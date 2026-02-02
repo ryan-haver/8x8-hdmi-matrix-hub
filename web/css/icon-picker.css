@@ -1,0 +1,447 @@
+/**
+ * OREI Matrix Control - Icon Picker Modal CSS
+ * Matches Phase 1 Design Aesthetic - Theme Aware
+ */
+
+/* === OVERLAY === */
+.icon-picker-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(4px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.icon-picker-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* === MODAL CONTAINER === */
+.icon-picker-modal {
+    background: rgba(13, 13, 26, 0.98);
+    border: 1px solid hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.25);
+    border-radius: 16px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 
+        0 0 40px hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.15),
+        0 20px 60px rgba(0, 0, 0, 0.5);
+    transform: scale(0.95) translateY(10px);
+    transition: transform 0.25s ease;
+}
+
+.icon-picker-overlay.visible .icon-picker-modal {
+    transform: scale(1) translateY(0);
+}
+
+/* === HEADER === */
+.icon-picker-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.icon-picker-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.icon-picker-close {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.icon-picker-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.icon-picker-close svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* === SEARCH === */
+.icon-picker-search {
+    padding: 12px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.icon-picker-search-input {
+    width: 100%;
+    padding: 10px 14px 10px 40px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: #fff;
+    font-size: 0.9rem;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.icon-picker-search-input:focus {
+    border-color: hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.5);
+    background: var(--accent-dim);
+    box-shadow: 0 0 0 3px hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.1);
+}
+
+.icon-picker-search-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.icon-picker-search-wrapper {
+    position: relative;
+}
+
+.icon-picker-search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    color: rgba(255, 255, 255, 0.4);
+    pointer-events: none;
+}
+
+/* === CATEGORIES === */
+.icon-picker-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 12px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+
+.icon-picker-category-btn {
+    padding: 6px 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+.icon-picker-category-btn:hover {
+    background: var(--accent-dim);
+    border-color: hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.3);
+    color: #fff;
+}
+
+.icon-picker-category-btn.active {
+    background: var(--accent-dim);
+    border-color: hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.5);
+    color: var(--accent);
+}
+
+/* === RECENTLY USED === */
+.icon-picker-recent {
+    padding: 12px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.icon-picker-recent-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.icon-picker-recent-grid {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+}
+
+.icon-picker-recent.hidden {
+    display: none;
+}
+
+/* === ICON GRID === */
+.icon-picker-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 16px 16px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    box-sizing: border-box;
+}
+
+.icon-picker-content::-webkit-scrollbar {
+    display: none;
+}
+
+.icon-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.icon-picker-grid-item {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px 4px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.icon-picker-grid-item:hover {
+    background: var(--accent-dim);
+    border-color: hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.3);
+    transform: translateY(-2px);
+}
+
+.icon-picker-grid-item.selected {
+    background: hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.15);
+    border-color: hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.6);
+    box-shadow: 
+        0 0 12px var(--accent-glow),
+        inset 0 0 20px hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.05);
+}
+
+.icon-picker-grid-item:focus {
+    outline: none;
+    border-color: hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.8);
+    box-shadow: 0 0 0 3px hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.2);
+}
+
+.icon-picker-grid-item svg {
+    width: 28px;
+    height: 28px;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.icon-picker-grid-item.selected svg {
+    color: var(--accent);
+}
+
+.icon-picker-grid-item-label {
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+    line-height: 1.2;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.icon-picker-grid-item.selected .icon-picker-grid-item-label {
+    color: hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.9);
+}
+
+/* === SKELETON LOADING === */
+.icon-picker-skeleton {
+    aspect-ratio: 1;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.03) 25%,
+        rgba(255, 255, 255, 0.08) 50%,
+        rgba(255, 255, 255, 0.03) 75%
+    );
+    background-size: 200% 100%;
+    border-radius: 12px;
+    animation: icon-skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes icon-skeleton-pulse {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* === EMPTY STATE === */
+.icon-picker-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    color: rgba(255, 255, 255, 0.4);
+    text-align: center;
+}
+
+.icon-picker-empty svg {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+
+.icon-picker-empty-text {
+    font-size: 0.9rem;
+}
+
+/* === FOOTER / PREVIEW === */
+.icon-picker-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 0 0 16px 16px;
+}
+
+.icon-picker-preview {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.icon-picker-preview-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent-dim);
+    border: 1px solid hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.3);
+    border-radius: 12px;
+}
+
+.icon-picker-preview-icon svg {
+    width: 32px;
+    height: 32px;
+    color: var(--accent);
+}
+
+.icon-picker-preview-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #fff;
+}
+
+.icon-picker-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.icon-picker-btn {
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.icon-picker-btn-cancel {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.icon-picker-btn-cancel:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #fff;
+}
+
+.icon-picker-btn-select {
+    background: var(--accent-gradient);
+    border: none;
+    color: #0d0d1a;
+    font-weight: 600;
+}
+
+.icon-picker-btn-select:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 4px 15px var(--accent-glow);
+}
+
+.icon-picker-btn-select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 480px) {
+    .icon-picker-modal {
+        width: 100%;
+        max-width: none;
+        max-height: 100vh;
+        height: 100%;
+        border-radius: 0;
+    }
+
+    .icon-picker-overlay.visible .icon-picker-modal {
+        transform: none;
+    }
+
+    .icon-picker-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .icon-picker-footer {
+        flex-direction: column;
+        gap: 12px;
+        border-radius: 0;
+    }
+
+    .icon-picker-actions {
+        width: 100%;
+    }
+
+    .icon-picker-btn {
+        flex: 1;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+    .icon-picker-modal {
+        max-width: 480px;
+    }
+
+    .icon-picker-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+@media (min-width: 769px) {
+    .icon-picker-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}

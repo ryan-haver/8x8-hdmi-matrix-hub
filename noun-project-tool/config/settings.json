@@ -1,0 +1,11 @@
+{
+  "proxy": {
+    "enabled": true,
+    "strategy": "smart",
+    "pia": {
+      "username": "x9987841",
+      "password": "sssGLPAF00MbaG96qOUI2g==:a8iWuHaD+hR7+jYaegNGoQ==:FfytowY/mpzKtQ=="
+    },
+    "custom": []
+  }
+}

@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NounProject Icon Tool</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <style>
+    :root {
+      --bg-primary: #0d1117;
+      --bg-secondary: #161b22;
+      --bg-tertiary: #21262d;
+      --border: #30363d;
+      --text-primary: #e6edf3;
+      --text-secondary: #8b949e;
+      --accent: #58a6ff;
+      --accent-hover: #79b8ff;
+      --success: #3fb950;
+      --warning: #d29922;
+      --error: #f85149;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 30px;
+    }
+    
+    h1 {
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    h1 .icon { font-size: 1.8rem; }
+    
+    .stats-bar {
+      display: flex;
+      gap: 20px;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    
+    .stats-bar span { display: flex; align-items: center; gap: 5px; }
+    .stats-bar .value { color: var(--accent); font-weight: 600; }
+    
+    /* Search */
+    .search-section {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .search-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .search-input {
+      flex: 1;
+      padding: 12px 16px;
+      font-size: 1rem;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-primary);
+      outline: none;
+    }
+    
+    .search-input:focus { border-color: var(--accent); }
+    
+    button {
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      background: var(--accent);
+      color: var(--bg-primary);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    button:hover { background: var(--accent-hover); }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    
+    .btn-secondary {
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+    
+    .btn-success { background: var(--success); }
+    
+    .filters {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .filter-group label { color: var(--text-secondary); font-size: 0.9rem; }
+    
+    select {
+      padding: 8px 12px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+    }
+    
+    /* Results */
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .results-count { color: var(--text-secondary); }
+    .results-count .highlight { color: var(--accent); font-weight: 600; }
+    
+    .selection-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 16px;
+    }
+    
+    .icon-card {
+      background: var(--bg-secondary);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+    
+    .icon-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .icon-card.selected { border-color: var(--success); background: rgba(63, 185, 80, 0.1); }
+    
+    .icon-card .check {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--success);
+      color: #fff;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+    
+    .icon-card.selected .check { display: flex; }
+    
+    .icon-preview {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 10px;
+      background: var(--bg-tertiary);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    
+    .icon-preview img {
+      max-width: 60px;
+      max-height: 60px;
+      filter: brightness(0) invert(1);
+    }
+    
+    .icon-term {
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .icon-creator {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    /* Download Queue */
+    .download-panel {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      min-width: 300px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+      display: none;
+    }
+    
+    .download-panel.visible { display: block; }
+    
+    .download-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .download-header h3 { font-size: 1rem; }
+    
+    .progress-bar {
+      height: 8px;
+      background: var(--bg-tertiary);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      transition: width 0.3s;
+    }
+    
+    .progress-text {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-secondary);
+    }
+    
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 15px;
+    }
+    
+    @keyframes spin { to { transform: rotate(360deg); } }
+    
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-secondary);
+    }
+    
+    .empty-state .icon { font-size: 4rem; margin-bottom: 20px; opacity: 0.5; }
+    
+    /* Settings Button */
+    .settings-btn {
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .settings-btn:hover { border-color: var(--accent); color: var(--accent); }
+    
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    
+    .modal-overlay.visible { display: flex; }
+    
+    .modal {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 500px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .modal-header h2 { font-size: 1.2rem; }
+    
+    .modal-body { padding: 20px; }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+    
+    .form-group input[type="text"],
+    .form-group input[type="password"] {
+      width: 100%;
+      padding: 10px 12px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+    }
+    
+    .form-group input:focus { border-color: var(--accent); outline: none; }
+    
+    .form-row {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .form-row .form-group { flex: 1; }
+    
+    .proxy-list {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0;
+      max-height: 250px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+    }
+    
+    .proxy-stats-header {
+      display: grid;
+      grid-template-columns: 1fr 80px 100px;
+      padding: 10px 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .proxy-item {
+      display: grid;
+      grid-template-columns: 1fr 80px 100px;
+      align-items: center;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
+    }
+    
+    .proxy-item:last-child { border-bottom: none; }
+    .proxy-item:hover { background: var(--bg-secondary); }
+    
+    .proxy-item .proxy-name {
+      font-family: monospace;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .proxy-item .req-count {
+      font-weight: 600;
+      color: var(--accent);
+      text-align: center;
+    }
+    
+    .proxy-item .last-used {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      text-align: right;
+    }
+    
+    .proxy-stats-total {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    
+    .proxy-stats-total .stat {
+      text-align: center;
+    }
+    
+    .proxy-stats-total .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    
+    .proxy-stats-total .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+    }
+    
+    .section-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    
+    .status-badge.active { background: rgba(63, 185, 80, 0.15); color: var(--success); }
+    .status-badge.inactive { background: rgba(139, 148, 158, 0.15); color: var(--text-secondary); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><span class="icon">🎨</span> NounProject Icon Tool</h1>
+      <div class="stats-bar">
+        <span>Catalog: <span class="value" id="stat-catalog">0</span></span>
+        <span>API: <span class="value" id="stat-api">-</span></span>
+        <span id="proxy-status"></span>
+        <button class="settings-btn" id="settings-btn">⚙️ Settings</button>
+      </div>
+    </header>
+    
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settings-modal">
+      <div class="modal">
+        <div class="modal-header">
+          <h2>⚙️ Settings</h2>
+          <button class="btn-secondary" id="close-settings" style="padding: 4px 12px;">✕</button>
+        </div>
+        <div class="modal-body">
+          <!-- Proxy Status -->
+          <div class="section-title">
+            Proxy Status
+            <span class="status-badge inactive" id="proxy-badge">Disabled</span>
+          </div>
+          
+          <!-- Rotation Strategy -->
+          <div class="form-group">
+            <label>Rotation Strategy</label>
+            <select id="proxy-strategy" style="width: 100%;">
+              <option value="smart">Smart (Balanced Random)</option>
+              <option value="round-robin">Round Robin</option>
+              <option value="random">Random</option>
+              <option value="least-used">Least Used</option>
+            </select>
+          </div>
+          
+          <!-- PIA Credentials -->
+          <div class="section-title">PIA VPN (SOCKS5)</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Username</label>
+              <input type="text" id="pia-username" placeholder="x1234567">
+            </div>
+            <div class="form-group">
+              <label>Password</label>
+              <input type="password" id="pia-password" placeholder="••••••••">
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+            <button class="btn-secondary" id="save-pia" style="flex: 1;">Save PIA Credentials</button>
+            <span id="pia-status" style="color: var(--text-secondary); font-size: 12px;"></span>
+          </div>
+          
+          <!-- Proxy Statistics -->
+          <div class="section-title">Proxy Statistics</div>
+          <div class="proxy-stats-total" id="proxy-stats-summary">
+            <div class="stat">
+              <div class="stat-value" id="total-proxies">0</div>
+              <div class="stat-label">Active Proxies</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value" id="total-requests">0</div>
+              <div class="stat-label">Total Requests</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value" id="avg-requests">0</div>
+              <div class="stat-label">Avg/Proxy</div>
+            </div>
+          </div>
+          <div class="proxy-list" id="proxy-list">
+            <div class="proxy-stats-header">
+              <span>Endpoint</span>
+              <span style="text-align: center;">Requests</span>
+              <span style="text-align: right;">Last Used</span>
+            </div>
+            <div style="color: var(--text-secondary); text-align: center; padding: 20px;">No proxies configured</div>
+          </div>
+          <div class="form-row">
+            <div class="form-group" style="flex: 3;">
+              <input type="text" id="new-proxy" placeholder="socks5://user:pass@host:1080">
+            </div>
+            <button id="add-proxy" style="height: 42px; margin-top: auto;">Add</button>
+          </div>
+          
+          <!-- Clear All -->
+          <button class="btn-secondary" id="clear-proxies" style="width: 100%; margin-top: 10px; color: var(--error);">Clear All Proxies</button>
+        </div>
+      </div>
+    </div>
+    
+    <section class="search-section">
+      <div class="search-row">
+        <input type="text" class="search-input" id="search-input" placeholder="Search icons (e.g., gaming, tv, hdmi)..." autofocus>
+        <button id="search-btn">Search</button>
+      </div>
+      <div class="filters">
+        <div class="filter-group">
+          <label>Style:</label>
+          <select id="filter-style">
+            <option value="">All</option>
+            <option value="line">Line</option>
+            <option value="solid">Solid</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Limit:</label>
+          <select id="filter-limit">
+            <option value="20">20</option>
+            <option value="50" selected>50</option>
+            <option value="100">100</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>
+            <input type="checkbox" id="save-results"> Save to catalog
+          </label>
+        </div>
+      </div>
+    </section>
+    
+    <div class="results-header">
+      <div class="results-count" id="results-info"></div>
+      <div class="selection-actions">
+        <span id="selection-count"></span>
+        <button class="btn-secondary" id="select-all-btn" style="display:none">Select All</button>
+        <button class="btn-success" id="download-btn" style="display:none">Download Selected</button>
+      </div>
+    </div>
+    
+    <div id="results-container">
+      <div class="empty-state">
+        <div class="icon">🔍</div>
+        <p>Search for icons to get started</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="download-panel" id="download-panel">
+    <div class="download-header">
+      <h3>📥 Downloading...</h3>
+      <button class="btn-secondary" id="close-panel" style="padding: 4px 10px;">✕</button>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+    </div>
+    <div class="progress-text">
+      <span id="progress-count">0 / 0</span>
+      <span id="progress-percent">0%</span>
+    </div>
+  </div>
+  
+  <script>
+    // State
+    let currentIcons = [];
+    let selectedIds = new Set();
+    let currentJobId = null;
+    
+    // Elements
+    const searchInput = document.getElementById('search-input');
+    const searchBtn = document.getElementById('search-btn');
+    const resultsContainer = document.getElementById('results-container');
+    const resultsInfo = document.getElementById('results-info');
+    const selectionCount = document.getElementById('selection-count');
+    const selectAllBtn = document.getElementById('select-all-btn');
+    const downloadBtn = document.getElementById('download-btn');
+    const downloadPanel = document.getElementById('download-panel');
+    
+    // Load stats on page load
+    async function loadStats() {
+      try {
+        const res = await fetch('/api/stats');
+        const data = await res.json();
+        
+        document.getElementById('stat-catalog').textContent = data.catalog?.totalIcons || 0;
+        
+        if (data.api) {
+          const pct = ((data.api.usage / data.api.limit) * 100).toFixed(1);
+          document.getElementById('stat-api').textContent = `${data.api.usage.toLocaleString()} / ${data.api.limit.toLocaleString()} (${pct}%)`;
+        }
+        
+        if (data.proxy?.enabled) {
+          document.getElementById('proxy-status').innerHTML = `<span style="color: var(--success);">🔒 ${data.proxy.count} proxies</span>`;
+        } else {
+          document.getElementById('proxy-status').innerHTML = `<span style="color: var(--text-secondary);">🔓 No proxy</span>`;
+        }
+      } catch (e) {
+        console.error('Failed to load stats:', e);
+      }
+    }
+    
+    // Search
+    async function search() {
+      const query = searchInput.value.trim();
+      if (!query) return;
+      
+      const style = document.getElementById('filter-style').value;
+      const limit = document.getElementById('filter-limit').value;
+      const save = document.getElementById('save-results').checked;
+      
+      resultsContainer.innerHTML = '<div class="loading"><div class="spinner"></div>Searching...</div>';
+      searchBtn.disabled = true;
+      
+      try {
+        let url = `/api/search?q=${encodeURIComponent(query)}&limit=${limit}`;
+        if (style) url += `&style=${style}`;
+        
+        const res = await fetch(url);
+        const data = await res.json();
+        
+        if (!data.success) throw new Error(data.error);
+        
+        currentIcons = data.icons;
+        selectedIds.clear();
+        
+        // Save if requested
+        if (save && currentIcons.length > 0) {
+          await fetch('/api/search/save', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query, limit: parseInt(limit), style })
+          });
+          loadStats();
+        }
+        
+        renderResults(data);
+        
+      } catch (e) {
+        resultsContainer.innerHTML = `<div class="empty-state"><div class="icon">❌</div><p>Error: ${e.message}</p></div>`;
+      }
+      
+      searchBtn.disabled = false;
+    }
+    
+    // Render results
+    function renderResults(data) {
+      if (data.icons.length === 0) {
+        resultsContainer.innerHTML = '<div class="empty-state"><div class="icon">😕</div><p>No icons found</p></div>';
+        resultsInfo.textContent = '';
+        return;
+      }
+      
+      resultsInfo.innerHTML = `Showing <span class="highlight">${data.icons.length}</span> of <span class="highlight">${data.total.toLocaleString()}</span> results`;
+      selectAllBtn.style.display = 'inline-block';
+      
+      resultsContainer.innerHTML = '<div class="icon-grid" id="icon-grid"></div>';
+      const grid = document.getElementById('icon-grid');
+      
+      for (const icon of data.icons) {
+        const card = document.createElement('div');
+        card.className = 'icon-card';
+        card.dataset.id = icon.id;
+        // API returns snake_case fields: thumbnail_url, icon_url
+        const thumbUrl = icon.thumbnail_url || icon.thumbnailUrl || '';
+        card.innerHTML = `
+          <div class="check">✓</div>
+          <div class="icon-preview">
+            ${thumbUrl ? `<img src="${thumbUrl}" alt="${icon.term}" loading="lazy">` : '<span style="color:var(--text-secondary)">No preview</span>'}
+          </div>
+          <div class="icon-term">${icon.term}</div>
+          <div class="icon-creator">by ${icon.creator?.name || 'Unknown'}</div>
+        `;
+        card.onclick = () => toggleSelection(icon.id, card);
+        grid.appendChild(card);
+      }
+      
+      updateSelectionUI();
+    }
+    
+    // Selection
+    function toggleSelection(id, card) {
+      if (selectedIds.has(id)) {
+        selectedIds.delete(id);
+        card.classList.remove('selected');
+      } else {
+        selectedIds.add(id);
+        card.classList.add('selected');
+      }
+      updateSelectionUI();
+    }
+    
+    function updateSelectionUI() {
+      if (selectedIds.size > 0) {
+        selectionCount.textContent = `${selectedIds.size} selected`;
+        downloadBtn.style.display = 'inline-block';
+      } else {
+        selectionCount.textContent = '';
+        downloadBtn.style.display = 'none';
+      }
+    }
+    
+    selectAllBtn.onclick = () => {
+      const cards = document.querySelectorAll('.icon-card');
+      if (selectedIds.size === currentIcons.length) {
+        // Deselect all
+        selectedIds.clear();
+        cards.forEach(c => c.classList.remove('selected'));
+      } else {
+        // Select all
+        currentIcons.forEach(i => selectedIds.add(i.id));
+        cards.forEach(c => c.classList.add('selected'));
+      }
+      updateSelectionUI();
+    };
+    
+    // Download
+    downloadBtn.onclick = async () => {
+      if (selectedIds.size === 0) return;
+      
+      const icons = currentIcons.filter(i => selectedIds.has(i.id));
+      
+      downloadBtn.disabled = true;
+      downloadPanel.classList.add('visible');
+      
+      try {
+        const res = await fetch('/api/download', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            query: searchInput.value.trim(),
+            limit: icons.length
+          })
+        });
+        
+        const data = await res.json();
+        currentJobId = data.jobId;
+        
+        // Poll for progress
+        pollProgress();
+        
+      } catch (e) {
+        alert('Download failed: ' + e.message);
+        downloadPanel.classList.remove('visible');
+      }
+      
+      downloadBtn.disabled = false;
+    };
+    
+    async function pollProgress() {
+      if (!currentJobId) return;
+      
+      try {
+        const res = await fetch(`/api/download/${currentJobId}`);
+        const data = await res.json();
+        
+        if (data.progress) {
+          document.getElementById('progress-fill').style.width = `${data.progress.percent}%`;
+          document.getElementById('progress-count').textContent = `${data.progress.done} / ${data.progress.total}`;
+          document.getElementById('progress-percent').textContent = `${data.progress.percent}%`;
+        }
+        
+        if (data.status === 'completed') {
+          document.getElementById('progress-fill').style.width = '100%';
+          document.querySelector('.download-header h3').textContent = '✅ Complete!';
+          loadStats();
+          return;
+        }
+        
+        setTimeout(pollProgress, 500);
+        
+      } catch (e) {
+        console.error('Progress poll error:', e);
+      }
+    }
+    
+    document.getElementById('close-panel').onclick = () => {
+      downloadPanel.classList.remove('visible');
+      currentJobId = null;
+    };
+    
+    // Event listeners
+    searchBtn.onclick = search;
+    searchInput.onkeypress = (e) => { if (e.key === 'Enter') search(); };
+    
+    // ============================================
+    // SETTINGS MODAL
+    // ============================================
+    
+    const settingsModal = document.getElementById('settings-modal');
+    const settingsBtn = document.getElementById('settings-btn');
+    const closeSettings = document.getElementById('close-settings');
+    const proxyBadge = document.getElementById('proxy-badge');
+    const proxyList = document.getElementById('proxy-list');
+    
+    // Open/close settings
+    settingsBtn.onclick = () => {
+      settingsModal.classList.add('visible');
+      loadProxySettings();
+    };
+    
+    closeSettings.onclick = () => settingsModal.classList.remove('visible');
+    settingsModal.onclick = (e) => {
+      if (e.target === settingsModal) settingsModal.classList.remove('visible');
+    };
+    
+    // Load current proxy settings
+    async function loadProxySettings() {
+      try {
+        // Use the correct endpoint (legacy /api/proxy redirects to /api/settings/proxy)
+        const res = await fetch('/api/settings/proxy');
+        const data = await res.json();
+        
+        // Response is nested under data.proxy
+        const proxyData = data.proxy || data;
+        
+        // Update badge
+        if (proxyData.enabled && proxyData.count > 0) {
+          proxyBadge.textContent = `${proxyData.count} Active`;
+          proxyBadge.className = 'status-badge active';
+        } else {
+          proxyBadge.textContent = 'Disabled';
+          proxyBadge.className = 'status-badge inactive';
+        }
+        
+        // Update strategy
+        if (proxyData.strategy) {
+          document.getElementById('proxy-strategy').value = proxyData.strategy;
+        }
+        
+        // Update PIA credentials status
+        const piaStatus = document.getElementById('pia-status');
+        const piaUsername = document.getElementById('pia-username');
+        if (proxyData.piaConfigured) {
+          piaStatus.innerHTML = '✅ Credentials stored';
+          piaStatus.style.color = 'var(--success)';
+          if (proxyData.piaUsername) {
+            piaUsername.value = proxyData.piaUsername;
+            piaUsername.placeholder = proxyData.piaUsername;
+          }
+          document.getElementById('pia-password').placeholder = '••••••••  (saved)';
+        } else {
+          piaStatus.innerHTML = '';
+          piaStatus.style.color = 'var(--text-secondary)';
+        }
+        
+        // Calculate and display statistics - API returns 'stats' array, not 'proxies'
+        const proxies = proxyData.stats || proxyData.proxies || [];
+        const totalRequests = proxies.reduce((sum, p) => sum + (p.count || 0), 0);
+        const avgRequests = proxies.length > 0 ? Math.round(totalRequests / proxies.length) : 0;
+        
+        document.getElementById('total-proxies').textContent = proxies.length;
+        document.getElementById('total-requests').textContent = totalRequests.toLocaleString();
+        document.getElementById('avg-requests').textContent = avgRequests;
+        
+        // Update proxy list with detailed stats table
+        if (proxies.length > 0) {
+          const headerHtml = `
+            <div class="proxy-stats-header">
+              <span>Endpoint</span>
+              <span style="text-align: center;">✓/✗</span>
+              <span style="text-align: right;">Last Used</span>
+            </div>
+          `;
+          
+          const rowsHtml = proxies.map(p => {
+            const endpoint = extractEndpoint(p.proxy);
+            const lastUsed = p.lastUsed ? formatLastUsed(p.lastUsed) : 'Never';
+            const successCount = p.success || 0;
+            const failureCount = p.failure || 0;
+            const statusHtml = failureCount > 0 
+              ? `<span style="color: var(--success);">${successCount}</span>/<span style="color: var(--error);">${failureCount}</span>`
+              : `<span style="color: var(--success);">${successCount}</span>`;
+            return `
+              <div class="proxy-item" title="${p.lastError ? 'Last error: ' + p.lastError : ''}">
+                <span class="proxy-name" title="${maskProxy(p.proxy)}">${endpoint}</span>
+                <span class="req-count">${statusHtml}</span>
+                <span class="last-used">${lastUsed}</span>
+              </div>
+            `;
+          }).join('');
+          
+          proxyList.innerHTML = headerHtml + rowsHtml;
+        } else {
+          proxyList.innerHTML = `
+            <div class="proxy-stats-header">
+              <span>Endpoint</span>
+              <span style="text-align: center;">Requests</span>
+              <span style="text-align: right;">Last Used</span>
+            </div>
+            <div style="color: var(--text-secondary); text-align: center; padding: 20px;">No proxies configured</div>
+          `;
+        }
+        
+      } catch (e) {
+        console.error('Failed to load proxy settings:', e);
+      }
+    }
+    
+    // Extract readable endpoint name from proxy URL
+    function extractEndpoint(url) {
+      try {
+        const u = new URL(url);
+        // For PIA proxies, extract region from hostname
+        // e.g., us-california.privacy.network -> US California
+        const hostname = u.hostname;
+        if (hostname.includes('.privacy.network')) {
+          const region = hostname.split('.')[0];
+          return region.replace(/-/g, ' ').replace(/_/g, ' ')
+            .split(' ')
+            .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+            .join(' ');
+        }
+        return hostname;
+      } catch {
+        return url.substring(0, 25) + '...';
+      }
+    }
+    
+    // Format last used timestamp
+    function formatLastUsed(timestamp) {
+      const date = new Date(timestamp);
+      const now = new Date();
+      const diffMs = now - date;
+      const diffMins = Math.floor(diffMs / 60000);
+      const diffHours = Math.floor(diffMs / 3600000);
+      
+      if (diffMins < 1) return 'Just now';
+      if (diffMins < 60) return `${diffMins}m ago`;
+      if (diffHours < 24) return `${diffHours}h ago`;
+      return date.toLocaleDateString();
+    }
+    
+    // Mask proxy URL for display
+    function maskProxy(url) {
+      try {
+        const u = new URL(url);
+        if (u.password) u.password = '****';
+        return u.toString().replace(/\*\*\*\*@/, '****@');
+      } catch {
+        return url.substring(0, 30) + '...';
+      }
+    }
+    
+    // Save PIA credentials
+    document.getElementById('save-pia').onclick = async () => {
+      const username = document.getElementById('pia-username').value.trim();
+      const password = document.getElementById('pia-password').value;
+      
+      if (!username || !password) {
+        alert('Both username and password are required');
+        return;
+      }
+      
+      try {
+        const res = await fetch('/api/proxy', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pia: { username, password } })
+        });
+        
+        const data = await res.json();
+        
+        if (data.success) {
+          alert(`PIA proxies added! Total: ${data.count}`);
+          document.getElementById('pia-username').value = '';
+          document.getElementById('pia-password').value = '';
+          loadProxySettings();
+          loadStats();
+        } else {
+          alert('Failed to add PIA: ' + data.error);
+        }
+        
+      } catch (e) {
+        alert('Error: ' + e.message);
+      }
+    };
+    
+    // Add custom proxy
+    document.getElementById('add-proxy').onclick = async () => {
+      const url = document.getElementById('new-proxy').value.trim();
+      
+      if (!url) {
+        alert('Enter a proxy URL');
+        return;
+      }
+      
+      try {
+        const res = await fetch('/api/proxy', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url })
+        });
+        
+        const data = await res.json();
+        
+        if (data.success) {
+          document.getElementById('new-proxy').value = '';
+          loadProxySettings();
+          loadStats();
+        } else {
+          alert('Failed to add proxy: ' + data.error);
+        }
+        
+      } catch (e) {
+        alert('Error: ' + e.message);
+      }
+    };
+    
+    // Update strategy
+    document.getElementById('proxy-strategy').onchange = async (e) => {
+      try {
+        await fetch('/api/config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ proxyStrategy: e.target.value })
+        });
+      } catch (e) {
+        console.error('Failed to update strategy:', e);
+      }
+    };
+    
+    // Clear all proxies
+    document.getElementById('clear-proxies').onclick = async () => {
+      if (!confirm('Are you sure you want to clear all proxies?')) return;
+      
+      try {
+        await fetch('/api/proxy', { method: 'DELETE' });
+        loadProxySettings();
+        loadStats();
+      } catch (e) {
+        alert('Error: ' + e.message);
+      }
+    };
+    
+    // Init
+    loadStats();
+  </script>
+</body>
+</html>

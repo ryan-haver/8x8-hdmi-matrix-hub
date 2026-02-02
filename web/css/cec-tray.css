@@ -1,0 +1,1136 @@
+/**
+ * OREI Matrix Control - CEC Tray Styles
+ * 
+ * Floating action button with expandable remote panel
+ */
+
+/* ==============================
+   CEC Tray Container
+   ============================== */
+.cec-tray {
+    position: fixed;
+    z-index: 900;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    pointer-events: none;
+}
+
+.cec-tray > * {
+    pointer-events: auto;
+}
+
+/* Position variants */
+.cec-tray.position-bottom-right {
+    bottom: 20px;
+    right: 20px;
+}
+
+.cec-tray.position-bottom-left {
+    bottom: 20px;
+    left: 20px;
+    align-items: flex-start;
+}
+
+.cec-tray.position-top-right {
+    top: 80px;
+    right: 20px;
+}
+
+.cec-tray.position-panel-right {
+    top: 100px;
+    right: 20px;
+}
+
+/* ==============================
+   FAB (Floating Action Button)
+   ============================== */
+.cec-tray-fab {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--accent-gradient);
+    color: var(--text-inverse);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--glow-cyan),
+                0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.cec-tray-fab:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5),
+                0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.cec-tray-fab:active {
+    transform: scale(0.95);
+}
+
+.cec-tray-fab .icon {
+    width: 28px;
+    height: 28px;
+}
+
+.cec-tray.expanded .cec-tray-fab {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.8);
+}
+
+/* ==============================
+   Expanded Panel
+   ============================== */
+.cec-tray-panel {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 280px;
+    max-height: calc(100vh - 100px);
+    background: var(--card-bg, #1f2937);
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.05);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px) scale(0.95);
+    transform-origin: bottom right;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.cec-tray.expanded .cec-tray-panel {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+/* Position-specific panel origins */
+.cec-tray.position-bottom-left .cec-tray-panel {
+    left: 0;
+    right: auto;
+    transform-origin: bottom left;
+}
+
+.cec-tray.position-top-right .cec-tray-panel {
+    bottom: auto;
+    top: 0;
+    transform-origin: top right;
+}
+
+/* Pinned state */
+.cec-tray.pinned .cec-tray-panel {
+    position: fixed;
+    top: 100px;
+    bottom: auto;
+}
+
+.cec-tray.pinned .cec-tray-fab {
+    display: none;
+}
+
+/* ==============================
+   Panel Header
+   ============================== */
+.cec-tray-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.2);
+    gap: 8px;
+}
+
+.cec-tray-title-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.cec-tray-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary, #f9fafb);
+}
+
+.cec-tray-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* Header target buttons (compact) */
+.cec-tray-header-targets {
+    display: flex;
+    gap: 16px;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Target group with label */
+.cec-target-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.cec-target-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary, #9ca3af);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.cec-header-target-btn {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    padding: 4px 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: var(--text-primary, #f9fafb);
+    font-size: 10px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.cec-header-target-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.cec-header-target-btn .icon-xs {
+    width: 12px;
+    height: 12px;
+    opacity: 0.7;
+}
+
+.cec-header-target-btn .target-abbrev {
+    max-width: 50px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.cec-tray-actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.cec-tray-pin-btn,
+.cec-tray-undock-btn,
+.cec-tray-close-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary, #9ca3af);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, color 0.15s;
+}
+
+.cec-tray-dashboard-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary, #9ca3af);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, color 0.15s;
+}
+
+.cec-tray-dashboard-btn .icon {
+    width: 16px;
+    height: 16px;
+}
+
+.cec-tray-dashboard-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary, #f9fafb);
+}
+
+.cec-tray-pin-btn:hover,
+.cec-tray-undock-btn:hover,
+.cec-tray-close-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary, #f9fafb);
+}
+
+.cec-tray-pin-btn .icon,
+.cec-tray-undock-btn .icon,
+.cec-tray-close-btn .icon {
+    width: 16px;
+    height: 16px;
+}
+
+/* Active states for pin/undock buttons */
+.cec-tray-pin-btn.active,
+.cec-tray.pinned .cec-tray-pin-btn {
+    color: var(--accent);
+}
+
+.cec-tray-undock-btn.active {
+    color: var(--secondary);
+}
+
+/* Hide pin/undock on mobile (desktop-only features) */
+.cec-tray-pin-btn.desktop-only,
+.cec-tray-undock-btn.desktop-only {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .cec-tray-pin-btn.desktop-only,
+    .cec-tray-undock-btn.desktop-only {
+        display: flex;
+    }
+}
+
+/* Dashboard button visible on ALL viewports */
+.cec-tray-dashboard-btn {
+    display: flex;
+}
+
+/* Undocked/floating state */
+.cec-tray.undocked .cec-tray-panel {
+    position: fixed;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.cec-tray.undocked .cec-tray-header {
+    cursor: grab;
+}
+
+.cec-tray.undocked .cec-tray-panel.dragging,
+.cec-tray.undocked .cec-tray-panel.dragging .cec-tray-header {
+    cursor: grabbing;
+}
+
+.cec-tray.undocked .cec-tray-panel.dragging {
+    opacity: 0.9;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
+}
+
+/* Scene indicator in header */
+.scene-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 9px;
+    font-weight: 500;
+    color: var(--status-active);
+    padding: 2px 6px;
+    background: var(--status-active-bg);
+    border-radius: 8px;
+    border: 1px solid var(--status-active);
+    white-space: nowrap;
+    max-width: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.scene-indicator::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    background: var(--status-active);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* ==============================
+   Target Selectors
+   ============================== */
+.cec-tray-targets {
+    display: flex;
+    gap: 8px;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.cec-target-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: var(--text-primary, #f9fafb);
+    font-size: 11px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.cec-target-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.target-label {
+    color: var(--text-secondary, #9ca3af);
+    font-weight: 500;
+}
+
+.target-name {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 70px;
+}
+
+.cec-target-btn .icon-sm {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+/* Target Selector Dropdown */
+.cec-target-selector {
+    min-width: 180px;
+    background: var(--card-bg, #1f2937);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+    padding: 8px 0;
+    overflow: hidden;
+    animation: fadeIn 0.15s ease;
+}
+
+.target-selector-header {
+    padding: 8px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--text-secondary, #9ca3af);
+    letter-spacing: 0.05em;
+}
+
+.target-selector-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 4px 0;
+}
+
+.target-selector-group-title {
+    padding: 6px 12px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--text-muted, #6b7280);
+    letter-spacing: 0.05em;
+}
+
+.target-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: var(--text-primary, #f9fafb);
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.target-option:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.target-option-indicator {
+    font-size: 8px;
+    color: transparent;
+}
+
+.target-option.selected .target-option-indicator {
+    color: var(--accent);
+}
+
+/* ==============================
+   Panel Sections
+   ============================== */
+.cec-tray-section {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.cec-tray-section:last-of-type {
+    border-bottom: none;
+}
+
+.cec-tray-section-title {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--text-secondary, #9ca3af);
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+}
+
+/* ==============================
+   Button Row
+   ============================== */
+.cec-tray-btn-row {
+    display: flex;
+    gap: 8px;
+}
+
+.cec-tray-cmd-btn {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 10px 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: var(--text-primary, #f9fafb);
+    font-size: 11px;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s, border-color 0.15s;
+}
+
+.cec-tray-cmd-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--accent);
+}
+
+.cec-tray-cmd-btn:active {
+    transform: scale(0.95);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.cec-tray-cmd-btn .icon {
+    width: 18px;
+    height: 18px;
+}
+
+/* Power buttons */
+.cec-tray-cmd-btn.power-on {
+    background: var(--status-active-bg);
+    border-color: var(--status-active);
+    color: var(--status-active);
+}
+
+.cec-tray-cmd-btn.power-on:hover {
+    background: hsla(var(--accent-h), 70%, 50%, 0.25);
+    border-color: var(--status-active);
+}
+
+.cec-tray-cmd-btn.power-off {
+    background: rgba(156, 163, 175, 0.15);
+    border-color: var(--status-disconnected);
+    color: var(--status-disconnected);
+}
+
+.cec-tray-cmd-btn.power-off:hover {
+    background: rgba(156, 163, 175, 0.25);
+    border-color: var(--text-muted);
+}
+
+/* ==============================
+   Trackpad Navigation
+   ============================== */
+.cec-trackpad {
+    margin: 0 auto 12px;
+    padding: 0 16px;
+}
+
+.trackpad-surface {
+    position: relative;
+    width: 100%;
+    height: 120px;
+    background: linear-gradient(145deg, 
+        rgba(255, 255, 255, 0.03) 0%, 
+        rgba(255, 255, 255, 0.01) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: none;
+    overflow: hidden;
+    transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+
+.trackpad-surface:hover {
+    background: linear-gradient(145deg, 
+        rgba(255, 255, 255, 0.05) 0%, 
+        rgba(255, 255, 255, 0.02) 100%);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.trackpad-surface.touching {
+    background: linear-gradient(145deg, 
+        rgba(59, 130, 246, 0.1) 0%, 
+        rgba(59, 130, 246, 0.05) 100%);
+    border-color: rgba(59, 130, 246, 0.4);
+    box-shadow: inset 0 0 20px rgba(59, 130, 246, 0.1);
+}
+
+.trackpad-hint {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-secondary, #9ca3af);
+    opacity: 0.6;
+    pointer-events: none;
+    line-height: 1.4;
+}
+
+.trackpad-surface.touching .trackpad-hint {
+    opacity: 0.3;
+}
+
+/* Feedback indicators */
+.trackpad-feedback {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.1s;
+}
+
+.trackpad-feedback.active {
+    opacity: 1;
+    animation: trackpadPulse 0.3s ease-out;
+}
+
+.trackpad-feedback.tap {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+}
+
+.trackpad-feedback.up {
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(to bottom, var(--accent-glow), transparent);
+}
+
+.trackpad-feedback.down {
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(to top, var(--accent-glow), transparent);
+}
+
+.trackpad-feedback.left {
+    top: 50%;
+    left: 8px;
+    transform: translateY(-50%);
+    background: linear-gradient(to right, var(--accent-glow), transparent);
+}
+
+.trackpad-feedback.right {
+    top: 50%;
+    right: 8px;
+    left: auto;
+    transform: translateY(-50%);
+    background: linear-gradient(to left, var(--accent-glow), transparent);
+}
+
+@keyframes trackpadPulse {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5);
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+}
+
+.trackpad-feedback.up,
+.trackpad-feedback.down {
+    width: 60px;
+    height: 30px;
+}
+
+.trackpad-feedback.left,
+.trackpad-feedback.right {
+    width: 30px;
+    height: 60px;
+}
+
+/* Keep old D-pad styles for backward compatibility */
+.cec-tray-dpad {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 6px;
+    width: 160px;
+    margin: 0 auto 12px;
+}
+
+.cec-tray-dpad .cec-tray-cmd-btn {
+    aspect-ratio: 1;
+    padding: 0;
+    font-size: 16px;
+    border-radius: 8px;
+}
+
+.dpad-up {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.dpad-left {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.dpad-center {
+    grid-column: 2;
+    grid-row: 2;
+    background: var(--accent-dim) !important;
+    border-color: var(--accent-glow) !important;
+    color: var(--accent) !important;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.dpad-center:hover {
+    background: hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.3) !important;
+    border-color: var(--accent) !important;
+}
+
+.dpad-right {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+.dpad-down {
+    grid-column: 2;
+    grid-row: 3;
+}
+
+/* Navigation secondary row */
+.nav-secondary .cec-tray-cmd-btn {
+    flex-direction: row;
+    padding: 8px 12px;
+}
+
+.nav-secondary .cec-tray-cmd-btn .icon {
+    width: 14px;
+    height: 14px;
+}
+
+/* ==============================
+   Playback Row
+   ============================== */
+.playback-row {
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.playback-row .cec-tray-cmd-btn {
+    min-width: 36px;
+    flex: 0 0 auto;
+    padding: 8px;
+    font-size: 14px;
+}
+
+.playback-row .play-btn {
+    background: var(--status-active-bg);
+    border-color: var(--status-active);
+    color: var(--status-active);
+}
+
+/* ==============================
+   Volume Row
+   ============================== */
+.volume-row .vol-btn {
+    flex-direction: row;
+    gap: 6px;
+    padding: 10px 14px;
+}
+
+.volume-row .vol-btn .icon {
+    width: 16px;
+    height: 16px;
+}
+
+/* ==============================
+   Footer / Macros
+   ============================== */
+.cec-tray-footer {
+    padding: 10px 16px;
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.cec-tray-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.cec-tray-section-header .cec-tray-section-title {
+    margin-bottom: 0;
+}
+
+.cec-tray-edit-macros-btn {
+    padding: 4px;
+    background: none;
+    border: none;
+    color: var(--text-muted, #6b7280);
+    cursor: pointer;
+    border-radius: 4px;
+    transition: color 0.2s, background 0.2s;
+}
+
+.cec-tray-edit-macros-btn:hover {
+    color: var(--text-primary, #f3f4f6);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.cec-tray-edit-macros-btn .icon {
+    width: 14px;
+    height: 14px;
+}
+
+.cec-tray-macros {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Macro item wrapper for API copy button */
+.cec-tray-macro-item {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.cec-tray-macro-item .macro-api-btn {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    opacity: 0;
+    transition: opacity 0.15s;
+    width: 18px;
+    height: 18px;
+    padding: 2px;
+    background: rgba(99, 102, 241, 0.9);
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.cec-tray-macro-item:hover .macro-api-btn,
+.cec-tray-macro-item:focus-within .macro-api-btn {
+    opacity: 1;
+}
+
+.cec-tray-macro-item .macro-api-btn:hover {
+    background: rgba(79, 70, 229, 1);
+    transform: scale(1.1);
+}
+
+.cec-tray-macro-item .icon-xs {
+    width: 12px;
+    height: 12px;
+}
+
+.macros-empty {
+    color: var(--text-muted, #6b7280);
+    font-size: 11px;
+    font-style: italic;
+}
+
+.cec-tray-macro-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: var(--text-primary, #f3f4f6);
+    font-size: 11px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.cec-tray-macro-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.cec-tray-macro-btn:active {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.cec-tray-macro-btn .macro-icon {
+    font-size: 14px;
+}
+
+.cec-tray-macro-btn .macro-name {
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.cec-tray-macro-more {
+    padding: 6px 10px;
+    background: none;
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    color: var(--text-muted, #6b7280);
+    font-size: 11px;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.cec-tray-macro-more:hover {
+    color: var(--text-primary, #f3f4f6);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.macros-label {
+    color: var(--text-secondary, #9ca3af);
+    font-weight: 500;
+}
+
+.macros-placeholder {
+    color: var(--text-muted, #6b7280);
+    font-style: italic;
+}
+
+/* ==============================
+   Animations
+   ============================== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==============================
+   Mobile Adjustments
+   ============================== */
+@media (max-width: 767px) {
+    .cec-tray.position-bottom-right {
+        bottom: calc(var(--tabs-height, 56px) + 16px); /* Above bottom nav */
+        right: 16px;
+    }
+    
+    .cec-tray.position-bottom-left {
+        bottom: calc(var(--tabs-height, 56px) + 16px);
+        left: 16px;
+    }
+    
+    .cec-tray-panel {
+        position: fixed !important;
+        left: 10px !important;
+        right: 10px !important;
+        bottom: calc(var(--tabs-height, 56px) + 80px) !important;
+        top: auto !important;
+        width: auto !important;
+        max-width: none !important;
+        max-height: calc(100vh - 200px);
+        transform-origin: bottom center;
+    }
+    
+    .cec-tray.expanded .cec-tray-panel {
+        transform: translateY(0) scale(1);
+    }
+    
+    .cec-tray-fab {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .cec-tray-fab .icon {
+        width: 24px;
+        height: 24px;
+    }
+    
+    /* Hide pin button on mobile */
+    .cec-tray-pin-btn {
+        display: none;
+    }
+}
+
+/* ==============================
+   Scrollable content
+   ============================== */
+.cec-tray-panel {
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.cec-tray-panel::-webkit-scrollbar {
+    width: 6px;
+}
+
+.cec-tray-panel::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.cec-tray-panel::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+}
+
+.cec-tray-panel::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* ==============================
+   Dark/Light theme compatibility
+   ============================== */
+/* ==============================
+   Desktop/Mobile visibility toggles
+   ============================== */
+
+/* By default on mobile: show trackpad, hide D-pad */
+.cec-tray-dpad.desktop-only,
+.cec-widget-dpad.desktop-only {
+    display: none;
+}
+
+.cec-trackpad.mobile-only {
+    display: block;
+}
+
+/* On desktop (768px+): show D-pad, hide trackpad */
+@media (min-width: 768px) {
+    .cec-tray-dpad.desktop-only,
+    .cec-widget-dpad.desktop-only {
+        display: grid;
+    }
+    
+    .cec-trackpad.mobile-only {
+        display: none;
+    }
+}
+
+/* Widget D-pad styling */
+.cec-widget-dpad {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 6px;
+    width: 140px;
+    margin: 0 auto 12px;
+}
+
+.cec-widget-dpad .cec-widget-cmd-btn {
+    aspect-ratio: 1;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    border-radius: 8px;
+    min-width: unset;
+}
+
+.cec-widget-dpad .cec-widget-cmd-btn .icon {
+    width: 18px;
+    height: 18px;
+}
+
+.cec-widget-dpad .dpad-center {
+    background: rgba(59, 130, 246, 0.2) !important;
+    border-color: rgba(59, 130, 246, 0.4) !important;
+    color: var(--accent) !important;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.cec-widget-dpad .dpad-center:hover {
+    background: rgba(59, 130, 246, 0.3) !important;
+    border-color: rgba(59, 130, 246, 0.6) !important;
+}
+
+/* ==============================
+   Dark/Light theme compatibility
+   ============================== */
+
+@media (prefers-color-scheme: light) {
+    .cec-tray-panel {
+        background: #ffffff;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15),
+                    0 0 0 1px rgba(0, 0, 0, 0.05);
+    }
+    
+    .cec-tray-header {
+        background: rgba(0, 0, 0, 0.03);
+        border-bottom-color: rgba(0, 0, 0, 0.1);
+    }
+    
+    .cec-tray-cmd-btn {
+        background: rgba(0, 0, 0, 0.03);
+        border-color: rgba(0, 0, 0, 0.1);
+        color: #1f2937;
+    }
+    
+    .cec-tray-cmd-btn:hover {
+        background: rgba(0, 0, 0, 0.06);
+        border-color: rgba(0, 0, 0, 0.15);
+    }
+    
+    .cec-target-btn {
+        background: rgba(0, 0, 0, 0.03);
+        border-color: rgba(0, 0, 0, 0.1);
+        color: #1f2937;
+    }
+    
+    .cec-target-selector {
+        background: #ffffff;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15),
+                    0 0 0 1px rgba(0, 0, 0, 0.05);
+    }
+}

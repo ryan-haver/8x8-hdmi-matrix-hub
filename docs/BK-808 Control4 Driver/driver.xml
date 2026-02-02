@@ -1,0 +1,818 @@
+<devicedata>
+  <copyright>Copyright 2022 Matrix ALL.</copyright>
+  <creator>UHD</creator>
+  <manufacturer>UHD</manufacturer>
+  <name>BK-808</name>
+  <model>BK-808</model>
+  <created>06/28/2024 11:14 AM</created>
+  <modified>06/28/2024 11:14 AM</modified>
+  <version>100</version>
+  <small>devices_sm\receiver.gif</small>
+  <large>devices_lg\receiver.gif</large>
+  <control>lua_gen</control>
+  <controlmethod>serial</controlmethod>
+  <driver>DriverWorks</driver>
+  <templatedescription>AVSwitch Proxy Template</templatedescription>
+  <search_types>
+    <type>c4:av_gen</type>
+  </search_types>
+  <proxies>
+    <proxy proxybindingid="5001" name="AVSwitch">avswitch</proxy>
+  </proxies>
+  <capabilities>
+    <!--Matrix audio inputs -->
+    <audio_consumer_count>8</audio_consumer_count>
+    <!--Matrix audio outputs -->
+    <audio_provider_count>8</audio_provider_count>
+    <can_downclass>False</can_downclass>
+    <can_switch>True</can_switch>
+    <can_upclass>False</can_upclass>
+    <has_audio_sense_control>False</has_audio_sense_control>
+    <has_discrete_balance_control>False</has_discrete_balance_control>
+    <has_discrete_bass_control>False</has_discrete_bass_control>
+    <has_discrete_input_select>True</has_discrete_input_select>
+    <has_discrete_loudness_control>False</has_discrete_loudness_control>
+    <has_discrete_mute_control>False</has_discrete_mute_control>
+    <has_discrete_treble_control>False</has_discrete_treble_control>
+    <has_discrete_volume_control>False</has_discrete_volume_control>
+    <has_toad_input_select>False</has_toad_input_select>
+    <has_toggle_loudness_control>False</has_toggle_loudness_control>
+    <has_toggle_mute_control>False</has_toggle_mute_control>
+    <has_up_down_balance_control>False</has_up_down_balance_control>
+    <has_up_down_bass_control>False</has_up_down_bass_control>
+    <has_up_down_treble_control>False</has_up_down_treble_control>
+    <has_up_down_volume_control>False</has_up_down_volume_control>
+    <has_video_sense_control>False</has_video_sense_control>
+    <!--Matrix video inputs -->
+    <video_consumer_count>8</video_consumer_count>
+    <!--Matrix video outputs -->
+    <video_provider_count>8</video_provider_count>
+    <can_switch_separately>True</can_switch_separately>
+    <requires_separate_switching>True</requires_separate_switching>
+  </capabilities>
+  <connections>
+    <connection>
+      <id>5001</id>
+      <type>2</type>
+      <connectionname>AVSWITCH</connectionname>
+      <consumer>False</consumer>
+      <linelevel>True</linelevel>
+      <classes>
+        <class>
+          <classname>AVSWITCH</classname>
+        </class>
+      </classes>
+    </connection>
+    <connection>
+      <id>1</id>
+      <facing>1</facing>
+      <connectionname>RS-232</connectionname>
+      <type>1</type>
+      <consumer>True</consumer>
+      <audiosource>False</audiosource>
+      <videosource>False</videosource>
+      <linelevel>True</linelevel>
+      <classes>
+        <class>
+          <classname>RS_232</classname>
+        </class>
+      </classes>
+    </connection>
+    <connection>
+      <id>6001</id>
+      <facing>1</facing>
+      <connectionname>Network</connectionname>
+      <type>4</type>
+      <consumer>True</consumer>
+      <audiosource>False</audiosource>
+      <videosource>False</videosource>
+      <linelevel>True</linelevel>
+      <classes>
+        <class>
+          <classname>TCP</classname>
+          <ports>
+            <port>
+              <number>8000</number>
+              <auto_connect>True</auto_connect>
+              <monitor_connection>True</monitor_connection>
+              <keep_connection>True</keep_connection>
+            </port>
+          </ports>
+        </class>
+      </classes>
+    </connection>
+    <connection>
+      <type>5</type>
+      <id>1000</id>
+      <audiosource>false</audiosource>
+      <videosource>false</videosource>
+      <connectionname>Input 1</connectionname>
+      <facing>1</facing>
+      <consumer>true</consumer>
+      <linelevel>true</linelevel>
+      <classes>
+        <class>
+          <classname>HDMI</classname>
+        </class>
+      </classes>
+    </connection>
+    <connection>
+      <type>5</type>
+      <id>1001</id>
+      <audiosource>false</audiosource>
+      <videosource>false</videosource>
+      <connectionname>Input 2</connectionname>
+      <facing>1</facing>
+      <consumer>true</consumer>
+      <linelevel>true</linelevel>
+      <classes>
+        <class>
+          <classname>HDMI</classname>
+        </class>
+      </classes>
+    </connection>
+    <connection>
+      <type>5</type>
+      <id>1002</id>
+      <audiosource>false</audiosource>
+      <videosource>false</videosource>
+      <connectionname>Input 3</connectionname>
+      <facing>1</facing>
+      <consumer>true</consumer>
+      <linelevel>true</linelevel>
+      <classes>
+        <class>
+          <classname>HDMI</classname>
+        </class>
+      </classes>
+    </connection>
+    <connection>
+      <type>5</type>
+      <id>1003</id>
+      <audiosource>false</audiosource>
+      <videosource>false</videosource>
+      <connectionname>Input 4</connectionname>
+      <facing>1</facing>
+      <consumer>true</consumer>
+      <linelevel>true</linelevel>
+      <classes>
+        <class>
+          <classname>HDMI</classname>
+        </class>
+      </classes>
+    </connection>
+    <connection>
+      <type>5</type>
+      <id>2000</id>
+      <audiosource>false</audiosource>
+      <videosource>false</videosource>
+      <connectionname>Output 1</connectionname>
+      <facing>1</facing>
+      <consumer>false</consumer>
+      <linelevel>true</linelevel>
+      <classes>
+        <class>
+          <classname>HDMI</classname>
+        </class>
+      </classes>
+    </connection>
+    <connection>
+      <type>5</type>
+      <id>2001</id>
+      <audiosource>false</audiosource>
+      <videosource>false</videosource>
+      <connectionname>Output 2</connectionname>
+      <facing>1</facing>
+      <consumer>false</consumer>
+      <linelevel>true</linelevel>
+      <classes>
+        <class>
+          <classname>HDMI</classname>
+        </class>
+      </classes>
+    </connection>
+    <connection>
+      <type>5</type>
+      <id>2002</id>
+      <audiosource>false</audiosource>
+      <videosource>false</videosource>
+      <connectionname>Output 3</connectionname>
+      <facing>1</facing>
+      <consumer>false</consumer>
+      <linelevel>true</linelevel>
+      <classes>
+        <class>
+          <classname>HDMI</classname>
+        </class>
+      </classes>
+    </connection>
+    <connection>
+      <type>5</type>
+      <id>2003</id>
+      <audiosource>false</audiosource>
+      <videosource>false</videosource>
+      <connectionname>Output 4</connectionname>
+      <facing>1</facing>
+      <consumer>false</consumer>
+      <linelevel>true</linelevel>
+      <classes>
+        <class>
+          <classname>HDMI</classname>
+        </class>
+      </classes>
+    </connection>
+
+- 	<connection><type>6</type><id>3000</id><audiosource>false</audiosource><videosource>false</videosource><connectionname>Output ARC 1</connectionname><facing>1</facing><consumer>true</consumer><linelevel>true</linelevel>
+-	<classes>
+-		<class><classname>DIGITAL_OPTICAL</classname></class></classes></connection>
+
+
+- 	<connection><type>6</type><id>3001</id><audiosource>false</audiosource><videosource>false</videosource><connectionname>Output ARC 2</connectionname><facing>1</facing><consumer>true</consumer><linelevel>true</linelevel>
+-	<classes>
+-		<class><classname>DIGITAL_OPTICAL</classname></class></classes></connection>
+
+	-<connection><type>6</type><id>3002</id><audiosource>false</audiosource><videosource>false</videosource><connectionname>Output ARC 3</connectionname><facing>1</facing><consumer>true</consumer><linelevel>true</linelevel>
+-	<classes>
+-		<class><classname>DIGITAL_OPTICAL</classname></class></classes></connection>
+
+	-<connection><type>6</type><id>3003</id><audiosource>false</audiosource><videosource>false</videosource><connectionname>Output ARC 4</connectionname><facing>1</facing><consumer>true</consumer><linelevel>true</linelevel>
+-	<classes>
+-		<class><classname>DIGITAL_OPTICAL</classname></class></classes></connection>
+	- 	<connection><type>6</type><id>3004</id><audiosource>false</audiosource><videosource>false</videosource><connectionname>Output ARC 5</connectionname><facing>1</facing><consumer>true</consumer><linelevel>true</linelevel>
+-	<classes>
+-		<class><classname>DIGITAL_OPTICAL</classname></class></classes></connection><connection><type>6</type><id>3005</id><audiosource>false</audiosource><videosource>false</videosource><connectionname>Output ARC 6</connectionname><facing>1</facing><consumer>true</consumer><linelevel>true</linelevel>
+-	<classes>
+-		<class><classname>DIGITAL_OPTICAL</classname></class></classes></connection>
+
+	-<connection><type>6</type><id>3006</id><audiosource>false</audiosource><videosource>false</videosource><connectionname>Output ARC 7</connectionname><facing>1</facing><consumer>true</consumer><linelevel>true</linelevel>
+-	<classes>
+-		<class><classname>DIGITAL_OPTICAL</classname></class></classes></connection>
+
+	-<connection><type>6</type><id>3007</id><audiosource>false</audiosource><videosource>false</videosource><connectionname>Output ARC 8</connectionname><facing>1</facing><consumer>true</consumer><linelevel>true</linelevel>
+-	<classes>
+-		<class><classname>DIGITAL_OPTICAL</classname></class></classes></connection><connection><type>6</type><id>4000</id><audiosource>false</audiosource><videosource>false</videosource><connectionname>Exa output 1</connectionname><facing>1</facing><consumer>false</consumer><linelevel>true</linelevel><classes><class><classname>STEREO</classname></class></classes></connection><connection><type>6</type><id>4001</id><audiosource>false</audiosource><videosource>false</videosource><connectionname>Exa output 2</connectionname><facing>1</facing><consumer>false</consumer><linelevel>true</linelevel><classes><class><classname>STEREO</classname></class></classes></connection><connection><type>6</type><id>4002</id><audiosource>false</audiosource><videosource>false</videosource><connectionname>Exa output 3</connectionname><facing>1</facing><consumer>false</consumer><linelevel>true</linelevel><classes><class><classname>STEREO</classname></class></classes></connection><connection><type>6</type><id>4003</id><audiosource>false</audiosource><videosource>false</videosource><connectionname>Exa output 4</connectionname><facing>1</facing><consumer>false</consumer><linelevel>true</linelevel><classes><class><classname>STEREO</classname></class></classes></connection><connection><type>6</type><id>4004</id><audiosource>false</audiosource><videosource>false</videosource><connectionname>Exa output 5</connectionname><facing>1</facing><consumer>false</consumer><linelevel>true</linelevel><classes><class><classname>STEREO</classname></class></classes></connection><connection><type>6</type><id>4005</id><audiosource>true</audiosource><videosource>false</videosource><connectionname>Exa output 6</connectionname><facing>1</facing><consumer>false</consumer><linelevel>true</linelevel><classes><class><classname>STEREO</classname></class></classes></connection><connection><type>6</type><id>4006</id><audiosource>false</audiosource><videosource>false</videosource><connectionname>Exa output 7</connectionname><facing>1</facing><consumer>false</consumer><linelevel>true</linelevel><classes><class><classname>STEREO</classname></class></classes></connection><connection><type>6</type><id>4007</id><audiosource>falsetrue</audiosource><videosource>false</videosource><connectionname>Exa output 8</connectionname><facing>1</facing><consumer>false</consumer><linelevel>true</linelevel><classes><class><classname>STEREO</classname></class></classes></connection><connection><type>5</type><id>1004</id><audiosource>false</audiosource><videosource>false</videosource><connectionname>Input 5</connectionname><facing>1</facing><consumer>true</consumer><linelevel>true</linelevel><classes><class><classname>HDMI</classname></class></classes></connection><connection><type>5</type><id>1005</id><audiosource>false</audiosource><videosource>false</videosource><connectionname>Input 6</connectionname><facing>1</facing><consumer>true</consumer><linelevel>true</linelevel><classes><class><classname>HDMI</classname></class></classes></connection><connection><type>5</type><id>1006</id><audiosource>false</audiosource><videosource>false</videosource><connectionname>Input 7</connectionname><facing>1</facing><consumer>true</consumer><linelevel>true</linelevel><classes><class><classname>HDMI</classname></class></classes></connection><connection><type>5</type><id>1007</id><audiosource>false</audiosource><videosource>false</videosource><connectionname>Input 8</connectionname><facing>1</facing><consumer>true</consumer><linelevel>true</linelevel><classes><class><classname>HDMI</classname></class></classes></connection><connection><type>5</type><id>2004</id><audiosource>false</audiosource><videosource>false</videosource><connectionname>Output 5</connectionname><facing>1</facing><consumer>false</consumer><linelevel>true</linelevel><classes><class><classname>HDMI</classname></class></classes></connection><connection><type>5</type><id>2005</id><audiosource>false</audiosource><videosource>false</videosource><connectionname>Output 6</connectionname><facing>1</facing><consumer>false</consumer><linelevel>true</linelevel><classes><class><classname>HDMI</classname></class></classes></connection><connection><type>5</type><id>2006</id><audiosource>false</audiosource><videosource>false</videosource><connectionname>Output 7</connectionname><facing>1</facing><consumer>false</consumer><linelevel>true</linelevel><classes><class><classname>HDMI</classname></class></classes></connection><connection><type>5</type><id>2007</id><audiosource>false</audiosource><videosource>false</videosource><connectionname>Output 8</connectionname><facing>1</facing><consumer>false</consumer><linelevel>true</linelevel><classes><class><classname>HDMI</classname></class></classes></connection></connections>
+  <config>
+    <power_management_method>AlwaysOn</power_management_method>
+    <power_command_delay>0</power_command_delay>
+    <power_delay>0</power_delay>
+    <power_command_needed>False</power_command_needed>
+    <serialsettings>115200 8 none 1 none 232</serialsettings>
+    <documentation file="documentation.rtf" />
+    <script file="driver.lua" />
+    <properties>
+      <property>
+        <name>Log Level</name>
+        <type>LIST</type>
+        <readonly>false</readonly>
+        <default>2 - Warning</default>
+        <items>
+          <item>0 - Alert</item>
+          <item>1 - Error</item>
+          <item>2 - Warning</item>
+          <item>3 - Info</item>
+          <item>4 - Trace</item>
+          <item>5 - Debug</item>
+        </items>
+      </property>
+      <property>
+        <name>Log Mode</name>
+        <type>LIST</type>
+        <readonly>false</readonly>
+        <default>Off</default>
+        <items>
+          <item>Off</item>
+          <item>Print</item>
+          <item>Log</item>
+          <item>Print and Log</item>
+        </items>
+      </property>
+      <property>
+        <name>Command Delay Milliseconds</name>
+        <type>RANGED_INTEGER</type>
+        <readonly>false</readonly>
+        <default>250</default>
+        <minimum>200</minimum>
+        <maximum>2500</maximum>
+      </property>
+      <property>
+        <name>Power On Delay Seconds</name>
+        <type>RANGED_INTEGER</type>
+        <readonly>false</readonly>
+        <default>10</default>
+        <minimum>1</minimum>
+        <maximum>30</maximum>
+      </property>
+      <property>
+        <name>Power Off Delay Seconds</name>
+        <type>RANGED_INTEGER</type>
+        <readonly>false</readonly>
+        <default>2</default>
+        <minimum>1</minimum>
+        <maximum>5</maximum>
+      </property>
+      <property>
+        <name>Connected To Network</name>
+        <type>STRING</type>
+        <readonly>false</readonly>
+        <default>Disconnect</default>
+      </property>
+      <property>
+        <name>HDMI Input 1 Connect Status</name>
+        <type>STRING</type>
+        <readonly>true</readonly>
+        <default>Disconnect</default>
+      </property>
+      <property>
+        <name>HDMI Input 2 Connect Status</name>
+        <type>STRING</type>
+        <readonly>true</readonly>
+        <default>Disconnect</default>
+      </property>
+      <property>
+        <name>HDMI Input 3 Connect Status</name>
+        <type>STRING</type>
+        <readonly>true</readonly>
+        <default>Disconnect</default>
+      </property>
+      <property>
+        <name>HDMI Input 4 Connect Status</name>
+        <type>STRING</type>
+        <readonly>true</readonly>
+        <default>Disconnect</default>
+      </property>
+      <property>
+        <name>HDMI Input 5 Connect Status</name>
+        <type>STRING</type>
+        <readonly>true</readonly>
+        <default>Disconnect</default>
+      </property>
+      <property>
+        <name>HDMI Input 6 Connect Status</name>
+        <type>STRING</type>
+        <readonly>true</readonly>
+        <default>Disconnect</default>
+      </property>
+      <property>
+        <name>HDMI Input 7 Connect Status</name>
+        <type>STRING</type>
+        <readonly>true</readonly>
+        <default>Disconnect</default>
+      </property>
+      <property>
+        <name>HDMI Input 8 Connect Status</name>
+        <type>STRING</type>
+        <readonly>true</readonly>
+        <default>Disconnect</default>
+      </property>
+      <property>
+        <name>HDMI Output 1 Connect Status</name>
+        <type>STRING</type>
+        <readonly>true</readonly>
+        <default>Disconnect</default>
+      </property>
+      <property>
+        <name>HDMI Output 2 Connect Status</name>
+        <type>STRING</type>
+        <readonly>true</readonly>
+        <default>Disconnect</default>
+      </property>
+      <property>
+        <name>HDMI Output 3 Connect Status</name>
+        <type>STRING</type>
+        <readonly>true</readonly>
+        <default>Disconnect</default>
+      </property>
+      <property>
+        <name>HDMI Output 4 Connect Status</name>
+        <type>STRING</type>
+        <readonly>true</readonly>
+        <default>Disconnect</default>
+      </property>
+      <property>
+        <name>HDMI Output 5 Connect Status</name>
+        <type>STRING</type>
+        <readonly>true</readonly>
+        <default>Disconnect</default>
+      </property>
+      <property>
+        <name>HDMI Output 6 Connect Status</name>
+        <type>STRING</type>
+        <readonly>true</readonly>
+        <default>Disconnect</default>
+      </property>
+      <property>
+        <name>HDMI Output 7 Connect Status</name>
+        <type>STRING</type>
+        <readonly>true</readonly>
+        <default>Disconnect</default>
+      </property>
+      <property>
+        <name>HDMI Output 8 Connect Status</name>
+        <type>STRING</type>
+        <readonly>true</readonly>
+        <default>Disconnect</default>
+      </property>
+    </properties>
+    <actions>
+      <action>
+        <name>Print Device Current Status</name>
+        <command>ACTION_GetSystemStatus</command>
+      </action>
+      <action>
+        <name>Set Device Reboot</name>
+        <command>ACTION_SetDeviceReboot</command>
+      </action>
+      <action>
+        <name>Set Device Power On or Off</name>
+        <command>ACTION_SetPowerMode</command>
+        <params>
+          <param>
+            <name>mode</name>
+            <type>LIST</type>
+            <default></default>
+            <items>
+              <item>On</item>
+              <item>Off</item>
+            </items>
+          </param>
+        </params>
+      </action>
+      <action>
+        <name>Set Device Beep Mode</name>
+        <command>ACTION_SetBeepMode</command>
+        <params>
+          <param>
+            <name>mode</name>
+            <type>LIST</type>
+            <default></default>
+            <items>
+              <item>On</item>
+              <item>Off</item>
+            </items>
+          </param>
+        </params>
+      </action>
+      <action>
+        <name>Set Device Pannel Lock On or Off</name>
+        <command>ACTION_SetPannelMode</command>
+        <params>
+          <param>
+            <name>mode</name>
+            <type>LIST</type>
+            <default></default>
+            <items>
+              <item>On</item>
+              <item>Off</item>
+            </items>
+          </param>
+        </params>
+      </action>
+    </actions>
+    <commands>
+      <command>
+        <name>GetSystemStatus</name>
+        <description>get system status</description>
+      </command>
+      <command>
+        <name>SetDeviceReboot</name>
+        <description>reboot the connected device</description>
+      </command>
+      <command>
+        <name>SetPowerMode</name>
+        <description>set the device power on or off</description>
+        <params>
+          <param>
+            <name>mode</name>
+            <type>LIST</type>
+            <items>
+              <item>On</item>
+              <item>Off</item>
+            </items>
+          </param>
+        </params>
+      </command>
+      <command>
+        <name>SetBeepMode</name>
+        <description>set the device beep on or off</description>
+        <params>
+          <param>
+            <name>mode</name>
+            <type>LIST</type>
+            <items>
+              <item>On</item>
+              <item>Off</item>
+            </items>
+          </param>
+        </params>
+      </command>
+      <command>
+        <name>SetPannelMode</name>
+        <description>set the pannel lock or unlock</description>
+        <params>
+          <param>
+            <name>mode</name>
+            <type>LIST</type>
+            <items>
+              <item>Lock</item>
+              <item>Unlock</item>
+            </items>
+          </param>
+        </params>
+      </command>
+      <command>
+        <name>SetLcdOnTime</name>
+        <description>set Lcd On time</description>
+        <params>
+          <param>
+            <name>mode</name>
+            <type>LIST</type>
+            <items>
+              <item>off</item>
+              <item>always</item>
+              <item>15s</item>
+              <item>30s</item>
+              <item>60s</item>
+            </items>
+          </param>
+        </params>
+      </command>
+      <command>
+        <name>SetOutputHDCP</name>
+        <description>set output HDCP</description>
+        <params>
+          <param>
+            <name>outputPort</name>
+            <type>RANGED_INTEGER</type>
+            <minimum>0</minimum>
+            <maximum>8</maximum>
+          </param>
+          <param>
+            <name>HDCP</name>
+            <type>LIST</type>
+            <items>
+              <item>HDCP 1.4</item>
+              <item>HDCP 2.2</item>
+              <item>Follow sink</item>
+              <item>Follow source</item>
+              <item>USER MODE</item>
+            </items>
+          </param>
+        </params>
+      </command>
+      <command>
+        <name>SetOutputStreamMode</name>
+        <description>set output stream enable/disable</description>
+        <params>
+          <param>
+            <name>outputPort</name>
+            <type>RANGED_INTEGER</type>
+            <minimum>0</minimum>
+            <maximum>8</maximum>
+          </param>
+          <param>
+            <name>mode</name>
+            <type>LIST</type>
+            <items>
+              <item>On</item>
+              <item>Off</item>
+            </items>
+          </param>
+        </params>
+      </command>
+      <command>
+        <name>SetOutputVideoMode</name>
+        <description>Set output port video mode</description>
+        <params>
+          <param>
+            <name>outputPort</name>
+            <type>RANGED_INTEGER</type>
+            <minimum>0</minimum>
+            <maximum>8</maximum>
+          </param>
+          <param>
+            <name>mode</name>
+            <type>LIST</type>
+            <items>
+              <item>pass-through</item>
+              <item>8k-&gt;4k</item>
+              <item>8k/4k-&gt;1080p</item>
+              <item>auto(follow sink EDID)</item>
+              <item>audio only</item>
+            </items>
+          </param>
+        </params>
+      </command>
+      <command>
+        <name>SetOutputHdrMode</name>
+        <description>Set output port HDR to SDR mode</description>
+        <params>
+          <param>
+            <name>outputPort</name>
+            <type>RANGED_INTEGER</type>
+            <minimum>0</minimum>
+            <maximum>8</maximum>
+          </param>
+          <param>
+            <name>mode</name>
+            <type>LIST</type>
+            <items>
+              <item>pass-through</item>
+              <item>HDR to SDR</item>
+              <item>auto(follow sink EDID)</item>
+            </items>
+          </param>
+        </params>
+      </command>
+      <command>
+        <name>SetOutputArcMode</name>
+        <description>Set output ARC on/off</description>
+        <params>
+          <param>
+            <name>outputPort</name>
+            <type>RANGED_INTEGER</type>
+            <minimum>0</minimum>
+            <maximum>8</maximum>
+          </param>
+          <param>
+            <name>mode</name>
+            <type>LIST</type>
+            <items>
+              <item>On</item>
+              <item>Off</item>
+            </items>
+          </param>
+        </params>
+      </command>
+      <command>
+        <name>SetOutputAudioMuteMode</name>
+        <description>Set output mute on/off</description>
+        <params>
+          <param>
+            <name>outputPort</name>
+            <type>RANGED_INTEGER</type>
+            <minimum>0</minimum>
+            <maximum>8</maximum>
+          </param>
+          <param>
+            <name>mode</name>
+            <type>LIST</type>
+            <items>
+              <item>On</item>
+              <item>Off</item>
+            </items>
+          </param>
+        </params>
+      </command>
+      <command>
+        <name>SetVideoSwitch</name>
+        <description>Route input source to output </description>
+        <params>
+          <param>
+            <name>inputPort</name>
+            <type>RANGED_INTEGER</type>
+            <minimum>1</minimum>
+            <maximum>8</maximum>
+          </param>
+          <param>
+            <name>outputPort</name>
+            <type>RANGED_INTEGER</type>
+            <minimum>0</minimum>
+            <maximum>8</maximum>
+          </param>
+        </params>
+      </command>
+      <command>
+        <name>SetOutputExaEnableOrDisable</name>
+        <description>Set output ext-audio enable/disable </description>
+        <params>
+          <param>
+            <name>mode</name>
+            <type>LIST</type>
+            <items>
+              <item>Enable</item>
+              <item>Disable</item>
+            </items>
+          </param>
+          <param>
+            <name>outputPort</name>
+            <type>RANGED_INTEGER</type>
+            <minimum>0</minimum>
+            <maximum>8</maximum>
+          </param>
+        </params>
+      </command>
+      <command>
+        <name>SetOutputExaMode</name>
+        <description>Set output ext-audio mode</description>
+        <params>
+          <param>
+            <name>mode</name>
+            <type>LIST</type>
+            <items>
+              <item>bind to input mode</item>
+              <item>bind to output mode</item>
+              <item>matrix mode</item>
+            </items>
+          </param>
+        </params>
+      </command>
+      <command>
+        <name>SetExaSource</name>
+        <description>Route input source audio to output ext-audio </description>
+        <params>
+          <param>
+            <name>inputPort</name>
+            <type>RANGED_INTEGER</type>
+            <minimum>1</minimum>
+            <maximum>8</maximum>
+          </param>
+          <param>
+            <name>ExaOutput</name>
+            <type>RANGED_INTEGER</type>
+            <minimum>0</minimum>
+            <maximum>8</maximum>
+          </param>
+        </params>
+      </command>
+      <command>
+        <name>SetPresetFunction</name>
+        <description> Set preset related functions</description>
+        <params>
+          <param>
+            <name>Preset</name>
+            <type>LIST</type>
+            <items>
+              <item>Preset 1</item>
+              <item>Preset 2</item>
+              <item>Preset 3</item>
+              <item>Preset 4</item>
+              <item>Preset 5</item>
+              <item>Preset 6</item>
+              <item>Preset 7</item>
+              <item>Preset 8</item>
+            </items>
+            <default>Preset 1</default>
+          </param>
+          <param>
+            <name>Mode</name>
+            <type>LIST</type>
+            <items>
+              <item>Recall</item>
+              <item>Save</item>
+              <item>Clear</item>
+              <item>Query</item>
+            </items>
+            <default>Recall</default>
+          </param>
+        </params>
+      </command>
+      <command>
+        <name>SetCECCommand</name>
+        <description>Set CEC Command To Device</description>
+        <params>
+          <param>
+            <name>CECCommand</name>
+            <type>LIST</type>
+            <items>
+              <item>CEC IN Power On</item>
+              <item>CEC IN Power Off</item>
+              <item>CEC IN Menu</item>
+              <item>CEC IN Back</item>
+              <item>CEC IN Left</item>
+              <item>CEC IN Right</item>
+              <item>CEC IN Up</item>
+              <item>CEC IN Down</item>
+              <item>CEC IN Enter</item>
+              <item>CEC IN Play</item>
+              <item>CEC IN Pause</item>
+              <item>CEC IN Stop</item>
+              <item>CEC IN Rew</item>
+              <item>CEC IN Mute</item>
+              <item>CEC IN Vol Up</item>
+              <item>CEC IN Vol Down</item>
+              <item>CEC IN Fast Forward</item>
+              <item>CEC IN Previous</item>
+              <item>CEC IN Next</item>
+              <item>CEC HDMI Out Power On</item>
+              <item>CEC HDMI Out Power Off</item>
+              <item>CEC HDMI Out Mute</item>
+              <item>CEC HDMI Out Vol Up</item>
+              <item>CEC HDMI Out Vol Down</item>
+              <item>CEC HDMI Out Active</item>
+            </items>
+            <default>CEC IN Power On</default>
+          </param>
+          <param>
+            <name>port</name>
+            <type>RANGED_INTEGER</type>
+            <minimum>0</minimum>
+            <maximum>8</maximum>
+          </param>
+        </params>
+      </command>
+    </commands>
+  </config>
+  <composer_categories>
+    <category>Audio/Video</category>
+  </composer_categories>
+</devicedata>

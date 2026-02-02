@@ -1,0 +1,205 @@
+{
+  "version": 2,
+  "profiles": [
+    {
+      "id": "test_ml36xe9b",
+      "name": "test",
+      "icon": "\ud83d\udcfa",
+      "outputs": {
+        "1": {
+          "input": 4,
+          "enabled": true,
+          "audio_mute": false
+        },
+        "2": {
+          "input": 3,
+          "enabled": true,
+          "audio_mute": false
+        },
+        "3": {
+          "input": 5,
+          "enabled": false,
+          "audio_mute": false
+        },
+        "4": {
+          "input": 4,
+          "enabled": false,
+          "audio_mute": false
+        },
+        "5": {
+          "input": 4,
+          "enabled": false,
+          "audio_mute": false
+        },
+        "6": {
+          "input": 5,
+          "enabled": false,
+          "audio_mute": false
+        },
+        "7": {
+          "input": 6,
+          "enabled": false,
+          "audio_mute": false
+        },
+        "8": {
+          "input": 8,
+          "enabled": false,
+          "audio_mute": false
+        }
+      },
+      "macros": [],
+      "pinned": true,
+      "pin_order": 0
+    },
+    {
+      "id": "test3_ml36xio3",
+      "name": "test3",
+      "icon": "\ud83d\udcfa",
+      "outputs": {
+        "1": {
+          "input": 4,
+          "enabled": true,
+          "audio_mute": false
+        },
+        "2": {
+          "input": 3,
+          "enabled": true,
+          "audio_mute": false
+        },
+        "3": {
+          "input": 5,
+          "enabled": false,
+          "audio_mute": false
+        },
+        "4": {
+          "input": 4,
+          "enabled": false,
+          "audio_mute": false
+        },
+        "5": {
+          "input": 4,
+          "enabled": false,
+          "audio_mute": false
+        },
+        "6": {
+          "input": 5,
+          "enabled": false,
+          "audio_mute": false
+        },
+        "7": {
+          "input": 6,
+          "enabled": false,
+          "audio_mute": false
+        },
+        "8": {
+          "input": 8,
+          "enabled": false,
+          "audio_mute": false
+        }
+      },
+      "macros": [],
+      "pinned": true,
+      "pin_order": 1
+    },
+    {
+      "id": "test4_ml36xly6",
+      "name": "test4",
+      "icon": "\ud83d\udcfa",
+      "outputs": {
+        "1": {
+          "input": 4,
+          "enabled": true,
+          "audio_mute": false
+        },
+        "2": {
+          "input": 3,
+          "enabled": true,
+          "audio_mute": false
+        },
+        "3": {
+          "input": 5,
+          "enabled": false,
+          "audio_mute": false
+        },
+        "4": {
+          "input": 4,
+          "enabled": false,
+          "audio_mute": false
+        },
+        "5": {
+          "input": 4,
+          "enabled": false,
+          "audio_mute": false
+        },
+        "6": {
+          "input": 5,
+          "enabled": false,
+          "audio_mute": false
+        },
+        "7": {
+          "input": 6,
+          "enabled": false,
+          "audio_mute": false
+        },
+        "8": {
+          "input": 8,
+          "enabled": false,
+          "audio_mute": false
+        }
+      },
+      "macros": [],
+      "pinned": true,
+      "pin_order": 2
+    },
+    {
+      "id": "test2_ml36xp8q",
+      "name": "test2",
+      "icon": "\ud83d\udcfa",
+      "outputs": {
+        "1": {
+          "input": 4,
+          "enabled": true,
+          "audio_mute": false
+        },
+        "2": {
+          "input": 3,
+          "enabled": true,
+          "audio_mute": false
+        },
+        "3": {
+          "input": 5,
+          "enabled": false,
+          "audio_mute": false
+        },
+        "4": {
+          "input": 4,
+          "enabled": false,
+          "audio_mute": false
+        },
+        "5": {
+          "input": 4,
+          "enabled": false,
+          "audio_mute": false
+        },
+        "6": {
+          "input": 5,
+          "enabled": false,
+          "audio_mute": false
+        },
+        "7": {
+          "input": 6,
+          "enabled": false,
+          "audio_mute": false
+        },
+        "8": {
+          "input": 8,
+          "enabled": false,
+          "audio_mute": false
+        }
+      },
+      "macros": [],
+      "pinned": true,
+      "pin_order": 3
+    }
+  ]
+}
