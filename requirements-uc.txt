@@ -1,0 +1,9 @@
+# Unfolded Circle integration dependencies
+# Install with: pip install -r requirements-uc.txt
+
+# Include core dependencies
+-r requirements.txt
+
+# UC-specific packages
+ucapi>=0.5.0
+pyee>=11.0.0
