@@ -1,0 +1,215 @@
+{
+  "scenes": [
+    {
+      "id": "test_scene",
+      "name": "Test Scene",
+      "outputs": {
+        "1": {
+          "input": 2,
+          "enabled": true,
+          "audio_mute": false
+        },
+        "2": {
+          "input": 3,
+          "enabled": true,
+          "audio_mute": true
+        }
+      }
+    },
+    {
+      "id": "movie_night",
+      "name": "Movie Night",
+      "outputs": {
+        "1": {
+          "input": 1,
+          "enabled": true,
+          "audio_mute": false
+        },
+        "2": {
+          "input": 1,
+          "enabled": true,
+          "audio_mute": false
+        }
+      }
+    },
+    {
+      "id": "recall_test",
+      "name": "Recall Test",
+      "outputs": {
+        "1": {
+          "input": 3,
+          "enabled": true,
+          "audio_mute": false
+        },
+        "2": {
+          "input": 4,
+          "enabled": true,
+          "audio_mute": false
+        }
+      }
+    },
+    {
+      "id": "current_state",
+      "name": "Current State",
+      "outputs": {
+        "1": {
+          "input": 1,
+          "enabled": true,
+          "audio_mute": false,
+          "hdr_mode": 3,
+          "hdcp_mode": 3
+        },
+        "2": {
+          "input": 2,
+          "enabled": true,
+          "audio_mute": false,
+          "hdr_mode": 3,
+          "hdcp_mode": 3
+        },
+        "3": {
+          "input": 3,
+          "enabled": true,
+          "audio_mute": false,
+          "hdr_mode": 3,
+          "hdcp_mode": 3
+        },
+        "4": {
+          "input": 4,
+          "enabled": true,
+          "audio_mute": false,
+          "hdr_mode": 3,
+          "hdcp_mode": 3
+        },
+        "5": {
+          "input": 5,
+          "enabled": true,
+          "audio_mute": false,
+          "hdr_mode": 3,
+          "hdcp_mode": 3
+        },
+        "6": {
+          "input": 6,
+          "enabled": true,
+          "audio_mute": false,
+          "hdr_mode": 3,
+          "hdcp_mode": 3
+        },
+        "7": {
+          "input": 7,
+          "enabled": true,
+          "audio_mute": false,
+          "hdr_mode": 3,
+          "hdcp_mode": 3
+        },
+        "8": {
+          "input": 8,
+          "enabled": true,
+          "audio_mute": false,
+          "hdr_mode": 3,
+          "hdcp_mode": 3
+        }
+      }
+    },
+    {
+      "id": "recall_validation",
+      "name": "Recall Validation",
+      "outputs": {
+        "1": {
+          "input": 5,
+          "enabled": true,
+          "audio_mute": false
+        },
+        "3": {
+          "input": 2,
+          "enabled": true,
+          "audio_mute": false
+        },
+        "7": {
+          "input": 8,
+          "enabled": true,
+          "audio_mute": false
+        }
+      }
+    },
+    {
+      "id": "mute_test",
+      "name": "Mute Test",
+      "outputs": {
+        "2": {
+          "input": 1,
+          "enabled": true,
+          "audio_mute": true
+        }
+      }
+    },
+    {
+      "id": "cec_get_test",
+      "name": "CEC Get Test",
+      "outputs": {
+        "1": {
+          "input": 1,
+          "enabled": true,
+          "audio_mute": false
+        }
+      },
+      "cec_config": {
+        "nav_targets": [
+          "input:1"
+        ],
+        "playback_targets": [],
+        "volume_targets": [
+          "output:1"
+        ],
+        "power_on_targets": [],
+        "power_off_targets": [],
+        "auto_resolved": true
+      }
+    },
+    {
+      "id": "cec_post_test",
+      "name": "CEC Post Test",
+      "outputs": {
+        "1": {
+          "input": 1,
+          "enabled": true,
+          "audio_mute": false
+        }
+      },
+      "cec_config": {
+        "nav_targets": [
+          "input:2",
+          "input:3"
+        ],
+        "playback_targets": [
+          "input:2"
+        ],
+        "volume_targets": [],
+        "power_on_targets": [],
+        "power_off_targets": [],
+        "auto_resolved": false
+      }
+    },
+    {
+      "id": "cec_put_test",
+      "name": "CEC Put Test",
+      "outputs": {
+        "1": {
+          "input": 1,
+          "enabled": true,
+          "audio_mute": false
+        }
+      },
+      "cec_config": {
+        "nav_targets": [],
+        "playback_targets": [],
+        "volume_targets": [
+          "output:1",
+          "output:2"
+        ],
+        "power_on_targets": [],
+        "power_off_targets": [],
+        "auto_resolved": false
+      }
+    }
+  ]
+}

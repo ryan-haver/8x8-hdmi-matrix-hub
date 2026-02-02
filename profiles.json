@@ -1,0 +1,310 @@
+{
+  "version": 2,
+  "profiles": [
+    {
+      "id": "test_mkr80vju",
+      "name": "test",
+      "icon": "\ud83d\udd0a",
+      "outputs": {
+        "1": {
+          "input": 3,
+          "enabled": true,
+          "audio_mute": false
+        },
+        "2": {
+          "input": 5,
+          "enabled": true,
+          "audio_mute": false
+        },
+        "3": {
+          "input": 3,
+          "enabled": false,
+          "audio_mute": false
+        },
+        "4": {
+          "input": 7,
+          "enabled": false,
+          "audio_mute": false
+        },
+        "5": {
+          "input": 4,
+          "enabled": false,
+          "audio_mute": false
+        },
+        "6": {
+          "input": 8,
+          "enabled": false,
+          "audio_mute": false
+        },
+        "7": {
+          "input": 7,
+          "enabled": false,
+          "audio_mute": false
+        },
+        "8": {
+          "input": 8,
+          "enabled": false,
+          "audio_mute": false
+        }
+      },
+      "macros": [
+        "macro_d4637707"
+      ],
+      "pinned": true,
+      "pin_order": 0,
+      "power_on_macro": "get_macro_test",
+      "power_off_macro": "update_steps_test"
+    },
+    {
+      "id": "movie_night",
+      "name": "Movie Night",
+      "icon": "\ud83c\udfac",
+      "outputs": {
+        "1": {
+          "input": 2,
+          "enabled": true,
+          "audio_mute": false
+        },
+        "2": {
+          "input": 2,
+          "enabled": true,
+          "audio_mute": true
+        }
+      },
+      "macros": [
+        "macro_1",
+        "macro_2"
+      ],
+      "pinned": false,
+      "pin_order": 0,
+      "power_on_macro": "startup_macro",
+      "power_off_macro": "shutdown_macro"
+    },
+    {
+      "id": "basic_profile",
+      "name": "Basic Profile",
+      "icon": "\ud83d\udcfa",
+      "outputs": {
+        "1": {
+          "input": 1,
+          "enabled": true,
+          "audio_mute": false
+        }
+      },
+      "macros": [],
+      "pinned": true,
+      "pin_order": 4
+    },
+    {
+      "id": "get_test",
+      "name": "Get Test",
+      "icon": "\ud83d\udcfa",
+      "outputs": {
+        "1": {
+          "input": 3,
+          "enabled": true,
+          "audio_mute": false
+        }
+      },
+      "macros": [],
+      "pinned": true,
+      "pin_order": 5
+    },
+    {
+      "id": "update_test",
+      "name": "Updated Name",
+      "icon": "\ud83c\udfac",
+      "outputs": {
+        "1": {
+          "input": 1,
+          "enabled": true,
+          "audio_mute": false
+        }
+      },
+      "macros": [],
+      "pinned": true,
+      "pin_order": 6
+    },
+    {
+      "id": "macro_update_test",
+      "name": "Macro Test",
+      "icon": "\ud83d\udcfa",
+      "outputs": {
+        "1": {
+          "input": 1,
+          "enabled": true,
+          "audio_mute": false
+        }
+      },
+      "macros": [
+        "macro_a",
+        "macro_b"
+      ],
+      "pinned": true,
+      "pin_order": 7,
+      "power_on_macro": "power_on",
+      "power_off_macro": "power_off"
+    },
+    {
+      "id": "recall_switch_test",
+      "name": "Recall Switch Test",
+      "icon": "\ud83d\udcfa",
+      "outputs": {
+        "1": {
+          "input": 3,
+          "enabled": true,
+          "audio_mute": false
+        },
+        "2": {
+          "input": 4,
+          "enabled": true,
+          "audio_mute": false
+        },
+        "5": {
+          "input": 1,
+          "enabled": true,
+          "audio_mute": false
+        }
+      },
+      "macros": [],
+      "pinned": false,
+      "pin_order": 0
+    },
+    {
+      "id": "list_test_0",
+      "name": "List Test 0",
+      "icon": "\ud83d\udcfa",
+      "outputs": {
+        "1": {
+          "input": 1,
+          "enabled": true,
+          "audio_mute": false
+        }
+      },
+      "macros": [],
+      "pinned": false,
+      "pin_order": 0
+    },
+    {
+      "id": "list_test_1",
+      "name": "List Test 1",
+      "icon": "\ud83d\udcfa",
+      "outputs": {
+        "1": {
+          "input": 2,
+          "enabled": true,
+          "audio_mute": false
+        }
+      },
+      "macros": [],
+      "pinned": false,
+      "pin_order": 0
+    },
+    {
+      "id": "list_test_2",
+      "name": "List Test 2",
+      "icon": "\ud83d\udcfa",
+      "outputs": {
+        "1": {
+          "input": 3,
+          "enabled": true,
+          "audio_mute": false
+        }
+      },
+      "macros": [],
+      "pinned": false,
+      "pin_order": 0
+    },
+    {
+      "id": "profile_cec_test",
+      "name": "Profile CEC Test",
+      "icon": "\ud83d\udcfa",
+      "outputs": {
+        "1": {
+          "input": 1,
+          "enabled": true,
+          "audio_mute": false
+        }
+      },
+      "macros": [],
+      "pinned": false,
+      "pin_order": 0,
+      "cec_config": {
+        "nav_targets": [
+          "input:1"
+        ],
+        "playback_targets": [],
+        "volume_targets": [],
+        "power_on_targets": [],
+        "power_off_targets": [],
+        "auto_resolved": true
+      }
+    },
+    {
+      "id": "profile_cec_update",
+      "name": "Profile CEC Update",
+      "icon": "\ud83d\udcfa",
+      "outputs": {
+        "1": {
+          "input": 1,
+          "enabled": true,
+          "audio_mute": false
+        }
+      },
+      "macros": [],
+      "pinned": false,
+      "pin_order": 0,
+      "cec_config": {
+        "nav_targets": [
+          "input:2"
+        ],
+        "playback_targets": [],
+        "volume_targets": [
+          "output:1"
+        ],
+        "power_on_targets": [],
+        "power_off_targets": [],
+        "auto_resolved": true
+      }
+    },
+    {
+      "id": "profile_macro_get",
+      "name": "Profile Macro Get",
+      "icon": "\ud83d\udcfa",
+      "outputs": {
+        "1": {
+          "input": 1,
+          "enabled": true,
+          "audio_mute": false
+        }
+      },
+      "macros": [
+        "macro1",
+        "macro2"
+      ],
+      "pinned": false,
+      "pin_order": 0,
+      "power_on_macro": "startup"
+    },
+    {
+      "id": "profile_macro_update",
+      "name": "Profile Macro Update",
+      "icon": "\ud83d\udcfa",
+      "outputs": {
+        "1": {
+          "input": 1,
+          "enabled": true,
+          "audio_mute": false
+        }
+      },
+      "macros": [
+        "new_macro1",
+        "new_macro2"
+      ],
+      "pinned": false,
+      "pin_order": 0,
+      "power_on_macro": "on_macro",
+      "power_off_macro": "off_macro"
+    }
+  ]
+}

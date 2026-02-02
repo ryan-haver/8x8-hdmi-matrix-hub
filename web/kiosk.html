@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0f172a">
+    <title>OREI Matrix - Kiosk</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --primary-color: #3b82f6;
+            --primary-dark: #2563eb;
+            --success-color: #22c55e;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --border-color: #475569;
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            touch-action: manipulation;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .kiosk-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            padding: 12px;
+            gap: 12px;
+        }
+
+        .kiosk-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            flex-shrink: 0;
+        }
+
+        .kiosk-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .kiosk-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--error-color);
+            transition: background 0.3s;
+        }
+
+        .status-dot.connected {
+            background: var(--success-color);
+        }
+
+        .kiosk-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* 4 columns on wider tablets */
+        @media (min-width: 600px) and (min-height: 400px) {
+            .kiosk-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* 2x4 layout on landscape tablets */
+        @media (min-width: 800px) {
+            .kiosk-grid {
+                grid-template-columns: repeat(4, 1fr);
+                grid-template-rows: repeat(2, 1fr);
+            }
+        }
+
+        .kiosk-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px 12px;
+            background: var(--bg-secondary);
+            border: 3px solid var(--border-color);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            position: relative;
+            overflow: hidden;
+            min-height: 0;
+        }
+
+        .kiosk-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* Status indicator bar on left */
+        .kiosk-btn::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 6px;
+            background: var(--text-muted);
+            transition: background 0.3s;
+        }
+
+        .kiosk-btn.status-signal::before {
+            background: var(--success-color);
+        }
+
+        .kiosk-btn.status-cable::before {
+            background: var(--warning-color);
+        }
+
+        .kiosk-btn.status-disconnected::before {
+            background: var(--error-color);
+        }
+
+        .kiosk-btn.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-lg), 0 0 30px rgba(59, 130, 246, 0.4);
+        }
+
+        .kiosk-btn.active::before {
+            background: white;
+        }
+
+        .kiosk-btn.loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .kiosk-btn-number {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 700;
+            line-height: 1;
+            color: var(--text-muted);
+        }
+
+        .kiosk-btn.active .kiosk-btn-number {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .kiosk-btn-name {
+            font-size: clamp(0.9rem, 2.5vw, 1.25rem);
+            font-weight: 600;
+            text-align: center;
+            color: var(--text-primary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 100%;
+            padding: 0 8px;
+        }
+
+        .kiosk-btn.active .kiosk-btn-name {
+            color: white;
+        }
+
+        /* Loading spinner */
+        .kiosk-btn.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 32px;
+            height: 32px;
+            margin: -16px 0 0 -16px;
+            border: 4px solid transparent;
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        .kiosk-btn.active.loading::after {
+            border-top-color: white;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Toast notifications */
+        .kiosk-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .kiosk-toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .kiosk-toast.success {
+            background: var(--success-color);
+        }
+
+        .kiosk-toast.error {
+            background: var(--error-color);
+        }
+
+        /* Settings button */
+        .kiosk-settings-btn {
+            background: transparent;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            color: var(--text-muted);
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .kiosk-settings-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .kiosk-settings-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Exit hint in header */
+        .kiosk-exit-hint {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            opacity: 0.6;
+            margin-left: auto;
+            padding-right: 12px;
+        }
+
+        /* Output count badge on input buttons */
+        .kiosk-btn-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            min-width: 24px;
+            height: 24px;
+            padding: 0 6px;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .kiosk-btn.active .kiosk-btn-badge {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        /* Output status footer */
+        .kiosk-footer {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 10px 12px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            flex-shrink: 0;
+        }
+
+        .kiosk-footer-title {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .output-status-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 6px;
+        }
+
+        .output-tile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            padding: 6px 4px;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .output-tile.connected {
+            border-color: var(--success-color);
+        }
+
+        .output-tile.disconnected {
+            opacity: 0.4;
+        }
+
+        .output-tile-num {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .output-tile-input {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+
+        .output-tile-name {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+            text-align: center;
+        }
+
+        /* Compact footer on small screens */
+        @media (max-width: 500px) {
+            .output-status-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="kiosk-container">
+        <header class="kiosk-header">
+            <span class="kiosk-title">Select Input</span>
+            <div class="kiosk-status">
+                <span class="status-dot" id="statusDot"></span>
+                <span id="statusText">Connecting...</span>
+                <a href="/ui" class="kiosk-settings-btn" title="Full UI">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                        <polyline points="9 22 9 12 15 12 15 22"/>
+                    </svg>
+                </a>
+            </div>
+        </header>
+        
+        <main class="kiosk-grid" id="kioskGrid">
+            <!-- Buttons rendered dynamically -->
+        </main>
+
+        <footer class="kiosk-footer">
+            <span class="kiosk-footer-title">Output Status</span>
+            <div class="output-status-grid" id="outputStatusGrid">
+                <!-- Output tiles rendered dynamically -->
+            </div>
+        </footer>
+    </div>
+
+    <div class="kiosk-toast" id="kioskToast"></div>
+
+    <script>
+        /**
+         * OREI Matrix Kiosk Mode
+         * Simplified UI for quick input switching on small tablets
+         */
+        (function() {
+            'use strict';
+
+            // Configuration
+            const API_BASE = '/api';
+            const POLL_INTERVAL = 5000;
+            const WS_RECONNECT_DELAY = 2000;
+
+            // State
+            let connected = false;
+            let routing = {};
+            let inputs = {};
+            let outputs = {};
+            let ws = null;
+            let pollTimer = null;
+
+            // DOM elements
+            const grid = document.getElementById('kioskGrid');
+            const outputGrid = document.getElementById('outputStatusGrid');
+            const statusDot = document.getElementById('statusDot');
+            const statusText = document.getElementById('statusText');
+            const toastEl = document.getElementById('kioskToast');
+
+            /**
+             * Show toast notification
+             */
+            function showToast(message, type = 'info') {
+                toastEl.textContent = message;
+                toastEl.className = 'kiosk-toast show ' + type;
+                setTimeout(() => {
+                    toastEl.classList.remove('show');
+                }, 2500);
+            }
+
+            /**
+             * Escape HTML for safe rendering
+             */
+            function escapeHtml(text) {
+                if (!text) return '';
+                const div = document.createElement('div');
+                div.textContent = String(text);
+                return div.innerHTML;
+            }
+
+            /**
+             * Get current "all outputs" routed input (if all same)
+             */
+            function getCurrentAllRouted() {
+                const values = Object.values(routing);
+                if (values.length === 0) return null;
+                const first = values[0];
+                return values.every(v => v === first) ? first : null;
+            }
+
+            /**
+             * Count how many outputs are using a given input
+             */
+            function getOutputCountForInput(inputNum) {
+                return Object.values(routing).filter(i => i === inputNum).length;
+            }
+
+            /**
+             * Update connection status display
+             */
+            function updateStatus(isConnected) {
+                connected = isConnected;
+                statusDot.classList.toggle('connected', isConnected);
+                statusText.textContent = isConnected ? 'Connected' : 'Disconnected';
+            }
+
+            /**
+             * Render input buttons and output status
+             */
+            function render() {
+                const activeInput = getCurrentAllRouted();
+                
+                // Render input buttons
+                let inputHtml = '';
+                for (let i = 1; i <= 8; i++) {
+                    const input = inputs[i] || {};
+                    const name = input.name || `Input ${i}`;
+                    const hasSignal = input.signalActive;
+                    const cableConnected = input.cableConnected;
+                    const isActive = activeInput === i;
+                    const outputCount = getOutputCountForInput(i);
+
+                    let statusClass = 'status-unknown';
+                    if (hasSignal) {
+                        statusClass = 'status-signal';
+                    } else if (cableConnected === true) {
+                        statusClass = 'status-cable';
+                    } else if (cableConnected === false) {
+                        statusClass = 'status-disconnected';
+                    }
+
+                    // Badge shows output count if > 0
+                    const badgeHtml = outputCount > 0 
+                        ? `<span class="kiosk-btn-badge">${outputCount}</span>` 
+                        : '';
+
+                    inputHtml += `
+                        <button class="kiosk-btn ${statusClass} ${isActive ? 'active' : ''}" 
+                                data-input="${i}">
+                            ${badgeHtml}
+                            <span class="kiosk-btn-number">${i}</span>
+                            <span class="kiosk-btn-name">${escapeHtml(name)}</span>
+                        </button>
+                    `;
+                }
+                grid.innerHTML = inputHtml;
+
+                // Attach click handlers
+                grid.querySelectorAll('.kiosk-btn').forEach(btn => {
+                    btn.addEventListener('click', handleButtonClick);
+                });
+
+                // Render output status grid
+                let outputHtml = '';
+                for (let o = 1; o <= 8; o++) {
+                    const output = outputs[o] || {};
+                    const currentInput = routing[o] || 0;
+                    const inputInfo = inputs[currentInput] || {};
+                    const inputName = inputInfo.name || `In ${currentInput}`;
+                    const isConnected = output.connected || output.cableConnected;
+                    
+                    outputHtml += `
+                        <div class="output-tile ${isConnected ? 'connected' : 'disconnected'}">
+                            <span class="output-tile-num">OUT ${o}</span>
+                            <span class="output-tile-input">${currentInput || '-'}</span>
+                            <span class="output-tile-name">${currentInput ? escapeHtml(inputName) : 'None'}</span>
+                        </div>
+                    `;
+                }
+                outputGrid.innerHTML = outputHtml;
+            }
+
+            /**
+             * Handle input button click
+             */
+            async function handleButtonClick(e) {
+                const btn = e.currentTarget;
+                const input = parseInt(btn.dataset.input);
+                const name = inputs[input]?.name || `Input ${input}`;
+
+                // Already loading or already active
+                if (btn.classList.contains('loading')) return;
+                if (btn.classList.contains('active')) {
+                    showToast(`${name} already active`, 'info');
+                    return;
+                }
+
+                btn.classList.add('loading');
+
+                try {
+                    // POST /api/switch with { input } routes to ALL outputs
+                    const response = await fetch(`${API_BASE}/switch`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ input: input })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    if (data.success) {
+                        // Optimistically update
+                        for (let o = 1; o <= 8; o++) {
+                            routing[o] = input;
+                        }
+                        showToast(`Switched to ${name}`, 'success');
+                        render();
+                    } else {
+                        throw new Error(data.error || 'Failed');
+                    }
+                } catch (err) {
+                    console.error('Switch error:', err);
+                    showToast(`Failed: ${err.message}`, 'error');
+                } finally {
+                    btn.classList.remove('loading');
+                }
+            }
+
+            /**
+             * Fetch status from API
+             * Fetches /api/status, /api/inputs/status, and /api/outputs/status
+             */
+            async function fetchStatus() {
+                try {
+                    // Fetch all endpoints in parallel
+                    const [statusRes, inputStatusRes, outputStatusRes] = await Promise.all([
+                        fetch(`${API_BASE}/status`),
+                        fetch(`${API_BASE}/inputs/status`),
+                        fetch(`${API_BASE}/outputs/status`)
+                    ]);
+                    
+                    if (!statusRes.ok) throw new Error(`Status HTTP ${statusRes.status}`);
+                    
+                    const statusData = await statusRes.json();
+                    if (statusData.success) {
+                        updateStatus(true);
+                        
+                        // Update routing
+                        if (statusData.data.routing) {
+                            routing = statusData.data.routing;
+                        }
+
+                        // Initialize inputs from input_names
+                        if (statusData.data.input_names) {
+                            for (let i = 1; i <= 8; i++) {
+                                inputs[i] = inputs[i] || {};
+                                inputs[i].name = statusData.data.input_names[i] || `Input ${i}`;
+                            }
+                        }
+
+                        // Initialize outputs from output_names
+                        if (statusData.data.output_names) {
+                            for (let o = 1; o <= 8; o++) {
+                                outputs[o] = outputs[o] || {};
+                                outputs[o].name = statusData.data.output_names[o] || `Output ${o}`;
+                            }
+                        }
+                    }
+                    
+                    // Merge input signal/cable status if available
+                    if (inputStatusRes.ok) {
+                        const inputStatusData = await inputStatusRes.json();
+                        if (inputStatusData.success && inputStatusData.data.inputs) {
+                            inputStatusData.data.inputs.forEach(inp => {
+                                if (inp.number >= 1 && inp.number <= 8) {
+                                    inputs[inp.number] = inputs[inp.number] || {};
+                                    inputs[inp.number].name = inp.name || inputs[inp.number].name || `Input ${inp.number}`;
+                                    inputs[inp.number].signalActive = inp.signalActive;
+                                    inputs[inp.number].cableConnected = inp.cableConnected;
+                                }
+                            });
+                        }
+                    }
+
+                    // Merge output connection status if available
+                    if (outputStatusRes.ok) {
+                        const outputStatusData = await outputStatusRes.json();
+                        if (outputStatusData.success && outputStatusData.data.outputs) {
+                            outputStatusData.data.outputs.forEach(out => {
+                                if (out.number >= 1 && out.number <= 8) {
+                                    outputs[out.number] = outputs[out.number] || {};
+                                    outputs[out.number].name = out.name || outputs[out.number].name || `Output ${out.number}`;
+                                    outputs[out.number].connected = out.connected;
+                                    outputs[out.number].cableConnected = out.cableConnected;
+                                    outputs[out.number].enabled = out.enabled;
+                                }
+                            });
+                        }
+                    }
+
+                    render();
+                } catch (err) {
+                    console.error('Status fetch error:', err);
+                    updateStatus(false);
+                }
+            }
+
+            /**
+             * Connect to WebSocket for real-time updates
+             */
+            function connectWebSocket() {
+                const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+                const wsUrl = `${protocol}//${location.host}/ws`;
+
+                ws = new WebSocket(wsUrl);
+
+                ws.onopen = () => {
+                    console.log('WebSocket connected');
+                    updateStatus(true);
+                };
+
+                ws.onmessage = (event) => {
+                    try {
+                        const msg = JSON.parse(event.data);
+                        
+                        if (msg.event === 'routing_change' && msg.data) {
+                            routing[msg.data.output] = msg.data.input;
+                            render();
+                        } else if (msg.event === 'status_update' && msg.data) {
+                            if (msg.data.routing) routing = msg.data.routing;
+                            // Handle input_names from status update
+                            if (msg.data.input_names) {
+                                for (let i = 1; i <= 8; i++) {
+                                    inputs[i] = inputs[i] || {};
+                                    if (msg.data.input_names[i]) {
+                                        inputs[i].name = msg.data.input_names[i];
+                                    }
+                                }
+                            }
+                            // Handle output_names from status update
+                            if (msg.data.output_names) {
+                                for (let o = 1; o <= 8; o++) {
+                                    outputs[o] = outputs[o] || {};
+                                    if (msg.data.output_names[o]) {
+                                        outputs[o].name = msg.data.output_names[o];
+                                    }
+                                }
+                            }
+                            render();
+                        } else if (msg.event === 'signal_change' && msg.data) {
+                            const input = inputs[msg.data.input];
+                            if (input) {
+                                input.signalActive = msg.data.has_signal;
+                                render();
+                            }
+                        } else if (msg.event === 'input_name_change' && msg.data) {
+                            const inputNum = msg.data.input;
+                            if (inputNum >= 1 && inputNum <= 8) {
+                                inputs[inputNum] = inputs[inputNum] || {};
+                                inputs[inputNum].name = msg.data.name;
+                                render();
+                            }
+                        } else if (msg.event === 'output_name_change' && msg.data) {
+                            const outputNum = msg.data.output;
+                            if (outputNum >= 1 && outputNum <= 8) {
+                                outputs[outputNum] = outputs[outputNum] || {};
+                                outputs[outputNum].name = msg.data.name;
+                                render();
+                            }
+                        } else if (msg.event === 'output_connection' && msg.data) {
+                            const outputNum = msg.data.output;
+                            if (outputNum >= 1 && outputNum <= 8) {
+                                outputs[outputNum] = outputs[outputNum] || {};
+                                outputs[outputNum].connected = msg.data.connected;
+                                render();
+                            }
+                        }
+                    } catch (err) {
+                        console.error('WS message parse error:', err);
+                    }
+                };
+
+                ws.onclose = () => {
+                    console.log('WebSocket closed, reconnecting...');
+                    updateStatus(false);
+                    setTimeout(connectWebSocket, WS_RECONNECT_DELAY);
+                };
+
+                ws.onerror = (err) => {
+                    console.error('WebSocket error:', err);
+                    ws.close();
+                };
+            }
+
+            /**
+             * Start polling as fallback
+             */
+            function startPolling() {
+                pollTimer = setInterval(fetchStatus, POLL_INTERVAL);
+            }
+
+            /**
+             * Double 2-finger tap gesture to exit kiosk mode
+             * Uses 2 fingers with double tap to avoid conflicts
+             */
+            const tripleFingerTap = {
+                tapCount: 0,
+                lastTapTime: 0,
+                TAP_TIMEOUT: 400,      // Max time between taps
+                REQUIRED_FINGERS: 2,
+                REQUIRED_TAPS: 2
+            };
+
+            function handleTripleFingerTap(e) {
+                // Only trigger on 2-finger touch
+                if (e.touches && e.touches.length !== tripleFingerTap.REQUIRED_FINGERS) {
+                    return;
+                }
+
+                const now = Date.now();
+                
+                // Reset if too much time passed
+                if (now - tripleFingerTap.lastTapTime > tripleFingerTap.TAP_TIMEOUT) {
+                    tripleFingerTap.tapCount = 0;
+                }
+
+                tripleFingerTap.tapCount++;
+                tripleFingerTap.lastTapTime = now;
+
+                if (tripleFingerTap.tapCount >= tripleFingerTap.REQUIRED_TAPS) {
+                    tripleFingerTap.tapCount = 0;
+                    showToast('Exiting kiosk mode...', 'info');
+                    setTimeout(() => {
+                        window.location.href = '/ui';
+                    }, 300);
+                }
+            }
+
+            /**
+             * Initialize kiosk mode
+             */
+            async function init() {
+                // Initial fetch
+                await fetchStatus();
+
+                // Connect WebSocket for real-time updates
+                connectWebSocket();
+
+                // Start polling as backup
+                startPolling();
+
+                // Triple 3-finger tap to exit kiosk mode
+                document.addEventListener('touchstart', handleTripleFingerTap, { passive: true });
+
+                // Prevent zoom on double-tap
+                document.addEventListener('touchend', (e) => {
+                    const now = Date.now();
+                    if (now - (window.lastTouchEnd || 0) < 300) {
+                        e.preventDefault();
+                    }
+                    window.lastTouchEnd = now;
+                }, false);
+            }
+
+            // Start when DOM ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+        })();
+    </script>
+</body>
+</html>
