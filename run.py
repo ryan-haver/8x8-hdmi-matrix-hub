@@ -44,6 +44,19 @@ SRC_PATH = PROJECT_ROOT / "src"
 # Add src directory to path
 sys.path.insert(0, str(SRC_PATH))
 
+# Check if ucapi is available (installed via requirements-uc.txt)
+try:
+    import ucapi
+    UCAPI_AVAILABLE = True
+except ImportError:
+    UCAPI_AVAILABLE = False
+    _LOG.info("ucapi module not available - UC integration disabled")
+
+# Auto-disable UC if ucapi not installed
+if UC_ENABLED and not UCAPI_AVAILABLE:
+    _LOG.warning("UC_ENABLED=true but ucapi not installed. Disabling UC integration.")
+    UC_ENABLED = False
+
 
 def run_legacy_mode():
     """
