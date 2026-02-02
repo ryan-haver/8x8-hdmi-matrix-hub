@@ -1,0 +1,64 @@
+{
+  "driver_id": "orei_hdmi_matrix",
+  "version": "0.1.0",
+  "min_core_api": "0.21.0",
+  "name": {
+    "en": "OREI HDMI Matrix"
+  },
+  "icon": "uc:integration",
+  "description": {
+    "en": "Integration for OREI BK-808 8x8 HDMI Matrix with scene/preset support"
+  },
+  "driver_url": "ws://192.168.1.145:9095",
+  "developer": {
+    "name": "Custom Integration",
+    "url": "https://github.com/unfoldedcircle"
+  },
+  "home_page": "https://github.com/unfoldedcircle",
+  "release_date": "2026-01-12",
+  "port": 9095,
+  "setup_data_schema": {
+    "title": {
+      "en": "OREI HDMI Matrix Setup"
+    },
+    "settings": [
+      {
+        "id": "info",
+        "label": {
+          "en": "Setup Information"
+        },
+        "field": {
+          "label": {
+            "value": {
+              "en": "Enter the IP address of your OREI BK-808 HDMI Matrix.\nThe device must be on the same network as your Remote."
+            }
+          }
+        }
+      },
+      {
+        "id": "host",
+        "label": {
+          "en": "IP Address"
+        },
+        "field": {
+          "text": {
+            "value": "192.168.0.100"
+          }
+        }
+      },
+      {
+        "id": "port",
+        "label": {
+          "en": "TCP Port"
+        },
+        "field": {
+          "number": {
+            "value": 443,
+            "min": 1,
+            "max": 65535
+          }
+        }
+      }
+    ]
+  }
+}

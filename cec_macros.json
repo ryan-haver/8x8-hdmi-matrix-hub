@@ -1,0 +1,317 @@
+{
+  "version": 1,
+  "macros": [
+    {
+      "id": "macro_d4e1b03b",
+      "name": "Power On All",
+      "icon": "\u26a1",
+      "description": "Powers on all devices",
+      "steps": [
+        {
+          "command": "POWER_ON",
+          "targets": [
+            "input_1",
+            "input_2"
+          ],
+          "delay_ms": 0
+        },
+        {
+          "command": "POWER_ON",
+          "targets": [
+            "output_1"
+          ],
+          "delay_ms": 1000
+        }
+      ],
+      "created_at": "2026-01-22T19:57:11.640558Z",
+      "updated_at": "2026-01-22T19:57:11.640558Z"
+    },
+    {
+      "id": "custom_macro_id",
+      "name": "Custom ID Macro",
+      "icon": "\u26a1",
+      "description": "",
+      "steps": [
+        {
+          "command": "PLAY",
+          "targets": [
+            "input_1"
+          ],
+          "delay_ms": 0
+        }
+      ],
+      "created_at": "2026-01-28T03:05:00.063551Z",
+      "updated_at": "2026-01-28T03:05:00.063551Z"
+    },
+    {
+      "id": "get_macro_test",
+      "name": "Get Test Macro",
+      "icon": "\ud83c\udfae",
+      "description": "",
+      "steps": [
+        {
+          "command": "PLAY",
+          "targets": [
+            "output_2"
+          ],
+          "delay_ms": 500
+        }
+      ],
+      "created_at": "2026-01-28T03:05:00.090499Z",
+      "updated_at": "2026-01-28T03:05:00.090499Z"
+    },
+    {
+      "id": "update_macro_test",
+      "name": "Updated Macro",
+      "icon": "\ud83c\udf19",
+      "description": "Now with description",
+      "steps": [
+        {
+          "command": "PLAY",
+          "targets": [
+            "input_1"
+          ],
+          "delay_ms": 0
+        }
+      ],
+      "created_at": "2026-01-28T03:05:00.160062Z",
+      "updated_at": "2026-01-28T03:05:00.162720Z"
+    },
+    {
+      "id": "update_steps_test",
+      "name": "Steps Test",
+      "icon": "\u26a1",
+      "description": "",
+      "steps": [
+        {
+          "command": "POWER_ON",
+          "targets": [
+            "input_1",
+            "input_2"
+          ],
+          "delay_ms": 0
+        },
+        {
+          "command": "POWER_ON",
+          "targets": [
+            "output_1"
+          ],
+          "delay_ms": 2000
+        }
+      ],
+      "created_at": "2026-01-28T03:05:00.173109Z",
+      "updated_at": "2026-01-28T03:05:00.174172Z"
+    },
+    {
+      "id": "test_macro_test",
+      "name": "Test Macro",
+      "icon": "\u26a1",
+      "description": "",
+      "steps": [
+        {
+          "command": "POWER_ON",
+          "targets": [
+            "input_1"
+          ],
+          "delay_ms": 0
+        }
+      ],
+      "created_at": "2026-01-28T03:05:00.220515Z",
+      "updated_at": "2026-01-28T03:05:00.220515Z"
+    },
+    {
+      "id": "list_macro_0",
+      "name": "List Macro 0",
+      "icon": "\u26a1",
+      "description": "",
+      "steps": [
+        {
+          "command": "PLAY",
+          "targets": [
+            "input_1"
+          ],
+          "delay_ms": 0
+        }
+      ],
+      "created_at": "2026-01-28T03:05:00.237870Z",
+      "updated_at": "2026-01-28T03:05:00.237870Z"
+    },
+    {
+      "id": "list_macro_1",
+      "name": "List Macro 1",
+      "icon": "\u26a1",
+      "description": "",
+      "steps": [
+        {
+          "command": "PLAY",
+          "targets": [
+            "input_2"
+          ],
+          "delay_ms": 0
+        }
+      ],
+      "created_at": "2026-01-28T03:05:00.238378Z",
+      "updated_at": "2026-01-28T03:05:00.238378Z"
+    },
+    {
+      "id": "list_macro_2",
+      "name": "List Macro 2",
+      "icon": "\u26a1",
+      "description": "",
+      "steps": [
+        {
+          "command": "PLAY",
+          "targets": [
+            "input_3"
+          ],
+          "delay_ms": 0
+        }
+      ],
+      "created_at": "2026-01-28T03:05:00.239917Z",
+      "updated_at": "2026-01-28T03:05:00.239917Z"
+    },
+    {
+      "id": "step_validation",
+      "name": "Step Validation",
+      "icon": "\u26a1",
+      "description": "",
+      "steps": [
+        {
+          "command": "VOLUME_UP",
+          "targets": [
+            "output_1",
+            "output_2"
+          ],
+          "delay_ms": 100
+        }
+      ],
+      "created_at": "2026-01-28T03:05:00.247611Z",
+      "updated_at": "2026-01-28T03:05:00.247611Z"
+    },
+    {
+      "id": "macro_68c1b327",
+      "name": "Power On All",
+      "icon": "\u26a1",
+      "description": "Powers on all devices",
+      "steps": [
+        {
+          "command": "POWER_ON",
+          "targets": [
+            "input_1",
+            "input_2"
+          ],
+          "delay_ms": 0
+        },
+        {
+          "command": "POWER_ON",
+          "targets": [
+            "output_1"
+          ],
+          "delay_ms": 1000
+        }
+      ],
+      "created_at": "2026-01-22T19:58:09.565716Z",
+      "updated_at": "2026-01-22T19:58:09.565716Z"
+    },
+    {
+      "id": "macro_d4637707",
+      "name": "Power On All",
+      "icon": "\u26a1",
+      "description": "Powers on all devices",
+      "steps": [
+        {
+          "command": "POWER_ON",
+          "targets": [
+            "input_1",
+            "input_2"
+          ],
+          "delay_ms": 0
+        },
+        {
+          "command": "POWER_ON",
+          "targets": [
+            "output_1"
+          ],
+          "delay_ms": 1000
+        }
+      ],
+      "created_at": "2026-01-22T19:58:24.852167Z",
+      "updated_at": "2026-01-22T19:58:24.852167Z"
+    },
+    {
+      "id": "macro_0ba87e35",
+      "name": "Power On All",
+      "icon": "\u26a1",
+      "description": "Powers on all devices",
+      "steps": [
+        {
+          "command": "POWER_ON",
+          "targets": [
+            "input_1",
+            "input_2"
+          ],
+          "delay_ms": 0
+        },
+        {
+          "command": "POWER_ON",
+          "targets": [
+            "output_1"
+          ],
+          "delay_ms": 1000
+        }
+      ],
+      "created_at": "2026-01-22T20:29:33.947667Z",
+      "updated_at": "2026-01-22T20:29:33.947667Z"
+    },
+    {
+      "id": "macro_0eacdddf",
+      "name": "Power On All",
+      "icon": "\u26a1",
+      "description": "Powers on all devices",
+      "steps": [
+        {
+          "command": "POWER_ON",
+          "targets": [
+            "input_1",
+            "input_2"
+          ],
+          "delay_ms": 0
+        },
+        {
+          "command": "POWER_ON",
+          "targets": [
+            "output_1"
+          ],
+          "delay_ms": 1000
+        }
+      ],
+      "created_at": "2026-01-28T02:57:32.632073Z",
+      "updated_at": "2026-01-28T02:57:32.632073Z"
+    },
+    {
+      "id": "macro_50d77570",
+      "name": "Power On All",
+      "icon": "\u26a1",
+      "description": "Powers on all devices",
+      "steps": [
+        {
+          "command": "POWER_ON",
+          "targets": [
+            "input_1",
+            "input_2"
+          ],
+          "delay_ms": 0
+        },
+        {
+          "command": "POWER_ON",
+          "targets": [
+            "output_1"
+          ],
+          "delay_ms": 1000
+        }
+      ],
+      "created_at": "2026-01-28T03:05:00.054046Z",
+      "updated_at": "2026-01-28T03:05:00.054046Z"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ucapi-orei-hdmi-matrix"
+version = "0.1.0"
+description = "OREI BK-808 HDMI Matrix integration for Unfolded Circle Remote Two/3"
+readme = "README.md"
+license = {text = "MPL-2.0"}
+requires-python = ">=3.11"
+authors = [
+    {name = "Custom Integration"}
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Home Automation",
+]
+dependencies = [
+    "ucapi>=0.5.0",
+    "pyee>=11.0.0",
+    "aiohttp>=3.9.0",
+    "psutil>=5.9.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+]
+
+[project.scripts]
+orei-matrix-driver = "src.driver:main"
+
+[project.urls]
+Homepage = "https://github.com/unfoldedcircle"
+Repository = "https://github.com/unfoldedcircle"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[tool.black]
+line-length = 120
+target-version = ["py311", "py312"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+select = ["E", "F", "W", "I", "N", "UP"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

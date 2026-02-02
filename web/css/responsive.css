@@ -1,0 +1,588 @@
+/**
+ * OREI Matrix Control - Responsive Styles
+ * Mobile-first breakpoints
+ */
+
+/* ===== Extra Small Phones (up to 359px) ===== */
+@media (max-width: 359px) {
+    :root {
+        --space-4: 0.75rem;
+    }
+    
+    .header-title {
+        font-size: var(--font-size-sm);
+    }
+    
+    .matrix-grid {
+        padding: var(--space-2);
+        gap: 2px;
+    }
+    
+    .matrix-grid.loaded {
+        grid-template-columns: auto repeat(8, 36px);
+    }
+    
+    .matrix-cell {
+        min-width: 36px;
+        min-height: 36px;
+        padding: 2px;
+        font-size: 9px;
+        line-height: 1.1;
+    }
+    
+    .matrix-header {
+        font-size: 9px;
+    }
+    
+    .matrix-input-label {
+        padding-left: 1px;
+        padding-right: 3px;
+        font-size: 9px;
+        min-width: auto;
+    }
+    
+    .matrix-dot {
+        width: 14px;
+        height: 14px;
+    }
+    
+    .btn-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Single column for all card lists on very small screens */
+    .card-list {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Profiles single column on very small screens */
+    #scenes-list.card-list {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    
+    /* IO cards stack actions on very small screens */
+    .io-card {
+        flex-wrap: wrap;
+        min-height: auto;
+        padding: var(--space-2);
+    }
+    
+    /* Allow text to wrap on mobile instead of truncating */
+    .io-name {
+        white-space: normal;
+        word-break: break-word;
+        line-height: 1.3;
+    }
+    
+    .io-status {
+        white-space: normal;
+        word-break: break-word;
+    }
+    
+    .io-info {
+        flex: 1;
+        min-width: 60px;
+    }
+    
+    .io-actions {
+        width: 100%;
+        justify-content: flex-end;
+        margin-top: var(--space-2);
+        padding-top: var(--space-2);
+        border-top: 1px solid var(--border-color);
+    }
+    
+    /* Scene cards text wrap */
+    .scene-name {
+        white-space: normal;
+        word-break: break-word;
+        line-height: 1.3;
+    }
+}
+
+/* ===== Small Phones (360px - 389px) ===== */
+@media (min-width: 360px) and (max-width: 389px) {
+    :root {
+        --space-4: 0.875rem;
+    }
+    
+    .matrix-grid {
+        padding: var(--space-2);
+        gap: 2px;
+    }
+    
+    .matrix-grid.loaded {
+        grid-template-columns: auto repeat(8, 38px);
+    }
+    
+    .matrix-cell {
+        min-width: 38px;
+        min-height: 38px;
+        padding: 2px;
+        font-size: 10px;
+        line-height: 1.1;
+    }
+    
+    .matrix-header {
+        font-size: 9px;
+        padding: 1px;
+    }
+    
+    .matrix-input-label {
+        padding-left: 2px;
+        padding-right: 3px;
+        font-size: 10px;
+        min-width: auto;
+    }
+    
+    .matrix-dot {
+        width: 14px;
+        height: 14px;
+    }
+    
+    /* IO cards - prevent text truncation */
+    .io-name {
+        white-space: normal;
+        word-break: break-word;
+        line-height: 1.3;
+        font-size: var(--font-size-sm);
+    }
+    
+    .io-status {
+        white-space: normal;
+        word-break: break-word;
+        font-size: 11px;
+    }
+    
+    .io-info {
+        min-width: 50px;
+    }
+    
+    /* Scene cards text wrap */
+    .scene-name {
+        white-space: normal;
+        word-break: break-word;
+        line-height: 1.3;
+        font-size: var(--font-size-sm);
+    }
+    
+    .scene-outputs {
+        font-size: 11px;
+    }
+}
+
+/* ===== Medium Phones (390px - 427px) ===== */
+@media (min-width: 390px) and (max-width: 427px) {
+    .matrix-grid {
+        padding: var(--space-2);
+        gap: 2px;
+    }
+    
+    .matrix-grid.loaded {
+        grid-template-columns: auto repeat(8, 40px);
+    }
+    
+    .matrix-cell {
+        min-width: 40px;
+        min-height: 40px;
+        padding: 2px;
+        font-size: 10px;
+        line-height: 1.1;
+    }
+    
+    .matrix-header {
+        font-size: 10px;
+        padding: 2px;
+    }
+    
+    .matrix-input-label {
+        padding-left: 2px;
+        padding-right: 4px;
+        font-size: 10px;
+        min-width: auto;
+    }
+    
+    .matrix-dot {
+        width: 16px;
+        height: 16px;
+    }
+    
+    /* IO cards - prevent text truncation */
+    .io-name {
+        white-space: normal;
+        word-break: break-word;
+        line-height: 1.3;
+        font-size: var(--font-size-sm);
+    }
+    
+    .io-status {
+        white-space: normal;
+        word-break: break-word;
+        font-size: 11px;
+    }
+    
+    .io-info {
+        min-width: 50px;
+    }
+    
+    /* Scene cards text wrap */
+    .scene-name {
+        white-space: normal;
+        word-break: break-word;
+        line-height: 1.3;
+        font-size: var(--font-size-sm);
+    }
+    
+    .scene-outputs {
+        font-size: 11px;
+    }
+}
+
+/* ===== Large Phones (428px - 767px) ===== */
+@media (min-width: 428px) and (max-width: 767px) {
+    /* Still single column on large phones for better readability */
+    .card-list {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    
+    #scenes-list.card-list {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    
+    .matrix-grid.loaded {
+        grid-template-columns: auto repeat(8, 42px);
+    }
+    
+    .matrix-cell {
+        min-width: 42px;
+        min-height: 42px;
+        font-size: 11px;
+        line-height: 1.2;
+    }
+    
+    .matrix-header {
+        font-size: 10px;
+        padding: 2px;
+    }
+    
+    .matrix-input-label {
+        padding-left: 2px;
+        padding-right: 4px;
+        font-size: 11px;
+        min-width: auto;
+    }
+    
+    .matrix-dot {
+        width: 16px;
+        height: 16px;
+    }
+    
+    /* IO cards - prevent text truncation on phones */
+    .io-name {
+        white-space: normal;
+        word-break: break-word;
+        line-height: 1.3;
+        font-size: var(--font-size-sm);
+    }
+    
+    .io-status {
+        white-space: normal;
+        word-break: break-word;
+        font-size: 11px;
+    }
+    
+    .io-info {
+        min-width: 50px;
+    }
+    
+    /* Scene cards text wrap */
+    .scene-name {
+        white-space: normal;
+        word-break: break-word;
+        line-height: 1.3;
+        font-size: var(--font-size-sm);
+    }
+    
+    .scene-outputs {
+        font-size: 11px;
+    }
+}
+
+/* ===== Tablets (768px and up) ===== */
+@media (min-width: 768px) {
+    :root {
+        --header-height: 64px;
+    }
+    
+    .header-title span {
+        display: inline;
+    }
+    
+    .status-text {
+        display: inline;
+    }
+    
+    .menu-toggle {
+        display: none;
+    }
+    
+    /* Hide tab bar on tablet+ - all sections visible */
+    .mobile-tabs {
+        display: none;
+    }
+    
+    /* Main content - header padding stays, no bottom tab padding needed */
+    .main-content {
+        padding: var(--space-6);
+        padding-top: calc(var(--header-height) + var(--space-8));
+        padding-bottom: var(--space-6);
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    
+    /* Matrix grid larger cells */
+    .matrix-cell {
+        min-width: 56px;
+        min-height: 56px;
+    }
+    
+    .matrix-dot {
+        width: 20px;
+        height: 20px;
+    }
+    
+    /* Input/Output grid layout - 1 column per row within each section */
+    .card-list {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--space-3);
+    }
+    
+    /* Profiles list grid 2 columns (spans full width) */
+    #scenes-list.card-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--space-3);
+    }
+    
+    /* Button grid 4 columns */
+    .btn-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    /* Toast position */
+    .toast-container {
+        bottom: var(--space-6);
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+        max-width: 400px;
+    }
+    
+    /* Show all sections in grid layout */
+    .section {
+        display: block !important;
+        min-width: 0;
+        position: relative;
+        isolation: isolate;
+        z-index: 1;
+        background-color: transparent;
+    }
+    
+    /* Dashboard section visibility is controlled by JS based on pinned widgets */
+    .section-dashboard {
+        display: none; /* Default hidden, JS controls visibility */
+    }
+    
+    .main-content {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-rows: auto auto auto auto;
+        grid-template-areas:
+            "matrix matrix"
+            "dashboard dashboard"
+            "inputs outputs"
+            "profiles profiles";
+        gap: var(--space-6);
+        max-width: 100%;
+        padding-top: calc(var(--header-height) + var(--space-8));
+    }
+    
+    /* When no dashboard widgets are pinned, collapse the grid row */
+    .main-content.no-dashboard {
+        grid-template-rows: auto auto auto;
+        grid-template-areas:
+            "matrix matrix"
+            "inputs outputs"
+            "profiles profiles";
+        gap: var(--space-2); /* Consistent 8px gap when no dashboard */
+    }
+    
+    .section-matrix {
+        grid-area: matrix;
+    }
+    
+    /* Dashboard section for pinned widgets */
+    .section-dashboard {
+        grid-area: dashboard;
+    }
+    
+    .section-inputs {
+        grid-area: inputs;
+    }
+    
+    .section-outputs {
+        grid-area: outputs;
+    }
+    
+    /* Add visual breathing room at bottom of IO sections in no-dashboard mode */
+    .main-content.no-dashboard .section-inputs,
+    .main-content.no-dashboard .section-outputs {
+        padding-bottom: var(--space-2);
+    }
+    
+    /* Profiles span full width at bottom */
+    .section-scenes {
+        grid-area: profiles;
+    }
+}
+
+/* ===== Small Desktops (1024px and up) ===== */
+@media (min-width: 1024px) {
+    .matrix-cell {
+        min-width: 64px;
+        min-height: 64px;
+    }
+    
+    /* 1 column layout for input/output cards within each section */
+    .card-list {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    
+    /* Profiles list grid 2 columns (spans full width) */
+    #scenes-list.card-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--space-3);
+    }
+    
+    /* Wider container */
+    .main-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: var(--space-8);
+        padding-top: calc(var(--header-height) + var(--space-8));
+    }
+}
+
+/* ===== Large Desktops (1200px and up) ===== */
+@media (min-width: 1200px) {
+    .main-content {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    /* Matrix grid larger */
+    .matrix-cell {
+        min-width: 72px;
+        min-height: 72px;
+    }
+    
+    /* Preset grid layout */
+    .section-presets .btn-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    /* Three column grid for scenes */
+    .section-scenes .btn-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* ===== Extra Large (1600px and up) ===== */
+@media (min-width: 1600px) {
+    .main-content {
+        padding: var(--space-10);
+        padding-top: calc(var(--header-height) + var(--space-8));
+    }
+    
+    .matrix-cell {
+        min-width: 80px;
+        min-height: 80px;
+        font-size: var(--font-size-base);
+    }
+    
+    .matrix-dot {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+/* ===== Landscape Phone ===== */
+@media (max-height: 500px) and (orientation: landscape) {
+    .header {
+        height: 48px;
+    }
+    
+    .mobile-tabs {
+        height: 44px;
+    }
+    
+    .tab-btn {
+        min-height: 44px;
+    }
+    
+    .matrix-cell {
+        min-width: 40px;
+        min-height: 40px;
+    }
+}
+
+/* ===== Print Styles ===== */
+@media print {
+    .header,
+    .mobile-tabs,
+    .btn,
+    .modal {
+        display: none !important;
+    }
+    
+    .main-content {
+        padding: 0;
+    }
+    
+    .section {
+        display: block !important;
+        page-break-inside: avoid;
+    }
+}
+
+/* ===== Reduced Motion ===== */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ===== High Contrast Mode ===== */
+@media (prefers-contrast: high) {
+    :root {
+        --border-color: var(--text-primary);
+    }
+    
+    .btn {
+        border: 2px solid currentColor;
+    }
+    
+    .matrix-route {
+        border-width: 3px;
+    }
+    
+    .matrix-route.active {
+        border-color: white;
+    }
+}

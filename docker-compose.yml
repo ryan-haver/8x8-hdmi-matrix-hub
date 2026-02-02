@@ -1,0 +1,61 @@
+# 8x8 HDMI Matrix Hub - Docker Compose
+#
+# Supports HDCVT HDP-MXC88A-based matrix switches including:
+# OREI BK-808, BZBGEAR BG-8K-88MA, A-NeuVideo ANI-8-8K60-S, and more.
+#
+# Usage:
+#   docker-compose up -d              # Start integration
+#   docker-compose logs -f            # View logs
+#   docker-compose down               # Stop integration
+
+services:
+  hdmi-matrix-hub:
+    build: .
+    container_name: hdmi-matrix-hub
+    restart: unless-stopped
+
+    # Port mapping - mDNS won't work but manual IP setup will
+    ports:
+      - "9095:9095" # UC WebSocket integration
+      - "8080:8080" # REST API for Flic, Home Assistant, etc.
+
+    volumes:
+      # Persist configuration across container restarts
+      - ./data:/data
+
+    environment:
+      # Integration config directory
+      - UC_CONFIG_HOME=/data
+      # Enable mDNS publishing for Remote 3 discovery
+      - UC_DISABLE_MDNS_PUBLISH=false
+      # Bind to all interfaces
+      - UC_INTEGRATION_INTERFACE=0.0.0.0
+      # WebSocket port (must match driver.json)
+      - UC_INTEGRATION_HTTP_PORT=9095
+      # REST API configuration
+      - REST_API_PORT=8080
+      - REST_API_ENABLED=true
+      # Optional: Set log level (DEBUG, INFO, WARNING, ERROR)
+      - LOG_LEVEL=INFO
+
+    # Graceful shutdown
+    stop_grace_period: 10s
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+# Future integrations can be added here:
+#
+#  another-integration:
+#    build: ../another-integration
+#    container_name: uc-another-integration
+#    restart: unless-stopped
+#    network_mode: host
+#    volumes:
+#      - ../another-integration/data:/data
+#    environment:
+#      - UC_CONFIG_HOME=/data
+#      - UC_INTEGRATION_HTTP_PORT=9096  # Different port for each integration!

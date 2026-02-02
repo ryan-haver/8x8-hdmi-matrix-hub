@@ -1,0 +1,19 @@
+# Gitleaks Configuration
+# https://github.com/gitleaks/gitleaks
+
+title = "OREI HDMI Matrix Hub Gitleaks Config"
+
+[extend]
+# Extend the default gitleaks config
+useDefault = true
+
+[allowlist]
+description = "Global allowlist"
+paths = [
+    '''\.venv''',
+    '''node_modules''',
+    '''_backups''',
+    '''gitleaks-.*\.json''',
+    '''\.pytest_cache''',
+    '''__pycache__''',
+]
