@@ -100,42 +100,62 @@ The **HDCVT HDP-MXC88A** is an OEM (Original Equipment Manufacturer) product tha
 ### Docker (Recommended)
 
 ```bash
+# Full mode - UC integration + REST API + Web UI
 docker-compose up -d
 docker logs -f hdmi-matrix-hub
 ```
 
-### Manual
+#### Deployment Modes
+
+| Mode         | Command                                | Use Case                        |
+| ------------ | -------------------------------------- | ------------------------------- |
+| **Full**     | `docker-compose up`                    | UC Remote + API + Web UI        |
+| **API-only** | `docker-compose --profile api-only up` | HA/MQTT without UC dependencies |
+
+### Manual Installation
 
 ```bash
 python -m venv .venv
 .venv\Scripts\activate  # Windows
+
+# Full mode (with UC Remote support)
+pip install -r requirements-uc.txt
+python run.py
+
+# API-only mode (no UC dependencies)
 pip install -r requirements.txt
-python src/driver.py
+UC_ENABLED=false python run.py
 ```
+
+### Environment Variables
+
+| Variable        | Default         | Description           |
+| --------------- | --------------- | --------------------- |
+| `MATRIX_HOST`   | `192.168.0.100` | Matrix IP address     |
+| `API_PORT`      | `8080`          | REST API port         |
+| `UC_ENABLED`    | `true`          | Enable UC integration |
+| `WEBUI_ENABLED` | `true`          | Enable Web UI         |
+| `LOG_LEVEL`     | `INFO`          | Logging verbosity     |
 
 ## 📁 Project Structure
 
 ```
-├── src/                    # Source code
-│   ├── __init__.py
-│   ├── driver.py           # Main UC integration driver
-│   ├── orei_matrix.py      # OREI matrix control library
-│   └── config.py           # Configuration utilities
-├── tests/                  # Test files
-│   ├── conftest.py
-│   └── test_*.py
-├── docs/                   # Documentation
-│   ├── PROJECT_ROADMAP.md
-│   ├── API_REFERENCE.md
-│   └── ...
-├── scripts/                # Utility scripts
-│   └── restart_driver.ps1
-├── data/                   # Runtime data (gitignored)
-├── docker-compose.yml
-├── Dockerfile
-├── pyproject.toml          # Modern Python config
-├── requirements.txt
-└── README.md
+├── src/
+│   ├── driver.py              # Main UC integration driver
+│   ├── orei_matrix.py         # Matrix control library
+│   ├── rest_api/              # REST API server
+│   └── integrations/          # Modular integration modules
+│       └── unfolded_circle/   # UC Remote integration
+│           ├── api_client.py  # REST API client
+│           ├── entities.py    # UC entity factories
+│           └── adapter.py     # OreiMatrix adapter
+├── web/                       # Web UI dashboard
+├── docs/                      # Documentation
+├── run.py                     # Main entry point
+├── Dockerfile                 # Multi-stage build
+├── docker-compose.yml         # Deployment profiles
+├── requirements.txt           # Core dependencies
+└── requirements-uc.txt        # UC-specific dependencies
 ```
 
 ## 🏗️ Architecture
