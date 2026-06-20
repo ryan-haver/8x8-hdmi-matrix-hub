@@ -160,11 +160,6 @@ class MatrixApiAdapter:
         await self._refresh_names()
         return self._input_names.copy()
 
-    async def get_output_names(self) -> dict[int, str]:
-        """Get output names from API."""
-        await self._refresh_names()
-        return self._output_names.copy()
-
     async def get_output_status(self) -> dict | None:
         """Get output status including routing."""
         result = await self._client.get_outputs()
