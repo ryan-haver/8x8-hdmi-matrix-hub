@@ -14,12 +14,13 @@ from pathlib import Path
 
 from aiohttp import web
 
+from persistence import ensure_data_dir, get_data_dir, migrate_legacy_file
 from .utils import _json_response
 from .websocket import broadcast_status_update
 
 _LOG = logging.getLogger("rest_api.device_settings")
 
-# Storage file location (relative to data/ directory)
+# Storage file location (resolved from persistent data dir at init time)
 _SETTINGS_FILE = "device_settings.json"
 _settings_path: Path | None = None
 _settings_cache: dict = {}
@@ -30,14 +31,22 @@ _settings_cache: dict = {}
 # =============================================================================
 
 def init_device_settings(data_dir: Path | None = None):
-    """Initialize device settings with the data directory path."""
+    """Initialize device settings with the data directory path.
+
+    :param data_dir: Explicit data directory (defaults to ``persistence.get_data_dir()``
+                     which honors ``MATRIX_DATA_DIR`` and ``UC_CONFIG_HOME`` env vars).
+    """
     global _settings_path, _settings_cache
 
     if data_dir is None:
-        # Default to data/ in project root
-        data_dir = Path(__file__).parent.parent.parent / "data"
+        data_dir = get_data_dir()
 
-    _settings_path = data_dir / _SETTINGS_FILE
+    # Ensure directory exists, then migrate any legacy file.
+    ensure_data_dir(data_dir)
+    target = data_dir / _SETTINGS_FILE
+    migrate_legacy_file(target, _SETTINGS_FILE)
+
+    _settings_path = target
     _load_settings()
     _LOG.info(f"Device settings initialized from {_settings_path}")
 

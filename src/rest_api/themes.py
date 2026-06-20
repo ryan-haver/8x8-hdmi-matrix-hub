@@ -1,6 +1,10 @@
 """
 Theme endpoints for UI theme management.
 Stores user theme preferences persistently on the backend.
+
+The storage location is resolved from the persistent data directory, which is
+controlled by the ``MATRIX_DATA_DIR`` or ``UC_CONFIG_HOME`` environment
+variables. See :mod:`persistence` for resolution details.
 """
 
 import json
@@ -9,12 +13,14 @@ from pathlib import Path
 
 from aiohttp import web
 
+from persistence import ensure_data_dir, get_data_dir, migrate_legacy_file
 from .utils import _json_response
 
 _LOG = logging.getLogger("rest_api.themes")
 
-# Theme storage file location
-THEME_STORAGE_FILE = Path(__file__).parent.parent.parent / "data" / "themes.json"
+# Theme storage file (resolved from persistent data dir at init time)
+_THEMES_FILE = "themes.json"
+_theme_path: Path | None = None
 
 # Default theme presets
 DEFAULT_THEMES = {
@@ -30,16 +36,41 @@ DEFAULT_THEMES = {
 }
 
 
-def _ensure_data_dir():
-    """Ensure the data directory exists."""
-    THEME_STORAGE_FILE.parent.mkdir(parents=True, exist_ok=True)
+def init_themes(data_dir: Path | None = None):
+    """Initialize theme storage with the persistent data directory.
+
+    :param data_dir: Explicit data directory (defaults to
+                     ``persistence.get_data_dir()`` which honors
+                     ``MATRIX_DATA_DIR`` and ``UC_CONFIG_HOME`` env vars).
+    """
+    global _theme_path
+
+    if data_dir is None:
+        data_dir = get_data_dir()
+
+    ensure_data_dir(data_dir)
+    target = data_dir / _THEMES_FILE
+    migrate_legacy_file(target, _THEMES_FILE)
+
+    _theme_path = target
+    _LOG.info(f"Theme storage initialized at {_theme_path}")
+
+
+def _resolve_theme_path() -> Path:
+    """Return the current theme path, lazily resolving it if not initialized."""
+    global _theme_path
+    if _theme_path is None:
+        init_themes()
+    assert _theme_path is not None
+    return _theme_path
 
 
 def _load_themes() -> dict:
     """Load theme settings from file, or return defaults."""
+    path = _resolve_theme_path()
     try:
-        if THEME_STORAGE_FILE.exists():
-            with open(THEME_STORAGE_FILE, encoding='utf-8') as f:
+        if path.exists():
+            with open(path, encoding='utf-8') as f:
                 return json.load(f)
     except Exception as e:
         _LOG.warning(f"Failed to load themes: {e}")
@@ -49,9 +80,10 @@ def _load_themes() -> dict:
 
 def _save_themes(data: dict) -> bool:
     """Save theme settings to file."""
+    path = _resolve_theme_path()
     try:
-        _ensure_data_dir()
-        with open(THEME_STORAGE_FILE, 'w', encoding='utf-8') as f:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with open(path, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=2)
         return True
     except Exception as e:
