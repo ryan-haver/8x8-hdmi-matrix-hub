@@ -794,6 +794,15 @@ body.high-contrast .skeleton {
 }
 
 /* ===== Slide-Out Navigation Hamburger Drawer ===== */
+/* Z-index layering (highest to lowest):
+   1050: side-nav-drawer (left)
+   1040: general-drawer, hardware-drawer, interface-drawer (right - settings)
+   1030: quick-actions-drawer (right)
+   1020: routing-drawer (right)
+   1010: theme-drawer (right)
+    950: side-nav-backdrop (full screen, BELOW right-side drawers)
+     99: header/footer (normal)
+*/
 .side-nav-backdrop {
   position: fixed;
   top: 0;
@@ -801,7 +810,7 @@ body.high-contrast .skeleton {
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.6);
-  z-index: 990;
+  z-index: 950;
   opacity: 0;
   pointer-events: none;
   transition: opacity var(--transition-normal);
@@ -825,7 +834,7 @@ body.high-contrast .skeleton {
   -webkit-backdrop-filter: blur(20px);
   border-right: 2px solid var(--accent, #00c8c8);
   box-shadow: 8px 0 32px rgba(0, 0, 0, 0.6);
-  z-index: 1000;
+  z-index: 1050;
   display: flex;
   flex-direction: column;
   transform: translateX(-100%);
