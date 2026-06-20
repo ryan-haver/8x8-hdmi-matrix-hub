@@ -1070,26 +1070,21 @@ localStorage['orei_debug_position']        // Debug dock position
 - Need to verify CEC command mappings match what devices expect
 - May need device-specific CEC command variations
 
-### 🔄 Phase 1B: CEC Macros (NOT STARTED)
+### ✅ Phase 1B: CEC Macros (COMPLETE in v2.9.0)
 
-**Priority: HIGH** - Enables power automation sequences
+**Completed in v2.9.0:**
+- `src/cec_macros.py` (435 lines) - Macro storage and execution
+- `config/cec_macros.json` - Macro storage file
+- `web/js/components/cec-macro-editor.js` (677 lines) - Macro CRUD UI
+- REST API endpoints: `/api/cec/macros`, `/api/cec/macro/{id}/execute`, `/api/cec/macro/{id}/test`
+- Quick-access macro buttons in CEC tray
+- Profile integration: macros can be assigned to profiles and auto-execute on recall
 
-**Files to Create:**
-- `src/cec_macros.py` - Macro storage and execution
-- `data/cec_macros.json` - Macro storage file
-- `web/js/components/cec-macro-editor.js` - Macro CRUD UI
+### ✅ Phase 2: Profile-Based CEC Config (COMPLETE in v2.10.0)
 
-**TODO:**
-- [ ] Create CEC macro storage (cec_macros.json)
-- [ ] Create macro CRUD REST API endpoints
-- [ ] Create macro editor UI component
-- [ ] Add quick-access macro buttons to CEC tray
+**Terminology Migration:** ✅ COMPLETED - Code now uses "Profile" as primary terminology with "Scene" as backward-compatible alias.
 
-### ✅ Phase 2: Profile-Based CEC Config (PARTIAL)
-
-**⚠️ Terminology Issue:** The codebase currently uses "Scene" but should use "Profile". Migration is tracked in Priority 2.
-
-**Current Implementation (using Scene terminology):**
+**Current Implementation (Profile terminology):**
 
 **Completed Files:**
 - `src/config.py` - Scene, SceneOutput, CecConfig dataclasses
