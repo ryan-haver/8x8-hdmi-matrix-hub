@@ -8,7 +8,8 @@ class MatrixWebSocket {
         this.onMessage = options.onMessage || (() => {});
         this.onStatusChange = options.onStatusChange || (() => {});
         this.onError = options.onError || (() => {});
-        
+        this.onReconnecting = options.onReconnecting || (() => {});
+
         this.ws = null;
         this.connected = false;
         this.reconnectDelay = 1000;
@@ -18,6 +19,7 @@ class MatrixWebSocket {
         this.reconnectTimer = null;
         this.pingInterval = null;
         this.url = null;
+        this.status = 'disconnected'; // 'disconnected' | 'connecting' | 'connected' | 'reconnecting' | 'failed'
     }
 
     /**
@@ -33,6 +35,7 @@ class MatrixWebSocket {
         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
         this.url = `${protocol}//${window.location.host}/ws`;
 
+        this.status = 'connecting';
         Logger.log(`Connecting to WebSocket: ${this.url}`);
 
         try {
@@ -40,6 +43,7 @@ class MatrixWebSocket {
             this.setupEventHandlers();
         } catch (error) {
             console.error('WebSocket connection error:', error);
+            this.status = 'disconnected';
             this.scheduleReconnect();
         }
     }
@@ -185,12 +189,21 @@ class MatrixWebSocket {
 
         if (this.reconnectAttempts >= this.maxReconnectAttempts) {
             console.error('Max reconnection attempts reached');
+            this.status = 'failed';
             this.onError(new Error('Unable to connect to server'));
             return;
         }
 
         this.reconnectAttempts++;
+        this.status = 'reconnecting';
         Logger.log(`Scheduling reconnect in ${this.reconnectDelay}ms (attempt ${this.reconnectAttempts})`);
+
+        // Notify listeners of reconnection attempt
+        this.onReconnecting({
+            attempt: this.reconnectAttempts,
+            maxAttempts: this.maxReconnectAttempts,
+            delayMs: this.reconnectDelay,
+        });
 
         this.reconnectTimer = setTimeout(() => {
             this.connect();
