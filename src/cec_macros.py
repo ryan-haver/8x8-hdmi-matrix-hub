@@ -72,6 +72,10 @@ class CecMacro:
     steps: list[MacroStep] = field(default_factory=list)  # Ordered list of steps
     created_at: str = ""  # ISO timestamp
     updated_at: str = ""  # ISO timestamp
+    # Surface visibility flags (Phase 7 unification)
+    favorite: bool = False  # Show in Quick Actions drawer for one-tap execute
+    dashboard_visible: bool = False  # Render as individual card on Dashboard tab
+    dashboard_order: int = 0  # Position within the Dashboard card grid
 
     def __post_init__(self):
         """Set timestamps if not provided."""
@@ -91,6 +95,9 @@ class CecMacro:
             "steps": [step.to_dict() for step in self.steps],
             "created_at": self.created_at,
             "updated_at": self.updated_at,
+            "favorite": self.favorite,
+            "dashboard_visible": self.dashboard_visible,
+            "dashboard_order": self.dashboard_order,
         }
 
     @staticmethod
@@ -105,6 +112,9 @@ class CecMacro:
             steps=steps,
             created_at=data.get("created_at", ""),
             updated_at=data.get("updated_at", ""),
+            favorite=data.get("favorite", False),
+            dashboard_visible=data.get("dashboard_visible", False),
+            dashboard_order=data.get("dashboard_order", 0),
         )
 
     def update_timestamp(self):
