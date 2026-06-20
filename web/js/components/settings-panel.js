@@ -6,8 +6,9 @@ class SettingsPanel {
     constructor() {
         this.modal = document.getElementById('settings-modal');
         this.edidModes = {};
+        this.focusTrap = null;
         this.setupModal();
-        
+
         // Subscribe to state changes
         state.on('info', () => this.updateInfo());
         state.on('system', () => this.updateSystemSettings());
@@ -375,6 +376,14 @@ class SettingsPanel {
             await this.loadCurrentSettings();
             // Automatically test connection when modal opens
             this.testConnection();
+
+            // Activate focus trap for keyboard accessibility
+            if (window.FocusTrap && !this.focusTrap) {
+                this.focusTrap = new window.FocusTrap(this.modal, () => this.close());
+            }
+            if (this.focusTrap) {
+                this.focusTrap.activate();
+            }
         }
     }
 
@@ -384,6 +393,10 @@ class SettingsPanel {
     close() {
         if (this.modal) {
             this.modal.setAttribute('aria-hidden', 'true');
+            // Deactivate focus trap and restore focus
+            if (this.focusTrap) {
+                this.focusTrap.deactivate();
+            }
         }
     }
 
