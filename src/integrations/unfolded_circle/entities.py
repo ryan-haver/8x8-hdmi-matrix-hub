@@ -12,41 +12,40 @@ This allows the UC driver to be run either co-located with the API
 or as a separate process consuming the API.
 """
 
-import asyncio
 import logging
-from typing import Any, Callable, Optional, Protocol
+from collections.abc import Callable
+from typing import Any, Protocol
 
 import ucapi
 from ucapi import Button, StatusCodes
-from ucapi.remote import Remote
 from ucapi.remote import Attributes as RemoteAttr
 from ucapi.remote import Features as RemoteFeatures
-from ucapi.remote import Commands as RemoteCommands
+from ucapi.remote import Remote
 
 _LOG = logging.getLogger("uc.entities")
 
 
 class MatrixBackend(Protocol):
     """Protocol defining the interface for matrix operations.
-    
+
     This protocol allows entity factory functions to work with either:
     - OreiMatrix (direct hardware access)
     - MatrixApiClient (REST API access)
     """
-    
+
     async def recall_preset(self, preset: int) -> bool:
         """Recall a preset configuration."""
         ...
-    
+
     async def switch_input(self, input_num: int, output_num: int) -> bool:
         """Route an input to an output."""
         ...
-    
+
     # CEC methods follow the API client interface
     async def send_cec_input(self, input_num: int, command: str) -> bool:
         """Send CEC command to an input device."""
         ...
-    
+
     async def send_cec_output(self, output_num: int, command: str) -> bool:
         """Send CEC command to an output device."""
         ...
@@ -55,26 +54,26 @@ class MatrixBackend(Protocol):
 class EntityContext:
     """
     Context object that holds references to shared state for entities.
-    
+
     This decouples entities from global state, making them testable
     and allowing different backends to be injected.
     """
-    
+
     def __init__(
         self,
-        get_backend: Callable[[], Optional[MatrixBackend]],
+        get_backend: Callable[[], MatrixBackend | None],
         get_input_names: Callable[[], dict[int, str]],
         get_output_names: Callable[[], dict[int, str]],
     ):
         self.get_backend = get_backend
         self.get_input_names = get_input_names
         self.get_output_names = get_output_names
-    
+
     def get_input_name(self, port: int) -> str:
         """Get input name with fallback."""
         names = self.get_input_names()
         return names.get(port, f"Input {port}")
-    
+
     def get_output_name(self, port: int) -> str:
         """Get output name with fallback."""
         names = self.get_output_names()
@@ -88,7 +87,7 @@ def create_preset_button_with_context(
 ) -> Button:
     """
     Create a button entity for a specific preset using injected context.
-    
+
     :param preset_num: Preset number (1-8)
     :param ctx: Entity context with backend access
     :param preset_name: Custom name for the preset (optional)
@@ -101,7 +100,7 @@ def create_preset_button_with_context(
     ) -> StatusCodes:
         """Handle preset button press."""
         _LOG.info(f"Preset {preset_num} ({display_name}) button pressed")
-        
+
         backend = ctx.get_backend()
         if backend is None:
             _LOG.error("Backend not available")
@@ -171,13 +170,13 @@ def create_cec_command_handler_with_context(
 ) -> Callable:
     """
     Factory function to create CEC command handlers using injected context.
-    
+
     :param port_num: Input or output number (1-8)
     :param port_type: "input" or "output"
     :param ctx: Entity context with backend access
     :return: Async command handler function
     """
-    
+
     async def cec_cmd_handler(
         entity: Remote, cmd_id: str, params: dict[str, Any] | None, websocket: Any
     ) -> StatusCodes:
@@ -191,7 +190,7 @@ def create_cec_command_handler_with_context(
 
         # Determine which CEC command to send
         cec_command = None
-        
+
         # Handle SEND_CMD for simple commands
         if cmd_id == ucapi.remote.Commands.SEND_CMD:
             if params and "command" in params:
@@ -199,7 +198,7 @@ def create_cec_command_handler_with_context(
         # Handle native remote commands (D-pad, playback buttons)
         elif cmd_id in NATIVE_CMD_MAP:
             cec_command = NATIVE_CMD_MAP[cmd_id]
-        
+
         if not cec_command:
             _LOG.warning(f"Command not implemented: {cmd_id}")
             return StatusCodes.NOT_IMPLEMENTED
@@ -213,7 +212,7 @@ def create_cec_command_handler_with_context(
         except Exception as e:
             _LOG.error(f"CEC command failed: {e}")
             return StatusCodes.SERVER_ERROR
-    
+
     return cec_cmd_handler
 
 
@@ -224,7 +223,7 @@ def create_input_cec_remote_with_context(
 ) -> Remote:
     """
     Create a remote entity for CEC control of a specific input device.
-    
+
     :param input_num: Input number (1-8)
     :param ctx: Entity context with backend access
     :param input_name: Custom name for the input (optional)
@@ -298,7 +297,7 @@ def create_output_cec_remote_with_context(
 ) -> Remote:
     """
     Create a remote entity for CEC control of an output device (TV/display).
-    
+
     :param output_num: Output number (1-8)
     :param ctx: Entity context with backend access
     :param output_name: Custom name for the output (optional)

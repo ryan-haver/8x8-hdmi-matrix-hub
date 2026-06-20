@@ -67,22 +67,22 @@ def matrix_config():
 async def real_matrix():
     """
     Create a real matrix connection for integration tests.
-    
+
     Skips if USE_MOCK_MATRIX=1 is set.
     """
     if USE_MOCK:
         pytest.skip("USE_MOCK_MATRIX=1 - skipping real device test")
-    
+
     from orei_matrix import OreiMatrix
-    
+
     matrix = OreiMatrix(MATRIX_HOST, MATRIX_PORT)
     connected = await matrix.connect()
-    
+
     if not connected:
         pytest.skip(f"Cannot connect to matrix at {MATRIX_HOST}:{MATRIX_PORT}")
-    
+
     yield matrix
-    
+
     # Cleanup - close connection if needed
     if hasattr(matrix, 'close'):
         await matrix.close()
@@ -96,8 +96,8 @@ async def real_matrix():
 def mock_matrix():
     """
     Create a mock matrix device for unit tests.
-    
-    Use this when you need to test without real hardware, 
+
+    Use this when you need to test without real hardware,
     or to test error conditions that are hard to trigger on real device.
     """
     matrix = MagicMock()
@@ -105,9 +105,33 @@ def mock_matrix():
     matrix.current_scene = 1
     matrix.host = MATRIX_HOST  # Use configured host for consistency
     matrix.port = MATRIX_PORT
-    
+
+    # CEC Command registry for mock
+    matrix.CEC_COMMAND_MAP = {
+        "POWER_ON": 1,
+        "POWER_OFF": 2,
+        "UP": 3,
+        "LEFT": 4,
+        "SELECT": 5,
+        "RIGHT": 6,
+        "MENU": 7,
+        "DOWN": 8,
+        "BACK": 9,
+        "PREVIOUS": 10,
+        "PLAY": 11,
+        "NEXT": 12,
+        "REWIND": 13,
+        "PAUSE": 14,
+        "FAST_FORWARD": 15,
+        "STOP": 16,
+        "MUTE": 17,
+        "VOLUME_DOWN": 18,
+        "VOLUME_UP": 19,
+    }
+
     # Mock async methods
     matrix.connect = AsyncMock(return_value=True)
+    matrix.send_cec = AsyncMock(return_value=True)
     matrix.recall_preset = AsyncMock(return_value=True)
     matrix.save_preset = AsyncMock(return_value=True)
     matrix.switch_input = AsyncMock(return_value=True)
@@ -116,15 +140,15 @@ def mock_matrix():
     matrix.get_status = AsyncMock(return_value={
         "power": "on",
         "routing": [1, 2, 3, 4, 5, 6, 7, 8],
-        "input_names": ["Input 1", "Input 2", "Input 3", "Input 4", 
+        "input_names": ["Input 1", "Input 2", "Input 3", "Input 4",
                        "Input 5", "Input 6", "Input 7", "Input 8"],
     })
     matrix.get_video_status = AsyncMock(return_value={
-        "alloutputname": ["TV 1", "TV 2", "TV 3", "TV 4", 
+        "alloutputname": ["TV 1", "TV 2", "TV 3", "TV 4",
                          "TV 5", "TV 6", "TV 7", "TV 8"],
     })
     matrix.get_current_input_for_output = AsyncMock(return_value=1)
-    
+
     # Sprint 2 methods
     matrix.set_output_enable = AsyncMock(return_value=True)
     matrix.set_output_hdcp = AsyncMock(return_value=True)
@@ -134,17 +158,17 @@ def mock_matrix():
     matrix.set_output_audio_mute = AsyncMock(return_value=True)
     matrix.set_cec_enable = AsyncMock(return_value=True)
     matrix.system_reboot = AsyncMock(return_value=True)
-    
+
     # Sprint 4 EDID methods
     matrix.get_edid_status = AsyncMock(return_value={
         "edid": [36, 36, 36, 36, 36, 36, 36, 36]
     })
     matrix.set_input_edid = AsyncMock(return_value=True)
     matrix.copy_edid_from_output = AsyncMock(return_value=True)
-    
+
     # Sprint 4 LCD timeout methods
     matrix.set_lcd_timeout = AsyncMock(return_value=True)
-    
+
     # Sprint 4 ext-audio methods
     matrix.get_ext_audio_status = AsyncMock(return_value={
         "mode": 0,
@@ -154,7 +178,7 @@ def mock_matrix():
     matrix.set_ext_audio_mode = AsyncMock(return_value=True)
     matrix.set_ext_audio_enable = AsyncMock(return_value=True)
     matrix.set_ext_audio_source = AsyncMock(return_value=True)
-    
+
     # Status endpoint methods
     matrix.get_full_status = AsyncMock(return_value={
         "power": 1,
@@ -209,11 +233,11 @@ def mock_matrix():
         5: "Input 5", 6: "Input 6", 7: "Input 7", 8: "Input 8",
     })
     matrix.telnet_connected = True
-    
+
     # System settings methods
     matrix.set_beep = AsyncMock(return_value=True)
     matrix.set_panel_lock = AsyncMock(return_value=True)
-    
+
     # CEC command methods (for REST API CEC_INPUT_COMMANDS and CEC_OUTPUT_COMMANDS)
     # Input CEC commands
     matrix.cec_input_power_on = AsyncMock(return_value=True)
@@ -235,7 +259,7 @@ def mock_matrix():
     matrix.cec_input_volume_up = AsyncMock(return_value=True)
     matrix.cec_input_volume_down = AsyncMock(return_value=True)
     matrix.cec_input_mute = AsyncMock(return_value=True)
-    
+
     # Output CEC commands
     matrix.cec_output_power_on = AsyncMock(return_value=True)
     matrix.cec_output_power_off = AsyncMock(return_value=True)
@@ -249,7 +273,7 @@ def mock_matrix():
     matrix.cec_output_volume_up = AsyncMock(return_value=True)
     matrix.cec_output_volume_down = AsyncMock(return_value=True)
     matrix.cec_output_mute = AsyncMock(return_value=True)
-    
+
     # CEC capabilities methods
     matrix.get_cec_enabled = AsyncMock(return_value={
         "inputs": {1: True, 2: True, 3: False, 4: False, 5: False, 6: False, 7: False, 8: False},
@@ -278,7 +302,7 @@ def mock_matrix():
         "is_audio_only": False,
         "commands": ["power_on", "power_off", "volume_up", "volume_down", "mute"],
     })
-    
+
     return matrix
 
 

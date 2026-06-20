@@ -6,9 +6,9 @@ import json
 import logging
 from typing import Any
 
-from aiohttp import web, WSMsgType
+from aiohttp import WSMsgType, web
 
-from .utils import get_ws_clients, get_matrix_device
+from .utils import get_matrix_device, get_ws_clients
 
 _LOG = logging.getLogger("rest_api.websocket")
 
@@ -16,22 +16,22 @@ _LOG = logging.getLogger("rest_api.websocket")
 async def broadcast_status_update(event_type: str, data: dict[str, Any]):
     """
     Broadcast a status update to all connected WebSocket clients.
-    
+
     :param event_type: Type of event (e.g., "routing_change", "connection_change", "signal_change")
     :param data: Event data to send
     """
     ws_clients = get_ws_clients()
     if not ws_clients:
         return
-    
+
     message = json.dumps({
         "event": event_type,
         "data": data
     })
-    
+
     # Copy the set to avoid iteration issues if clients are added/removed during broadcast
     clients_snapshot = set(ws_clients)
-    
+
     # Send to all clients, removing disconnected ones
     disconnected = set()
     for ws in clients_snapshot:
@@ -43,10 +43,10 @@ async def broadcast_status_update(event_type: str, data: dict[str, Any]):
         except Exception as e:
             _LOG.debug(f"Error sending to WebSocket client: {e}")
             disconnected.add(ws)
-    
+
     # Clean up disconnected clients
     ws_clients.difference_update(disconnected)
-    
+
     if disconnected:
         _LOG.debug(f"Removed {len(disconnected)} disconnected WebSocket client(s)")
 
@@ -59,7 +59,7 @@ def get_connected_client_count() -> int:
 async def handle_websocket(request: web.Request) -> web.WebSocketResponse:
     """
     WebSocket endpoint for real-time status updates.
-    
+
     Clients connect to /ws and receive JSON messages:
     - {"event": "connected", "data": {"message": "...", "client_count": N}}
     - {"event": "routing_change", "data": {"output": N, "input": M, "input_name": "..."}}
@@ -69,15 +69,15 @@ async def handle_websocket(request: web.Request) -> web.WebSocketResponse:
     """
     ws_clients = get_ws_clients()
     matrix_device = get_matrix_device()
-    
+
     ws = web.WebSocketResponse()
     await ws.prepare(request)
-    
+
     # Add to connected clients
     ws_clients.add(ws)
     client_count = len(ws_clients)
     _LOG.info(f"WebSocket client connected (total: {client_count})")
-    
+
     # Send welcome message
     try:
         await ws.send_json({
@@ -89,7 +89,7 @@ async def handle_websocket(request: web.Request) -> web.WebSocketResponse:
         })
     except Exception as e:
         _LOG.warning(f"Error sending welcome message: {e}")
-    
+
     # Keep connection open and handle incoming messages
     try:
         async for msg in ws:
@@ -98,7 +98,7 @@ async def handle_websocket(request: web.Request) -> web.WebSocketResponse:
                 try:
                     data = json.loads(msg.data)
                     command = data.get("command")
-                    
+
                     if command == "ping":
                         await ws.send_json({"event": "pong", "data": {}})
                     elif command == "get_status":
@@ -119,5 +119,5 @@ async def handle_websocket(request: web.Request) -> web.WebSocketResponse:
         # Remove from connected clients
         ws_clients.discard(ws)
         _LOG.info(f"WebSocket client disconnected (remaining: {len(ws_clients)})")
-    
+
     return ws

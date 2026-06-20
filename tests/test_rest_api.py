@@ -8,16 +8,12 @@ To run with real device:
     USE_MOCK_MATRIX=0 pytest tests/test_rest_api.py
 """
 
-import json
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock
 
 import pytest
-from aiohttp import web
-from aiohttp.test_utils import AioHTTPTestCase, unittest_run_loop
 
 # Import the REST API module
-import rest_api
-from rest_api import create_rest_app, set_matrix_device, update_input_names, reset_rate_limiter
+from rest_api import create_rest_app, reset_rate_limiter, set_matrix_device
 
 # mock_matrix fixture is provided by conftest.py
 
@@ -45,7 +41,7 @@ def extended_mock_matrix(mock_matrix):
     mock_matrix.set_audio_mute = AsyncMock(return_value=True)
     mock_matrix.set_hdr_mode = AsyncMock(return_value=True)
     mock_matrix.set_hdcp_mode = AsyncMock(return_value=True)
-    
+
     return mock_matrix
 
 
@@ -54,7 +50,7 @@ def app(extended_mock_matrix):
     """Create the REST app with mock matrix."""
     # Reset rate limiter between tests
     reset_rate_limiter()
-    
+
     set_matrix_device(extended_mock_matrix, {
         1: "Apple TV",
         2: "PS5",
@@ -87,7 +83,7 @@ class TestHealthEndpoints:
         """Test /api/health returns healthy status."""
         resp = await client.get("/api/health")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert data["data"]["status"] == "healthy"
@@ -97,7 +93,7 @@ class TestHealthEndpoints:
         """Test / returns API documentation."""
         resp = await client.get("/api")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert data["data"]["version"] == "2.10.0"
@@ -114,10 +110,10 @@ class TestHealthEndpoints:
             "model": "BK-808",
             "version": "V1.10.01",
         })
-        
+
         resp = await client.get("/api/info")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert "api_version" in data["data"]
@@ -129,7 +125,7 @@ class TestHealthEndpoints:
         """Test /api/status returns matrix status."""
         resp = await client.get("/api/status")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         mock_matrix.get_status.assert_called_once()
@@ -139,7 +135,7 @@ class TestHealthEndpoints:
         """Test /api/presets returns preset list."""
         resp = await client.get("/api/presets")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert len(data["data"]["presets"]) == 8
@@ -160,7 +156,7 @@ class TestControlEndpoints:
         """Test POST /api/preset/{n} recalls preset."""
         resp = await client.post("/api/preset/3")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         mock_matrix.recall_preset.assert_called_once_with(3)
@@ -170,7 +166,7 @@ class TestControlEndpoints:
         """Test invalid preset number returns 400."""
         resp = await client.post("/api/preset/0")
         assert resp.status == 400
-        
+
         resp = await client.post("/api/preset/9")
         assert resp.status == 400
 
@@ -179,7 +175,7 @@ class TestControlEndpoints:
         """Test POST /api/switch routes input to output."""
         resp = await client.post("/api/switch", json={"input": 3, "output": 1})
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         mock_matrix.switch_input.assert_called_once_with(3, 1)
@@ -208,7 +204,7 @@ class TestControlEndpoints:
         """Test POST /api/power/on powers on matrix."""
         resp = await client.post("/api/power/on")
         assert resp.status == 200
-        
+
         mock_matrix.power_on.assert_called_once()
 
     @pytest.mark.asyncio
@@ -216,7 +212,7 @@ class TestControlEndpoints:
         """Test POST /api/power/off powers off matrix."""
         resp = await client.post("/api/power/off")
         assert resp.status == 200
-        
+
         mock_matrix.power_off.assert_called_once()
 
 
@@ -233,7 +229,7 @@ class TestInputCycling:
         """Test POST /api/input/next cycles to next input."""
         resp = await client.post("/api/input/next?output=1")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert "current_input" in data["data"]
@@ -243,7 +239,7 @@ class TestInputCycling:
         """Test POST /api/input/previous cycles to previous input."""
         resp = await client.post("/api/input/previous?output=1")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
 
@@ -252,7 +248,7 @@ class TestInputCycling:
         """Test POST /api/output/{n}/source sets source."""
         resp = await client.post("/api/output/1/source", json={"input": 5})
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
 
@@ -270,7 +266,7 @@ class TestAdvancedOutputControl:
         """Test POST /api/output/{n}/enable."""
         resp = await client.post("/api/output/1/enable", json={"enabled": False})
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         mock_matrix.set_output_enable.assert_called_once_with(1, False)
@@ -280,7 +276,7 @@ class TestAdvancedOutputControl:
         """Test POST /api/output/{n}/hdcp."""
         resp = await client.post("/api/output/2/hdcp", json={"mode": 2})
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         mock_matrix.set_output_hdcp.assert_called_once_with(2, 2)
@@ -296,7 +292,7 @@ class TestAdvancedOutputControl:
         """Test POST /api/output/{n}/hdr."""
         resp = await client.post("/api/output/1/hdr", json={"mode": 1})
         assert resp.status == 200
-        
+
         mock_matrix.set_output_hdr.assert_called_once_with(1, 1)
 
     @pytest.mark.asyncio
@@ -304,7 +300,7 @@ class TestAdvancedOutputControl:
         """Test POST /api/output/{n}/scaler."""
         resp = await client.post("/api/output/1/scaler", json={"mode": 4})
         assert resp.status == 200
-        
+
         mock_matrix.set_output_scaler.assert_called_once_with(1, 4)
 
     @pytest.mark.asyncio
@@ -312,7 +308,7 @@ class TestAdvancedOutputControl:
         """Test POST /api/output/{n}/arc."""
         resp = await client.post("/api/output/1/arc", json={"enabled": True})
         assert resp.status == 200
-        
+
         mock_matrix.set_output_arc.assert_called_once_with(1, True)
 
     @pytest.mark.asyncio
@@ -320,7 +316,7 @@ class TestAdvancedOutputControl:
         """Test POST /api/output/{n}/mute."""
         resp = await client.post("/api/output/3/mute", json={"muted": True})
         assert resp.status == 200
-        
+
         mock_matrix.set_output_audio_mute.assert_called_once_with(3, True)
 
     @pytest.mark.asyncio
@@ -328,7 +324,7 @@ class TestAdvancedOutputControl:
         """Test POST /api/cec/{type}/{n}/enable."""
         resp = await client.post("/api/cec/input/2/enable", json={"enabled": True})
         assert resp.status == 200
-        
+
         mock_matrix.set_cec_enable.assert_called_once_with("input", 2, True)
 
     @pytest.mark.asyncio
@@ -336,7 +332,7 @@ class TestAdvancedOutputControl:
         """Test POST /api/preset/{n}/save."""
         resp = await client.post("/api/preset/5/save")
         assert resp.status == 200
-        
+
         mock_matrix.save_preset.assert_called_once_with(5)
 
     @pytest.mark.asyncio
@@ -344,7 +340,7 @@ class TestAdvancedOutputControl:
         """Test POST /api/system/reboot."""
         resp = await client.post("/api/system/reboot")
         assert resp.status == 200
-        
+
         mock_matrix.system_reboot.assert_called_once()
 
 
@@ -361,7 +357,7 @@ class TestEdidControl:
         """Test GET /api/edid/modes returns available EDID modes."""
         resp = await client.get("/api/edid/modes")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert "modes" in data["data"]
@@ -377,10 +373,10 @@ class TestEdidControl:
         mock_matrix.get_edid_status.return_value = {
             "edid": [36, 36, 36, 36, 36, 36, 36, 36]
         }
-        
+
         resp = await client.get("/api/status/edid")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert "inputs" in data["data"]
@@ -393,10 +389,10 @@ class TestEdidControl:
     async def test_set_input_edid(self, client, mock_matrix):
         """Test POST /api/input/{n}/edid sets EDID mode."""
         mock_matrix.set_input_edid.return_value = True
-        
+
         resp = await client.post("/api/input/1/edid", json={"mode": 36})
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert data["data"]["input"] == 1
@@ -409,7 +405,7 @@ class TestEdidControl:
         """Test POST /api/input/{n}/edid with invalid input number."""
         resp = await client.post("/api/input/0/edid", json={"mode": 36})
         assert resp.status == 400
-        
+
         resp = await client.post("/api/input/9/edid", json={"mode": 36})
         assert resp.status == 400
 
@@ -418,7 +414,7 @@ class TestEdidControl:
         """Test POST /api/input/{n}/edid with missing mode parameter."""
         resp = await client.post("/api/input/1/edid", json={})
         assert resp.status == 400
-        
+
         data = await resp.json()
         assert data["success"] is False
         assert "mode" in data["error"]
@@ -427,10 +423,10 @@ class TestEdidControl:
     async def test_set_input_edid_copy_from_output(self, client, mock_matrix):
         """Test POST /api/input/{n}/edid with copy-from-output mode (15-22)."""
         mock_matrix.copy_edid_from_output.return_value = True
-        
+
         resp = await client.post("/api/input/1/edid", json={"mode": 15})
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         # Mode 15 = copy from output 1
@@ -450,7 +446,7 @@ class TestLcdTimeoutControl:
         """Test GET /api/system/lcd/modes returns available LCD timeout modes."""
         resp = await client.get("/api/system/lcd/modes")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert "modes" in data["data"]
@@ -464,10 +460,10 @@ class TestLcdTimeoutControl:
     async def test_set_lcd_timeout(self, client, mock_matrix):
         """Test POST /api/system/lcd sets LCD timeout mode."""
         mock_matrix.set_lcd_timeout.return_value = True
-        
+
         resp = await client.post("/api/system/lcd", json={"mode": 3})
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert data["data"]["mode"] == 3
@@ -479,7 +475,7 @@ class TestLcdTimeoutControl:
         """Test POST /api/system/lcd with invalid mode."""
         resp = await client.post("/api/system/lcd", json={"mode": 5})
         assert resp.status == 400
-        
+
         resp = await client.post("/api/system/lcd", json={"mode": -1})
         assert resp.status == 400
 
@@ -488,7 +484,7 @@ class TestLcdTimeoutControl:
         """Test POST /api/system/lcd with missing mode parameter."""
         resp = await client.post("/api/system/lcd", json={})
         assert resp.status == 400
-        
+
         data = await resp.json()
         assert data["success"] is False
         assert "mode" in data["error"]
@@ -507,7 +503,7 @@ class TestExtAudioControl:
         """Test GET /api/status/ext-audio returns ext-audio status."""
         resp = await client.get("/api/status/ext-audio")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert "mode" in data["data"]
@@ -521,7 +517,7 @@ class TestExtAudioControl:
         """Test GET /api/ext-audio/modes returns available modes."""
         resp = await client.get("/api/ext-audio/modes")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert "modes" in data["data"]
@@ -534,10 +530,10 @@ class TestExtAudioControl:
     async def test_set_ext_audio_mode(self, client, mock_matrix):
         """Test POST /api/ext-audio/mode sets ext-audio mode."""
         mock_matrix.set_ext_audio_mode.return_value = True
-        
+
         resp = await client.post("/api/ext-audio/mode", json={"mode": 2})
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert data["data"]["mode"] == 2
@@ -554,10 +550,10 @@ class TestExtAudioControl:
     async def test_set_ext_audio_enable(self, client, mock_matrix):
         """Test POST /api/ext-audio/{n}/enable sets enable state."""
         mock_matrix.set_ext_audio_enable.return_value = True
-        
+
         resp = await client.post("/api/ext-audio/1/enable", json={"enabled": True})
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert data["data"]["output"] == 1
@@ -568,10 +564,10 @@ class TestExtAudioControl:
     async def test_set_ext_audio_source(self, client, mock_matrix):
         """Test POST /api/ext-audio/{n}/source sets audio source."""
         mock_matrix.set_ext_audio_source.return_value = True
-        
+
         resp = await client.post("/api/ext-audio/2/source", json={"input": 4})
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert data["data"]["output"] == 2
@@ -583,7 +579,7 @@ class TestExtAudioControl:
         """Test POST /api/ext-audio/{n}/source with invalid output."""
         resp = await client.post("/api/ext-audio/0/source", json={"input": 4})
         assert resp.status == 400
-        
+
         resp = await client.post("/api/ext-audio/9/source", json={"input": 4})
         assert resp.status == 400
 
@@ -592,7 +588,7 @@ class TestExtAudioControl:
         """Test POST /api/ext-audio/{n}/source with invalid input."""
         resp = await client.post("/api/ext-audio/1/source", json={"input": 0})
         assert resp.status == 400
-        
+
         resp = await client.post("/api/ext-audio/1/source", json={"input": 9})
         assert resp.status == 400
 
@@ -610,7 +606,7 @@ class TestSceneControl:
         """Test GET /api/scenes returns empty list initially."""
         resp = await client.get("/api/scenes")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert "scenes" in data["data"]
@@ -627,10 +623,10 @@ class TestSceneControl:
                 "2": {"input": 3, "audio_mute": True}
             }
         }
-        
+
         resp = await client.post("/api/scene", json=scene_data)
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert data["data"]["id"] == "test_scene"
@@ -646,11 +642,11 @@ class TestSceneControl:
             "outputs": {"1": {"input": 1}, "2": {"input": 1}}
         }
         await client.post("/api/scene", json=scene_data)
-        
+
         # Get it
         resp = await client.get("/api/scene/movie_night")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert data["data"]["name"] == "Movie Night"
@@ -671,15 +667,15 @@ class TestSceneControl:
             "outputs": {"1": {"input": 1}}
         }
         await client.post("/api/scene", json=scene_data)
-        
+
         # Delete it
         resp = await client.delete("/api/scene/to_delete")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert data["data"]["deleted"] == "to_delete"
-        
+
         # Verify it's gone
         resp = await client.get("/api/scene/to_delete")
         assert resp.status == 404
@@ -694,11 +690,11 @@ class TestSceneControl:
             "outputs": {"1": {"input": 3}, "2": {"input": 4}}
         }
         await client.post("/api/scene", json=scene_data)
-        
+
         # Recall it
         resp = await client.post("/api/scene/recall_test/recall")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert data["data"]["scene"] == "Recall Test"
@@ -718,7 +714,7 @@ class TestSceneControl:
             "name": "Current State"
         })
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert data["data"]["id"] == "current_state"
@@ -772,7 +768,7 @@ class TestErrorHandling:
         """Test invalid output number returns 400."""
         resp = await client.post("/api/output/0/hdcp", json={"mode": 1})
         assert resp.status == 400
-        
+
         resp = await client.post("/api/output/9/hdcp", json={"mode": 1})
         assert resp.status == 400
 
@@ -780,7 +776,7 @@ class TestErrorHandling:
     async def test_matrix_not_connected(self, client, mock_matrix):
         """Test endpoints return 503 when matrix not connected."""
         mock_matrix.connected = False
-        
+
         resp = await client.get("/api/status")
         assert resp.status == 503
 
@@ -788,7 +784,7 @@ class TestErrorHandling:
     async def test_cors_headers_present(self, client):
         """Test CORS headers are included in responses."""
         resp = await client.get("/api/health")
-        
+
         assert "Access-Control-Allow-Origin" in resp.headers
         assert resp.headers["Access-Control-Allow-Origin"] == "*"
 
@@ -832,7 +828,7 @@ class TestWebSocket:
         async with client.ws_connect("/ws") as ws:
             # Skip welcome message
             await ws.receive_json()
-            
+
             # Send ping
             await ws.send_json({"command": "ping"})
             msg = await ws.receive_json()
@@ -846,11 +842,11 @@ class TestWebSocket:
             "power": 1,
             "alloutsource": [1, 2, 3, 4, 5, 6, 7, 8]
         }
-        
+
         async with client.ws_connect("/ws") as ws:
             # Skip welcome message
             await ws.receive_json()
-            
+
             # Request status
             await ws.send_json({"command": "get_status"})
             msg = await ws.receive_json()
@@ -863,7 +859,7 @@ class TestWebSocket:
         async with client.ws_connect("/ws") as ws:
             # Skip welcome message
             await ws.receive_json()
-            
+
             # Send unknown command
             await ws.send_json({"command": "unknown_cmd"})
             msg = await ws.receive_json()
@@ -884,17 +880,17 @@ class TestWebUI:
         """Test /ui serves the Web UI."""
         resp = await client.get("/ui")
         assert resp.status == 200
-        
+
         content = await resp.text()
         assert "OREI Matrix Control" in content
-        assert "<!DOCTYPE html>" in content
+        assert "doctype html" in content.lower()
 
     @pytest.mark.asyncio
     async def test_web_ui_with_trailing_slash(self, client):
         """Test /ui/ also serves the Web UI."""
         resp = await client.get("/ui/")
         assert resp.status == 200
-        
+
         content = await resp.text()
         assert "OREI Matrix Control" in content
 
@@ -948,7 +944,7 @@ class TestProfileAPI:
         """Test GET /api/profiles returns empty list initially."""
         resp = await client.get("/api/profiles")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert "profiles" in data["data"]
@@ -969,10 +965,10 @@ class TestProfileAPI:
             "power_on_macro": "startup_macro",
             "power_off_macro": "shutdown_macro"
         }
-        
+
         resp = await client.post("/api/profile", json=profile_data)
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert data["data"]["id"] == "movie_night"
@@ -990,10 +986,10 @@ class TestProfileAPI:
             "name": "Basic Profile",
             "outputs": {"1": {"input": 1}}
         }
-        
+
         resp = await client.post("/api/profile", json=profile_data)
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert data["data"]["id"] == "basic_profile"
@@ -1008,7 +1004,7 @@ class TestProfileAPI:
             "outputs": {"1": {"input": 1}}
         })
         assert resp.status == 400
-        
+
         data = await resp.json()
         assert data["success"] is False
         assert "id" in data["error"].lower() or "required" in data["error"].lower()
@@ -1021,7 +1017,7 @@ class TestProfileAPI:
             "outputs": {"1": {"input": 1}}
         })
         assert resp.status == 400
-        
+
         data = await resp.json()
         assert data["success"] is False
 
@@ -1055,11 +1051,11 @@ class TestProfileAPI:
             "icon": "📺",
             "outputs": {"1": {"input": 3}}
         })
-        
+
         # Get it
         resp = await client.get("/api/profile/get_test")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert data["data"]["id"] == "get_test"
@@ -1072,7 +1068,7 @@ class TestProfileAPI:
         """Test GET /api/profile/{id} returns 404 for unknown profile."""
         resp = await client.get("/api/profile/nonexistent_profile")
         assert resp.status == 404
-        
+
         data = await resp.json()
         assert data["success"] is False
 
@@ -1086,19 +1082,19 @@ class TestProfileAPI:
             "icon": "📺",
             "outputs": {"1": {"input": 1}}
         })
-        
+
         # Update it
         resp = await client.put("/api/profile/update_test", json={
             "name": "Updated Name",
             "icon": "🎬"
         })
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert data["data"]["name"] == "Updated Name"
         assert data["data"]["icon"] == "🎬"
-        
+
         # Verify persistence
         resp = await client.get("/api/profile/update_test")
         data = await resp.json()
@@ -1113,7 +1109,7 @@ class TestProfileAPI:
             "name": "Macro Test",
             "outputs": {"1": {"input": 1}}
         })
-        
+
         # Update with macros
         resp = await client.put("/api/profile/macro_update_test", json={
             "macros": ["macro_a", "macro_b"],
@@ -1121,7 +1117,7 @@ class TestProfileAPI:
             "power_off_macro": "power_off"
         })
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert "macro_a" in data["data"].get("macros", [])
@@ -1143,14 +1139,14 @@ class TestProfileAPI:
             "name": "To Delete",
             "outputs": {"1": {"input": 1}}
         })
-        
+
         # Delete it
         resp = await client.delete("/api/profile/delete_test")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
-        
+
         # Verify it's gone
         resp = await client.get("/api/profile/delete_test")
         assert resp.status == 404
@@ -1174,19 +1170,19 @@ class TestProfileAPI:
                 "5": {"input": 1}
             }
         })
-        
+
         # Recall it
         resp = await client.post("/api/profile/recall_switch_test/recall")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert data["data"]["profile"] == "Recall Switch Test"
-        
+
         # CRITICAL: Verify switch_input was called for each output
         calls = mock_matrix.switch_input.call_args_list
         assert len(calls) >= 3, f"Expected at least 3 switch_input calls, got {len(calls)}"
-        
+
         # Verify correct input/output pairs were switched
         call_pairs = [(c[0][0], c[0][1]) for c in calls]  # (input, output) pairs
         assert (3, 1) in call_pairs, "Expected switch_input(3, 1) for output 1"
@@ -1209,17 +1205,17 @@ class TestProfileAPI:
                 "name": f"List Test {i}",
                 "outputs": {"1": {"input": i + 1}}
             })
-        
+
         # List them
         resp = await client.get("/api/profiles")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
-        
+
         profiles = data["data"]["profiles"]
         profile_ids = [p["id"] for p in profiles]
-        
+
         for i in range(3):
             assert f"list_test_{i}" in profile_ids
 
@@ -1237,7 +1233,7 @@ class TestMacroAPI:
         """Test GET /api/cec/macros returns empty list initially."""
         resp = await client.get("/api/cec/macros")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert "macros" in data["data"]
@@ -1255,10 +1251,10 @@ class TestMacroAPI:
                 {"command": "POWER_ON", "targets": ["output_1"], "delay_ms": 1000}
             ]
         }
-        
+
         resp = await client.post("/api/cec/macro", json=macro_data)
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert "id" in data["data"]  # ID should be auto-generated
@@ -1277,10 +1273,10 @@ class TestMacroAPI:
             "name": "Custom ID Macro",
             "steps": [{"command": "PLAY", "targets": ["input_1"]}]
         }
-        
+
         resp = await client.post("/api/cec/macro", json=macro_data)
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["data"]["id"] == "custom_macro_id"
 
@@ -1291,7 +1287,7 @@ class TestMacroAPI:
             "steps": [{"command": "PLAY", "targets": ["input_1"]}]
         })
         assert resp.status == 400
-        
+
         data = await resp.json()
         assert data["success"] is False
 
@@ -1316,11 +1312,11 @@ class TestMacroAPI:
             "steps": [{"command": "PLAY", "targets": ["output_2"], "delay_ms": 500}]
         })
         assert create_resp.status == 200
-        
+
         # Get it
         resp = await client.get("/api/cec/macro/get_macro_test")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert data["data"]["id"] == "get_macro_test"
@@ -1344,7 +1340,7 @@ class TestMacroAPI:
             "name": "Original Macro",
             "steps": [{"command": "PLAY", "targets": ["input_1"]}]
         })
-        
+
         # Update it
         resp = await client.put("/api/cec/macro/update_macro_test", json={
             "name": "Updated Macro",
@@ -1352,13 +1348,13 @@ class TestMacroAPI:
             "description": "Now with description"
         })
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert data["data"]["name"] == "Updated Macro"
         assert data["data"]["icon"] == "🌙"
         assert data["data"]["description"] == "Now with description"
-        
+
         # Verify steps were preserved
         assert len(data["data"]["steps"]) >= 1
 
@@ -1371,7 +1367,7 @@ class TestMacroAPI:
             "name": "Steps Test",
             "steps": [{"command": "PLAY", "targets": ["input_1"]}]
         })
-        
+
         # Update with new steps
         resp = await client.put("/api/cec/macro/update_steps_test", json={
             "steps": [
@@ -1380,7 +1376,7 @@ class TestMacroAPI:
             ]
         })
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert len(data["data"]["steps"]) == 2
         assert data["data"]["steps"][0]["command"] == "POWER_ON"
@@ -1402,14 +1398,14 @@ class TestMacroAPI:
             "steps": [{"command": "PLAY", "targets": ["input_1"]}]
         })
         assert create_resp.status == 200
-        
+
         # Delete it
         resp = await client.delete("/api/cec/macro/delete_macro_test")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
-        
+
         # Verify it's gone
         resp = await client.get("/api/cec/macro/delete_macro_test")
         assert resp.status == 404
@@ -1437,11 +1433,11 @@ class TestMacroAPI:
                 {"command": "POWER_ON", "targets": ["input_1"], "delay_ms": 0}
             ]
         })
-        
+
         # Test it
         resp = await client.post("/api/cec/macro/test_macro_test/test")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         # API returns step_count and issues list for validation
@@ -1466,17 +1462,17 @@ class TestMacroAPI:
                 "name": f"List Macro {i}",
                 "steps": [{"command": "PLAY", "targets": [f"input_{i+1}"]}]
             })
-        
+
         # List them
         resp = await client.get("/api/cec/macros")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
-        
+
         macros = data["data"]["macros"]
         macro_ids = [m["id"] for m in macros]
-        
+
         for i in range(3):
             assert f"list_macro_{i}" in macro_ids
 
@@ -1496,7 +1492,7 @@ class TestMacroAPI:
             ]
         })
         assert resp.status == 200
-        
+
         # Verify step was stored correctly
         data = await resp.json()
         step = data["data"]["steps"][0]
@@ -1527,15 +1523,15 @@ class TestSceneRecallValidation:
             }
         }
         await client.post("/api/scene", json=scene_data)
-        
+
         # Recall it
         resp = await client.post("/api/scene/recall_validation/recall")
         assert resp.status == 200
-        
+
         # CRITICAL: Verify switch_input was called for each output
         calls = mock_matrix.switch_input.call_args_list
         assert len(calls) >= 3, f"Expected at least 3 switch_input calls, got {len(calls)}"
-        
+
         # Verify correct routing was applied
         call_pairs = [(c[0][0], c[0][1]) for c in calls]  # (input, output) pairs
         assert (5, 1) in call_pairs, "Expected switch_input(5, 1)"
@@ -1553,14 +1549,14 @@ class TestSceneRecallValidation:
             }
         }
         await client.post("/api/scene", json=scene_data)
-        
+
         # Recall it
         resp = await client.post("/api/scene/mute_test/recall")
         assert resp.status == 200
-        
+
         # Should have called switch_input
         mock_matrix.switch_input.assert_called()
-        
+
         # If audio mute is supported, it should be called
         if hasattr(mock_matrix, 'set_output_audio_mute'):
             # Depending on implementation, mute may be called
@@ -1580,12 +1576,12 @@ class TestStatusEndpoints:
         """Test GET /api/inputs returns input list."""
         resp = await client.get("/api/inputs")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert "inputs" in data["data"]
         assert len(data["data"]["inputs"]) == 8
-        
+
         # Verify structure
         first_input = data["data"]["inputs"][0]
         assert "number" in first_input
@@ -1598,12 +1594,12 @@ class TestStatusEndpoints:
         """Test GET /api/outputs returns output list."""
         resp = await client.get("/api/outputs")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert "outputs" in data["data"]
         assert len(data["data"]["outputs"]) == 8
-        
+
         # Verify structure
         first_output = data["data"]["outputs"][0]
         assert "number" in first_output
@@ -1615,7 +1611,7 @@ class TestStatusEndpoints:
         """Test GET /api/status/full returns comprehensive status."""
         resp = await client.get("/api/status/full")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
 
@@ -1624,7 +1620,7 @@ class TestStatusEndpoints:
         """Test GET /api/status/outputs returns output status."""
         resp = await client.get("/api/status/outputs")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert "outputs" in data["data"]
@@ -1634,7 +1630,7 @@ class TestStatusEndpoints:
         """Test GET /api/status/inputs returns input status."""
         resp = await client.get("/api/status/inputs")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert "inputs" in data["data"]
@@ -1644,7 +1640,7 @@ class TestStatusEndpoints:
         """Test GET /api/status/system returns system settings."""
         resp = await client.get("/api/status/system")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         # Verify expected fields
@@ -1657,7 +1653,7 @@ class TestStatusEndpoints:
         """Test GET /api/status/device returns device info."""
         resp = await client.get("/api/status/device")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert "device" in data["data"]
@@ -1676,13 +1672,13 @@ class TestCecCommandEndpoints:
         """Test GET /api/cec/commands returns available commands."""
         resp = await client.get("/api/cec/commands")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert "input_commands" in data["data"]
         assert "output_commands" in data["data"]
         assert "usage" in data["data"]
-        
+
         # Verify some expected commands exist
         input_cmds = data["data"]["input_commands"]
         output_cmds = data["data"]["output_commands"]
@@ -1694,7 +1690,7 @@ class TestCecCommandEndpoints:
         """Test GET /api/cec/capabilities returns CEC capabilities."""
         resp = await client.get("/api/cec/capabilities")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         # Verify structure matches actual API response
@@ -1708,7 +1704,7 @@ class TestCecCommandEndpoints:
         """Test GET /api/cec/input/{n}/capabilities returns input CEC capabilities."""
         resp = await client.get("/api/cec/input/1/capabilities")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
 
@@ -1717,7 +1713,7 @@ class TestCecCommandEndpoints:
         """Test GET /api/cec/output/{n}/capabilities returns output CEC capabilities."""
         resp = await client.get("/api/cec/output/1/capabilities")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
 
@@ -1726,21 +1722,21 @@ class TestCecCommandEndpoints:
         """Test POST /api/cec/input/{n}/{command} sends CEC command."""
         resp = await client.post("/api/cec/input/3/power_on")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert data["data"]["input"] == 3
         assert data["data"]["command"] == "power_on"
-        
+
         # Verify the matrix method was called
-        mock_matrix.cec_input_power_on.assert_called_with(3)
+        mock_matrix.send_cec.assert_called_with("power_on", 3, is_output=False)
 
     @pytest.mark.asyncio
     async def test_cec_input_command_power_off(self, client, mock_matrix):
         """Test POST /api/cec/input/{n}/power_off sends standby command."""
         resp = await client.post("/api/cec/input/5/power_off")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert data["data"]["input"] == 5
@@ -1750,7 +1746,7 @@ class TestCecCommandEndpoints:
         """Test POST /api/cec/output/{n}/power_on sends TV power on."""
         resp = await client.post("/api/cec/output/2/power_on")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert data["data"]["output"] == 2
@@ -1761,7 +1757,7 @@ class TestCecCommandEndpoints:
         """Test POST /api/cec/output/{n}/power_off sends TV standby."""
         resp = await client.post("/api/cec/output/7/power_off")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert data["data"]["output"] == 7
@@ -1771,7 +1767,7 @@ class TestCecCommandEndpoints:
         """Test CEC command with invalid input port."""
         resp = await client.post("/api/cec/input/0/power_on")
         assert resp.status == 400
-        
+
         resp = await client.post("/api/cec/input/9/power_on")
         assert resp.status == 400
 
@@ -1780,7 +1776,7 @@ class TestCecCommandEndpoints:
         """Test CEC command with invalid output port."""
         resp = await client.post("/api/cec/output/0/power_on")
         assert resp.status == 400
-        
+
         resp = await client.post("/api/cec/output/9/power_on")
         assert resp.status == 400
 
@@ -1789,7 +1785,7 @@ class TestCecCommandEndpoints:
         """Test CEC with unknown command returns error."""
         resp = await client.post("/api/cec/input/1/invalid_command")
         assert resp.status == 400
-        
+
         data = await resp.json()
         assert data["success"] is False
         assert "Unknown command" in data["error"] or "unknown" in data["error"].lower()
@@ -1799,7 +1795,7 @@ class TestCecCommandEndpoints:
         """Test CEC with unknown command returns error."""
         resp = await client.post("/api/cec/output/1/invalid_command")
         assert resp.status == 400
-        
+
         data = await resp.json()
         assert data["success"] is False
 
@@ -1817,11 +1813,11 @@ class TestSystemSettingsEndpoints:
         """Test POST /api/system/beep enables beep."""
         resp = await client.post("/api/system/beep", json={"enabled": True})
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert data["data"]["beep_enabled"] is True
-        
+
         mock_matrix.set_beep.assert_called_with(True)
 
     @pytest.mark.asyncio
@@ -1829,11 +1825,11 @@ class TestSystemSettingsEndpoints:
         """Test POST /api/system/beep disables beep."""
         resp = await client.post("/api/system/beep", json={"enabled": False})
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert data["data"]["beep_enabled"] is False
-        
+
         mock_matrix.set_beep.assert_called_with(False)
 
     @pytest.mark.asyncio
@@ -1841,11 +1837,11 @@ class TestSystemSettingsEndpoints:
         """Test POST /api/system/panel_lock locks panel."""
         resp = await client.post("/api/system/panel_lock", json={"locked": True})
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert data["data"]["panel_locked"] is True
-        
+
         mock_matrix.set_panel_lock.assert_called_with(True)
 
     @pytest.mark.asyncio
@@ -1853,11 +1849,11 @@ class TestSystemSettingsEndpoints:
         """Test POST /api/system/panel_lock unlocks panel."""
         resp = await client.post("/api/system/panel_lock", json={"locked": False})
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert data["data"]["panel_locked"] is False
-        
+
         mock_matrix.set_panel_lock.assert_called_with(False)
 
 
@@ -1882,10 +1878,10 @@ class TestSceneCecConfigEndpoints:
                 "volume_targets": ["output:1"]
             }
         })
-        
+
         resp = await client.get("/api/scene/cec_get_test/cec")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
         assert "cec_config" in data["data"]
@@ -1906,7 +1902,7 @@ class TestSceneCecConfigEndpoints:
             "name": "CEC Post Test",
             "outputs": {"1": {"input": 1}}
         })
-        
+
         # Update CEC config
         resp = await client.post("/api/scene/cec_post_test/cec", json={
             "nav_targets": ["input:2", "input:3"],
@@ -1914,7 +1910,7 @@ class TestSceneCecConfigEndpoints:
             "auto_resolved": False
         })
         assert resp.status == 200
-        
+
         # Verify it was saved
         resp = await client.get("/api/scene/cec_post_test/cec")
         data = await resp.json()
@@ -1929,7 +1925,7 @@ class TestSceneCecConfigEndpoints:
             "name": "CEC Put Test",
             "outputs": {"1": {"input": 1}}
         })
-        
+
         resp = await client.put("/api/scene/cec_put_test/cec", json={
             "volume_targets": ["output:1", "output:2"],
             "auto_resolved": False
@@ -1954,10 +1950,10 @@ class TestProfileCecMacroEndpoints:
             "outputs": {"1": {"input": 1}},
             "cec_config": {"nav_targets": ["input:1"]}
         })
-        
+
         resp = await client.get("/api/profile/profile_cec_test/cec")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
 
@@ -1969,7 +1965,7 @@ class TestProfileCecMacroEndpoints:
             "name": "Profile CEC Update",
             "outputs": {"1": {"input": 1}}
         })
-        
+
         resp = await client.post("/api/profile/profile_cec_update/cec", json={
             "nav_targets": ["input:2"],
             "volume_targets": ["output:1"]
@@ -1986,10 +1982,10 @@ class TestProfileCecMacroEndpoints:
             "macros": ["macro1", "macro2"],
             "power_on_macro": "startup"
         })
-        
+
         resp = await client.get("/api/profile/profile_macro_get/macros")
         assert resp.status == 200
-        
+
         data = await resp.json()
         assert data["success"] is True
 
@@ -2001,7 +1997,7 @@ class TestProfileCecMacroEndpoints:
             "name": "Profile Macro Update",
             "outputs": {"1": {"input": 1}}
         })
-        
+
         resp = await client.post("/api/profile/profile_macro_update/macros", json={
             "macros": ["new_macro1", "new_macro2"],
             "power_on_macro": "on_macro",

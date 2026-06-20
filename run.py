@@ -46,7 +46,7 @@ sys.path.insert(0, str(SRC_PATH))
 
 # Check if ucapi is available (installed via requirements-uc.txt)
 try:
-    import ucapi
+    import ucapi  # noqa: F401
     UCAPI_AVAILABLE = True
 except ImportError:
     UCAPI_AVAILABLE = False
@@ -62,7 +62,7 @@ def run_legacy_mode():
     """
     Run in legacy mode - executes the original driver.py which handles
     both the API and UC driver in a single process.
-    
+
     This maintains full backward compatibility.
     """
     import runpy
@@ -74,38 +74,38 @@ async def run_modular_mode():
     """
     Run in modular mode - starts the REST API first, then optionally
     connects the UC driver via the API client.
-    
+
     This is the new architecture where integrations consume the API.
     """
-    from rest_api import RestApiServer, set_matrix_device
     from orei_matrix import OreiMatrix
-    
-    MATRIX_HOST = os.environ.get("MATRIX_HOST", "192.168.0.100")
-    
+    from rest_api import RestApiServer, set_matrix_device
+
+    matrix_host = os.environ.get("MATRIX_HOST", "192.168.0.100")
+
     _LOG.info("=" * 60)
     _LOG.info("8x8 HDMI Matrix Hub - Modular Mode")
     _LOG.info("=" * 60)
-    _LOG.info(f"  Matrix Host: {MATRIX_HOST}")
+    _LOG.info(f"  Matrix Host: {matrix_host}")
     _LOG.info(f"  API Port:    {API_PORT}")
     _LOG.info(f"  UC Enabled:  {UC_ENABLED}")
     _LOG.info(f"  Web UI:      {WEBUI_ENABLED}")
     _LOG.info("=" * 60)
-    
+
     # Layer 1: Connect to hardware
-    matrix = OreiMatrix(MATRIX_HOST)
+    matrix = OreiMatrix(matrix_host)
     set_matrix_device(matrix)
-    
+
     try:
         await matrix.connect()
         _LOG.info("✓ Connected to matrix hardware")
     except Exception as e:
         _LOG.warning(f"Could not connect to matrix on startup: {e}")
         _LOG.info("  Matrix will reconnect when available")
-    
+
     # Layer 2: Start REST API (always)
     api_server = RestApiServer(host="0.0.0.0", port=API_PORT)
     await api_server.start()
-    
+
     # Layer 3: Enable integrations based on feature flags
     if UC_ENABLED:
         _LOG.info("Starting UC integration in legacy mode (driver.py)...")
@@ -113,7 +113,7 @@ async def run_modular_mode():
         # Full modular UC driver is a future enhancement
         run_legacy_mode()
         return
-    
+
     # API-only mode - run until interrupted
     _LOG.info("Running in API-only mode. Press Ctrl+C to stop.")
     try:
@@ -132,9 +132,9 @@ def main():
     # Check if we should use modular mode
     # For now, always use legacy mode for full compatibility
     # Set USE_MODULAR=true to try the new architecture
-    USE_MODULAR = os.environ.get("USE_MODULAR", "false").lower() == "true"
-    
-    if USE_MODULAR and not UC_ENABLED:
+    use_modular = os.environ.get("USE_MODULAR", "false").lower() == "true"
+
+    if use_modular and not UC_ENABLED:
         # Modular mode only works for API-only currently
         _LOG.info("Starting in modular mode (API-only)...")
         asyncio.run(run_modular_mode())

@@ -9,10 +9,9 @@ cable/connection detection.
 
 import json
 import sys
-import ssl
-import urllib3
+
 import requests
-from typing import Optional
+import urllib3
 
 # Disable SSL warnings for self-signed cert
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -26,12 +25,12 @@ BASE_URL = f"https://{MATRIX_IP}:{MATRIX_PORT}/cgi-bin/instr"
 session = requests.Session()
 session.verify = False
 
-def send_command(comhead: str, params: Optional[dict] = None, timeout: int = 5) -> dict:
+def send_command(comhead: str, params: dict | None = None, timeout: int = 5) -> dict:
     """Send a command to the matrix and return the response."""
     payload = {"comhead": comhead, "language": 0}
     if params:
         payload.update(params)
-    
+
     try:
         response = session.post(BASE_URL, json=payload, timeout=timeout)
         return response.json()
@@ -48,10 +47,10 @@ def login() -> bool:
     # Check for multiple success conditions
     return result.get("result") == "success" or result.get("result") == 1 or result.get("comhead") == "login"
 
-def test_endpoint(comhead: str, params: Optional[dict] = None) -> tuple:
+def test_endpoint(comhead: str, params: dict | None = None) -> tuple:
     """Test an endpoint and return (success, response)."""
     result = send_command(comhead, params)
-    
+
     # Determine if it's a valid endpoint
     if "error" in result:
         return False, result
@@ -59,7 +58,7 @@ def test_endpoint(comhead: str, params: Optional[dict] = None) -> tuple:
         return True, result
     if "result" in result:
         return True, result
-    
+
     return False, result
 
 def main():
@@ -67,7 +66,7 @@ def main():
     print("OREI BK-808 API ENDPOINT DISCOVERY TOOL")
     print("=" * 70)
     print()
-    
+
     # Login first
     print("[*] Logging in to matrix...")
     if not login():
@@ -75,7 +74,7 @@ def main():
         sys.exit(1)
     print("[+] Login successful!")
     print()
-    
+
     # Known working endpoints (from HAR file)
     known_endpoints = [
         "get system status",
@@ -88,7 +87,7 @@ def main():
         "get ext-audio status",
         "get routing status",
     ]
-    
+
     # Potential undiscovered GET endpoints to probe
     # Based on patterns from known endpoints and Control4/RTI drivers
     potential_get_endpoints = [
@@ -112,7 +111,7 @@ def main():
         "get input info",
         "get input detail",
         "get input details",
-        
+
         # HDMI specific
         "get hdmi status",
         "get hdmi input status",
@@ -120,7 +119,7 @@ def main():
         "get hdmi input",
         "get hdmi output",
         "get hdmi info",
-        
+
         # Output variants
         "get output connection",
         "get output connect",
@@ -131,8 +130,8 @@ def main():
         "get outputs",
         "get output info",
         "get output detail",
-        
-        # General status variants  
+
+        # General status variants
         "get all status",
         "get full status",
         "get complete status",
@@ -151,7 +150,7 @@ def main():
         "get detect status",
         "get sync status",
         "get active status",
-        
+
         # Routing variants
         "get routing",
         "get route",
@@ -163,46 +162,46 @@ def main():
         "get source",
         "get sources",
         "get source status",
-        
+
         # EDID variants
         "get edid",
         "get edid status",
         "get edid info",
         "get input edid",
         "get output edid",
-        
+
         # HDCP variants
         "get hdcp",
         "get hdcp status",
         "get hdcp info",
-        
+
         # HDR variants
         "get hdr",
         "get hdr status",
         "get hdr info",
-        
+
         # Scaler variants
         "get scaler",
         "get scaler status",
         "get video mode",
-        
+
         # ARC variants
         "get arc",
         "get arc status",
         "get audio status",
-        
+
         # Mute variants
         "get mute",
         "get mute status",
         "get audio mute",
-        
+
         # Preset variants
         "get preset",
         "get presets",
         "get preset status",
         "get scene",
         "get scenes",
-        
+
         # Device info variants
         "get info",
         "get device",
@@ -211,7 +210,7 @@ def main():
         "get version",
         "get model",
         "get serial",
-        
+
         # Debug/diagnostic endpoints
         "get debug",
         "get log",
@@ -221,7 +220,7 @@ def main():
         "get test",
         "get raw status",
         "get telnet",
-        
+
         # Alternative naming patterns
         "input status",
         "output status",
@@ -236,7 +235,7 @@ def main():
         "r input status",
         "r output status",
     ]
-    
+
     # Test known endpoints first
     print("[*] Testing KNOWN endpoints...")
     print("-" * 70)
@@ -249,11 +248,11 @@ def main():
             keys = [k for k in result.keys() if k != "comhead"]
             print(f"      Keys: {', '.join(keys)}")
     print()
-    
+
     # Test potential undiscovered endpoints
     print("[*] Testing POTENTIAL undiscovered endpoints...")
     print("-" * 70)
-    
+
     discovered = []
     for endpoint in potential_get_endpoints:
         success, result = test_endpoint(endpoint)
@@ -264,12 +263,12 @@ def main():
         # Uncomment to see failed endpoints
         # else:
         #     print(f"  ✗ {endpoint}")
-    
+
     print()
     print("=" * 70)
     print("DISCOVERY SUMMARY")
     print("=" * 70)
-    
+
     if discovered:
         print(f"\n[+] Found {len(discovered)} undiscovered endpoint(s)!")
         for endpoint, result in discovered:
@@ -279,13 +278,13 @@ def main():
         print("\n[-] No undiscovered endpoints found with the tested patterns.")
         print("    The HTTP API may truly be limited to the known set.")
         print("    Consider using Telnet/TCP (port 23/8000) for additional capabilities.")
-    
+
     print()
-    
+
     # Try a few targeted tests with different parameter combinations
     print("[*] Testing specific parameter variations...")
     print("-" * 70)
-    
+
     # Try get input status with additional params
     variations = [
         ("get input status", {"index": 0}),
@@ -299,7 +298,7 @@ def main():
         ("get status", {"all": 1}),
         ("get status", {"detail": 1}),
     ]
-    
+
     for endpoint, params in variations:
         success, result = test_endpoint(endpoint, params)
         if success:
@@ -309,7 +308,7 @@ def main():
                 print(f"  ✓ {endpoint} with {params} has MORE keys!")
                 print(f"      Base keys: {list(base_result.keys())}")
                 print(f"      Extended keys: {list(result.keys())}")
-    
+
     print("\n[*] Discovery complete!")
 
 if __name__ == "__main__":

@@ -11,21 +11,20 @@ Tests cover:
 
 Run with: pytest tests/test_cec_macros.py -v
 """
-import asyncio
 import json
 import os
-import tempfile
-from pathlib import Path
-from unittest.mock import AsyncMock, MagicMock, patch
-
-import pytest
 
 # Import the module under test
 import sys
+import tempfile
+from pathlib import Path
+from unittest.mock import AsyncMock
+
+import pytest
+
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from cec_macros import MacroStep, CecMacro, MacroManager
-
+from cec_macros import CecMacro, MacroManager, MacroStep
 
 # =============================================================================
 # MacroStep Tests
@@ -224,15 +223,15 @@ class TestMacroManager:
                 {"command": "POWER_ON", "targets": ["output_1"]}
             ]
         )
-        
+
         macros = manager.list_macros()
         assert len(macros) == 2
-        
+
         # Check summary fields
         names = [m["name"] for m in macros]
         assert "Macro A" in names
         assert "Macro B" in names
-        
+
         # Check step counts
         macro_b = next(m for m in macros if m["name"] == "Macro B")
         assert macro_b["step_count"] == 2
@@ -243,7 +242,7 @@ class TestMacroManager:
             name="Get Test",
             steps=[{"command": "STOP", "targets": ["input_2"]}]
         )
-        
+
         macro = manager.get_macro(created.id)
         assert macro is not None
         assert macro.name == "Get Test"
@@ -261,13 +260,13 @@ class TestMacroManager:
             steps=[{"command": "PLAY", "targets": ["input_1"]}],
             icon="⚡"
         )
-        
+
         updated = manager.update_macro(
             macro_id=created.id,
             name="Updated Name",
             icon="🎬"
         )
-        
+
         assert updated is not None
         assert updated.name == "Updated Name"
         assert updated.icon == "🎬"
@@ -281,17 +280,17 @@ class TestMacroManager:
             name="Steps Test",
             steps=[{"command": "PLAY", "targets": ["input_1"]}]
         )
-        
+
         new_steps = [
             {"command": "POWER_ON", "targets": ["input_1"]},
             {"command": "POWER_ON", "targets": ["output_1"], "delay_ms": 1000}
         ]
-        
+
         updated = manager.update_macro(
             macro_id=created.id,
             steps=new_steps
         )
-        
+
         assert len(updated.steps) == 2
         assert updated.steps[0].command == "POWER_ON"
         assert updated.steps[1].delay_ms == 1000
@@ -310,7 +309,7 @@ class TestMacroManager:
             name="To Delete",
             steps=[{"command": "STOP", "targets": ["input_1"]}]
         )
-        
+
         assert manager.delete_macro(created.id) is True
         assert manager.get_macro(created.id) is None
 
@@ -328,10 +327,10 @@ class TestMacroManager:
             steps=[{"command": "MUTE", "targets": ["output_1"]}],
             macro_id="persistent_test"
         )
-        
+
         # Create new manager instance (simulates restart)
         manager2 = MacroManager(config_dir=temp_dir)
-        
+
         # Macro should still exist
         macro = manager2.get_macro("persistent_test")
         assert macro is not None
@@ -345,12 +344,12 @@ class TestMacroManager:
             steps=[{"command": "PLAY", "targets": ["input_1"]}],
             macro_id="format_test"
         )
-        
+
         # Read the file directly
         file_path = os.path.join(temp_dir, "cec_macros.json")
-        with open(file_path, "r") as f:
+        with open(file_path) as f:
             data = json.load(f)
-        
+
         assert "version" in data
         assert data["version"] == 1
         assert "macros" in data
@@ -434,7 +433,7 @@ class TestMacroExecution:
             steps=[{"command": "POWER_ON", "targets": ["input_1"]}],
             macro_id="test_macro"
         )
-        
+
         result = await manager.execute_macro("test_macro")
         assert result["success"] is False
         assert "sender not configured" in result["error"]
@@ -445,7 +444,7 @@ class TestMacroExecution:
         # Create mock CEC sender
         mock_sender = AsyncMock(return_value=True)
         manager.set_cec_sender(mock_sender)
-        
+
         manager.create_macro(
             name="Power On Sequence",
             steps=[
@@ -454,14 +453,14 @@ class TestMacroExecution:
             ],
             macro_id="power_on_seq"
         )
-        
+
         result = await manager.execute_macro("power_on_seq")
-        
+
         assert result["success"] is True
         assert result["macro_id"] == "power_on_seq"
         assert result["steps_executed"] == 2
         assert len(result["results"]) == 2
-        
+
         # Verify sender was called correctly
         assert mock_sender.call_count == 2
         mock_sender.assert_any_call("input", 1, "POWER_ON")
@@ -472,7 +471,7 @@ class TestMacroExecution:
         """Test macro execution with multiple targets per step."""
         mock_sender = AsyncMock(return_value=True)
         manager.set_cec_sender(mock_sender)
-        
+
         manager.create_macro(
             name="All Power Off",
             steps=[
@@ -480,9 +479,9 @@ class TestMacroExecution:
             ],
             macro_id="all_power_off"
         )
-        
+
         result = await manager.execute_macro("all_power_off")
-        
+
         assert result["success"] is True
         assert mock_sender.call_count == 3
 
@@ -494,9 +493,9 @@ class TestMacroExecution:
             if target_type == "output" and port == 2:
                 return False
             return True
-        
+
         manager.set_cec_sender(selective_sender)
-        
+
         manager.create_macro(
             name="Mixed Results",
             steps=[
@@ -504,13 +503,13 @@ class TestMacroExecution:
             ],
             macro_id="mixed_macro"
         )
-        
+
         result = await manager.execute_macro("mixed_macro")
-        
+
         # Overall should report partial failure
         assert result["success"] is False
         assert result["steps_executed"] == 1
-        
+
         # Step should have errors
         step_result = result["results"][0]
         assert step_result["success"] is False
@@ -548,9 +547,9 @@ class TestMacroValidation:
             ],
             macro_id="valid_macro"
         )
-        
+
         result = await manager.test_macro("valid_macro")
-        
+
         assert result["success"] is True
         assert result["step_count"] == 2
         assert result["estimated_duration_ms"] == 1500
@@ -566,9 +565,9 @@ class TestMacroValidation:
             ],
             macro_id="bad_macro"
         )
-        
+
         result = await manager.test_macro("bad_macro")
-        
+
         assert result["success"] is False
         assert any("Missing command" in issue for issue in result["issues"])
 
@@ -582,9 +581,9 @@ class TestMacroValidation:
             ],
             macro_id="no_targets"
         )
-        
+
         result = await manager.test_macro("no_targets")
-        
+
         assert result["success"] is False
         assert any("No targets" in issue for issue in result["issues"])
 
@@ -598,9 +597,9 @@ class TestMacroValidation:
             ],
             macro_id="invalid_target"
         )
-        
+
         result = await manager.test_macro("invalid_target")
-        
+
         assert result["success"] is False
         assert len(result["issues"]) > 0
 

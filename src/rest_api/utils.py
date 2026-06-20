@@ -7,16 +7,15 @@ Contains rate limiting, response helpers, and shared state.
 import json
 import logging
 import os
-import time
-from collections import defaultdict
-from pathlib import Path
-from typing import Any, Callable, Optional, Set
-
-from aiohttp import web
 
 # Support both package and direct imports
 import sys
+import time
+from collections import defaultdict
 from pathlib import Path
+from typing import Any
+
+from aiohttp import web
 
 # Ensure src/ directory is in path for sibling imports
 _src_dir = Path(__file__).parent.parent
@@ -24,9 +23,9 @@ if str(_src_dir) not in sys.path:
     sys.path.insert(0, str(_src_dir))
 
 try:
-    from config import SceneManager, ProfileManager
-    from orei_matrix import OreiMatrix
     from cec_macros import MacroManager
+    from config import ProfileManager, SceneManager
+    from orei_matrix import OreiMatrix
 except ImportError as e:
     # Log and continue with optional typing
     import logging
@@ -53,16 +52,16 @@ TRUST_PROXY_HEADERS = os.environ.get("TRUST_PROXY_HEADERS", "false").lower() == 
 # =============================================================================
 
 # Reference to the matrix device (set by driver.py)
-_matrix_device: Optional[OreiMatrix] = None
+_matrix_device: OreiMatrix | None = None
 _input_names: dict[int, str] = {}  # Physical HDMI input port names (1-8)
 _output_names: dict[int, str] = {}  # Physical HDMI output port names (1-8)
-_config_file: Optional[Path] = None  # Path to config file for persistence
-_scene_manager: Optional[SceneManager] = None  # Scene manager
-_profile_manager: Optional[ProfileManager] = None  # Profile manager
-_macro_manager: Optional[MacroManager] = None  # Macro manager
+_config_file: Path | None = None  # Path to config file for persistence
+_scene_manager: SceneManager | None = None  # Scene manager
+_profile_manager: ProfileManager | None = None  # Profile manager
+_macro_manager: MacroManager | None = None  # Macro manager
 
 # WebSocket client connections
-_ws_clients: Set[web.WebSocketResponse] = set()
+_ws_clients: set[web.WebSocketResponse] = set()
 
 # =============================================================================
 # Rate Limiting
@@ -79,23 +78,23 @@ def _cleanup_stale_rate_limits():
     """Remove stale entries from rate limit tracker to prevent memory exhaustion."""
     global _rate_limit_last_cleanup
     now = time.time()
-    
+
     # Only run cleanup every 60 seconds
     if now - _rate_limit_last_cleanup < 60:
         return
-    
+
     _rate_limit_last_cleanup = now
     window_start = now - RATE_LIMIT_WINDOW
-    
+
     # Remove IPs with no recent activity
     stale_ips = [
         ip for ip, timestamps in _rate_limit_tracker.items()
         if not timestamps or max(timestamps) <= window_start
     ]
-    
+
     for ip in stale_ips:
         del _rate_limit_tracker[ip]
-    
+
     # If still too many, remove oldest entries
     if len(_rate_limit_tracker) > RATE_LIMIT_MAX_TRACKED_IPS:
         # Sort by most recent activity and keep only the most active
@@ -107,7 +106,7 @@ def _cleanup_stale_rate_limits():
         _rate_limit_tracker.clear()
         for ip, timestamps in sorted_ips[:RATE_LIMIT_MAX_TRACKED_IPS]:
             _rate_limit_tracker[ip] = timestamps
-    
+
     if stale_ips:
         _LOG.debug(f"Cleaned up {len(stale_ips)} stale rate limit entries")
 
@@ -115,27 +114,27 @@ def _cleanup_stale_rate_limits():
 def _check_rate_limit(client_ip: str) -> bool:
     """
     Check if a client has exceeded the rate limit.
-    
+
     Uses a sliding window algorithm to track requests.
-    
+
     :param client_ip: Client IP address
     :return: True if request is allowed, False if rate limited
     """
     # Periodically clean up stale entries
     _cleanup_stale_rate_limits()
-    
+
     now = time.time()
     window_start = now - RATE_LIMIT_WINDOW
-    
+
     # Clean up old timestamps
     _rate_limit_tracker[client_ip] = [
         ts for ts in _rate_limit_tracker[client_ip] if ts > window_start
     ]
-    
+
     # Check if under limit
     if len(_rate_limit_tracker[client_ip]) >= RATE_LIMIT_REQUESTS:
         return False
-    
+
     # Record this request
     _rate_limit_tracker[client_ip].append(now)
     return True
@@ -150,7 +149,7 @@ def reset_rate_limiter():
 def _get_client_ip(request: web.Request) -> str:
     """
     Get client IP from request.
-    
+
     Only trusts X-Forwarded-For header if TRUST_PROXY_HEADERS is enabled,
     to prevent IP spoofing and rate limit bypass attacks.
     """
@@ -159,14 +158,14 @@ def _get_client_ip(request: web.Request) -> str:
         forwarded = request.headers.get("X-Forwarded-For")
         if forwarded:
             return forwarded.split(",")[0].strip()
-    
+
     # Fall back to peer address (direct connection)
     transport = request.transport
     if transport is not None:
         peername = transport.get_extra_info("peername")
         if peername:
             return peername[0]
-    
+
     return "unknown"
 
 
@@ -174,7 +173,7 @@ def _get_client_ip(request: web.Request) -> str:
 # Response Helper
 # =============================================================================
 
-def _json_response(success: bool, data: Any = None, error: Optional[str] = None, status: int = 200) -> web.Response:
+def _json_response(success: bool, data: Any = None, error: str | None = None, status: int = 200) -> web.Response:
     """Create a standardized JSON response."""
     return web.json_response(
         {
@@ -191,11 +190,11 @@ def _json_response(success: bool, data: Any = None, error: Optional[str] = None,
 # =============================================================================
 
 def set_matrix_device(
-    device, 
-    input_names: Optional[dict[int, str]] = None, 
-    output_names: Optional[dict[int, str]] = None,
-    config_file: Optional[Path] = None,
-    config_dir: Optional[str] = None
+    device,
+    input_names: dict[int, str] | None = None,
+    output_names: dict[int, str] | None = None,
+    config_file: Path | None = None,
+    config_dir: str | None = None
 ):
     """Set the matrix device reference for API handlers."""
     global _matrix_device, _input_names, _output_names, _config_file, _scene_manager, _profile_manager, _macro_manager
@@ -237,22 +236,22 @@ def _save_names_to_config():
     if _config_file is None:
         _LOG.warning("Cannot save names: config file path not set")
         return False
-    
+
     try:
         # Load existing config
         config = {}
         if _config_file.exists():
-            with open(_config_file, "r") as f:
+            with open(_config_file) as f:
                 config = json.load(f)
-        
+
         # Update names (convert int keys to strings for JSON)
         config["input_names"] = {str(k): v for k, v in _input_names.items()}
         config["output_names"] = {str(k): v for k, v in _output_names.items()}
-        
+
         # Save back
         with open(_config_file, "w") as f:
             json.dump(config, f, indent=2)
-        
+
         _LOG.info(f"Saved port names to {_config_file}")
         return True
     except Exception as e:
@@ -270,7 +269,7 @@ def set_macro_cec_sender(sender):
 # Accessor Functions (for use by other modules)
 # =============================================================================
 
-def get_matrix_device() -> Optional[OreiMatrix]:
+def get_matrix_device() -> OreiMatrix | None:
     """Get the matrix device reference."""
     return _matrix_device
 
@@ -285,22 +284,22 @@ def get_output_names() -> dict[int, str]:
     return _output_names
 
 
-def get_scene_manager() -> Optional[SceneManager]:
+def get_scene_manager() -> SceneManager | None:
     """Get the scene manager."""
     return _scene_manager
 
 
-def get_profile_manager() -> Optional[ProfileManager]:
+def get_profile_manager() -> ProfileManager | None:
     """Get the profile manager."""
     return _profile_manager
 
 
-def get_macro_manager() -> Optional[MacroManager]:
+def get_macro_manager() -> MacroManager | None:
     """Get the macro manager."""
     return _macro_manager
 
 
-def get_ws_clients() -> Set[web.WebSocketResponse]:
+def get_ws_clients() -> set[web.WebSocketResponse]:
     """Get WebSocket client set."""
     return _ws_clients
 
@@ -317,7 +316,7 @@ def get_web_dir() -> Path:
 @web.middleware
 async def rate_limit_middleware(request: web.Request, handler):
     """Rate limiting middleware for API requests.
-    
+
     Excludes:
     - Static files (CSS, JS, assets, images)
     - Web UI pages (/ui, /kiosk, /)
@@ -325,10 +324,10 @@ async def rate_limit_middleware(request: web.Request, handler):
     - Health check endpoint
     """
     path = request.path
-    
+
     # Skip rate limiting for non-API paths
     # Static files and UI pages should never be rate limited
-    if (path == "/ws" or 
+    if (path == "/ws" or
         path == "/" or
         path.startswith("/ui") or
         path.startswith("/kiosk") or
@@ -342,9 +341,9 @@ async def rate_limit_middleware(request: web.Request, handler):
         path.endswith(".jpg") or
         path.endswith(".webp")):
         return await handler(request)
-    
+
     client_ip = _get_client_ip(request)
-    
+
     if not _check_rate_limit(client_ip):
         _LOG.warning(f"Rate limit exceeded for {client_ip}")
         return _json_response(
@@ -352,7 +351,7 @@ async def rate_limit_middleware(request: web.Request, handler):
             error="Rate limit exceeded. Please slow down.",
             status=429
         )
-    
+
     return await handler(request)
 
 
@@ -363,7 +362,7 @@ async def rate_limit_middleware(request: web.Request, handler):
 # Alias: set_input_names -> update_input_names
 set_input_names = update_input_names
 
-# Alias: set_output_names -> update_output_names  
+# Alias: set_output_names -> update_output_names
 set_output_names = update_output_names
 
 

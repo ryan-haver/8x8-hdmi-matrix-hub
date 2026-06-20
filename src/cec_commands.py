@@ -8,13 +8,12 @@ Input devices (sources): 19 commands supported
 Output devices (displays): 6 commands supported
 """
 
-from typing import Dict, List, Set
 
 # =============================================================================
 # Input CEC Commands (Source devices: PS5, Apple TV, Roku, etc.)
 # =============================================================================
 
-INPUT_CEC_COMMANDS: Dict[str, Dict] = {
+INPUT_CEC_COMMANDS: dict[str, dict] = {
     # Power commands
     "POWER_ON": {
         "index": 1,
@@ -140,7 +139,7 @@ INPUT_CEC_COMMANDS: Dict[str, Dict] = {
 # Output CEC Commands (Display devices: TVs, Projectors, Soundbars)
 # =============================================================================
 
-OUTPUT_CEC_COMMANDS: Dict[str, Dict] = {
+OUTPUT_CEC_COMMANDS: dict[str, dict] = {
     # Power commands
     "POWER_ON": {
         "index": 1,
@@ -186,7 +185,7 @@ OUTPUT_CEC_COMMANDS: Dict[str, Dict] = {
 # Command Categories
 # =============================================================================
 
-CEC_CATEGORIES: Dict[str, List[str]] = {
+CEC_CATEGORIES: dict[str, list[str]] = {
     "power": ["POWER_ON", "POWER_OFF"],
     "navigation": ["UP", "DOWN", "LEFT", "RIGHT", "SELECT", "MENU", "BACK"],
     "playback": ["PLAY", "PAUSE", "STOP", "REWIND", "FAST_FORWARD", "PREVIOUS", "NEXT"],
@@ -198,20 +197,20 @@ CEC_CATEGORIES: Dict[str, List[str]] = {
 # Helper Functions
 # =============================================================================
 
-def get_input_commands() -> List[str]:
+def get_input_commands() -> list[str]:
     """Get list of all input CEC command names."""
     return list(INPUT_CEC_COMMANDS.keys())
 
 
-def get_output_commands() -> List[str]:
+def get_output_commands() -> list[str]:
     """Get list of all output CEC command names."""
     return list(OUTPUT_CEC_COMMANDS.keys())
 
 
-def get_commands_by_category(category: str, device_type: str = "input") -> List[str]:
+def get_commands_by_category(category: str, device_type: str = "input") -> list[str]:
     """
     Get commands for a specific category filtered by device type.
-    
+
     :param category: Command category (power, navigation, playback, volume, source)
     :param device_type: "input" or "output"
     :return: List of command names available for that device type and category
@@ -221,10 +220,10 @@ def get_commands_by_category(category: str, device_type: str = "input") -> List[
     return [cmd for cmd in commands if cmd in cmd_registry]
 
 
-def get_command_info(command: str, device_type: str = "input") -> Dict | None:
+def get_command_info(command: str, device_type: str = "input") -> dict | None:
     """
     Get full command info for a specific command.
-    
+
     :param command: Command name (e.g., "POWER_ON")
     :param device_type: "input" or "output"
     :return: Command info dict or None if not found
@@ -236,7 +235,7 @@ def get_command_info(command: str, device_type: str = "input") -> Dict | None:
 def get_command_index(command: str, device_type: str = "input") -> int | None:
     """
     Get the HTTP API command index for a command.
-    
+
     :param command: Command name (e.g., "POWER_ON")
     :param device_type: "input" or "output"
     :return: Command index or None if not found
@@ -248,7 +247,7 @@ def get_command_index(command: str, device_type: str = "input") -> int | None:
 def get_telnet_command(command: str, device_type: str = "input") -> str | None:
     """
     Get the Telnet command string for a command.
-    
+
     :param command: Command name (e.g., "POWER_ON")
     :param device_type: "input" or "output"
     :return: Telnet command string or None if not found
@@ -257,10 +256,10 @@ def get_telnet_command(command: str, device_type: str = "input") -> str | None:
     return info.get("telnet") if info else None
 
 
-def get_supported_categories(device_type: str = "input") -> List[str]:
+def get_supported_categories(device_type: str = "input") -> list[str]:
     """
     Get list of CEC categories supported by a device type.
-    
+
     :param device_type: "input" or "output"
     :return: List of category names
     """
@@ -271,10 +270,10 @@ def get_supported_categories(device_type: str = "input") -> List[str]:
     return list(categories)
 
 
-def get_all_commands_detailed(device_type: str = "input") -> Dict[str, Dict]:
+def get_all_commands_detailed(device_type: str = "input") -> dict[str, dict]:
     """
     Get all commands with full details for a device type.
-    
+
     :param device_type: "input" or "output"
     :return: Dict of command name -> command info
     """
@@ -307,7 +306,7 @@ class ScalerModeAPI:
 def is_audio_only_output(scaler_value: int, api_indexed: bool = False) -> bool:
     """
     Check if an output is configured as audio-only based on scaler mode.
-    
+
     :param scaler_value: Scaler mode value
     :param api_indexed: True if value is 1-indexed (from our API), False if 0-indexed (from matrix)
     :return: True if audio-only mode

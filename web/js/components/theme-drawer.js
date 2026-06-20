@@ -14,9 +14,9 @@ class ThemeDrawer {
         this.colorPalette = [
             { name: 'Cyan', hue: 187 },
             { name: 'Orange', hue: 25 },
-            { name: 'Magenta', hue: 300 },
+            { name: 'Crimson', hue: 350 },
             { name: 'Lime', hue: 80 },
-            { name: 'Purple', hue: 280 },
+            { name: 'Indigo', hue: 240 },
             { name: 'Gold', hue: 45 },
             { name: 'Teal', hue: 170 },
             { name: 'Pink', hue: 330 }
@@ -25,8 +25,8 @@ class ThemeDrawer {
         // Default theme presets (user can customize these)
         this.defaultPresets = [
             { id: 'preset-1', name: 'Tron Classic', primaryH: 187, secondaryH: 25 },
-            { id: 'preset-2', name: 'Neon', primaryH: 300, secondaryH: 80 },
-            { id: 'preset-3', name: 'Royal', primaryH: 280, secondaryH: 45 },
+            { id: 'preset-2', name: 'Neon', primaryH: 350, secondaryH: 80 },
+            { id: 'preset-3', name: 'Royal', primaryH: 240, secondaryH: 45 },
             { id: 'preset-4', name: 'Vaporwave', primaryH: 170, secondaryH: 330 }
         ];
         

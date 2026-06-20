@@ -10,7 +10,7 @@ import sys
 # Add src to path
 sys.path.insert(0, 'src')
 
-from telnet_client import TelnetClient, TelnetState
+from telnet_client import TelnetClient
 
 # Enable debug logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -23,10 +23,10 @@ async def main():
     print("=" * 60)
     print("OREI BK-808 Telnet Client Test")
     print("=" * 60)
-    
+
     # Create client
     client = TelnetClient(host=MATRIX_IP, port=23)
-    
+
     # Connect
     print("\n[1] Testing connection...")
     if await client.connect():
@@ -34,16 +34,16 @@ async def main():
     else:
         print("✗ Connection failed!")
         return
-    
+
     # Test full status
     print("\n[2] Testing full status query...")
     try:
         # Get raw response for debugging
         raw_response = await client._send_raw("status")
         print(f"   Raw response length: {len(raw_response)} chars")
-        
+
         status = await client.get_full_status()
-        print(f"✓ Status retrieved:")
+        print("✓ Status retrieved:")
         print(f"   Power: {status.power}")
         print(f"   Beep: {status.beep}")
         print(f"   Panel Lock: {status.panel_lock}")
@@ -55,7 +55,7 @@ async def main():
         print(f"✗ Status failed: {e}")
         import traceback
         traceback.print_exc()
-    
+
     # Test individual input connection
     print("\n[3] Testing input cable detection...")
     for i in range(1, 9):
@@ -65,7 +65,7 @@ async def main():
             print(f"   Input {i}: {symbol} {'connected' if connected else 'disconnected'}")
         except Exception as e:
             print(f"   Input {i}: error - {e}")
-    
+
     # Test individual output connection
     print("\n[4] Testing output cable detection...")
     for i in range(1, 9):
@@ -75,7 +75,7 @@ async def main():
             print(f"   Output {i}: {symbol} {'connected' if connected else 'disconnected'}")
         except Exception as e:
             print(f"   Output {i}: error - {e}")
-    
+
     # Test CEC command (power on input 1 - safe command)
     print("\n[5] Testing CEC command (input 1 power on)...")
     try:
@@ -86,12 +86,12 @@ async def main():
             print("✗ CEC command failed")
     except Exception as e:
         print(f"✗ CEC error: {e}")
-    
+
     # Disconnect
     print("\n[6] Disconnecting...")
     await client.disconnect()
     print("✓ Disconnected")
-    
+
     print("\n" + "=" * 60)
     print("Test complete!")
     print("=" * 60)
