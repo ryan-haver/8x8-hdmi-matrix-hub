@@ -58,13 +58,25 @@ from .core import (
     handle_status,
 )
 from persistence import get_data_dir
+from .dashboard_layout import (
+    handle_add_card,
+    handle_get_layout,
+    handle_remove_card,
+    handle_replace_layout,
+)
 from .device_settings import (
     handle_bulk_update_settings,
+    handle_get_dashboard_presets,
     handle_get_device_settings,
+    handle_get_favorite_presets,
     handle_get_input_settings,
     handle_get_output_settings,
+    handle_set_dashboard_presets,
+    handle_set_favorite_presets,
     handle_set_input_settings,
     handle_set_output_settings,
+    handle_toggle_dashboard_preset,
+    handle_toggle_favorite_preset,
     init_device_settings,
 )
 from .macros import (
@@ -72,8 +84,11 @@ from .macros import (
     handle_delete_macro,
     handle_execute_macro,
     handle_get_macro,
+    handle_list_favorite_macros,
     handle_list_macros,
     handle_test_macro,
+    handle_toggle_macro_dashboard,
+    handle_toggle_macro_favorite,
     handle_update_macro,
 )
 from .outputs import (
@@ -95,11 +110,16 @@ from .profiles import (
     handle_create_profile,
     handle_delete_profile,
     handle_get_profile,
+    handle_list_favorite_profiles,
     handle_list_profiles,
     handle_profile_cec_config,
     handle_profile_macros,
     handle_recall_profile,
     handle_reorder_profiles,
+    handle_set_profile_dashboard,
+    handle_set_profile_favorite,
+    handle_toggle_profile_dashboard,
+    handle_toggle_profile_favorite,
     handle_update_profile,
 )
 from .scenes import (
@@ -126,6 +146,19 @@ from .static import (
 from .system import (
     handle_get_info,
     handle_get_storage,
+)
+from .system_shortcuts import (
+    handle_create_shortcut,
+    handle_delete_shortcut,
+    handle_execute_shortcut,
+    handle_get_shortcut,
+    handle_list_dashboard_shortcuts,
+    handle_list_favorite_shortcuts,
+    handle_list_shortcuts,
+    handle_reorder_shortcuts,
+    handle_toggle_dashboard,
+    handle_toggle_favorite,
+    handle_update_shortcut,
 )
 from .themes import (
     handle_get_themes,
@@ -232,6 +265,25 @@ def create_rest_app(data_dir: Path | None = None) -> web.Application:
     app.router.add_get("/api/system/storage", handle_get_storage)
     app.router.add_get("/api/system/info", handle_get_info)
 
+    # System Shortcuts (Phase 7) — built-in quick-routing shortcuts
+    app.router.add_get("/api/system-shortcuts", handle_list_shortcuts)
+    app.router.add_get("/api/system-shortcuts/favorites", handle_list_favorite_shortcuts)
+    app.router.add_get("/api/system-shortcuts/dashboard", handle_list_dashboard_shortcuts)
+    app.router.add_post("/api/system-shortcuts", handle_create_shortcut)
+    app.router.add_put("/api/system-shortcuts/reorder", handle_reorder_shortcuts)
+    app.router.add_get("/api/system-shortcuts/{id}", handle_get_shortcut)
+    app.router.add_put("/api/system-shortcuts/{id}", handle_update_shortcut)
+    app.router.add_delete("/api/system-shortcuts/{id}", handle_delete_shortcut)
+    app.router.add_post("/api/system-shortcuts/{id}/favorite", handle_toggle_favorite)
+    app.router.add_post("/api/system-shortcuts/{id}/dashboard", handle_toggle_dashboard)
+    app.router.add_post("/api/system-shortcuts/{id}/execute", handle_execute_shortcut)
+
+    # Dashboard Layout (Phase 7) — server-backed card ordering
+    app.router.add_get("/api/dashboard/layout", handle_get_layout)
+    app.router.add_put("/api/dashboard/layout", handle_replace_layout)
+    app.router.add_post("/api/dashboard/cards", handle_add_card)
+    app.router.add_delete("/api/dashboard/cards", handle_remove_card)
+
     # Advanced Output Control
     app.router.add_post("/api/output/{output}/enable", handle_output_enable)
     app.router.add_post("/api/output/{output}/hdcp", handle_output_hdcp)
@@ -291,6 +343,13 @@ def create_rest_app(data_dir: Path | None = None) -> web.Application:
     app.router.add_put("/api/profile/{profile_id}/macros", handle_profile_macros)
     app.router.add_post("/api/profiles/reorder", handle_reorder_profiles)
 
+    # Profile surface-visibility (Phase 7: favorite + dashboard)
+    app.router.add_get("/api/profiles/favorites", handle_list_favorite_profiles)
+    app.router.add_post("/api/profile/{profile_id}/favorite", handle_toggle_profile_favorite)
+    app.router.add_put("/api/profile/{profile_id}/favorite", handle_set_profile_favorite)
+    app.router.add_post("/api/profile/{profile_id}/dashboard", handle_toggle_profile_dashboard)
+    app.router.add_put("/api/profile/{profile_id}/dashboard", handle_set_profile_dashboard)
+
     # CEC Macros
     app.router.add_get("/api/cec/macros", handle_list_macros)
     app.router.add_get("/api/cec/macro/{macro_id}", handle_get_macro)
@@ -300,6 +359,11 @@ def create_rest_app(data_dir: Path | None = None) -> web.Application:
     app.router.add_post("/api/cec/macro/{macro_id}/execute", handle_execute_macro)
     app.router.add_post("/api/cec/macro/{macro_id}/test", handle_test_macro)
 
+    # Macro surface-visibility (Phase 7: favorite + dashboard)
+    app.router.add_get("/api/cec/macros/favorites", handle_list_favorite_macros)
+    app.router.add_post("/api/cec/macro/{macro_id}/favorite", handle_toggle_macro_favorite)
+    app.router.add_post("/api/cec/macro/{macro_id}/dashboard", handle_toggle_macro_dashboard)
+
     # Device Settings (persistent names, icons, colors)
     app.router.add_get("/api/device-settings", handle_get_device_settings)
     app.router.add_post("/api/device-settings", handle_bulk_update_settings)
@@ -307,6 +371,14 @@ def create_rest_app(data_dir: Path | None = None) -> web.Application:
     app.router.add_post("/api/device-settings/input/{input}", handle_set_input_settings)
     app.router.add_get("/api/device-settings/output/{output}", handle_get_output_settings)
     app.router.add_post("/api/device-settings/output/{output}", handle_set_output_settings)
+
+    # Hardware-preset surface-visibility (Phase 7: favorite + dashboard)
+    app.router.add_get("/api/device-settings/favorite-presets", handle_get_favorite_presets)
+    app.router.add_put("/api/device-settings/favorite-presets", handle_set_favorite_presets)
+    app.router.add_post("/api/device-settings/favorite-presets/{preset}/toggle", handle_toggle_favorite_preset)
+    app.router.add_get("/api/device-settings/dashboard-presets", handle_get_dashboard_presets)
+    app.router.add_put("/api/device-settings/dashboard-presets", handle_set_dashboard_presets)
+    app.router.add_post("/api/device-settings/dashboard-presets/{preset}/toggle", handle_toggle_dashboard_preset)
 
     # Initialize persistent storage modules. All three share the same
     # ``data_dir`` which is resolved from ``MATRIX_DATA_DIR``,
