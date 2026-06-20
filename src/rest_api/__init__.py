@@ -5,39 +5,40 @@ This package provides a modular REST API for controlling the OREI BK-808 8x8 HDM
 """
 
 # Import utils (has no circular dependencies)
+# Import device settings functions
+from .device_settings import (
+    get_device_settings,
+    get_input_setting,
+    get_output_setting,
+    init_device_settings,
+    set_input_setting,
+    set_output_setting,
+)
 from .utils import (
     API_VERSION,
-    set_matrix_device,
-    set_input_names,
-    set_output_names,
-    set_scene_manager,
-    set_profile_manager,
-    set_macro_manager,
-    get_matrix_device,
     get_input_names,
-    get_output_names,
-    get_scene_manager,
-    get_profile_manager,
     get_macro_manager,
+    get_matrix_device,
+    get_output_names,
+    get_profile_manager,
+    get_scene_manager,
     rate_limit_middleware,
+    reset_rate_limiter,
+    set_input_names,
+    set_macro_cec_sender,
+    set_macro_manager,
+    set_matrix_device,
+    set_output_names,
+    set_profile_manager,
+    set_scene_manager,
     # Aliases for backward compatibility
     update_input_names,
     update_output_names,
-    set_macro_cec_sender,
 )
 
 # Import WebSocket broadcast function
 from .websocket import broadcast_status_update
 
-# Import device settings functions
-from .device_settings import (
-    init_device_settings,
-    get_device_settings,
-    get_input_setting,
-    get_output_setting,
-    set_input_setting,
-    set_output_setting,
-)
 
 # Lazy import for RestApiServer to avoid circular dependencies
 def _get_rest_api_server():
@@ -47,9 +48,9 @@ def _get_rest_api_server():
 # Create a class proxy for RestApiServer
 class RestApiServer:
     """REST API Server (lazy import wrapper for backward compatibility)."""
-    
+
     _real_class = None
-    
+
     def __new__(cls, *args, **kwargs):
         if cls._real_class is None:
             from .app import RestApiServer as _RestApiServer
@@ -87,6 +88,7 @@ __all__ = [
     "set_macro_cec_sender",
     # Middleware
     "rate_limit_middleware",
+    "reset_rate_limiter",
     # WebSocket
     "broadcast_status_update",
     # Device Settings

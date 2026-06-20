@@ -5,8 +5,8 @@ Stores user theme preferences persistently on the backend.
 
 import json
 import logging
-import os
 from pathlib import Path
+
 from aiohttp import web
 
 from .utils import _json_response
@@ -39,11 +39,11 @@ def _load_themes() -> dict:
     """Load theme settings from file, or return defaults."""
     try:
         if THEME_STORAGE_FILE.exists():
-            with open(THEME_STORAGE_FILE, 'r', encoding='utf-8') as f:
+            with open(THEME_STORAGE_FILE, encoding='utf-8') as f:
                 return json.load(f)
     except Exception as e:
         _LOG.warning(f"Failed to load themes: {e}")
-    
+
     return DEFAULT_THEMES.copy()
 
 
@@ -69,16 +69,16 @@ async def handle_put_themes(request: web.Request) -> web.Response:
     """Update theme settings."""
     try:
         body = await request.json()
-        
+
         # Validate required fields
         if "presets" not in body:
             return _json_response(False, error="Missing 'presets' field", status=400)
-        
+
         # Validate presets array
         presets = body.get("presets", [])
         if not isinstance(presets, list) or len(presets) != 4:
             return _json_response(False, error="Presets must be an array of 4 items", status=400)
-        
+
         # Validate each preset
         for i, preset in enumerate(presets):
             if not isinstance(preset.get("primaryH"), (int, float)):
@@ -89,7 +89,7 @@ async def handle_put_themes(request: web.Request) -> web.Response:
                 preset["name"] = f"Preset {i + 1}"
             if not preset.get("id"):
                 preset["id"] = f"preset-{i + 1}"
-        
+
         # Build clean data object
         theme_data = {
             "presets": presets,
@@ -97,13 +97,13 @@ async def handle_put_themes(request: web.Request) -> web.Response:
             "cardOpacity": max(0, min(1, float(body.get("cardOpacity", 0.8)))),
             "hoverPreference": body.get("hoverPreference", "primary") if body.get("hoverPreference") in ["primary", "secondary"] else "primary"
         }
-        
+
         if _save_themes(theme_data):
             _LOG.info("Theme settings saved successfully")
             return _json_response(True, theme_data)
         else:
             return _json_response(False, error="Failed to save theme settings", status=500)
-            
+
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON body", status=400)
     except Exception as e:

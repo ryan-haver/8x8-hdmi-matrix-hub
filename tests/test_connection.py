@@ -14,7 +14,7 @@ Configuration:
 Usage:
     # Run via pytest (uses conftest.py config)
     pytest tests/test_connection.py -v
-    
+
     # Run directly for interactive mode
     python tests/test_connection.py
 
@@ -22,9 +22,9 @@ NOTE: These are hardware integration tests requiring a real matrix.
 """
 
 import asyncio
+import logging
 import os
 import sys
-import logging
 
 import pytest
 
@@ -53,7 +53,7 @@ from orei_matrix import OreiMatrix
 async def run_connection_test(host: str, port: int = 443):
     """
     Test connection and basic commands.
-    
+
     NOTE: This is a manual test script, not a pytest test.
     Run directly: python tests/test_connection.py
 

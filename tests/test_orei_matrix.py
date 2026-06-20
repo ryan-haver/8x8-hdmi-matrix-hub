@@ -4,14 +4,11 @@ Unit tests for OREI Matrix control library.
 Uses mocking to test without requiring actual hardware.
 """
 
-import asyncio
-import json
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from orei_matrix import OreiMatrix, Events
-
+from orei_matrix import Events, OreiMatrix
 
 # =============================================================================
 # Fixtures
@@ -81,7 +78,7 @@ class TestConnection:
     async def test_connect_timeout(self, matrix):
         """Test connection timeout handling."""
         mock_session = MagicMock()
-        mock_session.post = MagicMock(side_effect=asyncio.TimeoutError())
+        mock_session.post = MagicMock(side_effect=TimeoutError())
 
         with patch("aiohttp.ClientSession", return_value=mock_session):
             result = await matrix.connect()

@@ -27,7 +27,6 @@ import argparse
 import asyncio
 import logging
 import os
-import signal
 import sys
 from pathlib import Path
 
@@ -35,7 +34,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
 from src.orei_matrix import OreiMatrix
-from src.rest_api.app import create_rest_app, RestApiServer
+from src.rest_api.app import RestApiServer
 from src.rest_api.utils import set_matrix_device
 
 # Configure logging
@@ -77,16 +76,16 @@ async def main():
         action="store_true",
         help="Enable debug logging"
     )
-    
+
     args = parser.parse_args()
-    
+
     if args.debug:
         logging.getLogger().setLevel(logging.DEBUG)
-    
+
     # Create config directory if needed
     config_dir = Path(args.config_dir)
     config_dir.mkdir(parents=True, exist_ok=True)
-    
+
     _LOG.info("=" * 60)
     _LOG.info("OREI Matrix REST API Server")
     _LOG.info("=" * 60)
@@ -94,11 +93,11 @@ async def main():
     _LOG.info(f"API Port: {args.port}")
     _LOG.info(f"Config Dir: {config_dir}")
     _LOG.info("=" * 60)
-    
+
     # Create and connect to the matrix
     _LOG.info(f"Connecting to matrix at {args.host}:{args.matrix_port}...")
     matrix = OreiMatrix(host=args.host, port=args.matrix_port, use_https=True)
-    
+
     # Try to connect with retries
     if not await matrix.connect_with_retry(max_retries=3):
         _LOG.error("Failed to connect to matrix. Check the IP address and network connection.")
@@ -106,16 +105,16 @@ async def main():
         # Continue anyway - the API can report connection errors
     else:
         _LOG.info("✓ Connected to matrix successfully!")
-    
+
     # Set up the REST API with the matrix device
     set_matrix_device(
         device=matrix,
         config_dir=str(config_dir)
     )
-    
+
     # Create and start the REST API server
     server = RestApiServer(host="0.0.0.0", port=args.port)
-    
+
     try:
         await server.start()
         _LOG.info("")
@@ -123,11 +122,11 @@ async def main():
         _LOG.info(f"  API Root: http://localhost:{args.port}/api")
         _LOG.info(f"  Web UI:   http://localhost:{args.port}/ui")
         _LOG.info("")
-        
+
         # Wait forever until interrupted
         while True:
             await asyncio.sleep(3600)
-            
+
     except asyncio.CancelledError:
         _LOG.info("Server cancelled...")
     except Exception as e:
@@ -138,11 +137,11 @@ async def main():
         # Use timeout to prevent hanging
         try:
             await asyncio.wait_for(server.stop(), timeout=5.0)
-        except asyncio.TimeoutError:
+        except TimeoutError:
             _LOG.warning("Server stop timed out")
         try:
             await asyncio.wait_for(matrix.disconnect(), timeout=5.0)
-        except asyncio.TimeoutError:
+        except TimeoutError:
             _LOG.warning("Matrix disconnect timed out")
         _LOG.info("Server stopped.")
 

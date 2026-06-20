@@ -17,9 +17,9 @@ Response: text lines ending with success or E00/E01 error codes.
 import asyncio
 import logging
 import re
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Callable, Optional
 
 _LOG = logging.getLogger(__name__)
 
@@ -92,7 +92,7 @@ class MatrixStatus:
 class TelnetClient:
     """
     Async Telnet client for OREI BK-808 matrix.
-    
+
     Provides persistent connection with auto-reconnect,
     command queuing, and response parsing.
     """
@@ -101,12 +101,12 @@ class TelnetClient:
         self,
         host: str,
         port: int = TELNET_PORT,
-        on_status_update: Optional[Callable[[MatrixStatus], None]] = None,
-        on_connection_change: Optional[Callable[[TelnetState], None]] = None,
+        on_status_update: Callable[[MatrixStatus], None] | None = None,
+        on_connection_change: Callable[[TelnetState], None] | None = None,
     ):
         """
         Initialize Telnet client.
-        
+
         :param host: Matrix IP address
         :param port: Telnet port (default 23)
         :param on_status_update: Callback for push status updates
@@ -116,18 +116,18 @@ class TelnetClient:
         self.port = port
         self._on_status_update = on_status_update
         self._on_connection_change = on_connection_change
-        
+
         # Connection state
         self._state = TelnetState.DISCONNECTED
-        self._reader: Optional[asyncio.StreamReader] = None
-        self._writer: Optional[asyncio.StreamWriter] = None
-        self._reconnect_task: Optional[asyncio.Task] = None
-        self._listener_task: Optional[asyncio.Task] = None
-        
+        self._reader: asyncio.StreamReader | None = None
+        self._writer: asyncio.StreamWriter | None = None
+        self._reconnect_task: asyncio.Task | None = None
+        self._listener_task: asyncio.Task | None = None
+
         # Command queue for serialization
         self._command_lock = asyncio.Lock()
-        self._pending_response: Optional[asyncio.Future] = None
-        
+        self._pending_response: asyncio.Future | None = None
+
         # Firmware version (from banner)
         self.firmware_version: str = ""
 
@@ -156,22 +156,22 @@ class TelnetClient:
     async def connect(self) -> bool:
         """
         Connect to the matrix Telnet interface.
-        
+
         :return: True if connection successful
         """
         if self._state == TelnetState.CONNECTED:
             return True
-        
+
         self._set_state(TelnetState.CONNECTING)
-        
+
         try:
             _LOG.info(f"Connecting to Telnet at {self.host}:{self.port}")
-            
+
             self._reader, self._writer = await asyncio.wait_for(
                 asyncio.open_connection(self.host, self.port),
                 timeout=COMMAND_TIMEOUT
             )
-            
+
             # Read welcome banner
             await asyncio.sleep(0.5)
             banner = await self._read_available()
@@ -182,16 +182,16 @@ class TelnetClient:
                 if match:
                     self.firmware_version = match.group(1)
                     _LOG.info(f"Matrix firmware version: {self.firmware_version}")
-            
+
             self._set_state(TelnetState.CONNECTED)
-            
+
             # Start background listener for push notifications
             self._listener_task = asyncio.create_task(self._listen_for_push())
-            
+
             _LOG.info("Telnet connection established")
             return True
-            
-        except asyncio.TimeoutError:
+
+        except TimeoutError:
             _LOG.error(f"Telnet connection timeout to {self.host}:{self.port}")
             self._set_state(TelnetState.DISCONNECTED)
             return False
@@ -203,7 +203,7 @@ class TelnetClient:
     async def disconnect(self) -> None:
         """Disconnect from the matrix."""
         _LOG.info("Disconnecting Telnet")
-        
+
         # Cancel background tasks
         if self._listener_task and not self._listener_task.done():
             self._listener_task.cancel()
@@ -211,14 +211,14 @@ class TelnetClient:
                 await self._listener_task
             except asyncio.CancelledError:
                 pass
-        
+
         if self._reconnect_task and not self._reconnect_task.done():
             self._reconnect_task.cancel()
             try:
                 await self._reconnect_task
             except asyncio.CancelledError:
                 pass
-        
+
         # Close connection
         if self._writer:
             try:
@@ -226,7 +226,7 @@ class TelnetClient:
                 await self._writer.wait_closed()
             except Exception as e:
                 _LOG.warning(f"Error closing Telnet connection: {e}")
-        
+
         self._reader = None
         self._writer = None
         self._set_state(TelnetState.DISCONNECTED)
@@ -235,14 +235,14 @@ class TelnetClient:
         """Read all available data from the connection."""
         if not self._reader:
             return ""
-        
+
         try:
             data = await asyncio.wait_for(
                 self._reader.read(8192),
                 timeout=timeout
             )
             return data.decode('utf-8', errors='replace')
-        except asyncio.TimeoutError:
+        except TimeoutError:
             return ""
         except Exception as e:
             _LOG.warning(f"Error reading from Telnet: {e}")
@@ -251,29 +251,29 @@ class TelnetClient:
     async def _send_raw(self, command: str) -> str:
         """
         Send a raw command and wait for response.
-        
+
         :param command: Command without terminator
         :return: Response text
         :raises CommandError: If command fails
         """
         if not self.connected or not self._writer:
             raise ConnectionError("Not connected")
-        
+
         async with self._command_lock:
             try:
                 # Clear any pending data
                 await self._read_available(timeout=0.1)
-                
+
                 # Send command with terminator
                 full_cmd = command + "!\r\n"
                 _LOG.debug(f"Telnet TX: {repr(full_cmd)}")
                 self._writer.write(full_cmd.encode())
                 await self._writer.drain()
-                
+
                 # Read response with timeout
                 response = ""
                 start_time = asyncio.get_event_loop().time()
-                
+
                 while True:
                     chunk = await self._read_available(timeout=0.5)
                     if chunk:
@@ -281,15 +281,15 @@ class TelnetClient:
                         # Check for command completion
                         if self._is_response_complete(response, command):
                             break
-                    
+
                     # Timeout check
                     if asyncio.get_event_loop().time() - start_time > COMMAND_TIMEOUT:
                         _LOG.warning(f"Command timeout: {command}")
                         break
-                
+
                 _LOG.debug(f"Telnet RX: {repr(response[:200])}...")
                 return response
-                
+
             except Exception as e:
                 _LOG.error(f"Telnet command error: {e}")
                 # Trigger reconnect
@@ -304,82 +304,82 @@ class TelnetClient:
         lines = response.strip().split('\r\n')
         if not lines:
             return False
-        
+
         last_line = lines[-1].strip()
-        
+
         # Error codes at end of response
         if last_line in ('E00', 'E01', 'E02'):
             return True
-        
+
         # For 'status' command, wait for mac address (last line)
         if command.lower() == "status":
             if 'mac address:' in response.lower():
                 return True
             return False
-        
+
         # For 'r link' commands, look for connect/disconnect
         if command.lower().startswith("r link"):
             if 'connect' in response.lower() or 'disconnect' in response.lower():
                 return True
-        
+
         # For CEC commands, look for confirmation
         if command.lower().startswith("s cec"):
             # CEC commands don't echo much, just wait a moment
             return len(response) > 10
-        
+
         # For other read commands, look for specific patterns
         if command.lower().startswith("r "):
             # Most read commands return a colon-separated value
             if ':' in response and len(response) > 20:
                 return True
-        
+
         # For set commands
         if command.lower().startswith("s "):
             # Set commands usually don't return much
             return len(response) > 5
-        
+
         # End of network config (last in full status dump)
         if 'mac address:' in response.lower():
             return True
-        
+
         return False
 
     async def _listen_for_push(self) -> None:
         """Background task to listen for push notifications."""
         _LOG.debug("Starting Telnet push listener")
-        
+
         while self.connected and self._reader:
             try:
                 # This is a passive listener - it runs when we're not sending commands
                 await asyncio.sleep(0.1)
-                
+
             except asyncio.CancelledError:
                 break
             except Exception as e:
                 _LOG.warning(f"Push listener error: {e}")
                 break
-        
+
         _LOG.debug("Telnet push listener stopped")
 
     def _schedule_reconnect(self) -> None:
         """Schedule a reconnection attempt."""
         if self._reconnect_task and not self._reconnect_task.done():
             return  # Already scheduled
-        
+
         self._reconnect_task = asyncio.create_task(self._reconnect_loop())
 
     async def _reconnect_loop(self) -> None:
         """Attempt to reconnect with backoff."""
         self._set_state(TelnetState.RECONNECTING)
-        
+
         for attempt in range(MAX_RECONNECT_ATTEMPTS):
             _LOG.info(f"Telnet reconnect attempt {attempt + 1}/{MAX_RECONNECT_ATTEMPTS}")
-            
+
             await asyncio.sleep(RECONNECT_DELAY * (attempt + 1))
-            
+
             if await self.connect():
                 return
-        
+
         _LOG.error("Telnet reconnection failed after max attempts")
         self._set_state(TelnetState.DISCONNECTED)
 
@@ -390,7 +390,7 @@ class TelnetClient:
     async def get_full_status(self) -> MatrixStatus:
         """
         Get full matrix status using 'status!' command.
-        
+
         Returns parsed MatrixStatus with all input/output states.
         """
         response = await self._send_raw("status")
@@ -403,13 +403,13 @@ class TelnetClient:
     async def get_input_connection(self, input_num: int) -> bool:
         """
         Check if an input port has a cable connected.
-        
+
         :param input_num: Input port (1-8)
         :return: True if cable connected
         """
         if input_num < 1 or input_num > 8:
             raise ValueError(f"Invalid input number: {input_num}")
-        
+
         response = await self._send_raw(f"r link in {input_num}")
         # Response: "hdmi input X: connect" or "hdmi input X: disconnect"
         return "connect" in response.lower() and "disconnect" not in response.lower()
@@ -417,23 +417,23 @@ class TelnetClient:
     async def get_output_connection(self, output_num: int) -> bool:
         """
         Check if an output port has a cable connected.
-        
+
         :param output_num: Output port (1-8)
         :return: True if cable connected
         """
         if output_num < 1 or output_num > 8:
             raise ValueError(f"Invalid output number: {output_num}")
-        
+
         response = await self._send_raw(f"r link out {output_num}")
         return "connect" in response.lower() and "disconnect" not in response.lower()
 
     async def get_all_input_connections(self) -> dict[int, bool]:
         """
         Get cable connection status for all inputs using bulk status command.
-        
+
         Uses the 'status!' command which returns all port states efficiently
         in a single Telnet call.
-        
+
         :return: Dict mapping input number to connection status
         """
         status = await self.get_full_status()
@@ -448,10 +448,10 @@ class TelnetClient:
     async def get_all_output_connections(self) -> dict[int, bool]:
         """
         Get cable connection status for all outputs using bulk status command.
-        
+
         Uses the 'status!' command which returns all port states efficiently
         in a single Telnet call.
-        
+
         :return: Dict mapping output number to connection status
         """
         status = await self.get_full_status()
@@ -466,42 +466,42 @@ class TelnetClient:
     def _parse_status_response(self, response: str) -> MatrixStatus:
         """Parse the response from 'status!' command."""
         status = MatrixStatus()
-        
+
         # Parse power state
         if "power on" in response.lower():
             status.power = True
         elif "power off" in response.lower():
             status.power = False
-        
+
         # Parse beep state
         if "beep on" in response.lower():
             status.beep = True
         elif "beep off" in response.lower():
             status.beep = False
-        
+
         # Parse panel lock
         if "panel button lock on" in response.lower():
             status.panel_lock = True
         elif "panel button lock off" in response.lower():
             status.panel_lock = False
-        
+
         # Parse LCD timeout
         lcd_match = re.search(r'lcd on (\d+) seconds', response.lower())
         if lcd_match:
             status.lcd_timeout = int(lcd_match.group(1))
-        
+
         # Parse input connections
         for match in re.finditer(r'hdmi input (\d+):\s*(connect|disconnect)', response.lower()):
             port = int(match.group(1))
             connected = match.group(2) == "connect"
             status.inputs[port] = InputStatus(port=port, connected=connected)
-        
+
         # Parse output connections
         for match in re.finditer(r'hdmi output (\d+):\s*(connect|disconnect)', response.lower()):
             port = int(match.group(1))
             connected = match.group(2) == "connect"
             status.outputs[port] = OutputStatus(port=port, connected=connected)
-        
+
         # Parse routing: output1->input1
         for match in re.finditer(r'output(\d+)->input(\d+)', response.lower()):
             output = int(match.group(1))
@@ -509,56 +509,56 @@ class TelnetClient:
             status.routing[output] = input_src
             if output in status.outputs:
                 status.outputs[output].source = input_src
-        
+
         # Parse HDCP settings
         for match in re.finditer(r'output (\d+) hdcp:\s*(.+)', response.lower()):
             port = int(match.group(1))
             hdcp = match.group(2).strip()
             if port in status.outputs:
                 status.outputs[port].hdcp = hdcp
-        
+
         # Parse stream enable/disable
         for match in re.finditer(r'output (\d+) stream:\s*(enable|disable)', response.lower()):
             port = int(match.group(1))
             enabled = match.group(2) == "enable"
             if port in status.outputs:
                 status.outputs[port].stream_enabled = enabled
-        
+
         # Parse video mode
         for match in re.finditer(r'output (\d+) video mode:\s*(.+)', response.lower()):
             port = int(match.group(1))
             mode = match.group(2).strip()
             if port in status.outputs:
                 status.outputs[port].video_mode = mode
-        
+
         # Parse HDR mode
         for match in re.finditer(r'output (\d+) hdr mode:\s*(.+)', response.lower()):
             port = int(match.group(1))
             mode = match.group(2).strip()
             if port in status.outputs:
                 status.outputs[port].hdr_mode = mode
-        
+
         # Parse ARC
         for match in re.finditer(r'output (\d+) arc:\s*(on|off)', response.lower()):
             port = int(match.group(1))
             enabled = match.group(2) == "on"
             if port in status.outputs:
                 status.outputs[port].arc = enabled
-        
+
         # Parse audio mute
         for match in re.finditer(r'output (\d+) audio mute:\s*(on|off)', response.lower()):
             port = int(match.group(1))
             muted = match.group(2) == "on"
             if port in status.outputs:
                 status.outputs[port].audio_mute = muted
-        
+
         # Parse EDID for inputs
         for match in re.finditer(r'input (\d+) edid:\s*(.+)', response.lower()):
             port = int(match.group(1))
             edid = match.group(2).strip()
             if port in status.inputs:
                 status.inputs[port].edid = edid
-        
+
         return status
 
     # =========================================================================
@@ -644,14 +644,14 @@ class TelnetClient:
     async def _send_cec_input(self, input_num: int, command: str) -> bool:
         """
         Send a CEC command to an input device.
-        
+
         Command format: s cec in {input} {command}!
         Example: s cec in 1 on!
         """
         if input_num < 1 or input_num > 8:
             _LOG.error(f"Invalid input number: {input_num}")
             return False
-        
+
         try:
             response = await self._send_raw(f"s cec in {input_num} {command}")
             # Check for error response
@@ -665,7 +665,7 @@ class TelnetClient:
             return False
 
     # Output CEC Commands
-    
+
     async def cec_output_power_on(self, output_num: int) -> bool:
         """Send Power On CEC command to output device (TV)."""
         return await self._send_cec_output(output_num, "on")
@@ -693,14 +693,14 @@ class TelnetClient:
     async def _send_cec_output(self, output_num: int, command: str) -> bool:
         """
         Send a CEC command to an output device (TV).
-        
+
         Command format: s cec hdmi out {output} {command}!
         Example: s cec hdmi out 1 on!
         """
         if output_num < 1 or output_num > 8:
             _LOG.error(f"Invalid output number: {output_num}")
             return False
-        
+
         try:
             response = await self._send_raw(f"s cec hdmi out {output_num} {command}")
             # Check for error response
@@ -722,7 +722,7 @@ class TelnetClient:
         if preset_num < 1 or preset_num > 8:
             _LOG.error(f"Invalid preset number: {preset_num}")
             return False
-        
+
         try:
             response = await self._send_raw(f"s save preset {preset_num}")
             return "E00" not in response and "E01" not in response
@@ -735,7 +735,7 @@ class TelnetClient:
         if preset_num < 1 or preset_num > 8:
             _LOG.error(f"Invalid preset number: {preset_num}")
             return False
-        
+
         try:
             response = await self._send_raw(f"s recall preset {preset_num}")
             return "E00" not in response and "E01" not in response
@@ -748,7 +748,7 @@ class TelnetClient:
         if preset_num < 1 or preset_num > 8:
             _LOG.error(f"Invalid preset number: {preset_num}")
             return False
-        
+
         try:
             response = await self._send_raw(f"s clear preset {preset_num}")
             return "E00" not in response and "E01" not in response
@@ -756,12 +756,12 @@ class TelnetClient:
             _LOG.error(f"Clear preset error: {e}")
             return False
 
-    async def get_preset_info(self, preset_num: int) -> Optional[dict]:
+    async def get_preset_info(self, preset_num: int) -> dict | None:
         """Get information about a preset."""
         if preset_num < 1 or preset_num > 8:
             _LOG.error(f"Invalid preset number: {preset_num}")
             return None
-        
+
         try:
             response = await self._send_raw(f"r preset {preset_num}")
             # Parse preset info from response
@@ -783,7 +783,7 @@ class TelnetClient:
     async def switch_input(self, input_num: int, output_num: int) -> bool:
         """
         Route an input to an output.
-        
+
         Command: s output Y in source X!
         """
         if input_num < 1 or input_num > 8:
@@ -792,7 +792,7 @@ class TelnetClient:
         if output_num < 1 or output_num > 8:
             _LOG.error(f"Invalid output number: {output_num}")
             return False
-        
+
         try:
             response = await self._send_raw(f"s output {output_num} in source {input_num}")
             success = "E00" not in response and "E01" not in response
@@ -808,7 +808,7 @@ class TelnetClient:
         if input_num < 1 or input_num > 8:
             _LOG.error(f"Invalid input number: {input_num}")
             return False
-        
+
         try:
             # Use output 0 to target all outputs
             response = await self._send_raw(f"s output 0 in source {input_num}")
@@ -845,7 +845,7 @@ class TelnetClient:
     async def reboot(self) -> bool:
         """Reboot the matrix."""
         try:
-            response = await self._send_raw("reboot")
+            await self._send_raw("reboot")
             return True  # Connection will drop after reboot
         except Exception as e:
             _LOG.error(f"Reboot error: {e}")

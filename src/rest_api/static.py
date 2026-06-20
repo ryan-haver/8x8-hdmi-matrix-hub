@@ -6,6 +6,7 @@ Serves the web UI, kiosk mode, and static assets.
 
 import logging
 from pathlib import Path
+
 from aiohttp import web
 
 from .utils import API_VERSION, _json_response
@@ -35,11 +36,11 @@ async def handle_kiosk_ui(request: web.Request) -> web.Response:
 async def handle_static_file(request: web.Request) -> web.Response:
     """Serve static files (CSS, JS, assets)."""
     request_path = request.path
-    
+
     # Security: prevent directory traversal
     if '..' in request_path:
         return web.Response(text="Forbidden", status=403)
-    
+
     content_types = {
         '.css': 'text/css',
         '.js': 'application/javascript',
@@ -50,9 +51,9 @@ async def handle_static_file(request: web.Request) -> web.Response:
         '.woff': 'font/woff',
         '.woff2': 'font/woff2',
     }
-    
+
     full_path = _WEB_DIR / request_path.lstrip('/')
-    
+
     if full_path.exists() and full_path.is_file():
         suffix = full_path.suffix.lower()
         content_type = content_types.get(suffix, 'application/octet-stream')
@@ -63,7 +64,7 @@ async def handle_static_file(request: web.Request) -> web.Response:
             'Expires': '0'
         }
         return web.FileResponse(full_path, headers=headers)
-    
+
     return web.Response(text="File not found", status=404)
 
 
