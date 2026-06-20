@@ -328,9 +328,9 @@ curl -X POST http://192.168.1.145:8080/api/cec/macro \
     "id": "theater-on",
     "name": "Theater On",
     "steps": [
-      {"command": "power_on", "targets": {"outputs": [1, 2]}, "delay_ms": 0},
-      {"command": "power_on", "targets": {"inputs": [2]}, "delay_ms": 3000},
-      {"command": "active_source", "targets": {"inputs": [2]}, "delay_ms": 1000}
+      {"command": "POWER_ON", "targets": ["output_1", "output_2"], "delay_ms": 0},
+      {"command": "POWER_ON", "targets": ["input_2"], "delay_ms": 3000},
+      {"command": "ACTIVE", "targets": ["input_2"], "delay_ms": 1000}
     ]
   }'
 ```
@@ -812,4 +812,4 @@ console.log("Flic Twist Handler loaded");
 
 ---
 
-*Last updated: REST API v2.3.0*
+*Last updated: REST API v2.10.0*
