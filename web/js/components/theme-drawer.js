@@ -55,8 +55,23 @@ class ThemeDrawer {
     }
     
     savePresets() {
+        // Save to localStorage (always works, fast)
         localStorage.setItem('theme_presets', JSON.stringify(this.presets));
         localStorage.setItem('active_preset_index', this.activePresetIndex.toString());
+
+        // Also sync to backend so themes work across devices
+        // Fire and forget - don't block UI on network response
+        if (window.matrixAPI && typeof window.matrixAPI.putThemes === 'function') {
+            window.matrixAPI.putThemes({
+                presets: this.presets,
+                activePresetIndex: this.activePresetIndex,
+                cardOpacity: this.cardOpacity,
+                hoverPreference: this.hoverPreference,
+            }).catch((err) => {
+                // Silently fail - localStorage is still the source of truth
+                console.warn('Failed to sync theme to backend:', err);
+            });
+        }
     }
     
     init() {
