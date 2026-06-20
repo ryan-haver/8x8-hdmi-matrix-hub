@@ -8,6 +8,20 @@
 #   docker-compose up -d api-only     # Start API-only mode
 #   docker-compose logs -f            # View logs
 #   docker-compose down               # Stop integration
+#
+# Persistent Storage:
+#   All user-addressable state (device settings, themes, UI preferences,
+#   scenes, profiles, CEC macros, driver state) is stored under the
+#   ``/data`` volume mount in the container. To control WHERE on the host
+#   this volume lives, set ``MATRIX_DATA_DIR`` either via an environment
+#   variable, a ``.env`` file, or by editing the line below:
+#
+#     MATRIX_DATA_DIR=./data               # default (relative to this file)
+#     MATRIX_DATA_DIR=/srv/matrix-config   # absolute host path
+#     MATRIX_DATA_DIR=/Volumes/nas/matrix  # NAS mount
+#
+#   The value is interpolated into the volume mount, so changing it here
+#   automatically redirects where the persistent volume is stored on the host.
 
 services:
   # ==========================================================================
@@ -28,10 +42,16 @@ services:
       - "8080:8080" # REST API for Flic, Home Assistant, etc.
 
     volumes:
-      - ./data:/data
+      # MATRIX_DATA_DIR controls where persistent state lives on the host.
+      # All user-addressable settings (themes, UI prefs, device names,
+      # scenes, profiles, CEC macros, driver state) are stored here.
+      - ${MATRIX_DATA_DIR:-./data}:/data
 
     environment:
+      # UC_CONFIG_HOME points the integration at the persistent volume.
+      # MATRIX_DATA_DIR is the explicit override (takes priority).
       - UC_CONFIG_HOME=/data
+      - MATRIX_DATA_DIR=/data
       - UC_DISABLE_MDNS_PUBLISH=false
       - UC_INTEGRATION_INTERFACE=0.0.0.0
       - UC_INTEGRATION_HTTP_PORT=9095
@@ -64,9 +84,12 @@ services:
       - "8080:8080" # REST API only
 
     volumes:
-      - ./data:/data
+      # Same MATRIX_DATA_DIR controls the persistent volume for API-only mode.
+      - ${MATRIX_DATA_DIR:-./data}:/data
 
     environment:
+      - UC_CONFIG_HOME=/data
+      - MATRIX_DATA_DIR=/data
       - REST_API_PORT=8080
       - UC_ENABLED=false
       - WEBUI_ENABLED=true
