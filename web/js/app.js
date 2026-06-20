@@ -119,6 +119,23 @@ class MatrixApp {
         state.on('wsConnection', (connected) => {
             this.updateConnectionStatus(connected);
         });
+
+        // Horizontal swipe navigation setup
+        this.setupSwipeGestures();
+
+        // Recalculate slider translation position on window resize
+        window.addEventListener('resize', () => {
+            const activeTab = state.ui.activeTab || 'matrix';
+            const slider = document.querySelector('.sections-slider');
+            const activeSection = document.getElementById(`${activeTab}-section`);
+            if (slider && activeSection) {
+                slider.style.transition = 'none'; // Prevent animation bounce during resize
+                slider.style.transform = `translateX(-${activeSection.offsetLeft}px)`;
+                // Force a layout reflow before restoring CSS transition
+                slider.offsetHeight;
+                slider.style.transition = '';
+            }
+        });
     }
 
     /**
@@ -170,12 +187,68 @@ class MatrixApp {
             btn.setAttribute('aria-selected', btn.dataset.tab === tab);
         });
         
-        // Update sections
+        // Update sections active state
         document.querySelectorAll('.section').forEach(section => {
             section.classList.toggle('active', section.id === `${tab}-section`);
         });
+
+        // Scroll sections slider horizontally
+        const slider = document.querySelector('.sections-slider');
+        const activeSection = document.getElementById(`${tab}-section`);
+        if (slider && activeSection) {
+            const offsetLeft = activeSection.offsetLeft;
+            slider.style.transform = `translateX(-${offsetLeft}px)`;
+        }
         
         state.setActiveTab(tab);
+    }
+
+    /**
+     * Setup touch swipe gesture handlers to navigate tabs
+     */
+    setupSwipeGestures() {
+        const slider = document.querySelector('.sections-slider');
+        if (!slider) return;
+
+        let startX = 0;
+        let startY = 0;
+        let isSwiping = false;
+
+        slider.addEventListener('touchstart', (e) => {
+            // Ignore if multi-touch or initiated inside a horizontal scroll container
+            if (e.touches.length !== 1 || e.target.closest('.matrix-container, .cec-actions, .presets-panel')) {
+                return;
+            }
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            isSwiping = true;
+        }, { passive: true });
+
+        slider.addEventListener('touchend', (e) => {
+            if (!isSwiping) return;
+            isSwiping = false;
+
+            const diffX = startX - e.changedTouches[0].clientX;
+            const diffY = startY - e.changedTouches[0].clientY;
+
+            // Verify swipe horizontal intent and minimum pixel travel (80px)
+            if (Math.abs(diffX) > Math.abs(diffY) * 1.8 && Math.abs(diffX) > 80) {
+                const tabButtons = Array.from(document.querySelectorAll('.tab-btn:not(.hidden)'));
+                const currentActiveIndex = tabButtons.findIndex(btn => btn.classList.contains('active'));
+                
+                if (currentActiveIndex === -1) return;
+
+                if (diffX > 0 && currentActiveIndex < tabButtons.length - 1) {
+                    // Swiped left -> Switch to next tab
+                    const nextTab = tabButtons[currentActiveIndex + 1].dataset.tab;
+                    this.switchTab(nextTab);
+                } else if (diffX < 0 && currentActiveIndex > 0) {
+                    // Swiped right -> Switch to previous tab
+                    const prevTab = tabButtons[currentActiveIndex - 1].dataset.tab;
+                    this.switchTab(prevTab);
+                }
+            }
+        }, { passive: true });
     }
 
     /**

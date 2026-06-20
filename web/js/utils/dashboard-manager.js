@@ -155,9 +155,9 @@ class DashboardManager {
             this.mobileWidgetContent.innerHTML = '<div class="mobile-widget-inner"></div>';
             
             // Insert after main content sections
-            const mainContent = document.querySelector('.main-content');
-            if (mainContent) {
-                mainContent.appendChild(this.mobileWidgetContent);
+            const slider = document.querySelector('.sections-slider');
+            if (slider) {
+                slider.appendChild(this.mobileWidgetContent);
             }
         }
     }
@@ -633,6 +633,13 @@ class DashboardManager {
                 
                 // Call onMount
                 widget.onMount(this.mobileWidgetContent);
+            }
+            
+            // Slide to the widget content section
+            const slider = document.querySelector('.sections-slider');
+            if (slider) {
+                const offsetLeft = this.mobileWidgetContent.offsetLeft;
+                slider.style.transform = `translateX(-${offsetLeft}px)`;
             }
         }
     }
