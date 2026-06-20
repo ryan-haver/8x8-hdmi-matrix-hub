@@ -91,7 +91,7 @@ def _save_settings():
 def _get_default_settings() -> dict:
     """Return default settings structure."""
     return {
-        "version": 1,
+        "version": 2,
         "inputs": {
             str(i): {
                 "name": f"Input {i}",
@@ -108,6 +108,12 @@ def _get_default_settings() -> dict:
             }
             for i in range(1, 9)
         },
+        # Phase 7: Preset surface-visibility flags. Presets are hardware-fixed
+        # (the matrix only has 8) so they can't carry their own fields — we
+        # track which preset numbers the user has favorited or pinned to the
+        # dashboard as small lists here.
+        "favorite_presets": [],
+        "dashboard_presets": [],
     }
 
 
@@ -182,6 +188,104 @@ def set_output_setting(output_num: int, name: str | None = None, icon: str | Non
         _settings_cache["outputs"][key]["color"] = color
 
     return _save_settings()
+
+
+# =============================================================================
+# Phase 7: Preset surface-visibility helpers
+# =============================================================================
+#
+# Hardware presets are fixed at 8 slots on the matrix itself, so we can't
+# attach fields to them directly. Instead, the user-facing lists live in
+# device_settings.json and are updated through these helpers.
+
+_VALID_PRESET_RANGE = range(1, 9)
+
+
+def _coerce_preset_list(raw) -> list[int]:
+    """Coerce arbitrary input to a sorted, deduped list of valid preset numbers."""
+    if not isinstance(raw, list):
+        return []
+    out: set[int] = set()
+    for item in raw:
+        try:
+            n = int(item)
+        except (TypeError, ValueError):
+            continue
+        if n in _VALID_PRESET_RANGE:
+            out.add(n)
+    return sorted(out)
+
+
+def get_favorite_presets() -> list[int]:
+    """Return the list of hardware preset numbers marked as favorites."""
+    if not _settings_cache:
+        _load_settings()
+    return _coerce_preset_list(_settings_cache.get("favorite_presets", []))
+
+
+def get_dashboard_presets() -> list[int]:
+    """Return the list of hardware preset numbers pinned to the dashboard."""
+    if not _settings_cache:
+        _load_settings()
+    return _coerce_preset_list(_settings_cache.get("dashboard_presets", []))
+
+
+def set_favorite_presets(presets: list[int]) -> bool:
+    """Replace the full favorites list with the supplied preset numbers.
+
+    Persists atomically — invalid or out-of-range entries are stripped.
+    """
+    global _settings_cache
+    _settings_cache["favorite_presets"] = _coerce_preset_list(presets)
+    return _save_settings()
+
+
+def set_dashboard_presets(presets: list[int]) -> bool:
+    """Replace the full dashboard-pinned list with the supplied preset numbers."""
+    global _settings_cache
+    _settings_cache["dashboard_presets"] = _coerce_preset_list(presets)
+    return _save_settings()
+
+
+def toggle_favorite_preset(preset_num: int) -> bool:
+    """Add the preset number to favorites if absent, remove if present.
+
+    Returns the new favorite state (``True`` if it's now a favorite).
+    """
+    global _settings_cache
+    current = _coerce_preset_list(_settings_cache.get("favorite_presets", []))
+    if preset_num in current:
+        current.remove(preset_num)
+        new_state = False
+    else:
+        if preset_num not in _VALID_PRESET_RANGE:
+            return False
+        current.append(preset_num)
+        current.sort()
+        new_state = True
+    _settings_cache["favorite_presets"] = current
+    if _save_settings():
+        return new_state
+    return False
+
+
+def toggle_dashboard_preset(preset_num: int) -> bool:
+    """Add the preset number to the dashboard if absent, remove if present."""
+    global _settings_cache
+    current = _coerce_preset_list(_settings_cache.get("dashboard_presets", []))
+    if preset_num in current:
+        current.remove(preset_num)
+        new_state = False
+    else:
+        if preset_num not in _VALID_PRESET_RANGE:
+            return False
+        current.append(preset_num)
+        current.sort()
+        new_state = True
+    _settings_cache["dashboard_presets"] = current
+    if _save_settings():
+        return new_state
+    return False
 
 
 # =============================================================================
