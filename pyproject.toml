@@ -66,7 +66,9 @@ ignore = ["E501", "E402", "E722", "N806", "F811", "F401"]
 explicit_package_bases = true
 ignore_missing_imports = true
 strict_optional = false
-ignore_errors = true
+# NOTE: Previously had `ignore_errors = true` which disabled ALL type checking.
+# Removed to enforce type safety. Use `# type: ignore` comments for specific
+# known issues. Run `mypy src/ --ignore-missing-imports` to verify.
 exclude = [
     '^_backups/',
     '^archive/',
