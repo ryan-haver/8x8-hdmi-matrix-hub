@@ -45,25 +45,61 @@ A responsive, single-page web application for controlling the OREI HDMI Matrix s
 ```
 web/
 ├── index.html          # Main SPA entry point
+├── kiosk.html          # Kiosk-mode entry point (2-finger tap to exit)
 ├── css/
 │   ├── style.css       # Main styles
+│   ├── theme.css       # Dark/TRON theme with CSS variables (8 presets)
 │   ├── components.css  # UI component styles
 │   └── responsive.css  # Media queries & breakpoints
 ├── js/
-│   ├── app.js          # Main application
-│   ├── api.js          # REST API client
-│   ├── websocket.js    # WebSocket handler
-│   ├── state.js        # State management
+│   ├── app.js          # Main application class (MatrixApp)
+│   ├── api.js          # REST API client (60+ methods)
+│   ├── websocket.js    # WebSocket handler with reconnection
+│   ├── state.js        # Centralized state management (1080 lines)
+│   ├── constants.js    # Application constants
+│   ├── tron-background.js  # Animated background effect
 │   └── components/
-│       ├── matrix-grid.js      # Main routing grid
-│       ├── input-panel.js      # Input status/naming
-│       ├── output-panel.js     # Output status/settings
-│       ├── presets-panel.js    # Preset management
-│       ├── scenes-panel.js     # Scene management
-│       ├── settings-panel.js   # System settings
-│       └── toast.js            # Notifications
+│       ├── matrix-grid.js          # Interactive 8x8 routing matrix
+│       ├── input-panel.js          # Input list with inline naming
+│       ├── output-panel.js         # Output list with quick mute
+│       ├── input-settings-modal.js # EDID, name, icon, CEC
+│       ├── output-settings-modal.js # HDR, HDCP, scaler, ARC, mute
+│       ├── settings-panel.js       # System settings modal (tabbed)
+│       ├── cec-controls.js         # CEC dropdown
+│       ├── cec-tray.js             # Floating CEC remote (1645 lines)
+│       ├── cec-macro-editor.js     # Macro CRUD with step builder
+│       ├── scene-cec-modal.js      # Scene CEC config
+│       ├── scenes-panel.js         # Profile management
+│       ├── profiles-panel.js       # Profile management (alias)
+│       ├── presets-panel.js        # Hardware presets 1-8
+│       ├── profile-manager.js      # Drag-to-reorder, pin/unpin
+│       ├── profile-editor.js       # Profile creation wizard
+│       ├── routing-drawer.js       # Route input to all outputs
+│       ├── quick-actions-drawer.js # Quick access shortcuts
+│       ├── side-nav-drawer.js      # Hamburger menu with tab customization
+│       ├── theme-drawer.js         # Theme picker (4 presets)
+│       ├── hdmi-status-tray.js     # Status dropdown
+│       ├── debug-panel.js          # Debug tools
+│       ├── about-dialog.js         # About information
+│       ├── setup-wizard.js         # First-run setup
+│       ├── icon-picker.js          # Icon selection modal
+│       ├── keyboard-shortcuts.js   # Keyboard navigation
+│       ├── context-menu.js         # Right-click menus
+│       ├── tooltip.js              # Tooltips
+│       ├── toast.js                # Toast notifications
+│       ├── confirm-dialog.js       # Confirmation dialogs
+│       ├── empty-state.js          # Empty state UI
+│       └── skeleton-loader.js      # Loading skeletons
+│   └── utils/
+│       ├── dashboard-manager.js    # Dashboard layout management
+│       ├── overlay-manager.js      # Modal/drawer overlay coordination
+│       ├── icon-library.js         # SVG icon management
+│       ├── floatable.js            # Floating window support
+│       ├── helpers.js              # Common utility functions
+│       ├── logger.js               # Client-side logging
+│       └── api-copy.js             # API documentation viewer
 └── assets/
-    ├── icons/          # SVG icons
+    ├── icons/          # 70+ SVG icons (gaming devices, AV equipment)
     └── favicon.ico
 ```
 
@@ -90,8 +126,8 @@ web/
 │         . . .               │
 │                             │
 ├─────────────────────────────┤
-│  Quick Actions              │
-│  [All Off] [Scene ▼]        │
+  │  Quick Actions              │
+  │  [All Off] [Profile ▼]      │
 └─────────────────────────────┘
 ```
 
@@ -121,7 +157,7 @@ web/
 │                                                                   │
 │   ┌────────────────────────────────────────────────────────────┐ │
 │   │  QUICK ACTIONS                                              │ │
-│   │  [🎬 Movie Night] [🎮 Gaming] [📺 Watch TV] [➕ New Scene] │ │
+│   │   [🎬 Movie Night] [🎮 Gaming] [📺 Watch TV] [➕ New Profile] │ │
 │   └────────────────────────────────────────────────────────────┘ │
 │                                                                   │
 └──────────────────────────────────────────────────────────────────┘
@@ -214,15 +250,19 @@ Hardware preset management.
 - Save current routing to preset
 - Rename presets
 
-### 4.5 Scenes Panel Component
-Software scene management.
+### 4.5 Profiles Panel Component
+Software profile management (formerly "Scenes" - renamed in v2.10.0).
 
 **Features:**
-- List all saved scenes
-- One-tap recall
-- Create new scene (modal)
-- Delete scene (with confirmation)
-- Save current state as new scene
+- List all saved profiles (with icons, colors, descriptions)
+- One-tap recall (with optional power-on macro execution)
+- Create new profile (modal with routing, output settings, CEC config, macros)
+- Delete profile (with confirmation)
+- Edit profile (inline or modal)
+- Pin/unpin profiles for quick access
+- Drag-to-reorder profiles
+- Power-on macro / Power-off macro per profile
+- `/api/profiles/*` endpoints (primary), `/api/scenes/*` (backward compat alias)
 
 ### 4.6 Settings Panel Component
 System configuration.
@@ -513,55 +553,92 @@ class MatrixWebSocket {
 
 ---
 
-## 8. Implementation Phases
+## 8. Implementation Phases (Status: All Complete)
 
-### Phase 1: Foundation (2 hours)
+### Phase 1: Foundation ✅
 1. **Static file serving** - Add route to rest_api.py
 2. **HTML skeleton** - Basic structure with all containers
 3. **CSS foundation** - Reset, tokens, basic layout
 4. **API client** - Core fetch wrapper
 
-**Deliverable:** Blank page loads, can make API calls
+**Deliverable:** ✅ Blank page loads, can make API calls
 
-### Phase 2: Matrix Grid (1.5 hours)
+### Phase 2: Matrix Grid ✅
 1. **Grid component** - Render 8×8 matrix
 2. **Click handling** - Route on click
 3. **State display** - Show active routes
 4. **Responsive scaling** - Scroll on mobile
 
-**Deliverable:** Functional routing grid
+**Deliverable:** ✅ Functional routing grid
 
-### Phase 3: Input/Output Panels (1.5 hours)
+### Phase 3: Input/Output Panels ✅
 1. **Input list** - Names, edit capability
 2. **Output list** - Status, current source
 3. **Output controls** - Audio, HDR, HDCP dropdowns
 4. **Panel layout** - Responsive side-by-side/stacked
 
-**Deliverable:** Full input/output management
+**Deliverable:** ✅ Full input/output management
 
-### Phase 4: Presets & Scenes (1 hour)
+### Phase 4: Presets & Profiles ✅ (Terminology: Scene → Profile in v2.10.0)
 1. **Preset buttons** - Recall, save
-2. **Scene list** - With recall/delete
-3. **Save scene modal** - Name input
+2. **Profile list** - With recall/delete/pin/reorder
+3. **Save profile modal** - Name, icon, routing, macros
 4. **Responsive layout** - Cards on mobile
 
-**Deliverable:** Full preset/scene control
+**Deliverable:** ✅ Full preset/profile control
 
-### Phase 5: System Controls (45 min)
-1. **Settings panel** - LCD, EDID, power
+### Phase 5: System Controls ✅
+1. **Settings panel** - LCD, EDID, power (tabbed modal)
 2. **Header bar** - Status, connection indicator
 3. **Toast notifications** - Action feedback
 
-**Deliverable:** Complete system settings
+**Deliverable:** ✅ Complete system settings
 
-### Phase 6: WebSocket & Polish (1 hour)
-1. **WebSocket integration** - Real-time updates
+### Phase 6: WebSocket & Polish ✅
+1. **WebSocket integration** - Real-time updates with reconnection
 2. **Loading states** - Spinners, skeletons
 3. **Error handling** - User-friendly messages
 4. **Animations** - Smooth transitions
 5. **PWA basics** - Manifest, icons
 
-**Deliverable:** Production-ready UI
+**Deliverable:** ✅ Production-ready UI
+
+### Phase 7: Mobile/Responsive Overhaul ✅
+1. **Horizontal swipe navigation** - Between tabs
+2. **Sliding grid layout** - With centering on desktop
+3. **Glassmorphism side drawer** - Hamburger menu (side-nav-drawer.js)
+4. **Concurrent desktop drawers** - Multiple drawers open at once
+5. **Persistent UI preferences** - Tab pinning, custom order
+6. **Mobile back button navigation** - Browser history integration
+
+**Deliverable:** ✅ Mobile-first responsive design
+
+### Phase 8: Theme System ✅
+1. **8 theme presets** - TRON, Neon, Royal, Vaporwave, etc.
+2. **Theme drawer UI** - Live theme switching
+3. **localStorage persistence** - Per-user theme preferences
+4. **Reduced glow mode** - Accessibility option
+5. **Card opacity slider** - Visual customization
+
+**Deliverable:** ✅ Full theme customization
+
+### Phase 9: CEC Control Suite ✅
+1. **CEC tray (floating remote)** - 1645 lines, 26 commands
+2. **CEC macro editor** - Multi-step macro builder
+3. **CEC auto-resolve** - Smart target selection per profile
+4. **Scene CEC config** - Per-profile CEC automation
+5. **CEC capabilities API** - Query supported commands
+
+**Deliverable:** ✅ Full CEC automation
+
+### Phase 10: Profile/Macro System ✅ (v2.10.0)
+1. **Profile CRUD** - Create, update, delete, reorder
+2. **Power-on/Power-off macros** - Per-profile automation
+3. **Icon and color customization** - Per-input/output
+4. **Theme preferences** - Server-side persistence
+5. **UI preferences API** - `/api/ui/preferences`
+
+**Deliverable:** ✅ Advanced profile system
 
 ---
 
