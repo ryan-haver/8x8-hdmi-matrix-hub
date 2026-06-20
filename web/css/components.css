@@ -935,14 +935,15 @@
 /* Settings Modal Large */
 .modal-lg .modal-content {
     max-width: 850px;
-    height: 580px;
+    height: 650px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
 }
 
-.settings-modal-body {
+.settings-tabbed-modal-body {
     display: flex;
+    flex-direction: row;
     flex: 1;
     overflow: hidden;
     padding: 0 !important;
@@ -984,10 +985,10 @@
 }
 
 .settings-tab-btn.active {
-    color: var(--accent-color, var(--text-primary));
+    color: var(--accent);
     background-color: rgba(255, 255, 255, 0.05);
-    border-left-color: var(--accent-color, #00f0ff);
-    text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+    border-left-color: var(--accent);
+    text-shadow: 0 0 10px var(--accent-glow);
 }
 
 .settings-tab-btn .icon {
@@ -999,7 +1000,7 @@
 /* Settings Panes Content */
 .settings-tab-panes {
     flex: 1;
-    padding: var(--space-5) var(--space-6);
+    padding: var(--space-4) var(--space-5);
     overflow-y: auto;
 }
 
@@ -1018,7 +1019,7 @@
         height: 80vh;
     }
     
-    .settings-modal-body {
+    .settings-tabbed-modal-body {
         flex-direction: column;
     }
     
@@ -1044,7 +1045,7 @@
     
     .settings-tab-btn.active {
         border-left-color: transparent;
-        border-bottom-color: var(--accent-color, #00f0ff);
+        border-bottom-color: var(--accent);
     }
 }
 
@@ -1058,47 +1059,59 @@
 
 /* ===== Settings Groups ===== */
 .settings-group {
-    padding: var(--space-4) 0;
-    border-bottom: 1px solid var(--border-color);
+    background-color: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3) var(--space-4);
+    margin-bottom: var(--space-4);
+    box-shadow: var(--shadow-sm);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-.settings-group:first-child {
-    padding-top: 0;
+.settings-group:hover {
+    border-color: var(--card-border-hover);
+    box-shadow: 0 0 12px hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.08);
 }
 
 .settings-group:last-child {
-    padding-bottom: 0;
-    border-bottom: none;
+    margin-bottom: 0;
 }
 
 /* Section headers */
 .settings-group h3 {
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-bold);
-    color: var(--text-muted);
+    color: var(--accent);
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.1em;
     margin: 0 0 var(--space-3) 0;
     padding: 0;
+    text-shadow: 0 0 8px var(--accent-glow);
 }
 
 /* Settings hint/description text - always appears right after h3 */
 .settings-hint {
     font-size: var(--font-size-sm);
-    color: var(--text-muted);
+    color: var(--text-secondary);
     line-height: 1.5;
-    margin: calc(-1 * var(--space-1)) 0 var(--space-3) 0;
+    margin: calc(-1 * var(--space-2)) 0 var(--space-3) 0;
     padding: 0;
 }
 
 /* Form rows - consistent horizontal layout */
 .settings-group .form-row {
     display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: space-between;
     gap: var(--space-4);
-    min-height: 44px;
-    padding: var(--space-2) 0;
+    min-height: 38px;
+    padding: var(--space-1) 0;
+}
+
+.settings-group .info-grid > .info-label,
+.settings-group .info-grid > .info-value {
+    padding: var(--space-1) 0;
 }
 
 .settings-group .form-row + .form-row {
@@ -1111,6 +1124,7 @@
     font-weight: var(--font-weight-normal);
     color: var(--text-primary);
     margin: 0;
+    text-align: left;
 }
 
 /* Toggle controls */
@@ -1127,12 +1141,34 @@
     flex-shrink: 0;
 }
 
+/* Responsive form rows on small/medium mobile devices */
+@media (max-width: 480px) {
+    .settings-group .form-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-2);
+        min-height: auto;
+    }
+    
+    .settings-group .form-row > label:first-child {
+        width: 100%;
+    }
+    
+    .settings-group .form-row > .select,
+    .settings-group .form-row > select,
+    .settings-group .form-row > .input,
+    .settings-group .form-row > input {
+        width: 100%;
+        max-width: none;
+    }
+}
+
 /* Button rows in settings - action buttons */
 .settings-group .btn-row {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-3);
-    margin-top: var(--space-2);
+    margin-top: var(--space-3);
 }
 
 .settings-group .btn-row .btn {
@@ -2319,14 +2355,14 @@
     gap: var(--space-3);
 }
 
-.toggle-input {
+.toggle-switch .toggle-input {
     position: absolute;
     opacity: 0;
     width: 0;
     height: 0;
 }
 
-.toggle-slider {
+.toggle-switch .toggle-slider {
     position: relative;
     display: inline-block;
     width: 48px;
@@ -2338,7 +2374,7 @@
     transition: all 0.2s ease;
 }
 
-.toggle-slider::before {
+.toggle-switch .toggle-slider::before {
     content: '';
     position: absolute;
     top: 3px;
@@ -2351,13 +2387,13 @@
 }
 
 /* Theme accent active state for toggle */
-.toggle-input:checked + .toggle-slider {
+.toggle-switch .toggle-input:checked + .toggle-slider {
     background: var(--toggle-bg-active, #00c8c8);
     border-color: var(--toggle-border-active, #00c8c8);
     box-shadow: var(--toggle-glow-active, 0 0 10px rgba(0, 200, 200, 0.4));
 }
 
-.toggle-input:checked + .toggle-slider::before {
+.toggle-switch .toggle-input:checked + .toggle-slider::before {
     transform: translateX(22px);
 }
 
