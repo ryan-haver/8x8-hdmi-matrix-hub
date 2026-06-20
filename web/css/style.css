@@ -632,6 +632,61 @@ body {
   color: var(--text-muted);
 }
 
+/* Skip to content link for accessibility */
+.skip-to-content {
+  position: absolute;
+  top: -40px;
+  left: var(--space-2);
+  z-index: 10000;
+  padding: var(--space-2) var(--space-4);
+  background: var(--accent-primary, #00ffff);
+  color: var(--bg-primary, #000);
+  text-decoration: none;
+  border-radius: var(--radius-md, 4px);
+  font-weight: 600;
+  z-index: 9999;
+  transition: top 0.2s ease;
+}
+
+.skip-to-content:focus {
+  top: var(--space-2);
+  outline: 2px solid var(--accent-secondary, #ff00ff);
+  outline-offset: 2px;
+}
+
+/* Main content gets focus outline removed when programmatically focused */
+#main-content:focus {
+  outline: none;
+}
+
+/* Skeleton wrapper for loading state */
+.skeleton-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+/* High contrast mode support */
+body.high-contrast {
+  --bg-primary: #000000;
+  --bg-secondary: #0a0a0a;
+  --text-primary: #ffffff;
+  --text-secondary: #e0e0e0;
+  --accent-primary: #ffff00;
+  --accent-secondary: #00ffff;
+  --border-color: #ffffff;
+}
+
+body.high-contrast .skeleton {
+  background: linear-gradient(
+    90deg,
+    #1a1a1a 25%,
+    #333333 50%,
+    #1a1a1a 75%
+  );
+}
+
 /* ===== Info Grid ===== */
 .info-grid {
   display: grid;
