@@ -72,3 +72,8 @@ _backups/
 
 # Security scan reports
 gitleaks-report*.json
+
+# Agent and tool directories
+.agent/
+.sisyphus/
+
