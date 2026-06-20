@@ -311,15 +311,13 @@
 /* ===== Tablets (768px and up) ===== */
 @media (min-width: 768px) {
     body {
-        overflow-y: auto;
-        overflow-x: hidden;
+        overflow: hidden;
     }
     
     .app {
-        height: auto;
-        min-height: 100vh;
-        min-height: 100dvh;
-        overflow: visible;
+        height: 100vh;
+        height: 100dvh;
+        overflow: hidden;
     }
 
     :root {
@@ -334,8 +332,12 @@
         display: inline;
     }
     
+    .desktop-tab-container {
+        display: flex !important;
+    }
+    
     .menu-toggle {
-        display: none;
+        display: inline-flex !important;
     }
     
     /* Hide tab bar on tablet+ - all sections visible */
@@ -343,16 +345,18 @@
         display: none;
     }
     
-    /* Main content - header padding stays, no bottom tab padding needed */
+    /* Main content - horizontal slider viewport configuration on desktop */
     .main-content {
-        padding: var(--space-6);
-        padding-top: calc(var(--header-height) + var(--space-8));
-        padding-bottom: var(--space-6);
-        max-width: 1000px;
-        margin: 0 auto;
-        display: block !important;
-        overflow: visible !important;
-        height: auto !important;
+        padding: 0 !important;
+        padding-top: calc(var(--header-height) + var(--space-4)) !important;
+        padding-bottom: var(--space-4) !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100% !important;
+        overflow: hidden !important;
+        margin: 0 !important;
     }
     
     /* Matrix grid larger cells */
@@ -394,77 +398,25 @@
         max-width: 400px;
     }
     
-    /* Show all sections in grid layout */
+    /* Slide configuration for desktop cover flow */
     .section {
         display: block !important;
-        min-width: 0;
+        width: 85vw !important;
+        max-width: 850px !important;
+        flex-shrink: 0 !important;
+        height: 100% !important;
+        overflow-y: auto !important;
         position: relative;
-        isolation: isolate;
-        z-index: 1;
-        background-color: transparent;
-        width: auto !important;
-        flex-shrink: 1 !important;
-        height: auto !important;
-        overflow-y: visible !important;
-        padding: 0 !important;
-    }
-    
-    /* Dashboard section visibility is controlled by JS based on pinned widgets */
-    .section-dashboard {
-        display: none; /* Default hidden, JS controls visibility */
+        margin: 0 var(--space-4) !important;
+        padding: 0 var(--space-4) !important;
     }
     
     .sections-slider {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-        grid-template-rows: auto auto auto auto;
-        grid-template-areas:
-            "matrix matrix"
-            "dashboard dashboard"
-            "inputs outputs"
-            "profiles profiles";
-        gap: var(--space-6);
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 0 !important;
         width: 100% !important;
-        height: auto !important;
-        transform: none !important; /* Force reset translate transform on desktop */
-    }
-    
-    /* When no dashboard widgets are pinned, collapse the grid row */
-    .sections-slider.no-dashboard {
-        grid-template-rows: auto auto auto;
-        grid-template-areas:
-            "matrix matrix"
-            "inputs outputs"
-            "profiles profiles";
-        gap: var(--space-2); /* Consistent 8px gap when no dashboard */
-    }
-    
-    .section-matrix {
-        grid-area: matrix;
-    }
-    
-    /* Dashboard section for pinned widgets */
-    .section-dashboard {
-        grid-area: dashboard;
-    }
-    
-    .section-inputs {
-        grid-area: inputs;
-    }
-    
-    .section-outputs {
-        grid-area: outputs;
-    }
-    
-    /* Add visual breathing room at bottom of IO sections in no-dashboard mode */
-    .sections-slider.no-dashboard .section-inputs,
-    .sections-slider.no-dashboard .section-outputs {
-        padding-bottom: var(--space-2);
-    }
-    
-    /* Profiles span full width at bottom */
-    .section-scenes {
-        grid-area: profiles;
+        height: 100% !important;
     }
 }
 
@@ -489,18 +441,19 @@
     
     /* Wider container */
     .main-content {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: var(--space-8);
-        padding-top: calc(var(--header-height) + var(--space-8));
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        padding-top: calc(var(--header-height) + var(--space-4)) !important;
+        padding-bottom: var(--space-4) !important;
     }
 }
 
 /* ===== Large Desktops (1200px and up) ===== */
 @media (min-width: 1200px) {
     .main-content {
-        max-width: 1200px;
-        margin: 0 auto;
+        max-width: 100% !important;
+        margin: 0 !important;
     }
     
     /* Matrix grid larger */
@@ -523,8 +476,9 @@
 /* ===== Extra Large (1600px and up) ===== */
 @media (min-width: 1600px) {
     .main-content {
-        padding: var(--space-10);
-        padding-top: calc(var(--header-height) + var(--space-8));
+        padding: 0 !important;
+        padding-top: calc(var(--header-height) + var(--space-4)) !important;
+        padding-bottom: var(--space-4) !important;
     }
     
     .matrix-cell {

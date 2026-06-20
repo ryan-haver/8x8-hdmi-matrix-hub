@@ -538,6 +538,16 @@ class MatrixAPI {
     async updateOutputSettings(output, settings) {
         return this.post(`/api/device-settings/output/${output}`, settings);
     }
+
+    // ===== UI Preferences (Custom tabs, sorting, pinning) =====
+
+    async getUiPreferences() {
+        return this.get('/api/ui/preferences');
+    }
+
+    async updateUiPreferences(prefs) {
+        return this.put('/api/ui/preferences', prefs);
+    }
 }
 
 // Clean up any legacy localStorage values before creating API instance

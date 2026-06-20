@@ -21,6 +21,12 @@ class MatrixApp {
         
         // Setup event handlers
         this.setupEventHandlers();
+
+        // Load UI Preferences & side navigation drawer
+        if (window.sideNavDrawer) {
+            await window.sideNavDrawer.init();
+            this.applyUiPreferences(window.sideNavDrawer.preferences);
+        }
         
         // Connect WebSocket for real-time updates
         this.connectWebSocket();
@@ -87,33 +93,10 @@ class MatrixApp {
         // Triple 3-finger tap to enter kiosk mode
         this.setupKioskGesture();
 
-        // Tab navigation (mobile)
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const tab = e.currentTarget.dataset.tab;
-                this.switchTab(tab);
-            });
+        // Listen for UI Preference changes
+        window.addEventListener('uiPreferencesChanged', (e) => {
+            this.applyUiPreferences(e.detail);
         });
-        
-        // Quick Actions button
-        const quickActionsBtn = document.getElementById('quick-actions-btn');
-        if (quickActionsBtn) {
-            quickActionsBtn.addEventListener('click', () => {
-                this.components.quickActionsDrawer.toggle();
-            });
-        }
-        
-        // Refresh button
-        const refreshBtn = document.getElementById('refresh-btn');
-        if (refreshBtn) {
-            refreshBtn.addEventListener('click', () => this.refresh());
-        }
-        
-        // Route all button - opens drawer
-        const routeAllBtn = document.getElementById('routing-btn');
-        if (routeAllBtn) {
-            routeAllBtn.addEventListener('click', () => this.components.routeAllDrawer.toggle());
-        }
         
         // Connection status updates
         state.on('wsConnection', (connected) => {
@@ -123,14 +106,22 @@ class MatrixApp {
         // Horizontal swipe navigation setup
         this.setupSwipeGestures();
 
-        // Recalculate slider translation position on window resize
+        // Recalculate slider translation position on window resize with dynamic slide centering
         window.addEventListener('resize', () => {
             const activeTab = state.ui.activeTab || 'matrix';
             const slider = document.querySelector('.sections-slider');
             const activeSection = document.getElementById(`${activeTab}-section`);
             if (slider && activeSection) {
                 slider.style.transition = 'none'; // Prevent animation bounce during resize
-                slider.style.transform = `translateX(-${activeSection.offsetLeft}px)`;
+                
+                let translation = -activeSection.offsetLeft;
+                const viewportWidth = slider.parentElement.clientWidth;
+                const sectionWidth = activeSection.clientWidth;
+                if (viewportWidth > sectionWidth) {
+                    translation += (viewportWidth - sectionWidth) / 2;
+                }
+                slider.style.transform = `translateX(${translation}px)`;
+                
                 // Force a layout reflow before restoring CSS transition
                 slider.offsetHeight;
                 slider.style.transition = '';
@@ -183,24 +174,130 @@ class MatrixApp {
     switchTab(tab) {
         // Update tab buttons
         document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.tab === tab);
-            btn.setAttribute('aria-selected', btn.dataset.tab === tab);
+            const isActive = btn.dataset.tab === tab;
+            btn.classList.toggle('active', isActive);
+            btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
         });
         
-        // Update sections active state
+        // Update sections active state and out-of-focus styling (adjacent cover flow)
         document.querySelectorAll('.section').forEach(section => {
-            section.classList.toggle('active', section.id === `${tab}-section`);
+            const isActive = section.id === `${tab}-section`;
+            section.classList.toggle('active', isActive);
+            section.classList.toggle('out-of-focus', !isActive);
         });
 
-        // Scroll sections slider horizontally
+        // Scroll sections slider horizontally with dynamic slide centering on desktop
         const slider = document.querySelector('.sections-slider');
         const activeSection = document.getElementById(`${tab}-section`);
         if (slider && activeSection) {
-            const offsetLeft = activeSection.offsetLeft;
-            slider.style.transform = `translateX(-${offsetLeft}px)`;
+            let translation = -activeSection.offsetLeft;
+            const viewportWidth = slider.parentElement.clientWidth;
+            const sectionWidth = activeSection.clientWidth;
+            if (viewportWidth > sectionWidth) {
+                translation += (viewportWidth - sectionWidth) / 2;
+            }
+            slider.style.transform = `translateX(${translation}px)`;
         }
         
         state.setActiveTab(tab);
+    }
+
+    /**
+     * Dynamically build tab buttons and reorder section elements in DOM based on UI preferences
+     */
+    applyUiPreferences(prefs) {
+        this.preferences = prefs;
+        
+        const mobileContainer = document.querySelector('.mobile-tabs');
+        const desktopContainer = document.querySelector('.desktop-tab-container');
+        const slider = document.querySelector('.sections-slider');
+        
+        if (!prefs || !prefs.pinnedTabs || !prefs.tabOrder || !slider) return;
+
+        // 1. Re-order standard section panel elements in DOM to match tabOrder
+        prefs.tabOrder.forEach(tabId => {
+            const sec = document.getElementById(`${tabId}-section`);
+            if (sec) {
+                slider.appendChild(sec);
+            }
+        });
+
+        // Make sure the mobile widget container is always appended at the end
+        const mobileWidgetSec = document.getElementById('mobile-widget-content');
+        if (mobileWidgetSec) {
+            slider.appendChild(mobileWidgetSec);
+        }
+
+        // 2. Render top (desktop) and bottom (mobile) tab buttons
+        const specs = window.sideNavDrawer ? window.sideNavDrawer.getTabSpecs() : [];
+        
+        // Sort tab specs according to user's tabOrder
+        const sortedSpecs = [...specs].sort((a, b) => {
+            let idxA = prefs.tabOrder.indexOf(a.id);
+            let idxB = prefs.tabOrder.indexOf(b.id);
+            if (idxA === -1) idxA = 99;
+            if (idxB === -1) idxB = 99;
+            return idxA - idxB;
+        });
+
+        const activeTab = state.ui.activeTab || 'matrix';
+        
+        let mobileHtml = "";
+        let desktopHtml = "";
+
+        sortedSpecs.forEach(tab => {
+            const isPinned = prefs.pinnedTabs.includes(tab.id);
+            
+            // Set hidden class in DOM on sections
+            const sec = document.getElementById(`${tab.id}-section`);
+            if (sec) {
+                sec.classList.toggle('hidden', !isPinned);
+            }
+
+            if (!isPinned) return;
+
+            const isActive = tab.id === activeTab;
+            
+            // Hide dashboard tab button dynamically if it is pinned but contains no widgets
+            const isDashboardHidden = tab.id === 'dashboard' && window.dashboardManager && !window.dashboardManager.hasPinnedWidgets();
+            const hideClass = isDashboardHidden ? 'hidden' : '';
+
+            const btnMarkup = `
+                <button class="tab-btn ${isActive ? 'active' : ''} ${hideClass}" data-tab="${tab.id}" role="tab" aria-selected="${isActive ? 'true' : 'false'}">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        ${tab.icon}
+                    </svg>
+                    <span>${tab.name.split(' ')[0]}</span>
+                </button>
+            `;
+
+            mobileHtml += btnMarkup;
+            desktopHtml += btnMarkup;
+        });
+
+        if (mobileContainer) mobileContainer.innerHTML = mobileHtml;
+        if (desktopContainer) desktopContainer.innerHTML = desktopHtml;
+
+        // Re-attach click listeners to new tab buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const tab = e.currentTarget.dataset.tab;
+                this.switchTab(tab);
+            });
+        });
+
+        // Ensure we switch to a pinned tab if the active one was unpinned
+        if (!prefs.pinnedTabs.includes(activeTab)) {
+            const firstPinned = prefs.pinnedTabs.find(id => {
+                if (id === 'dashboard') {
+                    return window.dashboardManager && window.dashboardManager.hasPinnedWidgets();
+                }
+                return true;
+            }) || 'matrix';
+            this.switchTab(firstPinned);
+        } else {
+            this.switchTab(activeTab);
+        }
     }
 
     /**

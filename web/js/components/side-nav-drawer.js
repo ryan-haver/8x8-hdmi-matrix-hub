@@ -1,0 +1,390 @@
+/**
+ * OREI Matrix Control - Side Navigation Drawer Component
+ * Handles the slide-out hamburger menu drawer, collapsed utility buttons,
+ * and interface customization settings (tab pinning and re-ordering) with backend persistence.
+ */
+
+class SideNavDrawer {
+    constructor() {
+        this.isOpen = false;
+        this.container = null;
+        this.backdrop = null;
+        
+        // Default UI preference fallback
+        this.preferences = {
+            pinnedTabs: ["matrix", "dashboard", "inputs", "outputs", "profiles"],
+            tabOrder: ["matrix", "dashboard", "inputs", "outputs", "profiles"]
+        };
+
+        // Create DOM nodes immediately
+        this.createDrawer();
+    }
+
+    /**
+     * Initialize the component by fetching preferences from the backend
+     */
+    async init() {
+        try {
+            const response = await api.getUiPreferences();
+            if (response && response.success && response.data) {
+                this.preferences = response.data;
+            }
+        } catch (e) {
+            console.warn("Failed to load persistent UI preferences from server, using default.", e);
+        }
+
+        this.setupEventListeners();
+        this.render();
+    }
+
+    /**
+     * Get list of all available tab specifications
+     */
+    getTabSpecs() {
+        return [
+            { id: "dashboard", name: "Dashboard", icon: `<polygon points="12 2 2 22 22 22"/>` },
+            { id: "matrix", name: "Matrix Routing", icon: `<path d="M3 8h15M3 16h15M8 3v18M16 3v18"/><circle cx="8" cy="8" r="2" fill="currentColor"/><circle cx="16" cy="16" r="2" fill="currentColor"/><path d="M18 10l3 3-3 3"/>` },
+            { id: "inputs", name: "Inputs status", icon: `<path d="M12 2v20M17 5l-5-5-5 5M12 0v10"/>` },
+            { id: "outputs", name: "Outputs status", icon: `<path d="M12 22V2M7 17l5 5 5-5M12 24V14"/>` },
+            { id: "profiles", name: "Profiles settings", icon: `<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>` }
+        ];
+    }
+
+    /**
+     * Create side drawer and backdrop in DOM
+     */
+    createDrawer() {
+        // Backdrop overlay
+        const backdrop = document.createElement("div");
+        backdrop.id = "side-nav-backdrop";
+        backdrop.className = "side-nav-backdrop";
+        backdrop.addEventListener("click", () => this.close());
+        document.body.appendChild(backdrop);
+        
+        // Sidebar Aside
+        const drawer = document.createElement("aside");
+        drawer.id = "side-nav-drawer";
+        drawer.className = "side-nav-drawer";
+        drawer.innerHTML = `
+            <div class="drawer-header">
+                <h3>
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 12h18M3 6h18M3 18h18"/>
+                    </svg>
+                    Control Deck
+                </h3>
+                <button class="btn-icon drawer-close" aria-label="Close drawer" title="Close menu">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="drawer-content">
+                <!-- Collapsed utility buttons section -->
+                <div class="drawer-section">
+                    <h4 class="drawer-section-title">Quick Utilities</h4>
+                    <div class="drawer-utilities-grid">
+                        <button id="drawer-quick-actions-btn" class="utility-btn" title="Quick Actions">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                            </svg>
+                            <span>Quick Actions</span>
+                        </button>
+                        
+                        <button id="drawer-routing-btn" class="utility-btn" title="Route to All">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 8h15M3 16h15M8 3v18M16 3v18"/><circle cx="8" cy="8" r="2" fill="currentColor"/><circle cx="16" cy="16" r="2" fill="currentColor"/><path d="M18 10l3 3-3 3"/>
+                            </svg>
+                            <span>Route to All</span>
+                        </button>
+                        
+                        <button id="drawer-theme-btn" class="utility-btn" title="Theme Settings">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="13.5" cy="6.5" r="0.5" fill="currentColor"/>
+                                <circle cx="17.5" cy="10.5" r="0.5" fill="currentColor"/>
+                                <circle cx="8.5" cy="7.5" r="0.5" fill="currentColor"/>
+                                <circle cx="6.5" cy="12.5" r="0.5" fill="currentColor"/>
+                                <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.555C21.965 6.012 17.461 2 12 2z"/>
+                            </svg>
+                            <span>Theme Style</span>
+                        </button>
+                        
+                        <button id="drawer-refresh-btn" class="utility-btn" title="Refresh Status">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                            </svg>
+                            <span>Refresh Status</span>
+                        </button>
+                        
+                        <button id="drawer-settings-btn" class="utility-btn" title="System Settings">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="3"/>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                            </svg>
+                            <span>System Settings</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Interface configuration section (pinning, re-ordering) -->
+                <div class="drawer-section">
+                    <h4 class="drawer-section-title">Personalize Tabs</h4>
+                    <ul id="drawer-tab-settings-list" class="drawer-settings-list">
+                        <!-- Custom settings rows rendered dynamically -->
+                    </ul>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(drawer);
+        
+        this.container = drawer;
+        this.backdrop = backdrop;
+    }
+
+    /**
+     * Attach interaction handlers
+     */
+    setupEventListeners() {
+        const toggleBtn = document.getElementById("menu-toggle");
+        if (toggleBtn) {
+            toggleBtn.addEventListener("click", () => this.toggle());
+        }
+
+        // Close drawer handlers
+        this.container.querySelector(".drawer-close").addEventListener("click", () => this.close());
+        
+        // Escape key close
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && this.isOpen) {
+                this.close();
+            }
+        });
+
+        // Utility actions
+        document.getElementById("drawer-quick-actions-btn").addEventListener("click", () => {
+            this.close();
+            window.app.components.quickActionsDrawer.toggle();
+        });
+
+        document.getElementById("drawer-routing-btn").addEventListener("click", () => {
+            this.close();
+            window.app.components.routeAllDrawer.toggle();
+        });
+
+        document.getElementById("drawer-theme-btn").addEventListener("click", () => {
+            this.close();
+            window.themeDrawer.toggle();
+        });
+
+        document.getElementById("drawer-refresh-btn").addEventListener("click", () => {
+            this.close();
+            window.app.refresh();
+        });
+
+        document.getElementById("drawer-settings-btn").addEventListener("click", () => {
+            this.close();
+            window.app.components.settingsPanel.open();
+        });
+    }
+
+    /**
+     * Render the personalization tab settings rows dynamically
+     */
+    render() {
+        const listEl = document.getElementById("drawer-tab-settings-list");
+        if (!listEl) return;
+
+        const specs = this.getTabSpecs();
+        const tabOrder = this.preferences.tabOrder || [];
+        const pinnedTabs = this.preferences.pinnedTabs || [];
+
+        // Sort tab specs based on active preferences order
+        const sortedSpecs = [...specs].sort((a, b) => {
+            let indexA = tabOrder.indexOf(a.id);
+            let indexB = tabOrder.indexOf(b.id);
+            if (indexA === -1) indexA = 99;
+            if (indexB === -1) indexB = 99;
+            return indexA - indexB;
+        });
+
+        let html = "";
+        sortedSpecs.forEach((tab, index) => {
+            const isPinned = pinnedTabs.includes(tab.id);
+            const isFirst = index === 0;
+            const isLast = index === sortedSpecs.length - 1;
+
+            html += `
+                <li class="tab-settings-item" data-id="${tab.id}">
+                    <div class="tab-settings-info">
+                        <svg class="icon tab-settings-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            ${tab.icon}
+                        </svg>
+                        <span class="tab-settings-label">${tab.name}</span>
+                    </div>
+                    
+                    <div class="tab-settings-actions">
+                        <label class="toggle-switch settings-pin-toggle" title="${isPinned ? 'Unpin Tab' : 'Pin Tab'}">
+                            <input type="checkbox" class="pin-checkbox" ${isPinned ? 'checked' : ''} data-id="${tab.id}">
+                            <span class="slider"></span>
+                        </label>
+                        
+                        <button class="btn-icon move-up-btn" data-id="${tab.id}" ${isFirst ? 'disabled' : ''} title="Move Up">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="18 15 12 9 6 15"/>
+                            </svg>
+                        </button>
+                        
+                        <button class="btn-icon move-down-btn" data-id="${tab.id}" ${isLast ? 'disabled' : ''} title="Move Down">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </button>
+                    </div>
+                </li>
+            `;
+        });
+
+        listEl.innerHTML = html;
+
+        // Attach events for pin/unpin toggles
+        listEl.querySelectorAll(".pin-checkbox").forEach(chk => {
+            chk.addEventListener("change", (e) => {
+                const id = e.target.dataset.id;
+                const checked = e.target.checked;
+                this.toggleTabPinned(id, checked);
+            });
+        });
+
+        // Attach events for up/down arrow buttons
+        listEl.querySelectorAll(".move-up-btn").forEach(btn => {
+            if (!btn.disabled) {
+                btn.addEventListener("click", () => this.moveTabOrder(btn.dataset.id, -1));
+            }
+        });
+
+        listEl.querySelectorAll(".move-down-btn").forEach(btn => {
+            if (!btn.disabled) {
+                btn.addEventListener("click", () => this.moveTabOrder(btn.dataset.id, 1));
+            }
+        });
+    }
+
+    /**
+     * Pin or unpin a tab from navigation
+     */
+    async toggleTabPinned(tabId, isPinned) {
+        let pinned = [...(this.preferences.pinnedTabs || [])];
+        if (isPinned) {
+            if (!pinned.includes(tabId)) {
+                pinned.push(tabId);
+            }
+        } else {
+            pinned = pinned.filter(id => id !== tabId);
+        }
+
+        // Must keep at least one tab pinned to prevent empty state crashes
+        if (pinned.length === 0) {
+            toast.warning("At least one tab must remain pinned");
+            this.render(); // Redraw to reset checkbox state
+            return;
+        }
+
+        this.preferences.pinnedTabs = pinned;
+        await this.savePreferences();
+    }
+
+    /**
+     * Shift a tab up or down in the sorting order
+     */
+    async moveTabOrder(tabId, direction) {
+        const order = [...(this.preferences.tabOrder || [])];
+        const index = order.indexOf(tabId);
+        if (index === -1) return;
+
+        const targetIndex = index + direction;
+        if (targetIndex < 0 || targetIndex >= order.length) return;
+
+        // Swap items
+        const temp = order[index];
+        order[index] = order[targetIndex];
+        order[targetIndex] = temp;
+
+        this.preferences.tabOrder = order;
+        await this.savePreferences();
+    }
+
+    /**
+     * Send updated preferences to server and trigger dynamic tab layout reload
+     */
+    async savePreferences() {
+        try {
+            const result = await api.updateUiPreferences(this.preferences);
+            if (result && result.success) {
+                toast.success("Preferences updated", 1500);
+                this.render();
+                
+                // Fire window custom event to inform matrixApp to reload UI
+                const event = new CustomEvent("uiPreferencesChanged", { detail: this.preferences });
+                window.dispatchEvent(event);
+            } else {
+                toast.error("Failed to save preferences: " + (result?.error || "Unknown"));
+            }
+        } catch (error) {
+            console.error("Preferences save error:", error);
+            toast.error("Network error saving preferences");
+        }
+    }
+
+    /**
+     * Open Drawer
+     */
+    open() {
+        this.isOpen = true;
+        this.container.classList.add("open");
+        this.backdrop.classList.add("open");
+        document.body.style.overflow = "hidden";
+        
+        // Hide Quick Actions drawer and others to avoid overlaps
+        if (window.app?.components?.quickActionsDrawer?.isOpen) {
+            window.app.components.quickActionsDrawer.close();
+        }
+        if (window.app?.components?.routeAllDrawer?.isOpen) {
+            window.app.components.routeAllDrawer.close();
+        }
+    }
+
+    /**
+     * Close Drawer
+     */
+    close() {
+        this.isOpen = false;
+        this.container.classList.remove("open");
+        this.backdrop.classList.remove("open");
+        document.body.style.overflow = "";
+    }
+
+    /**
+     * Toggle Drawer
+     */
+    toggle() {
+        if (this.isOpen) {
+            this.close();
+        } else {
+            this.open();
+        }
+    }
+}
+
+// Instantiate side navigation drawer on DOM load
+document.addEventListener("DOMContentLoaded", () => {
+    window.sideNavDrawer = new SideNavDrawer();
+    
+    // Register with overlay manager if it exists
+    if (window.overlayManager) {
+        window.overlayManager.register("side-nav-drawer", {
+            close: () => window.sideNavDrawer.close(),
+            isOpen: () => window.sideNavDrawer.isOpen
+        });
+    }
+});
