@@ -437,3 +437,125 @@ async def handle_reorder_profiles(request: web.Request) -> web.Response:
     except Exception as e:
         _LOG.error(f"Error reordering profiles: {e}")
         return _json_response(False, error=str(e), status=500)
+
+
+# =============================================================================
+# Phase 7: Profile surface-visibility endpoints (favorite + dashboard)
+# =============================================================================
+
+
+async def handle_list_favorite_profiles(request: web.Request) -> web.Response:
+    """GET /api/profiles/favorites — list profiles marked as favorites."""
+    manager = get_profile_manager()
+    if manager is None:
+        return _json_response(False, error="Profile manager not initialized", status=503)
+    try:
+        profiles = manager.list_favorites()
+        return _json_response(True, {
+            "profiles": [p.to_dict() for p in profiles],
+        })
+    except Exception as exc:
+        _LOG.error("Error listing favorite profiles: %s", exc)
+        return _json_response(False, error=str(exc), status=500)
+
+
+async def handle_toggle_profile_favorite(request: web.Request) -> web.Response:
+    """POST /api/profile/{id}/favorite — toggle the favorite flag."""
+    manager = get_profile_manager()
+    if manager is None:
+        return _json_response(False, error="Profile manager not initialized", status=503)
+    try:
+        profile_id = request.match_info.get("id", "")
+        if not profile_id:
+            return _json_response(False, error="Profile id required", status=400)
+        profile = manager.toggle_favorite(profile_id)
+        if profile is None:
+            return _json_response(False, error=f"Profile '{profile_id}' not found", status=404)
+        return _json_response(True, {
+            "id": profile.id,
+            "favorite": profile.favorite,
+        })
+    except Exception as exc:
+        _LOG.error("Error toggling profile favorite: %s", exc)
+        return _json_response(False, error=str(exc), status=500)
+
+
+async def handle_set_profile_favorite(request: web.Request) -> web.Response:
+    """PUT /api/profile/{id}/favorite — explicitly set favorite flag.
+
+    Body: ``{"favorite": true|false}``
+    """
+    manager = get_profile_manager()
+    if manager is None:
+        return _json_response(False, error="Profile manager not initialized", status=503)
+    try:
+        profile_id = request.match_info.get("id", "")
+        if not profile_id:
+            return _json_response(False, error="Profile id required", status=400)
+        body = await request.json()
+        if "favorite" not in body:
+            return _json_response(False, error="Missing 'favorite' field", status=400)
+        favorite = bool(body["favorite"])
+        profile = manager.set_favorite(profile_id, favorite)
+        if profile is None:
+            return _json_response(False, error=f"Profile '{profile_id}' not found", status=404)
+        return _json_response(True, {
+            "id": profile.id,
+            "favorite": profile.favorite,
+        })
+    except json.JSONDecodeError:
+        return _json_response(False, error="Invalid JSON body", status=400)
+    except Exception as exc:
+        _LOG.error("Error setting profile favorite: %s", exc)
+        return _json_response(False, error=str(exc), status=500)
+
+
+async def handle_toggle_profile_dashboard(request: web.Request) -> web.Response:
+    """POST /api/profile/{id}/dashboard — toggle dashboard-visible flag."""
+    manager = get_profile_manager()
+    if manager is None:
+        return _json_response(False, error="Profile manager not initialized", status=503)
+    try:
+        profile_id = request.match_info.get("id", "")
+        if not profile_id:
+            return _json_response(False, error="Profile id required", status=400)
+        profile = manager.toggle_dashboard_visible(profile_id)
+        if profile is None:
+            return _json_response(False, error=f"Profile '{profile_id}' not found", status=404)
+        return _json_response(True, {
+            "id": profile.id,
+            "dashboard_visible": profile.dashboard_visible,
+        })
+    except Exception as exc:
+        _LOG.error("Error toggling profile dashboard flag: %s", exc)
+        return _json_response(False, error=str(exc), status=500)
+
+
+async def handle_set_profile_dashboard(request: web.Request) -> web.Response:
+    """PUT /api/profile/{id}/dashboard — explicitly set dashboard-visible flag.
+
+    Body: ``{"dashboard_visible": true|false}``
+    """
+    manager = get_profile_manager()
+    if manager is None:
+        return _json_response(False, error="Profile manager not initialized", status=503)
+    try:
+        profile_id = request.match_info.get("id", "")
+        if not profile_id:
+            return _json_response(False, error="Profile id required", status=400)
+        body = await request.json()
+        if "dashboard_visible" not in body:
+            return _json_response(False, error="Missing 'dashboard_visible' field", status=400)
+        visible = bool(body["dashboard_visible"])
+        profile = manager.set_dashboard_visible(profile_id, visible)
+        if profile is None:
+            return _json_response(False, error=f"Profile '{profile_id}' not found", status=404)
+        return _json_response(True, {
+            "id": profile.id,
+            "dashboard_visible": profile.dashboard_visible,
+        })
+    except json.JSONDecodeError:
+        return _json_response(False, error="Invalid JSON body", status=400)
+    except Exception as exc:
+        _LOG.error("Error setting profile dashboard flag: %s", exc)
+        return _json_response(False, error=str(exc), status=500)
