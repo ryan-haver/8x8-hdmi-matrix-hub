@@ -48,6 +48,21 @@ class SettingsPanel {
      * Setup event listeners for settings controls
      */
     setupEventListeners() {
+        // Tab switching
+        const tabBtns = this.modal?.querySelectorAll('.settings-tab-btn');
+        const panes = this.modal?.querySelectorAll('.settings-tab-pane');
+        
+        tabBtns?.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabName = btn.dataset.tab;
+                
+                tabBtns.forEach(b => b.classList.toggle('active', b === btn));
+                panes?.forEach(pane => {
+                    pane.classList.toggle('active', pane.id === `pane-${tabName}`);
+                });
+            });
+        });
+
         // LCD Timeout
         const lcdSelect = document.getElementById('lcd-timeout');
         if (lcdSelect) {

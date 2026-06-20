@@ -393,7 +393,7 @@
     </div>
 
     <!-- Settings Modal -->
-    <div id="settings-modal" class="modal" aria-hidden="true">
+    <div id="settings-modal" class="modal modal-lg" aria-hidden="true">
       <div class="modal-backdrop"></div>
       <div class="modal-content">
         <div class="modal-header">
@@ -411,253 +411,228 @@
             </svg>
           </button>
         </div>
-        <div class="modal-body">
-          <!-- System Info -->
-          <div class="settings-group">
-            <h3>System Info</h3>
-            <div class="info-grid">
-              <span class="info-label">Model:</span>
-              <span id="info-model" class="info-value">-</span>
-              <span class="info-label">Firmware:</span>
-              <span id="info-firmware" class="info-value">-</span>
-              <span class="info-label">API:</span>
-              <span id="info-api" class="info-value">-</span>
-              <span class="info-label">Server:</span>
-              <span id="info-server-ip" class="info-value">-</span>
-            </div>
+        <div class="modal-body settings-modal-body">
+          <div class="settings-sidebar">
+            <button class="settings-tab-btn active" data-tab="general">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3" />
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+              </svg>
+              <span>General</span>
+            </button>
+            <button class="settings-tab-btn" data-tab="hardware">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
+                <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
+                <line x1="6" y1="6" x2="6.01" y2="6" />
+                <line x1="6" y1="18" x2="6.01" y2="18" />
+              </svg>
+              <span>Hardware</span>
+            </button>
+            <button class="settings-tab-btn" data-tab="interface">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                <path d="M2 12h20" />
+              </svg>
+              <span>Interface</span>
+            </button>
           </div>
-
-          <!-- Connection Settings -->
-          <div class="settings-group">
-            <h3>Connection Settings</h3>
-            <p class="settings-hint">Configure the HDMI matrix IP address</p>
-            <div class="form-row">
-              <label for="matrix-host-input">Matrix IP Address</label>
-              <input
-                type="text"
-                id="matrix-host-input"
-                class="input"
-                style="max-width: 180px;"
-                placeholder="e.g., 192.168.0.100"
-              />
-            </div>
-            <div class="btn-row" style="justify-content: center; margin-top: var(--space-3);">
-              <button id="matrix-host-save" class="btn btn-sm btn-primary" style="flex: none;">Save</button>
-              <button id="matrix-host-test" class="btn btn-sm btn-secondary" style="flex: none;">Test</button>
-              <button id="matrix-host-reset" class="btn btn-sm btn-secondary" style="flex: none;">Reset</button>
-            </div>
-            <div class="form-row" style="margin-top: var(--space-2);">
-              <label>Status</label>
-              <span id="matrix-connection-status" class="info-value">Checking...</span>
-            </div>
-          </div>
-
-          <!-- LCD Settings -->
-          <div class="settings-group">
-            <h3>Display Settings</h3>
-            <div class="form-row">
-              <label for="lcd-timeout">LCD Timeout</label>
-              <select id="lcd-timeout" class="select">
-                <option value="0">Off</option>
-                <option value="1">Always On</option>
-                <option value="2">15 seconds</option>
-                <option value="3">30 seconds</option>
-                <option value="4" selected>60 seconds</option>
-              </select>
-            </div>
-            <div class="form-row">
-              <label for="beep-enabled">System Beep</label>
-              <label class="toggle">
-                <input type="checkbox" id="beep-enabled" checked />
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-          </div>
-
-          <!-- Power-On Behavior - Not yet implemented in matrix firmware -->
-          <!--
-                <div class="settings-group">
-                    <h3>Power-On Behavior</h3>
-                    <div class="form-row">
-                        <label for="power-on-mode">On Power Up</label>
-                        <select id="power-on-mode" class="select">
-                            <option value="last">Restore Last State</option>
-                            <option value="preset1">Recall Preset 1</option>
-                            <option value="preset2">Recall Preset 2</option>
-                            <option value="preset3">Recall Preset 3</option>
-                            <option value="preset4">Recall Preset 4</option>
-                        </select>
-                    </div>
+          <div class="settings-tab-panes">
+            <!-- GENERAL TAB -->
+            <div class="settings-tab-pane active" id="pane-general">
+              <!-- System Info -->
+              <div class="settings-group">
+                <h3>System Info</h3>
+                <div class="info-grid">
+                  <span class="info-label">Model:</span>
+                  <span id="info-model" class="info-value">-</span>
+                  <span class="info-label">Firmware:</span>
+                  <span id="info-firmware" class="info-value">-</span>
+                  <span class="info-label">API:</span>
+                  <span id="info-api" class="info-value">-</span>
+                  <span class="info-label">Server:</span>
+                  <span id="info-server-ip" class="info-value">-</span>
                 </div>
-                -->
+              </div>
 
-          <!-- EDID Settings - Moved to individual Input Settings modals -->
-          <!--
-          <div class="settings-group">
-            <h3>EDID Settings</h3>
-            <p class="settings-hint">Set EDID mode for each input port</p>
-            <div id="edid-settings" class="port-settings-grid">
-            </div>
-          </div>
-          -->
-
-          <!-- CEC Control - Moved to CEC Tray and Quick Actions -->
-          <!--
-          <div class="settings-group">
-            <h3>CEC Control</h3>
-            <div class="cec-actions">
-              <button id="cec-power-on-all" class="btn btn-secondary btn-sm">
-                <svg
-                  class="icon"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="12" y1="8" x2="12" y2="12" />
-                  <line x1="12" y1="16" x2="12.01" y2="16" />
-                </svg>
-                Power On All
-              </button>
-              <button id="cec-standby-all" class="btn btn-secondary btn-sm">
-                <svg
-                  class="icon"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M18.36 6.64a9 9 0 1 1-12.73 0" />
-                  <line x1="12" y1="2" x2="12" y2="12" />
-                </svg>
-                Standby All
-              </button>
-            </div>
-          </div>
-          -->
-
-          <!-- CEC Remote Tray -->
-          <div class="settings-group">
-            <h3>CEC Remote Tray</h3>
-            <div class="form-row">
-              <label for="cec-tray-position">Tray Position</label>
-              <select id="cec-tray-position" class="select">
-                <option value="bottom-right">Bottom Right</option>
-                <option value="bottom-left">Bottom Left</option>
-                <option value="top-right">Top Right</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- External Audio -->
-          <div class="settings-group">
-            <h3>External Audio</h3>
-            <div class="form-row">
-              <label for="ext-audio-mode">Audio Mode</label>
-              <select id="ext-audio-mode" class="select">
-                <option value="0">Follow Video</option>
-                <option value="1">Independent</option>
-                <option value="2">Mixer</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Power Controls -->
-          <div class="settings-group">
-            <h3>Power</h3>
-            <div class="btn-row">
-              <button id="power-cycle-btn" class="btn btn-warning">
-                <svg
-                  class="icon"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M23 4v6h-6M1 20v-6h6" />
-                  <path
-                    d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"
+              <!-- Connection Settings -->
+              <div class="settings-group">
+                <h3>Connection Settings</h3>
+                <p class="settings-hint">Configure the HDMI matrix IP address</p>
+                <div class="form-row">
+                  <label for="matrix-host-input">Matrix IP Address</label>
+                  <input
+                    type="text"
+                    id="matrix-host-input"
+                    class="input"
+                    style="max-width: 180px;"
+                    placeholder="e.g., 192.168.0.100"
                   />
-                </svg>
-                <span>Power Cycle</span>
-              </button>
-              <button id="reboot-btn" class="btn btn-danger">
-                <svg
-                  class="icon"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M18.36 6.64a9 9 0 1 1-12.73 0" />
-                  <line x1="12" y1="2" x2="12" y2="12" />
-                </svg>
-                <span>Reboot</span>
-              </button>
+                </div>
+                <div class="btn-row" style="justify-content: center; margin-top: var(--space-3);">
+                  <button id="matrix-host-save" class="btn btn-sm btn-primary" style="flex: none;">Save</button>
+                  <button id="matrix-host-test" class="btn btn-sm btn-secondary" style="flex: none;">Test</button>
+                  <button id="matrix-host-reset" class="btn btn-sm btn-secondary" style="flex: none;">Reset</button>
+                </div>
+                <div class="form-row" style="margin-top: var(--space-2);">
+                  <label>Status</label>
+                  <span id="matrix-connection-status" class="info-value">Checking...</span>
+                </div>
+              </div>
             </div>
-          </div>
 
-          <!-- Visual Effects -->
-          <div class="settings-group">
-            <h3>Visual Effects</h3>
-            <p class="settings-hint">
-              TRON-inspired light cycle animation in the background
-            </p>
-            <div class="form-row">
-              <label for="tron-animation-toggle">Light Cycle Animation</label>
-              <label class="toggle">
-                <input type="checkbox" id="tron-animation-toggle" checked />
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-            <div class="form-row">
-              <label for="reduce-glow-toggle">Reduce UI Glow</label>
-              <label class="toggle">
-                <input type="checkbox" id="reduce-glow-toggle" />
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-          </div>
+            <!-- HARDWARE TAB -->
+            <div class="settings-tab-pane" id="pane-hardware">
+              <!-- LCD Settings -->
+              <div class="settings-group">
+                <h3>Display Settings</h3>
+                <div class="form-row">
+                  <label for="lcd-timeout">LCD Timeout</label>
+                  <select id="lcd-timeout" class="select">
+                    <option value="0">Off</option>
+                    <option value="1">Always On</option>
+                    <option value="2">15 seconds</option>
+                    <option value="3">30 seconds</option>
+                    <option value="4" selected>60 seconds</option>
+                  </select>
+                </div>
+                <div class="form-row">
+                  <label for="beep-enabled">System Beep</label>
+                  <label class="toggle">
+                    <input type="checkbox" id="beep-enabled" checked />
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
 
-          <!-- Developer Tools -->
-          <div class="settings-group">
-            <h3>Developer Tools</h3>
-            <p class="settings-hint">
-              Debug panel: single 3-finger tap on mobile
-            </p>
-            <div class="form-row">
-              <label for="debug-fab-toggle">Show Debug Panel</label>
-              <label class="toggle">
-                <input type="checkbox" id="debug-fab-toggle" />
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-          </div>
+              <!-- External Audio -->
+              <div class="settings-group">
+                <h3>External Audio</h3>
+                <div class="form-row">
+                  <label for="ext-audio-mode">Audio Mode</label>
+                  <select id="ext-audio-mode" class="select">
+                    <option value="0">Follow Video</option>
+                    <option value="1">Independent</option>
+                    <option value="2">Mixer</option>
+                  </select>
+                </div>
+              </div>
 
-          <!-- Kiosk Mode -->
-          <div class="settings-group">
-            <h3>Kiosk Mode</h3>
-            <p class="settings-hint">
-              Simplified tablet UI for quick input switching. Double 2-finger
-              tap to enter/exit.
-            </p>
-            <div class="form-row">
-              <label>Open Kiosk Interface</label>
-              <a href="/kiosk" class="btn btn-secondary btn-sm">
-                <svg
-                  class="icon"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
-                  <line x1="8" y1="21" x2="16" y2="21" />
-                  <line x1="12" y1="17" x2="12" y2="21" />
-                </svg>
-                <span>Open</span>
-              </a>
+              <!-- Power Controls -->
+              <div class="settings-group">
+                <h3>Power Controls</h3>
+                <p class="settings-hint">System power cycles or hard reboots</p>
+                <div class="btn-row">
+                  <button id="power-cycle-btn" class="btn btn-warning">
+                    <svg
+                      class="icon"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M23 4v6h-6M1 20v-6h6" />
+                      <path
+                        d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"
+                      />
+                    </svg>
+                    <span>Power Cycle</span>
+                  </button>
+                  <button id="reboot-btn" class="btn btn-danger">
+                    <svg
+                      class="icon"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M18.36 6.64a9 9 0 1 1-12.73 0" />
+                      <line x1="12" y1="2" x2="12" y2="12" />
+                    </svg>
+                    <span>Reboot</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- INTERFACE TAB -->
+            <div class="settings-tab-pane" id="pane-interface">
+              <!-- CEC Remote Tray -->
+              <div class="settings-group">
+                <h3>CEC Remote Tray</h3>
+                <div class="form-row">
+                  <label for="cec-tray-position">Tray Position</label>
+                  <select id="cec-tray-position" class="select">
+                    <option value="bottom-right">Bottom Right</option>
+                    <option value="bottom-left">Bottom Left</option>
+                    <option value="top-right">Top Right</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Visual Effects -->
+              <div class="settings-group">
+                <h3>Visual Effects</h3>
+                <p class="settings-hint">
+                  TRON-inspired light cycle animation in the background
+                </p>
+                <div class="form-row">
+                  <label for="tron-animation-toggle">Light Cycle Animation</label>
+                  <label class="toggle">
+                    <input type="checkbox" id="tron-animation-toggle" checked />
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                <div class="form-row">
+                  <label for="reduce-glow-toggle">Reduce UI Glow</label>
+                  <label class="toggle">
+                    <input type="checkbox" id="reduce-glow-toggle" />
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Developer Tools -->
+              <div class="settings-group">
+                <h3>Developer Tools</h3>
+                <p class="settings-hint">
+                  Debug panel: single 3-finger tap on mobile
+                </p>
+                <div class="form-row">
+                  <label for="debug-fab-toggle">Show Debug Panel</label>
+                  <label class="toggle">
+                    <input type="checkbox" id="debug-fab-toggle" />
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Kiosk Mode -->
+              <div class="settings-group">
+                <h3>Kiosk Mode</h3>
+                <p class="settings-hint">
+                  Simplified tablet UI for quick input switching. Double 2-finger
+                  tap to enter/exit.
+                </p>
+                <div class="form-row">
+                  <label>Open Kiosk Interface</label>
+                  <a href="/kiosk" class="btn btn-secondary btn-sm">
+                    <svg
+                      class="icon"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+                      <line x1="8" y1="21" x2="16" y2="21" />
+                      <line x1="12" y1="17" x2="12" y2="21" />
+                    </svg>
+                    <span>Open</span>
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
