@@ -43,6 +43,15 @@ class PresetsPanel {
                         <span>${Helpers.escapeHtml(presetName)}</span>
                     </button>
                     <div class="preset-item-actions">
+                        <button class="btn-icon btn-dashboard preset-dashboard-btn" data-preset="${p}" title="Pin to dashboard">
+                            <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                <line x1="9" y1="3" x2="9" y2="21"/>
+                                <line x1="15" y1="3" x2="15" y2="21"/>
+                                <line x1="3" y1="9" x2="21" y2="9"/>
+                                <line x1="3" y1="15" x2="21" y2="15"/>
+                            </svg>
+                        </button>
                         <button class="btn-icon btn-settings preset-settings-btn" data-preset="${p}" title="Preset settings">
                             <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="12" cy="12" r="3"/>
@@ -136,6 +145,20 @@ class PresetsPanel {
                     window.presetSettingsModal.open(preset);
                 } else {
                     toast.error('Preset settings modal not loaded');
+                }
+            });
+        });
+
+        // Dashboard pin buttons for presets (Phase 7)
+        this.container.querySelectorAll('.preset-dashboard-btn').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                const preset = parseInt(e.currentTarget.dataset.preset);
+                try {
+                    await window.api.toggleDashboardPreset(preset);
+                    toast.success(`Preset ${preset} ${btn.classList.contains('pinned') ? 'removed from dashboard' : 'pinned to dashboard'}`);
+                } catch (error) {
+                    toast.error(`Failed to update dashboard: ${error.message}`);
                 }
             });
         });

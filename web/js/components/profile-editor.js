@@ -79,6 +79,25 @@ class ProfileEditor {
                         <div class="form-section">
                             <label class="section-label">
                                 <span class="section-icon">2</span>
+                                Quick Access
+                            </label>
+                            <p class="section-help">Control where this profile appears for quick access.</p>
+                            <div class="quick-access-toggles">
+                                <label class="toggle-label">
+                                    <input type="checkbox" id="profile-quick-actions" />
+                                    <span class="toggle-label-text">Show in Quick Actions</span>
+                                </label>
+                                <label class="toggle-label">
+                                    <input type="checkbox" id="profile-dashboard" />
+                                    <span class="toggle-label-text">Show on Dashboard</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Routing Summary Section -->
+                        <div class="form-section">
+                            <label class="section-label">
+                                <span class="section-icon">3</span>
                                 Routing Configuration
                             </label>
                             <div class="routing-summary" id="profile-routing-summary">
@@ -95,7 +114,7 @@ class ProfileEditor {
                         <!-- Macro Assignment Section -->
                         <div class="form-section">
                             <label class="section-label">
-                                <span class="section-icon">3</span>
+                                <span class="section-icon">4</span>
                                 Quick-Action Macros
                                 <span class="optional-badge">Optional</span>
                             </label>
@@ -108,7 +127,7 @@ class ProfileEditor {
                         <!-- Power Macros Section -->
                         <div class="form-section">
                             <label class="section-label">
-                                <span class="section-icon">4</span>
+                                <span class="section-icon">5</span>
                                 Automation
                                 <span class="optional-badge">Optional</span>
                             </label>
@@ -176,7 +195,38 @@ class ProfileEditor {
         
         // Delete button
         this.modal.querySelector('#delete-profile-btn').addEventListener('click', () => this.delete());
-        
+
+        // Quick access toggles (Phase 7) - call server on change
+        const quickActionsToggle = this.modal.querySelector('#profile-quick-actions');
+        if (quickActionsToggle) {
+            quickActionsToggle.addEventListener('change', async () => {
+                if (!this.currentProfile) return;
+                try {
+                    await window.api.toggleProfileFavorite(this.currentProfile.id);
+                    toast.success(quickActionsToggle.checked ? 'Added to Quick Actions' : 'Removed from Quick Actions');
+                } catch (error) {
+                    // Revert on error
+                    quickActionsToggle.checked = !quickActionsToggle.checked;
+                    toast.error(`Failed to update: ${error.message}`);
+                }
+            });
+        }
+
+        const dashboardToggle = this.modal.querySelector('#profile-dashboard');
+        if (dashboardToggle) {
+            dashboardToggle.addEventListener('change', async () => {
+                if (!this.currentProfile) return;
+                try {
+                    await window.api.toggleProfileDashboard(this.currentProfile.id);
+                    toast.success(dashboardToggle.checked ? 'Pinned to Dashboard' : 'Unpinned from Dashboard');
+                } catch (error) {
+                    // Revert on error
+                    dashboardToggle.checked = !dashboardToggle.checked;
+                    toast.error(`Failed to update: ${error.message}`);
+                }
+            });
+        }
+
         // Open CEC config button (if present)
         const cecBtn = this.modal.querySelector('#open-cec-config-btn');
         if (cecBtn) cecBtn.addEventListener('click', () => this.openCecConfig());
@@ -255,7 +305,13 @@ class ProfileEditor {
         this.modal.querySelector('#delete-profile-btn').style.display = '';
         const cecSection = this.modal.querySelector('#cec-config-section');
         if (cecSection) cecSection.style.display = '';
-        
+
+        // Set Quick Access toggles (Phase 7)
+        const quickActionsCheckbox = this.modal.querySelector('#profile-quick-actions');
+        const dashboardCheckbox = this.modal.querySelector('#profile-dashboard');
+        if (quickActionsCheckbox) quickActionsCheckbox.checked = profile.favorite === true;
+        if (dashboardCheckbox) dashboardCheckbox.checked = profile.dashboard_visible === true;
+
         // Select icon
         const iconOptions = this.modal.querySelector('#profile-icon-options');
         iconOptions.querySelectorAll('.icon-option').forEach(b => {
