@@ -13,9 +13,46 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+  test:
+    name: Run Tests and Quality Checks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+          pip install pytest pytest-asyncio
+
+      - name: Run linter (ruff)
+        run: |
+          ruff check src/
+
+      - name: Run type checker (mypy)
+        run: |
+          mypy src/ --ignore-missing-imports || echo "mypy warnings present"
+
+      - name: Run tests
+        env:
+          USE_MOCK_MATRIX: '1'
+        run: |
+          pytest tests/ -v --tb=short -x
+
   build-and-push:
     name: Build and Push to GHCR
     runs-on: ubuntu-latest
+    needs: test  # Only build if tests pass
     permissions:
       contents: read
       packages: write

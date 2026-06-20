@@ -76,5 +76,6 @@ gitleaks-report*.json
 # Agent and tool directories
 .agent/
 .sisyphus/
+.omo/
 # Archive
 archive/
