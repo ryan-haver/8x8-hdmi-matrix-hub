@@ -130,7 +130,7 @@ class MacroManager:
         :param config_dir: Configuration directory path
         """
         if config_dir is None:
-            config_dir = os.getenv("UC_CONFIG_HOME") or os.getenv("HOME") or "./"
+            config_dir = os.getenv("UC_CONFIG_HOME") or os.getenv("HOME") or "./config"
 
         self.config_dir = config_dir
         self.macros_file = os.path.join(config_dir, "cec_macros.json")

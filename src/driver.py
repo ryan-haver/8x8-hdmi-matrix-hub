@@ -58,8 +58,8 @@ REST_API_ENABLED = os.environ.get("REST_API_ENABLED", "true").lower() == "true"
 POLLING_INTERVAL = int(os.environ.get("POLLING_INTERVAL", "30"))  # seconds
 POLLING_ENABLED = os.environ.get("POLLING_ENABLED", "true").lower() == "true"
 
-# Configuration file paths - use UC_CONFIG_HOME if set (for Docker), otherwise local directory
-_CONFIG_HOME = Path(os.environ.get("UC_CONFIG_HOME", Path(__file__).parent))
+# Configuration file paths - use UC_CONFIG_HOME if set (for Docker), otherwise local data directory
+_CONFIG_HOME = Path(os.environ.get("UC_CONFIG_HOME", Path(__file__).parent.parent / "data"))
 CONFIG_FILE = _CONFIG_HOME / "config_state.json"
 LOCK_FILE = _CONFIG_HOME / "driver.lock"
 

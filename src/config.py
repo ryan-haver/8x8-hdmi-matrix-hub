@@ -213,7 +213,7 @@ class SceneManager:
         :param config_dir: Configuration directory path
         """
         if config_dir is None:
-            config_dir = os.getenv("UC_CONFIG_HOME") or os.getenv("HOME") or "./"
+            config_dir = os.getenv("UC_CONFIG_HOME") or os.getenv("HOME") or "./config"
 
         self.config_dir = config_dir
         self.scenes_file = os.path.join(config_dir, "scenes.json")
@@ -456,7 +456,7 @@ class ProfileManager:
         :param config_dir: Configuration directory path
         """
         if config_dir is None:
-            config_dir = os.getenv("UC_CONFIG_HOME") or os.getenv("HOME") or "./"
+            config_dir = os.getenv("UC_CONFIG_HOME") or os.getenv("HOME") or "./config"
 
         self.config_dir = config_dir
         self.profiles_file = os.path.join(config_dir, "profiles.json")
@@ -714,7 +714,7 @@ class Config:
         :param config_dir: Configuration directory path
         """
         if config_dir is None:
-            config_dir = os.getenv("UC_CONFIG_HOME") or os.getenv("HOME") or "./"
+            config_dir = os.getenv("UC_CONFIG_HOME") or os.getenv("HOME") or "./config"
 
         self.config_dir = config_dir
         self.config_file = os.path.join(config_dir, "orei_matrix_config.json")
