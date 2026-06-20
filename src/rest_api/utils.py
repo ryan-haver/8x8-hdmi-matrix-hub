@@ -25,7 +25,9 @@ if str(_src_dir) not in sys.path:
 try:
     from cec_macros import MacroManager
     from config import ProfileManager, SceneManager
+    from dashboard_layout import DashboardLayoutManager
     from orei_matrix import OreiMatrix
+    from system_shortcuts import SystemShortcutManager
 except ImportError as e:
     # Log and continue with optional typing
     import logging
@@ -34,6 +36,8 @@ except ImportError as e:
     ProfileManager = None  # type: ignore
     OreiMatrix = None  # type: ignore
     MacroManager = None  # type: ignore
+    DashboardLayoutManager = None  # type: ignore
+    SystemShortcutManager = None  # type: ignore
 
 # API Version
 API_VERSION = "2.10.0"
@@ -59,6 +63,8 @@ _config_file: Path | None = None  # Path to config file for persistence
 _scene_manager: SceneManager | None = None  # Scene manager
 _profile_manager: ProfileManager | None = None  # Profile manager
 _macro_manager: MacroManager | None = None  # Macro manager
+_system_shortcut_manager: SystemShortcutManager | None = None  # System shortcuts
+_dashboard_layout_manager: DashboardLayoutManager | None = None  # Dashboard layout
 
 # WebSocket client connections
 _ws_clients: set[web.WebSocketResponse] = set()
@@ -236,10 +242,19 @@ def set_matrix_device(
     input_names: dict[int, str] | None = None,
     output_names: dict[int, str] | None = None,
     config_file: Path | None = None,
-    config_dir: str | None = None
+    config_dir: str | None = None,
+    data_dir: str | Path | None = None
 ):
-    """Set the matrix device reference for API handlers."""
-    global _matrix_device, _input_names, _output_names, _config_file, _scene_manager, _profile_manager, _macro_manager
+    """Set the matrix device reference for API handlers.
+
+    :param data_dir: Persistent data directory (defaults to
+        ``persistence.get_data_dir()`` which honors ``MATRIX_DATA_DIR``
+        and ``UC_CONFIG_HOME`` env vars). Used by Phase 7 managers
+        (system shortcuts, dashboard layout).
+    """
+    global _matrix_device, _input_names, _output_names, _config_file
+    global _scene_manager, _profile_manager, _macro_manager
+    global _system_shortcut_manager, _dashboard_layout_manager
     _matrix_device = device
     if input_names:
         _input_names = input_names.copy()
@@ -256,6 +271,18 @@ def set_matrix_device(
         _scene_manager = SceneManager()
         _profile_manager = ProfileManager()
         _macro_manager = MacroManager()
+    # Phase 7 managers live in the persistent data directory, not config.
+    # When data_dir is not explicitly passed, resolve it from env vars.
+    if data_dir is None:
+        try:
+            from persistence import get_data_dir as _resolve_data_dir
+            data_dir = _resolve_data_dir()
+        except ImportError:
+            data_dir = None
+    if SystemShortcutManager is not None:
+        _system_shortcut_manager = SystemShortcutManager(data_dir)
+    if DashboardLayoutManager is not None:
+        _dashboard_layout_manager = DashboardLayoutManager(data_dir)
 
 
 def update_input_names(input_names: dict[int, str]):
@@ -341,6 +368,16 @@ def get_macro_manager() -> MacroManager | None:
     return _macro_manager
 
 
+def get_system_shortcut_manager() -> SystemShortcutManager | None:
+    """Get the system shortcut manager."""
+    return _system_shortcut_manager
+
+
+def get_dashboard_layout_manager() -> DashboardLayoutManager | None:
+    """Get the dashboard layout manager."""
+    return _dashboard_layout_manager
+
+
 def get_ws_clients() -> set[web.WebSocketResponse]:
     """Get WebSocket client set."""
     return _ws_clients
@@ -424,3 +461,15 @@ def set_macro_manager(manager):
     """Set the macro manager reference."""
     global _macro_manager
     _macro_manager = manager
+
+
+def set_system_shortcut_manager(manager):
+    """Set the system shortcut manager reference."""
+    global _system_shortcut_manager
+    _system_shortcut_manager = manager
+
+
+def set_dashboard_layout_manager(manager):
+    """Set the dashboard layout manager reference."""
+    global _dashboard_layout_manager
+    _dashboard_layout_manager = manager
