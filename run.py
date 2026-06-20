@@ -93,7 +93,8 @@ async def run_modular_mode():
 
     # Layer 1: Connect to hardware
     matrix = OreiMatrix(matrix_host)
-    set_matrix_device(matrix)
+    config_dir = os.environ.get("UC_CONFIG_HOME", str(PROJECT_ROOT / "config"))
+    set_matrix_device(matrix, config_dir=config_dir)
 
     try:
         await matrix.connect()
