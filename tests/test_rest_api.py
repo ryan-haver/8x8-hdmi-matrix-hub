@@ -2016,3 +2016,614 @@ class TestProfileCecMacroEndpoints:
         """Test profile macros endpoint returns 404 for unknown profile."""
         resp = await client.get("/api/profile/nonexistent/macros")
         assert resp.status == 404
+
+
+# =============================================================================
+# Phase 7: System Shortcuts REST API Tests
+# =============================================================================
+
+
+class TestSystemShortcutsAPI:
+    """Tests for /api/system-shortcuts endpoints (Phase 7)."""
+
+    @pytest.fixture
+    def app_with_data_dir(self, extended_mock_matrix):
+        """Create REST app with mock matrix and temp data dir for managers."""
+        import tempfile
+        import os
+        reset_rate_limiter()
+        # CRITICAL: reset_data_dir_cache() clears the process-level cache so
+        # get_data_dir() re-resolves from the env var instead of returning a
+        # stale cached path from a previous test.
+        from persistence import reset_data_dir_cache
+        reset_data_dir_cache()
+        temp_data_dir = tempfile.mkdtemp()
+        os.environ["MATRIX_DATA_DIR"] = temp_data_dir
+        set_matrix_device(extended_mock_matrix, {
+            1: "Apple TV",
+            2: "PS5",
+            3: "Nintendo Switch",
+            4: "PC",
+            5: "Shield",
+            6: "Cable Box",
+            7: "Blu-ray",
+            8: "Chromecast",
+        }, data_dir=temp_data_dir)
+        return create_rest_app(temp_data_dir)
+
+    @pytest.fixture
+    async def client_with_data_dir(self, aiohttp_client, app_with_data_dir):
+        """Create test client for app with data dir."""
+        return await aiohttp_client(app_with_data_dir)
+
+    @pytest.mark.asyncio
+    async def test_list_shortcuts_returns_5_defaults(self, client_with_data_dir):
+        """GET /api/system-shortcuts returns 5 default shortcuts."""
+        resp = await client_with_data_dir.get("/api/system-shortcuts")
+        assert resp.status == 200
+        data = await resp.json()
+        assert data["success"] is True
+        assert len(data["data"]["shortcuts"]) == 5
+
+    @pytest.mark.asyncio
+    async def test_list_shortcuts_enabled_only(self, client_with_data_dir):
+        """GET /api/system-shortcuts?enabled_only=true filters disabled."""
+        # Disable one shortcut first
+        await client_with_data_dir.put(
+            "/api/system-shortcuts/builtin.all_to_out_1",
+            json={"enabled": False}
+        )
+        resp = await client_with_data_dir.get("/api/system-shortcuts?enabled_only=true")
+        data = await resp.json()
+        ids = [s["id"] for s in data["data"]["shortcuts"]]
+        assert "builtin.all_to_out_1" not in ids
+        assert len(ids) == 4
+
+    @pytest.mark.asyncio
+    async def test_list_favorites(self, client_with_data_dir):
+        """GET /api/system-shortcuts/favorites returns only enabled+favorite shortcuts."""
+        resp = await client_with_data_dir.get("/api/system-shortcuts/favorites")
+        assert resp.status == 200
+        data = await resp.json()
+        assert data["success"] is True
+        # builtin.all_to_out_1 and builtin.one_to_one are favorites by default
+        assert len(data["data"]["shortcuts"]) == 2
+        assert all(s["favorite"] for s in data["data"]["shortcuts"])
+
+    @pytest.mark.asyncio
+    async def test_list_dashboard_empty_by_default(self, client_with_data_dir):
+        """GET /api/system-shortcuts/dashboard returns empty (none have dashboard_visible)."""
+        resp = await client_with_data_dir.get("/api/system-shortcuts/dashboard")
+        assert resp.status == 200
+        data = await resp.json()
+        assert data["data"]["shortcuts"] == []
+
+    @pytest.mark.asyncio
+    async def test_get_shortcut_by_id(self, client_with_data_dir):
+        """GET /api/system-shortcuts/builtin.all_to_out_1 returns that shortcut."""
+        resp = await client_with_data_dir.get("/api/system-shortcuts/builtin.all_to_out_1")
+        assert resp.status == 200
+        data = await resp.json()
+        assert data["data"]["id"] == "builtin.all_to_out_1"
+        assert data["data"]["type"] == "route_all_to_output"
+
+    @pytest.mark.asyncio
+    async def test_get_shortcut_not_found(self, client_with_data_dir):
+        """GET /api/system-shortcuts/invalid_id returns 404."""
+        resp = await client_with_data_dir.get("/api/system-shortcuts/invalid.id")
+        assert resp.status == 404
+
+    @pytest.mark.asyncio
+    async def test_update_shortcut_rename(self, client_with_data_dir):
+        """PUT /api/system-shortcuts/{id} with name renames the shortcut."""
+        resp = await client_with_data_dir.put(
+            "/api/system-shortcuts/builtin.all_to_out_1",
+            json={"name": "New Name"}
+        )
+        assert resp.status == 200
+        data = await resp.json()
+        assert data["data"]["name"] == "New Name"
+
+    @pytest.mark.asyncio
+    async def test_update_shortcut_disable(self, client_with_data_dir):
+        """PUT /api/system-shortcuts/{id} with enabled=false disables it."""
+        resp = await client_with_data_dir.put(
+            "/api/system-shortcuts/builtin.mute_all_audio",
+            json={"enabled": False}
+        )
+        assert resp.status == 200
+        data = await resp.json()
+        assert data["data"]["enabled"] is False
+
+    @pytest.mark.asyncio
+    async def test_update_shortcut_set_favorite(self, client_with_data_dir):
+        """PUT /api/system-shortcuts/{id} with favorite=true sets it."""
+        resp = await client_with_data_dir.put(
+            "/api/system-shortcuts/builtin.power_off_all",
+            json={"favorite": True}
+        )
+        assert resp.status == 200
+        data = await resp.json()
+        assert data["data"]["favorite"] is True
+
+    @pytest.mark.asyncio
+    async def test_toggle_favorite(self, client_with_data_dir):
+        """POST /api/system-shortcuts/{id}/favorite toggles the favorite flag."""
+        # builtin.power_off_all starts as favorite=False
+        resp = await client_with_data_dir.post(
+            "/api/system-shortcuts/builtin.power_off_all/favorite"
+        )
+        assert resp.status == 200
+        data = await resp.json()
+        assert data["data"]["favorite"] is True
+        # Toggle back
+        resp = await client_with_data_dir.post(
+            "/api/system-shortcuts/builtin.power_off_all/favorite"
+        )
+        data = await resp.json()
+        assert data["data"]["favorite"] is False
+
+    @pytest.mark.asyncio
+    async def test_toggle_dashboard(self, client_with_data_dir):
+        """POST /api/system-shortcuts/{id}/dashboard toggles the dashboard_visible flag."""
+        resp = await client_with_data_dir.post(
+            "/api/system-shortcuts/builtin.all_to_out_1/dashboard"
+        )
+        assert resp.status == 200
+        data = await resp.json()
+        assert data["data"]["dashboard_visible"] is True
+
+    @pytest.mark.asyncio
+    async def test_execute_shortcut(self, client_with_data_dir, mock_matrix):
+        """POST /api/system-shortcuts/{id}/execute runs the shortcut against the matrix."""
+        resp = await client_with_data_dir.post(
+            "/api/system-shortcuts/builtin.power_off_all/execute"
+        )
+        assert resp.status == 200
+        data = await resp.json()
+        assert data["success"] is True
+        assert data["data"]["type"] == "power_off_all"
+
+    @pytest.mark.asyncio
+    async def test_execute_disabled_shortcut_returns_400(self, client_with_data_dir):
+        """POST /api/system-shortcuts/{id}/execute on a disabled shortcut returns 400."""
+        # First disable
+        await client_with_data_dir.put(
+            "/api/system-shortcuts/builtin.power_off_all",
+            json={"enabled": False}
+        )
+        resp = await client_with_data_dir.post(
+            "/api/system-shortcuts/builtin.power_off_all/execute"
+        )
+        assert resp.status == 400
+
+    @pytest.mark.asyncio
+    async def test_create_user_shortcut(self, client_with_data_dir):
+        """POST /api/system-shortcuts with valid body creates a user shortcut, returns 201."""
+        resp = await client_with_data_dir.post(
+            "/api/system-shortcuts",
+            json={
+                "name": "My Custom Shortcut",
+                "icon": "🎬",
+                "type": "route_one_to_one",
+            }
+        )
+        assert resp.status == 201
+        data = await resp.json()
+        assert data["data"]["name"] == "My Custom Shortcut"
+        assert data["data"]["builtin"] is False
+        assert data["data"]["id"].startswith("user.")
+
+    @pytest.mark.asyncio
+    async def test_create_shortcut_invalid_type_returns_400(self, client_with_data_dir):
+        """POST /api/system-shortcuts with invalid type returns 400."""
+        resp = await client_with_data_dir.post(
+            "/api/system-shortcuts",
+            json={"name": "Bad", "type": "not_a_real_type"}
+        )
+        assert resp.status == 400
+
+    @pytest.mark.asyncio
+    async def test_delete_builtin_returns_400(self, client_with_data_dir):
+        """DELETE /api/system-shortcuts/{builtin_id} returns 400 — built-ins cannot be deleted."""
+        resp = await client_with_data_dir.delete("/api/system-shortcuts/builtin.all_to_out_1")
+        assert resp.status == 400
+
+    @pytest.mark.asyncio
+    async def test_delete_user_shortcut(self, client_with_data_dir):
+        """DELETE /api/system-shortcuts/{user_id} deletes the user shortcut, returns 200."""
+        # Create a user shortcut first
+        create_resp = await client_with_data_dir.post(
+            "/api/system-shortcuts",
+            json={"name": "To Delete", "type": "route_one_to_one"}
+        )
+        create_data = await create_resp.json()
+        user_id = create_data["data"]["id"]
+        # Delete it
+        resp = await client_with_data_dir.delete(f"/api/system-shortcuts/{user_id}")
+        assert resp.status == 200
+        # Verify it's gone
+        get_resp = await client_with_data_dir.get(f"/api/system-shortcuts/{user_id}")
+        assert get_resp.status == 404
+
+    @pytest.mark.asyncio
+    async def test_reorder_shortcuts(self, client_with_data_dir):
+        """PUT /api/system-shortcuts/reorder with ordered_ids reorders the shortcuts."""
+        # Get current order
+        resp = await client_with_data_dir.get("/api/system-shortcuts")
+        shortcuts = (await resp.json())["data"]["shortcuts"]
+        ids = [s["id"] for s in shortcuts]
+        # Reverse the order
+        reversed_ids = list(reversed(ids))
+        reorder_resp = await client_with_data_dir.put(
+            "/api/system-shortcuts/reorder",
+            json={"ordered_ids": reversed_ids}
+        )
+        assert reorder_resp.status == 200
+        # Verify new order
+        resp = await client_with_data_dir.get("/api/system-shortcuts")
+        new_ids = [s["id"] for s in (await resp.json())["data"]["shortcuts"]]
+        assert new_ids == reversed_ids
+
+
+# =============================================================================
+# Phase 7: Dashboard Layout REST API Tests
+# =============================================================================
+
+
+class TestDashboardLayoutAPI:
+    """Tests for /api/dashboard/layout and /api/dashboard/cards endpoints (Phase 7)."""
+
+    @pytest.fixture
+    def app_with_data_dir(self, extended_mock_matrix):
+        """Create REST app with mock matrix and temp data dir."""
+        import tempfile
+        import os
+        reset_rate_limiter()
+        from persistence import reset_data_dir_cache
+        reset_data_dir_cache()
+        temp_data_dir = tempfile.mkdtemp()
+        os.environ["MATRIX_DATA_DIR"] = temp_data_dir
+        set_matrix_device(extended_mock_matrix, {
+            1: "Apple TV", 2: "PS5", 3: "Nintendo Switch",
+            4: "PC", 5: "Shield", 6: "Cable Box",
+            7: "Blu-ray", 8: "Chromecast",
+        }, data_dir=temp_data_dir)
+        return create_rest_app(temp_data_dir)
+
+    @pytest.fixture
+    async def client_with_data_dir(self, aiohttp_client, app_with_data_dir):
+        """Create test client for app with data dir."""
+        return await aiohttp_client(app_with_data_dir)
+
+    @pytest.mark.asyncio
+    async def test_get_layout_returns_3_legacy_widgets(self, client_with_data_dir):
+        """GET /api/dashboard/layout returns layout with 3 legacy aggregate widgets."""
+        resp = await client_with_data_dir.get("/api/dashboard/layout")
+        assert resp.status == 200
+        data = await resp.json()
+        assert data["success"] is True
+        assert len(data["data"]["cards"]) == 3
+        ids = {c["id"] for c in data["data"]["cards"]}
+        assert ids == {"cec-tray", "routing-dashboard", "quick-actions"}
+
+    @pytest.mark.asyncio
+    async def test_put_layout_replaces_layout(self, client_with_data_dir):
+        """PUT /api/dashboard/layout with new cards replaces the layout."""
+        resp = await client_with_data_dir.put(
+            "/api/dashboard/layout",
+            json={
+                "version": 1,
+                "cards": [
+                    {"type": "preset", "id": "1", "order": 0},
+                    {"type": "preset", "id": "2", "order": 1},
+                ]
+            }
+        )
+        assert resp.status == 200
+        data = await resp.json()
+        assert len(data["data"]["cards"]) == 2
+
+    @pytest.mark.asyncio
+    async def test_put_layout_skips_invalid_cards(self, client_with_data_dir):
+        """PUT /api/dashboard/layout skips cards with invalid types (logs warning)."""
+        resp = await client_with_data_dir.put(
+            "/api/dashboard/layout",
+            json={
+                "cards": [
+                    {"type": "profile", "id": "valid", "order": 0},
+                    {"type": "bad_type", "id": "invalid", "order": 1},
+                ]
+            }
+        )
+        assert resp.status == 200
+        data = await resp.json()
+        assert len(data["data"]["cards"]) == 1
+        assert data["data"]["cards"][0]["id"] == "valid"
+
+    @pytest.mark.asyncio
+    async def test_put_layout_deduplicates(self, client_with_data_dir):
+        """PUT /api/dashboard/layout deduplicates by (type, id), keeping first."""
+        resp = await client_with_data_dir.put(
+            "/api/dashboard/layout",
+            json={
+                "cards": [
+                    {"type": "preset", "id": "1", "order": 0},
+                    {"type": "preset", "id": "1", "order": 1},
+                ]
+            }
+        )
+        assert resp.status == 200
+        data = await resp.json()
+        preset1_count = sum(
+            1 for c in data["data"]["cards"]
+            if c["type"] == "preset" and c["id"] == "1"
+        )
+        assert preset1_count == 1
+
+    @pytest.mark.asyncio
+    async def test_add_card(self, client_with_data_dir):
+        """POST /api/dashboard/cards adds a card, returns 201."""
+        resp = await client_with_data_dir.post(
+            "/api/dashboard/cards",
+            json={"type": "preset", "id": "1"}
+        )
+        assert resp.status == 201
+        data = await resp.json()
+        # Card should now be in the layout
+        card_ids = {c["id"] for c in data["data"]["cards"]}
+        assert "1" in card_ids
+
+    @pytest.mark.asyncio
+    async def test_add_card_duplicate_returns_409(self, client_with_data_dir):
+        """POST /api/dashboard/cards with duplicate card returns 409."""
+        # Add once
+        await client_with_data_dir.post(
+            "/api/dashboard/cards",
+            json={"type": "preset", "id": "3"}
+        )
+        # Try to add again
+        resp = await client_with_data_dir.post(
+            "/api/dashboard/cards",
+            json={"type": "preset", "id": "3"}
+        )
+        assert resp.status == 409
+
+    @pytest.mark.asyncio
+    async def test_add_card_invalid_type_returns_400(self, client_with_data_dir):
+        """POST /api/dashboard/cards with invalid type returns 400."""
+        resp = await client_with_data_dir.post(
+            "/api/dashboard/cards",
+            json={"type": "not_a_card_type", "id": "something"}
+        )
+        assert resp.status == 400
+
+    @pytest.mark.asyncio
+    async def test_remove_card(self, client_with_data_dir):
+        """DELETE /api/dashboard/cards?type=aggregate_widget&id=cec-tray removes the card."""
+        resp = await client_with_data_dir.delete(
+            "/api/dashboard/cards",
+            params={"type": "aggregate_widget", "id": "cec-tray"}
+        )
+        assert resp.status == 200
+        # Verify it's gone from the layout
+        data = await resp.json()
+        remaining_ids = {c["id"] for c in data["data"]["cards"]}
+        assert "cec-tray" not in remaining_ids
+
+    @pytest.mark.asyncio
+    async def test_remove_card_not_found_returns_404(self, client_with_data_dir):
+        """DELETE /api/dashboard/cards with valid type but nonexistent card returns 404."""
+        # Preset 8 is a valid preset id (1-8) but is not on the dashboard,
+        # so this should return 404 (not found), not 400 (bad request).
+        resp = await client_with_data_dir.delete(
+            "/api/dashboard/cards",
+            params={"type": "preset", "id": "8"}
+        )
+        assert resp.status == 404
+
+
+# =============================================================================
+# Phase 7: Profile Favorite/Dashboard REST API Tests
+# =============================================================================
+
+
+class TestProfileFavoriteDashboardAPI:
+    """Tests for profile favorite and dashboard endpoints (Phase 7)."""
+
+    @pytest.fixture(autouse=True)
+    def fresh_profile_manager(self):
+        """Ensure a fresh ProfileManager for each test."""
+        import rest_api.utils as utils_module
+        from persistence import get_data_dir, reset_data_dir_cache
+        # Reset manager so set_matrix_device creates a fresh one
+        utils_module._profile_manager = None
+        # CRITICAL: reset the path cache first, BEFORE calling get_data_dir
+        reset_data_dir_cache()
+        # Delete profiles file so fresh manager loads empty state
+        profiles_file = get_data_dir() / "profiles.json"
+        if profiles_file.exists():
+            profiles_file.unlink()
+        yield
+        utils_module._profile_manager = None
+
+    @pytest.mark.asyncio
+    async def test_get_profiles_favorites_empty_initially(self, client):
+        """GET /api/profiles/favorites returns empty list when no profiles are favorited."""
+        resp = await client.get("/api/profiles/favorites")
+        assert resp.status == 200
+        data = await resp.json()
+        assert data["data"]["profiles"] == []
+
+    @pytest.mark.asyncio
+    async def test_toggle_profile_favorite_on(self, client):
+        """POST /api/profile/{id}/favorite toggles favorite on for a profile."""
+        # Create profile first
+        await client.post("/api/profile", json={
+            "id": "test_profile_fav",
+            "name": "Test Profile",
+            "outputs": {"1": {"input": 1}},
+        })
+        # Toggle favorite on
+        resp = await client.post("/api/profile/test_profile_fav/favorite")
+        assert resp.status == 200
+        data = await resp.json()
+        assert data["data"]["favorite"] is True
+
+    @pytest.mark.asyncio
+    async def test_toggle_profile_favorite_off(self, client):
+        """POST /api/profile/{id}/favorite toggles favorite off when already on."""
+        await client.post("/api/profile", json={
+            "id": "test_profile_fav2",
+            "name": "Test Profile 2",
+            "outputs": {"1": {"input": 1}},
+        })
+        # Turn on
+        await client.post("/api/profile/test_profile_fav2/favorite")
+        # Turn off
+        resp = await client.post("/api/profile/test_profile_fav2/favorite")
+        assert (await resp.json())["data"]["favorite"] is False
+
+    @pytest.mark.asyncio
+    async def test_put_profile_favorite_true(self, client):
+        """PUT /api/profile/{id}/favorite with favorite=true sets it on."""
+        await client.post("/api/profile", json={
+            "id": "test_profile_fav3",
+            "name": "Test Profile 3",
+            "outputs": {"1": {"input": 1}},
+        })
+        resp = await client.put(
+            "/api/profile/test_profile_fav3/favorite",
+            json={"favorite": True}
+        )
+        assert resp.status == 200
+        assert (await resp.json())["data"]["favorite"] is True
+
+    @pytest.mark.asyncio
+    async def test_put_profile_favorite_false(self, client):
+        """PUT /api/profile/{id}/favorite with favorite=false sets it off."""
+        await client.post("/api/profile", json={
+            "id": "test_profile_fav4",
+            "name": "Test Profile 4",
+            "outputs": {"1": {"input": 1}},
+        })
+        await client.put(
+            "/api/profile/test_profile_fav4/favorite",
+            json={"favorite": True}
+        )
+        resp = await client.put(
+            "/api/profile/test_profile_fav4/favorite",
+            json={"favorite": False}
+        )
+        assert (await resp.json())["data"]["favorite"] is False
+
+    @pytest.mark.asyncio
+    async def test_toggle_profile_dashboard(self, client):
+        """POST /api/profile/{id}/dashboard toggles dashboard_visible."""
+        await client.post("/api/profile", json={
+            "id": "test_profile_dash",
+            "name": "Test Profile Dashboard",
+            "outputs": {"1": {"input": 1}},
+        })
+        resp = await client.post("/api/profile/test_profile_dash/dashboard")
+        assert resp.status == 200
+        assert (await resp.json())["data"]["dashboard_visible"] is True
+
+    @pytest.mark.asyncio
+    async def test_put_profile_dashboard_true(self, client):
+        """PUT /api/profile/{id}/dashboard with dashboard_visible=true sets it on."""
+        await client.post("/api/profile", json={
+            "id": "test_profile_dash2",
+            "name": "Test Profile Dashboard 2",
+            "outputs": {"1": {"input": 1}},
+        })
+        resp = await client.put(
+            "/api/profile/test_profile_dash2/dashboard",
+            json={"dashboard_visible": True}
+        )
+        assert resp.status == 200
+        assert (await resp.json())["data"]["dashboard_visible"] is True
+
+    @pytest.mark.asyncio
+    async def test_get_profiles_favorites_after_faving(self, client):
+        """GET /api/profiles/favorites returns the favorited profile."""
+        await client.post("/api/profile", json={
+            "id": "fav_profile_test",
+            "name": "Fav Profile Test",
+            "outputs": {"1": {"input": 1}},
+        })
+        await client.post("/api/profile/fav_profile_test/favorite")
+        resp = await client.get("/api/profiles/favorites")
+        data = await resp.json()
+        ids = [p["id"] for p in data["data"]["profiles"]]
+        assert "fav_profile_test" in ids
+
+
+# =============================================================================
+# Phase 7: Macro Favorite/Dashboard REST API Tests
+# =============================================================================
+
+
+class TestMacroFavoriteDashboardAPI:
+    """Tests for macro favorite and dashboard endpoints (Phase 7)."""
+
+    @pytest.fixture(autouse=True)
+    def fresh_macro_manager(self):
+        """Ensure a fresh MacroManager for each test."""
+        import rest_api.utils as utils_module
+        from persistence import get_data_dir, reset_data_dir_cache
+        utils_module._macro_manager = None
+        reset_data_dir_cache()
+        macros_file = get_data_dir() / "cec_macros.json"
+        if macros_file.exists():
+            macros_file.unlink()
+        yield
+        utils_module._macro_manager = None
+
+    @pytest.mark.asyncio
+    async def test_get_macros_favorites_empty_initially(self, client):
+        """GET /api/cec/macros/favorites returns empty list when no macros are favorited."""
+        resp = await client.get("/api/cec/macros/favorites")
+        assert resp.status == 200
+        data = await resp.json()
+        assert data["data"]["macros"] == []
+
+    @pytest.mark.asyncio
+    async def test_toggle_macro_favorite(self, client):
+        """POST /api/cec/macro/{id}/favorite toggles favorite on a macro."""
+        # Create macro first
+        create_resp = await client.post("/api/cec/macro", json={
+            "name": "Test Macro Fav",
+            "steps": [{"command": "POWER_ON", "targets": ["input_1"]}],
+        })
+        macro_id = (await create_resp.json())["data"]["id"]
+        # Toggle favorite on
+        resp = await client.post(f"/api/cec/macro/{macro_id}/favorite")
+        assert resp.status == 200
+        assert (await resp.json())["data"]["favorite"] is True
+
+    @pytest.mark.asyncio
+    async def test_toggle_macro_dashboard(self, client):
+        """POST /api/cec/macro/{id}/dashboard toggles dashboard_visible on a macro."""
+        create_resp = await client.post("/api/cec/macro", json={
+            "name": "Test Macro Dash",
+            "steps": [{"command": "POWER_OFF", "targets": ["input_1"]}],
+        })
+        macro_id = (await create_resp.json())["data"]["id"]
+        resp = await client.post(f"/api/cec/macro/{macro_id}/dashboard")
+        assert resp.status == 200
+        assert (await resp.json())["data"]["dashboard_visible"] is True
+
+    @pytest.mark.asyncio
+    async def test_get_macros_favorites_after_faving(self, client):
+        """GET /api/cec/macros/favorites returns the favorited macro."""
+        create_resp = await client.post("/api/cec/macro", json={
+            "name": "Fav Macro Test",
+            "steps": [{"command": "POWER_ON", "targets": ["input_1"]}],
+        })
+        macro_id = (await create_resp.json())["data"]["id"]
+        await client.post(f"/api/cec/macro/{macro_id}/favorite")
+        resp = await client.get("/api/cec/macros/favorites")
+        data = await resp.json()
+        ids = [m["id"] for m in data["data"]["macros"]]
+        assert macro_id in ids
