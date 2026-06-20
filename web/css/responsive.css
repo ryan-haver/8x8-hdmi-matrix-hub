@@ -310,6 +310,18 @@
 
 /* ===== Tablets (768px and up) ===== */
 @media (min-width: 768px) {
+    body {
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    
+    .app {
+        height: auto;
+        min-height: 100vh;
+        min-height: 100dvh;
+        overflow: visible;
+    }
+
     :root {
         --header-height: 64px;
     }
@@ -338,6 +350,9 @@
         padding-bottom: var(--space-6);
         max-width: 1000px;
         margin: 0 auto;
+        display: block !important;
+        overflow: visible !important;
+        height: auto !important;
     }
     
     /* Matrix grid larger cells */
@@ -387,6 +402,11 @@
         isolation: isolate;
         z-index: 1;
         background-color: transparent;
+        width: auto !important;
+        flex-shrink: 1 !important;
+        height: auto !important;
+        overflow-y: visible !important;
+        padding: 0 !important;
     }
     
     /* Dashboard section visibility is controlled by JS based on pinned widgets */
@@ -394,7 +414,7 @@
         display: none; /* Default hidden, JS controls visibility */
     }
     
-    .main-content {
+    .sections-slider {
         display: grid;
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
         grid-template-rows: auto auto auto auto;
@@ -404,12 +424,13 @@
             "inputs outputs"
             "profiles profiles";
         gap: var(--space-6);
-        max-width: 100%;
-        padding-top: calc(var(--header-height) + var(--space-8));
+        width: 100% !important;
+        height: auto !important;
+        transform: none !important; /* Force reset translate transform on desktop */
     }
     
     /* When no dashboard widgets are pinned, collapse the grid row */
-    .main-content.no-dashboard {
+    .sections-slider.no-dashboard {
         grid-template-rows: auto auto auto;
         grid-template-areas:
             "matrix matrix"
@@ -436,8 +457,8 @@
     }
     
     /* Add visual breathing room at bottom of IO sections in no-dashboard mode */
-    .main-content.no-dashboard .section-inputs,
-    .main-content.no-dashboard .section-outputs {
+    .sections-slider.no-dashboard .section-inputs,
+    .sections-slider.no-dashboard .section-outputs {
         padding-bottom: var(--space-2);
     }
     

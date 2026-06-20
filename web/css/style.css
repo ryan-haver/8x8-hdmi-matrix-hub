@@ -141,10 +141,10 @@ body {
 .app {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
   max-width: 100vw;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 /* ===== Header ===== */
@@ -385,24 +385,38 @@ body {
 /* ===== Main Content ===== */
 .main-content {
   flex: 1;
-  padding: var(--space-3);
+  min-height: 0;
+  padding: 0; /* Remove padding here so slider covers full width */
   padding-top: calc(var(--header-height) + var(--space-8));
   padding-bottom: calc(var(--tabs-height) + var(--space-3));
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden; /* Acts as sliding viewport */
   max-width: 100%;
+  position: relative;
+}
+
+.sections-slider {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  transition: transform var(--transition-normal);
 }
 
 /* ===== Sections ===== */
 .section {
-  display: none;
-  max-width: 100%;
-  overflow: hidden;
+  display: block;
+  width: 100%;
+  flex-shrink: 0;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
   position: relative;
+  padding: 0 var(--space-3); /* Re-apply padding to individual sections */
+  -webkit-overflow-scrolling: touch;
 }
 
-.section.active {
-  display: block;
+.section.hidden {
+  display: none !important;
 }
 
 .section-header {
