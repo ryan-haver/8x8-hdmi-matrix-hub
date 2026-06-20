@@ -186,6 +186,48 @@ def _json_response(success: bool, data: Any = None, error: str | None = None, st
 
 
 # =============================================================================
+# Decorator: Reduce boilerplate in REST handlers
+# =============================================================================
+
+def require_connected(func):
+    """
+    Decorator that ensures the matrix device is configured and connected.
+
+    Replaces the common boilerplate in REST handlers:
+        matrix_device = get_matrix_device()
+        if matrix_device is None:
+            return _json_response(False, error="Matrix device not configured", status=503)
+        if not matrix_device.connected:
+            return _json_response(False, error="Matrix not connected", status=503)
+
+    Usage:
+        @require_connected
+        async def handle_status(request: web.Request) -> web.Response:
+            matrix_device = get_matrix_device()  # Guaranteed to be connected
+            ...
+
+    :param func: Async REST handler that uses get_matrix_device() to access the matrix
+    :return: Wrapped handler that pre-checks connection state
+    """
+    from functools import wraps
+
+    @wraps(func)
+    async def wrapper(request: web.Request) -> web.Response:
+        matrix_device = get_matrix_device()
+        if matrix_device is None:
+            return _json_response(
+                success=False, error="Matrix device not configured", status=503
+            )
+        if not matrix_device.connected:
+            return _json_response(
+                success=False, error="Matrix not connected", status=503
+            )
+        return await func(request)
+
+    return wrapper
+
+
+# =============================================================================
 # Configuration Functions
 # =============================================================================
 
