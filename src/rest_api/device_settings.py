@@ -456,3 +456,115 @@ async def handle_bulk_update_settings(request: web.Request) -> web.Response:
     except Exception as e:
         _LOG.error(f"Error bulk updating settings: {e}")
         return _json_response(False, error=str(e), status=500)
+
+
+# =============================================================================
+# Phase 7: Hardware-preset surface-visibility endpoints
+# =============================================================================
+#
+# Hardware presets are fixed at 8 slots on the matrix itself, so they
+# can't carry their own fields. These endpoints manage the
+# ``favorite_presets`` and ``dashboard_presets`` lists in
+# device_settings.json — the user-facing way to favorite or pin a
+# hardware preset.
+
+
+async def handle_get_favorite_presets(request: web.Request) -> web.Response:
+    """GET /api/device-settings/favorite-presets — list favorite preset numbers."""
+    try:
+        return _json_response(True, {"favorite_presets": get_favorite_presets()})
+    except Exception as e:
+        _LOG.error(f"Error getting favorite presets: {e}")
+        return _json_response(False, error=str(e), status=500)
+
+
+async def handle_get_dashboard_presets(request: web.Request) -> web.Response:
+    """GET /api/device-settings/dashboard-presets — list dashboard-pinned preset numbers."""
+    try:
+        return _json_response(True, {"dashboard_presets": get_dashboard_presets()})
+    except Exception as e:
+        _LOG.error(f"Error getting dashboard presets: {e}")
+        return _json_response(False, error=str(e), status=500)
+
+
+async def handle_set_favorite_presets(request: web.Request) -> web.Response:
+    """PUT /api/device-settings/favorite-presets — replace the full favorites list.
+
+    Body: ``{"favorite_presets": [1, 3, 5]}`` — only valid preset numbers (1-8)
+    are kept; others are silently dropped.
+    """
+    try:
+        body = await request.json()
+        if "favorite_presets" not in body:
+            return _json_response(False, error="Missing 'favorite_presets' field", status=400)
+        if not isinstance(body["favorite_presets"], list):
+            return _json_response(False, error="'favorite_presets' must be a list", status=400)
+        if not set_favorite_presets(body["favorite_presets"]):
+            return _json_response(False, error="Failed to save favorite presets", status=500)
+        return _json_response(True, {"favorite_presets": get_favorite_presets()})
+    except json.JSONDecodeError:
+        return _json_response(False, error="Invalid JSON body", status=400)
+    except Exception as e:
+        _LOG.error(f"Error setting favorite presets: {e}")
+        return _json_response(False, error=str(e), status=500)
+
+
+async def handle_set_dashboard_presets(request: web.Request) -> web.Response:
+    """PUT /api/device-settings/dashboard-presets — replace the full dashboard list.
+
+    Body: ``{"dashboard_presets": [2, 4]}``
+    """
+    try:
+        body = await request.json()
+        if "dashboard_presets" not in body:
+            return _json_response(False, error="Missing 'dashboard_presets' field", status=400)
+        if not isinstance(body["dashboard_presets"], list):
+            return _json_response(False, error="'dashboard_presets' must be a list", status=400)
+        if not set_dashboard_presets(body["dashboard_presets"]):
+            return _json_response(False, error="Failed to save dashboard presets", status=500)
+        return _json_response(True, {"dashboard_presets": get_dashboard_presets()})
+    except json.JSONDecodeError:
+        return _json_response(False, error="Invalid JSON body", status=400)
+    except Exception as e:
+        _LOG.error(f"Error setting dashboard presets: {e}")
+        return _json_response(False, error=str(e), status=500)
+
+
+async def handle_toggle_favorite_preset(request: web.Request) -> web.Response:
+    """POST /api/device-settings/favorite-presets/{preset}/toggle — toggle one preset."""
+    try:
+        try:
+            preset_num = int(request.match_info["preset"])
+        except (KeyError, TypeError, ValueError):
+            return _json_response(False, error="Invalid preset number", status=400)
+        if preset_num < 1 or preset_num > 8:
+            return _json_response(False, error="Preset number must be 1-8", status=400)
+        new_state = toggle_favorite_preset(preset_num)
+        return _json_response(True, {
+            "preset": preset_num,
+            "favorite": new_state,
+            "favorite_presets": get_favorite_presets(),
+        })
+    except Exception as e:
+        _LOG.error(f"Error toggling favorite preset: {e}")
+        return _json_response(False, error=str(e), status=500)
+
+
+async def handle_toggle_dashboard_preset(request: web.Request) -> web.Response:
+    """POST /api/device-settings/dashboard-presets/{preset}/toggle — toggle one preset."""
+    try:
+        try:
+            preset_num = int(request.match_info["preset"])
+        except (KeyError, TypeError, ValueError):
+            return _json_response(False, error="Invalid preset number", status=400)
+        if preset_num < 1 or preset_num > 8:
+            return _json_response(False, error="Preset number must be 1-8", status=400)
+        new_state = toggle_dashboard_preset(preset_num)
+        return _json_response(True, {
+            "preset": preset_num,
+            "dashboard_visible": new_state,
+            "dashboard_presets": get_dashboard_presets(),
+        })
+    except Exception as e:
+        _LOG.error(f"Error toggling dashboard preset: {e}")
+        return _json_response(False, error=str(e), status=500)
