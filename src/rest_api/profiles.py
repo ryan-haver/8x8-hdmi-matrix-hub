@@ -465,7 +465,7 @@ async def handle_toggle_profile_favorite(request: web.Request) -> web.Response:
     if manager is None:
         return _json_response(False, error="Profile manager not initialized", status=503)
     try:
-        profile_id = request.match_info.get("id", "")
+        profile_id = request.match_info.get("profile_id", "")
         if not profile_id:
             return _json_response(False, error="Profile id required", status=400)
         profile = manager.toggle_favorite(profile_id)
@@ -489,7 +489,7 @@ async def handle_set_profile_favorite(request: web.Request) -> web.Response:
     if manager is None:
         return _json_response(False, error="Profile manager not initialized", status=503)
     try:
-        profile_id = request.match_info.get("id", "")
+        profile_id = request.match_info.get("profile_id", "")
         if not profile_id:
             return _json_response(False, error="Profile id required", status=400)
         body = await request.json()
@@ -516,7 +516,7 @@ async def handle_toggle_profile_dashboard(request: web.Request) -> web.Response:
     if manager is None:
         return _json_response(False, error="Profile manager not initialized", status=503)
     try:
-        profile_id = request.match_info.get("id", "")
+        profile_id = request.match_info.get("profile_id", "")
         if not profile_id:
             return _json_response(False, error="Profile id required", status=400)
         profile = manager.toggle_dashboard_visible(profile_id)
@@ -540,7 +540,7 @@ async def handle_set_profile_dashboard(request: web.Request) -> web.Response:
     if manager is None:
         return _json_response(False, error="Profile manager not initialized", status=503)
     try:
-        profile_id = request.match_info.get("id", "")
+        profile_id = request.match_info.get("profile_id", "")
         if not profile_id:
             return _json_response(False, error="Profile id required", status=400)
         body = await request.json()
