@@ -7,7 +7,7 @@ import logging
 
 from aiohttp import web
 
-from .utils import _json_response, get_input_names, get_matrix_device
+from .utils import _json_response, get_input_names, get_matrix_device, require_connected
 from .websocket import broadcast_status_update
 
 _LOG = logging.getLogger("rest_api.control")
@@ -16,15 +16,10 @@ _LOG = logging.getLogger("rest_api.control")
 DEFAULT_CYCLE_OUTPUT = 1
 
 
+@require_connected
 async def handle_preset(request: web.Request) -> web.Response:
     """Recall a preset."""
     matrix_device = get_matrix_device()
-
-    if matrix_device is None:
-        return _json_response(False, error="Matrix device not configured", status=503)
-
-    if not matrix_device.connected:
-        return _json_response(False, error="Matrix not connected", status=503)
 
     try:
         preset_num = int(request.match_info["preset"])
