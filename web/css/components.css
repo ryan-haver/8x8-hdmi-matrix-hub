@@ -932,6 +932,122 @@
     padding: var(--space-5);
 }
 
+/* Settings Modal Large */
+.modal-lg .modal-content {
+    max-width: 850px;
+    height: 580px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.settings-modal-body {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    padding: 0 !important;
+}
+
+/* Sidebar Layout */
+.settings-sidebar {
+    width: 220px;
+    background-color: rgba(0, 0, 0, 0.15);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-4) 0;
+    gap: var(--space-1);
+    flex-shrink: 0;
+    overflow-y: auto;
+}
+
+.settings-tab-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-5);
+    background: none;
+    border: none;
+    border-left: 3px solid transparent;
+    color: var(--text-muted);
+    font-family: inherit;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-medium);
+    text-align: left;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.settings-tab-btn:hover {
+    color: var(--text-primary);
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+.settings-tab-btn.active {
+    color: var(--accent-color, var(--text-primary));
+    background-color: rgba(255, 255, 255, 0.05);
+    border-left-color: var(--accent-color, #00f0ff);
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+}
+
+.settings-tab-btn .icon {
+    width: 18px;
+    height: 18px;
+    stroke-width: 2px;
+}
+
+/* Settings Panes Content */
+.settings-tab-panes {
+    flex: 1;
+    padding: var(--space-5) var(--space-6);
+    overflow-y: auto;
+}
+
+.settings-tab-pane {
+    display: none;
+}
+
+.settings-tab-pane.active {
+    display: block;
+}
+
+/* Responsive adjustment for small screens */
+@media (max-width: 680px) {
+    .modal-lg .modal-content {
+        max-width: 100%;
+        height: 80vh;
+    }
+    
+    .settings-modal-body {
+        flex-direction: column;
+    }
+    
+    .settings-sidebar {
+        width: 100%;
+        flex-direction: row;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 0;
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+    }
+    
+    .settings-tab-btn {
+        flex: 1;
+        padding: var(--space-3) var(--space-4);
+        justify-content: center;
+        border-left: none;
+        border-bottom: 3px solid transparent;
+        text-align: center;
+    }
+    
+    .settings-tab-btn.active {
+        border-left-color: transparent;
+        border-bottom-color: var(--accent-color, #00f0ff);
+    }
+}
+
 .modal-footer {
     display: flex;
     justify-content: flex-end;
