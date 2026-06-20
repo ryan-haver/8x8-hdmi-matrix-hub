@@ -418,6 +418,17 @@
         width: 100% !important;
         height: 100% !important;
     }
+
+    /* Drawer backdrops transparent on desktop/tablet */
+    .side-nav-backdrop,
+    .quick-actions-backdrop,
+    .routing-backdrop,
+    .theme-drawer-overlay {
+        background-color: transparent !important;
+        background: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
 }
 
 /* ===== Small Desktops (1024px and up) ===== */
@@ -559,5 +570,36 @@
     
     .matrix-route.active {
         border-color: white;
+    }
+}
+
+/* ===== Mobile-Only Drawer Back Button ===== */
+.drawer-footer.mobile-only {
+    display: none !important;
+}
+
+@media (max-width: 767px) {
+    .drawer-footer.mobile-only {
+        display: block !important;
+        padding: var(--space-4);
+        border-top: 1px solid var(--border-color);
+        background: var(--bg-primary);
+        position: sticky;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 10;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+    
+    .back-to-deck-btn {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-2);
+        font-weight: var(--font-weight-semibold);
+        padding: var(--space-3);
     }
 }

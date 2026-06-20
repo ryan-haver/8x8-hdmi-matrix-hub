@@ -58,7 +58,13 @@ class SideNavDrawer {
         const backdrop = document.createElement("div");
         backdrop.id = "side-nav-backdrop";
         backdrop.className = "side-nav-backdrop";
-        backdrop.addEventListener("click", () => this.close());
+        backdrop.addEventListener("click", () => {
+            if (window.overlayManager) {
+                window.overlayManager.closeAll();
+            } else {
+                this.close();
+            }
+        });
         document.body.appendChild(backdrop);
         
         // Sidebar Aside
@@ -161,29 +167,39 @@ class SideNavDrawer {
             }
         });
 
-        // Utility actions
+        // Utility actions - keep Control Deck open on desktop/tablet
         document.getElementById("drawer-quick-actions-btn").addEventListener("click", () => {
-            this.close();
+            if (window.innerWidth < 768) {
+                this.close();
+            }
             window.app.components.quickActionsDrawer.toggle();
         });
 
         document.getElementById("drawer-routing-btn").addEventListener("click", () => {
-            this.close();
+            if (window.innerWidth < 768) {
+                this.close();
+            }
             window.app.components.routeAllDrawer.toggle();
         });
 
         document.getElementById("drawer-theme-btn").addEventListener("click", () => {
-            this.close();
+            if (window.innerWidth < 768) {
+                this.close();
+            }
             window.themeDrawer.toggle();
         });
 
         document.getElementById("drawer-refresh-btn").addEventListener("click", () => {
-            this.close();
+            if (window.innerWidth < 768) {
+                this.close();
+            }
             window.app.refresh();
         });
 
         document.getElementById("drawer-settings-btn").addEventListener("click", () => {
-            this.close();
+            if (window.innerWidth < 768) {
+                this.close();
+            }
             window.app.components.settingsPanel.open();
         });
     }
@@ -340,17 +356,25 @@ class SideNavDrawer {
      * Open Drawer
      */
     open() {
+        if (window.overlayManager) {
+            window.overlayManager.onOpen("side-nav-drawer");
+        }
         this.isOpen = true;
         this.container.classList.add("open");
         this.backdrop.classList.add("open");
         document.body.style.overflow = "hidden";
         
-        // Hide Quick Actions drawer and others to avoid overlaps
-        if (window.app?.components?.quickActionsDrawer?.isOpen) {
-            window.app.components.quickActionsDrawer.close();
-        }
-        if (window.app?.components?.routeAllDrawer?.isOpen) {
-            window.app.components.routeAllDrawer.close();
+        // Hide Quick Actions drawer and others to avoid overlaps on mobile only
+        if (window.innerWidth < 768) {
+            if (window.app?.components?.quickActionsDrawer?.isOpen) {
+                window.app.components.quickActionsDrawer.close();
+            }
+            if (window.app?.components?.routeAllDrawer?.isOpen) {
+                window.app.components.routeAllDrawer.close();
+            }
+            if (window.themeDrawer?.isOpen) {
+                window.themeDrawer.close();
+            }
         }
     }
 
@@ -358,6 +382,9 @@ class SideNavDrawer {
      * Close Drawer
      */
     close() {
+        if (window.overlayManager) {
+            window.overlayManager.onClose("side-nav-drawer");
+        }
         this.isOpen = false;
         this.container.classList.remove("open");
         this.backdrop.classList.remove("open");
