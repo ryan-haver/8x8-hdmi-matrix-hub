@@ -176,41 +176,25 @@ class DashboardManager {
             component: config.component || null
         });
         
-        const mode = this.getViewportMode();
+        // Auto-pin on first load, otherwise respect saved config
+        const hasNoSavedConfig = !localStorage.getItem(this.storageKey);
+        const shouldPin = hasNoSavedConfig || this.pinnedWidgets.has(config.id);
         
-        if (mode === 'desktop') {
-            // Desktop: Auto-pin on first load, otherwise respect saved config
-            const hasNoSavedConfig = !localStorage.getItem(this.storageKey);
-            const shouldPin = hasNoSavedConfig || this.pinnedWidgets.has(config.id);
-            
-            if (shouldPin) {
-                // Add to pinned set if first load
-                if (hasNoSavedConfig && !this.pinnedWidgets.has(config.id)) {
-                    this.pinnedWidgets.add(config.id);
-                    if (!this.widgetOrder.includes(config.id)) {
-                        this.widgetOrder.push(config.id);
-                    }
-                    // Save config so next load respects user's unpinned choices
-                    this.saveConfig();
+        if (shouldPin) {
+            // Add to pinned set if first load
+            if (hasNoSavedConfig && !this.pinnedWidgets.has(config.id)) {
+                this.pinnedWidgets.add(config.id);
+                if (!this.widgetOrder.includes(config.id)) {
+                    this.widgetOrder.push(config.id);
                 }
-                this.renderWidget(config.id);
-                this.notifyWidgetPinChange(config.id, true);
+                // Save config so next load respects user's unpinned choices
+                this.saveConfig();
             }
-            // Update visibility after registering
-            this.updateDashboardVisibility();
-        } else {
-            // Mobile: All widgets appear as tabs unless explicitly hidden
-            // Add to unified tab order if not already there and not hidden
-            const widgetTabId = `widget:${config.id}`;
-            if (!this.hiddenMobileWidgets.has(config.id) && !this.unifiedTabOrder.includes(widgetTabId)) {
-                this.unifiedTabOrder.push(widgetTabId);
-            }
-            this.updateMobileTabs();
-            // On mobile, widgets are always "pinned" (visible) unless hidden
-            if (!this.hiddenMobileWidgets.has(config.id)) {
-                this.notifyWidgetPinChange(config.id, true);
-            }
+            this.renderWidget(config.id);
+            this.notifyWidgetPinChange(config.id, true);
         }
+        // Update visibility after registering
+        this.updateDashboardVisibility();
     }
 
     /**
@@ -242,44 +226,22 @@ class DashboardManager {
             return false;
         }
         
-        const mode = this.getViewportMode();
         const widget = this.registeredWidgets.get(widgetId);
         
-        if (mode === 'mobile') {
-            // Mobile: Remove from hidden set (show the tab)
-            if (!this.hiddenMobileWidgets.has(widgetId)) {
-                return false; // Already visible
-            }
-            this.hiddenMobileWidgets.delete(widgetId);
-            
-            // Add back to unified tab order
-            const widgetTabId = `widget:${widgetId}`;
-            if (!this.unifiedTabOrder.includes(widgetTabId)) {
-                this.unifiedTabOrder.push(widgetTabId);
-            }
-        } else {
-            // Desktop: Add to pinned set
-            if (this.pinnedWidgets.has(widgetId)) {
-                return false; // Already pinned
-            }
-            
-            this.pinnedWidgets.add(widgetId);
-            if (!this.widgetOrder.includes(widgetId)) {
-                this.widgetOrder.push(widgetId);
-            }
-            
-            // Add to unified tab order
-            const widgetTabId = `widget:${widgetId}`;
-            if (!this.unifiedTabOrder.includes(widgetTabId)) {
-                this.unifiedTabOrder.push(widgetTabId);
-            }
-            
-            this.renderWidget(widgetId);
+        // Add to pinned set
+        if (this.pinnedWidgets.has(widgetId)) {
+            return false; // Already pinned
         }
+        
+        this.pinnedWidgets.add(widgetId);
+        if (!this.widgetOrder.includes(widgetId)) {
+            this.widgetOrder.push(widgetId);
+        }
+        
+        this.renderWidget(widgetId);
         
         this.saveConfig();
         this.updateDashboardVisibility();
-        this.updateMobileTabs();
         
         // Notify widget about pin state
         this.notifyWidgetPinChange(widgetId, true);
@@ -293,60 +255,29 @@ class DashboardManager {
      * Unpin a widget from the dashboard (desktop) or hide it (mobile)
      */
     unpinWidget(widgetId) {
-        const mode = this.getViewportMode();
         const widget = this.registeredWidgets.get(widgetId);
         
-        if (mode === 'mobile') {
-            // Mobile: Add to hidden set (hide the tab)
-            if (this.hiddenMobileWidgets.has(widgetId)) {
-                return false; // Already hidden
-            }
-            this.hiddenMobileWidgets.add(widgetId);
-            
-            // Remove from unified tab order
-            const widgetTabId = `widget:${widgetId}`;
-            this.unifiedTabOrder = this.unifiedTabOrder.filter(id => id !== widgetTabId);
-            
-            // Clear active widget tab if this was it
-            if (this.activeWidgetTab === widgetId) {
-                this.activeWidgetTab = null;
-                this.switchToStandardTab();
-            }
-        } else {
-            // Desktop: Remove from pinned set
-            if (!this.pinnedWidgets.has(widgetId)) {
-                return false;
-            }
-            
-            if (widget) {
-                widget.onUnmount();
-            }
-            
-            // Remove from desktop DOM
-            const widgetEl = document.getElementById(`dashboard-widget-${widgetId}`);
-            if (widgetEl) {
-                widgetEl.remove();
-            }
-            
-            this.pinnedWidgets.delete(widgetId);
-            this.widgetOrder = this.widgetOrder.filter(id => id !== widgetId);
-            
-            // Remove from unified tab order
-            const widgetTabId = `widget:${widgetId}`;
-            this.unifiedTabOrder = this.unifiedTabOrder.filter(id => id !== widgetTabId);
-            
-            // Clear active widget tab if this was it
-            if (this.activeWidgetTab === widgetId) {
-                this.activeWidgetTab = null;
-                this.switchToStandardTab();
-            }
+        // Remove from pinned set
+        if (!this.pinnedWidgets.has(widgetId)) {
+            return false;
         }
+        
+        if (widget) {
+            widget.onUnmount();
+        }
+        
+        // Remove from DOM
+        const widgetEl = document.getElementById(`dashboard-widget-${widgetId}`);
+        if (widgetEl) {
+            widgetEl.remove();
+        }
+        
+        this.pinnedWidgets.delete(widgetId);
+        this.widgetOrder = this.widgetOrder.filter(id => id !== widgetId);
         
         this.saveConfig();
         this.updateDashboardVisibility();
-        this.updateMobileTabs();
         
-        // Notify widget about unpin state
         this.notifyWidgetPinChange(widgetId, false);
         
         if (widget) {
@@ -387,40 +318,11 @@ class DashboardManager {
      * Check if a widget is pinned (or visible on mobile)
      */
     isWidgetPinned(widgetId) {
-        const mode = this.getViewportMode();
-        if (mode === 'mobile') {
-            // On mobile, widgets are "pinned" (visible) unless explicitly hidden
-            return this.registeredWidgets.has(widgetId) && !this.hiddenMobileWidgets.has(widgetId);
-        }
         return this.pinnedWidgets.has(widgetId);
     }
 
-    /**
-     * Update mobile tabs based on registered widgets and viewport mode
-     */
     updateMobileTabs() {
-        if (!this.mobileTabsContainer) return;
-        
-        const mode = this.getViewportMode();
-        
-        if (mode === 'desktop') {
-            // On desktop, restore standard tabs and hide widget tabs
-            this.restoreStandardTabs();
-            return;
-        }
-        
-        // Get visible widgets (registered and not hidden)
-        const visibleWidgets = Array.from(this.registeredWidgets.keys())
-            .filter(id => !this.hiddenMobileWidgets.has(id));
-        
-        // If no widgets visible, just show standard tabs normally
-        if (visibleWidgets.length === 0) {
-            this.restoreStandardTabs();
-            return;
-        }
-        
-        // Mobile with widgets: Render all tabs in unified order
-        this.renderUnifiedTabs();
+        this.updateDashboardVisibility();
     }
 
     /**
@@ -878,18 +780,14 @@ class DashboardManager {
     restorePinnedWidgets() {
         setTimeout(() => {
             const orderedWidgets = this.getOrderedWidgets();
-            const mode = this.getViewportMode();
             
-            if (mode === 'desktop') {
-                orderedWidgets.forEach(widgetId => {
-                    if (this.registeredWidgets.has(widgetId)) {
-                        this.renderWidget(widgetId);
-                    }
-                });
-            }
+            orderedWidgets.forEach(widgetId => {
+                if (this.registeredWidgets.has(widgetId)) {
+                    this.renderWidget(widgetId);
+                }
+            });
             
             this.updateDashboardVisibility();
-            this.updateMobileTabs();
             
             // Notify components about restored pins
             orderedWidgets.forEach(widgetId => {
@@ -1004,39 +902,28 @@ class DashboardManager {
      */
     updateDashboardVisibility() {
         const section = document.getElementById('dashboard-section');
-        const dashboardTab = document.querySelector('.tab-dashboard');
         const widgetsContainer = document.getElementById('dashboard-widgets');
-        const mainContent = document.querySelector('.main-content');
         
-        // Check both the pinnedWidgets set AND actual rendered widgets in DOM
         const hasWidgetsInSet = this.pinnedWidgets.size > 0;
         const hasRenderedWidgets = widgetsContainer && widgetsContainer.children.length > 0;
         const hasWidgets = hasWidgetsInSet && hasRenderedWidgets;
-        const mode = this.getViewportMode();
         
-        // Hide old dashboard tab (we use widget tabs now)
-        if (dashboardTab) {
-            dashboardTab.classList.add('hidden');
-        }
-        
+        // Show/hide section based on whether we have widgets to display
         if (section) {
-            if (mode === 'desktop' && hasWidgets) {
-                // Show dashboard section when has rendered widgets
-                section.style.setProperty('display', 'block', 'important');
-                section.classList.add('active');
+            if (hasWidgets) {
+                section.style.removeProperty('display');
+                section.classList.remove('hidden');
             } else {
-                // Hide dashboard section (no widgets or mobile mode)
                 section.style.setProperty('display', 'none', 'important');
-                section.classList.remove('active');
+                section.classList.add('hidden');
             }
         }
         
-        // Toggle grid layout class to collapse dashboard row when empty
-        if (mainContent) {
-            if (hasWidgets) {
-                mainContent.classList.remove('no-dashboard');
-            } else {
-                mainContent.classList.add('no-dashboard');
+        // Dispatch UI update if MatrixApp is ready
+        if (window.app && typeof window.app.applyUiPreferences === 'function') {
+            const prefs = window.app.preferences || (window.sideNavDrawer ? window.sideNavDrawer.preferences : null);
+            if (prefs) {
+                window.app.applyUiPreferences(prefs);
             }
         }
     }
@@ -1200,7 +1087,14 @@ class DashboardManager {
      * Check if dashboard mode is active (desktop with widgets)
      */
     isDashboardActive() {
-        return this.getViewportMode() === 'desktop' && this.pinnedWidgets.size > 0;
+        return this.pinnedWidgets.size > 0;
+    }
+
+    /**
+     * Check if dashboard has any pinned widgets (used by app.js tab visibility checks)
+     */
+    hasPinnedWidgets() {
+        return this.pinnedWidgets.size > 0;
     }
 }
 

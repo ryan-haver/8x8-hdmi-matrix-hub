@@ -126,6 +126,10 @@ from .themes import (
     handle_put_themes,
     handle_reset_themes,
 )
+from .ui import (
+    handle_get_ui_preferences,
+    handle_set_ui_preferences,
+)
 from .utils import API_VERSION, rate_limit_middleware
 from .websocket import handle_websocket
 
@@ -297,6 +301,10 @@ def create_rest_app() -> web.Application:
     app.router.add_get("/api/themes", handle_get_themes)
     app.router.add_put("/api/themes", handle_put_themes)
     app.router.add_post("/api/themes/reset", handle_reset_themes)
+
+    # UI Preferences Settings
+    app.router.add_get("/api/ui/preferences", handle_get_ui_preferences)
+    app.router.add_put("/api/ui/preferences", handle_set_ui_preferences)
 
     _LOG.info(f"REST API v{API_VERSION} application created with all routes registered")
     return app
