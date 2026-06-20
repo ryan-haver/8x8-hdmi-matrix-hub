@@ -105,11 +105,20 @@ class AppState {
             };
         }
         
-        // Quick actions favorites (preset/scene IDs)
-        this.favorites = {
-            presets: [],
-            scenes: []
-        };
+        // Quick actions favorites — server-backed (Phase 7)
+        this.favoriteProfiles = [];      // Profile objects with favorite=true
+        this.favoritePresets = [];        // Hardware preset numbers (1-8)
+        this.favoriteSystemShortcuts = []; // SystemShortcut objects with favorite=true
+        this.favoriteMacros = [];         // CecMacro objects with favorite=true
+
+        // System shortcuts (Phase 7)
+        this.systemShortcuts = [];
+
+        // Dashboard cards (Phase 7) — single source of truth for grid order
+        this.dashboardCards = [];
+
+        // Dashboard presets (Phase 7)
+        this.dashboardPresets = [];
         
         // CEC Tray state
         this.cecTray = {
@@ -441,62 +450,82 @@ class AppState {
         this.updateOutputSignals();
     }
     
+    // ==========================================
+    // Server-Backed Favorites (Phase 7)
+    // ==========================================
+
     /**
-     * Toggle favorite preset
+     * Load all favorites from server in parallel
      */
-    toggleFavoritePreset(presetId) {
-        const idx = this.favorites.presets.indexOf(presetId);
-        if (idx >= 0) {
-            this.favorites.presets.splice(idx, 1);
-        } else {
-            this.favorites.presets.push(presetId);
-        }
-        this.emit('favorites', this.favorites);
-        this.saveFavorites();
+    async loadAllFavorites() {
+        const [profiles, presets, shortcuts, macros] = await Promise.all([
+            window.api.listFavoriteProfiles().catch(() => ({ success: false })),
+            window.api.getFavoritePresets().catch(() => ({ success: false })),
+            window.api.listFavoriteSystemShortcuts().catch(() => ({ success: false })),
+            window.api.listFavoriteMacros().catch(() => ({ success: false })),
+        ]);
+        this.favoriteProfiles = profiles?.data?.profiles || [];
+        this.favoritePresets = presets?.data?.favorite_presets || [];
+        this.favoriteSystemShortcuts = shortcuts?.data?.shortcuts || [];
+        this.favoriteMacros = macros?.data?.macros || [];
+        this.emit('favorites', this._collectAllFavorites());
+        return this._collectAllFavorites();
     }
-    
+
     /**
-     * Toggle favorite scene
+     * Collect all favorites into unified array
      */
-    toggleFavoriteScene(sceneId) {
-        const idx = this.favorites.scenes.indexOf(sceneId);
-        if (idx >= 0) {
-            this.favorites.scenes.splice(idx, 1);
-        } else {
-            this.favorites.scenes.push(sceneId);
-        }
-        this.emit('favorites', this.favorites);
-        this.saveFavorites();
+    _collectAllFavorites() {
+        return [
+            ...this.favoriteProfiles.map(p => ({ type: 'profile', id: p.id, name: p.name, icon: p.icon, data: p })),
+            ...this.favoritePresets.map(n => ({ type: 'preset', id: String(n), name: `Preset ${n}`, icon: '⚡', data: { preset: n } })),
+            ...this.favoriteSystemShortcuts.map(s => ({ type: 'system_shortcut', id: s.id, name: s.name, icon: s.icon, data: s })),
+            ...this.favoriteMacros.map(m => ({ type: 'macro', id: m.id, name: m.name, icon: m.icon, data: m })),
+        ];
     }
-    
+
     /**
-     * Save favorites to localStorage
+     * Toggle favorite for a given type and id
      */
-    saveFavorites() {
-        try {
-            localStorage.setItem('orei_favorites', JSON.stringify(this.favorites));
-        } catch (e) {
-            console.warn('Failed to save favorites:', e);
+    async toggleFavorite(type, id) {
+        let result;
+        if (type === 'profile') result = await window.api.toggleProfileFavorite(id);
+        else if (type === 'preset') result = await window.api.toggleFavoritePreset(Number(id));
+        else if (type === 'system_shortcut') result = await window.api.toggleSystemShortcutFavorite(id);
+        else if (type === 'macro') result = await window.api.toggleMacroFavorite(id);
+        if (result?.success) {
+            await this.loadAllFavorites();
         }
+        return result;
     }
-    
+
     /**
-     * Load favorites from localStorage
+     * Load system shortcuts from server
      */
-    loadFavorites() {
-        try {
-            const saved = localStorage.getItem('orei_favorites');
-            if (saved) {
-                this.favorites = JSON.parse(saved);
-            }
-        } catch (e) {
-            console.warn('Failed to load favorites:', e);
-        }
-        
-        // Also load CEC tray settings
-        this.loadCecTraySettings();
+    async loadSystemShortcuts() {
+        const result = await window.api.listSystemShortcuts().catch(() => ({ success: false }));
+        this.systemShortcuts = result?.data?.shortcuts || [];
+        return this.systemShortcuts;
     }
-    
+
+    /**
+     * Load dashboard layout from server
+     */
+    async loadDashboardLayout() {
+        const result = await window.api.getDashboardLayout().catch(() => ({ success: false }));
+        this.dashboardCards = result?.data?.cards || [];
+        return this.dashboardCards;
+    }
+
+    /**
+     * Load dashboard presets from server (Phase 7)
+     */
+    async loadDashboardPresets() {
+        const result = await window.api.getDashboardPresets().catch(() => ({ success: false }));
+        this.dashboardPresets = result?.data?.dashboard_presets || [];
+        return this.dashboardPresets;
+    }
+
     // ==========================================
     // Icon Management (Phase 2)
     // ==========================================
