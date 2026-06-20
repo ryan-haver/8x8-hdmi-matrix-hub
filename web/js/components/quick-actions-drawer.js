@@ -1,7 +1,7 @@
 /**
  * OREI Matrix Control - Quick Actions Drawer Component
- * Slide-out drawer with quick access to favorite presets and scenes
- * Also supports dashboard widget mode for pinned inline display
+ * Slide-out drawer with unified quick access to favorite profiles, presets,
+ * system shortcuts, and macros. Data is now server-backed (Phase 7).
  */
 
 class QuickActionsDrawer {
@@ -9,15 +9,13 @@ class QuickActionsDrawer {
         this.isOpen = false;
         this.container = null;
         this.backdrop = null;
-        
-        // Subscribe to state changes
-        state.on('presets', () => this.onStateChange());
-        state.on('scenes', () => this.onStateChange());
+
+        // Subscribe to unified favorites array from server (Phase 7)
         state.on('favorites', () => this.onStateChange());
-        
+
         // Create drawer elements
         this.createDrawer();
-        
+
         // Register as dashboard widget
         this.registerAsWidget();
     }
@@ -56,59 +54,67 @@ class QuickActionsDrawer {
      * Render content for the dashboard widget (compact version)
      */
     renderWidgetContent() {
-        const favoritePresets = state.favorites?.presets || [];
-        const favoriteScenes = state.favorites?.scenes || [];
-        
-        let html = '<div class="quick-actions-grid">';
-        
-        // Show favorite presets
-        favoritePresets.forEach(presetId => {
-            const preset = state.presets[presetId];
-            if (preset) {
-                html += `
-                    <button class="quick-action-btn preset-btn" data-preset="${presetId}">
-                        <span class="quick-action-icon">📋</span>
-                        <span class="action-label">${Helpers.escapeHtml(preset.name)}</span>
-                    </button>
-                `;
-            }
-        });
-        
-        // Show favorite scenes
-        favoriteScenes.forEach(sceneId => {
-            const scene = state.scenes.find(s => s.id === sceneId);
-            if (scene) {
-                html += `
-                    <button class="quick-action-btn scene-btn" data-scene="${sceneId}">
-                        <span class="quick-action-icon">🎬</span>
-                        <span class="action-label">${Helpers.escapeHtml(scene.name)}</span>
-                    </button>
-                `;
-            }
-        });
-        
-        // Quick routing shortcuts
-        html += `
-            <button class="quick-action-btn routing-btn" data-action="1-to-1">
-                <span class="quick-action-icon">🔄</span>
-                <span class="action-label">1:1 Mapping</span>
-            </button>
-        `;
-        
-        if (favoritePresets.length === 0 && favoriteScenes.length === 0) {
-            html = `
+        const allFavorites = state._collectAllFavorites();
+
+        if (allFavorites.length === 0) {
+            return `
                 <div class="widget-empty">
-                    <p>Star presets or scenes to add them here.</p>
-                    <button class="btn btn-secondary widget-empty-cta" data-action="go-profiles">
-                        Browse Profiles
+                    <p>Star profiles, presets, or shortcuts to add them here.</p>
+                    <button class="btn btn-secondary widget-empty-cta" data-action="open-drawer">
+                        Open Quick Actions
                     </button>
                 </div>
             `;
-        } else {
-            html += '</div>';
         }
-        
+
+        let html = '<div class="quick-actions-grid">';
+
+        allFavorites.forEach(item => {
+            html += this.renderFavoriteItem(item, true);
+        });
+
+        html += '</div>';
         return html;
+    }
+
+    /**
+     * Render a single favorite item (for widget)
+     */
+    renderFavoriteItem(item, compact = false) {
+        const icon = item.icon || '⚡';
+        const name = Helpers.escapeHtml(item.name || item.id);
+        const classes = compact ? 'quick-action-btn compact' : 'quick-action-btn';
+
+        if (item.type === 'preset') {
+            return `
+                <button class="${classes} preset-btn" data-preset="${item.id}">
+                    <span class="quick-action-icon">${icon}</span>
+                    <span class="action-label">${name}</span>
+                </button>
+            `;
+        } else if (item.type === 'profile') {
+            return `
+                <button class="${classes} profile-btn" data-profile="${item.id}">
+                    <span class="quick-action-icon">${icon}</span>
+                    <span class="action-label">${name}</span>
+                </button>
+            `;
+        } else if (item.type === 'system_shortcut') {
+            return `
+                <button class="${classes} shortcut-btn" data-shortcut="${item.id}">
+                    <span class="quick-action-icon">${icon}</span>
+                    <span class="action-label">${name}</span>
+                </button>
+            `;
+        } else if (item.type === 'macro') {
+            return `
+                <button class="${classes} macro-btn" data-macro="${item.id}">
+                    <span class="quick-action-icon">${icon}</span>
+                    <span class="action-label">${name}</span>
+                </button>
+            `;
+        }
+        return '';
     }
 
     /**
@@ -116,35 +122,41 @@ class QuickActionsDrawer {
      */
     attachWidgetEventListeners(widgetEl) {
         if (!widgetEl) return;
-        
+
         widgetEl.querySelectorAll('.preset-btn').forEach(btn => {
             btn.addEventListener('click', async (e) => {
-                const presetId = parseInt(e.currentTarget.dataset.preset);
-                await this.recallPreset(presetId);
+                const presetNum = parseInt(e.currentTarget.dataset.preset);
+                await this.recallPreset(presetNum);
             });
         });
-        
-        widgetEl.querySelectorAll('.scene-btn').forEach(btn => {
+
+        widgetEl.querySelectorAll('.profile-btn').forEach(btn => {
             btn.addEventListener('click', async (e) => {
-                const sceneId = e.currentTarget.dataset.scene;
-                await this.recallScene(sceneId);
+                const profileId = e.currentTarget.dataset.profile;
+                await this.recallProfile(profileId);
             });
         });
-        
-        widgetEl.querySelectorAll('.routing-btn').forEach(btn => {
+
+        widgetEl.querySelectorAll('.shortcut-btn').forEach(btn => {
             btn.addEventListener('click', async (e) => {
-                const action = e.currentTarget.dataset.action;
-                await this.executeQuickRouting(action);
+                const shortcutId = e.currentTarget.dataset.shortcut;
+                await this.executeShortcut(shortcutId);
             });
         });
-        
-        // Empty state CTA - navigate to profiles
+
+        widgetEl.querySelectorAll('.macro-btn').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const macroId = e.currentTarget.dataset.macro;
+                await this.executeMacro(macroId);
+            });
+        });
+
+        // Empty state CTA
         widgetEl.querySelectorAll('.widget-empty-cta').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const action = e.currentTarget.dataset.action;
-                if (action === 'go-profiles') {
-                    // Switch to profiles tab
-                    state.setActiveTab('profiles');
+                if (action === 'open-drawer') {
+                    this.open();
                 }
             });
         });
@@ -163,10 +175,8 @@ class QuickActionsDrawer {
     toggleDashboardPin() {
         if (window.dashboardManager) {
             if (this.isPinnedToDashboard()) {
-                // Already pinned/visible - unpin/hide it
                 window.dashboardManager.unpinWidget('quick-actions');
             } else {
-                // Not pinned/visible - pin/show it
                 if (window.dashboardManager.pinWidget('quick-actions')) {
                     this.close();
                 }
@@ -179,8 +189,6 @@ class QuickActionsDrawer {
      * Initialize the component
      */
     init() {
-        // Load favorites from localStorage
-        state.loadFavorites();
         this.render();
         if (window.overlayManager) {
             window.overlayManager.register('quick-actions-drawer', {
@@ -206,7 +214,7 @@ class QuickActionsDrawer {
             }
         });
         document.body.appendChild(backdrop);
-        
+
         // Drawer
         const drawer = document.createElement('aside');
         drawer.id = 'quick-actions-drawer';
@@ -250,16 +258,16 @@ class QuickActionsDrawer {
             </div>
         `;
         document.body.appendChild(drawer);
-        
+
         this.container = drawer;
         this.backdrop = backdrop;
-        
+
         // Close button
         drawer.querySelector('.drawer-close').addEventListener('click', () => this.close());
-        
+
         // Pin to dashboard button (toggles pin state)
         drawer.querySelector('.drawer-pin-dashboard-btn')?.addEventListener('click', () => this.toggleDashboardPin());
-        
+
         // Back to Control Deck button
         drawer.querySelector('.back-to-deck-btn')?.addEventListener('click', () => {
             this.close();
@@ -267,7 +275,7 @@ class QuickActionsDrawer {
                 window.sideNavDrawer.open();
             }
         });
-        
+
         // Handle escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && this.isOpen) {
@@ -282,7 +290,7 @@ class QuickActionsDrawer {
     updateDashboardButton() {
         const btn = this.container?.querySelector('.drawer-pin-dashboard-btn');
         if (!btn) return;
-        
+
         const isPinned = this.isPinnedToDashboard();
         if (isPinned) {
             btn.title = 'Hide from tabs';
@@ -346,17 +354,53 @@ class QuickActionsDrawer {
     }
 
     /**
-     * Render drawer content
+     * Render drawer content - unified favorites grid (Phase 7)
      */
     render() {
         const content = document.getElementById('quick-actions-content');
         if (!content) return;
-        
-        const favoritePresets = state.favorites?.presets || [];
-        const favoriteScenes = state.favorites?.scenes || [];
-        
+
+        // Use the unified favorites array from state
+        const favoriteProfiles = state.favoriteProfiles || [];
+        const favoritePresets = state.favoritePresets || [];
+        const favoriteSystemShortcuts = state.favoriteSystemShortcuts || [];
+        const favoriteMacros = state.favoriteMacros || [];
+
         let html = '';
-        
+
+        // System Shortcuts Section (replaces legacy "All → Out 1" / "1:1 Mapping" buttons)
+        if (favoriteSystemShortcuts.length > 0) {
+            html += `
+                <div class="drawer-section">
+                    <h4 class="drawer-section-title">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                        </svg>
+                        System Shortcuts
+                    </h4>
+                    <div class="drawer-actions">
+                        ${this.renderFavoriteSystemShortcuts(favoriteSystemShortcuts)}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Favorite Profiles Section
+        html += `
+            <div class="drawer-section">
+                <h4 class="drawer-section-title">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polygon points="10 8 16 12 10 16 10 8"/>
+                    </svg>
+                    Favorite Profiles
+                </h4>
+                <div class="drawer-actions">
+                    ${this.renderFavoriteProfiles(favoriteProfiles)}
+                </div>
+            </div>
+        `;
+
         // Favorite Presets Section
         html += `
             <div class="drawer-section">
@@ -371,24 +415,25 @@ class QuickActionsDrawer {
                 </div>
             </div>
         `;
-        
-        // Favorite Scenes Section
-        html += `
-            <div class="drawer-section">
-                <h4 class="drawer-section-title">
-                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <polygon points="10 8 16 12 10 16 10 8"/>
-                    </svg>
-                    Favorite Scenes
-                </h4>
-                <div class="drawer-actions">
-                    ${this.renderFavoriteScenes(favoriteScenes)}
+
+        // Favorite Macros Section
+        if (favoriteMacros.length > 0) {
+            html += `
+                <div class="drawer-section">
+                    <h4 class="drawer-section-title">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                        </svg>
+                        Favorite Macros
+                    </h4>
+                    <div class="drawer-actions">
+                        ${this.renderFavoriteMacros(favoriteMacros)}
+                    </div>
                 </div>
-            </div>
-        `;
-        
-        // All Presets Section
+            `;
+        }
+
+        // All Presets Grid Section (with star toggle)
         html += `
             <div class="drawer-section">
                 <h4 class="drawer-section-title">
@@ -403,92 +448,109 @@ class QuickActionsDrawer {
                 </div>
             </div>
         `;
-        
-        // Quick Routing Section
-        html += `
-            <div class="drawer-section">
-                <h4 class="drawer-section-title">
-                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                        <polyline points="15 3 21 3 21 9"/>
-                        <line x1="10" y1="14" x2="21" y2="3"/>
-                    </svg>
-                    Quick Routing
-                </h4>
-                <div class="drawer-actions">
-                    ${this.renderQuickRouting()}
-                </div>
-            </div>
-        `;
-        
+
         content.innerHTML = html;
         this.attachEventListeners();
     }
 
     /**
-     * Render favorite presets buttons
+     * Render favorite profiles
      */
-    renderFavoritePresets(favorites) {
-        if (favorites.length === 0) {
-            return '<p class="drawer-empty">No favorite presets. Star a preset to add it here.</p>';
+    renderFavoriteProfiles(profiles) {
+        if (profiles.length === 0) {
+            return '<p class="drawer-empty">No favorite profiles. Star a profile to add it here.</p>';
         }
-        
-        let html = '';
-        favorites.forEach(presetId => {
-            const preset = state.presets[presetId];
-            if (preset) {
-                html += `
-                    <button class="quick-action-btn preset-btn" data-preset="${presetId}">
-                        <span class="quick-action-icon">📋</span>
-                        <span class="quick-action-label">${Helpers.escapeHtml(preset.name)}</span>
-                    </button>
-                `;
-            }
-        });
-        return html;
+
+        return profiles.map(profile => `
+            <button class="quick-action-btn profile-btn" data-profile="${profile.id}">
+                <span class="quick-action-icon">${profile.icon || '🎬'}</span>
+                <span class="quick-action-label">${Helpers.escapeHtml(profile.name)}</span>
+                <button class="btn-icon star-btn starred" data-type="profile" data-id="${profile.id}" title="Remove from favorites">
+                    <svg class="icon" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                </button>
+            </button>
+        `).join('');
     }
 
     /**
-     * Render favorite scenes buttons
+     * Render favorite presets
      */
-    renderFavoriteScenes(favorites) {
-        if (favorites.length === 0) {
-            return '<p class="drawer-empty">No favorite scenes. Star a scene to add it here.</p>';
+    renderFavoritePresets(presets) {
+        if (presets.length === 0) {
+            return '<p class="drawer-empty">No favorite presets. Star a preset below to add it here.</p>';
         }
-        
-        let html = '';
-        favorites.forEach(sceneId => {
-            const scene = state.scenes.find(s => s.id === sceneId);
-            if (scene) {
-                html += `
-                    <button class="quick-action-btn scene-btn" data-scene="${sceneId}">
-                        <span class="quick-action-icon">🎬</span>
-                        <span class="quick-action-label">${Helpers.escapeHtml(scene.name)}</span>
+
+        return presets.map(presetNum => {
+            const preset = state.presets[presetNum] || { name: `Preset ${presetNum}` };
+            return `
+                <button class="quick-action-btn preset-btn" data-preset="${presetNum}">
+                    <span class="quick-action-icon">⚡</span>
+                    <span class="quick-action-label">${Helpers.escapeHtml(preset.name)}</span>
+                    <button class="btn-icon star-btn starred" data-type="preset" data-id="${presetNum}" title="Remove from favorites">
+                        <svg class="icon" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
                     </button>
-                `;
-            }
-        });
-        return html;
+                </button>
+            `;
+        }).join('');
     }
 
     /**
-     * Render all presets grid with star toggle
+     * Render favorite system shortcuts
+     */
+    renderFavoriteSystemShortcuts(shortcuts) {
+        return shortcuts.map(shortcut => `
+            <button class="quick-action-btn shortcut-btn" data-shortcut="${shortcut.id}">
+                <span class="quick-action-icon">${shortcut.icon || '⚡'}</span>
+                <span class="quick-action-label">${Helpers.escapeHtml(shortcut.name)}</span>
+                <button class="btn-icon star-btn starred" data-type="system_shortcut" data-id="${shortcut.id}" title="Remove from favorites">
+                    <svg class="icon" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                </button>
+            </button>
+        `).join('');
+    }
+
+    /**
+     * Render favorite macros
+     */
+    renderFavoriteMacros(macros) {
+        return macros.map(macro => `
+            <button class="quick-action-btn macro-btn" data-macro="${macro.id}">
+                <span class="quick-action-icon">${macro.icon || '⚡'}</span>
+                <span class="quick-action-label">${Helpers.escapeHtml(macro.name)}</span>
+                <button class="btn-icon star-btn starred" data-type="macro" data-id="${macro.id}" title="Remove from favorites">
+                    <svg class="icon" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                </button>
+            </button>
+        `).join('');
+    }
+
+    /**
+     * Render all presets grid with star toggle (Phase 7 - uses state.favoritePresets)
      */
     renderAllPresets(favorites) {
         let html = '';
-        
+
         for (let i = 1; i <= 8; i++) {
             const preset = state.presets[i] || { name: `Preset ${i}` };
             const isFavorite = favorites.includes(i);
-            
+
             html += `
                 <div class="preset-grid-item">
                     <button class="quick-action-btn preset-btn compact" data-preset="${i}">
                         <span class="quick-action-num">${i}</span>
                         <span class="quick-action-label">${Helpers.escapeHtml(preset.name)}</span>
                     </button>
-                    <button class="btn-icon star-btn ${isFavorite ? 'starred' : ''}" 
-                            data-preset="${i}" 
+                    <button class="btn-icon star-btn ${isFavorite ? 'starred' : ''}"
+                            data-type="preset"
+                            data-preset="${i}"
                             title="${isFavorite ? 'Remove from favorites' : 'Add to favorites'}">
                         <svg class="icon" viewBox="0 0 24 24" fill="${isFavorite ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2">
                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
@@ -501,58 +563,56 @@ class QuickActionsDrawer {
     }
 
     /**
-     * Render quick routing buttons
-     */
-    renderQuickRouting() {
-        return `
-            <button class="quick-action-btn routing-btn" data-action="all-to-1">
-                <span class="quick-action-icon">📺</span>
-                <span class="quick-action-label">All → Output 1</span>
-            </button>
-            <button class="quick-action-btn routing-btn" data-action="1-to-1">
-                <span class="quick-action-icon">🔄</span>
-                <span class="quick-action-label">1:1 Mapping</span>
-            </button>
-        `;
-    }
-
-    /**
      * Attach event listeners
      */
     attachEventListeners() {
         const content = document.getElementById('quick-actions-content');
         if (!content) return;
-        
+
         // Preset buttons
         content.querySelectorAll('.preset-btn').forEach(btn => {
             btn.addEventListener('click', async (e) => {
-                const presetId = parseInt(e.currentTarget.dataset.preset);
-                await this.recallPreset(presetId);
+                // Ignore if clicking the star button inside
+                if (e.target.closest('.star-btn')) return;
+                const presetNum = parseInt(e.currentTarget.dataset.preset);
+                await this.recallPreset(presetNum);
             });
         });
-        
-        // Scene buttons
-        content.querySelectorAll('.scene-btn').forEach(btn => {
+
+        // Profile buttons
+        content.querySelectorAll('.profile-btn').forEach(btn => {
             btn.addEventListener('click', async (e) => {
-                const sceneId = e.currentTarget.dataset.scene;
-                await this.recallScene(sceneId);
+                if (e.target.closest('.star-btn')) return;
+                const profileId = e.currentTarget.dataset.profile;
+                await this.recallProfile(profileId);
             });
         });
-        
-        // Star buttons
+
+        // Shortcut buttons
+        content.querySelectorAll('.shortcut-btn').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                if (e.target.closest('.star-btn')) return;
+                const shortcutId = e.currentTarget.dataset.shortcut;
+                await this.executeShortcut(shortcutId);
+            });
+        });
+
+        // Macro buttons
+        content.querySelectorAll('.macro-btn').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                if (e.target.closest('.star-btn')) return;
+                const macroId = e.currentTarget.dataset.macro;
+                await this.executeMacro(macroId);
+            });
+        });
+
+        // Star buttons - toggle favorite via server (Phase 7)
         content.querySelectorAll('.star-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const presetId = parseInt(e.currentTarget.dataset.preset);
-                state.toggleFavoritePreset(presetId);
-            });
-        });
-        
-        // Quick routing buttons
-        content.querySelectorAll('.routing-btn').forEach(btn => {
             btn.addEventListener('click', async (e) => {
-                const action = e.currentTarget.dataset.action;
-                await this.executeQuickRouting(action);
+                e.stopPropagation();
+                const type = e.currentTarget.dataset.type;
+                const id = e.currentTarget.dataset.id || e.currentTarget.dataset.preset;
+                await window.app.state.toggleFavorite(type, id);
             });
         });
     }
@@ -575,46 +635,51 @@ class QuickActionsDrawer {
     }
 
     /**
-     * Recall a scene
+     * Recall a profile
      */
-    async recallScene(sceneId) {
-        const scene = state.scenes.find(s => s.id === sceneId);
-        if (!scene) return;
-        
+    async recallProfile(profileId) {
         try {
-            // Apply all routes in the scene
-            for (const [output, input] of Object.entries(scene.routing)) {
-                await api.switchInput(parseInt(output), input);
+            const response = await api.recallProfile(profileId);
+            if (response.success) {
+                toast.show(`Profile recalled`, 'success');
+                this.close();
+            } else {
+                toast.show(`Failed to recall profile: ${response.error}`, 'error');
             }
-            toast.show(`Scene "${scene.name}" applied`, 'success');
-            this.close();
         } catch (error) {
             toast.show(`Error: ${error.message}`, 'error');
         }
     }
 
     /**
-     * Execute quick routing action
+     * Execute a system shortcut
      */
-    async executeQuickRouting(action) {
+    async executeShortcut(shortcutId) {
         try {
-            if (action === 'all-to-1') {
-                // Route all outputs to input 1
-                for (let o = 1; o <= 8; o++) {
-                    await api.switchInput(o, 1);
-                }
-                toast.show('All outputs routed to Input 1', 'success');
-            } else if (action === '1-to-1') {
-                // 1:1 mapping
-                for (let i = 1; i <= 8; i++) {
-                    await api.switchInput(i, i);
-                }
-                toast.show('1:1 mapping applied', 'success');
+            const response = await api.executeSystemShortcut(shortcutId);
+            if (response.success) {
+                toast.show(`Shortcut executed`, 'success');
+            } else {
+                toast.show(`Failed to execute shortcut: ${response.error}`, 'error');
             }
-            this.close();
         } catch (error) {
             toast.show(`Error: ${error.message}`, 'error');
         }
     }
 
+    /**
+     * Execute a CEC macro
+     */
+    async executeMacro(macroId) {
+        try {
+            const response = await api.executeMacro(macroId);
+            if (response.success) {
+                toast.show(`Macro executed`, 'success');
+            } else {
+                toast.show(`Failed to execute macro: ${response.error}`, 'error');
+            }
+        } catch (error) {
+            toast.show(`Error: ${error.message}`, 'error');
+        }
+    }
 }
