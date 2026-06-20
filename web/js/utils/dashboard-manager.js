@@ -755,22 +755,10 @@ class DashboardManager {
         const widget = this.registeredWidgets.get(widgetId);
         if (!widget) return;
         
-        const mode = this.getViewportMode();
-        
-        if (mode === 'desktop') {
-            // Update desktop widget
-            const contentEl = document.querySelector(`#dashboard-widget-${widgetId} .dashboard-widget-content`);
-            if (contentEl) {
-                contentEl.innerHTML = widget.render();
-                widget.onMount(document.getElementById(`dashboard-widget-${widgetId}`));
-            }
-        } else if (this.activeWidgetTab === widgetId && this.mobileWidgetContent) {
-            // Update mobile widget if it's the active tab
-            const bodyEl = this.mobileWidgetContent.querySelector('.mobile-widget-body');
-            if (bodyEl) {
-                bodyEl.innerHTML = widget.render();
-                widget.onMount(this.mobileWidgetContent);
-            }
+        const contentEl = document.querySelector(`#dashboard-widget-${widgetId} .dashboard-widget-content`);
+        if (contentEl) {
+            contentEl.innerHTML = widget.render();
+            widget.onMount(document.getElementById(`dashboard-widget-${widgetId}`));
         }
     }
 
@@ -910,13 +898,7 @@ class DashboardManager {
         
         // Show/hide section based on whether we have widgets to display
         if (section) {
-            if (hasWidgets) {
-                section.style.removeProperty('display');
-                section.classList.remove('hidden');
-            } else {
-                section.style.setProperty('display', 'none', 'important');
-                section.classList.add('hidden');
-            }
+            section.classList.toggle('hidden', !hasWidgets);
         }
         
         // Dispatch UI update if MatrixApp is ready
@@ -946,24 +928,12 @@ class DashboardManager {
      */
     getPinnedWidgets() {
         const pinned = [];
-        const mode = this.getViewportMode();
-        
-        if (mode === 'mobile') {
-            // On mobile, return all registered widgets that aren't hidden
-            this.registeredWidgets.forEach((widget, id) => {
-                if (!this.hiddenMobileWidgets.has(id)) {
-                    pinned.push(widget);
-                }
-            });
-        } else {
-            // On desktop, return explicitly pinned widgets
-            this.pinnedWidgets.forEach(id => {
-                const widget = this.registeredWidgets.get(id);
-                if (widget) {
-                    pinned.push(widget);
-                }
-            });
-        }
+        this.pinnedWidgets.forEach(id => {
+            const widget = this.registeredWidgets.get(id);
+            if (widget) {
+                pinned.push(widget);
+            }
+        });
         return pinned;
     }
 
@@ -1016,36 +986,7 @@ class DashboardManager {
                 
                 if (newMode !== lastMode) {
                     lastMode = newMode;
-                    
-                    // Re-render everything for new viewport mode
-                    if (newMode === 'desktop') {
-                        // Render desktop widgets (only explicitly pinned)
-                        const orderedWidgets = this.getOrderedWidgets();
-                        orderedWidgets.forEach(widgetId => {
-                            if (this.registeredWidgets.has(widgetId)) {
-                                this.renderWidget(widgetId);
-                            }
-                        });
-                        
-                        // Notify widgets about desktop pin state
-                        this.registeredWidgets.forEach((widget, id) => {
-                            this.notifyWidgetPinChange(id, this.pinnedWidgets.has(id));
-                        });
-                    } else {
-                        // Clear desktop widgets
-                        if (this.container) {
-                            this.container.innerHTML = '';
-                        }
-                        
-                        // On mobile, notify all non-hidden widgets they're "pinned" (visible)
-                        this.registeredWidgets.forEach((widget, id) => {
-                            const isVisible = !this.hiddenMobileWidgets.has(id);
-                            this.notifyWidgetPinChange(id, isVisible);
-                        });
-                    }
-                    
                     this.updateDashboardVisibility();
-                    this.updateMobileTabs();
                 }
             }, 150);
         });

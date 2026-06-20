@@ -4974,7 +4974,7 @@
 
 /* Dashboard section in grid */
 .section-dashboard {
-    display: none; /* Hidden by default, shown by JS when widgets are pinned */
+    /* Managed dynamically via .hidden class */
 }
 
 /* Dashboard widgets container */
@@ -4986,12 +4986,12 @@
 }
 
 /* Route All and Quick Actions should span 1 column */
-.dashboard-widget[data-widget-id="routeAll"] {
+.dashboard-widget[data-widget-id="routing-dashboard"] {
     grid-column: span 1;
 }
 
 /* CEC Remote should span 1 column but be taller */
-.dashboard-widget[data-widget-id="cecRemote"] {
+.dashboard-widget[data-widget-id="cec-remote"] {
     grid-column: span 1;
 }
 
@@ -5130,24 +5130,16 @@
 }
 
 /* CEC Remote widget needs more height */
-.dashboard-widget[data-widget-id="cecRemote"] .dashboard-widget-content {
+.dashboard-widget[data-widget-id="cec-remote"] .dashboard-widget-content {
     max-height: none;
 }
 
-/* Route All widget buttons in dashboard */
-/* Route All widget buttons in dashboard - fill available space */
+/* Route All widget buttons in dashboard - fill available space using auto-fit for responsive scaling */
 .dashboard-widget .routing-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
     gap: var(--space-2);
     width: 100%;
-}
-
-/* For 8x8 matrix, use 2 rows of 4 buttons each */
-@media (max-width: 500px) {
-    .dashboard-widget .routing-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
 }
 
 .dashboard-widget .routing-btn {
