@@ -337,6 +337,37 @@ class AppState {
             this.emit('inputs', this.inputs);
         }
     }
+
+    /**
+     * Announce a message to screen readers via ARIA live region.
+     * Use for non-critical status updates (e.g., "Input 1 selected").
+     * @param {string} message - The message to announce
+     */
+    announce(message) {
+        const liveRegion = document.getElementById('aria-status');
+        if (liveRegion) {
+            // Clear and set to ensure screen readers re-announce
+            liveRegion.textContent = '';
+            setTimeout(() => {
+                liveRegion.textContent = message;
+            }, 50);
+        }
+    }
+
+    /**
+     * Announce an urgent alert to screen readers.
+     * Use for critical alerts (e.g., "Connection lost").
+     * @param {string} message - The alert message
+     */
+    alert(message) {
+        const alertRegion = document.getElementById('aria-alert');
+        if (alertRegion) {
+            alertRegion.textContent = '';
+            setTimeout(() => {
+                alertRegion.textContent = message;
+            }, 50);
+        }
+    }
     
     /**
      * Update all input signal statuses at once
