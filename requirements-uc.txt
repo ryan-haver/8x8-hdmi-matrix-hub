@@ -1,9 +1,12 @@
 # Unfolded Circle integration dependencies
 # Install with: pip install -r requirements-uc.txt
+# Pinned versions with SHA256 hashes for reproducible builds and supply chain security.
 
 # Include core dependencies
 -r requirements.txt
 
 # UC-specific packages
-ucapi>=0.5.0
-pyee>=11.0.0
+ucapi==0.5.1 \
+    --hash=sha256:645cf52d8d636df94b1e593de0e3cb5f61056313b3921fbb0c57ede9d4fb8deb
+pyee==13.0.0 \
+    --hash=sha256:48195a3cddb3b1515ce0695ed76036b5ccc2ef3a9f963ff9f77aec0139845498
