@@ -122,13 +122,40 @@ class SideNavDrawer {
                             </svg>
                             <span>Refresh Status</span>
                         </button>
-                        
-                        <button id="drawer-settings-btn" class="utility-btn" title="System Settings">
+                    </div>
+                </div>
+
+                <!-- Settings sections (split into 3 drawers) -->
+                <div class="drawer-section">
+                    <h4 class="drawer-section-title">Settings</h4>
+                    <div class="drawer-utilities-grid">
+                        <button id="drawer-general-btn" class="utility-btn" title="General Settings">
                             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="12" cy="12" r="3"/>
                                 <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
                             </svg>
-                            <span>System Settings</span>
+                            <span>General</span>
+                        </button>
+
+                        <button id="drawer-hardware-btn" class="utility-btn" title="Hardware Settings">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="4" y="4" width="16" height="16" rx="2"/>
+                                <rect x="9" y="9" width="6" height="6"/>
+                                <line x1="9" y1="1" x2="9" y2="4"/>
+                                <line x1="15" y1="1" x2="15" y2="4"/>
+                                <line x1="9" y1="20" x2="9" y2="23"/>
+                                <line x1="15" y1="20" x2="15" y2="23"/>
+                            </svg>
+                            <span>Hardware</span>
+                        </button>
+
+                        <button id="drawer-interface-btn" class="utility-btn" title="Interface Settings">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                                <line x1="8" y1="21" x2="16" y2="21"/>
+                                <line x1="12" y1="17" x2="12" y2="21"/>
+                            </svg>
+                            <span>Interface</span>
                         </button>
                     </div>
                 </div>
@@ -196,11 +223,32 @@ class SideNavDrawer {
             window.app.refresh();
         });
 
-        document.getElementById("drawer-settings-btn").addEventListener("click", () => {
+        // Settings drawers (split into 3 sections)
+        document.getElementById("drawer-general-btn")?.addEventListener("click", () => {
             if (window.innerWidth < 768) {
                 this.close();
             }
-            window.app.components.settingsPanel.open();
+            if (window.generalDrawer) {
+                window.generalDrawer.toggle();
+            }
+        });
+
+        document.getElementById("drawer-hardware-btn")?.addEventListener("click", () => {
+            if (window.innerWidth < 768) {
+                this.close();
+            }
+            if (window.hardwareDrawer) {
+                window.hardwareDrawer.toggle();
+            }
+        });
+
+        document.getElementById("drawer-interface-btn")?.addEventListener("click", () => {
+            if (window.innerWidth < 768) {
+                this.close();
+            }
+            if (window.interfaceDrawer) {
+                window.interfaceDrawer.toggle();
+            }
         });
     }
 

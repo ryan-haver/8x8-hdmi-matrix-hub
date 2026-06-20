@@ -25,14 +25,21 @@ class OverlayManager {
      */
     onOpen(name) {
         const isDesktop = window.innerWidth >= 768;
-        
+
         if (isDesktop) {
             // On desktop/tablet, we allow the side nav drawer (Control Deck) to coexist with one right-side drawer.
             if (name === 'side-nav-drawer') {
                 // Opening side-nav-drawer: do not close any right-side drawer.
             } else {
                 // Opening a right-side drawer: close other right-side drawers to avoid overlays on the right.
-                const rightSideDrawers = ['quick-actions-drawer', 'routing-drawer', 'theme-drawer'];
+                const rightSideDrawers = [
+                    'quick-actions-drawer',
+                    'routing-drawer',
+                    'theme-drawer',
+                    'general-drawer',
+                    'hardware-drawer',
+                    'interface-drawer',
+                ];
                 if (rightSideDrawers.includes(name)) {
                     rightSideDrawers.forEach(d => {
                         if (d !== name) {
