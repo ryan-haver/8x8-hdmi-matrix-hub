@@ -213,3 +213,65 @@ async def handle_test_macro(request: web.Request) -> web.Response:
     except Exception as e:
         _LOG.error(f"Error testing macro: {e}")
         return _json_response(False, error=str(e), status=500)
+
+
+# =============================================================================
+# Phase 7: Macro surface-visibility endpoints (favorite + dashboard)
+# =============================================================================
+
+
+async def handle_list_favorite_macros(request: web.Request) -> web.Response:
+    """GET /api/cec/macros/favorites — list macros marked as favorites."""
+    macro_manager = get_macro_manager()
+    if macro_manager is None:
+        return _json_response(False, error="Macro manager not initialized", status=503)
+    try:
+        macros = macro_manager.list_favorites()
+        return _json_response(True, {
+            "macros": [m.to_dict() for m in macros],
+        })
+    except Exception as e:
+        _LOG.error(f"Error listing favorite macros: {e}")
+        return _json_response(False, error=str(e), status=500)
+
+
+async def handle_toggle_macro_favorite(request: web.Request) -> web.Response:
+    """POST /api/cec/macro/{id}/favorite — toggle favorite flag."""
+    macro_manager = get_macro_manager()
+    if macro_manager is None:
+        return _json_response(False, error="Macro manager not initialized", status=503)
+    try:
+        macro_id = request.match_info.get("macro_id", "")
+        if not macro_id:
+            return _json_response(False, error="Macro ID required", status=400)
+        macro = macro_manager.toggle_favorite(macro_id)
+        if macro is None:
+            return _json_response(False, error=f"Macro '{macro_id}' not found", status=404)
+        return _json_response(True, {
+            "id": macro.id,
+            "favorite": macro.favorite,
+        })
+    except Exception as e:
+        _LOG.error(f"Error toggling macro favorite: {e}")
+        return _json_response(False, error=str(e), status=500)
+
+
+async def handle_toggle_macro_dashboard(request: web.Request) -> web.Response:
+    """POST /api/cec/macro/{id}/dashboard — toggle dashboard-visible flag."""
+    macro_manager = get_macro_manager()
+    if macro_manager is None:
+        return _json_response(False, error="Macro manager not initialized", status=503)
+    try:
+        macro_id = request.match_info.get("macro_id", "")
+        if not macro_id:
+            return _json_response(False, error="Macro ID required", status=400)
+        macro = macro_manager.toggle_dashboard_visible(macro_id)
+        if macro is None:
+            return _json_response(False, error=f"Macro '{macro_id}' not found", status=404)
+        return _json_response(True, {
+            "id": macro.id,
+            "dashboard_visible": macro.dashboard_visible,
+        })
+    except Exception as e:
+        _LOG.error(f"Error toggling macro dashboard flag: {e}")
+        return _json_response(False, error=str(e), status=500)
