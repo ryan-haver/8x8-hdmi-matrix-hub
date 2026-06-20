@@ -439,7 +439,8 @@ class OreiMatrix:
                 _LOG.info(f"Found {len(raw_input_names)} input names")
 
                 # Parse each input name (format: "IN01-DeviceName")
-                for idx, name in enumerate(raw_input_names):
+                # Only process up to 8 inputs (matrix is 8x8); ignore any terminator entries
+                for idx, name in enumerate(raw_input_names[:8]):
                     input_num = idx + 1  # Convert 0-based index to 1-based input number
 
                     if name and "-" in name:
@@ -1587,7 +1588,8 @@ class OreiMatrix:
 
             if status and "alloutputname" in status:
                 names = status["alloutputname"]
-                for idx, name in enumerate(names):
+                # Only process up to 8 outputs (matrix is 8x8); ignore any terminator entries
+                for idx, name in enumerate(names[:8]):
                     output_names[idx + 1] = name if name else f"Output {idx + 1}"
             else:
                 for i in range(1, 9):
@@ -2272,7 +2274,8 @@ class OreiMatrix:
         allarc = output_status.get("allarc", [])
         allconnect = output_status.get("allconnect", [])
         allout = output_status.get("allout", [])
-        alloutputname = output_status.get("alloutputname", [])
+        # get output status returns 'name' field (not 'alloutputname')
+        alloutputname = output_status.get("name") or output_status.get("alloutputname", [])
 
         cec_outputindex = cec_status.get("outputindex", [])
 
@@ -2383,7 +2386,8 @@ class OreiMatrix:
             allarc = output_status.get("allarc", [])
             allconnect = output_status.get("allconnect", [])
             allout = output_status.get("allout", [])
-            alloutputname = output_status.get("alloutputname", [])
+            # get output status returns 'name' field (not 'alloutputname')
+            alloutputname = output_status.get("name") or output_status.get("alloutputname", [])
             cec_outputindex = cec_status.get("outputindex", [])
 
             scaler_value = allscaler[idx] if idx < len(allscaler) else 0
