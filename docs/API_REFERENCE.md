@@ -764,6 +764,137 @@ curl -X POST http://localhost:8080/api/cec/output/1/mute
 
 ---
 
+## CEC Macros (v2.9.0+) ⭐
+
+CEC Macros are saved sequences of CEC commands that can be executed atomically with optional delays between steps.
+
+### Macro Step Format
+
+Each macro consists of ordered steps. Each step specifies:
+- `command`: CEC command name (e.g., `POWER_ON`, `POWER_OFF`, `MUTE`, `PLAY`)
+- `targets`: List of target strings (e.g., `["input_1", "output_2"]`)
+- `delay_ms`: Delay in milliseconds AFTER this step executes (default: 0)
+
+### Target String Format
+
+Targets use the format: `{type}_{port}` where type is `input` or `output` and port is 1-8.
+Examples: `input_1`, `input_2`, `output_5`
+
+#### GET /api/cec/macros
+List all CEC macros.
+
+```bash
+curl http://localhost:8080/api/cec/macros
+```
+
+Response:
+```json
+{
+  "success": true,
+  "data": {
+    "macros": [
+      {
+        "id": "theater-on",
+        "name": "Theater On",
+        "description": "Power on TV and soundbar, switch to movie input",
+        "steps": [...],
+        "created_at": "2026-06-19T10:30:00Z",
+        "updated_at": "2026-06-19T10:30:00Z"
+      }
+    ]
+  }
+}
+```
+
+#### POST /api/cec/macro
+Create a new CEC macro.
+
+```bash
+curl -X POST http://localhost:8080/api/cec/macro \
+  -H "Content-Type: application/json" \
+  -d '{
+    "id": "theater-on",
+    "name": "Theater On",
+    "description": "Power on TV and soundbar, switch to movie input",
+    "steps": [
+      {"command": "POWER_ON", "targets": ["output_1", "output_2"], "delay_ms": 0},
+      {"command": "POWER_ON", "targets": ["input_2"], "delay_ms": 3000},
+      {"command": "ACTIVE", "targets": ["input_2"], "delay_ms": 1000}
+    ]
+  }'
+```
+
+#### GET /api/cec/macro/{id}
+Get a specific CEC macro.
+
+```bash
+curl http://localhost:8080/api/cec/macro/theater-on
+```
+
+#### PUT /api/cec/macro/{id}
+Update an existing CEC macro.
+
+```bash
+curl -X PUT http://localhost:8080/api/cec/macro/theater-on \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Theater On (Updated)", "steps": [...]}'
+```
+
+#### DELETE /api/cec/macro/{id}
+Delete a CEC macro.
+
+```bash
+curl -X DELETE http://localhost:8080/api/cec/macro/theater-on
+```
+
+#### POST /api/cec/macro/{id}/execute
+Execute a CEC macro on the live matrix.
+
+```bash
+curl -X POST http://localhost:8080/api/cec/macro/theater-on/execute
+```
+
+Response:
+```json
+{
+  "success": true,
+  "data": {
+    "macro_id": "theater-on",
+    "total_steps": 3,
+    "successful_steps": 3,
+    "failed_steps": 0,
+    "duration_ms": 4523,
+    "step_results": [
+      {"step": 0, "command": "POWER_ON", "targets": ["output_1", "output_2"], "success": true},
+      {"step": 1, "command": "POWER_ON", "targets": ["input_2"], "success": true, "delay_ms": 3000},
+      {"step": 2, "command": "ACTIVE", "targets": ["input_2"], "success": true, "delay_ms": 1000}
+    ]
+  }
+}
+```
+
+#### POST /api/cec/macro/{id}/test
+Test a macro (dry run, no actual CEC commands sent).
+
+```bash
+curl -X POST http://localhost:8080/api/cec/macro/theater-on/test
+```
+
+Response:
+```json
+{
+  "success": true,
+  "data": {
+    "valid": true,
+    "step_count": 3,
+    "estimated_duration_ms": 4000,
+    "warnings": []
+  }
+}
+```
+
+---
+
 ## Integration Examples
 
 ### Flic Button
@@ -899,4 +1030,216 @@ Or in docker-compose.yml:
 ```yaml
 environment:
   - REST_API_ENABLED=false
+```
+
+---
+
+## Device Settings (v2.10.0+) ⭐
+
+Persistent per-device customizations (names, icons, colors) that survive across sessions and integrate with the UI.
+
+#### GET /api/device-settings
+Get all device settings.
+
+```bash
+curl http://localhost:8080/api/device-settings
+```
+
+#### POST /api/device-settings
+Update all device settings.
+
+```bash
+curl -X POST http://localhost:8080/api/device-settings \
+  -H "Content-Type: application/json" \
+  -d '{
+    "inputs": {"1": {"name": "PS5", "icon": "playstation"}, "2": {"name": "AppleTV"}},
+    "outputs": {"1": {"name": "Living Room TV", "icon": "tv"}}
+  }'
+```
+
+#### GET /api/device-settings/input/{input}
+Get settings for a specific input.
+
+```bash
+curl http://localhost:8080/api/device-settings/input/1
+```
+
+#### POST /api/device-settings/input/{input}
+Update settings for a specific input.
+
+```bash
+curl -X POST http://localhost:8080/api/device-settings/input/1 \
+  -H "Content-Type: application/json" \
+  -d '{"name": "PS5", "icon": "playstation", "color": "#0066cc"}'
+```
+
+#### GET /api/device-settings/output/{output}
+Get settings for a specific output.
+
+```bash
+curl http://localhost:8080/api/device-settings/output/1
+```
+
+#### POST /api/device-settings/output/{output}
+Update settings for a specific output.
+
+```bash
+curl -X POST http://localhost:8080/api/device-settings/output/1 \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Living Room TV", "icon": "tv", "color": "#cc0066"}'
+```
+
+---
+
+## Themes (v2.10.0+) ⭐
+
+UI theme preferences (color palette, glow intensity, etc.) that sync across devices.
+
+#### GET /api/themes
+Get current theme settings.
+
+```bash
+curl http://localhost:8080/api/themes
+```
+
+Response:
+```json
+{
+  "success": true,
+  "data": {
+    "preset": "tron",
+    "primary_color": "#00ffff",
+    "secondary_color": "#ff00ff",
+    "card_opacity": 0.8,
+    "hover_effect": "primary"
+  }
+}
+```
+
+#### PUT /api/themes
+Update theme settings.
+
+```bash
+curl -X PUT http://localhost:8080/api/themes \
+  -H "Content-Type: application/json" \
+  -d '{
+    "preset": "neon",
+    "primary_color": "#ff00ff",
+    "secondary_color": "#00ff00",
+    "card_opacity": 0.9
+  }'
+```
+
+#### POST /api/themes/reset
+Reset themes to default values.
+
+```bash
+curl -X POST http://localhost:8080/api/themes/reset
+```
+
+---
+
+## UI Preferences (v2.10.0+) ⭐
+
+User UI customization preferences (tab pinning, tab order) that persist per user.
+
+#### GET /api/ui/preferences
+Get current UI preferences.
+
+```bash
+curl http://localhost:8080/api/ui/preferences
+```
+
+Response:
+```json
+{
+  "success": true,
+  "data": {
+    "pinnedTabs": ["matrix", "dashboard", "inputs", "outputs", "profiles"],
+    "tabOrder": ["matrix", "dashboard", "inputs", "outputs", "profiles"]
+  }
+}
+```
+
+#### PUT /api/ui/preferences
+Update UI preferences.
+
+```bash
+curl -X PUT http://localhost:8080/api/ui/preferences \
+  -H "Content-Type: application/json" \
+  -d '{
+    "pinnedTabs": ["matrix", "dashboard", "outputs"],
+    "tabOrder": ["matrix", "dashboard", "outputs", "inputs", "profiles"]
+  }'
+```
+
+---
+
+## CEC Capabilities (v2.10.0+) ⭐
+
+Query CEC capabilities for inputs and outputs.
+
+#### GET /api/cec/capabilities
+Get global CEC capabilities.
+
+```bash
+curl http://localhost:8080/api/cec/capabilities
+```
+
+#### GET /api/cec/input/{input}/capabilities
+Get CEC capabilities for a specific input.
+
+```bash
+curl http://localhost:8080/api/cec/input/1/capabilities
+```
+
+#### GET /api/cec/output/{output}/capabilities
+Get CEC capabilities for a specific output.
+
+```bash
+curl http://localhost:8080/api/cec/output/1/capabilities
+```
+
+---
+
+## Scene Profile Reordering (v2.10.0+) ⭐
+
+#### POST /api/profiles/reorder
+Reorder profiles for display in the UI.
+
+```bash
+curl -X POST http://localhost:8080/api/profiles/reorder \
+  -H "Content-Type: application/json" \
+  -d '{"order": ["movie-night", "gaming", "work-from-home"]}'
+```
+
+---
+
+## Scene CEC Auto-Resolve (v2.10.0+) ⭐
+
+#### POST /api/scene/{scene_id}/cec/auto-resolve
+Automatically resolve CEC targets for a scene based on its routing and output configuration.
+
+```bash
+curl -X POST http://localhost:8080/api/scene/movie-night/cec/auto-resolve
+```
+
+This analyzes the scene's routing and suggests CEC targets:
+- Audio-only outputs (scaler mode 4) → volume targets
+- ARC-enabled outputs → audio return channel targets
+- Standard outputs → first available fallback
+
+Response:
+```json
+{
+  "success": true,
+  "data": {
+    "scene_id": "movie-night",
+    "resolved_targets": {
+      "volume": ["output_1"],
+      "power": ["output_1", "input_2"],
+      "navigation": ["input_2"]
+    }
+  }
+}
 ```
