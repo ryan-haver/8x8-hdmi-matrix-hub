@@ -260,7 +260,7 @@ class SystemShortcutManager:
             return False
 
     # ------------------------------------------------------------------ queries
-    def list(self, *, enabled_only: bool = False, include_builtin: bool = True) -> list[SystemShortcut]:
+    def list_shortcuts(self, *, enabled_only: bool = False, include_builtin: bool = True) -> list[SystemShortcut]:
         """Return all shortcuts sorted by ``order`` then ``name``."""
         items = list(self._shortcuts.values())
         if enabled_only:
@@ -272,11 +272,11 @@ class SystemShortcutManager:
 
     def list_favorites(self) -> list[SystemShortcut]:
         """Return shortcuts marked as favorites, enabled only, sorted by ``order``."""
-        return [s for s in self.list() if s.enabled and s.favorite]
+        return [s for s in self.list_shortcuts() if s.enabled and s.favorite]
 
     def list_dashboard(self) -> list[SystemShortcut]:
         """Return shortcuts marked as dashboard-visible, enabled only, sorted by ``order``."""
-        return [s for s in self.list() if s.enabled and s.dashboard_visible]
+        return [s for s in self.list_shortcuts() if s.enabled and s.dashboard_visible]
 
     def get(self, shortcut_id: str) -> SystemShortcut | None:
         """Return a single shortcut by id, or None."""
