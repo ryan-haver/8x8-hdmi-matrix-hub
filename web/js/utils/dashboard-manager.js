@@ -12,22 +12,25 @@ class DashboardManager {
     constructor() {
         // Registered widgets available for pinning
         this.registeredWidgets = new Map();
-        
+
         // Currently pinned widgets (ordered array for positioning) - desktop only
         this.pinnedWidgets = new Set();
-        
+
         // Hidden widgets on mobile (user explicitly unpinned) - mobile only
         this.hiddenMobileWidgets = new Set();
-        
+
         // Widget order (array of widget IDs) - for desktop grid
         this.widgetOrder = [];
-        
+
         // Unified tab order (both standard tab IDs and widget IDs) - for mobile/tablet
         // Standard tabs use 'tab:matrix', 'tab:inputs', etc. Widgets use 'widget:cec-remote', etc.
         this.unifiedTabOrder = [];
-        
+
         // Default standard tabs in order
         this.defaultStandardTabs = ['tab:matrix', 'tab:inputs', 'tab:outputs', 'tab:scenes'];
+
+        // Phase 7: Card type renderers (profile, preset, system_shortcut, macro, aggregate_widget)
+        this.cardRenderers = new Map();
         
         // Dashboard container element (desktop)
         this.container = null;
@@ -80,6 +83,9 @@ class DashboardManager {
         this.restorePinnedWidgets();
         this.setupResizeHandler();
         this.setupContainerDragHandlers();
+
+        // Phase 7: Subscribe to state changes for dashboard cards
+        state.on('dashboardCards', () => this.renderCards());
     }
 
     /**
@@ -88,6 +94,16 @@ class DashboardManager {
     initDashboardContainer() {
         this.container = document.getElementById('dashboard-widgets');
         this.updateDashboardVisibility();
+
+        // Phase 7: Add Card button in dashboard section header
+        const addCardBtn = document.getElementById('add-dashboard-card-btn');
+        if (addCardBtn) {
+            addCardBtn.addEventListener('click', () => {
+                if (window.dashboardCardPicker) {
+                    window.dashboardCardPicker.open();
+                }
+            });
+        }
     }
 
     /**
@@ -768,20 +784,151 @@ class DashboardManager {
     restorePinnedWidgets() {
         setTimeout(() => {
             const orderedWidgets = this.getOrderedWidgets();
-            
+
             orderedWidgets.forEach(widgetId => {
                 if (this.registeredWidgets.has(widgetId)) {
                     this.renderWidget(widgetId);
                 }
             });
-            
+
             this.updateDashboardVisibility();
-            
+
             // Notify components about restored pins
             orderedWidgets.forEach(widgetId => {
                 this.notifyWidgetPinChange(widgetId, true);
             });
+
+            // Phase 7: Also render cards from server layout
+            this.renderCards();
         }, 100);
+    }
+
+    /**
+     * Phase 7: Render dashboard cards from server layout
+     */
+    renderCards() {
+        if (!this.container) return;
+
+        // Ensure card renderers are loaded
+        if (typeof window.dashboardCardRenderers === 'undefined') {
+            console.warn('dashboardCardRenderers not loaded yet');
+            return;
+        }
+
+        // Get or create the cards container
+        let cardsContainer = this.container.querySelector('.dashboard-cards-container');
+        if (!cardsContainer) {
+            cardsContainer = document.createElement('div');
+            cardsContainer.className = 'dashboard-cards-container';
+            cardsContainer.innerHTML = `
+                <div class="dashboard-cards-header">
+                    <h4>Dashboard Cards</h4>
+                    <button class="btn btn-sm btn-secondary" id="add-card-btn">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        Add Card
+                    </button>
+                </div>
+                <div class="dashboard-cards-grid" id="dashboard-cards-grid">
+                    <!-- Cards rendered here -->
+                </div>
+            `;
+            this.container.appendChild(cardsContainer);
+
+            // Attach add card button handler
+            cardsContainer.querySelector('#add-card-btn').addEventListener('click', () => {
+                if (window.dashboardCardPicker) {
+                    window.dashboardCardPicker.open();
+                }
+            });
+        }
+
+        const grid = cardsContainer.querySelector('#dashboard-cards-grid');
+        const cards = window.state.dashboardCards || [];
+
+        if (cards.length === 0) {
+            grid.innerHTML = '<p class="empty-message" style="padding:16px;text-align:center;color:var(--text-secondary)">No cards yet. Click "Add Card" to get started.</p>';
+            return;
+        }
+
+        const context = {
+            state: window.state,
+            dashboardManager: this
+        };
+
+        let html = '';
+        cards.forEach(card => {
+            let renderer;
+            if (card.type === 'aggregate_widget') {
+                renderer = window.dashboardCardRenderers.aggregate_widget;
+            } else {
+                renderer = window.dashboardCardRenderers[card.type];
+            }
+
+            if (renderer) {
+                try {
+                    html += renderer(card, context);
+                } catch (err) {
+                    console.error(`Error rendering card ${card.type}:${card.id}:`, err);
+                }
+            }
+        });
+
+        grid.innerHTML = html;
+        this.attachCardEventListeners(grid);
+    }
+
+    /**
+     * Phase 7: Attach event listeners to rendered cards
+     */
+    attachCardEventListeners(grid) {
+        if (!grid) return;
+
+        // Action buttons (Recall, Execute, Run)
+        grid.querySelectorAll('.dashboard-card-action').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const type = e.currentTarget.dataset.type;
+                const id = e.currentTarget.dataset.id;
+
+                try {
+                    if (type === 'profile') {
+                        await window.api.recallProfile(id);
+                        toast.success('Profile recalled');
+                    } else if (type === 'preset') {
+                        await window.api.recallPreset(Number(id));
+                        toast.success(`Preset ${id} recalled`);
+                    } else if (type === 'system_shortcut') {
+                        await window.api.executeSystemShortcut(id);
+                        toast.success('Shortcut executed');
+                    } else if (type === 'macro') {
+                        await window.api.executeMacro(id);
+                        toast.success('Macro executed');
+                    }
+                } catch (error) {
+                    toast.error(`Error: ${error.message}`);
+                }
+            });
+        });
+
+        // Unpin (remove) buttons
+        grid.querySelectorAll('.dashboard-card-unpin').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                const type = e.currentTarget.dataset.type;
+                const id = e.currentTarget.dataset.id;
+
+                try {
+                    await window.api.removeDashboardCard(type, id);
+                    toast.success('Card removed from dashboard');
+                    await window.state.loadDashboardLayout();
+                    this.renderCards();
+                } catch (error) {
+                    toast.error(`Failed to remove card: ${error.message}`);
+                }
+            });
+        });
     }
 
     /**
