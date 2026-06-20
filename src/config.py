@@ -625,6 +625,9 @@ class ProfileManager:
         power_off_macro: str | None = None,
         pinned: bool | None = None,
         pin_order: int | None = None,
+        favorite: bool | None = None,
+        dashboard_visible: bool | None = None,
+        dashboard_order: int | None = None,
     ) -> Profile | None:
         """Update an existing profile."""
         profile = self._profiles.get(profile_id)
@@ -649,9 +652,47 @@ class ProfileManager:
             profile.pinned = pinned
         if pin_order is not None:
             profile.pin_order = pin_order
+        if favorite is not None:
+            profile.favorite = favorite
+        if dashboard_visible is not None:
+            profile.dashboard_visible = dashboard_visible
+        if dashboard_order is not None:
+            profile.dashboard_order = dashboard_order
 
         self.save()
         return profile
+
+    # ------------------------------------------------------------------
+    # Phase 7: surface-visibility helpers
+    # ------------------------------------------------------------------
+
+    def set_favorite(self, profile_id: str, favorite: bool) -> Profile | None:
+        """Set the favorite flag on a profile. Returns the updated profile."""
+        return self.update_profile(profile_id, favorite=favorite)
+
+    def toggle_favorite(self, profile_id: str) -> Profile | None:
+        """Toggle the favorite flag. Returns the updated profile."""
+        profile = self._profiles.get(profile_id)
+        if profile is None:
+            return None
+        return self.update_profile(profile_id, favorite=not profile.favorite)
+
+    def set_dashboard_visible(self, profile_id: str, visible: bool) -> Profile | None:
+        """Set the dashboard_visible flag on a profile."""
+        return self.update_profile(profile_id, dashboard_visible=visible)
+
+    def toggle_dashboard_visible(self, profile_id: str) -> Profile | None:
+        """Toggle the dashboard_visible flag. Returns the updated profile."""
+        profile = self._profiles.get(profile_id)
+        if profile is None:
+            return None
+        return self.update_profile(profile_id, dashboard_visible=not profile.dashboard_visible)
+
+    def list_favorites(self) -> list[Profile]:
+        """Return all profiles marked as favorite, sorted by pin_order then name."""
+        profiles = [p for p in self._profiles.values() if p.favorite]
+        profiles.sort(key=lambda p: (p.pin_order, p.name.lower()))
+        return profiles
 
     def delete_profile(self, profile_id: str) -> bool:
         """Delete a profile by ID."""
