@@ -14,6 +14,12 @@ from .device_settings import (
     set_input_setting,
     set_output_setting,
 )
+from .themes import (
+    init_themes,
+)
+from .ui import (
+    init_ui_preferences,
+)
 from .utils import (
     API_VERSION,
     get_input_names,
@@ -98,6 +104,9 @@ __all__ = [
     "get_output_setting",
     "set_input_setting",
     "set_output_setting",
+    # Theme & UI Preferences (persistent storage init)
+    "init_themes",
+    "init_ui_preferences",
     # App factory and server
     "create_rest_app",
     "RestApiServer",
