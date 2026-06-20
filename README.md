@@ -46,7 +46,7 @@ The **HDCVT HDP-MXC88A** is an OEM (Original Equipment Manufacturer) product tha
   - Per-input CEC remote entities
   - Fast reconnection via static driver URL
 
-- **REST API (v2.7.0)** ✅
+- **REST API (v2.10.0)** ✅
   - Full matrix control via HTTP endpoints
   - WebSocket for real-time status updates
   - Rate limiting and CORS support
@@ -69,11 +69,12 @@ The **HDCVT HDP-MXC88A** is an OEM (Original Equipment Manufacturer) product tha
   - Bind to input/output or matrix mode
   - Per-output audio source selection
 
-- **Scenes (Activity-Based Routing)**
+- **Profiles (Activity-Based Routing)**
   - Save named routing configurations
-  - Include HDR/HDCP/audio settings
-  - Recall scenes with single command
-  - Unlimited scenes (vs. 8 hardware presets)
+  - Include HDR/HDCP/audio settings, CEC macros, and power automation
+  - Recall profiles with single command
+  - Unlimited profiles (vs. 8 hardware presets)
+  - Backward compatible with legacy "Scenes" terminology
 
 - **Docker Deployment**
   - Containerized for easy deployment
