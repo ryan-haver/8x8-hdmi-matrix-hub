@@ -58,37 +58,72 @@ class MatrixAPI {
 
     // ===== Helper Methods =====
     
-    async get(path) {
-        try {
-            Logger.api('GET', path);
-            const response = await fetch(`${this.baseUrl}${path}`);
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    /**
+     * Retry helper for network operations.
+     * @param {Function} operation - Async function to retry
+     * @param {number} maxRetries - Maximum number of retry attempts
+     * @param {number} delayMs - Initial delay between retries (doubles each retry)
+     */
+    async _retryOperation(operation, maxRetries = 3, delayMs = 500) {
+        let lastError;
+        for (let attempt = 0; attempt <= maxRetries; attempt++) {
+            try {
+                return await operation();
+            } catch (error) {
+                lastError = error;
+                if (attempt < maxRetries) {
+                    // Don't retry on 4xx client errors (except 408, 429)
+                    if (error.message && error.message.includes('HTTP 4')) {
+                        const status = parseInt(error.message.match(/HTTP (\d+)/)?.[1] || '0');
+                        if (status !== 408 && status !== 429 && status >= 400 && status < 500) {
+                            throw error; // Don't retry client errors
+                        }
+                    }
+                    const backoff = delayMs * Math.pow(2, attempt);
+                    await new Promise((resolve) => setTimeout(resolve, backoff));
+                }
             }
-            const data = await response.json();
-            Logger.apiResponse(path, data);
-            return data;
+        }
+        throw lastError;
+    }
+
+    async get(path, options = {}) {
+        const { retries = 0 } = options;
+        try {
+            return await this._retryOperation(async () => {
+                Logger.api('GET', path);
+                const response = await fetch(`${this.baseUrl}${path}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                const data = await response.json();
+                Logger.apiResponse(path, data);
+                return data;
+            }, retries);
         } catch (error) {
             console.error(`API GET ${path} failed:`, error);
             throw error;
         }
     }
 
-    async post(path, body = {}) {
+    async post(path, body = {}, options = {}) {
+        const { retries = 0 } = options;
         try {
-            Logger.api('POST', path, body);
-            const response = await fetch(`${this.baseUrl}${path}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
-            });
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}));
-                throw new Error(errorData.error || `HTTP ${response.status}`);
-            }
-            const data = await response.json();
-            Logger.apiResponse(path, data);
-            return data;
+            return await this._retryOperation(async () => {
+                Logger.api('POST', path, body);
+                const response = await fetch(`${this.baseUrl}${path}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.error || `HTTP ${response.status}`);
+                }
+                const data = await response.json();
+                Logger.apiResponse(path, data);
+                return data;
+            }, retries);
         } catch (error) {
             console.error(`API POST ${path} failed:`, error);
             throw error;
