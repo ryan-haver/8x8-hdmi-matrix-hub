@@ -1,6 +1,6 @@
 # Home Assistant Integration Guide
 
-> **Status**: ✅ REST API v2.7.0 Ready (with WebSocket & Scenes) | 🔲 HACS Component Planned (Phase 3.0)
+> **Status**: ✅ REST API v2.10.0 Ready (with WebSocket, Profiles & CEC Macros) | 🔲 HACS Component Planned (Phase 3.0)
 
 This guide explains how to integrate the OREI HDMI Matrix with Home Assistant.
 
@@ -69,6 +69,20 @@ A proper Home Assistant integration with entities, services, and device registry
 | `/api/scene/{id}` | DELETE | Delete scene (v2.7+) |
 | `/api/scene/{id}/recall` | POST | Apply scene (v2.7+) |
 | `/api/scene/save-current` | POST | Save current state as scene (v2.7+) |
+| `/api/profiles` | GET | List profiles (v2.10+) ⭐ |
+| `/api/profile/{id}` | GET | Get profile details (v2.10+) ⭐ |
+| `/api/profile` | POST | Create profile (v2.10+) ⭐ |
+| `/api/profile/{id}` | PUT | Update profile (v2.10+) ⭐ |
+| `/api/profile/{id}` | DELETE | Delete profile (v2.10+) ⭐ |
+| `/api/profile/{id}/recall` | POST | Activate profile (v2.10+) ⭐ |
+| `/api/profile/{id}/cec` | GET/POST/PUT | Profile CEC config (v2.10+) ⭐ |
+| `/api/profile/{id}/macros` | GET/POST/PUT | Profile macros (v2.10+) ⭐ |
+| `/api/profiles/reorder` | POST | Reorder profiles (v2.10+) ⭐ |
+| `/api/cec/macros` | GET | List CEC macros (v2.9+) ⭐ |
+| `/api/cec/macro` | POST | Create CEC macro (v2.9+) ⭐ |
+| `/api/cec/macro/{id}` | GET/PUT/DELETE | Manage CEC macro (v2.9+) ⭐ |
+| `/api/cec/macro/{id}/execute` | POST | Execute macro (v2.9+) ⭐ |
+| `/api/cec/macro/{id}/test` | POST | Test macro (dry run) (v2.9+) ⭐ |
 
 ### Configuration
 
@@ -537,4 +551,4 @@ Create Alexa routines that trigger HA automations:
 
 ---
 
-*Last updated: REST API v2.7.0*
+*Last updated: REST API v2.10.0*
