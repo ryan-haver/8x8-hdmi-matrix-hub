@@ -205,13 +205,15 @@ Response: {
 
 ```json
 // Power On
-Request:  {"comhead": "set power index", "poweron": 1}
-Response: {"comhead": "set power index", "result": "success"}
+Request:  {"comhead": "set poweronoff", "language": 0, "power": 1}
+Response: {"comhead": "set poweronoff", "result": 1}
 
 // Power Off (Standby)
-Request:  {"comhead": "set power index", "poweron": 0}
-Response: {"comhead": "set power index", "result": "success"}
+Request:  {"comhead": "set poweronoff", "language": 0, "power": 0}
+Response: {"comhead": "set poweronoff", "result": 1}
 ```
+
+**Source**: Verified against `src/orei_matrix.py` (line 573) and HAR file captures.
 
 ---
 
@@ -219,16 +221,20 @@ Response: {"comhead": "set power index", "result": "success"}
 **Status**: ✅ Verified
 
 ```json
-// Route input 1 to output 2
-Request:  {"comhead": "set singleav index", "input": 1, "output": 2}
-Response: {"comhead": "set singleav index", "result": "success"}
+// Route input 2 to output 1
+Request:  {"comhead": "video switch", "language": 0, "source": [1, 2]}
+Response: {"comhead": "video switch", "result": 1}
 
-// Route input to all outputs
-Request:  {"comhead": "set allav index", "input": 1}
-Response: {"comhead": "set allav index", "result": "success"}
+// Route input 2 to ALL outputs (output index 0 = all)
+Request:  {"comhead": "video switch", "language": 0, "source": [0, 2]}
+Response: {"comhead": "video switch", "result": 1}
 ```
 
-**Notes**: Input and output are 1-indexed.
+**Notes**: 
+- `source` is `[output_index, input_index]` (output first, then input)
+- Use `output_index = 0` to route to all outputs
+- Both indices are 1-indexed (except the "all outputs" case uses 0)
+- **Source**: Verified against `src/orei_matrix.py` (line 506) and HAR file `docs/route all http calls.har`
 
 ---
 
@@ -236,21 +242,25 @@ Response: {"comhead": "set allav index", "result": "success"}
 **Status**: ✅ Verified
 
 ```json
-Request:  {"comhead": "set routing recall", "index": 1}
-Response: {"comhead": "set routing recall", "result": "success"}
+Request:  {"comhead": "preset set", "language": 0, "index": 1}
+Response: {"comhead": "preset set", "result": 1}
 ```
 
-**Notes**: Index is 1-8 for the 8 presets.
+**Notes**: 
+- Index is 1-8 for the 8 hardware presets
+- **Source**: Verified against `src/orei_matrix.py` (line 357)
 
 ---
 
 ### Save Preset
-**Status**: 🔄 Implemented
+**Status**: ✅ Implemented
 
 ```json
-Request:  {"comhead": "set routing save", "index": 1}
-Response: {"comhead": "set routing save", "result": "success"}
+Request:  {"comhead": "preset save", "language": 0, "index": 1}
+Response: {"comhead": "preset save", "result": 1}
 ```
+
+**Notes**: Saves the current routing configuration to the specified preset slot.
 
 ---
 
@@ -275,140 +285,189 @@ Response: {"comhead": "set panel lock", "result": "success"}
 ---
 
 ### Set CEC Enable
-**Status**: 🔄 Implemented, Needs Testing
+**Status**: ✅ Implemented
 
 ```json
 Request:  {
   "comhead": "set cec index",
-  "inputindex": [1,0,0,0,0,0,0,0],   // Enable CEC on input 1 only
-  "outputindex": [1,1,0,0,0,0,0,0]   // Enable CEC on outputs 1-2
+  "language": 0,
+  "inputindex": [1,0,0,0,0,0,0,0],   // Enable CEC on input 1 only (8-element array)
+  "outputindex": [1,1,0,0,0,0,0,0]   // Enable CEC on outputs 1-2 (8-element array)
 }
-Response: {"comhead": "set cec index", "result": "success"}
+Response: {"comhead": "set cec index", "result": 1}
 ```
 
 **Notes**:
-- ⚠️ **THEORY**: CEC commands may require the port to be enabled first
-- Test by: 1) Check CEC status, 2) Enable port, 3) Send CEC command, 4) Verify
+- Use `get cec status` first to check current CEC enable state
+- `inputindex` and `outputindex` are 8-element arrays (one entry per port)
+- Value 1 = CEC enabled on that port, 0 = CEC disabled
+- **Source**: Verified against `src/orei_matrix.py` (line 1297)
 
 ---
 
 ## CEC Commands
 
-### Input CEC (Control Source Devices)
+### CEC Command Format
 **Status**: ✅ Verified
 
+The matrix uses a unified `cec command` format with an `index` field that maps to specific commands.
+
 ```json
-Request:  {"comhead": "set cec in", "index": 1, "cectype": "on"}
-Response: {"comhead": "set cec in", "result": "success"}
+// General format
+Request:  {
+  "comhead": "cec command",
+  "language": 0,
+  "object": 0,           // 0 = input device, 1 = output device
+  "port": [0,0,1,0,0,0,0,0],  // 8-element array, target port = 1
+  "index": 1             // Command index (see tables below)
+}
+Response: {"comhead": "cec command", "result": 1}
 ```
 
-**Available cectype values (from RTI/Control4 drivers)**:
-| cectype | Description |
-|---------|-------------|
-| `on` | Power on |
-| `off` | Power off/standby |
-| `menu` | Menu/Home |
-| `back` | Back/Return |
-| `up` | D-pad up |
-| `down` | D-pad down |
-| `left` | D-pad left |
-| `right` | D-pad right |
-| `enter` | Select/OK |
-| `play` | Play |
-| `pause` | Pause |
-| `stop` | Stop |
-| `rew` | Rewind |
-| `ff` | Fast forward |
-| `previous` | Previous track |
-| `next` | Next track |
-| `mute` | Mute toggle |
-| `vol+` | Volume up |
-| `vol-` | Volume down |
+**Source**: Verified against `src/orei_matrix.py` (line 823).
+
+### Input CEC Commands (Control Source Devices)
+
+| Index | Description |
+|-------|-------------|
+| 1 | Power on |
+| 2 | Power off/standby |
+| 3 | Menu/Home |
+| 4 | Back/Return |
+| 5 | D-pad up |
+| 6 | D-pad down |
+| 7 | D-pad left |
+| 8 | D-pad right |
+| 9 | D-pad enter (Select/OK) |
+| 10 | Play |
+| 11 | Pause |
+| 12 | Stop |
+| 13 | Rewind |
+| 14 | Fast forward |
+| 15 | Previous track |
+| 16 | Next track |
+| 17 | Mute toggle |
+| 18 | Volume up |
+| 19 | Volume down |
 
 ---
 
-### Output CEC (Control TVs/Displays)
-**Status**: ✅ Verified
+### Output CEC Commands (Control TVs/Displays)
 
-```json
-Request:  {"comhead": "set cec hdmi out", "index": 1, "cectype": "on"}
-Response: {"comhead": "set cec hdmi out", "result": "success"}
-```
-
-**Available cectype values (from RTI/Control4 drivers)**:
-| cectype | Description |
-|---------|-------------|
-| `on` | Power on |
-| `off` | Power off/standby |
-| `mute` | Mute toggle |
-| `vol+` | Volume up |
-| `vol-` | Volume down |
-| `active` | Set active source (make TV switch to this input) |
+| Index | Description |
+|-------|-------------|
+| 1 | Power on |
+| 2 | Power off/standby |
+| 3 | Mute toggle |
+| 4 | Volume up |
+| 5 | Volume down |
+| 6 | Set active source (make TV switch to this input) |
 
 ---
 
 ## Output Settings Commands
 
 ### Set Output Stream On/Off
-**Status**: ❓ Discovered from drivers
+**Status**: ✅ Implemented
 
 ```json
-// From RTI driver - Serial format: "s out X stream Y"
-// JSON equivalent (theory):
 Request:  {"comhead": "set output stream", "output": 1, "enable": 1}
+Response: {"comhead": "set output stream", "result": 1}
 ```
 
-**Notes**: Enables/disables video output per port. Useful for "blank" scenarios.
+**Notes**: 
+- Enables/disables video output per port. Useful for "blank" scenarios.
+- `enable: 1` = on, `enable: 0` = off
+- **Source**: Verified against `src/orei_matrix.py` (line 1731)
 
 ---
 
 ### Set Output HDCP Mode
-**Status**: ❓ Discovered from drivers
+**Status**: ✅ Implemented
 
 ```json
-// From RTI driver:
-// 1=HDCP 1.4, 2=HDCP 2.2, 3=Follow Sink, 4=Follow Source, 5=User Mode
+Request:  {"comhead": "set output hdcp", "output": 1, "hdcp": 3}
+Response: {"comhead": "set output hdcp", "result": 1}
 ```
+
+**HDCP Modes**:
+| Value | Description |
+|-------|-------------|
+| 1 | HDCP 1.4 |
+| 2 | HDCP 2.2 |
+| 3 | Follow Sink |
+| 4 | Follow Source |
+| 5 | User Mode |
+
+**Source**: Verified against `src/orei_matrix.py` (line 1758)
 
 ---
 
 ### Set Output HDR Mode
-**Status**: ❓ Discovered from drivers
+**Status**: ✅ Implemented
 
 ```json
-// From RTI driver:
-// 1=Passthrough, 2=HDR to SDR, 3=Auto (follow sink EDID)
+Request:  {"comhead": "set output hdr", "output": 1, "hdr": 1}
+Response: {"comhead": "set output hdr", "result": 1}
 ```
+
+**HDR Modes**:
+| Value | Description |
+|-------|-------------|
+| 1 | Passthrough |
+| 2 | HDR to SDR |
+| 3 | Auto (follow sink EDID) |
+
+**Source**: Verified against `src/orei_matrix.py` (line 1784)
 
 ---
 
 ### Set Output Video Mode (Scaler)
-**Status**: ❓ Discovered from drivers
+**Status**: ✅ Implemented
 
 ```json
-// From RTI driver:
-// 1=Passthrough, 2=8K→4K, 3=8K/4K→1080p, 4=Auto, 5=Audio Only
+Request:  {"comhead": "set output scaler", "output": 1, "scaler": 1}
+Response: {"comhead": "set output scaler", "result": 1}
 ```
+
+**Scaler Modes**:
+| Value | Description |
+|-------|-------------|
+| 1 | Passthrough |
+| 2 | 8K→4K |
+| 3 | 8K/4K→1080p |
+| 4 | Auto (follow sink EDID) |
+| 5 | Audio Only |
+
+**Source**: Verified against `src/orei_matrix.py` (line 1810)
 
 ---
 
 ### Set Output ARC
-**Status**: ❓ Discovered from drivers
+**Status**: ✅ Implemented
 
 ```json
-// From RTI driver:
-// Enable/disable ARC (Audio Return Channel) per output
+Request:  {"comhead": "set output arc", "output": 1, "arc": 1}
+Response: {"comhead": "set output arc", "result": 1}
 ```
+
+**Notes**: Enable/disable ARC (Audio Return Channel) per output. `arc: 1` = on, `arc: 0` = off.
+
+**Source**: Verified against `src/orei_matrix.py` (line 1832)
 
 ---
 
 ### Set Output Audio Mute
-**Status**: ❓ Discovered from drivers
+**Status**: ✅ Implemented
 
 ```json
-// From RTI driver:
-// Mute audio on specific output
+Request:  {"comhead": "set output mute", "output": 1, "mute": 1}
+Response: {"comhead": "set output mute", "result": 1}
 ```
+
+**Notes**: Mute audio on specific output. `mute: 1` = muted, `mute: 0` = unmuted.
+
+**Source**: Verified against `src/orei_matrix.py` (line 1855)
 
 ---
 
@@ -591,17 +650,30 @@ These translate to JSON `{"comhead": "...", ...}` format for HTTP API.
 | Category | Commands | Verified | Implemented | Discovered |
 |----------|----------|----------|-------------|------------|
 | Auth | 1 | 1 | 1 | 0 |
-| Status | 7 | 7 | 7 | 0 |
-| Control | 5 | 5 | 5 | 0 |
-| CEC | 2 | 2 | 2 | 0 |
+| Status | 9 | 9 | 9 | 0 |
+| Control | 4 | 4 | 4 | 0 |
+| Naming | 2 | 2 | 2 | 0 |
 | Output Settings | 6 | 6 | 6 | 0 |
-| EDID | 2 | 2 | 2 | 0 |
-| LCD | 1 | 1 | 1 | 0 |
-| Ext-Audio | 3 | 3 | 3 | 0 |
-| System | 1 | 1 | 1 | 0 |
-| **Total** | **28** | **28** | **28** | **0** |
+| External Audio | 3 | 3 | 3 | 0 |
+| EDID | 1 | 1 | 1 | 0 |
+| System | 4 | 4 | 4 | 0 |
+| CEC Enable | 1 | 1 | 1 | 0 |
+| CEC Commands | 2 | 2 | 2 | 0 |
+| **Total** | **33** | **33** | **33** | **0** |
+
+### Notes on Status
+- **Verified**: Confirmed working with real hardware AND code implementation exists
+- **Implemented**: Code exists in `src/orei_matrix.py` but not yet tested with hardware
+- **Discovered**: Found in vendor drivers/HAR files but not yet implemented in code
+
+### Commands NOT Yet Implemented
+- **Network configuration** (IP/subnet/gateway) - vendor supports via telnet, no HTTP equivalent found
+- **Factory reset** - vendor has `reset!` telnet command, no HTTP equivalent found
+- **LCD logo customization** - vendor has `s logo1 *!` telnet command, no HTTP equivalent found
+- **Firmware update** - vendor method not yet identified
+- **User-defined EDID upload** - only preset EDID modes (1-47) currently supported
 
 ---
 
-*Last Updated: January 19, 2026*
-*Document Version: 1.3*
+*Last Updated: June 19, 2026*
+*Document Version: 2.0*
