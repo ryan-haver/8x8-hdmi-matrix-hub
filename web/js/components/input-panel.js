@@ -26,11 +26,13 @@ class InputPanel {
      * Render the input list
      */
     render() {
-        // Only show loading spinner if loading AND no cached data
+        // Only show loading skeleton if loading AND no cached data
         // This keeps the UI intact during refreshes
         const hasData = Object.keys(state.inputs).length > 0;
         if (state.ui.loading && !hasData) {
-            this.container.innerHTML = '<div class="matrix-loading"><div class="spinner"></div></div>';
+            // Use skeleton loader for better perceived performance
+            const skeleton = new window.SkeletonLoader({ type: 'io-card', count: 4 });
+            this.container.innerHTML = `<div class="skeleton-wrapper">${skeleton.render()}</div>`;
             return;
         }
 
