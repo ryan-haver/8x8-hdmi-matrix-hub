@@ -9,15 +9,14 @@ from aiohttp import web
 from .utils import (
     _json_response,
     _save_names_to_config,
+    API_VERSION,
     get_input_names,
     get_matrix_device,
     get_output_names,
+    require_connected,
 )
 
 _LOG = logging.getLogger("rest_api.core")
-
-# API Version
-API_VERSION = "2.10.0"
 
 
 async def handle_health(request: web.Request) -> web.Response:
