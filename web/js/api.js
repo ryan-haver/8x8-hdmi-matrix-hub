@@ -559,6 +559,116 @@ class MatrixAPI {
     async updateUiPreferences(prefs) {
         return this.put('/api/ui/preferences', prefs);
     }
+
+    // ===== System Shortcuts (Phase 7) =====
+
+    async listSystemShortcuts() {
+        return this.get('/api/system-shortcuts');
+    }
+
+    async listFavoriteSystemShortcuts() {
+        return this.get('/api/system-shortcuts/favorites');
+    }
+
+    async listDashboardSystemShortcuts() {
+        return this.get('/api/system-shortcuts/dashboard');
+    }
+
+    async getSystemShortcut(id) {
+        return this.get(`/api/system-shortcuts/${id}`);
+    }
+
+    async toggleSystemShortcutFavorite(id) {
+        return this.post(`/api/system-shortcuts/${id}/favorite`);
+    }
+
+    async toggleSystemShortcutDashboard(id) {
+        return this.post(`/api/system-shortcuts/${id}/dashboard`);
+    }
+
+    async updateSystemShortcut(id, updates) {
+        return this.put(`/api/system-shortcuts/${id}`, updates);
+    }
+
+    async reorderSystemShortcuts(orderedIds) {
+        return this.put('/api/system-shortcuts/reorder', { ordered_ids: orderedIds });
+    }
+
+    async executeSystemShortcut(id) {
+        return this.post(`/api/system-shortcuts/${id}/execute`);
+    }
+
+    // ===== Dashboard Layout (Phase 7) =====
+
+    async getDashboardLayout() {
+        return this.get('/api/dashboard/layout');
+    }
+
+    async replaceDashboardLayout(layout) {
+        return this.put('/api/dashboard/layout', layout);
+    }
+
+    async addDashboardCard(type, id) {
+        return this.post('/api/dashboard/cards', { type, id });
+    }
+
+    async removeDashboardCard(type, id) {
+        return this.delete(`/api/dashboard/cards?type=${encodeURIComponent(type)}&id=${encodeURIComponent(id)}`);
+    }
+
+    // ===== Profile Favorites (Phase 7) =====
+
+    async listFavoriteProfiles() {
+        return this.get('/api/profiles/favorites');
+    }
+
+    async toggleProfileFavorite(id) {
+        return this.post(`/api/profile/${id}/favorite`);
+    }
+
+    async setProfileFavorite(id, favorite) {
+        return this.put(`/api/profile/${id}/favorite`, { favorite });
+    }
+
+    async toggleProfileDashboard(id) {
+        return this.post(`/api/profile/${id}/dashboard`);
+    }
+
+    async setProfileDashboard(id, dashboard_visible) {
+        return this.put(`/api/profile/${id}/dashboard`, { dashboard_visible });
+    }
+
+    // ===== Macro Favorites (Phase 7) =====
+
+    async listFavoriteMacros() {
+        return this.get('/api/cec/macros/favorites');
+    }
+
+    async toggleMacroFavorite(id) {
+        return this.post(`/api/cec/macro/${id}/favorite`);
+    }
+
+    async toggleMacroDashboard(id) {
+        return this.post(`/api/cec/macro/${id}/dashboard`);
+    }
+
+    // ===== Device-Settings Preset Favorites (Phase 7) =====
+
+    async getFavoritePresets() {
+        return this.get('/api/device-settings/favorite-presets');
+    }
+
+    async toggleFavoritePreset(presetNum) {
+        return this.post(`/api/device-settings/favorite-presets/${presetNum}/toggle`);
+    }
+
+    async getDashboardPresets() {
+        return this.get('/api/device-settings/dashboard-presets');
+    }
+
+    async toggleDashboardPreset(presetNum) {
+        return this.post(`/api/device-settings/dashboard-presets/${presetNum}/toggle`);
+    }
 }
 
 // Clean up any legacy localStorage values before creating API instance

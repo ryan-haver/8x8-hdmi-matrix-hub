@@ -15,10 +15,13 @@ class MatrixApp {
      */
     async init() {
         Logger.info('OREI Matrix Control initializing...');
-        
+
+        // Phase 7: Migrate localStorage favorites/dashboard to server before initial load
+        await this.migrateLocalStorageToServer();
+
         // Initialize components first - renders UI immediately with default/cached state
         this.initComponents();
-        
+
         // Setup event handlers
         this.setupEventHandlers();
 
@@ -27,15 +30,59 @@ class MatrixApp {
             await window.sideNavDrawer.init();
             this.applyUiPreferences(window.sideNavDrawer.preferences);
         }
-        
+
         // Connect WebSocket for real-time updates
         this.connectWebSocket();
-        
+
         // Load initial data in background - don't block UI rendering
         // Components will update automatically via state events when data arrives
         this.loadInitialData();
-        
+
         Logger.info('OREI Matrix Control ready');
+    }
+
+    /**
+     * Migrate localStorage favorites/dashboard config to server (Phase 7)
+     * Runs once on first load after Phase 7 migration flag is set
+     */
+    async migrateLocalStorageToServer() {
+        const migrationKey = 'orei_phase7_migration_done';
+        if (localStorage.getItem(migrationKey)) return;
+
+        try {
+            // Migrate favorites
+            const favRaw = localStorage.getItem('orei_favorites');
+            if (favRaw) {
+                const favs = JSON.parse(favRaw);
+                // POST each preset favorite
+                if (Array.isArray(favs.presets)) {
+                    for (const presetNum of favs.presets) {
+                        await window.api.toggleFavoritePreset(Number(presetNum)).catch(() => {});
+                    }
+                }
+                // POST each scene (profile) favorite
+                if (Array.isArray(favs.scenes)) {
+                    for (const profileId of favs.scenes) {
+                        await window.api.toggleProfileFavorite(profileId).catch(() => {});
+                    }
+                }
+                localStorage.removeItem('orei_favorites');
+                console.info('Phase 7: migrated favorites from localStorage to server');
+            }
+
+            // Migrate dashboard config (if dashboard_manager stored anything)
+            const dashRaw = localStorage.getItem('orei_dashboard_config');
+            if (dashRaw) {
+                // The 3 legacy aggregate widgets may have been unpinned
+                // We just clear localStorage; server already has the default layout
+                localStorage.removeItem('orei_dashboard_config');
+                console.info('Phase 7: cleared legacy dashboard localStorage config');
+            }
+
+            localStorage.setItem(migrationKey, 'true');
+        } catch (err) {
+            console.warn('Phase 7 migration failed (non-fatal):', err);
+        }
     }
 
     /**
@@ -512,13 +559,14 @@ class MatrixApp {
             }
             
             // Load info and status in parallel
-            const [info, status, scenesResult, inputStatus, outputStatus, deviceSettings] = await Promise.all([
+            const [info, status, scenesResult, inputStatus, outputStatus, deviceSettings, shortcutsResult] = await Promise.all([
                 api.getInfo().catch(() => null),
                 api.getStatus().catch(() => null),
                 api.listScenes().catch(() => ({ scenes: [] })),
                 api.getInputStatus().catch(() => null),
                 api.getOutputStatus().catch(() => null),
-                state.loadDeviceSettings().catch(() => false)
+                state.loadDeviceSettings().catch(() => false),
+                state.loadSystemShortcuts().catch(() => [])
             ]);
             
             if (info) {
@@ -541,7 +589,14 @@ class MatrixApp {
             if (outputStatus?.data?.outputs) {
                 this.applyOutputStatus(outputStatus.data.outputs);
             }
-            
+
+            // Phase 7: Load server-backed favorites and dashboard
+            await Promise.all([
+                state.loadAllFavorites().catch(() => {}),
+                state.loadDashboardLayout().catch(() => {}),
+                state.loadDashboardPresets().catch(() => {})
+            ]);
+
             state.setConnected(true);
             state.ui.dataLoaded = true;
             
