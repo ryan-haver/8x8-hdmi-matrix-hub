@@ -5,6 +5,7 @@ Creates and configures the aiohttp web application with all routes.
 """
 
 import logging
+from pathlib import Path
 
 from aiohttp import web
 
@@ -56,6 +57,7 @@ from .core import (
     handle_set_output_name,
     handle_status,
 )
+from persistence import get_data_dir
 from .device_settings import (
     handle_bulk_update_settings,
     handle_get_device_settings,
@@ -121,14 +123,20 @@ from .static import (
     handle_static_file,
     handle_web_ui,
 )
+from .system import (
+    handle_get_info,
+    handle_get_storage,
+)
 from .themes import (
     handle_get_themes,
     handle_put_themes,
     handle_reset_themes,
+    init_themes,
 )
 from .ui import (
     handle_get_ui_preferences,
     handle_set_ui_preferences,
+    init_ui_preferences,
 )
 from .utils import API_VERSION, rate_limit_middleware
 from .websocket import handle_websocket
@@ -136,8 +144,18 @@ from .websocket import handle_websocket
 _LOG = logging.getLogger("rest_api.app")
 
 
-def create_rest_app() -> web.Application:
-    """Create and configure the REST API application."""
+def create_rest_app(data_dir: Path | None = None) -> web.Application:
+    """Create and configure the REST API application.
+
+    :param data_dir: Optional explicit persistent data directory. When omitted,
+        the directory is resolved from environment variables by
+        :func:`persistence.get_data_dir` (priority: ``MATRIX_DATA_DIR``,
+        then ``UC_CONFIG_HOME``, then local ``<project_root>/data``).
+    """
+    if data_dir is None:
+        data_dir = get_data_dir()
+    data_dir = Path(data_dir).resolve()
+
     app = web.Application(middlewares=[rate_limit_middleware])
 
     # Add CORS middleware for browser-based clients
@@ -209,6 +227,10 @@ def create_rest_app() -> web.Application:
     app.router.add_post("/api/system/reboot", handle_system_reboot)
     app.router.add_get("/api/system/lcd/modes", handle_lcd_timeout_modes)
     app.router.add_post("/api/system/lcd", handle_set_lcd_timeout)
+
+    # Persistent storage introspection (for verifying volume mounts)
+    app.router.add_get("/api/system/storage", handle_get_storage)
+    app.router.add_get("/api/system/info", handle_get_info)
 
     # Advanced Output Control
     app.router.add_post("/api/output/{output}/enable", handle_output_enable)
@@ -286,8 +308,14 @@ def create_rest_app() -> web.Application:
     app.router.add_get("/api/device-settings/output/{output}", handle_get_output_settings)
     app.router.add_post("/api/device-settings/output/{output}", handle_set_output_settings)
 
-    # Initialize device settings storage
-    init_device_settings()
+    # Initialize persistent storage modules. All three share the same
+    # ``data_dir`` which is resolved from ``MATRIX_DATA_DIR``,
+    # ``UC_CONFIG_HOME``, or the local ``<project_root>/data`` default.
+    # See :mod:`persistence` for resolution details.
+    init_device_settings(data_dir)
+    init_themes(data_dir)
+    init_ui_preferences(data_dir)
+    _LOG.info(f"Persistent storage initialized at {data_dir}")
 
     # WebSocket for real-time updates
     app.router.add_get("/ws", handle_websocket)
