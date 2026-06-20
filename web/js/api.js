@@ -150,14 +150,10 @@ class MatrixAPI {
         return this.get('/api/status');
     }
 
-    async getFullStatus() {
-        return this.get('/api/status/full');
-    }
-    
     async getInputStatus() {
         return this.get('/api/status/inputs');
     }
-    
+
     async getOutputStatus() {
         return this.get('/api/status/outputs');
     }
@@ -181,18 +177,10 @@ class MatrixAPI {
         return this.post(`/api/input/${input}/name`, { name });
     }
 
-    async getInputNames() {
-        return this.get('/api/inputs');
-    }
-
     // ===== Output Names =====
-    
+
     async setOutputName(output, name) {
         return this.post(`/api/output/${output}/name`, { name });
-    }
-
-    async getOutputNames() {
-        return this.get('/api/outputs');
     }
 
     // ===== Audio Control =====
@@ -435,18 +423,6 @@ class MatrixAPI {
     
     async sendCecCommand(type, port, command) {
         return this.post(`/api/cec/${type}/${port}/${command}`);
-    }
-
-    async getCecCommands() {
-        return this.get('/api/cec/commands');
-    }
-
-    async getCecCommandsByType(type) {
-        return this.get(`/api/cec/commands/${type}`);
-    }
-
-    async getCecCapabilities() {
-        return this.get('/api/cec/capabilities');
     }
 
     async getInputCapabilities(input) {
