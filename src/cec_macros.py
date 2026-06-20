@@ -268,6 +268,9 @@ class MacroManager:
         steps: list[dict[str, Any]] | None = None,
         icon: str | None = None,
         description: str | None = None,
+        favorite: bool | None = None,
+        dashboard_visible: bool | None = None,
+        dashboard_order: int | None = None,
     ) -> CecMacro | None:
         """
         Update an existing macro.
@@ -277,6 +280,9 @@ class MacroManager:
         :param steps: New steps (optional)
         :param icon: New icon (optional)
         :param description: New description (optional)
+        :param favorite: Phase 7 — show in Quick Actions drawer (optional)
+        :param dashboard_visible: Phase 7 — show as individual Dashboard card
+        :param dashboard_order: Phase 7 — position within the Dashboard grid
         :return: Updated macro or None if not found
         """
         macro = self._macros.get(macro_id)
@@ -291,11 +297,41 @@ class MacroManager:
             macro.description = description
         if steps is not None:
             macro.steps = [MacroStep.from_dict(s) for s in steps]
+        if favorite is not None:
+            macro.favorite = favorite
+        if dashboard_visible is not None:
+            macro.dashboard_visible = dashboard_visible
+        if dashboard_order is not None:
+            macro.dashboard_order = dashboard_order
 
         macro.update_timestamp()
         self.save()
         _LOG.info("Updated macro: %s", macro_id)
         return macro
+
+    # ------------------------------------------------------------------
+    # Phase 7: surface-visibility helpers
+    # ------------------------------------------------------------------
+
+    def toggle_favorite(self, macro_id: str) -> CecMacro | None:
+        """Toggle the favorite flag. Returns the updated macro, or None."""
+        macro = self._macros.get(macro_id)
+        if macro is None:
+            return None
+        return self.update_macro(macro_id, favorite=not macro.favorite)
+
+    def toggle_dashboard_visible(self, macro_id: str) -> CecMacro | None:
+        """Toggle the dashboard_visible flag. Returns the updated macro."""
+        macro = self._macros.get(macro_id)
+        if macro is None:
+            return None
+        return self.update_macro(macro_id, dashboard_visible=not macro.dashboard_visible)
+
+    def list_favorites(self) -> list[CecMacro]:
+        """Return all macros marked as favorite, sorted by name."""
+        macros = [m for m in self._macros.values() if m.favorite]
+        macros.sort(key=lambda m: (m.dashboard_order, m.name.lower()))
+        return macros
 
     def delete_macro(self, macro_id: str) -> bool:
         """
