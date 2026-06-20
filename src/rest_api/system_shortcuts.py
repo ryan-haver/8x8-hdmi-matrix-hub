@@ -52,7 +52,7 @@ async def handle_list_shortcuts(request: web.Request) -> web.Response:
     try:
         enabled_only = request.query.get("enabled_only", "").lower() == "true"
         include_builtin = request.query.get("include_builtin", "true").lower() != "false"
-        shortcuts = manager.list(enabled_only=enabled_only, include_builtin=include_builtin)
+        shortcuts = manager.list_shortcuts(enabled_only=enabled_only, include_builtin=include_builtin)
         return _json_response(True, {
             "shortcuts": [s.to_dict() for s in shortcuts],
         })

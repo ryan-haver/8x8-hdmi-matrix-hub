@@ -327,7 +327,7 @@ class SystemShortcutManager:
                 order += 1
         # Append any not in the supplied list, preserving their relative order
         leftovers = [
-            s for s in self.list() if s.id not in seen
+            s for s in self.list_shortcuts() if s.id not in seen
         ]
         for s in leftovers:
             s.order = order

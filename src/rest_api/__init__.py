@@ -64,9 +64,23 @@ class RestApiServer:
         return cls._real_class(*args, **kwargs)
 
 
-def create_rest_app():
-    """Create and configure the REST API application."""
+def create_rest_app(data_dir=None):
+    """Create and configure the REST API application.
+
+    :param data_dir: Optional explicit persistent data directory. When omitted,
+        the directory is resolved from environment variables by
+        :func:`persistence.get_data_dir`.
+    """
+    from pathlib import Path
     from .app import create_rest_app as _create_rest_app
+    if data_dir is not None:
+        import os
+        resolved = str(Path(data_dir).resolve())
+        # Set BOTH env vars so ProfileManager/MacroManager (which use
+        # UC_CONFIG_HOME or HOME) and SystemShortcutManager/DashboardManager
+        # (which use MATRIX_DATA_DIR via persistence) see the same path.
+        os.environ["MATRIX_DATA_DIR"] = resolved
+        os.environ["UC_CONFIG_HOME"] = resolved
     return _create_rest_app()
 
 
