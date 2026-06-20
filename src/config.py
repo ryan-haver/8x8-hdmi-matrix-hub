@@ -362,6 +362,10 @@ class Profile:
     # Pin/visibility settings
     pinned: bool = True  # Whether this profile appears in the main UI
     pin_order: int = 0  # Order in pinned list (0-7)
+    # Surface visibility flags (Phase 7 unification)
+    favorite: bool = False  # Show in Quick Actions drawer for one-tap recall
+    dashboard_visible: bool = False  # Render as individual card on Dashboard tab
+    dashboard_order: int = 0  # Position within the Dashboard card grid
 
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
@@ -373,6 +377,9 @@ class Profile:
             "macros": self.macros,
             "pinned": self.pinned,
             "pin_order": self.pin_order,
+            "favorite": self.favorite,
+            "dashboard_visible": self.dashboard_visible,
+            "dashboard_order": self.dashboard_order,
         }
         if self.cec_config is not None:
             result["cec_config"] = self.cec_config.to_dict()
@@ -404,6 +411,9 @@ class Profile:
             power_off_macro=data.get("power_off_macro"),
             pinned=data.get("pinned", True),
             pin_order=data.get("pin_order", 0),
+            favorite=data.get("favorite", False),
+            dashboard_visible=data.get("dashboard_visible", False),
+            dashboard_order=data.get("dashboard_order", 0),
         )
 
     @staticmethod
