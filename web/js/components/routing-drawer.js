@@ -134,6 +134,12 @@ class RouteAllDrawer {
      */
     init() {
         this.render();
+        if (window.overlayManager) {
+            window.overlayManager.register('routing-drawer', {
+                close: () => this.close(),
+                isOpen: () => this.isOpen
+            });
+        }
     }
 
     /**
@@ -144,7 +150,13 @@ class RouteAllDrawer {
         const backdrop = document.createElement('div');
         backdrop.id = 'routing-backdrop';
         backdrop.className = 'routing-backdrop';
-        backdrop.addEventListener('click', () => this.close());
+        backdrop.addEventListener('click', () => {
+            if (window.overlayManager) {
+                window.overlayManager.closeAll();
+            } else {
+                this.close();
+            }
+        });
         document.body.appendChild(backdrop);
         
         // Drawer
@@ -181,6 +193,15 @@ class RouteAllDrawer {
             <div class="drawer-content" id="routing-content">
                 <!-- Content rendered dynamically -->
             </div>
+            <div class="drawer-footer mobile-only">
+                <button class="btn btn-primary btn-block back-to-deck-btn">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="19" y1="12" x2="5" y2="12"/>
+                        <polyline points="12 19 5 12 12 5"/>
+                    </svg>
+                    Back to Control Deck
+                </button>
+            </div>
         `;
         document.body.appendChild(drawer);
         
@@ -192,6 +213,14 @@ class RouteAllDrawer {
         
         // Pin to dashboard button (toggles pin state)
         drawer.querySelector('.drawer-pin-dashboard-btn')?.addEventListener('click', () => this.toggleDashboardPin());
+        
+        // Back to Control Deck button
+        drawer.querySelector('.back-to-deck-btn')?.addEventListener('click', () => {
+            this.close();
+            if (window.sideNavDrawer) {
+                window.sideNavDrawer.open();
+            }
+        });
         
         // Handle escape key
         document.addEventListener('keydown', (e) => {
@@ -237,6 +266,9 @@ class RouteAllDrawer {
      */
     open() {
         Logger.log('RouteAllDrawer: Opening drawer');
+        if (window.overlayManager) {
+            window.overlayManager.onOpen('routing-drawer');
+        }
         this.isOpen = true;
         this.container.classList.add('open');
         this.backdrop.classList.add('open');
@@ -249,6 +281,9 @@ class RouteAllDrawer {
      * Close the drawer
      */
     close() {
+        if (window.overlayManager) {
+            window.overlayManager.onClose('routing-drawer');
+        }
         this.isOpen = false;
         this.container.classList.remove('open');
         this.backdrop.classList.remove('open');

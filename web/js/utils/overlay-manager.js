@@ -20,16 +20,38 @@ class OverlayManager {
 
     /**
      * Called when an overlay is opening
-     * Closes any other open overlay first
+     * Closes any other open overlay first (with viewport-aware bypass for desktop side nav)
      * @param {string} name - Name of the overlay being opened
      */
     onOpen(name) {
-        // Close any other open overlay
-        if (this.activeOverlay && this.activeOverlay !== name) {
-            const previous = this.overlays.get(this.activeOverlay);
-            if (previous?.close) {
-                previous.close();
+        const isDesktop = window.innerWidth >= 768;
+        
+        if (isDesktop) {
+            // On desktop/tablet, we allow the side nav drawer (Control Deck) to coexist with one right-side drawer.
+            if (name === 'side-nav-drawer') {
+                // Opening side-nav-drawer: do not close any right-side drawer.
+            } else {
+                // Opening a right-side drawer: close other right-side drawers to avoid overlays on the right.
+                const rightSideDrawers = ['quick-actions-drawer', 'routing-drawer', 'theme-drawer'];
+                if (rightSideDrawers.includes(name)) {
+                    rightSideDrawers.forEach(d => {
+                        if (d !== name) {
+                            const overlay = this.overlays.get(d);
+                            if (overlay?.isOpen && overlay.isOpen()) {
+                                overlay.close();
+                            }
+                        }
+                    });
+                }
+                // Do not close side-nav-drawer.
             }
+        } else {
+            // On mobile, close all other open overlays
+            this.overlays.forEach((overlay, key) => {
+                if (key !== name && overlay?.isOpen && overlay.isOpen()) {
+                    overlay.close();
+                }
+            });
         }
         this.activeOverlay = name;
     }
@@ -55,6 +77,18 @@ class OverlayManager {
             }
             this.activeOverlay = null;
         }
+    }
+
+    /**
+     * Close all registered overlays that are currently open
+     */
+    closeAll() {
+        this.overlays.forEach(overlay => {
+            if (overlay?.close && overlay?.isOpen && overlay.isOpen()) {
+                overlay.close();
+            }
+        });
+        this.activeOverlay = null;
     }
 
     /**

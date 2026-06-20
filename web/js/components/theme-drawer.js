@@ -193,6 +193,15 @@ class ThemeDrawer {
                     </button>
                 </div>
             </div>
+            <div class="drawer-footer mobile-only">
+                <button class="btn btn-primary btn-block back-to-deck-btn">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="19" y1="12" x2="5" y2="12"/>
+                        <polyline points="12 19 5 12 12 5"/>
+                    </svg>
+                    Back to Control Deck
+                </button>
+            </div>
         `;
     }
     
@@ -201,7 +210,24 @@ class ThemeDrawer {
         this.drawer.querySelector('.theme-drawer-close').addEventListener('click', () => this.close());
         
         // Overlay click
-        this.overlay.addEventListener('click', () => this.close());
+        this.overlay.addEventListener('click', () => {
+            if (window.overlayManager) {
+                window.overlayManager.closeAll();
+            } else {
+                this.close();
+            }
+        });
+        
+        // Back to Control Deck button
+        const backBtn = this.drawer.querySelector('.back-to-deck-btn');
+        if (backBtn) {
+            backBtn.addEventListener('click', () => {
+                this.close();
+                if (window.sideNavDrawer) {
+                    window.sideNavDrawer.open();
+                }
+            });
+        }
         
         // Preset slot click (activate preset)
         this.drawer.querySelectorAll('.theme-preset-slot').forEach(slot => {
