@@ -905,9 +905,19 @@ class DashboardManager {
                     } else if (type === 'macro') {
                         await window.api.executeMacro(id);
                         toast.success('Macro executed');
+                    } else if (type === 'scene') {
+                        const result = await window.api.executeScene(id);
+                        if (result.success) {
+                            toast.success('Scene executed');
+                        }
                     }
                 } catch (error) {
-                    toast.error(`Error: ${error.message}`);
+                    if (error.status === 401) {
+                        // Passcode required — handled in settings drawer
+                        toast.error('Passcode required');
+                    } else {
+                        toast.error(`Error: ${error.message}`);
+                    }
                 }
             });
         });

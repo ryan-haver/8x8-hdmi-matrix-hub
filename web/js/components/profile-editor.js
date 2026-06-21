@@ -179,6 +179,19 @@ class ProfileEditor {
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Execution Log Section (Phase 8) -->
+                        <div class="form-section" id="execution-log-section">
+                            <label class="section-label">
+                                <span class="section-icon">7</span>
+                                Execution History
+                                <span class="optional-badge">Last 7 days</span>
+                            </label>
+                            <p class="section-help">Recent executions of this profile (including from Scenes).</p>
+                            <div class="execution-log-list" id="profile-execution-log">
+                                <p class="empty-hint">Loading execution history...</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="settings-modal-footer profile-editor-footer">
@@ -368,7 +381,10 @@ class ProfileEditor {
         this.renderMacroList(profile.macros || []);
         this.selectPowerMacros(profile.power_on_macro, profile.power_off_macro);
         this.renderRoutingPreview(profile.outputs);
-        
+
+        // Load execution log (Phase 8)
+        await this.loadExecutionLog();
+
         // Show modal
         this.modal.setAttribute('aria-hidden', 'false');
         this.modal.classList.add('visible');
@@ -719,6 +735,74 @@ class ProfileEditor {
         } catch (error) {
             console.error('Failed to refresh profiles:', error);
         }
+    }
+
+    /**
+     * Load execution log from backend (Phase 8).
+     * Falls back to log embedded in profile object if API endpoint unavailable.
+     */
+    async loadExecutionLog() {
+        const container = this.modal.querySelector('#profile-execution-log');
+        if (!container) return;
+
+        if (!this.currentProfile) {
+            container.innerHTML = '<p class="empty-hint">Execution history is only available for existing profiles.</p>';
+            return;
+        }
+
+        try {
+            let log = [];
+            // Try the dedicated endpoint first
+            if (window.api.getProfileExecutionLog) {
+                const result = await window.api.getProfileExecutionLog(this.currentProfile.id);
+                log = result.data?.log || result.log || [];
+            } else if (this.currentProfile.execution_log) {
+                // Fall back to embedded log
+                log = this.currentProfile.execution_log;
+            }
+            this.renderExecutionLog(log);
+        } catch (err) {
+            // Endpoint may not exist yet — try embedded log
+            const log = this.currentProfile.execution_log || [];
+            this.renderExecutionLog(log);
+        }
+    }
+
+    /**
+     * Render execution log entries.
+     */
+    renderExecutionLog(log) {
+        const container = this.modal.querySelector('#profile-execution-log');
+        if (!container) return;
+
+        if (!log || log.length === 0) {
+            container.innerHTML = '<p class="empty-hint">No executions yet. This profile has not been run.</p>';
+            return;
+        }
+
+        // Sort newest first; show last 20
+        const sorted = [...log].sort((a, b) => {
+            const ta = new Date(a.timestamp || 0).getTime();
+            const tb = new Date(b.timestamp || 0).getTime();
+            return tb - ta;
+        }).slice(0, 20);
+
+        const html = sorted.map(entry => {
+            const status = entry.status || 'unknown';
+            const ts = entry.timestamp ? new Date(entry.timestamp).toLocaleString() : '';
+            const sceneLabel = entry.scene_name ? ` from <strong>${Helpers.escapeHtml(entry.scene_name)}</strong>` : '';
+            const errorMsg = entry.error ? ` — <span class="error-text">${Helpers.escapeHtml(entry.error)}</span>` : '';
+
+            return `
+                <div class="log-entry log-${status}">
+                    <span class="log-status-badge log-${status}">${status}</span>
+                    <span class="log-time">${ts}</span>
+                    <span class="log-detail">${sceneLabel}${errorMsg}</span>
+                </div>
+            `;
+        }).join('');
+
+        container.innerHTML = html;
     }
 }
 

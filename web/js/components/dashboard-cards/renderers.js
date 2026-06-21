@@ -125,6 +125,43 @@ window.dashboardCardRenderers = {
     },
 
     /**
+     * Render a Phase 8 Scene card (unified scene with profiles + system actions + macros)
+     * @param {Object} card - Card data with type:'scene' and id
+     * @param {Object} context - Provides state and action helpers
+     */
+    scene: function(card, context) {
+        const scene = (context.state.phase8Scenes || []).find(s => s.id === card.id);
+        if (!scene) return ''; // Skip missing scenes
+
+        const stepCount = scene.steps?.length || 0;
+        const isProtected = scene.password_protected;
+
+        return `
+            <div class="dashboard-card dashboard-card-scene" data-card-key="${card.type}:${card.id}">
+                <div class="dashboard-card-header">
+                    <span class="dashboard-card-drag-handle" title="Drag to reorder">⋮⋮</span>
+                    <span class="dashboard-card-icon">${scene.icon || '🎬'}</span>
+                    <span class="dashboard-card-title">
+                        ${Helpers.escapeHtml(scene.name)}
+                        ${isProtected ? `<svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" title="Password protected"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>` : ''}
+                    </span>
+                    <button class="dashboard-card-unpin btn-icon" data-type="scene" data-id="${scene.id}" title="Remove from dashboard">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="dashboard-card-body">
+                    <span class="dashboard-card-meta">${stepCount} step${stepCount !== 1 ? 's' : ''}</span>
+                    <button class="btn btn-sm btn-primary dashboard-card-action" data-type="scene" data-id="${scene.id}">
+                        Execute
+                    </button>
+                </div>
+            </div>
+        `;
+    },
+
+    /**
      * Render an aggregate widget card (legacy compatibility)
      * @param {Object} card - Card data with type:'aggregate_widget' and widget_id
      * @param {Object} context - Provides state and action helpers

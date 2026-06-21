@@ -638,6 +638,10 @@ class MatrixAPI {
         return this.put(`/api/profile/${id}/dashboard`, { dashboard_visible });
     }
 
+    async getProfileExecutionLog(id) {
+        return this.get(`/api/profile/${id}/execution-log`);
+    }
+
     // ===== Macro Favorites (Phase 7) =====
 
     async listFavoriteMacros() {

@@ -76,6 +76,8 @@ class SettingsDrawer {
             btn.addEventListener('click', () => {
                 this.activeTab = btn.dataset.tab;
                 this.container.querySelectorAll('.drawer-tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+                // Sync hash
+                window.history.replaceState(null, '', `#settings/${this.activeTab}`);
                 this.render();
             });
         });
@@ -86,11 +88,18 @@ class SettingsDrawer {
         document.body.appendChild(this.container);
     }
 
-    open() {
+    open(tab = null) {
         this.isOpen = true;
         this.container.classList.add('open');
         this.backdrop.classList.add('open');
         document.body.style.overflow = 'hidden';
+        if (tab && ['profiles', 'scenes', 'system'].includes(tab)) {
+            this.activeTab = tab;
+        }
+        // Sync hash with active tab
+        if (window.location.hash !== `#settings/${this.activeTab}`) {
+            window.history.replaceState(null, '', `#settings/${this.activeTab}`);
+        }
         this.render();
     }
 
@@ -99,11 +108,38 @@ class SettingsDrawer {
         this.container.classList.remove('open');
         this.backdrop.classList.remove('open');
         document.body.style.overflow = '';
+        // Clear hash when drawer closes
+        if (window.location.hash.startsWith('#settings/')) {
+            window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
     }
 
-    toggle() {
+    toggle(tab = null) {
         if (this.isOpen) this.close();
-        else this.open();
+        else this.open(tab);
+    }
+
+    /**
+     * Initialize hash-based routing. Opens drawer when URL hash matches #settings/*.
+     */
+    initHashRouting() {
+        window.addEventListener('hashchange', () => {
+            const hash = window.location.hash;
+            if (hash.startsWith('#settings/')) {
+                const tab = hash.replace('#settings/', '');
+                this.open(tab);
+            } else if (this.isOpen) {
+                this.close();
+            }
+        });
+        // Check initial hash
+        const hash = window.location.hash;
+        if (hash.startsWith('#settings/')) {
+            const tab = hash.replace('#settings/', '');
+            if (['profiles', 'scenes', 'system'].includes(tab)) {
+                this.activeTab = tab;
+            }
+        }
     }
 
     render() {
@@ -219,27 +255,60 @@ class SettingsDrawer {
             </div>`;
         }
 
-        let html = `<div class="drawer-section-title">System Actions</div>
-            <div class="settings-list">`;
-
+        // Group by category for better organization
+        const groups = {
+            routing: [],
+            presets: [],
+            system: [],
+            other: [],
+        };
         actions.forEach(action => {
-            html += `
-                <div class="settings-list-item" data-action-key="${action.key}">
-                    <div class="item-info">
-                        <span class="item-name">${Helpers.escapeHtml(action.name || action.key)}</span>
-                        ${action.description ? `<span class="item-meta">${Helpers.escapeHtml(action.description)}</span>` : ''}
-                    </div>
-                    <div class="item-actions">
-                        <button class="btn-icon execute-action-btn" data-key="${action.key}" title="Execute">
-                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polygon points="5 3 19 12 5 21 5 3"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>`;
+            const cat = action.category || 'other';
+            if (groups[cat]) groups[cat].push(action);
+            else groups.other.push(action);
         });
 
-        html += `</div>`;
+        const categoryLabels = {
+            routing: 'Routing Templates',
+            presets: 'Hardware Presets',
+            system: 'System Settings',
+            other: 'Other',
+        };
+
+        let html = '';
+        for (const [cat, items] of Object.entries(groups)) {
+            if (items.length === 0) continue;
+            html += `
+                <div class="drawer-section">
+                    <h4 class="drawer-section-title">${categoryLabels[cat]}</h4>
+                    <div class="settings-list">`;
+            items.forEach(action => {
+                html += `
+                    <div class="settings-list-item" data-action-key="${action.key}">
+                        <div class="item-info">
+                            <span class="item-icon">${action.icon || '⚡'}</span>
+                            <span class="item-name">${Helpers.escapeHtml(action.label || action.key)}</span>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-icon execute-action-btn" data-key="${action.key}" title="Execute">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="5 3 19 12 5 21 5 3"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>`;
+            });
+            html += `</div></div>`;
+        }
+
+        // Help text at bottom
+        html += `
+            <div class="drawer-section">
+                <p class="section-help">
+                    System Actions can be added as steps inside Scenes.
+                    Use the Scenes tab to create combined automations.
+                </p>
+            </div>`;
         return html;
     }
 
@@ -354,3 +423,4 @@ class SettingsDrawer {
 
 // Create global instance
 window.settingsDrawer = new SettingsDrawer();
+window.settingsDrawer.initHashRouting();

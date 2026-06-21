@@ -57,11 +57,13 @@ def _get_executor():
     from scene_execution import SceneExecutor
     from system_actions import SystemActionManager
     from persistence import get_data_dir
+    from rest_api.utils import get_macro_manager
     sam = SystemActionManager(get_data_dir())
     return SceneExecutor(
         scene_manager=_get_scene_manager(),
         profile_manager=_get_profile_manager(),
         system_action_manager=sam,
+        macro_manager=get_macro_manager(),
     )
 
 
@@ -112,6 +114,16 @@ async def handle_create_scene(request: web.Request) -> web.Response:
         steps = []
         for step_data in data.get("steps", []):
             steps.append(SceneStep.from_dict(step_data))
+
+        # Password inheritance check: scene containing protected profile must itself be protected
+        pm = _get_profile_manager()
+        profile_map = {p.id: p for p in pm.list_profiles()} if pm else None
+        if not bool(data.get("password_protected", False)) and mgr.steps_reference_protected_profile(steps, profile_map):
+            return await _json_response(
+                False,
+                error="Scene contains a password-protected Profile; the Scene must also be password-protected",
+                status=400,
+            )
 
         scene, err = mgr.create_scene(
             name=data.get("name", "Unnamed Scene"),
@@ -166,6 +178,22 @@ async def handle_update_scene(request: web.Request) -> web.Response:
                 for out_str, settings in outers.items():
                     overrides[pid][int(out_str)] = settings
 
+        # Password inheritance check
+        password_protected = data.get("password_protected")
+        if steps is not None and not password_protected:
+            pm = _get_profile_manager()
+            profile_map = {p.id: p for p in pm.list_profiles()} if pm else None
+            existing = mgr.get_scene(scene_id)
+            scene_is_protected = password_protected if password_protected is not None else (
+                existing.password_protected if existing else False
+            )
+            if not scene_is_protected and mgr.steps_reference_protected_profile(steps, profile_map):
+                return await _json_response(
+                    False,
+                    error="Scene contains a password-protected Profile; the Scene must also be password-protected",
+                    status=400,
+                )
+
         scene, err = mgr.update_scene(
             scene_id,
             name=data.get("name"),
@@ -175,7 +203,7 @@ async def handle_update_scene(request: web.Request) -> web.Response:
             favorite=data.get("favorite"),
             dashboard_visible=data.get("dashboard_visible"),
             dashboard_order=data.get("dashboard_order"),
-            password_protected=data.get("password_protected"),
+            password_protected=password_protected,
             passcode=data.get("passcode"),
         )
         if err:
