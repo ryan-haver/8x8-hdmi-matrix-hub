@@ -5,25 +5,25 @@ Tests cover: round-trip serialization, validation, card CRUD,
 deduplication, and order compaction.
 """
 
+import sys
 import tempfile
 from pathlib import Path
 
 import pytest
 
-import sys
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from dashboard_layout import (
+    CARD_AGGREGATE_WIDGET,
+    CARD_MACRO,
+    CARD_PRESET,
+    CARD_PROFILE,
+    CARD_SYSTEM_SHORTCUT,
+    LEGACY_AGGREGATE_WIDGETS,
+    VALID_CARD_TYPES,
     DashboardCard,
     DashboardLayout,
     DashboardLayoutManager,
-    CARD_PROFILE,
-    CARD_PRESET,
-    CARD_SYSTEM_SHORTCUT,
-    CARD_MACRO,
-    CARD_AGGREGATE_WIDGET,
-    VALID_CARD_TYPES,
-    LEGACY_AGGREGATE_WIDGETS,
 )
 
 
@@ -218,10 +218,12 @@ class TestDashboardLayoutManagerMutations:
         """replace_layout(new_layout) atomically replaces the entire layout."""
         with tempfile.TemporaryDirectory() as tmpdir:
             mgr = DashboardLayoutManager(Path(tmpdir))
-            new_layout = DashboardLayout(cards=[
-                DashboardCard(type=CARD_PRESET, id="1", order=0),
-                DashboardCard(type=CARD_PRESET, id="2", order=1),
-            ])
+            new_layout = DashboardLayout(
+                cards=[
+                    DashboardCard(type=CARD_PRESET, id="1", order=0),
+                    DashboardCard(type=CARD_PRESET, id="2", order=1),
+                ]
+            )
             result = mgr.replace_layout(new_layout)
             assert result is True
             cards = mgr.list_cards()
@@ -233,27 +235,28 @@ class TestDashboardLayoutManagerMutations:
         """replace_layout deduplicates cards with the same (type, id), keeping first."""
         with tempfile.TemporaryDirectory() as tmpdir:
             mgr = DashboardLayoutManager(Path(tmpdir))
-            new_layout = DashboardLayout(cards=[
-                DashboardCard(type=CARD_PRESET, id="1", order=0),
-                DashboardCard(type=CARD_PRESET, id="1", order=1),  # duplicate
-                DashboardCard(type=CARD_PRESET, id="2", order=2),
-            ])
+            new_layout = DashboardLayout(
+                cards=[
+                    DashboardCard(type=CARD_PRESET, id="1", order=0),
+                    DashboardCard(type=CARD_PRESET, id="1", order=1),  # duplicate
+                    DashboardCard(type=CARD_PRESET, id="2", order=2),
+                ]
+            )
             mgr.replace_layout(new_layout)
             # Should only have one "preset:1" card
-            preset1_count = sum(
-                1 for c in mgr.list_cards()
-                if c.type == CARD_PRESET and c.id == "1"
-            )
+            preset1_count = sum(1 for c in mgr.list_cards() if c.type == CARD_PRESET and c.id == "1")
             assert preset1_count == 1
 
     def test_replace_layout_recompacts_order(self):
         """replace_layout recompacts order values to 0..N-1 after dedup."""
         with tempfile.TemporaryDirectory() as tmpdir:
             mgr = DashboardLayoutManager(Path(tmpdir))
-            new_layout = DashboardLayout(cards=[
-                DashboardCard(type=CARD_PROFILE, id="a", order=99),
-                DashboardCard(type=CARD_PROFILE, id="b", order=100),
-            ])
+            new_layout = DashboardLayout(
+                cards=[
+                    DashboardCard(type=CARD_PROFILE, id="a", order=99),
+                    DashboardCard(type=CARD_PROFILE, id="b", order=100),
+                ]
+            )
             mgr.replace_layout(new_layout)
             orders = [c.order for c in mgr.list_cards()]
             assert orders == [0, 1]
@@ -262,10 +265,12 @@ class TestDashboardLayoutManagerMutations:
         """replace_layout silently skips cards with invalid types (logs warning)."""
         with tempfile.TemporaryDirectory() as tmpdir:
             mgr = DashboardLayoutManager(Path(tmpdir))
-            new_layout = DashboardLayout(cards=[
-                DashboardCard(type=CARD_PROFILE, id="valid", order=0),
-                DashboardCard(type="bad_type", id="invalid", order=1),
-            ])
+            new_layout = DashboardLayout(
+                cards=[
+                    DashboardCard(type=CARD_PROFILE, id="valid", order=0),
+                    DashboardCard(type="bad_type", id="invalid", order=1),
+                ]
+            )
             mgr.replace_layout(new_layout)
             assert mgr.has_card(CARD_PROFILE, "valid") is True
             assert mgr.has_card("bad_type", "invalid") is False

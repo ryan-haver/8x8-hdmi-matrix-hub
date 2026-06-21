@@ -38,17 +38,14 @@ def test_telnet_proper(port: int):
             b"r power",
             b"r input status",
             b"r output status",
-
             # Set commands from driver
             b"s power on",
             b"s power off",
-
             # Status read commands
             b"r output 1 hdcp",
             b"r output 1 video mode",
             b"r output 1 hdr",
             b"r output 1 in source",
-
             # Simple queries
             b"status",
             b"help",
@@ -64,7 +61,7 @@ def test_telnet_proper(port: int):
 
             response = tn.read_very_eager()
             if response:
-                decoded = response.decode('utf-8', errors='replace')
+                decoded = response.decode("utf-8", errors="replace")
                 print(f"[<] Response: {repr(decoded)}")
 
         # Listen for push data
@@ -76,7 +73,7 @@ def test_telnet_proper(port: int):
             data = tn.read_very_eager()
             if data:
                 print(f"\n[!] PUSH DATA: {data}")
-                decoded = data.decode('utf-8', errors='replace')
+                decoded = data.decode("utf-8", errors="replace")
                 print(f"[!] Decoded: {repr(decoded)}")
             time.sleep(0.2)
 
@@ -86,8 +83,10 @@ def test_telnet_proper(port: int):
     except Exception as e:
         print(f"[-] Error: {e}")
         import traceback
+
         traceback.print_exc()
         return False
+
 
 def test_telnet(port: int):
     """Test Telnet connection and commands."""
@@ -110,10 +109,10 @@ def test_telnet(port: int):
 
         # Only test commands that seemed valid (no E00)
         commands = [
-            b"r output 1 in source\r\n",             # Query routing for output 1
-            b"r input 1 status\r\n",                 # Input status query
-            b"r all output status\r\n",              # All output status
-            b"s output 1 hdcp 3\r\n",                # HDCP follow sink
+            b"r output 1 in source\r\n",  # Query routing for output 1
+            b"r input 1 status\r\n",  # Input status query
+            b"r all output status\r\n",  # All output status
+            b"s output 1 hdcp 3\r\n",  # HDCP follow sink
         ]
 
         for cmd in commands:
@@ -136,7 +135,7 @@ def test_telnet(port: int):
                 print(f"[<] Response: {full_response}")
                 # Try to decode and show readable
                 try:
-                    decoded = full_response.decode('utf-8', errors='replace')
+                    decoded = full_response.decode("utf-8", errors="replace")
                     print(f"[<] Decoded: {repr(decoded)}")
                 except:
                     pass
@@ -156,6 +155,7 @@ def test_telnet(port: int):
         print(f"[-] Error: {e}")
         return False
 
+
 def main():
     print("=" * 60)
     print("OREI BK-808 TELNET/TCP INTERFACE TEST")
@@ -165,6 +165,7 @@ def main():
     test_telnet_proper(TELNET_PORT)
 
     print("\n[*] Test complete!")
+
 
 if __name__ == "__main__":
     main()

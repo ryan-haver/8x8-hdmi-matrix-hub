@@ -22,6 +22,7 @@ if str(src_path) not in sys.path:
 # Test themes.py handlers
 # =============================================================================
 
+
 class TestThemesHandlers:
     """Test theme preferences handlers."""
 
@@ -119,6 +120,7 @@ class TestThemesHandlers:
 # =============================================================================
 # Test ui.py handlers
 # =============================================================================
+
 
 class TestUiPreferencesHandlers:
     """Test UI preferences handlers."""

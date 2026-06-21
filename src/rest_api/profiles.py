@@ -109,7 +109,7 @@ async def handle_create_profile(request: web.Request) -> web.Response:
             cec_config=cec_config,
             macros=macros,
             power_on_macro=power_on_macro,
-            power_off_macro=power_off_macro
+            power_off_macro=power_off_macro,
         )
         _LOG.info(f"Profile '{name}' ({profile_id}) created/updated")
 
@@ -204,16 +204,25 @@ async def handle_recall_profile(request: web.Request) -> web.Response:
             data = await request.json() if request.can_read_body else {}
             passcode = data.get("passcode")
             if not passcode:
-                return _json_response(False, {
-                    "error": "passcode_required",
-                    "profile_id": profile_id,
-                }, status=403)
-            from password import verify_passcode, needs_passcode
+                return _json_response(
+                    False,
+                    {
+                        "error": "passcode_required",
+                        "profile_id": profile_id,
+                    },
+                    status=403,
+                )
+            from password import needs_passcode, verify_passcode
+
             if not needs_passcode(profile.passcode_hash) or not verify_passcode(passcode, profile.passcode_hash):
-                return _json_response(False, {
-                    "error": "invalid_passcode",
-                    "profile_id": profile_id,
-                }, status=403)
+                return _json_response(
+                    False,
+                    {
+                        "error": "invalid_passcode",
+                        "profile_id": profile_id,
+                    },
+                    status=403,
+                )
 
         # Execute power-on macro if configured
         power_on_result = None
@@ -239,16 +248,16 @@ async def handle_recall_profile(request: web.Request) -> web.Response:
                 else:
                     errors.append(f"Failed to switch output {output_num}")
 
-                if hasattr(matrix_device, 'set_output_enable'):
+                if hasattr(matrix_device, "set_output_enable"):
                     await matrix_device.set_output_enable(output_num, output_config.enabled)
 
-                if hasattr(matrix_device, 'set_audio_mute'):
+                if hasattr(matrix_device, "set_audio_mute"):
                     await matrix_device.set_audio_mute(output_num, output_config.audio_mute)
 
-                if output_config.hdr_mode is not None and hasattr(matrix_device, 'set_hdr_mode'):
+                if output_config.hdr_mode is not None and hasattr(matrix_device, "set_hdr_mode"):
                     await matrix_device.set_hdr_mode(output_num, output_config.hdr_mode)
 
-                if output_config.hdcp_mode is not None and hasattr(matrix_device, 'set_hdcp_mode'):
+                if output_config.hdcp_mode is not None and hasattr(matrix_device, "set_hdcp_mode"):
                     await matrix_device.set_hdcp_mode(output_num, output_config.hdcp_mode)
 
             except Exception as e:
@@ -256,12 +265,15 @@ async def handle_recall_profile(request: web.Request) -> web.Response:
 
         _LOG.info(f"Profile '{profile.name}' recalled: {len(applied)} outputs configured")
 
-        return _json_response(True, {
-            "profile": profile.name,
-            "applied": applied,
-            "errors": errors if errors else None,
-            "power_on_macro": power_on_result,
-        })
+        return _json_response(
+            True,
+            {
+                "profile": profile.name,
+                "applied": applied,
+                "errors": errors if errors else None,
+                "power_on_macro": power_on_result,
+            },
+        )
     except Exception as e:
         _LOG.error(f"Error recalling profile: {e}")
         return _json_response(False, error=str(e), status=500)
@@ -285,16 +297,13 @@ async def handle_profile_cec_config(request: web.Request) -> web.Response:
 
         if request.method == "GET":
             if profile.cec_config is not None:
-                return _json_response(True, {
-                    "profile_id": profile_id,
-                    "cec_config": profile.cec_config.to_dict()
-                })
+                return _json_response(True, {"profile_id": profile_id, "cec_config": profile.cec_config.to_dict()})
             else:
                 from config import CecConfig
-                return _json_response(True, {
-                    "profile_id": profile_id,
-                    "cec_config": CecConfig.create_default().to_dict()
-                })
+
+                return _json_response(
+                    True, {"profile_id": profile_id, "cec_config": CecConfig.create_default().to_dict()}
+                )
 
         elif request.method in ("POST", "PUT"):
             data = await request.json()
@@ -303,15 +312,9 @@ async def handle_profile_cec_config(request: web.Request) -> web.Response:
             updated = profile_manager.update_profile_cec_config(profile_id, cec_config)
             if updated and updated.cec_config:
                 _LOG.info(f"Profile '{profile_id}' CEC config updated")
-                return _json_response(True, {
-                    "profile_id": profile_id,
-                    "cec_config": updated.cec_config.to_dict()
-                })
+                return _json_response(True, {"profile_id": profile_id, "cec_config": updated.cec_config.to_dict()})
             elif updated:
-                return _json_response(True, {
-                    "profile_id": profile_id,
-                    "cec_config": None
-                })
+                return _json_response(True, {"profile_id": profile_id, "cec_config": None})
             else:
                 return _json_response(False, error="Failed to update CEC config", status=500)
 
@@ -348,22 +351,27 @@ async def handle_profile_macros(request: web.Request) -> web.Response:
                 for macro_id in profile.macros:
                     macro = macro_manager.get_macro(macro_id)
                     if macro:
-                        macro_details.append({
-                            "id": macro.id,
-                            "name": macro.name,
-                            "icon": macro.icon,
-                            "description": macro.description,
-                        })
+                        macro_details.append(
+                            {
+                                "id": macro.id,
+                                "name": macro.name,
+                                "icon": macro.icon,
+                                "description": macro.description,
+                            }
+                        )
                     else:
                         macro_details.append({"id": macro_id, "error": "Macro not found"})
 
-            return _json_response(True, {
-                "profile_id": profile_id,
-                "macros": profile.macros,
-                "macro_details": macro_details,
-                "power_on_macro": profile.power_on_macro,
-                "power_off_macro": profile.power_off_macro,
-            })
+            return _json_response(
+                True,
+                {
+                    "profile_id": profile_id,
+                    "macros": profile.macros,
+                    "macro_details": macro_details,
+                    "power_on_macro": profile.power_on_macro,
+                    "power_off_macro": profile.power_off_macro,
+                },
+            )
 
         elif request.method in ("POST", "PUT"):
             data = await request.json()
@@ -382,12 +390,15 @@ async def handle_profile_macros(request: web.Request) -> web.Response:
             updated = profile_manager.update_profile(profile_id, **updates)
             if updated:
                 _LOG.info(f"Profile '{profile_id}' macros updated")
-                return _json_response(True, {
-                    "profile_id": profile_id,
-                    "macros": updated.macros,
-                    "power_on_macro": updated.power_on_macro,
-                    "power_off_macro": updated.power_off_macro,
-                })
+                return _json_response(
+                    True,
+                    {
+                        "profile_id": profile_id,
+                        "macros": updated.macros,
+                        "power_on_macro": updated.power_on_macro,
+                        "power_off_macro": updated.power_off_macro,
+                    },
+                )
             else:
                 return _json_response(False, error="Failed to update macros", status=500)
 
@@ -443,10 +454,13 @@ async def handle_reorder_profiles(request: web.Request) -> web.Response:
                     errors.append(f"Failed to update '{profile_id}'")
 
         _LOG.info(f"Reordered {len(updated)} profiles")
-        return _json_response(True, {
-            "updated": updated,
-            "errors": errors if errors else None,
-        })
+        return _json_response(
+            True,
+            {
+                "updated": updated,
+                "errors": errors if errors else None,
+            },
+        )
 
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON", status=400)
@@ -467,9 +481,12 @@ async def handle_list_favorite_profiles(request: web.Request) -> web.Response:
         return _json_response(False, error="Profile manager not initialized", status=503)
     try:
         profiles = manager.list_favorites()
-        return _json_response(True, {
-            "profiles": [p.to_dict() for p in profiles],
-        })
+        return _json_response(
+            True,
+            {
+                "profiles": [p.to_dict() for p in profiles],
+            },
+        )
     except Exception as exc:
         _LOG.error("Error listing favorite profiles: %s", exc)
         return _json_response(False, error=str(exc), status=500)
@@ -487,10 +504,13 @@ async def handle_toggle_profile_favorite(request: web.Request) -> web.Response:
         profile = manager.toggle_favorite(profile_id)
         if profile is None:
             return _json_response(False, error=f"Profile '{profile_id}' not found", status=404)
-        return _json_response(True, {
-            "id": profile.id,
-            "favorite": profile.favorite,
-        })
+        return _json_response(
+            True,
+            {
+                "id": profile.id,
+                "favorite": profile.favorite,
+            },
+        )
     except Exception as exc:
         _LOG.error("Error toggling profile favorite: %s", exc)
         return _json_response(False, error=str(exc), status=500)
@@ -515,10 +535,13 @@ async def handle_set_profile_favorite(request: web.Request) -> web.Response:
         profile = manager.set_favorite(profile_id, favorite)
         if profile is None:
             return _json_response(False, error=f"Profile '{profile_id}' not found", status=404)
-        return _json_response(True, {
-            "id": profile.id,
-            "favorite": profile.favorite,
-        })
+        return _json_response(
+            True,
+            {
+                "id": profile.id,
+                "favorite": profile.favorite,
+            },
+        )
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON body", status=400)
     except Exception as exc:
@@ -538,10 +561,13 @@ async def handle_toggle_profile_dashboard(request: web.Request) -> web.Response:
         profile = manager.toggle_dashboard_visible(profile_id)
         if profile is None:
             return _json_response(False, error=f"Profile '{profile_id}' not found", status=404)
-        return _json_response(True, {
-            "id": profile.id,
-            "dashboard_visible": profile.dashboard_visible,
-        })
+        return _json_response(
+            True,
+            {
+                "id": profile.id,
+                "dashboard_visible": profile.dashboard_visible,
+            },
+        )
     except Exception as exc:
         _LOG.error("Error toggling profile dashboard flag: %s", exc)
         return _json_response(False, error=str(exc), status=500)
@@ -566,10 +592,13 @@ async def handle_set_profile_dashboard(request: web.Request) -> web.Response:
         profile = manager.set_dashboard_visible(profile_id, visible)
         if profile is None:
             return _json_response(False, error=f"Profile '{profile_id}' not found", status=404)
-        return _json_response(True, {
-            "id": profile.id,
-            "dashboard_visible": profile.dashboard_visible,
-        })
+        return _json_response(
+            True,
+            {
+                "id": profile.id,
+                "dashboard_visible": profile.dashboard_visible,
+            },
+        )
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON body", status=400)
     except Exception as exc:
@@ -587,8 +616,11 @@ async def handle_profile_execution_log(request: web.Request) -> web.Response:
     if profile is None:
         return _json_response(False, error=f"Profile '{profile_id}' not found", status=404)
     log = getattr(profile, "execution_log", []) or []
-    return _json_response(True, {
-        "profile_id": profile_id,
-        "log": log,
-        "count": len(log),
-    })
+    return _json_response(
+        True,
+        {
+            "profile_id": profile_id,
+            "log": log,
+            "count": len(log),
+        },
+    )

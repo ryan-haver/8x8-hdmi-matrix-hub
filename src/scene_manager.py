@@ -16,13 +16,12 @@ import json
 import logging
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
+from password import PasswordError, hash_passcode, needs_passcode, verify_passcode
 from persistence import ensure_data_dir, get_data_dir
-
-from password import hash_passcode, needs_passcode, verify_passcode, PasswordError
 
 _LOG = logging.getLogger("scene_manager")
 
@@ -38,14 +37,23 @@ STEP_TYPE_MACRO = "macro"
 VALID_STEP_TYPES = frozenset({STEP_TYPE_PROFILE, STEP_TYPE_SYSTEM_ACTION, STEP_TYPE_MACRO})
 
 #: Settings keys that can be overridden per-scene
-OVERRIDABLE_SETTINGS = frozenset({
-    "input", "enabled", "hdcp", "hdr", "scaler", "arc", "audio_mute",
-})
+OVERRIDABLE_SETTINGS = frozenset(
+    {
+        "input",
+        "enabled",
+        "hdcp",
+        "hdr",
+        "scaler",
+        "arc",
+        "audio_mute",
+    }
+)
 
 
 # =============================================================================
 # Data classes
 # =============================================================================
+
 
 @dataclass
 class SceneStep:
@@ -62,6 +70,7 @@ class SceneStep:
     :param params: For ``system_action`` steps: runtime params
                    (e.g. ``{"output": 1}`` for route_all_to_output).
     """
+
     type: str
     id: str
     params: dict[str, Any] = field(default_factory=dict)
@@ -92,8 +101,9 @@ class SceneStep:
 @dataclass
 class ExecutionHistoryEntry:
     """A single execution record in a Scene's or Profile's history."""
-    timestamp: str          # ISO 8601
-    status: str             # "success" | "error"
+
+    timestamp: str  # ISO 8601
+    status: str  # "success" | "error"
     steps_completed: int
     total_steps: int
     error: str | None = None
@@ -136,6 +146,7 @@ class Scene:
     :param last_executed: ISO timestamp of last execution
     :param execution_history: List of recent execution records (max 7 days)
     """
+
     id: str
     name: str
     icon: str = "🎬"
@@ -179,10 +190,7 @@ class Scene:
                 out_map[int(out_str)] = settings
             overrides[pid] = out_map
 
-        history = [
-            ExecutionHistoryEntry.from_dict(h)
-            for h in data.get("execution_history", [])
-        ]
+        history = [ExecutionHistoryEntry.from_dict(h) for h in data.get("execution_history", [])]
 
         return Scene(
             id=data.get("id", ""),
@@ -205,19 +213,23 @@ class Scene:
 
     def add_system_action_step(self, action_key: str, params: dict[str, Any] | None = None) -> None:
         """Append a system action step."""
-        self.steps.append(SceneStep(
-            type=STEP_TYPE_SYSTEM_ACTION,
-            id=action_key,
-            params=params or {},
-        ))
+        self.steps.append(
+            SceneStep(
+                type=STEP_TYPE_SYSTEM_ACTION,
+                id=action_key,
+                params=params or {},
+            )
+        )
 
     def add_macro_step(self, macro_id: str, params: dict[str, Any] | None = None) -> None:
         """Append a CEC macro step."""
-        self.steps.append(SceneStep(
-            type=STEP_TYPE_MACRO,
-            id=macro_id,
-            params=params or {},
-        ))
+        self.steps.append(
+            SceneStep(
+                type=STEP_TYPE_MACRO,
+                id=macro_id,
+                params=params or {},
+            )
+        )
 
     def remove_step(self, index: int) -> bool:
         """Remove step at index. Returns True if removed."""
@@ -244,9 +256,11 @@ class Scene:
 
     def clear_override(self, profile_id: str, output_num: int, setting_key: str) -> None:
         """Remove a specific override."""
-        if (profile_id in self.overrides and
-                output_num in self.overrides[profile_id] and
-                setting_key in self.overrides[profile_id][output_num]):
+        if (
+            profile_id in self.overrides
+            and output_num in self.overrides[profile_id]
+            and setting_key in self.overrides[profile_id][output_num]
+        ):
             del self.overrides[profile_id][output_num][setting_key]
             if not self.overrides[profile_id][output_num]:
                 del self.overrides[profile_id][output_num]
@@ -259,7 +273,7 @@ class Scene:
 
     def record_execution(self, status: str, steps_completed: int, error: str | None = None) -> None:
         """Append to execution history, pruning entries older than 7 days."""
-        now = datetime.now(timezone.utc).isoformat()
+        now = datetime.now(UTC).isoformat()
         self.last_executed = now
         entry = ExecutionHistoryEntry(
             timestamp=now,
@@ -273,12 +287,9 @@ class Scene:
 
     def _prune_history(self) -> None:
         """Remove entries older than 7 days."""
-        cutoff = datetime.now(timezone.utc) - _HISTORY_RETENTION
+        cutoff = datetime.now(UTC) - _HISTORY_RETENTION
         cutoff_str = cutoff.isoformat()
-        self.execution_history = [
-            e for e in self.execution_history
-            if e.timestamp >= cutoff_str
-        ]
+        self.execution_history = [e for e in self.execution_history if e.timestamp >= cutoff_str]
 
     def is_valid(self) -> tuple[bool, list[str]]:
         """
@@ -309,9 +320,11 @@ class Scene:
 # Conflict detection
 # =============================================================================
 
+
 @dataclass
 class ConflictEntry:
     """Describes a single conflicting setting across profiles in a scene."""
+
     output_num: int
     setting_key: str
     profile_ids: list[tuple[str, str, Any]]  # (profile_id, profile_name, value)
@@ -320,10 +333,7 @@ class ConflictEntry:
         return {
             "output": self.output_num,
             "setting": self.setting_key,
-            "profiles": [
-                {"id": pid, "name": pname, "value": val}
-                for pid, pname, val in self.profile_ids
-            ],
+            "profiles": [{"id": pid, "name": pname, "value": val} for pid, pname, val in self.profile_ids],
         }
 
 
@@ -382,11 +392,13 @@ def detect_conflicts(
         for setting_key, entries_list in _group_by_setting(settings_map).items():
             if len(entries_list) > 1:
                 # Multiple different values = conflict
-                conflicts.append(ConflictEntry(
-                    output_num=output_num,
-                    setting_key=setting_key,
-                    profile_ids=entries_list,
-                ))
+                conflicts.append(
+                    ConflictEntry(
+                        output_num=output_num,
+                        setting_key=setting_key,
+                        profile_ids=entries_list,
+                    )
+                )
 
     return conflicts
 
@@ -417,9 +429,7 @@ def _is_default(setting_key: str, value: Any) -> bool:
     return defaults.get(setting_key) == value
 
 
-def _group_by_setting(
-    settings_map: dict[str, tuple[str, str, Any]]
-) -> dict[str, list[tuple[str, str, Any]]]:
+def _group_by_setting(settings_map: dict[str, tuple[str, str, Any]]) -> dict[str, list[tuple[str, str, Any]]]:
     """Group by setting_key, returning {setting_key: [(pid, pname, value), ...]}."""
     groups: dict[str, list[tuple[str, str, Any]]] = {}
     for setting_key, entry in settings_map.items():
@@ -432,6 +442,7 @@ def _group_by_setting(
 # =============================================================================
 # Scene Manager
 # =============================================================================
+
 
 class SceneManager:
     """
@@ -534,9 +545,7 @@ class SceneManager:
 
         # Password inheritance: scene containing a protected profile must itself be protected
         if not password_protected and self.steps_reference_protected_profile(step_list):
-            return None, (
-                "Scene contains a password-protected Profile; the Scene must also be password-protected"
-            )
+            return None, ("Scene contains a password-protected Profile; the Scene must also be password-protected")
 
         if password_protected:
             if not passcode:
@@ -608,9 +617,7 @@ class SceneManager:
 
         # Password inheritance: scene containing a protected profile must itself be protected
         if not scene.password_protected and self.steps_reference_protected_profile(scene.steps):
-            return None, (
-                "Scene contains a password-protected Profile; the Scene must also be password-protected"
-            )
+            return None, ("Scene contains a password-protected Profile; the Scene must also be password-protected")
 
         valid, errors = scene.is_valid()
         if not valid:
@@ -633,9 +640,7 @@ class SceneManager:
         # Password inheritance check
         prospective = list(scene.steps) + [step]
         if not scene.password_protected and self.steps_reference_protected_profile(prospective):
-            return None, (
-                "Cannot add a step referencing a password-protected Profile to an unprotected Scene"
-            )
+            return None, ("Cannot add a step referencing a password-protected Profile to an unprotected Scene")
 
         scene.steps.append(step)
         if not self._save():
@@ -648,10 +653,12 @@ class SceneManager:
         scene = self._scenes.get(scene_id)
         if scene is None:
             return None, "Scene not found"
-        if not scene.remove_step(index):
+        if not (0 <= index < len(scene.steps)):
             return None, f"Invalid step index: {index}"
+        step = scene.steps[index]
+        scene.remove_step(index)
         if not self._save():
-            scene.steps.insert(index, step)  # can't easily restore, but save failed
+            scene.steps.insert(index, step)
             return None, "Failed to save"
         return scene, None
 

@@ -5,6 +5,7 @@ Compare HTTP vs HTTPS responses to see what's different.
 NOTE: This is a manual/interactive test requiring hardware.
 Run directly with: python tests/test_http_vs_https.py 192.168.1.100
 """
+
 import asyncio
 import json
 import os
@@ -14,23 +15,20 @@ import pytest
 
 # Skip in pytest runs - this is a manual hardware test
 pytestmark = pytest.mark.skipif(
-    not os.environ.get("MATRIX_HOST"),
-    reason="Manual hardware test - set MATRIX_HOST to run"
+    not os.environ.get("MATRIX_HOST"), reason="Manual hardware test - set MATRIX_HOST to run"
 )
+
 
 async def test_preset(protocol: str, host: str, port: int, preset: int):
     """Test a single preset with given protocol."""
-    print(f"\n{'='*70}")
+    print(f"\n{'=' * 70}")
     print(f"Testing {protocol.upper()} on port {port} - Preset {preset}")
-    print(f"{'='*70}")
+    print(f"{'=' * 70}")
 
     try:
         # Create session with SSL disabled for HTTPS
         connector = aiohttp.TCPConnector(ssl=False) if protocol == "https" else None
-        async with aiohttp.ClientSession(
-            cookie_jar=aiohttp.CookieJar(),
-            connector=connector
-        ) as session:
+        async with aiohttp.ClientSession(cookie_jar=aiohttp.CookieJar(), connector=connector) as session:
             url = f"{protocol}://{host}:{port}/cgi-bin/instr"
 
             # Login first
@@ -64,6 +62,7 @@ async def test_preset(protocol: str, host: str, port: int, preset: int):
         print(f"  ERROR: {ex}")
         return None
 
+
 async def main():
     host = "192.168.0.100"
     preset = 1
@@ -77,9 +76,10 @@ async def main():
     input("\nPress Enter to test HTTPS (port 443)...")
     await test_preset("https", host, 443, preset)
 
-    print("\n" + "="*70)
+    print("\n" + "=" * 70)
     print("Which one changed your matrix routing? HTTP, HTTPS, or both?")
-    print("="*70)
+    print("=" * 70)
+
 
 if __name__ == "__main__":
     asyncio.run(main())

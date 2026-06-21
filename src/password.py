@@ -18,6 +18,7 @@ from typing import Any
 
 class PasswordError(ValueError):
     """Raised when passcode verification fails or passcode format is invalid."""
+
     pass
 
 
@@ -48,9 +49,7 @@ def hash_passcode(passcode: str) -> str:
         _iterations(),
         dklen=32,
     )
-    return (
-        f"pbkdf2_sha256${_iterations()}${salt.hex()}${stored.hex()}"
-    )
+    return f"pbkdf2_sha256${_iterations()}${salt.hex()}${stored.hex()}"
 
 
 def verify_passcode(passcode: str, stored_hash: str) -> bool:
@@ -91,9 +90,7 @@ def _validate_passcode(passcode: str) -> None:
     if not isinstance(passcode, str):
         raise PasswordError("passcode must be a string")
     if not re.fullmatch(r"\d{" + str(_MIN_PIN_LENGTH) + r"," + str(_MAX_PIN_LENGTH) + r"}", passcode):
-        raise PasswordError(
-            f"passcode must be {_MIN_PIN_LENGTH}-{_MAX_PIN_LENGTH} digits"
-        )
+        raise PasswordError(f"passcode must be {_MIN_PIN_LENGTH}-{_MAX_PIN_LENGTH} digits")
 
 
 def needs_passcode(stored_hash: str | None) -> bool:

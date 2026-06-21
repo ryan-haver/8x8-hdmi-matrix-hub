@@ -29,19 +29,19 @@ async def handle_preset(request: web.Request) -> web.Response:
         _LOG.info(f"REST API: Recalling preset {preset_num}")
 
         # Optimistic update - broadcast before command for instant UI feedback
-        await broadcast_status_update("preset_recall", {
-            "preset": preset_num,
-            "optimistic": True
-        })
+        await broadcast_status_update("preset_recall", {"preset": preset_num, "optimistic": True})
 
         success = await matrix_device.recall_preset(preset_num)
 
         if success:
-            return _json_response(True, {
-                "preset": preset_num,
-                "name": f"Preset {preset_num}",
-                "message": f"Preset {preset_num} activated",
-            })
+            return _json_response(
+                True,
+                {
+                    "preset": preset_num,
+                    "name": f"Preset {preset_num}",
+                    "message": f"Preset {preset_num} activated",
+                },
+            )
         else:
             return _json_response(False, error=f"Failed to recall preset {preset_num}", status=500)
     except ValueError:
@@ -79,20 +79,21 @@ async def handle_switch(request: web.Request) -> web.Response:
             _LOG.info(f"REST API: Switching input {input_num} to ALL outputs")
 
             # Optimistic update
-            await broadcast_status_update("switch_all", {
-                "input": input_num,
-                "outputs": list(range(1, 9)),
-                "optimistic": True
-            })
+            await broadcast_status_update(
+                "switch_all", {"input": input_num, "outputs": list(range(1, 9)), "optimistic": True}
+            )
 
             success = await matrix_device.switch_input_to_all(input_num)
 
             if success:
-                return _json_response(True, {
-                    "input": input_num,
-                    "output": "all",
-                    "message": f"Input {input_num} routed to all outputs",
-                })
+                return _json_response(
+                    True,
+                    {
+                        "input": input_num,
+                        "output": "all",
+                        "message": f"Input {input_num} routed to all outputs",
+                    },
+                )
             else:
                 return _json_response(False, error="Failed to switch routing", status=500)
 
@@ -105,20 +106,19 @@ async def handle_switch(request: web.Request) -> web.Response:
         _LOG.info(f"REST API: Switching input {input_num} to output {output_num}")
 
         # Optimistic update
-        await broadcast_status_update("switch", {
-            "input": input_num,
-            "output": output_num,
-            "optimistic": True
-        })
+        await broadcast_status_update("switch", {"input": input_num, "output": output_num, "optimistic": True})
 
         success = await matrix_device.switch_input(input_num, output_num)
 
         if success:
-            return _json_response(True, {
-                "input": input_num,
-                "output": output_num,
-                "message": f"Input {input_num} routed to output {output_num}",
-            })
+            return _json_response(
+                True,
+                {
+                    "input": input_num,
+                    "output": output_num,
+                    "message": f"Input {input_num} routed to output {output_num}",
+                },
+            )
         else:
             return _json_response(False, error="Failed to switch routing", status=500)
     except json.JSONDecodeError:
@@ -205,13 +205,16 @@ async def handle_input_next(request: web.Request) -> web.Response:
         success = await matrix_device.switch_input(next_input, output_num)
 
         if success:
-            return _json_response(True, {
-                "previous_input": current_input,
-                "current_input": next_input,
-                "input_name": input_name,
-                "output": output_num,
-                "message": f"Switched to {input_name} on output {output_num}",
-            })
+            return _json_response(
+                True,
+                {
+                    "previous_input": current_input,
+                    "current_input": next_input,
+                    "input_name": input_name,
+                    "output": output_num,
+                    "message": f"Switched to {input_name} on output {output_num}",
+                },
+            )
         else:
             return _json_response(False, error="Failed to switch input", status=500)
     except ValueError:
@@ -252,13 +255,16 @@ async def handle_input_previous(request: web.Request) -> web.Response:
         success = await matrix_device.switch_input(prev_input, output_num)
 
         if success:
-            return _json_response(True, {
-                "previous_input": current_input,
-                "current_input": prev_input,
-                "input_name": input_name,
-                "output": output_num,
-                "message": f"Switched to {input_name} on output {output_num}",
-            })
+            return _json_response(
+                True,
+                {
+                    "previous_input": current_input,
+                    "current_input": prev_input,
+                    "input_name": input_name,
+                    "output": output_num,
+                    "message": f"Switched to {input_name} on output {output_num}",
+                },
+            )
         else:
             return _json_response(False, error="Failed to switch input", status=500)
     except ValueError:
@@ -300,12 +306,15 @@ async def handle_output_source(request: web.Request) -> web.Response:
         success = await matrix_device.switch_input(input_num, output_num)
 
         if success:
-            return _json_response(True, {
-                "output": output_num,
-                "input": input_num,
-                "input_name": input_name,
-                "message": f"Output {output_num} now showing {input_name}",
-            })
+            return _json_response(
+                True,
+                {
+                    "output": output_num,
+                    "input": input_num,
+                    "input_name": input_name,
+                    "message": f"Output {output_num} now showing {input_name}",
+                },
+            )
         else:
             return _json_response(False, error="Failed to set output source", status=500)
     except json.JSONDecodeError:
@@ -317,31 +326,94 @@ async def handle_output_source(request: web.Request) -> web.Response:
         return _json_response(False, error=str(e), status=500)
 
 
+@require_connected
 async def handle_preset_save(request: web.Request) -> web.Response:
-    """Save current routing to a preset."""
+    """Save current routing or a custom routing mapping to a preset."""
     matrix_device = get_matrix_device()
-
-    if matrix_device is None:
-        return _json_response(False, error="Matrix device not configured", status=503)
-
-    if not matrix_device.connected:
-        return _json_response(False, error="Matrix not connected", status=503)
 
     try:
         preset_num = int(request.match_info["preset"])
         if preset_num < 1 or preset_num > 8:
             return _json_response(False, error="Preset must be 1-8", status=400)
 
-        _LOG.info(f"REST API: Saving current routing to preset {preset_num}")
-        success = await matrix_device.save_preset(preset_num)
+        # Check if we have a custom routing body
+        custom_routing = None
+        if request.can_read_body:
+            try:
+                body = await request.json()
+                custom_routing = body.get("routing")
+            except Exception:
+                pass
 
-        if success:
-            return _json_response(True, {
-                "preset": preset_num,
-                "message": f"Current routing saved to preset {preset_num}",
-            })
+        if custom_routing:
+            # Validate routing
+            parsed_routing = {}
+            for out_s, in_s in custom_routing.items():
+                try:
+                    out_num = int(out_s)
+                    in_num = int(in_s)
+                    if not (1 <= out_num <= 8 and 1 <= in_num <= 8):
+                        return _json_response(False, error="Outputs and inputs must be 1-8", status=400)
+                    parsed_routing[out_num] = in_num
+                except (ValueError, TypeError):
+                    return _json_response(False, error="Invalid output/input format", status=400)
+
+            # Get current active routing to restore later
+            raw_status = await matrix_device.get_status()
+            routing_array = raw_status.get("routing", [])
+            original_routing = {i + 1: src for i, src in enumerate(routing_array[:8]) if src is not None}
+
+            _LOG.info(f"REST API: Applying temporary routing to save to preset {preset_num}")
+
+            # 1. Switch to new routing
+            for out_num, in_num in parsed_routing.items():
+                await matrix_device.switch_input(in_num, out_num)
+
+            # 2. Save preset
+            success = await matrix_device.save_preset(preset_num)
+
+            # 3. Restore original routing
+            for out_num, in_num in original_routing.items():
+                await matrix_device.switch_input(in_num, out_num)
+
+            if success:
+                from .device_settings import set_preset_routing
+                set_preset_routing(preset_num, parsed_routing)
+                return _json_response(
+                    True,
+                    {
+                        "preset": preset_num,
+                        "routing": parsed_routing,
+                        "message": f"Custom routing saved to preset {preset_num}",
+                    },
+                )
+            else:
+                return _json_response(False, error=f"Failed to save preset {preset_num}", status=500)
         else:
-            return _json_response(False, error=f"Failed to save preset {preset_num}", status=500)
+            # Save current routing as-is
+            _LOG.info(f"REST API: Saving current routing to preset {preset_num}")
+            success = await matrix_device.save_preset(preset_num)
+
+            if success:
+                try:
+                    raw_status = await matrix_device.get_status()
+                    routing_array = raw_status.get("routing", [])
+                    current_routing = {i + 1: src for i, src in enumerate(routing_array[:8]) if src is not None}
+                    from .device_settings import set_preset_routing
+                    set_preset_routing(preset_num, current_routing)
+                except Exception as ex:
+                    _LOG.warning(f"Could not save current routing to device settings cache: {ex}")
+
+                return _json_response(
+                    True,
+                    {
+                        "preset": preset_num,
+                        "message": f"Current routing saved to preset {preset_num}",
+                    },
+                )
+            else:
+                return _json_response(False, error=f"Failed to save preset {preset_num}", status=500)
+
     except ValueError:
         return _json_response(False, error="Invalid preset number", status=400)
     except Exception as e:

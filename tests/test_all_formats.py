@@ -6,6 +6,7 @@ Run this and watch your matrix to see which format works
 NOTE: This is a manual/interactive test requiring hardware.
 Run directly with: python tests/test_all_formats.py 192.168.1.100
 """
+
 import asyncio
 import os
 import sys
@@ -14,16 +15,16 @@ import pytest
 
 # Skip in pytest runs - this is a manual hardware test
 pytestmark = pytest.mark.skipif(
-    not os.environ.get("MATRIX_HOST"),
-    reason="Manual hardware test - set MATRIX_HOST to run"
+    not os.environ.get("MATRIX_HOST"), reason="Manual hardware test - set MATRIX_HOST to run"
 )
+
 
 async def test_format(host: str, port: int, command: str, description: str):
     """Test a single command format"""
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"Testing: {description}")
     print(f"Command: '{command}'")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
 
     try:
         reader, writer = await asyncio.open_connection(host, port)
@@ -52,7 +53,7 @@ async def test_format(host: str, port: int, command: str, description: str):
                 writer.write(b"")  # Flush
                 await writer.drain()
                 if reader._buffer:
-                    response = reader._buffer.decode('ascii', errors='ignore')
+                    response = reader._buffer.decode("ascii", errors="ignore")
                     print(f"     Response: {response}")
             except:
                 pass
@@ -69,6 +70,7 @@ async def test_format(host: str, port: int, command: str, description: str):
 
     return True
 
+
 async def main():
     if len(sys.argv) < 2:
         print("Usage: python test_all_formats.py <matrix_ip>")
@@ -78,14 +80,14 @@ async def main():
     port = 23
     preset = 1
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print("OREI Matrix Command Format Tester")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
     print(f"Target: {host}:{port}")
     print(f"Testing Preset {preset}")
     print("\nWATCH YOUR MATRIX for routing changes!")
     print("We'll test multiple command formats...")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
 
     input("\nPress Enter to start testing...")
 
@@ -118,21 +120,22 @@ async def main():
         await test_format(host, port, command, description)
 
         response = input("\n  ▶ Did the routing change? (y/n/q to quit): ").strip().lower()
-        if response == 'y':
+        if response == "y":
             print(f"\n  ✓✓✓ SUCCESS! This format works: '{command}'")
             print(f"  ✓✓✓ Description: {description}")
             print("\n  Now testing which terminator worked...")
             # Would need to test again to isolate terminator
             break
-        elif response == 'q':
+        elif response == "q":
             print("\n  Stopping test.")
             break
         else:
             print("  Continuing to next format...")
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print("Test complete!")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
+
 
 if __name__ == "__main__":
     asyncio.run(main())

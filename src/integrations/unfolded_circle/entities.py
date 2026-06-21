@@ -80,11 +80,7 @@ class EntityContext:
         return names.get(port, f"Output {port}")
 
 
-def create_preset_button_with_context(
-    preset_num: int,
-    ctx: EntityContext,
-    preset_name: str = None
-) -> Button:
+def create_preset_button_with_context(preset_num: int, ctx: EntityContext, preset_name: str = None) -> Button:
     """
     Create a button entity for a specific preset using injected context.
 
@@ -123,20 +119,40 @@ def create_preset_button_with_context(
 
 # CEC command list shared by remotes
 CEC_INPUT_COMMANDS = [
-    "POWER_ON", "POWER_OFF",
-    "UP", "DOWN", "LEFT", "RIGHT", "SELECT",
-    "MENU", "BACK",
-    "PLAY", "PAUSE", "STOP",
-    "PREVIOUS", "NEXT",
-    "REWIND", "FAST_FORWARD",
-    "VOLUME_UP", "VOLUME_DOWN", "MUTE"
+    "POWER_ON",
+    "POWER_OFF",
+    "UP",
+    "DOWN",
+    "LEFT",
+    "RIGHT",
+    "SELECT",
+    "MENU",
+    "BACK",
+    "PLAY",
+    "PAUSE",
+    "STOP",
+    "PREVIOUS",
+    "NEXT",
+    "REWIND",
+    "FAST_FORWARD",
+    "VOLUME_UP",
+    "VOLUME_DOWN",
+    "MUTE",
 ]
 
 CEC_OUTPUT_COMMANDS = [
-    "POWER_ON", "POWER_OFF",
-    "UP", "DOWN", "LEFT", "RIGHT", "SELECT",
-    "MENU", "BACK",
-    "VOLUME_UP", "VOLUME_DOWN", "MUTE"
+    "POWER_ON",
+    "POWER_OFF",
+    "UP",
+    "DOWN",
+    "LEFT",
+    "RIGHT",
+    "SELECT",
+    "MENU",
+    "BACK",
+    "VOLUME_UP",
+    "VOLUME_DOWN",
+    "MUTE",
 ]
 
 # Remote command to CEC command mapping
@@ -216,11 +232,7 @@ def create_cec_command_handler_with_context(
     return cec_cmd_handler
 
 
-def create_input_cec_remote_with_context(
-    input_num: int,
-    ctx: EntityContext,
-    input_name: str = None
-) -> Remote:
+def create_input_cec_remote_with_context(input_num: int, ctx: EntityContext, input_name: str = None) -> Remote:
     """
     Create a remote entity for CEC control of a specific input device.
 
@@ -232,9 +244,7 @@ def create_input_cec_remote_with_context(
     display_name = input_name if input_name else ctx.get_input_name(input_num)
     entity_id = f"remote.input_{input_num}_cec"
 
-    cec_cmd_handler = create_cec_command_handler_with_context(
-        input_num, "input", ctx
-    )
+    cec_cmd_handler = create_cec_command_handler_with_context(input_num, "input", ctx)
 
     # Create UI pages for the remote
     from ucapi.ui import Size, UiPage, create_ui_text
@@ -290,11 +300,7 @@ def create_input_cec_remote_with_context(
     return remote
 
 
-def create_output_cec_remote_with_context(
-    output_num: int,
-    ctx: EntityContext,
-    output_name: str = None
-) -> Remote:
+def create_output_cec_remote_with_context(output_num: int, ctx: EntityContext, output_name: str = None) -> Remote:
     """
     Create a remote entity for CEC control of an output device (TV/display).
 
@@ -306,9 +312,7 @@ def create_output_cec_remote_with_context(
     display_name = output_name if output_name else ctx.get_output_name(output_num)
     entity_id = f"remote.output_{output_num}_cec"
 
-    cec_cmd_handler = create_cec_command_handler_with_context(
-        output_num, "output", ctx
-    )
+    cec_cmd_handler = create_cec_command_handler_with_context(output_num, "output", ctx)
 
     from ucapi.ui import Size, UiPage, create_ui_text
 

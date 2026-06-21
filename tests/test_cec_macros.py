@@ -11,6 +11,7 @@ Tests cover:
 
 Run with: pytest tests/test_cec_macros.py -v
 """
+
 import json
 import os
 
@@ -30,16 +31,13 @@ from cec_macros import CecMacro, MacroManager, MacroStep
 # MacroStep Tests
 # =============================================================================
 
+
 class TestMacroStep:
     """Tests for MacroStep dataclass."""
 
     def test_create_basic_step(self):
         """Test creating a basic macro step."""
-        step = MacroStep(
-            command="POWER_ON",
-            targets=["input_1", "output_2"],
-            delay_ms=500
-        )
+        step = MacroStep(command="POWER_ON", targets=["input_1", "output_2"], delay_ms=500)
         assert step.command == "POWER_ON"
         assert step.targets == ["input_1", "output_2"]
         assert step.delay_ms == 500
@@ -52,25 +50,13 @@ class TestMacroStep:
 
     def test_to_dict(self):
         """Test serialization to dictionary."""
-        step = MacroStep(
-            command="VOLUME_UP",
-            targets=["output_1"],
-            delay_ms=100
-        )
+        step = MacroStep(command="VOLUME_UP", targets=["output_1"], delay_ms=100)
         data = step.to_dict()
-        assert data == {
-            "command": "VOLUME_UP",
-            "targets": ["output_1"],
-            "delay_ms": 100
-        }
+        assert data == {"command": "VOLUME_UP", "targets": ["output_1"], "delay_ms": 100}
 
     def test_from_dict(self):
         """Test deserialization from dictionary."""
-        data = {
-            "command": "MUTE",
-            "targets": ["output_1", "output_2"],
-            "delay_ms": 200
-        }
+        data = {"command": "MUTE", "targets": ["output_1", "output_2"], "delay_ms": 200}
         step = MacroStep.from_dict(data)
         assert step.command == "MUTE"
         assert step.targets == ["output_1", "output_2"]
@@ -89,6 +75,7 @@ class TestMacroStep:
 # CecMacro Tests
 # =============================================================================
 
+
 class TestCecMacro:
     """Tests for CecMacro dataclass."""
 
@@ -98,13 +85,7 @@ class TestCecMacro:
             MacroStep(command="POWER_ON", targets=["input_1"]),
             MacroStep(command="POWER_ON", targets=["output_1"], delay_ms=1000),
         ]
-        macro = CecMacro(
-            id="test_macro",
-            name="Test Macro",
-            icon="🎬",
-            description="A test macro",
-            steps=steps
-        )
+        macro = CecMacro(id="test_macro", name="Test Macro", icon="🎬", description="A test macro", steps=steps)
         assert macro.id == "test_macro"
         assert macro.name == "Test Macro"
         assert macro.icon == "🎬"
@@ -125,7 +106,7 @@ class TestCecMacro:
             name="Movie Mode",
             steps=steps,
             created_at="2026-01-01T00:00:00Z",
-            updated_at="2026-01-01T00:00:00Z"
+            updated_at="2026-01-01T00:00:00Z",
         )
         data = macro.to_dict()
         assert data["id"] == "m1"
@@ -140,11 +121,9 @@ class TestCecMacro:
             "name": "Night Mode",
             "icon": "🌙",
             "description": "For nighttime viewing",
-            "steps": [
-                {"command": "POWER_OFF", "targets": ["output_1"], "delay_ms": 0}
-            ],
+            "steps": [{"command": "POWER_OFF", "targets": ["output_1"], "delay_ms": 0}],
             "created_at": "2026-01-01T00:00:00Z",
-            "updated_at": "2026-01-01T12:00:00Z"
+            "updated_at": "2026-01-01T12:00:00Z",
         }
         macro = CecMacro.from_dict(data)
         assert macro.id == "m2"
@@ -155,11 +134,7 @@ class TestCecMacro:
 
     def test_update_timestamp(self):
         """Test updating the timestamp."""
-        macro = CecMacro(
-            id="m1",
-            name="Test",
-            updated_at="2026-01-01T00:00:00Z"
-        )
+        macro = CecMacro(id="m1", name="Test", updated_at="2026-01-01T00:00:00Z")
         old_updated = macro.updated_at
         macro.update_timestamp()
         assert macro.updated_at != old_updated
@@ -168,6 +143,7 @@ class TestCecMacro:
 # =============================================================================
 # MacroManager Tests
 # =============================================================================
+
 
 class TestMacroManager:
     """Tests for MacroManager class."""
@@ -191,11 +167,9 @@ class TestMacroManager:
         """Test creating a new macro."""
         macro = manager.create_macro(
             name="Power On All",
-            steps=[
-                {"command": "POWER_ON", "targets": ["input_1", "output_1"]}
-            ],
+            steps=[{"command": "POWER_ON", "targets": ["input_1", "output_1"]}],
             icon="⚡",
-            description="Powers on all devices"
+            description="Powers on all devices",
         )
         assert macro.id.startswith("macro_")
         assert macro.name == "Power On All"
@@ -204,24 +178,16 @@ class TestMacroManager:
     def test_create_macro_with_custom_id(self, manager):
         """Test creating a macro with a custom ID."""
         macro = manager.create_macro(
-            name="Custom ID Macro",
-            steps=[{"command": "PLAY", "targets": ["input_1"]}],
-            macro_id="my_custom_macro"
+            name="Custom ID Macro", steps=[{"command": "PLAY", "targets": ["input_1"]}], macro_id="my_custom_macro"
         )
         assert macro.id == "my_custom_macro"
 
     def test_list_macros(self, manager):
         """Test listing macros returns summaries."""
-        manager.create_macro(
-            name="Macro A",
-            steps=[{"command": "POWER_ON", "targets": ["input_1"]}]
-        )
+        manager.create_macro(name="Macro A", steps=[{"command": "POWER_ON", "targets": ["input_1"]}])
         manager.create_macro(
             name="Macro B",
-            steps=[
-                {"command": "POWER_ON", "targets": ["input_1"]},
-                {"command": "POWER_ON", "targets": ["output_1"]}
-            ]
+            steps=[{"command": "POWER_ON", "targets": ["input_1"]}, {"command": "POWER_ON", "targets": ["output_1"]}],
         )
 
         macros = manager.list_macros()
@@ -238,10 +204,7 @@ class TestMacroManager:
 
     def test_get_macro(self, manager):
         """Test getting a macro by ID."""
-        created = manager.create_macro(
-            name="Get Test",
-            steps=[{"command": "STOP", "targets": ["input_2"]}]
-        )
+        created = manager.create_macro(name="Get Test", steps=[{"command": "STOP", "targets": ["input_2"]}])
 
         macro = manager.get_macro(created.id)
         assert macro is not None
@@ -256,16 +219,10 @@ class TestMacroManager:
     def test_update_macro(self, manager):
         """Test updating a macro."""
         created = manager.create_macro(
-            name="Original Name",
-            steps=[{"command": "PLAY", "targets": ["input_1"]}],
-            icon="⚡"
+            name="Original Name", steps=[{"command": "PLAY", "targets": ["input_1"]}], icon="⚡"
         )
 
-        updated = manager.update_macro(
-            macro_id=created.id,
-            name="Updated Name",
-            icon="🎬"
-        )
+        updated = manager.update_macro(macro_id=created.id, name="Updated Name", icon="🎬")
 
         assert updated is not None
         assert updated.name == "Updated Name"
@@ -276,20 +233,14 @@ class TestMacroManager:
 
     def test_update_macro_steps(self, manager):
         """Test updating macro steps."""
-        created = manager.create_macro(
-            name="Steps Test",
-            steps=[{"command": "PLAY", "targets": ["input_1"]}]
-        )
+        created = manager.create_macro(name="Steps Test", steps=[{"command": "PLAY", "targets": ["input_1"]}])
 
         new_steps = [
             {"command": "POWER_ON", "targets": ["input_1"]},
-            {"command": "POWER_ON", "targets": ["output_1"], "delay_ms": 1000}
+            {"command": "POWER_ON", "targets": ["output_1"], "delay_ms": 1000},
         ]
 
-        updated = manager.update_macro(
-            macro_id=created.id,
-            steps=new_steps
-        )
+        updated = manager.update_macro(macro_id=created.id, steps=new_steps)
 
         assert len(updated.steps) == 2
         assert updated.steps[0].command == "POWER_ON"
@@ -297,18 +248,12 @@ class TestMacroManager:
 
     def test_update_macro_not_found(self, manager):
         """Test updating a non-existent macro returns None."""
-        result = manager.update_macro(
-            macro_id="nonexistent",
-            name="New Name"
-        )
+        result = manager.update_macro(macro_id="nonexistent", name="New Name")
         assert result is None
 
     def test_delete_macro(self, manager):
         """Test deleting a macro."""
-        created = manager.create_macro(
-            name="To Delete",
-            steps=[{"command": "STOP", "targets": ["input_1"]}]
-        )
+        created = manager.create_macro(name="To Delete", steps=[{"command": "STOP", "targets": ["input_1"]}])
 
         assert manager.delete_macro(created.id) is True
         assert manager.get_macro(created.id) is None
@@ -323,9 +268,7 @@ class TestMacroManager:
         # Create manager and add macro
         manager1 = MacroManager(config_dir=temp_dir)
         manager1.create_macro(
-            name="Persistent Macro",
-            steps=[{"command": "MUTE", "targets": ["output_1"]}],
-            macro_id="persistent_test"
+            name="Persistent Macro", steps=[{"command": "MUTE", "targets": ["output_1"]}], macro_id="persistent_test"
         )
 
         # Create new manager instance (simulates restart)
@@ -340,9 +283,7 @@ class TestMacroManager:
         """Test the saved file format."""
         manager = MacroManager(config_dir=temp_dir)
         manager.create_macro(
-            name="Format Test",
-            steps=[{"command": "PLAY", "targets": ["input_1"]}],
-            macro_id="format_test"
+            name="Format Test", steps=[{"command": "PLAY", "targets": ["input_1"]}], macro_id="format_test"
         )
 
         # Read the file directly
@@ -360,6 +301,7 @@ class TestMacroManager:
 # =============================================================================
 # Target Parsing Tests
 # =============================================================================
+
 
 class TestTargetParsing:
     """Tests for target string parsing."""
@@ -409,6 +351,7 @@ class TestTargetParsing:
 # Macro Execution Tests
 # =============================================================================
 
+
 class TestMacroExecution:
     """Tests for macro execution."""
 
@@ -429,9 +372,7 @@ class TestMacroExecution:
     async def test_execute_macro_no_sender(self, manager):
         """Test executing without CEC sender configured."""
         manager.create_macro(
-            name="Test",
-            steps=[{"command": "POWER_ON", "targets": ["input_1"]}],
-            macro_id="test_macro"
+            name="Test", steps=[{"command": "POWER_ON", "targets": ["input_1"]}], macro_id="test_macro"
         )
 
         result = await manager.execute_macro("test_macro")
@@ -449,9 +390,9 @@ class TestMacroExecution:
             name="Power On Sequence",
             steps=[
                 {"command": "POWER_ON", "targets": ["input_1"]},
-                {"command": "POWER_ON", "targets": ["output_1"], "delay_ms": 100}
+                {"command": "POWER_ON", "targets": ["output_1"], "delay_ms": 100},
             ],
-            macro_id="power_on_seq"
+            macro_id="power_on_seq",
         )
 
         result = await manager.execute_macro("power_on_seq")
@@ -474,10 +415,8 @@ class TestMacroExecution:
 
         manager.create_macro(
             name="All Power Off",
-            steps=[
-                {"command": "POWER_OFF", "targets": ["output_1", "output_2", "output_3"]}
-            ],
-            macro_id="all_power_off"
+            steps=[{"command": "POWER_OFF", "targets": ["output_1", "output_2", "output_3"]}],
+            macro_id="all_power_off",
         )
 
         result = await manager.execute_macro("all_power_off")
@@ -488,6 +427,7 @@ class TestMacroExecution:
     @pytest.mark.asyncio
     async def test_execute_macro_partial_failure(self, manager):
         """Test macro execution with partial failures."""
+
         # Mock sender that fails on output_2
         async def selective_sender(target_type, port, command):
             if target_type == "output" and port == 2:
@@ -498,10 +438,8 @@ class TestMacroExecution:
 
         manager.create_macro(
             name="Mixed Results",
-            steps=[
-                {"command": "POWER_ON", "targets": ["output_1", "output_2", "output_3"]}
-            ],
-            macro_id="mixed_macro"
+            steps=[{"command": "POWER_ON", "targets": ["output_1", "output_2", "output_3"]}],
+            macro_id="mixed_macro",
         )
 
         result = await manager.execute_macro("mixed_macro")
@@ -519,6 +457,7 @@ class TestMacroExecution:
 # =============================================================================
 # Macro Validation (Test/Dry Run) Tests
 # =============================================================================
+
 
 class TestMacroValidation:
     """Tests for macro validation (dry run)."""
@@ -543,9 +482,9 @@ class TestMacroValidation:
             name="Valid Macro",
             steps=[
                 {"command": "POWER_ON", "targets": ["input_1"], "delay_ms": 500},
-                {"command": "POWER_ON", "targets": ["output_1"], "delay_ms": 1000}
+                {"command": "POWER_ON", "targets": ["output_1"], "delay_ms": 1000},
             ],
-            macro_id="valid_macro"
+            macro_id="valid_macro",
         )
 
         result = await manager.test_macro("valid_macro")
@@ -558,13 +497,7 @@ class TestMacroValidation:
     @pytest.mark.asyncio
     async def test_test_macro_missing_command(self, manager):
         """Test validating macro with missing command."""
-        manager.create_macro(
-            name="Bad Macro",
-            steps=[
-                {"command": "", "targets": ["input_1"]}
-            ],
-            macro_id="bad_macro"
-        )
+        manager.create_macro(name="Bad Macro", steps=[{"command": "", "targets": ["input_1"]}], macro_id="bad_macro")
 
         result = await manager.test_macro("bad_macro")
 
@@ -574,13 +507,7 @@ class TestMacroValidation:
     @pytest.mark.asyncio
     async def test_test_macro_no_targets(self, manager):
         """Test validating macro with no targets."""
-        manager.create_macro(
-            name="No Targets",
-            steps=[
-                {"command": "POWER_ON", "targets": []}
-            ],
-            macro_id="no_targets"
-        )
+        manager.create_macro(name="No Targets", steps=[{"command": "POWER_ON", "targets": []}], macro_id="no_targets")
 
         result = await manager.test_macro("no_targets")
 
@@ -592,10 +519,8 @@ class TestMacroValidation:
         """Test validating macro with invalid target."""
         manager.create_macro(
             name="Invalid Target",
-            steps=[
-                {"command": "POWER_ON", "targets": ["invalid_target"]}
-            ],
-            macro_id="invalid_target"
+            steps=[{"command": "POWER_ON", "targets": ["invalid_target"]}],
+            macro_id="invalid_target",
         )
 
         result = await manager.test_macro("invalid_target")

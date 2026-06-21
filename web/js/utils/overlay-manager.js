@@ -39,6 +39,8 @@ class OverlayManager {
                     'general-drawer',
                     'hardware-drawer',
                     'interface-drawer',
+                    'shortcuts-drawer',
+                    'presets-drawer',
                 ];
                 if (rightSideDrawers.includes(name)) {
                     rightSideDrawers.forEach(d => {

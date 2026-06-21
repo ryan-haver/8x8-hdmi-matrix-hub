@@ -511,6 +511,7 @@ class AppState {
     async loadSystemShortcuts() {
         const result = await window.api.listSystemShortcuts().catch(() => ({ success: false }));
         this.systemShortcuts = result?.data?.shortcuts || [];
+        this.emit('systemShortcuts', this.systemShortcuts);
         return this.systemShortcuts;
     }
 
@@ -542,8 +543,8 @@ class AppState {
     }
 
     async loadSystemActions() {
-        const result = await window.api.listSystemActions().catch(() => ({ success: false, data: { actions: [] } }));
-        this.systemActions = result?.data?.actions || [];
+        const result = await window.api.listSystemActions().catch(() => ({ success: false }));
+        this.systemActions = result?.data?.shortcuts || result?.data?.actions || [];
         this.emit('systemActions', this.systemActions);
         return this.systemActions;
     }

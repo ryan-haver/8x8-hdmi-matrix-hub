@@ -24,10 +24,7 @@ async def broadcast_status_update(event_type: str, data: dict[str, Any]):
     if not ws_clients:
         return
 
-    message = json.dumps({
-        "event": event_type,
-        "data": data
-    })
+    message = json.dumps({"event": event_type, "data": data})
 
     # Copy the set to avoid iteration issues if clients are added/removed during broadcast
     clients_snapshot = set(ws_clients)
@@ -80,13 +77,12 @@ async def handle_websocket(request: web.Request) -> web.WebSocketResponse:
 
     # Send welcome message
     try:
-        await ws.send_json({
-            "event": "connected",
-            "data": {
-                "message": "Connected to OREI Matrix WebSocket",
-                "client_count": client_count
+        await ws.send_json(
+            {
+                "event": "connected",
+                "data": {"message": "Connected to OREI Matrix WebSocket", "client_count": client_count},
             }
-        })
+        )
     except Exception as e:
         _LOG.warning(f"Error sending welcome message: {e}")
 

@@ -39,6 +39,7 @@ def _isolate_env(monkeypatch, tmp_path):
 
     # Reset the module-level caches so each test resolves fresh
     from persistence import reset_data_dir_cache
+
     reset_data_dir_cache()
 
     yield
@@ -277,13 +278,14 @@ class TestLegacyMigrationOnInit:
         LEGACY_DATA_DIR.mkdir(parents=True, exist_ok=True)
         legacy = LEGACY_DATA_DIR / "themes.json"
         legacy.write_text(
-            json.dumps({
-                "presets": [{"id": "preset-1", "name": "Migrated",
-                             "primaryH": 100, "secondaryH": 200}],
-                "activePresetIndex": 0,
-                "cardOpacity": 0.5,
-                "hoverPreference": "secondary",
-            }),
+            json.dumps(
+                {
+                    "presets": [{"id": "preset-1", "name": "Migrated", "primaryH": 100, "secondaryH": 200}],
+                    "activePresetIndex": 0,
+                    "cardOpacity": 0.5,
+                    "hoverPreference": "secondary",
+                }
+            ),
             encoding="utf-8",
         )
 
@@ -306,10 +308,12 @@ class TestLegacyMigrationOnInit:
         LEGACY_DATA_DIR.mkdir(parents=True, exist_ok=True)
         legacy = LEGACY_DATA_DIR / "ui_preferences.json"
         legacy.write_text(
-            json.dumps({
-                "pinnedTabs": ["matrix", "inputs"],
-                "tabOrder": ["matrix", "inputs"],
-            }),
+            json.dumps(
+                {
+                    "pinnedTabs": ["matrix", "inputs"],
+                    "tabOrder": ["matrix", "inputs"],
+                }
+            ),
             encoding="utf-8",
         )
 
@@ -331,11 +335,13 @@ class TestLegacyMigrationOnInit:
         LEGACY_DATA_DIR.mkdir(parents=True, exist_ok=True)
         legacy = LEGACY_DATA_DIR / "device_settings.json"
         legacy.write_text(
-            json.dumps({
-                "version": 1,
-                "inputs": {"1": {"name": "Migrated PS5", "icon": None, "color": None}},
-                "outputs": {},
-            }),
+            json.dumps(
+                {
+                    "version": 1,
+                    "inputs": {"1": {"name": "Migrated PS5", "icon": None, "color": None}},
+                    "outputs": {},
+                }
+            ),
             encoding="utf-8",
         )
 
@@ -361,17 +367,18 @@ class TestPersistenceRoundTrip:
 
         # First init + write
         themes.init_themes()
-        themes._save_themes({
-            "presets": [
-                {"id": "preset-1", "name": "Persisted", "primaryH": 42, "secondaryH": 99},
-            ] * 1 + [
-                {"id": f"preset-{i}", "name": f"Default {i}",
-                 "primaryH": 0, "secondaryH": 0} for i in range(2, 5)
-            ],
-            "activePresetIndex": 0,
-            "cardOpacity": 0.9,
-            "hoverPreference": "primary",
-        })
+        themes._save_themes(
+            {
+                "presets": [
+                    {"id": "preset-1", "name": "Persisted", "primaryH": 42, "secondaryH": 99},
+                ]
+                * 1
+                + [{"id": f"preset-{i}", "name": f"Default {i}", "primaryH": 0, "secondaryH": 0} for i in range(2, 5)],
+                "activePresetIndex": 0,
+                "cardOpacity": 0.9,
+                "hoverPreference": "primary",
+            }
+        )
 
         # Simulate a process restart: clear module-level path so init resolves again
         themes._theme_path = None
@@ -387,10 +394,12 @@ class TestPersistenceRoundTrip:
         monkeypatch.setenv("MATRIX_DATA_DIR", str(tmp_path))
 
         ui.init_ui_preferences()
-        ui._save_preferences({
-            "pinnedTabs": ["matrix", "profiles"],
-            "tabOrder": ["profiles", "matrix"],
-        })
+        ui._save_preferences(
+            {
+                "pinnedTabs": ["matrix", "profiles"],
+                "tabOrder": ["profiles", "matrix"],
+            }
+        )
 
         ui._ui_prefs_path = None
         ui.init_ui_preferences()
@@ -415,6 +424,7 @@ class TestStorageEndpoint:
         monkeypatch.setenv("MATRIX_DATA_DIR", str(tmp_path))
         # Also reset the persistence cache so the handler sees the new env
         from persistence import reset_data_dir_cache
+
         reset_data_dir_cache()
 
         request = MagicMock()
@@ -429,8 +439,8 @@ class TestStorageEndpoint:
 
     @pytest.mark.asyncio
     async def test_info_endpoint_includes_storage(self, monkeypatch, tmp_path):
-        from rest_api.system import handle_get_info
         from persistence import reset_data_dir_cache
+        from rest_api.system import handle_get_info
 
         monkeypatch.setenv("MATRIX_DATA_DIR", str(tmp_path))
         reset_data_dir_cache()

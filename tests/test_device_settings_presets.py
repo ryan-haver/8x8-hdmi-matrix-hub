@@ -5,31 +5,31 @@ Tests the REST API endpoints for hardware-preset surface-visibility
 (favorite_presets and dashboard_presets lists).
 """
 
-from pathlib import Path
+import sys
 import tempfile
+from pathlib import Path
 
 import pytest
 
-import sys
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
+from persistence import reset_data_dir_cache
 from rest_api import create_rest_app, reset_rate_limiter, set_matrix_device
 from rest_api.device_settings import (
-    init_device_settings,
-    get_favorite_presets,
-    get_dashboard_presets,
-    toggle_favorite_preset,
-    toggle_dashboard_preset,
-    set_favorite_presets,
-    set_dashboard_presets,
     _coerce_preset_list,
+    get_dashboard_presets,
+    get_favorite_presets,
+    init_device_settings,
+    set_dashboard_presets,
+    set_favorite_presets,
+    toggle_dashboard_preset,
+    toggle_favorite_preset,
 )
-from persistence import reset_data_dir_cache
-
 
 # =============================================================================
 # Fixtures
 # =============================================================================
+
 
 @pytest.fixture
 def temp_data_dir():
@@ -48,19 +48,24 @@ def app_with_device_settings(extended_mock_matrix, temp_data_dir):
     reset_data_dir_cache()
     # Set the env var so get_data_dir() resolves to our temp dir
     import os
+
     os.environ["MATRIX_DATA_DIR"] = str(temp_data_dir)
     # Reset the device settings module state and load from the fresh temp dir
     init_device_settings(temp_data_dir)
-    set_matrix_device(extended_mock_matrix, {
-        1: "Apple TV",
-        2: "PS5",
-        3: "Nintendo Switch",
-        4: "PC",
-        5: "Shield",
-        6: "Cable Box",
-        7: "Blu-ray",
-        8: "Chromecast",
-    }, data_dir=temp_data_dir)
+    set_matrix_device(
+        extended_mock_matrix,
+        {
+            1: "Apple TV",
+            2: "PS5",
+            3: "Nintendo Switch",
+            4: "PC",
+            5: "Shield",
+            6: "Cable Box",
+            7: "Blu-ray",
+            8: "Chromecast",
+        },
+        data_dir=temp_data_dir,
+    )
     return create_rest_app(temp_data_dir)
 
 
@@ -75,14 +80,17 @@ async def client_with_device_settings(aiohttp_client, app_with_device_settings):
 def extended_mock_matrix(mock_matrix):
     """Add methods needed for Phase 7 REST API tests."""
     from unittest.mock import AsyncMock
+
     mock_matrix.switch = AsyncMock(return_value=True)
-    mock_matrix.get_output_status = AsyncMock(return_value={
-        "allsource": [1, 2, 3, 4, 5, 6, 7, 8],
-        "allout": [1, 1, 1, 1, 1, 1, 1, 1],
-        "allaudiomute": [0, 0, 0, 0, 0, 0, 0, 0],
-        "allhdr": [3, 3, 3, 3, 3, 3, 3, 3],
-        "allhdcp": [3, 3, 3, 3, 3, 3, 3, 3],
-    })
+    mock_matrix.get_output_status = AsyncMock(
+        return_value={
+            "allsource": [1, 2, 3, 4, 5, 6, 7, 8],
+            "allout": [1, 1, 1, 1, 1, 1, 1, 1],
+            "allaudiomute": [0, 0, 0, 0, 0, 0, 0, 0],
+            "allhdr": [3, 3, 3, 3, 3, 3, 3, 3],
+            "allhdcp": [3, 3, 3, 3, 3, 3, 3, 3],
+        }
+    )
     mock_matrix.set_audio_mute = AsyncMock(return_value=True)
     mock_matrix.set_hdr_mode = AsyncMock(return_value=True)
     mock_matrix.set_hdcp_mode = AsyncMock(return_value=True)
@@ -92,6 +100,7 @@ def extended_mock_matrix(mock_matrix):
 # =============================================================================
 # Unit tests for coerce / toggle helpers
 # =============================================================================
+
 
 class TestCoercePresetList:
     """Unit tests for _coerce_preset_list()."""
@@ -176,6 +185,7 @@ class TestToggleDashboardPreset:
 # REST API tests for preset favorites/dashboard
 # =============================================================================
 
+
 class TestFavoritePresetsAPI:
     """Tests for GET /api/device-settings/favorite-presets."""
 
@@ -217,9 +227,7 @@ class TestToggleFavoritePresetAPI:
     @pytest.mark.asyncio
     async def test_toggle_favorite_preset_adds(self, client_with_device_settings):
         """POST toggle adds preset to favorites."""
-        resp = await client_with_device_settings.post(
-            "/api/device-settings/favorite-presets/4/toggle"
-        )
+        resp = await client_with_device_settings.post("/api/device-settings/favorite-presets/4/toggle")
         assert resp.status == 200
         data = await resp.json()
         assert data["success"] is True
@@ -231,13 +239,9 @@ class TestToggleFavoritePresetAPI:
     async def test_toggle_favorite_preset_removes(self, client_with_device_settings):
         """POST toggle removes preset from favorites when already present."""
         # Add first
-        await client_with_device_settings.post(
-            "/api/device-settings/favorite-presets/4/toggle"
-        )
+        await client_with_device_settings.post("/api/device-settings/favorite-presets/4/toggle")
         # Toggle again to remove
-        resp = await client_with_device_settings.post(
-            "/api/device-settings/favorite-presets/4/toggle"
-        )
+        resp = await client_with_device_settings.post("/api/device-settings/favorite-presets/4/toggle")
         assert resp.status == 200
         data = await resp.json()
         assert data["data"]["favorite"] is False
@@ -246,28 +250,20 @@ class TestToggleFavoritePresetAPI:
     @pytest.mark.asyncio
     async def test_toggle_favorite_preset_invalid_preset_0(self, client_with_device_settings):
         """POST with preset=0 returns 400."""
-        resp = await client_with_device_settings.post(
-            "/api/device-settings/favorite-presets/0/toggle"
-        )
+        resp = await client_with_device_settings.post("/api/device-settings/favorite-presets/0/toggle")
         assert resp.status == 400
 
     @pytest.mark.asyncio
     async def test_toggle_favorite_preset_invalid_preset_9(self, client_with_device_settings):
         """POST with preset=9 returns 400."""
-        resp = await client_with_device_settings.post(
-            "/api/device-settings/favorite-presets/9/toggle"
-        )
+        resp = await client_with_device_settings.post("/api/device-settings/favorite-presets/9/toggle")
         assert resp.status == 400
 
     @pytest.mark.asyncio
     async def test_toggle_favorite_twice_returns_to_original(self, client_with_device_settings):
         """Toggle twice returns to original state (empty)."""
-        await client_with_device_settings.post(
-            "/api/device-settings/favorite-presets/7/toggle"
-        )
-        await client_with_device_settings.post(
-            "/api/device-settings/favorite-presets/7/toggle"
-        )
+        await client_with_device_settings.post("/api/device-settings/favorite-presets/7/toggle")
+        await client_with_device_settings.post("/api/device-settings/favorite-presets/7/toggle")
         resp = await client_with_device_settings.get("/api/device-settings/favorite-presets")
         data = await resp.json()
         assert data["data"]["favorite_presets"] == []
@@ -279,9 +275,7 @@ class TestToggleDashboardPresetAPI:
     @pytest.mark.asyncio
     async def test_toggle_dashboard_preset_adds(self, client_with_device_settings):
         """POST toggle adds preset to dashboard."""
-        resp = await client_with_device_settings.post(
-            "/api/device-settings/dashboard-presets/2/toggle"
-        )
+        resp = await client_with_device_settings.post("/api/device-settings/dashboard-presets/2/toggle")
         assert resp.status == 200
         data = await resp.json()
         assert data["data"]["preset"] == 2
@@ -291,12 +285,8 @@ class TestToggleDashboardPresetAPI:
     @pytest.mark.asyncio
     async def test_toggle_dashboard_preset_removes(self, client_with_device_settings):
         """POST toggle removes preset from dashboard when already present."""
-        await client_with_device_settings.post(
-            "/api/device-settings/dashboard-presets/2/toggle"
-        )
-        resp = await client_with_device_settings.post(
-            "/api/device-settings/dashboard-presets/2/toggle"
-        )
+        await client_with_device_settings.post("/api/device-settings/dashboard-presets/2/toggle")
+        resp = await client_with_device_settings.post("/api/device-settings/dashboard-presets/2/toggle")
         assert resp.status == 200
         data = await resp.json()
         assert data["data"]["dashboard_visible"] is False
@@ -304,13 +294,9 @@ class TestToggleDashboardPresetAPI:
     @pytest.mark.asyncio
     async def test_toggle_dashboard_preset_invalid(self, client_with_device_settings):
         """POST with invalid preset returns 400."""
-        resp = await client_with_device_settings.post(
-            "/api/device-settings/dashboard-presets/0/toggle"
-        )
+        resp = await client_with_device_settings.post("/api/device-settings/dashboard-presets/0/toggle")
         assert resp.status == 400
-        resp = await client_with_device_settings.post(
-            "/api/device-settings/dashboard-presets/9/toggle"
-        )
+        resp = await client_with_device_settings.post("/api/device-settings/dashboard-presets/9/toggle")
         assert resp.status == 400
 
 
@@ -321,8 +307,7 @@ class TestSetFavoritePresetsAPI:
     async def test_put_favorite_presets_replaces_list(self, client_with_device_settings):
         """PUT replaces the favorites list with the provided preset numbers."""
         resp = await client_with_device_settings.put(
-            "/api/device-settings/favorite-presets",
-            json={"favorite_presets": [1, 3, 5]}
+            "/api/device-settings/favorite-presets", json={"favorite_presets": [1, 3, 5]}
         )
         assert resp.status == 200
         data = await resp.json()
@@ -333,8 +318,7 @@ class TestSetFavoritePresetsAPI:
     async def test_put_favorite_presets_invalid_presets_stripped(self, client_with_device_settings):
         """PUT with out-of-range presets silently drops them."""
         resp = await client_with_device_settings.put(
-            "/api/device-settings/favorite-presets",
-            json={"favorite_presets": [1, 9, 3, 0, 8]}
+            "/api/device-settings/favorite-presets", json={"favorite_presets": [1, 9, 3, 0, 8]}
         )
         assert resp.status == 200
         data = await resp.json()
@@ -344,8 +328,7 @@ class TestSetFavoritePresetsAPI:
     async def test_put_favorite_presets_deduplicates(self, client_with_device_settings):
         """PUT deduplicates preset numbers."""
         resp = await client_with_device_settings.put(
-            "/api/device-settings/favorite-presets",
-            json={"favorite_presets": [1, 1, 2, 2, 3]}
+            "/api/device-settings/favorite-presets", json={"favorite_presets": [1, 1, 2, 2, 3]}
         )
         data = await resp.json()
         assert data["data"]["favorite_presets"] == [1, 2, 3]
@@ -358,8 +341,7 @@ class TestSetDashboardPresetsAPI:
     async def test_put_dashboard_presets_replaces_list(self, client_with_device_settings):
         """PUT replaces the dashboard presets list."""
         resp = await client_with_device_settings.put(
-            "/api/device-settings/dashboard-presets",
-            json={"dashboard_presets": [2, 4]}
+            "/api/device-settings/dashboard-presets", json={"dashboard_presets": [2, 4]}
         )
         assert resp.status == 200
         data = await resp.json()
@@ -370,8 +352,7 @@ class TestSetDashboardPresetsAPI:
     async def test_put_dashboard_presets_invalid_presets_stripped(self, client_with_device_settings):
         """PUT with out-of-range presets silently drops them."""
         resp = await client_with_device_settings.put(
-            "/api/device-settings/dashboard-presets",
-            json={"dashboard_presets": [2, 99, 4, 0]}
+            "/api/device-settings/dashboard-presets", json={"dashboard_presets": [2, 99, 4, 0]}
         )
         assert resp.status == 200
         data = await resp.json()

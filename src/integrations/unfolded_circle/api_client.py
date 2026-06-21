@@ -120,10 +120,7 @@ class MatrixApiClient:
         :param output_num: Output number (1-8)
         :return: True if successful
         """
-        result = await self._post("/api/switch", json={
-            "input": input_num,
-            "output": output_num
-        })
+        result = await self._post("/api/switch", json={"input": input_num, "output": output_num})
         return result.get("success", False) if result else False
 
     async def switch_all_outputs(self, input_num: int) -> bool:
@@ -133,10 +130,13 @@ class MatrixApiClient:
         :param input_num: Input number (1-8)
         :return: True if successful
         """
-        result = await self._post("/api/switch", json={
-            "input": input_num,
-            "output": 0  # 0 = all outputs
-        })
+        result = await self._post(
+            "/api/switch",
+            json={
+                "input": input_num,
+                "output": 0,  # 0 = all outputs
+            },
+        )
         return result.get("success", False) if result else False
 
     async def power_on(self) -> bool:

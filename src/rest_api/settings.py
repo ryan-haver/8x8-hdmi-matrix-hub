@@ -66,12 +66,16 @@ async def handle_set_matrix_host(request: web.Request) -> web.Response:
             _LOG.warning(f"Failed to connect to new host: {e}")
             connected = False
 
-        return _json_response(True, {
-            "host": host,
-            "port": port,
-            "connected": connected,
-            "message": f"Matrix host updated to {host}:{port}" + (" - Connected!" if connected else " - Connection failed")
-        })
+        return _json_response(
+            True,
+            {
+                "host": host,
+                "port": port,
+                "connected": connected,
+                "message": f"Matrix host updated to {host}:{port}"
+                + (" - Connected!" if connected else " - Connection failed"),
+            },
+        )
 
     except Exception as e:
         _LOG.error(f"Error setting matrix host: {e}")
@@ -92,25 +96,34 @@ async def handle_test_matrix_connection(request: web.Request) -> web.Response:
 
         if matrix_device.connected:
             device_info = await matrix_device.get_device_info()
-            return _json_response(True, {
-                "connected": True,
-                "host": matrix_device.host,
-                "port": matrix_device.port,
-                "model": device_info.get("model", "Unknown") if device_info else "Unknown",
-                "firmware_version": device_info.get("version", "") if device_info else "",
-            })
+            return _json_response(
+                True,
+                {
+                    "connected": True,
+                    "host": matrix_device.host,
+                    "port": matrix_device.port,
+                    "model": device_info.get("model", "Unknown") if device_info else "Unknown",
+                    "firmware_version": device_info.get("version", "") if device_info else "",
+                },
+            )
         else:
-            return _json_response(True, {
-                "connected": False,
-                "host": matrix_device.host,
-                "port": matrix_device.port,
-                "error": "Connection failed",
-            })
+            return _json_response(
+                True,
+                {
+                    "connected": False,
+                    "host": matrix_device.host,
+                    "port": matrix_device.port,
+                    "error": "Connection failed",
+                },
+            )
 
     except Exception as e:
         _LOG.error(f"Error testing matrix connection: {e}")
-        return _json_response(True, {
-            "connected": False,
-            "host": matrix_device.host if matrix_device else None,
-            "error": str(e),
-        })
+        return _json_response(
+            True,
+            {
+                "connected": False,
+                "host": matrix_device.host if matrix_device else None,
+                "error": str(e),
+            },
+        )

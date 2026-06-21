@@ -309,6 +309,7 @@ class TestSceneManagerPassword:
     def test_password_inheritance_blocks_unprotected_scene_with_protected_step(self, mgr):
         """Unprotected scene containing protected profile step is rejected."""
         from unittest.mock import MagicMock, patch
+
         from config import ProfileManager
 
         # Patch the profile manager to return a protected profile
@@ -327,8 +328,9 @@ class TestDetectConflicts:
 
     def test_no_conflicts_with_single_profile(self):
         """No conflicts when scene has only one profile."""
-        from scene_manager import detect_conflicts
         from unittest.mock import MagicMock
+
+        from scene_manager import detect_conflicts
 
         profile = MagicMock()
         profile.id = "p1"

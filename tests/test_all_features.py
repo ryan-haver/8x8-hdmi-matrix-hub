@@ -5,6 +5,7 @@ Test all OREI Matrix features: power, video switching, status, and presets.
 NOTE: This is a manual/interactive test requiring hardware.
 Run directly with: python tests/test_all_features.py 192.168.1.100
 """
+
 import asyncio
 import logging
 import os
@@ -14,8 +15,7 @@ import pytest
 
 # Skip in pytest runs - this is a manual hardware test
 pytestmark = pytest.mark.skipif(
-    not os.environ.get("MATRIX_HOST"),
-    reason="Manual hardware test - set MATRIX_HOST to run"
+    not os.environ.get("MATRIX_HOST"), reason="Manual hardware test - set MATRIX_HOST to run"
 )
 
 from orei_matrix import OreiMatrix
@@ -32,9 +32,9 @@ _LOG = logging.getLogger(__name__)
 
 async def test_all_features(host: str, port: int = 443):
     """Test all matrix features."""
-    _LOG.info("="*70)
+    _LOG.info("=" * 70)
     _LOG.info("OREI Matrix Full Feature Test")
-    _LOG.info("="*70)
+    _LOG.info("=" * 70)
     _LOG.info(f"Target: https://{host}:{port}")
     _LOG.info("")
 
@@ -102,9 +102,9 @@ async def test_all_features(host: str, port: int = 443):
 
     # Disconnect
     await matrix.disconnect()
-    _LOG.info("="*70)
+    _LOG.info("=" * 70)
     _LOG.info("All Tests Complete!")
-    _LOG.info("="*70)
+    _LOG.info("=" * 70)
 
 
 if __name__ == "__main__":

@@ -34,10 +34,7 @@ MATRIX_PORT = int(os.environ.get("MATRIX_PORT", "443"))
 USE_MOCK = os.environ.get("USE_MOCK_MATRIX", "0") == "1"
 
 # Skip if using mock mode
-pytestmark = pytest.mark.skipif(
-    USE_MOCK,
-    reason="Hardware test - set USE_MOCK_MATRIX=0 to run"
-)
+pytestmark = pytest.mark.skipif(USE_MOCK, reason="Hardware test - set USE_MOCK_MATRIX=0 to run")
 
 # Setup logging
 logging.basicConfig(

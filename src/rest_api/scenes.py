@@ -24,6 +24,7 @@ Endpoints exposed:
 
 import json
 import logging
+import uuid
 
 from aiohttp import web
 
@@ -209,9 +210,11 @@ async def handle_save_current_as_scene(request: web.Request) -> web.Response:
         return _json_response(True, profile.to_dict(), status=200)
     except json.JSONDecodeError:
         from .utils import _json_response as _jr
+
         return _jr(False, error="Invalid JSON body", status=400)
     except Exception as exc:
         from .utils import _json_response as _jr
+
         _LOG.error("Error saving current as scene: %s", exc)
         return _jr(False, error=str(exc), status=500)
 
@@ -242,6 +245,7 @@ async def handle_auto_resolve_cec(request: web.Request) -> web.Response:
         # to the default CecConfig with auto_resolved=True.
         try:
             from cec_resolver import resolve_scene_cec_config  # type: ignore
+
             resolved = resolve_scene_cec_config(profile)
             profile_manager.update_profile(scene_id, cec_config=resolved.to_dict())
             return _json_response(True, resolved.to_dict())

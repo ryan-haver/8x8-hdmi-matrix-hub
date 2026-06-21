@@ -10,12 +10,20 @@ This module is responsible for:
 
 import logging
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime, timezone
 from typing import Any
 
 from config import Profile, ProfileManager
-from scene_manager import Scene, SceneManager, STEP_TYPE_PROFILE, STEP_TYPE_SYSTEM_ACTION, STEP_TYPE_MACRO
-from system_actions import SystemAction, SystemActionManager, execute_action
+from scene_manager import STEP_TYPE_MACRO, STEP_TYPE_PROFILE, STEP_TYPE_SYSTEM_ACTION, Scene, SceneManager
+from system_shortcuts import (
+    SystemShortcut as SystemAction,
+)
+from system_shortcuts import (
+    SystemShortcutManager as SystemActionManager,
+)
+from system_shortcuts import (
+    execute_shortcut as execute_action,
+)
 
 _LOG = logging.getLogger("scene_execution")
 
@@ -35,6 +43,7 @@ _DEFAULT_OUTPUT_SETTINGS = {
 @dataclass
 class StepResult:
     """Result of executing a single step."""
+
     step_index: int
     step_type: str
     step_id: str
@@ -56,6 +65,7 @@ class StepResult:
 @dataclass
 class ExecutionResult:
     """Result of executing an entire scene."""
+
     scene_id: str
     success: bool
     steps_completed: int
@@ -78,6 +88,7 @@ class ExecutionResult:
 # Override application
 # =============================================================================
 
+
 def apply_overrides_to_profile(
     profile: Profile,
     scene: Scene,
@@ -90,6 +101,7 @@ def apply_overrides_to_profile(
     (so the matrix is left unchanged for those settings).
     """
     import copy
+
     overrides = scene.get_overrides_for_profile(profile.id)
     if not overrides:
         return profile
@@ -124,6 +136,7 @@ def apply_overrides_to_profile(
 # =============================================================================
 # Profile execution helpers
 # =============================================================================
+
 
 async def _execute_profile(
     profile: Profile,
@@ -173,6 +186,7 @@ async def _execute_profile(
         # (the profile.macros field contains macro_id strings)
         # We look up via macro_manager if available
         from rest_api.utils import get_macro_manager
+
         macro_mgr = get_macro_manager()
         for macro_id in profile.macros:
             if macro_mgr is not None:
@@ -283,6 +297,7 @@ def _get_output_cec_method(matrix_device, command: str):
 # =============================================================================
 # Scene executor
 # =============================================================================
+
 
 class SceneExecutor:
     """
@@ -427,7 +442,7 @@ class SceneExecutor:
         result = await _execute_profile(overridden_profile, matrix_device, scene)
 
         # Log to profile's execution history
-        now = datetime.now(timezone.utc).isoformat()
+        now = datetime.now(UTC).isoformat()
         log_entry = {
             "timestamp": now,
             "scene_id": scene.id,
@@ -522,19 +537,23 @@ class SceneExecutor:
         """Emit a WebSocket error event for scene execution failure."""
         try:
             from rest_api.websocket import broadcast_status_update
-            await broadcast_status_update("scene_execution_error", {
-                "scene_id": scene.id,
-                "scene_name": scene.name,
-                "steps_completed": sum(1 for r in step_results if r.success),
-                "total_steps": len(step_results),
-                "error": overall_error,
-            })
+
+            await broadcast_status_update(
+                "scene_execution_error",
+                {
+                    "scene_id": scene.id,
+                    "scene_name": scene.name,
+                    "steps_completed": sum(1 for r in step_results if r.success),
+                    "total_steps": len(step_results),
+                    "error": overall_error,
+                },
+            )
         except Exception as e:
             _LOG.error("Failed to emit scene execution error event: %s", e)
 
 
 def _prune_profile_log(log: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Prune profile execution log to last 7 days."""
-    cutoff = datetime.now(timezone.utc) - __import__('datetime').timedelta(days=7)
+    cutoff = datetime.now(UTC) - __import__("datetime").timedelta(days=7)
     cutoff_str = cutoff.isoformat()
     return [e for e in log if e.get("timestamp", "") >= cutoff_str]

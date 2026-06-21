@@ -10,9 +10,11 @@ from .device_settings import (
     get_device_settings,
     get_input_setting,
     get_output_setting,
+    get_preset_setting,
     init_device_settings,
     set_input_setting,
     set_output_setting,
+    set_preset_routing,
 )
 from .themes import (
     init_themes,
@@ -49,7 +51,9 @@ from .websocket import broadcast_status_update
 # Lazy import for RestApiServer to avoid circular dependencies
 def _get_rest_api_server():
     from .app import RestApiServer
+
     return RestApiServer
+
 
 # Create a class proxy for RestApiServer
 class RestApiServer:
@@ -60,6 +64,7 @@ class RestApiServer:
     def __new__(cls, *args, **kwargs):
         if cls._real_class is None:
             from .app import RestApiServer as _RestApiServer
+
             cls._real_class = _RestApiServer
         return cls._real_class(*args, **kwargs)
 
@@ -72,9 +77,12 @@ def create_rest_app(data_dir=None):
         :func:`persistence.get_data_dir`.
     """
     from pathlib import Path
+
     from .app import create_rest_app as _create_rest_app
+
     if data_dir is not None:
         import os
+
         resolved = str(Path(data_dir).resolve())
         # Set BOTH env vars so ProfileManager/MacroManager (which use
         # UC_CONFIG_HOME or HOME) and SystemShortcutManager/DashboardManager
@@ -116,8 +124,10 @@ __all__ = [
     "get_device_settings",
     "get_input_setting",
     "get_output_setting",
+    "get_preset_setting",
     "set_input_setting",
     "set_output_setting",
+    "set_preset_routing",
     # Theme & UI Preferences (persistent storage init)
     "init_themes",
     "init_ui_preferences",

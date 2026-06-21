@@ -6038,14 +6038,45 @@
 }
 
 /* Playback row */
-.cec-widget-btn-row.playback-row {
-    flex-wrap: nowrap;
+.cec-widget-playback-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
 }
 
-.cec-widget-btn-row.playback-row .cec-widget-cmd-btn {
-    padding: var(--space-2);
-    min-width: 36px;
+.cec-widget-btn-row.playback-row {
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.cec-widget-btn-row.playback-row.primary-controls {
+    gap: 8px;
+}
+
+.cec-widget-btn-row.playback-row.primary-controls .cec-widget-cmd-btn {
+    font-size: 16px;
+    min-height: 40px;
+}
+
+.cec-widget-btn-row.playback-row.primary-controls .play-btn {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+}
+
+.cec-widget-btn-row.playback-row.primary-controls .play-btn:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+}
+
+.cec-widget-btn-row.playback-row.secondary-controls {
+    gap: 8px;
+}
+
+.cec-widget-btn-row.playback-row.secondary-controls .cec-widget-cmd-btn {
     font-size: 14px;
+    min-height: 36px;
 }
 
 /* Volume row */
@@ -6792,4 +6823,143 @@
 .drawer-spacer {
     flex: 1;
     min-height: var(--space-4, 16px);
+}
+
+/* ===== Matrix Presets Drawer Styles ===== */
+.preset-row {
+    background: var(--bg-primary, rgba(20, 20, 35, 0.6));
+    border: 1px solid var(--border-color, rgba(0, 200, 200, 0.2));
+    border-radius: 8px;
+    margin-bottom: var(--space-3, 12px);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.preset-row:hover {
+    border-color: var(--accent, rgba(0, 200, 200, 0.6));
+    box-shadow: 0 0 12px hsla(var(--accent-h, 180), var(--accent-s, 100%), var(--accent-l, 50%), 0.15);
+}
+
+.preset-row.active {
+    border-color: var(--accent, #00cbcb);
+    box-shadow: 0 0 16px hsla(var(--accent-h, 180), var(--accent-s, 100%), var(--accent-l, 50%), 0.25);
+}
+
+.preset-row.expanded {
+    background: var(--bg-secondary, rgba(13, 13, 26, 0.9));
+}
+
+.preset-row-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-3, 12px) var(--space-4, 16px);
+    cursor: pointer;
+    user-select: none;
+}
+
+.preset-row-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3, 12px);
+    flex: 1;
+}
+
+.preset-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--bg-tertiary, rgba(255, 255, 255, 0.1));
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.2));
+    color: var(--text-secondary, #ccc);
+    font-size: var(--font-size-xs, 11px);
+    font-weight: var(--font-weight-bold, 700);
+}
+
+.preset-row.active .preset-badge {
+    background: var(--accent, #00cbcb);
+    border-color: var(--accent, #00cbcb);
+    color: var(--bg-primary, #0d0d1a);
+}
+
+.preset-name {
+    font-weight: var(--font-weight-medium, 500);
+    color: var(--text-primary, #fff);
+}
+
+.preset-rename-input {
+    background: var(--bg-tertiary, rgba(0, 0, 0, 0.4));
+    border: 1px solid var(--accent, #00cbcb);
+    border-radius: 4px;
+    color: var(--text-primary, #fff);
+    padding: 2px 8px;
+    font-size: var(--font-size-sm, 14px);
+    width: 100%;
+    max-width: 180px;
+}
+
+.preset-row-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1, 4px);
+}
+
+.preset-routing-editor {
+    padding: 0 var(--space-4, 16px) var(--space-4, 16px) var(--space-4, 16px);
+    border-top: 1px solid var(--border-color, rgba(255, 255, 255, 0.05));
+    animation: slideDown 0.2s ease-out;
+}
+
+.preset-routing-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 8px);
+    margin: var(--space-3, 12px) 0;
+}
+
+.preset-routing-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3, 12px);
+}
+
+.preset-routing-label {
+    font-size: var(--font-size-sm, 12px);
+    color: var(--text-secondary, #ccc);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 150px;
+}
+
+.preset-routing-select {
+    width: 100%;
+    max-width: 160px;
+}
+
+.preset-routing-actions {
+    display: flex;
+    gap: var(--space-2, 8px);
+    margin-top: var(--space-4, 16px);
+}
+
+.preset-routing-actions .btn {
+    flex: 1;
+    font-size: var(--font-size-xs, 12px);
+    padding: var(--space-2, 8px);
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

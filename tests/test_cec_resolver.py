@@ -45,7 +45,7 @@ class TestVolumeTargetResolution:
         active_outputs = {1, 2, 3}
         status = {
             "allscaler": [0, 1, 0],  # No audio-only
-            "allarc": [0, 1, 0],     # Output 2 has ARC (integer 1)
+            "allarc": [0, 1, 0],  # Output 2 has ARC (integer 1)
             "allconnect": [1, 1, 1],
         }
 
@@ -115,7 +115,7 @@ class TestSceneCecConfigResolution:
                 "allscaler": [0, 4],  # Output 2 is audio-only (0-indexed)
                 "allarc": [0, 0],
                 "allconnect": [1, 1],  # Both connected (integers)
-            }
+            },
         )
 
         assert config["auto_resolved"] is True
@@ -127,11 +127,7 @@ class TestSceneCecConfigResolution:
 
     def test_empty_scene(self):
         """Empty scene returns empty config."""
-        config = resolve_scene_cec_config(
-            active_inputs=[],
-            active_outputs=[],
-            status={}
-        )
+        config = resolve_scene_cec_config(active_inputs=[], active_outputs=[], status={})
 
         expected = create_empty_cec_config()
         assert config == expected

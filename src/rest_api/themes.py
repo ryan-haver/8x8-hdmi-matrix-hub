@@ -14,6 +14,7 @@ from pathlib import Path
 from aiohttp import web
 
 from persistence import ensure_data_dir, get_data_dir, migrate_legacy_file
+
 from .utils import _json_response
 
 _LOG = logging.getLogger("rest_api.themes")
@@ -28,11 +29,11 @@ DEFAULT_THEMES = {
         {"id": "preset-1", "name": "Tron Classic", "primaryH": 187, "secondaryH": 25},
         {"id": "preset-2", "name": "Neon", "primaryH": 300, "secondaryH": 80},
         {"id": "preset-3", "name": "Royal", "primaryH": 280, "secondaryH": 45},
-        {"id": "preset-4", "name": "Vaporwave", "primaryH": 170, "secondaryH": 330}
+        {"id": "preset-4", "name": "Vaporwave", "primaryH": 170, "secondaryH": 330},
     ],
     "activePresetIndex": 0,
     "cardOpacity": 0.8,
-    "hoverPreference": "primary"
+    "hoverPreference": "primary",
 }
 
 
@@ -70,7 +71,7 @@ def _load_themes() -> dict:
     path = _resolve_theme_path()
     try:
         if path.exists():
-            with open(path, encoding='utf-8') as f:
+            with open(path, encoding="utf-8") as f:
                 return json.load(f)
     except Exception as e:
         _LOG.warning(f"Failed to load themes: {e}")
@@ -83,7 +84,7 @@ def _save_themes(data: dict) -> bool:
     path = _resolve_theme_path()
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
-        with open(path, 'w', encoding='utf-8') as f:
+        with open(path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)
         return True
     except Exception as e:
@@ -127,7 +128,9 @@ async def handle_put_themes(request: web.Request) -> web.Response:
             "presets": presets,
             "activePresetIndex": int(body.get("activePresetIndex", 0)) % 4,
             "cardOpacity": max(0, min(1, float(body.get("cardOpacity", 0.8)))),
-            "hoverPreference": body.get("hoverPreference", "primary") if body.get("hoverPreference") in ["primary", "secondary"] else "primary"
+            "hoverPreference": body.get("hoverPreference", "primary")
+            if body.get("hoverPreference") in ["primary", "secondary"]
+            else "primary",
         }
 
         if _save_themes(theme_data):

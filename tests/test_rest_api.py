@@ -31,13 +31,15 @@ def extended_mock_matrix(mock_matrix):
     """
     # Sprint 4 scene methods (specific to REST API tests)
     mock_matrix.switch = AsyncMock(return_value=True)
-    mock_matrix.get_output_status = AsyncMock(return_value={
-        "allsource": [1, 2, 3, 4, 5, 6, 7, 8],
-        "allout": [1, 1, 1, 1, 1, 1, 1, 1],
-        "allaudiomute": [0, 0, 0, 0, 0, 0, 0, 0],
-        "allhdr": [3, 3, 3, 3, 3, 3, 3, 3],
-        "allhdcp": [3, 3, 3, 3, 3, 3, 3, 3],
-    })
+    mock_matrix.get_output_status = AsyncMock(
+        return_value={
+            "allsource": [1, 2, 3, 4, 5, 6, 7, 8],
+            "allout": [1, 1, 1, 1, 1, 1, 1, 1],
+            "allaudiomute": [0, 0, 0, 0, 0, 0, 0, 0],
+            "allhdr": [3, 3, 3, 3, 3, 3, 3, 3],
+            "allhdcp": [3, 3, 3, 3, 3, 3, 3, 3],
+        }
+    )
     mock_matrix.set_audio_mute = AsyncMock(return_value=True)
     mock_matrix.set_hdr_mode = AsyncMock(return_value=True)
     mock_matrix.set_hdcp_mode = AsyncMock(return_value=True)
@@ -51,16 +53,19 @@ def app(extended_mock_matrix):
     # Reset rate limiter between tests
     reset_rate_limiter()
 
-    set_matrix_device(extended_mock_matrix, {
-        1: "Apple TV",
-        2: "PS5",
-        3: "Nintendo Switch",
-        4: "PC",
-        5: "Shield",
-        6: "Cable Box",
-        7: "Blu-ray",
-        8: "Chromecast",
-    })
+    set_matrix_device(
+        extended_mock_matrix,
+        {
+            1: "Apple TV",
+            2: "PS5",
+            3: "Nintendo Switch",
+            4: "PC",
+            5: "Shield",
+            6: "Cable Box",
+            7: "Blu-ray",
+            8: "Chromecast",
+        },
+    )
     return create_rest_app()
 
 
@@ -106,10 +111,12 @@ class TestHealthEndpoints:
     async def test_info_endpoint(self, client, mock_matrix):
         """Test /api/info returns API and matrix info."""
         # Mock get_device_info to return device info
-        mock_matrix.get_device_info = AsyncMock(return_value={
-            "model": "BK-808",
-            "version": "V1.10.01",
-        })
+        mock_matrix.get_device_info = AsyncMock(
+            return_value={
+                "model": "BK-808",
+                "version": "V1.10.01",
+            }
+        )
 
         resp = await client.get("/api/info")
         assert resp.status == 200
@@ -370,9 +377,7 @@ class TestEdidControl:
     @pytest.mark.asyncio
     async def test_get_edid_status(self, client, mock_matrix):
         """Test GET /api/status/edid returns EDID status for all inputs."""
-        mock_matrix.get_edid_status.return_value = {
-            "edid": [36, 36, 36, 36, 36, 36, 36, 36]
-        }
+        mock_matrix.get_edid_status.return_value = {"edid": [36, 36, 36, 36, 36, 36, 36, 36]}
 
         resp = await client.get("/api/status/edid")
         assert resp.status == 200
@@ -618,10 +623,7 @@ class TestSceneControl:
         scene_data = {
             "id": "test_scene",
             "name": "Test Scene",
-            "outputs": {
-                "1": {"input": 2},
-                "2": {"input": 3, "audio_mute": True}
-            }
+            "outputs": {"1": {"input": 2}, "2": {"input": 3, "audio_mute": True}},
         }
 
         resp = await client.post("/api/scene", json=scene_data)
@@ -636,11 +638,7 @@ class TestSceneControl:
     async def test_get_scene(self, client):
         """Test GET /api/scene/{id} returns scene details."""
         # Create a scene first
-        scene_data = {
-            "id": "movie_night",
-            "name": "Movie Night",
-            "outputs": {"1": {"input": 1}, "2": {"input": 1}}
-        }
+        scene_data = {"id": "movie_night", "name": "Movie Night", "outputs": {"1": {"input": 1}, "2": {"input": 1}}}
         await client.post("/api/scene", json=scene_data)
 
         # Get it
@@ -661,11 +659,7 @@ class TestSceneControl:
     async def test_delete_scene(self, client):
         """Test DELETE /api/scene/{id} deletes a scene."""
         # Create a scene first
-        scene_data = {
-            "id": "to_delete",
-            "name": "To Delete",
-            "outputs": {"1": {"input": 1}}
-        }
+        scene_data = {"id": "to_delete", "name": "To Delete", "outputs": {"1": {"input": 1}}}
         await client.post("/api/scene", json=scene_data)
 
         # Delete it
@@ -684,11 +678,7 @@ class TestSceneControl:
     async def test_recall_scene(self, client, mock_matrix):
         """Test POST /api/scene/{id}/recall applies scene settings."""
         # Create a scene
-        scene_data = {
-            "id": "recall_test",
-            "name": "Recall Test",
-            "outputs": {"1": {"input": 3}, "2": {"input": 4}}
-        }
+        scene_data = {"id": "recall_test", "name": "Recall Test", "outputs": {"1": {"input": 3}, "2": {"input": 4}}}
         await client.post("/api/scene", json=scene_data)
 
         # Recall it
@@ -709,10 +699,7 @@ class TestSceneControl:
     @pytest.mark.asyncio
     async def test_save_current_as_scene(self, client, mock_matrix):
         """Test POST /api/scene/save-current saves current state."""
-        resp = await client.post("/api/scene/save-current", json={
-            "id": "current_state",
-            "name": "Current State"
-        })
+        resp = await client.post("/api/scene/save-current", json={"id": "current_state", "name": "Current State"})
         assert resp.status == 200
 
         data = await resp.json()
@@ -737,11 +724,14 @@ class TestSceneControl:
     @pytest.mark.asyncio
     async def test_create_scene_invalid_output(self, client):
         """Test POST /api/scene with invalid output number."""
-        resp = await client.post("/api/scene", json={
-            "id": "bad_output",
-            "name": "Bad Output",
-            "outputs": {"9": {"input": 1}}  # Output 9 doesn't exist
-        })
+        resp = await client.post(
+            "/api/scene",
+            json={
+                "id": "bad_output",
+                "name": "Bad Output",
+                "outputs": {"9": {"input": 1}},  # Output 9 doesn't exist
+            },
+        )
         assert resp.status == 400
 
 
@@ -756,11 +746,7 @@ class TestErrorHandling:
     @pytest.mark.asyncio
     async def test_invalid_json_returns_400(self, client):
         """Test invalid JSON body returns 400."""
-        resp = await client.post(
-            "/api/switch",
-            data="not valid json",
-            headers={"Content-Type": "application/json"}
-        )
+        resp = await client.post("/api/switch", data="not valid json", headers={"Content-Type": "application/json"})
         assert resp.status == 400
 
     @pytest.mark.asyncio
@@ -838,10 +824,7 @@ class TestWebSocket:
     async def test_websocket_get_status(self, client, mock_matrix):
         """Test WebSocket get_status command."""
         mock_matrix.connected = True
-        mock_matrix.get_status.return_value = {
-            "power": 1,
-            "alloutsource": [1, 2, 3, 4, 5, 6, 7, 8]
-        }
+        mock_matrix.get_status.return_value = {"power": 1, "alloutsource": [1, 2, 3, 4, 5, 6, 7, 8]}
 
         async with client.ws_connect("/ws") as ws:
             # Skip welcome message
@@ -957,13 +940,10 @@ class TestProfileAPI:
             "id": "movie_night",
             "name": "Movie Night",
             "icon": "🎬",
-            "outputs": {
-                "1": {"input": 2, "enabled": True},
-                "2": {"input": 2, "audio_mute": True}
-            },
+            "outputs": {"1": {"input": 2, "enabled": True}, "2": {"input": 2, "audio_mute": True}},
             "macros": ["macro_1", "macro_2"],
             "power_on_macro": "startup_macro",
-            "power_off_macro": "shutdown_macro"
+            "power_off_macro": "shutdown_macro",
         }
 
         resp = await client.post("/api/profile", json=profile_data)
@@ -981,11 +961,7 @@ class TestProfileAPI:
     @pytest.mark.asyncio
     async def test_create_profile_minimal(self, client):
         """Test POST /api/profile with minimal required fields."""
-        profile_data = {
-            "id": "basic_profile",
-            "name": "Basic Profile",
-            "outputs": {"1": {"input": 1}}
-        }
+        profile_data = {"id": "basic_profile", "name": "Basic Profile", "outputs": {"1": {"input": 1}}}
 
         resp = await client.post("/api/profile", json=profile_data)
         assert resp.status == 200
@@ -999,10 +975,7 @@ class TestProfileAPI:
     @pytest.mark.asyncio
     async def test_create_profile_missing_id(self, client):
         """Test POST /api/profile fails without id."""
-        resp = await client.post("/api/profile", json={
-            "name": "No ID",
-            "outputs": {"1": {"input": 1}}
-        })
+        resp = await client.post("/api/profile", json={"name": "No ID", "outputs": {"1": {"input": 1}}})
         assert resp.status == 400
 
         data = await resp.json()
@@ -1012,10 +985,7 @@ class TestProfileAPI:
     @pytest.mark.asyncio
     async def test_create_profile_missing_name(self, client):
         """Test POST /api/profile fails without name."""
-        resp = await client.post("/api/profile", json={
-            "id": "no_name",
-            "outputs": {"1": {"input": 1}}
-        })
+        resp = await client.post("/api/profile", json={"id": "no_name", "outputs": {"1": {"input": 1}}})
         assert resp.status == 400
 
         data = await resp.json()
@@ -1024,33 +994,36 @@ class TestProfileAPI:
     @pytest.mark.asyncio
     async def test_create_profile_invalid_output(self, client):
         """Test POST /api/profile fails with invalid output number."""
-        resp = await client.post("/api/profile", json={
-            "id": "bad_output",
-            "name": "Bad Output",
-            "outputs": {"99": {"input": 1}}  # Invalid output
-        })
+        resp = await client.post(
+            "/api/profile",
+            json={
+                "id": "bad_output",
+                "name": "Bad Output",
+                "outputs": {"99": {"input": 1}},  # Invalid output
+            },
+        )
         assert resp.status == 400
 
     @pytest.mark.asyncio
     async def test_create_profile_invalid_input(self, client):
         """Test POST /api/profile fails with invalid input number."""
-        resp = await client.post("/api/profile", json={
-            "id": "bad_input",
-            "name": "Bad Input",
-            "outputs": {"1": {"input": 99}}  # Invalid input
-        })
+        resp = await client.post(
+            "/api/profile",
+            json={
+                "id": "bad_input",
+                "name": "Bad Input",
+                "outputs": {"1": {"input": 99}},  # Invalid input
+            },
+        )
         assert resp.status == 400
 
     @pytest.mark.asyncio
     async def test_get_profile(self, client):
         """Test GET /api/profile/{id} returns profile details."""
         # Create a profile first
-        await client.post("/api/profile", json={
-            "id": "get_test",
-            "name": "Get Test",
-            "icon": "📺",
-            "outputs": {"1": {"input": 3}}
-        })
+        await client.post(
+            "/api/profile", json={"id": "get_test", "name": "Get Test", "icon": "📺", "outputs": {"1": {"input": 3}}}
+        )
 
         # Get it
         resp = await client.get("/api/profile/get_test")
@@ -1076,18 +1049,13 @@ class TestProfileAPI:
     async def test_update_profile(self, client):
         """Test PUT /api/profile/{id} updates profile fields."""
         # Create a profile
-        await client.post("/api/profile", json={
-            "id": "update_test",
-            "name": "Original Name",
-            "icon": "📺",
-            "outputs": {"1": {"input": 1}}
-        })
+        await client.post(
+            "/api/profile",
+            json={"id": "update_test", "name": "Original Name", "icon": "📺", "outputs": {"1": {"input": 1}}},
+        )
 
         # Update it
-        resp = await client.put("/api/profile/update_test", json={
-            "name": "Updated Name",
-            "icon": "🎬"
-        })
+        resp = await client.put("/api/profile/update_test", json={"name": "Updated Name", "icon": "🎬"})
         assert resp.status == 200
 
         data = await resp.json()
@@ -1104,18 +1072,15 @@ class TestProfileAPI:
     async def test_update_profile_macros(self, client):
         """Test PUT /api/profile/{id} can update macro assignments."""
         # Create profile without macros
-        await client.post("/api/profile", json={
-            "id": "macro_update_test",
-            "name": "Macro Test",
-            "outputs": {"1": {"input": 1}}
-        })
+        await client.post(
+            "/api/profile", json={"id": "macro_update_test", "name": "Macro Test", "outputs": {"1": {"input": 1}}}
+        )
 
         # Update with macros
-        resp = await client.put("/api/profile/macro_update_test", json={
-            "macros": ["macro_a", "macro_b"],
-            "power_on_macro": "power_on",
-            "power_off_macro": "power_off"
-        })
+        resp = await client.put(
+            "/api/profile/macro_update_test",
+            json={"macros": ["macro_a", "macro_b"], "power_on_macro": "power_on", "power_off_macro": "power_off"},
+        )
         assert resp.status == 200
 
         data = await resp.json()
@@ -1134,11 +1099,9 @@ class TestProfileAPI:
     async def test_delete_profile(self, client):
         """Test DELETE /api/profile/{id} removes profile."""
         # Create a profile
-        await client.post("/api/profile", json={
-            "id": "delete_test",
-            "name": "To Delete",
-            "outputs": {"1": {"input": 1}}
-        })
+        await client.post(
+            "/api/profile", json={"id": "delete_test", "name": "To Delete", "outputs": {"1": {"input": 1}}}
+        )
 
         # Delete it
         resp = await client.delete("/api/profile/delete_test")
@@ -1161,15 +1124,14 @@ class TestProfileAPI:
     async def test_recall_profile_switches_inputs(self, client, mock_matrix):
         """Test POST /api/profile/{id}/recall actually switches matrix inputs."""
         # Create a profile with specific routing
-        await client.post("/api/profile", json={
-            "id": "recall_switch_test",
-            "name": "Recall Switch Test",
-            "outputs": {
-                "1": {"input": 3},
-                "2": {"input": 4},
-                "5": {"input": 1}
-            }
-        })
+        await client.post(
+            "/api/profile",
+            json={
+                "id": "recall_switch_test",
+                "name": "Recall Switch Test",
+                "outputs": {"1": {"input": 3}, "2": {"input": 4}, "5": {"input": 1}},
+            },
+        )
 
         # Recall it
         resp = await client.post("/api/profile/recall_switch_test/recall")
@@ -1200,11 +1162,10 @@ class TestProfileAPI:
         """Test GET /api/profiles returns all created profiles."""
         # Create multiple profiles
         for i in range(3):
-            await client.post("/api/profile", json={
-                "id": f"list_test_{i}",
-                "name": f"List Test {i}",
-                "outputs": {"1": {"input": i + 1}}
-            })
+            await client.post(
+                "/api/profile",
+                json={"id": f"list_test_{i}", "name": f"List Test {i}", "outputs": {"1": {"input": i + 1}}},
+            )
 
         # List them
         resp = await client.get("/api/profiles")
@@ -1248,8 +1209,8 @@ class TestMacroAPI:
             "description": "Powers on all devices",
             "steps": [
                 {"command": "POWER_ON", "targets": ["input_1", "input_2"], "delay_ms": 0},
-                {"command": "POWER_ON", "targets": ["output_1"], "delay_ms": 1000}
-            ]
+                {"command": "POWER_ON", "targets": ["output_1"], "delay_ms": 1000},
+            ],
         }
 
         resp = await client.post("/api/cec/macro", json=macro_data)
@@ -1271,7 +1232,7 @@ class TestMacroAPI:
         macro_data = {
             "id": "custom_macro_id",
             "name": "Custom ID Macro",
-            "steps": [{"command": "PLAY", "targets": ["input_1"]}]
+            "steps": [{"command": "PLAY", "targets": ["input_1"]}],
         }
 
         resp = await client.post("/api/cec/macro", json=macro_data)
@@ -1283,9 +1244,7 @@ class TestMacroAPI:
     @pytest.mark.asyncio
     async def test_create_macro_missing_name(self, client):
         """Test POST /api/macro fails without name."""
-        resp = await client.post("/api/cec/macro", json={
-            "steps": [{"command": "PLAY", "targets": ["input_1"]}]
-        })
+        resp = await client.post("/api/cec/macro", json={"steps": [{"command": "PLAY", "targets": ["input_1"]}]})
         assert resp.status == 400
 
         data = await resp.json()
@@ -1294,10 +1253,7 @@ class TestMacroAPI:
     @pytest.mark.asyncio
     async def test_create_macro_empty_steps(self, client):
         """Test POST /api/cec/macro with empty steps returns 400."""
-        resp = await client.post("/api/cec/macro", json={
-            "name": "Empty Macro",
-            "steps": []
-        })
+        resp = await client.post("/api/cec/macro", json={"name": "Empty Macro", "steps": []})
         # API requires at least one step
         assert resp.status == 400
 
@@ -1305,12 +1261,15 @@ class TestMacroAPI:
     async def test_get_macro(self, client):
         """Test GET /api/cec/macro/{id} returns macro details."""
         # Create a macro first
-        create_resp = await client.post("/api/cec/macro", json={
-            "id": "get_macro_test",
-            "name": "Get Test Macro",
-            "icon": "🎮",
-            "steps": [{"command": "PLAY", "targets": ["output_2"], "delay_ms": 500}]
-        })
+        create_resp = await client.post(
+            "/api/cec/macro",
+            json={
+                "id": "get_macro_test",
+                "name": "Get Test Macro",
+                "icon": "🎮",
+                "steps": [{"command": "PLAY", "targets": ["output_2"], "delay_ms": 500}],
+            },
+        )
         assert create_resp.status == 200
 
         # Get it
@@ -1335,18 +1294,20 @@ class TestMacroAPI:
     async def test_update_macro(self, client):
         """Test PUT /api/cec/macro/{id} updates macro fields."""
         # Create a macro
-        await client.post("/api/cec/macro", json={
-            "id": "update_macro_test",
-            "name": "Original Macro",
-            "steps": [{"command": "PLAY", "targets": ["input_1"]}]
-        })
+        await client.post(
+            "/api/cec/macro",
+            json={
+                "id": "update_macro_test",
+                "name": "Original Macro",
+                "steps": [{"command": "PLAY", "targets": ["input_1"]}],
+            },
+        )
 
         # Update it
-        resp = await client.put("/api/cec/macro/update_macro_test", json={
-            "name": "Updated Macro",
-            "icon": "🌙",
-            "description": "Now with description"
-        })
+        resp = await client.put(
+            "/api/cec/macro/update_macro_test",
+            json={"name": "Updated Macro", "icon": "🌙", "description": "Now with description"},
+        )
         assert resp.status == 200
 
         data = await resp.json()
@@ -1362,19 +1323,25 @@ class TestMacroAPI:
     async def test_update_macro_steps(self, client):
         """Test PUT /api/cec/macro/{id} can update steps."""
         # Create with one step
-        await client.post("/api/cec/macro", json={
-            "id": "update_steps_test",
-            "name": "Steps Test",
-            "steps": [{"command": "PLAY", "targets": ["input_1"]}]
-        })
+        await client.post(
+            "/api/cec/macro",
+            json={
+                "id": "update_steps_test",
+                "name": "Steps Test",
+                "steps": [{"command": "PLAY", "targets": ["input_1"]}],
+            },
+        )
 
         # Update with new steps
-        resp = await client.put("/api/cec/macro/update_steps_test", json={
-            "steps": [
-                {"command": "POWER_ON", "targets": ["input_1", "input_2"], "delay_ms": 0},
-                {"command": "POWER_ON", "targets": ["output_1"], "delay_ms": 2000}
-            ]
-        })
+        resp = await client.put(
+            "/api/cec/macro/update_steps_test",
+            json={
+                "steps": [
+                    {"command": "POWER_ON", "targets": ["input_1", "input_2"], "delay_ms": 0},
+                    {"command": "POWER_ON", "targets": ["output_1"], "delay_ms": 2000},
+                ]
+            },
+        )
         assert resp.status == 200
 
         data = await resp.json()
@@ -1392,11 +1359,14 @@ class TestMacroAPI:
     async def test_delete_macro(self, client):
         """Test DELETE /api/cec/macro/{id} removes macro."""
         # Create a macro with at least one step
-        create_resp = await client.post("/api/cec/macro", json={
-            "id": "delete_macro_test",
-            "name": "To Delete",
-            "steps": [{"command": "PLAY", "targets": ["input_1"]}]
-        })
+        create_resp = await client.post(
+            "/api/cec/macro",
+            json={
+                "id": "delete_macro_test",
+                "name": "To Delete",
+                "steps": [{"command": "PLAY", "targets": ["input_1"]}],
+            },
+        )
         assert create_resp.status == 200
 
         # Delete it
@@ -1426,13 +1396,14 @@ class TestMacroAPI:
     async def test_test_macro(self, client):
         """Test POST /api/cec/macro/{id}/test validates macro."""
         # Create a valid macro
-        await client.post("/api/cec/macro", json={
-            "id": "test_macro_test",
-            "name": "Test Macro",
-            "steps": [
-                {"command": "POWER_ON", "targets": ["input_1"], "delay_ms": 0}
-            ]
-        })
+        await client.post(
+            "/api/cec/macro",
+            json={
+                "id": "test_macro_test",
+                "name": "Test Macro",
+                "steps": [{"command": "POWER_ON", "targets": ["input_1"], "delay_ms": 0}],
+            },
+        )
 
         # Test it
         resp = await client.post("/api/cec/macro/test_macro_test/test")
@@ -1457,11 +1428,14 @@ class TestMacroAPI:
         """Test GET /api/cec/macros returns all created macros."""
         # Create multiple macros
         for i in range(3):
-            await client.post("/api/cec/macro", json={
-                "id": f"list_macro_{i}",
-                "name": f"List Macro {i}",
-                "steps": [{"command": "PLAY", "targets": [f"input_{i+1}"]}]
-            })
+            await client.post(
+                "/api/cec/macro",
+                json={
+                    "id": f"list_macro_{i}",
+                    "name": f"List Macro {i}",
+                    "steps": [{"command": "PLAY", "targets": [f"input_{i + 1}"]}],
+                },
+            )
 
         # List them
         resp = await client.get("/api/cec/macros")
@@ -1480,17 +1454,14 @@ class TestMacroAPI:
     async def test_macro_step_validation(self, client):
         """Test macro step structure is validated correctly."""
         # Create macro with proper step structure
-        resp = await client.post("/api/cec/macro", json={
-            "id": "step_validation",
-            "name": "Step Validation",
-            "steps": [
-                {
-                    "command": "VOLUME_UP",
-                    "targets": ["output_1", "output_2"],
-                    "delay_ms": 100
-                }
-            ]
-        })
+        resp = await client.post(
+            "/api/cec/macro",
+            json={
+                "id": "step_validation",
+                "name": "Step Validation",
+                "steps": [{"command": "VOLUME_UP", "targets": ["output_1", "output_2"], "delay_ms": 100}],
+            },
+        )
         assert resp.status == 200
 
         # Verify step was stored correctly
@@ -1516,11 +1487,7 @@ class TestSceneRecallValidation:
         scene_data = {
             "id": "recall_validation",
             "name": "Recall Validation",
-            "outputs": {
-                "1": {"input": 5},
-                "3": {"input": 2},
-                "7": {"input": 8}
-            }
+            "outputs": {"1": {"input": 5}, "3": {"input": 2}, "7": {"input": 8}},
         }
         await client.post("/api/scene", json=scene_data)
 
@@ -1541,13 +1508,7 @@ class TestSceneRecallValidation:
     @pytest.mark.asyncio
     async def test_scene_recall_applies_audio_mute(self, client, mock_matrix):
         """Test scene recall applies audio mute settings."""
-        scene_data = {
-            "id": "mute_test",
-            "name": "Mute Test",
-            "outputs": {
-                "2": {"input": 1, "audio_mute": True}
-            }
-        }
+        scene_data = {"id": "mute_test", "name": "Mute Test", "outputs": {"2": {"input": 1, "audio_mute": True}}}
         await client.post("/api/scene", json=scene_data)
 
         # Recall it
@@ -1558,7 +1519,7 @@ class TestSceneRecallValidation:
         mock_matrix.switch_input.assert_called()
 
         # If audio mute is supported, it should be called
-        if hasattr(mock_matrix, 'set_output_audio_mute'):
+        if hasattr(mock_matrix, "set_output_audio_mute"):
             # Depending on implementation, mute may be called
             pass  # Implementation specific
 
@@ -1869,15 +1830,15 @@ class TestSceneCecConfigEndpoints:
     async def test_get_scene_cec_config(self, client):
         """Test GET /api/scene/{id}/cec returns CEC config."""
         # Create scene with CEC config
-        await client.post("/api/scene", json={
-            "id": "cec_get_test",
-            "name": "CEC Get Test",
-            "outputs": {"1": {"input": 1}},
-            "cec_config": {
-                "nav_targets": ["input:1"],
-                "volume_targets": ["output:1"]
-            }
-        })
+        await client.post(
+            "/api/scene",
+            json={
+                "id": "cec_get_test",
+                "name": "CEC Get Test",
+                "outputs": {"1": {"input": 1}},
+                "cec_config": {"nav_targets": ["input:1"], "volume_targets": ["output:1"]},
+            },
+        )
 
         resp = await client.get("/api/scene/cec_get_test/cec")
         assert resp.status == 200
@@ -1897,18 +1858,15 @@ class TestSceneCecConfigEndpoints:
     async def test_post_scene_cec_config(self, client):
         """Test POST /api/scene/{id}/cec updates CEC config."""
         # Create scene first
-        await client.post("/api/scene", json={
-            "id": "cec_post_test",
-            "name": "CEC Post Test",
-            "outputs": {"1": {"input": 1}}
-        })
+        await client.post(
+            "/api/scene", json={"id": "cec_post_test", "name": "CEC Post Test", "outputs": {"1": {"input": 1}}}
+        )
 
         # Update CEC config
-        resp = await client.post("/api/scene/cec_post_test/cec", json={
-            "nav_targets": ["input:2", "input:3"],
-            "playback_targets": ["input:2"],
-            "auto_resolved": False
-        })
+        resp = await client.post(
+            "/api/scene/cec_post_test/cec",
+            json={"nav_targets": ["input:2", "input:3"], "playback_targets": ["input:2"], "auto_resolved": False},
+        )
         assert resp.status == 200
 
         # Verify it was saved
@@ -1920,16 +1878,13 @@ class TestSceneCecConfigEndpoints:
     @pytest.mark.asyncio
     async def test_put_scene_cec_config(self, client):
         """Test PUT /api/scene/{id}/cec replaces CEC config."""
-        await client.post("/api/scene", json={
-            "id": "cec_put_test",
-            "name": "CEC Put Test",
-            "outputs": {"1": {"input": 1}}
-        })
+        await client.post(
+            "/api/scene", json={"id": "cec_put_test", "name": "CEC Put Test", "outputs": {"1": {"input": 1}}}
+        )
 
-        resp = await client.put("/api/scene/cec_put_test/cec", json={
-            "volume_targets": ["output:1", "output:2"],
-            "auto_resolved": False
-        })
+        resp = await client.put(
+            "/api/scene/cec_put_test/cec", json={"volume_targets": ["output:1", "output:2"], "auto_resolved": False}
+        )
         assert resp.status == 200
 
 
@@ -1944,12 +1899,15 @@ class TestProfileCecMacroEndpoints:
     @pytest.mark.asyncio
     async def test_get_profile_cec_config(self, client):
         """Test GET /api/profile/{id}/cec returns CEC config."""
-        await client.post("/api/profile", json={
-            "id": "profile_cec_test",
-            "name": "Profile CEC Test",
-            "outputs": {"1": {"input": 1}},
-            "cec_config": {"nav_targets": ["input:1"]}
-        })
+        await client.post(
+            "/api/profile",
+            json={
+                "id": "profile_cec_test",
+                "name": "Profile CEC Test",
+                "outputs": {"1": {"input": 1}},
+                "cec_config": {"nav_targets": ["input:1"]},
+            },
+        )
 
         resp = await client.get("/api/profile/profile_cec_test/cec")
         assert resp.status == 200
@@ -1960,28 +1918,29 @@ class TestProfileCecMacroEndpoints:
     @pytest.mark.asyncio
     async def test_post_profile_cec_config(self, client):
         """Test POST /api/profile/{id}/cec updates CEC config."""
-        await client.post("/api/profile", json={
-            "id": "profile_cec_update",
-            "name": "Profile CEC Update",
-            "outputs": {"1": {"input": 1}}
-        })
+        await client.post(
+            "/api/profile",
+            json={"id": "profile_cec_update", "name": "Profile CEC Update", "outputs": {"1": {"input": 1}}},
+        )
 
-        resp = await client.post("/api/profile/profile_cec_update/cec", json={
-            "nav_targets": ["input:2"],
-            "volume_targets": ["output:1"]
-        })
+        resp = await client.post(
+            "/api/profile/profile_cec_update/cec", json={"nav_targets": ["input:2"], "volume_targets": ["output:1"]}
+        )
         assert resp.status == 200
 
     @pytest.mark.asyncio
     async def test_get_profile_macros(self, client):
         """Test GET /api/profile/{id}/macros returns macro assignments."""
-        await client.post("/api/profile", json={
-            "id": "profile_macro_get",
-            "name": "Profile Macro Get",
-            "outputs": {"1": {"input": 1}},
-            "macros": ["macro1", "macro2"],
-            "power_on_macro": "startup"
-        })
+        await client.post(
+            "/api/profile",
+            json={
+                "id": "profile_macro_get",
+                "name": "Profile Macro Get",
+                "outputs": {"1": {"input": 1}},
+                "macros": ["macro1", "macro2"],
+                "power_on_macro": "startup",
+            },
+        )
 
         resp = await client.get("/api/profile/profile_macro_get/macros")
         assert resp.status == 200
@@ -1992,17 +1951,15 @@ class TestProfileCecMacroEndpoints:
     @pytest.mark.asyncio
     async def test_post_profile_macros(self, client):
         """Test POST /api/profile/{id}/macros updates macro assignments."""
-        await client.post("/api/profile", json={
-            "id": "profile_macro_update",
-            "name": "Profile Macro Update",
-            "outputs": {"1": {"input": 1}}
-        })
+        await client.post(
+            "/api/profile",
+            json={"id": "profile_macro_update", "name": "Profile Macro Update", "outputs": {"1": {"input": 1}}},
+        )
 
-        resp = await client.post("/api/profile/profile_macro_update/macros", json={
-            "macros": ["new_macro1", "new_macro2"],
-            "power_on_macro": "on_macro",
-            "power_off_macro": "off_macro"
-        })
+        resp = await client.post(
+            "/api/profile/profile_macro_update/macros",
+            json={"macros": ["new_macro1", "new_macro2"], "power_on_macro": "on_macro", "power_off_macro": "off_macro"},
+        )
         assert resp.status == 200
 
     @pytest.mark.asyncio
@@ -2029,26 +1986,32 @@ class TestSystemShortcutsAPI:
     @pytest.fixture
     def app_with_data_dir(self, extended_mock_matrix):
         """Create REST app with mock matrix and temp data dir for managers."""
-        import tempfile
         import os
+        import tempfile
+
         reset_rate_limiter()
         # CRITICAL: reset_data_dir_cache() clears the process-level cache so
         # get_data_dir() re-resolves from the env var instead of returning a
         # stale cached path from a previous test.
         from persistence import reset_data_dir_cache
+
         reset_data_dir_cache()
         temp_data_dir = tempfile.mkdtemp()
         os.environ["MATRIX_DATA_DIR"] = temp_data_dir
-        set_matrix_device(extended_mock_matrix, {
-            1: "Apple TV",
-            2: "PS5",
-            3: "Nintendo Switch",
-            4: "PC",
-            5: "Shield",
-            6: "Cable Box",
-            7: "Blu-ray",
-            8: "Chromecast",
-        }, data_dir=temp_data_dir)
+        set_matrix_device(
+            extended_mock_matrix,
+            {
+                1: "Apple TV",
+                2: "PS5",
+                3: "Nintendo Switch",
+                4: "PC",
+                5: "Shield",
+                6: "Cable Box",
+                7: "Blu-ray",
+                8: "Chromecast",
+            },
+            data_dir=temp_data_dir,
+        )
         return create_rest_app(temp_data_dir)
 
     @pytest.fixture
@@ -2058,26 +2021,23 @@ class TestSystemShortcutsAPI:
 
     @pytest.mark.asyncio
     async def test_list_shortcuts_returns_5_defaults(self, client_with_data_dir):
-        """GET /api/system-shortcuts returns 5 default shortcuts."""
+        """GET /api/system-shortcuts returns 23 default shortcuts."""
         resp = await client_with_data_dir.get("/api/system-shortcuts")
         assert resp.status == 200
         data = await resp.json()
         assert data["success"] is True
-        assert len(data["data"]["shortcuts"]) == 5
+        assert len(data["data"]["shortcuts"]) == 23
 
     @pytest.mark.asyncio
     async def test_list_shortcuts_enabled_only(self, client_with_data_dir):
         """GET /api/system-shortcuts?enabled_only=true filters disabled."""
         # Disable one shortcut first
-        await client_with_data_dir.put(
-            "/api/system-shortcuts/builtin.all_to_out_1",
-            json={"enabled": False}
-        )
+        await client_with_data_dir.put("/api/system-shortcuts/builtin.all_to_out_1", json={"enabled": False})
         resp = await client_with_data_dir.get("/api/system-shortcuts?enabled_only=true")
         data = await resp.json()
         ids = [s["id"] for s in data["data"]["shortcuts"]]
         assert "builtin.all_to_out_1" not in ids
-        assert len(ids) == 4
+        assert len(ids) == 22
 
     @pytest.mark.asyncio
     async def test_list_favorites(self, client_with_data_dir):
@@ -2116,10 +2076,7 @@ class TestSystemShortcutsAPI:
     @pytest.mark.asyncio
     async def test_update_shortcut_rename(self, client_with_data_dir):
         """PUT /api/system-shortcuts/{id} with name renames the shortcut."""
-        resp = await client_with_data_dir.put(
-            "/api/system-shortcuts/builtin.all_to_out_1",
-            json={"name": "New Name"}
-        )
+        resp = await client_with_data_dir.put("/api/system-shortcuts/builtin.all_to_out_1", json={"name": "New Name"})
         assert resp.status == 200
         data = await resp.json()
         assert data["data"]["name"] == "New Name"
@@ -2127,10 +2084,7 @@ class TestSystemShortcutsAPI:
     @pytest.mark.asyncio
     async def test_update_shortcut_disable(self, client_with_data_dir):
         """PUT /api/system-shortcuts/{id} with enabled=false disables it."""
-        resp = await client_with_data_dir.put(
-            "/api/system-shortcuts/builtin.mute_all_audio",
-            json={"enabled": False}
-        )
+        resp = await client_with_data_dir.put("/api/system-shortcuts/builtin.mute_all_audio", json={"enabled": False})
         assert resp.status == 200
         data = await resp.json()
         assert data["data"]["enabled"] is False
@@ -2138,10 +2092,7 @@ class TestSystemShortcutsAPI:
     @pytest.mark.asyncio
     async def test_update_shortcut_set_favorite(self, client_with_data_dir):
         """PUT /api/system-shortcuts/{id} with favorite=true sets it."""
-        resp = await client_with_data_dir.put(
-            "/api/system-shortcuts/builtin.power_off_all",
-            json={"favorite": True}
-        )
+        resp = await client_with_data_dir.put("/api/system-shortcuts/builtin.power_off_all", json={"favorite": True})
         assert resp.status == 200
         data = await resp.json()
         assert data["data"]["favorite"] is True
@@ -2150,25 +2101,19 @@ class TestSystemShortcutsAPI:
     async def test_toggle_favorite(self, client_with_data_dir):
         """POST /api/system-shortcuts/{id}/favorite toggles the favorite flag."""
         # builtin.power_off_all starts as favorite=False
-        resp = await client_with_data_dir.post(
-            "/api/system-shortcuts/builtin.power_off_all/favorite"
-        )
+        resp = await client_with_data_dir.post("/api/system-shortcuts/builtin.power_off_all/favorite")
         assert resp.status == 200
         data = await resp.json()
         assert data["data"]["favorite"] is True
         # Toggle back
-        resp = await client_with_data_dir.post(
-            "/api/system-shortcuts/builtin.power_off_all/favorite"
-        )
+        resp = await client_with_data_dir.post("/api/system-shortcuts/builtin.power_off_all/favorite")
         data = await resp.json()
         assert data["data"]["favorite"] is False
 
     @pytest.mark.asyncio
     async def test_toggle_dashboard(self, client_with_data_dir):
         """POST /api/system-shortcuts/{id}/dashboard toggles the dashboard_visible flag."""
-        resp = await client_with_data_dir.post(
-            "/api/system-shortcuts/builtin.all_to_out_1/dashboard"
-        )
+        resp = await client_with_data_dir.post("/api/system-shortcuts/builtin.all_to_out_1/dashboard")
         assert resp.status == 200
         data = await resp.json()
         assert data["data"]["dashboard_visible"] is True
@@ -2176,9 +2121,7 @@ class TestSystemShortcutsAPI:
     @pytest.mark.asyncio
     async def test_execute_shortcut(self, client_with_data_dir, mock_matrix):
         """POST /api/system-shortcuts/{id}/execute runs the shortcut against the matrix."""
-        resp = await client_with_data_dir.post(
-            "/api/system-shortcuts/builtin.power_off_all/execute"
-        )
+        resp = await client_with_data_dir.post("/api/system-shortcuts/builtin.power_off_all/execute")
         assert resp.status == 200
         data = await resp.json()
         assert data["success"] is True
@@ -2188,13 +2131,8 @@ class TestSystemShortcutsAPI:
     async def test_execute_disabled_shortcut_returns_400(self, client_with_data_dir):
         """POST /api/system-shortcuts/{id}/execute on a disabled shortcut returns 400."""
         # First disable
-        await client_with_data_dir.put(
-            "/api/system-shortcuts/builtin.power_off_all",
-            json={"enabled": False}
-        )
-        resp = await client_with_data_dir.post(
-            "/api/system-shortcuts/builtin.power_off_all/execute"
-        )
+        await client_with_data_dir.put("/api/system-shortcuts/builtin.power_off_all", json={"enabled": False})
+        resp = await client_with_data_dir.post("/api/system-shortcuts/builtin.power_off_all/execute")
         assert resp.status == 400
 
     @pytest.mark.asyncio
@@ -2206,7 +2144,7 @@ class TestSystemShortcutsAPI:
                 "name": "My Custom Shortcut",
                 "icon": "🎬",
                 "type": "route_one_to_one",
-            }
+            },
         )
         assert resp.status == 201
         data = await resp.json()
@@ -2217,10 +2155,7 @@ class TestSystemShortcutsAPI:
     @pytest.mark.asyncio
     async def test_create_shortcut_invalid_type_returns_400(self, client_with_data_dir):
         """POST /api/system-shortcuts with invalid type returns 400."""
-        resp = await client_with_data_dir.post(
-            "/api/system-shortcuts",
-            json={"name": "Bad", "type": "not_a_real_type"}
-        )
+        resp = await client_with_data_dir.post("/api/system-shortcuts", json={"name": "Bad", "type": "not_a_real_type"})
         assert resp.status == 400
 
     @pytest.mark.asyncio
@@ -2234,8 +2169,7 @@ class TestSystemShortcutsAPI:
         """DELETE /api/system-shortcuts/{user_id} deletes the user shortcut, returns 200."""
         # Create a user shortcut first
         create_resp = await client_with_data_dir.post(
-            "/api/system-shortcuts",
-            json={"name": "To Delete", "type": "route_one_to_one"}
+            "/api/system-shortcuts", json={"name": "To Delete", "type": "route_one_to_one"}
         )
         create_data = await create_resp.json()
         user_id = create_data["data"]["id"]
@@ -2256,8 +2190,7 @@ class TestSystemShortcutsAPI:
         # Reverse the order
         reversed_ids = list(reversed(ids))
         reorder_resp = await client_with_data_dir.put(
-            "/api/system-shortcuts/reorder",
-            json={"ordered_ids": reversed_ids}
+            "/api/system-shortcuts/reorder", json={"ordered_ids": reversed_ids}
         )
         assert reorder_resp.status == 200
         # Verify new order
@@ -2277,18 +2210,29 @@ class TestDashboardLayoutAPI:
     @pytest.fixture
     def app_with_data_dir(self, extended_mock_matrix):
         """Create REST app with mock matrix and temp data dir."""
-        import tempfile
         import os
+        import tempfile
+
         reset_rate_limiter()
         from persistence import reset_data_dir_cache
+
         reset_data_dir_cache()
         temp_data_dir = tempfile.mkdtemp()
         os.environ["MATRIX_DATA_DIR"] = temp_data_dir
-        set_matrix_device(extended_mock_matrix, {
-            1: "Apple TV", 2: "PS5", 3: "Nintendo Switch",
-            4: "PC", 5: "Shield", 6: "Cable Box",
-            7: "Blu-ray", 8: "Chromecast",
-        }, data_dir=temp_data_dir)
+        set_matrix_device(
+            extended_mock_matrix,
+            {
+                1: "Apple TV",
+                2: "PS5",
+                3: "Nintendo Switch",
+                4: "PC",
+                5: "Shield",
+                6: "Cable Box",
+                7: "Blu-ray",
+                8: "Chromecast",
+            },
+            data_dir=temp_data_dir,
+        )
         return create_rest_app(temp_data_dir)
 
     @pytest.fixture
@@ -2317,8 +2261,8 @@ class TestDashboardLayoutAPI:
                 "cards": [
                     {"type": "preset", "id": "1", "order": 0},
                     {"type": "preset", "id": "2", "order": 1},
-                ]
-            }
+                ],
+            },
         )
         assert resp.status == 200
         data = await resp.json()
@@ -2334,7 +2278,7 @@ class TestDashboardLayoutAPI:
                     {"type": "profile", "id": "valid", "order": 0},
                     {"type": "bad_type", "id": "invalid", "order": 1},
                 ]
-            }
+            },
         )
         assert resp.status == 200
         data = await resp.json()
@@ -2351,23 +2295,17 @@ class TestDashboardLayoutAPI:
                     {"type": "preset", "id": "1", "order": 0},
                     {"type": "preset", "id": "1", "order": 1},
                 ]
-            }
+            },
         )
         assert resp.status == 200
         data = await resp.json()
-        preset1_count = sum(
-            1 for c in data["data"]["cards"]
-            if c["type"] == "preset" and c["id"] == "1"
-        )
+        preset1_count = sum(1 for c in data["data"]["cards"] if c["type"] == "preset" and c["id"] == "1")
         assert preset1_count == 1
 
     @pytest.mark.asyncio
     async def test_add_card(self, client_with_data_dir):
         """POST /api/dashboard/cards adds a card, returns 201."""
-        resp = await client_with_data_dir.post(
-            "/api/dashboard/cards",
-            json={"type": "preset", "id": "1"}
-        )
+        resp = await client_with_data_dir.post("/api/dashboard/cards", json={"type": "preset", "id": "1"})
         assert resp.status == 201
         data = await resp.json()
         # Card should now be in the layout
@@ -2378,23 +2316,16 @@ class TestDashboardLayoutAPI:
     async def test_add_card_duplicate_returns_409(self, client_with_data_dir):
         """POST /api/dashboard/cards with duplicate card returns 409."""
         # Add once
-        await client_with_data_dir.post(
-            "/api/dashboard/cards",
-            json={"type": "preset", "id": "3"}
-        )
+        await client_with_data_dir.post("/api/dashboard/cards", json={"type": "preset", "id": "3"})
         # Try to add again
-        resp = await client_with_data_dir.post(
-            "/api/dashboard/cards",
-            json={"type": "preset", "id": "3"}
-        )
+        resp = await client_with_data_dir.post("/api/dashboard/cards", json={"type": "preset", "id": "3"})
         assert resp.status == 409
 
     @pytest.mark.asyncio
     async def test_add_card_invalid_type_returns_400(self, client_with_data_dir):
         """POST /api/dashboard/cards with invalid type returns 400."""
         resp = await client_with_data_dir.post(
-            "/api/dashboard/cards",
-            json={"type": "not_a_card_type", "id": "something"}
+            "/api/dashboard/cards", json={"type": "not_a_card_type", "id": "something"}
         )
         assert resp.status == 400
 
@@ -2402,8 +2333,7 @@ class TestDashboardLayoutAPI:
     async def test_remove_card(self, client_with_data_dir):
         """DELETE /api/dashboard/cards?type=aggregate_widget&id=cec-tray removes the card."""
         resp = await client_with_data_dir.delete(
-            "/api/dashboard/cards",
-            params={"type": "aggregate_widget", "id": "cec-tray"}
+            "/api/dashboard/cards", params={"type": "aggregate_widget", "id": "cec-tray"}
         )
         assert resp.status == 200
         # Verify it's gone from the layout
@@ -2416,10 +2346,7 @@ class TestDashboardLayoutAPI:
         """DELETE /api/dashboard/cards with valid type but nonexistent card returns 404."""
         # Preset 8 is a valid preset id (1-8) but is not on the dashboard,
         # so this should return 404 (not found), not 400 (bad request).
-        resp = await client_with_data_dir.delete(
-            "/api/dashboard/cards",
-            params={"type": "preset", "id": "8"}
-        )
+        resp = await client_with_data_dir.delete("/api/dashboard/cards", params={"type": "preset", "id": "8"})
         assert resp.status == 404
 
 
@@ -2436,6 +2363,7 @@ class TestProfileFavoriteDashboardAPI:
         """Ensure a fresh ProfileManager for each test."""
         import rest_api.utils as utils_module
         from persistence import get_data_dir, reset_data_dir_cache
+
         # Reset manager so set_matrix_device creates a fresh one
         utils_module._profile_manager = None
         # CRITICAL: reset the path cache first, BEFORE calling get_data_dir
@@ -2459,11 +2387,14 @@ class TestProfileFavoriteDashboardAPI:
     async def test_toggle_profile_favorite_on(self, client):
         """POST /api/profile/{id}/favorite toggles favorite on for a profile."""
         # Create profile first
-        await client.post("/api/profile", json={
-            "id": "test_profile_fav",
-            "name": "Test Profile",
-            "outputs": {"1": {"input": 1}},
-        })
+        await client.post(
+            "/api/profile",
+            json={
+                "id": "test_profile_fav",
+                "name": "Test Profile",
+                "outputs": {"1": {"input": 1}},
+            },
+        )
         # Toggle favorite on
         resp = await client.post("/api/profile/test_profile_fav/favorite")
         assert resp.status == 200
@@ -2473,11 +2404,14 @@ class TestProfileFavoriteDashboardAPI:
     @pytest.mark.asyncio
     async def test_toggle_profile_favorite_off(self, client):
         """POST /api/profile/{id}/favorite toggles favorite off when already on."""
-        await client.post("/api/profile", json={
-            "id": "test_profile_fav2",
-            "name": "Test Profile 2",
-            "outputs": {"1": {"input": 1}},
-        })
+        await client.post(
+            "/api/profile",
+            json={
+                "id": "test_profile_fav2",
+                "name": "Test Profile 2",
+                "outputs": {"1": {"input": 1}},
+            },
+        )
         # Turn on
         await client.post("/api/profile/test_profile_fav2/favorite")
         # Turn off
@@ -2487,44 +2421,44 @@ class TestProfileFavoriteDashboardAPI:
     @pytest.mark.asyncio
     async def test_put_profile_favorite_true(self, client):
         """PUT /api/profile/{id}/favorite with favorite=true sets it on."""
-        await client.post("/api/profile", json={
-            "id": "test_profile_fav3",
-            "name": "Test Profile 3",
-            "outputs": {"1": {"input": 1}},
-        })
-        resp = await client.put(
-            "/api/profile/test_profile_fav3/favorite",
-            json={"favorite": True}
+        await client.post(
+            "/api/profile",
+            json={
+                "id": "test_profile_fav3",
+                "name": "Test Profile 3",
+                "outputs": {"1": {"input": 1}},
+            },
         )
+        resp = await client.put("/api/profile/test_profile_fav3/favorite", json={"favorite": True})
         assert resp.status == 200
         assert (await resp.json())["data"]["favorite"] is True
 
     @pytest.mark.asyncio
     async def test_put_profile_favorite_false(self, client):
         """PUT /api/profile/{id}/favorite with favorite=false sets it off."""
-        await client.post("/api/profile", json={
-            "id": "test_profile_fav4",
-            "name": "Test Profile 4",
-            "outputs": {"1": {"input": 1}},
-        })
-        await client.put(
-            "/api/profile/test_profile_fav4/favorite",
-            json={"favorite": True}
+        await client.post(
+            "/api/profile",
+            json={
+                "id": "test_profile_fav4",
+                "name": "Test Profile 4",
+                "outputs": {"1": {"input": 1}},
+            },
         )
-        resp = await client.put(
-            "/api/profile/test_profile_fav4/favorite",
-            json={"favorite": False}
-        )
+        await client.put("/api/profile/test_profile_fav4/favorite", json={"favorite": True})
+        resp = await client.put("/api/profile/test_profile_fav4/favorite", json={"favorite": False})
         assert (await resp.json())["data"]["favorite"] is False
 
     @pytest.mark.asyncio
     async def test_toggle_profile_dashboard(self, client):
         """POST /api/profile/{id}/dashboard toggles dashboard_visible."""
-        await client.post("/api/profile", json={
-            "id": "test_profile_dash",
-            "name": "Test Profile Dashboard",
-            "outputs": {"1": {"input": 1}},
-        })
+        await client.post(
+            "/api/profile",
+            json={
+                "id": "test_profile_dash",
+                "name": "Test Profile Dashboard",
+                "outputs": {"1": {"input": 1}},
+            },
+        )
         resp = await client.post("/api/profile/test_profile_dash/dashboard")
         assert resp.status == 200
         assert (await resp.json())["data"]["dashboard_visible"] is True
@@ -2532,26 +2466,29 @@ class TestProfileFavoriteDashboardAPI:
     @pytest.mark.asyncio
     async def test_put_profile_dashboard_true(self, client):
         """PUT /api/profile/{id}/dashboard with dashboard_visible=true sets it on."""
-        await client.post("/api/profile", json={
-            "id": "test_profile_dash2",
-            "name": "Test Profile Dashboard 2",
-            "outputs": {"1": {"input": 1}},
-        })
-        resp = await client.put(
-            "/api/profile/test_profile_dash2/dashboard",
-            json={"dashboard_visible": True}
+        await client.post(
+            "/api/profile",
+            json={
+                "id": "test_profile_dash2",
+                "name": "Test Profile Dashboard 2",
+                "outputs": {"1": {"input": 1}},
+            },
         )
+        resp = await client.put("/api/profile/test_profile_dash2/dashboard", json={"dashboard_visible": True})
         assert resp.status == 200
         assert (await resp.json())["data"]["dashboard_visible"] is True
 
     @pytest.mark.asyncio
     async def test_get_profiles_favorites_after_faving(self, client):
         """GET /api/profiles/favorites returns the favorited profile."""
-        await client.post("/api/profile", json={
-            "id": "fav_profile_test",
-            "name": "Fav Profile Test",
-            "outputs": {"1": {"input": 1}},
-        })
+        await client.post(
+            "/api/profile",
+            json={
+                "id": "fav_profile_test",
+                "name": "Fav Profile Test",
+                "outputs": {"1": {"input": 1}},
+            },
+        )
         await client.post("/api/profile/fav_profile_test/favorite")
         resp = await client.get("/api/profiles/favorites")
         data = await resp.json()
@@ -2572,6 +2509,7 @@ class TestMacroFavoriteDashboardAPI:
         """Ensure a fresh MacroManager for each test."""
         import rest_api.utils as utils_module
         from persistence import get_data_dir, reset_data_dir_cache
+
         utils_module._macro_manager = None
         reset_data_dir_cache()
         macros_file = get_data_dir() / "cec_macros.json"
@@ -2592,10 +2530,13 @@ class TestMacroFavoriteDashboardAPI:
     async def test_toggle_macro_favorite(self, client):
         """POST /api/cec/macro/{id}/favorite toggles favorite on a macro."""
         # Create macro first
-        create_resp = await client.post("/api/cec/macro", json={
-            "name": "Test Macro Fav",
-            "steps": [{"command": "POWER_ON", "targets": ["input_1"]}],
-        })
+        create_resp = await client.post(
+            "/api/cec/macro",
+            json={
+                "name": "Test Macro Fav",
+                "steps": [{"command": "POWER_ON", "targets": ["input_1"]}],
+            },
+        )
         macro_id = (await create_resp.json())["data"]["id"]
         # Toggle favorite on
         resp = await client.post(f"/api/cec/macro/{macro_id}/favorite")
@@ -2605,10 +2546,13 @@ class TestMacroFavoriteDashboardAPI:
     @pytest.mark.asyncio
     async def test_toggle_macro_dashboard(self, client):
         """POST /api/cec/macro/{id}/dashboard toggles dashboard_visible on a macro."""
-        create_resp = await client.post("/api/cec/macro", json={
-            "name": "Test Macro Dash",
-            "steps": [{"command": "POWER_OFF", "targets": ["input_1"]}],
-        })
+        create_resp = await client.post(
+            "/api/cec/macro",
+            json={
+                "name": "Test Macro Dash",
+                "steps": [{"command": "POWER_OFF", "targets": ["input_1"]}],
+            },
+        )
         macro_id = (await create_resp.json())["data"]["id"]
         resp = await client.post(f"/api/cec/macro/{macro_id}/dashboard")
         assert resp.status == 200
@@ -2617,10 +2561,13 @@ class TestMacroFavoriteDashboardAPI:
     @pytest.mark.asyncio
     async def test_get_macros_favorites_after_faving(self, client):
         """GET /api/cec/macros/favorites returns the favorited macro."""
-        create_resp = await client.post("/api/cec/macro", json={
-            "name": "Fav Macro Test",
-            "steps": [{"command": "POWER_ON", "targets": ["input_1"]}],
-        })
+        create_resp = await client.post(
+            "/api/cec/macro",
+            json={
+                "name": "Fav Macro Test",
+                "steps": [{"command": "POWER_ON", "targets": ["input_1"]}],
+            },
+        )
         macro_id = (await create_resp.json())["data"]["id"]
         await client.post(f"/api/cec/macro/{macro_id}/favorite")
         resp = await client.get("/api/cec/macros/favorites")

@@ -50,14 +50,16 @@ CARD_MACRO = "macro"
 CARD_SCENE = "scene"
 CARD_AGGREGATE_WIDGET = "aggregate_widget"
 
-VALID_CARD_TYPES = frozenset({
-    CARD_PROFILE,
-    CARD_PRESET,
-    CARD_SYSTEM_SHORTCUT,
-    CARD_MACRO,
-    CARD_SCENE,
-    CARD_AGGREGATE_WIDGET,
-})
+VALID_CARD_TYPES = frozenset(
+    {
+        CARD_PROFILE,
+        CARD_PRESET,
+        CARD_SYSTEM_SHORTCUT,
+        CARD_MACRO,
+        CARD_SCENE,
+        CARD_AGGREGATE_WIDGET,
+    }
+)
 
 # The three legacy aggregate widgets that shipped pre-Phase 7.
 # They remain in the default layout for backwards compatibility.
@@ -221,9 +223,7 @@ class DashboardLayoutManager:
         if self.has_card(card_type, card_id):
             return False
         next_order = (max((c.order for c in self._layout.cards), default=-1)) + 1
-        self._layout.cards.append(
-            DashboardCard(type=card_type, id=card_id, order=next_order)
-        )
+        self._layout.cards.append(DashboardCard(type=card_type, id=card_id, order=next_order))
         return self._save()
 
     def remove_card(self, card_type: str, card_id: str) -> bool:

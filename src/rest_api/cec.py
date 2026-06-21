@@ -42,23 +42,23 @@ async def handle_cec_input(request: web.Request) -> web.Response:
 
         # Optimistic update for power commands
         if command in ("power_on", "power_off"):
-            await broadcast_status_update("cec_command", {
-                "type": "input",
-                "port": input_num,
-                "command": command,
-                "name": input_name,
-                "optimistic": True
-            })
+            await broadcast_status_update(
+                "cec_command",
+                {"type": "input", "port": input_num, "command": command, "name": input_name, "optimistic": True},
+            )
 
         success = await matrix_device.send_cec(command, input_num, is_output=False)
 
         if success:
-            return _json_response(True, {
-                "input": input_num,
-                "name": input_name,
-                "command": command,
-                "message": f"CEC {command} sent to {input_name}",
-            })
+            return _json_response(
+                True,
+                {
+                    "input": input_num,
+                    "name": input_name,
+                    "command": command,
+                    "message": f"CEC {command} sent to {input_name}",
+                },
+            )
         else:
             return _json_response(False, error=f"Failed to send CEC {command}", status=500)
     except ValueError:
@@ -94,21 +94,21 @@ async def handle_cec_output(request: web.Request) -> web.Response:
 
         # Optimistic update for power commands
         if command in ("power_on", "power_off"):
-            await broadcast_status_update("cec_command", {
-                "type": "output",
-                "port": output_num,
-                "command": command,
-                "optimistic": True
-            })
+            await broadcast_status_update(
+                "cec_command", {"type": "output", "port": output_num, "command": command, "optimistic": True}
+            )
 
         success = await matrix_device.send_cec(command, output_num, is_output=True)
 
         if success:
-            return _json_response(True, {
-                "output": output_num,
-                "command": command,
-                "message": f"CEC {command} sent to output {output_num}",
-            })
+            return _json_response(
+                True,
+                {
+                    "output": output_num,
+                    "command": command,
+                    "message": f"CEC {command} sent to output {output_num}",
+                },
+            )
         else:
             return _json_response(False, error=f"Failed to send CEC {command}", status=500)
     except ValueError:
@@ -124,26 +124,47 @@ async def handle_cec_commands(request: web.Request) -> web.Response:
 
     if matrix_device is None:
         # Return static list if no device
-        commands = ["power_on", "power_off", "up", "down", "left", "right", "select",
-                   "menu", "back", "play", "pause", "stop", "volume_up", "volume_down", "mute"]
-        return _json_response(True, {
+        commands = [
+            "power_on",
+            "power_off",
+            "up",
+            "down",
+            "left",
+            "right",
+            "select",
+            "menu",
+            "back",
+            "play",
+            "pause",
+            "stop",
+            "volume_up",
+            "volume_down",
+            "mute",
+        ]
+        return _json_response(
+            True,
+            {
+                "input_commands": commands,
+                "output_commands": commands,
+                "usage": {
+                    "input": "POST /api/cec/input/{1-8}/{command}",
+                    "output": "POST /api/cec/output/{1-8}/{command}",
+                },
+            },
+        )
+
+    commands = sorted(k.lower() for k in matrix_device.CEC_COMMAND_MAP.keys())
+    return _json_response(
+        True,
+        {
             "input_commands": commands,
             "output_commands": commands,
             "usage": {
                 "input": "POST /api/cec/input/{1-8}/{command}",
                 "output": "POST /api/cec/output/{1-8}/{command}",
-            }
-        })
-
-    commands = sorted(k.lower() for k in matrix_device.CEC_COMMAND_MAP.keys())
-    return _json_response(True, {
-        "input_commands": commands,
-        "output_commands": commands,
-        "usage": {
-            "input": "POST /api/cec/input/{1-8}/{command}",
-            "output": "POST /api/cec/output/{1-8}/{command}",
-        }
-    })
+            },
+        },
+    )
 
 
 async def handle_cec_status(request: web.Request) -> web.Response:
@@ -166,15 +187,23 @@ async def handle_cec_status(request: web.Request) -> web.Response:
             }
             for i in range(1, 9):
                 idx = i - 1
-                cec_config["inputs"].append({
-                    "number": i,
-                    "name": input_names.get(i, f"Input {i}"),
-                    "cec_enabled": status.get("inputindex", [])[idx] == 1 if idx < len(status.get("inputindex", [])) else False,
-                })
-                cec_config["outputs"].append({
-                    "number": i,
-                    "cec_enabled": status.get("outputindex", [])[idx] == 1 if idx < len(status.get("outputindex", [])) else False,
-                })
+                cec_config["inputs"].append(
+                    {
+                        "number": i,
+                        "name": input_names.get(i, f"Input {i}"),
+                        "cec_enabled": status.get("inputindex", [])[idx] == 1
+                        if idx < len(status.get("inputindex", []))
+                        else False,
+                    }
+                )
+                cec_config["outputs"].append(
+                    {
+                        "number": i,
+                        "cec_enabled": status.get("outputindex", [])[idx] == 1
+                        if idx < len(status.get("outputindex", []))
+                        else False,
+                    }
+                )
             return _json_response(True, {"cec_config": cec_config, "raw": status})
         else:
             return _json_response(False, error="Failed to get CEC status", status=500)
@@ -196,27 +225,24 @@ async def handle_cec_capabilities(request: web.Request) -> web.Response:
     try:
         capabilities = await matrix_device.get_all_capabilities()
         if capabilities:
-            return _json_response(True, {
-                "capabilities": capabilities,
-                "summary": {
-                    "audio_only_outputs": [
-                        o["output_num"] for o in capabilities["outputs"]
-                        if o.get("is_audio_only")
-                    ],
-                    "arc_enabled_outputs": [
-                        o["output_num"] for o in capabilities["outputs"]
-                        if o.get("arc_enabled")
-                    ],
-                    "connected_outputs": [
-                        o["output_num"] for o in capabilities["outputs"]
-                        if o.get("connected")
-                    ],
-                    "signal_detected_inputs": [
-                        i["input_num"] for i in capabilities["inputs"]
-                        if i.get("signal_detected")
-                    ],
-                }
-            })
+            return _json_response(
+                True,
+                {
+                    "capabilities": capabilities,
+                    "summary": {
+                        "audio_only_outputs": [
+                            o["output_num"] for o in capabilities["outputs"] if o.get("is_audio_only")
+                        ],
+                        "arc_enabled_outputs": [
+                            o["output_num"] for o in capabilities["outputs"] if o.get("arc_enabled")
+                        ],
+                        "connected_outputs": [o["output_num"] for o in capabilities["outputs"] if o.get("connected")],
+                        "signal_detected_inputs": [
+                            i["input_num"] for i in capabilities["inputs"] if i.get("signal_detected")
+                        ],
+                    },
+                },
+            )
         else:
             return _json_response(False, error="Failed to get capabilities", status=500)
     except Exception as e:
@@ -286,13 +312,16 @@ async def handle_cec_commands_by_type(request: web.Request) -> web.Response:
         # Import from parent package
         import sys
         from pathlib import Path
+
         sys.path.insert(0, str(Path(__file__).parent.parent))
 
         if device_type == "input":
             from cec_commands import INPUT_CEC_COMMANDS
+
             commands = INPUT_CEC_COMMANDS
         elif device_type == "output":
             from cec_commands import OUTPUT_CEC_COMMANDS
+
             commands = OUTPUT_CEC_COMMANDS
         else:
             return _json_response(False, error="Type must be 'input' or 'output'", status=400)
@@ -303,18 +332,23 @@ async def handle_cec_commands_by_type(request: web.Request) -> web.Response:
             category = cmd_info.get("category", "other")
             if category not in by_category:
                 by_category[category] = []
-            by_category[category].append({
-                "command": cmd_name,
-                "description": cmd_info.get("description", ""),
-                "index": cmd_info.get("index"),
-            })
+            by_category[category].append(
+                {
+                    "command": cmd_name,
+                    "description": cmd_info.get("description", ""),
+                    "index": cmd_info.get("index"),
+                }
+            )
 
-        return _json_response(True, {
-            "device_type": device_type,
-            "commands": list(commands.keys()),
-            "by_category": by_category,
-            "total_commands": len(commands),
-        })
+        return _json_response(
+            True,
+            {
+                "device_type": device_type,
+                "commands": list(commands.keys()),
+                "by_category": by_category,
+                "total_commands": len(commands),
+            },
+        )
     except Exception as e:
         _LOG.error(f"Error getting CEC commands by type: {e}")
         return _json_response(False, error=str(e), status=500)
@@ -346,12 +380,15 @@ async def handle_cec_enable(request: web.Request) -> web.Response:
         success = await matrix_device.set_cec_enable(port_type, port_num, enabled)
 
         if success:
-            return _json_response(True, {
-                "port_type": port_type,
-                "port": port_num,
-                "cec_enabled": enabled,
-                "message": f"CEC for {port_type} {port_num} {'enabled' if enabled else 'disabled'}"
-            })
+            return _json_response(
+                True,
+                {
+                    "port_type": port_type,
+                    "port": port_num,
+                    "cec_enabled": enabled,
+                    "message": f"CEC for {port_type} {port_num} {'enabled' if enabled else 'disabled'}",
+                },
+            )
         else:
             return _json_response(False, error=f"Failed to set CEC for {port_type} {port_num}", status=500)
     except Exception as e:
@@ -381,12 +418,15 @@ async def handle_cec_enable_input(request: web.Request) -> web.Response:
         success = await matrix_device.set_cec_enable("input", port_num, enabled)
 
         if success:
-            return _json_response(True, {
-                "port_type": "input",
-                "port": port_num,
-                "cec_enabled": enabled,
-                "message": f"CEC for input {port_num} {'enabled' if enabled else 'disabled'}"
-            })
+            return _json_response(
+                True,
+                {
+                    "port_type": "input",
+                    "port": port_num,
+                    "cec_enabled": enabled,
+                    "message": f"CEC for input {port_num} {'enabled' if enabled else 'disabled'}",
+                },
+            )
         else:
             return _json_response(False, error=f"Failed to set CEC for input {port_num}", status=500)
     except Exception as e:
@@ -416,12 +456,15 @@ async def handle_cec_enable_output(request: web.Request) -> web.Response:
         success = await matrix_device.set_cec_enable("output", port_num, enabled)
 
         if success:
-            return _json_response(True, {
-                "port_type": "output",
-                "port": port_num,
-                "cec_enabled": enabled,
-                "message": f"CEC for output {port_num} {'enabled' if enabled else 'disabled'}"
-            })
+            return _json_response(
+                True,
+                {
+                    "port_type": "output",
+                    "port": port_num,
+                    "cec_enabled": enabled,
+                    "message": f"CEC for output {port_num} {'enabled' if enabled else 'disabled'}",
+                },
+            )
         else:
             return _json_response(False, error=f"Failed to set CEC for output {port_num}", status=500)
     except Exception as e:

@@ -68,6 +68,7 @@ LOCK_FILE = _CONFIG_HOME / "driver.lock"
 # Driver State Dataclass - Consolidates global state
 # =============================================================================
 
+
 @dataclass
 class DriverState:
     """Centralized driver state management.
@@ -118,6 +119,7 @@ _polling_task = None
 # State Accessor Functions - Clean interface for accessing driver state
 # =============================================================================
 
+
 def get_state() -> DriverState:
     """Get the global driver state instance.
 
@@ -163,10 +165,11 @@ def set_output_names(names: dict[int, str]) -> None:
 # CEC Command Handler Factory - Reduces duplication between input/output handlers
 # =============================================================================
 
+
 def create_cec_command_handler(
     port_num: int,
     port_type: str,  # "input" or "output"
-    get_method: Callable[[str], Callable[[int], Coroutine[Any, Any, bool]]]
+    get_method: Callable[[str], Callable[[int], Coroutine[Any, Any, bool]]],
 ) -> Callable:
     """
     Factory function to create CEC command handlers for inputs or outputs.
@@ -299,6 +302,7 @@ def acquire_lock() -> bool:
                     old_pid = int(f.read().strip())
                 # Check if process is still running (Windows-compatible)
                 import psutil
+
                 if psutil.pid_exists(old_pid):
                     _LOG.error(f"Another instance is already running (PID: {old_pid})")
                     return False
@@ -335,7 +339,7 @@ def check_port_available(port: int) -> bool:
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            s.bind(('0.0.0.0', port))
+            s.bind(("0.0.0.0", port))
             return True
     except OSError as e:
         if e.errno == 10048:  # Windows: Address already in use
@@ -563,7 +567,7 @@ async def restore_from_config() -> bool:
         get_matrix(),
         input_names=_driver_state.input_names,
         output_names=_driver_state.output_names,
-        config_file=CONFIG_FILE
+        config_file=CONFIG_FILE,
     )
 
     # Configure CEC sender for macros
@@ -652,13 +656,25 @@ def create_input_cec_remote(input_num: int, input_name: str = None) -> Remote:
 
     # CEC command mapping for simple_commands
     CEC_COMMANDS = [
-        "POWER_ON", "POWER_OFF",
-        "UP", "DOWN", "LEFT", "RIGHT", "SELECT",
-        "MENU", "BACK",
-        "PLAY", "PAUSE", "STOP",
-        "PREVIOUS", "NEXT",
-        "REWIND", "FAST_FORWARD",
-        "VOLUME_UP", "VOLUME_DOWN", "MUTE"
+        "POWER_ON",
+        "POWER_OFF",
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT",
+        "SELECT",
+        "MENU",
+        "BACK",
+        "PLAY",
+        "PAUSE",
+        "STOP",
+        "PREVIOUS",
+        "NEXT",
+        "REWIND",
+        "FAST_FORWARD",
+        "VOLUME_UP",
+        "VOLUME_DOWN",
+        "MUTE",
     ]
 
     # Use factory pattern for command handler (reduces ~80 lines of duplicate code)
@@ -742,10 +758,18 @@ def create_output_cec_remote(output_num: int, output_name: str = None) -> Remote
 
     # CEC command mapping for simple_commands (outputs typically use fewer commands)
     CEC_COMMANDS = [
-        "POWER_ON", "POWER_OFF",
-        "UP", "DOWN", "LEFT", "RIGHT", "SELECT",
-        "MENU", "BACK",
-        "VOLUME_UP", "VOLUME_DOWN", "MUTE"
+        "POWER_ON",
+        "POWER_OFF",
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT",
+        "SELECT",
+        "MENU",
+        "BACK",
+        "VOLUME_UP",
+        "VOLUME_DOWN",
+        "MUTE",
     ]
 
     # Use factory pattern for command handler (reduces ~60 lines of duplicate code)
@@ -795,9 +819,7 @@ def create_output_cec_remote(output_num: int, output_name: str = None) -> Remote
 
 
 def create_output_media_player(
-    output_num: int,
-    output_name: str = None,
-    input_names: dict[int, str] = None
+    output_num: int, output_name: str = None, input_names: dict[int, str] = None
 ) -> MediaPlayer:
     """
     Create a MediaPlayer entity for a specific output with source selection.
@@ -858,10 +880,7 @@ def create_output_media_player(
                         # Update entity attributes with new source
                         _driver_state.api.configured_entities.update_attributes(
                             entity.id,
-                            {
-                                MediaPlayerAttr.SOURCE: source_name,
-                                MediaPlayerAttr.STATE: MediaPlayerStates.ON
-                            }
+                            {MediaPlayerAttr.SOURCE: source_name, MediaPlayerAttr.STATE: MediaPlayerStates.ON},
                         )
                     return StatusCodes.OK if success else StatusCodes.SERVER_ERROR
                 else:
@@ -873,8 +892,7 @@ def create_output_media_player(
             success = await matrix.cec_output_power_on(output_num)
             if success:
                 _driver_state.api.configured_entities.update_attributes(
-                    entity.id,
-                    {MediaPlayerAttr.STATE: MediaPlayerStates.ON}
+                    entity.id, {MediaPlayerAttr.STATE: MediaPlayerStates.ON}
                 )
             return StatusCodes.OK if success else StatusCodes.SERVER_ERROR
 
@@ -883,8 +901,7 @@ def create_output_media_player(
             success = await matrix.cec_output_power_off(output_num)
             if success:
                 _driver_state.api.configured_entities.update_attributes(
-                    entity.id,
-                    {MediaPlayerAttr.STATE: MediaPlayerStates.OFF}
+                    entity.id, {MediaPlayerAttr.STATE: MediaPlayerStates.OFF}
                 )
             return StatusCodes.OK if success else StatusCodes.SERVER_ERROR
 
@@ -961,19 +978,13 @@ def create_matrix_power_switch() -> Switch:
         if cmd_id == SwitchCommands.ON:
             success = await matrix.power_on()
             if success:
-                _driver_state.api.configured_entities.update_attributes(
-                    entity.id,
-                    {SwitchAttr.STATE: SwitchStates.ON}
-                )
+                _driver_state.api.configured_entities.update_attributes(entity.id, {SwitchAttr.STATE: SwitchStates.ON})
             return StatusCodes.OK if success else StatusCodes.SERVER_ERROR
 
         elif cmd_id == SwitchCommands.OFF:
             success = await matrix.power_off()
             if success:
-                _driver_state.api.configured_entities.update_attributes(
-                    entity.id,
-                    {SwitchAttr.STATE: SwitchStates.OFF}
-                )
+                _driver_state.api.configured_entities.update_attributes(entity.id, {SwitchAttr.STATE: SwitchStates.OFF})
             return StatusCodes.OK if success else StatusCodes.SERVER_ERROR
 
         elif cmd_id == SwitchCommands.TOGGLE:
@@ -1219,6 +1230,7 @@ def create_matrix_remote(input_names: dict[int, str] = None) -> Remote:
 # Status Polling - Periodic updates for sensors and entities
 # =============================================================================
 
+
 async def status_polling_loop():
     """
     Background task that periodically polls matrix status and updates entities.
@@ -1269,26 +1281,26 @@ async def status_polling_loop():
                 for output_num in range(1, 9):
                     # Update connection sensor (matches sensor.output_{n}_connected entity ID)
                     conn_entity_id = f"sensor.output_{output_num}_connected"
-                    is_connected = output_connections[output_num - 1] == 1 if len(output_connections) >= output_num else False
+                    is_connected = (
+                        output_connections[output_num - 1] == 1 if len(output_connections) >= output_num else False
+                    )
 
                     if _driver_state.api.configured_entities.contains(conn_entity_id):
                         # Output status only provides cable detection, not signal detection
                         conn_state = "Connected" if is_connected else "Disconnected"
 
                         _driver_state.api.configured_entities.update_attributes(
-                            conn_entity_id,
-                            {SensorAttr.VALUE: conn_state, SensorAttr.STATE: SensorStates.ON}
+                            conn_entity_id, {SensorAttr.VALUE: conn_state, SensorAttr.STATE: SensorStates.ON}
                         )
 
                     # Broadcast connection change via WebSocket if changed
                     if len(_prev_connections) >= output_num:
                         prev_connected = _prev_connections[output_num - 1] == 1
                         if prev_connected != is_connected:
-                            await broadcast_status_update("connection_change", {
-                                "output": output_num,
-                                "connected": is_connected,
-                                "state": conn_state
-                            })
+                            await broadcast_status_update(
+                                "connection_change",
+                                {"output": output_num, "connected": is_connected, "state": conn_state},
+                            )
 
                     # Update routing sensor (matches sensor.output_{n}_source entity ID)
                     routing_entity_id = f"sensor.output_{output_num}_source"
@@ -1297,27 +1309,28 @@ async def status_polling_loop():
 
                     if _driver_state.api.configured_entities.contains(routing_entity_id):
                         _driver_state.api.configured_entities.update_attributes(
-                            routing_entity_id,
-                            {SensorAttr.VALUE: input_name, SensorAttr.STATE: SensorStates.ON}
+                            routing_entity_id, {SensorAttr.VALUE: input_name, SensorAttr.STATE: SensorStates.ON}
                         )
 
                     # Broadcast routing change via WebSocket if changed
                     if len(_prev_routing) >= output_num:
                         prev_input = _prev_routing[output_num - 1]
                         if prev_input != current_input:
-                            await broadcast_status_update("routing_change", {
-                                "output": output_num,
-                                "input": current_input,
-                                "input_name": input_name,
-                                "previous_input": prev_input
-                            })
+                            await broadcast_status_update(
+                                "routing_change",
+                                {
+                                    "output": output_num,
+                                    "input": current_input,
+                                    "input_name": input_name,
+                                    "previous_input": prev_input,
+                                },
+                            )
 
                     # Update media player source
                     mp_entity_id = f"orei_output_{output_num}"
                     if _driver_state.api.configured_entities.contains(mp_entity_id):
                         _driver_state.api.configured_entities.update_attributes(
-                            mp_entity_id,
-                            {MediaPlayerAttr.SOURCE: input_name}
+                            mp_entity_id, {MediaPlayerAttr.SOURCE: input_name}
                         )
 
                 # Save current state for next comparison
@@ -1342,19 +1355,23 @@ async def status_polling_loop():
                     if _driver_state.api.configured_entities.contains(signal_entity_id):
                         signal_state = "Active" if has_signal else "No Signal"
                         _driver_state.api.configured_entities.update_attributes(
-                            signal_entity_id,
-                            {SensorAttr.VALUE: signal_state, SensorAttr.STATE: SensorStates.ON}
+                            signal_entity_id, {SensorAttr.VALUE: signal_state, SensorAttr.STATE: SensorStates.ON}
                         )
 
                     # Broadcast signal change via WebSocket if changed
                     # Check previous state using same index-based lookup (1=signal present)
-                    prev_had_signal = _prev_inactive_inputs[inp_idx] == 1 if inp_idx < len(_prev_inactive_inputs) else False
+                    prev_had_signal = (
+                        _prev_inactive_inputs[inp_idx] == 1 if inp_idx < len(_prev_inactive_inputs) else False
+                    )
                     if prev_had_signal != has_signal:
-                        await broadcast_status_update("signal_change", {
-                            "input": input_num,
-                            "has_signal": has_signal,
-                            "input_name": _driver_state.input_names.get(input_num, f"Input {input_num}")
-                        })
+                        await broadcast_status_update(
+                            "signal_change",
+                            {
+                                "input": input_num,
+                                "has_signal": has_signal,
+                                "input_name": _driver_state.input_names.get(input_num, f"Input {input_num}"),
+                            },
+                        )
 
                 # Save current state for next comparison
                 _prev_inactive_inputs = inactive_inputs.copy() if inactive_inputs else []
@@ -1380,19 +1397,21 @@ async def status_polling_loop():
                             else:
                                 cable_state = "Unknown"
                             _driver_state.api.configured_entities.update_attributes(
-                                cable_entity_id,
-                                {SensorAttr.VALUE: cable_state, SensorAttr.STATE: SensorStates.ON}
+                                cable_entity_id, {SensorAttr.VALUE: cable_state, SensorAttr.STATE: SensorStates.ON}
                             )
 
                         # Broadcast cable change via WebSocket if changed
                         prev_connected = _prev_cable_status.get("inputs", {}).get(input_num)
                         if prev_connected != is_connected and is_connected is not None:
-                            await broadcast_status_update("cable_change", {
-                                "type": "input",
-                                "port": input_num,
-                                "connected": is_connected,
-                                "name": _driver_state.input_names.get(input_num, f"Input {input_num}")
-                            })
+                            await broadcast_status_update(
+                                "cable_change",
+                                {
+                                    "type": "input",
+                                    "port": input_num,
+                                    "connected": is_connected,
+                                    "name": _driver_state.input_names.get(input_num, f"Input {input_num}"),
+                                },
+                            )
 
                     # Update output cable sensors
                     for output_num in range(1, 9):
@@ -1405,25 +1424,24 @@ async def status_polling_loop():
                             else:
                                 cable_state = "Unknown"
                             _driver_state.api.configured_entities.update_attributes(
-                                cable_entity_id,
-                                {SensorAttr.VALUE: cable_state, SensorAttr.STATE: SensorStates.ON}
+                                cable_entity_id, {SensorAttr.VALUE: cable_state, SensorAttr.STATE: SensorStates.ON}
                             )
 
                         # Broadcast cable change via WebSocket if changed
                         prev_connected = _prev_cable_status.get("outputs", {}).get(output_num)
                         if prev_connected != is_connected and is_connected is not None:
-                            await broadcast_status_update("cable_change", {
-                                "type": "output",
-                                "port": output_num,
-                                "connected": is_connected,
-                                "name": _driver_state.output_names.get(output_num, f"Output {output_num}")
-                            })
+                            await broadcast_status_update(
+                                "cable_change",
+                                {
+                                    "type": "output",
+                                    "port": output_num,
+                                    "connected": is_connected,
+                                    "name": _driver_state.output_names.get(output_num, f"Output {output_num}"),
+                                },
+                            )
 
                     # Save current state for next comparison
-                    _prev_cable_status = {
-                        "inputs": input_cables.copy(),
-                        "outputs": output_cables.copy()
-                    }
+                    _prev_cable_status = {"inputs": input_cables.copy(), "outputs": output_cables.copy()}
 
                     _LOG.debug(f"Cable status polling complete - inputs: {input_cables}, outputs: {output_cables}")
 
@@ -1611,7 +1629,7 @@ _reconnect_attempt: int = 0
 def _calculate_reconnect_delay() -> float:
     """Calculate delay for next reconnection attempt using exponential backoff."""
     global _reconnect_attempt
-    delay = RECONNECT_DELAY_INITIAL * (RECONNECT_BACKOFF_FACTOR ** _reconnect_attempt)
+    delay = RECONNECT_DELAY_INITIAL * (RECONNECT_BACKOFF_FACTOR**_reconnect_attempt)
     return min(delay, RECONNECT_DELAY_MAX)
 
 
@@ -1693,8 +1711,7 @@ def on_matrix_connected():
     # Update entity states
     if _driver_state.api.configured_entities.contains("remote.orei_matrix"):
         _driver_state.api.configured_entities.update_attributes(
-            "remote.orei_matrix",
-            {RemoteAttr.STATE: ucapi.remote.States.ON}
+            "remote.orei_matrix", {RemoteAttr.STATE: ucapi.remote.States.ON}
         )
 
     # Update all connection sensors to show connected
@@ -1711,8 +1728,7 @@ def on_matrix_disconnected():
     # Update entity states
     if _driver_state.api.configured_entities.contains("remote.orei_matrix"):
         _driver_state.api.configured_entities.update_attributes(
-            "remote.orei_matrix",
-            {RemoteAttr.STATE: ucapi.remote.States.UNAVAILABLE}
+            "remote.orei_matrix", {RemoteAttr.STATE: ucapi.remote.States.UNAVAILABLE}
         )
 
     # Stop polling while disconnected
@@ -1794,7 +1810,7 @@ async def handle_driver_setup(msg: ucapi.DriverSetupRequest) -> ucapi.SetupActio
         _LOG.info(f"Output names retrieved: {output_names}")
 
         # Get output connections
-        output_connections = output_status.get("allconnect", [0]*8) if output_status else [0]*8
+        output_connections = output_status.get("allconnect", [0] * 8) if output_status else [0] * 8
         _LOG.info(f"Output connections: {output_connections}")
 
         # Get input signal status (inactive inputs = no signal)
@@ -1901,7 +1917,7 @@ async def handle_driver_setup(msg: ucapi.DriverSetupRequest) -> ucapi.SetupActio
             get_matrix(),
             input_names=_driver_state.input_names,
             output_names=_driver_state.output_names,
-            config_file=CONFIG_FILE
+            config_file=CONFIG_FILE,
         )
 
         # Configure CEC sender for macros
@@ -2082,7 +2098,9 @@ if __name__ == "__main__":
         except Exception as e:
             if "NonUniqueNameException" in str(type(e).__name__) or "NonUniqueNameException" in str(e):
                 total_wait = retry_delay
-                _LOG.warning(f"mDNS name conflict (attempt {attempt + 1}/{max_retries}), waiting {retry_delay}s before retry...")
+                _LOG.warning(
+                    f"mDNS name conflict (attempt {attempt + 1}/{max_retries}), waiting {retry_delay}s before retry..."
+                )
                 _LOG.info("This can happen if a previous instance didn't shut down cleanly.")
                 _LOG.info("The mDNS cache will clear automatically - please wait...")
                 time.sleep(retry_delay)
@@ -2101,7 +2119,7 @@ if __name__ == "__main__":
     if REST_API_ENABLED:
         _LOG.info(f"Starting REST API server on port {REST_API_PORT}...")
         _rest_api_server = RestApiServer(port=REST_API_PORT)
-        globals()['_rest_api_server'] = _rest_api_server
+        globals()["_rest_api_server"] = _rest_api_server
         try:
             loop.run_until_complete(_rest_api_server.start())
         except Exception as e:

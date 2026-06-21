@@ -79,9 +79,9 @@ class OreiMatrix:
         # CEC enabled status cache
         # inputindex/outputindex: 1 = CEC enabled, 0 = disabled
         self._cec_enabled_cache: dict[str, Any] = {
-            'inputs': [False] * 8,
-            'outputs': [False] * 8,
-            'last_updated': None  # datetime when last fetched
+            "inputs": [False] * 8,
+            "outputs": [False] * 8,
+            "last_updated": None,  # datetime when last fetched
         }
         self._cec_cache_ttl = 300  # 5 minutes cache TTL
 
@@ -113,9 +113,7 @@ class OreiMatrix:
         try:
             _LOG.info(f"Connecting Telnet to {self.host}:{self._telnet_port}")
             self._telnet = TelnetClient(
-                host=self.host,
-                port=self._telnet_port,
-                on_connection_change=self._on_telnet_state_change
+                host=self.host, port=self._telnet_port, on_connection_change=self._on_telnet_state_change
             )
 
             if await self._telnet.connect():
@@ -146,7 +144,7 @@ class OreiMatrix:
         :return: Delay in seconds
         """
         # Exponential backoff: delay = initial * 2^attempt
-        delay = INITIAL_RETRY_DELAY * (2 ** attempt)
+        delay = INITIAL_RETRY_DELAY * (2**attempt)
         # Cap at maximum delay
         delay = min(delay, MAX_RETRY_DELAY)
         # Add jitter (±10%) to prevent thundering herd
@@ -175,7 +173,9 @@ class OreiMatrix:
                 return False
 
             delay = self._calculate_retry_delay(self._retry_count)
-            _LOG.warning(f"Connection failed, retrying in {delay:.1f}s (attempt {self._retry_count + 1}/{max_retries + 1})")
+            _LOG.warning(
+                f"Connection failed, retrying in {delay:.1f}s (attempt {self._retry_count + 1}/{max_retries + 1})"
+            )
             self.events.emit(Events.RECONNECTING, self._retry_count + 1, max_retries + 1)
 
             await asyncio.sleep(delay)
@@ -197,10 +197,7 @@ class OreiMatrix:
             # Disable SSL verification for self-signed certificates
             if not self._session:
                 connector = aiohttp.TCPConnector(ssl=False) if self.use_https else None
-                self._session = aiohttp.ClientSession(
-                    cookie_jar=aiohttp.CookieJar(),
-                    connector=connector
-                )
+                self._session = aiohttp.ClientSession(cookie_jar=aiohttp.CookieJar(), connector=connector)
 
             # Authenticate with login command
             # Credentials can be overridden via environment variables
@@ -208,15 +205,11 @@ class OreiMatrix:
             login_cmd = {
                 "comhead": "login",
                 "user": os.environ.get("OREI_USER", "Admin"),
-                "password": os.environ.get("OREI_PASSWORD", "admin")
+                "password": os.environ.get("OREI_PASSWORD", "admin"),
             }
 
             _LOG.debug("Authenticating with matrix...")
-            async with self._session.post(
-                url,
-                json=login_cmd,
-                timeout=aiohttp.ClientTimeout(total=5)
-            ) as response:
+            async with self._session.post(url, json=login_cmd, timeout=aiohttp.ClientTimeout(total=5)) as response:
                 if response.status == 200:
                     try:
                         # Matrix returns text/plain, so read as text then parse JSON
@@ -304,11 +297,7 @@ class OreiMatrix:
             url = f"{protocol}://{self.host}:{self.port}/cgi-bin/instr"
             _LOG.debug("Sending %s POST to %s: %s", protocol.upper(), url, command)
 
-            async with self._session.post(
-                url,
-                json=command,
-                timeout=aiohttp.ClientTimeout(total=5)
-            ) as response:
+            async with self._session.post(url, json=command, timeout=aiohttp.ClientTimeout(total=5)) as response:
                 if response.status == 200:
                     try:
                         # Matrix returns text/plain, so read as text then parse JSON
@@ -353,11 +342,7 @@ class OreiMatrix:
         # OREI BK-808 uses JSON protocol
         # Command: {"comhead":"preset set","language":0,"index":<preset_num>}
         # Response: {"comhead":"preset set","result":1}
-        command = {
-            "comhead": "preset set",
-            "language": 0,
-            "index": scene
-        }
+        command = {"comhead": "preset set", "language": 0, "index": scene}
 
         success, response = await self._send_command(command)
 
@@ -369,8 +354,7 @@ class OreiMatrix:
                 self.events.emit(Events.UPDATE, {"scene": scene})
                 return True
             elif response:
-                _LOG.warning("Preset %d command sent but matrix returned result: %s",
-                           scene, response.get("result"))
+                _LOG.warning("Preset %d command sent but matrix returned result: %s", scene, response.get("result"))
                 return False
             else:
                 # No response but command sent - assume success
@@ -402,21 +386,25 @@ class OreiMatrix:
             _LOG.error("Invalid preset number: %d. Must be 1-8", preset)
             return None
 
-        _LOG.debug("Getting info for preset %d", preset)
+        # First, try to query via Telnet client if available and connected
+        if self._telnet and self._telnet.connected:
+            try:
+                return await self._telnet.get_preset_info(preset)
+            except Exception as e:
+                _LOG.warning(f"Failed to get preset info from Telnet client: {e}")
+
+        _LOG.debug("Getting info for preset %d via HTTP", preset)
 
         # Command: {"comhead":"preset get","index":<preset_num>}
-        command = {
-            "comhead": "preset get",
-            "index": preset
-        }
+        command = {"comhead": "preset get", "index": preset}
 
         success, response = await self._send_command(command)
 
         if success and response:
-            _LOG.debug("Preset %d info: %s", preset, response)
+            _LOG.debug("Preset %d info (HTTP): %s", preset, response)
             return response
 
-        _LOG.warning("Failed to get info for preset %d", preset)
+        _LOG.warning("Failed to get info for preset %d via HTTP", preset)
         return None
 
     async def get_all_input_names(self) -> dict[int, str]:
@@ -503,11 +491,7 @@ class OreiMatrix:
         # OREI BK-808 uses JSON protocol for video switching
         # Command: {"comhead":"video switch","language":0,"source":[output, input]}
         # Response: {"comhead":"video switch","result":1}
-        command = {
-            "comhead": "video switch",
-            "language": 0,
-            "source": [output_num, input_num]
-        }
+        command = {"comhead": "video switch", "language": 0, "source": [output_num, input_num]}
 
         success, response = await self._send_command(command)
 
@@ -539,11 +523,7 @@ class OreiMatrix:
 
         # OREI BK-808 uses "video switch" command with source=[0, input] for routing to all outputs
         # The first element 0 means "all outputs", second element is the input number
-        command = {
-            "comhead": "video switch",
-            "language": 0,
-            "source": [0, input_num]
-        }
+        command = {"comhead": "video switch", "language": 0, "source": [0, input_num]}
 
         success, response = await self._send_command(command)
 
@@ -570,11 +550,7 @@ class OreiMatrix:
 
         # Command: {"comhead":"set poweronoff","language":0,"power":1}
         # Response: {"comhead":"set poweronoff","result":1}
-        command = {
-            "comhead": "set poweronoff",
-            "language": 0,
-            "power": 1
-        }
+        command = {"comhead": "set poweronoff", "language": 0, "power": 1}
 
         success, response = await self._send_command(command)
 
@@ -596,11 +572,7 @@ class OreiMatrix:
 
         # Command: {"comhead":"set poweronoff","language":0,"power":0}
         # Response: {"comhead":"set poweronoff","result":1}
-        command = {
-            "comhead": "set poweronoff",
-            "language": 0,
-            "power": 0
-        }
+        command = {"comhead": "set poweronoff", "language": 0, "power": 0}
 
         success, response = await self._send_command(command)
 
@@ -627,10 +599,7 @@ class OreiMatrix:
         _LOG.debug("Getting video status")
 
         # Command: {"comhead":"get video status","language":0}
-        command = {
-            "comhead": "get video status",
-            "language": 0
-        }
+        command = {"comhead": "get video status", "language": 0}
 
         success, response = await self._send_command(command)
 
@@ -659,13 +628,15 @@ class OreiMatrix:
         }
 
         if video_status:
-            status.update({
-                "power": "on" if video_status.get("power") == 1 else "off",
-                "routing": video_status.get("allsource", []),
-                "input_names": video_status.get("allinputname", []),
-                "output_names": video_status.get("alloutputname", []),
-                "preset_names": video_status.get("allname", []),
-            })
+            status.update(
+                {
+                    "power": "on" if video_status.get("power") == 1 else "off",
+                    "routing": video_status.get("allsource", []),
+                    "input_names": video_status.get("allinputname", []),
+                    "output_names": video_status.get("alloutputname", []),
+                    "preset_names": video_status.get("allname", []),
+                }
+            )
 
         return status
 
@@ -720,25 +691,25 @@ class OreiMatrix:
 
     # CEC Command mapping: HTTP index -> Telnet command string
     _CEC_INDEX_TO_TELNET = {
-        1: "on",        # POWER_ON
-        2: "off",       # POWER_OFF
-        3: "up",        # UP
-        4: "left",      # LEFT
-        5: "enter",     # SELECT
-        6: "right",     # RIGHT
-        7: "menu",      # MENU
-        8: "down",      # DOWN
-        9: "back",      # BACK
-        10: "previous", # PREVIOUS
-        11: "play",     # PLAY
-        12: "next",     # NEXT
-        13: "rew",      # REWIND
-        14: "pause",    # PAUSE
-        15: "ff",       # FAST_FORWARD
-        16: "stop",     # STOP
-        17: "mute",     # MUTE
-        18: "vol-",     # VOLUME_DOWN
-        19: "vol+",     # VOLUME_UP
+        1: "on",  # POWER_ON
+        2: "off",  # POWER_OFF
+        3: "up",  # UP
+        4: "left",  # LEFT
+        5: "enter",  # SELECT
+        6: "right",  # RIGHT
+        7: "menu",  # MENU
+        8: "down",  # DOWN
+        9: "back",  # BACK
+        10: "previous",  # PREVIOUS
+        11: "play",  # PLAY
+        12: "next",  # NEXT
+        13: "rew",  # REWIND
+        14: "pause",  # PAUSE
+        15: "ff",  # FAST_FORWARD
+        16: "stop",  # STOP
+        17: "mute",  # MUTE
+        18: "vol-",  # VOLUME_DOWN
+        19: "vol+",  # VOLUME_UP
     }
 
     async def send_cec(self, command: str, port: int, is_output: bool = False) -> bool:
@@ -760,8 +731,7 @@ class OreiMatrix:
         """
         command_index = self.CEC_COMMAND_MAP.get(command.upper())
         if command_index is None:
-            _LOG.error("Unknown CEC command: %s. Valid commands: %s",
-                      command, list(self.CEC_COMMAND_MAP.keys()))
+            _LOG.error("Unknown CEC command: %s. Valid commands: %s", command, list(self.CEC_COMMAND_MAP.keys()))
             return False
 
         return await self._send_cec_command(port, command_index, is_output)
@@ -789,8 +759,11 @@ class OreiMatrix:
         # Ensure CEC is enabled on the target port (auto-enables if needed)
         cec_enabled = await self.ensure_cec_enabled(port_num, is_output)
         if not cec_enabled:
-            _LOG.warning("Could not ensure CEC enabled on %s %d, attempting command anyway",
-                        "output" if is_output else "input", port_num)
+            _LOG.warning(
+                "Could not ensure CEC enabled on %s %d, attempting command anyway",
+                "output" if is_output else "input",
+                port_num,
+            )
 
         # Try Telnet first (faster, persistent connection)
         if self._use_telnet_cec and self._telnet and self._telnet.connected:
@@ -803,15 +776,15 @@ class OreiMatrix:
                         success = await self._telnet._send_cec_input(port_num, telnet_cmd)
 
                     if success:
-                        _LOG.debug("CEC via Telnet: %s %d -> %s",
-                                   "output" if is_output else "input", port_num, telnet_cmd)
+                        _LOG.debug(
+                            "CEC via Telnet: %s %d -> %s", "output" if is_output else "input", port_num, telnet_cmd
+                        )
                         return True
                 except Exception as e:
                     _LOG.warning(f"Telnet CEC failed, falling back to HTTP: {e}")
 
         # Fall back to HTTP
-        _LOG.debug("CEC via HTTP: %s %d -> index %d",
-                   "output" if is_output else "input", port_num, command_index)
+        _LOG.debug("CEC via HTTP: %s %d -> index %d", "output" if is_output else "input", port_num, command_index)
 
         # Build port array - all zeros except the target port
         port_array = [0] * 8
@@ -825,19 +798,19 @@ class OreiMatrix:
             "language": 0,
             "object": object_type,
             "port": port_array,
-            "index": command_index
+            "index": command_index,
         }
 
         _LOG.debug("Sending CEC command: %s", command)
         success, response = await self._send_command(command)
 
         if success:
-            _LOG.info("✓ CEC command %d sent to %s %d",
-                     command_index, "output" if is_output else "input", port_num)
+            _LOG.info("✓ CEC command %d sent to %s %d", command_index, "output" if is_output else "input", port_num)
             return True
 
-        _LOG.error("Failed to send CEC command %d to %s %d",
-                  command_index, "output" if is_output else "input", port_num)
+        _LOG.error(
+            "Failed to send CEC command %d to %s %d", command_index, "output" if is_output else "input", port_num
+        )
         return False
 
     # Input CEC Control Methods (for source devices like PS3, Apple TV, etc.)
@@ -1090,10 +1063,7 @@ class OreiMatrix:
 
         :return: Dict with 'inputs' and 'outputs' sub-dicts mapping port -> connected
         """
-        result = {
-            "inputs": {},
-            "outputs": {}
-        }
+        result = {"inputs": {}, "outputs": {}}
 
         # Try Telnet individual queries for accuracy
         if self._telnet and self._telnet.connected:
@@ -1110,7 +1080,7 @@ class OreiMatrix:
         output_status = await self.get_output_status()
         if output_status and "allconnect" in output_status:
             for i, connected in enumerate(output_status["allconnect"]):
-                result["outputs"][i + 1] = (connected == 1)
+                result["outputs"][i + 1] = connected == 1
 
         # Inputs: cannot determine via HTTP
         for i in range(1, 9):
@@ -1177,18 +1147,20 @@ class OreiMatrix:
         """
         import datetime
 
-        if 'inputindex' in cec_status:
-            for i, val in enumerate(cec_status['inputindex'][:8]):
-                self._cec_enabled_cache['inputs'][i] = val == 1
+        if "inputindex" in cec_status:
+            for i, val in enumerate(cec_status["inputindex"][:8]):
+                self._cec_enabled_cache["inputs"][i] = val == 1
 
-        if 'outputindex' in cec_status:
-            for i, val in enumerate(cec_status['outputindex'][:8]):
-                self._cec_enabled_cache['outputs'][i] = val == 1
+        if "outputindex" in cec_status:
+            for i, val in enumerate(cec_status["outputindex"][:8]):
+                self._cec_enabled_cache["outputs"][i] = val == 1
 
-        self._cec_enabled_cache['last_updated'] = datetime.datetime.now()
-        _LOG.debug("CEC cache updated: inputs=%s, outputs=%s",
-                   self._cec_enabled_cache['inputs'],
-                   self._cec_enabled_cache['outputs'])
+        self._cec_enabled_cache["last_updated"] = datetime.datetime.now()
+        _LOG.debug(
+            "CEC cache updated: inputs=%s, outputs=%s",
+            self._cec_enabled_cache["inputs"],
+            self._cec_enabled_cache["outputs"],
+        )
 
     def _is_cec_cache_valid(self) -> bool:
         """
@@ -1198,10 +1170,10 @@ class OreiMatrix:
         """
         import datetime
 
-        if self._cec_enabled_cache['last_updated'] is None:
+        if self._cec_enabled_cache["last_updated"] is None:
             return False
 
-        age = (datetime.datetime.now() - self._cec_enabled_cache['last_updated']).total_seconds()
+        age = (datetime.datetime.now() - self._cec_enabled_cache["last_updated"]).total_seconds()
         return age < self._cec_cache_ttl
 
     def is_cec_enabled(self, port_num: int, is_output: bool = False) -> bool | None:
@@ -1218,7 +1190,7 @@ class OreiMatrix:
         if port_num < 1 or port_num > 8:
             return None
 
-        cache_key = 'outputs' if is_output else 'inputs'
+        cache_key = "outputs" if is_output else "inputs"
         return self._cec_enabled_cache[cache_key][port_num - 1]
 
     async def refresh_cec_status(self) -> bool:
@@ -1284,8 +1256,8 @@ class OreiMatrix:
             await self.refresh_cec_status()
 
         # Build the new arrays preserving existing state
-        input_array = [1 if self._cec_enabled_cache['inputs'][i] else 0 for i in range(8)]
-        output_array = [1 if self._cec_enabled_cache['outputs'][i] else 0 for i in range(8)]
+        input_array = [1 if self._cec_enabled_cache["inputs"][i] else 0 for i in range(8)]
+        output_array = [1 if self._cec_enabled_cache["outputs"][i] else 0 for i in range(8)]
 
         # Update the target port
         if is_output:
@@ -1294,12 +1266,7 @@ class OreiMatrix:
             input_array[port_num - 1] = 1 if enabled else 0
 
         # Send the command
-        command = {
-            "comhead": "set cec index",
-            "language": 0,
-            "inputindex": input_array,
-            "outputindex": output_array
-        }
+        command = {"comhead": "set cec index", "language": 0, "inputindex": input_array, "outputindex": output_array}
 
         _LOG.debug("Setting CEC index: %s", command)
         success, response = await self._send_command(command)
@@ -1307,18 +1274,16 @@ class OreiMatrix:
         if success:
             # Update cache immediately
             if is_output:
-                self._cec_enabled_cache['outputs'][port_num - 1] = enabled
+                self._cec_enabled_cache["outputs"][port_num - 1] = enabled
             else:
-                self._cec_enabled_cache['inputs'][port_num - 1] = enabled
+                self._cec_enabled_cache["inputs"][port_num - 1] = enabled
 
-            _LOG.info("✓ CEC %s on %s %d",
-                      "enabled" if enabled else "disabled",
-                      "output" if is_output else "input",
-                      port_num)
+            _LOG.info(
+                "✓ CEC %s on %s %d", "enabled" if enabled else "disabled", "output" if is_output else "input", port_num
+            )
             return True
 
-        _LOG.error("Failed to set CEC enabled on %s %d",
-                   "output" if is_output else "input", port_num)
+        _LOG.error("Failed to set CEC enabled on %s %d", "output" if is_output else "input", port_num)
         return False
 
     async def get_ext_audio_status(self) -> dict[str, Any] | None:
@@ -1442,11 +1407,7 @@ class OreiMatrix:
         """
         _LOG.info("Setting panel lock to: %s", "LOCKED" if locked else "UNLOCKED")
 
-        command = {
-            "comhead": "set panel lock",
-            "language": 0,
-            "lock": 1 if locked else 0
-        }
+        command = {"comhead": "set panel lock", "language": 0, "lock": 1 if locked else 0}
 
         success, response = await self._send_command(command)
 
@@ -1467,11 +1428,7 @@ class OreiMatrix:
         """
         _LOG.info("Setting beep to: %s", "ON" if enabled else "OFF")
 
-        command = {
-            "comhead": "set beep",
-            "language": 0,
-            "beep": 1 if enabled else 0
-        }
+        command = {"comhead": "set beep", "language": 0, "beep": 1 if enabled else 0}
 
         success, response = await self._send_command(command)
 
@@ -1501,7 +1458,7 @@ class OreiMatrix:
             "comhead": "set cec index",
             "language": 0,
             "inputindex": [1 if p else 0 for p in input_ports],
-            "outputindex": [1 if p else 0 for p in output_ports]
+            "outputindex": [1 if p else 0 for p in output_ports],
         }
 
         success, response = await self._send_command(command)
@@ -1662,12 +1619,7 @@ class OreiMatrix:
 
         _LOG.info("Setting input %d name to: %s", input_num, name)
 
-        command = {
-            "comhead": "set input name",
-            "language": 0,
-            "name": name,
-            "index": input_num
-        }
+        command = {"comhead": "set input name", "language": 0, "name": name, "index": input_num}
 
         success, response = await self._send_command(command)
 
@@ -1696,12 +1648,7 @@ class OreiMatrix:
 
         _LOG.info("Setting output %d name to: %s", output_num, name)
 
-        command = {
-            "comhead": "set output name",
-            "language": 0,
-            "name": name,
-            "index": output_num
-        }
+        command = {"comhead": "set output name", "language": 0, "name": name, "index": output_num}
 
         success, response = await self._send_command(command)
 
@@ -1729,11 +1676,7 @@ class OreiMatrix:
             _LOG.error("Invalid output number: %d. Must be 1-8", output_num)
             return False
 
-        command = {
-            "comhead": "set output stream",
-            "output": output_num,
-            "enable": 1 if enable else 0
-        }
+        command = {"comhead": "set output stream", "output": output_num, "enable": 1 if enable else 0}
 
         action = "enable" if enable else "disable"
         _LOG.info(f"Setting output {output_num} stream to {action}")
@@ -1756,11 +1699,7 @@ class OreiMatrix:
             _LOG.error("Invalid HDCP mode: %d. Must be 1-5", mode)
             return False
 
-        command = {
-            "comhead": "set output hdcp",
-            "output": output_num,
-            "hdcp": mode
-        }
+        command = {"comhead": "set output hdcp", "output": output_num, "hdcp": mode}
 
         _LOG.info(f"Setting output {output_num} HDCP mode to {mode}")
         success, _ = await self._send_command(command)
@@ -1782,11 +1721,7 @@ class OreiMatrix:
             _LOG.error("Invalid HDR mode: %d. Must be 1-3", mode)
             return False
 
-        command = {
-            "comhead": "set output hdr",
-            "output": output_num,
-            "hdr": mode
-        }
+        command = {"comhead": "set output hdr", "output": output_num, "hdr": mode}
 
         _LOG.info(f"Setting output {output_num} HDR mode to {mode}")
         success, _ = await self._send_command(command)
@@ -1808,11 +1743,7 @@ class OreiMatrix:
             _LOG.error("Invalid scaler mode: %d. Must be 1-5", mode)
             return False
 
-        command = {
-            "comhead": "set output scaler",
-            "output": output_num,
-            "scaler": mode
-        }
+        command = {"comhead": "set output scaler", "output": output_num, "scaler": mode}
 
         _LOG.info(f"Setting output {output_num} scaler mode to {mode}")
         success, _ = await self._send_command(command)
@@ -1830,11 +1761,7 @@ class OreiMatrix:
             _LOG.error("Invalid output number: %d. Must be 1-8", output_num)
             return False
 
-        command = {
-            "comhead": "set output arc",
-            "output": output_num,
-            "arc": 1 if enable else 0
-        }
+        command = {"comhead": "set output arc", "output": output_num, "arc": 1 if enable else 0}
 
         action = "enable" if enable else "disable"
         _LOG.info(f"Setting output {output_num} ARC to {action}")
@@ -1853,11 +1780,7 @@ class OreiMatrix:
             _LOG.error("Invalid output number: %d. Must be 1-8", output_num)
             return False
 
-        command = {
-            "comhead": "set output mute",
-            "output": output_num,
-            "mute": 1 if mute else 0
-        }
+        command = {"comhead": "set output mute", "output": output_num, "mute": 1 if mute else 0}
 
         action = "mute" if mute else "unmute"
         _LOG.info(f"Setting output {output_num} audio to {action}")
@@ -1881,12 +1804,7 @@ class OreiMatrix:
             _LOG.error("Invalid port number: %d. Must be 1-8", port_num)
             return False
 
-        command = {
-            "comhead": "set cec index",
-            "port": port_type,
-            "index": port_num,
-            "enable": 1 if enable else 0
-        }
+        command = {"comhead": "set cec index", "port": port_type, "index": port_num, "enable": 1 if enable else 0}
 
         action = "enable" if enable else "disable"
         _LOG.info(f"Setting CEC on {port_type} {port_num} to {action}")
@@ -1904,11 +1822,7 @@ class OreiMatrix:
             _LOG.error("Invalid preset number: %d. Must be 1-8", preset_num)
             return False
 
-        command = {
-            "comhead": "preset save",
-            "language": 0,
-            "index": preset_num
-        }
+        command = {"comhead": "preset save", "language": 0, "index": preset_num}
 
         _LOG.info(f"Saving current routing to preset {preset_num}")
         success, _ = await self._send_command(command)
@@ -1972,10 +1886,7 @@ class OreiMatrix:
 
         # Command format from Control4 driver: "s lcd on time N"
         # JSON equivalent follows standard pattern
-        command = {
-            "comhead": "set lcd on time",
-            "time": mode
-        }
+        command = {"comhead": "set lcd on time", "time": mode}
 
         mode_name = self.get_lcd_timeout_name(mode)
         _LOG.info(f"Setting LCD timeout to {mode} ({mode_name})")
@@ -2000,6 +1911,7 @@ class OreiMatrix:
                 success = False
 
         return success
+
     # =========================================================================
     # EDID Management
     # =========================================================================
@@ -2007,35 +1919,35 @@ class OreiMatrix:
     # EDID mode constants - maps human-readable names to API values
     # Values based on typical HDMI matrix EDID presets
     EDID_MODES = {
-        1: "1080p 2CH",           # 1080p stereo audio
-        2: "1080p 5.1CH",         # 1080p 5.1 surround
-        3: "1080p 7.1CH",         # 1080p 7.1 surround
-        4: "1080i",               # 1080i
-        5: "3D",                  # 3D mode
-        6: "4K30 2CH",            # 4K 30Hz stereo
-        7: "4K30 5.1CH",          # 4K 30Hz 5.1 surround
-        8: "4K30 7.1CH",          # 4K 30Hz 7.1 surround
-        9: "4K60 2CH",            # 4K 60Hz stereo
-        10: "4K60 5.1CH",         # 4K 60Hz 5.1 surround
-        11: "4K60 7.1CH",         # 4K 60Hz 7.1 surround
-        12: "4K60 4:4:4 2CH",     # 4K 60Hz 4:4:4 stereo
-        13: "4K60 4:4:4 5.1CH",   # 4K 60Hz 4:4:4 5.1
-        14: "4K60 4:4:4 7.1CH",   # 4K 60Hz 4:4:4 7.1
-        15: "Copy Output 1",      # Copy EDID from output 1
-        16: "Copy Output 2",      # Copy EDID from output 2
-        17: "Copy Output 3",      # Copy EDID from output 3
-        18: "Copy Output 4",      # Copy EDID from output 4
-        19: "Copy Output 5",      # Copy EDID from output 5
-        20: "Copy Output 6",      # Copy EDID from output 6
-        21: "Copy Output 7",      # Copy EDID from output 7
-        22: "Copy Output 8",      # Copy EDID from output 8
+        1: "1080p 2CH",  # 1080p stereo audio
+        2: "1080p 5.1CH",  # 1080p 5.1 surround
+        3: "1080p 7.1CH",  # 1080p 7.1 surround
+        4: "1080i",  # 1080i
+        5: "3D",  # 3D mode
+        6: "4K30 2CH",  # 4K 30Hz stereo
+        7: "4K30 5.1CH",  # 4K 30Hz 5.1 surround
+        8: "4K30 7.1CH",  # 4K 30Hz 7.1 surround
+        9: "4K60 2CH",  # 4K 60Hz stereo
+        10: "4K60 5.1CH",  # 4K 60Hz 5.1 surround
+        11: "4K60 7.1CH",  # 4K 60Hz 7.1 surround
+        12: "4K60 4:4:4 2CH",  # 4K 60Hz 4:4:4 stereo
+        13: "4K60 4:4:4 5.1CH",  # 4K 60Hz 4:4:4 5.1
+        14: "4K60 4:4:4 7.1CH",  # 4K 60Hz 4:4:4 7.1
+        15: "Copy Output 1",  # Copy EDID from output 1
+        16: "Copy Output 2",  # Copy EDID from output 2
+        17: "Copy Output 3",  # Copy EDID from output 3
+        18: "Copy Output 4",  # Copy EDID from output 4
+        19: "Copy Output 5",  # Copy EDID from output 5
+        20: "Copy Output 6",  # Copy EDID from output 6
+        21: "Copy Output 7",  # Copy EDID from output 7
+        22: "Copy Output 8",  # Copy EDID from output 8
         # Additional HDR/Dolby modes typically at higher values
-        33: "4K60 HDR 2CH",       # 4K 60Hz HDR stereo
-        34: "4K60 HDR 5.1CH",     # 4K 60Hz HDR 5.1
-        35: "4K60 HDR 7.1CH",     # 4K 60Hz HDR 7.1
-        36: "4K60 HDR Atmos",     # 4K 60Hz HDR with Dolby Atmos (observed in HAR)
-        37: "8K30",               # 8K 30Hz
-        38: "8K60",               # 8K 60Hz
+        33: "4K60 HDR 2CH",  # 4K 60Hz HDR stereo
+        34: "4K60 HDR 5.1CH",  # 4K 60Hz HDR 5.1
+        35: "4K60 HDR 7.1CH",  # 4K 60Hz HDR 7.1
+        36: "4K60 HDR Atmos",  # 4K 60Hz HDR with Dolby Atmos (observed in HAR)
+        37: "8K30",  # 8K 30Hz
+        38: "8K60",  # 8K 60Hz
     }
 
     @classmethod
@@ -2070,10 +1982,10 @@ class OreiMatrix:
             "inputs": {
                 i + 1: {
                     "mode": edid_values[i] if i < len(edid_values) else None,
-                    "mode_name": edid_names[i] if i < len(edid_names) else "Unknown"
+                    "mode_name": edid_names[i] if i < len(edid_names) else "Unknown",
                 }
                 for i in range(8)
-            }
+            },
         }
 
     async def set_input_edid(self, input_num: int, mode: int) -> bool:
@@ -2099,11 +2011,7 @@ class OreiMatrix:
             return False
 
         # Command format follows the pattern of other settings
-        command = {
-            "comhead": "set input edid",
-            "input": input_num,
-            "edid": mode
-        }
+        command = {"comhead": "set input edid", "input": input_num, "edid": mode}
 
         mode_name = self.get_edid_mode_name(mode)
         _LOG.info(f"Setting input {input_num} EDID to {mode} ({mode_name})")
@@ -2139,9 +2047,9 @@ class OreiMatrix:
 
     # Ext-audio mode values
     EXT_AUDIO_MODES = {
-        0: "Bind to Input",    # Audio follows video source (default)
-        1: "Bind to Output",   # Audio follows output routing
-        2: "Matrix Mode",      # Independent audio routing
+        0: "Bind to Input",  # Audio follows video source (default)
+        1: "Bind to Output",  # Audio follows output routing
+        2: "Matrix Mode",  # Independent audio routing
     }
 
     @classmethod
@@ -2181,10 +2089,7 @@ class OreiMatrix:
             _LOG.error("Invalid ext-audio mode: %d. Must be 0-2", mode)
             return False
 
-        command = {
-            "comhead": "set output exa mode",
-            "mode": mode
-        }
+        command = {"comhead": "set output exa mode", "mode": mode}
 
         mode_name = self.get_ext_audio_mode_name(mode)
         _LOG.info(f"Setting ext-audio mode to {mode} ({mode_name})")
@@ -2204,11 +2109,7 @@ class OreiMatrix:
             return False
 
         # From Control4 driver: exa 1 = enable, exa 2 = disable
-        command = {
-            "comhead": "set output exa",
-            "output": output_num,
-            "exa": 1 if enabled else 2
-        }
+        command = {"comhead": "set output exa", "output": output_num, "exa": 1 if enabled else 2}
 
         state = "enabled" if enabled else "disabled"
         _LOG.info(f"Setting ext-audio output {output_num} to {state}")
@@ -2233,11 +2134,7 @@ class OreiMatrix:
             _LOG.error("Invalid input number: %d. Must be 1-8", input_num)
             return False
 
-        command = {
-            "comhead": "set output exa in source",
-            "output": output_num,
-            "input": input_num
-        }
+        command = {"comhead": "set output exa in source", "output": output_num, "input": input_num}
 
         _LOG.info(f"Setting ext-audio output {output_num} source to input {input_num}")
         success, _ = await self._send_command(command)
@@ -2293,10 +2190,7 @@ class OreiMatrix:
             "arc_enabled": allarc[idx] == 1 if idx < len(allarc) else False,
             "cec_enabled": cec_outputindex[idx] == 1 if idx < len(cec_outputindex) else False,
             "scaler_mode": scaler_value,
-            "supported_cec_commands": [
-                "POWER_ON", "POWER_OFF", "MUTE",
-                "VOLUME_UP", "VOLUME_DOWN", "ACTIVE"
-            ],
+            "supported_cec_commands": ["POWER_ON", "POWER_OFF", "MUTE", "VOLUME_UP", "VOLUME_DOWN", "ACTIVE"],
         }
 
     async def get_input_capabilities(self, input_num: int) -> dict[str, Any] | None:
@@ -2333,10 +2227,25 @@ class OreiMatrix:
             "signal_detected": inactive[idx] == 1 if idx < len(inactive) else False,
             "cec_enabled": cec_inputindex[idx] == 1 if idx < len(cec_inputindex) else False,
             "supported_cec_commands": [
-                "POWER_ON", "POWER_OFF", "UP", "DOWN", "LEFT", "RIGHT",
-                "SELECT", "MENU", "BACK", "PLAY", "PAUSE", "STOP",
-                "PREVIOUS", "NEXT", "REWIND", "FAST_FORWARD",
-                "VOLUME_UP", "VOLUME_DOWN", "MUTE"
+                "POWER_ON",
+                "POWER_OFF",
+                "UP",
+                "DOWN",
+                "LEFT",
+                "RIGHT",
+                "SELECT",
+                "MENU",
+                "BACK",
+                "PLAY",
+                "PAUSE",
+                "STOP",
+                "PREVIOUS",
+                "NEXT",
+                "REWIND",
+                "FAST_FORWARD",
+                "VOLUME_UP",
+                "VOLUME_DOWN",
+                "MUTE",
             ],
         }
 
@@ -2368,18 +2277,35 @@ class OreiMatrix:
             inactive = input_status.get("inactive", [])
             cec_inputindex = cec_status.get("inputindex", [])
 
-            inputs.append({
-                "input_num": i,
-                "name": inname[idx] if idx < len(inname) else f"Input {i}",
-                "signal_detected": inactive[idx] == 1 if idx < len(inactive) else False,
-                "cec_enabled": cec_inputindex[idx] == 1 if idx < len(cec_inputindex) else False,
-                "supported_cec_commands": [
-                    "POWER_ON", "POWER_OFF", "UP", "DOWN", "LEFT", "RIGHT",
-                    "SELECT", "MENU", "BACK", "PLAY", "PAUSE", "STOP",
-                    "PREVIOUS", "NEXT", "REWIND", "FAST_FORWARD",
-                    "VOLUME_UP", "VOLUME_DOWN", "MUTE"
-                ],
-            })
+            inputs.append(
+                {
+                    "input_num": i,
+                    "name": inname[idx] if idx < len(inname) else f"Input {i}",
+                    "signal_detected": inactive[idx] == 1 if idx < len(inactive) else False,
+                    "cec_enabled": cec_inputindex[idx] == 1 if idx < len(cec_inputindex) else False,
+                    "supported_cec_commands": [
+                        "POWER_ON",
+                        "POWER_OFF",
+                        "UP",
+                        "DOWN",
+                        "LEFT",
+                        "RIGHT",
+                        "SELECT",
+                        "MENU",
+                        "BACK",
+                        "PLAY",
+                        "PAUSE",
+                        "STOP",
+                        "PREVIOUS",
+                        "NEXT",
+                        "REWIND",
+                        "FAST_FORWARD",
+                        "VOLUME_UP",
+                        "VOLUME_DOWN",
+                        "MUTE",
+                    ],
+                }
+            )
 
             # Output capabilities
             allscaler = output_status.get("allscaler", [])
@@ -2393,20 +2319,19 @@ class OreiMatrix:
             scaler_value = allscaler[idx] if idx < len(allscaler) else 0
             is_audio_only = scaler_value == 4
 
-            outputs.append({
-                "output_num": i,
-                "name": alloutputname[idx] if idx < len(alloutputname) else f"Output {i}",
-                "connected": allconnect[idx] == 1 if idx < len(allconnect) else False,
-                "stream_enabled": allout[idx] == 1 if idx < len(allout) else True,
-                "is_audio_only": is_audio_only,
-                "arc_enabled": allarc[idx] == 1 if idx < len(allarc) else False,
-                "cec_enabled": cec_outputindex[idx] == 1 if idx < len(cec_outputindex) else False,
-                "scaler_mode": scaler_value,
-                "supported_cec_commands": [
-                    "POWER_ON", "POWER_OFF", "MUTE",
-                    "VOLUME_UP", "VOLUME_DOWN", "ACTIVE"
-                ],
-            })
+            outputs.append(
+                {
+                    "output_num": i,
+                    "name": alloutputname[idx] if idx < len(alloutputname) else f"Output {i}",
+                    "connected": allconnect[idx] == 1 if idx < len(allconnect) else False,
+                    "stream_enabled": allout[idx] == 1 if idx < len(allout) else True,
+                    "is_audio_only": is_audio_only,
+                    "arc_enabled": allarc[idx] == 1 if idx < len(allarc) else False,
+                    "cec_enabled": cec_outputindex[idx] == 1 if idx < len(cec_outputindex) else False,
+                    "scaler_mode": scaler_value,
+                    "supported_cec_commands": ["POWER_ON", "POWER_OFF", "MUTE", "VOLUME_UP", "VOLUME_DOWN", "ACTIVE"],
+                }
+            )
 
         return {
             "inputs": inputs,
