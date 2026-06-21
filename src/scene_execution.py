@@ -14,7 +14,7 @@ from datetime import datetime, timezone
 from typing import Any
 
 from config import Profile, ProfileManager
-from scene_manager import Scene, SceneManager, STEP_TYPE_PROFILE, STEP_TYPE_SYSTEM_ACTION
+from scene_manager import Scene, SceneManager, STEP_TYPE_PROFILE, STEP_TYPE_SYSTEM_ACTION, STEP_TYPE_MACRO
 from system_actions import SystemAction, SystemActionManager, execute_action
 
 _LOG = logging.getLogger("scene_execution")
@@ -295,10 +295,13 @@ class SceneExecutor:
         scene_manager: SceneManager,
         profile_manager: ProfileManager,
         system_action_manager: SystemActionManager,
+        macro_manager: Any | None = None,
     ):
         self.scene_manager = scene_manager
         self.profile_manager = profile_manager
         self.system_action_manager = system_action_manager
+        # MacroManager is optional — scene can include macro steps only if provided
+        self.macro_manager = macro_manager
 
     async def execute_scene(
         self,
@@ -353,6 +356,8 @@ class SceneExecutor:
                 result = await self._execute_profile_step(step, matrix_device, scene)
             elif step.type == STEP_TYPE_SYSTEM_ACTION:
                 result = await self._execute_system_action_step(step, matrix_device)
+            elif step.type == STEP_TYPE_MACRO:
+                result = await self._execute_macro_step(step, matrix_device)
             else:
                 result = StepResult(
                     step_index=i,
@@ -468,6 +473,44 @@ class SceneExecutor:
             success=result.get("success", False),
             detail=result.get("detail", ""),
             error=None if result.get("success") else result.get("detail"),
+        )
+
+    async def _execute_macro_step(
+        self,
+        step: Any,  # SceneStep
+        matrix_device,
+    ) -> StepResult:
+        """Execute a single CEC macro step."""
+        if self.macro_manager is None:
+            return StepResult(
+                step_index=0,
+                step_type=STEP_TYPE_MACRO,
+                step_id=step.id,
+                success=False,
+                error="Macro manager not available",
+            )
+
+        # Check if macro exists
+        macro = self.macro_manager.get_macro(step.id)
+        if macro is None:
+            return StepResult(
+                step_index=0,
+                step_type=STEP_TYPE_MACRO,
+                step_id=step.id,
+                success=False,
+                error=f"Macro not found: {step.id}",
+            )
+
+        # Execute the macro
+        result = await self.macro_manager.execute_macro(step.id)
+        success = result.get("success", False)
+        return StepResult(
+            step_index=0,
+            step_type=STEP_TYPE_MACRO,
+            step_id=step.id,
+            success=success,
+            detail=result.get("detail", f"Executed {len(macro.steps)} step(s)"),
+            error=None if success else result.get("error", "Macro execution failed"),
         )
 
     async def _emit_error_event(

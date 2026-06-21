@@ -34,7 +34,8 @@ _HISTORY_RETENTION = timedelta(days=7)
 #: Valid step types
 STEP_TYPE_PROFILE = "profile"
 STEP_TYPE_SYSTEM_ACTION = "system_action"
-VALID_STEP_TYPES = frozenset({STEP_TYPE_PROFILE, STEP_TYPE_SYSTEM_ACTION})
+STEP_TYPE_MACRO = "macro"
+VALID_STEP_TYPES = frozenset({STEP_TYPE_PROFILE, STEP_TYPE_SYSTEM_ACTION, STEP_TYPE_MACRO})
 
 #: Settings keys that can be overridden per-scene
 OVERRIDABLE_SETTINGS = frozenset({
@@ -51,10 +52,13 @@ class SceneStep:
     """
     A single step within a Scene execution plan.
 
-    :param type: Either ``"profile"`` (execute a Profile) or
-                 ``"system_action"`` (execute a SystemAction by key).
+    :param type: One of:
+                 - ``"profile"`` — execute a Profile
+                 - ``"system_action"`` — execute a SystemAction by key
+                 - ``"macro"`` — execute a saved CEC Macro by ID
     :param id: For ``profile`` steps: the Profile ID.
                For ``system_action`` steps: the SystemAction key.
+               For ``macro`` steps: the CEC Macro ID.
     :param params: For ``system_action`` steps: runtime params
                    (e.g. ``{"output": 1}`` for route_all_to_output).
     """
@@ -152,8 +156,8 @@ class Scene:
             "icon": self.icon,
             "steps": [s.to_dict() for s in self.steps],
             "overrides": {
-                pid: {str(out): settings}
-                for pid, settings in self.overrides.items()
+                pid: {str(out_num): settings for out_num, settings in out_map.items()}
+                for pid, out_map in self.overrides.items()
             },
             "favorite": self.favorite,
             "dashboard_visible": self.dashboard_visible,
@@ -204,6 +208,14 @@ class Scene:
         self.steps.append(SceneStep(
             type=STEP_TYPE_SYSTEM_ACTION,
             id=action_key,
+            params=params or {},
+        ))
+
+    def add_macro_step(self, macro_id: str, params: dict[str, Any] | None = None) -> None:
+        """Append a CEC macro step."""
+        self.steps.append(SceneStep(
+            type=STEP_TYPE_MACRO,
+            id=macro_id,
             params=params or {},
         ))
 
@@ -471,6 +483,31 @@ class SceneManager:
         """Return a scene by ID."""
         return self._scenes.get(scene_id)
 
+    def steps_reference_protected_profile(
+        self,
+        steps: list[SceneStep],
+        profile_map: dict[str, Any] | None = None,
+    ) -> bool:
+        """
+        Return True if any step in the list references a password-protected Profile.
+
+        :param steps: List of SceneSteps to inspect
+        :param profile_map: Optional dict of profile_id -> Profile. If None,
+                           returns False (no way to determine without profiles).
+        """
+        if profile_map is None:
+            # Without a profile map we can't determine protection status.
+            # Callers in the REST API path supply the map explicitly.
+            return False
+
+        for step in steps:
+            if step.type != STEP_TYPE_PROFILE:
+                continue
+            profile = profile_map.get(step.id)
+            if profile is not None and getattr(profile, "password_protected", False):
+                return True
+        return False
+
     # ---- Create ----
 
     def create_scene(
@@ -493,6 +530,14 @@ class SceneManager:
         """
         scene_id = f"scene_{uuid.uuid4().hex[:12]}"
         passcode_hash = ""
+        step_list = steps or []
+
+        # Password inheritance: scene containing a protected profile must itself be protected
+        if not password_protected and self.steps_reference_protected_profile(step_list):
+            return None, (
+                "Scene contains a password-protected Profile; the Scene must also be password-protected"
+            )
+
         if password_protected:
             if not passcode:
                 return None, "passcode required when password_protected is True"
@@ -502,7 +547,7 @@ class SceneManager:
             id=scene_id,
             name=name,
             icon=icon,
-            steps=steps or [],
+            steps=step_list,
             password_protected=password_protected,
             passcode_hash=passcode_hash,
         )
@@ -561,6 +606,12 @@ class SceneManager:
             elif password_protected and not scene.passcode_hash:
                 return None, "passcode required when enabling password protection"
 
+        # Password inheritance: scene containing a protected profile must itself be protected
+        if not scene.password_protected and self.steps_reference_protected_profile(scene.steps):
+            return None, (
+                "Scene contains a password-protected Profile; the Scene must also be password-protected"
+            )
+
         valid, errors = scene.is_valid()
         if not valid:
             return None, "; ".join(errors)
@@ -578,6 +629,14 @@ class SceneManager:
         scene = self._scenes.get(scene_id)
         if scene is None:
             return None, "Scene not found"
+
+        # Password inheritance check
+        prospective = list(scene.steps) + [step]
+        if not scene.password_protected and self.steps_reference_protected_profile(prospective):
+            return None, (
+                "Cannot add a step referencing a password-protected Profile to an unprotected Scene"
+            )
+
         scene.steps.append(step)
         if not self._save():
             scene.steps.pop()

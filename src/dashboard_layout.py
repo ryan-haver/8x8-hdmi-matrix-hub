@@ -47,6 +47,7 @@ CARD_PROFILE = "profile"
 CARD_PRESET = "preset"
 CARD_SYSTEM_SHORTCUT = "system_shortcut"
 CARD_MACRO = "macro"
+CARD_SCENE = "scene"
 CARD_AGGREGATE_WIDGET = "aggregate_widget"
 
 VALID_CARD_TYPES = frozenset({
@@ -54,6 +55,7 @@ VALID_CARD_TYPES = frozenset({
     CARD_PRESET,
     CARD_SYSTEM_SHORTCUT,
     CARD_MACRO,
+    CARD_SCENE,
     CARD_AGGREGATE_WIDGET,
 })
 

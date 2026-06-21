@@ -575,3 +575,20 @@ async def handle_set_profile_dashboard(request: web.Request) -> web.Response:
     except Exception as exc:
         _LOG.error("Error setting profile dashboard flag: %s", exc)
         return _json_response(False, error=str(exc), status=500)
+
+
+async def handle_profile_execution_log(request: web.Request) -> web.Response:
+    """GET /api/profile/{profile_id}/execution-log — return last 7 days of executions."""
+    profile_id = request.match_info["profile_id"]
+    manager = get_profile_manager()
+    if manager is None:
+        return _json_response(False, error="Profile manager not initialized", status=503)
+    profile = manager.get_profile(profile_id)
+    if profile is None:
+        return _json_response(False, error=f"Profile '{profile_id}' not found", status=404)
+    log = getattr(profile, "execution_log", []) or []
+    return _json_response(True, {
+        "profile_id": profile_id,
+        "log": log,
+        "count": len(log),
+    })

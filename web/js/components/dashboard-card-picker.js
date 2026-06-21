@@ -40,6 +40,7 @@ class DashboardCardPicker {
                     <p class="section-help">Select an item to add to your dashboard.</p>
                     <div class="picker-tabs">
                         <button class="picker-tab-btn active" data-tab="profiles">Profiles</button>
+                        <button class="picker-tab-btn" data-tab="scenes">Scenes</button>
                         <button class="picker-tab-btn" data-tab="presets">Presets</button>
                         <button class="picker-tab-btn" data-tab="shortcuts">Shortcuts</button>
                         <button class="picker-tab-btn" data-tab="macros">Macros</button>
@@ -137,6 +138,8 @@ class DashboardCardPicker {
 
         if (tab === 'profiles') {
             this.renderProfiles(container, currentKeys);
+        } else if (tab === 'scenes') {
+            this.renderScenes(container, currentKeys);
         } else if (tab === 'presets') {
             this.renderPresets(container, currentKeys);
         } else if (tab === 'shortcuts') {
@@ -144,6 +147,39 @@ class DashboardCardPicker {
         } else if (tab === 'macros') {
             this.renderMacros(container, currentKeys);
         }
+    }
+
+    /**
+     * Render scenes tab (Phase 8)
+     */
+    renderScenes(container, currentKeys) {
+        const scenes = window.state.phase8Scenes || [];
+
+        if (scenes.length === 0) {
+            container.innerHTML = '<p class="empty-message">No scenes available. Create one in Settings → Scenes.</p>';
+            return;
+        }
+
+        const html = scenes.map(scene => {
+            const key = `scene:${scene.id}`;
+            const isAdded = currentKeys.has(key);
+            const stepCount = scene.steps?.length || 0;
+
+            return `
+                <div class="picker-item ${isAdded ? 'added' : ''}" data-type="scene" data-id="${scene.id}">
+                    <span class="picker-item-icon">${scene.icon || '🎬'}</span>
+                    <span class="picker-item-name">${Helpers.escapeHtml(scene.name)}</span>
+                    <span class="picker-item-meta">${stepCount} step${stepCount !== 1 ? 's' : ''}</span>
+                    ${isAdded
+                        ? '<span class="picker-item-badge">Added</span>'
+                        : `<button class="btn btn-sm btn-primary picker-add-btn" data-type="scene" data-id="${scene.id}">Add</button>`
+                    }
+                </div>
+            `;
+        }).join('');
+
+        container.innerHTML = html;
+        this.attachPickerListeners(container);
     }
 
     /**

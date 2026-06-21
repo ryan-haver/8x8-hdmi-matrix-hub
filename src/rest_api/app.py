@@ -113,6 +113,7 @@ from .profiles import (
     handle_list_favorite_profiles,
     handle_list_profiles,
     handle_profile_cec_config,
+    handle_profile_execution_log,
     handle_profile_macros,
     handle_recall_profile,
     handle_reorder_profiles,
@@ -356,6 +357,7 @@ def create_rest_app(data_dir: Path | None = None) -> web.Application:
     app.router.add_delete("/api/profile/{profile_id}", handle_delete_profile)
     app.router.add_post("/api/profile/{profile_id}/recall", handle_recall_profile)
     app.router.add_get("/api/profile/{profile_id}/cec", handle_profile_cec_config)
+    app.router.add_get("/api/profile/{profile_id}/execution-log", handle_profile_execution_log)
     app.router.add_post("/api/profile/{profile_id}/cec", handle_profile_cec_config)
     app.router.add_put("/api/profile/{profile_id}/cec", handle_profile_cec_config)
     app.router.add_get("/api/profile/{profile_id}/macros", handle_profile_macros)
