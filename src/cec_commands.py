@@ -197,6 +197,7 @@ CEC_CATEGORIES: dict[str, list[str]] = {
 # Helper Functions
 # =============================================================================
 
+
 def get_input_commands() -> list[str]:
     """Get list of all input CEC command names."""
     return list(INPUT_CEC_COMMANDS.keys())
@@ -284,18 +285,21 @@ def get_all_commands_detailed(device_type: str = "input") -> dict[str, dict]:
 # Scaler Mode Constants (for audio_only detection)
 # =============================================================================
 
+
 class ScalerMode:
     """Scaler mode constants (0-indexed as returned by matrix)."""
-    BYPASS = 0          # Passthrough
+
+    BYPASS = 0  # Passthrough
     DOWNSCALE_8K_4K = 1  # 8K → 4K
     DOWNSCALE_1080P = 2  # 8K/4K → 1080p
-    AUTO = 3            # Auto
-    AUDIO_ONLY = 4      # Audio Only (key for CEC routing!)
+    AUTO = 3  # Auto
+    AUDIO_ONLY = 4  # Audio Only (key for CEC routing!)
 
 
 # API uses 1-indexed values
 class ScalerModeAPI:
     """Scaler mode constants (1-indexed for our REST API)."""
+
     PASSTHROUGH = 1
     DOWNSCALE_8K_4K = 2
     DOWNSCALE_1080P = 3

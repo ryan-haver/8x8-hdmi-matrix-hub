@@ -25,6 +25,7 @@ BASE_URL = f"https://{MATRIX_IP}:{MATRIX_PORT}/cgi-bin/instr"
 session = requests.Session()
 session.verify = False
 
+
 def send_command(comhead: str, params: dict | None = None, timeout: int = 5) -> dict:
     """Send a command to the matrix and return the response."""
     payload = {"comhead": comhead, "language": 0}
@@ -41,11 +42,13 @@ def send_command(comhead: str, params: dict | None = None, timeout: int = 5) -> 
     except json.JSONDecodeError:
         return {"error": "invalid_json", "raw": response.text[:200] if response else "no response"}
 
+
 def login() -> bool:
     """Login to the matrix."""
     result = send_command("login", {"user": "Admin", "password": "admin"})
     # Check for multiple success conditions
     return result.get("result") == "success" or result.get("result") == 1 or result.get("comhead") == "login"
+
 
 def test_endpoint(comhead: str, params: dict | None = None) -> tuple:
     """Test an endpoint and return (success, response)."""
@@ -60,6 +63,7 @@ def test_endpoint(comhead: str, params: dict | None = None) -> tuple:
         return True, result
 
     return False, result
+
 
 def main():
     print("=" * 70)
@@ -111,7 +115,6 @@ def main():
         "get input info",
         "get input detail",
         "get input details",
-
         # HDMI specific
         "get hdmi status",
         "get hdmi input status",
@@ -119,7 +122,6 @@ def main():
         "get hdmi input",
         "get hdmi output",
         "get hdmi info",
-
         # Output variants
         "get output connection",
         "get output connect",
@@ -130,7 +132,6 @@ def main():
         "get outputs",
         "get output info",
         "get output detail",
-
         # General status variants
         "get all status",
         "get full status",
@@ -150,7 +151,6 @@ def main():
         "get detect status",
         "get sync status",
         "get active status",
-
         # Routing variants
         "get routing",
         "get route",
@@ -162,46 +162,38 @@ def main():
         "get source",
         "get sources",
         "get source status",
-
         # EDID variants
         "get edid",
         "get edid status",
         "get edid info",
         "get input edid",
         "get output edid",
-
         # HDCP variants
         "get hdcp",
         "get hdcp status",
         "get hdcp info",
-
         # HDR variants
         "get hdr",
         "get hdr status",
         "get hdr info",
-
         # Scaler variants
         "get scaler",
         "get scaler status",
         "get video mode",
-
         # ARC variants
         "get arc",
         "get arc status",
         "get audio status",
-
         # Mute variants
         "get mute",
         "get mute status",
         "get audio mute",
-
         # Preset variants
         "get preset",
         "get presets",
         "get preset status",
         "get scene",
         "get scenes",
-
         # Device info variants
         "get info",
         "get device",
@@ -210,7 +202,6 @@ def main():
         "get version",
         "get model",
         "get serial",
-
         # Debug/diagnostic endpoints
         "get debug",
         "get log",
@@ -220,7 +211,6 @@ def main():
         "get test",
         "get raw status",
         "get telnet",
-
         # Alternative naming patterns
         "input status",
         "output status",
@@ -310,6 +300,7 @@ def main():
                 print(f"      Extended keys: {list(result.keys())}")
 
     print("\n[*] Discovery complete!")
+
 
 if __name__ == "__main__":
     main()

@@ -256,8 +256,8 @@ class MatrixAPI {
         return this.post(`/api/preset/${preset}`);
     }
 
-    async savePreset(preset) {
-        return this.post(`/api/preset/${preset}/save`);
+    async savePreset(preset, routing = null) {
+        return this.post(`/api/preset/${preset}/save`, routing ? { routing } : {});
     }
 
     // ===== Scenes/Profiles =====
@@ -560,42 +560,46 @@ class MatrixAPI {
         return this.put('/api/ui/preferences', prefs);
     }
 
-    // ===== System Shortcuts (Phase 7) =====
+    // ===== System Shortcuts (Consolidated Phase 7 & 8) =====
 
     async listSystemShortcuts() {
-        return this.get('/api/system-shortcuts');
+        return this.get('/api/shortcuts');
     }
 
     async listFavoriteSystemShortcuts() {
-        return this.get('/api/system-shortcuts/favorites');
+        return this.get('/api/shortcuts/favorites');
     }
 
     async listDashboardSystemShortcuts() {
-        return this.get('/api/system-shortcuts/dashboard');
+        return this.get('/api/shortcuts/dashboard');
     }
 
     async getSystemShortcut(id) {
-        return this.get(`/api/system-shortcuts/${id}`);
+        return this.get(`/api/shortcuts/${id}`);
     }
 
     async toggleSystemShortcutFavorite(id) {
-        return this.post(`/api/system-shortcuts/${id}/favorite`);
+        return this.post(`/api/shortcuts/${id}/favorite`);
     }
 
     async toggleSystemShortcutDashboard(id) {
-        return this.post(`/api/system-shortcuts/${id}/dashboard`);
+        return this.post(`/api/shortcuts/${id}/dashboard`);
     }
 
     async updateSystemShortcut(id, updates) {
-        return this.put(`/api/system-shortcuts/${id}`, updates);
+        return this.put(`/api/shortcuts/${id}`, updates);
     }
 
     async reorderSystemShortcuts(orderedIds) {
-        return this.put('/api/system-shortcuts/reorder', { ordered_ids: orderedIds });
+        return this.put('/api/shortcuts/reorder', { ordered_ids: orderedIds });
     }
 
-    async executeSystemShortcut(id) {
-        return this.post(`/api/system-shortcuts/${id}/execute`);
+    async executeSystemShortcut(id, { params } = {}) {
+        return this.post(`/api/shortcuts/${id}/execute`, params ? { params } : {});
+    }
+
+    async renamePreset(number, name) {
+        return this.post(`/api/device-settings/preset/${number}/name`, { name });
     }
 
     // ===== Dashboard Layout (Phase 7) =====
@@ -724,18 +728,18 @@ class MatrixAPI {
         return this.delete(`/api/v2/scenes/${sceneId}/steps/${index}`);
     }
 
-    // ===== Phase 8: System Actions =====
+    // ===== Phase 8: System Actions (Routed through Shortcuts) =====
 
     async listSystemActions() {
-        return this.get('/api/system-actions');
+        return this.listSystemShortcuts();
     }
 
     async updateSystemAction(key, data) {
-        return this.put(`/api/system-actions/${key}`, data);
+        return this.updateSystemShortcut(key, data);
     }
 
     async executeSystemAction(key, { params } = {}) {
-        return this.post(`/api/system-actions/${key}/execute`, params ? { params } : {});
+        return this.executeSystemShortcut(key, { params });
     }
 }
 

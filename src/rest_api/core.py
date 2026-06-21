@@ -7,9 +7,9 @@ import logging
 from aiohttp import web
 
 from .utils import (
+    API_VERSION,
     _json_response,
     _save_names_to_config,
-    API_VERSION,
     get_input_names,
     get_matrix_device,
     get_output_names,
@@ -115,13 +115,15 @@ async def handle_status(request: web.Request) -> web.Response:
 
 
 async def handle_presets(request: web.Request) -> web.Response:
-    """Get all presets with their names."""
+    """Get all presets with their names and routing configurations."""
     matrix_device = get_matrix_device()
 
     if matrix_device is None:
         return _json_response(False, error="Matrix device not configured", status=503)
 
     try:
+        from .device_settings import get_preset_setting
+
         # Get preset names from matrix status
         preset_names = []
         if matrix_device.connected:
@@ -133,13 +135,26 @@ async def handle_presets(request: web.Request) -> web.Response:
 
         presets = []
         for i in range(1, 9):
-            name = preset_names[i - 1] if i - 1 < len(preset_names) and preset_names[i - 1] else f"Preset {i}"
+            preset_sett = get_preset_setting(i)
+            name = preset_sett.get("name")
+            if not name or name == f"Preset {i}":
+                if i - 1 < len(preset_names) and preset_names[i - 1]:
+                    name = preset_names[i - 1]
+                else:
+                    name = f"Preset {i}"
+
+            # Retrieve routing configuration from local settings cache
+            raw_routing = preset_sett.get("routing", {})
+            routing = {int(k): v for k, v in raw_routing.items()} if raw_routing else {}
+
             presets.append({
                 "number": i,
                 "name": name,
+                "routing": routing,
                 "endpoint": f"/api/preset/{i}",
                 "save_endpoint": f"/api/preset/{i}/save",
             })
+
         return _json_response(True, {"presets": presets})
     except Exception as e:
         _LOG.error(f"Error getting presets: {e}")
@@ -157,11 +172,13 @@ async def handle_inputs(request: web.Request) -> web.Response:
     try:
         inputs = []
         for i in range(1, 9):
-            inputs.append({
-                "number": i,
-                "name": input_names.get(i, f"Input {i}"),
-                "cec_endpoint": f"/api/cec/input/{i}",
-            })
+            inputs.append(
+                {
+                    "number": i,
+                    "name": input_names.get(i, f"Input {i}"),
+                    "cec_endpoint": f"/api/cec/input/{i}",
+                }
+            )
         return _json_response(True, {"inputs": inputs})
     except Exception as e:
         _LOG.error(f"Error getting inputs: {e}")
@@ -190,11 +207,13 @@ async def handle_outputs(request: web.Request) -> web.Response:
             else:
                 name = f"Output {i}"
 
-            outputs.append({
-                "number": i,
-                "name": name,
-                "cec_endpoint": f"/api/cec/output/{i}",
-            })
+            outputs.append(
+                {
+                    "number": i,
+                    "name": name,
+                    "cec_endpoint": f"/api/cec/output/{i}",
+                }
+            )
         return _json_response(True, {"outputs": outputs})
     except Exception as e:
         _LOG.error(f"Error getting outputs: {e}")
@@ -238,11 +257,9 @@ async def handle_set_input_name(request: web.Request) -> web.Response:
         # Persist to config file
         _save_names_to_config()
 
-        return _json_response(True, {
-            "input": input_num,
-            "name": name,
-            "message": f"Input {input_num} renamed to '{name}'"
-        })
+        return _json_response(
+            True, {"input": input_num, "name": name, "message": f"Input {input_num} renamed to '{name}'"}
+        )
     except Exception as e:
         _LOG.error(f"Error setting input name: {e}")
         return _json_response(False, error=str(e), status=500)
@@ -285,11 +302,9 @@ async def handle_set_output_name(request: web.Request) -> web.Response:
         # Persist to config file
         _save_names_to_config()
 
-        return _json_response(True, {
-            "output": output_num,
-            "name": name,
-            "message": f"Output {output_num} renamed to '{name}'"
-        })
+        return _json_response(
+            True, {"output": output_num, "name": name, "message": f"Output {output_num} renamed to '{name}'"}
+        )
     except Exception as e:
         _LOG.error(f"Error setting output name: {e}")
         return _json_response(False, error=str(e), status=500)

@@ -8,12 +8,12 @@ import logging
 import sys
 
 # Add src to path
-sys.path.insert(0, 'src')
+sys.path.insert(0, "src")
 
 from telnet_client import TelnetClient
 
 # Enable debug logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 _LOG = logging.getLogger(__name__)
 
 MATRIX_IP = "192.168.0.100"
@@ -54,6 +54,7 @@ async def main():
     except Exception as e:
         print(f"✗ Status failed: {e}")
         import traceback
+
         traceback.print_exc()
 
     # Test individual input connection

@@ -18,6 +18,7 @@ _LOG = logging.getLogger("rest_api.audio")
 # External Audio (Ext-Audio) Endpoints
 # =============================================================================
 
+
 async def handle_ext_audio_status(request: web.Request) -> web.Response:
     """Get external audio matrix status."""
     matrix_device = get_matrix_device()
@@ -32,6 +33,7 @@ async def handle_ext_audio_status(request: web.Request) -> web.Response:
         # Import OreiMatrix for static method access
         import sys
         from pathlib import Path
+
         sys.path.insert(0, str(Path(__file__).parent.parent))
         from orei_matrix import OreiMatrix
 
@@ -41,17 +43,22 @@ async def handle_ext_audio_status(request: web.Request) -> web.Response:
             mode = status.get("mode", 0)
             for i in range(1, 9):
                 idx = i - 1
-                outputs.append({
-                    "number": i,
-                    "enabled": status.get("allout", [])[idx] == 1 if idx < len(status.get("allout", [])) else False,
-                    "source": status.get("allsource", [])[idx] if idx < len(status.get("allsource", [])) else None,
-                })
-            return _json_response(True, {
-                "mode": mode,
-                "mode_name": OreiMatrix.get_ext_audio_mode_name(mode),
-                "outputs": outputs,
-                "raw": status
-            })
+                outputs.append(
+                    {
+                        "number": i,
+                        "enabled": status.get("allout", [])[idx] == 1 if idx < len(status.get("allout", [])) else False,
+                        "source": status.get("allsource", [])[idx] if idx < len(status.get("allsource", [])) else None,
+                    }
+                )
+            return _json_response(
+                True,
+                {
+                    "mode": mode,
+                    "mode_name": OreiMatrix.get_ext_audio_mode_name(mode),
+                    "outputs": outputs,
+                    "raw": status,
+                },
+            )
         else:
             return _json_response(False, error="Failed to get ext-audio status", status=500)
     except Exception as e:
@@ -64,6 +71,7 @@ async def handle_ext_audio_modes(request: web.Request) -> web.Response:
     try:
         import sys
         from pathlib import Path
+
         sys.path.insert(0, str(Path(__file__).parent.parent))
         from orei_matrix import OreiMatrix
 
@@ -87,6 +95,7 @@ async def handle_set_ext_audio_mode(request: web.Request) -> web.Response:
     try:
         import sys
         from pathlib import Path
+
         sys.path.insert(0, str(Path(__file__).parent.parent))
         from orei_matrix import OreiMatrix
 
@@ -105,10 +114,13 @@ async def handle_set_ext_audio_mode(request: web.Request) -> web.Response:
 
         if result:
             mode_name = OreiMatrix.get_ext_audio_mode_name(mode)
-            return _json_response(True, {
-                "mode": mode,
-                "mode_name": mode_name,
-            })
+            return _json_response(
+                True,
+                {
+                    "mode": mode,
+                    "mode_name": mode_name,
+                },
+            )
         else:
             return _json_response(False, error="Failed to set ext-audio mode", status=500)
     except ValueError:
@@ -142,10 +154,13 @@ async def handle_set_ext_audio_enable(request: web.Request) -> web.Response:
         result = await matrix_device.set_ext_audio_enable(output_num, bool(enabled))
 
         if result:
-            return _json_response(True, {
-                "output": output_num,
-                "enabled": bool(enabled),
-            })
+            return _json_response(
+                True,
+                {
+                    "output": output_num,
+                    "enabled": bool(enabled),
+                },
+            )
         else:
             return _json_response(False, error="Failed to set ext-audio enable", status=500)
     except ValueError:
@@ -183,10 +198,13 @@ async def handle_set_ext_audio_source(request: web.Request) -> web.Response:
         result = await matrix_device.set_ext_audio_source(output_num, input_num)
 
         if result:
-            return _json_response(True, {
-                "output": output_num,
-                "input": input_num,
-            })
+            return _json_response(
+                True,
+                {
+                    "output": output_num,
+                    "input": input_num,
+                },
+            )
         else:
             return _json_response(False, error="Failed to set ext-audio source", status=500)
     except ValueError:
@@ -199,6 +217,7 @@ async def handle_set_ext_audio_source(request: web.Request) -> web.Response:
 # =============================================================================
 # System Control Endpoints
 # =============================================================================
+
 
 async def handle_system_status(request: web.Request) -> web.Response:
     """Get system settings status."""
@@ -213,14 +232,17 @@ async def handle_system_status(request: web.Request) -> web.Response:
     try:
         status = await matrix_device.get_system_status()
         if status:
-            return _json_response(True, {
-                "power": "on" if status.get("power") == 1 else "off",
-                "beep_enabled": status.get("beep") == 1,
-                "panel_locked": status.get("lock") == 1,
-                "mode": status.get("mode"),
-                "baudrate": status.get("baudrate"),
-                "raw": status,
-            })
+            return _json_response(
+                True,
+                {
+                    "power": "on" if status.get("power") == 1 else "off",
+                    "beep_enabled": status.get("beep") == 1,
+                    "panel_locked": status.get("lock") == 1,
+                    "mode": status.get("mode"),
+                    "baudrate": status.get("baudrate"),
+                    "raw": status,
+                },
+            )
         else:
             return _json_response(False, error="Failed to get system status", status=500)
     except Exception as e:
@@ -244,22 +266,26 @@ async def handle_device_info(request: web.Request) -> web.Response:
 
         device = {}
         if info:
-            device.update({
-                "model": info.get("model"),
-                "firmware_version": info.get("version"),
-                "web_version": info.get("webversion"),
-                "hostname": info.get("hostname"),
-                "mac_address": info.get("macaddress"),
-            })
+            device.update(
+                {
+                    "model": info.get("model"),
+                    "firmware_version": info.get("version"),
+                    "web_version": info.get("webversion"),
+                    "hostname": info.get("hostname"),
+                    "mac_address": info.get("macaddress"),
+                }
+            )
         if network:
-            device.update({
-                "ip_address": network.get("ipaddress"),
-                "subnet": network.get("subnet"),
-                "gateway": network.get("gateway"),
-                "dhcp": network.get("dhcp") == 1,
-                "telnet_port": network.get("telnetport"),
-                "tcp_port": network.get("tcpport"),
-            })
+            device.update(
+                {
+                    "ip_address": network.get("ipaddress"),
+                    "subnet": network.get("subnet"),
+                    "gateway": network.get("gateway"),
+                    "dhcp": network.get("dhcp") == 1,
+                    "telnet_port": network.get("telnetport"),
+                    "tcp_port": network.get("tcpport"),
+                }
+            )
 
         return _json_response(True, {"device": device, "raw": {"status": info, "network": network}})
     except Exception as e:
@@ -285,7 +311,9 @@ async def handle_set_beep(request: web.Request) -> web.Response:
         success = await matrix_device.set_beep(enabled)
 
         if success:
-            return _json_response(True, {"beep_enabled": enabled, "message": f"Beep {'enabled' if enabled else 'disabled'}"})
+            return _json_response(
+                True, {"beep_enabled": enabled, "message": f"Beep {'enabled' if enabled else 'disabled'}"}
+            )
         else:
             return _json_response(False, error="Failed to set beep", status=500)
     except json.JSONDecodeError:
@@ -313,7 +341,9 @@ async def handle_set_panel_lock(request: web.Request) -> web.Response:
         success = await matrix_device.set_panel_lock(locked)
 
         if success:
-            return _json_response(True, {"panel_locked": locked, "message": f"Panel {'locked' if locked else 'unlocked'}"})
+            return _json_response(
+                True, {"panel_locked": locked, "message": f"Panel {'locked' if locked else 'unlocked'}"}
+            )
         else:
             return _json_response(False, error="Failed to set panel lock", status=500)
     except json.JSONDecodeError:
@@ -351,6 +381,7 @@ async def handle_lcd_timeout_modes(request: web.Request) -> web.Response:
     try:
         import sys
         from pathlib import Path
+
         sys.path.insert(0, str(Path(__file__).parent.parent))
         from orei_matrix import OreiMatrix
 
@@ -374,6 +405,7 @@ async def handle_set_lcd_timeout(request: web.Request) -> web.Response:
     try:
         import sys
         from pathlib import Path
+
         sys.path.insert(0, str(Path(__file__).parent.parent))
         from orei_matrix import OreiMatrix
 
@@ -392,10 +424,13 @@ async def handle_set_lcd_timeout(request: web.Request) -> web.Response:
 
         if result:
             mode_name = OreiMatrix.get_lcd_timeout_name(mode)
-            return _json_response(True, {
-                "mode": mode,
-                "mode_name": mode_name,
-            })
+            return _json_response(
+                True,
+                {
+                    "mode": mode,
+                    "mode_name": mode_name,
+                },
+            )
         else:
             return _json_response(False, error="Failed to set LCD timeout", status=500)
     except ValueError:

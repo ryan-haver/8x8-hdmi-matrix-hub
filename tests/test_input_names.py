@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Test querying input names from the OREI matrix."""
+
 import asyncio
 import logging
 import os
@@ -12,8 +13,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 # Skip unless MATRIX_HOST environment variable is set
 pytestmark = pytest.mark.skipif(
-    not os.environ.get("MATRIX_HOST"),
-    reason="Manual test - requires MATRIX_HOST environment variable"
+    not os.environ.get("MATRIX_HOST"), reason="Manual test - requires MATRIX_HOST environment variable"
 )
 
 

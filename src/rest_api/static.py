@@ -38,30 +38,30 @@ async def handle_static_file(request: web.Request) -> web.Response:
     request_path = request.path
 
     # Security: prevent directory traversal
-    if '..' in request_path:
+    if ".." in request_path:
         return web.Response(text="Forbidden", status=403)
 
     content_types = {
-        '.css': 'text/css',
-        '.js': 'application/javascript',
-        '.svg': 'image/svg+xml',
-        '.png': 'image/png',
-        '.ico': 'image/x-icon',
-        '.json': 'application/json',
-        '.woff': 'font/woff',
-        '.woff2': 'font/woff2',
+        ".css": "text/css",
+        ".js": "application/javascript",
+        ".svg": "image/svg+xml",
+        ".png": "image/png",
+        ".ico": "image/x-icon",
+        ".json": "application/json",
+        ".woff": "font/woff",
+        ".woff2": "font/woff2",
     }
 
-    full_path = _WEB_DIR / request_path.lstrip('/')
+    full_path = _WEB_DIR / request_path.lstrip("/")
 
     if full_path.exists() and full_path.is_file():
         suffix = full_path.suffix.lower()
-        content_type = content_types.get(suffix, 'application/octet-stream')
+        content_type = content_types.get(suffix, "application/octet-stream")
         headers = {
-            'Content-Type': content_type,
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            'Pragma': 'no-cache',
-            'Expires': '0'
+            "Content-Type": content_type,
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0",
         }
         return web.FileResponse(full_path, headers=headers)
 
@@ -185,14 +185,27 @@ async def handle_api_root(request: web.Request) -> web.Response:
             "hdr": {"1": "Passthrough", "2": "HDR to SDR", "3": "Auto"},
             "scaler": {"1": "Passthrough", "2": "8K→4K", "3": "8K/4K→1080p", "4": "Auto", "5": "Audio Only"},
             "edid": {
-                "1": "1080p 2CH", "2": "1080p 5.1CH", "3": "1080p 7.1CH",
-                "4": "1080p 3D 2CH", "5": "1080p 3D 5.1CH", "6": "1080p 3D 7.1CH",
-                "7": "4K30 2CH", "8": "4K30 5.1CH", "9": "4K30 7.1CH",
-                "10": "4K60 420 2CH", "11": "4K60 420 5.1CH", "12": "4K60 420 7.1CH",
-                "13": "4K60 444 2CH", "14": "4K60 444 7.1CH",
+                "1": "1080p 2CH",
+                "2": "1080p 5.1CH",
+                "3": "1080p 7.1CH",
+                "4": "1080p 3D 2CH",
+                "5": "1080p 3D 5.1CH",
+                "6": "1080p 3D 7.1CH",
+                "7": "4K30 2CH",
+                "8": "4K30 5.1CH",
+                "9": "4K30 7.1CH",
+                "10": "4K60 420 2CH",
+                "11": "4K60 420 5.1CH",
+                "12": "4K60 420 7.1CH",
+                "13": "4K60 444 2CH",
+                "14": "4K60 444 7.1CH",
                 "15-22": "Copy from Output 1-8",
-                "33": "4K60 HDR 2CH", "34": "4K60 HDR 5.1CH", "35": "4K60 HDR 7.1CH",
-                "36": "4K60 HDR Atmos", "37": "8K30", "38": "8K60"
+                "33": "4K60 HDR 2CH",
+                "34": "4K60 HDR 5.1CH",
+                "35": "4K60 HDR 7.1CH",
+                "36": "4K60 HDR Atmos",
+                "37": "8K30",
+                "38": "8K60",
             },
             "lcd_timeout": {"0": "Off", "1": "Always On", "2": "15 seconds", "3": "30 seconds", "4": "60 seconds"},
             "ext_audio_mode": {"0": "Bind to Input", "1": "Bind to Output", "2": "Matrix Mode"},
@@ -211,25 +224,25 @@ async def handle_api_root(request: web.Request) -> web.Response:
             "save_preset": "curl -X POST http://HOST:8080/api/preset/3/save",
             "switch_routing": 'curl -X POST http://HOST:8080/api/switch -d \'{"input": 3, "output": 1}\'',
             "next_input": "curl -X POST 'http://HOST:8080/api/input/next?output=1'",
-            "set_hdcp": 'curl -X POST http://HOST:8080/api/output/1/hdcp -d \'{"mode": 2}\'',
-            "set_hdr": 'curl -X POST http://HOST:8080/api/output/1/hdr -d \'{"mode": 1}\'',
-            "enable_arc": 'curl -X POST http://HOST:8080/api/output/1/arc -d \'{"enabled": true}\'',
-            "mute_output": 'curl -X POST http://HOST:8080/api/output/1/mute -d \'{"muted": true}\'',
-            "disable_output": 'curl -X POST http://HOST:8080/api/output/3/enable -d \'{"enabled": false}\'',
-            "enable_cec": 'curl -X POST http://HOST:8080/api/cec/input/2/enable -d \'{"enabled": true}\'',
+            "set_hdcp": "curl -X POST http://HOST:8080/api/output/1/hdcp -d '{\"mode\": 2}'",
+            "set_hdr": "curl -X POST http://HOST:8080/api/output/1/hdr -d '{\"mode\": 1}'",
+            "enable_arc": "curl -X POST http://HOST:8080/api/output/1/arc -d '{\"enabled\": true}'",
+            "mute_output": "curl -X POST http://HOST:8080/api/output/1/mute -d '{\"muted\": true}'",
+            "disable_output": "curl -X POST http://HOST:8080/api/output/3/enable -d '{\"enabled\": false}'",
+            "enable_cec": "curl -X POST http://HOST:8080/api/cec/input/2/enable -d '{\"enabled\": true}'",
             "cec_play": "curl -X POST http://HOST:8080/api/cec/input/2/play",
             "reboot": "curl -X POST http://HOST:8080/api/system/reboot",
             "get_edid_modes": "curl http://HOST:8080/api/edid/modes",
             "get_edid_status": "curl http://HOST:8080/api/status/edid",
-            "set_edid": 'curl -X POST http://HOST:8080/api/input/1/edid -d \'{"mode": 36}\'',
-            "copy_edid": 'curl -X POST http://HOST:8080/api/input/1/edid -d \'{"mode": 15}\'',
+            "set_edid": "curl -X POST http://HOST:8080/api/input/1/edid -d '{\"mode\": 36}'",
+            "copy_edid": "curl -X POST http://HOST:8080/api/input/1/edid -d '{\"mode\": 15}'",
             "get_lcd_modes": "curl http://HOST:8080/api/system/lcd/modes",
-            "set_lcd_timeout": 'curl -X POST http://HOST:8080/api/system/lcd -d \'{"mode": 3}\'',
+            "set_lcd_timeout": "curl -X POST http://HOST:8080/api/system/lcd -d '{\"mode\": 3}'",
             "get_ext_audio_status": "curl http://HOST:8080/api/status/ext-audio",
             "get_ext_audio_modes": "curl http://HOST:8080/api/ext-audio/modes",
-            "set_ext_audio_mode": 'curl -X POST http://HOST:8080/api/ext-audio/mode -d \'{"mode": 2}\'',
-            "enable_ext_audio": 'curl -X POST http://HOST:8080/api/ext-audio/1/enable -d \'{"enabled": true}\'',
-            "set_ext_audio_source": 'curl -X POST http://HOST:8080/api/ext-audio/1/source -d \'{"input": 3}\'',
+            "set_ext_audio_mode": "curl -X POST http://HOST:8080/api/ext-audio/mode -d '{\"mode\": 2}'",
+            "enable_ext_audio": "curl -X POST http://HOST:8080/api/ext-audio/1/enable -d '{\"enabled\": true}'",
+            "set_ext_audio_source": "curl -X POST http://HOST:8080/api/ext-audio/1/source -d '{\"input\": 3}'",
             "list_scenes": "curl http://HOST:8080/api/scenes",
             "get_scene": "curl http://HOST:8080/api/scene/movie_night",
             "create_scene": 'curl -X POST http://HOST:8080/api/scene -d \'{"id": "movie_night", "name": "Movie Night", "outputs": {"1": {"input": 2}, "2": {"input": 2}}}\'',

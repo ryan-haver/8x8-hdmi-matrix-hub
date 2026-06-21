@@ -172,14 +172,10 @@ def migrate_legacy_file(target_file: Path, filename: str) -> bool:
                 target_file.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(legacy_file, target_file)
                 _legacy_migrations.add(filename)
-                _LOG.info(
-                    "Migrated legacy file %s -> %s", legacy_file, target_file
-                )
+                _LOG.info("Migrated legacy file %s -> %s", legacy_file, target_file)
                 return True
             except OSError as exc:
-                _LOG.warning(
-                    "Could not migrate legacy file %s: %s", legacy_file, exc
-                )
+                _LOG.warning("Could not migrate legacy file %s: %s", legacy_file, exc)
                 return False
 
     return False

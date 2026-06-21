@@ -21,7 +21,7 @@ import tempfile
 
 import pytest
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from config import (
     CecConfig,
@@ -37,6 +37,7 @@ from config import (
 # =============================================================================
 # CecConfig Tests
 # =============================================================================
+
 
 class TestCecConfig:
     """Tests for CecConfig dataclass."""
@@ -163,6 +164,7 @@ class TestCecConfig:
 # SceneOutput Tests
 # =============================================================================
 
+
 class TestSceneOutput:
     """Tests for SceneOutput dataclass."""
 
@@ -258,6 +260,7 @@ class TestSceneOutput:
 # =============================================================================
 # Scene Tests
 # =============================================================================
+
 
 class TestScene:
     """Tests for Scene dataclass."""
@@ -401,6 +404,7 @@ class TestScene:
 # SceneManager Tests
 # =============================================================================
 
+
 class TestSceneManager:
     """Tests for SceneManager class."""
 
@@ -537,6 +541,7 @@ class TestSceneManager:
 # Profile Tests
 # =============================================================================
 
+
 class TestProfile:
     """Tests for Profile dataclass."""
 
@@ -671,7 +676,7 @@ class TestProfile:
             outputs={
                 1: SceneOutput(input=2, enabled=True),
                 2: SceneOutput(input=4, enabled=False),  # Disabled
-                3: SceneOutput(input=2, enabled=True),   # Duplicate input
+                3: SceneOutput(input=2, enabled=True),  # Duplicate input
             },
         )
 
@@ -701,6 +706,7 @@ class TestProfile:
 # =============================================================================
 # ProfileManager Tests
 # =============================================================================
+
 
 class TestProfileManager:
     """Tests for ProfileManager class."""
@@ -931,6 +937,7 @@ class TestProfileManager:
 # MatrixConfig Tests
 # =============================================================================
 
+
 class TestMatrixConfig:
     """Tests for MatrixConfig dataclass."""
 
@@ -984,6 +991,7 @@ class TestMatrixConfig:
 # =============================================================================
 # Config (Main Manager) Tests
 # =============================================================================
+
 
 class TestConfig:
     """Tests for Config class."""

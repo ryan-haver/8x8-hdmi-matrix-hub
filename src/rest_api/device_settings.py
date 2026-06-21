@@ -15,6 +15,7 @@ from pathlib import Path
 from aiohttp import web
 
 from persistence import ensure_data_dir, get_data_dir, migrate_legacy_file
+
 from .utils import _json_response
 from .websocket import broadcast_status_update
 
@@ -29,6 +30,7 @@ _settings_cache: dict = {}
 # =============================================================================
 # Settings Storage
 # =============================================================================
+
 
 def init_device_settings(data_dir: Path | None = None):
     """Initialize device settings with the data directory path.
@@ -114,12 +116,14 @@ def _get_default_settings() -> dict:
         # dashboard as small lists here.
         "favorite_presets": [],
         "dashboard_presets": [],
+        "presets": {str(i): {"name": f"Preset {i}"} for i in range(1, 9)},
     }
 
 
 # =============================================================================
 # Accessor Functions
 # =============================================================================
+
 
 def get_device_settings() -> dict:
     """Get all device settings."""
@@ -131,24 +135,32 @@ def get_device_settings() -> dict:
 def get_input_setting(input_num: int) -> dict:
     """Get settings for a specific input."""
     settings = get_device_settings()
-    return settings.get("inputs", {}).get(str(input_num), {
-        "name": f"Input {input_num}",
-        "icon": None,
-        "color": None,
-    })
+    return settings.get("inputs", {}).get(
+        str(input_num),
+        {
+            "name": f"Input {input_num}",
+            "icon": None,
+            "color": None,
+        },
+    )
 
 
 def get_output_setting(output_num: int) -> dict:
     """Get settings for a specific output."""
     settings = get_device_settings()
-    return settings.get("outputs", {}).get(str(output_num), {
-        "name": f"Output {output_num}",
-        "icon": None,
-        "color": None,
-    })
+    return settings.get("outputs", {}).get(
+        str(output_num),
+        {
+            "name": f"Output {output_num}",
+            "icon": None,
+            "color": None,
+        },
+    )
 
 
-def set_input_setting(input_num: int, name: str | None = None, icon: str | None = None, color: str | None = None) -> bool:
+def set_input_setting(
+    input_num: int, name: str | None = None, icon: str | None = None, color: str | None = None
+) -> bool:
     """Update settings for a specific input."""
     global _settings_cache
 
@@ -169,7 +181,9 @@ def set_input_setting(input_num: int, name: str | None = None, icon: str | None 
     return _save_settings()
 
 
-def set_output_setting(output_num: int, name: str | None = None, icon: str | None = None, color: str | None = None) -> bool:
+def set_output_setting(
+    output_num: int, name: str | None = None, icon: str | None = None, color: str | None = None
+) -> bool:
     """Update settings for a specific output."""
     global _settings_cache
 
@@ -187,6 +201,36 @@ def set_output_setting(output_num: int, name: str | None = None, icon: str | Non
     if color is not None:
         _settings_cache["outputs"][key]["color"] = color
 
+    return _save_settings()
+
+
+def get_preset_setting(preset_num: int) -> dict:
+    """Get settings for a specific preset (custom name)."""
+    settings = get_device_settings()
+    return settings.get("presets", {}).get(str(preset_num), {"name": f"Preset {preset_num}"})
+
+
+def set_preset_name(preset_num: int, name: str) -> bool:
+    """Update custom name for a preset."""
+    global _settings_cache
+    if "presets" not in _settings_cache:
+        _settings_cache["presets"] = {}
+    key = str(preset_num)
+    if key not in _settings_cache["presets"]:
+        _settings_cache["presets"][key] = {}
+    _settings_cache["presets"][key]["name"] = name
+    return _save_settings()
+
+
+def set_preset_routing(preset_num: int, routing: dict[int, int]) -> bool:
+    """Update custom routing for a preset."""
+    global _settings_cache
+    if "presets" not in _settings_cache:
+        _settings_cache["presets"] = {}
+    key = str(preset_num)
+    if key not in _settings_cache["presets"]:
+        _settings_cache["presets"][key] = {"name": f"Preset {preset_num}"}
+    _settings_cache["presets"][key]["routing"] = {str(k): v for k, v in routing.items()}
     return _save_settings()
 
 
@@ -292,6 +336,7 @@ def toggle_dashboard_preset(preset_num: int) -> bool:
 # API Handlers
 # =============================================================================
 
+
 async def handle_get_device_settings(request: web.Request) -> web.Response:
     """GET /api/device-settings - Get all device settings."""
     try:
@@ -334,17 +379,14 @@ async def handle_set_input_settings(request: web.Request) -> web.Response:
 
         if success:
             # Broadcast update to connected clients
-            await broadcast_status_update("device_settings", {
-                "type": "input",
-                "number": input_num,
-                **get_input_setting(input_num)
-            })
+            await broadcast_status_update(
+                "device_settings", {"type": "input", "number": input_num, **get_input_setting(input_num)}
+            )
 
-            return _json_response(True, {
-                "input": input_num,
-                **get_input_setting(input_num),
-                "message": f"Input {input_num} settings updated"
-            })
+            return _json_response(
+                True,
+                {"input": input_num, **get_input_setting(input_num), "message": f"Input {input_num} settings updated"},
+            )
         else:
             return _json_response(False, error="Failed to save settings", status=500)
     except json.JSONDecodeError:
@@ -388,17 +430,18 @@ async def handle_set_output_settings(request: web.Request) -> web.Response:
 
         if success:
             # Broadcast update to connected clients
-            await broadcast_status_update("device_settings", {
-                "type": "output",
-                "number": output_num,
-                **get_output_setting(output_num)
-            })
+            await broadcast_status_update(
+                "device_settings", {"type": "output", "number": output_num, **get_output_setting(output_num)}
+            )
 
-            return _json_response(True, {
-                "output": output_num,
-                **get_output_setting(output_num),
-                "message": f"Output {output_num} settings updated"
-            })
+            return _json_response(
+                True,
+                {
+                    "output": output_num,
+                    **get_output_setting(output_num),
+                    "message": f"Output {output_num} settings updated",
+                },
+            )
         else:
             return _json_response(False, error="Failed to save settings", status=500)
     except json.JSONDecodeError:
@@ -423,10 +466,7 @@ async def handle_bulk_update_settings(request: web.Request) -> web.Response:
                 input_num = int(key)
                 if 1 <= input_num <= 8:
                     set_input_setting(
-                        input_num,
-                        name=settings.get("name"),
-                        icon=settings.get("icon"),
-                        color=settings.get("color")
+                        input_num, name=settings.get("name"), icon=settings.get("icon"), color=settings.get("color")
                     )
                     updated_inputs.append(input_num)
 
@@ -436,21 +476,17 @@ async def handle_bulk_update_settings(request: web.Request) -> web.Response:
                 output_num = int(key)
                 if 1 <= output_num <= 8:
                     set_output_setting(
-                        output_num,
-                        name=settings.get("name"),
-                        icon=settings.get("icon"),
-                        color=settings.get("color")
+                        output_num, name=settings.get("name"), icon=settings.get("icon"), color=settings.get("color")
                     )
                     updated_outputs.append(output_num)
 
         # Broadcast full settings update
         await broadcast_status_update("device_settings_full", get_device_settings())
 
-        return _json_response(True, {
-            "updated_inputs": updated_inputs,
-            "updated_outputs": updated_outputs,
-            "settings": get_device_settings()
-        })
+        return _json_response(
+            True,
+            {"updated_inputs": updated_inputs, "updated_outputs": updated_outputs, "settings": get_device_settings()},
+        )
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON body", status=400)
     except Exception as e:
@@ -540,11 +576,14 @@ async def handle_toggle_favorite_preset(request: web.Request) -> web.Response:
         if preset_num < 1 or preset_num > 8:
             return _json_response(False, error="Preset number must be 1-8", status=400)
         new_state = toggle_favorite_preset(preset_num)
-        return _json_response(True, {
-            "preset": preset_num,
-            "favorite": new_state,
-            "favorite_presets": get_favorite_presets(),
-        })
+        return _json_response(
+            True,
+            {
+                "preset": preset_num,
+                "favorite": new_state,
+                "favorite_presets": get_favorite_presets(),
+            },
+        )
     except Exception as e:
         _LOG.error(f"Error toggling favorite preset: {e}")
         return _json_response(False, error=str(e), status=500)
@@ -560,11 +599,43 @@ async def handle_toggle_dashboard_preset(request: web.Request) -> web.Response:
         if preset_num < 1 or preset_num > 8:
             return _json_response(False, error="Preset number must be 1-8", status=400)
         new_state = toggle_dashboard_preset(preset_num)
-        return _json_response(True, {
-            "preset": preset_num,
-            "dashboard_visible": new_state,
-            "dashboard_presets": get_dashboard_presets(),
-        })
+        return _json_response(
+            True,
+            {
+                "preset": preset_num,
+                "dashboard_visible": new_state,
+                "dashboard_presets": get_dashboard_presets(),
+            },
+        )
     except Exception as e:
         _LOG.error(f"Error toggling dashboard preset: {e}")
+        return _json_response(False, error=str(e), status=500)
+
+
+async def handle_set_preset_name(request: web.Request) -> web.Response:
+    """POST /api/device-settings/preset/{preset}/name - Rename a preset."""
+    try:
+        preset_num = int(request.match_info["preset"])
+        if not (1 <= preset_num <= 8):
+            return _json_response(False, error="Preset must be 1-8", status=400)
+
+        data = await request.json()
+        name = data.get("name")
+        if not name:
+            return _json_response(False, error="'name' is required in body", status=400)
+
+        success = set_preset_name(preset_num, name)
+        if success:
+            await broadcast_status_update("device_settings", {"type": "preset", "number": preset_num, "name": name})
+            return _json_response(
+                True, {"preset": preset_num, "name": name, "message": f"Preset {preset_num} renamed to {name}"}
+            )
+        else:
+            return _json_response(False, error="Failed to save settings", status=500)
+    except json.JSONDecodeError:
+        return _json_response(False, error="Invalid JSON body", status=400)
+    except ValueError:
+        return _json_response(False, error="Invalid preset number", status=400)
+    except Exception as e:
+        _LOG.error(f"Error renaming preset {preset_num}: {e}")
         return _json_response(False, error=str(e), status=500)

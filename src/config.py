@@ -18,6 +18,7 @@ _LOG = logging.getLogger(__name__)
 # CEC Configuration for Scenes
 # =============================================================================
 
+
 @dataclass
 class CecConfig:
     """
@@ -269,11 +270,7 @@ class SceneManager:
         return self._scenes.get(scene_id)
 
     def create_scene(
-        self,
-        scene_id: str,
-        name: str,
-        outputs: dict[int, dict],
-        cec_config: dict[str, Any] | None = None
+        self, scene_id: str, name: str, outputs: dict[int, dict], cec_config: dict[str, Any] | None = None
     ) -> Scene:
         """
         Create or update a scene.
@@ -298,11 +295,7 @@ class SceneManager:
         self.save()
         return scene
 
-    def update_scene_cec_config(
-        self,
-        scene_id: str,
-        cec_config: dict[str, Any]
-    ) -> Scene | None:
+    def update_scene_cec_config(self, scene_id: str, cec_config: dict[str, Any]) -> Scene | None:
         """
         Update only the CEC config for an existing scene.
 
@@ -368,7 +361,7 @@ class Profile:
     dashboard_order: int = 0  # Position within the Dashboard card grid
     # Phase 8: Password protection
     password_protected: bool = False  # True = passcode required to execute
-    passcode_hash: str = ""           # Hashed passcode (empty if not protected)
+    passcode_hash: str = ""  # Hashed passcode (empty if not protected)
     # Phase 8: Execution history (last 7 days)
     execution_log: list[dict] = field(default_factory=list)  # [{timestamp, scene_id, scene_name, status, error}]
 
@@ -537,10 +530,7 @@ class ProfileManager:
         """Save profiles to file."""
         try:
             os.makedirs(self.config_dir, exist_ok=True)
-            data = {
-                "version": 2,
-                "profiles": [p.to_dict() for p in self._profiles.values()]
-            }
+            data = {"version": 2, "profiles": [p.to_dict() for p in self._profiles.values()]}
             with open(self.profiles_file, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2)
             _LOG.info("Saved %d profiles", len(self._profiles))
@@ -728,8 +718,9 @@ class ProfileManager:
         """Alias for get_profile() - backward compatibility."""
         return self.get_profile(scene_id)
 
-    def create_scene(self, scene_id: str, name: str, outputs: dict[int, dict],
-                     cec_config: dict[str, Any] | None = None) -> Profile:
+    def create_scene(
+        self, scene_id: str, name: str, outputs: dict[int, dict], cec_config: dict[str, Any] | None = None
+    ) -> Profile:
         """Alias for create_profile() - backward compatibility."""
         return self.create_profile(scene_id, name, outputs, cec_config=cec_config)
 

@@ -47,6 +47,7 @@ sys.path.insert(0, str(SRC_PATH))
 # Check if ucapi is available (installed via requirements-uc.txt)
 try:
     import ucapi  # noqa: F401
+
     UCAPI_AVAILABLE = True
 except ImportError:
     UCAPI_AVAILABLE = False
@@ -66,6 +67,7 @@ def run_legacy_mode():
     This maintains full backward compatibility.
     """
     import runpy
+
     os.chdir(PROJECT_ROOT)
     runpy.run_path(str(SRC_PATH / "driver.py"), run_name="__main__")
 

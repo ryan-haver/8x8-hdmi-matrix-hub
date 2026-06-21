@@ -13,6 +13,7 @@ from pathlib import Path
 from aiohttp import web
 
 from persistence import ensure_data_dir, get_data_dir, migrate_legacy_file
+
 from .utils import _json_response
 
 _LOG = logging.getLogger("rest_api.ui")
@@ -24,7 +25,7 @@ _ui_prefs_path: Path | None = None
 # Default tab layout settings
 DEFAULT_PREFS = {
     "pinnedTabs": ["matrix", "dashboard", "inputs", "outputs", "profiles"],
-    "tabOrder": ["matrix", "dashboard", "inputs", "outputs", "profiles"]
+    "tabOrder": ["matrix", "dashboard", "inputs", "outputs", "profiles"],
 }
 
 
@@ -62,7 +63,7 @@ def _load_preferences() -> dict:
     path = _resolve_ui_prefs_path()
     try:
         if path.exists():
-            with open(path, encoding='utf-8') as f:
+            with open(path, encoding="utf-8") as f:
                 return json.load(f)
     except Exception as e:
         _LOG.warning(f"Failed to load UI preferences: {e}")
@@ -75,7 +76,7 @@ def _save_preferences(data: dict) -> bool:
     path = _resolve_ui_prefs_path()
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
-        with open(path, 'w', encoding='utf-8') as f:
+        with open(path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)
         return True
     except Exception as e:
@@ -107,10 +108,7 @@ async def handle_set_ui_preferences(request: web.Request) -> web.Response:
         pinned_tabs = [str(t) for t in pinned_tabs]
         tab_order = [str(t) for t in tab_order]
 
-        prefs_data = {
-            "pinnedTabs": pinned_tabs,
-            "tabOrder": tab_order
-        }
+        prefs_data = {"pinnedTabs": pinned_tabs, "tabOrder": tab_order}
 
         if _save_preferences(prefs_data):
             _LOG.info("UI preferences saved successfully")

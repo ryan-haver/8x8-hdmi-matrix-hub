@@ -29,6 +29,7 @@ if str(src_path) not in sys.path:
 # Test Connection Failures
 # =============================================================================
 
+
 class TestConnectionFailures:
     """Test various connection failure scenarios."""
 
@@ -74,10 +75,12 @@ class TestConnectionFailures:
 
         matrix = OreiMatrix("192.168.0.100", 443)
         matrix._session = MagicMock()
-        matrix._session.post = MagicMock(return_value=MagicMock(
-            status=200,
-            text=AsyncMock(return_value='{"comhead": "login", "result": 0}'),
-        ))
+        matrix._session.post = MagicMock(
+            return_value=MagicMock(
+                status=200,
+                text=AsyncMock(return_value='{"comhead": "login", "result": 0}'),
+            )
+        )
 
         # Should not raise even with bad response
         result = await matrix.connect()
@@ -89,6 +92,7 @@ class TestConnectionFailures:
 # =============================================================================
 # Test Malformed Response Handling
 # =============================================================================
+
 
 class TestMalformedResponses:
     """Test handling of malformed API responses."""
@@ -124,6 +128,7 @@ class TestMalformedResponses:
 # =============================================================================
 # Test Retry Logic
 # =============================================================================
+
 
 class TestRetryLogic:
     """Test retry behavior on failures."""
@@ -176,6 +181,7 @@ class TestRetryLogic:
 # Test Telnet Client Errors
 # =============================================================================
 
+
 class TestTelnetClientErrors:
     """Test telnet client error handling."""
 
@@ -211,6 +217,7 @@ class TestTelnetClientErrors:
 # =============================================================================
 # Test Response Parsing for Output Status
 # =============================================================================
+
 
 class TestOutputStatusParsing:
     """Test output status response parsing edge cases."""
@@ -266,6 +273,7 @@ class TestOutputStatusParsing:
 # =============================================================================
 # Test Profile/Scene Migration Error Handling
 # =============================================================================
+
 
 class TestProfileMigrationErrors:
     """Test profile/scene migration edge cases."""

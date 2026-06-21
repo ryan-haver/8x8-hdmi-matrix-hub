@@ -76,9 +76,9 @@ async def handle_create_macro(request: web.Request) -> web.Response:
         # Validate steps structure
         for i, step in enumerate(steps):
             if "command" not in step:
-                return _json_response(False, error=f"Step {i+1} missing 'command'", status=400)
+                return _json_response(False, error=f"Step {i + 1} missing 'command'", status=400)
             if "targets" not in step or not step["targets"]:
-                return _json_response(False, error=f"Step {i+1} missing 'targets'", status=400)
+                return _json_response(False, error=f"Step {i + 1} missing 'targets'", status=400)
 
         macro = macro_manager.create_macro(
             name=name,
@@ -120,9 +120,9 @@ async def handle_update_macro(request: web.Request) -> web.Response:
         if steps is not None:
             for i, step in enumerate(steps):
                 if "command" not in step:
-                    return _json_response(False, error=f"Step {i+1} missing 'command'", status=400)
+                    return _json_response(False, error=f"Step {i + 1} missing 'command'", status=400)
                 if "targets" not in step or not step["targets"]:
-                    return _json_response(False, error=f"Step {i+1} missing 'targets'", status=400)
+                    return _json_response(False, error=f"Step {i + 1} missing 'targets'", status=400)
 
         macro = macro_manager.update_macro(
             macro_id=macro_id,
@@ -227,9 +227,12 @@ async def handle_list_favorite_macros(request: web.Request) -> web.Response:
         return _json_response(False, error="Macro manager not initialized", status=503)
     try:
         macros = macro_manager.list_favorites()
-        return _json_response(True, {
-            "macros": [m.to_dict() for m in macros],
-        })
+        return _json_response(
+            True,
+            {
+                "macros": [m.to_dict() for m in macros],
+            },
+        )
     except Exception as e:
         _LOG.error(f"Error listing favorite macros: {e}")
         return _json_response(False, error=str(e), status=500)
@@ -247,10 +250,13 @@ async def handle_toggle_macro_favorite(request: web.Request) -> web.Response:
         macro = macro_manager.toggle_favorite(macro_id)
         if macro is None:
             return _json_response(False, error=f"Macro '{macro_id}' not found", status=404)
-        return _json_response(True, {
-            "id": macro.id,
-            "favorite": macro.favorite,
-        })
+        return _json_response(
+            True,
+            {
+                "id": macro.id,
+                "favorite": macro.favorite,
+            },
+        )
     except Exception as e:
         _LOG.error(f"Error toggling macro favorite: {e}")
         return _json_response(False, error=str(e), status=500)
@@ -268,10 +274,13 @@ async def handle_toggle_macro_dashboard(request: web.Request) -> web.Response:
         macro = macro_manager.toggle_dashboard_visible(macro_id)
         if macro is None:
             return _json_response(False, error=f"Macro '{macro_id}' not found", status=404)
-        return _json_response(True, {
-            "id": macro.id,
-            "dashboard_visible": macro.dashboard_visible,
-        })
+        return _json_response(
+            True,
+            {
+                "id": macro.id,
+                "dashboard_visible": macro.dashboard_visible,
+            },
+        )
     except Exception as e:
         _LOG.error(f"Error toggling macro dashboard flag: {e}")
         return _json_response(False, error=str(e), status=500)

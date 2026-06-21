@@ -197,14 +197,18 @@ class CECTray {
                 <!-- Playback Section -->
                 <div class="cec-widget-section">
                     <div class="cec-widget-section-title">Playback</div>
-                    <div class="cec-widget-btn-row playback-row">
-                        <button class="cec-widget-cmd-btn" data-action="playback" data-cmd="previous" title="Previous">⏮</button>
-                        <button class="cec-widget-cmd-btn" data-action="playback" data-cmd="rewind" title="Rewind">⏪</button>
-                        <button class="cec-widget-cmd-btn play-btn" data-action="playback" data-cmd="play" title="Play">▶</button>
-                        <button class="cec-widget-cmd-btn" data-action="playback" data-cmd="pause" title="Pause">⏸</button>
-                        <button class="cec-widget-cmd-btn" data-action="playback" data-cmd="stop" title="Stop">⏹</button>
-                        <button class="cec-widget-cmd-btn" data-action="playback" data-cmd="fast_forward" title="Fast Forward">⏩</button>
-                        <button class="cec-widget-cmd-btn" data-action="playback" data-cmd="next" title="Next">⏭</button>
+                    <div class="cec-widget-playback-container">
+                        <div class="cec-widget-btn-row playback-row secondary-controls">
+                            <button class="cec-widget-cmd-btn" data-action="playback" data-cmd="previous" title="Previous">⏮</button>
+                            <button class="cec-widget-cmd-btn" data-action="playback" data-cmd="rewind" title="Rewind">⏪</button>
+                            <button class="cec-widget-cmd-btn" data-action="playback" data-cmd="fast_forward" title="Fast Forward">⏩</button>
+                            <button class="cec-widget-cmd-btn" data-action="playback" data-cmd="next" title="Next">⏭</button>
+                        </div>
+                        <div class="cec-widget-btn-row playback-row primary-controls">
+                            <button class="cec-widget-cmd-btn play-btn" data-action="playback" data-cmd="play" title="Play">▶</button>
+                            <button class="cec-widget-cmd-btn" data-action="playback" data-cmd="pause" title="Pause">⏸</button>
+                            <button class="cec-widget-cmd-btn" data-action="playback" data-cmd="stop" title="Stop">⏹</button>
+                        </div>
                     </div>
                 </div>
                 
@@ -631,14 +635,18 @@ class CECTray {
             
             <div class="cec-tray-section">
                 <div class="cec-tray-section-title">Playback</div>
-                <div class="cec-tray-btn-row playback-row">
-                    <button class="cec-tray-cmd-btn" data-action="playback" data-cmd="previous" title="Previous">⏮</button>
-                    <button class="cec-tray-cmd-btn" data-action="playback" data-cmd="rewind" title="Rewind">⏪</button>
-                    <button class="cec-tray-cmd-btn play-btn" data-action="playback" data-cmd="play" title="Play">▶</button>
-                    <button class="cec-tray-cmd-btn" data-action="playback" data-cmd="pause" title="Pause">⏸</button>
-                    <button class="cec-tray-cmd-btn" data-action="playback" data-cmd="stop" title="Stop">⏹</button>
-                    <button class="cec-tray-cmd-btn" data-action="playback" data-cmd="fast_forward" title="Fast Forward">⏩</button>
-                    <button class="cec-tray-cmd-btn" data-action="playback" data-cmd="next" title="Next">⏭</button>
+                <div class="cec-tray-playback-container">
+                    <div class="cec-tray-btn-row playback-row secondary-controls">
+                        <button class="cec-tray-cmd-btn" data-action="playback" data-cmd="previous" title="Previous">⏮</button>
+                        <button class="cec-tray-cmd-btn" data-action="playback" data-cmd="rewind" title="Rewind">⏪</button>
+                        <button class="cec-tray-cmd-btn" data-action="playback" data-cmd="fast_forward" title="Fast Forward">⏩</button>
+                        <button class="cec-tray-cmd-btn" data-action="playback" data-cmd="next" title="Next">⏭</button>
+                    </div>
+                    <div class="cec-tray-btn-row playback-row primary-controls">
+                        <button class="cec-tray-cmd-btn play-btn" data-action="playback" data-cmd="play" title="Play">▶</button>
+                        <button class="cec-tray-cmd-btn" data-action="playback" data-cmd="pause" title="Pause">⏸</button>
+                        <button class="cec-tray-cmd-btn" data-action="playback" data-cmd="stop" title="Stop">⏹</button>
+                    </div>
                 </div>
             </div>
             
@@ -666,21 +674,6 @@ class CECTray {
                         </svg>
                         <span>+</span>
                     </button>
-                </div>
-            </div>
-            
-            <div class="cec-tray-footer">
-                <div class="cec-tray-section-header">
-                    <span class="cec-tray-section-title">Macros</span>
-                    <button class="cec-tray-edit-macros-btn" title="Edit Macros">
-                        <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                        </svg>
-                    </button>
-                </div>
-                <div class="cec-tray-macros" id="cec-tray-macros">
-                    ${this.renderMacroButtons()}
                 </div>
             </div>
         `;
@@ -1466,7 +1459,6 @@ class CECTray {
         this.panel.innerHTML = this.renderPanel();
         this.updateDashboardButton();
         this.updateAutoTargets();
-        this.loadMacros();  // Load macros when tray expands
         this.initTrackpad();  // Initialize trackpad gestures
     }
     

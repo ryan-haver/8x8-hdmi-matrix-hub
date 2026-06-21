@@ -31,6 +31,7 @@ try:
 except ImportError as e:
     # Log and continue with optional typing
     import logging
+
     logging.getLogger("rest_api").warning(f"Could not import manager classes: {e}")
     SceneManager = None  # type: ignore
     ProfileManager = None  # type: ignore
@@ -94,8 +95,7 @@ def _cleanup_stale_rate_limits():
 
     # Remove IPs with no recent activity
     stale_ips = [
-        ip for ip, timestamps in _rate_limit_tracker.items()
-        if not timestamps or max(timestamps) <= window_start
+        ip for ip, timestamps in _rate_limit_tracker.items() if not timestamps or max(timestamps) <= window_start
     ]
 
     for ip in stale_ips:
@@ -104,11 +104,7 @@ def _cleanup_stale_rate_limits():
     # If still too many, remove oldest entries
     if len(_rate_limit_tracker) > RATE_LIMIT_MAX_TRACKED_IPS:
         # Sort by most recent activity and keep only the most active
-        sorted_ips = sorted(
-            _rate_limit_tracker.items(),
-            key=lambda x: max(x[1]) if x[1] else 0,
-            reverse=True
-        )
+        sorted_ips = sorted(_rate_limit_tracker.items(), key=lambda x: max(x[1]) if x[1] else 0, reverse=True)
         _rate_limit_tracker.clear()
         for ip, timestamps in sorted_ips[:RATE_LIMIT_MAX_TRACKED_IPS]:
             _rate_limit_tracker[ip] = timestamps
@@ -133,9 +129,7 @@ def _check_rate_limit(client_ip: str) -> bool:
     window_start = now - RATE_LIMIT_WINDOW
 
     # Clean up old timestamps
-    _rate_limit_tracker[client_ip] = [
-        ts for ts in _rate_limit_tracker[client_ip] if ts > window_start
-    ]
+    _rate_limit_tracker[client_ip] = [ts for ts in _rate_limit_tracker[client_ip] if ts > window_start]
 
     # Check if under limit
     if len(_rate_limit_tracker[client_ip]) >= RATE_LIMIT_REQUESTS:
@@ -179,6 +173,7 @@ def _get_client_ip(request: web.Request) -> str:
 # Response Helper
 # =============================================================================
 
+
 def _json_response(success: bool, data: Any = None, error: str | None = None, status: int = 200) -> web.Response:
     """Create a standardized JSON response."""
     return web.json_response(
@@ -194,6 +189,7 @@ def _json_response(success: bool, data: Any = None, error: str | None = None, st
 # =============================================================================
 # Decorator: Reduce boilerplate in REST handlers
 # =============================================================================
+
 
 def require_connected(func):
     """
@@ -221,13 +217,9 @@ def require_connected(func):
     async def wrapper(request: web.Request) -> web.Response:
         matrix_device = get_matrix_device()
         if matrix_device is None:
-            return _json_response(
-                success=False, error="Matrix device not configured", status=503
-            )
+            return _json_response(success=False, error="Matrix device not configured", status=503)
         if not matrix_device.connected:
-            return _json_response(
-                success=False, error="Matrix not connected", status=503
-            )
+            return _json_response(success=False, error="Matrix not connected", status=503)
         return await func(request)
 
     return wrapper
@@ -237,13 +229,14 @@ def require_connected(func):
 # Configuration Functions
 # =============================================================================
 
+
 def set_matrix_device(
     device,
     input_names: dict[int, str] | None = None,
     output_names: dict[int, str] | None = None,
     config_file: Path | None = None,
     config_dir: str | None = None,
-    data_dir: str | Path | None = None
+    data_dir: str | Path | None = None,
 ):
     """Set the matrix device reference for API handlers.
 
@@ -276,6 +269,7 @@ def set_matrix_device(
     if data_dir is None:
         try:
             from persistence import get_data_dir as _resolve_data_dir
+
             data_dir = _resolve_data_dir()
         except ImportError:
             data_dir = None
@@ -338,6 +332,7 @@ def set_macro_cec_sender(sender):
 # Accessor Functions (for use by other modules)
 # =============================================================================
 
+
 def get_matrix_device() -> OreiMatrix | None:
     """Get the matrix device reference."""
     return _matrix_device
@@ -392,6 +387,7 @@ def get_web_dir() -> Path:
 # Middleware
 # =============================================================================
 
+
 @web.middleware
 async def rate_limit_middleware(request: web.Request, handler):
     """Rate limiting middleware for API requests.
@@ -406,30 +402,28 @@ async def rate_limit_middleware(request: web.Request, handler):
 
     # Skip rate limiting for non-API paths
     # Static files and UI pages should never be rate limited
-    if (path == "/ws" or
-        path == "/" or
-        path.startswith("/ui") or
-        path.startswith("/kiosk") or
-        path.startswith("/css/") or
-        path.startswith("/js/") or
-        path.startswith("/assets/") or
-        path.startswith("/api/health") or
-        path.endswith(".ico") or
-        path.endswith(".svg") or
-        path.endswith(".png") or
-        path.endswith(".jpg") or
-        path.endswith(".webp")):
+    if (
+        path == "/ws"
+        or path == "/"
+        or path.startswith("/ui")
+        or path.startswith("/kiosk")
+        or path.startswith("/css/")
+        or path.startswith("/js/")
+        or path.startswith("/assets/")
+        or path.startswith("/api/health")
+        or path.endswith(".ico")
+        or path.endswith(".svg")
+        or path.endswith(".png")
+        or path.endswith(".jpg")
+        or path.endswith(".webp")
+    ):
         return await handler(request)
 
     client_ip = _get_client_ip(request)
 
     if not _check_rate_limit(client_ip):
         _LOG.warning(f"Rate limit exceeded for {client_ip}")
-        return _json_response(
-            False,
-            error="Rate limit exceeded. Please slow down.",
-            status=429
-        )
+        return _json_response(False, error="Rate limit exceeded. Please slow down.", status=429)
 
     return await handler(request)
 

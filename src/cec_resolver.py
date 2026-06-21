@@ -33,12 +33,12 @@ _LOG = logging.getLogger(__name__)
 
 DEFAULT_CEC_CONFIG = {
     "auto_resolved": True,
-    "nav_targets": [],          # D-pad, menu, back → input devices
-    "playback_targets": [],     # Play, pause, stop → input devices
-    "volume_targets": [],       # Volume, mute → output devices (audio)
-    "power_on_targets": [],     # Power on → inputs + outputs
-    "power_off_targets": [],    # Power off → usually just outputs
-    "device_overrides": {},     # Per-device overrides
+    "nav_targets": [],  # D-pad, menu, back → input devices
+    "playback_targets": [],  # Play, pause, stop → input devices
+    "volume_targets": [],  # Volume, mute → output devices (audio)
+    "power_on_targets": [],  # Power on → inputs + outputs
+    "power_off_targets": [],  # Power off → usually just outputs
+    "device_overrides": {},  # Per-device overrides
 }
 
 
@@ -50,6 +50,7 @@ def create_empty_cec_config() -> dict:
 # =============================================================================
 # Auto-Resolution Logic
 # =============================================================================
+
 
 async def resolve_profile_cec_config(
     profile: dict,
@@ -95,9 +96,7 @@ async def resolve_profile_cec_config(
     volume_targets = resolve_volume_targets(outputs_in_profile, output_status)
 
     # Resolve power targets
-    power_on_targets, power_off_targets = resolve_power_targets(
-        inputs_in_profile, outputs_in_profile
-    )
+    power_on_targets, power_off_targets = resolve_power_targets(inputs_in_profile, outputs_in_profile)
 
     config = {
         "auto_resolved": True,
@@ -109,8 +108,7 @@ async def resolve_profile_cec_config(
         "device_overrides": {},
     }
 
-    _LOG.info(f"Resolved CEC config: nav→{config['nav_targets']}, "
-              f"vol→{config['volume_targets']}")
+    _LOG.info(f"Resolved CEC config: nav→{config['nav_targets']}, vol→{config['volume_targets']}")
 
     return config
 
@@ -139,10 +137,7 @@ def resolve_volume_targets(
     allconnect = output_status.get("allconnect", [])
 
     # Only consider connected outputs
-    connected_outputs = [
-        o for o in outputs
-        if o <= len(allconnect) and allconnect[o - 1] == 1
-    ]
+    connected_outputs = [o for o in outputs if o <= len(allconnect) and allconnect[o - 1] == 1]
 
     if not connected_outputs:
         # Fall back to all outputs if none connected (might be detection issue)
@@ -150,18 +145,14 @@ def resolve_volume_targets(
 
     # Priority 1: Audio Only outputs
     audio_only_outputs = [
-        o for o in connected_outputs
-        if o <= len(allscaler) and is_audio_only_output(allscaler[o - 1])
+        o for o in connected_outputs if o <= len(allscaler) and is_audio_only_output(allscaler[o - 1])
     ]
     if audio_only_outputs:
         _LOG.debug(f"Volume targets: Audio Only outputs {audio_only_outputs}")
         return [f"output_{o}" for o in sorted(audio_only_outputs)]
 
     # Priority 2: ARC-enabled outputs
-    arc_outputs = [
-        o for o in connected_outputs
-        if o <= len(allarc) and allarc[o - 1] == 1
-    ]
+    arc_outputs = [o for o in connected_outputs if o <= len(allarc) and allarc[o - 1] == 1]
     if arc_outputs:
         _LOG.debug(f"Volume targets: ARC outputs {arc_outputs}")
         return [f"output_{o}" for o in sorted(arc_outputs)]
@@ -204,6 +195,7 @@ def resolve_power_targets(
 # =============================================================================
 # CEC Config Utilities
 # =============================================================================
+
 
 def get_targets_for_category(cec_config: dict, category: str) -> list[str]:
     """
@@ -279,6 +271,7 @@ def get_supported_commands_for_target(target: str) -> list[str]:
 # =============================================================================
 # Capability Detection
 # =============================================================================
+
 
 def get_output_capabilities(
     output_num: int,
@@ -400,9 +393,7 @@ def resolve_scene_cec_config(
     playback_targets = [f"input_{primary_input}"] if primary_input else []
 
     # Build power targets
-    power_on_targets, power_off_targets = resolve_power_targets(
-        set(active_inputs), set(active_outputs)
-    )
+    power_on_targets, power_off_targets = resolve_power_targets(set(active_inputs), set(active_outputs))
 
     config = {
         "auto_resolved": True,

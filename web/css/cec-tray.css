@@ -91,10 +91,12 @@
     right: 0;
     width: 280px;
     max-height: calc(100vh - 100px);
-    background: var(--card-bg, #1f2937);
+    background: rgba(17, 23, 32, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-radius: 16px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3),
-                0 0 0 1px rgba(255, 255, 255, 0.05);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35),
+                0 0 0 1px rgba(255, 255, 255, 0.08);
     opacity: 0;
     visibility: hidden;
     transform: translateY(20px) scale(0.95);
@@ -758,22 +760,45 @@
 /* ==============================
    Playback Row
    ============================== */
+.cec-tray-playback-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
 .playback-row {
-    flex-wrap: wrap;
-    gap: 6px;
+    flex-wrap: nowrap;
+    width: 100%;
 }
 
-.playback-row .cec-tray-cmd-btn {
-    min-width: 36px;
-    flex: 0 0 auto;
-    padding: 8px;
-    font-size: 14px;
+.playback-row.primary-controls {
+    gap: 8px;
 }
 
-.playback-row .play-btn {
+.playback-row.primary-controls .cec-tray-cmd-btn {
+    font-size: 16px;
+    min-height: 40px;
+}
+
+.playback-row.primary-controls .play-btn {
     background: var(--status-active-bg);
     border-color: var(--status-active);
     color: var(--status-active);
+}
+
+.playback-row.primary-controls .play-btn:hover {
+    background: rgba(59, 130, 246, 0.25);
+    border-color: var(--status-active);
+}
+
+.playback-row.secondary-controls {
+    gap: 8px;
+}
+
+.playback-row.secondary-controls .cec-tray-cmd-btn {
+    font-size: 14px;
+    min-height: 36px;
 }
 
 /* ==============================
@@ -1099,38 +1124,4 @@
    Dark/Light theme compatibility
    ============================== */
 
-@media (prefers-color-scheme: light) {
-    .cec-tray-panel {
-        background: #ffffff;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15),
-                    0 0 0 1px rgba(0, 0, 0, 0.05);
-    }
-    
-    .cec-tray-header {
-        background: rgba(0, 0, 0, 0.03);
-        border-bottom-color: rgba(0, 0, 0, 0.1);
-    }
-    
-    .cec-tray-cmd-btn {
-        background: rgba(0, 0, 0, 0.03);
-        border-color: rgba(0, 0, 0, 0.1);
-        color: #1f2937;
-    }
-    
-    .cec-tray-cmd-btn:hover {
-        background: rgba(0, 0, 0, 0.06);
-        border-color: rgba(0, 0, 0, 0.15);
-    }
-    
-    .cec-target-btn {
-        background: rgba(0, 0, 0, 0.03);
-        border-color: rgba(0, 0, 0, 0.1);
-        color: #1f2937;
-    }
-    
-    .cec-target-selector {
-        background: #ffffff;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15),
-                    0 0 0 1px rgba(0, 0, 0, 0.05);
-    }
-}
+

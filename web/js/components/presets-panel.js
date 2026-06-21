@@ -141,10 +141,10 @@ class PresetsPanel {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const preset = parseInt(e.currentTarget.dataset.preset);
-                if (window.presetSettingsModal) {
-                    window.presetSettingsModal.open(preset);
+                if (window.presetsDrawer) {
+                    window.presetsDrawer.open(preset);
                 } else {
-                    toast.error('Preset settings modal not loaded');
+                    toast.error('Presets drawer not loaded');
                 }
             });
         });

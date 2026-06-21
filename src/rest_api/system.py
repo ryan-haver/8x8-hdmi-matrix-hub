@@ -12,6 +12,7 @@ from pathlib import Path
 from aiohttp import web
 
 from persistence import describe_storage_layout
+
 from .utils import _json_response
 
 _LOG = logging.getLogger("rest_api.system")
@@ -38,9 +39,7 @@ async def handle_get_storage(request: web.Request) -> web.Response:
         # operator can see what state has been written.
         if data_dir.exists() and data_dir.is_dir():
             try:
-                layout["data_dir_files"] = sorted(
-                    entry.name for entry in data_dir.iterdir() if entry.is_file()
-                )
+                layout["data_dir_files"] = sorted(entry.name for entry in data_dir.iterdir() if entry.is_file())
             except OSError as exc:
                 layout["data_dir_files"] = []
                 layout["data_dir_error"] = str(exc)

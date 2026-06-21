@@ -9,6 +9,8 @@ from pathlib import Path
 
 from aiohttp import web
 
+from persistence import get_data_dir
+
 from .audio import (
     handle_device_info,
     handle_ext_audio_modes,
@@ -57,7 +59,6 @@ from .core import (
     handle_set_output_name,
     handle_status,
 )
-from persistence import get_data_dir
 from .dashboard_layout import (
     handle_add_card,
     handle_get_layout,
@@ -75,6 +76,7 @@ from .device_settings import (
     handle_set_favorite_presets,
     handle_set_input_settings,
     handle_set_output_settings,
+    handle_set_preset_name,
     handle_toggle_dashboard_preset,
     handle_toggle_favorite_preset,
     init_device_settings,
@@ -125,33 +127,52 @@ from .profiles import (
 )
 from .scenes import (
     handle_auto_resolve_cec as _handle_auto_resolve_cec_p7,
+)
+from .scenes import (
     handle_create_scene as _handle_create_scene_p7,
+)
+from .scenes import (
     handle_delete_scene as _handle_delete_scene_p7,
+)
+from .scenes import (
     handle_get_scene as _handle_get_scene_p7,
+)
+from .scenes import (
     handle_list_scenes as _handle_list_scenes_p7,
+)
+from .scenes import (
     handle_recall_scene as _handle_recall_scene_p7,
+)
+from .scenes import (
     handle_save_current_as_scene as _handle_save_current_as_scene_p7,
+)
+from .scenes import (
     handle_scene_cec_config as _handle_scene_cec_config_p7,
 )
 from .scenes_v2 import (
     handle_add_step,
     handle_clear_override,
-    handle_create_scene as handle_create_scene_v2,
-    handle_delete_scene as handle_delete_scene_v2,
     handle_execute_scene,
-    handle_get_scene as handle_get_scene_v2,
-    handle_list_scenes as handle_list_scenes_v2,
     handle_remove_step,
     handle_scene_history,
     handle_set_override,
     handle_update_scene,
     handle_validate_scene,
-    set_phase8_scene_manager as _set_phase8_scene_manager,
 )
-from .system_actions_api import (
-    handle_execute_system_action,
-    handle_list_system_actions,
-    handle_update_system_action,
+from .scenes_v2 import (
+    handle_create_scene as handle_create_scene_v2,
+)
+from .scenes_v2 import (
+    handle_delete_scene as handle_delete_scene_v2,
+)
+from .scenes_v2 import (
+    handle_get_scene as handle_get_scene_v2,
+)
+from .scenes_v2 import (
+    handle_list_scenes as handle_list_scenes_v2,
+)
+from .scenes_v2 import (
+    set_phase8_scene_manager as _set_phase8_scene_manager,
 )
 from .settings import (
     handle_get_settings,
@@ -286,18 +307,19 @@ def create_rest_app(data_dir: Path | None = None) -> web.Application:
     app.router.add_get("/api/system/storage", handle_get_storage)
     app.router.add_get("/api/system/info", handle_get_info)
 
-    # System Shortcuts (Phase 7) — built-in quick-routing shortcuts
-    app.router.add_get("/api/system-shortcuts", handle_list_shortcuts)
-    app.router.add_get("/api/system-shortcuts/favorites", handle_list_favorite_shortcuts)
-    app.router.add_get("/api/system-shortcuts/dashboard", handle_list_dashboard_shortcuts)
-    app.router.add_post("/api/system-shortcuts", handle_create_shortcut)
-    app.router.add_put("/api/system-shortcuts/reorder", handle_reorder_shortcuts)
-    app.router.add_get("/api/system-shortcuts/{id}", handle_get_shortcut)
-    app.router.add_put("/api/system-shortcuts/{id}", handle_update_shortcut)
-    app.router.add_delete("/api/system-shortcuts/{id}", handle_delete_shortcut)
-    app.router.add_post("/api/system-shortcuts/{id}/favorite", handle_toggle_favorite)
-    app.router.add_post("/api/system-shortcuts/{id}/dashboard", handle_toggle_dashboard)
-    app.router.add_post("/api/system-shortcuts/{id}/execute", handle_execute_shortcut)
+    # Unified Shortcuts (Phase 8 Consolidated & Phase 7 Backward Compat)
+    for prefix in ("/api/shortcuts", "/api/system-shortcuts"):
+        app.router.add_get(prefix, handle_list_shortcuts)
+        app.router.add_post(prefix, handle_create_shortcut)
+        app.router.add_get(f"{prefix}/favorites", handle_list_favorite_shortcuts)
+        app.router.add_get(f"{prefix}/dashboard", handle_list_dashboard_shortcuts)
+        app.router.add_put(f"{prefix}/reorder", handle_reorder_shortcuts)
+        app.router.add_get(f"{prefix}/{{key}}", handle_get_shortcut)
+        app.router.add_put(f"{prefix}/{{key}}", handle_update_shortcut)
+        app.router.add_delete(f"{prefix}/{{key}}", handle_delete_shortcut)
+        app.router.add_post(f"{prefix}/{{key}}/favorite", handle_toggle_favorite)
+        app.router.add_post(f"{prefix}/{{key}}/dashboard", handle_toggle_dashboard)
+        app.router.add_post(f"{prefix}/{{key}}/execute", handle_execute_shortcut)
 
     # Dashboard Layout (Phase 7) — server-backed card ordering
     app.router.add_get("/api/dashboard/layout", handle_get_layout)
@@ -393,6 +415,7 @@ def create_rest_app(data_dir: Path | None = None) -> web.Application:
     app.router.add_post("/api/device-settings/input/{input}", handle_set_input_settings)
     app.router.add_get("/api/device-settings/output/{output}", handle_get_output_settings)
     app.router.add_post("/api/device-settings/output/{output}", handle_set_output_settings)
+    app.router.add_post("/api/device-settings/preset/{preset}/name", handle_set_preset_name)
 
     # Hardware-preset surface-visibility (Phase 7: favorite + dashboard)
     app.router.add_get("/api/device-settings/favorite-presets", handle_get_favorite_presets)
@@ -416,11 +439,6 @@ def create_rest_app(data_dir: Path | None = None) -> web.Application:
     app.router.add_post("/api/v2/scenes/{scene_id}/steps", handle_add_step)
     app.router.add_delete("/api/v2/scenes/{scene_id}/steps/{index}", handle_remove_step)
 
-    # Phase 8: System Actions
-    app.router.add_get("/api/system-actions", handle_list_system_actions)
-    app.router.add_put("/api/system-actions/{key}", handle_update_system_action)
-    app.router.add_post("/api/system-actions/{key}/execute", handle_execute_system_action)
-
     # Initialize persistent storage modules. All three share the same
     # ``data_dir`` which is resolved from ``MATRIX_DATA_DIR``,
     # ``UC_CONFIG_HOME``, or the local ``<project_root>/data`` default.
@@ -431,9 +449,10 @@ def create_rest_app(data_dir: Path | None = None) -> web.Application:
 
     # Phase 8: Initialize Scene Manager and inject into scenes_v2
     from scene_manager import SceneManager as Phase8SceneManager
+
     phase8_sm = Phase8SceneManager(data_dir)
     _set_phase8_scene_manager(phase8_sm)
-    _LOG.info(f"Phase 8 SceneManager initialized with %d scenes", len(phase8_sm.list_scenes()))
+    _LOG.info("Phase 8 SceneManager initialized with %d scenes", len(phase8_sm.list_scenes()))
 
     _LOG.info(f"Persistent storage initialized at {data_dir}")
 

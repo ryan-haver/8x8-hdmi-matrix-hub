@@ -124,9 +124,7 @@ class MatrixApiAdapter:
     # CEC Commands (OreiMatrix-compatible interface)
     # =========================================================================
 
-    async def send_cec(
-        self, command: str, port: int, is_output: bool = False
-    ) -> bool:
+    async def send_cec(self, command: str, port: int, is_output: bool = False) -> bool:
         """
         Send a CEC command to a port.
 

@@ -26,9 +26,9 @@ from dashboard_layout import (
     CARD_PRESET,
     CARD_PROFILE,
     CARD_SYSTEM_SHORTCUT,
+    VALID_CARD_TYPES,
     DashboardCard,
     DashboardLayout,
-    VALID_CARD_TYPES,
 )
 
 from .utils import _json_response, get_dashboard_layout_manager

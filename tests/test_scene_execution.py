@@ -67,6 +67,7 @@ class TestApplyOverridesToProfile:
 
 class _FakeOutputCfg:
     """Plain object with attributes — avoids MagicMock await issues."""
+
     def __init__(self, **kwargs):
         for k, v in kwargs.items():
             setattr(self, k, v)
@@ -87,8 +88,9 @@ class TestSceneExecutorProfile:
         profile.id = "p1"
         profile.name = "Test Profile"
         profile.outputs = {
-            1: _FakeOutputCfg(input=1, enabled=True, hdcp_mode=3, hdr_mode=3,
-                              scaler_mode=0, arc=False, audio_mute=False),
+            1: _FakeOutputCfg(
+                input=1, enabled=True, hdcp_mode=3, hdr_mode=3, scaler_mode=0, arc=False, audio_mute=False
+            ),
         }
         profile.macros = []
         profile.power_on_macro = None
@@ -160,7 +162,11 @@ class TestSceneExecutorPassword:
         pm = MagicMock()
         profile = MagicMock()
         profile.id = "p1"
-        profile.outputs = {1: _FakeOutputCfg(input=1, enabled=True, hdcp_mode=3, hdr_mode=3, scaler_mode=0, arc=False, audio_mute=False)}
+        profile.outputs = {
+            1: _FakeOutputCfg(
+                input=1, enabled=True, hdcp_mode=3, hdr_mode=3, scaler_mode=0, arc=False, audio_mute=False
+            )
+        }
         profile.macros = []
         profile.execution_log = []
         pm.get_profile.return_value = profile

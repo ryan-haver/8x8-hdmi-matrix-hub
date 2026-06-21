@@ -26,6 +26,14 @@ class ShortcutsDrawer {
 
         // Create drawer
         this.createDrawer();
+
+        // Register with overlay manager if it exists
+        if (window.overlayManager) {
+            window.overlayManager.register('shortcuts-drawer', {
+                close: () => this.close(),
+                isOpen: () => this.isOpen
+            });
+        }
     }
 
     createDrawer() {
@@ -46,6 +54,9 @@ class ShortcutsDrawer {
         const drawer = document.createElement('aside');
         drawer.id = 'shortcuts-drawer';
         drawer.className = 'routing-drawer';
+        drawer.setAttribute('aria-hidden', 'true');
+        drawer.setAttribute('role', 'dialog');
+        drawer.setAttribute('aria-label', 'System Shortcuts');
         drawer.innerHTML = `
             <div class="drawer-header">
                 <h3>
@@ -117,10 +128,17 @@ class ShortcutsDrawer {
         }
         this.isOpen = true;
         this.container.classList.add('open');
+        this.container.setAttribute('aria-hidden', 'false');
         this.backdrop.classList.add('open');
         document.body.style.overflow = 'hidden';
         this.updateDashboardButton();
         this.loadShortcuts();
+
+        // Focus trap for accessibility
+        if (window.FocusTrap) {
+            this.focusTrap = new window.FocusTrap(this.container, () => this.close());
+            this.focusTrap.activate();
+        }
     }
 
     close() {
@@ -129,9 +147,14 @@ class ShortcutsDrawer {
         }
         this.isOpen = false;
         this.container.classList.remove('open');
+        this.container.setAttribute('aria-hidden', 'true');
         this.backdrop.classList.remove('open');
         document.body.style.overflow = '';
         this.editingId = null;
+
+        if (this.focusTrap) {
+            this.focusTrap.deactivate();
+        }
     }
 
     toggle() {

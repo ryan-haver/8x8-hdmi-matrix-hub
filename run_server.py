@@ -39,9 +39,7 @@ from src.rest_api.utils import set_matrix_device
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S"
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
 )
 _LOG = logging.getLogger("run_server")
 
@@ -52,30 +50,23 @@ async def main():
     parser.add_argument(
         "--host",
         default=os.environ.get("OREI_HOST", "192.168.0.100"),
-        help="Matrix IP address (default: 192.168.0.100)"
+        help="Matrix IP address (default: 192.168.0.100)",
     )
     parser.add_argument(
-        "--port",
-        type=int,
-        default=int(os.environ.get("OREI_API_PORT", "8080")),
-        help="REST API port (default: 8080)"
+        "--port", type=int, default=int(os.environ.get("OREI_API_PORT", "8080")), help="REST API port (default: 8080)"
     )
     parser.add_argument(
         "--matrix-port",
         type=int,
         default=int(os.environ.get("OREI_PORT", "443")),
-        help="Matrix HTTPS port (default: 443)"
+        help="Matrix HTTPS port (default: 443)",
     )
     parser.add_argument(
         "--config-dir",
         default=os.environ.get("OREI_CONFIG_DIR", "./config"),
-        help="Configuration directory (default: ./config)"
+        help="Configuration directory (default: ./config)",
     )
-    parser.add_argument(
-        "--debug",
-        action="store_true",
-        help="Enable debug logging"
-    )
+    parser.add_argument("--debug", action="store_true", help="Enable debug logging")
 
     args = parser.parse_args()
 
@@ -107,10 +98,7 @@ async def main():
         _LOG.info("✓ Connected to matrix successfully!")
 
     # Set up the REST API with the matrix device
-    set_matrix_device(
-        device=matrix,
-        config_dir=str(config_dir)
-    )
+    set_matrix_device(device=matrix, config_dir=str(config_dir))
 
     # Create and start the REST API server
     server = RestApiServer(host="0.0.0.0", port=args.port)
@@ -151,4 +139,3 @@ if __name__ == "__main__":
         asyncio.run(main())
     except KeyboardInterrupt:
         print("\nShutdown complete.")
-

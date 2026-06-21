@@ -33,21 +33,25 @@ COMMAND_TERMINATOR = b"!\r\n"
 
 class TelnetError(Exception):
     """Base exception for Telnet errors."""
+
     pass
 
 
 class ConnectionError(TelnetError):
     """Connection-related errors."""
+
     pass
 
 
 class CommandError(TelnetError):
     """Command execution errors."""
+
     pass
 
 
 class TelnetState(Enum):
     """Telnet connection state."""
+
     DISCONNECTED = "disconnected"
     CONNECTING = "connecting"
     CONNECTED = "connected"
@@ -57,6 +61,7 @@ class TelnetState(Enum):
 @dataclass
 class InputStatus:
     """Status of an HDMI input port."""
+
     port: int
     connected: bool  # Cable connected (from Telnet)
     name: str = ""
@@ -66,6 +71,7 @@ class InputStatus:
 @dataclass
 class OutputStatus:
     """Status of an HDMI output port."""
+
     port: int
     connected: bool  # Cable connected
     source: int = 0  # Currently routed input (1-8)
@@ -80,6 +86,7 @@ class OutputStatus:
 @dataclass
 class MatrixStatus:
     """Full matrix status from Telnet 'status!' command."""
+
     power: bool = True
     beep: bool = True
     panel_lock: bool = False
@@ -168,8 +175,7 @@ class TelnetClient:
             _LOG.info(f"Connecting to Telnet at {self.host}:{self.port}")
 
             self._reader, self._writer = await asyncio.wait_for(
-                asyncio.open_connection(self.host, self.port),
-                timeout=COMMAND_TIMEOUT
+                asyncio.open_connection(self.host, self.port), timeout=COMMAND_TIMEOUT
             )
 
             # Read welcome banner
@@ -178,7 +184,7 @@ class TelnetClient:
             if banner:
                 _LOG.debug(f"Telnet banner: {banner}")
                 # Extract firmware version from banner
-                match = re.search(r'fw version\s*:\s*v?([\d.]+)', banner, re.IGNORECASE)
+                match = re.search(r"fw version\s*:\s*v?([\d.]+)", banner, re.IGNORECASE)
                 if match:
                     self.firmware_version = match.group(1)
                     _LOG.info(f"Matrix firmware version: {self.firmware_version}")
@@ -237,11 +243,8 @@ class TelnetClient:
             return ""
 
         try:
-            data = await asyncio.wait_for(
-                self._reader.read(8192),
-                timeout=timeout
-            )
-            return data.decode('utf-8', errors='replace')
+            data = await asyncio.wait_for(self._reader.read(8192), timeout=timeout)
+            return data.decode("utf-8", errors="replace")
         except TimeoutError:
             return ""
         except Exception as e:
@@ -301,25 +304,25 @@ class TelnetClient:
         """Check if we've received a complete response."""
         # Response is complete when we see the end of status dump
         # or an error code
-        lines = response.strip().split('\r\n')
+        lines = response.strip().split("\r\n")
         if not lines:
             return False
 
         last_line = lines[-1].strip()
 
         # Error codes at end of response
-        if last_line in ('E00', 'E01', 'E02'):
+        if last_line in ("E00", "E01", "E02"):
             return True
 
         # For 'status' command, wait for mac address (last line)
         if command.lower() == "status":
-            if 'mac address:' in response.lower():
+            if "mac address:" in response.lower():
                 return True
             return False
 
         # For 'r link' commands, look for connect/disconnect
         if command.lower().startswith("r link"):
-            if 'connect' in response.lower() or 'disconnect' in response.lower():
+            if "connect" in response.lower() or "disconnect" in response.lower():
                 return True
 
         # For CEC commands, look for confirmation
@@ -330,7 +333,7 @@ class TelnetClient:
         # For other read commands, look for specific patterns
         if command.lower().startswith("r "):
             # Most read commands return a colon-separated value
-            if ':' in response and len(response) > 20:
+            if ":" in response and len(response) > 20:
                 return True
 
         # For set commands
@@ -339,7 +342,7 @@ class TelnetClient:
             return len(response) > 5
 
         # End of network config (last in full status dump)
-        if 'mac address:' in response.lower():
+        if "mac address:" in response.lower():
             return True
 
         return False
@@ -486,24 +489,24 @@ class TelnetClient:
             status.panel_lock = False
 
         # Parse LCD timeout
-        lcd_match = re.search(r'lcd on (\d+) seconds', response.lower())
+        lcd_match = re.search(r"lcd on (\d+) seconds", response.lower())
         if lcd_match:
             status.lcd_timeout = int(lcd_match.group(1))
 
         # Parse input connections
-        for match in re.finditer(r'hdmi input (\d+):\s*(connect|disconnect)', response.lower()):
+        for match in re.finditer(r"hdmi input (\d+):\s*(connect|disconnect)", response.lower()):
             port = int(match.group(1))
             connected = match.group(2) == "connect"
             status.inputs[port] = InputStatus(port=port, connected=connected)
 
         # Parse output connections
-        for match in re.finditer(r'hdmi output (\d+):\s*(connect|disconnect)', response.lower()):
+        for match in re.finditer(r"hdmi output (\d+):\s*(connect|disconnect)", response.lower()):
             port = int(match.group(1))
             connected = match.group(2) == "connect"
             status.outputs[port] = OutputStatus(port=port, connected=connected)
 
         # Parse routing: output1->input1
-        for match in re.finditer(r'output(\d+)->input(\d+)', response.lower()):
+        for match in re.finditer(r"output(\d+)->input(\d+)", response.lower()):
             output = int(match.group(1))
             input_src = int(match.group(2))
             status.routing[output] = input_src
@@ -511,49 +514,49 @@ class TelnetClient:
                 status.outputs[output].source = input_src
 
         # Parse HDCP settings
-        for match in re.finditer(r'output (\d+) hdcp:\s*(.+)', response.lower()):
+        for match in re.finditer(r"output (\d+) hdcp:\s*(.+)", response.lower()):
             port = int(match.group(1))
             hdcp = match.group(2).strip()
             if port in status.outputs:
                 status.outputs[port].hdcp = hdcp
 
         # Parse stream enable/disable
-        for match in re.finditer(r'output (\d+) stream:\s*(enable|disable)', response.lower()):
+        for match in re.finditer(r"output (\d+) stream:\s*(enable|disable)", response.lower()):
             port = int(match.group(1))
             enabled = match.group(2) == "enable"
             if port in status.outputs:
                 status.outputs[port].stream_enabled = enabled
 
         # Parse video mode
-        for match in re.finditer(r'output (\d+) video mode:\s*(.+)', response.lower()):
+        for match in re.finditer(r"output (\d+) video mode:\s*(.+)", response.lower()):
             port = int(match.group(1))
             mode = match.group(2).strip()
             if port in status.outputs:
                 status.outputs[port].video_mode = mode
 
         # Parse HDR mode
-        for match in re.finditer(r'output (\d+) hdr mode:\s*(.+)', response.lower()):
+        for match in re.finditer(r"output (\d+) hdr mode:\s*(.+)", response.lower()):
             port = int(match.group(1))
             mode = match.group(2).strip()
             if port in status.outputs:
                 status.outputs[port].hdr_mode = mode
 
         # Parse ARC
-        for match in re.finditer(r'output (\d+) arc:\s*(on|off)', response.lower()):
+        for match in re.finditer(r"output (\d+) arc:\s*(on|off)", response.lower()):
             port = int(match.group(1))
             enabled = match.group(2) == "on"
             if port in status.outputs:
                 status.outputs[port].arc = enabled
 
         # Parse audio mute
-        for match in re.finditer(r'output (\d+) audio mute:\s*(on|off)', response.lower()):
+        for match in re.finditer(r"output (\d+) audio mute:\s*(on|off)", response.lower()):
             port = int(match.group(1))
             muted = match.group(2) == "on"
             if port in status.outputs:
                 status.outputs[port].audio_mute = muted
 
         # Parse EDID for inputs
-        for match in re.finditer(r'input (\d+) edid:\s*(.+)', response.lower()):
+        for match in re.finditer(r"input (\d+) edid:\s*(.+)", response.lower()):
             port = int(match.group(1))
             edid = match.group(2).strip()
             if port in status.inputs:
@@ -767,7 +770,7 @@ class TelnetClient:
             # Parse preset info from response
             # Format: preset X: output1->inputY, output2->inputZ, ...
             info = {"preset": preset_num, "routing": {}}
-            for match in re.finditer(r'output(\d+)->input(\d+)', response.lower()):
+            for match in re.finditer(r"output(\d+)->input(\d+)", response.lower()):
                 output = int(match.group(1))
                 input_src = int(match.group(2))
                 info["routing"][output] = input_src
@@ -855,7 +858,7 @@ class TelnetClient:
         """Get firmware version."""
         try:
             response = await self._send_raw("r fw version")
-            match = re.search(r'v?([\d.]+)', response)
+            match = re.search(r"v?([\d.]+)", response)
             if match:
                 return match.group(1)
             return self.firmware_version

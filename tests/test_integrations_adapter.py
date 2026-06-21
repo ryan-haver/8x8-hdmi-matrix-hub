@@ -22,6 +22,7 @@ if str(src_path) not in sys.path:
 # Test MatrixApiAdapter
 # =============================================================================
 
+
 class TestMatrixApiAdapter:
     """Test the API adapter that wraps MatrixApiClient."""
 
@@ -29,19 +30,23 @@ class TestMatrixApiAdapter:
         """Create a mock MatrixApiClient."""
         client = MagicMock()
         client.get_health = AsyncMock(return_value={"status": "ok"})
-        client.get_inputs = AsyncMock(return_value={
-            "inputs": [
-                {"port": 1, "name": "PS5"},
-                {"port": 2, "name": "AppleTV"},
-                {"port": 3, "name": "Switch"},
-            ]
-        })
-        client.get_outputs = AsyncMock(return_value={
-            "outputs": [
-                {"port": 1, "name": "Living Room TV"},
-                {"port": 2, "name": "Bedroom TV"},
-            ]
-        })
+        client.get_inputs = AsyncMock(
+            return_value={
+                "inputs": [
+                    {"port": 1, "name": "PS5"},
+                    {"port": 2, "name": "AppleTV"},
+                    {"port": 3, "name": "Switch"},
+                ]
+            }
+        )
+        client.get_outputs = AsyncMock(
+            return_value={
+                "outputs": [
+                    {"port": 1, "name": "Living Room TV"},
+                    {"port": 2, "name": "Bedroom TV"},
+                ]
+            }
+        )
         client.close = AsyncMock()
         client.recall_preset = AsyncMock(return_value=True)
         client.save_preset = AsyncMock(return_value=True)
@@ -138,13 +143,15 @@ class TestMatrixApiAdapter:
         from integrations.unfolded_circle.adapter import MatrixApiAdapter
 
         mock_client = self._get_mock_api_client()
-        mock_client.get_inputs = AsyncMock(return_value={
-            "inputs": [
-                {"port": 1, "name": "Valid"},
-                {"name": "Missing port"},  # No port
-                {"port": 3},  # No name
-            ]
-        })
+        mock_client.get_inputs = AsyncMock(
+            return_value={
+                "inputs": [
+                    {"port": 1, "name": "Valid"},
+                    {"name": "Missing port"},  # No port
+                    {"port": 3},  # No name
+                ]
+            }
+        )
 
         adapter = MatrixApiAdapter(mock_client)
         await adapter._refresh_names()

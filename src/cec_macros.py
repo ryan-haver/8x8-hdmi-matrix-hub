@@ -25,6 +25,7 @@ _LOG = logging.getLogger(__name__)
 # Macro Data Structures
 # =============================================================================
 
+
 @dataclass
 class MacroStep:
     """
@@ -126,6 +127,7 @@ class CecMacro:
 # Macro Manager
 # =============================================================================
 
+
 class MacroManager:
     """
     Manages CEC macros - CRUD operations and execution.
@@ -182,10 +184,7 @@ class MacroManager:
         """Save macros to file."""
         try:
             os.makedirs(self.config_dir, exist_ok=True)
-            data = {
-                "version": 1,
-                "macros": [m.to_dict() for m in self._macros.values()]
-            }
+            data = {"version": 1, "macros": [m.to_dict() for m in self._macros.values()]}
             with open(self.macros_file, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2)
             _LOG.info("Saved %d macros", len(self._macros))
@@ -459,17 +458,17 @@ class MacroManager:
         for i, step in enumerate(macro.steps):
             # Validate command
             if not step.command:
-                issues.append(f"Step {i+1}: Missing command")
+                issues.append(f"Step {i + 1}: Missing command")
 
             # Validate targets
             if not step.targets:
-                issues.append(f"Step {i+1}: No targets specified")
+                issues.append(f"Step {i + 1}: No targets specified")
 
             for target in step.targets:
                 try:
                     self._parse_target(target)
                 except ValueError as ex:
-                    issues.append(f"Step {i+1}: {str(ex)}")
+                    issues.append(f"Step {i + 1}: {str(ex)}")
 
         return {
             "success": len(issues) == 0,

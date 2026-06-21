@@ -54,10 +54,11 @@ def _get_scene_manager() -> "SceneManager":
 
 
 def _get_executor():
-    from scene_execution import SceneExecutor
-    from system_actions import SystemActionManager
     from persistence import get_data_dir
     from rest_api.utils import get_macro_manager
+    from scene_execution import SceneExecutor
+    from system_shortcuts import SystemShortcutManager as SystemActionManager
+
     sam = SystemActionManager(get_data_dir())
     return SceneExecutor(
         scene_manager=_get_scene_manager(),
@@ -70,6 +71,7 @@ def _get_executor():
 def _get_profile_manager():
     from config import ProfileManager
     from rest_api.utils import get_profile_manager
+
     mgr = get_profile_manager()
     if mgr is None:
         raise RuntimeError("ProfileManager not initialized")
@@ -90,15 +92,19 @@ async def _json_response(success: bool, data: dict = None, error: str = None, st
 # Scenes CRUD
 # =============================================================================
 
+
 async def handle_list_scenes(request: web.Request) -> web.Response:
     """GET /api/v2/scenes — list all scenes."""
     try:
         mgr = _get_scene_manager()
         scenes = mgr.list_scenes()
-        return await _json_response(True, {
-            "scenes": [s.to_dict() for s in scenes],
-            "count": len(scenes),
-        })
+        return await _json_response(
+            True,
+            {
+                "scenes": [s.to_dict() for s in scenes],
+                "count": len(scenes),
+            },
+        )
     except Exception as e:
         _LOG.error("Error listing scenes: %s", e)
         return await _json_response(False, error=str(e), status=500)
@@ -118,7 +124,9 @@ async def handle_create_scene(request: web.Request) -> web.Response:
         # Password inheritance check: scene containing protected profile must itself be protected
         pm = _get_profile_manager()
         profile_map = {p.id: p for p in pm.list_profiles()} if pm else None
-        if not bool(data.get("password_protected", False)) and mgr.steps_reference_protected_profile(steps, profile_map):
+        if not bool(data.get("password_protected", False)) and mgr.steps_reference_protected_profile(
+            steps, profile_map
+        ):
             return await _json_response(
                 False,
                 error="Scene contains a password-protected Profile; the Scene must also be password-protected",
@@ -184,8 +192,10 @@ async def handle_update_scene(request: web.Request) -> web.Response:
             pm = _get_profile_manager()
             profile_map = {p.id: p for p in pm.list_profiles()} if pm else None
             existing = mgr.get_scene(scene_id)
-            scene_is_protected = password_protected if password_protected is not None else (
-                existing.password_protected if existing else False
+            scene_is_protected = (
+                password_protected
+                if password_protected is not None
+                else (existing.password_protected if existing else False)
             )
             if not scene_is_protected and mgr.steps_reference_protected_profile(steps, profile_map):
                 return await _json_response(
@@ -234,6 +244,7 @@ async def handle_delete_scene(request: web.Request) -> web.Response:
 # Scene execution
 # =============================================================================
 
+
 async def handle_execute_scene(request: web.Request) -> web.Response:
     """POST /api/v2/scenes/{scene_id}/execute — execute a scene."""
     try:
@@ -242,6 +253,7 @@ async def handle_execute_scene(request: web.Request) -> web.Response:
         passcode = data.get("passcode")
 
         from rest_api.utils import get_matrix_device
+
         matrix = get_matrix_device()
         if matrix is None:
             return await _json_response(False, error="Matrix not connected", status=503)
@@ -250,11 +262,15 @@ async def handle_execute_scene(request: web.Request) -> web.Response:
         result = await executor.execute_scene(scene_id, matrix, passcode=passcode)
 
         if not result.success and result.error in ("passcode_required", "invalid_passcode"):
-            return await _json_response(False, {
-                "error": result.error,
-                "scene_id": scene_id,
-                "requires_scene_passcode": True,
-            }, status=403)
+            return await _json_response(
+                False,
+                {
+                    "error": result.error,
+                    "scene_id": scene_id,
+                    "requires_scene_passcode": True,
+                },
+                status=403,
+            )
 
         return await _json_response(True, result.to_dict())
     except json.JSONDecodeError:
@@ -272,11 +288,14 @@ async def handle_scene_history(request: web.Request) -> web.Response:
         scene = mgr.get_scene(scene_id)
         if scene is None:
             return await _json_response(False, error="Scene not found", status=404)
-        return await _json_response(True, {
-            "scene_id": scene_id,
-            "last_executed": scene.last_executed,
-            "execution_history": [e.to_dict() for e in scene.execution_history],
-        })
+        return await _json_response(
+            True,
+            {
+                "scene_id": scene_id,
+                "last_executed": scene.last_executed,
+                "execution_history": [e.to_dict() for e in scene.execution_history],
+            },
+        )
     except Exception as e:
         _LOG.error("Error getting scene history %s: %s", scene_id, e)
         return await _json_response(False, error=str(e), status=500)
@@ -285,6 +304,7 @@ async def handle_scene_history(request: web.Request) -> web.Response:
 # =============================================================================
 # Conflict detection
 # =============================================================================
+
 
 async def handle_validate_scene(request: web.Request) -> web.Response:
     """POST /api/v2/scenes/{scene_id}/validate — detect conflicts in scene steps."""
@@ -300,11 +320,14 @@ async def handle_validate_scene(request: web.Request) -> web.Response:
         profile_map = {p.id: p for p in (pm._profiles.values() if hasattr(pm, "_profiles") else [])}
 
         conflicts = detect_conflicts(scene, profile_map)
-        return await _json_response(True, {
-            "scene_id": scene_id,
-            "conflicts": [c.to_dict() for c in conflicts],
-            "has_conflicts": len(conflicts) > 0,
-        })
+        return await _json_response(
+            True,
+            {
+                "scene_id": scene_id,
+                "conflicts": [c.to_dict() for c in conflicts],
+                "has_conflicts": len(conflicts) > 0,
+            },
+        )
     except Exception as e:
         _LOG.error("Error validating scene %s: %s", scene_id, e)
         return await _json_response(False, error=str(e), status=500)
@@ -313,6 +336,7 @@ async def handle_validate_scene(request: web.Request) -> web.Response:
 # =============================================================================
 # Override management
 # =============================================================================
+
 
 async def handle_set_override(request: web.Request) -> web.Response:
     """
@@ -378,6 +402,7 @@ async def handle_clear_override(request: web.Request) -> web.Response:
 # =============================================================================
 # Scene step management
 # =============================================================================
+
 
 async def handle_add_step(request: web.Request) -> web.Response:
     """
