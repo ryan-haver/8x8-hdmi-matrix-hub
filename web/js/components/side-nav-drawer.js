@@ -206,7 +206,7 @@ class SideNavDrawer {
             if (window.innerWidth < 768) {
                 this.close();
             }
-            window.app.components.quickActionsDrawer.toggle();
+            window.app.components.settingsDrawer.toggle();
         });
 
         document.getElementById("drawer-routing-btn").addEventListener("click", () => {
@@ -428,10 +428,10 @@ class SideNavDrawer {
         this.backdrop.classList.add("open");
         document.body.style.overflow = "hidden";
         
-        // Hide Quick Actions drawer and others to avoid overlaps on mobile only
+        // Hide Settings drawer and others to avoid overlaps on mobile only
         if (window.innerWidth < 768) {
-            if (window.app?.components?.quickActionsDrawer?.isOpen) {
-                window.app.components.quickActionsDrawer.close();
+            if (window.app?.components?.settingsDrawer?.isOpen) {
+                window.app.components.settingsDrawer.close();
             }
             if (window.app?.components?.routeAllDrawer?.isOpen) {
                 window.app.components.routeAllDrawer.close();

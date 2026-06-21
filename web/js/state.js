@@ -32,9 +32,15 @@ class AppState {
         
         // Software scenes (legacy)
         this.scenes = [];
-        
+
         // Profiles (enhanced scenes with macros)
         this.profiles = [];
+
+        // Phase 8: Unified Scenes (groupings of profiles + system actions)
+        this.phase8Scenes = [];
+
+        // Phase 8: System Actions
+        this.systemActions = [];
         
         // Currently active scene (after recall) - legacy
         this.activeScene = null;
@@ -524,6 +530,22 @@ class AppState {
         const result = await window.api.getDashboardPresets().catch(() => ({ success: false }));
         this.dashboardPresets = result?.data?.dashboard_presets || [];
         return this.dashboardPresets;
+    }
+
+    // ===== Phase 8: Unified Scenes =====
+
+    async loadPhase8Scenes() {
+        const result = await window.api.listScenes().catch(() => ({ success: false, data: { scenes: [] } }));
+        this.phase8Scenes = result?.data?.scenes || [];
+        this.emit('phase8Scenes', this.phase8Scenes);
+        return this.phase8Scenes;
+    }
+
+    async loadSystemActions() {
+        const result = await window.api.listSystemActions().catch(() => ({ success: false, data: { actions: [] } }));
+        this.systemActions = result?.data?.actions || [];
+        this.emit('systemActions', this.systemActions);
+        return this.systemActions;
     }
 
     // ==========================================
