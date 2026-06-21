@@ -366,6 +366,11 @@ class Profile:
     favorite: bool = False  # Show in Quick Actions drawer for one-tap recall
     dashboard_visible: bool = False  # Render as individual card on Dashboard tab
     dashboard_order: int = 0  # Position within the Dashboard card grid
+    # Phase 8: Password protection
+    password_protected: bool = False  # True = passcode required to execute
+    passcode_hash: str = ""           # Hashed passcode (empty if not protected)
+    # Phase 8: Execution history (last 7 days)
+    execution_log: list[dict] = field(default_factory=list)  # [{timestamp, scene_id, scene_name, status, error}]
 
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
@@ -380,6 +385,9 @@ class Profile:
             "favorite": self.favorite,
             "dashboard_visible": self.dashboard_visible,
             "dashboard_order": self.dashboard_order,
+            "password_protected": self.password_protected,
+            "passcode_hash": self.passcode_hash,
+            "execution_log": list(self.execution_log),
         }
         if self.cec_config is not None:
             result["cec_config"] = self.cec_config.to_dict()
@@ -414,6 +422,9 @@ class Profile:
             favorite=data.get("favorite", False),
             dashboard_visible=data.get("dashboard_visible", False),
             dashboard_order=data.get("dashboard_order", 0),
+            password_protected=bool(data.get("password_protected", False)),
+            passcode_hash=data.get("passcode_hash", ""),
+            execution_log=list(data.get("execution_log", [])),
         )
 
     @staticmethod
@@ -628,6 +639,8 @@ class ProfileManager:
         favorite: bool | None = None,
         dashboard_visible: bool | None = None,
         dashboard_order: int | None = None,
+        password_protected: bool | None = None,
+        passcode_hash: str | None = None,
     ) -> Profile | None:
         """Update an existing profile."""
         profile = self._profiles.get(profile_id)
@@ -658,6 +671,10 @@ class ProfileManager:
             profile.dashboard_visible = dashboard_visible
         if dashboard_order is not None:
             profile.dashboard_order = dashboard_order
+        if password_protected is not None:
+            profile.password_protected = password_protected
+        if passcode_hash is not None:
+            profile.passcode_hash = passcode_hash
 
         self.save()
         return profile

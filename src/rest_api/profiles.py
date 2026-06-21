@@ -199,6 +199,22 @@ async def handle_recall_profile(request: web.Request) -> web.Response:
         if profile is None:
             return _json_response(False, error=f"Profile '{profile_id}' not found", status=404)
 
+        # Password protection check
+        if profile.password_protected:
+            data = await request.json() if request.can_read_body else {}
+            passcode = data.get("passcode")
+            if not passcode:
+                return _json_response(False, {
+                    "error": "passcode_required",
+                    "profile_id": profile_id,
+                }, status=403)
+            from password import verify_passcode, needs_passcode
+            if not needs_passcode(profile.passcode_hash) or not verify_passcode(passcode, profile.passcode_hash):
+                return _json_response(False, {
+                    "error": "invalid_passcode",
+                    "profile_id": profile_id,
+                }, status=403)
+
         # Execute power-on macro if configured
         power_on_result = None
         if profile.power_on_macro and macro_manager:

@@ -669,6 +669,70 @@ class MatrixAPI {
     async toggleDashboardPreset(presetNum) {
         return this.post(`/api/device-settings/dashboard-presets/${presetNum}/toggle`);
     }
+
+    // ===== Phase 8: Unified Scenes =====
+
+    async listScenes() {
+        return this.get('/api/v2/scenes');
+    }
+
+    async getScene(id) {
+        return this.get(`/api/v2/scenes/${id}`);
+    }
+
+    async createScene(data) {
+        return this.post('/api/v2/scenes', data);
+    }
+
+    async updateScene(id, data) {
+        return this.put(`/api/v2/scenes/${id}`, data);
+    }
+
+    async deleteScene(id) {
+        return this.delete(`/api/v2/scenes/${id}`);
+    }
+
+    async executeScene(id, { passcode } = {}) {
+        return this.post(`/api/v2/scenes/${id}/execute`, passcode ? { passcode } : {});
+    }
+
+    async getSceneHistory(id) {
+        return this.get(`/api/v2/scenes/${id}/history`);
+    }
+
+    async validateScene(id) {
+        return this.post(`/api/v2/scenes/${id}/validate`);
+    }
+
+    async setOverride(sceneId, { profile_id, output_num, setting_key, disabled = true }) {
+        return this.put(`/api/v2/scenes/${sceneId}/override`, { profile_id, output_num, setting_key, disabled });
+    }
+
+    async clearOverride(sceneId, { profile_id, output_num, setting_key }) {
+        return this.delete(`/api/v2/scenes/${sceneId}/override`, { profile_id, output_num, setting_key });
+    }
+
+    async addStep(sceneId, step) {
+        return this.post(`/api/v2/scenes/${sceneId}/steps`, step);
+    }
+
+    async removeStep(sceneId, index) {
+        return this.delete(`/api/v2/scenes/${sceneId}/steps/${index}`);
+    }
+
+    // ===== Phase 8: System Actions =====
+
+    async listSystemActions() {
+        return this.get('/api/system-actions');
+    }
+
+    async updateSystemAction(key, data) {
+        return this.put(`/api/system-actions/${key}`, data);
+    }
+
+    async executeSystemAction(key, { params } = {}) {
+        return this.post(`/api/system-actions/${key}/execute`, params ? { params } : {});
+    }
 }
 
 // Clean up any legacy localStorage values before creating API instance

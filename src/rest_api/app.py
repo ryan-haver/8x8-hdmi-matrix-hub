@@ -123,14 +123,34 @@ from .profiles import (
     handle_update_profile,
 )
 from .scenes import (
-    handle_auto_resolve_cec,
-    handle_create_scene,
-    handle_delete_scene,
-    handle_get_scene,
-    handle_list_scenes,
-    handle_recall_scene,
-    handle_save_current_as_scene,
-    handle_scene_cec_config,
+    handle_auto_resolve_cec as _handle_auto_resolve_cec_p7,
+    handle_create_scene as _handle_create_scene_p7,
+    handle_delete_scene as _handle_delete_scene_p7,
+    handle_get_scene as _handle_get_scene_p7,
+    handle_list_scenes as _handle_list_scenes_p7,
+    handle_recall_scene as _handle_recall_scene_p7,
+    handle_save_current_as_scene as _handle_save_current_as_scene_p7,
+    handle_scene_cec_config as _handle_scene_cec_config_p7,
+)
+from .scenes_v2 import (
+    handle_add_step,
+    handle_clear_override,
+    handle_create_scene as handle_create_scene_v2,
+    handle_delete_scene as handle_delete_scene_v2,
+    handle_execute_scene,
+    handle_get_scene as handle_get_scene_v2,
+    handle_list_scenes as handle_list_scenes_v2,
+    handle_remove_step,
+    handle_scene_history,
+    handle_set_override,
+    handle_update_scene,
+    handle_validate_scene,
+    set_phase8_scene_manager as _set_phase8_scene_manager,
+)
+from .system_actions_api import (
+    handle_execute_system_action,
+    handle_list_system_actions,
+    handle_update_system_action,
 )
 from .settings import (
     handle_get_settings,
@@ -314,19 +334,19 @@ def create_rest_app(data_dir: Path | None = None) -> web.Application:
     app.router.add_post("/api/ext-audio/{output}/enable", handle_set_ext_audio_enable)
     app.router.add_post("/api/ext-audio/{output}/source", handle_set_ext_audio_source)
 
-    # Scenes
-    app.router.add_get("/api/scenes", handle_list_scenes)
-    app.router.add_get("/api/scene/{scene_id}", handle_get_scene)
-    app.router.add_post("/api/scene", handle_create_scene)
-    app.router.add_delete("/api/scene/{scene_id}", handle_delete_scene)
-    app.router.add_post("/api/scene/{scene_id}/recall", handle_recall_scene)
-    app.router.add_post("/api/scene/save-current", handle_save_current_as_scene)
+    # Scenes (Phase 7 backward compat — aliased to avoid collision)
+    app.router.add_get("/api/scenes", _handle_list_scenes_p7)
+    app.router.add_get("/api/scene/{scene_id}", _handle_get_scene_p7)
+    app.router.add_post("/api/scene", _handle_create_scene_p7)
+    app.router.add_delete("/api/scene/{scene_id}", _handle_delete_scene_p7)
+    app.router.add_post("/api/scene/{scene_id}/recall", _handle_recall_scene_p7)
+    app.router.add_post("/api/scene/save-current", _handle_save_current_as_scene_p7)
 
-    # Scene CEC Configuration
-    app.router.add_get("/api/scene/{scene_id}/cec", handle_scene_cec_config)
-    app.router.add_post("/api/scene/{scene_id}/cec", handle_scene_cec_config)
-    app.router.add_put("/api/scene/{scene_id}/cec", handle_scene_cec_config)
-    app.router.add_post("/api/scene/{scene_id}/cec/auto-resolve", handle_auto_resolve_cec)
+    # Scene CEC Configuration (Phase 7 backward compat)
+    app.router.add_get("/api/scene/{scene_id}/cec", _handle_scene_cec_config_p7)
+    app.router.add_post("/api/scene/{scene_id}/cec", _handle_scene_cec_config_p7)
+    app.router.add_put("/api/scene/{scene_id}/cec", _handle_scene_cec_config_p7)
+    app.router.add_post("/api/scene/{scene_id}/cec/auto-resolve", _handle_auto_resolve_cec_p7)
 
     # Profiles
     app.router.add_get("/api/profiles", handle_list_profiles)
@@ -380,6 +400,25 @@ def create_rest_app(data_dir: Path | None = None) -> web.Application:
     app.router.add_put("/api/device-settings/dashboard-presets", handle_set_dashboard_presets)
     app.router.add_post("/api/device-settings/dashboard-presets/{preset}/toggle", handle_toggle_dashboard_preset)
 
+    # Phase 8: Unified Scene (grouping of Profiles + System Actions)
+    app.router.add_get("/api/v2/scenes", handle_list_scenes_v2)
+    app.router.add_post("/api/v2/scenes", handle_create_scene_v2)
+    app.router.add_get("/api/v2/scenes/{scene_id}", handle_get_scene_v2)
+    app.router.add_put("/api/v2/scenes/{scene_id}", handle_update_scene)
+    app.router.add_delete("/api/v2/scenes/{scene_id}", handle_delete_scene_v2)
+    app.router.add_post("/api/v2/scenes/{scene_id}/execute", handle_execute_scene)
+    app.router.add_get("/api/v2/scenes/{scene_id}/history", handle_scene_history)
+    app.router.add_post("/api/v2/scenes/{scene_id}/validate", handle_validate_scene)
+    app.router.add_put("/api/v2/scenes/{scene_id}/override", handle_set_override)
+    app.router.add_delete("/api/v2/scenes/{scene_id}/override", handle_clear_override)
+    app.router.add_post("/api/v2/scenes/{scene_id}/steps", handle_add_step)
+    app.router.add_delete("/api/v2/scenes/{scene_id}/steps/{index}", handle_remove_step)
+
+    # Phase 8: System Actions
+    app.router.add_get("/api/system-actions", handle_list_system_actions)
+    app.router.add_put("/api/system-actions/{key}", handle_update_system_action)
+    app.router.add_post("/api/system-actions/{key}/execute", handle_execute_system_action)
+
     # Initialize persistent storage modules. All three share the same
     # ``data_dir`` which is resolved from ``MATRIX_DATA_DIR``,
     # ``UC_CONFIG_HOME``, or the local ``<project_root>/data`` default.
@@ -387,6 +426,13 @@ def create_rest_app(data_dir: Path | None = None) -> web.Application:
     init_device_settings(data_dir)
     init_themes(data_dir)
     init_ui_preferences(data_dir)
+
+    # Phase 8: Initialize Scene Manager and inject into scenes_v2
+    from scene_manager import SceneManager as Phase8SceneManager
+    phase8_sm = Phase8SceneManager(data_dir)
+    _set_phase8_scene_manager(phase8_sm)
+    _LOG.info(f"Phase 8 SceneManager initialized with %d scenes", len(phase8_sm.list_scenes()))
+
     _LOG.info(f"Persistent storage initialized at {data_dir}")
 
     # WebSocket for real-time updates

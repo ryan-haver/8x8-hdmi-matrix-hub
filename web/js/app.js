@@ -98,9 +98,12 @@ class MatrixApp {
         this.components.hdmiStatusTray = new HdmiStatusTray();
         this.components.hdmiStatusTray.init();
         
-        // Quick Actions Drawer
-        this.components.quickActionsDrawer = new QuickActionsDrawer();
-        this.components.quickActionsDrawer.init();
+        // Quick Actions Drawer (deprecated - replaced by Settings Drawer in Phase 8)
+        // this.components.quickActionsDrawer = new QuickActionsDrawer();
+        // this.components.quickActionsDrawer.init();
+
+        // Settings Drawer (Phase 8)
+        this.components.settingsDrawer = window.settingsDrawer;
         
         // Route All Drawer
         this.components.routeAllDrawer = new RouteAllDrawer();
@@ -595,6 +598,12 @@ class MatrixApp {
                 state.loadAllFavorites().catch(() => {}),
                 state.loadDashboardLayout().catch(() => {}),
                 state.loadDashboardPresets().catch(() => {})
+            ]);
+
+            // Phase 8: Load unified scenes and system actions
+            await Promise.all([
+                state.loadPhase8Scenes().catch(() => {}),
+                state.loadSystemActions().catch(() => {})
             ]);
 
             state.setConnected(true);

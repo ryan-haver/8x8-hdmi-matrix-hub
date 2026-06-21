@@ -153,6 +153,32 @@ class ProfileEditor {
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Password Protection Section (Phase 8) -->
+                        <div class="form-section" id="password-protection-section">
+                            <label class="section-label">
+                                <span class="section-icon">6</span>
+                                Password Protection
+                                <span class="optional-badge">Optional</span>
+                            </label>
+                            <p class="section-help">Require a passcode to execute this profile.</p>
+                            <div class="password-protection-toggle">
+                                <label class="toggle-label">
+                                    <input type="checkbox" id="profile-password-protected" />
+                                    <span class="toggle-label-text">Password Protect</span>
+                                </label>
+                            </div>
+                            <div class="password-fields" id="profile-password-fields" style="display:none;">
+                                <div class="form-group">
+                                    <label for="profile-passcode">Passcode (4-8 digits)</label>
+                                    <input type="password" id="profile-passcode" class="input" maxlength="8" placeholder="1234">
+                                </div>
+                                <div class="form-group">
+                                    <label for="profile-passcode-confirm">Confirm Passcode</label>
+                                    <input type="password" id="profile-passcode-confirm" class="input" maxlength="8" placeholder="1234">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="settings-modal-footer profile-editor-footer">
@@ -224,6 +250,15 @@ class ProfileEditor {
                     dashboardToggle.checked = !dashboardToggle.checked;
                     toast.error(`Failed to update: ${error.message}`);
                 }
+            });
+        }
+
+        // Password protection toggle (Phase 8)
+        const passwordToggle = this.modal.querySelector('#profile-password-protected');
+        const passwordFields = this.modal.querySelector('#profile-password-fields');
+        if (passwordToggle && passwordFields) {
+            passwordToggle.addEventListener('change', () => {
+                passwordFields.style.display = passwordToggle.checked ? 'block' : 'none';
             });
         }
 
@@ -311,6 +346,16 @@ class ProfileEditor {
         const dashboardCheckbox = this.modal.querySelector('#profile-dashboard');
         if (quickActionsCheckbox) quickActionsCheckbox.checked = profile.favorite === true;
         if (dashboardCheckbox) dashboardCheckbox.checked = profile.dashboard_visible === true;
+
+        // Set Password Protection (Phase 8)
+        const passwordToggle = this.modal.querySelector('#profile-password-protected');
+        const passwordFields = this.modal.querySelector('#profile-password-fields');
+        if (passwordToggle) {
+            passwordToggle.checked = profile.password_protected === true;
+            if (passwordFields) {
+                passwordFields.style.display = profile.password_protected ? 'block' : 'none';
+            }
+        }
 
         // Select icon
         const iconOptions = this.modal.querySelector('#profile-icon-options');
@@ -541,22 +586,34 @@ class ProfileEditor {
         if (!this.validate()) return;
         
         const { name, icon, outputs, macros, powerOnMacro, powerOffMacro } = this.getFormValues();
-        
+
+        // Password protection (Phase 8)
+        const passwordProtected = this.modal.querySelector('#profile-password-protected')?.checked || false;
+        const passcode = this.modal.querySelector('#profile-passcode')?.value || '';
+        const passcodeConfirm = this.modal.querySelector('#profile-passcode-confirm')?.value || '';
+        if (passwordProtected && passcode && passcode !== passcodeConfirm) {
+            toast.error('Passcodes do not match');
+            return;
+        }
+
         try {
             const saveBtn = this.modal.querySelector('#save-profile-btn');
             saveBtn.disabled = true;
             saveBtn.textContent = 'Saving...';
-            
+
             if (this.isEditing && this.currentProfile) {
                 // Update existing profile
-                const result = await api.updateProfile(this.currentProfile.id, {
+                const updateData = {
                     name,
                     icon,
                     macros,
                     power_on_macro: powerOnMacro,
-                    power_off_macro: powerOffMacro
-                });
-                
+                    power_off_macro: powerOffMacro,
+                    password_protected: passwordProtected
+                };
+                if (passcode) updateData.passcode = passcode;
+                const result = await api.updateProfile(this.currentProfile.id, updateData);
+
                 if (result?.success) {
                     toast.success(`Profile "${name}" updated`);
                     state.updateProfile(this.currentProfile.id, result.data || result);
@@ -566,15 +623,18 @@ class ProfileEditor {
             } else {
                 // Create new profile
                 const id = this.generateId(name);
-                const result = await api.createProfile({
+                const createData = {
                     id,
                     name,
                     icon,
                     outputs,
                     macros,
                     power_on_macro: powerOnMacro,
-                    power_off_macro: powerOffMacro
-                });
+                    power_off_macro: powerOffMacro,
+                    password_protected: passwordProtected
+                };
+                if (passcode) createData.passcode = passcode;
+                const result = await api.createProfile(createData);
                 
                 if (result?.success) {
                     toast.success(`Profile "${name}" created`);
