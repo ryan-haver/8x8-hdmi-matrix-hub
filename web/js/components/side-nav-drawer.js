@@ -248,8 +248,8 @@ class SideNavDrawer {
             if (window.innerWidth < 768) {
                 this.close();
             }
-            if (window.systemShortcutsPanel) {
-                window.systemShortcutsPanel.open();
+            if (window.shortcutsDrawer) {
+                window.shortcutsDrawer.toggle();
             }
         });
     }
