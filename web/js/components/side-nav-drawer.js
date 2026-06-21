@@ -91,13 +91,6 @@ class SideNavDrawer {
                 <div class="drawer-section">
                     <h4 class="drawer-section-title">Quick Utilities</h4>
                     <div class="drawer-utilities-grid">
-                        <button id="drawer-quick-actions-btn" class="utility-btn" title="Quick Actions">
-                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-                            </svg>
-                            <span>Quick Actions</span>
-                        </button>
-                        
                         <button id="drawer-routing-btn" class="utility-btn" title="Route to All">
                             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M3 8h15M3 16h15M8 3v18M16 3v18"/><circle cx="8" cy="8" r="2" fill="currentColor"/><circle cx="16" cy="16" r="2" fill="currentColor"/><path d="M18 10l3 3-3 3"/>
@@ -202,13 +195,6 @@ class SideNavDrawer {
         });
 
         // Utility actions - keep Control Deck open on desktop/tablet
-        document.getElementById("drawer-quick-actions-btn").addEventListener("click", () => {
-            if (window.innerWidth < 768) {
-                this.close();
-            }
-            window.app.components.settingsDrawer.toggle();
-        });
-
         document.getElementById("drawer-routing-btn").addEventListener("click", () => {
             if (window.innerWidth < 768) {
                 this.close();
