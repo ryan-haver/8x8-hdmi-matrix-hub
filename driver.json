@@ -11,10 +11,10 @@
   },
   "driver_url": "ws://192.168.1.145:9095",
   "developer": {
-    "name": "Custom Integration",
-    "url": "https://github.com/unfoldedcircle"
+    "name": "Ryan Haver",
+    "url": "https://github.com/ryan-haver/8x8-hdmi-matrix-hub"
   },
-  "home_page": "https://github.com/unfoldedcircle",
+  "home_page": "https://github.com/ryan-haver/8x8-hdmi-matrix-hub",
   "release_date": "2026-01-12",
   "port": 9095,
   "setup_data_schema": {
