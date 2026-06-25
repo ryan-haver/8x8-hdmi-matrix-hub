@@ -10,7 +10,7 @@ readme = "README.md"
 license = {text = "MPL-2.0"}
 requires-python = ">=3.11"
 authors = [
-    {name = "Custom Integration"}
+    {name = "Ryan Haver", email = "ryan.haver@gmail.com"}
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -43,8 +43,8 @@ dev = [
 orei-matrix-driver = "src.driver:main"
 
 [project.urls]
-Homepage = "https://github.com/unfoldedcircle"
-Repository = "https://github.com/unfoldedcircle"
+Homepage = "https://github.com/ryan-haver/8x8-hdmi-matrix-hub"
+Repository = "https://github.com/ryan-haver/8x8-hdmi-matrix-hub"
 
 [tool.setuptools.packages.find]
 where = ["."]
