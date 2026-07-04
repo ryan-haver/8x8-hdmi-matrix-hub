@@ -66,7 +66,7 @@ def _load_settings():
             _settings_cache = json.load(f)
         _LOG.debug(f"Loaded device settings from {_settings_path}")
     except Exception as e:
-        _LOG.error(f"Error loading device settings: {e}")
+        _LOG.exception(f"Error loading device settings: {e}")
         _settings_cache = _get_default_settings()
 
 
@@ -80,13 +80,14 @@ def _save_settings():
         # Ensure directory exists
         _settings_path.parent.mkdir(parents=True, exist_ok=True)
 
-        with open(_settings_path, "w", encoding="utf-8") as f:
-            json.dump(_settings_cache, f, indent=2)
+        from _file_io import atomic_write_json
+
+        atomic_write_json(_settings_path, _settings_cache)
 
         _LOG.debug(f"Saved device settings to {_settings_path}")
         return True
     except Exception as e:
-        _LOG.error(f"Error saving device settings: {e}")
+        _LOG.exception(f"Error saving device settings: {e}")
         return False
 
 
@@ -343,7 +344,7 @@ async def handle_get_device_settings(request: web.Request) -> web.Response:
         settings = get_device_settings()
         return _json_response(True, settings)
     except Exception as e:
-        _LOG.error(f"Error getting device settings: {e}")
+        _LOG.exception(f"Error getting device settings: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -359,7 +360,7 @@ async def handle_get_input_settings(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid input number", status=400)
     except Exception as e:
-        _LOG.error(f"Error getting input settings: {e}")
+        _LOG.exception(f"Error getting input settings: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -394,7 +395,7 @@ async def handle_set_input_settings(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid input number", status=400)
     except Exception as e:
-        _LOG.error(f"Error setting input settings: {e}")
+        _LOG.exception(f"Error setting input settings: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -410,7 +411,7 @@ async def handle_get_output_settings(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid output number", status=400)
     except Exception as e:
-        _LOG.error(f"Error getting output settings: {e}")
+        _LOG.exception(f"Error getting output settings: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -449,48 +450,83 @@ async def handle_set_output_settings(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid output number", status=400)
     except Exception as e:
-        _LOG.error(f"Error setting output settings: {e}")
+        _LOG.exception(f"Error setting output settings: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
 async def handle_bulk_update_settings(request: web.Request) -> web.Response:
-    """POST /api/device-settings - Bulk update device settings."""
+    """POST /api/device-settings - Bulk update device settings.
+
+    FIX (F12.7): collect per-entry errors instead of silently dropping
+    invalid keys. Returns ``applied`` and ``errors`` arrays so the caller
+    knows exactly which entries were updated and which were rejected.
+    """
     try:
         data = await request.json()
         updated_inputs = []
         updated_outputs = []
+        errors = []
 
         # Update inputs
         if "inputs" in data:
             for key, settings in data["inputs"].items():
-                input_num = int(key)
-                if 1 <= input_num <= 8:
-                    set_input_setting(
-                        input_num, name=settings.get("name"), icon=settings.get("icon"), color=settings.get("color")
-                    )
-                    updated_inputs.append(input_num)
+                try:
+                    input_num = int(key)
+                except (ValueError, TypeError):
+                    errors.append(f"inputs.{key}: not an integer")
+                    continue
+                if not (1 <= input_num <= 8):
+                    errors.append(f"inputs.{key}: port must be 1-8")
+                    continue
+                if not isinstance(settings, dict):
+                    errors.append(f"inputs.{input_num}: must be an object")
+                    continue
+                set_input_setting(
+                    input_num,
+                    name=settings.get("name"),
+                    icon=settings.get("icon"),
+                    color=settings.get("color"),
+                )
+                updated_inputs.append(input_num)
 
         # Update outputs
         if "outputs" in data:
             for key, settings in data["outputs"].items():
-                output_num = int(key)
-                if 1 <= output_num <= 8:
-                    set_output_setting(
-                        output_num, name=settings.get("name"), icon=settings.get("icon"), color=settings.get("color")
-                    )
-                    updated_outputs.append(output_num)
+                try:
+                    output_num = int(key)
+                except (ValueError, TypeError):
+                    errors.append(f"outputs.{key}: not an integer")
+                    continue
+                if not (1 <= output_num <= 8):
+                    errors.append(f"outputs.{key}: port must be 1-8")
+                    continue
+                if not isinstance(settings, dict):
+                    errors.append(f"outputs.{output_num}: must be an object")
+                    continue
+                set_output_setting(
+                    output_num,
+                    name=settings.get("name"),
+                    icon=settings.get("icon"),
+                    color=settings.get("color"),
+                )
+                updated_outputs.append(output_num)
 
         # Broadcast full settings update
         await broadcast_status_update("device_settings_full", get_device_settings())
 
         return _json_response(
             True,
-            {"updated_inputs": updated_inputs, "updated_outputs": updated_outputs, "settings": get_device_settings()},
+            {
+                "updated_inputs": updated_inputs,
+                "updated_outputs": updated_outputs,
+                "errors": errors if errors else None,
+                "settings": get_device_settings(),
+            },
         )
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON body", status=400)
     except Exception as e:
-        _LOG.error(f"Error bulk updating settings: {e}")
+        _LOG.exception(f"Error bulk updating settings: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -510,7 +546,7 @@ async def handle_get_favorite_presets(request: web.Request) -> web.Response:
     try:
         return _json_response(True, {"favorite_presets": get_favorite_presets()})
     except Exception as e:
-        _LOG.error(f"Error getting favorite presets: {e}")
+        _LOG.exception(f"Error getting favorite presets: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -519,7 +555,7 @@ async def handle_get_dashboard_presets(request: web.Request) -> web.Response:
     try:
         return _json_response(True, {"dashboard_presets": get_dashboard_presets()})
     except Exception as e:
-        _LOG.error(f"Error getting dashboard presets: {e}")
+        _LOG.exception(f"Error getting dashboard presets: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -541,7 +577,7 @@ async def handle_set_favorite_presets(request: web.Request) -> web.Response:
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON body", status=400)
     except Exception as e:
-        _LOG.error(f"Error setting favorite presets: {e}")
+        _LOG.exception(f"Error setting favorite presets: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -562,7 +598,7 @@ async def handle_set_dashboard_presets(request: web.Request) -> web.Response:
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON body", status=400)
     except Exception as e:
-        _LOG.error(f"Error setting dashboard presets: {e}")
+        _LOG.exception(f"Error setting dashboard presets: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -585,7 +621,7 @@ async def handle_toggle_favorite_preset(request: web.Request) -> web.Response:
             },
         )
     except Exception as e:
-        _LOG.error(f"Error toggling favorite preset: {e}")
+        _LOG.exception(f"Error toggling favorite preset: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -608,7 +644,7 @@ async def handle_toggle_dashboard_preset(request: web.Request) -> web.Response:
             },
         )
     except Exception as e:
-        _LOG.error(f"Error toggling dashboard preset: {e}")
+        _LOG.exception(f"Error toggling dashboard preset: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -637,5 +673,5 @@ async def handle_set_preset_name(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid preset number", status=400)
     except Exception as e:
-        _LOG.error(f"Error renaming preset {preset_num}: {e}")
+        _LOG.exception(f"Error renaming preset {preset_num}: {e}")
         return _json_response(False, error=str(e), status=500)

@@ -1,10 +1,15 @@
 """Support for OREI HDMI Matrix switches."""
 
+import aiohttp
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN, LOGGER
+
+# 10s timeout for all matrix HTTP calls — prevents the HA UI from hanging
+# when the matrix is unreachable.
+_TIMEOUT = aiohttp.ClientTimeout(total=10)
 
 
 async def async_setup_entry(hass, entry, async_add_entities):
@@ -55,7 +60,7 @@ class OreiPowerSwitch(CoordinatorEntity, SwitchEntity):
         session = self.coordinator.hass.helpers.aiohttp_client.async_get_clientsession()
         url = f"{self.coordinator.base_url}/api/power/on"
         try:
-            async with session.post(url) as resp:
+            async with session.post(url, timeout=_TIMEOUT) as resp:
                 if resp.status == 200:
                     json_resp = await resp.json()
                     if json_resp.get("success"):
@@ -70,7 +75,7 @@ class OreiPowerSwitch(CoordinatorEntity, SwitchEntity):
         session = self.coordinator.hass.helpers.aiohttp_client.async_get_clientsession()
         url = f"{self.coordinator.base_url}/api/power/off"
         try:
-            async with session.post(url) as resp:
+            async with session.post(url, timeout=_TIMEOUT) as resp:
                 if resp.status == 200:
                     json_resp = await resp.json()
                     if json_resp.get("success"):
@@ -125,7 +130,7 @@ class OreiOutputMuteSwitch(CoordinatorEntity, SwitchEntity):
         url = f"{self.coordinator.base_url}/api/output/{self.output_num}/mute"
         payload = {"muted": muted}
         try:
-            async with session.post(url, json=payload) as resp:
+            async with session.post(url, json=payload, timeout=_TIMEOUT) as resp:
                 if resp.status == 200:
                     json_resp = await resp.json()
                     if json_resp.get("success"):
@@ -180,7 +185,7 @@ class OreiOutputStreamSwitch(CoordinatorEntity, SwitchEntity):
         url = f"{self.coordinator.base_url}/api/output/{self.output_num}/enable"
         payload = {"enabled": enabled}
         try:
-            async with session.post(url, json=payload) as resp:
+            async with session.post(url, json=payload, timeout=_TIMEOUT) as resp:
                 if resp.status == 200:
                     json_resp = await resp.json()
                     if json_resp.get("success"):

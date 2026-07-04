@@ -2,18 +2,27 @@
 Control endpoints for preset, switch, and power operations.
 """
 
+import asyncio
 import json
 import logging
 
 from aiohttp import web
 
-from .utils import _json_response, get_input_names, get_matrix_device, require_connected
+from .utils import _json_response, get_input_names, get_matrix_device, require_connected, safe_error_message
 from .websocket import broadcast_status_update
 
 _LOG = logging.getLogger("rest_api.control")
 
 # Default output for input cycling (can be overridden via query param)
 DEFAULT_CYCLE_OUTPUT = 1
+
+# Per-output locks for input cycling. Without these, two concurrent
+# /api/input/next requests for the same output can both read the same
+# ``current_input`` and both compute the same ``next_input`` — the
+# second press effectively becomes a no-op.
+_cycle_locks: dict[int, asyncio.Lock] = {
+    i: asyncio.Lock() for i in range(1, 10)
+}
 
 
 @require_connected
@@ -43,12 +52,18 @@ async def handle_preset(request: web.Request) -> web.Response:
                 },
             )
         else:
+            # Send corrective broadcast so WebSocket clients can revert the
+            # optimistic state — otherwise the UI shows a preset as active
+            # when the matrix never actually switched.
+            await broadcast_status_update(
+                "preset_recall_failed", {"preset": preset_num}
+            )
             return _json_response(False, error=f"Failed to recall preset {preset_num}", status=500)
     except ValueError:
         return _json_response(False, error="Invalid preset number", status=400)
     except Exception as e:
-        _LOG.error(f"Error recalling preset: {e}")
-        return _json_response(False, error=str(e), status=500)
+        _LOG.exception(f"Error recalling preset: {e}")
+        return _json_response(False, error=safe_error_message(e, "recalling preset"), status=500)
 
 
 async def handle_switch(request: web.Request) -> web.Response:
@@ -63,6 +78,11 @@ async def handle_switch(request: web.Request) -> web.Response:
 
     try:
         data = await request.json()
+        # Check for unknown fields
+        allowed_fields = {"input", "output"}
+        extra = set(data.keys()) - allowed_fields
+        if extra:
+            return _json_response(False, error=f"Unknown fields: {sorted(extra)}", status=400)
         input_num = data.get("input")
         output_num = data.get("output")
 
@@ -95,6 +115,10 @@ async def handle_switch(request: web.Request) -> web.Response:
                     },
                 )
             else:
+                # Corrective broadcast so UI reverts optimistic state.
+                await broadcast_status_update(
+                    "switch_all_failed", {"input": input_num}
+                )
                 return _json_response(False, error="Failed to switch routing", status=500)
 
         # Single output routing
@@ -120,12 +144,16 @@ async def handle_switch(request: web.Request) -> web.Response:
                 },
             )
         else:
+            # Corrective broadcast so UI reverts optimistic state.
+            await broadcast_status_update(
+                "switch_failed", {"input": input_num, "output": output_num}
+            )
             return _json_response(False, error="Failed to switch routing", status=500)
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON body", status=400)
     except Exception as e:
-        _LOG.error(f"Error switching: {e}")
-        return _json_response(False, error=str(e), status=500)
+        _LOG.exception(f"Error switching: {e}")
+        return _json_response(False, error=safe_error_message(e, "switching routing"), status=500)
 
 
 async def handle_power_on(request: web.Request) -> web.Response:
@@ -147,8 +175,8 @@ async def handle_power_on(request: web.Request) -> web.Response:
         else:
             return _json_response(False, error="Failed to power on matrix", status=500)
     except Exception as e:
-        _LOG.error(f"Error powering on: {e}")
-        return _json_response(False, error=str(e), status=500)
+        _LOG.exception(f"Error powering on: {e}")
+        return _json_response(False, error=safe_error_message(e, "powering on"), status=500)
 
 
 async def handle_power_off(request: web.Request) -> web.Response:
@@ -170,8 +198,8 @@ async def handle_power_off(request: web.Request) -> web.Response:
         else:
             return _json_response(False, error="Failed to power off matrix", status=500)
     except Exception as e:
-        _LOG.error(f"Error powering off: {e}")
-        return _json_response(False, error=str(e), status=500)
+        _LOG.exception(f"Error powering off: {e}")
+        return _json_response(False, error=safe_error_message(e, "powering off"), status=500)
 
 
 async def handle_input_next(request: web.Request) -> web.Response:
@@ -191,18 +219,23 @@ async def handle_input_next(request: web.Request) -> web.Response:
         if output_num < 1 or output_num > 8:
             return _json_response(False, error="Output must be 1-8", status=400)
 
-        # Get current input for this output
-        current_input = await matrix_device.get_current_input_for_output(output_num)
-        if current_input is None:
-            current_input = 1
+        # Serialize cycling operations per-output so two concurrent
+        # /api/input/next requests for the same output see the updated
+        # current_input on the second request (otherwise both compute
+        # the same next_input and the second press is a no-op).
+        async with _cycle_locks[output_num]:
+            # Get current input for this output
+            current_input = await matrix_device.get_current_input_for_output(output_num)
+            if current_input is None:
+                current_input = 1
 
-        # Calculate next input (wrap around 8 -> 1)
-        next_input = (current_input % 8) + 1
+            # Calculate next input (wrap around 8 -> 1)
+            next_input = (current_input % 8) + 1
 
-        input_name = input_names.get(next_input, f"Input {next_input}")
-        _LOG.info(f"REST API: Cycling to next input {next_input} ({input_name}) on output {output_num}")
+            input_name = input_names.get(next_input, f"Input {next_input}")
+            _LOG.info(f"REST API: Cycling to next input {next_input} ({input_name}) on output {output_num}")
 
-        success = await matrix_device.switch_input(next_input, output_num)
+            success = await matrix_device.switch_input(next_input, output_num)
 
         if success:
             return _json_response(
@@ -220,8 +253,8 @@ async def handle_input_next(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid output number", status=400)
     except Exception as e:
-        _LOG.error(f"Error cycling to next input: {e}")
-        return _json_response(False, error=str(e), status=500)
+        _LOG.exception(f"Error cycling to next input: {e}")
+        return _json_response(False, error=safe_error_message(e, "cycling to next input"), status=500)
 
 
 async def handle_input_previous(request: web.Request) -> web.Response:
@@ -241,18 +274,20 @@ async def handle_input_previous(request: web.Request) -> web.Response:
         if output_num < 1 or output_num > 8:
             return _json_response(False, error="Output must be 1-8", status=400)
 
-        # Get current input for this output
-        current_input = await matrix_device.get_current_input_for_output(output_num)
-        if current_input is None:
-            current_input = 1
+        # Serialize cycling operations per-output (see handle_input_next).
+        async with _cycle_locks[output_num]:
+            # Get current input for this output
+            current_input = await matrix_device.get_current_input_for_output(output_num)
+            if current_input is None:
+                current_input = 1
 
-        # Calculate previous input (wrap around 1 -> 8)
-        prev_input = ((current_input - 2) % 8) + 1
+            # Calculate previous input (wrap around 1 -> 8)
+            prev_input = ((current_input - 2) % 8) + 1
 
-        input_name = input_names.get(prev_input, f"Input {prev_input}")
-        _LOG.info(f"REST API: Cycling to previous input {prev_input} ({input_name}) on output {output_num}")
+            input_name = input_names.get(prev_input, f"Input {prev_input}")
+            _LOG.info(f"REST API: Cycling to previous input {prev_input} ({input_name}) on output {output_num}")
 
-        success = await matrix_device.switch_input(prev_input, output_num)
+            success = await matrix_device.switch_input(prev_input, output_num)
 
         if success:
             return _json_response(
@@ -270,8 +305,8 @@ async def handle_input_previous(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid output number", status=400)
     except Exception as e:
-        _LOG.error(f"Error cycling to previous input: {e}")
-        return _json_response(False, error=str(e), status=500)
+        _LOG.exception(f"Error cycling to previous input: {e}")
+        return _json_response(False, error=safe_error_message(e, "cycling to previous input"), status=500)
 
 
 async def handle_output_source(request: web.Request) -> web.Response:
@@ -322,8 +357,8 @@ async def handle_output_source(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid output/input number", status=400)
     except Exception as e:
-        _LOG.error(f"Error setting output source: {e}")
-        return _json_response(False, error=str(e), status=500)
+        _LOG.exception(f"Error setting output source: {e}")
+        return _json_response(False, error=safe_error_message(e, "setting output source"), status=500)
 
 
 @require_connected
@@ -365,16 +400,27 @@ async def handle_preset_save(request: web.Request) -> web.Response:
 
             _LOG.info(f"REST API: Applying temporary routing to save to preset {preset_num}")
 
-            # 1. Switch to new routing
-            for out_num, in_num in parsed_routing.items():
-                await matrix_device.switch_input(in_num, out_num)
+            success = False
+            # Wrap apply-save-restore in try/finally so the original routing
+            # is ALWAYS restored, even if switch_input() or save_preset() raises
+            # mid-sequence. Without this, an exception during step 1 leaves the
+            # matrix with the temporary routing instead of the user's original.
+            try:
+                # 1. Switch to new routing
+                for out_num, in_num in parsed_routing.items():
+                    await matrix_device.switch_input(in_num, out_num)
 
-            # 2. Save preset
-            success = await matrix_device.save_preset(preset_num)
-
-            # 3. Restore original routing
-            for out_num, in_num in original_routing.items():
-                await matrix_device.switch_input(in_num, out_num)
+                # 2. Save preset
+                success = await matrix_device.save_preset(preset_num)
+            finally:
+                # 3. Restore original routing (always, even on exception)
+                for out_num, in_num in original_routing.items():
+                    try:
+                        await matrix_device.switch_input(in_num, out_num)
+                    except Exception as restore_err:
+                        _LOG.error(
+                            f"Failed to restore routing for output {out_num}: {restore_err}"
+                        )
 
             if success:
                 from .device_settings import set_preset_routing
@@ -417,5 +463,5 @@ async def handle_preset_save(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid preset number", status=400)
     except Exception as e:
-        _LOG.error(f"Error saving preset: {e}")
-        return _json_response(False, error=str(e), status=500)
+        _LOG.exception(f"Error saving preset: {e}")
+        return _json_response(False, error=safe_error_message(e, "saving preset"), status=500)

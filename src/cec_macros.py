@@ -77,6 +77,8 @@ class CecMacro:
     favorite: bool = False  # Show in Quick Actions drawer for one-tap execute
     dashboard_visible: bool = False  # Render as individual card on Dashboard tab
     dashboard_order: int = 0  # Position within the Dashboard card grid
+    # Execution behavior flags
+    continue_on_error: bool = False  # If True, continue executing remaining steps on failure
 
     def __post_init__(self):
         """Set timestamps if not provided."""
@@ -99,6 +101,7 @@ class CecMacro:
             "favorite": self.favorite,
             "dashboard_visible": self.dashboard_visible,
             "dashboard_order": self.dashboard_order,
+            "continue_on_error": self.continue_on_error,
         }
 
     @staticmethod
@@ -116,6 +119,7 @@ class CecMacro:
             favorite=data.get("favorite", False),
             dashboard_visible=data.get("dashboard_visible", False),
             dashboard_order=data.get("dashboard_order", 0),
+            continue_on_error=data.get("continue_on_error", False),
         )
 
     def update_timestamp(self):
@@ -181,12 +185,12 @@ class MacroManager:
             return False
 
     def save(self) -> bool:
-        """Save macros to file."""
+        """Save macros to file atomically."""
         try:
             os.makedirs(self.config_dir, exist_ok=True)
             data = {"version": 1, "macros": [m.to_dict() for m in self._macros.values()]}
-            with open(self.macros_file, "w", encoding="utf-8") as f:
-                json.dump(data, f, indent=2)
+            from _file_io import atomic_write_json
+            atomic_write_json(self.macros_file, data)
             _LOG.info("Saved %d macros", len(self._macros))
             return True
         except Exception as ex:
@@ -374,11 +378,18 @@ class MacroManager:
 
         return target_type, port
 
-    async def execute_macro(self, macro_id: str) -> dict[str, Any]:
+    async def execute_macro(
+        self,
+        macro_id: str,
+        continue_on_error: bool = False,
+        timeout_s: float = 300.0,
+    ) -> dict[str, Any]:
         """
         Execute a macro.
 
         :param macro_id: Macro identifier
+        :param continue_on_error: If False, halt execution on first step failure
+        :param timeout_s: Overall execution timeout in seconds (default 300s)
         :return: Execution result with success status and details
         """
         macro = self._macros.get(macro_id)
@@ -399,32 +410,53 @@ class MacroManager:
         results = []
         total_steps = len(macro.steps)
 
-        for i, step in enumerate(macro.steps):
-            step_result = {
-                "step": i + 1,
-                "command": step.command,
-                "targets": step.targets,
-                "success": True,
-                "errors": [],
+        try:
+            async with asyncio.timeout(timeout_s):
+                for i, step in enumerate(macro.steps):
+                    step_result = {
+                        "step": i + 1,
+                        "command": step.command,
+                        "targets": step.targets,
+                        "success": True,
+                        "errors": [],
+                    }
+
+                    # Send command to each target
+                    for target in step.targets:
+                        try:
+                            target_type, port = self._parse_target(target)
+                            success = await self._cec_sender(target_type, port, step.command)
+                            if not success:
+                                step_result["success"] = False
+                                step_result["errors"].append(f"Failed to send {step.command} to {target}")
+                        except Exception as ex:
+                            step_result["success"] = False
+                            step_result["errors"].append(f"Error sending to {target}: {str(ex)}")
+
+                    results.append(step_result)
+
+                    # Halt if step failed and continue_on_error is False
+                    if not step_result["success"] and not continue_on_error:
+                        _LOG.info("Macro %s halted at step %d due to failure", macro_id, i + 1)
+                        return {
+                            "success": False,
+                            "macro_id": macro_id,
+                            "macro_name": macro.name,
+                            "halted_at_step": i + 1,
+                            "steps_executed": len(results),
+                            "results": results,
+                        }
+
+                    # Apply delay if specified and not the last step
+                    if step.delay_ms > 0 and i < total_steps - 1:
+                        await asyncio.sleep(step.delay_ms / 1000.0)
+        except asyncio.TimeoutError:
+            _LOG.warning("Macro %s timed out after %ds", macro_id, timeout_s)
+            return {
+                "success": False,
+                "error": f"Macro execution timed out after {timeout_s}s",
+                "results": results,
             }
-
-            # Send command to each target
-            for target in step.targets:
-                try:
-                    target_type, port = self._parse_target(target)
-                    success = await self._cec_sender(target_type, port, step.command)
-                    if not success:
-                        step_result["success"] = False
-                        step_result["errors"].append(f"Failed to send {step.command} to {target}")
-                except Exception as ex:
-                    step_result["success"] = False
-                    step_result["errors"].append(f"Error sending to {target}: {str(ex)}")
-
-            results.append(step_result)
-
-            # Apply delay if specified and not the last step
-            if step.delay_ms > 0 and i < total_steps - 1:
-                await asyncio.sleep(step.delay_ms / 1000.0)
 
         # Determine overall success
         all_success = all(r["success"] for r in results)

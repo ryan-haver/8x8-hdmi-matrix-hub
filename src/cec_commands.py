@@ -1,8 +1,21 @@
 """
 CEC Command Registry for OREI HDMI Matrix.
 
-Centralized definitions for all CEC commands supported by input and output devices.
-Based on Control4 driver analysis and OREI API documentation.
+Centralized definitions for all CEC commands supported by input and
+output devices.
+
+.. warning::
+    The ``index`` fields historically defined in this module were
+    derived from a Control4 driver analysis and **do not match** the
+    HAR-captured indices in :class:`orei_matrix.OreiMatrix.CEC_COMMAND_MAP`.
+
+    Using these indices with the HTTP path would send the wrong commands
+    (e.g. "Volume Down" instead of "Down"). They have been removed.
+
+    The authoritative source of CEC indices is
+    ``orei_matrix.OreiMatrix.CEC_COMMAND_MAP`` (HAR-verified). The
+    authoritative source of Telnet command strings is the ``telnet``
+    field in this module (used by :mod:`telnet_client`).
 
 Input devices (sources): 19 commands supported
 Output devices (displays): 6 commands supported
@@ -16,119 +29,100 @@ Output devices (displays): 6 commands supported
 INPUT_CEC_COMMANDS: dict[str, dict] = {
     # Power commands
     "POWER_ON": {
-        "index": 1,
         "telnet": "on",
         "category": "power",
         "description": "Power on the device",
     },
     "POWER_OFF": {
-        "index": 2,
         "telnet": "off",
         "category": "power",
         "description": "Power off / standby",
     },
     # Navigation commands
     "UP": {
-        "index": 3,
         "telnet": "up",
         "category": "navigation",
         "description": "D-pad up",
     },
     "LEFT": {
-        "index": 4,
         "telnet": "left",
         "category": "navigation",
         "description": "D-pad left",
     },
     "SELECT": {
-        "index": 5,
         "telnet": "enter",
         "category": "navigation",
         "description": "Select / OK / Enter",
     },
     "RIGHT": {
-        "index": 6,
         "telnet": "right",
         "category": "navigation",
         "description": "D-pad right",
     },
     "DOWN": {
-        "index": 7,
         "telnet": "down",
         "category": "navigation",
         "description": "D-pad down",
     },
     # Playback commands
     "PLAY": {
-        "index": 8,
         "telnet": "play",
         "category": "playback",
         "description": "Play",
     },
     "PAUSE": {
-        "index": 9,
         "telnet": "pause",
         "category": "playback",
         "description": "Pause",
     },
     "STOP": {
-        "index": 10,
         "telnet": "stop",
         "category": "playback",
         "description": "Stop",
     },
     "REWIND": {
-        "index": 11,
         "telnet": "rew",
         "category": "playback",
         "description": "Rewind",
     },
     "FAST_FORWARD": {
-        "index": 12,
         "telnet": "ff",
         "category": "playback",
         "description": "Fast forward",
     },
     "PREVIOUS": {
-        "index": 13,
         "telnet": "previous",
         "category": "playback",
         "description": "Previous track/chapter",
     },
     "NEXT": {
-        "index": 14,
         "telnet": "next",
         "category": "playback",
         "description": "Next track/chapter",
     },
     # Volume commands
     "VOLUME_UP": {
-        "index": 15,
         "telnet": "vol+",
         "category": "volume",
         "description": "Volume up",
     },
     "VOLUME_DOWN": {
-        "index": 16,
         "telnet": "vol-",
         "category": "volume",
         "description": "Volume down",
     },
     "MUTE": {
-        "index": 17,
         "telnet": "mute",
         "category": "volume",
         "description": "Mute toggle",
     },
     # Menu commands
     "MENU": {
-        "index": 18,
         "telnet": "menu",
         "category": "navigation",
         "description": "Menu / Home",
     },
     "BACK": {
-        "index": 19,
         "telnet": "back",
         "category": "navigation",
         "description": "Back / Return",
@@ -142,39 +136,33 @@ INPUT_CEC_COMMANDS: dict[str, dict] = {
 OUTPUT_CEC_COMMANDS: dict[str, dict] = {
     # Power commands
     "POWER_ON": {
-        "index": 1,
         "telnet": "on",
         "category": "power",
         "description": "Power on the display",
     },
     "POWER_OFF": {
-        "index": 2,
         "telnet": "off",
         "category": "power",
-        "description": "Power off / standby",
+        "description": "Power off the display",
     },
     # Volume commands (primary use case for outputs)
     "MUTE": {
-        "index": 3,
         "telnet": "mute",
         "category": "volume",
         "description": "Mute toggle",
     },
     "VOLUME_UP": {
-        "index": 4,
         "telnet": "vol+",
         "category": "volume",
         "description": "Volume up",
     },
     "VOLUME_DOWN": {
-        "index": 5,
         "telnet": "vol-",
         "category": "volume",
         "description": "Volume down",
     },
     # Special commands
     "ACTIVE": {
-        "index": 6,
         "telnet": "active",
         "category": "source",
         "description": "Set as active source (make TV switch to this input)",
@@ -198,123 +186,45 @@ CEC_CATEGORIES: dict[str, list[str]] = {
 # =============================================================================
 
 
-def get_input_commands() -> list[str]:
-    """Get list of all input CEC command names."""
-    return list(INPUT_CEC_COMMANDS.keys())
-
-
-def get_output_commands() -> list[str]:
-    """Get list of all output CEC command names."""
-    return list(OUTPUT_CEC_COMMANDS.keys())
-
-
-def get_commands_by_category(category: str, device_type: str = "input") -> list[str]:
+def get_command_info(category: str) -> list[dict]:
     """
-    Get commands for a specific category filtered by device type.
+    Get all commands in a given category.
 
-    :param category: Command category (power, navigation, playback, volume, source)
-    :param device_type: "input" or "output"
-    :return: List of command names available for that device type and category
+    :param category: Category name (power, navigation, playback, volume, source)
+    :return: List of command info dicts (without the 'index' field — see
+        module docstring for why index was removed)
     """
     commands = CEC_CATEGORIES.get(category, [])
-    cmd_registry = INPUT_CEC_COMMANDS if device_type == "input" else OUTPUT_CEC_COMMANDS
-    return [cmd for cmd in commands if cmd in cmd_registry]
+    result = []
+    for cmd_name in commands:
+        if cmd_name in INPUT_CEC_COMMANDS:
+            result.append({"name": cmd_name, **INPUT_CEC_COMMANDS[cmd_name]})
+        elif cmd_name in OUTPUT_CEC_COMMANDS:
+            result.append({"name": cmd_name, **OUTPUT_CEC_COMMANDS[cmd_name]})
+    return result
 
 
-def get_command_info(command: str, device_type: str = "input") -> dict | None:
+def get_telnet_command(command_name: str, is_output: bool = False) -> str | None:
     """
-    Get full command info for a specific command.
+    Get the Telnet command string for a CEC command.
 
-    :param command: Command name (e.g., "POWER_ON")
-    :param device_type: "input" or "output"
-    :return: Command info dict or None if not found
+    :param command_name: CEC command name (e.g. "POWER_ON")
+    :param is_output: True for output commands, False for input
+    :return: Telnet command string (e.g. "on") or None if unknown
     """
-    cmd_registry = INPUT_CEC_COMMANDS if device_type == "input" else OUTPUT_CEC_COMMANDS
-    return cmd_registry.get(command)
+    table = OUTPUT_CEC_COMMANDS if is_output else INPUT_CEC_COMMANDS
+    info = table.get(command_name)
+    if info is None:
+        return None
+    return info.get("telnet")
 
 
-def get_command_index(command: str, device_type: str = "input") -> int | None:
+def get_available_commands(is_output: bool = False) -> list[str]:
     """
-    Get the HTTP API command index for a command.
+    Get list of available CEC command names for input or output devices.
 
-    :param command: Command name (e.g., "POWER_ON")
-    :param device_type: "input" or "output"
-    :return: Command index or None if not found
+    :param is_output: True for output commands, False for input
+    :return: Sorted list of command names
     """
-    info = get_command_info(command, device_type)
-    return info.get("index") if info else None
-
-
-def get_telnet_command(command: str, device_type: str = "input") -> str | None:
-    """
-    Get the Telnet command string for a command.
-
-    :param command: Command name (e.g., "POWER_ON")
-    :param device_type: "input" or "output"
-    :return: Telnet command string or None if not found
-    """
-    info = get_command_info(command, device_type)
-    return info.get("telnet") if info else None
-
-
-def get_supported_categories(device_type: str = "input") -> list[str]:
-    """
-    Get list of CEC categories supported by a device type.
-
-    :param device_type: "input" or "output"
-    :return: List of category names
-    """
-    cmd_registry = INPUT_CEC_COMMANDS if device_type == "input" else OUTPUT_CEC_COMMANDS
-    categories = set()
-    for cmd_info in cmd_registry.values():
-        categories.add(cmd_info["category"])
-    return list(categories)
-
-
-def get_all_commands_detailed(device_type: str = "input") -> dict[str, dict]:
-    """
-    Get all commands with full details for a device type.
-
-    :param device_type: "input" or "output"
-    :return: Dict of command name -> command info
-    """
-    return INPUT_CEC_COMMANDS.copy() if device_type == "input" else OUTPUT_CEC_COMMANDS.copy()
-
-
-# =============================================================================
-# Scaler Mode Constants (for audio_only detection)
-# =============================================================================
-
-
-class ScalerMode:
-    """Scaler mode constants (0-indexed as returned by matrix)."""
-
-    BYPASS = 0  # Passthrough
-    DOWNSCALE_8K_4K = 1  # 8K → 4K
-    DOWNSCALE_1080P = 2  # 8K/4K → 1080p
-    AUTO = 3  # Auto
-    AUDIO_ONLY = 4  # Audio Only (key for CEC routing!)
-
-
-# API uses 1-indexed values
-class ScalerModeAPI:
-    """Scaler mode constants (1-indexed for our REST API)."""
-
-    PASSTHROUGH = 1
-    DOWNSCALE_8K_4K = 2
-    DOWNSCALE_1080P = 3
-    AUTO = 4
-    AUDIO_ONLY = 5
-
-
-def is_audio_only_output(scaler_value: int, api_indexed: bool = False) -> bool:
-    """
-    Check if an output is configured as audio-only based on scaler mode.
-
-    :param scaler_value: Scaler mode value
-    :param api_indexed: True if value is 1-indexed (from our API), False if 0-indexed (from matrix)
-    :return: True if audio-only mode
-    """
-    if api_indexed:
-        return scaler_value == ScalerModeAPI.AUDIO_ONLY
-    return scaler_value == ScalerMode.AUDIO_ONLY
+    table = OUTPUT_CEC_COMMANDS if is_output else INPUT_CEC_COMMANDS
+    return sorted(table.keys())

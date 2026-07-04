@@ -5,6 +5,7 @@ Creates and configures the aiohttp web application with all routes.
 """
 
 import logging
+import os
 from pathlib import Path
 
 from aiohttp import web
@@ -233,7 +234,19 @@ def create_rest_app(data_dir: Path | None = None) -> web.Application:
 
     app = web.Application(middlewares=[rate_limit_middleware])
 
-    # Add CORS middleware for browser-based clients
+    # Add CORS middleware for browser-based clients.
+    # FIX (F13.1): validate the request Origin against an explicit allowlist
+    # rather than always returning "*". Wildcard "*" is dangerous if
+    # credentials support is ever added — cookies / auth headers would be
+    # exposed to any origin. Set ``CORS_ALLOWED_ORIGINS`` to a comma-separated
+    # list (e.g. "https://app.example.com,https://other.example.com") to
+    # restrict origins. Empty/``*`` preserves the legacy permissive default.
+    _allowed_origins_env = os.environ.get("CORS_ALLOWED_ORIGINS", "*").strip()
+    if _allowed_origins_env == "*" or _allowed_origins_env == "":
+        _allowed_origins = None  # wildcard — accept any origin
+    else:
+        _allowed_origins = {o.strip() for o in _allowed_origins_env.split(",") if o.strip()}
+
     @web.middleware
     async def cors_middleware(request: web.Request, handler):
         if request.method == "OPTIONS":
@@ -241,9 +254,23 @@ def create_rest_app(data_dir: Path | None = None) -> web.Application:
         else:
             response = await handler(request)
 
-        response.headers["Access-Control-Allow-Origin"] = "*"
+        origin = request.headers.get("Origin")
+        if _allowed_origins is None:
+            # Wildcard mode — preserve legacy behavior
+            response.headers["Access-Control-Allow-Origin"] = "*"
+        elif origin and origin in _allowed_origins:
+            # Specific allowlist match — echo the origin (CORS spec requires
+            # echoing the exact origin, not "*", when credentials are used)
+            response.headers["Access-Control-Allow-Origin"] = origin
+        # else: origin not in allowlist — don't set the header; browser
+        # will block the response. This is the secure default.
+
+        # Always add Vary header - caches must not serve wrong-origin responses
+        response.headers["Vary"] = "Origin"
+
         response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
         response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+        response.headers["Access-Control-Max-Age"] = "86400"
         return response
 
     app.middlewares.append(cors_middleware)
@@ -512,7 +539,7 @@ class RestApiServer:
             _LOG.info(f"✓ REST API server started on http://{self.host}:{self.port}")
             _LOG.info(f"  API docs: http://{self.host}:{self.port}/api")
         except Exception as e:
-            _LOG.error(f"Failed to start REST API server: {e}")
+            _LOG.exception(f"Failed to start REST API server: {e}")
             raise
 
     async def stop(self):
@@ -523,10 +550,14 @@ class RestApiServer:
         try:
             if self.runner:
                 await self.runner.cleanup()
-            self._running = False
-            _LOG.info("REST API server stopped")
         except Exception as e:
             _LOG.warning(f"Error stopping REST API server: {e}")
+        finally:
+            self.app = None
+            self.runner = None
+            self.site = None
+            self._running = False
+            _LOG.info("REST API server stopped")
 
     @property
     def running(self) -> bool:

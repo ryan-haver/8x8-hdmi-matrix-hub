@@ -447,8 +447,8 @@ class SystemShortcutManager:
                 raw[key] = prefs.to_dict()
             for key, us in self._user_shortcuts.items():
                 raw[key] = us.to_dict()
-            with open(self.prefs_path, "w", encoding="utf-8") as f:
-                json.dump(raw, f, indent=2)
+            from _file_io import atomic_write_json
+            atomic_write_json(self.prefs_path, raw)
             return True
         except Exception as e:
             _LOG.error("Error saving system shortcut prefs: %s", e)

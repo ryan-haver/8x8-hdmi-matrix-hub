@@ -128,7 +128,7 @@ async def handle_set_matrix_host(request: web.Request) -> web.Response:
         )
 
     except Exception as e:
-        _LOG.error(f"Error setting matrix host: {e}")
+        _LOG.exception(f"Error setting matrix host: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -157,23 +157,30 @@ async def handle_test_matrix_connection(request: web.Request) -> web.Response:
                 },
             )
         else:
+            # FIX (F13.2): return success=False with status 503 instead of
+            # success=True with connected=False. Previously monitoring tools
+            # checking HTTP 200 → "OK" missed the failed connection.
             return _json_response(
-                True,
+                False,
                 {
                     "connected": False,
                     "host": matrix_device.host,
                     "port": matrix_device.port,
                     "error": "Connection failed",
                 },
+                status=503,
             )
 
     except Exception as e:
-        _LOG.error(f"Error testing matrix connection: {e}")
+        _LOG.exception(f"Error testing matrix connection: {e}")
+        # FIX (F13.2): return success=False with status 503 instead of
+        # success=True with connected=False on exception.
         return _json_response(
-            True,
+            False,
             {
                 "connected": False,
                 "host": matrix_device.host if matrix_device else None,
                 "error": str(e),
             },
+            status=503,
         )

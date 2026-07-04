@@ -83,7 +83,16 @@ class OreiMatrix:
             "outputs": [False] * 8,
             "last_updated": None,  # datetime when last fetched
         }
-        self._cec_cache_ttl = 300  # 5 minutes cache TTL
+        self._cec_cache_ttl = int(os.environ.get("OREI_CEC_CACHE_TTL", "300"))  # 5 minutes cache TTL
+
+        # Serializes HTTP commands so concurrent REST/HA/UC callers cannot
+        # interleave JSON POSTs against the same matrix aiohttp session.
+        # Without this lock, overlapping commands can arrive at the hardware
+        # in undefined order and the matrix processes one at a time anyway.
+        self._command_lock = asyncio.Lock()
+
+        # Protects _cec_enabled_cache reads/writes from concurrent coroutines.
+        self._cec_cache_lock = asyncio.Lock()
 
     @property
     def connected(self) -> bool:
@@ -272,6 +281,9 @@ class OreiMatrix:
             await self._telnet.disconnect()
             self._telnet = None
 
+        # Clear CEC cache on disconnect to prevent stale data
+        self.clear_cec_cache()
+
         if self._session:
             try:
                 await self._session.close()
@@ -290,48 +302,53 @@ class OreiMatrix:
         :param retry_on_failure: Whether to attempt reconnection on failure
         :return: Tuple of (success, response_dict)
         """
-        if not self._session or not self._connected:
-            _LOG.warning("No session or not connected, attempting to connect...")
-            if retry_on_failure:
-                if not await self.connect_with_retry(max_retries=2):
-                    return False, None
-            else:
-                if not await self.connect():
-                    return False, None
-
-        try:
-            protocol = "https" if self.use_https else "http"
-            url = f"{protocol}://{self.host}:{self.port}/cgi-bin/instr"
-            _LOG.debug("Sending %s POST to %s: %s", protocol.upper(), url, command)
-
-            async with self._session.post(url, json=command, timeout=aiohttp.ClientTimeout(total=5)) as response:
-                if response.status == 200:
-                    try:
-                        # Matrix returns text/plain, so read as text then parse JSON
-                        text = await response.text()
-                        _LOG.debug("Command response (raw): %s", text)
-                        response_data = json.loads(text)
-                        _LOG.debug("Command response (parsed): %s", response_data)
-                        return True, response_data
-                    except Exception as ex:
-                        _LOG.debug("Could not parse JSON response: %s", ex)
-                        # Command sent successfully even if response parsing failed
-                        return True, None
+        # Serialize all HTTP commands so concurrent REST/HA/UC callers
+        # cannot interleave JSON POSTs against the same matrix session.
+        # The matrix hardware processes one command at a time anyway;
+        # this lock ensures callers see responses matching their request.
+        async with self._command_lock:
+            if not self._session or not self._connected:
+                _LOG.warning("No session or not connected, attempting to connect...")
+                if retry_on_failure:
+                    if not await self.connect_with_retry(max_retries=2):
+                        return False, None
                 else:
-                    _LOG.warning("HTTP request failed with status %d", response.status)
-                    # Mark as disconnected on HTTP error
-                    self._connected = False
-                    return False, None
+                    if not await self.connect():
+                        return False, None
 
-        except TimeoutError:
-            _LOG.error("Command timeout")
-            self._last_error = "Command timeout"
-            return False, None
-        except Exception as ex:
-            _LOG.error("Failed to send command '%s': %s", command, ex)
-            self._last_error = str(ex)
-            self.events.emit(Events.ERROR, str(ex))
-            return False, None
+            try:
+                protocol = "https" if self.use_https else "http"
+                url = f"{protocol}://{self.host}:{self.port}/cgi-bin/instr"
+                _LOG.debug("Sending %s POST to %s: %s", protocol.upper(), url, command)
+
+                async with self._session.post(url, json=command, timeout=aiohttp.ClientTimeout(total=5)) as response:
+                    if response.status == 200:
+                        try:
+                            # Matrix returns text/plain, so read as text then parse JSON
+                            text = await response.text()
+                            _LOG.debug("Command response (raw): %s", text)
+                            response_data = json.loads(text)
+                            _LOG.debug("Command response (parsed): %s", response_data)
+                            return True, response_data
+                        except Exception as ex:
+                            _LOG.warning("Could not parse JSON response: %s (raw: %.200s)", ex, text)
+                            self._last_error = f"Unparseable matrix response: {ex}"
+                            return False, None
+                    else:
+                        _LOG.warning("HTTP request failed with status %d", response.status)
+                        # Mark as disconnected on HTTP error
+                        self._connected = False
+                        return False, None
+
+            except TimeoutError:
+                _LOG.error("Command timeout")
+                self._last_error = "Command timeout"
+                return False, None
+            except Exception as ex:
+                _LOG.error("Failed to send command '%s': %s", command, ex)
+                self._last_error = str(ex)
+                self.events.emit(Events.ERROR, str(ex))
+                return False, None
 
     async def recall_scene(self, scene: int) -> bool:
         """
@@ -364,11 +381,9 @@ class OreiMatrix:
                 _LOG.warning("Preset %d command sent but matrix returned result: %s", scene, response.get("result"))
                 return False
             else:
-                # No response but command sent - assume success
-                _LOG.info("✓ Preset %d command sent (no response from matrix)", scene)
-                self._current_scene = scene
-                self.events.emit(Events.UPDATE, {"scene": scene})
-                return True
+                # No response - treat as failure since we can't confirm success
+                _LOG.warning("Preset %d command sent but no response from matrix", scene)
+                return False
 
         _LOG.error("Failed to recall preset %d", scene)
         return False
@@ -508,9 +523,8 @@ class OreiMatrix:
                 self.events.emit(Events.UPDATE, {"input": input_num, "output": output_num})
                 return True
             else:
-                _LOG.info("✓ Switch command sent (no confirmation)")
-                self.events.emit(Events.UPDATE, {"input": input_num, "output": output_num})
-                return True
+                _LOG.warning("Input %d to output %d command sent but no valid response from matrix", input_num, output_num)
+                return False
 
         _LOG.error("Failed to switch input %d to output %d", input_num, output_num)
         return False
@@ -1140,65 +1154,91 @@ class OreiMatrix:
         if success and response:
             _LOG.debug("CEC status: %s", response)
             # Update cache from response
-            self._update_cec_cache(response)
+            await self._update_cec_cache(response)
             return response
 
         _LOG.error("Failed to get CEC status")
         return None
 
-    def _update_cec_cache(self, cec_status: dict) -> None:
+    async def _update_cec_cache(self, cec_status: dict) -> None:
         """
         Update the CEC enabled cache from a get cec status response.
+
+        Thread-safe under ``_cec_cache_lock`` so concurrent CEC commands
+        cannot observe a torn cache state during refresh.
 
         :param cec_status: Response from get cec status command
         """
         import datetime
 
-        if "inputindex" in cec_status:
-            for i, val in enumerate(cec_status["inputindex"][:8]):
-                self._cec_enabled_cache["inputs"][i] = val == 1
+        async with self._cec_cache_lock:
+            if "inputindex" in cec_status:
+                for i, val in enumerate(cec_status["inputindex"][:8]):
+                    self._cec_enabled_cache["inputs"][i] = val == 1
 
-        if "outputindex" in cec_status:
-            for i, val in enumerate(cec_status["outputindex"][:8]):
-                self._cec_enabled_cache["outputs"][i] = val == 1
+            if "outputindex" in cec_status:
+                for i, val in enumerate(cec_status["outputindex"][:8]):
+                    self._cec_enabled_cache["outputs"][i] = val == 1
 
-        self._cec_enabled_cache["last_updated"] = datetime.datetime.now()
-        _LOG.debug(
-            "CEC cache updated: inputs=%s, outputs=%s",
-            self._cec_enabled_cache["inputs"],
-            self._cec_enabled_cache["outputs"],
-        )
+            self._cec_enabled_cache["last_updated"] = datetime.datetime.now()
+            _LOG.debug(
+                "CEC cache updated: inputs=%s, outputs=%s",
+                self._cec_enabled_cache["inputs"],
+                self._cec_enabled_cache["outputs"],
+            )
 
-    def _is_cec_cache_valid(self) -> bool:
+    async def _is_cec_cache_valid(self) -> bool:
         """
         Check if the CEC cache is still valid (not expired).
+
+        Thread-safe under ``_cec_cache_lock`` so the validity check and
+        subsequent cache read see a consistent ``last_updated`` timestamp.
 
         :return: True if cache is valid and fresh
         """
         import datetime
 
-        if self._cec_enabled_cache["last_updated"] is None:
-            return False
+        async with self._cec_cache_lock:
+            if self._cec_enabled_cache["last_updated"] is None:
+                return False
+            age = (
+                datetime.datetime.now() - self._cec_enabled_cache["last_updated"]
+            ).total_seconds()
+            return age < self._cec_cache_ttl
 
-        age = (datetime.datetime.now() - self._cec_enabled_cache["last_updated"]).total_seconds()
-        return age < self._cec_cache_ttl
+    def clear_cec_cache(self):
+        """
+        Clear the CEC enabled cache.
 
-    def is_cec_enabled(self, port_num: int, is_output: bool = False) -> bool | None:
+        Called on disconnect to prevent stale data when reconnecting.
+        """
+        self._cec_enabled_cache = {
+            "inputs": [False] * 8,
+            "outputs": [False] * 8,
+            "last_updated": None,
+        }
+
+    async def is_cec_enabled(self, port_num: int, is_output: bool = False) -> bool | None:
         """
         Check if CEC is enabled on a specific port from cache.
+
+        Thread-safe under ``_cec_cache_lock`` — the validity check and the
+        cache read are performed atomically so callers see a consistent
+        snapshot of CEC enablement state.
 
         :param port_num: Port number (1-8)
         :param is_output: True for output, False for input
         :return: True/False from cache, or None if cache is stale
         """
-        if not self._is_cec_cache_valid():
+        if not await self._is_cec_cache_valid():
             return None
 
         if port_num < 1 or port_num > 8:
             return None
 
-        cache_key = "outputs" if is_output else "inputs"
-        return self._cec_enabled_cache[cache_key][port_num - 1]
+        async with self._cec_cache_lock:
+            cache_key = "outputs" if is_output else "inputs"
+            return self._cec_enabled_cache[cache_key][port_num - 1]
 
     async def refresh_cec_status(self) -> bool:
         """
@@ -1225,14 +1265,14 @@ class OreiMatrix:
             return False
 
         # Check cache, refresh if stale
-        is_enabled = self.is_cec_enabled(port_num, is_output)
+        is_enabled = await self.is_cec_enabled(port_num, is_output)
         if is_enabled is None:
             _LOG.debug("CEC cache stale, refreshing...")
             if not await self.refresh_cec_status():
                 _LOG.warning("Failed to refresh CEC status, proceeding anyway")
                 # Proceed without knowing - let the command try
                 return True
-            is_enabled = self.is_cec_enabled(port_num, is_output)
+            is_enabled = await self.is_cec_enabled(port_num, is_output)
 
         if is_enabled:
             _LOG.debug("CEC already enabled on %s %d", "output" if is_output else "input", port_num)
@@ -1259,12 +1299,13 @@ class OreiMatrix:
             return False
 
         # Ensure we have current state
-        if not self._is_cec_cache_valid():
+        if not await self._is_cec_cache_valid():
             await self.refresh_cec_status()
 
         # Build the new arrays preserving existing state
-        input_array = [1 if self._cec_enabled_cache["inputs"][i] else 0 for i in range(8)]
-        output_array = [1 if self._cec_enabled_cache["outputs"][i] else 0 for i in range(8)]
+        async with self._cec_cache_lock:
+            input_array = [1 if self._cec_enabled_cache["inputs"][i] else 0 for i in range(8)]
+            output_array = [1 if self._cec_enabled_cache["outputs"][i] else 0 for i in range(8)]
 
         # Update the target port
         if is_output:

@@ -2,8 +2,10 @@
 WebSocket support for real-time status updates.
 """
 
+import asyncio
 import json
 import logging
+import time
 from typing import Any
 
 from aiohttp import WSMsgType, web
@@ -53,6 +55,29 @@ def get_connected_client_count() -> int:
     return len(get_ws_clients())
 
 
+async def _heartbeat(ws, ws_clients, last_pong_time):
+    """Heartbeat coroutine that pings the client every 30 seconds and checks for pong response."""
+    import time
+    try:
+        while not ws.closed:
+            await asyncio.sleep(30)
+            if ws.closed:
+                break
+            # Check if client responded to last ping within 10 seconds
+            if last_pong_time[0] > 0 and (time.monotonic() - last_pong_time[0]) > 10:
+                _LOG.warning("Client pong timeout, closing connection")
+                await ws.close()
+                break
+            try:
+                await ws.send_str(json.dumps({"event": "ping"}))
+            except Exception:
+                break
+    except asyncio.CancelledError:
+        pass
+    except Exception:
+        pass
+
+
 async def handle_websocket(request: web.Request) -> web.WebSocketResponse:
     """
     WebSocket endpoint for real-time status updates.
@@ -70,21 +95,28 @@ async def handle_websocket(request: web.Request) -> web.WebSocketResponse:
     ws = web.WebSocketResponse()
     await ws.prepare(request)
 
-    # Add to connected clients
-    ws_clients.add(ws)
-    client_count = len(ws_clients)
-    _LOG.info(f"WebSocket client connected (total: {client_count})")
-
-    # Send welcome message
+    # Send welcome message FIRST, only add to set if successful
     try:
         await ws.send_json(
             {
                 "event": "connected",
-                "data": {"message": "Connected to OREI Matrix WebSocket", "client_count": client_count},
+                "data": {"message": "Connected to OREI Matrix WebSocket", "client_count": len(ws_clients) + 1},
             }
         )
     except Exception as e:
-        _LOG.warning(f"Error sending welcome message: {e}")
+        _LOG.warning(f"Failed to send welcome: {e}")
+        return ws  # Don't add to set if welcome failed
+
+    # Only add to set after successful welcome
+    ws_clients.add(ws)
+    client_count = len(ws_clients)
+    _LOG.info(f"WebSocket client connected (total: {client_count})")
+
+    # Track last pong time for timeout detection
+    last_pong_time = [0.0]
+
+    # Create heartbeat task after welcome message
+    heartbeat_task = asyncio.create_task(_heartbeat(ws, ws_clients, last_pong_time))
 
     # Keep connection open and handle incoming messages
     try:
@@ -97,6 +129,9 @@ async def handle_websocket(request: web.Request) -> web.WebSocketResponse:
 
                     if command == "ping":
                         await ws.send_json({"event": "pong", "data": {}})
+                    elif command == "pong":
+                        import time
+                        last_pong_time[0] = time.monotonic()
                     elif command == "get_status":
                         if matrix_device and matrix_device.connected:
                             status = await matrix_device.get_status()
@@ -112,6 +147,12 @@ async def handle_websocket(request: web.Request) -> web.WebSocketResponse:
     except Exception as e:
         _LOG.debug(f"WebSocket connection error: {e}")
     finally:
+        # Cancel heartbeat task
+        heartbeat_task.cancel()
+        try:
+            await heartbeat_task
+        except asyncio.CancelledError:
+            pass
         # Remove from connected clients
         ws_clients.discard(ws)
         _LOG.info(f"WebSocket client disconnected (remaining: {len(ws_clients)})")

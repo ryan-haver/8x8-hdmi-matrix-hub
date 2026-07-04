@@ -62,7 +62,7 @@ async def handle_ext_audio_status(request: web.Request) -> web.Response:
         else:
             return _json_response(False, error="Failed to get ext-audio status", status=500)
     except Exception as e:
-        _LOG.error(f"Error getting ext-audio status: {e}")
+        _LOG.exception(f"Error getting ext-audio status: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -78,7 +78,7 @@ async def handle_ext_audio_modes(request: web.Request) -> web.Response:
         modes = OreiMatrix.get_ext_audio_modes()
         return _json_response(True, {"modes": modes})
     except Exception as e:
-        _LOG.error(f"Error getting ext-audio modes: {e}")
+        _LOG.exception(f"Error getting ext-audio modes: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -126,7 +126,7 @@ async def handle_set_ext_audio_mode(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid mode value", status=400)
     except Exception as e:
-        _LOG.error(f"Error setting ext-audio mode: {e}")
+        _LOG.exception(f"Error setting ext-audio mode: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -166,7 +166,7 @@ async def handle_set_ext_audio_enable(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid output number", status=400)
     except Exception as e:
-        _LOG.error(f"Error setting ext-audio enable: {e}")
+        _LOG.exception(f"Error setting ext-audio enable: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -210,7 +210,7 @@ async def handle_set_ext_audio_source(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid output or input number", status=400)
     except Exception as e:
-        _LOG.error(f"Error setting ext-audio source: {e}")
+        _LOG.exception(f"Error setting ext-audio source: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -246,7 +246,7 @@ async def handle_system_status(request: web.Request) -> web.Response:
         else:
             return _json_response(False, error="Failed to get system status", status=500)
     except Exception as e:
-        _LOG.error(f"Error getting system status: {e}")
+        _LOG.exception(f"Error getting system status: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -289,7 +289,7 @@ async def handle_device_info(request: web.Request) -> web.Response:
 
         return _json_response(True, {"device": device, "raw": {"status": info, "network": network}})
     except Exception as e:
-        _LOG.error(f"Error getting device info: {e}")
+        _LOG.exception(f"Error getting device info: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -319,7 +319,7 @@ async def handle_set_beep(request: web.Request) -> web.Response:
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON body", status=400)
     except Exception as e:
-        _LOG.error(f"Error setting beep: {e}")
+        _LOG.exception(f"Error setting beep: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -349,7 +349,7 @@ async def handle_set_panel_lock(request: web.Request) -> web.Response:
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON body", status=400)
     except Exception as e:
-        _LOG.error(f"Error setting panel lock: {e}")
+        _LOG.exception(f"Error setting panel lock: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -372,7 +372,7 @@ async def handle_system_reboot(request: web.Request) -> web.Response:
         else:
             return _json_response(False, error="Failed to initiate reboot", status=500)
     except Exception as e:
-        _LOG.error(f"Error rebooting system: {e}")
+        _LOG.exception(f"Error rebooting system: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -388,7 +388,7 @@ async def handle_lcd_timeout_modes(request: web.Request) -> web.Response:
         modes = OreiMatrix.get_lcd_timeout_modes()
         return _json_response(True, {"modes": modes})
     except Exception as e:
-        _LOG.error(f"Error getting LCD timeout modes: {e}")
+        _LOG.exception(f"Error getting LCD timeout modes: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -436,5 +436,5 @@ async def handle_set_lcd_timeout(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid mode value", status=400)
     except Exception as e:
-        _LOG.error(f"Error setting LCD timeout: {e}")
+        _LOG.exception(f"Error setting LCD timeout: {e}")
         return _json_response(False, error=str(e), status=500)

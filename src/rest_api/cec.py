@@ -64,7 +64,7 @@ async def handle_cec_input(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid input number", status=400)
     except Exception as e:
-        _LOG.error(f"Error sending CEC command: {e}")
+        _LOG.exception(f"Error sending CEC command: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -114,7 +114,7 @@ async def handle_cec_output(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid output number", status=400)
     except Exception as e:
-        _LOG.error(f"Error sending CEC command: {e}")
+        _LOG.exception(f"Error sending CEC command: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -208,7 +208,7 @@ async def handle_cec_status(request: web.Request) -> web.Response:
         else:
             return _json_response(False, error="Failed to get CEC status", status=500)
     except Exception as e:
-        _LOG.error(f"Error getting CEC status: {e}")
+        _LOG.exception(f"Error getting CEC status: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -246,7 +246,7 @@ async def handle_cec_capabilities(request: web.Request) -> web.Response:
         else:
             return _json_response(False, error="Failed to get capabilities", status=500)
     except Exception as e:
-        _LOG.error(f"Error getting CEC capabilities: {e}")
+        _LOG.exception(f"Error getting CEC capabilities: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -273,7 +273,7 @@ async def handle_input_capabilities(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid input number", status=400)
     except Exception as e:
-        _LOG.error(f"Error getting input capabilities: {e}")
+        _LOG.exception(f"Error getting input capabilities: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -300,7 +300,7 @@ async def handle_output_capabilities(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid output number", status=400)
     except Exception as e:
-        _LOG.error(f"Error getting output capabilities: {e}")
+        _LOG.exception(f"Error getting output capabilities: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -350,7 +350,7 @@ async def handle_cec_commands_by_type(request: web.Request) -> web.Response:
             },
         )
     except Exception as e:
-        _LOG.error(f"Error getting CEC commands by type: {e}")
+        _LOG.exception(f"Error getting CEC commands by type: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -392,7 +392,7 @@ async def handle_cec_enable(request: web.Request) -> web.Response:
         else:
             return _json_response(False, error=f"Failed to set CEC for {port_type} {port_num}", status=500)
     except Exception as e:
-        _LOG.error(f"Error setting CEC enable: {e}")
+        _LOG.exception(f"Error setting CEC enable: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -430,7 +430,7 @@ async def handle_cec_enable_input(request: web.Request) -> web.Response:
         else:
             return _json_response(False, error=f"Failed to set CEC for input {port_num}", status=500)
     except Exception as e:
-        _LOG.error(f"Error setting CEC enable: {e}")
+        _LOG.exception(f"Error setting CEC enable: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -468,5 +468,5 @@ async def handle_cec_enable_output(request: web.Request) -> web.Response:
         else:
             return _json_response(False, error=f"Failed to set CEC for output {port_num}", status=500)
     except Exception as e:
-        _LOG.error(f"Error setting CEC enable: {e}")
+        _LOG.exception(f"Error setting CEC enable: {e}")
         return _json_response(False, error=str(e), status=500)

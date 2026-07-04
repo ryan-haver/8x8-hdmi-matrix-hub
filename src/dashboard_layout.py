@@ -189,11 +189,11 @@ class DashboardLayoutManager:
         self._layout = DashboardLayout.from_dict(payload)
 
     def _save(self) -> bool:
-        """Persist the current layout to disk."""
+        """Persist the current layout to disk atomically."""
         try:
             ensure_data_dir(self.data_dir)
-            with open(self.file_path, "w", encoding="utf-8") as fh:
-                json.dump(self._layout.to_dict(), fh, indent=2)
+            from _file_io import atomic_write_json
+            atomic_write_json(self.file_path, self._layout.to_dict())
             return True
         except OSError as exc:
             _LOG.error("Failed to save dashboard_layout.json: %s", exc)

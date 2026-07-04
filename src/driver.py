@@ -14,6 +14,7 @@ import os
 import signal
 import socket
 import sys
+import threading
 import time
 from collections.abc import Callable, Coroutine
 from dataclasses import dataclass, field
@@ -41,6 +42,11 @@ from ucapi.switch import States as SwitchStates
 
 from orei_matrix import Events as MatrixEvents
 from orei_matrix import OreiMatrix
+
+try:
+    from _task_supervisor import create_supervised_task
+except ImportError:
+    from ._task_supervisor import create_supervised_task
 from rest_api import (
     RestApiServer,
     broadcast_status_update,
@@ -93,6 +99,11 @@ class DriverState:
     input_names: dict[int, str] = field(default_factory=dict)
     output_names: dict[int, str] = field(default_factory=dict)
     saved_config: dict[str, Any] = field(default_factory=dict)
+    # threading.Lock (not asyncio.Lock) because input_names/output_names are
+    # read by the polling task and written from REST handlers / setup flows
+    # which may run in either sync or async contexts. threading.Lock works
+    # in both and the critical sections are tiny (dict assignment).
+    _names_lock: threading.Lock = field(default_factory=threading.Lock, repr=False)
 
     @property
     def connected(self) -> bool:
@@ -113,6 +124,10 @@ _driver_state = DriverState()
 
 # Polling task reference for background status updates
 _polling_task = None
+# Serializes start/stop of the polling task. Without this lock, rapid
+# connect/disconnect cycles (e.g., Remote wake/sleep) can race the
+# ``_polling_task is not None`` / ``_polling_task.done()`` check.
+_polling_task_lock = asyncio.Lock()
 
 
 # =============================================================================
@@ -145,13 +160,15 @@ def set_matrix(device: OreiMatrix | None) -> None:
 
 
 def set_input_names(names: dict[int, str]) -> None:
-    """Update input names in driver state."""
-    _driver_state.input_names = names.copy() if names else {}
+    """Update input names in driver state (thread-safe)."""
+    with _driver_state._names_lock:
+        _driver_state.input_names = names.copy() if names else {}
 
 
 def set_output_names(names: dict[int, str]) -> None:
-    """Update output names in driver state."""
-    _driver_state.output_names = names.copy() if names else {}
+    """Update output names in driver state (thread-safe)."""
+    with _driver_state._names_lock:
+        _driver_state.output_names = names.copy() if names else {}
 
 
 # NOTE: Legacy globals have been removed. Use accessor functions instead:
@@ -391,8 +408,8 @@ def save_config(host: str, port: int, input_names: dict[int, str], output_names:
     if output_names:
         config["output_names"] = {str(k): v for k, v in output_names.items()}
     try:
-        with open(CONFIG_FILE, "w") as f:
-            json.dump(config, f, indent=2)
+        from _file_io import atomic_write_json
+        atomic_write_json(CONFIG_FILE, config)
         _LOG.info(f"Configuration saved to {CONFIG_FILE}")
     except Exception as e:
         _LOG.error(f"Failed to save configuration: {e}")
@@ -1257,6 +1274,15 @@ async def status_polling_loop():
 
     while True:
         try:
+            # Capture the "previous" state BEFORE sleeping. The comparison
+            # later in this iteration compares new state against what was
+            # observed at the END of the previous poll — not against what
+            # may have changed during the sleep window. This prevents
+            # missed routing/connection change broadcasts when a user
+            # action lands during the polling interval.
+            prev_routing_snapshot = _prev_routing.copy() if _prev_routing else None
+            prev_connections_snapshot = _prev_connections.copy() if _prev_connections else None
+
             await asyncio.sleep(POLLING_INTERVAL)
 
             matrix = get_matrix()
@@ -1300,8 +1326,8 @@ async def status_polling_loop():
                         )
 
                     # Broadcast connection change via WebSocket if changed
-                    if len(_prev_connections) >= output_num:
-                        prev_connected = _prev_connections[output_num - 1] == 1
+                    if prev_connections_snapshot is not None and len(prev_connections_snapshot) >= output_num:
+                        prev_connected = prev_connections_snapshot[output_num - 1] == 1
                         if prev_connected != is_connected:
                             await broadcast_status_update(
                                 "connection_change",
@@ -1319,8 +1345,8 @@ async def status_polling_loop():
                         )
 
                     # Broadcast routing change via WebSocket if changed
-                    if len(_prev_routing) >= output_num:
-                        prev_input = _prev_routing[output_num - 1]
+                    if prev_routing_snapshot is not None and len(prev_routing_snapshot) >= output_num:
+                        prev_input = prev_routing_snapshot[output_num - 1]
                         if prev_input != current_input:
                             await broadcast_status_update(
                                 "routing_change",
@@ -1459,30 +1485,31 @@ async def status_polling_loop():
             # Continue polling despite errors
 
 
-def start_status_polling():
-    """Start the background status polling task."""
+async def start_status_polling():
+    """Start the background status polling task (thread-safe)."""
     global _polling_task
 
     if not POLLING_ENABLED:
         _LOG.info("Status polling disabled (POLLING_ENABLED=false)")
         return
 
-    if _polling_task is not None and not _polling_task.done():
-        _LOG.warning("Status polling already running")
-        return
+    async with _polling_task_lock:
+        if _polling_task is not None and not _polling_task.done():
+            _LOG.warning("Status polling already running")
+            return
+        _polling_task = create_supervised_task(status_polling_loop, "status_polling")
+        _LOG.info("Status polling task started")
 
-    _polling_task = asyncio.create_task(status_polling_loop())
-    _LOG.info("Status polling task started")
 
-
-def stop_status_polling():
-    """Stop the background status polling task."""
+async def stop_status_polling():
+    """Stop the background status polling task (thread-safe)."""
     global _polling_task
 
-    if _polling_task is not None:
-        _polling_task.cancel()
-        _polling_task = None
-        _LOG.info("Status polling task stopped")
+    async with _polling_task_lock:
+        if _polling_task is not None:
+            _polling_task.cancel()
+            _polling_task = None
+            _LOG.info("Status polling task stopped")
 
 
 async def on_connect() -> None:
@@ -1573,8 +1600,8 @@ async def on_connect() -> None:
         except Exception as ex:
             _LOG.warning(f"Failed to query input names on connect: {ex}")
 
-    # Start status polling when client connects
-    start_status_polling()
+# Start status polling when client connects
+    await start_status_polling()
 
     await api.set_device_state(ucapi.DeviceStates.CONNECTED)
 
@@ -1584,15 +1611,16 @@ async def on_disconnect() -> None:
     _LOG.info("Client disconnected")
 
     # Stop status polling when client disconnects
-    stop_status_polling()
+    await stop_status_polling()
+ 
 
 
 async def on_enter_standby() -> None:
     """Handle standby mode."""
     _LOG.info("Entering standby mode")
 
-    # Stop polling in standby
-    stop_status_polling()
+# Stop polling in standby
+    await stop_status_polling()
 
     # Optionally disconnect from matrix to save resources
     matrix = get_matrix()
@@ -1609,7 +1637,8 @@ async def on_exit_standby() -> None:
         await matrix.connect()
 
     # Resume polling when exiting standby
-    start_status_polling()
+    await start_status_polling()
+ 
 
 
 async def on_subscribe_entities(entity_ids: list[str]) -> None:
@@ -1709,7 +1738,8 @@ async def _reconnect_loop() -> None:
                 await api.set_device_state(ucapi.DeviceStates.CONNECTED)
 
                 # Restart status polling if it was running
-                start_status_polling()
+                await start_status_polling()
+ 
                 break
             else:
                 _reconnect_attempt += 1
@@ -1777,8 +1807,19 @@ def on_matrix_disconnected():
             "remote.orei_matrix", {RemoteAttr.STATE: ucapi.remote.States.UNAVAILABLE}
         )
 
-    # Stop polling while disconnected
-    stop_status_polling()
+    # Stop polling while disconnected.
+    # on_matrix_disconnected is a sync event handler so we can't await
+    # directly — schedule the coroutine on the running event loop if any.
+    try:
+        loop = asyncio.get_running_loop()
+        loop.create_task(stop_status_polling())
+    except RuntimeError:
+        # No running loop (e.g., called from shutdown path); fall back to
+        # direct cancel of the task reference.
+        global _polling_task
+        if _polling_task is not None:
+            _polling_task.cancel()
+            _polling_task = None
 
     # Start automatic reconnection
     _start_reconnection()
@@ -1959,7 +2000,7 @@ async def handle_driver_setup(msg: ucapi.DriverSetupRequest) -> ucapi.SetupActio
         save_config(host, port, _driver_state.input_names, _driver_state.output_names)
 
         # Update REST API with the new matrix device, names, and config file
-        set_matrix_device(
+        await set_matrix_device(
             get_matrix(),
             input_names=_driver_state.input_names,
             output_names=_driver_state.output_names,
@@ -2021,8 +2062,8 @@ async def shutdown(loop):
     # Stop reconnection task
     _stop_reconnection()
 
-    # Stop status polling
-    stop_status_polling()
+# Stop status polling
+    await stop_status_polling()
 
     # Stop REST API server
     if _rest_api_server and _rest_api_server.running:

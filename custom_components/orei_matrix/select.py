@@ -1,10 +1,14 @@
 """Support for OREI HDMI Matrix output source selection."""
 
+import aiohttp
 from homeassistant.components.select import SelectEntity
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN, LOGGER
+
+# 10s timeout for all matrix HTTP calls.
+_TIMEOUT = aiohttp.ClientTimeout(total=10)
 
 
 async def async_setup_entry(hass, entry, async_add_entities):
@@ -70,16 +74,35 @@ class OreiOutputSelect(CoordinatorEntity, SelectEntity):
 
     async def async_select_option(self, option: str) -> None:
         """Change the active source."""
-        # Find input number matching the option name
-        input_names = self.coordinator.data["status"].get("input_names", {})
-        input_num = None
-        for i in range(1, 9):
-            name = input_names.get(str(i)) or input_names.get(i) or f"Input {i}"
-            if name == option:
-                input_num = i
-                break
-
-        if input_num is None:
+        # Find input number matching the option name. If two inputs share
+        # the same name, prefer the one currently routed to this output;
+        # fall back to the first match if no routing data is available.
+        # FIX (F10.4): previously the first match always won, making the
+        # second identically-named input unreachable.
+        input_names = self.coordinator.data.get("status", {}).get("input_names", {})
+        matches = [
+            i
+            for i in range(1, 9)
+            if (input_names.get(str(i)) or input_names.get(i) or f"Input {i}") == option
+        ]
+        if len(matches) > 1:
+            routing = self.coordinator.data.get("status", {}).get("routing", [])
+            if isinstance(routing, list) and 0 <= self.output_num - 1 < len(routing):
+                current = routing[self.output_num - 1]
+                if current in matches:
+                    input_num = current
+                else:
+                    LOGGER.warning(
+                        "Multiple inputs share name '%s': %s. Using first.",
+                        option,
+                        matches,
+                    )
+                    input_num = matches[0]
+            else:
+                input_num = matches[0]
+        elif len(matches) == 1:
+            input_num = matches[0]
+        else:
             LOGGER.error("Selected option %s does not match any input names", option)
             return
 
@@ -88,7 +111,7 @@ class OreiOutputSelect(CoordinatorEntity, SelectEntity):
         payload = {"input": input_num}
 
         try:
-            async with session.post(url, json=payload) as resp:
+            async with session.post(url, json=payload, timeout=_TIMEOUT) as resp:
                 if resp.status == 200:
                     json_resp = await resp.json()
                     if json_resp.get("success"):

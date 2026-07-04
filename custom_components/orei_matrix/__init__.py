@@ -2,11 +2,15 @@
 
 import asyncio
 
+import aiohttp
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
 from .const import CONF_IP_ADDRESS, CONF_PORT, DOMAIN, PLATFORMS
 from .coordinator import OreiMatrixCoordinator
+
+# 10s timeout for all matrix HTTP calls.
+_TIMEOUT = aiohttp.ClientTimeout(total=10)
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -52,7 +56,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         session = hass.helpers.aiohttp_client.async_get_clientsession()
         url = f"{coordinator.base_url}/api/preset/{preset}"
         try:
-            async with session.post(url) as resp:
+            async with session.post(url, timeout=_TIMEOUT) as resp:
                 if resp.status == 200:
                     await coordinator.async_request_refresh()
         except Exception as err:
@@ -64,7 +68,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         session = hass.helpers.aiohttp_client.async_get_clientsession()
         url = f"{coordinator.base_url}/api/output/{output}/source"
         try:
-            async with session.post(url, json={"input": input_num}) as resp:
+            async with session.post(url, json={"input": input_num}, timeout=_TIMEOUT) as resp:
                 if resp.status == 200:
                     await coordinator.async_request_refresh()
         except Exception as err:
@@ -77,7 +81,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         session = hass.helpers.aiohttp_client.async_get_clientsession()
         url = f"{coordinator.base_url}/api/cec/{port_type}/{port_num}/{command}"
         try:
-            async with session.post(url):
+            async with session.post(url, timeout=_TIMEOUT):
                 pass
         except Exception as err:
             coordinator.logger.error("Error sending CEC command via service: %s", err)

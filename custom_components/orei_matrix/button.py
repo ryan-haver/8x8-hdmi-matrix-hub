@@ -1,11 +1,15 @@
 """Support for OREI HDMI Matrix buttons."""
 
+import aiohttp
 from homeassistant.components.button import ButtonEntity
 from homeassistant.const import EntityCategory
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN, LOGGER
+
+# 10s timeout for all matrix HTTP calls.
+_TIMEOUT = aiohttp.ClientTimeout(total=10)
 
 
 async def async_setup_entry(hass, entry, async_add_entities):
@@ -58,7 +62,7 @@ class OreiPresetButton(CoordinatorEntity, ButtonEntity):
         session = self.coordinator.hass.helpers.aiohttp_client.async_get_clientsession()
         url = f"{self.coordinator.base_url}/api/preset/{self.preset_num}"
         try:
-            async with session.post(url) as resp:
+            async with session.post(url, timeout=_TIMEOUT) as resp:
                 if resp.status == 200:
                     json_resp = await resp.json()
                     if json_resp.get("success"):
@@ -97,7 +101,7 @@ class OreiRebootButton(CoordinatorEntity, ButtonEntity):
         session = self.coordinator.hass.helpers.aiohttp_client.async_get_clientsession()
         url = f"{self.coordinator.base_url}/api/system/reboot"
         try:
-            async with session.post(url) as resp:
+            async with session.post(url, timeout=_TIMEOUT) as resp:
                 if resp.status == 200:
                     json_resp = await resp.json()
                     if not json_resp.get("success"):

@@ -336,6 +336,11 @@ class MatrixApiClient:
             _LOG.error(f"WebSocket listen error: {e}")
         finally:
             self._connected = False
+            if self._ws is not None and not self._ws.closed:
+                try:
+                    await self._ws.close()
+                except Exception as e:
+                    _LOG.warning(f"Error closing WebSocket: {e}")
 
     async def _dispatch_status_update(self, data: dict):
         """Dispatch status update to all registered callbacks."""

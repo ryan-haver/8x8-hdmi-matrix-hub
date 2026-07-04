@@ -35,7 +35,7 @@ async def handle_full_status(request: web.Request) -> web.Response:
         status = await matrix_device.get_full_status()
         return _json_response(True, status)
     except Exception as e:
-        _LOG.error(f"Error getting full status: {e}")
+        _LOG.exception(f"Error getting full status: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -92,7 +92,7 @@ async def handle_output_status(request: web.Request) -> web.Response:
         else:
             return _json_response(False, error="Failed to get output status", status=500)
     except Exception as e:
-        _LOG.error(f"Error getting output status: {e}")
+        _LOG.exception(f"Error getting output status: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -148,7 +148,7 @@ async def handle_input_status(request: web.Request) -> web.Response:
         else:
             return _json_response(False, error="Failed to get input status", status=500)
     except Exception as e:
-        _LOG.error(f"Error getting input status: {e}")
+        _LOG.exception(f"Error getting input status: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -194,7 +194,7 @@ async def handle_cable_status(request: web.Request) -> web.Response:
 
         return _json_response(True, {"inputs": inputs, "outputs": outputs, "telnetAvailable": True})
     except Exception as e:
-        _LOG.error(f"Error getting cable status: {e}")
+        _LOG.exception(f"Error getting cable status: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -240,7 +240,7 @@ async def handle_edid_status(request: web.Request) -> web.Response:
         else:
             return _json_response(False, error="Failed to get EDID status", status=500)
     except Exception as e:
-        _LOG.error(f"Error getting EDID status: {e}")
+        _LOG.exception(f"Error getting EDID status: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -256,7 +256,7 @@ async def handle_edid_modes(request: web.Request) -> web.Response:
         modes = OreiMatrix.get_edid_modes()
         return _json_response(True, {"modes": modes})
     except Exception as e:
-        _LOG.error(f"Error getting EDID modes: {e}")
+        _LOG.exception(f"Error getting EDID modes: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -311,7 +311,7 @@ async def handle_set_input_edid(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid input or mode value", status=400)
     except Exception as e:
-        _LOG.error(f"Error setting EDID for input: {e}")
+        _LOG.exception(f"Error setting EDID for input: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -357,7 +357,7 @@ async def handle_output_enable(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid output number", status=400)
     except Exception as e:
-        _LOG.error(f"Error setting output enable: {e}")
+        _LOG.exception(f"Error setting output enable: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -406,7 +406,7 @@ async def handle_output_hdcp(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid output number", status=400)
     except Exception as e:
-        _LOG.error(f"Error setting output HDCP: {e}")
+        _LOG.exception(f"Error setting output HDCP: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -451,7 +451,7 @@ async def handle_output_hdr(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid output number", status=400)
     except Exception as e:
-        _LOG.error(f"Error setting output HDR: {e}")
+        _LOG.exception(f"Error setting output HDR: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -500,7 +500,7 @@ async def handle_output_scaler(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid output number", status=400)
     except Exception as e:
-        _LOG.error(f"Error setting output scaler: {e}")
+        _LOG.exception(f"Error setting output scaler: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -541,7 +541,7 @@ async def handle_output_arc(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid output number", status=400)
     except Exception as e:
-        _LOG.error(f"Error setting output ARC: {e}")
+        _LOG.exception(f"Error setting output ARC: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -586,5 +586,5 @@ async def handle_output_mute(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid output number", status=400)
     except Exception as e:
-        _LOG.error(f"Error setting output mute: {e}")
+        _LOG.exception(f"Error setting output mute: {e}")
         return _json_response(False, error=str(e), status=500)
