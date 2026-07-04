@@ -81,6 +81,19 @@ The **HDCVT HDP-MXC88A** is an OEM (Original Equipment Manufacturer) product tha
   - Persistent configuration across restarts
   - Health checks and auto-restart
 
+- **Flic Smart Button Integration**
+  - Internet Request template support for Flic Original / Flic 2 (single/double clicks, holds)
+  - Flic Duo zone-based multi-room button and profile mapping
+  - Flic Twist rotation-to-cycling HDMI inputs mapping (`/api/input/next` and `/api/input/previous`)
+  - Flic Twist press actions for volume, CEC, and mute controls
+  - Pre-built Flic Hub SDK Javascript templates for in-hub custom modules
+
+- **CEC Macro System**
+  - Custom multi-step CEC command sequences (power on/off, volume, inputs, delays)
+  - Test/dry-run capabilities via API
+  - Integration with Profiles for room-level automated startup/shutdown sequences
+
+
 - **Home Assistant Custom HACS Component**
   - UI-based config flow (setup via IP address & port)
   - Output source routing `select` entities mapping to custom input names
