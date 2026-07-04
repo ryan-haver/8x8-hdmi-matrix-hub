@@ -162,7 +162,6 @@ class TestBinarySensorAvailableState:
         """When coordinator.data has no inputs, is_on returns None."""
         from custom_components.orei_matrix.binary_sensor import OreiInputSignalSensor
 
-        hass = MagicMock()
         coordinator = MagicMock()
         coordinator.data = {}  # No 'inputs' key
         coordinator.last_update_success = True

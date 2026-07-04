@@ -24,7 +24,6 @@ sys.path.insert(0, str(src_path))
 
 from _telnet_proto import TelnetIACFilter
 
-
 # =============================================================================
 # Item 1.1: TelnetIACFilter Tests
 # =============================================================================
@@ -172,7 +171,6 @@ class TestBinaryDataDetection:
         data = b"hello world\r\n"
         user_data, _ = filter.feed(data)
         # Decode and check non-printable ratio
-        text = user_data.decode("utf-8", errors="replace")
         binary_count = sum(
             1 for b in user_data
             if b > 127 or (b < 32 and b not in (9, 10, 13))
@@ -236,11 +234,11 @@ class TestPendingResponseRemoval:
 
     def test_no_pending_response_in_telnet_client(self):
         """TelnetClient should not have _pending_response attribute."""
-        from telnet_client import TelnetClient
-
         # Check class definition doesn't include _pending_response
         # We can't instantiate without network, but we can check source
         import inspect
+
+        from telnet_client import TelnetClient
 
         source = inspect.getsource(TelnetClient)
         # The _pending_response line should NOT appear in __init__

@@ -23,6 +23,7 @@ import pytest
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(_PROJECT_ROOT / "src"))
 
+import _file_io  # noqa: E402
 from _file_io import atomic_read_json, atomic_write_json  # noqa: E402
 
 
