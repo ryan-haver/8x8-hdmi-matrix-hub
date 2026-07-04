@@ -450,7 +450,7 @@ class MacroManager:
                     # Apply delay if specified and not the last step
                     if step.delay_ms > 0 and i < total_steps - 1:
                         await asyncio.sleep(step.delay_ms / 1000.0)
-        except asyncio.TimeoutError:
+        except TimeoutError:
             _LOG.warning("Macro %s timed out after %ds", macro_id, timeout_s)
             return {
                 "success": False,
