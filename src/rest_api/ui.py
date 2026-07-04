@@ -76,11 +76,11 @@ def _save_preferences(data: dict) -> bool:
     path = _resolve_ui_prefs_path()
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
-        with open(path, "w", encoding="utf-8") as f:
-            json.dump(data, f, indent=2)
+        from _file_io import atomic_write_json
+        atomic_write_json(path, data)
         return True
     except Exception as e:
-        _LOG.error(f"Failed to save UI preferences: {e}")
+        _LOG.exception(f"Failed to save UI preferences: {e}")
         return False
 
 
@@ -119,5 +119,5 @@ async def handle_set_ui_preferences(request: web.Request) -> web.Response:
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON body", status=400)
     except Exception as e:
-        _LOG.error(f"Error updating UI preferences: {e}")
+        _LOG.exception(f"Error updating UI preferences: {e}")
         return _json_response(False, error=str(e), status=500)

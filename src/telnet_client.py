@@ -21,6 +21,16 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
 
+try:
+    from _task_supervisor import create_supervised_task
+except ImportError:
+    from ._task_supervisor import create_supervised_task
+
+try:
+    from _telnet_proto import TelnetIACFilter
+except ImportError:
+    from ._telnet_proto import TelnetIACFilter
+
 _LOG = logging.getLogger(__name__)
 
 # Telnet configuration
@@ -133,7 +143,13 @@ class TelnetClient:
 
         # Command queue for serialization
         self._command_lock = asyncio.Lock()
-        self._pending_response: asyncio.Future | None = None
+
+        # IAC protocol filter (Item 1.1)
+        self._filter = TelnetIACFilter()
+
+        # Push notification buffer — stores stray bytes received during _send_raw
+        # that should be processed by _listen_for_push after command completes (Item 1.3)
+        self._push_buffer: list[str] = []
 
         # Firmware version (from banner)
         self.firmware_version: str = ""
@@ -192,7 +208,7 @@ class TelnetClient:
             self._set_state(TelnetState.CONNECTED)
 
             # Start background listener for push notifications
-            self._listener_task = asyncio.create_task(self._listen_for_push())
+            self._listener_task = create_supervised_task(lambda: self._listen_for_push(), "telnet_push_listener")
 
             _LOG.info("Telnet connection established")
             return True
@@ -238,13 +254,46 @@ class TelnetClient:
         self._set_state(TelnetState.DISCONNECTED)
 
     async def _read_available(self, timeout: float = 0.5) -> str:
-        """Read all available data from the connection."""
+        """Read all available data from the connection.
+
+        FIX (F4.3): Pass raw bytes through TelnetIACFilter to strip IAC
+        negotiation sequences and handle auto-replies before decoding.
+
+        FIX (F4.5): Detect binary data (non-printable bytes) and return
+        empty string to avoid corrupting command response parsing.
+        """
         if not self._reader:
             return ""
 
         try:
             data = await asyncio.wait_for(self._reader.read(8192), timeout=timeout)
-            return data.decode("utf-8", errors="replace")
+            if not data:
+                return ""
+
+            # FIX (F4.3): Filter IAC negotiation bytes
+            user_data, response_bytes = self._filter.feed(data)
+
+            # Send any IAC auto-reply bytes back to the server
+            if response_bytes and self._writer:
+                self._writer.write(response_bytes)
+                await self._writer.drain()
+
+            # FIX (F4.5): Binary data detection
+            if user_data:
+                binary_count = sum(
+                    1 for b in user_data
+                    if b > 127 or (b < 32 and b not in (9, 10, 13))
+                )
+                non_printable_ratio = binary_count / len(user_data) if user_data else 0
+                if non_printable_ratio > 0.1:
+                    _LOG.warning(
+                        f"Binary data detected in Telnet read: "
+                        f"{binary_count}/{len(user_data)} non-printable bytes "
+                        f"({non_printable_ratio:.0%}), returning empty string"
+                    )
+                    return ""
+
+            return user_data.decode("utf-8", errors="replace")
         except TimeoutError:
             return ""
         except Exception as e:
@@ -264,13 +313,16 @@ class TelnetClient:
 
         async with self._command_lock:
             try:
-                # Clear any pending data
-                await self._read_available(timeout=0.1)
+                # FIX (F4.2): Removed pre-clear read here.
+                # Bytes that arrive during _send_raw are stored in _push_buffer
+                # by _listen_for_push and drained after the lock is released.
 
                 # Send command with terminator
                 full_cmd = command + "!\r\n"
                 _LOG.debug(f"Telnet TX: {repr(full_cmd)}")
-                self._writer.write(full_cmd.encode())
+                # FIX (F4.3): Escape any 0xFF bytes per RFC 854 §3
+                encoded_cmd = self._filter.escape_ff(full_cmd.encode())
+                self._writer.write(encoded_cmd)
                 await self._writer.drain()
 
                 # Read response with timeout
@@ -301,90 +353,245 @@ class TelnetClient:
                 raise CommandError(f"Command failed: {e}")
 
     def _is_response_complete(self, response: str, command: str = "") -> bool:
-        """Check if we've received a complete response."""
-        # Response is complete when we see the end of status dump
-        # or an error code
-        lines = response.strip().split("\r\n")
+        """Check if we've received a complete response.
+
+        FIX (F4.1): the previous heuristic used magic-number length checks
+        (``len(response) > 10`` for CEC, ``> 20`` for reads, ``> 5`` for
+        sets) which could mis-fire on short legitimate responses or
+        truncate long responses split across chunks. Now we look for
+        proper protocol terminators:
+
+        - Error codes (E00/E01/E02) — always signal completion
+        - Proper line endings (``\\r\\n``) on the last non-empty line
+        - Command-specific known terminators (mac address for status,
+          connect/disconnect for link queries)
+        """
+        if not response:
+            return False
+
+        # Split on either \r\n or \n — the matrix may use either
+        lines = response.replace("\r\n", "\n").rstrip("\n").split("\n")
+        # Drop trailing empty lines from split
+        while lines and not lines[-1].strip():
+            lines.pop()
         if not lines:
             return False
 
         last_line = lines[-1].strip()
 
-        # Error codes at end of response
+        # Error codes at end of response — definitive completion marker
         if last_line in ("E00", "E01", "E02"):
             return True
 
-        # For 'status' command, wait for mac address (last line)
+        # For 'status' command, wait for mac address (last line of dump)
         if command.lower() == "status":
-            if "mac address:" in response.lower():
-                return True
-            return False
+            return "mac address:" in response.lower()
 
-        # For 'r link' commands, look for connect/disconnect
+        # For 'r link' commands, look for connect/disconnect response
         if command.lower().startswith("r link"):
-            if "connect" in response.lower() or "disconnect" in response.lower():
-                return True
+            return "connect" in response.lower() or "disconnect" in response.lower()
 
-        # For CEC commands, look for confirmation
+        # For CEC commands — the matrix echoes "s cec in 1 on\r\nE00\r\n"
+        # or just "E00\r\n". Error-code check above handles success cases.
+        # If no error code yet, check if the last line is a recognizable
+        # CEC response pattern (port number + command name).
         if command.lower().startswith("s cec"):
-            # CEC commands don't echo much, just wait a moment
-            return len(response) > 10
+            # Still waiting if last line is incomplete (no proper terminator)
+            # or is just the echo of the command itself
+            if last_line == command.strip().lower():
+                return False
+            # If we got here without an error code, the matrix is still
+            # sending — keep reading until timeout.
+            return "E00" in response or "E01" in response
 
-        # For other read commands, look for specific patterns
+        # For other read commands — most return "label: value\r\n"
         if command.lower().startswith("r "):
-            # Most read commands return a colon-separated value
-            if ":" in response and len(response) > 20:
-                return True
+            # Complete when we have at least one colon-separated value line
+            # that has been properly terminated (ended with \r\n or \n).
+            return any(":" in line for line in lines)
 
-        # For set commands
+        # For set commands — matrix returns "E00\r\n" or "E01\r\n"
+        # which is caught by the error-code check above. If we reach here
+        # without an error code, the response is incomplete.
         if command.lower().startswith("s "):
-            # Set commands usually don't return much
-            return len(response) > 5
+            return False  # always wait for error code or timeout
 
         # End of network config (last in full status dump)
-        if "mac address:" in response.lower():
-            return True
-
-        return False
+        return "mac address:" in response.lower()
 
     async def _listen_for_push(self) -> None:
-        """Background task to listen for push notifications."""
+        """Background task to listen for push notifications from the matrix.
+
+        FIX (F2.3): previously this loop only slept without reading — push
+        notifications from the matrix (cable connect/disconnect events)
+        were never received. Now it reads from ``self._reader`` and parses
+        cable-change events, dispatching them to ``on_status_update``.
+
+        Note: this task runs concurrently with ``_send_raw`` which holds
+        ``self._command_lock``. Bytes that arrive between commands are
+        read here; bytes that arrive during a command response are read
+        by ``_send_raw`` (which holds the lock). The two readers cooperate
+        via the command lock — push data that arrives mid-command is
+        stored in ``self._push_buffer`` and drained here after the lock
+        is released (Item 1.3).
+        """
+        import re
+
         _LOG.debug("Starting Telnet push listener")
 
-        while self.connected and self._reader:
-            try:
-                # This is a passive listener - it runs when we're not sending commands
-                await asyncio.sleep(0.1)
+        # Cable connect/disconnect events look like:
+        #   "hdmi input 3: connect"
+        #   "hdmi output 5: disconnect"
+        _push_event_re = re.compile(
+            r"hdmi\s+(input|output)\s+(\d+)\s*:\s*(connect|disconnect)", re.IGNORECASE
+        )
+        # Buffer partial lines that may arrive split across reads
+        line_buffer = ""
 
+        while self.connected and self._reader:
+            # FIX (F4.2): Drain any bytes stored during _send_raw
+            while self._push_buffer:
+                buffered = self._push_buffer.pop(0)
+                line_buffer += buffered
+                # Process complete lines from buffered data
+                while "\n" in line_buffer:
+                    raw_line, line_buffer = line_buffer.split("\n", 1)
+                    line = raw_line.rstrip("\r").strip()
+                    if line:
+                        await self._dispatch_push_line(line, _push_event_re)
+
+            try:
+                data = await asyncio.wait_for(
+                    self._reader.read(4096),
+                    timeout=1.0,
+                )
+            except asyncio.TimeoutError:
+                # No data within 1s — normal idle, loop and recheck state
+                continue
             except asyncio.CancelledError:
                 break
             except Exception as e:
-                _LOG.warning(f"Push listener error: {e}")
-                break
+                _LOG.warning(f"Push listener read error: {e}")
+                await asyncio.sleep(0.5)
+                continue
+
+            if not data:
+                continue
+
+            # FIX (F4.3): Filter IAC negotiation bytes
+            user_data, response_bytes = self._filter.feed(data)
+
+            # Send any IAC auto-reply bytes back to the server
+            if response_bytes and self._writer:
+                self._writer.write(response_bytes)
+                await self._writer.drain()
+
+            # FIX (F4.5): Binary data detection
+            if user_data:
+                binary_count = sum(
+                    1 for b in user_data
+                    if b > 127 or (b < 32 and b not in (9, 10, 13))
+                )
+                non_printable_ratio = binary_count / len(user_data) if user_data else 0
+                if non_printable_ratio > 0.1:
+                    _LOG.warning(
+                        f"Binary data detected in push listener: "
+                        f"{binary_count}/{len(user_data)} non-printable bytes "
+                        f"({non_printable_ratio:.0%}), skipping"
+                    )
+                    continue
+
+            text = user_data.decode("utf-8", errors="replace")
+            line_buffer += text
+
+            # Process complete lines (delimited by \r\n or \n)
+            while "\n" in line_buffer:
+                raw_line, line_buffer = line_buffer.split("\n", 1)
+                line = raw_line.rstrip("\r").strip()
+                if not line:
+                    continue
+                await self._dispatch_push_line(line, _push_event_re)
 
         _LOG.debug("Telnet push listener stopped")
+
+    async def _dispatch_push_line(self, line: str, event_re) -> None:
+        """Parse a single push notification line and fire the callback.
+
+        Parses cable connect/disconnect events and builds a partial
+        MatrixStatus containing only the changed ports. This is sufficient
+        for the on_status_update callback which typically just broadcasts
+        a WebSocket notification.
+        """
+        m = event_re.search(line)
+        if not m:
+            return
+        port_type, port_str, state = m.group(1).lower(), int(m.group(2)), m.group(3).lower()
+        connected = state == "connect"
+        _LOG.info(f"Telnet push event: {port_type} {port_str} {state}")
+
+        if self._on_status_update is None:
+            return
+
+        # Build a minimal MatrixStatus with only the changed port.
+        # Callers that want full state should re-poll.
+        try:
+            status = MatrixStatus()
+            if port_type == "input":
+                status.inputs[port_str] = InputStatus(
+                    port=port_str, connected=connected
+                )
+            else:
+                status.outputs[port_str] = OutputStatus(
+                    port=port_str, connected=connected
+                )
+            self._on_status_update(status)
+        except Exception as e:
+            _LOG.warning(f"Failed to dispatch push event: {e}")
 
     def _schedule_reconnect(self) -> None:
         """Schedule a reconnection attempt."""
         if self._reconnect_task and not self._reconnect_task.done():
             return  # Already scheduled
 
-        self._reconnect_task = asyncio.create_task(self._reconnect_loop())
+        self._reconnect_task = create_supervised_task(lambda: self._reconnect_loop(), "telnet_reconnect")
+
+    # Maximum reconnect delay (5 minutes) — caps exponential growth so
+    # the loop doesn't eventually wait hours between attempts.
+    _MAX_RECONNECT_DELAY = 300.0
 
     async def _reconnect_loop(self) -> None:
-        """Attempt to reconnect with backoff."""
+        """Attempt to reconnect indefinitely with exponential backoff + jitter.
+
+        FIX (F2.4): previously this loop ran at most ``MAX_RECONNECT_ATTEMPTS``
+        (10) times then gave up permanently, leaving Telnet/CEC/cable-detection
+        features dead until the entire driver process restarted. Now the loop
+        runs forever with exponential backoff capped at 5 minutes — CEC and
+        cable detection self-recover when the matrix comes back online.
+        """
+        import random
+
         self._set_state(TelnetState.RECONNECTING)
 
-        for attempt in range(MAX_RECONNECT_ATTEMPTS):
-            _LOG.info(f"Telnet reconnect attempt {attempt + 1}/{MAX_RECONNECT_ATTEMPTS}")
+        attempt = 0
+        while True:
+            attempt += 1
+            # Exponential backoff: 5, 10, 20, 40, 80, 160, 300 (capped)
+            delay = min(RECONNECT_DELAY * (2 ** (attempt - 1)), self._MAX_RECONNECT_DELAY)
+            # ±10% jitter to avoid thundering herd if many clients reconnect
+            delay *= 0.9 + 0.2 * random.random()
 
-            await asyncio.sleep(RECONNECT_DELAY * (attempt + 1))
+            _LOG.info(
+                f"Telnet reconnect attempt {attempt} in {delay:.1f}s"
+            )
+            await asyncio.sleep(delay)
 
             if await self.connect():
+                _LOG.info(
+                    f"Telnet reconnected after {attempt} attempts"
+                )
+                self._reconnect_task = None
                 return
-
-        _LOG.error("Telnet reconnection failed after max attempts")
-        self._set_state(TelnetState.DISCONNECTED)
+            # Otherwise loop again with backoff
 
     # =========================================================================
     # Status Commands

@@ -221,6 +221,9 @@ async def handle_create_shortcut(request: web.Request) -> web.Response:
         if not name or not type:
             return _json_response(False, error="name and type are required fields", status=400)
 
+        if not isinstance(type, str) or not type.strip():
+            return _json_response(False, error="type must be a non-empty string", status=400)
+
         sc = manager.add_user_shortcut(name, icon, type, params)
         if sc is None:
             return _json_response(False, error="Failed to create shortcut. Ensure type is valid.", status=400)

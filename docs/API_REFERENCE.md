@@ -28,6 +28,25 @@ The REST API provides HTTP endpoints for external integrations, enabling control
 | 2.1.0 | Input cycling, per-output source |
 | 2.0.0 | Initial REST API |
 
+## Breaking Changes
+
+v2.10.0 introduced the following breaking changes:
+
+### Error Response Semantics
+
+- **`POST /api/settings/test-connection`**: Returns `200` with `success: true` on successful connection, or `503` with `success: false` on failure (previously returned `200` with `connected: false`)
+- **Handler errors**: Internal errors now return a correlation ID instead of raw exception text for security
+
+### Input Validation
+
+- **`POST /api/cec/macro`**: Validates all commands against a whitelist and all targets against the format `input_N` or `output_N`. Invalid commands or targets return `400` with descriptive error messages
+- **`PUT /api/profile/{id}`**: Only whitelisted fields are accepted. Unknown fields are silently ignored with a warning log
+
+### Accepted Fields Whitelist (Profile Update)
+
+The following fields are accepted by `PUT /api/profile/{id}`:
+`name`, `icon`, `outputs`, `cec_config`, `macros`, `power_on_macro`, `power_off_macro`, `pinned`, `pin_order`, `favorite`, `dashboard_visible`, `password_protected`, `passcode_hash`, `description`
+
 ## Base URL
 
 ```
@@ -622,6 +641,8 @@ curl -X PUT http://localhost:8080/api/profile/movie_night \
   -d '{"icon": "🎥", "power_on_macro": "theater_mode"}'
 ```
 
+**Accepted fields**: `name`, `icon`, `outputs`, `cec_config`, `macros`, `power_on_macro`, `power_off_macro`, `pinned`, `pin_order`, `favorite`, `dashboard_visible`, `password_protected`, `passcode_hash`, `description`. Unknown fields are silently ignored.
+
 #### DELETE /api/profile/{id}
 Delete a profile.
 
@@ -823,6 +844,8 @@ curl -X POST http://localhost:8080/api/cec/macro \
     ]
   }'
 ```
+
+**Validation**: Commands are validated against a whitelist. Valid input commands: `POWER_ON`, `POWER_OFF`, `UP`, `DOWN`, `LEFT`, `RIGHT`, `SELECT`, `MENU`, `BACK`, `PLAY`, `PAUSE`, `STOP`, `REWIND`, `FAST_FORWARD`, `PREVIOUS`, `NEXT`, `VOLUME_UP`, `VOLUME_DOWN`, `MUTE`. Valid output commands: `POWER_ON`, `POWER_OFF`, `MUTE`, `VOLUME_UP`, `VOLUME_DOWN`, `ACTIVE`. Targets must be formatted as `input_N` or `output_N` (N=1-8). Returns `400` with descriptive error message if validation fails.
 
 #### GET /api/cec/macro/{id}
 Get a specific CEC macro.
@@ -1031,6 +1054,48 @@ Or in docker-compose.yml:
 environment:
   - REST_API_ENABLED=false
 ```
+
+---
+
+## Backend Settings (v2.10.0+)
+
+Backend configuration endpoints for matrix connection and system settings.
+
+#### POST /api/settings/test-connection
+Test the connection to the currently configured matrix device.
+
+```bash
+curl -X POST http://localhost:8080/api/settings/test-connection
+```
+
+**Response (success):**
+```json
+{
+  "success": true,
+  "data": {
+    "connected": true,
+    "host": "192.168.0.100",
+    "port": 443,
+    "model": "BK-808",
+    "firmware_version": "1.0.5"
+  }
+}
+```
+
+**Response (failure - HTTP 503):**
+```json
+{
+  "success": false,
+  "data": {
+    "connected": false,
+    "host": "192.168.0.100",
+    "port": 443,
+    "error": "Connection failed"
+  }
+}
+```
+
+Returns `200` with `success: true` on successful connection, or `503` with `success: false` on failure.
 
 ---
 

@@ -14,12 +14,15 @@ async def async_setup_entry(hass, entry, async_add_entities):
     entities = []
 
     # 1. Input Signal Sensors
-    input_count = len(coordinator.data["status"].get("input_names", {})) or 8
+    input_count = len(coordinator.data.get("status", {}).get("input_names", {})) or 8
     for i in range(1, input_count + 1):
         entities.append(OreiInputSignalSensor(coordinator, i))
 
     # 2. Output Connection Sensors
-    output_count = len(coordinator.data["status"].get("outputs", [0] * 8))
+    # FIX (R1): outputs live at data["outputs"], not data["status"]["outputs"].
+    # The coordinator stores outputs/inputs as separate top-level keys
+    # populated from the /api/status/outputs and /api/status/inputs endpoints.
+    output_count = len(coordinator.data.get("outputs", [])) or 8
     for i in range(1, output_count + 1):
         entities.append(OreiOutputConnectionSensor(coordinator, i))
 
@@ -47,17 +50,33 @@ class OreiInputSignalSensor(CoordinatorEntity, BinarySensorEntity):
         )
 
     @property
+    def available(self) -> bool:
+        """Return True if the coordinator has fresh data.
+
+        When the matrix is unreachable or the API returns unexpected data,
+        the coordinator raises UpdateFailed and ``data`` may be stale or
+        incomplete. In that case we report unavailable rather than
+        a misleading "Off" state.
+        """
+        return (
+            self.coordinator.last_update_success
+            and bool(self.coordinator.data.get("inputs"))
+        )
+
+    @property
     def name(self) -> str:
         """Return the name of the sensor."""
-        input_names = self.coordinator.data["status"].get("input_names", {})
+        input_names = self.coordinator.data.get("status", {}).get("input_names", {})
         custom_name = input_names.get(str(self.input_num)) or input_names.get(self.input_num)
         if custom_name:
             return f"Input {self.input_num} ({custom_name}) Signal"
         return f"Input {self.input_num} Signal"
 
     @property
-    def is_on(self) -> bool:
-        """Return true if video signal is active."""
+    def is_on(self) -> bool | None:
+        """Return true if video signal is active, None if unknown."""
+        if not self.available:
+            return None
         inputs = self.coordinator.data.get("inputs", [])
         for inp in inputs:
             if inp.get("number") == self.input_num:

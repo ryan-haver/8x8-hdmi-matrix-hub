@@ -4,9 +4,14 @@ Shared utilities for REST API.
 Contains rate limiting, response helpers, and shared state.
 """
 
+from __future__ import annotations
+
+import asyncio
+import ipaddress
 import json
 import logging
 import os
+import uuid as _uuid
 
 # Support both package and direct imports
 import sys
@@ -22,28 +27,57 @@ _src_dir = Path(__file__).parent.parent
 if str(_src_dir) not in sys.path:
     sys.path.insert(0, str(_src_dir))
 
-try:
-    from cec_macros import MacroManager
-    from config import ProfileManager, SceneManager
-    from dashboard_layout import DashboardLayoutManager
-    from orei_matrix import OreiMatrix
-    from system_shortcuts import SystemShortcutManager
-except ImportError as e:
-    # Log and continue with optional typing
-    import logging
+_LOG = logging.getLogger("rest_api")
 
-    logging.getLogger("rest_api").warning(f"Could not import manager classes: {e}")
-    SceneManager = None  # type: ignore
-    ProfileManager = None  # type: ignore
-    OreiMatrix = None  # type: ignore
-    MacroManager = None  # type: ignore
-    DashboardLayoutManager = None  # type: ignore
-    SystemShortcutManager = None  # type: ignore
+# OreiMatrix is always needed - critical import that should fail fast
+from orei_matrix import OreiMatrix
+
+
+# Lazy import helpers for manager classes to avoid circular import risk
+def _get_scene_manager(config_dir):
+    """Get SceneManager instance with lazy import."""
+    from config import SceneManager
+
+    return SceneManager(config_dir)
+
+
+def _get_profile_manager(config_dir):
+    """Get ProfileManager instance with lazy import."""
+    from config import ProfileManager
+
+    return ProfileManager(config_dir)
+
+
+def _get_macro_manager(config_dir):
+    """Get MacroManager instance with lazy import."""
+    from cec_macros import MacroManager
+
+    return MacroManager(config_dir)
+
+
+def _get_dashboard_layout_manager(data_dir):
+    """Get DashboardLayoutManager instance with lazy import."""
+    from dashboard_layout import DashboardLayoutManager
+
+    return DashboardLayoutManager(data_dir)
+
+
+def _get_system_shortcut_manager(data_dir):
+    """Get SystemShortcutManager instance with lazy import."""
+    from system_shortcuts import SystemShortcutManager
+
+    return SystemShortcutManager(data_dir)
+
+
+def _get_data_dir():
+    """Get data directory with lazy import."""
+    from persistence import get_data_dir
+
+    return get_data_dir()
+
 
 # API Version
 API_VERSION = "2.10.0"
-
-_LOG = logging.getLogger("rest_api")
 
 # Web UI directory
 _WEB_DIR = Path(__file__).parent.parent.parent / "web"
@@ -51,6 +85,20 @@ _WEB_DIR = Path(__file__).parent.parent.parent / "web"
 # Security configuration
 # Set TRUST_PROXY_HEADERS=true if running behind a trusted reverse proxy
 TRUST_PROXY_HEADERS = os.environ.get("TRUST_PROXY_HEADERS", "false").lower() == "true"
+
+
+def safe_error_message(exc, context: str) -> str:
+    """
+    Log full exception with stack trace, return sanitized message.
+
+    Returns a client-safe error string with a correlation ID so
+    internal details (hostnames, firmware versions, stack traces)
+    are never leaked to API consumers.
+    """
+    correlation_id = _uuid.uuid4().hex[:8]
+    _LOG.exception("[%s] %s: %s", correlation_id, context, exc)
+    return "Internal server error (ref: %s)" % correlation_id
+
 
 # =============================================================================
 # Shared State (module-level variables)
@@ -69,6 +117,20 @@ _dashboard_layout_manager: DashboardLayoutManager | None = None  # Dashboard lay
 
 # WebSocket client connections
 _ws_clients: set[web.WebSocketResponse] = set()
+
+# =============================================================================
+# Concurrency Primitives
+# =============================================================================
+# Async locks protecting concurrent access to module-level shared state.
+# Without these, concurrent REST handlers / WebSocket / polling tasks can
+# trigger ``RuntimeError: dictionary changed size during iteration`` or
+# torn-read data corruption.
+
+_state_lock = asyncio.Lock()          # Protects _matrix_device, _input_names,
+                                      # _output_names, _config_file, and
+                                      # all *_manager globals.
+_ws_clients_lock = asyncio.Lock()    # Protects _ws_clients set.
+_rate_limit_lock = asyncio.Lock()     # Protects _rate_limit_tracker dict.
 
 # =============================================================================
 # Rate Limiting
@@ -113,37 +175,67 @@ def _cleanup_stale_rate_limits():
         _LOG.debug(f"Cleaned up {len(stale_ips)} stale rate limit entries")
 
 
-def _check_rate_limit(client_ip: str) -> bool:
+async def _check_rate_limit(client_ip: str) -> bool:
     """
     Check if a client has exceeded the rate limit.
 
-    Uses a sliding window algorithm to track requests.
+    Uses a sliding window algorithm to track requests. Thread-safe via
+    ``_rate_limit_lock`` — concurrent requests for different IPs can proceed
+    but the cleanup-and-update sequence is atomic.
 
     :param client_ip: Client IP address
     :return: True if request is allowed, False if rate limited
     """
-    # Periodically clean up stale entries
-    _cleanup_stale_rate_limits()
+    async with _rate_limit_lock:
+        # Periodically clean up stale entries
+        _cleanup_stale_rate_limits()
 
-    now = time.time()
-    window_start = now - RATE_LIMIT_WINDOW
+        now = time.time()
+        window_start = now - RATE_LIMIT_WINDOW
 
-    # Clean up old timestamps
-    _rate_limit_tracker[client_ip] = [ts for ts in _rate_limit_tracker[client_ip] if ts > window_start]
+        # Reject immediately if at capacity and this IP is new — prevents
+        # unbounded growth from a single flood source consuming all slots.
+        if (
+            client_ip not in _rate_limit_tracker
+            and len(_rate_limit_tracker) >= RATE_LIMIT_MAX_TRACKED_IPS
+        ):
+            return False
 
-    # Check if under limit
-    if len(_rate_limit_tracker[client_ip]) >= RATE_LIMIT_REQUESTS:
-        return False
+        # Clean up old timestamps for this IP
+        _rate_limit_tracker[client_ip] = [
+            ts for ts in _rate_limit_tracker[client_ip] if ts > window_start
+        ]
 
-    # Record this request
-    _rate_limit_tracker[client_ip].append(now)
-    return True
+        # Check if under limit
+        if len(_rate_limit_tracker[client_ip]) >= RATE_LIMIT_REQUESTS:
+            return False
+
+        # Record this request
+        _rate_limit_tracker[client_ip].append(now)
+        return True
 
 
 def reset_rate_limiter():
     """Reset the rate limiter (for testing purposes)."""
     global _rate_limit_tracker
     _rate_limit_tracker.clear()
+
+
+def _parse_trusted_proxies() -> list:
+    """Parse TRUSTED_PROXY_IPS into a list of ipaddress networks."""
+    raw = os.environ.get("TRUSTED_PROXY_IPS", "")
+    if not raw:
+        return []
+    networks = []
+    for item in raw.split(","):
+        item = item.strip()
+        if not item:
+            continue
+        try:
+            networks.append(ipaddress.ip_network(item, strict=False))
+        except ValueError:
+            _LOG.warning("Invalid TRUSTED_PROXY_IPS entry: %s", item)
+    return networks
 
 
 def _get_client_ip(request: web.Request) -> str:
@@ -155,9 +247,35 @@ def _get_client_ip(request: web.Request) -> str:
     """
     # Only check forwarded headers if explicitly trusted
     if TRUST_PROXY_HEADERS:
-        forwarded = request.headers.get("X-Forwarded-For")
-        if forwarded:
-            return forwarded.split(",")[0].strip()
+        transport = request.transport
+        if transport is not None:
+            peername = transport.get_extra_info("peername")
+            if peername:
+                peer_ip = peername[0]
+                trusted = _parse_trusted_proxies()
+                # Check if peer is in trusted proxy list
+                if trusted:
+                    try:
+                        peer_addr = ipaddress.ip_address(peer_ip)
+                        if any(peer_addr in net for net in trusted):
+                            forwarded = request.headers.get("X-Forwarded-For")
+                            if forwarded:
+                                # Take rightmost untrusted IP (standard practice)
+                                for ip_str in reversed(forwarded.split(",")):
+                                    ip_str = ip_str.strip()
+                                    try:
+                                        ip_addr = ipaddress.ip_address(ip_str)
+                                        if not any(ip_addr in net for net in trusted):
+                                            return ip_str
+                                    except ValueError:
+                                        pass
+                    except ValueError:
+                        pass
+                else:
+                    # No trusted IPs configured — trust X-Forwarded-For (legacy behavior)
+                    forwarded = request.headers.get("X-Forwarded-For")
+                    if forwarded:
+                        return forwarded.split(",")[0].strip()
 
     # Fall back to peer address (direct connection)
     transport = request.transport
@@ -220,7 +338,20 @@ def require_connected(func):
             return _json_response(success=False, error="Matrix device not configured", status=503)
         if not matrix_device.connected:
             return _json_response(success=False, error="Matrix not connected", status=503)
-        return await func(request)
+        # TOCTOU mitigation: the connection can drop between the check above
+        # and the handler execution. Catch connection-related exceptions and
+        # convert them to a proper 503 rather than letting them propagate
+        # as 500 Internal Server Error.
+        import aiohttp
+        try:
+            return await func(request)
+        except (aiohttp.ClientError, ConnectionError, TimeoutError, OSError) as exc:
+            _LOG.warning(f"Matrix connection lost during {func.__name__}: {exc}")
+            return _json_response(
+                success=False,
+                error="Matrix connection lost",
+                status=503,
+            )
 
     return wrapper
 
@@ -240,6 +371,10 @@ def set_matrix_device(
 ):
     """Set the matrix device reference for API handlers.
 
+    Called during driver initialization before any REST handlers run,
+    so no async lock is needed — all writes happen before the event
+    loop starts serving requests.
+
     :param data_dir: Persistent data directory (defaults to
         ``persistence.get_data_dir()`` which honors ``MATRIX_DATA_DIR``
         and ``UC_CONFIG_HOME`` env vars). Used by Phase 7 managers
@@ -255,40 +390,35 @@ def set_matrix_device(
         _output_names = output_names.copy()
     if config_file:
         _config_file = config_file
-    # Initialize managers with config directory
+    # Initialize managers with config directory (using lazy imports)
     if config_dir:
-        _scene_manager = SceneManager(config_dir)
-        _profile_manager = ProfileManager(config_dir)
-        _macro_manager = MacroManager(config_dir)
+        _scene_manager = _get_scene_manager(config_dir)
+        _profile_manager = _get_profile_manager(config_dir)
+        _macro_manager = _get_macro_manager(config_dir)
     else:
-        _scene_manager = SceneManager()
-        _profile_manager = ProfileManager()
-        _macro_manager = MacroManager()
+        _scene_manager = _get_scene_manager(str(_get_data_dir()))
+        _profile_manager = _get_profile_manager(str(_get_data_dir()))
+        _macro_manager = _get_macro_manager(str(_get_data_dir()))
     # Phase 7 managers live in the persistent data directory, not config.
     # When data_dir is not explicitly passed, resolve it from env vars.
     if data_dir is None:
-        try:
-            from persistence import get_data_dir as _resolve_data_dir
-
-            data_dir = _resolve_data_dir()
-        except ImportError:
-            data_dir = None
-    if SystemShortcutManager is not None:
-        _system_shortcut_manager = SystemShortcutManager(data_dir)
-    if DashboardLayoutManager is not None:
-        _dashboard_layout_manager = DashboardLayoutManager(data_dir)
+        data_dir = str(_get_data_dir())
+    _system_shortcut_manager = _get_system_shortcut_manager(data_dir)
+    _dashboard_layout_manager = _get_dashboard_layout_manager(data_dir)
 
 
-def update_input_names(input_names: dict[int, str]):
-    """Update input names cache."""
+async def update_input_names(input_names: dict[int, str]):
+    """Update input names cache (thread-safe)."""
     global _input_names
-    _input_names = input_names.copy()
+    async with _state_lock:
+        _input_names = input_names.copy()
 
 
-def update_output_names(output_names: dict[int, str]):
-    """Update output names cache."""
+async def update_output_names(output_names: dict[int, str]):
+    """Update output names cache (thread-safe)."""
     global _output_names
-    _output_names = output_names.copy()
+    async with _state_lock:
+        _output_names = output_names.copy()
 
 
 def _save_names_to_config():
@@ -311,14 +441,14 @@ def _save_names_to_config():
         config["input_names"] = {str(k): v for k, v in _input_names.items()}
         config["output_names"] = {str(k): v for k, v in _output_names.items()}
 
-        # Save back
-        with open(_config_file, "w") as f:
-            json.dump(config, f, indent=2)
+        # Save back atomically
+        from _file_io import atomic_write_json
+        atomic_write_json(_config_file, config)
 
         _LOG.info(f"Saved port names to {_config_file}")
         return True
     except Exception as e:
-        _LOG.error(f"Failed to save port names: {e}")
+        _LOG.exception(f"Failed to save port names: {e}")
         return False
 
 
@@ -421,7 +551,7 @@ async def rate_limit_middleware(request: web.Request, handler):
 
     client_ip = _get_client_ip(request)
 
-    if not _check_rate_limit(client_ip):
+    if not await _check_rate_limit(client_ip):
         _LOG.warning(f"Rate limit exceeded for {client_ip}")
         return _json_response(False, error="Rate limit exceeded. Please slow down.", status=429)
 

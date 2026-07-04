@@ -477,8 +477,8 @@ class SceneManager:
         try:
             ensure_data_dir(self.data_dir)
             data = {"scenes": [s.to_dict() for s in self._scenes.values()]}
-            with open(self.scenes_file, "w", encoding="utf-8") as f:
-                json.dump(data, f, indent=2)
+            from _file_io import atomic_write_json
+            atomic_write_json(self.scenes_file, data)
             return True
         except Exception as e:
             _LOG.error("Failed to save scenes: %s", e)

@@ -155,13 +155,16 @@ UC_ENABLED=false python run.py
 
 ### Environment Variables
 
-| Variable        | Default         | Description           |
-| --------------- | --------------- | --------------------- |
-| `MATRIX_HOST`   | `192.168.0.100` | Matrix IP address     |
-| `API_PORT`      | `8080`          | REST API port         |
-| `UC_ENABLED`    | `true`          | Enable UC integration |
-| `WEBUI_ENABLED` | `true`          | Enable Web UI         |
-| `LOG_LEVEL`     | `INFO`          | Logging verbosity     |
+| Variable        | Default         | Description                                      |
+| --------------- | --------------- | ------------------------------------------------ |
+| `MATRIX_HOST`   | `192.168.0.100` | Matrix IP address (canonical name)                |
+| `MATRIX_DATA_DIR` | _(none)_       | Data directory for profiles, macros, settings      |
+| `API_PORT`      | `8080`          | REST API port                                    |
+| `UC_ENABLED`    | `true`          | Enable UC integration                            |
+| `WEBUI_ENABLED` | `true`          | Enable Web UI                                    |
+| `LOG_LEVEL`     | `INFO`          | Logging verbosity                                |
+
+> **Note**: `OREI_HOST` and `OREI_API_PORT` are deprecated. Use `MATRIX_HOST` and `API_PORT` instead.
 
 ## 📁 Project Structure
 
@@ -180,7 +183,10 @@ UC_ENABLED=false python run.py
 │   ├── dashboard_layout.py    # Dashboard card layout
 │   ├── persistence.py         # Data directory resolution
 │   ├── password.py            # PIN-based passcode hashing
-│   ├── rest_api/              # REST API server (21 modules)
+│   ├── _file_io.py           # File I/O utilities
+│   ├── _task_supervisor.py   # Task supervision and error handling
+│   ├── _telnet_proto.py      # Telnet protocol implementation
+│   ├── rest_api/              # REST API server (22 modules)
 │   │   ├── app.py             # aiohttp application factory
 │   │   ├── control.py         # Routing and power endpoints
 │   │   ├── outputs.py         # Per-output settings (HDCP, HDR, EDID)

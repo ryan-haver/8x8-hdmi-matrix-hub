@@ -6,12 +6,66 @@ Handles profile CRUD, recall, and macro associations.
 
 import json
 import logging
+import re
 
 from aiohttp import web
 
 from .utils import _json_response, get_macro_manager, get_matrix_device, get_profile_manager
 
 _LOG = logging.getLogger("rest_api.profiles")
+
+# Whitelist of fields that may be updated via PUT /api/profile/{id}.
+# Without this, any field in the JSON body is passed through to
+# update_profile() as a kwarg — enabling mass assignment of internal
+# fields like ``passcode_hash`` or ``created_at``.
+PROFILE_UPDATE_FIELDS = frozenset({
+    "name",
+    "icon",
+    "description",
+    "favorite",
+    "dashboard_visible",
+    "pinned",
+    "pin_order",
+    "outputs",
+    "cec_config",
+    "macros",
+    "power_on_macro",
+    "power_off_macro",
+})
+
+# Fields allowed in a reorder request (excludes 'id' which is used for lookup).
+REORDER_UPDATE_FIELDS = frozenset({
+    "pinned",
+    "pin_order",
+})
+
+
+def _validate_cec_config(cec_config: dict) -> str | None:
+    """Validate cec_config structure. Returns error string or None if valid."""
+    if not isinstance(cec_config, dict):
+        return "cec_config must be an object"
+
+    # Validate known fields
+    valid_keys = {"nav_targets", "playback_targets", "volume_targets", "power_on_targets", "power_off_targets", "auto_resolved"}
+    extra = set(cec_config.keys()) - valid_keys
+    if extra:
+        return f"Unknown cec_config fields: {sorted(extra)}"
+
+    # Validate list fields
+    list_fields = ("nav_targets", "playback_targets", "volume_targets", "power_on_targets", "power_off_targets")
+    for key in list_fields:
+        if key in cec_config:
+            if not isinstance(cec_config[key], list):
+                return f"cec_config.{key} must be an array"
+            for item in cec_config[key]:
+                if not isinstance(item, str):
+                    return f"cec_config.{key} must contain strings only"
+
+    # Validate auto_resolved is boolean
+    if "auto_resolved" in cec_config and not isinstance(cec_config["auto_resolved"], bool):
+        return "cec_config.auto_resolved must be boolean"
+
+    return None  # valid
 
 
 async def handle_list_profiles(request: web.Request) -> web.Response:
@@ -25,7 +79,7 @@ async def handle_list_profiles(request: web.Request) -> web.Response:
         profiles = profile_manager.list_profiles()
         return _json_response(True, {"profiles": profiles})
     except Exception as e:
-        _LOG.error(f"Error listing profiles: {e}")
+        _LOG.exception(f"Error listing profiles: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -47,7 +101,7 @@ async def handle_get_profile(request: web.Request) -> web.Response:
 
         return _json_response(True, profile.to_dict())
     except Exception as e:
-        _LOG.error(f"Error getting profile: {e}")
+        _LOG.exception(f"Error getting profile: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -117,7 +171,7 @@ async def handle_create_profile(request: web.Request) -> web.Response:
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON", status=400)
     except Exception as e:
-        _LOG.error(f"Error creating profile: {e}")
+        _LOG.exception(f"Error creating profile: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -139,7 +193,22 @@ async def handle_update_profile(request: web.Request) -> web.Response:
 
         data = await request.json()
 
-        updated = profile_manager.update_profile(profile_id, **data)
+        # FIX (F12.3): whitelist fields to prevent mass assignment of
+        # internal fields like passcode_hash, created_at, etc.
+        updates = {k: v for k, v in data.items() if k in PROFILE_UPDATE_FIELDS}
+        ignored = set(data.keys()) - PROFILE_UPDATE_FIELDS
+        if ignored:
+            _LOG.warning(
+                "Profile update ignored unexpected fields: %s", sorted(ignored)
+            )
+        if not updates:
+            return _json_response(
+                False,
+                error="No valid fields to update",
+                status=400,
+            )
+
+        updated = profile_manager.update_profile(profile_id, **updates)
         if updated:
             _LOG.info(f"Profile '{profile_id}' updated")
             return _json_response(True, updated.to_dict())
@@ -149,7 +218,7 @@ async def handle_update_profile(request: web.Request) -> web.Response:
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON", status=400)
     except Exception as e:
-        _LOG.error(f"Error updating profile: {e}")
+        _LOG.exception(f"Error updating profile: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -171,7 +240,7 @@ async def handle_delete_profile(request: web.Request) -> web.Response:
         else:
             return _json_response(False, error=f"Profile '{profile_id}' not found", status=404)
     except Exception as e:
-        _LOG.error(f"Error deleting profile: {e}")
+        _LOG.exception(f"Error deleting profile: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -275,7 +344,7 @@ async def handle_recall_profile(request: web.Request) -> web.Response:
             },
         )
     except Exception as e:
-        _LOG.error(f"Error recalling profile: {e}")
+        _LOG.exception(f"Error recalling profile: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -309,6 +378,10 @@ async def handle_profile_cec_config(request: web.Request) -> web.Response:
             data = await request.json()
             cec_config = data.get("cec_config", data)
 
+            error = _validate_cec_config(cec_config)
+            if error:
+                return _json_response(False, error=error, status=400)
+
             updated = profile_manager.update_profile_cec_config(profile_id, cec_config)
             if updated and updated.cec_config:
                 _LOG.info(f"Profile '{profile_id}' CEC config updated")
@@ -324,7 +397,7 @@ async def handle_profile_cec_config(request: web.Request) -> web.Response:
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON", status=400)
     except Exception as e:
-        _LOG.error(f"Error handling profile CEC config: {e}")
+        _LOG.exception(f"Error handling profile CEC config: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -408,7 +481,7 @@ async def handle_profile_macros(request: web.Request) -> web.Response:
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON", status=400)
     except Exception as e:
-        _LOG.error(f"Error handling profile macros: {e}")
+        _LOG.exception(f"Error handling profile macros: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -465,7 +538,7 @@ async def handle_reorder_profiles(request: web.Request) -> web.Response:
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON", status=400)
     except Exception as e:
-        _LOG.error(f"Error reordering profiles: {e}")
+        _LOG.exception(f"Error reordering profiles: {e}")
         return _json_response(False, error=str(e), status=500)
 
 

@@ -51,6 +51,12 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
     CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8080/api/health');" && exit 0 || exit 1
 
+# FIX (R2 / F9.1): run as non-root for both api-only and full stages.
+# Previously api-only ran as root — anyone using
+# `docker-compose --profile api-only up` got full host access on compromise.
+RUN groupadd -r app && useradd -r -g app appuser && chown -R appuser:app /app /data
+USER appuser
+
 CMD ["python", "run.py"]
 
 # =============================================================================

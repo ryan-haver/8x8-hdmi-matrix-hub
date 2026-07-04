@@ -157,7 +157,7 @@ async def handle_presets(request: web.Request) -> web.Response:
 
         return _json_response(True, {"presets": presets})
     except Exception as e:
-        _LOG.error(f"Error getting presets: {e}")
+        _LOG.exception(f"Error getting presets: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -181,7 +181,7 @@ async def handle_inputs(request: web.Request) -> web.Response:
             )
         return _json_response(True, {"inputs": inputs})
     except Exception as e:
-        _LOG.error(f"Error getting inputs: {e}")
+        _LOG.exception(f"Error getting inputs: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -216,7 +216,7 @@ async def handle_outputs(request: web.Request) -> web.Response:
             )
         return _json_response(True, {"outputs": outputs})
     except Exception as e:
-        _LOG.error(f"Error getting outputs: {e}")
+        _LOG.exception(f"Error getting outputs: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -261,7 +261,7 @@ async def handle_set_input_name(request: web.Request) -> web.Response:
             True, {"input": input_num, "name": name, "message": f"Input {input_num} renamed to '{name}'"}
         )
     except Exception as e:
-        _LOG.error(f"Error setting input name: {e}")
+        _LOG.exception(f"Error setting input name: {e}")
         return _json_response(False, error=str(e), status=500)
 
 
@@ -306,5 +306,5 @@ async def handle_set_output_name(request: web.Request) -> web.Response:
             True, {"output": output_num, "name": name, "message": f"Output {output_num} renamed to '{name}'"}
         )
     except Exception as e:
-        _LOG.error(f"Error setting output name: {e}")
+        _LOG.exception(f"Error setting output name: {e}")
         return _json_response(False, error=str(e), status=500)

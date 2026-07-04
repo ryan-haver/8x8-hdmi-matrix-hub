@@ -9,15 +9,17 @@ Usage:
     python run_server.py [options]
 
 Options:
-    --host HOST         Matrix IP address (default: 192.168.0.100 or OREI_HOST env)
-    --port PORT         REST API port (default: 8080 or OREI_API_PORT env)
+    --host HOST         Matrix IP address (default: 192.168.0.100 or MATRIX_HOST env)
+    --port PORT         REST API port (default: 8080 or API_PORT env)
     --matrix-port PORT  Matrix HTTPS port (default: 443)
     --config-dir DIR    Configuration directory (default: ./config)
 
 Environment Variables:
-    OREI_HOST           Matrix IP address
+    MATRIX_HOST         Matrix IP address (canonical name)
+    OREI_HOST           Matrix IP address (deprecated alias for MATRIX_HOST)
     OREI_PORT           Matrix HTTPS port (default: 443)
-    OREI_API_PORT       REST API port (default: 8080)
+    API_PORT            REST API port (canonical name)
+    OREI_API_PORT       REST API port (deprecated alias for API_PORT)
     OREI_USER           Matrix username (default: Admin)
     OREI_PASSWORD       Matrix password (default: admin)
     OREI_USE_TELNET_CEC Use Telnet for CEC commands (default: false)
@@ -49,11 +51,11 @@ async def main():
     parser = argparse.ArgumentParser(description="OREI Matrix REST API Server")
     parser.add_argument(
         "--host",
-        default=os.environ.get("OREI_HOST", "192.168.0.100"),
+        default=os.environ.get("MATRIX_HOST") or os.environ.get("OREI_HOST", "192.168.0.100"),
         help="Matrix IP address (default: 192.168.0.100)",
     )
     parser.add_argument(
-        "--port", type=int, default=int(os.environ.get("OREI_API_PORT", "8080")), help="REST API port (default: 8080)"
+        "--port", type=int, default=int(os.environ.get("API_PORT") or os.environ.get("OREI_API_PORT", "8080")), help="REST API port (default: 8080)"
     )
     parser.add_argument(
         "--matrix-port",

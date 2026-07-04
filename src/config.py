@@ -213,8 +213,10 @@ class SceneManager:
 
         :param config_dir: Configuration directory path
         """
+        from persistence import get_data_dir
+
         if config_dir is None:
-            config_dir = os.getenv("UC_CONFIG_HOME") or os.getenv("HOME") or "./config"
+            config_dir = str(get_data_dir())
 
         self.config_dir = config_dir
         self.scenes_file = os.path.join(config_dir, "scenes.json")
@@ -223,6 +225,12 @@ class SceneManager:
 
     def load(self) -> bool:
         """Load scenes from file."""
+        # Migrate legacy scenes.json from old data directory if needed
+        from pathlib import Path
+        from persistence import migrate_legacy_file
+
+        migrate_legacy_file(Path(self.scenes_file), "scenes.json")
+
         if not os.path.exists(self.scenes_file):
             _LOG.info("Scenes file not found: %s", self.scenes_file)
             return False
@@ -241,12 +249,12 @@ class SceneManager:
             return False
 
     def save(self) -> bool:
-        """Save scenes to file."""
+        """Save scenes to file atomically."""
         try:
             os.makedirs(self.config_dir, exist_ok=True)
             data = {"scenes": [s.to_dict() for s in self._scenes.values()]}
-            with open(self.scenes_file, "w", encoding="utf-8") as f:
-                json.dump(data, f, indent=2)
+            from _file_io import atomic_write_json
+            atomic_write_json(self.scenes_file, data)
             _LOG.info("Saved %d scenes", len(self._scenes))
             return True
         except Exception as ex:
@@ -469,8 +477,10 @@ class ProfileManager:
 
         :param config_dir: Configuration directory path
         """
+        from persistence import get_data_dir
+
         if config_dir is None:
-            config_dir = os.getenv("UC_CONFIG_HOME") or os.getenv("HOME") or "./config"
+            config_dir = str(get_data_dir())
 
         self.config_dir = config_dir
         self.profiles_file = os.path.join(config_dir, "profiles.json")
@@ -480,6 +490,12 @@ class ProfileManager:
 
     def load(self) -> bool:
         """Load profiles from file, migrating from scenes.json if needed."""
+        # Migrate legacy profiles.json from old data directory if needed
+        from pathlib import Path
+        from persistence import migrate_legacy_file
+
+        migrate_legacy_file(Path(self.profiles_file), "profiles.json")
+
         # Try loading profiles.json first
         if os.path.exists(self.profiles_file):
             return self._load_profiles()
@@ -527,12 +543,12 @@ class ProfileManager:
             return False
 
     def save(self) -> bool:
-        """Save profiles to file."""
+        """Save profiles to file atomically."""
         try:
             os.makedirs(self.config_dir, exist_ok=True)
             data = {"version": 2, "profiles": [p.to_dict() for p in self._profiles.values()]}
-            with open(self.profiles_file, "w", encoding="utf-8") as f:
-                json.dump(data, f, indent=2)
+            from _file_io import atomic_write_json
+            atomic_write_json(self.profiles_file, data)
             _LOG.info("Saved %d profiles", len(self._profiles))
             return True
         except Exception as ex:
@@ -772,8 +788,10 @@ class Config:
 
         :param config_dir: Configuration directory path
         """
+        from persistence import get_data_dir
+
         if config_dir is None:
-            config_dir = os.getenv("UC_CONFIG_HOME") or os.getenv("HOME") or "./config"
+            config_dir = str(get_data_dir())
 
         self.config_dir = config_dir
         self.config_file = os.path.join(config_dir, "orei_matrix_config.json")
@@ -812,10 +830,11 @@ class Config:
         try:
             os.makedirs(self.config_dir, exist_ok=True)
 
-            with open(self.config_file, "w", encoding="utf-8") as f:
-                json.dump(self._matrix_config.to_dict(), f, indent=2)
-                _LOG.info("Configuration saved successfully")
-                return True
+            from _file_io import atomic_write_json
+
+            atomic_write_json(self.config_file, self._matrix_config.to_dict())
+            _LOG.info("Configuration saved successfully")
+            return True
         except Exception as ex:
             _LOG.error("Failed to save configuration: %s", ex)
             return False
