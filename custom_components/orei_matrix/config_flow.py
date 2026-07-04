@@ -1,11 +1,13 @@
 """Config flow for OREI HDMI Matrix integration."""
-import voluptuous as vol
+
 import aiohttp
+import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.core import callback
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-from .const import DOMAIN, CONF_IP_ADDRESS, CONF_PORT, DEFAULT_PORT, DEFAULT_NAME
+from .const import CONF_IP_ADDRESS, CONF_PORT, DEFAULT_NAME, DEFAULT_PORT, DOMAIN
+
 
 class OreiMatrixConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for OREI HDMI Matrix."""
@@ -19,7 +21,7 @@ class OreiMatrixConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             host = user_input[CONF_IP_ADDRESS]
             port = user_input.get(CONF_PORT, DEFAULT_PORT)
-            
+
             # Validate connection
             session = async_get_clientsession(self.hass)
             try:
@@ -28,7 +30,7 @@ class OreiMatrixConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                         # Set unique ID
                         await self.async_set_unique_id(host)
                         self._abort_if_unique_id_configured()
-                        
+
                         return self.async_create_entry(
                             title=f"{DEFAULT_NAME} ({host})",
                             data=user_input,
@@ -48,6 +50,4 @@ class OreiMatrixConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             }
         )
 
-        return self.async_show_form(
-            step_id="user", data_schema=data_schema, errors=errors
-        )
+        return self.async_show_form(step_id="user", data_schema=data_schema, errors=errors)

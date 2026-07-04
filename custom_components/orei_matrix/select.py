@@ -1,20 +1,23 @@
 """Support for OREI HDMI Matrix output source selection."""
+
 from homeassistant.components.select import SelectEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN, LOGGER
 
+
 async def async_setup_entry(hass, entry, async_add_entities):
     """Set up the OREI Matrix select entities."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
-    
+
     # Create a select entity for each output port
     entities = []
-    output_count = coordinator.data["status"].get("outputs", [0]*8)
+    output_count = coordinator.data["status"].get("outputs", [0] * 8)
     for i in range(1, len(output_count) + 1):
         entities.append(OreiOutputSelect(coordinator, i))
-        
+
     async_add_entities(entities)
+
 
 class OreiOutputSelect(CoordinatorEntity, SelectEntity):
     """Representation of an OREI Matrix output source selector."""
@@ -60,7 +63,7 @@ class OreiOutputSelect(CoordinatorEntity, SelectEntity):
             if name == option:
                 input_num = i
                 break
-                
+
         if input_num is None:
             LOGGER.error("Selected option %s does not match any input names", option)
             return
@@ -68,7 +71,7 @@ class OreiOutputSelect(CoordinatorEntity, SelectEntity):
         session = self.coordinator.hass.helpers.aiohttp_client.async_get_clientsession()
         url = f"{self.coordinator.base_url}/api/output/{self.output_num}/source"
         payload = {"input": input_num}
-        
+
         try:
             async with session.post(url, json=payload) as resp:
                 if resp.status == 200:

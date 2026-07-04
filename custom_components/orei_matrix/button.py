@@ -1,23 +1,26 @@
 """Support for OREI HDMI Matrix buttons."""
+
 from homeassistant.components.button import ButtonEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN, LOGGER
 
+
 async def async_setup_entry(hass, entry, async_add_entities):
     """Set up the OREI Matrix button entities."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
-    
+
     entities = []
-    
+
     # 1. Preset Recall Buttons
     for i in range(1, 9):
         entities.append(OreiPresetButton(coordinator, i))
-        
+
     # 2. Reboot Button
     entities.append(OreiRebootButton(coordinator))
-    
+
     async_add_entities(entities)
+
 
 class OreiPresetButton(CoordinatorEntity, ButtonEntity):
     """Button to recall a matrix preset."""

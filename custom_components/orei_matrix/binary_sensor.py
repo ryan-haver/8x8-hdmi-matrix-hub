@@ -1,26 +1,29 @@
 """Support for OREI HDMI Matrix binary sensors."""
+
 from homeassistant.components.binary_sensor import BinarySensorEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN
 
+
 async def async_setup_entry(hass, entry, async_add_entities):
     """Set up the OREI Matrix binary sensor entities."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
-    
+
     entities = []
-    
+
     # 1. Input Signal Sensors
     input_count = len(coordinator.data["status"].get("input_names", {})) or 8
     for i in range(1, input_count + 1):
         entities.append(OreiInputSignalSensor(coordinator, i))
-        
+
     # 2. Output Connection Sensors
-    output_count = len(coordinator.data["status"].get("outputs", [0]*8))
+    output_count = len(coordinator.data["status"].get("outputs", [0] * 8))
     for i in range(1, output_count + 1):
         entities.append(OreiOutputConnectionSensor(coordinator, i))
-        
+
     async_add_entities(entities)
+
 
 class OreiInputSignalSensor(CoordinatorEntity, BinarySensorEntity):
     """Binary sensor for HDMI input video signal active status."""
