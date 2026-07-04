@@ -20,11 +20,11 @@ The **HDCVT HDP-MXC88A** is an OEM (Original Equipment Manufacturer) product tha
 | Brand                  | Model         | Product Page                                                                                                                              | Status        |
 | ---------------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
 | **OREI**               | BK-808        | [orei.com/bk-808](https://orei.com/products/8k-8x8-hdmi-matrix-switcher-4k-120hz-hdcp-2-3-hdr-edid-dolby-vision-atmos-downscaling-bk-808) | ✅ **Tested** |
-| HDCVT (OEM)            | HDP-MXC88A    | [hdcvt.com](https://www.hdcvt.com/8x8-8k-hdmi-matrix-hdp-mxc88a-product/)                                                                 | 🔲 Untested   |
-| Simplified MFG         | M88-8K        | [simplifiedmfg.com](https://simplifiedmfg.com/product/m88-8k/)                                                                            | 🔲 Untested   |
-| BZBGEAR                | BG-8K-88MA    | [bzbgear.com](https://bzbgear.com/product/bg-8k-88ma-8x8-8k-60hz-4k-120-uhd-hdmi-2-1-matrix-switcher-with-audio-de-embedder/)             | 🔲 Untested   |
-| WolfPack (HDTV Supply) | HDTVHDPMXC88A | [hdtvsupply.com](https://www.hdtvsupply.com/8k60hz8x8hdmimatrixswitch.html)                                                               | 🔲 Untested   |
-| A-NeuVideo             | ANI-8-8K60-S  | [a-neuvideo.com](https://a-neuvideo.com/product/ani-8-8k60-s/)                                                                            | 🔲 Untested   |
+| HDCVT (OEM)            | HDP-MXC88A    | [hdcvt.com](https://www.hdcvt.com/HDMIMatrix/328.html)                                                                 | 🔲 Untested   |
+| Simplified MFG         | M88-8K        | [simplifiedmfg.com](https://www.simplifiedmfg.com/simplified-products/m88-8k)                                                                            | 🔲 Untested   |
+| BZBGEAR                | BG-8K-88MA    | [bzbgear.com](https://bzbgear.com/product/bg-8k-88ma-8x8-8k-uhd-hdmi-2-1-matrix-switcher-with-auto-downscaling-audio-de-embedding-8k60-4k120-and-vrr-fva-allm-support/)             | 🔲 Untested   |
+| WolfPack (HDTV Supply) | HDTVHDPMXC88A | [hdtvsupply.com](https://www.hdtvsupply.com/wolfpack-8k-60-hz-8x8-hdmi-matrix-switch.html)                                                               | 🔲 Untested   |
+| A-NeuVideo             | ANI-8-8K60-S  | [a-neuvideo.com](https://www.a-neuvideo.com/shop/product_info.php?products_id=269)                                                                            | 🔲 Untested   |
 
 > [!NOTE]
 > If you have one of the untested models and can confirm compatibility, please [open an issue](../../issues) to help us update this list!
