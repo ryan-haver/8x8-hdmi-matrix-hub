@@ -1149,7 +1149,8 @@ class AppState {
         const data = info.data || info;
         
         this.setInfo({
-            model: data.model || 'BK-808',
+            model: data.model || '',
+            connected: data.connected !== undefined ? data.connected : false,
             firmwareVersion: data.firmware_version || data.version || '',
             apiVersion: data.api_version || '',
             matrixHost: data.matrix_host || '',

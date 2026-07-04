@@ -150,6 +150,11 @@ class MatrixApp {
             this.updateConnectionStatus(connected);
         });
 
+        // Dynamic header title update
+        state.on('info', (info) => {
+            this.updateHeaderTitle(info);
+        });
+
         // Horizontal swipe navigation setup
         this.setupSwipeGestures();
 
@@ -539,6 +544,20 @@ class MatrixApp {
             const textEl = statusEl.querySelector('.status-text');
             if (textEl) {
                 textEl.textContent = connected ? 'Online' : 'Offline';
+            }
+        }
+    }
+
+    /**
+     * Update header title based on matrix model name dynamically
+     */
+    updateHeaderTitle(info) {
+        const titleEl = document.getElementById('header-title-text');
+        if (titleEl && info) {
+            if (info.connected && info.model) {
+                titleEl.textContent = info.model;
+            } else {
+                titleEl.textContent = 'OREI Matrix';
             }
         }
     }
