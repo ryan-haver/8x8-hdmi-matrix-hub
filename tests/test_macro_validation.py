@@ -58,12 +58,16 @@ def mock_macro_manager(monkeypatch):
         )
     )
 
-    async def _async_get_macro_manager():
+    def _sync_get_macro_manager():
         return manager
 
     monkeypatch.setattr(
         "rest_api.utils.get_macro_manager",
-        _async_get_macro_manager,
+        _sync_get_macro_manager,
+    )
+    monkeypatch.setattr(
+        "rest_api.macros.get_macro_manager",
+        _sync_get_macro_manager,
     )
     return manager
 
