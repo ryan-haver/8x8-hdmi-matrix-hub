@@ -1,0 +1,30 @@
+#!/bin/sh
+# Pre-commit hook: runs ruff lint check before every commit.
+# Stored in .githooks/ and activated via: git config core.hooksPath .githooks
+#
+# This prevents lint errors from reaching GitHub CI.
+
+# Find ruff: prefer venv, fall back to PATH
+if [ -f ".venv/Scripts/ruff.exe" ]; then
+    RUFF=".venv/Scripts/ruff.exe"
+elif [ -f ".venv/bin/ruff" ]; then
+    RUFF=".venv/bin/ruff"
+elif command -v ruff >/dev/null 2>&1; then
+    RUFF="ruff"
+else
+    echo "⚠️  ruff not found. Skipping lint check."
+    echo "   Install with: pip install ruff"
+    exit 0
+fi
+
+echo "Running ruff lint check..."
+$RUFF check src/ tests/
+
+if [ $? -ne 0 ]; then
+    echo ""
+    echo "❌ Ruff lint check failed. Fix errors above, then try again."
+    echo "   Tip: run '$RUFF check src/ tests/ --fix' to auto-fix."
+    exit 1
+fi
+
+echo "✅ Lint check passed."
