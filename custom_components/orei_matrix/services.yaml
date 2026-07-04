@@ -1,0 +1,74 @@
+recall_preset:
+  name: Recall Preset
+  description: Recall a saved matrix preset (1-8).
+  fields:
+    preset:
+      name: Preset Number
+      description: The preset slot number to activate (1-8).
+      required: true
+      selector:
+        number:
+          min: 1
+          max: 8
+          mode: box
+
+switch_input:
+  name: Switch Input
+  description: Route a specific input to a specific output.
+  fields:
+    output:
+      name: Output Port
+      description: The output display port (1-8).
+      required: true
+      selector:
+        number:
+          min: 1
+          max: 8
+          mode: box
+    input:
+      name: Input Port
+      description: The input source port (1-8).
+      required: true
+      selector:
+        number:
+          min: 1
+          max: 8
+          mode: box
+
+send_cec_command:
+  name: Send CEC Command
+  description: Send a CEC power/control command to a connected device.
+  fields:
+    port_type:
+      name: Port Type
+      description: Whether the target port is an 'input' or 'output'.
+      required: true
+      default: input
+      selector:
+        select:
+          options:
+            - input
+            - output
+    port_num:
+      name: Port Number
+      description: The input or output port number (1-8).
+      required: true
+      selector:
+        number:
+          min: 1
+          max: 8
+          mode: box
+    command:
+      name: CEC Command
+      description: The command action to send (e.g. power_on, power_off, play, pause, volume_up, volume_down, mute).
+      required: true
+      selector:
+        select:
+          options:
+            - power_on
+            - power_off
+            - play
+            - pause
+            - volume_up
+            - volume_down
+            - mute
