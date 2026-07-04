@@ -101,4 +101,4 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             hass.services.async_remove(DOMAIN, "switch_input")
             hass.services.async_remove(DOMAIN, "send_cec_command")
 
-    return True
+    return unload_ok

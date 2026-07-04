@@ -17,8 +17,8 @@ async def async_setup_entry(hass, entry, async_add_entities):
     entities.append(OreiPowerSwitch(coordinator))
 
     # 2. Output Mute and Stream Switches
-    output_count = coordinator.data["status"].get("outputs", [0] * 8)
-    for i in range(1, len(output_count) + 1):
+    # BK-808 always has 8 output ports
+    for i in range(1, 9):
         entities.append(OreiOutputMuteSwitch(coordinator, i))
         entities.append(OreiOutputStreamSwitch(coordinator, i))
 

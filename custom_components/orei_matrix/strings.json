@@ -1,0 +1,21 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "OREI HDMI Matrix",
+        "description": "Enter the IP address and port of your OREI matrix.",
+        "data": {
+          "host": "IP Address",
+          "port": "Port"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Cannot connect to the matrix. Verify the IP address and port.",
+      "unknown": "An unexpected error occurred."
+    },
+    "abort": {
+      "already_configured": "This matrix is already configured."
+    }
+  }
+}

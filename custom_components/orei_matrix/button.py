@@ -1,6 +1,7 @@
 """Support for OREI HDMI Matrix buttons."""
 
 from homeassistant.components.button import ButtonEntity
+from homeassistant.const import EntityCategory
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
@@ -78,7 +79,7 @@ class OreiRebootButton(CoordinatorEntity, ButtonEntity):
         super().__init__(coordinator)
         self._attr_name = "Reboot Matrix"
         self._attr_unique_id = f"{coordinator.host}_reboot"
-        self._attr_entity_category = "config"
+        self._attr_entity_category = EntityCategory.CONFIG
 
     @property
     def device_info(self) -> DeviceInfo:
