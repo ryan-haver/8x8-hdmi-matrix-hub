@@ -108,12 +108,12 @@ class TestExecuteShortcut:
     @pytest.fixture
     def mock_matrix(self):
         matrix = MagicMock()
-        matrix.switch = AsyncMock(returnValue=None)
-        matrix.set_output_audio_mute = AsyncMock(returnValue=None)
-        matrix.recall_preset = AsyncMock(returnValue=None)
-        matrix.set_beep = AsyncMock(returnValue=None)
-        matrix.system_reboot = AsyncMock(returnValue=None)
-        matrix.power_off = AsyncMock(returnValue=None)
+        matrix.switch = AsyncMock(return_value=None)
+        matrix.set_output_audio_mute = AsyncMock(return_value=None)
+        matrix.recall_preset = AsyncMock(return_value=None)
+        matrix.set_beep = AsyncMock(return_value=None)
+        matrix.system_reboot = AsyncMock(return_value=None)
+        matrix.power_off = AsyncMock(return_value=None)
         return matrix
 
     @pytest.mark.asyncio

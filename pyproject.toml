@@ -40,15 +40,32 @@ dev = [
 ]
 
 [project.scripts]
-orei-matrix-driver = "src.driver:main"
+orei-matrix-driver = "driver:main"
 
 [project.urls]
 Homepage = "https://github.com/ryan-haver/8x8-hdmi-matrix-hub"
 Repository = "https://github.com/ryan-haver/8x8-hdmi-matrix-hub"
 
+[tool.setuptools]
+package-dir = {"" = "src"}
+py-modules = [
+    "cec_commands",
+    "cec_macros",
+    "cec_resolver",
+    "config",
+    "dashboard_layout",
+    "driver",
+    "orei_matrix",
+    "password",
+    "persistence",
+    "scene_execution",
+    "scene_manager",
+    "system_shortcuts",
+    "telnet_client",
+]
+
 [tool.setuptools.packages.find]
-where = ["."]
-include = ["src*"]
+where = ["src"]
 
 [tool.black]
 line-length = 120
@@ -66,10 +83,10 @@ ignore = ["E501", "E402", "E722", "N806", "F811", "F401"]
 explicit_package_bases = true
 ignore_missing_imports = true
 strict_optional = false
-ignore_errors = true
-# NOTE: Previously had `ignore_errors = true` which disabled ALL type checking.
-# Removed to enforce type safety. Use `# type: ignore` comments for specific
-# known issues. Run `mypy src/ --ignore-missing-imports` to verify.
+ignore_errors = false
+# NOTE: `ignore_errors` was previously `true` which disabled ALL type checking.
+# Changed to `false` to enforce type safety. Use `# type: ignore[<code>]`
+# comments for specific known issues. Run `mypy src/ --ignore-missing-imports` to verify.
 exclude = [
     '^_backups/',
     '^archive/',

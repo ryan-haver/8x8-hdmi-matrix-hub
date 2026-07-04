@@ -261,67 +261,8 @@ class MatrixAPI {
     }
 
     // ===== Scenes/Profiles =====
-    // Note: "scenes" are now called "profiles" in the new API
-    
-    async listScenes() {
-        // Use profiles API, transform response to maintain compatibility
-        const result = await this.get('/api/profiles');
-        if (result?.success && result?.data?.profiles) {
-            // Transform profiles response to scenes format for backward compatibility
-            return { scenes: result.data.profiles };
-        }
-        return { scenes: [] };
-    }
-
-    async getScene(id) {
-        return this.get(`/api/profile/${id}`);
-    }
-
-    async createScene(name, outputs = null, cecConfig = null, id = null) {
-        // Use profiles API
-        const body = { name };
-        if (id) {
-            body.id = id;
-        } else {
-            // Generate ID from name
-            body.id = name.toLowerCase().replace(/[^a-z0-9]+/g, '_').substring(0, 32) + '_' + Date.now().toString(36);
-        }
-        if (outputs) {
-            body.outputs = outputs;
-        }
-        if (cecConfig) {
-            body.cec_config = cecConfig;
-        }
-        return this.post('/api/profile', body);
-    }
-
-    async deleteScene(id) {
-        return this.delete(`/api/profile/${id}`);
-    }
-
-    async recallScene(id) {
-        return this.post(`/api/profile/${id}/recall`);
-    }
-
-    async saveCurrentAsScene(name) {
-        // For backwards compatibility, create a profile from current routing
-        return this.post('/api/profile/save-current', { name });
-    }
-
-    // ===== Scene/Profile CEC Configuration =====
-    
-    async getSceneCecConfig(sceneId) {
-        return this.get(`/api/profile/${sceneId}/cec`);
-    }
-    
-    async updateSceneCecConfig(sceneId, cecConfig) {
-        return this.post(`/api/profile/${sceneId}/cec`, { cec_config: cecConfig });
-    }
-    
-    async autoResolveCecConfig(sceneId, apply = false) {
-        const path = `/api/profile/${sceneId}/cec/auto-resolve${apply ? '?apply=true' : ''}`;
-        return this.post(path);
-    }
+    // Note: "scenes" are now called "profiles" — use profiles API directly
+    // Legacy scene wrappers removed; use listProfiles(), getProfile(), etc.
 
     // ===== Profiles (Enhanced Scenes) =====
     
@@ -447,7 +388,10 @@ class MatrixAPI {
     }
 
     async powerCycle() {
-        return this.post('/api/system/power-cycle');
+        // This endpoint is not currently registered on the backend.
+        // Use reboot() or powerOff()/powerOn() instead.
+        console.warn('powerCycle() is not available. Use reboot() or powerOn()/powerOff().');
+        return { success: false, error: 'Not implemented' };
     }
 
     async reboot() {

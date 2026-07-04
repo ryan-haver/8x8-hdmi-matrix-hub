@@ -194,9 +194,16 @@ class OreiMatrix:
             _LOG.info("Connecting to OREI Matrix at %s://%s:%d", protocol, self.host, self.port)
 
             # Create aiohttp session with cookie jar for session management
-            # Disable SSL verification for self-signed certificates
+            # SSL verification is enabled by default. Set OREI_VERIFY_SSL=false
+            # only for development with self-signed certificates.
             if not self._session:
-                connector = aiohttp.TCPConnector(ssl=False) if self.use_https else None
+                if self.use_https:
+                    ssl_enabled = os.environ.get("OREI_VERIFY_SSL", "true").lower() == "true"
+                    connector = aiohttp.TCPConnector(ssl=ssl_enabled)
+                    if not ssl_enabled:
+                        _LOG.warning("SSL verification disabled for matrix connection")
+                else:
+                    connector = None
                 self._session = aiohttp.ClientSession(cookie_jar=aiohttp.CookieJar(), connector=connector)
 
             # Authenticate with login command

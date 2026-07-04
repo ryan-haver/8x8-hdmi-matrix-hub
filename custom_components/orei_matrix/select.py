@@ -44,9 +44,12 @@ class OreiOutputSelect(CoordinatorEntity, SelectEntity):
     @property
     def current_option(self) -> str | None:
         """Return the currently selected option."""
-        routing = self.coordinator.data["status"].get("routing", {})
-        # routing is a dict: {str(output_num): input_num}
-        input_num = routing.get(str(self.output_num)) or routing.get(self.output_num)
+        routing = self.coordinator.data["status"].get("routing", [])
+        # routing is an array: [input_for_output_1, input_for_output_2, ...]
+        if isinstance(routing, list) and 0 <= self.output_num - 1 < len(routing):
+            input_num = routing[self.output_num - 1]
+        else:
+            input_num = None
         if input_num is not None:
             return (
                 self.coordinator.data["status"].get("input_names", {}).get(str(input_num))
