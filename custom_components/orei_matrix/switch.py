@@ -1,6 +1,7 @@
 """Support for OREI HDMI Matrix switches."""
 
 from homeassistant.components.switch import SwitchEntity
+from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN, LOGGER
@@ -32,6 +33,17 @@ class OreiPowerSwitch(CoordinatorEntity, SwitchEntity):
         super().__init__(coordinator)
         self._attr_name = "Matrix Power"
         self._attr_unique_id = f"{coordinator.host}_power"
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return device registry information."""
+        return DeviceInfo(
+            identifiers={(DOMAIN, self.coordinator.host)},
+            name=f"OREI HDMI Matrix ({self.coordinator.host})",
+            manufacturer="OREI",
+            model="BK-808",
+            sw_version="1.0.0",
+        )
 
     @property
     def is_on(self) -> bool:
@@ -80,6 +92,17 @@ class OreiOutputMuteSwitch(CoordinatorEntity, SwitchEntity):
         self._attr_unique_id = f"{coordinator.host}_output_{output_num}_mute"
 
     @property
+    def device_info(self) -> DeviceInfo:
+        """Return device registry information."""
+        return DeviceInfo(
+            identifiers={(DOMAIN, self.coordinator.host)},
+            name=f"OREI HDMI Matrix ({self.coordinator.host})",
+            manufacturer="OREI",
+            model="BK-808",
+            sw_version="1.0.0",
+        )
+
+    @property
     def is_on(self) -> bool:
         """Return true if output audio is muted."""
         outputs = self.coordinator.data.get("outputs", [])
@@ -122,6 +145,17 @@ class OreiOutputStreamSwitch(CoordinatorEntity, SwitchEntity):
         self.output_num = output_num
         self._attr_name = f"Output {output_num} Stream"
         self._attr_unique_id = f"{coordinator.host}_output_{output_num}_stream"
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return device registry information."""
+        return DeviceInfo(
+            identifiers={(DOMAIN, self.coordinator.host)},
+            name=f"OREI HDMI Matrix ({self.coordinator.host})",
+            manufacturer="OREI",
+            model="BK-808",
+            sw_version="1.0.0",
+        )
 
     @property
     def is_on(self) -> bool:

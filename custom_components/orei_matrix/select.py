@@ -1,6 +1,7 @@
 """Support for OREI HDMI Matrix output source selection."""
 
 from homeassistant.components.select import SelectEntity
+from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN, LOGGER
@@ -28,6 +29,17 @@ class OreiOutputSelect(CoordinatorEntity, SelectEntity):
         self.output_num = output_num
         self._attr_name = f"Output {output_num} Source"
         self._attr_unique_id = f"{coordinator.host}_output_{output_num}_source"
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return device registry information."""
+        return DeviceInfo(
+            identifiers={(DOMAIN, self.coordinator.host)},
+            name=f"OREI HDMI Matrix ({self.coordinator.host})",
+            manufacturer="OREI",
+            model="BK-808",
+            sw_version="1.0.0",
+        )
 
     @property
     def current_option(self) -> str | None:

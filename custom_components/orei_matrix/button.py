@@ -1,6 +1,7 @@
 """Support for OREI HDMI Matrix buttons."""
 
 from homeassistant.components.button import ButtonEntity
+from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN, LOGGER
@@ -30,6 +31,17 @@ class OreiPresetButton(CoordinatorEntity, ButtonEntity):
         super().__init__(coordinator)
         self.preset_num = preset_num
         self._attr_unique_id = f"{coordinator.host}_preset_{preset_num}"
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return device registry information."""
+        return DeviceInfo(
+            identifiers={(DOMAIN, self.coordinator.host)},
+            name=f"OREI HDMI Matrix ({self.coordinator.host})",
+            manufacturer="OREI",
+            model="BK-808",
+            sw_version="1.0.0",
+        )
 
     @property
     def name(self) -> str:
@@ -67,6 +79,17 @@ class OreiRebootButton(CoordinatorEntity, ButtonEntity):
         self._attr_name = "Reboot Matrix"
         self._attr_unique_id = f"{coordinator.host}_reboot"
         self._attr_entity_category = "config"
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return device registry information."""
+        return DeviceInfo(
+            identifiers={(DOMAIN, self.coordinator.host)},
+            name=f"OREI HDMI Matrix ({self.coordinator.host})",
+            manufacturer="OREI",
+            model="BK-808",
+            sw_version="1.0.0",
+        )
 
     async def async_press(self) -> None:
         """Press the button."""

@@ -1,6 +1,7 @@
 """Support for OREI HDMI Matrix binary sensors."""
 
 from homeassistant.components.binary_sensor import BinarySensorEntity
+from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN
@@ -35,6 +36,17 @@ class OreiInputSignalSensor(CoordinatorEntity, BinarySensorEntity):
         self._attr_unique_id = f"{coordinator.host}_input_{input_num}_signal"
 
     @property
+    def device_info(self) -> DeviceInfo:
+        """Return device registry information."""
+        return DeviceInfo(
+            identifiers={(DOMAIN, self.coordinator.host)},
+            name=f"OREI HDMI Matrix ({self.coordinator.host})",
+            manufacturer="OREI",
+            model="BK-808",
+            sw_version="1.0.0",
+        )
+
+    @property
     def name(self) -> str:
         """Return the name of the sensor."""
         input_names = self.coordinator.data["status"].get("input_names", {})
@@ -66,6 +78,17 @@ class OreiOutputConnectionSensor(CoordinatorEntity, BinarySensorEntity):
         super().__init__(coordinator)
         self.output_num = output_num
         self._attr_unique_id = f"{coordinator.host}_output_{output_num}_connected"
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return device registry information."""
+        return DeviceInfo(
+            identifiers={(DOMAIN, self.coordinator.host)},
+            name=f"OREI HDMI Matrix ({self.coordinator.host})",
+            manufacturer="OREI",
+            model="BK-808",
+            sw_version="1.0.0",
+        )
 
     @property
     def name(self) -> str:

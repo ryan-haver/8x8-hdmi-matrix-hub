@@ -25,6 +25,27 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # Forward setup to the platforms (select, switch, button, binary_sensor)
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
+    import voluptuous as vol
+    from homeassistant.helpers import config_validation as cv
+
+    # Services schemas
+    RECALL_PRESET_SCHEMA = vol.Schema({vol.Required("preset"): vol.All(vol.Coerce(int), vol.Range(min=1, max=8))})
+
+    SWITCH_INPUT_SCHEMA = vol.Schema(
+        {
+            vol.Required("output"): vol.All(vol.Coerce(int), vol.Range(min=1, max=8)),
+            vol.Required("input"): vol.All(vol.Coerce(int), vol.Range(min=1, max=8)),
+        }
+    )
+
+    SEND_CEC_SCHEMA = vol.Schema(
+        {
+            vol.Required("port_type"): vol.In(["input", "output"]),
+            vol.Required("port_num"): vol.All(vol.Coerce(int), vol.Range(min=1, max=8)),
+            vol.Required("command"): cv.string,
+        }
+    )
+
     # Register custom services
     async def handle_recall_preset(call):
         preset = call.data["preset"]
@@ -61,9 +82,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         except Exception as err:
             coordinator.logger.error("Error sending CEC command via service: %s", err)
 
-    hass.services.async_register(DOMAIN, "recall_preset", handle_recall_preset)
-    hass.services.async_register(DOMAIN, "switch_input", handle_switch_input)
-    hass.services.async_register(DOMAIN, "send_cec_command", handle_send_cec_command)
+    hass.services.async_register(DOMAIN, "recall_preset", handle_recall_preset, schema=RECALL_PRESET_SCHEMA)
+    hass.services.async_register(DOMAIN, "switch_input", handle_switch_input, schema=SWITCH_INPUT_SCHEMA)
+    hass.services.async_register(DOMAIN, "send_cec_command", handle_send_cec_command, schema=SEND_CEC_SCHEMA)
 
     return True
 
