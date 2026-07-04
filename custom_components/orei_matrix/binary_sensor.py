@@ -61,7 +61,7 @@ class OreiInputSignalSensor(CoordinatorEntity, BinarySensorEntity):
         inputs = self.coordinator.data.get("inputs", [])
         for inp in inputs:
             if inp.get("number") == self.input_num:
-                return inp.get("signalActive") is True
+                return inp.get("signal_active", inp.get("signalActive")) is True
         return False
 
     @property
@@ -106,8 +106,9 @@ class OreiOutputConnectionSensor(CoordinatorEntity, BinarySensorEntity):
         for out in outputs:
             if out.get("number") == self.output_num:
                 # Prefer cableConnected, fallback to connected
-                if out.get("cableConnected") is not None:
-                    return out.get("cableConnected") is True
+                cable = out.get("cable_connected", out.get("cableConnected"))
+                if cable is not None:
+                    return cable is True
                 return out.get("connected") is True
         return False
 

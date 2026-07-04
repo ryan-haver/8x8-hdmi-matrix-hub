@@ -176,6 +176,12 @@ def create_cec_command_handler(
 
     This eliminates ~200 lines of duplicate code between input and output CEC handlers.
 
+    .. deprecated::
+        Prefer ``create_cec_command_handler_with_context()`` from
+        ``integrations.unfolded_circle.entities`` which uses dependency injection
+        instead of global state. This function is retained for backward
+        compatibility with the legacy direct-mode driver.
+
     :param port_num: Input or output number (1-8)
     :param port_type: "input" or "output"
     :param get_method: Function that returns the appropriate CEC method for a command

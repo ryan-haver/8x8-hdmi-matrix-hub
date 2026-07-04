@@ -33,8 +33,8 @@ class OreiMatrixCoordinator(DataUpdateCoordinator):
         try:
             # Fetch all statuses in parallel
             status_task = session.get(f"{self.base_url}/api/status")
-            outputs_task = session.get(f"{self.base_url}/api/output/status")
-            inputs_task = session.get(f"{self.base_url}/api/input/status")
+            outputs_task = session.get(f"{self.base_url}/api/status/outputs")
+            inputs_task = session.get(f"{self.base_url}/api/status/inputs")
 
             responses = await asyncio.gather(status_task, outputs_task, inputs_task, return_exceptions=True)
 

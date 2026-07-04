@@ -47,9 +47,9 @@ ENV UC_ENABLED=false
 # Only expose REST API port
 EXPOSE 8080
 
-# Health check for API
+# Health check for API — validates the actual application, not just port binding
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
-    CMD python -c "import socket; s=socket.socket(); s.settimeout(2); result=s.connect_ex(('localhost', 8080)); s.close(); exit(0 if result==0 else 1)"
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8080/api/health');" && exit 0 || exit 1
 
 CMD ["python", "run.py"]
 
@@ -71,8 +71,12 @@ ENV UC_INTEGRATION_HTTP_PORT=9095
 # Expose both WebSocket and REST API ports
 EXPOSE 9095 8080
 
-# Health check - verify UC integration port is listening
+# Health check - verify UC integration and REST API are healthy
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
-    CMD python -c "import socket; s=socket.socket(); s.settimeout(2); result=s.connect_ex(('localhost', 9095)); s.close(); exit(0 if result==0 else 1)"
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8080/api/health');" && exit 0 || exit 1
+
+# Run as non-root user for security
+RUN groupadd -r app && useradd -r -g app appuser && chown -R appuser:app /app /data
+USER appuser
 
 CMD ["python", "run.py"]

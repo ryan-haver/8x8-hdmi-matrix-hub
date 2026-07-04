@@ -9,7 +9,7 @@
   "description": {
     "en": "Integration for OREI BK-808 8x8 HDMI Matrix with scene/preset support"
   },
-  "driver_url": "ws://192.168.1.145:9095",
+  "driver_url": "",
   "developer": {
     "name": "Ryan Haver",
     "url": "https://github.com/ryan-haver/8x8-hdmi-matrix-hub"

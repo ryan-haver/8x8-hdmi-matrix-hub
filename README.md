@@ -169,15 +169,40 @@ UC_ENABLED=false python run.py
 ├── src/
 │   ├── driver.py              # Main UC integration driver
 │   ├── orei_matrix.py         # Matrix control library
-│   ├── rest_api/              # REST API server
+│   ├── telnet_client.py       # Async Telnet client (CEC, cable detection)
+│   ├── config.py              # Configuration management
+│   ├── scene_manager.py       # Scene/profile persistence
+│   ├── scene_execution.py     # Scene execution engine
+│   ├── cec_macros.py          # CEC macro definitions
+│   ├── cec_commands.py        # CEC byte-level protocol
+│   ├── cec_resolver.py        # CEC address resolution
+│   ├── system_shortcuts.py    # Quick-action shortcuts
+│   ├── dashboard_layout.py    # Dashboard card layout
+│   ├── persistence.py         # Data directory resolution
+│   ├── password.py            # PIN-based passcode hashing
+│   ├── rest_api/              # REST API server (21 modules)
+│   │   ├── app.py             # aiohttp application factory
+│   │   ├── control.py         # Routing and power endpoints
+│   │   ├── outputs.py         # Per-output settings (HDCP, HDR, EDID)
+│   │   ├── cec.py             # CEC command endpoints
+│   │   ├── macros.py          # CEC macro CRUD and execution
+│   │   ├── profiles.py        # Profile management
+│   │   ├── scenes.py          # Scene API (v1, backward compat)
+│   │   ├── scenes_v2.py       # Scene API (v2, Phase 8)
+│   │   ├── websocket.py       # WebSocket broadcast
+│   │   └── ...                # (14 more modules)
 │   └── integrations/          # Modular integration modules
 │       └── unfolded_circle/   # UC Remote integration
 │           ├── api_client.py  # REST API client
 │           ├── entities.py    # UC entity factories
 │           └── adapter.py     # OreiMatrix adapter
+├── custom_components/         # Home Assistant HACS component
+│   └── orei_matrix/
 ├── web/                       # Web UI dashboard
 ├── docs/                      # Documentation
+├── tests/                     # Test suite (24 files)
 ├── run.py                     # Main entry point
+├── run_server.py              # Standalone API server
 ├── Dockerfile                 # Multi-stage build
 ├── docker-compose.yml         # Deployment profiles
 ├── requirements.txt           # Core dependencies
@@ -286,20 +311,24 @@ To change preset names:
 
 ### Connection Protocol
 
-- **Protocol**: HTTPS (JSON over HTTP POST)
-- **Default Port**: 443
+- **Primary Protocol**: HTTPS (JSON over HTTP POST) — port 443
+- **Secondary Protocol**: Telnet (port 23) — for CEC commands and cable detection
 - **Endpoint**: `/cgi-bin/instr`
-- **Authentication**: Username `Admin`, Password `admin`
+- **Authentication**: Username `Admin`, Password `admin` (defaults, configurable via `OREI_USER`/`OREI_PASSWORD` env vars)
 
 ### Supported Commands
 
-The OREI BK-808 uses JSON commands over HTTPS:
+The matrix uses JSON commands over HTTPS:
 
 - **Login**: `{"comhead":"login","user":"Admin","password":"admin"}`
 - **Recall Preset**: `{"comhead":"preset set","language":0,"index":<1-8>}`
 - **Get Video Status**: `{"comhead":"get video status","language":0}`
 - **Switch Input**: `{"comhead":"video switch","language":0,"source":[<output>,<input>]}`
 - **Power On/Off**: `{"comhead":"set poweronoff","language":0,"power":<0|1>}`
+- **EDID Management**: Per-input EDID configuration
+- **HDCP/HDR Control**: Per-output HDCP mode, HDR passthrough/conversion
+- **Audio**: External audio matrix routing, per-output mute
+- **CEC**: Consumer Electronics Control via Telnet or HTTP fallback
 
 ### Entity Types
 
@@ -417,10 +446,10 @@ Based on the user manual and common OREI matrix protocols:
 ## FAQ
 
 **Q: Can I control individual input/output routing?**  
-A: The current version focuses on scene recall. Individual routing can be added in future versions.
+A: Yes! Use `POST /api/output/{output}/source` to route any input to any output, or `POST /api/switch` to switch all outputs.
 
 **Q: How many scenes can I save?**  
-A: The OREI BK-808 supports 8 preset scenes.
+A: 8 hardware presets, plus unlimited software profiles via the `/api/profiles` API with full routing, CEC macros, and power automation.
 
 **Q: Can I use RS-232 instead of TCP/IP?**  
 A: The integration uses TCP/IP. For RS-232, connect the Remote 3 dock's 3.5mm port to the matrix and use the generic RS-232 integration.
@@ -462,27 +491,50 @@ This integration is provided as-is under the Mozilla Public License Version 2.0.
 
 ## Version History
 
-### v0.1.0 (2026-01-12)
+### v2.10.0 (Current)
+- Profiles with CEC macro support and power automation
+- CEC Macros — multi-step command sequences with delays
+- Device Settings — persistent per-device names, icons, colors
+- Themes and UI Preferences persistence
+- Home Assistant HACS component with config flow
+- Enhanced CEC capabilities API
+- Dashboard layout management (Phase 7)
+- Security hardening — SSRF protection, TLS verification, non-root Docker
 
-- Initial release
-- Scene recall functionality (1-8)
-- TCP/IP control via Telnet
-- Remote entity with touchscreen UI
-- Individual scene button entities
-- Basic connection management
+### v2.9.0
+- CEC Macros system — save and execute multi-step CEC commands
+- Macro favorites and dashboard visibility
+
+### v2.8.0
+- Web UI dashboard with real-time WebSocket updates
+- `/api/info` endpoint, debug panel
+
+### v2.7.0
+- Scenes (activity-based routing configurations)
+- Scene CEC auto-resolution
+
+### v2.6.0
+- External audio matrix routing
+- Independent audio source selection per output
+
+### v2.5.0
+- EDID management per input
+- LCD timeout settings
+
+### v2.0.0
+- Initial REST API release
+- Flic smart button support
+- WebSocket real-time status updates
 
 ## Future Enhancements
 
 Planned features for future releases:
 
-- [ ] Individual input/output routing control
-- [ ] Scene save functionality from Remote
-- [ ] Custom scene names
-- [ ] Real-time status feedback
-- [ ] EDID management
-- [ ] CEC control integration
-- [ ] Web GUI automation
-- [ ] RS-232 control option
+- [ ] Alexa voice control (via Home Assistant)
+- [ ] OpenAPI 3.0 specification & Swagger UI
+- [ ] Automated scheduling engine (cron-like profile triggers)
+- [ ] MQTT broker integration
+- [ ] Outgoing webhook support
 
 ---
 
