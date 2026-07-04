@@ -81,10 +81,22 @@ The **HDCVT HDP-MXC88A** is an OEM (Original Equipment Manufacturer) product tha
   - Persistent configuration across restarts
   - Health checks and auto-restart
 
+- **Home Assistant Custom HACS Component**
+  - UI-based config flow (setup via IP address & port)
+  - Output source routing `select` entities mapping to custom input names
+  - Switch controls for matrix power, audio mute, and output stream enable/disable
+  - Button controls to recall presets 1-8 and reboot the device
+  - Binary sensors for input active video signals and output display connection status
+  - Custom native service integrations (`recall_preset`, `switch_input`, `send_cec_command`)
+
 ### 🔲 Coming Soon
 
-- Home Assistant custom HACS component
 - Alexa voice control (via HA)
+- Flic hardware validation (pending hardware)
+- OpenAPI 3.0 specification & Swagger UI integration
+- Automated scheduling engine (cron-like profile triggers)
+- Outgoing webhook support and MQTT broker integration
+
 
 ## 📚 Documentation
 
