@@ -34,6 +34,14 @@ from config import (
     SceneOutput,
 )
 
+
+@pytest.fixture(autouse=True)
+def mock_migrate_legacy_file(monkeypatch):
+    """Prevent tests from loading/migrating files from the real host environment."""
+    import persistence
+    monkeypatch.setattr(persistence, "migrate_legacy_file", lambda target, filename: False)
+
+
 # =============================================================================
 # CecConfig Tests
 # =============================================================================

@@ -1267,7 +1267,7 @@ class TestMacroAPI:
                 "id": "get_macro_test",
                 "name": "Get Test Macro",
                 "icon": "🎮",
-                "steps": [{"command": "PLAY", "targets": ["output_2"], "delay_ms": 500}],
+                "steps": [{"command": "PLAY", "targets": ["input_2"], "delay_ms": 500}],
             },
         )
         assert create_resp.status == 200

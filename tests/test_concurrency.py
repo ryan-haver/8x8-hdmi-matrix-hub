@@ -31,11 +31,13 @@ def _reset_module_state():
     api_utils._input_names = {}
     api_utils._output_names = {}
     api_utils._ws_clients.clear()
+    api_utils.reset_rate_limiter()
     yield
     api_utils._matrix_device = None
     api_utils._input_names = {}
     api_utils._output_names = {}
     api_utils._ws_clients.clear()
+    api_utils.reset_rate_limiter()
 
 
 class TestRateLimitUnderConcurrency:
@@ -70,15 +72,15 @@ class TestSetMatrixDeviceUnderConcurrency:
     @pytest.mark.asyncio
     async def test_concurrent_set_matrix_device(self):
         """50 concurrent set_matrix_device calls don't raise."""
+        async def call_sync(i):
+            return api_utils.set_matrix_device(
+                device=f"device_{i}",  # placeholder, only None-checks
+                input_names={1: f"name_{i}"},
+                output_names={1: f"output_{i}"},
+            )
+
         results = await asyncio.gather(
-            *[
-                api_utils.set_matrix_device(
-                    device=f"device_{i}",  # placeholder, only None-checks
-                    input_names={1: f"name_{i}"},
-                    output_names={1: f"output_{i}"},
-                )
-                for i in range(50)
-            ],
+            *[call_sync(i) for i in range(50)],
             return_exceptions=True,
         )
         errors = [r for r in results if isinstance(r, BaseException)]

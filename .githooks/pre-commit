@@ -28,3 +28,28 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "✅ Lint check passed."
+
+# Find pytest: prefer venv, fall back to PATH
+if [ -f ".venv/Scripts/pytest.exe" ]; then
+    PYTEST=".venv/Scripts/pytest.exe"
+elif [ -f ".venv/bin/pytest" ]; then
+    PYTEST=".venv/bin/pytest"
+elif command -v pytest >/dev/null 2>&1; then
+    PYTEST="pytest"
+else
+    echo "⚠️  pytest not found. Skipping test execution."
+    echo "   Install with: pip install pytest"
+    PYTEST=""
+fi
+
+if [ -n "$PYTEST" ]; then
+    echo "Running pytest suite..."
+    $PYTEST tests/ -x -q --tb=short --ignore=tests/test_atomic_writes.py
+    if [ $? -ne 0 ]; then
+        echo ""
+        echo "❌ Pytest suite failed. Fix failures above, then try again."
+        exit 1
+    fi
+    echo "✅ Pytest suite passed."
+fi
+

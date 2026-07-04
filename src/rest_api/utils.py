@@ -476,12 +476,12 @@ def get_matrix_device() -> OreiMatrix | None:
 
 def get_input_names() -> dict[int, str]:
     """Get input names mapping."""
-    return _input_names
+    return _input_names.copy()
 
 
 def get_output_names() -> dict[int, str]:
     """Get output names mapping."""
-    return _output_names
+    return _output_names.copy()
 
 
 def get_scene_manager() -> SceneManager | None:
