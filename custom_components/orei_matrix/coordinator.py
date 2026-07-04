@@ -57,6 +57,12 @@ class OreiMatrixCoordinator(DataUpdateCoordinator):
                 outputs_json = await outputs_resp.json()
                 if outputs_json.get("success"):
                     data["outputs"] = outputs_json.get("data", {}).get("outputs", [])
+                else:
+                    LOGGER.warning("Output status API returned error: %s", outputs_json.get("error"))
+            elif isinstance(outputs_resp, Exception):
+                LOGGER.warning("Failed to fetch output status: %s", outputs_resp)
+            else:
+                LOGGER.warning("Output status endpoint returned HTTP %s", outputs_resp.status)
 
             # 3. Parse inputs status
             inputs_resp = responses[2]
@@ -64,6 +70,12 @@ class OreiMatrixCoordinator(DataUpdateCoordinator):
                 inputs_json = await inputs_resp.json()
                 if inputs_json.get("success"):
                     data["inputs"] = inputs_json.get("data", {}).get("inputs", [])
+                else:
+                    LOGGER.warning("Input status API returned error: %s", inputs_json.get("error"))
+            elif isinstance(inputs_resp, Exception):
+                LOGGER.warning("Failed to fetch input status: %s", inputs_resp)
+            else:
+                LOGGER.warning("Input status endpoint returned HTTP %s", inputs_resp.status)
 
             return data
 

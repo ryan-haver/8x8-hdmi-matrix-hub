@@ -1327,7 +1327,7 @@ async def status_polling_loop():
                             )
 
                     # Update media player source
-                    mp_entity_id = f"orei_output_{output_num}"
+                    mp_entity_id = f"media_player.output_{output_num}"
                     if _driver_state.api.configured_entities.contains(mp_entity_id):
                         _driver_state.api.configured_entities.update_attributes(
                             mp_entity_id, {MediaPlayerAttr.SOURCE: input_name}
@@ -1503,24 +1503,64 @@ async def on_connect() -> None:
                 # Store new names using accessor
                 set_input_names(fresh_names)
 
+                # Also refresh output names
+                fresh_output_names = await matrix.get_output_names()
+                if fresh_output_names:
+                    set_output_names(fresh_output_names)
+
                 # Clear existing entities
                 _driver_state.api.available_entities.clear()
 
-                # Recreate remote entity with new names
+                # Recreate ALL entities with updated names
+
+                # 1. Matrix remote
                 remote_entity = create_matrix_remote(_driver_state.input_names)
                 _driver_state.api.available_entities.add(remote_entity)
 
-                # Recreate button entities (presets use generic names)
+                # 2. Preset buttons
                 for preset_num in range(1, 9):
                     button = create_preset_button(preset_num)
                     _driver_state.api.available_entities.add(button)
 
-                # Recreate CEC remote entities with new names
+                # 3. Input CEC remotes
                 for input_num in range(1, 9):
                     cec_remote = create_input_cec_remote(input_num, _driver_state.get_input_name(input_num))
                     _driver_state.api.available_entities.add(cec_remote)
 
-                _LOG.info("✓ Entities updated with new input names")
+                # 4. Input signal sensors
+                for input_num in range(1, 9):
+                    signal_sensor = create_input_signal_sensor(input_num, _driver_state.get_input_name(input_num))
+                    _driver_state.api.available_entities.add(signal_sensor)
+
+                # 5. Input cable sensors
+                for input_num in range(1, 9):
+                    cable_sensor = create_input_cable_sensor(input_num, _driver_state.get_input_name(input_num))
+                    _driver_state.api.available_entities.add(cable_sensor)
+
+                # 6. Power switch
+                power_switch = create_matrix_power_switch()
+                _driver_state.api.available_entities.add(power_switch)
+
+                # 7. Per-output entities (MediaPlayer, CEC, sensors)
+                for output_num in range(1, 9):
+                    output_name = _driver_state.get_output_name(output_num)
+
+                    media_player = create_output_media_player(output_num, output_name, _driver_state.input_names)
+                    _driver_state.api.available_entities.add(media_player)
+
+                    output_cec = create_output_cec_remote(output_num, output_name)
+                    _driver_state.api.available_entities.add(output_cec)
+
+                    conn_sensor = create_connection_sensor(output_num, output_name)
+                    _driver_state.api.available_entities.add(conn_sensor)
+
+                    cable_sensor = create_output_cable_sensor(output_num, output_name)
+                    _driver_state.api.available_entities.add(cable_sensor)
+
+                    routing_sensor = create_routing_sensor(output_num, output_name)
+                    _driver_state.api.available_entities.add(routing_sensor)
+
+                _LOG.info("✓ All entities updated with new names")
             else:
                 _LOG.debug("Input names unchanged")
 
@@ -1848,7 +1888,7 @@ async def handle_driver_setup(msg: ucapi.DriverSetupRequest) -> ucapi.SetupActio
             input_name = _driver_state.get_input_name(input_num)
             signal_sensor = create_input_signal_sensor(input_num, input_name)
             # Update sensor with actual signal status
-            # inactive array: 0 = signal present, 1 = no signal (at index input_num - 1)
+            # inactive array: 1 = signal present, 0 = no signal (at index input_num - 1)
             idx = input_num - 1
             has_signal = input_inactive[idx] == 1 if idx < len(input_inactive) else False
             signal_sensor.attributes[SensorAttr.VALUE] = "Active" if has_signal else "No Signal"

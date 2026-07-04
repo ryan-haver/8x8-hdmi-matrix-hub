@@ -158,8 +158,10 @@ Best for: Controlling TV/soundbar volume via CEC
 For setting a specific output to a specific input:
 
 ```
-URL: http://192.168.1.145:8080/api/output/1/source/3
+URL: http://192.168.1.145:8080/api/output/1/source
 Method: POST
+Body: {"input": 3}
+Content-Type: application/json
 Description: Sets Output 1 to Input 3
 ```
 
@@ -200,8 +202,8 @@ For setups with multiple Flic buttons controlling different outputs:
 ### Office (Output 3)
 | Button | Action | URL |
 |--------|--------|-----|
-| Duo Left | Single | `http://192.168.1.145:8080/api/output/3/source/1` |
-| Duo Right | Single | `http://192.168.1.145:8080/api/output/3/source/2` |
+| Duo Left | Single | `http://192.168.1.145:8080/api/output/3/source` | POST (body: `{"input":1}`) |
+| Duo Right | Single | `http://192.168.1.145:8080/api/output/3/source` | POST (body: `{"input":2}`) |
 
 ---
 
@@ -466,8 +468,8 @@ curl -X POST http://192.168.1.145:8080/api/profile \
 |--------|--------|-----|-------------|
 | Left | Single | `/api/profile/work-mode/recall` | Work computer |
 | Right | Single | `/api/profile/personal-mode/recall` | Personal device |
-| Left | Hold | `/api/output/4/source/3` | Quick switch to Input 3 |
-| Right | Hold | `/api/output/4/source/4` | Quick switch to Input 4 |
+| Left | Hold | `/api/output/4/source` | POST (body: `{"input":3}`) |
+| Right | Hold | `/api/output/4/source` | POST (body: `{"input":4}`) |
 
 ### Kids Room Zone (Output 5)
 
@@ -599,8 +601,10 @@ buttonManager.on("buttonSingleOrDoubleClickOrHold", function(obj) {
 
 function setInput(input) {
     http.makeRequest({
-        url: API_BASE + "/api/output/" + OUTPUT + "/source/" + input,
-        method: "POST"
+        url: API_BASE + "/api/output/" + OUTPUT + "/source",
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        content: JSON.stringify({"input": input})
     }, function(err, res) {
         console.log(err ? "Switch failed" : "Switched to input " + input);
     });

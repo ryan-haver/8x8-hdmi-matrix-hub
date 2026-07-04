@@ -13,8 +13,8 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
     # Create a select entity for each output port
     entities = []
-    output_count = coordinator.data["status"].get("outputs", [0] * 8)
-    for i in range(1, len(output_count) + 1):
+    # BK-808 always has 8 output ports
+    for i in range(1, 9):
         entities.append(OreiOutputSelect(coordinator, i))
 
     async_add_entities(entities)

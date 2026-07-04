@@ -25,7 +25,7 @@ class OreiMatrixConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             # Validate connection
             session = async_get_clientsession(self.hass)
             try:
-                async with session.get(f"http://{host}:{port}/api/health", timeout=5) as resp:
+                async with session.get(f"http://{host}:{port}/api/health", timeout=aiohttp.ClientTimeout(total=5)) as resp:
                     if resp.status == 200:
                         # Set unique ID
                         await self.async_set_unique_id(host)

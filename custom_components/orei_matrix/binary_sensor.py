@@ -1,6 +1,6 @@
 """Support for OREI HDMI Matrix binary sensors."""
 
-from homeassistant.components.binary_sensor import BinarySensorEntity
+from homeassistant.components.binary_sensor import BinarySensorDeviceClass, BinarySensorEntity
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
@@ -67,7 +67,7 @@ class OreiInputSignalSensor(CoordinatorEntity, BinarySensorEntity):
     @property
     def device_class(self):
         """Return the device class."""
-        return "connectivity"
+        return BinarySensorDeviceClass.CONNECTIVITY
 
 
 class OreiOutputConnectionSensor(CoordinatorEntity, BinarySensorEntity):
@@ -114,4 +114,4 @@ class OreiOutputConnectionSensor(CoordinatorEntity, BinarySensorEntity):
     @property
     def device_class(self):
         """Return the device class."""
-        return "plug"
+        return BinarySensorDeviceClass.PLUG
