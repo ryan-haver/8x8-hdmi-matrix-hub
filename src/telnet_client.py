@@ -465,7 +465,7 @@ class TelnetClient:
                     self._reader.read(4096),
                     timeout=1.0,
                 )
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 # No data within 1s — normal idle, loop and recheck state
                 continue
             except asyncio.CancelledError:

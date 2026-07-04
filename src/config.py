@@ -227,6 +227,7 @@ class SceneManager:
         """Load scenes from file."""
         # Migrate legacy scenes.json from old data directory if needed
         from pathlib import Path
+
         from persistence import migrate_legacy_file
 
         migrate_legacy_file(Path(self.scenes_file), "scenes.json")
@@ -492,6 +493,7 @@ class ProfileManager:
         """Load profiles from file, migrating from scenes.json if needed."""
         # Migrate legacy profiles.json from old data directory if needed
         from pathlib import Path
+
         from persistence import migrate_legacy_file
 
         migrate_legacy_file(Path(self.profiles_file), "profiles.json")

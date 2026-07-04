@@ -9,7 +9,6 @@ bytes that appear during initial connection to the OREI BK-808 matrix.
 """
 
 from enum import Enum
-from typing import Tuple
 
 
 class _IACState(Enum):
@@ -50,7 +49,7 @@ class TelnetIACFilter:
         self._state = _IACState.DATA
         self._sb_data: list[int] = []  # Accumulated subnegotiation data
 
-    def feed(self, data: bytes) -> Tuple[bytes, bytes]:
+    def feed(self, data: bytes) -> tuple[bytes, bytes]:
         """
         Process incoming bytes through the IAC filter.
 

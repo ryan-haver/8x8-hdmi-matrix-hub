@@ -1612,7 +1612,7 @@ async def on_disconnect() -> None:
 
     # Stop status polling when client disconnects
     await stop_status_polling()
- 
+
 
 
 async def on_enter_standby() -> None:
@@ -1638,7 +1638,7 @@ async def on_exit_standby() -> None:
 
     # Resume polling when exiting standby
     await start_status_polling()
- 
+
 
 
 async def on_subscribe_entities(entity_ids: list[str]) -> None:
@@ -1739,7 +1739,7 @@ async def _reconnect_loop() -> None:
 
                 # Restart status polling if it was running
                 await start_status_polling()
- 
+
                 break
             else:
                 _reconnect_attempt += 1

@@ -228,3 +228,24 @@ def get_available_commands(is_output: bool = False) -> list[str]:
     """
     table = OUTPUT_CEC_COMMANDS if is_output else INPUT_CEC_COMMANDS
     return sorted(table.keys())
+
+
+# Convenience wrappers used by cec_resolver
+def get_input_commands() -> list[str]:
+    """Get sorted list of input CEC command names."""
+    return get_available_commands(is_output=False)
+
+
+def get_output_commands() -> list[str]:
+    """Get sorted list of output CEC command names."""
+    return get_available_commands(is_output=True)
+
+
+def get_commands_by_category(category: str) -> list[str]:
+    """Get command names in a given category."""
+    return CEC_CATEGORIES.get(category, [])
+
+
+def is_audio_only_output(scaler_value: int) -> bool:
+    """Return True if the scaler value indicates an Audio Only output (value 4)."""
+    return scaler_value == 4

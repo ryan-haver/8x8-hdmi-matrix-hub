@@ -11,16 +11,22 @@ import ipaddress
 import json
 import logging
 import os
-import uuid as _uuid
 
 # Support both package and direct imports
 import sys
 import time
+import uuid as _uuid
 from collections import defaultdict
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from aiohttp import web
+
+if TYPE_CHECKING:
+    from cec_macros import MacroManager
+    from config import ProfileManager, SceneManager
+    from dashboard_layout import DashboardLayoutManager
+    from system_shortcuts import SystemShortcutManager
 
 # Ensure src/ directory is in path for sibling imports
 _src_dir = Path(__file__).parent.parent
@@ -97,7 +103,7 @@ def safe_error_message(exc, context: str) -> str:
     """
     correlation_id = _uuid.uuid4().hex[:8]
     _LOG.exception("[%s] %s: %s", correlation_id, context, exc)
-    return "Internal server error (ref: %s)" % correlation_id
+    return f"Internal server error (ref: {correlation_id})"
 
 
 # =============================================================================
