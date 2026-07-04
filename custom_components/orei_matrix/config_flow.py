@@ -9,7 +9,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from .const import CONF_IP_ADDRESS, CONF_PORT, DEFAULT_NAME, DEFAULT_PORT, DOMAIN
 
 
-class OreiMatrixConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+class OreiMatrixConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore[call-arg]
     """Handle a config flow for OREI HDMI Matrix."""
 
     VERSION = 1

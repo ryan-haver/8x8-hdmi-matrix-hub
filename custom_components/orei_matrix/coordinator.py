@@ -31,7 +31,7 @@ class OreiMatrixCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self):
         """Fetch status data from OREI REST API endpoints."""
         if self._poll_lock.locked():
-            _LOG.warning("Previous poll still running, skipping this interval")
+            LOGGER.warning("Previous poll still running, skipping this interval")
             return self.data  # return stale data rather than overlapping
 
         async with self._poll_lock:
