@@ -1,4 +1,5 @@
 """Constants for the OREI HDMI Matrix integration."""
+
 import logging
 
 DOMAIN = "orei_matrix"

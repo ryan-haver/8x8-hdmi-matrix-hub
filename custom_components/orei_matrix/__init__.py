@@ -1,10 +1,13 @@
 """The OREI HDMI Matrix integration."""
+
 import asyncio
+
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
-from .const import DOMAIN, CONF_IP_ADDRESS, CONF_PORT, PLATFORMS
+from .const import CONF_IP_ADDRESS, CONF_PORT, DOMAIN, PLATFORMS
 from .coordinator import OreiMatrixCoordinator
+
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up OREI HDMI Matrix from a config entry."""
@@ -53,7 +56,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         session = hass.helpers.aiohttp_client.async_get_clientsession()
         url = f"{coordinator.base_url}/api/cec/{port_type}/{port_num}/{command}"
         try:
-            async with session.post(url) as resp:
+            async with session.post(url):
                 pass
         except Exception as err:
             coordinator.logger.error("Error sending CEC command via service: %s", err)
@@ -64,12 +67,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     return True
 
+
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
     unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
     if unload_ok:
         hass.data[DOMAIN].pop(entry.entry_id)
-        
+
         # If no other entries exist, deregister services
         if not hass.data[DOMAIN]:
             hass.services.async_remove(DOMAIN, "recall_preset")

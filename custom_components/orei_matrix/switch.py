@@ -1,25 +1,28 @@
 """Support for OREI HDMI Matrix switches."""
+
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN, LOGGER
 
+
 async def async_setup_entry(hass, entry, async_add_entities):
     """Set up the OREI Matrix switch entities."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
-    
+
     entities = []
-    
+
     # 1. Power Switch
     entities.append(OreiPowerSwitch(coordinator))
-    
+
     # 2. Output Mute and Stream Switches
-    output_count = coordinator.data["status"].get("outputs", [0]*8)
+    output_count = coordinator.data["status"].get("outputs", [0] * 8)
     for i in range(1, len(output_count) + 1):
         entities.append(OreiOutputMuteSwitch(coordinator, i))
         entities.append(OreiOutputStreamSwitch(coordinator, i))
-        
+
     async_add_entities(entities)
+
 
 class OreiPowerSwitch(CoordinatorEntity, SwitchEntity):
     """Representation of the OREI Matrix power switch."""
