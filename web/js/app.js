@@ -93,10 +93,7 @@ class MatrixApp {
         if (window.dashboardManager) {
             window.dashboardManager.init();
         }
-        
-        // HDMI Status Tray (header button with dropdown)
-        this.components.hdmiStatusTray = new HdmiStatusTray();
-        this.components.hdmiStatusTray.init();
+
         
         // Quick Actions Drawer (deprecated - replaced by Settings Drawer in Phase 8)
         // this.components.quickActionsDrawer = new QuickActionsDrawer();
@@ -246,7 +243,7 @@ class MatrixApp {
             if (viewportWidth > sectionWidth) {
                 translation += (viewportWidth - sectionWidth) / 2;
             }
-            slider.style.transform = `translateX(${translation}px)`;
+            slider.style.transform = `translate3d(${translation}px, 0, 0)`;
         }
         
         state.setActiveTab(tab);

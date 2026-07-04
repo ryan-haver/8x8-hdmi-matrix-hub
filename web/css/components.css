@@ -3,6 +3,10 @@
  */
 
 /* ===== Mobile Tab Navigation ===== */
+:root {
+    --tabs-height: calc(56px + env(safe-area-inset-bottom, 0px));
+}
+
 .mobile-tabs {
     position: fixed;
     bottom: 0;
@@ -16,6 +20,7 @@
     -webkit-backdrop-filter: var(--glass-blur);
     border-top: 1px solid var(--border-subtle);
     box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.3);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 .tab-btn {
@@ -24,13 +29,13 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: var(--space-1);
-    min-height: var(--tabs-height);
-    padding: var(--space-2);
+    gap: 2px;
+    min-height: 56px;
+    padding: var(--space-1) var(--space-2);
     background: transparent;
     border: none;
     color: var(--text-muted);
-    font-size: var(--font-size-xs);
+    font-size: 10px;
     font-weight: var(--font-weight-medium);
     cursor: pointer;
     transition: all var(--transition-fast);
@@ -38,9 +43,9 @@
 }
 
 .tab-btn .icon {
-    width: 24px;
-    height: 24px;
-    transition: transform var(--transition-fast);
+    width: 22px;
+    height: 22px;
+    transition: transform var(--transition-fast), filter var(--transition-fast);
 }
 
 .tab-btn:hover {
@@ -48,7 +53,7 @@
 }
 
 .tab-btn:hover .icon {
-    transform: translateY(-2px);
+    transform: translateY(-1px);
 }
 
 .tab-btn.active {
@@ -57,19 +62,20 @@
 
 .tab-btn.active .icon {
     filter: drop-shadow(0 0 6px var(--accent-glow));
+    transform: scale(1.05);
 }
-
-/* Active tab indicator - cyan glow bar */
+/* Active tab indicator - cyan glow bar at the top of the active tab button */
 .tab-btn.active::after {
     content: '';
     position: absolute;
     top: 0;
-    left: 20%;
-    right: 20%;
+    left: 25%;
+    right: 25%;
     height: 3px;
     background: var(--accent-gradient);
     border-radius: 0 0 var(--radius-sm) var(--radius-sm);
     box-shadow: 0 2px 8px var(--accent-glow);
+    transition: all var(--transition-fast);
 }
 
 .tab-btn {
@@ -1463,464 +1469,7 @@
     margin-left: 4px;
 }
 
-/* ===== HDMI Status Tray ===== */
-.hdmi-status-tray-container {
-    margin-bottom: var(--space-2);
-}
 
-.hdmi-tray {
-    background-color: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-}
-
-.hdmi-tray-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: var(--space-2) var(--space-3);
-    background: none;
-    border: none;
-    color: var(--text-color);
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.hdmi-tray-header:hover {
-    background-color: var(--bg-tertiary);
-}
-
-.hdmi-tray-summary {
-    display: flex;
-    gap: var(--space-4);
-    font-size: var(--font-size-sm);
-}
-
-.hdmi-summary-item {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-1) var(--space-2);
-    background-color: var(--bg-secondary);
-    border-radius: var(--radius-sm);
-}
-
-.hdmi-summary-item .status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
-}
-
-.hdmi-summary-item .status-dot.active,
-.hdmi-summary-item .status-dot.connected {
-    background-color: var(--status-active);
-}
-
-.hdmi-summary-item .status-dot.inactive,
-.hdmi-summary-item .status-dot.disconnected {
-    background-color: var(--status-disconnected);
-    opacity: var(--status-disconnected-opacity);
-}
-
-.hdmi-tray-chevron {
-    width: 16px;
-    height: 16px;
-    transition: transform 0.2s;
-}
-
-.hdmi-tray.expanded .hdmi-tray-chevron {
-    transform: rotate(180deg);
-}
-
-.hdmi-tray-content {
-    border-top: 1px solid var(--border-color);
-    padding: var(--space-3);
-    display: grid;
-    gap: var(--space-4);
-}
-
-@media (min-width: 768px) {
-    .hdmi-tray-content {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
-.hdmi-status-section {
-    min-width: 0;
-}
-
-.hdmi-section-title {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-    color: var(--text-secondary);
-    margin-bottom: var(--space-2);
-}
-
-.hdmi-section-title .icon {
-    width: 14px;
-    height: 14px;
-}
-
-.hdmi-status-grid {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
-}
-
-.hdmi-status-item {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-2) var(--space-3);
-    background-color: var(--bg-tertiary);
-    border-radius: var(--radius-sm);
-    font-size: var(--font-size-sm);
-    min-height: 32px;
-    border-left: 3px solid var(--text-muted, #64748b);
-}
-
-/* HDMI status item - status colors via left border */
-.hdmi-status-item.input-active,
-.hdmi-status-item.output-active {
-    border-left-color: var(--status-active);
-    background-color: var(--status-active-bg);
-}
-
-.hdmi-status-item.input-connected,
-.hdmi-status-item.output-connected {
-    border-left-color: var(--status-standby);
-    background-color: var(--status-standby-bg);
-}
-
-.hdmi-status-item.input-disconnected,
-.hdmi-status-item.output-disconnected {
-    border-left-color: var(--status-disconnected);
-    background-color: rgba(90, 106, 122, 0.1);
-}
-
-.hdmi-status-item.input-unknown,
-.hdmi-status-item.output-disabled {
-    border-left-color: var(--text-muted, #64748b);
-    opacity: 0.7;
-}
-
-.hdmi-status-num {
-    font-weight: var(--font-weight-semibold);
-    color: var(--text-secondary);
-    min-width: 18px;
-    flex-shrink: 0;
-}
-
-.hdmi-status-name {
-    flex: 1;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.hdmi-status-source {
-    color: var(--text-muted);
-    font-size: var(--font-size-xs);
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-
-.hdmi-status-label {
-    font-size: var(--font-size-xs);
-    padding: 2px 6px;
-    border-radius: var(--radius-sm);
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-
-/* Legacy signal-active/inactive (kept for backward compatibility) */
-.hdmi-status-item.signal-active .hdmi-status-label {
-    color: var(--status-active);
-}
-
-.hdmi-status-item.signal-inactive .hdmi-status-label {
-    color: var(--text-muted);
-}
-
-/* Input fully active (cable + signal) */
-.hdmi-status-item.input-active .hdmi-status-label {
-    color: var(--status-active);
-}
-
-/* Input connected but no signal */
-.hdmi-status-item.input-connected .hdmi-status-label {
-    color: var(--status-standby);
-}
-
-/* Input disconnected (no cable) */
-.hdmi-status-item.input-disconnected .hdmi-status-label {
-    color: var(--status-disconnected);
-}
-
-/* Input unknown status */
-.hdmi-status-item.input-unknown .hdmi-status-label {
-    color: var(--text-muted);
-}
-
-/* Output fully active (cable + signal) */
-.hdmi-status-item.output-active .hdmi-status-label {
-    color: var(--status-active);
-}
-
-/* Output connected but no signal - ORANGE */
-.hdmi-status-item.output-connected .hdmi-status-label {
-    color: var(--status-standby);
-}
-
-/* Output disconnected (no cable) - RED */
-.hdmi-status-item.output-disconnected .hdmi-status-label {
-    color: var(--status-disconnected);
-}
-
-/* Output disabled */
-.hdmi-status-item.output-disabled .hdmi-status-label {
-    color: var(--text-muted);
-}
-
-/* ===== HDMI Status Header Button & Dropdown ===== */
-.hdmi-status-header-btn {
-    position: relative;
-}
-
-.hdmi-status-header-btn.active {
-    background-color: var(--bg-tertiary);
-}
-
-.hdmi-status-badge {
-    position: absolute;
-    top: -2px;
-    right: -2px;
-    display: flex;
-    gap: 2px;
-    padding: 2px 3px;
-    border-radius: 6px;
-    background-color: var(--bg-tertiary);
-    border: 1px solid var(--border-color);
-}
-
-.hdmi-status-badge .badge-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background-color: var(--text-muted);
-    transition: background-color 0.2s;
-}
-
-.hdmi-status-badge .badge-dot.dot-green {
-    background-color: var(--status-active);
-    box-shadow: var(--status-active-glow);
-}
-
-.hdmi-status-badge .badge-dot.dot-amber {
-    background-color: var(--status-standby);
-    box-shadow: var(--status-standby-glow);
-}
-
-.hdmi-status-badge .badge-dot.dot-red {
-    background-color: var(--status-disconnected);
-    opacity: var(--status-disconnected-opacity);
-}
-
-/* Legacy status classes - kept for backward compatibility */
-.hdmi-status-badge.status-good {
-    background-color: var(--status-active);
-    color: white;
-    border-color: transparent;
-}
-
-.hdmi-status-badge.status-warning {
-    background-color: var(--status-standby);
-    color: white;
-    border-color: transparent;
-}
-
-.hdmi-status-badge.status-error {
-    background-color: var(--status-disconnected);
-    color: white;
-    border-color: transparent;
-}
-
-.hdmi-status-dropdown {
-    position: fixed;
-    width: 420px;
-    max-width: calc(100vw - 20px);
-    max-height: calc(100vh - 120px);
-    background-color: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
-    z-index: 1000;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-8px);
-    transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-}
-
-@media (max-width: 480px) {
-    .hdmi-status-dropdown {
-        left: 10px !important;
-        right: 10px !important;
-        width: auto !important;
-        max-width: none !important;
-    }
-}
-
-.hdmi-status-dropdown.open {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-.hdmi-dropdown-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: var(--space-3) var(--space-4);
-    border-bottom: 1px solid var(--border-color);
-    background-color: var(--bg-primary);
-}
-
-.hdmi-dropdown-title {
-    font-weight: var(--font-weight-semibold);
-    font-size: var(--font-size-base);
-}
-
-.hdmi-dropdown-close {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    padding: 0;
-    border: none;
-    background: none;
-    color: var(--text-secondary);
-    cursor: pointer;
-    border-radius: var(--radius-sm);
-    transition: background-color 0.2s, color 0.2s;
-}
-
-.hdmi-dropdown-close:hover {
-    background-color: var(--bg-tertiary);
-    color: var(--text-primary);
-}
-
-.hdmi-dropdown-close .icon {
-    width: 16px;
-    height: 16px;
-}
-
-.hdmi-dropdown-summary {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-3);
-    padding: var(--space-3) var(--space-4);
-    background-color: var(--bg-tertiary);
-}
-
-.hdmi-summary-card {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-    padding: var(--space-2) var(--space-3);
-    background-color: var(--bg-secondary);
-    border-radius: var(--radius-md);
-}
-
-.hdmi-summary-header {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-semibold);
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.hdmi-summary-header .icon {
-    width: 14px;
-    height: 14px;
-}
-
-.hdmi-summary-divider {
-    height: 1px;
-    background-color: var(--border-color);
-}
-
-.hdmi-summary-stat {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-}
-
-.hdmi-summary-stat .status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
-}
-
-.hdmi-summary-stat .status-dot.active,
-.hdmi-summary-stat .status-dot.connected {
-    background-color: var(--status-active);
-}
-
-.hdmi-summary-stat .status-dot.inactive,
-.hdmi-summary-stat .status-dot.disconnected {
-    background-color: var(--status-disconnected);
-    opacity: var(--status-disconnected-opacity);
-}
-
-.hdmi-summary-count {
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-bold);
-    color: var(--text-primary);
-}
-
-.hdmi-summary-label {
-    font-size: var(--font-size-sm);
-    color: var(--text-secondary);
-}
-
-.hdmi-dropdown-content {
-    padding: var(--space-4);
-    overflow-y: auto;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-}
-
-.hdmi-dropdown-footer {
-    padding: var(--space-2) var(--space-3);
-    border-top: 1px solid var(--border-color);
-    background-color: var(--bg-tertiary);
-    text-align: center;
-    color: var(--text-muted);
-    font-size: var(--font-size-xs);
-}
-
-.hdmi-dropdown-loading {
-    padding: var(--space-4);
-    text-align: center;
-    color: var(--text-secondary);
-}
 
 /* ===== Quick Actions Drawer ===== */
 .quick-actions-backdrop {
@@ -2688,241 +2237,7 @@
     background: var(--accent-dim);
 }
 
-/* ===== HDMI Status Tray Dropdown ===== */
-.hdmi-status-dropdown {
-    position: fixed;
-    width: 320px;
-    max-height: 400px;
-    background: var(--modal-bg-solid);
-    border: 1px solid hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.25);
-    border-radius: var(--radius-lg);
-    box-shadow: 0 0 30px hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.1),
-                0 15px 40px rgba(0, 0, 0, 0.4);
-    z-index: 1000;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-8px);
-    transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-}
 
-.hdmi-status-dropdown.open {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-.hdmi-dropdown-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: var(--space-3) var(--space-4);
-    border-bottom: 1px solid hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.15);
-    background: rgba(0, 0, 0, 0.2);
-}
-
-.hdmi-dropdown-title {
-    font-size: var(--font-size-base);
-    font-weight: var(--font-weight-semibold);
-    color: var(--text-primary);
-}
-
-.hdmi-dropdown-close {
-    width: 28px;
-    height: 28px;
-    border-radius: var(--radius-md);
-    background: transparent;
-    border: none;
-    color: var(--text-secondary);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.15s, color 0.15s;
-}
-
-.hdmi-dropdown-close:hover {
-    background: hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.15);
-    color: var(--accent);
-}
-
-.hdmi-dropdown-close .icon {
-    width: 16px;
-    height: 16px;
-}
-
-.hdmi-dropdown-content {
-    padding: var(--space-3);
-    overflow-y: auto;
-    flex: 1;
-}
-
-.hdmi-status-section {
-    margin-bottom: var(--space-4);
-}
-
-.hdmi-status-section:last-child {
-    margin-bottom: 0;
-}
-
-.hdmi-section-title {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-semibold);
-    text-transform: uppercase;
-    color: var(--text-secondary);
-    margin-bottom: var(--space-2);
-    letter-spacing: 0.05em;
-}
-
-.hdmi-section-title .icon {
-    width: 14px;
-    height: 14px;
-    opacity: 0.7;
-}
-
-.hdmi-status-grid {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
-}
-
-.hdmi-status-item {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-2) var(--space-3);
-    background: var(--bg-tertiary);
-    border-radius: var(--radius-md);
-    border-left: 3px solid var(--text-muted);
-    transition: background 0.15s;
-}
-
-.hdmi-status-item:hover {
-    background: var(--bg-secondary);
-}
-
-/* Input status classes */
-.hdmi-status-item.input-active {
-    border-left-color: var(--status-success);
-    background: var(--status-success-dim);
-}
-
-.hdmi-status-item.input-connected {
-    border-left-color: var(--status-warning);
-    background: var(--status-warning-dim);
-}
-
-.hdmi-status-item.input-disconnected {
-    border-left-color: var(--status-error);
-    background: var(--status-error-dim);
-}
-
-.hdmi-status-item.input-unknown {
-    border-left-color: var(--text-muted);
-}
-
-/* Output status classes */
-.hdmi-status-item.output-active {
-    border-left-color: var(--status-success);
-    background: var(--status-success-dim);
-}
-
-.hdmi-status-item.output-connected {
-    border-left-color: var(--status-warning);
-    background: var(--status-warning-dim);
-}
-
-.hdmi-status-item.output-disconnected {
-    border-left-color: var(--status-error);
-    background: var(--status-error-dim);
-}
-
-.hdmi-status-item.output-disabled {
-    border-left-color: var(--text-muted);
-    opacity: 0.6;
-}
-
-.hdmi-status-num {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-sm);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-bold);
-    color: var(--text-primary);
-    flex-shrink: 0;
-}
-
-.hdmi-status-name {
-    flex: 1;
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    color: var(--text-primary);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.hdmi-status-source {
-    font-size: var(--font-size-xs);
-    color: var(--text-secondary);
-    opacity: 0.8;
-}
-
-.hdmi-status-label {
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
-    padding: 2px 8px;
-    border-radius: var(--radius-sm);
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--text-secondary);
-}
-
-.hdmi-status-item.input-active .hdmi-status-label,
-.hdmi-status-item.output-active .hdmi-status-label {
-    background: var(--status-success);
-    color: white;
-}
-
-.hdmi-status-item.input-connected .hdmi-status-label,
-.hdmi-status-item.output-connected .hdmi-status-label {
-    background: var(--status-warning);
-    color: white;
-}
-
-.hdmi-status-item.input-disconnected .hdmi-status-label,
-.hdmi-status-item.output-disconnected .hdmi-status-label {
-    background: var(--status-error);
-    color: white;
-}
-
-/* HDMI Status Header Button */
-.hdmi-status-header-btn {
-    position: relative;
-}
-
-.hdmi-status-header-btn.active {
-    background: var(--accent-dim);
-    color: var(--accent);
-}
-
-/* Mobile responsive */
-@media (max-width: 480px) {
-    .hdmi-status-dropdown {
-        left: var(--space-2) !important;
-        right: var(--space-2) !important;
-        width: auto;
-        max-height: 60vh;
-    }
-}
 
 /* ===== Route All Drawer ===== */
 .routing-backdrop {
@@ -6962,4 +6277,317 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* ===== Responsive Routing Matrix Overhaul ===== */
+
+/* View Toggle Button Group */
+.matrix-layout-toggle {
+    display: flex;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 2px;
+    gap: 2px;
+}
+
+.matrix-layout-toggle .btn-icon {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    background: transparent;
+    transition: all var(--transition-fast);
+}
+
+.matrix-layout-toggle .btn-icon:hover {
+    color: var(--text-primary);
+    background: var(--bg-hover);
+}
+
+.matrix-layout-toggle .btn-icon.active {
+    color: var(--accent);
+    background: var(--bg-active);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Mobile Routing List Layout */
+.matrix-mobile-view {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    width: 100%;
+    margin-top: var(--space-2);
+}
+
+/* Output Card Customizations for Routing */
+.io-card.routing-card {
+    transition: border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.io-card.routing-card:hover {
+    border-color: var(--border-focus);
+}
+
+.io-status-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-1);
+}
+
+.io-status-row .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+/* Route Selector Button inside Card */
+.io-card-route-selector {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: var(--space-2) var(--space-3);
+    margin-top: var(--space-3);
+    min-height: 44px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-align: left;
+}
+
+.io-card-route-selector:hover,
+.io-card-route-selector:focus-visible {
+    background: var(--bg-hover);
+    border-color: var(--border-focus);
+    outline: none;
+}
+
+.io-card-route-selector-label {
+    font-size: 9px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.05em;
+    line-height: 1;
+    margin-bottom: 2px;
+}
+
+.io-card-route-selector-value {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+}
+
+.io-card-route-selector-arrow {
+    color: var(--text-muted);
+    font-size: 10px;
+    margin-left: var(--space-2);
+}
+
+/* Mobile Bottom Sheet Drawer Modal */
+.bottom-sheet {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: var(--z-modal, 1100);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    pointer-events: none;
+    visibility: hidden;
+    transition: visibility var(--transition-normal);
+}
+
+.bottom-sheet.open {
+    pointer-events: auto;
+    visibility: visible;
+}
+
+.bottom-sheet-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+}
+
+.bottom-sheet.open .bottom-sheet-backdrop {
+    opacity: 1;
+}
+
+.bottom-sheet-content {
+    position: relative;
+    background: rgba(13, 13, 26, 0.95);
+    backdrop-filter: var(--glass-blur-heavy, blur(24px));
+    -webkit-backdrop-filter: var(--glass-blur-heavy, blur(24px));
+    border-top: 2px solid var(--accent);
+    border-radius: 20px 20px 0 0;
+    max-height: 80vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+    transform: translateY(100%);
+    transition: transform var(--transition-normal) var(--ease-out-expo);
+    margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+    .bottom-sheet-content {
+        max-width: 480px;
+        border-left: 1px solid var(--border-color);
+        border-right: 1px solid var(--border-color);
+        border-radius: 20px 20px 0 0;
+    }
+}
+
+.bottom-sheet.open .bottom-sheet-content {
+    transform: translateY(0);
+}
+
+.bottom-sheet-drag-handle {
+    width: 40px;
+    height: 4px;
+    background: var(--text-muted);
+    opacity: 0.4;
+    border-radius: var(--radius-full);
+    margin: var(--space-3) auto 0;
+}
+
+.bottom-sheet-header {
+    padding: var(--space-4);
+    border-bottom: 1px solid var(--border-color-subtle);
+    text-align: center;
+}
+
+.bottom-sheet-header h3 {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+    margin-top: var(--space-1);
+    margin-bottom: 0;
+}
+
+.bottom-sheet-subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+    margin-top: 2px;
+    margin-bottom: 0;
+}
+
+.bottom-sheet-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-2) var(--space-4) calc(var(--space-6) + env(safe-area-inset-bottom, 0));
+    -webkit-overflow-scrolling: touch;
+}
+
+.mobile-input-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.mobile-input-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-3) var(--space-4);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    color: var(--text-primary);
+    cursor: pointer;
+    min-height: 52px;
+    transition: all var(--transition-fast);
+}
+
+.mobile-input-item:hover,
+.mobile-input-item:focus-visible {
+    background: var(--bg-hover);
+    border-color: var(--border-focus);
+    outline: none;
+}
+
+.mobile-input-item.active {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+    box-shadow: var(--glow-cyan-sm);
+}
+
+.mobile-input-item-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.mobile-input-item-number {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-muted);
+    background: var(--bg-surface);
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mobile-input-item.active .mobile-input-item-number {
+    color: var(--accent);
+    background: var(--bg-elevated);
+}
+
+.mobile-input-item-name {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+}
+
+.mobile-input-item-badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    font-weight: var(--font-weight-medium);
+}
+
+.mobile-input-item-badge.status-signal {
+    background: hsla(142, 70%, 45%, 0.15);
+    color: var(--color-success, #22c55e);
+}
+
+.mobile-input-item-badge.status-cable {
+    background: hsla(25, 85%, 55%, 0.15);
+    color: var(--color-warning, #f59e0b);
+}
+
+.mobile-input-item-badge.status-disconnected {
+    background: var(--border-subtle);
+    color: var(--text-muted);
+}
+
+.mobile-input-item-checkmark {
+    font-size: 1.25rem;
+    color: var(--accent);
+    font-weight: bold;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all var(--transition-fast);
+}
+
+.mobile-input-item.active .mobile-input-item-checkmark {
+    opacity: 1;
+    transform: scale(1);
 }

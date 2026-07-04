@@ -358,7 +358,14 @@ class SystemShortcutsPanel {
         container.querySelectorAll('.shortcut-delete-btn').forEach(btn => {
             btn.addEventListener('click', async (e) => {
                 const shortcutId = e.currentTarget.dataset.shortcutId;
-                if (!confirm('Delete this shortcut? This cannot be undone.')) return;
+                const confirmed = await ConfirmDialog.confirm({
+                    title: 'Delete Shortcut',
+                    message: 'Delete this shortcut? This cannot be undone.',
+                    confirmText: 'Delete',
+                    cancelText: 'Keep',
+                    variant: 'danger'
+                });
+                if (!confirmed) return;
                 try {
                     const result = await window.api.deleteSystemShortcut(shortcutId);
                     if (result?.success) {

@@ -308,6 +308,67 @@
     }
 }
 
+/* ===== General Mobile & Tablet Utilities ===== */
+@media (max-width: 767px) {
+    :root {
+        --header-height: 56px;
+    }
+    
+    .header {
+        height: var(--header-height);
+        padding: 0 var(--space-3);
+    }
+    
+    .main-content {
+        padding-top: calc(var(--header-height) + var(--space-4)) !important;
+        padding-bottom: calc(var(--tabs-height) + var(--space-4)) !important;
+    }
+    
+    /* Touch-active haptic feedback scale animation */
+    .tab-btn:active,
+    .btn:active,
+    .io-card:active,
+    .card:active,
+    .mobile-input-item:active,
+    .utility-btn:active,
+    .action-btn:active,
+    .matrix-route:active {
+        transform: scale(0.97);
+        opacity: 0.9;
+        transition: transform 0.08s ease, opacity 0.08s ease;
+    }
+    
+    /* Mobile drawer widths cover 85% width on mobile */
+    .quick-actions-drawer,
+    .theme-drawer,
+    .side-nav-drawer {
+        width: 85vw !important;
+        max-width: 85vw !important;
+    }
+
+    /* Resize theme opacity slider thumb on mobile */
+    .theme-opacity-slider::-webkit-slider-thumb {
+        width: 28px !important;
+        height: 28px !important;
+    }
+    .theme-opacity-slider::-moz-range-thumb {
+        width: 28px !important;
+        height: 28px !important;
+    }
+}
+
+@media (min-width: 600px) and (max-width: 1023px) {
+    /* Responsive card lists - 2 columns on medium tablet viewports */
+    .card-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: var(--space-3) !important;
+    }
+    
+    #scenes-list.card-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
 /* ===== Tablets (768px and up) ===== */
 @media (min-width: 768px) {
     body {
@@ -601,5 +662,20 @@
         gap: var(--space-2);
         font-weight: var(--font-weight-semibold);
         padding: var(--space-3);
+    }
+}
+
+/* ===== Routing Card Grid Layout for Tablets & Desktops ===== */
+@media (min-width: 600px) {
+    .matrix-mobile-view {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: var(--space-3) !important;
+    }
+}
+
+@media (min-width: 1200px) {
+    .matrix-mobile-view {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
     }
 }

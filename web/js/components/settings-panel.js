@@ -588,9 +588,13 @@ class SettingsPanel {
      * Power cycle the matrix
      */
     async powerCycle() {
-        if (!confirm('Power cycle the matrix? This will briefly disconnect all outputs.')) {
-            return;
-        }
+        const confirmed = await ConfirmDialog.confirm({
+            title: 'Power Cycle',
+            message: 'Power cycle the matrix? This will briefly disconnect all outputs.',
+            confirmText: 'Power Cycle',
+            variant: 'warning'
+        });
+        if (!confirmed) return;
         
         try {
             await api.powerCycle();
@@ -604,9 +608,13 @@ class SettingsPanel {
      * Reboot the matrix
      */
     async reboot() {
-        if (!confirm('Reboot the matrix? This will take about 30 seconds.')) {
-            return;
-        }
+        const confirmed = await ConfirmDialog.confirm({
+            title: 'Reboot Device',
+            message: 'Reboot the matrix? This will take about 30 seconds.',
+            confirmText: 'Reboot',
+            variant: 'danger'
+        });
+        if (!confirmed) return;
         
         try {
             await api.reboot();
