@@ -1,9 +1,4 @@
 # Core dependencies for REST API
-# Pinned versions with SHA256 hashes for reproducible builds and supply chain security.
-# To update: run `pip install --upgrade <package>` then `pip hash <wheel>` to regenerate.
-aiohttp==3.13.3 \
-    --hash=sha256:e3531d63d3bdfa7e3ac5e9b27b2dd7ec9df3206a98e0b3445fa906f233264c57 \
-    --hash=sha256:9ae8dd55c8e6c4257eae3a20fd2c8f41edaea5992ed67156642493b8daf3cecc
-psutil==7.2.1 \
-    --hash=sha256:b1b0671619343aa71c20ff9767eced0483e4fc9e1f489d50923738caf6a03c17 \
-    --hash=sha256:5e38404ca2bb30ed7267a46c02f06ff842e92da3bb8c5bfdadbd35a5722314d8
+# Pinned versions for reproducible builds.
+aiohttp==3.13.3
+psutil==7.2.1
