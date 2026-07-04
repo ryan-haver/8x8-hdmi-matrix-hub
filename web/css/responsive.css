@@ -395,6 +395,11 @@
     
     .desktop-tab-container {
         display: flex !important;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        align-items: center;
+        height: 100%;
     }
     
     .menu-toggle {

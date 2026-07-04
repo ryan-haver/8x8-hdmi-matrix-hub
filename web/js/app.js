@@ -531,20 +531,12 @@ class MatrixApp {
         }
     }
 
-    /**
-     * Update connection status indicator
-     */
     updateConnectionStatus(connected) {
-        const statusEl = document.getElementById('connection-status');
-        if (statusEl) {
-            statusEl.classList.toggle('connected', connected);
-            statusEl.classList.toggle('disconnected', !connected);
-            statusEl.title = connected ? 'Connected' : 'Disconnected';
-            
-            const textEl = statusEl.querySelector('.status-text');
-            if (textEl) {
-                textEl.textContent = connected ? 'Online' : 'Offline';
-            }
+        const titleEl = document.getElementById('header-title-text');
+        if (titleEl) {
+            titleEl.classList.toggle('connected', connected);
+            titleEl.classList.toggle('disconnected', !connected);
+            titleEl.title = connected ? 'Connected' : 'Disconnected';
         }
     }
 
