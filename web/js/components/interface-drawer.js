@@ -15,6 +15,7 @@ class InterfaceDrawer {
         this.backdrop = null;
 
         this.createDrawer();
+        this.registerWithOverlayManager();
     }
 
     /**

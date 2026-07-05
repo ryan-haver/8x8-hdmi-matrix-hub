@@ -14,6 +14,7 @@ class HardwareDrawer {
         this.backdrop = null;
 
         this.createDrawer();
+        this.registerWithOverlayManager();
     }
 
     /**
