@@ -15,6 +15,7 @@ class IntegrationsDrawer {
 
         // Helper state
         this.flicConfig = {
+            buttonType: 'button', // 'button', 'twist', 'duo'
             targetType: 'preset', // 'preset', 'profile', 'switch_all', 'switch_output', 'cycle_input', 'volume_control', 'power', 'cec'
             presetNum: 1,
             profileId: '',
@@ -26,7 +27,7 @@ class IntegrationsDrawer {
             cecTargetType: 'input',
             cecTargetPort: 1,
             powerCmd: 'on',
-            gesture: 'single' // 'single', 'double', 'hold', 'rotate_cw', 'rotate_ccw'
+            gesture: 'single' // 'single', 'double', 'hold', 'rotate_cw', 'rotate_ccw', and duo variations
         };
 
         this.haConfig = {
@@ -237,6 +238,15 @@ class IntegrationsDrawer {
                 <p class="settings-hint">Pair an OREI action/preset to your button click or rotation.</p>
                 
                 <div class="form-row">
+                    <label for="flic-button-type">Button Type</label>
+                    <select id="flic-button-type" class="select">
+                        <option value="button" ${this.flicConfig.buttonType === 'button' ? 'selected' : ''}>Flic Button (Original / Flic 2)</option>
+                        <option value="twist" ${this.flicConfig.buttonType === 'twist' ? 'selected' : ''}>Flic Twist</option>
+                        <option value="duo" ${this.flicConfig.buttonType === 'duo' ? 'selected' : ''}>Flic Duo</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
                     <label for="flic-target-type">Action Target</label>
                     <select id="flic-target-type" class="select">
                         <option value="preset" ${this.flicConfig.targetType === 'preset' ? 'selected' : ''}>Recall Hardware Preset</option>
@@ -257,11 +267,7 @@ class IntegrationsDrawer {
                 <div class="form-row">
                     <label for="flic-gesture">Button Gesture</label>
                     <select id="flic-gesture" class="select">
-                        <option value="single" ${this.flicConfig.gesture === 'single' ? 'selected' : ''}>Single Click / Press</option>
-                        <option value="double" ${this.flicConfig.gesture === 'double' ? 'selected' : ''}>Double Click</option>
-                        <option value="hold" ${this.flicConfig.gesture === 'hold' ? 'selected' : ''}>Hold</option>
-                        <option value="rotate_cw" ${this.flicConfig.gesture === 'rotate_cw' ? 'selected' : ''}>Rotate Clockwise (Twist)</option>
-                        <option value="rotate_ccw" ${this.flicConfig.gesture === 'rotate_ccw' ? 'selected' : ''}>Rotate Counter-Clockwise (Twist)</option>
+                        <!-- Loaded dynamically via updateGestureOptions() -->
                     </select>
                 </div>
 
@@ -309,6 +315,7 @@ class IntegrationsDrawer {
         `;
 
         this.updateDynamicInputs();
+        this.updateGestureOptions();
         this.attachFlicBuilderListeners();
     }
 
@@ -316,20 +323,44 @@ class IntegrationsDrawer {
      * Attach event handlers inside Flic Builder section
      */
     attachFlicBuilderListeners() {
+        const buttonTypeSelect = this.container.querySelector("#flic-button-type");
         const targetTypeSelect = this.container.querySelector("#flic-target-type");
         const gestureSelect = this.container.querySelector("#flic-gesture");
+
+        buttonTypeSelect?.addEventListener("change", (e) => {
+            this.flicConfig.buttonType = e.target.value;
+            
+            // Set sensible default gesture when button type changes
+            if (this.flicConfig.buttonType === 'duo') {
+                this.flicConfig.gesture = 'left_single';
+            } else if (this.flicConfig.buttonType === 'twist' && (this.flicConfig.targetType === 'cycle_input' || this.flicConfig.targetType === 'volume_control')) {
+                this.flicConfig.gesture = 'rotate_cw';
+            } else {
+                this.flicConfig.gesture = 'single';
+            }
+
+            this.updateGestureOptions();
+            this.updateFlicOutput();
+        });
 
         targetTypeSelect?.addEventListener("change", (e) => {
             this.flicConfig.targetType = e.target.value;
             
             // Set sensible default gestures
             if (this.flicConfig.targetType === 'cycle_input' || this.flicConfig.targetType === 'volume_control') {
-                this.flicConfig.gesture = 'rotate_cw';
-            } else if (this.flicConfig.gesture.startsWith('rotate')) {
+                if (this.flicConfig.buttonType === 'twist') {
+                    this.flicConfig.gesture = 'rotate_cw';
+                } else if (this.flicConfig.buttonType === 'duo') {
+                    this.flicConfig.gesture = 'left_single';
+                } else {
+                    this.flicConfig.gesture = 'single';
+                }
+            } else if (this.flicConfig.gesture.startsWith('rotate') && this.flicConfig.buttonType !== 'twist') {
                 this.flicConfig.gesture = 'single';
             }
 
             this.updateDynamicInputs();
+            this.updateGestureOptions();
             this.updateFlicOutput();
         });
 
@@ -337,6 +368,44 @@ class IntegrationsDrawer {
             this.flicConfig.gesture = e.target.value;
             this.updateFlicOutput();
         });
+    }
+
+    /**
+     * Dynamically populate button gestures based on selected button type
+     */
+    updateGestureOptions() {
+        const gestureSelect = this.container.querySelector("#flic-gesture");
+        if (!gestureSelect) return;
+
+        const buttonType = this.flicConfig.buttonType || 'button';
+        let optionsHtml = '';
+
+        if (buttonType === 'button') {
+            optionsHtml = `
+                <option value="single" ${this.flicConfig.gesture === 'single' ? 'selected' : ''}>Single Click</option>
+                <option value="double" ${this.flicConfig.gesture === 'double' ? 'selected' : ''}>Double Click</option>
+                <option value="hold" ${this.flicConfig.gesture === 'hold' ? 'selected' : ''}>Hold</option>
+            `;
+        } else if (buttonType === 'twist') {
+            optionsHtml = `
+                <option value="single" ${this.flicConfig.gesture === 'single' ? 'selected' : ''}>Single Click / Press</option>
+                <option value="double" ${this.flicConfig.gesture === 'double' ? 'selected' : ''}>Double Click</option>
+                <option value="hold" ${this.flicConfig.gesture === 'hold' ? 'selected' : ''}>Hold</option>
+                <option value="rotate_cw" ${this.flicConfig.gesture === 'rotate_cw' ? 'selected' : ''}>Rotate Clockwise (Twist)</option>
+                <option value="rotate_ccw" ${this.flicConfig.gesture === 'rotate_ccw' ? 'selected' : ''}>Rotate Counter-Clockwise (Twist)</option>
+            `;
+        } else if (buttonType === 'duo') {
+            optionsHtml = `
+                <option value="left_single" ${this.flicConfig.gesture === 'left_single' ? 'selected' : ''}>Left Button - Single Click</option>
+                <option value="left_double" ${this.flicConfig.gesture === 'left_double' ? 'selected' : ''}>Left Button - Double Click</option>
+                <option value="left_hold" ${this.flicConfig.gesture === 'left_hold' ? 'selected' : ''}>Left Button - Hold</option>
+                <option value="right_single" ${this.flicConfig.gesture === 'right_single' ? 'selected' : ''}>Right Button - Single Click</option>
+                <option value="right_double" ${this.flicConfig.gesture === 'right_double' ? 'selected' : ''}>Right Button - Double Click</option>
+                <option value="right_hold" ${this.flicConfig.gesture === 'right_hold' ? 'selected' : ''}>Right Button - Hold</option>
+            `;
+        }
+
+        gestureSelect.innerHTML = optionsHtml;
     }
 
     /**
@@ -620,13 +689,30 @@ class IntegrationsDrawer {
         if (!codeBlock) return;
 
         const gesture = this.flicConfig.gesture;
-        const triggerCondition = 
-            gesture === 'single' ? 'obj.isSingleClick' :
-            gesture === 'double' ? 'obj.isDoubleClick' :
-            gesture === 'hold' ? 'obj.isHold' : 
-            gesture === 'rotate_cw' ? 'obj.direction > 0' : 'obj.direction < 0';
+        let eventName = 'buttonSingleOrDoubleClickOrHold';
+        let triggerCondition = '';
 
-        const eventName = gesture.startsWith('rotate') ? 'buttonRotate' : 'buttonSingleOrDoubleClickOrHold';
+        if (gesture === 'left_single') {
+            triggerCondition = 'obj.buttonNumber === 0 && obj.isSingleClick';
+        } else if (gesture === 'left_double') {
+            triggerCondition = 'obj.buttonNumber === 0 && obj.isDoubleClick';
+        } else if (gesture === 'left_hold') {
+            triggerCondition = 'obj.buttonNumber === 0 && obj.isHold';
+        } else if (gesture === 'right_single') {
+            triggerCondition = 'obj.buttonNumber === 1 && obj.isSingleClick';
+        } else if (gesture === 'right_double') {
+            triggerCondition = 'obj.buttonNumber === 1 && obj.isDoubleClick';
+        } else if (gesture === 'right_hold') {
+            triggerCondition = 'obj.buttonNumber === 1 && obj.isHold';
+        } else {
+            triggerCondition = 
+                gesture === 'single' ? 'obj.isSingleClick' :
+                gesture === 'double' ? 'obj.isDoubleClick' :
+                gesture === 'hold' ? 'obj.isHold' : 
+                gesture === 'rotate_cw' ? 'obj.direction > 0' : 'obj.direction < 0';
+
+            eventName = gesture.startsWith('rotate') ? 'buttonRotate' : 'buttonSingleOrDoubleClickOrHold';
+        }
         const method = 'POST';
 
         let actionCode = `        http.makeRequest({
