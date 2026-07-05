@@ -82,6 +82,10 @@ from .device_settings import (
     handle_toggle_favorite_preset,
     init_device_settings,
 )
+from .integrations import (
+    handle_get_flic_buttons,
+    handle_register_flic_buttons,
+)
 from .macros import (
     handle_create_macro,
     handle_delete_macro,
@@ -482,6 +486,10 @@ def create_rest_app(data_dir: Path | None = None) -> web.Application:
     _LOG.info("Phase 8 SceneManager initialized with %d scenes", len(phase8_sm.list_scenes()))
 
     _LOG.info(f"Persistent storage initialized at {data_dir}")
+
+    # Flic Integrations Auto-Discovery
+    app.router.add_post("/api/integrations/flic/register", handle_register_flic_buttons)
+    app.router.add_get("/api/integrations/flic/buttons", handle_get_flic_buttons)
 
     # WebSocket for real-time updates
     app.router.add_get("/ws", handle_websocket)
