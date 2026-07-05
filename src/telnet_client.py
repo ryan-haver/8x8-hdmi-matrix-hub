@@ -143,6 +143,8 @@ class TelnetClient:
 
         # Command queue for serialization
         self._command_lock = asyncio.Lock()
+        self._command_pending = False
+        self._push_reading = False
 
         # IAC protocol filter (Item 1.1)
         self._filter = TelnetIACFilter()
@@ -311,8 +313,13 @@ class TelnetClient:
         if not self.connected or not self._writer:
             raise ConnectionError("Not connected")
 
-        async with self._command_lock:
-            try:
+        self._command_pending = True
+        try:
+            async with self._command_lock:
+                # Wait for push listener to exit its read block
+                while self._push_reading:
+                    await asyncio.sleep(0.02)
+
                 # FIX (F4.2): Removed pre-clear read here.
                 # Bytes that arrive during _send_raw are stored in _push_buffer
                 # by _listen_for_push and drained after the lock is released.
@@ -345,12 +352,14 @@ class TelnetClient:
                 _LOG.debug(f"Telnet RX: {repr(response[:200])}...")
                 return response
 
-            except Exception as e:
-                _LOG.error(f"Telnet command error: {e}")
-                # Trigger reconnect
-                self._set_state(TelnetState.DISCONNECTED)
-                self._schedule_reconnect()
-                raise CommandError(f"Command failed: {e}")
+        except Exception as e:
+            _LOG.error(f"Telnet command error: {e}")
+            # Trigger reconnect
+            self._set_state(TelnetState.DISCONNECTED)
+            self._schedule_reconnect()
+            raise CommandError(f"Command failed: {e}")
+        finally:
+            self._command_pending = False
 
     def _is_response_complete(self, response: str, command: str = "") -> bool:
         """Check if we've received a complete response.
@@ -449,6 +458,10 @@ class TelnetClient:
         line_buffer = ""
 
         while self.connected and self._reader:
+            if self._command_pending:
+                await asyncio.sleep(0.05)
+                continue
+
             # FIX (F4.2): Drain any bytes stored during _send_raw
             while self._push_buffer:
                 buffered = self._push_buffer.pop(0)
@@ -460,13 +473,14 @@ class TelnetClient:
                     if line:
                         await self._dispatch_push_line(line, _push_event_re)
 
+            self._push_reading = True
             try:
                 data = await asyncio.wait_for(
                     self._reader.read(4096),
-                    timeout=1.0,
+                    timeout=0.1,  # Short timeout to release quickly for commands
                 )
             except TimeoutError:
-                # No data within 1s — normal idle, loop and recheck state
+                # No data within timeout — normal idle, loop and recheck state
                 continue
             except asyncio.CancelledError:
                 break
@@ -474,6 +488,8 @@ class TelnetClient:
                 _LOG.warning(f"Push listener read error: {e}")
                 await asyncio.sleep(0.5)
                 continue
+            finally:
+                self._push_reading = False
 
             if not data:
                 continue
