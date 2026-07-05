@@ -312,6 +312,14 @@ class SettingsPanel {
             if (type === 'success') statusEl.classList.add('text-success');
             else if (type === 'error') statusEl.classList.add('text-error');
         }
+
+        const generalStatusEl = document.getElementById('general-matrix-connection-status');
+        if (generalStatusEl) {
+            generalStatusEl.textContent = text;
+            generalStatusEl.className = 'info-value';
+            if (type === 'success') generalStatusEl.classList.add('text-success');
+            else if (type === 'error') generalStatusEl.classList.add('text-error');
+        }
     }
 
     /**

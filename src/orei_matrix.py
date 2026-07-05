@@ -43,6 +43,7 @@ class Events(IntEnum):
     ERROR = 2
     UPDATE = 3
     RECONNECTING = 4  # New event for reconnection attempts
+    CONFIG_CHANGED = 5
 
 
 class OreiMatrix:
@@ -202,12 +203,11 @@ class OreiMatrix:
             protocol = "https" if self.use_https else "http"
             _LOG.info("Connecting to OREI Matrix at %s://%s:%d", protocol, self.host, self.port)
 
-            # Create aiohttp session with cookie jar for session management
-            # SSL verification is enabled by default. Set OREI_VERIFY_SSL=false
-            # only for development with self-signed certificates.
+            # SSL verification is disabled by default. Set OREI_VERIFY_SSL=true
+            # to enable strict verification if a CA-signed certificate is installed.
             if not self._session:
                 if self.use_https:
-                    ssl_enabled = os.environ.get("OREI_VERIFY_SSL", "true").lower() == "true"
+                    ssl_enabled = os.environ.get("OREI_VERIFY_SSL", "false").lower() == "true"
                     connector = aiohttp.TCPConnector(ssl=ssl_enabled)
                     if not ssl_enabled:
                         _LOG.warning("SSL verification disabled for matrix connection")
