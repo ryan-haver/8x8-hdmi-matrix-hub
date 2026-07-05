@@ -223,21 +223,17 @@ class IntegrationsDrawer {
     renderFlicTab(container) {
         container.innerHTML = `
             <div class="settings-section">
-                <h4>Flic Onboarding Setup</h4>
+                <h4>Option A: Flic Mobile App (Internet Request)</h4>
+                <p class="settings-hint">Configure simple, direct HTTP requests via the Flic App on your phone.</p>
                 <ol class="onboarding-steps">
                     <li>Launch the <strong>Flic App</strong> on your mobile device.</li>
                     <li>Add or select your Flic button (Original, Duo, or Twist).</li>
                     <li>Tap the action you want to configure (e.g. Single Click, Rotate).</li>
                     <li>Choose <strong>Internet Request</strong> from the Tools menu.</li>
-                    <li>Use the pairing assistant below to generate the exact request parameters, then copy and paste them into the Flic app.</li>
+                    <li>Use the request builder below to generate the parameters, then copy and paste them into the Flic app.</li>
                 </ol>
-            </div>
-
-            <div class="settings-section">
-                <h4>Flic Request Builder</h4>
-                <p class="settings-hint">Pair an OREI action/preset to your button click or rotation.</p>
                 
-                <div class="form-row">
+                <div class="form-row" style="margin-top: var(--space-4);">
                     <label for="flic-button-type">Button Type</label>
                     <select id="flic-button-type" class="select">
                         <option value="button" ${this.flicConfig.buttonType === 'button' ? 'selected' : ''}>Flic Button (Original / Flic 2)</option>
@@ -304,10 +300,17 @@ class IntegrationsDrawer {
 
             <div class="settings-section">
                 <div class="section-title-row">
-                    <h4>Flic Hub SDK JavaScript Code</h4>
+                    <h4>Option B: Flic Hub Studio (JS SDK Module)</h4>
                     <button class="btn btn-xs btn-primary btn-copy-action" data-target="flic-sdk-code-block">Copy Script</button>
                 </div>
-                <p class="settings-hint">For local, ultra-low latency control, run this script directly on your Flic Hub.</p>
+                <p class="settings-hint">Run local, ultra-low latency JavaScript code directly on your Flic Hub.</p>
+                <ol class="onboarding-steps">
+                    <li>In the Flic mobile app, select your Hub, go to settings, and toggle <strong>Enable SDK Access</strong> ON.</li>
+                    <li>Ensure your computer is on the same local network as your Hub.</li>
+                    <li>Go to the online IDE at <a href="https://hubsdk.flic.io/" target="_blank">hubsdk.flic.io</a> and connect to your Hub's IP address.</li>
+                    <li>Create a new package or open your module's <code>main.js</code>.</li>
+                    <li>Paste the copied script below and click <strong>Save & Run</strong>.</li>
+                </ol>
                 <div class="code-container">
                     <pre><code id="flic-sdk-code-block" class="javascript-code"></code></pre>
                 </div>
