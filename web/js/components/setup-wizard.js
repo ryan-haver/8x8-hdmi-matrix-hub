@@ -277,7 +277,7 @@ class SetupWizard {
                     content: (data) => `
                         <div class="setup-form">
                             <p class="setup-form__intro">
-                                Enter the IP address and port of your OREI HDMI Matrix.
+                                Enter the IP address and port of your HDMI Matrix.
                             </p>
                             <div class="setup-form__field">
                                 <label for="host">IP Address</label>
@@ -326,7 +326,7 @@ class SetupWizard {
                             <div class="setup-complete">
                                 <div class="setup-complete__icon">✓</div>
                                 <h3>Connection Successful!</h3>
-                                <p>Your OREI Matrix is ready to use.</p>
+                                <p>Your HDMI Matrix is ready to use.</p>
                             </div>
                         </div>
                     `

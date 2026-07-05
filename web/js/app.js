@@ -549,7 +549,7 @@ class MatrixApp {
             if (info.connected && info.model) {
                 titleEl.textContent = info.model;
             } else {
-                titleEl.textContent = 'OREI Matrix';
+                titleEl.textContent = 'HDMI Matrix';
             }
         }
     }

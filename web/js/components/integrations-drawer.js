@@ -13,9 +13,12 @@ class IntegrationsDrawer {
         this.backdrop = null;
         this.activeTab = 'flic'; // Default tab
 
+        this.discoveredButtons = [];
+
         // Helper state
         this.flicConfig = {
             buttonType: 'button', // 'button', 'twist', 'duo'
+            buttonIdentifier: '', // Optional name/bdaddr filtering
             targetType: 'preset', // 'preset', 'profile', 'switch_all', 'switch_output', 'cycle_input', 'volume_control', 'power', 'cec'
             presetNum: 1,
             profileId: '',
@@ -134,7 +137,7 @@ class IntegrationsDrawer {
         }
     }
 
-    open() {
+    async open() {
         if (window.overlayManager) {
             window.overlayManager.onOpen("integrations-drawer");
         }
@@ -144,6 +147,7 @@ class IntegrationsDrawer {
         this.backdrop.classList.add("open");
         document.body.style.overflow = "hidden";
 
+        await this.fetchDiscoveredButtons();
         this.render();
 
         if (window.FocusTrap) {
@@ -164,6 +168,19 @@ class IntegrationsDrawer {
 
         if (this.focusTrap) {
             this.focusTrap.deactivate();
+        }
+    }
+
+    async fetchDiscoveredButtons() {
+        try {
+            const res = await fetch("/api/integrations/flic/buttons");
+            const data = await res.json();
+            if (data && data.success) {
+                this.discoveredButtons = data.buttons || [];
+            }
+        } catch (err) {
+            console.error("Failed to fetch discovered Flic buttons:", err);
+            this.discoveredButtons = [];
         }
     }
 
@@ -243,6 +260,23 @@ class IntegrationsDrawer {
                 </div>
 
                 <div class="form-row">
+                    <label for="flic-btn-select">Button Link / Select</label>
+                    <select id="flic-btn-select" class="select">
+                        <!-- Loaded dynamically via updateButtonSelectOptions() -->
+                    </select>
+                </div>
+
+                <div class="form-row hidden" id="flic-custom-identifier-row">
+                    <label for="flic-btn-identifier">Custom Button Identifier</label>
+                    <input type="text" id="flic-btn-identifier" class="input" 
+                           placeholder="e.g. Living Room or 90:88:a9:5b:10:62" 
+                           value="${this.flicConfig.buttonIdentifier || ''}" />
+                </div>
+                <p class="settings-hint" style="margin-top: 4px; margin-bottom: 0; font-size: var(--font-size-xs);">
+                    Filter by a specific button. Choose "Trigger on All Buttons", select a discovered button, or specify a custom name/MAC.
+                </p>
+
+                <div class="form-row">
                     <label for="flic-target-type">Action Target</label>
                     <select id="flic-target-type" class="select">
                         <option value="preset" ${this.flicConfig.targetType === 'preset' ? 'selected' : ''}>Recall Hardware Preset</option>
@@ -319,6 +353,7 @@ class IntegrationsDrawer {
 
         this.updateDynamicInputs();
         this.updateGestureOptions();
+        this.updateButtonSelectOptions();
         this.attachFlicBuilderListeners();
     }
 
@@ -367,6 +402,29 @@ class IntegrationsDrawer {
             this.updateFlicOutput();
         });
 
+        const btnSelect = this.container.querySelector("#flic-btn-select");
+        const btnIdentifierInput = this.container.querySelector("#flic-btn-identifier");
+        const customRow = this.container.querySelector("#flic-custom-identifier-row");
+
+        btnSelect?.addEventListener("change", (e) => {
+            const val = e.target.value;
+            if (val === 'custom') {
+                customRow?.classList.remove("hidden");
+                if (btnIdentifierInput) {
+                    this.flicConfig.buttonIdentifier = btnIdentifierInput.value;
+                }
+            } else {
+                customRow?.classList.add("hidden");
+                this.flicConfig.buttonIdentifier = val;
+            }
+            this.updateFlicOutput();
+        });
+
+        btnIdentifierInput?.addEventListener("input", (e) => {
+            this.flicConfig.buttonIdentifier = e.target.value;
+            this.updateFlicOutput();
+        });
+
         gestureSelect?.addEventListener("change", (e) => {
             this.flicConfig.gesture = e.target.value;
             this.updateFlicOutput();
@@ -409,6 +467,40 @@ class IntegrationsDrawer {
         }
 
         gestureSelect.innerHTML = optionsHtml;
+    }
+
+    /**
+     * Dynamically populate button select dropdown options
+     */
+    updateButtonSelectOptions() {
+        const btnSelect = this.container.querySelector("#flic-btn-select");
+        if (!btnSelect) return;
+
+        const currentId = this.flicConfig.buttonIdentifier || '';
+        let optionsHtml = `<option value="" ${currentId === '' ? 'selected' : ''}>Trigger on All Buttons</option>`;
+        
+        let isCustom = currentId !== '';
+        
+        if (this.discoveredButtons && this.discoveredButtons.length > 0) {
+            this.discoveredButtons.forEach(btn => {
+                const isSelected = (currentId === btn.bdaddr || currentId === btn.name);
+                if (isSelected) isCustom = false;
+                optionsHtml += `<option value="${btn.bdaddr}" ${isSelected ? 'selected' : ''}>${btn.name} (${btn.bdaddr})</option>`;
+            });
+        }
+        
+        optionsHtml += `<option value="custom" ${isCustom ? 'selected' : ''}>Custom Identifier...</option>`;
+        btnSelect.innerHTML = optionsHtml;
+
+        // Toggle custom identifier input row visibility
+        const customRow = this.container.querySelector("#flic-custom-identifier-row");
+        if (customRow) {
+            if (isCustom) {
+                customRow.classList.remove("hidden");
+            } else {
+                customRow.classList.add("hidden");
+            }
+        }
     }
 
     /**
@@ -725,7 +817,26 @@ class IntegrationsDrawer {
             console.log(err ? "Request failed" : "Matrix updated successfully!");
         });`;
 
-        let fullScript = `// OREI HDMI Matrix Hub - Flic Hub SDK Integration Script
+        const modelName = state.info.model || 'HDMI Matrix';
+        const identifier = this.flicConfig.buttonIdentifier ? this.flicConfig.buttonIdentifier.trim() : '';
+        let handlerBody = '';
+
+        if (identifier) {
+            handlerBody = `    var button = buttonManager.getButton(obj.bdaddr);
+    if (button && (button.name === "${identifier}" || obj.bdaddr === "${identifier}")) {
+        if (${triggerCondition}) {
+            console.log("Flic Button trigger detected - updating ${modelName}");
+${actionCode}
+        }
+    }`;
+        } else {
+            handlerBody = `    if (${triggerCondition}) {
+        console.log("Flic Button trigger detected - updating ${modelName}");
+${actionCode}
+    }`;
+        }
+
+        let fullScript = `// ${modelName} Hub - Flic Hub SDK Integration Script
 // Paste this in the Flic Hub IDE (https://hubsdk.flic.io/)
 
 var buttonManager = require("buttons");
@@ -733,14 +844,28 @@ var http = require("http");
 
 var API_BASE = "${origin}";
 
+// Automatically register all paired buttons with the ${modelName} Hub server on startup
+try {
+    var buttons = buttonManager.getButtons().map(function(btn) {
+        return { name: btn.name, bdaddr: btn.bdaddr, serial: btn.serialNumber || "" };
+    });
+    http.makeRequest({
+        url: API_BASE + "/api/integrations/flic/register",
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        content: JSON.stringify({buttons: buttons})
+    }, function(err, res) {
+        console.log(err ? "Failed to register buttons with ${modelName} Hub" : "Buttons registered successfully!");
+    });
+} catch (e) {
+    console.log("Startup registration failed: " + e);
+}
+
 buttonManager.on("${eventName}", function(obj) {
-    if (${triggerCondition}) {
-        console.log("Flic Button trigger detected - updating OREI Matrix");
-${actionCode}
-    }
+${handlerBody}
 });
 
-console.log("OREI Matrix Control script loaded successfully!");
+console.log("${modelName} Control script loaded successfully!");
 `;
 
         codeBlock.textContent = fullScript;
@@ -827,12 +952,17 @@ console.log("OREI Matrix Control script loaded successfully!");
         if (!yamlEl) return;
 
         const origin = window.location.origin;
+        const modelSlug = (state.info.model || 'hdmi_matrix')
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '_')
+            .replace(/(^_+|_+$)/g, '');
+
         let yaml = `# Copy and paste this into your configuration.yaml\nrest_command:\n`;
 
         if (this.haConfig.includePresets) {
             yaml += `  # Recall Matrix Presets (1-8)\n`;
             for (let i = 1; i <= 8; i++) {
-                yaml += `  orei_preset_${i}:\n`;
+                yaml += `  ${modelSlug}_preset_${i}:\n`;
                 yaml += `    url: "${origin}/api/preset/${i}"\n`;
                 yaml += `    method: POST\n`;
             }
@@ -841,10 +971,10 @@ console.log("OREI Matrix Control script loaded successfully!");
 
         if (this.haConfig.includePower) {
             yaml += `  # Power control\n`;
-            yaml += `  orei_power_on:\n`;
+            yaml += `  ${modelSlug}_power_on:\n`;
             yaml += `    url: "${origin}/api/power/on"\n`;
             yaml += `    method: POST\n`;
-            yaml += `  orei_power_off:\n`;
+            yaml += `  ${modelSlug}_power_off:\n`;
             yaml += `    url: "${origin}/api/power/off"\n`;
             yaml += `    method: POST\n`;
             yaml += `\n`;
@@ -852,10 +982,10 @@ console.log("OREI Matrix Control script loaded successfully!");
 
         if (this.haConfig.includeInputCycling) {
             yaml += `  # Input cycling (Next/Previous)\n`;
-            yaml += `  orei_input_next:\n`;
+            yaml += `  ${modelSlug}_input_next:\n`;
             yaml += `    url: "${origin}/api/input/next?output={{ output }}"\n`;
             yaml += `    method: POST\n`;
-            yaml += `  orei_input_previous:\n`;
+            yaml += `  ${modelSlug}_input_previous:\n`;
             yaml += `    url: "${origin}/api/input/previous?output={{ output }}"\n`;
             yaml += `    method: POST\n`;
             yaml += `\n`;
@@ -863,7 +993,7 @@ console.log("OREI Matrix Control script loaded successfully!");
 
         if (this.haConfig.includeRouting) {
             yaml += `  # Route Output to Input dynamically\n`;
-            yaml += `  orei_set_output_source:\n`;
+            yaml += `  ${modelSlug}_set_output_source:\n`;
             yaml += `    url: "${origin}/api/output/{{ output }}/source"\n`;
             yaml += `    method: POST\n`;
             yaml += `    content_type: "application/json"\n`;
@@ -882,14 +1012,16 @@ console.log("OREI Matrix Control script loaded successfully!");
         const ip = origin.replace(/https?:\/\//, "").split(":")[0];
         const driverPort = 9095; // Default WebSocket server port for driver
 
+        const modelName = state.info.model || 'HDMI Matrix';
+
         container.innerHTML = `
             <div class="settings-section">
                 <h4>Unfolded Circle Integration Guide</h4>
-                <p class="settings-hint">The OREI Hub has a built-in integration driver that runs in the background to serve entities directly to the Remote 3.</p>
+                <p class="settings-hint">The Matrix Hub has a built-in integration driver that runs in the background to serve entities directly to the Remote 3.</p>
                 <ol class="onboarding-steps">
                     <li>Ensure this Hub server is running on the <strong>same network</strong> as your Remote.</li>
                     <li>On the Remote, go to <strong>Settings -> Integrations -> Add Integration</strong>.</li>
-                    <li>If discovery is active, the Remote will show <strong>"OREI HDMI Matrix"</strong> under discovered integrations.</li>
+                    <li>If discovery is active, the Remote will show <strong>"OREI HDMI Matrix"</strong> (representing your ${modelName}) under discovered integrations.</li>
                     <li>If it doesn't appear, choose <strong>Manual Setup</strong> and enter:
                         <ul>
                             <li><strong>IP Address:</strong> <code>${ip}</code></li>

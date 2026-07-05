@@ -865,7 +865,7 @@ class TestWebUI:
         assert resp.status == 200
 
         content = await resp.text()
-        assert "OREI Matrix Control" in content
+        assert "HDMI Matrix Control" in content
         assert "doctype html" in content.lower()
 
     @pytest.mark.asyncio
@@ -875,7 +875,7 @@ class TestWebUI:
         assert resp.status == 200
 
         content = await resp.text()
-        assert "OREI Matrix Control" in content
+        assert "HDMI Matrix Control" in content
 
     @pytest.mark.asyncio
     async def test_static_css(self, client):
