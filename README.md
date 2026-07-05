@@ -163,6 +163,7 @@ UC_ENABLED=false python run.py
 | `UC_ENABLED`    | `true`          | Enable UC integration                            |
 | `WEBUI_ENABLED` | `true`          | Enable Web UI                                    |
 | `LOG_LEVEL`     | `INFO`          | Logging verbosity                                |
+| `OREI_VERIFY_SSL` | `false`        | Verify SSL certificate of the matrix switch      |
 
 > **Note**: `OREI_HOST` and `OREI_API_PORT` are deprecated. Use `MATRIX_HOST` and `API_PORT` instead.
 

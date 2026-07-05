@@ -170,6 +170,23 @@ class SideNavDrawer {
                         </button>
                     </div>
                 </div>
+
+                <!-- Integrations section -->
+                <div class="drawer-section">
+                    <h4 class="drawer-section-title">Integrations</h4>
+                    <div class="drawer-utilities-grid">
+                        <button id="drawer-integrations-btn" class="utility-btn" title="System Integrations">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
+                                <path d="M6 8h-1a4 4 0 0 0 0 8h1" />
+                                <line x1="2" y1="12" x2="5" y2="12" />
+                                <line x1="19" y1="12" x2="22" y2="12" />
+                                <rect x="6" y="5" width="12" height="14" rx="2" />
+                            </svg>
+                            <span>Integrations</span>
+                        </button>
+                    </div>
+                </div>
                 
                 <!-- Interface configuration section (pinning, re-ordering) -->
                 <div class="drawer-section">
@@ -270,6 +287,15 @@ class SideNavDrawer {
             }
             if (window.shortcutsDrawer) {
                 window.shortcutsDrawer.toggle();
+            }
+        });
+
+        document.getElementById("drawer-integrations-btn")?.addEventListener("click", () => {
+            if (window.innerWidth < 768) {
+                this.close();
+            }
+            if (window.integrationsDrawer) {
+                window.integrationsDrawer.toggle();
             }
         });
     }

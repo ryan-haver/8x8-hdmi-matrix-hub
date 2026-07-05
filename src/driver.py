@@ -469,6 +469,7 @@ async def restore_from_config() -> bool:
     matrix.events.on(MatrixEvents.CONNECTED, on_matrix_connected)
     matrix.events.on(MatrixEvents.DISCONNECTED, on_matrix_disconnected)
     matrix.events.on(MatrixEvents.ERROR, on_matrix_error)
+    matrix.events.on(MatrixEvents.CONFIG_CHANGED, on_matrix_config_changed)
     matrix.events.on(MatrixEvents.UPDATE, on_matrix_update)
 
     # Try to connect and update names
@@ -1835,6 +1836,13 @@ def on_matrix_error(error: str):
         _start_reconnection()
 
 
+def on_matrix_config_changed():
+    """Handle matrix host configuration change."""
+    _LOG.info("Matrix configuration changed - resetting reconnection loop")
+    _stop_reconnection()
+    _start_reconnection()
+
+
 def on_matrix_update(update: dict[str, Any]):
     """Handle matrix update event."""
     _LOG.debug("Matrix update: %s", update)
@@ -1877,6 +1885,7 @@ async def handle_driver_setup(msg: ucapi.DriverSetupRequest) -> ucapi.SetupActio
         matrix.events.on(MatrixEvents.CONNECTED, on_matrix_connected)
         matrix.events.on(MatrixEvents.DISCONNECTED, on_matrix_disconnected)
         matrix.events.on(MatrixEvents.ERROR, on_matrix_error)
+        matrix.events.on(MatrixEvents.CONFIG_CHANGED, on_matrix_config_changed)
         matrix.events.on(MatrixEvents.UPDATE, on_matrix_update)
 
         # Try to connect

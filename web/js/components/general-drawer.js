@@ -99,6 +99,10 @@ class GeneralDrawer {
 
         this.setupEventListeners();
         this.registerWithOverlayManager();
+
+        // Listen to state changes to update system info dynamically
+        state.on('info', () => this.refreshContent());
+        state.on('connected', () => this.refreshContent());
     }
 
     /**
@@ -172,6 +176,12 @@ class GeneralDrawer {
 
         // Refresh content from existing settings panel
         this.refreshContent();
+
+        // Automatically test connection when drawer opens
+        const testBtn = document.getElementById("matrix-host-test");
+        if (testBtn) {
+            testBtn.click();
+        }
 
         // Focus trap for accessibility
         if (window.FocusTrap) {

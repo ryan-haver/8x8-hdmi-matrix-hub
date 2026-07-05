@@ -8,6 +8,8 @@ import re
 
 from aiohttp import web
 
+from orei_matrix import Events
+
 from .utils import (
     _json_response,
     get_matrix_device,
@@ -107,6 +109,9 @@ async def handle_set_matrix_host(request: web.Request) -> web.Response:
         # Update host configuration
         matrix_device.host = host
         matrix_device.port = port
+
+        # Emit configuration changed event to reset any reconnection tasks
+        matrix_device.events.emit(Events.CONFIG_CHANGED)
 
         # Try to connect to new host
         try:
