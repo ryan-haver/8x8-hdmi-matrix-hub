@@ -6730,3 +6730,46 @@
     font-size: var(--font-size-base, 14px);
 }
 
+/* Drawer Tab Navigation */
+.drawer-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.1));
+    margin-bottom: var(--space-4, 16px);
+    gap: var(--space-2, 8px);
+    padding: 0 var(--space-4, 16px);
+}
+.drawer-tab-btn {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-muted, #64748b);
+    font-size: var(--font-size-base, 14px);
+    font-weight: var(--font-weight-medium, 500);
+    padding: var(--space-2, 8px) var(--space-3, 12px);
+    cursor: pointer;
+    transition: all var(--transition-fast, 0.15s);
+    text-shadow: none;
+}
+.drawer-tab-btn:hover {
+    color: var(--text-primary, #f8fafc);
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+.drawer-tab-btn.active {
+    color: var(--accent, #00f0f0);
+    border-bottom-color: var(--accent, #00f0f0);
+    text-shadow: 0 0 8px var(--accent-glow, rgba(0, 240, 240, 0.4));
+}
+
+/* Section Title Row with action button */
+.section-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: var(--space-2, 8px);
+}
+.section-title-row h4 {
+    margin: 0;
+}
+
+
