@@ -19,6 +19,17 @@ class SettingsDrawer {
 
         // Create drawer elements
         this.createDrawer();
+        this.registerWithOverlayManager();
+    }
+
+    registerWithOverlayManager() {
+        if (window.overlayManager) {
+            window.overlayManager.register('settings-drawer', {
+                open: (tab) => this.open(tab),
+                close: () => this.close(),
+                isOpen: () => this.isOpen
+            });
+        }
     }
 
     createDrawer() {
@@ -89,6 +100,9 @@ class SettingsDrawer {
     }
 
     open(tab = null) {
+        if (window.overlayManager) {
+            window.overlayManager.onOpen('settings-drawer');
+        }
         this.isOpen = true;
         this.container.classList.add('open');
         this.backdrop.classList.add('open');
@@ -104,6 +118,9 @@ class SettingsDrawer {
     }
 
     close() {
+        if (window.overlayManager) {
+            window.overlayManager.onClose('settings-drawer');
+        }
         this.isOpen = false;
         this.container.classList.remove('open');
         this.backdrop.classList.remove('open');
