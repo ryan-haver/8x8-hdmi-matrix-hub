@@ -189,6 +189,31 @@ class IntegrationsDrawer {
         } else if (this.activeTab === 'uc') {
             this.renderUcTab(contentEl);
         }
+
+        this.attachGlobalCopyListeners();
+    }
+
+    /**
+     * Set up global copy click listeners for elements with class .btn-copy-action
+     */
+    attachGlobalCopyListeners() {
+        this.container.querySelectorAll(".btn-copy-action").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const button = e.currentTarget;
+                const targetId = button.dataset.target;
+                const el = this.container.querySelector(`#${targetId}`);
+                if (el) {
+                    navigator.clipboard.writeText(el.innerText || el.textContent);
+                    const originalText = button.textContent;
+                    button.textContent = "Copied!";
+                    button.classList.add("btn-success");
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.classList.remove("btn-success");
+                    }, 2000);
+                }
+            });
+        });
     }
 
     // ==========================================
@@ -245,21 +270,21 @@ class IntegrationsDrawer {
                         <span class="output-label">HTTP Method</span>
                         <div class="output-value-container">
                             <code class="output-code" id="flic-out-method">POST</code>
-                            <button class="btn btn-xs btn-secondary btn-copy" data-target="flic-out-method">Copy</button>
+                            <button class="btn btn-xs btn-secondary btn-copy-action" data-target="flic-out-method">Copy</button>
                         </div>
                     </div>
                     <div class="output-row">
                         <span class="output-label">Request URL</span>
                         <div class="output-value-container">
                             <code class="output-code" id="flic-out-url">http://192.168.0.100:8080/api/preset/1</code>
-                            <button class="btn btn-xs btn-secondary btn-copy" data-target="flic-out-url">Copy</button>
+                            <button class="btn btn-xs btn-secondary btn-copy-action" data-target="flic-out-url">Copy</button>
                         </div>
                     </div>
                     <div class="output-row" id="flic-out-body-row">
                         <span class="output-label">JSON Body</span>
                         <div class="output-value-container">
                             <code class="output-code" id="flic-out-body">{"input": 1}</code>
-                            <button class="btn btn-xs btn-secondary btn-copy" data-target="flic-out-body">Copy</button>
+                            <button class="btn btn-xs btn-secondary btn-copy-action" data-target="flic-out-body">Copy</button>
                         </div>
                     </div>
                     <div class="output-row" id="flic-out-content-type-row">
@@ -274,7 +299,7 @@ class IntegrationsDrawer {
             <div class="settings-section">
                 <div class="section-title-row">
                     <h4>Flic Hub SDK JavaScript Code</h4>
-                    <button class="btn btn-xs btn-primary btn-copy" data-target="flic-sdk-code-block">Copy Script</button>
+                    <button class="btn btn-xs btn-primary btn-copy-action" data-target="flic-sdk-code-block">Copy Script</button>
                 </div>
                 <p class="settings-hint">For local, ultra-low latency control, run this script directly on your Flic Hub.</p>
                 <div class="code-container">
@@ -311,24 +336,6 @@ class IntegrationsDrawer {
         gestureSelect?.addEventListener("change", (e) => {
             this.flicConfig.gesture = e.target.value;
             this.updateFlicOutput();
-        });
-
-        // Set up Copy buttons
-        this.container.querySelectorAll(".btn-copy").forEach(btn => {
-            btn.addEventListener("click", () => {
-                const targetId = btn.dataset.target;
-                const el = this.container.querySelector(`#${targetId}`);
-                if (el) {
-                    navigator.clipboard.writeText(el.innerText || el.textContent);
-                    const originalText = btn.textContent;
-                    btn.textContent = "Copied!";
-                    btn.classList.add("btn-success");
-                    setTimeout(() => {
-                        btn.textContent = originalText;
-                        btn.classList.remove("btn-success");
-                    }, 2000);
-                }
-            });
         });
     }
 
@@ -670,7 +677,7 @@ console.log("OREI Matrix Control script loaded successfully!");
             <div class="settings-section">
                 <div class="section-title-row">
                     <h4>Option B: REST Commands (YAML Configuration)</h4>
-                    <button class="btn btn-xs btn-primary btn-copy" data-target="ha-yaml-output">Copy YAML</button>
+                    <button class="btn btn-xs btn-primary btn-copy-action" data-target="ha-yaml-output">Copy YAML</button>
                 </div>
                 <p class="settings-hint">Add direct HTTP request buttons to your Lovelace dashboard via <code>configuration.yaml</code>.</p>
                 
@@ -724,23 +731,6 @@ console.log("OREI Matrix Control script loaded successfully!");
         checkPower?.addEventListener("change", updateHa);
         checkCycling?.addEventListener("change", updateHa);
         checkRouting?.addEventListener("change", updateHa);
-
-        // Copy button
-        this.container.querySelector(".btn-copy")?.addEventListener("click", (e) => {
-            const btn = e.target;
-            const targetId = btn.dataset.target;
-            const el = this.container.querySelector(`#${targetId}`);
-            if (el) {
-                navigator.clipboard.writeText(el.innerText || el.textContent);
-                const originalText = btn.textContent;
-                btn.textContent = "Copied!";
-                btn.classList.add("btn-success");
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                    btn.classList.remove("btn-success");
-                }, 2000);
-            }
-        });
     }
 
     updateHaYaml() {
