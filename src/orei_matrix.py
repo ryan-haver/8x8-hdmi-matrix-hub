@@ -323,6 +323,7 @@ class OreiMatrix:
 
                 async with self._session.post(url, json=command, timeout=aiohttp.ClientTimeout(total=5)) as response:
                     if response.status == 200:
+                        text = ""
                         try:
                             # Matrix returns text/plain, so read as text then parse JSON
                             text = await response.text()
@@ -1882,9 +1883,20 @@ class OreiMatrix:
 
         :return: True if command sent (connection will be lost after reboot)
         """
-        command = {"comhead": "set reboot"}
-
         _LOG.warning("Initiating system reboot...")
+
+        # Try Telnet reboot first if connected, as it is much more reliable and standard
+        if self._telnet and self._telnet.connected:
+            _LOG.info("Sending reboot command via Telnet...")
+            success = await self._telnet.reboot()
+            if success:
+                self._connected = False
+                self.events.emit(Events.DISCONNECTED)
+                return True
+
+        # Fall back to HTTP if Telnet is not connected/available
+        _LOG.info("Sending reboot command via HTTP...")
+        command = {"comhead": "set reboot"}
         success, _ = await self._send_command(command, retry_on_failure=False)
 
         if success:
