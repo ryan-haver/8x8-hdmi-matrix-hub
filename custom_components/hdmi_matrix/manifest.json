@@ -1,5 +1,5 @@
 {
-  "domain": "orei_matrix",
+  "domain": "hdmi_matrix",
   "name": "HDMI Matrix",
   "codeowners": ["@ryan-haver"],
   "config_flow": true,

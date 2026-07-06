@@ -2,8 +2,8 @@
 
 import logging
 
-DOMAIN = "orei_matrix"
-DEFAULT_NAME = "OREI HDMI Matrix"
+DOMAIN = "hdmi_matrix"
+DEFAULT_NAME = "HDMI Matrix"
 DEFAULT_PORT = 8080
 
 CONF_IP_ADDRESS = "host"

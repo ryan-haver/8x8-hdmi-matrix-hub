@@ -25,7 +25,7 @@ pytest.importorskip("homeassistant", reason="homeassistant not installed")
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(_PROJECT_ROOT))
 
-from custom_components.orei_matrix.coordinator import OreiMatrixCoordinator  # noqa: E402
+from custom_components.hdmi_matrix.coordinator import OreiMatrixCoordinator  # noqa: E402
 
 
 def _make_coordinator() -> OreiMatrixCoordinator:
@@ -160,7 +160,7 @@ class TestBinarySensorAvailableState:
     @pytest.mark.asyncio
     async def test_binary_sensor_returns_none_when_no_data(self):
         """When coordinator.data has no inputs, is_on returns None."""
-        from custom_components.orei_matrix.binary_sensor import OreiInputSignalSensor
+        from custom_components.hdmi_matrix.binary_sensor import OreiInputSignalSensor
 
         coordinator = MagicMock()
         coordinator.data = {}  # No 'inputs' key
@@ -175,7 +175,7 @@ class TestBinarySensorAvailableState:
     @pytest.mark.asyncio
     async def test_binary_sensor_unavailable_when_update_failed(self):
         """When coordinator.last_update_success is False, available is False."""
-        from custom_components.orei_matrix.binary_sensor import OreiInputSignalSensor
+        from custom_components.hdmi_matrix.binary_sensor import OreiInputSignalSensor
 
         coordinator = MagicMock()
         coordinator.data = {"inputs": [{"number": 1, "signal_active": True}]}
@@ -189,7 +189,7 @@ class TestBinarySensorAvailableState:
     @pytest.mark.asyncio
     async def test_binary_sensor_returns_value_when_data_available(self):
         """When data is fresh, is_on returns True/False based on signal."""
-        from custom_components.orei_matrix.binary_sensor import OreiInputSignalSensor
+        from custom_components.hdmi_matrix.binary_sensor import OreiInputSignalSensor
 
         coordinator = MagicMock()
         coordinator.data = {"inputs": [{"number": 1, "signal_active": True}]}
@@ -207,7 +207,7 @@ class TestSelectDuplicateInputNames:
     @pytest.mark.asyncio
     async def test_duplicate_name_prefers_currently_routed_input(self):
         """Two inputs share name 'PS5' — select should use the one currently routed."""
-        from custom_components.orei_matrix.select import OreiOutputSelect
+        from custom_components.hdmi_matrix.select import OreiOutputSelect
 
         coordinator = MagicMock()
         # Both input 1 and input 2 are named "PS5"
