@@ -865,7 +865,7 @@
         <div class="kiosk-tabs-bar">
             <button class="kiosk-tab-btn active" data-tab="routing">Routing</button>
             <button class="kiosk-tab-btn" data-tab="presets">Presets</button>
-            <button class="kiosk-tab-btn" data-tab="quick-actions">Quick Actions</button>
+            <button class="kiosk-tab-btn" data-tab="shortcuts">Shortcuts</button>
             <button class="kiosk-tab-btn" data-tab="profiles">Profiles</button>
             <button class="kiosk-pin-btn" id="kioskPinBtn" title="Pin Active Tab">📌</button>
         </div>
@@ -886,10 +886,10 @@
                     </div>
                 </div>
 
-                <!-- Tab 3: Quick Actions -->
-                <div class="kiosk-panel" id="panelQuickActions">
-                    <div class="kiosk-grid" id="quickActionsGrid">
-                        <!-- Quick Actions rendered dynamically -->
+                <!-- Tab 3: Shortcuts -->
+                <div class="kiosk-panel" id="panelShortcuts">
+                    <div class="kiosk-grid" id="shortcutsGrid">
+                        <!-- Shortcuts rendered dynamically -->
                     </div>
                 </div>
 
@@ -1109,7 +1109,7 @@
             // UI parameters
             let activeTab = 'routing';
             let editModeActive = false;
-            let pinnedQuickActions = [];
+            let pinnedShortcuts = [];
             let pinnedProfiles = [];
 
             // DOM elements
@@ -1191,7 +1191,7 @@
              */
             function switchTab(tabName) {
                 activeTab = tabName;
-                const tabOrder = ['routing', 'presets', 'quick-actions', 'profiles'];
+                const tabOrder = ['routing', 'presets', 'shortcuts', 'profiles'];
                 const index = tabOrder.indexOf(tabName);
                 
                 // Slide container
@@ -1207,7 +1207,7 @@
                 const titles = {
                     'routing': 'Select Input',
                     'presets': 'Recall Preset',
-                    'quick-actions': 'Quick Actions',
+                    'shortcuts': 'Shortcuts',
                     'profiles': 'Profiles & Scenes'
                 };
                 kioskTitle.textContent = titles[tabName] || 'Kiosk Mode';
@@ -1259,7 +1259,7 @@
 
                 // Swipe only triggers when swipe is primarily horizontal
                 if (Math.abs(dx) > swipeThreshold && Math.abs(dy) < verticalThreshold) {
-                    const tabOrder = ['routing', 'presets', 'quick-actions', 'profiles'];
+                    const tabOrder = ['routing', 'presets', 'shortcuts', 'profiles'];
                     const currentIndex = tabOrder.indexOf(activeTab);
                     if (dx < 0 && currentIndex < tabOrder.length - 1) {
                         switchTab(tabOrder[currentIndex + 1]);
@@ -1572,7 +1572,7 @@
                 if (editModeActive) {
                     openSlotMapper();
                 } else {
-                    const id = type === 'shortcut' ? pinnedQuickActions[index] : pinnedProfiles[index];
+                    const id = type === 'shortcut' ? pinnedShortcuts[index] : pinnedProfiles[index];
                     if (id) {
                         if (type === 'shortcut') executeShortcut(id);
                         else recallProfile(id);
@@ -1620,12 +1620,12 @@
                 document.getElementById('slotMapperModalTitle').textContent = `Configure Slot ${selectedSlotIndex + 1}`;
                 
                 const currentId = selectedSlotType === 'shortcut' 
-                    ? pinnedQuickActions[selectedSlotIndex] 
+                    ? pinnedShortcuts[selectedSlotIndex] 
                     : pinnedProfiles[selectedSlotIndex];
                 document.getElementById('slotMapperClearBtn').classList.toggle('hidden', !currentId);
 
                 if (selectedSlotType === 'shortcut') {
-                    document.getElementById('slotMapperInstruction').textContent = 'Choose Quick Action / Shortcut:';
+                    document.getElementById('slotMapperInstruction').textContent = 'Choose Shortcut:';
                     if (shortcuts.length === 0) {
                         listEl.innerHTML = '<p class="empty-message">No shortcuts configured in Full UI.</p>';
                     } else {
@@ -1669,8 +1669,8 @@
             function mapSlot(id) {
                 closeModal('slotMapperModal');
                 if (selectedSlotType === 'shortcut') {
-                    pinnedQuickActions[selectedSlotIndex] = id;
-                    localStorage.setItem('kiosk_quick_actions', JSON.stringify(pinnedQuickActions));
+                    pinnedShortcuts[selectedSlotIndex] = id;
+                    localStorage.setItem('kiosk_shortcuts', JSON.stringify(pinnedShortcuts));
                 } else {
                     pinnedProfiles[selectedSlotIndex] = id;
                     localStorage.setItem('kiosk_profiles', JSON.stringify(pinnedProfiles));
@@ -1832,11 +1832,11 @@
                 gridEl.innerHTML = html;
             }
 
-            function renderQuickActionsGrid() {
-                const gridEl = document.getElementById('quickActionsGrid');
+            function renderShortcutsGrid() {
+                const gridEl = document.getElementById('shortcutsGrid');
                 let html = '';
                 for (let i = 0; i < 8; i++) {
-                    const id = pinnedQuickActions[i];
+                    const id = pinnedShortcuts[i];
                     if (id) {
                         const shortcut = shortcuts.find(s => s.id === id) || { name: id, icon: '⚡' };
                         html += `
@@ -1926,7 +1926,7 @@
 
                 // Renders secondary tab grids
                 renderPresetsGrid();
-                renderQuickActionsGrid();
+                renderShortcutsGrid();
                 renderProfilesGrid();
 
                 // Renders output footer tiles
@@ -1979,15 +1979,23 @@
                     }
 
                     // Initialize pinned layouts arrays
-                    const storedActions = localStorage.getItem('kiosk_quick_actions');
+                    let storedActions = localStorage.getItem('kiosk_shortcuts');
+                    if (!storedActions) {
+                        storedActions = localStorage.getItem('kiosk_quick_actions');
+                        if (storedActions) {
+                            localStorage.setItem('kiosk_shortcuts', storedActions);
+                            localStorage.removeItem('kiosk_quick_actions');
+                        }
+                    }
+
                     if (storedActions) {
-                        pinnedQuickActions = JSON.parse(storedActions);
+                        pinnedShortcuts = JSON.parse(storedActions);
                     } else {
-                        pinnedQuickActions = Array(8).fill(null);
+                        pinnedShortcuts = Array(8).fill(null);
                         shortcuts.slice(0, 8).forEach((s, idx) => {
-                            pinnedQuickActions[idx] = s.id;
+                            pinnedShortcuts[idx] = s.id;
                         });
-                        localStorage.setItem('kiosk_quick_actions', JSON.stringify(pinnedQuickActions));
+                        localStorage.setItem('kiosk_shortcuts', JSON.stringify(pinnedShortcuts));
                     }
 
                     const storedProfiles = localStorage.getItem('kiosk_profiles');
