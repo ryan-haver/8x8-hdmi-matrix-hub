@@ -684,3 +684,9 @@
         grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
     }
 }
+
+/* Ensure hidden state is respected even with media query overrides */
+.matrix-grid.hidden,
+.matrix-mobile-view.hidden {
+    display: none !important;
+}
