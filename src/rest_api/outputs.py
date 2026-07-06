@@ -50,7 +50,7 @@ async def handle_output_status(request: web.Request) -> web.Response:
         return _json_response(False, error="Matrix not connected", status=503)
 
     try:
-        is_cached = hasattr(matrix_device, "_output_status_cache") and matrix_device._output_status_cache is not None
+        is_cached = hasattr(matrix_device, "_output_status_cache") and isinstance(matrix_device._output_status_cache, dict)
 
         status = await matrix_device.get_output_status()
 

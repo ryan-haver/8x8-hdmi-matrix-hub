@@ -383,26 +383,523 @@
                 grid-template-columns: repeat(4, 1fr);
             }
         }
+
+        /* 4-Tab Swiping Container and Tabs Bar */
+        .kiosk-tabs-bar {
+            display: flex;
+            align-items: center;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 4px;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        .kiosk-tab-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 12px 4px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            border: 2px solid transparent;
+        }
+
+        .kiosk-tab-btn:hover {
+            color: var(--text-secondary);
+        }
+
+        .kiosk-tab-btn.active {
+            background: var(--primary-color);
+            color: var(--text-primary);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .kiosk-pin-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 8px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .kiosk-pin-btn.pinned {
+            color: var(--warning-color);
+            transform: scale(1.1);
+        }
+
+        .kiosk-swipe-container {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+        }
+
+        .kiosk-swipe-wrapper {
+            display: flex;
+            width: 400%; /* 4 panels */
+            height: 100%;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .kiosk-panel {
+            width: 25%; /* 1/4 of container */
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 4px;
+        }
+
+        /* Edit layout header styles */
+        .kiosk-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .kiosk-edit-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .kiosk-edit-btn.active {
+            background: var(--warning-color);
+            border-color: var(--warning-color);
+            color: var(--bg-primary);
+        }
+
+        .kiosk-edit-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Dotted placeholder style for edit mode */
+        .kiosk-btn.placeholder {
+            border-style: dashed;
+            background: transparent;
+            opacity: 0.5;
+            color: var(--text-muted);
+        }
+
+        .kiosk-btn.placeholder:hover {
+            opacity: 0.8;
+            border-color: var(--warning-color);
+            color: var(--warning-color);
+        }
+
+        /* Configured item details on tiles */
+        .kiosk-btn-icon {
+            font-size: 2.2rem;
+            line-height: 1;
+        }
+
+        .kiosk-btn-config {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            opacity: 0.5;
+            transition: opacity 0.2s;
+        }
+
+        .kiosk-btn:hover .kiosk-btn-config {
+            opacity: 1;
+            color: var(--warning-color);
+        }
+
+        /* Modals and guided wizards */
+        .kiosk-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .kiosk-modal.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .kiosk-modal-content {
+            background: var(--bg-secondary);
+            border: 3px solid var(--border-color);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-lg), 0 0 40px rgba(0,0,0,0.5);
+            max-height: 85vh;
+        }
+
+        .kiosk-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .kiosk-modal-header h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .kiosk-modal-close {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.8rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .kiosk-modal-close:hover {
+            color: var(--error-color);
+        }
+
+        .kiosk-modal-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .kiosk-modal-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-top: 2px solid var(--border-color);
+            gap: 12px;
+        }
+
+        /* Wizard style buttons and elements */
+        .wizard-instruction {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .wizard-option-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 8px;
+            text-align: left;
+            transition: all 0.15s;
+        }
+
+        .wizard-option-btn:hover {
+            border-color: var(--primary-color);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .wizard-option-btn.primary-option {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: var(--primary-color);
+            text-align: center;
+        }
+
+        .wizard-option-btn.primary-option:hover {
+            background: var(--primary-color);
+        }
+
+        .wizard-checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            border-radius: 10px;
+            background: var(--bg-tertiary);
+            cursor: pointer;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+
+        .wizard-checkbox-label input {
+            width: 18px;
+            height: 18px;
+        }
+
+        .wizard-link-btn {
+            background: transparent;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 4px 0;
+            text-align: left;
+            display: block;
+            margin-bottom: 16px;
+        }
+
+        .wizard-link-btn:hover {
+            text-decoration: underline;
+        }
+
+        .wizard-advanced-settings {
+            border-top: 1px solid var(--border-color);
+            padding-top: 16px;
+            margin-top: 8px;
+        }
+
+        .settings-row {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+
+        .settings-row label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .settings-row select, .wizard-input {
+            width: 100%;
+            padding: 10px 12px;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .wizard-input:focus, .settings-row select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .btn-wizard {
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-prev {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+        }
+
+        .btn-next, .btn-save {
+            background: var(--primary-color);
+            color: var(--text-primary);
+            margin-left: auto;
+        }
+
+        .btn-delete {
+            background: var(--error-color);
+            color: white;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Icon Picker for Profiles Wizard */
+        .wizard-icon-picker {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .icon-picker-btn {
+            width: 44px;
+            height: 44px;
+            font-size: 1.5rem;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+        }
+
+        .icon-picker-btn.selected {
+            border-color: var(--primary-color);
+            background: rgba(59, 130, 246, 0.2);
+        }
+
+        /* Output Grid in Modal Builders */
+        .modal-outputs-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .modal-output-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+        }
+
+        .modal-output-row label {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .modal-output-row select {
+            width: 140px;
+            padding: 6px 10px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+        }
+
+        /* Slot Mapper styling */
+        .slot-mapping-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 40vh;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .slot-mapping-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .slot-mapping-item:hover {
+            border-color: var(--warning-color);
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .slot-mapping-item-icon {
+            font-size: 1.4rem;
+        }
+
+        .slot-mapping-item-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
     <div class="kiosk-container">
         <header class="kiosk-header">
-            <span class="kiosk-title">Select Input</span>
-            <div class="kiosk-status">
-                <span class="status-dot" id="statusDot"></span>
-                <span id="statusText">Connecting...</span>
-                <a href="/ui" class="kiosk-settings-btn" title="Full UI">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                        <polyline points="9 22 9 12 15 12 15 22"/>
+            <span class="kiosk-title" id="kioskTitle">Select Input</span>
+            <div class="kiosk-header-actions">
+                <button class="kiosk-edit-btn" id="kioskEditBtn" title="Edit Layout">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
                     </svg>
-                </a>
+                    <span>Edit Layout</span>
+                </button>
+                <div class="kiosk-status">
+                    <span class="status-dot" id="statusDot"></span>
+                    <span id="statusText">Connecting...</span>
+                    <a href="/ui" class="kiosk-settings-btn" title="Full UI">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9 22 9 12 15 12 15 22"/>
+                        </svg>
+                    </a>
+                </div>
             </div>
         </header>
+
+        <div class="kiosk-tabs-bar">
+            <button class="kiosk-tab-btn active" data-tab="routing">Routing</button>
+            <button class="kiosk-tab-btn" data-tab="presets">Presets</button>
+            <button class="kiosk-tab-btn" data-tab="quick-actions">Quick Actions</button>
+            <button class="kiosk-tab-btn" data-tab="profiles">Profiles</button>
+            <button class="kiosk-pin-btn" id="kioskPinBtn" title="Pin Active Tab">📌</button>
+        </div>
         
-        <main class="kiosk-grid" id="kioskGrid">
-            <!-- Buttons rendered dynamically -->
+        <main class="kiosk-swipe-container" id="kioskSwipeContainer">
+            <div class="kiosk-swipe-wrapper" id="kioskSwipeWrapper">
+                <!-- Tab 1: Routing -->
+                <div class="kiosk-panel active" id="panelRouting">
+                    <div class="kiosk-grid" id="kioskGrid">
+                        <!-- Buttons rendered dynamically -->
+                    </div>
+                </div>
+
+                <!-- Tab 2: Presets -->
+                <div class="kiosk-panel" id="panelPresets">
+                    <div class="kiosk-grid" id="presetsGrid">
+                        <!-- Presets rendered dynamically -->
+                    </div>
+                </div>
+
+                <!-- Tab 3: Quick Actions -->
+                <div class="kiosk-panel" id="panelQuickActions">
+                    <div class="kiosk-grid" id="quickActionsGrid">
+                        <!-- Quick Actions rendered dynamically -->
+                    </div>
+                </div>
+
+                <!-- Tab 4: Profiles -->
+                <div class="kiosk-panel" id="panelProfiles">
+                    <div class="kiosk-grid" id="profilesGrid">
+                        <!-- Profiles rendered dynamically -->
+                    </div>
+                </div>
+            </div>
         </main>
 
         <footer class="kiosk-footer">
@@ -413,12 +910,179 @@
         </footer>
     </div>
 
+    <!-- Guided Routing Modal -->
+    <div class="kiosk-modal" id="routingModal">
+        <div class="kiosk-modal-content">
+            <div class="kiosk-modal-header">
+                <h4 id="routingModalTitle">Route Source</h4>
+                <button class="kiosk-modal-close" id="routingModalCloseBtn">&times;</button>
+            </div>
+            <div class="kiosk-modal-body">
+                <div class="routing-wizard-step" id="routingStep1">
+                    <p class="wizard-instruction">Choose Destination Output:</p>
+                    <button class="wizard-option-btn primary-option" id="routeToAllBtn">Route to All Outputs</button>
+                    <div class="modal-outputs-grid" id="wizardOutputsList">
+                        <!-- List of individual output options -->
+                    </div>
+                </div>
+                <div class="routing-wizard-step hidden" id="routingStep2">
+                    <p class="wizard-instruction">Configure Routing Options:</p>
+                    <label class="wizard-checkbox-label">
+                        <input type="checkbox" id="routingAudioFollowVideo" checked>
+                        <span>Audio Follow Video (AFV)</span>
+                    </label>
+                    <label class="wizard-checkbox-label">
+                        <input type="checkbox" id="routingMuteAudio">
+                        <span>Mute output audio</span>
+                    </label>
+                    <button class="wizard-link-btn" id="toggleAdvancedRouting">Show Advanced Settings...</button>
+                    
+                    <div class="wizard-advanced-settings hidden" id="advancedRoutingSettings">
+                        <div class="settings-row">
+                            <label>HDCP Mode</label>
+                            <select id="routingHdcpMode">
+                                <option value="3" selected>Auto</option>
+                                <option value="1">HDCP 1.4</option>
+                                <option value="2">HDCP 2.2</option>
+                                <option value="0">Disable</option>
+                            </select>
+                        </div>
+                        <div class="settings-row">
+                            <label>HDR Mode</label>
+                            <select id="routingHdrMode">
+                                <option value="0" selected>Auto</option>
+                                <option value="1">HDR 10</option>
+                                <option value="2">SDR</option>
+                            </select>
+                        </div>
+                        <div class="settings-row">
+                            <label>Scaler Mode</label>
+                            <select id="routingScalerMode">
+                                <option value="1" selected>Auto (Display EDID)</option>
+                                <option value="0">Bypass</option>
+                                <option value="2">Force 1080p Downscale</option>
+                            </select>
+                        </div>
+                        <label class="wizard-checkbox-label">
+                            <input type="checkbox" id="routingArc">
+                            <span>Enable Audio Return Channel (ARC)</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="kiosk-modal-footer">
+                <button class="btn-wizard btn-prev hidden" id="routingPrevBtn">Back</button>
+                <button class="btn-wizard btn-next hidden" id="routingNextBtn">Next</button>
+                <button class="btn-wizard btn-save hidden" id="routingApplyBtn">Apply Routing</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preset Config Modal -->
+    <div class="kiosk-modal" id="presetConfigModal">
+        <div class="kiosk-modal-content">
+            <div class="kiosk-modal-header">
+                <h4 id="presetConfigModalTitle">Configure Preset</h4>
+                <button class="kiosk-modal-close" id="presetConfigCloseBtn">&times;</button>
+            </div>
+            <div class="kiosk-modal-body">
+                <div class="settings-row">
+                    <label>Rename Preset</label>
+                    <input type="text" class="wizard-input" id="presetRenameInput" placeholder="e.g. Cinema Setup">
+                </div>
+                <div style="margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 20px;">
+                    <button class="wizard-option-btn primary-option" id="presetSaveCurrentStateBtn">
+                        Save Current Matrix Routing to this Preset
+                    </button>
+                </div>
+            </div>
+            <div class="kiosk-modal-footer">
+                <button class="btn-wizard btn-save" id="presetConfigSaveBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profiles Creator Modal -->
+    <div class="kiosk-modal" id="profileModal">
+        <div class="kiosk-modal-content">
+            <div class="kiosk-modal-header">
+                <h4>Create Profile</h4>
+                <button class="kiosk-modal-close" id="profileModalCloseBtn">&times;</button>
+            </div>
+            <div class="kiosk-modal-body">
+                <div class="profile-wizard-step" id="profileStep1">
+                    <p class="wizard-instruction">Step 1: Profile Name & Icon</p>
+                    <div class="settings-row">
+                        <label>Profile Name</label>
+                        <input type="text" class="wizard-input" id="profileNameInput" placeholder="e.g. Movie Night">
+                    </div>
+                    <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">Choose Icon</label>
+                    <div class="wizard-icon-picker" id="profileIconPicker">
+                        <button class="icon-picker-btn selected" data-icon="📺">📺</button>
+                        <button class="icon-picker-btn" data-icon="🎮">🎮</button>
+                        <button class="icon-picker-btn" data-icon="🎬">🎬</button>
+                        <button class="icon-picker-btn" data-icon="🎵">🎵</button>
+                        <button class="icon-picker-btn" data-icon="💡">💡</button>
+                        <button class="icon-picker-btn" data-icon="🏠">🏠</button>
+                    </div>
+                </div>
+                <div class="profile-wizard-step hidden" id="profileStep2">
+                    <p class="wizard-instruction">Step 2: Source to Output Routing Map</p>
+                    <div class="modal-outputs-grid" id="profileRoutingMap">
+                        <!-- Output rows to map inputs to -->
+                    </div>
+                </div>
+                <div class="profile-wizard-step hidden" id="profileStep3">
+                    <p class="wizard-instruction">Step 3: Associated Macros</p>
+                    <div class="settings-row">
+                        <label>Power On Macro</label>
+                        <select id="profilePowerOnMacro">
+                            <option value="">None</option>
+                            <!-- populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="settings-row">
+                        <label>Power Off Macro</label>
+                        <select id="profilePowerOffMacro">
+                            <option value="">None</option>
+                            <!-- populated dynamically -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="kiosk-modal-footer">
+                <button class="btn-wizard btn-prev hidden" id="profilePrevBtn">Back</button>
+                <button class="btn-wizard btn-next" id="profileNextBtn">Next</button>
+                <button class="btn-wizard btn-save hidden" id="profileSaveBtn">Create Profile</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slot Mapper Modal -->
+    <div class="kiosk-modal" id="slotMapperModal">
+        <div class="kiosk-modal-content">
+            <div class="kiosk-modal-header">
+                <h4 id="slotMapperModalTitle">Configure Button Slot</h4>
+                <button class="kiosk-modal-close" id="slotMapperCloseBtn">&times;</button>
+            </div>
+            <div class="kiosk-modal-body">
+                <p class="wizard-instruction" id="slotMapperInstruction">Choose item to map to this slot:</p>
+                <div class="slot-mapping-list" id="slotMappingList">
+                    <!-- Configured shortcuts or profiles listed here -->
+                </div>
+            </div>
+            <div class="kiosk-modal-footer">
+                <button class="btn-wizard btn-delete hidden" id="slotMapperClearBtn">Clear Slot</button>
+            </div>
+        </div>
+    </div>
+
     <div class="kiosk-toast" id="kioskToast"></div>
 
     <script>
         /**
          * OREI Matrix Kiosk Mode
-         * Simplified UI for quick input switching on small tablets
+         * Comprehensive Multi-tab swipe control interface
          */
         (function() {
             'use strict';
@@ -436,12 +1100,44 @@
             let ws = null;
             let pollTimer = null;
 
+            // Configurable data lists
+            let presets = [];
+            let shortcuts = [];
+            let profiles = [];
+            let macros = [];
+
+            // UI parameters
+            let activeTab = 'routing';
+            let editModeActive = false;
+            let pinnedQuickActions = [];
+            let pinnedProfiles = [];
+
             // DOM elements
             const grid = document.getElementById('kioskGrid');
             const outputGrid = document.getElementById('outputStatusGrid');
             const statusDot = document.getElementById('statusDot');
             const statusText = document.getElementById('statusText');
             const toastEl = document.getElementById('kioskToast');
+            const tabButtons = document.querySelectorAll('.kiosk-tab-btn');
+            const swipeWrapper = document.getElementById('kioskSwipeWrapper');
+            const kioskTitle = document.getElementById('kioskTitle');
+            const pinBtn = document.getElementById('kioskPinBtn');
+            const editBtn = document.getElementById('kioskEditBtn');
+
+            // Routing Wizard state
+            let selectedInputForRouting = null;
+            let selectedRoutingDestination = null; // 'all' or output number
+            let currentWizardStep = 1;
+
+            // Profile Creator Wizard state
+            let selectedProfileIcon = '📺';
+
+            // Slot Mapper state
+            let selectedSlotType = null; // 'shortcut' or 'profile'
+            let selectedSlotIndex = null; // 0-7
+
+            // Preset Config state
+            let selectedPresetForConfig = null;
 
             /**
              * Show toast notification
@@ -491,12 +1187,710 @@
             }
 
             /**
-             * Render input buttons and output status
+             * Tabs Navigation
+             */
+            function switchTab(tabName) {
+                activeTab = tabName;
+                const tabOrder = ['routing', 'presets', 'quick-actions', 'profiles'];
+                const index = tabOrder.indexOf(tabName);
+                
+                // Slide container
+                swipeWrapper.style.transform = `translateX(-${index * 25}%)`;
+                
+                // Update active tab buttons
+                tabButtons.forEach(btn => {
+                    const isActive = btn.dataset.tab === tabName;
+                    btn.classList.toggle('active', isActive);
+                });
+
+                // Update title
+                const titles = {
+                    'routing': 'Select Input',
+                    'presets': 'Recall Preset',
+                    'quick-actions': 'Quick Actions',
+                    'profiles': 'Profiles & Scenes'
+                };
+                kioskTitle.textContent = titles[tabName] || 'Kiosk Mode';
+
+                // Update default pinned tab star/pin icon
+                updatePinButtonState();
+            }
+
+            function updatePinButtonState() {
+                const pinnedTab = localStorage.getItem('kiosk_default_tab');
+                pinBtn.classList.toggle('pinned', pinnedTab === activeTab);
+            }
+
+            pinBtn.addEventListener('click', () => {
+                const pinnedTab = localStorage.getItem('kiosk_default_tab');
+                if (pinnedTab === activeTab) {
+                    localStorage.removeItem('kiosk_default_tab');
+                    showToast('Tab unpinned from default startup', 'info');
+                } else {
+                    localStorage.setItem('kiosk_default_tab', activeTab);
+                    showToast(`Pinned "${kioskTitle.textContent}" as startup default`, 'success');
+                }
+                updatePinButtonState();
+            });
+
+            /**
+             * Swipe Gestures Implementation
+             */
+            let touchStartX = 0;
+            let touchStartY = 0;
+
+            const swipeContainer = document.getElementById('kioskSwipeContainer');
+            swipeContainer.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+                touchStartY = e.changedTouches[0].screenY;
+            }, { passive: true });
+
+            swipeContainer.addEventListener('touchend', (e) => {
+                const touchEndX = e.changedTouches[0].screenX;
+                const touchEndY = e.changedTouches[0].screenY;
+                handleSwipe(touchStartX, touchStartY, touchEndX, touchEndY);
+            }, { passive: true });
+
+            function handleSwipe(startX, startY, endX, endY) {
+                const dx = endX - startX;
+                const dy = endY - startY;
+                const swipeThreshold = 80;
+                const verticalThreshold = 50;
+
+                // Swipe only triggers when swipe is primarily horizontal
+                if (Math.abs(dx) > swipeThreshold && Math.abs(dy) < verticalThreshold) {
+                    const tabOrder = ['routing', 'presets', 'quick-actions', 'profiles'];
+                    const currentIndex = tabOrder.indexOf(activeTab);
+                    if (dx < 0 && currentIndex < tabOrder.length - 1) {
+                        switchTab(tabOrder[currentIndex + 1]);
+                    } else if (dx > 0 && currentIndex > 0) {
+                        switchTab(tabOrder[currentIndex - 1]);
+                    }
+                }
+            }
+
+            /**
+             * Edit Layout Mode
+             */
+            editBtn.addEventListener('click', () => {
+                editModeActive = !editModeActive;
+                editBtn.classList.toggle('active', editModeActive);
+                editBtn.querySelector('span').textContent = editModeActive ? 'Editing Layout' : 'Edit Layout';
+                showToast(editModeActive ? 'Edit Mode active. Tap slots to configure.' : 'Layout saved', 'info');
+                render();
+            });
+
+            /**
+             * Modal Dialog Helper Functions
+             */
+            function openModal(id) {
+                document.getElementById(id).classList.add('show');
+            }
+
+            function closeModal(id) {
+                document.getElementById(id).classList.remove('show');
+            }
+
+            window.closeModal = closeModal;
+
+            // Hook up close buttons dynamically
+            document.querySelectorAll('.kiosk-modal-close').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const modal = e.currentTarget.closest('.kiosk-modal');
+                    closeModal(modal.id);
+                });
+            });
+
+            /**
+             * Tab 1: Routing Tab Functions & Multi-step Wizard
+             */
+            function handleInputGridClick(inputNum) {
+                selectedInputForRouting = inputNum;
+                openRoutingWizard();
+            }
+
+            window.handleInputGridClick = handleInputGridClick;
+
+            function openRoutingWizard() {
+                currentWizardStep = 1;
+                document.getElementById('routingModalTitle').textContent = `Route ${inputs[selectedInputForRouting]?.name || 'Input ' + selectedInputForRouting}`;
+                
+                // Renders output cards
+                const outputsGrid = document.getElementById('wizardOutputsList');
+                let outputHtml = '';
+                for (let o = 1; o <= 8; o++) {
+                    const outName = outputs[o]?.name || `Output ${o}`;
+                    const currentIn = routing[o] || 0;
+                    outputHtml += `
+                        <button class="wizard-option-btn" data-output="${o}">
+                            ${outName} <span style="font-size:0.8rem; color:var(--text-muted); float:right;">(Current In: ${currentIn || '-'})</span>
+                        </button>
+                    `;
+                }
+                outputsGrid.innerHTML = outputHtml;
+
+                // Hook up choice clicks
+                outputsGrid.querySelectorAll('.wizard-option-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const outNum = parseInt(btn.dataset.output);
+                        selectRoutingDestination(outNum);
+                    });
+                });
+
+                showWizardStep('routing', 1);
+                openModal('routingModal');
+            }
+
+            function selectRoutingDestination(dest) {
+                selectedRoutingDestination = dest;
+                showWizardStep('routing', 2);
+            }
+
+            document.getElementById('routeToAllBtn').addEventListener('click', () => {
+                selectRoutingDestination('all');
+            });
+
+            // Toggle Advanced Routing section
+            const advToggle = document.getElementById('toggleAdvancedRouting');
+            const advPanel = document.getElementById('advancedRoutingSettings');
+            advToggle.addEventListener('click', () => {
+                const isHidden = advPanel.classList.contains('hidden');
+                advPanel.classList.toggle('hidden', !isHidden);
+                advToggle.textContent = isHidden ? 'Hide Advanced Settings...' : 'Show Advanced Settings...';
+            });
+
+            // Back/Next Navigation for Routing Wizard
+            const routingPrevBtn = document.getElementById('routingPrevBtn');
+            const routingNextBtn = document.getElementById('routingNextBtn');
+            const routingApplyBtn = document.getElementById('routingApplyBtn');
+
+            routingPrevBtn.addEventListener('click', () => {
+                if (currentWizardStep === 2) {
+                    showWizardStep('routing', 1);
+                }
+            });
+
+            function showWizardStep(prefix, step) {
+                currentWizardStep = step;
+                document.getElementById(`${prefix}Step1`).classList.toggle('hidden', step !== 1);
+                document.getElementById(`${prefix}Step2`).classList.toggle('hidden', step !== 2);
+                
+                const step3 = document.getElementById(`${prefix}Step3`);
+                if (step3) step3.classList.toggle('hidden', step !== 3);
+
+                // Prev btn visibility
+                const prevBtn = document.getElementById(`${prefix}PrevBtn`);
+                if (prevBtn) prevBtn.classList.toggle('hidden', step === 1);
+
+                // Wizard control buttons
+                const nextBtn = document.getElementById(`${prefix}NextBtn`);
+                const saveBtn = document.getElementById(`${prefix}ApplyBtn`) || document.getElementById(`${prefix}SaveBtn`);
+                
+                const totalSteps = step3 ? 3 : 2;
+                if (nextBtn) nextBtn.classList.toggle('hidden', step === totalSteps);
+                if (saveBtn) {
+                    saveBtn.classList.toggle('hidden', step !== totalSteps);
+                }
+            }
+
+            routingApplyBtn.addEventListener('click', async () => {
+                closeModal('routingModal');
+                showToast('Applying routing configuration...', 'info');
+
+                const input = selectedInputForRouting;
+                const dest = selectedRoutingDestination;
+
+                const afv = document.getElementById('routingAudioFollowVideo').checked;
+                const mute = document.getElementById('routingMuteAudio').checked;
+                const hdcp = document.getElementById('routingHdcpMode').value;
+                const hdr = document.getElementById('routingHdrMode').value;
+                const scaler = document.getElementById('routingScalerMode').value;
+                const arc = document.getElementById('routingArc').checked;
+
+                try {
+                    let success = false;
+                    if (dest === 'all') {
+                        const res = await fetch(`${API_BASE}/switch`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ input: input })
+                        });
+                        const data = await res.json();
+                        success = data.success;
+                        if (success) {
+                            for (let o = 1; o <= 8; o++) routing[o] = input;
+                        }
+                    } else {
+                        const res = await fetch(`${API_BASE}/output/${dest}/source`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ input: input })
+                        });
+                        const data = await res.json();
+                        success = data.success;
+                        if (success) {
+                            routing[dest] = input;
+                        }
+                    }
+
+                    if (success) {
+                        const targets = dest === 'all' ? [1,2,3,4,5,6,7,8] : [dest];
+                        const promises = [];
+
+                        targets.forEach(t => {
+                            // HDCP mode
+                            promises.push(fetch(`${API_BASE}/output/${t}/hdcp`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ mode: parseInt(hdcp) })
+                            }).catch(() => {}));
+
+                            // HDR mode
+                            promises.push(fetch(`${API_BASE}/output/${t}/hdr`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ mode: parseInt(hdr) })
+                            }).catch(() => {}));
+
+                            // Scaler mode
+                            promises.push(fetch(`${API_BASE}/output/${t}/scaler`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ mode: parseInt(scaler) })
+                            }).catch(() => {}));
+
+                            // ARC control
+                            promises.push(fetch(`${API_BASE}/output/${t}/arc`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ enable: arc })
+                            }).catch(() => {}));
+
+                            // Mute control
+                            promises.push(fetch(`${API_BASE}/output/${t}/mute`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ mute: mute })
+                            }).catch(() => {}));
+                        });
+
+                        await Promise.all(promises);
+                        showToast('Routing and output parameters applied', 'success');
+                        render();
+                    } else {
+                        showToast('Failed to execute matrix switch', 'error');
+                    }
+                } catch (err) {
+                    console.error('Route wizard execution error:', err);
+                    showToast(`Error: ${err.message}`, 'error');
+                }
+            });
+
+            /**
+             * Tab 2: Presets Tab Functions & Modal Configuration
+             */
+            function handlePresetClick(num) {
+                if (editModeActive) {
+                    selectedPresetForConfig = num;
+                    const currentName = presets.find(p => p.number === num)?.name || `Preset ${num}`;
+                    document.getElementById('presetRenameInput').value = currentName;
+                    document.getElementById('presetConfigModalTitle').textContent = `Configure Preset ${num}`;
+                    openModal('presetConfigModal');
+                } else {
+                    recallPreset(num);
+                }
+            }
+
+            window.handlePresetClick = handlePresetClick;
+
+            async function recallPreset(num) {
+                showToast(`Recalling preset ${num}...`, 'info');
+                try {
+                    const res = await fetch(`${API_BASE}/preset/${num}`, { method: 'POST' });
+                    const data = await res.json();
+                    if (data.success) {
+                        showToast(`Preset recalled: ${data.name || 'Preset ' + num}`, 'success');
+                        fetchStatus(); // Refresh status to sync visual routing
+                    } else {
+                        showToast(`Failed: ${data.error || 'Unknown'}`, 'error');
+                    }
+                } catch (err) {
+                    showToast(`Failed: ${err.message}`, 'error');
+                }
+            }
+
+            document.getElementById('presetSaveCurrentStateBtn').addEventListener('click', async () => {
+                const num = selectedPresetForConfig;
+                showToast(`Saving current routing map to Preset ${num}...`, 'info');
+                try {
+                    const res = await fetch(`${API_BASE}/preset/${num}/save`, { method: 'POST' });
+                    const data = await res.json();
+                    if (data.success) {
+                        showToast('Preset routing state saved successfully', 'success');
+                    } else {
+                        showToast(`Failed: ${data.error}`, 'error');
+                    }
+                } catch (err) {
+                    showToast(`Error: ${err.message}`, 'error');
+                }
+            });
+
+            document.getElementById('presetConfigSaveBtn').addEventListener('click', async () => {
+                const num = selectedPresetForConfig;
+                const newName = document.getElementById('presetRenameInput').value.trim();
+                if (!newName) return;
+
+                closeModal('presetConfigModal');
+                showToast('Renaming preset...', 'info');
+
+                try {
+                    const res = await fetch(`${API_BASE}/device-settings/preset/${num}/name`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name: newName })
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        showToast('Preset renamed', 'success');
+                        const presetObj = presets.find(p => p.number === num);
+                        if (presetObj) presetObj.name = newName;
+                        render();
+                    } else {
+                        showToast('Failed to rename preset', 'error');
+                    }
+                } catch (err) {
+                    showToast(`Error: ${err.message}`, 'error');
+                }
+            });
+
+            /**
+             * Tab 3 & 4: Slot-based Grids and Slot Mapper (Edit Layout)
+             */
+            function handleSlotClick(type, index) {
+                selectedSlotType = type;
+                selectedSlotIndex = index;
+                if (editModeActive) {
+                    openSlotMapper();
+                } else {
+                    const id = type === 'shortcut' ? pinnedQuickActions[index] : pinnedProfiles[index];
+                    if (id) {
+                        if (type === 'shortcut') executeShortcut(id);
+                        else recallProfile(id);
+                    }
+                }
+            }
+
+            window.handleSlotClick = handleSlotClick;
+
+            async function executeShortcut(key) {
+                showToast('Executing shortcut...', 'info');
+                try {
+                    const res = await fetch(`${API_BASE}/shortcuts/${key}/execute`, { method: 'POST' });
+                    const data = await res.json();
+                    if (data.success) {
+                        showToast('Shortcut executed', 'success');
+                    } else {
+                        showToast(`Failed: ${data.error}`, 'error');
+                    }
+                } catch (err) {
+                    showToast(`Error: ${err.message}`, 'error');
+                }
+            }
+
+            async function recallProfile(id) {
+                showToast('Recalling profile...', 'info');
+                try {
+                    const res = await fetch(`${API_BASE}/profile/${id}/recall`, { method: 'POST' });
+                    const data = await res.json();
+                    if (data.success) {
+                        showToast('Profile activated', 'success');
+                        fetchStatus(); // Sync state
+                    } else {
+                        showToast(`Failed: ${data.error}`, 'error');
+                    }
+                } catch (err) {
+                    showToast(`Error: ${err.message}`, 'error');
+                }
+            }
+
+            function openSlotMapper() {
+                const listEl = document.getElementById('slotMappingList');
+                listEl.innerHTML = '';
+                
+                document.getElementById('slotMapperModalTitle').textContent = `Configure Slot ${selectedSlotIndex + 1}`;
+                
+                const currentId = selectedSlotType === 'shortcut' 
+                    ? pinnedQuickActions[selectedSlotIndex] 
+                    : pinnedProfiles[selectedSlotIndex];
+                document.getElementById('slotMapperClearBtn').classList.toggle('hidden', !currentId);
+
+                if (selectedSlotType === 'shortcut') {
+                    document.getElementById('slotMapperInstruction').textContent = 'Choose Quick Action / Shortcut:';
+                    if (shortcuts.length === 0) {
+                        listEl.innerHTML = '<p class="empty-message">No shortcuts configured in Full UI.</p>';
+                    } else {
+                        shortcuts.forEach(s => {
+                            listEl.appendChild(createSlotMappingRow(s.icon || '⚡', s.name, () => mapSlot(s.id)));
+                        });
+                    }
+                } else {
+                    document.getElementById('slotMapperInstruction').textContent = 'Choose Profile:';
+                    
+                    // Profile creation trigger row
+                    const createRow = createSlotMappingRow('➕', 'Create New Profile...', () => {
+                        closeModal('slotMapperModal');
+                        openProfileWizard();
+                    });
+                    createRow.style.borderColor = 'var(--primary-color)';
+                    createRow.style.background = 'rgba(59, 130, 246, 0.1)';
+                    listEl.appendChild(createRow);
+
+                    if (profiles.length > 0) {
+                        profiles.forEach(p => {
+                            listEl.appendChild(createSlotMappingRow(p.icon || '📺', p.name, () => mapSlot(p.id)));
+                        });
+                    }
+                }
+
+                openModal('slotMapperModal');
+            }
+
+            function createSlotMappingRow(icon, name, clickHandler) {
+                const row = document.createElement('div');
+                row.className = 'slot-mapping-item';
+                row.innerHTML = `
+                    <span class="slot-mapping-item-icon">${icon}</span>
+                    <span class="slot-mapping-item-name">${escapeHtml(name)}</span>
+                `;
+                row.addEventListener('click', clickHandler);
+                return row;
+            }
+
+            function mapSlot(id) {
+                closeModal('slotMapperModal');
+                if (selectedSlotType === 'shortcut') {
+                    pinnedQuickActions[selectedSlotIndex] = id;
+                    localStorage.setItem('kiosk_quick_actions', JSON.stringify(pinnedQuickActions));
+                } else {
+                    pinnedProfiles[selectedSlotIndex] = id;
+                    localStorage.setItem('kiosk_profiles', JSON.stringify(pinnedProfiles));
+                }
+                render();
+            }
+
+            document.getElementById('slotMapperClearBtn').addEventListener('click', () => {
+                mapSlot(null);
+            });
+
+            /**
+             * Profile Creator Wizard Functions
+             */
+            function openProfileWizard() {
+                currentWizardStep = 1;
+                document.getElementById('profileNameInput').value = '';
+                
+                // Renders icon options click listeners
+                const picker = document.getElementById('profileIconPicker');
+                picker.querySelectorAll('.icon-picker-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        picker.querySelector('.icon-picker-btn.selected')?.classList.remove('selected');
+                        btn.classList.add('selected');
+                        selectedProfileIcon = btn.dataset.icon;
+                    });
+                });
+
+                // Renders outputs dropdown mapping
+                const mapContainer = document.getElementById('profileRoutingMap');
+                let mapHtml = '';
+                for (let o = 1; o <= 8; o++) {
+                    const outName = outputs[o]?.name || `Output ${o}`;
+                    mapHtml += `
+                        <div class="modal-output-row">
+                            <label>${outName}</label>
+                            <select class="profile-output-input-select" data-output="${o}">
+                                <option value="">Keep Unchanged</option>
+                                ${Object.entries(inputs).map(([num, inp]) => `
+                                    <option value="${num}">Route to ${inp.name || 'Input ' + num}</option>
+                                `).join('')}
+                            </select>
+                        </div>
+                    `;
+                }
+                mapContainer.innerHTML = mapHtml;
+
+                // Renders macros dropdown lists
+                const onSelect = document.getElementById('profilePowerOnMacro');
+                const offSelect = document.getElementById('profilePowerOffMacro');
+                
+                const macroOptions = `<option value="">None</option>` + macros.map(m => `
+                    <option value="${m.id}">${m.name}</option>
+                `).join('');
+                
+                onSelect.innerHTML = macroOptions;
+                offSelect.innerHTML = macroOptions;
+
+                showWizardStep('profile', 1);
+                openModal('profileModal');
+            }
+
+            // Nav buttons for Profile Wizard
+            document.getElementById('profilePrevBtn').addEventListener('click', () => {
+                if (currentWizardStep > 1) {
+                    showWizardStep('profile', currentWizardStep - 1);
+                }
+            });
+
+            document.getElementById('profileNextBtn').addEventListener('click', () => {
+                if (currentWizardStep === 1) {
+                    const name = document.getElementById('profileNameInput').value.trim();
+                    if (!name) {
+                        showToast('Please enter a profile name', 'error');
+                        return;
+                    }
+                }
+                if (currentWizardStep < 3) {
+                    showWizardStep('profile', currentWizardStep + 1);
+                }
+            });
+
+            document.getElementById('profileSaveBtn').addEventListener('click', async () => {
+                const name = document.getElementById('profileNameInput').value.trim();
+                if (!name) return;
+
+                closeModal('profileModal');
+                showToast('Creating profile...', 'info');
+
+                // Collect output maps
+                const outputsConfig = {};
+                document.querySelectorAll('.profile-output-input-select').forEach(sel => {
+                    const val = sel.value;
+                    const outNum = sel.dataset.output;
+                    if (val) {
+                        outputsConfig[outNum] = { input: parseInt(val) };
+                    }
+                });
+
+                const onMacro = document.getElementById('profilePowerOnMacro').value;
+                const offMacro = document.getElementById('profilePowerOffMacro').value;
+                const slug = name.toLowerCase().replace(/[^a-z0-9]/g, '_');
+
+                const profilePayload = {
+                    id: slug,
+                    name: name,
+                    icon: selectedProfileIcon,
+                    outputs: outputsConfig,
+                    power_on_macro: onMacro || null,
+                    power_off_macro: offMacro || null
+                };
+
+                try {
+                    const res = await fetch(`${API_BASE}/profile`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(profilePayload)
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        showToast('Profile created successfully', 'success');
+                        
+                        // Refetch profiles
+                        const profRes = await fetch(`${API_BASE}/profiles`);
+                        if (profRes.ok) {
+                            const profData = await profRes.json();
+                            if (profData.success) {
+                                profiles = profData.data.profiles || [];
+                            }
+                        }
+
+                        // Set slot configuration
+                        mapSlot(slug);
+                    } else {
+                        showToast(`Failed: ${data.error}`, 'error');
+                    }
+                } catch (err) {
+                    showToast(`Error: ${err.message}`, 'error');
+                }
+            });
+
+            /**
+             * Renders functions for grid views
+             */
+            function renderPresetsGrid() {
+                const gridEl = document.getElementById('presetsGrid');
+                let html = '';
+                for (let i = 1; i <= 8; i++) {
+                    const presetObj = presets.find(p => p.number === i) || {};
+                    const name = presetObj.name || `Preset ${i}`;
+                    html += `
+                        <button class="kiosk-btn" onclick="handlePresetClick(${i})">
+                            ${editModeActive ? `<span class="kiosk-btn-config">⚙️</span>` : ''}
+                            <span class="kiosk-btn-number">${i}</span>
+                            <span class="kiosk-btn-name">${escapeHtml(name)}</span>
+                        </button>
+                    `;
+                }
+                gridEl.innerHTML = html;
+            }
+
+            function renderQuickActionsGrid() {
+                const gridEl = document.getElementById('quickActionsGrid');
+                let html = '';
+                for (let i = 0; i < 8; i++) {
+                    const id = pinnedQuickActions[i];
+                    if (id) {
+                        const shortcut = shortcuts.find(s => s.id === id) || { name: id, icon: '⚡' };
+                        html += `
+                            <button class="kiosk-btn" onclick="handleSlotClick('shortcut', ${i})">
+                                ${editModeActive ? `<span class="kiosk-btn-config">⚙️</span>` : ''}
+                                <span class="kiosk-btn-icon">${shortcut.icon || '⚡'}</span>
+                                <span class="kiosk-btn-name">${escapeHtml(shortcut.name)}</span>
+                            </button>
+                        `;
+                    } else {
+                        html += `
+                            <button class="kiosk-btn placeholder" onclick="handleSlotClick('shortcut', ${i})">
+                                <span class="kiosk-btn-icon">➕</span>
+                                <span class="kiosk-btn-name">Add Shortcut</span>
+                            </button>
+                        `;
+                    }
+                }
+                gridEl.innerHTML = html;
+            }
+
+            function renderProfilesGrid() {
+                const gridEl = document.getElementById('profilesGrid');
+                let html = '';
+                for (let i = 0; i < 8; i++) {
+                    const id = pinnedProfiles[i];
+                    if (id) {
+                        const profileObj = profiles.find(p => p.id === id) || { name: id, icon: '📺' };
+                        html += `
+                            <button class="kiosk-btn" onclick="handleSlotClick('profile', ${i})">
+                                ${editModeActive ? `<span class="kiosk-btn-config">⚙️</span>` : ''}
+                                <span class="kiosk-btn-icon">${profileObj.icon || '📺'}</span>
+                                <span class="kiosk-btn-name">${escapeHtml(profileObj.name)}</span>
+                            </button>
+                        `;
+                    } else {
+                        html += `
+                            <button class="kiosk-btn placeholder" onclick="handleSlotClick('profile', ${i})">
+                                <span class="kiosk-btn-icon">➕</span>
+                                <span class="kiosk-btn-name">Add Profile</span>
+                            </button>
+                        `;
+                    }
+                }
+                gridEl.innerHTML = html;
+            }
+
+            /**
+             * Renders Routing tab and Footer Output states
              */
             function render() {
                 const activeInput = getCurrentAllRouted();
                 
-                // Render input buttons
+                // Renders routing grid
                 let inputHtml = '';
                 for (let i = 1; i <= 8; i++) {
                     const input = inputs[i] || {};
@@ -515,14 +1909,13 @@
                         statusClass = 'status-disconnected';
                     }
 
-                    // Badge shows output count if > 0
                     const badgeHtml = outputCount > 0 
                         ? `<span class="kiosk-btn-badge">${outputCount}</span>` 
                         : '';
 
                     inputHtml += `
                         <button class="kiosk-btn ${statusClass} ${isActive ? 'active' : ''}" 
-                                data-input="${i}">
+                                onclick="handleInputGridClick(${i})">
                             ${badgeHtml}
                             <span class="kiosk-btn-number">${i}</span>
                             <span class="kiosk-btn-name">${escapeHtml(name)}</span>
@@ -531,12 +1924,12 @@
                 }
                 grid.innerHTML = inputHtml;
 
-                // Attach click handlers
-                grid.querySelectorAll('.kiosk-btn').forEach(btn => {
-                    btn.addEventListener('click', handleButtonClick);
-                });
+                // Renders secondary tab grids
+                renderPresetsGrid();
+                renderQuickActionsGrid();
+                renderProfilesGrid();
 
-                // Render output status grid
+                // Renders output footer tiles
                 let outputHtml = '';
                 for (let o = 1; o <= 8; o++) {
                     const output = outputs[o] || {};
@@ -557,62 +1950,66 @@
             }
 
             /**
-             * Handle input button click
+             * Fetch startup metadata and layouts configuration
              */
-            async function handleButtonClick(e) {
-                const btn = e.currentTarget;
-                const input = parseInt(btn.dataset.input);
-                const name = inputs[input]?.name || `Input ${input}`;
-
-                // Already loading or already active
-                if (btn.classList.contains('loading')) return;
-                if (btn.classList.contains('active')) {
-                    showToast(`${name} already active`, 'info');
-                    return;
-                }
-
-                btn.classList.add('loading');
-
+            async function loadStartupData() {
                 try {
-                    // POST /api/switch with { input } routes to ALL outputs
-                    const response = await fetch(`${API_BASE}/switch`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ input: input })
-                    });
+                    const [presetsRes, shortcutsRes, profilesRes, macrosRes] = await Promise.all([
+                        fetch(`${API_BASE}/presets`),
+                        fetch(`${API_BASE}/shortcuts`),
+                        fetch(`${API_BASE}/profiles`),
+                        fetch(`${API_BASE}/cec/macros`)
+                    ]);
 
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}`);
+                    if (presetsRes.ok) {
+                        const data = await presetsRes.json();
+                        presets = data.data?.presets || [];
+                    }
+                    if (shortcutsRes.ok) {
+                        const data = await shortcutsRes.json();
+                        shortcuts = data.data?.shortcuts || [];
+                    }
+                    if (profilesRes.ok) {
+                        const data = await profilesRes.json();
+                        profiles = data.data?.profiles || [];
+                    }
+                    if (macrosRes.ok) {
+                        const data = await macrosRes.json();
+                        macros = data.data || [];
                     }
 
-                    const data = await response.json();
-                    if (data.success) {
-                        // Optimistically update
-                        for (let o = 1; o <= 8; o++) {
-                            routing[o] = input;
-                        }
-                        showToast(`Switched to ${name}`, 'success');
-                        render();
+                    // Initialize pinned layouts arrays
+                    const storedActions = localStorage.getItem('kiosk_quick_actions');
+                    if (storedActions) {
+                        pinnedQuickActions = JSON.parse(storedActions);
                     } else {
-                        throw new Error(data.error || 'Failed');
+                        pinnedQuickActions = Array(8).fill(null);
+                        shortcuts.slice(0, 8).forEach((s, idx) => {
+                            pinnedQuickActions[idx] = s.id;
+                        });
+                        localStorage.setItem('kiosk_quick_actions', JSON.stringify(pinnedQuickActions));
+                    }
+
+                    const storedProfiles = localStorage.getItem('kiosk_profiles');
+                    if (storedProfiles) {
+                        pinnedProfiles = JSON.parse(storedProfiles);
+                    } else {
+                        pinnedProfiles = Array(8).fill(null);
+                        profiles.slice(0, 8).forEach((p, idx) => {
+                            pinnedProfiles[idx] = p.id;
+                        });
+                        localStorage.setItem('kiosk_profiles', JSON.stringify(pinnedProfiles));
                     }
                 } catch (err) {
-                    console.error('Switch error:', err);
-                    showToast(`Failed: ${err.message}`, 'error');
-                } finally {
-                    btn.classList.remove('loading');
+                    console.error('Error loading startup lists:', err);
                 }
             }
 
             /**
-             * Fetch status from API
-             * Fetches /api/status, /api/inputs/status, and /api/outputs/status
+             * Fetch dynamic status
              */
             async function fetchStatus() {
                 try {
-                    // Fetch all endpoints in parallel
                     const [statusRes, inputStatusRes, outputStatusRes] = await Promise.all([
                         fetch(`${API_BASE}/status`),
                         fetch(`${API_BASE}/inputs/status`),
@@ -624,13 +2021,10 @@
                     const statusData = await statusRes.json();
                     if (statusData.success) {
                         updateStatus(true);
-                        
-                        // Update routing
                         if (statusData.data.routing) {
                             routing = statusData.data.routing;
                         }
 
-                        // Initialize inputs from input_names
                         if (statusData.data.input_names) {
                             for (let i = 1; i <= 8; i++) {
                                 inputs[i] = inputs[i] || {};
@@ -638,7 +2032,6 @@
                             }
                         }
 
-                        // Initialize outputs from output_names
                         if (statusData.data.output_names) {
                             for (let o = 1; o <= 8; o++) {
                                 outputs[o] = outputs[o] || {};
@@ -647,7 +2040,6 @@
                         }
                     }
                     
-                    // Merge input signal/cable status if available
                     if (inputStatusRes.ok) {
                         const inputStatusData = await inputStatusRes.json();
                         if (inputStatusData.success && inputStatusData.data.inputs) {
@@ -662,7 +2054,6 @@
                         }
                     }
 
-                    // Merge output connection status if available
                     if (outputStatusRes.ok) {
                         const outputStatusData = await outputStatusRes.json();
                         if (outputStatusData.success && outputStatusData.data.outputs) {
@@ -708,7 +2099,6 @@
                             render();
                         } else if (msg.event === 'status_update' && msg.data) {
                             if (msg.data.routing) routing = msg.data.routing;
-                            // Handle input_names from status update
                             if (msg.data.input_names) {
                                 for (let i = 1; i <= 8; i++) {
                                     inputs[i] = inputs[i] || {};
@@ -717,7 +2107,6 @@
                                     }
                                 }
                             }
-                            // Handle output_names from status update
                             if (msg.data.output_names) {
                                 for (let o = 1; o <= 8; o++) {
                                     outputs[o] = outputs[o] || {};
@@ -773,7 +2162,7 @@
             }
 
             /**
-             * Start polling as fallback
+             * Polling fallback
              */
             function startPolling() {
                 pollTimer = setInterval(fetchStatus, POLL_INTERVAL);
@@ -781,25 +2170,21 @@
 
             /**
              * Double 2-finger tap gesture to exit kiosk mode
-             * Uses 2 fingers with double tap to avoid conflicts
              */
             const tripleFingerTap = {
                 tapCount: 0,
                 lastTapTime: 0,
-                TAP_TIMEOUT: 400,      // Max time between taps
+                TAP_TIMEOUT: 400,
                 REQUIRED_FINGERS: 2,
                 REQUIRED_TAPS: 2
             };
 
             function handleTripleFingerTap(e) {
-                // Only trigger on 2-finger touch
                 if (e.touches && e.touches.length !== tripleFingerTap.REQUIRED_FINGERS) {
                     return;
                 }
 
                 const now = Date.now();
-                
-                // Reset if too much time passed
                 if (now - tripleFingerTap.lastTapTime > tripleFingerTap.TAP_TIMEOUT) {
                     tripleFingerTap.tapCount = 0;
                 }
@@ -820,19 +2205,37 @@
              * Initialize kiosk mode
              */
             async function init() {
+                // Fetch static lists
+                await loadStartupData();
+
                 // Initial fetch
                 await fetchStatus();
 
-                // Connect WebSocket for real-time updates
+                // Connect WebSocket
                 connectWebSocket();
 
-                // Start polling as backup
+                // Start polling backup
                 startPolling();
 
-                // Triple 3-finger tap to exit kiosk mode
+                // Load initial default default active tab from localStorage
+                const defaultTab = localStorage.getItem('kiosk_default_tab');
+                if (defaultTab) {
+                    switchTab(defaultTab);
+                } else {
+                    switchTab('routing');
+                }
+
+                // Add active tab click listeners
+                tabButtons.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        switchTab(btn.dataset.tab);
+                    });
+                });
+
+                // Exit kiosk mode gesture
                 document.addEventListener('touchstart', handleTripleFingerTap, { passive: true });
 
-                // Prevent zoom on double-tap
+                // Prevent double-tap zooming on iOS
                 document.addEventListener('touchend', (e) => {
                     const now = Date.now();
                     if (now - (window.lastTouchEnd || 0) < 300) {
@@ -842,7 +2245,7 @@
                 }, false);
             }
 
-            // Start when DOM ready
+            // Start when ready
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', init);
             } else {
