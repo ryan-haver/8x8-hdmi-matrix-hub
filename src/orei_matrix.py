@@ -95,6 +95,11 @@ class OreiMatrix:
         # Protects _cec_enabled_cache reads/writes from concurrent coroutines.
         self._cec_cache_lock = asyncio.Lock()
 
+        # Status cache to speed up UI loads
+        self._status_cache: dict[str, Any] | None = None
+        self._status_cache_time: float = 0.0
+        self._status_cache_ttl = float(os.environ.get("OREI_STATUS_CACHE_TTL", "3.0"))
+
     @property
     def connected(self) -> bool:
         """Return connection status."""
@@ -330,6 +335,14 @@ class OreiMatrix:
                             _LOG.debug("Command response (raw): %s", text)
                             response_data = json.loads(text)
                             _LOG.debug("Command response (parsed): %s", response_data)
+
+                            # Invalidate status cache on state-changing/write commands
+                            comhead = command.get("comhead", "")
+                            is_query = comhead.startswith("get") or comhead.endswith("get") or "get" in comhead
+                            if not is_query:
+                                _LOG.debug("Invalidating status cache due to write command: %s", comhead)
+                                self._status_cache = None
+
                             return True, response_data
                         except Exception as ex:
                             _LOG.warning("Could not parse JSON response: %s (raw: %.200s)", ex, text)
@@ -632,12 +645,20 @@ class OreiMatrix:
         _LOG.error("Failed to get video status")
         return None
 
-    async def get_status(self) -> dict[str, Any]:
+    async def get_status(self, force_refresh: bool = False) -> dict[str, Any]:
         """
         Get the current status of the matrix.
 
+        :param force_refresh: Force update from physical switcher even if cache is fresh.
         :return: Dictionary with status information
         """
+        import time
+
+        if not force_refresh and self._status_cache is not None:
+            if time.time() - self._status_cache_time < self._status_cache_ttl:
+                _LOG.debug("Returning cached status (cache age: %.2fs)", time.time() - self._status_cache_time)
+                return self._status_cache.copy()
+
         # Get detailed video status from matrix
         video_status = await self.get_video_status()
 
@@ -660,6 +681,8 @@ class OreiMatrix:
                 }
             )
 
+        self._status_cache = status.copy()
+        self._status_cache_time = time.time()
         return status
 
     # =========================================================================

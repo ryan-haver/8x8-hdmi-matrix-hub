@@ -2,7 +2,9 @@
 Core health and status endpoints.
 """
 
+import asyncio
 import logging
+from typing import Any
 
 from aiohttp import web
 
@@ -17,6 +19,88 @@ from .utils import (
 )
 
 _LOG = logging.getLogger("rest_api.core")
+
+
+def _format_status(raw_status: dict[str, Any], matrix_device, input_names: dict[int, str], output_names: dict[int, str]) -> dict[str, Any]:
+    """Format the raw matrix status dictionary for Web UI consumption."""
+    status = {
+        "connected": raw_status.get("connected", True),
+        "host": raw_status.get("host", matrix_device.host),
+    }
+
+    # Routing: convert array to map {output: input}
+    routing_array = raw_status.get("routing", [])
+    if routing_array:
+        routing_array = routing_array[:8] if len(routing_array) > 8 else routing_array
+        status["routing"] = {i + 1: src for i, src in enumerate(routing_array)}
+        status["outputs"] = routing_array
+
+    # Input names: prefer our cache, then matrix names, then default
+    result_input_names = {}
+    matrix_input_names = raw_status.get("input_names", [])
+    for i in range(1, 9):
+        if i in input_names and input_names[i]:
+            result_input_names[i] = input_names[i]
+        elif i - 1 < len(matrix_input_names) and matrix_input_names[i - 1]:
+            result_input_names[i] = matrix_input_names[i - 1]
+        else:
+            result_input_names[i] = f"Input {i}"
+    status["input_names"] = result_input_names
+
+    # Output names: prefer our cache, then matrix names, then default
+    result_output_names = {}
+    matrix_output_names = raw_status.get("output_names", [])
+    for i in range(1, 9):
+        if i in output_names and output_names[i]:
+            result_output_names[i] = output_names[i]
+        elif i - 1 < len(matrix_output_names) and matrix_output_names[i - 1]:
+            result_output_names[i] = matrix_output_names[i - 1]
+        else:
+            result_output_names[i] = f"Output {i}"
+    status["output_names"] = result_output_names
+
+    # Preset names
+    preset_names = raw_status.get("preset_names", [])
+    status["preset_names"] = {i + 1: name for i, name in enumerate(preset_names)} if preset_names else {}
+
+    return status
+
+
+async def background_status_refresh(matrix_device):
+    """Fetch status in the background, update cache, and broadcast changes if any."""
+    try:
+        # Save old routing and power states to check for changes
+        old_routing = None
+        old_power = None
+        if hasattr(matrix_device, "_status_cache") and matrix_device._status_cache:
+            old_routing = matrix_device._status_cache.get("routing")
+            old_power = matrix_device._status_cache.get("power")
+
+        # Force a refresh from the matrix hardware
+        fresh_status = await matrix_device.get_status(force_refresh=True)
+
+        # Check if routing or power changed
+        changed = False
+        if fresh_status:
+            new_routing = fresh_status.get("routing")
+            new_power = fresh_status.get("power")
+            if old_routing != new_routing or old_power != new_power:
+                changed = True
+                _LOG.info("Background refresh detected status change: routing=%s power=%s", new_routing, new_power)
+
+        if changed:
+            # Broadcast the updated status formatted for Web UI
+            from .websocket import broadcast_status_update
+            
+            input_names = get_input_names()
+            output_names = get_output_names()
+            formatted = _format_status(fresh_status, matrix_device, input_names, output_names)
+            
+            _LOG.info("Broadcasting background status update via WebSocket")
+            await broadcast_status_update("status", formatted)
+
+    except Exception as e:
+        _LOG.warning("Failed background status refresh: %s", e)
 
 
 async def handle_health(request: web.Request) -> web.Response:
@@ -83,49 +167,23 @@ async def handle_status(request: web.Request) -> web.Response:
         return _json_response(False, error="Matrix not connected", status=503)
 
     try:
+        # Check cache validity before calling get_status
+        import time
+        is_cached = False
+        if hasattr(matrix_device, "_status_cache") and matrix_device._status_cache is not None and \
+           hasattr(matrix_device, "_status_cache_time") and hasattr(matrix_device, "_status_cache_ttl") and \
+           time.time() - matrix_device._status_cache_time < matrix_device._status_cache_ttl:
+            is_cached = True
+
         raw_status = await matrix_device.get_status()
 
-        # Format for Web UI consumption
-        status = {
-            "connected": raw_status.get("connected", True),
-            "host": raw_status.get("host", matrix_device.host),
-        }
+        # If cache was used, trigger background refresh
+        if is_cached:
+            _LOG.debug("Cached hit for status handler. Spawning background refresh task.")
+            asyncio.create_task(background_status_refresh(matrix_device))
 
-        # Routing: convert array to map {output: input}
-        routing_array = raw_status.get("routing", [])
-        if routing_array:
-            routing_array = routing_array[:8] if len(routing_array) > 8 else routing_array
-            status["routing"] = {i + 1: src for i, src in enumerate(routing_array)}
-            status["outputs"] = routing_array
-
-        # Input names: prefer our cache, then matrix names, then default
-        result_input_names = {}
-        matrix_input_names = raw_status.get("input_names", [])
-        for i in range(1, 9):
-            if i in input_names and input_names[i]:
-                result_input_names[i] = input_names[i]
-            elif i - 1 < len(matrix_input_names) and matrix_input_names[i - 1]:
-                result_input_names[i] = matrix_input_names[i - 1]
-            else:
-                result_input_names[i] = f"Input {i}"
-        status["input_names"] = result_input_names
-
-        # Output names: prefer our cache, then matrix names, then default
-        result_output_names = {}
-        matrix_output_names = raw_status.get("output_names", [])
-        for i in range(1, 9):
-            if i in output_names and output_names[i]:
-                result_output_names[i] = output_names[i]
-            elif i - 1 < len(matrix_output_names) and matrix_output_names[i - 1]:
-                result_output_names[i] = matrix_output_names[i - 1]
-            else:
-                result_output_names[i] = f"Output {i}"
-        status["output_names"] = result_output_names
-
-        # Preset names
-        preset_names = raw_status.get("preset_names", [])
-        status["preset_names"] = {i + 1: name for i, name in enumerate(preset_names)} if preset_names else {}
-
+        # Format and return response instantly
+        status = _format_status(raw_status, matrix_device, input_names, output_names)
         return _json_response(True, status)
     except Exception as e:
         _LOG.error(f"Error getting status: {e}", exc_info=True)
