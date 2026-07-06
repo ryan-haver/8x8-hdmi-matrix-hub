@@ -427,25 +427,66 @@
             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
-        .tab-pin-indicator {
-            margin-left: 6px;
-            font-size: 0.85rem;
-            opacity: 0.2;
-            transition: all 0.2s;
-            cursor: pointer;
-            display: inline-block;
-            filter: grayscale(1);
+        .kiosk-edit-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            background: rgba(249, 115, 22, 0.1);
+            border-bottom: 2px solid var(--warning-color);
+            padding: 10px 16px;
+            font-size: 0.9rem;
         }
 
-        .tab-pin-indicator:hover {
-            opacity: 0.8;
-            transform: scale(1.1);
+        .kiosk-edit-bar.hidden {
+            display: none !important;
         }
 
-        .kiosk-tab-btn.pinned .tab-pin-indicator {
-            opacity: 1;
-            filter: none;
+        .edit-bar-label {
+            font-weight: 600;
             color: var(--warning-color);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        .edit-bar-options {
+            display: flex;
+            gap: 16px;
+        }
+
+        .edit-radio-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .edit-radio-label input[type="radio"] {
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border: 2px solid var(--text-muted);
+            border-radius: 50%;
+            outline: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .edit-radio-label input[type="radio"]:checked {
+            border-color: var(--warning-color);
+            background: var(--warning-color);
+            box-shadow: 0 0 6px rgba(249, 115, 22, 0.5);
+        }
+
+        .edit-radio-label input[type="radio"]:checked + span {
+            color: var(--warning-color);
+            font-weight: 600;
         }
 
         .kiosk-swipe-container {
@@ -1115,10 +1156,32 @@
         </header>
 
         <div class="kiosk-tabs-bar">
-            <button class="kiosk-tab-btn active" data-tab="routing">Routing <span class="tab-pin-indicator" title="Set as default tab">📌</span></button>
-            <button class="kiosk-tab-btn" data-tab="presets">Presets <span class="tab-pin-indicator" title="Set as default tab">📌</span></button>
-            <button class="kiosk-tab-btn" data-tab="shortcuts">Shortcuts <span class="tab-pin-indicator" title="Set as default tab">📌</span></button>
-            <button class="kiosk-tab-btn" data-tab="profiles">Profiles <span class="tab-pin-indicator" title="Set as default tab">📌</span></button>
+            <button class="kiosk-tab-btn active" data-tab="routing">Routing</button>
+            <button class="kiosk-tab-btn" data-tab="presets">Presets</button>
+            <button class="kiosk-tab-btn" data-tab="shortcuts">Shortcuts</button>
+            <button class="kiosk-tab-btn" data-tab="profiles">Profiles</button>
+        </div>
+
+        <div class="kiosk-edit-bar hidden" id="kioskEditBar">
+            <span class="edit-bar-label">Default Tab:</span>
+            <div class="edit-bar-options">
+                <label class="edit-radio-label">
+                    <input type="radio" name="defaultTabSelect" value="routing" onclick="handleDefaultTabChange('routing')">
+                    <span>Routing</span>
+                </label>
+                <label class="edit-radio-label">
+                    <input type="radio" name="defaultTabSelect" value="presets" onclick="handleDefaultTabChange('presets')">
+                    <span>Presets</span>
+                </label>
+                <label class="edit-radio-label">
+                    <input type="radio" name="defaultTabSelect" value="shortcuts" onclick="handleDefaultTabChange('shortcuts')">
+                    <span>Shortcuts</span>
+                </label>
+                <label class="edit-radio-label">
+                    <input type="radio" name="defaultTabSelect" value="profiles" onclick="handleDefaultTabChange('profiles')">
+                    <span>Profiles</span>
+                </label>
+            </div>
         </div>
         
         <main class="kiosk-swipe-container" id="kioskSwipeContainer">
@@ -1535,30 +1598,25 @@
             }
 
             function updatePinButtonState() {
-                const pinnedTab = localStorage.getItem('kiosk_default_tab');
-                tabButtons.forEach(btn => {
-                    const isPinned = btn.dataset.tab === pinnedTab;
-                    btn.classList.toggle('pinned', isPinned);
-                });
+                const pinnedTab = localStorage.getItem('kiosk_default_tab') || 'routing';
+                const radio = document.querySelector(`input[name="defaultTabSelect"][value="${pinnedTab}"]`);
+                if (radio) {
+                    radio.checked = true;
+                }
             }
 
-            function togglePinTab(tabName) {
-                const pinnedTab = localStorage.getItem('kiosk_default_tab');
-                if (pinnedTab === tabName) {
-                    localStorage.removeItem('kiosk_default_tab');
-                    showToast('Tab unpinned from default startup', 'info');
-                } else {
-                    localStorage.setItem('kiosk_default_tab', tabName);
-                    const tabTitle = {
-                        'routing': 'Routing',
-                        'presets': 'Presets',
-                        'shortcuts': 'Shortcuts',
-                        'profiles': 'Profiles'
-                    }[tabName] || tabName;
-                    showToast(`Pinned "${tabTitle}" as startup default`, 'success');
-                }
+            function handleDefaultTabChange(tabName) {
+                localStorage.setItem('kiosk_default_tab', tabName);
+                const tabTitle = {
+                    'routing': 'Routing',
+                    'presets': 'Presets',
+                    'shortcuts': 'Shortcuts',
+                    'profiles': 'Profiles'
+                }[tabName] || tabName;
+                showToast(`Default startup tab set to "${tabTitle}"`, 'success');
                 updatePinButtonState();
             }
+            window.handleDefaultTabChange = handleDefaultTabChange;
 
             /**
              * Swipe Gestures Implementation
@@ -1603,6 +1661,13 @@
                 editModeActive = !editModeActive;
                 editBtn.classList.toggle('active', editModeActive);
                 editBtn.querySelector('span').textContent = editModeActive ? 'Editing Layout' : 'Edit Layout';
+                
+                // Toggle edit bar visibility
+                const editBar = document.getElementById('kioskEditBar');
+                if (editBar) {
+                    editBar.classList.toggle('hidden', !editModeActive);
+                }
+                
                 showToast(editModeActive ? 'Edit Mode active. Tap slots to configure.' : 'Layout saved', 'info');
                 render();
             });
@@ -1641,10 +1706,15 @@
                 const outputName = outputs[outputNum]?.name || `Output ${outputNum}`;
                 const routedInput = routing[outputNum] || 0;
                 
-                document.getElementById('remoteDisplayName').textContent = outputName;
+                const btnDisplayName = document.getElementById('remoteDisplayName');
+                if (btnDisplayName) btnDisplayName.textContent = outputName;
                 
                 const btnSource = document.getElementById('btnTargetSource');
                 const btnDisplay = document.getElementById('btnTargetDisplay');
+                if (!btnSource || !btnDisplay) {
+                    console.warn('CEC Remote buttons not found in DOM');
+                    return;
+                }
                 
                 if (routedInput > 0) {
                     activeRemoteInputPort = routedInput;
@@ -1672,6 +1742,7 @@
                 
                 const btnSource = document.getElementById('btnTargetSource');
                 const btnDisplay = document.getElementById('btnTargetDisplay');
+                if (!btnSource || !btnDisplay) return;
                 
                 if (target === 'input') {
                     btnSource.classList.add('active');
@@ -2655,12 +2726,7 @@
 
                 // Add active tab click listeners
                 tabButtons.forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        if (e.target.closest('.tab-pin-indicator')) {
-                            e.stopPropagation();
-                            togglePinTab(btn.dataset.tab);
-                            return;
-                        }
+                    btn.addEventListener('click', () => {
                         switchTab(btn.dataset.tab);
                     });
                 });
