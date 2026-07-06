@@ -437,3 +437,64 @@ class TestEvents:
 
         assert len(events_received) == 1
         assert events_received[0]["scene"] == 5
+
+
+class TestStatusCaching:
+    """Tests for status caching and cache invalidation/busting."""
+
+    @pytest.mark.asyncio
+    async def test_status_cache_hit(self, connected_matrix):
+        """Test status cache avoids redundant HTTP calls."""
+        mock_response = MagicMock()
+        mock_response.status = 200
+        mock_response.text = AsyncMock(return_value='{"comhead":"get video status","power":1,"allsource":[1,2,3,4,5,6,7,8]}')
+        mock_response.__aenter__ = AsyncMock(return_value=mock_response)
+        mock_response.__aexit__ = AsyncMock(return_value=None)
+        
+        connected_matrix._session.post = MagicMock(return_value=mock_response)
+
+        # First call (populates cache)
+        status1 = await connected_matrix.get_status()
+        assert status1["power"] == "on"
+        assert connected_matrix._status_cache is not None
+
+        # Change response in mock to prove the HTTP call is NOT made
+        mock_response.text = AsyncMock(return_value='{"comhead":"get video status","power":0}')
+        
+        # Second call (should hit cache)
+        status2 = await connected_matrix.get_status()
+        assert status2["power"] == "on"  # still on because cached
+
+        # Force refresh (should fetch new response)
+        status3 = await connected_matrix.get_status(force_refresh=True)
+        assert status3["power"] == "off"  # now off
+
+    @pytest.mark.asyncio
+    async def test_status_cache_busting(self, connected_matrix):
+        """Test write commands invalidate the status cache."""
+        mock_response = MagicMock()
+        mock_response.status = 200
+        mock_response.text = AsyncMock(return_value='{"comhead":"get video status","power":1,"allsource":[1,2,3,4,5,6,7,8]}')
+        mock_response.__aenter__ = AsyncMock(return_value=mock_response)
+        mock_response.__aexit__ = AsyncMock(return_value=None)
+        
+        connected_matrix._session.post = MagicMock(return_value=mock_response)
+
+        # Populate cache
+        await connected_matrix.get_status()
+        assert connected_matrix._status_cache is not None
+
+        # Mock write command response (e.g. switch routing)
+        write_response = MagicMock()
+        write_response.status = 200
+        write_response.text = AsyncMock(return_value='{"comhead":"video switch","result":1}')
+        write_response.__aenter__ = AsyncMock(return_value=write_response)
+        write_response.__aexit__ = AsyncMock(return_value=None)
+        
+        connected_matrix._session.post = MagicMock(return_value=write_response)
+
+        # Trigger write command
+        await connected_matrix.switch_input(2, 3)
+
+        # Cache should be invalidated
+        assert connected_matrix._status_cache is None
