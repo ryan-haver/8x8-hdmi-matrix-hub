@@ -28,11 +28,29 @@ async def handle_info(request: web.Request) -> web.Response:
     """Get API and matrix info for the Web UI."""
     matrix_device = get_matrix_device()
 
+    import json
+    from pathlib import Path
+
+    driver_id = "orei_hdmi_matrix"
+    driver_name = "OREI HDMI Matrix"
+
+    try:
+        driver_path = Path("driver.json")
+        if driver_path.exists():
+            with open(driver_path, encoding="utf-8") as f:
+                driver_data = json.load(f)
+                driver_id = driver_data.get("driver_id", driver_id)
+                driver_name = driver_data.get("name", {}).get("en", driver_name)
+    except Exception as e:
+        _LOG.warning(f"Could not load driver.json: {e}")
+
     info = {
         "api_version": API_VERSION,
         "service": "orei-hdmi-matrix",
         "input_count": 8,
         "output_count": 8,
+        "driver_id": driver_id,
+        "driver_name": driver_name,
     }
 
     if matrix_device is not None:

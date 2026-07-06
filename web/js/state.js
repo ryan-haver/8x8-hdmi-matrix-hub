@@ -15,7 +15,9 @@ class AppState {
             firmwareVersion: '',
             apiVersion: '',
             inputCount: 8,
-            outputCount: 8
+            outputCount: 8,
+            driverId: '',
+            driverName: ''
         };
         
         // Current routing: output -> input
@@ -1155,7 +1157,9 @@ class AppState {
             apiVersion: data.api_version || '',
             matrixHost: data.matrix_host || '',
             inputCount: data.input_count || 8,
-            outputCount: data.output_count || 8
+            outputCount: data.output_count || 8,
+            driverId: data.driver_id || '',
+            driverName: data.driver_name || ''
         });
     }
 }
