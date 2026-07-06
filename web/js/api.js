@@ -260,6 +260,10 @@ class MatrixAPI {
         return this.post(`/api/preset/${preset}/save`, routing ? { routing } : {});
     }
 
+    async renamePreset(preset, name) {
+        return this.post(`/api/device-settings/preset/${preset}/name`, { name });
+    }
+
     // ===== Scenes/Profiles =====
     // Note: "scenes" are now called "profiles" — use profiles API directly
     // Legacy scene wrappers removed; use listProfiles(), getProfile(), etc.
