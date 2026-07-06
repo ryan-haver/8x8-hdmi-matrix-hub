@@ -432,6 +432,201 @@ class TestEvents:
         mock_response.__aexit__ = AsyncMock(return_value=None)
 
         connected_matrix._session.post = MagicMock(return_value=mock_response)
+        mock_response.status = 200
+        mock_response.text = AsyncMock(return_value='{"result":1}')
+        mock_response.__aenter__ = AsyncMock(return_value=mock_response)
+        mock_response.__aexit__ = AsyncMock(return_value=None)
+
+        connected_matrix._session.post = MagicMock(return_value=mock_response)
+
+        result = await connected_matrix.set_output_hdcp(1, 2)
+
+        assert result is True
+
+    @pytest.mark.asyncio
+    async def test_set_output_hdcp_invalid_output(self, connected_matrix):
+        """Test HDCP with invalid output number."""
+        result = await connected_matrix.set_output_hdcp(0, 2)
+        assert result is False
+
+    @pytest.mark.asyncio
+    async def test_set_output_hdr_success(self, connected_matrix):
+        """Test setting HDR mode."""
+        mock_response = MagicMock()
+        mock_response.status = 200
+        mock_response.text = AsyncMock(return_value='{"result":1}')
+        mock_response.__aenter__ = AsyncMock(return_value=mock_response)
+        mock_response.__aexit__ = AsyncMock(return_value=None)
+
+        connected_matrix._session.post = MagicMock(return_value=mock_response)
+
+        result = await connected_matrix.set_output_hdr(2, 1)
+
+        assert result is True
+
+    @pytest.mark.asyncio
+    async def test_set_output_arc_success(self, connected_matrix):
+        """Test enabling/disabling ARC."""
+        mock_response = MagicMock()
+        mock_response.status = 200
+        mock_response.text = AsyncMock(return_value='{"result":1}')
+        mock_response.__aenter__ = AsyncMock(return_value=mock_response)
+        mock_response.__aexit__ = AsyncMock(return_value=None)
+
+        connected_matrix._session.post = MagicMock(return_value=mock_response)
+
+        result = await connected_matrix.set_output_arc(1, True)
+        assert result is True
+
+        result = await connected_matrix.set_output_arc(1, False)
+        assert result is True
+
+    @pytest.mark.asyncio
+    async def test_set_output_audio_mute_success(self, connected_matrix):
+        """Test muting/unmuting audio."""
+        mock_response = MagicMock()
+        mock_response.status = 200
+        mock_response.text = AsyncMock(return_value='{"result":1}')
+        mock_response.__aenter__ = AsyncMock(return_value=mock_response)
+        mock_response.__aexit__ = AsyncMock(return_value=None)
+
+        connected_matrix._session.post = MagicMock(return_value=mock_response)
+
+        result = await connected_matrix.set_output_audio_mute(3, True)
+        assert result is True
+
+    @pytest.mark.asyncio
+    async def test_set_cec_enable_success(self, connected_matrix):
+        """Test enabling/disabling CEC per port."""
+        mock_response = MagicMock()
+        mock_response.status = 200
+        mock_response.text = AsyncMock(return_value='{"result":1}')
+        mock_response.__aenter__ = AsyncMock(return_value=mock_response)
+        mock_response.__aexit__ = AsyncMock(return_value=None)
+
+        connected_matrix._session.post = MagicMock(return_value=mock_response)
+
+        result = await connected_matrix.set_cec_enable("input", 2, True)
+        assert result is True
+
+        result = await connected_matrix.set_cec_enable("output", 1, False)
+        assert result is True
+
+    @pytest.mark.asyncio
+    async def test_set_cec_enable_invalid_port_type(self, connected_matrix):
+        """Test CEC enable with invalid port type."""
+        result = await connected_matrix.set_cec_enable("invalid", 1, True)
+        assert result is False
+
+    @pytest.mark.asyncio
+    async def test_system_reboot(self, connected_matrix):
+        """Test system reboot command."""
+        mock_response = MagicMock()
+        mock_response.status = 200
+        mock_response.text = AsyncMock(return_value='{"result":1}')
+        mock_response.__aenter__ = AsyncMock(return_value=mock_response)
+        mock_response.__aexit__ = AsyncMock(return_value=None)
+
+        connected_matrix._session.post = MagicMock(return_value=mock_response)
+
+        result = await connected_matrix.system_reboot()
+
+        assert result is True
+        # After reboot, should be marked as disconnected
+        assert connected_matrix.connected is False
+
+
+# =============================================================================
+# Power Control Tests
+# =============================================================================
+
+
+class TestPowerControl:
+    """Tests for power on/off functionality."""
+
+    @pytest.mark.asyncio
+    async def test_power_on_success(self, connected_matrix):
+        """Test powering on the matrix."""
+        mock_response = MagicMock()
+        mock_response.status = 200
+        mock_response.text = AsyncMock(return_value='{"comhead":"set standby","result":1}')
+        mock_response.__aenter__ = AsyncMock(return_value=mock_response)
+        mock_response.__aexit__ = AsyncMock(return_value=None)
+
+        connected_matrix._session.post = MagicMock(return_value=mock_response)
+
+        result = await connected_matrix.power_on()
+
+        assert result is True
+
+    @pytest.mark.asyncio
+    async def test_power_off_success(self, connected_matrix):
+        """Test powering off the matrix."""
+        mock_response = MagicMock()
+        mock_response.status = 200
+        mock_response.text = AsyncMock(return_value='{"comhead":"set standby","result":1}')
+        mock_response.__aenter__ = AsyncMock(return_value=mock_response)
+        mock_response.__aexit__ = AsyncMock(return_value=None)
+
+        connected_matrix._session.post = MagicMock(return_value=mock_response)
+
+        result = await connected_matrix.power_off()
+
+        assert result is True
+
+
+# =============================================================================
+# Event Emission Tests
+# =============================================================================
+
+
+class TestEvents:
+    """Tests for event emission."""
+
+    @pytest.mark.asyncio
+    async def test_connected_event_emitted(self, matrix):
+        """Test CONNECTED event is emitted on successful connection."""
+        events_received = []
+        matrix.events.on(Events.CONNECTED, lambda: events_received.append("connected"))
+
+        mock_response = MagicMock()
+        mock_response.status = 200
+        mock_response.text = AsyncMock(return_value='{"comhead":"login","result":1}')
+        mock_response.__aenter__ = AsyncMock(return_value=mock_response)
+        mock_response.__aexit__ = AsyncMock(return_value=None)
+
+        mock_session = MagicMock()
+        mock_session.post = MagicMock(return_value=mock_response)
+
+        with patch("aiohttp.ClientSession", return_value=mock_session):
+            await matrix.connect()
+
+        assert "connected" in events_received
+
+    @pytest.mark.asyncio
+    async def test_disconnected_event_emitted(self, connected_matrix):
+        """Test DISCONNECTED event is emitted on disconnect."""
+        events_received = []
+        connected_matrix.events.on(Events.DISCONNECTED, lambda: events_received.append("disconnected"))
+
+        connected_matrix._session.close = AsyncMock()
+        await connected_matrix.disconnect()
+
+        assert "disconnected" in events_received
+
+    @pytest.mark.asyncio
+    async def test_update_event_on_preset_recall(self, connected_matrix):
+        """Test UPDATE event is emitted on preset recall."""
+        events_received = []
+        connected_matrix.events.on(Events.UPDATE, lambda data: events_received.append(data))
+
+        mock_response = MagicMock()
+        mock_response.status = 200
+        mock_response.text = AsyncMock(return_value='{"comhead":"preset set","result":1}')
+        mock_response.__aenter__ = AsyncMock(return_value=mock_response)
+        mock_response.__aexit__ = AsyncMock(return_value=None)
+
+        connected_matrix._session.post = MagicMock(return_value=mock_response)
 
         await connected_matrix.recall_preset(5)
 
@@ -498,3 +693,84 @@ class TestStatusCaching:
 
         # Cache should be invalidated
         assert connected_matrix._status_cache is None
+
+    @pytest.mark.asyncio
+    async def test_output_status_cache_hit(self, connected_matrix):
+        """Test output status cache avoids redundant HTTP calls."""
+        mock_response = MagicMock()
+        mock_response.status = 200
+        mock_response.text = AsyncMock(return_value='{"comhead":"get output status","allconnect":[1,1,0,0,0,0,0,0]}')
+        mock_response.__aenter__ = AsyncMock(return_value=mock_response)
+        mock_response.__aexit__ = AsyncMock(return_value=None)
+        
+        connected_matrix._session.post = MagicMock(return_value=mock_response)
+
+        # First call (populates cache)
+        status1 = await connected_matrix.get_output_status()
+        assert status1["allconnect"][0] == 1
+        assert connected_matrix._output_status_cache is not None
+
+        # Change response in mock to prove HTTP call is not made
+        mock_response.text = AsyncMock(return_value='{"comhead":"get output status","allconnect":[0,0,0,0,0,0,0,0]}')
+        
+        # Second call (hits cache)
+        status2 = await connected_matrix.get_output_status()
+        assert status2["allconnect"][0] == 1
+
+        # Force refresh (fetches new response)
+        status3 = await connected_matrix.get_output_status(force_refresh=True)
+        assert status3["allconnect"][0] == 0
+
+    @pytest.mark.asyncio
+    async def test_input_status_cache_hit(self, connected_matrix):
+        """Test input status cache avoids redundant HTTP calls."""
+        mock_response = MagicMock()
+        mock_response.status = 200
+        mock_response.text = AsyncMock(return_value='{"comhead":"get input status","inactive":[0,0,1,1,1,1,1,1]}')
+        mock_response.__aenter__ = AsyncMock(return_value=mock_response)
+        mock_response.__aexit__ = AsyncMock(return_value=None)
+        
+        connected_matrix._session.post = MagicMock(return_value=mock_response)
+
+        # First call
+        status1 = await connected_matrix.get_input_status()
+        assert status1["inactive"][2] == 1
+        assert connected_matrix._input_status_cache is not None
+
+        # Change response
+        mock_response.text = AsyncMock(return_value='{"comhead":"get input status","inactive":[0,0,0,0,0,0,0,0]}')
+        
+        # Hit cache
+        status2 = await connected_matrix.get_input_status()
+        assert status2["inactive"][2] == 1
+
+        # Force refresh
+        status3 = await connected_matrix.get_input_status(force_refresh=True)
+        assert status3["inactive"][2] == 0
+
+    @pytest.mark.asyncio
+    async def test_all_caches_busted_on_write(self, connected_matrix):
+        """Test write commands invalidate all status caches."""
+        # Populate all caches
+        connected_matrix._status_cache = {"dummy": 1}
+        connected_matrix._output_status_cache = {"dummy": 1}
+        connected_matrix._input_status_cache = {"dummy": 1}
+        connected_matrix._cable_status_cache = {"dummy": 1}
+
+        # Mock write command response
+        write_response = MagicMock()
+        write_response.status = 200
+        write_response.text = AsyncMock(return_value='{"comhead":"video switch","result":1}')
+        write_response.__aenter__ = AsyncMock(return_value=write_response)
+        write_response.__aexit__ = AsyncMock(return_value=None)
+        
+        connected_matrix._session.post = MagicMock(return_value=write_response)
+
+        # Trigger write
+        await connected_matrix.switch_input(1, 2)
+
+        # All caches should be cleared
+        assert connected_matrix._status_cache is None
+        assert connected_matrix._output_status_cache is None
+        assert connected_matrix._input_status_cache is None
+        assert connected_matrix._cable_status_cache is None

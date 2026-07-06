@@ -50,7 +50,15 @@ async def handle_output_status(request: web.Request) -> web.Response:
         return _json_response(False, error="Matrix not connected", status=503)
 
     try:
+        is_cached = hasattr(matrix_device, "_output_status_cache") and matrix_device._output_status_cache is not None
+
         status = await matrix_device.get_output_status()
+
+        if is_cached:
+            import asyncio
+            from .core import background_status_refresh
+            asyncio.create_task(background_status_refresh(matrix_device))
+
         if status:
             # Get cable status from Telnet if available
             cable_outputs = {}
@@ -107,7 +115,14 @@ async def handle_input_status(request: web.Request) -> web.Response:
         return _json_response(False, error="Matrix not connected", status=503)
 
     try:
+        is_cached = hasattr(matrix_device, "_input_status_cache") and matrix_device._input_status_cache is not None
+
         status = await matrix_device.get_input_status()
+
+        if is_cached:
+            import asyncio
+            from .core import background_status_refresh
+            asyncio.create_task(background_status_refresh(matrix_device))
 
         # Get cable status from Telnet if available
         cable_inputs = {}
@@ -166,7 +181,15 @@ async def handle_cable_status(request: web.Request) -> web.Response:
         return _json_response(False, error="Telnet not connected - cable detection unavailable", status=503)
 
     try:
+        is_cached = hasattr(matrix_device, "_cable_status_cache") and matrix_device._cable_status_cache is not None
+
         cable_status = await matrix_device.get_all_cable_status()
+
+        if is_cached:
+            import asyncio
+            from .core import background_status_refresh
+            asyncio.create_task(background_status_refresh(matrix_device))
+
         input_names_dict = await matrix_device.get_all_input_names()
         output_names_dict = await matrix_device.get_output_names()
 

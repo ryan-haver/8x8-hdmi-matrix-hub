@@ -66,38 +66,90 @@ def _format_status(raw_status: dict[str, Any], matrix_device, input_names: dict[
     return status
 
 
+def _format_inputs(status: dict[str, Any] | None, cable_status: dict[str, Any] | None, input_names: dict[int, str]) -> list[dict[str, Any]]:
+    """Format input status details for Web UI."""
+    if not status:
+        return []
+    inactive_arr = status.get("inactive", [])
+    edid_arr = status.get("edid", [])
+    inname_arr = status.get("inname", [])
+    cable_inputs = cable_status.get("inputs", {}) if cable_status else {}
+
+    inputs = []
+    for i in range(1, 9):
+        idx = i - 1
+        has_signal = inactive_arr[idx] == 1 if idx < len(inactive_arr) else False
+        source_detected = cable_inputs.get(i)
+        name = inname_arr[idx] if idx < len(inname_arr) else f"Input {i}"
+
+        inputs.append(
+            {
+                "number": i,
+                "name": input_names.get(i, name),
+                "inactive": not has_signal,
+                "signalActive": has_signal,
+                "cableConnected": source_detected,
+                "sourceDetected": source_detected,
+                "edid": edid_arr[idx] if idx < len(edid_arr) else None,
+            }
+        )
+    return inputs
+
+
+def _format_outputs(status: dict[str, Any] | None, cable_status: dict[str, Any] | None, output_names: dict[int, str]) -> list[dict[str, Any]]:
+    """Format output status details for Web UI."""
+    if not status:
+        return []
+    cable_outputs = cable_status.get("outputs", {}) if cable_status else {}
+
+    outputs = []
+    for i in range(1, 9):
+        idx = i - 1
+        is_connected = (
+            status.get("allconnect", [])[idx] == 1 if idx < len(status.get("allconnect", [])) else False
+        )
+        cable_connected = cable_outputs.get(i)
+
+        outputs.append(
+            {
+                "number": i,
+                "name": output_names.get(i, f"Output {i}"),
+                "connected": is_connected,
+                "cableConnected": cable_connected,
+                "enabled": status.get("allout", [])[idx] == 1 if idx < len(status.get("allout", [])) else False,
+                "muted": status.get("allaudiomute", [])[idx] == 1
+                if idx < len(status.get("allaudiomute", []))
+                else False,
+                "hdcp": status.get("allhdcp", [])[idx] if idx < len(status.get("allhdcp", [])) else None,
+                "hdr": status.get("allhdr", [])[idx] if idx < len(status.get("allhdr", [])) else None,
+                "scaler": status.get("allscaler", [])[idx] if idx < len(status.get("allscaler", [])) else None,
+                "arc": status.get("allarc", [])[idx] == 1 if idx < len(status.get("allarc", [])) else False,
+            }
+        )
+    return outputs
+
+
 async def background_status_refresh(matrix_device):
-    """Fetch status in the background, update cache, and broadcast changes if any."""
+    """Fetch status in the background, update caches, and broadcast changes if any."""
     try:
-        # Save old routing and power states to check for changes
-        old_routing = None
-        old_power = None
-        if hasattr(matrix_device, "_status_cache") and matrix_device._status_cache:
-            old_routing = matrix_device._status_cache.get("routing")
-            old_power = matrix_device._status_cache.get("power")
-
-        # Force a refresh from the matrix hardware
+        # Force a refresh from the matrix hardware for all caches in parallel
         fresh_status = await matrix_device.get_status(force_refresh=True)
+        fresh_output_status = await matrix_device.get_output_status(force_refresh=True)
+        fresh_input_status = await matrix_device.get_input_status(force_refresh=True)
+        fresh_cable_status = await matrix_device.get_all_cable_status(force_refresh=True)
 
-        # Check if routing or power changed
-        changed = False
-        if fresh_status:
-            new_routing = fresh_status.get("routing")
-            new_power = fresh_status.get("power")
-            if old_routing != new_routing or old_power != new_power:
-                changed = True
-                _LOG.info("Background refresh detected status change: routing=%s power=%s", new_routing, new_power)
-
-        if changed:
-            # Broadcast the updated status formatted for Web UI
-            from .websocket import broadcast_status_update
-            
-            input_names = get_input_names()
-            output_names = get_output_names()
-            formatted = _format_status(fresh_status, matrix_device, input_names, output_names)
-            
-            _LOG.info("Broadcasting background status update via WebSocket")
-            await broadcast_status_update("status", formatted)
+        # Broadcast the updated status formatted for Web UI
+        from .websocket import broadcast_status_update
+        
+        input_names = get_input_names()
+        output_names = get_output_names()
+        
+        formatted = _format_status(fresh_status, matrix_device, input_names, output_names)
+        formatted["inputs"] = _format_inputs(fresh_input_status, fresh_cable_status, input_names)
+        formatted["outputs_detail"] = _format_outputs(fresh_output_status, fresh_cable_status, output_names)
+        
+        _LOG.info("Broadcasting background status update via WebSocket")
+        await broadcast_status_update("status", formatted)
 
     except Exception as e:
         _LOG.warning("Failed background status refresh: %s", e)

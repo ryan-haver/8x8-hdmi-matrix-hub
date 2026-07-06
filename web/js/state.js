@@ -1132,6 +1132,39 @@ class AppState {
             }
             this.emit('presets', this.presets);
         }
+
+        // Update full inputs state if provided (including signal, cable, edid)
+        if (data.inputs && Array.isArray(data.inputs)) {
+            data.inputs.forEach(input => {
+                const num = input.number;
+                if (this.inputs[num]) {
+                    this.inputs[num].signalActive = input.signalActive !== undefined ? input.signalActive : !input.inactive;
+                    this.inputs[num].cableConnected = input.cableConnected;
+                    if (input.edid !== undefined && input.edid !== null) this.inputs[num].edidMode = input.edid;
+                    if (input.name) this.inputs[num].name = input.name;
+                }
+            });
+            this.emit('inputs', this.inputs);
+        }
+
+        // Update full outputs state if provided (including connected, cable, hdcp, hdr, scaler, arc, mute)
+        if (data.outputs_detail && Array.isArray(data.outputs_detail)) {
+            data.outputs_detail.forEach(output => {
+                const num = output.number;
+                if (this.outputs[num]) {
+                    this.outputs[num].displayConnected = output.connected;
+                    this.outputs[num].cableConnected = output.cableConnected;
+                    this.outputs[num].enabled = output.enabled;
+                    this.outputs[num].audioMuted = output.muted;
+                    this.outputs[num].hdcpMode = output.hdcp;
+                    this.outputs[num].hdrMode = output.hdr;
+                    this.outputs[num].scalerMode = output.scaler;
+                    this.outputs[num].arcEnabled = output.arc;
+                    if (output.name) this.outputs[num].name = output.name;
+                }
+            });
+            this.emit('outputs', this.outputs);
+        }
         
         // Mark as loaded
         this.setLoading(false);
