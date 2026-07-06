@@ -222,8 +222,9 @@ async def handle_status(request: web.Request) -> web.Response:
         # Check cache validity before calling get_status
         import time
         is_cached = False
-        if hasattr(matrix_device, "_status_cache") and matrix_device._status_cache is not None and \
-           hasattr(matrix_device, "_status_cache_time") and hasattr(matrix_device, "_status_cache_ttl") and \
+        if hasattr(matrix_device, "_status_cache") and isinstance(matrix_device._status_cache, dict) and \
+           hasattr(matrix_device, "_status_cache_time") and isinstance(matrix_device._status_cache_time, (int, float)) and \
+           hasattr(matrix_device, "_status_cache_ttl") and isinstance(matrix_device._status_cache_ttl, (int, float)) and \
            time.time() - matrix_device._status_cache_time < matrix_device._status_cache_ttl:
             is_cached = True
 
