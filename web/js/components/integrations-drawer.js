@@ -875,6 +875,7 @@ console.log("${modelName} Control script loaded successfully!");
     // HOME ASSISTANT TAB RENDER
     // ==========================================
     renderHaTab(container) {
+        const modelName = state.info.model || 'HDMI Matrix';
         container.innerHTML = `
             <div class="settings-section">
                 <h4>Option A: HACS Custom Component (Full UI Integration)</h4>
@@ -883,7 +884,7 @@ console.log("${modelName} Control script loaded successfully!");
                     <li>Copy or link the folder <code>custom_components/orei_matrix</code> into your Home Assistant <code>/config/custom_components/</code> directory.</li>
                     <li>Restart Home Assistant.</li>
                     <li>Go to <strong>Settings -> Devices & Services -> Add Integration</strong>.</li>
-                    <li>Search for <strong>"OREI HDMI Matrix"</strong>.</li>
+                    <li>Search for <strong>"OREI HDMI Matrix"</strong> (representing your ${Helpers.escapeHtml(modelName)}).</li>
                     <li>Enter this Hub's IP/URL when prompted: <code id="ha-hacs-host"></code></li>
                 </ol>
             </div>

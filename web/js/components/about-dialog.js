@@ -148,8 +148,8 @@ class AboutDialog {
                 if (matrixEl) {
                     matrixEl.innerHTML = '<span class="status-badge status-badge--success">Connected</span>';
                 }
-                if (modelEl && data.model) {
-                    modelEl.textContent = data.model || 'OREI BK-808';
+                if (modelEl) {
+                    modelEl.textContent = data.model || 'HDMI Matrix';
                 }
             } else {
                 if (matrixEl) {
