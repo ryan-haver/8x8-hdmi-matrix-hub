@@ -100,6 +100,15 @@ class OreiMatrix:
         self._status_cache_time: float = 0.0
         self._status_cache_ttl = float(os.environ.get("OREI_STATUS_CACHE_TTL", "3.0"))
 
+        self._output_status_cache: dict[str, Any] | None = None
+        self._output_status_cache_time: float = 0.0
+
+        self._input_status_cache: dict[str, Any] | None = None
+        self._input_status_cache_time: float = 0.0
+
+        self._cable_status_cache: dict[str, Any] | None = None
+        self._cable_status_cache_time: float = 0.0
+
     @property
     def connected(self) -> bool:
         """Return connection status."""
@@ -340,8 +349,11 @@ class OreiMatrix:
                             comhead = command.get("comhead", "")
                             is_query = comhead.startswith("get") or comhead.endswith("get") or "get" in comhead
                             if not is_query:
-                                _LOG.debug("Invalidating status cache due to write command: %s", comhead)
+                                _LOG.debug("Invalidating all status caches due to write command: %s", comhead)
                                 self._status_cache = None
+                                self._output_status_cache = None
+                                self._input_status_cache = None
+                                self._cable_status_cache = None
 
                             return True, response_data
                         except Exception as ex:
@@ -990,7 +1002,7 @@ class OreiMatrix:
     # Extended Status Methods (discovered from HAR capture)
     # =========================================================================
 
-    async def get_output_status(self) -> dict[str, Any] | None:
+    async def get_output_status(self, force_refresh: bool = False) -> dict[str, Any] | None:
         """
         Get detailed output/display status including connection detection.
 
@@ -1006,6 +1018,11 @@ class OreiMatrix:
             - allout: output enabled per output
             - allaudiomute: audio mute per output
         """
+        import time
+
+        if not force_refresh and self._output_status_cache is not None:
+            return self._output_status_cache.copy()
+
         _LOG.debug("Getting output status")
 
         command = {"comhead": "get output status", "language": 0}
@@ -1013,12 +1030,14 @@ class OreiMatrix:
 
         if success and response:
             _LOG.debug("Output status: %s", response)
+            self._output_status_cache = response.copy()
+            self._output_status_cache_time = time.time()
             return response
 
         _LOG.error("Failed to get output status")
         return None
 
-    async def get_input_status(self) -> dict[str, Any] | None:
+    async def get_input_status(self, force_refresh: bool = False) -> dict[str, Any] | None:
         """
         Get detailed input status including signal detection.
 
@@ -1029,6 +1048,11 @@ class OreiMatrix:
             - inactive: array showing inactive inputs (signal detection)
             - inname: array of input names
         """
+        import time
+
+        if not force_refresh and self._input_status_cache is not None:
+            return self._input_status_cache.copy()
+
         _LOG.debug("Getting input status")
 
         command = {"comhead": "get input status", "language": 0}
@@ -1036,6 +1060,8 @@ class OreiMatrix:
 
         if success and response:
             _LOG.debug("Input status: %s", response)
+            self._input_status_cache = response.copy()
+            self._input_status_cache_time = time.time()
             return response
 
         _LOG.error("Failed to get input status")
@@ -1099,7 +1125,7 @@ class OreiMatrix:
 
         return None
 
-    async def get_all_cable_status(self) -> dict[str, dict[int, bool]]:
+    async def get_all_cable_status(self, force_refresh: bool = False) -> dict[str, dict[int, bool]]:
         """
         Get cable connection status for all inputs and outputs.
 
@@ -1108,6 +1134,11 @@ class OreiMatrix:
 
         :return: Dict with 'inputs' and 'outputs' sub-dicts mapping port -> connected
         """
+        import time
+
+        if not force_refresh and self._cable_status_cache is not None:
+            return self._cable_status_cache.copy()
+
         result = {"inputs": {}, "outputs": {}}
 
         # Try Telnet individual queries for accuracy
@@ -1117,20 +1148,25 @@ class OreiMatrix:
                 result["inputs"] = await self._telnet.get_all_input_connections()
                 # Query each output individually
                 result["outputs"] = await self._telnet.get_all_output_connections()
+                self._cable_status_cache = result.copy()
+                self._cable_status_cache_time = time.time()
                 return result
             except Exception as e:
                 _LOG.warning(f"Failed to get cable status via Telnet: {e}")
 
         # Fall back to HTTP for outputs only (inputs not available via HTTP)
-        output_status = await self.get_output_status()
+        output_status = await self.get_output_status(force_refresh=force_refresh)
         if output_status and "allconnect" in output_status:
             for i, connected in enumerate(output_status["allconnect"]):
                 result["outputs"][i + 1] = connected == 1
 
         # Inputs: cannot determine via HTTP
         for i in range(1, 9):
-            result["inputs"][i] = None
+            if result["inputs"].get(i) is None:
+                result["inputs"][i] = None
 
+        self._cable_status_cache = result.copy()
+        self._cable_status_cache_time = time.time()
         return result
 
     async def get_telnet_full_status(self) -> MatrixStatus | None:
