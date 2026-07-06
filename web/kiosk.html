@@ -344,6 +344,13 @@
             border-radius: 8px;
             border: 2px solid transparent;
             transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .output-tile:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--primary-color);
         }
 
         .output-tile.connected {
@@ -563,6 +570,249 @@
             display: flex;
             flex-direction: column;
             box-shadow: var(--shadow-lg), 0 0 40px rgba(0,0,0,0.5);
+
+            /* Slide-up Bottom Drawer for Mobile/Tablet */
+        }
+
+        .bottom-drawer {
+            justify-content: flex-end;
+            align-items: flex-end;
+        }
+
+        .bottom-drawer .kiosk-modal-content {
+            width: 100%;
+            max-width: 480px;
+            border-radius: 24px 24px 0 0;
+            margin: 0 auto;
+            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            max-height: 90vh;
+            border-bottom: none;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        /* CEC Remote Styling */
+        .remote-control-container {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .remote-device-selector {
+            display: flex;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .remote-device-selector .selector-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .remote-device-selector .selector-btn.active {
+            background: var(--primary-color);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .remote-section {
+            background: rgba(15, 23, 42, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .remote-section.nav-section {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.4) 0%, rgba(30, 41, 59, 0.4) 100%);
+        }
+
+        /* DPAD Style */
+        .cec-dpad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 10px;
+            width: 170px;
+            height: 170px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .cec-dpad button {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-color);
+            font-size: 1.1rem;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cec-dpad button:active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            transform: scale(0.95);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        .cec-dpad .dpad-up { grid-column: 2; grid-row: 1; }
+        .cec-dpad .dpad-left { grid-column: 1; grid-row: 2; }
+        .cec-dpad .dpad-center { 
+            grid-column: 2; 
+            grid-row: 2; 
+            background: rgba(59, 130, 246, 0.15); 
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+        .cec-dpad .dpad-right { grid-column: 3; grid-row: 2; }
+        .cec-dpad .dpad-down { grid-column: 2; grid-row: 3; }
+
+        .remote-btn-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .remote-cmd-btn.action-btn {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-color);
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .remote-cmd-btn.action-btn:active {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Playback buttons */
+        .remote-cmd-btn.media-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-color);
+            padding: 10px;
+            border-radius: 50%;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+        }
+
+        .remote-cmd-btn.media-btn:active {
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(0.95);
+        }
+
+        /* Volume & Power */
+        .remote-vol-pow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            width: 100%;
+        }
+
+        .volume-controls {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 2px;
+            flex: 1.2;
+        }
+
+        .volume-controls .vol-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.2rem;
+            font-weight: 500;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .volume-controls .vol-btn:active {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .power-controls {
+            display: flex;
+            gap: 8px;
+            flex: 0.8;
+        }
+
+        .power-controls .power-btn {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 12px 6px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .power-controls .power-btn.on:active {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: #10b981;
+            color: #10b981;
+        }
+
+        .power-controls .power-btn.off:active {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: #ef4444;
+            color: #ef4444;
             max-height: 85vh;
         }
 
@@ -909,6 +1159,74 @@
                 <!-- Output tiles rendered dynamically -->
             </div>
         </footer>
+    </div>
+
+    <!-- CEC Remote Drawer / Modal -->
+    <div class="kiosk-modal bottom-drawer" id="cecRemoteModal">
+        <div class="kiosk-modal-content">
+            <div class="kiosk-modal-header">
+                <div class="remote-header-info">
+                    <h4 id="cecRemoteTitle">HDMI CEC Remote</h4>
+                    <span id="cecRemoteSubtitle" class="text-muted">Display & Source control</span>
+                </div>
+                <button class="kiosk-modal-close" id="cecRemoteModalCloseBtn">&times;</button>
+            </div>
+            
+            <div class="remote-control-container">
+                <!-- Device Target Segment Control -->
+                <div class="remote-device-selector" id="remoteDeviceSelector">
+                    <button class="selector-btn active" id="btnTargetSource" data-target="input">
+                        <span class="icon">⚡</span>
+                        <span class="name" id="remoteSourceName">Source</span>
+                    </button>
+                    <button class="selector-btn" id="btnTargetDisplay" data-target="output">
+                        <span class="icon">📺</span>
+                        <span class="name" id="remoteDisplayName">Display</span>
+                    </button>
+                </div>
+
+                <!-- Navigation D-Pad Section -->
+                <div class="remote-section nav-section">
+                    <div class="cec-dpad">
+                        <button class="remote-cmd-btn dpad-up" data-cmd="up">▲</button>
+                        <button class="remote-cmd-btn dpad-left" data-cmd="left">◀</button>
+                        <button class="remote-cmd-btn dpad-center" data-cmd="select">OK</button>
+                        <button class="remote-cmd-btn dpad-right" data-cmd="right">▶</button>
+                        <button class="remote-cmd-btn dpad-down" data-cmd="down">▼</button>
+                    </div>
+                    <div class="remote-btn-row">
+                        <button class="remote-cmd-btn action-btn" data-cmd="menu">Menu</button>
+                        <button class="remote-cmd-btn action-btn" data-cmd="back">Back</button>
+                    </div>
+                </div>
+
+                <!-- Playback Section -->
+                <div class="remote-section playback-section" id="remotePlaybackSection">
+                    <div class="remote-btn-row">
+                        <button class="remote-cmd-btn media-btn" data-cmd="rewind">⏪</button>
+                        <button class="remote-cmd-btn media-btn" data-cmd="play">▶</button>
+                        <button class="remote-cmd-btn media-btn" data-cmd="pause">⏸</button>
+                        <button class="remote-cmd-btn media-btn" data-cmd="stop">⏹</button>
+                        <button class="remote-cmd-btn media-btn" data-cmd="fast_forward">⏩</button>
+                    </div>
+                </div>
+
+                <!-- TV Volume & Power Section -->
+                <div class="remote-section tv-section">
+                    <div class="remote-vol-pow">
+                        <div class="volume-controls">
+                            <button class="remote-cmd-btn vol-btn" data-cmd="volume_down">−</button>
+                            <button class="remote-cmd-btn vol-btn" data-cmd="mute">Mute</button>
+                            <button class="remote-cmd-btn vol-btn" data-cmd="volume_up">+</button>
+                        </div>
+                        <div class="power-controls">
+                            <button class="remote-cmd-btn power-btn on" data-cmd="power_on">ON</button>
+                            <button class="remote-cmd-btn power-btn off" data-cmd="power_off">OFF</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Guided Routing Modal -->
@@ -1307,6 +1625,99 @@
                 btn.addEventListener('click', (e) => {
                     const modal = e.currentTarget.closest('.kiosk-modal');
                     closeModal(modal.id);
+                });
+            });
+
+            /**
+             * CEC Remote Bottom Drawer Logic
+             */
+            let activeRemoteTarget = 'input'; // 'input' or 'output'
+            let activeRemoteOutputPort = null;
+            let activeRemoteInputPort = null;
+
+            function handleOutputTileClick(outputNum) {
+                activeRemoteOutputPort = outputNum;
+                
+                const outputName = outputs[outputNum]?.name || `Output ${outputNum}`;
+                const routedInput = routing[outputNum] || 0;
+                
+                document.getElementById('remoteDisplayName').textContent = outputName;
+                
+                const btnSource = document.getElementById('btnTargetSource');
+                const btnDisplay = document.getElementById('btnTargetDisplay');
+                
+                if (routedInput > 0) {
+                    activeRemoteInputPort = routedInput;
+                    const inputName = inputs[routedInput]?.name || `Input ${routedInput}`;
+                    document.getElementById('remoteSourceName').textContent = inputName;
+                    btnSource.style.display = 'flex';
+                    setRemoteTarget('input');
+                } else {
+                    activeRemoteInputPort = null;
+                    btnSource.style.display = 'none';
+                    setRemoteTarget('output');
+                }
+
+                // Update subtitle
+                const sourceText = routedInput > 0 ? (inputs[routedInput]?.name || `Input ${routedInput}`) : 'None';
+                document.getElementById('cecRemoteSubtitle').textContent = `Display: ${outputName} • Source: ${sourceText}`;
+                
+                openModal('cecRemoteModal');
+            }
+
+            window.handleOutputTileClick = handleOutputTileClick;
+
+            function setRemoteTarget(target) {
+                activeRemoteTarget = target; // 'input' or 'output'
+                
+                const btnSource = document.getElementById('btnTargetSource');
+                const btnDisplay = document.getElementById('btnTargetDisplay');
+                
+                if (target === 'input') {
+                    btnSource.classList.add('active');
+                    btnDisplay.classList.remove('active');
+                    document.getElementById('remotePlaybackSection').classList.remove('hidden');
+                } else {
+                    btnSource.classList.remove('active');
+                    btnDisplay.classList.add('active');
+                    document.getElementById('remotePlaybackSection').classList.add('hidden');
+                }
+            }
+
+            document.getElementById('btnTargetSource').addEventListener('click', () => setRemoteTarget('input'));
+            document.getElementById('btnTargetDisplay').addEventListener('click', () => setRemoteTarget('output'));
+
+            // Click listener for all remote command buttons
+            document.querySelectorAll('#cecRemoteModal .remote-cmd-btn').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    const cmd = e.currentTarget.dataset.cmd;
+                    if (!cmd) return;
+
+                    const targetType = activeRemoteTarget; // 'input' or 'output'
+                    const targetPort = targetType === 'input' ? activeRemoteInputPort : activeRemoteOutputPort;
+
+                    if (!targetPort) {
+                        showToast('No active target port for command', 'warning');
+                        return;
+                    }
+
+                    // Button press animation (scale down)
+                    e.currentTarget.style.transform = 'scale(0.9)';
+                    setTimeout(() => {
+                        e.currentTarget.style.transform = '';
+                    }, 100);
+
+                    try {
+                        const res = await fetch(`${API_BASE}/cec/${targetType}/${targetPort}/${cmd}`, { method: 'POST' });
+                        const data = await res.json();
+                        if (data.success) {
+                            showToast(`CEC ${cmd.replace('_', ' ')} sent`, 'success');
+                        } else {
+                            showToast(`Failed: ${data.error}`, 'error');
+                        }
+                    } catch (err) {
+                        showToast(`Error: ${err.message}`, 'error');
+                    }
                 });
             });
 
@@ -1948,7 +2359,7 @@
                     const isConnected = output.connected || output.cableConnected;
                     
                     outputHtml += `
-                        <div class="output-tile ${isConnected ? 'connected' : 'disconnected'}">
+                        <div class="output-tile ${isConnected ? 'connected' : 'disconnected'}" onclick="handleOutputTileClick(${o})">
                             <span class="output-tile-num">OUT ${o}</span>
                             <span class="output-tile-input">${currentInput || '-'}</span>
                             <span class="output-tile-name">${currentInput ? escapeHtml(inputName) : 'None'}</span>
