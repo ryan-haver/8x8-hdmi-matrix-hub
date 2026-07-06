@@ -140,14 +140,14 @@ async def background_status_refresh(matrix_device):
 
         # Broadcast the updated status formatted for Web UI
         from .websocket import broadcast_status_update
-        
+
         input_names = get_input_names()
         output_names = get_output_names()
-        
+
         formatted = _format_status(fresh_status, matrix_device, input_names, output_names)
         formatted["inputs"] = _format_inputs(fresh_input_status, fresh_cable_status, input_names)
         formatted["outputs_detail"] = _format_outputs(fresh_output_status, fresh_cable_status, output_names)
-        
+
         _LOG.info("Broadcasting background status update via WebSocket")
         await broadcast_status_update("status", formatted)
 

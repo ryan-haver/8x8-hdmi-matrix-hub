@@ -56,6 +56,7 @@ async def handle_output_status(request: web.Request) -> web.Response:
 
         if is_cached:
             import asyncio
+
             from .core import background_status_refresh
             asyncio.create_task(background_status_refresh(matrix_device))
 
@@ -121,6 +122,7 @@ async def handle_input_status(request: web.Request) -> web.Response:
 
         if is_cached:
             import asyncio
+
             from .core import background_status_refresh
             asyncio.create_task(background_status_refresh(matrix_device))
 
@@ -187,6 +189,7 @@ async def handle_cable_status(request: web.Request) -> web.Response:
 
         if is_cached:
             import asyncio
+
             from .core import background_status_refresh
             asyncio.create_task(background_status_refresh(matrix_device))
 
