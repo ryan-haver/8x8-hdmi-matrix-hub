@@ -1014,6 +1014,8 @@ console.log("${modelName} Control script loaded successfully!");
         const driverPort = 9095; // Default WebSocket server port for driver
 
         const modelName = state.info.model || 'HDMI Matrix';
+        const driverName = state.info.driverName || 'HDMI Matrix';
+        const driverId = state.info.driverId || 'orei_hdmi_matrix';
 
         container.innerHTML = `
             <div class="settings-section">
@@ -1022,7 +1024,7 @@ console.log("${modelName} Control script loaded successfully!");
                 <ol class="onboarding-steps">
                     <li>Ensure this Hub server is running on the <strong>same network</strong> as your Remote.</li>
                     <li>On the Remote, go to <strong>Settings -> Integrations -> Add Integration</strong>.</li>
-                    <li>If discovery is active, the Remote will show <strong>"OREI HDMI Matrix"</strong> (representing your ${modelName}) under discovered integrations.</li>
+                    <li>If discovery is active, the Remote will show <strong>"${Helpers.escapeHtml(driverName)}"</strong> (representing your ${Helpers.escapeHtml(modelName)}) under discovered integrations.</li>
                     <li>If it doesn't appear, choose <strong>Manual Setup</strong> and enter:
                         <ul>
                             <li><strong>IP Address:</strong> <code>${ip}</code></li>
@@ -1040,7 +1042,7 @@ console.log("${modelName} Control script loaded successfully!");
                     <span class="info-label">Driver Port:</span>
                     <span class="info-value">9095</span>
                     <span class="info-label">mDNS Identifier:</span>
-                    <span class="info-value">orei_hdmi_matrix</span>
+                    <span class="info-value">${Helpers.escapeHtml(driverId)}</span>
                     <span class="info-label">Discovery URL:</span>
                     <span class="info-value">http://${ip}:${driverPort}/</span>
                     <span class="info-label">Status:</span>

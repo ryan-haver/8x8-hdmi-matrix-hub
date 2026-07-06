@@ -1,6 +1,6 @@
 {
   "domain": "orei_matrix",
-  "name": "OREI HDMI Matrix",
+  "name": "HDMI Matrix",
   "codeowners": ["@ryan-haver"],
   "config_flow": true,
   "documentation": "https://github.com/ryan-haver/8x8-hdmi-matrix-hub",
