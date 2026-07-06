@@ -17,9 +17,9 @@ try:
     from homeassistant.config_entries import ConfigFlowResult  # noqa: F401
     from homeassistant.core import HomeAssistant  # noqa: F401
 
-    from custom_components.orei_matrix.config_flow import OreiMatrixConfigFlow
-    from custom_components.orei_matrix.const import DOMAIN
-    from custom_components.orei_matrix.coordinator import OreiMatrixCoordinator
+    from custom_components.hdmi_matrix.config_flow import OreiMatrixConfigFlow
+    from custom_components.hdmi_matrix.const import DOMAIN
+    from custom_components.hdmi_matrix.coordinator import OreiMatrixCoordinator
 
     HAS_HOMEASSISTANT = True
 except ImportError:
@@ -44,11 +44,11 @@ async def test_config_flow_success():
     mock_session = MagicMock()
     mock_session.get = MagicMock(return_value=mock_resp)
 
-    with patch("custom_components.orei_matrix.config_flow.async_get_clientsession", return_value=mock_session):
+    with patch("custom_components.hdmi_matrix.config_flow.async_get_clientsession", return_value=mock_session):
         result = await flow.async_step_user({"host": "192.168.1.100", "port": 8080})
 
         assert result["type"] == "create_entry"
-        assert result["title"] == "OREI HDMI Matrix (192.168.1.100)"
+        assert result["title"] == "HDMI Matrix (192.168.1.100)"
         assert result["data"] == {"host": "192.168.1.100", "port": 8080}
 
 
@@ -105,7 +105,7 @@ async def test_coordinator_update_success():
     mock_session = MagicMock()
     mock_session.get = MagicMock(side_effect=[mock_status_resp, mock_outputs_resp, mock_inputs_resp])
 
-    with patch("custom_components.orei_matrix.coordinator.async_get_clientsession", return_value=mock_session):
+    with patch("custom_components.hdmi_matrix.coordinator.async_get_clientsession", return_value=mock_session):
         data = await coordinator._async_update_data()
 
         assert data["status"]["connected"] is True
