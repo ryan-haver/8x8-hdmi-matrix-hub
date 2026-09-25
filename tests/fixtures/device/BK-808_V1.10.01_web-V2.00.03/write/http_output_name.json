@@ -1,0 +1,358 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "write/http_output_name",
+  "title": "Rename an output",
+  "group": "names",
+  "answers": [
+    "write-ok-results",
+    "write-fail-result",
+    "name-truncation"
+  ],
+  "before": {
+    "power": 1,
+    "beep": 1,
+    "lock": 0,
+    "routing": [
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7
+    ],
+    "input_names": [
+      "NES",
+      "SNES",
+      "Sega",
+      "N64",
+      "Switch",
+      "PS3",
+      "Apple",
+      "Switcher"
+    ],
+    "output_names": [
+      "TV",
+      "Sound",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "stream": [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "hdcp": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "hdr": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "scaler": [
+      0,
+      4,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "arc": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "mute": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "edid": [
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36
+    ],
+    "cec_in": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "cec_out": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "exa_mode": 0,
+    "exa_enable": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "exa_source": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "presets": null,
+    "lcd_line": null,
+    "errors": []
+  },
+  "steps": [
+    {
+      "describe": "output 8 name 'Out8' -> 'HIL-CAPTURE'",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set output name",
+        "comhead": "set output name",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 80"
+          ],
+          "json": {
+            "comhead": "set output name",
+            "language": 0,
+            "name": "HIL-CAPTURE",
+            "index": 8
+          },
+          "body_text": "{\"comhead\": \"set output name\", \"language\": 0, \"name\": \"HIL-CAPTURE\", \"index\": 8}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IG91dHB1dCBuYW1lIiwicmVzdWx0IjoxfQ0K",
+          "body_text": "{\"comhead\":\"set output name\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "set output name",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T20:21:08.919880Z",
+          "elapsed_ms": 231.25
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "output_names",
+          8,
+          "Out8",
+          "HIL-CAPTURE"
+        ]
+      ],
+      "outcome": "applied"
+    },
+    {
+      "describe": "output 8 name -> 40-char name (truncation?)",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set output name",
+        "comhead": "set output name",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 109"
+          ],
+          "json": {
+            "comhead": "set output name",
+            "language": 0,
+            "name": "HIL-LONG-NAME-01234567890123456789012345",
+            "index": 8
+          },
+          "body_text": "{\"comhead\": \"set output name\", \"language\": 0, \"name\": \"HIL-LONG-NAME-01234567890123456789012345\", \"index\": 8}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IG91dHB1dCBuYW1lIiwicmVzdWx0IjoxfQ0K",
+          "body_text": "{\"comhead\":\"set output name\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "set output name",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T20:21:11.148304Z",
+          "elapsed_ms": 251.67
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "output_names",
+          8,
+          "HIL-CAPTURE",
+          "HIL-LONG-NAME-01234567890123456789012345"
+        ]
+      ],
+      "outcome": "applied"
+    },
+    {
+      "describe": "invalid index 9",
+      "kind": "invalid",
+      "exchange": {
+        "kind": "http",
+        "role": "write-invalid",
+        "label": "set output name",
+        "comhead": "set output name",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 72"
+          ],
+          "json": {
+            "comhead": "set output name",
+            "language": 0,
+            "name": "HIL",
+            "index": 9
+          },
+          "body_text": "{\"comhead\": \"set output name\", \"language\": 0, \"name\": \"HIL\", \"index\": 9}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IG91dHB1dCBuYW1lIiwicmVzdWx0IjowfQ0K",
+          "body_text": "{\"comhead\":\"set output name\",\"result\":0}\r\n",
+          "json": {
+            "comhead": "set output name",
+            "result": 0
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T20:21:13.402769Z",
+          "elapsed_ms": 231.2
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    }
+  ],
+  "restored": true,
+  "restore_remaining": [],
+  "findings": {
+    "results_by_outcome": {
+      "applied": [
+        1
+      ],
+      "rejected": [
+        0
+      ]
+    },
+    "long_name_sent_len": 40,
+    "long_name_stored": "HIL-LONG-NAME-01234567890123456789012345",
+    "long_name_stored_len": 40
+  },
+  "mode": "write",
+  "captured_at": "2026-09-25T20:21:19.562392Z"
+}

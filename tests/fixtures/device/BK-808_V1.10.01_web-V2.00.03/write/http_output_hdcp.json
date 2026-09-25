@@ -1,0 +1,479 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "write/http_output_hdcp",
+  "title": "Output HDCP mode (every code)",
+  "group": "output",
+  "answers": [
+    "write-ok-results",
+    "write-fail-result",
+    "output-mode-text"
+  ],
+  "before": {
+    "power": 1,
+    "beep": 1,
+    "lock": 0,
+    "routing": [
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7
+    ],
+    "input_names": [
+      "NES",
+      "SNES",
+      "Sega",
+      "N64",
+      "Switch",
+      "PS3",
+      "Apple",
+      "Switcher"
+    ],
+    "output_names": [
+      "TV",
+      "Sound",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "stream": [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "hdcp": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "hdr": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "scaler": [
+      0,
+      4,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "arc": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "mute": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "edid": [
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36
+    ],
+    "cec_in": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "cec_out": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "exa_mode": 0,
+    "exa_enable": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "exa_source": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "presets": null,
+    "lcd_line": null,
+    "errors": []
+  },
+  "steps": [
+    {
+      "describe": "output 8 hdcp -> 1",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set output hdcp",
+        "comhead": "set output hdcp",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output hdcp",
+            "output": 8,
+            "hdcp": 1
+          },
+          "body_text": "{\"comhead\": \"set output hdcp\", \"output\": 8, \"hdcp\": 1}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:22:01.984487Z",
+          "elapsed_ms": 5533.5
+        },
+        "outcome": "not-applied"
+      },
+      "diff": [],
+      "outcome": "not-applied",
+      "status_changes": {
+        "removed": [],
+        "added": []
+      }
+    },
+    {
+      "describe": "output 8 hdcp -> 2",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set output hdcp",
+        "comhead": "set output hdcp",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output hdcp",
+            "output": 8,
+            "hdcp": 2
+          },
+          "body_text": "{\"comhead\": \"set output hdcp\", \"output\": 8, \"hdcp\": 2}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:22:11.157288Z",
+          "elapsed_ms": 5363.98
+        },
+        "outcome": "not-applied"
+      },
+      "diff": [],
+      "outcome": "not-applied",
+      "status_changes": {
+        "removed": [],
+        "added": []
+      }
+    },
+    {
+      "describe": "output 8 hdcp -> 4",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set output hdcp",
+        "comhead": "set output hdcp",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output hdcp",
+            "output": 8,
+            "hdcp": 4
+          },
+          "body_text": "{\"comhead\": \"set output hdcp\", \"output\": 8, \"hdcp\": 4}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:22:20.144604Z",
+          "elapsed_ms": 5378.17
+        },
+        "outcome": "not-applied"
+      },
+      "diff": [],
+      "outcome": "not-applied",
+      "status_changes": {
+        "removed": [],
+        "added": []
+      }
+    },
+    {
+      "describe": "output 8 hdcp -> 5",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set output hdcp",
+        "comhead": "set output hdcp",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output hdcp",
+            "output": 8,
+            "hdcp": 5
+          },
+          "body_text": "{\"comhead\": \"set output hdcp\", \"output\": 8, \"hdcp\": 5}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:22:29.290729Z",
+          "elapsed_ms": 5237.53
+        },
+        "outcome": "not-applied"
+      },
+      "diff": [],
+      "outcome": "not-applied",
+      "status_changes": {
+        "removed": [],
+        "added": []
+      }
+    },
+    {
+      "describe": "output 8 hdcp -> 3 (back to the original)",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set output hdcp",
+        "comhead": "set output hdcp",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output hdcp",
+            "output": 8,
+            "hdcp": 3
+          },
+          "body_text": "{\"comhead\": \"set output hdcp\", \"output\": 8, \"hdcp\": 3}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:22:38.115365Z",
+          "elapsed_ms": 5409.15
+        },
+        "outcome": "applied"
+      },
+      "diff": [],
+      "outcome": "applied",
+      "status_changes": {
+        "removed": [],
+        "added": []
+      }
+    },
+    {
+      "describe": "invalid output 9",
+      "kind": "invalid",
+      "exchange": {
+        "kind": "http",
+        "role": "write-invalid",
+        "label": "set output hdcp",
+        "comhead": "set output hdcp",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output hdcp",
+            "output": 9,
+            "hdcp": 1
+          },
+          "body_text": "{\"comhead\": \"set output hdcp\", \"output\": 9, \"hdcp\": 1}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:22:47.104231Z",
+          "elapsed_ms": 5426.08
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    },
+    {
+      "describe": "invalid hdcp 0",
+      "kind": "invalid",
+      "exchange": {
+        "kind": "http",
+        "role": "write-invalid",
+        "label": "set output hdcp",
+        "comhead": "set output hdcp",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output hdcp",
+            "output": 8,
+            "hdcp": 0
+          },
+          "body_text": "{\"comhead\": \"set output hdcp\", \"output\": 8, \"hdcp\": 0}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:22:54.623191Z",
+          "elapsed_ms": 5895.38
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    },
+    {
+      "describe": "invalid hdcp 6",
+      "kind": "invalid",
+      "exchange": {
+        "kind": "http",
+        "role": "write-invalid",
+        "label": "set output hdcp",
+        "comhead": "set output hdcp",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output hdcp",
+            "output": 8,
+            "hdcp": 6
+          },
+          "body_text": "{\"comhead\": \"set output hdcp\", \"output\": 8, \"hdcp\": 6}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:23:02.803245Z",
+          "elapsed_ms": 5721.58
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    }
+  ],
+  "restored": true,
+  "restore_remaining": [],
+  "findings": {
+    "results_by_outcome": {
+      "not-applied": [
+        {
+          "type": "TimeoutError",
+          "message": ""
+        }
+      ],
+      "applied": [
+        {
+          "type": "TimeoutError",
+          "message": ""
+        }
+      ],
+      "rejected": [
+        {
+          "type": "TimeoutError",
+          "message": ""
+        }
+      ]
+    },
+    "status_text": {
+      "1": [],
+      "2": [],
+      "4": [],
+      "5": [],
+      "3": []
+    }
+  },
+  "mode": "write",
+  "captured_at": "2026-09-25T20:23:12.387027Z"
+}

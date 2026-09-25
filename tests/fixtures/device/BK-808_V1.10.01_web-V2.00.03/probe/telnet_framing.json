@@ -1,0 +1,706 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "probe/telnet_framing",
+  "title": "Telnet command framing: terminator '!', CR LF, case, pipelining",
+  "answers": [
+    "telnet-terminators"
+  ],
+  "variants": [
+    {
+      "variant": "no_bang_then_bang",
+      "why": "command without '!', then '!' alone",
+      "exchanges": [
+        {
+          "kind": "telnet",
+          "role": "framing-banner",
+          "label": "banner",
+          "command": null,
+          "sent_b64": "",
+          "response": {
+            "body_b64": "//sD//wB//4B//4A//wDKioqKioqKioqKioqKioqKndlbGNvbWUgKioqKioqKioqKioqKioNCiAgICAgICAgICAgIGZ3IHZlcnNpb24gOnYxLjEwLjAxICAgICAgICANCioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqDQoNCg==",
+            "text": "****************welcome **************\r\n            fw version :v1.10.01        \r\n**************************************\r\n\r\n",
+            "chunks": [
+              {
+                "t_ms": 1.71,
+                "len": 12
+              },
+              {
+                "t_ms": 2.57,
+                "len": 3
+              },
+              {
+                "t_ms": 182.98,
+                "len": 40
+              },
+              {
+                "t_ms": 183.26,
+                "len": 42
+              },
+              {
+                "t_ms": 188.04,
+                "len": 40
+              },
+              {
+                "t_ms": 227.03,
+                "len": 2
+              }
+            ],
+            "completion": "idle",
+            "idle_ms": 1500,
+            "first_byte_ms": 1.71,
+            "elapsed_ms": 1727.14,
+            "analysis": {
+              "line_endings": {
+                "crlf": 4,
+                "lf": 0,
+                "cr": 0
+              },
+              "lines": [
+                "****************welcome **************",
+                "            fw version :v1.10.01        ",
+                "**************************************",
+                ""
+              ],
+              "ends_with_newline": true,
+              "trailing_without_newline": "",
+              "last_line": "**************************************",
+              "error_code": null,
+              "error_codes_seen": [],
+              "iac": [
+                "IAC WILL 3",
+                "IAC WONT 1",
+                "IAC DONT 1",
+                "IAC DONT 0",
+                "IAC WONT 3"
+              ]
+            }
+          },
+          "error": null,
+          "timing": {
+            "started_at": "2026-09-25T20:14:16.905987Z",
+            "elapsed_ms": 1727.14
+          }
+        },
+        {
+          "kind": "telnet",
+          "role": "framing",
+          "label": "no_bang_then_bang: first write",
+          "command": "r type\r\n",
+          "sent_b64": "ciB0eXBlDQo=",
+          "sent_text": "r type\r\n",
+          "response": {
+            "body_b64": "ciB0eXBlDQpFMDANCg==",
+            "text": "r type\r\nE00\r\n",
+            "chunks": [
+              {
+                "t_ms": 21.3,
+                "len": 8
+              },
+              {
+                "t_ms": 306.01,
+                "len": 5
+              }
+            ],
+            "completion": "idle",
+            "idle_ms": 1000,
+            "first_byte_ms": 21.3,
+            "elapsed_ms": 1306.35,
+            "analysis": {
+              "line_endings": {
+                "crlf": 2,
+                "lf": 0,
+                "cr": 0
+              },
+              "lines": [
+                "r type",
+                "E00"
+              ],
+              "ends_with_newline": true,
+              "trailing_without_newline": "",
+              "last_line": "E00",
+              "error_code": "E00",
+              "error_codes_seen": [
+                "E00"
+              ],
+              "iac": []
+            }
+          },
+          "error": null,
+          "timing": {
+            "started_at": "2026-09-25T20:14:18.633409Z",
+            "elapsed_ms": 1306.35
+          }
+        },
+        {
+          "kind": "telnet",
+          "role": "framing",
+          "label": "no_bang_then_bang: second write",
+          "command": "!\r\n",
+          "sent_b64": "IQ0K",
+          "sent_text": "!\r\n",
+          "response": {
+            "body_b64": "IQ0KRTAwDQo=",
+            "text": "!\r\nE00\r\n",
+            "chunks": [
+              {
+                "t_ms": 29.78,
+                "len": 3
+              },
+              {
+                "t_ms": 207.65,
+                "len": 5
+              }
+            ],
+            "completion": "idle",
+            "idle_ms": 1000,
+            "first_byte_ms": 29.78,
+            "elapsed_ms": 1207.69,
+            "analysis": {
+              "line_endings": {
+                "crlf": 2,
+                "lf": 0,
+                "cr": 0
+              },
+              "lines": [
+                "!",
+                "E00"
+              ],
+              "ends_with_newline": true,
+              "trailing_without_newline": "",
+              "last_line": "E00",
+              "error_code": "E00",
+              "error_codes_seen": [
+                "E00"
+              ],
+              "iac": []
+            }
+          },
+          "error": null,
+          "timing": {
+            "started_at": "2026-09-25T20:14:19.939870Z",
+            "elapsed_ms": 1207.69
+          }
+        }
+      ],
+      "first_response": "r type\r\nE00\r\n",
+      "second_response": "!\r\nE00\r\n"
+    },
+    {
+      "variant": "bang_no_crlf",
+      "why": "'!' but no CR LF",
+      "exchanges": [
+        {
+          "kind": "telnet",
+          "role": "framing-banner",
+          "label": "banner",
+          "command": null,
+          "sent_b64": "",
+          "response": {
+            "body_b64": "//sD//wB//4B//4A//wDKioqKioqKioqKioqKioqKndlbGNvbWUgKioqKioqKioqKioqKioNCiAgICAgICAgICAgIGZ3IHZlcnNpb24gOnYxLjEwLjAxICAgICAgICANCioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqDQoNCg==",
+            "text": "****************welcome **************\r\n            fw version :v1.10.01        \r\n**************************************\r\n\r\n",
+            "chunks": [
+              {
+                "t_ms": 1.83,
+                "len": 12
+              },
+              {
+                "t_ms": 2.64,
+                "len": 3
+              },
+              {
+                "t_ms": 178.98,
+                "len": 40
+              },
+              {
+                "t_ms": 187.46,
+                "len": 42
+              },
+              {
+                "t_ms": 187.9,
+                "len": 40
+              },
+              {
+                "t_ms": 223.58,
+                "len": 2
+              }
+            ],
+            "completion": "idle",
+            "idle_ms": 1500,
+            "first_byte_ms": 1.83,
+            "elapsed_ms": 1724.73,
+            "analysis": {
+              "line_endings": {
+                "crlf": 4,
+                "lf": 0,
+                "cr": 0
+              },
+              "lines": [
+                "****************welcome **************",
+                "            fw version :v1.10.01        ",
+                "**************************************",
+                ""
+              ],
+              "ends_with_newline": true,
+              "trailing_without_newline": "",
+              "last_line": "**************************************",
+              "error_code": null,
+              "error_codes_seen": [],
+              "iac": [
+                "IAC WILL 3",
+                "IAC WONT 1",
+                "IAC DONT 1",
+                "IAC DONT 0",
+                "IAC WONT 3"
+              ]
+            }
+          },
+          "error": null,
+          "timing": {
+            "started_at": "2026-09-25T20:14:21.147687Z",
+            "elapsed_ms": 1724.73
+          }
+        },
+        {
+          "kind": "telnet",
+          "role": "framing",
+          "label": "bang_no_crlf: first write",
+          "command": "r type!",
+          "sent_b64": "ciB0eXBlIQ==",
+          "sent_text": "r type!",
+          "response": {
+            "body_b64": "ciB0eXBlIQ==",
+            "text": "r type!",
+            "chunks": [
+              {
+                "t_ms": 11.93,
+                "len": 7
+              }
+            ],
+            "completion": "idle",
+            "idle_ms": 1000,
+            "first_byte_ms": 11.93,
+            "elapsed_ms": 1012.09,
+            "analysis": {
+              "line_endings": {
+                "crlf": 0,
+                "lf": 0,
+                "cr": 0
+              },
+              "lines": [
+                "r type!"
+              ],
+              "ends_with_newline": false,
+              "trailing_without_newline": "r type!",
+              "last_line": "r type!",
+              "error_code": null,
+              "error_codes_seen": [],
+              "iac": []
+            }
+          },
+          "error": null,
+          "timing": {
+            "started_at": "2026-09-25T20:14:22.872629Z",
+            "elapsed_ms": 1012.09
+          }
+        }
+      ],
+      "first_response": "r type!"
+    },
+    {
+      "variant": "bang_lf_only",
+      "why": "'!' and LF only",
+      "exchanges": [
+        {
+          "kind": "telnet",
+          "role": "framing-banner",
+          "label": "banner",
+          "command": null,
+          "sent_b64": "",
+          "response": {
+            "body_b64": "//sD//wB//4B//4A//wDKioqKioqKioqKioqKioqKndlbGNvbWUgKioqKioqKioqKioqKioNCiAgICAgICAgICAgIGZ3IHZlcnNpb24gOnYxLjEwLjAxICAgICAgICANCioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqDQoNCg==",
+            "text": "****************welcome **************\r\n            fw version :v1.10.01        \r\n**************************************\r\n\r\n",
+            "chunks": [
+              {
+                "t_ms": 1.67,
+                "len": 12
+              },
+              {
+                "t_ms": 2.4,
+                "len": 3
+              },
+              {
+                "t_ms": 161.38,
+                "len": 40
+              },
+              {
+                "t_ms": 161.62,
+                "len": 42
+              },
+              {
+                "t_ms": 166.28,
+                "len": 40
+              },
+              {
+                "t_ms": 184.43,
+                "len": 2
+              }
+            ],
+            "completion": "idle",
+            "idle_ms": 1500,
+            "first_byte_ms": 1.67,
+            "elapsed_ms": 1685.47,
+            "analysis": {
+              "line_endings": {
+                "crlf": 4,
+                "lf": 0,
+                "cr": 0
+              },
+              "lines": [
+                "****************welcome **************",
+                "            fw version :v1.10.01        ",
+                "**************************************",
+                ""
+              ],
+              "ends_with_newline": true,
+              "trailing_without_newline": "",
+              "last_line": "**************************************",
+              "error_code": null,
+              "error_codes_seen": [],
+              "iac": [
+                "IAC WILL 3",
+                "IAC WONT 1",
+                "IAC DONT 1",
+                "IAC DONT 0",
+                "IAC WONT 3"
+              ]
+            }
+          },
+          "error": null,
+          "timing": {
+            "started_at": "2026-09-25T20:14:23.884821Z",
+            "elapsed_ms": 1685.47
+          }
+        },
+        {
+          "kind": "telnet",
+          "role": "framing",
+          "label": "bang_lf_only: first write",
+          "command": "r type!\n",
+          "sent_b64": "ciB0eXBlIQo=",
+          "sent_text": "r type!\n",
+          "response": {
+            "body_b64": "ciB0eXBlIQ==",
+            "text": "r type!",
+            "chunks": [
+              {
+                "t_ms": 11.79,
+                "len": 7
+              }
+            ],
+            "completion": "idle",
+            "idle_ms": 1000,
+            "first_byte_ms": 11.79,
+            "elapsed_ms": 1012.47,
+            "analysis": {
+              "line_endings": {
+                "crlf": 0,
+                "lf": 0,
+                "cr": 0
+              },
+              "lines": [
+                "r type!"
+              ],
+              "ends_with_newline": false,
+              "trailing_without_newline": "r type!",
+              "last_line": "r type!",
+              "error_code": null,
+              "error_codes_seen": [],
+              "iac": []
+            }
+          },
+          "error": null,
+          "timing": {
+            "started_at": "2026-09-25T20:14:25.570444Z",
+            "elapsed_ms": 1012.47
+          }
+        }
+      ],
+      "first_response": "r type!"
+    },
+    {
+      "variant": "uppercase",
+      "why": "upper-case command",
+      "exchanges": [
+        {
+          "kind": "telnet",
+          "role": "framing-banner",
+          "label": "banner",
+          "command": null,
+          "sent_b64": "",
+          "response": {
+            "body_b64": "//sD//wB//4B//4A//wDKioqKioqKioqKioqKioqKndlbGNvbWUgKioqKioqKioqKioqKioNCiAgICAgICAgICAgIGZ3IHZlcnNpb24gOnYxLjEwLjAxICAgICAgICANCioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqDQoNCg==",
+            "text": "****************welcome **************\r\n            fw version :v1.10.01        \r\n**************************************\r\n\r\n",
+            "chunks": [
+              {
+                "t_ms": 1.74,
+                "len": 12
+              },
+              {
+                "t_ms": 2.45,
+                "len": 3
+              },
+              {
+                "t_ms": 161.24,
+                "len": 40
+              },
+              {
+                "t_ms": 161.34,
+                "len": 42
+              },
+              {
+                "t_ms": 166.19,
+                "len": 40
+              },
+              {
+                "t_ms": 184.35,
+                "len": 2
+              }
+            ],
+            "completion": "idle",
+            "idle_ms": 1500,
+            "first_byte_ms": 1.74,
+            "elapsed_ms": 1684.45,
+            "analysis": {
+              "line_endings": {
+                "crlf": 4,
+                "lf": 0,
+                "cr": 0
+              },
+              "lines": [
+                "****************welcome **************",
+                "            fw version :v1.10.01        ",
+                "**************************************",
+                ""
+              ],
+              "ends_with_newline": true,
+              "trailing_without_newline": "",
+              "last_line": "**************************************",
+              "error_code": null,
+              "error_codes_seen": [],
+              "iac": [
+                "IAC WILL 3",
+                "IAC WONT 1",
+                "IAC DONT 1",
+                "IAC DONT 0",
+                "IAC WONT 3"
+              ]
+            }
+          },
+          "error": null,
+          "timing": {
+            "started_at": "2026-09-25T20:14:26.583058Z",
+            "elapsed_ms": 1684.45
+          }
+        },
+        {
+          "kind": "telnet",
+          "role": "framing",
+          "label": "uppercase: first write",
+          "command": "R TYPE!\r\n",
+          "sent_b64": "UiBUWVBFIQ0K",
+          "sent_text": "R TYPE!\r\n",
+          "response": {
+            "body_b64": "UiBUWVBFIQ0KOHg4IGhkbWkyLjEgbWF0cml4DQo=",
+            "text": "R TYPE!\r\n8x8 hdmi2.1 matrix\r\n",
+            "chunks": [
+              {
+                "t_ms": 30.7,
+                "len": 9
+              },
+              {
+                "t_ms": 167.11,
+                "len": 20
+              }
+            ],
+            "completion": "idle",
+            "idle_ms": 1000,
+            "first_byte_ms": 30.7,
+            "elapsed_ms": 1167.19,
+            "analysis": {
+              "line_endings": {
+                "crlf": 2,
+                "lf": 0,
+                "cr": 0
+              },
+              "lines": [
+                "R TYPE!",
+                "8x8 hdmi2.1 matrix"
+              ],
+              "ends_with_newline": true,
+              "trailing_without_newline": "",
+              "last_line": "8x8 hdmi2.1 matrix",
+              "error_code": null,
+              "error_codes_seen": [],
+              "iac": []
+            }
+          },
+          "error": null,
+          "timing": {
+            "started_at": "2026-09-25T20:14:28.267742Z",
+            "elapsed_ms": 1167.19
+          }
+        }
+      ],
+      "first_response": "R TYPE!\r\n8x8 hdmi2.1 matrix\r\n"
+    },
+    {
+      "variant": "pipelined",
+      "why": "two commands in one write",
+      "exchanges": [
+        {
+          "kind": "telnet",
+          "role": "framing-banner",
+          "label": "banner",
+          "command": null,
+          "sent_b64": "",
+          "response": {
+            "body_b64": "//sD//wB//4B//4A//wDKioqKioqKioqKioqKioqKndlbGNvbWUgKioqKioqKioqKioqKioNCiAgICAgICAgICAgIGZ3IHZlcnNpb24gOnYxLjEwLjAxICAgICAgICANCioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqDQoNCg==",
+            "text": "****************welcome **************\r\n            fw version :v1.10.01        \r\n**************************************\r\n\r\n",
+            "chunks": [
+              {
+                "t_ms": 1.98,
+                "len": 12
+              },
+              {
+                "t_ms": 2.71,
+                "len": 3
+              },
+              {
+                "t_ms": 161.23,
+                "len": 40
+              },
+              {
+                "t_ms": 161.41,
+                "len": 42
+              },
+              {
+                "t_ms": 166.24,
+                "len": 40
+              },
+              {
+                "t_ms": 184.2,
+                "len": 2
+              }
+            ],
+            "completion": "idle",
+            "idle_ms": 1500,
+            "first_byte_ms": 1.98,
+            "elapsed_ms": 1685.54,
+            "analysis": {
+              "line_endings": {
+                "crlf": 4,
+                "lf": 0,
+                "cr": 0
+              },
+              "lines": [
+                "****************welcome **************",
+                "            fw version :v1.10.01        ",
+                "**************************************",
+                ""
+              ],
+              "ends_with_newline": true,
+              "trailing_without_newline": "",
+              "last_line": "**************************************",
+              "error_code": null,
+              "error_codes_seen": [],
+              "iac": [
+                "IAC WILL 3",
+                "IAC WONT 1",
+                "IAC DONT 1",
+                "IAC DONT 0",
+                "IAC WONT 3"
+              ]
+            }
+          },
+          "error": null,
+          "timing": {
+            "started_at": "2026-09-25T20:14:29.435014Z",
+            "elapsed_ms": 1685.54
+          }
+        },
+        {
+          "kind": "telnet",
+          "role": "framing",
+          "label": "pipelined: first write",
+          "command": "r type!\r\nr fw version!\r\n",
+          "sent_b64": "ciB0eXBlIQ0KciBmdyB2ZXJzaW9uIQ0K",
+          "sent_text": "r type!\r\nr fw version!\r\n",
+          "response": {
+            "body_b64": "ciB0eXBlIQ0KciBmdyB2ZXJzaW9uIQ0KOHg4IGhkbWkyLjEgbWF0cml4DQptY3UgZncgdmVyc2lvbjogdjEuMTAuMDENCmtleSBtY3UgICAgICAgOiB2MS4wMC4wOA0Kd2ViIGd1aSAgICAgICA6IHYyLjAwLjAzDQpjcGxkIHZlcnNpb24gIDogdjEuMDAuMDYNCg==",
+            "text": "r type!\r\nr fw version!\r\n8x8 hdmi2.1 matrix\r\nmcu fw version: v1.10.01\r\nkey mcu       : v1.00.08\r\nweb gui       : v2.00.03\r\ncpld version  : v1.00.06\r\n",
+            "chunks": [
+              {
+                "t_ms": 46.01,
+                "len": 24
+              },
+              {
+                "t_ms": 182.81,
+                "len": 20
+              },
+              {
+                "t_ms": 185.89,
+                "len": 26
+              },
+              {
+                "t_ms": 188.64,
+                "len": 26
+              },
+              {
+                "t_ms": 191.45,
+                "len": 26
+              },
+              {
+                "t_ms": 194.18,
+                "len": 26
+              }
+            ],
+            "completion": "idle",
+            "idle_ms": 1000,
+            "first_byte_ms": 46.01,
+            "elapsed_ms": 1196.18,
+            "analysis": {
+              "line_endings": {
+                "crlf": 7,
+                "lf": 0,
+                "cr": 0
+              },
+              "lines": [
+                "r type!",
+                "r fw version!",
+                "8x8 hdmi2.1 matrix",
+                "mcu fw version: v1.10.01",
+                "key mcu       : v1.00.08",
+                "web gui       : v2.00.03",
+                "cpld version  : v1.00.06"
+              ],
+              "ends_with_newline": true,
+              "trailing_without_newline": "",
+              "last_line": "cpld version  : v1.00.06",
+              "error_code": null,
+              "error_codes_seen": [],
+              "iac": []
+            }
+          },
+          "error": null,
+          "timing": {
+            "started_at": "2026-09-25T20:14:31.120819Z",
+            "elapsed_ms": 1196.18
+          }
+        }
+      ],
+      "first_response": "r type!\r\nr fw version!\r\n8x8 hdmi2.1 matrix\r\nmcu fw version: v1.10.01\r\nkey mcu       : v1.00.08\r\nweb gui       : v2.00.03\r\ncpld version  : v1.00.06\r\n"
+    }
+  ],
+  "mode": "probe",
+  "captured_at": "2026-09-25T20:14:32.317130Z"
+}

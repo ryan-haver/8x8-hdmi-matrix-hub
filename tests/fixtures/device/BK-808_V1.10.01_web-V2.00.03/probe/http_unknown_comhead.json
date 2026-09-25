@@ -1,0 +1,41 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "probe/http_unknown_comhead",
+  "title": "Unknown comhead",
+  "answers": [
+    "unknown-comhead-result"
+  ],
+  "exchanges": [
+    {
+      "kind": "http",
+      "role": "unknown-comhead",
+      "label": "hil capture unknown",
+      "comhead": "hil capture unknown",
+      "request": {
+        "method": "POST",
+        "path": "/cgi-bin/instr",
+        "headers": [],
+        "json": {
+          "comhead": "hil capture unknown",
+          "language": 0
+        },
+        "body_text": "{\"comhead\": \"hil capture unknown\", \"language\": 0}"
+      },
+      "response": null,
+      "error": {
+        "type": "TimeoutError",
+        "message": ""
+      },
+      "timing": {
+        "started_at": "2026-09-25T20:13:39.389270Z",
+        "elapsed_ms": 5137.06
+      }
+    }
+  ],
+  "findings": {
+    "json": null,
+    "status": null
+  },
+  "mode": "probe",
+  "captured_at": "2026-09-25T20:13:44.526750Z"
+}

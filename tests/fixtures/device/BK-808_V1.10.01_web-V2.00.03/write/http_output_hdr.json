@@ -1,0 +1,408 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "write/http_output_hdr",
+  "title": "Output HDR mode (every code)",
+  "group": "output",
+  "answers": [
+    "write-ok-results",
+    "write-fail-result",
+    "output-mode-text"
+  ],
+  "before": {
+    "power": 1,
+    "beep": 1,
+    "lock": 0,
+    "routing": [
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7
+    ],
+    "input_names": [
+      "NES",
+      "SNES",
+      "Sega",
+      "N64",
+      "Switch",
+      "PS3",
+      "Apple",
+      "Switcher"
+    ],
+    "output_names": [
+      "TV",
+      "Sound",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "stream": [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "hdcp": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "hdr": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "scaler": [
+      0,
+      4,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "arc": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "mute": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "edid": [
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36
+    ],
+    "cec_in": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "cec_out": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "exa_mode": 0,
+    "exa_enable": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "exa_source": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "presets": null,
+    "lcd_line": null,
+    "errors": []
+  },
+  "steps": [
+    {
+      "describe": "output 8 hdr -> 1",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set output hdr",
+        "comhead": "set output hdr",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output hdr",
+            "output": 8,
+            "hdr": 1
+          },
+          "body_text": "{\"comhead\": \"set output hdr\", \"output\": 8, \"hdr\": 1}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:23:15.858514Z",
+          "elapsed_ms": 5658.49
+        },
+        "outcome": "not-applied"
+      },
+      "diff": [],
+      "outcome": "not-applied",
+      "status_changes": {
+        "removed": [],
+        "added": []
+      }
+    },
+    {
+      "describe": "output 8 hdr -> 2",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set output hdr",
+        "comhead": "set output hdr",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output hdr",
+            "output": 8,
+            "hdr": 2
+          },
+          "body_text": "{\"comhead\": \"set output hdr\", \"output\": 8, \"hdr\": 2}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:23:25.308451Z",
+          "elapsed_ms": 5220.59
+        },
+        "outcome": "not-applied"
+      },
+      "diff": [],
+      "outcome": "not-applied",
+      "status_changes": {
+        "removed": [],
+        "added": []
+      }
+    },
+    {
+      "describe": "output 8 hdr -> 3",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set output hdr",
+        "comhead": "set output hdr",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output hdr",
+            "output": 8,
+            "hdr": 3
+          },
+          "body_text": "{\"comhead\": \"set output hdr\", \"output\": 8, \"hdr\": 3}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:23:34.103283Z",
+          "elapsed_ms": 5423.39
+        },
+        "outcome": "not-applied"
+      },
+      "diff": [],
+      "outcome": "not-applied",
+      "status_changes": {
+        "removed": [],
+        "added": []
+      }
+    },
+    {
+      "describe": "output 8 hdr -> 0 (back to the original)",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set output hdr",
+        "comhead": "set output hdr",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output hdr",
+            "output": 8,
+            "hdr": 0
+          },
+          "body_text": "{\"comhead\": \"set output hdr\", \"output\": 8, \"hdr\": 0}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:23:43.239124Z",
+          "elapsed_ms": 5287.83
+        },
+        "outcome": "applied"
+      },
+      "diff": [],
+      "outcome": "applied",
+      "status_changes": {
+        "removed": [],
+        "added": []
+      }
+    },
+    {
+      "describe": "invalid output 9",
+      "kind": "invalid",
+      "exchange": {
+        "kind": "http",
+        "role": "write-invalid",
+        "label": "set output hdr",
+        "comhead": "set output hdr",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output hdr",
+            "output": 9,
+            "hdr": 0
+          },
+          "body_text": "{\"comhead\": \"set output hdr\", \"output\": 9, \"hdr\": 0}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:23:52.261304Z",
+          "elapsed_ms": 5269.6
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    },
+    {
+      "describe": "invalid hdr 4",
+      "kind": "invalid",
+      "exchange": {
+        "kind": "http",
+        "role": "write-invalid",
+        "label": "set output hdr",
+        "comhead": "set output hdr",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output hdr",
+            "output": 8,
+            "hdr": 4
+          },
+          "body_text": "{\"comhead\": \"set output hdr\", \"output\": 8, \"hdr\": 4}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:23:59.539197Z",
+          "elapsed_ms": 5987.75
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    }
+  ],
+  "restored": true,
+  "restore_remaining": [],
+  "findings": {
+    "results_by_outcome": {
+      "not-applied": [
+        {
+          "type": "TimeoutError",
+          "message": ""
+        }
+      ],
+      "applied": [
+        {
+          "type": "TimeoutError",
+          "message": ""
+        }
+      ],
+      "rejected": [
+        {
+          "type": "TimeoutError",
+          "message": ""
+        }
+      ]
+    },
+    "status_text": {
+      "1": [],
+      "2": [],
+      "3": [],
+      "0": []
+    }
+  },
+  "mode": "write",
+  "captured_at": "2026-09-25T20:24:09.752184Z"
+}

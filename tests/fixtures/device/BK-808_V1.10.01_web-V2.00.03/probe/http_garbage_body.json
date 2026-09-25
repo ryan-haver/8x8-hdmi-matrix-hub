@@ -1,0 +1,38 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "probe/http_garbage_body",
+  "title": "Body that is not JSON",
+  "answers": [
+    "garbage-body"
+  ],
+  "exchanges": [
+    {
+      "kind": "http",
+      "role": "garbage",
+      "label": "non-JSON body",
+      "comhead": null,
+      "request": {
+        "method": "POST",
+        "path": "/cgi-bin/instr",
+        "headers": [],
+        "json": null,
+        "body_text": "this is not json"
+      },
+      "response": null,
+      "error": {
+        "type": "TimeoutError",
+        "message": ""
+      },
+      "timing": {
+        "started_at": "2026-09-25T20:13:44.527848Z",
+        "elapsed_ms": 4996.16
+      }
+    }
+  ],
+  "findings": {
+    "json": null,
+    "status": null
+  },
+  "mode": "probe",
+  "captured_at": "2026-09-25T20:13:49.523781Z"
+}
