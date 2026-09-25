@@ -34,7 +34,9 @@ async def test_full_write_run_verifies_every_command_and_restores(sim, tmp_path)
     for test in default_tests:
         record = load(root, RecordIds.write(test.id))
         assert record["restored"] is True, test.id
-        outcomes = [s["outcome"] for s in record["steps"]]
+        # The vendor preset syntax is unknown to the real device (captured: E00),
+        # so the simulator doesn't apply it either; judge the hub's own steps.
+        outcomes = [s["outcome"] for s in record["steps"] if "vendor syntax" not in s["describe"]]
         if test.id not in _EXPECTED_NOT_APPLIED:
             assert "not-applied" not in outcomes, (test.id, [(s["describe"], s["outcome"]) for s in record["steps"]])
         assert "accepted-invalid" not in outcomes, test.id
@@ -44,7 +46,7 @@ async def test_full_write_run_verifies_every_command_and_restores(sim, tmp_path)
     assert load(root, RecordIds.write("http_input_name"))["findings"]["long_name_stored_len"] == 40
     assert load(root, RecordIds.write("http_preset_name"))["findings"]["long_name_stored_len"] == 40
     lcd = load(root, RecordIds.write("http_lcd_on_time"))["findings"]
-    assert lcd["lcd_lines"] == {"0": "lcd off", "1": "lcd on always", "2": "lcd on 15 seconds",
+    assert lcd["lcd_lines"] == {"0": "lcd off", "1": "lcd always on", "2": "lcd on 15 seconds",
                                 "3": "lcd on 30 seconds", "4": "lcd on 60 seconds"}
     assert set(lcd["lcd_outcomes"].values()) == {"applied"}
     power = load(root, RecordIds.write("telnet_power_bare"))["steps"]
@@ -54,7 +56,8 @@ async def test_full_write_run_verifies_every_command_and_restores(sim, tmp_path)
                     "http_output_audio_mute", "http_set_edid", "http_ext_audio_mode", "http_ext_audio_out",
                     "http_ext_audio_switch", "http_ext_audio_index", "http_preset_name", "http_preset_recall",
                     "http_preset_save", "telnet_presets"):
-        steps = load(root, RecordIds.write(test_id))["steps"]
+        # vendor-syntax preset steps are unknown to the device (E00) and to the simulator
+        steps = [s for s in load(root, RecordIds.write(test_id))["steps"] if "vendor syntax" not in s["describe"]]
         assert {s["outcome"] for s in steps if s["kind"] == "write"} == {"applied"}, test_id
         assert {s["outcome"] for s in steps if s["kind"] == "invalid"} <= {"rejected"}, test_id
     # the old hub's commands: never answered (or rejected: the old LCD payload), nothing changed

@@ -61,12 +61,11 @@ def _on_off(v: int) -> str:
 
 
 def _lcd_line(mode: int) -> str:
-    # ASSUMPTION(HIL-A): wording; the client only parses "lcd on <N> seconds".
-    # Only "lcd on 30 seconds" (code 3) has been seen (V1.10.01 read capture).
+    # Wording captured from the real device (HIL Session 1 write run).
     if mode == 0:
         return "lcd off"
     if mode == 1:
-        return "lcd on always"
+        return "lcd always on"
     return f"lcd on {proto.LCD_SECONDS[mode]} seconds"
 
 
@@ -243,14 +242,12 @@ def _handle(state: DeviceState, raw: str) -> TelnetResult:
     # The vendor serial reference's "s av <input> <output>" is unknown to
     # V1.10.01 (captured: E00); it falls through to the unknown answer.
 
-    # Presets: hub uses "s save|recall|clear preset N"; the vendor reference
-    # uses "s preset save|recall N". Both accepted.
-    # ASSUMPTION(HIL-A): acknowledgement wording.
+    # Presets: "s save|recall|clear preset N" (acknowledgements captured on
+    # V1.10.01). The vendor reference's "s preset save|recall N" is unknown to
+    # the device (captured: E00) and falls through to the unknown answer.
     preset_op = None
     if len(words) == 4 and words[0] == "s" and words[2] == "preset" and words[1] in ("save", "recall", "clear"):
         preset_op, token = words[1], words[3]
-    elif len(words) == 4 and words[:2] == ["s", "preset"] and words[2] in ("save", "recall"):
-        preset_op, token = words[2], words[3]
     if preset_op:
         n = _port(token)
         if n is None:

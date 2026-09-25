@@ -884,10 +884,12 @@ class _Checks:
         lo, hi = proto.EDID_RANGE
         bad, seen = [], []
         for s in steps:
-            v = (s["exchange"]["request"]["json"].get("edid") or [None, None])[1]
+            port, v = (s["exchange"]["request"]["json"].get("edid") or [None, None])[:2]
             accepted = s.get("outcome") in ("applied", "accepted-invalid")
             seen.append(f"{v}:{'yes' if accepted else 'no'}")
-            if accepted != (isinstance(v, int) and lo <= v <= hi):
+            # An invalid input port is rejected whatever the id; only judge ids sent to a valid port.
+            port_ok = isinstance(port, int) and 1 <= port <= proto.PORT_COUNT
+            if accepted != (port_ok and isinstance(v, int) and lo <= v <= hi):
                 bad.append(v)
         return Verdict("edid-range", CONTRADICTED if bad or old_bad else CONFIRMED,
                        f"set edid accepted {seen}; simulator range {lo}-{hi}" + (f"; mismatches {bad}" if bad else ""),

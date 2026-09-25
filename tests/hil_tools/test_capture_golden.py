@@ -288,7 +288,7 @@ def test_report_on_the_real_device_captures_has_no_contradictions():
     assert [(v.id, v.detail) for v in verdicts.values() if v.status == CONTRADICTED] == []
     for aid in ("login-fail-result", "write-fail-result", "legacy-unanswered", "unknown-comhead-result",
                 "garbage-body", "cec-index-single-port", "name-truncation", "telnet-error-codes",
-                "telnet-set-acks", "telnet-bare-power", "standby-behaviour"):
+                "telnet-set-acks", "telnet-bare-power", "standby-behaviour",
+                # proven by the WP-A4 part 2 hardware write run (2026-09-25)
+                "web-ui-commands", "lcd-codes", "edid-range", "output-mode-text"):
         assert verdicts[aid].status == CONFIRMED, (aid, verdicts[aid].detail)
-    # web-UI-derived commands: nothing captured yet, so no claim either way
-    assert verdicts["web-ui-commands"].status == MISSING

@@ -180,9 +180,10 @@ TELNET_CEC_OUTPUT_WORDS = TELNET_CEC_INPUT_WORDS | {"active"}
 # guess until a write run with Telnet.
 # ---------------------------------------------------------------------------
 
-HDCP_TEXT = {1: "hdcp1.4", 2: "hdcp2.2", 3: "follow sink", 4: "follow source", 5: "user mode"}
-HDR_TEXT = {0: "pass-through", 1: "hdr to sdr", 2: "auto"}
-SCALER_TEXT = {0: "pass-through", 1: "8k to 4k", 2: "8k/4k to 1080p", 3: "auto", 4: "audio only"}
+# Wording captured from the real device (HIL Session 1 write run, 2026-09-25).
+HDCP_TEXT = {1: "hdcp 1.4", 2: "hdcp 2.2", 3: "follow sink", 4: "follow source", 5: "user mode"}
+HDR_TEXT = {0: "pass-through", 1: "hdr to sdr", 2: "auto(follow sink edid)"}
+SCALER_TEXT = {0: "pass-through", 1: "8k->4k", 2: "8k/4k->1080p", 3: "auto(follow sink edid)", 4: "audio only"}
 EDID_TEXT = {36: "frl12g_8k_hdr,7.1ch"}
 EXT_AUDIO_MODE_TEXT = {0: "bind to input", 1: "bind to output", 2: "matrix"}
 LCD_SECONDS = {2: 15, 3: 30, 4: 60}

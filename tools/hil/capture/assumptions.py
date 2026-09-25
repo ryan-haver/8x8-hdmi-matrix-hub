@@ -169,7 +169,6 @@ ASSUMPTIONS: tuple[Assumption, ...] = (
         "lcd-codes", "LCD on-time codes 0-4 (`set lcd on time`, read back as `get system status.mode`) and "
         "their Telnet wording",
         "protocol.LCD_SECONDS, telnet_commands._lcd_line", ("API-07",), ("write",),
-        (("telnet_commands.py", "wording; the client only parses"),),
     ),
     # ------------------------------------------------------------ Telnet
     Assumption(
@@ -200,8 +199,7 @@ ASSUMPTIONS: tuple[Assumption, ...] = (
     Assumption(
         "telnet-set-acks", "Acknowledgement text of set commands (routing, presets, beep, lock, stream, CEC)",
         "telnet_commands.handle", ("BE-07",), ("probe", "write"),
-        (("telnet_commands.py", "success is acknowledged by echoing"),
-         ("telnet_commands.py", "acknowledgement wording")),
+        (("telnet_commands.py", "success is acknowledged by echoing"),),
     ),
     Assumption(
         "telnet-bare-power", "Whether bare `power N` (sent by TelnetClient) works, vs `s power N`",
