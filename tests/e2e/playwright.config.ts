@@ -31,6 +31,9 @@ const visualProject = (name: keyof typeof VIEWPORTS, themed: boolean) => ({
   ...(themed ? {} : { grepInvert: /@themed/ }),
   use: {
     ...devices['Desktop Chrome'],
+    // The HTML report already has expected/actual/diff; traces for ~800
+    // captures cost memory and disk for little extra.
+    trace: 'off' as const,
     viewport: VIEWPORTS[name].viewport,
     deviceScaleFactor: 1,
     isMobile: VIEWPORTS[name].isMobile,
@@ -39,10 +42,18 @@ const visualProject = (name: keyof typeof VIEWPORTS, themed: boolean) => ({
   },
 });
 
+// Output locations can be redirected (absolute paths). The container runner
+// uses this to write inside the container and copy back once at the end:
+// Docker Desktop bind mounts on Windows intermittently fail concurrent writes
+// with ENOMEM.
+const OUTPUT_DIR = process.env.E2E_OUTPUT_DIR ?? '../../test-results';
+const REPORT_DIR = process.env.E2E_REPORT_DIR ?? '../../playwright-report';
+const SNAPSHOT_DIR = process.env.E2E_SNAPSHOT_DIR ?? '{testDir}/visual/__snapshots__';
+
 export default defineConfig({
   testDir: '.',
-  outputDir: '../../test-results',
-  snapshotPathTemplate: '{testDir}/visual/__snapshots__/{projectName}/{arg}{ext}',
+  outputDir: OUTPUT_DIR,
+  snapshotPathTemplate: `${SNAPSHOT_DIR}/{projectName}/{arg}{ext}`,
   // One stack is shared by all tests. Smoke tests (which change simulator
   // state) run serially in one worker before any capture; captures run in
   // parallel. Each test resets the simulator state it depends on.
@@ -65,8 +76,8 @@ export default defineConfig({
   },
   reporter: [
     ['list'],
-    ['html', { outputFolder: '../../playwright-report', open: 'never' }],
-    ['json', { outputFile: '../../test-results/results.json' }],
+    ['html', { outputFolder: REPORT_DIR, open: 'never' }],
+    ['json', { outputFile: `${OUTPUT_DIR}/results.json` }],
   ],
   use: {
     baseURL: HUB_URL,

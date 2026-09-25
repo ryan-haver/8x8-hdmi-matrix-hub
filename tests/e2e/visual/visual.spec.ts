@@ -59,7 +59,8 @@ test.beforeAll(({}, info) => {
       },
     ],
   };
-  const file = path.join(path.dirname(fileURLToPath(import.meta.url)), '__snapshots__', 'catalog.json');
+  const dir = process.env.E2E_SNAPSHOT_DIR ?? path.join(path.dirname(fileURLToPath(import.meta.url)), '__snapshots__');
+  const file = path.join(dir, 'catalog.json');
   const body = `${JSON.stringify(manifest, null, 2)}\n`;
   fs.mkdirSync(path.dirname(file), { recursive: true });
   if (!fs.existsSync(file) || fs.readFileSync(file, 'utf8') !== body) fs.writeFileSync(file, body);

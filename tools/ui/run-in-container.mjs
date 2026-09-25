@@ -14,7 +14,7 @@
 // The repo is bind-mounted at /work. node_modules inside the container is a
 // named volume (the host's node_modules may hold Windows binaries), and pip,
 // npm and the Python venv are cached in a second named volume.
-import { spawnSync } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -65,18 +65,37 @@ const script = [
   'setup_out=$(bash tools/ui/container-setup.sh | tee /dev/stderr)',
   'export E2E_PYTHON="${setup_out##*E2E_PYTHON=}"',
   'export PLAYWRIGHT_CONTAINER=1',
+  // Write everything inside the container and copy it back once at the end:
+  // Docker Desktop bind mounts (Windows) intermittently fail concurrent
+  // writes with ENOMEM. `cp -a -u` only copies files that are new or newer.
+  'SNAP=tests/e2e/visual/__snapshots__',
+  'export E2E_SNAPSHOT_DIR=/tmp/ui/snapshots E2E_OUTPUT_DIR=/tmp/ui/test-results E2E_REPORT_DIR=/tmp/ui/playwright-report',
+  'mkdir -p "$E2E_SNAPSHOT_DIR"',
+  'if [ -d "$SNAP" ]; then cp -a "$SNAP/." "$E2E_SNAPSHOT_DIR/"; fi',
+  'copy_back() { for i in 1 2 3 4 5; do mkdir -p "$2" && cp -a -u "$1/." "$2/" && return 0; echo "[ui-container] copy to $2 failed (attempt $i), retrying" >&2; sleep 3; done; return 1; }',
   'status=0',
   `${playwright} || status=$?`,
+  'if ! copy_back "$E2E_SNAPSHOT_DIR" "$SNAP"; then status=1; fi',
+  'rm -rf test-results playwright-report',
+  'if [ -d "$E2E_OUTPUT_DIR" ]; then copy_back "$E2E_OUTPUT_DIR" test-results || status=1; fi',
+  'if [ -d "$E2E_REPORT_DIR" ]; then copy_back "$E2E_REPORT_DIR" playwright-report || status=1; fi',
   chown,
   'exit $status',
 ].join('\n');
 
 const tty = process.stdin.isTTY && process.stdout.isTTY;
+// Unique name so an interrupted run can be stopped (killing the docker CLI
+// alone leaves the container running).
+const name = `hdmi-hub-ui-${process.pid}-${Date.now()}`;
+// Docker Desktop VMs are often small (a few GB); four Chromium workers plus
+// the stack can exhaust them. Default to 2 locally; CI sets its own.
+const workers = process.env.E2E_WORKERS ?? '2';
 const dockerArgs = [
   'run',
   '--rm',
   '--init',
-  '--ipc=host',
+  '--name', name,
+  '--shm-size=1g',
   ...(tty ? ['-it'] : []),
   '-v', `${ROOT}:/work`,
   '-v', `${VOLUME_NODE_MODULES}:/work/node_modules`,
@@ -85,20 +104,33 @@ const dockerArgs = [
   '-e', 'CI',
   '-e', 'UI_CACHE_DIR=/cache',
   '-e', 'E2E_LOG_LEVEL',
-  '-e', 'E2E_WORKERS',
+  '-e', `E2E_WORKERS=${workers}`,
   '-e', 'npm_config_update_notifier=false',
   IMAGE,
   'bash', '-c', script,
 ];
 
-console.log(`[ui-container] ${IMAGE}: ${mode}${passthrough.length ? ` ${passthrough.join(' ')}` : ''}`);
-const result = spawnSync('docker', dockerArgs, {
-  stdio: 'inherit',
-  // Git Bash rewrites /work-style arguments into Windows paths; disable that.
-  env: { ...process.env, MSYS_NO_PATHCONV: '1', MSYS2_ARG_CONV_EXCL: '*' },
-});
-if (result.error) {
-  console.error(`[ui-container] could not run docker: ${result.error.message}`);
-  process.exit(1);
+// Git Bash rewrites /work-style arguments into Windows paths; disable that.
+const env = { ...process.env, MSYS_NO_PATHCONV: '1', MSYS2_ARG_CONV_EXCL: '*' };
+console.log(
+  `[ui-container] ${IMAGE}: ${mode}${passthrough.length ? ` ${passthrough.join(' ')}` : ''} (workers: ${workers})`,
+);
+const child = spawn('docker', dockerArgs, { stdio: 'inherit', env });
+let stopping = false;
+const stop = () => {
+  if (stopping) return;
+  stopping = true;
+  console.error(`\n[ui-container] stopping ${name}`);
+  spawnSync('docker', ['stop', '-t', '5', name], { stdio: 'ignore', env });
+};
+for (const sig of ['SIGINT', 'SIGTERM', 'SIGHUP']) {
+  process.on(sig, () => {
+    stop();
+    process.exit(130);
+  });
 }
-process.exit(result.status ?? 1);
+child.on('error', (err) => {
+  console.error(`[ui-container] could not run docker: ${err.message}`);
+  process.exit(1);
+});
+child.on('exit', (code) => process.exit(code ?? 1));

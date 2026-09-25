@@ -70,9 +70,19 @@ and Flic buttons. The simulator starts from `tools/simulator/states/default.json
   keeps its own `node_modules` and a pip/npm/venv cache in named Docker
   volumes (`hdmi-hub-ui-node-modules`, `hdmi-hub-ui-cache`) and runs
   `tools/ui/container-setup.sh` (the same setup the CI `ui` job uses).
-- **Parallelism**: captures run on 4 workers (`E2E_WORKERS`); the smoke
-  project runs first because it changes simulator state (visual projects
-  depend on it; `--no-deps` skips it).
+  Snapshots, `test-results/` and `playwright-report/` are written inside the
+  container and copied back to the repo at the end, because Docker Desktop
+  bind mounts on Windows intermittently fail concurrent writes with
+  `ENOMEM`. The container is named `hdmi-hub-ui-<pid>-<time>` and is stopped
+  if the runner is interrupted.
+- **Parallelism**: `E2E_WORKERS` (default 4; the container runner defaults to
+  2 because Docker Desktop VMs are often small, and 4 Chromium workers plus
+  the stack exhausted a 3 GB VM). The smoke project runs first because it
+  changes simulator state (visual projects depend on it; `--no-deps` skips
+  it).
+- **Removing an entry**: Playwright never deletes obsolete snapshots; delete
+  the entry's PNGs by hand (the gallery lists them as entries without
+  catalog metadata).
 
 ### Approving a visual change
 
