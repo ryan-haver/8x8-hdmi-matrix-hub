@@ -645,7 +645,7 @@ class TestStatusCaching:
         mock_response.text = AsyncMock(return_value='{"comhead":"get video status","power":1,"allsource":[1,2,3,4,5,6,7,8]}')
         mock_response.__aenter__ = AsyncMock(return_value=mock_response)
         mock_response.__aexit__ = AsyncMock(return_value=None)
-        
+
         connected_matrix._session.post = MagicMock(return_value=mock_response)
 
         # First call (populates cache)
@@ -655,7 +655,7 @@ class TestStatusCaching:
 
         # Change response in mock to prove the HTTP call is NOT made
         mock_response.text = AsyncMock(return_value='{"comhead":"get video status","power":0}')
-        
+
         # Second call (should hit cache)
         status2 = await connected_matrix.get_status()
         assert status2["power"] == "on"  # still on because cached
@@ -672,7 +672,7 @@ class TestStatusCaching:
         mock_response.text = AsyncMock(return_value='{"comhead":"get video status","power":1,"allsource":[1,2,3,4,5,6,7,8]}')
         mock_response.__aenter__ = AsyncMock(return_value=mock_response)
         mock_response.__aexit__ = AsyncMock(return_value=None)
-        
+
         connected_matrix._session.post = MagicMock(return_value=mock_response)
 
         # Populate cache
@@ -685,7 +685,7 @@ class TestStatusCaching:
         write_response.text = AsyncMock(return_value='{"comhead":"video switch","result":1}')
         write_response.__aenter__ = AsyncMock(return_value=write_response)
         write_response.__aexit__ = AsyncMock(return_value=None)
-        
+
         connected_matrix._session.post = MagicMock(return_value=write_response)
 
         # Trigger write command
@@ -702,7 +702,7 @@ class TestStatusCaching:
         mock_response.text = AsyncMock(return_value='{"comhead":"get output status","allconnect":[1,1,0,0,0,0,0,0]}')
         mock_response.__aenter__ = AsyncMock(return_value=mock_response)
         mock_response.__aexit__ = AsyncMock(return_value=None)
-        
+
         connected_matrix._session.post = MagicMock(return_value=mock_response)
 
         # First call (populates cache)
@@ -712,7 +712,7 @@ class TestStatusCaching:
 
         # Change response in mock to prove HTTP call is not made
         mock_response.text = AsyncMock(return_value='{"comhead":"get output status","allconnect":[0,0,0,0,0,0,0,0]}')
-        
+
         # Second call (hits cache)
         status2 = await connected_matrix.get_output_status()
         assert status2["allconnect"][0] == 1
@@ -729,7 +729,7 @@ class TestStatusCaching:
         mock_response.text = AsyncMock(return_value='{"comhead":"get input status","inactive":[0,0,1,1,1,1,1,1]}')
         mock_response.__aenter__ = AsyncMock(return_value=mock_response)
         mock_response.__aexit__ = AsyncMock(return_value=None)
-        
+
         connected_matrix._session.post = MagicMock(return_value=mock_response)
 
         # First call
@@ -739,7 +739,7 @@ class TestStatusCaching:
 
         # Change response
         mock_response.text = AsyncMock(return_value='{"comhead":"get input status","inactive":[0,0,0,0,0,0,0,0]}')
-        
+
         # Hit cache
         status2 = await connected_matrix.get_input_status()
         assert status2["inactive"][2] == 1
@@ -763,7 +763,7 @@ class TestStatusCaching:
         write_response.text = AsyncMock(return_value='{"comhead":"video switch","result":1}')
         write_response.__aenter__ = AsyncMock(return_value=write_response)
         write_response.__aexit__ = AsyncMock(return_value=None)
-        
+
         connected_matrix._session.post = MagicMock(return_value=write_response)
 
         # Trigger write
