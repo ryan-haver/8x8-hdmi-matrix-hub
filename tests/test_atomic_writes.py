@@ -10,6 +10,7 @@ Validates the core guarantees:
 
 from __future__ import annotations
 
+import json
 import sys
 import threading
 from pathlib import Path
@@ -85,11 +86,6 @@ class TestAtomicWriteJson:
         temp_files = list(tmp_data_dir.glob(".settings.json.*.tmp"))
         assert temp_files == [], f"Temp files not cleaned up: {temp_files}"
 
-    @pytest.mark.xfail(
-        sys.platform == "win32",
-        reason="PER-01: _file_io locks the temp file, not the target; os.replace races on Windows",
-        strict=True,
-    )
     def test_concurrent_writers_dont_corrupt_file(self, tmp_data_dir: Path):
         """100 threads writing the same file should produce valid JSON."""
         target = tmp_data_dir / "settings.json"
@@ -156,6 +152,140 @@ class TestAtomicWriteJson:
         data = {"name": "日本語テスト 🎬 café"}
         atomic_write_json(target, data, ensure_ascii=False)
         assert atomic_read_json(target) == data
+
+
+class TestWriterSerialization:
+    """PER-01: writers serialize on a stable sidecar lock, not the temp file."""
+
+    def test_sidecar_lock_path_is_stable_and_hidden(self, tmp_data_dir: Path):
+        target = tmp_data_dir / "settings.json"
+        assert _file_io.lock_path_for(target) == tmp_data_dir / ".settings.json.lock"
+        atomic_write_json(target, {"a": 1})
+        atomic_write_json(target, {"a": 2})
+        assert _file_io.lock_path_for(target).exists()
+        # Only the target and its sidecar remain — no temp files.
+        assert sorted(p.name for p in tmp_data_dir.iterdir()) == [".settings.json.lock", "settings.json"]
+
+    def test_writer_waits_for_foreign_sidecar_lock(self, tmp_data_dir: Path):
+        """A writer blocks (then times out) while another handle holds the sidecar lock."""
+        import os
+
+        target = tmp_data_dir / "settings.json"
+        atomic_write_json(target, {"v": 1})
+
+        fd = os.open(_file_io.lock_path_for(target), os.O_RDWR)
+        try:
+            _file_io._lock_file_exclusive(fd)
+            with pytest.raises(TimeoutError):
+                atomic_write_json(target, {"v": 2}, lock_timeout=0.2)
+            # The sidecar lock never locks the target itself.
+            assert json.loads(target.read_text(encoding="utf-8")) == {"v": 1}
+        finally:
+            _file_io._unlock_file(fd)
+            os.close(fd)
+
+        atomic_write_json(target, {"v": 3}, lock_timeout=0.2)
+        assert atomic_read_json(target) == {"v": 3}
+
+    def test_readers_never_see_partial_content_during_writes(self, tmp_data_dir: Path):
+        target = tmp_data_dir / "settings.json"
+        payload = {"list": list(range(500))}
+        atomic_write_json(target, {"writer": -1, **payload})
+        stop = threading.Event()
+        errors: list[BaseException] = []
+
+        def reader() -> None:
+            while not stop.is_set():
+                try:
+                    data = atomic_read_json(target)
+                    assert data["list"] == payload["list"]
+                except BaseException as exc:  # pragma: no cover - we want all errors
+                    errors.append(exc)
+                    return
+
+        readers = [threading.Thread(target=reader) for _ in range(4)]
+        for t in readers:
+            t.start()
+        try:
+            for i in range(100):
+                atomic_write_json(target, {"writer": i, **payload})
+        finally:
+            stop.set()
+            for t in readers:
+                t.join()
+        assert not errors, errors
+
+    def test_concurrent_writer_processes_dont_corrupt_file(self, tmp_data_dir: Path):
+        """Several processes hammering one file serialize via the sidecar lock."""
+        import subprocess
+
+        target = tmp_data_dir / "shared.json"
+        script = (
+            "import sys; sys.path.insert(0, sys.argv[1]);"
+            "from _file_io import atomic_write_json, atomic_read_json;"
+            "idx = int(sys.argv[3]);"
+            "[atomic_write_json(sys.argv[2], {'writer': idx, 'n': n, 'list': list(range(200))}) for n in range(25)];"
+            "[atomic_read_json(sys.argv[2]) for _ in range(25)]"
+        )
+        procs = [
+            subprocess.Popen(
+                [sys.executable, "-c", script, str(_PROJECT_ROOT / "src"), str(target), str(i)],
+                stderr=subprocess.PIPE,
+            )
+            for i in range(4)
+        ]
+        failures = []
+        for proc in procs:
+            _, err = proc.communicate(timeout=60)
+            if proc.returncode != 0:
+                failures.append(err.decode(errors="replace"))
+        assert not failures, "\n".join(failures)
+        data = atomic_read_json(target)
+        assert data["list"] == list(range(200))
+        assert data["n"] == 24
+        assert list(tmp_data_dir.glob(".shared.json.*.tmp")) == []
+
+
+class TestReplaceRetry:
+    """PER-01: Windows sharing violations on os.replace are retried."""
+
+    def test_transient_permission_error_on_replace(self, tmp_data_dir: Path, monkeypatch):
+        target = tmp_data_dir / "settings.json"
+        real_replace = _file_io.os.replace
+        calls = {"n": 0}
+
+        def flaky_replace(src, dst):
+            calls["n"] += 1
+            if calls["n"] <= 2:
+                raise PermissionError(13, "The process cannot access the file")
+            return real_replace(src, dst)
+
+        monkeypatch.setattr(_file_io.os, "replace", flaky_replace)
+        if sys.platform == "win32":
+            assert atomic_write_json(target, {"ok": True}) is True
+            assert calls["n"] == 3
+            assert atomic_read_json(target) == {"ok": True}
+        else:
+            # On POSIX a PermissionError is a real permission problem.
+            with pytest.raises(PermissionError):
+                atomic_write_json(target, {"ok": True})
+            assert calls["n"] == 1
+        assert list(tmp_data_dir.glob(".settings.json.*.tmp")) == []
+
+    @pytest.mark.skipif(sys.platform != "win32", reason="Windows sharing semantics")
+    def test_replace_succeeds_once_reader_closes_handle(self, tmp_data_dir: Path):
+        """A reader holding the target open delays, but does not fail, the write."""
+        target = tmp_data_dir / "settings.json"
+        atomic_write_json(target, {"v": 1})
+        f = open(target, encoding="utf-8")  # noqa: SIM115 - held open deliberately
+        timer = threading.Timer(0.2, f.close)
+        timer.start()
+        try:
+            atomic_write_json(target, {"v": 2})
+        finally:
+            timer.join()
+            f.close()
+        assert atomic_read_json(target) == {"v": 2}
 
 
 class TestAtomicReadJson:
