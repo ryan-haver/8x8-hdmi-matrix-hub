@@ -29,12 +29,27 @@ except ImportError:
     from ._task_supervisor import cancel_and_wait, create_supervised_task  # type: ignore[no-redef]
 
 try:
-    from _telnet_proto import TelnetIACFilter, is_acknowledged, is_response_complete, response_error
+    from _telnet_proto import (
+        READ_SETTLE_S,
+        TelnetIACFilter,
+        answer_lines,
+        is_acknowledged,
+        is_preset_empty,
+        is_response_complete,
+        needs_settle,
+        preset_routing,
+        response_error,
+    )
 except ImportError:
     from ._telnet_proto import (  # type: ignore[no-redef]
+        READ_SETTLE_S,
         TelnetIACFilter,
+        answer_lines,
         is_acknowledged,
+        is_preset_empty,
         is_response_complete,
+        needs_settle,
+        preset_routing,
         response_error,
     )
 
@@ -424,6 +439,16 @@ class TelnetClient:
                         # Check for command completion
                         if self._is_response_complete(response, command):
                             break
+
+                # A multi-line read with no known last line (`r fw version`):
+                # take the rest of the burst too, or it would be read as the
+                # answer to the next command.
+                if needs_settle(command) and response_error(response) is None:
+                    while loop.time() < deadline:
+                        chunk = await self._read_available(timeout=READ_SETTLE_S)
+                        if not chunk:
+                            break
+                        response += chunk
 
                 _LOG.debug(f"Telnet RX: {repr(response[:200])}...")
                 return response
@@ -1044,14 +1069,10 @@ class TelnetClient:
 
         try:
             response = await self._send_raw(f"r preset {preset_num}")
-            # Parse preset info from response
-            # Format: preset X: output1->inputY, output2->inputZ, ...
-            info: dict = {"preset": preset_num, "routing": {}}
-            for match in re.finditer(r"output(\d+)->input(\d+)", response.lower()):
-                output = int(match.group(1))
-                input_src = int(match.group(2))
-                info["routing"][output] = input_src
-            return info
+            # V1.10.01: one "outputX->inputY" line per output, or
+            # "preset N is none,please save a preset" for an empty slot.
+            empty = is_preset_empty(response)
+            return {"preset": preset_num, "routing": {} if empty else preset_routing(response), "saved": not empty}
         except Exception as e:
             _LOG.error(f"Get preset info error: {e}")
             return None
@@ -1133,7 +1154,9 @@ class TelnetClient:
         """Get firmware version."""
         try:
             response = await self._send_raw("r fw version")
-            match = re.search(r"v?([\d.]+)", response)
+            # V1.10.01 answers "mcu fw version: v1.10.01" followed by the key
+            # MCU, web GUI and CPLD versions; the MCU line is the firmware.
+            match = re.search(r"(?:mcu\s+)?fw version\s*:\s*v?(\d[\d.]*)", response, re.IGNORECASE)
             if match:
                 return match.group(1)
             return self.firmware_version
@@ -1145,8 +1168,9 @@ class TelnetClient:
         """Get device model/type."""
         try:
             response = await self._send_raw("r type")
-            # Parse model from response
-            return response.strip()
+            # The device echoes "r type!" first (V1.10.01); the answer is
+            # the rest ("8x8 hdmi2.1 matrix").
+            return "\n".join(answer_lines(response, "r type"))
         except Exception as e:
             _LOG.error(f"Get device type error: {e}")
             return ""
