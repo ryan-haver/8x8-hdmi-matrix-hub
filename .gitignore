@@ -84,6 +84,7 @@ gitleaks-report*.json
 .sisyphus/
 .omo/
 .playwright-mcp/
+.claude/worktrees/
 
 # Archive
 archive/
