@@ -14,7 +14,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from persistence import reset_data_dir_cache
-from rest_api import create_rest_app, reset_rate_limiter, set_matrix_device
+from rest_api import create_rest_app, set_matrix_device
 from rest_api.device_settings import (
     _coerce_preset_list,
     get_dashboard_presets,
@@ -41,7 +41,6 @@ def temp_data_dir():
 @pytest.fixture
 def app_with_device_settings(extended_mock_matrix, temp_data_dir):
     """Create REST app with mock matrix and initialized device settings."""
-    reset_rate_limiter()
     # CRITICAL: reset_data_dir_cache() clears the process-level cache so
     # get_data_dir() re-resolves from the env var instead of returning a
     # stale cached path from a previous test.

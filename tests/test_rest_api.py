@@ -13,7 +13,7 @@ from unittest.mock import AsyncMock
 import pytest
 
 # Import the REST API module
-from rest_api import create_rest_app, reset_rate_limiter, set_matrix_device
+from rest_api import create_rest_app, set_matrix_device
 
 # mock_matrix fixture is provided by conftest.py
 
@@ -50,9 +50,6 @@ def extended_mock_matrix(mock_matrix):
 @pytest.fixture
 def app(extended_mock_matrix):
     """Create the REST app with mock matrix."""
-    # Reset rate limiter between tests
-    reset_rate_limiter()
-
     set_matrix_device(
         extended_mock_matrix,
         {
@@ -1989,7 +1986,6 @@ class TestSystemShortcutsAPI:
         import os
         import tempfile
 
-        reset_rate_limiter()
         # CRITICAL: reset_data_dir_cache() clears the process-level cache so
         # get_data_dir() re-resolves from the env var instead of returning a
         # stale cached path from a previous test.
@@ -2213,7 +2209,6 @@ class TestDashboardLayoutAPI:
         import os
         import tempfile
 
-        reset_rate_limiter()
         from persistence import reset_data_dir_cache
 
         reset_data_dir_cache()
@@ -2358,23 +2353,6 @@ class TestDashboardLayoutAPI:
 class TestProfileFavoriteDashboardAPI:
     """Tests for profile favorite and dashboard endpoints (Phase 7)."""
 
-    @pytest.fixture(autouse=True)
-    def fresh_profile_manager(self):
-        """Ensure a fresh ProfileManager for each test."""
-        import rest_api.utils as utils_module
-        from persistence import get_data_dir, reset_data_dir_cache
-
-        # Reset manager so set_matrix_device creates a fresh one
-        utils_module._profile_manager = None
-        # CRITICAL: reset the path cache first, BEFORE calling get_data_dir
-        reset_data_dir_cache()
-        # Delete profiles file so fresh manager loads empty state
-        profiles_file = get_data_dir() / "profiles.json"
-        if profiles_file.exists():
-            profiles_file.unlink()
-        yield
-        utils_module._profile_manager = None
-
     @pytest.mark.asyncio
     async def test_get_profiles_favorites_empty_initially(self, client):
         """GET /api/profiles/favorites returns empty list when no profiles are favorited."""
@@ -2503,20 +2481,6 @@ class TestProfileFavoriteDashboardAPI:
 
 class TestMacroFavoriteDashboardAPI:
     """Tests for macro favorite and dashboard endpoints (Phase 7)."""
-
-    @pytest.fixture(autouse=True)
-    def fresh_macro_manager(self):
-        """Ensure a fresh MacroManager for each test."""
-        import rest_api.utils as utils_module
-        from persistence import get_data_dir, reset_data_dir_cache
-
-        utils_module._macro_manager = None
-        reset_data_dir_cache()
-        macros_file = get_data_dir() / "cec_macros.json"
-        if macros_file.exists():
-            macros_file.unlink()
-        yield
-        utils_module._macro_manager = None
 
     @pytest.mark.asyncio
     async def test_get_macros_favorites_empty_initially(self, client):

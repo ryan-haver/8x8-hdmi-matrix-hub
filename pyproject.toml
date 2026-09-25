@@ -99,3 +99,11 @@ exclude = [
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
+# Tests that need a real matrix are marked `hardware` and only run with
+# `pytest -m hardware` (TST-05). Passing another -m on the command line
+# overrides this default.
+addopts = "-m 'not hardware'"
+markers = [
+    "hardware: test needs a real matrix (MATRIX_HOST); deselected by default, run with -m hardware",
+    "mock: test uses the mock matrix (runs offline)",
+]
