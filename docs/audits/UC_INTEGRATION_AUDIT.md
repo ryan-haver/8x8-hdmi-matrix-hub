@@ -42,13 +42,13 @@ Severity: **C** critical · **H** high · **M** medium · **L** low. "Phase" ref
 | UC-11 | M | mDNS/Docker: `UC_INTEGRATION_INTERFACE=0.0.0.0` is published as the service address. SRV target is `<container-id>.local` in bridge mode. IPv4 only. `ucapi` never unregisters its zeroconf, which is the root cause of the `NonUniqueNameException` retry loop and the `clear_stale_mdns` workaround. Each `api.init` retry adds a duplicate attribute listener, so every `entity_change` is sent twice. Env var names in docs and plan don't match what `ucapi` reads (`UC_DISABLE_MDNS_PUBLISH`, `UC_INTEGRATION_HTTP_PORT`). | `driver.py:363-402,2185-2214`, `Dockerfile`, `run.py:17` | Discovery fails or duplicates. Double events after a restart race. | Host networking + `UC_INTEGRATION_INTERFACE=<LAN IP>` + `UC_MDNS_LOCAL_HOSTNAME`. In bridge mode, disable mDNS publish and register by `driver_url`. Correct env var names. Later, publish mDNS ourselves and unregister on shutdown. | 2 / 4 |
 | UC-12 | L | Remote command names don't follow the UC patterns (`POWER_ON`, `UP`, `SELECT`, `PLAY`, `MUTE` instead of `on_off` feature, `CURSOR_UP`, `CURSOR_ENTER`, `PLAY_PAUSE`, `MUTE_TOGGLE`). No `button_mapping`. UI tiles use text/emoji, not `uc:` icons. | `driver.py:686-845` | Physical D-pad and volume keys do nothing unless mapped by hand | Standard names + `button_mapping` + icons. Command renames break users' macros, so handled with DI-9. | 4 (DI-9) |
 | UC-13 | L | Status sensors are `CUSTOM` text sensors. `binary` exists even in 0.5.1. `output_N_connected` and `output_N_cable` report the same thing. `output_N_source` duplicates the media player source. | `driver.py:1040-1173` | 40 status entities, 24 redundant | Binary sensors, merge duplicates (DI-9) | 4 (DI-9) |
-| UC-14 | L | Preset names are hard-coded "Preset N" although the device reports them (`get video status.allname`). | `driver.py:630,1185` | Generic preset buttons | Use real preset names, updating in place on change | 2 |
+| UC-14 | M | Preset names are hard-coded "Preset N". The web app's preset names, favourites and visibility (device settings) are ignored. | `driver.py:630,1185` | Remote presets don't match the web app | Take preset names, order and visibility from the hub (device settings); update live on change (§4) | 2 |
 | UC-15 | M | `ucapi` pinned to 0.5.1 (latest 0.7.0, 2026-05-10). `pyproject.toml`/`setup.py` say `>=0.5.0`, so installs resolve to different versions. 0.7.0 adds log sanitising, queued WebSocket processing, Select/IR entities (0.5.2), entity icons/descriptions (0.6.0), and supported-entity filtering. The reviewers tested all 11 entity factories on 0.7.0 with no changes. | `requirements-uc.txt:8`, `pyproject.toml:26` | Missing fixes. Inconsistent installs. | Pin `ucapi==0.7.0` everywhere. Keep listener parameter names (`entity_ids`). Retest with the harness. | 2 |
 | UC-16 | L | `driver.json`: `min_core_api` not chosen deliberately; generic `driver_id` (also the mDNS instance name); host default `192.168.0.100` with no validation; the info text says the matrix must be on the Remote's network (it must be reachable from the hub); stale `release_date`; English only. | `driver.json` | Minor setup confusion | Correct the text and validation. Set `min_core_api` deliberately when adopting new setup errors. Version and date from the single version source (DEP-06). Keep `driver_id` (changing it breaks installs). | 2 / 6 |
 | UC-17 | H | Hub liveness is tied to the Remote. The poller, the only thing that emits `routing_change`/`connection_change`/`signal_change`/`cable_change` over `/ws`, is started only by UC `on_connect`/`on_exit_standby`/reconnect and stops when the Remote disconnects. `on_enter_standby` disconnects the matrix. In API-only mode nothing emits these events at all. | `driver.py:1608-1644,1745` | Web UI and HA lose live updates whenever the Remote sleeps or isn't connected | Start the poller with the hub, independent of any Remote. UC standby only pauses UC pushes. Long term, MatrixService owns polling (Phase 4). | 1 (wave 2) / 4 |
 | UC-18 | H | The modular path doesn't work against the real API. It ignores the `{success,data,error}` envelope (health check always fails, names never load, profiles/scenes always empty); maps routing into `allconnect` (BE-20); reads signal from the wrong endpoint; posts `output: 0` for switch-all (rejected); sends next/previous output in the body (the handler reads the query string); its WS client has no reconnect, resync, or auth. Only 3 of 11 entity types exist. Mocked tests hide all of this. | `src/integrations/unfolded_circle/*`, `tests/test_integrations_adapter.py` | None today (unused), but it blocks D4 | Rewrite `api_client.py` as `HubClientHttp` against the contract fixtures. Delete `adapter.py`. Implement the design in §5. | 4 |
 | UC-19 | L | `restore_from_config` runs before `api.init` and blocks on an unreachable matrix. `CONFIG_FILE` ignores `ucapi`'s `config_dir_path`. Hard-coded 9095 port check (BE-21). `driver.json` loaded relative to the CWD. `api` is a `__main__`-only global (works when run via `run.py`, breaks when imported). | `driver.py:443-627,2120-2214` | Slow start when the matrix is down. Fragile packaging. | Start the WS server first and restore asynchronously. Use `api.config_dir_path`. Package-relative paths. `_driver_state.api` everywhere. | 1 (wave 2) / 4 |
-| UC-20 | M | Vendored UC API docs are stale: integration API 0.12.1-beta vs 0.16.0-beta upstream, core WS API 0.31.0 vs 0.45.0, REST 0.40.0 vs 0.52.0. `UNFOLDED_CIRCLE_INTEGRATION_GUIDE.md` misses the 0.4.0 `CLIENT_DISCONNECTED` change. | `docs/remote3-*.md` | Development against outdated contracts | Refresh with a source/version header, or link upstream instead of vendoring. Move to `docs/vendor/`. | 7 |
+| UC-20 | M | Vendored UC API docs are stale: integration API 0.12.1-beta vs 0.16.0-beta upstream, core WS API 0.31.0 vs 0.45.0, REST 0.40.0 vs 0.52.0. `UNFOLDED_CIRCLE_INTEGRATION_GUIDE.md` misses the 0.4.0 `CLIENT_DISCONNECTED` change. | `docs/remote3-*.md` | Development against outdated contracts | Current official sources are now pinned and fetched locally with `tools/uc_reference.py` (`docs/vendor/UNFOLDED_CIRCLE.md`). Remove the stale vendored copies and point docs at the reference guide. | 7 |
 | UC-21 | H | No automated test exercises the integration as a Remote would. Every bug above was found manually. | `tests/` | Regressions go unnoticed | Scripted-Remote harness (§7) as a blocking CI job, built before any `driver.py` change | 1 (wave 2, first) |
 
 ## 3. Entity inventory (current, confirmed live: 74 entities)
@@ -67,19 +67,37 @@ Severity: **C** critical · **H** high · **M** medium · **L** low. "Phase" ref
 
 IDs are index-based and stable, and any future model must keep every surviving ID. Names are fixed when entities are created. No entity sets an icon or `device_id`.
 
-## 4. Target entity model (proposal, pending discussion item DI-9)
+## 4. Target design: the Remote as another front end of the web app (DI-9)
 
-The official integrations expose a handful of entities per device. What users actually put in activities and macros is: route output X to input Y, recall a preset/profile/scene, and CEC control of TVs and sources. Proposed model (~35–45 entities; optional groups selectable at setup):
+**Direction from the project owner (2026-09-25):** the Remote integration follows the core web app's design patterns and functionality. It focuses on **presets pulled from the web app**, **kiosk mode**, and **CEC control**. It follows Unfolded Circle's official guidance (pinned sources in [`docs/vendor/UNFOLDED_CIRCLE.md`](../vendor/UNFOLDED_CIRCLE.md)).
 
-1. **`remote.orei_matrix`** — the activity anchor. Simple commands `PRESET_n`, `PROFILE_<slug>`, `SCENE_<slug>`, `ROUTE_ALL_IN_n`, `OUT<m>_IN<n>`, `ALL_TVS_ON/OFF`. UI pages for Presets (real names), Profiles, Scenes, Route-all. This makes Profiles and Scenes usable from the Remote.
-2. **Per-output routing** — `select.output_N_source` (options = input names; needs ucapi ≥ 0.5.2 and Remote firmware support). If not adopted, `media_player.output_N` becomes routing-only, with state derived from the connection.
-3. **Per-output TV control** — `remote.output_N_cec` with working power, standard command names, `button_mapping`, and icons.
-4. **Per-input source control** — `remote.input_N_cec`, with the same fixes.
-5. **Status** — `sensor.output_N_display` and `sensor.input_N_signal` as binary sensors (16). Cable, connected, and source sensors dropped or offered as opt-in extras.
-6. **Buttons** — `button.preset_N` kept; optional `button.profile_<id>`.
-7. **`switch.matrix_power`** — synced from the device.
+### 4.1 Design rules
 
-**Migration rules:** keep every surviving entity ID. Profile and scene IDs are slug- or UUID-based so reordering doesn't break macros. Removed IDs and renamed commands are listed in the release notes and shown on a setup confirmation page.
+1. **One source of truth: the hub.** The Remote shows the same presets, names, order, profiles, shortcuts, macros and routing as the web app and the kiosk. It reads them from the hub (HubClient) and never keeps its own copies or defaults ("Preset N", "Input 1").
+2. **Configure in the web app, use on the Remote.** What appears on the Remote is managed in the web app: the existing Integrations → Unfolded Circle drawer, plus the kiosk layout. The Remote's setup flow only connects. Changes in the web app update the Remote live through hub events, without re-running setup.
+3. **Same actions, same behaviour.** Every Remote action calls the same hub operation as the equivalent web app or kiosk control (preset recall, profile recall, shortcut execute, CEC command, routing). Results and errors match, and nothing is reimplemented in the integration.
+4. **Official patterns.** Standard command names so physical buttons map automatically, `button_mapping` and `user_interface` pages per `entity_remote.md`, `select` for choosing among options per `entity_select.md`, binary sensors, changed-only updates, and a correct device state.
+
+### 4.2 Entities
+
+| Web app concept | Remote entity | Notes |
+| --- | --- | --- |
+| **Kiosk mode** (tabs: Routing · Presets · Shortcuts · Profiles, with pinned items) | `remote.orei_matrix` ("HDMI Matrix") | The activity anchor. Its UI pages mirror the kiosk tabs and show the items pinned in the kiosk layout, in the same order and with the same labels. Simple commands exist for every item: `PRESET_<n>`, `PROFILE_<id>`, `SCENE_<id>`, `SHORTCUT_<key>`, `MACRO_<id>`, `ROUTE_ALL_IN_<n>`. Commands keep working in activities even for items not pinned to a page. |
+| **Presets** (hardware presets 1–8 with names, favourites and visibility from device settings) | `button.preset_N` (existing IDs kept) + the Presets page above | Names come from the web app's device settings. Presets hidden in the web app are hidden on the Remote. Renames update live. |
+| **Routing** (matrix grid / kiosk Routing tab) | `select.output_N_source` | Options are the web app's input names, and `current_option` is live routing. Falls back to a routing-only `media_player.output_N` on firmware without select support (ucapi 0.7.0 filters unsupported types automatically). |
+| **CEC control of displays** (web app CEC remote / kiosk bottom-drawer remote on an output tile) | `remote.output_N_cec` (existing IDs kept) | Same command set and grouping as the web app's CEC remote (power, D-pad, back/home/menu, playback, volume/mute). Standard UC command names, `button_mapping` so the physical keys work, and UI pages laid out like the web app remote. |
+| **CEC control of sources** | `remote.input_N_cec` (existing IDs kept) | As above, for source devices. |
+| **CEC macros** | `MACRO_<id>` simple commands on `remote.orei_matrix` | The same macros as the web app's macro editor. |
+| **Status** (web app input/output status) | `sensor.output_N_display`, `sensor.input_N_signal` (binary) | Replace the 40 text sensors. The extra cable/connected/source sensors become opt-in in the web app. |
+| **Matrix power** | `switch.matrix_power` (existing ID) | Synced from the device. |
+
+**Protected items:** profiles and scenes with a per-item PIN can't be run from the Remote, because the Remote can't prompt for a PIN. They are hidden from the Remote unless the owner explicitly allows them in the web app. That choice is recorded as a web app setting, never a silent bypass.
+
+**Dependencies:** the kiosk layout must move from browser `localStorage` to the hub's dashboard layout (DI-5, Phase 4/5) before the Remote can mirror it. Until then, the Remote pages show the hub's favourites/dashboard flags for presets, profiles and shortcuts, which are already server-side.
+
+### 4.3 Migration
+
+Surviving entity IDs are unchanged: `remote.orei_matrix`, `button.preset_N`, `remote.input_N_cec`, `remote.output_N_cec`, `switch.matrix_power`. Removed entities (the 40 text sensors, and `media_player.output_N` where select is available) and renamed CEC commands are listed for approval before implementation, then in the release notes and on the setup confirmation page. Item command IDs are based on stable hub IDs, never on list order, so reordering in the web app doesn't break macros.
 
 ## 5. Architecture: finishing the modular integration (decision D4)
 
@@ -122,7 +140,7 @@ src/hub/integrations/unfolded_circle/
 | Latency | Lowest | One extra LAN hop (negligible) |
 | Complexity | Simplest | Requires a production-quality `HubClientHttp` (needed for D4 anyway) |
 
-**Recommendation (pending DI-10):** keep in-hub as the default. Offer an on-device aarch64 build (PyInstaller, packaged as `uc-intg-hdmi-matrix-<ver>-aarch64.tar.gz` and attached to releases) once `HubClientHttp` passes the contract suite. It's the better choice for users who can't use host networking (NAS, Kubernetes, Docker Desktop on macOS). *Unverified; confirm against the official docs and the build workflows of Unfolded Circle's integrations before committing: packaging layout, size and memory limits, the builder image, and whether switching an existing user from external to on-device creates a new integration instance (activities would need re-mapping).*
+**Recommendation (pending DI-10):** keep in-hub as the default. Offer an on-device aarch64 build (PyInstaller, packaged as `uc-intg-hdmi-matrix-<ver>-aarch64.tar.gz` and attached to releases) once `HubClientHttp` passes the contract suite. It's the better choice for users who can't use host networking (NAS, Kubernetes, Docker Desktop on macOS). *Confirmed from the official installation docs (pinned in `docs/vendor/UNFOLDED_CIRCLE.md`): firmware ≥ 1.9.0; `.tar.gz` ≤ 100 MB with an aarch64 `driver` and the Python runtime packed in; sandboxed; only `$UC_CONFIG_HOME`/`$UC_DATA_HOME` persist; ≤ 100 MB of memory recommended (throttled at 250 MB, killed at 350 MB); max 10 custom integrations; in-place update needs firmware ≥ 2.9.3. Still to verify on a real Remote: whether switching an existing user from the external driver to the on-device one creates a new integration instance (activities would need re-mapping).*
 
 ## 7. Test strategy: scripted Remote harness
 
@@ -142,6 +160,8 @@ Test cases, run against both HubClient implementations once they exist:
 10. Only changed attributes are pushed.
 11. Legacy `config_state.json` import; entity IDs unchanged.
 12. Auth: token required when configured; HTTP HubClient without a key fails with a clear setup error when a control PIN is set.
+
+V3 addition: run the same cases against Unfolded Circle's `core-simulator` (the real Remote core software) where its licence allows; it has no declared licence, so local-only until confirmed.
 
 CI: a blocking `uc` job (`pytest tests/uc`). The Docker smoke test runs with UC on and off.
 
