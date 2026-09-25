@@ -106,6 +106,7 @@ features:
   title: Name presets in the web app (names shown by the API, UI, kiosk)
   claim: web UI presets drawer rename; POST /api/device-settings/preset/{n}/name
   interfaces:
+    device: ['preset name (OreiMatrix.set_preset_name; the REST rename keeps hub-local names)']
     rest: ['POST /api/device-settings/preset/{preset}/name', GET /api/presets]
     ws: [device_settings]
     ui: [drawer/presets/rename]
@@ -142,7 +143,7 @@ features:
   title: Mute / unmute the audio of an output
   claim: 'README "Advanced Output Control: Audio mute per output"'
   interfaces:
-    device: [set output mute]
+    device: [set output audio mute]
     rest: ['POST /api/output/{output}/mute']
     ui: [modal/output-settings/default]
     kiosk: [kiosk/routing-modal/advanced]
@@ -150,162 +151,170 @@ features:
     flic: ['POST /api/output/{n}/mute']
     ha: [switch.output_N_mute]
   target: V4
-  current: V2
-  basis: 'V2: tests/sim/test_sim_e2e.py::test_output_setting_via_rest (POST /api/output/2/mute -> simulator audio_mute asserted).'
+  current: V1
+  basis: 'tests/sim/test_sim_e2e.py::test_output_setting_via_rest (POST /api/output/2/mute -> simulator audio_mute asserted)
+    and tests/sim/test_sim_real_commands.py (payload `{"mute": [2, 1]}` on the simulator log). Recorded V2 before WP-A4
+    part 2, lowered: On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
   evidence: []
-  findings: [BE-12]
+  findings: [BE-12, HIL-09]
   scenarios: [outputs.audio_mute]
 - id: F-MTX-008
   area: matrix
   title: Enable / disable an output's video stream
   claim: README "Advanced Output Control" (stream)
   interfaces:
-    device: [set output stream]
+    device: [tx stream]
     rest: ['POST /api/output/{output}/enable']
     ui: [modal/output-settings/default]
     kiosk: [kiosk/routing-modal/advanced]
     ha: [switch.output_N_stream]
   target: V4
   current: V1
-  basis: 'tests/sim/test_sim_hub.py::test_output_settings (driver-level: real OreiMatrix against the simulator, no user interface
-    in the path -> V1); tests/test_rest_api.py TestAdvancedOutputControl (mocked).'
+  basis: 'tests/sim/test_sim_hub.py::test_output_settings and tests/sim/test_sim_real_commands.py (driver-level: real OreiMatrix
+    against the simulator, payload on the simulator log -> V1); tests/test_rest_api.py TestAdvancedOutputControl (mocked).
+    On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
   evidence: []
-  findings: [BE-12]
+  findings: [BE-12, HIL-09]
   scenarios: []
 - id: F-MTX-009
   area: matrix
   title: Set an output's HDCP mode
   claim: README "Advanced Output Control" (hdcp)
   interfaces:
-    device: [set output hdcp]
+    device: [tx hdcp]
     rest: ['POST /api/output/{output}/hdcp']
     ui: [modal/output-settings/default]
     kiosk: [kiosk/routing-modal/advanced]
   target: V4
   current: V1
-  basis: 'tests/sim/test_sim_hub.py::test_output_settings (driver-level: real OreiMatrix against the simulator, no user interface
-    in the path -> V1); tests/test_rest_api.py TestAdvancedOutputControl (mocked).'
+  basis: 'tests/sim/test_sim_hub.py::test_output_settings and tests/sim/test_sim_real_commands.py (driver-level: real OreiMatrix
+    against the simulator, payload on the simulator log -> V1); tests/test_rest_api.py TestAdvancedOutputControl (mocked).
+    On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
   evidence: []
-  findings: [BE-12]
+  findings: [BE-12, HIL-09]
   scenarios: []
 - id: F-MTX-010
   area: matrix
   title: Set an output's HDR mode
   claim: README "Advanced Output Control" (hdr)
   interfaces:
-    device: [set output hdr]
+    device: [set hdr conversion]
     rest: ['POST /api/output/{output}/hdr']
     ui: [modal/output-settings/default]
     kiosk: [kiosk/routing-modal/advanced]
   target: V4
   current: V1
-  basis: 'tests/sim/test_sim_hub.py::test_output_settings (driver-level: real OreiMatrix against the simulator, no user interface
-    in the path -> V1); tests/test_rest_api.py TestAdvancedOutputControl (mocked).'
+  basis: 'tests/sim/test_sim_hub.py::test_output_settings and tests/sim/test_sim_real_commands.py (driver-level: real OreiMatrix
+    against the simulator, payload on the simulator log -> V1); tests/test_rest_api.py TestAdvancedOutputControl (mocked).
+    On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
   evidence: []
-  findings: [BE-12]
+  findings: [BE-12, HIL-09]
   scenarios: []
 - id: F-MTX-011
   area: matrix
   title: Set an output's scaler mode (incl. audio-only)
   claim: README "Advanced Output Control" (scaler)
   interfaces:
-    device: [set output scaler]
+    device: [set video scaler]
     rest: ['POST /api/output/{output}/scaler']
     ui: [modal/output-settings/default]
     kiosk: [kiosk/routing-modal/advanced]
   target: V4
   current: V1
-  basis: 'tests/sim/test_sim_hub.py::test_output_settings (driver-level: real OreiMatrix against the simulator, no user interface
-    in the path -> V1); tests/test_rest_api.py TestAdvancedOutputControl (mocked).'
+  basis: 'tests/sim/test_sim_hub.py::test_output_settings and tests/sim/test_sim_real_commands.py (driver-level: real OreiMatrix
+    against the simulator, payload on the simulator log -> V1); tests/test_rest_api.py TestAdvancedOutputControl (mocked).
+    On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
   evidence: []
-  findings: [BE-12, BE-15]
+  findings: [BE-12, BE-15, HIL-09]
   scenarios: []
 - id: F-MTX-012
   area: matrix
   title: Enable / disable ARC on an output
   claim: README "Advanced Output Control" (arc)
   interfaces:
-    device: [set output arc]
+    device: [set arc]
     rest: ['POST /api/output/{output}/arc']
     ui: [modal/output-settings/default]
     kiosk: [kiosk/routing-modal/advanced]
   target: V4
   current: V1
-  basis: 'tests/sim/test_sim_hub.py::test_output_settings (driver-level: real OreiMatrix against the simulator, no user interface
-    in the path -> V1); tests/test_rest_api.py TestAdvancedOutputControl (mocked).'
+  basis: 'tests/sim/test_sim_hub.py::test_output_settings and tests/sim/test_sim_real_commands.py (driver-level: real OreiMatrix
+    against the simulator, payload on the simulator log -> V1); tests/test_rest_api.py TestAdvancedOutputControl (mocked).
+    On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
   evidence: []
-  findings: [BE-12]
+  findings: [BE-12, HIL-09]
   scenarios: []
 - id: F-MTX-013
   area: matrix
   title: Set an input's EDID
   claim: 'README "EDID Management: Per-input EDID configuration"'
   interfaces:
-    device: [set input edid]
+    device: [set edid]
     rest: ['POST /api/input/{input}/edid', GET /api/edid/modes, GET /api/status/edid]
     ui: [modal/input-settings/default]
   target: V4
   current: V1
-  basis: 'tests/sim/test_sim_hub.py::test_edid (driver-level: real OreiMatrix against the simulator, no user interface in
-    the path -> V1); tests/test_rest_api.py TestEdidControl (mocked).'
+  basis: 'tests/sim/test_sim_hub.py::test_edid and tests/sim/test_sim_real_commands.py (driver-level: real OreiMatrix against
+    the simulator -> V1); tests/test_rest_api.py TestEdidControl (mocked). EDID ids 1-47 are the device web interface''s
+    list (36 = 8K FRL 12G HDR 7.1CH, as V1.10.01 reports). On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
   evidence: []
-  findings: [BE-12]
+  findings: [BE-12, HIL-09]
   scenarios: []
 - id: F-MTX-014
   area: matrix
   title: Copy EDID from a connected display
   claim: README "Copy EDID from connected displays"
   interfaces:
-    device: [set input edid (14+N)]
+    device: [set edid (39+N)]
     rest: ['POST /api/input/{input}/edid']
   target: V4
   current: V1
-  basis: 'tests/sim/test_sim_hub.py::test_edid (copy_edid_from_output) (driver-level: real OreiMatrix against the simulator,
-    no user interface in the path -> V1).'
+  basis: 'tests/sim/test_sim_hub.py::test_edid (copy_edid_from_output sends set edid 39+N) (driver-level -> V1). Neither
+    `copy edid` nor `set input edid 14+N` is answered by V1.10.01 (BE-25). On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
   evidence: []
-  findings: [BE-25]
+  findings: [BE-25, HIL-09]
   scenarios: []
 - id: F-MTX-015
   area: matrix
   title: 'External audio: matrix mode'
   claim: 'README "External Audio Routing: Bind to input/output or matrix mode"'
   interfaces:
-    device: [set output exa mode, get ext-audio status]
+    device: [set ext-audio mode, set ext-audio index, get ext-audio status]
     rest: [POST /api/ext-audio/mode, GET /api/ext-audio/modes, GET /api/status/ext-audio]
   target: V4
   current: V1
-  basis: 'tests/sim/test_sim_hub.py::test_ext_audio (driver-level: real OreiMatrix against the simulator, no user interface
-    in the path -> V1); tests/test_rest_api.py TestExtAudioControl (mocked).'
+  basis: 'tests/sim/test_sim_hub.py::test_ext_audio and tests/sim/test_sim_real_commands.py (driver-level -> V1);
+    tests/test_rest_api.py TestExtAudioControl (mocked). On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
   evidence: []
-  findings: [BE-12]
+  findings: [BE-12, HIL-09]
   scenarios: []
 - id: F-MTX-016
   area: matrix
   title: 'External audio: enable per output'
   claim: README "Independent audio matrix control"
   interfaces:
-    device: [set output exa]
+    device: [set ext-audio out]
     rest: ['POST /api/ext-audio/{output}/enable']
   target: V4
   current: V1
-  basis: 'tests/sim/test_sim_hub.py::test_ext_audio (driver-level: real OreiMatrix against the simulator, no user interface
-    in the path -> V1); tests/test_rest_api.py TestExtAudioControl (mocked).'
+  basis: 'tests/sim/test_sim_hub.py::test_ext_audio and tests/sim/test_sim_real_commands.py (driver-level -> V1);
+    tests/test_rest_api.py TestExtAudioControl (mocked). On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
   evidence: []
-  findings: [BE-12]
+  findings: [BE-12, HIL-09]
   scenarios: []
 - id: F-MTX-017
   area: matrix
   title: 'External audio: source per output'
   claim: README "Per-output audio source selection"
   interfaces:
-    device: [set output exa in source]
+    device: [ext-audio switch]
     rest: ['POST /api/ext-audio/{output}/source']
   target: V4
   current: V1
-  basis: 'tests/sim/test_sim_hub.py::test_ext_audio (driver-level: real OreiMatrix against the simulator, no user interface
-    in the path -> V1); tests/test_rest_api.py TestExtAudioControl (mocked).'
+  basis: 'tests/sim/test_sim_hub.py::test_ext_audio and tests/sim/test_sim_real_commands.py (driver-level -> V1);
+    tests/test_rest_api.py TestExtAudioControl (mocked). The device web interface offers it only in matrix mode (2). On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
   evidence: []
-  findings: [BE-12]
+  findings: [BE-12, HIL-09]
   scenarios: []
 - id: F-MTX-018
   area: matrix
@@ -347,17 +356,19 @@ features:
     ui: [drawer/hardware/default]
   target: V4
   current: V1
-  basis: 'tests/sim/test_sim_hub.py::test_system_settings (driver-level: real OreiMatrix against the simulator, no user interface
-    in the path -> V1); tests/test_rest_api.py TestLcdTimeoutControl (mocked).'
+  basis: 'tests/sim/test_sim_hub.py::test_system_settings and tests/sim/test_sim_real_commands.py (driver-level -> V1);
+    tests/test_rest_api.py TestLcdTimeoutControl (mocked). V1.10.01 rejected the old {"time": N} payload for every code
+    (captured, result 0); the hub now sends {"lcd on time": N} and reads the code back as `get system status.mode`
+    (captured: 3 = "lcd on 30 seconds"). On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
   evidence: []
-  findings: [API-07, BE-12]
+  findings: [API-07, BE-12, HIL-09]
   scenarios: []
 - id: F-MTX-021
   area: matrix
   title: Reboot the matrix
   claim: docs/FLIC_SETUP.md POST /api/system/reboot; HA reboot button
   interfaces:
-    device: [set reboot]
+    device: [reboot]
     telnet: [reboot]
     rest: [POST /api/system/reboot]
     ui: [dialog/confirm/reboot]
@@ -3299,7 +3310,7 @@ features:
   title: Recover after the matrix reboots or is power-cycled
   claim: docs/audits/UC_INTEGRATION_AUDIT.md §9 item 8
   interfaces:
-    device: [set reboot]
+    device: [reboot]
     telnet: [reboot]
   target: V4
   current: V0

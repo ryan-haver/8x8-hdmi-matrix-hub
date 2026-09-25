@@ -24,7 +24,8 @@ SIM = ROOT / "tools" / "simulator"
 def _default_snapshot() -> Snapshot:
     state = DeviceState.default()
     reads = {c: dispatch(state.copy(), cmd.snapshot_payload(c)).response for c in cmd.SNAPSHOT_READS}
-    return Snapshot.from_reads(reads, lcd_line="lcd on 30 seconds")
+    presets = [{"saved": p.saved, "routing": list(p.routing) if p.saved else None} for p in state.presets]
+    return Snapshot.from_reads(reads, lcd_line="lcd on 30 seconds", presets=presets)
 
 
 def _all_steps():
@@ -57,9 +58,27 @@ def test_payloads_match_the_hub_shapes():
     """Key order and the `language` field matter for byte-level captures."""
     assert list(cmd.video_switch(1, 2)) == ["comhead", "language", "source"]
     assert list(cmd.input_name(1, "x")) == ["comhead", "language", "name", "index"]
-    assert "language" not in cmd.output_setting("hdcp", 1, 3)
+    assert cmd.output_setting("hdcp", 1, 3) == {"comhead": "tx hdcp", "language": 0, "hdcp": [1, 3]}
+    assert cmd.output_setting("stream", 2, 0) == {"comhead": "tx stream", "language": 0, "out": [2, 0]}
+    assert cmd.set_edid(4, 40) == {"comhead": "set edid", "language": 0, "edid": [4, 40]}
+    assert cmd.lcd_time(3) == {"comhead": "set lcd on time", "language": 0, "lcd on time": 3}
+    assert cmd.exa_out(3, 0) == {"comhead": "set ext-audio out", "language": 0, "out": [3, 0]}
+    assert cmd.exa_switch(3, 9) == {"comhead": "ext-audio switch", "language": 0, "source": [3, 9]}
+    assert list(cmd.preset_name(1, "x")) == ["comhead", "language", "index", "name"]
+    assert cmd.reboot() == {"comhead": "reboot", "language": 0, "reboot": 1}
+    # the old hub's payloads, kept as "expected unanswered" evidence (HIL-09)
     assert list(cmd.cec_index_single("input", 1, 1)) == ["comhead", "port", "index", "enable"]
-    assert cmd.exa_enable(3, False) == {"comhead": "set output exa", "output": 3, "exa": 2}
+    assert cmd.legacy_exa_enable(3, False) == {"comhead": "set output exa", "output": 3, "exa": 2}
+    assert "language" not in cmd.legacy_output_setting("hdcp", 1, 3)
+
+
+def test_capture_payloads_are_exactly_what_the_hub_sends():
+    """Same comhead, keys, key order and values as OreiMatrix builds them (device codes)."""
+    import re as _re
+
+    text = (SRC / "orei_matrix.py").read_text(encoding="utf-8")
+    for comhead, key in cmd.OUTPUT_SETTINGS.values():
+        assert _re.search(rf'"comhead": "{comhead}",\s*"language": 0,\s*"{key}": \[', text), comhead
 
 
 # ------------------------------------------------------------------ Telnet

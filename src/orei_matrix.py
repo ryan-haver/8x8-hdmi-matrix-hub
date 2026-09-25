@@ -35,9 +35,53 @@ from pyee.asyncio import AsyncIOEventEmitter
 # Import Telnet client for CEC and cable detection
 try:
     from ._task_supervisor import cancel_and_wait, create_supervised_task
+    from .device_codes import (
+        CEC_INPUT_COMMANDS,
+        CEC_OUTPUT_COMMANDS,
+        HDCP_MODES,
+        HDR_MODES,
+        SCALER_AUDIO_ONLY,
+        SCALER_MODES,
+        edid_copy_from_output,
+        hdr_from_device,
+        hdr_to_device,
+        scaler_from_device,
+        scaler_to_device,
+    )
+    from .device_codes import (
+        EDID_MODES as DEVICE_EDID_MODES,
+    )
+    from .device_codes import (
+        EXT_AUDIO_MODES as DEVICE_EXT_AUDIO_MODES,
+    )
+    from .device_codes import (
+        LCD_TIMEOUT_MODES as DEVICE_LCD_MODES,
+    )
     from .telnet_client import MatrixStatus, TelnetClient, TelnetState
 except ImportError:
     from _task_supervisor import cancel_and_wait, create_supervised_task  # type: ignore[no-redef]
+    from device_codes import (  # type: ignore[no-redef]
+        CEC_INPUT_COMMANDS,
+        CEC_OUTPUT_COMMANDS,
+        HDCP_MODES,
+        HDR_MODES,
+        SCALER_AUDIO_ONLY,
+        SCALER_MODES,
+        edid_copy_from_output,
+        hdr_from_device,
+        hdr_to_device,
+        scaler_from_device,
+        scaler_to_device,
+    )
+    from device_codes import (
+        EDID_MODES as DEVICE_EDID_MODES,
+    )
+    from device_codes import (
+        EXT_AUDIO_MODES as DEVICE_EXT_AUDIO_MODES,
+    )
+    from device_codes import (
+        LCD_TIMEOUT_MODES as DEVICE_LCD_MODES,
+    )
     from telnet_client import MatrixStatus, TelnetClient, TelnetState
 
 _LOG = logging.getLogger(__name__)
@@ -92,12 +136,14 @@ _LINK_UP = frozenset({ConnectionState.CONNECTED, ConnectionState.DEGRADED})
 # tests/fixtures/device/BK-808_V1.10.01_web-V2.00.03/http/login.json). The API
 # doc lists "success"; it is kept for other firmware.
 LOGIN_SUCCESS_RESULTS: tuple[int | str, ...] = (1, "success")
-# HIL-A: confirm -- `result` of an accepted write (verified 1 for video
-# switch, preset set and set poweronoff; the doc shows "success" for some).
+# `result` of an accepted write: 1 on V1.10.01 (captured for video switch,
+# names, beep, panel lock, set cec index and set poweronoff, write/*.json).
+# "success" is kept for other firmware.
 WRITE_SUCCESS_RESULTS: tuple[int | str, ...] = (1, "success")
-# HIL-A: confirm -- `result` values that mean failure: a rejected write, a
-# wrong password ("fail" is the simulator's guess), or a command sent without
-# a valid session (the simulator echoes the comhead with result 0).
+# `result` values that mean failure. V1.10.01 answers a rejected write and a
+# wrong-password login with 0 (captured, write/*.json and
+# probe/login_wrong_password.json); the strings are kept for other firmware.
+# The answer to a command sent without a session is still uncaptured (HIL-14).
 FAILURE_RESULTS: tuple[int | str, ...] = (0, "fail", "failed", "failure", "error")
 
 
@@ -114,10 +160,10 @@ def _normalise_result(value: Any) -> Any:
 def is_login_success(response: Any) -> bool:
     """Whether a ``login`` response reports success (BE-05).
 
-    # HIL-A: confirm against real device
-    The matrix echoes ``comhead: "login"`` even for a wrong password, so the
-    echo proves nothing: only an explicit success ``result`` counts. A failure
-    ``result`` ("fail", 0, ...), a missing ``result`` or anything unexpected
+    The matrix echoes ``comhead: "login"`` even for a wrong password
+    (captured on V1.10.01: ``{"comhead":"login","result":0}``), so the echo
+    proves nothing: only an explicit success ``result`` counts. A failure
+    ``result`` (0, "fail", ...), a missing ``result`` or anything unexpected
     is a failed login.
     """
     if not isinstance(response, dict):
@@ -126,7 +172,7 @@ def is_login_success(response: Any) -> bool:
 
 
 def is_write_success(response: Any) -> bool:
-    """Whether a write command's response reports success (BE-12). # HIL-A: confirm"""
+    """Whether a write command's response reports success (BE-12)."""
     if not isinstance(response, dict):
         return False
     return _normalise_result(response.get("result")) in WRITE_SUCCESS_RESULTS
@@ -139,13 +185,28 @@ def _copy_cables(cables: dict[str, Any]) -> dict[str, Any]:
 
 #: Physical outputs. Per-output arrays of V1.10.01 have one more entry
 #: (``allsource``, ``allscaler``, ``allhdr``, ``allhdcp``, ``allarc``, ``allout``,
-#: ``allaudiomute``: 9 values). What the ninth is, is undocumented (HIL-04).
+#: ``allaudiomute``: 9 values). The device's own web interface shows the ninth
+#: entry as its "All Output" row and writes it with port 0 (HIL-04).
 OUTPUT_COUNT = 8
 
 
 def per_output(values: Any) -> list[Any]:
     """The first ``OUTPUT_COUNT`` entries of a per-output array (drops the ninth, HIL-04)."""
     return list(values[:OUTPUT_COUNT]) if isinstance(values, list) else []
+
+
+def api_output_settings(status: dict[str, Any] | None) -> dict[str, list[Any]]:
+    """Per-output HDR/scaler/HDCP from ``get output status``, as API values.
+
+    HDR and scaler are 1-based in the hub's API and 0-based on the device
+    (:mod:`device_codes`); a code the device table does not know reads as None.
+    """
+    status = status or {}
+    return {
+        "hdr": [hdr_from_device(v) for v in per_output(status.get("allhdr"))],
+        "scaler": [scaler_from_device(v) for v in per_output(status.get("allscaler"))],
+        "hdcp": per_output(status.get("allhdcp")),
+    }
 
 
 def _is_read_command(comhead: str) -> bool:
@@ -612,10 +673,11 @@ class OreiMatrix:
         if not isinstance(data, dict):
             return _HttpResult("bad_response", error="Unparseable matrix response: not a JSON object")
         comhead = payload.get("comhead", "")
-        # HIL-A: confirm how the device answers a command sent without a valid
-        # session. Reads never carry `result` on success, so a failure result
-        # on a read is the "not logged in" answer. On a write it may also be a
-        # plain rejection; the caller re-logs in once and retries, and a second
+        # How the device answers a command sent without a valid session is
+        # not captured yet (HIL-14). Reads never carry `result` on success, so
+        # a failure result on a read is taken as "not logged in". On a write
+        # it is usually a plain rejection (V1.10.01 answers bad parameters with
+        # result 0); the caller re-logs in once and retries, and a second
         # failure is reported as a rejected write.
         if comhead != "login" and "result" in data and _normalise_result(data["result"]) in FAILURE_RESULTS:
             return _HttpResult("auth", data=data, error="Matrix returned a failure result (session may have expired)")
@@ -1076,81 +1138,71 @@ class OreiMatrix:
     # CEC Control Methods
     # =========================================================================
 
-    # CEC Command Index Mapping for HTTP API (verified from HAR capture)
-    CEC_POWER_ON = 1
-    CEC_POWER_OFF = 2
-    CEC_UP = 3
-    CEC_LEFT = 4
-    CEC_SELECT = 5
-    CEC_RIGHT = 6
-    CEC_MENU = 7
-    CEC_DOWN = 8
-    CEC_BACK = 9
-    CEC_PREVIOUS = 10
-    CEC_PLAY = 11
-    CEC_NEXT = 12
-    CEC_REWIND = 13
-    CEC_PAUSE = 14
-    CEC_FAST_FORWARD = 15
-    CEC_STOP = 16
-    CEC_MUTE = 17
-    CEC_VOLUME_DOWN = 18
-    CEC_VOLUME_UP = 19
+    # CEC command indices for the HTTP ``cec command`` (object 0 = source
+    # device). Kept as class constants for existing callers; the tables live
+    # in device_codes (VAL-03, BE-14).
+    CEC_POWER_ON = CEC_INPUT_COMMANDS["POWER_ON"]
+    CEC_POWER_OFF = CEC_INPUT_COMMANDS["POWER_OFF"]
+    CEC_UP = CEC_INPUT_COMMANDS["UP"]
+    CEC_LEFT = CEC_INPUT_COMMANDS["LEFT"]
+    CEC_SELECT = CEC_INPUT_COMMANDS["SELECT"]
+    CEC_RIGHT = CEC_INPUT_COMMANDS["RIGHT"]
+    CEC_MENU = CEC_INPUT_COMMANDS["MENU"]
+    CEC_DOWN = CEC_INPUT_COMMANDS["DOWN"]
+    CEC_BACK = CEC_INPUT_COMMANDS["BACK"]
+    CEC_PREVIOUS = CEC_INPUT_COMMANDS["PREVIOUS"]
+    CEC_PLAY = CEC_INPUT_COMMANDS["PLAY"]
+    CEC_NEXT = CEC_INPUT_COMMANDS["NEXT"]
+    CEC_REWIND = CEC_INPUT_COMMANDS["REWIND"]
+    CEC_PAUSE = CEC_INPUT_COMMANDS["PAUSE"]
+    CEC_FAST_FORWARD = CEC_INPUT_COMMANDS["FAST_FORWARD"]
+    CEC_STOP = CEC_INPUT_COMMANDS["STOP"]
+    CEC_MUTE = CEC_INPUT_COMMANDS["MUTE"]
+    CEC_VOLUME_DOWN = CEC_INPUT_COMMANDS["VOLUME_DOWN"]
+    CEC_VOLUME_UP = CEC_INPUT_COMMANDS["VOLUME_UP"]
 
-    # Unified CEC command registry: command name -> (index, description)
-    # This eliminates the need for separate input/output method mappings
-    CEC_COMMAND_MAP: dict[str, int] = {
-        "POWER_ON": 1,
-        "POWER_OFF": 2,
-        "UP": 3,
-        "LEFT": 4,
-        "SELECT": 5,
-        "RIGHT": 6,
-        "MENU": 7,
-        "DOWN": 8,
-        "BACK": 9,
-        "PREVIOUS": 10,
-        "PLAY": 11,
-        "NEXT": 12,
-        "REWIND": 13,
-        "PAUSE": 14,
-        "FAST_FORWARD": 15,
-        "STOP": 16,
-        "MUTE": 17,
-        "VOLUME_DOWN": 18,
-        "VOLUME_UP": 19,
-    }
+    #: Every CEC command name the hub knows, with its source-device (input)
+    #: index. Displays (outputs) use :attr:`CEC_OUTPUT_COMMAND_MAP`, a different
+    #: 0-based table of six commands (BE-14).
+    CEC_COMMAND_MAP: dict[str, int] = dict(CEC_INPUT_COMMANDS)
+    #: CEC commands a display (output) accepts, with the device's output index.
+    CEC_OUTPUT_COMMAND_MAP: dict[str, int] = dict(CEC_OUTPUT_COMMANDS)
 
-    # CEC Command mapping: HTTP index -> Telnet command string
-    _CEC_INDEX_TO_TELNET = {
-        1: "on",  # POWER_ON
-        2: "off",  # POWER_OFF
-        3: "up",  # UP
-        4: "left",  # LEFT
-        5: "enter",  # SELECT
-        6: "right",  # RIGHT
-        7: "menu",  # MENU
-        8: "down",  # DOWN
-        9: "back",  # BACK
-        10: "previous",  # PREVIOUS
-        11: "play",  # PLAY
-        12: "next",  # NEXT
-        13: "rew",  # REWIND
-        14: "pause",  # PAUSE
-        15: "ff",  # FAST_FORWARD
-        16: "stop",  # STOP
-        17: "mute",  # MUTE
-        18: "vol-",  # VOLUME_DOWN
-        19: "vol+",  # VOLUME_UP
+    # CEC command name -> Telnet word (``s cec in N <word>`` / ``s cec hdmi out N <word>``)
+    _CEC_NAME_TO_TELNET = {
+        "POWER_ON": "on",
+        "POWER_OFF": "off",
+        "UP": "up",
+        "LEFT": "left",
+        "SELECT": "enter",
+        "RIGHT": "right",
+        "MENU": "menu",
+        "DOWN": "down",
+        "BACK": "back",
+        "PREVIOUS": "previous",
+        "PLAY": "play",
+        "NEXT": "next",
+        "REWIND": "rew",
+        "PAUSE": "pause",
+        "FAST_FORWARD": "ff",
+        "STOP": "stop",
+        "MUTE": "mute",
+        "VOLUME_DOWN": "vol-",
+        "VOLUME_UP": "vol+",
+        "ACTIVE": "active",
     }
+    # Input index -> Telnet word (kept for callers of the old name).
+    _CEC_INDEX_TO_TELNET = {CEC_INPUT_COMMANDS[name]: word for name, word in _CEC_NAME_TO_TELNET.items()
+                            if name in CEC_INPUT_COMMANDS}
 
     async def send_cec(self, command: str, port: int, is_output: bool = False) -> bool:
         """
         Send a CEC command by name to an input or output device.
 
-        This is the unified CEC interface that accepts command names from the
-        CEC_COMMAND_MAP. Use this instead of the individual cec_input_* and
-        cec_output_* methods.
+        Sources (inputs) accept every name in :attr:`CEC_COMMAND_MAP`;
+        displays (outputs) only the six in :attr:`CEC_OUTPUT_COMMAND_MAP`
+        (power on/off, mute, volume up/down, active). Each side has its own
+        index table on the device (BE-14).
 
         :param command: Command name (e.g., "POWER_ON", "VOLUME_UP", "PLAY")
         :param port: Port number (1-8)
@@ -1161,22 +1213,31 @@ class OreiMatrix:
             await matrix.send_cec("POWER_ON", 1, is_output=True)  # Turn on TV 1
             await matrix.send_cec("PLAY", 3, is_output=False)    # Play on source 3
         """
-        command_index = self.CEC_COMMAND_MAP.get(command.upper())
+        name = command.upper()
+        table = self.CEC_OUTPUT_COMMAND_MAP if is_output else self.CEC_COMMAND_MAP
+        command_index = table.get(name)
         if command_index is None:
-            _LOG.error("Unknown CEC command: %s. Valid commands: %s", command, list(self.CEC_COMMAND_MAP.keys()))
+            _LOG.error(
+                "CEC command %s is not available for %s devices. Valid commands: %s",
+                command,
+                "output" if is_output else "input",
+                list(table.keys()),
+            )
             return False
 
-        return await self._send_cec_command(port, command_index, is_output)
+        return await self._send_cec_command(port, command_index, is_output, name=name)
 
-    async def _send_cec_command(self, port_num: int, command_index: int, is_output: bool = False) -> bool:
+    async def _send_cec_command(
+        self, port_num: int, command_index: int, is_output: bool = False, *, name: str | None = None
+    ) -> bool:
         """
         Send a CEC command to an input or output device.
 
-        Uses Telnet when available (faster), falls back to HTTP.
+        Uses Telnet when enabled (``OREI_USE_TELNET_CEC``), otherwise HTTP.
         Automatically ensures CEC is enabled on the target port before sending.
 
         :param port_num: Port number (1-8)
-        :param command_index: CEC command index (1-19)
+        :param command_index: CEC command index from the input (1-19) or output (0-5) table
         :param is_output: True for output device (TV), False for input device (source)
         :return: True if command sent successfully
         """
@@ -1184,9 +1245,17 @@ class OreiMatrix:
             _LOG.error("Invalid port number: %d. Must be 1-8", port_num)
             return False
 
-        if command_index < 1 or command_index > 19:
-            _LOG.error("Invalid CEC command index: %d. Must be 1-19", command_index)
+        table = self.CEC_OUTPUT_COMMAND_MAP if is_output else self.CEC_COMMAND_MAP
+        by_index = {index: cmd_name for cmd_name, index in table.items()}
+        if command_index not in by_index:
+            _LOG.error(
+                "Invalid %s CEC command index: %d. Must be one of %s",
+                "output" if is_output else "input",
+                command_index,
+                sorted(by_index),
+            )
             return False
+        name = name or by_index[command_index]
 
         # Ensure CEC is enabled on the target port (auto-enables if needed)
         cec_enabled = await self.ensure_cec_enabled(port_num, is_output)
@@ -1197,9 +1266,9 @@ class OreiMatrix:
                 port_num,
             )
 
-        # Try Telnet first (faster, persistent connection)
+        # Telnet (opt-in, faster persistent connection)
         if self._use_telnet_cec and self._telnet and self._telnet.connected:
-            telnet_cmd = self._CEC_INDEX_TO_TELNET.get(command_index)
+            telnet_cmd = self._CEC_NAME_TO_TELNET.get(name)
             if telnet_cmd:
                 try:
                     if is_output:
@@ -1237,141 +1306,146 @@ class OreiMatrix:
         success, response = await self._send_command(command)
 
         if self._check_write(success, response, command):
-            _LOG.info("✓ CEC command %d sent to %s %d", command_index, "output" if is_output else "input", port_num)
+            _LOG.info("✓ CEC %s sent to %s %d", name, "output" if is_output else "input", port_num)
             return True
 
-        _LOG.error(
-            "Failed to send CEC command %d to %s %d", command_index, "output" if is_output else "input", port_num
-        )
+        _LOG.error("Failed to send CEC %s to %s %d", name, "output" if is_output else "input", port_num)
         return False
 
     # Input CEC Control Methods (for source devices like PS3, Apple TV, etc.)
 
     async def cec_input_power_on(self, input_num: int) -> bool:
         """Send Power On CEC command to an input device."""
-        return await self._send_cec_command(input_num, self.CEC_POWER_ON, is_output=False)
+        return await self.send_cec("POWER_ON", input_num, is_output=False)
 
     async def cec_input_power_off(self, input_num: int) -> bool:
         """Send Power Off CEC command to an input device."""
-        return await self._send_cec_command(input_num, self.CEC_POWER_OFF, is_output=False)
+        return await self.send_cec("POWER_OFF", input_num, is_output=False)
 
     async def cec_input_up(self, input_num: int) -> bool:
         """Send Up navigation CEC command to an input device."""
-        return await self._send_cec_command(input_num, self.CEC_UP, is_output=False)
+        return await self.send_cec("UP", input_num, is_output=False)
 
     async def cec_input_down(self, input_num: int) -> bool:
         """Send Down navigation CEC command to an input device."""
-        return await self._send_cec_command(input_num, self.CEC_DOWN, is_output=False)
+        return await self.send_cec("DOWN", input_num, is_output=False)
 
     async def cec_input_left(self, input_num: int) -> bool:
         """Send Left navigation CEC command to an input device."""
-        return await self._send_cec_command(input_num, self.CEC_LEFT, is_output=False)
+        return await self.send_cec("LEFT", input_num, is_output=False)
 
     async def cec_input_right(self, input_num: int) -> bool:
         """Send Right navigation CEC command to an input device."""
-        return await self._send_cec_command(input_num, self.CEC_RIGHT, is_output=False)
+        return await self.send_cec("RIGHT", input_num, is_output=False)
 
     async def cec_input_select(self, input_num: int) -> bool:
         """Send Select/Enter CEC command to an input device."""
-        return await self._send_cec_command(input_num, self.CEC_SELECT, is_output=False)
+        return await self.send_cec("SELECT", input_num, is_output=False)
 
     async def cec_input_menu(self, input_num: int) -> bool:
         """Send Menu CEC command to an input device."""
-        return await self._send_cec_command(input_num, self.CEC_MENU, is_output=False)
+        return await self.send_cec("MENU", input_num, is_output=False)
 
     async def cec_input_back(self, input_num: int) -> bool:
         """Send Back/Return CEC command to an input device."""
-        return await self._send_cec_command(input_num, self.CEC_BACK, is_output=False)
+        return await self.send_cec("BACK", input_num, is_output=False)
 
     async def cec_input_play(self, input_num: int) -> bool:
         """Send Play CEC command to an input device."""
-        return await self._send_cec_command(input_num, self.CEC_PLAY, is_output=False)
+        return await self.send_cec("PLAY", input_num, is_output=False)
 
     async def cec_input_pause(self, input_num: int) -> bool:
         """Send Pause CEC command to an input device."""
-        return await self._send_cec_command(input_num, self.CEC_PAUSE, is_output=False)
+        return await self.send_cec("PAUSE", input_num, is_output=False)
 
     async def cec_input_stop(self, input_num: int) -> bool:
         """Send Stop CEC command to an input device."""
-        return await self._send_cec_command(input_num, self.CEC_STOP, is_output=False)
+        return await self.send_cec("STOP", input_num, is_output=False)
 
     async def cec_input_previous(self, input_num: int) -> bool:
         """Send Previous CEC command to an input device."""
-        return await self._send_cec_command(input_num, self.CEC_PREVIOUS, is_output=False)
+        return await self.send_cec("PREVIOUS", input_num, is_output=False)
 
     async def cec_input_next(self, input_num: int) -> bool:
         """Send Next CEC command to an input device."""
-        return await self._send_cec_command(input_num, self.CEC_NEXT, is_output=False)
+        return await self.send_cec("NEXT", input_num, is_output=False)
 
     async def cec_input_rewind(self, input_num: int) -> bool:
         """Send Rewind CEC command to an input device."""
-        return await self._send_cec_command(input_num, self.CEC_REWIND, is_output=False)
+        return await self.send_cec("REWIND", input_num, is_output=False)
 
     async def cec_input_fast_forward(self, input_num: int) -> bool:
         """Send Fast Forward CEC command to an input device."""
-        return await self._send_cec_command(input_num, self.CEC_FAST_FORWARD, is_output=False)
+        return await self.send_cec("FAST_FORWARD", input_num, is_output=False)
 
     async def cec_input_volume_up(self, input_num: int) -> bool:
         """Send Volume Up CEC command to an input device."""
-        return await self._send_cec_command(input_num, self.CEC_VOLUME_UP, is_output=False)
+        return await self.send_cec("VOLUME_UP", input_num, is_output=False)
 
     async def cec_input_volume_down(self, input_num: int) -> bool:
         """Send Volume Down CEC command to an input device."""
-        return await self._send_cec_command(input_num, self.CEC_VOLUME_DOWN, is_output=False)
+        return await self.send_cec("VOLUME_DOWN", input_num, is_output=False)
 
     async def cec_input_mute(self, input_num: int) -> bool:
         """Send Mute CEC command to an input device."""
-        return await self._send_cec_command(input_num, self.CEC_MUTE, is_output=False)
+        return await self.send_cec("MUTE", input_num, is_output=False)
 
-    # Output CEC Control Methods (for TVs/displays)
+    # Output CEC Control Methods (for displays). A display only has the six
+    # commands of CEC_OUTPUT_COMMAND_MAP; the navigation helpers below are
+    # kept for callers and fail (return False) because the device has no
+    # output index for them (BE-14).
 
     async def cec_output_power_on(self, output_num: int) -> bool:
-        """Send Power On CEC command to an output device (TV)."""
-        return await self._send_cec_command(output_num, self.CEC_POWER_ON, is_output=True)
+        """Send Power On CEC command to an output device."""
+        return await self.send_cec("POWER_ON", output_num, is_output=True)
 
     async def cec_output_power_off(self, output_num: int) -> bool:
-        """Send Power Off CEC command to an output device (TV)."""
-        return await self._send_cec_command(output_num, self.CEC_POWER_OFF, is_output=True)
+        """Send Power Off CEC command to an output device."""
+        return await self.send_cec("POWER_OFF", output_num, is_output=True)
 
     async def cec_output_up(self, output_num: int) -> bool:
-        """Send Up navigation CEC command to an output device."""
-        return await self._send_cec_command(output_num, self.CEC_UP, is_output=True)
+        """Not supported by the device's output CEC table (returns False)."""
+        return await self.send_cec("UP", output_num, is_output=True)
 
     async def cec_output_down(self, output_num: int) -> bool:
-        """Send Down navigation CEC command to an output device."""
-        return await self._send_cec_command(output_num, self.CEC_DOWN, is_output=True)
+        """Not supported by the device's output CEC table (returns False)."""
+        return await self.send_cec("DOWN", output_num, is_output=True)
 
     async def cec_output_left(self, output_num: int) -> bool:
-        """Send Left navigation CEC command to an output device."""
-        return await self._send_cec_command(output_num, self.CEC_LEFT, is_output=True)
+        """Not supported by the device's output CEC table (returns False)."""
+        return await self.send_cec("LEFT", output_num, is_output=True)
 
     async def cec_output_right(self, output_num: int) -> bool:
-        """Send Right navigation CEC command to an output device."""
-        return await self._send_cec_command(output_num, self.CEC_RIGHT, is_output=True)
+        """Not supported by the device's output CEC table (returns False)."""
+        return await self.send_cec("RIGHT", output_num, is_output=True)
 
     async def cec_output_select(self, output_num: int) -> bool:
-        """Send Select/Enter CEC command to an output device."""
-        return await self._send_cec_command(output_num, self.CEC_SELECT, is_output=True)
+        """Not supported by the device's output CEC table (returns False)."""
+        return await self.send_cec("SELECT", output_num, is_output=True)
 
     async def cec_output_menu(self, output_num: int) -> bool:
-        """Send Menu CEC command to an output device."""
-        return await self._send_cec_command(output_num, self.CEC_MENU, is_output=True)
+        """Not supported by the device's output CEC table (returns False)."""
+        return await self.send_cec("MENU", output_num, is_output=True)
 
     async def cec_output_back(self, output_num: int) -> bool:
-        """Send Back/Return CEC command to an output device."""
-        return await self._send_cec_command(output_num, self.CEC_BACK, is_output=True)
+        """Not supported by the device's output CEC table (returns False)."""
+        return await self.send_cec("BACK", output_num, is_output=True)
 
     async def cec_output_volume_up(self, output_num: int) -> bool:
         """Send Volume Up CEC command to an output device."""
-        return await self._send_cec_command(output_num, self.CEC_VOLUME_UP, is_output=True)
+        return await self.send_cec("VOLUME_UP", output_num, is_output=True)
 
     async def cec_output_volume_down(self, output_num: int) -> bool:
         """Send Volume Down CEC command to an output device."""
-        return await self._send_cec_command(output_num, self.CEC_VOLUME_DOWN, is_output=True)
+        return await self.send_cec("VOLUME_DOWN", output_num, is_output=True)
 
     async def cec_output_mute(self, output_num: int) -> bool:
         """Send Mute CEC command to an output device."""
-        return await self._send_cec_command(output_num, self.CEC_MUTE, is_output=True)
+        return await self.send_cec("MUTE", output_num, is_output=True)
+
+    async def cec_output_active(self, output_num: int) -> bool:
+        """Send the output pad's "active/input" CEC command to a display."""
+        return await self.send_cec("ACTIVE", output_num, is_output=True)
 
     # =========================================================================
     # Extended Status Methods (discovered from HAR capture)
@@ -1995,9 +2069,11 @@ class OreiMatrix:
 
         if output_status:
             status["outputs_connected"] = output_status.get("allconnect", [])
-            status["output_scaler"] = per_output(output_status.get("allscaler"))
-            status["output_hdr"] = per_output(output_status.get("allhdr"))
-            status["output_hdcp"] = per_output(output_status.get("allhdcp"))
+            # HDR/scaler as API values (1-based, like the setters), HIL-02
+            settings = api_output_settings(output_status)
+            status["output_scaler"] = settings["scaler"]
+            status["output_hdr"] = settings["hdr"]
+            status["output_hdcp"] = settings["hdcp"]
             status["output_arc"] = per_output(output_status.get("allarc"))
             status["output_enabled"] = per_output(output_status.get("allout"))
             status["output_muted"] = per_output(output_status.get("allaudiomute"))
@@ -2152,178 +2228,184 @@ class OreiMatrix:
         return False
 
     # =========================================================================
-    # ADVANCED OUTPUT CONTROL (from Control4/RTI drivers)
+    # OUTPUT SETTINGS (HIL-09)
+    #
+    # MCU V1.10.01 never answers the commands the hub used to send here
+    # (``set output stream|hdcp|hdr|scaler|arc|mute``: captured, HIL-09). The
+    # commands and payload shapes below are the ones the device's own web
+    # interface sends: ``{"comhead": ..., "language": 0, <key>: [port, value]}``,
+    # port 0 = all outputs. Value codes and the API -> device mapping live in
+    # ``device_codes``. Status per command: docs/OREI_API_COMMANDS.md.
     # =========================================================================
+
+    async def _write(self, command: dict[str, Any], what: str) -> bool:
+        """Send one write, log the outcome, return whether the matrix accepted it."""
+        _LOG.info("Setting %s", what)
+        success, response = await self._send_command(command)
+        if self._check_write(success, response, command):
+            return True
+        _LOG.error("Failed to set %s", what)
+        return False
+
+    @staticmethod
+    def _valid_output(output_num: int) -> bool:
+        if 1 <= output_num <= OUTPUT_COUNT:
+            return True
+        _LOG.error("Invalid output number: %d. Must be 1-8", output_num)
+        return False
 
     async def set_output_enable(self, output_num: int, enable: bool) -> bool:
         """
-        Enable or disable video output stream for a specific output.
+        Enable or disable the video stream of an output (``tx stream``).
 
         :param output_num: Output number (1-8)
         :param enable: True to enable output, False to disable (blank)
-        :return: True if command sent successfully
+        :return: True if the matrix accepted the command
         """
-        if output_num < 1 or output_num > 8:
-            _LOG.error("Invalid output number: %d. Must be 1-8", output_num)
+        if not self._valid_output(output_num):
             return False
-
-        command = {"comhead": "set output stream", "output": output_num, "enable": 1 if enable else 0}
-
-        action = "enable" if enable else "disable"
-        _LOG.info(f"Setting output {output_num} stream to {action}")
-        success, response = await self._send_command(command)
-        return self._check_write(success, response, command)
+        command = {"comhead": "tx stream", "language": 0, "out": [output_num, 1 if enable else 0]}
+        return await self._write(command, f"output {output_num} stream {'on' if enable else 'off'}")
 
     async def set_output_hdcp(self, output_num: int, mode: int) -> bool:
         """
-        Set HDCP mode for a specific output.
+        Set the HDCP mode of an output (``tx hdcp``).
 
         :param output_num: Output number (1-8)
         :param mode: HDCP mode (1=HDCP 1.4, 2=HDCP 2.2, 3=Follow Sink, 4=Follow Source, 5=User Mode)
-        :return: True if command sent successfully
+        :return: True if the matrix accepted the command
         """
-        if output_num < 1 or output_num > 8:
-            _LOG.error("Invalid output number: %d. Must be 1-8", output_num)
+        if not self._valid_output(output_num):
             return False
-
-        if mode < 1 or mode > 5:
+        if mode not in HDCP_MODES:
             _LOG.error("Invalid HDCP mode: %d. Must be 1-5", mode)
             return False
-
-        command = {"comhead": "set output hdcp", "output": output_num, "hdcp": mode}
-
-        _LOG.info(f"Setting output {output_num} HDCP mode to {mode}")
-        success, response = await self._send_command(command)
-        return self._check_write(success, response, command)
+        command = {"comhead": "tx hdcp", "language": 0, "hdcp": [output_num, mode]}
+        return await self._write(command, f"output {output_num} HDCP to {mode} ({HDCP_MODES[mode]})")
 
     async def set_output_hdr(self, output_num: int, mode: int) -> bool:
         """
-        Set HDR mode for a specific output.
+        Set the HDR conversion of an output (``set hdr conversion``).
 
         :param output_num: Output number (1-8)
-        :param mode: HDR mode (1=Passthrough, 2=HDR to SDR, 3=Auto/follow sink EDID)
-        :return: True if command sent successfully
+        :param mode: HDR mode, API value (1=Passthrough, 2=HDR to SDR, 3=Auto/follow sink EDID).
+            The device code is ``mode - 1`` (HIL-02: the device reports 0 for pass-through).
+        :return: True if the matrix accepted the command
         """
-        if output_num < 1 or output_num > 8:
-            _LOG.error("Invalid output number: %d. Must be 1-8", output_num)
+        if not self._valid_output(output_num):
             return False
-
-        # TODO(HIL-02): MCU V1.10.01 *reports* HDR 0 on every output (its Telnet
-        # status prints it as "pass-through"). Whether 0 can be written, and how it
-        # differs from 1, is unknown until a write-mode capture; keep 1-3 until then.
-        if mode < 1 or mode > 3:
+        if mode not in HDR_MODES:
             _LOG.error("Invalid HDR mode: %d. Must be 1-3", mode)
             return False
-
-        command = {"comhead": "set output hdr", "output": output_num, "hdr": mode}
-
-        _LOG.info(f"Setting output {output_num} HDR mode to {mode}")
-        success, response = await self._send_command(command)
-        return self._check_write(success, response, command)
+        command = {"comhead": "set hdr conversion", "language": 0, "hdr": [output_num, hdr_to_device(mode)]}
+        return await self._write(command, f"output {output_num} HDR to {mode} ({HDR_MODES[mode]})")
 
     async def set_output_scaler(self, output_num: int, mode: int) -> bool:
         """
-        Set scaler/video mode for a specific output.
+        Set the video mode (scaler) of an output (``set video scaler``).
 
         :param output_num: Output number (1-8)
-        :param mode: Scaler mode (1=Passthrough, 2=8K→4K, 3=8K/4K→1080p, 4=Auto, 5=Audio Only)
-        :return: True if command sent successfully
+        :param mode: Scaler mode, API value (1=Passthrough, 2=8K→4K, 3=8K/4K→1080p, 4=Auto, 5=Audio Only).
+            The device code is ``mode - 1`` (BE-15: audio only is 4 on the device, in reads and writes).
+        :return: True if the matrix accepted the command
         """
-        if output_num < 1 or output_num > 8:
-            _LOG.error("Invalid output number: %d. Must be 1-8", output_num)
+        if not self._valid_output(output_num):
             return False
-
-        # TODO(HIL-02, BE-15): V1.10.01 reports scaler 0 ("pass-through") and 4
-        # ("audio only"), so reads may be 0-based where these writes are 1-based.
-        # Needs a write-mode capture before the range or the codes change.
-        if mode < 1 or mode > 5:
+        if mode not in SCALER_MODES:
             _LOG.error("Invalid scaler mode: %d. Must be 1-5", mode)
             return False
-
-        command = {"comhead": "set output scaler", "output": output_num, "scaler": mode}
-
-        _LOG.info(f"Setting output {output_num} scaler mode to {mode}")
-        success, response = await self._send_command(command)
-        return self._check_write(success, response, command)
+        command = {
+            "comhead": "set video scaler",
+            "language": 0,
+            "scaler": [output_num, scaler_to_device(mode)],
+        }
+        return await self._write(command, f"output {output_num} scaler to {mode} ({SCALER_MODES[mode]})")
 
     async def set_output_arc(self, output_num: int, enable: bool) -> bool:
         """
-        Enable or disable ARC (Audio Return Channel) for a specific output.
+        Enable or disable ARC (Audio Return Channel) of an output (``set arc``).
 
         :param output_num: Output number (1-8)
         :param enable: True to enable ARC, False to disable
-        :return: True if command sent successfully
+        :return: True if the matrix accepted the command
         """
-        if output_num < 1 or output_num > 8:
-            _LOG.error("Invalid output number: %d. Must be 1-8", output_num)
+        if not self._valid_output(output_num):
             return False
-
-        command = {"comhead": "set output arc", "output": output_num, "arc": 1 if enable else 0}
-
-        action = "enable" if enable else "disable"
-        _LOG.info(f"Setting output {output_num} ARC to {action}")
-        success, response = await self._send_command(command)
-        return self._check_write(success, response, command)
+        command = {"comhead": "set arc", "language": 0, "arc": [output_num, 1 if enable else 0]}
+        return await self._write(command, f"output {output_num} ARC {'on' if enable else 'off'}")
 
     async def set_output_audio_mute(self, output_num: int, mute: bool) -> bool:
         """
-        Mute or unmute audio for a specific output.
+        Mute or unmute the audio of an output (``set output audio mute``).
 
         :param output_num: Output number (1-8)
         :param mute: True to mute, False to unmute
-        :return: True if command sent successfully
+        :return: True if the matrix accepted the command
         """
-        if output_num < 1 or output_num > 8:
-            _LOG.error("Invalid output number: %d. Must be 1-8", output_num)
+        if not self._valid_output(output_num):
             return False
-
-        command = {"comhead": "set output mute", "output": output_num, "mute": 1 if mute else 0}
-
-        action = "mute" if mute else "unmute"
-        _LOG.info(f"Setting output {output_num} audio to {action}")
-        success, response = await self._send_command(command)
-        return self._check_write(success, response, command)
+        command = {"comhead": "set output audio mute", "language": 0, "mute": [output_num, 1 if mute else 0]}
+        return await self._write(command, f"output {output_num} audio {'muted' if mute else 'unmuted'}")
 
     async def set_cec_enable(self, port_type: str, port_num: int, enable: bool) -> bool:
         """
         Enable or disable CEC for a specific input or output.
 
+        HIL-10 / BE-13: the device rejects the single-port ``set cec index``
+        payload (``result: 0``, captured); only the documented form with both
+        8-element arrays works. This method therefore reads the current
+        arrays and sends both (:meth:`set_cec_enabled`).
+
         :param port_type: "input" or "output"
         :param port_num: Port number (1-8)
         :param enable: True to enable CEC, False to disable
-        :return: True if command sent successfully
+        :return: True if the matrix accepted the command
         """
         if port_type not in ("input", "output"):
             _LOG.error("Invalid port type: %s. Must be 'input' or 'output'", port_type)
             return False
+        return await self.set_cec_enabled(port_num, enable, is_output=port_type == "output")
 
-        if port_num < 1 or port_num > 8:
-            _LOG.error("Invalid port number: %d. Must be 1-8", port_num)
-            return False
-
-        command = {"comhead": "set cec index", "port": port_type, "index": port_num, "enable": 1 if enable else 0}
-
-        action = "enable" if enable else "disable"
-        _LOG.info(f"Setting CEC on {port_type} {port_num} to {action}")
-        success, response = await self._send_command(command)
-        return self._check_write(success, response, command)
+    # =========================================================================
+    # Presets
+    # =========================================================================
 
     async def save_preset(self, preset_num: int) -> bool:
         """
-        Save the current routing configuration to a preset.
+        Save the current routing configuration to a preset (``preset save``).
 
         :param preset_num: Preset number (1-8)
-        :return: True if command sent successfully
+        :return: True if the matrix accepted the command
         """
         if preset_num < 1 or preset_num > 8:
             _LOG.error("Invalid preset number: %d. Must be 1-8", preset_num)
             return False
-
         command = {"comhead": "preset save", "language": 0, "index": preset_num}
+        return await self._write(command, f"preset {preset_num} to the current routing")
 
-        _LOG.info(f"Saving current routing to preset {preset_num}")
-        success, response = await self._send_command(command)
-        return self._check_write(success, response, command)
+    async def set_preset_name(self, preset_num: int, name: str) -> bool:
+        """
+        Rename a preset on the matrix (``preset name``).
+
+        The device reports preset names in ``get video status.allname``.
+
+        :param preset_num: Preset number (1-8)
+        :param name: New name (the device web interface allows 32 characters)
+        :return: True if the matrix accepted the command
+        """
+        if preset_num < 1 or preset_num > 8:
+            _LOG.error("Invalid preset number: %d. Must be 1-8", preset_num)
+            return False
+        name = name[:32]
+        command = {"comhead": "preset name", "language": 0, "index": preset_num, "name": name}
+        if await self._write(command, f"preset {preset_num} name to {name!r}"):
+            self.events.emit(Events.UPDATE, {"preset_name": {preset_num: name}})
+            return True
+        return False
+
+    # =========================================================================
+    # System
+    # =========================================================================
 
     async def system_reboot(self) -> bool:
         """
@@ -2342,9 +2424,10 @@ class OreiMatrix:
                 self._link_lost("matrix reboot requested")
                 return True
 
-        # Fall back to HTTP if Telnet is not connected/available
+        # HTTP: the device web interface's reboot command (HIL-09: ``set reboot``
+        # was never captured; ``reboot`` with ``reboot: 1`` is web-UI-derived).
         _LOG.info("Sending reboot command via HTTP...")
-        command = {"comhead": "set reboot"}
+        command = {"comhead": "reboot", "language": 0, "reboot": 1}
         sent, response = await self._send_command(command, retry_on_failure=False)
         success = self._check_write(sent, response, command)
 
@@ -2353,18 +2436,9 @@ class OreiMatrix:
 
         return success
 
-    # =========================================================================
-    # LCD Display Settings
-    # =========================================================================
-
-    # LCD timeout mode values
-    LCD_TIMEOUT_MODES = {
-        0: "Off",
-        1: "Always On",
-        2: "15 seconds",
-        3: "30 seconds",
-        4: "60 seconds",
-    }
+    # LCD timeout mode values (device code == API value; read back as
+    # ``get system status.mode``)
+    LCD_TIMEOUT_MODES = dict(DEVICE_LCD_MODES)
 
     @classmethod
     def get_lcd_timeout_name(cls, mode: int) -> str:
@@ -2378,28 +2452,19 @@ class OreiMatrix:
 
     async def set_lcd_timeout(self, mode: int) -> bool:
         """
-        Set the LCD display timeout on the front panel.
+        Set how long the front-panel LCD stays on (``set lcd on time``).
 
-        :param mode: Timeout mode:
-            - 0: Off (LCD disabled)
-            - 1: Always on
-            - 2: 15 seconds
-            - 3: 30 seconds
-            - 4: 60 seconds
-        :return: True if command sent successfully
+        HIL-09: the old ``{"time": N}`` payload is rejected for every code
+        (captured); the value goes in a key named ``"lcd on time"``.
+
+        :param mode: 0=Off, 1=Always on, 2=15 s, 3=30 s, 4=60 s
+        :return: True if the matrix accepted the command
         """
-        if mode < 0 or mode > 4:
+        if mode not in DEVICE_LCD_MODES:
             _LOG.error("Invalid LCD timeout mode: %d. Must be 0-4", mode)
             return False
-
-        # Command format from Control4 driver: "s lcd on time N"
-        # JSON equivalent follows standard pattern
-        command = {"comhead": "set lcd on time", "time": mode}
-
-        mode_name = self.get_lcd_timeout_name(mode)
-        _LOG.info(f"Setting LCD timeout to {mode} ({mode_name})")
-        success, response = await self._send_command(command)
-        return self._check_write(success, response, command)
+        command = {"comhead": "set lcd on time", "language": 0, "lcd on time": mode}
+        return await self._write(command, f"LCD on time to {mode} ({self.get_lcd_timeout_name(mode)})")
 
     async def route_input_to_all_outputs(self, input_num: int) -> bool:
         """
@@ -2424,39 +2489,9 @@ class OreiMatrix:
     # EDID Management
     # =========================================================================
 
-    # EDID mode constants - maps human-readable names to API values
-    # Values based on typical HDMI matrix EDID presets
-    EDID_MODES = {
-        1: "1080p 2CH",  # 1080p stereo audio
-        2: "1080p 5.1CH",  # 1080p 5.1 surround
-        3: "1080p 7.1CH",  # 1080p 7.1 surround
-        4: "1080i",  # 1080i
-        5: "3D",  # 3D mode
-        6: "4K30 2CH",  # 4K 30Hz stereo
-        7: "4K30 5.1CH",  # 4K 30Hz 5.1 surround
-        8: "4K30 7.1CH",  # 4K 30Hz 7.1 surround
-        9: "4K60 2CH",  # 4K 60Hz stereo
-        10: "4K60 5.1CH",  # 4K 60Hz 5.1 surround
-        11: "4K60 7.1CH",  # 4K 60Hz 7.1 surround
-        12: "4K60 4:4:4 2CH",  # 4K 60Hz 4:4:4 stereo
-        13: "4K60 4:4:4 5.1CH",  # 4K 60Hz 4:4:4 5.1
-        14: "4K60 4:4:4 7.1CH",  # 4K 60Hz 4:4:4 7.1
-        15: "Copy Output 1",  # Copy EDID from output 1
-        16: "Copy Output 2",  # Copy EDID from output 2
-        17: "Copy Output 3",  # Copy EDID from output 3
-        18: "Copy Output 4",  # Copy EDID from output 4
-        19: "Copy Output 5",  # Copy EDID from output 5
-        20: "Copy Output 6",  # Copy EDID from output 6
-        21: "Copy Output 7",  # Copy EDID from output 7
-        22: "Copy Output 8",  # Copy EDID from output 8
-        # Additional HDR/Dolby modes typically at higher values
-        33: "4K60 HDR 2CH",  # 4K 60Hz HDR stereo
-        34: "4K60 HDR 5.1CH",  # 4K 60Hz HDR 5.1
-        35: "4K60 HDR 7.1CH",  # 4K 60Hz HDR 7.1
-        36: "4K60 HDR Atmos",  # 4K 60Hz HDR with Dolby Atmos (observed in HAR)
-        37: "8K30",  # 8K 30Hz
-        38: "8K60",  # 8K 60Hz
-    }
+    #: EDID ids the device offers (device id == API value), see device_codes.
+    #: 40-47 copy the EDID of output 1-8 (BE-25: there is no ``copy edid``).
+    EDID_MODES = dict(DEVICE_EDID_MODES)
 
     @classmethod
     def get_edid_mode_name(cls, mode_value: int) -> str:
@@ -2498,67 +2533,44 @@ class OreiMatrix:
 
     async def set_input_edid(self, input_num: int, mode: int) -> bool:
         """
-        Set EDID mode for a specific input.
+        Set the EDID of an input (``set edid``).
 
         :param input_num: Input number (1-8)
-        :param mode: EDID mode value (see EDID_MODES for available values)
-        :return: True if command sent successfully
-
-        Common modes:
-        - 1-14: Resolution/audio presets (1080p to 4K60 4:4:4)
-        - 15-22: Copy from output 1-8
-        - 33-36: HDR modes
-        - 37-38: 8K modes
+        :param mode: EDID id 1-47 (see :attr:`EDID_MODES`): 1-36 built-in
+            resolution/audio sets, 37-39 user EDIDs, 40-47 copy from output 1-8
+        :return: True if the matrix accepted the command
         """
         if input_num < 1 or input_num > 8:
             _LOG.error("Invalid input number: %d. Must be 1-8", input_num)
             return False
-
-        if mode < 1:
-            _LOG.error("Invalid EDID mode: %d. Must be >= 1", mode)
+        if mode not in DEVICE_EDID_MODES:
+            _LOG.error("Invalid EDID mode: %d. Must be %d-%d", mode, min(DEVICE_EDID_MODES), max(DEVICE_EDID_MODES))
             return False
-
-        # Command format follows the pattern of other settings
-        command = {"comhead": "set input edid", "input": input_num, "edid": mode}
-
-        mode_name = self.get_edid_mode_name(mode)
-        _LOG.info(f"Setting input {input_num} EDID to {mode} ({mode_name})")
-        success, response = await self._send_command(command)
-        return self._check_write(success, response, command)
+        command = {"comhead": "set edid", "language": 0, "edid": [input_num, mode]}
+        return await self._write(command, f"input {input_num} EDID to {mode} ({self.get_edid_mode_name(mode)})")
 
     async def copy_edid_from_output(self, input_num: int, output_num: int) -> bool:
         """
-        Copy EDID from a connected display (output) to an input.
+        Copy the EDID of a connected display (output) to an input.
 
-        This is useful when you want an input device to see the exact
-        capabilities of a specific display.
+        BE-25: the device has no ``copy edid`` command (captured: no answer);
+        copying is EDID id 39 + output (40 = output 1 ... 47 = output 8).
 
         :param input_num: Input number (1-8) to receive the EDID
         :param output_num: Output number (1-8) to copy EDID from
-        :return: True if command sent successfully
+        :return: True if the matrix accepted the command
         """
-        if input_num < 1 or input_num > 8:
-            _LOG.error("Invalid input number: %d. Must be 1-8", input_num)
-            return False
-
-        if output_num < 1 or output_num > 8:
+        if not 1 <= output_num <= 8:
             _LOG.error("Invalid output number: %d. Must be 1-8", output_num)
             return False
-
-        # Copy from output X uses mode values 15-22 (15 = output 1, etc.)
-        mode = 14 + output_num
-        return await self.set_input_edid(input_num, mode)
+        return await self.set_input_edid(input_num, edid_copy_from_output(output_num))
 
     # =========================================================================
     # External Audio (Ext-Audio) Matrix Control
     # =========================================================================
 
-    # Ext-audio mode values
-    EXT_AUDIO_MODES = {
-        0: "Bind to Input",  # Audio follows video source (default)
-        1: "Bind to Output",  # Audio follows output routing
-        2: "Matrix Mode",  # Independent audio routing
-    }
+    # Ext-audio mode values (device code == API value)
+    EXT_AUDIO_MODES = dict(DEVICE_EXT_AUDIO_MODES)
 
     @classmethod
     def get_ext_audio_mode_name(cls, mode: int) -> str:
@@ -2585,68 +2597,64 @@ class OreiMatrix:
 
     async def set_ext_audio_mode(self, mode: int) -> bool:
         """
-        Set the external audio routing mode.
+        Set the external audio routing mode (``set ext-audio mode``).
 
-        :param mode: Mode value:
-            - 0: Bind to input (audio follows video source)
-            - 1: Bind to output (audio follows output routing)
-            - 2: Matrix mode (independent audio routing)
-        :return: True if command sent successfully
+        :param mode: 0 = bind to input, 1 = bind to output, 2 = matrix mode
+        :return: True if the matrix accepted the command
         """
-        if mode < 0 or mode > 2:
+        if mode not in DEVICE_EXT_AUDIO_MODES:
             _LOG.error("Invalid ext-audio mode: %d. Must be 0-2", mode)
             return False
-
-        command = {"comhead": "set output exa mode", "mode": mode}
-
-        mode_name = self.get_ext_audio_mode_name(mode)
-        _LOG.info(f"Setting ext-audio mode to {mode} ({mode_name})")
-        success, response = await self._send_command(command)
-        return self._check_write(success, response, command)
+        command = {"comhead": "set ext-audio mode", "language": 0, "mode": mode}
+        return await self._write(command, f"ext-audio mode to {mode} ({self.get_ext_audio_mode_name(mode)})")
 
     async def set_ext_audio_enable(self, output_num: int, enabled: bool) -> bool:
         """
-        Enable or disable external audio output on a specific port.
+        Enable or disable an external audio output (``set ext-audio out``).
 
-        :param output_num: Output number (1-8)
+        :param output_num: Ext-audio output number (1-8)
         :param enabled: True to enable, False to disable
-        :return: True if command sent successfully
+        :return: True if the matrix accepted the command
         """
-        if output_num < 1 or output_num > 8:
-            _LOG.error("Invalid output number: %d. Must be 1-8", output_num)
+        if not self._valid_output(output_num):
             return False
-
-        # From Control4 driver: exa 1 = enable, exa 2 = disable
-        command = {"comhead": "set output exa", "output": output_num, "exa": 1 if enabled else 2}
-
-        state = "enabled" if enabled else "disabled"
-        _LOG.info(f"Setting ext-audio output {output_num} to {state}")
-        success, response = await self._send_command(command)
-        return self._check_write(success, response, command)
+        command = {"comhead": "set ext-audio out", "language": 0, "out": [output_num, 1 if enabled else 0]}
+        return await self._write(command, f"ext-audio output {output_num} {'enabled' if enabled else 'disabled'}")
 
     async def set_ext_audio_source(self, output_num: int, input_num: int) -> bool:
         """
-        Route an input source to an external audio output.
+        Route an input to an external audio output (``ext-audio switch``).
 
-        This only works when ext-audio mode is set to Matrix Mode (2).
+        The device applies this in matrix mode (2); its web interface only
+        offers it there.
 
         :param output_num: Ext-audio output number (1-8)
         :param input_num: Input source number (1-8)
-        :return: True if command sent successfully
+        :return: True if the matrix accepted the command
         """
-        if output_num < 1 or output_num > 8:
-            _LOG.error("Invalid output number: %d. Must be 1-8", output_num)
+        if not self._valid_output(output_num):
             return False
-
         if input_num < 1 or input_num > 8:
             _LOG.error("Invalid input number: %d. Must be 1-8", input_num)
             return False
+        command = {"comhead": "ext-audio switch", "language": 0, "source": [output_num, input_num]}
+        return await self._write(command, f"ext-audio output {output_num} source to input {input_num}")
 
-        command = {"comhead": "set output exa in source", "output": output_num, "input": input_num}
+    async def set_ext_audio_index(self, output_num: int) -> bool:
+        """
+        Select the "current" ext-audio output (``set ext-audio index``; read
+        back as ``get ext-audio status.index``).
 
-        _LOG.info(f"Setting ext-audio output {output_num} source to input {input_num}")
-        success, response = await self._send_command(command)
-        return self._check_write(success, response, command)
+        The device's own web page sends it in matrix mode when an audio output
+        is clicked, before routing a source to it; no other effect is known.
+
+        :param output_num: Ext-audio output number (1-8)
+        :return: True if the matrix accepted the command
+        """
+        if not self._valid_output(output_num):
+            return False
+        command = {"comhead": "set ext-audio index", "language": 0, "index": output_num}
+        return await self._write(command, f"ext-audio selected output to {output_num}")
 
     # =========================================================================
     # Device Capability Detection (for CEC routing)
@@ -2686,8 +2694,8 @@ class OreiMatrix:
 
         scaler_value = allscaler[idx] if idx < len(allscaler) else 0
 
-        # Scaler value 4 = Audio Only (0-indexed from matrix)
-        is_audio_only = scaler_value == 4
+        # Audio only is device scaler code 4 (BE-15)
+        is_audio_only = scaler_value == SCALER_AUDIO_ONLY
 
         return {
             "output_num": output_num,
@@ -2698,7 +2706,7 @@ class OreiMatrix:
             "arc_enabled": allarc[idx] == 1 if idx < len(allarc) else False,
             "cec_enabled": cec_outputindex[idx] == 1 if idx < len(cec_outputindex) else False,
             "scaler_mode": scaler_value,
-            "supported_cec_commands": ["POWER_ON", "POWER_OFF", "MUTE", "VOLUME_UP", "VOLUME_DOWN", "ACTIVE"],
+            "supported_cec_commands": list(self.CEC_OUTPUT_COMMAND_MAP),
         }
 
     async def get_input_capabilities(self, input_num: int) -> dict[str, Any] | None:
@@ -2825,7 +2833,7 @@ class OreiMatrix:
             cec_outputindex = cec_status.get("outputindex", [])
 
             scaler_value = allscaler[idx] if idx < len(allscaler) else 0
-            is_audio_only = scaler_value == 4
+            is_audio_only = scaler_value == SCALER_AUDIO_ONLY
 
             outputs.append(
                 {
@@ -2837,7 +2845,7 @@ class OreiMatrix:
                     "arc_enabled": allarc[idx] == 1 if idx < len(allarc) else False,
                     "cec_enabled": cec_outputindex[idx] == 1 if idx < len(cec_outputindex) else False,
                     "scaler_mode": scaler_value,
-                    "supported_cec_commands": ["POWER_ON", "POWER_OFF", "MUTE", "VOLUME_UP", "VOLUME_DOWN", "ACTIVE"],
+                    "supported_cec_commands": list(self.CEC_OUTPUT_COMMAND_MAP),
                 }
             )
 

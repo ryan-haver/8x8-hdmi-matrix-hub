@@ -4,9 +4,10 @@ Commands arrive as ``<command>!`` (the hub sends ``<command>!\\r\\n``).
 Every response line ends with ``\\r\\n``, and the device echoes the command
 line (``<command>!``) before the answer. The banner, ``status``, ``r fw
 version``, ``r type``, ``r link`` and ``r preset`` follow the read capture of
-MCU V1.10.01 (``tests/fixtures/device/BK-808_V1.10.01_web-V2.00.03/telnet``).
-Set-command acknowledgements and error answers are still guesses (marked
-``ASSUMPTION(HIL-A)``) until probe/write captures exist.
+MCU V1.10.01 (``tests/fixtures/device/BK-808_V1.10.01_web-V2.00.03/telnet``);
+the error codes, the routing/beep/lock acknowledgements and ``power N`` follow
+its probe and write captures. CEC and preset acknowledgements and ``reboot``
+are still guesses (marked ``ASSUMPTION(HIL-A)``).
 """
 
 from __future__ import annotations
@@ -29,11 +30,14 @@ class TelnetResult:
     warnings: list[str] = field(default_factory=list)
     #: the command line echoed before the answer (``r link in 1!``), or None
     echo: str | None = None
+    #: lines the device prints *before* the echo (``r preset 9``: "E01")
+    pre_echo: list[str] = field(default_factory=list)
 
     @property
     def text(self) -> str:
+        pre = "".join(line + EOL for line in self.pre_echo)
         head = self.echo + EOL if self.echo is not None else ""
-        return head + "".join(line + EOL for line in self.lines)
+        return pre + head + "".join(line + EOL for line in self.lines)
 
 
 def banner(state: DeviceState) -> str:
@@ -187,32 +191,42 @@ def _handle(state: DeviceState, raw: str) -> TelnetResult:
         return TelnetResult([state.device["type"]])
 
     if len(words) == 4 and words[:2] == ["r", "link"] and words[2] in ("in", "out"):
-        n = _port(words[3])
+        # Captured: "r link out 0" lists every output; "r link in 9" is E01.
+        # (Whether "r link in 0" lists every input is not captured: E01 here.)
+        n = _port(words[3], lo=0 if words[2] == "out" else 1)
         if n is None:
             return err(proto.TELNET_ERR_PARAM, f"bad port in {raw!r}")
         if words[2] == "in":
             return TelnetResult([f"hdmi input {n}: {_connect(state.inputs[n - 1].cable)}"])
-        return TelnetResult([f"hdmi output {n}: {_connect(state.outputs[n - 1].connected)}"])
+        ports = range(1, proto.PORT_COUNT + 1) if n == 0 else [n]
+        return TelnetResult([f"hdmi output {i}: {_connect(state.outputs[i - 1].connected)}" for i in ports])
 
     if len(words) == 3 and words[:2] == ["r", "preset"]:
         n = _port(words[2])
         if n is None:
-            return err(proto.TELNET_ERR_PARAM, f"bad preset in {raw!r}")
+            # Captured ("r preset 9"): E01 arrives *before* the echo, E00 after it.
+            return TelnetResult([proto.TELNET_ERR_UNKNOWN], pre_echo=[proto.TELNET_ERR_PARAM],
+                                warnings=[f"bad preset in {raw!r}"])
         return TelnetResult(preset_lines(state, n))
 
-    # CEC: "s cec in <n> <word>" / "s cec hdmi out <n> <word>"
+    # CEC: "s cec in <n> <word>" / "s cec hdmi out <n> <word>". Captured: a
+    # bad port is E01, an unknown word E00.
     # ASSUMPTION(HIL-A): success is acknowledged by echoing the command without
     # "s " and without any E0x code. The client completes the command on this
     # line (BE-07).
     if len(words) == 5 and words[:3] == ["s", "cec", "in"]:
         n = _port(words[3])
-        if n is None or words[4] not in proto.TELNET_CEC_INPUT_WORDS:
-            return err(proto.TELNET_ERR_PARAM, f"bad CEC input command {raw!r}")
+        if words[4] not in proto.TELNET_CEC_INPUT_WORDS:
+            return err(proto.TELNET_ERR_UNKNOWN, f"unknown CEC input word {raw!r}")
+        if n is None:
+            return err(proto.TELNET_ERR_PARAM, f"bad CEC input port {raw!r}")
         return TelnetResult([f"cec in {n} {words[4]}"])
     if len(words) == 6 and words[:4] == ["s", "cec", "hdmi", "out"]:
         n = _port(words[4])
-        if n is None or words[5] not in proto.TELNET_CEC_OUTPUT_WORDS:
-            return err(proto.TELNET_ERR_PARAM, f"bad CEC output command {raw!r}")
+        if words[5] not in proto.TELNET_CEC_OUTPUT_WORDS:
+            return err(proto.TELNET_ERR_UNKNOWN, f"unknown CEC output word {raw!r}")
+        if n is None:
+            return err(proto.TELNET_ERR_PARAM, f"bad CEC output port {raw!r}")
         return TelnetResult([f"cec hdmi out {n} {words[5]}"])
 
     # Routing: "s output <n|0> in source <m>"
@@ -226,15 +240,8 @@ def _handle(state: DeviceState, raw: str) -> TelnetResult:
             state.outputs[o - 1].source = inp
         return TelnetResult([f"output{o}->input{inp}" for o in targets], mutated=True)
 
-    # Vendor serial reference: "s av <input> <output>"
-    if len(words) == 4 and words[:2] == ["s", "av"]:
-        inp, out = _port(words[2]), _port(words[3], lo=0)
-        if inp is None or out is None:
-            return err(proto.TELNET_ERR_PARAM, f"bad routing {raw!r}")
-        targets = range(1, proto.PORT_COUNT + 1) if out == 0 else [out]
-        for o in targets:
-            state.outputs[o - 1].source = inp
-        return TelnetResult([f"output{o}->input{inp}" for o in targets], mutated=True)
+    # The vendor serial reference's "s av <input> <output>" is unknown to
+    # V1.10.01 (captured: E00); it falls through to the unknown answer.
 
     # Presets: hub uses "s save|recall|clear preset N"; the vendor reference
     # uses "s preset save|recall N". Both accepted.
@@ -261,12 +268,18 @@ def _handle(state: DeviceState, raw: str) -> TelnetResult:
         preset.saved = False
         return TelnetResult([f"clear preset {n}"], mutated=True)
 
-    # Power: vendor reference is "s power <0|1>".
-    # ASSUMPTION(HIL-A): the bare "power <0|1>" the hub's TelnetClient sends
-    # (telnet_client.py:1056,1065) is NOT recognised (E00). Unused by the hub.
-    if len(words) == 3 and words[:2] == ["s", "power"] and words[2] in ("0", "1", "on", "off"):
-        state.system["power"] = 1 if words[2] in ("1", "on") else 0
-        return TelnetResult([f"power {_on_off(state.system['power'])}"], mutated=True)
+    # Power: the bare "power <0|1>" the hub's TelnetClient sends works
+    # (captured: "power off"; "power on" followed by the start-up text). The
+    # vendor reference's "s power <0|1>" is answered with E01.
+    if len(words) == 2 and words[0] == "power" and words[1] in ("0", "1"):
+        state.system["power"] = int(words[1])
+        if not state.system["power"]:
+            return TelnetResult(["power off"], mutated=True)
+        return TelnetResult(["power on", "", state.device["type"], "system initializing...",
+                             "initialization finished!", f"mcu fw version : {_v(state.device['firmware_version'])}",
+                             ""], mutated=True)
+    if len(words) >= 2 and words[:2] == ["s", "power"]:
+        return err(proto.TELNET_ERR_PARAM, f"'s power' is not accepted by V1.10.01: {raw!r}")
 
     if len(words) == 3 and words[0] == "s" and words[1] in ("beep", "lock") and words[2] in ("0", "1", "on", "off"):
         value = 1 if words[2] in ("1", "on") else 0
@@ -276,13 +289,8 @@ def _handle(state: DeviceState, raw: str) -> TelnetResult:
         state.system["panel_lock"] = value
         return TelnetResult([f"panel button lock {_on_off(value)}"], mutated=True)
 
-    # "s out <n> stream <0|1>" (vendor reference)
-    if len(words) == 5 and words[:2] == ["s", "out"] and words[3] == "stream" and words[4] in ("0", "1"):
-        n = _port(words[2])
-        if n is None:
-            return err(proto.TELNET_ERR_PARAM, f"bad port {raw!r}")
-        state.outputs[n - 1].stream = int(words[4])
-        return TelnetResult([f"output {n} stream: {'enable' if words[4] == '1' else 'disable'}"], mutated=True)
+    # The vendor reference's "s out <n> stream <0|1>" is unknown to V1.10.01
+    # (captured: E00, HIL-11); it falls through to the unknown answer.
 
     # ASSUMPTION(HIL-A): "reboot" (what the hub sends) and "s reboot" both
     # reboot; the device acknowledges before dropping the connection.
@@ -304,12 +312,10 @@ def recognised_command_patterns() -> list[str]:
         "s cec in <n> <word>",
         "s cec hdmi out <n> <word>",
         "s output <n|0> in source <m>",
-        "s av <in> <out|0>",
         "s save|recall|clear preset <n>",
         "s preset save|recall <n>",
-        "s power <0|1>",
+        "power <0|1>",
         "s beep <0|1>",
         "s lock <0|1>",
-        "s out <n> stream <0|1>",
         "reboot",
     ]

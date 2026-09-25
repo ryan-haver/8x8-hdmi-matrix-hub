@@ -4,9 +4,13 @@ Pure functions over :class:`~tools.simulator.state.DeviceState`: no I/O, no
 sessions, no faults (those live in :mod:`tools.simulator.server`). Each handler
 takes the parsed request payload and returns the response document.
 
-Read responses use the exact key names ``src/orei_matrix.py`` parses and
-``docs/OREI_API_COMMANDS.md`` documents. Every guess is marked
-``ASSUMPTION(HIL-A)``.
+Reads have the key sets and key order captured on MCU V1.10.01. Writes are
+the commands the device's own web interface sends (``{"comhead": ...,
+"language": 0, <key>: [port, value]}``, port 0 = all outputs): the captured
+ones are byte-exact, the others are web-UI-derived until a write capture
+proves them (marked ``ASSUMPTION(HIL-A)``). A comhead with no handler is never
+answered, like on the device (HIL-09/HIL-12): :func:`dispatch` flags it
+``unanswered`` and the server holds the request open.
 """
 
 from __future__ import annotations
@@ -16,7 +20,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from . import protocol as proto
-from .state import DeviceState
+from .state import NINTH_KEYS, DeviceState
 
 Payload = dict[str, Any]
 
@@ -29,6 +33,8 @@ class CommandResult:
     recognised: bool = True
     mutated: bool = False
     reboot: bool = False
+    #: the device does not answer this command at all (unknown comhead)
+    unanswered: bool = False
     warnings: list[str] = field(default_factory=list)
 
 
@@ -59,7 +65,11 @@ def dispatch(state: DeviceState, payload: Payload) -> CommandResult:
     handler = HANDLERS.get(comhead) if isinstance(comhead, str) else None
     if handler is None:
         result.recognised = False
+        result.unanswered = proto.UNKNOWN_COMMANDS_UNANSWERED
         result.response = {"comhead": comhead, "result": proto.UNKNOWN_COMMAND_RESULT}
+        why = ("not implemented by MCU V1.10.01 (captured: no answer)"
+               if comhead in proto.LEGACY_UNANSWERED_WRITES else "unknown comhead")
+        result.warnings.append(why)
         return result
     try:
         body = handler(state, payload, result)
@@ -84,11 +94,33 @@ def _int(payload: Payload, key: str, lo: int, hi: int) -> int:
     return value
 
 
+def _port_value(payload: Payload, key: str, ports: tuple[int, int], values: tuple[int, int]) -> tuple[int, int]:
+    """``key: [port, value]`` of the web-interface write commands."""
+    pair = payload.get(key)
+    if not isinstance(pair, list) or len(pair) != 2:
+        raise _RejectError(f"{key}={pair!r} is not a [port, value] pair")
+    port, value = pair
+    for what, v, (lo, hi) in (("port", port, ports), ("value", value, values)):
+        if isinstance(v, bool) or not isinstance(v, int) or not lo <= v <= hi:
+            raise _RejectError(f"{key} {what} {v!r} not in {lo}..{hi}")
+    return port, value
+
+
 def _port_array(payload: Payload, key: str) -> list[int]:
     value = payload.get(key)
     if not isinstance(value, list) or len(value) != proto.PORT_COUNT or any(v not in (0, 1) for v in value):
         raise _RejectError(f"{key}={value!r} is not an 8-element 0/1 array")
     return list(value)
+
+
+def _name(payload: Payload) -> str:
+    name = payload.get("name")
+    if not isinstance(name, str):
+        raise _RejectError(f"name={name!r}")
+    # ASSUMPTION(HIL-A): names are stored as sent up to protocol.NAME_MAX
+    # characters. V1.10.01 kept a 40-character name unchanged (captured); a
+    # longer limit is unknown.
+    return name[: proto.NAME_MAX]
 
 
 def _ok(comhead: str) -> dict[str, Any]:
@@ -110,19 +142,20 @@ def _names(state: DeviceState) -> dict[str, Any]:
 # same state the body is byte-identical to the capture.
 
 
-def _with_ninth(values: list[int], state: DeviceState, key: str) -> list[int]:
-    """A per-output array plus the ninth entry V1.10.01 appends (HIL-04)."""
-    return [*values, state.ninth_output[key]]
+def _with_ninth(state: DeviceState, key: str) -> list[int]:
+    """A per-output array plus the ninth ("all outputs") entry V1.10.01 appends (HIL-04)."""
+    assert key in NINTH_KEYS
+    return [*state.column("outputs", key), state.ninth(key)]
 
 
 @command("get video status", read=True)
 def _get_video_status(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
-    # Not in OREI_API_COMMANDS.md. The names are 8 plain strings (no "IN01-"
-    # prefix). ``allsource`` has 9 entries (HIL-04). The hub reads ``allname``
-    # as the preset names; V1.10.01 sends "Out1".."Out8" there.
+    # The names are 8 plain strings (no "IN01-" prefix). ``allsource`` has 9
+    # entries (HIL-04). ``allname`` holds the preset names ("Out1".."Out8" on
+    # the captured device; the web interface edits them with ``preset name``).
     return {
         "power": state.system["power"],
-        "allsource": _with_ninth(state.routing, state, "source"),
+        "allsource": _with_ninth(state, "source"),
         **_names(state),
         "allname": [p.name for p in state.presets],
     }
@@ -137,12 +170,12 @@ def _get_output_status(state: DeviceState, payload: Payload, r: CommandResult) -
         "power": state.system["power"],
         "allconnect": state.column("outputs", "connected"),
         "name": state.column("outputs", "name"),
-        "allscaler": _with_ninth(state.column("outputs", "scaler"), state, "scaler"),
-        "allhdr": _with_ninth(state.column("outputs", "hdr"), state, "hdr"),
-        "allhdcp": _with_ninth(state.column("outputs", "hdcp"), state, "hdcp"),
-        "allarc": _with_ninth(state.column("outputs", "arc"), state, "arc"),
-        "allout": _with_ninth(state.column("outputs", "stream"), state, "stream"),
-        "allaudiomute": _with_ninth(state.column("outputs", "audio_mute"), state, "audio_mute"),
+        "allscaler": _with_ninth(state, "scaler"),
+        "allhdr": _with_ninth(state, "hdr"),
+        "allhdcp": _with_ninth(state, "hdcp"),
+        "allarc": _with_ninth(state, "arc"),
+        "allout": _with_ninth(state, "stream"),
+        "allaudiomute": _with_ninth(state, "audio_mute"),
     }
 
 
@@ -169,15 +202,16 @@ def _get_cec_status(state: DeviceState, payload: Payload, r: CommandResult) -> d
 
 @command("get system status", read=True)
 def _get_system_status(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
-    # ``baudrate`` is a code (6 on V1.10.01), not bits per second; ``mode`` is
-    # an undocumented code (3 on V1.10.01).
+    # ``baudrate`` is a code (6 = 115200); ``mode`` is the LCD on-time code
+    # (3 = "lcd on 30 seconds" in the V1.10.01 capture; the device web
+    # interface binds it to its LCD setting).
     s = state.system
     return {
         "power": s["power"],
         "baudrate": s["baudrate"],
         "beep": s["beep"],
         "lock": s["panel_lock"],
-        "mode": s["mode"],
+        "mode": s["lcd_timeout"],
     }
 
 
@@ -225,8 +259,9 @@ def _get_ext_audio_status(state: DeviceState, payload: Payload, r: CommandResult
         "allsource": state.column("outputs", "ext_audio_source"),
         "allout": state.column("outputs", "ext_audio_enabled"),
         **_names(state),
-        # ASSUMPTION(HIL-A): meaning of "index" is unknown; the doc shows 1.
-        "index": 1,
+        # The audio output selected with ``set ext-audio index`` (the device
+        # web interface's current audio output; 1 on the captured device).
+        "index": state.ext_audio["index"],
     }
 
 
@@ -252,18 +287,14 @@ def _preset_get(state: DeviceState, payload: Payload, r: CommandResult) -> dict[
 
 
 # ---------------------------------------------------------------- writes
+# Captured on V1.10.01: video switch, set poweronoff, set beep, set panel lock,
+# set input name, set output name, set cec index, cec command, the rejection of
+# the old ``set lcd on time`` payload.
 
 
 @command("video switch")
 def _video_switch(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
-    source = payload.get("source")
-    if not isinstance(source, list) or len(source) != 2:
-        raise _RejectError(f"source={source!r}")
-    out, inp = source
-    if not isinstance(out, int) or not 0 <= out <= proto.PORT_COUNT:
-        raise _RejectError(f"output {out!r}")
-    if not isinstance(inp, int) or not 1 <= inp <= proto.PORT_COUNT:
-        raise _RejectError(f"input {inp!r}")
+    out, inp = _port_value(payload, "source", (0, proto.PORT_COUNT), (1, proto.PORT_COUNT))
     targets = state.outputs if out == 0 else [state.outputs[out - 1]]
     for o in targets:
         o.source = inp
@@ -271,28 +302,10 @@ def _video_switch(state: DeviceState, payload: Payload, r: CommandResult) -> dic
     return _ok("video switch")
 
 
-@command("preset set")
-def _preset_set(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
-    idx = _int(payload, "index", 1, proto.PORT_COUNT)
-    for o, src in zip(state.outputs, state.presets[idx - 1].routing, strict=True):
-        o.source = src
-    r.mutated = True
-    return _ok("preset set")
-
-
-@command("preset save")
-def _preset_save(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
-    idx = _int(payload, "index", 1, proto.PORT_COUNT)
-    state.presets[idx - 1].routing = state.routing
-    state.presets[idx - 1].saved = True
-    r.mutated = True
-    return _ok("preset save")
-
-
 @command("set poweronoff")
 def _set_power(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
-    # ASSUMPTION(HIL-A): other commands keep working while in standby; reads
-    # simply report power 0.
+    # Captured: reads keep answering in standby (power 0), and writes are
+    # still accepted.
     state.system["power"] = _int(payload, "power", 0, 1)
     r.mutated = True
     return _ok("set poweronoff")
@@ -312,21 +325,10 @@ def _set_panel_lock(state: DeviceState, payload: Payload, r: CommandResult) -> d
     return _ok("set panel lock")
 
 
-@command("set lcd on time")
-def _set_lcd(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
-    state.system["lcd_timeout"] = _int(payload, "time", *proto.LCD_RANGE)
-    r.mutated = True
-    return _ok("set lcd on time")
-
-
 @command("set input name")
 def _set_input_name(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
     idx = _int(payload, "index", 1, proto.PORT_COUNT)
-    name = payload.get("name")
-    if not isinstance(name, str):
-        raise _RejectError(f"name={name!r}")
-    # ASSUMPTION(HIL-A): the device truncates to 32 characters like the hub does.
-    state.inputs[idx - 1].name = name[:32]
+    state.inputs[idx - 1].name = _name(payload)
     r.mutated = True
     return _ok("set input name")
 
@@ -334,126 +336,180 @@ def _set_input_name(state: DeviceState, payload: Payload, r: CommandResult) -> d
 @command("set output name")
 def _set_output_name(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
     idx = _int(payload, "index", 1, proto.PORT_COUNT)
-    name = payload.get("name")
-    if not isinstance(name, str):
-        raise _RejectError(f"name={name!r}")
-    state.outputs[idx - 1].name = name[:32]
+    state.outputs[idx - 1].name = _name(payload)
     r.mutated = True
     return _ok("set output name")
 
 
-def _output_setting(comhead: str, key: str, attr: str, lo: int, hi: int) -> None:
-    def handler(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
-        out = _int(payload, "output", 1, proto.PORT_COUNT)
-        setattr(state.outputs[out - 1], attr, _int(payload, key, lo, hi))
-        r.mutated = True
-        return _ok(comhead)
-
-    command(comhead)(handler)
-
-
-_output_setting("set output stream", "enable", "stream", 0, 1)
-_output_setting("set output hdcp", "hdcp", "hdcp", *proto.HDCP_RANGE)
-_output_setting("set output hdr", "hdr", "hdr", *proto.HDR_RANGE)
-_output_setting("set output scaler", "scaler", "scaler", *proto.SCALER_RANGE)
-_output_setting("set output arc", "arc", "arc", 0, 1)
-_output_setting("set output mute", "mute", "audio_mute", 0, 1)
-
-
-@command("set input edid")
-def _set_input_edid(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
-    inp = _int(payload, "input", 1, proto.PORT_COUNT)
-    state.inputs[inp - 1].edid = _int(payload, "edid", *proto.EDID_RANGE)
-    r.mutated = True
-    return _ok("set input edid")
-
-
-@command("copy edid")
-def _copy_edid(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
-    # Documented, not sent by the hub (it uses "set input edid" 14+N, BE-25).
-    # ASSUMPTION(HIL-A): equivalent to EDID mode 14 + output.
-    inp = _int(payload, "input", 1, proto.PORT_COUNT)
-    out = _int(payload, "output", 1, proto.PORT_COUNT)
-    state.inputs[inp - 1].edid = 14 + out
-    r.mutated = True
-    return _ok("copy edid")
-
-
 @command("set cec index")
 def _set_cec_index(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
-    if "inputindex" in payload or "outputindex" in payload:
-        # Documented shape: full 8-element arrays for both port types.
-        inputs = _port_array(payload, "inputindex")
-        outputs = _port_array(payload, "outputindex")
-        for p, v in zip(state.inputs, inputs, strict=True):
-            p.cec_enabled = v
-        for o, v in zip(state.outputs, outputs, strict=True):
-            o.cec_enabled = v
-    else:
-        # ASSUMPTION(HIL-A): the single-port shape sent by
-        # OreiMatrix.set_cec_enable ({"port": "input", "index": n, "enable": 0/1},
-        # orei_matrix.py:1915, BE-13) is accepted so the web UI works, but it
-        # is undocumented and flagged in the command log.
-        r.warnings.append("undocumented 'set cec index' single-port payload (BE-13)")
-        port_type = payload.get("port")
-        if port_type not in ("input", "output"):
-            raise _RejectError(f"port={port_type!r}")
-        idx = _int(payload, "index", 1, proto.PORT_COUNT)
-        enable = _int(payload, "enable", 0, 1)
-        ports = state.inputs if port_type == "input" else state.outputs
-        ports[idx - 1].cec_enabled = enable
+    # Only the form with both 8-element arrays works (captured). The old hub's
+    # single-port form ({"port": "input", "index": n, "enable": 0/1}) and a
+    # short array are answered with result 0 and change nothing (BE-13, HIL-10).
+    if "inputindex" not in payload and "outputindex" not in payload:
+        raise _RejectError("single-port payload (BE-13): the device rejects it")
+    inputs = _port_array(payload, "inputindex")
+    outputs = _port_array(payload, "outputindex")
+    for p, v in zip(state.inputs, inputs, strict=True):
+        p.cec_enabled = v
+    for o, v in zip(state.outputs, outputs, strict=True):
+        o.cec_enabled = v
     r.mutated = True
     return _ok("set cec index")
 
 
 @command("cec command")
 def _cec_command(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
-    obj = _int(payload, "object", 0, 1)
-    ports = _port_array(payload, "port")
-    _int(payload, "index", *proto.CEC_INDEX_RANGE)  # validated only
+    # Captured: the device only validates ``object`` (2 -> result 0). Any
+    # index and an empty port array are answered with result 1 (HIL-13: the
+    # hub validates instead).
+    obj = _int(payload, "object", *proto.CEC_OBJECT_RANGE)
+    ports = payload.get("port")
+    index = payload.get("index")
+    if not isinstance(ports, list):
+        r.warnings.append(f"port={ports!r} is not a port array")
+        ports = []
     if not any(ports):
-        raise _RejectError("no target port")
+        r.warnings.append("no target port (the device accepts it anyway)")
+    table_size = 6 if obj == 1 else 20
+    if not isinstance(index, int) or not 0 <= index < table_size:
+        r.warnings.append(f"index {index!r} is not in the {'output' if obj else 'input'} CEC table")
     # ASSUMPTION(HIL-A): commands are accepted even when CEC is disabled on the
     # target port (open question in the API doc); the log records whether it
     # was enabled so tests can assert on it.
     table = state.outputs if obj == 1 else state.inputs
-    disabled = [i + 1 for i, v in enumerate(ports) if v and not table[i].cec_enabled]
+    disabled = [i + 1 for i, v in enumerate(ports[: proto.PORT_COUNT]) if v and not table[i].cec_enabled]
     if disabled:
         r.warnings.append(f"CEC disabled on {'output' if obj else 'input'} port(s) {disabled}")
     return _ok("cec command")
 
 
-@command("set output exa mode")
+@command("preset set")
+def _preset_set(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
+    idx = _int(payload, "index", 1, proto.PORT_COUNT)
+    preset = state.presets[idx - 1]
+    # ASSUMPTION(HIL-A): recalling an empty slot is answered with result 0 (the
+    # device web interface shows "Set failed, please save a preset" when
+    # ``result`` is not 1).
+    if not preset.saved:
+        raise _RejectError(f"preset {idx} is empty")
+    for o, src in zip(state.outputs, preset.routing, strict=True):
+        o.source = src
+    r.mutated = True
+    return _ok("preset set")
+
+
+@command("preset save")
+def _preset_save(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
+    idx = _int(payload, "index", 1, proto.PORT_COUNT)
+    state.presets[idx - 1].routing = state.routing
+    state.presets[idx - 1].saved = True
+    r.mutated = True
+    return _ok("preset save")
+
+
+# ------------------------------------------------ web-UI-derived writes
+# The commands the device's own web interface sends (WP-A4 part 2). Payloads,
+# value ranges and port 0 = all outputs come from that interface; the answers
+# are the ASSUMPTION(HIL-A) in protocol.WRITE_RESULT_OVERRIDES.
+
+
+@command("preset name")
+def _preset_name(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
+    idx = _int(payload, "index", 1, proto.PORT_COUNT)
+    state.presets[idx - 1].name = _name(payload)
+    r.mutated = True
+    return _ok("preset name")
+
+
+@command("preset clear")
+def _preset_clear(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
+    idx = _int(payload, "index", 1, proto.PORT_COUNT)
+    state.presets[idx - 1].routing = list(range(1, proto.PORT_COUNT + 1))
+    state.presets[idx - 1].saved = False
+    r.mutated = True
+    return _ok("preset clear")
+
+
+def _output_setting(comhead: str, key: str, attr: str, lo: int, hi: int) -> None:
+    """``{comhead, key: [output, value]}``; output 0 = all outputs."""
+
+    def handler(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
+        out, value = _port_value(payload, key, (0, proto.PORT_COUNT), (lo, hi))
+        for o in state.outputs if out == 0 else [state.outputs[out - 1]]:
+            setattr(o, attr, value)
+        r.mutated = True
+        return _ok(comhead)
+
+    command(comhead)(handler)
+
+
+_output_setting("tx stream", "out", "stream", 0, 1)
+_output_setting("tx hdcp", "hdcp", "hdcp", *proto.HDCP_RANGE)
+_output_setting("set hdr conversion", "hdr", "hdr", *proto.HDR_RANGE)
+_output_setting("set video scaler", "scaler", "scaler", *proto.SCALER_RANGE)
+_output_setting("set arc", "arc", "arc", 0, 1)
+_output_setting("set output audio mute", "mute", "audio_mute", 0, 1)
+
+
+@command("set edid")
+def _set_edid(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
+    # 1-36 built-in EDIDs, 37-39 user EDIDs, 40-47 copy the EDID of output
+    # 1-8 (BE-25). The stored id is what ``get input status.edid`` reports.
+    inp, edid = _port_value(payload, "edid", (1, proto.PORT_COUNT), proto.EDID_RANGE)
+    state.inputs[inp - 1].edid = edid
+    r.mutated = True
+    return _ok("set edid")
+
+
+@command("set lcd on time")
+def _set_lcd(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
+    # The value goes in a key named "lcd on time" (web interface); the old
+    # hub's {"time": N} is rejected for every code (captured, API-07/HIL-09).
+    if "lcd on time" not in payload:
+        raise _RejectError("no 'lcd on time' value (the old {'time': N} payload is rejected)")
+    state.system["lcd_timeout"] = _int(payload, "lcd on time", *proto.LCD_RANGE)
+    r.mutated = True
+    return _ok("set lcd on time")
+
+
+@command("set ext-audio mode")
 def _set_exa_mode(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
-    # ASSUMPTION(HIL-A): comhead and payload taken from the hub (derived from
-    # the Control4 driver); never verified over HTTP.
     state.ext_audio["mode"] = _int(payload, "mode", *proto.EXT_AUDIO_MODE_RANGE)
     r.mutated = True
-    return _ok("set output exa mode")
+    return _ok("set ext-audio mode")
 
 
-@command("set output exa")
-def _set_exa(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
-    # ASSUMPTION(HIL-A): exa 1 = enable, 2 = disable (hub comment, Control4 driver).
-    out = _int(payload, "output", 1, proto.PORT_COUNT)
-    exa = _int(payload, "exa", 1, 2)
-    state.outputs[out - 1].ext_audio_enabled = 1 if exa == 1 else 0
+@command("set ext-audio out")
+def _set_exa_out(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
+    out, enabled = _port_value(payload, "out", (1, proto.PORT_COUNT), (0, 1))
+    state.outputs[out - 1].ext_audio_enabled = enabled
     r.mutated = True
-    return _ok("set output exa")
+    return _ok("set ext-audio out")
 
 
-@command("set output exa in source")
-def _set_exa_source(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
-    out = _int(payload, "output", 1, proto.PORT_COUNT)
-    state.outputs[out - 1].ext_audio_source = _int(payload, "input", 1, proto.PORT_COUNT)
+@command("set ext-audio index")
+def _set_exa_index(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
+    state.ext_audio["index"] = _int(payload, "index", 1, proto.PORT_COUNT)
     r.mutated = True
-    return _ok("set output exa in source")
+    return _ok("set ext-audio index")
 
 
-@command("set reboot")
-def _set_reboot(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
+@command("ext-audio switch")
+def _ext_audio_switch(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
+    out, source = _port_value(payload, "source", (1, proto.PORT_COUNT), proto.EXT_AUDIO_SOURCE_RANGE)
+    state.outputs[out - 1].ext_audio_source = source
+    if state.ext_audio["mode"] != 2:
+        r.warnings.append("ext-audio switch outside matrix mode (the device web interface only offers it in mode 2)")
+    r.mutated = True
+    return _ok("ext-audio switch")
+
+
+@command("reboot")
+def _reboot(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
+    _int(payload, "reboot", 1, 1)
     r.reboot = True
-    return _ok("set reboot")
+    return _ok("reboot")
 
 
 def recognised_comheads() -> set[str]:

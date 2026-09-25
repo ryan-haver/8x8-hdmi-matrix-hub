@@ -14,17 +14,18 @@ from enum import Enum
 # =============================================================================
 # Response classification (BE-07)
 #
-# Every constant below is taken from the simulator's documented assumptions
-# (tools/simulator/protocol.py) and still has to be checked against captures
-# from the real BK-808 in HIL-A (docs/REMEDIATION_PLAN.md §5.2).
+# Checked against the probe and write captures of a BK-808 with MCU V1.10.01
+# (tests/fixtures/device/BK-808_V1.10.01_web-V2.00.03/{probe,write}).
 # =============================================================================
 
-# HIL-A: confirm — "E00" answers a command the matrix does not recognise.
+# Captured on V1.10.01: "E00" answers a command the matrix does not know
+# ("hilcapture unknown", "s av 7 8", "s out 8 stream 0", an unknown CEC word).
 TELNET_ERR_UNKNOWN_COMMAND = "E00"
-# HIL-A: confirm — "E01" answers a recognised command with a bad parameter.
+# Captured on V1.10.01: "E01" answers a known command with a bad parameter
+# ("r link in 9", "s cec in 9 on", "s output 9 in source 1", "s power 0").
 TELNET_ERR_BAD_PARAMETER = "E01"
-# HIL-A: confirm — every error code the matrix may send ("E02" was accepted
-# by earlier client code; its meaning is unknown).
+# Every error code the matrix may send ("E02" was accepted by earlier client
+# code; it has never been seen).
 TELNET_ERROR_CODES = frozenset({TELNET_ERR_UNKNOWN_COMMAND, TELNET_ERR_BAD_PARAMETER, "E02"})
 # Confirmed on MCU V1.10.01 (read capture, tests/fixtures/device/
 # BK-808_V1.10.01_web-V2.00.03/telnet): the device echoes every command line
@@ -45,11 +46,13 @@ PRESET_OUTPUTS = 8
 #: reading until the device has been silent this long, so the rest of the
 #: answer does not leak into the next command.
 READ_SETTLE_S = 0.1
-# HIL-A: confirm — successful set commands answer with one or more
-# acknowledgement lines (the simulator echoes the command without "s ", e.g.
-# "cec in 1 on", "output1->input3", "save to preset 1") and no error code.
-# A line identical to the command we sent is treated as the echo, not as the
-# acknowledgement (V1.10.01 echoes reads; set commands are not captured yet).
+# Successful set commands answer with the echo of the command line, then one
+# or more acknowledgement lines and no error code. Captured on V1.10.01:
+# "s output 8 in source 8" -> "output8->input8" (8 lines for output 0),
+# "s beep 0" -> "beep off", "s lock 1" -> "panel button lock on",
+# "power 0" -> "power off". A line identical to the command we sent is treated
+# as the echo, not as the acknowledgement. CEC and preset acknowledgements are
+# not captured yet.
 
 
 def complete_lines(response: str) -> list[str]:

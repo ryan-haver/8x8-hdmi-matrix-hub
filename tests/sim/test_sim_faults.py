@@ -279,4 +279,4 @@ async def test_rejected_idempotent_write_is_retried_after_relogin(matrix, simula
     simulator.faults.update({"reject_writes": True})
     simulator.log.clear()
     assert await matrix.set_output_hdcp(1, 1) is False
-    assert _http_sends(simulator, "set output hdcp") == 2
+    assert _http_sends(simulator, "tx hdcp") == 2

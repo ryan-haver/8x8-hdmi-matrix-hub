@@ -16,7 +16,7 @@ SCENARIOS = [
             Response(status=200),
             Device("outputs[1].audio_mute", equals=1),
             DeviceUnchanged(allow=("outputs[1].audio_mute",)),
-            CommandSent("set output mute", {"output": 2, "mute": 1}, count=1),
+            CommandSent("set output audio mute", {"mute": [2, 1]}, count=1),
             WsEvent("audio_mute", {"output": 2, "muted": True}),
             Hub("/api/status/outputs", "data.outputs[1].muted", equals=True),
         ),

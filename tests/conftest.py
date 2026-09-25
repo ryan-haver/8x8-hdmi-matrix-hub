@@ -297,7 +297,7 @@ def mock_matrix():
             "allconnect": [1, 1, 1, 1, 0, 0, 0, 0],
             "allaudiomute": [0, 0, 0, 0, 0, 0, 0, 0],
             "allhdcp": [3, 3, 3, 3, 3, 3, 3, 3],
-            "allhdr": [3, 3, 3, 3, 3, 3, 3, 3],
+            "allhdr": [2, 2, 2, 2, 2, 2, 2, 2],  # device code 2 = auto (API 3)
             "allscaler": [0, 0, 0, 0, 0, 0, 0, 0],
             "allarc": [0, 0, 0, 0, 0, 0, 0, 0],
         }

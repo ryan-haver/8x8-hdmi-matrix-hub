@@ -65,8 +65,8 @@ def test_apply_http_captures_from_documented_examples(tmp_path):
         "get_output_status.json": {
             "comhead": "get output status",
             "allconnect": [1, 0, 1, 0, 0, 0, 0, 0],
-            "allscaler": [1, 1, 1, 1, 1, 1, 1, 5],
-            "allhdr": [3] * 8,
+            "allscaler": [1, 1, 1, 1, 1, 1, 1, 4],  # device codes 0-4
+            "allhdr": [2] * 8,  # device codes 0-2
             "allhdcp": [2] * 8,
             "allarc": [0] * 8,
             "allout": [1] * 8,

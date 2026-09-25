@@ -10,6 +10,16 @@ import logging
 
 from aiohttp import web
 
+from device_codes import (
+    EDID_MODES,
+    HDCP_MODES,
+    HDR_MODES,
+    SCALER_MODES,
+    edid_copy_from_output,
+    hdr_from_device,
+    scaler_from_device,
+)
+
 from .utils import _json_response, get_input_names, get_matrix_device
 from .websocket import broadcast_status_update
 
@@ -89,8 +99,13 @@ async def handle_output_status(request: web.Request) -> web.Response:
                         if idx < len(status.get("allaudiomute", []))
                         else False,
                         "hdcp": status.get("allhdcp", [])[idx] if idx < len(status.get("allhdcp", [])) else None,
-                        "hdr": status.get("allhdr", [])[idx] if idx < len(status.get("allhdr", [])) else None,
-                        "scaler": status.get("allscaler", [])[idx] if idx < len(status.get("allscaler", [])) else None,
+                        # API values (HDR 1-3, scaler 1-5), what the setters take (HIL-02)
+                        "hdr": hdr_from_device(status.get("allhdr", [])[idx])
+                        if idx < len(status.get("allhdr", []))
+                        else None,
+                        "scaler": scaler_from_device(status.get("allscaler", [])[idx])
+                        if idx < len(status.get("allscaler", []))
+                        else None,
                         "arc": status.get("allarc", [])[idx] == 1 if idx < len(status.get("allarc", [])) else False,
                     }
                 )
@@ -306,17 +321,27 @@ async def handle_set_input_edid(request: web.Request) -> web.Response:
 
         data = await request.json()
         mode = data.get("mode")
+        copy_from = data.get("copy_from_output")
 
-        if mode is None:
+        if mode is None and copy_from is None:
             return _json_response(False, error="Missing 'mode' parameter", status=400)
 
-        mode = int(mode)
-
-        # Check if this is a copy-from-output mode (15-22)
-        if 15 <= mode <= 22:
-            output_num = mode - 14
+        # EDID ids are the device's own (1-47, GET /api/edid/modes). Copying
+        # a display's EDID is id 39 + output (40-47); ``copy_from_output`` is
+        # a shortcut for it. The old 15-22 "copy" ids were wrong (BE-25):
+        # 15-22 are built-in HDR EDIDs on the device.
+        if copy_from is not None:
+            output_num = int(copy_from)
+            if not 1 <= output_num <= 8:
+                return _json_response(False, error="copy_from_output must be 1-8", status=400)
+            mode = edid_copy_from_output(output_num)
             result = await matrix_device.copy_edid_from_output(input_num, output_num)
         else:
+            mode = int(mode)
+            if mode not in EDID_MODES:
+                return _json_response(
+                    False, error=f"mode must be {min(EDID_MODES)}-{max(EDID_MODES)} (see /api/edid/modes)", status=400
+                )
             result = await matrix_device.set_input_edid(input_num, mode)
 
         if result:
@@ -401,14 +426,14 @@ async def handle_output_hdcp(request: web.Request) -> web.Response:
 
         data = await request.json()
         mode = data.get("mode")
-        if mode is None or mode < 1 or mode > 5:
+        if mode not in HDCP_MODES:
             return _json_response(
                 False,
                 error="mode must be 1-5 (1=HDCP1.4, 2=HDCP2.2, 3=Follow Sink, 4=Follow Source, 5=User)",
                 status=400,
             )
 
-        mode_names = {1: "HDCP 1.4", 2: "HDCP 2.2", 3: "Follow Sink", 4: "Follow Source", 5: "User Mode"}
+        mode_names = HDCP_MODES
         _LOG.info(f"REST API: Setting output {output_num} HDCP to mode {mode} ({mode_names.get(mode)})")
         success = await matrix_device.set_output_hdcp(output_num, mode)
 
@@ -450,10 +475,10 @@ async def handle_output_hdr(request: web.Request) -> web.Response:
 
         data = await request.json()
         mode = data.get("mode")
-        if mode is None or mode < 1 or mode > 3:
+        if mode not in HDR_MODES:
             return _json_response(False, error="mode must be 1-3 (1=Passthrough, 2=HDR→SDR, 3=Auto)", status=400)
 
-        mode_names = {1: "Passthrough", 2: "HDR to SDR", 3: "Auto"}
+        mode_names = HDR_MODES
         _LOG.info(f"REST API: Setting output {output_num} HDR to mode {mode} ({mode_names.get(mode)})")
         success = await matrix_device.set_output_hdr(output_num, mode)
 
@@ -495,14 +520,14 @@ async def handle_output_scaler(request: web.Request) -> web.Response:
 
         data = await request.json()
         mode = data.get("mode")
-        if mode is None or mode < 1 or mode > 5:
+        if mode not in SCALER_MODES:
             return _json_response(
                 False,
                 error="mode must be 1-5 (1=Passthrough, 2=8K→4K, 3=8K/4K→1080p, 4=Auto, 5=Audio Only)",
                 status=400,
             )
 
-        mode_names = {1: "Passthrough", 2: "8K to 4K", 3: "8K/4K to 1080p", 4: "Auto", 5: "Audio Only"}
+        mode_names = SCALER_MODES
         _LOG.info(f"REST API: Setting output {output_num} scaler to mode {mode} ({mode_names.get(mode)})")
         success = await matrix_device.set_output_scaler(output_num, mode)
 

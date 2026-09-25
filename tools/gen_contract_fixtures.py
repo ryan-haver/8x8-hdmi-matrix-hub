@@ -72,8 +72,8 @@ RAW_DEVICE_RESPONSES: dict[str, dict[str, Any]] = {
         "comhead": "get output status",
         "power": 1,
         "allconnect": [1, 1, 0, 0, 0, 0, 0, 0],  # TV + Soundbar plugged in
-        "allscaler": [1, 1, 1, 1, 1, 1, 1, 1],
-        "allhdr": [3, 3, 3, 3, 3, 3, 3, 3],
+        "allscaler": [0, 0, 0, 0, 0, 0, 0, 0],  # device codes: 0 = passthrough (API 1)
+        "allhdr": [2, 2, 2, 2, 2, 2, 2, 2],  # device codes: 2 = auto (API 3), HIL-02
         "allhdcp": [3, 3, 3, 3, 3, 3, 3, 3],
         "allarc": [1, 0, 0, 0, 0, 0, 0, 0],  # ARC from the TV
         "allout": [1, 1, 1, 1, 1, 1, 1, 0],  # output 8 stream disabled

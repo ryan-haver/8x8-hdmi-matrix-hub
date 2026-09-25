@@ -58,8 +58,10 @@ async def test_login_and_status_reads_parse_the_device_bytes(matrix, simulator):
     full = await matrix.get_full_status()
     assert (full["firmware_version"], full["web_version"], full["model"]) == ("V1.10.01", "V2.00.03", "BK-808")
     assert full["outputs_connected"] == [1, 1, 0, 0, 0, 0, 0, 0]
-    assert full["output_scaler"] == [0, 4, 0, 0, 0, 0, 0, 0]
-    assert full["output_hdr"] == [0] * 8  # HIL-02: HDR 0 is what the device reports
+    # API values (1-based): the device reports scaler 0/4 and HDR 0 (HIL-02, BE-15)
+    assert full["output_scaler"] == [1, 5, 1, 1, 1, 1, 1, 1]  # 1 = passthrough, 5 = audio only
+    assert full["output_hdr"] == [1] * 8  # 1 = passthrough
+    assert full["output_hdcp"] == [3] * 8  # follow sink
     assert full["output_enabled"] == [1, 1, 0, 0, 0, 0, 0, 0]
     assert full["input_edid"] == [36] * 8 and full["inputs_inactive"] == [0] * 8
     assert full["cec_inputs_enabled"] == [1, 0, 0, 0, 0, 0, 0, 0]
@@ -118,6 +120,53 @@ async def test_rest_status_from_real_device_answers(hub, simulator):
     assert [o["number"] for o in outputs] == list(range(1, 9))
     assert [o["connected"] for o in outputs] == [True, True] + [False] * 6
     assert [o["enabled"] for o in outputs] == [True, True] + [False] * 6
+    # HIL-02: read values are API values, so a client can write back what it read
+    assert [o["hdr"] for o in outputs] == [1] * 8
+    assert [o["scaler"] for o in outputs] == [1, 5, 1, 1, 1, 1, 1, 1]
+    assert [o["hdcp"] for o in outputs] == [3] * 8
+
+
+async def test_rest_output_status_endpoint_reports_api_values(hub, simulator):
+    body = (await (await hub.get("/api/status/outputs")).json())["data"]
+    assert [o["hdr"] for o in body["outputs"]] == [1] * 8
+    assert [o["scaler"] for o in body["outputs"]] == [1, 5, 1, 1, 1, 1, 1, 1]
+    assert body["raw"]["allscaler"] == [0, 4, 0, 0, 0, 0, 0, 0, 255]  # the device's own codes stay in `raw`
+
+
+# ------------------------------------------------------------------ writes
+
+
+@pytest.mark.parametrize("method, args, comhead", [
+    ("set_beep", (False,), "set beep"),
+    ("set_panel_lock", (True,), "set panel lock"),
+    ("set_input_name", (8, "HIL-CAPTURE"), "set input name"),
+    ("set_output_name", (8, "HIL-CAPTURE"), "set output name"),
+    ("switch_input", (8, 8), "video switch"),
+    ("switch_input_to_all", (8,), "video switch"),
+    ("power_off", (), "set poweronoff"),
+])
+async def test_captured_writes_are_answered_with_the_device_bytes(matrix, simulator, method, args, comhead):
+    """The writes captured on V1.10.01 get the device's own answer (result 1), and the hub accepts it."""
+    assert await matrix.connect()
+    assert await getattr(matrix, method)(*args) is True
+    assert served_from_captures(simulator, comhead)[-1] == "verbatim"
+
+
+async def test_cec_enable_bulk_answer_from_the_device(matrix, simulator):
+    """HIL-10: the array form got result 1 on the device; the hub now always sends it."""
+    assert await matrix.connect()
+    assert await matrix.set_cec_enable("input", 8, True) is True
+    sent = [e for e in simulator.log if e.get("command") == "set cec index"][-1]
+    assert "inputindex" in sent["payload"] and sent.get("golden") == "verbatim"
+    assert simulator.state.inputs[7].cec_enabled == 1
+
+
+async def test_rest_save_current_scene_stores_api_hdr_values(hub, simulator):
+    """HIL-02: the device reports HDR 0; a saved scene stores API value 1, which the setter accepts."""
+    resp = await hub.post("/api/scene/save-current", json={"id": "hdr", "name": "HDR"})
+    assert resp.status == 200, await resp.text()
+    outputs = (await resp.json())["data"]["outputs"]
+    assert {o["hdr_mode"] for o in outputs.values()} == {1}
 
 
 async def test_rest_save_current_scene_uses_the_real_routing(hub, simulator):

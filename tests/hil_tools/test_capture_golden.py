@@ -224,7 +224,7 @@ def test_report_on_simulator_captures_confirms_the_simulator(golden_src):
 
 def test_report_flags_device_differences(golden_src, tmp_path):
     root = _copy(golden_src, tmp_path / "g")
-    set_body(root, RecordIds.PROBE_WRONG_PASSWORD, b'{"comhead":"login","result":0}',
+    set_body(root, RecordIds.PROBE_WRONG_PASSWORD, b'{"comhead":"login","result":"fail"}',
              match=lambda ex: ex["role"] == "login-wrong")
     set_body(root, RecordIds.TELNET_STATUS, b"power on\r\nmac address: x\r\n")
     status_doc = load(root, "http/get_status")["exchanges"][0]["response"]["json"]
@@ -279,3 +279,16 @@ def test_detect_style_and_patch():
     base = {"all": ["IN01-A", "IN02-B"], "k": 1}
     now = {"all": ["IN01-A", "C"], "k": 2}
     assert _patch(captured, base, now) == {"all": ["IN01-A", "C", "extra"], "k": 2, "dev": "x"}
+
+
+def test_report_on_the_real_device_captures_has_no_contradictions():
+    """WP-A4 part 2: the simulator matches every probe/write answer of the owner's BK-808 (MCU V1.10.01)."""
+    root = Path(__file__).resolve().parents[2] / "tests" / "fixtures" / "device" / "BK-808_V1.10.01_web-V2.00.03"
+    verdicts = {v.id: v for v in assumption_report(GoldenSet.load(root))}
+    assert [(v.id, v.detail) for v in verdicts.values() if v.status == CONTRADICTED] == []
+    for aid in ("login-fail-result", "write-fail-result", "legacy-unanswered", "unknown-comhead-result",
+                "garbage-body", "cec-index-single-port", "name-truncation", "telnet-error-codes",
+                "telnet-set-acks", "telnet-bare-power", "standby-behaviour"):
+        assert verdicts[aid].status == CONFIRMED, (aid, verdicts[aid].detail)
+    # web-UI-derived commands: nothing captured yet, so no claim either way
+    assert verdicts["web-ui-commands"].status == MISSING

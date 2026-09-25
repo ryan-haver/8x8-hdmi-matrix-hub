@@ -28,6 +28,8 @@ import uuid
 
 from aiohttp import web
 
+from device_codes import hdr_from_device
+
 from .profiles import (
     handle_create_profile,
     handle_delete_profile,
@@ -184,7 +186,8 @@ async def handle_save_current_as_scene(request: web.Request) -> web.Response:
                                 "input": int(allsource[i]) if i < len(allsource) else 1,
                                 "enabled": True,
                                 "audio_mute": bool(allaudiomute[i]) if i < len(allaudiomute) else False,
-                                "hdr_mode": int(allhdr[i]) if i < len(allhdr) else None,
+                                # scenes store API values: device HDR 0-2 -> 1-3 (HIL-02)
+                                "hdr_mode": hdr_from_device(allhdr[i]) if i < len(allhdr) else None,
                                 "hdcp_mode": int(allhdcp[i]) if i < len(allhdcp) else None,
                             }
                         except (TypeError, ValueError, IndexError):

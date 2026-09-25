@@ -9,6 +9,8 @@ from typing import Any
 
 from aiohttp import web
 
+from device_codes import hdr_from_device, scaler_from_device
+
 from .runtime import runtime_snapshot
 from .utils import (
     API_VERSION,
@@ -122,8 +124,11 @@ def _format_outputs(status: dict[str, Any] | None, cable_status: dict[str, Any] 
                 if idx < len(status.get("allaudiomute", []))
                 else False,
                 "hdcp": status.get("allhdcp", [])[idx] if idx < len(status.get("allhdcp", [])) else None,
-                "hdr": status.get("allhdr", [])[idx] if idx < len(status.get("allhdr", [])) else None,
-                "scaler": status.get("allscaler", [])[idx] if idx < len(status.get("allscaler", [])) else None,
+                # API values (HDR 1-3, scaler 1-5), the same scale the setters take (HIL-02)
+                "hdr": hdr_from_device(status.get("allhdr", [])[idx]) if idx < len(status.get("allhdr", [])) else None,
+                "scaler": scaler_from_device(status.get("allscaler", [])[idx])
+                if idx < len(status.get("allscaler", []))
+                else None,
                 "arc": status.get("allarc", [])[idx] == 1 if idx < len(status.get("allarc", [])) else False,
             }
         )
