@@ -161,9 +161,11 @@ Test cases, run against both HubClient implementations once they exist:
 11. Legacy `config_state.json` import; entity IDs unchanged.
 12. Auth: token required when configured; HTTP HubClient without a key fails with a clear setup error when a control PIN is set.
 
-V3 addition: run the same cases against Unfolded Circle's `core-simulator` (the real Remote core software) where its licence allows; it has no declared licence, so local-only until confirmed.
+V3 addition: run the same cases against Unfolded Circle's `core-simulator` (the real Remote core software) where its licence allows; it has no declared licence, so local-only until confirmed. Evaluation and a local smoke-test recipe: [`UC_CORE_SIMULATOR.md`](UC_CORE_SIMULATOR.md).
 
 CI: a blocking `uc` job (`pytest tests/uc`). The Docker smoke test runs with UC on and off.
+
+**Status (WP-B1):** built. `tools/uc_remote_sim.py` is the scripted Remote; `tests/uc` covers cases 1–10 against the current driver (known bugs as strict xfails naming their register rows, the entity set pinned in `tests/uc/golden/entities.json`); the `uc` validation client runs `tests/validation/scenarios/remote.py`. Cases 11–12 wait for the modular integration (WP-B3/Phase 4).
 
 ## 8. Upstream conformance and upgrade path
 
