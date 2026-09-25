@@ -139,3 +139,33 @@ def test_hardware_mode_safety(tmp_path: Path, fake_matrix, schema_validator):
 
     # every change was restored on the "matrix"
     assert asyncio.run(_sim_state(fake_matrix))["outputs"] == before["outputs"]
+
+
+def test_uc_client_runs_against_the_hub_with_the_integration(tmp_path: Path, schema_validator):
+    """The scripted Remote (WP-B1): the runner restarts the hub in UC mode for it and back for the api client."""
+    scenarios = discover()
+    chosen = [scenarios["remote.select_source"], scenarios["remote.output_cec_on"], scenarios["routing.switch_one"]]
+    runner = Runner(RunOptions(target="sim", clients=("uc", "api"), out_dir=tmp_path, findings=load_findings()))
+    asyncio.run(runner.run(chosen))
+    out = _outcomes(runner)
+
+    ok = out[("remote.select_source", "uc")]
+    assert (ok.status, ok.level, ok.gate) == ("pass", "V3", "ok")
+    known = out[("remote.output_cec_on", "uc")]
+    assert (known.status, known.gate) == ("fail", "known-failure")
+    assert {c["finding"] for c in known.failed_checks} == {"UC-01"}
+    assert out[("routing.switch_one", "api")].status == "pass"  # back on the API-only hub
+    assert ("routing.switch_one", "uc") not in out  # not a uc scenario
+
+    records = {(r.data["scenario"], r.data["client"]): r.data for r in iter_records([tmp_path / "evidence"])}
+    for rec in records.values():
+        assert list(schema_validator.iter_errors(rec)) == [], rec["scenario"]
+    select = records[("remote.select_source", "uc")]
+    assert select["environment"]["hub"]["entry"].startswith("run.py legacy mode")
+    assert select["environment"]["hub"]["env"]["UC_DISABLE_MDNS_PUBLISH"] == "true"
+    assert select["observations"]["requests"][0]["body"]["cmd_id"] == "select_source"
+    assert select["observations"]["requests"][0]["body"]["params"] == {"source": "PS5"}  # the name the Remote lists
+    assert {"path": "outputs[0].source", "before": 2, "after": 6} in select["observations"]["state_diff"]
+    crash = records[("remote.output_cec_on", "uc")]
+    assert crash["observations"]["requests"][0]["closed"] == 1011
+    assert records[("routing.switch_one", "api")]["environment"]["hub"]["entry"].startswith("run.py (USE_MODULAR")

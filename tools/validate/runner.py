@@ -24,7 +24,7 @@ from typing import Any
 import aiohttp
 
 from . import gitinfo
-from .clients import ActionResult, ApiClient, Client, HubInfo, NotSupportedError, make_client
+from .clients import CLIENTS, ActionResult, ApiClient, Client, HubInfo, NotSupportedError, make_client
 from .device import RESTORABLE_DOMAINS, HardwareDevice, SimDevice
 from .evidence import SCHEMA_VERSION, record_stem, redact, write_record
 from .model import (
@@ -232,23 +232,52 @@ class Runner:
 
     def _start_system(self) -> None:
         logs = self.o.out_dir / "logs"
+        # Start the hub in the mode the first client needs (the uc client needs the UC integration).
+        first = CLIENTS.get(self.o.clients[0]) if self.o.clients else None
+        mode = first.hub_mode if first else "api"
         if self.o.target == "sim":
             self.stack = SimStack(logs)
-            self.stack.start()
+            self.stack.start(mode)
             self.hub_health = self.stack.health
         else:
             if not self.o.matrix_host:
                 raise SystemExit("--target hardware needs --matrix-host")
-            self.hub = HubProcess(
-                matrix_host=self.o.matrix_host,
-                matrix_port=self.o.matrix_port,
-                telnet_port=self.o.telnet_port,
-                log_dir=logs,
-                matrix_user=self.o.matrix_user,
-                matrix_password=self.o.matrix_password,
-                external_url=self.o.hub_url,
-            )
+            self.hub = self._hardware_hub(mode if not self.o.hub_url else "api")
             self.hub_health = self.hub.start()
+
+    def _hardware_hub(self, mode: str) -> HubProcess:
+        return HubProcess(
+            matrix_host=self.o.matrix_host or "",
+            matrix_port=self.o.matrix_port,
+            telnet_port=self.o.telnet_port,
+            log_dir=self.o.out_dir / "logs",
+            matrix_user=self.o.matrix_user,
+            matrix_password=self.o.matrix_password,
+            external_url=self.o.hub_url,
+            mode=mode,
+            polling_interval=2 if mode == "uc" else 30,
+        )
+
+    def _hub_process(self) -> HubProcess | None:
+        if self.stack and self.stack.hub:
+            return self.stack.hub
+        return self.hub
+
+    def _use_hub_mode(self, mode: str) -> None:
+        """Run the hub in the mode the next client needs (restarting it in the other mode if needed)."""
+        hub = self._hub_process()
+        if hub is not None and hub.mode == mode:
+            return
+        if self.stack:
+            self.stack.use_hub_mode(mode)
+            self.hub_health = self.stack.health
+            return
+        if self.hub is not None and self.hub.external_url:
+            raise RuntimeError(f"an already running hub (--hub-url) cannot be restarted in '{mode}' mode")
+        if self.hub is not None:
+            self.hub.stop()
+        self.hub = self._hardware_hub(mode)
+        self.hub_health = self.hub.start()
 
     def _stop_system(self) -> None:
         if self.stack:
@@ -269,7 +298,7 @@ class Runner:
             "python": sys.version.split()[0],
             "platform": platform.platform(),
             "hub": {
-                "entry": "run.py (USE_MODULAR=true, UC_ENABLED=false)" if not self.o.hub_url else self.o.hub_url,
+                "entry": self._hub_process().entry if self._hub_process() else self.o.hub_url,
                 "version": self.hub_health.get("version"),
                 "api_version": self.hub_health.get("api_version"),
                 "image_digest": None,
@@ -310,9 +339,13 @@ class Runner:
 
     async def _run_client(self, client_name: str, scenarios: list[Scenario]) -> None:
         client = make_client(client_name)
-        hub_info = HubInfo(self.base_url, forwarded_for=self._xff(), artifacts_dir=self.o.out_dir / "artifacts")
         # (per-record artifact dirs are passed in client.context before each action)
         try:
+            if any(client_name in sc.clients for sc in scenarios):
+                await asyncio.to_thread(self._use_hub_mode, client.hub_mode)
+            hub = self._hub_process()
+            hub_info = HubInfo(self.base_url, forwarded_for=self._xff(), artifacts_dir=self.o.out_dir / "artifacts",
+                               uc_url=hub.uc_url if hub is not None and hub.mode == "uc" else None)
             await client.start(hub_info)
         except (NotImplementedError, RuntimeError) as exc:
             for sc in scenarios:
@@ -603,7 +636,7 @@ class Runner:
                 if exp.json and client.name == "api":
                     ok = ok and _subset(exp.json, result.body)
                 verdict = "pass" if ok else "fail"
-                body = json.dumps(result.body, default=str)[:300] if client.name == "api" else "(browser)"
+                body = json.dumps(result.body, default=str)[:300] if client.name == "api" else f"({client.name})"
                 detail = f"HTTP {status}; body {body}" + (f"; error {result.error}" if result.error else "")
             elif isinstance(exp, Hub):
                 deadline = time.monotonic() + 4.0

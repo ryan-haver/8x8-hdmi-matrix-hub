@@ -30,6 +30,8 @@ class HubInfo:
     base_url: str
     forwarded_for: str = "10.99.0.1"
     artifacts_dir: Path | None = None
+    #: The Unfolded Circle integration WebSocket (hub started in ``uc`` mode), else ``None``.
+    uc_url: str | None = None
 
 
 @dataclass
@@ -54,6 +56,9 @@ class Client(ABC):
     name: str = ""
     #: Intents this client can perform.
     intents: frozenset[str] = frozenset()
+    #: How the runner starts the hub for this client (``tools.validate.stack.HUB_MODES``):
+    #: ``api`` = modular API-only mode, ``uc`` = the shipped legacy mode with the UC integration.
+    hub_mode: str = "api"
     #: Per-action context set by the runner before :meth:`perform`:
     #: ``label`` (scenario id, for artifact names) and ``forwarded_for`` (the
     #: client address this scenario uses; the hub rate-limits per client).

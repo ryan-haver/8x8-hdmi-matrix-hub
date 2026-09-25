@@ -5,6 +5,8 @@ from __future__ import annotations
 import pytest
 
 from tools.validate.clients.api import rest_call
+from tools.validate.clients.base import NotSupportedError
+from tools.validate.clients.uc import RemoteClient
 from tools.validate.model import (
     INTENTS,
     Device,
@@ -106,8 +108,17 @@ def test_api_client_maps_every_intent():
         "cec_input": {"input": 1, "command": "power_on"}, "cec_output": {"output": 1, "command": "power_on"},
         "profile_recall": {"profile_id": "p"}, "request": {"method": "GET", "path": "/api/health"},
     }
-    assert set(samples) == set(INTENTS)
+    # uc_command is the Remote's raw escape hatch, as `request` is the api client's
+    assert set(samples) == set(INTENTS) - {"uc_command"}
     for intent, params in samples.items():
         method, path, _ = rest_call(act(intent, **params))
         assert method in ("GET", "POST") and path.startswith("/api/")
+    with pytest.raises(NotSupportedError):
+        rest_call(act("uc_command", entity_id="button.preset_1", cmd_id="push"))
     assert rest_call(act("route_all", input=3)) == ("POST", "/api/switch", {"input": 3})
+
+
+def test_uc_client_intents_exist_and_need_the_uc_hub():
+    assert RemoteClient.intents <= set(INTENTS)
+    assert "request" not in RemoteClient.intents
+    assert RemoteClient.hub_mode == "uc"
