@@ -41,13 +41,21 @@ from pathlib import Path
 from typing import Any
 
 from tools.hil.capture.assumptions import ASSUMPTIONS, BY_ID
-from tools.hil.capture.fixtures import RecordIds, header, iter_exchanges, iter_records, load_manifest, unb64
+from tools.hil.capture.fixtures import (
+    REDACTED,
+    RecordIds,
+    header,
+    iter_exchanges,
+    iter_records,
+    load_manifest,
+    unb64,
+)
 
 from . import protocol as proto
 from .http_commands import HANDLERS, READ_COMMANDS, dispatch
 from .state import DeviceState, StateError
-from .telnet_commands import _lcd_line
-from .telnet_commands import banner as sim_banner
+from .telnet_commands import _lcd_line, edid_text
+from .telnet_commands import banner_bytes as sim_banner_bytes
 from .telnet_commands import handle as telnet_handle
 
 CONFIRMED = "confirmed"
@@ -57,6 +65,9 @@ MISSING = "no-evidence"
 
 _PUSH_RE = re.compile(r"^hdmi\s+(input|output)\s+(\d+)\s*:\s*(connect|disconnect)$", re.IGNORECASE)
 _LINK_RE = re.compile(r"hdmi\s+(input|output)\s+(\d+)\s*:\s*(connect|disconnect)", re.IGNORECASE)
+_ROUTE_RE = re.compile(r"^output(\d+)->input(\d+)\s*$", re.IGNORECASE | re.MULTILINE)
+_PRESET_NONE_RE = re.compile(r"preset\s+\d+\s+is\s+none", re.IGNORECASE)
+_MAC_LINE_RE = re.compile(r"^mac address:\s*(\S+)", re.IGNORECASE | re.MULTILINE)
 
 
 class GoldenError(ValueError):
@@ -306,10 +317,51 @@ class GoldenSet:
                         state.outputs[n - 1].connected = int(value.lower() == "connect")
         status = self.telnet.get("status")
         if status is not None:
-            lines = {ln.strip() for ln in status.body.decode("utf-8", errors="replace").splitlines()}
+            text = status.body.decode("utf-8", errors="replace")
+            lines = {ln.strip() for ln in text.splitlines()}
             for mode in range(5):
                 if _lcd_line(mode) in lines:
                     state.system["lcd_timeout"] = mode
+            # The MAC as the status dump prints it, when the HTTP reads only
+            # have the redaction marker (captures redact what the owner asked).
+            mac = _MAC_LINE_RE.search(text)
+            if mac and REDACTED in str(state.device.get("mac_address")) and REDACTED not in mac.group(1):
+                state.device["mac_address"] = mac.group(1).upper()
+        self._seed_telnet_presets(state)
+        self._seed_telnet_versions(state)
+
+    def _telnet_read_text(self, command: str) -> str | None:
+        t = self.telnet.get(command)
+        if t is None or t.role != "read":
+            return None
+        return t.body.decode("utf-8", errors="replace")
+
+    def _seed_telnet_presets(self, state: DeviceState) -> None:
+        """Preset routing and empty slots from ``r preset N`` (V1.10.01 has no HTTP preset read)."""
+        for n, preset in enumerate(state.presets, 1):
+            text = self._telnet_read_text(f"r preset {n}")
+            if text is None:
+                continue
+            if _PRESET_NONE_RE.search(text):
+                preset.saved = False
+                continue
+            routing = {int(o): int(i) for o, i in _ROUTE_RE.findall(text)}
+            if sorted(routing) == list(range(1, 9)) and all(1 <= v <= 8 for v in routing.values()):
+                preset.routing = [routing[o] for o in range(1, 9)]
+                preset.saved = True
+
+    def _seed_telnet_versions(self, state: DeviceState) -> None:
+        text = self._telnet_read_text("r fw version")
+        if text is not None:
+            for label, key in (("key mcu", "key_mcu_version"), ("cpld version", "cpld_version")):
+                m = re.search(rf"^{label}\s*:\s*(\S+)", text, re.IGNORECASE | re.MULTILINE)
+                if m:
+                    state.device[key] = m.group(1).upper()
+        text = self._telnet_read_text("r type")
+        if text is not None:
+            answer = [ln.strip() for ln in text.splitlines() if ln.strip() and not ln.strip().endswith("!")]
+            if answer:
+                state.device["type"] = answer[0]
 
     def bind(self, seed_state: DeviceState) -> None:
         """Record the simulator's own answers for the seed state (the baselines)."""
@@ -407,7 +459,25 @@ class Verdict:
 
 def _sim_body(doc: Any) -> bytes:
     """Exactly what ``Simulator._reply`` sends."""
-    return json.dumps(doc, separators=(",", ":")).encode("utf-8")
+    return json.dumps(doc, separators=(",", ":")).encode("utf-8") + proto.RESPONSE_BODY_SUFFIX
+
+
+_REDACTED_B = REDACTED.encode()
+
+
+def same_bytes(device: bytes, sim: bytes) -> bool:
+    """``device == sim``, where a redaction marker in the capture matches any one token.
+
+    The capture tool replaces secrets and the ``--redact`` values (MAC address,
+    hostname) with ``***REDACTED***``, so those bytes cannot be compared; the
+    rest of the answer still must be identical.
+    """
+    if device == sim:
+        return True
+    if _REDACTED_B not in device:
+        return False
+    pattern = b"[^\\s\",]*".join(re.escape(part) for part in device.split(_REDACTED_B))
+    return re.fullmatch(pattern, sim, re.DOTALL) is not None
 
 
 class _Checks:
@@ -605,10 +675,12 @@ class _Checks:
         t = self.read("get output status")
         if t is None or not isinstance(t.doc, dict):
             return Verdict("output-status-name-field", MISSING, "get output status not captured")
-        has_doc = "allinputname" in t.doc and "alloutputname" in t.doc
-        detail = "allinputname/alloutputname present" if has_doc else (
-            "device sends 'name'" if "name" in t.doc else "no name arrays at all")
-        return Verdict("output-status-name-field", CONFIRMED if has_doc else CONTRADICTED, detail, [t.source])
+        sim = self.sim(t.request or {"comhead": "get output status"})
+        keys = ("name", "allinputname", "alloutputname")
+        device_keys = [k for k in keys if k in t.doc]
+        sim_keys = [k for k in keys if k in sim]
+        return Verdict("output-status-name-field", CONFIRMED if device_keys == sim_keys else CONTRADICTED,
+                       f"device sends {device_keys or 'no name arrays'}, simulator {sim_keys or 'none'}", [t.source])
 
     def _keys(self, aid: str, comhead: str) -> Verdict:
         t = self.read(comhead)
@@ -627,7 +699,30 @@ class _Checks:
         return self._keys("get-network-fields", "get network")
 
     def preset_get_shape(self) -> Verdict:
-        return self._keys("preset-get-shape", "preset get")
+        """``preset get`` / ``get routing status``: does the device answer at all (HIL-01)?"""
+        notes, bad, src = [], [], []
+        for comhead in ("preset get", "get routing status"):
+            answered, silent = 0, 0
+            for rid, rec in sorted(self.g.records.items()):
+                for ex in iter_exchanges(rec):
+                    if ex.get("kind") != "http" or ex.get("comhead") != comhead or ex.get("role") != "read":
+                        continue
+                    src.append(rid)
+                    if ex.get("error") or not isinstance(ex.get("response"), dict):
+                        silent += 1
+                    else:
+                        answered += 1
+            if not answered and not silent:
+                continue
+            sim_silent = comhead in proto.UNANSWERED_COMHEADS
+            notes.append(f"{comhead}: device {'never answered' if not answered else f'answered {answered}x'}"
+                         f"{f' ({silent} without answer)' if answered and silent else ''}, "
+                         f"simulator {'does not answer' if sim_silent else 'answers'}")
+            if bool(answered) == sim_silent:
+                bad.append(comhead)
+        if not notes:
+            return Verdict("preset-get-shape", MISSING, "preset get / get routing status not captured")
+        return Verdict("preset-get-shape", CONTRADICTED if bad else CONFIRMED, "; ".join(notes), sorted(set(src)))
 
     def ext_audio_index(self) -> Verdict:
         t = self.read("get ext-audio status")
@@ -645,7 +740,7 @@ class _Checks:
         for (comhead, _), t in sorted(self.g.reads.items()):
             sim = self.sim(t.request or {"comhead": comhead})
             label = f"{comhead}{' ' + params_key(t.request) if params_key(t.request) != '{}' else ''}"
-            if _sim_body(sim) == t.body:
+            if same_bytes(t.body, _sim_body(sim)):
                 identical.append(label)
             elif not isinstance(t.doc, dict) or set(sim) != set(t.doc):
                 key_diff.append(label)
@@ -770,13 +865,82 @@ class _Checks:
                     bad.append(f"{setting} {value}: device {texts[0]!r}, simulator {table.get(value)!r}")
                 else:
                     good += 1
+        read_good, read_bad, read_src = self._read_mode_text()
+        bad += read_bad
+        src += read_src
         if not (bad or good or unparsed):
+            if read_good:
+                return Verdict("output-mode-text", MISSING,
+                               f"read captures agree for {', '.join(read_good)}; every other code needs "
+                               "--mode write with Telnet", sorted(set(src)))
             return Verdict("output-mode-text", MISSING, "not captured (run --mode write with Telnet)")
         detail = f"{good} match" + (f"; mismatches: {bad}" if bad else "") + (
             f"; unrecognised status lines: {unparsed}" if unparsed else "")
         if audio_only is not None:
             detail += f"; audio-only scaler code = {audio_only}"
         return Verdict("output-mode-text", CONTRADICTED if bad or unparsed else CONFIRMED, detail, sorted(set(src)))
+
+    def _read_mode_text(self) -> tuple[list[str], list[str], list[str]]:
+        """Pair the captured ``get output/input status`` codes with the ``status`` dump wording.
+
+        Returns (codes that agree, mismatches, evidence records).
+        """
+        status = self.g.telnet.get("status")
+        out, inp = self.read("get output status"), self.read("get input status")
+        if status is None or status.role != "read":
+            return [], [], []
+        text = status.body.decode("utf-8", errors="replace")
+        tables = [  # (setting, read, key, dump label, code -> simulator text)
+            ("hdcp", out, "allhdcp", "hdcp", proto.HDCP_TEXT.get),
+            ("hdr", out, "allhdr", "hdr mode", proto.HDR_TEXT.get),
+            ("scaler", out, "allscaler", "video mode", proto.SCALER_TEXT.get),
+            ("edid", inp, "edid", "edid", edid_text),
+        ]
+        good: set[str] = set()
+        bad: set[str] = set()
+        src: set[str] = set()
+        for setting, t, key, label, table in tables:
+            if t is None or not isinstance(t.doc, dict) or not isinstance(t.doc.get(key), list):
+                continue
+            values = t.doc[key]
+            port_kind = "input" if setting == "edid" else "output"
+            for port, value in enumerate(values[:8], 1):
+                m = re.search(rf"^{port_kind} {port} {label}\s*:\s*(.+?)\s*$", text, re.IGNORECASE | re.MULTILINE)
+                if not m:
+                    continue
+                src.update({t.source, status.source})
+                if table(value) == m.group(1):
+                    good.add(f"{setting} {value}")
+                else:
+                    bad.add(f"{setting} {value}: device {m.group(1)!r}, simulator {table(value)!r}")
+        return sorted(good), sorted(bad), sorted(src)
+
+    def ninth_entry(self) -> Verdict:
+        """HIL-04: the ninth entry of the per-output arrays."""
+        t_out, t_video = self.read("get output status"), self.read("get video status")
+        seen, bad, src = [], [], []
+        for t, keys in ((t_video, ("allsource",)),
+                        (t_out, ("allscaler", "allhdr", "allhdcp", "allarc", "allout", "allaudiomute"))):
+            if t is None or not isinstance(t.doc, dict):
+                continue
+            sim = self.sim(t.request or {"comhead": t.comhead})
+            for key in keys:
+                dev_v, sim_v = t.doc.get(key), sim.get(key)
+                if not isinstance(dev_v, list):
+                    continue
+                src.append(t.source)
+                dev9 = dev_v[8] if len(dev_v) > 8 else None
+                sim9 = sim_v[8] if isinstance(sim_v, list) and len(sim_v) > 8 else None
+                seen.append(f"{key}={dev9}")
+                if len(dev_v) != (len(sim_v) if isinstance(sim_v, list) else -1) or dev9 != sim9:
+                    bad.append(f"{key}: device {len(dev_v)} entries (9th {dev9!r}), simulator "
+                               f"{len(sim_v) if isinstance(sim_v, list) else None} (9th {sim9!r})")
+        if not seen:
+            return Verdict("ninth-entry", MISSING, "get video/output status not captured")
+        if bad:
+            return Verdict("ninth-entry", CONTRADICTED, "; ".join(bad), sorted(set(src)))
+        return Verdict("ninth-entry", REVIEW, f"simulator reproduces the ninth entries ({', '.join(seen)}); what "
+                       "the entry is, and whether writes change it, needs a write capture", sorted(set(src)))
 
     def lcd_codes(self) -> Verdict:
         f = self.findings(RecordIds.write("http_lcd"))
@@ -794,24 +958,27 @@ class _Checks:
         t = self.g.telnet_banner
         if t is None:
             return Verdict("telnet-banner", MISSING, "banner not captured (run --mode read)")
-        sim = sim_banner(self.st).encode()
-        return Verdict("telnet-banner", CONFIRMED if t.body == sim else CONTRADICTED,
-                       "identical" if t.body == sim else f"device {t.body!r}, simulator {sim!r}", [t.source])
+        sim = sim_banner_bytes(self.st)
+        same = same_bytes(t.body, sim)
+        return Verdict("telnet-banner", CONFIRMED if same else CONTRADICTED,
+                       "identical" if same else f"device {t.body!r}, simulator {sim!r}", [t.source])
 
     def telnet_iac(self) -> Verdict:
         t = self.g.telnet_banner
         if t is None:
             return Verdict("telnet-iac", MISSING, "banner not captured")
         iac = b"\xff" in t.body
-        return Verdict("telnet-iac", CONFIRMED if iac == proto.TELNET_SEND_IAC_NEGOTIATION else CONTRADICTED,
-                       f"device {'sends' if iac else 'sends no'} IAC negotiation", [t.source])
+        sim = proto.TELNET_IAC_NEGOTIATION if proto.TELNET_SEND_IAC_NEGOTIATION else b""
+        device = t.body[: t.body.rfind(b"\xff") + 3] if iac else b""
+        return Verdict("telnet-iac", CONFIRMED if device == sim else CONTRADICTED,
+                       f"device sends {device!r}, simulator {sim!r}", [t.source])
 
     def _telnet_compare(self, aid: str, keys: list[str]) -> Verdict:
         same, diff_ = [], []
         for key in keys:
             t = self.g.telnet[key]
             sim = self.sim_telnet(t.command).encode()
-            if sim == t.body:
+            if same_bytes(t.body, sim):
                 same.append(key)
             else:
                 diff_.append(f"{key}: device {t.body[:60]!r} vs simulator {sim[:60]!r}")
@@ -826,7 +993,7 @@ class _Checks:
             return Verdict("telnet-status-wording", MISSING, "status not captured (run --mode read)")
         t = self.g.telnet["status"]
         sim = self.sim_telnet("status")
-        if sim.encode() == t.body:
+        if same_bytes(t.body, sim.encode()):
             return Verdict("telnet-status-wording", CONFIRMED, "identical", [t.source])
         dev_lines = t.body.decode("utf-8", errors="replace").splitlines()
         sim_lines = sim.splitlines()

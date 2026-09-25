@@ -1,0 +1,146 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "http/get_output_status",
+  "title": "Read: get output status",
+  "note": "",
+  "answers": [
+    "http-read-shapes",
+    "output-status-name-field"
+  ],
+  "exchanges": [
+    {
+      "kind": "http",
+      "role": "read",
+      "label": "get output status",
+      "comhead": "get output status",
+      "request": {
+        "method": "POST",
+        "path": "/cgi-bin/instr",
+        "headers": [
+          "Host: 192.168.0.100",
+          "Content-Type: application/json",
+          "Accept: */*",
+          "Accept-Encoding: gzip, deflate",
+          "User-Agent: Python/3.12 aiohttp/3.13.3",
+          "Content-Length: 47"
+        ],
+        "json": {
+          "comhead": "get output status",
+          "language": 0
+        },
+        "body_text": "{\"comhead\": \"get output status\", \"language\": 0}"
+      },
+      "response": {
+        "status": 200,
+        "reason": "OK",
+        "http_version": "1.1",
+        "headers": [
+          "Connection: Keep-Alive",
+          "Transfer-Encoding: chunked",
+          "Keep-Alive: timeout=200",
+          "content-type: text/plain"
+        ],
+        "body_b64": "eyJjb21oZWFkIjoiZ2V0IG91dHB1dCBzdGF0dXMiLCJwb3dlciI6MSwiYWxsY29ubmVjdCI6WzEsMSwwLDAsMCwwLDAsMF0sIm5hbWUiOlsiVFYiLCJTb3VuZCIsIk91dDMiLCJPdXQ0IiwiT3V0NSIsIk91dDYiLCJPdXQ3IiwiT3V0OCJdLCJhbGxzY2FsZXIiOlswLDQsMCwwLDAsMCwwLDAsMjU1XSwiYWxsaGRyIjpbMCwwLDAsMCwwLDAsMCwwLDBdLCJhbGxoZGNwIjpbMywzLDMsMywzLDMsMywzLDNdLCJhbGxhcmMiOlswLDAsMCwwLDAsMCwwLDAsMF0sImFsbG91dCI6WzEsMSwwLDAsMCwwLDAsMCwyNTVdLCJhbGxhdWRpb211dGUiOlswLDAsMCwwLDAsMCwwLDAsMF19DQo=",
+        "body_text": "{\"comhead\":\"get output status\",\"power\":1,\"allconnect\":[1,1,0,0,0,0,0,0],\"name\":[\"TV\",\"Sound\",\"Out3\",\"Out4\",\"Out5\",\"Out6\",\"Out7\",\"Out8\"],\"allscaler\":[0,4,0,0,0,0,0,0,255],\"allhdr\":[0,0,0,0,0,0,0,0,0],\"allhdcp\":[3,3,3,3,3,3,3,3,3],\"allarc\":[0,0,0,0,0,0,0,0,0],\"allout\":[1,1,0,0,0,0,0,0,255],\"allaudiomute\":[0,0,0,0,0,0,0,0,0]}\r\n",
+        "json": {
+          "comhead": "get output status",
+          "power": 1,
+          "allconnect": [
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "name": [
+            "TV",
+            "Sound",
+            "Out3",
+            "Out4",
+            "Out5",
+            "Out6",
+            "Out7",
+            "Out8"
+          ],
+          "allscaler": [
+            0,
+            4,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            255
+          ],
+          "allhdr": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "allhdcp": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "allarc": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "allout": [
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            255
+          ],
+          "allaudiomute": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "json_error": null
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T17:28:35.272416Z",
+        "elapsed_ms": 330.98
+      }
+    }
+  ],
+  "mode": "read",
+  "captured_at": "2026-09-25T17:28:35.603401Z"
+}

@@ -31,10 +31,11 @@ class Assumption:
 
 ASSUMPTIONS: tuple[Assumption, ...] = (
     # ------------------------------------------------------------ HTTP / auth
+    # Entries without markers were resolved from captures (V1.10.01 read
+    # capture, WP-A4); they stay registered so the report keeps checking them.
     Assumption(
-        "login-ok-result", "Login success `result` value (doc: \"success\"; hub also accepts 1)",
+        "login-ok-result", "Login success `result` value (doc: \"success\"; V1.10.01 answers 1)",
         "protocol.LOGIN_OK_RESULT", ("BE-05",), ("read", "probe"),
-        (("protocol.py", 'the API doc lists ``"result": "success"`` for login'),),
     ),
     Assumption(
         "login-fail-result", "Exact response to a wrong-password login",
@@ -93,22 +94,24 @@ ASSUMPTIONS: tuple[Assumption, ...] = (
     Assumption(
         "video-status-names", "`get video status` names are 8 plain strings (no IN01- prefix, no extra entries)",
         "http_commands._get_video_status", (), ("read",),
-        (("http_commands.py", "names are plain strings"),),
     ),
     Assumption(
-        "output-status-name-field", "`get output status` carries allinputname/alloutputname (not `name`)",
+        "output-status-name-field", "`get output status` names its outputs in `name` (not allinputname/alloutputname)",
         "http_commands._get_output_status", (), ("read",),
-        (("http_commands.py", "the doc shows allinputname/alloutputname here"),),
+    ),
+    Assumption(
+        "ninth-entry", "The ninth entry of allsource/allscaler/allhdr/allhdcp/allarc/allout/allaudiomute: "
+        "what it is, and whether writes change it",
+        "state.DeviceState.ninth_output", ("HIL-04",), ("read", "write"),
+        (("state.py", "the ninth entry never changes"),),
     ),
     Assumption(
         "get-status-fields", "Field set of `get status` (versions, model, MAC...)",
         "http_commands._get_status", (), ("read",),
-        (("http_commands.py", "union of the doc (version, webversion)"),),
     ),
     Assumption(
         "get-network-fields", "`get network` uses netmask and/or subnet (and which other fields)",
         "http_commands._get_network", (), ("read",),
-        (("http_commands.py", 'the doc says "netmask"'),),
     ),
     Assumption(
         "ext-audio-index", "Meaning of `index` in `get ext-audio status`",
@@ -116,9 +119,9 @@ ASSUMPTIONS: tuple[Assumption, ...] = (
         (("http_commands.py", 'meaning of "index" is unknown'),),
     ),
     Assumption(
-        "preset-get-shape", "Response shape of the undocumented `preset get`",
-        "http_commands._preset_get", (), ("read",),
-        (("http_commands.py", "undocumented (orei_matrix.get_preset_info"),),
+        "preset-get-shape", "Whether the device answers `preset get` / `get routing status` at all "
+        "(V1.10.01: no answer, HIL-01)",
+        "protocol.UNANSWERED_COMHEADS", ("HIL-01",), ("read",),
     ),
     # ------------------------------------------------------------ HTTP writes
     Assumption(
@@ -153,8 +156,8 @@ ASSUMPTIONS: tuple[Assumption, ...] = (
          ("http_commands.py", "exa 1 = enable, 2 = disable")),
     ),
     Assumption(
-        "output-mode-text", "Telnet wording of HDCP/HDR/scaler codes; which scaler code is audio-only",
-        "protocol.HDCP_TEXT / HDR_TEXT / SCALER_TEXT", ("BE-15",), ("write",),
+        "output-mode-text", "Telnet wording of HDCP/HDR/scaler/EDID codes; which scaler code is audio-only",
+        "protocol.HDCP_TEXT / HDR_TEXT / SCALER_TEXT / EDID_TEXT", ("BE-15", "HIL-02"), ("read", "write"),
         (("protocol.py", "wording of every value below"),),
     ),
     Assumption(
@@ -166,17 +169,15 @@ ASSUMPTIONS: tuple[Assumption, ...] = (
     Assumption(
         "telnet-banner", "Connection banner text",
         "protocol.TELNET_BANNER_LINES", (), ("read",),
-        (("protocol.py", "connection banner"),),
     ),
     Assumption(
-        "telnet-iac", "The device starts no Telnet option negotiation",
-        "protocol.TELNET_SEND_IAC_NEGOTIATION", (), ("read",),
-        (("protocol.py", "the device does not start any Telnet option negotiation"),),
+        "telnet-iac", "Telnet option negotiation the device sends on connect",
+        "protocol.TELNET_SEND_IAC_NEGOTIATION / TELNET_IAC_NEGOTIATION", (), ("read",),
     ),
     Assumption(
         "telnet-status-wording", "`status` dump lines, order and last line",
         "telnet_commands.status_lines", ("BE-28", "BE-29"), ("read",),
-        (("telnet_commands.py", "line wording and order"),),
+        (("telnet_commands.py", "wording of values not seen in the capture"),),
     ),
     Assumption(
         "telnet-read-wording", "Wording of `r fw version`, `r type`, `r link`, `r preset`",

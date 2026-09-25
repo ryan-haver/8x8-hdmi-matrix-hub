@@ -1,9 +1,12 @@
 """Telnet command handlers (port 23 protocol).
 
 Commands arrive as ``<command>!`` (the hub sends ``<command>!\\r\\n``).
-Every response line ends with ``\\r\\n``. The whole response format is a guess
-(marked ``ASSUMPTION(HIL-A)``) shaped to satisfy the parsers in
-``src/telnet_client.py``; HIL-A must capture the real text.
+Every response line ends with ``\\r\\n``, and the device echoes the command
+line (``<command>!``) before the answer. The banner, ``status``, ``r fw
+version``, ``r type``, ``r link`` and ``r preset`` follow the read capture of
+MCU V1.10.01 (``tests/fixtures/device/BK-808_V1.10.01_web-V2.00.03/telnet``).
+Set-command acknowledgements and error answers are still guesses (marked
+``ASSUMPTION(HIL-A)``) until probe/write captures exist.
 """
 
 from __future__ import annotations
@@ -24,15 +27,29 @@ class TelnetResult:
     mutated: bool = False
     reboot: bool = False
     warnings: list[str] = field(default_factory=list)
+    #: the command line echoed before the answer (``r link in 1!``), or None
+    echo: str | None = None
 
     @property
     def text(self) -> str:
-        return "".join(line + EOL for line in self.lines)
+        head = self.echo + EOL if self.echo is not None else ""
+        return head + "".join(line + EOL for line in self.lines)
 
 
 def banner(state: DeviceState) -> str:
-    fmt = {"model": state.device["model"], "fw_version": state.device["firmware_version"]}
+    """The banner text (without the Telnet negotiation bytes)."""
+    fmt = {
+        "model": state.device["model"],
+        "fw_version": state.device["firmware_version"],
+        "fw_version_lower": str(state.device["firmware_version"]).lower(),
+    }
     return "".join(line.format(**fmt) + EOL for line in proto.TELNET_BANNER_LINES)
+
+
+def banner_bytes(state: DeviceState) -> bytes:
+    """Everything the device sends on connect: option negotiation, then the banner."""
+    iac = proto.TELNET_IAC_NEGOTIATION if proto.TELNET_SEND_IAC_NEGOTIATION else b""
+    return iac + banner(state).encode()
 
 
 def _on_off(v: int) -> str:
@@ -41,6 +58,7 @@ def _on_off(v: int) -> str:
 
 def _lcd_line(mode: int) -> str:
     # ASSUMPTION(HIL-A): wording; the client only parses "lcd on <N> seconds".
+    # Only "lcd on 30 seconds" (code 3) has been seen (V1.10.01 read capture).
     if mode == 0:
         return "lcd off"
     if mode == 1:
@@ -48,39 +66,84 @@ def _lcd_line(mode: int) -> str:
     return f"lcd on {proto.LCD_SECONDS[mode]} seconds"
 
 
-def status_lines(state: DeviceState) -> list[str]:
-    """``status!`` dump. ASSUMPTION(HIL-A): line wording and order.
+def edid_text(code: int) -> str:
+    """EDID code as the ``status`` dump prints it (unknown codes: a placeholder)."""
+    return proto.EDID_TEXT.get(code, f"edid {code}")
 
-    The client requires ``mac address:`` to be the last thing it sees
-    (telnet_client.py:396).
+
+def _connect(v: int) -> str:
+    return "connect" if v else "disconnect"
+
+
+def _enable(v: int) -> str:
+    return "enable" if v else "disable"
+
+
+def _v(version: object) -> str:
+    """Versions are printed in lower case on Telnet (``v1.10.01``)."""
+    return str(version).lower()
+
+
+def status_lines(state: DeviceState) -> list[str]:
+    """``status!`` dump, in the order and wording of the V1.10.01 capture.
+
+    ASSUMPTION(HIL-A): wording of values not seen in the capture (power, beep
+    or lock in the other state, lcd other than 30 s, "ip mode: static",
+    other EDID codes, other ext-audio modes). The dump ends with the
+    ``mac address:`` line and one empty line; the client completes ``status``
+    on the MAC line.
     """
     s, d = state.system, state.device
+    outs = list(enumerate(state.outputs, 1))
+    ins = list(enumerate(state.inputs, 1))
     lines = [
+        "get the unit all status:",
         f"power {_on_off(s['power'])}",
         f"beep {_on_off(s['beep'])}",
         f"panel button lock {_on_off(s['panel_lock'])}",
         _lcd_line(s["lcd_timeout"]),
     ]
-    lines += [f"hdmi input {i}: {'connect' if p.cable else 'disconnect'}" for i, p in enumerate(state.inputs, 1)]
-    lines += [f"hdmi output {i}: {'connect' if o.connected else 'disconnect'}" for i, o in enumerate(state.outputs, 1)]
-    lines += [f"output{i}->input{o.source}" for i, o in enumerate(state.outputs, 1)]
-    for i, o in enumerate(state.outputs, 1):
-        lines += [
-            f"output {i} hdcp: {proto.HDCP_TEXT[o.hdcp]}",
-            f"output {i} stream: {'enable' if o.stream else 'disable'}",
-            f"output {i} video mode: {proto.SCALER_TEXT[o.scaler]}",
-            f"output {i} hdr mode: {proto.HDR_TEXT[o.hdr]}",
-            f"output {i} arc: {_on_off(o.arc)}",
-            f"output {i} audio mute: {_on_off(o.audio_mute)}",
-        ]
-    lines += [f"input {i} edid: {p.edid}" for i, p in enumerate(state.inputs, 1)]
+    lines += [f"hdmi input {i}: {_connect(p.cable)}" for i, p in ins]
+    lines += [f"hdmi output {i}: {_connect(o.connected)}" for i, o in outs]
+    lines += [f"output{i}->input{o.source}" for i, o in outs]
+    lines += [f"output {i} hdcp: {proto.HDCP_TEXT[o.hdcp]}" for i, o in outs]
+    lines += [f"output {i} stream: {_enable(o.stream)}" for i, o in outs]
+    lines += [f"output {i} video mode: {proto.SCALER_TEXT[o.scaler]}" for i, o in outs]
+    lines += [f"output {i} hdr mode: {proto.HDR_TEXT[o.hdr]}" for i, o in outs]
+    lines += [f"output {i} arc: {_on_off(o.arc)}" for i, o in outs]
+    lines += [f"output {i} audio mute: {_on_off(o.audio_mute)}" for i, o in outs]
+    lines += [f"input {i} edid:{edid_text(p.edid)}" for i, p in ins]
+    lines += [f"output {i} ext-audio: {_enable(o.ext_audio_enabled)}" for i, o in outs]
+    lines.append(f"output ext-audio mode: {proto.EXT_AUDIO_MODE_TEXT[state.ext_audio['mode']]}")
+    lines += [f"output {i} ext-audio->input{o.ext_audio_source}" for i, o in outs]
     lines += [
-        f"ip address: {d['ip_address']}",
+        f"ip mode: {'dhcp' if d['dhcp'] else 'static'}",
+        f"ip: {d['ip_address']}",
         f"subnet mask: {d['netmask']}",
         f"gateway: {d['gateway']}",
-        f"mac address: {d['mac_address']}",
+        f"tcp/ip port:{d['tcp_port']}",
+        f"telnet port:{d['telnet_port']}",
+        f"mac address: {str(d['mac_address']).lower()}",
+        "",
     ]
     return lines
+
+
+def fw_version_lines(state: DeviceState) -> list[str]:
+    d = state.device
+    return [
+        f"mcu fw version: {_v(d['firmware_version'])}",
+        f"key mcu       : {_v(d['key_mcu_version'])}",
+        f"web gui       : {_v(d['web_version'])}",
+        f"cpld version  : {_v(d['cpld_version'])}",
+    ]
+
+
+def preset_lines(state: DeviceState, n: int) -> list[str]:
+    preset = state.presets[n - 1]
+    if not preset.saved:
+        return [f"preset {n} is none,please save a preset"]
+    return [f"output{i}->input{src}" for i, src in enumerate(preset.routing, 1)]
 
 
 def _port(token: str, lo: int = 1) -> int | None:
@@ -94,7 +157,18 @@ _SIMPLE = re.compile(r"\s+")
 
 
 def handle(state: DeviceState, raw: str) -> TelnetResult:
-    """Handle one command (without its ``!`` terminator)."""
+    """Handle one command (without its ``!`` terminator).
+
+    The result carries the echo of the command line the device sends first
+    (``protocol.TELNET_ECHO_COMMANDS``).
+    """
+    result = _handle(state, raw)
+    if proto.TELNET_ECHO_COMMANDS:
+        result.echo = raw.strip() + proto.TELNET_COMMAND_TERMINATOR.decode()
+    return result
+
+
+def _handle(state: DeviceState, raw: str) -> TelnetResult:
     cmd = _SIMPLE.sub(" ", raw.strip().lower())
     words = cmd.split(" ") if cmd else []
 
@@ -107,25 +181,24 @@ def handle(state: DeviceState, raw: str) -> TelnetResult:
         return TelnetResult(status_lines(state))
 
     if cmd == "r fw version":
-        return TelnetResult([f"fw version: {state.device['firmware_version']}"])
+        return TelnetResult(fw_version_lines(state))
 
     if cmd == "r type":
-        return TelnetResult([state.device["model"]])
+        return TelnetResult([state.device["type"]])
 
     if len(words) == 4 and words[:2] == ["r", "link"] and words[2] in ("in", "out"):
         n = _port(words[3])
         if n is None:
             return err(proto.TELNET_ERR_PARAM, f"bad port in {raw!r}")
         if words[2] == "in":
-            return TelnetResult([f"hdmi input {n}: {'connect' if state.inputs[n - 1].cable else 'disconnect'}"])
-        return TelnetResult([f"hdmi output {n}: {'connect' if state.outputs[n - 1].connected else 'disconnect'}"])
+            return TelnetResult([f"hdmi input {n}: {_connect(state.inputs[n - 1].cable)}"])
+        return TelnetResult([f"hdmi output {n}: {_connect(state.outputs[n - 1].connected)}"])
 
     if len(words) == 3 and words[:2] == ["r", "preset"]:
         n = _port(words[2])
         if n is None:
             return err(proto.TELNET_ERR_PARAM, f"bad preset in {raw!r}")
-        routing = ", ".join(f"output{i}->input{src}" for i, src in enumerate(state.presets[n - 1].routing, 1))
-        return TelnetResult([f"preset {n}: {routing}"])
+        return TelnetResult(preset_lines(state, n))
 
     # CEC: "s cec in <n> <word>" / "s cec hdmi out <n> <word>"
     # ASSUMPTION(HIL-A): success is acknowledged by echoing the command without
@@ -178,12 +251,14 @@ def handle(state: DeviceState, raw: str) -> TelnetResult:
         preset = state.presets[n - 1]
         if preset_op == "save":
             preset.routing = state.routing
+            preset.saved = True
             return TelnetResult([f"save to preset {n}"], mutated=True)
         if preset_op == "recall":
             for out_port, src in zip(state.outputs, preset.routing, strict=True):
                 out_port.source = src
             return TelnetResult([f"recall from preset {n}"], mutated=True)
         preset.routing = list(range(1, proto.PORT_COUNT + 1))
+        preset.saved = False
         return TelnetResult([f"clear preset {n}"], mutated=True)
 
     # Power: vendor reference is "s power <0|1>".

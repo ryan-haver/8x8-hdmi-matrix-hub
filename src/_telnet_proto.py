@@ -26,16 +26,30 @@ TELNET_ERR_BAD_PARAMETER = "E01"
 # HIL-A: confirm — every error code the matrix may send ("E02" was accepted
 # by earlier client code; its meaning is unknown).
 TELNET_ERROR_CODES = frozenset({TELNET_ERR_UNKNOWN_COMMAND, TELNET_ERR_BAD_PARAMETER, "E02"})
-# HIL-A: confirm — the `status` dump ends with the MAC address line.
+# Confirmed on MCU V1.10.01 (read capture, tests/fixtures/device/
+# BK-808_V1.10.01_web-V2.00.03/telnet): the device echoes every command line
+# ("r link in 1!") before its answer, and the `status` dump ("get the unit all
+# status:" and 108 more lines) ends with the MAC address line and one empty line.
 STATUS_DUMP_LAST_LINE = "mac address:"
 _MAC_RE = re.compile(r"mac address:\s*([0-9a-f]{2}[:-]){5}[0-9a-f]{2}", re.IGNORECASE)
-# HIL-A: confirm — `r link in|out N` answers "hdmi input|output N: connect|disconnect".
+# Confirmed on V1.10.01: `r link in|out N` answers "hdmi input|output N: connect|disconnect".
 _LINK_RE = re.compile(r"\b(connect|disconnect)\b", re.IGNORECASE)
+# Confirmed on V1.10.01: `r preset N` answers one "outputX->inputY" line per
+# output (8 lines, each in its own TCP segment ~2 ms apart), or
+# "preset N is none,please save a preset" for an empty slot.
+_ROUTE_RE = re.compile(r"\boutput(\d+)->input(\d+)\b", re.IGNORECASE)
+_PRESET_NONE_RE = re.compile(r"^preset\s+\d+\s+is\s+none\b", re.IGNORECASE)
+PRESET_OUTPUTS = 8
+#: Reads whose answer has no known last line (``r fw version`` sends 4 lines
+#: over ~10 ms on V1.10.01). After their first answer line the client keeps
+#: reading until the device has been silent this long, so the rest of the
+#: answer does not leak into the next command.
+READ_SETTLE_S = 0.1
 # HIL-A: confirm — successful set commands answer with one or more
 # acknowledgement lines (the simulator echoes the command without "s ", e.g.
 # "cec in 1 on", "output1->input3", "save to preset 1") and no error code.
-# A line identical to the command we sent is treated as a plain echo, not
-# as the acknowledgement.
+# A line identical to the command we sent is treated as the echo, not as the
+# acknowledgement (V1.10.01 echoes reads; set commands are not captured yet).
 
 
 def complete_lines(response: str) -> list[str]:
@@ -56,8 +70,37 @@ def response_error(response: str) -> str | None:
     return tail if tail in TELNET_ERROR_CODES else None
 
 
+def _norm(command: str) -> str:
+    return " ".join(command.strip().lower().split())
+
+
 def _is_echo(line: str, command: str) -> bool:
-    return line.lower().rstrip("!").strip() == command.strip().lower()
+    return _norm(line.rstrip("!")) == _norm(command)
+
+
+def answer_lines(response: str, command: str) -> list[str]:
+    """The complete lines of ``response`` without the device's echo of ``command``."""
+    return [line for line in complete_lines(response) if not _is_echo(line, command)]
+
+
+def preset_routing(response: str) -> dict[int, int]:
+    """``{output: input}`` from an ``r preset N`` answer (empty for an empty slot)."""
+    routing: dict[int, int] = {}
+    for line in complete_lines(response):
+        for out, inp in _ROUTE_RE.findall(line):
+            routing[int(out)] = int(inp)
+    return routing
+
+
+def is_preset_empty(response: str) -> bool:
+    """True if an ``r preset N`` answer says the slot is empty."""
+    return any(_PRESET_NONE_RE.match(line) for line in complete_lines(response))
+
+
+def needs_settle(command: str) -> bool:
+    """Whether ``command`` is a read whose answer has no known last line (see READ_SETTLE_S)."""
+    cmd = _norm(command)
+    return cmd.startswith("r ") and not cmd.startswith(("r link", "r preset"))
 
 
 def is_response_complete(response: str, command: str) -> bool:
@@ -66,10 +109,14 @@ def is_response_complete(response: str, command: str) -> bool:
     - any error code completes every command;
     - ``status`` completes on its last line (``mac address: ...``);
     - ``r link ...`` completes on its ``connect``/``disconnect`` line;
+    - ``r preset N`` completes on its eighth routing line, or on the "is none"
+      line of an empty slot (V1.10.01 sends the 8 lines one by one; completing
+      on the first one returned a single output's routing);
     - everything else (reads and set commands alike) completes on the first
-      full line that is not an echo of the command. Set commands therefore
+      full line that is not the echo of the command. Set commands therefore
       return as soon as the matrix acknowledges them instead of waiting the
-      whole command timeout.
+      whole command timeout. Reads in :func:`needs_settle` then keep reading
+      until the device goes quiet (``TelnetClient._send_raw``).
     """
     if not response:
         return False
@@ -77,7 +124,7 @@ def is_response_complete(response: str, command: str) -> bool:
         return True
 
     lines = complete_lines(response)
-    cmd = command.strip().lower()
+    cmd = _norm(command)
 
     if cmd == "status":
         if any(line.lower().startswith(STATUS_DUMP_LAST_LINE) for line in lines):
@@ -87,6 +134,9 @@ def is_response_complete(response: str, command: str) -> bool:
 
     if cmd.startswith("r link"):
         return any(_LINK_RE.search(line) for line in lines)
+
+    if cmd.startswith("r preset"):
+        return is_preset_empty(response) or len(preset_routing(response)) >= PRESET_OUTPUTS
 
     return any(not _is_echo(line, cmd) for line in lines)
 

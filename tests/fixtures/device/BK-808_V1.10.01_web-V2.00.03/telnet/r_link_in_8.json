@@ -1,0 +1,61 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "telnet/r_link_in_8",
+  "title": "Telnet read: r link in 8",
+  "answers": [
+    "telnet-read-wording",
+    "telnet-terminators"
+  ],
+  "exchanges": [
+    {
+      "kind": "telnet",
+      "role": "read",
+      "label": "r link in 8",
+      "command": "r link in 8",
+      "sent_b64": "ciBsaW5rIGluIDghDQo=",
+      "sent_text": "r link in 8!\r\n",
+      "response": {
+        "body_b64": "ciBsaW5rIGluIDghDQpoZG1pIGlucHV0IDg6IGNvbm5lY3QNCg==",
+        "text": "r link in 8!\r\nhdmi input 8: connect\r\n",
+        "chunks": [
+          {
+            "t_ms": 27.84,
+            "len": 14
+          },
+          {
+            "t_ms": 167.13,
+            "len": 23
+          }
+        ],
+        "completion": "idle",
+        "idle_ms": 1000,
+        "first_byte_ms": 27.84,
+        "elapsed_ms": 1168.25,
+        "analysis": {
+          "line_endings": {
+            "crlf": 2,
+            "lf": 0,
+            "cr": 0
+          },
+          "lines": [
+            "r link in 8!",
+            "hdmi input 8: connect"
+          ],
+          "ends_with_newline": true,
+          "trailing_without_newline": "",
+          "last_line": "hdmi input 8: connect",
+          "error_code": null,
+          "error_codes_seen": [],
+          "iac": []
+        }
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T17:29:37.520939Z",
+        "elapsed_ms": 1168.25
+      }
+    }
+  ],
+  "mode": "read",
+  "captured_at": "2026-09-25T17:29:38.690430Z"
+}

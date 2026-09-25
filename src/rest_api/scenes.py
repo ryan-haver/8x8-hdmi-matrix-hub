@@ -164,15 +164,21 @@ async def handle_save_current_as_scene(request: web.Request) -> web.Response:
             if hasattr(matrix_device, "get_output_status"):
                 status = await matrix_device.get_output_status()
                 if isinstance(status, dict):
-                    allsource = status.get("allsource", [])
+                    # The routing lives in ``get video status``: the real
+                    # device's ``get output status`` has no ``allsource``
+                    # (MCU V1.10.01 capture), which made every output "input 1".
+                    video = None
+                    if hasattr(matrix_device, "get_video_status"):
+                        video = await matrix_device.get_video_status()
+                    allsource = (video or {}).get("allsource") or status.get("allsource", [])
                     allout = status.get("allout", [])
                     allaudiomute = status.get("allaudiomute", [])
                     allhdr = status.get("allhdr", [])
                     allhdcp = status.get("allhdcp", [])
                     # ``allout`` is indexed by position (i+1 = output number).
-                    # The value at each position is just the output index
-                    # echoed back; we use position+1 as the canonical key.
-                    for i in range(len(allout)):
+                    # The device appends a ninth entry that is not an output
+                    # (HIL-04), so only the first 8 positions are outputs.
+                    for i in range(min(len(allout), 8)):
                         try:
                             outputs[i + 1] = {
                                 "input": int(allsource[i]) if i < len(allsource) else 1,

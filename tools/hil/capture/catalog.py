@@ -26,7 +26,7 @@ def read(comhead: str) -> dict[str, Any]:  # get_*_status / get_network_info / g
     return {"comhead": comhead, "language": 0}
 
 
-def preset_get(index: int) -> dict[str, Any]:  # get_preset_info (HTTP fallback)
+def preset_get(index: int) -> dict[str, Any]:  # old get_preset_info HTTP fallback (removed, HIL-01)
     return {"comhead": "preset get", "index": index}
 
 
@@ -146,22 +146,27 @@ class TelnetRead:
 _SHAPES = ("http-read-shapes",)
 
 HTTP_READS: tuple[HttpRead, ...] = (
-    HttpRead("get_video_status", read("get video status"), _SHAPES + ("video-status-names",)),
-    HttpRead("get_output_status", read("get output status"), _SHAPES + ("output-status-name-field",)),
+    HttpRead("get_video_status", read("get video status"), _SHAPES + ("video-status-names", "ninth-entry")),
+    HttpRead("get_output_status", read("get output status"),
+             _SHAPES + ("output-status-name-field", "ninth-entry", "output-mode-text")),
     HttpRead("get_input_status", read("get input status"), _SHAPES),
     HttpRead("get_cec_status", read("get cec status"), _SHAPES),
     HttpRead("get_system_status", read("get system status"), _SHAPES),
     HttpRead("get_status", read("get status"), _SHAPES + ("get-status-fields",)),
     HttpRead("get_network", read("get network"), _SHAPES + ("get-network-fields",)),
     HttpRead("get_ext_audio_status", read("get ext-audio status"), _SHAPES + ("ext-audio-index",)),
-    HttpRead("get_routing_status", routing_status(), _SHAPES, "documented; not sent by the hub"),
+    HttpRead("get_routing_status", routing_status(), _SHAPES + ("preset-get-shape",), "documented; not sent by the hub"),
     *(HttpRead(f"preset_get_{n}", preset_get(n), _SHAPES + ("preset-get-shape",)) for n in PORTS),
 )
+
+#: Reads the hub does not need. A timeout on one of them means "this firmware
+#: does not implement it" (V1.10.01, HIL-01): a warning, not a capture error.
+OPTIONAL_READS = frozenset({"get routing status", "preset get"})
 
 _TREAD = ("telnet-read-wording", "telnet-terminators")
 
 TELNET_READS: tuple[TelnetRead, ...] = (
-    TelnetRead("status", "status", ("telnet-status-wording", "telnet-terminators")),
+    TelnetRead("status", "status", ("telnet-status-wording", "telnet-terminators", "output-mode-text")),
     TelnetRead("r_fw_version", "r fw version", _TREAD),
     TelnetRead("r_type", "r type", _TREAD),
     *(TelnetRead(f"r_link_in_{n}", f"r link in {n}", _TREAD) for n in PORTS),

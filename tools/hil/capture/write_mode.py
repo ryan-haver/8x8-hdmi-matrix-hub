@@ -404,9 +404,12 @@ TESTS: tuple[WriteTest, ...] = (
     WriteTest("http_output_hdcp", "output", "Output HDCP mode (every code)",
               ("write-ok-results", "write-fail-result", "output-mode-text"), _output_toggle("hdcp", 1, 5, (0, 6))),
     WriteTest("http_output_hdr", "output", "Output HDR mode (every code)",
-              ("write-ok-results", "write-fail-result", "output-mode-text"), _output_toggle("hdr", 1, 3, (0, 4))),
+              ("write-ok-results", "write-fail-result", "output-mode-text"),
+              # 0 is what V1.10.01 reports (HIL-02): try it as a value, not as "invalid"
+              _output_toggle("hdr", 0, 3, (4,))),
     WriteTest("http_output_scaler", "output", "Output scaler mode (every code; audio-only BE-15)",
-              ("write-ok-results", "write-fail-result", "output-mode-text"), _output_toggle("scaler", 1, 5, (0, 6))),
+              ("write-ok-results", "write-fail-result", "output-mode-text"),
+              _output_toggle("scaler", 0, 5, (6,))),  # V1.10.01 reports 0 and 4 (BE-15)
     WriteTest("http_output_arc", "output", "Output ARC", ("write-ok-results", "write-fail-result"),
               _output_toggle("arc", 0, 1, (2,))),
     WriteTest("http_output_mute", "output", "Output audio mute", ("write-ok-results", "write-fail-result"),

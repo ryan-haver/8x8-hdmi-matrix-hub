@@ -333,6 +333,21 @@ Findings from running features against the real hub and simulator (`docs/validat
 | VAL-05 | M | `POST /api/output/{n}/source`, used by the matrix grid, never broadcasts a WebSocket event, so other open clients don't see the change | `rest_api/control.py:312-356` | `routing.grid_notifies_other_clients` (browser) | 2 / WP-C2 |
 | VAL-06 | L | One `/ui` load makes 20–26 API calls against a limit of 60 per 10 s per client, so a third reload within 10 s fails with 429 errors | `rest_api/utils.py`, `web/js/app.js` | observed in the first browser run | 3 / WP-F1 (rate limiter), WP-E2 (fewer calls) |
 
+### 4.11 Found on hardware (HIL)
+
+From HIL sessions against the real BK-808 (MCU V1.10.01, web V2.00.03). Session reports: `docs/validation/*-hil-session-*.md`; captures: `tests/fixtures/device/`.
+
+| ID | Sev | Finding | Location | Evidence | Phase / WP |
+| --- | --- | --- | --- | --- | --- |
+| HIL-01 | M | `get routing status` and `preset get` are not implemented by this firmware (no answer, timeout). `get_preset_info` falls back to them over HTTP when Telnet is unavailable, and `OREI_API_COMMANDS.md` documents them as working | `orei_matrix.py:~776-783`, `docs/OREI_API_COMMANDS.md` | `http/get_routing_status`, `http/preset_get_*` | 1 / WP-A4 ✅ fixed (no HTTP fallback, doc marks both unsupported, simulator never answers them) |
+| HIL-02 | M | The device reports HDR mode **0**; the hub (`set_output_hdr` accepts 1–3), the UI and the simulator assume 1–3. The meaning of 0 is unknown | `orei_matrix.py:set_output_hdr`, `rest_api/outputs.py`, `tools/simulator/state.py` | `http/get_output_status` | 1 / WP-A4 (write-mode capture) |
+| HIL-03 | M | Telnet differs from the assumptions the hub's parser and the simulator were built on: the banner starts with IAC negotiation, every command is echoed before its answer, and `status` is a 111-line dump headed "get the unit all status:". The hub's parsing must be proven against the real captures | `telnet_client.py`, `_telnet_proto.py`, `tools/simulator/telnet_commands.py` | `telnet/*` | 1 / WP-A4 (reads proven against the captures: `tests/test_telnet_real_captures.py`; set-command acknowledgements need the write capture) |
+| HIL-04 | L | `get video status.allsource` has 9 entries (8 outputs + one more, likely the external audio output). The hub slices to 8, but the ninth value's meaning is undocumented | `rest_api/core.py:_format_status` | `http/get_video_status` | 1 / WP-A4 (hub keeps outputs 1-8, simulator emits the ninth entry; its meaning needs the write capture) |
+| HIL-05 | M | Telnet answers that arrive line by line were cut short: `r preset N` completed on its first routing line (one output instead of 8), and the three lines `r fw version` sends after its first one were read as the next command's answer. Replayed against the real device's segments, the old client returned `{}` for preset 1 after a firmware read and the echo `r preset 1!` as the device type; `get_device_type` also returned the echo | `_telnet_proto.py:is_response_complete`, `telnet_client.py:_send_raw`, `get_device_type` | `telnet/r_preset_1`, `telnet/r_fw_version`; `tests/test_telnet_real_captures.py` | 1 / WP-A4 ✅ fixed |
+| HIL-06 | M | `POST /api/scene/save-current` took the routing from `get output status.allsource`, which the device does not send, so every saved output was "input 1"; the device's 9-entry arrays also added an output 9 | `rest_api/scenes.py:handle_save_current_as_scene` | `http/get_output_status`; `tests/sim/test_golden_hub.py` | 2 / WP-A4 ✅ fixed |
+| HIL-07 | M | `--redact` in the capture tool matched case-sensitively. The Telnet `status` dump prints the MAC in lower case, so HIL Session 1's committed `telnet/status.json` still contains the matrix's MAC address | `tools/hil/capture/context.py:Capture.secrets` | `telnet/status.json` | 1 / WP-A4 (tool fixed; the committed fixture needs an owner decision: re-capture or rewrite before merge) |
+| HIL-08 | L | `get_all_input_names` cut every input name at its first `-`, assuming an `IN01-` prefix the device does not send (so "Sega-CD" became "CD") | `orei_matrix.py:get_all_input_names` | `http/get_video_status` (plain names) | 1 / WP-A4 ✅ fixed |
+
 ---
 
 ## 5. Validation strategy ("full real validation")
@@ -654,12 +669,12 @@ Work is organised into work packages (WPs) in parallel lanes. Each WP closes reg
 | --- | --- | --- | --- | --- | --- |
 | WP-V1 | V | ✅ Validation framework: `features.yaml` registry (every feature, ~200), evidence schema, scenario runner (`tools/validate/`), `LEDGER.md` generator, CI enforcement | — | Ledger generated in CI; every feature listed with its current honest level | next |
 | WP-V2 | V | **C0 baseline truth:** run every feature at V2/V3 on the simulator against current code; failures become findings | WP-V1 | First `LEDGER.md`; new register rows | after V1 |
-| WP-A1 | A | Transport reliability (BE-01, 03, 04, 05, 07, 11, 12, 17, 28–30, API-11) | — | Transport and reliability features at V2 with fault injection; loop lag < 100 ms under faults | in progress |
-| WP-A2 | A | Persistence and process lock (PER-01–03, TST-08, BE-18) | — | Persistence features at V2 on Windows and Linux | in progress |
-| WP-A3 | A | Hardware capture tooling (HIL-A) | — | Capture round-trip proven on the simulator | in progress |
-| WP-H1 | A | **HIL Session 1 / C0-HW:** capture + first V4 runs (routing, presets, power, TV CEC power, one profile) | WP-A3, owner hardware access | Golden captures committed; first V4 evidence | needs owner |
-| WP-A4 | A | Protocol corrections from captures (BE-13, 14, 15, 25, API-07, VAL-03); simulator golden mode | WP-H1 | Affected features at V2 against golden data, V4 re-run | after H1 |
-| WP-B1 | B | ✅ Scripted-Remote harness + blocking `uc` CI job; evaluate the UC core simulator (UC-21) | WP-A1 merged | Every Remote entity type exercised at V3; current behaviour pinned | after A1 |
+| WP-A1 | A | Transport reliability (BE-01, 03, 04, 05, 07, 11, 12, 17, 28–30, API-11) | — | Transport and reliability features at V2 with fault injection; loop lag < 100 ms under faults | ✅ merged 2026-09-25 |
+| WP-A2 | A | Persistence and process lock (PER-01–03, TST-08, BE-18) | — | Persistence features at V2 on Windows and Linux | ✅ merged 2026-09-25 |
+| WP-A3 | A | Hardware capture tooling (HIL-A) | — | Capture round-trip proven on the simulator | ✅ merged 2026-09-25 |
+| WP-H1 | A | **HIL Session 1 / C0-HW:** capture + first V4 runs (routing, presets, power, TV CEC power, one profile) | WP-A3, owner hardware access | Golden captures committed; first V4 evidence | read capture done 2026-09-25 (HIL-01…04); probe/write/V4 need owner |
+| WP-A4 | A | Protocol corrections from captures (BE-13, 14, 15, 25, API-07, VAL-03, HIL-01…04); simulator corrected to the 8 contradicted assumptions | WP-H1 | Affected features at V2 against golden data, V4 re-run | read part done 2026-09-25: report 0 contradicted (12 confirmed), HIL-01/05/06/08 fixed, hub tested against the real captures; BE-13/14/25, API-07, VAL-03 and HIL-02 need the probe/write capture |
+| WP-B1 | B | ✅ Scripted-Remote harness + blocking `uc` CI job; evaluate the UC core simulator (UC-21) | WP-A1 merged | Every Remote entity type exercised at V3; current behaviour pinned | ✅ merged with UC-22 filed |
 | WP-B2 | B | Remote integration fixes in `driver.py` (UC-01, 22, 04, 05 part, 06, 07, 17, 19, BE-02, 06, 08, 09, 10, 21) | WP-B1 | Remote features at V3; UC-01 proven fixed through the harness | after B1 |
 | WP-C1 | C | Scenes, shortcuts, profile execution (API-01–08, 13, 14, 23, VAL-01, VAL-02) | WP-V2 | Domain features at V3 | after V2 |
 | WP-C2 | C | WebSocket contract and schema; hub-owned event stream; truthful `/api/status` (API-09, 10, UI-02, UC-17 part, VAL-04, VAL-05) | WP-A1 | Every WS event at V2; live updates proven in the browser and HA at V3 | after A1 |
