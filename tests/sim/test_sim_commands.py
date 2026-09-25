@@ -289,7 +289,11 @@ def test_every_hub_comhead_is_recognised(comhead):
 def _hub_telnet_commands() -> list[str]:
     text = (SRC / "telnet_client.py").read_text(encoding="utf-8")
     commands = []
-    for template in re.findall(r'_send_raw\(f?"([^"]+)"\)', text):
+    # Commands are passed inline (`_send_raw("status")`) or built first
+    # (`telnet_cmd = f"s cec in {input_num} {command}"`) so the same string
+    # can be checked for its acknowledgement.
+    templates = re.findall(r'_send_raw\(f?"([^"]+)"\)', text) + re.findall(r'telnet_cmd = f?"([^"]+)"', text)
+    for template in templates:
         cmd = re.sub(r"\{command\}", "on", template)
         cmd = re.sub(r"\{[a-z_]+\}", "1", cmd)
         commands.append(cmd)

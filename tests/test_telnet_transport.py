@@ -11,6 +11,7 @@ import asyncio
 import pytest
 
 import telnet_client
+from _telnet_proto import is_acknowledged, is_response_complete, response_error
 from telnet_client import CommandError, ConnectionLostError, MatrixStatus, TelnetClient, TelnetState
 
 
@@ -175,3 +176,86 @@ async def test_link_query_unknown_when_no_answer(monkeypatch, response, expected
 
     monkeypatch.setattr(client, "_send_raw", fake_send_raw)
     assert await client.get_output_connection(3) is expected
+
+
+# =============================================================================
+# BE-07: completion detection and E00/E01 semantics
+# =============================================================================
+
+
+
+@pytest.mark.parametrize(
+    ("command", "response", "complete"),
+    [
+        # set commands complete on their acknowledgement ...
+        ("s cec in 1 on", "cec in 1 on\r\n", True),
+        ("s output 2 in source 3", "output2->input3\r\n", True),
+        ("s save preset 1", "save to preset 1\r\n", True),
+        # ... not on a bare echo of the command, nor on a partial line
+        ("s cec in 1 on", "s cec in 1 on\r\n", False),
+        ("s cec in 1 on", "s cec in 1 on!\r\n", False),
+        ("s cec in 1 on", "cec in 1", False),
+        # error codes complete every command
+        ("s cec in 1 bogus", "E01\r\n", True),
+        ("power 1", "E00\r\n", True),
+        ("status", "power on\r\nE00\r\n", True),
+        # status waits for its last line
+        ("status", "power on\r\nhdmi input 1: connect\r\n", False),
+        ("status", "power on\r\nmac address: 00:11:22:33:44:55\r\n", True),
+        ("status", "power on\r\nmac address: 00:11:22:33:44:55", True),
+        ("status", "power on\r\nmac address: 00:11:2", False),
+        # link queries wait for connect/disconnect
+        ("r link in 3", "hdmi input 3: disconnect\r\n", True),
+        ("r link in 3", "hdmi input 3", False),
+        # other reads complete on their first line (r type has no colon)
+        ("r type", "BK-808\r\n", True),
+        ("r fw version", "fw version: V1.10.02\r\n", True),
+        ("status", "", False),
+    ],
+)
+def test_is_response_complete(command, response, complete):
+    assert is_response_complete(response, command) is complete
+
+
+def test_error_codes_are_failures():
+    assert response_error("E00\r\n") == "E00"
+    assert response_error("s cec in 1 on\r\nE01\r\n") == "E01"
+    assert response_error("E01") == "E01"
+    assert response_error("cec in 1 on\r\n") is None
+    assert not is_acknowledged("E00\r\n", "power 1")
+    assert not is_acknowledged("", "s cec in 1 on")  # timed out, no answer
+    assert not is_acknowledged("s cec in 1 on\r\n", "s cec in 1 on")  # echo only
+    assert is_acknowledged("cec in 1 on\r\n", "s cec in 1 on")
+
+
+async def test_set_command_returns_on_ack_not_timeout(monkeypatch):
+    """A successful set command returns as soon as the ack line arrives."""
+    monkeypatch.setattr(telnet_client, "COMMAND_TIMEOUT", 5.0)
+    reader = asyncio.StreamReader()
+    client, writer = make_client(reader)
+    reader.feed_data(b"cec hdmi out 1 on\r\n")
+    loop = asyncio.get_running_loop()
+    start = loop.time()
+    assert await client.cec_output_power_on(1) is True
+    assert loop.time() - start < 1.0
+    assert bytes(writer.written) == b"s cec hdmi out 1 on!\r\n"
+
+
+@pytest.mark.parametrize("answer", [b"E00\r\n", b"E01\r\n"])
+async def test_set_command_error_code_is_failure(monkeypatch, answer):
+    monkeypatch.setattr(telnet_client, "COMMAND_TIMEOUT", 5.0)
+    reader = asyncio.StreamReader()
+    client, _ = make_client(reader)
+    reader.feed_data(answer)
+    loop = asyncio.get_running_loop()
+    start = loop.time()
+    assert await client.switch_input(3, 2) is False
+    assert loop.time() - start < 1.0
+    assert client.connected  # an error answer is not a connection problem
+
+
+async def test_set_command_without_answer_is_failure(monkeypatch):
+    monkeypatch.setattr(telnet_client, "COMMAND_TIMEOUT", 0.2)
+    client, _ = make_client(asyncio.StreamReader())
+    assert await client.save_preset(2) is False
+    assert client.connected
