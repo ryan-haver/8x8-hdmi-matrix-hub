@@ -12,8 +12,9 @@ are easy to read and edit by hand::
       "outputs": [{"name", "source", "connected", "stream", "hdcp", "hdr",
                    "scaler", "arc", "audio_mute", "cec_enabled",
                    "ext_audio_enabled", "ext_audio_source"} x 8],
+      "ninth_output": {"source", "scaler", "hdr", "hdcp", "arc", "stream", "audio_mute"},
       "ext_audio": {"mode": 0},
-      "presets": [{"name", "routing": [8 x input]} x 8]
+      "presets": [{"name", "routing": [8 x input], "saved": true} x 8]
     }
 
 Missing keys fall back to defaults, so partial state files are fine.
@@ -29,7 +30,7 @@ from dataclasses import asdict, dataclass, field, fields
 from pathlib import Path
 from typing import Any
 
-from .protocol import PORT_COUNT
+from .protocol import HDCP_RANGE, HDR_RANGE, PORT_COUNT, SCALER_RANGE
 
 SCHEMA_VERSION = 1
 
@@ -76,8 +77,8 @@ class OutputPort:
     connected: int = 0  # hot-plug detect: ``allconnect``
     stream: int = 1  # ``allout``
     hdcp: int = 3
-    hdr: int = 3
-    scaler: int = 1
+    hdr: int = 0  # V1.10.01 reports 0 ("pass-through"), see protocol.HDR_RANGE (HIL-02)
+    scaler: int = 0  # V1.10.01 reports 0 ("pass-through") and 4 ("audio only")
     arc: int = 0
     audio_mute: int = 0
     cec_enabled: int = 0
@@ -85,10 +86,21 @@ class OutputPort:
     ext_audio_source: int = 1
 
 
+#: Keys of the ninth entry V1.10.01 appends to the per-output arrays (HIL-04).
+NINTH_KEYS = ("source", "scaler", "hdr", "hdcp", "arc", "stream", "audio_mute")
+
+
+def default_ninth_output() -> dict[str, int]:
+    """The ninth entry as captured on V1.10.01 (``source`` follows the capture's routing)."""
+    return {"source": 1, "scaler": 255, "hdr": 0, "hdcp": 3, "arc": 0, "stream": 255, "audio_mute": 0}
+
+
 @dataclass
 class Preset:
     name: str
     routing: list[int] = field(default_factory=lambda: [1] * PORT_COUNT)
+    #: False = the slot is empty: ``r preset N`` answers "preset N is none,please save a preset"
+    saved: bool = True
 
 
 @dataclass
@@ -100,8 +112,12 @@ class DeviceState:
         default_factory=lambda: {
             "model": "BK-808",
             "hostname": "BK-808",
-            "firmware_version": "V1.10.02",
+            "firmware_version": "V1.10.01",
             "web_version": "V2.00.03",
+            "key_mcu_version": "V1.00.08",
+            "cpld_version": "V1.00.06",
+            #: ``r type`` answer
+            "type": "8x8 hdmi2.1 matrix",
             "ip_module_version": "10.01.17",
             "mac_address": "02:00:00:0B:08:08",
             "ip_address": "192.168.0.100",
@@ -110,6 +126,8 @@ class DeviceState:
             "dhcp": 0,
             "telnet_port": 23,
             "tcp_port": 8000,
+            #: ``get network`` ``username``: an integer on V1.10.01 (1), meaning unknown
+            "network_username": 1,
         }
     )
     system: dict[str, int] = field(
@@ -118,12 +136,18 @@ class DeviceState:
             "beep": 1,
             "panel_lock": 0,
             "lcd_timeout": 3,
-            "mode": 0,
-            "baudrate": 115200,
+            # ``get system status`` codes, meaning unknown (V1.10.01 reports mode 3, baudrate 6)
+            "mode": 3,
+            "baudrate": 6,
         }
     )
     inputs: list[InputPort] = field(default_factory=lambda: [InputPort(f"Input {i}") for i in range(1, 9)])
     outputs: list[OutputPort] = field(default_factory=lambda: [OutputPort(f"Output {i}") for i in range(1, 9)])
+    #: The ninth entry of ``allsource`` / ``allscaler`` / ``allhdr`` / ``allhdcp`` / ``allarc`` / ``allout`` /
+    #: ``allaudiomute`` (HIL-04). What it is (likely the external audio output) is undocumented.
+    # ASSUMPTION(HIL-A): the ninth entry never changes with writes (not even
+    # "video switch" to all outputs); the simulator reports it from here.
+    ninth_output: dict[str, int] = field(default_factory=default_ninth_output)
     ext_audio: dict[str, int] = field(default_factory=lambda: {"mode": 0})
     presets: list[Preset] = field(default_factory=lambda: [Preset(f"Preset {i}") for i in range(1, 9)])
 
@@ -154,6 +178,11 @@ class DeviceState:
                     state.system[key] = sysdoc[key]
         if "ext_audio" in doc:
             state.ext_audio["mode"] = doc["ext_audio"].get("mode", state.ext_audio["mode"])
+        if "ninth_output" in doc:
+            ninth = doc["ninth_output"]
+            if not isinstance(ninth, dict) or set(ninth) - set(NINTH_KEYS):
+                raise StateError(f"ninth_output: expected an object with keys from {list(NINTH_KEYS)}")
+            state.ninth_output.update(ninth)
 
         state.inputs = cls._ports(doc.get("inputs"), InputPort, "inputs", "Input")
         state.outputs = cls._ports(doc.get("outputs"), OutputPort, "outputs", "Output")
@@ -165,6 +194,7 @@ class DeviceState:
                 Preset(
                     name=p.get("name", f"Preset {i + 1}"),
                     routing=list(p.get("routing", [1] * PORT_COUNT)),
+                    saved=bool(p.get("saved", True)),
                 )
                 for i, p in enumerate(presets)
             ]
@@ -207,6 +237,7 @@ class DeviceState:
             "system": dict(self.system),
             "inputs": [asdict(p) for p in self.inputs],
             "outputs": [asdict(p) for p in self.outputs],
+            "ninth_output": dict(self.ninth_output),
             "ext_audio": dict(self.ext_audio),
             "presets": [asdict(p) for p in self.presets],
         }
@@ -239,12 +270,14 @@ class DeviceState:
             path = f"outputs[{i}]"
             o.name = _str(o.name, f"{path}.name", 32)
             _int_in(o.source, f"{path}.source", 1, PORT_COUNT)
-            _int_in(o.hdcp, f"{path}.hdcp", 1, 5)
-            _int_in(o.hdr, f"{path}.hdr", 1, 3)
-            _int_in(o.scaler, f"{path}.scaler", 1, 5)
+            _int_in(o.hdcp, f"{path}.hdcp", *HDCP_RANGE)
+            _int_in(o.hdr, f"{path}.hdr", *HDR_RANGE)
+            _int_in(o.scaler, f"{path}.scaler", *SCALER_RANGE)
             _int_in(o.ext_audio_source, f"{path}.ext_audio_source", 1, PORT_COUNT)
             for key in ("connected", "stream", "arc", "audio_mute", "cec_enabled", "ext_audio_enabled"):
                 _flag(getattr(o, key), f"{path}.{key}")
+        for key in NINTH_KEYS:
+            _int_in(self.ninth_output.get(key), f"ninth_output.{key}", 0, 255)
         for i, pr in enumerate(self.presets):
             pr.name = _str(pr.name, f"presets[{i}].name", 32)
             if len(pr.routing) != PORT_COUNT:
@@ -276,7 +309,13 @@ class DeviceState:
             val = resp.get(key)
             return list(val[:PORT_COUNT]) if isinstance(val, list) else None
 
+        def ninth(resp: dict[str, Any], key: str, attr: str) -> None:
+            val = resp.get(key)
+            if isinstance(val, list) and len(val) > PORT_COUNT:
+                self.ninth_output[attr] = val[PORT_COUNT]
+
         video = captures.get("get video status") or {}
+        ninth(video, "allsource", "source")
         if (v := arr(video, "allsource")) is not None:
             for o, src in zip(self.outputs, v, strict=False):
                 o.source = src
@@ -303,9 +342,14 @@ class DeviceState:
             ("allaudiomute", "audio_mute"),
             ("allsource", "source"),
         ):
+            ninth(out, key, attr)
             if (v := arr(out, key)) is not None:
                 for o, val in zip(self.outputs, v, strict=False):
                     setattr(o, attr, val)
+        # V1.10.01 names the outputs in ``name`` here (no allinputname/alloutputname).
+        if (v := arr(out, "name")) is not None:
+            for o, name in zip(self.outputs, v, strict=False):
+                o.name = name
 
         inp = captures.get("get input status") or {}
         if (v := arr(inp, "edid")) is not None:
@@ -331,14 +375,16 @@ class DeviceState:
 
         info = captures.get("get status") or {}
         for key, attr in (("version", "firmware_version"), ("webversion", "web_version"), ("model", "model"),
-                          ("macaddress", "mac_address"), ("hostname", "hostname")):
+                          ("macaddress", "mac_address"), ("hostname", "hostname"), ("ipaddress", "ip_address"),
+                          ("subnet", "netmask"), ("gateway", "gateway")):
             if key in info:
                 self.device[attr] = info[key]
 
         net = captures.get("get network") or {}
         for key, attr in (("ipaddress", "ip_address"), ("netmask", "netmask"), ("subnet", "netmask"),
                           ("gateway", "gateway"), ("macaddress", "mac_address"), ("hostname", "hostname"),
-                          ("dhcp", "dhcp"), ("telnetport", "telnet_port"), ("tcpport", "tcp_port")):
+                          ("dhcp", "dhcp"), ("telnetport", "telnet_port"), ("tcpport", "tcp_port"),
+                          ("username", "network_username"), ("model", "model")):
             if key in net:
                 self.device[attr] = net[key]
 

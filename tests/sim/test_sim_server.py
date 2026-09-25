@@ -8,7 +8,7 @@ import aiohttp
 import pytest
 
 from tools.simulator import protocol as proto
-from tools.simulator.telnet_commands import banner
+from tools.simulator.telnet_commands import banner_bytes
 
 LOGIN = {"comhead": "login", "user": "Admin", "password": "admin"}
 
@@ -182,26 +182,31 @@ async def test_fault_wrong_password_and_reject_writes(http, simulator):
 
 async def telnet_open(sim):
     reader, writer = await asyncio.open_connection(sim.host, sim.telnet_port)
-    expected = banner(sim.state).encode()
+    expected = banner_bytes(sim.state)  # IAC option negotiation, then the banner text (V1.10.01)
     received = await asyncio.wait_for(reader.readexactly(len(expected)), 1)
     assert received == expected
     return reader, writer, received
 
 
 async def telnet_cmd(reader, writer, command):
+    """Send one command; returns the answer's first line after the device's echo."""
     writer.write(command.encode() + b"!\r\n")
     await writer.drain()
+    echo = (await asyncio.wait_for(reader.readline(), 1)).decode()
+    assert echo == command + "!\r\n"
     return (await asyncio.wait_for(reader.readline(), 1)).decode()
 
 
 async def test_telnet_banner_commands_and_push(simulator):
     reader, writer, greeting = await telnet_open(simulator)
     try:
-        assert b"BK-808" in greeting
+        assert greeting.startswith(b"\xff\xfb\x03") and b"fw version :v1.10.01" in greeting
         assert await telnet_cmd(reader, writer, "r link out 1") == "hdmi output 1: connect\r\n"
         # two commands in one packet, extra CR/LF between them
         writer.write(b"r link in 3!\r\n\r\nr link in 2!\r\n")
+        assert (await reader.readline()).decode() == "r link in 3!\r\n"
         assert (await reader.readline()).decode() == "hdmi input 3: disconnect\r\n"
+        assert (await reader.readline()).decode() == "r link in 2!\r\n"
         assert (await reader.readline()).decode() == "hdmi input 2: connect\r\n"
         await simulator.cable_event("output", 1, False)
         assert (await asyncio.wait_for(reader.readline(), 1)).decode() == "hdmi output 1: disconnect\r\n"

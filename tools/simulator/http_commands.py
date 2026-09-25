@@ -103,18 +103,26 @@ def _names(state: DeviceState) -> dict[str, Any]:
 
 
 # ----------------------------------------------------------------- reads
+#
+# Every read below has the key set and key order the BK-808 sends on MCU
+# V1.10.01 / web V2.00.03 (tests/fixtures/device/BK-808_V1.10.01_web-V2.00.03/
+# http/). The server serialises them compactly and appends CR LF, so for the
+# same state the body is byte-identical to the capture.
+
+
+def _with_ninth(values: list[int], state: DeviceState, key: str) -> list[int]:
+    """A per-output array plus the ninth entry V1.10.01 appends (HIL-04)."""
+    return [*values, state.ninth_output[key]]
 
 
 @command("get video status", read=True)
 def _get_video_status(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
-    # Not in OREI_API_COMMANDS.md; shape from orei_matrix.py get_video_status /
-    # get_status / get_all_input_names.
-    # ASSUMPTION(HIL-A): names are plain strings. get_all_input_names() also
-    # strips an "IN01-" style prefix and mentions trailing "terminator
-    # entries" (orei_matrix.py:477-479); neither is emitted here.
+    # Not in OREI_API_COMMANDS.md. The names are 8 plain strings (no "IN01-"
+    # prefix). ``allsource`` has 9 entries (HIL-04). The hub reads ``allname``
+    # as the preset names; V1.10.01 sends "Out1".."Out8" there.
     return {
         "power": state.system["power"],
-        "allsource": state.routing,
+        "allsource": _with_ninth(state.routing, state, "source"),
         **_names(state),
         "allname": [p.name for p in state.presets],
     }
@@ -122,20 +130,19 @@ def _get_video_status(state: DeviceState, payload: Payload, r: CommandResult) ->
 
 @command("get output status", read=True)
 def _get_output_status(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
-    # ASSUMPTION(HIL-A): the doc shows allinputname/alloutputname here, but a
-    # comment at orei_matrix.py:2293 claims this response has a "name" array
-    # instead. The doc's shape is emitted.
+    # The output names are in ``name``; the API doc's allinputname,
+    # alloutputname and allsource are not sent. Every settings array has the
+    # ninth entry (HIL-04); ``allconnect`` and ``name`` do not.
     return {
         "power": state.system["power"],
         "allconnect": state.column("outputs", "connected"),
-        "allscaler": state.column("outputs", "scaler"),
-        "allhdr": state.column("outputs", "hdr"),
-        "allhdcp": state.column("outputs", "hdcp"),
-        "allarc": state.column("outputs", "arc"),
-        "allout": state.column("outputs", "stream"),
-        "allaudiomute": state.column("outputs", "audio_mute"),
-        "allsource": state.routing,
-        **_names(state),
+        "name": state.column("outputs", "name"),
+        "allscaler": _with_ninth(state.column("outputs", "scaler"), state, "scaler"),
+        "allhdr": _with_ninth(state.column("outputs", "hdr"), state, "hdr"),
+        "allhdcp": _with_ninth(state.column("outputs", "hdcp"), state, "hdcp"),
+        "allarc": _with_ninth(state.column("outputs", "arc"), state, "arc"),
+        "allout": _with_ninth(state.column("outputs", "stream"), state, "stream"),
+        "allaudiomute": _with_ninth(state.column("outputs", "audio_mute"), state, "audio_mute"),
     }
 
 
@@ -162,51 +169,50 @@ def _get_cec_status(state: DeviceState, payload: Payload, r: CommandResult) -> d
 
 @command("get system status", read=True)
 def _get_system_status(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
+    # ``baudrate`` is a code (6 on V1.10.01), not bits per second; ``mode`` is
+    # an undocumented code (3 on V1.10.01).
     s = state.system
     return {
         "power": s["power"],
+        "baudrate": s["baudrate"],
         "beep": s["beep"],
         "lock": s["panel_lock"],
         "mode": s["mode"],
-        "baudrate": s["baudrate"],
     }
 
 
 @command("get status", read=True)
 def _get_status(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
-    # ASSUMPTION(HIL-A): union of the doc (version, webversion) and the fields
-    # orei_matrix.get_device_info documents (model, macaddress, hostname, ...).
     d = state.device
     return {
         "power": state.system["power"],
         "version": d["firmware_version"],
-        "webversion": d["web_version"],
-        "model": d["model"],
         "hostname": d["hostname"],
-        "macaddress": d["mac_address"],
         "ipaddress": d["ip_address"],
         "subnet": d["netmask"],
         "gateway": d["gateway"],
+        "macaddress": d["mac_address"],
+        "model": d["model"],
+        "webversion": d["web_version"],
     }
 
 
 @command("get network", read=True)
 def _get_network(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
-    # ASSUMPTION(HIL-A): the doc says "netmask", orei_matrix.get_network_info
-    # says "subnet" (plus dhcp/telnetport/tcpport/username). Both are sent.
+    # ``subnet``, not the API doc's ``netmask``. ``username`` is an integer
+    # (1 on V1.10.01), not the login name.
     d = state.device
     return {
         "power": state.system["power"],
         "dhcp": d["dhcp"],
         "ipaddress": d["ip_address"],
-        "netmask": d["netmask"],
         "subnet": d["netmask"],
         "gateway": d["gateway"],
         "telnetport": d["telnet_port"],
         "tcpport": d["tcp_port"],
         "macaddress": d["mac_address"],
         "hostname": d["hostname"],
-        "username": state.auth["user"],
+        "username": d["network_username"],
         "model": d["model"],
     }
 
@@ -224,9 +230,14 @@ def _get_ext_audio_status(state: DeviceState, payload: Payload, r: CommandResult
     }
 
 
+# ``get routing status`` is documented and ``preset get`` was sent by older hub
+# code, but V1.10.01 never answers either (HIL-01). The server holds both open
+# without an answer (protocol.UNANSWERED_COMHEADS); these handlers only keep
+# the documented shape for reference.
+
+
 @command("get routing status", read=True)
 def _get_routing_status(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
-    # Documented but not used by the hub.
     return {
         "power": state.system["power"],
         "allpreset": [{"allsource": list(p.routing), "name": p.name} for p in state.presets],
@@ -235,9 +246,6 @@ def _get_routing_status(state: DeviceState, payload: Payload, r: CommandResult) 
 
 @command("preset get", read=True)
 def _preset_get(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
-    # ASSUMPTION(HIL-A): undocumented (orei_matrix.get_preset_info HTTP
-    # fallback returns the whole response). Shape chosen to mirror
-    # "get routing status" entries.
     idx = _int(payload, "index", 1, proto.PORT_COUNT)
     preset = state.presets[idx - 1]
     return {"index": idx, "name": preset.name, "allsource": list(preset.routing)}
@@ -276,6 +284,7 @@ def _preset_set(state: DeviceState, payload: Payload, r: CommandResult) -> dict[
 def _preset_save(state: DeviceState, payload: Payload, r: CommandResult) -> dict[str, Any]:
     idx = _int(payload, "index", 1, proto.PORT_COUNT)
     state.presets[idx - 1].routing = state.routing
+    state.presets[idx - 1].saved = True
     r.mutated = True
     return _ok("preset save")
 

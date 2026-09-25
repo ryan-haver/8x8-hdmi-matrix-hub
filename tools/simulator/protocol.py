@@ -29,6 +29,11 @@ INSTR_PATH = "/cgi-bin/instr"
 #: ``response.text()`` then ``json.loads`` for exactly this reason).
 RESPONSE_CONTENT_TYPE = "text/plain"
 
+#: Bytes the device appends to every JSON body. Captured on V1.10.01: compact
+#: JSON (``","`` / ``":"`` separators, keys in a fixed order per comhead)
+#: followed by CR LF (``tests/fixtures/device/BK-808_V1.10.01_web-V2.00.03/http``).
+RESPONSE_BODY_SUFFIX = b"\r\n"
+
 #: ``result`` value for a successful write. Verified for ``video switch``,
 #: ``preset set`` and ``set poweronoff``.
 RESULT_OK = 1
@@ -38,10 +43,10 @@ RESULT_OK = 1
 # RESULT_OK.
 RESULT_FAIL = 0
 
-# ASSUMPTION(HIL-A): the API doc lists ``"result": "success"`` for login (the
-# only entry marked verified that uses a string). orei_matrix.py:251 accepts
-# either ``result == 1`` or any echoed ``comhead == "login"``.
-LOGIN_OK_RESULT: int | str = "success"
+#: Login success is ``{"comhead":"login","result":1}`` (captured on V1.10.01,
+#: ``http/login``). The API doc's ``"result": "success"`` is wrong for this
+#: firmware; orei_matrix.py accepts ``result == 1``.
+LOGIN_OK_RESULT: int | str = 1
 
 # ASSUMPTION(HIL-A): a wrong user/password still echoes ``comhead: "login"``
 # (that is what BE-05 says the hub mis-reads as success) with a failure result.
@@ -79,6 +84,13 @@ SESSION_EXPIRED_HTML = (
 # than by cookie.
 DEFAULT_SESSION_TTL_S: float | None = None
 
+#: Reads this firmware does not implement: the device accepts the request and
+#: never answers (the capture client gave up with a TimeoutError after 5 s,
+#: ``http/get_routing_status`` and ``http/preset_get_1..8`` on V1.10.01,
+#: HIL-01). The simulator holds these requests open the same way until the
+#: client gives up, or the simulator is reset or stopped.
+UNANSWERED_COMHEADS = frozenset({"get routing status", "preset get"})
+
 # ASSUMPTION(HIL-A): ``set reboot`` answers before the device drops off the
 # network (the doc only says "connection will drop").
 REBOOT_REPLIES_FIRST = True
@@ -103,19 +115,25 @@ TELNET_EOL = "\r\n"
 TELNET_ERR_UNKNOWN = "E00"
 TELNET_ERR_PARAM = "E01"
 
-# ASSUMPTION(HIL-A): connection banner. The client only extracts
-# ``fw version : v<digits>`` from it (telnet_client.py:205).
+#: Connection banner, captured on V1.10.01 (``telnet/banner``). The version
+#: is the MCU firmware in lower case (``v1.10.01``). The client only extracts
+#: ``fw version :v<digits>`` from it (telnet_client.py ``connect``).
 TELNET_BANNER_LINES = (
-    "",
-    "Welcome to {model} 8x8 HDMI Matrix",
-    "fw version : {fw_version}",
+    "****************welcome **************",
+    "            fw version :{fw_version_lower}        ",
+    "**************************************",
     "",
 )
 
-# ASSUMPTION(HIL-A): the device does not start any Telnet option negotiation.
-# Set to True to send IAC WILL ECHO / IAC WILL SGA with the banner and exercise
-# the client's IAC filter.
-TELNET_SEND_IAC_NEGOTIATION = False
+#: The device opens every connection with Telnet option negotiation, before
+#: the banner text (``telnet/banner`` on V1.10.01):
+#: IAC WILL SGA, IAC WONT ECHO, IAC DONT ECHO, IAC DONT BINARY, IAC WONT SGA.
+TELNET_SEND_IAC_NEGOTIATION = True
+TELNET_IAC_NEGOTIATION = bytes.fromhex("fffb03fffc01fffe01fffe00fffc03")
+
+#: The device echoes every command line (``r link in 1!``, CR LF) before its
+#: answer (every ``telnet/*`` read capture on V1.10.01).
+TELNET_ECHO_COMMANDS = True
 
 #: CEC command words accepted after ``s cec in <n>`` (telnet_client.py
 #: _CEC_INDEX_TO_TELNET and the cec_input_* helpers).
@@ -135,12 +153,23 @@ TELNET_CEC_OUTPUT_WORDS = TELNET_CEC_INPUT_WORDS | {"active"}
 # ---------------------------------------------------------------------------
 # Value -> text maps used in the Telnet ``status`` dump.
 # ASSUMPTION(HIL-A): wording of every value below. The client only needs the
-# ``<label>: <text>`` shape (telnet_client.py:692-788).
+# ``<label>: <text>`` shape (telnet_client.py ``_parse_status_response``).
+#
+# Read-capture evidence (V1.10.01: ``get output status`` values next to the
+# ``status`` dump lines): HDCP 3 = "follow sink", HDR 0 = "pass-through",
+# scaler 0 = "pass-through", scaler 4 = "audio only", EDID 36 =
+# "frl12g_8k_hdr,7.1ch". Every other code is still a guess. The reads use 0
+# and 4 where the API doc's write tables use 1 (passthrough) and 5 (audio
+# only), so reads may be 0-based and writes 1-based; only a write capture can
+# tell (HIL-02, BE-15).
 # ---------------------------------------------------------------------------
 
 HDCP_TEXT = {1: "hdcp1.4", 2: "hdcp2.2", 3: "follow sink", 4: "follow source", 5: "user mode"}
-HDR_TEXT = {1: "pass-through", 2: "hdr to sdr", 3: "auto"}
-SCALER_TEXT = {1: "pass-through", 2: "8k to 4k", 3: "8k/4k to 1080p", 4: "auto", 5: "audio only"}
+HDR_TEXT = {0: "pass-through", 1: "pass-through", 2: "hdr to sdr", 3: "auto"}
+SCALER_TEXT = {0: "pass-through", 1: "pass-through", 2: "8k to 4k", 3: "8k/4k to 1080p", 4: "audio only",
+               5: "audio only"}
+EDID_TEXT = {36: "frl12g_8k_hdr,7.1ch"}
+EXT_AUDIO_MODE_TEXT = {0: "bind to input", 1: "bind to output", 2: "matrix"}
 LCD_SECONDS = {2: 15, 3: 30, 4: 60}
 
 # ---------------------------------------------------------------------------
@@ -148,8 +177,13 @@ LCD_SECONDS = {2: 15, 3: 30, 4: 60}
 # ---------------------------------------------------------------------------
 
 HDCP_RANGE = (1, 5)
-HDR_RANGE = (1, 3)
-SCALER_RANGE = (1, 5)
+#: HDR 0 is what V1.10.01 reports for every output (``http/get_output_status``)
+#: and prints as "pass-through" in ``status``. Its meaning next to the
+#: documented 1-3, and whether 0 can be written, is unknown pending a
+#: write-mode capture (HIL-02). The simulator accepts 0 in reads and writes.
+HDR_RANGE = (0, 3)
+#: Scaler 0 is reported by V1.10.01 (``pass-through``); see HDR_RANGE.
+SCALER_RANGE = (0, 5)
 LCD_RANGE = (0, 4)
 EXT_AUDIO_MODE_RANGE = (0, 2)
 CEC_INDEX_RANGE = (1, 19)
