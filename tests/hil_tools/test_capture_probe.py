@@ -8,6 +8,7 @@ from tests.hil_tools.helpers import FW, ScriptedConsole, load, make_opts, new_si
 from tools.hil.capture import cli, run_capture
 from tools.hil.capture.fixtures import RecordIds
 from tools.simulator import protocol as proto
+from tools.simulator.telnet_commands import handle
 
 
 async def test_probe_mode_answers_login_session_and_telnet_questions(tmp_path):
@@ -72,12 +73,15 @@ async def test_probe_mode_answers_login_session_and_telnet_questions(tmp_path):
 
     framing = {v["variant"]: v for v in load(root, RecordIds.PROBE_TELNET_FRAMING)["variants"]}
     assert framing["no_bang_then_bang"]["first_response"] == ""  # nothing until "!" arrives
-    assert framing["no_bang_then_bang"]["second_response"] == "BK-808\r\n"
-    assert framing["pipelined"]["first_response"] == "BK-808\r\nfw version: V1.10.02\r\n"
+    r_type = handle(s.state.copy(), "r type").text  # the echoed command line, then the answer
+    assert framing["no_bang_then_bang"]["second_response"] == r_type
+    assert framing["pipelined"]["first_response"] == r_type + handle(s.state.copy(), "r fw version").text
 
     acks = load(root, RecordIds.PROBE_TELNET_NOOP_ACKS)
     assert acks["findings"]["state_changed"] == []
-    assert [ex["response"]["text"] for ex in acks["exchanges"]][:2] == ["output8->input1\r\n", "beep on\r\n"]
+    assert [ex["response"]["text"] for ex in acks["exchanges"]][:2] == [
+        "s output 8 in source 1!\r\noutput8->input1\r\n", "s beep 1!\r\nbeep on\r\n",
+    ]
 
     assert load(root, RecordIds.PROBE_TELNET_SECOND_SESSION)["findings"] == {
         "second_session_works": True, "first_session_still_works": True,
