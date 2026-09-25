@@ -7,4 +7,14 @@
 # Each row: id, severity (C/H/M/L), title, location, proposed register row
 # (section + text), proof (scenario that demonstrates it), status (open|closed).
 
-findings: []
+findings:
+- id: VAL-07
+  severity: M
+  title: Remote send_cmd ignores `repeat`, `delay` and `hold`, so a held key (volume) sends a single CEC step
+  location: src/driver.py:220-230 (create_cec_command_handler, SEND_CMD branch)
+  proposed_register_row: >-
+    §4.9 UC-22 (M): the CEC remote send_cmd handler sends the command once and ignores the entity_remote.md
+    parameters repeat/delay/hold (hold-to-repeat volume, repeated D-pad presses in macros). Fix with UC-01 in
+    WP-B2: one shared command runner for send_cmd and send_cmd_sequence that honours repeat/delay/hold.
+  proof: tests/uc/test_commands.py::test_send_cmd_repeat_sends_the_command_repeatedly (strict xfail)
+  status: open

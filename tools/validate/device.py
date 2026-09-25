@@ -101,6 +101,17 @@ class SimDevice:
     async def log(self) -> list[dict[str, Any]]:
         return list(await self._call("GET", "/_sim/log"))
 
+    async def clear_log(self) -> None:
+        await self._call("DELETE", "/_sim/log")
+
+    async def patch_state(self, patch: dict[str, Any]) -> None:
+        """Change the device behind the hub's back (front panel, IR remote): deep-merge ``patch``."""
+        await self._call("PATCH", "/_sim/state", patch)
+
+    async def event(self, event: dict[str, Any]) -> None:
+        """Cable/signal events (``POST /_sim/event``), pushed to Telnet clients like the device does."""
+        await self._call("POST", "/_sim/event", event)
+
     async def info(self) -> dict[str, Any]:
         st = await self._call("GET", "/_sim/state")
         return {
