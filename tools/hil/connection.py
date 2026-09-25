@@ -1,40 +1,29 @@
 #!/usr/bin/env python3
 """
-Test script for OREI HDMI Matrix connection.
+Connection check for a real OREI BK-808 HDMI matrix (hardware-in-the-loop script).
 
-This script tests the connection to your OREI BK-808 and verifies
-that scene recall commands work correctly.
-
-Configuration:
-    Default matrix: 192.168.0.100:443 (from conftest.py)
-    Override via environment variables:
-        MATRIX_HOST - IP address of the matrix
-        MATRIX_PORT - Port number (default 443)
+Connects to the matrix, recalls presets 1-3 (watch the matrix for routing
+changes), prints the status and disconnects. Not a pytest test.
 
 Usage:
-    # Run via pytest (uses conftest.py config)
-    pytest tests/test_connection.py -v
-
-    # Run directly for interactive mode
-    python tests/test_connection.py
-
-NOTE: These are hardware integration tests requiring a real matrix.
+    python tools/hil/connection.py <ip> [port]   # explicit address
+    MATRIX_HOST=<ip> python tools/hil/connection.py
+    python tools/hil/connection.py -i            # interactive mode
 """
 
 import asyncio
 import logging
 import os
 import sys
+from pathlib import Path
 
-import pytest
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
 
-# Get config from environment (same defaults as conftest.py)
-MATRIX_HOST = os.environ.get("MATRIX_HOST", "192.168.0.100")
+from orei_matrix import OreiMatrix  # noqa: E402
+
+# No default address: the target must be given explicitly (TST-05).
+MATRIX_HOST = os.environ.get("MATRIX_HOST")
 MATRIX_PORT = int(os.environ.get("MATRIX_PORT", "443"))
-USE_MOCK = os.environ.get("USE_MOCK_MATRIX", "0") == "1"
-
-# Skip if using mock mode
-pytestmark = pytest.mark.skipif(USE_MOCK, reason="Hardware test - set USE_MOCK_MATRIX=0 to run")
 
 # Setup logging
 logging.basicConfig(
@@ -44,15 +33,10 @@ logging.basicConfig(
 
 _LOG = logging.getLogger(__name__)
 
-from orei_matrix import OreiMatrix
-
 
 async def run_connection_test(host: str, port: int = 443):
     """
     Test connection and basic commands.
-
-    NOTE: This is a manual test script, not a pytest test.
-    Run directly: python tests/test_connection.py
 
     :param host: Matrix IP address
     :param port: Port (default 443 for HTTPS)
@@ -125,13 +109,11 @@ async def run_connection_test(host: str, port: int = 443):
     _LOG.info("Test Complete!")
     _LOG.info("=" * 60)
     _LOG.info("")
-    _LOG.info("✓ ConVerify presets changed your matrix routing")
+    _LOG.info("Next steps:")
+    _LOG.info("  1. Verify the presets changed your matrix routing")
     _LOG.info("  2. Configure your presets on the matrix (if not done)")
     _LOG.info("  3. Run the integration: python3 driver.py")
-    _LOG.info("  4t steps:")
-    _LOG.info("  1. Configure your scenes on the matrix")
-    _LOG.info("  2. Run the integration: python3 driver.py")
-    _LOG.info("  3. Add the integration on your Remote 3")
+    _LOG.info("  4. Add the integration on your Remote 3")
     _LOG.info("")
 
     return True
@@ -203,26 +185,24 @@ async def interactive_test():
 
 def main():
     """Main entry point."""
-    if len(sys.argv) == 1:
-        # Use config defaults
-        _LOG.info("Using matrix at %s:%d", MATRIX_HOST, MATRIX_PORT)
-        _LOG.info("Override with: MATRIX_HOST=x.x.x.x MATRIX_PORT=443 python tests/test_connection.py")
-        _LOG.info("")
-        asyncio.run(run_connection_test(MATRIX_HOST, MATRIX_PORT))
-    elif sys.argv[1] == "-i":
-        # Interactive mode
+    usage = (
+        "Usage: python tools/hil/connection.py <ip> [port]\n"
+        "   or: MATRIX_HOST=<ip> python tools/hil/connection.py\n"
+        "   or: python tools/hil/connection.py -i    (interactive mode)"
+    )
+    if len(sys.argv) >= 2 and sys.argv[1] == "-i":
         _LOG.info("Starting interactive mode...")
         _LOG.info("")
         asyncio.run(interactive_test())
     elif len(sys.argv) >= 2:
-        # Command line override
         host = sys.argv[1]
         port = int(sys.argv[2]) if len(sys.argv) > 2 else MATRIX_PORT
         asyncio.run(run_connection_test(host, port))
+    elif MATRIX_HOST:
+        _LOG.info("Using matrix at %s:%d (from MATRIX_HOST/MATRIX_PORT)", MATRIX_HOST, MATRIX_PORT)
+        asyncio.run(run_connection_test(MATRIX_HOST, MATRIX_PORT))
     else:
-        print(f"Usage: python3 test_connection.py              (uses {MATRIX_HOST}:{MATRIX_PORT})")
-        print("   or: python3 test_connection.py <ip> [port]  (custom address)")
-        print("   or: python3 test_connection.py -i           (interactive mode)")
+        print(usage)
         sys.exit(1)
 
 

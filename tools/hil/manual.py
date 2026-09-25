@@ -70,7 +70,7 @@ async def cleanup():
 
 async def main():
     if len(sys.argv) < 2:
-        print("Usage: python test_manual.py <matrix_ip> [port]")
+        print("Usage: python tools/hil/manual.py <matrix_ip> [port]")
         print("Default port is 443 (HTTPS)")
         sys.exit(1)
 
@@ -124,17 +124,9 @@ async def main():
             else:
                 print("❌ No change observed.")
     finally:
+        # (Previously this block referenced `response`/`preset_num`, which are
+        # unbound when quitting before sending any preset -> NameError.)
         await cleanup()
-        if response == "y":
-            print("🎉 SUCCESS! Preset command is working!")
-            print("   The correct command format is:")
-            print(f'   {{"comhead": "preset set", "language": 0, "index": {preset_num}}}')
-        else:
-            print("❌ No change observed. The matrix may not be responding to commands.")
-            print("   Possible issues:")
-            print("   - Preset might not be configured on the matrix")
-            print("   - Wrong protocol or command format")
-            print("   - Matrix web UI might use different endpoint")
 
 
 if __name__ == "__main__":

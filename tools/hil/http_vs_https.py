@@ -2,24 +2,18 @@
 """
 Compare HTTP vs HTTPS responses to see what's different.
 
-NOTE: This is a manual/interactive test requiring hardware.
-Run directly with: python tests/test_http_vs_https.py 192.168.1.100
+NOTE: This is a manual/interactive hardware-in-the-loop script (not a pytest test).
+Run directly with: python tools/hil/http_vs_https.py <matrix_ip> [preset]
 """
 
 import asyncio
 import json
-import os
+import sys
 
 import aiohttp
-import pytest
-
-# Skip in pytest runs - this is a manual hardware test
-pytestmark = pytest.mark.skipif(
-    not os.environ.get("MATRIX_HOST"), reason="Manual hardware test - set MATRIX_HOST to run"
-)
 
 
-async def test_preset(protocol: str, host: str, port: int, preset: int):
+async def send_preset(protocol: str, host: str, port: int, preset: int):
     """Test a single preset with given protocol."""
     print(f"\n{'=' * 70}")
     print(f"Testing {protocol.upper()} on port {port} - Preset {preset}")
@@ -64,17 +58,21 @@ async def test_preset(protocol: str, host: str, port: int, preset: int):
 
 
 async def main():
-    host = "192.168.0.100"
-    preset = 1
+    if len(sys.argv) < 2:
+        print("Usage: python tools/hil/http_vs_https.py <matrix_ip> [preset]")
+        sys.exit(1)
+
+    host = sys.argv[1]
+    preset = int(sys.argv[2]) if len(sys.argv) > 2 else 1
 
     print("\nThis will test the same preset command via HTTP and HTTPS")
     print("WATCH YOUR MATRIX to see which one actually changes routing!")
 
     input("\nPress Enter to test HTTP (port 80)...")
-    await test_preset("http", host, 80, preset)
+    await send_preset("http", host, 80, preset)
 
     input("\nPress Enter to test HTTPS (port 443)...")
-    await test_preset("https", host, 443, preset)
+    await send_preset("https", host, 443, preset)
 
     print("\n" + "=" * 70)
     print("Which one changed your matrix routing? HTTP, HTTPS, or both?")

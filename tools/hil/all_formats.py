@@ -3,23 +3,15 @@
 Test all possible command formats for OREI Matrix
 Run this and watch your matrix to see which format works
 
-NOTE: This is a manual/interactive test requiring hardware.
-Run directly with: python tests/test_all_formats.py 192.168.1.100
+NOTE: This is a manual/interactive hardware-in-the-loop script (not a pytest test).
+Run directly with: python tools/hil/all_formats.py <matrix_ip>
 """
 
 import asyncio
-import os
 import sys
 
-import pytest
 
-# Skip in pytest runs - this is a manual hardware test
-pytestmark = pytest.mark.skipif(
-    not os.environ.get("MATRIX_HOST"), reason="Manual hardware test - set MATRIX_HOST to run"
-)
-
-
-async def test_format(host: str, port: int, command: str, description: str):
+async def probe_format(host: str, port: int, command: str, description: str):
     """Test a single command format"""
     print(f"\n{'=' * 60}")
     print(f"Testing: {description}")
@@ -55,7 +47,7 @@ async def test_format(host: str, port: int, command: str, description: str):
                 if reader._buffer:
                     response = reader._buffer.decode("ascii", errors="ignore")
                     print(f"     Response: {response}")
-            except:
+            except Exception:
                 pass
 
             print("     Did the routing change? (waiting...)")
@@ -73,7 +65,7 @@ async def test_format(host: str, port: int, command: str, description: str):
 
 async def main():
     if len(sys.argv) < 2:
-        print("Usage: python test_all_formats.py <matrix_ip>")
+        print("Usage: python tools/hil/all_formats.py <matrix_ip>")
         sys.exit(1)
 
     host = sys.argv[1]
@@ -117,7 +109,7 @@ async def main():
     ]
 
     for command, description in test_cases:
-        await test_format(host, port, command, description)
+        await probe_format(host, port, command, description)
 
         response = input("\n  ▶ Did the routing change? (y/n/q to quit): ").strip().lower()
         if response == "y":

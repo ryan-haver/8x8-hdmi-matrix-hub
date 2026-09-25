@@ -2,23 +2,18 @@
 """
 Test all OREI Matrix features: power, video switching, status, and presets.
 
-NOTE: This is a manual/interactive test requiring hardware.
-Run directly with: python tests/test_all_features.py 192.168.1.100
+NOTE: This is a manual/interactive hardware-in-the-loop script (not a pytest test).
+Run directly with: python tools/hil/all_features.py <matrix_ip> [port]
 """
 
 import asyncio
 import logging
-import os
 import sys
+from pathlib import Path
 
-import pytest
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
 
-# Skip in pytest runs - this is a manual hardware test
-pytestmark = pytest.mark.skipif(
-    not os.environ.get("MATRIX_HOST"), reason="Manual hardware test - set MATRIX_HOST to run"
-)
-
-from orei_matrix import OreiMatrix
+from orei_matrix import OreiMatrix  # noqa: E402
 
 # Set up logging
 logging.basicConfig(
@@ -30,7 +25,7 @@ logging.basicConfig(
 _LOG = logging.getLogger(__name__)
 
 
-async def test_all_features(host: str, port: int = 443):
+async def run_all_features(host: str, port: int = 443):
     """Test all matrix features."""
     _LOG.info("=" * 70)
     _LOG.info("OREI Matrix Full Feature Test")
@@ -109,11 +104,11 @@ async def test_all_features(host: str, port: int = 443):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python test_all_features.py <matrix_ip> [port]")
+        print("Usage: python tools/hil/all_features.py <matrix_ip> [port]")
         print("Default port is 443 (HTTPS)")
         sys.exit(1)
 
     host = sys.argv[1]
     port = int(sys.argv[2]) if len(sys.argv) > 2 else 443
 
-    asyncio.run(test_all_features(host, port))
+    asyncio.run(run_all_features(host, port))
