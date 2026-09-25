@@ -184,6 +184,23 @@ def render(rows: list[FeatureRow], findings: dict[str, Finding], *, out_path: Pa
                  + f" | **{total['_below']}** | **{total['_stale']}** |")
     lines += ["", "Levels: " + " · ".join(f"**{v}** {LEVEL_NAMES[v]}" for v in levels), ""]
 
+    lines += [
+        "Recorded baseline (the registry's `current`: proof that existed before scenario evidence, "
+        "see [`README.md`](README.md#recorded-baseline-c-pre-2026-09-25)):",
+        "",
+        "| Area | " + " | ".join(str(v) for v in levels) + " |",
+        "| --- | " + " | ".join("---:" for _ in levels) + " |",
+    ]
+    rec_total: Counter[str] = Counter()
+    for area in AREAS:
+        arows = [r for r in rows if r.feature["area"] == area]
+        if not arows:
+            continue
+        c = Counter(str(r.recorded) for r in arows)
+        rec_total.update(c)
+        lines.append(f"| {AREA_TITLES[area]} | " + " | ".join(str(c.get(str(v), 0)) for v in levels) + " |")
+    lines += ["| **All** | " + " | ".join(f"**{rec_total.get(str(v), 0)}**" for v in levels) + " |", ""]
+
     capped = [r for r in rows if r.capped_by]
     proven = [r for r in rows if r.proven is not None]
     failing = [r for r in rows if r.fresh_fail]
