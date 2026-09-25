@@ -78,3 +78,19 @@ async def test_health_reports_matrix_and_runtime(hub, simulator):
     assert data["matrix"]["telnet_connected"] is False  # HTTP-only fixture
     assert data["runtime"]["task_count"] >= 1
     assert simulator.unrecognised() == []
+
+
+async def test_status_cache_hits_share_one_background_refresh(hub, simulator):
+    """API-11: cache hits used to spawn an untracked 4-request refresh each."""
+    from rest_api import core
+
+    simulator.faults.update({"latency_ms": 30})  # keep the refresh running for a while
+    assert (await hub.get("/api/status")).status == 200  # fills the cache
+    simulator.log.clear()
+    for _ in range(5):
+        assert (await hub.get("/api/status")).status == 200  # cache hits
+    refresh = core._refresh_task
+    assert refresh is not None  # referenced, so it cannot be garbage-collected mid-run
+    await refresh
+    video_reads = [e for e in simulator.log if e["channel"] == "http" and e["command"] == "get video status"]
+    assert len(video_reads) == 1  # one refresh, not five

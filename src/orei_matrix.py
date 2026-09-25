@@ -22,9 +22,11 @@ import json
 import logging
 import os
 import random
+import time
+from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from enum import IntEnum, StrEnum
-from typing import Any
+from typing import Any, TypeVar
 
 import aiohttp
 from pyee.asyncio import AsyncIOEventEmitter
@@ -47,6 +49,8 @@ RETRY_JITTER = 0.1  # 10% jitter to prevent thundering herd
 
 #: HTTP request timeout (seconds) for every command, login included.
 HTTP_TIMEOUT = 5.0
+
+_T = TypeVar("_T")
 
 
 class Events(IntEnum):
@@ -124,6 +128,11 @@ def is_write_success(response: Any) -> bool:
     if not isinstance(response, dict):
         return False
     return _normalise_result(response.get("result")) in WRITE_SUCCESS_RESULTS
+
+
+def _copy_cables(cables: dict[str, Any]) -> dict[str, Any]:
+    """Copy a cable-status dict including its per-side port dicts."""
+    return {side: dict(ports) if isinstance(ports, dict) else ports for side, ports in cables.items()}
 
 
 def _is_read_command(comhead: str) -> bool:
@@ -210,10 +219,16 @@ class OreiMatrix:
         # Protects _cec_enabled_cache reads/writes from concurrent coroutines.
         self._cec_cache_lock = asyncio.Lock()
 
-        # Status cache to speed up UI loads
+        # Status caches to speed up UI loads (BE-03). Every cache below expires
+        # after OREI_STATUS_CACHE_TTL seconds; writes invalidate all of them.
+        # Concurrent refreshes of one cache share a single request
+        # (_single_flight); _cache_generation increases on every invalidation
+        # so a refresh started before a write is never cached or joined after it.
         self._status_cache: dict[str, Any] | None = None
         self._status_cache_time: float = 0.0
         self._status_cache_ttl = float(os.environ.get("OREI_STATUS_CACHE_TTL", "3.0"))
+        self._cache_generation = 0
+        self._inflight: dict[str, tuple[int, asyncio.Future[Any]]] = {}
 
         self._output_status_cache: dict[str, Any] | None = None
         self._output_status_cache_time: float = 0.0
@@ -637,6 +652,7 @@ class OreiMatrix:
         return False
 
     def _invalidate_status_caches(self) -> None:
+        self._cache_generation += 1
         self._status_cache = None
         self._output_status_cache = None
         self._input_status_cache = None
@@ -963,21 +979,24 @@ class OreiMatrix:
         """
         Get the current status of the matrix.
 
+        Served from a cache younger than ``OREI_STATUS_CACHE_TTL`` (default
+        3 s) unless ``force_refresh``; concurrent refreshes share one request.
+
         :param force_refresh: Force update from physical switcher even if cache is fresh.
         :return: Dictionary with status information
         """
-        import time
+        if not force_refresh and self._status_cache is not None and self._cache_fresh(self._status_cache_time):
+            _LOG.debug("Returning cached status (cache age: %.2fs)", time.time() - self._status_cache_time)
+            return self._status_cache.copy()
+        return (await self._single_flight("status", self._fetch_status)).copy()
 
-        if not force_refresh and self._status_cache is not None:
-            if time.time() - self._status_cache_time < self._status_cache_ttl:
-                _LOG.debug("Returning cached status (cache age: %.2fs)", time.time() - self._status_cache_time)
-                return self._status_cache.copy()
-
+    async def _fetch_status(self) -> dict[str, Any]:
+        generation = self._cache_generation
         # Get detailed video status from matrix
         video_status = await self.get_video_status()
 
         status = {
-            "connected": self._connected,
+            "connected": self.connected,
             "host": self.host,
             "port": self.port,
             "current_scene": self._current_scene,
@@ -994,10 +1013,41 @@ class OreiMatrix:
                     "preset_names": video_status.get("allname", []),
                 }
             )
-
-        self._status_cache = status.copy()
-        self._status_cache_time = time.time()
+            if generation == self._cache_generation:  # no write landed meanwhile
+                self._status_cache = status.copy()
+                self._status_cache_time = time.time()
         return status
+
+    # =========================================================================
+    # Status snapshot helpers (BE-03)
+    # =========================================================================
+
+    def _cache_fresh(self, cache_time: float) -> bool:
+        """Whether a cache written at ``cache_time`` is younger than the TTL."""
+        return time.time() - cache_time < self._status_cache_ttl
+
+    async def _single_flight(self, key: str, fetch: Callable[[], Awaitable[_T]]) -> _T:
+        """Run ``fetch`` once for all concurrent callers of the same ``key``.
+
+        A caller that arrives after a write invalidated the caches (new cache
+        generation) starts its own fetch instead of joining one that may have
+        read the old state.
+        """
+        generation = self._cache_generation
+        entry = self._inflight.get(key)
+        if entry is not None and entry[0] == generation and not entry[1].done():
+            task = entry[1]
+        else:
+            task = asyncio.ensure_future(fetch())
+            self._inflight[key] = (generation, task)
+
+            def _forget(done: asyncio.Future, key: str = key) -> None:
+                current = self._inflight.get(key)
+                if current is not None and current[1] is done:
+                    del self._inflight[key]
+
+            task.add_done_callback(_forget)
+        return await asyncio.shield(task)
 
     # =========================================================================
     # CEC Control Methods
@@ -1319,12 +1369,21 @@ class OreiMatrix:
             - allarc: ARC enabled per output
             - allout: output enabled per output
             - allaudiomute: audio mute per output
+
+        Cached for ``OREI_STATUS_CACHE_TTL`` seconds (BE-03: the cache used to
+        never expire); concurrent refreshes share one request.
         """
-        import time
-
-        if not force_refresh and self._output_status_cache is not None:
+        if (
+            not force_refresh
+            and self._output_status_cache is not None
+            and self._cache_fresh(self._output_status_cache_time)
+        ):
             return self._output_status_cache.copy()
+        response = await self._single_flight("output_status", self._fetch_output_status)
+        return response.copy() if response is not None else None
 
+    async def _fetch_output_status(self) -> dict[str, Any] | None:
+        generation = self._cache_generation
         _LOG.debug("Getting output status")
 
         command = {"comhead": "get output status", "language": 0}
@@ -1332,8 +1391,9 @@ class OreiMatrix:
 
         if success and response:
             _LOG.debug("Output status: %s", response)
-            self._output_status_cache = response.copy()
-            self._output_status_cache_time = time.time()
+            if generation == self._cache_generation:
+                self._output_status_cache = response.copy()
+                self._output_status_cache_time = time.time()
             return response
 
         _LOG.error("Failed to get output status")
@@ -1349,12 +1409,21 @@ class OreiMatrix:
             - edid: EDID mode per input
             - inactive: array showing inactive inputs (signal detection)
             - inname: array of input names
+
+        Cached for ``OREI_STATUS_CACHE_TTL`` seconds (BE-03); concurrent
+        refreshes share one request.
         """
-        import time
-
-        if not force_refresh and self._input_status_cache is not None:
+        if (
+            not force_refresh
+            and self._input_status_cache is not None
+            and self._cache_fresh(self._input_status_cache_time)
+        ):
             return self._input_status_cache.copy()
+        response = await self._single_flight("input_status", self._fetch_input_status)
+        return response.copy() if response is not None else None
 
+    async def _fetch_input_status(self) -> dict[str, Any] | None:
+        generation = self._cache_generation
         _LOG.debug("Getting input status")
 
         command = {"comhead": "get input status", "language": 0}
@@ -1362,8 +1431,9 @@ class OreiMatrix:
 
         if success and response:
             _LOG.debug("Input status: %s", response)
-            self._input_status_cache = response.copy()
-            self._input_status_cache_time = time.time()
+            if generation == self._cache_generation:
+                self._input_status_cache = response.copy()
+                self._input_status_cache_time = time.time()
             return response
 
         _LOG.error("Failed to get input status")
@@ -1437,12 +1507,22 @@ class OreiMatrix:
         falling back to HTTP for outputs if Telnet unavailable.
 
         :return: Dict with 'inputs' and 'outputs' sub-dicts mapping port -> connected
+            (None = unknown)
+
+        Cached for ``OREI_STATUS_CACHE_TTL`` seconds (BE-03); concurrent
+        refreshes share one ``status!``.
         """
-        import time
+        if (
+            not force_refresh
+            and self._cable_status_cache is not None
+            and self._cache_fresh(self._cable_status_cache_time)
+        ):
+            return _copy_cables(self._cable_status_cache)
+        result = await self._single_flight("cable_status", lambda: self._fetch_cable_status(force_refresh))
+        return _copy_cables(result)
 
-        if not force_refresh and self._cable_status_cache is not None:
-            return self._cable_status_cache.copy()
-
+    async def _fetch_cable_status(self, force_refresh: bool) -> dict[str, dict[int, bool | None]]:
+        generation = self._cache_generation
         result: dict[str, dict[int, bool | None]] = {
             "inputs": dict.fromkeys(range(1, 9)),
             "outputs": dict.fromkeys(range(1, 9)),
@@ -1466,8 +1546,9 @@ class OreiMatrix:
                     if result["outputs"].get(i + 1) is None:
                         result["outputs"][i + 1] = connected == 1
 
-        self._cable_status_cache = result.copy()
-        self._cable_status_cache_time = time.time()
+        if generation == self._cache_generation:
+            self._cable_status_cache = _copy_cables(result)
+            self._cable_status_cache_time = time.time()
         return result
 
     async def get_telnet_full_status(self) -> MatrixStatus | None:
