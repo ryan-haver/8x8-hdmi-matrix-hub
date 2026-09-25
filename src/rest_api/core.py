@@ -156,6 +156,27 @@ async def background_status_refresh(matrix_device):
         _LOG.warning("Failed background status refresh: %s", e)
 
 
+#: The one background refresh in flight (API-11). Keeping a reference stops
+#: the task being garbage-collected mid-run; reusing it stops every cache hit
+#: from spawning another 4-request refresh.
+_refresh_task: asyncio.Task | None = None
+
+
+def schedule_background_refresh(matrix_device) -> asyncio.Task:
+    """Start a background status refresh unless one is already running.
+
+    :return: the running (or newly started) refresh task
+    """
+    global _refresh_task
+    task = _refresh_task
+    loop = asyncio.get_running_loop()
+    if task is not None and not task.done() and task.get_loop() is loop:
+        _LOG.debug("Background status refresh already running; not starting another")
+        return task
+    _refresh_task = loop.create_task(background_status_refresh(matrix_device), name="status_background_refresh")
+    return _refresh_task
+
+
 def _matrix_health(matrix_device) -> dict[str, Any]:
     """Cheap connection summary for /api/health (never talks to the matrix)."""
     if matrix_device is None:
@@ -276,10 +297,10 @@ async def handle_status(request: web.Request) -> web.Response:
 
         raw_status = await matrix_device.get_status()
 
-        # If cache was used, trigger background refresh
+        # If cache was used, refresh in the background (at most one at a time).
         if is_cached:
-            _LOG.debug("Cached hit for status handler. Spawning background refresh task.")
-            asyncio.create_task(background_status_refresh(matrix_device))
+            _LOG.debug("Cached hit for status handler. Scheduling background refresh.")
+            schedule_background_refresh(matrix_device)
 
         # Format and return response instantly
         status = _format_status(raw_status, matrix_device, input_names, output_names)
