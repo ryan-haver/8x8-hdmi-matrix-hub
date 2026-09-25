@@ -22,6 +22,7 @@ import json
 import logging
 import os
 import random
+import re
 import time
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
@@ -87,8 +88,9 @@ class ConnectionState(StrEnum):
 #: States in which HTTP commands can be sent (``OreiMatrix.connected``).
 _LINK_UP = frozenset({ConnectionState.CONNECTED, ConnectionState.DEGRADED})
 
-# HIL-A: confirm against real device -- `result` of a successful login. The
-# API doc lists "success"; older hub code accepted 1.
+# `result` of a successful login: 1 on MCU V1.10.01 (captured,
+# tests/fixtures/device/BK-808_V1.10.01_web-V2.00.03/http/login.json). The API
+# doc lists "success"; it is kept for other firmware.
 LOGIN_SUCCESS_RESULTS: tuple[int | str, ...] = (1, "success")
 # HIL-A: confirm -- `result` of an accepted write (verified 1 for video
 # switch, preset set and set poweronoff; the doc shows "success" for some).
@@ -133,6 +135,17 @@ def is_write_success(response: Any) -> bool:
 def _copy_cables(cables: dict[str, Any]) -> dict[str, Any]:
     """Copy a cable-status dict including its per-side port dicts."""
     return {side: dict(ports) if isinstance(ports, dict) else ports for side, ports in cables.items()}
+
+
+#: Physical outputs. Per-output arrays of V1.10.01 have one more entry
+#: (``allsource``, ``allscaler``, ``allhdr``, ``allhdcp``, ``allarc``, ``allout``,
+#: ``allaudiomute``: 9 values). What the ninth is, is undocumented (HIL-04).
+OUTPUT_COUNT = 8
+
+
+def per_output(values: Any) -> list[Any]:
+    """The first ``OUTPUT_COUNT`` entries of a per-output array (drops the ninth, HIL-04)."""
+    return list(values[:OUTPUT_COUNT]) if isinstance(values, list) else []
 
 
 def _is_read_command(comhead: str) -> bool:
@@ -770,25 +783,22 @@ class OreiMatrix:
             _LOG.error("Invalid preset number: %d. Must be 1-8", preset)
             return None
 
-        # First, try to query via Telnet client if available and connected
+        # Telnet `r preset N` is the only preset read this firmware answers.
+        # HIL-01: MCU V1.10.01 never answers the HTTP `preset get` or
+        # `get routing status` (the capture timed out on both), so there is no
+        # HTTP fallback: it would only block for the whole HTTP timeout.
         if self._telnet and self._telnet.connected:
             try:
                 return await self._telnet.get_preset_info(preset)
             except Exception as e:
                 _LOG.warning(f"Failed to get preset info from Telnet client: {e}")
+                return None
 
-        _LOG.debug("Getting info for preset %d via HTTP", preset)
-
-        # Command: {"comhead":"preset get","index":<preset_num>}
-        command = {"comhead": "preset get", "index": preset}
-
-        success, response = await self._send_command(command)
-
-        if success and response:
-            _LOG.debug("Preset %d info (HTTP): %s", preset, response)
-            return response
-
-        _LOG.warning("Failed to get info for preset %d via HTTP", preset)
+        _LOG.warning(
+            "Cannot read preset %d: Telnet is not connected, and the matrix firmware does not implement "
+            "an HTTP preset read ('preset get' / 'get routing status' go unanswered, HIL-01)",
+            preset,
+        )
         return None
 
     async def get_all_input_names(self) -> dict[int, str]:
@@ -810,14 +820,16 @@ class OreiMatrix:
                 raw_input_names = response["allinputname"]
                 _LOG.info(f"Found {len(raw_input_names)} input names")
 
-                # Parse each input name (format: "IN01-DeviceName")
+                # MCU V1.10.01 sends plain names ("NES", "SNES", ...: capture
+                # http/get_video_status). Only strip an "IN01-" style prefix if
+                # one is there; splitting on any "-" cut names like "Sega-CD".
                 # Only process up to 8 inputs (matrix is 8x8); ignore any terminator entries
                 for idx, name in enumerate(raw_input_names[:8]):
                     input_num = idx + 1  # Convert 0-based index to 1-based input number
 
-                    if name and "-" in name:
-                        # Extract device name after the dash
-                        device_name = name.split("-", 1)[1].strip()
+                    prefixed = re.match(r"^IN\d+-(.*)$", name, re.IGNORECASE) if isinstance(name, str) else None
+                    if prefixed:
+                        device_name = prefixed.group(1).strip()
                         input_names[input_num] = device_name if device_name else f"Input {input_num}"
                     elif name:
                         # Use the name as-is if no dash
@@ -1018,7 +1030,7 @@ class OreiMatrix:
             status.update(
                 {
                     "power": "on" if video_status.get("power") == 1 else "off",
-                    "routing": video_status.get("allsource", []),
+                    "routing": per_output(video_status.get("allsource")),
                     "input_names": video_status.get("allinputname", []),
                     "output_names": video_status.get("alloutputname", []),
                     "preset_names": video_status.get("allname", []),
@@ -1976,19 +1988,19 @@ class OreiMatrix:
 
         if video_status:
             status["power"] = "on" if video_status.get("power") == 1 else "off"
-            status["routing"] = video_status.get("allsource", [])
+            status["routing"] = per_output(video_status.get("allsource"))
             status["input_names"] = video_status.get("allinputname", [])
             status["output_names"] = video_status.get("alloutputname", [])
             status["preset_names"] = video_status.get("allname", [])
 
         if output_status:
             status["outputs_connected"] = output_status.get("allconnect", [])
-            status["output_scaler"] = output_status.get("allscaler", [])
-            status["output_hdr"] = output_status.get("allhdr", [])
-            status["output_hdcp"] = output_status.get("allhdcp", [])
-            status["output_arc"] = output_status.get("allarc", [])
-            status["output_enabled"] = output_status.get("allout", [])
-            status["output_muted"] = output_status.get("allaudiomute", [])
+            status["output_scaler"] = per_output(output_status.get("allscaler"))
+            status["output_hdr"] = per_output(output_status.get("allhdr"))
+            status["output_hdcp"] = per_output(output_status.get("allhdcp"))
+            status["output_arc"] = per_output(output_status.get("allarc"))
+            status["output_enabled"] = per_output(output_status.get("allout"))
+            status["output_muted"] = per_output(output_status.get("allaudiomute"))
 
         if input_status:
             status["input_edid"] = input_status.get("edid", [])
@@ -2196,6 +2208,9 @@ class OreiMatrix:
             _LOG.error("Invalid output number: %d. Must be 1-8", output_num)
             return False
 
+        # TODO(HIL-02): MCU V1.10.01 *reports* HDR 0 on every output (its Telnet
+        # status prints it as "pass-through"). Whether 0 can be written, and how it
+        # differs from 1, is unknown until a write-mode capture; keep 1-3 until then.
         if mode < 1 or mode > 3:
             _LOG.error("Invalid HDR mode: %d. Must be 1-3", mode)
             return False
@@ -2218,6 +2233,9 @@ class OreiMatrix:
             _LOG.error("Invalid output number: %d. Must be 1-8", output_num)
             return False
 
+        # TODO(HIL-02, BE-15): V1.10.01 reports scaler 0 ("pass-through") and 4
+        # ("audio only"), so reads may be 0-based where these writes are 1-based.
+        # Needs a write-mode capture before the range or the codes change.
         if mode < 1 or mode > 5:
             _LOG.error("Invalid scaler mode: %d. Must be 1-5", mode)
             return False

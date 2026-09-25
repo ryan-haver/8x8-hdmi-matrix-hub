@@ -2,8 +2,6 @@
 
 import asyncio
 
-import pytest
-
 import telnet_client
 
 
@@ -103,7 +101,7 @@ async def test_system_settings(matrix, simulator):
     assert simulator.state.system["lcd_timeout"] == 0
     full = await matrix.get_full_status()
     assert full["beep_enabled"] is False and full["panel_locked"] is True
-    assert full["firmware_version"] == "V1.10.02" and full["model"] == "BK-808"
+    assert full["firmware_version"] == "V1.10.01" and full["model"] == "BK-808"
     assert (await matrix.get_network_info())["ipaddress"] == "192.168.0.100"
 
 
@@ -141,10 +139,11 @@ async def test_capabilities(matrix, simulator):
     assert caps["outputs"][0]["connected"] is True and caps["outputs"][0]["arc_enabled"] is True
 
 
-@pytest.mark.xfail(strict=True, reason="BE-15: audio-only detection uses scaler==4; docs and setter say 5")
 async def test_audio_only_output_detected(matrix, simulator):
+    """BE-15 (read side): MCU V1.10.01 reports scaler 4 for an audio-only output (its Telnet
+    status prints "audio only"), which is what the hub checks. The setter's 5 is still unverified."""
     await matrix.connect()
-    assert simulator.state.outputs[1].scaler == 5  # Soundbar is audio-only in the seed
+    assert simulator.state.outputs[1].scaler == 4  # Soundbar is audio-only in the seed
     caps = await matrix.get_output_capabilities(2)
     assert caps["is_audio_only"] is True
 
@@ -155,7 +154,7 @@ async def test_audio_only_output_detected(matrix, simulator):
 async def test_telnet_connects_and_reads_firmware(matrix_with_telnet):
     assert await matrix_with_telnet.connect()
     assert matrix_with_telnet.telnet_connected
-    assert matrix_with_telnet._telnet.firmware_version == "1.10.02"
+    assert matrix_with_telnet._telnet.firmware_version == "1.10.01"
 
 
 async def test_telnet_cable_and_full_status(matrix_with_telnet, simulator):
@@ -169,7 +168,7 @@ async def test_telnet_cable_and_full_status(matrix_with_telnet, simulator):
     full = await m.get_telnet_full_status()
     assert full.routing == {i + 1: s for i, s in enumerate(simulator.state.routing)}
     info = await m.get_preset_info(1)
-    assert info == {"preset": 1, "routing": {i: 2 for i in range(1, 9)}}
+    assert info == {"preset": 1, "routing": {i: 2 for i in range(1, 9)}, "saved": True}
 
 
 async def test_telnet_push_cable_event_reaches_client(matrix_with_telnet, simulator):

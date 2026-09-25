@@ -4,8 +4,11 @@
   "device": {
     "model": "BK-808",
     "hostname": "BK-808",
-    "firmware_version": "V1.10.02",
+    "firmware_version": "V1.10.01",
     "web_version": "V2.00.03",
+    "key_mcu_version": "V1.00.08",
+    "cpld_version": "V1.00.06",
+    "type": "8x8 hdmi2.1 matrix",
     "ip_module_version": "10.01.17",
     "mac_address": "02:00:00:0B:08:08",
     "ip_address": "192.168.0.100",
@@ -13,9 +16,10 @@
     "gateway": "192.168.0.1",
     "dhcp": 0,
     "telnet_port": 23,
-    "tcp_port": 8000
+    "tcp_port": 8000,
+    "network_username": 1
   },
-  "system": {"power": 1, "beep": 1, "panel_lock": 0, "lcd_timeout": 3, "mode": 0, "baudrate": 115200},
+  "system": {"power": 1, "beep": 1, "panel_lock": 0, "lcd_timeout": 3, "mode": 3, "baudrate": 6},
   "inputs": [
     {"name": "PS3",      "edid": 36, "signal": 0, "cable": 1, "cec_enabled": 0},
     {"name": "AppleTV",  "edid": 36, "signal": 1, "cable": 1, "cec_enabled": 1},
@@ -27,15 +31,16 @@
     {"name": "Input 8",  "edid": 36, "signal": 0, "cable": 0, "cec_enabled": 0}
   ],
   "outputs": [
-    {"name": "TV",       "source": 2, "connected": 1, "stream": 1, "hdcp": 3, "hdr": 3, "scaler": 1, "arc": 1, "audio_mute": 0, "cec_enabled": 1},
-    {"name": "Soundbar", "source": 2, "connected": 1, "stream": 1, "hdcp": 3, "hdr": 3, "scaler": 5, "arc": 0, "audio_mute": 0, "cec_enabled": 1},
-    {"name": "Output 3", "source": 1, "connected": 0, "stream": 1, "hdcp": 3, "hdr": 3, "scaler": 1, "arc": 0, "audio_mute": 0, "cec_enabled": 0},
-    {"name": "Output 4", "source": 1, "connected": 0, "stream": 1, "hdcp": 3, "hdr": 3, "scaler": 1, "arc": 0, "audio_mute": 0, "cec_enabled": 0},
-    {"name": "Output 5", "source": 5, "connected": 0, "stream": 1, "hdcp": 3, "hdr": 3, "scaler": 1, "arc": 0, "audio_mute": 0, "cec_enabled": 0},
-    {"name": "Output 6", "source": 6, "connected": 0, "stream": 1, "hdcp": 3, "hdr": 3, "scaler": 1, "arc": 0, "audio_mute": 0, "cec_enabled": 0},
-    {"name": "Output 7", "source": 1, "connected": 0, "stream": 1, "hdcp": 3, "hdr": 3, "scaler": 1, "arc": 0, "audio_mute": 0, "cec_enabled": 0},
-    {"name": "Output 8", "source": 1, "connected": 0, "stream": 1, "hdcp": 3, "hdr": 3, "scaler": 1, "arc": 0, "audio_mute": 0, "cec_enabled": 0}
+    {"name": "TV",       "source": 2, "connected": 1, "stream": 1, "hdcp": 3, "hdr": 0, "scaler": 0, "arc": 1, "audio_mute": 0, "cec_enabled": 1},
+    {"name": "Soundbar", "source": 2, "connected": 1, "stream": 1, "hdcp": 3, "hdr": 0, "scaler": 4, "arc": 0, "audio_mute": 0, "cec_enabled": 1},
+    {"name": "Output 3", "source": 1, "connected": 0, "stream": 1, "hdcp": 3, "hdr": 0, "scaler": 0, "arc": 0, "audio_mute": 0, "cec_enabled": 0},
+    {"name": "Output 4", "source": 1, "connected": 0, "stream": 1, "hdcp": 3, "hdr": 0, "scaler": 0, "arc": 0, "audio_mute": 0, "cec_enabled": 0},
+    {"name": "Output 5", "source": 5, "connected": 0, "stream": 1, "hdcp": 3, "hdr": 0, "scaler": 0, "arc": 0, "audio_mute": 0, "cec_enabled": 0},
+    {"name": "Output 6", "source": 6, "connected": 0, "stream": 1, "hdcp": 3, "hdr": 0, "scaler": 0, "arc": 0, "audio_mute": 0, "cec_enabled": 0},
+    {"name": "Output 7", "source": 1, "connected": 0, "stream": 1, "hdcp": 3, "hdr": 0, "scaler": 0, "arc": 0, "audio_mute": 0, "cec_enabled": 0},
+    {"name": "Output 8", "source": 1, "connected": 0, "stream": 1, "hdcp": 3, "hdr": 0, "scaler": 0, "arc": 0, "audio_mute": 0, "cec_enabled": 0}
   ],
+  "ninth_output": {"source": 1, "scaler": 255, "hdr": 0, "hdcp": 3, "arc": 0, "stream": 255, "audio_mute": 0},
   "ext_audio": {"mode": 0},
   "presets": [
     {"name": "Apple TV", "routing": [2, 2, 2, 2, 2, 2, 2, 2]},

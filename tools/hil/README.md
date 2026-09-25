@@ -131,7 +131,7 @@ Every run writes into the same folder, `tests/fixtures/device/<model>_<MCU versi
 
 **read.** Nothing that changes the device:
 
-- HTTP: `login`, then `get video status`, `get output status`, `get input status`, `get cec status`, `get system status`, `get status`, `get network`, `get ext-audio status` (all with `"language": 0`, as the hub sends them), `get routing status` (documented, `"index": 1`), `preset get` for index 1-8, and `GET /`.
+- HTTP: `login`, then `get video status`, `get output status`, `get input status`, `get cec status`, `get system status`, `get status`, `get network`, `get ext-audio status` (all with `"language": 0`, as the hub sends them), `get routing status` (documented, `"index": 1`), `preset get` for index 1-8, and `GET /`. MCU V1.10.01 never answers `get routing status` or `preset get` (HIL-01). A timeout on either is a warning, not an error, and the remaining `preset get N` are skipped after the first one goes unanswered; later snapshots (write mode) skip any read the device left unanswered, so the preset write tests are skipped on this firmware (their snapshot needs `get routing status`).
 - Telnet (each command followed by `!\r\n`, like the hub): it records the banner, then sends `status`, `r fw version`, `r type`, `r link in 1-8`, `r link out 1-8` and `r preset 1-8`.
 
 **probe.**
@@ -146,7 +146,7 @@ Every run writes into the same folder, `tests/fixtures/device/<model>_<MCU versi
 
 **write.** The printed plan lists every exact command. In short, all against the test ports:
 
-- HTTP: `video switch` (one output, all outputs, invalid ports), `preset set` / `preset save`, `set input name` / `set output name` (including a 40-character name), `set output stream|hdcp|hdr|scaler|arc|mute` (every value, with the Telnet `status` text read back for each), `set input edid` (including 38, 39, 47, 48), `copy edid` and `set input edid 15` (BE-25), `set cec index` in both shapes, invalid `cec command`s, `set output exa mode|exa|exa in source`, `set beep`, `set panel lock`, `set lcd on time` 0-4 (with the Telnet LCD line for each), `set poweronoff` (a read and a write while in standby).
+- HTTP: `video switch` (one output, all outputs, invalid ports), `preset set` / `preset save`, `set input name` / `set output name` (including a 40-character name), `set output stream|hdcp|hdr|scaler|arc|mute` (every value, with the Telnet `status` text read back for each; HDR 0-3 and scaler 0-5 include 0, which V1.10.01 reports, HIL-02), `set input edid` (including 38, 39, 47, 48), `copy edid` and `set input edid 15` (BE-25), `set cec index` in both shapes, invalid `cec command`s, `set output exa mode|exa|exa in source`, `set beep`, `set panel lock`, `set lcd on time` 0-4 (with the Telnet LCD line for each), `set poweronoff` (a read and a write while in standby).
 - Telnet: `s output N in source M`, `s av M N`, `s output 0 in source M`, `s recall|save|clear preset P`, `s preset recall|save P`, `s beep`, `s lock`, `s out N stream`, `power 0/1` (what TelnetClient sends) and `s power 0/1`.
 - With `cec-live`: every `s cec hdmi out N <word>`, and `cec command` object 1 index 1-6.
 - With `reboot`: `set reboot`, and the Telnet `reboot`.
@@ -167,7 +167,7 @@ Every run writes into the same folder, `tests/fixtures/device/<model>_<MCU versi
    git grep -n "$OREI_PASSWORD" -- tests/fixtures/device || echo "password not found"
    ```
 
-   The captures include the matrix's LAN IP, MAC address and hostname. If that is a problem, capture again with `--redact <value>`.
+   The captures include the matrix's LAN IP, MAC address and hostname. If that is a problem, capture again with `--redact <value>`. A `--redact` value is scrubbed in upper and lower case too: the device prints the MAC in upper case over HTTP and in lower case in the Telnet `status` dump. (Before this was fixed, HIL Session 1's `telnet/status.json` kept the lower-case MAC.)
 
 3. **Try the simulator on the captures.** `python -m tools.simulator --golden tests/fixtures/device/<folder>` should start and print `golden ...: N HTTP reads, ...`. You can also point the dev stack at it.
 

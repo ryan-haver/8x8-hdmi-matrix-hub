@@ -35,6 +35,15 @@
 
 HIL-01 … HIL-04 in `docs/REMEDIATION_PLAN.md` §4.11. The simulator corrections (8 contradicted assumptions) are WP-A4.
 
+## Follow-up: WP-A4, read part (no device contact)
+
+- **Simulator** corrected to the captures: the report now shows **0 contradicted, 12 confirmed**, 2 need review (`ninth-entry`, `ext-audio-index`), 25 without evidence (probe/write). All 8 HTTP reads are byte-identical to the simulator's own answers for the captured state (compact JSON + CR LF, device key order), as are the banner with its IAC negotiation, the `status` dump and all 26 `r ...` answers (including the echo). `get routing status` and `preset get` are never answered, like the device.
+- **Hub proven against the real bytes** (V2 against real data where REST is in the path, V1 driver-level otherwise; no V4 claimed): `tests/test_telnet_real_captures.py` replays the captured Telnet segments with their timing to the real `TelnetClient`; `tests/sim/test_golden_hub.py` runs `OreiMatrix`, the Telnet client and the REST API against the simulator in golden mode.
+- **Hub bugs found with the real data and fixed:** HIL-05 (multi-line Telnet answers cut short; `r preset` returned one output), HIL-06 (save-current scene read a field the device does not send), HIL-08 (input names cut at `-`), HIL-01 (no HTTP preset fallback). HIL-04: the hub keeps outputs 1-8 of the 9-entry arrays.
+- **Read-side evidence for BE-15:** the audio-only output reports scaler **4**, and the Telnet status prints it as "audio only", which is what the hub checks. Pass-through is **0** for both scaler and HDR. Whether writes use 1-based codes (1 = passthrough, 5 = audio only as documented) is for the write capture.
+- **HIL-07:** `telnet/status.json` contained the matrix's MAC in lower case (the capture tool's `--redact` was case-sensitive) and reached the public `main`. Resolved 2026-09-25: the tool redacts case-insensitively, and on the owner's decision the MAC was scrubbed from the entire git history (history rewrite + force-push; verified 0 occurrences across all branches and tags). GitHub's read-only PR refs (#8–#10) are included in the owner's GitHub Support purge request.
+- **Capture tool changes for the next session:** unanswered `get routing status` / `preset get` are warnings, not errors (the read run exited 1 because of them), later snapshots skip them, and the HDR/scaler write tests now try 0 as a value. The preset write tests need `get routing status` for their snapshot, so they are skipped on this firmware until they read presets over Telnet.
+
 ## Next (needs the owner present)
 
 1. `--mode probe`: wrong-password login (check that the account isn't locked afterwards by logging in through the matrix web page), session behaviour, Telnet error codes, and front-panel notifications (the tool prompts for button presses).

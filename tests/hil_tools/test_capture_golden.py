@@ -16,7 +16,7 @@ from tests.hil_tools.helpers import FW, bodies, load, make_opts, new_sim, quiet
 from tools.hil.capture import catalog as cmd
 from tools.hil.capture import run_capture
 from tools.hil.capture.assumptions import BY_ID
-from tools.hil.capture.catalog import HTTP_READS, TELNET_READS
+from tools.hil.capture.catalog import HTTP_READS, OPTIONAL_READS, TELNET_READS
 from tools.hil.capture.fixtures import RecordIds, b64, iter_exchanges, response_body
 from tools.hil.capture.transport import HttpRecorder, TelnetRecorder
 from tools.simulator import DeviceState
@@ -97,10 +97,14 @@ async def test_round_trip_capture_golden_capture_is_byte_identical(golden_src, t
     second = tmp_path / FW
     ids = [RecordIds.LOGIN, RecordIds.TELNET_BANNER]
     ids += [RecordIds.http_read(r.slug) for r in HTTP_READS] + [RecordIds.telnet_read(r.slug) for r in TELNET_READS]
+    # `preset get` 2-8 are not sent once `preset get 1` went unanswered (HIL-01).
+    ids = [i for i in ids if (golden_src / f"{i}.json").exists()]
+    assert len(ids) == 2 + len(HTTP_READS) - 7 + len(TELNET_READS)
     for record_id in ids:
         assert bodies(load(golden_src, record_id)) == bodies(load(second, record_id)), record_id
-    # ...and they really came from the captures: every read and the login.
-    assert len([e for e in served if e["channel"] == "http"]) >= len(HTTP_READS) + 1
+    # ...and they really came from the captures: every read with data and the login.
+    answered = [r for r in HTTP_READS if r.payload["comhead"] not in OPTIONAL_READS]
+    assert len([e for e in served if e["channel"] == "http"]) >= len(answered) + 1
     assert len([e for e in served if e["channel"] == "telnet"]) == len(TELNET_READS)
 
 
@@ -124,7 +128,7 @@ async def test_golden_serves_device_bytes_and_patches_state_changes(golden_src, 
         assert response_body(first) == device_bytes(device_doc)
         assert (await http.post(cmd.video_switch(8, 3)))["response"]["json"]["result"] == 1
         second = await http.post(cmd.read("get video status"))
-        expected = {**device_doc, "allsource": [*doc["allsource"][:7], 3]}
+        expected = {**device_doc, "allsource": [*doc["allsource"][:7], 3, *doc["allsource"][8:]]}
         assert response_body(second) == device_bytes(expected)
         await http.post(cmd.input_name(2, "Xbox"))
         names = (await http.post(cmd.read("get video status")))["response"]["json"]["allinputname"]

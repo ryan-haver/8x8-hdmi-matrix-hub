@@ -27,7 +27,7 @@ from . import protocol as proto
 from .faults import Faults
 from .http_commands import HANDLERS, READ_COMMANDS, dispatch
 from .state import DeviceState, StateError
-from .telnet_commands import banner
+from .telnet_commands import banner_bytes
 from .telnet_commands import handle as handle_telnet
 from .tls import server_ssl_context
 
@@ -35,7 +35,6 @@ _LOG = logging.getLogger("tools.simulator")
 
 _IAC = 0xFF
 _IAC_WILL, _IAC_WONT, _IAC_DO, _IAC_DONT, _IAC_SB, _IAC_SE = 0xFB, 0xFC, 0xFD, 0xFE, 0xFA, 0xF0
-_OPT_ECHO, _OPT_SGA = 0x01, 0x03
 
 
 def _strip_iac(data: bytes) -> bytes:
@@ -85,6 +84,7 @@ class Simulator:
         reboot_seconds: float = proto.DEFAULT_REBOOT_SECONDS,
         log_limit: int = 2000,
         golden: Any = None,
+        unanswered_comheads: frozenset[str] = proto.UNANSWERED_COMHEADS,
     ) -> None:
         self.initial_state = (state or DeviceState.default()).copy()
         #: tools.simulator.golden.GoldenSet: serve HIL-A captures byte for byte
@@ -102,6 +102,9 @@ class Simulator:
         self.require_login = require_login
         self.session_ttl_s = session_ttl_s
         self.reboot_seconds = reboot_seconds
+        #: comheads held open without an answer, like the firmware does (HIL-01);
+        #: pass an empty set to emulate a firmware that implements them
+        self.unanswered_comheads = frozenset(unanswered_comheads)
         #: client IP -> session expiry (monotonic) or None for "never"
         self.sessions: dict[str, float | None] = {}
         self.log: deque[dict[str, Any]] = deque(maxlen=log_limit)
@@ -322,8 +325,13 @@ class Simulator:
             self._hang_release = asyncio.Event()
 
     @staticmethod
-    def _reply(doc: Any) -> web.Response:
-        return web.Response(text=json.dumps(doc, separators=(",", ":")), content_type=proto.RESPONSE_CONTENT_TYPE)
+    def reply_body(doc: Any) -> bytes:
+        """The exact body the device sends for ``doc``: compact JSON + CR LF."""
+        return json.dumps(doc, separators=(",", ":")).encode("utf-8") + proto.RESPONSE_BODY_SUFFIX
+
+    @classmethod
+    def _reply(cls, doc: Any) -> web.Response:
+        return web.Response(body=cls.reply_body(doc), content_type=proto.RESPONSE_CONTENT_TYPE)
 
     async def _handle_instr(self, request: web.Request) -> web.StreamResponse:
         client = request.remote or "?"
@@ -366,6 +374,16 @@ class Simulator:
             malformed = False
 
         response, entry = self._process(client, payload, comhead)
+        if comhead in self.unanswered_comheads and "fault" not in entry:
+            # The firmware never answers these (HIL-01): hold the request open
+            # like the device does until the client gives up.
+            entry["unanswered"] = True
+            _LOG.info("HTTP  -> %s  [not implemented by the firmware: no answer]", comhead)
+            assert self._hang_release is not None
+            await self._hang_release.wait()
+            if request.transport is not None:
+                request.transport.abort()
+            return web.Response(status=500)
         if self.golden is not None:
             golden = self.golden.http_reply(
                 payload, response, entry,
@@ -463,10 +481,8 @@ class Simulator:
             self._telnet_writers.add(writer)
             self._record("telnet", "<connect>", client=client)
             _LOG.info("TELNET connection from %s", client)
-            if proto.TELNET_SEND_IAC_NEGOTIATION:
-                writer.write(bytes([_IAC, _IAC_WILL, _OPT_ECHO, _IAC, _IAC_WILL, _OPT_SGA]))
             golden_banner = self.golden.banner_bytes() if self.golden is not None else None
-            writer.write(golden_banner if golden_banner is not None else banner(self.state).encode())
+            writer.write(golden_banner if golden_banner is not None else banner_bytes(self.state))
             await writer.drain()
             buf = b""
             while True:

@@ -1,13 +1,13 @@
 # BK-808 matrix simulator
 
-A deterministic stand-in for the OREI BK-808 8x8 HDMI matrix, so the hub (REST API, web UI, kiosk, integrations) can be run and tested without hardware. This is simulator v1 from `docs/REMEDIATION_PLAN.md` §5.1. It was built from `docs/OREI_API_COMMANDS.md` and from what `src/orei_matrix.py` / `src/telnet_client.py` send and parse. HIL-A captures from the real device will replace its guesses (see [Replacing assumptions with HIL captures](#replacing-assumptions-with-hil-captures)).
+A deterministic stand-in for the OREI BK-808 8x8 HDMI matrix, so the hub (REST API, web UI, kiosk, integrations) can be run and tested without hardware. This is simulator v1 from `docs/REMEDIATION_PLAN.md` §5.1. It was built from `docs/OREI_API_COMMANDS.md` and from what `src/orei_matrix.py` / `src/telnet_client.py` send and parse, then corrected against the first real capture: every read, the login and the Telnet banner and reads now match a BK-808 with MCU V1.10.01 / web V2.00.03 byte for byte (HIL Session 1, `tests/fixtures/device/BK-808_V1.10.01_web-V2.00.03/`, WP-A4). Writes, errors and push notifications are still guesses until the probe and write captures (see [Replacing assumptions with HIL captures](#replacing-assumptions-with-hil-captures)).
 
 It runs three listeners:
 
 | Listener | Default | What it does |
 | --- | --- | --- |
-| Device HTTPS | `127.0.0.1:8443` | `POST /cgi-bin/instr` JSON commands, self-signed TLS, `text/plain` responses (like the device) |
-| Device Telnet | `127.0.0.1:2323` | the port-23 text protocol (`command!\r\n`), banner, push notifications |
+| Device HTTPS | `127.0.0.1:8443` | `POST /cgi-bin/instr` JSON commands, self-signed TLS, `text/plain` responses: compact JSON + CR LF (like the device) |
+| Device Telnet | `127.0.0.1:2323` | the port-23 text protocol (`command!\r\n`): option negotiation and banner on connect, command echo, push notifications |
 | Control HTTP | `127.0.0.1:8444` | `/_sim/*`: state, fault injection, reboot, events, command log. It stays up while the device "reboots". |
 
 ## Quick start
@@ -116,16 +116,17 @@ curl -X POST localhost:8444/_sim/faults -H 'Content-Type: application/json' \
 
 **HTTP comheads** (every one the hub sends, plus the documented extras):
 
-- Reads: `get video status`, `get output status`, `get input status`, `get cec status`, `get system status`, `get status`, `get network`, `get ext-audio status`, `get routing status`, `preset get`.
+- Reads: `get video status`, `get output status`, `get input status`, `get cec status`, `get system status`, `get status`, `get network`, `get ext-audio status`. Key sets, key order and formatting are those of V1.10.01: `get output status` names the outputs in `name` and has no `allsource`; the per-output settings arrays and `get video status.allsource` have a ninth entry (HIL-04, from `ninth_output` in the state); HDR and scaler codes are what the device reports (HDR 0, scaler 0 = pass-through, 4 = audio only).
+- Never answered, like V1.10.01 (HIL-01): `get routing status` and `preset get`. The request is held open until the client gives up, as the device does. `Simulator(unanswered_comheads=frozenset())` emulates a firmware that implements them (the capture-tool tests use this).
 - Writes: `login`, `video switch` (output `0` = all), `preset set`, `preset save`, `set poweronoff`, `set beep`, `set panel lock`, `set lcd on time`, `set input name`, `set output name`, `set output stream|hdcp|hdr|scaler|arc|mute`, `set input edid`, `copy edid`, `set cec index` (documented array shape and the hub's single-port shape, the latter flagged as BE-13), `cec command`, `set output exa mode`, `set output exa`, `set output exa in source`, `set reboot`.
 
 Unknown comheads get `{"comhead": X, "result": 0}` and are logged as unrecognised. `tests/sim/test_sim_commands.py` scans `src/orei_matrix.py` and `src/telnet_client.py` and fails if the hub sends anything the simulator does not recognise (plan §5, L2).
 
-**Telnet commands:** `status`, `r fw version`, `r type`, `r link in|out <n>`, `r preset <n>`, `s cec in <n> <word>`, `s cec hdmi out <n> <word>`, `s output <n|0> in source <m>`, `s av <in> <out|0>`, `s save|recall|clear preset <n>`, `s preset save|recall <n>`, `s power <0|1>`, `s beep <0|1>`, `s lock <0|1>`, `s out <n> stream <0|1>`, `reboot`. Unknown commands get `E00`, and bad parameters get `E01`. Cable events are pushed as `hdmi input|output <n>: connect|disconnect`.
+**Telnet commands:** `status`, `r fw version`, `r type`, `r link in|out <n>`, `r preset <n>`, `s cec in <n> <word>`, `s cec hdmi out <n> <word>`, `s output <n|0> in source <m>`, `s av <in> <out|0>`, `s save|recall|clear preset <n>`, `s preset save|recall <n>`, `s power <0|1>`, `s beep <0|1>`, `s lock <0|1>`, `s out <n> stream <0|1>`, `reboot`. Every command line is echoed (`r link in 1!`) before the answer, as on V1.10.01. The banner (with the device's Telnet option negotiation), the `status` dump, `r fw version`, `r type`, `r link` and `r preset` (8 routing lines, or `preset N is none,please save a preset` for a slot whose `saved` is false) use the captured wording. Unknown commands get `E00`, and bad parameters get `E01`. Cable events are pushed as `hdmi input|output <n>: connect|disconnect`.
 
 ## State files
 
-`states/default.json` is the seed: inputs PS3, AppleTV, Computer, Switch, Shield, PS5, Analogue and Input 8; outputs TV, Soundbar and Output 3-8; TV and Soundbar connected; signal on inputs 2, 5 and 6; the Soundbar is in audio-only scaler mode.
+`states/default.json` is the seed: inputs PS3, AppleTV, Computer, Switch, Shield, PS5, Analogue and Input 8; outputs TV, Soundbar and Output 3-8; TV and Soundbar connected; signal on inputs 2, 5 and 6; the Soundbar is in audio-only scaler mode (4, as the real device reports it). Device values follow the V1.10.01 capture: firmware V1.10.01, HDR 0 and scaler 0 (pass-through) on the other outputs, `mode` 3 and `baudrate` 6 (codes), the ninth array entry.
 
 The format is grouped per port, so it is easy to edit by hand:
 
@@ -133,17 +134,18 @@ The format is grouped per port, so it is easy to edit by hand:
 {
   "schema_version": 1,
   "auth":    {"user": "Admin", "password": "admin"},
-  "device":  {"model": "BK-808", "firmware_version": "V1.10.02", "...": "..."},
-  "system":  {"power": 1, "beep": 1, "panel_lock": 0, "lcd_timeout": 3, "mode": 0, "baudrate": 115200},
+  "device":  {"model": "BK-808", "firmware_version": "V1.10.01", "type": "8x8 hdmi2.1 matrix", "...": "..."},
+  "system":  {"power": 1, "beep": 1, "panel_lock": 0, "lcd_timeout": 3, "mode": 3, "baudrate": 6},
   "inputs":  [{"name": "PS3", "edid": 36, "signal": 0, "cable": 1, "cec_enabled": 0}, "... 8 total"],
-  "outputs": [{"name": "TV", "source": 2, "connected": 1, "stream": 1, "hdcp": 3, "hdr": 3, "scaler": 1,
+  "outputs": [{"name": "TV", "source": 2, "connected": 1, "stream": 1, "hdcp": 3, "hdr": 0, "scaler": 0,
                "arc": 1, "audio_mute": 0, "cec_enabled": 1, "ext_audio_enabled": 0, "ext_audio_source": 1}, "..."],
+  "ninth_output": {"source": 1, "scaler": 255, "hdr": 0, "hdcp": 3, "arc": 0, "stream": 255, "audio_mute": 0},
   "ext_audio": {"mode": 0},
-  "presets": [{"name": "Apple TV", "routing": [2, 2, 2, 2, 2, 2, 2, 2]}, "... 8 total"]
+  "presets": [{"name": "Apple TV", "routing": [2, 2, 2, 2, 2, 2, 2, 2], "saved": true}, "... 8 total"]
 }
 ```
 
-Missing keys fall back to defaults. Invalid values (wrong port counts, out-of-range modes, unknown keys) are rejected with the path of the bad field.
+Missing keys fall back to defaults. Invalid values (wrong port counts, out-of-range modes, unknown keys) are rejected with the path of the bad field. HDR accepts 0-3 and scaler 0-5: 0 is what V1.10.01 reports; whether the device accepts 0 in a write, and what it means next to the documented 1-3 / 1-5, is unknown until a write capture (HIL-02). `ninth_output` holds the ninth entry of the per-output arrays (HIL-04, meaning unknown); no write changes it.
 
 ## In tests
 
@@ -152,6 +154,9 @@ Missing keys fall back to defaults. Invalid values (wrong port counts, out-of-ra
 - `simulator`: a fresh instance per test on ephemeral ports.
 - `matrix`: a real `OreiMatrix` pointed at the simulator, HTTP only.
 - `matrix_with_telnet`: the same, with the real Telnet client connected.
+- `make_simulator(golden_dir)`: build one yourself, optionally in golden mode. `tests/sim/test_golden_hub.py` overrides `simulator` with the real-capture golden simulator, so the real hub (HTTP, Telnet and REST) runs against the device's own bytes.
+
+`SIM_GOLDEN=tests/fixtures/device/BK-808_V1.10.01_web-V2.00.03 pytest tests/sim` runs the whole simulator suite in golden mode. Tests that assume the default seed (names, routing, cable states, CEC flags, preset routing) then fail by design; everything else must pass.
 
 ```python
 async def test_switch(matrix, simulator):
@@ -171,14 +176,17 @@ async with Simulator(DeviceState.default(), https_port=0, telnet_port=0, control
 
 ## Replacing assumptions with HIL captures
 
-Everything the simulator guesses is marked `# ASSUMPTION(HIL-A)`. Run `grep -rn "ASSUMPTION(HIL-A)" tools/simulator` to list the guesses. Wire-level constants (result codes, login answers, session behaviour, Telnet banner and error codes, value wording) live in `protocol.py`, so most corrections are one-line edits there. The main open questions are:
+Everything the simulator guesses is marked `# ASSUMPTION(HIL-A)`. Run `grep -rn "ASSUMPTION(HIL-A)" tools/simulator` to list the guesses. Wire-level constants (result codes, login answers, session behaviour, Telnet banner and error codes, value wording) live in `protocol.py`, so most corrections are one-line edits there.
 
-- Login success and failure `result` values. The success value is `"success"` per the doc, and the failure value is guessed as `"fail"` (BE-05).
-- What a command gets without a session or after the session expires, and the session lifetime (BE-04).
-- The `result` value of the unverified writes: beep, panel lock, EDID, and LCD.
-- The `get output status` name field (`alloutputname` in the doc vs `name` per a hub comment), and the `get video status` name format (the hub strips an `IN01-` prefix).
-- The `set cec index` single-port shape (BE-13), the output CEC table (BE-14), and the audio-only scaler code (BE-15).
-- Telnet wording: banner, `status` dump lines, set-command acknowledgements, `E00`/`E01` meaning (BE-07), push lines, and whether bare `power N` works.
+**Resolved by the V1.10.01 read capture (WP-A4).** Login success is `result: 1`; every read's keys, order and formatting (compact JSON + CR LF); `get output status` uses `name`; `get network` uses `subnet`; `get routing status` and `preset get` are never answered; the Telnet option negotiation and banner; the command echo; the `status` dump; and the `r fw version`, `r type`, `r link` and `r preset` answers. Their markers are gone; the registry entries stay, so `--report` keeps checking them against every capture folder. The report compares the capture's `***REDACTED***` values (MAC, hostname) as wildcards.
+
+The main open questions (they need the probe and write captures):
+
+- The answer to a wrong password (BE-05), a command without a session or after it expires, and the session lifetime (BE-04).
+- The `result` value of the unverified writes: beep, panel lock, EDID, and LCD; and of rejected writes.
+- Whether the device accepts HDR 0 and scaler 0 in writes, and how reads and writes number the codes (HIL-02, BE-15); what the ninth array entry is and whether writes change it (HIL-04); the meaning of `get ext-audio status.index`.
+- The `set cec index` single-port shape (BE-13), the output CEC table (BE-14).
+- Telnet: set-command acknowledgements (after the echo), `E00`/`E01` meaning (BE-07), push lines, whether bare `power N` works, the wording of values not seen yet (LCD codes, other HDCP/HDR/scaler/EDID codes).
 - Whether the device accepts commands in standby, and what `set reboot` answers before dropping off.
 
 Every marker has an entry in `tools/hil/capture/assumptions.py`, and `tests/hil_tools/test_capture_catalog.py` fails if a marker is added without one, or if a registered marker disappears.

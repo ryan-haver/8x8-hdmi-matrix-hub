@@ -122,12 +122,33 @@ class Capture:
         self._extra: list[Any] = []
         #: test hook: called after every write-mode step (may raise)
         self.after_step: Callable[[str, int], Any] | None = None
+        #: comheads the device left unanswered (timeout) in this run; later
+        #: snapshots skip them (V1.10.01 never answers ``get routing status``,
+        #: HIL-01, and each try costs the whole HTTP timeout)
+        self.unanswered: set[str] = set()
+
+    def note_unanswered(self, comhead: str, exchange: dict[str, Any]) -> bool:
+        """Remember ``comhead`` if ``exchange`` timed out; True if it did."""
+        if (exchange.get("error") or {}).get("type") != "TimeoutError":
+            return False
+        if comhead not in self.unanswered:
+            self.unanswered.add(comhead)
+            self.warnings.append(f"no answer to {comhead!r} within {self.opts.http_timeout:g} s; "
+                                 "not sent again in this run")
+        return True
 
     # ------------------------------------------------------------ lifecycle
 
     @property
     def secrets(self) -> list[str]:
-        return [s for s in [self.opts.password, *self.opts.redact] if s]
+        """The password (exact) and every ``--redact`` value in any letter case.
+
+        The device prints the same value in different cases: the MAC address is
+        upper case over HTTP but lower case in the Telnet ``status`` dump, where
+        an exact match let it through (HIL Session 1, ``telnet/status``).
+        """
+        variants = [v for s in self.opts.redact if s for v in (s, s.lower(), s.upper())]
+        return list(dict.fromkeys(s for s in [self.opts.password, *variants] if s))
 
     def track(self, client: Any) -> Any:
         self._extra.append(client)
@@ -180,8 +201,12 @@ class Capture:
                         relogin: bool = True) -> Any:
         """A read's JSON; logs in again once if the answer carries no data (session expired)."""
         http = client or self.http
+        if comhead in self.unanswered:
+            return None
         for attempt in (1, 2):
             ex = await http.post(cmd.snapshot_payload(comhead), role=role)
+            if self.note_unanswered(comhead, ex):
+                return None
             resp = ex.get("response") or {}
             doc = resp.get("json") if resp.get("status") == 200 else None
             if is_data_response(doc) or not relogin or attempt == 2 or ex.get("error"):
@@ -268,7 +293,9 @@ class Capture:
     async def snapshot(self, *, with_lcd: bool = False) -> Snapshot:
         reads: dict[str, Any] = {}
         for comhead in cmd.SNAPSHOT_READS:
-            reads[comhead] = await self.read_json(comhead)
+            doc = await self.read_json(comhead)
+            if comhead not in self.unanswered:  # a read the firmware lacks is not an "unreadable" state
+                reads[comhead] = doc
         lcd = None
         if with_lcd:
             status = await self.telnet_status()

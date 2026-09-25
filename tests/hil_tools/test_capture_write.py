@@ -45,13 +45,28 @@ async def test_full_write_run_verifies_every_command_and_restores(sim, tmp_path)
     assert lcd == {"0": "lcd off", "1": "lcd on always", "2": "lcd on 15 seconds", "3": "lcd on 30 seconds",
                    "4": "lcd on 60 seconds"}
     power = load(root, RecordIds.write("telnet_power_bare"))["steps"]
-    assert power[0]["outcome"] == "not-applied" and power[0]["exchange"]["response"]["text"] == "E00\r\n"
+    assert power[0]["outcome"] == "not-applied" and power[0]["exchange"]["response"]["text"] == "power 0!\r\nE00\r\n"
 
     log = _restore_log(root)
     assert log and all(e["verified"] for e in log if "verified" in e)
     assert load(root, RecordIds.WRITE_SNAPSHOT_FINAL)["differences_from_initial"] == []
     manifest_run = json.loads((root / "manifest.json").read_text(encoding="utf-8"))["runs"][-1]
     assert manifest_run["write_outcome"]["restored"] is True
+
+
+async def test_without_get_routing_status_preset_tests_are_skipped_and_the_run_restores(device_like_sim, tmp_path):
+    """V1.10.01 never answers `get routing status` (HIL-01): one timeout, a warning, no preset tests."""
+    sim = device_like_sim
+    opts = make_opts(sim, tmp_path / "out", mode="write", i_understand=True, only=["routing", "presets"])
+    code, cap = await run_capture(opts, quiet())
+    assert code == cli.EXIT_OK, cap.errors
+    assert cap.unanswered == {"get routing status"}
+    assert sum("no answer to 'get routing status'" in w for w in cap.warnings) == 1
+    asked = [e for e in sim.log if e.get("command") == "get routing status"]
+    assert len(asked) == 1  # later snapshots skip it
+    assert (tmp_path / "out" / "write" / "http_video_switch.json").exists()
+    assert not (tmp_path / "out" / "write" / "http_preset_recall.json").exists()
+    assert sim.state.to_dict() == sim.initial_state.to_dict()
 
 
 #: Steps that the simulator deliberately does not apply (so "not-applied" is right).

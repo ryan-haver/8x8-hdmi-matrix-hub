@@ -22,11 +22,19 @@ async def run_read(cap: Capture, login_exchange: dict) -> None:
 
     con.print(f"HTTP reads ({len(cmd.HTTP_READS)}):")
     for spec in cmd.HTTP_READS:
+        comhead = spec.payload["comhead"]
+        if comhead in cap.unanswered:
+            # One timeout is the evidence; every further try costs the whole
+            # HTTP timeout (V1.10.01: `preset get` 1-8, HIL-01).
+            con.print(f"  {comhead:<24} {spec.payload.get('index', ''):<2} -> skipped (no answer earlier)")
+            continue
         ex = await cap.http.post(spec.payload, role="read")
         status = (ex.get("response") or {}).get("status")
-        con.print(f"  {spec.payload['comhead']:<24} {spec.payload.get('index', ''):<2} -> "
+        con.print(f"  {comhead:<24} {spec.payload.get('index', ''):<2} -> "
                   f"{status if status else ex['error']['type']}")
-        if ex.get("error"):
+        # A firmware without an optional read: a warning, not a capture failure.
+        unanswered = comhead in cmd.OPTIONAL_READS and cap.note_unanswered(comhead, ex)
+        if ex.get("error") and not unanswered:
             cap.errors.append(f"{spec.slug}: {ex['error']['message']}")
         cap.add(RecordIds.http_read(spec.slug), {
             "title": f"Read: {spec.payload['comhead']}",

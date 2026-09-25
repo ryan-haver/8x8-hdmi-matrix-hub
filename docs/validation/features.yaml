@@ -416,9 +416,11 @@ features:
     ha: [select.output_N_source current_option]
   target: V4
   current: V2
-  basis: 'V2: tests/sim/test_sim_e2e.py::test_status_reflects_simulator (REST status equals simulator state).'
+  basis: 'V2: tests/sim/test_sim_e2e.py::test_status_reflects_simulator (REST status equals simulator state). V2 against
+    real device data: tests/sim/test_golden_hub.py::test_rest_status_from_real_device_answers (REST -> real hub -> simulator
+    in golden mode serving the byte-exact MCU V1.10.01 read capture, 9-entry allsource).'
   evidence: []
-  findings: [API-11]
+  findings: [API-11, HIL-04]
   scenarios: []
 - id: F-MTX-025
   area: matrix
@@ -450,9 +452,12 @@ features:
   target: V4
   current: V1
   basis: 'tests/sim/test_sim_hub.py::test_telnet_cable_and_full_status (driver-level: real OreiMatrix against the simulator,
-    no user interface in the path -> V1). GET /api/status/cables is not exercised by any test.'
+    no user interface in the path -> V1). Against real device data (still driver-level, V1): tests/test_telnet_real_captures.py
+    (real TelnetClient against a replay of the captured V1.10.01 segments and timing: banner with IAC, echo, status dump,
+    r link) and tests/sim/test_golden_hub.py::test_telnet_banner_cables_and_presets_from_real_device_bytes. GET
+    /api/status/cables is not exercised by any test.'
   evidence: []
-  findings: [BE-03, BE-29, BE-30]
+  findings: [BE-03, BE-29, BE-30, HIL-03]
   scenarios: []
 - id: F-MTX-027
   area: matrix
@@ -467,7 +472,9 @@ features:
   target: V4
   current: V1
   basis: 'tests/sim/test_sim_hub.py::test_capabilities (driver-level: real OreiMatrix against the simulator, no user interface
-    in the path -> V1); tests/test_rest_api.py TestStatusEndpoints (mocked).'
+    in the path -> V1); tests/test_rest_api.py TestStatusEndpoints (mocked). V2 against real device data, not yet recorded
+    as evidence: tests/sim/test_golden_hub.py::test_rest_status_from_real_device_answers (GET /api/status/outputs -> real hub
+    -> simulator in golden mode serving the V1.10.01 get output status capture: `name`, 9-entry arrays).'
   evidence: []
   findings: [BE-03]
   scenarios: []
@@ -483,7 +490,9 @@ features:
   target: V4
   current: V1
   basis: 'tests/sim/test_sim_hub.py::test_system_settings and ::test_telnet_connects_and_reads_firmware (driver-level: real
-    OreiMatrix against the simulator, no user interface in the path -> V1).'
+    OreiMatrix against the simulator, no user interface in the path -> V1). Against real device data (driver-level, V1):
+    tests/sim/test_golden_hub.py::test_login_and_status_reads_parse_the_device_bytes (get status, get network, get system
+    status as captured on V1.10.01) and tests/test_telnet_real_captures.py (banner, r fw version, r type).'
   evidence: []
   findings: []
   scenarios: []
@@ -512,9 +521,12 @@ features:
   target: V4
   current: V1
   basis: 'tests/sim/test_sim_hub.py::test_telnet_cable_and_full_status (get_preset_info) (driver-level: real OreiMatrix against
-    the simulator, no user interface in the path -> V1).'
+    the simulator, no user interface in the path -> V1). Against real device data (driver-level, V1): the r preset answers
+    captured on V1.10.01 (8 lines, one TCP segment each, or an empty slot) through the real TelnetClient in
+    tests/test_telnet_real_captures.py; HTTP preset get is not implemented by that firmware (HIL-01), so there is no HTTP
+    path: tests/sim/test_golden_hub.py::test_get_preset_info_never_uses_the_http_preset_read.'
   evidence: []
-  findings: []
+  findings: [HIL-01]
   scenarios: []
 - id: F-MTX-031
   area: matrix

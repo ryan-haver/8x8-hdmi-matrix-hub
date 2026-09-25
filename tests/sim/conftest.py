@@ -9,11 +9,18 @@
                            (costs ~0.5 s: the client sleeps before reading the banner).
 
 Retry/back-off and Telnet timeouts are shortened so fault tests stay fast.
+
+``SIM_GOLDEN=<capture folder>`` (e.g. ``tests/fixtures/device/BK-808_V1.10.01_web-V2.00.03``)
+runs the whole suite against the simulator in golden mode: seeded from the real
+device's captures and answering with its captured bytes (tools/simulator/README.md).
+Tests that assume the default seed state then fail by design; the run shows
+which hub paths still work on real device output.
 """
 
 from __future__ import annotations
 
 import asyncio
+import os
 import sys
 from pathlib import Path
 from unittest.mock import AsyncMock
@@ -28,27 +35,39 @@ for _p in (ROOT, ROOT / "src"):
 import orei_matrix  # noqa: E402
 import telnet_client  # noqa: E402
 from tools.simulator import DeviceState, Simulator  # noqa: E402
+from tools.simulator.golden import GoldenSet  # noqa: E402
 
 #: Short Telnet command timeout used by these tests (the client default is 5 s);
 #: it only matters for commands the simulator never answers (telnet_silent).
 FAST_TELNET_TIMEOUT = 0.4
 
 
-@pytest.fixture(scope="session")
-def default_state() -> DeviceState:
-    return DeviceState.default()
+#: The real BK-808 captures (MCU V1.10.01, web V2.00.03, HIL Session 1).
+DEVICE_CAPTURES = ROOT / "tests" / "fixtures" / "device" / "BK-808_V1.10.01_web-V2.00.03"
 
 
-@pytest.fixture
-async def simulator(default_state: DeviceState):
-    sim = Simulator(
-        default_state,
+def make_simulator(golden_dir: str | Path | None = None) -> Simulator:
+    """A simulator on ephemeral ports; with ``golden_dir``, seeded from and answering with those captures."""
+    state = DeviceState.default()
+    golden = None
+    if golden_dir:
+        golden = GoldenSet.load(golden_dir)
+        golden.seed(state)
+        assert not golden.warnings, golden.warnings
+    return Simulator(
+        state,
         host="127.0.0.1",
         https_port=0,
         telnet_port=0,
         control_port=0,
         reboot_seconds=0.3,
+        golden=golden,
     )
+
+
+@pytest.fixture
+async def simulator():
+    sim = make_simulator(os.environ.get("SIM_GOLDEN") or None)
     await sim.start()
     try:
         yield sim

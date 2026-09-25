@@ -16,14 +16,14 @@ from tools.hil.capture.fixtures import iter_exchanges, response_body
 from tools.simulator import DeviceState, Simulator
 
 #: Folder name the capture tool derives from the default simulator state.
-FW = "BK-808_V1.10.02_web-V2.00.03"
+FW = "BK-808_V1.10.01_web-V2.00.03"
 
 #: Short timings: the simulator answers every Telnet command in one write.
 FAST: dict[str, Any] = {
     "telnet_idle": 0.05,
     "banner_idle": 0.1,
     "telnet_timeout": 1.0,
-    "http_timeout": 3.0,
+    "http_timeout": 1.5,  # also how long the unanswered `get routing status` / `preset get` cost
     "push_seconds": 0,
     "push_grace": 0.0,
 }

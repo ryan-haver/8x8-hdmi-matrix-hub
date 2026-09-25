@@ -9,34 +9,46 @@ import pytest
 from tests.hil_tools.helpers import FW, load, make_opts, new_sim, quiet
 from tools.hil.capture import cli, run_capture
 from tools.hil.capture import fixtures as fx
-from tools.hil.capture.catalog import HTTP_READS, TELNET_READS
+from tools.hil.capture.catalog import HTTP_READS, OPTIONAL_READS, TELNET_READS
 from tools.hil.capture.fixtures import REDACTED, RecordIds, firmware_folder_name, response_body
-from tools.simulator import DeviceState
+from tools.simulator import DeviceState, Simulator
 from tools.simulator.http_commands import dispatch
-from tools.simulator.telnet_commands import banner, handle
+from tools.simulator.telnet_commands import banner_bytes, handle
 
 
-async def test_read_mode_records_every_read_byte_for_byte(sim, tmp_path):
+async def test_read_mode_records_every_read_byte_for_byte(device_like_sim, tmp_path):
+    sim = device_like_sim
     code, cap = await run_capture(make_opts(sim, tmp_path / "{firmware}"), quiet())
     assert code == cli.EXIT_OK, cap.errors
     root = tmp_path / FW
     assert cap.writer.root == root
 
     for spec in HTTP_READS:
+        if spec.payload["comhead"] in OPTIONAL_READS:
+            continue
         record = load(root, RecordIds.http_read(spec.slug))
         (ex,) = record["exchanges"]
         expected = dispatch(sim.state.copy(), dict(spec.payload)).response
-        assert response_body(ex) == json.dumps(expected, separators=(",", ":")).encode(), spec.slug
+        assert response_body(ex) == Simulator.reply_body(expected), spec.slug
         assert ex["request"]["json"] == spec.payload
         assert ex["response"]["status"] == 200
         assert any(h.lower().startswith("content-type: text/plain") for h in ex["response"]["headers"])
+    # Like V1.10.01, the simulator never answers these (HIL-01): one timeout per
+    # comhead is recorded as the evidence, a warning rather than an error, and
+    # the other `preset get N` are not sent.
+    for slug in ("get_routing_status", "preset_get_1"):
+        (ex,) = load(root, RecordIds.http_read(slug))["exchanges"]
+        assert ex["response"] is None and ex["error"]["type"] == "TimeoutError", slug
+    assert not (root / "http" / "preset_get_2.json").exists()
+    assert sum("no answer to" in w for w in cap.warnings) == 2
     for spec in TELNET_READS:
         (ex,) = load(root, RecordIds.telnet_read(spec.slug))["exchanges"]
         assert response_body(ex) == handle(sim.state.copy(), spec.command).text.encode(), spec.command
         assert fx.unb64(ex["sent_b64"]) == spec.command.encode() + b"!\r\n"  # exactly what the hub sends
         assert ex["response"]["analysis"]["line_endings"]["lf"] == 0
     (ex,) = load(root, RecordIds.TELNET_BANNER)["exchanges"]
-    assert response_body(ex) == banner(sim.state).encode()
+    assert response_body(ex) == banner_bytes(sim.state)
+    assert ex["response"]["analysis"]["iac"]  # the negotiation the device sends is recorded
     assert load(root, RecordIds.INDEX_PAGE)["exchanges"][0]["response"]["status"] == 200
 
     # Read mode is read-only.
@@ -47,7 +59,7 @@ async def test_read_mode_records_every_read_byte_for_byte(sim, tmp_path):
 
     manifest = fx.load_manifest(root)
     assert manifest["format"] == fx.FORMAT
-    assert manifest["device"]["mcu_version"] == "V1.10.02"
+    assert manifest["device"]["mcu_version"] == "V1.10.01"
     (run,) = manifest["runs"]
     assert run["mode"] == "read" and run["target"]["port"] == sim.https_port
     assert "password" not in run["options"]
@@ -114,6 +126,8 @@ async def test_password_and_redact_values_never_reach_disk(tmp_path):
         assert not fx.find_secrets(path, [SECRET, MAC]), path
         raw = path.read_bytes()
         assert SECRET.encode() not in raw and MAC.encode() not in raw
+        # The Telnet status dump prints the MAC in lower case; it must be caught too.
+        assert MAC.lower().encode() not in raw, path
     login = load(root, RecordIds.LOGIN)["exchanges"][0]
     assert login["request"]["json"]["password"] == REDACTED
     assert login["redacted"] == ["request.password"]

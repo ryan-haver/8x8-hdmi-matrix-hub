@@ -18,6 +18,9 @@ This document tracks all known API commands for the OREI BK-808 HDMI Matrix, the
 | 🔄 | Implemented but needs testing |
 | ⚠️ | Discovered but not yet implemented |
 | ❓ | Discovered from drivers, unverified |
+| ❌ | Not implemented by the firmware (captured: no answer) |
+
+**Captured on a real device.** Entries marked *Captured on V1.10.01* were checked against byte-exact recordings from a BK-808 with MCU firmware V1.10.01 and web V2.00.03 (HIL Session 1, 2026-09-25; records in `tests/fixtures/device/BK-808_V1.10.01_web-V2.00.03/`, report in `docs/validation/2026-09-25-hil-session-1-read.md`). Every JSON answer is compact (no spaces), keeps the key order shown, and ends with CR LF. Only reads have been captured so far; write commands are still unverified.
 
 ---
 
@@ -28,10 +31,10 @@ This document tracks all known API commands for the OREI BK-808 HDMI Matrix, the
 
 ```json
 Request:  {"comhead": "login", "user": "Admin", "password": "admin"}
-Response: {"comhead": "login", "result": "success"}
+Response: {"comhead":"login","result":1}
 ```
 
-**Notes**: Required before any other commands. Default credentials are Admin/admin.
+**Notes**: Required before any other commands. Default credentials are Admin/admin. *Captured on V1.10.01*: success is `"result":1`, not the `"success"` string this page used to show (`http/login.json`). The answer to a wrong password is not captured yet.
 
 ---
 
@@ -52,7 +55,7 @@ Response: {
 }
 ```
 
-**Notes**: Primary status endpoint. Power state affects other commands.
+**Notes**: Primary status endpoint. Power state affects other commands. *Captured on V1.10.01*: `{"comhead":"get system status","power":1,"baudrate":6,"beep":1,"lock":0,"mode":3}`. `baudrate` is a code (6), not bits per second; the meaning of `mode` 3 is unknown.
 
 ---
 
@@ -81,6 +84,16 @@ Response: {
 - `allconnect` is the key array for detecting which displays are physically connected
 - `allsource` shows current routing (which input goes to which output)
 - Names are configurable via web UI
+
+*Captured on V1.10.01* (`http/get_output_status.json`), the real answer differs from the example above:
+
+```json
+{"comhead":"get output status","power":1,"allconnect":[1,1,0,0,0,0,0,0],"name":["TV","Sound","Out3","Out4","Out5","Out6","Out7","Out8"],"allscaler":[0,4,0,0,0,0,0,0,255],"allhdr":[0,0,0,0,0,0,0,0,0],"allhdcp":[3,3,3,3,3,3,3,3,3],"allarc":[0,0,0,0,0,0,0,0,0],"allout":[1,1,0,0,0,0,0,0,255],"allaudiomute":[0,0,0,0,0,0,0,0,0]}
+```
+
+- The output names are in `name`. There is no `allinputname`, `alloutputname` or `allsource` here: read the routing from `get video status`.
+- Every settings array has a **ninth entry** (8 outputs + one more, HIL-04); `allconnect` and `name` have 8. Its meaning is undocumented (likely the external audio output). Use the first 8 entries.
+- HDR is reported as **0** (HIL-02) and scaler as 0 / 4; the Telnet `status` dump prints these as "pass-through", "pass-through" and "audio only". The write tables below use 1 for passthrough and 5 for audio only, so reads may be 0-based and writes 1-based. Unverified until a write capture.
 
 ---
 
@@ -143,6 +156,14 @@ Response: {
 }
 ```
 
+*Captured on V1.10.01*: the mask is `subnet`, not `netmask`, and there are more fields (MAC and hostname redacted in the capture):
+
+```json
+{"comhead":"get network","power":1,"dhcp":1,"ipaddress":"192.168.0.100","subnet":"255.255.254.0","gateway":"192.168.1.254","telnetport":23,"tcpport":8000,"macaddress":"…","hostname":"…","username":1,"model":"BK-808"}
+```
+
+`username` is an integer (1), not the login name.
+
 ---
 
 ### Get Device Info (Firmware)
@@ -156,6 +177,8 @@ Response: {
   "webversion": "V2.00.03"  // Web UI version
 }
 ```
+
+*Captured on V1.10.01*, the full field set (MAC and hostname redacted in the capture): `{"comhead":"get status","power":1,"version":"V1.10.01","hostname":"…","ipaddress":"192.168.0.100","subnet":"255.255.254.0","gateway":"192.168.1.254","macaddress":"…","model":"BK-808","webversion":"V2.00.03"}`.
 
 ---
 
@@ -181,11 +204,11 @@ Response: {
 ---
 
 ### Get Preset Status
-**Status**: ✅ Verified
+**Status**: ❌ Not supported on MCU V1.10.01 (HIL-01)
 
 ```json
 Request:  {"comhead": "get routing status", "language": 0, "index": 1}
-Response: {
+Response (as documented by the vendor drivers; never seen on V1.10.01): {
   "comhead": "get routing status",
   "power": 1,
   "allpreset": [
@@ -195,6 +218,19 @@ Response: {
   ]
 }
 ```
+
+**Evidence**: V1.10.01 accepts the request and never answers; the capture client gave up after 5 s with a `TimeoutError` (`tests/fixtures/device/BK-808_V1.10.01_web-V2.00.03/http/get_routing_status.json`). It was marked verified before, without a capture. The hub does not send it. Read presets over Telnet with `r preset N` instead (one `outputX->inputY` line per output, or `preset N is none,please save a preset` for an empty slot).
+
+---
+
+### Get One Preset (`preset get`)
+**Status**: ❌ Not supported on MCU V1.10.01 (HIL-01)
+
+```json
+Request:  {"comhead": "preset get", "index": 1}
+```
+
+**Evidence**: no answer for any index 1-8 (each timed out after 5 s: `http/preset_get_1.json` … `preset_get_8.json`). The hub used it as the HTTP fallback of `get_preset_info()` when Telnet was down; that fallback was removed, so without Telnet the hub reports the preset as unreadable instead of blocking for the HTTP timeout.
 
 ---
 
@@ -642,6 +678,20 @@ s lock <0|1>                    // Panel lock
 ```
 
 These translate to JSON `{"comhead": "...", ...}` format for HTTP API.
+
+### Telnet (port 23), captured on V1.10.01
+
+Read commands only (`tests/fixtures/device/BK-808_V1.10.01_web-V2.00.03/telnet/`):
+
+- On connect the device sends Telnet option negotiation (`IAC WILL SGA`, `IAC WONT ECHO`, `IAC DONT ECHO`, `IAC DONT BINARY`, `IAC WONT SGA`), then a banner: `****************welcome **************`, `fw version :v1.10.01` (padded with spaces on both sides), a line of `*`, an empty line.
+- Every command line is **echoed** (`r link in 1!`) before the answer. All lines end with CR LF; there is no prompt and no end-of-answer marker. The answer starts ~140 ms after the echo.
+- `status!`: `get the unit all status:` then power, beep, panel lock, LCD, cable state per input and output, routing (`output1->input7`), then per field for all 8 outputs: hdcp, stream, video mode, hdr mode, arc, audio mute; then `input N edid:<text>`, ext-audio enable per output, `output ext-audio mode: bind to input`, ext-audio routing (`output 1 ext-audio->input1`), IP mode, IP, subnet mask, gateway, `tcp/ip port:8000`, `telnet port:23`, `mac address: …` (lower case) and an empty line.
+- `r fw version!`: four lines, `mcu fw version: v1.10.01`, `key mcu       : v1.00.08`, `web gui       : v2.00.03`, `cpld version  : v1.00.06`.
+- `r type!`: `8x8 hdmi2.1 matrix`.
+- `r link in|out N!`: `hdmi input|output N: connect|disconnect`.
+- `r preset N!`: eight lines `output1->input2` … (one TCP segment each), or `preset N is none,please save a preset`.
+
+Set-command acknowledgements, error codes (`E00`/`E01`) and push notifications are not captured yet.
 
 ---
 
