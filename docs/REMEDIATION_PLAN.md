@@ -13,6 +13,7 @@
 3. **Contracts come from reality, not from mocks.** Device responses come from captures of the real BK-808; API shapes come from the real server; test fixtures are generated, not hand-written.
 4. **Keep the concepts, cut the layers.** Presets, Profiles, Scenes, Macros, Shortcuts, Dashboard, Kiosk, CEC remote, and the Tron/glass look all stay. Duplicate paths, dead code, and parallel implementations go.
 5. **Small, reviewable PRs.** One workstream per branch, PR per logical fix group, CI green before merge.
+6. **Proof, not assumption.** Passing tests are not proof that something works. Every feature's status and every closed finding is backed by an evidence record showing the real effect, at the verification levels defined in [`docs/validation/VALIDATION_PLAN.md`](validation/VALIDATION_PLAN.md) (V0 claimed → V5 field-proven).
 
 ---
 
@@ -53,6 +54,8 @@ These are places where features overlap or where fixing the bug properly changes
 | DI-6 | **PINs: per-item vs admin** | Profiles/Scenes have per-item PINs today; D2 adds an admin PIN. | Keep per-item PINs for "don't let the kids run this", admin PIN for configuration. Document the difference in the UI. |
 | DI-7 | **Settings UI** | 9 settings drawers + a hidden legacy modal + `settings-panel.js`. | Single Settings drawer with sections (Phase 5), looks the same section by section. Review via the §5.3 capture process. |
 | DI-8 | **Inputs / Outputs tabs** | Mostly status views that overlap with Matrix grid and dashboard cards. | Keep as-is for now; revisit after Phase 5 baseline review. |
+| DI-9 | **Remote 3 design** *(direction set by the owner 2026-09-25)* | 74 entities, 24 redundant; routing mixed with TV CEC; non-standard command names; presets, profiles and kiosk content from the web app not reachable from the Remote. | **The Remote is another front end of the web app** (`docs/audits/UC_INTEGRATION_AUDIT.md` §4): presets (names, order, visibility) from the web app, a matrix remote whose pages mirror kiosk mode, per-output source select, CEC remotes matching the web app's CEC remote with standard names and button mapping, CEC macros, binary status sensors; configuration done in the web app; official UC patterns. Surviving entity IDs kept; the exact removal/rename list is approved before implementation. |
+| DI-10 | **On-Remote deployment** *(recommendation accepted 2026-09-25)* | The UC integration could also run on the Remote 3 itself (aarch64 custom integration) talking to the hub over HTTP, avoiding Docker host networking. | Keep in-hub as the default; add the on-device build as an optional release artifact after Phase 4, once packaging limits are verified against official docs. |
 
 ---
 
@@ -288,6 +291,34 @@ Severity: **C** critical · **H** high · **M** medium · **L** low. "Phase" is 
 | DOC-12 | Missing: CONFIGURATION, ARCHITECTURE, CHANGELOG, VALIDATION report, SECURITY | 7 |
 | DOC-13 | `CONTRIBUTING.md` outdated (container name, install path, hooks, mypy) | 7 |
 
+### 4.9 Unfolded Circle Remote integration (UC)
+
+Full detail (location, user impact, fix) in [`docs/audits/UC_INTEGRATION_AUDIT.md`](audits/UC_INTEGRATION_AUDIT.md) §2.
+
+| ID | Sev | Finding (short) | Phase |
+| --- | --- | --- | --- |
+| UC-01 | C | Any CEC remote command other than `send_cmd` (incl. `on`/`off`) raises `AttributeError` and drops the Remote's WebSocket | 1 (wave 2) |
+| UC-02 | H | Port 9095 unauthenticated; `setup_driver` from anyone repoints the matrix host and sends the stored password to it | 2 / 3 |
+| UC-03 | H | `driver_url: ""` → advertised `ws://<container-id>:9095` | 2 |
+| UC-04 | H | Device state always CONNECTED; entities never UNAVAILABLE; poller pushes fabricated values during outages; `CLIENT_DISCONNECTED` unhandled | 1 (wave 2) |
+| UC-05 | H | Reconfigure swaps device before probing, clears configured entities; abort/user-data unhandled; generic errors; setup payload logged; no credential step | 1 (wave 2) / 2 |
+| UC-06 | M | Standby keeps pushing; wake starts a second poller | 1 (wave 2) |
+| UC-07 | M | Every poll re-sends all attributes (~8.6k msgs/h) | 1 (wave 2) |
+| UC-08 | M | Renames leave stale source lists in subscribed entities (select by new name fails) | 2 / 4 |
+| UC-09 | M | Matrix power switch never synced | 2 |
+| UC-10 | M | Media player mixes routing and TV CEC; first toggle turns the TV off | 4 (DI-9) |
+| UC-11 | M | mDNS publishes `0.0.0.0`, never unregisters (root of retry loop + duplicate events); env var names wrong in docs/plan | 2 / 4 |
+| UC-12 | L | Non-standard remote command names, no button mapping, text/emoji UI tiles | 4 (DI-9) |
+| UC-13 | L | Text sensors instead of binary; duplicate sensors | 4 (DI-9) |
+| UC-14 | M | Preset names hard-coded "Preset N"; web app preset names/favourites/visibility ignored | 2 |
+| UC-15 | M | `ucapi` 0.5.1 vs 0.7.0; inconsistent pins | 2 |
+| UC-16 | L | `driver.json` text/validation/`min_core_api`/release date | 2 / 6 |
+| UC-17 | H | Hub liveness tied to the Remote: poller (only source of live WS events) runs only while a Remote is connected; standby disconnects the matrix | 1 (wave 2) / 4 |
+| UC-18 | H | Modular path non-functional against the real API (envelope, allconnect, switch-all, next/previous, WS client); mocked tests hide it | 4 |
+| UC-19 | L | Restore blocks startup before the WS server; config path ignores `ucapi`; CWD-relative `driver.json`; `__main__`-only `api` global | 1 (wave 2) / 4 |
+| UC-20 | M | Vendored UC API docs several spec versions stale (official sources now pinned locally via `tools/uc_reference.py`) | 7 |
+| UC-21 | H | No scripted-Remote test harness | 1 (wave 2, first) |
+
 ---
 
 ## 5. Validation strategy ("full real validation")
@@ -347,7 +378,7 @@ Record for each session: date, BK-808 MCU + IP-module firmware versions, hub com
 
 #### HIL-E — Real clients (Phase 8)
 
-- [ ] Remote 3: fresh install, discovery (mDNS in Docker), setup, reconfigure to a new host, standby/wake, driver restart, entity states match reality.
+- [ ] Remote 3: the 14-point checklist in `docs/audits/UC_INTEGRATION_AUDIT.md` §9 (install/discovery, setup and reconfigure, every CEC remote command incl. power and sequences, physical keys, source selection and renames, live changes, outages, matrix reboot, sleep/wake, restart with matrix off, presets/profiles/scenes, power switch, battery drain, activity migration).
 - [ ] Home Assistant (≥ D8): install via HACS custom repository, config flow, every entity type, all services, options/reconfigure, reload, remove.
 - [ ] Flic: single/double/hold, Duo, Twist rotation (if hardware available — otherwise mark "not validated" in the report).
 - [ ] Web UI on desktop Chrome/Firefox/Safari, iPad, phone; kiosk on the actual kiosk device for 24 h.
@@ -410,7 +441,7 @@ Goal: make it impossible for the bugs below to come back silently.
   - [x] `git filter-repo` removing `docs/BK-808 Firmware/`, `docs/BK-808 RTI Driver/`, `docs/BK-808 Control4 Driver/`, `docs/BK-808 Control4 Driver.c4z`, `docs/BK-808_User_Manual.pdf`.
   - [x] Replace with `docs/vendor/README.md`: links to vendor downloads, file names, versions, SHA-256 checksums, and a short summary of protocol facts we derived (our own words, no copied content).
   - [x] Verify with `git rev-list --objects --all` that no purged blob remains; force-push `main` (done 2026-09-25, `469c013`). Commit emails also rewritten to the GitHub no-reply address (required by the account's email-privacy push protection).
-  - [ ] Ask GitHub Support to purge cached views/refs of the removed blobs (the repo has been public since 2026-02-02) — draft provided; to be sent by the repo owner.
+  - [ ] *(owner)* Ask GitHub Support to purge cached views/refs of the removed blobs (the repo has been public since 2026-02-02) — draft provided; to be sent by the repo owner.
   - [x] Commit full MPL-2.0 `LICENSE` text (official Mozilla text; copyright line moves to the README licence section in Phase 7).
 - [x] Branch strategy: `fix/phase-N-<topic>`; PR template listing register IDs + test evidence + (for UI) the §5.3 review link.
 - [x] CI (DEP-05): add `pull_request` trigger; lint `src tests custom_components tools`; mypy blocking against a baseline file; gitleaks; hassfest + HACS validation; separate HA test job with `pytest-homeassistant-custom-component`; Docker build of both targets. *(done: `ci.yml`; mypy fixed to zero instead of a baseline; hassfest/HACS non-blocking until Phase 2)*
@@ -420,11 +451,11 @@ Goal: make it impossible for the bugs below to come back silently.
 - [x] **Contract fixtures:** generate API response fixtures from the real `_format_status` etc., and make HA/web tests consume them (TST-02). *(HA tests consume them; web tests will in Phase 0 UI capture)*
 - [x] Route-inventory test (initially reports coverage; becomes blocking at Phase 2 exit). *(baseline 107/163)*
 - [x] Minimal JS tooling: `package.json` (dev-only) with ESLint, Stylelint, Playwright, axe; one smoke E2E that loads `/ui` and `/kiosk` against the simulator (TST-04). *(lint findings baselined: ESLint 19, Stylelint 539; new violations fail)*
-- [ ] **UI capture baseline (§5.3)** — *before any UI code changes, including Phase 2 fixes*:
-  - [ ] Write `docs/ui/LOOK_AND_FEEL.md` from the current UI; review and sign off together.
+- [x] **UI capture baseline (§5.3)** — *before any UI code changes, including Phase 2 fixes*:
+  - [x] Write `docs/ui/LOOK_AND_FEEL.md` from the current UI; review and sign off together.
   - [x] Build the UI state catalog covering every current page, tab, drawer, modal, editor, CEC remote, dashboard card type, and kiosk panel. *(170 entries, 763 snapshots; the component-isolation gallery page `/ui/gallery` moves to Phase 5 with ES modules — Phase 0 uses a screenshot gallery)*
   - [x] Capture baselines in the pinned Playwright container; Git LFS for snapshots; CODEOWNERS; PR bot comment with before/after thumbnails.
-  - [ ] Publish the baseline as a browsable gallery for a one-time walkthrough, so we both agree it represents the look to preserve (and note anything that is currently *wrong* and should change).
+  - [x] Publish the baseline as a browsable gallery for a one-time walkthrough, so we both agree it represents the look to preserve (and note anything that is currently *wrong* and should change).
 - [x] Simulator v1 from docs (§5.1) — enough for status, routing, presets, login. *(done beyond v1 scope: all comheads, Telnet, fault API, `tools/dev_stack.py`)*
 - [x] Pre-commit hook: fast unit tests + ruff; fail loudly if tools are missing (DEP-11). `.gitignore` additions (DEP-10).
 - [x] Add `/api/health` detail: connection state, last successful poll, loop lag, task count, version (needed by HIL-C/D).
@@ -449,6 +480,14 @@ Goal: the hub stays connected, reports truthfully, and never freezes.
 - [ ] **Persistence** (PER-01…03, TST-08): per-file in-process `asyncio.Lock` + cross-process lock on a stable `.lock` sidecar; Windows-safe replace with retry; directory fsync on POSIX; atomic Flic writes; never delete on read error.
 - [ ] Misc: Linux EADDRINUSE handling and configurable UC port (BE-21); remove per-request `sys.path.insert` (API-16).
 - [ ] Update simulator with HIL-A golden captures.
+- [ ] **Wave 2: Remote integration fixes in `driver.py`** (after wave 1 merges; per `docs/audits/UC_INTEGRATION_AUDIT.md`):
+  - [ ] Scripted-Remote test harness `tools/uc_remote_sim.py` + `tests/uc/`, blocking CI job (UC-21) — built first, pinning current behaviour.
+  - [ ] Command handling: `on`/`off`/`toggle`/`send_cmd_sequence` on CEC remotes; every handler wrapped (UC-01).
+  - [ ] Device state + availability from the matrix state machine; no fabricated values; `CLIENT_DISCONNECTED` (UC-04).
+  - [ ] Hub-owned poller started at hub startup, independent of any Remote; UC standby only pauses UC pushes; single poller (UC-17, UC-06, BE-08, BE-09).
+  - [ ] Push only changed attributes (UC-07).
+  - [ ] Setup: BE-02; probe the new host before swapping; update entities in place instead of clearing (UC-05 part).
+  - [ ] Restore after the WS server is up; `api.config_dir_path`; package-relative `driver.json`; `_driver_state.api` (UC-19, BE-21).
 
 **Exit:** all BE/PER items in scope closed with tests; simulator fault-injection suite green; event-loop lag < 100 ms under injected faults; HIL-A report committed.
 
@@ -467,6 +506,7 @@ Goal: every advertised feature actually works end to end.
   - [ ] Fetch timeout via `AbortController`; only the originating client shows refresh toasts.
   - [ ] Fix `cec-tray` handler leak.
   - [ ] Fix the functional UI bugs found by the baseline capture (UI-23…UI-31, BE-31); each fix un-skips or updates its catalog entry through §5.3 review.
+- [ ] **Remote integration** (per the UC audit): multi-step setup with a matrix password field, `AUTHORIZATION_ERROR`, abort handling, no setup-payload logging, host change requires the password (UC-05, UC-02 short-term); remove `driver_url` / add `UC_DRIVER_URL` (UC-03); rename propagation in place (UC-08); power switch sync (UC-09); correct UC env var names + host-networking compose example for UC (UC-11, DEP-02); real preset names (UC-14); `ucapi==0.7.0` everywhere (UC-15); `driver.json` text and validation (UC-16).
 
 **Exit:** route inventory 100% (becomes blocking); HA test job green with real `hass`; Playwright suite covers passcode flow, routing, presets, profiles, scenes, CEC remote; image passes smoke with UC on and off; all visual diffs reviewed and approved; tag **v0.2.0 "Stabilize"**.
 
@@ -490,6 +530,7 @@ Goal (D2): **simple.** A home/lab user can optionally gate admin functions with 
 - [ ] **PINs** (SEC-04…06): never serialize `passcode_hash` to clients (separate internal/external DTOs); changing/removing a PIN or deleting a protected item requires the current PIN; add API to set/clear profile PINs; pass the profile map to inheritance checks; hash/verify in a thread executor; per-item attempt limiter with exponential lockout.
 - [ ] **Hardening** (SEC-11…13, API-15): generic error responses with correlation IDs (details in logs only); remove path listings; strict body validation (types, ranges, known keys) via a small schema layer; rate limiter keyed on route class, WS connection cap, XFF only from `TRUSTED_PROXY_IPS`; static serving via `resolve()` + `is_relative_to`.
 - [ ] HA config flow gets an optional API-key field (HA-16); Flic docs show both keyless and keyed setups.
+- [ ] Remote integration token auth: subclass `IntegrationAPI` authentication against `UC_AUTH_TOKEN`, `pwd` in mDNS TXT, driver registration with token; document firewalling port 9095 to the Remote's IP (UC-02).
 - [ ] Per-item Profile/Scene PINs kept alongside the admin PIN (DI-6), fixed as above; the UI labels the difference.
 - [ ] Add `SECURITY.md`: threat model for a home/lab LAN, what the PINs do and don't protect, "don't expose port 8080 to the internet; use a VPN/reverse proxy with its own auth", vulnerability reporting.
 
@@ -502,7 +543,7 @@ Goal: one runtime, one owner of state, one execution path, **modular opt-in inte
 Work items marked *(DI-n)* implement the agreed outcome in §2.3.
 
 - [ ] **Single runtime + integration loader** (BE-19, BE-20, DEP-07, D4, D11): `run.py` always starts the core (MatrixService + REST + WS + web UI + kiosk), then loads each integration whose env var is enabled. Disabled integrations are never imported, open no ports, and register no routes. Delete `run_server.py` (or thin alias) and `USE_MODULAR`.
-- [ ] **Finish `src/integrations/` as the integration framework:**
+- [ ] **Finish `src/integrations/` as the integration framework:** Detailed design, HubClient surface, migration rules and refactor sequence: `docs/audits/UC_INTEGRATION_AUDIT.md` §5. Rewrite `api_client.py` as `HubClientHttp` against the contract fixtures and delete `adapter.py` (UC-18); implement the agreed entity model (DI-9: UC-10, UC-12, UC-13); publish/unregister mDNS ourselves (UC-11).
   - [ ] `Integration` interface (`config_from_env`, `start(hub)`, `stop`, `health`, optional `routes`) + registry + loader; per-integration health in `/api/health`; startup log lists enabled/disabled integrations.
   - [ ] `HubClient` facade with an **in-process** implementation (default) and the existing **HTTP** `api_client.py` finished as the second implementation (fix the `allconnect` mapping, add auth-key support, contract tests against both implementations).
   - [ ] **`integrations/unfolded_circle`** (`UC_ENABLED`, `UC_PORT`, `UC_DISABLE_MDNS`) — the Remote 3 driver moved out of `driver.py` onto `HubClient`: one entity factory (BE-22), media-player state updates (BE-24), no rebuild on transient name failures, dead code removed (BE-23), entities update from hub events instead of its own poller.
@@ -576,6 +617,7 @@ Per DI-7, the consolidated Settings drawer is mocked up first and reviewed via a
 - [ ] Rewrite `HOME_ASSISTANT.md` around the real component (REST examples as appendix) (DOC-04); fix `DOCKER.md` (DOC-05), `FLIC_SETUP.md` routes, `CONTRIBUTING.md` (DOC-13).
 - [ ] `OREI_API_COMMANDS.md` updated from HIL-A captures + new Telnet section (DOC-11).
 - [ ] Merge `MASTER_INDEX.md` + `docs/README.md` into one index (DOC-10); replace `PROJECT_ROADMAP.md` with a short `ROADMAP.md` of open items (DOC-01).
+- [ ] Refresh or replace the vendored UC API docs with a source/version header; update or retire `UNFOLDED_CIRCLE_INTEGRATION_GUIDE.md` (UC-20).
 - [ ] Archive `WEB_UI_IMPLEMENTATION_PLAN.md`, `CEC_CONTROL_ARCHITECTURE.md`, `PHASE_8_SPEC.md` to `docs/archive/design/` with a banner listing deviations (DOC-06…08); move `IR_CONTROL_ROADMAP.md` to `docs/proposals/` without version numbers (DOC-09); move vendored UC API docs to `docs/vendor/`.
 
 ### Phase 8 — Validation campaign & 1.0 release (3-5 days + 72 h soak)
@@ -588,29 +630,46 @@ Per DI-7, the consolidated Settings drawer is mocked up first and reviewed via a
 
 ---
 
-## 7. Sequencing & milestones
+## 7. Execution roadmap
 
-```
-Week:        1        2        3        4        5        6        7        8
-Phase 0  ██████ (history purge, CI, simulator v1, UI baselines + look-and-feel sign-off)
-Phase 1        ██████ (HIL-A)
-Phase 2              █████                        → v0.2.0 Stabilize
-Phase 3                   ██████ (HIL-B)          → v0.3.0 Secure
-Phase 4                         ██████████
-Phase 5                              ██████████████
-Phase 6                                      ██
-Phase 7                                        ████
-Phase 8                                            █████ (+72 h soak) → v1.0.0
-```
+Work is organised into work packages (WPs) in parallel lanes. Each WP closes register findings and **exits with evidence**: the affected features in the ledger ([`docs/validation/VALIDATION_PLAN.md`](validation/VALIDATION_PLAN.md) §3) reach the stated level. Phase numbers in §6 are kept for reference. The WPs below are the execution order.
 
-- Discussion items DI-1…DI-8 are agreed (2026-09-24), so Phases 4 and 5 are not blocked on decisions.
-- Phases 4 and 5 can overlap once Phase 4's `core/` API and the WS schema are stable (Phase 5 depends on the schema, not on the backend package layout).
-- The history purge happens at the very start of Phase 0, before any branches exist.
+**Lanes:** **V** validation · **A** core/transport · **B** Remote integration · **C** domain/API · **D** clients and deployment (HA, Flic, Docker) · **E** web UI · **F** security · **G** release and docs.
+
+| WP | Lane | Scope (register IDs) | Depends on | Exit evidence | Status |
+| --- | --- | --- | --- | --- | --- |
+| WP-V1 | V | Validation framework: `features.yaml` registry (every feature, ~200), evidence schema, scenario runner (`tools/validate/`), `LEDGER.md` generator, CI enforcement | — | Ledger generated in CI; every feature listed with its current honest level | next |
+| WP-V2 | V | **C0 baseline truth:** run every feature at V2/V3 on the simulator against current code; failures become findings | WP-V1 | First `LEDGER.md`; new register rows | after V1 |
+| WP-A1 | A | Transport reliability (BE-01, 03, 04, 05, 07, 11, 12, 17, 28–30, API-11) | — | Transport and reliability features at V2 with fault injection; loop lag < 100 ms under faults | in progress |
+| WP-A2 | A | Persistence and process lock (PER-01–03, TST-08, BE-18) | — | Persistence features at V2 on Windows and Linux | in progress |
+| WP-A3 | A | Hardware capture tooling (HIL-A) | — | Capture round-trip proven on the simulator | in progress |
+| WP-H1 | A | **HIL Session 1 / C0-HW:** capture + first V4 runs (routing, presets, power, TV CEC power, one profile) | WP-A3, owner hardware access | Golden captures committed; first V4 evidence | needs owner |
+| WP-A4 | A | Protocol corrections from captures (BE-13, 14, 15, 25, API-07); simulator golden mode | WP-H1 | Affected features at V2 against golden data, V4 re-run | after H1 |
+| WP-B1 | B | Scripted-Remote harness + blocking `uc` CI job; evaluate the UC core simulator (UC-21) | WP-A1 merged | Every Remote entity type exercised at V3; current behaviour pinned | after A1 |
+| WP-B2 | B | Remote integration fixes in `driver.py` (UC-01, 04, 05 part, 06, 07, 17, 19, BE-02, 06, 08, 09, 10, 21) | WP-B1 | Remote features at V3; UC-01 proven fixed through the harness | after B1 |
+| WP-C1 | C | Scenes, shortcuts, profile execution (API-01–08, 13, 14, 23) | WP-V2 | Domain features at V3 | after V2 |
+| WP-C2 | C | WebSocket contract and schema; hub-owned event stream (API-09, 10, UI-02, UC-17 part) | WP-A1 | Every WS event at V2; live updates proven in the browser and HA at V3 | after A1 |
+| WP-D1 | D | Home Assistant fixes + real-HA-container E2E (HA-01–15) | WP-V1 | HA features at V3 in a real HA container | after V1 |
+| WP-D2 | D | Docker/deployment (DEP-01–03, D11, UC-03, UC-11) | WP-A1 | Deployment features at V3 on the shipped image, UC on and off | after A1 |
+| WP-B3 | B | Remote setup flow, `ucapi` 0.7.0, names, power switch, presets (UC-02 short-term, 05, 08, 09, 14, 15, 16) | WP-B2 | Remote features at V3; setup V4 on a real Remote | after B2 |
+| WP-E1 | E | UI functional fixes (UI-01–04, 17, 23–31, BE-31, SEC-07/08 patch), each with visual review | WP-C2 | UI/kiosk flows at V3 with approved visuals | after C2 |
+| **Gate** | | **v0.2.0 "Stabilize"** (VALIDATION_PLAN §6) | WP-A1…E1 | | |
+| WP-F1 | F | Security baseline incl. Remote token auth (SEC-01–13, API-15, HA-16, UC-02) | v0.2.0 | Security features at V3 in all three auth configurations | |
+| **Gate** | | **v0.3.0 "Secure"** | WP-F1 | | |
+| WP-C3 | C/B | Backend consolidation and modular integrations (Phase 4; UC-10, 12, 13, 18; DI-9 entity model after approval of the exact change list) | v0.3.0 | No feature drops below its level; Remote entity migration proven on a real Remote | |
+| WP-E2 | E | UI simplification (Phase 5) | WP-C2, v0.3.0 | Visual review approved; UI flows at V3; V4 on real devices | |
+| WP-G1 | G | Hygiene and release engineering incl. optional on-Remote build (Phase 6, DI-10) | WP-C3 | Release pipeline proven; on-Remote build installed on a real Remote | |
+| WP-G2 | G | Documentation (Phase 7, UC-20) | WP-C3 | Every documented feature links its ledger entry | |
+| WP-V3 | V | **C8 release validation:** HIL-B/C/D/E, 72 h soak, validation report | all | Every feature at target; V5 soak | |
+| **Gate** | | **v1.0.0** | WP-V3 | | |
+
+**Running in parallel now:** WP-A1, WP-A2, WP-A3. **Next:** WP-V1 (touches only `tools/validate/`, `tests/validation/`, `docs/validation/`, CI), then WP-V2. Then WP-B1, WP-C2 and WP-D2 once WP-A1 merges. WP-D1 can start as soon as WP-V1 lands.
 
 ## 8. Definition of done (every PR)
 
 - [ ] Register IDs listed in the PR description; checkboxes ticked here.
 - [ ] Regression test that failed before the fix.
+- [ ] **Evidence:** affected features have fresh evidence records at the WP's exit level (simulator scenarios in CI; hardware records for V4). The ledger shows no feature below its previous level.
 - [ ] L0-L3 green (L4/L5 when touching clients or deployment).
 - [ ] **UI PRs:** before/after captures for every affected catalog entry reviewed and approved (§5.3); new components/states added to the catalog; no raw colours/spacing outside `tokens.css`.
 - [ ] No behaviour or data-format change to an existing feature unless its discussion item (§2.3) was agreed.

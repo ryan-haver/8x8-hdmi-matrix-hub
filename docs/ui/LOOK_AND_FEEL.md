@@ -1,6 +1,6 @@
 # Look & Feel Specification
 
-> **Status:** DRAFT, written 2026-09-25 from the current CSS (`web/css/theme.css`, `web/css/style.css`). It becomes the reference once the Phase 0 UI baseline screenshots are attached and the project owner signs it off. After sign-off, any change to this document goes through the same review as a visual baseline change (see `docs/REMEDIATION_PLAN.md` §5.3).
+> **Status:** APPROVED 2026-09-25. The project owner signed it off after walking through the Phase 0 UI baseline gallery (170 catalog entries, 763 snapshots, `tests/e2e/visual/`). The baseline screenshots are the visual reference for every section below. From now on, changes to this document go through the same review as a visual baseline change (see `docs/REMEDIATION_PLAN.md` §5.3).
 >
 > **Purpose:** define what "correct" looks like, so every UI change can be checked against something written down rather than against memory.
 
@@ -110,7 +110,7 @@ The swatch picker offers eight hues (Cyan 187, Orange 25, Crimson 350, Lime 80, 
 
 ## 8. Component anatomy
 
-To be completed with annotated baseline screenshots from the Phase 0 UI capture. Each entry links to its catalog states.
+The visual reference for each component is its entries in the UI state catalog (`tests/e2e/visual/catalog.ts`) and their approved baselines (browse them with `npm run visual:gallery`).
 
 - **Header:** app title (matrix model name) with the connection status shown as a coloured border line around the title (active / standby / disconnected colours); desktop tabs centred.
 - **Tabs:** Matrix · Dashboard · Inputs · Outputs · Profiles. Users can pin and reorder them. Mobile uses a bottom tab bar.
@@ -124,7 +124,7 @@ To be completed with annotated baseline screenshots from the Phase 0 UI capture.
 
 ## 9. Observed inconsistencies (for review, not yet fixed)
 
-These are recorded as found in the current UI. The baseline captures them as they are; fixing any of them is a deliberate, reviewed visual change.
+These are recorded as found in the current UI, and the approved baseline captures them as they are. They stay open until Phase 5, where each fix is made as a deliberate, reviewed visual change.
 
 1. **Hard-coded Tron colours.** The body background grid (`style.css`) and about 30 other places use literal cyan/orange values (`rgba(0,200,200,…)`, `rgba(255,140,0,…)`, `#00e5cc`, …) instead of accent tokens, so they don't follow the Neon, Royal, or Vaporwave presets.
 2. **Undefined monospace token.** `--font-mono` / `--font-family-mono` are used but never defined, so code text renders in the sans-serif body font.

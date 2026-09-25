@@ -97,3 +97,6 @@ archive/
 
 # Route inventory report (tests/route_inventory.py)
 route-coverage.json
+
+# Local Unfolded Circle reference sources (tools/uc_reference.py)
+reference/
