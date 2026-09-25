@@ -1,0 +1,76 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "telnet/r_fw_version",
+  "title": "Telnet read: r fw version",
+  "answers": [
+    "telnet-read-wording",
+    "telnet-terminators"
+  ],
+  "exchanges": [
+    {
+      "kind": "telnet",
+      "role": "read",
+      "label": "r fw version",
+      "command": "r fw version",
+      "sent_b64": "ciBmdyB2ZXJzaW9uIQ0K",
+      "sent_text": "r fw version!\r\n",
+      "response": {
+        "body_b64": "ciBmdyB2ZXJzaW9uIQ0KbWN1IGZ3IHZlcnNpb246IHYxLjEwLjAxDQprZXkgbWN1ICAgICAgIDogdjEuMDAuMDgNCndlYiBndWkgICAgICAgOiB2Mi4wMC4wMw0KY3BsZCB2ZXJzaW9uICA6IHYxLjAwLjA2DQo=",
+        "text": "r fw version!\r\nmcu fw version: v1.10.01\r\nkey mcu       : v1.00.08\r\nweb gui       : v2.00.03\r\ncpld version  : v1.00.06\r\n",
+        "chunks": [
+          {
+            "t_ms": 29.75,
+            "len": 15
+          },
+          {
+            "t_ms": 166.84,
+            "len": 26
+          },
+          {
+            "t_ms": 169.59,
+            "len": 26
+          },
+          {
+            "t_ms": 172.38,
+            "len": 26
+          },
+          {
+            "t_ms": 175.1,
+            "len": 26
+          }
+        ],
+        "completion": "idle",
+        "idle_ms": 1000,
+        "first_byte_ms": 29.75,
+        "elapsed_ms": 1175.54,
+        "analysis": {
+          "line_endings": {
+            "crlf": 5,
+            "lf": 0,
+            "cr": 0
+          },
+          "lines": [
+            "r fw version!",
+            "mcu fw version: v1.10.01",
+            "key mcu       : v1.00.08",
+            "web gui       : v2.00.03",
+            "cpld version  : v1.00.06"
+          ],
+          "ends_with_newline": true,
+          "trailing_without_newline": "",
+          "last_line": "cpld version  : v1.00.06",
+          "error_code": null,
+          "error_codes_seen": [],
+          "iac": []
+        }
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T17:29:26.922675Z",
+        "elapsed_ms": 1175.54
+      }
+    }
+  ],
+  "mode": "read",
+  "captured_at": "2026-09-25T17:29:28.098123Z"
+}

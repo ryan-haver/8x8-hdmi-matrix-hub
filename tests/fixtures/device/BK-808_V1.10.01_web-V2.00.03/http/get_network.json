@@ -1,0 +1,73 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "http/get_network",
+  "title": "Read: get network",
+  "note": "",
+  "answers": [
+    "http-read-shapes",
+    "get-network-fields"
+  ],
+  "exchanges": [
+    {
+      "kind": "http",
+      "role": "read",
+      "label": "get network",
+      "comhead": "get network",
+      "request": {
+        "method": "POST",
+        "path": "/cgi-bin/instr",
+        "headers": [
+          "Host: 192.168.0.100",
+          "Content-Type: application/json",
+          "Accept: */*",
+          "Accept-Encoding: gzip, deflate",
+          "User-Agent: Python/3.12 aiohttp/3.13.3",
+          "Content-Length: 41"
+        ],
+        "json": {
+          "comhead": "get network",
+          "language": 0
+        },
+        "body_text": "{\"comhead\": \"get network\", \"language\": 0}"
+      },
+      "response": {
+        "status": 200,
+        "reason": "OK",
+        "http_version": "1.1",
+        "headers": [
+          "Connection: Keep-Alive",
+          "Transfer-Encoding: chunked",
+          "Keep-Alive: timeout=200",
+          "content-type: text/plain"
+        ],
+        "body_b64": "eyJjb21oZWFkIjoiZ2V0IG5ldHdvcmsiLCJwb3dlciI6MSwiZGhjcCI6MSwiaXBhZGRyZXNzIjoiMTkyLjE2OC4wLjEwMCIsInN1Ym5ldCI6IjI1NS4yNTUuMjU0LjAiLCJnYXRld2F5IjoiMTkyLjE2OC4xLjI1NCIsInRlbG5ldHBvcnQiOjIzLCJ0Y3Bwb3J0Ijo4MDAwLCJtYWNhZGRyZXNzIjoiKioqUkVEQUNURUQqKioiLCJob3N0bmFtZSI6IioqKlJFREFDVEVEKioqIiwidXNlcm5hbWUiOjEsIm1vZGVsIjoiQkstODA4In0NCg==",
+        "body_text": "{\"comhead\":\"get network\",\"power\":1,\"dhcp\":1,\"ipaddress\":\"192.168.0.100\",\"subnet\":\"255.255.254.0\",\"gateway\":\"192.168.1.254\",\"telnetport\":23,\"tcpport\":8000,\"macaddress\":\"***REDACTED***\",\"hostname\":\"***REDACTED***\",\"username\":1,\"model\":\"BK-808\"}\r\n",
+        "json": {
+          "comhead": "get network",
+          "power": 1,
+          "dhcp": 1,
+          "ipaddress": "192.168.0.100",
+          "subnet": "255.255.254.0",
+          "gateway": "192.168.1.254",
+          "telnetport": 23,
+          "tcpport": 8000,
+          "macaddress": "***REDACTED***",
+          "hostname": "***REDACTED***",
+          "username": 1,
+          "model": "BK-808"
+        },
+        "json_error": null
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T17:28:37.168539Z",
+        "elapsed_ms": 250.95
+      }
+    }
+  ],
+  "mode": "read",
+  "captured_at": "2026-09-25T17:28:37.420460Z",
+  "redactions": [
+    "secret value scrubbed from stored text/bytes"
+  ]
+}

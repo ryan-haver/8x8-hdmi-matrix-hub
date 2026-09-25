@@ -1,0 +1,71 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "http/get_status",
+  "title": "Read: get status",
+  "note": "",
+  "answers": [
+    "http-read-shapes",
+    "get-status-fields"
+  ],
+  "exchanges": [
+    {
+      "kind": "http",
+      "role": "read",
+      "label": "get status",
+      "comhead": "get status",
+      "request": {
+        "method": "POST",
+        "path": "/cgi-bin/instr",
+        "headers": [
+          "Host: 192.168.0.100",
+          "Content-Type: application/json",
+          "Accept: */*",
+          "Accept-Encoding: gzip, deflate",
+          "User-Agent: Python/3.12 aiohttp/3.13.3",
+          "Content-Length: 40"
+        ],
+        "json": {
+          "comhead": "get status",
+          "language": 0
+        },
+        "body_text": "{\"comhead\": \"get status\", \"language\": 0}"
+      },
+      "response": {
+        "status": 200,
+        "reason": "OK",
+        "http_version": "1.1",
+        "headers": [
+          "Connection: Keep-Alive",
+          "Transfer-Encoding: chunked",
+          "Keep-Alive: timeout=200",
+          "content-type: text/plain"
+        ],
+        "body_b64": "eyJjb21oZWFkIjoiZ2V0IHN0YXR1cyIsInBvd2VyIjoxLCJ2ZXJzaW9uIjoiVjEuMTAuMDEiLCJob3N0bmFtZSI6IioqKlJFREFDVEVEKioqIiwiaXBhZGRyZXNzIjoiMTkyLjE2OC4wLjEwMCIsInN1Ym5ldCI6IjI1NS4yNTUuMjU0LjAiLCJnYXRld2F5IjoiMTkyLjE2OC4xLjI1NCIsIm1hY2FkZHJlc3MiOiIqKipSRURBQ1RFRCoqKiIsIm1vZGVsIjoiQkstODA4Iiwid2VidmVyc2lvbiI6IlYyLjAwLjAzIn0NCg==",
+        "body_text": "{\"comhead\":\"get status\",\"power\":1,\"version\":\"V1.10.01\",\"hostname\":\"***REDACTED***\",\"ipaddress\":\"192.168.0.100\",\"subnet\":\"255.255.254.0\",\"gateway\":\"192.168.1.254\",\"macaddress\":\"***REDACTED***\",\"model\":\"BK-808\",\"webversion\":\"V2.00.03\"}\r\n",
+        "json": {
+          "comhead": "get status",
+          "power": 1,
+          "version": "V1.10.01",
+          "hostname": "***REDACTED***",
+          "ipaddress": "192.168.0.100",
+          "subnet": "255.255.254.0",
+          "gateway": "192.168.1.254",
+          "macaddress": "***REDACTED***",
+          "model": "BK-808",
+          "webversion": "V2.00.03"
+        },
+        "json_error": null
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T17:28:36.892032Z",
+        "elapsed_ms": 276.67
+      }
+    }
+  ],
+  "mode": "read",
+  "captured_at": "2026-09-25T17:28:37.168539Z",
+  "redactions": [
+    "secret value scrubbed from stored text/bytes"
+  ]
+}

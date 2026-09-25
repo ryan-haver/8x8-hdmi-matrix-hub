@@ -1,0 +1,85 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "telnet/banner",
+  "title": "Telnet connection banner",
+  "answers": [
+    "telnet-banner",
+    "telnet-iac",
+    "telnet-terminators"
+  ],
+  "exchanges": [
+    {
+      "kind": "telnet",
+      "role": "banner",
+      "label": "banner",
+      "command": null,
+      "sent_b64": "",
+      "response": {
+        "body_b64": "//sD//wB//4B//4A//wDKioqKioqKioqKioqKioqKndlbGNvbWUgKioqKioqKioqKioqKioNCiAgICAgICAgICAgIGZ3IHZlcnNpb24gOnYxLjEwLjAxICAgICAgICANCioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqDQoNCg==",
+        "text": "****************welcome **************\r\n            fw version :v1.10.01        \r\n**************************************\r\n\r\n",
+        "chunks": [
+          {
+            "t_ms": 1.57,
+            "len": 12
+          },
+          {
+            "t_ms": 2.26,
+            "len": 3
+          },
+          {
+            "t_ms": 160.99,
+            "len": 40
+          },
+          {
+            "t_ms": 161.07,
+            "len": 42
+          },
+          {
+            "t_ms": 165.75,
+            "len": 40
+          },
+          {
+            "t_ms": 183.91,
+            "len": 2
+          }
+        ],
+        "completion": "idle",
+        "idle_ms": 1500,
+        "first_byte_ms": 1.57,
+        "elapsed_ms": 1683.76,
+        "analysis": {
+          "line_endings": {
+            "crlf": 4,
+            "lf": 0,
+            "cr": 0
+          },
+          "lines": [
+            "****************welcome **************",
+            "            fw version :v1.10.01        ",
+            "**************************************",
+            ""
+          ],
+          "ends_with_newline": true,
+          "trailing_without_newline": "",
+          "last_line": "**************************************",
+          "error_code": null,
+          "error_codes_seen": [],
+          "iac": [
+            "IAC WILL 3",
+            "IAC WONT 1",
+            "IAC DONT 1",
+            "IAC DONT 0",
+            "IAC WONT 3"
+          ]
+        }
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T17:29:23.734434Z",
+        "elapsed_ms": 1683.76
+      }
+    }
+  ],
+  "mode": "read",
+  "captured_at": "2026-09-25T17:29:25.418395Z"
+}

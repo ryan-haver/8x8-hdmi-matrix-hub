@@ -1,0 +1,61 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "telnet/r_link_in_3",
+  "title": "Telnet read: r link in 3",
+  "answers": [
+    "telnet-read-wording",
+    "telnet-terminators"
+  ],
+  "exchanges": [
+    {
+      "kind": "telnet",
+      "role": "read",
+      "label": "r link in 3",
+      "command": "r link in 3",
+      "sent_b64": "ciBsaW5rIGluIDMhDQo=",
+      "sent_text": "r link in 3!\r\n",
+      "response": {
+        "body_b64": "ciBsaW5rIGluIDMhDQpoZG1pIGlucHV0IDM6IGRpc2Nvbm5lY3QNCg==",
+        "text": "r link in 3!\r\nhdmi input 3: disconnect\r\n",
+        "chunks": [
+          {
+            "t_ms": 85.11,
+            "len": 14
+          },
+          {
+            "t_ms": 223.86,
+            "len": 26
+          }
+        ],
+        "completion": "idle",
+        "idle_ms": 1000,
+        "first_byte_ms": 85.11,
+        "elapsed_ms": 1224.05,
+        "analysis": {
+          "line_endings": {
+            "crlf": 2,
+            "lf": 0,
+            "cr": 0
+          },
+          "lines": [
+            "r link in 3!",
+            "hdmi input 3: disconnect"
+          ],
+          "ends_with_newline": true,
+          "trailing_without_newline": "",
+          "last_line": "hdmi input 3: disconnect",
+          "error_code": null,
+          "error_codes_seen": [],
+          "iac": []
+        }
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T17:29:31.605171Z",
+        "elapsed_ms": 1224.05
+      }
+    }
+  ],
+  "mode": "read",
+  "captured_at": "2026-09-25T17:29:32.829494Z"
+}
