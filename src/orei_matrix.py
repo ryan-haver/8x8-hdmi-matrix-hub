@@ -618,6 +618,24 @@ class OreiMatrix:
         self.events.emit(Events.DISCONNECTED)
         _LOG.info("Disconnected from OREI Matrix")
 
+    def _check_write(self, success: bool, response: dict | None, command: dict[str, Any]) -> bool:
+        """Report whether a write was accepted (BE-12), logging why not.
+
+        A write succeeds only if the matrix answered with a success ``result``
+        (see :func:`is_write_success`); HTTP 200 alone proves nothing.
+        """
+        comhead = command.get("comhead", "?")
+        if not success:
+            _LOG.error("Write '%s' failed: no valid answer from the matrix (%s)", comhead, self._last_error)
+            return False
+        if is_write_success(response):
+            return True
+        result = response.get("result") if isinstance(response, dict) else None
+        args = {k: v for k, v in command.items() if k not in ("comhead", "language")}
+        _LOG.error("Matrix rejected '%s' %s (result=%r)", comhead, args, result)
+        self._last_error = f"Matrix rejected '{comhead}' (result={result!r})"
+        return False
+
     def _invalidate_status_caches(self) -> None:
         self._status_cache = None
         self._output_status_cache = None
@@ -696,20 +714,11 @@ class OreiMatrix:
 
         success, response = await self._send_command(command)
 
-        if success:
-            # Check if we got a valid response
-            if response and response.get("result") == 1:
-                _LOG.info("✓ Preset %d recalled successfully (confirmed by matrix)", scene)
-                self._current_scene = scene
-                self.events.emit(Events.UPDATE, {"scene": scene})
-                return True
-            elif response:
-                _LOG.warning("Preset %d command sent but matrix returned result: %s", scene, response.get("result"))
-                return False
-            else:
-                # No response - treat as failure since we can't confirm success
-                _LOG.warning("Preset %d command sent but no response from matrix", scene)
-                return False
+        if self._check_write(success, response, command):
+            _LOG.info("✓ Preset %d recalled successfully (confirmed by matrix)", scene)
+            self._current_scene = scene
+            self.events.emit(Events.UPDATE, {"scene": scene})
+            return True
 
         _LOG.error("Failed to recall preset %d", scene)
         return False
@@ -843,14 +852,10 @@ class OreiMatrix:
 
         success, response = await self._send_command(command)
 
-        if success:
-            if response and response.get("result") == 1:
-                _LOG.info("✓ Input %d switched to output %d (confirmed)", input_num, output_num)
-                self.events.emit(Events.UPDATE, {"input": input_num, "output": output_num})
-                return True
-            else:
-                _LOG.warning("Input %d to output %d command sent but no valid response from matrix", input_num, output_num)
-                return False
+        if self._check_write(success, response, command):
+            _LOG.info("✓ Input %d switched to output %d (confirmed)", input_num, output_num)
+            self.events.emit(Events.UPDATE, {"input": input_num, "output": output_num})
+            return True
 
         _LOG.error("Failed to switch input %d to output %d", input_num, output_num)
         return False
@@ -874,15 +879,11 @@ class OreiMatrix:
 
         success, response = await self._send_command(command)
 
-        if success:
-            if response and response.get("result") == 1:
-                _LOG.info("✓ Input %d switched to all outputs (confirmed)", input_num)
-                self.events.emit(Events.UPDATE, {"input": input_num, "all_outputs": True})
-                return True
-            else:
-                _LOG.info("✓ Switch all command sent (no confirmation)")
-                self.events.emit(Events.UPDATE, {"input": input_num, "all_outputs": True})
-                return True
+        # BE-12: this used to report success even when the matrix rejected it.
+        if self._check_write(success, response, command):
+            _LOG.info("✓ Input %d switched to all outputs (confirmed)", input_num)
+            self.events.emit(Events.UPDATE, {"input": input_num, "all_outputs": True})
+            return True
 
         _LOG.error("Failed to switch input %d to all outputs", input_num)
         return False
@@ -901,7 +902,7 @@ class OreiMatrix:
 
         success, response = await self._send_command(command)
 
-        if success and response and response.get("result") == 1:
+        if self._check_write(success, response, command):
             _LOG.info("✓ Matrix powered ON (confirmed)")
             self.events.emit(Events.UPDATE, {"power": "on"})
             return True
@@ -923,7 +924,7 @@ class OreiMatrix:
 
         success, response = await self._send_command(command)
 
-        if success and response and response.get("result") == 1:
+        if self._check_write(success, response, command):
             _LOG.info("✓ Matrix powered OFF (confirmed)")
             self.events.emit(Events.UPDATE, {"power": "off"})
             return True
@@ -1162,7 +1163,7 @@ class OreiMatrix:
         _LOG.debug("Sending CEC command: %s", command)
         success, response = await self._send_command(command)
 
-        if success:
+        if self._check_write(success, response, command):
             _LOG.info("✓ CEC command %d sent to %s %d", command_index, "output" if is_output else "input", port_num)
             return True
 
@@ -1679,7 +1680,7 @@ class OreiMatrix:
         _LOG.debug("Setting CEC index: %s", command)
         success, response = await self._send_command(command)
 
-        if success:
+        if self._check_write(success, response, command):
             # Update cache immediately
             if is_output:
                 self._cec_enabled_cache["outputs"][port_num - 1] = enabled
@@ -1797,7 +1798,7 @@ class OreiMatrix:
 
         success, response = await self._send_command(command)
 
-        if success and response and response.get("result") == 1:
+        if self._check_write(success, response, command):
             _LOG.info("✓ Panel lock set to: %s", "LOCKED" if locked else "UNLOCKED")
             self.events.emit(Events.UPDATE, {"panel_lock": locked})
             return True
@@ -1818,7 +1819,7 @@ class OreiMatrix:
 
         success, response = await self._send_command(command)
 
-        if success and response and response.get("result") == 1:
+        if self._check_write(success, response, command):
             _LOG.info("✓ Beep set to: %s", "ON" if enabled else "OFF")
             self.events.emit(Events.UPDATE, {"beep": enabled})
             return True
@@ -1849,7 +1850,7 @@ class OreiMatrix:
 
         success, response = await self._send_command(command)
 
-        if success and response and response.get("result") == 1:
+        if self._check_write(success, response, command):
             _LOG.info("✓ CEC configuration updated")
             self.events.emit(Events.UPDATE, {"cec_config": {"inputs": input_ports, "outputs": output_ports}})
             return True
@@ -2009,7 +2010,7 @@ class OreiMatrix:
 
         success, response = await self._send_command(command)
 
-        if success and response and response.get("result") == 1:
+        if self._check_write(success, response, command):
             _LOG.info("✓ Input %d renamed to: %s", input_num, name)
             self.events.emit(Events.UPDATE, {"input_name": {input_num: name}})
             return True
@@ -2038,7 +2039,7 @@ class OreiMatrix:
 
         success, response = await self._send_command(command)
 
-        if success and response and response.get("result") == 1:
+        if self._check_write(success, response, command):
             _LOG.info("✓ Output %d renamed to: %s", output_num, name)
             self.events.emit(Events.UPDATE, {"output_name": {output_num: name}})
             return True
@@ -2066,8 +2067,8 @@ class OreiMatrix:
 
         action = "enable" if enable else "disable"
         _LOG.info(f"Setting output {output_num} stream to {action}")
-        success, _ = await self._send_command(command)
-        return success
+        success, response = await self._send_command(command)
+        return self._check_write(success, response, command)
 
     async def set_output_hdcp(self, output_num: int, mode: int) -> bool:
         """
@@ -2088,8 +2089,8 @@ class OreiMatrix:
         command = {"comhead": "set output hdcp", "output": output_num, "hdcp": mode}
 
         _LOG.info(f"Setting output {output_num} HDCP mode to {mode}")
-        success, _ = await self._send_command(command)
-        return success
+        success, response = await self._send_command(command)
+        return self._check_write(success, response, command)
 
     async def set_output_hdr(self, output_num: int, mode: int) -> bool:
         """
@@ -2110,8 +2111,8 @@ class OreiMatrix:
         command = {"comhead": "set output hdr", "output": output_num, "hdr": mode}
 
         _LOG.info(f"Setting output {output_num} HDR mode to {mode}")
-        success, _ = await self._send_command(command)
-        return success
+        success, response = await self._send_command(command)
+        return self._check_write(success, response, command)
 
     async def set_output_scaler(self, output_num: int, mode: int) -> bool:
         """
@@ -2132,8 +2133,8 @@ class OreiMatrix:
         command = {"comhead": "set output scaler", "output": output_num, "scaler": mode}
 
         _LOG.info(f"Setting output {output_num} scaler mode to {mode}")
-        success, _ = await self._send_command(command)
-        return success
+        success, response = await self._send_command(command)
+        return self._check_write(success, response, command)
 
     async def set_output_arc(self, output_num: int, enable: bool) -> bool:
         """
@@ -2151,8 +2152,8 @@ class OreiMatrix:
 
         action = "enable" if enable else "disable"
         _LOG.info(f"Setting output {output_num} ARC to {action}")
-        success, _ = await self._send_command(command)
-        return success
+        success, response = await self._send_command(command)
+        return self._check_write(success, response, command)
 
     async def set_output_audio_mute(self, output_num: int, mute: bool) -> bool:
         """
@@ -2170,8 +2171,8 @@ class OreiMatrix:
 
         action = "mute" if mute else "unmute"
         _LOG.info(f"Setting output {output_num} audio to {action}")
-        success, _ = await self._send_command(command)
-        return success
+        success, response = await self._send_command(command)
+        return self._check_write(success, response, command)
 
     async def set_cec_enable(self, port_type: str, port_num: int, enable: bool) -> bool:
         """
@@ -2194,8 +2195,8 @@ class OreiMatrix:
 
         action = "enable" if enable else "disable"
         _LOG.info(f"Setting CEC on {port_type} {port_num} to {action}")
-        success, _ = await self._send_command(command)
-        return success
+        success, response = await self._send_command(command)
+        return self._check_write(success, response, command)
 
     async def save_preset(self, preset_num: int) -> bool:
         """
@@ -2211,8 +2212,8 @@ class OreiMatrix:
         command = {"comhead": "preset save", "language": 0, "index": preset_num}
 
         _LOG.info(f"Saving current routing to preset {preset_num}")
-        success, _ = await self._send_command(command)
-        return success
+        success, response = await self._send_command(command)
+        return self._check_write(success, response, command)
 
     async def system_reboot(self) -> bool:
         """
@@ -2234,7 +2235,8 @@ class OreiMatrix:
         # Fall back to HTTP if Telnet is not connected/available
         _LOG.info("Sending reboot command via HTTP...")
         command = {"comhead": "set reboot"}
-        success, _ = await self._send_command(command, retry_on_failure=False)
+        sent, response = await self._send_command(command, retry_on_failure=False)
+        success = self._check_write(sent, response, command)
 
         if success:
             self._link_lost("matrix reboot requested")
@@ -2286,8 +2288,8 @@ class OreiMatrix:
 
         mode_name = self.get_lcd_timeout_name(mode)
         _LOG.info(f"Setting LCD timeout to {mode} ({mode_name})")
-        success, _ = await self._send_command(command)
-        return success
+        success, response = await self._send_command(command)
+        return self._check_write(success, response, command)
 
     async def route_input_to_all_outputs(self, input_num: int) -> bool:
         """
@@ -2411,8 +2413,8 @@ class OreiMatrix:
 
         mode_name = self.get_edid_mode_name(mode)
         _LOG.info(f"Setting input {input_num} EDID to {mode} ({mode_name})")
-        success, _ = await self._send_command(command)
-        return success
+        success, response = await self._send_command(command)
+        return self._check_write(success, response, command)
 
     async def copy_edid_from_output(self, input_num: int, output_num: int) -> bool:
         """
@@ -2489,8 +2491,8 @@ class OreiMatrix:
 
         mode_name = self.get_ext_audio_mode_name(mode)
         _LOG.info(f"Setting ext-audio mode to {mode} ({mode_name})")
-        success, _ = await self._send_command(command)
-        return success
+        success, response = await self._send_command(command)
+        return self._check_write(success, response, command)
 
     async def set_ext_audio_enable(self, output_num: int, enabled: bool) -> bool:
         """
@@ -2509,8 +2511,8 @@ class OreiMatrix:
 
         state = "enabled" if enabled else "disabled"
         _LOG.info(f"Setting ext-audio output {output_num} to {state}")
-        success, _ = await self._send_command(command)
-        return success
+        success, response = await self._send_command(command)
+        return self._check_write(success, response, command)
 
     async def set_ext_audio_source(self, output_num: int, input_num: int) -> bool:
         """
@@ -2533,8 +2535,8 @@ class OreiMatrix:
         command = {"comhead": "set output exa in source", "output": output_num, "input": input_num}
 
         _LOG.info(f"Setting ext-audio output {output_num} source to input {input_num}")
-        success, _ = await self._send_command(command)
-        return success
+        success, response = await self._send_command(command)
+        return self._check_write(success, response, command)
 
     # =========================================================================
     # Device Capability Detection (for CEC routing)
