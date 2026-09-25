@@ -1,0 +1,590 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "telnet/status",
+  "title": "Telnet read: status",
+  "answers": [
+    "telnet-status-wording",
+    "telnet-terminators"
+  ],
+  "exchanges": [
+    {
+      "kind": "telnet",
+      "role": "read",
+      "label": "status",
+      "command": "status",
+      "sent_b64": "c3RhdHVzIQ0K",
+      "sent_text": "status!\r\n",
+      "response": {
+        "body_b64": "c3RhdHVzIQ0KZ2V0IHRoZSB1bml0IGFsbCBzdGF0dXM6DQpwb3dlciBvbg0KYmVlcCBvbg0KcGFuZWwgYnV0dG9uIGxvY2sgb2ZmDQpsY2Qgb24gMzAgc2Vjb25kcw0KaGRtaSBpbnB1dCAxOiBkaXNjb25uZWN0DQpoZG1pIGlucHV0IDI6IGRpc2Nvbm5lY3QNCmhkbWkgaW5wdXQgMzogZGlzY29ubmVjdA0KaGRtaSBpbnB1dCA0OiBkaXNjb25uZWN0DQpoZG1pIGlucHV0IDU6IGRpc2Nvbm5lY3QNCmhkbWkgaW5wdXQgNjogZGlzY29ubmVjdA0KaGRtaSBpbnB1dCA3OiBjb25uZWN0DQpoZG1pIGlucHV0IDg6IGNvbm5lY3QNCmhkbWkgb3V0cHV0IDE6IGNvbm5lY3QNCmhkbWkgb3V0cHV0IDI6IGNvbm5lY3QNCmhkbWkgb3V0cHV0IDM6IGRpc2Nvbm5lY3QNCmhkbWkgb3V0cHV0IDQ6IGRpc2Nvbm5lY3QNCmhkbWkgb3V0cHV0IDU6IGRpc2Nvbm5lY3QNCmhkbWkgb3V0cHV0IDY6IGRpc2Nvbm5lY3QNCmhkbWkgb3V0cHV0IDc6IGRpc2Nvbm5lY3QNCmhkbWkgb3V0cHV0IDg6IGRpc2Nvbm5lY3QNCm91dHB1dDEtPmlucHV0Nw0Kb3V0cHV0Mi0+aW5wdXQ3DQpvdXRwdXQzLT5pbnB1dDcNCm91dHB1dDQtPmlucHV0Nw0Kb3V0cHV0NS0+aW5wdXQ3DQpvdXRwdXQ2LT5pbnB1dDcNCm91dHB1dDctPmlucHV0Nw0Kb3V0cHV0OC0+aW5wdXQ3DQpvdXRwdXQgMSBoZGNwOiBmb2xsb3cgc2luaw0Kb3V0cHV0IDIgaGRjcDogZm9sbG93IHNpbmsNCm91dHB1dCAzIGhkY3A6IGZvbGxvdyBzaW5rDQpvdXRwdXQgNCBoZGNwOiBmb2xsb3cgc2luaw0Kb3V0cHV0IDUgaGRjcDogZm9sbG93IHNpbmsNCm91dHB1dCA2IGhkY3A6IGZvbGxvdyBzaW5rDQpvdXRwdXQgNyBoZGNwOiBmb2xsb3cgc2luaw0Kb3V0cHV0IDggaGRjcDogZm9sbG93IHNpbmsNCm91dHB1dCAxIHN0cmVhbTogZW5hYmxlDQpvdXRwdXQgMiBzdHJlYW06IGVuYWJsZQ0Kb3V0cHV0IDMgc3RyZWFtOiBkaXNhYmxlDQpvdXRwdXQgNCBzdHJlYW06IGRpc2FibGUNCm91dHB1dCA1IHN0cmVhbTogZGlzYWJsZQ0Kb3V0cHV0IDYgc3RyZWFtOiBkaXNhYmxlDQpvdXRwdXQgNyBzdHJlYW06IGRpc2FibGUNCm91dHB1dCA4IHN0cmVhbTogZGlzYWJsZQ0Kb3V0cHV0IDEgdmlkZW8gbW9kZTogcGFzcy10aHJvdWdoDQpvdXRwdXQgMiB2aWRlbyBtb2RlOiBhdWRpbyBvbmx5DQpvdXRwdXQgMyB2aWRlbyBtb2RlOiBwYXNzLXRocm91Z2gNCm91dHB1dCA0IHZpZGVvIG1vZGU6IHBhc3MtdGhyb3VnaA0Kb3V0cHV0IDUgdmlkZW8gbW9kZTogcGFzcy10aHJvdWdoDQpvdXRwdXQgNiB2aWRlbyBtb2RlOiBwYXNzLXRocm91Z2gNCm91dHB1dCA3IHZpZGVvIG1vZGU6IHBhc3MtdGhyb3VnaA0Kb3V0cHV0IDggdmlkZW8gbW9kZTogcGFzcy10aHJvdWdoDQpvdXRwdXQgMSBoZHIgbW9kZTogcGFzcy10aHJvdWdoDQpvdXRwdXQgMiBoZHIgbW9kZTogcGFzcy10aHJvdWdoDQpvdXRwdXQgMyBoZHIgbW9kZTogcGFzcy10aHJvdWdoDQpvdXRwdXQgNCBoZHIgbW9kZTogcGFzcy10aHJvdWdoDQpvdXRwdXQgNSBoZHIgbW9kZTogcGFzcy10aHJvdWdoDQpvdXRwdXQgNiBoZHIgbW9kZTogcGFzcy10aHJvdWdoDQpvdXRwdXQgNyBoZHIgbW9kZTogcGFzcy10aHJvdWdoDQpvdXRwdXQgOCBoZHIgbW9kZTogcGFzcy10aHJvdWdoDQpvdXRwdXQgMSBhcmM6IG9mZg0Kb3V0cHV0IDIgYXJjOiBvZmYNCm91dHB1dCAzIGFyYzogb2ZmDQpvdXRwdXQgNCBhcmM6IG9mZg0Kb3V0cHV0IDUgYXJjOiBvZmYNCm91dHB1dCA2IGFyYzogb2ZmDQpvdXRwdXQgNyBhcmM6IG9mZg0Kb3V0cHV0IDggYXJjOiBvZmYNCm91dHB1dCAxIGF1ZGlvIG11dGU6IG9mZg0Kb3V0cHV0IDIgYXVkaW8gbXV0ZTogb2ZmDQpvdXRwdXQgMyBhdWRpbyBtdXRlOiBvZmYNCm91dHB1dCA0IGF1ZGlvIG11dGU6IG9mZg0Kb3V0cHV0IDUgYXVkaW8gbXV0ZTogb2ZmDQpvdXRwdXQgNiBhdWRpbyBtdXRlOiBvZmYNCm91dHB1dCA3IGF1ZGlvIG11dGU6IG9mZg0Kb3V0cHV0IDggYXVkaW8gbXV0ZTogb2ZmDQppbnB1dCAxIGVkaWQ6ZnJsMTJnXzhrX2hkciw3LjFjaA0KaW5wdXQgMiBlZGlkOmZybDEyZ184a19oZHIsNy4xY2gNCmlucHV0IDMgZWRpZDpmcmwxMmdfOGtfaGRyLDcuMWNoDQppbnB1dCA0IGVkaWQ6ZnJsMTJnXzhrX2hkciw3LjFjaA0KaW5wdXQgNSBlZGlkOmZybDEyZ184a19oZHIsNy4xY2gNCmlucHV0IDYgZWRpZDpmcmwxMmdfOGtfaGRyLDcuMWNoDQppbnB1dCA3IGVkaWQ6ZnJsMTJnXzhrX2hkciw3LjFjaA0KaW5wdXQgOCBlZGlkOmZybDEyZ184a19oZHIsNy4xY2gNCm91dHB1dCAxIGV4dC1hdWRpbzogZW5hYmxlDQpvdXRwdXQgMiBleHQtYXVkaW86IGVuYWJsZQ0Kb3V0cHV0IDMgZXh0LWF1ZGlvOiBlbmFibGUNCm91dHB1dCA0IGV4dC1hdWRpbzogZW5hYmxlDQpvdXRwdXQgNSBleHQtYXVkaW86IGVuYWJsZQ0Kb3V0cHV0IDYgZXh0LWF1ZGlvOiBlbmFibGUNCm91dHB1dCA3IGV4dC1hdWRpbzogZW5hYmxlDQpvdXRwdXQgOCBleHQtYXVkaW86IGVuYWJsZQ0Kb3V0cHV0IGV4dC1hdWRpbyBtb2RlOiBiaW5kIHRvIGlucHV0DQpvdXRwdXQgMSBleHQtYXVkaW8tPmlucHV0MQ0Kb3V0cHV0IDIgZXh0LWF1ZGlvLT5pbnB1dDINCm91dHB1dCAzIGV4dC1hdWRpby0+aW5wdXQzDQpvdXRwdXQgNCBleHQtYXVkaW8tPmlucHV0NA0Kb3V0cHV0IDUgZXh0LWF1ZGlvLT5pbnB1dDUNCm91dHB1dCA2IGV4dC1hdWRpby0+aW5wdXQ2DQpvdXRwdXQgNyBleHQtYXVkaW8tPmlucHV0Nw0Kb3V0cHV0IDggZXh0LWF1ZGlvLT5pbnB1dDgNCmlwIG1vZGU6IGRoY3ANCmlwOiAxOTIuMTY4LjAuMTAwDQpzdWJuZXQgbWFzazogMjU1LjI1NS4yNTQuMA0KZ2F0ZXdheTogMTkyLjE2OC4xLjI1NA0KdGNwL2lwIHBvcnQ6ODAwMA0KdGVsbmV0IHBvcnQ6MjMNCm1hYyBhZGRyZXNzOiAqKipSRURBQ1RFRCoqKg0KDQo=",
+        "text": "status!\r\nget the unit all status:\r\npower on\r\nbeep on\r\npanel button lock off\r\nlcd on 30 seconds\r\nhdmi input 1: disconnect\r\nhdmi input 2: disconnect\r\nhdmi input 3: disconnect\r\nhdmi input 4: disconnect\r\nhdmi input 5: disconnect\r\nhdmi input 6: disconnect\r\nhdmi input 7: connect\r\nhdmi input 8: connect\r\nhdmi output 1: connect\r\nhdmi output 2: connect\r\nhdmi output 3: disconnect\r\nhdmi output 4: disconnect\r\nhdmi output 5: disconnect\r\nhdmi output 6: disconnect\r\nhdmi output 7: disconnect\r\nhdmi output 8: disconnect\r\noutput1->input7\r\noutput2->input7\r\noutput3->input7\r\noutput4->input7\r\noutput5->input7\r\noutput6->input7\r\noutput7->input7\r\noutput8->input7\r\noutput 1 hdcp: follow sink\r\noutput 2 hdcp: follow sink\r\noutput 3 hdcp: follow sink\r\noutput 4 hdcp: follow sink\r\noutput 5 hdcp: follow sink\r\noutput 6 hdcp: follow sink\r\noutput 7 hdcp: follow sink\r\noutput 8 hdcp: follow sink\r\noutput 1 stream: enable\r\noutput 2 stream: enable\r\noutput 3 stream: disable\r\noutput 4 stream: disable\r\noutput 5 stream: disable\r\noutput 6 stream: disable\r\noutput 7 stream: disable\r\noutput 8 stream: disable\r\noutput 1 video mode: pass-through\r\noutput 2 video mode: audio only\r\noutput 3 video mode: pass-through\r\noutput 4 video mode: pass-through\r\noutput 5 video mode: pass-through\r\noutput 6 video mode: pass-through\r\noutput 7 video mode: pass-through\r\noutput 8 video mode: pass-through\r\noutput 1 hdr mode: pass-through\r\noutput 2 hdr mode: pass-through\r\noutput 3 hdr mode: pass-through\r\noutput 4 hdr mode: pass-through\r\noutput 5 hdr mode: pass-through\r\noutput 6 hdr mode: pass-through\r\noutput 7 hdr mode: pass-through\r\noutput 8 hdr mode: pass-through\r\noutput 1 arc: off\r\noutput 2 arc: off\r\noutput 3 arc: off\r\noutput 4 arc: off\r\noutput 5 arc: off\r\noutput 6 arc: off\r\noutput 7 arc: off\r\noutput 8 arc: off\r\noutput 1 audio mute: off\r\noutput 2 audio mute: off\r\noutput 3 audio mute: off\r\noutput 4 audio mute: off\r\noutput 5 audio mute: off\r\noutput 6 audio mute: off\r\noutput 7 audio mute: off\r\noutput 8 audio mute: off\r\ninput 1 edid:frl12g_8k_hdr,7.1ch\r\ninput 2 edid:frl12g_8k_hdr,7.1ch\r\ninput 3 edid:frl12g_8k_hdr,7.1ch\r\ninput 4 edid:frl12g_8k_hdr,7.1ch\r\ninput 5 edid:frl12g_8k_hdr,7.1ch\r\ninput 6 edid:frl12g_8k_hdr,7.1ch\r\ninput 7 edid:frl12g_8k_hdr,7.1ch\r\ninput 8 edid:frl12g_8k_hdr,7.1ch\r\noutput 1 ext-audio: enable\r\noutput 2 ext-audio: enable\r\noutput 3 ext-audio: enable\r\noutput 4 ext-audio: enable\r\noutput 5 ext-audio: enable\r\noutput 6 ext-audio: enable\r\noutput 7 ext-audio: enable\r\noutput 8 ext-audio: enable\r\noutput ext-audio mode: bind to input\r\noutput 1 ext-audio->input1\r\noutput 2 ext-audio->input2\r\noutput 3 ext-audio->input3\r\noutput 4 ext-audio->input4\r\noutput 5 ext-audio->input5\r\noutput 6 ext-audio->input6\r\noutput 7 ext-audio->input7\r\noutput 8 ext-audio->input8\r\nip mode: dhcp\r\nip: 192.168.0.100\r\nsubnet mask: 255.255.254.0\r\ngateway: 192.168.1.254\r\ntcp/ip port:8000\r\ntelnet port:23\r\nmac address: ***REDACTED***\r\n\r\n",
+        "chunks": [
+          {
+            "t_ms": 28.2,
+            "len": 9
+          },
+          {
+            "t_ms": 164.84,
+            "len": 26
+          },
+          {
+            "t_ms": 166.2,
+            "len": 10
+          },
+          {
+            "t_ms": 167.59,
+            "len": 9
+          },
+          {
+            "t_ms": 170.31,
+            "len": 23
+          },
+          {
+            "t_ms": 173.1,
+            "len": 19
+          },
+          {
+            "t_ms": 175.86,
+            "len": 26
+          },
+          {
+            "t_ms": 178.69,
+            "len": 26
+          },
+          {
+            "t_ms": 181.44,
+            "len": 26
+          },
+          {
+            "t_ms": 184.19,
+            "len": 26
+          },
+          {
+            "t_ms": 186.99,
+            "len": 26
+          },
+          {
+            "t_ms": 189.74,
+            "len": 26
+          },
+          {
+            "t_ms": 192.57,
+            "len": 23
+          },
+          {
+            "t_ms": 193.96,
+            "len": 23
+          },
+          {
+            "t_ms": 196.68,
+            "len": 24
+          },
+          {
+            "t_ms": 199.49,
+            "len": 24
+          },
+          {
+            "t_ms": 202.24,
+            "len": 27
+          },
+          {
+            "t_ms": 205.04,
+            "len": 27
+          },
+          {
+            "t_ms": 207.83,
+            "len": 27
+          },
+          {
+            "t_ms": 210.69,
+            "len": 27
+          },
+          {
+            "t_ms": 213.45,
+            "len": 27
+          },
+          {
+            "t_ms": 217.6,
+            "len": 27
+          },
+          {
+            "t_ms": 218.96,
+            "len": 17
+          },
+          {
+            "t_ms": 220.37,
+            "len": 17
+          },
+          {
+            "t_ms": 223.11,
+            "len": 17
+          },
+          {
+            "t_ms": 224.51,
+            "len": 17
+          },
+          {
+            "t_ms": 227.29,
+            "len": 17
+          },
+          {
+            "t_ms": 228.74,
+            "len": 17
+          },
+          {
+            "t_ms": 231.45,
+            "len": 17
+          },
+          {
+            "t_ms": 232.85,
+            "len": 17
+          },
+          {
+            "t_ms": 235.6,
+            "len": 28
+          },
+          {
+            "t_ms": 238.46,
+            "len": 28
+          },
+          {
+            "t_ms": 241.2,
+            "len": 28
+          },
+          {
+            "t_ms": 245.36,
+            "len": 28
+          },
+          {
+            "t_ms": 248.15,
+            "len": 28
+          },
+          {
+            "t_ms": 250.94,
+            "len": 28
+          },
+          {
+            "t_ms": 253.7,
+            "len": 28
+          },
+          {
+            "t_ms": 256.47,
+            "len": 28
+          },
+          {
+            "t_ms": 259.26,
+            "len": 25
+          },
+          {
+            "t_ms": 262.06,
+            "len": 25
+          },
+          {
+            "t_ms": 264.8,
+            "len": 26
+          },
+          {
+            "t_ms": 267.64,
+            "len": 26
+          },
+          {
+            "t_ms": 270.35,
+            "len": 26
+          },
+          {
+            "t_ms": 273.14,
+            "len": 26
+          },
+          {
+            "t_ms": 275.92,
+            "len": 26
+          },
+          {
+            "t_ms": 278.74,
+            "len": 26
+          },
+          {
+            "t_ms": 281.47,
+            "len": 35
+          },
+          {
+            "t_ms": 285.62,
+            "len": 33
+          },
+          {
+            "t_ms": 288.44,
+            "len": 35
+          },
+          {
+            "t_ms": 292.57,
+            "len": 35
+          },
+          {
+            "t_ms": 296.76,
+            "len": 35
+          },
+          {
+            "t_ms": 299.62,
+            "len": 35
+          },
+          {
+            "t_ms": 303.69,
+            "len": 35
+          },
+          {
+            "t_ms": 306.55,
+            "len": 35
+          },
+          {
+            "t_ms": 310.68,
+            "len": 33
+          },
+          {
+            "t_ms": 313.4,
+            "len": 33
+          },
+          {
+            "t_ms": 317.57,
+            "len": 33
+          },
+          {
+            "t_ms": 320.35,
+            "len": 33
+          },
+          {
+            "t_ms": 323.19,
+            "len": 33
+          },
+          {
+            "t_ms": 327.3,
+            "len": 33
+          },
+          {
+            "t_ms": 330.07,
+            "len": 33
+          },
+          {
+            "t_ms": 334.25,
+            "len": 33
+          },
+          {
+            "t_ms": 335.78,
+            "len": 19
+          },
+          {
+            "t_ms": 338.46,
+            "len": 19
+          },
+          {
+            "t_ms": 339.93,
+            "len": 19
+          },
+          {
+            "t_ms": 342.59,
+            "len": 19
+          },
+          {
+            "t_ms": 345.33,
+            "len": 19
+          },
+          {
+            "t_ms": 347.02,
+            "len": 19
+          },
+          {
+            "t_ms": 349.51,
+            "len": 19
+          },
+          {
+            "t_ms": 351.06,
+            "len": 19
+          },
+          {
+            "t_ms": 353.7,
+            "len": 26
+          },
+          {
+            "t_ms": 356.46,
+            "len": 26
+          },
+          {
+            "t_ms": 359.25,
+            "len": 26
+          },
+          {
+            "t_ms": 362.04,
+            "len": 26
+          },
+          {
+            "t_ms": 364.77,
+            "len": 26
+          },
+          {
+            "t_ms": 367.58,
+            "len": 26
+          },
+          {
+            "t_ms": 370.33,
+            "len": 26
+          },
+          {
+            "t_ms": 373.13,
+            "len": 26
+          },
+          {
+            "t_ms": 377.27,
+            "len": 34
+          },
+          {
+            "t_ms": 380.09,
+            "len": 34
+          },
+          {
+            "t_ms": 384.23,
+            "len": 34
+          },
+          {
+            "t_ms": 387.13,
+            "len": 34
+          },
+          {
+            "t_ms": 391.17,
+            "len": 34
+          },
+          {
+            "t_ms": 393.94,
+            "len": 34
+          },
+          {
+            "t_ms": 398.13,
+            "len": 34
+          },
+          {
+            "t_ms": 400.92,
+            "len": 34
+          },
+          {
+            "t_ms": 403.67,
+            "len": 28
+          },
+          {
+            "t_ms": 407.84,
+            "len": 28
+          },
+          {
+            "t_ms": 410.66,
+            "len": 28
+          },
+          {
+            "t_ms": 413.39,
+            "len": 28
+          },
+          {
+            "t_ms": 416.17,
+            "len": 28
+          },
+          {
+            "t_ms": 418.99,
+            "len": 28
+          },
+          {
+            "t_ms": 421.75,
+            "len": 28
+          },
+          {
+            "t_ms": 424.5,
+            "len": 28
+          },
+          {
+            "t_ms": 428.65,
+            "len": 38
+          },
+          {
+            "t_ms": 431.47,
+            "len": 28
+          },
+          {
+            "t_ms": 434.18,
+            "len": 28
+          },
+          {
+            "t_ms": 436.97,
+            "len": 28
+          },
+          {
+            "t_ms": 441.14,
+            "len": 28
+          },
+          {
+            "t_ms": 443.94,
+            "len": 28
+          },
+          {
+            "t_ms": 446.74,
+            "len": 28
+          },
+          {
+            "t_ms": 449.48,
+            "len": 28
+          },
+          {
+            "t_ms": 452.26,
+            "len": 28
+          },
+          {
+            "t_ms": 477.4,
+            "len": 15
+          },
+          {
+            "t_ms": 477.44,
+            "len": 19
+          },
+          {
+            "t_ms": 482.2,
+            "len": 118
+          },
+          {
+            "t_ms": 500.3,
+            "len": 2
+          }
+        ],
+        "completion": "idle",
+        "idle_ms": 1000,
+        "first_byte_ms": 28.2,
+        "elapsed_ms": 1501.62,
+        "analysis": {
+          "line_endings": {
+            "crlf": 111,
+            "lf": 0,
+            "cr": 0
+          },
+          "lines": [
+            "status!",
+            "get the unit all status:",
+            "power on",
+            "beep on",
+            "panel button lock off",
+            "lcd on 30 seconds",
+            "hdmi input 1: disconnect",
+            "hdmi input 2: disconnect",
+            "hdmi input 3: disconnect",
+            "hdmi input 4: disconnect",
+            "hdmi input 5: disconnect",
+            "hdmi input 6: disconnect",
+            "hdmi input 7: connect",
+            "hdmi input 8: connect",
+            "hdmi output 1: connect",
+            "hdmi output 2: connect",
+            "hdmi output 3: disconnect",
+            "hdmi output 4: disconnect",
+            "hdmi output 5: disconnect",
+            "hdmi output 6: disconnect",
+            "hdmi output 7: disconnect",
+            "hdmi output 8: disconnect",
+            "output1->input7",
+            "output2->input7",
+            "output3->input7",
+            "output4->input7",
+            "output5->input7",
+            "output6->input7",
+            "output7->input7",
+            "output8->input7",
+            "output 1 hdcp: follow sink",
+            "output 2 hdcp: follow sink",
+            "output 3 hdcp: follow sink",
+            "output 4 hdcp: follow sink",
+            "output 5 hdcp: follow sink",
+            "output 6 hdcp: follow sink",
+            "output 7 hdcp: follow sink",
+            "output 8 hdcp: follow sink",
+            "output 1 stream: enable",
+            "output 2 stream: enable",
+            "output 3 stream: disable",
+            "output 4 stream: disable",
+            "output 5 stream: disable",
+            "output 6 stream: disable",
+            "output 7 stream: disable",
+            "output 8 stream: disable",
+            "output 1 video mode: pass-through",
+            "output 2 video mode: audio only",
+            "output 3 video mode: pass-through",
+            "output 4 video mode: pass-through",
+            "output 5 video mode: pass-through",
+            "output 6 video mode: pass-through",
+            "output 7 video mode: pass-through",
+            "output 8 video mode: pass-through",
+            "output 1 hdr mode: pass-through",
+            "output 2 hdr mode: pass-through",
+            "output 3 hdr mode: pass-through",
+            "output 4 hdr mode: pass-through",
+            "output 5 hdr mode: pass-through",
+            "output 6 hdr mode: pass-through",
+            "output 7 hdr mode: pass-through",
+            "output 8 hdr mode: pass-through",
+            "output 1 arc: off",
+            "output 2 arc: off",
+            "output 3 arc: off",
+            "output 4 arc: off",
+            "output 5 arc: off",
+            "output 6 arc: off",
+            "output 7 arc: off",
+            "output 8 arc: off",
+            "output 1 audio mute: off",
+            "output 2 audio mute: off",
+            "output 3 audio mute: off",
+            "output 4 audio mute: off",
+            "output 5 audio mute: off",
+            "output 6 audio mute: off",
+            "output 7 audio mute: off",
+            "output 8 audio mute: off",
+            "input 1 edid:frl12g_8k_hdr,7.1ch",
+            "input 2 edid:frl12g_8k_hdr,7.1ch",
+            "input 3 edid:frl12g_8k_hdr,7.1ch",
+            "input 4 edid:frl12g_8k_hdr,7.1ch",
+            "input 5 edid:frl12g_8k_hdr,7.1ch",
+            "input 6 edid:frl12g_8k_hdr,7.1ch",
+            "input 7 edid:frl12g_8k_hdr,7.1ch",
+            "input 8 edid:frl12g_8k_hdr,7.1ch",
+            "output 1 ext-audio: enable",
+            "output 2 ext-audio: enable",
+            "output 3 ext-audio: enable",
+            "output 4 ext-audio: enable",
+            "output 5 ext-audio: enable",
+            "output 6 ext-audio: enable",
+            "output 7 ext-audio: enable",
+            "output 8 ext-audio: enable",
+            "output ext-audio mode: bind to input",
+            "output 1 ext-audio->input1",
+            "output 2 ext-audio->input2",
+            "output 3 ext-audio->input3",
+            "output 4 ext-audio->input4",
+            "output 5 ext-audio->input5",
+            "output 6 ext-audio->input6",
+            "output 7 ext-audio->input7",
+            "output 8 ext-audio->input8",
+            "ip mode: dhcp",
+            "ip: 192.168.0.100",
+            "subnet mask: 255.255.254.0",
+            "gateway: 192.168.1.254",
+            "tcp/ip port:8000",
+            "telnet port:23",
+            "mac address: ***REDACTED***",
+            ""
+          ],
+          "ends_with_newline": true,
+          "trailing_without_newline": "",
+          "last_line": "mac address: ***REDACTED***",
+          "error_code": null,
+          "error_codes_seen": [],
+          "iac": []
+        }
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T17:29:25.418395Z",
+        "elapsed_ms": 1501.62
+      }
+    }
+  ],
+  "mode": "read",
+  "captured_at": "2026-09-25T17:29:26.920624Z"
+}

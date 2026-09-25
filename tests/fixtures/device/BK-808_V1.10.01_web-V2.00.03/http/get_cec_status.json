@@ -1,0 +1,99 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "http/get_cec_status",
+  "title": "Read: get cec status",
+  "note": "",
+  "answers": [
+    "http-read-shapes"
+  ],
+  "exchanges": [
+    {
+      "kind": "http",
+      "role": "read",
+      "label": "get cec status",
+      "comhead": "get cec status",
+      "request": {
+        "method": "POST",
+        "path": "/cgi-bin/instr",
+        "headers": [
+          "Host: 192.168.0.100",
+          "Content-Type: application/json",
+          "Accept: */*",
+          "Accept-Encoding: gzip, deflate",
+          "User-Agent: Python/3.12 aiohttp/3.13.3",
+          "Content-Length: 44"
+        ],
+        "json": {
+          "comhead": "get cec status",
+          "language": 0
+        },
+        "body_text": "{\"comhead\": \"get cec status\", \"language\": 0}"
+      },
+      "response": {
+        "status": 200,
+        "reason": "OK",
+        "http_version": "1.1",
+        "headers": [
+          "Connection: Keep-Alive",
+          "Transfer-Encoding: chunked",
+          "Keep-Alive: timeout=200",
+          "content-type: text/plain"
+        ],
+        "body_b64": "eyJjb21oZWFkIjoiZ2V0IGNlYyBzdGF0dXMiLCJwb3dlciI6MSwiYWxsaW5wdXRuYW1lIjpbIk5FUyIsIlNORVMiLCJTZWdhIiwiTjY0IiwiU3dpdGNoIiwiUFMzIiwiQXBwbGUiLCJTd2l0Y2hlciJdLCJhbGxvdXRwdXRuYW1lIjpbIlRWIiwiU291bmQiLCJPdXQzIiwiT3V0NCIsIk91dDUiLCJPdXQ2IiwiT3V0NyIsIk91dDgiXSwiaW5wdXRpbmRleCI6WzEsMCwwLDAsMCwwLDAsMF0sIm91dHB1dGluZGV4IjpbMSwwLDAsMCwwLDAsMCwwXX0NCg==",
+        "body_text": "{\"comhead\":\"get cec status\",\"power\":1,\"allinputname\":[\"NES\",\"SNES\",\"Sega\",\"N64\",\"Switch\",\"PS3\",\"Apple\",\"Switcher\"],\"alloutputname\":[\"TV\",\"Sound\",\"Out3\",\"Out4\",\"Out5\",\"Out6\",\"Out7\",\"Out8\"],\"inputindex\":[1,0,0,0,0,0,0,0],\"outputindex\":[1,0,0,0,0,0,0,0]}\r\n",
+        "json": {
+          "comhead": "get cec status",
+          "power": 1,
+          "allinputname": [
+            "NES",
+            "SNES",
+            "Sega",
+            "N64",
+            "Switch",
+            "PS3",
+            "Apple",
+            "Switcher"
+          ],
+          "alloutputname": [
+            "TV",
+            "Sound",
+            "Out3",
+            "Out4",
+            "Out5",
+            "Out6",
+            "Out7",
+            "Out8"
+          ],
+          "inputindex": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "outputindex": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "json_error": null
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T17:28:36.058289Z",
+        "elapsed_ms": 437.87
+      }
+    }
+  ],
+  "mode": "read",
+  "captured_at": "2026-09-25T17:28:36.496445Z"
+}

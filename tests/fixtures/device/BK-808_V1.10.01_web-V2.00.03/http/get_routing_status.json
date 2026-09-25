@@ -1,0 +1,39 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "http/get_routing_status",
+  "title": "Read: get routing status",
+  "note": "documented; not sent by the hub",
+  "answers": [
+    "http-read-shapes"
+  ],
+  "exchanges": [
+    {
+      "kind": "http",
+      "role": "read",
+      "label": "get routing status",
+      "comhead": "get routing status",
+      "request": {
+        "method": "POST",
+        "path": "/cgi-bin/instr",
+        "headers": [],
+        "json": {
+          "comhead": "get routing status",
+          "language": 0,
+          "index": 1
+        },
+        "body_text": "{\"comhead\": \"get routing status\", \"language\": 0, \"index\": 1}"
+      },
+      "response": null,
+      "error": {
+        "type": "TimeoutError",
+        "message": ""
+      },
+      "timing": {
+        "started_at": "2026-09-25T17:28:37.670631Z",
+        "elapsed_ms": 5846.38
+      }
+    }
+  ],
+  "mode": "read",
+  "captured_at": "2026-09-25T17:28:43.517001Z"
+}

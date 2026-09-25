@@ -1,0 +1,39 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "http/preset_get_7",
+  "title": "Read: preset get",
+  "note": "",
+  "answers": [
+    "http-read-shapes",
+    "preset-get-shape"
+  ],
+  "exchanges": [
+    {
+      "kind": "http",
+      "role": "read",
+      "label": "preset get",
+      "comhead": "preset get",
+      "request": {
+        "method": "POST",
+        "path": "/cgi-bin/instr",
+        "headers": [],
+        "json": {
+          "comhead": "preset get",
+          "index": 7
+        },
+        "body_text": "{\"comhead\": \"preset get\", \"index\": 7}"
+      },
+      "response": null,
+      "error": {
+        "type": "TimeoutError",
+        "message": ""
+      },
+      "timing": {
+        "started_at": "2026-09-25T17:29:13.517613Z",
+        "elapsed_ms": 4999.43
+      }
+    }
+  ],
+  "mode": "read",
+  "captured_at": "2026-09-25T17:29:18.517298Z"
+}
