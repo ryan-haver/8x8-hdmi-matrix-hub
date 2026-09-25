@@ -139,6 +139,12 @@ def _is_read_command(comhead: str) -> bool:
     return comhead.startswith("get") or comhead.endswith("get") or "get" in comhead
 
 
+# Commands whose effect is not idempotent: sending one twice changes the
+# result (a CEC volume step, a power toggle). They are never resent after an
+# ambiguous failure answer, because the first send may already have acted.
+NON_IDEMPOTENT_COMMANDS = frozenset({"cec command"})
+
+
 def _looks_like_login_page(text: str) -> bool:
     # HIL-A: confirm -- some firmwares may answer an expired session with the
     # HTML login page instead of JSON.
@@ -686,7 +692,12 @@ class OreiMatrix:
         result = await self._post(command)
         if result.kind == "auth" and retry_on_failure:
             _LOG.warning("Matrix answered '%s' with '%s'; re-authenticating once", comhead, result.error)
-            if await self._relogin():
+            relogged = await self._relogin()
+            # A JSON failure result on a write is ambiguous (expired session or
+            # plain rejection); resending a non-idempotent command could run it
+            # twice, so only unambiguous session loss (no JSON body) is resent.
+            ambiguous = result.data is not None and not is_read
+            if relogged and not (ambiguous and comhead in NON_IDEMPOTENT_COMMANDS):
                 result = await self._post(command)
 
         if result.kind == "ok" or (result.kind == "auth" and result.data is not None and not is_read):
