@@ -73,7 +73,7 @@ def _cmd_run(args: argparse.Namespace) -> int:
     counts: dict[str, int] = {}
     for o in outcomes:
         counts[o.status] = counts.get(o.status, 0) + 1
-    print(f"[validate] done: {counts}; evidence in {opts.out_dir / 'evidence'}; summary {opts.out_dir / 'run-summary.json'}")
+    print(f"[validate] done: {counts}; evidence in {runner.evidence_dir}; summary {opts.out_dir / 'run-summary.json'}")
     if runner.aborted:
         print(f"[validate] ABORTED: {runner.aborted}", file=sys.stderr)
         return 3
