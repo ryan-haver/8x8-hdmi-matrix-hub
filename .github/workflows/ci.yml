@@ -266,14 +266,29 @@ jobs:
           apt-get install -y -qq --no-install-recommends git-lfs
           git lfs install --system
 
+      # LFS objects are cached so a run only downloads baselines that changed
+      # (GitHub counts LFS downloads against the account's bandwidth quota).
       - uses: actions/checkout@v7
         with:
-          lfs: true
+          lfs: false
           fetch-depth: 0
           persist-credentials: false
 
       - name: Trust the workspace (container runs as root)
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: List LFS objects for the cache key
+        run: git lfs ls-files --long | cut -d' ' -f1 | sort > .lfs-assets-id
+
+      - name: Restore LFS cache
+        uses: actions/cache@v6
+        with:
+          path: .git/lfs
+          key: lfs-${{ hashFiles('.lfs-assets-id') }}
+          restore-keys: lfs-
+
+      - name: Pull LFS objects
+        run: git lfs pull
 
       - name: Set up Python venv and npm packages
         run: |
@@ -301,7 +316,7 @@ jobs:
       - name: Upload Playwright report
         id: upload-report
         if: steps.tests.outcome == 'failure'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-report
           path: |
@@ -335,7 +350,7 @@ jobs:
       - name: Upload review gallery
         id: upload-review
         if: always() && steps.tests.outcome != 'skipped'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ui-review
           path: ui-gallery/
@@ -358,13 +373,13 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         continue-on-error: true
         with:
           name: ui-review
           path: ui-review
 
-      - uses: actions/github-script@v7
+      - uses: actions/github-script@v9
         env:
           REVIEW_URL: ${{ needs.ui.outputs.review-url }}
           REPORT_URL: ${{ needs.ui.outputs.report-url }}

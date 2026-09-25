@@ -64,6 +64,7 @@ playwright-report/
 blob-report/
 # UI review gallery (tools/ui/build_gallery.mjs)
 ui-gallery/
+.lfs-assets-id
 # Seeded hub data for the Playwright stack is fixture data, not runtime data
 !tests/e2e/fixtures/data/
 

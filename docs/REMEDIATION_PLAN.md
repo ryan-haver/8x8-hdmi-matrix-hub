@@ -123,6 +123,7 @@ Severity: **C** critical · **H** high · **M** medium · **L** low. "Phase" is 
 | BE-28 | C | Telnet push listener busy-loops at EOF (`read()` returns `b""`, loop `continue`s without yielding) → hub event loop frozen at 100% CPU after a matrix reboot or network drop (found by simulator, SIM-02) | `telnet_client.py:478-495` | 1 |
 | BE-29 | H | Telnet EOF never detected: `_send_raw` spins to timeout and `telnet_connected` stays true; truncated `status` dump makes every missing port read as disconnected (SIM-01) | `telnet_client.py:271-273,667-671,685-689` | 1 |
 | BE-30 | L | `get_all_cable_status` sends `status!` twice per poll | `orei_matrix.py:1148-1150` | 1 |
+| BE-31 | M | Background status refresh formats outputs from the hub name cache, which is empty in modular mode → WebSocket broadcast resets output names to "Output 1/2" in every open UI (symptom of BE-16) | `rest_api/outputs.py:59`, `rest_api/core.py:115` | 2 |
 
 ### 4.2 REST API, domain & persistence (API / PER)
 
@@ -193,7 +194,7 @@ Severity: **C** critical · **H** high · **M** medium · **L** low. "Phase" is 
 | HA-11 | L | unique_id is the IP; port not range-validated; no reconfigure/options flow | `config_flow.py` | 2 |
 | HA-12 | L | CEC command interpolated into URL unvalidated; schema doesn't enforce allowed values | `__init__.py:82` | 2 |
 | HA-13 | L | `manifest.json` missing `integration_type` | manifest | 2 |
-| HA-14 | M | No `hacs.json` at repo root | repo root | 2 |
+| HA-14 | M | HACS validation fails: no `hacs.json`, no GitHub repository topics (owner action: add e.g. `home-assistant`, `hacs`, `hdmi-matrix`), no brand assets (icon/logo via the HA brands repo or bundled with the integration); licence check passes once the full LICENSE is on `main` | repo root, GitHub settings | 2 |
 | HA-15 | L | Unused imports; `custom_components/` not linted in CI | component | 2 |
 | HA-16 | — | Needs optional API-key field once SEC-01 lands (only required when the hub has a control PIN) | component | 3 |
 
@@ -254,6 +255,20 @@ Severity: **C** critical · **H** high · **M** medium · **L** low. "Phase" is 
 | UI-20 | L | `about-dialog`/`integrations-drawer` call `fetch` directly | — | 5 |
 | UI-21 | L | PWA manifest marked done in plan, not present | `web/` | 5 |
 | UI-22 | M | Device icon set is a bitmap trace of a PNG sprite of unknown origin/licence (`device_icons_set.png.svg`); `_icon-paths.json` is 2.9 MB and single icons reach 376 KB | `web/assets/icons/svg/`, `scripts/convert-icons-to-svg.js` | 5 / 6 |
+| UI-23 | H | Kiosk "Apply" sends `{mute}`/`{enable}` but the hub reads `muted`/`enabled` (default true) → can mute/unmute outputs unintentionally; kiosk HDR/scaler/HDCP option values don't match the API | `kiosk.html` | 2 |
+| UI-24 | H | Kiosk calls non-existent `/api/inputs/status` and `/api/outputs/status` (real: `/api/status/*`) → input tiles always grey, footer tiles always dimmed | `kiosk.html:2514` | 2 |
+| UI-25 | M | Kiosk profile wizard never opens (reads the macros response shape wrong); routing wizard step 1 "Next" has no handler | `kiosk.html:2469` | 2 |
+| UI-26 | H | Scene editor always fails "Scene name is required" (duplicate `id="scene-name"`) | `scene-editor.js:90` | 2 |
+| UI-27 | M | Profiles tab never loads profiles; `state.profiles`/`state.cecMacros` never loaded; dashboard cards race the layout fetch (100 ms timer) and don't render on load | `app.js:591`, `dashboard-manager.js` | 2 |
+| UI-28 | M | Runtime errors: CEC tray FAB TypeError (`.target-name` vs `.target-abbrev`); tooltip capture listener throws `closest is not a function` on first pointer; API button throws on first click | `cec-tray.js:1186`, `tooltip.js:25-35`, `api-copy.js:134` | 2 |
+| UI-29 | M | No error state when the matrix is unreachable or status is pending: grid shows fabricated 1:1 routing and default names while the header stays green; "reconnecting" is visually identical to "disconnected" | `app.js`, `matrix-grid.js`, header | 2 (logic) / 5 (visual) |
+| UI-30 | L | Scene-CEC modal never becomes visible; About dialog always shows WebSocket "Disconnected"; hardware drawer shows HTML defaults instead of device values; settings drawer `open('scenes'\|'system')` highlights the Profiles tab | `scene-cec-modal.js:204`, `about-dialog.js`, `hardware-drawer.js`, `settings-drawer.js` | 2 |
+| UI-31 | M | Theme preset edit buttons are nested `<button>`s → clicking edit on preset 1 hits preset 4 | `theme-drawer.js:122-136` | 2 |
+| UI-32 | M | Layering: confirm dialogs and toasts render under drawers/modals; scene editor opens under the settings drawer | CSS z-index | 5 |
+| UI-33 | L | Phone (390 px): matrix grid view clips the last column; kiosk footer and edit bar clip | `responsive.css`, `kiosk.html` | 5 |
+| UI-34 | L | Kiosk ignores the theme presets (always Tron Classic) | `kiosk.html` | 5 |
+| UI-35 | M | axe: `aria-required-parent` on desktop tabs, unlabeled tab-pin checkboxes, `aria-hidden-focus` in closed drawers, unnamed tooltip, kiosk `color-contrast` ×22, zoom disabled | `index.html`, `kiosk.html` | 5 |
+| UI-36 | L | Passcode prompt is a native `window.prompt()` (unstyled, can't be captured) | `settings-drawer.js`, `dashboard-manager.js` | 5 (with UI-01) |
 
 ### 4.8 Documentation (DOC)
 
@@ -404,11 +419,11 @@ Goal: make it impossible for the bugs below to come back silently.
 - [x] Autouse fixture resetting REST module globals and rate limiter (TST-06).
 - [x] **Contract fixtures:** generate API response fixtures from the real `_format_status` etc., and make HA/web tests consume them (TST-02). *(HA tests consume them; web tests will in Phase 0 UI capture)*
 - [x] Route-inventory test (initially reports coverage; becomes blocking at Phase 2 exit). *(baseline 107/163)*
-- [ ] Minimal JS tooling: `package.json` (dev-only) with ESLint, Stylelint, Playwright, axe; one smoke E2E that loads `/ui` and `/kiosk` against the simulator (TST-04).
+- [x] Minimal JS tooling: `package.json` (dev-only) with ESLint, Stylelint, Playwright, axe; one smoke E2E that loads `/ui` and `/kiosk` against the simulator (TST-04). *(lint findings baselined: ESLint 19, Stylelint 539; new violations fail)*
 - [ ] **UI capture baseline (§5.3)** — *before any UI code changes, including Phase 2 fixes*:
   - [ ] Write `docs/ui/LOOK_AND_FEEL.md` from the current UI; review and sign off together.
-  - [ ] Build the UI state catalog covering every current page, tab, drawer, modal, editor, CEC remote, dashboard card type, and kiosk panel.
-  - [ ] Capture baselines in the pinned Playwright container; Git LFS for snapshots; CODEOWNERS; PR bot comment with before/after thumbnails.
+  - [x] Build the UI state catalog covering every current page, tab, drawer, modal, editor, CEC remote, dashboard card type, and kiosk panel. *(170 entries, 763 snapshots; the component-isolation gallery page `/ui/gallery` moves to Phase 5 with ES modules — Phase 0 uses a screenshot gallery)*
+  - [x] Capture baselines in the pinned Playwright container; Git LFS for snapshots; CODEOWNERS; PR bot comment with before/after thumbnails.
   - [ ] Publish the baseline as a browsable gallery for a one-time walkthrough, so we both agree it represents the look to preserve (and note anything that is currently *wrong* and should change).
 - [x] Simulator v1 from docs (§5.1) — enough for status, routing, presets, login. *(done beyond v1 scope: all comheads, Telnet, fault API, `tools/dev_stack.py`)*
 - [x] Pre-commit hook: fast unit tests + ruff; fail loudly if tools are missing (DEP-11). `.gitignore` additions (DEP-10).
@@ -451,6 +466,7 @@ Goal: every advertised feature actually works end to end.
   - [ ] Align WS client with the schema; handle all server events; resync (`refresh()`) on reconnect; infinite capped backoff with "reconnecting" indicator; kiosk handles `switch`/`switch_all`.
   - [ ] Fetch timeout via `AbortController`; only the originating client shows refresh toasts.
   - [ ] Fix `cec-tray` handler leak.
+  - [ ] Fix the functional UI bugs found by the baseline capture (UI-23…UI-31, BE-31); each fix un-skips or updates its catalog entry through §5.3 review.
 
 **Exit:** route inventory 100% (becomes blocking); HA test job green with real `hass`; Playwright suite covers passcode flow, routing, presets, profiles, scenes, CEC remote; image passes smoke with UC on and off; all visual diffs reviewed and approved; tag **v0.2.0 "Stabilize"**.
 
