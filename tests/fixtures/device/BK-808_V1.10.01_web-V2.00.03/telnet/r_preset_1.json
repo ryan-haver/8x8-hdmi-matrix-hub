@@ -1,0 +1,96 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "telnet/r_preset_1",
+  "title": "Telnet read: r preset 1",
+  "answers": [
+    "telnet-read-wording",
+    "telnet-terminators"
+  ],
+  "exchanges": [
+    {
+      "kind": "telnet",
+      "role": "read",
+      "label": "r preset 1",
+      "command": "r preset 1",
+      "sent_b64": "ciBwcmVzZXQgMSENCg==",
+      "sent_text": "r preset 1!\r\n",
+      "response": {
+        "body_b64": "ciBwcmVzZXQgMSENCm91dHB1dDEtPmlucHV0Mg0Kb3V0cHV0Mi0+aW5wdXQ0DQpvdXRwdXQzLT5pbnB1dDQNCm91dHB1dDQtPmlucHV0NA0Kb3V0cHV0NS0+aW5wdXQ0DQpvdXRwdXQ2LT5pbnB1dDQNCm91dHB1dDctPmlucHV0NA0Kb3V0cHV0OC0+aW5wdXQ0DQo=",
+        "text": "r preset 1!\r\noutput1->input2\r\noutput2->input4\r\noutput3->input4\r\noutput4->input4\r\noutput5->input4\r\noutput6->input4\r\noutput7->input4\r\noutput8->input4\r\n",
+        "chunks": [
+          {
+            "t_ms": 29.09,
+            "len": 13
+          },
+          {
+            "t_ms": 168.45,
+            "len": 17
+          },
+          {
+            "t_ms": 169.84,
+            "len": 17
+          },
+          {
+            "t_ms": 172.6,
+            "len": 17
+          },
+          {
+            "t_ms": 174.75,
+            "len": 17
+          },
+          {
+            "t_ms": 176.96,
+            "len": 17
+          },
+          {
+            "t_ms": 178.48,
+            "len": 17
+          },
+          {
+            "t_ms": 181.14,
+            "len": 17
+          },
+          {
+            "t_ms": 182.01,
+            "len": 17
+          }
+        ],
+        "completion": "idle",
+        "idle_ms": 1000,
+        "first_byte_ms": 29.09,
+        "elapsed_ms": 1182.21,
+        "analysis": {
+          "line_endings": {
+            "crlf": 9,
+            "lf": 0,
+            "cr": 0
+          },
+          "lines": [
+            "r preset 1!",
+            "output1->input2",
+            "output2->input4",
+            "output3->input4",
+            "output4->input4",
+            "output5->input4",
+            "output6->input4",
+            "output7->input4",
+            "output8->input4"
+          ],
+          "ends_with_newline": true,
+          "trailing_without_newline": "",
+          "last_line": "output8->input4",
+          "error_code": null,
+          "error_codes_seen": [],
+          "iac": []
+        }
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T17:29:48.092645Z",
+        "elapsed_ms": 1182.21
+      }
+    }
+  ],
+  "mode": "read",
+  "captured_at": "2026-09-25T17:29:49.274859Z"
+}

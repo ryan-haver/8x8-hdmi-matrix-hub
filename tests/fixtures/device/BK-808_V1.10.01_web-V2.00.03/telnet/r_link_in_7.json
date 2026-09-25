@@ -1,0 +1,61 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "telnet/r_link_in_7",
+  "title": "Telnet read: r link in 7",
+  "answers": [
+    "telnet-read-wording",
+    "telnet-terminators"
+  ],
+  "exchanges": [
+    {
+      "kind": "telnet",
+      "role": "read",
+      "label": "r link in 7",
+      "command": "r link in 7",
+      "sent_b64": "ciBsaW5rIGluIDchDQo=",
+      "sent_text": "r link in 7!\r\n",
+      "response": {
+        "body_b64": "ciBsaW5rIGluIDchDQpoZG1pIGlucHV0IDc6IGNvbm5lY3QNCg==",
+        "text": "r link in 7!\r\nhdmi input 7: connect\r\n",
+        "chunks": [
+          {
+            "t_ms": 28.65,
+            "len": 14
+          },
+          {
+            "t_ms": 167.31,
+            "len": 23
+          }
+        ],
+        "completion": "idle",
+        "idle_ms": 1000,
+        "first_byte_ms": 28.65,
+        "elapsed_ms": 1166.95,
+        "analysis": {
+          "line_endings": {
+            "crlf": 2,
+            "lf": 0,
+            "cr": 0
+          },
+          "lines": [
+            "r link in 7!",
+            "hdmi input 7: connect"
+          ],
+          "ends_with_newline": true,
+          "trailing_without_newline": "",
+          "last_line": "hdmi input 7: connect",
+          "error_code": null,
+          "error_codes_seen": [],
+          "iac": []
+        }
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T17:29:36.353575Z",
+        "elapsed_ms": 1166.95
+      }
+    }
+  ],
+  "mode": "read",
+  "captured_at": "2026-09-25T17:29:37.520939Z"
+}

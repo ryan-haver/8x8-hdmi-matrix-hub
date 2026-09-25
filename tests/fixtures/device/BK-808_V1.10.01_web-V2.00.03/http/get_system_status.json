@@ -1,0 +1,63 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "http/get_system_status",
+  "title": "Read: get system status",
+  "note": "",
+  "answers": [
+    "http-read-shapes"
+  ],
+  "exchanges": [
+    {
+      "kind": "http",
+      "role": "read",
+      "label": "get system status",
+      "comhead": "get system status",
+      "request": {
+        "method": "POST",
+        "path": "/cgi-bin/instr",
+        "headers": [
+          "Host: 192.168.0.100",
+          "Content-Type: application/json",
+          "Accept: */*",
+          "Accept-Encoding: gzip, deflate",
+          "User-Agent: Python/3.12 aiohttp/3.13.3",
+          "Content-Length: 47"
+        ],
+        "json": {
+          "comhead": "get system status",
+          "language": 0
+        },
+        "body_text": "{\"comhead\": \"get system status\", \"language\": 0}"
+      },
+      "response": {
+        "status": 200,
+        "reason": "OK",
+        "http_version": "1.1",
+        "headers": [
+          "Connection: Keep-Alive",
+          "Transfer-Encoding: chunked",
+          "Keep-Alive: timeout=200",
+          "content-type: text/plain"
+        ],
+        "body_b64": "eyJjb21oZWFkIjoiZ2V0IHN5c3RlbSBzdGF0dXMiLCJwb3dlciI6MSwiYmF1ZHJhdGUiOjYsImJlZXAiOjEsImxvY2siOjAsIm1vZGUiOjN9DQo=",
+        "body_text": "{\"comhead\":\"get system status\",\"power\":1,\"baudrate\":6,\"beep\":1,\"lock\":0,\"mode\":3}\r\n",
+        "json": {
+          "comhead": "get system status",
+          "power": 1,
+          "baudrate": 6,
+          "beep": 1,
+          "lock": 0,
+          "mode": 3
+        },
+        "json_error": null
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T17:28:36.496949Z",
+        "elapsed_ms": 393.85
+      }
+    }
+  ],
+  "mode": "read",
+  "captured_at": "2026-09-25T17:28:36.891028Z"
+}

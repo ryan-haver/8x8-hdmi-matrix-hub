@@ -1,0 +1,61 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "telnet/r_preset_4",
+  "title": "Telnet read: r preset 4",
+  "answers": [
+    "telnet-read-wording",
+    "telnet-terminators"
+  ],
+  "exchanges": [
+    {
+      "kind": "telnet",
+      "role": "read",
+      "label": "r preset 4",
+      "command": "r preset 4",
+      "sent_b64": "ciBwcmVzZXQgNCENCg==",
+      "sent_text": "r preset 4!\r\n",
+      "response": {
+        "body_b64": "ciBwcmVzZXQgNCENCnByZXNldCA0IGlzIG5vbmUscGxlYXNlIHNhdmUgYSBwcmVzZXQNCg==",
+        "text": "r preset 4!\r\npreset 4 is none,please save a preset\r\n",
+        "chunks": [
+          {
+            "t_ms": 29.25,
+            "len": 13
+          },
+          {
+            "t_ms": 170.97,
+            "len": 39
+          }
+        ],
+        "completion": "idle",
+        "idle_ms": 1000,
+        "first_byte_ms": 29.25,
+        "elapsed_ms": 1171.84,
+        "analysis": {
+          "line_endings": {
+            "crlf": 2,
+            "lf": 0,
+            "cr": 0
+          },
+          "lines": [
+            "r preset 4!",
+            "preset 4 is none,please save a preset"
+          ],
+          "ends_with_newline": true,
+          "trailing_without_newline": "",
+          "last_line": "preset 4 is none,please save a preset",
+          "error_code": null,
+          "error_codes_seen": [],
+          "iac": []
+        }
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T17:29:51.649533Z",
+        "elapsed_ms": 1171.84
+      }
+    }
+  ],
+  "mode": "read",
+  "captured_at": "2026-09-25T17:29:52.821642Z"
+}

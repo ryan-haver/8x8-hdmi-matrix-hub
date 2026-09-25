@@ -1,0 +1,51 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "http/index_page",
+  "title": "GET / (web UI entry page)",
+  "answers": [],
+  "exchanges": [
+    {
+      "kind": "http",
+      "role": "page",
+      "label": "GET /",
+      "comhead": null,
+      "request": {
+        "method": "GET",
+        "path": "/",
+        "headers": [
+          "Host: 192.168.0.100",
+          "Accept: */*",
+          "Accept-Encoding: gzip, deflate",
+          "User-Agent: Python/3.12 aiohttp/3.13.3"
+        ],
+        "json": null,
+        "body_text": ""
+      },
+      "response": {
+        "status": 200,
+        "reason": "OK",
+        "http_version": "1.1",
+        "headers": [
+          "Connection: Keep-Alive",
+          "Keep-Alive: timeout=200",
+          "ETag: \"9c0-7f1-67f50ff6\"",
+          "Last-Modified: Tue, 08 Apr 2025 12:00:54 GMT",
+          "Date: Fri, 25 Sep 2026 17:29:24 GMT",
+          "Content-Type: text/html",
+          "Content-Length: 2033"
+        ],
+        "body_b64": "PCFET0NUWVBFIGh0bWw+PGh0bWwgbGFuZz1lbj48aGVhZD48bWV0YSBjaGFyc2V0PXV0Zi04PjxtZXRhIGh0dHAtZXF1aXY9WC1VQS1Db21wYXRpYmxlIGNvbnRlbnQ9IklFPWVkZ2UiPjxtZXRhIG5hbWU9dmlld3BvcnQgY29udGVudD0id2lkdGg9ZGV2aWNlLXdpZHRoLGluaXRpYWwtc2NhbGU9MSI+PG1ldGEgaHR0cC1lcXVpdj1wcmFncmFtIGNvbnRlbnQ9bm8tY2FjaGU+PG1ldGEgaHR0cC1lcXVpdj1jYWNoZS1jb250cm9sIGNvbnRlbnQ9Im5vLWNhY2hlLCBuby1zdG9yZSwgbXVzdC1yZXZhbGlkYXRlIj48bWV0YSBuYW1lPXZpZXdwb3J0IGNvbnRlbnQ9IndpZHRoPWRldmljZS13aWR0aCxpbml0aWFsLXNjYWxlPTEiPjxsaW5rIHJlbD1pY29uIGhyZWY9L2Zhdmljb24uaWNvPjx0aXRsZT4xOEdicHMgNHg0IEhETUkgJiBNYXRyaXg8L3RpdGxlPjxsaW5rIGhyZWY9L2Nzcy9jaHVuay0xYTc4NjM4My41YmU0MDdjOS5jc3MgcmVsPXByZWZldGNoPjxsaW5rIGhyZWY9L2Nzcy9jaHVuay0yMGVkNmJkYy4wNTdhODJiYi5jc3MgcmVsPXByZWZldGNoPjxsaW5rIGhyZWY9L2Nzcy9jaHVuay0yYTcyOWExYy5jYjFhNTQ4Zi5jc3MgcmVsPXByZWZldGNoPjxsaW5rIGhyZWY9L2Nzcy9jaHVuay0yYmE1YWZlNi5iZDliMmI0Mi5jc3MgcmVsPXByZWZldGNoPjxsaW5rIGhyZWY9L2Nzcy9jaHVuay0yY2ZkZjRkNi42ZGU5YmI1Yy5jc3MgcmVsPXByZWZldGNoPjxsaW5rIGhyZWY9L2Nzcy9jaHVuay00MzdhYjIzYy4wZjk4YjIyNC5jc3MgcmVsPXByZWZldGNoPjxsaW5rIGhyZWY9L2Nzcy9jaHVuay00ZmEzYjk1Ny5iZDg4NGExOC5jc3MgcmVsPXByZWZldGNoPjxsaW5rIGhyZWY9L2Nzcy9jaHVuay02NTc1Y2VhNi42YzRkZDMxNS5jc3MgcmVsPXByZWZldGNoPjxsaW5rIGhyZWY9L2Nzcy9jaHVuay1hOTllODRmZS41MTEzNWY5Ni5jc3MgcmVsPXByZWZldGNoPjxsaW5rIGhyZWY9L2pzL2NodW5rLTFhNzg2MzgzLmZiNWI1ZTNkLmpzIHJlbD1wcmVmZXRjaD48bGluayBocmVmPS9qcy9jaHVuay0yMGVkNmJkYy45OTllZDMxMi5qcyByZWw9cHJlZmV0Y2g+PGxpbmsgaHJlZj0vanMvY2h1bmstMmE3MjlhMWMuMDllMTUzOWIuanMgcmVsPXByZWZldGNoPjxsaW5rIGhyZWY9L2pzL2NodW5rLTJiYTVhZmU2LmNkNjFhNjE3LmpzIHJlbD1wcmVmZXRjaD48bGluayBocmVmPS9qcy9jaHVuay0yY2ZkZjRkNi43OWM1NTUxZi5qcyByZWw9cHJlZmV0Y2g+PGxpbmsgaHJlZj0vanMvY2h1bmstNDM3YWIyM2MuNDkyODA5MWUuanMgcmVsPXByZWZldGNoPjxsaW5rIGhyZWY9L2pzL2NodW5rLTRmYTNiOTU3LjVlOTk5MjdkLmpzIHJlbD1wcmVmZXRjaD48bGluayBocmVmPS9qcy9jaHVuay02NTc1Y2VhNi42M2RjMzgxMC5qcyByZWw9cHJlZmV0Y2g+PGxpbmsgaHJlZj0vanMvY2h1bmstYTk5ZTg0ZmUuYWQzYTUwYmQuanMgcmVsPXByZWZldGNoPjxsaW5rIGhyZWY9L2Nzcy9hcHAuNDY3Y2Y3NzUuY3NzIHJlbD1wcmVsb2FkIGFzPXN0eWxlPjxsaW5rIGhyZWY9L2pzL2FwcC41ZTBmNjViZC5qcyByZWw9cHJlbG9hZCBhcz1zY3JpcHQ+PGxpbmsgaHJlZj0vanMvY2h1bmstdmVuZG9ycy5hODcyNmQzMC5qcyByZWw9cHJlbG9hZCBhcz1zY3JpcHQ+PGxpbmsgaHJlZj0vanMvaW5kZXguNGQ2MjE2OWUuanMgcmVsPXByZWxvYWQgYXM9c2NyaXB0PjxsaW5rIGhyZWY9L2Nzcy9hcHAuNDY3Y2Y3NzUuY3NzIHJlbD1zdHlsZXNoZWV0PjwvaGVhZD48Ym9keT48bm9zY3JpcHQ+PHN0cm9uZz5XZSdyZSBzb3JyeSBidXQgaGVsbG8td29ybGQgZG9lc24ndCB3b3JrIHByb3Blcmx5IHdpdGhvdXQgSmF2YVNjcmlwdCBlbmFibGVkLiBQbGVhc2UgZW5hYmxlIGl0IHRvIGNvbnRpbnVlLjwvc3Ryb25nPjwvbm9zY3JpcHQ+PGRpdiBpZD1hcHA+PC9kaXY+PHNjcmlwdCBzcmM9L2pzL2NodW5rLXZlbmRvcnMuYTg3MjZkMzAuanM+PC9zY3JpcHQ+PHNjcmlwdCBzcmM9L2pzL2FwcC41ZTBmNjViZC5qcz48L3NjcmlwdD48c2NyaXB0IHNyYz0vanMvaW5kZXguNGQ2MjE2OWUuanM+PC9zY3JpcHQ+PC9ib2R5PjwvaHRtbD4=",
+        "body_text": "<!DOCTYPE html><html lang=en><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content=\"IE=edge\"><meta name=viewport content=\"width=device-width,initial-scale=1\"><meta http-equiv=pragram content=no-cache><meta http-equiv=cache-control content=\"no-cache, no-store, must-revalidate\"><meta name=viewport content=\"width=device-width,initial-scale=1\"><link rel=icon href=/favicon.ico><title>18Gbps 4x4 HDMI & Matrix</title><link href=/css/chunk-1a786383.5be407c9.css rel=prefetch><link href=/css/chunk-20ed6bdc.057a82bb.css rel=prefetch><link href=/css/chunk-2a729a1c.cb1a548f.css rel=prefetch><link href=/css/chunk-2ba5afe6.bd9b2b42.css rel=prefetch><link href=/css/chunk-2cfdf4d6.6de9bb5c.css rel=prefetch><link href=/css/chunk-437ab23c.0f98b224.css rel=prefetch><link href=/css/chunk-4fa3b957.bd884a18.css rel=prefetch><link href=/css/chunk-6575cea6.6c4dd315.css rel=prefetch><link href=/css/chunk-a99e84fe.51135f96.css rel=prefetch><link href=/js/chunk-1a786383.fb5b5e3d.js rel=prefetch><link href=/js/chunk-20ed6bdc.999ed312.js rel=prefetch><link href=/js/chunk-2a729a1c.09e1539b.js rel=prefetch><link href=/js/chunk-2ba5afe6.cd61a617.js rel=prefetch><link href=/js/chunk-2cfdf4d6.79c5551f.js rel=prefetch><link href=/js/chunk-437ab23c.4928091e.js rel=prefetch><link href=/js/chunk-4fa3b957.5e99927d.js rel=prefetch><link href=/js/chunk-6575cea6.63dc3810.js rel=prefetch><link href=/js/chunk-a99e84fe.ad3a50bd.js rel=prefetch><link href=/css/app.467cf775.css rel=preload as=style><link href=/js/app.5e0f65bd.js rel=preload as=script><link href=/js/chunk-vendors.a8726d30.js rel=preload as=script><link href=/js/index.4d62169e.js rel=preload as=script><link href=/css/app.467cf775.css rel=stylesheet></head><body><noscript><strong>We're sorry but hello-world doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id=app></div><script src=/js/chunk-vendors.a8726d30.js></script><script src=/js/app.5e0f65bd.js></script><script src=/js/index.4d62169e.js></script></body></html>",
+        "json": null,
+        "json_error": "Expecting value: line 1 column 1 (char 0)"
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T17:29:23.519281Z",
+        "elapsed_ms": 214.32
+      }
+    }
+  ],
+  "mode": "read",
+  "captured_at": "2026-09-25T17:29:23.733909Z"
+}
