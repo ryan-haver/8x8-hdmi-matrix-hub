@@ -147,7 +147,7 @@ jobs:
           pip install -r requirements-uc.txt -e ".[dev]"
 
       - name: pytest tests/uc
-        run: pytest tests/uc -v --tb=short -rxX --basetemp=build/uc-tmp
+        run: mkdir -p build && pytest tests/uc -v --tb=short -rxX --basetemp=build/uc-tmp
 
       - name: Upload driver and simulator logs
         if: failure()
