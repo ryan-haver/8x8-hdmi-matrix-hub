@@ -390,9 +390,9 @@ Goal: make it impossible for the bugs below to come back silently.
   - [x] Full mirror backup of the repo kept offline (not pushed anywhere).
   - [x] `git filter-repo` removing `docs/BK-808 Firmware/`, `docs/BK-808 RTI Driver/`, `docs/BK-808 Control4 Driver/`, `docs/BK-808 Control4 Driver.c4z`, `docs/BK-808_User_Manual.pdf`.
   - [x] Replace with `docs/vendor/README.md`: links to vendor downloads, file names, versions, SHA-256 checksums, and a short summary of protocol facts we derived (our own words, no copied content).
-  - [ ] Verify with `git rev-list --objects --all` that no purged blob remains; force-push `main`; re-clone locally.
-  - [ ] Ask GitHub Support to purge cached views/refs of the removed blobs (the repo has been public since 2026-02-02).
-  - [ ] Commit full MPL-2.0 `LICENSE` text.
+  - [x] Verify with `git rev-list --objects --all` that no purged blob remains; force-push `main` (done 2026-09-25, `469c013`). Commit emails also rewritten to the GitHub no-reply address (required by the account's email-privacy push protection).
+  - [ ] Ask GitHub Support to purge cached views/refs of the removed blobs (the repo has been public since 2026-02-02) — draft provided; to be sent by the repo owner.
+  - [x] Commit full MPL-2.0 `LICENSE` text (official Mozilla text; copyright line moves to the README licence section in Phase 7).
 - [ ] Branch strategy: `fix/phase-N-<topic>`; PR template listing register IDs + test evidence + (for UI) the §5.3 review link.
 - [ ] CI (DEP-05): add `pull_request` trigger; lint `src tests custom_components tools`; mypy blocking against a baseline file; gitleaks; hassfest + HACS validation; separate HA test job with `pytest-homeassistant-custom-component`; Docker build of both targets.
 - [ ] Remove `F401/F811/E722` ignores; fix the 10 ruff errors; record mypy baseline (TST-07).
