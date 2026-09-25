@@ -421,6 +421,66 @@ jobs:
             if (existing) await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
             else await github.rest.issues.createComment({ owner, repo, issue_number, body });
 
+  # Proof of function (docs/validation/README.md): every scenario against the
+  # real hub (run.py) + simulator, through the REST API (V2) and through the
+  # web UI in Chromium (V3), in the same pinned Playwright container as `ui`.
+  # Uploads the evidence records and the regenerated LEDGER.md; fails when a
+  # scenario fails without a linked open finding, or a feature drops below its
+  # recorded level in docs/validation/features.yaml.
+  validation:
+    name: Validation (scenarios + ledger)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
+      options: --ipc=host
+    permissions:
+      contents: read
+    env:
+      UI_CACHE_DIR: /tmp/ui-cache
+      npm_config_update_notifier: 'false'
+    steps:
+      # Full history: evidence freshness compares the evidence commit with later
+      # changes to the scenario's code paths. LFS files are not needed.
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Trust the workspace (container runs as root)
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Set up Python venv and npm packages
+        run: |
+          out=$(bash tools/ui/container-setup.sh | tee /dev/stderr)
+          echo "VALIDATE_PYTHON=${out##*E2E_PYTHON=}" >> "$GITHUB_ENV"
+
+      - name: Install validation dependencies
+        run: '"$VALIDATE_PYTHON" -m pip install --quiet "pyyaml>=6.0" "jsonschema>=4.20"'
+
+      - name: Run scenarios (simulator, api + browser)
+        run: '"$VALIDATE_PYTHON" -m tools.validate run --client api --client browser --operator automation --out build/validation'
+
+      - name: Generate ledger
+        if: always()
+        run: >-
+          "$VALIDATE_PYTHON" -m tools.validate ledger --timestamp
+          --evidence build/validation/evidence --run-summary build/validation/run-summary.json
+          --out build/validation/LEDGER.md
+
+      - name: Upload evidence and ledger
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: validation-evidence
+          path: build/validation/
+          retention-days: 30
+
+      - name: Gate (no unexplained failures, no feature below its recorded level)
+        run: >-
+          "$VALIDATE_PYTHON" -m tools.validate check --expect-clients api,browser
+          --evidence build/validation/evidence --run-summary build/validation/run-summary.json
+
   publish:
     name: Build and push to GHCR
     # Does not depend on `ui` yet: the visual baselines are new (Phase 0) and
