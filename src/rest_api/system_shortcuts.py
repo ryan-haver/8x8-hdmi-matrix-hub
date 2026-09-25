@@ -9,7 +9,7 @@ import logging
 
 from aiohttp import web
 
-from system_shortcuts import SystemShortcut, execute_shortcut
+from system_shortcuts import execute_shortcut
 
 from .utils import (
     _json_response,

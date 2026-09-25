@@ -24,12 +24,12 @@ from enum import Enum
 try:
     from _task_supervisor import create_supervised_task
 except ImportError:
-    from ._task_supervisor import create_supervised_task
+    from ._task_supervisor import create_supervised_task  # type: ignore[no-redef]  # package-relative fallback
 
 try:
     from _telnet_proto import TelnetIACFilter
 except ImportError:
-    from ._telnet_proto import TelnetIACFilter
+    from ._telnet_proto import TelnetIACFilter  # type: ignore[no-redef]  # package-relative fallback
 
 _LOG = logging.getLogger(__name__)
 
@@ -992,7 +992,7 @@ class TelnetClient:
             response = await self._send_raw(f"r preset {preset_num}")
             # Parse preset info from response
             # Format: preset X: output1->inputY, output2->inputZ, ...
-            info = {"preset": preset_num, "routing": {}}
+            info: dict = {"preset": preset_num, "routing": {}}
             for match in re.finditer(r"output(\d+)->input(\d+)", response.lower()):
                 output = int(match.group(1))
                 input_src = int(match.group(2))

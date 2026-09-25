@@ -8,6 +8,7 @@ can verify their Docker volume mounts are pointing where they expect.
 import logging
 import os
 from pathlib import Path
+from typing import Any
 
 from aiohttp import web
 
@@ -26,7 +27,7 @@ async def handle_get_storage(request: web.Request) -> web.Response:
     when debugging "my settings didn't persist" reports.
     """
     try:
-        layout = describe_storage_layout()
+        layout: dict[str, Any] = describe_storage_layout()
 
         # Enrich with size/contents info for diagnostics.
         data_dir = Path(layout["data_dir"])

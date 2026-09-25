@@ -37,6 +37,7 @@ dev = [
     "black>=23.0.0",
     "ruff>=0.1.0",
     "mypy>=1.0.0",
+    "cryptography>=42.0.0",
 ]
 
 [project.scripts]
@@ -77,9 +78,14 @@ target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "N", "UP"]
-ignore = ["E501", "E402", "E722", "N806", "F811", "F401"]
+ignore = ["E501", "E402", "N806"]
 
 [tool.mypy]
+# The runtime puts src/ on sys.path and imports modules top-level
+# (`from config import ...`). Without this, mypy resolves `config` to the
+# repo-root config/ data directory (a namespace package) instead of
+# src/config.py and silently treats everything imported from it as missing.
+mypy_path = "src"
 explicit_package_bases = true
 ignore_missing_imports = true
 strict_optional = false
@@ -99,3 +105,11 @@ exclude = [
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
+# Tests that need a real matrix are marked `hardware` and only run with
+# `pytest -m hardware` (TST-05). Passing another -m on the command line
+# overrides this default.
+addopts = "-m 'not hardware'"
+markers = [
+    "hardware: test needs a real matrix (MATRIX_HOST); deselected by default, run with -m hardware",
+    "mock: test uses the mock matrix (runs offline)",
+]

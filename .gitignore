@@ -59,6 +59,18 @@ Thumbs.db
 htmlcov/
 .tox/
 .nox/
+test-results/
+playwright-report/
+blob-report/
+# UI review gallery (tools/ui/build_gallery.mjs)
+ui-gallery/
+.lfs-assets-id
+# Seeded hub data for the Playwright stack is fixture data, not runtime data
+!tests/e2e/fixtures/data/
+
+# Tool caches
+.mypy_cache/
+.ruff_cache/
 
 # Distribution
 *.tar.gz
@@ -78,6 +90,10 @@ gitleaks-report*.json
 .sisyphus/
 .omo/
 .playwright-mcp/
+.claude/worktrees/
 
 # Archive
 archive/
+
+# Route inventory report (tests/route_inventory.py)
+route-coverage.json

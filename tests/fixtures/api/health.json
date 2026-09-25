@@ -1,0 +1,23 @@
+{
+  "data": {
+    "api_version": "2.10.0",
+    "matrix": {
+      "configured": true,
+      "connected": true,
+      "host": "192.0.2.10",
+      "last_successful_poll": null,
+      "telnet_connected": false
+    },
+    "runtime": {
+      "loop_lag_max_ms": null,
+      "loop_lag_ms": null,
+      "task_count": 0,
+      "uptime_s": 0.0
+    },
+    "service": "orei-hdmi-matrix",
+    "status": "healthy",
+    "version": "2.10.0"
+  },
+  "error": null,
+  "success": true
+}

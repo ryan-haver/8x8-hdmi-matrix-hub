@@ -1,0 +1,68 @@
+{
+  "web/js/api.js": {
+    "no-dupe-class-members": {
+      "count": 2
+    }
+  },
+  "web/js/app.js": {
+    "no-case-declarations": {
+      "count": 1
+    },
+    "no-unused-vars": {
+      "count": 2
+    }
+  },
+  "web/js/components/cec-macro-editor.js": {
+    "no-unused-vars": {
+      "count": 1
+    }
+  },
+  "web/js/components/cec-tray.js": {
+    "no-unused-vars": {
+      "count": 2
+    }
+  },
+  "web/js/components/input-panel.js": {
+    "no-useless-assignment": {
+      "count": 2
+    }
+  },
+  "web/js/components/integrations-drawer.js": {
+    "no-useless-assignment": {
+      "count": 2
+    }
+  },
+  "web/js/components/output-panel.js": {
+    "no-unused-vars": {
+      "count": 1
+    },
+    "no-useless-assignment": {
+      "count": 1
+    }
+  },
+  "web/js/components/settings-panel.js": {
+    "no-unused-vars": {
+      "count": 1
+    }
+  },
+  "web/js/state.js": {
+    "no-unused-vars": {
+      "count": 1
+    }
+  },
+  "web/js/tron-background.js": {
+    "no-useless-assignment": {
+      "count": 1
+    }
+  },
+  "web/js/utils/api-copy.js": {
+    "no-unused-vars": {
+      "count": 1
+    }
+  },
+  "web/js/utils/floatable.js": {
+    "no-unused-vars": {
+      "count": 1
+    }
+  }
+}

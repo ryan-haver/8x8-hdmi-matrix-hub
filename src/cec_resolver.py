@@ -12,14 +12,12 @@ import logging
 # Support both package and direct imports
 try:
     from .cec_commands import (
-        get_commands_by_category,
         get_input_commands,
         get_output_commands,
         is_audio_only_output,
     )
 except ImportError:
     from cec_commands import (
-        get_commands_by_category,
         get_input_commands,
         get_output_commands,
         is_audio_only_output,

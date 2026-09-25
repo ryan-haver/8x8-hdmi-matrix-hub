@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "macros": [
+    {
+      "id": "macro_tv_on", "name": "TV + Apple TV On", "icon": "⚡", "description": "Power on the living room TV and the Apple TV",
+      "steps": [
+        {"command": "POWER_ON", "targets": ["output_1"], "delay_ms": 1500},
+        {"command": "POWER_ON", "targets": ["input_2"], "delay_ms": 0}
+      ],
+      "created_at": "2026-09-24T12:00:00Z", "updated_at": "2026-09-24T12:00:00Z",
+      "favorite": true, "dashboard_visible": true, "dashboard_order": 2, "continue_on_error": false
+    },
+    {
+      "id": "macro_all_off", "name": "All Off", "icon": "🌙", "description": "",
+      "steps": [
+        {"command": "POWER_OFF", "targets": ["input_1", "input_2", "input_6"], "delay_ms": 500},
+        {"command": "POWER_OFF", "targets": ["output_1", "output_2"], "delay_ms": 0}
+      ],
+      "created_at": "2026-09-24T12:00:00Z", "updated_at": "2026-09-24T12:00:00Z",
+      "favorite": false, "dashboard_visible": false, "dashboard_order": 0, "continue_on_error": true
+    },
+    {
+      "id": "macro_volume_up", "name": "Soundbar Volume +3", "icon": "🔊", "description": "Three volume steps on the soundbar",
+      "steps": [
+        {"command": "VOLUME_UP", "targets": ["output_2"], "delay_ms": 200},
+        {"command": "VOLUME_UP", "targets": ["output_2"], "delay_ms": 200},
+        {"command": "VOLUME_UP", "targets": ["output_2"], "delay_ms": 0}
+      ],
+      "created_at": "2026-09-24T12:00:00Z", "updated_at": "2026-09-24T12:00:00Z",
+      "favorite": true, "dashboard_visible": false, "dashboard_order": 0, "continue_on_error": false
+    }
+  ]
+}

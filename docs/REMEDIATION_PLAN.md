@@ -120,6 +120,10 @@ Severity: **C** critical · **H** high · **M** medium · **L** low. "Phase" is 
 | BE-25 | L | `copy_edid_from_output` uses `set input edid` 14+N; docs describe `copy edid` | `orei_matrix.py` | 1 (HIL) |
 | BE-26 | L | Hard-coded default host `192.168.0.100`; ~62 `range(1, 9)` / `[0]*8` | many | 4 |
 | BE-27 | L | Runtime leftovers in `src/` (`driver.lock`, `config_state.json`, egg-info) | `src/` | 6 |
+| BE-28 | C | Telnet push listener busy-loops at EOF (`read()` returns `b""`, loop `continue`s without yielding) → hub event loop frozen at 100% CPU after a matrix reboot or network drop (found by simulator, SIM-02) | `telnet_client.py:478-495` | 1 |
+| BE-29 | H | Telnet EOF never detected: `_send_raw` spins to timeout and `telnet_connected` stays true; truncated `status` dump makes every missing port read as disconnected (SIM-01) | `telnet_client.py:271-273,667-671,685-689` | 1 |
+| BE-30 | L | `get_all_cable_status` sends `status!` twice per poll | `orei_matrix.py:1148-1150` | 1 |
+| BE-31 | M | Background status refresh formats outputs from the hub name cache, which is empty in modular mode → WebSocket broadcast resets output names to "Output 1/2" in every open UI (symptom of BE-16) | `rest_api/outputs.py:59`, `rest_api/core.py:115` | 2 |
 
 ### 4.2 REST API, domain & persistence (API / PER)
 
@@ -147,6 +151,7 @@ Severity: **C** critical · **H** high · **M** medium · **L** low. "Phase" is 
 | API-20 | M | Dashboard layout claims to be source of truth, but 5 entity types carry their own favorite/dashboard flags; deletes orphan cards | `dashboard_layout.py`, managers | 4 |
 | API-21 | L | Two response envelope implementations (sync `_json_response` vs async in `scenes_v2`) | `utils.py`, `scenes_v2.py` | 4 |
 | API-22 | M | Profile outputs lack `scaler_mode`/`arc` fields that the executor reads via `getattr` | `config.py:127-130`, `scene_execution.py:126-175` | 4 |
+| API-23 | H | `POST` scene CEC auto-resolve calls `resolve_scene_cec_config(profile)` but the resolver takes `(active_inputs, active_outputs, status)` and returns a dict (then `.to_dict()` is called on it) → endpoint always returns 500 (found by mypy in Phase 0) | `rest_api/scenes.py:~257`, `cec_resolver.py` | 2 |
 | PER-01 | M | `_file_io` locks the unique temp file (no mutual exclusion); Windows `os.replace` fails under concurrent readers (the failing test); no directory fsync | `_file_io.py:196-205` | 1 |
 | PER-02 | M | Flic button registry written non-atomically | `rest_api/integrations.py:50-56` | 1 |
 | PER-03 | M | `migrate_legacy_file` deletes target on any read OSError → possible data loss | `persistence.py:184-196` | 1 |
@@ -189,7 +194,7 @@ Severity: **C** critical · **H** high · **M** medium · **L** low. "Phase" is 
 | HA-11 | L | unique_id is the IP; port not range-validated; no reconfigure/options flow | `config_flow.py` | 2 |
 | HA-12 | L | CEC command interpolated into URL unvalidated; schema doesn't enforce allowed values | `__init__.py:82` | 2 |
 | HA-13 | L | `manifest.json` missing `integration_type` | manifest | 2 |
-| HA-14 | M | No `hacs.json` at repo root | repo root | 2 |
+| HA-14 | M | HACS validation fails: no `hacs.json`, no GitHub repository topics (owner action: add e.g. `home-assistant`, `hacs`, `hdmi-matrix`), no brand assets (icon/logo via the HA brands repo or bundled with the integration); licence check passes once the full LICENSE is on `main` | repo root, GitHub settings | 2 |
 | HA-15 | L | Unused imports; `custom_components/` not linted in CI | component | 2 |
 | HA-16 | — | Needs optional API-key field once SEC-01 lands (only required when the hub has a control PIN) | component | 3 |
 
@@ -250,6 +255,20 @@ Severity: **C** critical · **H** high · **M** medium · **L** low. "Phase" is 
 | UI-20 | L | `about-dialog`/`integrations-drawer` call `fetch` directly | — | 5 |
 | UI-21 | L | PWA manifest marked done in plan, not present | `web/` | 5 |
 | UI-22 | M | Device icon set is a bitmap trace of a PNG sprite of unknown origin/licence (`device_icons_set.png.svg`); `_icon-paths.json` is 2.9 MB and single icons reach 376 KB | `web/assets/icons/svg/`, `scripts/convert-icons-to-svg.js` | 5 / 6 |
+| UI-23 | H | Kiosk "Apply" sends `{mute}`/`{enable}` but the hub reads `muted`/`enabled` (default true) → can mute/unmute outputs unintentionally; kiosk HDR/scaler/HDCP option values don't match the API | `kiosk.html` | 2 |
+| UI-24 | H | Kiosk calls non-existent `/api/inputs/status` and `/api/outputs/status` (real: `/api/status/*`) → input tiles always grey, footer tiles always dimmed | `kiosk.html:2514` | 2 |
+| UI-25 | M | Kiosk profile wizard never opens (reads the macros response shape wrong); routing wizard step 1 "Next" has no handler | `kiosk.html:2469` | 2 |
+| UI-26 | H | Scene editor always fails "Scene name is required" (duplicate `id="scene-name"`) | `scene-editor.js:90` | 2 |
+| UI-27 | M | Profiles tab never loads profiles; `state.profiles`/`state.cecMacros` never loaded; dashboard cards race the layout fetch (100 ms timer) and don't render on load | `app.js:591`, `dashboard-manager.js` | 2 |
+| UI-28 | M | Runtime errors: CEC tray FAB TypeError (`.target-name` vs `.target-abbrev`); tooltip capture listener throws `closest is not a function` on first pointer; API button throws on first click | `cec-tray.js:1186`, `tooltip.js:25-35`, `api-copy.js:134` | 2 |
+| UI-29 | M | No error state when the matrix is unreachable or status is pending: grid shows fabricated 1:1 routing and default names while the header stays green; "reconnecting" is visually identical to "disconnected" | `app.js`, `matrix-grid.js`, header | 2 (logic) / 5 (visual) |
+| UI-30 | L | Scene-CEC modal never becomes visible; About dialog always shows WebSocket "Disconnected"; hardware drawer shows HTML defaults instead of device values; settings drawer `open('scenes'\|'system')` highlights the Profiles tab | `scene-cec-modal.js:204`, `about-dialog.js`, `hardware-drawer.js`, `settings-drawer.js` | 2 |
+| UI-31 | M | Theme preset edit buttons are nested `<button>`s → clicking edit on preset 1 hits preset 4 | `theme-drawer.js:122-136` | 2 |
+| UI-32 | M | Layering: confirm dialogs and toasts render under drawers/modals; scene editor opens under the settings drawer | CSS z-index | 5 |
+| UI-33 | L | Phone (390 px): matrix grid view clips the last column; kiosk footer and edit bar clip | `responsive.css`, `kiosk.html` | 5 |
+| UI-34 | L | Kiosk ignores the theme presets (always Tron Classic) | `kiosk.html` | 5 |
+| UI-35 | M | axe: `aria-required-parent` on desktop tabs, unlabeled tab-pin checkboxes, `aria-hidden-focus` in closed drawers, unnamed tooltip, kiosk `color-contrast` ×22, zoom disabled | `index.html`, `kiosk.html` | 5 |
+| UI-36 | L | Passcode prompt is a native `window.prompt()` (unstyled, can't be captured) | `settings-drawer.js`, `dashboard-manager.js` | 5 (with UI-01) |
 
 ### 4.8 Documentation (DOC)
 
@@ -386,29 +405,29 @@ Estimates assume one developer working with AI assistance; they are sizing, not 
 Goal: make it impossible for the bugs below to come back silently.
 
 - [x] Commit the pending `acquire_lock` fix as-is (stopgap; proper fix in Phase 1).
-- [ ] **History purge first (SEC-14, D3)** — done now, while `main` is the only branch and there are no forks, so no rebasing is ever needed:
+- [x] **History purge first (SEC-14, D3)** — done now, while `main` is the only branch and there are no forks, so no rebasing is ever needed:
   - [x] Full mirror backup of the repo kept offline (not pushed anywhere).
   - [x] `git filter-repo` removing `docs/BK-808 Firmware/`, `docs/BK-808 RTI Driver/`, `docs/BK-808 Control4 Driver/`, `docs/BK-808 Control4 Driver.c4z`, `docs/BK-808_User_Manual.pdf`.
   - [x] Replace with `docs/vendor/README.md`: links to vendor downloads, file names, versions, SHA-256 checksums, and a short summary of protocol facts we derived (our own words, no copied content).
-  - [ ] Verify with `git rev-list --objects --all` that no purged blob remains; force-push `main`; re-clone locally.
-  - [ ] Ask GitHub Support to purge cached views/refs of the removed blobs (the repo has been public since 2026-02-02).
-  - [ ] Commit full MPL-2.0 `LICENSE` text.
-- [ ] Branch strategy: `fix/phase-N-<topic>`; PR template listing register IDs + test evidence + (for UI) the §5.3 review link.
-- [ ] CI (DEP-05): add `pull_request` trigger; lint `src tests custom_components tools`; mypy blocking against a baseline file; gitleaks; hassfest + HACS validation; separate HA test job with `pytest-homeassistant-custom-component`; Docker build of both targets.
-- [ ] Remove `F401/F811/E722` ignores; fix the 10 ruff errors; record mypy baseline (TST-07).
-- [ ] Move hardware scripts to `tools/hil/`; conftest defaults to mock; add `hardware` pytest marker, deselected by default (TST-05).
-- [ ] Autouse fixture resetting REST module globals and rate limiter (TST-06).
-- [ ] **Contract fixtures:** generate API response fixtures from the real `_format_status` etc., and make HA/web tests consume them (TST-02).
-- [ ] Route-inventory test (initially reports coverage; becomes blocking at Phase 2 exit).
-- [ ] Minimal JS tooling: `package.json` (dev-only) with ESLint, Stylelint, Playwright, axe; one smoke E2E that loads `/ui` and `/kiosk` against the simulator (TST-04).
+  - [x] Verify with `git rev-list --objects --all` that no purged blob remains; force-push `main` (done 2026-09-25, `469c013`). Commit emails also rewritten to the GitHub no-reply address (required by the account's email-privacy push protection).
+  - [ ] Ask GitHub Support to purge cached views/refs of the removed blobs (the repo has been public since 2026-02-02) — draft provided; to be sent by the repo owner.
+  - [x] Commit full MPL-2.0 `LICENSE` text (official Mozilla text; copyright line moves to the README licence section in Phase 7).
+- [x] Branch strategy: `fix/phase-N-<topic>`; PR template listing register IDs + test evidence + (for UI) the §5.3 review link.
+- [x] CI (DEP-05): add `pull_request` trigger; lint `src tests custom_components tools`; mypy blocking against a baseline file; gitleaks; hassfest + HACS validation; separate HA test job with `pytest-homeassistant-custom-component`; Docker build of both targets. *(done: `ci.yml`; mypy fixed to zero instead of a baseline; hassfest/HACS non-blocking until Phase 2)*
+- [x] Remove `F401/F811/E722` ignores; fix the 10 ruff errors; record mypy baseline (TST-07).
+- [x] Move hardware scripts to `tools/hil/`; conftest defaults to mock; add `hardware` pytest marker, deselected by default (TST-05).
+- [x] Autouse fixture resetting REST module globals and rate limiter (TST-06).
+- [x] **Contract fixtures:** generate API response fixtures from the real `_format_status` etc., and make HA/web tests consume them (TST-02). *(HA tests consume them; web tests will in Phase 0 UI capture)*
+- [x] Route-inventory test (initially reports coverage; becomes blocking at Phase 2 exit). *(baseline 107/163)*
+- [x] Minimal JS tooling: `package.json` (dev-only) with ESLint, Stylelint, Playwright, axe; one smoke E2E that loads `/ui` and `/kiosk` against the simulator (TST-04). *(lint findings baselined: ESLint 19, Stylelint 539; new violations fail)*
 - [ ] **UI capture baseline (§5.3)** — *before any UI code changes, including Phase 2 fixes*:
   - [ ] Write `docs/ui/LOOK_AND_FEEL.md` from the current UI; review and sign off together.
-  - [ ] Build the UI state catalog covering every current page, tab, drawer, modal, editor, CEC remote, dashboard card type, and kiosk panel.
-  - [ ] Capture baselines in the pinned Playwright container; Git LFS for snapshots; CODEOWNERS; PR bot comment with before/after thumbnails.
+  - [x] Build the UI state catalog covering every current page, tab, drawer, modal, editor, CEC remote, dashboard card type, and kiosk panel. *(170 entries, 763 snapshots; the component-isolation gallery page `/ui/gallery` moves to Phase 5 with ES modules — Phase 0 uses a screenshot gallery)*
+  - [x] Capture baselines in the pinned Playwright container; Git LFS for snapshots; CODEOWNERS; PR bot comment with before/after thumbnails.
   - [ ] Publish the baseline as a browsable gallery for a one-time walkthrough, so we both agree it represents the look to preserve (and note anything that is currently *wrong* and should change).
-- [ ] Simulator v1 from docs (§5.1) — enough for status, routing, presets, login.
-- [ ] Pre-commit hook: fast unit tests + ruff; fail loudly if tools are missing (DEP-11). `.gitignore` additions (DEP-10).
-- [ ] Add `/api/health` detail: connection state, last successful poll, loop lag, task count, version (needed by HIL-C/D).
+- [x] Simulator v1 from docs (§5.1) — enough for status, routing, presets, login. *(done beyond v1 scope: all comheads, Telnet, fault API, `tools/dev_stack.py`)*
+- [x] Pre-commit hook: fast unit tests + ruff; fail loudly if tools are missing (DEP-11). `.gitignore` additions (DEP-10).
+- [x] Add `/api/health` detail: connection state, last successful poll, loop lag, task count, version (needed by HIL-C/D).
 
 **Exit:** history purged and verified; CI runs on PRs and is green; HA tests actually execute (and fail on HA-01…03, proving they now catch them); look-and-feel doc signed off and UI baselines committed.
 
@@ -416,6 +435,7 @@ Goal: make it impossible for the bugs below to come back silently.
 
 Goal: the hub stays connected, reports truthfully, and never freezes.
 
+- [ ] **Telnet EOF handling** (BE-28, BE-29, BE-30): treat `b""` as disconnect (transition state, stop listener, trigger reconnect); parse `status` dumps defensively (missing port = unknown, not disconnected); one `status!` per poll. Simulator reboot/drop tests un-xfailed.
 - [ ] **Supervisor** (BE-01): restart only on exception with backoff; normal return ends supervision; always re-raise `CancelledError`; remove `except CancelledError: break` in loops. Tests: returning coroutine not restarted; cancel stops it; crash restarts after delay; `disconnect()` completes within 1 s.
 - [ ] **UC setup** (BE-02): drop the stray `await`; test the full `handle_driver_setup` flow.
 - [ ] **Connection state machine** (BE-04, BE-05, BE-06, BE-09, BE-17): explicit states `DISCONNECTED → CONNECTING → CONNECTED ↔ DEGRADED (telnet down) → BACKOFF`; one reconnect supervisor owned by the matrix object; transport errors transition state; one re-login attempt on auth failure; login success = explicit `result` check (per HIL-A capture); intentional disconnect (standby/shutdown) does not trigger reconnect; command lock not held during backoff. Tests use simulator fault injection.
@@ -436,7 +456,7 @@ Goal: the hub stays connected, reports truthfully, and never freezes.
 
 Goal: every advertised feature actually works end to end.
 
-- [ ] **Scenes & shortcuts** (API-01…08, API-13, API-14): `switch_input`; `save()`; macro steps via `MacroManager` with the real target format; overrides mean "leave unchanged"; `list_profiles` usage; `power_off_all` once; LCD map; honest status codes (`207`/`500` with per-step results); validate-then-mutate; custom preset save gets a routing lock and restores from fresh (not cached) routing — any change to *what* it does waits for DI-4. Full `/api/v2/scenes` test suite. All fixes preserve current behaviour and data formats (D5).
+- [ ] **Scenes & shortcuts** (API-01…08, API-13, API-14, API-23): `switch_input`; `save()`; macro steps via `MacroManager` with the real target format; overrides mean "leave unchanged"; `list_profiles` usage; `power_off_all` once; LCD map; honest status codes (`207`/`500` with per-step results); validate-then-mutate; custom preset save gets a routing lock and restores from fresh (not cached) routing — any change to *what* it does waits for DI-4. Full `/api/v2/scenes` test suite. All fixes preserve current behaviour and data formats (D5).
 - [ ] **WebSocket** (API-09, API-10): per-client send with timeout, concurrent fan-out, drop dead clients; broadcast after the command result; use aiohttp's built-in `heartbeat`; publish a **WS event schema** (`docs/api/ws-events.json`) used by server tests and the web client.
 - [ ] **Home Assistant** (HA-01…15): `async_get_clientsession`; consume `outputs` list / dict correctly from contract fixtures; power from the right endpoint (add `power` to status); `translations/en.json`; `AbortFlow` handling; services in `async_setup` with device/entry targeting and `HomeAssistantError`; `runtime_data`; `async with` responses; base `HdmiMatrixEntity` with `has_entity_name`, shared `DeviceInfo`, firmware version, `configuration_url`; reconfigure + options flow; validated CEC command; `integration_type: "hub"`; `hacs.json`.
 - [ ] **Docker** (DEP-01…03, D11): single compose service, no profiles; one image with all integration deps; `UC_ENABLED` defaults to `false` and gates the `ucapi` import (interim guard until Phase 4's integration loader); compose example documents `network_mode: host` as required only when `UC_ENABLED=true` (mDNS); smoke tests for UC on/off.
@@ -446,6 +466,7 @@ Goal: every advertised feature actually works end to end.
   - [ ] Align WS client with the schema; handle all server events; resync (`refresh()`) on reconnect; infinite capped backoff with "reconnecting" indicator; kiosk handles `switch`/`switch_all`.
   - [ ] Fetch timeout via `AbortController`; only the originating client shows refresh toasts.
   - [ ] Fix `cec-tray` handler leak.
+  - [ ] Fix the functional UI bugs found by the baseline capture (UI-23…UI-31, BE-31); each fix un-skips or updates its catalog entry through §5.3 review.
 
 **Exit:** route inventory 100% (becomes blocking); HA test job green with real `hass`; Playwright suite covers passcode flow, routing, presets, profiles, scenes, CEC remote; image passes smoke with UC on and off; all visual diffs reviewed and approved; tag **v0.2.0 "Stabilize"**.
 

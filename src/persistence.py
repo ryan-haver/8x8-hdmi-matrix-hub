@@ -36,7 +36,6 @@ contains files, the relevant legacy file is copied to the new location.
 
 import logging
 import os
-import shutil
 import threading
 from pathlib import Path
 

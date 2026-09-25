@@ -1,0 +1,37 @@
+{
+  "name": "hdmi-matrix-hub-ui-dev",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Dev-only JS tooling for the web UI: lint, Playwright smoke tests and visual baselines. Not shipped.",
+  "license": "MPL-2.0",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "lint:js": "eslint .",
+    "lint:js:all": "eslint --suppressions-location tools/ui/eslint-report-all.json .",
+    "lint:js:prune": "eslint --prune-suppressions .",
+    "lint:css": "node tools/ui/stylelint-baseline.mjs",
+    "lint:css:all": "node tools/ui/stylelint-baseline.mjs --verbose",
+    "lint:css:strict": "node tools/ui/stylelint-baseline.mjs --strict",
+    "lint:css:baseline": "node tools/ui/stylelint-baseline.mjs --update",
+    "test:e2e": "playwright test -c tests/e2e/playwright.config.ts --project=smoke",
+    "visual:test": "node tools/ui/run-in-container.mjs test",
+    "visual:update": "node tools/ui/run-in-container.mjs update",
+    "visual:report": "playwright show-report playwright-report",
+    "visual:gallery": "node tools/ui/build_gallery.mjs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.63.0",
+    "eslint": "10.11.0",
+    "globals": "17.12.0",
+    "pixelmatch": "7.2.0",
+    "pngjs": "7.0.0",
+    "sharp": "0.35.4",
+    "stylelint": "17.15.0",
+    "stylelint-config-recommended": "18.0.0"
+  }
+}

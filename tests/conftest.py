@@ -1,24 +1,39 @@
 """
-Test configuration for pytest.
+Shared pytest configuration.
 
-Matrix Connection Settings:
-    Default: Uses real matrix at 192.168.0.100:443
-    Override via environment variables:
-        MATRIX_HOST - IP address of the matrix
-        MATRIX_PORT - Port number (default 443)
-        USE_MOCK_MATRIX - Set to "1" to use mock instead of real device
+Matrix connection settings
+    The suite runs **offline against mocks by default** (TST-05). No test talks
+    to a real matrix unless it is marked ``@pytest.mark.hardware`` and pytest is
+    run with ``-m hardware``. ``pyproject.toml`` sets ``addopts = "-m 'not hardware'"``,
+    so hardware tests are deselected by default. Hardware tests get the target from:
 
-Examples:
-    # Use real device (default)
-    pytest tests/
+        MATRIX_HOST - IP address of the matrix (required; there is no default)
+        MATRIX_PORT - port number (default 443)
 
-    # Use different matrix IP
-    MATRIX_HOST=192.168.1.50 pytest tests/
+    Example::
 
-    # Use mock for CI/offline testing
-    USE_MOCK_MATRIX=1 pytest tests/
+        MATRIX_HOST=192.168.1.50 pytest -m hardware
+
+    Interactive hardware scripts live in ``tools/hil/`` and are not collected.
+
+Test isolation (TST-06)
+    ``_isolate_global_state`` (autouse) points ``MATRIX_DATA_DIR`` at a fresh
+    temporary directory for every test and resets all REST API module globals
+    (matrix device, name caches, managers, rate limiter, WebSocket clients,
+    persistence caches) before and after each test, so state cannot leak
+    between tests or into the developer's ``data/`` directory.
+
+Home Assistant tests
+    ``tests/ha/`` needs ``homeassistant`` (Python 3.13+, see
+    ``requirements-test-ha.txt``) and is ignored when it is not installed.
+
+Route inventory
+    ``tests/route_inventory.py`` records which REST routes the suite exercises
+    and writes ``route-coverage.json`` (see that module for details).
 """
 
+import asyncio
+import importlib.util
 import os
 import sys
 from pathlib import Path
@@ -30,18 +45,24 @@ import pytest
 src_path = Path(__file__).parent.parent / "src"
 sys.path.insert(0, str(src_path))
 
-# Configure pytest-asyncio to use auto mode
-pytest_plugins = ("pytest_asyncio",)
+pytest_plugins = ("pytest_asyncio", "tests.route_inventory")
+
+# Home Assistant tests need the real `homeassistant` package (Python 3.13+).
+# Skip collecting them entirely when it is not available so the normal suite
+# (Python 3.12 venv) is unaffected.
+collect_ignore = [] if importlib.util.find_spec("homeassistant") else ["ha"]
 
 
 # =============================================================================
 # Matrix Connection Configuration
 # =============================================================================
 
-# Default to real device - configure once, use everywhere
-MATRIX_HOST = os.environ.get("MATRIX_HOST", "192.168.0.100")
+# Real hardware is opt-in: MATRIX_HOST has no default (TST-05).
+MATRIX_HOST = os.environ.get("MATRIX_HOST") or None
 MATRIX_PORT = int(os.environ.get("MATRIX_PORT", "443"))
-USE_MOCK = os.environ.get("USE_MOCK_MATRIX", "0") == "1"
+
+# Address used by the mock matrix (RFC 5737 TEST-NET-1, never routable).
+MOCK_MATRIX_HOST = "192.0.2.100"
 
 
 def get_matrix_config() -> dict:
@@ -49,12 +70,88 @@ def get_matrix_config() -> dict:
     return {
         "host": MATRIX_HOST,
         "port": MATRIX_PORT,
-        "use_mock": USE_MOCK,
+        "use_mock": MATRIX_HOST is None,
     }
 
 
 # =============================================================================
-# Real Matrix Fixture
+# Global state isolation (TST-06)
+# =============================================================================
+
+
+def _reset_rest_api_globals() -> None:
+    """Reset module-level state of the REST API package and persistence layer.
+
+    Only touches modules that are already imported, so this costs nothing for
+    tests that never import the REST API (and works in the HA test environment,
+    where ``src/`` dependencies are not installed).
+    """
+    persistence = sys.modules.get("persistence")
+    if persistence is not None:
+        persistence.reset_data_dir_cache()
+
+    utils = sys.modules.get("rest_api.utils")
+    if utils is not None:
+        utils._matrix_device = None
+        utils._input_names = {}
+        utils._output_names = {}
+        utils._config_file = None
+        utils._scene_manager = None
+        utils._profile_manager = None
+        utils._macro_manager = None
+        utils._system_shortcut_manager = None
+        utils._dashboard_layout_manager = None
+        utils._ws_clients.clear()
+        utils.reset_rate_limiter()
+        utils._rate_limit_last_cleanup = 0.0
+        # asyncio locks bind to the first event loop that contends on them;
+        # each test gets a new loop, so hand out fresh locks.
+        utils._state_lock = asyncio.Lock()
+        utils._ws_clients_lock = asyncio.Lock()
+        utils._rate_limit_lock = asyncio.Lock()
+
+    control = sys.modules.get("rest_api.control")
+    if control is not None:
+        control._cycle_locks = {i: asyncio.Lock() for i in control._cycle_locks}
+
+    device_settings = sys.modules.get("rest_api.device_settings")
+    if device_settings is not None:
+        device_settings._settings_path = None
+        device_settings._settings_cache = {}
+
+    themes = sys.modules.get("rest_api.themes")
+    if themes is not None:
+        themes._theme_path = None
+
+    ui = sys.modules.get("rest_api.ui")
+    if ui is not None:
+        ui._ui_prefs_path = None
+
+    integrations = sys.modules.get("rest_api.integrations")
+    if integrations is not None:
+        integrations._registered_buttons = {}
+        integrations._loaded = False
+
+    scenes_v2 = sys.modules.get("rest_api.scenes_v2")
+    if scenes_v2 is not None:
+        scenes_v2._phase8_scene_manager = None
+
+
+@pytest.fixture(autouse=True)
+def _isolate_global_state(tmp_path_factory, monkeypatch):
+    """Give every test a private data dir and pristine REST module globals."""
+    data_dir = tmp_path_factory.mktemp("matrix-data")
+    # monkeypatch restores the original values afterwards, even if a test (or
+    # rest_api.create_rest_app(data_dir=...)) overwrote os.environ directly.
+    monkeypatch.setenv("MATRIX_DATA_DIR", str(data_dir))
+    monkeypatch.delenv("UC_CONFIG_HOME", raising=False)
+    _reset_rest_api_globals()
+    yield
+    _reset_rest_api_globals()
+
+
+# =============================================================================
+# Real Matrix Fixture (hardware tests only)
 # =============================================================================
 
 
@@ -67,12 +164,13 @@ def matrix_config():
 @pytest.fixture
 async def real_matrix():
     """
-    Create a real matrix connection for integration tests.
+    Create a real matrix connection for hardware tests.
 
-    Skips if USE_MOCK_MATRIX=1 is set.
+    Use only from tests marked ``@pytest.mark.hardware``. Skips unless
+    ``MATRIX_HOST`` is set.
     """
-    if USE_MOCK:
-        pytest.skip("USE_MOCK_MATRIX=1 - skipping real device test")
+    if MATRIX_HOST is None:
+        pytest.skip("Hardware test - set MATRIX_HOST (and run with -m hardware)")
 
     from orei_matrix import OreiMatrix
 
@@ -84,13 +182,11 @@ async def real_matrix():
 
     yield matrix
 
-    # Cleanup - close connection if needed
-    if hasattr(matrix, "close"):
-        await matrix.close()
+    await matrix.disconnect()
 
 
 # =============================================================================
-# Mock Matrix Fixture (opt-in for unit tests / CI)
+# Mock Matrix Fixture (default for unit tests / CI)
 # =============================================================================
 
 
@@ -99,14 +195,14 @@ def mock_matrix():
     """
     Create a mock matrix device for unit tests.
 
-    Use this when you need to test without real hardware,
-    or to test error conditions that are hard to trigger on real device.
+    This is the default for the whole suite; no test needs real hardware
+    unless it is marked ``hardware``.
     """
     matrix = MagicMock()
     matrix.connected = True
     matrix.current_scene = 1
-    matrix.host = MATRIX_HOST  # Use configured host for consistency
-    matrix.port = MATRIX_PORT
+    matrix.host = MOCK_MATRIX_HOST
+    matrix.port = 443
 
     # CEC Command registry for mock
     matrix.CEC_COMMAND_MAP = {
@@ -234,7 +330,7 @@ def mock_matrix():
     )
     matrix.get_network_info = AsyncMock(
         return_value={
-            "ipaddress": MATRIX_HOST,
+            "ipaddress": MOCK_MATRIX_HOST,
             "subnet": "255.255.255.0",
             "gateway": "192.168.0.1",
             "dhcp": 0,
@@ -345,12 +441,4 @@ def mock_matrix():
     return matrix
 
 
-# =============================================================================
-# Pytest Markers
-# =============================================================================
-
-
-def pytest_configure(config):
-    """Register custom markers."""
-    config.addinivalue_line("markers", "mock: mark test as using mock matrix (can run offline)")
-    config.addinivalue_line("markers", "hardware: mark test as requiring real hardware")
+# Markers (`hardware`, `mock`) are registered in pyproject.toml [tool.pytest.ini_options].

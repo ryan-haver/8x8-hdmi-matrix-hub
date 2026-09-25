@@ -10,11 +10,9 @@ the full Unfolded Circle integration library. These include:
 - Stale mDNS cleanup
 """
 
-import json
 import os
 import socket
 import sys
-import time
 from pathlib import Path
 from unittest.mock import patch
 
@@ -66,7 +64,7 @@ class TestReconnectDelay:
         """First attempt should use initial delay."""
         # Reset to known state
         import driver
-        from driver import _calculate_reconnect_delay, _reconnect_attempt
+        from driver import _calculate_reconnect_delay
 
         driver._reconnect_attempt = 0
         delay = _calculate_reconnect_delay()
@@ -442,7 +440,7 @@ class TestConnectionEvents:
         """on_matrix_error should handle error without crashing."""
         from unittest.mock import patch
 
-        from driver import _start_reconnection, on_matrix_error, set_matrix
+        from driver import on_matrix_error, set_matrix
 
         # Mock _start_reconnection to avoid creating async task without event loop
         mock = type("MockMatrix", (), {"connected": False})()

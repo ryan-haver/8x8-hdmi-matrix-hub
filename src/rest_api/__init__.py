@@ -4,6 +4,8 @@ REST API Package for OREI HDMI Matrix Integration.
 This package provides a modular REST API for controlling the OREI BK-808 8x8 HDMI Matrix.
 """
 
+from typing import TYPE_CHECKING
+
 # Import utils (has no circular dependencies)
 # Import device settings functions
 from .device_settings import (
@@ -55,18 +57,22 @@ def _get_rest_api_server():
     return RestApiServer
 
 
-# Create a class proxy for RestApiServer
-class RestApiServer:
-    """REST API Server (lazy import wrapper for backward compatibility)."""
+if TYPE_CHECKING:
+    # Type checkers see the real class; at runtime the lazy proxy below is used.
+    from .app import RestApiServer
+else:
+    # Create a class proxy for RestApiServer
+    class RestApiServer:
+        """REST API Server (lazy import wrapper for backward compatibility)."""
 
-    _real_class = None
+        _real_class = None
 
-    def __new__(cls, *args, **kwargs):
-        if cls._real_class is None:
-            from .app import RestApiServer as _RestApiServer
+        def __new__(cls, *args, **kwargs):
+            if cls._real_class is None:
+                from .app import RestApiServer as _RestApiServer
 
-            cls._real_class = _RestApiServer
-        return cls._real_class(*args, **kwargs)
+                cls._real_class = _RestApiServer
+            return cls._real_class(*args, **kwargs)
 
 
 def create_rest_app(data_dir=None):

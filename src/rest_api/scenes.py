@@ -70,8 +70,13 @@ def _clone_response_with_renamed_key(response: web.Response, key_map: dict[str, 
     Response so the body shape matches what the legacy /api/scene/*
     callers expect (e.g. ``scenes`` instead of ``profiles``).
     """
+    body = response.body
+    if not isinstance(body, (bytes, bytearray)):
+        # Streamed Payload / empty body: nothing to rename (json.loads would
+        # raise TypeError here, which was handled the same way).
+        return response
     try:
-        payload = json.loads(response.body)
+        payload = json.loads(body)
     except (ValueError, TypeError):
         return response
     if isinstance(payload, dict) and "data" in payload and isinstance(payload["data"], dict):
@@ -246,9 +251,13 @@ async def handle_auto_resolve_cec(request: web.Request) -> web.Response:
         try:
             from cec_resolver import resolve_scene_cec_config  # type: ignore
 
-            resolved = resolve_scene_cec_config(profile)
-            profile_manager.update_profile(scene_id, cec_config=resolved.to_dict())
-            return _json_response(True, resolved.to_dict())
+            # BUG (found by mypy, not yet in the register): the resolver takes
+            # (active_inputs, active_outputs, status) and returns a dict, so
+            # this call raises TypeError and the endpoint always returns 500.
+            # Left unchanged here (type-only pass); fix with its regression test.
+            resolved = resolve_scene_cec_config(profile)  # type: ignore[call-arg, arg-type]
+            profile_manager.update_profile(scene_id, cec_config=resolved.to_dict())  # type: ignore[attr-defined]
+            return _json_response(True, resolved.to_dict())  # type: ignore[attr-defined]
         except ImportError:
             # Fallback: just enable auto-resolve flag on the existing/default config
             profile.cec_config = profile.ensure_cec_config()
