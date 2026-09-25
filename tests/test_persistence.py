@@ -12,6 +12,7 @@ Verifies:
 """
 
 import json
+import os
 import sys
 from pathlib import Path
 from unittest.mock import MagicMock
@@ -193,6 +194,119 @@ class TestLegacyMigration:
         result = migrate_legacy_file(target, "doesnt-exist.json")
         assert result is False
         assert not target.exists()
+
+
+class TestLegacyMigrationNeverDestroysData:
+    """PER-03: a read error on the target must never delete it."""
+
+    @pytest.fixture
+    def legacy_dir(self, monkeypatch, tmp_path):
+        import persistence
+
+        legacy = tmp_path / "legacy"
+        legacy.mkdir()
+        monkeypatch.setattr(persistence, "get_legacy_data_paths", lambda: [legacy])
+        return legacy
+
+    @pytest.fixture
+    def data_dir(self, tmp_path):
+        d = tmp_path / "data"
+        d.mkdir()
+        return d
+
+    def test_unreadable_target_is_left_untouched(self, monkeypatch, legacy_dir, data_dir):
+        import builtins
+
+        from persistence import migrate_legacy_file
+
+        (legacy_dir / "prefs.json").write_text('{"legacy": true}', encoding="utf-8")
+        target = data_dir / "prefs.json"
+        target.write_text('{"user": "data"}', encoding="utf-8")
+
+        real_open = builtins.open
+
+        def guarded_open(file, *args, **kwargs):
+            if Path(file) == target:
+                raise PermissionError(13, "Permission denied", str(file))
+            return real_open(file, *args, **kwargs)
+
+        monkeypatch.setattr(builtins, "open", guarded_open)
+        assert migrate_legacy_file(target, "prefs.json") is False
+        monkeypatch.setattr(builtins, "open", real_open)
+
+        assert target.exists()
+        assert json.loads(target.read_text(encoding="utf-8")) == {"user": "data"}
+
+    @pytest.mark.skipif(sys.platform != "win32", reason="uses a Windows byte-range lock")
+    def test_target_locked_by_other_handle_is_left_untouched(self, legacy_dir, data_dir):
+        """A real read failure: another handle holds a byte-range lock (Windows)."""
+        import msvcrt
+
+        from persistence import migrate_legacy_file
+
+        (legacy_dir / "prefs.json").write_text('{"legacy": true}', encoding="utf-8")
+        target = data_dir / "prefs.json"
+        target.write_text('{"user": "data"}', encoding="utf-8")
+
+        with open(target, "rb") as holder:
+            msvcrt.locking(holder.fileno(), msvcrt.LK_NBLCK, 1)
+            try:
+                with pytest.raises(PermissionError):
+                    target.read_bytes()  # sanity: the file really is unreadable
+                assert migrate_legacy_file(target, "prefs.json") is False
+            finally:
+                holder.seek(0)
+                msvcrt.locking(holder.fileno(), msvcrt.LK_UNLCK, 1)
+
+        assert json.loads(target.read_text(encoding="utf-8")) == {"user": "data"}
+
+    @pytest.mark.skipif(
+        sys.platform == "win32" or (hasattr(os, "geteuid") and os.geteuid() == 0),
+        reason="needs POSIX permissions enforced (non-root)",
+    )
+    def test_target_without_read_permission_is_left_untouched(self, legacy_dir, data_dir):
+        from persistence import migrate_legacy_file
+
+        (legacy_dir / "prefs.json").write_text('{"legacy": true}', encoding="utf-8")
+        target = data_dir / "prefs.json"
+        target.write_text('{"user": "data"}', encoding="utf-8")
+        target.chmod(0)
+        try:
+            assert migrate_legacy_file(target, "prefs.json") is False
+            assert target.exists()
+        finally:
+            target.chmod(0o644)
+        assert json.loads(target.read_text(encoding="utf-8")) == {"user": "data"}
+
+    def test_corrupt_target_kept_when_no_legacy_file(self, legacy_dir, data_dir):
+        from persistence import migrate_legacy_file
+
+        target = data_dir / "prefs.json"
+        target.write_text("{half-written", encoding="utf-8")
+
+        assert migrate_legacy_file(target, "prefs.json") is False
+        assert target.read_text(encoding="utf-8") == "{half-written"
+
+    def test_corrupt_target_kept_when_legacy_invalid(self, legacy_dir, data_dir):
+        from persistence import migrate_legacy_file
+
+        (legacy_dir / "prefs.json").write_text("not json either", encoding="utf-8")
+        target = data_dir / "prefs.json"
+        target.write_text("{half-written", encoding="utf-8")
+
+        assert migrate_legacy_file(target, "prefs.json") is False
+        assert target.read_text(encoding="utf-8") == "{half-written"
+
+    def test_corrupt_target_replaced_from_valid_legacy_with_backup(self, legacy_dir, data_dir):
+        from persistence import migrate_legacy_file
+
+        (legacy_dir / "prefs.json").write_text('{"legacy": true}', encoding="utf-8")
+        target = data_dir / "prefs.json"
+        target.write_text("{half-written", encoding="utf-8")
+
+        assert migrate_legacy_file(target, "prefs.json") is True
+        assert json.loads(target.read_text(encoding="utf-8")) == {"legacy": True}
+        assert (data_dir / "prefs.json.corrupt").read_text(encoding="utf-8") == "{half-written"
 
 
 # =============================================================================
