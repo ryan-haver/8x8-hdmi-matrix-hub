@@ -1,0 +1,54 @@
+{
+  "_comment": "Pinned Unfolded Circle reference sources. Fetch locally with `python tools/uc_reference.py` (clones into reference/unfoldedcircle/, which is git-ignored). Bump a pin deliberately and note what changed in docs/vendor/UNFOLDED_CIRCLE.md.",
+  "checked": "2026-09-25",
+  "sources": [
+    {
+      "name": "core-api",
+      "repo": "https://github.com/unfoldedcircle/core-api",
+      "ref": "84e7a5b8d3be41340041c34199cf7b66f47625c1",
+      "ref_date": "2026-09-20",
+      "license": "CC-BY-SA-4.0",
+      "purpose": "Integration API spec (AsyncAPI), entity docs, driver.json schema, driver registration, core REST/WS APIs"
+    },
+    {
+      "name": "integration-python-library",
+      "repo": "https://github.com/unfoldedcircle/integration-python-library",
+      "ref": "v0.7.0",
+      "ref_sha": "f6e6e4a0efc5397287b73eba4d422c3b128bf287",
+      "license": "MPL-2.0",
+      "purpose": "ucapi SDK source, CHANGELOG, examples"
+    },
+    {
+      "name": "integration-denonavr",
+      "repo": "https://github.com/unfoldedcircle/integration-denonavr",
+      "ref": "75bd4d77ea2e27c7b4a5c04ce835be28d42bcdb5",
+      "ref_date": "2026-09-14",
+      "license": "MPL-2.0",
+      "purpose": "Reference: select entities, sensors, changed-only updates, standby handling, setup flow"
+    },
+    {
+      "name": "integration-androidtv",
+      "repo": "https://github.com/unfoldedcircle/integration-androidtv",
+      "ref": "53955d24585ddd98db0a321f25eb2c2e07fc38e7",
+      "ref_date": "2026-08-08",
+      "license": "MPL-2.0",
+      "purpose": "Reference: remote entity UI pages, button mapping, simple commands, on-device aarch64 build workflow"
+    },
+    {
+      "name": "integration-appletv",
+      "repo": "https://github.com/unfoldedcircle/integration-appletv",
+      "ref": "22684d889f9f837949d59d6a20111d48fcbc6cb0",
+      "ref_date": "2026-08-07",
+      "license": "MPL-2.0",
+      "purpose": "Reference: multi-step setup with credentials, media player + remote pairing, icons"
+    },
+    {
+      "name": "core-simulator",
+      "repo": "https://github.com/unfoldedcircle/core-simulator",
+      "ref": "510476445ce410f4fe7338c610e1406bd3c2b77d",
+      "ref_date": "2026-07-15",
+      "license": "none declared (use for local testing only; check terms before CI use)",
+      "purpose": "Remote core simulator for V3 end-to-end tests with real Remote core software (latest GitHub release is 2023; verify the current distribution)"
+    }
+  ]
+}
