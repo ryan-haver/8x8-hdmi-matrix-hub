@@ -410,7 +410,7 @@ Goal: make it impossible for the bugs below to come back silently.
   - [x] `git filter-repo` removing `docs/BK-808 Firmware/`, `docs/BK-808 RTI Driver/`, `docs/BK-808 Control4 Driver/`, `docs/BK-808 Control4 Driver.c4z`, `docs/BK-808_User_Manual.pdf`.
   - [x] Replace with `docs/vendor/README.md`: links to vendor downloads, file names, versions, SHA-256 checksums, and a short summary of protocol facts we derived (our own words, no copied content).
   - [x] Verify with `git rev-list --objects --all` that no purged blob remains; force-push `main` (done 2026-09-25, `469c013`). Commit emails also rewritten to the GitHub no-reply address (required by the account's email-privacy push protection).
-  - [ ] Ask GitHub Support to purge cached views/refs of the removed blobs (the repo has been public since 2026-02-02) — draft provided; to be sent by the repo owner.
+  - [ ] *(owner)* Ask GitHub Support to purge cached views/refs of the removed blobs (the repo has been public since 2026-02-02) — draft provided; to be sent by the repo owner.
   - [x] Commit full MPL-2.0 `LICENSE` text (official Mozilla text; copyright line moves to the README licence section in Phase 7).
 - [x] Branch strategy: `fix/phase-N-<topic>`; PR template listing register IDs + test evidence + (for UI) the §5.3 review link.
 - [x] CI (DEP-05): add `pull_request` trigger; lint `src tests custom_components tools`; mypy blocking against a baseline file; gitleaks; hassfest + HACS validation; separate HA test job with `pytest-homeassistant-custom-component`; Docker build of both targets. *(done: `ci.yml`; mypy fixed to zero instead of a baseline; hassfest/HACS non-blocking until Phase 2)*
@@ -420,11 +420,11 @@ Goal: make it impossible for the bugs below to come back silently.
 - [x] **Contract fixtures:** generate API response fixtures from the real `_format_status` etc., and make HA/web tests consume them (TST-02). *(HA tests consume them; web tests will in Phase 0 UI capture)*
 - [x] Route-inventory test (initially reports coverage; becomes blocking at Phase 2 exit). *(baseline 107/163)*
 - [x] Minimal JS tooling: `package.json` (dev-only) with ESLint, Stylelint, Playwright, axe; one smoke E2E that loads `/ui` and `/kiosk` against the simulator (TST-04). *(lint findings baselined: ESLint 19, Stylelint 539; new violations fail)*
-- [ ] **UI capture baseline (§5.3)** — *before any UI code changes, including Phase 2 fixes*:
-  - [ ] Write `docs/ui/LOOK_AND_FEEL.md` from the current UI; review and sign off together.
+- [x] **UI capture baseline (§5.3)** — *before any UI code changes, including Phase 2 fixes*:
+  - [x] Write `docs/ui/LOOK_AND_FEEL.md` from the current UI; review and sign off together.
   - [x] Build the UI state catalog covering every current page, tab, drawer, modal, editor, CEC remote, dashboard card type, and kiosk panel. *(170 entries, 763 snapshots; the component-isolation gallery page `/ui/gallery` moves to Phase 5 with ES modules — Phase 0 uses a screenshot gallery)*
   - [x] Capture baselines in the pinned Playwright container; Git LFS for snapshots; CODEOWNERS; PR bot comment with before/after thumbnails.
-  - [ ] Publish the baseline as a browsable gallery for a one-time walkthrough, so we both agree it represents the look to preserve (and note anything that is currently *wrong* and should change).
+  - [x] Publish the baseline as a browsable gallery for a one-time walkthrough, so we both agree it represents the look to preserve (and note anything that is currently *wrong* and should change).
 - [x] Simulator v1 from docs (§5.1) — enough for status, routing, presets, login. *(done beyond v1 scope: all comheads, Telnet, fault API, `tools/dev_stack.py`)*
 - [x] Pre-commit hook: fast unit tests + ruff; fail loudly if tools are missing (DEP-11). `.gitignore` additions (DEP-10).
 - [x] Add `/api/health` detail: connection state, last successful poll, loop lag, task count, version (needed by HIL-C/D).
