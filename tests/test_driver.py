@@ -389,6 +389,15 @@ class TestCecCommandResolution:
             "VOLUME_UP": 8,
             "VOLUME_DOWN": 9,
         }
+        # The device's display table (BE-14): a different, smaller set of commands.
+        mock.CEC_OUTPUT_COMMAND_MAP = {
+            "POWER_ON": 0,
+            "POWER_OFF": 1,
+            "MUTE": 2,
+            "VOLUME_DOWN": 3,
+            "VOLUME_UP": 4,
+            "ACTIVE": 5,
+        }
         mock.send_cec = AsyncMock(return_value=True)
         return mock
 
@@ -435,6 +444,17 @@ class TestCecCommandResolution:
         method = get_input_cec_method("POWER_ON")
         assert method is not None
         assert callable(method)
+
+    def test_get_output_cec_method_uses_the_display_table(self):
+        """Displays accept only the output table (BE-14): source-only keys are refused, ACTIVE is accepted."""
+        from driver import get_output_cec_method, set_matrix
+
+        mock = self._get_mock_matrix_with_cec_map()
+        set_matrix(mock)
+        for command in ("POWER_ON", "VOLUME_UP", "ACTIVE"):
+            assert callable(get_output_cec_method(command)), command
+        for command in ("MENU", "BACK", "PLAY", "UP"):
+            assert get_output_cec_method(command) is None, command
 
 
 # =============================================================================

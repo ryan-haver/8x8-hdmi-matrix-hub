@@ -140,19 +140,15 @@ CEC_INPUT_COMMANDS = [
     "MUTE",
 ]
 
+# The device's display (output) CEC table (BE-14, ``device_codes.CEC_OUTPUT_COMMANDS``):
+# a display has no navigation or playback keys, and the hub refuses them.
 CEC_OUTPUT_COMMANDS = [
     "POWER_ON",
     "POWER_OFF",
-    "UP",
-    "DOWN",
-    "LEFT",
-    "RIGHT",
-    "SELECT",
-    "MENU",
-    "BACK",
-    "VOLUME_UP",
-    "VOLUME_DOWN",
     "MUTE",
+    "VOLUME_DOWN",
+    "VOLUME_UP",
+    "ACTIVE",
 ]
 
 # Remote command to CEC command mapping
@@ -319,20 +315,14 @@ def create_output_cec_remote_with_context(output_num: int, ctx: EntityContext, o
     control_page = UiPage(
         f"output_{output_num}_control",
         "TV Control",
-        grid=Size(4, 6),
+        grid=Size(4, 3),
         items=[
             create_ui_text("📺 Power On", 0, 0, Size(2, 1), "POWER_ON"),
             create_ui_text("⏻ Power Off", 2, 0, Size(2, 1), "POWER_OFF"),
-            create_ui_text("▲", 1, 1, Size(2, 1), "UP"),
-            create_ui_text("◀", 0, 2, Size(1, 1), "LEFT"),
-            create_ui_text("OK", 1, 2, Size(2, 1), "SELECT"),
-            create_ui_text("▶", 3, 2, Size(1, 1), "RIGHT"),
-            create_ui_text("▼", 1, 3, Size(2, 1), "DOWN"),
-            create_ui_text("Menu", 0, 4, Size(2, 1), "MENU"),
-            create_ui_text("Back", 2, 4, Size(2, 1), "BACK"),
-            create_ui_text("🔉", 0, 5, Size(1, 1), "VOLUME_DOWN"),
-            create_ui_text("🔇 Mute", 1, 5, Size(2, 1), "MUTE"),
-            create_ui_text("🔊", 3, 5, Size(1, 1), "VOLUME_UP"),
+            create_ui_text("Input", 1, 1, Size(2, 1), "ACTIVE"),
+            create_ui_text("🔉", 0, 2, Size(1, 1), "VOLUME_DOWN"),
+            create_ui_text("🔇 Mute", 1, 2, Size(2, 1), "MUTE"),
+            create_ui_text("🔊", 3, 2, Size(1, 1), "VOLUME_UP"),
         ],
     )
 

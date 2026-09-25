@@ -412,16 +412,10 @@
       "simple_commands": [
         "POWER_ON",
         "POWER_OFF",
-        "UP",
-        "DOWN",
-        "LEFT",
-        "RIGHT",
-        "SELECT",
-        "MENU",
-        "BACK",
-        "VOLUME_UP",
+        "MUTE",
         "VOLUME_DOWN",
-        "MUTE"
+        "VOLUME_UP",
+        "ACTIVE"
       ]
     },
     {
@@ -434,16 +428,10 @@
       "simple_commands": [
         "POWER_ON",
         "POWER_OFF",
-        "UP",
-        "DOWN",
-        "LEFT",
-        "RIGHT",
-        "SELECT",
-        "MENU",
-        "BACK",
-        "VOLUME_UP",
+        "MUTE",
         "VOLUME_DOWN",
-        "MUTE"
+        "VOLUME_UP",
+        "ACTIVE"
       ]
     },
     {
@@ -456,16 +444,10 @@
       "simple_commands": [
         "POWER_ON",
         "POWER_OFF",
-        "UP",
-        "DOWN",
-        "LEFT",
-        "RIGHT",
-        "SELECT",
-        "MENU",
-        "BACK",
-        "VOLUME_UP",
+        "MUTE",
         "VOLUME_DOWN",
-        "MUTE"
+        "VOLUME_UP",
+        "ACTIVE"
       ]
     },
     {
@@ -478,16 +460,10 @@
       "simple_commands": [
         "POWER_ON",
         "POWER_OFF",
-        "UP",
-        "DOWN",
-        "LEFT",
-        "RIGHT",
-        "SELECT",
-        "MENU",
-        "BACK",
-        "VOLUME_UP",
+        "MUTE",
         "VOLUME_DOWN",
-        "MUTE"
+        "VOLUME_UP",
+        "ACTIVE"
       ]
     },
     {
@@ -500,16 +476,10 @@
       "simple_commands": [
         "POWER_ON",
         "POWER_OFF",
-        "UP",
-        "DOWN",
-        "LEFT",
-        "RIGHT",
-        "SELECT",
-        "MENU",
-        "BACK",
-        "VOLUME_UP",
+        "MUTE",
         "VOLUME_DOWN",
-        "MUTE"
+        "VOLUME_UP",
+        "ACTIVE"
       ]
     },
     {
@@ -522,16 +492,10 @@
       "simple_commands": [
         "POWER_ON",
         "POWER_OFF",
-        "UP",
-        "DOWN",
-        "LEFT",
-        "RIGHT",
-        "SELECT",
-        "MENU",
-        "BACK",
-        "VOLUME_UP",
+        "MUTE",
         "VOLUME_DOWN",
-        "MUTE"
+        "VOLUME_UP",
+        "ACTIVE"
       ]
     },
     {
@@ -544,16 +508,10 @@
       "simple_commands": [
         "POWER_ON",
         "POWER_OFF",
-        "UP",
-        "DOWN",
-        "LEFT",
-        "RIGHT",
-        "SELECT",
-        "MENU",
-        "BACK",
-        "VOLUME_UP",
+        "MUTE",
         "VOLUME_DOWN",
-        "MUTE"
+        "VOLUME_UP",
+        "ACTIVE"
       ]
     },
     {
@@ -566,16 +524,10 @@
       "simple_commands": [
         "POWER_ON",
         "POWER_OFF",
-        "UP",
-        "DOWN",
-        "LEFT",
-        "RIGHT",
-        "SELECT",
-        "MENU",
-        "BACK",
-        "VOLUME_UP",
+        "MUTE",
         "VOLUME_DOWN",
-        "MUTE"
+        "VOLUME_UP",
+        "ACTIVE"
       ]
     },
     {

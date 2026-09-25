@@ -13,18 +13,24 @@ from tools.validate.device import SimDevice
 
 from ._helpers import CYCLE, INPUT_NAMES, SEED_STATE, cec_frames, known_bug, port_mask, sent, wait_for, writes
 
-#: CEC command name -> index in the matrix's `cec command` frame, as the hub sends it today
-#: (orei_matrix.CEC_COMMAND_MAP). Written out here on purpose: the index table is disputed
-#: (VAL-03, BE-14; HIL capture pending), so a change must show up as a deliberate test change.
-PINNED_CEC_INDEX = {
+#: CEC command name -> index in the matrix's `cec command` frame. Written out here on purpose
+#: (a change must show up as a deliberate test change). Both tables are the BK-808's own, from its
+#: web interface's control pads (docs/OREI_API_COMMANDS.md "cec command"; VAL-03, BE-14):
+#: sources (object 0) use the 1-based 19-key table ...
+PINNED_INPUT_CEC_INDEX = {
     "POWER_ON": 1, "POWER_OFF": 2, "UP": 3, "LEFT": 4, "SELECT": 5, "RIGHT": 6, "MENU": 7, "DOWN": 8,
     "BACK": 9, "PREVIOUS": 10, "PLAY": 11, "NEXT": 12, "REWIND": 13, "PAUSE": 14, "FAST_FORWARD": 15,
     "STOP": 16, "MUTE": 17, "VOLUME_DOWN": 18, "VOLUME_UP": 19,
 }
-OUTPUT_CEC_COMMANDS = ["POWER_ON", "POWER_OFF", "UP", "DOWN", "LEFT", "RIGHT", "SELECT", "MENU", "BACK",
-                       "VOLUME_UP", "VOLUME_DOWN", "MUTE"]
-INPUT_CEC_COMMANDS = [*OUTPUT_CEC_COMMANDS[:9], "PLAY", "PAUSE", "STOP", "PREVIOUS", "NEXT", "REWIND",
-                      "FAST_FORWARD", "VOLUME_UP", "VOLUME_DOWN", "MUTE"]
+#: ... displays (object 1) a different, 0-based table of six keys. Source index 1 (power on) is
+#: display index 1 = power OFF: sending the source table to a TV turns it off (BE-14).
+PINNED_OUTPUT_CEC_INDEX = {"POWER_ON": 0, "POWER_OFF": 1, "MUTE": 2, "VOLUME_DOWN": 3, "VOLUME_UP": 4, "ACTIVE": 5}
+#: The simple commands each CEC remote advertises (tests/uc/golden/entities.json). A display
+#: remote offers exactly the display table: no navigation or playback keys.
+OUTPUT_CEC_COMMANDS = list(PINNED_OUTPUT_CEC_INDEX)
+INPUT_CEC_COMMANDS = ["POWER_ON", "POWER_OFF", "UP", "DOWN", "LEFT", "RIGHT", "SELECT", "MENU", "BACK", "PLAY",
+                      "PAUSE", "STOP", "PREVIOUS", "NEXT", "REWIND", "FAST_FORWARD", "VOLUME_UP", "VOLUME_DOWN",
+                      "MUTE"]
 
 
 # ---------------------------------------------------------------------- routing (media player)
@@ -100,8 +106,25 @@ async def test_output_cec_remote_send_cmd_sends_exact_frames(uc_remote: UcRemote
         resp = await uc_remote.remote_send_cmd("remote.output_1_cec", command)
         assert resp["code"] == 200, command
     assert cec_frames(await sim.log()) == [
-        {"object": 1, "port": port_mask(1), "index": PINNED_CEC_INDEX[c]} for c in OUTPUT_CEC_COMMANDS
+        {"object": 1, "port": port_mask(1), "index": PINNED_OUTPUT_CEC_INDEX[c]} for c in OUTPUT_CEC_COMMANDS
     ]
+
+
+async def test_output_cec_remote_advertises_only_the_display_table(uc_remote: UcRemoteSim) -> None:
+    """The display remote offers the six keys a display has on the BK-808, nothing the hub would refuse."""
+    entities = {e["entity_id"]: e for e in await uc_remote.get_available_entities()}
+    for n in range(1, 9):
+        assert entities[f"remote.output_{n}_cec"]["options"]["simple_commands"] == OUTPUT_CEC_COMMANDS
+
+
+async def test_source_only_keys_on_the_output_cec_remote_are_rejected(uc_remote: UcRemoteSim,
+                                                                      sim: SimDevice) -> None:
+    """Navigation/playback keys have no display index (BE-14): 400 and no frame, never a source-table index."""
+    await sim.clear_log()
+    for command in ("UP", "SELECT", "MENU", "BACK", "PLAY"):
+        assert (await uc_remote.remote_send_cmd("remote.output_1_cec", command))["code"] == 400, command
+    assert cec_frames(await sim.log()) == []
+    assert not uc_remote.closed
 
 
 async def test_input_cec_remote_send_cmd_sends_exact_frames(uc_remote: UcRemoteSim, sim: SimDevice) -> None:
@@ -111,7 +134,7 @@ async def test_input_cec_remote_send_cmd_sends_exact_frames(uc_remote: UcRemoteS
         resp = await uc_remote.remote_send_cmd("remote.input_2_cec", command)
         assert resp["code"] == 200, command
     assert cec_frames(await sim.log()) == [
-        {"object": 0, "port": port_mask(2), "index": PINNED_CEC_INDEX[c]} for c in INPUT_CEC_COMMANDS
+        {"object": 0, "port": port_mask(2), "index": PINNED_INPUT_CEC_INDEX[c]} for c in INPUT_CEC_COMMANDS
     ]
 
 
@@ -120,8 +143,8 @@ async def test_cec_send_cmd_targets_the_entity_port(uc_remote: UcRemoteSim, sim:
     assert (await uc_remote.remote_send_cmd("remote.output_8_cec", "POWER_OFF"))["code"] == 200
     assert (await uc_remote.remote_send_cmd("remote.input_8_cec", "POWER_ON"))["code"] == 200
     assert cec_frames(await sim.log()) == [
-        {"object": 1, "port": port_mask(8), "index": 2},
-        {"object": 0, "port": port_mask(8), "index": 1},
+        {"object": 1, "port": port_mask(8), "index": PINNED_OUTPUT_CEC_INDEX["POWER_OFF"]},  # 1
+        {"object": 0, "port": port_mask(8), "index": PINNED_INPUT_CEC_INDEX["POWER_ON"]},  # 1
     ]
 
 
@@ -138,18 +161,20 @@ async def test_send_cmd_repeat_sends_the_command_repeatedly(uc_remote: UcRemoteS
     await sim.clear_log()
     resp = await uc_remote.remote_send_cmd("remote.output_1_cec", "VOLUME_UP", repeat=3, delay=50)
     assert resp["code"] == 200
-    assert cec_frames(await sim.log()) == [{"object": 1, "port": port_mask(1), "index": 19}] * 3
+    assert cec_frames(await sim.log()) == [
+        {"object": 1, "port": port_mask(1), "index": PINNED_OUTPUT_CEC_INDEX["VOLUME_UP"]}] * 3
 
 
 # ---------------------------------------------------------------------- CEC remotes: UC-01
 
 #: remote entity command -> the CEC frame(s) a correct driver sends (entity_remote.md; power maps to CEC power).
+#: Displays use the display table (0 power on, 1 power off, 4 volume up), sources the source table.
 UC01_CASES = [
-    ("remote.output_1_cec", "on", None, [{"object": 1, "port": port_mask(1), "index": 1}]),
-    ("remote.output_1_cec", "off", None, [{"object": 1, "port": port_mask(1), "index": 2}]),
+    ("remote.output_1_cec", "on", None, [{"object": 1, "port": port_mask(1), "index": 0}]),
+    ("remote.output_1_cec", "off", None, [{"object": 1, "port": port_mask(1), "index": 1}]),
     ("remote.output_1_cec", "toggle", None, None),
-    ("remote.output_1_cec", "send_cmd_sequence", {"sequence": ["POWER_ON", "MENU"], "delay": 50},
-     [{"object": 1, "port": port_mask(1), "index": 1}, {"object": 1, "port": port_mask(1), "index": 7}]),
+    ("remote.output_1_cec", "send_cmd_sequence", {"sequence": ["POWER_ON", "VOLUME_UP"], "delay": 50},
+     [{"object": 1, "port": port_mask(1), "index": 0}, {"object": 1, "port": port_mask(1), "index": 4}]),
     ("remote.input_3_cec", "on", None, [{"object": 0, "port": port_mask(3), "index": 1}]),
     ("remote.input_3_cec", "off", None, [{"object": 0, "port": port_mask(3), "index": 2}]),
     ("remote.input_3_cec", "toggle", None, None),
@@ -207,11 +232,14 @@ async def test_a_crashing_command_takes_down_only_that_connection(uc_remote_fact
 
 
 async def test_media_player_power_volume_and_mute_send_output_cec(uc_remote: UcRemoteSim, sim: SimDevice) -> None:
+    """The media player's TV power/volume/mute are display commands: the display table, not the source one."""
     await sim.clear_log()
-    for cmd_id, index in (("on", 1), ("off", 2), ("volume_up", 19), ("volume_down", 18), ("mute_toggle", 17)):
+    for cmd_id, command in (("on", "POWER_ON"), ("off", "POWER_OFF"), ("volume_up", "VOLUME_UP"),
+                            ("volume_down", "VOLUME_DOWN"), ("mute_toggle", "MUTE")):
         resp = await uc_remote.entity_command("media_player.output_2", cmd_id)
         assert resp["code"] == 200, cmd_id
-        assert cec_frames(await sim.log())[-1] == {"object": 1, "port": port_mask(2), "index": index}, cmd_id
+        assert cec_frames(await sim.log())[-1] == {
+            "object": 1, "port": port_mask(2), "index": PINNED_OUTPUT_CEC_INDEX[command]}, cmd_id
     assert len(cec_frames(await sim.log())) == 5
     assert (await uc_remote.entity_state("media_player.output_2"))["state"] == "OFF"
 
@@ -222,7 +250,10 @@ async def test_media_player_first_toggle_does_not_turn_the_tv_off(uc_remote: UcR
     assert (await uc_remote.entity_state("media_player.output_1"))["state"] == "UNKNOWN"
     await sim.clear_log()
     assert (await uc_remote.entity_command("media_player.output_1", "toggle"))["code"] == 200
-    assert cec_frames(await sim.log()) != [{"object": 1, "port": port_mask(1), "index": 2}]
+    # Power off is display index 1 (BE-14). Before WP-A4 part 2 this compared against the source
+    # table's power off (2), so the new, correct index made the still-present bug look fixed.
+    power_off = {"object": 1, "port": port_mask(1), "index": PINNED_OUTPUT_CEC_INDEX["POWER_OFF"]}
+    assert power_off not in cec_frames(await sim.log())
 
 
 # ---------------------------------------------------------------------- matrix power switch
