@@ -55,10 +55,9 @@ async def handle_output_status(request: web.Request) -> web.Response:
         status = await matrix_device.get_output_status()
 
         if is_cached:
-            import asyncio
+            from .core import schedule_background_refresh
 
-            from .core import background_status_refresh
-            asyncio.create_task(background_status_refresh(matrix_device))
+            schedule_background_refresh(matrix_device)  # deduplicated (API-11)
 
         if status:
             # Get cable status from Telnet if available
@@ -121,10 +120,9 @@ async def handle_input_status(request: web.Request) -> web.Response:
         status = await matrix_device.get_input_status()
 
         if is_cached:
-            import asyncio
+            from .core import schedule_background_refresh
 
-            from .core import background_status_refresh
-            asyncio.create_task(background_status_refresh(matrix_device))
+            schedule_background_refresh(matrix_device)  # deduplicated (API-11)
 
         # Get cable status from Telnet if available
         cable_inputs = {}
@@ -188,10 +186,9 @@ async def handle_cable_status(request: web.Request) -> web.Response:
         cable_status = await matrix_device.get_all_cable_status()
 
         if is_cached:
-            import asyncio
+            from .core import schedule_background_refresh
 
-            from .core import background_status_refresh
-            asyncio.create_task(background_status_refresh(matrix_device))
+            schedule_background_refresh(matrix_device)  # deduplicated (API-11)
 
         input_names_dict = await matrix_device.get_all_input_names()
         output_names_dict = await matrix_device.get_output_names()

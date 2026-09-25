@@ -7,6 +7,13 @@ Hybrid HTTP/Telnet control architecture:
 
 HTTP API: POST to /cgi-bin/instr with JSON payload
 Telnet: Port 23, commands end with !\\r\\n
+
+Connection state (BE-04): ``OreiMatrix.connection_state`` is one of
+:class:`ConnectionState`. ``connected`` is true while the HTTP session works
+(CONNECTED, or DEGRADED when only Telnet is down). A transport error, timeout
+or unparseable answer moves the matrix to BACKOFF, emits
+``Events.DISCONNECTED`` and starts the matrix-owned reconnect supervisor;
+``disconnect()`` is intentional and never triggers a reconnect.
 """
 
 import asyncio
@@ -15,16 +22,21 @@ import json
 import logging
 import os
 import random
-from enum import IntEnum
-from typing import Any
+import time
+from collections.abc import Awaitable, Callable
+from dataclasses import dataclass
+from enum import IntEnum, StrEnum
+from typing import Any, TypeVar
 
 import aiohttp
 from pyee.asyncio import AsyncIOEventEmitter
 
 # Import Telnet client for CEC and cable detection
 try:
+    from ._task_supervisor import cancel_and_wait, create_supervised_task
     from .telnet_client import MatrixStatus, TelnetClient, TelnetState
 except ImportError:
+    from _task_supervisor import cancel_and_wait, create_supervised_task  # type: ignore[no-redef]
     from telnet_client import MatrixStatus, TelnetClient, TelnetState
 
 _LOG = logging.getLogger(__name__)
@@ -34,6 +46,11 @@ MAX_RETRIES = int(os.environ.get("OREI_MAX_RETRIES", "5"))
 INITIAL_RETRY_DELAY = float(os.environ.get("OREI_RETRY_DELAY", "1.0"))
 MAX_RETRY_DELAY = float(os.environ.get("OREI_MAX_RETRY_DELAY", "60.0"))
 RETRY_JITTER = 0.1  # 10% jitter to prevent thundering herd
+
+#: HTTP request timeout (seconds) for every command, login included.
+HTTP_TIMEOUT = 5.0
+
+_T = TypeVar("_T")
 
 
 class Events(IntEnum):
@@ -45,6 +62,109 @@ class Events(IntEnum):
     UPDATE = 3
     RECONNECTING = 4  # New event for reconnection attempts
     CONFIG_CHANGED = 5
+
+
+class ConnectionState(StrEnum):
+    """Link state of the matrix (BE-04).
+
+    - ``DISCONNECTED``: not connected and no reconnect scheduled (initial
+      state, after ``disconnect()``, or after a failed first connect).
+    - ``CONNECTING``: login in progress.
+    - ``CONNECTED``: HTTP session and Telnet both up.
+    - ``DEGRADED``: HTTP session up, Telnet down (CEC and cable detection use
+      the HTTP fallbacks).
+    - ``BACKOFF``: the link was lost; the reconnect supervisor is waiting
+      before its next attempt.
+    """
+
+    DISCONNECTED = "disconnected"
+    CONNECTING = "connecting"
+    CONNECTED = "connected"
+    DEGRADED = "degraded"
+    BACKOFF = "backoff"
+
+
+#: States in which HTTP commands can be sent (``OreiMatrix.connected``).
+_LINK_UP = frozenset({ConnectionState.CONNECTED, ConnectionState.DEGRADED})
+
+# HIL-A: confirm against real device -- `result` of a successful login. The
+# API doc lists "success"; older hub code accepted 1.
+LOGIN_SUCCESS_RESULTS: tuple[int | str, ...] = (1, "success")
+# HIL-A: confirm -- `result` of an accepted write (verified 1 for video
+# switch, preset set and set poweronoff; the doc shows "success" for some).
+WRITE_SUCCESS_RESULTS: tuple[int | str, ...] = (1, "success")
+# HIL-A: confirm -- `result` values that mean failure: a rejected write, a
+# wrong password ("fail" is the simulator's guess), or a command sent without
+# a valid session (the simulator echoes the comhead with result 0).
+FAILURE_RESULTS: tuple[int | str, ...] = (0, "fail", "failed", "failure", "error")
+
+
+def _normalise_result(value: Any) -> Any:
+    """``"1"``/``" Success "`` -> ``1``/``"success"``; other values unchanged."""
+    if isinstance(value, bool):
+        return int(value)
+    if isinstance(value, str):
+        text = value.strip().lower()
+        return int(text) if text.isdigit() else text
+    return value
+
+
+def is_login_success(response: Any) -> bool:
+    """Whether a ``login`` response reports success (BE-05).
+
+    # HIL-A: confirm against real device
+    The matrix echoes ``comhead: "login"`` even for a wrong password, so the
+    echo proves nothing: only an explicit success ``result`` counts. A failure
+    ``result`` ("fail", 0, ...), a missing ``result`` or anything unexpected
+    is a failed login.
+    """
+    if not isinstance(response, dict):
+        return False
+    return _normalise_result(response.get("result")) in LOGIN_SUCCESS_RESULTS
+
+
+def is_write_success(response: Any) -> bool:
+    """Whether a write command's response reports success (BE-12). # HIL-A: confirm"""
+    if not isinstance(response, dict):
+        return False
+    return _normalise_result(response.get("result")) in WRITE_SUCCESS_RESULTS
+
+
+def _copy_cables(cables: dict[str, Any]) -> dict[str, Any]:
+    """Copy a cable-status dict including its per-side port dicts."""
+    return {side: dict(ports) if isinstance(ports, dict) else ports for side, ports in cables.items()}
+
+
+def _is_read_command(comhead: str) -> bool:
+    return comhead.startswith("get") or comhead.endswith("get") or "get" in comhead
+
+
+# Commands whose effect is not idempotent: sending one twice changes the
+# result (a CEC volume step, a power toggle). They are never resent after an
+# ambiguous failure answer, because the first send may already have acted.
+NON_IDEMPOTENT_COMMANDS = frozenset({"cec command"})
+
+
+def _looks_like_login_page(text: str) -> bool:
+    # HIL-A: confirm -- some firmwares may answer an expired session with the
+    # HTML login page instead of JSON.
+    lowered = text.lstrip().lower()
+    return lowered.startswith("<") and ("<html" in lowered or "login" in lowered)
+
+
+@dataclass
+class _HttpResult:
+    """Outcome of one POST to /cgi-bin/instr.
+
+    ``kind`` is ``ok``, ``auth`` (the session is not valid, or a failure
+    ``result`` that may mean that), ``transport`` (connection error, timeout,
+    HTTP error status) or ``bad_response`` (not a JSON object).
+    """
+
+    kind: str
+    data: dict[str, Any] | None = None
+    error: str | None = None
+    timeout: bool = False
 
 
 class OreiMatrix:
@@ -62,7 +182,7 @@ class OreiMatrix:
         self.port = port
         self.use_https = use_https
         self._session: aiohttp.ClientSession | None = None
-        self._connected = False
+        self._state = ConnectionState.DISCONNECTED
         # Typed as Any: pyee annotates event names as `str`, but this codebase
         # keys events by the `Events` IntEnum (any hashable works at runtime).
         self.events: Any = AsyncIOEventEmitter()
@@ -71,9 +191,16 @@ class OreiMatrix:
         self._current_scene: int | None = None
         self._last_error: str | None = None
 
-        # Retry state
+        # Retry / reconnect state. The reconnect supervisor is owned by this
+        # object and only runs after the link was lost (not after disconnect()).
+        self.auto_reconnect = os.environ.get("OREI_AUTO_RECONNECT", "true").lower() != "false"
         self._retry_count = 0
         self._reconnect_task: asyncio.Task | None = None
+        self._intentional_disconnect = False
+        # Single-flight connect / re-login (BE-11): concurrent callers await
+        # the attempt already in progress.
+        self._connect_task: asyncio.Future[bool] | None = None
+        self._relogin_task: asyncio.Future[bool] | None = None
 
         # Telnet client for CEC commands and cable detection
         self._telnet: TelnetClient | None = None
@@ -89,19 +216,25 @@ class OreiMatrix:
         }
         self._cec_cache_ttl = int(os.environ.get("OREI_CEC_CACHE_TTL", "300"))  # 5 minutes cache TTL
 
-        # Serializes HTTP commands so concurrent REST/HA/UC callers cannot
-        # interleave JSON POSTs against the same matrix aiohttp session.
-        # Without this lock, overlapping commands can arrive at the hardware
-        # in undefined order and the matrix processes one at a time anyway.
+        # Serializes HTTP requests so concurrent REST/HA/UC callers cannot
+        # interleave JSON POSTs against the same matrix aiohttp session. It is
+        # held for one request only -- never across a reconnect or a backoff
+        # sleep (BE-17).
         self._command_lock = asyncio.Lock()
 
         # Protects _cec_enabled_cache reads/writes from concurrent coroutines.
         self._cec_cache_lock = asyncio.Lock()
 
-        # Status cache to speed up UI loads
+        # Status caches to speed up UI loads (BE-03). Every cache below expires
+        # after OREI_STATUS_CACHE_TTL seconds; writes invalidate all of them.
+        # Concurrent refreshes of one cache share a single request
+        # (_single_flight); _cache_generation increases on every invalidation
+        # so a refresh started before a write is never cached or joined after it.
         self._status_cache: dict[str, Any] | None = None
         self._status_cache_time: float = 0.0
         self._status_cache_ttl = float(os.environ.get("OREI_STATUS_CACHE_TTL", "3.0"))
+        self._cache_generation = 0
+        self._inflight: dict[str, tuple[int, asyncio.Future[Any]]] = {}
 
         self._output_status_cache: dict[str, Any] | None = None
         self._output_status_cache_time: float = 0.0
@@ -115,10 +248,89 @@ class OreiMatrix:
         # UTC time of the last successful status read (for /api/health)
         self._last_successful_poll: datetime.datetime | None = None
 
+    # =========================================================================
+    # Connection state
+    # =========================================================================
+
+    @property
+    def connection_state(self) -> ConnectionState:
+        """Current link state (see :class:`ConnectionState`)."""
+        return self._state
+
     @property
     def connected(self) -> bool:
-        """Return connection status."""
-        return self._connected
+        """True while HTTP commands can be sent (CONNECTED or DEGRADED)."""
+        return self._state in _LINK_UP
+
+    @property
+    def _connected(self) -> bool:
+        """Backward-compatible alias of :attr:`connected` (tests set it)."""
+        return self.connected
+
+    @_connected.setter
+    def _connected(self, value: bool) -> None:
+        self._set_state(self._link_up_state() if value else ConnectionState.DISCONNECTED)
+
+    def _set_state(self, new_state: ConnectionState) -> None:
+        if new_state is not self._state:
+            _LOG.info("Matrix connection state: %s -> %s", self._state.value, new_state.value)
+            self._state = new_state
+
+    def _link_up_state(self) -> ConnectionState:
+        return ConnectionState.CONNECTED if self.telnet_connected else ConnectionState.DEGRADED
+
+    def _link_lost(self, reason: str | None) -> None:
+        """The HTTP link failed: leave CONNECTED/DEGRADED and schedule a reconnect.
+
+        Emits ``Events.DISCONNECTED`` when the link was up, so existing
+        listeners (driver.py) keep working. Never called for an intentional
+        ``disconnect()``.
+        """
+        was_up = self.connected
+        if self._intentional_disconnect or not self.auto_reconnect:
+            self._set_state(ConnectionState.DISCONNECTED)
+        else:
+            self._set_state(ConnectionState.BACKOFF)
+            self._start_reconnect()
+        if was_up:
+            _LOG.warning("Lost connection to OREI Matrix: %s", reason)
+            self.events.emit(Events.DISCONNECTED)
+
+    def start_auto_reconnect(self) -> None:
+        """Keep trying to connect in the background until it works.
+
+        For entry points whose first ``connect()`` failed (matrix offline at
+        startup). No-op when connected or already reconnecting.
+        """
+        if self.connected:
+            return
+        self._intentional_disconnect = False
+        self._set_state(ConnectionState.BACKOFF)
+        self._start_reconnect()
+
+    def _start_reconnect(self) -> None:
+        if not self.auto_reconnect or self._intentional_disconnect:
+            return
+        task = self._reconnect_task
+        if task is not None and not task.done():
+            return
+        self._reconnect_task = create_supervised_task(self._reconnect_loop, "matrix_reconnect")
+
+    async def _reconnect_loop(self) -> None:
+        """Reconnect with exponential backoff until connected (or disconnect())."""
+        attempt = 0
+        while not self._intentional_disconnect and not self.connected:
+            delay = self._calculate_retry_delay(attempt)
+            if self._state is not ConnectionState.CONNECTING:
+                self._set_state(ConnectionState.BACKOFF)
+            _LOG.info("Matrix reconnect attempt %d in %.1fs", attempt + 1, delay)
+            await asyncio.sleep(delay)
+            if self._intentional_disconnect or self.connected:
+                break
+            if await self.connect():
+                _LOG.info("Reconnected to OREI Matrix after %d attempt(s)", attempt + 1)
+                break
+            attempt += 1
 
     @property
     def last_successful_poll(self) -> datetime.datetime | None:
@@ -145,31 +357,48 @@ class OreiMatrix:
         if self._telnet and self._telnet.connected:
             return True
 
+        # BE-11: dispose of the previous client (its socket, push listener and
+        # reconnect loop) before replacing it, or it keeps running and
+        # reconnecting in the background.
+        await self._dispose_telnet()
+
+        client: TelnetClient | None = None
         try:
             _LOG.info(f"Connecting Telnet to {self.host}:{self._telnet_port}")
-            self._telnet = TelnetClient(
+            client = TelnetClient(
                 host=self.host, port=self._telnet_port, on_connection_change=self._on_telnet_state_change
             )
+            self._telnet = client
 
-            if await self._telnet.connect():
-                _LOG.info(f"Telnet connected (firmware: {self._telnet.firmware_version})")
+            if await client.connect():
+                _LOG.info(f"Telnet connected (firmware: {client.firmware_version})")
                 return True
             else:
                 _LOG.warning("Telnet connection failed - CEC and cable detection will use HTTP fallback")
-                self._telnet = None
+                await self._dispose_telnet()
                 return False
 
         except Exception as e:
             _LOG.warning(f"Telnet connection error: {e} - falling back to HTTP-only mode")
-            self._telnet = None
+            await self._dispose_telnet()
             return False
 
+    async def _dispose_telnet(self) -> None:
+        """Disconnect and drop the current Telnet client, if any."""
+        telnet, self._telnet = self._telnet, None
+        if telnet is not None:
+            try:
+                await telnet.disconnect()
+            except Exception as e:
+                _LOG.warning(f"Error disposing Telnet client: {e}")
+        if self.connected:
+            self._set_state(self._link_up_state())
+
     def _on_telnet_state_change(self, state: TelnetState) -> None:
-        """Handle Telnet connection state changes."""
+        """Track Telnet up/down as CONNECTED/DEGRADED while HTTP is up."""
         _LOG.info(f"Telnet state changed to: {state.value}")
-        if state == TelnetState.DISCONNECTED:
-            # Could trigger reconnect here if needed
-            pass
+        if self.connected:
+            self._set_state(self._link_up_state())
 
     def _calculate_retry_delay(self, attempt: int) -> float:
         """
@@ -179,14 +408,14 @@ class OreiMatrix:
         :return: Delay in seconds
         """
         # Exponential backoff: delay = initial * 2^attempt
-        delay = INITIAL_RETRY_DELAY * (2**attempt)
+        delay = INITIAL_RETRY_DELAY * (2 ** min(attempt, 32))
         # Cap at maximum delay
         delay = min(delay, MAX_RETRY_DELAY)
         # Add jitter (±10%) to prevent thundering herd
         jitter = delay * RETRY_JITTER * (2 * random.random() - 1)
         return delay + jitter
 
-    async def connect_with_retry(self, max_retries: int = None) -> bool:
+    async def connect_with_retry(self, max_retries: int | None = None) -> bool:
         """
         Connect to the OREI Matrix with exponential backoff retry.
 
@@ -222,8 +451,37 @@ class OreiMatrix:
         """
         Connect to the OREI Matrix via HTTPS/HTTP and authenticate.
 
+        Single-flight (BE-11): a call made while another connect is in
+        progress waits for that attempt's result instead of logging in again.
+
         :return: True if connection successful
         """
+        task = self._connect_task
+        if task is None or task.done():
+            task = asyncio.ensure_future(self._connect_once())
+            self._connect_task = task
+        return await self._await_shared(task)
+
+    @staticmethod
+    async def _await_shared(task: "asyncio.Future[bool]") -> bool:
+        """Await a shared attempt; its cancellation reads as failure, ours propagates."""
+        try:
+            return await asyncio.shield(task)
+        except asyncio.CancelledError:
+            current = asyncio.current_task()
+            if current is not None and current.cancelling():
+                raise
+            return False
+
+    def _url(self) -> str:
+        protocol = "https" if self.use_https else "http"
+        return f"{protocol}://{self.host}:{self.port}/cgi-bin/instr"
+
+    async def _connect_once(self) -> bool:
+        """One login attempt, then Telnet. Used through :meth:`connect`."""
+        self._intentional_disconnect = False
+        reconnecting = self._reconnect_task is not None and not self._reconnect_task.done()
+        self._set_state(ConnectionState.CONNECTING)
         try:
             protocol = "https" if self.use_https else "http"
             _LOG.info("Connecting to OREI Matrix at %s://%s:%d", protocol, self.host, self.port)
@@ -240,152 +498,228 @@ class OreiMatrix:
                     connector = None
                 self._session = aiohttp.ClientSession(cookie_jar=aiohttp.CookieJar(), connector=connector)
 
-            # Authenticate with login command
-            # Credentials can be overridden via environment variables
-            url = f"{protocol}://{self.host}:{self.port}/cgi-bin/instr"
-            login_cmd = {
-                "comhead": "login",
-                "user": os.environ.get("OREI_USER", "Admin"),
-                "password": os.environ.get("OREI_PASSWORD", "admin"),
-            }
-
             _LOG.debug("Authenticating with matrix...")
-            async with self._session.post(url, json=login_cmd, timeout=aiohttp.ClientTimeout(total=5)) as response:
-                if response.status == 200:
-                    try:
-                        # Matrix returns text/plain, so read as text then parse JSON
-                        text = await response.text()
-                        _LOG.debug("Login response (raw): %s", text)
-                        result = json.loads(text)
-                        _LOG.debug("Login response (parsed): %s", result)
-                        # Check if login was successful
-                        if result.get("result") == 1 or result.get("comhead") == "login":
-                            self._connected = True
-                            self.events.emit(Events.CONNECTED)
-                            _LOG.info("Successfully authenticated to OREI Matrix via HTTP")
-
-                            # Also connect Telnet for CEC and cable detection
-                            await self._connect_telnet()
-
-                            return True
-                        else:
-                            _LOG.error("Login failed: %s", result)
-                            self._last_error = "Authentication failed"
-                            return False
-                    except Exception as ex:
-                        _LOG.error("Failed to parse login response: %s", ex)
-                        return False
-                else:
-                    _LOG.warning("Login request returned status %d", response.status)
-                    return False
-
-        except TimeoutError:
-            _LOG.error("Connection timeout to OREI Matrix at %s:%d", self.host, self.port)
-            self._last_error = "Connection timeout"
-            self.events.emit(Events.ERROR, "Connection timeout")
-            return False
+            logged_in = await self._login()
         except Exception as ex:
             _LOG.error("Failed to connect to OREI Matrix: %s", ex)
             self._last_error = str(ex)
             self.events.emit(Events.ERROR, str(ex))
+            logged_in = False
+
+        if not logged_in:
+            self._set_state(ConnectionState.BACKOFF if reconnecting else ConnectionState.DISCONNECTED)
             return False
 
-    async def disconnect(self):
-        """Disconnect from the OREI Matrix (both HTTP and Telnet)."""
-        # Cancel any pending reconnect task
-        if self._reconnect_task and not self._reconnect_task.done():
-            self._reconnect_task.cancel()
+        # HTTP works: usable now (DEGRADED until Telnet is up).
+        self._set_state(ConnectionState.DEGRADED)
+        self._last_error = None
+        self.events.emit(Events.CONNECTED)
+        _LOG.info("Successfully authenticated to OREI Matrix via HTTP")
+
+        # Also connect Telnet for CEC and cable detection
+        await self._connect_telnet()
+        if self.connected:
+            self._set_state(self._link_up_state())
+        return True
+
+    async def _login(self) -> bool:
+        """POST the login command; True only on an explicit success result."""
+        # Credentials can be overridden via environment variables
+        login_cmd = {
+            "comhead": "login",
+            "user": os.environ.get("OREI_USER", "Admin"),
+            "password": os.environ.get("OREI_PASSWORD", "admin"),
+        }
+        result = await self._post(login_cmd)
+        if result.kind != "ok":
+            if result.timeout:
+                _LOG.error("Connection timeout to OREI Matrix at %s:%d", self.host, self.port)
+                self._last_error = "Connection timeout"
+            else:
+                _LOG.error("Login request failed: %s", result.error)
+                self._last_error = result.error or "Login failed"
+            self.events.emit(Events.ERROR, self._last_error)
+            return False
+        if not is_login_success(result.data):
+            _LOG.error("Login failed: %s", result.data)
+            self._last_error = "Authentication failed"
+            return False
+        return True
+
+    async def _relogin(self) -> bool:
+        """Re-authenticate once (single-flight) after the session was lost."""
+        task = self._relogin_task
+        if task is None or task.done():
+            task = asyncio.ensure_future(self._login())
+            self._relogin_task = task
+        ok = await self._await_shared(task)
+        if ok:
+            _LOG.info("Re-authenticated to OREI Matrix")
+        else:
+            self._link_lost(f"re-authentication failed: {self._last_error}")
+        return ok
+
+    async def _post(self, payload: dict[str, Any]) -> _HttpResult:
+        """Send one JSON command and classify the answer.
+
+        ``_command_lock`` is held for this single request only (BE-17).
+        """
+        session = self._session
+        if session is None:
+            return _HttpResult("transport", error="No HTTP session")
+        _LOG.debug("Sending POST to %s: %s", self._url(), payload if payload.get("comhead") != "login" else "login")
+        async with self._command_lock:
             try:
-                await self._reconnect_task
-            except asyncio.CancelledError:
-                pass
-            self._reconnect_task = None
+                async with session.post(
+                    self._url(), json=payload, timeout=aiohttp.ClientTimeout(total=HTTP_TIMEOUT)
+                ) as response:
+                    status = response.status
+                    # Matrix returns text/plain, so read as text then parse JSON
+                    text = await response.text() if status == 200 else ""
+            except TimeoutError:
+                return _HttpResult("transport", error="Command timeout", timeout=True)
+            except Exception as ex:  # aiohttp.ClientError, OSError, ...
+                return _HttpResult("transport", error=str(ex) or type(ex).__name__)
+        return self._classify_response(payload, status, text)
+
+    @staticmethod
+    def _classify_response(payload: dict[str, Any], status: int, text: str) -> _HttpResult:
+        if status in (401, 403):
+            return _HttpResult("auth", error=f"HTTP {status}")
+        if status != 200:
+            return _HttpResult("transport", error=f"HTTP {status}")
+        _LOG.debug("Command response (raw): %s", text)
+        try:
+            data = json.loads(text)
+        except ValueError as ex:
+            if _looks_like_login_page(text):
+                return _HttpResult("auth", error="Session expired (login page)")
+            _LOG.warning("Could not parse JSON response: %s (raw: %.200s)", ex, text)
+            return _HttpResult("bad_response", error=f"Unparseable matrix response: {ex}")
+        if not isinstance(data, dict):
+            return _HttpResult("bad_response", error="Unparseable matrix response: not a JSON object")
+        comhead = payload.get("comhead", "")
+        # HIL-A: confirm how the device answers a command sent without a valid
+        # session. Reads never carry `result` on success, so a failure result
+        # on a read is the "not logged in" answer. On a write it may also be a
+        # plain rejection; the caller re-logs in once and retries, and a second
+        # failure is reported as a rejected write.
+        if comhead != "login" and "result" in data and _normalise_result(data["result"]) in FAILURE_RESULTS:
+            return _HttpResult("auth", data=data, error="Matrix returned a failure result (session may have expired)")
+        return _HttpResult("ok", data=data)
+
+    async def disconnect(self):
+        """Disconnect from the OREI Matrix (both HTTP and Telnet).
+
+        Intentional: no reconnect is scheduled afterwards.
+        """
+        self._intentional_disconnect = True
+        await cancel_and_wait(self._reconnect_task, "matrix_reconnect")
+        self._reconnect_task = None
+        for attr in ("_connect_task", "_relogin_task"):
+            pending = getattr(self, attr)
+            if isinstance(pending, asyncio.Task):
+                await cancel_and_wait(pending, attr)
+            setattr(self, attr, None)
 
         # Disconnect Telnet first
-        if self._telnet:
-            await self._telnet.disconnect()
-            self._telnet = None
+        await self._dispose_telnet()
 
-        # Clear CEC cache on disconnect to prevent stale data
+        # Clear caches on disconnect to prevent stale data
         self.clear_cec_cache()
+        self._invalidate_status_caches()
 
         if self._session:
             try:
                 await self._session.close()
             except Exception as ex:
                 _LOG.warning("Error closing session: %s", ex)
-        self._connected = False
         self._session = None
+        self._set_state(ConnectionState.DISCONNECTED)
         self.events.emit(Events.DISCONNECTED)
         _LOG.info("Disconnected from OREI Matrix")
+
+    def _check_write(self, success: bool, response: dict | None, command: dict[str, Any]) -> bool:
+        """Report whether a write was accepted (BE-12), logging why not.
+
+        A write succeeds only if the matrix answered with a success ``result``
+        (see :func:`is_write_success`); HTTP 200 alone proves nothing.
+        """
+        comhead = command.get("comhead", "?")
+        if not success:
+            _LOG.error("Write '%s' failed: no valid answer from the matrix (%s)", comhead, self._last_error)
+            return False
+        if is_write_success(response):
+            return True
+        result = response.get("result") if isinstance(response, dict) else None
+        args = {k: v for k, v in command.items() if k not in ("comhead", "language")}
+        _LOG.error("Matrix rejected '%s' %s (result=%r)", comhead, args, result)
+        self._last_error = f"Matrix rejected '{comhead}' (result={result!r})"
+        return False
+
+    def _invalidate_status_caches(self) -> None:
+        self._cache_generation += 1
+        self._status_cache = None
+        self._output_status_cache = None
+        self._input_status_cache = None
+        self._cable_status_cache = None
 
     async def _send_command(self, command: dict, retry_on_failure: bool = True) -> tuple[bool, dict | None]:
         """
         Send a JSON command to the matrix via HTTP POST.
 
+        - Not connected: one single-flight connect attempt first (no backoff
+          sleep, no lock held -- BE-17).
+        - Session lost (HTTP 401/403, login page, failure ``result``): one
+          re-login and one retry when ``retry_on_failure`` (BE-04).
+        - Transport error, timeout or unparseable answer: the link is marked
+          lost (BACKOFF + ``Events.DISCONNECTED``) and the command fails.
+        - A write the matrix answered with a failure ``result`` returns
+          ``(True, response)`` so the caller reports the rejection (BE-12).
+
         :param command: Command dictionary to send as JSON
-        :param retry_on_failure: Whether to attempt reconnection on failure
+        :param retry_on_failure: Whether to re-login and retry once on a session failure
         :return: Tuple of (success, response_dict)
         """
-        # Serialize all HTTP commands so concurrent REST/HA/UC callers
-        # cannot interleave JSON POSTs against the same matrix session.
-        # The matrix hardware processes one command at a time anyway;
-        # this lock ensures callers see responses matching their request.
-        async with self._command_lock:
-            if not self._session or not self._connected:
-                _LOG.warning("No session or not connected, attempting to connect...")
-                if retry_on_failure:
-                    if not await self.connect_with_retry(max_retries=2):
-                        return False, None
-                else:
-                    if not await self.connect():
-                        return False, None
-
-            try:
-                protocol = "https" if self.use_https else "http"
-                url = f"{protocol}://{self.host}:{self.port}/cgi-bin/instr"
-                _LOG.debug("Sending %s POST to %s: %s", protocol.upper(), url, command)
-
-                async with self._session.post(url, json=command, timeout=aiohttp.ClientTimeout(total=5)) as response:
-                    if response.status == 200:
-                        text = ""
-                        try:
-                            # Matrix returns text/plain, so read as text then parse JSON
-                            text = await response.text()
-                            _LOG.debug("Command response (raw): %s", text)
-                            response_data = json.loads(text)
-                            _LOG.debug("Command response (parsed): %s", response_data)
-
-                            # Invalidate status cache on state-changing/write commands
-                            comhead = command.get("comhead", "")
-                            is_query = comhead.startswith("get") or comhead.endswith("get") or "get" in comhead
-                            if not is_query:
-                                _LOG.debug("Invalidating all status caches due to write command: %s", comhead)
-                                self._status_cache = None
-                                self._output_status_cache = None
-                                self._input_status_cache = None
-                                self._cable_status_cache = None
-
-                            return True, response_data
-                        except Exception as ex:
-                            _LOG.warning("Could not parse JSON response: %s (raw: %.200s)", ex, text)
-                            self._last_error = f"Unparseable matrix response: {ex}"
-                            return False, None
-                    else:
-                        _LOG.warning("HTTP request failed with status %d", response.status)
-                        # Mark as disconnected on HTTP error
-                        self._connected = False
-                        return False, None
-
-            except TimeoutError:
-                _LOG.error("Command timeout")
-                self._last_error = "Command timeout"
+        if not self._session or not self.connected:
+            _LOG.warning("No session or not connected, attempting to connect...")
+            if not await self.connect():
                 return False, None
-            except Exception as ex:
-                _LOG.error("Failed to send command '%s': %s", command, ex)
-                self._last_error = str(ex)
-                self.events.emit(Events.ERROR, str(ex))
-                return False, None
+
+        comhead = command.get("comhead", "")
+        is_read = _is_read_command(comhead)
+
+        result = await self._post(command)
+        if result.kind == "auth" and retry_on_failure:
+            _LOG.warning("Matrix answered '%s' with '%s'; re-authenticating once", comhead, result.error)
+            relogged = await self._relogin()
+            # A JSON failure result on a write is ambiguous (expired session or
+            # plain rejection); resending a non-idempotent command could run it
+            # twice, so only unambiguous session loss (no JSON body) is resent.
+            ambiguous = result.data is not None and not is_read
+            if relogged and not (ambiguous and comhead in NON_IDEMPOTENT_COMMANDS):
+                result = await self._post(command)
+
+        if result.kind == "ok" or (result.kind == "auth" and result.data is not None and not is_read):
+            if not is_read:
+                # Invalidate status caches on state-changing/write commands
+                _LOG.debug("Invalidating all status caches due to write command: %s", comhead)
+                self._invalidate_status_caches()
+            return True, result.data
+
+        self._last_error = result.error
+        if result.kind == "auth":
+            _LOG.error("Command '%s' failed: %s", comhead, result.error)
+            return False, None
+
+        # Transport error, timeout or unparseable answer: the link is not healthy.
+        if result.timeout:
+            _LOG.error("Command timeout")
+        else:
+            _LOG.error("Failed to send command '%s': %s", comhead, result.error)
+            self.events.emit(Events.ERROR, result.error)
+        self._link_lost(result.error)
+        return False, None
 
     async def recall_scene(self, scene: int) -> bool:
         """
@@ -407,20 +741,11 @@ class OreiMatrix:
 
         success, response = await self._send_command(command)
 
-        if success:
-            # Check if we got a valid response
-            if response and response.get("result") == 1:
-                _LOG.info("✓ Preset %d recalled successfully (confirmed by matrix)", scene)
-                self._current_scene = scene
-                self.events.emit(Events.UPDATE, {"scene": scene})
-                return True
-            elif response:
-                _LOG.warning("Preset %d command sent but matrix returned result: %s", scene, response.get("result"))
-                return False
-            else:
-                # No response - treat as failure since we can't confirm success
-                _LOG.warning("Preset %d command sent but no response from matrix", scene)
-                return False
+        if self._check_write(success, response, command):
+            _LOG.info("✓ Preset %d recalled successfully (confirmed by matrix)", scene)
+            self._current_scene = scene
+            self.events.emit(Events.UPDATE, {"scene": scene})
+            return True
 
         _LOG.error("Failed to recall preset %d", scene)
         return False
@@ -554,14 +879,10 @@ class OreiMatrix:
 
         success, response = await self._send_command(command)
 
-        if success:
-            if response and response.get("result") == 1:
-                _LOG.info("✓ Input %d switched to output %d (confirmed)", input_num, output_num)
-                self.events.emit(Events.UPDATE, {"input": input_num, "output": output_num})
-                return True
-            else:
-                _LOG.warning("Input %d to output %d command sent but no valid response from matrix", input_num, output_num)
-                return False
+        if self._check_write(success, response, command):
+            _LOG.info("✓ Input %d switched to output %d (confirmed)", input_num, output_num)
+            self.events.emit(Events.UPDATE, {"input": input_num, "output": output_num})
+            return True
 
         _LOG.error("Failed to switch input %d to output %d", input_num, output_num)
         return False
@@ -585,15 +906,11 @@ class OreiMatrix:
 
         success, response = await self._send_command(command)
 
-        if success:
-            if response and response.get("result") == 1:
-                _LOG.info("✓ Input %d switched to all outputs (confirmed)", input_num)
-                self.events.emit(Events.UPDATE, {"input": input_num, "all_outputs": True})
-                return True
-            else:
-                _LOG.info("✓ Switch all command sent (no confirmation)")
-                self.events.emit(Events.UPDATE, {"input": input_num, "all_outputs": True})
-                return True
+        # BE-12: this used to report success even when the matrix rejected it.
+        if self._check_write(success, response, command):
+            _LOG.info("✓ Input %d switched to all outputs (confirmed)", input_num)
+            self.events.emit(Events.UPDATE, {"input": input_num, "all_outputs": True})
+            return True
 
         _LOG.error("Failed to switch input %d to all outputs", input_num)
         return False
@@ -612,7 +929,7 @@ class OreiMatrix:
 
         success, response = await self._send_command(command)
 
-        if success and response and response.get("result") == 1:
+        if self._check_write(success, response, command):
             _LOG.info("✓ Matrix powered ON (confirmed)")
             self.events.emit(Events.UPDATE, {"power": "on"})
             return True
@@ -634,7 +951,7 @@ class OreiMatrix:
 
         success, response = await self._send_command(command)
 
-        if success and response and response.get("result") == 1:
+        if self._check_write(success, response, command):
             _LOG.info("✓ Matrix powered OFF (confirmed)")
             self.events.emit(Events.UPDATE, {"power": "off"})
             return True
@@ -673,21 +990,24 @@ class OreiMatrix:
         """
         Get the current status of the matrix.
 
+        Served from a cache younger than ``OREI_STATUS_CACHE_TTL`` (default
+        3 s) unless ``force_refresh``; concurrent refreshes share one request.
+
         :param force_refresh: Force update from physical switcher even if cache is fresh.
         :return: Dictionary with status information
         """
-        import time
+        if not force_refresh and self._status_cache is not None and self._cache_fresh(self._status_cache_time):
+            _LOG.debug("Returning cached status (cache age: %.2fs)", time.time() - self._status_cache_time)
+            return self._status_cache.copy()
+        return (await self._single_flight("status", self._fetch_status)).copy()
 
-        if not force_refresh and self._status_cache is not None:
-            if time.time() - self._status_cache_time < self._status_cache_ttl:
-                _LOG.debug("Returning cached status (cache age: %.2fs)", time.time() - self._status_cache_time)
-                return self._status_cache.copy()
-
+    async def _fetch_status(self) -> dict[str, Any]:
+        generation = self._cache_generation
         # Get detailed video status from matrix
         video_status = await self.get_video_status()
 
         status = {
-            "connected": self._connected,
+            "connected": self.connected,
             "host": self.host,
             "port": self.port,
             "current_scene": self._current_scene,
@@ -704,10 +1024,41 @@ class OreiMatrix:
                     "preset_names": video_status.get("allname", []),
                 }
             )
-
-        self._status_cache = status.copy()
-        self._status_cache_time = time.time()
+            if generation == self._cache_generation:  # no write landed meanwhile
+                self._status_cache = status.copy()
+                self._status_cache_time = time.time()
         return status
+
+    # =========================================================================
+    # Status snapshot helpers (BE-03)
+    # =========================================================================
+
+    def _cache_fresh(self, cache_time: float) -> bool:
+        """Whether a cache written at ``cache_time`` is younger than the TTL."""
+        return time.time() - cache_time < self._status_cache_ttl
+
+    async def _single_flight(self, key: str, fetch: Callable[[], Awaitable[_T]]) -> _T:
+        """Run ``fetch`` once for all concurrent callers of the same ``key``.
+
+        A caller that arrives after a write invalidated the caches (new cache
+        generation) starts its own fetch instead of joining one that may have
+        read the old state.
+        """
+        generation = self._cache_generation
+        entry = self._inflight.get(key)
+        if entry is not None and entry[0] == generation and not entry[1].done():
+            task = entry[1]
+        else:
+            task = asyncio.ensure_future(fetch())
+            self._inflight[key] = (generation, task)
+
+            def _forget(done: asyncio.Future, key: str = key) -> None:
+                current = self._inflight.get(key)
+                if current is not None and current[1] is done:
+                    del self._inflight[key]
+
+            task.add_done_callback(_forget)
+        return await asyncio.shield(task)
 
     # =========================================================================
     # CEC Control Methods
@@ -873,7 +1224,7 @@ class OreiMatrix:
         _LOG.debug("Sending CEC command: %s", command)
         success, response = await self._send_command(command)
 
-        if success:
+        if self._check_write(success, response, command):
             _LOG.info("✓ CEC command %d sent to %s %d", command_index, "output" if is_output else "input", port_num)
             return True
 
@@ -1029,12 +1380,21 @@ class OreiMatrix:
             - allarc: ARC enabled per output
             - allout: output enabled per output
             - allaudiomute: audio mute per output
+
+        Cached for ``OREI_STATUS_CACHE_TTL`` seconds (BE-03: the cache used to
+        never expire); concurrent refreshes share one request.
         """
-        import time
-
-        if not force_refresh and self._output_status_cache is not None:
+        if (
+            not force_refresh
+            and self._output_status_cache is not None
+            and self._cache_fresh(self._output_status_cache_time)
+        ):
             return self._output_status_cache.copy()
+        response = await self._single_flight("output_status", self._fetch_output_status)
+        return response.copy() if response is not None else None
 
+    async def _fetch_output_status(self) -> dict[str, Any] | None:
+        generation = self._cache_generation
         _LOG.debug("Getting output status")
 
         command = {"comhead": "get output status", "language": 0}
@@ -1042,8 +1402,9 @@ class OreiMatrix:
 
         if success and response:
             _LOG.debug("Output status: %s", response)
-            self._output_status_cache = response.copy()
-            self._output_status_cache_time = time.time()
+            if generation == self._cache_generation:
+                self._output_status_cache = response.copy()
+                self._output_status_cache_time = time.time()
             return response
 
         _LOG.error("Failed to get output status")
@@ -1059,12 +1420,21 @@ class OreiMatrix:
             - edid: EDID mode per input
             - inactive: array showing inactive inputs (signal detection)
             - inname: array of input names
+
+        Cached for ``OREI_STATUS_CACHE_TTL`` seconds (BE-03); concurrent
+        refreshes share one request.
         """
-        import time
-
-        if not force_refresh and self._input_status_cache is not None:
+        if (
+            not force_refresh
+            and self._input_status_cache is not None
+            and self._cache_fresh(self._input_status_cache_time)
+        ):
             return self._input_status_cache.copy()
+        response = await self._single_flight("input_status", self._fetch_input_status)
+        return response.copy() if response is not None else None
 
+    async def _fetch_input_status(self) -> dict[str, Any] | None:
+        generation = self._cache_generation
         _LOG.debug("Getting input status")
 
         command = {"comhead": "get input status", "language": 0}
@@ -1072,8 +1442,9 @@ class OreiMatrix:
 
         if success and response:
             _LOG.debug("Input status: %s", response)
-            self._input_status_cache = response.copy()
-            self._input_status_cache_time = time.time()
+            if generation == self._cache_generation:
+                self._input_status_cache = response.copy()
+                self._input_status_cache_time = time.time()
             return response
 
         _LOG.error("Failed to get input status")
@@ -1123,7 +1494,9 @@ class OreiMatrix:
         # Try Telnet first
         if self._telnet and self._telnet.connected:
             try:
-                return await self._telnet.get_output_connection(output_num)
+                telnet_result = await self._telnet.get_output_connection(output_num)
+                if telnet_result is not None:
+                    return telnet_result
             except Exception as e:
                 _LOG.warning(f"Failed to get output cable status via Telnet: {e}")
 
@@ -1137,7 +1510,7 @@ class OreiMatrix:
 
         return None
 
-    async def get_all_cable_status(self, force_refresh: bool = False) -> dict[str, dict[int, bool]]:
+    async def get_all_cable_status(self, force_refresh: bool = False) -> dict[str, dict[int, bool | None]]:
         """
         Get cable connection status for all inputs and outputs.
 
@@ -1145,40 +1518,48 @@ class OreiMatrix:
         falling back to HTTP for outputs if Telnet unavailable.
 
         :return: Dict with 'inputs' and 'outputs' sub-dicts mapping port -> connected
+            (None = unknown)
+
+        Cached for ``OREI_STATUS_CACHE_TTL`` seconds (BE-03); concurrent
+        refreshes share one ``status!``.
         """
-        import time
+        if (
+            not force_refresh
+            and self._cable_status_cache is not None
+            and self._cache_fresh(self._cable_status_cache_time)
+        ):
+            return _copy_cables(self._cable_status_cache)
+        result = await self._single_flight("cable_status", lambda: self._fetch_cable_status(force_refresh))
+        return _copy_cables(result)
 
-        if not force_refresh and self._cable_status_cache is not None:
-            return self._cable_status_cache.copy()
+    async def _fetch_cable_status(self, force_refresh: bool) -> dict[str, dict[int, bool | None]]:
+        generation = self._cache_generation
+        result: dict[str, dict[int, bool | None]] = {
+            "inputs": dict.fromkeys(range(1, 9)),
+            "outputs": dict.fromkeys(range(1, 9)),
+        }
 
-        result: dict[str, dict[int, bool]] = {"inputs": {}, "outputs": {}}
-
-        # Try Telnet individual queries for accuracy
+        # One Telnet `status!` gives every input and output (BE-30: this used
+        # to send it twice). Ports missing from the dump stay None (BE-29).
         if self._telnet and self._telnet.connected:
             try:
-                # Query each input individually
-                result["inputs"] = await self._telnet.get_all_input_connections()
-                # Query each output individually
-                result["outputs"] = await self._telnet.get_all_output_connections()
-                self._cable_status_cache = result.copy()
-                self._cable_status_cache_time = time.time()
-                return result
+                result = await self._telnet.get_all_connections()
             except Exception as e:
                 _LOG.warning(f"Failed to get cable status via Telnet: {e}")
 
-        # Fall back to HTTP for outputs only (inputs not available via HTTP)
-        output_status = await self.get_output_status(force_refresh=force_refresh)
-        if output_status and "allconnect" in output_status:
-            for i, connected in enumerate(output_status["allconnect"]):
-                result["outputs"][i + 1] = connected == 1
+        # Outputs Telnet did not report: fall back to HTTP 'allconnect'
+        # (inputs are not available via HTTP and stay None = unknown).
+        if any(v is None for v in result["outputs"].values()):
+            output_status = await self.get_output_status(force_refresh=force_refresh)
+            allconnect = output_status.get("allconnect") if output_status else None
+            if isinstance(allconnect, list):
+                for i, connected in enumerate(allconnect[:8]):
+                    if result["outputs"].get(i + 1) is None:
+                        result["outputs"][i + 1] = connected == 1
 
-        # Inputs: cannot determine via HTTP
-        for i in range(1, 9):
-            if result["inputs"].get(i) is None:
-                result["inputs"][i] = None
-
-        self._cable_status_cache = result.copy()
-        self._cable_status_cache_time = time.time()
+        if generation == self._cache_generation:
+            self._cable_status_cache = _copy_cables(result)
+            self._cable_status_cache_time = time.time()
         return result
 
     async def get_telnet_full_status(self) -> MatrixStatus | None:
@@ -1391,7 +1772,7 @@ class OreiMatrix:
         _LOG.debug("Setting CEC index: %s", command)
         success, response = await self._send_command(command)
 
-        if success:
+        if self._check_write(success, response, command):
             # Update cache immediately
             if is_output:
                 self._cec_enabled_cache["outputs"][port_num - 1] = enabled
@@ -1509,7 +1890,7 @@ class OreiMatrix:
 
         success, response = await self._send_command(command)
 
-        if success and response and response.get("result") == 1:
+        if self._check_write(success, response, command):
             _LOG.info("✓ Panel lock set to: %s", "LOCKED" if locked else "UNLOCKED")
             self.events.emit(Events.UPDATE, {"panel_lock": locked})
             return True
@@ -1530,7 +1911,7 @@ class OreiMatrix:
 
         success, response = await self._send_command(command)
 
-        if success and response and response.get("result") == 1:
+        if self._check_write(success, response, command):
             _LOG.info("✓ Beep set to: %s", "ON" if enabled else "OFF")
             self.events.emit(Events.UPDATE, {"beep": enabled})
             return True
@@ -1561,7 +1942,7 @@ class OreiMatrix:
 
         success, response = await self._send_command(command)
 
-        if success and response and response.get("result") == 1:
+        if self._check_write(success, response, command):
             _LOG.info("✓ CEC configuration updated")
             self.events.emit(Events.UPDATE, {"cec_config": {"inputs": input_ports, "outputs": output_ports}})
             return True
@@ -1721,7 +2102,7 @@ class OreiMatrix:
 
         success, response = await self._send_command(command)
 
-        if success and response and response.get("result") == 1:
+        if self._check_write(success, response, command):
             _LOG.info("✓ Input %d renamed to: %s", input_num, name)
             self.events.emit(Events.UPDATE, {"input_name": {input_num: name}})
             return True
@@ -1750,7 +2131,7 @@ class OreiMatrix:
 
         success, response = await self._send_command(command)
 
-        if success and response and response.get("result") == 1:
+        if self._check_write(success, response, command):
             _LOG.info("✓ Output %d renamed to: %s", output_num, name)
             self.events.emit(Events.UPDATE, {"output_name": {output_num: name}})
             return True
@@ -1778,8 +2159,8 @@ class OreiMatrix:
 
         action = "enable" if enable else "disable"
         _LOG.info(f"Setting output {output_num} stream to {action}")
-        success, _ = await self._send_command(command)
-        return success
+        success, response = await self._send_command(command)
+        return self._check_write(success, response, command)
 
     async def set_output_hdcp(self, output_num: int, mode: int) -> bool:
         """
@@ -1800,8 +2181,8 @@ class OreiMatrix:
         command = {"comhead": "set output hdcp", "output": output_num, "hdcp": mode}
 
         _LOG.info(f"Setting output {output_num} HDCP mode to {mode}")
-        success, _ = await self._send_command(command)
-        return success
+        success, response = await self._send_command(command)
+        return self._check_write(success, response, command)
 
     async def set_output_hdr(self, output_num: int, mode: int) -> bool:
         """
@@ -1822,8 +2203,8 @@ class OreiMatrix:
         command = {"comhead": "set output hdr", "output": output_num, "hdr": mode}
 
         _LOG.info(f"Setting output {output_num} HDR mode to {mode}")
-        success, _ = await self._send_command(command)
-        return success
+        success, response = await self._send_command(command)
+        return self._check_write(success, response, command)
 
     async def set_output_scaler(self, output_num: int, mode: int) -> bool:
         """
@@ -1844,8 +2225,8 @@ class OreiMatrix:
         command = {"comhead": "set output scaler", "output": output_num, "scaler": mode}
 
         _LOG.info(f"Setting output {output_num} scaler mode to {mode}")
-        success, _ = await self._send_command(command)
-        return success
+        success, response = await self._send_command(command)
+        return self._check_write(success, response, command)
 
     async def set_output_arc(self, output_num: int, enable: bool) -> bool:
         """
@@ -1863,8 +2244,8 @@ class OreiMatrix:
 
         action = "enable" if enable else "disable"
         _LOG.info(f"Setting output {output_num} ARC to {action}")
-        success, _ = await self._send_command(command)
-        return success
+        success, response = await self._send_command(command)
+        return self._check_write(success, response, command)
 
     async def set_output_audio_mute(self, output_num: int, mute: bool) -> bool:
         """
@@ -1882,8 +2263,8 @@ class OreiMatrix:
 
         action = "mute" if mute else "unmute"
         _LOG.info(f"Setting output {output_num} audio to {action}")
-        success, _ = await self._send_command(command)
-        return success
+        success, response = await self._send_command(command)
+        return self._check_write(success, response, command)
 
     async def set_cec_enable(self, port_type: str, port_num: int, enable: bool) -> bool:
         """
@@ -1906,8 +2287,8 @@ class OreiMatrix:
 
         action = "enable" if enable else "disable"
         _LOG.info(f"Setting CEC on {port_type} {port_num} to {action}")
-        success, _ = await self._send_command(command)
-        return success
+        success, response = await self._send_command(command)
+        return self._check_write(success, response, command)
 
     async def save_preset(self, preset_num: int) -> bool:
         """
@@ -1923,8 +2304,8 @@ class OreiMatrix:
         command = {"comhead": "preset save", "language": 0, "index": preset_num}
 
         _LOG.info(f"Saving current routing to preset {preset_num}")
-        success, _ = await self._send_command(command)
-        return success
+        success, response = await self._send_command(command)
+        return self._check_write(success, response, command)
 
     async def system_reboot(self) -> bool:
         """
@@ -1939,18 +2320,18 @@ class OreiMatrix:
             _LOG.info("Sending reboot command via Telnet...")
             success = await self._telnet.reboot()
             if success:
-                self._connected = False
-                self.events.emit(Events.DISCONNECTED)
+                # Not an intentional disconnect: reconnect once it is back.
+                self._link_lost("matrix reboot requested")
                 return True
 
         # Fall back to HTTP if Telnet is not connected/available
         _LOG.info("Sending reboot command via HTTP...")
         command = {"comhead": "set reboot"}
-        success, _ = await self._send_command(command, retry_on_failure=False)
+        sent, response = await self._send_command(command, retry_on_failure=False)
+        success = self._check_write(sent, response, command)
 
         if success:
-            self._connected = False
-            self.events.emit(Events.DISCONNECTED)
+            self._link_lost("matrix reboot requested")
 
         return success
 
@@ -1999,8 +2380,8 @@ class OreiMatrix:
 
         mode_name = self.get_lcd_timeout_name(mode)
         _LOG.info(f"Setting LCD timeout to {mode} ({mode_name})")
-        success, _ = await self._send_command(command)
-        return success
+        success, response = await self._send_command(command)
+        return self._check_write(success, response, command)
 
     async def route_input_to_all_outputs(self, input_num: int) -> bool:
         """
@@ -2124,8 +2505,8 @@ class OreiMatrix:
 
         mode_name = self.get_edid_mode_name(mode)
         _LOG.info(f"Setting input {input_num} EDID to {mode} ({mode_name})")
-        success, _ = await self._send_command(command)
-        return success
+        success, response = await self._send_command(command)
+        return self._check_write(success, response, command)
 
     async def copy_edid_from_output(self, input_num: int, output_num: int) -> bool:
         """
@@ -2202,8 +2583,8 @@ class OreiMatrix:
 
         mode_name = self.get_ext_audio_mode_name(mode)
         _LOG.info(f"Setting ext-audio mode to {mode} ({mode_name})")
-        success, _ = await self._send_command(command)
-        return success
+        success, response = await self._send_command(command)
+        return self._check_write(success, response, command)
 
     async def set_ext_audio_enable(self, output_num: int, enabled: bool) -> bool:
         """
@@ -2222,8 +2603,8 @@ class OreiMatrix:
 
         state = "enabled" if enabled else "disabled"
         _LOG.info(f"Setting ext-audio output {output_num} to {state}")
-        success, _ = await self._send_command(command)
-        return success
+        success, response = await self._send_command(command)
+        return self._check_write(success, response, command)
 
     async def set_ext_audio_source(self, output_num: int, input_num: int) -> bool:
         """
@@ -2246,8 +2627,8 @@ class OreiMatrix:
         command = {"comhead": "set output exa in source", "output": output_num, "input": input_num}
 
         _LOG.info(f"Setting ext-audio output {output_num} source to input {input_num}")
-        success, _ = await self._send_command(command)
-        return success
+        success, response = await self._send_command(command)
+        return self._check_write(success, response, command)
 
     # =========================================================================
     # Device Capability Detection (for CEC routing)

@@ -579,3 +579,55 @@ class TestStatusCaching:
         assert connected_matrix._output_status_cache is None
         assert connected_matrix._input_status_cache is None
         assert connected_matrix._cable_status_cache is None
+
+
+# =============================================================================
+# BE-05: login needs an explicit success result
+# =============================================================================
+
+
+@pytest.mark.parametrize(
+    ("response", "ok"),
+    [
+        ({"comhead": "login", "result": 1}, True),
+        ({"comhead": "login", "result": "success"}, True),
+        ({"comhead": "login", "result": "Success"}, True),
+        ({"comhead": "login", "result": "1"}, True),
+        ({"comhead": "login", "result": "fail"}, False),
+        ({"comhead": "login", "result": 0}, False),
+        ({"comhead": "login"}, False),  # echo without a result is not success
+        ({"comhead": "error", "result": 0}, False),
+        (None, False),
+        ([], False),
+    ],
+)
+def test_is_login_success(response, ok):
+    from orei_matrix import is_login_success
+
+    assert is_login_success(response) is ok
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("body", ['{"comhead":"login","result":"fail"}', '{"comhead":"login"}'])
+async def test_connect_rejects_login_echo_without_success(matrix, body):
+    mock_response = MagicMock()
+    mock_response.status = 200
+    mock_response.text = AsyncMock(return_value=body)
+    mock_response.__aenter__ = AsyncMock(return_value=mock_response)
+    mock_response.__aexit__ = AsyncMock(return_value=None)
+    mock_session = MagicMock()
+    mock_session.post = MagicMock(return_value=mock_response)
+
+    with patch("aiohttp.ClientSession", return_value=mock_session):
+        assert await matrix.connect() is False
+    assert matrix.connected is False
+    assert matrix._last_error == "Authentication failed"
+
+
+def test_connected_alias_setter_maps_to_state(matrix):
+    from orei_matrix import ConnectionState
+
+    matrix._connected = True
+    assert matrix.connected and matrix.connection_state == ConnectionState.DEGRADED  # no Telnet
+    matrix._connected = False
+    assert matrix.connection_state == ConnectionState.DISCONNECTED

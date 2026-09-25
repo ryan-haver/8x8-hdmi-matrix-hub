@@ -110,6 +110,10 @@ def _reset_rest_api_globals() -> None:
         utils._ws_clients_lock = asyncio.Lock()
         utils._rate_limit_lock = asyncio.Lock()
 
+    core = sys.modules.get("rest_api.core")
+    if core is not None:
+        core._refresh_task = None
+
     control = sys.modules.get("rest_api.control")
     if control is not None:
         control._cycle_locks = {i: asyncio.Lock() for i in control._cycle_locks}
