@@ -61,6 +61,11 @@ htmlcov/
 .nox/
 test-results/
 playwright-report/
+blob-report/
+# UI review gallery (tools/ui/build_gallery.mjs)
+ui-gallery/
+# Seeded hub data for the Playwright stack is fixture data, not runtime data
+!tests/e2e/fixtures/data/
 
 # Tool caches
 .mypy_cache/

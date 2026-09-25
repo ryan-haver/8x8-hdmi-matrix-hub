@@ -1,0 +1,47 @@
+{
+  "version": 2,
+  "profiles": [
+    {
+      "id": "movie_night", "name": "Movie Night", "icon": "🎬",
+      "outputs": {
+        "1": {"input": 2, "enabled": true, "audio_mute": false, "hdr_mode": 1, "hdcp_mode": 3},
+        "2": {"input": 2, "enabled": true, "audio_mute": true}
+      },
+      "cec_config": {
+        "nav_targets": ["input:2"], "playback_targets": ["input:2"], "volume_targets": ["output:2"],
+        "power_on_targets": ["input:2", "output:1"], "power_off_targets": ["input:2", "output:1"],
+        "auto_resolved": false
+      },
+      "macros": ["macro_tv_on"], "power_on_macro": "macro_tv_on", "power_off_macro": "macro_all_off",
+      "pinned": true, "pin_order": 0, "favorite": true, "dashboard_visible": true, "dashboard_order": 0,
+      "password_protected": false, "passcode_hash": "", "execution_log": []
+    },
+    {
+      "id": "game_day", "name": "Game Day", "icon": "🏈",
+      "outputs": {
+        "1": {"input": 5, "enabled": true, "audio_mute": false},
+        "2": {"input": 5, "enabled": true, "audio_mute": false},
+        "3": {"input": 5, "enabled": true, "audio_mute": true}
+      },
+      "macros": [], "pinned": true, "pin_order": 1, "favorite": true, "dashboard_visible": false, "dashboard_order": 1,
+      "password_protected": false, "passcode_hash": "", "execution_log": []
+    },
+    {
+      "id": "kids_gaming", "name": "Kids Gaming", "icon": "🎮",
+      "outputs": {"1": {"input": 6, "enabled": true, "audio_mute": false}},
+      "macros": [], "pinned": true, "pin_order": 2, "favorite": false, "dashboard_visible": false, "dashboard_order": 2,
+      "password_protected": true,
+      "passcode_hash": "pbkdf2_sha256$1000$00112233445566778899aabbccddeeff$b8ad0f1dacec0beb4f418fadcb2ee5939ef45823391bb89692028dd1b67e9cef",
+      "execution_log": []
+    },
+    {
+      "id": "retro_hour", "name": "Retro Hour", "icon": "👾",
+      "outputs": {
+        "1": {"input": 7, "enabled": true, "audio_mute": false},
+        "2": {"input": 7, "enabled": false, "audio_mute": false}
+      },
+      "macros": [], "pinned": false, "pin_order": 3, "favorite": false, "dashboard_visible": false, "dashboard_order": 3,
+      "password_protected": false, "passcode_hash": "", "execution_log": []
+    }
+  ]
+}

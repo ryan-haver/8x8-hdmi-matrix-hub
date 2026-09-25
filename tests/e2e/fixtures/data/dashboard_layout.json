@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "cards": [
+    {"type": "scene", "id": "scene_movienight01", "order": 0},
+    {"type": "scene", "id": "scene_kidslocked", "order": 1},
+    {"type": "preset", "id": "2", "order": 2},
+    {"type": "system_shortcut", "id": "builtin.mute_all_audio", "order": 3},
+    {"type": "system_shortcut", "id": "user.a1b2c3d4e5f6", "order": 4},
+    {"type": "profile", "id": "movie_night", "order": 5},
+    {"type": "macro", "id": "macro_tv_on", "order": 6},
+    {"type": "aggregate_widget", "id": "routing-dashboard", "order": 7},
+    {"type": "aggregate_widget", "id": "quick-actions", "order": 8},
+    {"type": "aggregate_widget", "id": "cec-tray", "order": 9}
+  ]
+}

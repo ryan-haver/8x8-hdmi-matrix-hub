@@ -239,8 +239,177 @@ jobs:
           cache-from: type=gha,scope=${{ matrix.target }}
           cache-to: type=gha,mode=max,scope=${{ matrix.target }}
 
+  # UI smoke + visual regression (docs/REMEDIATION_PLAN.md §5.3). Runs in the
+  # same pinned Playwright image that generates the baselines locally
+  # (npm run visual:update), so font rendering is identical.
+  ui:
+    name: UI (smoke + visual)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
+      options: --ipc=host
+    permissions:
+      contents: read
+    outputs:
+      review-url: ${{ steps.upload-review.outputs.artifact-url }}
+      report-url: ${{ steps.upload-report.outputs.artifact-url }}
+      tests: ${{ steps.tests.outcome }}
+    env:
+      UI_CACHE_DIR: /tmp/ui-cache
+      npm_config_update_notifier: 'false'
+    steps:
+      # actions/checkout needs git-lfs in the container to fetch the baselines.
+      - name: Install git-lfs
+        run: |
+          apt-get update -qq
+          apt-get install -y -qq --no-install-recommends git-lfs
+          git lfs install --system
+
+      - uses: actions/checkout@v7
+        with:
+          lfs: true
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Trust the workspace (container runs as root)
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Set up Python venv and npm packages
+        run: |
+          out=$(bash tools/ui/container-setup.sh | tee /dev/stderr)
+          echo "E2E_PYTHON=${out##*E2E_PYTHON=}" >> "$GITHUB_ENV"
+
+      # Report-only until the web/ code is cleaned up (Phase 5): both commands
+      # fail only on findings above the checked-in baselines.
+      - name: ESLint (non-blocking)
+        continue-on-error: true
+        run: npm run lint:js
+
+      - name: Stylelint (non-blocking)
+        continue-on-error: true
+        run: npm run lint:css
+
+      - name: Smoke + visual tests
+        id: tests
+        continue-on-error: true
+        run: >-
+          npx playwright test -c tests/e2e/playwright.config.ts
+          --project=smoke --project=desktop --project=tablet --project=phone --project=kiosk
+          --update-snapshots=none
+
+      - name: Upload Playwright report
+        id: upload-report
+        if: steps.tests.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+
+      # Review page: before/after for every snapshot that differs from the base
+      # branch (baselines updated in this PR) or from the committed baselines
+      # (unapproved changes, re-captured here with --update-snapshots).
+      - name: Build review gallery
+        if: always() && steps.tests.outcome != 'skipped'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          TESTS_OUTCOME: ${{ steps.tests.outcome }}
+        run: |
+          if [ "$TESTS_OUTCOME" = failure ]; then
+            npx playwright test -c tests/e2e/playwright.config.ts --last-failed \
+              --update-snapshots=changed --reporter=list || true
+          fi
+          if [ -n "$BASE_REF" ]; then
+            base=$(git merge-base HEAD "origin/$BASE_REF")
+            git lfs fetch origin "$base" || true
+          else
+            base=HEAD
+          fi
+          node tools/ui/build_gallery.mjs --base "$base" --changed-only --out ui-gallery
+          git status --porcelain -- tests/e2e/visual/__snapshots__ \
+            | sed 's#.*tests/e2e/visual/__snapshots__/##' > ui-gallery/unapproved.txt
+
+      - name: Upload review gallery
+        id: upload-review
+        if: always() && steps.tests.outcome != 'skipped'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-review
+          path: ui-gallery/
+          retention-days: 14
+
+      - name: Fail if UI tests failed
+        if: steps.tests.outcome == 'failure'
+        run: |
+          echo "::error::UI smoke/visual tests failed. Review the ui-review and playwright-report artifacts; approve intended changes with npm run visual:update."
+          exit 1
+
+  # Separate job so only this small script gets a write token.
+  ui-comment:
+    name: UI review comment
+    needs: ui
+    if: always() && github.event_name == 'pull_request' && needs.ui.result != 'skipped' && needs.ui.result != 'cancelled'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: ui-review
+          path: ui-review
+
+      - uses: actions/github-script@v7
+        env:
+          REVIEW_URL: ${{ needs.ui.outputs.review-url }}
+          REPORT_URL: ${{ needs.ui.outputs.report-url }}
+          TESTS: ${{ needs.ui.outputs.tests }}
+        with:
+          script: |
+            const fs = require('fs');
+            const marker = '<!-- ui-visual-review -->';
+            let changed = { changedEntries: [], images: [] };
+            try { changed = JSON.parse(fs.readFileSync('ui-review/changed.json', 'utf8')); } catch {}
+            let unapproved = [];
+            try { unapproved = fs.readFileSync('ui-review/unapproved.txt', 'utf8').split('\n').filter(Boolean); } catch {}
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+            const comments = await github.paginate(github.rest.issues.listComments, { owner, repo, issue_number });
+            const existing = comments.find((c) => c.body && c.body.includes(marker));
+            if (!changed.changedEntries.length && !existing && process.env.TESTS !== 'failure') return;
+
+            const byEntry = new Map();
+            for (const img of changed.images) {
+              if (!byEntry.has(img.entry)) byEntry.set(img.entry, []);
+              byEntry.get(img.entry).push(`${img.viewport}${img.theme !== 'tron-classic' ? '/' + img.theme : ''} (${img.status}${img.diffPixels ? ', ' + img.diffPixels + ' px' : ''})`);
+            }
+            const lines = [marker, '### UI visual review', ''];
+            if (!byEntry.size) {
+              lines.push('No catalog entry differs from the base branch baselines.');
+            } else {
+              lines.push(`**${byEntry.size}** catalog entr${byEntry.size === 1 ? 'y' : 'ies'} differ from the base branch (${changed.images.length} images):`, '');
+              for (const [entry, shots] of [...byEntry].sort()) lines.push(`- \`${entry}\`: ${shots.join(', ')}`);
+            }
+            if (unapproved.length) {
+              lines.push('', `:warning: **${unapproved.length} snapshot(s) differ from the committed baselines** (not approved). If intended, run \`npm run visual:update\` and commit the baselines in a separate \`visual: approve …\` commit.`);
+            }
+            lines.push('');
+            if (process.env.REVIEW_URL) lines.push(`Before/after review page: [ui-review artifact](${process.env.REVIEW_URL}) (download, open \`index.html\`).`);
+            if (process.env.REPORT_URL) lines.push(`Playwright report: [playwright-report artifact](${process.env.REPORT_URL}).`);
+            lines.push('', `Tests: **${process.env.TESTS || 'unknown'}** · run [#${context.runNumber}](${context.serverUrl}/${owner}/${repo}/actions/runs/${context.runId})`);
+            const body = lines.join('\n');
+            if (existing) await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+            else await github.rest.issues.createComment({ owner, repo, issue_number, body });
+
   publish:
     name: Build and push to GHCR
+    # Does not depend on `ui` yet: the visual baselines are new (Phase 0) and
+    # must prove stable in CI first. Add `ui` here once they have.
     needs: [lint, typecheck, test, ha-test, gitleaks]
     if: >-
       github.event_name != 'pull_request' &&
