@@ -74,7 +74,9 @@ def _norm(command: str) -> str:
 def _hub_telnet_templates() -> set[str]:
     text = (SRC / "telnet_client.py").read_text(encoding="utf-8")
     out = set()
-    for template in re.findall(r'_send_raw\(f?"([^"]+)"\)', text):
+    # Commands are sent inline (`_send_raw(f"...")`) or built first
+    # (`telnet_cmd = f"..."`, then `_send_raw(telnet_cmd)`); catch both forms.
+    for template in re.findall(r'(?:_send_raw\(|telnet_cmd\s*=\s*)f?"([^"]+)"', text):
         example = re.sub(r"\{[a-z_]+\}", "1", template.replace("{command}", "on"))
         out.add(_norm(example))
     return out
