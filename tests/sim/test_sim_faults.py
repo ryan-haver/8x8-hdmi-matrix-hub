@@ -51,14 +51,12 @@ async def test_explicit_reconnect_after_reboot(matrix, simulator):
 # ---------------------------------------------------------------- known bugs (register)
 
 
-@pytest.mark.xfail(strict=True, reason="BE-05: login treated as success when comhead=='login' (orei_matrix.py:251)")
 async def test_wrong_password_is_not_connected(matrix, simulator):
     simulator.faults.update({"wrong_password": True})
     assert await matrix.connect() is False
     assert matrix.connected is False
 
 
-@pytest.mark.xfail(strict=True, reason="BE-04: 'connected' not cleared on transport errors (orei_matrix.py:373-377)")
 async def test_dropped_connection_clears_connected(matrix, simulator):
     await matrix.connect()
     simulator.faults.update({"drop_http": True, "http_fault_count": 1})
@@ -66,7 +64,6 @@ async def test_dropped_connection_clears_connected(matrix, simulator):
     assert matrix.connected is False
 
 
-@pytest.mark.xfail(strict=True, reason="BE-04: 'connected' not cleared on timeouts (orei_matrix.py:369-372)")
 async def test_timeout_clears_connected(matrix, simulator, monkeypatch):
     real_timeout = aiohttp.ClientTimeout
     # The hub hard-codes a 5 s timeout; shrink it so the test stays fast.
@@ -78,7 +75,6 @@ async def test_timeout_clears_connected(matrix, simulator, monkeypatch):
     assert matrix.connected is False
 
 
-@pytest.mark.xfail(strict=True, reason="BE-04: no re-login on session expiry; empty status returned as success")
 async def test_session_expiry_triggers_relogin(matrix, simulator):
     await matrix.connect()
     simulator.expire_sessions()
@@ -86,7 +82,6 @@ async def test_session_expiry_triggers_relogin(matrix, simulator):
     assert status.get("routing") == simulator.state.routing
 
 
-@pytest.mark.xfail(strict=True, reason="BE-04: hub never re-authenticates after the matrix reboots")
 async def test_recovers_after_device_reboot(matrix, simulator):
     await matrix.connect()
     await simulator.reboot(0.2)
