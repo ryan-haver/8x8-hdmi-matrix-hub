@@ -1,9 +1,10 @@
 """Hub behaviour under simulated device faults.
 
-Tests marked ``xfail(strict=True)`` document known bugs from the findings
-register (docs/REMEDIATION_PLAN.md §4). They must keep failing until the
-Phase 1 fix lands; the fix PR then removes the marker (strict xfail turns an
-unexpected pass into a failure, so nobody forgets).
+Known bugs from the findings register (docs/REMEDIATION_PLAN.md §4) are
+recorded as ``xfail(strict=True)`` tests until their fix lands; the fix then
+removes the marker (strict xfail turns an unexpected pass into a failure, so
+nobody forgets). The "register regressions" section below holds the tests
+whose markers Phase 1 removed.
 """
 
 import asyncio
@@ -48,7 +49,7 @@ async def test_explicit_reconnect_after_reboot(matrix, simulator):
     assert (await matrix.get_status(force_refresh=True))["routing"] == simulator.state.routing
 
 
-# ---------------------------------------------------------------- known bugs (register)
+# ---------------------------------------------------------------- register regressions (fixed in Phase 1)
 
 
 async def test_wrong_password_is_not_connected(matrix, simulator):
@@ -89,18 +90,63 @@ async def test_recovers_after_device_reboot(matrix, simulator):
     assert status.get("routing") == simulator.state.routing
 
 
-@pytest.mark.xfail(strict=True, reason="BE-12: write methods report success on HTTP 200 regardless of result")
 async def test_rejected_output_setting_reports_failure(matrix, simulator):
     await matrix.connect()
     simulator.faults.update({"reject_writes": True})
     assert await matrix.set_output_hdcp(1, 1) is False
 
 
-@pytest.mark.xfail(strict=True, reason="BE-12: switch_input_to_all returns True on failure (orei_matrix.py:582-585)")
 async def test_rejected_switch_all_reports_failure(matrix, simulator):
     await matrix.connect()
     simulator.faults.update({"reject_writes": True})
     assert await matrix.switch_input_to_all(4) is False
+
+
+#: Every HTTP write method, with arguments the simulator would accept.
+_WRITES = {
+    "recall_preset": (3,),
+    "save_preset": (3,),
+    "switch_input": (4, 2),
+    "switch_input_to_all": (4,),
+    "power_on": (),
+    "power_off": (),
+    "set_panel_lock": (True,),
+    "set_beep": (False,),
+    "set_input_name": (2, "Xbox"),
+    "set_output_name": (2, "Den"),
+    "set_output_enable": (3, False),
+    "set_output_hdcp": (3, 2),
+    "set_output_hdr": (3, 2),
+    "set_output_scaler": (3, 2),
+    "set_output_arc": (3, True),
+    "set_output_audio_mute": (3, True),
+    "set_cec_enable": ("output", 3, True),
+    "set_cec_enabled": (3, True, True),
+    "set_cec_enabled_bulk": ([True] * 8, [True] * 8),
+    "set_lcd_timeout": (2,),
+    "set_input_edid": (2, 5),
+    "copy_edid_from_output": (2, 1),
+    "set_ext_audio_mode": (1,),
+    "set_ext_audio_enable": (2, True),
+    "set_ext_audio_source": (2, 3),
+    "send_cec": ("PLAY", 1),
+}
+
+
+@pytest.mark.parametrize("method", sorted(_WRITES))
+async def test_every_write_reports_rejection(matrix, simulator, method):
+    """BE-12: HTTP 200 with a failure result is a failed write, for every write method."""
+    await matrix.connect()
+    before = simulator.state.to_dict()
+    simulator.faults.update({"reject_writes": True})
+    assert await getattr(matrix, method)(*_WRITES[method]) is False
+    assert simulator.state.to_dict() == before
+
+
+@pytest.mark.parametrize("method", sorted(_WRITES))
+async def test_every_write_reports_success(matrix, simulator, method):
+    await matrix.connect()
+    assert await getattr(matrix, method)(*_WRITES[method]) is True
 
 
 async def test_telnet_disconnect_completes(matrix_with_telnet):
