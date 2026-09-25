@@ -120,6 +120,9 @@ Severity: **C** critical · **H** high · **M** medium · **L** low. "Phase" is 
 | BE-25 | L | `copy_edid_from_output` uses `set input edid` 14+N; docs describe `copy edid` | `orei_matrix.py` | 1 (HIL) |
 | BE-26 | L | Hard-coded default host `192.168.0.100`; ~62 `range(1, 9)` / `[0]*8` | many | 4 |
 | BE-27 | L | Runtime leftovers in `src/` (`driver.lock`, `config_state.json`, egg-info) | `src/` | 6 |
+| BE-28 | C | Telnet push listener busy-loops at EOF (`read()` returns `b""`, loop `continue`s without yielding) → hub event loop frozen at 100% CPU after a matrix reboot or network drop (found by simulator, SIM-02) | `telnet_client.py:478-495` | 1 |
+| BE-29 | H | Telnet EOF never detected: `_send_raw` spins to timeout and `telnet_connected` stays true; truncated `status` dump makes every missing port read as disconnected (SIM-01) | `telnet_client.py:271-273,667-671,685-689` | 1 |
+| BE-30 | L | `get_all_cable_status` sends `status!` twice per poll | `orei_matrix.py:1148-1150` | 1 |
 
 ### 4.2 REST API, domain & persistence (API / PER)
 
@@ -387,29 +390,29 @@ Estimates assume one developer working with AI assistance; they are sizing, not 
 Goal: make it impossible for the bugs below to come back silently.
 
 - [x] Commit the pending `acquire_lock` fix as-is (stopgap; proper fix in Phase 1).
-- [ ] **History purge first (SEC-14, D3)** — done now, while `main` is the only branch and there are no forks, so no rebasing is ever needed:
+- [x] **History purge first (SEC-14, D3)** — done now, while `main` is the only branch and there are no forks, so no rebasing is ever needed:
   - [x] Full mirror backup of the repo kept offline (not pushed anywhere).
   - [x] `git filter-repo` removing `docs/BK-808 Firmware/`, `docs/BK-808 RTI Driver/`, `docs/BK-808 Control4 Driver/`, `docs/BK-808 Control4 Driver.c4z`, `docs/BK-808_User_Manual.pdf`.
   - [x] Replace with `docs/vendor/README.md`: links to vendor downloads, file names, versions, SHA-256 checksums, and a short summary of protocol facts we derived (our own words, no copied content).
   - [x] Verify with `git rev-list --objects --all` that no purged blob remains; force-push `main` (done 2026-09-25, `469c013`). Commit emails also rewritten to the GitHub no-reply address (required by the account's email-privacy push protection).
   - [ ] Ask GitHub Support to purge cached views/refs of the removed blobs (the repo has been public since 2026-02-02) — draft provided; to be sent by the repo owner.
   - [x] Commit full MPL-2.0 `LICENSE` text (official Mozilla text; copyright line moves to the README licence section in Phase 7).
-- [ ] Branch strategy: `fix/phase-N-<topic>`; PR template listing register IDs + test evidence + (for UI) the §5.3 review link.
-- [ ] CI (DEP-05): add `pull_request` trigger; lint `src tests custom_components tools`; mypy blocking against a baseline file; gitleaks; hassfest + HACS validation; separate HA test job with `pytest-homeassistant-custom-component`; Docker build of both targets.
-- [ ] Remove `F401/F811/E722` ignores; fix the 10 ruff errors; record mypy baseline (TST-07).
-- [ ] Move hardware scripts to `tools/hil/`; conftest defaults to mock; add `hardware` pytest marker, deselected by default (TST-05).
-- [ ] Autouse fixture resetting REST module globals and rate limiter (TST-06).
-- [ ] **Contract fixtures:** generate API response fixtures from the real `_format_status` etc., and make HA/web tests consume them (TST-02).
-- [ ] Route-inventory test (initially reports coverage; becomes blocking at Phase 2 exit).
+- [x] Branch strategy: `fix/phase-N-<topic>`; PR template listing register IDs + test evidence + (for UI) the §5.3 review link.
+- [x] CI (DEP-05): add `pull_request` trigger; lint `src tests custom_components tools`; mypy blocking against a baseline file; gitleaks; hassfest + HACS validation; separate HA test job with `pytest-homeassistant-custom-component`; Docker build of both targets. *(done: `ci.yml`; mypy fixed to zero instead of a baseline; hassfest/HACS non-blocking until Phase 2)*
+- [x] Remove `F401/F811/E722` ignores; fix the 10 ruff errors; record mypy baseline (TST-07).
+- [x] Move hardware scripts to `tools/hil/`; conftest defaults to mock; add `hardware` pytest marker, deselected by default (TST-05).
+- [x] Autouse fixture resetting REST module globals and rate limiter (TST-06).
+- [x] **Contract fixtures:** generate API response fixtures from the real `_format_status` etc., and make HA/web tests consume them (TST-02). *(HA tests consume them; web tests will in Phase 0 UI capture)*
+- [x] Route-inventory test (initially reports coverage; becomes blocking at Phase 2 exit). *(baseline 107/163)*
 - [ ] Minimal JS tooling: `package.json` (dev-only) with ESLint, Stylelint, Playwright, axe; one smoke E2E that loads `/ui` and `/kiosk` against the simulator (TST-04).
 - [ ] **UI capture baseline (§5.3)** — *before any UI code changes, including Phase 2 fixes*:
   - [ ] Write `docs/ui/LOOK_AND_FEEL.md` from the current UI; review and sign off together.
   - [ ] Build the UI state catalog covering every current page, tab, drawer, modal, editor, CEC remote, dashboard card type, and kiosk panel.
   - [ ] Capture baselines in the pinned Playwright container; Git LFS for snapshots; CODEOWNERS; PR bot comment with before/after thumbnails.
   - [ ] Publish the baseline as a browsable gallery for a one-time walkthrough, so we both agree it represents the look to preserve (and note anything that is currently *wrong* and should change).
-- [ ] Simulator v1 from docs (§5.1) — enough for status, routing, presets, login.
-- [ ] Pre-commit hook: fast unit tests + ruff; fail loudly if tools are missing (DEP-11). `.gitignore` additions (DEP-10).
-- [ ] Add `/api/health` detail: connection state, last successful poll, loop lag, task count, version (needed by HIL-C/D).
+- [x] Simulator v1 from docs (§5.1) — enough for status, routing, presets, login. *(done beyond v1 scope: all comheads, Telnet, fault API, `tools/dev_stack.py`)*
+- [x] Pre-commit hook: fast unit tests + ruff; fail loudly if tools are missing (DEP-11). `.gitignore` additions (DEP-10).
+- [x] Add `/api/health` detail: connection state, last successful poll, loop lag, task count, version (needed by HIL-C/D).
 
 **Exit:** history purged and verified; CI runs on PRs and is green; HA tests actually execute (and fail on HA-01…03, proving they now catch them); look-and-feel doc signed off and UI baselines committed.
 
@@ -417,6 +420,7 @@ Goal: make it impossible for the bugs below to come back silently.
 
 Goal: the hub stays connected, reports truthfully, and never freezes.
 
+- [ ] **Telnet EOF handling** (BE-28, BE-29, BE-30): treat `b""` as disconnect (transition state, stop listener, trigger reconnect); parse `status` dumps defensively (missing port = unknown, not disconnected); one `status!` per poll. Simulator reboot/drop tests un-xfailed.
 - [ ] **Supervisor** (BE-01): restart only on exception with backoff; normal return ends supervision; always re-raise `CancelledError`; remove `except CancelledError: break` in loops. Tests: returning coroutine not restarted; cancel stops it; crash restarts after delay; `disconnect()` completes within 1 s.
 - [ ] **UC setup** (BE-02): drop the stray `await`; test the full `handle_driver_setup` flow.
 - [ ] **Connection state machine** (BE-04, BE-05, BE-06, BE-09, BE-17): explicit states `DISCONNECTED → CONNECTING → CONNECTED ↔ DEGRADED (telnet down) → BACKOFF`; one reconnect supervisor owned by the matrix object; transport errors transition state; one re-login attempt on auth failure; login success = explicit `result` check (per HIL-A capture); intentional disconnect (standby/shutdown) does not trigger reconnect; command lock not held during backoff. Tests use simulator fault injection.

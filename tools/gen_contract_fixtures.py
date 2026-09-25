@@ -145,6 +145,31 @@ async def _fetch(route: str, data_dir: Path) -> dict[str, Any]:
         return body
 
 
+# Fields whose values change on every request (timings, counters, clocks).
+# They are replaced with fixed placeholders of the same type so the fixture
+# still pins the field names and types without drifting between runs.
+_VOLATILE_FIELDS: dict[str, dict[tuple[str, ...], Any]] = {
+    "health.json": {
+        ("data", "runtime", "uptime_s"): 0.0,
+        ("data", "runtime", "loop_lag_ms"): 0.0,
+        ("data", "runtime", "loop_lag_max_ms"): 0.0,
+        ("data", "runtime", "task_count"): 0,
+        ("data", "matrix", "last_successful_poll"): "2026-01-01T00:00:00+00:00",
+    },
+}
+
+
+def _normalize(name: str, body: dict[str, Any]) -> dict[str, Any]:
+    """Replace volatile values in ``body`` with fixed placeholders."""
+    for path, placeholder in _VOLATILE_FIELDS.get(name, {}).items():
+        node: Any = body
+        for key in path[:-1]:
+            node = node.get(key) if isinstance(node, dict) else None
+        if isinstance(node, dict) and node.get(path[-1]) is not None:
+            node[path[-1]] = placeholder
+    return body
+
+
 async def generate() -> dict[str, dict[str, Any]]:
     """Return ``{fixture file name: response body}`` for every fixture.
 
@@ -160,7 +185,7 @@ async def generate() -> dict[str, dict[str, Any]]:
             with tempfile.TemporaryDirectory(prefix="contract-fixtures-") as tmp:
                 os.environ["MATRIX_DATA_DIR"] = tmp
                 reset_data_dir_cache()
-                results[name] = await _fetch(route, Path(tmp))
+                results[name] = _normalize(name, await _fetch(route, Path(tmp)))
     finally:
         if saved_env is None:
             os.environ.pop("MATRIX_DATA_DIR", None)
