@@ -482,8 +482,6 @@ class TelnetClient:
             except TimeoutError:
                 # No data within timeout — normal idle, loop and recheck state
                 continue
-            except asyncio.CancelledError:
-                break
             except Exception as e:
                 _LOG.warning(f"Push listener read error: {e}")
                 await asyncio.sleep(0.5)

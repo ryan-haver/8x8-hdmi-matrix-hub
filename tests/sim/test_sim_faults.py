@@ -107,23 +107,16 @@ async def test_rejected_switch_all_reports_failure(matrix, simulator):
     assert await matrix.switch_input_to_all(4) is False
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="BE-01: push listener swallows CancelledError and the supervisor restarts it, so disconnect() hangs",
-)
 async def test_telnet_disconnect_completes(matrix_with_telnet):
+    """BE-01: cancelling the push listener ends it; disconnect() returns within 1 s."""
     await matrix_with_telnet.connect()
     assert matrix_with_telnet.telnet_connected
     await asyncio.sleep(0.2)  # let the push listener enter its read loop
     telnet = matrix_with_telnet._telnet
-    disconnect = asyncio.ensure_future(telnet.disconnect())
-    done, _ = await asyncio.wait([disconnect], timeout=0.5)
-    # Unstick it without cancelling disconnect() itself (that would let the
-    # supervisor hot-spin): make the next restart raise, then cancel again.
-    defuse_telnet_supervisor(matrix_with_telnet)
-    telnet._listener_task.cancel()
-    await asyncio.wait_for(disconnect, 2)
-    assert done, "TelnetClient.disconnect() did not finish within 0.5 s"
+    listener = telnet._listener_task
+    await asyncio.wait_for(telnet.disconnect(), 1)
+    assert listener.done()
+    assert not matrix_with_telnet.telnet_connected
 
 
 @pytest.mark.xfail(
