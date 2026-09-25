@@ -13,7 +13,6 @@ import hashlib
 import hmac
 import os
 import re
-from typing import Any
 
 
 class PasswordError(ValueError):

@@ -15,7 +15,6 @@ from .utils import (
     get_input_names,
     get_matrix_device,
     get_output_names,
-    require_connected,
 )
 
 _LOG = logging.getLogger("rest_api.core")

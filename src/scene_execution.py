@@ -10,14 +10,11 @@ This module is responsible for:
 
 import logging
 from dataclasses import dataclass, field
-from datetime import UTC, datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 from config import Profile, ProfileManager
 from scene_manager import STEP_TYPE_MACRO, STEP_TYPE_PROFILE, STEP_TYPE_SYSTEM_ACTION, Scene, SceneManager
-from system_shortcuts import (
-    SystemShortcut as SystemAction,
-)
 from system_shortcuts import (
     SystemShortcutManager as SystemActionManager,
 )

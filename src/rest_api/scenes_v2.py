@@ -28,8 +28,6 @@ import logging
 from aiohttp import web
 
 from scene_manager import (
-    STEP_TYPE_PROFILE,
-    STEP_TYPE_SYSTEM_ACTION,
     SceneManager,
     SceneStep,
     detect_conflicts,
@@ -69,7 +67,6 @@ def _get_executor():
 
 
 def _get_profile_manager():
-    from config import ProfileManager
     from rest_api.utils import get_profile_manager
 
     mgr = get_profile_manager()
