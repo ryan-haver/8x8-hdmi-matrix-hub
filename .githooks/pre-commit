@@ -1,55 +1,77 @@
 #!/bin/sh
-# Pre-commit hook: runs ruff lint check before every commit.
+# Pre-commit hook: ruff lint + fast unit tests before every commit.
 # Stored in .githooks/ and activated via: git config core.hooksPath .githooks
 #
-# This prevents lint errors from reaching GitHub CI.
+# Mirrors the CI `lint` and `test` jobs (.github/workflows/ci.yml) so problems
+# are caught locally. Fails loudly if a required tool is missing rather than
+# silently skipping the check. POSIX sh: works in Git Bash on Windows and on
+# Linux/macOS.
 
-# Find ruff: prefer venv, fall back to PATH
-if [ -f ".venv/Scripts/ruff.exe" ]; then
-    RUFF=".venv/Scripts/ruff.exe"
-elif [ -f ".venv/bin/ruff" ]; then
-    RUFF=".venv/bin/ruff"
-elif command -v ruff >/dev/null 2>&1; then
-    RUFF="ruff"
-else
-    echo "⚠️  ruff not found. Skipping lint check."
-    echo "   Install with: pip install ruff"
-    exit 0
-fi
-
-echo "Running ruff lint check..."
-$RUFF check src/ tests/
-
-if [ $? -ne 0 ]; then
-    echo ""
-    echo "❌ Ruff lint check failed. Fix errors above, then try again."
-    echo "   Tip: run '$RUFF check src/ tests/ --fix' to auto-fix."
+fail() {
+    echo "" >&2
+    echo "pre-commit: FAILED - $1" >&2
+    shift
+    for line in "$@"; do
+        echo "  $line" >&2
+    done
     exit 1
-fi
+}
 
-echo "✅ Lint check passed."
-
-# Find pytest: prefer venv, fall back to PATH
-if [ -f ".venv/Scripts/pytest.exe" ]; then
-    PYTEST=".venv/Scripts/pytest.exe"
-elif [ -f ".venv/bin/pytest" ]; then
-    PYTEST=".venv/bin/pytest"
-elif command -v pytest >/dev/null 2>&1; then
-    PYTEST="pytest"
-else
-    echo "⚠️  pytest not found. Skipping test execution."
-    echo "   Install with: pip install pytest"
-    PYTEST=""
-fi
-
-if [ -n "$PYTEST" ]; then
-    echo "Running pytest suite..."
-    $PYTEST tests/ -x -q --tb=short --ignore=tests/test_atomic_writes.py
-    if [ $? -ne 0 ]; then
-        echo ""
-        echo "❌ Pytest suite failed. Fix failures above, then try again."
-        exit 1
+# Locate a tool: this checkout's .venv, then the main checkout's .venv (when
+# committing from a linked worktree), then PATH. Prints the command or nothing.
+find_tool() {
+    name="$1"
+    common_dir=$(git rev-parse --git-common-dir 2>/dev/null)
+    main_root=""
+    if [ -n "$common_dir" ]; then
+        main_root=$(cd "$common_dir/.." 2>/dev/null && pwd)
     fi
-    echo "✅ Pytest suite passed."
+    for venv in ".venv" "$main_root/.venv"; do
+        [ -n "$venv" ] || continue
+        if [ -f "$venv/Scripts/$name.exe" ]; then
+            echo "$venv/Scripts/$name.exe"
+            return 0
+        fi
+        if [ -x "$venv/bin/$name" ]; then
+            echo "$venv/bin/$name"
+            return 0
+        fi
+    done
+    if command -v "$name" >/dev/null 2>&1; then
+        echo "$name"
+        return 0
+    fi
+    return 1
+}
+
+RUFF=$(find_tool ruff) || fail "ruff not found in .venv or PATH." \
+    "Install the dev tools: pip install -e \".[dev]\""
+PYTEST=$(find_tool pytest) || fail "pytest not found in .venv or PATH." \
+    "Install the dev tools: pip install -e \".[dev]\""
+
+# --- Lint (same paths as CI; only those that exist) --------------------------
+LINT_PATHS=""
+for p in src tests custom_components tools run.py run_server.py; do
+    if [ -e "$p" ]; then
+        LINT_PATHS="$LINT_PATHS $p"
+    fi
+done
+
+echo "pre-commit: ruff check$LINT_PATHS"
+# shellcheck disable=SC2086
+if ! "$RUFF" check $LINT_PATHS; then
+    fail "ruff lint errors (see above)." \
+        "Auto-fix what can be fixed with: $RUFF check$LINT_PATHS --fix"
 fi
 
+# --- Fast unit tests (never talks to real hardware) --------------------------
+USE_MOCK_MATRIX="${USE_MOCK_MATRIX:-1}"
+export USE_MOCK_MATRIX
+
+echo "pre-commit: pytest (stop on first failure)"
+if ! "$PYTEST" tests/ --ignore=tests/ha -q -x -p no:cacheprovider; then
+    fail "pytest failures (see above)." \
+        "Re-run with: $PYTEST tests/ --ignore=tests/ha -x"
+fi
+
+echo "pre-commit: OK (ruff + pytest passed)"

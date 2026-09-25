@@ -57,7 +57,6 @@ def get_connected_client_count() -> int:
 
 async def _heartbeat(ws, ws_clients, last_pong_time):
     """Heartbeat coroutine that pings the client every 30 seconds and checks for pong response."""
-    import time
     try:
         while not ws.closed:
             await asyncio.sleep(30)

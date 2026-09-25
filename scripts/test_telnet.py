@@ -137,7 +137,7 @@ def test_telnet(port: int):
                 try:
                     decoded = full_response.decode("utf-8", errors="replace")
                     print(f"[<] Decoded: {repr(decoded)}")
-                except:
+                except Exception:
                     pass
             else:
                 print("[<] No response")

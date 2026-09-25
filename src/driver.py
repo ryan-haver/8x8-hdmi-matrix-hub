@@ -46,7 +46,7 @@ from orei_matrix import OreiMatrix
 try:
     from _task_supervisor import create_supervised_task
 except ImportError:
-    from ._task_supervisor import create_supervised_task
+    from ._task_supervisor import create_supervised_task  # type: ignore[no-redef]  # package-relative fallback
 from rest_api import (
     RestApiServer,
     broadcast_status_update,

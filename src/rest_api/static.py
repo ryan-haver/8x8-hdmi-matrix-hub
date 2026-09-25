@@ -17,7 +17,7 @@ _LOG = logging.getLogger("rest_api.static")
 _WEB_DIR = Path(__file__).parent.parent.parent / "web"
 
 
-async def handle_web_ui(request: web.Request) -> web.Response:
+async def handle_web_ui(request: web.Request) -> web.StreamResponse:
     """Serve the main Web UI page."""
     index_path = _WEB_DIR / "index.html"
     if index_path.exists():
@@ -25,7 +25,7 @@ async def handle_web_ui(request: web.Request) -> web.Response:
     return web.Response(text="Web UI not found", status=404)
 
 
-async def handle_kiosk_ui(request: web.Request) -> web.Response:
+async def handle_kiosk_ui(request: web.Request) -> web.StreamResponse:
     """Serve the Kiosk Mode page for simple input switching on tablets."""
     kiosk_path = _WEB_DIR / "kiosk.html"
     if kiosk_path.exists():
@@ -33,7 +33,7 @@ async def handle_kiosk_ui(request: web.Request) -> web.Response:
     return web.Response(text="Kiosk UI not found", status=404)
 
 
-async def handle_static_file(request: web.Request) -> web.Response:
+async def handle_static_file(request: web.Request) -> web.StreamResponse:
     """Serve static files (CSS, JS, assets)."""
     request_path = request.path
 

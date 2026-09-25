@@ -401,7 +401,7 @@ class MatrixApiClient:
                     try:
                         error = await resp.json()
                         return error
-                    except:
+                    except Exception:
                         return {"success": False, "error": f"HTTP {resp.status}"}
         except Exception as e:
             _LOG.error(f"POST {path} failed: {e}")

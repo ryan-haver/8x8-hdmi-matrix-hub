@@ -62,7 +62,9 @@ class OreiMatrix:
         self.use_https = use_https
         self._session: aiohttp.ClientSession | None = None
         self._connected = False
-        self.events = AsyncIOEventEmitter()
+        # Typed as Any: pyee annotates event names as `str`, but this codebase
+        # keys events by the `Events` IntEnum (any hashable works at runtime).
+        self.events: Any = AsyncIOEventEmitter()
 
         # Device state
         self._current_scene: int | None = None
@@ -1139,7 +1141,7 @@ class OreiMatrix:
         if not force_refresh and self._cable_status_cache is not None:
             return self._cable_status_cache.copy()
 
-        result = {"inputs": {}, "outputs": {}}
+        result: dict[str, dict[int, bool]] = {"inputs": {}, "outputs": {}}
 
         # Try Telnet individual queries for accuracy
         if self._telnet and self._telnet.connected:
@@ -1394,31 +1396,9 @@ class OreiMatrix:
         _LOG.error("Failed to set CEC enabled on %s %d", "output" if is_output else "input", port_num)
         return False
 
-    async def get_ext_audio_status(self) -> dict[str, Any] | None:
-        """
-        Get external audio routing status.
-
-        :return: Dictionary with audio status or None if failed
-        Returns:
-            - power: 1 (on) or 0 (off)
-            - mode: audio mode (0 = follow video, etc.)
-            - allsource: audio source per output
-            - allout: audio output enabled per output
-            - allinputname: array of input names
-            - alloutputname: array of output names
-            - index: current audio index
-        """
-        _LOG.debug("Getting ext-audio status")
-
-        command = {"comhead": "get ext-audio status", "language": 0}
-        success, response = await self._send_command(command)
-
-        if success and response:
-            _LOG.debug("Ext-audio status: %s", response)
-            return response
-
-        _LOG.error("Failed to get ext-audio status")
-        return None
+    # NOTE: get_ext_audio_status() is defined once, in the ext-audio section
+    # below. An earlier duplicate definition here was always shadowed by it
+    # (ruff F811) and has been removed without changing runtime behaviour.
 
     async def get_system_status(self) -> dict[str, Any] | None:
         """

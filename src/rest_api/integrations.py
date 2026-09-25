@@ -14,7 +14,7 @@ from .utils import _json_response
 
 _LOG = logging.getLogger("rest_api.integrations")
 
-_registered_buttons = {}
+_registered_buttons: dict[str, dict] = {}
 _loaded = False
 
 

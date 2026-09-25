@@ -3,7 +3,6 @@
 import aiohttp
 import voluptuous as vol
 from homeassistant import config_entries
-from homeassistant.core import callback
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .const import CONF_IP_ADDRESS, CONF_PORT, DEFAULT_NAME, DEFAULT_PORT, DOMAIN
