@@ -8,6 +8,7 @@ from pathlib import Path
 
 from aiohttp import web
 
+from _file_io import atomic_write_json
 from persistence import get_data_dir
 
 from .utils import _json_response
@@ -49,9 +50,9 @@ def _save_buttons():
     """Save the in-memory registered buttons dict to persistent storage."""
     file_path = _get_flic_file_path()
     try:
-        file_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(file_path, "w", encoding="utf-8") as f:
-            json.dump(_registered_buttons, f, indent=4)
+        # Atomic replace + serialized writers (PER-02): a crash or a
+        # concurrent registration can no longer leave a truncated file.
+        atomic_write_json(file_path, _registered_buttons, indent=4)
     except Exception as e:
         _LOG.warning(f"Failed to save registered Flic buttons: {e}")
 
