@@ -60,7 +60,7 @@ $env:USE_MODULAR='true'; $env:UC_ENABLED='false'; $env:MATRIX_HOST='127.0.0.1'; 
 
 The hub accepts the simulator's self-signed certificate because `OREI_VERIFY_SSL` defaults to `false`.
 
-> **Known hub bug (SIM-02):** when the simulator reboots or otherwise closes the Telnet connection, the hub's Telnet push listener spins at 100% CPU and the hub stops responding. Restart the hub after using `/_sim/reboot` or `telnet_refuse` against a live hub. The Phase 1 fix is tracked in the remediation plan.
+`/_sim/reboot` and `telnet_refuse` are safe against a live hub: the Telnet client treats EOF as a dropped connection and reconnects with backoff (SIM-02 / BE-28, fixed in Phase 1).
 
 ## Control API (`http://127.0.0.1:8444/_sim/...`)
 

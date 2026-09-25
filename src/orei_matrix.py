@@ -145,24 +145,40 @@ class OreiMatrix:
         if self._telnet and self._telnet.connected:
             return True
 
+        # BE-11: dispose of the previous client (its socket, push listener and
+        # reconnect loop) before replacing it, or it keeps running and
+        # reconnecting in the background.
+        await self._dispose_telnet()
+
+        client: TelnetClient | None = None
         try:
             _LOG.info(f"Connecting Telnet to {self.host}:{self._telnet_port}")
-            self._telnet = TelnetClient(
+            client = TelnetClient(
                 host=self.host, port=self._telnet_port, on_connection_change=self._on_telnet_state_change
             )
+            self._telnet = client
 
-            if await self._telnet.connect():
-                _LOG.info(f"Telnet connected (firmware: {self._telnet.firmware_version})")
+            if await client.connect():
+                _LOG.info(f"Telnet connected (firmware: {client.firmware_version})")
                 return True
             else:
                 _LOG.warning("Telnet connection failed - CEC and cable detection will use HTTP fallback")
-                self._telnet = None
+                await self._dispose_telnet()
                 return False
 
         except Exception as e:
             _LOG.warning(f"Telnet connection error: {e} - falling back to HTTP-only mode")
-            self._telnet = None
+            await self._dispose_telnet()
             return False
+
+    async def _dispose_telnet(self) -> None:
+        """Disconnect and drop the current Telnet client, if any."""
+        telnet, self._telnet = self._telnet, None
+        if telnet is not None:
+            try:
+                await telnet.disconnect()
+            except Exception as e:
+                _LOG.warning(f"Error disposing Telnet client: {e}")
 
     def _on_telnet_state_change(self, state: TelnetState) -> None:
         """Handle Telnet connection state changes."""
@@ -1123,7 +1139,9 @@ class OreiMatrix:
         # Try Telnet first
         if self._telnet and self._telnet.connected:
             try:
-                return await self._telnet.get_output_connection(output_num)
+                telnet_result = await self._telnet.get_output_connection(output_num)
+                if telnet_result is not None:
+                    return telnet_result
             except Exception as e:
                 _LOG.warning(f"Failed to get output cable status via Telnet: {e}")
 
@@ -1137,7 +1155,7 @@ class OreiMatrix:
 
         return None
 
-    async def get_all_cable_status(self, force_refresh: bool = False) -> dict[str, dict[int, bool]]:
+    async def get_all_cable_status(self, force_refresh: bool = False) -> dict[str, dict[int, bool | None]]:
         """
         Get cable connection status for all inputs and outputs.
 
@@ -1151,31 +1169,28 @@ class OreiMatrix:
         if not force_refresh and self._cable_status_cache is not None:
             return self._cable_status_cache.copy()
 
-        result: dict[str, dict[int, bool]] = {"inputs": {}, "outputs": {}}
+        result: dict[str, dict[int, bool | None]] = {
+            "inputs": dict.fromkeys(range(1, 9)),
+            "outputs": dict.fromkeys(range(1, 9)),
+        }
 
-        # Try Telnet individual queries for accuracy
+        # One Telnet `status!` gives every input and output (BE-30: this used
+        # to send it twice). Ports missing from the dump stay None (BE-29).
         if self._telnet and self._telnet.connected:
             try:
-                # Query each input individually
-                result["inputs"] = await self._telnet.get_all_input_connections()
-                # Query each output individually
-                result["outputs"] = await self._telnet.get_all_output_connections()
-                self._cable_status_cache = result.copy()
-                self._cable_status_cache_time = time.time()
-                return result
+                result = await self._telnet.get_all_connections()
             except Exception as e:
                 _LOG.warning(f"Failed to get cable status via Telnet: {e}")
 
-        # Fall back to HTTP for outputs only (inputs not available via HTTP)
-        output_status = await self.get_output_status(force_refresh=force_refresh)
-        if output_status and "allconnect" in output_status:
-            for i, connected in enumerate(output_status["allconnect"]):
-                result["outputs"][i + 1] = connected == 1
-
-        # Inputs: cannot determine via HTTP
-        for i in range(1, 9):
-            if result["inputs"].get(i) is None:
-                result["inputs"][i] = None
+        # Outputs Telnet did not report: fall back to HTTP 'allconnect'
+        # (inputs are not available via HTTP and stay None = unknown).
+        if any(v is None for v in result["outputs"].values()):
+            output_status = await self.get_output_status(force_refresh=force_refresh)
+            allconnect = output_status.get("allconnect") if output_status else None
+            if isinstance(allconnect, list):
+                for i, connected in enumerate(allconnect[:8]):
+                    if result["outputs"].get(i + 1) is None:
+                        result["outputs"][i + 1] = connected == 1
 
         self._cable_status_cache = result.copy()
         self._cable_status_cache_time = time.time()

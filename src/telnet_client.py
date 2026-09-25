@@ -22,9 +22,9 @@ from dataclasses import dataclass, field
 from enum import Enum
 
 try:
-    from _task_supervisor import create_supervised_task
+    from _task_supervisor import cancel_and_wait, create_supervised_task
 except ImportError:
-    from ._task_supervisor import create_supervised_task  # type: ignore[no-redef]  # package-relative fallback
+    from ._task_supervisor import cancel_and_wait, create_supervised_task  # type: ignore[no-redef]
 
 try:
     from _telnet_proto import TelnetIACFilter
@@ -49,6 +49,12 @@ class TelnetError(Exception):
 
 class ConnectionError(TelnetError):
     """Connection-related errors."""
+
+    pass
+
+
+class ConnectionLostError(ConnectionError):
+    """The matrix closed the connection (EOF) or the socket failed (BE-28/29)."""
 
     pass
 
@@ -141,6 +147,13 @@ class TelnetClient:
         self._reconnect_task: asyncio.Task | None = None
         self._listener_task: asyncio.Task | None = None
 
+        # Single-flight connect() (BE-11): concurrent callers (the reconnect
+        # loop, the matrix, REST handlers) must not open two sockets.
+        self._connect_lock = asyncio.Lock()
+        # Set by disconnect(): a connection loss after an intentional close
+        # must not schedule a reconnect.
+        self._closing = False
+
         # Command queue for serialization
         self._command_lock = asyncio.Lock()
         self._command_pending = False
@@ -182,78 +195,121 @@ class TelnetClient:
         """
         Connect to the matrix Telnet interface.
 
+        Single-flight (BE-11): concurrent callers wait for the attempt in
+        progress instead of opening a second socket. The writer is closed on
+        every failure path.
+
         :return: True if connection successful
         """
-        if self._state == TelnetState.CONNECTED:
-            return True
+        async with self._connect_lock:
+            if self._state == TelnetState.CONNECTED:
+                return True
 
-        self._set_state(TelnetState.CONNECTING)
+            self._closing = False
+            self._set_state(TelnetState.CONNECTING)
 
-        try:
-            _LOG.info(f"Connecting to Telnet at {self.host}:{self.port}")
+            try:
+                _LOG.info(f"Connecting to Telnet at {self.host}:{self.port}")
 
-            self._reader, self._writer = await asyncio.wait_for(
-                asyncio.open_connection(self.host, self.port), timeout=COMMAND_TIMEOUT
-            )
+                self._reader, self._writer = await asyncio.wait_for(
+                    asyncio.open_connection(self.host, self.port), timeout=COMMAND_TIMEOUT
+                )
+                # Fresh IAC parser state for a fresh connection.
+                self._filter = TelnetIACFilter()
 
-            # Read welcome banner
-            await asyncio.sleep(0.5)
-            banner = await self._read_available()
-            if banner:
-                _LOG.debug(f"Telnet banner: {banner}")
-                # Extract firmware version from banner
-                match = re.search(r"fw version\s*:\s*v?([\d.]+)", banner, re.IGNORECASE)
-                if match:
-                    self.firmware_version = match.group(1)
-                    _LOG.info(f"Matrix firmware version: {self.firmware_version}")
+                # Read welcome banner. EOF here (the device accepted the socket
+                # and closed it) raises ConnectionLostError, so connect fails.
+                await asyncio.sleep(0.5)
+                banner = await self._read_available()
+                if banner:
+                    _LOG.debug(f"Telnet banner: {banner}")
+                    # Extract firmware version from banner
+                    match = re.search(r"fw version\s*:\s*v?([\d.]+)", banner, re.IGNORECASE)
+                    if match:
+                        self.firmware_version = match.group(1)
+                        _LOG.info(f"Matrix firmware version: {self.firmware_version}")
 
-            self._set_state(TelnetState.CONNECTED)
+                self._set_state(TelnetState.CONNECTED)
 
-            # Start background listener for push notifications
-            self._listener_task = create_supervised_task(lambda: self._listen_for_push(), "telnet_push_listener")
+                # Start background listener for push notifications
+                self._listener_task = create_supervised_task(self._listen_for_push, "telnet_push_listener")
 
-            _LOG.info("Telnet connection established")
-            return True
+                _LOG.info("Telnet connection established")
+                return True
 
-        except TimeoutError:
-            _LOG.error(f"Telnet connection timeout to {self.host}:{self.port}")
-            self._set_state(TelnetState.DISCONNECTED)
-            return False
-        except Exception as e:
-            _LOG.error(f"Telnet connection failed: {e}")
-            self._set_state(TelnetState.DISCONNECTED)
-            return False
+            except TimeoutError:
+                _LOG.error(f"Telnet connection timeout to {self.host}:{self.port}")
+                await self._close_transport()
+                self._set_state(TelnetState.DISCONNECTED)
+                return False
+            except Exception as e:
+                _LOG.error(f"Telnet connection failed: {e}")
+                await self._close_transport()
+                self._set_state(TelnetState.DISCONNECTED)
+                return False
+            except BaseException:
+                # Cancelled mid-connect: do not leak the socket.
+                self._abort_transport()
+                self._set_state(TelnetState.DISCONNECTED)
+                raise
 
     async def disconnect(self) -> None:
-        """Disconnect from the matrix."""
+        """Disconnect from the matrix (intentional: no reconnect afterwards)."""
         _LOG.info("Disconnecting Telnet")
+        self._closing = True
 
-        # Cancel background tasks
-        if self._listener_task and not self._listener_task.done():
-            self._listener_task.cancel()
-            try:
-                await self._listener_task
-            except asyncio.CancelledError:
-                pass
+        # Stop the reconnect loop first so it cannot reopen the socket.
+        await cancel_and_wait(self._reconnect_task, "telnet_reconnect")
+        self._reconnect_task = None
+        await cancel_and_wait(self._listener_task, "telnet_push_listener")
+        self._listener_task = None
 
-        if self._reconnect_task and not self._reconnect_task.done():
-            self._reconnect_task.cancel()
-            try:
-                await self._reconnect_task
-            except asyncio.CancelledError:
-                pass
+        await self._close_transport()
+        self._set_state(TelnetState.DISCONNECTED)
 
-        # Close connection
-        if self._writer:
-            try:
-                self._writer.close()
-                await self._writer.wait_closed()
-            except Exception as e:
-                _LOG.warning(f"Error closing Telnet connection: {e}")
-
+    def _abort_transport(self) -> None:
+        """Close the socket without waiting (safe from sync code)."""
+        writer = self._writer
         self._reader = None
         self._writer = None
+        if writer is not None:
+            try:
+                writer.close()
+            except Exception as e:
+                _LOG.debug(f"Error closing Telnet writer: {e}")
+
+    async def _close_transport(self) -> None:
+        """Close the socket and wait (briefly) until it is closed."""
+        writer = self._writer
+        self._abort_transport()
+        if writer is not None:
+            try:
+                await asyncio.wait_for(writer.wait_closed(), timeout=1.0)
+            except Exception as e:
+                _LOG.debug(f"Error waiting for Telnet close: {e}")
+
+    def _connection_lost(self, reason: str) -> None:
+        """Handle an unexpected EOF or socket error (BE-28, BE-29).
+
+        Closes the socket, moves to DISCONNECTED (so ``connected`` and the
+        matrix's ``telnet_connected`` turn false), stops the push listener
+        and schedules a reconnect unless ``disconnect()`` is in progress.
+        Only the first report of a loss acts; later ones just make sure the
+        socket is closed.
+        """
+        if self._state != TelnetState.CONNECTED:
+            self._abort_transport()
+            return
+        _LOG.warning(f"Telnet connection lost: {reason}")
+        self._abort_transport()
         self._set_state(TelnetState.DISCONNECTED)
+
+        listener = self._listener_task
+        if listener is not None and not listener.done() and listener is not asyncio.current_task():
+            listener.cancel()
+
+        if not self._closing:
+            self._schedule_reconnect()
 
     async def _read_available(self, timeout: float = 0.5) -> str:
         """Read all available data from the connection.
@@ -263,15 +319,25 @@ class TelnetClient:
 
         FIX (F4.5): Detect binary data (non-printable bytes) and return
         empty string to avoid corrupting command response parsing.
+
+        BE-28/BE-29: ``b""`` from ``read()`` is EOF (the matrix closed the
+        connection) and a socket error means the same; both raise
+        :class:`ConnectionLostError` instead of returning ``""``, which made
+        callers loop until their timeout. A timeout with no data returns ``""``.
         """
         if not self._reader:
-            return ""
+            raise ConnectionLostError("Not connected")
 
         try:
             data = await asyncio.wait_for(self._reader.read(8192), timeout=timeout)
-            if not data:
-                return ""
+        except TimeoutError:
+            return ""
+        except OSError as e:
+            raise ConnectionLostError(f"read failed: {e}") from e
+        if not data:
+            raise ConnectionLostError("connection closed by the matrix (EOF)")
 
+        try:
             # FIX (F4.3): Filter IAC negotiation bytes
             user_data, response_bytes = self._filter.feed(data)
 
@@ -296,11 +362,8 @@ class TelnetClient:
                     return ""
 
             return user_data.decode("utf-8", errors="replace")
-        except TimeoutError:
-            return ""
-        except Exception as e:
-            _LOG.warning(f"Error reading from Telnet: {e}")
-            return ""
+        except OSError as e:
+            raise ConnectionLostError(f"write failed: {e}") from e
 
     async def _send_raw(self, command: str) -> str:
         """
@@ -320,6 +383,11 @@ class TelnetClient:
                 while self._push_reading:
                     await asyncio.sleep(0.02)
 
+                # The connection may have been lost while we waited.
+                writer = self._writer
+                if not self.connected or writer is None:
+                    raise ConnectionLostError("Not connected")
+
                 # FIX (F4.2): Removed pre-clear read here.
                 # Bytes that arrive during _send_raw are stored in _push_buffer
                 # by _listen_for_push and drained after the lock is released.
@@ -329,35 +397,35 @@ class TelnetClient:
                 _LOG.debug(f"Telnet TX: {repr(full_cmd)}")
                 # FIX (F4.3): Escape any 0xFF bytes per RFC 854 §3
                 encoded_cmd = self._filter.escape_ff(full_cmd.encode())
-                self._writer.write(encoded_cmd)
-                await self._writer.drain()
+                writer.write(encoded_cmd)
+                await writer.drain()
 
-                # Read response with timeout
+                # Read response until complete or COMMAND_TIMEOUT. EOF raises
+                # ConnectionLostError (BE-29) instead of spinning to the timeout.
                 response = ""
-                start_time = asyncio.get_event_loop().time()
+                loop = asyncio.get_running_loop()
+                deadline = loop.time() + COMMAND_TIMEOUT
 
                 while True:
-                    chunk = await self._read_available(timeout=0.5)
+                    remaining = deadline - loop.time()
+                    if remaining <= 0:
+                        _LOG.warning(f"Command timeout: {command}")
+                        break
+                    chunk = await self._read_available(timeout=min(0.5, remaining))
                     if chunk:
                         response += chunk
                         # Check for command completion
                         if self._is_response_complete(response, command):
                             break
 
-                    # Timeout check
-                    if asyncio.get_event_loop().time() - start_time > COMMAND_TIMEOUT:
-                        _LOG.warning(f"Command timeout: {command}")
-                        break
-
                 _LOG.debug(f"Telnet RX: {repr(response[:200])}...")
                 return response
 
         except Exception as e:
-            _LOG.error(f"Telnet command error: {e}")
-            # Trigger reconnect
-            self._set_state(TelnetState.DISCONNECTED)
-            self._schedule_reconnect()
-            raise CommandError(f"Command failed: {e}")
+            _LOG.error(f"Telnet command error ({command}): {e}")
+            # Close the socket (BE-11), mark disconnected and trigger reconnect
+            self._connection_lost(str(e))
+            raise CommandError(f"Command failed: {e}") from e
         finally:
             self._command_pending = False
 
@@ -483,22 +551,30 @@ class TelnetClient:
                 # No data within timeout — normal idle, loop and recheck state
                 continue
             except Exception as e:
-                _LOG.warning(f"Push listener read error: {e}")
-                await asyncio.sleep(0.5)
-                continue
+                # A failed socket read never recovers: treat it as a drop.
+                self._connection_lost(f"push listener read error: {e}")
+                return
             finally:
                 self._push_reading = False
 
             if not data:
-                continue
+                # BE-28: b"" is EOF (matrix rebooted / network dropped). The old
+                # code `continue`d here and read b"" again without ever
+                # yielding, freezing the event loop at 100% CPU.
+                self._connection_lost("connection closed by the matrix (EOF)")
+                return
 
             # FIX (F4.3): Filter IAC negotiation bytes
             user_data, response_bytes = self._filter.feed(data)
 
             # Send any IAC auto-reply bytes back to the server
             if response_bytes and self._writer:
-                self._writer.write(response_bytes)
-                await self._writer.drain()
+                try:
+                    self._writer.write(response_bytes)
+                    await self._writer.drain()
+                except OSError as e:
+                    self._connection_lost(f"push listener write error: {e}")
+                    return
 
             # FIX (F4.5): Binary data detection
             if user_data:
@@ -567,7 +643,7 @@ class TelnetClient:
         if self._reconnect_task and not self._reconnect_task.done():
             return  # Already scheduled
 
-        self._reconnect_task = create_supervised_task(lambda: self._reconnect_loop(), "telnet_reconnect")
+        self._reconnect_task = create_supervised_task(self._reconnect_loop, "telnet_reconnect")
 
     # Maximum reconnect delay (5 minutes) — caps exponential growth so
     # the loop doesn't eventually wait hours between attempts.
@@ -584,10 +660,9 @@ class TelnetClient:
         """
         import random
 
-        self._set_state(TelnetState.RECONNECTING)
-
         attempt = 0
-        while True:
+        while not self._closing:
+            self._set_state(TelnetState.RECONNECTING)
             attempt += 1
             # Exponential backoff: 5, 10, 20, 40, 80, 160, 300 (capped)
             delay = min(RECONNECT_DELAY * (2 ** (attempt - 1)), self._MAX_RECONNECT_DELAY)
@@ -624,68 +699,82 @@ class TelnetClient:
         _LOG.debug(f"Parsed outputs: {result.outputs}")
         return result
 
-    async def get_input_connection(self, input_num: int) -> bool:
+    @staticmethod
+    def _parse_link_response(response: str, port_type: str, port: int) -> bool | None:
+        """Parse ``hdmi input|output N: connect|disconnect``; None if absent."""
+        match = re.search(
+            rf"hdmi\s+{port_type}\s+{port}\s*:\s*(connect|disconnect)\b", response, re.IGNORECASE
+        )
+        if match is None:
+            return None
+        return match.group(1).lower() == "connect"
+
+    async def get_input_connection(self, input_num: int) -> bool | None:
         """
         Check if an input port has a cable connected.
 
         :param input_num: Input port (1-8)
-        :return: True if cable connected
+        :return: True/False, or None if the response did not say (BE-29)
         """
         if input_num < 1 or input_num > 8:
             raise ValueError(f"Invalid input number: {input_num}")
 
         response = await self._send_raw(f"r link in {input_num}")
         # Response: "hdmi input X: connect" or "hdmi input X: disconnect"
-        return "connect" in response.lower() and "disconnect" not in response.lower()
+        return self._parse_link_response(response, "input", input_num)
 
-    async def get_output_connection(self, output_num: int) -> bool:
+    async def get_output_connection(self, output_num: int) -> bool | None:
         """
         Check if an output port has a cable connected.
 
         :param output_num: Output port (1-8)
-        :return: True if cable connected
+        :return: True/False, or None if the response did not say (BE-29)
         """
         if output_num < 1 or output_num > 8:
             raise ValueError(f"Invalid output number: {output_num}")
 
         response = await self._send_raw(f"r link out {output_num}")
-        return "connect" in response.lower() and "disconnect" not in response.lower()
+        return self._parse_link_response(response, "output", output_num)
 
-    async def get_all_input_connections(self) -> dict[int, bool]:
+    @staticmethod
+    def connections_from_status(status: MatrixStatus) -> dict[str, dict[int, bool | None]]:
+        """Cable state per port from one parsed ``status`` dump.
+
+        BE-29: a port missing from the dump (truncated or garbled response)
+        is ``None`` (unknown), not ``False`` (disconnected).
+        """
+        return {
+            "inputs": {i: status.inputs[i].connected if i in status.inputs else None for i in range(1, 9)},
+            "outputs": {i: status.outputs[i].connected if i in status.outputs else None for i in range(1, 9)},
+        }
+
+    async def get_all_connections(self) -> dict[str, dict[int, bool | None]]:
+        """Cable state of every input and output from a single ``status!`` (BE-30).
+
+        :return: ``{"inputs": {1..8: bool|None}, "outputs": {1..8: bool|None}}``
+        """
+        return self.connections_from_status(await self.get_full_status())
+
+    async def get_all_input_connections(self) -> dict[int, bool | None]:
         """
         Get cable connection status for all inputs using bulk status command.
 
-        Uses the 'status!' command which returns all port states efficiently
-        in a single Telnet call.
+        Prefer :meth:`get_all_connections` when outputs are needed too (one
+        ``status!`` instead of two).
 
-        :return: Dict mapping input number to connection status
+        :return: Dict mapping input number to connection status (None = unknown)
         """
-        status = await self.get_full_status()
-        result = {}
-        for i in range(1, 9):
-            if i in status.inputs:
-                result[i] = status.inputs[i].connected
-            else:
-                result[i] = False
-        return result
+        return (await self.get_all_connections())["inputs"]
 
-    async def get_all_output_connections(self) -> dict[int, bool]:
+    async def get_all_output_connections(self) -> dict[int, bool | None]:
         """
         Get cable connection status for all outputs using bulk status command.
 
-        Uses the 'status!' command which returns all port states efficiently
-        in a single Telnet call.
+        Prefer :meth:`get_all_connections` when inputs are needed too.
 
-        :return: Dict mapping output number to connection status
+        :return: Dict mapping output number to connection status (None = unknown)
         """
-        status = await self.get_full_status()
-        result = {}
-        for i in range(1, 9):
-            if i in status.outputs:
-                result[i] = status.outputs[i].connected
-            else:
-                result[i] = False
-        return result
+        return (await self.get_all_connections())["outputs"]
 
     def _parse_status_response(self, response: str) -> MatrixStatus:
         """Parse the response from 'status!' command."""
