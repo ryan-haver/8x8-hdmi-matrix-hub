@@ -1,0 +1,6 @@
+# Evidence artifacts (screenshots, photos, captures) live in Git LFS (VALIDATION_PLAN §4).
+*.png filter=lfs diff=lfs merge=lfs -text
+*.jpg filter=lfs diff=lfs merge=lfs -text
+*.jpeg filter=lfs diff=lfs merge=lfs -text
+*.mp4 filter=lfs diff=lfs merge=lfs -text
+*.webm filter=lfs diff=lfs merge=lfs -text

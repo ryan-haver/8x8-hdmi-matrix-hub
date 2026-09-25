@@ -1,0 +1,84 @@
+# Findings discovered by validation, waiting to be added to the register in
+# docs/REMEDIATION_PLAN.md §4 (VALIDATION_PLAN §1.7: a feature that does not
+# work is a finding). The VAL-nn ids are provisional: when a row is added to
+# the register, rename the id in features.yaml and in the scenarios' `finding=`
+# links, then delete it here. The ledger/CI treat these rows as open findings.
+#
+# Each row: id, severity (C/H/M/L), title, location, proposed register row
+# (section + text), proof (scenario that demonstrates it), status (open|closed).
+
+findings:
+  - id: VAL-01
+    severity: H
+    title: >-
+      Profile recall never applies audio mute, HDR or HDCP. handle_recall_profile checks
+      hasattr(matrix_device, "set_audio_mute" / "set_hdr_mode" / "set_hdcp_mode"), but OreiMatrix
+      names them set_output_audio_mute / set_output_hdr / set_output_hdcp, so the settings are
+      silently skipped and the response is still 200 success (README: "Include HDR/HDCP/audio settings").
+    location: src/rest_api/profiles.py:322-329
+    register: "4.2 API — | H | Profile recall skips audio mute, HDR and HDCP (hasattr on non-existent method names), reports success | `rest_api/profiles.py:322-329` | 2 |"
+    proof: tests/validation/scenarios/profiles.py::profiles.recall_output_settings
+    status: open
+
+  - id: VAL-02
+    severity: M
+    title: >-
+      Modular mode (run.py with USE_MODULAR=true, the D4/D11 target architecture and what
+      dev_stack/Playwright/validation run) never wires the macro CEC sender: only driver.py calls
+      set_macro_cec_sender. Every CEC macro (POST /api/cec/macro/{id}/execute, profile power-on/off
+      macros, scene macro steps) fails with "CEC sender not configured"; profile recall still answers
+      200 success (API-08).
+    location: run.py:88-106 (run_modular_mode), src/rest_api/utils.py:461
+    register: "4.2 API — | M | Modular mode never wires the macro CEC sender; macros and profile power macros fail silently | `run.py:101`, `rest_api/utils.py:461` | 2 |"
+    proof: tests/validation/scenarios/profiles.py::profiles.recall_power_macro
+    status: open
+
+  - id: VAL-03
+    severity: M
+    title: >-
+      The CEC index table in docs/OREI_API_COMMANDS.md contradicts the hub's "HAR-verified"
+      CEC_COMMAND_MAP for 15 of 19 indices (doc: 3 Menu, 5 Up, 9 Enter, 10 Play, 18 Volume up,
+      19 Volume down; code: 3 Up, 5 Select, 9 Back, 11 Play, 18 Volume down, 19 Volume up). One of
+      them sends the wrong command for every navigation/playback/volume key. Only power on/off (1, 2), rewind (13)
+      and mute (17) agree. HIL-A must settle it (with BE-14 for the output side).
+    location: docs/OREI_API_COMMANDS.md:329-351 vs src/orei_matrix.py:717-759
+    register: "4.1 BE — | M | CEC index table: docs and CEC_COMMAND_MAP disagree on 15 of 19 indices | `orei_matrix.py:717-759`, `OREI_API_COMMANDS.md:329` | 1 (HIL) |"
+    proof: tests/validation/scenarios/cec.py::cec.output_volume_up (frame recorded; physical effect needs V4)
+    status: open
+
+  - id: VAL-04
+    severity: H
+    title: >-
+      /api/status fabricates state when the matrix cannot be read: with every device connection
+      dropped it answers 200 success with connected=true, default names "Input 1..8"/"Output 1..8"
+      and no routing, because get_status() returns {} and _format_status defaults "connected" to
+      True and fills default names. Clients (web UI, HA, kiosk) show made-up names as live state.
+      API-level root of UI-29; complements BE-04 (connected flag never cleared).
+    location: src/rest_api/core.py:25-60 (_format_status), src/rest_api/core.py handle_status
+    register: "4.1 BE — | H | `/api/status` answers 200 with connected=true and default names when the device read fails | `rest_api/core.py:28` | 1 |"
+    proof: tests/validation/scenarios/failures.py::failures.unreachable_switch
+    status: open
+
+  - id: VAL-05
+    severity: M
+    title: >-
+      POST /api/output/{n}/source, the route the web UI's matrix grid uses, sends no WebSocket event
+      (only /api/switch broadcasts "switch"), so other open web UIs and the kiosk never learn about a
+      grid routing change; in modular mode no poller covers for it (UC-17).
+    location: src/rest_api/control.py:312-356 (handle_output_source)
+    register: "4.2 API — | M | `/api/output/{n}/source` (used by the grid) never broadcasts a WS event | `rest_api/control.py:312` | 2 |"
+    proof: tests/validation/scenarios/routing.py::routing.grid_notifies_other_clients (browser)
+    status: open
+
+  - id: VAL-06
+    severity: L
+    title: >-
+      One /ui page load makes 20-26 API requests against a limit of 60 requests per 10 s per client,
+      so three loads within 10 s from one device (reloads, or UI + kiosk on the same tablet) make the UI
+      fail with HTTP 429: data loads fail and a grid click is rejected ("Rate limit exceeded").
+    location: src/rest_api/utils.py rate limiter; web/js/app.js loadInitialData
+    register: "4.3 SEC — | L | Rate limit (60/10 s per client) is below what 3 UI loads need; UI breaks with 429 | `rest_api/utils.py`, `web/js/app.js` | 3 |"
+    proof: >-
+      Browser evidence records page_api_requests 20-26 per load (client_diagnostics); the first browser run with one
+      client address for all actions got 429 on POST /api/output/1/source at the third page load.
+    status: open
