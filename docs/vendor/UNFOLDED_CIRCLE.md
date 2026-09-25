@@ -24,7 +24,7 @@ Pins live in [`unfoldedcircle-references.json`](unfoldedcircle-references.json).
 | Good patterns: select entities, sensors, changed-only updates, standby | `integration-denonavr/` |
 | Good patterns: remote UI pages, button mapping, aarch64 build workflow | `integration-androidtv/` (`.github/workflows/`) |
 | Good patterns: credential setup flow, icons | `integration-appletv/` |
-| Running the real Remote core for end-to-end tests | `core-simulator/` (no licence declared; local testing only until terms are confirmed) |
+| Running the real Remote core for end-to-end tests | `core-simulator/` (no licence declared; local testing only until terms are confirmed; evaluation in [`../audits/UC_CORE_SIMULATOR.md`](../audits/UC_CORE_SIMULATOR.md)) |
 
 ## Facts relied on by this project (from the pinned sources)
 

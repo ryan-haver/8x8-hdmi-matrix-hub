@@ -163,6 +163,7 @@ INTENTS: dict[str, str] = {
     "cec_output": "send CEC `command` to the display on output `output`",
     "profile_recall": "recall profile `profile_id` (optional `passcode`)",
     "request": "raw HTTP `method` `path` with optional `json` body (api client only)",
+    "uc_command": "Remote 3 entity command `cmd_id` with optional `params` on `entity_id` (uc client only)",
 }
 
 

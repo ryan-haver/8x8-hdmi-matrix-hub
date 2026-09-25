@@ -45,12 +45,12 @@ def _wait_for(url: str, proc: subprocess.Popen, timeout: float, what: str) -> di
     raise RuntimeError(f"{what} not ready at {url} after {timeout:.0f}s: {last_error}")
 
 
-def _stop(proc: subprocess.Popen | None, name: str) -> None:
+def _stop(proc: subprocess.Popen | None, name: str, timeout: float = 8) -> None:
     if proc is None or proc.poll() is not None:
         return
     proc.terminate()
     try:
-        proc.wait(timeout=8)
+        proc.wait(timeout=timeout)
     except subprocess.TimeoutExpired:
         print(f"[dev-stack] killing {name}", flush=True)
         proc.kill()

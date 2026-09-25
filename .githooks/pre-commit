@@ -68,10 +68,12 @@ fi
 USE_MOCK_MATRIX="${USE_MOCK_MATRIX:-1}"
 export USE_MOCK_MATRIX
 
+# tests/uc (the scripted-Remote harness, ~5 min: every test starts the real
+# driver) is its own CI job, like here; run it with: pytest tests/uc
 echo "pre-commit: pytest (stop on first failure)"
-if ! "$PYTEST" tests/ --ignore=tests/ha -q -x -p no:cacheprovider; then
+if ! "$PYTEST" tests/ --ignore=tests/ha --ignore=tests/uc -q -x -p no:cacheprovider; then
     fail "pytest failures (see above)." \
-        "Re-run with: $PYTEST tests/ --ignore=tests/ha -x"
+        "Re-run with: $PYTEST tests/ --ignore=tests/ha --ignore=tests/uc -x"
 fi
 
 echo "pre-commit: OK (ruff + pytest passed)"

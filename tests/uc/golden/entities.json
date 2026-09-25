@@ -1,0 +1,830 @@
+{
+  "count": 74,
+  "entities": [
+    {
+      "entity_id": "button.preset_1",
+      "entity_type": "button",
+      "features": [
+        "press"
+      ]
+    },
+    {
+      "entity_id": "button.preset_2",
+      "entity_type": "button",
+      "features": [
+        "press"
+      ]
+    },
+    {
+      "entity_id": "button.preset_3",
+      "entity_type": "button",
+      "features": [
+        "press"
+      ]
+    },
+    {
+      "entity_id": "button.preset_4",
+      "entity_type": "button",
+      "features": [
+        "press"
+      ]
+    },
+    {
+      "entity_id": "button.preset_5",
+      "entity_type": "button",
+      "features": [
+        "press"
+      ]
+    },
+    {
+      "entity_id": "button.preset_6",
+      "entity_type": "button",
+      "features": [
+        "press"
+      ]
+    },
+    {
+      "entity_id": "button.preset_7",
+      "entity_type": "button",
+      "features": [
+        "press"
+      ]
+    },
+    {
+      "entity_id": "button.preset_8",
+      "entity_type": "button",
+      "features": [
+        "press"
+      ]
+    },
+    {
+      "entity_id": "media_player.output_1",
+      "entity_type": "media_player",
+      "features": [
+        "on_off",
+        "toggle",
+        "select_source",
+        "volume_up_down",
+        "mute_toggle"
+      ],
+      "device_class": "tv"
+    },
+    {
+      "entity_id": "media_player.output_2",
+      "entity_type": "media_player",
+      "features": [
+        "on_off",
+        "toggle",
+        "select_source",
+        "volume_up_down",
+        "mute_toggle"
+      ],
+      "device_class": "tv"
+    },
+    {
+      "entity_id": "media_player.output_3",
+      "entity_type": "media_player",
+      "features": [
+        "on_off",
+        "toggle",
+        "select_source",
+        "volume_up_down",
+        "mute_toggle"
+      ],
+      "device_class": "tv"
+    },
+    {
+      "entity_id": "media_player.output_4",
+      "entity_type": "media_player",
+      "features": [
+        "on_off",
+        "toggle",
+        "select_source",
+        "volume_up_down",
+        "mute_toggle"
+      ],
+      "device_class": "tv"
+    },
+    {
+      "entity_id": "media_player.output_5",
+      "entity_type": "media_player",
+      "features": [
+        "on_off",
+        "toggle",
+        "select_source",
+        "volume_up_down",
+        "mute_toggle"
+      ],
+      "device_class": "tv"
+    },
+    {
+      "entity_id": "media_player.output_6",
+      "entity_type": "media_player",
+      "features": [
+        "on_off",
+        "toggle",
+        "select_source",
+        "volume_up_down",
+        "mute_toggle"
+      ],
+      "device_class": "tv"
+    },
+    {
+      "entity_id": "media_player.output_7",
+      "entity_type": "media_player",
+      "features": [
+        "on_off",
+        "toggle",
+        "select_source",
+        "volume_up_down",
+        "mute_toggle"
+      ],
+      "device_class": "tv"
+    },
+    {
+      "entity_id": "media_player.output_8",
+      "entity_type": "media_player",
+      "features": [
+        "on_off",
+        "toggle",
+        "select_source",
+        "volume_up_down",
+        "mute_toggle"
+      ],
+      "device_class": "tv"
+    },
+    {
+      "entity_id": "remote.input_1_cec",
+      "entity_type": "remote",
+      "features": [
+        "send_cmd",
+        "on_off"
+      ],
+      "simple_commands": [
+        "POWER_ON",
+        "POWER_OFF",
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT",
+        "SELECT",
+        "MENU",
+        "BACK",
+        "PLAY",
+        "PAUSE",
+        "STOP",
+        "PREVIOUS",
+        "NEXT",
+        "REWIND",
+        "FAST_FORWARD",
+        "VOLUME_UP",
+        "VOLUME_DOWN",
+        "MUTE"
+      ]
+    },
+    {
+      "entity_id": "remote.input_2_cec",
+      "entity_type": "remote",
+      "features": [
+        "send_cmd",
+        "on_off"
+      ],
+      "simple_commands": [
+        "POWER_ON",
+        "POWER_OFF",
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT",
+        "SELECT",
+        "MENU",
+        "BACK",
+        "PLAY",
+        "PAUSE",
+        "STOP",
+        "PREVIOUS",
+        "NEXT",
+        "REWIND",
+        "FAST_FORWARD",
+        "VOLUME_UP",
+        "VOLUME_DOWN",
+        "MUTE"
+      ]
+    },
+    {
+      "entity_id": "remote.input_3_cec",
+      "entity_type": "remote",
+      "features": [
+        "send_cmd",
+        "on_off"
+      ],
+      "simple_commands": [
+        "POWER_ON",
+        "POWER_OFF",
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT",
+        "SELECT",
+        "MENU",
+        "BACK",
+        "PLAY",
+        "PAUSE",
+        "STOP",
+        "PREVIOUS",
+        "NEXT",
+        "REWIND",
+        "FAST_FORWARD",
+        "VOLUME_UP",
+        "VOLUME_DOWN",
+        "MUTE"
+      ]
+    },
+    {
+      "entity_id": "remote.input_4_cec",
+      "entity_type": "remote",
+      "features": [
+        "send_cmd",
+        "on_off"
+      ],
+      "simple_commands": [
+        "POWER_ON",
+        "POWER_OFF",
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT",
+        "SELECT",
+        "MENU",
+        "BACK",
+        "PLAY",
+        "PAUSE",
+        "STOP",
+        "PREVIOUS",
+        "NEXT",
+        "REWIND",
+        "FAST_FORWARD",
+        "VOLUME_UP",
+        "VOLUME_DOWN",
+        "MUTE"
+      ]
+    },
+    {
+      "entity_id": "remote.input_5_cec",
+      "entity_type": "remote",
+      "features": [
+        "send_cmd",
+        "on_off"
+      ],
+      "simple_commands": [
+        "POWER_ON",
+        "POWER_OFF",
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT",
+        "SELECT",
+        "MENU",
+        "BACK",
+        "PLAY",
+        "PAUSE",
+        "STOP",
+        "PREVIOUS",
+        "NEXT",
+        "REWIND",
+        "FAST_FORWARD",
+        "VOLUME_UP",
+        "VOLUME_DOWN",
+        "MUTE"
+      ]
+    },
+    {
+      "entity_id": "remote.input_6_cec",
+      "entity_type": "remote",
+      "features": [
+        "send_cmd",
+        "on_off"
+      ],
+      "simple_commands": [
+        "POWER_ON",
+        "POWER_OFF",
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT",
+        "SELECT",
+        "MENU",
+        "BACK",
+        "PLAY",
+        "PAUSE",
+        "STOP",
+        "PREVIOUS",
+        "NEXT",
+        "REWIND",
+        "FAST_FORWARD",
+        "VOLUME_UP",
+        "VOLUME_DOWN",
+        "MUTE"
+      ]
+    },
+    {
+      "entity_id": "remote.input_7_cec",
+      "entity_type": "remote",
+      "features": [
+        "send_cmd",
+        "on_off"
+      ],
+      "simple_commands": [
+        "POWER_ON",
+        "POWER_OFF",
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT",
+        "SELECT",
+        "MENU",
+        "BACK",
+        "PLAY",
+        "PAUSE",
+        "STOP",
+        "PREVIOUS",
+        "NEXT",
+        "REWIND",
+        "FAST_FORWARD",
+        "VOLUME_UP",
+        "VOLUME_DOWN",
+        "MUTE"
+      ]
+    },
+    {
+      "entity_id": "remote.input_8_cec",
+      "entity_type": "remote",
+      "features": [
+        "send_cmd",
+        "on_off"
+      ],
+      "simple_commands": [
+        "POWER_ON",
+        "POWER_OFF",
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT",
+        "SELECT",
+        "MENU",
+        "BACK",
+        "PLAY",
+        "PAUSE",
+        "STOP",
+        "PREVIOUS",
+        "NEXT",
+        "REWIND",
+        "FAST_FORWARD",
+        "VOLUME_UP",
+        "VOLUME_DOWN",
+        "MUTE"
+      ]
+    },
+    {
+      "entity_id": "remote.orei_matrix",
+      "entity_type": "remote",
+      "features": [
+        "send_cmd"
+      ],
+      "simple_commands": [
+        "PRESET_1",
+        "PRESET_2",
+        "PRESET_3",
+        "PRESET_4",
+        "PRESET_5",
+        "PRESET_6",
+        "PRESET_7",
+        "PRESET_8"
+      ]
+    },
+    {
+      "entity_id": "remote.output_1_cec",
+      "entity_type": "remote",
+      "features": [
+        "send_cmd",
+        "on_off"
+      ],
+      "simple_commands": [
+        "POWER_ON",
+        "POWER_OFF",
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT",
+        "SELECT",
+        "MENU",
+        "BACK",
+        "VOLUME_UP",
+        "VOLUME_DOWN",
+        "MUTE"
+      ]
+    },
+    {
+      "entity_id": "remote.output_2_cec",
+      "entity_type": "remote",
+      "features": [
+        "send_cmd",
+        "on_off"
+      ],
+      "simple_commands": [
+        "POWER_ON",
+        "POWER_OFF",
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT",
+        "SELECT",
+        "MENU",
+        "BACK",
+        "VOLUME_UP",
+        "VOLUME_DOWN",
+        "MUTE"
+      ]
+    },
+    {
+      "entity_id": "remote.output_3_cec",
+      "entity_type": "remote",
+      "features": [
+        "send_cmd",
+        "on_off"
+      ],
+      "simple_commands": [
+        "POWER_ON",
+        "POWER_OFF",
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT",
+        "SELECT",
+        "MENU",
+        "BACK",
+        "VOLUME_UP",
+        "VOLUME_DOWN",
+        "MUTE"
+      ]
+    },
+    {
+      "entity_id": "remote.output_4_cec",
+      "entity_type": "remote",
+      "features": [
+        "send_cmd",
+        "on_off"
+      ],
+      "simple_commands": [
+        "POWER_ON",
+        "POWER_OFF",
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT",
+        "SELECT",
+        "MENU",
+        "BACK",
+        "VOLUME_UP",
+        "VOLUME_DOWN",
+        "MUTE"
+      ]
+    },
+    {
+      "entity_id": "remote.output_5_cec",
+      "entity_type": "remote",
+      "features": [
+        "send_cmd",
+        "on_off"
+      ],
+      "simple_commands": [
+        "POWER_ON",
+        "POWER_OFF",
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT",
+        "SELECT",
+        "MENU",
+        "BACK",
+        "VOLUME_UP",
+        "VOLUME_DOWN",
+        "MUTE"
+      ]
+    },
+    {
+      "entity_id": "remote.output_6_cec",
+      "entity_type": "remote",
+      "features": [
+        "send_cmd",
+        "on_off"
+      ],
+      "simple_commands": [
+        "POWER_ON",
+        "POWER_OFF",
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT",
+        "SELECT",
+        "MENU",
+        "BACK",
+        "VOLUME_UP",
+        "VOLUME_DOWN",
+        "MUTE"
+      ]
+    },
+    {
+      "entity_id": "remote.output_7_cec",
+      "entity_type": "remote",
+      "features": [
+        "send_cmd",
+        "on_off"
+      ],
+      "simple_commands": [
+        "POWER_ON",
+        "POWER_OFF",
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT",
+        "SELECT",
+        "MENU",
+        "BACK",
+        "VOLUME_UP",
+        "VOLUME_DOWN",
+        "MUTE"
+      ]
+    },
+    {
+      "entity_id": "remote.output_8_cec",
+      "entity_type": "remote",
+      "features": [
+        "send_cmd",
+        "on_off"
+      ],
+      "simple_commands": [
+        "POWER_ON",
+        "POWER_OFF",
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT",
+        "SELECT",
+        "MENU",
+        "BACK",
+        "VOLUME_UP",
+        "VOLUME_DOWN",
+        "MUTE"
+      ]
+    },
+    {
+      "entity_id": "sensor.input_1_cable",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.input_1_signal",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.input_2_cable",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.input_2_signal",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.input_3_cable",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.input_3_signal",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.input_4_cable",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.input_4_signal",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.input_5_cable",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.input_5_signal",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.input_6_cable",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.input_6_signal",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.input_7_cable",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.input_7_signal",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.input_8_cable",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.input_8_signal",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.output_1_cable",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.output_1_connected",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.output_1_source",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.output_2_cable",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.output_2_connected",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.output_2_source",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.output_3_cable",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.output_3_connected",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.output_3_source",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.output_4_cable",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.output_4_connected",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.output_4_source",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.output_5_cable",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.output_5_connected",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.output_5_source",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.output_6_cable",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.output_6_connected",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.output_6_source",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.output_7_cable",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.output_7_connected",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.output_7_source",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.output_8_cable",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.output_8_connected",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "sensor.output_8_source",
+      "entity_type": "sensor",
+      "features": [],
+      "device_class": "custom"
+    },
+    {
+      "entity_id": "switch.matrix_power",
+      "entity_type": "switch",
+      "features": [
+        "on_off",
+        "toggle"
+      ]
+    }
+  ]
+}
