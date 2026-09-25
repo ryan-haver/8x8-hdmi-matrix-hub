@@ -12,8 +12,9 @@ import aiohttp
 import pytest
 
 import orei_matrix
+import telnet_client
 
-from .conftest import defuse_telnet_supervisor
+from .conftest import LoopLagProbe
 
 # ---------------------------------------------------------------- behaviour that works today
 
@@ -119,24 +120,92 @@ async def test_telnet_disconnect_completes(matrix_with_telnet):
     assert not matrix_with_telnet.telnet_connected
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="SIM-01 (new): Telnet EOF is not detected (telnet_client.py:271-273), so a dropped connection "
-    "stays 'connected' and cable status silently reads as all-disconnected",
-)
 async def test_telnet_drop_mid_command_is_detected(matrix_with_telnet, simulator):
+    """BE-29 / SIM-01: EOF mid-response marks Telnet down; cables fall back to HTTP."""
     m = matrix_with_telnet
     await m.connect()
     await asyncio.sleep(0.2)
-    # Stop the push listener first: once the socket hits EOF it busy-loops
-    # without ever yielding (SIM-02, telnet_client.py:478-495) and would
-    # freeze this test's event loop.
-    listener = m._telnet._listener_task
-    defuse_telnet_supervisor(m)
-    listener.cancel()
-    await asyncio.wait([listener], timeout=1)
-    assert listener.done()
-
     simulator.faults.update({"telnet_close_mid_command": True, "telnet_fault_count": 1})
+    with LoopLagProbe() as probe:
+        cables = await m.get_all_cable_status(force_refresh=True)
+    assert m.telnet_connected is False
+    # Outputs come from HTTP allconnect; inputs are unknown, not "disconnected".
+    assert cables["outputs"] == {i + 1: bool(o.connected) for i, o in enumerate(simulator.state.outputs)}
+    assert set(cables["inputs"].values()) == {None}
+    assert probe.max_lag < 0.2
+
+
+async def test_telnet_eof_on_device_reboot_does_not_freeze_loop(matrix_with_telnet, simulator):
+    """BE-28 / SIM-02: the push listener used to spin on b"" after a reboot.
+
+    Now EOF stops the listener, telnet_connected turns false, the event loop
+    stays responsive and the client reconnects once the device is back.
+    """
+    m = matrix_with_telnet
+    await m.connect()
+    telnet = m._telnet
+    old_listener = telnet._listener_task
+    await asyncio.sleep(0.2)  # listener is in its read loop
+
+    with LoopLagProbe() as probe:
+        await simulator.reboot(0.3)  # listeners down 0.3 s, then back up
+        assert old_listener.done()
+        for _ in range(100):
+            if m.telnet_connected:
+                break
+            await asyncio.sleep(0.05)
+    assert probe.max_lag < 0.2, f"event loop stalled for {probe.max_lag:.2f}s"
+    assert m.telnet_connected, "Telnet did not reconnect after the reboot"
+    assert telnet._listener_task is not old_listener and not telnet._listener_task.done()
+    # And it works again.
+    assert (await m.get_all_cable_status(force_refresh=True))["outputs"][1] is True
+
+
+async def test_telnet_eof_state_goes_false_immediately(matrix_with_telnet, simulator, monkeypatch):
+    """BE-29: after EOF, telnet_connected is false (it used to stay true)."""
+    m = matrix_with_telnet
+    await m.connect()
+    monkeypatch.setattr(m._telnet, "_schedule_reconnect", lambda: None)  # observe the dropped state
+    await asyncio.sleep(0.2)
+    await simulator.reboot(0.2)
+    for _ in range(40):
+        if not m.telnet_connected:
+            break
+        await asyncio.sleep(0.05)
+    assert m.telnet_connected is False
+    assert m._telnet._writer is None  # socket closed (BE-11)
+
+
+async def test_telnet_refused_connection_fails_fast(fast_hub, simulator):
+    """Device accepts the socket and closes it at once: connect() fails, no spin."""
+    simulator.faults.update({"telnet_refuse": True})
+    client = telnet_client.TelnetClient("127.0.0.1", simulator.telnet_port)
+    with LoopLagProbe() as probe:
+        assert await asyncio.wait_for(client.connect(), 3) is False
+    assert client.state is telnet_client.TelnetState.DISCONNECTED
+    assert client._writer is None and client._listener_task is None
+    assert probe.max_lag < 0.2
+    await client.disconnect()
+
+
+async def test_telnet_connect_is_single_flight(fast_hub, simulator):
+    """BE-11: concurrent connect() calls open one socket."""
+    client = telnet_client.TelnetClient("127.0.0.1", simulator.telnet_port)
+    try:
+        results = await asyncio.gather(*(client.connect() for _ in range(5)))
+        assert results == [True] * 5
+        connects = [e for e in simulator.log if e["channel"] == "telnet" and e["command"] == "<connect>"]
+        assert len(connects) == 1
+    finally:
+        await client.disconnect()
+
+
+async def test_cable_poll_sends_one_status_command(matrix_with_telnet, simulator):
+    """BE-30: one `status!` per cable poll (it used to send two)."""
+    m = matrix_with_telnet
+    await m.connect()
+    simulator.log.clear()
     cables = await m.get_all_cable_status(force_refresh=True)
-    assert m.telnet_connected is False or cables["outputs"][1] is True
+    assert cables["inputs"] == {i + 1: bool(p.cable) for i, p in enumerate(simulator.state.inputs)}
+    status_cmds = [e for e in simulator.log if e["channel"] == "telnet" and e["command"] == "status"]
+    assert len(status_cmds) == 1

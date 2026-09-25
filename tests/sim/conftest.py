@@ -67,6 +67,7 @@ def fast_hub(monkeypatch, simulator):
     monkeypatch.setattr(orei_matrix, "INITIAL_RETRY_DELAY", 0.01)
     monkeypatch.setattr(orei_matrix, "MAX_RETRY_DELAY", 0.05)
     monkeypatch.setattr(telnet_client, "COMMAND_TIMEOUT", FAST_TELNET_TIMEOUT)
+    monkeypatch.setattr(telnet_client, "RECONNECT_DELAY", 0.05)
     return simulator
 
 
@@ -85,30 +86,6 @@ async def matrix(fast_hub, monkeypatch):
         await m.disconnect()
 
 
-async def _raise_cancelled() -> None:
-    raise asyncio.CancelledError
-
-
-def defuse_telnet_supervisor(m: orei_matrix.OreiMatrix) -> None:
-    """Test-only workaround for BE-01.
-
-    ``TelnetClient._listen_for_push`` swallows ``CancelledError`` and returns,
-    and ``_task_supervisor`` restarts coroutines that return, so
-    ``TelnetClient.disconnect()`` waits forever for the listener task. The
-    supervisor looks the coroutine up through ``self`` on every restart, so
-    swapping it for one that raises ``CancelledError`` lets the task end.
-    """
-    telnet = m._telnet
-    if telnet is not None:
-        telnet._listen_for_push = _raise_cancelled
-        telnet._reconnect_loop = _raise_cancelled
-
-
-async def safe_disconnect(m: orei_matrix.OreiMatrix) -> None:
-    defuse_telnet_supervisor(m)
-    await asyncio.wait_for(m.disconnect(), 5)
-
-
 @pytest.fixture
 async def matrix_with_telnet(fast_hub):
     """Real OreiMatrix with the real Telnet client (not yet connected)."""
@@ -116,4 +93,32 @@ async def matrix_with_telnet(fast_hub):
     try:
         yield m
     finally:
-        await safe_disconnect(m)
+        await asyncio.wait_for(m.disconnect(), 5)
+
+
+class LoopLagProbe:
+    """Measures event-loop lag: a ticker that should wake every ``interval`` s.
+
+    ``max_lag`` is the worst extra delay seen. A busy loop that never yields
+    (SIM-02 / BE-28) shows up as lag of seconds, or as the probe never running.
+    """
+
+    def __init__(self, interval: float = 0.02) -> None:
+        self.interval = interval
+        self.max_lag = 0.0
+        self._task: asyncio.Task | None = None
+
+    async def _run(self) -> None:
+        loop = asyncio.get_running_loop()
+        while True:
+            before = loop.time()
+            await asyncio.sleep(self.interval)
+            self.max_lag = max(self.max_lag, loop.time() - before - self.interval)
+
+    def __enter__(self) -> LoopLagProbe:
+        self._task = asyncio.ensure_future(self._run())
+        return self
+
+    def __exit__(self, *exc: object) -> None:
+        if self._task is not None:
+            self._task.cancel()

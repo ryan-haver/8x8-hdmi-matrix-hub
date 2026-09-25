@@ -69,6 +69,22 @@ async def _supervised_loop(
         return
 
 
+async def cancel_and_wait(task: asyncio.Task | None, name: str = "", timeout: float = 2.0) -> None:
+    """Cancel ``task`` and wait until it has finished.
+
+    Unlike ``task.cancel(); await task`` this never swallows a cancellation
+    of the *calling* task (it propagates), and it gives up after ``timeout``
+    seconds instead of hanging on a task that ignores cancellation.
+    Cancelling the current task (a task stopping itself) is a no-op.
+    """
+    if task is None or task.done() or task is asyncio.current_task():
+        return
+    task.cancel()
+    done, _ = await asyncio.wait([task], timeout=timeout)
+    if not done:
+        _LOG.warning("Task '%s' did not stop within %.1fs of being cancelled", name or task.get_name(), timeout)
+
+
 def create_supervised_task(
     coro_fn: Callable[[], Awaitable[Any]],
     name: str,
