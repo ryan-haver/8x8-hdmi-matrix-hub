@@ -59,6 +59,12 @@ Thumbs.db
 htmlcov/
 .tox/
 .nox/
+test-results/
+playwright-report/
+
+# Tool caches
+.mypy_cache/
+.ruff_cache/
 
 # Distribution
 *.tar.gz
