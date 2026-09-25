@@ -7,6 +7,7 @@
     "power": 1,
     "beep": 1,
     "lock": 0,
+    "lcd": 3,
     "routing": [
       7,
       7,
@@ -30,6 +31,16 @@
     "output_names": [
       "TV",
       "Sound",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "preset_names": [
+      "Out1",
+      "Out2",
       "Out3",
       "Out4",
       "Out5",
@@ -148,10 +159,23 @@
       7,
       8
     ],
-    "presets": null,
+    "exa_index": 1,
+    "presets": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "saved": false,
+        "routing": null
+      }
+    ],
     "lcd_line": "lcd on 30 seconds",
     "errors": []
   },
   "mode": "write",
-  "captured_at": "2026-09-25T20:20:26.022926Z"
+  "captured_at": "2026-09-25T22:02:38.622268Z"
 }

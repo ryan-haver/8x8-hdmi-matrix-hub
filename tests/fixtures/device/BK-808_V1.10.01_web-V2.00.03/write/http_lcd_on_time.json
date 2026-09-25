@@ -1,0 +1,633 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "write/http_lcd_on_time",
+  "title": "LCD on time, every code (set lcd on time; mode, API-07)",
+  "group": "system",
+  "answers": [
+    "write-ok-results",
+    "write-fail-result",
+    "web-ui-commands",
+    "lcd-codes"
+  ],
+  "before": {
+    "power": 1,
+    "beep": 1,
+    "lock": 0,
+    "lcd": 3,
+    "routing": [
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7
+    ],
+    "input_names": [
+      "NES",
+      "SNES",
+      "Sega",
+      "N64",
+      "Switch",
+      "PS3",
+      "Apple",
+      "Switcher"
+    ],
+    "output_names": [
+      "TV",
+      "Sound",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "preset_names": [
+      "Out1",
+      "Out2",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "stream": [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "hdcp": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "hdr": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "scaler": [
+      0,
+      4,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "arc": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "mute": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "edid": [
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36
+    ],
+    "cec_in": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "cec_out": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "exa_mode": 0,
+    "exa_enable": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "exa_source": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "exa_index": 1,
+    "presets": null,
+    "lcd_line": "lcd on 30 seconds",
+    "errors": []
+  },
+  "steps": [
+    {
+      "describe": "LCD on time -> code 0",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set lcd on time",
+        "comhead": "set lcd on time",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 63"
+          ],
+          "json": {
+            "comhead": "set lcd on time",
+            "language": 0,
+            "lcd on time": 0
+          },
+          "body_text": "{\"comhead\": \"set lcd on time\", \"language\": 0, \"lcd on time\": 0}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IGxjZCBvbiB0aW1lIiwicmVzdWx0IjoxfQ0K",
+          "body_text": "{\"comhead\":\"set lcd on time\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "set lcd on time",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:07:56.368790Z",
+          "elapsed_ms": 240.18
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "lcd",
+          null,
+          3,
+          0
+        ],
+        [
+          "lcd_line",
+          null,
+          "lcd on 30 seconds",
+          "lcd off"
+        ]
+      ],
+      "outcome": "applied",
+      "status_changes": {
+        "removed": [
+          "lcd on 30 seconds"
+        ],
+        "added": [
+          "lcd off"
+        ]
+      },
+      "lcd_line": "lcd off"
+    },
+    {
+      "describe": "LCD on time -> code 1",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set lcd on time",
+        "comhead": "set lcd on time",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 63"
+          ],
+          "json": {
+            "comhead": "set lcd on time",
+            "language": 0,
+            "lcd on time": 1
+          },
+          "body_text": "{\"comhead\": \"set lcd on time\", \"language\": 0, \"lcd on time\": 1}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IGxjZCBvbiB0aW1lIiwicmVzdWx0IjoxfQ0K",
+          "body_text": "{\"comhead\":\"set lcd on time\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "set lcd on time",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:08:02.595680Z",
+          "elapsed_ms": 265.13
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "lcd",
+          null,
+          0,
+          1
+        ],
+        [
+          "lcd_line",
+          null,
+          "lcd off",
+          "lcd always on"
+        ]
+      ],
+      "outcome": "applied",
+      "status_changes": {
+        "removed": [
+          "lcd on 30 seconds"
+        ],
+        "added": [
+          "lcd always on"
+        ]
+      },
+      "lcd_line": "lcd always on"
+    },
+    {
+      "describe": "LCD on time -> code 2",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set lcd on time",
+        "comhead": "set lcd on time",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 63"
+          ],
+          "json": {
+            "comhead": "set lcd on time",
+            "language": 0,
+            "lcd on time": 2
+          },
+          "body_text": "{\"comhead\": \"set lcd on time\", \"language\": 0, \"lcd on time\": 2}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IGxjZCBvbiB0aW1lIiwicmVzdWx0IjoxfQ0K",
+          "body_text": "{\"comhead\":\"set lcd on time\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "set lcd on time",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:08:07.965461Z",
+          "elapsed_ms": 224.64
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "lcd",
+          null,
+          1,
+          2
+        ],
+        [
+          "lcd_line",
+          null,
+          "lcd always on",
+          "lcd on 15 seconds"
+        ]
+      ],
+      "outcome": "applied",
+      "status_changes": {
+        "removed": [
+          "lcd on 30 seconds"
+        ],
+        "added": [
+          "lcd on 15 seconds"
+        ]
+      },
+      "lcd_line": "lcd on 15 seconds"
+    },
+    {
+      "describe": "LCD on time -> code 4",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set lcd on time",
+        "comhead": "set lcd on time",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 63"
+          ],
+          "json": {
+            "comhead": "set lcd on time",
+            "language": 0,
+            "lcd on time": 4
+          },
+          "body_text": "{\"comhead\": \"set lcd on time\", \"language\": 0, \"lcd on time\": 4}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IGxjZCBvbiB0aW1lIiwicmVzdWx0IjoxfQ0K",
+          "body_text": "{\"comhead\":\"set lcd on time\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "set lcd on time",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:08:13.214816Z",
+          "elapsed_ms": 252.45
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "lcd",
+          null,
+          2,
+          4
+        ],
+        [
+          "lcd_line",
+          null,
+          "lcd on 15 seconds",
+          "lcd on 60 seconds"
+        ]
+      ],
+      "outcome": "applied",
+      "status_changes": {
+        "removed": [
+          "lcd on 30 seconds"
+        ],
+        "added": [
+          "lcd on 60 seconds"
+        ]
+      },
+      "lcd_line": "lcd on 60 seconds"
+    },
+    {
+      "describe": "LCD on time -> code 3 (back to the original)",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set lcd on time",
+        "comhead": "set lcd on time",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 63"
+          ],
+          "json": {
+            "comhead": "set lcd on time",
+            "language": 0,
+            "lcd on time": 3
+          },
+          "body_text": "{\"comhead\": \"set lcd on time\", \"language\": 0, \"lcd on time\": 3}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IGxjZCBvbiB0aW1lIiwicmVzdWx0IjoxfQ0K",
+          "body_text": "{\"comhead\":\"set lcd on time\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "set lcd on time",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:08:18.456672Z",
+          "elapsed_ms": 231.12
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "lcd",
+          null,
+          4,
+          3
+        ],
+        [
+          "lcd_line",
+          null,
+          "lcd on 60 seconds",
+          "lcd on 30 seconds"
+        ]
+      ],
+      "outcome": "applied",
+      "status_changes": {
+        "removed": [],
+        "added": []
+      },
+      "lcd_line": "lcd on 30 seconds"
+    },
+    {
+      "describe": "invalid code 5",
+      "kind": "invalid",
+      "exchange": {
+        "kind": "http",
+        "role": "write-invalid",
+        "label": "set lcd on time",
+        "comhead": "set lcd on time",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 63"
+          ],
+          "json": {
+            "comhead": "set lcd on time",
+            "language": 0,
+            "lcd on time": 5
+          },
+          "body_text": "{\"comhead\": \"set lcd on time\", \"language\": 0, \"lcd on time\": 5}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IGxjZCBvbiB0aW1lIiwicmVzdWx0IjowfQ0K",
+          "body_text": "{\"comhead\":\"set lcd on time\",\"result\":0}\r\n",
+          "json": {
+            "comhead": "set lcd on time",
+            "result": 0
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:08:23.862548Z",
+          "elapsed_ms": 268.31
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    }
+  ],
+  "restored": true,
+  "restore_remaining": [],
+  "findings": {
+    "results_by_outcome": {
+      "applied": [
+        1
+      ],
+      "rejected": [
+        0
+      ]
+    },
+    "lcd_lines": {
+      "0": "lcd off",
+      "1": "lcd always on",
+      "2": "lcd on 15 seconds",
+      "4": "lcd on 60 seconds",
+      "3": "lcd on 30 seconds"
+    },
+    "lcd_outcomes": {
+      "0": "applied",
+      "1": "applied",
+      "2": "applied",
+      "4": "applied",
+      "3": "applied"
+    }
+  },
+  "mode": "write",
+  "captured_at": "2026-09-25T22:08:29.339347Z"
+}

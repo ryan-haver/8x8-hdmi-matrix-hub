@@ -1,0 +1,648 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "write/http_set_edid",
+  "title": "Input EDID incl. copy from output 1 (set edid; edid, BE-25)",
+  "group": "edid",
+  "answers": [
+    "write-ok-results",
+    "write-fail-result",
+    "web-ui-commands",
+    "edid-range",
+    "copy-edid"
+  ],
+  "before": {
+    "power": 1,
+    "beep": 1,
+    "lock": 0,
+    "lcd": 3,
+    "routing": [
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7
+    ],
+    "input_names": [
+      "NES",
+      "SNES",
+      "Sega",
+      "N64",
+      "Switch",
+      "PS3",
+      "Apple",
+      "Switcher"
+    ],
+    "output_names": [
+      "TV",
+      "Sound",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "preset_names": [
+      "Out1",
+      "Out2",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "stream": [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "hdcp": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "hdr": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "scaler": [
+      0,
+      4,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "arc": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "mute": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "edid": [
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36
+    ],
+    "cec_in": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "cec_out": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "exa_mode": 0,
+    "exa_enable": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "exa_source": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "exa_index": 1,
+    "presets": null,
+    "lcd_line": null,
+    "errors": []
+  },
+  "steps": [
+    {
+      "describe": "input 8 EDID 36 -> 1",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set edid",
+        "comhead": "set edid",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 54"
+          ],
+          "json": {
+            "comhead": "set edid",
+            "language": 0,
+            "edid": [
+              8,
+              1
+            ]
+          },
+          "body_text": "{\"comhead\": \"set edid\", \"language\": 0, \"edid\": [8, 1]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IGVkaWQiLCJyZXN1bHQiOjF9DQo=",
+          "body_text": "{\"comhead\":\"set edid\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "set edid",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:06:01.348034Z",
+          "elapsed_ms": 242.92
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "edid",
+          8,
+          36,
+          1
+        ]
+      ],
+      "outcome": "applied"
+    },
+    {
+      "describe": "input 8 EDID -> 40 (copy from output 1, BE-25)",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set edid",
+        "comhead": "set edid",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 55"
+          ],
+          "json": {
+            "comhead": "set edid",
+            "language": 0,
+            "edid": [
+              8,
+              40
+            ]
+          },
+          "body_text": "{\"comhead\": \"set edid\", \"language\": 0, \"edid\": [8, 40]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IGVkaWQiLCJyZXN1bHQiOjF9DQo=",
+          "body_text": "{\"comhead\":\"set edid\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "set edid",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:06:03.572859Z",
+          "elapsed_ms": 236.96
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "edid",
+          8,
+          1,
+          40
+        ]
+      ],
+      "outcome": "applied"
+    },
+    {
+      "describe": "input 8 EDID -> 36 (back to the original)",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set edid",
+        "comhead": "set edid",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 55"
+          ],
+          "json": {
+            "comhead": "set edid",
+            "language": 0,
+            "edid": [
+              8,
+              36
+            ]
+          },
+          "body_text": "{\"comhead\": \"set edid\", \"language\": 0, \"edid\": [8, 36]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IGVkaWQiLCJyZXN1bHQiOjF9DQo=",
+          "body_text": "{\"comhead\":\"set edid\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "set edid",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:06:05.854296Z",
+          "elapsed_ms": 240.47
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "edid",
+          8,
+          40,
+          36
+        ]
+      ],
+      "outcome": "applied"
+    },
+    {
+      "describe": "invalid EDID 0",
+      "kind": "invalid",
+      "exchange": {
+        "kind": "http",
+        "role": "write-invalid",
+        "label": "set edid",
+        "comhead": "set edid",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 54"
+          ],
+          "json": {
+            "comhead": "set edid",
+            "language": 0,
+            "edid": [
+              8,
+              0
+            ]
+          },
+          "body_text": "{\"comhead\": \"set edid\", \"language\": 0, \"edid\": [8, 0]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IGVkaWQiLCJyZXN1bHQiOjB9DQo=",
+          "body_text": "{\"comhead\":\"set edid\",\"result\":0}\r\n",
+          "json": {
+            "comhead": "set edid",
+            "result": 0
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:06:08.076260Z",
+          "elapsed_ms": 229.46
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    },
+    {
+      "describe": "invalid EDID 48",
+      "kind": "invalid",
+      "exchange": {
+        "kind": "http",
+        "role": "write-invalid",
+        "label": "set edid",
+        "comhead": "set edid",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 55"
+          ],
+          "json": {
+            "comhead": "set edid",
+            "language": 0,
+            "edid": [
+              8,
+              48
+            ]
+          },
+          "body_text": "{\"comhead\": \"set edid\", \"language\": 0, \"edid\": [8, 48]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IGVkaWQiLCJyZXN1bHQiOjB9DQo=",
+          "body_text": "{\"comhead\":\"set edid\",\"result\":0}\r\n",
+          "json": {
+            "comhead": "set edid",
+            "result": 0
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:06:10.205182Z",
+          "elapsed_ms": 264.42
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    },
+    {
+      "describe": "invalid input 9",
+      "kind": "invalid",
+      "exchange": {
+        "kind": "http",
+        "role": "write-invalid",
+        "label": "set edid",
+        "comhead": "set edid",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 54"
+          ],
+          "json": {
+            "comhead": "set edid",
+            "language": 0,
+            "edid": [
+              9,
+              1
+            ]
+          },
+          "body_text": "{\"comhead\": \"set edid\", \"language\": 0, \"edid\": [9, 1]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IGVkaWQiLCJyZXN1bHQiOjB9DQo=",
+          "body_text": "{\"comhead\":\"set edid\",\"result\":0}\r\n",
+          "json": {
+            "comhead": "set edid",
+            "result": 0
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:06:12.388541Z",
+          "elapsed_ms": 230.38
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    }
+  ],
+  "restored": true,
+  "restore_remaining": [],
+  "findings": {
+    "results_by_outcome": {
+      "applied": [
+        1
+      ],
+      "rejected": [
+        0
+      ]
+    },
+    "edid_steps": [
+      {
+        "payload": {
+          "comhead": "set edid",
+          "language": 0,
+          "edid": [
+            8,
+            1
+          ]
+        },
+        "outcome": "applied",
+        "edid_after": [
+          [
+            "edid",
+            8,
+            36,
+            1
+          ]
+        ]
+      },
+      {
+        "payload": {
+          "comhead": "set edid",
+          "language": 0,
+          "edid": [
+            8,
+            40
+          ]
+        },
+        "outcome": "applied",
+        "edid_after": [
+          [
+            "edid",
+            8,
+            1,
+            40
+          ]
+        ]
+      },
+      {
+        "payload": {
+          "comhead": "set edid",
+          "language": 0,
+          "edid": [
+            8,
+            36
+          ]
+        },
+        "outcome": "applied",
+        "edid_after": [
+          [
+            "edid",
+            8,
+            40,
+            36
+          ]
+        ]
+      },
+      {
+        "payload": {
+          "comhead": "set edid",
+          "language": 0,
+          "edid": [
+            8,
+            0
+          ]
+        },
+        "outcome": "rejected",
+        "edid_after": []
+      },
+      {
+        "payload": {
+          "comhead": "set edid",
+          "language": 0,
+          "edid": [
+            8,
+            48
+          ]
+        },
+        "outcome": "rejected",
+        "edid_after": []
+      },
+      {
+        "payload": {
+          "comhead": "set edid",
+          "language": 0,
+          "edid": [
+            9,
+            1
+          ]
+        },
+        "outcome": "rejected",
+        "edid_after": []
+      }
+    ]
+  },
+  "mode": "write",
+  "captured_at": "2026-09-25T22:06:16.620058Z"
+}

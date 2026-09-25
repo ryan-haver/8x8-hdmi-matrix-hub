@@ -1,8 +1,8 @@
 {
   "format": "orei-hil-capture/1",
-  "id": "write/http_beep",
-  "title": "Beep",
-  "group": "system",
+  "id": "write/http_preset_save",
+  "title": "Save a preset (r preset readback)",
+  "group": "presets",
   "answers": [
     "write-ok-results",
     "write-fail-result"
@@ -164,19 +164,31 @@
       8
     ],
     "exa_index": 1,
-    "presets": null,
+    "presets": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "saved": false,
+        "routing": null
+      }
+    ],
     "lcd_line": null,
     "errors": []
   },
   "steps": [
     {
-      "describe": "beep 1 -> 0",
+      "describe": "stage: output 8 -> input 8",
       "kind": "write",
       "exchange": {
         "kind": "http",
         "role": "write",
-        "label": "set beep",
-        "comhead": "set beep",
+        "label": "video switch",
+        "comhead": "video switch",
         "request": {
           "method": "POST",
           "path": "/cgi-bin/instr",
@@ -186,14 +198,17 @@
             "Accept: */*",
             "Accept-Encoding: gzip, deflate",
             "User-Agent: Python/3.12 aiohttp/3.13.3",
-            "Content-Length: 49"
+            "Content-Length: 60"
           ],
           "json": {
-            "comhead": "set beep",
+            "comhead": "video switch",
             "language": 0,
-            "beep": 0
+            "source": [
+              8,
+              8
+            ]
           },
-          "body_text": "{\"comhead\": \"set beep\", \"language\": 0, \"beep\": 0}"
+          "body_text": "{\"comhead\": \"video switch\", \"language\": 0, \"source\": [8, 8]}"
         },
         "response": {
           "status": 200,
@@ -205,39 +220,39 @@
             "Keep-Alive: timeout=200",
             "content-type: text/plain"
           ],
-          "body_b64": "eyJjb21oZWFkIjoic2V0IGJlZXAiLCJyZXN1bHQiOjF9DQo=",
-          "body_text": "{\"comhead\":\"set beep\",\"result\":1}\r\n",
+          "body_b64": "eyJjb21oZWFkIjoidmlkZW8gc3dpdGNoIiwicmVzdWx0IjoxfQ0K",
+          "body_text": "{\"comhead\":\"video switch\",\"result\":1}\r\n",
           "json": {
-            "comhead": "set beep",
+            "comhead": "video switch",
             "result": 1
           },
           "json_error": null
         },
         "error": null,
         "timing": {
-          "started_at": "2026-09-25T22:07:30.951508Z",
-          "elapsed_ms": 238.36
+          "started_at": "2026-09-25T22:03:15.963346Z",
+          "elapsed_ms": 269.63
         },
         "outcome": "applied"
       },
       "diff": [
         [
-          "beep",
-          null,
-          1,
-          0
+          "routing",
+          8,
+          7,
+          8
         ]
       ],
       "outcome": "applied"
     },
     {
-      "describe": "invalid beep 2",
-      "kind": "invalid",
+      "describe": "save live routing into preset 8 (overwrites it; restored afterwards)",
+      "kind": "write",
       "exchange": {
         "kind": "http",
-        "role": "write-invalid",
-        "label": "set beep",
-        "comhead": "set beep",
+        "role": "write",
+        "label": "preset save",
+        "comhead": "preset save",
         "request": {
           "method": "POST",
           "path": "/cgi-bin/instr",
@@ -247,14 +262,14 @@
             "Accept: */*",
             "Accept-Encoding: gzip, deflate",
             "User-Agent: Python/3.12 aiohttp/3.13.3",
-            "Content-Length: 49"
+            "Content-Length: 53"
           ],
           "json": {
-            "comhead": "set beep",
+            "comhead": "preset save",
             "language": 0,
-            "beep": 2
+            "index": 8
           },
-          "body_text": "{\"comhead\": \"set beep\", \"language\": 0, \"beep\": 2}"
+          "body_text": "{\"comhead\": \"preset save\", \"language\": 0, \"index\": 8}"
         },
         "response": {
           "status": 200,
@@ -266,18 +281,79 @@
             "Keep-Alive: timeout=200",
             "content-type: text/plain"
           ],
-          "body_b64": "eyJjb21oZWFkIjoic2V0IGJlZXAiLCJyZXN1bHQiOjB9DQo=",
-          "body_text": "{\"comhead\":\"set beep\",\"result\":0}\r\n",
+          "body_b64": "eyJjb21oZWFkIjoicHJlc2V0IHNhdmUiLCJyZXN1bHQiOjF9DQo=",
+          "body_text": "{\"comhead\":\"preset save\",\"result\":1}\r\n",
           "json": {
-            "comhead": "set beep",
+            "comhead": "preset save",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:03:19.386220Z",
+          "elapsed_ms": 232.54
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "preset_saved",
+          8,
+          false,
+          true
+        ]
+      ],
+      "outcome": "applied"
+    },
+    {
+      "describe": "invalid preset 9",
+      "kind": "invalid",
+      "exchange": {
+        "kind": "http",
+        "role": "write-invalid",
+        "label": "preset save",
+        "comhead": "preset save",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 53"
+          ],
+          "json": {
+            "comhead": "preset save",
+            "language": 0,
+            "index": 9
+          },
+          "body_text": "{\"comhead\": \"preset save\", \"language\": 0, \"index\": 9}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoicHJlc2V0IHNhdmUiLCJyZXN1bHQiOjB9DQo=",
+          "body_text": "{\"comhead\":\"preset save\",\"result\":0}\r\n",
+          "json": {
+            "comhead": "preset save",
             "result": 0
           },
           "json_error": null
         },
         "error": null,
         "timing": {
-          "started_at": "2026-09-25T22:07:34.148839Z",
-          "elapsed_ms": 364.8
+          "started_at": "2026-09-25T22:03:22.795818Z",
+          "elapsed_ms": 239.74
         },
         "outcome": "rejected"
       },
@@ -298,5 +374,5 @@
     }
   },
   "mode": "write",
-  "captured_at": "2026-09-25T22:07:41.088396Z"
+  "captured_at": "2026-09-25T22:03:33.409441Z"
 }

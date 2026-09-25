@@ -556,11 +556,239 @@
         "restored": true,
         "remaining": []
       }
+    },
+    {
+      "mode": "write",
+      "started_at": "2026-09-25T22:02:31.624666Z",
+      "finished_at": "2026-09-25T22:11:37.269519Z",
+      "tool_version": "1.0",
+      "hub_commit": "0dc38c5987ac417213ffe8478a65a69e41ad0666",
+      "host_os": "Windows-11-10.0.26200-SP0",
+      "python": "3.12.10",
+      "target": {
+        "host": "192.168.0.100",
+        "port": 443,
+        "telnet_port": 23,
+        "tls": true,
+        "user": "Admin"
+      },
+      "options": {
+        "host": "192.168.0.100",
+        "port": 443,
+        "telnet_port": 23,
+        "tls": true,
+        "user": "Admin",
+        "out": "C:/Users/ryanh/AppData/Local/Temp/claude/c--scripts-unfoldedcircle-orei-hdmi-matrix-integration/5737f4ac-eccf-432c-83bc-2593fb3ea078/scratchpad/hil3/{firmware}",
+        "firmware": null,
+        "mode": "write",
+        "telnet": true,
+        "http_timeout": 5.0,
+        "telnet_idle": 1.0,
+        "telnet_timeout": 5.0,
+        "banner_idle": 1.5,
+        "redact": [
+          "<17 chars>",
+          "<14 chars>"
+        ],
+        "yes": true,
+        "i_understand": true,
+        "only": [
+          "output",
+          "edid",
+          "ext-audio",
+          "system",
+          "presets",
+          "telnet",
+          "cec-enable",
+          "legacy"
+        ],
+        "skip": [],
+        "include": [],
+        "test_output": 8,
+        "test_input": 8,
+        "test_preset": 8,
+        "cec_output": 1,
+        "cec_input": 1,
+        "push_grace": 0.3,
+        "reboot_wait": 180.0,
+        "idle_waits": [],
+        "push_seconds": 30.0
+      },
+      "records": [
+        "write/http_arc",
+        "write/http_beep",
+        "write/http_cec_index_bulk",
+        "write/http_cec_index_single",
+        "write/http_ext_audio_index",
+        "write/http_ext_audio_mode",
+        "write/http_ext_audio_out",
+        "write/http_ext_audio_switch",
+        "write/http_hdr_conversion",
+        "write/http_lcd_on_time",
+        "write/http_legacy_commands",
+        "write/http_output_audio_mute",
+        "write/http_panel_lock",
+        "write/http_preset_name",
+        "write/http_preset_recall",
+        "write/http_preset_save",
+        "write/http_set_edid",
+        "write/http_tx_hdcp",
+        "write/http_tx_stream",
+        "write/http_video_scaler",
+        "write/snapshot-final",
+        "write/snapshot-initial",
+        "write/telnet_legacy_commands",
+        "write/telnet_presets",
+        "write/telnet_routing",
+        "write/telnet_system"
+      ],
+      "answers": {
+        "cec-index-single-port": [
+          "write/http_cec_index_single"
+        ],
+        "copy-edid": [
+          "write/http_set_edid"
+        ],
+        "edid-range": [
+          "write/http_set_edid"
+        ],
+        "exa-commands": [
+          "write/http_ext_audio_index",
+          "write/http_ext_audio_mode",
+          "write/http_ext_audio_out",
+          "write/http_ext_audio_switch"
+        ],
+        "ext-audio-index": [
+          "write/http_ext_audio_index"
+        ],
+        "lcd-codes": [
+          "write/http_lcd_on_time"
+        ],
+        "legacy-unanswered": [
+          "write/http_legacy_commands"
+        ],
+        "name-truncation": [
+          "write/http_preset_name"
+        ],
+        "output-mode-text": [
+          "write/http_hdr_conversion",
+          "write/http_tx_hdcp",
+          "write/http_video_scaler"
+        ],
+        "preset-set-empty": [
+          "write/http_preset_recall"
+        ],
+        "push-wording": [
+          "write/telnet_routing"
+        ],
+        "telnet-error-codes": [
+          "write/telnet_legacy_commands"
+        ],
+        "telnet-set-acks": [
+          "write/telnet_legacy_commands",
+          "write/telnet_presets",
+          "write/telnet_routing",
+          "write/telnet_system"
+        ],
+        "unknown-comhead-result": [
+          "write/http_legacy_commands"
+        ],
+        "web-ui-commands": [
+          "write/http_arc",
+          "write/http_ext_audio_index",
+          "write/http_ext_audio_mode",
+          "write/http_ext_audio_out",
+          "write/http_ext_audio_switch",
+          "write/http_hdr_conversion",
+          "write/http_lcd_on_time",
+          "write/http_output_audio_mute",
+          "write/http_preset_name",
+          "write/http_set_edid",
+          "write/http_tx_hdcp",
+          "write/http_tx_stream",
+          "write/http_video_scaler"
+        ],
+        "write-fail-result": [
+          "write/http_arc",
+          "write/http_beep",
+          "write/http_cec_index_bulk",
+          "write/http_cec_index_single",
+          "write/http_ext_audio_index",
+          "write/http_ext_audio_mode",
+          "write/http_ext_audio_out",
+          "write/http_ext_audio_switch",
+          "write/http_hdr_conversion",
+          "write/http_lcd_on_time",
+          "write/http_output_audio_mute",
+          "write/http_panel_lock",
+          "write/http_preset_name",
+          "write/http_preset_recall",
+          "write/http_preset_save",
+          "write/http_set_edid",
+          "write/http_tx_hdcp",
+          "write/http_tx_stream",
+          "write/http_video_scaler"
+        ],
+        "write-ok-results": [
+          "write/http_arc",
+          "write/http_beep",
+          "write/http_cec_index_bulk",
+          "write/http_ext_audio_index",
+          "write/http_ext_audio_mode",
+          "write/http_ext_audio_out",
+          "write/http_ext_audio_switch",
+          "write/http_hdr_conversion",
+          "write/http_lcd_on_time",
+          "write/http_output_audio_mute",
+          "write/http_panel_lock",
+          "write/http_preset_name",
+          "write/http_preset_recall",
+          "write/http_preset_save",
+          "write/http_set_edid",
+          "write/http_tx_hdcp",
+          "write/http_tx_stream",
+          "write/http_video_scaler"
+        ]
+      },
+      "errors": [],
+      "warnings": [],
+      "write_outcome": {
+        "tests": {
+          "http_preset_recall": "rejected, applied, applied, applied, applied, rejected, rejected",
+          "http_preset_save": "applied, applied, rejected",
+          "http_preset_name": "applied, applied, rejected",
+          "http_tx_stream": "applied, applied, rejected, rejected",
+          "http_tx_hdcp": "applied, applied, applied, applied, applied, rejected, rejected, rejected",
+          "http_hdr_conversion": "applied, applied, applied, rejected, rejected",
+          "http_video_scaler": "applied, applied, applied, applied, applied, rejected, rejected",
+          "http_arc": "applied, applied, rejected, rejected",
+          "http_output_audio_mute": "applied, applied, rejected, rejected",
+          "http_set_edid": "applied, applied, applied, rejected, rejected, rejected",
+          "http_cec_index_bulk": "applied, rejected",
+          "http_cec_index_single": "rejected, rejected",
+          "http_ext_audio_mode": "applied, applied, applied, rejected",
+          "http_ext_audio_out": "applied, applied, rejected, rejected",
+          "http_ext_audio_switch": "applied, applied, applied, rejected, rejected",
+          "http_ext_audio_index": "applied, rejected",
+          "http_beep": "applied, rejected",
+          "http_panel_lock": "applied, rejected",
+          "http_lcd_on_time": "applied, applied, applied, applied, applied, rejected",
+          "telnet_routing": "applied, applied",
+          "telnet_presets": "applied, applied, applied, applied, applied, applied, not-applied, applied, not-applied",
+          "telnet_system": "applied, applied",
+          "http_legacy_commands": "unanswered, unanswered, unanswered, unanswered, unanswered, unanswered, unanswered, unanswered, rejected, unanswered, unanswered, unanswered",
+          "telnet_legacy_commands": "rejected, rejected"
+        },
+        "aborted": null,
+        "restored": true,
+        "remaining": []
+      }
     }
   ],
   "answers": {
     "ext-audio-index": [
-      "http/get_ext_audio_status"
+      "http/get_ext_audio_status",
+      "write/http_ext_audio_index"
     ],
     "get-network-fields": [
       "http/get_network"
@@ -682,33 +910,44 @@
       "write/http_cec_index_single"
     ],
     "copy-edid": [
-      "write/http_copy_edid"
+      "write/http_copy_edid",
+      "write/http_set_edid"
     ],
     "edid-range": [
-      "write/http_input_edid"
+      "write/http_input_edid",
+      "write/http_set_edid"
     ],
     "exa-commands": [
       "write/http_exa_enable",
       "write/http_exa_mode",
-      "write/http_exa_source"
+      "write/http_exa_source",
+      "write/http_ext_audio_index",
+      "write/http_ext_audio_mode",
+      "write/http_ext_audio_out",
+      "write/http_ext_audio_switch"
     ],
     "garbage-body": [
       "probe/http_garbage_body"
     ],
     "lcd-codes": [
-      "write/http_lcd"
+      "write/http_lcd",
+      "write/http_lcd_on_time"
     ],
     "login-fail-result": [
       "probe/login_wrong_password"
     ],
     "name-truncation": [
       "write/http_input_name",
-      "write/http_output_name"
+      "write/http_output_name",
+      "write/http_preset_name"
     ],
     "output-mode-text": [
       "write/http_output_hdcp",
       "write/http_output_hdr",
-      "write/http_output_scaler"
+      "write/http_output_scaler",
+      "write/http_hdr_conversion",
+      "write/http_tx_hdcp",
+      "write/http_video_scaler"
     ],
     "push-wording": [
       "write/http_video_switch",
@@ -734,7 +973,8 @@
       "write/telnet_power_s"
     ],
     "telnet-error-codes": [
-      "probe/telnet_errors"
+      "probe/telnet_errors",
+      "write/telnet_legacy_commands"
     ],
     "telnet-multi-session": [
       "probe/telnet_second_session"
@@ -744,10 +984,13 @@
       "write/telnet_power_bare",
       "write/telnet_power_s",
       "write/telnet_routing",
-      "write/telnet_system"
+      "write/telnet_system",
+      "write/telnet_legacy_commands",
+      "write/telnet_presets"
     ],
     "unknown-comhead-result": [
-      "probe/http_unknown_comhead"
+      "probe/http_unknown_comhead",
+      "write/http_legacy_commands"
     ],
     "write-fail-result": [
       "write/http_beep",
@@ -766,7 +1009,23 @@
       "write/http_output_stream",
       "write/http_panel_lock",
       "write/http_power",
-      "write/http_video_switch"
+      "write/http_video_switch",
+      "write/http_arc",
+      "write/http_cec_index_single",
+      "write/http_ext_audio_index",
+      "write/http_ext_audio_mode",
+      "write/http_ext_audio_out",
+      "write/http_ext_audio_switch",
+      "write/http_hdr_conversion",
+      "write/http_lcd_on_time",
+      "write/http_output_audio_mute",
+      "write/http_preset_name",
+      "write/http_preset_recall",
+      "write/http_preset_save",
+      "write/http_set_edid",
+      "write/http_tx_hdcp",
+      "write/http_tx_stream",
+      "write/http_video_scaler"
     ],
     "write-ok-results": [
       "write/http_beep",
@@ -789,7 +1048,43 @@
       "write/http_panel_lock",
       "write/http_power",
       "write/http_video_switch",
-      "write/http_video_switch_all"
+      "write/http_video_switch_all",
+      "write/http_arc",
+      "write/http_ext_audio_index",
+      "write/http_ext_audio_mode",
+      "write/http_ext_audio_out",
+      "write/http_ext_audio_switch",
+      "write/http_hdr_conversion",
+      "write/http_lcd_on_time",
+      "write/http_output_audio_mute",
+      "write/http_preset_name",
+      "write/http_preset_recall",
+      "write/http_preset_save",
+      "write/http_set_edid",
+      "write/http_tx_hdcp",
+      "write/http_tx_stream",
+      "write/http_video_scaler"
+    ],
+    "legacy-unanswered": [
+      "write/http_legacy_commands"
+    ],
+    "preset-set-empty": [
+      "write/http_preset_recall"
+    ],
+    "web-ui-commands": [
+      "write/http_arc",
+      "write/http_ext_audio_index",
+      "write/http_ext_audio_mode",
+      "write/http_ext_audio_out",
+      "write/http_ext_audio_switch",
+      "write/http_hdr_conversion",
+      "write/http_lcd_on_time",
+      "write/http_output_audio_mute",
+      "write/http_preset_name",
+      "write/http_set_edid",
+      "write/http_tx_hdcp",
+      "write/http_tx_stream",
+      "write/http_video_scaler"
     ]
   }
 }

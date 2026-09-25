@@ -1,0 +1,731 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "write/http_tx_hdcp",
+  "title": "Output HDCP, every code (tx hdcp; allhdcp)",
+  "group": "output",
+  "answers": [
+    "write-ok-results",
+    "write-fail-result",
+    "web-ui-commands",
+    "output-mode-text"
+  ],
+  "before": {
+    "power": 1,
+    "beep": 1,
+    "lock": 0,
+    "lcd": 3,
+    "routing": [
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7
+    ],
+    "input_names": [
+      "NES",
+      "SNES",
+      "Sega",
+      "N64",
+      "Switch",
+      "PS3",
+      "Apple",
+      "Switcher"
+    ],
+    "output_names": [
+      "TV",
+      "Sound",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "preset_names": [
+      "Out1",
+      "Out2",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "stream": [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "hdcp": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "hdr": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "scaler": [
+      0,
+      4,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "arc": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "mute": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "edid": [
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36
+    ],
+    "cec_in": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "cec_out": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "exa_mode": 0,
+    "exa_enable": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "exa_source": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "exa_index": 1,
+    "presets": null,
+    "lcd_line": null,
+    "errors": []
+  },
+  "steps": [
+    {
+      "describe": "output 8 hdcp -> 1",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "tx hdcp",
+        "comhead": "tx hdcp",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 53"
+          ],
+          "json": {
+            "comhead": "tx hdcp",
+            "language": 0,
+            "hdcp": [
+              8,
+              1
+            ]
+          },
+          "body_text": "{\"comhead\": \"tx hdcp\", \"language\": 0, \"hdcp\": [8, 1]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoidHggaGRjcCIsInJlc3VsdCI6MX0NCg==",
+          "body_text": "{\"comhead\":\"tx hdcp\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "tx hdcp",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:04:07.272502Z",
+          "elapsed_ms": 231.34
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "hdcp",
+          8,
+          3,
+          1
+        ]
+      ],
+      "outcome": "applied",
+      "status_changes": {
+        "removed": [
+          "output 8 hdcp: follow sink"
+        ],
+        "added": [
+          "output 8 hdcp: hdcp 1.4"
+        ]
+      }
+    },
+    {
+      "describe": "output 8 hdcp -> 2",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "tx hdcp",
+        "comhead": "tx hdcp",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 53"
+          ],
+          "json": {
+            "comhead": "tx hdcp",
+            "language": 0,
+            "hdcp": [
+              8,
+              2
+            ]
+          },
+          "body_text": "{\"comhead\": \"tx hdcp\", \"language\": 0, \"hdcp\": [8, 2]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoidHggaGRjcCIsInJlc3VsdCI6MX0NCg==",
+          "body_text": "{\"comhead\":\"tx hdcp\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "tx hdcp",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:04:11.010822Z",
+          "elapsed_ms": 249.87
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "hdcp",
+          8,
+          1,
+          2
+        ]
+      ],
+      "outcome": "applied",
+      "status_changes": {
+        "removed": [
+          "output 8 hdcp: follow sink"
+        ],
+        "added": [
+          "output 8 hdcp: hdcp 2.2"
+        ]
+      }
+    },
+    {
+      "describe": "output 8 hdcp -> 4",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "tx hdcp",
+        "comhead": "tx hdcp",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 53"
+          ],
+          "json": {
+            "comhead": "tx hdcp",
+            "language": 0,
+            "hdcp": [
+              8,
+              4
+            ]
+          },
+          "body_text": "{\"comhead\": \"tx hdcp\", \"language\": 0, \"hdcp\": [8, 4]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoidHggaGRjcCIsInJlc3VsdCI6MX0NCg==",
+          "body_text": "{\"comhead\":\"tx hdcp\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "tx hdcp",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:04:14.868002Z",
+          "elapsed_ms": 267.51
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "hdcp",
+          8,
+          2,
+          4
+        ]
+      ],
+      "outcome": "applied",
+      "status_changes": {
+        "removed": [
+          "output 8 hdcp: follow sink"
+        ],
+        "added": [
+          "output 8 hdcp: follow source"
+        ]
+      }
+    },
+    {
+      "describe": "output 8 hdcp -> 5",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "tx hdcp",
+        "comhead": "tx hdcp",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 53"
+          ],
+          "json": {
+            "comhead": "tx hdcp",
+            "language": 0,
+            "hdcp": [
+              8,
+              5
+            ]
+          },
+          "body_text": "{\"comhead\": \"tx hdcp\", \"language\": 0, \"hdcp\": [8, 5]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoidHggaGRjcCIsInJlc3VsdCI6MX0NCg==",
+          "body_text": "{\"comhead\":\"tx hdcp\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "tx hdcp",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:04:18.989086Z",
+          "elapsed_ms": 230.09
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "hdcp",
+          8,
+          4,
+          5
+        ]
+      ],
+      "outcome": "applied",
+      "status_changes": {
+        "removed": [
+          "output 8 hdcp: follow sink"
+        ],
+        "added": [
+          "output 8 hdcp: user mode"
+        ]
+      }
+    },
+    {
+      "describe": "output 8 hdcp -> 3 (back to the original)",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "tx hdcp",
+        "comhead": "tx hdcp",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 53"
+          ],
+          "json": {
+            "comhead": "tx hdcp",
+            "language": 0,
+            "hdcp": [
+              8,
+              3
+            ]
+          },
+          "body_text": "{\"comhead\": \"tx hdcp\", \"language\": 0, \"hdcp\": [8, 3]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoidHggaGRjcCIsInJlc3VsdCI6MX0NCg==",
+          "body_text": "{\"comhead\":\"tx hdcp\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "tx hdcp",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:04:22.732559Z",
+          "elapsed_ms": 263.54
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "hdcp",
+          8,
+          5,
+          3
+        ]
+      ],
+      "outcome": "applied",
+      "status_changes": {
+        "removed": [],
+        "added": []
+      }
+    },
+    {
+      "describe": "invalid output 9",
+      "kind": "invalid",
+      "exchange": {
+        "kind": "http",
+        "role": "write-invalid",
+        "label": "tx hdcp",
+        "comhead": "tx hdcp",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 53"
+          ],
+          "json": {
+            "comhead": "tx hdcp",
+            "language": 0,
+            "hdcp": [
+              9,
+              1
+            ]
+          },
+          "body_text": "{\"comhead\": \"tx hdcp\", \"language\": 0, \"hdcp\": [9, 1]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoidHggaGRjcCIsInJlc3VsdCI6MH0NCg==",
+          "body_text": "{\"comhead\":\"tx hdcp\",\"result\":0}\r\n",
+          "json": {
+            "comhead": "tx hdcp",
+            "result": 0
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:04:26.526879Z",
+          "elapsed_ms": 235.15
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    },
+    {
+      "describe": "invalid hdcp 0",
+      "kind": "invalid",
+      "exchange": {
+        "kind": "http",
+        "role": "write-invalid",
+        "label": "tx hdcp",
+        "comhead": "tx hdcp",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 53"
+          ],
+          "json": {
+            "comhead": "tx hdcp",
+            "language": 0,
+            "hdcp": [
+              8,
+              0
+            ]
+          },
+          "body_text": "{\"comhead\": \"tx hdcp\", \"language\": 0, \"hdcp\": [8, 0]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoidHggaGRjcCIsInJlc3VsdCI6MH0NCg==",
+          "body_text": "{\"comhead\":\"tx hdcp\",\"result\":0}\r\n",
+          "json": {
+            "comhead": "tx hdcp",
+            "result": 0
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:04:28.676510Z",
+          "elapsed_ms": 228.7
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    },
+    {
+      "describe": "invalid hdcp 6",
+      "kind": "invalid",
+      "exchange": {
+        "kind": "http",
+        "role": "write-invalid",
+        "label": "tx hdcp",
+        "comhead": "tx hdcp",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 53"
+          ],
+          "json": {
+            "comhead": "tx hdcp",
+            "language": 0,
+            "hdcp": [
+              8,
+              6
+            ]
+          },
+          "body_text": "{\"comhead\": \"tx hdcp\", \"language\": 0, \"hdcp\": [8, 6]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoidHggaGRjcCIsInJlc3VsdCI6MH0NCg==",
+          "body_text": "{\"comhead\":\"tx hdcp\",\"result\":0}\r\n",
+          "json": {
+            "comhead": "tx hdcp",
+            "result": 0
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:04:30.855895Z",
+          "elapsed_ms": 230.13
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    }
+  ],
+  "restored": true,
+  "restore_remaining": [],
+  "findings": {
+    "results_by_outcome": {
+      "applied": [
+        1
+      ],
+      "rejected": [
+        0
+      ]
+    },
+    "status_text": {
+      "1": [
+        "output 8 hdcp: hdcp 1.4"
+      ],
+      "2": [
+        "output 8 hdcp: hdcp 2.2"
+      ],
+      "4": [
+        "output 8 hdcp: follow source"
+      ],
+      "5": [
+        "output 8 hdcp: user mode"
+      ],
+      "3": []
+    }
+  },
+  "mode": "write",
+  "captured_at": "2026-09-25T22:04:34.844438Z"
+}

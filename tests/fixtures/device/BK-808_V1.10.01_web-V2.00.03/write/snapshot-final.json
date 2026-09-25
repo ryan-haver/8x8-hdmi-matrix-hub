@@ -7,7 +7,17 @@
     "power": 1,
     "beep": 1,
     "lock": 0,
-    "routing": null,
+    "lcd": 3,
+    "routing": [
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7
+    ],
     "input_names": [
       "NES",
       "SNES",
@@ -18,7 +28,26 @@
       "Apple",
       "Switcher"
     ],
-    "output_names": null,
+    "output_names": [
+      "TV",
+      "Sound",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "preset_names": [
+      "Out1",
+      "Out2",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
     "stream": [
       1,
       1,
@@ -130,11 +159,24 @@
       7,
       8
     ],
-    "presets": null,
+    "exa_index": 1,
+    "presets": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "saved": false,
+        "routing": null
+      }
+    ],
     "lcd_line": "lcd on 30 seconds",
     "errors": []
   },
   "differences_from_initial": [],
   "mode": "write",
-  "captured_at": "2026-09-25T20:31:55.189192Z"
+  "captured_at": "2026-09-25T22:11:37.267934Z"
 }

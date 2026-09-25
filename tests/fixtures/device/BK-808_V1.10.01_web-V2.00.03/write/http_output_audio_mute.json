@@ -1,0 +1,448 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "write/http_output_audio_mute",
+  "title": "Output audio mute (set output audio mute; allaudiomute)",
+  "group": "output",
+  "answers": [
+    "write-ok-results",
+    "write-fail-result",
+    "web-ui-commands"
+  ],
+  "before": {
+    "power": 1,
+    "beep": 1,
+    "lock": 0,
+    "lcd": 3,
+    "routing": [
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7
+    ],
+    "input_names": [
+      "NES",
+      "SNES",
+      "Sega",
+      "N64",
+      "Switch",
+      "PS3",
+      "Apple",
+      "Switcher"
+    ],
+    "output_names": [
+      "TV",
+      "Sound",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "preset_names": [
+      "Out1",
+      "Out2",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "stream": [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "hdcp": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "hdr": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "scaler": [
+      0,
+      4,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "arc": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "mute": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "edid": [
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36
+    ],
+    "cec_in": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "cec_out": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "exa_mode": 0,
+    "exa_enable": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "exa_source": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "exa_index": 1,
+    "presets": null,
+    "lcd_line": null,
+    "errors": []
+  },
+  "steps": [
+    {
+      "describe": "output 8 mute -> 1",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set output audio mute",
+        "comhead": "set output audio mute",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 67"
+          ],
+          "json": {
+            "comhead": "set output audio mute",
+            "language": 0,
+            "mute": [
+              8,
+              1
+            ]
+          },
+          "body_text": "{\"comhead\": \"set output audio mute\", \"language\": 0, \"mute\": [8, 1]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IG91dHB1dCBhdWRpbyBtdXRlIiwicmVzdWx0IjoxfQ0K",
+          "body_text": "{\"comhead\":\"set output audio mute\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "set output audio mute",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:05:45.578540Z",
+          "elapsed_ms": 229.38
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "mute",
+          8,
+          0,
+          1
+        ]
+      ],
+      "outcome": "applied",
+      "status_changes": {
+        "removed": [
+          "output 8 audio mute: off"
+        ],
+        "added": [
+          "output 8 audio mute: on"
+        ]
+      }
+    },
+    {
+      "describe": "output 8 mute -> 0 (back to the original)",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set output audio mute",
+        "comhead": "set output audio mute",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 67"
+          ],
+          "json": {
+            "comhead": "set output audio mute",
+            "language": 0,
+            "mute": [
+              8,
+              0
+            ]
+          },
+          "body_text": "{\"comhead\": \"set output audio mute\", \"language\": 0, \"mute\": [8, 0]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IG91dHB1dCBhdWRpbyBtdXRlIiwicmVzdWx0IjoxfQ0K",
+          "body_text": "{\"comhead\":\"set output audio mute\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "set output audio mute",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:05:49.340278Z",
+          "elapsed_ms": 230.09
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "mute",
+          8,
+          1,
+          0
+        ]
+      ],
+      "outcome": "applied",
+      "status_changes": {
+        "removed": [],
+        "added": []
+      }
+    },
+    {
+      "describe": "invalid output 9",
+      "kind": "invalid",
+      "exchange": {
+        "kind": "http",
+        "role": "write-invalid",
+        "label": "set output audio mute",
+        "comhead": "set output audio mute",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 67"
+          ],
+          "json": {
+            "comhead": "set output audio mute",
+            "language": 0,
+            "mute": [
+              9,
+              0
+            ]
+          },
+          "body_text": "{\"comhead\": \"set output audio mute\", \"language\": 0, \"mute\": [9, 0]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IG91dHB1dCBhdWRpbyBtdXRlIiwicmVzdWx0IjowfQ0K",
+          "body_text": "{\"comhead\":\"set output audio mute\",\"result\":0}\r\n",
+          "json": {
+            "comhead": "set output audio mute",
+            "result": 0
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:05:53.151445Z",
+          "elapsed_ms": 266.08
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    },
+    {
+      "describe": "invalid mute 2",
+      "kind": "invalid",
+      "exchange": {
+        "kind": "http",
+        "role": "write-invalid",
+        "label": "set output audio mute",
+        "comhead": "set output audio mute",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 67"
+          ],
+          "json": {
+            "comhead": "set output audio mute",
+            "language": 0,
+            "mute": [
+              8,
+              2
+            ]
+          },
+          "body_text": "{\"comhead\": \"set output audio mute\", \"language\": 0, \"mute\": [8, 2]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IG91dHB1dCBhdWRpbyBtdXRlIiwicmVzdWx0IjowfQ0K",
+          "body_text": "{\"comhead\":\"set output audio mute\",\"result\":0}\r\n",
+          "json": {
+            "comhead": "set output audio mute",
+            "result": 0
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:05:55.325304Z",
+          "elapsed_ms": 230.3
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    }
+  ],
+  "restored": true,
+  "restore_remaining": [],
+  "findings": {
+    "results_by_outcome": {
+      "applied": [
+        1
+      ],
+      "rejected": [
+        0
+      ]
+    },
+    "status_text": {
+      "1": [
+        "output 8 audio mute: on"
+      ],
+      "0": []
+    }
+  },
+  "mode": "write",
+  "captured_at": "2026-09-25T22:05:59.270120Z"
+}

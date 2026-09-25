@@ -1,0 +1,655 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "write/http_legacy_commands",
+  "title": "Old hub commands (HIL-09; expected: no answer, no change)",
+  "group": "legacy",
+  "answers": [
+    "legacy-unanswered",
+    "unknown-comhead-result"
+  ],
+  "before": {
+    "power": 1,
+    "beep": 1,
+    "lock": 0,
+    "lcd": 3,
+    "routing": [
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7
+    ],
+    "input_names": [
+      "NES",
+      "SNES",
+      "Sega",
+      "N64",
+      "Switch",
+      "PS3",
+      "Apple",
+      "Switcher"
+    ],
+    "output_names": [
+      "TV",
+      "Sound",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "preset_names": [
+      "Out1",
+      "Out2",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "stream": [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "hdcp": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "hdr": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "scaler": [
+      0,
+      4,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "arc": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "mute": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "edid": [
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36
+    ],
+    "cec_in": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "cec_out": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "exa_mode": 0,
+    "exa_enable": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "exa_source": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "exa_index": 1,
+    "presets": null,
+    "lcd_line": null,
+    "errors": []
+  },
+  "steps": [
+    {
+      "describe": "old 'set output stream' (current value 0)",
+      "kind": "unanswered",
+      "exchange": {
+        "kind": "http",
+        "role": "write-legacy",
+        "label": "set output stream",
+        "comhead": "set output stream",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output stream",
+            "output": 8,
+            "enable": 0
+          },
+          "body_text": "{\"comhead\": \"set output stream\", \"output\": 8, \"enable\": 0}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T22:09:46.550650Z",
+          "elapsed_ms": 5973.2
+        },
+        "outcome": "unanswered"
+      },
+      "diff": [],
+      "outcome": "unanswered"
+    },
+    {
+      "describe": "old 'set output hdcp' (current value 3)",
+      "kind": "unanswered",
+      "exchange": {
+        "kind": "http",
+        "role": "write-legacy",
+        "label": "set output hdcp",
+        "comhead": "set output hdcp",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output hdcp",
+            "output": 8,
+            "hdcp": 3
+          },
+          "body_text": "{\"comhead\": \"set output hdcp\", \"output\": 8, \"hdcp\": 3}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T22:09:54.553687Z",
+          "elapsed_ms": 5973.85
+        },
+        "outcome": "unanswered"
+      },
+      "diff": [],
+      "outcome": "unanswered"
+    },
+    {
+      "describe": "old 'set output hdr' (current value 0)",
+      "kind": "unanswered",
+      "exchange": {
+        "kind": "http",
+        "role": "write-legacy",
+        "label": "set output hdr",
+        "comhead": "set output hdr",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output hdr",
+            "output": 8,
+            "hdr": 0
+          },
+          "body_text": "{\"comhead\": \"set output hdr\", \"output\": 8, \"hdr\": 0}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T22:10:02.632342Z",
+          "elapsed_ms": 5893.87
+        },
+        "outcome": "unanswered"
+      },
+      "diff": [],
+      "outcome": "unanswered"
+    },
+    {
+      "describe": "old 'set output scaler' (current value 0)",
+      "kind": "unanswered",
+      "exchange": {
+        "kind": "http",
+        "role": "write-legacy",
+        "label": "set output scaler",
+        "comhead": "set output scaler",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output scaler",
+            "output": 8,
+            "scaler": 0
+          },
+          "body_text": "{\"comhead\": \"set output scaler\", \"output\": 8, \"scaler\": 0}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T22:10:10.727158Z",
+          "elapsed_ms": 5794.9
+        },
+        "outcome": "unanswered"
+      },
+      "diff": [],
+      "outcome": "unanswered"
+    },
+    {
+      "describe": "old 'set output arc' (current value 0)",
+      "kind": "unanswered",
+      "exchange": {
+        "kind": "http",
+        "role": "write-legacy",
+        "label": "set output arc",
+        "comhead": "set output arc",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output arc",
+            "output": 8,
+            "arc": 0
+          },
+          "body_text": "{\"comhead\": \"set output arc\", \"output\": 8, \"arc\": 0}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T22:10:18.576749Z",
+          "elapsed_ms": 5941.88
+        },
+        "outcome": "unanswered"
+      },
+      "diff": [],
+      "outcome": "unanswered"
+    },
+    {
+      "describe": "old 'set output mute' (current value 0)",
+      "kind": "unanswered",
+      "exchange": {
+        "kind": "http",
+        "role": "write-legacy",
+        "label": "set output mute",
+        "comhead": "set output mute",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output mute",
+            "output": 8,
+            "mute": 0
+          },
+          "body_text": "{\"comhead\": \"set output mute\", \"output\": 8, \"mute\": 0}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T22:10:26.558651Z",
+          "elapsed_ms": 5972.13
+        },
+        "outcome": "unanswered"
+      },
+      "diff": [],
+      "outcome": "unanswered"
+    },
+    {
+      "describe": "old 'set input edid' (current value 36)",
+      "kind": "unanswered",
+      "exchange": {
+        "kind": "http",
+        "role": "write-legacy",
+        "label": "set input edid",
+        "comhead": "set input edid",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set input edid",
+            "input": 8,
+            "edid": 36
+          },
+          "body_text": "{\"comhead\": \"set input edid\", \"input\": 8, \"edid\": 36}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T22:10:34.878660Z",
+          "elapsed_ms": 5642.04
+        },
+        "outcome": "unanswered"
+      },
+      "diff": [],
+      "outcome": "unanswered"
+    },
+    {
+      "describe": "documented 'copy edid' (BE-25)",
+      "kind": "unanswered",
+      "exchange": {
+        "kind": "http",
+        "role": "write-legacy",
+        "label": "copy edid",
+        "comhead": "copy edid",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "copy edid",
+            "input": 8,
+            "output": 1
+          },
+          "body_text": "{\"comhead\": \"copy edid\", \"input\": 8, \"output\": 1}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T22:10:42.655869Z",
+          "elapsed_ms": 5867.63
+        },
+        "outcome": "unanswered"
+      },
+      "diff": [],
+      "outcome": "unanswered"
+    },
+    {
+      "describe": "old 'set lcd on time' {\"time\": N} (captured: result 0)",
+      "kind": "unanswered",
+      "exchange": {
+        "kind": "http",
+        "role": "write-legacy",
+        "label": "set lcd on time",
+        "comhead": "set lcd on time",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 41"
+          ],
+          "json": {
+            "comhead": "set lcd on time",
+            "time": 3
+          },
+          "body_text": "{\"comhead\": \"set lcd on time\", \"time\": 3}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IGxjZCBvbiB0aW1lIiwicmVzdWx0IjowfQ0K",
+          "body_text": "{\"comhead\":\"set lcd on time\",\"result\":0}\r\n",
+          "json": {
+            "comhead": "set lcd on time",
+            "result": 0
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:10:50.593019Z",
+          "elapsed_ms": 250.81
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    },
+    {
+      "describe": "old 'set output exa mode' (current 0)",
+      "kind": "unanswered",
+      "exchange": {
+        "kind": "http",
+        "role": "write-legacy",
+        "label": "set output exa mode",
+        "comhead": "set output exa mode",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output exa mode",
+            "mode": 0
+          },
+          "body_text": "{\"comhead\": \"set output exa mode\", \"mode\": 0}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T22:10:52.743181Z",
+          "elapsed_ms": 5781.0
+        },
+        "outcome": "unanswered"
+      },
+      "diff": [],
+      "outcome": "unanswered"
+    },
+    {
+      "describe": "old 'set output exa' (current)",
+      "kind": "unanswered",
+      "exchange": {
+        "kind": "http",
+        "role": "write-legacy",
+        "label": "set output exa",
+        "comhead": "set output exa",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output exa",
+            "output": 8,
+            "exa": 1
+          },
+          "body_text": "{\"comhead\": \"set output exa\", \"output\": 8, \"exa\": 1}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T22:11:00.567224Z",
+          "elapsed_ms": 5955.88
+        },
+        "outcome": "unanswered"
+      },
+      "diff": [],
+      "outcome": "unanswered"
+    },
+    {
+      "describe": "old 'set output exa in source' (current)",
+      "kind": "unanswered",
+      "exchange": {
+        "kind": "http",
+        "role": "write-legacy",
+        "label": "set output exa in source",
+        "comhead": "set output exa in source",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output exa in source",
+            "output": 8,
+            "input": 8
+          },
+          "body_text": "{\"comhead\": \"set output exa in source\", \"output\": 8, \"input\": 8}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T22:11:08.570876Z",
+          "elapsed_ms": 5957.54
+        },
+        "outcome": "unanswered"
+      },
+      "diff": [],
+      "outcome": "unanswered"
+    }
+  ],
+  "restored": true,
+  "restore_remaining": [],
+  "findings": {
+    "results_by_outcome": {
+      "unanswered": [
+        {
+          "type": "TimeoutError",
+          "message": ""
+        }
+      ],
+      "rejected": [
+        0
+      ]
+    },
+    "legacy": [
+      {
+        "command": "set output stream",
+        "outcome": "unanswered"
+      },
+      {
+        "command": "set output hdcp",
+        "outcome": "unanswered"
+      },
+      {
+        "command": "set output hdr",
+        "outcome": "unanswered"
+      },
+      {
+        "command": "set output scaler",
+        "outcome": "unanswered"
+      },
+      {
+        "command": "set output arc",
+        "outcome": "unanswered"
+      },
+      {
+        "command": "set output mute",
+        "outcome": "unanswered"
+      },
+      {
+        "command": "set input edid",
+        "outcome": "unanswered"
+      },
+      {
+        "command": "copy edid",
+        "outcome": "unanswered"
+      },
+      {
+        "command": "set lcd on time",
+        "outcome": "rejected"
+      },
+      {
+        "command": "set output exa mode",
+        "outcome": "unanswered"
+      },
+      {
+        "command": "set output exa",
+        "outcome": "unanswered"
+      },
+      {
+        "command": "set output exa in source",
+        "outcome": "unanswered"
+      }
+    ]
+  },
+  "mode": "write",
+  "captured_at": "2026-09-25T22:11:18.503360Z"
+}

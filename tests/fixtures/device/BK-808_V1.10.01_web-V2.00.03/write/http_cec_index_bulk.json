@@ -1,7 +1,7 @@
 {
   "format": "orei-hil-capture/1",
   "id": "write/http_cec_index_bulk",
-  "title": "CEC enable, documented array shape",
+  "title": "CEC enable, 8-element array shape",
   "group": "cec-enable",
   "answers": [
     "write-ok-results",
@@ -11,6 +11,7 @@
     "power": 1,
     "beep": 1,
     "lock": 0,
+    "lcd": 3,
     "routing": [
       7,
       7,
@@ -34,6 +35,16 @@
     "output_names": [
       "TV",
       "Sound",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "preset_names": [
+      "Out1",
+      "Out2",
       "Out3",
       "Out4",
       "Out5",
@@ -152,6 +163,7 @@
       7,
       8
     ],
+    "exa_index": 1,
     "presets": null,
     "lcd_line": null,
     "errors": []
@@ -222,8 +234,8 @@
         },
         "error": null,
         "timing": {
-          "started_at": "2026-09-25T20:28:12.434494Z",
-          "elapsed_ms": 252.02
+          "started_at": "2026-09-25T22:06:18.450337Z",
+          "elapsed_ms": 234.41
         },
         "outcome": "applied"
       },
@@ -301,8 +313,8 @@
         },
         "error": null,
         "timing": {
-          "started_at": "2026-09-25T20:28:14.582930Z",
-          "elapsed_ms": 235.02
+          "started_at": "2026-09-25T22:06:20.608319Z",
+          "elapsed_ms": 232.55
         },
         "outcome": "rejected"
       },
@@ -323,5 +335,5 @@
     }
   },
   "mode": "write",
-  "captured_at": "2026-09-25T20:28:20.376140Z"
+  "captured_at": "2026-09-25T22:06:26.481777Z"
 }

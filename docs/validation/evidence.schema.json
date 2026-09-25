@@ -101,7 +101,7 @@
       "required": ["requests", "state_before", "state_after", "state_diff", "device_log", "ws_events", "screenshots", "operator"],
       "properties": {
         "requests": {
-          "description": "HTTP exchanges the client made (api: full request/response; browser: the non-GET calls the page made).",
+          "description": "Exchanges the client made (api: full HTTP request/response; browser: the non-GET calls the page made; uc: Integration-API messages, method = message, path = entity id, closed = WebSocket close code).",
           "type": "array",
           "items": {
             "type": "object",

@@ -110,10 +110,52 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements-uc.txt -e ".[dev]"
 
+      # tests/uc (scripted Remote against the real driver) runs in its own job below.
       - name: pytest
         env:
           USE_MOCK_MATRIX: '1'
-        run: pytest tests/ --ignore=tests/ha --tb=short
+        run: pytest tests/ --ignore=tests/ha --ignore=tests/uc --tb=short
+
+  # Scripted-Remote harness (UC-21, docs/audits/UC_INTEGRATION_AUDIT.md §7): the
+  # matrix simulator -> the hub running src/driver.py exactly as it ships
+  # (run.py legacy mode, mDNS off, free ports) -> tools/uc_remote_sim.py speaking
+  # the Integration API. Known bugs are strict xfails, so a fix without removing
+  # its marker (XPASS) and any regression both fail this job.
+  uc:
+    name: Remote 3 integration (scripted Remote)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-uc.txt
+            pyproject.toml
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-uc.txt -e ".[dev]"
+
+      - name: pytest tests/uc
+        run: mkdir -p build && pytest tests/uc -v --tb=short -rxX --basetemp=build/uc-tmp
+
+      - name: Upload driver and simulator logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: uc-logs
+          path: build/uc-tmp/
+          retention-days: 14
 
   ha-test:
     name: Home Assistant tests
@@ -422,8 +464,9 @@ jobs:
             else await github.rest.issues.createComment({ owner, repo, issue_number, body });
 
   # Proof of function (docs/validation/README.md): every scenario against the
-  # real hub (run.py) + simulator, through the REST API (V2) and through the
-  # web UI in Chromium (V3), in the same pinned Playwright container as `ui`.
+  # real hub (run.py) + simulator, through the REST API (V2), through the web UI
+  # in Chromium (V3, in the same pinned Playwright container as `ui`) and through
+  # the scripted Remote 3 (V3, the hub restarted with the UC integration).
   # Uploads the evidence records and the regenerated LEDGER.md; fails when a
   # scenario fails without a linked open finding, or a feature drops below its
   # recorded level in docs/validation/features.yaml.
@@ -458,8 +501,10 @@ jobs:
       - name: Install validation dependencies
         run: '"$VALIDATE_PYTHON" -m pip install --quiet "pyyaml>=6.0" "jsonschema>=4.20"'
 
-      - name: Run scenarios (simulator, api + browser)
-        run: '"$VALIDATE_PYTHON" -m tools.validate run --client api --client browser --operator automation --out build/validation'
+      - name: Run scenarios (simulator, api + browser + uc)
+        run: >-
+          "$VALIDATE_PYTHON" -m tools.validate run --client api --client browser --client uc
+          --operator automation --out build/validation
 
       - name: Generate ledger
         if: always()
@@ -478,14 +523,14 @@ jobs:
 
       - name: Gate (no unexplained failures, no feature below its recorded level)
         run: >-
-          "$VALIDATE_PYTHON" -m tools.validate check --expect-clients api,browser
+          "$VALIDATE_PYTHON" -m tools.validate check --expect-clients api,browser,uc
           --evidence build/validation/evidence --run-summary build/validation/run-summary.json
 
   publish:
     name: Build and push to GHCR
     # Does not depend on `ui` yet: the visual baselines are new (Phase 0) and
     # must prove stable in CI first. Add `ui` here once they have.
-    needs: [lint, typecheck, test, ha-test, gitleaks]
+    needs: [lint, typecheck, test, uc, ha-test, gitleaks]
     if: >-
       github.event_name != 'pull_request' &&
       (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))

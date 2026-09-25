@@ -11,6 +11,7 @@
     "power": 1,
     "beep": 1,
     "lock": 0,
+    "lcd": 3,
     "routing": [
       7,
       7,
@@ -34,6 +35,16 @@
     "output_names": [
       "TV",
       "Sound",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "preset_names": [
+      "Out1",
+      "Out2",
       "Out3",
       "Out4",
       "Out5",
@@ -152,6 +163,7 @@
       7,
       8
     ],
+    "exa_index": 1,
     "presets": null,
     "lcd_line": null,
     "errors": []
@@ -172,18 +184,18 @@
           "text": "s output 8 in source 8!\r\noutput8->input8\r\n",
           "chunks": [
             {
-              "t_ms": 29.28,
+              "t_ms": 29.5,
               "len": 25
             },
             {
-              "t_ms": 170.92,
+              "t_ms": 170.6,
               "len": 17
             }
           ],
           "completion": "idle",
           "idle_ms": 1000,
-          "first_byte_ms": 29.28,
-          "elapsed_ms": 1170.19,
+          "first_byte_ms": 29.5,
+          "elapsed_ms": 1171.25,
           "analysis": {
             "line_endings": {
               "crlf": 2,
@@ -204,8 +216,8 @@
         },
         "error": null,
         "timing": {
-          "started_at": "2026-09-25T20:30:36.723675Z",
-          "elapsed_ms": 1170.19
+          "started_at": "2026-09-25T22:08:31.584334Z",
+          "elapsed_ms": 1171.25
         },
         "outcome": "applied"
       },
@@ -218,63 +230,6 @@
         ]
       ],
       "outcome": "applied"
-    },
-    {
-      "describe": "output 8 -> input 7 (vendor 's av <in> <out>')",
-      "kind": "write",
-      "exchange": {
-        "kind": "telnet",
-        "role": "write",
-        "label": "s av 7 8",
-        "command": "s av 7 8",
-        "sent_b64": "cyBhdiA3IDghDQo=",
-        "sent_text": "s av 7 8!\r\n",
-        "response": {
-          "body_b64": "cyBhdiA3IDghDQpFMDANCg==",
-          "text": "s av 7 8!\r\nE00\r\n",
-          "chunks": [
-            {
-              "t_ms": 35.26,
-              "len": 11
-            },
-            {
-              "t_ms": 388.81,
-              "len": 5
-            }
-          ],
-          "completion": "idle",
-          "idle_ms": 1000,
-          "first_byte_ms": 35.26,
-          "elapsed_ms": 1390.65,
-          "analysis": {
-            "line_endings": {
-              "crlf": 2,
-              "lf": 0,
-              "cr": 0
-            },
-            "lines": [
-              "s av 7 8!",
-              "E00"
-            ],
-            "ends_with_newline": true,
-            "trailing_without_newline": "",
-            "last_line": "E00",
-            "error_code": "E00",
-            "error_codes_seen": [
-              "E00"
-            ],
-            "iac": []
-          }
-        },
-        "error": null,
-        "timing": {
-          "started_at": "2026-09-25T20:30:40.119176Z",
-          "elapsed_ms": 1390.65
-        },
-        "outcome": "not-applied"
-      },
-      "diff": [],
-      "outcome": "not-applied"
     },
     {
       "describe": "ALL outputs -> input 8",
@@ -291,46 +246,38 @@
           "text": "s output 0 in source 8!\r\noutput1->input8\r\noutput2->input8\r\noutput3->input8\r\noutput4->input8\r\noutput5->input8\r\noutput6->input8\r\noutput7->input8\r\noutput8->input8\r\n",
           "chunks": [
             {
-              "t_ms": 88.9,
+              "t_ms": 30.08,
               "len": 25
             },
             {
-              "t_ms": 188.11,
+              "t_ms": 173.62,
+              "len": 34
+            },
+            {
+              "t_ms": 177.54,
               "len": 17
             },
             {
-              "t_ms": 190.82,
+              "t_ms": 177.7,
               "len": 17
             },
             {
-              "t_ms": 192.92,
+              "t_ms": 180.68,
               "len": 17
             },
             {
-              "t_ms": 196.21,
+              "t_ms": 181.86,
               "len": 17
             },
             {
-              "t_ms": 197.06,
-              "len": 17
-            },
-            {
-              "t_ms": 197.89,
-              "len": 17
-            },
-            {
-              "t_ms": 201.43,
-              "len": 17
-            },
-            {
-              "t_ms": 204.25,
-              "len": 17
+              "t_ms": 189.52,
+              "len": 34
             }
           ],
           "completion": "idle",
           "idle_ms": 1000,
-          "first_byte_ms": 88.9,
-          "elapsed_ms": 1204.46,
+          "first_byte_ms": 30.08,
+          "elapsed_ms": 1189.26,
           "analysis": {
             "line_endings": {
               "crlf": 9,
@@ -358,8 +305,8 @@
         },
         "error": null,
         "timing": {
-          "started_at": "2026-09-25T20:30:43.422927Z",
-          "elapsed_ms": 1204.46
+          "started_at": "2026-09-25T22:08:34.653208Z",
+          "elapsed_ms": 1189.26
         },
         "outcome": "applied"
       },
@@ -416,12 +363,9 @@
     "results_by_outcome": {
       "applied": [
         "output8->input8"
-      ],
-      "not-applied": [
-        "E00"
       ]
     }
   },
   "mode": "write",
-  "captured_at": "2026-09-25T20:30:55.044615Z"
+  "captured_at": "2026-09-25T22:08:46.293373Z"
 }
