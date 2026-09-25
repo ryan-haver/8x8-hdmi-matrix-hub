@@ -168,11 +168,16 @@ def migrate_legacy_file(target_file: Path, filename: str) -> bool:
     ``data/themes.json``, ``data/ui_preferences.json``, etc. will see their
     settings preserved at the new location on first access.
 
-    Migration is atomic and corruption-aware:
+    Migration is atomic, corruption-aware and never destructive (PER-03):
     - If the target exists and is valid JSON, skip migration (idempotent).
-    - If the target exists but is corrupt, delete it and migrate from legacy.
-    - Writes go through ``atomic_write_json`` so a crash mid-migration cannot
-      leave a partial file.
+    - If the target exists but cannot be *read* (permissions, sharing
+      violation, I/O error), leave it untouched and skip migration — an
+      unreadable file is not a corrupt one.
+    - If the target exists but is corrupt (not valid JSON/UTF-8), it is only
+      replaced once a readable, valid legacy file is in hand; the corrupt
+      content is first copied to ``<name>.corrupt`` (best effort).
+    - The target is never deleted. Writes go through ``atomic_write_json`` so
+      a crash mid-migration cannot leave a partial file.
 
     :param target_file: Where the file should live (new location).
     :param filename: Name of the file to migrate.
@@ -180,19 +185,18 @@ def migrate_legacy_file(target_file: Path, filename: str) -> bool:
     """
     import json as _json
 
+    target_corrupt = False
     if target_file.exists():
-        # Validate existing target — if corrupt, allow migration to replace it
         try:
             with open(target_file, encoding="utf-8") as _f:
                 _json.load(_f)
             return False  # Valid target already exists
-        except (_json.JSONDecodeError, OSError):
-            _LOG.warning("Removing corrupt migration target: %s", target_file)
-            try:
-                target_file.unlink()
-            except OSError as exc:
-                _LOG.warning("Could not remove corrupt target %s: %s", target_file, exc)
-                return False
+        except ValueError:  # JSONDecodeError / UnicodeDecodeError
+            target_corrupt = True
+            _LOG.warning("Migration target %s is corrupt; will replace it only from a valid legacy file", target_file)
+        except OSError as exc:
+            _LOG.warning("Cannot read migration target %s (%s); leaving it untouched", target_file, exc)
+            return False
 
     with _persistence_lock:
         if filename in _legacy_migrations:
@@ -203,22 +207,40 @@ def migrate_legacy_file(target_file: Path, filename: str) -> bool:
         legacy_file = legacy_dir / filename
         if legacy_file.exists() and legacy_file.resolve() != target_file.resolve():
             try:
-                target_file.parent.mkdir(parents=True, exist_ok=True)
-                # Validate legacy file before copying
+                # Validate legacy file before touching the target
                 with open(legacy_file, encoding="utf-8") as _f:
                     _legacy_data = _json.load(_f)
+            except (ValueError, OSError) as exc:
+                _LOG.warning("Could not migrate legacy file %s: %s", legacy_file, exc)
+                return False
+            try:
+                target_file.parent.mkdir(parents=True, exist_ok=True)
+                if target_corrupt:
+                    _preserve_corrupt_file(target_file)
                 # Use atomic write for migration target — prevents partial writes
                 from _file_io import atomic_write_json
                 atomic_write_json(target_file, _legacy_data)
-                with _persistence_lock:
-                    _legacy_migrations.add(filename)
-                _LOG.info("Migrated legacy file %s -> %s", legacy_file, target_file)
-                return True
-            except (_json.JSONDecodeError, OSError) as exc:
-                _LOG.warning("Could not migrate legacy file %s: %s", legacy_file, exc)
+            except OSError as exc:
+                _LOG.warning("Could not write migrated file %s: %s", target_file, exc)
                 return False
+            with _persistence_lock:
+                _legacy_migrations.add(filename)
+            _LOG.info("Migrated legacy file %s -> %s", legacy_file, target_file)
+            return True
 
     return False
+
+
+def _preserve_corrupt_file(path: Path) -> None:
+    """Best-effort copy of a corrupt file to ``<name>.corrupt`` before it is replaced."""
+    import shutil
+
+    backup = path.with_name(f"{path.name}.corrupt")
+    try:
+        shutil.copy2(path, backup)
+        _LOG.warning("Saved corrupt %s as %s", path, backup)
+    except OSError as exc:
+        _LOG.warning("Could not back up corrupt %s: %s", path, exc)
 
 
 def reset_data_dir_cache() -> None:
