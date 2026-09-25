@@ -42,10 +42,24 @@ def record_path(root: Path, record: dict[str, Any]) -> Path:
     return root / record["features"][0] / record_filename(record)
 
 
+_SCALAR_LIST = re.compile(r"\[\s*\n\s*((?:[^\[\]{}\n]+,\s*\n\s*)*[^\[\]{}\n]+)\s*\n\s*\]")
+
+
+def dumps(record: dict[str, Any]) -> str:
+    """Indented JSON with short scalar lists (routing, port flags) kept on one line."""
+    text = json.dumps(record, indent=2, sort_keys=False, default=str, ensure_ascii=False)
+
+    def one_line(m: re.Match[str]) -> str:
+        joined = "[" + ", ".join(part.strip() for part in m.group(1).split(",\n")) + "]"
+        return joined if len(joined) <= 100 else m.group(0)
+
+    return _SCALAR_LIST.sub(one_line, text)
+
+
 def write_record(root: Path, record: dict[str, Any]) -> Path:
     path = record_path(root, record)
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(record, indent=2, sort_keys=False, default=str) + "\n", encoding="utf-8")
+    path.write_text(dumps(record) + "\n", encoding="utf-8")
     return path
 
 

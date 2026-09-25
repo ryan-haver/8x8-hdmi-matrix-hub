@@ -64,6 +64,24 @@ def _subset(expected: Any, actual: Any) -> bool:
     return bool(expected == actual)
 
 
+def _is_read(entry: dict[str, Any]) -> bool:
+    cmd = str(entry.get("command", ""))
+    return cmd.startswith(("get ", "preset get", "r ")) or cmd == "status"
+
+
+def compact_log(entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Command log excerpt for the record: every write/CEC command in full; plain reads
+    (which a page load issues by the dozen) without their payload and response, unless
+    they carried a fault or warning."""
+    out = []
+    for e in entries:
+        if _is_read(e) and not e.get("fault") and not e.get("warnings"):
+            out.append({k: e[k] for k in ("t", "channel", "command", "recognised") if k in e})
+        else:
+            out.append(e)
+    return out
+
+
 def simulator_fingerprint() -> dict[str, Any]:
     """Identify the simulator build: hash of its source and seed state (it has no version number)."""
     h = hashlib.sha256()
@@ -486,7 +504,7 @@ class Runner:
                 "state_before": state_before,
                 "state_after": state_after,
                 "state_diff": diff_states(state_before, state_after) if state_before and state_after else [],
-                "device_log": redact(log_excerpt),
+                "device_log": redact(compact_log(log_excerpt)),
                 "ws_events": [
                     {"t_ms": round((e["t"] - t_action) * 1000), "event": e["event"], "data": e["data"]}
                     for e in ws.events
