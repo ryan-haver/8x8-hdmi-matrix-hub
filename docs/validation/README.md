@@ -18,6 +18,7 @@ This directory implements [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md). The short 
 python -m tools.validate list                                   # scenarios, their features, clients, targets
 python -m tools.validate run                                    # every scenario, api client, simulator (V2)
 python -m tools.validate run --client api --client browser      # + the web UI in Chromium (V3); needs `npm ci`
+python -m tools.validate run --client uc                        # the scripted Remote 3 (V3); needs requirements-uc.txt
 python -m tools.validate run --feature F-MTX-001                # only scenarios that prove this feature
 python -m tools.validate run --scenario presets.recall --client browser
 python -m tools.validate ledger --evidence build/validation/evidence --run-summary build/validation/run-summary.json \
@@ -28,7 +29,7 @@ python -m tools.validate ledger                                 # regenerate doc
 
 `run` writes to `build/validation/` by default: `evidence/` (records plus screenshots next to them), `logs/` (hub and simulator logs), and `run-summary.json`. `--record` writes the records into `docs/validation/evidence/` so you can commit them at a milestone.
 
-**Simulator target (`--target sim`, the default).** The runner starts the simulator (`python -m tools.simulator`) and the real hub (`run.py`, modular API-only mode, the same way as `tools/dev_stack.py`) on free ports. The hub data is a fresh copy of `tests/e2e/fixtures/data` (profiles, macros, scenes and so on). Before each scenario, the simulator is reset to its seed state through `PUT /_sim/state`. The hub keeps its session because `/_sim/reset` would trigger BE-04. After a fault-injection scenario the hub is restarted.
+**Simulator target (`--target sim`, the default).** The runner starts the simulator (`python -m tools.simulator`) and the real hub (`run.py`, modular API-only mode, the same way as `tools/dev_stack.py`) on free ports. The hub data is a fresh copy of `tests/e2e/fixtures/data` (profiles, macros, scenes and so on). For the `uc` client the runner restarts the hub the way it ships with the Remote integration enabled (`run.py` legacy mode, `src/driver.py`, integration WebSocket on a free port, mDNS off, `config_state.json` seeded with the simulator's address), and switches back for the next client; the record's `environment.hub.entry` says which. Before each scenario, the simulator is reset to its seed state through `PUT /_sim/state`. The hub keeps its session because `/_sim/reset` would trigger BE-04. After a fault-injection scenario the hub is restarted.
 
 **Hardware target (`--target hardware`).** This runs the same scenarios against a real matrix:
 
@@ -47,7 +48,7 @@ python -m tools.validate run --target hardware --matrix-host 192.168.1.50 --oper
 | Target | Client | Level of a PASS |
 | --- | --- | --- |
 | sim | `api` (REST exactly as HA/Flic/scripts use it) | V2 |
-| sim | `browser` (Chromium drives the shipped web UI), later `ha`, `uc`, `flic` | V3 |
+| sim | `browser` (Chromium drives the shipped web UI), `uc` (the scripted Remote 3, `tools/uc_remote_sim.py`), later `ha`, `flic` | V3 |
 | hardware | any | V4 |
 
 The ledger computes each feature's **level** as the highest level of *fresh passing* evidence. If there is none, it uses the registry's recorded `current`. An open critical or high finding linked to the feature caps it at V1. Evidence is *stale* when a file listed in the scenario's `covers` changed after the evidence commit, or had uncommitted changes when the scenario ran.
@@ -102,7 +103,9 @@ Then add the scenario id to the feature's `scenarios:` in `features.yaml` (a tes
 
 ## Adding a client
 
-Subclass `tools.validate.clients.base.Client`. It needs `name`, the `intents` it can perform, `start(hub)`, `perform(action) -> ActionResult` and `stop()`. Register it in `clients/__init__.py`. Before each action the runner sets `client.context` (`label`, `forwarded_for`, `artifacts_dir`). The `ha`, `uc` and `flic` clients are placeholders that raise `NotImplementedError` naming their work package (WP-D1, WP-B1). A PASS with a real client counts as V3.
+Subclass `tools.validate.clients.base.Client`. It needs `name`, the `intents` it can perform, `start(hub)`, `perform(action) -> ActionResult` and `stop()`. Register it in `clients/__init__.py`. Before each action the runner sets `client.context` (`label`, `forwarded_for`, `artifacts_dir`). Set `hub_mode = "uc"` if the client needs the hub with the Remote integration (the runner then passes `HubInfo.uc_url`). The `ha` and `flic` clients are placeholders that raise `NotImplementedError` naming their work package (WP-D1). A PASS with a real client counts as V3.
+
+**The `uc` client** (`clients/uc.py`, WP-B1) connects like a Remote 3 (authenticate, `connect`, subscribe every entity) and maps intents to entity commands: `route` → `media_player.output_N` `select_source` with the name from the entity's source list, `preset_recall` → `button.preset_N` `push`, `matrix_power` → `switch.matrix_power`, `cec_input`/`cec_output` → `remote.input_N_cec`/`remote.output_N_cec` `send_cmd` (`power_on` → `POWER_ON`), and `uc_command` for any other entity command. A driver that drops the connection is a result, recorded with its close code (`requests[].closed`), not a blocked run; the next action reconnects. Its scenarios are in `tests/validation/scenarios/remote.py`; the protocol and lifecycle cases (setup, standby, outages, renames, the golden entity set) are the pytest suite `tests/uc`.
 
 ## Recorded baseline (C-pre, 2026-09-25)
 

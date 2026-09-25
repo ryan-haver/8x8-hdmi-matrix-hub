@@ -25,3 +25,6 @@ WEB_DRAWERS = (
     "web/js/components/routing-drawer.js",
     "web/js/components/presets-drawer.js",
 )
+
+#: The Unfolded Circle integration as it ships (run.py legacy mode -> src/driver.py on ucapi).
+UC_DRIVER = ("src/driver.py", "driver.json", "requirements-uc.txt", "src/rest_api/__init__.py")

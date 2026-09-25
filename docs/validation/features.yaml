@@ -43,7 +43,7 @@ features:
     click -> simulator state asserted). V2: tests/sim/test_sim_e2e.py::test_switch_changes_simulator_state.'
   evidence: []
   findings: []
-  scenarios: [routing.switch_one]
+  scenarios: [routing.switch_one, remote.select_source]
 - id: F-MTX-002
   area: matrix
   title: Route one input to every output
@@ -82,7 +82,7 @@ features:
   basis: 'V2: tests/sim/test_sim_e2e.py::test_switch_all_and_preset (POST /api/preset/3 -> simulator routing asserted).'
   evidence: []
   findings: []
-  scenarios: [presets.recall]
+  scenarios: [presets.recall, remote.preset_button]
 - id: F-MTX-004
   area: matrix
   title: Save the current routing to a matrix preset
@@ -136,7 +136,7 @@ features:
     the path -> V1); tests/test_rest_api.py TestControlEndpoints (mocked).'
   evidence: []
   findings: []
-  scenarios: [power.standby, power.wake]
+  scenarios: [power.standby, power.wake, remote.power_switch_off]
 - id: F-MTX-007
   area: matrix
   title: Mute / unmute the audio of an output
@@ -606,7 +606,7 @@ features:
     the simulator, no user interface in the path -> V1); tests/test_rest_api.py TestCecCommandEndpoints (mocked).'
   evidence: []
   findings: [BE-14]
-  scenarios: [cec.output_power_on]
+  scenarios: [cec.output_power_on, remote.output_cec_power_on]
 - id: F-CEC-006
   area: cec
   title: Display / soundbar volume and mute over CEC
@@ -2294,7 +2294,7 @@ features:
     env: [UC_ENABLED, UC_INTEGRATION_INTERFACE]
   target: V4
   current: V0
-  basis: No automated test drives the integration as a Remote would (UC-21); no scripted Remote yet.
+  basis: 'Not tested: tests/uc (scripted Remote 3 -> real driver.py -> simulator) disables mDNS. test_handshake.py pins the metadata (driver_version, driver_metadata = driver.json); the advertised driver_url is a strict xfail (UC-03).'
   evidence: []
   findings: [UC-03, UC-11, UC-16]
   scenarios: []
@@ -2305,8 +2305,8 @@ features:
   interfaces:
     uc: [setup_driver, driver_setup_change]
   target: V4
-  current: V0
-  basis: No automated test drives the integration as a Remote would (UC-21); no scripted Remote yet.
+  current: V1
+  basis: 'V1 (capped: BE-02, UC-02, UC-05). tests/uc (scripted Remote 3 -> real driver.py -> simulator): test_setup.py::test_setup_connects_creates_entities_and_saves_the_configuration passes (74 entities, config saved, routing works); test_setup_reports_success is a strict xfail (BE-02: STOP/ERROR after a successful setup).'
   evidence: []
   findings: [BE-02, UC-05, UC-02]
   scenarios: []
@@ -2318,7 +2318,7 @@ features:
     uc: [setup_driver (reconfigure)]
   target: V4
   current: V0
-  basis: No automated test drives the integration as a Remote would (UC-21); no scripted Remote yet.
+  basis: 'tests/uc (scripted Remote 3 -> real driver.py -> simulator): test_setup.py reconfigure tests are strict xfails (UC-05: a bad address breaks a working install; subscriptions are cleared).'
   evidence: []
   findings: [UC-05, BE-10]
   scenarios: []
@@ -2329,11 +2329,11 @@ features:
   interfaces:
     uc: [button.preset_1..8 press]
   target: V4
-  current: V0
-  basis: No automated test drives the integration as a Remote would (UC-21); no scripted Remote yet.
+  current: V3
+  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_commands.py::test_preset_button_recalls_the_preset (simulator routing and ''preset set'' asserted); names are a strict xfail (UC-14). Scenario remote.preset_button.'
   evidence: []
   findings: [UC-14]
-  scenarios: []
+  scenarios: [remote.preset_button]
 - id: F-UC-005
   area: uc
   title: Matrix remote entity with a preset page
@@ -2341,11 +2341,11 @@ features:
   interfaces:
     uc: [remote.orei_matrix send_cmd PRESET_N, remote.orei_matrix on/off]
   target: V4
-  current: V0
-  basis: No automated test drives the integration as a Remote would (UC-21); no scripted Remote yet.
+  current: V3
+  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_commands.py::test_matrix_remote_preset_command_recalls_the_preset and ::test_matrix_remote_rejects_bad_commands_and_stays_connected. Scenario remote.matrix_preset_command.'
   evidence: []
   findings: [UC-12]
-  scenarios: []
+  scenarios: [remote.matrix_preset_command]
 - id: F-UC-006
   area: uc
   title: Per-input CEC remotes (source power, navigation, playback)
@@ -2354,10 +2354,10 @@ features:
     uc: [remote.input_N_cec send_cmd, remote.input_N_cec on/off, send_cmd_sequence]
   target: V4
   current: V1
-  basis: tests/test_driver.py TestCecCommandResolution (command-name mapping only).
+  basis: 'V1 (capped: UC-01). tests/uc (scripted Remote 3 -> real driver.py -> simulator): send_cmd sends the exact CEC frame for all 19 commands (test_commands.py::test_input_cec_remote_send_cmd_sends_exact_frames); on/off/toggle/send_cmd_sequence close the connection with 1011 (strict xfails, UC-01); repeat is ignored (VAL-07). Scenario remote.input_cec_command.'
   evidence: []
-  findings: [UC-01, UC-12]
-  scenarios: []
+  findings: [UC-01, UC-12, VAL-07]
+  scenarios: [remote.input_cec_command]
 - id: F-UC-007
   area: uc
   title: Per-output CEC remotes (TV power, volume)
@@ -2366,10 +2366,10 @@ features:
     uc: [remote.output_N_cec send_cmd, remote.output_N_cec on/off]
   target: V4
   current: V1
-  basis: tests/test_driver.py TestCecCommandResolution (command-name mapping only).
+  basis: 'V1 (capped: UC-01). tests/uc (scripted Remote 3 -> real driver.py -> simulator): send_cmd sends the exact CEC frame for all 12 commands (test_commands.py::test_output_cec_remote_send_cmd_sends_exact_frames); on/off/toggle/send_cmd_sequence close the connection with 1011 (strict xfails, UC-01). Scenarios remote.output_cec_power_on, remote.output_cec_on (known failure UC-01).'
   evidence: []
-  findings: [UC-01, BE-14]
-  scenarios: []
+  findings: [UC-01, BE-14, VAL-07]
+  scenarios: [remote.output_cec_power_on, remote.output_cec_on]
 - id: F-UC-008
   area: uc
   title: Choose an output's source from the Remote (media player source list)
@@ -2377,11 +2377,11 @@ features:
   interfaces:
     uc: [media_player.output_N select_source]
   target: V4
-  current: V0
-  basis: No automated test drives the integration as a Remote would (UC-21); no scripted Remote yet.
+  current: V3
+  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_commands.py::test_select_source_routes_the_output (simulator routing, the exact ''video switch'' and the entity_change asserted); renames are strict xfails (UC-08). Scenarios remote.select_source, remote.unknown_source.'
   evidence: []
   findings: [UC-08, UC-10]
-  scenarios: []
+  scenarios: [remote.select_source, remote.unknown_source]
 - id: F-UC-009
   area: uc
   title: TV power / volume / mute from the output media player
@@ -2389,11 +2389,11 @@ features:
   interfaces:
     uc: [media_player.output_N on/off/toggle/volume/mute]
   target: V4
-  current: V0
-  basis: No automated test drives the integration as a Remote would (UC-21); no scripted Remote yet.
+  current: V3
+  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_commands.py::test_media_player_power_volume_and_mute_send_output_cec (exact CEC frames asserted); the first toggle is a strict xfail (UC-10). Scenario remote.media_player_volume.'
   evidence: []
   findings: [UC-10, BE-24]
-  scenarios: []
+  scenarios: [remote.media_player_volume]
 - id: F-UC-010
   area: uc
   title: Matrix power switch on the Remote
@@ -2401,11 +2401,11 @@ features:
   interfaces:
     uc: [switch.matrix_power on/off/toggle]
   target: V4
-  current: V0
-  basis: No automated test drives the integration as a Remote would (UC-21); no scripted Remote yet.
+  current: V3
+  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_commands.py::test_power_switch_turns_the_matrix_off_and_on (simulator power asserted); sync and 503 while disconnected are strict xfails (UC-09). Scenario remote.power_switch_off.'
   evidence: []
   findings: [UC-09]
-  scenarios: []
+  scenarios: [remote.power_switch_off]
 - id: F-UC-011
   area: uc
   title: Input signal and cable sensors
@@ -2413,8 +2413,8 @@ features:
   interfaces:
     uc: [sensor.input_N_signal, sensor.input_N_cable]
   target: V4
-  current: V0
-  basis: No automated test drives the integration as a Remote would (UC-21); no scripted Remote yet.
+  current: V1
+  basis: 'V1 (capped: UC-04). tests/uc (scripted Remote 3 -> real driver.py -> simulator): test_state_sync.py::test_subscribed_entity_states_reflect_the_device and ::test_signal_and_cable_changes_reach_the_remote pass; made-up values at start-up and during outages are strict xfails (UC-04).'
   evidence: []
   findings: [UC-04, UC-13, BE-03]
   scenarios: []
@@ -2425,8 +2425,8 @@ features:
   interfaces:
     uc: [sensor.output_N_connected, sensor.output_N_cable, sensor.output_N_source]
   target: V4
-  current: V0
-  basis: No automated test drives the integration as a Remote would (UC-21); no scripted Remote yet.
+  current: V1
+  basis: 'V1 (capped: UC-04). tests/uc (scripted Remote 3 -> real driver.py -> simulator): test_state_sync.py::test_subscribed_entity_states_reflect_the_device and ::test_front_panel_routing_change_reaches_the_remote pass; ''Input 0'' pushed during an outage is a strict xfail (UC-04).'
   evidence: []
   findings: [UC-04, UC-13]
   scenarios: []
@@ -2438,9 +2438,9 @@ features:
     uc: [entity state UNAVAILABLE, device state]
   target: V4
   current: V0
-  basis: No automated test drives the integration as a Remote would (UC-21); no scripted Remote yet.
+  basis: 'tests/uc (scripted Remote 3 -> real driver.py -> simulator): test_state_sync.py outage tests are strict xfails (UC-04: device state stays CONNECTED, entities stay live; BE-06: updates never resume after a transient failure).'
   evidence: []
-  findings: [UC-04]
+  findings: [UC-04, BE-06]
   scenarios: []
 - id: F-UC-014
   area: uc
@@ -2449,8 +2449,8 @@ features:
   interfaces:
     uc: [enter_standby, exit_standby]
   target: V4
-  current: V0
-  basis: No automated test drives the integration as a Remote would (UC-21); no scripted Remote yet.
+  current: V1
+  basis: 'V1 (capped: UC-17). tests/uc (scripted Remote 3 -> real driver.py -> simulator): test_lifecycle.py::test_wake_resyncs_with_exactly_one_poller passes; pushes during standby (UC-06) and the matrix disconnect on standby (UC-17) are strict xfails.'
   evidence: []
   findings: [UC-06, UC-17, BE-09]
   scenarios: []
@@ -2462,7 +2462,7 @@ features:
     uc: [entity_change events]
   target: V4
   current: V0
-  basis: No automated test drives the integration as a Remote would (UC-21); no scripted Remote yet.
+  basis: 'tests/uc (scripted Remote 3 -> real driver.py -> simulator): test_state_sync.py::test_unchanged_attributes_are_not_resent is a strict xfail (UC-07).'
   evidence: []
   findings: [UC-07]
   scenarios: []
@@ -2474,7 +2474,7 @@ features:
     uc: [media_player source_list, entity names]
   target: V4
   current: V0
-  basis: No automated test drives the integration as a Remote would (UC-21); no scripted Remote yet.
+  basis: 'tests/uc (scripted Remote 3 -> real driver.py -> simulator): test_state_sync.py rename tests are strict xfails (UC-08).'
   evidence: []
   findings: [UC-08, BE-16]
   scenarios: []
@@ -2486,8 +2486,8 @@ features:
     uc: [driver restart]
     files: [config.json (UC_CONFIG_HOME)]
   target: V4
-  current: V1
-  basis: tests/test_driver.py TestConfigPersistence.
+  current: V3
+  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_entities.py::test_restore_after_restart (same entity ids; a re-subscribing Remote routes without a new setup, simulator asserted). Start-up with a hanging matrix is a strict xfail (UC-19). tests/test_driver.py TestConfigPersistence (unit).'
   evidence: []
   findings: [UC-19]
   scenarios: []
