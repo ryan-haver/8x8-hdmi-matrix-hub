@@ -40,6 +40,7 @@ from ucapi.switch import Commands as SwitchCommands
 from ucapi.switch import Features as SwitchFeatures
 from ucapi.switch import States as SwitchStates
 
+from _process_lock import ProcessLock, ProcessLockError
 from orei_matrix import Events as MatrixEvents
 from orei_matrix import OreiMatrix
 
@@ -312,50 +313,43 @@ def get_output_cec_method(command: str) -> Callable[[int], Coroutine[Any, Any, b
     return send_output_cec
 
 
+_instance_lock: ProcessLock | None = None  # held for the process lifetime
+
+
 def acquire_lock() -> bool:
     """
-    Acquire a file lock to ensure only one instance runs.
+    Acquire the single-instance lock to ensure only one instance runs.
     This prevents mDNS conflicts from multiple instances.
+
+    Backed by an OS advisory lock (BE-18) that the OS drops when the process
+    exits, however it exits — so there are no stale locks and no PID checks.
     """
-    try:
-        # Check if lock file exists and if the process is still running
-        if LOCK_FILE.exists():
-            try:
-                with open(LOCK_FILE) as f:
-                    old_pid = int(f.read().strip())
-                # Check if process is still running (Windows-compatible)
-                import psutil
-
-                if old_pid == os.getpid():
-                    _LOG.info(f"Stale lock file found matching current PID ({old_pid}), removing...")
-                    LOCK_FILE.unlink()
-                elif psutil.pid_exists(old_pid):
-                    _LOG.error(f"Another instance is already running (PID: {old_pid})")
-                    return False
-                else:
-                    _LOG.info(f"Stale lock file found (PID {old_pid} not running), removing...")
-                    LOCK_FILE.unlink()
-            except (ValueError, ImportError):
-                # If we can't check, just remove the stale lock
-                _LOG.info("Removing potentially stale lock file...")
-                LOCK_FILE.unlink()
-
-        # Create lock file with our PID
-        with open(LOCK_FILE, "w") as f:
-            f.write(str(os.getpid()))
-        _LOG.info(f"Lock acquired (PID: {os.getpid()})")
+    global _instance_lock
+    if _instance_lock is not None and _instance_lock.held and _instance_lock.path == LOCK_FILE:
         return True
+    lock = ProcessLock(LOCK_FILE)
+    try:
+        lock.acquire()
+    except ProcessLockError as e:
+        _LOG.error(str(e))
+        return False
     except Exception as e:
         _LOG.error(f"Failed to acquire lock: {e}")
         return False
+    _instance_lock = lock
+    _LOG.info(f"Lock acquired (PID: {os.getpid()})")
+    return True
 
 
 def release_lock():
-    """Release the file lock."""
+    """Release the single-instance lock (idempotent)."""
+    global _instance_lock
+    lock, _instance_lock = _instance_lock, None
+    if lock is None:
+        return
     try:
-        if LOCK_FILE.exists():
-            LOCK_FILE.unlink()
-            _LOG.info("Lock released")
+        lock.release()
+        _LOG.info("Lock released")
     except Exception as e:
         _LOG.warning(f"Failed to release lock: {e}")
 

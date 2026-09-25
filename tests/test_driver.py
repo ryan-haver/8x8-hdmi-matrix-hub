@@ -14,7 +14,6 @@ import os
 import socket
 import sys
 from pathlib import Path
-from unittest.mock import patch
 
 import pytest
 
@@ -43,6 +42,11 @@ def clean_lock_file(tmp_path, monkeypatch):
             pass
 
     yield
+
+    # Drop the OS lock (if a test took it) before removing the file
+    import driver
+
+    driver.release_lock()
 
     # Cleanup after
     if test_lock.exists():
@@ -183,36 +187,41 @@ class TestLockFileManagement:
         release_lock()
         assert not LOCK_FILE.exists()
 
-    def test_acquire_lock_when_already_held(self):
-        """Cannot acquire lock if another instance holds it."""
+    def test_acquire_lock_when_already_held(self, caplog):
+        """Cannot acquire lock while another holder has the OS lock (BE-18)."""
+        from _process_lock import ProcessLock
         from driver import LOCK_FILE, acquire_lock
 
-        # Manually create a lock file with a different PID
-        with open(LOCK_FILE, "w") as f:
-            f.write("99999")  # Fake PID
-
-        # Try to acquire lock
-        with patch("psutil.pid_exists", return_value=True):
+        # Another handle holds the OS lock (the OS refuses a second handle
+        # even within one process, so this stands in for another instance).
+        with ProcessLock(LOCK_FILE):
             result = acquire_lock()
 
-        # Should fail because another "running" instance holds the lock
         assert result is False
+        assert "already running" in caplog.text or "already holds it" in caplog.text
 
     def test_acquire_lock_with_stale_lock(self):
-        """Stale lock file (dead PID) should be removed and lock acquired."""
+        """A leftover lock file nobody holds is simply taken over (no PID checks)."""
         from driver import LOCK_FILE, acquire_lock
 
-        # Create a lock file with a PID that doesn't exist
+        # Leftover file from a crashed instance; its PID may even be live
+        # (PID reuse) — irrelevant, since nobody holds the OS lock.
         with open(LOCK_FILE, "w") as f:
-            f.write("1")  # PID 1 is init, may exist on Linux
+            f.write("1")
 
-        # Mock psutil.pid_exists to return False (stale lock)
-        with patch("psutil.pid_exists", return_value=False):
-            result = acquire_lock()
+        result = acquire_lock()
 
-        # Should succeed by removing stale lock and acquiring new one
         assert result is True
         assert LOCK_FILE.exists()
+        with open(LOCK_FILE) as f:
+            assert int(f.read().strip()) == os.getpid()
+
+    def test_acquire_lock_is_idempotent_for_holder(self):
+        """A second acquire_lock() in the holding process succeeds (retry path in main)."""
+        from driver import acquire_lock
+
+        assert acquire_lock() is True
+        assert acquire_lock() is True
 
     def test_release_lock_when_no_file(self):
         """Releasing lock when no file exists should not raise."""
