@@ -42,7 +42,7 @@ def test_sim_run_produces_evidence(tmp_path: Path, schema_validator):
         expect=(Device("outputs[0].source", equals=7, timeout=0.3),), covers=("src/rest_api/control.py",),
         targets=("sim",),
     )
-    chosen = [scenarios["routing.switch_one"], scenarios["outputs.audio_mute_rejected"],
+    chosen = [scenarios["routing.switch_one"], scenarios["profiles.recall_output_settings"],
               scenarios["failures.bad_input"], impossible]
     runner = Runner(RunOptions(target="sim", clients=("api",), out_dir=tmp_path, findings=load_findings()))
     asyncio.run(runner.run(chosen))
@@ -50,15 +50,15 @@ def test_sim_run_produces_evidence(tmp_path: Path, schema_validator):
 
     ok = out[("routing.switch_one", "api")]
     assert (ok.status, ok.level, ok.gate) == ("pass", "V2", "ok")
-    known = out[("outputs.audio_mute_rejected", "api")]
+    known = out[("profiles.recall_output_settings", "api")]
     assert (known.status, known.gate) == ("fail", "known-failure")
-    assert [c["finding"] for c in known.failed_checks] == ["BE-12"]
+    assert {c["finding"] for c in known.failed_checks} == {"VAL-01"}
     assert out[("failures.bad_input", "api")].status == "pass"
     bad = out[("selftest.impossible", "api")]
     assert (bad.status, bad.gate) == ("fail", "regression")
 
     records = {r.data["scenario"]: r.data for r in iter_records([tmp_path / "evidence"])}
-    assert set(records) == {"routing.switch_one", "outputs.audio_mute_rejected", "failures.bad_input",
+    assert set(records) == {"routing.switch_one", "profiles.recall_output_settings", "failures.bad_input",
                             "selftest.impossible"}
     for rec in records.values():
         assert list(schema_validator.iter_errors(rec)) == [], rec["scenario"]
