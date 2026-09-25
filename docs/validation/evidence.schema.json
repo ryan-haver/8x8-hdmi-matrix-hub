@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ryan-haver/8x8-hdmi-matrix-hub/docs/validation/evidence.schema.json",
+  "title": "Validation evidence record",
+  "description": "One run of one scenario with one client against one target (docs/validation/VALIDATION_PLAN.md §4). Written by `python -m tools.validate run`; hardware records also carry operator observations.",
+  "type": "object",
+  "required": [
+    "schema_version", "features", "level", "scenario", "scenario_kind", "target", "client", "result", "gate",
+    "commit", "timestamp", "operator", "environment", "procedure", "observations", "checks", "findings", "covers"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": 1},
+    "features": {
+      "description": "Feature IDs this record proves (the first one is where the record is stored).",
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^F-[A-Z]+-[0-9]{3}$"}
+    },
+    "level": {
+      "description": "Level a PASS proves: sim+api V2, sim+real client V3, hardware V4 (V5 soak records use the same shape).",
+      "enum": ["V2", "V3", "V4", "V5"]
+    },
+    "scenario": {"type": "string", "pattern": "^[a-z0-9_]+\\.[a-z0-9_]+$"},
+    "scenario_title": {"type": "string"},
+    "scenario_kind": {"enum": ["happy", "failure"]},
+    "target": {"enum": ["sim", "hardware"]},
+    "client": {"enum": ["api", "browser", "ha", "uc", "flic"]},
+    "result": {"enum": ["pass", "fail", "blocked"]},
+    "gate": {
+      "description": "ok; known-failure = every failed check is linked to an open finding; regression = at least one is not (CI fails).",
+      "enum": ["ok", "known-failure", "regression"]
+    },
+    "blocked_reason": {"type": ["string", "null"]},
+    "commit": {
+      "type": "object",
+      "required": ["sha", "short", "dirty", "dirty_files"],
+      "properties": {
+        "sha": {"type": "string"},
+        "short": {"type": "string"},
+        "branch": {"type": "string"},
+        "dirty": {"type": "boolean"},
+        "dirty_files": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "timestamp": {
+      "type": "object",
+      "required": ["started", "finished"],
+      "properties": {
+        "started": {"type": "string", "format": "date-time"},
+        "finished": {"type": "string", "format": "date-time"}
+      }
+    },
+    "operator": {
+      "description": "'automation' for CI/scripted runs; a person's name for hardware attestation.",
+      "type": "string", "minLength": 1
+    },
+    "environment": {
+      "type": "object",
+      "required": ["target", "python", "platform", "hub", "client"],
+      "properties": {
+        "target": {"enum": ["sim", "hardware"]},
+        "python": {"type": "string"},
+        "platform": {"type": "string"},
+        "hub": {
+          "type": "object",
+          "required": ["entry"],
+          "properties": {
+            "entry": {"type": "string"},
+            "version": {"type": ["string", "null"]},
+            "api_version": {"type": ["string", "null"]},
+            "image_digest": {"type": ["string", "null"]},
+            "env": {"type": "object", "additionalProperties": {"type": "string"}}
+          }
+        },
+        "client": {
+          "type": "object",
+          "required": ["name"],
+          "properties": {"name": {"type": "string"}},
+          "additionalProperties": true
+        },
+        "simulator": {
+          "type": "object",
+          "properties": {
+            "source_sha256": {"type": "string"},
+            "seed_state": {"type": "string"},
+            "model": {"type": ["string", "null"]},
+            "firmware_version": {"type": ["string", "null"]},
+            "web_version": {"type": ["string", "null"]}
+          }
+        },
+        "matrix": {
+          "description": "Hardware: what the device reports (model, MCU and web firmware versions, host).",
+          "type": "object"
+        }
+      },
+      "anyOf": [{"required": ["simulator"]}, {"required": ["matrix"]}]
+    },
+    "procedure": {"type": "array", "items": {"type": "string"}},
+    "observations": {
+      "type": "object",
+      "required": ["requests", "state_before", "state_after", "state_diff", "device_log", "ws_events", "screenshots", "operator"],
+      "properties": {
+        "requests": {
+          "description": "HTTP exchanges the client made (api: full request/response; browser: the non-GET calls the page made).",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["method", "path", "status"],
+            "properties": {
+              "method": {"type": "string"},
+              "path": {"type": "string"},
+              "body": {},
+              "status": {"type": ["integer", "null"]},
+              "response": {},
+              "elapsed_ms": {"type": "number"},
+              "via": {"type": "string"}
+            }
+          }
+        },
+        "response_status": {"type": ["integer", "null"]},
+        "hub_reads": {"description": "Read-backs through the hub API made by Hub checks.", "type": "array"},
+        "state_before": {"description": "Device state after setup, before the action (simulator state or hardware readback).", "type": "object"},
+        "state_after": {"type": "object"},
+        "state_diff": {
+          "type": "array",
+          "items": {"type": "object", "required": ["path", "before", "after"]}
+        },
+        "device_log": {"description": "Simulator command log entries caused by the action (empty on hardware).", "type": "array"},
+        "ws_events": {
+          "description": "Every event a /ws observer received; t_ms is relative to the action start.",
+          "type": "array",
+          "items": {"type": "object", "required": ["t_ms", "event"], "properties": {"t_ms": {"type": "number"}, "event": {"type": ["string", "null"]}, "data": {}}}
+        },
+        "screenshots": {"description": "Paths relative to the record's directory.", "type": "array", "items": {"type": "string"}},
+        "client_diagnostics": {},
+        "operator": {
+          "description": "Hardware: answers to the scenario's observe questions.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["question", "answer", "media", "at", "confirmed"],
+            "properties": {
+              "question": {"type": "string"},
+              "answer": {"type": ["string", "null"]},
+              "media": {"type": "array", "items": {"type": "string"}},
+              "at": {"type": "string"},
+              "confirmed": {"type": "boolean"},
+              "source": {"type": "string"}
+            }
+          }
+        },
+        "restore": {"description": "Hardware: snapshot restore report.", "type": ["object", "null"]},
+        "notes": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["description", "result", "detail"],
+        "properties": {
+          "description": {"type": "string"},
+          "result": {"enum": ["pass", "fail", "n/a"]},
+          "detail": {"type": "string"},
+          "finding": {"description": "Set on a failed check: the open register row that explains it.", "type": ["string", "null"]},
+          "linked_finding": {"type": ["string", "null"]},
+          "note": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "findings": {"type": "array", "items": {"type": "string", "pattern": "^[A-Z]+-[0-9]+$"}},
+    "covers": {
+      "description": "Repo paths/globs; the record is stale once any of them changes after `commit`.",
+      "type": "array", "minItems": 1, "items": {"type": "string"}
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"result": {"const": "pass"}}},
+      "then": {"properties": {"gate": {"const": "ok"}}}
+    },
+    {
+      "if": {"properties": {"target": {"const": "hardware"}}},
+      "then": {"properties": {"level": {"enum": ["V4", "V5"]}, "operator": {"not": {"const": "automation"}}}}
+    },
+    {
+      "if": {"properties": {"target": {"const": "sim"}}},
+      "then": {"properties": {"level": {"enum": ["V2", "V3"]}}}
+    }
+  ]
+}

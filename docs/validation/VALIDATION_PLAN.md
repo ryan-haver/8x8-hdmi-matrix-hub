@@ -73,7 +73,7 @@
 
 ## 4. Evidence records
 
-**Location:** `docs/validation/evidence/<feature-id>/<YYYY-MM-DD>-<level>-<shortsha>.json`. Artifacts go alongside: screenshots, logs, and captures in Git LFS. Simulator-level runs in CI are uploaded as artifacts, and only the summary record is committed at milestones.
+**Location:** `docs/validation/evidence/<feature-id>/<YYYY-MM-DD>-<level>-<shortsha>-<scenario>-<client>.json` (the scenario and client suffix keeps records from colliding when several scenarios or clients prove a feature on the same day and commit; a record that proves several features is stored once, under its first feature). Artifacts go alongside, in a folder with the record's name: screenshots, logs, and captures in Git LFS. Simulator-level runs in CI are uploaded as artifacts, and only the summary record is committed at milestones.
 
 **Record fields:** feature ID(s), level, scenario ID, commit SHA, environment (simulator version or matrix firmware versions, hub image digest, client versions: browser, HA, Remote firmware), procedure steps, observations (requests/responses, device state before/after, simulator command log excerpt or device readback, WebSocket events received, screenshots, operator observation text and media), result (pass/fail/blocked), linked findings, operator (`automation` or a named person), timestamp.
 

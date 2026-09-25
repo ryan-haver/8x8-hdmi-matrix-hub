@@ -1,0 +1,705 @@
+{
+  "schema_version": 1,
+  "features": ["F-CEC-001", "F-CEC-007", "F-API-015"],
+  "level": "V2",
+  "scenario": "cec.input_power_on",
+  "scenario_title": "CEC power-on to the source on input 1 (CEC disabled there: the hub enables it first)",
+  "scenario_kind": "happy",
+  "target": "sim",
+  "client": "api",
+  "result": "pass",
+  "gate": "ok",
+  "blocked_reason": null,
+  "commit": {
+    "sha": "d6668000167b259a4a285541fc1bb58fa30ac6f2",
+    "branch": "feat/validation-framework",
+    "dirty_files": ["docs/validation/VALIDATION_PLAN.md", "github/workflows/ci.yml"],
+    "short": "d6668000",
+    "dirty": true
+  },
+  "timestamp": {
+    "started": "2026-09-25T16:49:03.806Z",
+    "finished": "2026-09-25T16:49:03.814Z"
+  },
+  "operator": "automation",
+  "environment": {
+    "target": "sim",
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "hub": {
+      "entry": "run.py (USE_MODULAR=true, UC_ENABLED=false)",
+      "version": "2.10.0",
+      "api_version": "2.10.0",
+      "image_digest": null,
+      "env": {
+        "USE_MODULAR": "true",
+        "UC_ENABLED": "false",
+        "MATRIX_HOST": "127.0.0.1",
+        "MATRIX_PORT": "49213",
+        "OREI_TELNET_PORT": "49214",
+        "TRUST_PROXY_HEADERS": "true",
+        "TRUSTED_PROXY_IPS": "127.0.0.1",
+        "LOG_LEVEL": "INFO"
+      }
+    },
+    "client": {
+      "name": "api",
+      "aiohttp": "3.13.3"
+    },
+    "simulator": {
+      "source_sha256": "d3e1a074b677d04f",
+      "seed_state": "tools/simulator/states/default.json",
+      "model": "BK-808",
+      "firmware_version": "V1.10.02",
+      "web_version": "V2.00.03"
+    }
+  },
+  "procedure": [
+    "reset the simulator to the seed state",
+    "action (api): cec_input(input=1, command='power_on')",
+    "  POST /api/cec/input/1/power_on -> HTTP 200"
+  ],
+  "observations": {
+    "requests": [
+      {
+        "method": "POST",
+        "path": "/api/cec/input/1/power_on",
+        "body": null,
+        "status": 200,
+        "response": {
+          "success": true,
+          "data": {
+            "input": 1,
+            "name": "Input 1",
+            "command": "power_on",
+            "message": "CEC power_on sent to Input 1"
+          },
+          "error": null
+        },
+        "elapsed_ms": 2.6
+      }
+    ],
+    "response_status": 200,
+    "hub_reads": [],
+    "state_before": {
+      "schema_version": 1,
+      "auth": {
+        "user": "Admin",
+        "password": "admin"
+      },
+      "device": {
+        "model": "BK-808",
+        "hostname": "BK-808",
+        "firmware_version": "V1.10.02",
+        "web_version": "V2.00.03",
+        "ip_module_version": "10.01.17",
+        "mac_address": "02:00:00:0B:08:08",
+        "ip_address": "192.168.0.100",
+        "netmask": "255.255.255.0",
+        "gateway": "192.168.0.1",
+        "dhcp": 0,
+        "telnet_port": 23,
+        "tcp_port": 8000
+      },
+      "system": {
+        "power": 1,
+        "beep": 1,
+        "panel_lock": 0,
+        "lcd_timeout": 3,
+        "mode": 0,
+        "baudrate": 115200
+      },
+      "inputs": [
+        {
+          "name": "PS3",
+          "edid": 36,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "AppleTV",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "Computer",
+          "edid": 3,
+          "signal": 0,
+          "cable": 0,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Switch",
+          "edid": 36,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Shield",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "PS5",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "Analogue",
+          "edid": 3,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Input 8",
+          "edid": 36,
+          "signal": 0,
+          "cable": 0,
+          "cec_enabled": 0
+        }
+      ],
+      "outputs": [
+        {
+          "name": "TV",
+          "source": 2,
+          "connected": 1,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 1,
+          "audio_mute": 0,
+          "cec_enabled": 1,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Soundbar",
+          "source": 2,
+          "connected": 1,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 5,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 1,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 3",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 4",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 5",
+          "source": 5,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 6",
+          "source": 6,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 7",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 8",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        }
+      ],
+      "ext_audio": {
+        "mode": 0
+      },
+      "presets": [
+        {
+          "name": "Apple TV",
+          "routing": [2, 2, 2, 2, 2, 2, 2, 2]
+        },
+        {
+          "name": "Shield",
+          "routing": [5, 5, 5, 5, 5, 5, 5, 5]
+        },
+        {
+          "name": "PS5",
+          "routing": [6, 6, 6, 6, 6, 6, 6, 6]
+        },
+        {
+          "name": "Retro",
+          "routing": [7, 7, 1, 1, 1, 1, 1, 1]
+        },
+        {
+          "name": "Preset 5",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8]
+        },
+        {
+          "name": "Preset 6",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8]
+        },
+        {
+          "name": "Preset 7",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8]
+        },
+        {
+          "name": "Preset 8",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8]
+        }
+      ],
+      "routing": [2, 2, 1, 1, 5, 6, 1, 1]
+    },
+    "state_after": {
+      "schema_version": 1,
+      "auth": {
+        "user": "Admin",
+        "password": "admin"
+      },
+      "device": {
+        "model": "BK-808",
+        "hostname": "BK-808",
+        "firmware_version": "V1.10.02",
+        "web_version": "V2.00.03",
+        "ip_module_version": "10.01.17",
+        "mac_address": "02:00:00:0B:08:08",
+        "ip_address": "192.168.0.100",
+        "netmask": "255.255.255.0",
+        "gateway": "192.168.0.1",
+        "dhcp": 0,
+        "telnet_port": 23,
+        "tcp_port": 8000
+      },
+      "system": {
+        "power": 1,
+        "beep": 1,
+        "panel_lock": 0,
+        "lcd_timeout": 3,
+        "mode": 0,
+        "baudrate": 115200
+      },
+      "inputs": [
+        {
+          "name": "PS3",
+          "edid": 36,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "AppleTV",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "Computer",
+          "edid": 3,
+          "signal": 0,
+          "cable": 0,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Switch",
+          "edid": 36,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Shield",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "PS5",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "Analogue",
+          "edid": 3,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Input 8",
+          "edid": 36,
+          "signal": 0,
+          "cable": 0,
+          "cec_enabled": 0
+        }
+      ],
+      "outputs": [
+        {
+          "name": "TV",
+          "source": 2,
+          "connected": 1,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 1,
+          "audio_mute": 0,
+          "cec_enabled": 1,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Soundbar",
+          "source": 2,
+          "connected": 1,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 5,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 1,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 3",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 4",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 5",
+          "source": 5,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 6",
+          "source": 6,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 7",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 8",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        }
+      ],
+      "ext_audio": {
+        "mode": 0
+      },
+      "presets": [
+        {
+          "name": "Apple TV",
+          "routing": [2, 2, 2, 2, 2, 2, 2, 2]
+        },
+        {
+          "name": "Shield",
+          "routing": [5, 5, 5, 5, 5, 5, 5, 5]
+        },
+        {
+          "name": "PS5",
+          "routing": [6, 6, 6, 6, 6, 6, 6, 6]
+        },
+        {
+          "name": "Retro",
+          "routing": [7, 7, 1, 1, 1, 1, 1, 1]
+        },
+        {
+          "name": "Preset 5",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8]
+        },
+        {
+          "name": "Preset 6",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8]
+        },
+        {
+          "name": "Preset 7",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8]
+        },
+        {
+          "name": "Preset 8",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8]
+        }
+      ],
+      "routing": [2, 2, 1, 1, 5, 6, 1, 1]
+    },
+    "state_diff": [
+      {
+        "path": "inputs[0].cec_enabled",
+        "before": 0,
+        "after": 1
+      }
+    ],
+    "device_log": [
+      {
+        "t": 1790354943.809,
+        "channel": "http",
+        "command": "get cec status",
+        "recognised": true
+      },
+      {
+        "t": 1790354943.809,
+        "channel": "http",
+        "command": "set cec index",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "set cec index",
+          "language": 0,
+          "inputindex": [1, 1, 0, 0, 1, 1, 0, 0],
+          "outputindex": [1, 1, 0, 0, 0, 0, 0, 0]
+        },
+        "response": {
+          "comhead": "set cec index",
+          "result": 1
+        },
+        "recognised": true,
+        "mutated": true,
+        "warnings": []
+      },
+      {
+        "t": 1790354943.811,
+        "channel": "http",
+        "command": "cec command",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "cec command",
+          "language": 0,
+          "object": 0,
+          "port": [1, 0, 0, 0, 0, 0, 0, 0],
+          "index": 1
+        },
+        "response": {
+          "comhead": "cec command",
+          "result": 1
+        },
+        "recognised": true,
+        "mutated": false,
+        "warnings": []
+      }
+    ],
+    "ws_events": [
+      {
+        "t_ms": 0,
+        "event": "connected",
+        "data": {
+          "message": "Connected to OREI Matrix WebSocket",
+          "client_count": 1
+        }
+      },
+      {
+        "t_ms": 2,
+        "event": "cec_command",
+        "data": {
+          "type": "input",
+          "port": 1,
+          "command": "power_on",
+          "name": "Input 1",
+          "optimistic": true
+        }
+      }
+    ],
+    "screenshots": [],
+    "client_diagnostics": null,
+    "operator": [],
+    "restore": null,
+    "notes": []
+  },
+  "checks": [
+    {
+      "description": "response HTTP 200",
+      "result": "pass",
+      "detail": "HTTP 200; body {\"success\": true, \"data\": {\"input\": 1, \"name\": \"Input 1\", \"command\": \"power_on\", \"message\": \"CEC power_on sent to Input 1\"}, \"error\": null}",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device received http 'set cec index' with {'inputindex': [1, 1, 0, 0, 1, 1, 0, 0]} exactly 1x",
+      "result": "pass",
+      "detail": "1 matching; http commands seen: [('get cec status', {'comhead': 'get cec status', 'language': 0}), ('set cec index', {'comhead': 'set cec index', 'language': 0, 'inputindex': [1, 1, 0, 0, 1, 1, 0, 0], 'outputindex': [1, 1, 0, 0, 0, 0, 0, 0]}), ('cec command', {'comhead': 'cec command', 'language': 0, 'object': 0, 'port': [1, 0, 0, 0, 0, 0, 0, 0], 'index': 1})]",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device received http 'cec command' with {'object': 0, 'port': [1, 0, 0, 0, 0, 0, 0, 0], 'index': 1} exactly 1x",
+      "result": "pass",
+      "detail": "1 matching; http commands seen: [('get cec status', {'comhead': 'get cec status', 'language': 0}), ('set cec index', {'comhead': 'set cec index', 'language': 0, 'inputindex': [1, 1, 0, 0, 1, 1, 0, 0], 'outputindex': [1, 1, 0, 0, 0, 0, 0, 0]}), ('cec command', {'comhead': 'cec command', 'language': 0, 'object': 0, 'port': [1, 0, 0, 0, 0, 0, 0, 0], 'index': 1})]",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "simulator raised no protocol warnings",
+      "result": "pass",
+      "detail": "none",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device inputs[0].cec_enabled == 1",
+      "result": "pass",
+      "detail": "inputs[0].cec_enabled = 1",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device otherwise unchanged (allowed: inputs[0].cec_enabled)",
+      "result": "pass",
+      "detail": "no other changes",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    }
+  ],
+  "findings": [],
+  "covers": [
+    "run.py",
+    "src/orei_matrix.py",
+    "src/telnet_client.py",
+    "src/_task_supervisor.py",
+    "src/rest_api/app.py",
+    "src/rest_api/utils.py",
+    "src/rest_api/websocket.py",
+    "src/rest_api/cec.py",
+    "src/cec_commands.py"
+  ]
+}

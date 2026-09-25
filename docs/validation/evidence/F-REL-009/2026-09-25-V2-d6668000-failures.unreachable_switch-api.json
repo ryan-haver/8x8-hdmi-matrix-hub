@@ -1,0 +1,1283 @@
+{
+  "schema_version": 1,
+  "features": ["F-REL-009"],
+  "level": "V2",
+  "scenario": "failures.unreachable_switch",
+  "scenario_title": "Matrix unreachable (connections dropped): routing fails visibly, no fabricated state",
+  "scenario_kind": "failure",
+  "target": "sim",
+  "client": "api",
+  "result": "fail",
+  "gate": "known-failure",
+  "blocked_reason": null,
+  "commit": {
+    "sha": "d6668000167b259a4a285541fc1bb58fa30ac6f2",
+    "branch": "feat/validation-framework",
+    "dirty_files": ["docs/validation/VALIDATION_PLAN.md", "github/workflows/ci.yml"],
+    "short": "d6668000",
+    "dirty": true
+  },
+  "timestamp": {
+    "started": "2026-09-25T16:49:03.853Z",
+    "finished": "2026-09-25T16:49:12.889Z"
+  },
+  "operator": "automation",
+  "environment": {
+    "target": "sim",
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "hub": {
+      "entry": "run.py (USE_MODULAR=true, UC_ENABLED=false)",
+      "version": "2.10.0",
+      "api_version": "2.10.0",
+      "image_digest": null,
+      "env": {
+        "USE_MODULAR": "true",
+        "UC_ENABLED": "false",
+        "MATRIX_HOST": "127.0.0.1",
+        "MATRIX_PORT": "49213",
+        "OREI_TELNET_PORT": "49214",
+        "TRUST_PROXY_HEADERS": "true",
+        "TRUSTED_PROXY_IPS": "127.0.0.1",
+        "LOG_LEVEL": "INFO"
+      }
+    },
+    "client": {
+      "name": "api",
+      "aiohttp": "3.13.3"
+    },
+    "simulator": {
+      "source_sha256": "d3e1a074b677d04f",
+      "seed_state": "tools/simulator/states/default.json",
+      "model": "BK-808",
+      "firmware_version": "V1.10.02",
+      "web_version": "V2.00.03"
+    }
+  },
+  "procedure": [
+    "reset the simulator to the seed state",
+    "inject simulator fault {'drop_http': True}",
+    "action (api): route(input=3, output=1)",
+    "  POST /api/switch {'input': 3, 'output': 1} -> HTTP 500",
+    "restart the hub (scenario may leave it in a bad state)"
+  ],
+  "observations": {
+    "requests": [
+      {
+        "method": "POST",
+        "path": "/api/switch",
+        "body": {
+          "input": 3,
+          "output": 1
+        },
+        "status": 500,
+        "response": {
+          "success": false,
+          "data": null,
+          "error": "Failed to switch routing"
+        },
+        "elapsed_ms": 1.4
+      }
+    ],
+    "response_status": 500,
+    "hub_reads": [
+      {
+        "method": "GET",
+        "path": "/api/health",
+        "body": null,
+        "status": 200,
+        "response": {
+          "success": true,
+          "data": {
+            "status": "healthy",
+            "service": "orei-hdmi-matrix",
+            "api_version": "2.10.0",
+            "version": "2.10.0",
+            "matrix": {
+              "configured": true,
+              "connected": true,
+              "host": "127.0.0.1",
+              "last_successful_poll": null,
+              "telnet_connected": true
+            },
+            "runtime": {
+              "uptime_s": 4.2,
+              "loop_lag_ms": 0.0,
+              "loop_lag_max_ms": 16.0,
+              "task_count": 10
+            }
+          },
+          "error": null
+        },
+        "elapsed_ms": 0.6
+      },
+      {
+        "method": "GET",
+        "path": "/api/status",
+        "body": null,
+        "status": 200,
+        "response": {
+          "success": true,
+          "data": {
+            "connected": true,
+            "host": "127.0.0.1",
+            "input_names": {
+              "1": "Input 1",
+              "2": "Input 2",
+              "3": "Input 3",
+              "4": "Input 4",
+              "5": "Input 5",
+              "6": "Input 6",
+              "7": "Input 7",
+              "8": "Input 8"
+            },
+            "output_names": {
+              "1": "Output 1",
+              "2": "Output 2",
+              "3": "Output 3",
+              "4": "Output 4",
+              "5": "Output 5",
+              "6": "Output 6",
+              "7": "Output 7",
+              "8": "Output 8"
+            },
+            "preset_names": {}
+          },
+          "error": null
+        },
+        "elapsed_ms": 0.7
+      }
+    ],
+    "state_before": {
+      "schema_version": 1,
+      "auth": {
+        "user": "Admin",
+        "password": "admin"
+      },
+      "device": {
+        "model": "BK-808",
+        "hostname": "BK-808",
+        "firmware_version": "V1.10.02",
+        "web_version": "V2.00.03",
+        "ip_module_version": "10.01.17",
+        "mac_address": "02:00:00:0B:08:08",
+        "ip_address": "192.168.0.100",
+        "netmask": "255.255.255.0",
+        "gateway": "192.168.0.1",
+        "dhcp": 0,
+        "telnet_port": 23,
+        "tcp_port": 8000
+      },
+      "system": {
+        "power": 1,
+        "beep": 1,
+        "panel_lock": 0,
+        "lcd_timeout": 3,
+        "mode": 0,
+        "baudrate": 115200
+      },
+      "inputs": [
+        {
+          "name": "PS3",
+          "edid": 36,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "AppleTV",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "Computer",
+          "edid": 3,
+          "signal": 0,
+          "cable": 0,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Switch",
+          "edid": 36,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Shield",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "PS5",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "Analogue",
+          "edid": 3,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Input 8",
+          "edid": 36,
+          "signal": 0,
+          "cable": 0,
+          "cec_enabled": 0
+        }
+      ],
+      "outputs": [
+        {
+          "name": "TV",
+          "source": 2,
+          "connected": 1,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 1,
+          "audio_mute": 0,
+          "cec_enabled": 1,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Soundbar",
+          "source": 2,
+          "connected": 1,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 5,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 1,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 3",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 4",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 5",
+          "source": 5,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 6",
+          "source": 6,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 7",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 8",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        }
+      ],
+      "ext_audio": {
+        "mode": 0
+      },
+      "presets": [
+        {
+          "name": "Apple TV",
+          "routing": [2, 2, 2, 2, 2, 2, 2, 2]
+        },
+        {
+          "name": "Shield",
+          "routing": [5, 5, 5, 5, 5, 5, 5, 5]
+        },
+        {
+          "name": "PS5",
+          "routing": [6, 6, 6, 6, 6, 6, 6, 6]
+        },
+        {
+          "name": "Retro",
+          "routing": [7, 7, 1, 1, 1, 1, 1, 1]
+        },
+        {
+          "name": "Preset 5",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8]
+        },
+        {
+          "name": "Preset 6",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8]
+        },
+        {
+          "name": "Preset 7",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8]
+        },
+        {
+          "name": "Preset 8",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8]
+        }
+      ],
+      "routing": [2, 2, 1, 1, 5, 6, 1, 1]
+    },
+    "state_after": {
+      "schema_version": 1,
+      "auth": {
+        "user": "Admin",
+        "password": "admin"
+      },
+      "device": {
+        "model": "BK-808",
+        "hostname": "BK-808",
+        "firmware_version": "V1.10.02",
+        "web_version": "V2.00.03",
+        "ip_module_version": "10.01.17",
+        "mac_address": "02:00:00:0B:08:08",
+        "ip_address": "192.168.0.100",
+        "netmask": "255.255.255.0",
+        "gateway": "192.168.0.1",
+        "dhcp": 0,
+        "telnet_port": 23,
+        "tcp_port": 8000
+      },
+      "system": {
+        "power": 1,
+        "beep": 1,
+        "panel_lock": 0,
+        "lcd_timeout": 3,
+        "mode": 0,
+        "baudrate": 115200
+      },
+      "inputs": [
+        {
+          "name": "PS3",
+          "edid": 36,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "AppleTV",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "Computer",
+          "edid": 3,
+          "signal": 0,
+          "cable": 0,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Switch",
+          "edid": 36,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Shield",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "PS5",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "Analogue",
+          "edid": 3,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Input 8",
+          "edid": 36,
+          "signal": 0,
+          "cable": 0,
+          "cec_enabled": 0
+        }
+      ],
+      "outputs": [
+        {
+          "name": "TV",
+          "source": 2,
+          "connected": 1,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 1,
+          "audio_mute": 0,
+          "cec_enabled": 1,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Soundbar",
+          "source": 2,
+          "connected": 1,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 5,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 1,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 3",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 4",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 5",
+          "source": 5,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 6",
+          "source": 6,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 7",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 8",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        }
+      ],
+      "ext_audio": {
+        "mode": 0
+      },
+      "presets": [
+        {
+          "name": "Apple TV",
+          "routing": [2, 2, 2, 2, 2, 2, 2, 2]
+        },
+        {
+          "name": "Shield",
+          "routing": [5, 5, 5, 5, 5, 5, 5, 5]
+        },
+        {
+          "name": "PS5",
+          "routing": [6, 6, 6, 6, 6, 6, 6, 6]
+        },
+        {
+          "name": "Retro",
+          "routing": [7, 7, 1, 1, 1, 1, 1, 1]
+        },
+        {
+          "name": "Preset 5",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8]
+        },
+        {
+          "name": "Preset 6",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8]
+        },
+        {
+          "name": "Preset 7",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8]
+        },
+        {
+          "name": "Preset 8",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8]
+        }
+      ],
+      "routing": [2, 2, 1, 1, 5, 6, 1, 1]
+    },
+    "state_diff": [],
+    "device_log": [
+      {
+        "t": 1790354943.857,
+        "channel": "http",
+        "command": "video switch",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "video switch",
+          "language": 0,
+          "source": [1, 3]
+        },
+        "fault": "drop_http"
+      },
+      {
+        "t": 1790354947.869,
+        "channel": "http",
+        "command": "get video status",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "get video status",
+          "language": 0
+        },
+        "fault": "drop_http"
+      },
+      {
+        "t": 1790354948.373,
+        "channel": "http",
+        "command": "get video status",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "get video status",
+          "language": 0
+        },
+        "fault": "drop_http"
+      },
+      {
+        "t": 1790354948.376,
+        "channel": "http",
+        "command": "get output status",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "get output status",
+          "language": 0
+        },
+        "fault": "drop_http"
+      },
+      {
+        "t": 1790354948.377,
+        "channel": "http",
+        "command": "get input status",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "get input status",
+          "language": 0
+        },
+        "fault": "drop_http"
+      },
+      {
+        "t": 1790354948.42,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      },
+      {
+        "t": 1790354948.42,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      },
+      {
+        "t": 1790354948.863,
+        "channel": "http",
+        "command": "get video status",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "get video status",
+          "language": 0
+        },
+        "fault": "drop_http"
+      },
+      {
+        "t": 1790354948.865,
+        "channel": "http",
+        "command": "get output status",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "get output status",
+          "language": 0
+        },
+        "fault": "drop_http"
+      },
+      {
+        "t": 1790354948.867,
+        "channel": "http",
+        "command": "get input status",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "get input status",
+          "language": 0
+        },
+        "fault": "drop_http"
+      },
+      {
+        "t": 1790354948.976,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      },
+      {
+        "t": 1790354948.976,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      },
+      {
+        "t": 1790354949.372,
+        "channel": "http",
+        "command": "get video status",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "get video status",
+          "language": 0
+        },
+        "fault": "drop_http"
+      },
+      {
+        "t": 1790354949.373,
+        "channel": "http",
+        "command": "get output status",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "get output status",
+          "language": 0
+        },
+        "fault": "drop_http"
+      },
+      {
+        "t": 1790354949.376,
+        "channel": "http",
+        "command": "get input status",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "get input status",
+          "language": 0
+        },
+        "fault": "drop_http"
+      },
+      {
+        "t": 1790354949.442,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      },
+      {
+        "t": 1790354949.442,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      },
+      {
+        "t": 1790354949.868,
+        "channel": "http",
+        "command": "get video status",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "get video status",
+          "language": 0
+        },
+        "fault": "drop_http"
+      },
+      {
+        "t": 1790354949.871,
+        "channel": "http",
+        "command": "get output status",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "get output status",
+          "language": 0
+        },
+        "fault": "drop_http"
+      },
+      {
+        "t": 1790354949.873,
+        "channel": "http",
+        "command": "get input status",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "get input status",
+          "language": 0
+        },
+        "fault": "drop_http"
+      },
+      {
+        "t": 1790354949.98,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      },
+      {
+        "t": 1790354949.981,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      },
+      {
+        "t": 1790354950.376,
+        "channel": "http",
+        "command": "get video status",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "get video status",
+          "language": 0
+        },
+        "fault": "drop_http"
+      },
+      {
+        "t": 1790354950.377,
+        "channel": "http",
+        "command": "get output status",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "get output status",
+          "language": 0
+        },
+        "fault": "drop_http"
+      },
+      {
+        "t": 1790354950.38,
+        "channel": "http",
+        "command": "get input status",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "get input status",
+          "language": 0
+        },
+        "fault": "drop_http"
+      },
+      {
+        "t": 1790354950.445,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      },
+      {
+        "t": 1790354950.445,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      },
+      {
+        "t": 1790354950.872,
+        "channel": "http",
+        "command": "get video status",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "get video status",
+          "language": 0
+        },
+        "fault": "drop_http"
+      },
+      {
+        "t": 1790354950.875,
+        "channel": "http",
+        "command": "get output status",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "get output status",
+          "language": 0
+        },
+        "fault": "drop_http"
+      },
+      {
+        "t": 1790354950.877,
+        "channel": "http",
+        "command": "get input status",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "get input status",
+          "language": 0
+        },
+        "fault": "drop_http"
+      },
+      {
+        "t": 1790354950.985,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      },
+      {
+        "t": 1790354950.985,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      },
+      {
+        "t": 1790354951.365,
+        "channel": "http",
+        "command": "get video status",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "get video status",
+          "language": 0
+        },
+        "fault": "drop_http"
+      },
+      {
+        "t": 1790354951.368,
+        "channel": "http",
+        "command": "get output status",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "get output status",
+          "language": 0
+        },
+        "fault": "drop_http"
+      },
+      {
+        "t": 1790354951.369,
+        "channel": "http",
+        "command": "get input status",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "get input status",
+          "language": 0
+        },
+        "fault": "drop_http"
+      },
+      {
+        "t": 1790354951.413,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      },
+      {
+        "t": 1790354951.413,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      }
+    ],
+    "ws_events": [
+      {
+        "t_ms": -1,
+        "event": "connected",
+        "data": {
+          "message": "Connected to OREI Matrix WebSocket",
+          "client_count": 1
+        }
+      },
+      {
+        "t_ms": 1,
+        "event": "switch",
+        "data": {
+          "input": 3,
+          "output": 1,
+          "optimistic": true
+        }
+      },
+      {
+        "t_ms": 1,
+        "event": "switch_failed",
+        "data": {
+          "input": 3,
+          "output": 1
+        }
+      },
+      {
+        "t_ms": 4565,
+        "event": "status",
+        "data": {
+          "connected": true,
+          "host": "127.0.0.1",
+          "input_names": {
+            "1": "Input 1",
+            "2": "Input 2",
+            "3": "Input 3",
+            "4": "Input 4",
+            "5": "Input 5",
+            "6": "Input 6",
+            "7": "Input 7",
+            "8": "Input 8"
+          },
+          "output_names": {
+            "1": "Output 1",
+            "2": "Output 2",
+            "3": "Output 3",
+            "4": "Output 4",
+            "5": "Output 5",
+            "6": "Output 6",
+            "7": "Output 7",
+            "8": "Output 8"
+          },
+          "preset_names": {},
+          "inputs": [],
+          "outputs_detail": []
+        }
+      },
+      {
+        "t_ms": 5121,
+        "event": "status",
+        "data": {
+          "connected": true,
+          "host": "127.0.0.1",
+          "input_names": {
+            "1": "Input 1",
+            "2": "Input 2",
+            "3": "Input 3",
+            "4": "Input 4",
+            "5": "Input 5",
+            "6": "Input 6",
+            "7": "Input 7",
+            "8": "Input 8"
+          },
+          "output_names": {
+            "1": "Output 1",
+            "2": "Output 2",
+            "3": "Output 3",
+            "4": "Output 4",
+            "5": "Output 5",
+            "6": "Output 6",
+            "7": "Output 7",
+            "8": "Output 8"
+          },
+          "preset_names": {},
+          "inputs": [],
+          "outputs_detail": []
+        }
+      },
+      {
+        "t_ms": 5586,
+        "event": "status",
+        "data": {
+          "connected": true,
+          "host": "127.0.0.1",
+          "input_names": {
+            "1": "Input 1",
+            "2": "Input 2",
+            "3": "Input 3",
+            "4": "Input 4",
+            "5": "Input 5",
+            "6": "Input 6",
+            "7": "Input 7",
+            "8": "Input 8"
+          },
+          "output_names": {
+            "1": "Output 1",
+            "2": "Output 2",
+            "3": "Output 3",
+            "4": "Output 4",
+            "5": "Output 5",
+            "6": "Output 6",
+            "7": "Output 7",
+            "8": "Output 8"
+          },
+          "preset_names": {},
+          "inputs": [],
+          "outputs_detail": []
+        }
+      },
+      {
+        "t_ms": 6125,
+        "event": "status",
+        "data": {
+          "connected": true,
+          "host": "127.0.0.1",
+          "input_names": {
+            "1": "Input 1",
+            "2": "Input 2",
+            "3": "Input 3",
+            "4": "Input 4",
+            "5": "Input 5",
+            "6": "Input 6",
+            "7": "Input 7",
+            "8": "Input 8"
+          },
+          "output_names": {
+            "1": "Output 1",
+            "2": "Output 2",
+            "3": "Output 3",
+            "4": "Output 4",
+            "5": "Output 5",
+            "6": "Output 6",
+            "7": "Output 7",
+            "8": "Output 8"
+          },
+          "preset_names": {},
+          "inputs": [],
+          "outputs_detail": []
+        }
+      },
+      {
+        "t_ms": 6589,
+        "event": "status",
+        "data": {
+          "connected": true,
+          "host": "127.0.0.1",
+          "input_names": {
+            "1": "Input 1",
+            "2": "Input 2",
+            "3": "Input 3",
+            "4": "Input 4",
+            "5": "Input 5",
+            "6": "Input 6",
+            "7": "Input 7",
+            "8": "Input 8"
+          },
+          "output_names": {
+            "1": "Output 1",
+            "2": "Output 2",
+            "3": "Output 3",
+            "4": "Output 4",
+            "5": "Output 5",
+            "6": "Output 6",
+            "7": "Output 7",
+            "8": "Output 8"
+          },
+          "preset_names": {},
+          "inputs": [],
+          "outputs_detail": []
+        }
+      },
+      {
+        "t_ms": 7130,
+        "event": "status",
+        "data": {
+          "connected": true,
+          "host": "127.0.0.1",
+          "input_names": {
+            "1": "Input 1",
+            "2": "Input 2",
+            "3": "Input 3",
+            "4": "Input 4",
+            "5": "Input 5",
+            "6": "Input 6",
+            "7": "Input 7",
+            "8": "Input 8"
+          },
+          "output_names": {
+            "1": "Output 1",
+            "2": "Output 2",
+            "3": "Output 3",
+            "4": "Output 4",
+            "5": "Output 5",
+            "6": "Output 6",
+            "7": "Output 7",
+            "8": "Output 8"
+          },
+          "preset_names": {},
+          "inputs": [],
+          "outputs_detail": []
+        }
+      },
+      {
+        "t_ms": 7558,
+        "event": "status",
+        "data": {
+          "connected": true,
+          "host": "127.0.0.1",
+          "input_names": {
+            "1": "Input 1",
+            "2": "Input 2",
+            "3": "Input 3",
+            "4": "Input 4",
+            "5": "Input 5",
+            "6": "Input 6",
+            "7": "Input 7",
+            "8": "Input 8"
+          },
+          "output_names": {
+            "1": "Output 1",
+            "2": "Output 2",
+            "3": "Output 3",
+            "4": "Output 4",
+            "5": "Output 5",
+            "6": "Output 6",
+            "7": "Output 7",
+            "8": "Output 8"
+          },
+          "preset_names": {},
+          "inputs": [],
+          "outputs_detail": []
+        }
+      }
+    ],
+    "screenshots": [],
+    "client_diagnostics": null,
+    "operator": [],
+    "restore": null,
+    "notes": []
+  },
+  "checks": [
+    {
+      "description": "response HTTP >= 500 and body contains {'success': False}",
+      "result": "pass",
+      "detail": "HTTP 500; body {\"success\": false, \"data\": null, \"error\": \"Failed to switch routing\"}",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device outputs[0].source == 2",
+      "result": "pass",
+      "detail": "outputs[0].source = 2",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device otherwise unchanged",
+      "result": "pass",
+      "detail": "no other changes",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "WebSocket event 'switch_failed' with {'input': 3}",
+      "result": "pass",
+      "detail": "events after the action: ['switch', 'switch_failed']",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "hub GET /api/health -> data.matrix.connected == False (HTTP 200)",
+      "result": "fail",
+      "detail": "HTTP 200; data.matrix.connected = true",
+      "finding": "BE-04",
+      "linked_finding": "BE-04",
+      "note": null
+    },
+    {
+      "description": "hub GET /api/status -> success == False",
+      "result": "fail",
+      "detail": "HTTP 200; success = true",
+      "finding": "VAL-04",
+      "linked_finding": "VAL-04",
+      "note": "must not answer 200 with connected=true and default names while the matrix is unreachable"
+    }
+  ],
+  "findings": ["BE-04", "VAL-04"],
+  "covers": [
+    "run.py",
+    "src/orei_matrix.py",
+    "src/telnet_client.py",
+    "src/_task_supervisor.py",
+    "src/rest_api/app.py",
+    "src/rest_api/utils.py",
+    "src/rest_api/websocket.py",
+    "src/rest_api/control.py",
+    "src/rest_api/core.py",
+    "src/rest_api/core.py"
+  ]
+}

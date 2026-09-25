@@ -1,0 +1,1754 @@
+{
+  "schema_version": 1,
+  "features": ["F-MTX-001", "F-UI-002"],
+  "level": "V3",
+  "scenario": "routing.switch_one",
+  "scenario_title": "Route input 6 to output 1; nothing else changes",
+  "scenario_kind": "happy",
+  "target": "sim",
+  "client": "browser",
+  "result": "pass",
+  "gate": "ok",
+  "blocked_reason": null,
+  "commit": {
+    "sha": "d6668000167b259a4a285541fc1bb58fa30ac6f2",
+    "branch": "feat/validation-framework",
+    "dirty_files": ["docs/validation/VALIDATION_PLAN.md", "github/workflows/ci.yml"],
+    "short": "d6668000",
+    "dirty": true
+  },
+  "timestamp": {
+    "started": "2026-09-25T16:49:22.603Z",
+    "finished": "2026-09-25T16:49:24.041Z"
+  },
+  "operator": "automation",
+  "environment": {
+    "target": "sim",
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "hub": {
+      "entry": "run.py (USE_MODULAR=true, UC_ENABLED=false)",
+      "version": "2.10.0",
+      "api_version": "2.10.0",
+      "image_digest": null,
+      "env": {
+        "USE_MODULAR": "true",
+        "UC_ENABLED": "false",
+        "MATRIX_HOST": "127.0.0.1",
+        "MATRIX_PORT": "49213",
+        "OREI_TELNET_PORT": "49214",
+        "TRUST_PROXY_HEADERS": "true",
+        "TRUSTED_PROXY_IPS": "127.0.0.1",
+        "LOG_LEVEL": "INFO"
+      }
+    },
+    "client": {
+      "name": "browser",
+      "browser": "chromium 153.0.8010.12",
+      "driver": "Playwright (@playwright/test, package-lock.json)"
+    },
+    "simulator": {
+      "source_sha256": "d3e1a074b677d04f",
+      "seed_state": "tools/simulator/states/default.json",
+      "model": "BK-808",
+      "firmware_version": "V1.10.02",
+      "web_version": "V2.00.03"
+    }
+  },
+  "procedure": [
+    "reset the simulator to the seed state",
+    "action (browser): route(input=6, output=1)",
+    "  open /ui and wait until the app has loaded its data",
+    "  click the matrix grid cell input 6 / output 1",
+    "  the page sent POST /api/output/1/source -> HTTP 200"
+  ],
+  "observations": {
+    "requests": [
+      {
+        "method": "POST",
+        "path": "/api/output/1/source",
+        "body": "{\"input\":6}",
+        "status": 200,
+        "via": "page"
+      }
+    ],
+    "response_status": 200,
+    "hub_reads": [
+      {
+        "method": "GET",
+        "path": "/api/status",
+        "body": null,
+        "status": 200,
+        "response": {
+          "success": true,
+          "data": {
+            "connected": true,
+            "host": "127.0.0.1",
+            "routing": {
+              "1": 6,
+              "2": 2,
+              "3": 1,
+              "4": 1,
+              "5": 5,
+              "6": 6,
+              "7": 1,
+              "8": 1
+            },
+            "outputs": [6, 2, 1, 1, 5, 6, 1, 1],
+            "input_names": {
+              "1": "PS3",
+              "2": "AppleTV",
+              "3": "Computer",
+              "4": "Switch",
+              "5": "Shield",
+              "6": "PS5",
+              "7": "Analogue",
+              "8": "Input 8"
+            },
+            "output_names": {
+              "1": "TV",
+              "2": "Soundbar",
+              "3": "Output 3",
+              "4": "Output 4",
+              "5": "Output 5",
+              "6": "Output 6",
+              "7": "Output 7",
+              "8": "Output 8"
+            },
+            "preset_names": {
+              "1": "Apple TV",
+              "2": "Shield",
+              "3": "PS5",
+              "4": "Retro",
+              "5": "Preset 5",
+              "6": "Preset 6",
+              "7": "Preset 7",
+              "8": "Preset 8"
+            }
+          },
+          "error": null
+        },
+        "elapsed_ms": 1.6
+      }
+    ],
+    "state_before": {
+      "schema_version": 1,
+      "auth": {
+        "user": "Admin",
+        "password": "admin"
+      },
+      "device": {
+        "model": "BK-808",
+        "hostname": "BK-808",
+        "firmware_version": "V1.10.02",
+        "web_version": "V2.00.03",
+        "ip_module_version": "10.01.17",
+        "mac_address": "02:00:00:0B:08:08",
+        "ip_address": "192.168.0.100",
+        "netmask": "255.255.255.0",
+        "gateway": "192.168.0.1",
+        "dhcp": 0,
+        "telnet_port": 23,
+        "tcp_port": 8000
+      },
+      "system": {
+        "power": 1,
+        "beep": 1,
+        "panel_lock": 0,
+        "lcd_timeout": 3,
+        "mode": 0,
+        "baudrate": 115200
+      },
+      "inputs": [
+        {
+          "name": "PS3",
+          "edid": 36,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "AppleTV",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "Computer",
+          "edid": 3,
+          "signal": 0,
+          "cable": 0,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Switch",
+          "edid": 36,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Shield",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "PS5",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "Analogue",
+          "edid": 3,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Input 8",
+          "edid": 36,
+          "signal": 0,
+          "cable": 0,
+          "cec_enabled": 0
+        }
+      ],
+      "outputs": [
+        {
+          "name": "TV",
+          "source": 2,
+          "connected": 1,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 1,
+          "audio_mute": 0,
+          "cec_enabled": 1,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Soundbar",
+          "source": 2,
+          "connected": 1,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 5,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 1,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 3",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 4",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 5",
+          "source": 5,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 6",
+          "source": 6,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 7",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 8",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        }
+      ],
+      "ext_audio": {
+        "mode": 0
+      },
+      "presets": [
+        {
+          "name": "Apple TV",
+          "routing": [2, 2, 2, 2, 2, 2, 2, 2]
+        },
+        {
+          "name": "Shield",
+          "routing": [5, 5, 5, 5, 5, 5, 5, 5]
+        },
+        {
+          "name": "PS5",
+          "routing": [6, 6, 6, 6, 6, 6, 6, 6]
+        },
+        {
+          "name": "Retro",
+          "routing": [7, 7, 1, 1, 1, 1, 1, 1]
+        },
+        {
+          "name": "Preset 5",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8]
+        },
+        {
+          "name": "Preset 6",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8]
+        },
+        {
+          "name": "Preset 7",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8]
+        },
+        {
+          "name": "Preset 8",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8]
+        }
+      ],
+      "routing": [2, 2, 1, 1, 5, 6, 1, 1]
+    },
+    "state_after": {
+      "schema_version": 1,
+      "auth": {
+        "user": "Admin",
+        "password": "admin"
+      },
+      "device": {
+        "model": "BK-808",
+        "hostname": "BK-808",
+        "firmware_version": "V1.10.02",
+        "web_version": "V2.00.03",
+        "ip_module_version": "10.01.17",
+        "mac_address": "02:00:00:0B:08:08",
+        "ip_address": "192.168.0.100",
+        "netmask": "255.255.255.0",
+        "gateway": "192.168.0.1",
+        "dhcp": 0,
+        "telnet_port": 23,
+        "tcp_port": 8000
+      },
+      "system": {
+        "power": 1,
+        "beep": 1,
+        "panel_lock": 0,
+        "lcd_timeout": 3,
+        "mode": 0,
+        "baudrate": 115200
+      },
+      "inputs": [
+        {
+          "name": "PS3",
+          "edid": 36,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "AppleTV",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "Computer",
+          "edid": 3,
+          "signal": 0,
+          "cable": 0,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Switch",
+          "edid": 36,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Shield",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "PS5",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "Analogue",
+          "edid": 3,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Input 8",
+          "edid": 36,
+          "signal": 0,
+          "cable": 0,
+          "cec_enabled": 0
+        }
+      ],
+      "outputs": [
+        {
+          "name": "TV",
+          "source": 6,
+          "connected": 1,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 1,
+          "audio_mute": 0,
+          "cec_enabled": 1,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Soundbar",
+          "source": 2,
+          "connected": 1,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 5,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 1,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 3",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 4",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 5",
+          "source": 5,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 6",
+          "source": 6,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 7",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 8",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 3,
+          "scaler": 1,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        }
+      ],
+      "ext_audio": {
+        "mode": 0
+      },
+      "presets": [
+        {
+          "name": "Apple TV",
+          "routing": [2, 2, 2, 2, 2, 2, 2, 2]
+        },
+        {
+          "name": "Shield",
+          "routing": [5, 5, 5, 5, 5, 5, 5, 5]
+        },
+        {
+          "name": "PS5",
+          "routing": [6, 6, 6, 6, 6, 6, 6, 6]
+        },
+        {
+          "name": "Retro",
+          "routing": [7, 7, 1, 1, 1, 1, 1, 1]
+        },
+        {
+          "name": "Preset 5",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8]
+        },
+        {
+          "name": "Preset 6",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8]
+        },
+        {
+          "name": "Preset 7",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8]
+        },
+        {
+          "name": "Preset 8",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8]
+        }
+      ],
+      "routing": [6, 2, 1, 1, 5, 6, 1, 1]
+    },
+    "state_diff": [
+      {
+        "path": "outputs[0].source",
+        "before": 2,
+        "after": 6
+      },
+      {
+        "path": "routing[0]",
+        "before": 2,
+        "after": 6
+      }
+    ],
+    "device_log": [
+      {
+        "t": 1790354962.766,
+        "channel": "http",
+        "command": "get video status",
+        "recognised": true
+      },
+      {
+        "t": 1790354962.766,
+        "channel": "http",
+        "command": "get output status",
+        "recognised": true
+      },
+      {
+        "t": 1790354962.766,
+        "channel": "http",
+        "command": "get input status",
+        "recognised": true
+      },
+      {
+        "t": 1790354962.773,
+        "channel": "http",
+        "command": "get status",
+        "recognised": true
+      },
+      {
+        "t": 1790354962.774,
+        "channel": "http",
+        "command": "get video status",
+        "recognised": true
+      },
+      {
+        "t": 1790354962.775,
+        "channel": "http",
+        "command": "get video status",
+        "recognised": true
+      },
+      {
+        "t": 1790354962.775,
+        "channel": "http",
+        "command": "get video status",
+        "recognised": true
+      },
+      {
+        "t": 1790354962.776,
+        "channel": "http",
+        "command": "get video status",
+        "recognised": true
+      },
+      {
+        "t": 1790354962.776,
+        "channel": "http",
+        "command": "get output status",
+        "recognised": true
+      },
+      {
+        "t": 1790354962.777,
+        "channel": "http",
+        "command": "get output status",
+        "recognised": true
+      },
+      {
+        "t": 1790354962.777,
+        "channel": "http",
+        "command": "get output status",
+        "recognised": true
+      },
+      {
+        "t": 1790354962.777,
+        "channel": "http",
+        "command": "get input status",
+        "recognised": true
+      },
+      {
+        "t": 1790354962.777,
+        "channel": "http",
+        "command": "get input status",
+        "recognised": true
+      },
+      {
+        "t": 1790354962.777,
+        "channel": "http",
+        "command": "get input status",
+        "recognised": true
+      },
+      {
+        "t": 1790354962.852,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      },
+      {
+        "t": 1790354962.853,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      },
+      {
+        "t": 1790354962.853,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      },
+      {
+        "t": 1790354962.854,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      },
+      {
+        "t": 1790354962.855,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      },
+      {
+        "t": 1790354962.855,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      },
+      {
+        "t": 1790354962.856,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      },
+      {
+        "t": 1790354962.857,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      },
+      {
+        "t": 1790354963.431,
+        "channel": "http",
+        "command": "video switch",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "video switch",
+          "language": 0,
+          "source": [1, 6]
+        },
+        "response": {
+          "comhead": "video switch",
+          "result": 1
+        },
+        "recognised": true,
+        "mutated": true,
+        "warnings": []
+      },
+      {
+        "t": 1790354964.04,
+        "channel": "http",
+        "command": "get video status",
+        "recognised": true
+      }
+    ],
+    "ws_events": [
+      {
+        "t_ms": 0,
+        "event": "connected",
+        "data": {
+          "message": "Connected to OREI Matrix WebSocket",
+          "client_count": 1
+        }
+      },
+      {
+        "t_ms": 249,
+        "event": "status",
+        "data": {
+          "connected": true,
+          "host": "127.0.0.1",
+          "routing": {
+            "1": 2,
+            "2": 2,
+            "3": 1,
+            "4": 1,
+            "5": 5,
+            "6": 6,
+            "7": 1,
+            "8": 1
+          },
+          "outputs": [2, 2, 1, 1, 5, 6, 1, 1],
+          "input_names": {
+            "1": "PS3",
+            "2": "AppleTV",
+            "3": "Computer",
+            "4": "Switch",
+            "5": "Shield",
+            "6": "PS5",
+            "7": "Analogue",
+            "8": "Input 8"
+          },
+          "output_names": {
+            "1": "TV",
+            "2": "Soundbar",
+            "3": "Output 3",
+            "4": "Output 4",
+            "5": "Output 5",
+            "6": "Output 6",
+            "7": "Output 7",
+            "8": "Output 8"
+          },
+          "preset_names": {
+            "1": "Apple TV",
+            "2": "Shield",
+            "3": "PS5",
+            "4": "Retro",
+            "5": "Preset 5",
+            "6": "Preset 6",
+            "7": "Preset 7",
+            "8": "Preset 8"
+          },
+          "inputs": [
+            {
+              "number": 1,
+              "name": "PS3",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 2,
+              "name": "AppleTV",
+              "inactive": false,
+              "signalActive": true,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 3,
+              "name": "Computer",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": false,
+              "sourceDetected": false,
+              "edid": 3
+            },
+            {
+              "number": 4,
+              "name": "Switch",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 5,
+              "name": "Shield",
+              "inactive": false,
+              "signalActive": true,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 6,
+              "name": "PS5",
+              "inactive": false,
+              "signalActive": true,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 7,
+              "name": "Analogue",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 3
+            },
+            {
+              "number": 8,
+              "name": "Input 8",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": false,
+              "sourceDetected": false,
+              "edid": 36
+            }
+          ],
+          "outputs_detail": [
+            {
+              "number": 1,
+              "name": "Output 1",
+              "connected": true,
+              "cableConnected": true,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 1,
+              "arc": true
+            },
+            {
+              "number": 2,
+              "name": "Output 2",
+              "connected": true,
+              "cableConnected": true,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 5,
+              "arc": false
+            },
+            {
+              "number": 3,
+              "name": "Output 3",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 4,
+              "name": "Output 4",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 5,
+              "name": "Output 5",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 6,
+              "name": "Output 6",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 7,
+              "name": "Output 7",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 8,
+              "name": "Output 8",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 1,
+              "arc": false
+            }
+          ]
+        }
+      },
+      {
+        "t_ms": 250,
+        "event": "status",
+        "data": {
+          "connected": true,
+          "host": "127.0.0.1",
+          "routing": {
+            "1": 2,
+            "2": 2,
+            "3": 1,
+            "4": 1,
+            "5": 5,
+            "6": 6,
+            "7": 1,
+            "8": 1
+          },
+          "outputs": [2, 2, 1, 1, 5, 6, 1, 1],
+          "input_names": {
+            "1": "PS3",
+            "2": "AppleTV",
+            "3": "Computer",
+            "4": "Switch",
+            "5": "Shield",
+            "6": "PS5",
+            "7": "Analogue",
+            "8": "Input 8"
+          },
+          "output_names": {
+            "1": "TV",
+            "2": "Soundbar",
+            "3": "Output 3",
+            "4": "Output 4",
+            "5": "Output 5",
+            "6": "Output 6",
+            "7": "Output 7",
+            "8": "Output 8"
+          },
+          "preset_names": {
+            "1": "Apple TV",
+            "2": "Shield",
+            "3": "PS5",
+            "4": "Retro",
+            "5": "Preset 5",
+            "6": "Preset 6",
+            "7": "Preset 7",
+            "8": "Preset 8"
+          },
+          "inputs": [
+            {
+              "number": 1,
+              "name": "PS3",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 2,
+              "name": "AppleTV",
+              "inactive": false,
+              "signalActive": true,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 3,
+              "name": "Computer",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": false,
+              "sourceDetected": false,
+              "edid": 3
+            },
+            {
+              "number": 4,
+              "name": "Switch",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 5,
+              "name": "Shield",
+              "inactive": false,
+              "signalActive": true,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 6,
+              "name": "PS5",
+              "inactive": false,
+              "signalActive": true,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 7,
+              "name": "Analogue",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 3
+            },
+            {
+              "number": 8,
+              "name": "Input 8",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": false,
+              "sourceDetected": false,
+              "edid": 36
+            }
+          ],
+          "outputs_detail": [
+            {
+              "number": 1,
+              "name": "Output 1",
+              "connected": true,
+              "cableConnected": true,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 1,
+              "arc": true
+            },
+            {
+              "number": 2,
+              "name": "Output 2",
+              "connected": true,
+              "cableConnected": true,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 5,
+              "arc": false
+            },
+            {
+              "number": 3,
+              "name": "Output 3",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 4,
+              "name": "Output 4",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 5,
+              "name": "Output 5",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 6,
+              "name": "Output 6",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 7,
+              "name": "Output 7",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 8,
+              "name": "Output 8",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 1,
+              "arc": false
+            }
+          ]
+        }
+      },
+      {
+        "t_ms": 251,
+        "event": "status",
+        "data": {
+          "connected": true,
+          "host": "127.0.0.1",
+          "routing": {
+            "1": 2,
+            "2": 2,
+            "3": 1,
+            "4": 1,
+            "5": 5,
+            "6": 6,
+            "7": 1,
+            "8": 1
+          },
+          "outputs": [2, 2, 1, 1, 5, 6, 1, 1],
+          "input_names": {
+            "1": "PS3",
+            "2": "AppleTV",
+            "3": "Computer",
+            "4": "Switch",
+            "5": "Shield",
+            "6": "PS5",
+            "7": "Analogue",
+            "8": "Input 8"
+          },
+          "output_names": {
+            "1": "TV",
+            "2": "Soundbar",
+            "3": "Output 3",
+            "4": "Output 4",
+            "5": "Output 5",
+            "6": "Output 6",
+            "7": "Output 7",
+            "8": "Output 8"
+          },
+          "preset_names": {
+            "1": "Apple TV",
+            "2": "Shield",
+            "3": "PS5",
+            "4": "Retro",
+            "5": "Preset 5",
+            "6": "Preset 6",
+            "7": "Preset 7",
+            "8": "Preset 8"
+          },
+          "inputs": [
+            {
+              "number": 1,
+              "name": "PS3",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 2,
+              "name": "AppleTV",
+              "inactive": false,
+              "signalActive": true,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 3,
+              "name": "Computer",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": false,
+              "sourceDetected": false,
+              "edid": 3
+            },
+            {
+              "number": 4,
+              "name": "Switch",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 5,
+              "name": "Shield",
+              "inactive": false,
+              "signalActive": true,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 6,
+              "name": "PS5",
+              "inactive": false,
+              "signalActive": true,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 7,
+              "name": "Analogue",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 3
+            },
+            {
+              "number": 8,
+              "name": "Input 8",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": false,
+              "sourceDetected": false,
+              "edid": 36
+            }
+          ],
+          "outputs_detail": [
+            {
+              "number": 1,
+              "name": "Output 1",
+              "connected": true,
+              "cableConnected": true,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 1,
+              "arc": true
+            },
+            {
+              "number": 2,
+              "name": "Output 2",
+              "connected": true,
+              "cableConnected": true,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 5,
+              "arc": false
+            },
+            {
+              "number": 3,
+              "name": "Output 3",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 4,
+              "name": "Output 4",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 5,
+              "name": "Output 5",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 6,
+              "name": "Output 6",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 7,
+              "name": "Output 7",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 8,
+              "name": "Output 8",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 1,
+              "arc": false
+            }
+          ]
+        }
+      },
+      {
+        "t_ms": 251,
+        "event": "status",
+        "data": {
+          "connected": true,
+          "host": "127.0.0.1",
+          "routing": {
+            "1": 2,
+            "2": 2,
+            "3": 1,
+            "4": 1,
+            "5": 5,
+            "6": 6,
+            "7": 1,
+            "8": 1
+          },
+          "outputs": [2, 2, 1, 1, 5, 6, 1, 1],
+          "input_names": {
+            "1": "PS3",
+            "2": "AppleTV",
+            "3": "Computer",
+            "4": "Switch",
+            "5": "Shield",
+            "6": "PS5",
+            "7": "Analogue",
+            "8": "Input 8"
+          },
+          "output_names": {
+            "1": "TV",
+            "2": "Soundbar",
+            "3": "Output 3",
+            "4": "Output 4",
+            "5": "Output 5",
+            "6": "Output 6",
+            "7": "Output 7",
+            "8": "Output 8"
+          },
+          "preset_names": {
+            "1": "Apple TV",
+            "2": "Shield",
+            "3": "PS5",
+            "4": "Retro",
+            "5": "Preset 5",
+            "6": "Preset 6",
+            "7": "Preset 7",
+            "8": "Preset 8"
+          },
+          "inputs": [
+            {
+              "number": 1,
+              "name": "PS3",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 2,
+              "name": "AppleTV",
+              "inactive": false,
+              "signalActive": true,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 3,
+              "name": "Computer",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": false,
+              "sourceDetected": false,
+              "edid": 3
+            },
+            {
+              "number": 4,
+              "name": "Switch",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 5,
+              "name": "Shield",
+              "inactive": false,
+              "signalActive": true,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 6,
+              "name": "PS5",
+              "inactive": false,
+              "signalActive": true,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 7,
+              "name": "Analogue",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 3
+            },
+            {
+              "number": 8,
+              "name": "Input 8",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": false,
+              "sourceDetected": false,
+              "edid": 36
+            }
+          ],
+          "outputs_detail": [
+            {
+              "number": 1,
+              "name": "Output 1",
+              "connected": true,
+              "cableConnected": true,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 1,
+              "arc": true
+            },
+            {
+              "number": 2,
+              "name": "Output 2",
+              "connected": true,
+              "cableConnected": true,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 5,
+              "arc": false
+            },
+            {
+              "number": 3,
+              "name": "Output 3",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 4,
+              "name": "Output 4",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 5,
+              "name": "Output 5",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 6,
+              "name": "Output 6",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 7,
+              "name": "Output 7",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 8,
+              "name": "Output 8",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 3,
+              "scaler": 1,
+              "arc": false
+            }
+          ]
+        }
+      }
+    ],
+    "screenshots": ["2026-09-25-V3-d6668000-routing.switch_one-browser/after.png"],
+    "client_diagnostics": {
+      "page_api_requests": 20,
+      "page_errors": ["TypeError: e.target.closest is not a function"],
+      "console_errors": []
+    },
+    "operator": [],
+    "restore": null,
+    "notes": []
+  },
+  "checks": [
+    {
+      "description": "response HTTP 200",
+      "result": "pass",
+      "detail": "HTTP 200; body (browser)",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device outputs[0].source == 6",
+      "result": "pass",
+      "detail": "outputs[0].source = 6",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device otherwise unchanged (allowed: outputs[0].source, routing[0])",
+      "result": "pass",
+      "detail": "no other changes",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device received http 'video switch' with {'source': [1, 6]} exactly 1x",
+      "result": "pass",
+      "detail": "1 matching; http commands seen: [('get video status', {'comhead': 'get video status', 'language': 0}), ('get output status', {'comhead': 'get output status', 'language': 0}), ('get input status', {'comhead': 'get input status', 'language': 0}), ('get status', {'comhead': 'get status', 'language': 0}), ('get video status', {'comhead': 'get video status', 'language': 0}), ('get video status', {'comhead': 'get video status', 'language': 0}), ('get video status', {'comhead': 'get video status', 'language': 0}), ('get video status', {'comhead': 'get video status', 'language': 0}), ('get output status', {'comhead': 'get output status', 'language': 0}), ('get output status', {'comhead': 'get output status', 'language': 0}), ('get output status', {'comhead': 'get output status', 'language': 0}), ('get input status', {'comhead': 'get input status', 'language': 0})]",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "WebSocket event 'switch' with {'input': 6, 'output': 1}",
+      "result": "n/a",
+      "detail": "not checked for client 'browser'",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "hub GET /api/status -> data.routing.1 == 6 (HTTP 200)",
+      "result": "pass",
+      "detail": "HTTP 200; data.routing.1 = 6",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    }
+  ],
+  "findings": [],
+  "covers": [
+    "run.py",
+    "src/orei_matrix.py",
+    "src/telnet_client.py",
+    "src/_task_supervisor.py",
+    "src/rest_api/app.py",
+    "src/rest_api/utils.py",
+    "src/rest_api/websocket.py",
+    "src/rest_api/control.py",
+    "src/rest_api/core.py",
+    "web/index.html",
+    "web/js/app.js",
+    "web/js/api.js",
+    "web/js/state.js",
+    "web/js/websocket.js",
+    "web/js/components/matrix-grid.js"
+  ]
+}
