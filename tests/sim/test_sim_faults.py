@@ -250,3 +250,33 @@ async def test_cable_poll_sends_one_status_command(matrix_with_telnet, simulator
     assert cables["inputs"] == {i + 1: bool(p.cable) for i, p in enumerate(simulator.state.inputs)}
     status_cmds = [e for e in simulator.log if e["channel"] == "telnet" and e["command"] == "status"]
     assert len(status_cmds) == 1
+
+
+def _http_sends(simulator, comhead: str) -> int:
+    return sum(
+        1
+        for e in simulator.log
+        if e.get("channel") == "http" and e.get("command") == comhead
+    )
+
+
+async def test_rejected_cec_command_is_not_resent(matrix, simulator):
+    """A rejected CEC key press must reach the matrix exactly once.
+
+    A JSON failure result is ambiguous (expired session or plain rejection);
+    resending a non-idempotent command such as volume-up could run it twice.
+    """
+    await matrix.connect()
+    simulator.faults.update({"reject_writes": True})
+    simulator.log.clear()
+    assert await matrix.send_cec("VOLUME_UP", 1, is_output=True) is False
+    assert _http_sends(simulator, "cec command") == 1
+
+
+async def test_rejected_idempotent_write_is_retried_after_relogin(matrix, simulator):
+    """Idempotent writes may be resent once after re-login (same end state)."""
+    await matrix.connect()
+    simulator.faults.update({"reject_writes": True})
+    simulator.log.clear()
+    assert await matrix.set_output_hdcp(1, 1) is False
+    assert _http_sends(simulator, "set output hdcp") == 2
