@@ -84,8 +84,14 @@ class Simulator:
         session_ttl_s: float | None = proto.DEFAULT_SESSION_TTL_S,
         reboot_seconds: float = proto.DEFAULT_REBOOT_SECONDS,
         log_limit: int = 2000,
+        golden: Any = None,
     ) -> None:
         self.initial_state = (state or DeviceState.default()).copy()
+        #: tools.simulator.golden.GoldenSet: serve HIL-A captures byte for byte
+        #: (seed ``state`` with ``golden.seed`` first; baselines are bound here).
+        self.golden = golden
+        if golden is not None:
+            golden.bind(self.initial_state)
         self.state = self.initial_state.copy()
         self.faults = Faults()
         self.host = host
@@ -360,6 +366,15 @@ class Simulator:
             malformed = False
 
         response, entry = self._process(client, payload, comhead)
+        if self.golden is not None:
+            golden = self.golden.http_reply(
+                payload, response, entry,
+                default_session_style=self.faults.session_expired_style == proto.SESSION_EXPIRED_STYLE,
+            )
+            if golden is not None:
+                entry["golden"] = golden.kind
+                body = golden.body[: max(1, len(golden.body) // 2)] if malformed else golden.body
+                return web.Response(body=body, status=golden.status, headers={"Content-Type": golden.content_type})
         if malformed:
             body = json.dumps(response)
             entry["fault"] = "malformed_json"
@@ -450,7 +465,8 @@ class Simulator:
             _LOG.info("TELNET connection from %s", client)
             if proto.TELNET_SEND_IAC_NEGOTIATION:
                 writer.write(bytes([_IAC, _IAC_WILL, _OPT_ECHO, _IAC, _IAC_WILL, _OPT_SGA]))
-            writer.write(banner(self.state).encode())
+            golden_banner = self.golden.banner_bytes() if self.golden is not None else None
+            writer.write(golden_banner if golden_banner is not None else banner(self.state).encode())
             await writer.drain()
             buf = b""
             while True:
@@ -493,17 +509,23 @@ class Simulator:
         level = logging.INFO if result.recognised else logging.WARNING
         _LOG.log(level, "TELNET <- %s%s", cmd, "" if result.recognised else "  UNRECOGNISED")
 
+        data = result.text.encode()
+        if self.golden is not None:
+            golden = self.golden.telnet_reply(cmd, result.text)
+            if golden is not None:
+                entry["golden"] = "verbatim"
+                data = golden
+
         if faults.telnet_close_mid_command:
             faults.consume_telnet()
             entry["fault"] = "telnet_close_mid_command"
-            data = result.text.encode()
             writer.write(data[: max(1, len(data) // 2)])
             with contextlib.suppress(Exception):
                 await writer.drain()
             _LOG.info("TELNET     [fault: closed mid-response]")
             return False
 
-        writer.write(result.text.encode())
+        writer.write(data)
         await writer.drain()
         if result.reboot:
             self.schedule_reboot()
@@ -551,6 +573,7 @@ class Simulator:
                 "sessions": len(self.sessions),
                 "telnet_clients": len(self._telnet_writers),
                 "faults": self.faults.to_dict(),
+                "golden": str(self.golden.root) if self.golden is not None else None,
             }
         )
 
