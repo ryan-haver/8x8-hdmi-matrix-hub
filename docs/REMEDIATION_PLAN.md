@@ -249,6 +249,7 @@ Severity: **C** critical · **H** high · **M** medium · **L** low. "Phase" is 
 | UI-19 | L | `scene-editor` uses `prompt()` for step targets | `scene-editor.js:263-278` | 5 |
 | UI-20 | L | `about-dialog`/`integrations-drawer` call `fetch` directly | — | 5 |
 | UI-21 | L | PWA manifest marked done in plan, not present | `web/` | 5 |
+| UI-22 | M | Device icon set is a bitmap trace of a PNG sprite of unknown origin/licence (`device_icons_set.png.svg`); `_icon-paths.json` is 2.9 MB and single icons reach 376 KB | `web/assets/icons/svg/`, `scripts/convert-icons-to-svg.js` | 5 / 6 |
 
 ### 4.8 Documentation (DOC)
 
@@ -531,6 +532,7 @@ Per DI-7, the consolidated Settings drawer is mocked up first and reviewed via a
 - [ ] **Feedback consistency** — one connection indicator (header border line, keep current style) + "reconnecting" state; optimistic updates roll back on `*_failed` events; toast de-duplication.
 - [ ] **Performance** (UI-16) — Tron background renders only when cycles move, capped at 30 fps, blur reduced on low-power/kiosk; lazy-load editors.
 - [ ] **CSS consolidation** (UI-10) — split `components.css` into per-component files; remove unused selectors (verified by visual regression, not by guesswork).
+- [ ] **Device icons** (UI-22) — establish provenance of the current set; if the licence can't be confirmed, replace it with a permissively licensed set (e.g. MIT/ISC line icons) or redraw in-house as clean vector paths, matching the current style; reviewed via §5.3. Target < 5 KB per icon.
 - [ ] Fix keyboard shortcuts (UI-06), `api-copy` base URL (UI-18), add a real PWA manifest + icons (UI-21) or drop the claim.
 
 **Exit:** every visual diff reviewed and approved per §5.3, with the catalog updated for any new states; real-device capture (kiosk, iPad, phone) reviewed; `LOOK_AND_FEEL.md` still accurate; Playwright E2E + axe accessibility checks pass on all pages; JS size reduced (target ≥ 25%); kiosk shares ≥ 90% of its logic with the main UI.
@@ -538,6 +540,7 @@ Per DI-7, the consolidated Settings drawer is mocked up first and reviewed via a
 ### Phase 6 — Repository hygiene & release engineering (1-2 days)
 
 - [ ] (History purge and LICENSE moved to Phase 0.) Re-verify no vendor binaries or HAR captures crept back in; add a CI check rejecting `*.bin`, `*.exe`, `*.c4z`, `*.har`, and files > 2 MB outside LFS-tracked snapshot paths.
+- [ ] Licence audit of every bundled asset (icons, fonts, images) with a `THIRD_PARTY_NOTICES.md`; release blocked until UI-22 is resolved.
 - [ ] Delete `setup.py`; `pyproject.toml` as sole metadata with correct packages (DEP-04).
 - [ ] Single version source (e.g. `hub/__init__.py:__version__`) feeding `driver.json`, HA `manifest.json`, `/api/info`, Docker labels; release script bumps all (DEP-06).
 - [ ] Locked, hashed requirements (`pip-compile`), `requirements-dev.txt`, digest-pinned base image, SHA-pinned actions, Dependabot/Renovate (DEP-08, SEC-15).
