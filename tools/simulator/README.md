@@ -24,7 +24,9 @@ Options (`python -m tools.simulator --help`):
 | `--host` | `127.0.0.1` | bind address |
 | `--https-port` / `--telnet-port` / `--control-port` | `8443` / `2323` / `8444` | `0` = any free port |
 | `--state FILE` | `tools/simulator/states/default.json` | seed state |
-| `--captures DIR` | none | golden HTTP captures applied on top of `--state` |
+| `--captures DIR` | none | legacy: flat `<comhead>.json` response files applied on top of `--state` |
+| `--golden DIR` | none | HIL-A capture folder (`tests/fixtures/device/<fw>/`): seed the state from it and answer with the captured bytes ([golden mode](#golden-mode-hil-a-captures)) |
+| `--report` | off | with `--golden`: print which `ASSUMPTION(HIL-A)` guesses the captures confirm or contradict, then exit |
 | `--user` / `--password` | from the state file (`Admin` / `admin`) | login credentials |
 | `--no-tls` | off | plain HTTP device API |
 | `--no-auth` | off | accept commands without a login |
@@ -179,9 +181,24 @@ Everything the simulator guesses is marked `# ASSUMPTION(HIL-A)`. Run `grep -rn 
 - Telnet wording: banner, `status` dump lines, set-command acknowledgements, `E00`/`E01` meaning (BE-07), push lines, and whether bare `power N` works.
 - Whether the device accepts commands in standby, and what `set reboot` answers before dropping off.
 
-HIL-A workflow (`tools/hil/capture.py`, plan §5.2):
+Every marker has an entry in `tools/hil/capture/assumptions.py`, and `tests/hil_tools/test_capture_catalog.py` fails if a marker is added without one, or if a registered marker disappears.
 
-1. Store each raw read response as `tests/fixtures/device/<firmware>/<comhead with _ for spaces>.json`, for example `get_output_status.json`. Files starting with `_` are ignored, so keep notes there.
-2. Seed the simulator from them with `python -m tools.simulator --captures tests/fixtures/device/V1.10.02` (or `DeviceState.apply_http_captures(load_capture_dir(...))`).
-3. Correct `protocol.py` and the marked handlers so their responses match the captures, then remove the `ASSUMPTION(HIL-A)` marker.
-4. Add a contract test that compares simulator responses with the captures (same keys, same types, and byte-identical for a state seeded from the same capture). That is the §5 L2 exit criterion.
+HIL-A workflow (plan §5.2; operator runbook in [`tools/hil/README.md`](../hil/README.md)):
+
+1. Capture with `python -m tools.hil.capture --host <ip> --mode probe|read|write`. The records go to `tests/fixtures/device/<firmware>/`; the format is described in [`tests/fixtures/device/README.md`](../../tests/fixtures/device/README.md).
+2. Run `python -m tools.simulator --golden tests/fixtures/device/<firmware> --report` to see which guesses the captures contradict, which need a human, and which have no evidence yet.
+3. Correct `protocol.py` and the marked handlers until the report shows them as confirmed, then remove each `ASSUMPTION(HIL-A)` marker and its registry marker.
+4. Add a contract test that loads the golden folder and compares simulator responses with the captures (see `tests/hil_tools/test_capture_golden.py` for the pattern). That is the §5 L2 exit criterion.
+
+## Golden mode (HIL-A captures)
+
+`python -m tools.simulator --golden tests/fixtures/device/<firmware>` (implementation and details in `golden.py`):
+
+- **Seed.** The captured reads (routing, names, output settings, EDID, CEC, ext-audio, presets) and the Telnet cable and LCD lines overwrite the `--state` file. If a captured value is outside the simulator's ranges, the seed is skipped with a warning.
+- **Byte-identical reads.** At start-up the simulator computes its own answer to each captured read for the seed state (the baseline). While its current answer still equals the baseline, it sends the captured body unchanged: same bytes, status and `Content-Type`.
+- **State still moves.** Once a write (or `/_sim/state`, or an event) changes the state, the captured document is patched. Only the values that differ from the baseline are replaced, list elements one by one. Fields only the device sends keep their captured values, and the document is serialised in the device's JSON style. So routing, names and settings follow the writes, and device-only details such as extra keys, name prefixes and spacing survive.
+- **Telnet.** The banner and every captured command (reads, set-command acks, error probes) are answered with the captured bytes. A read whose state changed falls back to the simulator's own text, because free text is not patched.
+- **Login, no-session and writes.** The login success and wrong-password answers, the "not logged in" answer, and the write results by outcome (applied or rejected) come from the captures too.
+- Anything not captured is answered as without `--golden`. The control API reports the golden folder in `GET /_sim/health`, and log entries served from captures carry `"golden": "verbatim"` or `"patched"`.
+
+In code: `golden = GoldenSet.load(path); golden.seed(state); Simulator(state, golden=golden)`.
