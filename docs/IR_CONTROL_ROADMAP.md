@@ -144,9 +144,9 @@ Abstract device control into capabilities:
 5. What's the IR blaster range/power?
 
 **Documentation to Review**:
-- BK-808 User Manual (IR section)
-- BK-808 Control4 Driver (may reveal IR capabilities)
-- BK-808 RTI Driver (may reveal IR capabilities)
+- BK-808 User Manual (IR section) — see [vendor/README.md](vendor/README.md)
+- BK-808 Control4 Driver (may reveal IR capabilities) — see [vendor/README.md](vendor/README.md)
+- BK-808 RTI Driver (may reveal IR capabilities) — see [vendor/README.md](vendor/README.md)
 - HTTP API exploration
 
 **Resolution Criteria**: Full understanding of BK-808 IR capabilities documented, with decision on whether to use built-in IR.

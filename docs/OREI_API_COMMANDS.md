@@ -620,8 +620,8 @@ Response: {"comhead": "set lcd on time", "result": "success"}
 ## Source References
 
 1. **HAR File** (`matrix more http payloads.har`): Captured from OREI web UI
-2. **RTI Driver** (`BK-808_CN_AV.rtidriver`): Contains serial command formats and variables
-3. **Control4 Driver** (`driver.lua`): Contains Lua implementation with serial commands
+2. **RTI Driver** (`BK-808_CN_AV.rtidriver`): Contains serial command formats and variables (not redistributed; see [vendor/README.md](vendor/README.md))
+3. **Control4 Driver** (`driver.lua`): Contains Lua implementation with serial commands (not redistributed; see [vendor/README.md](vendor/README.md))
 4. **Web UI**: Live testing at https://193.168.0.100/
 
 ---

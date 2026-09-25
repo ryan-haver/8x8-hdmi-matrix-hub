@@ -57,9 +57,7 @@ This document serves as the central navigation hub for all project documentation
 
 | Document                                               | Location | Description                         |
 | ------------------------------------------------------ | -------- | ----------------------------------- |
-| [BK-808_User_Manual.pdf](BK-808_User_Manual.pdf)       | `/docs/` | Official OREI hardware manual       |
-| [BK-808 Control4 Driver/](BK-808%20Control4%20Driver/) | `/docs/` | Control4 driver reference           |
-| [BK-808 RTI Driver/](BK-808%20RTI%20Driver/)           | `/docs/` | RTI driver reference                |
+| [vendor/README.md](vendor/README.md)                   | `/docs/vendor/` | Where to get the BK-808 manual, firmware, Control4/RTI drivers (not redistributed) |
 | [remote3-rest-core-api.md](remote3-rest-core-api.md)   | `/docs/` | UC Remote 3 REST API reference      |
 | [remote3-websocket-\*.md](.)                           | `/docs/` | UC Remote 3 WebSocket API reference |
 

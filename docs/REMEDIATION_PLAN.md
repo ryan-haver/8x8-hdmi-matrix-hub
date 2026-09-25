@@ -384,11 +384,11 @@ Estimates assume one developer working with AI assistance; they are sizing, not 
 
 Goal: make it impossible for the bugs below to come back silently.
 
-- [ ] Commit the pending `acquire_lock` fix as-is (stopgap; proper fix in Phase 1).
+- [x] Commit the pending `acquire_lock` fix as-is (stopgap; proper fix in Phase 1).
 - [ ] **History purge first (SEC-14, D3)** — done now, while `main` is the only branch and there are no forks, so no rebasing is ever needed:
-  - [ ] Full mirror backup of the repo kept offline (not pushed anywhere).
-  - [ ] `git filter-repo` removing `docs/BK-808 Firmware/`, `docs/BK-808 RTI Driver/`, `docs/BK-808 Control4 Driver/`, `docs/BK-808 Control4 Driver.c4z`, `docs/BK-808_User_Manual.pdf`.
-  - [ ] Replace with `docs/vendor/README.md`: links to vendor downloads, file names, versions, SHA-256 checksums, and a short summary of protocol facts we derived (our own words, no copied content).
+  - [x] Full mirror backup of the repo kept offline (not pushed anywhere).
+  - [x] `git filter-repo` removing `docs/BK-808 Firmware/`, `docs/BK-808 RTI Driver/`, `docs/BK-808 Control4 Driver/`, `docs/BK-808 Control4 Driver.c4z`, `docs/BK-808_User_Manual.pdf`.
+  - [x] Replace with `docs/vendor/README.md`: links to vendor downloads, file names, versions, SHA-256 checksums, and a short summary of protocol facts we derived (our own words, no copied content).
   - [ ] Verify with `git rev-list --objects --all` that no purged blob remains; force-push `main`; re-clone locally.
   - [ ] Ask GitHub Support to purge cached views/refs of the removed blobs (the repo has been public since 2026-02-02).
   - [ ] Commit full MPL-2.0 `LICENSE` text.
