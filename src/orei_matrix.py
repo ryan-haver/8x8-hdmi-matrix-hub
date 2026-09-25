@@ -10,6 +10,7 @@ Telnet: Port 23, commands end with !\\r\\n
 """
 
 import asyncio
+import datetime
 import json
 import logging
 import os
@@ -109,10 +110,18 @@ class OreiMatrix:
         self._cable_status_cache: dict[str, Any] | None = None
         self._cable_status_cache_time: float = 0.0
 
+        # UTC time of the last successful status read (for /api/health)
+        self._last_successful_poll: datetime.datetime | None = None
+
     @property
     def connected(self) -> bool:
         """Return connection status."""
         return self._connected
+
+    @property
+    def last_successful_poll(self) -> datetime.datetime | None:
+        """UTC time the matrix last answered a status read, or None."""
+        return self._last_successful_poll
 
     @property
     def telnet_connected(self) -> bool:
@@ -652,6 +661,7 @@ class OreiMatrix:
 
         if success and response:
             _LOG.debug("Video status: %s", response)
+            self._last_successful_poll = datetime.datetime.now(datetime.UTC)
             return response
 
         _LOG.error("Failed to get video status")
