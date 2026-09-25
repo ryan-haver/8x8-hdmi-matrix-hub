@@ -10,6 +10,7 @@ tools/hil/README.md).
 
 from __future__ import annotations
 
+import logging
 import re
 from pathlib import Path
 
@@ -26,6 +27,7 @@ from device_codes import (
     scaler_from_device,
     scaler_to_device,
 )
+from orei_matrix import ConnectionState, Events
 from tools.simulator import protocol as proto
 
 SRC = Path(__file__).resolve().parents[2] / "src"
@@ -152,6 +154,76 @@ async def test_source_cec_keeps_the_input_table(matrix, simulator):
     assert await matrix.send_cec("VOLUME_UP", 2)
     payload = sent(simulator, "cec command")[-1]
     assert (payload["object"], payload["index"]) == (0, 19)
+
+
+# ------------------------------------------------------------------ HIL-12
+
+
+async def _fast(monkeypatch):
+    monkeypatch.setattr(orei_matrix, "HTTP_TIMEOUT", 0.3)
+
+
+async def test_an_unanswered_command_is_a_failed_command_not_a_lost_link(matrix, simulator, monkeypatch, caplog):
+    """HIL-12: the device ignores the command; the health read still answers, so the link stays up."""
+    await _fast(monkeypatch)
+    await matrix.connect()
+    events: list[str] = []
+    matrix.events.on(Events.DISCONNECTED, lambda *a: events.append("disconnected"))
+    simulator.unanswered_comheads = simulator.unanswered_comheads | {"tx hdcp"}
+    simulator.log.clear()
+    with caplog.at_level(logging.ERROR, logger="orei_matrix"):
+        assert await matrix.set_output_hdcp(1, 2) is False
+    assert "device did not answer 'tx hdcp'" in caplog.text
+    assert matrix.connected and matrix.connection_state is not ConnectionState.BACKOFF
+    assert events == []
+    # the health read went out after the unanswered command, and nothing re-logged in
+    commands = [e["command"] for e in simulator.log if e.get("channel") == "http"]
+    assert commands[:2] == ["tx hdcp", "get system status"]
+    assert "login" not in commands
+    assert (await matrix.get_status(force_refresh=True))["routing"] == simulator.state.routing
+
+
+async def test_every_unknown_comhead_behaves_like_the_device(matrix, simulator, monkeypatch):
+    """A comhead the firmware does not know (the old `set output hdcp`) gets no answer; the hub stays up."""
+    await _fast(monkeypatch)
+    await matrix.connect()
+    ok, response = await matrix._send_command({"comhead": "set output hdcp", "output": 1, "hdcp": 1})
+    assert (ok, response) == (False, None)
+    assert matrix.connected
+    assert simulator.log[-1]["command"] == "get system status"
+
+
+async def test_no_answer_and_a_failed_health_read_mark_the_link_lost(matrix, simulator, monkeypatch):
+    await _fast(monkeypatch)
+    await matrix.connect()
+    events: list[str] = []
+    matrix.events.on(Events.DISCONNECTED, lambda *a: events.append("disconnected"))
+    simulator.unanswered_comheads = simulator.unanswered_comheads | {"tx hdcp", "get system status"}
+    assert await matrix.set_output_hdcp(1, 2) is False
+    assert matrix.connected is False and matrix.connection_state is ConnectionState.BACKOFF
+    assert events == ["disconnected"]
+    health = [e for e in simulator.log if e.get("command") == "get system status"]
+    assert len(health) == orei_matrix.HEALTH_CHECK_ATTEMPTS  # one retry for a device that stalls once
+
+
+async def test_a_transport_failure_is_a_lost_link_without_a_health_read(matrix, simulator):
+    """Connection reset / refused is not HIL-12: BACKOFF at once."""
+    await matrix.connect()
+    simulator.faults.update({"drop_http": True, "http_fault_count": 1})
+    simulator.log.clear()
+    assert await matrix.set_output_hdcp(1, 2) is False
+    assert matrix.connection_state is ConnectionState.BACKOFF
+    assert not [e for e in simulator.log if e.get("command") == "get system status" and "fault" not in e]
+
+
+async def test_a_device_that_stalls_once_after_an_ignored_command_keeps_the_link(matrix, simulator, monkeypatch):
+    """Captured on V1.10.01: right after unanswered probes, one `get system status` also timed out."""
+    await _fast(monkeypatch)
+    await matrix.connect()
+    simulator.unanswered_comheads = simulator.unanswered_comheads | {"tx hdcp"}
+    simulator.faults.update({"hang_http": True, "comheads": ["get system status"], "http_fault_count": 1})
+    assert await matrix.set_output_hdcp(1, 2) is False
+    assert matrix.connected
 
 
 # ------------------------------------------------------------------ regressions HIL-09 / HIL-11

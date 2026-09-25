@@ -10,10 +10,16 @@ Telnet: Port 23, commands end with !\\r\\n
 
 Connection state (BE-04): ``OreiMatrix.connection_state`` is one of
 :class:`ConnectionState`. ``connected`` is true while the HTTP session works
-(CONNECTED, or DEGRADED when only Telnet is down). A transport error, timeout
-or unparseable answer moves the matrix to BACKOFF, emits
+(CONNECTED, or DEGRADED when only Telnet is down). A transport error
+(connection refused or reset, DNS, TLS) moves the matrix to BACKOFF, emits
 ``Events.DISCONNECTED`` and starts the matrix-owned reconnect supervisor;
 ``disconnect()`` is intentional and never triggers a reconnect.
+
+HIL-12: the BK-808 never answers a command it does not implement (captured on
+V1.10.01), so a command that times out, gets an HTTP error status or an
+unparseable body is a *failed command*, not a lost link: the hub logs
+"device did not answer <comhead>", returns failure, and checks the link with a
+status read. Only when that health read fails too is the link marked lost.
 """
 
 import asyncio
@@ -94,6 +100,12 @@ RETRY_JITTER = 0.1  # 10% jitter to prevent thundering herd
 
 #: HTTP request timeout (seconds) for every command, login included.
 HTTP_TIMEOUT = 5.0
+
+#: Read used to tell "the device ignored one command" from "the device is
+#: gone" (HIL-12), and how often it is tried: right after an unanswered
+#: command the device's web server can stall for one more request (captured).
+HEALTH_CHECK_COMMAND = {"comhead": "get system status", "language": 0}
+HEALTH_CHECK_ATTEMPTS = 2
 
 _T = TypeVar("_T")
 
@@ -231,8 +243,10 @@ class _HttpResult:
     """Outcome of one POST to /cgi-bin/instr.
 
     ``kind`` is ``ok``, ``auth`` (the session is not valid, or a failure
-    ``result`` that may mean that), ``transport`` (connection error, timeout,
-    HTTP error status) or ``bad_response`` (not a JSON object).
+    ``result`` that may mean that), ``transport`` (the connection failed:
+    refused, reset, DNS, TLS), ``no_answer`` (the request was sent but timed
+    out, HIL-12), ``http_error`` (an HTTP error status) or ``bad_response``
+    (not a JSON object).
     """
 
     kind: str
@@ -651,7 +665,7 @@ class OreiMatrix:
                     # Matrix returns text/plain, so read as text then parse JSON
                     text = await response.text() if status == 200 else ""
             except TimeoutError:
-                return _HttpResult("transport", error="Command timeout", timeout=True)
+                return _HttpResult("no_answer", error="Command timeout", timeout=True)
             except Exception as ex:  # aiohttp.ClientError, OSError, ...
                 return _HttpResult("transport", error=str(ex) or type(ex).__name__)
         return self._classify_response(payload, status, text)
@@ -661,7 +675,7 @@ class OreiMatrix:
         if status in (401, 403):
             return _HttpResult("auth", error=f"HTTP {status}")
         if status != 200:
-            return _HttpResult("transport", error=f"HTTP {status}")
+            return _HttpResult("http_error", error=f"HTTP {status}")
         _LOG.debug("Command response (raw): %s", text)
         try:
             data = json.loads(text)
@@ -747,7 +761,11 @@ class OreiMatrix:
           sleep, no lock held -- BE-17).
         - Session lost (HTTP 401/403, login page, failure ``result``): one
           re-login and one retry when ``retry_on_failure`` (BE-04).
-        - Transport error, timeout or unparseable answer: the link is marked
+        - No answer (timeout), HTTP error status or unparseable answer
+          (HIL-12): the command fails ("device did not answer"); a health
+          read decides whether the link is still up. Only if that read fails
+          too is the link marked lost.
+        - Transport error (refused, reset, DNS, TLS): the link is marked
           lost (BACKOFF + ``Events.DISCONNECTED``) and the command fails.
         - A write the matrix answered with a failure ``result`` returns
           ``(True, response)`` so the caller reports the rejection (BE-12).
@@ -787,14 +805,43 @@ class OreiMatrix:
             _LOG.error("Command '%s' failed: %s", comhead, result.error)
             return False, None
 
-        # Transport error, timeout or unparseable answer: the link is not healthy.
-        if result.timeout:
-            _LOG.error("Command timeout")
-        else:
-            _LOG.error("Failed to send command '%s': %s", comhead, result.error)
-            self.events.emit(Events.ERROR, result.error)
+        if result.kind in ("no_answer", "http_error", "bad_response"):
+            # HIL-12: the device ignores commands it does not implement. One
+            # unanswered command is a failed command; the link is only lost
+            # if a health read fails as well.
+            if result.kind == "no_answer":
+                _LOG.error("Matrix: device did not answer '%s' within %.1fs", comhead, HTTP_TIMEOUT)
+                self._last_error = f"device did not answer '{comhead}'"
+            else:
+                _LOG.error("Matrix: bad answer to '%s': %s", comhead, result.error)
+            if await self._link_healthy():
+                return False, None
+            self._link_lost(f"no answer to '{comhead}' and to the health read")
+            return False, None
+
+        # Transport error: the connection itself failed.
+        _LOG.error("Failed to send command '%s': %s", comhead, result.error)
+        self.events.emit(Events.ERROR, result.error)
         self._link_lost(result.error)
         return False, None
+
+    async def _link_healthy(self) -> bool:
+        """Health read after a failed command (HIL-12): does the matrix still answer?
+
+        Any answer counts (even "not logged in": the device is reachable).
+        A transport error means the link is gone; a timeout is retried once,
+        because the device's web server can stall for one request right after
+        a command it ignored (captured on V1.10.01).
+        """
+        for attempt in range(1, HEALTH_CHECK_ATTEMPTS + 1):
+            result = await self._post(dict(HEALTH_CHECK_COMMAND))
+            if result.kind in ("ok", "auth"):
+                _LOG.info("Matrix health read answered; the connection is still up")
+                return True
+            _LOG.warning("Matrix health read %d/%d failed: %s", attempt, HEALTH_CHECK_ATTEMPTS, result.error)
+            if result.kind == "transport":
+                return False
+        return False
 
     async def recall_scene(self, scene: int) -> bool:
         """

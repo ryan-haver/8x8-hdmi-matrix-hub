@@ -9,7 +9,6 @@ whose markers Phase 1 removed.
 
 import asyncio
 
-import aiohttp
 import pytest
 
 import orei_matrix
@@ -20,9 +19,17 @@ from .conftest import LoopLagProbe
 # ---------------------------------------------------------------- behaviour that works today
 
 
-async def test_http_500_marks_disconnected(matrix, simulator):
+async def test_single_http_500_fails_the_command_but_keeps_the_link(matrix, simulator):
+    """HIL-12: an HTTP error on one command is a failed command; the health read proves the link is up."""
     await matrix.connect()
     simulator.faults.update({"http_status": 500, "http_fault_count": 1})
+    assert await matrix.get_video_status() is None
+    assert matrix.connected is True
+
+
+async def test_persistent_http_500_marks_disconnected(matrix, simulator):
+    await matrix.connect()
+    simulator.faults.update({"http_status": 500})
     assert await matrix.get_video_status() is None
     assert matrix.connected is False
 
@@ -65,14 +72,21 @@ async def test_dropped_connection_clears_connected(matrix, simulator):
     assert matrix.connected is False
 
 
-async def test_timeout_clears_connected(matrix, simulator, monkeypatch):
-    real_timeout = aiohttp.ClientTimeout
-    # The hub hard-codes a 5 s timeout; shrink it so the test stays fast.
-    monkeypatch.setattr(orei_matrix.aiohttp, "ClientTimeout", lambda total=None, **kw: real_timeout(total=0.2))
+async def test_one_timeout_is_a_failed_command_not_a_lost_link(matrix, simulator, monkeypatch):
+    """HIL-12: one unanswered request fails; the link stays up because the health read answers."""
+    monkeypatch.setattr(orei_matrix, "HTTP_TIMEOUT", 0.2)  # the hub waits 5 s; keep the test fast
     await matrix.connect()
     simulator.faults.update({"hang_http": True, "http_fault_count": 1})
     assert await matrix.get_video_status() is None
-    assert matrix._last_error == "Command timeout"
+    assert matrix._last_error == "device did not answer 'get video status'"
+    assert matrix.connected is True
+
+
+async def test_timeouts_that_the_health_read_confirms_clear_connected(matrix, simulator, monkeypatch):
+    monkeypatch.setattr(orei_matrix, "HTTP_TIMEOUT", 0.2)
+    await matrix.connect()
+    simulator.faults.update({"hang_http": True})
+    assert await matrix.get_video_status() is None
     assert matrix.connected is False
 
 
