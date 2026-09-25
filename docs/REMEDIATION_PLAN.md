@@ -319,6 +319,19 @@ Full detail (location, user impact, fix) in [`docs/audits/UC_INTEGRATION_AUDIT.m
 | UC-20 | M | Vendored UC API docs several spec versions stale (official sources now pinned locally via `tools/uc_reference.py`) | 7 |
 | UC-21 | H | No scripted-Remote test harness | 1 (wave 2, first) |
 
+### 4.10 Found by validation (VAL)
+
+Findings from running features against the real hub and simulator (`docs/validation/VALIDATION_PLAN.md`). Each one is demonstrated by a failing scenario with committed evidence in `docs/validation/evidence/`.
+
+| ID | Sev | Finding | Location | Proof (scenario) | Phase / WP |
+| --- | --- | --- | --- | --- | --- |
+| VAL-01 | H | Profile recall never applies audio mute, HDR or HDCP: it checks `hasattr(matrix_device, "set_audio_mute" / "set_hdr_mode" / "set_hdcp_mode")`, but the methods are named `set_output_*`, so the settings are silently skipped and recall still returns 200 | `rest_api/profiles.py:322-329` | `profiles.recall_output_settings` | 2 / WP-C1 |
+| VAL-02 | M | Modular mode (`run.py`, the target architecture) never wires the macro CEC sender, so CEC macros, profile power macros and scene macro steps fail with "CEC sender not configured" while recall reports success | `run.py:88-106`, `rest_api/utils.py:461` | `profiles.recall_power_macro` | 2 / WP-C1 |
+| VAL-03 | M | The CEC index table in `OREI_API_COMMANDS.md` contradicts the hub's `CEC_COMMAND_MAP` on 15 of 19 indices; one of them is wrong | `orei_matrix.py:717-759`, `docs/OREI_API_COMMANDS.md:329-351` | (hardware needed) | 1 / WP-H1, WP-A4 |
+| VAL-04 | H | With the matrix unreachable, `/api/status` returns 200 with `connected: true` and made-up names "Input 1…8" | `rest_api/core.py:28` | `failures.unreachable_switch` | 2 / WP-C2 (with UI-29) |
+| VAL-05 | M | `POST /api/output/{n}/source`, used by the matrix grid, never broadcasts a WebSocket event, so other open clients don't see the change | `rest_api/control.py:312-356` | `routing.grid_notifies_other_clients` (browser) | 2 / WP-C2 |
+| VAL-06 | L | One `/ui` load makes 20–26 API calls against a limit of 60 per 10 s per client, so a third reload within 10 s fails with 429 errors | `rest_api/utils.py`, `web/js/app.js` | observed in the first browser run | 3 / WP-F1 (rate limiter), WP-E2 (fewer calls) |
+
 ---
 
 ## 5. Validation strategy ("full real validation")
@@ -638,23 +651,23 @@ Work is organised into work packages (WPs) in parallel lanes. Each WP closes reg
 
 | WP | Lane | Scope (register IDs) | Depends on | Exit evidence | Status |
 | --- | --- | --- | --- | --- | --- |
-| WP-V1 | V | Validation framework: `features.yaml` registry (every feature, ~200), evidence schema, scenario runner (`tools/validate/`), `LEDGER.md` generator, CI enforcement | — | Ledger generated in CI; every feature listed with its current honest level | next |
+| WP-V1 | V | ✅ Validation framework: `features.yaml` registry (every feature, ~200), evidence schema, scenario runner (`tools/validate/`), `LEDGER.md` generator, CI enforcement | — | Ledger generated in CI; every feature listed with its current honest level | next |
 | WP-V2 | V | **C0 baseline truth:** run every feature at V2/V3 on the simulator against current code; failures become findings | WP-V1 | First `LEDGER.md`; new register rows | after V1 |
 | WP-A1 | A | Transport reliability (BE-01, 03, 04, 05, 07, 11, 12, 17, 28–30, API-11) | — | Transport and reliability features at V2 with fault injection; loop lag < 100 ms under faults | in progress |
 | WP-A2 | A | Persistence and process lock (PER-01–03, TST-08, BE-18) | — | Persistence features at V2 on Windows and Linux | in progress |
 | WP-A3 | A | Hardware capture tooling (HIL-A) | — | Capture round-trip proven on the simulator | in progress |
 | WP-H1 | A | **HIL Session 1 / C0-HW:** capture + first V4 runs (routing, presets, power, TV CEC power, one profile) | WP-A3, owner hardware access | Golden captures committed; first V4 evidence | needs owner |
-| WP-A4 | A | Protocol corrections from captures (BE-13, 14, 15, 25, API-07); simulator golden mode | WP-H1 | Affected features at V2 against golden data, V4 re-run | after H1 |
+| WP-A4 | A | Protocol corrections from captures (BE-13, 14, 15, 25, API-07, VAL-03); simulator golden mode | WP-H1 | Affected features at V2 against golden data, V4 re-run | after H1 |
 | WP-B1 | B | Scripted-Remote harness + blocking `uc` CI job; evaluate the UC core simulator (UC-21) | WP-A1 merged | Every Remote entity type exercised at V3; current behaviour pinned | after A1 |
 | WP-B2 | B | Remote integration fixes in `driver.py` (UC-01, 04, 05 part, 06, 07, 17, 19, BE-02, 06, 08, 09, 10, 21) | WP-B1 | Remote features at V3; UC-01 proven fixed through the harness | after B1 |
-| WP-C1 | C | Scenes, shortcuts, profile execution (API-01–08, 13, 14, 23) | WP-V2 | Domain features at V3 | after V2 |
-| WP-C2 | C | WebSocket contract and schema; hub-owned event stream (API-09, 10, UI-02, UC-17 part) | WP-A1 | Every WS event at V2; live updates proven in the browser and HA at V3 | after A1 |
+| WP-C1 | C | Scenes, shortcuts, profile execution (API-01–08, 13, 14, 23, VAL-01, VAL-02) | WP-V2 | Domain features at V3 | after V2 |
+| WP-C2 | C | WebSocket contract and schema; hub-owned event stream; truthful `/api/status` (API-09, 10, UI-02, UC-17 part, VAL-04, VAL-05) | WP-A1 | Every WS event at V2; live updates proven in the browser and HA at V3 | after A1 |
 | WP-D1 | D | Home Assistant fixes + real-HA-container E2E (HA-01–15) | WP-V1 | HA features at V3 in a real HA container | after V1 |
 | WP-D2 | D | Docker/deployment (DEP-01–03, D11, UC-03, UC-11) | WP-A1 | Deployment features at V3 on the shipped image, UC on and off | after A1 |
 | WP-B3 | B | Remote setup flow, `ucapi` 0.7.0, names, power switch, presets (UC-02 short-term, 05, 08, 09, 14, 15, 16) | WP-B2 | Remote features at V3; setup V4 on a real Remote | after B2 |
 | WP-E1 | E | UI functional fixes (UI-01–04, 17, 23–31, BE-31, SEC-07/08 patch), each with visual review | WP-C2 | UI/kiosk flows at V3 with approved visuals | after C2 |
 | **Gate** | | **v0.2.0 "Stabilize"** (VALIDATION_PLAN §6) | WP-A1…E1 | | |
-| WP-F1 | F | Security baseline incl. Remote token auth (SEC-01–13, API-15, HA-16, UC-02) | v0.2.0 | Security features at V3 in all three auth configurations | |
+| WP-F1 | F | Security baseline incl. Remote token auth (SEC-01–13, API-15, HA-16, UC-02, VAL-06) | v0.2.0 | Security features at V3 in all three auth configurations | |
 | **Gate** | | **v0.3.0 "Secure"** | WP-F1 | | |
 | WP-C3 | C/B | Backend consolidation and modular integrations (Phase 4; UC-10, 12, 13, 18; DI-9 entity model after approval of the exact change list) | v0.3.0 | No feature drops below its level; Remote entity migration proven on a real Remote | |
 | WP-E2 | E | UI simplification (Phase 5) | WP-C2, v0.3.0 | Visual review approved; UI flows at V3; V4 on real devices | |

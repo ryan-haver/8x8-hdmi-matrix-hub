@@ -195,8 +195,9 @@ def test_register_closed_markers():
 
 
 def test_pending_findings_are_well_formed():
+    # Empty is the normal state once every validation finding has been
+    # promoted to the register in docs/REMEDIATION_PLAN.md.
     pending = load_pending()
-    assert pending, "findings_pending.yaml should list the validation findings"
     for fid, f in pending.items():
         assert re.fullmatch(r"VAL-\d{2}", fid)
         assert f.severity in ("C", "H", "M", "L")
