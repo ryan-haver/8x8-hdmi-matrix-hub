@@ -326,7 +326,10 @@ def acquire_lock() -> bool:
                 # Check if process is still running (Windows-compatible)
                 import psutil
 
-                if psutil.pid_exists(old_pid):
+                if old_pid == os.getpid():
+                    _LOG.info(f"Stale lock file found matching current PID ({old_pid}), removing...")
+                    LOCK_FILE.unlink()
+                elif psutil.pid_exists(old_pid):
                     _LOG.error(f"Another instance is already running (PID: {old_pid})")
                     return False
                 else:
