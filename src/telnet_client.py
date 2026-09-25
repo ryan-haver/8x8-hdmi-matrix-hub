@@ -8,7 +8,9 @@ Provides persistent Telnet connection for:
 - Real-time push notifications (cable connect/disconnect events)
 
 Command format: command!\r\n
-Response: text lines ending with success or E00/E01 error codes.
+Response: one or more text lines. Set commands are acknowledged with a line
+(e.g. "cec in 1 on"); E00 (unknown command) and E01 (bad parameter) are
+failures. See ``_telnet_proto`` for the completion rules (BE-07, HIL-A).
 
 :copyright: (c) 2026 by Custom Integration.
 :license: Mozilla Public License Version 2.0, see LICENSE for more details.
@@ -27,9 +29,14 @@ except ImportError:
     from ._task_supervisor import cancel_and_wait, create_supervised_task  # type: ignore[no-redef]
 
 try:
-    from _telnet_proto import TelnetIACFilter
+    from _telnet_proto import TelnetIACFilter, is_acknowledged, is_response_complete, response_error
 except ImportError:
-    from ._telnet_proto import TelnetIACFilter  # type: ignore[no-redef]  # package-relative fallback
+    from ._telnet_proto import (  # type: ignore[no-redef]
+        TelnetIACFilter,
+        is_acknowledged,
+        is_response_complete,
+        response_error,
+    )
 
 _LOG = logging.getLogger(__name__)
 
@@ -430,71 +437,31 @@ class TelnetClient:
             self._command_pending = False
 
     def _is_response_complete(self, response: str, command: str = "") -> bool:
-        """Check if we've received a complete response.
+        """Check if we've received a complete response (BE-07).
 
-        FIX (F4.1): the previous heuristic used magic-number length checks
-        (``len(response) > 10`` for CEC, ``> 20`` for reads, ``> 5`` for
-        sets) which could mis-fire on short legitimate responses or
-        truncate long responses split across chunks. Now we look for
-        proper protocol terminators:
-
-        - Error codes (E00/E01/E02) — always signal completion
-        - Proper line endings (``\\r\\n``) on the last non-empty line
-        - Command-specific known terminators (mac address for status,
-          connect/disconnect for link queries)
+        See :func:`_telnet_proto.is_response_complete`. Error codes complete
+        (and fail) any command; ``status`` completes on its ``mac address``
+        line; ``r link`` on its connect/disconnect line; every other command,
+        including set commands, completes on its first answer line, so a
+        successful set command no longer waits the whole ``COMMAND_TIMEOUT``.
         """
-        if not response:
+        return is_response_complete(response, command)
+
+    def _command_ok(self, response: str, command: str) -> bool:
+        """Log and report whether a set command succeeded (BE-07).
+
+        ``E00`` (unknown command) and ``E01`` (bad parameter) are failures,
+        never completion markers of a success; so is no answer at all (the
+        command timed out).
+        """
+        error = response_error(response)
+        if error is not None:
+            _LOG.warning(f"Telnet command '{command}' rejected by the matrix: {error}")
             return False
-
-        # Split on either \r\n or \n — the matrix may use either
-        lines = response.replace("\r\n", "\n").rstrip("\n").split("\n")
-        # Drop trailing empty lines from split
-        while lines and not lines[-1].strip():
-            lines.pop()
-        if not lines:
+        if not is_acknowledged(response, command):
+            _LOG.warning(f"Telnet command '{command}' was not acknowledged (response: {response!r})")
             return False
-
-        last_line = lines[-1].strip()
-
-        # Error codes at end of response — definitive completion marker
-        if last_line in ("E00", "E01", "E02"):
-            return True
-
-        # For 'status' command, wait for mac address (last line of dump)
-        if command.lower() == "status":
-            return "mac address:" in response.lower()
-
-        # For 'r link' commands, look for connect/disconnect response
-        if command.lower().startswith("r link"):
-            return "connect" in response.lower() or "disconnect" in response.lower()
-
-        # For CEC commands — the matrix echoes "s cec in 1 on\r\nE00\r\n"
-        # or just "E00\r\n". Error-code check above handles success cases.
-        # If no error code yet, check if the last line is a recognizable
-        # CEC response pattern (port number + command name).
-        if command.lower().startswith("s cec"):
-            # Still waiting if last line is incomplete (no proper terminator)
-            # or is just the echo of the command itself
-            if last_line == command.strip().lower():
-                return False
-            # If we got here without an error code, the matrix is still
-            # sending — keep reading until timeout.
-            return "E00" in response or "E01" in response
-
-        # For other read commands — most return "label: value\r\n"
-        if command.lower().startswith("r "):
-            # Complete when we have at least one colon-separated value line
-            # that has been properly terminated (ended with \r\n or \n).
-            return any(":" in line for line in lines)
-
-        # For set commands — matrix returns "E00\r\n" or "E01\r\n"
-        # which is caught by the error-code check above. If we reach here
-        # without an error code, the response is incomplete.
-        if command.lower().startswith("s "):
-            return False  # always wait for error code or timeout
-
-        # End of network config (last in full status dump)
-        return "mac address:" in response.lower()
+        return True
 
     async def _listen_for_push(self) -> None:
         """Background task to listen for push notifications from the matrix.
@@ -966,9 +933,9 @@ class TelnetClient:
             return False
 
         try:
-            response = await self._send_raw(f"s cec in {input_num} {command}")
-            # Check for error response
-            if "E00" in response or "E01" in response:
+            telnet_cmd = f"s cec in {input_num} {command}"
+            response = await self._send_raw(telnet_cmd)
+            if not self._command_ok(response, telnet_cmd):
                 _LOG.warning(f"CEC input command failed: {command} on input {input_num}")
                 return False
             _LOG.info(f"CEC input {input_num}: {command} sent successfully")
@@ -1015,9 +982,9 @@ class TelnetClient:
             return False
 
         try:
-            response = await self._send_raw(f"s cec hdmi out {output_num} {command}")
-            # Check for error response
-            if "E00" in response or "E01" in response:
+            telnet_cmd = f"s cec hdmi out {output_num} {command}"
+            response = await self._send_raw(telnet_cmd)
+            if not self._command_ok(response, telnet_cmd):
                 _LOG.warning(f"CEC output command failed: {command} on output {output_num}")
                 return False
             _LOG.info(f"CEC output {output_num}: {command} sent successfully")
@@ -1037,8 +1004,8 @@ class TelnetClient:
             return False
 
         try:
-            response = await self._send_raw(f"s save preset {preset_num}")
-            return "E00" not in response and "E01" not in response
+            telnet_cmd = f"s save preset {preset_num}"
+            return self._command_ok(await self._send_raw(telnet_cmd), telnet_cmd)
         except Exception as e:
             _LOG.error(f"Save preset error: {e}")
             return False
@@ -1050,8 +1017,8 @@ class TelnetClient:
             return False
 
         try:
-            response = await self._send_raw(f"s recall preset {preset_num}")
-            return "E00" not in response and "E01" not in response
+            telnet_cmd = f"s recall preset {preset_num}"
+            return self._command_ok(await self._send_raw(telnet_cmd), telnet_cmd)
         except Exception as e:
             _LOG.error(f"Recall preset error: {e}")
             return False
@@ -1063,8 +1030,8 @@ class TelnetClient:
             return False
 
         try:
-            response = await self._send_raw(f"s clear preset {preset_num}")
-            return "E00" not in response and "E01" not in response
+            telnet_cmd = f"s clear preset {preset_num}"
+            return self._command_ok(await self._send_raw(telnet_cmd), telnet_cmd)
         except Exception as e:
             _LOG.error(f"Clear preset error: {e}")
             return False
@@ -1107,8 +1074,8 @@ class TelnetClient:
             return False
 
         try:
-            response = await self._send_raw(f"s output {output_num} in source {input_num}")
-            success = "E00" not in response and "E01" not in response
+            telnet_cmd = f"s output {output_num} in source {input_num}"
+            success = self._command_ok(await self._send_raw(telnet_cmd), telnet_cmd)
             if success:
                 _LOG.info(f"Routed input {input_num} to output {output_num}")
             return success
@@ -1124,8 +1091,8 @@ class TelnetClient:
 
         try:
             # Use output 0 to target all outputs
-            response = await self._send_raw(f"s output 0 in source {input_num}")
-            success = "E00" not in response and "E01" not in response
+            telnet_cmd = f"s output 0 in source {input_num}"
+            success = self._command_ok(await self._send_raw(telnet_cmd), telnet_cmd)
             if success:
                 _LOG.info(f"Routed input {input_num} to all outputs")
             return success
@@ -1140,8 +1107,7 @@ class TelnetClient:
     async def power_on(self) -> bool:
         """Power on the matrix."""
         try:
-            response = await self._send_raw("power 1")
-            return "E00" not in response and "E01" not in response
+            return self._command_ok(await self._send_raw("power 1"), "power 1")
         except Exception as e:
             _LOG.error(f"Power on error: {e}")
             return False
@@ -1149,8 +1115,7 @@ class TelnetClient:
     async def power_off(self) -> bool:
         """Power off the matrix (standby)."""
         try:
-            response = await self._send_raw("power 0")
-            return "E00" not in response and "E01" not in response
+            return self._command_ok(await self._send_raw("power 0"), "power 0")
         except Exception as e:
             _LOG.error(f"Power off error: {e}")
             return False

@@ -4,6 +4,8 @@ import asyncio
 
 import pytest
 
+import telnet_client
+
 
 async def test_connect_and_status(matrix, simulator):
     assert await matrix.connect()
@@ -184,10 +186,49 @@ async def test_telnet_push_cable_event_reaches_client(matrix_with_telnet, simula
 
 
 async def test_telnet_cec(matrix_with_telnet, simulator, monkeypatch):
-    """OREI_USE_TELNET_CEC path; each command waits the (shortened) timeout, see BE-07."""
+    """OREI_USE_TELNET_CEC path."""
     m = matrix_with_telnet
     await m.connect()
     monkeypatch.setattr(m, "_use_telnet_cec", True)
     assert await m.send_cec("POWER_ON", 1, is_output=True)
     telnet_cmds = [e["command"] for e in simulator.log if e["channel"] == "telnet"]
     assert "s cec hdmi out 1 on" in telnet_cmds
+
+
+async def test_telnet_set_commands_complete_on_ack(matrix_with_telnet, simulator, monkeypatch):
+    """BE-07: set commands return on the acknowledgement, not after COMMAND_TIMEOUT."""
+    monkeypatch.setattr(telnet_client, "COMMAND_TIMEOUT", 5.0)  # the production value
+    m = matrix_with_telnet
+    await m.connect()
+    telnet = m._telnet
+    loop = asyncio.get_running_loop()
+    start = loop.time()
+    assert await telnet.cec_output_power_on(1)
+    assert await telnet.cec_input_play(2)
+    assert await telnet.switch_input(4, 3)
+    assert await telnet.save_preset(3)
+    assert await telnet.recall_preset(3)
+    assert loop.time() - start < 2.0, "set commands waited for the command timeout"
+    assert simulator.state.outputs[2].source == 4
+
+
+async def test_telnet_error_codes_mean_failure(matrix_with_telnet, simulator, monkeypatch):
+    """BE-07: E01 (bad parameter) and E00 (unknown command) are failures, returned promptly."""
+    monkeypatch.setattr(telnet_client, "COMMAND_TIMEOUT", 5.0)
+    m = matrix_with_telnet
+    await m.connect()
+    telnet = m._telnet
+    loop = asyncio.get_running_loop()
+    start = loop.time()
+    assert await telnet._send_cec_input(1, "bogus") is False  # E01
+    assert await telnet.power_on() is False  # "power 1" -> E00 in the simulator (HIL-A)
+    assert loop.time() - start < 1.0
+    assert m.telnet_connected
+
+
+async def test_telnet_unanswered_set_command_is_failure(matrix_with_telnet, simulator):
+    m = matrix_with_telnet
+    await m.connect()
+    simulator.faults.update({"telnet_silent": True, "telnet_fault_count": 1})
+    assert await m._telnet.cec_output_power_off(1) is False
+    assert m.telnet_connected  # silence is a timeout, not a dropped connection

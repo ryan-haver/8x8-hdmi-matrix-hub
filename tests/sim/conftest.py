@@ -29,8 +29,8 @@ import orei_matrix  # noqa: E402
 import telnet_client  # noqa: E402
 from tools.simulator import DeviceState, Simulator  # noqa: E402
 
-#: Short Telnet command timeout used by these tests (the client default is 5 s
-#: and, per BE-07, every successful set/CEC command waits the full timeout).
+#: Short Telnet command timeout used by these tests (the client default is 5 s);
+#: it only matters for commands the simulator never answers (telnet_silent).
 FAST_TELNET_TIMEOUT = 0.4
 
 
