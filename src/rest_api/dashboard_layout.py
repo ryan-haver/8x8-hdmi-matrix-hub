@@ -21,11 +21,7 @@ import logging
 from aiohttp import web
 
 from dashboard_layout import (
-    CARD_AGGREGATE_WIDGET,
-    CARD_MACRO,
     CARD_PRESET,
-    CARD_PROFILE,
-    CARD_SYSTEM_SHORTCUT,
     VALID_CARD_TYPES,
     DashboardCard,
     DashboardLayout,

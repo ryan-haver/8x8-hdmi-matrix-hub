@@ -1,0 +1,35 @@
+{
+  "route_all_to_output": {"label": "All → Out 1", "icon": "🎯", "enabled": true, "order": 0, "favorite": true, "dashboard_visible": false},
+  "route_one_to_one": {"label": "1:1 Mapping", "icon": "🔁", "enabled": true, "order": 1, "favorite": true, "dashboard_visible": false},
+  "power_off_all": {"label": "Power Off All", "icon": "⏻", "enabled": true, "order": 2, "favorite": false, "dashboard_visible": true},
+  "mute_all_audio": {"label": "Mute All Audio", "icon": "🔇", "enabled": true, "order": 3, "favorite": true, "dashboard_visible": true},
+  "unmute_all_audio": {"label": "Unmute All Audio", "icon": "🔊", "enabled": true, "order": 4, "favorite": false, "dashboard_visible": false},
+  "preset_recall_1": {"label": "Apple TV Everywhere", "icon": "1️⃣", "enabled": true, "order": 10, "favorite": true, "dashboard_visible": false},
+  "preset_recall_2": {"label": "Preset 2", "icon": "2️⃣", "enabled": true, "order": 11, "favorite": false, "dashboard_visible": false},
+  "preset_recall_3": {"label": "Preset 3", "icon": "3️⃣", "enabled": true, "order": 12, "favorite": false, "dashboard_visible": false},
+  "preset_recall_4": {"label": "Preset 4", "icon": "4️⃣", "enabled": true, "order": 13, "favorite": false, "dashboard_visible": false},
+  "preset_recall_5": {"label": "Preset 5", "icon": "5️⃣", "enabled": true, "order": 14, "favorite": false, "dashboard_visible": false},
+  "preset_recall_6": {"label": "Preset 6", "icon": "6️⃣", "enabled": true, "order": 15, "favorite": false, "dashboard_visible": false},
+  "preset_recall_7": {"label": "Preset 7", "icon": "7️⃣", "enabled": true, "order": 16, "favorite": false, "dashboard_visible": false},
+  "preset_recall_8": {"label": "Preset 8", "icon": "8️⃣", "enabled": true, "order": 17, "favorite": false, "dashboard_visible": false},
+  "beep_on": {"label": "Beep On", "icon": "🔔", "enabled": true, "order": 20, "favorite": false, "dashboard_visible": false},
+  "beep_off": {"label": "Beep Off", "icon": "🔕", "enabled": true, "order": 21, "favorite": false, "dashboard_visible": false},
+  "panel_lock_on": {"label": "Panel Lock On", "icon": "🔒", "enabled": true, "order": 22, "favorite": false, "dashboard_visible": false},
+  "panel_lock_off": {"label": "Panel Lock Off", "icon": "🔓", "enabled": true, "order": 23, "favorite": false, "dashboard_visible": false},
+  "system_reboot": {"label": "Reboot Matrix", "icon": "🔄", "enabled": false, "order": 24, "favorite": false, "dashboard_visible": false},
+  "lcd_timeout_off": {"label": "LCD: Off", "icon": "🖥️", "enabled": true, "order": 25, "favorite": false, "dashboard_visible": false},
+  "lcd_timeout_10s": {"label": "LCD: 10s", "icon": "🖥️", "enabled": true, "order": 26, "favorite": false, "dashboard_visible": false},
+  "lcd_timeout_30s": {"label": "LCD: 30s", "icon": "🖥️", "enabled": true, "order": 27, "favorite": false, "dashboard_visible": false},
+  "lcd_timeout_60s": {"label": "LCD: 60s", "icon": "🖥️", "enabled": true, "order": 28, "favorite": false, "dashboard_visible": false},
+  "lcd_timeout_always_on": {"label": "LCD: Always On", "icon": "🖥️", "enabled": true, "order": 29, "favorite": false, "dashboard_visible": false},
+  "user.a1b2c3d4e5f6": {
+    "key": "user.a1b2c3d4e5f6", "label": "Shield → TV", "icon": "📺", "enabled": true, "order": 30,
+    "category": "routing", "favorite": true, "dashboard_visible": true, "builtin": false,
+    "params": {"input": 5, "output": 1}, "type": "route_all_to_output"
+  },
+  "user.0f9e8d7c6b5a": {
+    "key": "user.0f9e8d7c6b5a", "label": "Everything Off", "icon": "🌙", "enabled": true, "order": 31,
+    "category": "routing", "favorite": false, "dashboard_visible": false, "builtin": false,
+    "params": {}, "type": "power_off_all"
+  }
+}

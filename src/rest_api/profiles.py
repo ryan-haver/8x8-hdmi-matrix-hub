@@ -6,7 +6,6 @@ Handles profile CRUD, recall, and macro associations.
 
 import json
 import logging
-import re
 
 from aiohttp import web
 

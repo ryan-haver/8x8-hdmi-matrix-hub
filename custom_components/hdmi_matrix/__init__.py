@@ -1,7 +1,5 @@
 """The OREI HDMI Matrix integration."""
 
-import asyncio
-
 import aiohttp
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant

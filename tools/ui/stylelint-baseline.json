@@ -1,0 +1,37 @@
+{
+  "web/css/cec-tray.css": {
+    "hub/no-raw-colors": 87,
+    "no-descending-specificity": 3,
+    "no-duplicate-selectors": 2
+  },
+  "web/css/components.css": {
+    "declaration-block-no-duplicate-properties": 1,
+    "declaration-property-value-keyword-no-deprecated": 1,
+    "hub/no-raw-colors": 196,
+    "no-descending-specificity": 83,
+    "no-duplicate-selectors": 20
+  },
+  "web/css/icon-picker.css": {
+    "hub/no-raw-colors": 38,
+    "no-descending-specificity": 2
+  },
+  "web/css/responsive.css": {
+    "declaration-block-no-shorthand-property-overrides": 1,
+    "declaration-property-value-keyword-no-deprecated": 12,
+    "hub/no-raw-colors": 1,
+    "media-feature-name-value-no-unknown": 1,
+    "property-no-deprecated": 1
+  },
+  "web/css/style.css": {
+    "declaration-block-no-duplicate-properties": 1,
+    "declaration-property-value-keyword-no-deprecated": 1,
+    "hub/no-raw-colors": 76,
+    "no-descending-specificity": 5,
+    "no-duplicate-selectors": 1,
+    "property-no-deprecated": 1
+  },
+  "web/css/theme.css": {
+    "no-descending-specificity": 4,
+    "no-duplicate-selectors": 1
+  }
+}

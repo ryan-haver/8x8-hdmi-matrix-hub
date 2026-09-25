@@ -11,9 +11,7 @@ Verifies:
 - The ``/api/system/storage`` endpoint returns the resolved layout
 """
 
-import importlib
 import json
-import os
 import sys
 from pathlib import Path
 from unittest.mock import MagicMock
@@ -153,7 +151,7 @@ class TestLegacyMigration:
 
     def test_migrates_existing_legacy_file(self, monkeypatch, tmp_path):
         """If legacy file exists and target doesn't, copy it over."""
-        from persistence import get_data_dir, migrate_legacy_file
+        from persistence import migrate_legacy_file
 
         # Pre-populate the legacy location
         LEGACY_DATA_DIR.mkdir(parents=True, exist_ok=True)

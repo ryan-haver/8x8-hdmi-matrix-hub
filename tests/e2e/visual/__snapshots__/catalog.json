@@ -1,0 +1,1396 @@
+{
+  "generated_by": "tests/e2e/visual/visual.spec.ts",
+  "themes": [
+    "tron-classic",
+    "neon",
+    "royal",
+    "vaporwave"
+  ],
+  "viewports": [
+    "desktop",
+    "tablet",
+    "phone",
+    "kiosk"
+  ],
+  "entries": [
+    {
+      "name": "app/header/disconnected",
+      "page": "ui",
+      "description": "Header when the WebSocket cannot connect: red title pill, generic title.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "app/matrix-unreachable",
+      "page": "ui",
+      "description": "Hub up but the matrix is not answering: every status call returns 503 (as the hub does when the matrix is disconnected).",
+      "note": "No error is shown: the header stays green (it only reflects the WebSocket) and the grid shows a made-up 1:1 routing with default output names.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "app/header/reconnecting",
+      "page": "ui",
+      "description": "WebSocket closed after a good start (hub restarted): header after the socket drops, while it retries.",
+      "note": "There is no distinct \"reconnecting\" visual: websocket.js tracks a reconnecting status but app.js never renders it, so this is the plain disconnected header over loaded data.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "app/ws-status-refresh/output-names",
+      "page": "ui",
+      "description": "Matrix grid after the hub's background status broadcast arrives (what a user sees ~100 ms after load).",
+      "note": "Hub bug: every GET /api/status/outputs with a warm cache broadcasts a refresh whose outputs_detail names come from the hub name cache, empty in modular mode (src/rest_api/core.py:115 via outputs.py:59), so TV/Soundbar become \"Output 1/2\" (unless the broadcast happens to arrive before the REST response). All other entries drop these broadcasts to stay deterministic.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "matrix/grid/default",
+      "page": "ui",
+      "description": "Routing matrix, grid view, seeded simulator (8 named inputs/outputs, mixed routing, signal on 2/5/6).",
+      "note": null,
+      "themed": true,
+      "viewports": null
+    },
+    {
+      "name": "matrix/cards/default",
+      "page": "ui",
+      "description": "Routing matrix, cards view (output cards with route selector, CEC and settings buttons).",
+      "note": null,
+      "themed": true,
+      "viewports": null
+    },
+    {
+      "name": "matrix/grid/all-to-one",
+      "page": "ui",
+      "description": "Grid with every output on input 2 (after Route All / preset recall).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "matrix/grid/no-signal",
+      "page": "ui",
+      "description": "All sources idle: cables in, no signal (standby colours on labels).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "matrix/grid/cables-unplugged",
+      "page": "ui",
+      "description": "Every input and output cable unplugged (disconnected colours).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "matrix/cards/cables-unplugged",
+      "page": "ui",
+      "description": "Cards view with every cable unplugged.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "matrix/grid/long-names",
+      "page": "ui",
+      "description": "Grid with long input/output names (overflow and truncation).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "matrix/cards/long-names",
+      "page": "ui",
+      "description": "Cards view with long input/output names.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "matrix/grid/route-pending",
+      "page": "ui",
+      "description": "A route click waiting for the matrix (pending cell).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "matrix/grid/status-pending",
+      "page": "ui",
+      "description": "Matrix while the first /api/status request is still pending.",
+      "note": "No loading indicator: the grid shows a made-up 1:1 routing and default names until status arrives (the \"Loading matrix...\" spinner exists only in the pre-JS HTML). The same happens when the matrix is unreachable (app/matrix-unreachable).",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "matrix/grid/cell-hover",
+      "page": "ui",
+      "description": "Pointer hovering an inactive grid cell.",
+      "note": null,
+      "themed": false,
+      "viewports": [
+        "desktop"
+      ]
+    },
+    {
+      "name": "matrix/grid/cell-focus",
+      "page": "ui",
+      "description": "Keyboard focus on a grid cell (focus ring).",
+      "note": null,
+      "themed": false,
+      "viewports": [
+        "desktop"
+      ]
+    },
+    {
+      "name": "matrix/cards/routing-sheet",
+      "page": "ui",
+      "description": "Output card route selector: the \"Select Input Source\" bottom sheet.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "dashboard/default",
+      "page": "ui",
+      "description": "Dashboard as it loads: Routing widget pinned; server cards not rendered yet (\"No cards yet\").",
+      "note": "Seeded dashboard cards do not render on load: dashboard-manager.js renders cards from a 100 ms timer before /api/dashboard/layout arrives, and nothing re-renders afterwards.",
+      "themed": true,
+      "viewports": null
+    },
+    {
+      "name": "dashboard/cards/all-types",
+      "page": "ui",
+      "description": "Every dashboard card type (scene, locked scene, preset, built-in and user shortcut, profile, macro, aggregate widgets) once cards are rendered.",
+      "note": "Needs an app-state nudge: profile and macro cards need state.profiles/state.cecMacros, which the main UI never loads; aggregate_widget cards render empty (renderer reads card.widget_id).",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "dashboard/cards/empty",
+      "page": "ui",
+      "description": "Dashboard cards area with no cards.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "dashboard/widgets/cec-remote",
+      "page": "ui",
+      "description": "Dashboard with the CEC remote widget pinned next to the Routing widget.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "dashboard/card-picker/profiles",
+      "page": "ui",
+      "description": "\"Add card\" picker, profiles tab.",
+      "note": "Always empty today: state.profiles is never loaded by the main UI.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "dashboard/card-picker/scenes",
+      "page": "ui",
+      "description": "\"Add card\" picker, scenes tab.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "dashboard/card-picker/presets",
+      "page": "ui",
+      "description": "\"Add card\" picker, presets tab.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "dashboard/card-picker/shortcuts",
+      "page": "ui",
+      "description": "\"Add card\" picker, shortcuts tab.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "dashboard/card-picker/macros",
+      "page": "ui",
+      "description": "\"Add card\" picker, macros tab.",
+      "note": "Always empty today: state.cecMacros is never loaded by the main UI.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "inputs/list/default",
+      "page": "ui",
+      "description": "Inputs tab: 8 input cards with icons, signal/cable status, CEC and settings buttons.",
+      "note": null,
+      "themed": true,
+      "viewports": null
+    },
+    {
+      "name": "inputs/list/no-signal",
+      "page": "ui",
+      "description": "Inputs tab with no source signal anywhere.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "inputs/list/cables-unplugged",
+      "page": "ui",
+      "description": "Inputs tab with every cable unplugged.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "inputs/list/long-names",
+      "page": "ui",
+      "description": "Inputs tab with long names.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "inputs/list/loading-skeleton",
+      "page": "ui",
+      "description": "Input cards skeleton loader.",
+      "note": "Not reachable in normal use: the skeleton only shows when state has no inputs, and state always starts with 8 defaults.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "inputs/card/hover",
+      "page": "ui",
+      "description": "Pointer hovering an input card.",
+      "note": null,
+      "themed": false,
+      "viewports": [
+        "desktop"
+      ]
+    },
+    {
+      "name": "outputs/list/default",
+      "page": "ui",
+      "description": "Outputs tab: 8 output cards (TV and Soundbar connected, others no display).",
+      "note": null,
+      "themed": true,
+      "viewports": null
+    },
+    {
+      "name": "outputs/list/cables-unplugged",
+      "page": "ui",
+      "description": "Outputs tab with every display unplugged.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "outputs/list/long-names",
+      "page": "ui",
+      "description": "Outputs tab with long names.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "profiles/list/empty",
+      "page": "ui",
+      "description": "Profiles tab as it loads today (empty, even though the hub has 4 profiles).",
+      "note": "The Profiles tab only shows profiles from the browser state cache: app.js:591 reads /api/v2/scenes with the wrong response path, and the tab never calls /api/profiles.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "profiles/list/populated",
+      "page": "ui",
+      "description": "Profiles tab with profiles (pinned ones shown, incl. a passcode-protected profile).",
+      "note": "The Profiles tab only shows profiles from the browser state cache: app.js:591 reads /api/v2/scenes with the wrong response path, and the tab never calls /api/profiles.",
+      "themed": true,
+      "viewports": null
+    },
+    {
+      "name": "profiles/list/long-names",
+      "page": "ui",
+      "description": "Profiles tab with long profile names.",
+      "note": "The Profiles tab only shows profiles from the browser state cache: app.js:591 reads /api/v2/scenes with the wrong response path, and the tab never calls /api/profiles.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "profiles/manager/populated",
+      "page": "ui",
+      "description": "Manage Profiles panel (pinned/unpinned lists).",
+      "note": "The Profiles tab only shows profiles from the browser state cache: app.js:591 reads /api/v2/scenes with the wrong response path, and the tab never calls /api/profiles.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "profiles/manager/empty",
+      "page": "ui",
+      "description": "Manage Profiles panel with no profiles.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "profiles/api-endpoint-modal",
+      "page": "ui",
+      "description": "Profile \"API endpoint\" modal (URL + curl snippet for Flic/automation).",
+      "note": "The first click on the API button throws and opens nothing: createModal (api-copy.js:134) queries .api-modal-backdrop inside itself and gets null; the second click works. The URLs hard-code port 8080 (api-copy.js:13), wrong when the hub runs on another port (here 18080).",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "deck/default",
+      "page": "ui",
+      "description": "Control Deck (side nav): utility buttons and Personalize Tabs list.",
+      "note": null,
+      "themed": true,
+      "viewports": null
+    },
+    {
+      "name": "deck/personalize-tabs",
+      "page": "ui",
+      "description": "Control Deck scrolled to the Personalize Tabs list (pin / reorder).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "deck/button-hover",
+      "page": "ui",
+      "description": "Pointer hovering a Control Deck button.",
+      "note": null,
+      "themed": false,
+      "viewports": [
+        "desktop"
+      ]
+    },
+    {
+      "name": "drawer/routing/default",
+      "page": "ui",
+      "description": "Route To All drawer: input buttons with signal status.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/routing/all-active",
+      "page": "ui",
+      "description": "Route To All drawer when every output is on one input (active badge).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/routing/routing-in-progress",
+      "page": "ui",
+      "description": "Route To All button while the switch request is in flight (loading).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/presets/default",
+      "page": "ui",
+      "description": "Presets drawer: 8 presets (names from device settings + matrix).",
+      "note": null,
+      "themed": true,
+      "viewports": null
+    },
+    {
+      "name": "drawer/presets/expanded",
+      "page": "ui",
+      "description": "Presets drawer with a preset expanded (routing editor, recall/overwrite/save).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/presets/rename",
+      "page": "ui",
+      "description": "Presets drawer, renaming a preset (inline input).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/presets/active",
+      "page": "ui",
+      "description": "Presets drawer with the last recalled preset highlighted.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/presets/long-names",
+      "page": "ui",
+      "description": "Presets drawer with long preset names.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/presets/loading",
+      "page": "ui",
+      "description": "Presets drawer while presets load.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/presets/error",
+      "page": "ui",
+      "description": "Presets drawer when presets fail to load.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/theme/default",
+      "page": "ui",
+      "description": "Theme drawer: four presets, hover glow preference, card opacity, reset.",
+      "note": null,
+      "themed": true,
+      "viewports": null
+    },
+    {
+      "name": "drawer/theme/customize",
+      "page": "ui",
+      "description": "Theme drawer editing a preset (hue swatches, name).",
+      "note": "theme-drawer.js:122-136 nests the edit <button> inside the preset <button>; the parser splits them, so the edit buttons render as separate grid items that overlap: a click on the first preset's edit button hits the fourth's.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/theme/low-opacity",
+      "page": "ui",
+      "description": "Card opacity at 40% (LOOK_AND_FEEL §3: surfaces must stay legible from 0.4 to 1.0).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/general/default",
+      "page": "ui",
+      "description": "General drawer: system info, matrix IP, connection test result.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/general/connection-error",
+      "page": "ui",
+      "description": "General drawer when the connection test fails.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/hardware/default",
+      "page": "ui",
+      "description": "Hardware drawer: LCD timeout, beep, external audio, power controls.",
+      "note": "Shows HTML defaults, not the device values: settings-panel.js loadCurrentSettings never runs (its #settings-btn trigger does not exist).",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/interface/default",
+      "page": "ui",
+      "description": "Interface drawer: CEC tray position, light-cycle animation, reduce glow, debug panel, kiosk link.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/shortcuts/default",
+      "page": "ui",
+      "description": "Shortcuts drawer: built-in and user shortcuts grouped by category, with favourite/dashboard/run buttons.",
+      "note": null,
+      "themed": true,
+      "viewports": null
+    },
+    {
+      "name": "drawer/shortcuts/scrolled-end",
+      "page": "ui",
+      "description": "Shortcuts drawer scrolled to the end (System / LCD groups, user shortcuts).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/shortcuts/rename",
+      "page": "ui",
+      "description": "Shortcuts drawer, renaming a shortcut.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/shortcuts/long-names",
+      "page": "ui",
+      "description": "Shortcuts drawer with long user-shortcut names.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/shortcuts/empty",
+      "page": "ui",
+      "description": "Shortcuts drawer with no shortcuts.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/shortcuts/loading",
+      "page": "ui",
+      "description": "Shortcuts drawer while shortcuts load.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/shortcuts/error",
+      "page": "ui",
+      "description": "Shortcuts drawer when shortcuts fail to load.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/integrations/flic",
+      "page": "ui",
+      "description": "Integrations drawer, Flic Buttons tab (default): generator for button actions.",
+      "note": null,
+      "themed": true,
+      "viewports": null
+    },
+    {
+      "name": "drawer/integrations/flic-cec",
+      "page": "ui",
+      "description": "Integrations drawer, Flic tab with a CEC command target (extra port row).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/integrations/flic-profile",
+      "page": "ui",
+      "description": "Integrations drawer, Flic tab with a profile target.",
+      "note": "Always warns \"No Profiles created yet\" because state.profiles is never loaded (integrations-drawer.js:526).",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/integrations/home-assistant",
+      "page": "ui",
+      "description": "Integrations drawer, Home Assistant tab (HACS setup + YAML generator).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/integrations/flic-generated-request",
+      "page": "ui",
+      "description": "Integrations drawer, Flic tab scrolled to the generated request (method, URL, body, SDK code).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/integrations/home-assistant-yaml",
+      "page": "ui",
+      "description": "Integrations drawer, Home Assistant tab scrolled to the REST command YAML generator.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/integrations/unfolded-circle",
+      "page": "ui",
+      "description": "Integrations drawer, Unfolded Circle tab.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/settings/profiles",
+      "page": "ui",
+      "description": "Settings drawer (Phase 8), Profiles tab as it renders today (empty).",
+      "note": "No button opens this drawer (only a #settings/<tab> hash change). The Profiles tab is always empty: state.profiles is never loaded.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/settings/profiles-populated",
+      "page": "ui",
+      "description": "Settings drawer, Profiles tab with profiles (execute / favourite buttons).",
+      "note": "Needs state.profiles, which the app never loads; filled from /api/profiles here.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/settings/scenes",
+      "page": "ui",
+      "description": "Settings drawer, Scenes tab (v2 scenes incl. a passcode-protected one).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/settings/scenes-empty",
+      "page": "ui",
+      "description": "Settings drawer, Scenes tab with no scenes (create button).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/settings/system",
+      "page": "ui",
+      "description": "Settings drawer, System tab (system actions by group).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "drawer/stacked/deck-and-presets",
+      "page": "ui",
+      "description": "Control Deck and a right-side drawer open together (wide screens keep both).",
+      "note": null,
+      "themed": false,
+      "viewports": [
+        "desktop",
+        "tablet",
+        "kiosk"
+      ]
+    },
+    {
+      "name": "modal/input-settings/default",
+      "page": "ui",
+      "description": "Input settings modal: name, icon, EDID, CEC, signal info.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "modal/input-settings/icon-suggestion",
+      "page": "ui",
+      "description": "Input settings with the icon suggestion that appears after typing a known device name.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "modal/input-settings/long-name",
+      "page": "ui",
+      "description": "Input settings modal for an input with a long name.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "modal/output-settings/default",
+      "page": "ui",
+      "description": "Output settings modal: name, icon, enable, HDR/HDCP/scaler, ARC, mute, CEC.",
+      "note": "HDR/HDCP selects may render blank: state defaults are the string \"auto\" (output-settings-modal.js:320).",
+      "themed": true,
+      "viewports": null
+    },
+    {
+      "name": "modal/output-settings/disconnected-display",
+      "page": "ui",
+      "description": "Output settings for an output with no display connected.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "modal/icon-picker/default",
+      "page": "ui",
+      "description": "Icon picker (all categories, current icon selected).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "modal/icon-picker/category",
+      "page": "ui",
+      "description": "Icon picker filtered to the Gaming category.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "modal/icon-picker/no-results",
+      "page": "ui",
+      "description": "Icon picker search with no results.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "modal/icon-picker/recent",
+      "page": "ui",
+      "description": "Icon picker with recently used icons.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "modal/icon-picker/loading",
+      "page": "ui",
+      "description": "Icon picker skeleton.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "modal/save-profile/legacy",
+      "page": "ui",
+      "description": "Legacy \"Save Profile\" modal (index.html #save-scene-modal).",
+      "note": "Unreachable in normal use (fallback path only); captured because it ships in index.html.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "modal/settings-legacy/general",
+      "page": "ui",
+      "description": "Legacy tabbed Settings modal, general tab.",
+      "note": "Unreachable: its trigger #settings-btn does not exist (settings-panel.js:29). Replaced by the General/Hardware/Interface drawers.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "modal/settings-legacy/hardware",
+      "page": "ui",
+      "description": "Legacy tabbed Settings modal, hardware tab.",
+      "note": "Unreachable: its trigger #settings-btn does not exist (settings-panel.js:29). Replaced by the General/Hardware/Interface drawers.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "modal/settings-legacy/interface",
+      "page": "ui",
+      "description": "Legacy tabbed Settings modal, interface tab.",
+      "note": "Unreachable: its trigger #settings-btn does not exist (settings-panel.js:29). Replaced by the General/Hardware/Interface drawers.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "dialog/confirm/reboot",
+      "page": "ui",
+      "description": "Confirm dialog (danger variant) from Hardware → Reboot.",
+      "note": "Renders under the Hardware drawer: .confirm-dialog z-index 500 < drawer 1040.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "dialog/confirm/power-cycle",
+      "page": "ui",
+      "description": "Confirm dialog (warning variant) from Hardware → Power Cycle.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "dialog/confirm/default",
+      "page": "ui",
+      "description": "Confirm dialog, default variant, on its own.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "dialog/about/default",
+      "page": "ui",
+      "description": "About dialog (version, status, keyboard link).",
+      "note": "No UI trigger. Always shows WebSocket \"Disconnected\" (about-dialog.js:167 reads a missing state.wsStatus).",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "dialog/keyboard-shortcuts",
+      "page": "ui",
+      "description": "Keyboard shortcuts help overlay.",
+      "note": "Pressing \"?\" never opens it (registered without shift, keyboard-shortcuts.js:53).",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "dialog/setup-wizard/connection",
+      "page": "ui",
+      "description": "Setup wizard, step 1 (matrix connection).",
+      "note": "Never shown automatically; nothing in the app opens it.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "dialog/setup-wizard/validation-error",
+      "page": "ui",
+      "description": "Setup wizard with an invalid IP.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "dialog/setup-wizard/testing",
+      "page": "ui",
+      "description": "Setup wizard, step 2 (testing connection).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "dialog/context-menu/profile",
+      "page": "ui",
+      "description": "Context menu for a profile.",
+      "note": "Not wired to any UI.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "dialog/context-menu/output",
+      "page": "ui",
+      "description": "Context menu for an output.",
+      "note": "Not wired to any UI.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "dialog/tooltip",
+      "page": "ui",
+      "description": "Tooltip (the only [data-tooltip] is the About dialog keyboard link).",
+      "note": null,
+      "themed": false,
+      "viewports": [
+        "desktop"
+      ]
+    },
+    {
+      "name": "dialog/scene-cec",
+      "page": "ui",
+      "description": "Scene CEC configuration modal (targets per category).",
+      "note": "Invisible in the app: scene-cec-modal.js:204 sets aria-hidden only, but the overlay needs .visible; it also has no UI trigger. Forced visible here.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "dialog/passcode-prompt",
+      "page": "ui",
+      "description": "Passcode prompt for a protected scene/profile.",
+      "note": "Not capturable: the passcode prompt is a native window.prompt() (settings-drawer.js showPasscodePrompt), which screenshots do not include, and its automatic trigger never fires (api.js errors carry no .status).",
+      "themed": false,
+      "viewports": []
+    },
+    {
+      "name": "editor/profile/new",
+      "page": "ui",
+      "description": "Profile editor, new profile (icon, name, routing preview, macros, passcode).",
+      "note": null,
+      "themed": true,
+      "viewports": null
+    },
+    {
+      "name": "editor/profile/validation-error",
+      "page": "ui",
+      "description": "Profile editor after saving with no name.",
+      "note": "The warning toast (z-index 300) renders under the modal.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "editor/profile/passcode",
+      "page": "ui",
+      "description": "Profile editor with passcode protection switched on.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "editor/profile/edit",
+      "page": "ui",
+      "description": "Profile editor, editing an existing profile (macros, power macros, delete button).",
+      "note": "The UI edit path (Profiles tab → edit) fetches /api/v2/scenes/{id} and fails; opened with the editor API here.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "editor/profile/edit-bottom",
+      "page": "ui",
+      "description": "Profile editor scrolled to routing preview, macros, passcode and execution history.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "editor/scene/new",
+      "page": "ui",
+      "description": "Scene editor, new scene (from the Settings drawer Scenes tab).",
+      "note": "Opens behind the Settings drawer (.modal z-index 200 < drawer 1040).",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "editor/scene/new-standalone",
+      "page": "ui",
+      "description": "Scene editor on its own (no drawer over it).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "editor/scene/edit",
+      "page": "ui",
+      "description": "Scene editor editing \"Movie Night\" (macro, profile and system-action steps; override).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "editor/scene/passcode",
+      "page": "ui",
+      "description": "Scene editor editing the passcode-protected scene.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "editor/scene/validation-error",
+      "page": "ui",
+      "description": "Scene editor after Save: \"Scene name is required\".",
+      "note": "Always fails validation: scene-editor.js:90 renders a duplicate id=\"scene-name\" and save() reads the hidden legacy input.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "editor/scene/conflicts",
+      "page": "ui",
+      "description": "Scene editor showing profile setting conflicts.",
+      "note": "Normally reached only through prompt()-driven step adds; conflicts injected into the editor here.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "editor/cec-macro/list",
+      "page": "ui",
+      "description": "CEC macro editor, macro list.",
+      "note": "No working UI trigger (\"Create a macro\" uses window.cecMacroEditor, which is undefined).",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "editor/cec-macro/empty",
+      "page": "ui",
+      "description": "CEC macro editor with no macros.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "editor/cec-macro/edit",
+      "page": "ui",
+      "description": "CEC macro editor editing a two-step macro.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "editor/cec-macro/validation-error",
+      "page": "ui",
+      "description": "New CEC macro saved without a name.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "cec-remote/output-1",
+      "page": "ui",
+      "description": "CEC remote opened from the TV output tile (display CEC: power, navigation, volume).",
+      "note": null,
+      "themed": true,
+      "viewports": null
+    },
+    {
+      "name": "cec-remote/input-2",
+      "page": "ui",
+      "description": "CEC remote opened from the Apple TV input tile (source CEC incl. playback).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "cec-remote/matrix-card",
+      "page": "ui",
+      "description": "CEC remote opened from a routing card in the matrix cards view.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "cec-tray/fab",
+      "page": "ui",
+      "description": "Floating CEC tray button (collapsed).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "cec-tray/expanded",
+      "page": "ui",
+      "description": "CEC tray expanded: target buttons, power, D-pad (wide) or trackpad (narrow), playback, volume.",
+      "note": "Clicking the FAB throws an uncaught TypeError (cec-tray.js:1186 queries .target-name; markup uses .target-abbrev). The panel still opens.",
+      "themed": true,
+      "viewports": null
+    },
+    {
+      "name": "cec-tray/target-selector",
+      "page": "ui",
+      "description": "CEC tray target selector (choose navigation device).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "cec-tray/bottom-left",
+      "page": "ui",
+      "description": "CEC tray expanded at the bottom-left position (Interface setting).",
+      "note": null,
+      "themed": false,
+      "viewports": [
+        "desktop"
+      ]
+    },
+    {
+      "name": "toast/success",
+      "page": "ui",
+      "description": "success toast.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "toast/error",
+      "page": "ui",
+      "description": "error toast.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "toast/warning",
+      "page": "ui",
+      "description": "warning toast.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "toast/info",
+      "page": "ui",
+      "description": "info toast.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "toast/stacked",
+      "page": "ui",
+      "description": "Several toasts at once.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "component/empty-state/all-presets",
+      "page": "ui",
+      "description": "EmptyState component presets (connection lost, no scenes/inputs/outputs, no search results).",
+      "note": "The EmptyState component is never used by the app; mounted into the Profiles list to review it.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "debug/fab",
+      "page": "ui",
+      "description": "Debug panel toggle button (Interface → Show Debug Panel).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "debug/panel/state",
+      "page": "ui",
+      "description": "Debug panel, state tab.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "debug/panel/routing",
+      "page": "ui",
+      "description": "Debug panel, routing tab.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "debug/panel/names",
+      "page": "ui",
+      "description": "Debug panel, names tab.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "debug/panel/logs",
+      "page": "ui",
+      "description": "Debug panel, logs tab.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/routing/default",
+      "page": "kiosk",
+      "description": "Kiosk routing tab (tiles, header, output status footer).",
+      "note": "Input tiles are all \"unknown\" grey and footer tiles all dimmed: kiosk.html:2514 polls /api/inputs/status and /api/outputs/status, which 404. The kiosk does not follow the theme presets.",
+      "themed": true,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/routing/edit-mode",
+      "page": "kiosk",
+      "description": "Kiosk routing tab in Edit Layout mode.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/presets/default",
+      "page": "kiosk",
+      "description": "Kiosk presets tab (tiles, header, output status footer).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/presets/edit-mode",
+      "page": "kiosk",
+      "description": "Kiosk presets tab in Edit Layout mode.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/shortcuts/default",
+      "page": "kiosk",
+      "description": "Kiosk shortcuts tab (tiles, header, output status footer).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/shortcuts/edit-mode",
+      "page": "kiosk",
+      "description": "Kiosk shortcuts tab in Edit Layout mode.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/profiles/default",
+      "page": "kiosk",
+      "description": "Kiosk profiles tab (tiles, header, output status footer).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/profiles/edit-mode",
+      "page": "kiosk",
+      "description": "Kiosk profiles tab in Edit Layout mode.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/routing/long-names",
+      "page": "kiosk",
+      "description": "Kiosk routing tiles and footer with long names.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/presets/long-names",
+      "page": "kiosk",
+      "description": "Kiosk presets with long names.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/routing/all-to-one",
+      "page": "kiosk",
+      "description": "Kiosk routing with every output on one input (active tile and badge).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/routing/tile-pressed",
+      "page": "kiosk",
+      "description": "Kiosk input tile while pressed (touch feedback).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/shortcuts/empty-slots",
+      "page": "kiosk",
+      "description": "Kiosk shortcuts with no slots assigned (placeholders).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/profiles/empty-slots",
+      "page": "kiosk",
+      "description": "Kiosk profiles with no slots assigned (placeholders).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/routing-modal/step-1",
+      "page": "kiosk",
+      "description": "Kiosk routing wizard, step 1: choose outputs (Route to all / single output).",
+      "note": "The Next button on step 1 has no handler (kiosk.html:1357).",
+      "themed": true,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/routing-modal/step-2",
+      "page": "kiosk",
+      "description": "Kiosk routing wizard, step 2: audio options.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/routing-modal/advanced",
+      "page": "kiosk",
+      "description": "Kiosk routing wizard, step 2 with advanced output settings.",
+      "note": "HDR/scaler/HDCP option values do not match the API (kiosk.html:1329-1346); Apply always mutes outputs and turns ARC on.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/cec-remote/output-1",
+      "page": "kiosk",
+      "description": "Kiosk CEC remote drawer for the TV (source/display target, D-pad, playback, volume, power).",
+      "note": null,
+      "themed": true,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/cec-remote/display-target",
+      "page": "kiosk",
+      "description": "Kiosk CEC remote targeting the display (playback hidden).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/preset-config",
+      "page": "kiosk",
+      "description": "Kiosk preset configuration (rename / save current routing).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/slot-mapper/shortcut",
+      "page": "kiosk",
+      "description": "Kiosk slot mapper for a shortcut slot (choose a shortcut).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/slot-mapper/shortcut-empty",
+      "page": "kiosk",
+      "description": "Kiosk slot mapper when there are no shortcuts.",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/slot-mapper/profile",
+      "page": "kiosk",
+      "description": "Kiosk slot mapper for an empty profile slot (create new / choose profile).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/profile-wizard/step-1",
+      "page": "kiosk",
+      "description": "Profile wizard step 1: name and icon.",
+      "note": "Unreachable today: the wizard throws before opening (kiosk.html:2469/2216, /api/cec/macros shape). Captured with the macros response reshaped to what the kiosk expects.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/profile-wizard/step-2",
+      "page": "kiosk",
+      "description": "Profile wizard step 2: routing per output.",
+      "note": "Unreachable today: the wizard throws before opening (kiosk.html:2469/2216, /api/cec/macros shape). Captured with the macros response reshaped to what the kiosk expects.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/profile-wizard/step-3",
+      "page": "kiosk",
+      "description": "Profile wizard step 3: power on/off macros.",
+      "note": "Unreachable today: the wizard throws before opening (kiosk.html:2469/2216, /api/cec/macros shape). Captured with the macros response reshaped to what the kiosk expects.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/toast/success",
+      "page": "kiosk",
+      "description": "Kiosk toast (shown when entering edit mode).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/disconnected",
+      "page": "kiosk",
+      "description": "Kiosk when the hub reports the matrix unreachable on first load (red status, empty grids).",
+      "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "special/tron-background/paused-frame",
+      "page": "ui",
+      "description": "Tron light-cycle background enabled, one deterministic paused frame.",
+      "note": null,
+      "themed": false,
+      "viewports": [
+        "desktop",
+        "kiosk"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+# Look-and-feel governance (docs/REMEDIATION_PLAN.md §5.3): the project owner
+# approves every change to the visual baselines, the catalog of UI states, the
+# design tokens and the written look-and-feel spec.
+/tests/e2e/visual/            @ryan-haver
+/tests/e2e/visual/catalog.ts  @ryan-haver
+/web/css/theme.css            @ryan-haver
+/docs/ui/LOOK_AND_FEEL.md     @ryan-haver

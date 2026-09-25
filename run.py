@@ -11,6 +11,7 @@ Usage:
 
 Environment Variables:
     MATRIX_HOST     - Matrix IP address (default: 192.168.0.100)
+    MATRIX_PORT     - Matrix HTTPS port, modular mode (default: 443; OREI_PORT also accepted)
     API_PORT        - REST API port (default: 8080)
     UC_ENABLED      - Enable UC integration (default: true)
     UC_PORT         - UC WebSocket port (default: 9095)
@@ -83,18 +84,19 @@ async def run_modular_mode():
     from rest_api import RestApiServer, set_matrix_device
 
     matrix_host = os.environ.get("MATRIX_HOST", "192.168.0.100")
+    matrix_port = int(os.environ.get("MATRIX_PORT") or os.environ.get("OREI_PORT") or "443")
 
     _LOG.info("=" * 60)
     _LOG.info("8x8 HDMI Matrix Hub - Modular Mode")
     _LOG.info("=" * 60)
-    _LOG.info(f"  Matrix Host: {matrix_host}")
+    _LOG.info(f"  Matrix Host: {matrix_host}:{matrix_port}")
     _LOG.info(f"  API Port:    {API_PORT}")
     _LOG.info(f"  UC Enabled:  {UC_ENABLED}")
     _LOG.info(f"  Web UI:      {WEBUI_ENABLED}")
     _LOG.info("=" * 60)
 
     # Layer 1: Connect to hardware
-    matrix = OreiMatrix(matrix_host)
+    matrix = OreiMatrix(matrix_host, port=matrix_port)
     config_dir = os.environ.get("UC_CONFIG_HOME", str(PROJECT_ROOT / "config"))
     set_matrix_device(matrix, config_dir=config_dir)
 

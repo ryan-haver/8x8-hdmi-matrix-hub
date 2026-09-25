@@ -3,11 +3,13 @@ Core health and status endpoints.
 """
 
 import asyncio
+import datetime
 import logging
 from typing import Any
 
 from aiohttp import web
 
+from .runtime import runtime_snapshot
 from .utils import (
     API_VERSION,
     _json_response,
@@ -15,7 +17,6 @@ from .utils import (
     get_input_names,
     get_matrix_device,
     get_output_names,
-    require_connected,
 )
 
 _LOG = logging.getLogger("rest_api.core")
@@ -155,9 +156,54 @@ async def background_status_refresh(matrix_device):
         _LOG.warning("Failed background status refresh: %s", e)
 
 
+def _matrix_health(matrix_device) -> dict[str, Any]:
+    """Cheap connection summary for /api/health (never talks to the matrix)."""
+    if matrix_device is None:
+        return {
+            "configured": False,
+            "connected": False,
+            "host": None,
+            "last_successful_poll": None,
+            "telnet_connected": None,
+        }
+
+    def _bool_or_none(value: Any) -> bool | None:
+        return value if isinstance(value, bool) else None
+
+    last_poll = getattr(matrix_device, "last_successful_poll", None)
+    if isinstance(last_poll, datetime.datetime):
+        last_poll = last_poll.isoformat()
+    elif not isinstance(last_poll, str):
+        last_poll = None
+    host = getattr(matrix_device, "host", None)
+    return {
+        "configured": True,
+        "connected": getattr(matrix_device, "connected", False) is True,
+        "host": host if isinstance(host, str) else None,
+        "last_successful_poll": last_poll,
+        "telnet_connected": _bool_or_none(getattr(matrix_device, "telnet_connected", None)),
+    }
+
+
 async def handle_health(request: web.Request) -> web.Response:
-    """Health check endpoint."""
-    return _json_response(True, {"status": "healthy", "service": "orei-hdmi-matrix", "api_version": API_VERSION})
+    """Health check endpoint.
+
+    Always 200 while the process serves requests (the HA config flow relies on
+    that). ``status``/``service``/``api_version`` are kept for existing
+    clients; ``matrix`` and ``runtime`` add connection state, last successful
+    poll, event-loop lag and task count for HIL-C/HIL-D monitoring.
+    """
+    return _json_response(
+        True,
+        {
+            "status": "healthy",
+            "service": "orei-hdmi-matrix",
+            "api_version": API_VERSION,
+            "version": API_VERSION,
+            "matrix": _matrix_health(get_matrix_device()),
+            "runtime": runtime_snapshot(request.app),
+        },
+    )
 
 
 async def handle_info(request: web.Request) -> web.Response:

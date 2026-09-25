@@ -130,6 +130,7 @@ from .profiles import (
     handle_toggle_profile_favorite,
     handle_update_profile,
 )
+from .runtime import install_runtime_monitor
 from .scenes import (
     handle_auto_resolve_cec as _handle_auto_resolve_cec_p7,
 )
@@ -237,6 +238,9 @@ def create_rest_app(data_dir: Path | None = None) -> web.Application:
     data_dir = Path(data_dir).resolve()
 
     app = web.Application(middlewares=[rate_limit_middleware])
+
+    # Event-loop lag / uptime / task-count sampling for /api/health
+    install_runtime_monitor(app)
 
     # Add CORS middleware for browser-based clients.
     # FIX (F13.1): validate the request Origin against an explicit allowlist

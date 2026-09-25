@@ -1,0 +1,479 @@
+name: CI
+
+# Runs on every PR and on pushes to main / release tags.
+# The `publish` job (GHCR image) only runs for main and v* tags, never for PRs,
+# and only after lint, typecheck, tests and the secret scan have passed.
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+# Cancel superseded runs for the same PR; never cancel main/tag runs (publishing).
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+# Least privilege: nothing by default, each job asks for what it needs.
+permissions: {}
+
+env:
+  PYTHON_VERSION: '3.12'
+  # Pinned so CI results do not drift with new tool releases.
+  RUFF_VERSION: '0.15.18'
+  MYPY_VERSION: '2.1.0'
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  lint:
+    name: Lint (ruff)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install ruff
+        run: python -m pip install "ruff==${RUFF_VERSION}"
+
+      - name: ruff check
+        run: |
+          # Only lint paths that exist (tools/ is added in Phase 0).
+          paths=""
+          for p in src tests custom_components tools run.py run_server.py; do
+            if [ -e "$p" ]; then paths="$paths $p"; fi
+          done
+          echo "Linting:$paths"
+          # shellcheck disable=SC2086
+          ruff check --output-format=github $paths
+
+  typecheck:
+    name: Type check (mypy)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-uc.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-uc.txt "mypy==${MYPY_VERSION}"
+
+      - name: mypy
+        run: mypy src/
+
+  test:
+    name: Tests (pytest)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-uc.txt
+            pyproject.toml
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-uc.txt -e ".[dev]"
+
+      - name: pytest
+        env:
+          USE_MOCK_MATRIX: '1'
+        run: pytest tests/ --ignore=tests/ha --tb=short
+
+  ha-test:
+    name: Home Assistant tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # Skips cleanly until requirements-test-ha.txt and tests/ha/ exist.
+      - name: Check for HA test suite
+        id: ha
+        run: |
+          if [ -f requirements-test-ha.txt ] && [ -d tests/ha ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::requirements-test-ha.txt or tests/ha/ not found; skipping HA tests"
+          fi
+
+      - uses: actions/setup-python@v7
+        if: steps.ha.outputs.present == 'true'
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: requirements-test-ha.txt
+
+      - name: Install dependencies
+        if: steps.ha.outputs.present == 'true'
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-test-ha.txt
+
+      - name: pytest tests/ha
+        if: steps.ha.outputs.present == 'true'
+        run: pytest tests/ha --tb=short
+
+  hassfest:
+    name: hassfest
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # TODO(HA-04, HA-14): make blocking in Phase 2
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # Home Assistant publishes this action only on its default branch
+      # (last tagged release is from 2020). SHA pinning comes in a later phase.
+      - uses: home-assistant/actions/hassfest@master
+
+  hacs:
+    name: HACS validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # TODO(HA-04, HA-14): make blocking in Phase 2
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      # HACS documents this action on its default branch (last tag is 2022).
+      - uses: hacs/action@main
+        with:
+          category: integration
+          # Don't post PR comments (would need pull-requests: write).
+          comment: false
+
+  gitleaks:
+    name: Secret scan (gitleaks)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      # Lists the commits of a PR to scan.
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      # gitleaks-action needs a licence key only for organisation-owned
+      # repositories; this is a personal (User) repository, so none is needed.
+      # The repo-root .gitleaks.toml is picked up automatically.
+      - uses: gitleaks/gitleaks-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_CONFIG: .gitleaks.toml
+          GITLEAKS_ENABLE_COMMENTS: 'false'
+
+  docker-build:
+    name: Docker build (${{ matrix.target }})
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [full, api-only]
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: docker/setup-buildx-action@v4
+
+      # Single-arch (amd64) on PRs for speed; publish builds amd64 + arm64.
+      - name: Build ${{ matrix.target }}
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: ./Dockerfile
+          target: ${{ matrix.target }}
+          push: false
+          cache-from: type=gha,scope=${{ matrix.target }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.target }}
+
+  # UI smoke + visual regression (docs/REMEDIATION_PLAN.md §5.3). Runs in the
+  # same pinned Playwright image that generates the baselines locally
+  # (npm run visual:update), so font rendering is identical.
+  ui:
+    name: UI (smoke + visual)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
+      options: --ipc=host
+    permissions:
+      contents: read
+    outputs:
+      review-url: ${{ steps.upload-review.outputs.artifact-url }}
+      report-url: ${{ steps.upload-report.outputs.artifact-url }}
+      tests: ${{ steps.tests.outcome }}
+    env:
+      UI_CACHE_DIR: /tmp/ui-cache
+      npm_config_update_notifier: 'false'
+    steps:
+      # actions/checkout needs git-lfs in the container to fetch the baselines.
+      - name: Install git-lfs
+        run: |
+          apt-get update -qq
+          apt-get install -y -qq --no-install-recommends git-lfs
+          git lfs install --system
+
+      # LFS objects are cached so a run only downloads baselines that changed
+      # (GitHub counts LFS downloads against the account's bandwidth quota).
+      - uses: actions/checkout@v7
+        with:
+          lfs: false
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Trust the workspace (container runs as root)
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: List LFS objects for the cache key
+        run: git lfs ls-files --long | cut -d' ' -f1 | sort > .lfs-assets-id
+
+      - name: Restore LFS cache
+        uses: actions/cache@v6
+        with:
+          path: .git/lfs
+          key: lfs-${{ hashFiles('.lfs-assets-id') }}
+          restore-keys: lfs-
+
+      - name: Pull LFS objects
+        run: git lfs pull
+
+      - name: Set up Python venv and npm packages
+        run: |
+          out=$(bash tools/ui/container-setup.sh | tee /dev/stderr)
+          echo "E2E_PYTHON=${out##*E2E_PYTHON=}" >> "$GITHUB_ENV"
+
+      # Report-only until the web/ code is cleaned up (Phase 5): both commands
+      # fail only on findings above the checked-in baselines.
+      - name: ESLint (non-blocking)
+        continue-on-error: true
+        run: npm run lint:js
+
+      - name: Stylelint (non-blocking)
+        continue-on-error: true
+        run: npm run lint:css
+
+      - name: Smoke + visual tests
+        id: tests
+        continue-on-error: true
+        run: >-
+          npx playwright test -c tests/e2e/playwright.config.ts
+          --project=smoke --project=desktop --project=tablet --project=phone --project=kiosk
+          --update-snapshots=none
+
+      - name: Upload Playwright report
+        id: upload-report
+        if: steps.tests.outcome == 'failure'
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+
+      # Review page: before/after for every snapshot that differs from the base
+      # branch (baselines updated in this PR) or from the committed baselines
+      # (unapproved changes, re-captured here with --update-snapshots).
+      - name: Build review gallery
+        if: always() && steps.tests.outcome != 'skipped'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          TESTS_OUTCOME: ${{ steps.tests.outcome }}
+        run: |
+          if [ "$TESTS_OUTCOME" = failure ]; then
+            npx playwright test -c tests/e2e/playwright.config.ts --last-failed \
+              --update-snapshots=changed --reporter=list || true
+          fi
+          if [ -n "$BASE_REF" ]; then
+            base=$(git merge-base HEAD "origin/$BASE_REF")
+            git lfs fetch origin "$base" || true
+          else
+            base=HEAD
+          fi
+          node tools/ui/build_gallery.mjs --base "$base" --changed-only --out ui-gallery
+          git status --porcelain -- tests/e2e/visual/__snapshots__ \
+            | sed 's#.*tests/e2e/visual/__snapshots__/##' > ui-gallery/unapproved.txt
+
+      - name: Upload review gallery
+        id: upload-review
+        if: always() && steps.tests.outcome != 'skipped'
+        uses: actions/upload-artifact@v7
+        with:
+          name: ui-review
+          path: ui-gallery/
+          retention-days: 14
+
+      - name: Fail if UI tests failed
+        if: steps.tests.outcome == 'failure'
+        run: |
+          echo "::error::UI smoke/visual tests failed. Review the ui-review and playwright-report artifacts; approve intended changes with npm run visual:update."
+          exit 1
+
+  # Separate job so only this small script gets a write token.
+  ui-comment:
+    name: UI review comment
+    needs: ui
+    if: always() && github.event_name == 'pull_request' && needs.ui.result != 'skipped' && needs.ui.result != 'cancelled'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/download-artifact@v8
+        continue-on-error: true
+        with:
+          name: ui-review
+          path: ui-review
+
+      - uses: actions/github-script@v9
+        env:
+          REVIEW_URL: ${{ needs.ui.outputs.review-url }}
+          REPORT_URL: ${{ needs.ui.outputs.report-url }}
+          TESTS: ${{ needs.ui.outputs.tests }}
+        with:
+          script: |
+            const fs = require('fs');
+            const marker = '<!-- ui-visual-review -->';
+            let changed = { changedEntries: [], images: [] };
+            try { changed = JSON.parse(fs.readFileSync('ui-review/changed.json', 'utf8')); } catch {}
+            let unapproved = [];
+            try { unapproved = fs.readFileSync('ui-review/unapproved.txt', 'utf8').split('\n').filter(Boolean); } catch {}
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+            const comments = await github.paginate(github.rest.issues.listComments, { owner, repo, issue_number });
+            const existing = comments.find((c) => c.body && c.body.includes(marker));
+            if (!changed.changedEntries.length && !existing && process.env.TESTS !== 'failure') return;
+
+            const byEntry = new Map();
+            for (const img of changed.images) {
+              if (!byEntry.has(img.entry)) byEntry.set(img.entry, []);
+              byEntry.get(img.entry).push(`${img.viewport}${img.theme !== 'tron-classic' ? '/' + img.theme : ''} (${img.status}${img.diffPixels ? ', ' + img.diffPixels + ' px' : ''})`);
+            }
+            const lines = [marker, '### UI visual review', ''];
+            if (!byEntry.size) {
+              lines.push('No catalog entry differs from the base branch baselines.');
+            } else {
+              lines.push(`**${byEntry.size}** catalog entr${byEntry.size === 1 ? 'y' : 'ies'} differ from the base branch (${changed.images.length} images):`, '');
+              for (const [entry, shots] of [...byEntry].sort()) lines.push(`- \`${entry}\`: ${shots.join(', ')}`);
+            }
+            if (unapproved.length) {
+              lines.push('', `:warning: **${unapproved.length} snapshot(s) differ from the committed baselines** (not approved). If intended, run \`npm run visual:update\` and commit the baselines in a separate \`visual: approve …\` commit.`);
+            }
+            lines.push('');
+            if (process.env.REVIEW_URL) lines.push(`Before/after review page: [ui-review artifact](${process.env.REVIEW_URL}) (download, open \`index.html\`).`);
+            if (process.env.REPORT_URL) lines.push(`Playwright report: [playwright-report artifact](${process.env.REPORT_URL}).`);
+            lines.push('', `Tests: **${process.env.TESTS || 'unknown'}** · run [#${context.runNumber}](${context.serverUrl}/${owner}/${repo}/actions/runs/${context.runId})`);
+            const body = lines.join('\n');
+            if (existing) await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+            else await github.rest.issues.createComment({ owner, repo, issue_number, body });
+
+  publish:
+    name: Build and push to GHCR
+    # Does not depend on `ui` yet: the visual baselines are new (Phase 0) and
+    # must prove stable in CI first. Add `ui` here once they have.
+    needs: [lint, typecheck, test, ha-test, gitleaks]
+    if: >-
+      github.event_name != 'pull_request' &&
+      (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Downcase image name
+        run: echo "IMAGE_NAME_LOWER=${IMAGE_NAME,,}" >> "${GITHUB_ENV}"
+
+      - uses: docker/setup-qemu-action@v4
+
+      - uses: docker/setup-buildx-action@v4
+
+      - name: Log in to the container registry
+        uses: docker/login-action@v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels)
+        id: meta
+        uses: docker/metadata-action@v6
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_LOWER }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=ref,event=branch
+            type=sha
+            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: ./Dockerfile
+          target: full
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=full
+          cache-to: type=gha,mode=max,scope=full
