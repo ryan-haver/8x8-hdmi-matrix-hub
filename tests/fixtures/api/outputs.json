@@ -1,0 +1,48 @@
+{
+  "data": {
+    "outputs": [
+      {
+        "cec_endpoint": "/api/cec/output/1",
+        "name": "TV",
+        "number": 1
+      },
+      {
+        "cec_endpoint": "/api/cec/output/2",
+        "name": "Soundbar",
+        "number": 2
+      },
+      {
+        "cec_endpoint": "/api/cec/output/3",
+        "name": "Output 3",
+        "number": 3
+      },
+      {
+        "cec_endpoint": "/api/cec/output/4",
+        "name": "Output 4",
+        "number": 4
+      },
+      {
+        "cec_endpoint": "/api/cec/output/5",
+        "name": "Output 5",
+        "number": 5
+      },
+      {
+        "cec_endpoint": "/api/cec/output/6",
+        "name": "Output 6",
+        "number": 6
+      },
+      {
+        "cec_endpoint": "/api/cec/output/7",
+        "name": "Output 7",
+        "number": 7
+      },
+      {
+        "cec_endpoint": "/api/cec/output/8",
+        "name": "Output 8",
+        "number": 8
+      }
+    ]
+  },
+  "error": null,
+  "success": true
+}

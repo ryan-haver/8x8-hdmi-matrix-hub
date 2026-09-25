@@ -1,0 +1,209 @@
+{
+  "data": {
+    "outputs": [
+      {
+        "arc": true,
+        "cableConnected": true,
+        "connected": true,
+        "enabled": true,
+        "hdcp": 3,
+        "hdr": 3,
+        "muted": false,
+        "name": "TV",
+        "number": 1,
+        "scaler": 1
+      },
+      {
+        "arc": false,
+        "cableConnected": true,
+        "connected": true,
+        "enabled": true,
+        "hdcp": 3,
+        "hdr": 3,
+        "muted": true,
+        "name": "Soundbar",
+        "number": 2,
+        "scaler": 1
+      },
+      {
+        "arc": false,
+        "cableConnected": false,
+        "connected": false,
+        "enabled": true,
+        "hdcp": 3,
+        "hdr": 3,
+        "muted": false,
+        "name": "Output 3",
+        "number": 3,
+        "scaler": 1
+      },
+      {
+        "arc": false,
+        "cableConnected": false,
+        "connected": false,
+        "enabled": true,
+        "hdcp": 3,
+        "hdr": 3,
+        "muted": false,
+        "name": "Output 4",
+        "number": 4,
+        "scaler": 1
+      },
+      {
+        "arc": false,
+        "cableConnected": false,
+        "connected": false,
+        "enabled": true,
+        "hdcp": 3,
+        "hdr": 3,
+        "muted": false,
+        "name": "Output 5",
+        "number": 5,
+        "scaler": 1
+      },
+      {
+        "arc": false,
+        "cableConnected": false,
+        "connected": false,
+        "enabled": true,
+        "hdcp": 3,
+        "hdr": 3,
+        "muted": false,
+        "name": "Output 6",
+        "number": 6,
+        "scaler": 1
+      },
+      {
+        "arc": false,
+        "cableConnected": false,
+        "connected": false,
+        "enabled": true,
+        "hdcp": 3,
+        "hdr": 3,
+        "muted": false,
+        "name": "Output 7",
+        "number": 7,
+        "scaler": 1
+      },
+      {
+        "arc": false,
+        "cableConnected": false,
+        "connected": false,
+        "enabled": false,
+        "hdcp": 3,
+        "hdr": 3,
+        "muted": false,
+        "name": "Output 8",
+        "number": 8,
+        "scaler": 1
+      }
+    ],
+    "raw": {
+      "allarc": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "allaudiomute": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "allconnect": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "allhdcp": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "allhdr": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "allinputname": [
+        "PS3",
+        "AppleTV",
+        "Computer",
+        "Switch",
+        "Shield",
+        "PS5",
+        "Analogue",
+        "Input 8"
+      ],
+      "allout": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0
+      ],
+      "alloutputname": [
+        "TV",
+        "Soundbar",
+        "Output 3",
+        "Output 4",
+        "Output 5",
+        "Output 6",
+        "Output 7",
+        "Output 8"
+      ],
+      "allscaler": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "allsource": [
+        2,
+        2,
+        6,
+        4,
+        1,
+        3,
+        5,
+        7
+      ],
+      "comhead": "get output status",
+      "power": 1
+    },
+    "telnetAvailable": false
+  },
+  "error": null,
+  "success": true
+}

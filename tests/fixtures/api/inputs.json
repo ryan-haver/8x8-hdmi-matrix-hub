@@ -1,0 +1,48 @@
+{
+  "data": {
+    "inputs": [
+      {
+        "cec_endpoint": "/api/cec/input/1",
+        "name": "PS3",
+        "number": 1
+      },
+      {
+        "cec_endpoint": "/api/cec/input/2",
+        "name": "AppleTV",
+        "number": 2
+      },
+      {
+        "cec_endpoint": "/api/cec/input/3",
+        "name": "Computer",
+        "number": 3
+      },
+      {
+        "cec_endpoint": "/api/cec/input/4",
+        "name": "Switch",
+        "number": 4
+      },
+      {
+        "cec_endpoint": "/api/cec/input/5",
+        "name": "Shield",
+        "number": 5
+      },
+      {
+        "cec_endpoint": "/api/cec/input/6",
+        "name": "PS5",
+        "number": 6
+      },
+      {
+        "cec_endpoint": "/api/cec/input/7",
+        "name": "Analogue",
+        "number": 7
+      },
+      {
+        "cec_endpoint": "/api/cec/input/8",
+        "name": "Input 8",
+        "number": 8
+      }
+    ]
+  },
+  "error": null,
+  "success": true
+}
