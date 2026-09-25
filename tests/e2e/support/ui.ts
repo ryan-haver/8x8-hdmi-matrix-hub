@@ -64,17 +64,24 @@ export type PrepareOptions = {
    * done with page.route (long names, no signal, ...) would be overwritten.
    * The broadcast also resets output names to "Output N" (hub bug: _format_outputs
    * uses the hub's name cache, empty in modular mode). 'drop' keeps each page
-   * on its own REST data; 'pass' lets them through (see catalog entry
-   * app/ws-status-refresh/output-names).
+   * on its own REST data; 'hold' queues them until releaseStatusFrames() (so
+   * they land after the page has applied its REST data, the usual real-world
+   * order; see catalog entry app/ws-status-refresh/output-names).
    */
-  wsStatus?: 'drop' | 'pass';
+  wsStatus?: 'drop' | 'hold';
 };
 
-const wsStatusFrames = new WeakMap<Page, { count: number }>();
+type WsStatusState = { count: number; held: string[]; release: () => void };
+const wsStatusFrames = new WeakMap<Page, WsStatusState>();
 
-/** Number of hub "status" broadcasts the page has received (wsStatus: 'pass'). */
+/** Number of hub "status" broadcasts the hub has sent this page (received or dropped/held). */
 export function statusFramesReceived(page: Page) {
   return wsStatusFrames.get(page)?.count ?? 0;
+}
+
+/** Deliver held "status" broadcasts (wsStatus: 'hold') and any later ones. */
+export function releaseStatusFrames(page: Page) {
+  wsStatusFrames.get(page)?.release();
 }
 
 /**
@@ -154,15 +161,24 @@ export async function preparePage(page: Page, opts: PrepareOptions = {}) {
   if (!opts.realClock) await page.clock.setFixedTime(FIXED_TIME);
 
   if (!opts.noWebSocket) {
-    const counter = { count: 0 };
-    wsStatusFrames.set(page, counter);
-    const drop = (opts.wsStatus ?? 'drop') === 'drop';
+    const mode = opts.wsStatus ?? 'drop';
+    const state: WsStatusState = { count: 0, held: [], release: () => {} };
+    wsStatusFrames.set(page, state);
     await page.routeWebSocket(/\/ws$/, (ws) => {
       const server = ws.connectToServer();
+      let released = false;
+      state.release = () => {
+        released = true;
+        for (const m of state.held.splice(0)) ws.send(m);
+      };
       server.onMessage((message) => {
         if (typeof message === 'string' && /^\s*\{\s*"event"\s*:\s*"status"/.test(message)) {
-          counter.count++;
-          if (drop) return;
+          state.count++;
+          if (mode === 'drop') return;
+          if (!released) {
+            state.held.push(message);
+            return;
+          }
         }
         ws.send(message);
       });

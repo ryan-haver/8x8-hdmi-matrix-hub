@@ -22,7 +22,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { expect, type Page } from '@playwright/test';
 import type { ViewportName } from '../support/viewports';
-import { failJson, mutateJson, okJson, settle, statusFramesReceived, type PrepareOptions } from '../support/ui';
+import { failJson, mutateJson, okJson, releaseStatusFrames, settle, statusFramesReceived, type PrepareOptions } from '../support/ui';
 
 export type Ctx = { page: Page; viewport: ViewportName };
 
@@ -275,16 +275,19 @@ export const CATALOG: CatalogEntry[] = [
     name: 'app/ws-status-refresh/output-names',
     page: 'ui',
     description: 'Matrix grid after the hub\'s background status broadcast arrives (what a user sees ~100 ms after load).',
-    prepare: { wsStatus: 'pass', storage: { 'matrix-view-mode': 'grid' } },
+    prepare: { wsStatus: 'hold', storage: { 'matrix-view-mode': 'grid' } },
     // Warm the hub's output-status cache so this page load triggers the broadcast.
     routes: async (page) => {
       await page.request.get('/api/status/outputs');
     },
     setup: async ({ page }) => {
       await expect.poll(() => statusFramesReceived(page), { timeout: 10_000 }).toBeGreaterThan(0);
+      // Deliver it after the page has applied its REST data (the usual order;
+      // if it arrives first, the REST response wins and names stay correct).
+      releaseStatusFrames(page);
       await settle(page, 400);
     },
-    note: 'Hub bug: every GET /api/status/outputs with a warm cache broadcasts a refresh whose outputs_detail names come from the hub name cache, empty in modular mode (src/rest_api/core.py:115 via outputs.py:59), so TV/Soundbar become "Output 1/2". All other entries drop these broadcasts to stay deterministic.',
+    note: 'Hub bug: every GET /api/status/outputs with a warm cache broadcasts a refresh whose outputs_detail names come from the hub name cache, empty in modular mode (src/rest_api/core.py:115 via outputs.py:59), so TV/Soundbar become "Output 1/2" (unless the broadcast happens to arrive before the REST response). All other entries drop these broadcasts to stay deterministic.',
   },
 
   // ===== Matrix ============================================================
@@ -1050,6 +1053,9 @@ export const CATALOG: CatalogEntry[] = [
     setup: async ({ page }) => {
       await js(page, `window.iconPicker.open('playstation-5', () => {})`);
       await page.locator('#icon-picker-modal.visible').waitFor();
+      // The picker focuses its search box 100 ms after opening; let that
+      // happen before the click so focus always ends on the category button.
+      await settle(page, 400);
       await page.locator('.icon-picker-category-btn[data-category="gaming"]').click();
       await settle(page, 400);
     },
@@ -1289,12 +1295,15 @@ export const CATALOG: CatalogEntry[] = [
       await tab(page, 'profiles');
       await page.locator('#save-scene-btn').click();
       await page.locator('#profile-editor-modal.visible').waitFor();
+      // Let the editor's own 100 ms autofocus happen first.
+      await settle(page, 400);
       await page.locator('#profile-name').fill('Kids Gaming');
       await page.locator('#profile-password-protected').check({ force: true });
       await page.locator('#profile-password-fields').waitFor();
-      await page.locator('#profile-password-fields').scrollIntoViewIfNeeded();
       await settle(page, 300);
     },
+    // Deterministic scroll (the check() click may or may not scroll the modal).
+    scrollTo: '#profile-password-fields',
   },
   {
     name: 'editor/profile/edit',
