@@ -317,7 +317,8 @@ Full detail (location, user impact, fix) in [`docs/audits/UC_INTEGRATION_AUDIT.m
 | UC-18 | H | Modular path non-functional against the real API (envelope, allconnect, switch-all, next/previous, WS client); mocked tests hide it | 4 |
 | UC-19 | L | Restore blocks startup before the WS server; config path ignores `ucapi`; CWD-relative `driver.json`; `__main__`-only `api` global | 1 (wave 2) / 4 |
 | UC-20 | M | Vendored UC API docs several spec versions stale (official sources now pinned locally via `tools/uc_reference.py`) | 7 |
-| UC-21 | H | No scripted-Remote test harness | 1 (wave 2, first) |
+| UC-21 | H | No scripted-Remote test harness (✅ built in WP-B1: `tools/uc_remote_sim.py`, `tests/uc/`) | 1 (wave 2, first) |
+| UC-22 | M | CEC remote `send_cmd` ignores `repeat`/`delay`/`hold`: holding a volume key sends a single CEC step (found by the WP-B1 harness) | 1 (wave 2, with UC-01) |
 
 ### 4.10 Found by validation (VAL)
 
@@ -658,8 +659,8 @@ Work is organised into work packages (WPs) in parallel lanes. Each WP closes reg
 | WP-A3 | A | Hardware capture tooling (HIL-A) | — | Capture round-trip proven on the simulator | in progress |
 | WP-H1 | A | **HIL Session 1 / C0-HW:** capture + first V4 runs (routing, presets, power, TV CEC power, one profile) | WP-A3, owner hardware access | Golden captures committed; first V4 evidence | needs owner |
 | WP-A4 | A | Protocol corrections from captures (BE-13, 14, 15, 25, API-07, VAL-03); simulator golden mode | WP-H1 | Affected features at V2 against golden data, V4 re-run | after H1 |
-| WP-B1 | B | Scripted-Remote harness + blocking `uc` CI job; evaluate the UC core simulator (UC-21) | WP-A1 merged | Every Remote entity type exercised at V3; current behaviour pinned | after A1 |
-| WP-B2 | B | Remote integration fixes in `driver.py` (UC-01, 04, 05 part, 06, 07, 17, 19, BE-02, 06, 08, 09, 10, 21) | WP-B1 | Remote features at V3; UC-01 proven fixed through the harness | after B1 |
+| WP-B1 | B | ✅ Scripted-Remote harness + blocking `uc` CI job; evaluate the UC core simulator (UC-21) | WP-A1 merged | Every Remote entity type exercised at V3; current behaviour pinned | after A1 |
+| WP-B2 | B | Remote integration fixes in `driver.py` (UC-01, 22, 04, 05 part, 06, 07, 17, 19, BE-02, 06, 08, 09, 10, 21) | WP-B1 | Remote features at V3; UC-01 proven fixed through the harness | after B1 |
 | WP-C1 | C | Scenes, shortcuts, profile execution (API-01–08, 13, 14, 23, VAL-01, VAL-02) | WP-V2 | Domain features at V3 | after V2 |
 | WP-C2 | C | WebSocket contract and schema; hub-owned event stream; truthful `/api/status` (API-09, 10, UI-02, UC-17 part, VAL-04, VAL-05) | WP-A1 | Every WS event at V2; live updates proven in the browser and HA at V3 | after A1 |
 | WP-D1 | D | Home Assistant fixes + real-HA-container E2E (HA-01–15) | WP-V1 | HA features at V3 in a real HA container | after V1 |

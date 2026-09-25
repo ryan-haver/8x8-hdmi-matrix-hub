@@ -2354,9 +2354,9 @@ features:
     uc: [remote.input_N_cec send_cmd, remote.input_N_cec on/off, send_cmd_sequence]
   target: V4
   current: V1
-  basis: 'V1 (capped: UC-01). tests/uc (scripted Remote 3 -> real driver.py -> simulator): send_cmd sends the exact CEC frame for all 19 commands (test_commands.py::test_input_cec_remote_send_cmd_sends_exact_frames); on/off/toggle/send_cmd_sequence close the connection with 1011 (strict xfails, UC-01); repeat is ignored (VAL-07). Scenario remote.input_cec_command.'
+  basis: 'V1 (capped: UC-01). tests/uc (scripted Remote 3 -> real driver.py -> simulator): send_cmd sends the exact CEC frame for all 19 commands (test_commands.py::test_input_cec_remote_send_cmd_sends_exact_frames); on/off/toggle/send_cmd_sequence close the connection with 1011 (strict xfails, UC-01); repeat is ignored (UC-22). Scenario remote.input_cec_command.'
   evidence: []
-  findings: [UC-01, UC-12, VAL-07]
+  findings: [UC-01, UC-12, UC-22]
   scenarios: [remote.input_cec_command]
 - id: F-UC-007
   area: uc
@@ -2368,7 +2368,7 @@ features:
   current: V1
   basis: 'V1 (capped: UC-01). tests/uc (scripted Remote 3 -> real driver.py -> simulator): send_cmd sends the exact CEC frame for all 12 commands (test_commands.py::test_output_cec_remote_send_cmd_sends_exact_frames); on/off/toggle/send_cmd_sequence close the connection with 1011 (strict xfails, UC-01). Scenarios remote.output_cec_power_on, remote.output_cec_on (known failure UC-01).'
   evidence: []
-  findings: [UC-01, BE-14, VAL-07]
+  findings: [UC-01, BE-14, UC-22]
   scenarios: [remote.output_cec_power_on, remote.output_cec_on]
 - id: F-UC-008
   area: uc

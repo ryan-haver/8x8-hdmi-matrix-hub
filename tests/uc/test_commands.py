@@ -133,7 +133,7 @@ async def test_unknown_cec_command_is_rejected_without_a_frame(uc_remote: UcRemo
     assert not uc_remote.closed
 
 
-@known_bug("VAL-07", "send_cmd ignores `repeat` (and `delay`/`hold`): a held volume key sends one step")
+@known_bug("UC-22", "send_cmd ignores `repeat` (and `delay`/`hold`): a held volume key sends one step")
 async def test_send_cmd_repeat_sends_the_command_repeatedly(uc_remote: UcRemoteSim, sim: SimDevice) -> None:
     await sim.clear_log()
     resp = await uc_remote.remote_send_cmd("remote.output_1_cec", "VOLUME_UP", repeat=3, delay=50)

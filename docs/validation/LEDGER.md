@@ -256,8 +256,8 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-UC-003 | Reconfigure the integration (new matrix address) | V4 | V0 (capped) | V0 | — | — | UC-05(H), BE-10(M) |
 | F-UC-004 | Preset buttons on the Remote | V4 | V3 | V3 | — | — | UC-14(M) |
 | F-UC-005 | Matrix remote entity with a preset page | V4 | V3 | V3 | — | — | UC-12(L) |
-| F-UC-006 | Per-input CEC remotes (source power, navigation, playback) | V4 | V1 (capped) | V1 | — | — | UC-01(C), UC-12(L), VAL-07(M) |
-| F-UC-007 | Per-output CEC remotes (TV power, volume) | V4 | V1 (capped) | V1 | — | — | UC-01(C), BE-14(M), VAL-07(M) |
+| F-UC-006 | Per-input CEC remotes (source power, navigation, playback) | V4 | V1 (capped) | V1 | — | — | UC-01(C), UC-12(L), UC-22(M) |
+| F-UC-007 | Per-output CEC remotes (TV power, volume) | V4 | V1 (capped) | V1 | — | — | UC-01(C), BE-14(M), UC-22(M) |
 | F-UC-008 | Choose an output's source from the Remote (media player source list) | V4 | V3 | V3 | — | — | UC-08(M), UC-10(M) |
 | F-UC-009 | TV power / volume / mute from the output media player | V4 | V3 | V3 | — | — | UC-10(M), BE-24(L) |
 | F-UC-010 | Matrix power switch on the Remote | V4 | V3 | V3 | — | — | UC-09(M) |
