@@ -1,0 +1,493 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "probe/telnet_errors",
+  "title": "Telnet commands that should fail (E00/E01 semantics, BE-07)",
+  "answers": [
+    "telnet-error-codes",
+    "telnet-terminators"
+  ],
+  "exchanges": [
+    {
+      "kind": "telnet",
+      "role": "probe-error",
+      "label": "unknown command",
+      "command": "hilcapture unknown",
+      "sent_b64": "aGlsY2FwdHVyZSB1bmtub3duIQ0K",
+      "sent_text": "hilcapture unknown!\r\n",
+      "response": {
+        "body_b64": "aGlsY2FwdHVyZSB1bmtub3duIQ0KRTAwDQo=",
+        "text": "hilcapture unknown!\r\nE00\r\n",
+        "chunks": [
+          {
+            "t_ms": 37.59,
+            "len": 21
+          },
+          {
+            "t_ms": 602.96,
+            "len": 5
+          }
+        ],
+        "completion": "idle",
+        "idle_ms": 1000,
+        "first_byte_ms": 37.59,
+        "elapsed_ms": 1601.85,
+        "analysis": {
+          "line_endings": {
+            "crlf": 2,
+            "lf": 0,
+            "cr": 0
+          },
+          "lines": [
+            "hilcapture unknown!",
+            "E00"
+          ],
+          "ends_with_newline": true,
+          "trailing_without_newline": "",
+          "last_line": "E00",
+          "error_code": "E00",
+          "error_codes_seen": [
+            "E00"
+          ],
+          "iac": []
+        }
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T20:14:04.518368Z",
+        "elapsed_ms": 1601.85
+      }
+    },
+    {
+      "kind": "telnet",
+      "role": "probe-error",
+      "label": "input port out of range",
+      "command": "r link in 9",
+      "sent_b64": "ciBsaW5rIGluIDkhDQo=",
+      "sent_text": "r link in 9!\r\n",
+      "response": {
+        "body_b64": "ciBsaW5rIGluIDkhDQpFMDENCg==",
+        "text": "r link in 9!\r\nE01\r\n",
+        "chunks": [
+          {
+            "t_ms": 29.22,
+            "len": 14
+          },
+          {
+            "t_ms": 167.53,
+            "len": 5
+          }
+        ],
+        "completion": "idle",
+        "idle_ms": 1000,
+        "first_byte_ms": 29.22,
+        "elapsed_ms": 1167.11,
+        "analysis": {
+          "line_endings": {
+            "crlf": 2,
+            "lf": 0,
+            "cr": 0
+          },
+          "lines": [
+            "r link in 9!",
+            "E01"
+          ],
+          "ends_with_newline": true,
+          "trailing_without_newline": "",
+          "last_line": "E01",
+          "error_code": "E01",
+          "error_codes_seen": [
+            "E01"
+          ],
+          "iac": []
+        }
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T20:14:06.120518Z",
+        "elapsed_ms": 1167.11
+      }
+    },
+    {
+      "kind": "telnet",
+      "role": "probe-error",
+      "label": "output port out of range",
+      "command": "r link out 0",
+      "sent_b64": "ciBsaW5rIG91dCAwIQ0K",
+      "sent_text": "r link out 0!\r\n",
+      "response": {
+        "body_b64": "ciBsaW5rIG91dCAwIQ0KaGRtaSBvdXRwdXQgMTogY29ubmVjdA0KaGRtaSBvdXRwdXQgMjogY29ubmVjdA0KaGRtaSBvdXRwdXQgMzogZGlzY29ubmVjdA0KaGRtaSBvdXRwdXQgNDogZGlzY29ubmVjdA0KaGRtaSBvdXRwdXQgNTogZGlzY29ubmVjdA0KaGRtaSBvdXRwdXQgNjogZGlzY29ubmVjdA0KaGRtaSBvdXRwdXQgNzogZGlzY29ubmVjdA0KaGRtaSBvdXRwdXQgODogZGlzY29ubmVjdA0K",
+        "text": "r link out 0!\r\nhdmi output 1: connect\r\nhdmi output 2: connect\r\nhdmi output 3: disconnect\r\nhdmi output 4: disconnect\r\nhdmi output 5: disconnect\r\nhdmi output 6: disconnect\r\nhdmi output 7: disconnect\r\nhdmi output 8: disconnect\r\n",
+        "chunks": [
+          {
+            "t_ms": 52.5,
+            "len": 15
+          },
+          {
+            "t_ms": 231.79,
+            "len": 24
+          },
+          {
+            "t_ms": 231.86,
+            "len": 24
+          },
+          {
+            "t_ms": 232.27,
+            "len": 27
+          },
+          {
+            "t_ms": 232.48,
+            "len": 54
+          },
+          {
+            "t_ms": 232.81,
+            "len": 81
+          }
+        ],
+        "completion": "idle",
+        "idle_ms": 1000,
+        "first_byte_ms": 52.5,
+        "elapsed_ms": 1233.27,
+        "analysis": {
+          "line_endings": {
+            "crlf": 9,
+            "lf": 0,
+            "cr": 0
+          },
+          "lines": [
+            "r link out 0!",
+            "hdmi output 1: connect",
+            "hdmi output 2: connect",
+            "hdmi output 3: disconnect",
+            "hdmi output 4: disconnect",
+            "hdmi output 5: disconnect",
+            "hdmi output 6: disconnect",
+            "hdmi output 7: disconnect",
+            "hdmi output 8: disconnect"
+          ],
+          "ends_with_newline": true,
+          "trailing_without_newline": "",
+          "last_line": "hdmi output 8: disconnect",
+          "error_code": null,
+          "error_codes_seen": [],
+          "iac": []
+        }
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T20:14:07.287741Z",
+        "elapsed_ms": 1233.27
+      }
+    },
+    {
+      "kind": "telnet",
+      "role": "probe-error",
+      "label": "preset out of range",
+      "command": "r preset 9",
+      "sent_b64": "ciBwcmVzZXQgOSENCg==",
+      "sent_text": "r preset 9!\r\n",
+      "response": {
+        "body_b64": "RTAxDQpyIHByZXNldCA5IQ0KRTAwDQo=",
+        "text": "E01\r\nr preset 9!\r\nE00\r\n",
+        "chunks": [
+          {
+            "t_ms": 233.97,
+            "len": 5
+          },
+          {
+            "t_ms": 234.08,
+            "len": 13
+          },
+          {
+            "t_ms": 390.31,
+            "len": 5
+          }
+        ],
+        "completion": "idle",
+        "idle_ms": 1000,
+        "first_byte_ms": 233.97,
+        "elapsed_ms": 1390.67,
+        "analysis": {
+          "line_endings": {
+            "crlf": 3,
+            "lf": 0,
+            "cr": 0
+          },
+          "lines": [
+            "E01",
+            "r preset 9!",
+            "E00"
+          ],
+          "ends_with_newline": true,
+          "trailing_without_newline": "",
+          "last_line": "E00",
+          "error_code": "E00",
+          "error_codes_seen": [
+            "E00",
+            "E01"
+          ],
+          "iac": []
+        }
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T20:14:08.521075Z",
+        "elapsed_ms": 1390.67
+      }
+    },
+    {
+      "kind": "telnet",
+      "role": "probe-error",
+      "label": "non-numeric port",
+      "command": "r link in x",
+      "sent_b64": "ciBsaW5rIGluIHghDQo=",
+      "sent_text": "r link in x!\r\n",
+      "response": {
+        "body_b64": "ciBsaW5rIGluIHghDQpFMDENCg==",
+        "text": "r link in x!\r\nE01\r\n",
+        "chunks": [
+          {
+            "t_ms": 44.68,
+            "len": 14
+          },
+          {
+            "t_ms": 182.74,
+            "len": 5
+          }
+        ],
+        "completion": "idle",
+        "idle_ms": 1000,
+        "first_byte_ms": 44.68,
+        "elapsed_ms": 1184.13,
+        "analysis": {
+          "line_endings": {
+            "crlf": 2,
+            "lf": 0,
+            "cr": 0
+          },
+          "lines": [
+            "r link in x!",
+            "E01"
+          ],
+          "ends_with_newline": true,
+          "trailing_without_newline": "",
+          "last_line": "E01",
+          "error_code": "E01",
+          "error_codes_seen": [
+            "E01"
+          ],
+          "iac": []
+        }
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T20:14:09.911905Z",
+        "elapsed_ms": 1184.13
+      }
+    },
+    {
+      "kind": "telnet",
+      "role": "probe-error",
+      "label": "CEC input port out of range",
+      "command": "s cec in 9 on",
+      "sent_b64": "cyBjZWMgaW4gOSBvbiENCg==",
+      "sent_text": "s cec in 9 on!\r\n",
+      "response": {
+        "body_b64": "cyBjZWMgaW4gOSBvbiENCkUwMQ0K",
+        "text": "s cec in 9 on!\r\nE01\r\n",
+        "chunks": [
+          {
+            "t_ms": 48.46,
+            "len": 16
+          },
+          {
+            "t_ms": 191.5,
+            "len": 5
+          }
+        ],
+        "completion": "idle",
+        "idle_ms": 1000,
+        "first_byte_ms": 48.46,
+        "elapsed_ms": 1190.71,
+        "analysis": {
+          "line_endings": {
+            "crlf": 2,
+            "lf": 0,
+            "cr": 0
+          },
+          "lines": [
+            "s cec in 9 on!",
+            "E01"
+          ],
+          "ends_with_newline": true,
+          "trailing_without_newline": "",
+          "last_line": "E01",
+          "error_code": "E01",
+          "error_codes_seen": [
+            "E01"
+          ],
+          "iac": []
+        }
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T20:14:11.096120Z",
+        "elapsed_ms": 1190.71
+      }
+    },
+    {
+      "kind": "telnet",
+      "role": "probe-error",
+      "label": "unknown CEC word",
+      "command": "s cec hdmi out 1 hilbogus",
+      "sent_b64": "cyBjZWMgaGRtaSBvdXQgMSBoaWxib2d1cyENCg==",
+      "sent_text": "s cec hdmi out 1 hilbogus!\r\n",
+      "response": {
+        "body_b64": "cyBjZWMgaGRtaSBvdXQgMSBoaWxib2d1cyENCkUwMA0K",
+        "text": "s cec hdmi out 1 hilbogus!\r\nE00\r\n",
+        "chunks": [
+          {
+            "t_ms": 29.67,
+            "len": 28
+          },
+          {
+            "t_ms": 755.15,
+            "len": 5
+          }
+        ],
+        "completion": "idle",
+        "idle_ms": 1000,
+        "first_byte_ms": 29.67,
+        "elapsed_ms": 1755.41,
+        "analysis": {
+          "line_endings": {
+            "crlf": 2,
+            "lf": 0,
+            "cr": 0
+          },
+          "lines": [
+            "s cec hdmi out 1 hilbogus!",
+            "E00"
+          ],
+          "ends_with_newline": true,
+          "trailing_without_newline": "",
+          "last_line": "E00",
+          "error_code": "E00",
+          "error_codes_seen": [
+            "E00"
+          ],
+          "iac": []
+        }
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T20:14:12.287000Z",
+        "elapsed_ms": 1755.41
+      }
+    },
+    {
+      "kind": "telnet",
+      "role": "probe-error",
+      "label": "routing output out of range",
+      "command": "s output 9 in source 1",
+      "sent_b64": "cyBvdXRwdXQgOSBpbiBzb3VyY2UgMSENCg==",
+      "sent_text": "s output 9 in source 1!\r\n",
+      "response": {
+        "body_b64": "cyBvdXRwdXQgOSBpbiBzb3VyY2UgMSENCkUwMQ0K",
+        "text": "s output 9 in source 1!\r\nE01\r\n",
+        "chunks": [
+          {
+            "t_ms": 46.1,
+            "len": 25
+          },
+          {
+            "t_ms": 186.99,
+            "len": 5
+          }
+        ],
+        "completion": "idle",
+        "idle_ms": 1000,
+        "first_byte_ms": 46.1,
+        "elapsed_ms": 1188.15,
+        "analysis": {
+          "line_endings": {
+            "crlf": 2,
+            "lf": 0,
+            "cr": 0
+          },
+          "lines": [
+            "s output 9 in source 1!",
+            "E01"
+          ],
+          "ends_with_newline": true,
+          "trailing_without_newline": "",
+          "last_line": "E01",
+          "error_code": "E01",
+          "error_codes_seen": [
+            "E01"
+          ],
+          "iac": []
+        }
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T20:14:14.042487Z",
+        "elapsed_ms": 1188.15
+      }
+    }
+  ],
+  "findings": {
+    "by_command": {
+      "hilcapture unknown": {
+        "why": "unknown command",
+        "last_line": "E00",
+        "error_code": "E00",
+        "completion": "idle"
+      },
+      "r link in 9": {
+        "why": "input port out of range",
+        "last_line": "E01",
+        "error_code": "E01",
+        "completion": "idle"
+      },
+      "r link out 0": {
+        "why": "output port out of range",
+        "last_line": "hdmi output 8: disconnect",
+        "error_code": null,
+        "completion": "idle"
+      },
+      "r preset 9": {
+        "why": "preset out of range",
+        "last_line": "E00",
+        "error_code": "E00",
+        "completion": "idle"
+      },
+      "r link in x": {
+        "why": "non-numeric port",
+        "last_line": "E01",
+        "error_code": "E01",
+        "completion": "idle"
+      },
+      "s cec in 9 on": {
+        "why": "CEC input port out of range",
+        "last_line": "E01",
+        "error_code": "E01",
+        "completion": "idle"
+      },
+      "s cec hdmi out 1 hilbogus": {
+        "why": "unknown CEC word",
+        "last_line": "E00",
+        "error_code": "E00",
+        "completion": "idle"
+      },
+      "s output 9 in source 1": {
+        "why": "routing output out of range",
+        "last_line": "E01",
+        "error_code": "E01",
+        "completion": "idle"
+      }
+    },
+    "state_changed": []
+  },
+  "mode": "probe",
+  "captured_at": "2026-09-25T20:14:16.904361Z"
+}

@@ -234,6 +234,328 @@
         "preset_get_8: "
       ],
       "warnings": []
+    },
+    {
+      "mode": "probe",
+      "started_at": "2026-09-25T20:07:33.248267Z",
+      "finished_at": "2026-09-25T20:14:41.944402Z",
+      "tool_version": "1.0",
+      "hub_commit": "3892f67bed5278e2c989282552d38d00ce0df8ec",
+      "host_os": "Windows-11-10.0.26200-SP0",
+      "python": "3.12.10",
+      "target": {
+        "host": "192.168.0.100",
+        "port": 443,
+        "telnet_port": 23,
+        "tls": true,
+        "user": "Admin"
+      },
+      "options": {
+        "host": "192.168.0.100",
+        "port": 443,
+        "telnet_port": 23,
+        "tls": true,
+        "user": "Admin",
+        "out": "C:/Users/ryanh/AppData/Local/Temp/claude/c--scripts-unfoldedcircle-orei-hdmi-matrix-integration/5737f4ac-eccf-432c-83bc-2593fb3ea078/scratchpad/hil2/{firmware}",
+        "firmware": null,
+        "mode": "probe",
+        "telnet": true,
+        "http_timeout": 5.0,
+        "telnet_idle": 1.0,
+        "telnet_timeout": 5.0,
+        "banner_idle": 1.5,
+        "redact": [
+          "<17 chars>",
+          "<14 chars>"
+        ],
+        "yes": false,
+        "i_understand": false,
+        "only": [],
+        "skip": [],
+        "include": [],
+        "test_output": 8,
+        "test_input": 8,
+        "test_preset": 8,
+        "cec_output": 1,
+        "cec_input": 1,
+        "push_grace": 0.3,
+        "reboot_wait": 180.0,
+        "idle_waits": [
+          60.0,
+          300.0
+        ],
+        "push_seconds": 0.0
+      },
+      "records": [
+        "probe/cec_enable_shapes",
+        "probe/http_garbage_body",
+        "probe/http_no_session",
+        "probe/http_unknown_comhead",
+        "probe/login_ok",
+        "probe/login_wrong_password",
+        "probe/session_idle_expiry",
+        "probe/session_mechanism",
+        "probe/telnet_errors",
+        "probe/telnet_framing",
+        "probe/telnet_noop_set_acks",
+        "probe/telnet_second_session"
+      ],
+      "answers": {
+        "cec-index-single-port": [
+          "probe/cec_enable_shapes"
+        ],
+        "garbage-body": [
+          "probe/http_garbage_body"
+        ],
+        "login-fail-result": [
+          "probe/login_wrong_password"
+        ],
+        "login-ok-result": [
+          "probe/login_ok"
+        ],
+        "session-expired-style": [
+          "probe/http_no_session",
+          "probe/session_idle_expiry"
+        ],
+        "session-mechanism": [
+          "probe/login_ok",
+          "probe/login_wrong_password",
+          "probe/session_mechanism"
+        ],
+        "session-ttl": [
+          "probe/session_idle_expiry"
+        ],
+        "telnet-error-codes": [
+          "probe/telnet_errors"
+        ],
+        "telnet-multi-session": [
+          "probe/telnet_second_session"
+        ],
+        "telnet-set-acks": [
+          "probe/telnet_noop_set_acks"
+        ],
+        "telnet-terminators": [
+          "probe/telnet_errors",
+          "probe/telnet_framing",
+          "probe/telnet_noop_set_acks"
+        ],
+        "unknown-comhead-result": [
+          "probe/http_unknown_comhead"
+        ]
+      },
+      "errors": [],
+      "warnings": [
+        "no-session probe: the read returned data without a login: a session from this IP was probably still active (stop the hub and close the web UI, wait for the session to expire, then re-run)",
+        "no answer to 'get system status' within 5 s; not sent again in this run",
+        "no answer to 'get routing status' within 5 s; not sent again in this run"
+      ]
+    },
+    {
+      "mode": "write",
+      "started_at": "2026-09-25T20:20:14.354003Z",
+      "finished_at": "2026-09-25T20:31:55.190852Z",
+      "tool_version": "1.0",
+      "hub_commit": "3892f67bed5278e2c989282552d38d00ce0df8ec",
+      "host_os": "Windows-11-10.0.26200-SP0",
+      "python": "3.12.10",
+      "target": {
+        "host": "192.168.0.100",
+        "port": 443,
+        "telnet_port": 23,
+        "tls": true,
+        "user": "Admin"
+      },
+      "options": {
+        "host": "192.168.0.100",
+        "port": 443,
+        "telnet_port": 23,
+        "tls": true,
+        "user": "Admin",
+        "out": "C:/Users/ryanh/AppData/Local/Temp/claude/c--scripts-unfoldedcircle-orei-hdmi-matrix-integration/5737f4ac-eccf-432c-83bc-2593fb3ea078/scratchpad/hil2/{firmware}",
+        "firmware": null,
+        "mode": "write",
+        "telnet": true,
+        "http_timeout": 5.0,
+        "telnet_idle": 1.0,
+        "telnet_timeout": 5.0,
+        "banner_idle": 1.5,
+        "redact": [
+          "<17 chars>",
+          "<14 chars>"
+        ],
+        "yes": true,
+        "i_understand": true,
+        "only": [],
+        "skip": [],
+        "include": [],
+        "test_output": 8,
+        "test_input": 8,
+        "test_preset": 8,
+        "cec_output": 1,
+        "cec_input": 1,
+        "push_grace": 0.3,
+        "reboot_wait": 180.0,
+        "idle_waits": [],
+        "push_seconds": 30.0
+      },
+      "records": [
+        "write/http_beep",
+        "write/http_cec_command_invalid",
+        "write/http_cec_index_bulk",
+        "write/http_cec_index_single",
+        "write/http_copy_edid",
+        "write/http_exa_enable",
+        "write/http_exa_mode",
+        "write/http_exa_source",
+        "write/http_input_edid",
+        "write/http_input_name",
+        "write/http_lcd",
+        "write/http_output_arc",
+        "write/http_output_hdcp",
+        "write/http_output_hdr",
+        "write/http_output_mute",
+        "write/http_output_name",
+        "write/http_output_scaler",
+        "write/http_output_stream",
+        "write/http_panel_lock",
+        "write/http_power",
+        "write/http_video_switch",
+        "write/http_video_switch_all",
+        "write/snapshot-final",
+        "write/snapshot-initial",
+        "write/telnet_power_bare",
+        "write/telnet_power_s",
+        "write/telnet_routing",
+        "write/telnet_system"
+      ],
+      "answers": {
+        "cec-index-single-port": [
+          "write/http_cec_index_single"
+        ],
+        "copy-edid": [
+          "write/http_copy_edid"
+        ],
+        "edid-range": [
+          "write/http_input_edid"
+        ],
+        "exa-commands": [
+          "write/http_exa_enable",
+          "write/http_exa_mode",
+          "write/http_exa_source"
+        ],
+        "lcd-codes": [
+          "write/http_lcd"
+        ],
+        "name-truncation": [
+          "write/http_input_name",
+          "write/http_output_name"
+        ],
+        "output-mode-text": [
+          "write/http_output_hdcp",
+          "write/http_output_hdr",
+          "write/http_output_scaler"
+        ],
+        "push-wording": [
+          "write/http_video_switch",
+          "write/telnet_routing"
+        ],
+        "standby-behaviour": [
+          "write/http_power"
+        ],
+        "telnet-bare-power": [
+          "write/telnet_power_bare",
+          "write/telnet_power_s"
+        ],
+        "telnet-set-acks": [
+          "write/telnet_power_bare",
+          "write/telnet_power_s",
+          "write/telnet_routing",
+          "write/telnet_system"
+        ],
+        "write-fail-result": [
+          "write/http_beep",
+          "write/http_cec_command_invalid",
+          "write/http_cec_index_bulk",
+          "write/http_exa_mode",
+          "write/http_input_edid",
+          "write/http_input_name",
+          "write/http_lcd",
+          "write/http_output_arc",
+          "write/http_output_hdcp",
+          "write/http_output_hdr",
+          "write/http_output_mute",
+          "write/http_output_name",
+          "write/http_output_scaler",
+          "write/http_output_stream",
+          "write/http_panel_lock",
+          "write/http_power",
+          "write/http_video_switch"
+        ],
+        "write-ok-results": [
+          "write/http_beep",
+          "write/http_cec_index_bulk",
+          "write/http_cec_index_single",
+          "write/http_copy_edid",
+          "write/http_exa_enable",
+          "write/http_exa_mode",
+          "write/http_exa_source",
+          "write/http_input_edid",
+          "write/http_input_name",
+          "write/http_lcd",
+          "write/http_output_arc",
+          "write/http_output_hdcp",
+          "write/http_output_hdr",
+          "write/http_output_mute",
+          "write/http_output_name",
+          "write/http_output_scaler",
+          "write/http_output_stream",
+          "write/http_panel_lock",
+          "write/http_power",
+          "write/http_video_switch",
+          "write/http_video_switch_all"
+        ]
+      },
+      "errors": [],
+      "warnings": [
+        "no answer to 'get routing status' within 5 s; not sent again in this run",
+        "no answer to 'get video status' within 5 s; not sent again in this run"
+      ],
+      "write_outcome": {
+        "tests": {
+          "http_video_switch": "applied, rejected, rejected, rejected",
+          "http_video_switch_all": "applied",
+          "http_preset_recall": "skipped: presets (get routing status) could not be read",
+          "http_preset_save": "skipped: presets (get routing status) could not be read",
+          "http_input_name": "applied, applied, rejected",
+          "http_output_name": "applied, applied, rejected",
+          "http_output_stream": "not-applied, applied, rejected, rejected",
+          "http_output_hdcp": "not-applied, not-applied, not-applied, not-applied, applied, rejected, rejected, rejected",
+          "http_output_hdr": "not-applied, not-applied, not-applied, applied, rejected, rejected",
+          "http_output_scaler": "not-applied, not-applied, not-applied, not-applied, not-applied, applied, rejected, rejected",
+          "http_output_arc": "not-applied, applied, rejected, rejected",
+          "http_output_mute": "not-applied, applied, rejected, rejected",
+          "http_input_edid": "not-applied, not-applied, not-applied, not-applied, not-applied, rejected",
+          "http_copy_edid": "not-applied, not-applied, not-applied, not-applied",
+          "http_cec_index_bulk": "applied, rejected",
+          "http_cec_index_single": "not-applied, not-applied",
+          "http_cec_command_invalid": "rejected, rejected, rejected",
+          "http_exa_mode": "not-applied, not-applied, applied, rejected",
+          "http_exa_enable": "not-applied",
+          "http_exa_source": "not-applied",
+          "http_beep": "applied, rejected",
+          "http_panel_lock": "applied, rejected",
+          "http_lcd": "not-applied, not-applied, not-applied, not-applied, not-applied, rejected",
+          "telnet_routing": "applied, not-applied, applied",
+          "telnet_presets": "skipped: presets could not be read",
+          "telnet_system": "applied, applied, not-applied",
+          "http_power": "applied, data, sent, applied, rejected",
+          "telnet_power_bare": "applied, applied",
+          "telnet_power_s": "not-applied, not-applied"
+        },
+        "aborted": null,
+        "restored": true,
+        "remaining": []
+      }
     }
   ],
   "answers": {
@@ -266,7 +588,8 @@
       "http/preset_get_8"
     ],
     "login-ok-result": [
-      "http/login"
+      "http/login",
+      "probe/login_ok"
     ],
     "output-status-name-field": [
       "http/get_output_status"
@@ -346,10 +669,127 @@
       "telnet/r_preset_7",
       "telnet/r_preset_8",
       "telnet/r_type",
-      "telnet/status"
+      "telnet/status",
+      "probe/telnet_errors",
+      "probe/telnet_framing",
+      "probe/telnet_noop_set_acks"
     ],
     "video-status-names": [
       "http/get_video_status"
+    ],
+    "cec-index-single-port": [
+      "probe/cec_enable_shapes",
+      "write/http_cec_index_single"
+    ],
+    "copy-edid": [
+      "write/http_copy_edid"
+    ],
+    "edid-range": [
+      "write/http_input_edid"
+    ],
+    "exa-commands": [
+      "write/http_exa_enable",
+      "write/http_exa_mode",
+      "write/http_exa_source"
+    ],
+    "garbage-body": [
+      "probe/http_garbage_body"
+    ],
+    "lcd-codes": [
+      "write/http_lcd"
+    ],
+    "login-fail-result": [
+      "probe/login_wrong_password"
+    ],
+    "name-truncation": [
+      "write/http_input_name",
+      "write/http_output_name"
+    ],
+    "output-mode-text": [
+      "write/http_output_hdcp",
+      "write/http_output_hdr",
+      "write/http_output_scaler"
+    ],
+    "push-wording": [
+      "write/http_video_switch",
+      "write/telnet_routing"
+    ],
+    "session-expired-style": [
+      "probe/http_no_session",
+      "probe/session_idle_expiry"
+    ],
+    "session-mechanism": [
+      "probe/login_ok",
+      "probe/login_wrong_password",
+      "probe/session_mechanism"
+    ],
+    "session-ttl": [
+      "probe/session_idle_expiry"
+    ],
+    "standby-behaviour": [
+      "write/http_power"
+    ],
+    "telnet-bare-power": [
+      "write/telnet_power_bare",
+      "write/telnet_power_s"
+    ],
+    "telnet-error-codes": [
+      "probe/telnet_errors"
+    ],
+    "telnet-multi-session": [
+      "probe/telnet_second_session"
+    ],
+    "telnet-set-acks": [
+      "probe/telnet_noop_set_acks",
+      "write/telnet_power_bare",
+      "write/telnet_power_s",
+      "write/telnet_routing",
+      "write/telnet_system"
+    ],
+    "unknown-comhead-result": [
+      "probe/http_unknown_comhead"
+    ],
+    "write-fail-result": [
+      "write/http_beep",
+      "write/http_cec_command_invalid",
+      "write/http_cec_index_bulk",
+      "write/http_exa_mode",
+      "write/http_input_edid",
+      "write/http_input_name",
+      "write/http_lcd",
+      "write/http_output_arc",
+      "write/http_output_hdcp",
+      "write/http_output_hdr",
+      "write/http_output_mute",
+      "write/http_output_name",
+      "write/http_output_scaler",
+      "write/http_output_stream",
+      "write/http_panel_lock",
+      "write/http_power",
+      "write/http_video_switch"
+    ],
+    "write-ok-results": [
+      "write/http_beep",
+      "write/http_cec_index_bulk",
+      "write/http_cec_index_single",
+      "write/http_copy_edid",
+      "write/http_exa_enable",
+      "write/http_exa_mode",
+      "write/http_exa_source",
+      "write/http_input_edid",
+      "write/http_input_name",
+      "write/http_lcd",
+      "write/http_output_arc",
+      "write/http_output_hdcp",
+      "write/http_output_hdr",
+      "write/http_output_mute",
+      "write/http_output_name",
+      "write/http_output_scaler",
+      "write/http_output_stream",
+      "write/http_panel_lock",
+      "write/http_power",
+      "write/http_video_switch",
+      "write/http_video_switch_all"
     ]
   }
 }

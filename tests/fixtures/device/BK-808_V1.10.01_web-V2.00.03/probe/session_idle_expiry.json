@@ -1,0 +1,235 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "probe/session_idle_expiry",
+  "title": "Idle session expiry (BE-04)",
+  "answers": [
+    "session-ttl",
+    "session-expired-style"
+  ],
+  "steps": [
+    {
+      "idle_s": 60.0,
+      "alive": true,
+      "classification": "data",
+      "exchanges": [
+        {
+          "kind": "http",
+          "role": "login",
+          "label": "login",
+          "comhead": "login",
+          "request": {
+            "method": "POST",
+            "path": "/cgi-bin/instr",
+            "headers": [
+              "Host: 192.168.0.100",
+              "Content-Type: application/json",
+              "Accept: */*",
+              "Accept-Encoding: gzip, deflate",
+              "User-Agent: Python/3.12 aiohttp/3.13.3",
+              "Content-Length: 58"
+            ],
+            "json": {
+              "comhead": "login",
+              "user": "Admin",
+              "password": "***REDACTED***"
+            },
+            "body_text": "{\"comhead\": \"login\", \"user\": \"Admin\", \"password\": \"***REDACTED***\"}"
+          },
+          "redacted": [
+            "request.password"
+          ],
+          "response": {
+            "status": 200,
+            "reason": "OK",
+            "http_version": "1.1",
+            "headers": [
+              "Connection: Keep-Alive",
+              "Transfer-Encoding: chunked",
+              "Keep-Alive: timeout=200",
+              "content-type: text/plain"
+            ],
+            "body_b64": "eyJjb21oZWFkIjoibG9naW4iLCJyZXN1bHQiOjF9DQo=",
+            "body_text": "{\"comhead\":\"login\",\"result\":1}\r\n",
+            "json": {
+              "comhead": "login",
+              "result": 1
+            },
+            "json_error": null
+          },
+          "error": null,
+          "timing": {
+            "started_at": "2026-09-25T20:07:37.098118Z",
+            "elapsed_ms": 398.2
+          }
+        },
+        {
+          "kind": "http",
+          "role": "idle-check",
+          "label": "get system status",
+          "comhead": "get system status",
+          "request": {
+            "method": "POST",
+            "path": "/cgi-bin/instr",
+            "headers": [
+              "Host: 192.168.0.100",
+              "Content-Type: application/json",
+              "Accept: */*",
+              "Accept-Encoding: gzip, deflate",
+              "User-Agent: Python/3.12 aiohttp/3.13.3",
+              "Content-Length: 47"
+            ],
+            "json": {
+              "comhead": "get system status",
+              "language": 0
+            },
+            "body_text": "{\"comhead\": \"get system status\", \"language\": 0}"
+          },
+          "response": {
+            "status": 200,
+            "reason": "OK",
+            "http_version": "1.1",
+            "headers": [
+              "Connection: Keep-Alive",
+              "Transfer-Encoding: chunked",
+              "Keep-Alive: timeout=200",
+              "content-type: text/plain"
+            ],
+            "body_b64": "eyJjb21oZWFkIjoiZ2V0IHN5c3RlbSBzdGF0dXMiLCJwb3dlciI6MSwiYmF1ZHJhdGUiOjYsImJlZXAiOjEsImxvY2siOjAsIm1vZGUiOjN9DQo=",
+            "body_text": "{\"comhead\":\"get system status\",\"power\":1,\"baudrate\":6,\"beep\":1,\"lock\":0,\"mode\":3}\r\n",
+            "json": {
+              "comhead": "get system status",
+              "power": 1,
+              "baudrate": 6,
+              "beep": 1,
+              "lock": 0,
+              "mode": 3
+            },
+            "json_error": null
+          },
+          "error": null,
+          "timing": {
+            "started_at": "2026-09-25T20:08:37.492487Z",
+            "elapsed_ms": 409.89
+          }
+        }
+      ]
+    },
+    {
+      "idle_s": 300.0,
+      "alive": true,
+      "classification": "data",
+      "exchanges": [
+        {
+          "kind": "http",
+          "role": "login",
+          "label": "login",
+          "comhead": "login",
+          "request": {
+            "method": "POST",
+            "path": "/cgi-bin/instr",
+            "headers": [
+              "Host: 192.168.0.100",
+              "Content-Type: application/json",
+              "Accept: */*",
+              "Accept-Encoding: gzip, deflate",
+              "User-Agent: Python/3.12 aiohttp/3.13.3",
+              "Content-Length: 58"
+            ],
+            "json": {
+              "comhead": "login",
+              "user": "Admin",
+              "password": "***REDACTED***"
+            },
+            "body_text": "{\"comhead\": \"login\", \"user\": \"Admin\", \"password\": \"***REDACTED***\"}"
+          },
+          "redacted": [
+            "request.password"
+          ],
+          "response": {
+            "status": 200,
+            "reason": "OK",
+            "http_version": "1.1",
+            "headers": [
+              "Connection: Keep-Alive",
+              "Transfer-Encoding: chunked",
+              "Keep-Alive: timeout=200",
+              "content-type: text/plain"
+            ],
+            "body_b64": "eyJjb21oZWFkIjoibG9naW4iLCJyZXN1bHQiOjF9DQo=",
+            "body_text": "{\"comhead\":\"login\",\"result\":1}\r\n",
+            "json": {
+              "comhead": "login",
+              "result": 1
+            },
+            "json_error": null
+          },
+          "error": null,
+          "timing": {
+            "started_at": "2026-09-25T20:08:37.901876Z",
+            "elapsed_ms": 629.21
+          }
+        },
+        {
+          "kind": "http",
+          "role": "idle-check",
+          "label": "get system status",
+          "comhead": "get system status",
+          "request": {
+            "method": "POST",
+            "path": "/cgi-bin/instr",
+            "headers": [
+              "Host: 192.168.0.100",
+              "Content-Type: application/json",
+              "Accept: */*",
+              "Accept-Encoding: gzip, deflate",
+              "User-Agent: Python/3.12 aiohttp/3.13.3",
+              "Content-Length: 47"
+            ],
+            "json": {
+              "comhead": "get system status",
+              "language": 0
+            },
+            "body_text": "{\"comhead\": \"get system status\", \"language\": 0}"
+          },
+          "response": {
+            "status": 200,
+            "reason": "OK",
+            "http_version": "1.1",
+            "headers": [
+              "Connection: Keep-Alive",
+              "Transfer-Encoding: chunked",
+              "Keep-Alive: timeout=200",
+              "content-type: text/plain"
+            ],
+            "body_b64": "eyJjb21oZWFkIjoiZ2V0IHN5c3RlbSBzdGF0dXMiLCJwb3dlciI6MSwiYmF1ZHJhdGUiOjYsImJlZXAiOjEsImxvY2siOjAsIm1vZGUiOjN9DQo=",
+            "body_text": "{\"comhead\":\"get system status\",\"power\":1,\"baudrate\":6,\"beep\":1,\"lock\":0,\"mode\":3}\r\n",
+            "json": {
+              "comhead": "get system status",
+              "power": 1,
+              "baudrate": 6,
+              "beep": 1,
+              "lock": 0,
+              "mode": 3
+            },
+            "json_error": null
+          },
+          "error": null,
+          "timing": {
+            "started_at": "2026-09-25T20:13:38.536018Z",
+            "elapsed_ms": 399.95
+          }
+        }
+      ]
+    }
+  ],
+  "findings": {
+    "alive_after_s": 300.0,
+    "expired_after_s": null,
+    "waits": [
+      60.0,
+      300.0
+    ]
+  },
+  "mode": "probe",
+  "captured_at": "2026-09-25T20:13:38.936058Z"
+}

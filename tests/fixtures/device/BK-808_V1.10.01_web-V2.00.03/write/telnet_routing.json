@@ -1,0 +1,427 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "write/telnet_routing",
+  "title": "Telnet routing commands",
+  "group": "telnet",
+  "answers": [
+    "telnet-set-acks",
+    "push-wording"
+  ],
+  "before": {
+    "power": 1,
+    "beep": 1,
+    "lock": 0,
+    "routing": [
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7
+    ],
+    "input_names": [
+      "NES",
+      "SNES",
+      "Sega",
+      "N64",
+      "Switch",
+      "PS3",
+      "Apple",
+      "Switcher"
+    ],
+    "output_names": [
+      "TV",
+      "Sound",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "stream": [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "hdcp": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "hdr": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "scaler": [
+      0,
+      4,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "arc": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "mute": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "edid": [
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36
+    ],
+    "cec_in": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "cec_out": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "exa_mode": 0,
+    "exa_enable": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "exa_source": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "presets": null,
+    "lcd_line": null,
+    "errors": []
+  },
+  "steps": [
+    {
+      "describe": "output 8 -> input 8 (hub syntax)",
+      "kind": "write",
+      "exchange": {
+        "kind": "telnet",
+        "role": "write",
+        "label": "s output 8 in source 8",
+        "command": "s output 8 in source 8",
+        "sent_b64": "cyBvdXRwdXQgOCBpbiBzb3VyY2UgOCENCg==",
+        "sent_text": "s output 8 in source 8!\r\n",
+        "response": {
+          "body_b64": "cyBvdXRwdXQgOCBpbiBzb3VyY2UgOCENCm91dHB1dDgtPmlucHV0OA0K",
+          "text": "s output 8 in source 8!\r\noutput8->input8\r\n",
+          "chunks": [
+            {
+              "t_ms": 29.28,
+              "len": 25
+            },
+            {
+              "t_ms": 170.92,
+              "len": 17
+            }
+          ],
+          "completion": "idle",
+          "idle_ms": 1000,
+          "first_byte_ms": 29.28,
+          "elapsed_ms": 1170.19,
+          "analysis": {
+            "line_endings": {
+              "crlf": 2,
+              "lf": 0,
+              "cr": 0
+            },
+            "lines": [
+              "s output 8 in source 8!",
+              "output8->input8"
+            ],
+            "ends_with_newline": true,
+            "trailing_without_newline": "",
+            "last_line": "output8->input8",
+            "error_code": null,
+            "error_codes_seen": [],
+            "iac": []
+          }
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T20:30:36.723675Z",
+          "elapsed_ms": 1170.19
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "routing",
+          8,
+          7,
+          8
+        ]
+      ],
+      "outcome": "applied"
+    },
+    {
+      "describe": "output 8 -> input 7 (vendor 's av <in> <out>')",
+      "kind": "write",
+      "exchange": {
+        "kind": "telnet",
+        "role": "write",
+        "label": "s av 7 8",
+        "command": "s av 7 8",
+        "sent_b64": "cyBhdiA3IDghDQo=",
+        "sent_text": "s av 7 8!\r\n",
+        "response": {
+          "body_b64": "cyBhdiA3IDghDQpFMDANCg==",
+          "text": "s av 7 8!\r\nE00\r\n",
+          "chunks": [
+            {
+              "t_ms": 35.26,
+              "len": 11
+            },
+            {
+              "t_ms": 388.81,
+              "len": 5
+            }
+          ],
+          "completion": "idle",
+          "idle_ms": 1000,
+          "first_byte_ms": 35.26,
+          "elapsed_ms": 1390.65,
+          "analysis": {
+            "line_endings": {
+              "crlf": 2,
+              "lf": 0,
+              "cr": 0
+            },
+            "lines": [
+              "s av 7 8!",
+              "E00"
+            ],
+            "ends_with_newline": true,
+            "trailing_without_newline": "",
+            "last_line": "E00",
+            "error_code": "E00",
+            "error_codes_seen": [
+              "E00"
+            ],
+            "iac": []
+          }
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T20:30:40.119176Z",
+          "elapsed_ms": 1390.65
+        },
+        "outcome": "not-applied"
+      },
+      "diff": [],
+      "outcome": "not-applied"
+    },
+    {
+      "describe": "ALL outputs -> input 8",
+      "kind": "write",
+      "exchange": {
+        "kind": "telnet",
+        "role": "write",
+        "label": "s output 0 in source 8",
+        "command": "s output 0 in source 8",
+        "sent_b64": "cyBvdXRwdXQgMCBpbiBzb3VyY2UgOCENCg==",
+        "sent_text": "s output 0 in source 8!\r\n",
+        "response": {
+          "body_b64": "cyBvdXRwdXQgMCBpbiBzb3VyY2UgOCENCm91dHB1dDEtPmlucHV0OA0Kb3V0cHV0Mi0+aW5wdXQ4DQpvdXRwdXQzLT5pbnB1dDgNCm91dHB1dDQtPmlucHV0OA0Kb3V0cHV0NS0+aW5wdXQ4DQpvdXRwdXQ2LT5pbnB1dDgNCm91dHB1dDctPmlucHV0OA0Kb3V0cHV0OC0+aW5wdXQ4DQo=",
+          "text": "s output 0 in source 8!\r\noutput1->input8\r\noutput2->input8\r\noutput3->input8\r\noutput4->input8\r\noutput5->input8\r\noutput6->input8\r\noutput7->input8\r\noutput8->input8\r\n",
+          "chunks": [
+            {
+              "t_ms": 88.9,
+              "len": 25
+            },
+            {
+              "t_ms": 188.11,
+              "len": 17
+            },
+            {
+              "t_ms": 190.82,
+              "len": 17
+            },
+            {
+              "t_ms": 192.92,
+              "len": 17
+            },
+            {
+              "t_ms": 196.21,
+              "len": 17
+            },
+            {
+              "t_ms": 197.06,
+              "len": 17
+            },
+            {
+              "t_ms": 197.89,
+              "len": 17
+            },
+            {
+              "t_ms": 201.43,
+              "len": 17
+            },
+            {
+              "t_ms": 204.25,
+              "len": 17
+            }
+          ],
+          "completion": "idle",
+          "idle_ms": 1000,
+          "first_byte_ms": 88.9,
+          "elapsed_ms": 1204.46,
+          "analysis": {
+            "line_endings": {
+              "crlf": 9,
+              "lf": 0,
+              "cr": 0
+            },
+            "lines": [
+              "s output 0 in source 8!",
+              "output1->input8",
+              "output2->input8",
+              "output3->input8",
+              "output4->input8",
+              "output5->input8",
+              "output6->input8",
+              "output7->input8",
+              "output8->input8"
+            ],
+            "ends_with_newline": true,
+            "trailing_without_newline": "",
+            "last_line": "output8->input8",
+            "error_code": null,
+            "error_codes_seen": [],
+            "iac": []
+          }
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T20:30:43.422927Z",
+          "elapsed_ms": 1204.46
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "routing",
+          1,
+          7,
+          8
+        ],
+        [
+          "routing",
+          2,
+          7,
+          8
+        ],
+        [
+          "routing",
+          3,
+          7,
+          8
+        ],
+        [
+          "routing",
+          4,
+          7,
+          8
+        ],
+        [
+          "routing",
+          5,
+          7,
+          8
+        ],
+        [
+          "routing",
+          6,
+          7,
+          8
+        ],
+        [
+          "routing",
+          7,
+          7,
+          8
+        ]
+      ],
+      "outcome": "applied"
+    }
+  ],
+  "restored": true,
+  "restore_remaining": [],
+  "findings": {
+    "results_by_outcome": {
+      "applied": [
+        "output8->input8"
+      ],
+      "not-applied": [
+        "E00"
+      ]
+    }
+  },
+  "mode": "write",
+  "captured_at": "2026-09-25T20:30:55.044615Z"
+}

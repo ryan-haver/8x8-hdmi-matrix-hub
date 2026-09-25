@@ -1,0 +1,121 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "probe/telnet_noop_set_acks",
+  "title": "Set-command acknowledgements with no-op values (BE-07 completion detection)",
+  "answers": [
+    "telnet-set-acks",
+    "telnet-terminators"
+  ],
+  "exchanges": [
+    {
+      "kind": "telnet",
+      "role": "probe-noop-ack",
+      "label": "no-op set",
+      "command": "s output 8 in source 7",
+      "sent_b64": "cyBvdXRwdXQgOCBpbiBzb3VyY2UgNyENCg==",
+      "sent_text": "s output 8 in source 7!\r\n",
+      "response": {
+        "body_b64": "cyBvdXRwdXQgOCBpbiBzb3VyY2UgNyENCm91dHB1dDgtPmlucHV0Nw0K",
+        "text": "s output 8 in source 7!\r\noutput8->input7\r\n",
+        "chunks": [
+          {
+            "t_ms": 29.07,
+            "len": 25
+          },
+          {
+            "t_ms": 170.2,
+            "len": 17
+          }
+        ],
+        "completion": "idle",
+        "idle_ms": 1000,
+        "first_byte_ms": 29.07,
+        "elapsed_ms": 1169.72,
+        "analysis": {
+          "line_endings": {
+            "crlf": 2,
+            "lf": 0,
+            "cr": 0
+          },
+          "lines": [
+            "s output 8 in source 7!",
+            "output8->input7"
+          ],
+          "ends_with_newline": true,
+          "trailing_without_newline": "",
+          "last_line": "output8->input7",
+          "error_code": null,
+          "error_codes_seen": [],
+          "iac": []
+        }
+      },
+      "error": null,
+      "unsolicited_before": [
+        {
+          "t": "2026-09-25T20:14:33.836598Z",
+          "b64": "KioqKioqKioqKioqKioqKndlbGNvbWUgKioqKioqKioqKioqKioNCiAgICAgICAgICAgIGZ3IHZlcnNpb24gOnYxLjEwLjAxICAgICAgICANCioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqDQoNCkUwMA0KRTAwDQoqKioqKioqKioqKioqKioqd2VsY29tZSAqKioqKioqKioqKioqKg0KICAgICAgICAgICAgZncgdmVyc2lvbiA6djEuMTAuMDEgICAgICAgIA0KKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioNCg0KKioqKioqKioqKioqKioqKndlbGNvbWUgKioqKioqKioqKioqKioNCiAgICAgICAgICAgIGZ3IHZlcnNpb24gOnYxLjEwLjAxICAgICAgICANCioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqDQoNCioqKioqKioqKioqKioqKip3ZWxjb21lICoqKioqKioqKioqKioqDQogICAgICAgICAgICBmdyB2ZXJzaW9uIDp2MS4xMC4wMSAgICAgICAgDQoqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKg0KDQo4eDggaGRtaTIuMSBtYXRyaXgNCioqKioqKioqKioqKioqKip3ZWxjb21lICoqKioqKioqKioqKioqDQogICAgICAgICAgICBmdyB2ZXJzaW9uIDp2MS4xMC4wMSAgICAgICAgDQoqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKg0KDQo4eDggaGRtaTIuMSBtYXRyaXgNCm1jdSBmdyB2ZXJzaW9uOiB2MS4xMC4wMQ0Ka2V5IG1jdSAgICAgICA6IHYxLjAwLjA4DQp3ZWIgZ3VpICAgICAgIDogdjIuMDAuMDMNCmNwbGQgdmVyc2lvbiAgOiB2MS4wMC4wNg0K",
+          "text": "****************welcome **************\r\n            fw version :v1.10.01        \r\n**************************************\r\n\r\nE00\r\nE00\r\n****************welcome **************\r\n            fw version :v1.10.01        \r\n**************************************\r\n\r\n****************welcome **************\r\n            fw version :v1.10.01        \r\n**************************************\r\n\r\n****************welcome **************\r\n            fw version :v1.10.01        \r\n**************************************\r\n\r\n8x8 hdmi2.1 matrix\r\n****************welcome **************\r\n            fw version :v1.10.01        \r\n**************************************\r\n\r\n8x8 hdmi2.1 matrix\r\nmcu fw version: v1.10.01\r\nkey mcu       : v1.00.08\r\nweb gui       : v2.00.03\r\ncpld version  : v1.00.06\r\n"
+        }
+      ],
+      "timing": {
+        "started_at": "2026-09-25T20:14:33.836079Z",
+        "elapsed_ms": 1169.72
+      }
+    },
+    {
+      "kind": "telnet",
+      "role": "probe-noop-ack",
+      "label": "no-op set",
+      "command": "s out 8 stream 0",
+      "sent_b64": "cyBvdXQgOCBzdHJlYW0gMCENCg==",
+      "sent_text": "s out 8 stream 0!\r\n",
+      "response": {
+        "body_b64": "cyBvdXQgOCBzdHJlYW0gMCENCkUwMA0K",
+        "text": "s out 8 stream 0!\r\nE00\r\n",
+        "chunks": [
+          {
+            "t_ms": 29.75,
+            "len": 19
+          },
+          {
+            "t_ms": 553.78,
+            "len": 5
+          }
+        ],
+        "completion": "idle",
+        "idle_ms": 1000,
+        "first_byte_ms": 29.75,
+        "elapsed_ms": 1553.91,
+        "analysis": {
+          "line_endings": {
+            "crlf": 2,
+            "lf": 0,
+            "cr": 0
+          },
+          "lines": [
+            "s out 8 stream 0!",
+            "E00"
+          ],
+          "ends_with_newline": true,
+          "trailing_without_newline": "",
+          "last_line": "E00",
+          "error_code": "E00",
+          "error_codes_seen": [
+            "E00"
+          ],
+          "iac": []
+        }
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T20:14:35.006129Z",
+        "elapsed_ms": 1553.91
+      }
+    }
+  ],
+  "findings": {
+    "state_changed": []
+  },
+  "mode": "probe",
+  "captured_at": "2026-09-25T20:14:37.921639Z"
+}

@@ -1,0 +1,208 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "write/http_exa_source",
+  "title": "Ext-audio source",
+  "group": "ext-audio",
+  "answers": [
+    "write-ok-results",
+    "exa-commands"
+  ],
+  "before": {
+    "power": 1,
+    "beep": 1,
+    "lock": 0,
+    "routing": [
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7
+    ],
+    "input_names": [
+      "NES",
+      "SNES",
+      "Sega",
+      "N64",
+      "Switch",
+      "PS3",
+      "Apple",
+      "Switcher"
+    ],
+    "output_names": [
+      "TV",
+      "Sound",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "stream": [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "hdcp": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "hdr": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "scaler": [
+      0,
+      4,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "arc": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "mute": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "edid": [
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36
+    ],
+    "cec_in": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "cec_out": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "exa_mode": 0,
+    "exa_enable": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "exa_source": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "presets": null,
+    "lcd_line": null,
+    "errors": []
+  },
+  "steps": [
+    {
+      "describe": "ext-audio output 8 source 8 -> 1",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set output exa in source",
+        "comhead": "set output exa in source",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output exa in source",
+            "output": 8,
+            "input": 1
+          },
+          "body_text": "{\"comhead\": \"set output exa in source\", \"output\": 8, \"input\": 1}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:29:26.337005Z",
+          "elapsed_ms": 5190.29
+        },
+        "outcome": "not-applied"
+      },
+      "diff": [],
+      "outcome": "not-applied"
+    }
+  ],
+  "restored": true,
+  "restore_remaining": [],
+  "findings": {
+    "results_by_outcome": {
+      "not-applied": [
+        {
+          "type": "TimeoutError",
+          "message": ""
+        }
+      ]
+    }
+  },
+  "mode": "write",
+  "captured_at": "2026-09-25T20:29:35.400114Z"
+}

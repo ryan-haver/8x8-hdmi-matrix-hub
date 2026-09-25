@@ -1,0 +1,140 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "write/snapshot-final",
+  "title": "Device state after write mode",
+  "answers": [],
+  "snapshot": {
+    "power": 1,
+    "beep": 1,
+    "lock": 0,
+    "routing": null,
+    "input_names": [
+      "NES",
+      "SNES",
+      "Sega",
+      "N64",
+      "Switch",
+      "PS3",
+      "Apple",
+      "Switcher"
+    ],
+    "output_names": null,
+    "stream": [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "hdcp": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "hdr": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "scaler": [
+      0,
+      4,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "arc": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "mute": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "edid": [
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36
+    ],
+    "cec_in": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "cec_out": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "exa_mode": 0,
+    "exa_enable": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "exa_source": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "presets": null,
+    "lcd_line": "lcd on 30 seconds",
+    "errors": []
+  },
+  "differences_from_initial": [],
+  "mode": "write",
+  "captured_at": "2026-09-25T20:31:55.189192Z"
+}

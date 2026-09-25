@@ -1,0 +1,356 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "write/telnet_system",
+  "title": "Telnet beep / lock / stream",
+  "group": "telnet",
+  "answers": [
+    "telnet-set-acks"
+  ],
+  "before": {
+    "power": 1,
+    "beep": 1,
+    "lock": 0,
+    "routing": [
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7
+    ],
+    "input_names": [
+      "NES",
+      "SNES",
+      "Sega",
+      "N64",
+      "Switch",
+      "PS3",
+      "Apple",
+      "Switcher"
+    ],
+    "output_names": [
+      "TV",
+      "Sound",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "stream": [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "hdcp": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "hdr": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "scaler": [
+      0,
+      4,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "arc": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "mute": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "edid": [
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36
+    ],
+    "cec_in": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "cec_out": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "exa_mode": 0,
+    "exa_enable": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "exa_source": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "presets": null,
+    "lcd_line": null,
+    "errors": []
+  },
+  "steps": [
+    {
+      "describe": "beep toggle",
+      "kind": "write",
+      "exchange": {
+        "kind": "telnet",
+        "role": "write",
+        "label": "s beep 0",
+        "command": "s beep 0",
+        "sent_b64": "cyBiZWVwIDAhDQo=",
+        "sent_text": "s beep 0!\r\n",
+        "response": {
+          "body_b64": "cyBiZWVwIDAhDQpiZWVwIG9mZg0K",
+          "text": "s beep 0!\r\nbeep off\r\n",
+          "chunks": [
+            {
+              "t_ms": 30.35,
+              "len": 11
+            },
+            {
+              "t_ms": 213.21,
+              "len": 10
+            }
+          ],
+          "completion": "idle",
+          "idle_ms": 1000,
+          "first_byte_ms": 30.35,
+          "elapsed_ms": 1214.73,
+          "analysis": {
+            "line_endings": {
+              "crlf": 2,
+              "lf": 0,
+              "cr": 0
+            },
+            "lines": [
+              "s beep 0!",
+              "beep off"
+            ],
+            "ends_with_newline": true,
+            "trailing_without_newline": "",
+            "last_line": "beep off",
+            "error_code": null,
+            "error_codes_seen": [],
+            "iac": []
+          }
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T20:30:56.867211Z",
+          "elapsed_ms": 1214.73
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "beep",
+          null,
+          1,
+          0
+        ]
+      ],
+      "outcome": "applied"
+    },
+    {
+      "describe": "panel lock toggle",
+      "kind": "write",
+      "exchange": {
+        "kind": "telnet",
+        "role": "write",
+        "label": "s lock 1",
+        "command": "s lock 1",
+        "sent_b64": "cyBsb2NrIDEhDQo=",
+        "sent_text": "s lock 1!\r\n",
+        "response": {
+          "body_b64": "cyBsb2NrIDEhDQpwYW5lbCBidXR0b24gbG9jayBvbg0K",
+          "text": "s lock 1!\r\npanel button lock on\r\n",
+          "chunks": [
+            {
+              "t_ms": 34.59,
+              "len": 11
+            },
+            {
+              "t_ms": 168.24,
+              "len": 22
+            }
+          ],
+          "completion": "idle",
+          "idle_ms": 1000,
+          "first_byte_ms": 34.59,
+          "elapsed_ms": 1169.59,
+          "analysis": {
+            "line_endings": {
+              "crlf": 2,
+              "lf": 0,
+              "cr": 0
+            },
+            "lines": [
+              "s lock 1!",
+              "panel button lock on"
+            ],
+            "ends_with_newline": true,
+            "trailing_without_newline": "",
+            "last_line": "panel button lock on",
+            "error_code": null,
+            "error_codes_seen": [],
+            "iac": []
+          }
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T20:31:00.010657Z",
+          "elapsed_ms": 1169.59
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "lock",
+          null,
+          0,
+          1
+        ]
+      ],
+      "outcome": "applied"
+    },
+    {
+      "describe": "output 8 stream -> 1",
+      "kind": "write",
+      "exchange": {
+        "kind": "telnet",
+        "role": "write",
+        "label": "s out 8 stream 1",
+        "command": "s out 8 stream 1",
+        "sent_b64": "cyBvdXQgOCBzdHJlYW0gMSENCg==",
+        "sent_text": "s out 8 stream 1!\r\n",
+        "response": {
+          "body_b64": "cyBvdXQgOCBzdHJlYW0gMSENCkUwMA0K",
+          "text": "s out 8 stream 1!\r\nE00\r\n",
+          "chunks": [
+            {
+              "t_ms": 34.62,
+              "len": 19
+            },
+            {
+              "t_ms": 561.01,
+              "len": 5
+            }
+          ],
+          "completion": "idle",
+          "idle_ms": 1000,
+          "first_byte_ms": 34.62,
+          "elapsed_ms": 1561.07,
+          "analysis": {
+            "line_endings": {
+              "crlf": 2,
+              "lf": 0,
+              "cr": 0
+            },
+            "lines": [
+              "s out 8 stream 1!",
+              "E00"
+            ],
+            "ends_with_newline": true,
+            "trailing_without_newline": "",
+            "last_line": "E00",
+            "error_code": "E00",
+            "error_codes_seen": [
+              "E00"
+            ],
+            "iac": []
+          }
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T20:31:03.354475Z",
+          "elapsed_ms": 1561.07
+        },
+        "outcome": "not-applied"
+      },
+      "diff": [],
+      "outcome": "not-applied"
+    }
+  ],
+  "restored": true,
+  "restore_remaining": [],
+  "findings": {
+    "results_by_outcome": {
+      "applied": [
+        "beep off",
+        "panel button lock on"
+      ],
+      "not-applied": [
+        "E00"
+      ]
+    }
+  },
+  "mode": "write",
+  "captured_at": "2026-09-25T20:31:11.502885Z"
+}

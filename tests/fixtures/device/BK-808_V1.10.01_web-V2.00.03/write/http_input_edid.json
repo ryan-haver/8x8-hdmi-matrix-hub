@@ -1,0 +1,436 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "write/http_input_edid",
+  "title": "Input EDID mode (range)",
+  "group": "edid",
+  "answers": [
+    "write-ok-results",
+    "write-fail-result",
+    "edid-range"
+  ],
+  "before": {
+    "power": 1,
+    "beep": 1,
+    "lock": 0,
+    "routing": [
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7
+    ],
+    "input_names": [
+      "NES",
+      "SNES",
+      "Sega",
+      "N64",
+      "Switch",
+      "PS3",
+      "Apple",
+      "Switcher"
+    ],
+    "output_names": [
+      "TV",
+      "Sound",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "stream": [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "hdcp": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "hdr": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "scaler": [
+      0,
+      4,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "arc": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "mute": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "edid": [
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36
+    ],
+    "cec_in": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "cec_out": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "exa_mode": 0,
+    "exa_enable": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "exa_source": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "presets": null,
+    "lcd_line": null,
+    "errors": []
+  },
+  "steps": [
+    {
+      "describe": "input 8 EDID 36 -> 1",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set input edid",
+        "comhead": "set input edid",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set input edid",
+            "input": 8,
+            "edid": 1
+          },
+          "body_text": "{\"comhead\": \"set input edid\", \"input\": 8, \"edid\": 1}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:26:44.533393Z",
+          "elapsed_ms": 5986.79
+        },
+        "outcome": "not-applied"
+      },
+      "diff": [],
+      "outcome": "not-applied"
+    },
+    {
+      "describe": "input 8 EDID -> 38 (accepted?)",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set input edid",
+        "comhead": "set input edid",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set input edid",
+            "input": 8,
+            "edid": 38
+          },
+          "body_text": "{\"comhead\": \"set input edid\", \"input\": 8, \"edid\": 38}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:26:52.760297Z",
+          "elapsed_ms": 5770.2
+        },
+        "outcome": "not-applied"
+      },
+      "diff": [],
+      "outcome": "not-applied"
+    },
+    {
+      "describe": "input 8 EDID -> 39 (accepted?)",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set input edid",
+        "comhead": "set input edid",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set input edid",
+            "input": 8,
+            "edid": 39
+          },
+          "body_text": "{\"comhead\": \"set input edid\", \"input\": 8, \"edid\": 39}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:27:00.593853Z",
+          "elapsed_ms": 5922.79
+        },
+        "outcome": "not-applied"
+      },
+      "diff": [],
+      "outcome": "not-applied"
+    },
+    {
+      "describe": "input 8 EDID -> 47 (accepted?)",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set input edid",
+        "comhead": "set input edid",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set input edid",
+            "input": 8,
+            "edid": 47
+          },
+          "body_text": "{\"comhead\": \"set input edid\", \"input\": 8, \"edid\": 47}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:27:08.559185Z",
+          "elapsed_ms": 5971.89
+        },
+        "outcome": "not-applied"
+      },
+      "diff": [],
+      "outcome": "not-applied"
+    },
+    {
+      "describe": "input 8 EDID -> 48 (accepted?)",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set input edid",
+        "comhead": "set input edid",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set input edid",
+            "input": 8,
+            "edid": 48
+          },
+          "body_text": "{\"comhead\": \"set input edid\", \"input\": 8, \"edid\": 48}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:27:16.575326Z",
+          "elapsed_ms": 5943.3
+        },
+        "outcome": "not-applied"
+      },
+      "diff": [],
+      "outcome": "not-applied"
+    },
+    {
+      "describe": "invalid EDID 0",
+      "kind": "invalid",
+      "exchange": {
+        "kind": "http",
+        "role": "write-invalid",
+        "label": "set input edid",
+        "comhead": "set input edid",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set input edid",
+            "input": 8,
+            "edid": 0
+          },
+          "body_text": "{\"comhead\": \"set input edid\", \"input\": 8, \"edid\": 0}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:27:24.726633Z",
+          "elapsed_ms": 5803.25
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    }
+  ],
+  "restored": true,
+  "restore_remaining": [],
+  "findings": {
+    "results_by_outcome": {
+      "not-applied": [
+        {
+          "type": "TimeoutError",
+          "message": ""
+        }
+      ],
+      "rejected": [
+        {
+          "type": "TimeoutError",
+          "message": ""
+        }
+      ]
+    },
+    "edid_steps": [
+      {
+        "payload": {
+          "comhead": "set input edid",
+          "input": 8,
+          "edid": 1
+        },
+        "outcome": "not-applied",
+        "edid_after": []
+      },
+      {
+        "payload": {
+          "comhead": "set input edid",
+          "input": 8,
+          "edid": 38
+        },
+        "outcome": "not-applied",
+        "edid_after": []
+      },
+      {
+        "payload": {
+          "comhead": "set input edid",
+          "input": 8,
+          "edid": 39
+        },
+        "outcome": "not-applied",
+        "edid_after": []
+      },
+      {
+        "payload": {
+          "comhead": "set input edid",
+          "input": 8,
+          "edid": 47
+        },
+        "outcome": "not-applied",
+        "edid_after": []
+      },
+      {
+        "payload": {
+          "comhead": "set input edid",
+          "input": 8,
+          "edid": 48
+        },
+        "outcome": "not-applied",
+        "edid_after": []
+      },
+      {
+        "payload": {
+          "comhead": "set input edid",
+          "input": 8,
+          "edid": 0
+        },
+        "outcome": "rejected",
+        "edid_after": []
+      }
+    ]
+  },
+  "mode": "write",
+  "captured_at": "2026-09-25T20:27:34.688503Z"
+}

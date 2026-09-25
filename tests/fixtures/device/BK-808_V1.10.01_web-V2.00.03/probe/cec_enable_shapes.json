@@ -1,0 +1,155 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "probe/cec_enable_shapes",
+  "title": "set cec index: documented bulk shape vs the hub's single-port shape, both no-op (BE-13)",
+  "answers": [
+    "cec-index-single-port"
+  ],
+  "exchanges": [
+    {
+      "kind": "http",
+      "role": "cec-shape-bulk-noop",
+      "label": "set cec index",
+      "comhead": "set cec index",
+      "request": {
+        "method": "POST",
+        "path": "/cgi-bin/instr",
+        "headers": [
+          "Host: 192.168.0.100",
+          "Content-Type: application/json",
+          "Accept: */*",
+          "Accept-Encoding: gzip, deflate",
+          "User-Agent: Python/3.12 aiohttp/3.13.3",
+          "Content-Length: 124"
+        ],
+        "json": {
+          "comhead": "set cec index",
+          "language": 0,
+          "inputindex": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "outputindex": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "body_text": "{\"comhead\": \"set cec index\", \"language\": 0, \"inputindex\": [1, 0, 0, 0, 0, 0, 0, 0], \"outputindex\": [1, 0, 0, 0, 0, 0, 0, 0]}"
+      },
+      "response": {
+        "status": 200,
+        "reason": "OK",
+        "http_version": "1.1",
+        "headers": [
+          "Connection: Keep-Alive",
+          "Transfer-Encoding: chunked",
+          "Keep-Alive: timeout=200",
+          "content-type: text/plain"
+        ],
+        "body_b64": "eyJjb21oZWFkIjoic2V0IGNlYyBpbmRleCIsInJlc3VsdCI6MX0NCg==",
+        "body_text": "{\"comhead\":\"set cec index\",\"result\":1}\r\n",
+        "json": {
+          "comhead": "set cec index",
+          "result": 1
+        },
+        "json_error": null
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T20:13:55.358864Z",
+        "elapsed_ms": 271.74
+      }
+    },
+    {
+      "kind": "http",
+      "role": "cec-shape-single-noop",
+      "label": "set cec index",
+      "comhead": "set cec index",
+      "request": {
+        "method": "POST",
+        "path": "/cgi-bin/instr",
+        "headers": [
+          "Host: 192.168.0.100",
+          "Content-Type: application/json",
+          "Accept: */*",
+          "Accept-Encoding: gzip, deflate",
+          "User-Agent: Python/3.12 aiohttp/3.13.3",
+          "Content-Length: 70"
+        ],
+        "json": {
+          "comhead": "set cec index",
+          "port": "input",
+          "index": 8,
+          "enable": 0
+        },
+        "body_text": "{\"comhead\": \"set cec index\", \"port\": \"input\", \"index\": 8, \"enable\": 0}"
+      },
+      "response": {
+        "status": 200,
+        "reason": "OK",
+        "http_version": "1.1",
+        "headers": [
+          "Connection: Keep-Alive",
+          "Transfer-Encoding: chunked",
+          "Keep-Alive: timeout=200",
+          "content-type: text/plain"
+        ],
+        "body_b64": "eyJjb21oZWFkIjoic2V0IGNlYyBpbmRleCIsInJlc3VsdCI6MH0NCg==",
+        "body_text": "{\"comhead\":\"set cec index\",\"result\":0}\r\n",
+        "json": {
+          "comhead": "set cec index",
+          "result": 0
+        },
+        "json_error": null
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T20:13:55.630742Z",
+        "elapsed_ms": 229.76
+      }
+    }
+  ],
+  "findings": {
+    "bulk_result": 1,
+    "single_result": 0,
+    "state_changed": false,
+    "restored": null,
+    "before": {
+      "inputindex": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputindex": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "after": null
+  },
+  "mode": "probe",
+  "captured_at": "2026-09-25T20:13:56.126014Z"
+}

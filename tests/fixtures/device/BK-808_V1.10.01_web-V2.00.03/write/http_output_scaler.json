@@ -1,0 +1,484 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "write/http_output_scaler",
+  "title": "Output scaler mode (every code; audio-only BE-15)",
+  "group": "output",
+  "answers": [
+    "write-ok-results",
+    "write-fail-result",
+    "output-mode-text"
+  ],
+  "before": {
+    "power": 1,
+    "beep": 1,
+    "lock": 0,
+    "routing": [
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7
+    ],
+    "input_names": [
+      "NES",
+      "SNES",
+      "Sega",
+      "N64",
+      "Switch",
+      "PS3",
+      "Apple",
+      "Switcher"
+    ],
+    "output_names": [
+      "TV",
+      "Sound",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "stream": [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "hdcp": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "hdr": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "scaler": [
+      0,
+      4,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "arc": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "mute": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "edid": [
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36
+    ],
+    "cec_in": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "cec_out": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "exa_mode": 0,
+    "exa_enable": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "exa_source": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "presets": null,
+    "lcd_line": null,
+    "errors": []
+  },
+  "steps": [
+    {
+      "describe": "output 8 scaler -> 1",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set output scaler",
+        "comhead": "set output scaler",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output scaler",
+            "output": 8,
+            "scaler": 1
+          },
+          "body_text": "{\"comhead\": \"set output scaler\", \"output\": 8, \"scaler\": 1}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:24:13.102183Z",
+          "elapsed_ms": 5423.42
+        },
+        "outcome": "not-applied"
+      },
+      "diff": [],
+      "outcome": "not-applied",
+      "status_changes": {
+        "removed": [],
+        "added": []
+      }
+    },
+    {
+      "describe": "output 8 scaler -> 2",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set output scaler",
+        "comhead": "set output scaler",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output scaler",
+            "output": 8,
+            "scaler": 2
+          },
+          "body_text": "{\"comhead\": \"set output scaler\", \"output\": 8, \"scaler\": 2}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:24:22.252185Z",
+          "elapsed_ms": 5271.69
+        },
+        "outcome": "not-applied"
+      },
+      "diff": [],
+      "outcome": "not-applied",
+      "status_changes": {
+        "removed": [],
+        "added": []
+      }
+    },
+    {
+      "describe": "output 8 scaler -> 3",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set output scaler",
+        "comhead": "set output scaler",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output scaler",
+            "output": 8,
+            "scaler": 3
+          },
+          "body_text": "{\"comhead\": \"set output scaler\", \"output\": 8, \"scaler\": 3}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:24:31.047663Z",
+          "elapsed_ms": 5473.36
+        },
+        "outcome": "not-applied"
+      },
+      "diff": [],
+      "outcome": "not-applied",
+      "status_changes": {
+        "removed": [],
+        "added": []
+      }
+    },
+    {
+      "describe": "output 8 scaler -> 4",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set output scaler",
+        "comhead": "set output scaler",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output scaler",
+            "output": 8,
+            "scaler": 4
+          },
+          "body_text": "{\"comhead\": \"set output scaler\", \"output\": 8, \"scaler\": 4}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:24:40.125754Z",
+          "elapsed_ms": 5393.84
+        },
+        "outcome": "not-applied"
+      },
+      "diff": [],
+      "outcome": "not-applied",
+      "status_changes": {
+        "removed": [],
+        "added": []
+      }
+    },
+    {
+      "describe": "output 8 scaler -> 5",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set output scaler",
+        "comhead": "set output scaler",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output scaler",
+            "output": 8,
+            "scaler": 5
+          },
+          "body_text": "{\"comhead\": \"set output scaler\", \"output\": 8, \"scaler\": 5}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:24:49.256194Z",
+          "elapsed_ms": 5270.93
+        },
+        "outcome": "not-applied"
+      },
+      "diff": [],
+      "outcome": "not-applied",
+      "status_changes": {
+        "removed": [],
+        "added": []
+      }
+    },
+    {
+      "describe": "output 8 scaler -> 0 (back to the original)",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set output scaler",
+        "comhead": "set output scaler",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output scaler",
+            "output": 8,
+            "scaler": 0
+          },
+          "body_text": "{\"comhead\": \"set output scaler\", \"output\": 8, \"scaler\": 0}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:24:58.130917Z",
+          "elapsed_ms": 5394.34
+        },
+        "outcome": "applied"
+      },
+      "diff": [],
+      "outcome": "applied",
+      "status_changes": {
+        "removed": [],
+        "added": []
+      }
+    },
+    {
+      "describe": "invalid output 9",
+      "kind": "invalid",
+      "exchange": {
+        "kind": "http",
+        "role": "write-invalid",
+        "label": "set output scaler",
+        "comhead": "set output scaler",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output scaler",
+            "output": 9,
+            "scaler": 0
+          },
+          "body_text": "{\"comhead\": \"set output scaler\", \"output\": 9, \"scaler\": 0}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:25:07.419244Z",
+          "elapsed_ms": 5097.47
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    },
+    {
+      "describe": "invalid scaler 6",
+      "kind": "invalid",
+      "exchange": {
+        "kind": "http",
+        "role": "write-invalid",
+        "label": "set output scaler",
+        "comhead": "set output scaler",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [],
+          "json": {
+            "comhead": "set output scaler",
+            "output": 8,
+            "scaler": 6
+          },
+          "body_text": "{\"comhead\": \"set output scaler\", \"output\": 8, \"scaler\": 6}"
+        },
+        "response": null,
+        "error": {
+          "type": "TimeoutError",
+          "message": ""
+        },
+        "timing": {
+          "started_at": "2026-09-25T20:25:14.578945Z",
+          "elapsed_ms": 5941.39
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    }
+  ],
+  "restored": true,
+  "restore_remaining": [],
+  "findings": {
+    "results_by_outcome": {
+      "not-applied": [
+        {
+          "type": "TimeoutError",
+          "message": ""
+        }
+      ],
+      "applied": [
+        {
+          "type": "TimeoutError",
+          "message": ""
+        }
+      ],
+      "rejected": [
+        {
+          "type": "TimeoutError",
+          "message": ""
+        }
+      ]
+    },
+    "status_text": {
+      "1": [],
+      "2": [],
+      "3": [],
+      "4": [],
+      "5": [],
+      "0": []
+    }
+  },
+  "mode": "write",
+  "captured_at": "2026-09-25T20:25:24.538783Z"
+}

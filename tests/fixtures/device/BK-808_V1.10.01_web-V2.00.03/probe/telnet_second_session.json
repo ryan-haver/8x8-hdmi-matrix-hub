@@ -1,0 +1,190 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "probe/telnet_second_session",
+  "title": "Two Telnet connections at once",
+  "answers": [
+    "telnet-multi-session"
+  ],
+  "exchanges": [
+    {
+      "kind": "telnet",
+      "role": "second-session-banner",
+      "label": "banner",
+      "command": null,
+      "sent_b64": "",
+      "response": {
+        "body_b64": "//sD//wB//4B//4A//wDKioqKioqKioqKioqKioqKndlbGNvbWUgKioqKioqKioqKioqKioNCiAgICAgICAgICAgIGZ3IHZlcnNpb24gOnYxLjEwLjAxICAgICAgICANCioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqDQoNCg==",
+        "text": "****************welcome **************\r\n            fw version :v1.10.01        \r\n**************************************\r\n\r\n",
+        "chunks": [
+          {
+            "t_ms": 1.65,
+            "len": 12
+          },
+          {
+            "t_ms": 2.34,
+            "len": 3
+          },
+          {
+            "t_ms": 161.48,
+            "len": 40
+          },
+          {
+            "t_ms": 161.59,
+            "len": 42
+          },
+          {
+            "t_ms": 166.39,
+            "len": 40
+          },
+          {
+            "t_ms": 184.42,
+            "len": 2
+          }
+        ],
+        "completion": "idle",
+        "idle_ms": 1500,
+        "first_byte_ms": 1.65,
+        "elapsed_ms": 1684.42,
+        "analysis": {
+          "line_endings": {
+            "crlf": 4,
+            "lf": 0,
+            "cr": 0
+          },
+          "lines": [
+            "****************welcome **************",
+            "            fw version :v1.10.01        ",
+            "**************************************",
+            ""
+          ],
+          "ends_with_newline": true,
+          "trailing_without_newline": "",
+          "last_line": "**************************************",
+          "error_code": null,
+          "error_codes_seen": [],
+          "iac": [
+            "IAC WILL 3",
+            "IAC WONT 1",
+            "IAC DONT 1",
+            "IAC DONT 0",
+            "IAC WONT 3"
+          ]
+        }
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T20:14:37.923204Z",
+        "elapsed_ms": 1684.42
+      }
+    },
+    {
+      "kind": "telnet",
+      "role": "read",
+      "label": "r type",
+      "command": "r type",
+      "sent_b64": "ciB0eXBlIQ0K",
+      "sent_text": "r type!\r\n",
+      "response": {
+        "body_b64": "ciB0eXBlIQ0KOHg4IGhkbWkyLjEgbWF0cml4DQo=",
+        "text": "r type!\r\n8x8 hdmi2.1 matrix\r\n",
+        "chunks": [
+          {
+            "t_ms": 29.33,
+            "len": 9
+          },
+          {
+            "t_ms": 166.07,
+            "len": 20
+          }
+        ],
+        "completion": "idle",
+        "idle_ms": 1000,
+        "first_byte_ms": 29.33,
+        "elapsed_ms": 1167.63,
+        "analysis": {
+          "line_endings": {
+            "crlf": 2,
+            "lf": 0,
+            "cr": 0
+          },
+          "lines": [
+            "r type!",
+            "8x8 hdmi2.1 matrix"
+          ],
+          "ends_with_newline": true,
+          "trailing_without_newline": "",
+          "last_line": "8x8 hdmi2.1 matrix",
+          "error_code": null,
+          "error_codes_seen": [],
+          "iac": []
+        }
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T20:14:39.607582Z",
+        "elapsed_ms": 1167.63
+      }
+    },
+    {
+      "kind": "telnet",
+      "role": "read",
+      "label": "r type",
+      "command": "r type",
+      "sent_b64": "ciB0eXBlIQ0K",
+      "sent_text": "r type!\r\n",
+      "response": {
+        "body_b64": "ciB0eXBlIQ0KOHg4IGhkbWkyLjEgbWF0cml4DQo=",
+        "text": "r type!\r\n8x8 hdmi2.1 matrix\r\n",
+        "chunks": [
+          {
+            "t_ms": 29.6,
+            "len": 9
+          },
+          {
+            "t_ms": 166.42,
+            "len": 20
+          }
+        ],
+        "completion": "idle",
+        "idle_ms": 1000,
+        "first_byte_ms": 29.6,
+        "elapsed_ms": 1167.53,
+        "analysis": {
+          "line_endings": {
+            "crlf": 2,
+            "lf": 0,
+            "cr": 0
+          },
+          "lines": [
+            "r type!",
+            "8x8 hdmi2.1 matrix"
+          ],
+          "ends_with_newline": true,
+          "trailing_without_newline": "",
+          "last_line": "8x8 hdmi2.1 matrix",
+          "error_code": null,
+          "error_codes_seen": [],
+          "iac": []
+        }
+      },
+      "error": null,
+      "unsolicited_before": [
+        {
+          "t": "2026-09-25T20:14:40.775244Z",
+          "b64": "KioqKioqKioqKioqKioqKndlbGNvbWUgKioqKioqKioqKioqKioNCiAgICAgICAgICAgIGZ3IHZlcnNpb24gOnYxLjEwLjAxICAgICAgICANCioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqDQoNCjh4OCBoZG1pMi4xIG1hdHJpeA0K",
+          "text": "****************welcome **************\r\n            fw version :v1.10.01        \r\n**************************************\r\n\r\n8x8 hdmi2.1 matrix\r\n"
+        }
+      ],
+      "timing": {
+        "started_at": "2026-09-25T20:14:40.775244Z",
+        "elapsed_ms": 1167.53
+      }
+    }
+  ],
+  "findings": {
+    "second_session_works": true,
+    "first_session_still_works": true
+  },
+  "mode": "probe",
+  "captured_at": "2026-09-25T20:14:41.942848Z"
+}

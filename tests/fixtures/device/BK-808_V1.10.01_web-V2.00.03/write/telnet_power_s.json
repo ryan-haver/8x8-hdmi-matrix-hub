@@ -1,0 +1,268 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "write/telnet_power_s",
+  "title": "Telnet 's power N' (vendor syntax)",
+  "group": "power",
+  "answers": [
+    "telnet-bare-power",
+    "telnet-set-acks"
+  ],
+  "before": {
+    "power": 1,
+    "beep": 1,
+    "lock": 0,
+    "routing": null,
+    "input_names": [
+      "NES",
+      "SNES",
+      "Sega",
+      "N64",
+      "Switch",
+      "PS3",
+      "Apple",
+      "Switcher"
+    ],
+    "output_names": null,
+    "stream": [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "hdcp": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "hdr": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "scaler": [
+      0,
+      4,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "arc": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "mute": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "edid": [
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36
+    ],
+    "cec_in": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "cec_out": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "exa_mode": 0,
+    "exa_enable": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "exa_source": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "presets": null,
+    "lcd_line": null,
+    "errors": []
+  },
+  "steps": [
+    {
+      "describe": "STANDBY via Telnet",
+      "kind": "write",
+      "exchange": {
+        "kind": "telnet",
+        "role": "write",
+        "label": "s power 0",
+        "command": "s power 0",
+        "sent_b64": "cyBwb3dlciAwIQ0K",
+        "sent_text": "s power 0!\r\n",
+        "response": {
+          "body_b64": "cyBwb3dlciAwIQ0KRTAxDQo=",
+          "text": "s power 0!\r\nE01\r\n",
+          "chunks": [
+            {
+              "t_ms": 32.17,
+              "len": 12
+            },
+            {
+              "t_ms": 167.99,
+              "len": 5
+            }
+          ],
+          "completion": "idle",
+          "idle_ms": 1000,
+          "first_byte_ms": 32.17,
+          "elapsed_ms": 1169.2,
+          "analysis": {
+            "line_endings": {
+              "crlf": 2,
+              "lf": 0,
+              "cr": 0
+            },
+            "lines": [
+              "s power 0!",
+              "E01"
+            ],
+            "ends_with_newline": true,
+            "trailing_without_newline": "",
+            "last_line": "E01",
+            "error_code": "E01",
+            "error_codes_seen": [
+              "E01"
+            ],
+            "iac": []
+          }
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T20:31:42.098721Z",
+          "elapsed_ms": 1169.2
+        },
+        "outcome": "not-applied"
+      },
+      "diff": [],
+      "outcome": "not-applied"
+    },
+    {
+      "describe": "power on via Telnet (proves nothing if standby did not apply)",
+      "kind": "write",
+      "exchange": {
+        "kind": "telnet",
+        "role": "write",
+        "label": "s power 1",
+        "command": "s power 1",
+        "sent_b64": "cyBwb3dlciAxIQ0K",
+        "sent_text": "s power 1!\r\n",
+        "response": {
+          "body_b64": "cyBwb3dlciAxIQ0KRTAxDQo=",
+          "text": "s power 1!\r\nE01\r\n",
+          "chunks": [
+            {
+              "t_ms": 30.15,
+              "len": 12
+            },
+            {
+              "t_ms": 166.84,
+              "len": 5
+            }
+          ],
+          "completion": "idle",
+          "idle_ms": 1000,
+          "first_byte_ms": 30.15,
+          "elapsed_ms": 1167.6,
+          "analysis": {
+            "line_endings": {
+              "crlf": 2,
+              "lf": 0,
+              "cr": 0
+            },
+            "lines": [
+              "s power 1!",
+              "E01"
+            ],
+            "ends_with_newline": true,
+            "trailing_without_newline": "",
+            "last_line": "E01",
+            "error_code": "E01",
+            "error_codes_seen": [
+              "E01"
+            ],
+            "iac": []
+          }
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T20:31:44.846192Z",
+          "elapsed_ms": 1167.6
+        },
+        "outcome": "not-applied"
+      },
+      "diff": [],
+      "outcome": "not-applied"
+    }
+  ],
+  "restored": true,
+  "restore_remaining": [],
+  "findings": {
+    "results_by_outcome": {
+      "not-applied": [
+        "E01"
+      ]
+    }
+  },
+  "mode": "write",
+  "captured_at": "2026-09-25T20:31:49.188942Z"
+}

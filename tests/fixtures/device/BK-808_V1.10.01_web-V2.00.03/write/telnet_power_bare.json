@@ -1,0 +1,305 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "write/telnet_power_bare",
+  "title": "Telnet 'power N' (what TelnetClient sends)",
+  "group": "power",
+  "answers": [
+    "telnet-bare-power",
+    "telnet-set-acks"
+  ],
+  "before": {
+    "power": 1,
+    "beep": 1,
+    "lock": 0,
+    "routing": null,
+    "input_names": [
+      "NES",
+      "SNES",
+      "Sega",
+      "N64",
+      "Switch",
+      "PS3",
+      "Apple",
+      "Switcher"
+    ],
+    "output_names": null,
+    "stream": [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "hdcp": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "hdr": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "scaler": [
+      0,
+      4,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "arc": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "mute": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "edid": [
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36
+    ],
+    "cec_in": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "cec_out": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "exa_mode": 0,
+    "exa_enable": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "exa_source": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "presets": null,
+    "lcd_line": null,
+    "errors": []
+  },
+  "steps": [
+    {
+      "describe": "STANDBY via Telnet",
+      "kind": "write",
+      "exchange": {
+        "kind": "telnet",
+        "role": "write",
+        "label": "power 0",
+        "command": "power 0",
+        "sent_b64": "cG93ZXIgMCENCg==",
+        "sent_text": "power 0!\r\n",
+        "response": {
+          "body_b64": "cG93ZXIgMCENCnBvd2VyIG9mZg0K",
+          "text": "power 0!\r\npower off\r\n",
+          "chunks": [
+            {
+              "t_ms": 29.39,
+              "len": 10
+            },
+            {
+              "t_ms": 165.48,
+              "len": 11
+            }
+          ],
+          "completion": "idle",
+          "idle_ms": 1000,
+          "first_byte_ms": 29.39,
+          "elapsed_ms": 1165.91,
+          "analysis": {
+            "line_endings": {
+              "crlf": 2,
+              "lf": 0,
+              "cr": 0
+            },
+            "lines": [
+              "power 0!",
+              "power off"
+            ],
+            "ends_with_newline": true,
+            "trailing_without_newline": "",
+            "last_line": "power off",
+            "error_code": null,
+            "error_codes_seen": [],
+            "iac": []
+          }
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T20:31:32.200941Z",
+          "elapsed_ms": 1165.91
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "power",
+          null,
+          1,
+          0
+        ]
+      ],
+      "outcome": "applied"
+    },
+    {
+      "describe": "power on via Telnet (proves nothing if standby did not apply)",
+      "kind": "write",
+      "exchange": {
+        "kind": "telnet",
+        "role": "write",
+        "label": "power 1",
+        "command": "power 1",
+        "sent_b64": "cG93ZXIgMSENCg==",
+        "sent_text": "power 1!\r\n",
+        "response": {
+          "body_b64": "cG93ZXIgMSENCnBvd2VyIG9uDQoNCjh4OCBoZG1pMi4xIG1hdHJpeA0Kc3lzdGVtIGluaXRpYWxpemluZy4uLg0KaW5pdGlhbGl6YXRpb24gZmluaXNoZWQhDQptY3UgZncgdmVyc2lvbiA6IHYxLjEwLjAxDQoNCg==",
+          "text": "power 1!\r\npower on\r\n\r\n8x8 hdmi2.1 matrix\r\nsystem initializing...\r\ninitialization finished!\r\nmcu fw version : v1.10.01\r\n\r\n",
+          "chunks": [
+            {
+              "t_ms": 30.15,
+              "len": 10
+            },
+            {
+              "t_ms": 165.86,
+              "len": 10
+            },
+            {
+              "t_ms": 1121.36,
+              "len": 2
+            },
+            {
+              "t_ms": 1121.77,
+              "len": 20
+            },
+            {
+              "t_ms": 1122.28,
+              "len": 24
+            },
+            {
+              "t_ms": 1123.84,
+              "len": 53
+            },
+            {
+              "t_ms": 1124.81,
+              "len": 2
+            }
+          ],
+          "completion": "idle",
+          "idle_ms": 1000,
+          "first_byte_ms": 30.15,
+          "elapsed_ms": 2125.95,
+          "analysis": {
+            "line_endings": {
+              "crlf": 8,
+              "lf": 0,
+              "cr": 0
+            },
+            "lines": [
+              "power 1!",
+              "power on",
+              "",
+              "8x8 hdmi2.1 matrix",
+              "system initializing...",
+              "initialization finished!",
+              "mcu fw version : v1.10.01",
+              ""
+            ],
+            "ends_with_newline": true,
+            "trailing_without_newline": "",
+            "last_line": "mcu fw version : v1.10.01",
+            "error_code": null,
+            "error_codes_seen": [],
+            "iac": []
+          }
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T20:31:35.062123Z",
+          "elapsed_ms": 2125.95
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "power",
+          null,
+          0,
+          1
+        ]
+      ],
+      "outcome": "applied"
+    }
+  ],
+  "restored": true,
+  "restore_remaining": [],
+  "findings": {
+    "results_by_outcome": {
+      "applied": [
+        "power off",
+        "mcu fw version : v1.10.01"
+      ]
+    }
+  },
+  "mode": "write",
+  "captured_at": "2026-09-25T20:31:40.385549Z"
+}

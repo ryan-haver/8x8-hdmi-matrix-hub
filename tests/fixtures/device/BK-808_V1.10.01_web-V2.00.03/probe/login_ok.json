@@ -1,0 +1,71 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "probe/login_ok",
+  "title": "Successful login (fresh client; Set-Cookie values masked)",
+  "answers": [
+    "login-ok-result",
+    "session-mechanism"
+  ],
+  "exchanges": [
+    {
+      "kind": "http",
+      "role": "login",
+      "label": "login",
+      "comhead": "login",
+      "request": {
+        "method": "POST",
+        "path": "/cgi-bin/instr",
+        "headers": [
+          "Host: 192.168.0.100",
+          "Content-Type: application/json",
+          "Accept: */*",
+          "Accept-Encoding: gzip, deflate",
+          "User-Agent: Python/3.12 aiohttp/3.13.3",
+          "Content-Length: 58"
+        ],
+        "json": {
+          "comhead": "login",
+          "user": "Admin",
+          "password": "***REDACTED***"
+        },
+        "body_text": "{\"comhead\": \"login\", \"user\": \"Admin\", \"password\": \"***REDACTED***\"}"
+      },
+      "redacted": [
+        "request.password"
+      ],
+      "response": {
+        "status": 200,
+        "reason": "OK",
+        "http_version": "1.1",
+        "headers": [
+          "Connection: Keep-Alive",
+          "Transfer-Encoding: chunked",
+          "Keep-Alive: timeout=200",
+          "content-type: text/plain"
+        ],
+        "body_b64": "eyJjb21oZWFkIjoibG9naW4iLCJyZXN1bHQiOjF9DQo=",
+        "body_text": "{\"comhead\":\"login\",\"result\":1}\r\n",
+        "json": {
+          "comhead": "login",
+          "result": 1
+        },
+        "json_error": null
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T20:07:35.822356Z",
+        "elapsed_ms": 434.11
+      }
+    }
+  ],
+  "findings": {
+    "json": {
+      "comhead": "login",
+      "result": 1
+    },
+    "set_cookie": [],
+    "cookie_names": []
+  },
+  "mode": "probe",
+  "captured_at": "2026-09-25T20:07:36.257494Z"
+}
