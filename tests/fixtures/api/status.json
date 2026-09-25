@@ -1,0 +1,58 @@
+{
+  "data": {
+    "connected": true,
+    "host": "192.0.2.10",
+    "input_names": {
+      "1": "PS3",
+      "2": "AppleTV",
+      "3": "Computer",
+      "4": "Switch",
+      "5": "Shield",
+      "6": "PS5",
+      "7": "Analogue",
+      "8": "Input 8"
+    },
+    "output_names": {
+      "1": "TV",
+      "2": "Soundbar",
+      "3": "Output 3",
+      "4": "Output 4",
+      "5": "Output 5",
+      "6": "Output 6",
+      "7": "Output 7",
+      "8": "Output 8"
+    },
+    "outputs": [
+      2,
+      2,
+      6,
+      4,
+      1,
+      3,
+      5,
+      7
+    ],
+    "preset_names": {
+      "1": "Movie Night",
+      "2": "Gaming",
+      "3": "Preset 3",
+      "4": "Preset 4",
+      "5": "Preset 5",
+      "6": "Preset 6",
+      "7": "Preset 7",
+      "8": "Preset 8"
+    },
+    "routing": {
+      "1": 2,
+      "2": 2,
+      "3": 6,
+      "4": 4,
+      "5": 1,
+      "6": 3,
+      "7": 5,
+      "8": 7
+    }
+  },
+  "error": null,
+  "success": true
+}

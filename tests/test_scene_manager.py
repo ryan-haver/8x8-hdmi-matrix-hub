@@ -6,7 +6,6 @@ conflict detection, override management, password protection,
 and password inheritance enforcement.
 """
 
-import json
 import tempfile
 from pathlib import Path
 
@@ -308,9 +307,7 @@ class TestSceneManagerPassword:
 
     def test_password_inheritance_blocks_unprotected_scene_with_protected_step(self, mgr):
         """Unprotected scene containing protected profile step is rejected."""
-        from unittest.mock import MagicMock, patch
 
-        from config import ProfileManager
 
         # Patch the profile manager to return a protected profile
         scene, err = mgr.create_scene(

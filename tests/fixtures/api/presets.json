@@ -1,0 +1,64 @@
+{
+  "data": {
+    "presets": [
+      {
+        "endpoint": "/api/preset/1",
+        "name": "Movie Night",
+        "number": 1,
+        "routing": {},
+        "save_endpoint": "/api/preset/1/save"
+      },
+      {
+        "endpoint": "/api/preset/2",
+        "name": "Gaming",
+        "number": 2,
+        "routing": {},
+        "save_endpoint": "/api/preset/2/save"
+      },
+      {
+        "endpoint": "/api/preset/3",
+        "name": "Preset 3",
+        "number": 3,
+        "routing": {},
+        "save_endpoint": "/api/preset/3/save"
+      },
+      {
+        "endpoint": "/api/preset/4",
+        "name": "Preset 4",
+        "number": 4,
+        "routing": {},
+        "save_endpoint": "/api/preset/4/save"
+      },
+      {
+        "endpoint": "/api/preset/5",
+        "name": "Preset 5",
+        "number": 5,
+        "routing": {},
+        "save_endpoint": "/api/preset/5/save"
+      },
+      {
+        "endpoint": "/api/preset/6",
+        "name": "Preset 6",
+        "number": 6,
+        "routing": {},
+        "save_endpoint": "/api/preset/6/save"
+      },
+      {
+        "endpoint": "/api/preset/7",
+        "name": "Preset 7",
+        "number": 7,
+        "routing": {},
+        "save_endpoint": "/api/preset/7/save"
+      },
+      {
+        "endpoint": "/api/preset/8",
+        "name": "Preset 8",
+        "number": 8,
+        "routing": {},
+        "save_endpoint": "/api/preset/8/save"
+      }
+    ]
+  },
+  "error": null,
+  "success": true
+}

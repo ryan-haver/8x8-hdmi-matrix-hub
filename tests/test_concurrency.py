@@ -23,21 +23,8 @@ sys.path.insert(0, str(_PROJECT_ROOT / "src"))
 # Import the REST API utils module to exercise its locks.
 from rest_api import utils as api_utils  # noqa: E402
 
-
-@pytest.fixture(autouse=True)
-def _reset_module_state():
-    """Reset module-level globals between tests so they don't bleed."""
-    api_utils._matrix_device = None
-    api_utils._input_names = {}
-    api_utils._output_names = {}
-    api_utils._ws_clients.clear()
-    api_utils.reset_rate_limiter()
-    yield
-    api_utils._matrix_device = None
-    api_utils._input_names = {}
-    api_utils._output_names = {}
-    api_utils._ws_clients.clear()
-    api_utils.reset_rate_limiter()
+# Module globals (device, name caches, WS clients, rate limiter) are reset
+# between tests by the autouse fixture in tests/conftest.py (TST-06).
 
 
 class TestRateLimitUnderConcurrency:

@@ -1,0 +1,115 @@
+{
+  "data": {
+    "inputs": [
+      {
+        "cableConnected": null,
+        "edid": 3,
+        "inactive": true,
+        "name": "PS3",
+        "number": 1,
+        "signalActive": false,
+        "sourceDetected": null
+      },
+      {
+        "cableConnected": null,
+        "edid": 3,
+        "inactive": false,
+        "name": "AppleTV",
+        "number": 2,
+        "signalActive": true,
+        "sourceDetected": null
+      },
+      {
+        "cableConnected": null,
+        "edid": 3,
+        "inactive": true,
+        "name": "Computer",
+        "number": 3,
+        "signalActive": false,
+        "sourceDetected": null
+      },
+      {
+        "cableConnected": null,
+        "edid": 3,
+        "inactive": false,
+        "name": "Switch",
+        "number": 4,
+        "signalActive": true,
+        "sourceDetected": null
+      },
+      {
+        "cableConnected": null,
+        "edid": 3,
+        "inactive": true,
+        "name": "Shield",
+        "number": 5,
+        "signalActive": false,
+        "sourceDetected": null
+      },
+      {
+        "cableConnected": null,
+        "edid": 3,
+        "inactive": false,
+        "name": "PS5",
+        "number": 6,
+        "signalActive": true,
+        "sourceDetected": null
+      },
+      {
+        "cableConnected": null,
+        "edid": 3,
+        "inactive": true,
+        "name": "Analogue",
+        "number": 7,
+        "signalActive": false,
+        "sourceDetected": null
+      },
+      {
+        "cableConnected": null,
+        "edid": 3,
+        "inactive": true,
+        "name": "Input 8",
+        "number": 8,
+        "signalActive": false,
+        "sourceDetected": null
+      }
+    ],
+    "raw": {
+      "comhead": "get input status",
+      "edid": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "inactive": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        0
+      ],
+      "inname": [
+        "PS3",
+        "AppleTV",
+        "Computer",
+        "Switch",
+        "Shield",
+        "PS5",
+        "Analogue",
+        "Input 8"
+      ],
+      "power": 1
+    },
+    "telnetAvailable": false
+  },
+  "error": null,
+  "success": true
+}

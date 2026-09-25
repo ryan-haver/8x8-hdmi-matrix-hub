@@ -20,7 +20,6 @@ from scene_execution import (
 from scene_manager import (
     STEP_TYPE_MACRO,
     STEP_TYPE_PROFILE,
-    STEP_TYPE_SYSTEM_ACTION,
     Scene,
     SceneManager,
     SceneStep,
@@ -42,7 +41,6 @@ class TestApplyOverridesToProfile:
 
     def test_overrides_reset_to_defaults(self):
         """Overridden settings are reset to defaults in the returned profile."""
-        import copy
 
         # Create a real-ish profile mock with mutable outputs
         profile = MagicMock()

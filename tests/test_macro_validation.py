@@ -13,7 +13,6 @@ Validates the F12.1 / F12.2 / F12.4 / F12.5 fixes:
 
 from __future__ import annotations
 
-import json
 import sys
 from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock

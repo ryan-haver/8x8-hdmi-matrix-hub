@@ -11,12 +11,8 @@ Tests:
 :license: Mozilla Public License Version 2.0, see LICENSE for more details.
 """
 
-import asyncio
 import sys
 from pathlib import Path
-from unittest.mock import AsyncMock, MagicMock
-
-import pytest
 
 # Add src to path for imports
 src_path = Path(__file__).parent.parent / "src"

@@ -15,12 +15,9 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from dashboard_layout import (
     CARD_AGGREGATE_WIDGET,
-    CARD_MACRO,
     CARD_PRESET,
     CARD_PROFILE,
-    CARD_SYSTEM_SHORTCUT,
     LEGACY_AGGREGATE_WIDGETS,
-    VALID_CARD_TYPES,
     DashboardCard,
     DashboardLayout,
     DashboardLayoutManager,
