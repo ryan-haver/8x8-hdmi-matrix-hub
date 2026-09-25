@@ -1,0 +1,10 @@
+# Findings discovered by validation, waiting to be added to the register in
+# docs/REMEDIATION_PLAN.md §4 (VALIDATION_PLAN §1.7: a feature that does not
+# work is a finding). The VAL-nn ids are provisional: when a row is added to
+# the register, rename the id in features.yaml and in the scenarios' `finding=`
+# links, then delete it here. The ledger/CI treat these rows as open findings.
+#
+# Each row: id, severity (C/H/M/L), title, location, proposed register row
+# (section + text), proof (scenario that demonstrates it), status (open|closed).
+
+findings: []
