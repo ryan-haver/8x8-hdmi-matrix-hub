@@ -75,8 +75,8 @@ export default [
     },
   },
   {
-    // Node tooling (configs, tools/ui).
-    files: ['*.js', '*.mjs', 'tools/**/*.mjs'],
+    // Node tooling (configs, tools/ui, test support scripts).
+    files: ['*.js', '*.mjs', 'tools/**/*.mjs', 'tests/**/*.mjs'],
     languageOptions: {
       ecmaVersion: 2023,
       sourceType: 'module',

@@ -21,6 +21,12 @@ const CI = !!process.env.CI;
 const visualProject = (name: keyof typeof VIEWPORTS, themed: boolean) => ({
   name,
   testMatch: /visual\/visual\.spec\.ts$/,
+  // Captures never change hub or simulator state (writes are blocked in the
+  // spec, hub broadcasts are filtered per page), so they run in parallel.
+  fullyParallel: true,
+  // The smoke tests DO change simulator state; running them first (and
+  // alone) keeps them from racing the captures. Skip with --no-deps.
+  dependencies: ['smoke'],
   // Theme presets other than Tron Classic run on desktop and kiosk only (§5.3).
   ...(themed ? {} : { grepInvert: /@themed/ }),
   use: {
@@ -37,10 +43,11 @@ export default defineConfig({
   testDir: '.',
   outputDir: '../../test-results',
   snapshotPathTemplate: '{testDir}/visual/__snapshots__/{projectName}/{arg}{ext}',
-  // One stack is shared by all tests, and some tests change simulator state,
-  // so tests run one at a time. Each test resets the state it depends on.
+  // One stack is shared by all tests. Smoke tests (which change simulator
+  // state) run serially in one worker before any capture; captures run in
+  // parallel. Each test resets the simulator state it depends on.
   fullyParallel: false,
-  workers: 1,
+  workers: Number(process.env.E2E_WORKERS ?? 4),
   retries: 0,
   forbidOnly: CI,
   timeout: 60_000,

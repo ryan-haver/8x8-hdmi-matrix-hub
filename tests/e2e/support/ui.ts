@@ -55,7 +55,27 @@ export type PrepareOptions = {
   realClock?: boolean;
   /** Replace window.WebSocket with one that never connects (disconnected header/status). */
   noWebSocket?: boolean;
+  /**
+   * Hub "status" broadcasts on the WebSocket. Default 'drop'.
+   *
+   * Every GET /api/status/outputs with a warm cache makes the hub broadcast a
+   * background refresh to ALL open pages (src/rest_api/outputs.py:59), so
+   * pages would re-render at times set by other tests, and response shaping
+   * done with page.route (long names, no signal, ...) would be overwritten.
+   * The broadcast also resets output names to "Output N" (hub bug: _format_outputs
+   * uses the hub's name cache, empty in modular mode). 'drop' keeps each page
+   * on its own REST data; 'pass' lets them through (see catalog entry
+   * app/ws-status-refresh/output-names).
+   */
+  wsStatus?: 'drop' | 'pass';
 };
+
+const wsStatusFrames = new WeakMap<Page, { count: number }>();
+
+/** Number of hub "status" broadcasts the page has received (wsStatus: 'pass'). */
+export function statusFramesReceived(page: Page) {
+  return wsStatusFrames.get(page)?.count ?? 0;
+}
 
 /**
  * Deterministic page setup; call before the first navigation.
@@ -85,6 +105,9 @@ export async function preparePage(page: Page, opts: PrepareOptions = {}) {
       }
       // Seeded PRNG so anything random (the Tron background) is repeatable.
       let seed = 0x5eed1234;
+      (window as unknown as { __e2eReseed: () => void }).__e2eReseed = () => {
+        seed = 0x5eed1234;
+      };
       Math.random = () => {
         seed |= 0;
         seed = (seed + 0x6d2b79f5) | 0;
@@ -129,6 +152,22 @@ export async function preparePage(page: Page, opts: PrepareOptions = {}) {
     { storage, css: FREEZE_CSS, noWebSocket: !!opts.noWebSocket },
   );
   if (!opts.realClock) await page.clock.setFixedTime(FIXED_TIME);
+
+  if (!opts.noWebSocket) {
+    const counter = { count: 0 };
+    wsStatusFrames.set(page, counter);
+    const drop = (opts.wsStatus ?? 'drop') === 'drop';
+    await page.routeWebSocket(/\/ws$/, (ws) => {
+      const server = ws.connectToServer();
+      server.onMessage((message) => {
+        if (typeof message === 'string' && /^\s*\{\s*"event"\s*:\s*"status"/.test(message)) {
+          counter.count++;
+          if (drop) return;
+        }
+        ws.send(message);
+      });
+    });
+  }
 }
 
 /** Wait until the main UI has finished its startup sequence (see web/js/app.js init()). */
@@ -188,7 +227,8 @@ export async function openKiosk(page: Page, opts: { ready?: boolean } = {}) {
 
 /** Let pending timers, rAF callbacks and network responses land. */
 export async function settle(page: Page, ms = 300) {
-  await page.waitForLoadState('networkidle').catch(() => {});
+  // Bounded: some states deliberately hold a request open forever.
+  await page.waitForLoadState('networkidle', { timeout: 3000 }).catch(() => {});
   await page.evaluate(
     (ms) =>
       new Promise<void>((resolve) =>
