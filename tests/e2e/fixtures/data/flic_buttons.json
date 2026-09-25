@@ -1,0 +1,4 @@
+{
+  "80:e4:da:70:00:01": {"bdaddr": "80:e4:da:70:00:01", "name": "Couch Button", "serial": "BG12-A00001"},
+  "80:e4:da:70:00:02": {"bdaddr": "80:e4:da:70:00:02", "name": "Kitchen Button", "serial": "BG12-A00002"}
+}

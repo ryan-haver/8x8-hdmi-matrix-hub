@@ -1,0 +1,40 @@
+{
+  "scenes": [
+    {
+      "id": "scene_movienight01", "name": "Movie Night", "icon": "🍿",
+      "steps": [
+        {"type": "macro", "id": "macro_tv_on"},
+        {"type": "profile", "id": "movie_night"},
+        {"type": "system_action", "id": "preset_recall_2"}
+      ],
+      "overrides": {"movie_night": {"2": {"audio_mute": true}}},
+      "favorite": true, "dashboard_visible": true, "dashboard_order": 0,
+      "password_protected": false, "passcode_hash": "",
+      "last_executed": null, "execution_history": []
+    },
+    {
+      "id": "scene_kidslocked", "name": "Kids (Locked)", "icon": "🔒",
+      "steps": [
+        {"type": "profile", "id": "kids_gaming"},
+        {"type": "system_action", "id": "route_all_to_output", "params": {"input": 6, "output": 1}}
+      ],
+      "overrides": {}, "favorite": false, "dashboard_visible": true, "dashboard_order": 1,
+      "password_protected": true,
+      "passcode_hash": "pbkdf2_sha256$1000$00112233445566778899aabbccddeeff$b8ad0f1dacec0beb4f418fadcb2ee5939ef45823391bb89692028dd1b67e9cef",
+      "last_executed": "2026-09-23T20:00:00+00:00",
+      "execution_history": [
+        {"timestamp": "2026-09-23T20:00:00+00:00", "status": "success", "steps_completed": 2, "total_steps": 2, "error": null}
+      ]
+    },
+    {
+      "id": "scene_goodnight01", "name": "Good Night", "icon": "🌙",
+      "steps": [
+        {"type": "system_action", "id": "mute_all_audio"},
+        {"type": "macro", "id": "macro_all_off"}
+      ],
+      "overrides": {}, "favorite": false, "dashboard_visible": false, "dashboard_order": 2,
+      "password_protected": false, "passcode_hash": "",
+      "last_executed": null, "execution_history": []
+    }
+  ]
+}

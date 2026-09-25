@@ -16,10 +16,10 @@
     "lint:css:all": "node tools/ui/stylelint-baseline.mjs --verbose",
     "lint:css:strict": "node tools/ui/stylelint-baseline.mjs --strict",
     "lint:css:baseline": "node tools/ui/stylelint-baseline.mjs --update",
-    "test:e2e": "playwright test --project=smoke",
+    "test:e2e": "playwright test -c tests/e2e/playwright.config.ts --project=smoke",
     "visual:test": "node tools/ui/run-in-container.mjs test",
     "visual:update": "node tools/ui/run-in-container.mjs update",
-    "visual:report": "playwright show-report",
+    "visual:report": "playwright show-report playwright-report",
     "visual:gallery": "node tools/ui/build_gallery.mjs"
   },
   "devDependencies": {
