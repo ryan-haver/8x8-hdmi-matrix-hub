@@ -96,9 +96,10 @@ TELNET_EOL = "\r\n"
 
 # ASSUMPTION(HIL-A): error codes. The client and the ad-hoc scripts treat
 # ``E00`` as "command not recognised"; ``E01`` is assumed to mean "bad
-# parameter". BE-07 (telnet_client.py:403-426) is unresolved: the client waits
-# for E00/E01 as the *completion* marker of a CEC command and then treats them
-# as failure. The simulator never sends E00/E01 for a successful command.
+# parameter". The client (src/_telnet_proto.py, BE-07) follows the same
+# assumptions: E0x means failure, and a set command completes on its
+# acknowledgement line. The simulator never sends E00/E01 for a successful
+# command.
 TELNET_ERR_UNKNOWN = "E00"
 TELNET_ERR_PARAM = "E01"
 

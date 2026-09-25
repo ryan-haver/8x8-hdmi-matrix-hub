@@ -129,8 +129,8 @@ def handle(state: DeviceState, raw: str) -> TelnetResult:
 
     # CEC: "s cec in <n> <word>" / "s cec hdmi out <n> <word>"
     # ASSUMPTION(HIL-A): success is acknowledged by echoing the command without
-    # "s " and without any E0x code. BE-07: the client then waits for its full
-    # COMMAND_TIMEOUT because it only treats E00/E01 as "complete".
+    # "s " and without any E0x code. The client completes the command on this
+    # line (BE-07).
     if len(words) == 5 and words[:3] == ["s", "cec", "in"]:
         n = _port(words[3])
         if n is None or words[4] not in proto.TELNET_CEC_INPUT_WORDS:
