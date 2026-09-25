@@ -131,8 +131,7 @@ def pytest_terminal_summary(terminalreporter, exitstatus: int, config: pytest.Co
     tr = terminalreporter
     tr.section("route inventory")
     tr.write_line(
-        f"Route coverage: {_result['covered']}/{_result['total']} ({_result['percent']}%) "
-        f"-> {_result['report_path']}"
+        f"Route coverage: {_result['covered']}/{_result['total']} ({_result['percent']}%) -> {_result['report_path']}"
     )
     if _result["uncovered"]:
         mode = "FAILING (ROUTE_COVERAGE_STRICT=1)" if _result["strict"] else "report-only"

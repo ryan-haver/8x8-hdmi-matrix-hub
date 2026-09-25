@@ -10,9 +10,6 @@ Validates the core guarantees:
 
 from __future__ import annotations
 
-import json
-import os
-import platform
 import sys
 import threading
 from pathlib import Path
@@ -190,11 +187,11 @@ class TestPlatformSupport:
 
     def test_locking_module_is_platform_appropriate(self):
         if sys.platform == "win32":
-            import msvcrt
+            import msvcrt  # noqa: F401  (platform must provide it)
 
             assert hasattr(_file_io, "msvcrt")
         else:
-            import fcntl
+            import fcntl  # noqa: F401  (platform must provide it)
 
             assert hasattr(_file_io, "fcntl")
 

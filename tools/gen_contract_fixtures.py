@@ -189,7 +189,8 @@ def main(argv: list[str] | None = None) -> int:
     for name, payload in generated.items():
         path = FIXTURE_DIR / name
         text = render(payload)
-        current = path.read_text(encoding="utf-8") if path.exists() else None
+        # Normalize line endings: Windows checkouts may use CRLF (core.autocrlf).
+        current = path.read_text(encoding="utf-8").replace("\r\n", "\n") if path.exists() else None
         if current != text:
             drift.append(name)
             if not args.check:
