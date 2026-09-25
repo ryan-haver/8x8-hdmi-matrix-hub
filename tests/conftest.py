@@ -50,7 +50,7 @@ pytest_plugins = ("pytest_asyncio", "tests.route_inventory")
 # Home Assistant tests need the real `homeassistant` package (Python 3.13+).
 # Skip collecting them entirely when it is not available so the normal suite
 # (Python 3.12 venv) is unaffected.
-collect_ignore_glob = [] if importlib.util.find_spec("homeassistant") else ["ha/*"]
+collect_ignore = [] if importlib.util.find_spec("homeassistant") else ["ha"]
 
 
 # =============================================================================

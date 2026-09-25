@@ -1,0 +1,11 @@
+# Test dependencies for the Home Assistant custom component (tests/ha/).
+#
+# Requires Python 3.13. pytest-homeassistant-custom-component pins an exact
+# Home Assistant release (0.13.316 -> homeassistant==2026.2.3, the newest
+# release that still supports Python 3.13; later plugin versions require
+# Python >= 3.14). Bump this pin together with the CI Python version.
+#
+# Usage:
+#   pip install -r requirements-test-ha.txt
+#   pytest tests/ha
+pytest-homeassistant-custom-component==0.13.316
