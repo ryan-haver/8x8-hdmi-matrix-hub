@@ -81,3 +81,6 @@ gitleaks-report*.json
 
 # Archive
 archive/
+
+# Route inventory report (tests/route_inventory.py)
+route-coverage.json

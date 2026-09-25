@@ -26,6 +26,10 @@ Test isolation (TST-06)
 Home Assistant tests
     ``tests/ha/`` needs ``homeassistant`` (Python 3.13+, see
     ``requirements-test-ha.txt``) and is ignored when it is not installed.
+
+Route inventory
+    ``tests/route_inventory.py`` records which REST routes the suite exercises
+    and writes ``route-coverage.json`` (see that module for details).
 """
 
 import asyncio
@@ -41,7 +45,7 @@ import pytest
 src_path = Path(__file__).parent.parent / "src"
 sys.path.insert(0, str(src_path))
 
-pytest_plugins = ("pytest_asyncio",)
+pytest_plugins = ("pytest_asyncio", "tests.route_inventory")
 
 # Home Assistant tests need the real `homeassistant` package (Python 3.13+).
 # Skip collecting them entirely when it is not available so the normal suite
