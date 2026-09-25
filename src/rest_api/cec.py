@@ -181,7 +181,7 @@ async def handle_cec_status(request: web.Request) -> web.Response:
     try:
         status = await matrix_device.get_cec_status()
         if status:
-            cec_config = {
+            cec_config: dict[str, list] = {
                 "inputs": [],
                 "outputs": [],
             }
@@ -327,7 +327,7 @@ async def handle_cec_commands_by_type(request: web.Request) -> web.Response:
             return _json_response(False, error="Type must be 'input' or 'output'", status=400)
 
         # Group commands by category
-        by_category = {}
+        by_category: dict[str, list] = {}
         for cmd_name, cmd_info in commands.items():
             category = cmd_info.get("category", "other")
             if category not in by_category:

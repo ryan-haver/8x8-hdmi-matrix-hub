@@ -62,7 +62,9 @@ class OreiMatrix:
         self.use_https = use_https
         self._session: aiohttp.ClientSession | None = None
         self._connected = False
-        self.events = AsyncIOEventEmitter()
+        # Typed as Any: pyee annotates event names as `str`, but this codebase
+        # keys events by the `Events` IntEnum (any hashable works at runtime).
+        self.events: Any = AsyncIOEventEmitter()
 
         # Device state
         self._current_scene: int | None = None
@@ -1139,7 +1141,7 @@ class OreiMatrix:
         if not force_refresh and self._cable_status_cache is not None:
             return self._cable_status_cache.copy()
 
-        result = {"inputs": {}, "outputs": {}}
+        result: dict[str, dict[int, bool]] = {"inputs": {}, "outputs": {}}
 
         # Try Telnet individual queries for accuracy
         if self._telnet and self._telnet.connected:

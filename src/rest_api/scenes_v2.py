@@ -24,6 +24,7 @@ System Actions:
 
 import json
 import logging
+from typing import Any
 
 from aiohttp import web
 
@@ -77,7 +78,7 @@ def _get_profile_manager():
 
 async def _json_response(success: bool, data: dict = None, error: str = None, status: int = 200) -> web.Response:
     """Helper to build a standard JSON response."""
-    body = {"success": success}
+    body: dict[str, Any] = {"success": success}
     if data is not None:
         body["data"] = data
     if error is not None:
@@ -175,7 +176,7 @@ async def handle_update_scene(request: web.Request) -> web.Response:
             steps = [SceneStep.from_dict(s) for s in data["steps"]]
 
         # Parse overrides if provided
-        overrides = None
+        overrides: dict[str, dict[int, dict[str, bool]]] | None = None
         if "overrides" in data:
             overrides = {}
             for pid, outers in data["overrides"].items():

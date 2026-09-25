@@ -84,6 +84,11 @@ ignore = ["E501", "E402", "N806"]
 "tests/**" = ["F401", "F811", "E722"]
 
 [tool.mypy]
+# The runtime puts src/ on sys.path and imports modules top-level
+# (`from config import ...`). Without this, mypy resolves `config` to the
+# repo-root config/ data directory (a namespace package) instead of
+# src/config.py and silently treats everything imported from it as missing.
+mypy_path = "src"
 explicit_package_bases = true
 ignore_missing_imports = true
 strict_optional = false

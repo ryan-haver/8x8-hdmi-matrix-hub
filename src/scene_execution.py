@@ -26,7 +26,7 @@ _LOG = logging.getLogger("scene_execution")
 
 
 # Default output settings (must match OreiMatrix / Profile defaults)
-_DEFAULT_OUTPUT_SETTINGS = {
+_DEFAULT_OUTPUT_SETTINGS: dict[str, Any] = {
     "input": 1,
     "enabled": True,
     "hdcp": 3,
@@ -121,9 +121,9 @@ def apply_overrides_to_profile(
             elif setting_key == "hdr":
                 output_cfg.hdr_mode = _DEFAULT_OUTPUT_SETTINGS["hdr"]
             elif setting_key == "scaler":
-                output_cfg.scaler_mode = _DEFAULT_OUTPUT_SETTINGS["scaler"]
+                output_cfg.scaler_mode = _DEFAULT_OUTPUT_SETTINGS["scaler"]  # type: ignore[attr-defined]  # API-22: SceneOutput has no scaler_mode
             elif setting_key == "arc":
-                output_cfg.arc = _DEFAULT_OUTPUT_SETTINGS["arc"]
+                output_cfg.arc = _DEFAULT_OUTPUT_SETTINGS["arc"]  # type: ignore[attr-defined]  # API-22: SceneOutput has no arc
             elif setting_key == "audio_mute":
                 output_cfg.audio_mute = _DEFAULT_OUTPUT_SETTINGS["audio_mute"]
 
@@ -169,7 +169,7 @@ async def _execute_profile(
                 await matrix_device.set_output_hdr(output_num, output_cfg.hdr_mode)
             # Scaler
             if getattr(output_cfg, "scaler_mode", None) is not None:
-                await matrix_device.set_output_scaler(output_num, output_cfg.scaler_mode)
+                await matrix_device.set_output_scaler(output_num, output_cfg.scaler_mode)  # type: ignore[attr-defined]  # API-22
             # ARC
             if hasattr(output_cfg, "arc") and output_cfg.arc is not None:
                 await matrix_device.set_output_arc(output_num, output_cfg.arc)
@@ -191,8 +191,8 @@ async def _execute_profile(
                 if macro is not None:
                     for step in macro.steps:
                         # Execute each macro step via the matrix
-                        cmd = step.get("command", "")
-                        params = step.get("params", {})
+                        cmd = step.get("command", "")  # type: ignore[attr-defined]  # API-03: MacroStep is a dataclass
+                        params = step.get("params", {})  # type: ignore[attr-defined]  # API-03
                         cec_target = params.get("target")
                         if cmd and cec_target:
                             await _send_cec_command(matrix_device, cmd, cec_target, params)
@@ -449,7 +449,7 @@ class SceneExecutor:
         }
         profile.execution_log.append(log_entry)
         profile.execution_log = _prune_profile_log(profile.execution_log)
-        self.profile_manager._save()
+        self.profile_manager._save()  # type: ignore[attr-defined]  # API-02: ProfileManager has no _save()
 
         return result
 
