@@ -1,0 +1,61 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "telnet/r_link_out_2",
+  "title": "Telnet read: r link out 2",
+  "answers": [
+    "telnet-read-wording",
+    "telnet-terminators"
+  ],
+  "exchanges": [
+    {
+      "kind": "telnet",
+      "role": "read",
+      "label": "r link out 2",
+      "command": "r link out 2",
+      "sent_b64": "ciBsaW5rIG91dCAyIQ0K",
+      "sent_text": "r link out 2!\r\n",
+      "response": {
+        "body_b64": "ciBsaW5rIG91dCAyIQ0KaGRtaSBvdXRwdXQgMjogY29ubmVjdA0K",
+        "text": "r link out 2!\r\nhdmi output 2: connect\r\n",
+        "chunks": [
+          {
+            "t_ms": 28.85,
+            "len": 15
+          },
+          {
+            "t_ms": 167.78,
+            "len": 24
+          }
+        ],
+        "completion": "idle",
+        "idle_ms": 1000,
+        "first_byte_ms": 28.85,
+        "elapsed_ms": 1168.13,
+        "analysis": {
+          "line_endings": {
+            "crlf": 2,
+            "lf": 0,
+            "cr": 0
+          },
+          "lines": [
+            "r link out 2!",
+            "hdmi output 2: connect"
+          ],
+          "ends_with_newline": true,
+          "trailing_without_newline": "",
+          "last_line": "hdmi output 2: connect",
+          "error_code": null,
+          "error_codes_seen": [],
+          "iac": []
+        }
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T17:29:39.862894Z",
+        "elapsed_ms": 1168.13
+      }
+    }
+  ],
+  "mode": "read",
+  "captured_at": "2026-09-25T17:29:41.030977Z"
+}

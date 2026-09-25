@@ -1,0 +1,101 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "http/get_video_status",
+  "title": "Read: get video status",
+  "note": "",
+  "answers": [
+    "http-read-shapes",
+    "video-status-names"
+  ],
+  "exchanges": [
+    {
+      "kind": "http",
+      "role": "read",
+      "label": "get video status",
+      "comhead": "get video status",
+      "request": {
+        "method": "POST",
+        "path": "/cgi-bin/instr",
+        "headers": [
+          "Host: 192.168.0.100",
+          "Content-Type: application/json",
+          "Accept: */*",
+          "Accept-Encoding: gzip, deflate",
+          "User-Agent: Python/3.12 aiohttp/3.13.3",
+          "Content-Length: 46"
+        ],
+        "json": {
+          "comhead": "get video status",
+          "language": 0
+        },
+        "body_text": "{\"comhead\": \"get video status\", \"language\": 0}"
+      },
+      "response": {
+        "status": 200,
+        "reason": "OK",
+        "http_version": "1.1",
+        "headers": [
+          "Connection: Keep-Alive",
+          "Transfer-Encoding: chunked",
+          "Keep-Alive: timeout=200",
+          "content-type: text/plain"
+        ],
+        "body_b64": "eyJjb21oZWFkIjoiZ2V0IHZpZGVvIHN0YXR1cyIsInBvd2VyIjoxLCJhbGxzb3VyY2UiOls3LDcsNyw3LDcsNyw3LDcsN10sImFsbGlucHV0bmFtZSI6WyJORVMiLCJTTkVTIiwiU2VnYSIsIk42NCIsIlN3aXRjaCIsIlBTMyIsIkFwcGxlIiwiU3dpdGNoZXIiXSwiYWxsb3V0cHV0bmFtZSI6WyJUViIsIlNvdW5kIiwiT3V0MyIsIk91dDQiLCJPdXQ1IiwiT3V0NiIsIk91dDciLCJPdXQ4Il0sImFsbG5hbWUiOlsiT3V0MSIsIk91dDIiLCJPdXQzIiwiT3V0NCIsIk91dDUiLCJPdXQ2IiwiT3V0NyIsIk91dDgiXX0NCg==",
+        "body_text": "{\"comhead\":\"get video status\",\"power\":1,\"allsource\":[7,7,7,7,7,7,7,7,7],\"allinputname\":[\"NES\",\"SNES\",\"Sega\",\"N64\",\"Switch\",\"PS3\",\"Apple\",\"Switcher\"],\"alloutputname\":[\"TV\",\"Sound\",\"Out3\",\"Out4\",\"Out5\",\"Out6\",\"Out7\",\"Out8\"],\"allname\":[\"Out1\",\"Out2\",\"Out3\",\"Out4\",\"Out5\",\"Out6\",\"Out7\",\"Out8\"]}\r\n",
+        "json": {
+          "comhead": "get video status",
+          "power": 1,
+          "allsource": [
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7
+          ],
+          "allinputname": [
+            "NES",
+            "SNES",
+            "Sega",
+            "N64",
+            "Switch",
+            "PS3",
+            "Apple",
+            "Switcher"
+          ],
+          "alloutputname": [
+            "TV",
+            "Sound",
+            "Out3",
+            "Out4",
+            "Out5",
+            "Out6",
+            "Out7",
+            "Out8"
+          ],
+          "allname": [
+            "Out1",
+            "Out2",
+            "Out3",
+            "Out4",
+            "Out5",
+            "Out6",
+            "Out7",
+            "Out8"
+          ]
+        },
+        "json_error": null
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T17:28:35.011663Z",
+        "elapsed_ms": 259.73
+      }
+    }
+  ],
+  "mode": "read",
+  "captured_at": "2026-09-25T17:28:35.271904Z"
+}

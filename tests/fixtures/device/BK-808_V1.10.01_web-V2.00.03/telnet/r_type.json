@@ -1,0 +1,61 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "telnet/r_type",
+  "title": "Telnet read: r type",
+  "answers": [
+    "telnet-read-wording",
+    "telnet-terminators"
+  ],
+  "exchanges": [
+    {
+      "kind": "telnet",
+      "role": "read",
+      "label": "r type",
+      "command": "r type",
+      "sent_b64": "ciB0eXBlIQ0K",
+      "sent_text": "r type!\r\n",
+      "response": {
+        "body_b64": "ciB0eXBlIQ0KOHg4IGhkbWkyLjEgbWF0cml4DQo=",
+        "text": "r type!\r\n8x8 hdmi2.1 matrix\r\n",
+        "chunks": [
+          {
+            "t_ms": 28.32,
+            "len": 9
+          },
+          {
+            "t_ms": 165.84,
+            "len": 20
+          }
+        ],
+        "completion": "idle",
+        "idle_ms": 1000,
+        "first_byte_ms": 28.32,
+        "elapsed_ms": 1165.93,
+        "analysis": {
+          "line_endings": {
+            "crlf": 2,
+            "lf": 0,
+            "cr": 0
+          },
+          "lines": [
+            "r type!",
+            "8x8 hdmi2.1 matrix"
+          ],
+          "ends_with_newline": true,
+          "trailing_without_newline": "",
+          "last_line": "8x8 hdmi2.1 matrix",
+          "error_code": null,
+          "error_codes_seen": [],
+          "iac": []
+        }
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T17:29:28.098123Z",
+        "elapsed_ms": 1165.93
+      }
+    }
+  ],
+  "mode": "read",
+  "captured_at": "2026-09-25T17:29:29.265176Z"
+}

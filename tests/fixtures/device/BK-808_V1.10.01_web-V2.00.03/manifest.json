@@ -1,0 +1,355 @@
+{
+  "format": "orei-hil-capture/1",
+  "firmware_folder": "BK-808_V1.10.01_web-V2.00.03",
+  "device": {
+    "model": "BK-808",
+    "mcu_version": "V1.10.01",
+    "web_version": "V2.00.03",
+    "hostname": "***REDACTED***",
+    "telnet_banner_version": "fw version :v1.10.01"
+  },
+  "runs": [
+    {
+      "mode": "read",
+      "started_at": "2026-09-25T17:28:34.061157Z",
+      "finished_at": "2026-09-25T17:29:57.556864Z",
+      "tool_version": "1.0",
+      "hub_commit": "c374fad5442055b40eaa6663fd336e1d014d805b",
+      "host_os": "Windows-11-10.0.26200-SP0",
+      "python": "3.12.10",
+      "target": {
+        "host": "192.168.0.100",
+        "port": 443,
+        "telnet_port": 23,
+        "tls": true,
+        "user": "Admin"
+      },
+      "options": {
+        "host": "192.168.0.100",
+        "port": 443,
+        "telnet_port": 23,
+        "tls": true,
+        "user": "Admin",
+        "out": "tests/fixtures/device/{firmware}",
+        "firmware": null,
+        "mode": "read",
+        "telnet": true,
+        "http_timeout": 5.0,
+        "telnet_idle": 1.0,
+        "telnet_timeout": 5.0,
+        "banner_idle": 1.5,
+        "redact": [
+          "<17 chars>",
+          "<14 chars>"
+        ],
+        "yes": false,
+        "i_understand": false,
+        "only": [],
+        "skip": [],
+        "include": [],
+        "test_output": 8,
+        "test_input": 8,
+        "test_preset": 8,
+        "cec_output": 1,
+        "cec_input": 1,
+        "push_grace": 0.3,
+        "reboot_wait": 180.0,
+        "idle_waits": [],
+        "push_seconds": 30.0
+      },
+      "records": [
+        "http/get_cec_status",
+        "http/get_ext_audio_status",
+        "http/get_input_status",
+        "http/get_network",
+        "http/get_output_status",
+        "http/get_routing_status",
+        "http/get_status",
+        "http/get_system_status",
+        "http/get_video_status",
+        "http/index_page",
+        "http/login",
+        "http/preset_get_1",
+        "http/preset_get_2",
+        "http/preset_get_3",
+        "http/preset_get_4",
+        "http/preset_get_5",
+        "http/preset_get_6",
+        "http/preset_get_7",
+        "http/preset_get_8",
+        "telnet/banner",
+        "telnet/r_fw_version",
+        "telnet/r_link_in_1",
+        "telnet/r_link_in_2",
+        "telnet/r_link_in_3",
+        "telnet/r_link_in_4",
+        "telnet/r_link_in_5",
+        "telnet/r_link_in_6",
+        "telnet/r_link_in_7",
+        "telnet/r_link_in_8",
+        "telnet/r_link_out_1",
+        "telnet/r_link_out_2",
+        "telnet/r_link_out_3",
+        "telnet/r_link_out_4",
+        "telnet/r_link_out_5",
+        "telnet/r_link_out_6",
+        "telnet/r_link_out_7",
+        "telnet/r_link_out_8",
+        "telnet/r_preset_1",
+        "telnet/r_preset_2",
+        "telnet/r_preset_3",
+        "telnet/r_preset_4",
+        "telnet/r_preset_5",
+        "telnet/r_preset_6",
+        "telnet/r_preset_7",
+        "telnet/r_preset_8",
+        "telnet/r_type",
+        "telnet/status"
+      ],
+      "answers": {
+        "ext-audio-index": [
+          "http/get_ext_audio_status"
+        ],
+        "get-network-fields": [
+          "http/get_network"
+        ],
+        "get-status-fields": [
+          "http/get_status"
+        ],
+        "http-read-shapes": [
+          "http/get_cec_status",
+          "http/get_ext_audio_status",
+          "http/get_input_status",
+          "http/get_network",
+          "http/get_output_status",
+          "http/get_routing_status",
+          "http/get_status",
+          "http/get_system_status",
+          "http/get_video_status",
+          "http/preset_get_1",
+          "http/preset_get_2",
+          "http/preset_get_3",
+          "http/preset_get_4",
+          "http/preset_get_5",
+          "http/preset_get_6",
+          "http/preset_get_7",
+          "http/preset_get_8"
+        ],
+        "login-ok-result": [
+          "http/login"
+        ],
+        "output-status-name-field": [
+          "http/get_output_status"
+        ],
+        "preset-get-shape": [
+          "http/preset_get_1",
+          "http/preset_get_2",
+          "http/preset_get_3",
+          "http/preset_get_4",
+          "http/preset_get_5",
+          "http/preset_get_6",
+          "http/preset_get_7",
+          "http/preset_get_8"
+        ],
+        "telnet-banner": [
+          "telnet/banner"
+        ],
+        "telnet-iac": [
+          "telnet/banner"
+        ],
+        "telnet-read-wording": [
+          "telnet/r_fw_version",
+          "telnet/r_link_in_1",
+          "telnet/r_link_in_2",
+          "telnet/r_link_in_3",
+          "telnet/r_link_in_4",
+          "telnet/r_link_in_5",
+          "telnet/r_link_in_6",
+          "telnet/r_link_in_7",
+          "telnet/r_link_in_8",
+          "telnet/r_link_out_1",
+          "telnet/r_link_out_2",
+          "telnet/r_link_out_3",
+          "telnet/r_link_out_4",
+          "telnet/r_link_out_5",
+          "telnet/r_link_out_6",
+          "telnet/r_link_out_7",
+          "telnet/r_link_out_8",
+          "telnet/r_preset_1",
+          "telnet/r_preset_2",
+          "telnet/r_preset_3",
+          "telnet/r_preset_4",
+          "telnet/r_preset_5",
+          "telnet/r_preset_6",
+          "telnet/r_preset_7",
+          "telnet/r_preset_8",
+          "telnet/r_type"
+        ],
+        "telnet-status-wording": [
+          "telnet/status"
+        ],
+        "telnet-terminators": [
+          "telnet/banner",
+          "telnet/r_fw_version",
+          "telnet/r_link_in_1",
+          "telnet/r_link_in_2",
+          "telnet/r_link_in_3",
+          "telnet/r_link_in_4",
+          "telnet/r_link_in_5",
+          "telnet/r_link_in_6",
+          "telnet/r_link_in_7",
+          "telnet/r_link_in_8",
+          "telnet/r_link_out_1",
+          "telnet/r_link_out_2",
+          "telnet/r_link_out_3",
+          "telnet/r_link_out_4",
+          "telnet/r_link_out_5",
+          "telnet/r_link_out_6",
+          "telnet/r_link_out_7",
+          "telnet/r_link_out_8",
+          "telnet/r_preset_1",
+          "telnet/r_preset_2",
+          "telnet/r_preset_3",
+          "telnet/r_preset_4",
+          "telnet/r_preset_5",
+          "telnet/r_preset_6",
+          "telnet/r_preset_7",
+          "telnet/r_preset_8",
+          "telnet/r_type",
+          "telnet/status"
+        ],
+        "video-status-names": [
+          "http/get_video_status"
+        ]
+      },
+      "errors": [
+        "get_routing_status: ",
+        "preset_get_1: ",
+        "preset_get_2: ",
+        "preset_get_3: ",
+        "preset_get_4: ",
+        "preset_get_5: ",
+        "preset_get_6: ",
+        "preset_get_7: ",
+        "preset_get_8: "
+      ],
+      "warnings": []
+    }
+  ],
+  "answers": {
+    "ext-audio-index": [
+      "http/get_ext_audio_status"
+    ],
+    "get-network-fields": [
+      "http/get_network"
+    ],
+    "get-status-fields": [
+      "http/get_status"
+    ],
+    "http-read-shapes": [
+      "http/get_cec_status",
+      "http/get_ext_audio_status",
+      "http/get_input_status",
+      "http/get_network",
+      "http/get_output_status",
+      "http/get_routing_status",
+      "http/get_status",
+      "http/get_system_status",
+      "http/get_video_status",
+      "http/preset_get_1",
+      "http/preset_get_2",
+      "http/preset_get_3",
+      "http/preset_get_4",
+      "http/preset_get_5",
+      "http/preset_get_6",
+      "http/preset_get_7",
+      "http/preset_get_8"
+    ],
+    "login-ok-result": [
+      "http/login"
+    ],
+    "output-status-name-field": [
+      "http/get_output_status"
+    ],
+    "preset-get-shape": [
+      "http/preset_get_1",
+      "http/preset_get_2",
+      "http/preset_get_3",
+      "http/preset_get_4",
+      "http/preset_get_5",
+      "http/preset_get_6",
+      "http/preset_get_7",
+      "http/preset_get_8"
+    ],
+    "telnet-banner": [
+      "telnet/banner"
+    ],
+    "telnet-iac": [
+      "telnet/banner"
+    ],
+    "telnet-read-wording": [
+      "telnet/r_fw_version",
+      "telnet/r_link_in_1",
+      "telnet/r_link_in_2",
+      "telnet/r_link_in_3",
+      "telnet/r_link_in_4",
+      "telnet/r_link_in_5",
+      "telnet/r_link_in_6",
+      "telnet/r_link_in_7",
+      "telnet/r_link_in_8",
+      "telnet/r_link_out_1",
+      "telnet/r_link_out_2",
+      "telnet/r_link_out_3",
+      "telnet/r_link_out_4",
+      "telnet/r_link_out_5",
+      "telnet/r_link_out_6",
+      "telnet/r_link_out_7",
+      "telnet/r_link_out_8",
+      "telnet/r_preset_1",
+      "telnet/r_preset_2",
+      "telnet/r_preset_3",
+      "telnet/r_preset_4",
+      "telnet/r_preset_5",
+      "telnet/r_preset_6",
+      "telnet/r_preset_7",
+      "telnet/r_preset_8",
+      "telnet/r_type"
+    ],
+    "telnet-status-wording": [
+      "telnet/status"
+    ],
+    "telnet-terminators": [
+      "telnet/banner",
+      "telnet/r_fw_version",
+      "telnet/r_link_in_1",
+      "telnet/r_link_in_2",
+      "telnet/r_link_in_3",
+      "telnet/r_link_in_4",
+      "telnet/r_link_in_5",
+      "telnet/r_link_in_6",
+      "telnet/r_link_in_7",
+      "telnet/r_link_in_8",
+      "telnet/r_link_out_1",
+      "telnet/r_link_out_2",
+      "telnet/r_link_out_3",
+      "telnet/r_link_out_4",
+      "telnet/r_link_out_5",
+      "telnet/r_link_out_6",
+      "telnet/r_link_out_7",
+      "telnet/r_link_out_8",
+      "telnet/r_preset_1",
+      "telnet/r_preset_2",
+      "telnet/r_preset_3",
+      "telnet/r_preset_4",
+      "telnet/r_preset_5",
+      "telnet/r_preset_6",
+      "telnet/r_preset_7",
+      "telnet/r_preset_8",
+      "telnet/r_type",
+      "telnet/status"
+    ],
+    "video-status-names": [
+      "http/get_video_status"
+    ]
+  }
+}

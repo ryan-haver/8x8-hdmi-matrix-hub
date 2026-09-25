@@ -1,0 +1,89 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "http/get_input_status",
+  "title": "Read: get input status",
+  "note": "",
+  "answers": [
+    "http-read-shapes"
+  ],
+  "exchanges": [
+    {
+      "kind": "http",
+      "role": "read",
+      "label": "get input status",
+      "comhead": "get input status",
+      "request": {
+        "method": "POST",
+        "path": "/cgi-bin/instr",
+        "headers": [
+          "Host: 192.168.0.100",
+          "Content-Type: application/json",
+          "Accept: */*",
+          "Accept-Encoding: gzip, deflate",
+          "User-Agent: Python/3.12 aiohttp/3.13.3",
+          "Content-Length: 46"
+        ],
+        "json": {
+          "comhead": "get input status",
+          "language": 0
+        },
+        "body_text": "{\"comhead\": \"get input status\", \"language\": 0}"
+      },
+      "response": {
+        "status": 200,
+        "reason": "OK",
+        "http_version": "1.1",
+        "headers": [
+          "Connection: Keep-Alive",
+          "Transfer-Encoding: chunked",
+          "Keep-Alive: timeout=200",
+          "content-type: text/plain"
+        ],
+        "body_b64": "eyJjb21oZWFkIjoiZ2V0IGlucHV0IHN0YXR1cyIsInBvd2VyIjoxLCJlZGlkIjpbMzYsMzYsMzYsMzYsMzYsMzYsMzYsMzZdLCJpbmFjdGl2ZSI6WzAsMCwwLDAsMCwwLDAsMF0sImlubmFtZSI6WyJORVMiLCJTTkVTIiwiU2VnYSIsIk42NCIsIlN3aXRjaCIsIlBTMyIsIkFwcGxlIiwiU3dpdGNoZXIiXX0NCg==",
+        "body_text": "{\"comhead\":\"get input status\",\"power\":1,\"edid\":[36,36,36,36,36,36,36,36],\"inactive\":[0,0,0,0,0,0,0,0],\"inname\":[\"NES\",\"SNES\",\"Sega\",\"N64\",\"Switch\",\"PS3\",\"Apple\",\"Switcher\"]}\r\n",
+        "json": {
+          "comhead": "get input status",
+          "power": 1,
+          "edid": [
+            36,
+            36,
+            36,
+            36,
+            36,
+            36,
+            36,
+            36
+          ],
+          "inactive": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "inname": [
+            "NES",
+            "SNES",
+            "Sega",
+            "N64",
+            "Switch",
+            "PS3",
+            "Apple",
+            "Switcher"
+          ]
+        },
+        "json_error": null
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T17:28:35.604456Z",
+        "elapsed_ms": 453.09
+      }
+    }
+  ],
+  "mode": "read",
+  "captured_at": "2026-09-25T17:28:36.056758Z"
+}

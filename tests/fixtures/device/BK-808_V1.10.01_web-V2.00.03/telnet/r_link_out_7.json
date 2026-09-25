@@ -1,0 +1,61 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "telnet/r_link_out_7",
+  "title": "Telnet read: r link out 7",
+  "answers": [
+    "telnet-read-wording",
+    "telnet-terminators"
+  ],
+  "exchanges": [
+    {
+      "kind": "telnet",
+      "role": "read",
+      "label": "r link out 7",
+      "command": "r link out 7",
+      "sent_b64": "ciBsaW5rIG91dCA3IQ0K",
+      "sent_text": "r link out 7!\r\n",
+      "response": {
+        "body_b64": "ciBsaW5rIG91dCA3IQ0KaGRtaSBvdXRwdXQgNzogZGlzY29ubmVjdA0K",
+        "text": "r link out 7!\r\nhdmi output 7: disconnect\r\n",
+        "chunks": [
+          {
+            "t_ms": 29.02,
+            "len": 15
+          },
+          {
+            "t_ms": 169.31,
+            "len": 27
+          }
+        ],
+        "completion": "idle",
+        "idle_ms": 1000,
+        "first_byte_ms": 29.02,
+        "elapsed_ms": 1169.76,
+        "analysis": {
+          "line_endings": {
+            "crlf": 2,
+            "lf": 0,
+            "cr": 0
+          },
+          "lines": [
+            "r link out 7!",
+            "hdmi output 7: disconnect"
+          ],
+          "ends_with_newline": true,
+          "trailing_without_newline": "",
+          "last_line": "hdmi output 7: disconnect",
+          "error_code": null,
+          "error_codes_seen": [],
+          "iac": []
+        }
+      },
+      "error": null,
+      "timing": {
+        "started_at": "2026-09-25T17:29:45.739438Z",
+        "elapsed_ms": 1169.76
+      }
+    }
+  ],
+  "mode": "read",
+  "captured_at": "2026-09-25T17:29:46.909261Z"
+}
