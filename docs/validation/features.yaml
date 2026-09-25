@@ -2389,7 +2389,7 @@ features:
     uc: [remote.output_N_cec send_cmd, remote.output_N_cec on/off]
   target: V4
   current: V1
-  basis: 'V1 (capped: UC-01). tests/uc (scripted Remote 3 -> real driver.py -> simulator): send_cmd sends the exact CEC frame for all 12 commands (test_commands.py::test_output_cec_remote_send_cmd_sends_exact_frames); on/off/toggle/send_cmd_sequence close the connection with 1011 (strict xfails, UC-01). Scenarios remote.output_cec_power_on, remote.output_cec_on (known failure UC-01).'
+  basis: 'V1 (capped: UC-01). tests/uc (scripted Remote 3 -> real driver.py -> simulator): the remote offers exactly the display CEC table (POWER_ON, POWER_OFF, MUTE, VOLUME_DOWN, VOLUME_UP, ACTIVE; BE-14) and send_cmd sends its exact frame, display index 0-5 (test_commands.py::test_output_cec_remote_send_cmd_sends_exact_frames, ::test_output_cec_remote_advertises_only_the_display_table); source-only keys (UP, MENU, PLAY ...) answer 400 with no frame (::test_source_only_keys_on_the_output_cec_remote_are_rejected); on/off/toggle/send_cmd_sequence close the connection with 1011 (strict xfails, UC-01). Scenarios remote.output_cec_power_on, remote.output_cec_on (known failure UC-01).'
   evidence: []
   findings: [UC-01, BE-14, UC-22]
   scenarios: [remote.output_cec_power_on, remote.output_cec_on]
@@ -2413,7 +2413,7 @@ features:
     uc: [media_player.output_N on/off/toggle/volume/mute]
   target: V4
   current: V3
-  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_commands.py::test_media_player_power_volume_and_mute_send_output_cec (exact CEC frames asserted); the first toggle is a strict xfail (UC-10). Scenario remote.media_player_volume.'
+  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_commands.py::test_media_player_power_volume_and_mute_send_output_cec (exact CEC frames of the display table asserted: on 0, off 1, mute 2, volume down 3, volume up 4; BE-14); the first toggle is a strict xfail (UC-10: it still sends display power off). Scenario remote.media_player_volume.'
   evidence: []
   findings: [UC-10, BE-24]
   scenarios: [remote.media_player_volume]
@@ -2461,7 +2461,7 @@ features:
     uc: [entity state UNAVAILABLE, device state]
   target: V4
   current: V0
-  basis: 'tests/uc (scripted Remote 3 -> real driver.py -> simulator): test_state_sync.py outage tests are strict xfails (UC-04: device state stays CONNECTED, entities stay live; BE-06: updates never resume after a transient failure).'
+  basis: 'tests/uc (scripted Remote 3 -> real driver.py -> simulator): test_state_sync.py outage tests are strict xfails (UC-04: device state stays CONNECTED, entities stay live; BE-06: updates never resume after a short link loss). One unanswered status read is not an outage (HIL-12): the Remote is never told the matrix is unavailable and updates continue (::test_one_unanswered_status_read_keeps_the_remote_live passes).'
   evidence: []
   findings: [UC-04, BE-06]
   scenarios: []
