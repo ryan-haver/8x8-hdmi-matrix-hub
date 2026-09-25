@@ -15,10 +15,22 @@ from tools.validate.registry import Finding
 
 from .helpers import make_record
 
+#: Identity for the throw-away repository, passed through the environment so
+#: the tests never write git config anywhere (a leaked GIT_DIR once made
+#: `git config` in this fixture rewrite the real repository's config).
+_TEST_IDENTITY = {
+    "GIT_AUTHOR_NAME": "t",
+    "GIT_AUTHOR_EMAIL": "t@example.invalid",
+    "GIT_COMMITTER_NAME": "t",
+    "GIT_COMMITTER_EMAIL": "t@example.invalid",
+}
+
 
 def _git(repo: Path, *args: str) -> str:
-    return subprocess.run(["git", *args], cwd=repo, check=True, capture_output=True, text=True,
-                          env=gitinfo.clean_git_env()).stdout.strip()
+    env = {**gitinfo.clean_git_env(), **_TEST_IDENTITY}
+    # Signing is disabled only inside this throw-away repository.
+    return subprocess.run(["git", "-c", "commit.gpgsign=false", *args], cwd=repo, check=True,
+                          capture_output=True, text=True, env=env).stdout.strip()
 
 
 @pytest.fixture
@@ -26,9 +38,9 @@ def repo(tmp_path: Path) -> Path:
     r = tmp_path / "repo"
     (r / "src").mkdir(parents=True)
     _git(r, "init", "-q")
-    _git(r, "config", "user.email", "t@example.invalid")
-    _git(r, "config", "user.name", "t")
-    _git(r, "config", "commit.gpgsign", "false")
+    # Refuse to continue unless git really created a repository in tmp_path.
+    git_dir = Path(_git(r, "rev-parse", "--absolute-git-dir")).resolve()
+    assert git_dir == (r / ".git").resolve(), f"git init did not create {r / '.git'} (got {git_dir})"
     (r / "src" / "a.py").write_text("a = 1\n")
     (r / "src" / "b.py").write_text("b = 1\n")
     _git(r, "add", ".")
