@@ -112,8 +112,53 @@ def firmware_folder_name(device: dict[str, Any]) -> str:
 # ------------------------------------------------------------------- redaction
 
 
+def _redact_with_segments(raw: bytes, lens: list[int], usable: list[str]) -> tuple[bytes, list[int]]:
+    """Redact ``raw`` and recompute the TCP segment lengths recorded for it.
+
+    Replacing a secret changes the body length, so the segment whose bytes
+    were replaced must shrink or grow by the same amount; otherwise the
+    recorded segments no longer add up to the body and a replay splits it at
+    the wrong offsets. Replacement bytes are credited to the segment the
+    secret starts in; removed bytes are taken from the segments they were in.
+    """
+    matches: list[tuple[int, int]] = []
+    pos = 0
+    needles = [s.encode("utf-8") for s in usable]
+    while pos < len(raw):
+        found = [(raw.find(n, pos), n) for n in needles]
+        found = [(i, n) for i, n in found if i >= 0]
+        if not found:
+            break
+        start, needle = min(found, key=lambda f: (f[0], -len(f[1])))
+        matches.append((start, start + len(needle)))
+        pos = start + len(needle)
+    if not matches:
+        return raw, lens
+    marker = REDACTED.encode()
+    new = bytearray()
+    last = 0
+    for start, end in matches:
+        new += raw[last:start] + marker
+        last = end
+    new += raw[last:]
+    bounds, offset = [], 0
+    for n in lens:
+        bounds.append((offset, offset + n))
+        offset += n
+    new_lens = []
+    for a, b in bounds:
+        removed = sum(max(0, min(b, end) - max(a, start)) for start, end in matches)
+        added = sum(len(marker) for start, _ in matches if a <= start < b)
+        new_lens.append((b - a) - removed + added)
+    return bytes(new), new_lens
+
+
 def scrub(obj: Any, secrets: list[str]) -> tuple[Any, bool]:
-    """Replace every secret in strings and base64 fields. Returns (obj, changed)."""
+    """Replace every secret in strings and base64 fields. Returns (obj, changed).
+
+    A base64 body with recorded TCP segments (``chunks`` with ``len``) keeps
+    its segment lengths consistent with the redacted body.
+    """
     usable = [s for s in secrets if s and len(s) >= MIN_SCRUB_LEN]
     if not usable:
         return obj, False
@@ -122,11 +167,30 @@ def scrub(obj: Any, secrets: list[str]) -> tuple[Any, bool]:
     def walk(value: Any, key: str = "") -> Any:
         nonlocal changed
         if isinstance(value, dict):
+            chunks = value.get("chunks")
+            if (
+                isinstance(value.get("body_b64"), str)
+                and isinstance(chunks, list)
+                and chunks
+                and all(isinstance(c, dict) and isinstance(c.get("len"), int) for c in chunks)
+            ):
+                try:
+                    raw = unb64(value["body_b64"])
+                except (ValueError, TypeError):
+                    raw = None
+                if raw is not None and sum(c["len"] for c in chunks) == len(raw):
+                    new_raw, new_lens = _redact_with_segments(raw, [c["len"] for c in chunks], usable)
+                    out = {k: walk(v, k) for k, v in value.items() if k not in ("body_b64", "chunks")}
+                    if new_raw != raw:
+                        changed = True
+                    out["body_b64"] = b64(new_raw)
+                    out["chunks"] = [{**walk(c), "len": n} for c, n in zip(chunks, new_lens, strict=True)]
+                    return {k: out[k] for k in value}  # keep the original key order
             return {k: walk(v, k) for k, v in value.items()}
         if isinstance(value, list):
             return [walk(v, key) for v in value]
         if isinstance(value, str):
-            if key.endswith("_b64"):
+            if key.endswith("_b64") or key == "b64":
                 try:
                     raw = unb64(value)
                 except (ValueError, TypeError):
@@ -177,7 +241,7 @@ def find_secrets(path: Path, secrets: list[str]) -> list[str]:
             elif isinstance(value, list):
                 for v in value:
                     walk(v, key)
-            elif isinstance(value, str) and key.endswith("_b64"):
+            elif isinstance(value, str) and (key.endswith("_b64") or key == "b64"):
                 try:
                     raw = unb64(value)
                 except (ValueError, TypeError):
