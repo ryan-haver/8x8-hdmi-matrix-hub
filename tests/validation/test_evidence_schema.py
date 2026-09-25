@@ -63,6 +63,23 @@ def test_write_and_load_round_trip(tmp_path):
     assert len(loaded) == 1 and loaded[0].features == ["F-MTX-001", "F-API-005"]
 
 
+def test_compact_serialisation_round_trips():
+    from tools.validate.evidence import dumps
+    from tools.validate.runner import compact_log
+
+    rec = make_record()
+    rec["observations"]["state_after"] = {"routing": [6, 2, 1, 1, 5, 6, 1, 1], "names": ["a, b", "c"]}
+    text = dumps(rec)
+    assert '"routing": [6, 2, 1, 1, 5, 6, 1, 1]' in text
+    assert json.loads(text) == rec
+    log = compact_log([
+        {"t": 1, "channel": "http", "command": "get video status", "payload": {"x": 1}, "response": {"big": 1}},
+        {"t": 2, "channel": "http", "command": "cec command", "payload": {"index": 1}, "response": {"result": 1}},
+        {"t": 3, "channel": "http", "command": "get output status", "fault": "drop_http", "payload": {}},
+    ])
+    assert "payload" not in log[0] and log[1]["payload"] == {"index": 1} and log[2]["fault"] == "drop_http"
+
+
 def test_redaction():
     assert redact({"password": "x", "nested": [{"passcode": "1234", "ok": 1}]}) == {
         "password": "***", "nested": [{"passcode": "***", "ok": 1}]}
