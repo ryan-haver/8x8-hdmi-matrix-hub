@@ -1,0 +1,3457 @@
+# Feature registry - docs/validation/VALIDATION_PLAN.md §3.
+#
+# One entry per user-facing feature. Maintained by hand; LEDGER.md is generated
+# from it (python -m tools.validate ledger). Fields:
+#   id          F-<AREA>-NNN (areas: MTX CEC API DOM UI KIO UC HA FLIC OPS SEC REL)
+#   area        matrix | cec | api | domain | ui | kiosk | uc | ha | flic | ops | security | reliability
+#   title       the capability, in user terms
+#   claim       where the project claims it (README, docs, route table, UI)
+#   interfaces  how users reach it: device comheads, telnet, rest, ws, ui/kiosk catalog entries, uc, ha, flic, env, files
+#   target      level required at v1.0.0 (VALIDATION_PLAN §2 target table)
+#   current     RECORDED level: the honest C-pre baseline (2026-09-25, commit c506de5) from existing proof only.
+#               Raise it only together with committed evidence. The ledger shows the proven level next to it.
+#   basis       why `current` is what it is (the tests that prove it, or why there is nothing)
+#   evidence    committed evidence records (docs/validation/evidence/...) that back `current`
+#   findings    register rows (docs/REMEDIATION_PLAN.md §4, or docs/validation/findings_pending.yaml) that
+#               affect the feature. An open critical/high finding caps the feature at V1.
+#   scenarios   tests/validation/scenarios ids that prove it
+#
+# Baseline rules (conservative; when unsure, lower): V1 = only unit/mocked tests, or driver-level simulator
+# tests (real OreiMatrix, no user interface in the path), or screenshot baselines; V2 = an existing test drives
+# the REST API -> real hub code -> simulator and asserts the device effect (tests/sim/test_sim_e2e.py);
+# V3 = a real client asserts the effect (tests/e2e/smoke.spec.ts). Tests that are strict xfails prove a
+# feature broken, so they count as V0.
+
+features:
+- id: F-MTX-001
+  area: matrix
+  title: Route one input to one output
+  claim: README "Full matrix control via HTTP endpoints"; docs/API_REFERENCE.md POST /api/switch
+  interfaces:
+    device: [video switch]
+    telnet: ['s output {n} in source {m}']
+    rest: [POST /api/switch, 'POST /api/output/{output}/source']
+    ws: [switch, switch_failed]
+    ui: [matrix/grid/default, matrix/cards/routing-sheet]
+    kiosk: [kiosk/routing-modal/step-2]
+    uc: [media_player.output_N select_source]
+    ha: [select.output_N_source, service hdmi_matrix.switch_input]
+    flic: ['POST /api/output/{n}/source']
+  target: V4
+  current: V3
+  basis: 'V3: tests/e2e/smoke.spec.ts ''routing an input to an output in the matrix grid changes the simulator'' (browser
+    click -> simulator state asserted). V2: tests/sim/test_sim_e2e.py::test_switch_changes_simulator_state.'
+  evidence: []
+  findings: []
+  scenarios: [routing.switch_one]
+- id: F-MTX-002
+  area: matrix
+  title: Route one input to every output
+  claim: README "Full matrix control"; kiosk "Route to all"; built-in shortcut route_all_to_output
+  interfaces:
+    device: [video switch (output 0)]
+    telnet: ['s output 0 in source {m}']
+    rest: [POST /api/switch (no output)]
+    ws: [switch_all, switch_all_failed]
+    ui: [drawer/routing/default, drawer/routing/all-active]
+    kiosk: [kiosk/routing/all-to-one]
+    ha: [service hdmi_matrix.switch_input (per output)]
+  target: V4
+  current: V3
+  basis: 'V3: tests/e2e/smoke.spec.ts ''routing an input to all outputs from the kiosk changes the simulator'' (asserts simulator
+    routing). V2: tests/sim/test_sim_e2e.py::test_switch_all_and_preset.'
+  evidence: []
+  findings: [BE-12]
+  scenarios: [routing.route_all]
+- id: F-MTX-003
+  area: matrix
+  title: Recall a matrix preset (1-8)
+  claim: README "8 preset buttons"; docs/API_REFERENCE.md POST /api/preset/{n}; docs/FLIC_SETUP.md
+  interfaces:
+    device: [preset set]
+    telnet: ['s recall preset {n}']
+    rest: ['POST /api/preset/{preset}']
+    ws: [preset_recall, preset_recall_failed]
+    ui: [drawer/presets/expanded, dashboard/cards/all-types]
+    kiosk: [kiosk/presets/default]
+    uc: [button.preset_N, remote.orei_matrix PRESET_N]
+    ha: [button.preset_N, service hdmi_matrix.recall_preset]
+    flic: ['POST /api/preset/{n}']
+  target: V4
+  current: V2
+  basis: 'V2: tests/sim/test_sim_e2e.py::test_switch_all_and_preset (POST /api/preset/3 -> simulator routing asserted).'
+  evidence: []
+  findings: []
+  scenarios: [presets.recall]
+- id: F-MTX-004
+  area: matrix
+  title: Save the current routing to a matrix preset
+  claim: docs/API_REFERENCE.md POST /api/preset/{n}/save; docs/FLIC_SETUP.md
+  interfaces:
+    device: [preset save]
+    telnet: ['s save preset {n}']
+    rest: ['POST /api/preset/{preset}/save']
+    ui: [drawer/presets/expanded]
+    kiosk: [kiosk/preset-config]
+    flic: ['POST /api/preset/{n}/save']
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_recall_and_save_preset (driver-level: real OreiMatrix against the simulator, no
+    user interface in the path -> V1); tests/test_rest_api.py TestControlEndpoints (mocked matrix).'
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-MTX-005
+  area: matrix
+  title: Name presets in the web app (names shown by the API, UI, kiosk)
+  claim: web UI presets drawer rename; POST /api/device-settings/preset/{n}/name
+  interfaces:
+    rest: ['POST /api/device-settings/preset/{preset}/name', GET /api/presets]
+    ws: [device_settings]
+    ui: [drawer/presets/rename]
+    kiosk: [kiosk/presets/default]
+    uc: [button.preset_N name]
+  target: V4
+  current: V0
+  basis: No test renames a preset (route not exercised by any test); the visual catalog entry drawer/presets/rename only captures
+    the edit field.
+  evidence: []
+  findings: [UC-14, BE-16]
+  scenarios: [presets.rename]
+- id: F-MTX-006
+  area: matrix
+  title: Matrix power on / standby
+  claim: docs/API_REFERENCE.md POST /api/power/on|off; README HA switch; docs/FLIC_SETUP.md
+  interfaces:
+    device: [set poweronoff]
+    telnet: ['power {0|1}']
+    rest: [POST /api/power/on, POST /api/power/off]
+    ui: [dialog/confirm/power-cycle]
+    uc: [switch.matrix_power]
+    ha: [switch.matrix_power]
+    flic: [POST /api/power/off]
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_power (driver-level: real OreiMatrix against the simulator, no user interface in
+    the path -> V1); tests/test_rest_api.py TestControlEndpoints (mocked).'
+  evidence: []
+  findings: []
+  scenarios: [power.standby, power.wake]
+- id: F-MTX-007
+  area: matrix
+  title: Mute / unmute the audio of an output
+  claim: 'README "Advanced Output Control: Audio mute per output"'
+  interfaces:
+    device: [set output mute]
+    rest: ['POST /api/output/{output}/mute']
+    ui: [modal/output-settings/default]
+    kiosk: [kiosk/routing-modal/advanced]
+    ws: [audio_mute]
+    flic: ['POST /api/output/{n}/mute']
+    ha: [switch.output_N_mute]
+  target: V4
+  current: V2
+  basis: 'V2: tests/sim/test_sim_e2e.py::test_output_setting_via_rest (POST /api/output/2/mute -> simulator audio_mute asserted).'
+  evidence: []
+  findings: [BE-12]
+  scenarios: [outputs.audio_mute]
+- id: F-MTX-008
+  area: matrix
+  title: Enable / disable an output's video stream
+  claim: README "Advanced Output Control" (stream)
+  interfaces:
+    device: [set output stream]
+    rest: ['POST /api/output/{output}/enable']
+    ui: [modal/output-settings/default]
+    kiosk: [kiosk/routing-modal/advanced]
+    ha: [switch.output_N_stream]
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_output_settings (driver-level: real OreiMatrix against the simulator, no user interface
+    in the path -> V1); tests/test_rest_api.py TestAdvancedOutputControl (mocked).'
+  evidence: []
+  findings: [BE-12]
+  scenarios: []
+- id: F-MTX-009
+  area: matrix
+  title: Set an output's HDCP mode
+  claim: README "Advanced Output Control" (hdcp)
+  interfaces:
+    device: [set output hdcp]
+    rest: ['POST /api/output/{output}/hdcp']
+    ui: [modal/output-settings/default]
+    kiosk: [kiosk/routing-modal/advanced]
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_output_settings (driver-level: real OreiMatrix against the simulator, no user interface
+    in the path -> V1); tests/test_rest_api.py TestAdvancedOutputControl (mocked).'
+  evidence: []
+  findings: [BE-12]
+  scenarios: []
+- id: F-MTX-010
+  area: matrix
+  title: Set an output's HDR mode
+  claim: README "Advanced Output Control" (hdr)
+  interfaces:
+    device: [set output hdr]
+    rest: ['POST /api/output/{output}/hdr']
+    ui: [modal/output-settings/default]
+    kiosk: [kiosk/routing-modal/advanced]
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_output_settings (driver-level: real OreiMatrix against the simulator, no user interface
+    in the path -> V1); tests/test_rest_api.py TestAdvancedOutputControl (mocked).'
+  evidence: []
+  findings: [BE-12]
+  scenarios: []
+- id: F-MTX-011
+  area: matrix
+  title: Set an output's scaler mode (incl. audio-only)
+  claim: README "Advanced Output Control" (scaler)
+  interfaces:
+    device: [set output scaler]
+    rest: ['POST /api/output/{output}/scaler']
+    ui: [modal/output-settings/default]
+    kiosk: [kiosk/routing-modal/advanced]
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_output_settings (driver-level: real OreiMatrix against the simulator, no user interface
+    in the path -> V1); tests/test_rest_api.py TestAdvancedOutputControl (mocked).'
+  evidence: []
+  findings: [BE-12, BE-15]
+  scenarios: []
+- id: F-MTX-012
+  area: matrix
+  title: Enable / disable ARC on an output
+  claim: README "Advanced Output Control" (arc)
+  interfaces:
+    device: [set output arc]
+    rest: ['POST /api/output/{output}/arc']
+    ui: [modal/output-settings/default]
+    kiosk: [kiosk/routing-modal/advanced]
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_output_settings (driver-level: real OreiMatrix against the simulator, no user interface
+    in the path -> V1); tests/test_rest_api.py TestAdvancedOutputControl (mocked).'
+  evidence: []
+  findings: [BE-12]
+  scenarios: []
+- id: F-MTX-013
+  area: matrix
+  title: Set an input's EDID
+  claim: 'README "EDID Management: Per-input EDID configuration"'
+  interfaces:
+    device: [set input edid]
+    rest: ['POST /api/input/{input}/edid', GET /api/edid/modes, GET /api/status/edid]
+    ui: [modal/input-settings/default]
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_edid (driver-level: real OreiMatrix against the simulator, no user interface in
+    the path -> V1); tests/test_rest_api.py TestEdidControl (mocked).'
+  evidence: []
+  findings: [BE-12]
+  scenarios: []
+- id: F-MTX-014
+  area: matrix
+  title: Copy EDID from a connected display
+  claim: README "Copy EDID from connected displays"
+  interfaces:
+    device: [set input edid (14+N)]
+    rest: ['POST /api/input/{input}/edid']
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_edid (copy_edid_from_output) (driver-level: real OreiMatrix against the simulator,
+    no user interface in the path -> V1).'
+  evidence: []
+  findings: [BE-25]
+  scenarios: []
+- id: F-MTX-015
+  area: matrix
+  title: 'External audio: matrix mode'
+  claim: 'README "External Audio Routing: Bind to input/output or matrix mode"'
+  interfaces:
+    device: [set output exa mode, get ext-audio status]
+    rest: [POST /api/ext-audio/mode, GET /api/ext-audio/modes, GET /api/status/ext-audio]
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_ext_audio (driver-level: real OreiMatrix against the simulator, no user interface
+    in the path -> V1); tests/test_rest_api.py TestExtAudioControl (mocked).'
+  evidence: []
+  findings: [BE-12]
+  scenarios: []
+- id: F-MTX-016
+  area: matrix
+  title: 'External audio: enable per output'
+  claim: README "Independent audio matrix control"
+  interfaces:
+    device: [set output exa]
+    rest: ['POST /api/ext-audio/{output}/enable']
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_ext_audio (driver-level: real OreiMatrix against the simulator, no user interface
+    in the path -> V1); tests/test_rest_api.py TestExtAudioControl (mocked).'
+  evidence: []
+  findings: [BE-12]
+  scenarios: []
+- id: F-MTX-017
+  area: matrix
+  title: 'External audio: source per output'
+  claim: README "Per-output audio source selection"
+  interfaces:
+    device: [set output exa in source]
+    rest: ['POST /api/ext-audio/{output}/source']
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_ext_audio (driver-level: real OreiMatrix against the simulator, no user interface
+    in the path -> V1); tests/test_rest_api.py TestExtAudioControl (mocked).'
+  evidence: []
+  findings: [BE-12]
+  scenarios: []
+- id: F-MTX-018
+  area: matrix
+  title: Front-panel beep on / off
+  claim: docs/API_REFERENCE.md POST /api/system/beep; built-in shortcuts beep_on/off
+  interfaces:
+    device: [set beep]
+    rest: [POST /api/system/beep]
+    ui: [drawer/hardware/default]
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_system_settings (driver-level: real OreiMatrix against the simulator, no user interface
+    in the path -> V1); tests/test_rest_api.py TestSystemSettingsEndpoints (mocked).'
+  evidence: []
+  findings: [BE-12]
+  scenarios: []
+- id: F-MTX-019
+  area: matrix
+  title: Front-panel lock
+  claim: docs/API_REFERENCE.md POST /api/system/panel_lock
+  interfaces:
+    device: [set panel lock]
+    rest: [POST /api/system/panel_lock]
+    ui: [drawer/hardware/default]
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_system_settings (driver-level: real OreiMatrix against the simulator, no user interface
+    in the path -> V1); tests/test_rest_api.py TestSystemSettingsEndpoints (mocked).'
+  evidence: []
+  findings: [BE-12]
+  scenarios: []
+- id: F-MTX-020
+  area: matrix
+  title: Front-panel LCD timeout
+  claim: docs/API_REFERENCE.md POST /api/system/lcd
+  interfaces:
+    device: [set lcd on time]
+    rest: [POST /api/system/lcd, GET /api/system/lcd/modes]
+    ui: [drawer/hardware/default]
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_system_settings (driver-level: real OreiMatrix against the simulator, no user interface
+    in the path -> V1); tests/test_rest_api.py TestLcdTimeoutControl (mocked).'
+  evidence: []
+  findings: [API-07, BE-12]
+  scenarios: []
+- id: F-MTX-021
+  area: matrix
+  title: Reboot the matrix
+  claim: docs/FLIC_SETUP.md POST /api/system/reboot; HA reboot button
+  interfaces:
+    device: [set reboot]
+    telnet: [reboot]
+    rest: [POST /api/system/reboot]
+    ui: [dialog/confirm/reboot]
+    ha: [button.reboot_matrix]
+    flic: [POST /api/system/reboot]
+  target: V4
+  current: V1
+  basis: tests/test_rest_api.py TestSystemSettingsEndpoints reboot (mocked). No test reboots the simulator through the hub.
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-MTX-022
+  area: matrix
+  title: Rename inputs (names stored on the matrix)
+  claim: web UI input settings modal; POST /api/input/{n}/name
+  interfaces:
+    device: [set input name, get video status]
+    rest: ['POST /api/input/{input}/name']
+    ui: [modal/input-settings/default]
+    uc: [media_player source_list]
+    ha: [select options]
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_set_names (driver-level: real OreiMatrix against the simulator, no user interface
+    in the path -> V1). The REST route is not exercised by any test.'
+  evidence: []
+  findings: [BE-16, UC-08]
+  scenarios: []
+- id: F-MTX-023
+  area: matrix
+  title: Rename outputs (names stored on the matrix)
+  claim: web UI output settings modal; POST /api/output/{n}/name
+  interfaces:
+    device: [set output name]
+    rest: ['POST /api/output/{output}/name']
+    ui: [modal/output-settings/default]
+    uc: [media_player.output_N name]
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_set_names (driver-level: real OreiMatrix against the simulator, no user interface
+    in the path -> V1). The REST route is not exercised by any test.'
+  evidence: []
+  findings: [BE-16, BE-31, UC-08]
+  scenarios: []
+- id: F-MTX-024
+  area: matrix
+  title: Read the current routing and names
+  claim: docs/API_REFERENCE.md GET /api/status; every client's status view
+  interfaces:
+    device: [get video status]
+    rest: [GET /api/status]
+    ws: [status_update]
+    ui: [matrix/grid/default]
+    kiosk: [kiosk/routing/default]
+    uc: [sensor.output_N_source]
+    ha: [select.output_N_source current_option]
+  target: V4
+  current: V2
+  basis: 'V2: tests/sim/test_sim_e2e.py::test_status_reflects_simulator (REST status equals simulator state).'
+  evidence: []
+  findings: [API-11]
+  scenarios: []
+- id: F-MTX-025
+  area: matrix
+  title: Show which inputs have an active signal
+  claim: README HA "Binary sensors for input active video signals"
+  interfaces:
+    device: [get input status (inactive)]
+    rest: [GET /api/status/inputs, GET /api/inputs]
+    ui: [inputs/list/default, matrix/grid/no-signal]
+    kiosk: [kiosk/routing/default]
+    uc: [sensor.input_N_signal]
+    ha: [binary_sensor.input_N_signal]
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_capabilities (driver-level: real OreiMatrix against the simulator, no user interface
+    in the path -> V1); tests/test_rest_api.py TestStatusEndpoints (mocked).'
+  evidence: []
+  findings: [BE-03]
+  scenarios: []
+- id: F-MTX-026
+  area: matrix
+  title: Show which cables are plugged in (Telnet link status)
+  claim: README Technical Details "Telnet (port 23) - for CEC commands and cable detection"
+  interfaces:
+    telnet: [status, 'r link in {n}', 'r link out {n}']
+    rest: [GET /api/status/cables]
+    ui: [matrix/grid/cables-unplugged, outputs/list/cables-unplugged]
+    uc: [sensor.input_N_cable, sensor.output_N_cable]
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_telnet_cable_and_full_status (driver-level: real OreiMatrix against the simulator,
+    no user interface in the path -> V1). GET /api/status/cables is not exercised by any test.'
+  evidence: []
+  findings: [BE-03, BE-29, BE-30]
+  scenarios: []
+- id: F-MTX-027
+  area: matrix
+  title: Show which outputs have a display connected
+  claim: README HA "Binary sensors for ... output display connection status"
+  interfaces:
+    device: [get output status (allconnect)]
+    rest: [GET /api/status/outputs, GET /api/outputs]
+    ui: [outputs/list/default]
+    uc: [sensor.output_N_connected]
+    ha: [binary_sensor.output_N_connected]
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_capabilities (driver-level: real OreiMatrix against the simulator, no user interface
+    in the path -> V1); tests/test_rest_api.py TestStatusEndpoints (mocked).'
+  evidence: []
+  findings: [BE-03]
+  scenarios: []
+- id: F-MTX-028
+  area: matrix
+  title: Show device info (model, firmware, network)
+  claim: web UI About/General; GET /api/status/device, /api/system/info
+  interfaces:
+    device: [get status, get network, get system status]
+    telnet: [r fw version, r type]
+    rest: [GET /api/status/device, GET /api/status/system, GET /api/system/info]
+    ui: [dialog/about/default]
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_system_settings and ::test_telnet_connects_and_reads_firmware (driver-level: real
+    OreiMatrix against the simulator, no user interface in the path -> V1).'
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-MTX-029
+  area: matrix
+  title: Cycle an output to the next / previous input
+  claim: docs/FLIC_SETUP.md Flic Twist; README Flic
+  interfaces:
+    rest: ['POST /api/input/next?output=N', 'POST /api/input/previous?output=N']
+    flic: [Twist rotate]
+  target: V4
+  current: V1
+  basis: tests/test_rest_api.py TestInputCycling (mocked).
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-MTX-030
+  area: matrix
+  title: Read a preset's stored routing
+  claim: GET /api/presets (routing per preset); presets drawer routing editor
+  interfaces:
+    device: [preset get]
+    telnet: ['r preset {n}']
+    rest: [GET /api/presets]
+    ui: [drawer/presets/expanded]
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_telnet_cable_and_full_status (get_preset_info) (driver-level: real OreiMatrix against
+    the simulator, no user interface in the path -> V1).'
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-MTX-031
+  area: matrix
+  title: Notice changes made outside the hub (front panel, cable plugged, source on/off)
+  claim: docs/REMEDIATION_PLAN.md HIL-B physical-change detection; driver poller routing_change/cable_change
+  interfaces:
+    telnet: ['push: hdmi input|output N: connect|disconnect']
+    ws: [routing_change, cable_change, signal_change, connection_change]
+    uc: [sensor updates]
+    ha: [coordinator refresh]
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_telnet_push_cable_event_reaches_client (driver-level: real OreiMatrix against the
+    simulator, no user interface in the path -> V1).'
+  evidence: []
+  findings: [UC-17, BE-29, BE-03]
+  scenarios: []
+- id: F-CEC-001
+  area: cec
+  title: Power a source on / off over CEC
+  claim: README "CEC control for all 8 inputs (navigation, playback, power)"
+  interfaces: &id001
+    device: [cec command (object 0)]
+    telnet: ['s cec in {n} {word}']
+    rest: ['POST /api/cec/input/{input}/{command}']
+    ui: [cec-remote/input-2]
+    kiosk: [kiosk/cec-remote/output-1]
+    uc: [remote.input_N_cec send_cmd]
+    ha: [service hdmi_matrix.send_cec_command]
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_cec_http_auto_enables_port (driver-level: real OreiMatrix against the simulator,
+    no user interface in the path -> V1); tests/test_rest_api.py TestCecCommandEndpoints (mocked); tests/test_driver.py TestCecCommandResolution.'
+  evidence: []
+  findings: []
+  scenarios: [cec.input_power_on]
+- id: F-CEC-002
+  area: cec
+  title: Navigate a source's menus over CEC (up/down/left/right/select/menu/back)
+  claim: README "CEC control ... navigation"
+  interfaces: *id001
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_cec_http_auto_enables_port (driver-level: real OreiMatrix against the simulator,
+    no user interface in the path -> V1); tests/test_rest_api.py TestCecCommandEndpoints (mocked); tests/test_driver.py TestCecCommandResolution.'
+  evidence: []
+  findings: [VAL-03]
+  scenarios: []
+- id: F-CEC-003
+  area: cec
+  title: Control playback on a source over CEC
+  claim: README "CEC control ... playback"
+  interfaces: *id001
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_cec_http_auto_enables_port (driver-level: real OreiMatrix against the simulator,
+    no user interface in the path -> V1); tests/test_rest_api.py TestCecCommandEndpoints (mocked); tests/test_driver.py TestCecCommandResolution.'
+  evidence: []
+  findings: [VAL-03]
+  scenarios: []
+- id: F-CEC-004
+  area: cec
+  title: Source volume / mute over CEC
+  claim: docs/CEC_CONTROL_ARCHITECTURE.md input volume commands
+  interfaces: *id001
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_cec_http_auto_enables_port (driver-level: real OreiMatrix against the simulator,
+    no user interface in the path -> V1); tests/test_rest_api.py TestCecCommandEndpoints (mocked); tests/test_driver.py TestCecCommandResolution.'
+  evidence: []
+  findings: [VAL-03]
+  scenarios: []
+- id: F-CEC-005
+  area: cec
+  title: Turn a display (TV) on / off over CEC
+  claim: docs/FLIC_SETUP.md; README Profiles power automation
+  interfaces: &id002
+    device: [cec command (object 1)]
+    telnet: ['s cec hdmi out {n} {word}']
+    rest: ['POST /api/cec/output/{output}/{command}']
+    ws: [cec_command]
+    ui: [cec-remote/output-1, cec-tray/expanded]
+    kiosk: [kiosk/cec-remote/display-target]
+    uc: [remote.output_N_cec, media_player.output_N on/off/volume]
+    ha: [service hdmi_matrix.send_cec_command]
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_telnet_cec (Telnet path, POWER_ON to output 1) (driver-level: real OreiMatrix against
+    the simulator, no user interface in the path -> V1); tests/test_rest_api.py TestCecCommandEndpoints (mocked).'
+  evidence: []
+  findings: [BE-14]
+  scenarios: [cec.output_power_on]
+- id: F-CEC-006
+  area: cec
+  title: Display / soundbar volume and mute over CEC
+  claim: docs/FLIC_SETUP.md Flic Twist volume control
+  interfaces: *id002
+  target: V4
+  current: V1
+  basis: tests/test_rest_api.py TestCecCommandEndpoints (mocked).
+  evidence: []
+  findings: [BE-14, VAL-03]
+  scenarios: [cec.output_volume_up]
+- id: F-CEC-007
+  area: cec
+  title: Enable CEC on the target port automatically before a command
+  claim: src/orei_matrix.py ensure_cec_enabled; docs/OREI_API_COMMANDS.md CEC enable note
+  interfaces:
+    device: [get cec status, set cec index]
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_cec_http_auto_enables_port (driver-level: real OreiMatrix against the simulator,
+    no user interface in the path -> V1).'
+  evidence: []
+  findings: [BE-13]
+  scenarios: [cec.input_power_on]
+- id: F-CEC-008
+  area: cec
+  title: Enable / disable CEC per port
+  claim: docs/API_REFERENCE.md POST /api/cec/{input|output}/{port}/enable
+  interfaces:
+    device: [set cec index]
+    rest: ['POST /api/cec/input/{port}/enable', 'POST /api/cec/output/{port}/enable']
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_cec_enable_single_port_shape (driver-level: real OreiMatrix against the simulator,
+    no user interface in the path -> V1); tests/test_rest_api.py (input enable, mocked). Output enable is not exercised by
+    any test.'
+  evidence: []
+  findings: [BE-13]
+  scenarios: []
+- id: F-CEC-009
+  area: cec
+  title: Read which ports have CEC enabled
+  claim: GET /api/status/cec
+  interfaces:
+    device: [get cec status]
+    rest: [GET /api/status/cec]
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_cec_http_auto_enables_port reads the CEC cache (driver-level: real OreiMatrix against
+    the simulator, no user interface in the path -> V1). GET /api/status/cec is not exercised by any test.'
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-CEC-010
+  area: cec
+  title: Send CEC over Telnet (OREI_USE_TELNET_CEC)
+  claim: README Technical Details "CEC via Telnet or HTTP fallback"
+  interfaces:
+    telnet: ['s cec in {n} {word}', 's cec hdmi out {n} {word}']
+    env: [OREI_USE_TELNET_CEC]
+  target: V4
+  current: V1
+  basis: 'tests/sim/test_sim_hub.py::test_telnet_cec (driver-level: real OreiMatrix against the simulator, no user interface
+    in the path -> V1).'
+  evidence: []
+  findings: [BE-07]
+  scenarios: []
+- id: F-CEC-011
+  area: cec
+  title: List CEC commands and per-port capabilities (incl. audio-only outputs)
+  claim: docs/API_REFERENCE.md GET /api/cec/commands, /api/cec/capabilities
+  interfaces:
+    rest: [GET /api/cec/commands, 'GET /api/cec/commands/{type}', GET /api/cec/capabilities, 'GET /api/cec/input/{input}/capabilities',
+      'GET /api/cec/output/{output}/capabilities']
+  target: V4
+  current: V1
+  basis: tests/test_rest_api.py TestCecCommandEndpoints (mocked); tests/sim/test_sim_hub.py::test_audio_only_output_detected
+    is a strict xfail (BE-15).
+  evidence: []
+  findings: [BE-15]
+  scenarios: []
+- id: F-API-001
+  area: api
+  title: GET /api/health (liveness, matrix connection, runtime metrics)
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: [GET /api/health]
+  target: V3
+  current: V2
+  basis: 'V2: tests/sim/test_sim_e2e.py::test_health_reports_matrix_and_runtime; tests/test_health.py.'
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-API-002
+  area: api
+  title: API info and root (GET /, /api, /api/info)
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: [GET /, GET /api, GET /api/info]
+  target: V2
+  current: V1
+  basis: tests/test_rest_api.py TestHealthEndpoints (mocked); GET / is not exercised.
+  evidence: []
+  findings: [DEP-06]
+  scenarios: []
+- id: F-API-003
+  area: api
+  title: GET /api/status
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: [GET /api/status]
+  target: V3
+  current: V2
+  basis: 'V2: tests/sim/test_sim_e2e.py::test_status_reflects_simulator; tests/test_contract_fixtures.py.'
+  evidence: []
+  findings: [API-11]
+  scenarios: []
+- id: F-API-004
+  area: api
+  title: Detailed status (GET /api/status/full|inputs|outputs|cables|edid|ext-audio|system|device|cec)
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: [GET /api/status/full, GET /api/status/inputs, GET /api/status/outputs, GET /api/status/cables, GET /api/status/edid,
+      GET /api/status/ext-audio, GET /api/status/system, GET /api/status/device, GET /api/status/cec]
+  target: V3
+  current: V1
+  basis: tests/test_rest_api.py TestStatusEndpoints (mocked); cables and cec are not exercised.
+  evidence: []
+  findings: [BE-03]
+  scenarios: []
+- id: F-API-005
+  area: api
+  title: POST /api/switch (one output or all)
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: [POST /api/switch]
+  target: V3
+  current: V2
+  basis: 'V2: tests/sim/test_sim_e2e.py::test_switch_changes_simulator_state, ::test_switch_all_and_preset.'
+  evidence: []
+  findings: [BE-12]
+  scenarios: [routing.switch_one, routing.route_all]
+- id: F-API-006
+  area: api
+  title: POST /api/output/{output}/source and input cycling
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: ['POST /api/output/{output}/source', POST /api/input/next, POST /api/input/previous]
+  target: V3
+  current: V1
+  basis: tests/test_rest_api.py TestControlEndpoints, TestInputCycling (mocked).
+  evidence: []
+  findings: [VAL-05]
+  scenarios: []
+- id: F-API-007
+  area: api
+  title: POST /api/preset/{preset} (recall)
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: ['POST /api/preset/{preset}']
+  target: V3
+  current: V2
+  basis: 'V2: tests/sim/test_sim_e2e.py::test_switch_all_and_preset.'
+  evidence: []
+  findings: []
+  scenarios: [presets.recall]
+- id: F-API-008
+  area: api
+  title: POST /api/preset/{preset}/save
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: ['POST /api/preset/{preset}/save']
+  target: V2
+  current: V1
+  basis: tests/test_rest_api.py TestControlEndpoints (mocked).
+  evidence: []
+  findings: [API-14]
+  scenarios: []
+- id: F-API-009
+  area: api
+  title: POST /api/power/on|off
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: [POST /api/power/on, POST /api/power/off]
+  target: V3
+  current: V1
+  basis: tests/test_rest_api.py TestControlEndpoints (mocked).
+  evidence: []
+  findings: []
+  scenarios: [power.standby, power.wake]
+- id: F-API-010
+  area: api
+  title: Output setting routes (mute, enable, hdcp, hdr, scaler, arc)
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: ['POST /api/output/{output}/mute', 'POST /api/output/{output}/enable', 'POST /api/output/{output}/hdcp', 'POST /api/output/{output}/hdr',
+      'POST /api/output/{output}/scaler', 'POST /api/output/{output}/arc']
+  target: V2
+  current: V1
+  basis: tests/test_rest_api.py TestAdvancedOutputControl (mocked); mute also V2 in tests/sim/test_sim_e2e.py::test_output_setting_via_rest.
+  evidence: []
+  findings: [BE-12, API-15]
+  scenarios: []
+- id: F-API-011
+  area: api
+  title: EDID routes
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: ['POST /api/input/{input}/edid', GET /api/edid/modes]
+  target: V2
+  current: V1
+  basis: tests/test_rest_api.py TestEdidControl (mocked).
+  evidence: []
+  findings: [BE-12]
+  scenarios: []
+- id: F-API-012
+  area: api
+  title: External audio routes
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: [POST /api/ext-audio/mode, 'POST /api/ext-audio/{output}/enable', 'POST /api/ext-audio/{output}/source', GET /api/ext-audio/modes]
+  target: V2
+  current: V1
+  basis: tests/test_rest_api.py TestExtAudioControl (mocked).
+  evidence: []
+  findings: [BE-12]
+  scenarios: []
+- id: F-API-013
+  area: api
+  title: System setting routes (beep, panel lock, LCD, reboot)
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: [POST /api/system/beep, POST /api/system/panel_lock, POST /api/system/lcd, GET /api/system/lcd/modes, POST /api/system/reboot]
+  target: V2
+  current: V1
+  basis: tests/test_rest_api.py TestSystemSettingsEndpoints, TestLcdTimeoutControl (mocked).
+  evidence: []
+  findings: [BE-12]
+  scenarios: []
+- id: F-API-014
+  area: api
+  title: System info and storage routes
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: [GET /api/system/info, GET /api/system/storage]
+  target: V2
+  current: V1
+  basis: tests/test_persistence.py TestStorageEndpoint (handler-level); /api/system/info is not exercised.
+  evidence: []
+  findings: [SEC-11]
+  scenarios: []
+- id: F-API-015
+  area: api
+  title: CEC command routes
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: ['POST /api/cec/input/{input}/{command}', 'POST /api/cec/output/{output}/{command}']
+  target: V3
+  current: V1
+  basis: tests/test_rest_api.py TestCecCommandEndpoints (mocked).
+  evidence: []
+  findings: []
+  scenarios: [cec.input_power_on, cec.output_power_on, cec.output_volume_up]
+- id: F-API-016
+  area: api
+  title: CEC catalogue, capability and enable routes
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: [GET /api/cec/commands, 'GET /api/cec/commands/{type}', GET /api/cec/capabilities, 'GET /api/cec/input/{input}/capabilities',
+      'GET /api/cec/output/{output}/capabilities', 'POST /api/cec/input/{port}/enable', 'POST /api/cec/output/{port}/enable']
+  target: V2
+  current: V1
+  basis: tests/test_rest_api.py TestCecCommandEndpoints (mocked); commands/{type} and output enable are not exercised.
+  evidence: []
+  findings: [BE-13]
+  scenarios: []
+- id: F-API-017
+  area: api
+  title: Device settings routes (icons, display names, preset names, favourite/dashboard presets)
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: [GET /api/device-settings, POST /api/device-settings, 'GET /api/device-settings/input/{input}', 'POST /api/device-settings/input/{input}',
+      'GET /api/device-settings/output/{output}', 'POST /api/device-settings/output/{output}', 'POST /api/device-settings/preset/{preset}/name',
+      GET /api/device-settings/favorite-presets, PUT /api/device-settings/favorite-presets, 'POST /api/device-settings/favorite-presets/{preset}/toggle',
+      GET /api/device-settings/dashboard-presets, PUT /api/device-settings/dashboard-presets, 'POST /api/device-settings/dashboard-presets/{preset}/toggle']
+  target: V2
+  current: V1
+  basis: tests/test_device_settings_presets.py (favourite/dashboard presets); the other 7 routes are not exercised.
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-API-018
+  area: api
+  title: Name routes (POST /api/input|output/{n}/name)
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: ['POST /api/input/{input}/name', 'POST /api/output/{output}/name']
+  target: V2
+  current: V0
+  basis: Not exercised by any test.
+  evidence: []
+  findings: [BE-16]
+  scenarios: []
+- id: F-API-019
+  area: api
+  title: Profile routes
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: [GET /api/profiles, GET /api/profiles/favorites, POST /api/profile, 'GET /api/profile/{profile_id}', 'PUT /api/profile/{profile_id}',
+      'DELETE /api/profile/{profile_id}', 'POST /api/profile/{profile_id}/recall', POST /api/profiles/reorder, 'GET|POST|PUT
+        /api/profile/{profile_id}/cec', 'GET|POST|PUT /api/profile/{profile_id}/macros', 'POST|PUT /api/profile/{profile_id}/favorite',
+      'POST|PUT /api/profile/{profile_id}/dashboard', 'GET /api/profile/{profile_id}/execution-log']
+  target: V2
+  current: V1
+  basis: tests/test_rest_api.py TestProfileAPI, TestProfileCecMacroEndpoints, TestProfileFavoriteDashboardAPI (mocked); reorder,
+    execution-log and PUT cec/macros are not exercised.
+  evidence: []
+  findings: [SEC-04, API-08]
+  scenarios: []
+- id: F-API-020
+  area: api
+  title: Scene v1 alias routes (/api/scene*, /api/scenes)
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: [GET /api/scenes, POST /api/scene, 'GET /api/scene/{scene_id}', 'DELETE /api/scene/{scene_id}', 'POST /api/scene/{scene_id}/recall',
+      POST /api/scene/save-current, 'GET|POST|PUT /api/scene/{scene_id}/cec', 'POST /api/scene/{scene_id}/cec/auto-resolve']
+  target: V2
+  current: V1
+  basis: tests/test_rest_api.py TestSceneControl, TestSceneRecallValidation, TestSceneCecConfigEndpoints (mocked); auto-resolve
+    not exercised.
+  evidence: []
+  findings: [API-23, API-12]
+  scenarios: []
+- id: F-API-021
+  area: api
+  title: Scene v2 routes (/api/v2/scenes*)
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: [GET /api/v2/scenes, POST /api/v2/scenes, 'GET /api/v2/scenes/{scene_id}', 'PUT /api/v2/scenes/{scene_id}', 'DELETE
+        /api/v2/scenes/{scene_id}', 'POST /api/v2/scenes/{scene_id}/execute', 'POST /api/v2/scenes/{scene_id}/validate', 'POST
+        /api/v2/scenes/{scene_id}/steps', 'DELETE /api/v2/scenes/{scene_id}/steps/{index}', 'PUT|DELETE /api/v2/scenes/{scene_id}/override',
+      'GET /api/v2/scenes/{scene_id}/history']
+  target: V2
+  current: V0
+  basis: No test exercises any /api/v2/scenes route (TST-03).
+  evidence: []
+  findings: [API-05, API-01, API-02, TST-03]
+  scenarios: []
+- id: F-API-022
+  area: api
+  title: Response envelope and input validation (4xx before anything reaches the matrix)
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: ['all routes: {success, data, error}']
+  target: V2
+  current: V1
+  basis: tests/test_rest_api.py TestErrorHandling (mocked).
+  evidence: []
+  findings: [API-15, SEC-11, API-21]
+  scenarios: [failures.bad_input]
+- id: F-API-023
+  area: api
+  title: Macro routes
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: [GET /api/cec/macros, GET /api/cec/macros/favorites, POST /api/cec/macro, 'GET /api/cec/macro/{macro_id}', 'PUT
+        /api/cec/macro/{macro_id}', 'DELETE /api/cec/macro/{macro_id}', 'POST /api/cec/macro/{macro_id}/execute', 'POST /api/cec/macro/{macro_id}/test',
+      'POST /api/cec/macro/{macro_id}/favorite', 'POST /api/cec/macro/{macro_id}/dashboard']
+  target: V2
+  current: V1
+  basis: tests/test_rest_api.py TestMacroAPI, TestMacroFavoriteDashboardAPI (mocked).
+  evidence: []
+  findings: [VAL-02]
+  scenarios: []
+- id: F-API-024
+  area: api
+  title: Shortcut routes (/api/system-shortcuts* and the /api/shortcuts* aliases)
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: [GET /api/system-shortcuts, 'GET /api/system-shortcuts/{key}', POST /api/system-shortcuts, 'PUT /api/system-shortcuts/{key}',
+      'DELETE /api/system-shortcuts/{key}', 'POST /api/system-shortcuts/{key}/execute', PUT /api/system-shortcuts/reorder,
+      'POST /api/system-shortcuts/{key}/favorite|dashboard', GET /api/system-shortcuts/favorites|dashboard, /api/shortcuts*
+        (10 aliases)]
+  target: V2
+  current: V1
+  basis: tests/test_rest_api.py TestSystemShortcutsAPI (mocked); none of the /api/shortcuts* aliases is exercised.
+  evidence: []
+  findings: [API-01, API-06, API-08]
+  scenarios: []
+- id: F-API-025
+  area: api
+  title: Dashboard layout routes
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: [GET /api/dashboard/layout, PUT /api/dashboard/layout, POST /api/dashboard/cards, DELETE /api/dashboard/cards]
+  target: V2
+  current: V1
+  basis: tests/test_rest_api.py TestDashboardLayoutAPI (mocked).
+  evidence: []
+  findings: [API-20]
+  scenarios: []
+- id: F-API-026
+  area: api
+  title: Themes and UI preference routes
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: [GET /api/themes, PUT /api/themes, POST /api/themes/reset, GET /api/ui/preferences, PUT /api/ui/preferences]
+  target: V2
+  current: V1
+  basis: tests/test_rest_themes_ui.py (handler-level; routes not resolved).
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-API-027
+  area: api
+  title: Settings routes (matrix host, test connection)
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: [GET /api/settings, POST /api/settings/matrix-host, POST /api/settings/test-connection]
+  target: V2
+  current: V0
+  basis: Not exercised by any test (TST-03).
+  evidence: []
+  findings: [SEC-03, TST-03]
+  scenarios: []
+- id: F-API-028
+  area: api
+  title: Flic integration routes
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: [GET /api/integrations/flic/buttons, POST /api/integrations/flic/register]
+  target: V2
+  current: V0
+  basis: Not exercised by any test (TST-03).
+  evidence: []
+  findings: [PER-02, API-15, TST-03]
+  scenarios: []
+- id: F-API-029
+  area: api
+  title: Web UI, kiosk and static asset routes
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: [GET /ui, GET /ui/, GET /kiosk, GET /kiosk/, 'GET /css/{path}', 'GET /js/{path}', 'GET /assets/{path}']
+  target: V3
+  current: V3
+  basis: 'V3: tests/e2e/smoke.spec.ts loads /ui and /kiosk in Chromium with no page errors; tests/test_rest_api.py TestWebUI.'
+  evidence: []
+  findings: [SEC-13]
+  scenarios: []
+- id: F-API-030
+  area: api
+  title: Rate limiting (60 requests / 10 s per client)
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: [all /api routes]
+  target: V2
+  current: V1
+  basis: tests/test_rest_api.py TestRateLimiting; tests/test_concurrency.py TestRateLimitUnderConcurrency.
+  evidence: []
+  findings: [SEC-12, VAL-06]
+  scenarios: []
+- id: F-API-031
+  area: api
+  title: CORS headers
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: [all routes (OPTIONS preflight)]
+  target: V2
+  current: V1
+  basis: tests/test_rest_api.py (CORS header assertions, mocked).
+  evidence: []
+  findings: [SEC-02]
+  scenarios: []
+- id: F-API-032
+  area: api
+  title: 'WebSocket /ws: welcome, get_status, errors'
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: [GET /ws]
+    ws: [connected, status_update, error]
+  target: V2
+  current: V1
+  basis: tests/test_rest_api.py TestWebSocket.
+  evidence: []
+  findings: [API-10]
+  scenarios: []
+- id: F-API-033
+  area: api
+  title: WS event switch / switch_failed
+  claim: src/rest_api/control.py broadcasts; web/js/websocket.js consumer
+  interfaces:
+    ws: [switch, switch_failed]
+  target: V3
+  current: V1
+  basis: tests/test_rest_api.py TestWebSocket (broadcast, mocked).
+  evidence: []
+  findings: [API-09]
+  scenarios: [routing.switch_one]
+- id: F-API-034
+  area: api
+  title: WS event switch_all / switch_all_failed
+  claim: src/rest_api/control.py broadcasts
+  interfaces:
+    ws: [switch_all, switch_all_failed]
+  target: V3
+  current: V1
+  basis: tests/test_rest_api.py TestWebSocket (broadcast, mocked).
+  evidence: []
+  findings: [API-09]
+  scenarios: [routing.route_all]
+- id: F-API-035
+  area: api
+  title: WS event preset_recall / preset_recall_failed
+  claim: src/rest_api/control.py broadcasts
+  interfaces:
+    ws: [preset_recall, preset_recall_failed]
+  target: V3
+  current: V1
+  basis: tests/test_rest_api.py TestWebSocket (broadcast, mocked).
+  evidence: []
+  findings: [API-09, UI-04]
+  scenarios: [presets.recall]
+- id: F-API-036
+  area: api
+  title: WS event audio_mute
+  claim: src/rest_api/outputs.py broadcast
+  interfaces:
+    ws: [audio_mute]
+  target: V2
+  current: V1
+  basis: No test asserts the event.
+  evidence: []
+  findings: []
+  scenarios: [outputs.audio_mute]
+- id: F-API-037
+  area: api
+  title: WS events device_settings / device_settings_full
+  claim: src/rest_api/device_settings.py broadcasts
+  interfaces:
+    ws: [device_settings, device_settings_full]
+  target: V2
+  current: V0
+  basis: No test asserts the events.
+  evidence: []
+  findings: []
+  scenarios: [presets.rename]
+- id: F-API-038
+  area: api
+  title: WS event cec_command
+  claim: src/rest_api/cec.py broadcast
+  interfaces:
+    ws: [cec_command]
+  target: V2
+  current: V0
+  basis: No test asserts the event.
+  evidence: []
+  findings: [UI-02]
+  scenarios: [cec.output_power_on]
+- id: F-API-039
+  area: api
+  title: WS event status (background refresh broadcast)
+  claim: src/rest_api/core.py background_status_refresh
+  interfaces:
+    ws: [status]
+  target: V2
+  current: V1
+  basis: Visual catalog app/ws-status-refresh/output-names captures its effect (render only).
+  evidence: []
+  findings: [BE-31, API-11]
+  scenarios: []
+- id: F-API-040
+  area: api
+  title: WS live device events (routing_change, signal_change, connection_change, cable_change)
+  claim: src/rest_api/websocket.py docstring; README "WebSocket for real-time status updates"
+  interfaces:
+    ws: [routing_change, signal_change, connection_change, cable_change]
+  target: V2
+  current: V0
+  basis: Only emitted by the driver.py poller (legacy mode, while a Remote is connected); no test.
+  evidence: []
+  findings: [UC-17, BE-08, BE-24]
+  scenarios: []
+- id: F-API-041
+  area: api
+  title: WS event scene_execution_error
+  claim: src/scene_execution.py broadcast
+  interfaces:
+    ws: [scene_execution_error]
+  target: V2
+  current: V0
+  basis: No test.
+  evidence: []
+  findings: [API-01, UI-02]
+  scenarios: []
+- id: F-API-042
+  area: api
+  title: WS heartbeat (ping / pong)
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  interfaces:
+    rest: [GET /ws]
+    ws: [ping, pong]
+  target: V2
+  current: V1
+  basis: tests/test_rest_api.py TestWebSocket ping.
+  evidence: []
+  findings: [API-10]
+  scenarios: []
+- id: F-DOM-001
+  area: domain
+  title: Create, edit and delete profiles
+  claim: 'README "Profiles: Save named routing configurations"'
+  interfaces:
+    rest: [POST /api/profile, 'PUT /api/profile/{profile_id}', 'DELETE /api/profile/{profile_id}']
+    ui: [editor/profile/new, editor/profile/edit, profiles/manager/populated]
+    kiosk: [kiosk/profile-wizard/step-1]
+    files: [profiles.json]
+  target: V3
+  current: V1
+  basis: tests/test_config.py TestProfileManager; tests/test_rest_api.py TestProfileAPI (mocked).
+  evidence: []
+  findings: [API-22]
+  scenarios: []
+- id: F-DOM-002
+  area: domain
+  title: 'Recall a profile: its routing is applied'
+  claim: README "Recall profiles with single command"
+  interfaces:
+    rest: ['POST /api/profile/{profile_id}/recall']
+    ui: [profiles/list/populated, dashboard/cards/all-types]
+    kiosk: [kiosk/profiles/default]
+    flic: ['POST /api/profile/{id}/recall']
+  target: V4
+  current: V1
+  basis: tests/test_rest_api.py TestProfileAPI recall (mocked matrix).
+  evidence: []
+  findings: [API-08, API-19]
+  scenarios: [profiles.recall_routing]
+- id: F-DOM-003
+  area: domain
+  title: 'Recall a profile: its output settings (mute, HDR, HDCP, enable) are applied'
+  claim: README "Include HDR/HDCP/audio settings"
+  interfaces:
+    rest: ['POST /api/profile/{profile_id}/recall']
+    files: ['profiles.json outputs.{n}.audio_mute|hdr_mode|hdcp_mode']
+  target: V4
+  current: V1
+  basis: tests/test_rest_api.py TestProfileAPI recall uses a MagicMock matrix, which has every method, so it cannot see VAL-01.
+  evidence: []
+  findings: [VAL-01, API-22]
+  scenarios: [profiles.recall_output_settings]
+- id: F-DOM-004
+  area: domain
+  title: 'Recall a profile: its power-on / power-off macro runs'
+  claim: README "CEC macros, and power automation"
+  interfaces:
+    rest: ['POST /api/profile/{profile_id}/recall']
+    files: [profiles.json power_on_macro]
+  target: V4
+  current: V1
+  basis: tests/test_rest_api.py TestProfileCecMacroEndpoints (mocked).
+  evidence: []
+  findings: [VAL-02, BE-02, API-08]
+  scenarios: [profiles.recall_power_macro]
+- id: F-DOM-005
+  area: domain
+  title: Protect a profile with a passcode (per-item PIN)
+  claim: docs/PHASE_8_SPEC.md passcodes; DI-6
+  interfaces:
+    rest: ['POST /api/profile/{profile_id}/recall (passcode)']
+    ui: [dialog/passcode-prompt, editor/profile/passcode]
+  target: V3
+  current: V0
+  basis: No test recalls a protected profile (tests/test_password.py covers hashing only).
+  evidence: []
+  findings: [SEC-05, SEC-06, UI-01]
+  scenarios: [profiles.recall_needs_passcode]
+- id: F-DOM-006
+  area: domain
+  title: Favourite, pin, reorder profiles and show them on the dashboard
+  claim: web UI Profiles tab; kiosk profile slots
+  interfaces:
+    rest: ['POST|PUT /api/profile/{profile_id}/favorite', 'POST|PUT /api/profile/{profile_id}/dashboard', POST /api/profiles/reorder]
+    ui: [profiles/manager/populated]
+  target: V3
+  current: V1
+  basis: tests/test_rest_api.py TestProfileFavoriteDashboardAPI (mocked); reorder not exercised.
+  evidence: []
+  findings: [API-20]
+  scenarios: []
+- id: F-DOM-007
+  area: domain
+  title: Per-profile CEC targets (nav/playback/volume/power) and auto-resolve
+  claim: docs/CEC_CONTROL_ARCHITECTURE.md scene CEC config
+  interfaces:
+    rest: ['GET|POST|PUT /api/profile/{profile_id}/cec', 'POST /api/scene/{scene_id}/cec/auto-resolve']
+    ui: [dialog/scene-cec]
+  target: V3
+  current: V1
+  basis: tests/test_cec_resolver.py; tests/test_rest_api.py TestSceneCecConfigEndpoints (mocked).
+  evidence: []
+  findings: [API-23]
+  scenarios: []
+- id: F-DOM-008
+  area: domain
+  title: Profile execution log
+  claim: GET /api/profile/{id}/execution-log
+  interfaces:
+    rest: ['GET /api/profile/{profile_id}/execution-log']
+  target: V3
+  current: V0
+  basis: Not exercised by any test.
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-DOM-009
+  area: domain
+  title: Save the current routing as a new profile
+  claim: POST /api/scene/save-current; web UI save-profile modal
+  interfaces:
+    rest: [POST /api/scene/save-current]
+    ui: [modal/save-profile/legacy]
+  target: V3
+  current: V1
+  basis: tests/test_rest_api.py TestSceneControl save-current (mocked).
+  evidence: []
+  findings: [API-12]
+  scenarios: []
+- id: F-DOM-010
+  area: domain
+  title: Create, edit and delete scenes (sequences of steps)
+  claim: docs/PHASE_8_SPEC.md Scenes v2; DI-2
+  interfaces:
+    rest: [POST /api/v2/scenes, 'PUT /api/v2/scenes/{scene_id}', 'DELETE /api/v2/scenes/{scene_id}', 'POST /api/v2/scenes/{scene_id}/steps',
+      'DELETE /api/v2/scenes/{scene_id}/steps/{index}']
+    ui: [editor/scene/new, editor/scene/edit]
+    files: [scenes.json]
+  target: V3
+  current: V1
+  basis: tests/test_scene_manager.py (manager only; no v2 route is exercised).
+  evidence: []
+  findings: [API-05, API-13, API-12]
+  scenarios: []
+- id: F-DOM-011
+  area: domain
+  title: 'Run a scene: profile steps'
+  claim: docs/PHASE_8_SPEC.md scene execution
+  interfaces:
+    rest: ['POST /api/v2/scenes/{scene_id}/execute']
+    ws: [scene_execution_error]
+    ui: [drawer/settings/scenes]
+  target: V4
+  current: V1
+  basis: tests/test_scene_execution.py TestSceneExecutorProfile (mocked matrix).
+  evidence: []
+  findings: [API-01, API-02, API-08]
+  scenarios: []
+- id: F-DOM-012
+  area: domain
+  title: 'Run a scene: macro steps'
+  claim: docs/PHASE_8_SPEC.md scene step types
+  interfaces:
+    rest: ['POST /api/v2/scenes/{scene_id}/execute']
+  target: V4
+  current: V1
+  basis: tests/test_scene_execution.py TestSceneExecutorMacroStep (mocked).
+  evidence: []
+  findings: [API-03, VAL-02]
+  scenarios: []
+- id: F-DOM-013
+  area: domain
+  title: 'Run a scene: delay and shortcut steps'
+  claim: docs/PHASE_8_SPEC.md scene step types
+  interfaces:
+    rest: ['POST /api/v2/scenes/{scene_id}/execute']
+  target: V3
+  current: V1
+  basis: tests/test_scene_execution.py (mocked).
+  evidence: []
+  findings: [API-01, API-08]
+  scenarios: []
+- id: F-DOM-014
+  area: domain
+  title: Scene overrides (per-run changes to a profile step)
+  claim: docs/PHASE_8_SPEC.md overrides
+  interfaces:
+    rest: ['PUT|DELETE /api/v2/scenes/{scene_id}/override']
+  target: V3
+  current: V1
+  basis: tests/test_scene_execution.py TestApplyOverridesToProfile; tests/test_scene_manager.py TestSceneManagerOverrides.
+  evidence: []
+  findings: [API-04]
+  scenarios: []
+- id: F-DOM-015
+  area: domain
+  title: Protect a scene with a passcode
+  claim: docs/PHASE_8_SPEC.md; DI-6
+  interfaces:
+    rest: ['POST /api/v2/scenes/{scene_id}/execute (passcode)']
+    ui: [editor/scene/passcode]
+  target: V3
+  current: V1
+  basis: tests/test_scene_execution.py TestSceneExecutorPassword; tests/test_scene_manager.py TestSceneManagerPassword.
+  evidence: []
+  findings: [SEC-05, SEC-06]
+  scenarios: []
+- id: F-DOM-016
+  area: domain
+  title: Validate a scene and detect conflicting steps
+  claim: POST /api/v2/scenes/{id}/validate
+  interfaces:
+    rest: ['POST /api/v2/scenes/{scene_id}/validate']
+    ui: [editor/scene/conflicts, editor/scene/validation-error]
+  target: V3
+  current: V1
+  basis: tests/test_scene_manager.py TestDetectConflicts.
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-DOM-017
+  area: domain
+  title: Scene execution history
+  claim: GET /api/v2/scenes/{id}/history
+  interfaces:
+    rest: ['GET /api/v2/scenes/{scene_id}/history']
+  target: V3
+  current: V1
+  basis: tests/test_scene_manager.py (history API of the manager).
+  evidence: []
+  findings: [API-02]
+  scenarios: []
+- id: F-DOM-018
+  area: domain
+  title: Legacy 'scenes' (v1) as aliases of profiles
+  claim: README "Backward compatible with legacy Scenes terminology"
+  interfaces:
+    rest: [GET /api/scenes, 'POST /api/scene/{scene_id}/recall']
+  target: V2
+  current: V1
+  basis: tests/test_rest_api.py TestSceneControl, TestSceneRecallValidation (mocked).
+  evidence: []
+  findings: [API-12, API-23]
+  scenarios: []
+  target_note: 'DI-1: deprecated aliases, kept for one release; contract-level proof is enough'
+- id: F-DOM-019
+  area: domain
+  title: Create, edit, delete and validate CEC macros
+  claim: 'README "CEC Macro System: custom multi-step sequences"'
+  interfaces:
+    rest: [POST /api/cec/macro, 'PUT /api/cec/macro/{macro_id}', 'DELETE /api/cec/macro/{macro_id}']
+    ui: [editor/cec-macro/edit, editor/cec-macro/validation-error]
+    files: [cec_macros.json]
+  target: V3
+  current: V1
+  basis: tests/test_cec_macros.py; tests/test_macro_validation.py; tests/test_rest_api.py TestMacroAPI (mocked).
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-DOM-020
+  area: domain
+  title: Run a CEC macro (steps, targets, delays)
+  claim: README "CEC Macro System"
+  interfaces:
+    rest: ['POST /api/cec/macro/{macro_id}/execute']
+    ui: [editor/cec-macro/list]
+    flic: ['POST /api/cec/macro/{id}/execute']
+  target: V4
+  current: V1
+  basis: tests/test_cec_macros.py TestMacroExecution (fake sender).
+  evidence: []
+  findings: [VAL-02, BE-02]
+  scenarios: []
+- id: F-DOM-021
+  area: domain
+  title: Test / dry-run a macro
+  claim: README "Test/dry-run capabilities via API"
+  interfaces:
+    rest: ['POST /api/cec/macro/{macro_id}/test']
+  target: V3
+  current: V1
+  basis: tests/test_rest_api.py TestMacroAPI test (mocked).
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-DOM-022
+  area: domain
+  title: Favourite macros and show them on the dashboard
+  claim: web UI dashboard macro cards
+  interfaces:
+    rest: ['POST /api/cec/macro/{macro_id}/favorite', 'POST /api/cec/macro/{macro_id}/dashboard', GET /api/cec/macros/favorites]
+  target: V3
+  current: V1
+  basis: tests/test_rest_api.py TestMacroFavoriteDashboardAPI (mocked).
+  evidence: []
+  findings: [API-20]
+  scenarios: []
+- id: F-DOM-023
+  area: domain
+  title: 'Built-in shortcuts: route all to an output, one-to-one routing'
+  claim: src/system_shortcuts.py built-ins
+  interfaces: &id003
+    rest: ['POST /api/system-shortcuts/{key}/execute']
+    ui: [drawer/shortcuts/default]
+    kiosk: [kiosk/shortcuts/default]
+  target: V3
+  current: V1
+  basis: tests/test_system_shortcuts.py TestExecuteShortcut (mocked matrix).
+  evidence: []
+  findings: [API-01]
+  scenarios: []
+- id: F-DOM-024
+  area: domain
+  title: 'Built-in shortcut: power everything off'
+  claim: src/system_shortcuts.py power_off_all
+  interfaces: *id003
+  target: V3
+  current: V1
+  basis: tests/test_system_shortcuts.py (mocked).
+  evidence: []
+  findings: [API-06]
+  scenarios: []
+- id: F-DOM-025
+  area: domain
+  title: 'Built-in shortcuts: mute / unmute all outputs'
+  claim: src/system_shortcuts.py mute_all_audio
+  interfaces: *id003
+  target: V3
+  current: V1
+  basis: tests/test_system_shortcuts.py (mocked).
+  evidence: []
+  findings: [API-08]
+  scenarios: []
+- id: F-DOM-026
+  area: domain
+  title: 'Built-in shortcuts: recall preset 1-8'
+  claim: src/system_shortcuts.py preset_recall_N
+  interfaces: *id003
+  target: V3
+  current: V1
+  basis: tests/test_system_shortcuts.py (mocked).
+  evidence: []
+  findings: [API-08]
+  scenarios: []
+- id: F-DOM-027
+  area: domain
+  title: 'Built-in shortcuts: beep, panel lock, reboot'
+  claim: src/system_shortcuts.py system actions
+  interfaces: *id003
+  target: V3
+  current: V1
+  basis: tests/test_system_shortcuts.py (mocked).
+  evidence: []
+  findings: [API-08]
+  scenarios: []
+- id: F-DOM-028
+  area: domain
+  title: 'Built-in shortcuts: LCD timeout'
+  claim: src/system_shortcuts.py lcd_timeout_*
+  interfaces: *id003
+  target: V3
+  current: V1
+  basis: tests/test_system_shortcuts.py (mocked).
+  evidence: []
+  findings: [API-07]
+  scenarios: []
+- id: F-DOM-029
+  area: domain
+  title: Create, rename, reorder and delete user shortcuts
+  claim: web UI Shortcuts drawer; DI-3
+  interfaces:
+    rest: [POST /api/system-shortcuts, 'PUT /api/system-shortcuts/{key}', PUT /api/system-shortcuts/reorder, 'DELETE /api/system-shortcuts/{key}']
+    ui: [drawer/shortcuts/rename]
+    kiosk: [kiosk/slot-mapper/shortcut]
+  target: V3
+  current: V1
+  basis: tests/test_system_shortcuts.py TestSystemShortcutManager; tests/test_rest_api.py TestSystemShortcutsAPI (mocked).
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-DOM-030
+  area: domain
+  title: Favourite shortcuts and show them on the dashboard
+  claim: web UI dashboard shortcut cards
+  interfaces:
+    rest: ['POST /api/system-shortcuts/{key}/favorite', 'POST /api/system-shortcuts/{key}/dashboard']
+  target: V3
+  current: V1
+  basis: tests/test_rest_api.py TestSystemShortcutsAPI (mocked).
+  evidence: []
+  findings: [API-20]
+  scenarios: []
+- id: F-DOM-031
+  area: domain
+  title: Dashboard layout (add, remove, reorder cards)
+  claim: docs/PHASE_8_SPEC.md dashboard layout; DI-5
+  interfaces:
+    rest: [GET|PUT /api/dashboard/layout, POST|DELETE /api/dashboard/cards]
+    ui: [dashboard/cards/all-types, dashboard/card-picker/profiles]
+    files: [dashboard_layout.json]
+  target: V3
+  current: V1
+  basis: tests/test_dashboard_layout.py; tests/test_rest_api.py TestDashboardLayoutAPI (mocked).
+  evidence: []
+  findings: [API-20, UI-08]
+  scenarios: []
+- id: F-DOM-032
+  area: domain
+  title: Input/output icons, colours and display names (device settings)
+  claim: web UI input/output settings modals
+  interfaces:
+    rest: ['GET|POST /api/device-settings/input/{input}', 'GET|POST /api/device-settings/output/{output}', POST /api/device-settings]
+    ws: [device_settings, device_settings_full]
+    ui: [modal/input-settings/icon-suggestion, modal/icon-picker/default]
+    files: [device_settings.json]
+  target: V3
+  current: V0
+  basis: No test exercises the input/output device-settings routes or their storage.
+  evidence: []
+  findings: [BE-16, UI-22]
+  scenarios: []
+- id: F-DOM-033
+  area: domain
+  title: Favourite presets and choose which presets the dashboard shows
+  claim: web UI presets drawer; kiosk presets
+  interfaces:
+    rest: [PUT /api/device-settings/favorite-presets, 'POST /api/device-settings/favorite-presets/{preset}/toggle', PUT /api/device-settings/dashboard-presets,
+      'POST /api/device-settings/dashboard-presets/{preset}/toggle']
+  target: V3
+  current: V1
+  basis: tests/test_device_settings_presets.py.
+  evidence: []
+  findings: [UC-14]
+  scenarios: []
+- id: F-DOM-034
+  area: domain
+  title: Save a custom routing mapping into a preset
+  claim: web UI presets drawer 'Save Mapping'; DI-4
+  interfaces:
+    rest: ['POST /api/preset/{preset}/save {routing}']
+    ui: [drawer/presets/expanded]
+  target: V3
+  current: V1
+  basis: tests/test_rest_api.py TestControlEndpoints preset save (mocked).
+  evidence: []
+  findings: [API-14]
+  scenarios: []
+- id: F-DOM-035
+  area: domain
+  title: Theme presets and custom themes
+  claim: web UI theme drawer; docs/ui/LOOK_AND_FEEL.md
+  interfaces:
+    rest: [GET|PUT /api/themes, POST /api/themes/reset]
+    ui: [drawer/theme/default, drawer/theme/customize]
+  target: V3
+  current: V1
+  basis: tests/test_rest_themes_ui.py TestThemesHandlers.
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-DOM-036
+  area: domain
+  title: UI preferences stored on the hub
+  claim: GET/PUT /api/ui/preferences
+  interfaces:
+    rest: [GET|PUT /api/ui/preferences]
+    ui: [drawer/interface/default]
+    files: [ui_preferences.json]
+  target: V3
+  current: V1
+  basis: tests/test_rest_themes_ui.py TestUiPreferencesHandlers.
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-UI-001
+  area: ui
+  title: Open the web UI; the header shows the matrix connection
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [app/header/disconnected, app/header/reconnecting]
+  target: V3
+  current: V3
+  basis: 'V3: tests/e2e/smoke.spec.ts ''/ui loads without page errors, connects the WebSocket'' (header class connected, 64
+    grid cells).'
+  evidence: []
+  findings: [UI-29]
+  scenarios: []
+- id: F-UI-002
+  area: ui
+  title: Route by clicking a cell in the matrix grid
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [matrix/grid/default, matrix/grid/route-pending]
+  target: V3
+  current: V3
+  basis: 'V3: tests/e2e/smoke.spec.ts ''routing an input to an output in the matrix grid changes the simulator''.'
+  evidence: []
+  findings: []
+  scenarios: [routing.switch_one]
+- id: F-UI-003
+  area: ui
+  title: Route from the matrix card view (routing sheet)
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [matrix/cards/default, matrix/cards/routing-sheet]
+  target: V3
+  current: V1
+  basis: visual catalog matrix/cards/* (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-UI-004
+  area: ui
+  title: Route one input to every output from the Route To All drawer
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [drawer/routing/default, drawer/routing/routing-in-progress]
+  target: V3
+  current: V1
+  basis: visual catalog drawer/routing/* (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: []
+  scenarios: [routing.route_all]
+- id: F-UI-005
+  area: ui
+  title: Recall a preset from the Presets drawer
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [drawer/presets/default, drawer/presets/expanded, drawer/presets/active]
+  target: V3
+  current: V1
+  basis: visual catalog drawer/presets/* (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: []
+  scenarios: [presets.recall]
+- id: F-UI-006
+  area: ui
+  title: Rename a preset in the Presets drawer
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [drawer/presets/rename]
+  target: V3
+  current: V1
+  basis: visual catalog drawer/presets/rename (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: []
+  scenarios: [presets.rename]
+- id: F-UI-007
+  area: ui
+  title: Overwrite a preset / save a custom mapping from the Presets drawer
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [drawer/presets/expanded]
+  target: V3
+  current: V1
+  basis: visual catalog drawer/presets/expanded (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: [API-14]
+  scenarios: []
+- id: F-UI-008
+  area: ui
+  title: Run profiles, scenes, presets, shortcuts and macros from dashboard cards
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [dashboard/default, dashboard/cards/all-types]
+  target: V3
+  current: V1
+  basis: visual catalog dashboard/* (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: [UI-01, UI-27]
+  scenarios: []
+- id: F-UI-009
+  area: ui
+  title: Customise the dashboard (card picker, pin, reorder)
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [dashboard/card-picker/profiles, dashboard/cards/empty]
+  target: V3
+  current: V1
+  basis: visual catalog dashboard/card-picker/* (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: [UI-08, API-20]
+  scenarios: []
+- id: F-UI-010
+  area: ui
+  title: 'Inputs tab: signal/cable status and input settings (name, icon, EDID)'
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [inputs/list/default, modal/input-settings/default, modal/icon-picker/default]
+  target: V3
+  current: V1
+  basis: visual catalog inputs/* (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: [BE-03]
+  scenarios: []
+- id: F-UI-011
+  area: ui
+  title: 'Outputs tab: display status and output settings (HDCP, HDR, scaler, ARC, mute)'
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [outputs/list/default, modal/output-settings/default]
+  target: V3
+  current: V1
+  basis: visual catalog outputs/* (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: [BE-03]
+  scenarios: []
+- id: F-UI-012
+  area: ui
+  title: Profiles tab and profile manager
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [profiles/list/populated, profiles/manager/populated]
+  target: V3
+  current: V1
+  basis: visual catalog profiles/* (screenshot baseline only; no effect asserted); the tab never loads profiles (catalog note).
+  evidence: []
+  findings: [UI-27]
+  scenarios: []
+- id: F-UI-013
+  area: ui
+  title: Create and edit a profile in the profile editor
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [editor/profile/new, editor/profile/edit]
+  target: V3
+  current: V1
+  basis: visual catalog editor/profile/* (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-UI-014
+  area: ui
+  title: Run a passcode-protected profile (passcode prompt)
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [dialog/passcode-prompt]
+  target: V3
+  current: V1
+  basis: visual catalog dialog/passcode-prompt (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: [UI-01, UI-36]
+  scenarios: []
+- id: F-UI-015
+  area: ui
+  title: Build a scene in the scene editor
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [editor/scene/new, editor/scene/edit, editor/scene/conflicts]
+  target: V3
+  current: V1
+  basis: visual catalog editor/scene/* (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: [UI-26, UI-19]
+  scenarios: []
+- id: F-UI-016
+  area: ui
+  title: Build a CEC macro in the macro editor
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [editor/cec-macro/list, editor/cec-macro/edit]
+  target: V3
+  current: V1
+  basis: visual catalog editor/cec-macro/* (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-UI-017
+  area: ui
+  title: CEC remote on output/input tiles and the CEC tray
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [cec-remote/output-1, cec-remote/input-2, cec-tray/expanded, cec-tray/fab]
+  target: V3
+  current: V1
+  basis: visual catalog cec-remote/*, cec-tray/* (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: [UI-28, UI-12, UI-17]
+  scenarios: []
+- id: F-UI-018
+  area: ui
+  title: Theme presets, customisation and card opacity
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [drawer/theme/default, drawer/theme/customize, drawer/theme/low-opacity]
+  target: V3
+  current: V1
+  basis: visual catalog drawer/theme/* (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: [UI-31]
+  scenarios: []
+- id: F-UI-019
+  area: ui
+  title: 'General settings: matrix host and connection test'
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [drawer/general/default, drawer/general/connection-error]
+  target: V3
+  current: V1
+  basis: visual catalog drawer/general/* (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: [SEC-03, UI-05]
+  scenarios: []
+- id: F-UI-020
+  area: ui
+  title: 'Hardware settings: beep, panel lock, LCD, reboot'
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [drawer/hardware/default]
+  target: V3
+  current: V1
+  basis: visual catalog drawer/hardware/default (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: [UI-05, UI-30]
+  scenarios: []
+- id: F-UI-021
+  area: ui
+  title: Interface settings
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [drawer/interface/default]
+  target: V3
+  current: V1
+  basis: visual catalog drawer/interface/default (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: [UI-05]
+  scenarios: []
+- id: F-UI-022
+  area: ui
+  title: 'Shortcuts drawer: run, rename, reorder'
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [drawer/shortcuts/default, drawer/shortcuts/rename]
+  target: V3
+  current: V1
+  basis: visual catalog drawer/shortcuts/* (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-UI-023
+  area: ui
+  title: Integrations drawer (Flic request builder, HA YAML, Remote 3 info)
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [drawer/integrations/flic, drawer/integrations/home-assistant, drawer/integrations/unfolded-circle]
+  target: V3
+  current: V1
+  basis: visual catalog drawer/integrations/* (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: [SEC-08]
+  scenarios: []
+- id: F-UI-024
+  area: ui
+  title: Live updates when another client or the matrix changes something
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [app/ws-status-refresh/output-names]
+  target: V3
+  current: V1
+  basis: visual catalog app/ws-status-refresh/output-names captures the name-reset bug (screenshot baseline only; no effect
+    asserted).
+  evidence: []
+  findings: [UI-02, BE-31, UC-17, VAL-05]
+  scenarios: [routing.grid_notifies_other_clients]
+- id: F-UI-025
+  area: ui
+  title: Reconnect and resync after the WebSocket drops
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [app/header/reconnecting]
+  target: V3
+  current: V1
+  basis: visual catalog app/header/reconnecting (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: [UI-03]
+  scenarios: []
+- id: F-UI-026
+  area: ui
+  title: Show an error state when the matrix is unreachable
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [app/matrix-unreachable, matrix/grid/status-pending]
+  target: V3
+  current: V1
+  basis: visual catalog app/matrix-unreachable (screenshot baseline only; no effect asserted); the catalog notes fabricated
+    routing and names.
+  evidence: []
+  findings: [UI-29, VAL-04]
+  scenarios: []
+- id: F-UI-027
+  area: ui
+  title: Toasts and confirmation dialogs
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [toast/success, toast/stacked, dialog/confirm/default]
+  target: V3
+  current: V1
+  basis: visual catalog toast/*, dialog/confirm/* (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: [UI-32]
+  scenarios: []
+- id: F-UI-028
+  area: ui
+  title: Keyboard shortcuts
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [dialog/keyboard-shortcuts]
+  target: V3
+  current: V1
+  basis: visual catalog dialog/keyboard-shortcuts (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: [UI-06]
+  scenarios: []
+- id: F-UI-029
+  area: ui
+  title: Accessibility (keyboard, focus, ARIA, contrast, zoom)
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [deck/default]
+  target: V3
+  current: V1
+  basis: tests/e2e/smoke.spec.ts runs axe on /ui report-only (violations recorded, not asserted).
+  evidence: []
+  findings: [UI-07, UI-35]
+  scenarios: []
+- id: F-UI-030
+  area: ui
+  title: Debug panel
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [debug/fab, debug/panel/state]
+  target: V3
+  current: V1
+  basis: visual catalog debug/* (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-UI-031
+  area: ui
+  title: About dialog
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [dialog/about/default]
+  target: V3
+  current: V1
+  basis: visual catalog dialog/about/default (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: [UI-30]
+  scenarios: []
+- id: F-UI-032
+  area: ui
+  title: Animated Tron background (opt-in)
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [deck/default]
+  target: V3
+  current: V1
+  basis: visual catalog paused Tron frame (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: [UI-16]
+  scenarios: []
+- id: F-UI-033
+  area: ui
+  title: Tablet and phone layouts
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [matrix/grid/default]
+  target: V3
+  current: V1
+  basis: visual catalog tablet and phone viewports (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: [UI-33]
+  scenarios: []
+- id: F-UI-034
+  area: ui
+  title: Personalise tabs in the Control Deck (pin, reorder)
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [deck/personalize-tabs]
+  target: V3
+  current: V1
+  basis: visual catalog deck/personalize-tabs (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-UI-035
+  area: ui
+  title: Copy an API endpoint for automation (API button / modal)
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [profiles/api-endpoint-modal]
+  target: V3
+  current: V1
+  basis: visual catalog profiles/api-endpoint-modal (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: [UI-18, UI-28]
+  scenarios: []
+- id: F-UI-036
+  area: ui
+  title: First-run setup wizard (matrix connection)
+  claim: web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+  interfaces:
+    ui: [dialog/setup-wizard/connection, dialog/setup-wizard/testing]
+  target: V3
+  current: V1
+  basis: visual catalog dialog/setup-wizard/* (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: [UI-09]
+  scenarios: []
+- id: F-KIO-001
+  area: kiosk
+  title: Open the kiosk; it shows the matrix connection
+  claim: web/kiosk.html; docs/REMEDIATION_PLAN.md D7
+  interfaces:
+    kiosk: [kiosk/routing/default, kiosk/disconnected]
+  target: V3
+  current: V3
+  basis: 'V3: tests/e2e/smoke.spec.ts ''/kiosk loads without page errors, connects the WebSocket'' (status dot connected,
+    8 output tiles).'
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-KIO-002
+  area: kiosk
+  title: Route a source to one display with the routing wizard
+  claim: web/kiosk.html; docs/REMEDIATION_PLAN.md D7
+  interfaces:
+    kiosk: [kiosk/routing-modal/step-1, kiosk/routing-modal/step-2, kiosk/routing-modal/advanced]
+  target: V3
+  current: V1
+  basis: visual catalog kiosk/routing-modal/* (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: [UI-25, UI-23]
+  scenarios: []
+- id: F-KIO-003
+  area: kiosk
+  title: Route a source to every display from the kiosk
+  claim: web/kiosk.html; docs/REMEDIATION_PLAN.md D7
+  interfaces:
+    kiosk: [kiosk/routing/all-to-one]
+  target: V3
+  current: V1
+  basis: tests/e2e/smoke.spec.ts 'routing an input to all outputs from the kiosk' asserts the routing, but Apply also mutes
+    every output and turns ARC on (UI-23, annotated as a known bug) -> capped at V1.
+  evidence: []
+  findings: [UI-23]
+  scenarios: []
+- id: F-KIO-004
+  area: kiosk
+  title: Input and output status tiles
+  claim: web/kiosk.html; docs/REMEDIATION_PLAN.md D7
+  interfaces:
+    kiosk: [kiosk/routing/default]
+  target: V3
+  current: V1
+  basis: visual catalog kiosk/routing/default (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: [UI-24]
+  scenarios: []
+- id: F-KIO-005
+  area: kiosk
+  title: Recall a preset from the kiosk
+  claim: web/kiosk.html; docs/REMEDIATION_PLAN.md D7
+  interfaces:
+    kiosk: [kiosk/presets/default]
+  target: V3
+  current: V1
+  basis: visual catalog kiosk/presets/default (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-KIO-006
+  area: kiosk
+  title: Configure which presets the kiosk shows (edit mode)
+  claim: web/kiosk.html; docs/REMEDIATION_PLAN.md D7
+  interfaces:
+    kiosk: [kiosk/presets/edit-mode, kiosk/preset-config]
+  target: V3
+  current: V1
+  basis: visual catalog kiosk/presets/edit-mode (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: [UI-08]
+  scenarios: []
+- id: F-KIO-007
+  area: kiosk
+  title: Run shortcuts from the kiosk and map them to slots
+  claim: web/kiosk.html; docs/REMEDIATION_PLAN.md D7
+  interfaces:
+    kiosk: [kiosk/shortcuts/default, kiosk/slot-mapper/shortcut]
+  target: V3
+  current: V1
+  basis: visual catalog kiosk/shortcuts/* (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-KIO-008
+  area: kiosk
+  title: Run profiles from the kiosk; create one with the profile wizard
+  claim: web/kiosk.html; docs/REMEDIATION_PLAN.md D7
+  interfaces:
+    kiosk: [kiosk/profiles/default, kiosk/profile-wizard/step-1]
+  target: V3
+  current: V1
+  basis: visual catalog kiosk/profiles/* (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: [UI-25]
+  scenarios: []
+- id: F-KIO-009
+  area: kiosk
+  title: CEC remote in the kiosk
+  claim: web/kiosk.html; docs/REMEDIATION_PLAN.md D7
+  interfaces:
+    kiosk: [kiosk/cec-remote/output-1, kiosk/cec-remote/display-target]
+  target: V3
+  current: V1
+  basis: visual catalog kiosk/cec-remote/* (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-KIO-010
+  area: kiosk
+  title: Kiosk live updates
+  claim: web/kiosk.html; docs/REMEDIATION_PLAN.md D7
+  interfaces:
+    kiosk: [kiosk/routing/default]
+  target: V3
+  current: V1
+  basis: No test; kiosk ignores switch/switch_all (UI-02).
+  evidence: []
+  findings: [UI-02, UC-17]
+  scenarios: []
+- id: F-KIO-011
+  area: kiosk
+  title: Kiosk disconnected state
+  claim: web/kiosk.html; docs/REMEDIATION_PLAN.md D7
+  interfaces:
+    kiosk: [kiosk/disconnected]
+  target: V3
+  current: V1
+  basis: visual catalog kiosk/disconnected (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: [UI-29]
+  scenarios: []
+- id: F-KIO-012
+  area: kiosk
+  title: Kiosk layout and pins persist
+  claim: web/kiosk.html; docs/REMEDIATION_PLAN.md D7
+  interfaces:
+    kiosk: [kiosk/routing/edit-mode]
+  target: V3
+  current: V1
+  basis: visual catalog kiosk/*/edit-mode (screenshot baseline only; no effect asserted); pins live in browser localStorage
+    only.
+  evidence: []
+  findings: [UI-08]
+  scenarios: []
+- id: F-KIO-013
+  area: kiosk
+  title: Kiosk follows the selected theme
+  claim: web/kiosk.html; docs/REMEDIATION_PLAN.md D7
+  interfaces:
+    kiosk: [kiosk/routing/default]
+  target: V3
+  current: V1
+  basis: visual catalog themed kiosk captures (screenshot baseline only; no effect asserted).
+  evidence: []
+  findings: [UI-34]
+  scenarios: []
+- id: F-KIO-014
+  area: kiosk
+  title: Kiosk touch accessibility (targets, ARIA, contrast)
+  claim: web/kiosk.html; docs/REMEDIATION_PLAN.md D7
+  interfaces:
+    kiosk: [kiosk/routing/tile-pressed]
+  target: V3
+  current: V1
+  basis: tests/e2e/smoke.spec.ts runs axe on /kiosk report-only.
+  evidence: []
+  findings: [UI-07, UI-35]
+  scenarios: []
+- id: F-UC-001
+  area: uc
+  title: Discover the integration and register the driver (mDNS, driver URL)
+  claim: README "Fast reconnection via static driver URL"; docs/UNFOLDED_CIRCLE_INTEGRATION_GUIDE.md
+  interfaces:
+    uc: [mDNS _uc-integration._tcp, driver.json]
+    env: [UC_ENABLED, UC_INTEGRATION_INTERFACE]
+  target: V4
+  current: V0
+  basis: No automated test drives the integration as a Remote would (UC-21); no scripted Remote yet.
+  evidence: []
+  findings: [UC-03, UC-11, UC-16]
+  scenarios: []
+- id: F-UC-002
+  area: uc
+  title: Set up the integration on the Remote
+  claim: docs/UNFOLDED_CIRCLE_INTEGRATION_GUIDE.md setup flow
+  interfaces:
+    uc: [setup_driver, driver_setup_change]
+  target: V4
+  current: V0
+  basis: No automated test drives the integration as a Remote would (UC-21); no scripted Remote yet.
+  evidence: []
+  findings: [BE-02, UC-05, UC-02]
+  scenarios: []
+- id: F-UC-003
+  area: uc
+  title: Reconfigure the integration (new matrix address)
+  claim: docs/UNFOLDED_CIRCLE_INTEGRATION_GUIDE.md reconfigure
+  interfaces:
+    uc: [setup_driver (reconfigure)]
+  target: V4
+  current: V0
+  basis: No automated test drives the integration as a Remote would (UC-21); no scripted Remote yet.
+  evidence: []
+  findings: [UC-05, BE-10]
+  scenarios: []
+- id: F-UC-004
+  area: uc
+  title: Preset buttons on the Remote
+  claim: README "8 preset buttons with dynamic names from matrix"
+  interfaces:
+    uc: [button.preset_1..8 press]
+  target: V4
+  current: V0
+  basis: No automated test drives the integration as a Remote would (UC-21); no scripted Remote yet.
+  evidence: []
+  findings: [UC-14]
+  scenarios: []
+- id: F-UC-005
+  area: uc
+  title: Matrix remote entity with a preset page
+  claim: README "Matrix remote entity with preset selection UI"
+  interfaces:
+    uc: [remote.orei_matrix send_cmd PRESET_N, remote.orei_matrix on/off]
+  target: V4
+  current: V0
+  basis: No automated test drives the integration as a Remote would (UC-21); no scripted Remote yet.
+  evidence: []
+  findings: [UC-12]
+  scenarios: []
+- id: F-UC-006
+  area: uc
+  title: Per-input CEC remotes (source power, navigation, playback)
+  claim: README "Per-input CEC remote entities"; "CEC control for all 8 inputs"
+  interfaces:
+    uc: [remote.input_N_cec send_cmd, remote.input_N_cec on/off, send_cmd_sequence]
+  target: V4
+  current: V1
+  basis: tests/test_driver.py TestCecCommandResolution (command-name mapping only).
+  evidence: []
+  findings: [UC-01, UC-12]
+  scenarios: []
+- id: F-UC-007
+  area: uc
+  title: Per-output CEC remotes (TV power, volume)
+  claim: src/driver.py remote.output_N_cec
+  interfaces:
+    uc: [remote.output_N_cec send_cmd, remote.output_N_cec on/off]
+  target: V4
+  current: V1
+  basis: tests/test_driver.py TestCecCommandResolution (command-name mapping only).
+  evidence: []
+  findings: [UC-01, BE-14]
+  scenarios: []
+- id: F-UC-008
+  area: uc
+  title: Choose an output's source from the Remote (media player source list)
+  claim: docs/audits/UC_INTEGRATION_AUDIT.md §3 media_player.output_N
+  interfaces:
+    uc: [media_player.output_N select_source]
+  target: V4
+  current: V0
+  basis: No automated test drives the integration as a Remote would (UC-21); no scripted Remote yet.
+  evidence: []
+  findings: [UC-08, UC-10]
+  scenarios: []
+- id: F-UC-009
+  area: uc
+  title: TV power / volume / mute from the output media player
+  claim: docs/audits/UC_INTEGRATION_AUDIT.md §3
+  interfaces:
+    uc: [media_player.output_N on/off/toggle/volume/mute]
+  target: V4
+  current: V0
+  basis: No automated test drives the integration as a Remote would (UC-21); no scripted Remote yet.
+  evidence: []
+  findings: [UC-10, BE-24]
+  scenarios: []
+- id: F-UC-010
+  area: uc
+  title: Matrix power switch on the Remote
+  claim: src/driver.py switch.matrix_power
+  interfaces:
+    uc: [switch.matrix_power on/off/toggle]
+  target: V4
+  current: V0
+  basis: No automated test drives the integration as a Remote would (UC-21); no scripted Remote yet.
+  evidence: []
+  findings: [UC-09]
+  scenarios: []
+- id: F-UC-011
+  area: uc
+  title: Input signal and cable sensors
+  claim: docs/audits/UC_INTEGRATION_AUDIT.md §3 sensor.input_N_*
+  interfaces:
+    uc: [sensor.input_N_signal, sensor.input_N_cable]
+  target: V4
+  current: V0
+  basis: No automated test drives the integration as a Remote would (UC-21); no scripted Remote yet.
+  evidence: []
+  findings: [UC-04, UC-13, BE-03]
+  scenarios: []
+- id: F-UC-012
+  area: uc
+  title: Output connected, cable and source sensors
+  claim: docs/audits/UC_INTEGRATION_AUDIT.md §3 sensor.output_N_*
+  interfaces:
+    uc: [sensor.output_N_connected, sensor.output_N_cable, sensor.output_N_source]
+  target: V4
+  current: V0
+  basis: No automated test drives the integration as a Remote would (UC-21); no scripted Remote yet.
+  evidence: []
+  findings: [UC-04, UC-13]
+  scenarios: []
+- id: F-UC-013
+  area: uc
+  title: Entities go unavailable while the matrix is unreachable
+  claim: docs/audits/UC_INTEGRATION_AUDIT.md §9 item 7
+  interfaces:
+    uc: [entity state UNAVAILABLE, device state]
+  target: V4
+  current: V0
+  basis: No automated test drives the integration as a Remote would (UC-21); no scripted Remote yet.
+  evidence: []
+  findings: [UC-04]
+  scenarios: []
+- id: F-UC-014
+  area: uc
+  title: Remote standby and wake
+  claim: docs/audits/UC_INTEGRATION_AUDIT.md §9 item 9
+  interfaces:
+    uc: [enter_standby, exit_standby]
+  target: V4
+  current: V0
+  basis: No automated test drives the integration as a Remote would (UC-21); no scripted Remote yet.
+  evidence: []
+  findings: [UC-06, UC-17, BE-09]
+  scenarios: []
+- id: F-UC-015
+  area: uc
+  title: Only changed attributes are sent to the Remote
+  claim: docs/audits/UC_INTEGRATION_AUDIT.md UC-07
+  interfaces:
+    uc: [entity_change events]
+  target: V4
+  current: V0
+  basis: No automated test drives the integration as a Remote would (UC-21); no scripted Remote yet.
+  evidence: []
+  findings: [UC-07]
+  scenarios: []
+- id: F-UC-016
+  area: uc
+  title: Renamed inputs/outputs show up on the Remote
+  claim: docs/audits/UC_INTEGRATION_AUDIT.md §9 item 5
+  interfaces:
+    uc: [media_player source_list, entity names]
+  target: V4
+  current: V0
+  basis: No automated test drives the integration as a Remote would (UC-21); no scripted Remote yet.
+  evidence: []
+  findings: [UC-08, BE-16]
+  scenarios: []
+- id: F-UC-017
+  area: uc
+  title: Restore the configuration at startup (also with the matrix offline)
+  claim: src/driver.py restore_from_config
+  interfaces:
+    uc: [driver restart]
+    files: [config.json (UC_CONFIG_HOME)]
+  target: V4
+  current: V1
+  basis: tests/test_driver.py TestConfigPersistence.
+  evidence: []
+  findings: [UC-19]
+  scenarios: []
+- id: F-HA-001
+  area: ha
+  title: Add the hub in Home Assistant (config flow)
+  claim: README "UI-based config flow (setup via IP address & port)"
+  interfaces:
+    ha: [config flow user step]
+  target: V4
+  current: V1
+  basis: tests/ha/test_config_flow.py (real hass fixture, aioclient_mock).
+  evidence: []
+  findings: [HA-05, HA-11]
+  scenarios: []
+- id: F-HA-002
+  area: ha
+  title: Choose each output's source (select entities)
+  claim: README "Output source routing select entities"
+  interfaces:
+    ha: [select.output_N_source]
+  target: V4
+  current: V0
+  basis: 'tests/ha (test_select.py::test_select_option_routes_input) is a strict xfail on HA-01/HA-02: the test proves the
+    write is broken. Tests use aioclient_mock (V1 at best).'
+  evidence: []
+  findings: [HA-01, HA-02]
+  scenarios: []
+- id: F-HA-003
+  area: ha
+  title: Matrix power switch
+  claim: README "Switch controls for matrix power"
+  interfaces:
+    ha: [switch.matrix_power]
+  target: V4
+  current: V0
+  basis: 'tests/ha (test_switch.py) is a strict xfail on HA-03: the test proves the write is broken. Tests use aioclient_mock
+    (V1 at best).'
+  evidence: []
+  findings: [HA-01, HA-03]
+  scenarios: []
+- id: F-HA-004
+  area: ha
+  title: Output audio mute switches
+  claim: README "Switch controls for ... audio mute"
+  interfaces:
+    ha: [switch.output_N_mute]
+  target: V4
+  current: V0
+  basis: tests/ha/test_switch.py writes fail on HA-01 (hass.helpers.aiohttp_client removed).
+  evidence: []
+  findings: [HA-01]
+  scenarios: []
+- id: F-HA-005
+  area: ha
+  title: Output stream enable switches
+  claim: README "Switch controls for ... output stream enable/disable"
+  interfaces:
+    ha: [switch.output_N_stream]
+  target: V4
+  current: V0
+  basis: tests/ha/test_switch.py writes fail on HA-01.
+  evidence: []
+  findings: [HA-01]
+  scenarios: []
+- id: F-HA-006
+  area: ha
+  title: Preset buttons
+  claim: README "Button controls to recall presets 1-8"
+  interfaces:
+    ha: [button.preset_N]
+  target: V4
+  current: V0
+  basis: 'tests/ha (test_button.py) is a strict xfail on HA-01: the test proves the write is broken. Tests use aioclient_mock
+    (V1 at best).'
+  evidence: []
+  findings: [HA-01]
+  scenarios: []
+- id: F-HA-007
+  area: ha
+  title: Reboot button
+  claim: README "... and reboot the device"
+  interfaces:
+    ha: [button.reboot_matrix]
+  target: V4
+  current: V0
+  basis: 'tests/ha (test_button.py) is a strict xfail on HA-01: the test proves the write is broken. Tests use aioclient_mock
+    (V1 at best).'
+  evidence: []
+  findings: [HA-01]
+  scenarios: []
+- id: F-HA-008
+  area: ha
+  title: Input signal binary sensors
+  claim: README "Binary sensors for input active video signals"
+  interfaces:
+    ha: [binary_sensor.input_N_signal]
+  target: V4
+  current: V1
+  basis: tests/ha/test_binary_sensor.py (aioclient_mock).
+  evidence: []
+  findings: [HA-08]
+  scenarios: []
+- id: F-HA-009
+  area: ha
+  title: Output connected binary sensors
+  claim: README "... and output display connection status"
+  interfaces:
+    ha: [binary_sensor.output_N_connected]
+  target: V4
+  current: V1
+  basis: tests/ha/test_binary_sensor.py (aioclient_mock).
+  evidence: []
+  findings: [HA-08]
+  scenarios: []
+- id: F-HA-010
+  area: ha
+  title: Service hdmi_matrix.recall_preset
+  claim: README "Custom native service integrations (recall_preset ...)"
+  interfaces:
+    ha: [service hdmi_matrix.recall_preset]
+  target: V4
+  current: V0
+  basis: 'tests/ha (test_services.py::test_recall_preset) is a strict xfail on HA-01: the test proves the write is broken.
+    Tests use aioclient_mock (V1 at best).'
+  evidence: []
+  findings: [HA-01, HA-06]
+  scenarios: []
+- id: F-HA-011
+  area: ha
+  title: Service hdmi_matrix.switch_input
+  claim: README "... switch_input ..."
+  interfaces:
+    ha: [service hdmi_matrix.switch_input]
+  target: V4
+  current: V0
+  basis: 'tests/ha (test_services.py::test_switch_input) is a strict xfail on HA-01: the test proves the write is broken.
+    Tests use aioclient_mock (V1 at best).'
+  evidence: []
+  findings: [HA-01, HA-06]
+  scenarios: []
+- id: F-HA-012
+  area: ha
+  title: Service hdmi_matrix.send_cec_command
+  claim: README "... send_cec_command"
+  interfaces:
+    ha: [service hdmi_matrix.send_cec_command]
+  target: V4
+  current: V0
+  basis: 'tests/ha (test_services.py::test_send_cec_command) is a strict xfail on HA-01: the test proves the write is broken.
+    Tests use aioclient_mock (V1 at best).'
+  evidence: []
+  findings: [HA-01, HA-06, HA-12]
+  scenarios: []
+- id: F-HA-013
+  area: ha
+  title: Poll the hub; entities go unavailable when it is unreachable
+  claim: custom_components/hdmi_matrix/coordinator.py
+  interfaces:
+    ha: [DataUpdateCoordinator]
+  target: V4
+  current: V1
+  basis: tests/ha/test_init.py (aioclient_mock).
+  evidence: []
+  findings: [HA-08, HA-09]
+  scenarios: []
+- id: F-HA-014
+  area: ha
+  title: Install through HACS (custom repository)
+  claim: README "Home Assistant Custom HACS Component"
+  interfaces:
+    ha: [hacs.json, manifest.json, translations/en.json]
+  target: V4
+  current: V0
+  basis: CI hacs/hassfest jobs run non-blocking and fail today.
+  evidence: []
+  findings: [HA-14, HA-04, HA-13]
+  scenarios: []
+- id: F-HA-015
+  area: ha
+  title: Device and entity naming in Home Assistant
+  claim: custom_components/hdmi_matrix device_info
+  interfaces:
+    ha: [device registry entry]
+  target: V4
+  current: V1
+  basis: tests/ha (entity creation, aioclient_mock).
+  evidence: []
+  findings: [HA-10]
+  scenarios: []
+- id: F-FLIC-001
+  area: flic
+  title: Button click recalls a preset
+  claim: docs/FLIC_SETUP.md; README Flic Smart Button Integration
+  interfaces:
+    flic: ['POST http://hub:8080/api/preset/{n} (no body)']
+  target: V3
+  current: V1
+  basis: 'The same REST route has mocked tests only, or a sim test that is not a Flic request replay; no test replays the
+    Flic Hub''s request. Closest: tests/sim/test_sim_e2e.py::test_switch_all_and_preset (POST /api/preset/3, no body).'
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-FLIC-002
+  area: flic
+  title: Button hold powers the matrix off / on
+  claim: docs/FLIC_SETUP.md; README Flic Smart Button Integration
+  interfaces:
+    flic: [POST /api/power/off, POST /api/power/on]
+  target: V3
+  current: V1
+  basis: The same REST route has mocked tests only, or a sim test that is not a Flic request replay; no test replays the Flic
+    Hub's request.
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-FLIC-003
+  area: flic
+  title: Button powers a source on over CEC
+  claim: docs/FLIC_SETUP.md; README Flic Smart Button Integration
+  interfaces:
+    flic: ['POST /api/cec/input/{n}/power_on']
+  target: V3
+  current: V1
+  basis: The same REST route has mocked tests only, or a sim test that is not a Flic request replay; no test replays the Flic
+    Hub's request.
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-FLIC-004
+  area: flic
+  title: Flic Twist cycles an output through its inputs
+  claim: docs/FLIC_SETUP.md; README Flic Smart Button Integration
+  interfaces:
+    flic: ['POST /api/input/next?output=N', 'POST /api/input/previous?output=N']
+  target: V3
+  current: V1
+  basis: The same REST route has mocked tests only, or a sim test that is not a Flic request replay; no test replays the Flic
+    Hub's request.
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-FLIC-005
+  area: flic
+  title: Flic Twist controls TV volume and mute over CEC
+  claim: docs/FLIC_SETUP.md; README Flic Smart Button Integration
+  interfaces:
+    flic: ['POST /api/cec/output/{n}/volume_up', 'POST /api/cec/output/{n}/volume_down', 'POST /api/cec/output/{n}/mute']
+  target: V3
+  current: V1
+  basis: The same REST route has mocked tests only, or a sim test that is not a Flic request replay; no test replays the Flic
+    Hub's request.
+  evidence: []
+  findings: [BE-14, VAL-03]
+  scenarios: []
+- id: F-FLIC-006
+  area: flic
+  title: Button recalls a profile or runs a macro
+  claim: docs/FLIC_SETUP.md; README Flic Smart Button Integration
+  interfaces:
+    flic: ['POST /api/profile/{id}/recall', 'POST /api/cec/macro/{id}/execute']
+  target: V3
+  current: V1
+  basis: The same REST route has mocked tests only, or a sim test that is not a Flic request replay; no test replays the Flic
+    Hub's request.
+  evidence: []
+  findings: [VAL-02, API-08]
+  scenarios: []
+- id: F-FLIC-007
+  area: flic
+  title: Register Flic buttons with the hub (button registry)
+  claim: docs/FLIC_SETUP.md; README Flic Smart Button Integration
+  interfaces:
+    rest: [POST /api/integrations/flic/register, GET /api/integrations/flic/buttons]
+    files: [flic_buttons.json]
+  target: V3
+  current: V0
+  basis: Not exercised by any test.
+  evidence: []
+  findings: [PER-02, API-15]
+  scenarios: []
+- id: F-FLIC-008
+  area: flic
+  title: Button switches every output to input N (POST /api/input/{n})
+  claim: docs/FLIC_SETUP.md endpoint table
+  interfaces:
+    flic: ['POST /api/input/{n}']
+  target: V3
+  current: V0
+  basis: The documented route does not exist in src/rest_api/app.py (DOC-03).
+  evidence: []
+  findings: [DOC-03]
+  scenarios: []
+- id: F-FLIC-009
+  area: flic
+  title: Flic Hub SDK JavaScript module templates
+  claim: README "Pre-built Flic Hub SDK Javascript templates"; docs/FLIC_SETUP.md#flic-hub-sdk-integration
+  interfaces:
+    docs: [docs/FLIC_SETUP.md Flic Hub SDK section]
+  target: V3
+  current: V0
+  basis: Templates are documentation only; never executed.
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-FLIC-010
+  area: flic
+  title: Generate Flic request URLs in the web UI
+  claim: web UI integrations drawer
+  interfaces:
+    ui: [drawer/integrations/flic-generated-request, drawer/integrations/flic-cec]
+  target: V3
+  current: V1
+  basis: visual catalog drawer/integrations/flic-*(screenshot baseline only).
+  evidence: []
+  findings: [SEC-08]
+  scenarios: []
+- id: F-OPS-001
+  area: ops
+  title: Run the hub from the Docker image (full target)
+  claim: 'README "Docker Deployment: Containerized"'
+  interfaces:
+    files: [Dockerfile (full)]
+  target: V4
+  current: V0
+  basis: CI docker-build only builds the image; nothing starts it or checks it works.
+  evidence: []
+  findings: [DEP-09]
+  scenarios: []
+- id: F-OPS-002
+  area: ops
+  title: Run the API-only image
+  claim: README "API-only mode (no UC dependencies)"
+  interfaces:
+    files: [Dockerfile (api-only)]
+  target: V4
+  current: V0
+  basis: Built in CI, never started; cannot start (DEP-03).
+  evidence: []
+  findings: [DEP-03]
+  scenarios: []
+- id: F-OPS-003
+  area: ops
+  title: docker-compose quick start
+  claim: README Quick Start `docker-compose up -d`
+  interfaces:
+    files: [docker-compose.yml]
+  target: V4
+  current: V0
+  basis: No test; `docker-compose up` starts nothing (DEP-01).
+  evidence: []
+  findings: [DEP-01]
+  scenarios: []
+- id: F-OPS-004
+  area: ops
+  title: Remote 3 discovery works from Docker
+  claim: docs/DOCKER.md networking
+  interfaces:
+    files: [docker-compose.yml]
+    env: [UC_ENABLED]
+  target: V4
+  current: V0
+  basis: No test.
+  evidence: []
+  findings: [DEP-02, UC-11]
+  scenarios: []
+- id: F-OPS-005
+  area: ops
+  title: Container health check and auto-restart
+  claim: README "Health checks and auto-restart"
+  interfaces:
+    files: [Dockerfile HEALTHCHECK]
+    rest: [GET /api/health]
+  target: V4
+  current: V0
+  basis: HEALTHCHECK never exercised.
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-OPS-006
+  area: ops
+  title: Point the hub at the matrix (MATRIX_HOST / MATRIX_PORT)
+  claim: README Environment Variables
+  interfaces:
+    env: [MATRIX_HOST, MATRIX_PORT, OREI_HOST, OREI_PORT]
+  target: V4
+  current: V1
+  basis: Every sim/e2e run depends on it (tools/dev_stack.py), but no test asserts the configuration contract.
+  evidence: []
+  findings: [DEP-07, BE-26]
+  scenarios: []
+- id: F-OPS-007
+  area: ops
+  title: Choose the API port (API_PORT)
+  claim: README Environment Variables
+  interfaces:
+    env: [API_PORT, REST_API_PORT, OREI_API_PORT]
+  target: V4
+  current: V1
+  basis: Used by tools/dev_stack.py; not asserted.
+  evidence: []
+  findings: [DEP-07]
+  scenarios: []
+- id: F-OPS-008
+  area: ops
+  title: Matrix credentials (OREI_USER / OREI_PASSWORD)
+  claim: README Technical Details authentication
+  interfaces:
+    env: [OREI_USER, OREI_PASSWORD]
+  target: V4
+  current: V1
+  basis: tests/sim/test_sim_faults.py login tests use the default credentials only.
+  evidence: []
+  findings: [SEC-10]
+  scenarios: []
+- id: F-OPS-009
+  area: ops
+  title: Verify the matrix TLS certificate (OREI_VERIFY_SSL)
+  claim: README Environment Variables
+  interfaces:
+    env: [OREI_VERIFY_SSL]
+  target: V4
+  current: V0
+  basis: No test.
+  evidence: []
+  findings: [SEC-09]
+  scenarios: []
+- id: F-OPS-010
+  area: ops
+  title: Log level (LOG_LEVEL)
+  claim: README Environment Variables
+  interfaces:
+    env: [LOG_LEVEL]
+  target: V4
+  current: V0
+  basis: No test.
+  evidence: []
+  findings: [SEC-10]
+  scenarios: []
+- id: F-OPS-011
+  area: ops
+  title: Enable/disable integrations and the web UI (UC_ENABLED, WEBUI_ENABLED, USE_MODULAR)
+  claim: README Deployment Modes; D4
+  interfaces:
+    env: [UC_ENABLED, WEBUI_ENABLED, USE_MODULAR, REST_API_ENABLED]
+  target: V4
+  current: V0
+  basis: No test; WEBUI_ENABLED is a no-op (DEP-07).
+  evidence: []
+  findings: [DEP-07, BE-19, BE-20]
+  scenarios: []
+- id: F-OPS-012
+  area: ops
+  title: Background polling (POLLING_ENABLED / POLLING_INTERVAL)
+  claim: src/driver.py poller
+  interfaces:
+    env: [POLLING_ENABLED, POLLING_INTERVAL]
+  target: V4
+  current: V0
+  basis: No test of the poller (TST-03).
+  evidence: []
+  findings: [UC-17, BE-08, TST-03]
+  scenarios: []
+- id: F-OPS-013
+  area: ops
+  title: Telnet options (OREI_TELNET_PORT, OREI_USE_TELNET_CEC)
+  claim: README Technical Details
+  interfaces:
+    env: [OREI_TELNET_PORT, OREI_USE_TELNET_CEC]
+  target: V4
+  current: V1
+  basis: tests/sim/test_sim_hub.py Telnet tests set OREI_TELNET_PORT.
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-OPS-014
+  area: ops
+  title: Cache and retry tuning (OREI_STATUS_CACHE_TTL, OREI_CEC_CACHE_TTL, OREI_*RETR*)
+  claim: src/orei_matrix.py
+  interfaces:
+    env: [OREI_STATUS_CACHE_TTL, OREI_CEC_CACHE_TTL, OREI_MAX_RETRIES, OREI_RETRY_DELAY, OREI_MAX_RETRY_DELAY]
+  target: V4
+  current: V1
+  basis: tests/test_orei_matrix.py TestRetryLogic, TestStatusCaching.
+  evidence: []
+  findings: [BE-03]
+  scenarios: []
+- id: F-OPS-015
+  area: ops
+  title: Hub data persists across restarts (MATRIX_DATA_DIR)
+  claim: README "Persistent configuration across restarts"
+  interfaces:
+    env: [MATRIX_DATA_DIR, OREI_CONFIG_DIR, UC_CONFIG_HOME]
+    files: [profiles.json, cec_macros.json, scenes.json]
+  target: V4
+  current: V1
+  basis: tests/test_persistence.py TestPersistenceRoundTrip (in-process, no restart).
+  evidence: []
+  findings: [DEP-07]
+  scenarios: []
+- id: F-OPS-016
+  area: ops
+  title: Writes are atomic and safe under concurrency
+  claim: src/_file_io.py
+  interfaces:
+    files: [all hub JSON files]
+  target: V4
+  current: V1
+  basis: 'tests/test_atomic_writes.py (fails on Windows: TST-08).'
+  evidence: []
+  findings: [PER-01, PER-02, TST-08]
+  scenarios: []
+- id: F-OPS-017
+  area: ops
+  title: Migrate legacy data files (scenes -> profiles)
+  claim: src/persistence.py migrate_legacy_file
+  interfaces:
+    files: [scenes.json (v1), profiles.json]
+  target: V4
+  current: V1
+  basis: tests/test_persistence.py TestLegacyMigration; tests/test_error_paths.py TestProfileMigrationErrors.
+  evidence: []
+  findings: [PER-03, API-12, PER-04]
+  scenarios: []
+- id: F-OPS-018
+  area: ops
+  title: Only one hub instance runs (process lock)
+  claim: src/driver.py acquire_lock
+  interfaces:
+    files: [driver.lock]
+  target: V4
+  current: V1
+  basis: tests/test_driver.py TestLockFileManagement.
+  evidence: []
+  findings: [BE-18]
+  scenarios: []
+- id: F-OPS-019
+  area: ops
+  title: One consistent version everywhere
+  claim: driver.json, /api/info, HA manifest
+  interfaces:
+    rest: [GET /api/info]
+    files: [driver.json, pyproject.toml, manifest.json]
+  target: V4
+  current: V1
+  basis: tests/test_rest_api.py TestHealthEndpoints (version field present).
+  evidence: []
+  findings: [DEP-06]
+  scenarios: []
+- id: F-OPS-020
+  area: ops
+  title: Multi-arch images (amd64 + arm64)
+  claim: docs/REMEDIATION_PLAN.md Phase 6
+  interfaces:
+    files: [ci.yml publish]
+  target: V4
+  current: V0
+  basis: Published on main/tags; never started on arm64.
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-SEC-001
+  area: security
+  title: Optional admin / control PIN gate
+  claim: docs/REMEDIATION_PLAN.md D2, Phase 3 (planned)
+  interfaces:
+    rest: [all mutating routes]
+    ws: [/ws]
+  target: V3
+  current: V0
+  basis: Not implemented yet (Phase 3).
+  evidence: []
+  findings: [SEC-01]
+  scenarios: []
+- id: F-SEC-002
+  area: security
+  title: Cross-site request protection (CORS, Origin, Content-Type, Host allow-list)
+  claim: README "Rate limiting and CORS support"
+  interfaces:
+    rest: [all routes]
+    env: [CORS_ALLOWED_ORIGINS]
+  target: V3
+  current: V1
+  basis: tests/test_rest_api.py CORS header tests (mocked).
+  evidence: []
+  findings: [SEC-02]
+  scenarios: []
+- id: F-SEC-003
+  area: security
+  title: Matrix host changes cannot leak the matrix password (SSRF guard)
+  claim: src/rest_api/settings.py
+  interfaces:
+    rest: [POST /api/settings/matrix-host]
+  target: V3
+  current: V0
+  basis: Not exercised by any test.
+  evidence: []
+  findings: [SEC-03]
+  scenarios: []
+- id: F-SEC-004
+  area: security
+  title: Profile/scene passcodes are stored as PBKDF2 hashes
+  claim: src/password.py; docs/PHASE_8_SPEC.md
+  interfaces:
+    env: [MATRIX_PASSWORD_ITERATIONS]
+    files: [profiles.json passcode_hash]
+  target: V3
+  current: V1
+  basis: tests/test_password.py.
+  evidence: []
+  findings: [SEC-06]
+  scenarios: []
+- id: F-SEC-005
+  area: security
+  title: Passcode hashes are never sent to clients
+  claim: DI-6; docs/REMEDIATION_PLAN.md SEC-04
+  interfaces:
+    rest: ['GET /api/profile/{profile_id}', GET /api/v2/scenes]
+  target: V3
+  current: V0
+  basis: No test; the hash is returned today.
+  evidence: []
+  findings: [SEC-04]
+  scenarios: []
+- id: F-SEC-006
+  area: security
+  title: Changing or removing a PIN needs the current PIN
+  claim: docs/REMEDIATION_PLAN.md SEC-05
+  interfaces:
+    rest: ['PUT /api/profile/{profile_id}', 'PUT /api/v2/scenes/{scene_id}']
+  target: V3
+  current: V0
+  basis: No test.
+  evidence: []
+  findings: [SEC-05]
+  scenarios: []
+- id: F-SEC-007
+  area: security
+  title: Wrong-PIN attempts are limited and do not stall the hub
+  claim: docs/REMEDIATION_PLAN.md SEC-06
+  interfaces:
+    rest: ['POST /api/profile/{profile_id}/recall']
+  target: V3
+  current: V0
+  basis: No test.
+  evidence: []
+  findings: [SEC-06]
+  scenarios: []
+- id: F-SEC-008
+  area: security
+  title: Rate limiting per client
+  claim: README "Rate limiting"
+  interfaces:
+    rest: [all /api routes]
+  target: V3
+  current: V1
+  basis: tests/test_rest_api.py TestRateLimiting.
+  evidence: []
+  findings: [SEC-12, VAL-06]
+  scenarios: []
+- id: F-SEC-009
+  area: security
+  title: Proxy headers trusted only from configured proxies
+  claim: src/rest_api/utils.py
+  interfaces:
+    env: [TRUST_PROXY_HEADERS, TRUSTED_PROXY_IPS]
+  target: V3
+  current: V0
+  basis: No test.
+  evidence: []
+  findings: [SEC-12]
+  scenarios: []
+- id: F-SEC-010
+  area: security
+  title: Static files cannot escape the web root
+  claim: src/rest_api/static.py
+  interfaces:
+    rest: ['GET /css/{path}', 'GET /js/{path}', 'GET /assets/{path}']
+  target: V3
+  current: V1
+  basis: tests/test_rest_api.py TestWebUI::test_directory_traversal_blocked.
+  evidence: []
+  findings: [SEC-13]
+  scenarios: []
+- id: F-SEC-011
+  area: security
+  title: Error responses do not leak internals
+  claim: src/rest_api/utils.py safe_error_message
+  interfaces:
+    rest: [all routes]
+  target: V3
+  current: V1
+  basis: tests/test_rest_api.py TestErrorHandling.
+  evidence: []
+  findings: [SEC-11]
+  scenarios: []
+- id: F-SEC-012
+  area: security
+  title: User-provided names are escaped in the UI (no XSS)
+  claim: web/js/utils/helpers.js escapeHtml
+  interfaces:
+    ui: [all views rendering names]
+    kiosk: [all views]
+  target: V3
+  current: V0
+  basis: No test.
+  evidence: []
+  findings: [SEC-07, SEC-08]
+  scenarios: []
+- id: F-SEC-013
+  area: security
+  title: TLS certificate verification / pinning for the matrix
+  claim: README OREI_VERIFY_SSL
+  interfaces:
+    env: [OREI_VERIFY_SSL]
+  target: V3
+  current: V0
+  basis: No test.
+  evidence: []
+  findings: [SEC-09]
+  scenarios: []
+- id: F-SEC-014
+  area: security
+  title: No credentials in logs
+  claim: docs/REMEDIATION_PLAN.md SEC-10
+  interfaces:
+    env: [LOG_LEVEL]
+  target: V3
+  current: V0
+  basis: No test.
+  evidence: []
+  findings: [SEC-10]
+  scenarios: []
+- id: F-SEC-015
+  area: security
+  title: Remote 3 integration port requires authentication
+  claim: docs/audits/UC_INTEGRATION_AUDIT.md UC-02
+  interfaces:
+    uc: ['ws://hub:9095']
+  target: V3
+  current: V0
+  basis: Not implemented (Phase 3).
+  evidence: []
+  findings: [UC-02]
+  scenarios: []
+- id: F-REL-001
+  area: reliability
+  title: Reconnect automatically after a matrix outage
+  claim: docs/REMEDIATION_PLAN.md Phase 1 goal
+  interfaces:
+    device: [login, get video status]
+  target: V4
+  current: V0
+  basis: tests/test_driver.py TestReconnectDelay covers the delay maths only; the reconnect loop cancels itself (BE-06).
+  evidence: []
+  findings: [BE-04, BE-06, BE-17]
+  scenarios: []
+- id: F-REL-002
+  area: reliability
+  title: Report the connection state truthfully on errors and timeouts
+  claim: GET /api/health matrix.connected
+  interfaces:
+    rest: [GET /api/health]
+  target: V4
+  current: V0
+  basis: tests/sim/test_sim_faults.py::test_dropped_connection_clears_connected and ::test_timeout_clears_connected are strict
+    xfails (BE-04).
+  evidence: []
+  findings: [BE-04]
+  scenarios: []
+- id: F-REL-003
+  area: reliability
+  title: Detect a wrong matrix password
+  claim: docs/REMEDIATION_PLAN.md BE-05
+  interfaces:
+    device: [login]
+  target: V4
+  current: V0
+  basis: tests/sim/test_sim_faults.py::test_wrong_password_is_not_connected is a strict xfail (BE-05).
+  evidence: []
+  findings: [BE-05]
+  scenarios: []
+- id: F-REL-004
+  area: reliability
+  title: Log in again when the matrix session expires
+  claim: docs/REMEDIATION_PLAN.md BE-04
+  interfaces:
+    device: [login]
+  target: V4
+  current: V0
+  basis: tests/sim/test_sim_faults.py::test_session_expiry_triggers_relogin is a strict xfail (BE-04).
+  evidence: []
+  findings: [BE-04]
+  scenarios: []
+- id: F-REL-005
+  area: reliability
+  title: Recover after the matrix reboots or is power-cycled
+  claim: docs/audits/UC_INTEGRATION_AUDIT.md §9 item 8
+  interfaces:
+    device: [set reboot]
+    telnet: [reboot]
+  target: V4
+  current: V0
+  basis: tests/sim/test_sim_faults.py::test_recovers_after_device_reboot is a strict xfail (BE-04); only a manual disconnect/connect
+    works (::test_explicit_reconnect_after_reboot).
+  evidence: []
+  findings: [BE-04, BE-28]
+  scenarios: []
+- id: F-REL-006
+  area: reliability
+  title: Detect a dropped Telnet connection and reconnect
+  claim: docs/REMEDIATION_PLAN.md BE-28/29
+  interfaces:
+    telnet: [connection]
+  target: V4
+  current: V0
+  basis: tests/sim/test_sim_faults.py::test_telnet_drop_mid_command_is_detected is a strict xfail (BE-29).
+  evidence: []
+  findings: [BE-28, BE-29, BE-11]
+  scenarios: []
+- id: F-REL-007
+  area: reliability
+  title: Shut down and disconnect cleanly
+  claim: docs/REMEDIATION_PLAN.md BE-01
+  interfaces:
+    telnet: [disconnect]
+  target: V4
+  current: V0
+  basis: tests/sim/test_sim_faults.py::test_telnet_disconnect_completes is a strict xfail (BE-01).
+  evidence: []
+  findings: [BE-01]
+  scenarios: []
+- id: F-REL-008
+  area: reliability
+  title: A command the matrix rejects is reported as failed
+  claim: docs/REMEDIATION_PLAN.md BE-12
+  interfaces:
+    rest: ['POST /api/output/{output}/*', POST /api/switch]
+  target: V4
+  current: V0
+  basis: tests/sim/test_sim_faults.py::test_rejected_output_setting_reports_failure and ::test_rejected_switch_all_reports_failure
+    are strict xfails (BE-12).
+  evidence: []
+  findings: [BE-12]
+  scenarios: [outputs.audio_mute_rejected]
+- id: F-REL-009
+  area: reliability
+  title: 'Matrix unreachable: commands fail visibly and no state is made up'
+  claim: VALIDATION_PLAN §1.5
+  interfaces:
+    rest: [POST /api/switch, GET /api/status, GET /api/health]
+  target: V4
+  current: V1
+  basis: tests/sim/test_sim_faults.py::test_http_500_marks_disconnected (driver-level); the drop and timeout variants are
+    strict xfails.
+  evidence: []
+  findings: [BE-04, VAL-04, UI-29]
+  scenarios: [failures.unreachable_switch]
+- id: F-REL-010
+  area: reliability
+  title: Status stays fresh (caches expire, one refresh at a time)
+  claim: docs/REMEDIATION_PLAN.md BE-03/API-11
+  interfaces:
+    rest: [GET /api/status, GET /api/status/*]
+  target: V4
+  current: V1
+  basis: tests/test_orei_matrix.py TestStatusCaching.
+  evidence: []
+  findings: [BE-03, API-11]
+  scenarios: []
+- id: F-REL-011
+  area: reliability
+  title: API calls are not blocked while the hub reconnects
+  claim: docs/REMEDIATION_PLAN.md BE-17
+  interfaces:
+    rest: [all matrix routes]
+  target: V4
+  current: V0
+  basis: No test.
+  evidence: []
+  findings: [BE-17]
+  scenarios: []
+- id: F-REL-012
+  area: reliability
+  title: Background polling keeps state live without a Remote connected
+  claim: docs/audits/UC_INTEGRATION_AUDIT.md UC-17
+  interfaces:
+    ws: [routing_change, signal_change]
+  target: V4
+  current: V0
+  basis: No test of the poller (TST-03).
+  evidence: []
+  findings: [UC-17, BE-08]
+  scenarios: []
+- id: F-REL-013
+  area: reliability
+  title: The event loop never stalls (loop-lag metric)
+  claim: GET /api/health runtime.loop_lag_ms
+  interfaces:
+    rest: [GET /api/health]
+  target: V4
+  current: V1
+  basis: tests/test_health.py test_monitor_measures_lag.
+  evidence: []
+  findings: [BE-28, SEC-06]
+  scenarios: []
+- id: F-REL-014
+  area: reliability
+  title: A slow WebSocket client cannot stall commands
+  claim: docs/REMEDIATION_PLAN.md API-09
+  interfaces:
+    ws: [all broadcasts]
+  target: V4
+  current: V1
+  basis: tests/test_concurrency.py TestWebSocketClientSetConcurrency (set safety only).
+  evidence: []
+  findings: [API-09]
+  scenarios: []
+- id: F-REL-015
+  area: reliability
+  title: Tolerate slow and malformed matrix responses
+  claim: docs/REMEDIATION_PLAN.md §5.1 fault injection
+  interfaces:
+    device: [all comheads]
+  target: V4
+  current: V1
+  basis: tests/sim/test_sim_faults.py::test_latency_within_client_timeout, ::test_malformed_json_is_reported (driver-level);
+    tests/test_error_paths.py.
+  evidence: []
+  findings: []
+  scenarios: []
+- id: F-REL-016
+  area: reliability
+  title: Standby does not start reconnect storms or duplicate pollers
+  claim: docs/REMEDIATION_PLAN.md BE-09, UC-06
+  interfaces:
+    uc: [enter_standby]
+  target: V4
+  current: V0
+  basis: No test.
+  evidence: []
+  findings: [BE-09, UC-06]
+  scenarios: []
+- id: F-REL-017
+  area: reliability
+  title: No leaked sessions, sockets or tasks after reconfiguration
+  claim: docs/REMEDIATION_PLAN.md BE-10/11
+  interfaces:
+    uc: [setup_driver]
+  target: V4
+  current: V0
+  basis: No test.
+  evidence: []
+  findings: [BE-10, BE-11]
+  scenarios: []
+- id: F-REL-018
+  area: reliability
+  title: 72-hour soak with flat memory, tasks and sockets
+  claim: VALIDATION_PLAN §2 V5; HIL-D
+  interfaces:
+    rest: [GET /api/health]
+  target: V5
+  current: V0
+  basis: Not run yet (Phase 8).
+  evidence: []
+  findings: []
+  scenarios: []
