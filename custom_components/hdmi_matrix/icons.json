@@ -1,0 +1,53 @@
+{
+  "entity": {
+    "binary_sensor": {
+      "input_signal": {
+        "default": "mdi:video-input-hdmi"
+      },
+      "output_display": {
+        "default": "mdi:television-off",
+        "state": {
+          "on": "mdi:television"
+        }
+      }
+    },
+    "button": {
+      "preset": {
+        "default": "mdi:view-grid-outline"
+      }
+    },
+    "select": {
+      "output_source": {
+        "default": "mdi:video-input-hdmi"
+      }
+    },
+    "switch": {
+      "power": {
+        "default": "mdi:power"
+      },
+      "output_mute": {
+        "default": "mdi:volume-high",
+        "state": {
+          "on": "mdi:volume-off"
+        }
+      },
+      "output_stream": {
+        "default": "mdi:video-off",
+        "state": {
+          "on": "mdi:video"
+        }
+      }
+    }
+  },
+  "services": {
+    "recall_preset": {
+      "service": "mdi:view-grid-outline"
+    },
+    "switch_input": {
+      "service": "mdi:video-switch"
+    },
+    "send_cec_command": {
+      "service": "mdi:remote"
+    }
+  }
+}
