@@ -12,6 +12,8 @@ Unlike the old Phase 7 SceneManager (config.SceneManager), this module
 defines the NEW unified Scene concept for Phase 8.
 """
 
+import copy
+import dataclasses
 import json
 import logging
 import uuid
@@ -48,6 +50,32 @@ OVERRIDABLE_SETTINGS = frozenset(
         "audio_mute",
     }
 )
+
+
+def validate_overrides(overrides: Any) -> str | None:
+    """Check a ``{profile_id: {output_num: {setting_key: bool}}}`` overrides map.
+
+    Returns an error string, or None if it is valid. Output numbers are 1-8
+    and setting keys are the :data:`OVERRIDABLE_SETTINGS`.
+    """
+    if not isinstance(overrides, dict):
+        return "overrides must be an object"
+    for profile_id, outputs in overrides.items():
+        if not isinstance(profile_id, str) or not profile_id:
+            return "override profile id must be a non-empty string"
+        if not isinstance(outputs, dict):
+            return f"overrides for {profile_id!r} must be an object"
+        for output_num, settings in outputs.items():
+            if isinstance(output_num, bool) or not isinstance(output_num, int) or not 1 <= output_num <= 8:
+                return f"override output {output_num!r} must be 1-8"
+            if not isinstance(settings, dict):
+                return f"overrides for {profile_id!r} output {output_num} must be an object"
+            for key, disabled in settings.items():
+                if key not in OVERRIDABLE_SETTINGS:
+                    return f"unknown override setting {key!r} (one of {sorted(OVERRIDABLE_SETTINGS)})"
+                if not isinstance(disabled, bool):
+                    return f"override {key!r} must be true or false"
+    return None
 
 
 # =============================================================================
@@ -588,44 +616,56 @@ class SceneManager:
         """
         Update an existing scene.
 
+        The changes are applied to a copy, which is validated and saved before
+        it replaces the stored scene: a rejected update leaves the scene as it
+        was, in memory and on disk (API-13).
+
         :returns: (updated_scene, error_string)
         """
         scene = self._scenes.get(scene_id)
         if scene is None:
             return None, "Scene not found"
 
-        if name is not None:
-            scene.name = name
-        if icon is not None:
-            scene.icon = icon
-        if steps is not None:
-            scene.steps = steps
         if overrides is not None:
-            scene.overrides = overrides
+            err = validate_overrides(overrides)
+            if err:
+                return None, err
+
+        candidate = copy.deepcopy(scene)
+        if name is not None:
+            candidate.name = name
+        if icon is not None:
+            candidate.icon = icon
+        if steps is not None:
+            candidate.steps = list(steps)
+        if overrides is not None:
+            candidate.overrides = overrides
         if favorite is not None:
-            scene.favorite = favorite
+            candidate.favorite = favorite
         if dashboard_visible is not None:
-            scene.dashboard_visible = dashboard_visible
+            candidate.dashboard_visible = dashboard_visible
         if dashboard_order is not None:
-            scene.dashboard_order = dashboard_order
+            candidate.dashboard_order = dashboard_order
         if password_protected is not None:
-            scene.password_protected = password_protected
+            candidate.password_protected = password_protected
             if password_protected and passcode:
-                scene.passcode_hash = hash_passcode(passcode)
-            elif password_protected and not scene.passcode_hash:
+                candidate.passcode_hash = hash_passcode(passcode)
+            elif password_protected and not candidate.passcode_hash:
                 return None, "passcode required when enabling password protection"
 
         # Password inheritance: scene containing a protected profile must itself be protected
-        if not scene.password_protected and self.steps_reference_protected_profile(scene.steps):
+        if not candidate.password_protected and self.steps_reference_protected_profile(candidate.steps):
             return None, ("Scene contains a password-protected Profile; the Scene must also be password-protected")
 
-        valid, errors = scene.is_valid()
+        valid, errors = candidate.is_valid()
         if not valid:
             return None, "; ".join(errors)
 
+        self._scenes[scene_id] = candidate
         if not self._save():
+            self._scenes[scene_id] = scene
             return None, "Failed to save"
-        return scene, None
+        return candidate, None
 
     def add_step(
         self,
@@ -641,6 +681,11 @@ class SceneManager:
         prospective = list(scene.steps) + [step]
         if not scene.password_protected and self.steps_reference_protected_profile(prospective):
             return None, ("Cannot add a step referencing a password-protected Profile to an unprotected Scene")
+
+        # Validate the scene as it would be before changing it (API-13)
+        valid, errors = dataclasses.replace(scene, steps=prospective).is_valid()
+        if not valid:
+            return None, "; ".join(errors)
 
         scene.steps.append(step)
         if not self._save():
@@ -674,6 +719,9 @@ class SceneManager:
         scene = self._scenes.get(scene_id)
         if scene is None:
             return None, "Scene not found"
+        err = validate_overrides({profile_id: {output_num: {setting_key: disabled}}})
+        if err:
+            return None, err
         scene.set_override(profile_id, output_num, setting_key, disabled)
         if not self._save():
             scene.clear_override(profile_id, output_num, setting_key)

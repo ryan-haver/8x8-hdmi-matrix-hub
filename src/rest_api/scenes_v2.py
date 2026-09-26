@@ -29,9 +29,11 @@ from typing import Any
 from aiohttp import web
 
 from scene_manager import (
+    STEP_TYPE_PROFILE,
     SceneManager,
     SceneStep,
     detect_conflicts,
+    validate_overrides,
 )
 
 _LOG = logging.getLogger("rest_api.scenes_v2")
@@ -54,11 +56,13 @@ def _get_scene_manager() -> "SceneManager":
 
 def _get_executor():
     from persistence import get_data_dir
-    from rest_api.utils import get_macro_manager
+    from rest_api.utils import get_macro_manager, get_system_shortcut_manager
     from scene_execution import SceneExecutor
     from system_shortcuts import SystemShortcutManager as SystemActionManager
 
-    sam = SystemActionManager(get_data_dir())
+    # The hub's shortcut manager (the one the shortcut routes edit); a private
+    # instance only when the REST layer was not set up with one.
+    sam = get_system_shortcut_manager() or SystemActionManager(get_data_dir())
     return SceneExecutor(
         scene_manager=_get_scene_manager(),
         profile_manager=_get_profile_manager(),
@@ -74,6 +78,63 @@ def _get_profile_manager():
     if mgr is None:
         raise RuntimeError("ProfileManager not initialized")
     return mgr  # type: ignore
+
+
+def _profile_map(steps: list[SceneStep]) -> dict[str, Any]:
+    """``{profile_id: Profile}`` for the profiles the steps reference (unknown ids left out).
+
+    API-05: this used ``{p.id: p for p in pm.list_profiles()}``, but
+    ``list_profiles()`` returns summary dicts, so every create/update with
+    profiles on the hub failed with 500.
+    """
+    pm = _get_profile_manager()
+    found: dict[str, Any] = {}
+    for step in steps:
+        if step.type == STEP_TYPE_PROFILE and step.id not in found:
+            profile = pm.get_profile(step.id)
+            if profile is not None:
+                found[step.id] = profile
+    return found
+
+
+def _parse_steps(raw: Any) -> list[SceneStep]:
+    """Steps from a request body; raises ValueError with a client-facing message."""
+    if not isinstance(raw, list):
+        raise ValueError("steps must be a list")
+    steps = []
+    for i, item in enumerate(raw):
+        if not isinstance(item, dict):
+            raise ValueError(f"step {i} must be an object")
+        steps.append(SceneStep.from_dict(item))
+    return steps
+
+
+def _parse_overrides(raw: Any) -> dict[str, dict[int, dict[str, bool]]]:
+    """Overrides from a request body (output keys are strings in JSON); raises ValueError."""
+    if not isinstance(raw, dict):
+        raise ValueError("overrides must be an object")
+    overrides: dict[str, dict[int, dict[str, bool]]] = {}
+    for pid, outputs in raw.items():
+        if not isinstance(outputs, dict):
+            raise ValueError(f"overrides for {pid!r} must be an object")
+        overrides[pid] = {}
+        for out_str, settings in outputs.items():
+            try:
+                out_num = int(out_str)
+            except (TypeError, ValueError):
+                raise ValueError(f"override output {out_str!r} must be a number") from None
+            overrides[pid][out_num] = settings
+    err = validate_overrides(overrides)
+    if err:
+        raise ValueError(err)
+    return overrides
+
+
+def _execution_status(result: Any) -> int:
+    """HTTP status of a scene run (API-08): 200 all steps succeeded, 207 some did, 500 none did."""
+    if result.success:
+        return 200
+    return 207 if result.steps_completed > 0 else 500
 
 
 async def _json_response(success: bool, data: dict = None, error: str = None, status: int = 200) -> web.Response:
@@ -112,18 +173,22 @@ async def handle_create_scene(request: web.Request) -> web.Response:
     """POST /api/v2/scenes — create a new scene."""
     try:
         data = await request.json()
+        if not isinstance(data, dict):
+            return await _json_response(False, error="Body must be a JSON object", status=400)
         mgr = _get_scene_manager()
 
-        # Parse steps
-        steps = []
-        for step_data in data.get("steps", []):
-            steps.append(SceneStep.from_dict(step_data))
+        try:
+            steps = _parse_steps(data.get("steps", []))
+        except ValueError as exc:
+            return await _json_response(False, error=str(exc), status=400)
+        for i, step in enumerate(steps):
+            err = step.validate()
+            if err:
+                return await _json_response(False, error=f"Step {i}: {err}", status=400)
 
         # Password inheritance check: scene containing protected profile must itself be protected
-        pm = _get_profile_manager()
-        profile_map = {p.id: p for p in pm.list_profiles()} if pm else None
         if not bool(data.get("password_protected", False)) and mgr.steps_reference_protected_profile(
-            steps, profile_map
+            steps, _profile_map(steps)
         ):
             return await _json_response(
                 False,
@@ -168,27 +233,27 @@ async def handle_update_scene(request: web.Request) -> web.Response:
     try:
         scene_id = request.match_info["scene_id"]
         data = await request.json()
+        if not isinstance(data, dict):
+            return await _json_response(False, error="Body must be a JSON object", status=400)
         mgr = _get_scene_manager()
+        if mgr.get_scene(scene_id) is None:
+            return await _json_response(False, error="Scene not found", status=404)
 
-        # Parse steps if provided
+        # Parse (and validate) everything before anything is changed (API-13)
         steps = None
-        if "steps" in data:
-            steps = [SceneStep.from_dict(s) for s in data["steps"]]
-
-        # Parse overrides if provided
         overrides: dict[str, dict[int, dict[str, bool]]] | None = None
-        if "overrides" in data:
-            overrides = {}
-            for pid, outers in data["overrides"].items():
-                overrides[pid] = {}
-                for out_str, settings in outers.items():
-                    overrides[pid][int(out_str)] = settings
+        try:
+            if "steps" in data:
+                steps = _parse_steps(data["steps"])
+            if "overrides" in data:
+                overrides = _parse_overrides(data["overrides"])
+        except ValueError as exc:
+            return await _json_response(False, error=str(exc), status=400)
 
         # Password inheritance check
         password_protected = data.get("password_protected")
         if steps is not None and not password_protected:
-            pm = _get_profile_manager()
-            profile_map = {p.id: p for p in pm.list_profiles()} if pm else None
+            profile_map = _profile_map(steps)
             existing = mgr.get_scene(scene_id)
             scene_is_protected = (
                 password_protected
@@ -248,13 +313,16 @@ async def handle_execute_scene(request: web.Request) -> web.Response:
     try:
         scene_id = request.match_info["scene_id"]
         data = await request.json() if request.can_read_body else {}
-        passcode = data.get("passcode")
+        passcode = data.get("passcode") if isinstance(data, dict) else None
 
         from rest_api.utils import get_matrix_device
 
         matrix = get_matrix_device()
         if matrix is None:
             return await _json_response(False, error="Matrix not connected", status=503)
+
+        if _get_scene_manager().get_scene(scene_id) is None:
+            return await _json_response(False, error="Scene not found", status=404)
 
         executor = _get_executor()
         result = await executor.execute_scene(scene_id, matrix, passcode=passcode)
@@ -270,7 +338,9 @@ async def handle_execute_scene(request: web.Request) -> web.Response:
                 status=403,
             )
 
-        return await _json_response(True, result.to_dict())
+        # API-08: the answer says what happened - 200 every step succeeded,
+        # 207 some did (per-step results in data.step_results), 500 none did.
+        return await _json_response(result.success, result.to_dict(), status=_execution_status(result))
     except json.JSONDecodeError:
         return await _json_response(False, error="Invalid JSON body", status=400)
     except Exception as e:
@@ -313,11 +383,7 @@ async def handle_validate_scene(request: web.Request) -> web.Response:
         if scene is None:
             return await _json_response(False, error="Scene not found", status=404)
 
-        # Build profile map for conflict detection
-        pm = _get_profile_manager()
-        profile_map = {p.id: p for p in (pm._profiles.values() if hasattr(pm, "_profiles") else [])}
-
-        conflicts = detect_conflicts(scene, profile_map)
+        conflicts = detect_conflicts(scene, _profile_map(scene.steps))
         return await _json_response(
             True,
             {
@@ -414,10 +480,22 @@ async def handle_add_step(request: web.Request) -> web.Response:
         data = await request.json()
         mgr = _get_scene_manager()
 
+        if not isinstance(data, dict):
+            return await _json_response(False, error="Body must be a JSON object", status=400)
         step = SceneStep.from_dict(data)
         err = step.validate()
         if err:
             return await _json_response(False, error=err, status=400)
+
+        existing = mgr.get_scene(scene_id)
+        if existing is None:
+            return await _json_response(False, error="Scene not found", status=404)
+        if not existing.password_protected and mgr.steps_reference_protected_profile([step], _profile_map([step])):
+            return await _json_response(
+                False,
+                error="Cannot add a step referencing a password-protected Profile to an unprotected Scene",
+                status=400,
+            )
 
         scene, err = mgr.add_step(scene_id, step)
         if err:

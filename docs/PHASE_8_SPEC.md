@@ -280,7 +280,9 @@ No recovery. User must delete and recreate the Profile or Scene.
 - If a step fails, execution continues to the next step
 - Error is logged in both the Scene's execution history and the Profile's execution log
 - WebSocket event emitted: `{"type": "scene_execution_error", "scene_id": "...", "step": n, "error": "..."}`
-- REST API returns 200 with `{"success": false, "steps_completed": n, "total_steps": m, "error": "..."}`
+- REST API returns `{"success": false, "data": {"steps_completed": n, "total_steps": m, "step_results": [...], "error": "..."}}`
+  with status 207 when some steps succeeded and 500 when none did (200 only when every step succeeded; 404 for an
+  unknown scene). Changed in WP-C1 (API-08): it used to answer 200 `success: true` whatever happened.
 
 ### No rollback
 

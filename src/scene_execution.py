@@ -1,16 +1,16 @@
 """
-Scene execution engine — applies Profiles and System Actions in order.
+Scene execution engine — applies Profiles, System Actions and CEC macros in order.
 
 This module is responsible for:
-1. Applying per-scene overrides to a Profile before execution
-2. Executing each step in a Scene in order
+1. Leaving the settings a scene overrides unchanged when it applies a Profile
+2. Executing each step in a Scene in order, checking every matrix answer
 3. Logging execution results to Profile.execution_log and Scene.execution_history
 4. Emitting WebSocket events on errors
 """
 
 import logging
 from dataclasses import dataclass, field
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 from config import Profile, ProfileManager
@@ -23,18 +23,6 @@ from system_shortcuts import (
 )
 
 _LOG = logging.getLogger("scene_execution")
-
-
-# Default output settings (must match OreiMatrix / Profile defaults)
-_DEFAULT_OUTPUT_SETTINGS: dict[str, Any] = {
-    "input": 1,
-    "enabled": True,
-    "hdcp": 3,
-    "hdr": 3,
-    "scaler": 0,
-    "arc": False,
-    "audio_mute": False,
-}
 
 
 @dataclass
@@ -82,52 +70,31 @@ class ExecutionResult:
 
 
 # =============================================================================
-# Override application
+# Overrides
 # =============================================================================
 
 
-def apply_overrides_to_profile(
-    profile: Profile,
-    scene: Scene,
-) -> Profile:
+def overridden_settings(scene: Scene, profile_id: str) -> dict[int, set[str]]:
     """
-    Return a copy of the profile with per-scene overrides applied.
+    The output settings a scene leaves unchanged when it runs ``profile_id``.
 
-    The original profile object is never modified.
-    Overrides are applied by setting overridden settings to their defaults
-    (so the matrix is left unchanged for those settings).
+    A per-scene override means "leave this setting as it is on the matrix"
+    (docs/PHASE_8_SPEC.md: apply each output setting *unless* it is overridden
+    for this scene). Only keys whose override value is true count; an override
+    stored as ``False`` is not active. API-04: overrides used to reset the
+    setting to a default instead, so an ``input`` override routed Input 1.
+
+    ``enabled`` can be overridden too, but the scene executor never changes an
+    output's stream state, so there is nothing to leave unchanged for it.
+
+    :returns: ``{output_num: {"input", "hdcp", ...}}``
     """
-    import copy
-
-    overrides = scene.get_overrides_for_profile(profile.id)
-    if not overrides:
-        return profile
-
-    # Deep copy the profile so we can mutate it
-    overridden_profile: Profile = copy.deepcopy(profile)
-
-    for output_num, disabled_settings in overrides.items():
-        if output_num not in overridden_profile.outputs:
-            continue
-        output_cfg = overridden_profile.outputs[output_num]
-        for setting_key in disabled_settings:
-            # Set to default so the matrix command skips it
-            if setting_key == "input":
-                output_cfg.input = _DEFAULT_OUTPUT_SETTINGS["input"]
-            elif setting_key == "enabled":
-                output_cfg.enabled = _DEFAULT_OUTPUT_SETTINGS["enabled"]
-            elif setting_key == "hdcp":
-                output_cfg.hdcp_mode = _DEFAULT_OUTPUT_SETTINGS["hdcp"]
-            elif setting_key == "hdr":
-                output_cfg.hdr_mode = _DEFAULT_OUTPUT_SETTINGS["hdr"]
-            elif setting_key == "scaler":
-                output_cfg.scaler_mode = _DEFAULT_OUTPUT_SETTINGS["scaler"]  # type: ignore[attr-defined]  # API-22: SceneOutput has no scaler_mode
-            elif setting_key == "arc":
-                output_cfg.arc = _DEFAULT_OUTPUT_SETTINGS["arc"]  # type: ignore[attr-defined]  # API-22: SceneOutput has no arc
-            elif setting_key == "audio_mute":
-                output_cfg.audio_mute = _DEFAULT_OUTPUT_SETTINGS["audio_mute"]
-
-    return overridden_profile
+    skipped: dict[int, set[str]] = {}
+    for output_num, settings in scene.get_overrides_for_profile(profile_id).items():
+        keys = {key for key, disabled in settings.items() if disabled}
+        if keys:
+            skipped[output_num] = keys
+    return skipped
 
 
 # =============================================================================
@@ -135,160 +102,119 @@ def apply_overrides_to_profile(
 # =============================================================================
 
 
+async def _apply_output(matrix_device, output_num: int, output_cfg: Any, skip: set[str]) -> list[str]:
+    """Apply one output of a profile; returns what the matrix did not accept (empty = all applied).
+
+    Uses the real ``OreiMatrix`` methods and checks their result (API-01,
+    API-08). HDR and scaler values are the hub's 1-based API values;
+    ``OreiMatrix`` maps them to the device codes (``device_codes``).
+    """
+    failed: list[str] = []
+
+    async def apply(what: str, call: Any) -> None:
+        try:
+            ok = await call
+        except Exception as exc:  # noqa: BLE001 - one failed write must not stop the other outputs
+            _LOG.error("Output %d %s failed: %s", output_num, what, exc)
+            ok = False
+        if not ok:
+            failed.append(what)
+
+    if "input" not in skip:
+        await apply(f"route input {output_cfg.input}", matrix_device.switch_input(output_cfg.input, output_num))
+    hdcp = getattr(output_cfg, "hdcp_mode", None)
+    if hdcp is not None and "hdcp" not in skip:
+        await apply(f"HDCP {hdcp}", matrix_device.set_output_hdcp(output_num, hdcp))
+    hdr = getattr(output_cfg, "hdr_mode", None)
+    if hdr is not None and "hdr" not in skip:
+        await apply(f"HDR {hdr}", matrix_device.set_output_hdr(output_num, hdr))
+    # Profiles do not store scaler/ARC yet (API-22); applied when present.
+    scaler = getattr(output_cfg, "scaler_mode", None)
+    if scaler is not None and "scaler" not in skip:
+        await apply(f"scaler {scaler}", matrix_device.set_output_scaler(output_num, scaler))
+    arc = getattr(output_cfg, "arc", None)
+    if arc is not None and "arc" not in skip:
+        await apply(f"ARC {'on' if arc else 'off'}", matrix_device.set_output_arc(output_num, bool(arc)))
+    mute = getattr(output_cfg, "audio_mute", None)
+    if mute is not None and "audio_mute" not in skip:
+        await apply("mute" if mute else "unmute", matrix_device.set_output_audio_mute(output_num, bool(mute)))
+    return failed
+
+
+def _macro_error(outcome: dict[str, Any]) -> str:
+    """A one-line reason from a ``MacroManager.execute_macro`` result."""
+    if outcome.get("error"):
+        return str(outcome["error"])
+    errors = [err for step in outcome.get("results", []) for err in step.get("errors", [])]
+    return "; ".join(errors) or "macro execution failed"
+
+
 async def _execute_profile(
     profile: Profile,
     matrix_device,
-    scene: Scene | None = None,
+    skip: dict[int, set[str]] | None = None,
+    macro_manager: Any | None = None,
 ) -> StepResult:
     """
     Execute a single Profile against the matrix.
 
-    Applies routing, per-output settings, then macro sequence.
+    Applies routing and per-output settings of every enabled output (outputs a
+    profile marks disabled are not touched), then runs the profile's macros in
+    order through the ``MacroManager`` (docs/PHASE_8_SPEC.md "Execute each
+    macro in order"). Every matrix answer is checked: the step fails if
+    anything was not applied, and the error names the output and the setting.
 
     :param profile: Profile to execute
     :param matrix_device: OreiMatrix instance
-    :param scene: Scene this profile is being executed within (for logging)
+    :param skip: settings to leave unchanged per output (scene overrides, :func:`overridden_settings`)
+    :param macro_manager: MacroManager that runs the profile's macros
     """
+    skip = skip or {}
+    problems: list[str] = []
+    applied = 0
     try:
-        # Step 1: Apply routing for each output
-        for output_num, output_cfg in profile.outputs.items():
+        for output_num in sorted(profile.outputs):
+            output_cfg = profile.outputs[output_num]
             if not output_cfg.enabled:
                 continue
-            # Route input to output
-            await matrix_device.switch(output_cfg.input, output_num)
+            failed = await _apply_output(matrix_device, output_num, output_cfg, skip.get(output_num, set()))
+            if failed:
+                problems.append(f"output {output_num}: {', '.join(failed)} not applied")
+            else:
+                applied += 1
 
-        # Step 2: Apply per-output settings
-        for output_num, output_cfg in profile.outputs.items():
-            if not output_cfg.enabled:
-                continue
-            # HDCP
-            if getattr(output_cfg, "hdcp_mode", None) is not None:
-                await matrix_device.set_output_hdcp(output_num, output_cfg.hdcp_mode)
-            # HDR
-            if getattr(output_cfg, "hdr_mode", None) is not None:
-                await matrix_device.set_output_hdr(output_num, output_cfg.hdr_mode)
-            # Scaler
-            if getattr(output_cfg, "scaler_mode", None) is not None:
-                await matrix_device.set_output_scaler(output_num, output_cfg.scaler_mode)  # type: ignore[attr-defined]  # API-22
-            # ARC
-            if hasattr(output_cfg, "arc") and output_cfg.arc is not None:
-                await matrix_device.set_output_arc(output_num, output_cfg.arc)
-            # Audio mute
-            if hasattr(output_cfg, "audio_mute") and output_cfg.audio_mute is not None:
-                await matrix_device.set_output_audio_mute(output_num, output_cfg.audio_mute)
-
-        # Step 3: Execute CEC macros (CEC commands)
-        # Note: macros is a list of macro IDs — look up and execute each
-        # For now, we handle direct CEC commands embedded in the profile
-        # (the profile.macros field contains macro_id strings)
-        # We look up via macro_manager if available
-        from rest_api.utils import get_macro_manager
-
-        macro_mgr = get_macro_manager()
+        # API-03: macros run through the MacroManager (targets like "output_1"),
+        # which sends each step with the configured CEC sender (VAL-02).
         for macro_id in profile.macros:
-            if macro_mgr is not None:
-                macro = macro_mgr.get_macro(macro_id)
-                if macro is not None:
-                    for step in macro.steps:
-                        # Execute each macro step via the matrix
-                        cmd = step.get("command", "")  # type: ignore[attr-defined]  # API-03: MacroStep is a dataclass
-                        params = step.get("params", {})  # type: ignore[attr-defined]  # API-03
-                        cec_target = params.get("target")
-                        if cmd and cec_target:
-                            await _send_cec_command(matrix_device, cmd, cec_target, params)
-
-        detail = f"Profile '{profile.name}' executed"
-        return StepResult(
-            step_index=0,  # Will be overwritten by caller
-            step_type=STEP_TYPE_PROFILE,
-            step_id=profile.id,
-            success=True,
-            detail=detail,
-        )
-
-    except Exception as exc:
+            if macro_manager is None:
+                problems.append(f"macro {macro_id}: macro manager not available")
+                continue
+            if macro_manager.get_macro(macro_id) is None:
+                problems.append(f"macro {macro_id}: not found")
+                continue
+            outcome = await macro_manager.execute_macro(macro_id)
+            if not outcome.get("success"):
+                problems.append(f"macro {macro_id}: {_macro_error(outcome)}")
+    except Exception as exc:  # noqa: BLE001 - reported as a failed step; the scene continues
         _LOG.error("Profile %s execution failed: %s", profile.id, exc)
+        problems.append(str(exc))
+
+    if problems:
         return StepResult(
             step_index=0,
             step_type=STEP_TYPE_PROFILE,
             step_id=profile.id,
             success=False,
-            error=str(exc),
+            detail=f"Profile '{profile.name}': {applied} output(s) applied",
+            error="; ".join(problems),
         )
-
-
-async def _send_cec_command(matrix_device, command: str, target: str, params: dict[str, Any]) -> bool:
-    """Send a single CEC command to the matrix."""
-    try:
-        # Parse target: "input:3", "output:1", "all_inputs"
-        if target.startswith("input:"):
-            port = int(target.split(":")[1])
-            cec_method = _get_input_cec_method(matrix_device, command)
-            if cec_method:
-                return await cec_method(port)
-        elif target.startswith("output:"):
-            port = int(target.split(":")[1])
-            cec_method = _get_output_cec_method(matrix_device, command)
-            if cec_method:
-                return await cec_method(port)
-        elif target == "all_inputs":
-            for n in range(1, 9):
-                cec_method = _get_input_cec_method(matrix_device, command)
-                if cec_method:
-                    await cec_method(n)
-        elif target == "all_outputs":
-            for n in range(1, 9):
-                cec_method = _get_output_cec_method(matrix_device, command)
-                if cec_method:
-                    await cec_method(n)
-        return True
-    except Exception as e:
-        _LOG.error("CEC command %s to %s failed: %s", command, target, e)
-        return False
-
-
-def _get_input_cec_method(matrix_device, command: str):
-    """Return the appropriate input CEC method for a command."""
-    mapping = {
-        "power_on": "cec_input_power_on",
-        "power_off": "cec_input_power_off",
-        "up": "cec_input_up",
-        "down": "cec_input_down",
-        "left": "cec_input_left",
-        "right": "cec_input_right",
-        "select": "cec_input_select",
-        "menu": "cec_input_menu",
-        "back": "cec_input_back",
-        "play": "cec_input_play",
-        "pause": "cec_input_pause",
-        "stop": "cec_input_stop",
-        "previous": "cec_input_previous",
-        "next": "cec_input_next",
-        "rewind": "cec_input_rewind",
-        "fast_forward": "cec_input_fast_forward",
-        "volume_up": "cec_input_volume_up",
-        "volume_down": "cec_input_volume_down",
-        "mute": "cec_input_mute",
-    }
-    method_name = mapping.get(command.lower())
-    if method_name:
-        return getattr(matrix_device, method_name, None)
-    return None
-
-
-def _get_output_cec_method(matrix_device, command: str):
-    """Return the appropriate output CEC method for a command."""
-    mapping = {
-        "power_on": "cec_output_power_on",
-        "power_off": "cec_output_power_off",
-        "volume_up": "cec_output_volume_up",
-        "volume_down": "cec_output_volume_down",
-        "mute": "cec_output_mute",
-    }
-    method_name = mapping.get(command.lower())
-    if method_name:
-        return getattr(matrix_device, method_name, None)
-    return None
+    return StepResult(
+        step_index=0,  # Will be overwritten by caller
+        step_type=STEP_TYPE_PROFILE,
+        step_id=profile.id,
+        success=True,
+        detail=f"Profile '{profile.name}' executed",
+    )
 
 
 # =============================================================================
@@ -298,8 +224,8 @@ def _get_output_cec_method(matrix_device, command: str):
 
 class SceneExecutor:
     """
-    Executes Scenes with full override application, conflict resolution,
-    error handling, and execution history logging.
+    Executes Scenes with override handling, per-step results, error handling,
+    and execution history logging.
     """
 
     def __init__(
@@ -312,7 +238,7 @@ class SceneExecutor:
         self.scene_manager = scene_manager
         self.profile_manager = profile_manager
         self.system_action_manager = system_action_manager
-        # MacroManager is optional — scene can include macro steps only if provided
+        # MacroManager is optional — macro steps and profile macros fail without it
         self.macro_manager = macro_manager
 
     async def execute_scene(
@@ -362,8 +288,6 @@ class SceneExecutor:
         steps_completed = 0
 
         for i, step in enumerate(scene.steps):
-            result: StepResult | None = None
-
             if step.type == STEP_TYPE_PROFILE:
                 result = await self._execute_profile_step(step, matrix_device, scene)
             elif step.type == STEP_TYPE_SYSTEM_ACTION:
@@ -379,12 +303,10 @@ class SceneExecutor:
                     error=f"Unknown step type: {step.type}",
                 )
 
-            if result:
-                result.step_index = i
-                step_results.append(result)
-                if result.success:
-                    steps_completed += 1
-
+            result.step_index = i
+            step_results.append(result)
+            if result.success:
+                steps_completed += 1
             # Continue on error — do not abort
 
         # Determine overall success
@@ -421,7 +343,7 @@ class SceneExecutor:
         matrix_device,
         scene: Scene,
     ) -> StepResult:
-        """Execute a single profile step with overrides applied."""
+        """Execute a single profile step, leaving the scene's overridden settings unchanged."""
         profile = self.profile_manager.get_profile(step.id)
         if profile is None:
             return StepResult(
@@ -432,13 +354,14 @@ class SceneExecutor:
                 error="Profile not found",
             )
 
-        # Apply per-scene overrides
-        overridden_profile = apply_overrides_to_profile(profile, scene)
+        result = await _execute_profile(
+            profile,
+            matrix_device,
+            skip=overridden_settings(scene, profile.id),
+            macro_manager=self.macro_manager,
+        )
 
-        # Execute
-        result = await _execute_profile(overridden_profile, matrix_device, scene)
-
-        # Log to profile's execution history
+        # Log to profile's execution history (API-02: persisted with the manager's save())
         now = datetime.now(UTC).isoformat()
         log_entry = {
             "timestamp": now,
@@ -449,7 +372,8 @@ class SceneExecutor:
         }
         profile.execution_log.append(log_entry)
         profile.execution_log = _prune_profile_log(profile.execution_log)
-        self.profile_manager._save()  # type: ignore[attr-defined]  # API-02: ProfileManager has no _save()
+        if not self.profile_manager.save():
+            _LOG.warning("Could not save the execution log of profile %s", profile.id)
 
         return result
 
@@ -515,14 +439,14 @@ class SceneExecutor:
 
         # Execute the macro
         result = await self.macro_manager.execute_macro(step.id)
-        success = result.get("success", False)
+        success = bool(result.get("success", False))
         return StepResult(
             step_index=0,
             step_type=STEP_TYPE_MACRO,
             step_id=step.id,
             success=success,
             detail=result.get("detail", f"Executed {len(macro.steps)} step(s)"),
-            error=None if success else result.get("error", "Macro execution failed"),
+            error=None if success else _macro_error(result),
         )
 
     async def _emit_error_event(
@@ -551,6 +475,5 @@ class SceneExecutor:
 
 def _prune_profile_log(log: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Prune profile execution log to last 7 days."""
-    cutoff = datetime.now(UTC) - __import__("datetime").timedelta(days=7)
-    cutoff_str = cutoff.isoformat()
+    cutoff_str = (datetime.now(UTC) - timedelta(days=7)).isoformat()
     return [e for e in log if e.get("timestamp", "") >= cutoff_str]
