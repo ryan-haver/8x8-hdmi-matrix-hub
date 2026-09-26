@@ -2329,7 +2329,7 @@ features:
     uc: [setup_driver, driver_setup_change]
   target: V4
   current: V1
-  basis: 'V1 (capped: BE-02, UC-02, UC-05). tests/uc (scripted Remote 3 -> real driver.py -> simulator): test_setup.py::test_setup_connects_creates_entities_and_saves_the_configuration passes (74 entities, config saved, routing works); test_setup_reports_success is a strict xfail (BE-02: STOP/ERROR after a successful setup).'
+  basis: 'V1 (capped: UC-05, UC-02 open). tests/uc (scripted Remote 3 -> real driver.py -> simulator): test_setup.py::test_setup_reports_success passes since WP-B2 (BE-02 fixed: STOP/OK), ::test_setup_connects_creates_entities_and_saves_the_configuration and ::test_setup_starts_live_updates_without_a_remote_connect pass (74 entities, config saved, CONNECTED, live updates without a Remote connect). Credential step and specific errors: UC-05 (Phase 2).'
   evidence: []
   findings: [BE-02, UC-05, UC-02]
   scenarios: []
@@ -2340,8 +2340,8 @@ features:
   interfaces:
     uc: [setup_driver (reconfigure)]
   target: V4
-  current: V0
-  basis: 'tests/uc (scripted Remote 3 -> real driver.py -> simulator): test_setup.py reconfigure tests are strict xfails (UC-05: a bad address breaks a working install; subscriptions are cleared).'
+  current: V1
+  basis: 'V1 (capped: UC-05 open for the Phase 2 part). tests/uc (scripted Remote 3 -> real driver.py -> simulator): test_setup.py::test_reconfigure_with_a_bad_address_keeps_the_working_setup, ::test_reconfigure_keeps_the_subscribed_entities_working and ::test_reconfigure_to_another_matrix_disposes_the_old_connection pass since WP-B2 (probe before swap, subscriptions kept, old matrix disposed: BE-10).'
   evidence: []
   findings: [UC-05, BE-10]
   scenarios: []
@@ -2376,11 +2376,11 @@ features:
   interfaces:
     uc: [remote.input_N_cec send_cmd, remote.input_N_cec on/off, send_cmd_sequence]
   target: V4
-  current: V1
-  basis: 'V1 (capped: UC-01). tests/uc (scripted Remote 3 -> real driver.py -> simulator): send_cmd sends the exact CEC frame for all 19 commands (test_commands.py::test_input_cec_remote_send_cmd_sends_exact_frames); on/off/toggle/send_cmd_sequence close the connection with 1011 (strict xfails, UC-01); repeat is ignored (UC-22). Scenario remote.input_cec_command.'
+  current: V3
+  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator): send_cmd sends the exact CEC frame for all 19 commands (test_commands.py::test_input_cec_remote_send_cmd_sends_exact_frames); since WP-B2 on/off/toggle/send_cmd_sequence answer 200 with the exact frames and the connection stays open (::test_cec_remote_power_and_sequence_commands, ::test_cec_remote_toggle_follows_the_tracked_power_state; UC-01), repeat applies per command (::test_send_cmd_sequence_repeat_and_the_button_mapping_form; UC-22). Scenarios remote.input_cec_command, remote.input_cec_off, remote.input_cec_sequence.'
   evidence: []
   findings: [UC-01, UC-12, UC-22]
-  scenarios: [remote.input_cec_command]
+  scenarios: [remote.input_cec_command, remote.input_cec_off, remote.input_cec_sequence]
 - id: F-UC-007
   area: uc
   title: Per-output CEC remotes (TV power, volume)
@@ -2388,11 +2388,11 @@ features:
   interfaces:
     uc: [remote.output_N_cec send_cmd, remote.output_N_cec on/off]
   target: V4
-  current: V1
-  basis: 'V1 (capped: UC-01). tests/uc (scripted Remote 3 -> real driver.py -> simulator): the remote offers exactly the display CEC table (POWER_ON, POWER_OFF, MUTE, VOLUME_DOWN, VOLUME_UP, ACTIVE; BE-14) and send_cmd sends its exact frame, display index 0-5 (test_commands.py::test_output_cec_remote_send_cmd_sends_exact_frames, ::test_output_cec_remote_advertises_only_the_display_table); source-only keys (UP, MENU, PLAY ...) answer 400 with no frame (::test_source_only_keys_on_the_output_cec_remote_are_rejected); on/off/toggle/send_cmd_sequence close the connection with 1011 (strict xfails, UC-01). Scenarios remote.output_cec_power_on, remote.output_cec_on (known failure UC-01).'
+  current: V3
+  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator): the remote offers exactly the display CEC table (POWER_ON, POWER_OFF, MUTE, VOLUME_DOWN, VOLUME_UP, ACTIVE; BE-14) and send_cmd sends its exact frame (test_commands.py::test_output_cec_remote_send_cmd_sends_exact_frames, ::test_output_cec_remote_advertises_only_the_display_table); source-only keys answer 400 with no frame (::test_source_only_keys_on_the_output_cec_remote_are_rejected); since WP-B2 on/off/toggle/send_cmd_sequence work and never close the connection (::test_cec_remote_power_and_sequence_commands; UC-01) and repeat sends every step (::test_send_cmd_repeat_sends_the_command_repeatedly; UC-22). Scenarios remote.output_cec_power_on, remote.output_cec_on, remote.output_cec_toggle, remote.output_cec_volume_repeat, remote.cec_bad_sequence.'
   evidence: []
   findings: [UC-01, BE-14, UC-22]
-  scenarios: [remote.output_cec_power_on, remote.output_cec_on]
+  scenarios: [remote.output_cec_power_on, remote.output_cec_on, remote.output_cec_toggle, remote.output_cec_volume_repeat, remote.cec_bad_sequence]
 - id: F-UC-008
   area: uc
   title: Choose an output's source from the Remote (media player source list)
@@ -2413,10 +2413,10 @@ features:
     uc: [media_player.output_N on/off/toggle/volume/mute]
   target: V4
   current: V3
-  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_commands.py::test_media_player_power_volume_and_mute_send_output_cec (exact CEC frames of the display table asserted: on 0, off 1, mute 2, volume down 3, volume up 4; BE-14); the first toggle is a strict xfail (UC-10: it still sends display power off). Scenario remote.media_player_volume.'
+  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_commands.py::test_media_player_power_volume_and_mute_send_output_cec (exact CEC frames of the display table asserted: on 0, off 1, mute 2, volume down 3, volume up 4; BE-14); since WP-B2 the first toggle powers the display on and toggle then follows the tracked power (::test_media_player_first_toggle_does_not_turn_the_tv_off; UC-10 toggle part). Scenarios remote.media_player_volume, remote.media_player_toggle.'
   evidence: []
   findings: [UC-10, BE-24]
-  scenarios: [remote.media_player_volume]
+  scenarios: [remote.media_player_volume, remote.media_player_toggle]
 - id: F-UC-010
   area: uc
   title: Matrix power switch on the Remote
@@ -2437,7 +2437,7 @@ features:
     uc: [sensor.input_N_signal, sensor.input_N_cable]
   target: V4
   current: V1
-  basis: 'V1 (capped: UC-04). tests/uc (scripted Remote 3 -> real driver.py -> simulator): test_state_sync.py::test_subscribed_entity_states_reflect_the_device and ::test_signal_and_cable_changes_reach_the_remote pass; made-up values at start-up and during outages are strict xfails (UC-04).'
+  basis: 'V1 (capped: BE-03 still open in the register). tests/uc (scripted Remote 3 -> real driver.py -> simulator): test_state_sync.py::test_subscribed_entity_states_reflect_the_device and ::test_signal_and_cable_changes_reach_the_remote pass; since WP-B2 (UC-04) sensors start UNKNOWN and keep their last known value during an outage (::test_starting_with_the_matrix_offline_reports_no_made_up_state, ::test_no_values_are_made_up_during_an_outage).'
   evidence: []
   findings: [UC-04, UC-13, BE-03]
   scenarios: []
@@ -2448,8 +2448,8 @@ features:
   interfaces:
     uc: [sensor.output_N_connected, sensor.output_N_cable, sensor.output_N_source]
   target: V4
-  current: V1
-  basis: 'V1 (capped: UC-04). tests/uc (scripted Remote 3 -> real driver.py -> simulator): test_state_sync.py::test_subscribed_entity_states_reflect_the_device and ::test_front_panel_routing_change_reaches_the_remote pass; ''Input 0'' pushed during an outage is a strict xfail (UC-04).'
+  current: V3
+  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator): test_state_sync.py::test_subscribed_entity_states_reflect_the_device, ::test_front_panel_routing_change_reaches_the_remote and ::test_a_partial_subscription_still_gets_updates pass; since WP-B2 (UC-04) no ''Input 0''/''Disconnected'' placeholders: ::test_no_values_are_made_up_during_an_outage, ::test_starting_with_the_matrix_offline_reports_no_made_up_state.'
   evidence: []
   findings: [UC-04, UC-13]
   scenarios: []
@@ -2460,8 +2460,8 @@ features:
   interfaces:
     uc: [entity state UNAVAILABLE, device state]
   target: V4
-  current: V0
-  basis: 'tests/uc (scripted Remote 3 -> real driver.py -> simulator): test_state_sync.py outage tests are strict xfails (UC-04: device state stays CONNECTED, entities stay live; BE-06: updates never resume after a short link loss). One unanswered status read is not an outage (HIL-12): the Remote is never told the matrix is unavailable and updates continue (::test_one_unanswered_status_read_keeps_the_remote_live passes).'
+  current: V3
+  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) since WP-B2 (UC-04, BE-06): test_state_sync.py::test_matrix_outage_changes_the_device_state (ERROR), ::test_entities_are_unavailable_during_an_outage (every stateful entity UNAVAILABLE), ::test_recovery_reports_connected_and_restores_the_last_known_state, ::test_live_updates_resume_after_a_transient_failure; test_commands.py::test_commands_answer_503_while_the_matrix_is_unreachable. One unanswered status read is not an outage (HIL-12, ::test_one_unanswered_status_read_keeps_the_remote_live).'
   evidence: []
   findings: [UC-04, BE-06]
   scenarios: []
@@ -2472,8 +2472,8 @@ features:
   interfaces:
     uc: [enter_standby, exit_standby]
   target: V4
-  current: V1
-  basis: 'V1 (capped: UC-17). tests/uc (scripted Remote 3 -> real driver.py -> simulator): test_lifecycle.py::test_wake_resyncs_with_exactly_one_poller passes; pushes during standby (UC-06) and the matrix disconnect on standby (UC-17) are strict xfails.'
+  current: V3
+  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) since WP-B2 (UC-06, UC-17, BE-09): test_lifecycle.py::test_remote_standby_keeps_the_matrix_connected, ::test_no_pushes_while_the_remote_is_in_standby, ::test_wake_resyncs_with_exactly_one_poller, ::test_repeated_connects_and_wakes_keep_one_poller; the web app keeps live updates without an awake Remote (::test_front_panel_change_reaches_web_clients_* tests).'
   evidence: []
   findings: [UC-06, UC-17, BE-09]
   scenarios: []
@@ -2484,8 +2484,8 @@ features:
   interfaces:
     uc: [entity_change events]
   target: V4
-  current: V0
-  basis: 'tests/uc (scripted Remote 3 -> real driver.py -> simulator): test_state_sync.py::test_unchanged_attributes_are_not_resent is a strict xfail (UC-07).'
+  current: V3
+  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) since WP-B2 (UC-07): test_state_sync.py::test_unchanged_attributes_are_not_resent (no entity_change for three polls of an unchanged device); tests/test_driver.py::TestEntityStateSync.'
   evidence: []
   findings: [UC-07]
   scenarios: []
@@ -2496,8 +2496,8 @@ features:
   interfaces:
     uc: [media_player source_list, entity names]
   target: V4
-  current: V0
-  basis: 'tests/uc (scripted Remote 3 -> real driver.py -> simulator): test_state_sync.py rename tests are strict xfails (UC-08).'
+  current: V1
+  basis: 'V1 (partial: UC-08). tests/uc (scripted Remote 3 -> real driver.py -> simulator): since WP-B2 a rename is applied to the subscribed entities at the next Remote connect (test_state_sync.py::test_select_source_by_new_name_after_rename passes: new name, new source list pushed, select by the new name routes); a live rename without a reconnect is still a strict xfail (::test_input_rename_updates_the_source_list, UC-08).'
   evidence: []
   findings: [UC-08, BE-16]
   scenarios: []
@@ -2510,7 +2510,7 @@ features:
     files: [config.json (UC_CONFIG_HOME)]
   target: V4
   current: V3
-  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_entities.py::test_restore_after_restart (same entity ids; a re-subscribing Remote routes without a new setup, simulator asserted). Start-up with a hanging matrix is a strict xfail (UC-19). tests/test_driver.py TestConfigPersistence (unit).'
+  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_entities.py::test_restore_after_restart (same entity ids; a re-subscribing Remote routes without a new setup, simulator asserted); since WP-B2 (UC-19) the integration port opens without waiting for a hanging matrix and the restored entities are offered at once (test_lifecycle.py::test_integration_port_opens_promptly_when_the_matrix_hangs), and a driver started with the matrix offline reports no made-up state (test_state_sync.py::test_starting_with_the_matrix_offline_reports_no_made_up_state). Without a saved setup, MATRIX_HOST serves the hub before any Remote setup and is never saved (test_setup.py::test_matrix_host_serves_the_hub_before_any_remote_setup). tests/test_driver.py TestConfigPersistence, TestStartupHelpers (unit).'
   evidence: []
   findings: [UC-19]
   scenarios: []

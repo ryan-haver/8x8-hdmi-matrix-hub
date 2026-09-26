@@ -1,7 +1,7 @@
 # Feature ledger
 
 > **Generated** by `python -m tools.validate ledger` — do not edit by hand. Registry: [`features.yaml`](features.yaml) · Plan: [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md) · How to add evidence: [`README.md`](README.md).
-> Commit `f82ba962`
+> Commit `69f20490`
 
 **Level** = highest level with fresh passing evidence, else the recorded baseline (the registry's `current`), capped at V1 while an open critical/high finding is linked. **Recorded** = the registry baseline. **Fresh** = evidence commit not older than the last change to the scenario's `covers` paths.
 
@@ -15,13 +15,13 @@
 | Domain features | 36 | 2 | 33 | 1 | 0 | 0 | 0 | 36 | 0 |
 | Web UI | 36 | 0 | 34 | 0 | 2 | 0 | 0 | 34 | 5 |
 | Kiosk | 14 | 0 | 13 | 0 | 1 | 0 | 0 | 13 | 0 |
-| Remote 3 integration | 17 | 5 | 6 | 0 | 6 | 0 | 0 | 17 | 0 |
+| Remote 3 integration | 17 | 1 | 4 | 0 | 12 | 0 | 0 | 17 | 0 |
 | Home Assistant component | 15 | 10 | 5 | 0 | 0 | 0 | 0 | 15 | 0 |
 | Flic | 10 | 3 | 7 | 0 | 0 | 0 | 0 | 10 | 0 |
 | Deployment, configuration, persistence | 20 | 10 | 10 | 0 | 0 | 0 | 0 | 20 | 0 |
 | Security controls | 15 | 10 | 5 | 0 | 0 | 0 | 0 | 15 | 0 |
 | Reliability | 18 | 12 | 5 | 1 | 0 | 0 | 0 | 18 | 0 |
-| **All** | **265** | **58** | **175** | **20** | **12** | **0** | **0** | **258** | **10** |
+| **All** | **265** | **54** | **173** | **20** | **18** | **0** | **0** | **258** | **10** |
 
 Levels: **V0** Claimed · **V1** Unit · **V2** Simulated integration · **V3** End-to-end · **V4** Hardware · **V5** Field
 
@@ -35,17 +35,17 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | Domain features | 3 | 33 | 0 | 0 | 0 | 0 |
 | Web UI | 0 | 34 | 0 | 2 | 0 | 0 |
 | Kiosk | 0 | 13 | 0 | 1 | 0 | 0 |
-| Remote 3 integration | 5 | 6 | 0 | 6 | 0 | 0 |
+| Remote 3 integration | 1 | 4 | 0 | 12 | 0 | 0 |
 | Home Assistant component | 10 | 5 | 0 | 0 | 0 | 0 |
 | Flic | 3 | 7 | 0 | 0 | 0 | 0 |
 | Deployment, configuration, persistence | 10 | 10 | 0 | 0 | 0 | 0 |
 | Security controls | 10 | 5 | 0 | 0 | 0 | 0 |
 | Reliability | 13 | 5 | 0 | 0 | 0 | 0 |
-| **All** | **63** | **184** | **6** | **12** | **0** | **0** |
+| **All** | **59** | **182** | **6** | **18** | **0** | **0** |
 
 - Features with fresh passing scenario evidence: **20** of 265.
 - Features with a fresh failing scenario: **2**: `F-DOM-003`, `F-DOM-004`.
-- Features capped at V1 by an open critical/high finding: **99**.
+- Features capped at V1 by an open critical/high finding: **89**.
 
 ## Matrix control (F-MTX)
 
@@ -81,7 +81,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-MTX-028 | Show device info (model, firmware, network) | V4 | V1 | V1 | — | — | — |
 | F-MTX-029 | Cycle an output to the next / previous input | V4 | V1 | V1 | — | — | — |
 | F-MTX-030 | Read a preset's stored routing | V4 | V1 | V1 | — | — | — |
-| F-MTX-031 | Notice changes made outside the hub (front panel, cable plugged, source on/off) | V4 | V1 (capped) | V1 | — | — | UC-17(H), BE-29(H), BE-03(H) |
+| F-MTX-031 | Notice changes made outside the hub (front panel, cable plugged, source on/off) | V4 | V1 (capped) | V1 | — | — | BE-29(H), BE-03(H) |
 
 ## CEC control (F-CEC)
 
@@ -142,7 +142,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-API-037 | WS events device_settings / device_settings_full | V2 | **V2** | V0 | fresh | [presets.rename·api·pass](evidence/F-MTX-005/2026-09-25-V2-22afc1a7-presets.rename-api.json) | — |
 | F-API-038 | WS event cec_command | V2 | V1 (capped) | V0 | fresh | [cec.output_power_on·api·pass](evidence/F-CEC-005/2026-09-25-V2-22afc1a7-cec.output_power_on-api.json) | UI-02(H) |
 | F-API-039 | WS event status (background refresh broadcast) | V2 | V1 | V1 | — | — | BE-31(M), API-11(M) |
-| F-API-040 | WS live device events (routing_change, signal_change, connection_change, cable_change) | V2 | V0 (capped) | V0 | — | — | UC-17(H), BE-08(M), BE-24(L) |
+| F-API-040 | WS live device events (routing_change, signal_change, connection_change, cable_change) | V2 | V0 | V0 | — | — | BE-24(L) |
 | F-API-041 | WS event scene_execution_error | V2 | V0 (capped) | V0 | — | — | API-01(C), UI-02(H) |
 | F-API-042 | WS heartbeat (ping / pong) | V2 | V1 | V1 | — | — | API-10(M) |
 
@@ -153,7 +153,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-DOM-001 | Create, edit and delete profiles | V3 | V1 | V1 | — | — | API-22(M) |
 | F-DOM-002 | Recall a profile: its routing is applied | V4 | V2 | V1 | fresh | [profiles.recall_routing·api·pass](evidence/F-DOM-002/2026-09-25-V2-22afc1a7-profiles.recall_routing-api.json) | API-08(M), API-19(M) |
 | F-DOM-003 | Recall a profile: its output settings (mute, HDR, HDCP, enable) are applied | V4 | V1 (capped) | V1 | fresh | [profiles.recall_output_settings·api·fail](evidence/F-DOM-003/2026-09-25-V2-22afc1a7-profiles.recall_output_settings-api.json) | VAL-01(H), API-22(M) |
-| F-DOM-004 | Recall a profile: its power-on / power-off macro runs | V4 | V1 (capped) | V1 | fresh | [profiles.recall_power_macro·api·fail](evidence/F-DOM-004/2026-09-25-V2-22afc1a7-profiles.recall_power_macro-api.json) | VAL-02(M), BE-02(C), API-08(M) |
+| F-DOM-004 | Recall a profile: its power-on / power-off macro runs | V4 | V1 | V1 | fresh | [profiles.recall_power_macro·api·fail](evidence/F-DOM-004/2026-09-25-V2-22afc1a7-profiles.recall_power_macro-api.json) | VAL-02(M), API-08(M) |
 | F-DOM-005 | Protect a profile with a passcode (per-item PIN) | V3 | V1 (capped) | V0 | fresh | [profiles.recall_needs_passcode·api·pass](evidence/F-DOM-005/2026-09-25-V2-22afc1a7-profiles.recall_needs_passcode-api.json) | SEC-05(H), SEC-06(H), UI-01(H) |
 | F-DOM-006 | Favourite, pin, reorder profiles and show them on the dashboard | V3 | V1 | V1 | — | — | API-20(M) |
 | F-DOM-007 | Per-profile CEC targets (nav/playback/volume/power) and auto-resolve | V3 | V1 (capped) | V1 | — | — | API-23(H) |
@@ -169,7 +169,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-DOM-017 | Scene execution history | V3 | V1 (capped) | V1 | — | — | API-02(C) |
 | F-DOM-018 | Legacy 'scenes' (v1) as aliases of profiles | V2 | V1 (capped) | V1 | — | — | API-12(M), API-23(H) |
 | F-DOM-019 | Create, edit, delete and validate CEC macros | V3 | V1 | V1 | — | — | — |
-| F-DOM-020 | Run a CEC macro (steps, targets, delays) | V4 | V1 (capped) | V1 | — | — | VAL-02(M), BE-02(C) |
+| F-DOM-020 | Run a CEC macro (steps, targets, delays) | V4 | V1 | V1 | — | — | VAL-02(M) |
 | F-DOM-021 | Test / dry-run a macro | V3 | V1 | V1 | — | — | — |
 | F-DOM-022 | Favourite macros and show them on the dashboard | V3 | V1 | V1 | — | — | API-20(M) |
 | F-DOM-023 | Built-in shortcuts: route all to an output, one-to-one routing | V3 | V1 (capped) | V1 | — | — | API-01(C) |
@@ -214,7 +214,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-UI-021 | Interface settings | V3 | V1 | V1 | — | — | UI-05(M) |
 | F-UI-022 | Shortcuts drawer: run, rename, reorder | V3 | V1 | V1 | — | — | — |
 | F-UI-023 | Integrations drawer (Flic request builder, HA YAML, Remote 3 info) | V3 | V1 (capped) | V1 | — | — | SEC-08(H) |
-| F-UI-024 | Live updates when another client or the matrix changes something | V3 | V1 (capped) | V1 | stale | [routing.grid_notifies_other_clients·browser·fail](evidence/F-UI-024/2026-09-25-V3-d6668000-routing.grid_notifies_other_clients-browser.json) | UI-02(H), BE-31(M), UC-17(H), VAL-05(M) |
+| F-UI-024 | Live updates when another client or the matrix changes something | V3 | V1 (capped) | V1 | stale | [routing.grid_notifies_other_clients·browser·fail](evidence/F-UI-024/2026-09-25-V3-d6668000-routing.grid_notifies_other_clients-browser.json) | UI-02(H), BE-31(M), VAL-05(M) |
 | F-UI-025 | Reconnect and resync after the WebSocket drops | V3 | V1 | V1 | — | — | UI-03(M) |
 | F-UI-026 | Show an error state when the matrix is unreachable | V3 | V1 (capped) | V1 | — | — | UI-29(M), VAL-04(H) |
 | F-UI-027 | Toasts and confirmation dialogs | V3 | V1 | V1 | — | — | UI-32(M) |
@@ -241,7 +241,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-KIO-007 | Run shortcuts from the kiosk and map them to slots | V3 | V1 | V1 | — | — | — |
 | F-KIO-008 | Run profiles from the kiosk; create one with the profile wizard | V3 | V1 | V1 | — | — | UI-25(M) |
 | F-KIO-009 | CEC remote in the kiosk | V3 | V1 | V1 | — | — | — |
-| F-KIO-010 | Kiosk live updates | V3 | V1 (capped) | V1 | — | — | UI-02(H), UC-17(H) |
+| F-KIO-010 | Kiosk live updates | V3 | V1 (capped) | V1 | — | — | UI-02(H) |
 | F-KIO-011 | Kiosk disconnected state | V3 | V1 | V1 | — | — | UI-29(M) |
 | F-KIO-012 | Kiosk layout and pins persist | V3 | V1 | V1 | — | — | UI-08(M) |
 | F-KIO-013 | Kiosk follows the selected theme | V3 | V1 | V1 | — | — | UI-34(L) |
@@ -252,22 +252,22 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | ID | Feature | Target | Level | Recorded | Freshness | Evidence | Open findings |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | F-UC-001 | Discover the integration and register the driver (mDNS, driver URL) | V4 | V0 (capped) | V0 | — | — | UC-03(H), UC-11(M), UC-16(L) |
-| F-UC-002 | Set up the integration on the Remote | V4 | V1 (capped) | V1 | — | — | BE-02(C), UC-05(H), UC-02(H) |
-| F-UC-003 | Reconfigure the integration (new matrix address) | V4 | V0 (capped) | V0 | — | — | UC-05(H), BE-10(M) |
+| F-UC-002 | Set up the integration on the Remote | V4 | V1 (capped) | V1 | — | — | UC-05(H), UC-02(H) |
+| F-UC-003 | Reconfigure the integration (new matrix address) | V4 | V1 (capped) | V1 | — | — | UC-05(H) |
 | F-UC-004 | Preset buttons on the Remote | V4 | V3 | V3 | — | — | UC-14(M) |
 | F-UC-005 | Matrix remote entity with a preset page | V4 | V3 | V3 | — | — | UC-12(L) |
-| F-UC-006 | Per-input CEC remotes (source power, navigation, playback) | V4 | V1 (capped) | V1 | — | — | UC-01(C), UC-12(L), UC-22(M) |
-| F-UC-007 | Per-output CEC remotes (TV power, volume) | V4 | V1 (capped) | V1 | — | — | UC-01(C), BE-14(M), UC-22(M) |
+| F-UC-006 | Per-input CEC remotes (source power, navigation, playback) | V4 | V3 | V3 | — | — | UC-12(L) |
+| F-UC-007 | Per-output CEC remotes (TV power, volume) | V4 | V3 | V3 | — | — | BE-14(M) |
 | F-UC-008 | Choose an output's source from the Remote (media player source list) | V4 | V3 | V3 | — | — | UC-08(M), UC-10(M) |
 | F-UC-009 | TV power / volume / mute from the output media player | V4 | V3 | V3 | — | — | UC-10(M), BE-24(L) |
 | F-UC-010 | Matrix power switch on the Remote | V4 | V3 | V3 | — | — | UC-09(M) |
-| F-UC-011 | Input signal and cable sensors | V4 | V1 (capped) | V1 | — | — | UC-04(H), UC-13(L), BE-03(H) |
-| F-UC-012 | Output connected, cable and source sensors | V4 | V1 (capped) | V1 | — | — | UC-04(H), UC-13(L) |
-| F-UC-013 | Entities go unavailable while the matrix is unreachable | V4 | V0 (capped) | V0 | — | — | UC-04(H), BE-06(H) |
-| F-UC-014 | Remote standby and wake | V4 | V1 (capped) | V1 | — | — | UC-06(M), UC-17(H), BE-09(M) |
-| F-UC-015 | Only changed attributes are sent to the Remote | V4 | V0 | V0 | — | — | UC-07(M) |
-| F-UC-016 | Renamed inputs/outputs show up on the Remote | V4 | V0 | V0 | — | — | UC-08(M), BE-16(M) |
-| F-UC-017 | Restore the configuration at startup (also with the matrix offline) | V4 | V3 | V3 | — | — | UC-19(L) |
+| F-UC-011 | Input signal and cable sensors | V4 | V1 (capped) | V1 | — | — | UC-13(L), BE-03(H) |
+| F-UC-012 | Output connected, cable and source sensors | V4 | V3 | V3 | — | — | UC-13(L) |
+| F-UC-013 | Entities go unavailable while the matrix is unreachable | V4 | V3 | V3 | — | — | — |
+| F-UC-014 | Remote standby and wake | V4 | V3 | V3 | — | — | — |
+| F-UC-015 | Only changed attributes are sent to the Remote | V4 | V3 | V3 | — | — | — |
+| F-UC-016 | Renamed inputs/outputs show up on the Remote | V4 | V1 | V1 | — | — | UC-08(M), BE-16(M) |
+| F-UC-017 | Restore the configuration at startup (also with the matrix offline) | V4 | V3 | V3 | — | — | — |
 
 ## Home Assistant component (F-HA)
 
@@ -319,7 +319,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-OPS-009 | Verify the matrix TLS certificate (OREI_VERIFY_SSL) | V4 | V0 | V0 | — | — | SEC-09(M) |
 | F-OPS-010 | Log level (LOG_LEVEL) | V4 | V0 | V0 | — | — | SEC-10(M) |
 | F-OPS-011 | Enable/disable integrations and the web UI (UC_ENABLED, WEBUI_ENABLED, USE_MODULAR) | V4 | V0 | V0 | — | — | DEP-07(M), BE-19(M), BE-20(M) |
-| F-OPS-012 | Background polling (POLLING_ENABLED / POLLING_INTERVAL) | V4 | V0 (capped) | V0 | — | — | UC-17(H), BE-08(M), TST-03(M) |
+| F-OPS-012 | Background polling (POLLING_ENABLED / POLLING_INTERVAL) | V4 | V0 | V0 | — | — | TST-03(M) |
 | F-OPS-013 | Telnet options (OREI_TELNET_PORT, OREI_USE_TELNET_CEC) | V4 | V1 | V1 | — | — | — |
 | F-OPS-014 | Cache and retry tuning (OREI_STATUS_CACHE_TTL, OREI_CEC_CACHE_TTL, OREI_*RETR*) | V4 | V1 (capped) | V1 | — | — | BE-03(H) |
 | F-OPS-015 | Hub data persists across restarts (MATRIX_DATA_DIR) | V4 | V1 | V1 | — | — | DEP-07(M) |
@@ -353,7 +353,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 
 | ID | Feature | Target | Level | Recorded | Freshness | Evidence | Open findings |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| F-REL-001 | Reconnect automatically after a matrix outage | V4 | V0 (capped) | V0 | — | — | BE-04(H), BE-06(H), BE-17(M) |
+| F-REL-001 | Reconnect automatically after a matrix outage | V4 | V0 (capped) | V0 | — | — | BE-04(H), BE-17(M) |
 | F-REL-002 | Report the connection state truthfully on errors and timeouts | V4 | V0 (capped) | V0 | — | — | BE-04(H) |
 | F-REL-003 | Detect a wrong matrix password | V4 | V0 (capped) | V0 | — | — | BE-05(H) |
 | F-REL-004 | Log in again when the matrix session expires | V4 | V0 (capped) | V0 | — | — | BE-04(H) |
@@ -364,10 +364,10 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-REL-009 | Matrix unreachable: commands fail visibly and no state is made up | V4 | V1 (capped) | V1 | fresh | [failures.unreachable_switch·api·pass](evidence/F-REL-009/2026-09-25-V2-22afc1a7-failures.unreachable_switch-api.json) | BE-04(H), VAL-04(H), UI-29(M) |
 | F-REL-010 | Status stays fresh (caches expire, one refresh at a time) | V4 | V1 (capped) | V1 | — | — | BE-03(H), API-11(M) |
 | F-REL-011 | API calls are not blocked while the hub reconnects | V4 | V0 | V0 | — | — | BE-17(M) |
-| F-REL-012 | Background polling keeps state live without a Remote connected | V4 | V0 (capped) | V0 | — | — | UC-17(H), BE-08(M) |
+| F-REL-012 | Background polling keeps state live without a Remote connected | V4 | V0 | V0 | — | — | — |
 | F-REL-013 | The event loop never stalls (loop-lag metric) | V4 | V1 (capped) | V1 | — | — | BE-28(C), SEC-06(H) |
 | F-REL-014 | A slow WebSocket client cannot stall commands | V4 | V1 | V1 | — | — | API-09(M) |
 | F-REL-015 | Tolerate slow and malformed matrix responses | V4 | V1 | V1 | — | — | — |
-| F-REL-016 | Standby does not start reconnect storms or duplicate pollers | V4 | V0 | V0 | — | — | BE-09(M), UC-06(M) |
-| F-REL-017 | No leaked sessions, sockets or tasks after reconfiguration | V4 | V0 | V0 | — | — | BE-10(M), BE-11(M) |
+| F-REL-016 | Standby does not start reconnect storms or duplicate pollers | V4 | V0 | V0 | — | — | — |
+| F-REL-017 | No leaked sessions, sockets or tasks after reconfiguration | V4 | V0 | V0 | — | — | BE-11(M) |
 | F-REL-018 | 72-hour soak with flat memory, tasks and sockets | V5 | V0 | V0 | — | — | — |
