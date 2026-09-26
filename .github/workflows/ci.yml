@@ -352,7 +352,8 @@ jobs:
         continue-on-error: true
         run: >-
           npx playwright test -c tests/e2e/playwright.config.ts
-          --project=smoke --project=desktop --project=tablet --project=phone --project=kiosk
+          --project=smoke --project=desktop --project=tablet --project=phone
+          --project=kiosk-tab-a11 --project=kiosk-iphone16promax
           --update-snapshots=none
 
       - name: Upload Playwright report

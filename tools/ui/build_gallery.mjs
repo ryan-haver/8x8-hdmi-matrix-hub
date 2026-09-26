@@ -9,6 +9,8 @@
 //   --base <ref>        compare the working-tree baselines with the baselines at <ref>
 //   --changed-only      (with --base) only include entries that differ
 //   --out <dir>         output directory (default ui-gallery/)
+//   --viewports <list>  only these viewports (projects), comma-separated,
+//                       e.g. --viewports kiosk-tab-a11,kiosk-iphone16promax
 //   --thumb <px>        thumbnail width (default 360)
 //
 // Output (ui-gallery/ is gitignored):
@@ -32,7 +34,8 @@ import sharp from 'sharp';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SNAP_REL = 'tests/e2e/visual/__snapshots__';
 const SNAP_DIR = path.join(ROOT, SNAP_REL);
-const VIEWPORT_ORDER = ['desktop', 'tablet', 'phone', 'kiosk'];
+// Keep in sync with tests/e2e/support/viewports.ts (VIEWPORTS).
+const VIEWPORT_ORDER = ['desktop', 'tablet', 'phone', 'kiosk-tab-a11', 'kiosk-iphone16promax'];
 const THEME_ORDER = ['tron-classic', 'neon', 'royal', 'vaporwave'];
 const LFS_POINTER = Buffer.from('version https://git-lfs');
 
@@ -46,6 +49,7 @@ const baseRef = opt('--base', null);
 const changedOnly = args.includes('--changed-only');
 const outDir = path.resolve(ROOT, opt('--out', 'ui-gallery'));
 const thumbWidth = Number(opt('--thumb', 360));
+const onlyViewports = opt('--viewports', null)?.split(',').map((v) => v.trim()).filter(Boolean) ?? null;
 
 // --- load image sets ---------------------------------------------------------
 function git(argv, input) {
@@ -153,7 +157,8 @@ const manifest = loadManifest(null);
 const baseManifest = baseRef ? loadManifest(baseRef) : { entries: [] };
 const meta = new Map([...baseManifest.entries, ...manifest.entries].map((e) => [e.name, e]));
 
-const keys = new Set([...current.keys(), ...(base ? base.keys() : [])]);
+const inScope = (key) => !onlyViewports || onlyViewports.includes(parseKey(key).viewport);
+const keys = new Set([...current.keys(), ...(base ? base.keys() : [])].filter(inScope));
 const entries = new Map(); // entry name -> {name, meta, shots: []}
 const changed = [];
 let totalBytes = 0;
@@ -187,9 +192,12 @@ for (const key of [...keys].sort()) {
   entries.get(entry).shots.push(shot);
 }
 
-// Catalog entries that have no images at all (e.g. "not capturable").
+// Catalog entries that have no images at all (e.g. "not capturable"). With
+// --viewports, entries captured only at other viewports are left out.
 for (const e of manifest.entries) {
-  if (!entries.has(e.name) && !changedOnly) entries.set(e.name, { name: e.name, meta: e, shots: [] });
+  if (entries.has(e.name) || changedOnly) continue;
+  if (onlyViewports && e.viewports && e.viewports.length > 0) continue;
+  entries.set(e.name, { name: e.name, meta: e, shots: [] });
 }
 
 const list = [...entries.values()].sort((a, b) => a.name.localeCompare(b.name));
@@ -210,11 +218,13 @@ if (base) {
 }
 
 const data = {
-  title: base ? `UI review: ${changedEntries.length} changed entr${changedEntries.length === 1 ? 'y' : 'ies'} vs ${baseRef}` : 'UI baseline gallery',
+  title:
+    (base ? `UI review: ${changedEntries.length} changed entr${changedEntries.length === 1 ? 'y' : 'ies'} vs ${baseRef}` : 'UI baseline gallery') +
+    (onlyViewports ? ` (${onlyViewports.join(', ')})` : ''),
   compare: !!base,
   baseRef,
   generated: new Date().toISOString(),
-  imageCount: [...current.keys()].length,
+  imageCount: [...current.keys()].filter(inScope).length,
   entryCount: list.length,
   changedEntries,
   entries: list,

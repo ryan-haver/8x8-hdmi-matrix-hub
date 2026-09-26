@@ -4,7 +4,7 @@
 // UI elements: a new component or state is not done until it has an entry.
 // visual.spec.ts captures every entry at every viewport in the default theme
 // (Tron Classic), and entries marked `themed` also in Neon, Royal and
-// Vaporwave at desktop and kiosk size.
+// Vaporwave at desktop and kiosk-device sizes.
 //
 // Naming: <area>/<element>/<state>, e.g. matrix/grid/default,
 // drawer/theme/customize, kiosk/presets/edit-mode.
@@ -33,9 +33,9 @@ export type CatalogEntry = {
   description: string;
   /** Which page to load. */
   page: 'ui' | 'kiosk';
-  /** Also capture in the other three theme presets (desktop + kiosk viewports). */
+  /** Also capture in the other three theme presets (desktop + kiosk-device viewports). */
   themed?: boolean;
-  /** Restrict to these viewports (default: all four). */
+  /** Restrict to these viewports (default: all; see tests/e2e/support/viewports.ts). */
   viewports?: ViewportName[];
   /** Browser setup before navigation (storage, WebSocket). */
   prepare?: PrepareOptions;
@@ -964,7 +964,7 @@ export const CATALOG: CatalogEntry[] = [
   {
     name: 'drawer/stacked/deck-and-presets',
     page: 'ui',
-    viewports: ['desktop', 'tablet', 'kiosk'],
+    viewports: ['desktop', 'tablet', 'kiosk-tab-a11'],
     description: 'Control Deck and a right-side drawer open together (wide screens keep both).',
     setup: async ({ page }) => {
       await drawer(page, 'drawer-presets-btn', PRESETS);
