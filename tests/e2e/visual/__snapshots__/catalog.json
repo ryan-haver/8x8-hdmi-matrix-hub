@@ -10,7 +10,8 @@
     "desktop",
     "tablet",
     "phone",
-    "kiosk"
+    "kiosk-tab-a11",
+    "kiosk-iphone16promax"
   ],
   "entries": [
     {
@@ -670,7 +671,7 @@
       "viewports": [
         "desktop",
         "tablet",
-        "kiosk"
+        "kiosk-tab-a11"
       ]
     },
     {
@@ -1389,7 +1390,8 @@
       "themed": false,
       "viewports": [
         "desktop",
-        "kiosk"
+        "kiosk-tab-a11",
+        "kiosk-iphone16promax"
       ]
     }
   ]
