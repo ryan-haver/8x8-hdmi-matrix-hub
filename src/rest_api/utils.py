@@ -405,6 +405,12 @@ def set_matrix_device(
         _scene_manager = _get_scene_manager(str(_get_data_dir()))
         _profile_manager = _get_profile_manager(str(_get_data_dir()))
         _macro_manager = _get_macro_manager(str(_get_data_dir()))
+    # VAL-02: macros (and the profile power-on macros and scene macro steps
+    # that run them) need a CEC sender. The UC driver installs its own after
+    # this call; modular mode (run.py) never did, so every macro failed with
+    # "CEC sender not configured". This default works in every mode.
+    if _macro_manager is not None:
+        _macro_manager.set_cec_sender(matrix_cec_sender)
     # Phase 7 managers live in the persistent data directory, not config.
     # When data_dir is not explicitly passed, resolve it from env vars.
     if data_dir is None:
@@ -462,6 +468,20 @@ def set_macro_cec_sender(sender):
     """Set the CEC sender function for macro execution."""
     if _macro_manager is not None:
         _macro_manager.set_cec_sender(sender)
+
+
+async def matrix_cec_sender(target_type: str, port: int, command: str) -> bool:
+    """The macro CEC sender: one command to one port of the current matrix device.
+
+    ``target_type`` is ``"input"`` (source) or ``"output"`` (display) and
+    ``command`` a name such as ``POWER_ON``; ``OreiMatrix.send_cec`` picks the
+    right device table for each side (BE-14). Returns False when no matrix is
+    connected or the matrix refused the command.
+    """
+    matrix = _matrix_device
+    if matrix is None or not matrix.connected or target_type not in ("input", "output"):
+        return False
+    return bool(await matrix.send_cec(command, port, is_output=target_type == "output"))
 
 
 # =============================================================================
