@@ -16,7 +16,7 @@ from tools.uc_remote_sim import UcRemoteSim
 from tools.validate.device import SimDevice
 from tools.validate.stack import SimulatorProcess, free_port
 
-from ._helpers import known_bug
+from ._helpers import CYCLE, INPUT_NAMES, POLL, known_bug, sent
 
 
 def _config(hub) -> dict:
@@ -48,13 +48,29 @@ async def test_setup_connects_creates_entities_and_saves_the_configuration(
         assert (await sim.state())["outputs"][1]["source"] == 6
 
 
-@known_bug("BE-02", "handle_driver_setup awaits the synchronous set_matrix_device(); the TypeError turns every "
-           "successful setup into STOP/ERROR 'OTHER' (and the macro CEC sender is never wired)")
 async def test_setup_reports_success(uc_hub_factory, uc_simulator: SimulatorProcess) -> None:
+    """BE-02: a successful setup ends in STOP/OK (it used to end in ERROR 'OTHER')."""
     hub = await uc_hub_factory(restore=False)
     async with UcRemoteSim(hub.uc_url) as remote:
         outcome = await remote.setup_driver({"host": uc_simulator.host, "port": uc_simulator.https_port})
     assert outcome.final == {"event_type": "STOP", "state": "OK"}
+
+
+async def test_setup_starts_live_updates_without_a_remote_connect(uc_hub_factory, uc_simulator: SimulatorProcess,
+                                                                  sim: SimDevice) -> None:
+    """After setup the entities follow the device at once (the poller starts with the configured matrix,
+    not with a later Remote `connect`) and the device state is CONNECTED."""
+    hub = await uc_hub_factory(restore=False)
+    async with UcRemoteSim(hub.uc_url) as remote:
+        outcome = await remote.setup_driver({"host": uc_simulator.host, "port": uc_simulator.https_port})
+        assert outcome.state == "OK"
+        assert (await remote.get_device_state())["msg_data"]["state"] == "CONNECTED"
+        await remote.get_available_entities()
+        await remote.subscribe_events(["media_player.output_2"])
+        since = remote.mark()
+        await sim.patch_state({"outputs": {"1": {"source": 7}}})
+        await remote.wait_event("entity_change", lambda d: d["entity_id"] == "media_player.output_2"
+                                and d["attributes"].get("source") == INPUT_NAMES[6], since=since, timeout=CYCLE)
 
 
 async def test_setup_with_an_unreachable_matrix_fails_cleanly(uc_hub_factory) -> None:
@@ -67,10 +83,9 @@ async def test_setup_with_an_unreachable_matrix_fails_cleanly(uc_hub_factory) ->
     assert not Path(hub.data_dir, "config_state.json").exists()
 
 
-@known_bug("UC-05", "reconfigure swaps in the new, unreachable device and clears the entities before probing it: "
-           "a typo in the address breaks a working install (commands answer 404)")
 async def test_reconfigure_with_a_bad_address_keeps_the_working_setup(uc_remote: UcRemoteSim, uc_hub,
                                                                       sim: SimDevice) -> None:
+    """UC-05: the new address is probed first; a typo leaves the working installation untouched."""
     before = _config(uc_hub)
     outcome = await uc_remote.setup_driver({"host": "127.0.0.1", "port": free_port()}, reconfigure=True, timeout=60)
     assert outcome.state == "ERROR"
@@ -81,15 +96,40 @@ async def test_reconfigure_with_a_bad_address_keeps_the_working_setup(uc_remote:
     assert (await sim.state())["outputs"][0]["source"] == 6
 
 
-@known_bug("UC-05", "reconfigure clears configured_entities, so every entity the Remote subscribed answers 404 "
-           "until it resubscribes")
 async def test_reconfigure_keeps_the_subscribed_entities_working(uc_remote: UcRemoteSim,
                                                                  uc_simulator: SimulatorProcess,
                                                                  sim: SimDevice) -> None:
-    await uc_remote.setup_driver({"host": uc_simulator.host, "port": uc_simulator.https_port}, reconfigure=True)
+    """UC-05: reconfigure never clears the subscribed entities (they used to answer 404 until resubscribed)."""
+    outcome = await uc_remote.setup_driver({"host": uc_simulator.host, "port": uc_simulator.https_port},
+                                           reconfigure=True)
+    assert outcome.state == "OK"
     resp = await uc_remote.select_source("media_player.output_1", "PS5")
     assert resp["code"] == 200
     assert (await sim.state())["outputs"][0]["source"] == 6
+
+
+async def test_reconfigure_to_another_matrix_disposes_the_old_connection(uc_remote: UcRemoteSim, uc_hub,
+                                                                         uc_log_dir, sim: SimDevice) -> None:
+    """BE-10: after a successful reconfigure to a new address the subscribed entities control the new matrix,
+    and the old matrix client is disposed: the old device gets no more requests (no leaked poller/session)."""
+    other = SimulatorProcess(log_dir=uc_log_dir / "new-matrix")
+    await asyncio.to_thread(other.start)
+    try:
+        outcome = await uc_remote.setup_driver({"host": other.host, "port": other.https_port}, reconfigure=True)
+        assert outcome.state == "OK"
+        assert (_config(uc_hub)["host"], _config(uc_hub)["port"]) == (other.host, other.https_port)
+        async with SimDevice(other.control_url) as new:
+            await sim.clear_log()
+            await new.clear_log()
+            assert (await uc_remote.select_source("media_player.output_1", "PS5"))["code"] == 200
+            assert (await new.state())["outputs"][0]["source"] == 6
+            await asyncio.sleep(3 * POLL)
+            assert sent(await new.log(), "get video status"), "the new matrix is polled"
+            # HTTP only: the harness points every matrix client at the first simulator's Telnet port.
+            old_http = [e.get("command") for e in await sim.log() if e.get("channel") == "http"]
+            assert old_http == [], f"the old matrix is still used: {old_http}"
+    finally:
+        await asyncio.to_thread(other.stop)
 
 
 async def test_abort_driver_setup_keeps_the_driver_usable(uc_remote: UcRemoteSim, sim: SimDevice) -> None:

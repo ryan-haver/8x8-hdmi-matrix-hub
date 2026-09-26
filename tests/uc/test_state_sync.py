@@ -8,6 +8,7 @@ one poll cycle; outages must be reported, not papered over.
 from __future__ import annotations
 
 import asyncio
+import time
 from typing import Any
 
 import aiohttp
@@ -85,7 +86,6 @@ async def test_signal_and_cable_changes_reach_the_remote(uc_remote: UcRemoteSim,
         since=since, timeout=CYCLE)
 
 
-@known_bug("UC-07", "every poll re-sends every attribute of every subscribed entity, changed or not")
 async def test_unchanged_attributes_are_not_resent(uc_remote: UcRemoteSim, sim: SimDevice) -> None:
     # Let the first poll after subscribing sync everything, then change nothing for three cycles.
     await uc_remote.wait_event("entity_change", lambda d: d["entity_id"] == "media_player.output_8", timeout=CYCLE)
@@ -107,17 +107,16 @@ async def _outage(remote: UcRemoteSim, sim: SimDevice, faults: dict[str, Any] | 
     return since
 
 
-@known_bug("UC-04", "device state is always CONNECTED: a matrix outage never sends DISCONNECTED/ERROR")
 async def test_matrix_outage_changes_the_device_state(uc_remote: UcRemoteSim, sim: SimDevice) -> None:
+    """UC-04: a lost matrix link is reported (it used to stay CONNECTED)."""
     since = await _outage(uc_remote, sim)
     await asyncio.sleep(POLL + 1)
     assert set(uc_remote.device_states(since)) & {"ERROR", "DISCONNECTED", "CONNECTING"}
     assert (await uc_remote.get_device_state())["msg_data"]["state"] != "CONNECTED"
 
 
-@known_bug("UC-04", "during an outage only remote.orei_matrix goes UNAVAILABLE; every other entity keeps "
-           "showing live-looking values")
 async def test_entities_are_unavailable_during_an_outage(uc_remote: UcRemoteSim, sim: SimDevice) -> None:
+    """UC-04: every stateful entity goes UNAVAILABLE (it used to be only remote.orei_matrix)."""
     await _outage(uc_remote, sim)
     await asyncio.sleep(POLL + 1)
     states = [e for e in await uc_remote.get_entity_states() if e["entity_id"].startswith(STATEFUL)]
@@ -125,9 +124,51 @@ async def test_entities_are_unavailable_during_an_outage(uc_remote: UcRemoteSim,
     assert live == []
 
 
-@known_bug("UC-04", "the poll that hits the outage still pushes placeholders: when the routing read fails but "
-           "the output status comes from the cache, every output's source becomes 'Input 0' (media player and "
-           "source sensor)")
+async def test_recovery_reports_connected_and_restores_the_last_known_state(uc_remote: UcRemoteSim,
+                                                                            sim: SimDevice) -> None:
+    """UC-04 / audit §7 case 8: after the link comes back the device is CONNECTED again, the entities are
+    available with their last known values, and the Remote is resynced with the device."""
+    await uc_remote.wait_event("entity_change", lambda d: d["entity_id"] == "media_player.output_8", timeout=CYCLE)
+    await _outage(uc_remote, sim)
+    since = uc_remote.mark()
+    await sim.clear_faults()
+    await uc_remote.wait_event("device_state", lambda d: d.get("state") == "CONNECTED", since=since, timeout=15)
+    truth = expected_attributes(await sim.state())
+    last: list[str] = []
+
+    async def recovered() -> bool:
+        nonlocal last
+        states = await uc_remote.get_entity_states()
+        last = [e["entity_id"] for e in states
+                if e["entity_id"].startswith(STATEFUL) and e["attributes"].get("state") == "UNAVAILABLE"]
+        last += mismatches(states, truth)
+        return not last
+
+    assert await wait_for(recovered, timeout=CYCLE), last
+    assert (await uc_remote.get_device_state())["msg_data"]["state"] == "CONNECTED"
+
+
+async def test_a_partial_subscription_still_gets_updates(uc_remote_factory, sim: SimDevice, hub_ws) -> None:
+    """BE-08: with the output sensors not subscribed, a display change used to abort the poll (unbound
+    variable), so nothing after it was ever reported again."""
+    remote = await uc_remote_factory(entity_ids=["media_player.output_1"])
+    await remote.wait_event("entity_change", lambda d: d["entity_id"] == "media_player.output_1", timeout=CYCLE)
+    await asyncio.sleep(POLL + 0.5)
+    t0 = time.time()
+    since = remote.mark()
+    await sim.event({"type": "cable", "port_type": "output", "port": 1, "connected": False})
+    await sim.patch_state({"outputs": {"0": {"source": 3}}})
+    await remote.wait_event("entity_change", lambda d: d["entity_id"] == "media_player.output_1"
+                            and d["attributes"].get("source") == INPUT_NAMES[2], since=since, timeout=CYCLE + 2)
+
+    async def web_told() -> bool:
+        events = hub_ws.since(t0)
+        return (any(e["event"] == "connection_change" and (e["data"] or {}).get("output") == 1 for e in events)
+                and any(e["event"] == "routing_change" and (e["data"] or {}).get("output") == 1 for e in events))
+
+    assert await wait_for(web_told, timeout=CYCLE + 2)
+
+
 async def test_no_values_are_made_up_during_an_outage(uc_hub_factory, sim: SimDevice) -> None:
     """Nothing the Remote is told during an outage may contradict the device: last known values stay.
 
@@ -177,9 +218,6 @@ async def test_one_unanswered_status_read_keeps_the_remote_live(uc_remote: UcRem
     assert unavailable == []
 
 
-@known_bug("BE-06", "after the matrix link drops once, the driver's reconnect loop stops itself (the matrix's "
-           "own reconnect emits CONNECTED -> _stop_reconnection) and the poller is never restarted, so the "
-           "Remote gets no more updates (UC-04)")
 async def test_live_updates_resume_after_a_transient_failure(uc_remote: UcRemoteSim, sim: SimDevice) -> None:
     await uc_remote.wait_event("entity_change", lambda d: d["entity_id"] == "media_player.output_8", timeout=CYCLE)
     # A real, short link loss: the matrix drops the connection. (Since HIL-12 a single failed status read is
@@ -198,8 +236,6 @@ async def test_live_updates_resume_after_a_transient_failure(uc_remote: UcRemote
     assert await wait_for(updated, timeout=CYCLE + 5)
 
 
-@known_bug("UC-04", "a driver started while the matrix is unreachable reports CONNECTED and seeds its sensors "
-           "with made-up values ([0]*8: every display 'Disconnected', every source 'No Signal')")
 async def test_starting_with_the_matrix_offline_reports_no_made_up_state(uc_hub_factory, sim: SimDevice) -> None:
     await sim.set_faults({"drop_http": True})
     hub = await uc_hub_factory()
@@ -234,16 +270,21 @@ async def test_input_rename_updates_the_source_list(uc_remote: UcRemoteSim, sim:
     assert await wait_for(renamed, timeout=CYCLE + 2)
 
 
-@known_bug("UC-08", "after a rename and a Remote reconnect the driver rebuilds available_entities only; the "
-           "subscribed media player still matches sources against the old names, so the new name is rejected (400)")
 async def test_select_source_by_new_name_after_rename(uc_remote: UcRemoteSim, sim: SimDevice,
                                                       hub_api: aiohttp.ClientSession) -> None:
+    """A rename seen at the next Remote `connect` replaces the subscribed entities in place (WP-B2, UC-05 "update
+    entities in place"): the new source name works. It used to rebuild only available_entities, so the subscribed
+    media player kept matching the old names (400). A live rename without a reconnect is still UC-08 (above)."""
     await _rename_input(hub_api, 3, "Xbox")
     since = uc_remote.mark()
     await uc_remote.send_connect()  # what the Remote sends when it reconnects / wakes
     await uc_remote.wait_event("device_state", since=since, timeout=15)
     available = {e["entity_id"]: e for e in await uc_remote.get_available_entities()}
     assert available["remote.input_3_cec"]["name"] == {"en": "Xbox CEC"}  # the rebuilt entity has the new name
+    # The subscribed media player was replaced, and the Remote was sent its new source list.
+    assert (await uc_remote.entity_state("media_player.output_1"))["source_list"][2] == "Xbox"
+    assert any(c["entity_id"] == "media_player.output_1" and "Xbox" in c["attributes"].get("source_list", [])
+               for c in uc_remote.entity_changes(since))
     resp = await uc_remote.select_source("media_player.output_1", "Xbox")
     assert resp["code"] == 200
     assert (await sim.state())["outputs"][0]["source"] == 3
