@@ -1,0 +1,24 @@
+# Remote 3 integration with host networking (recommended; docs/DOCKER.md).
+#
+#   HUB_HOST_IP=192.168.1.20 docker compose -f docker-compose.yml -f docker-compose.uc-host.yml up -d
+#
+# The Remote finds the integration by mDNS, which only reaches the LAN when the
+# container shares the host's network. The web UI / REST API listen directly on
+# the host at HUB_PORT (default 8080) and the integration on 9095.
+# HUB_HOST_IP (this machine's LAN address) is the address mDNS announces.
+# Host networking needs a Linux Docker host (on Docker Desktop, enable it under
+# Settings > Resources > Network, or use docker-compose.uc-bridge.yml).
+#
+# On Remote setup: Settings > Integrations > Add new > "HDMI Matrix", then enter
+# the matrix's IP address. The integration keeps that address in
+# /data/config_state.json; with UC enabled it is the address the hub uses.
+
+services:
+  hdmi-matrix-hub:
+    network_mode: host
+    ports: !reset []
+    environment:
+      API_PORT: ${HUB_PORT:-8080}
+      UC_ENABLED: "true"
+      UC_INTEGRATION_INTERFACE: ${HUB_HOST_IP:?set HUB_HOST_IP to this machine's LAN IP address}
+      UC_DISABLE_MDNS_PUBLISH: "false"

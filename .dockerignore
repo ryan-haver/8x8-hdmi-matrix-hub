@@ -1,38 +1,18 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-.venv/
-venv/
-ENV/
-env/
+# Build context allow-list: the image needs only these (see Dockerfile).
+# Everything else (docs, tests, tools, node_modules, data, agent/cache folders)
+# stays out of the context.
+*
+!src/
+!web/
+!run.py
+!run_server.py
+!driver.json
+!requirements.txt
+!requirements-uc.txt
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Git
-.git/
-.gitignore
-
-# Local files
-*.log
-*.lock
-driver.lock
-config_state.json
-
-# Docker
-Dockerfile
-docker-compose*.yml
-.dockerignore
-
-# Documentation
-*.md
-LICENSE
-
-# Data directory (mounted as volume)
-data/
+# Never ship caches or local state from inside the allowed folders.
+**/__pycache__/
+**/*.py[cod]
+**/.pytest_cache/
+**/*.lock
+**/config_state.json

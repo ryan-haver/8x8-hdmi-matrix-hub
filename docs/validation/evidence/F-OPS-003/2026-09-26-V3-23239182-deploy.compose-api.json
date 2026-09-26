@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "features": ["F-OPS-003"],
+  "level": "V3",
+  "scenario": "deploy.compose",
+  "scenario_title": "docker-compose.yml alone, with the UC bridge override and with the UC host override",
+  "scenario_kind": "happy",
+  "target": "sim",
+  "client": "api",
+  "result": "pass",
+  "gate": "ok",
+  "blocked_reason": null,
+  "commit": {
+    "sha": "232391822a4d5a56d923f46f87fee7cb787f75d3",
+    "short": "23239182",
+    "branch": "wp-d2-deployment",
+    "dirty": false,
+    "dirty_files": []
+  },
+  "timestamp": {
+    "started": "2026-09-26T01:18:24.344Z",
+    "finished": "2026-09-26T01:19:08.157Z"
+  },
+  "operator": "automation",
+  "environment": {
+    "target": "sim",
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "hub": {
+      "entry": "",
+      "version": null,
+      "api_version": null,
+      "image_digest": null,
+      "env": {}
+    },
+    "client": {
+      "name": "api",
+      "runner": "pytest tests/deploy (HTTP, docker CLI)"
+    },
+    "simulator": {
+      "seed_state": "tools/simulator/states/default.json",
+      "container": true
+    }
+  },
+  "procedure": [
+    "docker compose -f docker-compose.yml up -d  ({'HUB_CONTAINER_NAME': 'hubtest-compose-hub-a0f7ff28', 'HUB_PORT': '64514', 'MATRIX_HOST': '192.0.2.1'}; image under test)",
+    "docker compose -f docker-compose.yml -f docker-compose.uc-bridge.yml up -d  ({'HUB_CONTAINER_NAME': 'hubtest-compose-hub-0fea28c3', 'HUB_PORT': '64785', 'MATRIX_HOST': '192.0.2.1', 'HUB_HOST_IP': '127.0.0.1', 'UC_HOST_PORT': '64784'}; image under test)"
+  ],
+  "observations": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/health",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/ui",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/health",
+        "status": 200
+      }
+    ],
+    "response_status": null,
+    "hub_reads": [],
+    "state_before": {},
+    "state_after": {},
+    "state_diff": [],
+    "device_log": [],
+    "ws_events": [],
+    "screenshots": [],
+    "operator": [],
+    "restore": null,
+    "notes": []
+  },
+  "checks": [
+    {
+      "description": "test_default_compose_starts_the_hub: DEP-01: plain `docker compose up -d` starts the hub (no profiles); the integration is off.",
+      "result": "pass",
+      "detail": "passed in 1.8s",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "test_uc_bridge_compose_advertises_the_driver_url: DEP-02/UC-11 bridge variant: mDNS off, 9095 published, driver URL from HUB_HOST_IP.",
+      "result": "pass",
+      "detail": "passed in 3.8s",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "test_uc_compose_files_require_the_host_ip",
+      "result": "pass",
+      "detail": "passed in 0.3s",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "test_uc_host_compose_listens_on_the_host: DEP-02 recommended variant: host networking, mDNS published, API and 9095 directly on the host.",
+      "result": "n/a",
+      "detail": "skipped: Skipped: host networking needs a Linux Docker host",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    }
+  ],
+  "findings": [],
+  "covers": [
+    "Dockerfile",
+    ".dockerignore",
+    "run.py",
+    "driver.json",
+    "requirements.txt",
+    "requirements-uc.txt",
+    "src/rest_api/app.py",
+    "src/rest_api/core.py",
+    "src/rest_api/static.py",
+    "src/persistence.py",
+    "docker-compose.yml",
+    "docker-compose.uc-host.yml",
+    "docker-compose.uc-bridge.yml"
+  ]
+}

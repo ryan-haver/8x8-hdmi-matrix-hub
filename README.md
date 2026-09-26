@@ -126,46 +126,50 @@ The **HDCVT HDP-MXC88A** is an OEM (Original Equipment Manufacturer) product tha
 ### Docker (Recommended)
 
 ```bash
-# Full mode - UC integration + REST API + Web UI
-docker-compose up -d
-docker logs -f hdmi-matrix-hub
+mkdir -p data && sudo chown 1000:1000 data     # Linux: the container runs as UID 1000
+MATRIX_HOST=192.168.1.50 docker compose up -d  # your matrix's IP address
+docker compose logs -f
+# Web UI: http://<docker-host>:8080/ui   Kiosk: http://<docker-host>:8080/kiosk
 ```
 
-#### Deployment Modes
+That starts the core (REST API, web UI, kiosk). Integrations are switched on with
+environment variables; the image contains all of them.
 
-| Mode         | Command                                | Use Case                        |
-| ------------ | -------------------------------------- | ------------------------------- |
-| **Full**     | `docker-compose up`                    | UC Remote + API + Web UI        |
-| **API-only** | `docker-compose --profile api-only up` | HA/MQTT without UC dependencies |
+| Setup | Command |
+| ----- | ------- |
+| **Core** (web UI, kiosk, REST for HA/Flic/scripts) | `docker compose up -d` |
+| **+ Remote 3**, host networking, found by mDNS (recommended) | `HUB_HOST_IP=<this host's LAN IP> docker compose -f docker-compose.yml -f docker-compose.uc-host.yml up -d` |
+| **+ Remote 3**, bridge networking, fixed driver URL | `HUB_HOST_IP=<this host's LAN IP> docker compose -f docker-compose.yml -f docker-compose.uc-bridge.yml up -d` |
+
+See [docs/DOCKER.md](docs/DOCKER.md) for persistent storage, networking and upgrading.
 
 ### Manual Installation
 
 ```bash
 python -m venv .venv
 .venv\Scripts\activate  # Windows
-
-# Full mode (with UC Remote support)
 pip install -r requirements-uc.txt
-python run.py
 
-# API-only mode (no UC dependencies)
-pip install -r requirements.txt
-UC_ENABLED=false python run.py
+MATRIX_HOST=192.168.1.50 python run.py                  # core only
+UC_ENABLED=true python run.py                           # core + Remote 3 integration (port 9095)
 ```
 
 ### Environment Variables
 
-| Variable        | Default         | Description                                      |
-| --------------- | --------------- | ------------------------------------------------ |
-| `MATRIX_HOST`   | `192.168.0.100` | Matrix IP address (canonical name)                |
-| `MATRIX_DATA_DIR` | _(none)_       | Data directory for profiles, macros, settings      |
-| `API_PORT`      | `8080`          | REST API port                                    |
-| `UC_ENABLED`    | `true`          | Enable UC integration                            |
-| `WEBUI_ENABLED` | `true`          | Enable Web UI                                    |
-| `LOG_LEVEL`     | `INFO`          | Logging verbosity                                |
-| `OREI_VERIFY_SSL` | `false`        | Verify SSL certificate of the matrix switch      |
+| Variable | Default | Description |
+| -------- | ------- | ----------- |
+| `MATRIX_HOST` | `192.168.0.100` | Matrix IP address (with `UC_ENABLED=true` the Remote's setup sets it) |
+| `MATRIX_PORT` | `443` | Matrix HTTPS port |
+| `API_PORT` | `8080` | REST API, web UI and kiosk port |
+| `DATA_DIR` | image: `/data` | Persistent data (settings, profiles, macros, integration state) |
+| `UC_ENABLED` | `false` | Start the Unfolded Circle Remote 3 integration |
+| `LOG_LEVEL` | `INFO` | Logging verbosity |
+| `OREI_VERIFY_SSL` | `false` | Verify the matrix's TLS certificate |
 
-> **Note**: `OREI_HOST` and `OREI_API_PORT` are deprecated. Use `MATRIX_HOST` and `API_PORT` instead.
+The Remote integration's variables (`UC_INTEGRATION_HTTP_PORT`, `UC_INTEGRATION_INTERFACE`,
+`UC_DISABLE_MDNS_PUBLISH`, `UC_DRIVER_URL`, `UC_CONFIG_HOME`) and the deprecated names
+(`OREI_HOST`, `OREI_PORT`, `REST_API_PORT`, `OREI_API_PORT`, `MATRIX_DATA_DIR`; `USE_MODULAR`
+and `WEBUI_ENABLED` are ignored) are in [docs/DOCKER.md](docs/DOCKER.md#environment-variables).
 
 ## 📁 Project Structure
 
@@ -208,10 +212,10 @@ UC_ENABLED=false python run.py
 ├── web/                       # Web UI dashboard
 ├── docs/                      # Documentation
 ├── tests/                     # Test suite (24 files)
-├── run.py                     # Main entry point
-├── run_server.py              # Standalone API server
-├── Dockerfile                 # Multi-stage build
-├── docker-compose.yml         # Deployment profiles
+├── run.py                     # The one entry point (core + opt-in integrations)
+├── run_server.py              # Deprecated alias of run.py (core only)
+├── Dockerfile                 # One image with every integration
+├── docker-compose.yml         # Core; docker-compose.uc-*.yml add the Remote 3
 ├── requirements.txt           # Core dependencies
 └── requirements-uc.txt        # UC-specific dependencies
 ```
@@ -233,10 +237,10 @@ UC_ENABLED=false python run.py
 
 ## 📡 Ports
 
-| Port | Protocol  | Purpose                      |
-| ---- | --------- | ---------------------------- |
-| 9095 | WebSocket | Unfolded Circle integration  |
-| 8080 | HTTP      | REST API (Flic, HA, scripts) |
+| Port | Protocol | Purpose |
+| ---- | -------- | ------- |
+| 9095 | WebSocket | Unfolded Circle integration (only with `UC_ENABLED=true`) |
+| 8080 | HTTP | REST API (Flic, HA, scripts), web UI, kiosk |
 
 ---
 

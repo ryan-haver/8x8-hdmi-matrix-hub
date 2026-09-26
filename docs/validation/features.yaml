@@ -2317,9 +2317,11 @@ features:
     env: [UC_ENABLED, UC_INTEGRATION_INTERFACE]
   target: V4
   current: V0
-  basis: 'Not tested: tests/uc (scripted Remote 3 -> real driver.py -> simulator) disables mDNS. test_handshake.py pins the metadata (driver_version, driver_metadata = driver.json); the advertised driver_url is a strict xfail (UC-03).'
+  basis: 'tests/uc (scripted Remote 3 -> real driver.py -> simulator) disables mDNS. test_handshake.py pins the metadata
+    (driver_metadata = driver.json, no driver_url: UC-03 fixed in WP-D2) and that UC_DRIVER_URL is the URL advertised;
+    tests/deploy reaches the integration at that URL from the image. mDNS discovery by a real Remote: not tested.'
   evidence: []
-  findings: [UC-03, UC-11, UC-16]
+  findings: [UC-11, UC-16]
   scenarios: []
 - id: F-UC-002
   area: uc
@@ -2830,52 +2832,66 @@ features:
   scenarios: []
 - id: F-OPS-001
   area: ops
-  title: Run the hub from the Docker image (full target)
-  claim: 'README "Docker Deployment: Containerized"'
+  title: Run the hub from the Docker image
+  claim: 'README "Docker Deployment: Containerized"; docs/DOCKER.md (one image, D11)'
   interfaces:
-    files: [Dockerfile (full)]
+    files: [Dockerfile]
+    rest: [GET /api/health, GET /api/status, POST /api/switch, /ui, /kiosk]
   target: V4
-  current: V0
-  basis: CI docker-build only builds the image; nothing starts it or checks it works.
-  evidence: []
-  findings: [DEP-09]
+  current: V3
+  basis: 'V3 (WP-D2): tests/deploy/test_docker_image.py starts the shipped image with the integrations off and with the
+    Remote 3 integration on, against the BK-808 simulator in a container: /api/health, /ui, /kiosk and static assets
+    served, /api/status equals the simulator routing and a switch changes it, UID 1000 with read-only app code, clean
+    SIGTERM stop. CI docker-build job. Deployment evidence deploy.image_core, deploy.image_uc.'
+  evidence: [docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_uc-uc.json]
+  findings: []
   scenarios: []
 - id: F-OPS-002
   area: ops
-  title: Run the API-only image
-  claim: README "API-only mode (no UC dependencies)"
+  title: Run the hub without the Remote integration (UC_ENABLED=false, the default)
+  claim: README "Core" setup; docs/DOCKER.md (the api-only target is an alias of the one image)
   interfaces:
-    files: [Dockerfile (api-only)]
+    files: [Dockerfile]
+    env: [UC_ENABLED]
   target: V4
-  current: V0
-  basis: Built in CI, never started; cannot start (DEP-03).
-  evidence: []
-  findings: [DEP-03]
+  current: V3
+  basis: 'V3 (WP-D2, DEP-03 fixed): tests/deploy/test_docker_image.py[core]: the image with UC_ENABLED unset serves the
+    core against the simulator, port 9095 is closed and the PYTHONPROFILEIMPORTTIME trace has no ucapi module;
+    tests/test_run_entry.py proves the same for `python -X importtime run.py`. Deployment evidence deploy.image_core.'
+  evidence: [docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json]
+  findings: []
   scenarios: []
 - id: F-OPS-003
   area: ops
-  title: docker-compose quick start
-  claim: README Quick Start `docker-compose up -d`
+  title: docker compose quick start
+  claim: README Quick Start `docker compose up -d`; docs/DOCKER.md compose files
   interfaces:
-    files: [docker-compose.yml]
+    files: [docker-compose.yml, docker-compose.uc-host.yml, docker-compose.uc-bridge.yml]
   target: V4
-  current: V0
-  basis: No test; `docker-compose up` starts nothing (DEP-01).
-  evidence: []
-  findings: [DEP-01]
+  current: V3
+  basis: 'V3 (WP-D2, DEP-01 fixed): tests/deploy/test_compose.py: `docker compose up -d` with docker-compose.yml alone
+    starts the hub (health, /ui, 9095 closed); with docker-compose.uc-bridge.yml the scripted Remote reaches the
+    integration at the advertised UC_DRIVER_URL; with docker-compose.uc-host.yml (Linux/CI only) the API and 9095
+    listen on the host; both UC files refuse to start without HUB_HOST_IP. Deployment evidence deploy.compose (the
+    committed record is from Docker Desktop, where the host-networking check is n/a; CI runs it on Linux).'
+  evidence: [docs/validation/evidence/F-OPS-003/2026-09-26-V3-23239182-deploy.compose-api.json]
+  findings: []
   scenarios: []
 - id: F-OPS-004
   area: ops
   title: Remote 3 discovery works from Docker
-  claim: docs/DOCKER.md networking
+  claim: docs/DOCKER.md Remote 3 integration and networking
   interfaces:
-    files: [docker-compose.yml]
-    env: [UC_ENABLED]
+    files: [docker-compose.uc-host.yml, docker-compose.uc-bridge.yml]
+    env: [UC_ENABLED, UC_INTEGRATION_INTERFACE, UC_DISABLE_MDNS_PUBLISH, UC_DRIVER_URL]
   target: V4
-  current: V0
-  basis: No test.
+  current: V2
+  basis: 'WP-D2 (DEP-02 fixed): host-networking and bridge compose files; tests/deploy/test_compose.py starts both and
+    the scripted Remote connects (bridge: at UC_DRIVER_URL; host networking on Linux: on the host port, mDNS
+    publishing on). Not proven: that a real Remote discovers the mDNS announcement or accepts the driver-URL
+    registration (HIL-E). UC-11: no mDNS unregister on shutdown.'
   evidence: []
-  findings: [DEP-02, UC-11]
+  findings: [UC-11]
   scenarios: []
 - id: F-OPS-005
   area: ops
@@ -2885,32 +2901,39 @@ features:
     files: [Dockerfile HEALTHCHECK]
     rest: [GET /api/health]
   target: V4
-  current: V0
-  basis: HEALTHCHECK never exercised.
-  evidence: []
+  current: V3
+  basis: 'V3 (WP-D2): the image HEALTHCHECK (`python run.py healthcheck`, follows API_PORT) reports healthy in both
+    modes (tests/deploy/test_docker_image.py::test_image_healthcheck_reports_healthy, run with a 2 s interval). Not
+    tested: a restart triggered by an unhealthy state (restart policy).'
+  evidence: [docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_uc-uc.json]
   findings: []
   scenarios: []
 - id: F-OPS-006
   area: ops
   title: Point the hub at the matrix (MATRIX_HOST / MATRIX_PORT)
-  claim: README Environment Variables
+  claim: README Environment Variables; docs/DOCKER.md
   interfaces:
     env: [MATRIX_HOST, MATRIX_PORT, OREI_HOST, OREI_PORT]
   target: V4
-  current: V1
-  basis: Every sim/e2e run depends on it (tools/dev_stack.py), but no test asserts the configuration contract.
-  evidence: []
+  current: V3
+  basis: 'V3 (WP-D2): the image started with MATRIX_HOST/MATRIX_PORT pointing at the simulator container reports its
+    routing and switches it (tests/deploy/test_docker_image.py[core]); tests/test_run_entry.py: OREI_HOST/OREI_PORT
+    are warned aliases, the canonical name wins, bad ports stop the hub. With UC_ENABLED=true the address comes from
+    the Remote setup (DEP-07, still open).'
+  evidence: [docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json]
   findings: [DEP-07, BE-26]
   scenarios: []
 - id: F-OPS-007
   area: ops
   title: Choose the API port (API_PORT)
-  claim: README Environment Variables
+  claim: README Environment Variables; docs/DOCKER.md
   interfaces:
     env: [API_PORT, REST_API_PORT, OREI_API_PORT]
   target: V4
-  current: V1
-  basis: Used by tools/dev_stack.py; not asserted.
+  current: V2
+  basis: 'WP-D2: tests/test_run_entry.py::test_core_only_start_serves_ui_and_never_imports_ucapi starts run.py with the
+    deprecated REST_API_PORT and reaches /api/health, /ui, /kiosk on it (one deprecation warning); alias unit tests;
+    tests/deploy/test_compose.py host networking serves the API on API_PORT (Linux/CI).'
   evidence: []
   findings: [DEP-07]
   scenarios: []
@@ -2945,22 +2968,25 @@ features:
   interfaces:
     env: [LOG_LEVEL]
   target: V4
-  current: V0
-  basis: No test.
+  current: V1
+  basis: 'tests/test_run_entry.py: an unknown LOG_LEVEL falls back to INFO with a warning. No test of the levels.'
   evidence: []
   findings: [SEC-10]
   scenarios: []
 - id: F-OPS-011
   area: ops
-  title: Enable/disable integrations and the web UI (UC_ENABLED, WEBUI_ENABLED, USE_MODULAR)
-  claim: README Deployment Modes; D4
+  title: Enable/disable integrations (UC_ENABLED)
+  claim: README Deployment table; D4, D11
   interfaces:
     env: [UC_ENABLED, WEBUI_ENABLED, USE_MODULAR, REST_API_ENABLED]
   target: V4
-  current: V0
-  basis: No test; WEBUI_ENABLED is a no-op (DEP-07).
-  evidence: []
-  findings: [DEP-07, BE-19, BE-20]
+  current: V3
+  basis: 'V3 (WP-D2): the image with UC_ENABLED unset opens no port 9095 and never imports ucapi; with UC_ENABLED=true
+    the scripted Remote connects and ucapi is in the import trace (tests/deploy/test_docker_image.py). WEBUI_ENABLED,
+    USE_MODULAR and REST_API_ENABLED=false are ignored with a warning (the web UI and REST API are the core;
+    tests/test_run_entry.py). The integration loader itself is Phase 4 (BE-20).'
+  evidence: [docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_uc-uc.json]
+  findings: [DEP-07, BE-20]
   scenarios: []
 - id: F-OPS-012
   area: ops
@@ -3000,15 +3026,18 @@ features:
   scenarios: []
 - id: F-OPS-015
   area: ops
-  title: Hub data persists across restarts (MATRIX_DATA_DIR)
-  claim: README "Persistent configuration across restarts"
+  title: Hub data persists across restarts (DATA_DIR)
+  claim: README "Persistent configuration across restarts"; docs/DOCKER.md Persistent storage
   interfaces:
-    env: [MATRIX_DATA_DIR, OREI_CONFIG_DIR, UC_CONFIG_HOME]
-    files: [profiles.json, cec_macros.json, scenes.json]
+    env: [DATA_DIR, MATRIX_DATA_DIR, UC_CONFIG_HOME]
+    files: [profiles.json, themes.json, cec_macros.json, scenes.json]
   target: V4
-  current: V1
-  basis: tests/test_persistence.py TestPersistenceRoundTrip (in-process, no restart).
-  evidence: []
+  current: V3
+  basis: 'V3 (WP-D2): a theme (data dir) and a profile (config dir) saved through the API are read back after
+    `docker restart`, in both modes, from the /data volume (tests/deploy/test_docker_image.py::
+    test_data_persists_across_restart); an unwritable data dir stops the hub with a chown hint
+    (tests/test_run_entry.py). tests/test_persistence.py TestPersistenceRoundTrip (in-process).'
+  evidence: [docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_uc-uc.json]
   findings: [DEP-07]
   scenarios: []
 - id: F-OPS-016

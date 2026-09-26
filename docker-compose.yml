@@ -1,99 +1,52 @@
-# 8x8 HDMI Matrix Hub - Docker Compose
+# 8x8 HDMI Matrix Hub - Docker Compose (docs/DOCKER.md)
 #
 # Supports HDCVT HDP-MXC88A-based matrix switches including:
 # OREI BK-808, BZBGEAR BG-8K-88MA, A-NeuVideo ANI-8-8K60-S, and more.
 #
-# Usage:
-#   docker-compose up -d              # Start with UC integration (full)
-#   docker-compose up -d api-only     # Start API-only mode
-#   docker-compose logs -f            # View logs
-#   docker-compose down               # Stop integration
+#   MATRIX_HOST=192.168.1.50 docker compose up -d   # start the hub (web UI: http://<host>:8080/ui)
+#   docker compose logs -f                          # logs
+#   docker compose down                             # stop
 #
-# Persistent Storage:
-#   All user-addressable state (device settings, themes, UI preferences,
-#   scenes, profiles, CEC macros, driver state) is stored under the
-#   ``/data`` volume mount in the container. To control WHERE on the host
-#   this volume lives, set ``MATRIX_DATA_DIR`` either via an environment
-#   variable, a ``.env`` file, or by editing the line below:
+# This file starts the core: REST API, web UI (/ui) and kiosk (/kiosk).
+# The Unfolded Circle Remote 3 integration is off. To turn it on, add one of
+# the override files (both need HUB_HOST_IP, this machine's LAN address):
 #
-#     MATRIX_DATA_DIR=./data               # default (relative to this file)
-#     MATRIX_DATA_DIR=/srv/matrix-config   # absolute host path
-#     MATRIX_DATA_DIR=/Volumes/nas/matrix  # NAS mount
+#   docker compose -f docker-compose.yml -f docker-compose.uc-host.yml up -d     # recommended: host networking, mDNS discovery
+#   docker compose -f docker-compose.yml -f docker-compose.uc-bridge.yml up -d   # bridge networking, no mDNS, fixed driver URL
 #
-#   The value is interpolated into the volume mount, so changing it here
-#   automatically redirects where the persistent volume is stored on the host.
+# Settings can go in a `.env` file next to this file instead of the command line:
+#
+#   MATRIX_HOST=192.168.1.50      # the matrix's IP address (required)
+#   MATRIX_DATA_DIR=./data        # host folder for persistent data (default ./data)
+#   HUB_PORT=8080                 # host port of the web UI / REST API
+#   LOG_LEVEL=INFO
+#   HUB_HOST_IP=192.168.1.20      # only for the UC override files
+#
+# Persistent storage: everything the hub saves (settings, names, themes,
+# profiles, macros, the Remote integration's state) is under /data in the
+# container, mounted from MATRIX_DATA_DIR on the host. The container runs as
+# UID/GID 1000; on Linux create the folder first so that user can write it:
+#   mkdir -p data && sudo chown 1000:1000 data
 
 services:
-  # ==========================================================================
-  # Full service with UC integration (default)
-  # ==========================================================================
   hdmi-matrix-hub:
     build:
       context: .
-      target: full
-    container_name: hdmi-matrix-hub
+    image: hdmi-matrix-hub:local
+    container_name: ${HUB_CONTAINER_NAME:-hdmi-matrix-hub}
     restart: unless-stopped
-    profiles:
-      - full
-      - default
 
     ports:
-      - "9095:9095" # UC WebSocket integration
-      - "8080:8080" # REST API for Flic, Home Assistant, etc.
+      - "${HUB_PORT:-8080}:8080" # REST API, web UI, kiosk
 
     volumes:
-      # MATRIX_DATA_DIR controls where persistent state lives on the host.
-      # All user-addressable settings (themes, UI prefs, device names,
-      # scenes, profiles, CEC macros, driver state) are stored here.
       - ${MATRIX_DATA_DIR:-./data}:/data
 
     environment:
-      # UC_CONFIG_HOME points the integration at the persistent volume.
-      # MATRIX_DATA_DIR is the explicit override (takes priority).
-      - UC_CONFIG_HOME=/data
-      - MATRIX_DATA_DIR=/data
-      - UC_DISABLE_MDNS_PUBLISH=false
-      - UC_INTEGRATION_INTERFACE=0.0.0.0
-      - UC_INTEGRATION_HTTP_PORT=9095
-      - REST_API_PORT=8080
-      - UC_ENABLED=true
-      - WEBUI_ENABLED=true
-      - LOG_LEVEL=INFO
-
-    stop_grace_period: 10s
-
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
-
-  # ==========================================================================
-  # API-only service (no UC dependencies, smaller image)
-  # ==========================================================================
-  api-only:
-    build:
-      context: .
-      target: api-only
-    container_name: hdmi-matrix-api
-    restart: unless-stopped
-    profiles:
-      - api-only
-
-    ports:
-      - "8080:8080" # REST API only
-
-    volumes:
-      # Same MATRIX_DATA_DIR controls the persistent volume for API-only mode.
-      - ${MATRIX_DATA_DIR:-./data}:/data
-
-    environment:
-      - UC_CONFIG_HOME=/data
-      - MATRIX_DATA_DIR=/data
-      - REST_API_PORT=8080
-      - UC_ENABLED=false
-      - WEBUI_ENABLED=true
-      - LOG_LEVEL=INFO
+      MATRIX_HOST: ${MATRIX_HOST:-}
+      MATRIX_PORT: ${MATRIX_PORT:-443}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      UC_ENABLED: "false"
 
     stop_grace_period: 10s
 

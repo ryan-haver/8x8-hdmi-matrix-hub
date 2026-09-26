@@ -114,7 +114,7 @@ Severity: **C** critical · **H** high · **M** medium · **L** low. "Phase" is 
 | BE-16 | M | Two name stores (driver vs REST); web renames never reach UC; failed name query rebuilds entities with generic names; stale `configured_entities` | `driver.py:~1536`, `rest_api/utils.py` | 4 |
 | BE-17 | M | `_command_lock` held across reconnect + backoff → all HTTP callers stall 15-20 s during outages | `orei_matrix.py:~327` | 1 |
 | BE-18 | M | Lock file: non-atomic check; stale PID reuse; ImportError path deletes unconditionally (uncommitted fix is a stopgap) | `driver.py:acquire_lock` | 1 |
-| BE-19 | M | `run_server.py` imports `src.rest_api.*` while modules import `rest_api.*` → duplicate module instances, uninitialised managers | `run_server.py:38-40`, `scenes_v2.py:58,73` | 4 |
+| BE-19 | M | `run_server.py` imports `src.rest_api.*` while modules import `rest_api.*` → duplicate module instances, uninitialised managers | `run_server.py:38-40`, `scenes_v2.py:58,73` | 4 / WP-D2 ✅ fixed: `run_server.py` is a thin deprecated alias of `run.py` (top-level imports only) |
 | BE-20 | M | `src/integrations/unfolded_circle` unused parallel path (to be **finished** per D4); adapter maps `current_input` into `allconnect` | `src/integrations/`, `run.py:113-147` | 4 (D4) |
 | BE-21 | L | `check_port_available` only handles Windows errno; port 9095 hard-coded; `driver.json` path depends on CWD | `driver.py:371` | 1 |
 | BE-22 | L | Entity creation duplicated 3×, `cec_sender` closure 2× | `driver.py:516-590,1553-1598,1929-2002` | 4 |
@@ -205,15 +205,15 @@ Severity: **C** critical · **H** high · **M** medium · **L** low. "Phase" is 
 
 | ID | Sev | Finding | Location | Phase |
 | --- | --- | --- | --- | --- |
-| DEP-01 | H | Every compose service has `profiles:` (`default` is not special) → `docker-compose up` starts nothing | `docker-compose.yml:36-38,80-81` | 2 |
-| DEP-02 | H | Bridge networking, but UC mDNS discovery requires host networking (per DOCKER.md) | `docker-compose.yml` | 2 |
-| DEP-03 | C | API-only image runs legacy `driver.py` (imports `ucapi`), but `ucapi` is not installed → cannot start | `run.py:138-147`, `Dockerfile:42-60` | 2 |
+| DEP-01 | H | Every compose service has `profiles:` (`default` is not special) → `docker-compose up` starts nothing | `docker-compose.yml:36-38,80-81` | 2 / WP-D2 ✅ fixed: one service, no profiles; `tests/deploy/test_compose.py` |
+| DEP-02 | H | Bridge networking, but UC mDNS discovery requires host networking (per DOCKER.md) | `docker-compose.yml` | 2 / WP-D2 ✅ fixed: `docker-compose.uc-host.yml` (host networking, mDNS on `HUB_HOST_IP`) and `docker-compose.uc-bridge.yml` (mDNS off, `UC_DRIVER_URL`); discovery by a real Remote is still HIL-E (F-OPS-004) |
+| DEP-03 | C | API-only image runs legacy `driver.py` (imports `ucapi`), but `ucapi` is not installed → cannot start | `run.py:138-147`, `Dockerfile:42-60` | 2 / WP-D2 ✅ fixed: one image; `UC_ENABLED=false` runs the core without importing `ucapi` (`tests/deploy`, `tests/test_run_entry.py`) |
 | DEP-04 | M | `setup.py` and `pyproject.toml` both present; both omit `_file_io`, `_task_supervisor`, `_telnet_proto` | root | 6 |
 | DEP-05 | M | CI: no `pull_request` trigger; ruff only on `src/`; mypy non-blocking; no hassfest/HACS validation; no gitleaks; QEMU set up but no multi-arch platforms | `.github/workflows/docker-publish.yml` | 0 |
 | DEP-06 | M | Five version numbers (0.1.0, 1.0.0, 2.10.0, README 2.7.0, HA sw 1.0.0); `driver_id` fallback mismatch | `driver.json`, `pyproject.toml`, `utils.py:86`, `manifest.json`, `core.py:170` | 6 |
-| DEP-07 | M | Env-var surface inconsistent: `API_PORT` vs `REST_API_PORT`, `MATRIX_HOST` ignored in default mode, `WEBUI_ENABLED` no-op, `USE_MODULAR` | `run.py`, `driver.py:60` | 4 |
+| DEP-07 | M | Env-var surface inconsistent: `API_PORT` vs `REST_API_PORT`, `MATRIX_HOST` ignored in default mode, `WEBUI_ENABLED` no-op, `USE_MODULAR` | `run.py`, `driver.py:60` | 4 (WP-D2: `run.py` reads one set of names, old names are warned aliases, `USE_MODULAR`/`WEBUI_ENABLED` ignored; still open: with UC on, `driver.py` takes the matrix address from the Remote setup, not `MATRIX_HOST`) |
 | DEP-08 | L | No lockfile/hashes for transitive deps; base image not digest-pinned; no dev requirements file | `requirements*.txt` | 6 |
-| DEP-09 | L | `.dockerignore` misses `docs/`, `archive/`, `tests/`, agent/cache dirs | `.dockerignore` | 6 |
+| DEP-09 | L | `.dockerignore` misses `docs/`, `archive/`, `tests/`, agent/cache dirs | `.dockerignore` | 6 / WP-D2 ✅ fixed: allow-list (`src/`, `web/`, entry scripts, `driver.json`, requirements) |
 | DEP-10 | L | `.gitignore` misses `.playwright-mcp/`, tool caches | `.gitignore` | 0 |
 | DEP-11 | L | Pre-commit hook runs the full suite, silently skips `test_atomic_writes.py`, silently passes without ruff | `.githooks/pre-commit` | 0 |
 | DEP-12 | L | One-off scripts (`_upgrade_log_calls.py`, ad-hoc telnet scripts) | `scripts/` | 6 |
@@ -300,7 +300,7 @@ Full detail (location, user impact, fix) in [`docs/audits/UC_INTEGRATION_AUDIT.m
 | --- | --- | --- | --- |
 | UC-01 | C | Any CEC remote command other than `send_cmd` (incl. `on`/`off`) raises `AttributeError` and drops the Remote's WebSocket | 1 (wave 2) |
 | UC-02 | H | Port 9095 unauthenticated; `setup_driver` from anyone repoints the matrix host and sends the stored password to it | 2 / 3 |
-| UC-03 | H | `driver_url: ""` → advertised `ws://<container-id>:9095` | 2 |
+| UC-03 | H | `driver_url: ""` → advertised `ws://<container-id>:9095` | 2 / WP-D2 ✅ fixed: key removed; optional `UC_DRIVER_URL` (`tests/uc/test_handshake.py`, `tests/deploy`) |
 | UC-04 | H | Device state always CONNECTED; entities never UNAVAILABLE; poller pushes fabricated values during outages; `CLIENT_DISCONNECTED` unhandled | 1 (wave 2) |
 | UC-05 | H | Reconfigure swaps device before probing, clears configured entities; abort/user-data unhandled; generic errors; setup payload logged; no credential step | 1 (wave 2) / 2 |
 | UC-06 | M | Standby keeps pushing; wake starts a second poller | 1 (wave 2) |
@@ -308,7 +308,7 @@ Full detail (location, user impact, fix) in [`docs/audits/UC_INTEGRATION_AUDIT.m
 | UC-08 | M | Renames leave stale source lists in subscribed entities (select by new name fails) | 2 / 4 |
 | UC-09 | M | Matrix power switch never synced | 2 |
 | UC-10 | M | Media player mixes routing and TV CEC; first toggle turns the TV off (still open: the strict xfail compared against the source table's power off, index 2; with the display table the first toggle sends display power off, index 1, which that assertion missed, so it XPASSed without a fix. The test now checks for display power off) | 4 (DI-9) |
-| UC-11 | M | mDNS publishes `0.0.0.0`, never unregisters (root of retry loop + duplicate events); env var names wrong in docs/plan | 2 / 4 |
+| UC-11 | M | mDNS publishes `0.0.0.0`, never unregisters (root of retry loop + duplicate events); env var names wrong in docs/plan | 2 / 4 (WP-D2: the image no longer sets `UC_INTEGRATION_INTERFACE=0.0.0.0`, the host-networking compose publishes `HUB_HOST_IP`, env names corrected in DOCKER.md; still open: unregister on shutdown, Phase 4) |
 | UC-12 | L | Non-standard remote command names, no button mapping, text/emoji UI tiles | 4 (DI-9) |
 | UC-13 | L | Text sensors instead of binary; duplicate sensors | 4 (DI-9) |
 | UC-14 | M | Preset names hard-coded "Preset N"; web app preset names/favourites/visibility ignored | 2 |
@@ -535,7 +535,7 @@ Goal: every advertised feature actually works end to end.
 - [ ] **Scenes & shortcuts** (API-01…08, API-13, API-14, API-23): `switch_input`; `save()`; macro steps via `MacroManager` with the real target format; overrides mean "leave unchanged"; `list_profiles` usage; `power_off_all` once; LCD map; honest status codes (`207`/`500` with per-step results); validate-then-mutate; custom preset save gets a routing lock and restores from fresh (not cached) routing — any change to *what* it does waits for DI-4. Full `/api/v2/scenes` test suite. All fixes preserve current behaviour and data formats (D5).
 - [ ] **WebSocket** (API-09, API-10): per-client send with timeout, concurrent fan-out, drop dead clients; broadcast after the command result; use aiohttp's built-in `heartbeat`; publish a **WS event schema** (`docs/api/ws-events.json`) used by server tests and the web client.
 - [ ] **Home Assistant** (HA-01…15): `async_get_clientsession`; consume `outputs` list / dict correctly from contract fixtures; power from the right endpoint (add `power` to status); `translations/en.json`; `AbortFlow` handling; services in `async_setup` with device/entry targeting and `HomeAssistantError`; `runtime_data`; `async with` responses; base `HdmiMatrixEntity` with `has_entity_name`, shared `DeviceInfo`, firmware version, `configuration_url`; reconfigure + options flow; validated CEC command; `integration_type: "hub"`; `hacs.json`.
-- [ ] **Docker** (DEP-01…03, D11): single compose service, no profiles; one image with all integration deps; `UC_ENABLED` defaults to `false` and gates the `ucapi` import (interim guard until Phase 4's integration loader); compose example documents `network_mode: host` as required only when `UC_ENABLED=true` (mDNS); smoke tests for UC on/off.
+- [x] **Docker** (DEP-01…03, D11): single compose service, no profiles; one image with all integration deps; `UC_ENABLED` defaults to `false` and gates the `ucapi` import (interim guard until Phase 4's integration loader); compose example documents `network_mode: host` as required only when `UC_ENABLED=true` (mDNS); smoke tests for UC on/off.
 - [ ] **Web UI breakages** (UI-01…04, UI-17, SEC-07, SEC-08 patch) — each PR goes through §5.3 capture & review; these fixes should produce **no** visual diffs except where a broken state (e.g. passcode prompt) now renders:
   - [ ] `executeProfile` → real endpoint; `ApiError` with `status`/`code`; passcode prompt on 403/`passcode_required`.
   - [ ] `escapeHtml` escapes `& < > " '`; patch every unescaped sink listed in SEC-08; icons restricted to emoji or icon-library keys.
