@@ -1,0 +1,3 @@
+# Known false positive: a documentation example with a <PIN> placeholder
+# (docs/DOCKER.md, since changed to prompt for the PIN instead).
+232391822a4d5a56d923f46f87fee7cb787f75d3:docs/DOCKER.md:curl-auth-user:77

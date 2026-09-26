@@ -49,16 +49,15 @@ To run the two by hand (simulator already running with the defaults above):
 
 ```bash
 # bash
-USE_MODULAR=true UC_ENABLED=false MATRIX_HOST=127.0.0.1 MATRIX_PORT=8443 OREI_TELNET_PORT=2323 \
-  MATRIX_DATA_DIR=.dev-data UC_CONFIG_HOME=.dev-data python run.py
+MATRIX_HOST=127.0.0.1 MATRIX_PORT=8443 OREI_TELNET_PORT=2323 DATA_DIR=.dev-data python run.py
 ```
 
 ```powershell
 # PowerShell
-$env:USE_MODULAR='true'; $env:UC_ENABLED='false'; $env:MATRIX_HOST='127.0.0.1'; $env:MATRIX_PORT='8443'; $env:OREI_TELNET_PORT='2323'; $env:MATRIX_DATA_DIR='.dev-data'; $env:UC_CONFIG_HOME='.dev-data'; python run.py
+$env:MATRIX_HOST='127.0.0.1'; $env:MATRIX_PORT='8443'; $env:OREI_TELNET_PORT='2323'; $env:DATA_DIR='.dev-data'; python run.py
 ```
 
-`MATRIX_PORT` was added to `run.py`'s modular mode for this; it previously always used port 443. `run_server.py --host 127.0.0.1 --matrix-port 8443` also works, but it has the duplicate-module problem BE-19, so some routes (v2 scenes) misbehave.
+`UC_ENABLED` defaults to `false`, so this is the core only (`UC_CONFIG_HOME` defaults to `DATA_DIR`). `run_server.py --host 127.0.0.1 --matrix-port 8443` is a deprecated alias of the same thing.
 
 The hub accepts the simulator's self-signed certificate because `OREI_VERIFY_SSL` defaults to `false`.
 

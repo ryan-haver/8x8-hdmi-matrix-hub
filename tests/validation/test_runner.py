@@ -163,9 +163,9 @@ def test_uc_client_runs_against_the_hub_with_the_integration(tmp_path: Path, sch
 
     ok = out[("remote.select_source", "uc")]
     assert (ok.status, ok.level, ok.gate) == ("pass", "V3", "ok")
-    known = out[("remote.output_cec_on", "uc")]
-    assert (known.status, known.gate) == ("fail", "known-failure")
-    assert {c["finding"] for c in known.failed_checks} == {"UC-01"}
+    # UC-01 (fixed in WP-B2): `on` used to close the Remote's WebSocket (1011); now it answers and powers on.
+    on = out[("remote.output_cec_on", "uc")]
+    assert (on.status, on.level, on.gate) == ("pass", "V3", "ok")
     assert out[("routing.switch_one", "api")].status == "pass"  # back on the API-only hub
     assert ("routing.switch_one", "uc") not in out  # not a uc scenario
 
@@ -178,6 +178,7 @@ def test_uc_client_runs_against_the_hub_with_the_integration(tmp_path: Path, sch
     assert select["observations"]["requests"][0]["body"]["cmd_id"] == "select_source"
     assert select["observations"]["requests"][0]["body"]["params"] == {"source": "PS5"}  # the name the Remote lists
     assert {"path": "outputs[0].source", "before": 2, "after": 6} in select["observations"]["state_diff"]
-    crash = records[("remote.output_cec_on", "uc")]
-    assert crash["observations"]["requests"][0]["closed"] == 1011
+    power_on = records[("remote.output_cec_on", "uc")]
+    assert power_on["observations"]["requests"][0]["status"] == 200
+    assert "closed" not in power_on["observations"]["requests"][0]
     assert records[("routing.switch_one", "api")]["environment"]["hub"]["entry"].startswith("run.py (USE_MODULAR")
