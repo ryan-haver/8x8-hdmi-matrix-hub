@@ -1,7 +1,7 @@
 # Feature ledger
 
 > **Generated** by `python -m tools.validate ledger` — do not edit by hand. Registry: [`features.yaml`](features.yaml) · Plan: [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md) · How to add evidence: [`README.md`](README.md).
-> Commit `69f20490`
+> Commit `a9b624ea`
 
 **Level** = highest level with fresh passing evidence, else the recorded baseline (the registry's `current`), capped at V1 while an open critical/high finding is linked. **Recorded** = the registry baseline. **Fresh** = evidence commit not older than the last change to the scenario's `covers` paths.
 
@@ -9,8 +9,8 @@
 
 | Area | Features | V0 | V1 | V2 | V3 | V4 | V5 | Below target | Stale evidence |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Matrix control | 31 | 0 | 25 | 4 | 2 | 0 | 0 | 31 | 2 |
-| CEC control | 11 | 0 | 7 | 4 | 0 | 0 | 0 | 11 | 0 |
+| Matrix control | 31 | 0 | 25 | 2 | 4 | 0 | 0 | 31 | 1 |
+| CEC control | 11 | 0 | 7 | 3 | 1 | 0 | 0 | 11 | 0 |
 | REST/WebSocket contract | 42 | 6 | 25 | 10 | 1 | 0 | 0 | 38 | 3 |
 | Domain features | 36 | 2 | 33 | 1 | 0 | 0 | 0 | 36 | 0 |
 | Web UI | 36 | 0 | 34 | 0 | 2 | 0 | 0 | 34 | 5 |
@@ -21,7 +21,7 @@
 | Deployment, configuration, persistence | 20 | 10 | 10 | 0 | 0 | 0 | 0 | 20 | 0 |
 | Security controls | 15 | 10 | 5 | 0 | 0 | 0 | 0 | 15 | 0 |
 | Reliability | 18 | 12 | 5 | 1 | 0 | 0 | 0 | 18 | 0 |
-| **All** | **265** | **54** | **173** | **20** | **18** | **0** | **0** | **258** | **10** |
+| **All** | **265** | **54** | **173** | **17** | **21** | **0** | **0** | **258** | **9** |
 
 Levels: **V0** Claimed · **V1** Unit · **V2** Simulated integration · **V3** End-to-end · **V4** Hardware · **V5** Field
 
@@ -43,7 +43,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | Reliability | 13 | 5 | 0 | 0 | 0 | 0 |
 | **All** | **59** | **182** | **6** | **18** | **0** | **0** |
 
-- Features with fresh passing scenario evidence: **20** of 265.
+- Features with fresh passing scenario evidence: **28** of 265.
 - Features with a fresh failing scenario: **2**: `F-DOM-003`, `F-DOM-004`.
 - Features capped at V1 by an open critical/high finding: **89**.
 
@@ -51,12 +51,12 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 
 | ID | Feature | Target | Level | Recorded | Freshness | Evidence | Open findings |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| F-MTX-001 | Route one input to one output | V4 | V3 | V3 | stale | [routing.switch_one·api·pass](evidence/F-MTX-001/2026-09-25-V2-d6668000-routing.switch_one-api.json)<br>[routing.switch_one·browser·pass](evidence/F-MTX-001/2026-09-25-V3-d6668000-routing.switch_one-browser.json) | — |
+| F-MTX-001 | Route one input to one output | V4 | V3 | V3 | fresh | [remote.select_source·uc·pass](evidence/F-UC-008/2026-09-26-V3-a9b624ea-remote.select_source-uc.json) | — |
 | F-MTX-002 | Route one input to every output | V4 | V3 | V3 | stale | [routing.route_all·api·pass](evidence/F-MTX-002/2026-09-25-V2-d6668000-routing.route_all-api.json)<br>[routing.route_all·browser·pass](evidence/F-MTX-002/2026-09-25-V3-d6668000-routing.route_all-browser.json) | BE-12(M) |
-| F-MTX-003 | Recall a matrix preset (1-8) | V4 | V2 | V2 | fresh | [presets.recall·api·pass](evidence/F-MTX-003/2026-09-25-V2-22afc1a7-presets.recall-api.json) | — |
+| F-MTX-003 | Recall a matrix preset (1-8) | V4 | V3 | V2 | fresh | [presets.recall·api·pass](evidence/F-MTX-003/2026-09-25-V2-22afc1a7-presets.recall-api.json)<br>[remote.preset_button·uc·pass](evidence/F-UC-004/2026-09-26-V3-a9b624ea-remote.preset_button-uc.json) | — |
 | F-MTX-004 | Save the current routing to a matrix preset | V4 | V1 | V1 | — | — | — |
 | F-MTX-005 | Name presets in the web app (names shown by the API, UI, kiosk) | V4 | V2 | V0 | fresh | [presets.rename·api·pass](evidence/F-MTX-005/2026-09-25-V2-22afc1a7-presets.rename-api.json) | UC-14(M), BE-16(M) |
-| F-MTX-006 | Matrix power on / standby | V4 | V2 | V1 | fresh | [power.standby·api·pass](evidence/F-MTX-006/2026-09-25-V2-22afc1a7-power.standby-api.json)<br>[power.wake·api·pass](evidence/F-MTX-006/2026-09-25-V2-22afc1a7-power.wake-api.json) | — |
+| F-MTX-006 | Matrix power on / standby | V4 | V3 | V1 | fresh | [power.standby·api·pass](evidence/F-MTX-006/2026-09-25-V2-22afc1a7-power.standby-api.json)<br>[power.wake·api·pass](evidence/F-MTX-006/2026-09-25-V2-22afc1a7-power.wake-api.json)<br>[remote.power_switch_off·uc·pass](evidence/F-UC-010/2026-09-26-V3-a9b624ea-remote.power_switch_off-uc.json) | — |
 | F-MTX-007 | Mute / unmute the audio of an output | V4 | V1 (capped) | V1 | fresh | [outputs.audio_mute·api·pass](evidence/F-MTX-007/2026-09-25-V2-22afc1a7-outputs.audio_mute-api.json) | BE-12(M), HIL-09(C) |
 | F-MTX-008 | Enable / disable an output's video stream | V4 | V1 (capped) | V1 | — | — | BE-12(M), HIL-09(C) |
 | F-MTX-009 | Set an output's HDCP mode | V4 | V1 (capped) | V1 | — | — | BE-12(M), HIL-09(C) |
@@ -91,7 +91,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-CEC-002 | Navigate a source's menus over CEC (up/down/left/right/select/menu/back) | V4 | V1 | V1 | — | — | — |
 | F-CEC-003 | Control playback on a source over CEC | V4 | V1 | V1 | — | — | — |
 | F-CEC-004 | Source volume / mute over CEC | V4 | V1 | V1 | — | — | — |
-| F-CEC-005 | Turn a display (TV) on / off over CEC | V4 | V2 | V1 | fresh | [cec.output_power_on·api·pass](evidence/F-CEC-005/2026-09-25-V2-22afc1a7-cec.output_power_on-api.json) | BE-14(M) |
+| F-CEC-005 | Turn a display (TV) on / off over CEC | V4 | V3 | V1 | fresh | [cec.output_power_on·api·pass](evidence/F-CEC-005/2026-09-25-V2-22afc1a7-cec.output_power_on-api.json)<br>[remote.output_cec_power_on·uc·pass](evidence/F-UC-007/2026-09-26-V3-a9b624ea-remote.output_cec_power_on-uc.json) | BE-14(M) |
 | F-CEC-006 | Display / soundbar volume and mute over CEC | V4 | V2 | V1 | fresh | [cec.output_volume_up·api·pass](evidence/F-CEC-006/2026-09-25-V2-22afc1a7-cec.output_volume_up-api.json) | BE-14(M) |
 | F-CEC-007 | Enable CEC on the target port automatically before a command | V4 | V2 | V1 | fresh | [cec.input_power_on·api·pass](evidence/F-CEC-001/2026-09-25-V2-22afc1a7-cec.input_power_on-api.json) | — |
 | F-CEC-008 | Enable / disable CEC per port | V4 | V1 | V1 | — | — | — |
@@ -254,13 +254,13 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-UC-001 | Discover the integration and register the driver (mDNS, driver URL) | V4 | V0 (capped) | V0 | — | — | UC-03(H), UC-11(M), UC-16(L) |
 | F-UC-002 | Set up the integration on the Remote | V4 | V1 (capped) | V1 | — | — | UC-05(H), UC-02(H) |
 | F-UC-003 | Reconfigure the integration (new matrix address) | V4 | V1 (capped) | V1 | — | — | UC-05(H) |
-| F-UC-004 | Preset buttons on the Remote | V4 | V3 | V3 | — | — | UC-14(M) |
-| F-UC-005 | Matrix remote entity with a preset page | V4 | V3 | V3 | — | — | UC-12(L) |
-| F-UC-006 | Per-input CEC remotes (source power, navigation, playback) | V4 | V3 | V3 | — | — | UC-12(L) |
-| F-UC-007 | Per-output CEC remotes (TV power, volume) | V4 | V3 | V3 | — | — | BE-14(M) |
-| F-UC-008 | Choose an output's source from the Remote (media player source list) | V4 | V3 | V3 | — | — | UC-08(M), UC-10(M) |
-| F-UC-009 | TV power / volume / mute from the output media player | V4 | V3 | V3 | — | — | UC-10(M), BE-24(L) |
-| F-UC-010 | Matrix power switch on the Remote | V4 | V3 | V3 | — | — | UC-09(M) |
+| F-UC-004 | Preset buttons on the Remote | V4 | V3 | V3 | fresh | [remote.preset_button·uc·pass](evidence/F-UC-004/2026-09-26-V3-a9b624ea-remote.preset_button-uc.json) | UC-14(M) |
+| F-UC-005 | Matrix remote entity with a preset page | V4 | V3 | V3 | fresh | [remote.matrix_preset_command·uc·pass](evidence/F-UC-005/2026-09-26-V3-a9b624ea-remote.matrix_preset_command-uc.json) | UC-12(L) |
+| F-UC-006 | Per-input CEC remotes (source power, navigation, playback) | V4 | V3 | V3 | fresh | [remote.input_cec_command·uc·pass](evidence/F-UC-006/2026-09-26-V3-a9b624ea-remote.input_cec_command-uc.json)<br>[remote.input_cec_off·uc·pass](evidence/F-UC-006/2026-09-26-V3-a9b624ea-remote.input_cec_off-uc.json)<br>[remote.input_cec_sequence·uc·pass](evidence/F-UC-006/2026-09-26-V3-a9b624ea-remote.input_cec_sequence-uc.json) | UC-12(L) |
+| F-UC-007 | Per-output CEC remotes (TV power, volume) | V4 | V3 | V3 | fresh | [remote.cec_bad_sequence·uc·pass](evidence/F-UC-007/2026-09-26-V3-a9b624ea-remote.cec_bad_sequence-uc.json)<br>[remote.output_cec_on·uc·pass](evidence/F-UC-007/2026-09-26-V3-a9b624ea-remote.output_cec_on-uc.json)<br>[remote.output_cec_power_on·uc·pass](evidence/F-UC-007/2026-09-26-V3-a9b624ea-remote.output_cec_power_on-uc.json)<br>[remote.output_cec_toggle·uc·pass](evidence/F-UC-007/2026-09-26-V3-a9b624ea-remote.output_cec_toggle-uc.json) | BE-14(M) |
+| F-UC-008 | Choose an output's source from the Remote (media player source list) | V4 | V3 | V3 | fresh | [remote.select_source·uc·pass](evidence/F-UC-008/2026-09-26-V3-a9b624ea-remote.select_source-uc.json)<br>[remote.unknown_source·uc·pass](evidence/F-UC-008/2026-09-26-V3-a9b624ea-remote.unknown_source-uc.json) | UC-08(M), UC-10(M) |
+| F-UC-009 | TV power / volume / mute from the output media player | V4 | V3 | V3 | fresh | [remote.media_player_toggle·uc·pass](evidence/F-UC-009/2026-09-26-V3-a9b624ea-remote.media_player_toggle-uc.json)<br>[remote.media_player_volume·uc·pass](evidence/F-UC-009/2026-09-26-V3-a9b624ea-remote.media_player_volume-uc.json) | UC-10(M), BE-24(L) |
+| F-UC-010 | Matrix power switch on the Remote | V4 | V3 | V3 | fresh | [remote.power_switch_off·uc·pass](evidence/F-UC-010/2026-09-26-V3-a9b624ea-remote.power_switch_off-uc.json) | UC-09(M) |
 | F-UC-011 | Input signal and cable sensors | V4 | V1 (capped) | V1 | — | — | UC-13(L), BE-03(H) |
 | F-UC-012 | Output connected, cable and source sensors | V4 | V3 | V3 | — | — | UC-13(L) |
 | F-UC-013 | Entities go unavailable while the matrix is unreachable | V4 | V3 | V3 | — | — | — |
