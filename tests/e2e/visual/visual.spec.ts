@@ -4,10 +4,11 @@
 //   npm run visual:update   write new/changed baselines (in the pinned container)
 //
 // Matrix:
-// - Tron Classic (default) x every catalog entry x the four viewport projects
-//   (desktop, tablet, phone, kiosk; see tests/e2e/support/viewports.ts)
+// - Tron Classic (default) x every catalog entry x the viewport projects
+//   (desktop, tablet, phone and the two kiosk devices kiosk-tab-a11 and
+//   kiosk-iphone16promax; see tests/e2e/support/viewports.ts)
 // - Neon, Royal, Vaporwave x entries marked `themed` (~key screens) x desktop
-//   and kiosk (tests tagged @themed; the other projects grep them out)
+//   and the kiosk devices (tests tagged @themed; the other projects grep them out)
 // - one paused-frame snapshot with the Tron light-cycle background on
 //
 // Snapshots: tests/e2e/visual/__snapshots__/<project>/<entry name>.png, and
@@ -22,7 +23,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { CATALOG, type CatalogEntry } from './catalog';
 import { expect, FIXED_TIME, openKiosk, openUi, parkPointer, preparePage, settle, test, THEMES, type ThemeName } from '../support/ui';
-import type { ViewportName } from '../support/viewports';
+import { THEMED_VIEWPORTS, VISUAL_VIEWPORTS, type ViewportName } from '../support/viewports';
 
 /** Hub routes that only the running app should ever change; a capture that writes them would leak into later entries. */
 const WRITE_GUARD = /\/api\/(ui\/preferences|dashboard\/cards|device-settings|shortcuts\/[^/]+\/(favorite|dashboard)|profile|v2\/scenes|cec\/macro)/;
@@ -39,7 +40,7 @@ test.beforeAll(({}, info) => {
   const manifest = {
     generated_by: 'tests/e2e/visual/visual.spec.ts',
     themes: Object.keys(THEMES),
-    viewports: ['desktop', 'tablet', 'phone', 'kiosk'],
+    viewports: VISUAL_VIEWPORTS,
     entries: [
       ...CATALOG.map((e) => ({
         name: e.name,
@@ -55,7 +56,7 @@ test.beforeAll(({}, info) => {
         description: 'Tron light-cycle background enabled, one deterministic paused frame.',
         note: null,
         themed: false,
-        viewports: ['desktop', 'kiosk'],
+        viewports: THEMED_VIEWPORTS,
       },
     ],
   };
@@ -140,7 +141,7 @@ for (const entry of CATALOG) {
 // time, so the frame is the same on every run.
 test('special/tron-background/paused-frame', async ({ page }, info) => {
   const vp = info.project.name as ViewportName;
-  test.skip(vp !== 'desktop' && vp !== 'kiosk', 'captured at desktop and kiosk only');
+  test.skip(!(THEMED_VIEWPORTS as readonly ViewportName[]).includes(vp), `captured at ${THEMED_VIEWPORTS.join(', ')} only`);
   await preparePage(page, { realClock: true, storage: { 'matrix-view-mode': 'grid' } });
   await page.clock.install({ time: FIXED_TIME });
   await page.clock.resume();

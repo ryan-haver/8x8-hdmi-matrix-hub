@@ -272,6 +272,12 @@ Severity: **C** critical · **H** high · **M** medium · **L** low. "Phase" is 
 | UI-34 | L | Kiosk ignores the theme presets (always Tron Classic) | `kiosk.html` | 5 |
 | UI-35 | M | axe: `aria-required-parent` on desktop tabs, unlabeled tab-pin checkboxes, `aria-hidden-focus` in closed drawers, unnamed tooltip, kiosk `color-contrast` ×22, zoom disabled | `index.html`, `kiosk.html` | 5 |
 | UI-36 | L | Passcode prompt is a native `window.prompt()` (unstyled, can't be captured) | `settings-drawer.js`, `dashboard-manager.js` | 5 (with UI-01) |
+| UI-38 | M | Kiosk output-status footer grows sideways with long names and runs off the right edge (iPhone: columns 3–4 and 7–8 hidden; Tab A11: OUT 8 hidden) | `kiosk/routing/long-names`, `kiosk/presets/long-names` | 5 |
+| UI-39 | M | iPhone kiosk: header title and "Edit Layout" button wrap to two lines; the edit-mode "DEFAULT TAB" strip runs to the edge with no padding | `kiosk/*/edit-mode`, `kiosk/profiles/*`, `kiosk/toast/success` | 5 |
+| UI-40 | L | iPhone kiosk profile wizard: "Keep Unchanged" dropdowns clipped | `kiosk/profile-wizard/step-2` | 5 |
+| UI-41 | M | iPhone matrix grid: input row labels clipped on the left, output headers truncated, last column flush to the edge (related to UI-33) | `matrix/grid/*` (iPhone) | 5 |
+| UI-42 | L | Tab A11 kiosk routing modal uses the full 800 px height with almost no margin (will clip if the confirmed viewport is shorter) | `kiosk/routing-modal/step-1` | 5 |
+| UI-43 | M | Scene-CEC dialog: a large rounded shape covers the modal, hiding its title and footer buttons (phone and iPhone) | `dialog/scene-cec` | 2 (with UI-30) |
 | UI-37 | M | Since BE-14 the hub refuses navigation/playback CEC keys for displays (REST 400), but the web app's CEC dropdown renders the D-pad and Menu/Back for a display too (no per-target filtering found in the CEC tray or the kiosk remote either); `GET /api/cec/output/{n}/capabilities` lists the six supported keys. Needs a UI change through the UI review process | `cec-controls.js:renderDropdownContent`, `cec-tray.js`, `kiosk.html` | 2 |
 
 ### 4.8 Documentation (DOC)

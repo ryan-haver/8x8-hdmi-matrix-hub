@@ -2,10 +2,12 @@
 //
 // Projects:
 //   smoke                      smoke.spec.ts: /ui and /kiosk load, routing, WebSocket, axe
-//   desktop | tablet | phone | kiosk
+//   desktop | tablet | phone | kiosk-tab-a11 | kiosk-iphone16promax
 //                              visual.spec.ts: every catalog entry (tests/e2e/visual/catalog.ts)
-//                              in the default preset; desktop and kiosk also run the
-//                              @themed entries in the other three presets.
+//                              in the default preset; desktop and the two kiosk devices
+//                              also run the @themed entries in the other three presets.
+//                              Sizes in tests/e2e/support/viewports.ts (kiosk-tab-a11 is
+//                              PROVISIONAL until its CSS viewport is confirmed on the device).
 //
 // The stack (simulator + hub, seeded data) is started by webServer via
 // tests/e2e/support/start-stack.mjs on fixed ports.
@@ -14,11 +16,11 @@
 // (mcr.microsoft.com/playwright:v1.63.0-noble): `npm run visual:update`.
 import { defineConfig, devices } from '@playwright/test';
 import { HUB_URL, PORTS } from './support/ports.mjs';
-import { VIEWPORTS } from './support/viewports';
+import { THEMED_VIEWPORTS, VIEWPORTS, VISUAL_VIEWPORTS, type ViewportName } from './support/viewports';
 
 const CI = !!process.env.CI;
 
-const visualProject = (name: keyof typeof VIEWPORTS, themed: boolean) => ({
+const visualProject = (name: ViewportName) => ({
   name,
   testMatch: /visual\/visual\.spec\.ts$/,
   // Captures never change hub or simulator state (writes are blocked in the
@@ -27,15 +29,16 @@ const visualProject = (name: keyof typeof VIEWPORTS, themed: boolean) => ({
   // The smoke tests DO change simulator state; running them first (and
   // alone) keeps them from racing the captures. Skip with --no-deps.
   dependencies: ['smoke'],
-  // Theme presets other than Tron Classic run on desktop and kiosk only (§5.3).
-  ...(themed ? {} : { grepInvert: /@themed/ }),
+  // Theme presets other than Tron Classic run on desktop and the kiosk devices only (§5.3).
+  ...((THEMED_VIEWPORTS as readonly ViewportName[]).includes(name) ? {} : { grepInvert: /@themed/ }),
   use: {
     ...devices['Desktop Chrome'],
     // The HTML report already has expected/actual/diff; traces for ~800
     // captures cost memory and disk for little extra.
     trace: 'off' as const,
     viewport: VIEWPORTS[name].viewport,
-    deviceScaleFactor: 1,
+    ...('screen' in VIEWPORTS[name] ? { screen: VIEWPORTS[name].screen } : {}),
+    deviceScaleFactor: VIEWPORTS[name].deviceScaleFactor,
     isMobile: VIEWPORTS[name].isMobile,
     hasTouch: VIEWPORTS[name].hasTouch,
     userAgent: VIEWPORTS[name].userAgent ?? devices['Desktop Chrome'].userAgent,
@@ -105,9 +108,6 @@ export default defineConfig({
       testMatch: /smoke\.spec\.ts$/,
       use: { ...devices['Desktop Chrome'], viewport: VIEWPORTS.desktop.viewport },
     },
-    visualProject('desktop', true),
-    visualProject('tablet', false),
-    visualProject('phone', false),
-    visualProject('kiosk', true),
+    ...VISUAL_VIEWPORTS.map(visualProject),
   ],
 });

@@ -24,11 +24,14 @@ The Python side (hub + simulator) needs the dev dependencies:
 | `npm run visual:report` | Open the last Playwright HTML report (baseline / actual / diff) | host |
 | `npm run visual:gallery` | Build `ui-gallery/index.html` from the baselines | host or container |
 | `node tools/ui/build_gallery.mjs --base origin/main` | Before/after review page against a git ref | host or container |
+| `node tools/ui/build_gallery.mjs --viewports kiosk-tab-a11,kiosk-iphone16promax --out <dir>` | Gallery of some viewports only | host or container |
 | `npm run lint:js` / `npm run lint:css` | Lint; fail only on violations above the baseline | host |
 
 Extra Playwright arguments go after `--`, e.g.
 `npm run visual:test -- --grep "drawer/theme"` or
-`npm run visual:update -- --project=kiosk`.
+`npm run visual:update -- --project=kiosk-tab-a11`. Any `--project` argument
+replaces the default list of visual projects (the smoke project still runs
+first as a dependency; add `--no-deps` to skip it).
 
 ## The stack
 
@@ -50,11 +53,30 @@ and Flic buttons. The simulator starts from `tools/simulator/states/default.json
 - **Catalog** (`visual/catalog.ts`): one named entry per reviewable UI state
   (`<area>/<element>/<state>`). The catalog is the checklist of UI elements: a
   new component or state is not done until it has an entry.
-- **Matrix**: Tron Classic x every entry x `desktop` 1440x900, `tablet`
-  1024x768, `phone` 390x844, `kiosk` 1280x800 (update `support/viewports.ts`
-  when the real kiosk resolution is known); Neon, Royal, Vaporwave x entries
-  marked `themed` x desktop + kiosk; plus one paused frame with the Tron
-  background on.
+- **Matrix**: Tron Classic x every entry x five viewport projects (Neon,
+  Royal, Vaporwave x entries marked `themed` x desktop and both kiosk
+  devices; plus one paused frame with the Tron background on, at desktop and
+  both kiosk devices). Sizes are in `support/viewports.ts`:
+
+  | Project | Viewport (CSS px) | Scale | Mobile / touch | Device |
+  | --- | --- | --- | --- | --- |
+  | `desktop` | 1440x900 | 1 | no / no | desktop browser |
+  | `tablet` | 1024x768 landscape | 1 | no / yes | iPad class |
+  | `phone` | 390x844 portrait | 1 | yes / yes | iPhone 12-15 class |
+  | `kiosk-tab-a11` | 1340x800 landscape | 1 | yes / yes | Samsung Galaxy Tab A11 (SM-X133), 8.7", Android Chrome. **PROVISIONAL** |
+  | `kiosk-iphone16promax` | 440x956 portrait | 3 | yes / yes | Apple iPhone 16 Pro Max |
+
+  Kiosk devices vary; these two are the owner's test kiosks (owner decision
+  2026-09-25). `kiosk-tab-a11` uses the panel resolution at scale 1 because
+  the browser's CSS viewport is not confirmed yet: open
+  whatismyviewport.com on the device (in the browser mode the kiosk really
+  uses), update `support/viewports.ts` and re-baseline with
+  `npm run visual:update -- --project=kiosk-tab-a11`. `kiosk-iphone16promax`
+  takes its user agent, screen and scale from Playwright's
+  "iPhone 16 Pro Max" descriptor but uses the full 440x956 screen as the
+  viewport (the descriptor's 440x763 is Safari with its bars showing).
+  Every project renders with Chromium; screenshots are taken at CSS scale, so
+  each baseline is viewport-sized.
 - **Files**: `visual/__snapshots__/<viewport>/[themes/<preset>/]<entry>.png`
   (Git LFS) and `visual/__snapshots__/catalog.json` (entry descriptions and
   notes, read by the gallery).
