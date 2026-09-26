@@ -24,6 +24,18 @@ _cycle_locks: dict[int, asyncio.Lock] = {
     i: asyncio.Lock() for i in range(1, 10)
 }
 
+# Serialises custom preset saves (API-14): each one temporarily re-routes the
+# displays, and two interleaved saves would store and restore each other's
+# temporary routing. Created on first use (bound to the running loop).
+_preset_save_lock: asyncio.Lock | None = None
+
+
+def _get_preset_save_lock() -> asyncio.Lock:
+    global _preset_save_lock
+    if _preset_save_lock is None:
+        _preset_save_lock = asyncio.Lock()
+    return _preset_save_lock
+
 
 @require_connected
 async def handle_preset(request: web.Request) -> web.Response:
@@ -393,34 +405,50 @@ async def handle_preset_save(request: web.Request) -> web.Response:
                 except (ValueError, TypeError):
                     return _json_response(False, error="Invalid output/input format", status=400)
 
-            # Get current active routing to restore later
-            raw_status = await matrix_device.get_status()
-            routing_array = raw_status.get("routing", [])
-            original_routing = {i + 1: src for i, src in enumerate(routing_array[:8]) if src is not None}
+            # The matrix can only save its live routing, so a custom save
+            # routes the displays temporarily, saves, and routes them back
+            # (whether that can be avoided is DI-4). API-14: one save at a time
+            # (the lock), and the routing to restore is read fresh from the
+            # matrix, not from the hub's status cache.
+            async with _get_preset_save_lock():
+                raw_status = await matrix_device.get_status(force_refresh=True)
+                routing_array = list((raw_status or {}).get("routing") or [])[:8]
+                if len(routing_array) != 8 or any(not isinstance(src, int) for src in routing_array):
+                    return _json_response(
+                        False,
+                        error="Could not read the current routing to restore; preset not saved",
+                        status=503,
+                    )
+                original_routing = {i + 1: src for i, src in enumerate(routing_array)}
 
-            _LOG.info(f"REST API: Applying temporary routing to save to preset {preset_num}")
+                _LOG.info(f"REST API: Applying temporary routing to save to preset {preset_num}")
 
-            success = False
-            # Wrap apply-save-restore in try/finally so the original routing
-            # is ALWAYS restored, even if switch_input() or save_preset() raises
-            # mid-sequence. Without this, an exception during step 1 leaves the
-            # matrix with the temporary routing instead of the user's original.
-            try:
-                # 1. Switch to new routing
-                for out_num, in_num in parsed_routing.items():
-                    await matrix_device.switch_input(in_num, out_num)
+                success = False
+                failed_restore: list[int] = []
+                # Wrap apply-save-restore in try/finally so the original routing
+                # is ALWAYS restored, even if switch_input() or save_preset() raises
+                # mid-sequence.
+                try:
+                    # 1. Switch to new routing; only save if every output took it
+                    applied = [await matrix_device.switch_input(in_num, out_num)
+                               for out_num, in_num in parsed_routing.items()]
 
-                # 2. Save preset
-                success = await matrix_device.save_preset(preset_num)
-            finally:
-                # 3. Restore original routing (always, even on exception)
-                for out_num, in_num in original_routing.items():
-                    try:
-                        await matrix_device.switch_input(in_num, out_num)
-                    except Exception as restore_err:
-                        _LOG.error(
-                            f"Failed to restore routing for output {out_num}: {restore_err}"
-                        )
+                    # 2. Save preset
+                    if all(applied):
+                        success = await matrix_device.save_preset(preset_num)
+                finally:
+                    # 3. Restore the outputs that were changed (always, even on exception)
+                    for out_num in parsed_routing:
+                        in_num = original_routing[out_num]
+                        try:
+                            if not await matrix_device.switch_input(in_num, out_num):
+                                failed_restore.append(out_num)
+                        except Exception as restore_err:
+                            failed_restore.append(out_num)
+                            _LOG.error(f"Failed to restore routing for output {out_num}: {restore_err}")
+
+            if failed_restore:
+                _LOG.error(f"Preset {preset_num} save: routing of output(s) {failed_restore} not restored")
 
             if success:
                 from .device_settings import set_preset_routing
