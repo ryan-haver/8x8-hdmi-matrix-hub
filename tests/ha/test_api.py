@@ -67,3 +67,20 @@ async def test_unreachable_hub_is_a_connection_error() -> None:
         client = HubClient(session, "127.0.0.1", 9)  # discard port: connection refused
         with pytest.raises(HubConnectionError):
             await client.status()
+
+
+@pytest.mark.parametrize(
+    ("host", "url"),
+    [
+        ("192.0.2.10", "http://192.0.2.10:8080"),
+        ("hub.local", "http://hub.local:8080"),
+        ("fd00::10", "http://[fd00::10]:8080"),
+        ("[fd00::10]", "http://[fd00::10]:8080"),
+    ],
+)
+async def test_base_url_brackets_ipv6(host: str, url: str) -> None:
+    """An IPv6 hub address must be bracketed in the URL (the ha validation client's reconfigure run
+    on Docker Desktop, which resolves the host to IPv6, found this). The HA test harness only allows
+    127.0.0.1, so the connection itself is not exercised here."""
+    async with aiohttp.ClientSession() as session:
+        assert HubClient(session, host, 8080).base_url == url

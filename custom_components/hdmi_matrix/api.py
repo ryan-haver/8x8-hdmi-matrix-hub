@@ -42,7 +42,9 @@ class HubClient:
         self._session = session
         self.host = host
         self.port = port
-        self.base_url = f"http://{host}:{port}"
+        # An IPv6 literal needs brackets in a URL (found by the ha validation client on Docker Desktop).
+        url_host = f"[{host}]" if ":" in host and not host.startswith("[") else host
+        self.base_url = f"http://{url_host}:{port}"
         self._timeout = aiohttp.ClientTimeout(total=REQUEST_TIMEOUT)
 
     async def _request(self, method: str, path: str, payload: dict[str, Any] | None = None) -> Any:
