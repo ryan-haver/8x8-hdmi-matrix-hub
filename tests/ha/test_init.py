@@ -234,3 +234,15 @@ def test_manifest_and_hacs() -> None:
     assert "zeroconf" not in manifest  # the hub does not advertise itself yet
     hacs = json.loads((COMPONENT.parents[1] / "hacs.json").read_text(encoding="utf-8"))
     assert hacs["name"] == "HDMI Matrix" and hacs["homeassistant"] == "2025.1.0"  # D8
+
+
+PNG_SIGNATURE = bytes.fromhex("89504e470d0a1a0a")
+
+
+def test_brand_icons() -> None:
+    # HA-14: HACS finds local brand assets at brand/icon.png; HA wants square RGBA PNGs, 256 and 512 px.
+    for name, px in (("icon.png", 256), ("icon@2x.png", 512)):
+        data = (COMPONENT / "brand" / name).read_bytes()
+        assert data[:8] == PNG_SIGNATURE and data[12:16] == b"IHDR"
+        assert int.from_bytes(data[16:20], "big") == px and int.from_bytes(data[20:24], "big") == px
+        assert data[25] == 6  # colour type 6: RGBA (transparent background)

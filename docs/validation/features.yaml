@@ -2704,7 +2704,7 @@ features:
     ha: [hacs.json, manifest.json, translations/en.json]
   target: V4
   current: V1
-  basis: 'hassfest passes (blocking CI job, also run locally); the HACS action passes every check except brands (ignored until HA-14''s brand assets exist); tests/ha/test_init.py::test_manifest_and_hacs and test_translations_match_strings. Not yet installed through HACS itself.'
+  basis: 'hassfest passes (blocking CI job, also run locally); the HACS action passes every check, brands included (HA-14: local brand icons); tests/ha/test_init.py::test_manifest_and_hacs and test_translations_match_strings. Not yet installed through HACS itself.'
   evidence: []
   findings: [HA-14]
   scenarios: []

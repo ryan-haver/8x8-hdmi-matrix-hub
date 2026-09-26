@@ -216,7 +216,7 @@ jobs:
     name: HACS validation
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    # Blocking since WP-D1; only the brands check is ignored (HA-14: brand assets are an owner action).
+    # Blocking since WP-D1; brands pass via custom_components/hdmi_matrix/brand/ (HA-14).
     permissions:
       contents: read
     steps:
@@ -224,8 +224,6 @@ jobs:
       - uses: hacs/action@main
         with:
           category: integration
-          # TODO(HA-14): drop once custom_components/hdmi_matrix/brand/ (or the HA brands repo) has the icons.
-          ignore: brands
           # Don't post PR comments (would need pull-requests: write).
           comment: false
 

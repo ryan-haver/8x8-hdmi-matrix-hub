@@ -1,7 +1,7 @@
 # Feature ledger
 
 > **Generated** by `python -m tools.validate ledger` — do not edit by hand. Registry: [`features.yaml`](features.yaml) · Plan: [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md) · How to add evidence: [`README.md`](README.md).
-> Commit `aae8c2d4`
+> Commit `31c674a2`
 
 **Level** = highest level with fresh passing evidence, else the recorded baseline (the registry's `current`), capped at V1 while an open critical/high finding is linked. **Recorded** = the registry baseline. **Fresh** = evidence commit not older than the last change to the scenario's `covers` paths.
 
@@ -9,19 +9,19 @@
 
 | Area | Features | V0 | V1 | V2 | V3 | V4 | V5 | Below target | Stale evidence |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Matrix control | 31 | 1 | 25 | 1 | 4 | 0 | 0 | 31 | 2 |
-| CEC control | 11 | 0 | 7 | 3 | 1 | 0 | 0 | 11 | 0 |
-| REST/WebSocket contract | 42 | 7 | 25 | 9 | 1 | 0 | 0 | 39 | 4 |
-| Domain features | 36 | 2 | 33 | 1 | 0 | 0 | 0 | 36 | 0 |
+| Matrix control | 31 | 1 | 25 | 1 | 4 | 0 | 0 | 31 | 6 |
+| CEC control | 11 | 0 | 10 | 0 | 1 | 0 | 0 | 11 | 4 |
+| REST/WebSocket contract | 42 | 8 | 29 | 4 | 1 | 0 | 0 | 41 | 11 |
+| Domain features | 36 | 3 | 33 | 0 | 0 | 0 | 0 | 36 | 4 |
 | Web UI | 36 | 0 | 34 | 0 | 2 | 0 | 0 | 34 | 5 |
 | Kiosk | 14 | 0 | 13 | 0 | 1 | 0 | 0 | 13 | 0 |
 | Remote 3 integration | 17 | 1 | 4 | 0 | 12 | 0 | 0 | 17 | 7 |
-| Home Assistant component | 18 | 0 | 1 | 0 | 17 | 0 | 0 | 18 | 0 |
+| Home Assistant component | 18 | 0 | 1 | 0 | 17 | 0 | 0 | 18 | 17 |
 | Flic | 10 | 3 | 7 | 0 | 0 | 0 | 0 | 10 | 0 |
 | Deployment, configuration, persistence | 20 | 3 | 8 | 2 | 7 | 0 | 0 | 20 | 7 |
 | Security controls | 15 | 10 | 5 | 0 | 0 | 0 | 0 | 15 | 0 |
-| Reliability | 18 | 12 | 5 | 1 | 0 | 0 | 0 | 18 | 1 |
-| **All** | **268** | **39** | **167** | **17** | **45** | **0** | **0** | **262** | **26** |
+| Reliability | 18 | 13 | 5 | 0 | 0 | 0 | 0 | 18 | 2 |
+| **All** | **268** | **42** | **174** | **7** | **45** | **0** | **0** | **264** | **63** |
 
 Levels: **V0** Claimed · **V1** Unit · **V2** Simulated integration · **V3** End-to-end · **V4** Hardware · **V5** Field
 
@@ -43,21 +43,21 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | Reliability | 13 | 5 | 0 | 0 | 0 | 0 |
 | **All** | **42** | **174** | **7** | **45** | **0** | **0** |
 
-- Features with fresh passing scenario evidence: **35** of 268.
-- Features with a fresh failing scenario: **2**: `F-DOM-003`, `F-DOM-004`.
+- Features with fresh passing scenario evidence: **0** of 268.
+- Features with a fresh failing scenario: **0**.
 - Features capped at V1 by an open critical/high finding: **58**.
 
 ## Matrix control (F-MTX)
 
 | ID | Feature | Target | Level | Recorded | Freshness | Evidence | Open findings |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| F-MTX-001 | Route one input to one output | V4 | V3 | V3 | fresh | [ha.select_source·ha·pass](evidence/F-HA-002/2026-09-26-V3-6c22aa7a-ha.select_source-ha.json) | — |
+| F-MTX-001 | Route one input to one output | V4 | V3 | V3 | stale | [ha.select_source·ha·pass](evidence/F-HA-002/2026-09-26-V3-6c22aa7a-ha.select_source-ha.json)<br>[routing.switch_one·api·pass](evidence/F-MTX-001/2026-09-25-V2-d6668000-routing.switch_one-api.json) | — |
 | F-MTX-002 | Route one input to every output | V4 | V3 | V3 | stale | [routing.route_all·api·pass](evidence/F-MTX-002/2026-09-25-V2-d6668000-routing.route_all-api.json)<br>[routing.route_all·browser·pass](evidence/F-MTX-002/2026-09-25-V3-d6668000-routing.route_all-browser.json) | — |
-| F-MTX-003 | Recall a matrix preset (1-8) | V4 | V3 | V3 | fresh | [ha.preset_button·ha·pass](evidence/F-HA-006/2026-09-26-V3-6c22aa7a-ha.preset_button-ha.json)<br>[presets.recall·api·pass](evidence/F-MTX-003/2026-09-25-V2-22afc1a7-presets.recall-api.json) | — |
+| F-MTX-003 | Recall a matrix preset (1-8) | V4 | V3 | V3 | stale | [ha.preset_button·ha·pass](evidence/F-HA-006/2026-09-26-V3-6c22aa7a-ha.preset_button-ha.json)<br>[presets.recall·api·pass](evidence/F-MTX-003/2026-09-25-V2-22afc1a7-presets.recall-api.json) | — |
 | F-MTX-004 | Save the current routing to a matrix preset | V4 | V1 | V1 | — | — | — |
 | F-MTX-005 | Name presets in the web app (names shown by the API, UI, kiosk) | V4 | V0 | V0 | stale | [presets.rename·api·pass](evidence/F-MTX-005/2026-09-25-V2-22afc1a7-presets.rename-api.json)<br>[presets.rename·api·pass](evidence/F-MTX-005/2026-09-25-V2-d6668000-presets.rename-api.json) | UC-14(M), BE-16(M) |
-| F-MTX-006 | Matrix power on / standby | V4 | V3 | V3 | fresh | [ha.power_off·ha·pass](evidence/F-HA-003/2026-09-26-V3-6c22aa7a-ha.power_off-ha.json)<br>[ha.power_on·ha·pass](evidence/F-HA-003/2026-09-26-V3-6c22aa7a-ha.power_on-ha.json)<br>[power.standby·api·pass](evidence/F-MTX-006/2026-09-25-V2-22afc1a7-power.standby-api.json)<br>[power.wake·api·pass](evidence/F-MTX-006/2026-09-25-V2-22afc1a7-power.wake-api.json) | — |
-| F-MTX-007 | Mute / unmute the audio of an output | V4 | V1 (capped) | V1 | fresh | [ha.mute_switch·ha·pass](evidence/F-HA-004/2026-09-26-V3-6c22aa7a-ha.mute_switch-ha.json)<br>[outputs.audio_mute·api·pass](evidence/F-MTX-007/2026-09-25-V2-22afc1a7-outputs.audio_mute-api.json) | HIL-09(C) |
+| F-MTX-006 | Matrix power on / standby | V4 | V3 | V3 | stale | [ha.power_off·ha·pass](evidence/F-HA-003/2026-09-26-V3-6c22aa7a-ha.power_off-ha.json)<br>[ha.power_on·ha·pass](evidence/F-HA-003/2026-09-26-V3-6c22aa7a-ha.power_on-ha.json) | — |
+| F-MTX-007 | Mute / unmute the audio of an output | V4 | V1 (capped) | V1 | stale | [ha.mute_switch·ha·pass](evidence/F-HA-004/2026-09-26-V3-6c22aa7a-ha.mute_switch-ha.json)<br>[outputs.audio_mute·api·pass](evidence/F-MTX-007/2026-09-25-V2-22afc1a7-outputs.audio_mute-api.json) | HIL-09(C) |
 | F-MTX-008 | Enable / disable an output's video stream | V4 | V1 (capped) | V1 | — | — | HIL-09(C) |
 | F-MTX-009 | Set an output's HDCP mode | V4 | V1 (capped) | V1 | — | — | HIL-09(C) |
 | F-MTX-010 | Set an output's HDR mode | V4 | V1 (capped) | V1 | — | — | HIL-09(C) |
@@ -87,13 +87,13 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 
 | ID | Feature | Target | Level | Recorded | Freshness | Evidence | Open findings |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| F-CEC-001 | Power a source on / off over CEC | V4 | V2 | V1 | fresh | [cec.input_power_on·api·pass](evidence/F-CEC-001/2026-09-25-V2-22afc1a7-cec.input_power_on-api.json) | — |
+| F-CEC-001 | Power a source on / off over CEC | V4 | V1 | V1 | stale | [cec.input_power_on·api·pass](evidence/F-CEC-001/2026-09-25-V2-22afc1a7-cec.input_power_on-api.json)<br>[cec.input_power_on·api·pass](evidence/F-CEC-001/2026-09-25-V2-d6668000-cec.input_power_on-api.json) | — |
 | F-CEC-002 | Navigate a source's menus over CEC (up/down/left/right/select/menu/back) | V4 | V1 | V1 | — | — | — |
 | F-CEC-003 | Control playback on a source over CEC | V4 | V1 | V1 | — | — | — |
 | F-CEC-004 | Source volume / mute over CEC | V4 | V1 | V1 | — | — | — |
-| F-CEC-005 | Turn a display (TV) on / off over CEC | V4 | V3 | V3 | fresh | [cec.output_power_on·api·pass](evidence/F-CEC-005/2026-09-25-V2-22afc1a7-cec.output_power_on-api.json)<br>[ha.service_cec_display·ha·pass](evidence/F-HA-012/2026-09-26-V3-6c22aa7a-ha.service_cec_display-ha.json) | BE-14(M) |
-| F-CEC-006 | Display / soundbar volume and mute over CEC | V4 | V2 | V1 | fresh | [cec.output_volume_up·api·pass](evidence/F-CEC-006/2026-09-25-V2-22afc1a7-cec.output_volume_up-api.json) | BE-14(M) |
-| F-CEC-007 | Enable CEC on the target port automatically before a command | V4 | V2 | V1 | fresh | [cec.input_power_on·api·pass](evidence/F-CEC-001/2026-09-25-V2-22afc1a7-cec.input_power_on-api.json) | — |
+| F-CEC-005 | Turn a display (TV) on / off over CEC | V4 | V3 | V3 | stale | [cec.output_power_on·api·pass](evidence/F-CEC-005/2026-09-25-V2-22afc1a7-cec.output_power_on-api.json)<br>[cec.output_power_on·api·pass](evidence/F-CEC-005/2026-09-25-V2-d6668000-cec.output_power_on-api.json) | BE-14(M) |
+| F-CEC-006 | Display / soundbar volume and mute over CEC | V4 | V1 | V1 | stale | [cec.output_volume_up·api·pass](evidence/F-CEC-006/2026-09-25-V2-22afc1a7-cec.output_volume_up-api.json)<br>[cec.output_volume_up·api·pass](evidence/F-CEC-006/2026-09-25-V2-d6668000-cec.output_volume_up-api.json) | BE-14(M) |
+| F-CEC-007 | Enable CEC on the target port automatically before a command | V4 | V1 | V1 | stale | [cec.input_power_on·api·pass](evidence/F-CEC-001/2026-09-25-V2-22afc1a7-cec.input_power_on-api.json)<br>[cec.input_power_on·api·pass](evidence/F-CEC-001/2026-09-25-V2-d6668000-cec.input_power_on-api.json) | — |
 | F-CEC-008 | Enable / disable CEC per port | V4 | V1 | V1 | — | — | — |
 | F-CEC-009 | Read which ports have CEC enabled | V4 | V1 | V1 | — | — | — |
 | F-CEC-010 | Send CEC over Telnet (OREI_USE_TELNET_CEC) | V4 | V1 | V1 | — | — | — |
@@ -109,22 +109,22 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-API-004 | Detailed status (GET /api/status/full\|inputs\|outputs\|cables\|edid\|ext-audio\|system\|device\|cec) | V3 | V1 | V1 | — | — | — |
 | F-API-005 | POST /api/switch (one output or all) | V3 | V2 | V2 | stale | [routing.switch_one·api·pass](evidence/F-MTX-001/2026-09-25-V2-d6668000-routing.switch_one-api.json)<br>[routing.route_all·api·pass](evidence/F-MTX-002/2026-09-25-V2-d6668000-routing.route_all-api.json) | — |
 | F-API-006 | POST /api/output/{output}/source and input cycling | V3 | V1 | V1 | — | — | VAL-05(M) |
-| F-API-007 | POST /api/preset/{preset} (recall) | V3 | V2 | V2 | fresh | [presets.recall·api·pass](evidence/F-MTX-003/2026-09-25-V2-22afc1a7-presets.recall-api.json) | — |
+| F-API-007 | POST /api/preset/{preset} (recall) | V3 | V2 | V2 | stale | [presets.recall·api·pass](evidence/F-MTX-003/2026-09-25-V2-22afc1a7-presets.recall-api.json)<br>[presets.recall·api·pass](evidence/F-MTX-003/2026-09-25-V2-d6668000-presets.recall-api.json) | — |
 | F-API-008 | POST /api/preset/{preset}/save | V2 | V1 | V1 | — | — | API-14(M) |
-| F-API-009 | POST /api/power/on\|off | V3 | V2 | V1 | fresh | [power.standby·api·pass](evidence/F-MTX-006/2026-09-25-V2-22afc1a7-power.standby-api.json)<br>[power.wake·api·pass](evidence/F-MTX-006/2026-09-25-V2-22afc1a7-power.wake-api.json) | — |
+| F-API-009 | POST /api/power/on\|off | V3 | V1 | V1 | stale | [power.standby·api·pass](evidence/F-MTX-006/2026-09-25-V2-22afc1a7-power.standby-api.json)<br>[power.wake·api·pass](evidence/F-MTX-006/2026-09-25-V2-22afc1a7-power.wake-api.json) | — |
 | F-API-010 | Output setting routes (mute, enable, hdcp, hdr, scaler, arc) | V2 | V1 | V1 | — | — | API-15(L) |
 | F-API-011 | EDID routes | V2 | V1 | V1 | — | — | — |
 | F-API-012 | External audio routes | V2 | V1 | V1 | — | — | — |
 | F-API-013 | System setting routes (beep, panel lock, LCD, reboot) | V2 | V1 | V1 | — | — | — |
 | F-API-014 | System info and storage routes | V2 | V1 | V1 | — | — | SEC-11(L) |
-| F-API-015 | CEC command routes | V3 | V2 | V1 | fresh | [cec.input_power_on·api·pass](evidence/F-CEC-001/2026-09-25-V2-22afc1a7-cec.input_power_on-api.json)<br>[cec.output_power_on·api·pass](evidence/F-CEC-005/2026-09-25-V2-22afc1a7-cec.output_power_on-api.json)<br>[cec.output_volume_up·api·pass](evidence/F-CEC-006/2026-09-25-V2-22afc1a7-cec.output_volume_up-api.json) | — |
+| F-API-015 | CEC command routes | V3 | V1 | V1 | stale | [cec.input_power_on·api·pass](evidence/F-CEC-001/2026-09-25-V2-22afc1a7-cec.input_power_on-api.json)<br>[cec.input_power_on·api·pass](evidence/F-CEC-001/2026-09-25-V2-d6668000-cec.input_power_on-api.json) | — |
 | F-API-016 | CEC catalogue, capability and enable routes | V2 | V1 | V1 | — | — | — |
 | F-API-017 | Device settings routes (icons, display names, preset names, favourite/dashboard presets) | V2 | V1 | V1 | — | — | — |
 | F-API-018 | Name routes (POST /api/input\|output/{n}/name) | V2 | V0 | V0 | — | — | BE-16(M) |
 | F-API-019 | Profile routes | V2 | V1 (capped) | V1 | — | — | SEC-04(H), API-08(M) |
 | F-API-020 | Scene v1 alias routes (/api/scene*, /api/scenes) | V2 | V1 (capped) | V1 | — | — | API-23(H), API-12(M) |
 | F-API-021 | Scene v2 routes (/api/v2/scenes*) | V2 | V0 (capped) | V0 | — | — | API-05(H), API-01(C), API-02(C), TST-03(M) |
-| F-API-022 | Response envelope and input validation (4xx before anything reaches the matrix) | V2 | **V2** | V1 | fresh | [failures.bad_input·api·pass](evidence/F-API-022/2026-09-25-V2-22afc1a7-failures.bad_input-api.json) | API-15(L), SEC-11(L), API-21(L) |
+| F-API-022 | Response envelope and input validation (4xx before anything reaches the matrix) | V2 | V1 | V1 | stale | [failures.bad_input·api·pass](evidence/F-API-022/2026-09-25-V2-22afc1a7-failures.bad_input-api.json)<br>[failures.bad_input·api·pass](evidence/F-API-022/2026-09-25-V2-d6668000-failures.bad_input-api.json) | API-15(L), SEC-11(L), API-21(L) |
 | F-API-023 | Macro routes | V2 | V1 | V1 | — | — | VAL-02(M) |
 | F-API-024 | Shortcut routes (/api/system-shortcuts* and the /api/shortcuts* aliases) | V2 | V1 (capped) | V1 | — | — | API-01(C), API-06(H), API-08(M) |
 | F-API-025 | Dashboard layout routes | V2 | V1 | V1 | — | — | API-20(M) |
@@ -137,10 +137,10 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-API-032 | WebSocket /ws: welcome, get_status, errors | V2 | V1 | V1 | — | — | API-10(M) |
 | F-API-033 | WS event switch / switch_failed | V3 | V1 | V1 | stale | [routing.switch_one·api·pass](evidence/F-MTX-001/2026-09-25-V2-d6668000-routing.switch_one-api.json) | API-09(M) |
 | F-API-034 | WS event switch_all / switch_all_failed | V3 | V1 | V1 | stale | [routing.route_all·api·pass](evidence/F-MTX-002/2026-09-25-V2-d6668000-routing.route_all-api.json) | API-09(M) |
-| F-API-035 | WS event preset_recall / preset_recall_failed | V3 | V2 | V1 | fresh | [presets.recall·api·pass](evidence/F-MTX-003/2026-09-25-V2-22afc1a7-presets.recall-api.json) | API-09(M), UI-04(M) |
-| F-API-036 | WS event audio_mute | V2 | **V2** | V1 | fresh | [outputs.audio_mute·api·pass](evidence/F-MTX-007/2026-09-25-V2-22afc1a7-outputs.audio_mute-api.json) | — |
+| F-API-035 | WS event preset_recall / preset_recall_failed | V3 | V1 | V1 | stale | [presets.recall·api·pass](evidence/F-MTX-003/2026-09-25-V2-22afc1a7-presets.recall-api.json)<br>[presets.recall·api·pass](evidence/F-MTX-003/2026-09-25-V2-d6668000-presets.recall-api.json) | API-09(M), UI-04(M) |
+| F-API-036 | WS event audio_mute | V2 | V1 | V1 | stale | [outputs.audio_mute·api·pass](evidence/F-MTX-007/2026-09-25-V2-22afc1a7-outputs.audio_mute-api.json)<br>[outputs.audio_mute·api·pass](evidence/F-MTX-007/2026-09-25-V2-d6668000-outputs.audio_mute-api.json) | — |
 | F-API-037 | WS events device_settings / device_settings_full | V2 | V0 | V0 | stale | [presets.rename·api·pass](evidence/F-MTX-005/2026-09-25-V2-22afc1a7-presets.rename-api.json)<br>[presets.rename·api·pass](evidence/F-MTX-005/2026-09-25-V2-d6668000-presets.rename-api.json) | — |
-| F-API-038 | WS event cec_command | V2 | V1 (capped) | V0 | fresh | [cec.output_power_on·api·pass](evidence/F-CEC-005/2026-09-25-V2-22afc1a7-cec.output_power_on-api.json) | UI-02(H) |
+| F-API-038 | WS event cec_command | V2 | V0 (capped) | V0 | stale | [cec.output_power_on·api·pass](evidence/F-CEC-005/2026-09-25-V2-22afc1a7-cec.output_power_on-api.json)<br>[cec.output_power_on·api·pass](evidence/F-CEC-005/2026-09-25-V2-d6668000-cec.output_power_on-api.json) | UI-02(H) |
 | F-API-039 | WS event status (background refresh broadcast) | V2 | V1 | V1 | — | — | BE-31(M) |
 | F-API-040 | WS live device events (routing_change, signal_change, connection_change, cable_change) | V2 | V0 | V0 | — | — | BE-24(L) |
 | F-API-041 | WS event scene_execution_error | V2 | V0 (capped) | V0 | — | — | API-01(C), UI-02(H) |
@@ -151,10 +151,10 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | ID | Feature | Target | Level | Recorded | Freshness | Evidence | Open findings |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | F-DOM-001 | Create, edit and delete profiles | V3 | V1 | V1 | — | — | API-22(M) |
-| F-DOM-002 | Recall a profile: its routing is applied | V4 | V2 | V1 | fresh | [profiles.recall_routing·api·pass](evidence/F-DOM-002/2026-09-25-V2-22afc1a7-profiles.recall_routing-api.json) | API-08(M), API-19(M) |
-| F-DOM-003 | Recall a profile: its output settings (mute, HDR, HDCP, enable) are applied | V4 | V1 (capped) | V1 | fresh | [profiles.recall_output_settings·api·fail](evidence/F-DOM-003/2026-09-25-V2-22afc1a7-profiles.recall_output_settings-api.json) | VAL-01(H), API-22(M) |
-| F-DOM-004 | Recall a profile: its power-on / power-off macro runs | V4 | V1 | V1 | fresh | [profiles.recall_power_macro·api·fail](evidence/F-DOM-004/2026-09-25-V2-22afc1a7-profiles.recall_power_macro-api.json) | VAL-02(M), API-08(M) |
-| F-DOM-005 | Protect a profile with a passcode (per-item PIN) | V3 | V1 (capped) | V0 | fresh | [profiles.recall_needs_passcode·api·pass](evidence/F-DOM-005/2026-09-25-V2-22afc1a7-profiles.recall_needs_passcode-api.json) | SEC-05(H), SEC-06(H), UI-01(H) |
+| F-DOM-002 | Recall a profile: its routing is applied | V4 | V1 | V1 | stale | [profiles.recall_routing·api·pass](evidence/F-DOM-002/2026-09-25-V2-22afc1a7-profiles.recall_routing-api.json)<br>[profiles.recall_routing·api·pass](evidence/F-DOM-002/2026-09-25-V2-d6668000-profiles.recall_routing-api.json) | API-08(M), API-19(M) |
+| F-DOM-003 | Recall a profile: its output settings (mute, HDR, HDCP, enable) are applied | V4 | V1 (capped) | V1 | stale | [profiles.recall_output_settings·api·fail](evidence/F-DOM-003/2026-09-25-V2-22afc1a7-profiles.recall_output_settings-api.json)<br>[profiles.recall_output_settings·api·fail](evidence/F-DOM-003/2026-09-25-V2-d6668000-profiles.recall_output_settings-api.json) | VAL-01(H), API-22(M) |
+| F-DOM-004 | Recall a profile: its power-on / power-off macro runs | V4 | V1 | V1 | stale | [profiles.recall_power_macro·api·fail](evidence/F-DOM-004/2026-09-25-V2-22afc1a7-profiles.recall_power_macro-api.json)<br>[profiles.recall_power_macro·api·fail](evidence/F-DOM-004/2026-09-25-V2-d6668000-profiles.recall_power_macro-api.json) | VAL-02(M), API-08(M) |
+| F-DOM-005 | Protect a profile with a passcode (per-item PIN) | V3 | V0 (capped) | V0 | stale | [profiles.recall_needs_passcode·api·pass](evidence/F-DOM-005/2026-09-25-V2-22afc1a7-profiles.recall_needs_passcode-api.json)<br>[profiles.recall_needs_passcode·api·pass](evidence/F-DOM-005/2026-09-25-V2-d6668000-profiles.recall_needs_passcode-api.json) | SEC-05(H), SEC-06(H), UI-01(H) |
 | F-DOM-006 | Favourite, pin, reorder profiles and show them on the dashboard | V3 | V1 | V1 | — | — | API-20(M) |
 | F-DOM-007 | Per-profile CEC targets (nav/playback/volume/power) and auto-resolve | V3 | V1 (capped) | V1 | — | — | API-23(H) |
 | F-DOM-008 | Profile execution log | V3 | V0 | V0 | — | — | — |
@@ -273,24 +273,24 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 
 | ID | Feature | Target | Level | Recorded | Freshness | Evidence | Open findings |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| F-HA-001 | Add the hub in Home Assistant (config flow) | V4 | V3 | V3 | fresh | [ha.config_flow·ha·pass](evidence/F-HA-001/2026-09-26-V3-6c22aa7a-ha.config_flow-ha.json) | — |
-| F-HA-002 | Choose each output's source (select entities) | V4 | V3 | V3 | fresh | [ha.select_source·ha·pass](evidence/F-HA-002/2026-09-26-V3-6c22aa7a-ha.select_source-ha.json) | — |
-| F-HA-003 | Matrix power switch | V4 | V3 | V3 | fresh | [ha.power_off·ha·pass](evidence/F-HA-003/2026-09-26-V3-6c22aa7a-ha.power_off-ha.json)<br>[ha.power_on·ha·pass](evidence/F-HA-003/2026-09-26-V3-6c22aa7a-ha.power_on-ha.json) | — |
-| F-HA-004 | Output audio mute switches | V4 | V3 | V3 | fresh | [ha.mute_switch·ha·pass](evidence/F-HA-004/2026-09-26-V3-6c22aa7a-ha.mute_switch-ha.json) | — |
-| F-HA-005 | Output stream enable switches | V4 | V3 | V3 | fresh | [ha.stream_switch·ha·pass](evidence/F-HA-005/2026-09-26-V3-6c22aa7a-ha.stream_switch-ha.json) | — |
-| F-HA-006 | Preset buttons | V4 | V3 | V3 | fresh | [ha.preset_button·ha·pass](evidence/F-HA-006/2026-09-26-V3-6c22aa7a-ha.preset_button-ha.json) | — |
-| F-HA-007 | Reboot button | V4 | V3 | V3 | fresh | [ha.reboot_button·ha·pass](evidence/F-HA-007/2026-09-26-V3-6c22aa7a-ha.reboot_button-ha.json) | — |
-| F-HA-008 | Input signal binary sensors | V4 | V3 | V3 | fresh | [ha.input_signal·ha·pass](evidence/F-HA-008/2026-09-26-V3-6c22aa7a-ha.input_signal-ha.json) | — |
-| F-HA-009 | Output connected binary sensors | V4 | V3 | V3 | fresh | [ha.display_unplugged·ha·pass](evidence/F-HA-009/2026-09-26-V3-6c22aa7a-ha.display_unplugged-ha.json) | — |
-| F-HA-010 | Service hdmi_matrix.recall_preset | V4 | V3 | V3 | fresh | [ha.service_recall_preset·ha·pass](evidence/F-HA-010/2026-09-26-V3-6c22aa7a-ha.service_recall_preset-ha.json) | — |
-| F-HA-011 | Service hdmi_matrix.switch_input | V4 | V3 | V3 | fresh | [ha.service_switch_input·ha·pass](evidence/F-HA-011/2026-09-26-V3-6c22aa7a-ha.service_switch_input-ha.json) | — |
-| F-HA-012 | Service hdmi_matrix.send_cec_command | V4 | V3 | V3 | fresh | [ha.service_cec_display·ha·pass](evidence/F-HA-012/2026-09-26-V3-6c22aa7a-ha.service_cec_display-ha.json)<br>[ha.service_cec_invalid·ha·pass](evidence/F-HA-012/2026-09-26-V3-6c22aa7a-ha.service_cec_invalid-ha.json)<br>[ha.service_cec_source·ha·pass](evidence/F-HA-012/2026-09-26-V3-6c22aa7a-ha.service_cec_source-ha.json) | — |
-| F-HA-013 | Poll the hub; entities go unavailable when it is unreachable | V4 | V3 | V3 | fresh | [ha.input_signal·ha·pass](evidence/F-HA-008/2026-09-26-V3-6c22aa7a-ha.input_signal-ha.json)<br>[ha.display_unplugged·ha·pass](evidence/F-HA-009/2026-09-26-V3-6c22aa7a-ha.display_unplugged-ha.json)<br>[ha.matrix_unreachable·ha·pass](evidence/F-HA-013/2026-09-26-V3-6c22aa7a-ha.matrix_unreachable-ha.json) | — |
-| F-HA-014 | Install through HACS (custom repository) | V4 | V1 | V1 | — | — | HA-14(M) |
-| F-HA-015 | Device and entity naming in Home Assistant | V4 | V3 | V3 | fresh | [ha.config_flow·ha·pass](evidence/F-HA-001/2026-09-26-V3-6c22aa7a-ha.config_flow-ha.json) | — |
-| F-HA-016 | Change the hub address of a configured matrix (reconfigure flow) | V4 | V3 | V3 | fresh | [ha.reconfigure·ha·pass](evidence/F-HA-016/2026-09-26-V3-6c22aa7a-ha.reconfigure-ha.json) | — |
-| F-HA-017 | Polling interval option (options flow) | V4 | V3 | V3 | fresh | [ha.config_flow·ha·pass](evidence/F-HA-001/2026-09-26-V3-6c22aa7a-ha.config_flow-ha.json) | — |
-| F-HA-018 | Services target one matrix (config entry or device) | V4 | V3 | V3 | fresh | [ha.service_recall_preset·ha·pass](evidence/F-HA-010/2026-09-26-V3-6c22aa7a-ha.service_recall_preset-ha.json)<br>[ha.service_switch_input·ha·pass](evidence/F-HA-011/2026-09-26-V3-6c22aa7a-ha.service_switch_input-ha.json) | — |
+| F-HA-001 | Add the hub in Home Assistant (config flow) | V4 | V3 | V3 | stale | [ha.config_flow·ha·pass](evidence/F-HA-001/2026-09-26-V3-6c22aa7a-ha.config_flow-ha.json) | — |
+| F-HA-002 | Choose each output's source (select entities) | V4 | V3 | V3 | stale | [ha.select_source·ha·pass](evidence/F-HA-002/2026-09-26-V3-6c22aa7a-ha.select_source-ha.json) | — |
+| F-HA-003 | Matrix power switch | V4 | V3 | V3 | stale | [ha.power_off·ha·pass](evidence/F-HA-003/2026-09-26-V3-6c22aa7a-ha.power_off-ha.json)<br>[ha.power_on·ha·pass](evidence/F-HA-003/2026-09-26-V3-6c22aa7a-ha.power_on-ha.json) | — |
+| F-HA-004 | Output audio mute switches | V4 | V3 | V3 | stale | [ha.mute_switch·ha·pass](evidence/F-HA-004/2026-09-26-V3-6c22aa7a-ha.mute_switch-ha.json) | — |
+| F-HA-005 | Output stream enable switches | V4 | V3 | V3 | stale | [ha.stream_switch·ha·pass](evidence/F-HA-005/2026-09-26-V3-6c22aa7a-ha.stream_switch-ha.json) | — |
+| F-HA-006 | Preset buttons | V4 | V3 | V3 | stale | [ha.preset_button·ha·pass](evidence/F-HA-006/2026-09-26-V3-6c22aa7a-ha.preset_button-ha.json) | — |
+| F-HA-007 | Reboot button | V4 | V3 | V3 | stale | [ha.reboot_button·ha·pass](evidence/F-HA-007/2026-09-26-V3-6c22aa7a-ha.reboot_button-ha.json) | — |
+| F-HA-008 | Input signal binary sensors | V4 | V3 | V3 | stale | [ha.input_signal·ha·pass](evidence/F-HA-008/2026-09-26-V3-6c22aa7a-ha.input_signal-ha.json) | — |
+| F-HA-009 | Output connected binary sensors | V4 | V3 | V3 | stale | [ha.display_unplugged·ha·pass](evidence/F-HA-009/2026-09-26-V3-6c22aa7a-ha.display_unplugged-ha.json) | — |
+| F-HA-010 | Service hdmi_matrix.recall_preset | V4 | V3 | V3 | stale | [ha.service_recall_preset·ha·pass](evidence/F-HA-010/2026-09-26-V3-6c22aa7a-ha.service_recall_preset-ha.json) | — |
+| F-HA-011 | Service hdmi_matrix.switch_input | V4 | V3 | V3 | stale | [ha.service_switch_input·ha·pass](evidence/F-HA-011/2026-09-26-V3-6c22aa7a-ha.service_switch_input-ha.json) | — |
+| F-HA-012 | Service hdmi_matrix.send_cec_command | V4 | V3 | V3 | stale | [ha.service_cec_display·ha·pass](evidence/F-HA-012/2026-09-26-V3-6c22aa7a-ha.service_cec_display-ha.json)<br>[ha.service_cec_invalid·ha·pass](evidence/F-HA-012/2026-09-26-V3-6c22aa7a-ha.service_cec_invalid-ha.json) | — |
+| F-HA-013 | Poll the hub; entities go unavailable when it is unreachable | V4 | V3 | V3 | stale | [ha.input_signal·ha·pass](evidence/F-HA-008/2026-09-26-V3-6c22aa7a-ha.input_signal-ha.json)<br>[ha.display_unplugged·ha·pass](evidence/F-HA-009/2026-09-26-V3-6c22aa7a-ha.display_unplugged-ha.json) | — |
+| F-HA-014 | Install through HACS (custom repository) | V4 | V1 | V1 | — | — | — |
+| F-HA-015 | Device and entity naming in Home Assistant | V4 | V3 | V3 | stale | [ha.config_flow·ha·pass](evidence/F-HA-001/2026-09-26-V3-6c22aa7a-ha.config_flow-ha.json) | — |
+| F-HA-016 | Change the hub address of a configured matrix (reconfigure flow) | V4 | V3 | V3 | stale | [ha.reconfigure·ha·pass](evidence/F-HA-016/2026-09-26-V3-6c22aa7a-ha.reconfigure-ha.json) | — |
+| F-HA-017 | Polling interval option (options flow) | V4 | V3 | V3 | stale | [ha.config_flow·ha·pass](evidence/F-HA-001/2026-09-26-V3-6c22aa7a-ha.config_flow-ha.json) | — |
+| F-HA-018 | Services target one matrix (config entry or device) | V4 | V3 | V3 | stale | [ha.service_recall_preset·ha·pass](evidence/F-HA-010/2026-09-26-V3-6c22aa7a-ha.service_recall_preset-ha.json)<br>[ha.service_switch_input·ha·pass](evidence/F-HA-011/2026-09-26-V3-6c22aa7a-ha.service_switch_input-ha.json) | — |
 
 ## Flic (F-FLIC)
 
@@ -363,7 +363,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-REL-005 | Recover after the matrix reboots or is power-cycled | V4 | V0 | V0 | — | — | — |
 | F-REL-006 | Detect a dropped Telnet connection and reconnect | V4 | V0 | V0 | — | — | — |
 | F-REL-007 | Shut down and disconnect cleanly | V4 | V0 | V0 | — | — | — |
-| F-REL-008 | A command the matrix rejects is reported as failed | V4 | V2 | V0 | fresh | [outputs.audio_mute_rejected·api·pass](evidence/F-REL-008/2026-09-25-V2-22afc1a7-outputs.audio_mute_rejected-api.json) | — |
+| F-REL-008 | A command the matrix rejects is reported as failed | V4 | V0 | V0 | stale | [outputs.audio_mute_rejected·api·pass](evidence/F-REL-008/2026-09-25-V2-22afc1a7-outputs.audio_mute_rejected-api.json)<br>[outputs.audio_mute_rejected·api·fail](evidence/F-REL-008/2026-09-25-V2-d6668000-outputs.audio_mute_rejected-api.json) | — |
 | F-REL-009 | Matrix unreachable: commands fail visibly and no state is made up | V4 | V1 (capped) | V1 | stale | [failures.unreachable_switch·api·pass](evidence/F-REL-009/2026-09-25-V2-22afc1a7-failures.unreachable_switch-api.json)<br>[failures.unreachable_switch·api·fail](evidence/F-REL-009/2026-09-25-V2-d6668000-failures.unreachable_switch-api.json) | VAL-04(H), UI-29(M) |
 | F-REL-010 | Status stays fresh (caches expire, one refresh at a time) | V4 | V1 | V1 | — | — | — |
 | F-REL-011 | API calls are not blocked while the hub reconnects | V4 | V0 | V0 | — | — | — |
