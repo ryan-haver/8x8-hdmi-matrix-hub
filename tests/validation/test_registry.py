@@ -212,7 +212,9 @@ def test_validator_flags_common_mistakes(findings):
     assert validate_features([good], findings) == []
     bad_level = {**good, "current": "V2", "basis": "trust me"}
     assert any("basis" in p for p in validate_features([bad_level], findings))
-    capped = {**good, "current": "V2", "basis": "tests/x.py", "findings": ["BE-01"]}
+    # Any open critical/high finding will do; the real register closes them over time.
+    blocking = next(fid for fid, f in sorted(findings.items()) if f.blocking)
+    capped = {**good, "current": "V2", "basis": "tests/x.py", "findings": [blocking]}
     assert any("cap it at V1" in p for p in validate_features([capped], findings))
     unknown = {**good, "findings": ["ZZ-01"]}
     assert any("ZZ-01" in p for p in validate_features([unknown], findings))

@@ -6,12 +6,13 @@ doc/integration-driver/websocket.md (pinned, docs/vendor/UNFOLDED_CIRCLE.md).
 
 from __future__ import annotations
 
+import json
 import socket
 
 from tools.uc_remote_sim import UcRemoteSim
 from tools.validate.stack import HubProcess
 
-from ._helpers import DRIVER_JSON, known_bug
+from ._helpers import DRIVER_JSON
 
 
 async def test_connection_is_authenticated_without_a_token(uc_hub: HubProcess) -> None:
@@ -45,18 +46,27 @@ async def test_driver_metadata_matches_driver_json(uc_hub: HubProcess) -> None:
         resp = await remote.get_driver_metadata()
     assert resp["msg"] == "driver_metadata" and resp["code"] == 200
     meta = resp["msg_data"]
-    # ucapi rewrites an empty driver_url (see the UC-03 test); every other field is driver.json verbatim.
-    assert {k: v for k, v in meta.items() if k != "driver_url"} == \
-        {k: v for k, v in DRIVER_JSON.items() if k != "driver_url"}
+    # driver.json has no driver_url (UC-03), so the metadata is driver.json verbatim.
+    assert meta == DRIVER_JSON
     assert meta["setup_data_schema"]["settings"][1]["id"] == "host"
 
 
-@known_bug("UC-03", "driver_url \"\" makes ucapi advertise ws://<socket hostname>:<port> (the container id in "
-           "bridge-mode Docker) instead of leaving the URL to mDNS or a configured UC_DRIVER_URL")
 async def test_driver_metadata_does_not_advertise_the_socket_hostname(uc_hub: HubProcess) -> None:
+    """UC-03: no driver_url unless configured, so the Remote uses the address it discovered (mDNS)."""
     async with UcRemoteSim(uc_hub.uc_url) as remote:
         meta = (await remote.get_driver_metadata())["msg_data"]
-    assert meta.get("driver_url", "") in ("", None) or socket.gethostname() not in meta["driver_url"]
+    assert "driver_url" not in meta
+    assert socket.gethostname() not in json.dumps(meta)
+
+
+async def test_driver_metadata_advertises_the_configured_driver_url(uc_hub_factory) -> None:
+    """UC_DRIVER_URL (bridge networking, docs/DOCKER.md) is the address the Remote is told to use."""
+    url = "ws://192.0.2.10:19095"
+    hub = await uc_hub_factory(extra_env={"UC_DRIVER_URL": url})
+    async with UcRemoteSim(hub.uc_url) as remote:
+        meta = (await remote.get_driver_metadata())["msg_data"]
+    assert meta["driver_url"] == url
+    assert {k: v for k, v in meta.items() if k != "driver_url"} == DRIVER_JSON
 
 
 async def test_connect_event_reports_device_state(uc_hub: HubProcess, uc_remote_factory) -> None:
