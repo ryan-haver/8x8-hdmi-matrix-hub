@@ -104,7 +104,9 @@ async def uc_hub_factory(uc_simulator: SimulatorProcess, sim: SimDevice, tmp_pat
             polling_interval=polling_interval,
             stop_timeout=3,
             keep_data_on_restart=True,
-            extra_env={"LOG_LEVEL": "DEBUG", **(extra_env or {})},
+            # An unconfigured hub has no matrix: without a saved setup the driver would otherwise use
+            # MATRIX_HOST, which the stack always sets (tests that want that pass it in extra_env).
+            extra_env={"LOG_LEVEL": "DEBUG", **({} if restore else {"MATRIX_HOST": ""}), **(extra_env or {})},
         )
         hubs.append(hub)
         hub.launch()
