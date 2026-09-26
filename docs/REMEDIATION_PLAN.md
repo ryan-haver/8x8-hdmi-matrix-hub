@@ -186,21 +186,21 @@ Severity: **C** critical · **H** high · **M** medium · **L** low. "Phase" is 
 
 | ID | Sev | Finding | Location | Phase |
 | --- | --- | --- | --- | --- |
-| HA-01 | C | `hass.helpers.aiohttp_client` (removed API) in 10 places → every write/service fails | `switch.py`, `select.py`, `button.py`, `__init__.py` | 2 |
-| HA-02 | H | Expects `routing` as a list; API returns a dict → `current_option` always `None` | `select.py:51-63,89-90` | 2 |
-| HA-03 | H | Power switch reads `power` key that `/api/status` never returns | `switch.py:56`, `core.py:24-66` | 2 |
-| HA-04 | M | No `translations/en.json` (custom integrations don't compile `strings.json`) | component root | 2 |
-| HA-05 | M | `AbortFlow` swallowed by broad `except` in config flow | `config_flow.py:27-43` | 2 |
-| HA-06 | M | Services registered per entry (last entry wins), errors only logged, non-200 ignored | `__init__.py:32-91` | 2 |
-| HA-07 | M | Legacy `hass.data` storage instead of `entry.runtime_data` | all platforms | 2 |
-| HA-08 | M | Coordinator responses not released on early-raise/non-200 paths | `coordinator.py:45-58` | 2 |
-| HA-09 | L | `UpdateFailed` re-wrapped without `from err`; redundant `_poll_lock` | `coordinator.py:99-100` | 2 |
-| HA-10 | L | No `has_entity_name`/`translation_key`; `device_info` copy-pasted 7×; hard-coded `sw_version`; no `configuration_url` | all entities | 2 |
-| HA-11 | L | unique_id is the IP; port not range-validated; no reconfigure/options flow | `config_flow.py` | 2 |
-| HA-12 | L | CEC command interpolated into URL unvalidated; schema doesn't enforce allowed values | `__init__.py:82` | 2 |
-| HA-13 | L | `manifest.json` missing `integration_type` | manifest | 2 |
-| HA-14 | M | HACS validation fails: no `hacs.json`, no GitHub repository topics (owner action: add e.g. `home-assistant`, `hacs`, `hdmi-matrix`), no brand assets (icon/logo via the HA brands repo or bundled with the integration); licence check passes once the full LICENSE is on `main` | repo root, GitHub settings | 2 |
-| HA-15 | L | Unused imports; `custom_components/` not linted in CI | component | 2 |
+| HA-01 | C | `hass.helpers.aiohttp_client` (removed API) in 10 places → every write/service fails | `switch.py`, `select.py`, `button.py`, `__init__.py` | 2 / WP-D1 ✅ fixed: one hub client on `async_get_clientsession` (`api.py`); V3 in a real Home Assistant container (`ha.*` scenarios) |
+| HA-02 | H | Expects `routing` as a list; API returns a dict → `current_option` always `None` | `select.py:51-63,89-90` | 2 / WP-D1 ✅ fixed: routing read as the `{"1": 2}` mapping from the contract fixture; V3 in a real Home Assistant container (`ha.*` scenarios) (`ha.select_source`) |
+| HA-03 | H | Power switch reads `power` key that `/api/status` never returns | `switch.py:56`, `core.py:24-66` | 2 / WP-D1 ✅ fixed: `/api/status` now carries `power` (`on`/`off`, `rest_api/core.py`); the switch reads it and is unavailable without it; V3 (`ha.power_off`, `ha.power_on`) |
+| HA-04 | M | No `translations/en.json` (custom integrations don't compile `strings.json`) | component root | 2 / WP-D1 ✅ fixed: `translations/en.json` = `strings.json` (tested), exception/selector translations, `icons.json` |
+| HA-05 | M | `AbortFlow` swallowed by broad `except` in config flow | `config_flow.py:27-43` | 2 / WP-D1 ✅ fixed: only the probe is in `try`; abort/create outside it (`test_user_flow_already_configured`) |
+| HA-06 | M | Services registered per entry (last entry wins), errors only logged, non-200 ignored | `__init__.py:32-91` | 2 / WP-D1 ✅ fixed: services in `async_setup`, `config_entry_id`/`device_id` targeting, `ServiceValidationError`/`HomeAssistantError`; V3 (`ha.service_*`) |
+| HA-07 | M | Legacy `hass.data` storage instead of `entry.runtime_data` | all platforms | 2 / WP-D1 ✅ fixed: `entry.runtime_data` |
+| HA-08 | M | Coordinator responses not released on early-raise/non-200 paths | `coordinator.py:45-58` | 2 / WP-D1 ✅ fixed: every request in `async with` (released on all paths; `tests/ha/test_api.py` checks the connector against a real server) |
+| HA-09 | L | `UpdateFailed` re-wrapped without `from err`; redundant `_poll_lock` | `coordinator.py:99-100` | 2 / WP-D1 ✅ fixed: `raise UpdateFailed(...) from err`; lock removed |
+| HA-10 | L | No `has_entity_name`/`translation_key`; `device_info` copy-pasted 7×; hard-coded `sw_version`; no `configuration_url` | all entities | 2 / WP-D1 ✅ fixed: `HdmiMatrixEntity` (has_entity_name, translation keys, one DeviceInfo with model/firmware from `/api/status/device`, MAC connection, `configuration_url`); V3 (`ha.config_flow`) |
+| HA-11 | L | unique_id is the IP; port not range-validated; no reconfigure/options flow | `config_flow.py` | 2 / WP-D1 ✅ fixed: unique id = matrix MAC (address-keyed entries migrate at setup), port 1-65535, reconfigure + options flows; V3 (`ha.reconfigure`, `ha.config_flow`) |
+| HA-12 | L | CEC command interpolated into URL unvalidated; schema doesn't enforce allowed values | `__init__.py:82` | 2 / WP-D1 ✅ fixed: `vol.In` of the hub's CEC tables + the display table for outputs; V3 (`ha.service_cec_invalid`) |
+| HA-13 | L | `manifest.json` missing `integration_type` | manifest | 2 / WP-D1 ✅ fixed: `integration_type: hub` (no zeroconf: the hub does not advertise itself yet) |
+| HA-14 | M | HACS validation fails: no `hacs.json`, no GitHub repository topics (owner action: add e.g. `home-assistant`, `hacs`, `hdmi-matrix`), no brand assets (icon/logo via the HA brands repo or bundled with the integration); licence check passes once the full LICENSE is on `main` | repo root, GitHub settings | 2 / WP-D1: `hacs.json` added (Home Assistant 2025.1, D8), topics are set, the HACS action passes every check except brands; ✅ fixed: brand icons (`custom_components/hdmi_matrix/brand/icon.png` 256 px, `icon@2x.png` 512 px) rendered from the web UI favicon (owner chose this 2026-09-26); HACS `ignore: brands` removed, so every HACS check is blocking (`tests/ha/test_init.py::test_brand_icons`) |
+| HA-15 | L | Unused imports; `custom_components/` not linted in CI | component | 2 / WP-D1 ✅ fixed: unused imports gone; ruff already lints `custom_components/` in CI and the pre-commit hook |
 | HA-16 | — | Needs optional API-key field once SEC-01 lands (only required when the hub has a control PIN) | component | 3 |
 
 ### 4.5 Deployment, packaging & CI (DEP)
@@ -537,7 +537,7 @@ Goal: every advertised feature actually works end to end.
 
 - [ ] **Scenes & shortcuts** (API-01…08, API-13, API-14, API-23): `switch_input`; `save()`; macro steps via `MacroManager` with the real target format; overrides mean "leave unchanged"; `list_profiles` usage; `power_off_all` once; LCD map; honest status codes (`207`/`500` with per-step results); validate-then-mutate; custom preset save gets a routing lock and restores from fresh (not cached) routing — any change to *what* it does waits for DI-4. Full `/api/v2/scenes` test suite. All fixes preserve current behaviour and data formats (D5).
 - [ ] **WebSocket** (API-09, API-10): per-client send with timeout, concurrent fan-out, drop dead clients; broadcast after the command result; use aiohttp's built-in `heartbeat`; publish a **WS event schema** (`docs/api/ws-events.json`) used by server tests and the web client.
-- [ ] **Home Assistant** (HA-01…15): `async_get_clientsession`; consume `outputs` list / dict correctly from contract fixtures; power from the right endpoint (add `power` to status); `translations/en.json`; `AbortFlow` handling; services in `async_setup` with device/entry targeting and `HomeAssistantError`; `runtime_data`; `async with` responses; base `HdmiMatrixEntity` with `has_entity_name`, shared `DeviceInfo`, firmware version, `configuration_url`; reconfigure + options flow; validated CEC command; `integration_type: "hub"`; `hacs.json`.
+- [x] **Home Assistant** (HA-01…15; WP-D1): `async_get_clientsession`; consume `outputs` list / dict correctly from contract fixtures; power from the right endpoint (add `power` to status); `translations/en.json`; `AbortFlow` handling; services in `async_setup` with device/entry targeting and `HomeAssistantError`; `runtime_data`; `async with` responses; base `HdmiMatrixEntity` with `has_entity_name`, shared `DeviceInfo`, firmware version, `configuration_url`; reconfigure + options flow; validated CEC command; `integration_type: "hub"`; `hacs.json`.
 - [x] **Docker** (DEP-01…03, D11): single compose service, no profiles; one image with all integration deps; `UC_ENABLED` defaults to `false` and gates the `ucapi` import (interim guard until Phase 4's integration loader); compose example documents `network_mode: host` as required only when `UC_ENABLED=true` (mDNS); smoke tests for UC on/off.
 - [ ] **Web UI breakages** (UI-01…04, UI-17, SEC-07, SEC-08 patch) — each PR goes through §5.3 capture & review; these fixes should produce **no** visual diffs except where a broken state (e.g. passcode prompt) now renders:
   - [ ] `executeProfile` → real endpoint; `ApiError` with `status`/`code`; passcode prompt on 403/`passcode_required`.
@@ -689,7 +689,7 @@ Work is organised into work packages (WPs) in parallel lanes. Each WP closes reg
 | WP-B2 | B | Remote integration fixes in `driver.py` (UC-01, 22, 04, 05 part, 06, 07, 17, 19, BE-02, 06, 08, 09, 10, 21) | WP-B1 | Remote features at V3; UC-01 proven fixed through the harness | ✅ done on `wp-b2-remote-fixes` (also UC-10's first toggle); UC-05 rest, UC-10 model with WP-B3/C3 |
 | WP-C1 | C | Scenes, shortcuts, profile execution (API-01–08, 13, 14, 23, VAL-01, VAL-02) | WP-V2 | Domain features at V3 | after V2 |
 | WP-C2 | C | WebSocket contract and schema; hub-owned event stream; truthful `/api/status` (API-09, 10, UI-02, UC-17 part, VAL-04, VAL-05) | WP-A1 | Every WS event at V2; live updates proven in the browser and HA at V3 | after A1 |
-| WP-D1 | D | Home Assistant fixes + real-HA-container E2E (HA-01–15) | WP-V1 | HA features at V3 in a real HA container | after V1 |
+| WP-D1 | D | Home Assistant fixes + real-HA-container E2E (HA-01–15) | WP-V1 | HA features at V3 in a real HA container | done on `wp-d1-home-assistant`: HA-01…13, 15 fixed; F-HA-001…013, 015…018 at V3 (HA 2026.9.3 and 2025.1.4); HA-14 brand icons added from the favicon |
 | WP-D2 | D | Docker/deployment (DEP-01–03, D11, UC-03, UC-11) | WP-A1 | Deployment features at V3 on the shipped image, UC on and off | after A1 |
 | WP-B3 | B | Remote setup flow, `ucapi` 0.7.0, names, power switch, presets (UC-02 short-term, 05, 08, 09, 14, 15, 16) | WP-B2 | Remote features at V3; setup V4 on a real Remote | after B2 |
 | WP-E1 | E | UI functional fixes (UI-01–04, 17, 23–31, BE-31, SEC-07/08 patch), each with visual review | WP-C2 | UI/kiosk flows at V3 with approved visuals | after C2 |

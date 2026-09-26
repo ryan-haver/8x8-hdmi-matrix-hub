@@ -41,9 +41,10 @@ features:
   current: V3
   basis: 'V3: tests/e2e/smoke.spec.ts ''routing an input to an output in the matrix grid changes the simulator'' (browser
     click -> simulator state asserted). V2: tests/sim/test_sim_e2e.py::test_switch_changes_simulator_state.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-HA-002/2026-09-26-V3-6c22aa7a-ha.select_source-ha.json
   findings: []
-  scenarios: [routing.switch_one, remote.select_source]
+  scenarios: [routing.switch_one, remote.select_source, ha.select_source]
 - id: F-MTX-002
   area: matrix
   title: Route one input to every output
@@ -78,11 +79,12 @@ features:
     ha: [button.preset_N, service hdmi_matrix.recall_preset]
     flic: ['POST /api/preset/{n}']
   target: V4
-  current: V2
-  basis: 'V2: tests/sim/test_sim_e2e.py::test_switch_all_and_preset (POST /api/preset/3 -> simulator routing asserted).'
-  evidence: []
+  current: V3
+  basis: 'V3: ha.preset_button (ha client: a real Home Assistant container drives it; simulator state read back). V2: tests/sim/test_sim_e2e.py::test_switch_all_and_preset (POST /api/preset/3 -> simulator routing asserted).'
+  evidence:
+  - docs/validation/evidence/F-HA-006/2026-09-26-V3-6c22aa7a-ha.preset_button-ha.json
   findings: []
-  scenarios: [presets.recall, remote.preset_button]
+  scenarios: [presets.recall, remote.preset_button, ha.preset_button]
 - id: F-MTX-004
   area: matrix
   title: Save the current routing to a matrix preset
@@ -132,12 +134,14 @@ features:
     ha: [switch.matrix_power]
     flic: [POST /api/power/off]
   target: V4
-  current: V1
-  basis: 'tests/sim/test_sim_hub.py::test_power (driver-level: real OreiMatrix against the simulator, no user interface in
+  current: V3
+  basis: 'V3: ha.power_off, ha.power_on (ha client: a real Home Assistant container drives it; simulator state read back). tests/sim/test_sim_hub.py::test_power (driver-level: real OreiMatrix against the simulator, no user interface in
     the path -> V1); tests/test_rest_api.py TestControlEndpoints (mocked).'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-HA-003/2026-09-26-V3-6c22aa7a-ha.power_off-ha.json
+  - docs/validation/evidence/F-HA-003/2026-09-26-V3-6c22aa7a-ha.power_on-ha.json
   findings: []
-  scenarios: [power.standby, power.wake, remote.power_switch_off]
+  scenarios: [power.standby, power.wake, remote.power_switch_off, ha.power_off, ha.power_on]
 - id: F-MTX-007
   area: matrix
   title: Mute / unmute the audio of an output
@@ -155,9 +159,10 @@ features:
   basis: 'tests/sim/test_sim_e2e.py::test_output_setting_via_rest (POST /api/output/2/mute -> simulator audio_mute asserted)
     and tests/sim/test_sim_real_commands.py (payload `{"mute": [2, 1]}` on the simulator log). Recorded V2 before WP-A4
     part 2, lowered: On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-HA-004/2026-09-26-V3-6c22aa7a-ha.mute_switch-ha.json
   findings: [BE-12, HIL-09]
-  scenarios: [outputs.audio_mute]
+  scenarios: [outputs.audio_mute, ha.mute_switch]
 - id: F-MTX-008
   area: matrix
   title: Enable / disable an output's video stream
@@ -624,12 +629,13 @@ features:
     uc: [remote.output_N_cec, media_player.output_N on/off/volume]
     ha: [service hdmi_matrix.send_cec_command]
   target: V4
-  current: V1
-  basis: 'tests/sim/test_sim_hub.py::test_telnet_cec (Telnet path, POWER_ON to output 1) (driver-level: real OreiMatrix against
+  current: V3
+  basis: 'V3: ha.service_cec_display (ha client: a real Home Assistant container drives it; simulator state read back). tests/sim/test_sim_hub.py::test_telnet_cec (Telnet path, POWER_ON to output 1) (driver-level: real OreiMatrix against
     the simulator, no user interface in the path -> V1); tests/test_rest_api.py TestCecCommandEndpoints (mocked).'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-HA-012/2026-09-26-V3-6c22aa7a-ha.service_cec_display-ha.json
   findings: [BE-14]
-  scenarios: [cec.output_power_on, remote.output_cec_power_on]
+  scenarios: [cec.output_power_on, remote.output_cec_power_on, ha.service_cec_display]
 - id: F-CEC-006
   area: cec
   title: Display / soundbar volume and mute over CEC
@@ -2523,11 +2529,12 @@ features:
   interfaces:
     ha: [config flow user step]
   target: V4
-  current: V1
-  basis: tests/ha/test_config_flow.py (real hass fixture, aioclient_mock).
-  evidence: []
-  findings: [HA-05, HA-11]
-  scenarios: []
+  current: V3
+  basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.config_flow; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_config_flow.py (pytest-homeassistant-custom-component, contract fixtures).'
+  evidence:
+  - docs/validation/evidence/F-HA-001/2026-09-26-V3-6c22aa7a-ha.config_flow-ha.json
+  findings: []
+  scenarios: [ha.config_flow]
 - id: F-HA-002
   area: ha
   title: Choose each output's source (select entities)
@@ -2535,12 +2542,12 @@ features:
   interfaces:
     ha: [select.output_N_source]
   target: V4
-  current: V0
-  basis: 'tests/ha (test_select.py::test_select_option_routes_input) is a strict xfail on HA-01/HA-02: the test proves the
-    write is broken. Tests use aioclient_mock (V1 at best).'
-  evidence: []
-  findings: [HA-01, HA-02]
-  scenarios: []
+  current: V3
+  basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.select_source; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_select.py (pytest-homeassistant-custom-component, contract fixtures).'
+  evidence:
+  - docs/validation/evidence/F-HA-002/2026-09-26-V3-6c22aa7a-ha.select_source-ha.json
+  findings: []
+  scenarios: [ha.select_source]
 - id: F-HA-003
   area: ha
   title: Matrix power switch
@@ -2548,12 +2555,13 @@ features:
   interfaces:
     ha: [switch.matrix_power]
   target: V4
-  current: V0
-  basis: 'tests/ha (test_switch.py) is a strict xfail on HA-03: the test proves the write is broken. Tests use aioclient_mock
-    (V1 at best).'
-  evidence: []
-  findings: [HA-01, HA-03]
-  scenarios: []
+  current: V3
+  basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenarios ha.power_off, ha.power_on; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_switch.py (pytest-homeassistant-custom-component, contract fixtures).'
+  evidence:
+  - docs/validation/evidence/F-HA-003/2026-09-26-V3-6c22aa7a-ha.power_off-ha.json
+  - docs/validation/evidence/F-HA-003/2026-09-26-V3-6c22aa7a-ha.power_on-ha.json
+  findings: []
+  scenarios: [ha.power_off, ha.power_on]
 - id: F-HA-004
   area: ha
   title: Output audio mute switches
@@ -2561,11 +2569,12 @@ features:
   interfaces:
     ha: [switch.output_N_mute]
   target: V4
-  current: V0
-  basis: tests/ha/test_switch.py writes fail on HA-01 (hass.helpers.aiohttp_client removed).
-  evidence: []
-  findings: [HA-01]
-  scenarios: []
+  current: V3
+  basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.mute_switch; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_switch.py (pytest-homeassistant-custom-component, contract fixtures).'
+  evidence:
+  - docs/validation/evidence/F-HA-004/2026-09-26-V3-6c22aa7a-ha.mute_switch-ha.json
+  findings: []
+  scenarios: [ha.mute_switch]
 - id: F-HA-005
   area: ha
   title: Output stream enable switches
@@ -2573,11 +2582,12 @@ features:
   interfaces:
     ha: [switch.output_N_stream]
   target: V4
-  current: V0
-  basis: tests/ha/test_switch.py writes fail on HA-01.
-  evidence: []
-  findings: [HA-01]
-  scenarios: []
+  current: V3
+  basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.stream_switch; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_switch.py (pytest-homeassistant-custom-component, contract fixtures).'
+  evidence:
+  - docs/validation/evidence/F-HA-005/2026-09-26-V3-6c22aa7a-ha.stream_switch-ha.json
+  findings: []
+  scenarios: [ha.stream_switch]
 - id: F-HA-006
   area: ha
   title: Preset buttons
@@ -2585,12 +2595,12 @@ features:
   interfaces:
     ha: [button.preset_N]
   target: V4
-  current: V0
-  basis: 'tests/ha (test_button.py) is a strict xfail on HA-01: the test proves the write is broken. Tests use aioclient_mock
-    (V1 at best).'
-  evidence: []
-  findings: [HA-01]
-  scenarios: []
+  current: V3
+  basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.preset_button; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_button.py (pytest-homeassistant-custom-component, contract fixtures).'
+  evidence:
+  - docs/validation/evidence/F-HA-006/2026-09-26-V3-6c22aa7a-ha.preset_button-ha.json
+  findings: []
+  scenarios: [ha.preset_button]
 - id: F-HA-007
   area: ha
   title: Reboot button
@@ -2598,12 +2608,12 @@ features:
   interfaces:
     ha: [button.reboot_matrix]
   target: V4
-  current: V0
-  basis: 'tests/ha (test_button.py) is a strict xfail on HA-01: the test proves the write is broken. Tests use aioclient_mock
-    (V1 at best).'
-  evidence: []
-  findings: [HA-01]
-  scenarios: []
+  current: V3
+  basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.reboot_button; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_button.py (pytest-homeassistant-custom-component, contract fixtures).'
+  evidence:
+  - docs/validation/evidence/F-HA-007/2026-09-26-V3-6c22aa7a-ha.reboot_button-ha.json
+  findings: []
+  scenarios: [ha.reboot_button]
 - id: F-HA-008
   area: ha
   title: Input signal binary sensors
@@ -2611,11 +2621,12 @@ features:
   interfaces:
     ha: [binary_sensor.input_N_signal]
   target: V4
-  current: V1
-  basis: tests/ha/test_binary_sensor.py (aioclient_mock).
-  evidence: []
-  findings: [HA-08]
-  scenarios: []
+  current: V3
+  basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.input_signal; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_binary_sensor.py (pytest-homeassistant-custom-component, contract fixtures).'
+  evidence:
+  - docs/validation/evidence/F-HA-008/2026-09-26-V3-6c22aa7a-ha.input_signal-ha.json
+  findings: []
+  scenarios: [ha.input_signal]
 - id: F-HA-009
   area: ha
   title: Output connected binary sensors
@@ -2623,11 +2634,12 @@ features:
   interfaces:
     ha: [binary_sensor.output_N_connected]
   target: V4
-  current: V1
-  basis: tests/ha/test_binary_sensor.py (aioclient_mock).
-  evidence: []
-  findings: [HA-08]
-  scenarios: []
+  current: V3
+  basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.display_unplugged; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_binary_sensor.py (pytest-homeassistant-custom-component, contract fixtures).'
+  evidence:
+  - docs/validation/evidence/F-HA-009/2026-09-26-V3-6c22aa7a-ha.display_unplugged-ha.json
+  findings: []
+  scenarios: [ha.display_unplugged]
 - id: F-HA-010
   area: ha
   title: Service hdmi_matrix.recall_preset
@@ -2635,12 +2647,12 @@ features:
   interfaces:
     ha: [service hdmi_matrix.recall_preset]
   target: V4
-  current: V0
-  basis: 'tests/ha (test_services.py::test_recall_preset) is a strict xfail on HA-01: the test proves the write is broken.
-    Tests use aioclient_mock (V1 at best).'
-  evidence: []
-  findings: [HA-01, HA-06]
-  scenarios: []
+  current: V3
+  basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.service_recall_preset; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_services.py (pytest-homeassistant-custom-component, contract fixtures).'
+  evidence:
+  - docs/validation/evidence/F-HA-010/2026-09-26-V3-6c22aa7a-ha.service_recall_preset-ha.json
+  findings: []
+  scenarios: [ha.service_recall_preset]
 - id: F-HA-011
   area: ha
   title: Service hdmi_matrix.switch_input
@@ -2648,12 +2660,12 @@ features:
   interfaces:
     ha: [service hdmi_matrix.switch_input]
   target: V4
-  current: V0
-  basis: 'tests/ha (test_services.py::test_switch_input) is a strict xfail on HA-01: the test proves the write is broken.
-    Tests use aioclient_mock (V1 at best).'
-  evidence: []
-  findings: [HA-01, HA-06]
-  scenarios: []
+  current: V3
+  basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.service_switch_input; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_services.py (pytest-homeassistant-custom-component, contract fixtures).'
+  evidence:
+  - docs/validation/evidence/F-HA-011/2026-09-26-V3-6c22aa7a-ha.service_switch_input-ha.json
+  findings: []
+  scenarios: [ha.service_switch_input]
 - id: F-HA-012
   area: ha
   title: Service hdmi_matrix.send_cec_command
@@ -2661,12 +2673,14 @@ features:
   interfaces:
     ha: [service hdmi_matrix.send_cec_command]
   target: V4
-  current: V0
-  basis: 'tests/ha (test_services.py::test_send_cec_command) is a strict xfail on HA-01: the test proves the write is broken.
-    Tests use aioclient_mock (V1 at best).'
-  evidence: []
-  findings: [HA-01, HA-06, HA-12]
-  scenarios: []
+  current: V3
+  basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenarios ha.service_cec_display, ha.service_cec_source, ha.service_cec_invalid; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_services.py (pytest-homeassistant-custom-component, contract fixtures).'
+  evidence:
+  - docs/validation/evidence/F-HA-012/2026-09-26-V3-6c22aa7a-ha.service_cec_display-ha.json
+  - docs/validation/evidence/F-HA-012/2026-09-26-V3-6c22aa7a-ha.service_cec_invalid-ha.json
+  - docs/validation/evidence/F-HA-012/2026-09-26-V3-6c22aa7a-ha.service_cec_source-ha.json
+  findings: []
+  scenarios: [ha.service_cec_display, ha.service_cec_source, ha.service_cec_invalid]
 - id: F-HA-013
   area: ha
   title: Poll the hub; entities go unavailable when it is unreachable
@@ -2674,11 +2688,14 @@ features:
   interfaces:
     ha: [DataUpdateCoordinator]
   target: V4
-  current: V1
-  basis: tests/ha/test_init.py (aioclient_mock).
-  evidence: []
-  findings: [HA-08, HA-09]
-  scenarios: []
+  current: V3
+  basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenarios ha.input_signal, ha.display_unplugged, ha.matrix_unreachable; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_init.py (pytest-homeassistant-custom-component, contract fixtures).'
+  evidence:
+  - docs/validation/evidence/F-HA-008/2026-09-26-V3-6c22aa7a-ha.input_signal-ha.json
+  - docs/validation/evidence/F-HA-009/2026-09-26-V3-6c22aa7a-ha.display_unplugged-ha.json
+  - docs/validation/evidence/F-HA-013/2026-09-26-V3-6c22aa7a-ha.matrix_unreachable-ha.json
+  findings: []
+  scenarios: [ha.input_signal, ha.display_unplugged, ha.matrix_unreachable]
 - id: F-HA-014
   area: ha
   title: Install through HACS (custom repository)
@@ -2686,10 +2703,10 @@ features:
   interfaces:
     ha: [hacs.json, manifest.json, translations/en.json]
   target: V4
-  current: V0
-  basis: CI hacs/hassfest jobs run non-blocking and fail today.
+  current: V1
+  basis: 'hassfest passes (blocking CI job, also run locally); the HACS action passes every check, brands included (HA-14: local brand icons); tests/ha/test_init.py::test_manifest_and_hacs and test_translations_match_strings. Not yet installed through HACS itself.'
   evidence: []
-  findings: [HA-14, HA-04, HA-13]
+  findings: [HA-14]
   scenarios: []
 - id: F-HA-015
   area: ha
@@ -2698,11 +2715,52 @@ features:
   interfaces:
     ha: [device registry entry]
   target: V4
-  current: V1
-  basis: tests/ha (entity creation, aioclient_mock).
-  evidence: []
-  findings: [HA-10]
-  scenarios: []
+  current: V3
+  basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.config_flow; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_init.py (pytest-homeassistant-custom-component, contract fixtures).'
+  evidence:
+  - docs/validation/evidence/F-HA-001/2026-09-26-V3-6c22aa7a-ha.config_flow-ha.json
+  findings: []
+  scenarios: [ha.config_flow]
+- id: F-HA-016
+  area: ha
+  title: Change the hub address of a configured matrix (reconfigure flow)
+  claim: custom_components/hdmi_matrix/config_flow.py async_step_reconfigure; docs/HOME_ASSISTANT.md
+  interfaces:
+    ha: [config flow reconfigure step]
+  target: V4
+  current: V3
+  basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.reconfigure; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_config_flow.py (pytest-homeassistant-custom-component, contract fixtures).'
+  evidence:
+  - docs/validation/evidence/F-HA-016/2026-09-26-V3-6c22aa7a-ha.reconfigure-ha.json
+  findings: []
+  scenarios: [ha.reconfigure]
+- id: F-HA-017
+  area: ha
+  title: Polling interval option (options flow)
+  claim: custom_components/hdmi_matrix/config_flow.py HdmiMatrixOptionsFlow; docs/HOME_ASSISTANT.md
+  interfaces:
+    ha: [options flow scan_interval]
+  target: V4
+  current: V3
+  basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.config_flow (sets 5 s; every later scenario relies on it); effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_config_flow.py (pytest-homeassistant-custom-component, contract fixtures).'
+  evidence:
+  - docs/validation/evidence/F-HA-001/2026-09-26-V3-6c22aa7a-ha.config_flow-ha.json
+  findings: []
+  scenarios: [ha.config_flow]
+- id: F-HA-018
+  area: ha
+  title: Services target one matrix (config entry or device)
+  claim: custom_components/hdmi_matrix/services.py; docs/HOME_ASSISTANT.md
+  interfaces:
+    ha: [service field config_entry_id, service field device_id]
+  target: V4
+  current: V3
+  basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenarios ha.service_recall_preset (entry), ha.service_switch_input (device); effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_services.py (pytest-homeassistant-custom-component, contract fixtures).'
+  evidence:
+  - docs/validation/evidence/F-HA-010/2026-09-26-V3-6c22aa7a-ha.service_recall_preset-ha.json
+  - docs/validation/evidence/F-HA-011/2026-09-26-V3-6c22aa7a-ha.service_switch_input-ha.json
+  findings: []
+  scenarios: [ha.service_recall_preset, ha.service_switch_input]
 - id: F-FLIC-001
   area: flic
   title: Button click recalls a preset

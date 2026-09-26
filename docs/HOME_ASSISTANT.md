@@ -1,6 +1,6 @@
 # Home Assistant Integration Guide
 
-> **Status**: ✅ REST API v2.10.0 Ready (with WebSocket, Profiles & CEC Macros) | 🔲 HACS Component Planned (Phase 3.0)
+> **Status**: REST API v2.10.0 (with WebSocket, Profiles & CEC Macros) | HACS component `hdmi_matrix` (Home Assistant 2025.1+)
 
 This guide explains how to integrate the OREI HDMI Matrix with Home Assistant.
 
@@ -16,7 +16,7 @@ Use Home Assistant's built-in REST integration with the REST API.
 A proper Home Assistant integration with entities, services, and device registry.
 
 **Pros**: Full functionality, proper UI, automations, device tracking
-**Cons**: Requires development (Phase 3.0)
+**Cons**: Installed through HACS (custom repository)
 
 ---
 
@@ -484,27 +484,47 @@ cards:
 
 ## Option B: HACS Custom Component
 
-### Planned Features (Phase 3.0)
-- Config flow for easy setup
-- Device registry with proper device info
-- Entities:
-  - `select.orei_matrix_output_1_input` - Select input for each output
-  - `button.orei_preset_1-8` - Preset buttons
-  - `media_player.orei_input_1-8` - CEC control per input
-  - `switch.orei_matrix_power` - Power control
-  - `sensor.orei_matrix_routing` - Current routing state
-- Services:
-  - `orei_matrix.recall_preset`
-  - `orei_matrix.switch_input`
-  - `orei_matrix.set_output_source`
-  - `orei_matrix.send_cec`
+The `hdmi_matrix` integration in `custom_components/hdmi_matrix/` talks to the
+hub's REST API (not to the matrix directly). Requires Home Assistant 2025.1 or
+newer. Proof of function: `docs/validation/LEDGER.md` (area `ha`); the
+integration is exercised in a real Home Assistant container by
+`python -m tools.validate run --client ha`.
 
-### Installation (Future)
-1. Add custom repository to HACS
-2. Install "OREI HDMI Matrix" integration
-3. Restart Home Assistant
-4. Add integration via UI
-5. Enter matrix IP address and credentials
+### Installation
+1. HACS -> Integrations -> Custom repositories: add this repository (category *Integration*).
+2. Install **HDMI Matrix** and restart Home Assistant.
+3. Settings -> Devices & services -> Add integration -> **HDMI Matrix**.
+4. Enter the hub's host and port (default 8080). The matrix is identified by its
+   MAC, so a later address change keeps entities and history.
+
+**Reconfigure** (the entry's menu) changes the hub address; it refuses a hub that
+controls a different matrix. **Options** set the polling interval (5-300 s,
+default 15 s).
+
+### Entities (one device per matrix, names include the hub's port names)
+| Entity | What it does |
+| --- | --- |
+| `select` Output N source | Input shown on output N; options are the hub's input names |
+| `switch` Power | Matrix on / standby |
+| `switch` Output N mute / Output N stream | Audio mute and video stream of output N |
+| `button` Recall preset N | Recalls preset slot N (1-8) |
+| `button` Reboot | Restarts the matrix (configuration category) |
+| `binary_sensor` Input N signal | On while the source on input N sends video |
+| `binary_sensor` Output N display | On while a display is connected to output N |
+
+Entities become unavailable (not "off") when the hub or the matrix cannot be read.
+Renaming an input, output or preset on the hub renames the entities after the next poll.
+
+### Services
+All three accept an optional `config_entry_id` or `device_id`; without one, the
+only configured matrix is used. Invalid values are rejected before anything is
+sent, and a failure reported by the hub is raised as an error.
+
+| Service | Fields |
+| --- | --- |
+| `hdmi_matrix.recall_preset` | `preset` (1-8) |
+| `hdmi_matrix.switch_input` | `output` (1-8), `input` (1-8) |
+| `hdmi_matrix.send_cec_command` | `port_type` (`input` / `output`), `port_num` (1-8), `command`: sources accept `power_on`, `power_off`, `up`, `down`, `left`, `right`, `select`, `menu`, `back`, `previous`, `play`, `pause`, `stop`, `next`, `rewind`, `fast_forward`, `mute`, `volume_down`, `volume_up`; displays accept `power_on`, `power_off`, `mute`, `volume_down`, `volume_up`, `active` |
 
 ---
 

@@ -1,8 +1,8 @@
 """Validation clients (VALIDATION_PLAN §4 "Real clients for V3").
 
-``api``, ``browser`` and ``uc`` (the scripted Remote 3, WP-B1) are implemented.
-``ha`` and ``flic`` are placeholders with the interface fixed, delivered by
-later work packages.
+``api``, ``browser``, ``uc`` (the scripted Remote 3, WP-B1) and ``ha`` (a real
+Home Assistant container, WP-D1) are implemented. ``flic`` is a placeholder
+with the interface fixed, delivered by a later work package.
 """
 
 from __future__ import annotations
@@ -10,14 +10,8 @@ from __future__ import annotations
 from .api import ApiClient
 from .base import ActionResult, Client, HubInfo, NotSupportedError, UnimplementedClient
 from .browser import BrowserClient
+from .ha import HomeAssistantClient
 from .uc import RemoteClient
-
-
-class HomeAssistantClient(UnimplementedClient):
-    name = "ha"
-    work_package = "WP-D1"
-    plan = ("a real homeassistant/home-assistant container with custom_components/hdmi_matrix installed and "
-            "configured through HA's own API; service calls and entity states checked against the device")
 
 
 class FlicClient(UnimplementedClient):
@@ -48,6 +42,7 @@ __all__ = [
     "ApiClient",
     "BrowserClient",
     "Client",
+    "HomeAssistantClient",
     "HubInfo",
     "NotSupportedError",
     "RemoteClient",

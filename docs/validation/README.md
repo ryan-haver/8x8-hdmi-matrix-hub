@@ -19,6 +19,7 @@ python -m tools.validate list                                   # scenarios, the
 python -m tools.validate run                                    # every scenario, api client, simulator (V2)
 python -m tools.validate run --client api --client browser      # + the web UI in Chromium (V3); needs `npm ci`
 python -m tools.validate run --client uc                        # the scripted Remote 3 (V3); needs requirements-uc.txt
+python -m tools.validate run --client ha                        # a real Home Assistant container (V3); needs Docker
 python -m tools.validate run --feature F-MTX-001                # only scenarios that prove this feature
 python -m tools.validate run --scenario presets.recall --client browser
 python -m tools.validate ledger --evidence build/validation/evidence --run-summary build/validation/run-summary.json \
@@ -48,7 +49,7 @@ python -m tools.validate run --target hardware --matrix-host 192.168.1.50 --oper
 | Target | Client | Level of a PASS |
 | --- | --- | --- |
 | sim | `api` (REST exactly as HA/Flic/scripts use it) | V2 |
-| sim | `browser` (Chromium drives the shipped web UI), `uc` (the scripted Remote 3, `tools/uc_remote_sim.py`), later `ha`, `flic` | V3 |
+| sim | `browser` (Chromium drives the shipped web UI), `uc` (the scripted Remote 3, `tools/uc_remote_sim.py`), `ha` (a real Home Assistant container), later `flic` | V3 |
 | hardware | any | V4 |
 
 The ledger computes each feature's **level** as the highest level of *fresh passing* evidence. If there is none, it uses the registry's recorded `current`. An open critical or high finding linked to the feature caps it at V1. Evidence is *stale* when a file listed in the scenario's `covers` changed after the evidence commit, or had uncommitted changes when the scenario ran.
@@ -97,15 +98,30 @@ SCENARIOS = [
 Then add the scenario id to the feature's `scenarios:` in `features.yaml` (a test checks that the links go both ways) and run `python -m tools.validate run --scenario outputs.hdcp`.
 
 - Available **intents** are listed in `tools/validate/model.py` (`INTENTS`). The api client maps each one to its REST call in `clients/api.py::rest_call`. For failure paths and edge cases use `act("request", method=..., path=..., json=...)`.
-- **Expectations:** `Device` / `DeviceUnchanged` (device state), `CommandSent` / `NoCommand` / `NoProtocolWarnings` (simulator command log; `n/a` on hardware), `Response` (the client's HTTP result), `Hub` (read back through the hub API, e.g. a name shown afterwards), `WsEvent` / `NoWsEvent` (what a `/ws` client received). `clients=("api",)` limits a check to one client.
+- **Expectations:** `Device` / `DeviceUnchanged` (device state), `CommandSent` / `NoCommand` / `NoProtocolWarnings` (simulator command log; `n/a` on hardware), `Response` (the client's HTTP result), `Hub` (read back through the hub API, e.g. a name shown afterwards), `WsEvent` / `NoWsEvent` (what a `/ws` client received), `ClientState` (what the client itself shows, e.g. a Home Assistant entity state; `before=` makes the runner wait for the old value first, so the check proves a change; `n/a` for clients that cannot observe). `clients=("api",)` limits a check to one client.
+- **Changes behind the hub's back** (a cable, a signal, the front panel): `act("device_change", event={...})` (`POST /_sim/event`) or `patch={...}`. The runner makes the change on the simulator itself (`targets=("sim",)`), and only clients that observe (`Client.observes`, e.g. `ha`) run the scenario, checking the effect with `ClientState`.
 - **Failure paths** are scenarios with `kind="failure"`, `faults={...}` (simulator fault injection, see `tools/simulator/README.md`) and `targets=("sim",)`.
 - Scenarios that fail because of a known bug stay in. Link the finding on the failing check. If the bug is new, add it to `findings_pending.yaml` first.
 
 ## Adding a client
 
-Subclass `tools.validate.clients.base.Client`. It needs `name`, the `intents` it can perform, `start(hub)`, `perform(action) -> ActionResult` and `stop()`. Register it in `clients/__init__.py`. Before each action the runner sets `client.context` (`label`, `forwarded_for`, `artifacts_dir`). Set `hub_mode = "uc"` if the client needs the hub with the Remote integration (the runner then passes `HubInfo.uc_url`). The `ha` and `flic` clients are placeholders that raise `NotImplementedError` naming their work package (WP-D1). A PASS with a real client counts as V3.
+Subclass `tools.validate.clients.base.Client`. It needs `name`, the `intents` it can perform, `start(hub)`, `perform(action) -> ActionResult` and `stop()`. Register it in `clients/__init__.py`. Before each action the runner sets `client.context` (`label`, `forwarded_for`, `artifacts_dir`). Set `hub_mode = "uc"` if the client needs the hub with the Remote integration (the runner then passes `HubInfo.uc_url`). A client that shows state sets `observes = True` and implements `observe(key)` (for `ClientState`). The `flic` client is a placeholder that raises `NotImplementedError` naming its work package. A PASS with a real client counts as V3.
 
 **The `uc` client** (`clients/uc.py`, WP-B1) connects like a Remote 3 (authenticate, `connect`, subscribe every entity) and maps intents to entity commands: `route` → `media_player.output_N` `select_source` with the name from the entity's source list, `preset_recall` → `button.preset_N` `push`, `matrix_power` → `switch.matrix_power`, `cec_input`/`cec_output` → `remote.input_N_cec`/`remote.output_N_cec` `send_cmd` (`power_on` → `POWER_ON`), and `uc_command` for any other entity command. A driver that drops the connection is a result, recorded with its close code (`requests[].closed`), not a blocked run; the next action reconnects. Its scenarios are in `tests/validation/scenarios/remote.py`; the protocol and lifecycle cases (setup, standby, outages, renames, the golden entity set) are the pytest suite `tests/uc`.
+
+**The `ha` client** (`clients/ha.py`, WP-D1) runs a real Home Assistant: it creates a container from a pinned
+`homeassistant/home-assistant` image (`VALIDATE_HA_IMAGE` overrides it; `homeassistant/home-assistant:2025.1.4` checks
+the minimum version, D8), copies a minimal `configuration.yaml` and `custom_components/hdmi_matrix` into `/config`
+(`docker cp`, nothing is bind-mounted), maps `host.docker.internal` to the Docker host (`host-gateway`, where the hub
+listens on all interfaces) and onboards Home Assistant through `/api/onboarding`. Scenario `ha.config_flow` adds the hub
+through `/api/config/config_entries/flow` like the UI does and sets a 5 s polling interval through the options flow.
+Intents become service calls over the WebSocket API (`route` -> `select.select_option` with the input's name from the
+entity's options, `preset_recall` -> `button.press`, `matrix_power` / `output_mute` / `output_setting` `enable` ->
+`switch.turn_on/off`, `cec_*` -> `hdmi_matrix.send_cec_command`, `ha_service` -> any service, `ha_reconfigure` -> the
+reconfigure flow); the result maps to 200 / 400 (validation error) / 404 / 500 (Home Assistant error) for `Response`.
+`ClientState` keys: `<platform>.<unique-id suffix>` (`select.output_1_source`, `@attr` for an attribute),
+`device.<field>`, `entry.<field>`, `log.errors`. The Home Assistant log is saved as `logs/home-assistant.log`.
+Scenarios: `tests/validation/scenarios/home_assistant.py`.
 
 ## Recorded baseline (C-pre, 2026-09-25)
 
