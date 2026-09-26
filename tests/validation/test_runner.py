@@ -17,7 +17,7 @@ from tools.validate.device import SimDevice
 from tools.validate.evidence import SCHEMA_PATH, iter_records
 from tools.validate.ledger import gate
 from tools.validate.model import Device, Scenario, act
-from tools.validate.registry import load_findings
+from tools.validate.registry import Finding, load_findings
 from tools.validate.runner import Runner, RunOptions
 from tools.validate.scenarios import discover
 from tools.validate.stack import SimulatorProcess
@@ -42,24 +42,36 @@ def test_sim_run_produces_evidence(tmp_path: Path, schema_validator):
         expect=(Device("outputs[0].source", equals=7, timeout=0.3),), covers=("src/rest_api/control.py",),
         targets=("sim",),
     )
+    # A failing check linked to an open finding is a known failure, not a regression. The finding is
+    # synthetic so this self-test does not depend on which real register rows are still open.
+    known_bug = Scenario(
+        id="selftest.known", title="A failing check linked to an open finding is a known failure",
+        features=("F-MTX-001",), action=act("route", input=6, output=1),
+        expect=(Device("outputs[0].source", equals=7, timeout=0.3, finding="SELFTEST-1"),),
+        covers=("src/rest_api/control.py",), targets=("sim",),
+    )
+    findings = {**load_findings(), "SELFTEST-1": Finding("SELFTEST-1", "M", "runner self-test", True, "test")}
     chosen = [scenarios["routing.switch_one"], scenarios["profiles.recall_output_settings"],
-              scenarios["failures.bad_input"], impossible]
-    runner = Runner(RunOptions(target="sim", clients=("api",), out_dir=tmp_path, findings=load_findings()))
+              scenarios["failures.bad_input"], known_bug, impossible]
+    runner = Runner(RunOptions(target="sim", clients=("api",), out_dir=tmp_path, findings=findings))
     asyncio.run(runner.run(chosen))
     out = _outcomes(runner)
 
     ok = out[("routing.switch_one", "api")]
     assert (ok.status, ok.level, ok.gate) == ("pass", "V2", "ok")
-    known = out[("profiles.recall_output_settings", "api")]
+    # VAL-01 was fixed in WP-C1: the scenario that used to be this test's known failure passes
+    assert (out[("profiles.recall_output_settings", "api")].status,
+            out[("profiles.recall_output_settings", "api")].gate) == ("pass", "ok")
+    known = out[("selftest.known", "api")]
     assert (known.status, known.gate) == ("fail", "known-failure")
-    assert {c["finding"] for c in known.failed_checks} == {"VAL-01"}
+    assert {c["finding"] for c in known.failed_checks} == {"SELFTEST-1"}
     assert out[("failures.bad_input", "api")].status == "pass"
     bad = out[("selftest.impossible", "api")]
     assert (bad.status, bad.gate) == ("fail", "regression")
 
     records = {r.data["scenario"]: r.data for r in iter_records([tmp_path / "evidence"])}
     assert set(records) == {"routing.switch_one", "profiles.recall_output_settings", "failures.bad_input",
-                            "selftest.impossible"}
+                            "selftest.known", "selftest.impossible"}
     for rec in records.values():
         assert list(schema_validator.iter_errors(rec)) == [], rec["scenario"]
     switch = records["routing.switch_one"]
