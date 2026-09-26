@@ -76,11 +76,12 @@ SCENARIOS = [
         action=act("cec_output", output=1, command="power_on"),
         expect=(
             Response(status=200),
-            CommandSent("cec command", {"object": 1, "port": [1, 0, 0, 0, 0, 0, 0, 0], "index": 1}, count=1),
+            CommandSent("cec command", {"object": 1, "port": [1, 0, 0, 0, 0, 0, 0, 0], "index": 0}, count=1),
             DeviceUnchanged(),
         ),
         observe=("Did the TV on output 1 turn on?",),
         covers=(*HUB_CORE, *UC_DRIVER, *CEC),
+        notes="Display table (BE-14): power on = 0. Index 1, what the hub sent before WP-A4 part 2, is power off.",
     ),
     Scenario(
         id="remote.input_cec_command",
@@ -107,7 +108,7 @@ SCENARIOS = [
         expect=(
             Response(status=200, finding="UC-01",
                      note="the driver raises AttributeError and ucapi closes the Remote's WebSocket (1011)"),
-            CommandSent("cec command", {"object": 1, "port": [1, 0, 0, 0, 0, 0, 0, 0], "index": 1}, count=1,
+            CommandSent("cec command", {"object": 1, "port": [1, 0, 0, 0, 0, 0, 0, 0], "index": 0}, count=1,
                         finding="UC-01"),
         ),
         observe=("Did the TV on output 1 turn on, and does the Remote still show the integration as connected?",),
@@ -122,11 +123,12 @@ SCENARIOS = [
         action=act("uc_command", entity_id="media_player.output_2", cmd_id="volume_up"),
         expect=(
             Response(status=200),
-            CommandSent("cec command", {"object": 1, "port": [0, 1, 0, 0, 0, 0, 0, 0], "index": 19}, count=1),
+            CommandSent("cec command", {"object": 1, "port": [0, 1, 0, 0, 0, 0, 0, 0], "index": 4}, count=1),
             DeviceUnchanged(),
         ),
         observe=("Did the soundbar on output 2 raise its volume by one step?",),
         covers=(*HUB_CORE, *UC_DRIVER, *CEC),
+        notes="Display table (BE-14): volume up = 4 (the source table's 19 is not a display command).",
     ),
     Scenario(
         id="remote.power_switch_off",

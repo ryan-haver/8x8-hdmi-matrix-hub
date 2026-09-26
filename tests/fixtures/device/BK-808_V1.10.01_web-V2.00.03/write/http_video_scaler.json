@@ -1,0 +1,674 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "write/http_video_scaler",
+  "title": "Output video mode, every code (set video scaler; allscaler, BE-15)",
+  "group": "output",
+  "answers": [
+    "write-ok-results",
+    "write-fail-result",
+    "web-ui-commands",
+    "output-mode-text"
+  ],
+  "before": {
+    "power": 1,
+    "beep": 1,
+    "lock": 0,
+    "lcd": 3,
+    "routing": [
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7
+    ],
+    "input_names": [
+      "NES",
+      "SNES",
+      "Sega",
+      "N64",
+      "Switch",
+      "PS3",
+      "Apple",
+      "Switcher"
+    ],
+    "output_names": [
+      "TV",
+      "Sound",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "preset_names": [
+      "Out1",
+      "Out2",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "stream": [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "hdcp": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "hdr": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "scaler": [
+      0,
+      4,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "arc": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "mute": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "edid": [
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36
+    ],
+    "cec_in": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "cec_out": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "exa_mode": 0,
+    "exa_enable": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "exa_source": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "exa_index": 1,
+    "presets": null,
+    "lcd_line": null,
+    "errors": []
+  },
+  "steps": [
+    {
+      "describe": "output 8 scaler -> 1",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set video scaler",
+        "comhead": "set video scaler",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 64"
+          ],
+          "json": {
+            "comhead": "set video scaler",
+            "language": 0,
+            "scaler": [
+              8,
+              1
+            ]
+          },
+          "body_text": "{\"comhead\": \"set video scaler\", \"language\": 0, \"scaler\": [8, 1]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IHZpZGVvIHNjYWxlciIsInJlc3VsdCI6MX0NCg==",
+          "body_text": "{\"comhead\":\"set video scaler\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "set video scaler",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:04:59.216599Z",
+          "elapsed_ms": 260.47
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "scaler",
+          8,
+          0,
+          1
+        ]
+      ],
+      "outcome": "applied",
+      "status_changes": {
+        "removed": [
+          "output 8 video mode: pass-through"
+        ],
+        "added": [
+          "output 8 video mode: 8k->4k"
+        ]
+      }
+    },
+    {
+      "describe": "output 8 scaler -> 2",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set video scaler",
+        "comhead": "set video scaler",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 64"
+          ],
+          "json": {
+            "comhead": "set video scaler",
+            "language": 0,
+            "scaler": [
+              8,
+              2
+            ]
+          },
+          "body_text": "{\"comhead\": \"set video scaler\", \"language\": 0, \"scaler\": [8, 2]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IHZpZGVvIHNjYWxlciIsInJlc3VsdCI6MX0NCg==",
+          "body_text": "{\"comhead\":\"set video scaler\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "set video scaler",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:05:03.206781Z",
+          "elapsed_ms": 256.96
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "scaler",
+          8,
+          1,
+          2
+        ]
+      ],
+      "outcome": "applied",
+      "status_changes": {
+        "removed": [
+          "output 8 video mode: pass-through"
+        ],
+        "added": [
+          "output 8 video mode: 8k/4k->1080p"
+        ]
+      }
+    },
+    {
+      "describe": "output 8 scaler -> 3",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set video scaler",
+        "comhead": "set video scaler",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 64"
+          ],
+          "json": {
+            "comhead": "set video scaler",
+            "language": 0,
+            "scaler": [
+              8,
+              3
+            ]
+          },
+          "body_text": "{\"comhead\": \"set video scaler\", \"language\": 0, \"scaler\": [8, 3]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IHZpZGVvIHNjYWxlciIsInJlc3VsdCI6MX0NCg==",
+          "body_text": "{\"comhead\":\"set video scaler\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "set video scaler",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:05:06.995353Z",
+          "elapsed_ms": 352.98
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "scaler",
+          8,
+          2,
+          3
+        ]
+      ],
+      "outcome": "applied",
+      "status_changes": {
+        "removed": [
+          "output 8 video mode: pass-through"
+        ],
+        "added": [
+          "output 8 video mode: auto(follow sink edid)"
+        ]
+      }
+    },
+    {
+      "describe": "output 8 scaler -> 4",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set video scaler",
+        "comhead": "set video scaler",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 64"
+          ],
+          "json": {
+            "comhead": "set video scaler",
+            "language": 0,
+            "scaler": [
+              8,
+              4
+            ]
+          },
+          "body_text": "{\"comhead\": \"set video scaler\", \"language\": 0, \"scaler\": [8, 4]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IHZpZGVvIHNjYWxlciIsInJlc3VsdCI6MX0NCg==",
+          "body_text": "{\"comhead\":\"set video scaler\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "set video scaler",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:05:10.830896Z",
+          "elapsed_ms": 262.27
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "scaler",
+          8,
+          3,
+          4
+        ]
+      ],
+      "outcome": "applied",
+      "status_changes": {
+        "removed": [
+          "output 8 video mode: pass-through"
+        ],
+        "added": [
+          "output 8 video mode: audio only"
+        ]
+      }
+    },
+    {
+      "describe": "output 8 scaler -> 0 (back to the original)",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set video scaler",
+        "comhead": "set video scaler",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 64"
+          ],
+          "json": {
+            "comhead": "set video scaler",
+            "language": 0,
+            "scaler": [
+              8,
+              0
+            ]
+          },
+          "body_text": "{\"comhead\": \"set video scaler\", \"language\": 0, \"scaler\": [8, 0]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IHZpZGVvIHNjYWxlciIsInJlc3VsdCI6MX0NCg==",
+          "body_text": "{\"comhead\":\"set video scaler\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "set video scaler",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:05:14.566442Z",
+          "elapsed_ms": 264.71
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "scaler",
+          8,
+          4,
+          0
+        ]
+      ],
+      "outcome": "applied",
+      "status_changes": {
+        "removed": [],
+        "added": []
+      }
+    },
+    {
+      "describe": "invalid output 9",
+      "kind": "invalid",
+      "exchange": {
+        "kind": "http",
+        "role": "write-invalid",
+        "label": "set video scaler",
+        "comhead": "set video scaler",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 64"
+          ],
+          "json": {
+            "comhead": "set video scaler",
+            "language": 0,
+            "scaler": [
+              9,
+              0
+            ]
+          },
+          "body_text": "{\"comhead\": \"set video scaler\", \"language\": 0, \"scaler\": [9, 0]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IHZpZGVvIHNjYWxlciIsInJlc3VsdCI6MH0NCg==",
+          "body_text": "{\"comhead\":\"set video scaler\",\"result\":0}\r\n",
+          "json": {
+            "comhead": "set video scaler",
+            "result": 0
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:05:18.380320Z",
+          "elapsed_ms": 325.57
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    },
+    {
+      "describe": "invalid scaler 5",
+      "kind": "invalid",
+      "exchange": {
+        "kind": "http",
+        "role": "write-invalid",
+        "label": "set video scaler",
+        "comhead": "set video scaler",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 64"
+          ],
+          "json": {
+            "comhead": "set video scaler",
+            "language": 0,
+            "scaler": [
+              8,
+              5
+            ]
+          },
+          "body_text": "{\"comhead\": \"set video scaler\", \"language\": 0, \"scaler\": [8, 5]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IHZpZGVvIHNjYWxlciIsInJlc3VsdCI6MH0NCg==",
+          "body_text": "{\"comhead\":\"set video scaler\",\"result\":0}\r\n",
+          "json": {
+            "comhead": "set video scaler",
+            "result": 0
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:05:20.611353Z",
+          "elapsed_ms": 254.31
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    }
+  ],
+  "restored": true,
+  "restore_remaining": [],
+  "findings": {
+    "results_by_outcome": {
+      "applied": [
+        1
+      ],
+      "rejected": [
+        0
+      ]
+    },
+    "status_text": {
+      "1": [
+        "output 8 video mode: 8k->4k"
+      ],
+      "2": [
+        "output 8 video mode: 8k/4k->1080p"
+      ],
+      "3": [
+        "output 8 video mode: auto(follow sink edid)"
+      ],
+      "4": [
+        "output 8 video mode: audio only"
+      ],
+      "0": []
+    }
+  },
+  "mode": "write",
+  "captured_at": "2026-09-25T22:05:24.848440Z"
+}

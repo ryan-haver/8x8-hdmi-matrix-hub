@@ -1,0 +1,308 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "write/telnet_legacy_commands",
+  "title": "Vendor Telnet commands V1.10.01 lacks (expected E00)",
+  "group": "legacy",
+  "answers": [
+    "telnet-error-codes",
+    "telnet-set-acks"
+  ],
+  "before": {
+    "power": 1,
+    "beep": 1,
+    "lock": 0,
+    "lcd": 3,
+    "routing": [
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7
+    ],
+    "input_names": [
+      "NES",
+      "SNES",
+      "Sega",
+      "N64",
+      "Switch",
+      "PS3",
+      "Apple",
+      "Switcher"
+    ],
+    "output_names": [
+      "TV",
+      "Sound",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "preset_names": [
+      "Out1",
+      "Out2",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "stream": [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "hdcp": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "hdr": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "scaler": [
+      0,
+      4,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "arc": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "mute": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "edid": [
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36
+    ],
+    "cec_in": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "cec_out": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "exa_mode": 0,
+    "exa_enable": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "exa_source": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "exa_index": 1,
+    "presets": null,
+    "lcd_line": null,
+    "errors": []
+  },
+  "steps": [
+    {
+      "describe": "vendor 's av 7 8' (no-op; expected E00)",
+      "kind": "unanswered",
+      "exchange": {
+        "kind": "telnet",
+        "role": "write-legacy",
+        "label": "s av 7 8",
+        "command": "s av 7 8",
+        "sent_b64": "cyBhdiA3IDghDQo=",
+        "sent_text": "s av 7 8!\r\n",
+        "response": {
+          "body_b64": "cyBhdiA3IDghDQpFMDANCg==",
+          "text": "s av 7 8!\r\nE00\r\n",
+          "chunks": [
+            {
+              "t_ms": 45.72,
+              "len": 11
+            },
+            {
+              "t_ms": 394.72,
+              "len": 5
+            }
+          ],
+          "completion": "idle",
+          "idle_ms": 1000,
+          "first_byte_ms": 45.72,
+          "elapsed_ms": 1396.24,
+          "analysis": {
+            "line_endings": {
+              "crlf": 2,
+              "lf": 0,
+              "cr": 0
+            },
+            "lines": [
+              "s av 7 8!",
+              "E00"
+            ],
+            "ends_with_newline": true,
+            "trailing_without_newline": "",
+            "last_line": "E00",
+            "error_code": "E00",
+            "error_codes_seen": [
+              "E00"
+            ],
+            "iac": []
+          }
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:11:20.392185Z",
+          "elapsed_ms": 1396.24
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    },
+    {
+      "describe": "vendor 's out 8 stream 0' (no-op; expected E00, HIL-11)",
+      "kind": "unanswered",
+      "exchange": {
+        "kind": "telnet",
+        "role": "write-legacy",
+        "label": "s out 8 stream 0",
+        "command": "s out 8 stream 0",
+        "sent_b64": "cyBvdXQgOCBzdHJlYW0gMCENCg==",
+        "sent_text": "s out 8 stream 0!\r\n",
+        "response": {
+          "body_b64": "cyBvdXQgOCBzdHJlYW0gMCENCkUwMA0K",
+          "text": "s out 8 stream 0!\r\nE00\r\n",
+          "chunks": [
+            {
+              "t_ms": 33.66,
+              "len": 19
+            },
+            {
+              "t_ms": 556.97,
+              "len": 5
+            }
+          ],
+          "completion": "idle",
+          "idle_ms": 1000,
+          "first_byte_ms": 33.66,
+          "elapsed_ms": 1558.01,
+          "analysis": {
+            "line_endings": {
+              "crlf": 2,
+              "lf": 0,
+              "cr": 0
+            },
+            "lines": [
+              "s out 8 stream 0!",
+              "E00"
+            ],
+            "ends_with_newline": true,
+            "trailing_without_newline": "",
+            "last_line": "E00",
+            "error_code": "E00",
+            "error_codes_seen": [
+              "E00"
+            ],
+            "iac": []
+          }
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:11:24.005921Z",
+          "elapsed_ms": 1558.01
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    }
+  ],
+  "restored": true,
+  "restore_remaining": [],
+  "findings": {
+    "results_by_outcome": {
+      "rejected": [
+        "E00"
+      ]
+    },
+    "legacy": [
+      {
+        "command": "s av 7 8",
+        "outcome": "rejected"
+      },
+      {
+        "command": "s out 8 stream 0",
+        "outcome": "rejected"
+      }
+    ]
+  },
+  "mode": "write",
+  "captured_at": "2026-09-25T22:11:29.904957Z"
+}

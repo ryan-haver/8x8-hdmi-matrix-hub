@@ -1,0 +1,757 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "write/telnet_presets",
+  "title": "Telnet preset commands (r preset readback)",
+  "group": "telnet",
+  "answers": [
+    "telnet-set-acks"
+  ],
+  "before": {
+    "power": 1,
+    "beep": 1,
+    "lock": 0,
+    "lcd": 3,
+    "routing": [
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7
+    ],
+    "input_names": [
+      "NES",
+      "SNES",
+      "Sega",
+      "N64",
+      "Switch",
+      "PS3",
+      "Apple",
+      "Switcher"
+    ],
+    "output_names": [
+      "TV",
+      "Sound",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "preset_names": [
+      "Out1",
+      "Out2",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "stream": [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "hdcp": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "hdr": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "scaler": [
+      0,
+      4,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "arc": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "mute": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "edid": [
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36
+    ],
+    "cec_in": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "cec_out": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "exa_mode": 0,
+    "exa_enable": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "exa_source": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "exa_index": 1,
+    "presets": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "saved": false,
+        "routing": null
+      }
+    ],
+    "lcd_line": null,
+    "errors": []
+  },
+  "steps": [
+    {
+      "describe": "stage: output 8 -> input 8",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "video switch",
+        "comhead": "video switch",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 60"
+          ],
+          "json": {
+            "comhead": "video switch",
+            "language": 0,
+            "source": [
+              8,
+              8
+            ]
+          },
+          "body_text": "{\"comhead\": \"video switch\", \"language\": 0, \"source\": [8, 8]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoidmlkZW8gc3dpdGNoIiwicmVzdWx0IjoxfQ0K",
+          "body_text": "{\"comhead\":\"video switch\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "video switch",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:08:49.595677Z",
+          "elapsed_ms": 259.59
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "routing",
+          8,
+          7,
+          8
+        ]
+      ],
+      "outcome": "applied"
+    },
+    {
+      "describe": "save preset 8 (hub syntax)",
+      "kind": "write",
+      "exchange": {
+        "kind": "telnet",
+        "role": "write",
+        "label": "s save preset 8",
+        "command": "s save preset 8",
+        "sent_b64": "cyBzYXZlIHByZXNldCA4IQ0K",
+        "sent_text": "s save preset 8!\r\n",
+        "response": {
+          "body_b64": "cyBzYXZlIHByZXNldCA4IQ0Kc2F2ZSB0byBwcmVzZXQgOA0K",
+          "text": "s save preset 8!\r\nsave to preset 8\r\n",
+          "chunks": [
+            {
+              "t_ms": 28.68,
+              "len": 18
+            },
+            {
+              "t_ms": 168.15,
+              "len": 18
+            }
+          ],
+          "completion": "idle",
+          "idle_ms": 1000,
+          "first_byte_ms": 28.68,
+          "elapsed_ms": 1168.75,
+          "analysis": {
+            "line_endings": {
+              "crlf": 2,
+              "lf": 0,
+              "cr": 0
+            },
+            "lines": [
+              "s save preset 8!",
+              "save to preset 8"
+            ],
+            "ends_with_newline": true,
+            "trailing_without_newline": "",
+            "last_line": "save to preset 8",
+            "error_code": null,
+            "error_codes_seen": [],
+            "iac": []
+          }
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:08:53.067216Z",
+          "elapsed_ms": 1168.75
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "preset_saved",
+          8,
+          false,
+          true
+        ]
+      ],
+      "outcome": "applied"
+    },
+    {
+      "describe": "stage: output 8 -> input 7",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "video switch",
+        "comhead": "video switch",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 60"
+          ],
+          "json": {
+            "comhead": "video switch",
+            "language": 0,
+            "source": [
+              8,
+              7
+            ]
+          },
+          "body_text": "{\"comhead\": \"video switch\", \"language\": 0, \"source\": [8, 7]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoidmlkZW8gc3dpdGNoIiwicmVzdWx0IjoxfQ0K",
+          "body_text": "{\"comhead\":\"video switch\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "video switch",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:08:57.311028Z",
+          "elapsed_ms": 230.22
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "routing",
+          8,
+          8,
+          7
+        ]
+      ],
+      "outcome": "applied"
+    },
+    {
+      "describe": "recall preset 8 (hub syntax; ALL outputs)",
+      "kind": "write",
+      "exchange": {
+        "kind": "telnet",
+        "role": "write",
+        "label": "s recall preset 8",
+        "command": "s recall preset 8",
+        "sent_b64": "cyByZWNhbGwgcHJlc2V0IDghDQo=",
+        "sent_text": "s recall preset 8!\r\n",
+        "response": {
+          "body_b64": "cyByZWNhbGwgcHJlc2V0IDghDQpyZWNhbGwgZnJvbSBwcmVzZXQgOA0K",
+          "text": "s recall preset 8!\r\nrecall from preset 8\r\n",
+          "chunks": [
+            {
+              "t_ms": 45.29,
+              "len": 20
+            },
+            {
+              "t_ms": 184.02,
+              "len": 22
+            }
+          ],
+          "completion": "idle",
+          "idle_ms": 1000,
+          "first_byte_ms": 45.29,
+          "elapsed_ms": 1184.74,
+          "analysis": {
+            "line_endings": {
+              "crlf": 2,
+              "lf": 0,
+              "cr": 0
+            },
+            "lines": [
+              "s recall preset 8!",
+              "recall from preset 8"
+            ],
+            "ends_with_newline": true,
+            "trailing_without_newline": "",
+            "last_line": "recall from preset 8",
+            "error_code": null,
+            "error_codes_seen": [],
+            "iac": []
+          }
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:09:00.804093Z",
+          "elapsed_ms": 1184.74
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "routing",
+          8,
+          7,
+          8
+        ]
+      ],
+      "outcome": "applied"
+    },
+    {
+      "describe": "clear preset 8 (hub syntax)",
+      "kind": "write",
+      "exchange": {
+        "kind": "telnet",
+        "role": "write",
+        "label": "s clear preset 8",
+        "command": "s clear preset 8",
+        "sent_b64": "cyBjbGVhciBwcmVzZXQgOCENCg==",
+        "sent_text": "s clear preset 8!\r\n",
+        "response": {
+          "body_b64": "cyBjbGVhciBwcmVzZXQgOCENCmNsZWFyIHByZXNldCA4DQo=",
+          "text": "s clear preset 8!\r\nclear preset 8\r\n",
+          "chunks": [
+            {
+              "t_ms": 29.98,
+              "len": 19
+            },
+            {
+              "t_ms": 169.78,
+              "len": 16
+            }
+          ],
+          "completion": "idle",
+          "idle_ms": 1000,
+          "first_byte_ms": 29.98,
+          "elapsed_ms": 1170.4,
+          "analysis": {
+            "line_endings": {
+              "crlf": 2,
+              "lf": 0,
+              "cr": 0
+            },
+            "lines": [
+              "s clear preset 8!",
+              "clear preset 8"
+            ],
+            "ends_with_newline": true,
+            "trailing_without_newline": "",
+            "last_line": "clear preset 8",
+            "error_code": null,
+            "error_codes_seen": [],
+            "iac": []
+          }
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:09:05.134836Z",
+          "elapsed_ms": 1170.4
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "preset_saved",
+          8,
+          true,
+          false
+        ]
+      ],
+      "outcome": "applied"
+    },
+    {
+      "describe": "stage: output 8 -> input 7",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "video switch",
+        "comhead": "video switch",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 60"
+          ],
+          "json": {
+            "comhead": "video switch",
+            "language": 0,
+            "source": [
+              8,
+              7
+            ]
+          },
+          "body_text": "{\"comhead\": \"video switch\", \"language\": 0, \"source\": [8, 7]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoidmlkZW8gc3dpdGNoIiwicmVzdWx0IjoxfQ0K",
+          "body_text": "{\"comhead\":\"video switch\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "video switch",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:09:09.336952Z",
+          "elapsed_ms": 242.82
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "routing",
+          8,
+          8,
+          7
+        ]
+      ],
+      "outcome": "applied"
+    },
+    {
+      "describe": "save preset 8 (vendor syntax)",
+      "kind": "write",
+      "exchange": {
+        "kind": "telnet",
+        "role": "write",
+        "label": "s preset save 8",
+        "command": "s preset save 8",
+        "sent_b64": "cyBwcmVzZXQgc2F2ZSA4IQ0K",
+        "sent_text": "s preset save 8!\r\n",
+        "response": {
+          "body_b64": "cyBwcmVzZXQgc2F2ZSA4IQ0KRTAwDQo=",
+          "text": "s preset save 8!\r\nE00\r\n",
+          "chunks": [
+            {
+              "t_ms": 45.93,
+              "len": 18
+            },
+            {
+              "t_ms": 547.07,
+              "len": 5
+            }
+          ],
+          "completion": "idle",
+          "idle_ms": 1000,
+          "first_byte_ms": 45.93,
+          "elapsed_ms": 1548.34,
+          "analysis": {
+            "line_endings": {
+              "crlf": 2,
+              "lf": 0,
+              "cr": 0
+            },
+            "lines": [
+              "s preset save 8!",
+              "E00"
+            ],
+            "ends_with_newline": true,
+            "trailing_without_newline": "",
+            "last_line": "E00",
+            "error_code": "E00",
+            "error_codes_seen": [
+              "E00"
+            ],
+            "iac": []
+          }
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:09:12.730419Z",
+          "elapsed_ms": 1548.34
+        },
+        "outcome": "not-applied"
+      },
+      "diff": [],
+      "outcome": "not-applied"
+    },
+    {
+      "describe": "stage: output 8 -> input 8",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "video switch",
+        "comhead": "video switch",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 60"
+          ],
+          "json": {
+            "comhead": "video switch",
+            "language": 0,
+            "source": [
+              8,
+              8
+            ]
+          },
+          "body_text": "{\"comhead\": \"video switch\", \"language\": 0, \"source\": [8, 8]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoidmlkZW8gc3dpdGNoIiwicmVzdWx0IjoxfQ0K",
+          "body_text": "{\"comhead\":\"video switch\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "video switch",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:09:17.358292Z",
+          "elapsed_ms": 239.39
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "routing",
+          8,
+          7,
+          8
+        ]
+      ],
+      "outcome": "applied"
+    },
+    {
+      "describe": "recall preset 8 (vendor syntax)",
+      "kind": "write",
+      "exchange": {
+        "kind": "telnet",
+        "role": "write",
+        "label": "s preset recall 8",
+        "command": "s preset recall 8",
+        "sent_b64": "cyBwcmVzZXQgcmVjYWxsIDghDQo=",
+        "sent_text": "s preset recall 8!\r\n",
+        "response": {
+          "body_b64": "cyBwcmVzZXQgcmVjYWxsIDghDQpFMDANCg==",
+          "text": "s preset recall 8!\r\nE00\r\n",
+          "chunks": [
+            {
+              "t_ms": 29.79,
+              "len": 20
+            },
+            {
+              "t_ms": 577.42,
+              "len": 5
+            }
+          ],
+          "completion": "idle",
+          "idle_ms": 1000,
+          "first_byte_ms": 29.79,
+          "elapsed_ms": 1578.07,
+          "analysis": {
+            "line_endings": {
+              "crlf": 2,
+              "lf": 0,
+              "cr": 0
+            },
+            "lines": [
+              "s preset recall 8!",
+              "E00"
+            ],
+            "ends_with_newline": true,
+            "trailing_without_newline": "",
+            "last_line": "E00",
+            "error_code": "E00",
+            "error_codes_seen": [
+              "E00"
+            ],
+            "iac": []
+          }
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:09:20.756787Z",
+          "elapsed_ms": 1578.07
+        },
+        "outcome": "not-applied"
+      },
+      "diff": [],
+      "outcome": "not-applied"
+    }
+  ],
+  "restored": true,
+  "restore_remaining": [],
+  "findings": {
+    "results_by_outcome": {
+      "applied": [
+        1,
+        "save to preset 8",
+        "recall from preset 8",
+        "clear preset 8"
+      ],
+      "not-applied": [
+        "E00"
+      ]
+    }
+  },
+  "mode": "write",
+  "captured_at": "2026-09-25T22:09:31.795178Z"
+}

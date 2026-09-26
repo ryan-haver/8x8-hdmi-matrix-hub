@@ -17,16 +17,24 @@ _LOG = logging.getLogger("system_shortcuts")
 
 _PREFS_FILE = "system_shortcuts.json"
 
-# LCD timeout mode constants (from orei_matrix.py)
+# LCD on-time codes of the device (device_codes.LCD_TIMEOUT_MODES, read back
+# as ``get system status.mode``; captured: 3 = "lcd on 30 seconds").
+# API-07: this map used to be shifted by one ("always on" sent 4 = 60 s).
 LCD_TIMEOUT_OFF = 0
-LCD_TIMEOUT_10S = 1
-LCD_TIMEOUT_30S = 2
-LCD_TIMEOUT_60S = 3
-LCD_TIMEOUT_ALWAYS_ON = 4
+LCD_TIMEOUT_ALWAYS_ON = 1
+LCD_TIMEOUT_15S = 2
+LCD_TIMEOUT_30S = 3
+LCD_TIMEOUT_60S = 4
+#: Kept for callers of the old name. The device has no 10 s setting; its
+#: shortest timeout is 15 s.
+LCD_TIMEOUT_10S = LCD_TIMEOUT_15S
 
 LCD_TIMEOUT_MODES = {
     "off": LCD_TIMEOUT_OFF,
-    "10s": LCD_TIMEOUT_10S,
+    "15s": LCD_TIMEOUT_15S,
+    # The shortcut key ``lcd_timeout_10s`` predates the device table and is
+    # kept so saved shortcut preferences stay valid; it sets the 15 s timeout.
+    "10s": LCD_TIMEOUT_15S,
     "30s": LCD_TIMEOUT_30S,
     "60s": LCD_TIMEOUT_60S,
     "always_on": LCD_TIMEOUT_ALWAYS_ON,

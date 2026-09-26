@@ -5,6 +5,13 @@ and the ``language`` field, or its absence), so a capture shows what the hub
 will really get back. ``tests/sim/test_capture_catalog.py`` scans ``src/`` and
 fails if the hub sends a comhead or Telnet command the capture tool does not
 cover.
+
+Values are the device's own codes (0-based HDR and scaler, EDID ids 1-47), not
+the hub's API values: the capture tool talks to the device directly.
+
+The ``legacy_*`` builders are the commands the hub sent before WP-A4 part 2.
+MCU V1.10.01 never answers them (HIL-09); the write mode keeps one step per
+command as "expected unanswered" evidence (group ``legacy``).
 """
 
 from __future__ import annotations
@@ -15,7 +22,7 @@ from typing import Any
 PORTS = range(1, 9)
 
 # ------------------------------------------------------------------ payloads
-# One builder per hub method (orei_matrix.py line numbers as of Phase 0).
+# One builder per hub method.
 
 
 def login(user: str, password: str) -> dict[str, Any]:  # connect()
@@ -46,6 +53,10 @@ def preset_save(index: int) -> dict[str, Any]:  # save_preset
     return {"comhead": "preset save", "language": 0, "index": index}
 
 
+def preset_name(index: int, name: str) -> dict[str, Any]:  # set_preset_name
+    return {"comhead": "preset name", "language": 0, "index": index, "name": name}
+
+
 def power(on: int) -> dict[str, Any]:  # power_on / power_off
     return {"comhead": "set poweronoff", "language": 0, "power": on}
 
@@ -59,7 +70,7 @@ def beep(value: int) -> dict[str, Any]:  # set_beep
 
 
 def lcd_time(mode: int) -> dict[str, Any]:  # set_lcd_timeout
-    return {"comhead": "set lcd on time", "time": mode}
+    return {"comhead": "set lcd on time", "language": 0, "lcd on time": mode}
 
 
 def input_name(index: int, name: str) -> dict[str, Any]:  # set_input_name
@@ -70,35 +81,41 @@ def output_name(index: int, name: str) -> dict[str, Any]:  # set_output_name
     return {"comhead": "set output name", "language": 0, "name": name, "index": index}
 
 
-#: snapshot field -> (comhead, payload key) for per-output settings.
+#: snapshot field -> (comhead, payload key) of the per-output settings; the
+#: value is ``[output, device code]`` (output 0 = all outputs).
 OUTPUT_SETTINGS: dict[str, tuple[str, str]] = {
-    "stream": ("set output stream", "enable"),
-    "hdcp": ("set output hdcp", "hdcp"),
-    "hdr": ("set output hdr", "hdr"),
-    "scaler": ("set output scaler", "scaler"),
-    "arc": ("set output arc", "arc"),
-    "mute": ("set output mute", "mute"),
+    "stream": ("tx stream", "out"),  # set_output_enable
+    "hdcp": ("tx hdcp", "hdcp"),  # set_output_hdcp
+    "hdr": ("set hdr conversion", "hdr"),  # set_output_hdr (device code = API value - 1)
+    "scaler": ("set video scaler", "scaler"),  # set_output_scaler (device code = API value - 1)
+    "arc": ("set arc", "arc"),  # set_output_arc
+    "mute": ("set output audio mute", "mute"),  # set_output_audio_mute
+}
+
+#: Device code ranges of the per-output settings (the device web interface's option lists).
+OUTPUT_RANGES: dict[str, tuple[int, int]] = {
+    "stream": (0, 1), "hdcp": (1, 5), "hdr": (0, 2), "scaler": (0, 4), "arc": (0, 1), "mute": (0, 1),
 }
 
 
 def output_setting(setting: str, output: int, value: int) -> dict[str, Any]:  # set_output_* methods
     comhead, key = OUTPUT_SETTINGS[setting]
-    return {"comhead": comhead, "output": output, key: value}
+    return {"comhead": comhead, "language": 0, key: [output, value]}
 
 
-def input_edid(input_: int, mode: int) -> dict[str, Any]:  # set_input_edid / copy_edid_from_output (14+N)
-    return {"comhead": "set input edid", "input": input_, "edid": mode}
+def set_edid(input_: int, edid: int) -> dict[str, Any]:  # set_input_edid / copy_edid_from_output (39 + N)
+    return {"comhead": "set edid", "language": 0, "edid": [input_, edid]}
 
 
-def copy_edid(input_: int, output: int) -> dict[str, Any]:  # documented, not sent by the hub (BE-25)
-    return {"comhead": "copy edid", "input": input_, "output": output}
+#: ``set edid`` id that copies the EDID of output N is ``EDID_COPY_BASE + N`` (40-47).
+EDID_COPY_BASE = 39
 
 
-def cec_index_bulk(inputs: list[int], outputs: list[int]) -> dict[str, Any]:  # set_cec_enabled_bulk / toggle
+def cec_index_bulk(inputs: list[int], outputs: list[int]) -> dict[str, Any]:  # set_cec_enabled / set_cec_enable
     return {"comhead": "set cec index", "language": 0, "inputindex": list(inputs), "outputindex": list(outputs)}
 
 
-def cec_index_single(port_type: str, index: int, enable: int) -> dict[str, Any]:  # set_cec_enable (BE-13)
+def cec_index_single(port_type: str, index: int, enable: int) -> dict[str, Any]:  # old set_cec_enable (BE-13)
     return {"comhead": "set cec index", "port": port_type, "index": index, "enable": enable}
 
 
@@ -110,18 +127,67 @@ def cec_command(obj: int, port: int, index: int) -> dict[str, Any]:  # send_cec_
 
 
 def exa_mode(mode: int) -> dict[str, Any]:  # set_ext_audio_mode
+    return {"comhead": "set ext-audio mode", "language": 0, "mode": mode}
+
+
+def exa_out(output: int, enabled: int) -> dict[str, Any]:  # set_ext_audio_enable
+    return {"comhead": "set ext-audio out", "language": 0, "out": [output, enabled]}
+
+
+def exa_switch(output: int, source: int) -> dict[str, Any]:  # set_ext_audio_source (1-8 input, 9-16 ARC)
+    return {"comhead": "ext-audio switch", "language": 0, "source": [output, source]}
+
+
+def exa_index(output: int) -> dict[str, Any]:  # set_ext_audio_index
+    return {"comhead": "set ext-audio index", "language": 0, "index": output}
+
+
+def reboot() -> dict[str, Any]:  # system_reboot (HTTP path)
+    return {"comhead": "reboot", "language": 0, "reboot": 1}
+
+
+# ----------------------------------------------- legacy (unanswered, HIL-09)
+#: snapshot field -> (comhead, payload key) the hub sent before WP-A4 part 2.
+LEGACY_OUTPUT_SETTINGS: dict[str, tuple[str, str]] = {
+    "stream": ("set output stream", "enable"),
+    "hdcp": ("set output hdcp", "hdcp"),
+    "hdr": ("set output hdr", "hdr"),
+    "scaler": ("set output scaler", "scaler"),
+    "arc": ("set output arc", "arc"),
+    "mute": ("set output mute", "mute"),
+}
+
+
+def legacy_output_setting(setting: str, output: int, value: int) -> dict[str, Any]:
+    comhead, key = LEGACY_OUTPUT_SETTINGS[setting]
+    return {"comhead": comhead, "output": output, key: value}
+
+
+def legacy_input_edid(input_: int, mode: int) -> dict[str, Any]:
+    return {"comhead": "set input edid", "input": input_, "edid": mode}
+
+
+def legacy_copy_edid(input_: int, output: int) -> dict[str, Any]:  # documented, never sent by the hub (BE-25)
+    return {"comhead": "copy edid", "input": input_, "output": output}
+
+
+def legacy_lcd_time(mode: int) -> dict[str, Any]:  # rejected with result 0 (captured)
+    return {"comhead": "set lcd on time", "time": mode}
+
+
+def legacy_exa_mode(mode: int) -> dict[str, Any]:
     return {"comhead": "set output exa mode", "mode": mode}
 
 
-def exa_enable(output: int, enabled: bool) -> dict[str, Any]:  # set_ext_audio_enable
+def legacy_exa_enable(output: int, enabled: bool) -> dict[str, Any]:
     return {"comhead": "set output exa", "output": output, "exa": 1 if enabled else 2}
 
 
-def exa_source(output: int, input_: int) -> dict[str, Any]:  # set_ext_audio_source
+def legacy_exa_source(output: int, input_: int) -> dict[str, Any]:
     return {"comhead": "set output exa in source", "output": output, "input": input_}
 
 
-def reboot() -> dict[str, Any]:  # reboot
+def legacy_reboot() -> dict[str, Any]:  # never captured; the device web interface uses ``reboot``
     return {"comhead": "set reboot"}
 
 
@@ -182,8 +248,9 @@ SNAPSHOT_READS: tuple[str, ...] = (
     "get cec status",
     "get system status",
     "get ext-audio status",
-    "get routing status",
 )
+# Presets are read over Telnet (``r preset N``, Capture.read_presets): V1.10.01
+# never answers ``get routing status`` (HIL-01).
 
 
 def snapshot_payload(comhead: str) -> dict[str, Any]:

@@ -255,7 +255,9 @@ class GoldenSet:
                 self.no_session = t
         elif role == "write" and comhead in HANDLERS and ex.get("outcome") == "applied":
             self.write_ok.setdefault(comhead, t)
-        elif role == "write-invalid" and comhead in HANDLERS and ex.get("outcome") == "rejected":
+        elif (role == "write-invalid" and comhead in HANDLERS and ex.get("outcome") == "rejected"
+              and isinstance(t.doc, dict) and t.doc.get("result") == proto.RESULT_FAIL):
+            # Only real rejections: V1.10.01 answers some invalid `cec command`s with result 1.
             self.write_fail.setdefault(comhead, t)
 
     def _index_telnet(self, record_id: str, ex: dict[str, Any]) -> None:
@@ -480,6 +482,26 @@ def same_bytes(device: bytes, sim: bytes) -> bool:
     return re.fullmatch(pattern, sim, re.DOTALL) is not None
 
 
+#: Marker for "the device (or the simulator) sent no answer at all".
+UNANSWERED = "no answer"
+
+#: Comheads the hub sends since WP-A4 part 2 that come from the device web interface.
+WEB_UI_COMHEADS = frozenset({
+    "tx stream", "tx hdcp", "set hdr conversion", "set video scaler", "set arc", "set output audio mute",
+    "set edid", "set lcd on time", "set ext-audio mode", "set ext-audio out", "set ext-audio index",
+    "ext-audio switch", "preset name", "preset clear", "reboot",
+})
+
+
+def device_unanswered(ex: dict[str, Any]) -> bool:
+    """The capture client gave up waiting (no response at all)."""
+    return (ex.get("error") or {}).get("type") == "TimeoutError" and not isinstance(ex.get("response"), dict)
+
+
+def _show(value: Any) -> str:
+    return value if value == UNANSWERED else f"result {value!r}"
+
+
 class _Checks:
     def __init__(self, g: GoldenSet, state: DeviceState) -> None:
         self.g = g
@@ -506,6 +528,44 @@ class _Checks:
     def steps(self, test_id: str) -> list[dict[str, Any]]:
         rec = self.rec(RecordIds.write(test_id))
         return list(rec.get("steps") or []) if rec else []
+
+    def sim_result(self, payload: dict[str, Any]) -> Any:
+        """The simulator's ``result`` for ``payload`` on the seeded state, or UNANSWERED."""
+        r = dispatch(self.st.copy(), dict(payload))
+        return UNANSWERED if r.unanswered else r.response.get("result")
+
+    @staticmethod
+    def device_result(ex: dict[str, Any]) -> Any:
+        """The device's ``result`` for one HTTP exchange, UNANSWERED on a timeout, None without JSON."""
+        if device_unanswered(ex):
+            return UNANSWERED
+        doc = (ex.get("response") or {}).get("json")
+        return doc.get("result") if isinstance(doc, dict) else None
+
+    def http_exchanges(self, comheads: frozenset[str] | set[str], roles: tuple[str, ...]) -> list[
+        tuple[str, dict[str, Any]]
+    ]:
+        """(record id, exchange) for every captured HTTP exchange with one of ``comheads`` and ``roles``."""
+        out = []
+        for rid, rec in sorted(self.g.records.items()):
+            for ex in iter_exchanges(rec):
+                if ex.get("kind") == "http" and ex.get("comhead") in comheads and ex.get("role") in roles:
+                    out.append((rid, ex))
+        return out
+
+    def web_ui_steps(self) -> list[tuple[str, dict[str, Any]]]:
+        """(record id, step) for every write-mode step that sent a web-UI-derived comhead."""
+        out = []
+        for rid, rec in sorted(self.g.records.items()):
+            for step in rec.get("steps") or []:
+                ex = step.get("exchange") or {}
+                payload = (ex.get("request") or {}).get("json") or {}
+                if ex.get("kind") != "http" or ex.get("comhead") not in WEB_UI_COMHEADS:
+                    continue
+                if ex.get("comhead") == "set lcd on time" and "lcd on time" not in payload:
+                    continue  # the old {"time": N} payload: legacy-unanswered / lcd-codes
+                out.append((rid, step))
+        return out
 
     # ---------------------------------------------------------------- checks
 
@@ -544,23 +604,32 @@ class _Checks:
                        sorted({t.source for t in self.g.write_ok.values()}))
 
     def write_fail_result(self) -> Verdict:
-        accepted = []
+        """Each captured invalid write: the device's answer (or silence) vs. the simulator's."""
+        accepted, bad, same, src = [], [], 0, set()
         for rid, rec in self.g.records.items():
             for ex in iter_exchanges(rec):
-                if ex.get("kind") == "http" and ex.get("outcome") == "accepted-invalid":
-                    accepted.append(f"{ex.get('comhead')} {params_key((ex.get('request') or {}).get('json'))}")
-        if not self.g.write_fail and not accepted:
+                if ex.get("kind") != "http" or ex.get("role") != "write-invalid":
+                    continue
+                payload = (ex.get("request") or {}).get("json")
+                if not isinstance(payload, dict):
+                    continue
+                src.add(rid)
+                if ex.get("outcome") == "accepted-invalid":
+                    accepted.append(f"{ex.get('comhead')} {params_key(payload)}")
+                device, sim = self.device_result(ex), self.sim_result(payload)
+                if device == sim:
+                    same += 1
+                else:
+                    bad.append(f"{ex.get('comhead')} {params_key(payload)}: device {device!r}, simulator {sim!r}")
+        if not src:
             return Verdict("write-fail-result", MISSING, "no rejected writes captured (run --mode write)")
-        bad = []
-        for comhead, t in sorted(self.g.write_fail.items()):
-            got = t.doc.get("result") if isinstance(t.doc, dict) else t.body[:40]
-            if got != proto.RESULT_FAIL:
-                bad.append(f"{comhead}: device {got!r}")
-        detail = "; ".join(bad) if bad else f"{len(self.g.write_fail)} comheads reject with {proto.RESULT_FAIL!r}"
+        detail = f"{same} invalid writes answered like the simulator (result 0, or result 1 for the `cec command` " \
+                 "parameters the device does not check, or no answer)"
+        if bad:
+            detail += f"; mismatches: {bad[:4]}"
         if accepted:
-            detail += f"; device ACCEPTED invalid parameters: {accepted}"
-        status = CONTRADICTED if bad or accepted else CONFIRMED
-        return Verdict("write-fail-result", status, detail, sorted({t.source for t in self.g.write_fail.values()}))
+            detail += f"; device CHANGED state on invalid parameters: {accepted}"
+        return Verdict("write-fail-result", CONTRADICTED if bad or accepted else CONFIRMED, detail, sorted(src))
 
     def _single_exchange_doc(self, aid: str, record_id: str, expected: Any) -> Verdict:
         rec = self.rec(record_id)
@@ -572,12 +641,24 @@ class _Checks:
                        f"device {doc!r}, simulator {expected!r}", [record_id])
 
     def unknown_comhead_result(self) -> Verdict:
-        return self._single_exchange_doc("unknown-comhead-result", RecordIds.PROBE_UNKNOWN_COMHEAD,
-                                         self.sim({"comhead": "hil capture unknown", "language": 0}))
+        rec = self.rec(RecordIds.PROBE_UNKNOWN_COMHEAD)
+        exs = list(iter_exchanges(rec)) if rec else []
+        if not exs:
+            return Verdict("unknown-comhead-result", MISSING, "not captured (run --mode probe)")
+        device = self.device_result(exs[0])
+        sim = self.sim_result({"comhead": "hil capture unknown", "language": 0})
+        return Verdict("unknown-comhead-result", CONFIRMED if device == sim else CONTRADICTED,
+                       f"device {_show(device)}, simulator {_show(sim)}", [RecordIds.PROBE_UNKNOWN_COMHEAD])
 
     def garbage_body(self) -> Verdict:
-        return self._single_exchange_doc("garbage-body", RecordIds.PROBE_GARBAGE_BODY,
-                                         {"comhead": None, "result": proto.RESULT_FAIL})
+        rec = self.rec(RecordIds.PROBE_GARBAGE_BODY)
+        exs = list(iter_exchanges(rec)) if rec else []
+        if not exs:
+            return Verdict("garbage-body", MISSING, "not captured (run --mode probe)")
+        device = self.device_result(exs[0])
+        sim = UNANSWERED if proto.UNKNOWN_COMMANDS_UNANSWERED else proto.RESULT_FAIL
+        return Verdict("garbage-body", CONFIRMED if device == sim else CONTRADICTED,
+                       f"device {_show(device)}, simulator {_show(sim)}", [RecordIds.PROBE_GARBAGE_BODY])
 
     def session_expired_style(self) -> Verdict:
         f = self.findings(RecordIds.PROBE_NO_SESSION)
@@ -730,8 +811,15 @@ class _Checks:
             return Verdict("ext-audio-index", MISSING, "get ext-audio status not captured")
         if "index" not in t.doc:
             return Verdict("ext-audio-index", CONTRADICTED, "device sends no 'index'", [t.source])
-        return Verdict("ext-audio-index", REVIEW, f"device index={t.doc['index']!r} (simulator sends 1); "
-                       "its meaning still needs a human", [t.source])
+        steps = [s for s in self.steps("http_ext_audio_index") if s["kind"] == "write"]
+        if steps:
+            bad = [s["describe"] for s in steps if s["outcome"] != "applied"]
+            return Verdict("ext-audio-index", CONTRADICTED if bad else CONFIRMED,
+                           f"`set ext-audio index` read back as `index`: {len(steps) - len(bad)}/{len(steps)} applied",
+                           [t.source, RecordIds.write("http_ext_audio_index")])
+        return Verdict("ext-audio-index", REVIEW, f"device index={t.doc['index']!r}; the device web interface "
+                       "sets it with `set ext-audio index` (the selected audio output); not written on hardware yet",
+                       [t.source])
 
     def http_read_shapes(self) -> Verdict:
         if not self.g.reads:
@@ -756,61 +844,85 @@ class _Checks:
         return Verdict("http-read-shapes", status, detail, sorted({t.source for t in self.g.reads.values()}))
 
     def name_truncation(self) -> Verdict:
-        lens, src = [], []
-        for tid in ("http_input_name", "http_output_name"):
+        lens, src, sim_lens = [], [], []
+        for tid, comhead in (("http_input_name", "set input name"), ("http_output_name", "set output name"),
+                             ("http_preset_name", "preset name")):
             f = self.findings(RecordIds.write(tid))
             if f and "long_name_stored_len" in f:
                 lens.append(f.get("long_name_stored_len"))
                 src.append(RecordIds.write(tid))
+                state = self.st.copy()
+                dispatch(state, {"comhead": comhead, "language": 0, "index": 1, "name": "x" * f["long_name_sent_len"]})
+                names = {"set input name": state.column("inputs", "name"),
+                         "set output name": state.column("outputs", "name"),
+                         "preset name": [pr.name for pr in state.presets]}[comhead]
+                sim_lens.append(len(names[0]))
         if not lens:
             return Verdict("name-truncation", MISSING, "not captured (run --mode write)")
-        ok = all(n == 32 for n in lens)
-        return Verdict("name-truncation", CONFIRMED if ok else CONTRADICTED,
-                       f"40-char names stored as {lens} chars (simulator 32)", src)
+        return Verdict("name-truncation", CONFIRMED if lens == sim_lens else CONTRADICTED,
+                       f"40-char names stored as {lens} chars (simulator {sim_lens})", src)
+
+    def _legacy_consistent(self, comheads: frozenset[str] | set[str]) -> tuple[list[str], list[str], list[str]]:
+        """Captured exchanges of legacy comheads: (agree with the simulator, disagree, records)."""
+        good, bad, src = [], [], []
+        for rid, ex in self.http_exchanges(comheads, ("write", "write-invalid", "write-legacy")):
+            payload = (ex.get("request") or {}).get("json") or {}
+            device, sim = self.device_result(ex), self.sim_result(payload)
+            src.append(rid)
+            (good if device == sim else bad).append(f"{ex.get('comhead')}: device {_show(device)}, "
+                                                    f"simulator {_show(sim)}")
+        return good, bad, sorted(set(src))
 
     def edid_range(self) -> Verdict:
-        f = self.findings(RecordIds.write("http_input_edid"))
-        if not f:
-            return Verdict("edid-range", MISSING, "not captured (run --mode write)")
+        steps = [s for s in self.steps("http_set_edid") if s["kind"] in ("write", "invalid")]
+        old_good, old_bad, old_src = self._legacy_consistent({"set input edid"})
+        if not steps:
+            status = CONTRADICTED if old_bad else MISSING
+            return Verdict("edid-range", status, f"the old 'set input edid' went unanswered {len(old_good)}x on the "
+                           "device and in the simulator" + (f"; mismatches {old_bad[:3]}" if old_bad else "")
+                           + "; 'set edid' is not captured yet (run --mode write)", old_src)
         lo, hi = proto.EDID_RANGE
         bad, seen = [], []
-        for s in f.get("edid_steps") or []:
-            v = (s.get("payload") or {}).get("edid")
-            if not isinstance(v, int):
-                continue
+        for s in steps:
+            port, v = (s["exchange"]["request"]["json"].get("edid") or [None, None])[:2]
             accepted = s.get("outcome") in ("applied", "accepted-invalid")
             seen.append(f"{v}:{'yes' if accepted else 'no'}")
-            if accepted != (lo <= v <= hi):
+            # An invalid input port is rejected whatever the id; only judge ids sent to a valid port.
+            port_ok = isinstance(port, int) and 1 <= port <= proto.PORT_COUNT
+            if accepted != (port_ok and isinstance(v, int) and lo <= v <= hi):
                 bad.append(v)
-        return Verdict("edid-range", CONTRADICTED if bad else CONFIRMED,
-                       f"accepted {seen}; simulator range {lo}-{hi}" + (f"; mismatches {bad}" if bad else ""),
-                       [RecordIds.write("http_input_edid")])
+        return Verdict("edid-range", CONTRADICTED if bad or old_bad else CONFIRMED,
+                       f"set edid accepted {seen}; simulator range {lo}-{hi}" + (f"; mismatches {bad}" if bad else ""),
+                       [RecordIds.write("http_set_edid"), *old_src])
 
     def copy_edid(self) -> Verdict:
-        f = self.findings(RecordIds.write("http_copy_edid"))
-        if not f:
-            return Verdict("copy-edid", MISSING, "not captured (run --mode write)")
-        notes, ok = [], True
-        for s in f.get("edid_steps") or []:
-            p = s.get("payload") or {}
-            after = [d[3] for d in s.get("edid_after") or []]
-            if p.get("comhead") == "copy edid":
-                expected = 14 + int(p.get("output", 0))
-                notes.append(f"copy edid -> {s.get('outcome')}, EDID now {after or 'unchanged'} "
-                             f"(simulator {expected})")
-                ok &= after == [expected]
-            elif p.get("edid") == 15:
-                notes.append(f"set input edid 15 -> {s.get('outcome')}")
-                ok &= s.get("outcome") == "applied"
-        return Verdict("copy-edid", CONFIRMED if ok else CONTRADICTED, "; ".join(notes),
-                       [RecordIds.write("http_copy_edid")])
+        old_good, old_bad, old_src = self._legacy_consistent({"copy edid", "set input edid"})
+        copies = [s for s in self.steps("http_set_edid") if s["kind"] == "write"
+                  and (s["exchange"]["request"]["json"].get("edid") or [0, 0])[1] > 39]
+        note = f"'copy edid' / 'set input edid 14+N' unanswered like the simulator ({len(old_good)}x)"
+        if old_bad:
+            note += f"; mismatches {old_bad[:3]}"
+        if not copies:
+            return Verdict("copy-edid", CONTRADICTED if old_bad else MISSING,
+                           note + "; copy via 'set edid' 40-47 is not captured yet", old_src)
+        bad = [s["describe"] for s in copies if s["outcome"] != "applied"]
+        return Verdict("copy-edid", CONTRADICTED if bad or old_bad else CONFIRMED,
+                       note + f"; set edid 40+ applied {len(copies) - len(bad)}/{len(copies)}",
+                       [RecordIds.write("http_set_edid"), *old_src])
 
     def cec_index_single_port(self) -> Verdict:
         steps = self.steps("http_cec_index_single")
         if steps:
-            outcomes = [s["outcome"] for s in steps]
-            return Verdict("cec-index-single-port", CONFIRMED if all(o == "applied" for o in outcomes) else CONTRADICTED,
-                           f"single-port payload outcomes {outcomes}", [RecordIds.write("http_cec_index_single")])
+            notes, ok = [], True
+            for s in steps:
+                device = self.device_result(s["exchange"])
+                sim = self.sim_result(s["exchange"]["request"]["json"])
+                applied = s["outcome"] in ("applied", "accepted-invalid")
+                notes.append(f"{s['outcome']} (device {_show(device)}, simulator {_show(sim)})")
+                ok &= not applied and device == sim
+            return Verdict("cec-index-single-port", CONFIRMED if ok else CONTRADICTED,
+                           f"single-port payload: {notes}; the simulator rejects it like the device",
+                           [RecordIds.write("http_cec_index_single")])
         f = self.findings(RecordIds.PROBE_CEC_SHAPES)
         if f:
             return Verdict("cec-index-single-port", REVIEW, f"no-op probe only: bulk result {f.get('bulk_result')!r}, "
@@ -828,29 +940,37 @@ class _Checks:
                        [RecordIds.write("cec_live_output")])
 
     def exa_commands(self) -> Verdict:
+        old_good, old_bad, old_src = self._legacy_consistent(
+            {"set output exa mode", "set output exa", "set output exa in source"})
         outcomes, src = [], []
-        for tid in ("http_exa_mode", "http_exa_enable", "http_exa_source"):
+        for tid in ("http_ext_audio_mode", "http_ext_audio_out", "http_ext_audio_switch", "http_ext_audio_index"):
             steps = [s for s in self.steps(tid) if s["kind"] == "write"]
             if steps:
                 src.append(RecordIds.write(tid))
                 outcomes += [f"{tid}:{s['outcome']}" for s in steps]
+        note = f"old 'set output exa*' unanswered like the simulator ({len(old_good)}x)"
+        if old_bad:
+            note += f"; mismatches {old_bad[:3]}"
         if not outcomes:
-            return Verdict("exa-commands", MISSING, "not captured (run --mode write)")
+            return Verdict("exa-commands", CONTRADICTED if old_bad else MISSING,
+                           note + "; 'set ext-audio *' / 'ext-audio switch' not captured yet", old_src)
         bad = [o for o in outcomes if not o.endswith(":applied")]
-        return Verdict("exa-commands", CONTRADICTED if bad else CONFIRMED,
-                       f"not applied: {bad}" if bad else f"{len(outcomes)} writes applied", src)
+        return Verdict("exa-commands", CONTRADICTED if bad or old_bad else CONFIRMED,
+                       note + (f"; not applied: {bad}" if bad else f"; {len(outcomes)} writes applied"), src + old_src)
 
     def output_mode_text(self) -> Verdict:
-        maps = {"hdcp": ("hdcp", proto.HDCP_TEXT), "hdr": ("hdr mode", proto.HDR_TEXT),
-                "scaler": ("video mode", proto.SCALER_TEXT)}
+        maps = {"hdcp": ("http_tx_hdcp", "hdcp", proto.HDCP_TEXT),
+                "hdr": ("http_hdr_conversion", "hdr mode", proto.HDR_TEXT),
+                "scaler": ("http_video_scaler", "video mode", proto.SCALER_TEXT)}
         bad, good, unparsed, src = [], 0, [], []
         audio_only = None
-        for setting, (label, table) in maps.items():
-            for s in self.steps(f"http_output_{setting}"):
-                if s["kind"] != "write":
+        for setting, (test_id, label, table) in maps.items():
+            for s in self.steps(test_id):
+                if s["kind"] != "write" or s["outcome"] != "applied":
                     continue
                 payload = s["exchange"]["request"]["json"]
-                value, port = payload.get(setting), payload.get("output")
+                pair = payload.get(setting) or [None, None]
+                port, value = pair[0], pair[1]
                 added = (s.get("status_changes") or {}).get("added") or []
                 texts = [m.group(1).strip() for ln in added
                          if (m := re.match(rf"output\s*{port}\s+{label}\s*:\s*(.+)$", ln, re.IGNORECASE))]
@@ -858,7 +978,7 @@ class _Checks:
                     if added:
                         unparsed.append(f"{setting}={value}: {added[:2]}")
                     continue
-                src.append(RecordIds.write(f"http_output_{setting}"))
+                src.append(RecordIds.write(test_id))
                 if setting == "scaler" and "audio" in texts[0].lower():
                     audio_only = value
                 if texts[0] != table.get(value):
@@ -939,20 +1059,28 @@ class _Checks:
             return Verdict("ninth-entry", MISSING, "get video/output status not captured")
         if bad:
             return Verdict("ninth-entry", CONTRADICTED, "; ".join(bad), sorted(set(src)))
-        return Verdict("ninth-entry", REVIEW, f"simulator reproduces the ninth entries ({', '.join(seen)}); what "
-                       "the entry is, and whether writes change it, needs a write capture", sorted(set(src)))
+        return Verdict("ninth-entry", REVIEW, f"the simulator derives the ninth entries as the device web interface's "
+                       f"'All Output' row (common value, 255 when mixed) and reproduces all of them ({', '.join(seen)}); "
+                       "how writes with port 0 change them is not captured yet", sorted(set(src)))
 
     def lcd_codes(self) -> Verdict:
-        f = self.findings(RecordIds.write("http_lcd"))
-        if not f or not f.get("lcd_lines"):
-            return Verdict("lcd-codes", MISSING, "not captured (run --mode write with Telnet)")
-        bad = []
-        for mode, line in sorted(f["lcd_lines"].items()):
+        old_good, old_bad, old_src = self._legacy_consistent({"set lcd on time"})
+        old = f"the old {{'time': N}} payload answered like the simulator {len(old_good)}x (result 0)"
+        if old_bad:
+            old += f"; mismatches {old_bad[:3]}"
+        f = self.findings(RecordIds.write("http_lcd_on_time"))
+        if not f or not f.get("lcd_outcomes"):
+            return Verdict("lcd-codes", CONTRADICTED if old_bad else MISSING,
+                           old + "; 'set lcd on time' with 'lcd on time' not captured yet (run --mode write with "
+                           "Telnet)", old_src)
+        bad = [f"code {m}: {o}" for m, o in sorted(f["lcd_outcomes"].items()) if o != "applied"]
+        for mode, line in sorted((f.get("lcd_lines") or {}).items()):
             expected = _lcd_line(int(mode))
-            if line != expected:
+            if line is not None and line != expected:
                 bad.append(f"code {mode}: device {line!r}, simulator {expected!r}")
-        return Verdict("lcd-codes", CONTRADICTED if bad else CONFIRMED, "; ".join(bad) or "all 5 codes match",
-                       [RecordIds.write("http_lcd")])
+        return Verdict("lcd-codes", CONTRADICTED if bad or old_bad else CONFIRMED,
+                       "; ".join(bad) or f"{len(f['lcd_outcomes'])} codes applied (read back as `mode`), wording matches",
+                       [RecordIds.write("http_lcd_on_time"), *old_src])
 
     def telnet_banner(self) -> Verdict:
         t = self.g.telnet_banner
@@ -1094,6 +1222,46 @@ class _Checks:
         return Verdict("push-wording", CONTRADICTED if unknown else CONFIRMED,
                        f"{len(lines)} lines" + (f"; lines the simulator never sends: {unknown[:6]}" if unknown else
                                                 "; all are cable events the simulator sends"), sorted(src))
+
+    def web_ui_commands(self) -> Verdict:
+        """The web-UI-derived writes on hardware: answer and readback as the simulator predicts."""
+        items = self.web_ui_steps()
+        if not items:
+            return Verdict("web-ui-commands", MISSING, "not captured yet (run --mode write)")
+        bad, good = [], 0
+        for rid, s in items:
+            ex = s["exchange"]
+            payload = ex["request"]["json"]
+            device, sim = self.device_result(ex), self.sim_result(payload)
+            expected_outcome = {"write": "applied", "invalid": "rejected"}.get(s["kind"])
+            ok = device == sim and (expected_outcome is None or s["outcome"] == expected_outcome)
+            if ok:
+                good += 1
+            else:
+                bad.append(f"{rid}: {s['describe']}: {s['outcome']}, device {_show(device)}, simulator {_show(sim)}")
+        return Verdict("web-ui-commands", CONTRADICTED if bad else CONFIRMED,
+                       f"{good}/{len(items)} steps as predicted" + (f"; differences: {bad[:5]}" if bad else ""),
+                       sorted({rid for rid, _ in items}))
+
+    def preset_set_empty(self) -> Verdict:
+        steps = [s for s in self.steps("http_preset_recall")
+                 if s["kind"] == "invalid" and "empty" in s.get("describe", "")]
+        if not steps:
+            return Verdict("preset-set-empty", MISSING, "not captured (run --mode write with an empty test preset)")
+        s = steps[0]
+        device = self.device_result(s["exchange"])
+        ok = device == proto.RESULT_FAIL and s["outcome"] == "rejected"
+        return Verdict("preset-set-empty", CONFIRMED if ok else CONTRADICTED,
+                       f"recall of an empty slot: device {_show(device)} ({s['outcome']}), simulator "
+                       f"{proto.RESULT_FAIL!r}", [RecordIds.write("http_preset_recall")])
+
+    def legacy_unanswered(self) -> Verdict:
+        good, bad, src = self._legacy_consistent(proto.LEGACY_UNANSWERED_WRITES)
+        if not src:
+            return Verdict("legacy-unanswered", MISSING, "no old-hub commands captured (run --mode write)")
+        return Verdict("legacy-unanswered", CONTRADICTED if bad else CONFIRMED,
+                       f"{len(good)} exchanges of the old hub's comheads, answered (or not) like the simulator"
+                       + (f"; mismatches {bad[:4]}" if bad else ""), src)
 
     def telnet_multi_session(self) -> Verdict:
         f = self.findings(RecordIds.PROBE_TELNET_SECOND_SESSION)

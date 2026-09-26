@@ -42,15 +42,16 @@ SCENARIOS = [
         title="Recall profile 'Movie Night': HDR, HDCP and audio mute are applied",
         features=("F-DOM-003",),
         writes=("routing", "outputs"),
-        sim_state={"outputs": {"0": {"hdcp": 1}}},
+        sim_state={"outputs": {"0": {"hdcp": 1, "hdr": 2}}},
         action=act("profile_recall", profile_id="movie_night"),
         expect=(
             Response(status=200, json={"success": True}),
             Device("outputs[1].source", equals=2),
             Device("outputs[1].audio_mute", equals=1, timeout=2, finding="VAL-01"),
-            Device("outputs[0].hdr", equals=1, timeout=1, finding="VAL-01"),
+            # the profile's API HDR 1 (passthrough) is device code 0 (HIL-02)
+            Device("outputs[0].hdr", equals=0, timeout=1, finding="VAL-01"),
             Device("outputs[0].hdcp", equals=3, timeout=1, finding="VAL-01"),
-            CommandSent("set output mute", {"output": 2, "mute": 1}, finding="VAL-01"),
+            CommandSent("set output audio mute", {"mute": [2, 1]}, finding="VAL-01"),
         ),
         observe=("Is output 2 muted and does output 1 show HDR content as SDR/HDR per the profile?",),
         covers=(*HUB_CORE, *PROFILES),
@@ -63,7 +64,8 @@ SCENARIOS = [
         action=act("profile_recall", profile_id="movie_night"),
         expect=(
             Response(status=200, json={"success": True}),
-            CommandSent("cec command", {"object": 1, "port": [1, 0, 0, 0, 0, 0, 0, 0], "index": 1},
+            # displays use the output CEC table: power on = index 0 (BE-14)
+            CommandSent("cec command", {"object": 1, "port": [1, 0, 0, 0, 0, 0, 0, 0], "index": 0},
                         finding="VAL-02"),
             CommandSent("cec command", {"object": 0, "port": [0, 1, 0, 0, 0, 0, 0, 0], "index": 1},
                         finding="VAL-02"),

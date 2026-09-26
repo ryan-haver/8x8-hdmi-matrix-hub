@@ -56,21 +56,26 @@ async def test_telnet_up_is_connected_and_drop_is_degraded(matrix_with_telnet, s
 @pytest.mark.parametrize(
     "fault",
     [
-        {"drop_http": True},
-        {"http_status": 500},
-        {"malformed_json": True},
+        {"drop_http": True, "http_fault_count": 1},
+        {"http_status": 500, "http_fault_count": 3},
+        {"malformed_json": True, "http_fault_count": 3},
     ],
     ids=["dropped", "http500", "non-json"],
 )
 async def test_transport_failure_leaves_connected_and_reconnects(matrix, simulator, fault):
-    """BE-04: transport errors transition out of CONNECTED, emit DISCONNECTED, then recover."""
+    """BE-04: transport errors transition out of CONNECTED, emit DISCONNECTED, then recover.
+
+    A dropped connection is a transport error at once; an HTTP error or an
+    unparseable answer only when the health read (two tries) fails too (HIL-12).
+    """
     await matrix.connect()
     events = _record_events(matrix)
-    simulator.faults.update({**fault, "http_fault_count": 1})
+    simulator.faults.update(fault)
     assert await matrix.get_video_status() is None
     assert matrix.connected is False
     assert matrix.connection_state is ConnectionState.BACKOFF
     assert events == ["disconnected"]
+    simulator.clear_faults()
     # The matrix-owned reconnect supervisor brings it back without any caller.
     assert await _wait_for(lambda: matrix.connected)
     assert events == ["disconnected", "connected"]

@@ -31,8 +31,12 @@ SEED_STATE = ROOT / "tools" / "simulator" / "states" / "default.json"
 #: Fields compared/restored on hardware, per state domain.
 OUTPUT_FIELDS = ("source", "stream", "hdcp", "hdr", "scaler", "arc", "audio_mute", "name")
 #: Domains a hardware restore can put back. ``presets`` cannot be restored
-#: without re-routing live outputs (see DI-4), ``cec`` enable is BE-13-unverified.
-RESTORABLE_DOMAINS = frozenset({"routing", "outputs", "power", "names", "system", "edid", "ext_audio"})
+#: without re-routing live outputs (see DI-4). ``cec`` enable is restored with
+#: the 8-element array form of ``set cec index`` (captured working on V1.10.01;
+#: the single-port form is rejected, BE-13/HIL-10). Output settings, EDID and
+#: ext-audio use the device web interface's commands (WP-A4 part 2); their
+#: values here are the device's own codes, as read.
+RESTORABLE_DOMAINS = frozenset({"routing", "outputs", "power", "names", "system", "edid", "ext_audio", "cec"})
 
 
 def with_routing(state: dict[str, Any]) -> dict[str, Any]:
@@ -265,28 +269,32 @@ class HardwareDevice:
             if "routing" in domains and s["source"] != n["source"]:
                 cmds.append({"comhead": "video switch", "language": 0, "source": [o, s["source"]]})
             if "outputs" in domains:
-                if s["stream"] != n["stream"]:
-                    cmds.append({"comhead": "set output stream", "output": o, "enable": s["stream"]})
-                for key in ("hdcp", "hdr", "scaler", "arc"):
+                for key, comhead, field in (("stream", "tx stream", "out"), ("hdcp", "tx hdcp", "hdcp"),
+                                            ("hdr", "set hdr conversion", "hdr"),
+                                            ("scaler", "set video scaler", "scaler"), ("arc", "set arc", "arc"),
+                                            ("audio_mute", "set output audio mute", "mute")):
                     if s[key] != n[key]:
-                        cmds.append({"comhead": f"set output {key}", "output": o, key: s[key]})
-                if s["audio_mute"] != n["audio_mute"]:
-                    cmds.append({"comhead": "set output mute", "output": o, "mute": s["audio_mute"]})
+                        cmds.append({"comhead": comhead, "language": 0, field: [o, s[key]]})
             if "names" in domains and s["name"] != n["name"]:
                 cmds.append({"comhead": "set output name", "language": 0, "name": s["name"], "index": o})
             if "ext_audio" in domains:
                 if s["ext_audio_enabled"] != n["ext_audio_enabled"]:
-                    cmds.append({"comhead": "set output exa", "output": o, "exa": 1 if s["ext_audio_enabled"] else 2})
+                    cmds.append({"comhead": "set ext-audio out", "language": 0, "out": [o, s["ext_audio_enabled"]]})
                 if s["ext_audio_source"] != n["ext_audio_source"]:
-                    cmds.append({"comhead": "set output exa in source", "output": o, "input": s["ext_audio_source"]})
+                    cmds.append({"comhead": "ext-audio switch", "language": 0, "source": [o, s["ext_audio_source"]]})
         for i in range(8):
             s, n = snap["inputs"][i], now["inputs"][i]
             if "names" in domains and s["name"] != n["name"]:
                 cmds.append({"comhead": "set input name", "language": 0, "name": s["name"], "index": i + 1})
             if "edid" in domains and s["edid"] != n["edid"]:
-                cmds.append({"comhead": "set input edid", "input": i + 1, "edid": s["edid"]})
+                cmds.append({"comhead": "set edid", "language": 0, "edid": [i + 1, s["edid"]]})
         if "ext_audio" in domains and snap["ext_audio"].get("mode") != now["ext_audio"].get("mode"):
-            cmds.append({"comhead": "set output exa mode", "mode": snap["ext_audio"]["mode"]})
+            cmds.append({"comhead": "set ext-audio mode", "language": 0, "mode": snap["ext_audio"]["mode"]})
+        if "cec" in domains:
+            cin = [p["cec_enabled"] for p in snap["inputs"]]
+            cout = [o["cec_enabled"] for o in snap["outputs"]]
+            if cin != [p["cec_enabled"] for p in now["inputs"]] or cout != [o["cec_enabled"] for o in now["outputs"]]:
+                cmds.append({"comhead": "set cec index", "language": 0, "inputindex": cin, "outputindex": cout})
         return cmds
 
     async def restore(self, snapshot: dict[str, Any], domains: set[str]) -> dict[str, Any]:

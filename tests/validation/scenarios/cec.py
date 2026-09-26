@@ -1,9 +1,12 @@
 """CEC: the exact frame the matrix receives for a source and a display command.
 
 CEC frames over HTTP: ``{"comhead": "cec command", "object": 0|1 (input|output),
-"port": [8 flags], "index": n}``. Indices follow the hub's HAR-verified table
-(``OreiMatrix.CEC_COMMAND_MAP``: 1 power on, 2 power off, ..., 19 volume up).
-The physical effect (the TV turning on) is only proven on hardware (V4).
+"port": [8 flags], "index": n}``. Sources (object 0) use the 19-command table
+(``OreiMatrix.CEC_COMMAND_MAP``: 1 power on, 2 power off, ..., 19 volume up);
+displays (object 1) use the device web interface's 0-based output table
+(``OreiMatrix.CEC_OUTPUT_COMMAND_MAP``: 0 power on, 1 power off, 2 mute,
+3 volume down, 4 volume up, 5 active; BE-14, VAL-03). The physical effect (the
+TV turning on) is only proven on hardware (V4).
 """
 
 from tools.validate.model import (
@@ -38,7 +41,7 @@ SCENARIOS = [
         ),
         observe=("Did the source on input 1 power on?",),
         covers=(*HUB_CORE, *CEC),
-        notes="Hardware runs change the CEC enable flags (not restorable: BE-13); needs --allow-unrestorable.",
+        notes="Hardware runs change the CEC enable flags; the restore puts them back with the array form (HIL-10).",
     ),
     Scenario(
         id="cec.output_power_on",
@@ -49,14 +52,14 @@ SCENARIOS = [
         action=act("cec_output", output=1, command="power_on"),
         expect=(
             Response(status=200),
-            CommandSent("cec command", {"object": 1, "port": [1, 0, 0, 0, 0, 0, 0, 0], "index": 1}, count=1),
+            CommandSent("cec command", {"object": 1, "port": [1, 0, 0, 0, 0, 0, 0, 0], "index": 0}, count=1),
             NoProtocolWarnings(),
             WsEvent("cec_command", {"type": "output", "port": 1, "command": "power_on"}),
             DeviceUnchanged(),
         ),
         observe=("Did the TV on output 1 turn on?",),
         covers=(*HUB_CORE, *CEC),
-        notes="BE-14: the output-side index table is unconfirmed on hardware; V4 settles it.",
+        notes="BE-14: output table from the device web interface (power on = 0); a V4 run proves it.",
     ),
     Scenario(
         id="cec.output_volume_up",
@@ -67,12 +70,12 @@ SCENARIOS = [
         action=act("cec_output", output=2, command="volume_up"),
         expect=(
             Response(status=200),
-            CommandSent("cec command", {"object": 1, "port": [0, 1, 0, 0, 0, 0, 0, 0], "index": 19}, count=1),
+            CommandSent("cec command", {"object": 1, "port": [0, 1, 0, 0, 0, 0, 0, 0], "index": 4}, count=1),
             NoProtocolWarnings(),
             DeviceUnchanged(),
         ),
         observe=("Did the soundbar on output 2 raise its volume by one step?",),
         covers=(*HUB_CORE, *CEC),
-        notes="Index 19 per the hub's table; docs/OREI_API_COMMANDS.md lists 18 for volume up (VAL-03).",
+        notes="Output table index 4 = volume up (device web interface; VAL-03, BE-14).",
     ),
 ]

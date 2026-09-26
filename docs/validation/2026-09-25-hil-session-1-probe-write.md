@@ -67,3 +67,27 @@ HIL-09 … HIL-14 in `docs/REMEDIATION_PLAN.md` §4.11.
 - Front-panel push notifications (`--push-seconds 30`, with the owner pressing buttons).
 - Live CEC to the TV (`--include cec-live`), and reboot (`--include reboot`).
 - First V4 scenarios with the owner confirming what the TV shows.
+
+## Follow-up: WP-A4 part 2 (no device contact)
+
+- **Hub** (`src/orei_matrix.py`, `src/device_codes.py`): sends the web interface's commands above for output stream/HDCP/HDR/scaler/ARC/audio mute, EDID (copy = `set edid` 39+N), LCD (`"lcd on time"`), ext-audio (`set ext-audio mode|out|index`, `ext-audio switch`), preset name and reboot. `src/device_codes.py` maps the API values to device codes in one place: HDR and scaler are 1-based in the API and 0-based on the device (the device web interface writes back the codes it reads, and the reads agree: HDR 0 / scaler 0 = pass-through, scaler 4 = audio only); HDCP, EDID, LCD and ext-audio mode are identical. REST reads now report API values. CEC enable only uses the array form (HIL-10); displays use the web interface's separate output table (0 on, 1 off, 2 mute, 3 vol-, 4 vol+, 5 active; BE-14). The web interface also shows that the ninth entry of the per-output arrays is its "All Output" row (HIL-04) and that `get system status.mode` is the LCD code.
+- **HIL-12**: a timeout, HTTP error or unparseable answer on one command is a failed command ("device did not answer ..."); the link is only marked lost when a follow-up `get system status` (one retry for the stall seen above) fails too.
+- **Simulator**: implements the new commands, ignores unknown comheads and non-JSON bodies like the device, and now matches every probe and write capture. `python -m tools.simulator --golden tests/fixtures/device/BK-808_V1.10.01_web-V2.00.03 --report`: **25 confirmed, 0 contradicted**, 5 need review (session behaviour, ninth entry under port-0 writes, ext-audio index), 12 without evidence (the web-UI-derived commands, reboot, live CEC, push lines).
+- **Capture tool**: a write test per new command with read-back through the status reads (table in `tools/hil/README.md`, "Verify the WP-A4 part 2 commands"), preset tests that read presets over Telnet `r preset N`, and the old commands as an "expected unanswered" `legacy` group.
+- **Status**: the new commands are **web-UI-derived, not proven**. HIL-09 stays open until the verification run; `docs/OREI_API_COMMANDS.md` marks every command as verified (captured), web-UI-derived or not implemented.
+
+## Hardware verification of the real commands (WP-A4 part 2)
+
+Second write run on 2026-09-25, from branch `wp-a4-part2-real-commands` (`--only output,edid,ext-audio,system,presets,telnet,cec-enable,legacy`, output/input/preset 8). Captures merged into `tests/fixtures/device/BK-808_V1.10.01_web-V2.00.03/write/`.
+
+| Command | Result on the device |
+| --- | --- |
+| `tx stream`, `tx hdcp` (codes 1–5), `set hdr conversion` (0–2), `set video scaler` (0–4), `set arc`, `set output audio mute` | ✅ every code applied and read back; out-of-range values and output 9 → `result: 0` |
+| `set edid` (id 1, 40 = copy from output 1, back to 36) | ✅ applied and read back; ids 0/48 and input 9 rejected |
+| `set ext-audio mode`, `set ext-audio out`, `ext-audio switch` (incl. source 16 = ARC of output 8), `set ext-audio index` | ✅ applied and read back |
+| `set lcd on time` with `"lcd on time"` (codes 0–4) | ✅ applied (read back as `get system status.mode`) |
+| `preset save`, `preset set`, `preset name`; Telnet `s save/recall/clear preset N` | ✅ applied (preset 8 used and cleared; preset 1 untouched) |
+| CEC enable, single-port form | ❌ rejected, as expected (HIL-10) |
+| Old commands (`{"time": N}` LCD, `s av`, `s out N stream`, vendor `s preset save/recall`) | ❌ rejected / `E00`, as expected |
+
+**Device restored to its initial state (verified).** Simulator assumption report on all captures: **33 confirmed, 0 contradicted**. HIL-09, HIL-10 and HIL-11 are fixed and proven on hardware.

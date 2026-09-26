@@ -7,17 +7,20 @@ are easy to read and edit by hand::
       "schema_version": 1,
       "auth":    {"user": "Admin", "password": "admin"},
       "device":  {...model / firmware / network info...},
-      "system":  {"power": 1, "beep": 1, "panel_lock": 0, "lcd_timeout": 3, ...},
+      "system":  {"power": 1, "beep": 1, "panel_lock": 0, "lcd_timeout": 3, "baudrate": 6},
       "inputs":  [{"name", "edid", "signal", "cable", "cec_enabled"} x 8],
       "outputs": [{"name", "source", "connected", "stream", "hdcp", "hdr",
                    "scaler", "arc", "audio_mute", "cec_enabled",
                    "ext_audio_enabled", "ext_audio_source"} x 8],
-      "ninth_output": {"source", "scaler", "hdr", "hdcp", "arc", "stream", "audio_mute"},
-      "ext_audio": {"mode": 0},
+      "ext_audio": {"mode": 0, "index": 1},
       "presets": [{"name", "routing": [8 x input], "saved": true} x 8]
     }
 
-Missing keys fall back to defaults, so partial state files are fine.
+Missing keys fall back to defaults, so partial state files are fine. Two keys
+of older state files are still accepted: ``system.mode`` (it is the LCD on-time
+code, ``get system status.mode``, so it now sets ``lcd_timeout``) and
+``ninth_output`` (ignored: the ninth entry of the per-output arrays is derived
+from the eight outputs, see :meth:`DeviceState.ninth`).
 :meth:`DeviceState.apply_http_captures` seeds the state from golden responses
 captured on real hardware (HIL-A), see ``tools/simulator/README.md``.
 """
@@ -30,7 +33,16 @@ from dataclasses import asdict, dataclass, field, fields
 from pathlib import Path
 from typing import Any
 
-from .protocol import HDCP_RANGE, HDR_RANGE, PORT_COUNT, SCALER_RANGE
+from .protocol import (
+    EDID_RANGE,
+    EXT_AUDIO_SOURCE_RANGE,
+    HDCP_RANGE,
+    HDR_RANGE,
+    MIXED,
+    NAME_MAX,
+    PORT_COUNT,
+    SCALER_RANGE,
+)
 
 SCHEMA_VERSION = 1
 
@@ -77,22 +89,18 @@ class OutputPort:
     connected: int = 0  # hot-plug detect: ``allconnect``
     stream: int = 1  # ``allout``
     hdcp: int = 3
-    hdr: int = 0  # V1.10.01 reports 0 ("pass-through"), see protocol.HDR_RANGE (HIL-02)
-    scaler: int = 0  # V1.10.01 reports 0 ("pass-through") and 4 ("audio only")
+    hdr: int = 0  # device code: 0 pass-through, 1 HDR to SDR, 2 auto (HIL-02)
+    scaler: int = 0  # device code: 0 pass-through ... 4 audio only (BE-15)
     arc: int = 0
     audio_mute: int = 0
     cec_enabled: int = 0
     ext_audio_enabled: int = 0
+    #: ``ext-audio switch`` source: 1-8 = input N, 9-16 = the ARC of output N-8
     ext_audio_source: int = 1
 
 
-#: Keys of the ninth entry V1.10.01 appends to the per-output arrays (HIL-04).
+#: Output fields that have a ninth ("all outputs") entry in the V1.10.01 reads (HIL-04).
 NINTH_KEYS = ("source", "scaler", "hdr", "hdcp", "arc", "stream", "audio_mute")
-
-
-def default_ninth_output() -> dict[str, int]:
-    """The ninth entry as captured on V1.10.01 (``source`` follows the capture's routing)."""
-    return {"source": 1, "scaler": 255, "hdr": 0, "hdcp": 3, "arc": 0, "stream": 255, "audio_mute": 0}
 
 
 @dataclass
@@ -136,19 +144,14 @@ class DeviceState:
             "beep": 1,
             "panel_lock": 0,
             "lcd_timeout": 3,
-            # ``get system status`` codes, meaning unknown (V1.10.01 reports mode 3, baudrate 6)
-            "mode": 3,
+            # ``get system status.baudrate``: 1-6 = 4800 ... 115200 (device web interface)
             "baudrate": 6,
         }
     )
     inputs: list[InputPort] = field(default_factory=lambda: [InputPort(f"Input {i}") for i in range(1, 9)])
     outputs: list[OutputPort] = field(default_factory=lambda: [OutputPort(f"Output {i}") for i in range(1, 9)])
-    #: The ninth entry of ``allsource`` / ``allscaler`` / ``allhdr`` / ``allhdcp`` / ``allarc`` / ``allout`` /
-    #: ``allaudiomute`` (HIL-04). What it is (likely the external audio output) is undocumented.
-    # ASSUMPTION(HIL-A): the ninth entry never changes with writes (not even
-    # "video switch" to all outputs); the simulator reports it from here.
-    ninth_output: dict[str, int] = field(default_factory=default_ninth_output)
-    ext_audio: dict[str, int] = field(default_factory=lambda: {"mode": 0})
+    #: ``mode`` = ext-audio mode, ``index`` = the audio output selected with ``set ext-audio index``
+    ext_audio: dict[str, int] = field(default_factory=lambda: {"mode": 0, "index": 1})
     presets: list[Preset] = field(default_factory=lambda: [Preset(f"Preset {i}") for i in range(1, 9)])
 
     # ------------------------------------------------------------------ I/O
@@ -173,16 +176,16 @@ class DeviceState:
             state.device.update({k: v for k, v in doc["device"].items()})
         if "system" in doc:
             sysdoc = doc["system"]
+            # ``mode`` of older state files is the LCD on-time code (get system status.mode)
+            if "mode" in sysdoc and "lcd_timeout" not in sysdoc:
+                state.system["lcd_timeout"] = sysdoc["mode"]
             for key in state.system:
                 if key in sysdoc:
                     state.system[key] = sysdoc[key]
         if "ext_audio" in doc:
-            state.ext_audio["mode"] = doc["ext_audio"].get("mode", state.ext_audio["mode"])
-        if "ninth_output" in doc:
-            ninth = doc["ninth_output"]
-            if not isinstance(ninth, dict) or set(ninth) - set(NINTH_KEYS):
-                raise StateError(f"ninth_output: expected an object with keys from {list(NINTH_KEYS)}")
-            state.ninth_output.update(ninth)
+            for key in state.ext_audio:
+                state.ext_audio[key] = doc["ext_audio"].get(key, state.ext_audio[key])
+        # ``ninth_output`` of older state files is ignored: the ninth entry is derived (ninth()).
 
         state.inputs = cls._ports(doc.get("inputs"), InputPort, "inputs", "Input")
         state.outputs = cls._ports(doc.get("outputs"), OutputPort, "outputs", "Output")
@@ -237,7 +240,6 @@ class DeviceState:
             "system": dict(self.system),
             "inputs": [asdict(p) for p in self.inputs],
             "outputs": [asdict(p) for p in self.outputs],
-            "ninth_output": dict(self.ninth_output),
             "ext_audio": dict(self.ext_audio),
             "presets": [asdict(p) for p in self.presets],
         }
@@ -259,27 +261,27 @@ class DeviceState:
         _flag(s["beep"], "system.beep")
         _flag(s["panel_lock"], "system.panel_lock")
         _int_in(s["lcd_timeout"], "system.lcd_timeout", 0, 4)
+        _int_in(s["baudrate"], "system.baudrate", 1, 6)
         _int_in(self.ext_audio["mode"], "ext_audio.mode", 0, 2)
+        _int_in(self.ext_audio["index"], "ext_audio.index", 1, PORT_COUNT)
         for i, p in enumerate(self.inputs):
             path = f"inputs[{i}]"
-            p.name = _str(p.name, f"{path}.name", 32)
-            _int_in(p.edid, f"{path}.edid", 1, 47)
+            p.name = _str(p.name, f"{path}.name", NAME_MAX)
+            _int_in(p.edid, f"{path}.edid", *EDID_RANGE)
             for key in ("signal", "cable", "cec_enabled"):
                 _flag(getattr(p, key), f"{path}.{key}")
         for i, o in enumerate(self.outputs):
             path = f"outputs[{i}]"
-            o.name = _str(o.name, f"{path}.name", 32)
+            o.name = _str(o.name, f"{path}.name", NAME_MAX)
             _int_in(o.source, f"{path}.source", 1, PORT_COUNT)
             _int_in(o.hdcp, f"{path}.hdcp", *HDCP_RANGE)
             _int_in(o.hdr, f"{path}.hdr", *HDR_RANGE)
             _int_in(o.scaler, f"{path}.scaler", *SCALER_RANGE)
-            _int_in(o.ext_audio_source, f"{path}.ext_audio_source", 1, PORT_COUNT)
+            _int_in(o.ext_audio_source, f"{path}.ext_audio_source", *EXT_AUDIO_SOURCE_RANGE)
             for key in ("connected", "stream", "arc", "audio_mute", "cec_enabled", "ext_audio_enabled"):
                 _flag(getattr(o, key), f"{path}.{key}")
-        for key in NINTH_KEYS:
-            _int_in(self.ninth_output.get(key), f"ninth_output.{key}", 0, 255)
         for i, pr in enumerate(self.presets):
-            pr.name = _str(pr.name, f"presets[{i}].name", 32)
+            pr.name = _str(pr.name, f"presets[{i}].name", NAME_MAX)
             if len(pr.routing) != PORT_COUNT:
                 raise StateError(f"presets[{i}].routing: expected {PORT_COUNT} entries")
             for j, src in enumerate(pr.routing):
@@ -293,6 +295,18 @@ class DeviceState:
 
     def column(self, ports: str, key: str) -> list:
         return [getattr(p, key) for p in getattr(self, ports)]
+
+    def ninth(self, key: str) -> int:
+        """The ninth ("all outputs") entry V1.10.01 appends to a per-output array (HIL-04).
+
+        The device's own web interface shows it as the "All Output" row and
+        writes it with port 0. Its value is the eight outputs' common value,
+        or 255 when they differ: that reproduces all seven captured arrays
+        (``allsource`` 7 when every output shows input 7, ``allscaler`` 255 for
+        [0, 4, 0, ...], ``allout`` 255 for [1, 1, 0, ...], ``allhdcp`` 3 ...).
+        """
+        values = set(self.column("outputs", key))
+        return values.pop() if len(values) == 1 else MIXED
 
     # --------------------------------------------------- golden-capture seed
 
@@ -309,13 +323,7 @@ class DeviceState:
             val = resp.get(key)
             return list(val[:PORT_COUNT]) if isinstance(val, list) else None
 
-        def ninth(resp: dict[str, Any], key: str, attr: str) -> None:
-            val = resp.get(key)
-            if isinstance(val, list) and len(val) > PORT_COUNT:
-                self.ninth_output[attr] = val[PORT_COUNT]
-
         video = captures.get("get video status") or {}
-        ninth(video, "allsource", "source")
         if (v := arr(video, "allsource")) is not None:
             for o, src in zip(self.outputs, v, strict=False):
                 o.source = src
@@ -342,7 +350,6 @@ class DeviceState:
             ("allaudiomute", "audio_mute"),
             ("allsource", "source"),
         ):
-            ninth(out, key, attr)
             if (v := arr(out, key)) is not None:
                 for o, val in zip(self.outputs, v, strict=False):
                     setattr(o, attr, val)
@@ -368,7 +375,7 @@ class DeviceState:
                 o.cec_enabled = val
 
         system = captures.get("get system status") or {}
-        for key, attr in (("power", "power"), ("beep", "beep"), ("lock", "panel_lock"), ("mode", "mode"),
+        for key, attr in (("power", "power"), ("beep", "beep"), ("lock", "panel_lock"), ("mode", "lcd_timeout"),
                           ("baudrate", "baudrate")):
             if key in system:
                 self.system[attr] = system[key]
@@ -389,8 +396,9 @@ class DeviceState:
                 self.device[attr] = net[key]
 
         ext = captures.get("get ext-audio status") or {}
-        if "mode" in ext:
-            self.ext_audio["mode"] = ext["mode"]
+        for key in ("mode", "index"):
+            if key in ext:
+                self.ext_audio[key] = ext[key]
         if (v := arr(ext, "allsource")) is not None:
             for o, val in zip(self.outputs, v, strict=False):
                 o.ext_audio_source = val

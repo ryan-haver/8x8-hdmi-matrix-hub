@@ -1,16 +1,17 @@
 {
   "format": "orei-hil-capture/1",
   "id": "write/http_cec_index_single",
-  "title": "CEC enable, hub single-port shape (BE-13)",
+  "title": "CEC enable, old single-port shape (BE-13; expected rejected)",
   "group": "cec-enable",
   "answers": [
-    "write-ok-results",
+    "write-fail-result",
     "cec-index-single-port"
   ],
   "before": {
     "power": 1,
     "beep": 1,
     "lock": 0,
+    "lcd": 3,
     "routing": [
       7,
       7,
@@ -34,6 +35,16 @@
     "output_names": [
       "TV",
       "Sound",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "preset_names": [
+      "Out1",
+      "Out2",
       "Out3",
       "Out4",
       "Out5",
@@ -152,17 +163,18 @@
       7,
       8
     ],
+    "exa_index": 1,
     "presets": null,
     "lcd_line": null,
     "errors": []
   },
   "steps": [
     {
-      "describe": "hub single-port shape: CEC input 8 -> 1 (BE-13)",
-      "kind": "write",
+      "describe": "old single-port shape: CEC input 8 -> 1 (expected: result 0)",
+      "kind": "invalid",
       "exchange": {
         "kind": "http",
-        "role": "write",
+        "role": "write-invalid",
         "label": "set cec index",
         "comhead": "set cec index",
         "request": {
@@ -204,20 +216,20 @@
         },
         "error": null,
         "timing": {
-          "started_at": "2026-09-25T20:28:22.224806Z",
-          "elapsed_ms": 259.05
+          "started_at": "2026-09-25T22:06:28.338549Z",
+          "elapsed_ms": 230.74
         },
-        "outcome": "not-applied"
+        "outcome": "rejected"
       },
       "diff": [],
-      "outcome": "not-applied"
+      "outcome": "rejected"
     },
     {
-      "describe": "hub single-port shape: CEC output 8 -> 1 (BE-13)",
-      "kind": "write",
+      "describe": "old single-port shape: CEC output 8 -> 1 (expected: result 0)",
+      "kind": "invalid",
       "exchange": {
         "kind": "http",
-        "role": "write",
+        "role": "write-invalid",
         "label": "set cec index",
         "comhead": "set cec index",
         "request": {
@@ -259,24 +271,24 @@
         },
         "error": null,
         "timing": {
-          "started_at": "2026-09-25T20:28:24.365049Z",
-          "elapsed_ms": 261.32
+          "started_at": "2026-09-25T22:06:30.469287Z",
+          "elapsed_ms": 493.65
         },
-        "outcome": "not-applied"
+        "outcome": "rejected"
       },
       "diff": [],
-      "outcome": "not-applied"
+      "outcome": "rejected"
     }
   ],
   "restored": true,
   "restore_remaining": [],
   "findings": {
     "results_by_outcome": {
-      "not-applied": [
+      "rejected": [
         0
       ]
     }
   },
   "mode": "write",
-  "captured_at": "2026-09-25T20:28:28.383640Z"
+  "captured_at": "2026-09-25T22:06:34.620870Z"
 }

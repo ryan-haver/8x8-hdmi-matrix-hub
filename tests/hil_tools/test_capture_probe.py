@@ -36,13 +36,15 @@ async def test_probe_mode_answers_login_session_and_telnet_questions(tmp_path):
 
         console = ScriptedConsole(on_ask=on_ask)
         opts = make_opts(s, tmp_path / "{firmware}", mode="probe", idle_waits=[0.1, 0.6], push_seconds=0.5,
-                         telnet_timeout=0.5, yes=False)
+                         telnet_timeout=0.5, http_timeout=0.5, yes=False)
         code, cap = await run_capture(opts, console)
         assert code == cli.EXIT_OK, (cap.errors, console.text)
         # The routing the operator changed during the window was restored.
         assert s.state.routing == initial_routing
-        # Only the deliberately unknown commands went unrecognised.
-        assert {e["command"] for e in s.unrecognised()} == {"hil capture unknown", None, "hilcapture unknown"}
+        # Only the deliberately unknown commands went unrecognised, and the vendor
+        # `s out N stream` no-op, which V1.10.01 does not know either (E00, HIL-11).
+        assert {e["command"] for e in s.unrecognised()} == {
+            "hil capture unknown", None, "hilcapture unknown", "s out 8 stream 1"}
 
     root = tmp_path / FW
     no_session = load(root, RecordIds.PROBE_NO_SESSION)
@@ -59,12 +61,14 @@ async def test_probe_mode_answers_login_session_and_telnet_questions(tmp_path):
     assert idle["findings"]["alive_after_s"] == 0.1 and idle["findings"]["expired_after_s"] == 0.6
     assert idle["steps"][-1]["relogin_works"] is True
 
-    unknown = load(root, RecordIds.PROBE_UNKNOWN_COMHEAD)["findings"]
-    assert unknown["json"] == {"comhead": "hil capture unknown", "result": proto.UNKNOWN_COMMAND_RESULT}
-    assert load(root, RecordIds.PROBE_GARBAGE_BODY)["findings"]["json"] == {"comhead": None, "result": 0}
+    # Like V1.10.01 (HIL-12): an unknown comhead and a non-JSON body get no answer at all.
+    for record_id in (RecordIds.PROBE_UNKNOWN_COMHEAD, RecordIds.PROBE_GARBAGE_BODY):
+        record = load(root, record_id)
+        assert record["findings"]["json"] is None
+        assert record["exchanges"][0]["error"]["type"] == "TimeoutError"
 
     cec = load(root, RecordIds.PROBE_CEC_SHAPES)["findings"]
-    assert cec["state_changed"] is False and cec["single_result"] == proto.RESULT_OK
+    assert cec["state_changed"] is False and cec["single_result"] == proto.RESULT_FAIL  # BE-13 / HIL-10
 
     errors = load(root, RecordIds.PROBE_TELNET_ERRORS)["findings"]
     assert errors["by_command"]["hilcapture unknown"]["error_code"] == proto.TELNET_ERR_UNKNOWN

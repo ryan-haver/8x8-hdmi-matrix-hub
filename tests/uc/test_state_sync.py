@@ -149,11 +149,43 @@ async def test_no_values_are_made_up_during_an_outage(uc_hub_factory, sim: SimDe
         assert mismatches(await remote.get_entity_states(), truth) == []
 
 
-@known_bug("BE-06", "after the matrix link drops once (here: one failed status read), the driver's reconnect "
-           "loop stops itself and the poller is never restarted, so the Remote gets no more updates (UC-04)")
+async def test_one_unanswered_status_read_keeps_the_remote_live(uc_remote: UcRemoteSim, sim: SimDevice) -> None:
+    """HIL-12: the BK-808 can leave a request unanswered (captured on V1.10.01). One unanswered status read is a
+    failed read, not an outage: the health read answers, the link stays up, the Remote is never told the
+    matrix is unavailable, and live updates keep coming."""
+    await uc_remote.wait_event("entity_change", lambda d: d["entity_id"] == "media_player.output_8", timeout=CYCLE)
+    since = uc_remote.mark()
+    await sim.clear_log()
+    await sim.set_faults({"hang_http": True, "comheads": ["get video status"], "http_fault_count": 1})
+
+    async def health_read_after_the_fault() -> bool:
+        comheads = [(e.get("command"), e.get("fault")) for e in await sim.log() if e.get("channel") == "http"]
+        hung = [i for i, (_, fault) in enumerate(comheads) if fault == "hang_http"]
+        return bool(hung) and ("get system status", None) in comheads[hung[0] + 1:]
+
+    # The poll that hits the fault waits out the hub's HTTP timeout (5 s); then the health read answers.
+    assert await wait_for(health_read_after_the_fault, timeout=CYCLE + 5 + 2)
+    await sim.patch_state({"outputs": {"2": {"source": 8}}})
+
+    async def updated() -> bool:
+        return any(c["entity_id"] == "media_player.output_3" and c["attributes"].get("source") == INPUT_NAMES[7]
+                   for c in uc_remote.entity_changes(since))
+
+    assert await wait_for(updated, timeout=CYCLE + 2)
+    unavailable = [c for c in uc_remote.entity_changes(since)
+                   if c["entity_id"] == "remote.orei_matrix" and c["attributes"].get("state") == "UNAVAILABLE"]
+    assert unavailable == []
+
+
+@known_bug("BE-06", "after the matrix link drops once, the driver's reconnect loop stops itself (the matrix's "
+           "own reconnect emits CONNECTED -> _stop_reconnection) and the poller is never restarted, so the "
+           "Remote gets no more updates (UC-04)")
 async def test_live_updates_resume_after_a_transient_failure(uc_remote: UcRemoteSim, sim: SimDevice) -> None:
     await uc_remote.wait_event("entity_change", lambda d: d["entity_id"] == "media_player.output_8", timeout=CYCLE)
-    await _outage(uc_remote, sim, {"http_status": 500, "comheads": ["get video status"], "http_fault_count": 1})
+    # A real, short link loss: the matrix drops the connection. (Since HIL-12 a single failed status read is
+    # no longer a lost link -- test_one_unanswered_status_read_keeps_the_remote_live -- so it cannot trigger
+    # the reconnect path any more.)
+    await _outage(uc_remote, sim, {"drop_http": True})
     await sim.clear_faults()
     await asyncio.sleep(8)  # the hub's reconnect back-off (5 s) plus a poll
     since = uc_remote.mark()

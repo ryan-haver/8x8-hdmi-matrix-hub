@@ -14,7 +14,7 @@ from typing import Any
 from . import catalog as cmd
 from .assumptions import BY_ID
 from .fixtures import RESTORE_LOG, CaptureWriter, firmware_folder_name, utc_now
-from .snapshot import Snapshot, diff, lcd_line, plan_restore
+from .snapshot import Snapshot, diff, lcd_line, parse_preset, plan_restore
 from .transport import HttpRecorder, TelnetRecorder, is_data_response
 
 TOOL_VERSION = "1.0"
@@ -128,9 +128,16 @@ class Capture:
         self.unanswered: set[str] = set()
 
     def note_unanswered(self, comhead: str, exchange: dict[str, Any]) -> bool:
-        """Remember ``comhead`` if ``exchange`` timed out; True if it did."""
+        """Remember ``comhead`` if ``exchange`` timed out; True if it did.
+
+        Only reads the firmware may lack (``catalog.OPTIONAL_READS``) are
+        remembered; a status read that timed out once (the device can stall
+        for one request right after a command it ignored, HIL-12) is not.
+        """
         if (exchange.get("error") or {}).get("type") != "TimeoutError":
             return False
+        if comhead not in cmd.OPTIONAL_READS:
+            return True
         if comhead not in self.unanswered:
             self.unanswered.add(comhead)
             self.warnings.append(f"no answer to {comhead!r} within {self.opts.http_timeout:g} s; "
@@ -203,13 +210,17 @@ class Capture:
         http = client or self.http
         if comhead in self.unanswered:
             return None
-        for attempt in (1, 2):
+        stalls = 0
+        for attempt in (1, 2, 3):
             ex = await http.post(cmd.snapshot_payload(comhead), role=role)
             if self.note_unanswered(comhead, ex):
-                return None
+                if comhead in self.unanswered or stalls:
+                    return None
+                stalls += 1  # one retry after a stall (HIL-12)
+                continue
             resp = ex.get("response") or {}
             doc = resp.get("json") if resp.get("status") == 200 else None
-            if is_data_response(doc) or not relogin or attempt == 2 or ex.get("error"):
+            if is_data_response(doc) or not relogin or attempt == 3 or ex.get("error"):
                 return doc
             await self.login(http, role="relogin")
         return None
@@ -290,7 +301,14 @@ class Capture:
 
     # -------------------------------------------------------------- snapshot
 
-    async def snapshot(self, *, with_lcd: bool = False) -> Snapshot:
+    async def snapshot(self, *, with_lcd: bool = False, preset_slots: tuple[int, ...] = ()) -> Snapshot:
+        """Read the device state.
+
+        ``with_lcd`` adds the LCD line of the Telnet ``status`` dump (wording
+        evidence; the LCD code itself is ``get system status.mode``).
+        ``preset_slots`` reads those presets over Telnet (``r preset N``, the
+        only preset read V1.10.01 answers, HIL-01).
+        """
         reads: dict[str, Any] = {}
         for comhead in cmd.SNAPSHOT_READS:
             doc = await self.read_json(comhead)
@@ -300,7 +318,22 @@ class Capture:
         if with_lcd:
             status = await self.telnet_status()
             lcd = lcd_line(status) if status is not None else None
-        return Snapshot.from_reads(reads, lcd)
+        presets = await self.read_presets(preset_slots) if preset_slots else None
+        return Snapshot.from_reads(reads, lcd, presets)
+
+    async def read_presets(self, slots: tuple[int, ...]) -> list[dict[str, Any] | None] | None:
+        """``r preset N`` for each slot (None for slots not read); None without Telnet."""
+        if self.telnet is None:
+            return None
+        if not self.telnet.connected:
+            await self.reconnect_telnet()
+            if not self.telnet.connected:
+                return None
+        presets: list[dict[str, Any] | None] = [None] * 8
+        for n in slots:
+            ex = await self.telnet.command(f"r preset {n}", role="snapshot")
+            presets[n - 1] = parse_preset((ex.get("response") or {}).get("text")) if not ex.get("error") else None
+        return presets
 
     async def telnet_status(self) -> str | None:
         if self.telnet is None:
@@ -329,11 +362,12 @@ class Capture:
         Every write is logged to ``write/restore-log.jsonl`` as it happens, so
         a crash mid-restore still leaves a record of what was done.
         """
-        with_lcd = target.lcd_line is not None
+        with_lcd = target.lcd_line is not None and target.lcd is None
+        slots = tuple(i for i, p in enumerate(target.presets or [], 1) if p is not None)
         remaining: list[list[Any]] = []
         for attempt in range(1, attempts + 1):
             await self.ensure_session()
-            current = await self.snapshot(with_lcd=with_lcd)
+            current = await self.snapshot(with_lcd=with_lcd, preset_slots=slots)
             actions, warnings = plan_restore(current, target, self.lcd_modes)
             for w in warnings:
                 if w not in self.warnings:
@@ -353,8 +387,13 @@ class Capture:
                     "payload": action.payload, "status": resp.get("status"), "result": resp.get("json"),
                     "error": ex.get("error"),
                 })
-            verify = await self.snapshot(with_lcd=with_lcd)
+            verify = await self.snapshot(with_lcd=with_lcd, preset_slots=slots)
             remaining = _fatal(diff(target, verify)) + _unreadable(verify)
+            for d in diff(target, verify):
+                if d[0] in _COSMETIC:
+                    note = f"not restored (cosmetic): {d[0]} {d[1]}: was {d[2]!r}, now {d[3]!r}"
+                    if note not in self.warnings:
+                        self.warnings.append(note)
             self.log_restore({"reason": reason, "attempt": attempt, "verified": not remaining,
                               "remaining": remaining})
             if not remaining:
@@ -404,13 +443,17 @@ class Capture:
         return lines
 
 
-def _fatal(differences: list[list[Any]]) -> list[list[Any]]:
-    """Differences that count as "not restored".
+#: Differences reported as warnings instead of "not restored": they have no
+#: effect on video or audio, and the commands that restore them (``preset
+#: name``, ``preset clear``, ``set ext-audio index``) are web-UI-derived and not
+#: proven on hardware yet. ``lcd_line`` is the Telnet wording; the LCD code
+#: (``lcd``) is compared and restored as a real setting.
+_COSMETIC = ("preset_names", "preset_saved", "exa_index", "lcd_line")
 
-    Preset names cannot be restored by any command, and the LCD timeout is
-    cosmetic; both are reported as warnings instead.
-    """
-    return [d for d in differences if d[0] not in ("preset_name", "lcd_line")]
+
+def _fatal(differences: list[list[Any]]) -> list[list[Any]]:
+    """Differences that count as "not restored" (everything except :data:`_COSMETIC`)."""
+    return [d for d in differences if d[0] not in _COSMETIC]
 
 
 def _unreadable(snap: Snapshot) -> list[list[Any]]:

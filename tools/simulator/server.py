@@ -102,8 +102,11 @@ class Simulator:
         self.require_login = require_login
         self.session_ttl_s = session_ttl_s
         self.reboot_seconds = reboot_seconds
-        #: comheads held open without an answer, like the firmware does (HIL-01);
-        #: pass an empty set to emulate a firmware that implements them
+        #: comheads held open without an answer, like the firmware does (HIL-01,
+        #: HIL-09). Pass an empty set to emulate a firmware that answers the
+        #: unimplemented reads; add a comhead to make the device ignore it
+        #: (HIL-12 tests). Unknown comheads and non-JSON bodies are never
+        #: answered either (protocol.UNKNOWN_COMMANDS_UNANSWERED).
         self.unanswered_comheads = frozenset(unanswered_comheads)
         #: client IP -> session expiry (monotonic) or None for "never"
         self.sessions: dict[str, float | None] = {}
@@ -374,9 +377,9 @@ class Simulator:
             malformed = False
 
         response, entry = self._process(client, payload, comhead)
-        if comhead in self.unanswered_comheads and "fault" not in entry:
-            # The firmware never answers these (HIL-01): hold the request open
-            # like the device does until the client gives up.
+        if (comhead in self.unanswered_comheads or entry.get("unanswered")) and "fault" not in entry:
+            # The firmware never answers these (HIL-01, HIL-09, HIL-12): hold
+            # the request open like the device does until the client gives up.
             entry["unanswered"] = True
             _LOG.info("HTTP  -> %s  [not implemented by the firmware: no answer]", comhead)
             assert self._hang_release is not None
@@ -405,10 +408,11 @@ class Simulator:
     def _process(self, client: str, payload: Any, comhead: Any) -> tuple[Any, dict[str, Any]]:
         """Run one JSON command; returns (response doc or web.Response, log entry)."""
         if not isinstance(payload, dict) or not isinstance(comhead, str):
-            # ASSUMPTION(HIL-A): garbage bodies are answered with an empty
-            # failure document.
+            # A body that is not a JSON command is never answered (captured on
+            # V1.10.01, probe/http_garbage_body).
             resp: Any = {"comhead": comhead, "result": proto.RESULT_FAIL}
-            entry = self._record("http", comhead, client=client, payload=payload, response=resp, recognised=False)
+            entry = self._record("http", comhead, client=client, payload=payload, recognised=False,
+                                 unanswered=proto.UNKNOWN_COMMANDS_UNANSWERED)
             _LOG.warning("HTTP  <- unparseable/invalid body from %s", client)
             return resp, entry
 
@@ -456,6 +460,9 @@ class Simulator:
             "http", comhead, client=client, payload=payload, response=result.response,
             recognised=result.recognised, mutated=result.mutated, warnings=result.warnings,
         )
+        if result.unanswered:
+            entry["unanswered"] = True
+            entry.pop("response", None)
         if not result.recognised:
             _LOG.warning("HTTP  <- %s  UNRECOGNISED comhead %r", payload, comhead)
         else:

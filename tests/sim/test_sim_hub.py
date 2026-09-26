@@ -71,12 +71,12 @@ async def test_output_settings(matrix, simulator):
     await matrix.connect()
     assert await matrix.set_output_enable(3, False)
     assert await matrix.set_output_hdcp(3, 2)
-    assert await matrix.set_output_hdr(3, 1)
-    assert await matrix.set_output_scaler(3, 4)
+    assert await matrix.set_output_hdr(3, 2)  # API 2 = HDR to SDR = device code 1
+    assert await matrix.set_output_scaler(3, 4)  # API 4 = auto = device code 3
     assert await matrix.set_output_arc(3, True)
     assert await matrix.set_output_audio_mute(3, True)
     o = simulator.state.outputs[2]
-    assert (o.stream, o.hdcp, o.hdr, o.scaler, o.arc, o.audio_mute) == (0, 2, 1, 4, 1, 1)
+    assert (o.stream, o.hdcp, o.hdr, o.scaler, o.arc, o.audio_mute) == (0, 2, 1, 3, 1, 1)
     status = await matrix.get_output_status(force_refresh=True)
     assert status["allout"][2] == 0 and status["allhdcp"][2] == 2 and status["allaudiomute"][2] == 1
 
@@ -86,7 +86,7 @@ async def test_edid(matrix, simulator):
     assert await matrix.set_input_edid(4, 12)
     assert await matrix.copy_edid_from_output(5, 1)
     assert simulator.state.inputs[3].edid == 12
-    assert simulator.state.inputs[4].edid == 15
+    assert simulator.state.inputs[4].edid == 40  # 39 + output 1 (BE-25)
     edid = await matrix.get_edid_status()
     assert edid["inputs"][4]["mode"] == 12
 
@@ -124,12 +124,16 @@ async def test_cec_http_auto_enables_port(matrix, simulator):
     assert cec_calls[-1]["warnings"] == []
 
 
-async def test_cec_enable_single_port_shape(matrix, simulator):
-    """BE-13: set_cec_enable sends an undocumented payload; the simulator accepts and flags it."""
+async def test_cec_enable_uses_the_array_shape(matrix, simulator):
+    """BE-13 / HIL-10: set_cec_enable sends both 8-element arrays (the single-port shape is rejected)."""
     await matrix.connect()
+    before_in = simulator.state.column("inputs", "cec_enabled")
     assert await matrix.set_cec_enable("output", 5, True)
     assert simulator.state.outputs[4].cec_enabled == 1
-    assert any("BE-13" in w for w in simulator.log[-1]["warnings"])
+    assert simulator.state.column("inputs", "cec_enabled") == before_in  # other ports preserved
+    sent = [e["payload"] for e in simulator.log if e["command"] == "set cec index"]
+    assert list(sent[-1]) == ["comhead", "language", "inputindex", "outputindex"]
+    assert all("port" not in s for s in sent)
 
 
 async def test_capabilities(matrix, simulator):
@@ -219,8 +223,9 @@ async def test_telnet_error_codes_mean_failure(matrix_with_telnet, simulator, mo
     telnet = m._telnet
     loop = asyncio.get_running_loop()
     start = loop.time()
-    assert await telnet._send_cec_input(1, "bogus") is False  # E01
-    assert await telnet.power_on() is False  # "power 1" -> E00 in the simulator (HIL-A)
+    assert await telnet._send_cec_input(1, "bogus") is False  # E00 (unknown word, captured)
+    assert telnet._command_ok(await telnet._send_raw("s power 1"), "s power 1") is False  # E01 (captured)
+    assert await telnet.power_on() is True  # the bare "power 1" works (captured)
     assert loop.time() - start < 1.0
     assert m.telnet_connected
 

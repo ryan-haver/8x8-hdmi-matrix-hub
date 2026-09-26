@@ -1,0 +1,612 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "write/http_preset_recall",
+  "title": "Save a routing into the test preset, recall it (r preset readback)",
+  "group": "presets",
+  "answers": [
+    "write-ok-results",
+    "write-fail-result",
+    "preset-set-empty"
+  ],
+  "before": {
+    "power": 1,
+    "beep": 1,
+    "lock": 0,
+    "lcd": 3,
+    "routing": [
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7
+    ],
+    "input_names": [
+      "NES",
+      "SNES",
+      "Sega",
+      "N64",
+      "Switch",
+      "PS3",
+      "Apple",
+      "Switcher"
+    ],
+    "output_names": [
+      "TV",
+      "Sound",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "preset_names": [
+      "Out1",
+      "Out2",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "stream": [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "hdcp": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "hdr": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "scaler": [
+      0,
+      4,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "arc": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "mute": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "edid": [
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36
+    ],
+    "cec_in": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "cec_out": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "exa_mode": 0,
+    "exa_enable": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "exa_source": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "exa_index": 1,
+    "presets": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "saved": false,
+        "routing": null
+      }
+    ],
+    "lcd_line": null,
+    "errors": []
+  },
+  "steps": [
+    {
+      "describe": "recall preset 8 while it is empty (expected: result 0)",
+      "kind": "invalid",
+      "exchange": {
+        "kind": "http",
+        "role": "write-invalid",
+        "label": "preset set",
+        "comhead": "preset set",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 52"
+          ],
+          "json": {
+            "comhead": "preset set",
+            "language": 0,
+            "index": 8
+          },
+          "body_text": "{\"comhead\": \"preset set\", \"language\": 0, \"index\": 8}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoicHJlc2V0IHNldCIsInJlc3VsdCI6MH0NCg==",
+          "body_text": "{\"comhead\":\"preset set\",\"result\":0}\r\n",
+          "json": {
+            "comhead": "preset set",
+            "result": 0
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:02:41.603283Z",
+          "elapsed_ms": 230.98
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    },
+    {
+      "describe": "stage: output 8 -> input 8",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "video switch",
+        "comhead": "video switch",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 60"
+          ],
+          "json": {
+            "comhead": "video switch",
+            "language": 0,
+            "source": [
+              8,
+              8
+            ]
+          },
+          "body_text": "{\"comhead\": \"video switch\", \"language\": 0, \"source\": [8, 8]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoidmlkZW8gc3dpdGNoIiwicmVzdWx0IjoxfQ0K",
+          "body_text": "{\"comhead\":\"video switch\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "video switch",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:02:45.183594Z",
+          "elapsed_ms": 326.3
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "routing",
+          8,
+          7,
+          8
+        ]
+      ],
+      "outcome": "applied"
+    },
+    {
+      "describe": "stage: save preset 8",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "preset save",
+        "comhead": "preset save",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 53"
+          ],
+          "json": {
+            "comhead": "preset save",
+            "language": 0,
+            "index": 8
+          },
+          "body_text": "{\"comhead\": \"preset save\", \"language\": 0, \"index\": 8}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoicHJlc2V0IHNhdmUiLCJyZXN1bHQiOjF9DQo=",
+          "body_text": "{\"comhead\":\"preset save\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "preset save",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:02:48.689314Z",
+          "elapsed_ms": 229.97
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "preset_saved",
+          8,
+          false,
+          true
+        ]
+      ],
+      "outcome": "applied"
+    },
+    {
+      "describe": "stage: output 8 -> input 7",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "video switch",
+        "comhead": "video switch",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 60"
+          ],
+          "json": {
+            "comhead": "video switch",
+            "language": 0,
+            "source": [
+              8,
+              7
+            ]
+          },
+          "body_text": "{\"comhead\": \"video switch\", \"language\": 0, \"source\": [8, 7]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoidmlkZW8gc3dpdGNoIiwicmVzdWx0IjoxfQ0K",
+          "body_text": "{\"comhead\":\"video switch\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "video switch",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:02:52.024362Z",
+          "elapsed_ms": 234.64
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "routing",
+          8,
+          8,
+          7
+        ]
+      ],
+      "outcome": "applied"
+    },
+    {
+      "describe": "recall preset 8 (routing -> [7, 7, 7, 7, 7, 7, 7, 8], ALL outputs)",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "preset set",
+        "comhead": "preset set",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 52"
+          ],
+          "json": {
+            "comhead": "preset set",
+            "language": 0,
+            "index": 8
+          },
+          "body_text": "{\"comhead\": \"preset set\", \"language\": 0, \"index\": 8}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoicHJlc2V0IHNldCIsInJlc3VsdCI6MX0NCg==",
+          "body_text": "{\"comhead\":\"preset set\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "preset set",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:02:55.462317Z",
+          "elapsed_ms": 228.4
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "routing",
+          8,
+          7,
+          8
+        ]
+      ],
+      "outcome": "applied"
+    },
+    {
+      "describe": "invalid preset 9",
+      "kind": "invalid",
+      "exchange": {
+        "kind": "http",
+        "role": "write-invalid",
+        "label": "preset set",
+        "comhead": "preset set",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 52"
+          ],
+          "json": {
+            "comhead": "preset set",
+            "language": 0,
+            "index": 9
+          },
+          "body_text": "{\"comhead\": \"preset set\", \"language\": 0, \"index\": 9}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoicHJlc2V0IHNldCIsInJlc3VsdCI6MH0NCg==",
+          "body_text": "{\"comhead\":\"preset set\",\"result\":0}\r\n",
+          "json": {
+            "comhead": "preset set",
+            "result": 0
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:02:58.912568Z",
+          "elapsed_ms": 234.75
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    },
+    {
+      "describe": "invalid preset 0",
+      "kind": "invalid",
+      "exchange": {
+        "kind": "http",
+        "role": "write-invalid",
+        "label": "preset set",
+        "comhead": "preset set",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 52"
+          ],
+          "json": {
+            "comhead": "preset set",
+            "language": 0,
+            "index": 0
+          },
+          "body_text": "{\"comhead\": \"preset set\", \"language\": 0, \"index\": 0}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoicHJlc2V0IHNldCIsInJlc3VsdCI6MH0NCg==",
+          "body_text": "{\"comhead\":\"preset set\",\"result\":0}\r\n",
+          "json": {
+            "comhead": "preset set",
+            "result": 0
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:03:02.255062Z",
+          "elapsed_ms": 230.56
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    }
+  ],
+  "restored": true,
+  "restore_remaining": [],
+  "findings": {
+    "results_by_outcome": {
+      "rejected": [
+        0
+      ],
+      "applied": [
+        1
+      ]
+    }
+  },
+  "mode": "write",
+  "captured_at": "2026-09-25T22:03:12.905584Z"
+}

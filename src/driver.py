@@ -293,17 +293,21 @@ def get_output_cec_method(command: str) -> Callable[[int], Coroutine[Any, Any, b
     Get a callable for executing a CEC command on an output device.
 
     Uses the unified send_cec method instead of individual method mappings.
+    Displays only have the six commands of the device's output table
+    (``OreiMatrix.CEC_OUTPUT_COMMAND_MAP``, BE-14); anything else is refused
+    here, so the Remote gets 400 (like the REST API) instead of a failed send.
 
     :param command: CEC command name (e.g., "POWER_ON", "VOLUME_UP", "MUTE")
-    :return: Async callable that takes output_num and returns bool, or None if matrix unavailable
+    :return: Async callable that takes output_num and returns bool, or None if
+        the matrix is unavailable or the display table has no such command
     """
     matrix = get_matrix()
     if matrix is None:
         return None
 
-    # Validate command exists in the registry
-    if command.upper() not in matrix.CEC_COMMAND_MAP:
-        _LOG.warning(f"Unknown CEC command: {command}")
+    # Validate command exists in the display (output) table
+    if command.upper() not in matrix.CEC_OUTPUT_COMMAND_MAP:
+        _LOG.warning(f"CEC command not available for displays: {command}")
         return None
 
     # Return a closure that calls send_cec with is_output=True
@@ -777,21 +781,12 @@ def create_output_cec_remote(output_num: int, output_name: str = None) -> Remote
     display_name = output_name if output_name else f"Output {output_num}"
     entity_id = f"remote.output_{output_num}_cec"
 
-    # CEC command mapping for simple_commands (outputs typically use fewer commands)
-    CEC_COMMANDS = [
-        "POWER_ON",
-        "POWER_OFF",
-        "UP",
-        "DOWN",
-        "LEFT",
-        "RIGHT",
-        "SELECT",
-        "MENU",
-        "BACK",
-        "VOLUME_UP",
-        "VOLUME_DOWN",
-        "MUTE",
-    ]
+    # Simple commands = the device's display (output) CEC table, and nothing
+    # else (BE-14): POWER_ON, POWER_OFF, MUTE, VOLUME_DOWN, VOLUME_UP, ACTIVE.
+    # A display has no navigation or playback keys on the BK-808 (the device
+    # web interface's output pad has only these six), so the D-pad, OK, Menu
+    # and Back the remote used to offer are gone: the hub refuses them.
+    CEC_COMMANDS = list(OreiMatrix.CEC_OUTPUT_COMMAND_MAP)
 
     # Use factory pattern for command handler (reduces ~60 lines of duplicate code)
     cec_cmd_handler = create_cec_command_handler(output_num, "output", get_output_cec_method)
@@ -802,24 +797,17 @@ def create_output_cec_remote(output_num: int, output_name: str = None) -> Remote
     control_page = UiPage(
         f"output_{output_num}_control",
         "TV Control",
-        grid=Size(4, 6),
+        grid=Size(4, 3),
         items=[
             # Power row
             create_ui_text("📺 Power On", 0, 0, Size(2, 1), "POWER_ON"),
             create_ui_text("⏻ Power Off", 2, 0, Size(2, 1), "POWER_OFF"),
-            # D-pad
-            create_ui_text("▲", 1, 1, Size(2, 1), "UP"),
-            create_ui_text("◀", 0, 2, Size(1, 1), "LEFT"),
-            create_ui_text("OK", 1, 2, Size(2, 1), "SELECT"),
-            create_ui_text("▶", 3, 2, Size(1, 1), "RIGHT"),
-            create_ui_text("▼", 1, 3, Size(2, 1), "DOWN"),
-            # Menu/Back/Volume row
-            create_ui_text("Menu", 0, 4, Size(2, 1), "MENU"),
-            create_ui_text("Back", 2, 4, Size(2, 1), "BACK"),
+            # The output pad's "active/input" key: make the display select the matrix
+            create_ui_text("Input", 1, 1, Size(2, 1), "ACTIVE"),
             # Volume
-            create_ui_text("🔉", 0, 5, Size(1, 1), "VOLUME_DOWN"),
-            create_ui_text("🔇 Mute", 1, 5, Size(2, 1), "MUTE"),
-            create_ui_text("🔊", 3, 5, Size(1, 1), "VOLUME_UP"),
+            create_ui_text("🔉", 0, 2, Size(1, 1), "VOLUME_DOWN"),
+            create_ui_text("🔇 Mute", 1, 2, Size(2, 1), "MUTE"),
+            create_ui_text("🔊", 3, 2, Size(1, 1), "VOLUME_UP"),
         ],
     )
 

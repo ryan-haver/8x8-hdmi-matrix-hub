@@ -1,0 +1,524 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "write/http_hdr_conversion",
+  "title": "Output HDR conversion, every code (set hdr conversion; allhdr, HIL-02)",
+  "group": "output",
+  "answers": [
+    "write-ok-results",
+    "write-fail-result",
+    "web-ui-commands",
+    "output-mode-text"
+  ],
+  "before": {
+    "power": 1,
+    "beep": 1,
+    "lock": 0,
+    "lcd": 3,
+    "routing": [
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7
+    ],
+    "input_names": [
+      "NES",
+      "SNES",
+      "Sega",
+      "N64",
+      "Switch",
+      "PS3",
+      "Apple",
+      "Switcher"
+    ],
+    "output_names": [
+      "TV",
+      "Sound",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "preset_names": [
+      "Out1",
+      "Out2",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "stream": [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "hdcp": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "hdr": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "scaler": [
+      0,
+      4,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "arc": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "mute": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "edid": [
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36
+    ],
+    "cec_in": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "cec_out": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "exa_mode": 0,
+    "exa_enable": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "exa_source": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "exa_index": 1,
+    "presets": null,
+    "lcd_line": null,
+    "errors": []
+  },
+  "steps": [
+    {
+      "describe": "output 8 hdr -> 1",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set hdr conversion",
+        "comhead": "set hdr conversion",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 63"
+          ],
+          "json": {
+            "comhead": "set hdr conversion",
+            "language": 0,
+            "hdr": [
+              8,
+              1
+            ]
+          },
+          "body_text": "{\"comhead\": \"set hdr conversion\", \"language\": 0, \"hdr\": [8, 1]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IGhkciBjb252ZXJzaW9uIiwicmVzdWx0IjoxfQ0K",
+          "body_text": "{\"comhead\":\"set hdr conversion\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "set hdr conversion",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:04:38.238827Z",
+          "elapsed_ms": 242.32
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "hdr",
+          8,
+          0,
+          1
+        ]
+      ],
+      "outcome": "applied",
+      "status_changes": {
+        "removed": [
+          "output 8 hdr mode: pass-through"
+        ],
+        "added": [
+          "output 8 hdr mode: hdr to sdr"
+        ]
+      }
+    },
+    {
+      "describe": "output 8 hdr -> 2",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set hdr conversion",
+        "comhead": "set hdr conversion",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 63"
+          ],
+          "json": {
+            "comhead": "set hdr conversion",
+            "language": 0,
+            "hdr": [
+              8,
+              2
+            ]
+          },
+          "body_text": "{\"comhead\": \"set hdr conversion\", \"language\": 0, \"hdr\": [8, 2]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IGhkciBjb252ZXJzaW9uIiwicmVzdWx0IjoxfQ0K",
+          "body_text": "{\"comhead\":\"set hdr conversion\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "set hdr conversion",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:04:42.183779Z",
+          "elapsed_ms": 233.16
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "hdr",
+          8,
+          1,
+          2
+        ]
+      ],
+      "outcome": "applied",
+      "status_changes": {
+        "removed": [
+          "output 8 hdr mode: pass-through"
+        ],
+        "added": [
+          "output 8 hdr mode: auto(follow sink edid)"
+        ]
+      }
+    },
+    {
+      "describe": "output 8 hdr -> 0 (back to the original)",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set hdr conversion",
+        "comhead": "set hdr conversion",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 63"
+          ],
+          "json": {
+            "comhead": "set hdr conversion",
+            "language": 0,
+            "hdr": [
+              8,
+              0
+            ]
+          },
+          "body_text": "{\"comhead\": \"set hdr conversion\", \"language\": 0, \"hdr\": [8, 0]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IGhkciBjb252ZXJzaW9uIiwicmVzdWx0IjoxfQ0K",
+          "body_text": "{\"comhead\":\"set hdr conversion\",\"result\":1}\r\n",
+          "json": {
+            "comhead": "set hdr conversion",
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:04:45.920849Z",
+          "elapsed_ms": 232.83
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "hdr",
+          8,
+          2,
+          0
+        ]
+      ],
+      "outcome": "applied",
+      "status_changes": {
+        "removed": [],
+        "added": []
+      }
+    },
+    {
+      "describe": "invalid output 9",
+      "kind": "invalid",
+      "exchange": {
+        "kind": "http",
+        "role": "write-invalid",
+        "label": "set hdr conversion",
+        "comhead": "set hdr conversion",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 63"
+          ],
+          "json": {
+            "comhead": "set hdr conversion",
+            "language": 0,
+            "hdr": [
+              9,
+              0
+            ]
+          },
+          "body_text": "{\"comhead\": \"set hdr conversion\", \"language\": 0, \"hdr\": [9, 0]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IGhkciBjb252ZXJzaW9uIiwicmVzdWx0IjowfQ0K",
+          "body_text": "{\"comhead\":\"set hdr conversion\",\"result\":0}\r\n",
+          "json": {
+            "comhead": "set hdr conversion",
+            "result": 0
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:04:49.712161Z",
+          "elapsed_ms": 239.52
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    },
+    {
+      "describe": "invalid hdr 3",
+      "kind": "invalid",
+      "exchange": {
+        "kind": "http",
+        "role": "write-invalid",
+        "label": "set hdr conversion",
+        "comhead": "set hdr conversion",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 63"
+          ],
+          "json": {
+            "comhead": "set hdr conversion",
+            "language": 0,
+            "hdr": [
+              8,
+              3
+            ]
+          },
+          "body_text": "{\"comhead\": \"set hdr conversion\", \"language\": 0, \"hdr\": [8, 3]}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IGhkciBjb252ZXJzaW9uIiwicmVzdWx0IjowfQ0K",
+          "body_text": "{\"comhead\":\"set hdr conversion\",\"result\":0}\r\n",
+          "json": {
+            "comhead": "set hdr conversion",
+            "result": 0
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:04:51.840448Z",
+          "elapsed_ms": 235.9
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    }
+  ],
+  "restored": true,
+  "restore_remaining": [],
+  "findings": {
+    "results_by_outcome": {
+      "applied": [
+        1
+      ],
+      "rejected": [
+        0
+      ]
+    },
+    "status_text": {
+      "1": [
+        "output 8 hdr mode: hdr to sdr"
+      ],
+      "2": [
+        "output 8 hdr mode: auto(follow sink edid)"
+      ],
+      "0": []
+    }
+  },
+  "mode": "write",
+  "captured_at": "2026-09-25T22:04:55.837655Z"
+}

@@ -8,6 +8,8 @@ import logging
 
 from aiohttp import web
 
+from device_codes import CEC_OUTPUT_COMMANDS
+
 from .utils import _json_response, get_input_names, get_matrix_device
 from .websocket import broadcast_status_update
 
@@ -85,10 +87,13 @@ async def handle_cec_output(request: web.Request) -> web.Response:
         if output_num < 1 or output_num > 8:
             return _json_response(False, error="Output must be 1-8", status=400)
 
-        # Use the unified send_cec method
-        if command.upper() not in matrix_device.CEC_COMMAND_MAP:
-            available = ", ".join(sorted(k.lower() for k in matrix_device.CEC_COMMAND_MAP.keys()))
-            return _json_response(False, error=f"Unknown command '{command}'. Available: {available}", status=400)
+        # Displays have their own, smaller CEC table on the device (BE-14):
+        # power on/off, mute, volume up/down, active.
+        if command.upper() not in CEC_OUTPUT_COMMANDS:
+            available = ", ".join(sorted(k.lower() for k in CEC_OUTPUT_COMMANDS))
+            return _json_response(
+                False, error=f"Command '{command}' is not available for outputs. Available: {available}", status=400
+            )
 
         _LOG.info(f"REST API: CEC {command} to output {output_num}")
 
@@ -158,7 +163,7 @@ async def handle_cec_commands(request: web.Request) -> web.Response:
         True,
         {
             "input_commands": commands,
-            "output_commands": commands,
+            "output_commands": sorted(k.lower() for k in CEC_OUTPUT_COMMANDS),
             "usage": {
                 "input": "POST /api/cec/input/{1-8}/{command}",
                 "output": "POST /api/cec/output/{1-8}/{command}",

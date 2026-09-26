@@ -55,12 +55,10 @@ The password is never stored. You can pass it with `--password`, or put it in th
 #### write mode
 
 - Every command it will send is printed before anything happens. Nothing is sent until you type `yes`, unless you pass `--yes`.
-- Things you will notice: routing changes on the test output, and on **all outputs** for the "route all", preset-recall and `s output 0` tests. The matrix goes into **standby** and back (all displays go dark for a few seconds). The test input's **EDID changes**, so its source device renegotiates HDMI. The panel lock and beep toggle.
+- Things you will notice: routing changes on the test output, and on **all outputs** for the "route all", preset-recall and `s output 0` tests. The matrix goes into **standby** and back (all displays go dark for a few seconds). The test output's stream, HDCP, HDR, video mode, ARC and audio mute cycle through every value. The test input's **EDID changes** (including "copy from output 1"), so its source device renegotiates HDMI. The ext-audio mode switches through all three modes. The front-panel LCD cycles through its on-times. The panel lock and beep toggle.
 - After each test the tool restores the state it saw before that test, and checks the result with a fresh read. At the end it restores the state from before the first test and checks again.
 - **Ctrl+C:** the first press stops the run and starts the restore. Further presses are ignored while the restore runs. The fourth press forces an exit without finishing the restore (don't do that).
-- These cannot be restored automatically:
-  - **Preset names.** No command sets them. A preset save might rename a preset; you get a warning if it does.
-  - **The LCD timeout**, if the LCD test did not run with Telnet. You get a warning; set it back on the front panel.
+- Restores use the same commands the tests prove. Three differences only produce a warning (`not restored (cosmetic)`) instead of exit code 3, because they change nothing you can see or hear and the command that restores them is itself still unproven: a **preset name** (`preset name`), a preset slot that was **empty** before the test saved into it (`preset clear`), and the ext-audio **selected output** (`set ext-audio index`). Fix them in the matrix web UI if the warning appears.
 - If a restore fails, the tool prints `THE MATRIX WAS NOT FULLY RESTORED` with the differences and exits with code 3. `write/snapshot-initial.json` has every original value, and `write/restore-log.jsonl` shows what was already put back. Fix the rest in the web UI.
 - Opt-in groups, which never run unless you add them with `--include`:
   - `cec-live` sends real CEC commands to the display on `--cec-output`. The display will turn off and on, mute, and change volume and input, and the tool asks you what the display did after each command.
@@ -100,9 +98,46 @@ python -m tools.hil.capture --host $HOST --mode write --i-understand-this-change
     --test-output 8 --test-input 8 --test-preset 8
 ```
 
-Read the printed plan, then type `yes`. To run only some groups, use `--only routing,names` or `--skip power`. The groups are `routing`, `presets`, `names`, `output`, `edid`, `cec-enable`, `cec-invalid`, `ext-audio`, `system`, `telnet`, `power`, plus the opt-in `cec-live` and `reboot`.
+Read the printed plan, then type `yes`. To run only some groups, use `--only routing,names` or `--skip power`. The groups are `routing`, `presets`, `names`, `output`, `edid`, `cec-enable`, `cec-invalid`, `ext-audio`, `system`, `telnet`, `power`, `legacy`, plus the opt-in `cec-live` and `reboot`. `legacy` sends each command the hub used before WP-A4 part 2 once, with the current value, as evidence that the firmware ignores it (each one waits out `--http-timeout`); skip it with `--skip legacy`.
 
-**Optional: live CEC (BE-14) and reboot.**
+#### Verify the WP-A4 part 2 commands (HIL-09)
+
+Since WP-A4 part 2 the hub sends the commands the matrix's own web interface uses. They are implemented and tested against the simulator, but no device has answered them yet. This run proves each one on the matrix, with snapshot and restore, and reads every setting back from the device's status reads. From the capture PC, with the hub, the HA integration and every browser tab on the matrix web UI stopped (section 1):
+
+```bash
+python -m tools.hil.capture --host 192.168.0.100 --mode write --i-understand-this-changes-the-matrix \
+    --only output,edid,ext-audio,system,presets,telnet,cec-enable,legacy \
+    --test-output 8 --test-input 8 --test-preset 8 \
+    --redact <MAC address> --redact <hostname>
+python -m tools.simulator --golden tests/fixtures/device/BK-808_V1.10.01_web-V2.00.03 --report
+```
+
+What each new test checks (each step is "applied" only if the named read shows the value afterwards; invalid values must be answered `result: 0` and change nothing):
+
+| Test | Sends | Read back from |
+| --- | --- | --- |
+| `http_tx_stream` | `tx stream` `{"out": [8, 0\|1]}` | `get output status.allout[7]` |
+| `http_tx_hdcp` | `tx hdcp` `{"hdcp": [8, 1..5]}` (every code, original last) | `allhdcp[7]`, plus the Telnet `status` wording |
+| `http_hdr_conversion` | `set hdr conversion` `{"hdr": [8, 0..2]}` | `allhdr[7]`, Telnet `hdr mode` line (HIL-02) |
+| `http_video_scaler` | `set video scaler` `{"scaler": [8, 0..4]}` | `allscaler[7]`, Telnet `video mode` line (4 = audio only, BE-15) |
+| `http_arc` | `set arc` `{"arc": [8, 0\|1]}` | `allarc[7]` |
+| `http_output_audio_mute` | `set output audio mute` `{"mute": [8, 0\|1]}` | `allaudiomute[7]` |
+| `http_set_edid` | `set edid` `{"edid": [8, id]}`: a built-in EDID, 40 (copy from output 1, BE-25), the original; invalid 0, 48, input 9 | `get input status.edid[7]` |
+| `http_lcd_on_time` | `set lcd on time` `{"lcd on time": 0..4}` (API-07) | `get system status.mode`, Telnet `lcd ...` line |
+| `http_ext_audio_mode` | `set ext-audio mode` `{"mode": 0..2}` | `get ext-audio status.mode` |
+| `http_ext_audio_out` | `set ext-audio out` `{"out": [8, 0\|1]}` | `get ext-audio status.allout[7]` |
+| `http_ext_audio_switch` | matrix mode, then `ext-audio switch` `{"source": [8, input]}` and `[8, 16]` (ARC of output 8) | `get ext-audio status.allsource[7]` |
+| `http_ext_audio_index` | `set ext-audio index` `{"index": n}` | `get ext-audio status.index` |
+| `http_preset_recall` | recall of the empty test preset (expected `result: 0`), then stage, `preset save 8`, move away, `preset set 8` | routing from `get video status`, preset 8 from Telnet `r preset 8` |
+| `http_preset_save` | stage output 8, `preset save 8` | Telnet `r preset 8` equals the live routing |
+| `http_preset_name` | `preset name` `{"index": 8, "name": ...}` incl. a 40-character name | `get video status.allname[7]` |
+| `telnet_presets` | `s save preset 8`, `s recall preset 8`, `s clear preset 8`, `s preset save\|recall 8` | Telnet `r preset 8`, routing |
+| `http_cec_index_single` | the old single-port `set cec index` (expected `result: 0`, HIL-10) | `get cec status` unchanged |
+| `http_legacy_commands`, `telnet_legacy_commands` | the old `set output *`, `set input edid`, `copy edid`, `set lcd on time {"time"}`, `set output exa*`; Telnet `s av`, `s out N stream` | expected: no answer / `E00`, nothing changed |
+
+The preset tests read presets with Telnet `r preset 8` (this firmware never answers `get routing status`, HIL-01), so they need Telnet. On the captured device preset 8 is empty: the tests save into it and the restore empties it again with `preset clear`. In the `--report` output, `web-ui-commands`, `lcd-codes`, `edid-range`, `copy-edid`, `exa-commands`, `ext-audio-index`, `preset-set-empty` and `output-mode-text` then turn CONFIRMED, or CONTRADICTED with the step that differs. Afterwards, record the result in the session report and in `docs/OREI_API_COMMANDS.md` (move each proven row from 🌐 to ✅).
+
+**Optional: live CEC (BE-14) and reboot.** The HTTP part of `cec-live` uses the output (display) table of the device web interface: 0 power on, 1 power off, 2 mute, 3 volume down, 4 volume up, 5 active.
 
 ```bash
 # a display with CEC on output 1; you will be asked what it did after each command
@@ -131,7 +166,7 @@ Every run writes into the same folder, `tests/fixtures/device/<model>_<MCU versi
 
 **read.** Nothing that changes the device:
 
-- HTTP: `login`, then `get video status`, `get output status`, `get input status`, `get cec status`, `get system status`, `get status`, `get network`, `get ext-audio status` (all with `"language": 0`, as the hub sends them), `get routing status` (documented, `"index": 1`), `preset get` for index 1-8, and `GET /`. MCU V1.10.01 never answers `get routing status` or `preset get` (HIL-01). A timeout on either is a warning, not an error, and the remaining `preset get N` are skipped after the first one goes unanswered; later snapshots (write mode) skip any read the device left unanswered, so the preset write tests are skipped on this firmware (their snapshot needs `get routing status`).
+- HTTP: `login`, then `get video status`, `get output status`, `get input status`, `get cec status`, `get system status`, `get status`, `get network`, `get ext-audio status` (all with `"language": 0`, as the hub sends them), `get routing status` (documented, `"index": 1`), `preset get` for index 1-8, and `GET /`. MCU V1.10.01 never answers `get routing status` or `preset get` (HIL-01). A timeout on either is a warning, not an error, and the remaining `preset get N` are skipped after the first one goes unanswered. Write-mode snapshots do not use them: presets are read over Telnet with `r preset N`. A status read that times out once (the device can stall for one request right after a command it ignores, HIL-12) is retried.
 - Telnet (each command followed by `!\r\n`, like the hub): it records the banner, then sends `status`, `r fw version`, `r type`, `r link in 1-8`, `r link out 1-8` and `r preset 1-8`.
 
 **probe.**
@@ -146,10 +181,10 @@ Every run writes into the same folder, `tests/fixtures/device/<model>_<MCU versi
 
 **write.** The printed plan lists every exact command. In short, all against the test ports:
 
-- HTTP: `video switch` (one output, all outputs, invalid ports), `preset set` / `preset save`, `set input name` / `set output name` (including a 40-character name), `set output stream|hdcp|hdr|scaler|arc|mute` (every value, with the Telnet `status` text read back for each; HDR 0-3 and scaler 0-5 include 0, which V1.10.01 reports, HIL-02), `set input edid` (including 38, 39, 47, 48), `copy edid` and `set input edid 15` (BE-25), `set cec index` in both shapes, invalid `cec command`s, `set output exa mode|exa|exa in source`, `set beep`, `set panel lock`, `set lcd on time` 0-4 (with the Telnet LCD line for each), `set poweronoff` (a read and a write while in standby).
-- Telnet: `s output N in source M`, `s av M N`, `s output 0 in source M`, `s recall|save|clear preset P`, `s preset recall|save P`, `s beep`, `s lock`, `s out N stream`, `power 0/1` (what TelnetClient sends) and `s power 0/1`.
-- With `cec-live`: every `s cec hdmi out N <word>`, and `cec command` object 1 index 1-6.
-- With `reboot`: `set reboot`, and the Telnet `reboot`.
+- HTTP: `video switch` (one output, all outputs, invalid ports), `preset set` / `preset save` / `preset name`, `set input name` / `set output name` (including a 40-character name), `tx stream`, `tx hdcp`, `set hdr conversion`, `set video scaler`, `set arc`, `set output audio mute` (every device code, with the Telnet `status` text read back for each), `set edid` (incl. 40 = copy from output 1), `set cec index` in both shapes, invalid `cec command`s, `set ext-audio mode|out|index`, `ext-audio switch`, `set beep`, `set panel lock`, `set lcd on time` 0-4 (with the Telnet LCD line for each), `set poweronoff` (a read and a write while in standby); group `legacy`: the old `set output stream|hdcp|hdr|scaler|arc|mute`, `set input edid`, `copy edid`, `set lcd on time {"time"}`, `set output exa mode|exa|exa in source`, once each with the current value (see the table above).
+- Telnet: `s output N in source M`, `s output 0 in source M`, `s recall|save|clear preset P`, `s preset recall|save P`, `s beep`, `s lock`, `power 0/1` (what TelnetClient sends) and `s power 0/1`; group `legacy`: `s av M N`, `s out N stream`.
+- With `cec-live`: every `s cec hdmi out N <word>`, and `cec command` object 1 with the output-table indices 0-5.
+- With `reboot`: `reboot` `{"reboot": 1}`, and the Telnet `reboot`.
 
 ### 5. After the session
 
@@ -192,9 +227,9 @@ Every run writes into the same folder, `tests/fixtures/device/<model>_<MCU versi
    | Session behaviour / expiry (BE-04) | | probe/session_*.json |
    | CEC enable payload (BE-13) | | probe/cec_enable_shapes.json, write/http_cec_index_single.json |
    | Output CEC table (BE-14) | | write/cec_live_output.json |
-   | Audio-only scaler code (BE-15) | | write/http_output_scaler.json |
-   | EDID copy (BE-25) | | write/http_copy_edid.json |
-   | LCD codes (API-07) | | write/http_lcd.json |
+   | Audio-only scaler code (BE-15) | | write/http_video_scaler.json |
+   | EDID copy (BE-25) | | write/http_set_edid.json (id 40) |
+   | LCD codes (API-07) | | write/http_lcd_on_time.json |
    | Telnet E00/E01 and terminators (BE-07) | | probe/telnet_*.json |
    | Push notifications on front-panel changes | | probe/telnet_push_window.json |
 

@@ -89,22 +89,44 @@ async def test_write_mutates_state_and_is_logged(http, simulator):
     assert simulator.log[0]["payload"]["password"] == "***"
 
 
-async def test_unknown_comhead_is_recorded(http, simulator):
+async def test_unknown_comhead_is_recorded_and_never_answered(http, simulator):
+    """Like MCU V1.10.01 (probe/http_unknown_comhead, HIL-12): no answer; the client times out."""
     await cmd(http, simulator, LOGIN)
-    resp = await cmd(http, simulator, {"comhead": "get flux capacitor"})
-    assert resp["result"] == proto.UNKNOWN_COMMAND_RESULT
+    with pytest.raises(asyncio.TimeoutError):
+        await instr(http, simulator, {"comhead": "get flux capacitor"}, timeout=0.3)
     assert [e["command"] for e in simulator.unrecognised()] == ["get flux capacitor"]
+    assert simulator.log[-1]["unanswered"] is True
+    # the device keeps answering other requests
+    assert "allsource" in await cmd(http, simulator, {"comhead": "get video status"})
 
 
-async def test_garbage_body(http, simulator):
-    async with http.post(f"{simulator.device_url}/cgi-bin/instr", data=b"{nope") as resp:
-        assert json.loads(await resp.text())["result"] == proto.RESULT_FAIL
+async def test_old_hub_command_is_never_answered(http, simulator):
+    """HIL-09: `set output hdcp` & co. went unanswered on V1.10.01 and changed nothing."""
+    await cmd(http, simulator, LOGIN)
+    with pytest.raises(asyncio.TimeoutError):
+        await instr(http, simulator, {"comhead": "set output hdcp", "output": 1, "hdcp": 1}, timeout=0.3)
+    assert simulator.state.outputs[0].hdcp == 3
 
 
-async def test_set_reboot_takes_device_offline(http, simulator):
+async def test_extra_unanswered_comhead(http, simulator):
+    """``unanswered_comheads`` makes the simulator ignore a command it knows (HIL-12 tests)."""
+    await cmd(http, simulator, LOGIN)
+    simulator.unanswered_comheads = simulator.unanswered_comheads | {"tx hdcp"}
+    with pytest.raises(asyncio.TimeoutError):
+        await instr(http, simulator, {"comhead": "tx hdcp", "language": 0, "hdcp": [1, 1]}, timeout=0.3)
+
+
+async def test_garbage_body_is_never_answered(http, simulator):
+    with pytest.raises(asyncio.TimeoutError):
+        async with http.post(f"{simulator.device_url}/cgi-bin/instr", data=b"{nope",
+                             timeout=aiohttp.ClientTimeout(total=0.3)) as resp:
+            await resp.text()
+
+
+async def test_reboot_takes_device_offline(http, simulator):
     simulator.reboot_seconds = 0.6
     await cmd(http, simulator, LOGIN)
-    assert (await cmd(http, simulator, {"comhead": "set reboot"}))["result"] == 1
+    assert (await cmd(http, simulator, {"comhead": "reboot", "language": 0, "reboot": 1}))["result"] == 1
     await asyncio.sleep(0.15)
     assert simulator.rebooting
     # Linux refuses the connection; Windows keeps retrying the SYN (timeout).
@@ -172,7 +194,7 @@ async def test_fault_wrong_password_and_reject_writes(http, simulator):
     assert (await cmd(http, simulator, LOGIN))["result"] == proto.LOGIN_FAIL_RESULT
     simulator.faults.update({"wrong_password": False, "reject_writes": True})
     await cmd(http, simulator, LOGIN)
-    resp = await cmd(http, simulator, {"comhead": "set output hdcp", "output": 1, "hdcp": 1})
+    resp = await cmd(http, simulator, {"comhead": "tx hdcp", "language": 0, "hdcp": [1, 1]})
     assert resp["result"] == proto.RESULT_FAIL and simulator.state.outputs[0].hdcp == 3
     assert "allsource" in await cmd(http, simulator, {"comhead": "get video status"})  # reads still work
 

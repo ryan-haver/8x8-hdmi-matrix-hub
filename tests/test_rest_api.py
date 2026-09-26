@@ -367,9 +367,13 @@ class TestEdidControl:
         assert "modes" in data["data"]
         # Check some expected modes exist (keys are strings in JSON)
         modes = data["data"]["modes"]
-        assert "1" in modes  # 1080p 2CH
-        assert "36" in modes  # 4K60 HDR Atmos
-        assert "38" in modes  # 8K60
+        # The device's own EDID ids (device web interface): 1-36 built in,
+        # 37-39 user EDIDs, 40-47 copy from output 1-8 (BE-25)
+        assert modes["1"] == "1080p 2.0CH"
+        assert modes["36"] == "8K FRL 12G HDR 7.1CH"  # what V1.10.01 reports (captured)
+        assert modes["40"] == "Copy from Output 1"
+        assert modes["47"] == "Copy from Output 8"
+        assert "48" not in modes
 
     @pytest.mark.asyncio
     async def test_get_edid_status(self, client, mock_matrix):
@@ -384,7 +388,7 @@ class TestEdidControl:
         assert "inputs" in data["data"]
         assert len(data["data"]["inputs"]) == 8
         assert data["data"]["inputs"][0]["edid_mode"] == 36
-        assert data["data"]["inputs"][0]["edid_mode_name"] == "4K60 HDR Atmos"
+        assert data["data"]["inputs"][0]["edid_mode_name"] == "8K FRL 12G HDR 7.1CH"
         mock_matrix.get_edid_status.assert_called_once()
 
     @pytest.mark.asyncio
@@ -399,7 +403,7 @@ class TestEdidControl:
         assert data["success"] is True
         assert data["data"]["input"] == 1
         assert data["data"]["mode"] == 36
-        assert data["data"]["mode_name"] == "4K60 HDR Atmos"
+        assert data["data"]["mode_name"] == "8K FRL 12G HDR 7.1CH"
         mock_matrix.set_input_edid.assert_called_once_with(1, 36)
 
     @pytest.mark.asyncio
@@ -423,16 +427,36 @@ class TestEdidControl:
 
     @pytest.mark.asyncio
     async def test_set_input_edid_copy_from_output(self, client, mock_matrix):
-        """Test POST /api/input/{n}/edid with copy-from-output mode (15-22)."""
+        """Copy the EDID of an output: ``copy_from_output`` or EDID id 39 + N (BE-25)."""
         mock_matrix.copy_edid_from_output.return_value = True
+        mock_matrix.set_input_edid.return_value = True
 
+        resp = await client.post("/api/input/1/edid", json={"copy_from_output": 2})
+        assert resp.status == 200
+        data = await resp.json()
+        assert data["success"] is True and data["data"]["mode"] == 41
+        assert data["data"]["mode_name"] == "Copy from Output 2"
+        mock_matrix.copy_edid_from_output.assert_called_once_with(1, 2)
+
+        resp = await client.post("/api/input/1/edid", json={"mode": 40})
+        assert resp.status == 200
+        mock_matrix.set_input_edid.assert_called_once_with(1, 40)
+
+    @pytest.mark.asyncio
+    async def test_set_input_edid_old_copy_ids_are_plain_edids(self, client, mock_matrix):
+        """15-22 were the hub's made-up "copy" ids; on the device they are built-in HDR EDIDs (BE-25)."""
+        mock_matrix.set_input_edid.return_value = True
         resp = await client.post("/api/input/1/edid", json={"mode": 15})
         assert resp.status == 200
+        mock_matrix.set_input_edid.assert_called_once_with(1, 15)
+        mock_matrix.copy_edid_from_output.assert_not_called()
 
-        data = await resp.json()
-        assert data["success"] is True
-        # Mode 15 = copy from output 1
-        mock_matrix.copy_edid_from_output.assert_called_once_with(1, 1)
+    @pytest.mark.asyncio
+    async def test_set_input_edid_rejects_unknown_ids(self, client, mock_matrix):
+        for body in ({"mode": 0}, {"mode": 48}, {"copy_from_output": 9}):
+            resp = await client.post("/api/input/1/edid", json=body)
+            assert resp.status == 400, body
+        mock_matrix.set_input_edid.assert_not_called()
 
 
 # =============================================================================

@@ -256,14 +256,11 @@ Response:
   "success": true,
   "data": {
     "modes": {
-      "1": "1080p 2CH", "2": "1080p 5.1CH", "3": "1080p 7.1CH",
-      "4": "1080p 3D 2CH", "5": "1080p 3D 5.1CH", "6": "1080p 3D 7.1CH",
-      "7": "4K30 2CH", "8": "4K30 5.1CH", "9": "4K30 7.1CH",
-      "10": "4K60 420 2CH", "11": "4K60 420 5.1CH", "12": "4K60 420 7.1CH",
-      "13": "4K60 444 2CH", "14": "4K60 444 7.1CH",
-      "15": "Copy from Output 1", "16": "Copy from Output 2", ...
-      "33": "4K60 HDR 2CH", "34": "4K60 HDR 5.1CH", "35": "4K60 HDR 7.1CH",
-      "36": "4K60 HDR Atmos", "37": "8K30", "38": "8K60"
+      "1": "1080p 2.0CH", "2": "1080p 5.1CH", "3": "1080p 7.1CH",
+      "4": "4K30 2.0CH", ...
+      "34": "8K FRL 12G HDR 2.0CH", "35": "8K FRL 12G HDR 5.1CH", "36": "8K FRL 12G HDR 7.1CH",
+      "37": "User EDID 1", "38": "User EDID 2", "39": "User EDID 3",
+      "40": "Copy from Output 1", ... "47": "Copy from Output 8"
     }
   }
 }
@@ -282,8 +279,8 @@ Response:
   "success": true,
   "data": {
     "inputs": {
-      "1": {"mode": 36, "mode_name": "4K60 HDR Atmos"},
-      "2": {"mode": 36, "mode_name": "4K60 HDR Atmos"},
+      "1": {"mode": 36, "mode_name": "8K FRL 12G HDR 7.1CH"},
+      "2": {"mode": 36, "mode_name": "8K FRL 12G HDR 7.1CH"},
       ...
     }
   }
@@ -291,19 +288,21 @@ Response:
 ```
 
 #### POST /api/input/{1-8}/edid
-Set EDID mode for a specific input.
+Set EDID mode for a specific input. The ids are the matrix's own EDID list (1-47, see `GET /api/edid/modes` and `docs/OREI_API_COMMANDS.md`); 40-47 copy the EDID of output 1-8. Before WP-A4 part 2 the hub used a made-up table in which 15-22 meant "copy"; on the device 15-22 are built-in HDR EDIDs (BE-25).
 
 ```bash
-# Set input 1 to 4K60 HDR with Atmos
+# Set input 1 to 8K FRL 12G HDR 7.1CH
 curl -X POST http://localhost:8080/api/input/1/edid \
   -H "Content-Type: application/json" \
   -d '{"mode": 36}'
 
-# Copy EDID from output 1 to input 3
+# Copy EDID from output 1 to input 3 (same as {"mode": 40})
 curl -X POST http://localhost:8080/api/input/3/edid \
   -H "Content-Type: application/json" \
-  -d '{"mode": 15}'
+  -d '{"copy_from_output": 1}'
 ```
+
+Any other `mode` is rejected with 400.
 
 ---
 
@@ -770,10 +769,12 @@ Response:
 #### POST /api/cec/output/{1-8}/{command}
 Send CEC command to an output device (TV/display).
 
-**Available commands:**
-- Navigation: `up`, `down`, `left`, `right`, `select`, `menu`, `back`
+**Available commands** (the matrix's display CEC table has six keys, BE-14):
 - Power: `power_on`, `power_off`
 - Volume: `volume_up`, `volume_down`, `mute`
+- `active` (make the display select the matrix)
+
+Any other command (navigation, playback) is answered with 400 for outputs; send those to the source device on an input instead.
 
 ```bash
 # Power on TV (output 1)

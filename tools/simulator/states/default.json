@@ -19,7 +19,7 @@
     "tcp_port": 8000,
     "network_username": 1
   },
-  "system": {"power": 1, "beep": 1, "panel_lock": 0, "lcd_timeout": 3, "mode": 3, "baudrate": 6},
+  "system": {"power": 1, "beep": 1, "panel_lock": 0, "lcd_timeout": 3, "baudrate": 6},
   "inputs": [
     {"name": "PS3",      "edid": 36, "signal": 0, "cable": 1, "cec_enabled": 0},
     {"name": "AppleTV",  "edid": 36, "signal": 1, "cable": 1, "cec_enabled": 1},
@@ -40,8 +40,7 @@
     {"name": "Output 7", "source": 1, "connected": 0, "stream": 1, "hdcp": 3, "hdr": 0, "scaler": 0, "arc": 0, "audio_mute": 0, "cec_enabled": 0},
     {"name": "Output 8", "source": 1, "connected": 0, "stream": 1, "hdcp": 3, "hdr": 0, "scaler": 0, "arc": 0, "audio_mute": 0, "cec_enabled": 0}
   ],
-  "ninth_output": {"source": 1, "scaler": 255, "hdr": 0, "hdcp": 3, "arc": 0, "stream": 255, "audio_mute": 0},
-  "ext_audio": {"mode": 0},
+  "ext_audio": {"mode": 0, "index": 1},
   "presets": [
     {"name": "Apple TV", "routing": [2, 2, 2, 2, 2, 2, 2, 2]},
     {"name": "Shield",   "routing": [5, 5, 5, 5, 5, 5, 5, 5]},

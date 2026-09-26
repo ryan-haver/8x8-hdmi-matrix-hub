@@ -1,0 +1,860 @@
+{
+  "schema_version": 1,
+  "features": ["F-REL-008"],
+  "level": "V2",
+  "scenario": "outputs.audio_mute_rejected",
+  "scenario_title": "The matrix rejects a mute command: the hub must report the failure",
+  "scenario_kind": "failure",
+  "target": "sim",
+  "client": "api",
+  "result": "pass",
+  "gate": "ok",
+  "blocked_reason": null,
+  "commit": {
+    "sha": "22afc1a7e86677ea5a82c79b533cd0ae7faec758",
+    "branch": "wp-a4-part2-real-commands",
+    "dirty_files": [
+      "docs/OREI_API_COMMANDS.md",
+      "docs/REMEDIATION_PLAN.md",
+      "docs/validation/2026-09-25-hil-session-1-probe-write.md",
+      "docs/validation/LEDGER.md",
+      "ocs/API_REFERENCE.md",
+      "tools/hil/README.md",
+      "tools/simulator/README.md"
+    ],
+    "short": "22afc1a7",
+    "dirty": true
+  },
+  "timestamp": {
+    "started": "2026-09-25T21:54:34.119Z",
+    "finished": "2026-09-25T21:54:35.274Z"
+  },
+  "operator": "automation",
+  "environment": {
+    "target": "sim",
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "hub": {
+      "entry": "run.py (USE_MODULAR=true, UC_ENABLED=false)",
+      "version": "2.10.0",
+      "api_version": "2.10.0",
+      "image_digest": null,
+      "env": {
+        "USE_MODULAR": "true",
+        "UC_ENABLED": "false",
+        "MATRIX_HOST": "127.0.0.1",
+        "MATRIX_PORT": "52568",
+        "OREI_TELNET_PORT": "52569",
+        "TRUST_PROXY_HEADERS": "true",
+        "TRUSTED_PROXY_IPS": "127.0.0.1",
+        "LOG_LEVEL": "INFO"
+      }
+    },
+    "client": {
+      "name": "api",
+      "aiohttp": "3.13.3"
+    },
+    "simulator": {
+      "source_sha256": "71d5bd88aa277f54",
+      "seed_state": "tools/simulator/states/default.json",
+      "model": "BK-808",
+      "firmware_version": "V1.10.01",
+      "web_version": "V2.00.03"
+    }
+  },
+  "procedure": [
+    "reset the simulator to the seed state",
+    "inject simulator fault {'reject_writes': True}",
+    "action (api): output_mute(output=2, muted=True)",
+    "  POST /api/output/2/mute {'muted': True} -> HTTP 500",
+    "restart the hub (scenario may leave it in a bad state)"
+  ],
+  "observations": {
+    "requests": [
+      {
+        "method": "POST",
+        "path": "/api/output/2/mute",
+        "body": {
+          "muted": true
+        },
+        "status": 500,
+        "response": {
+          "success": false,
+          "data": null,
+          "error": "Failed to set output 2 audio mute"
+        },
+        "elapsed_ms": 2.8
+      }
+    ],
+    "response_status": 500,
+    "hub_reads": [
+      {
+        "method": "GET",
+        "path": "/api/status/outputs",
+        "body": null,
+        "status": 200,
+        "response": {
+          "success": true,
+          "data": {
+            "outputs": [
+              {
+                "number": 1,
+                "name": "TV",
+                "connected": true,
+                "cableConnected": true,
+                "enabled": true,
+                "muted": false,
+                "hdcp": 3,
+                "hdr": 1,
+                "scaler": 1,
+                "arc": true
+              },
+              {
+                "number": 2,
+                "name": "Soundbar",
+                "connected": true,
+                "cableConnected": true,
+                "enabled": true,
+                "muted": false,
+                "hdcp": 3,
+                "hdr": 1,
+                "scaler": 5,
+                "arc": false
+              },
+              {
+                "number": 3,
+                "name": "Output 3",
+                "connected": false,
+                "cableConnected": false,
+                "enabled": true,
+                "muted": false,
+                "hdcp": 3,
+                "hdr": 1,
+                "scaler": 1,
+                "arc": false
+              },
+              {
+                "number": 4,
+                "name": "Output 4",
+                "connected": false,
+                "cableConnected": false,
+                "enabled": true,
+                "muted": false,
+                "hdcp": 3,
+                "hdr": 1,
+                "scaler": 1,
+                "arc": false
+              },
+              {
+                "number": 5,
+                "name": "Output 5",
+                "connected": false,
+                "cableConnected": false,
+                "enabled": true,
+                "muted": false,
+                "hdcp": 3,
+                "hdr": 1,
+                "scaler": 1,
+                "arc": false
+              },
+              {
+                "number": 6,
+                "name": "Output 6",
+                "connected": false,
+                "cableConnected": false,
+                "enabled": true,
+                "muted": false,
+                "hdcp": 3,
+                "hdr": 1,
+                "scaler": 1,
+                "arc": false
+              },
+              {
+                "number": 7,
+                "name": "Output 7",
+                "connected": false,
+                "cableConnected": false,
+                "enabled": true,
+                "muted": false,
+                "hdcp": 3,
+                "hdr": 1,
+                "scaler": 1,
+                "arc": false
+              },
+              {
+                "number": 8,
+                "name": "Output 8",
+                "connected": false,
+                "cableConnected": false,
+                "enabled": true,
+                "muted": false,
+                "hdcp": 3,
+                "hdr": 1,
+                "scaler": 1,
+                "arc": false
+              }
+            ],
+            "raw": {
+              "comhead": "get output status",
+              "power": 1,
+              "allconnect": [1, 1, 0, 0, 0, 0, 0, 0],
+              "name": ["TV", "Soundbar", "Output 3", "Output 4", "Output 5", "Output 6", "Output 7", "Output 8"],
+              "allscaler": [0, 4, 0, 0, 0, 0, 0, 0, 255],
+              "allhdr": [0, 0, 0, 0, 0, 0, 0, 0, 0],
+              "allhdcp": [3, 3, 3, 3, 3, 3, 3, 3, 3],
+              "allarc": [1, 0, 0, 0, 0, 0, 0, 0, 255],
+              "allout": [1, 1, 1, 1, 1, 1, 1, 1, 1],
+              "allaudiomute": [0, 0, 0, 0, 0, 0, 0, 0, 0]
+            },
+            "telnetAvailable": true
+          },
+          "error": null
+        },
+        "elapsed_ms": 131.0
+      }
+    ],
+    "state_before": {
+      "schema_version": 1,
+      "auth": {
+        "user": "Admin",
+        "password": "admin"
+      },
+      "device": {
+        "model": "BK-808",
+        "hostname": "BK-808",
+        "firmware_version": "V1.10.01",
+        "web_version": "V2.00.03",
+        "key_mcu_version": "V1.00.08",
+        "cpld_version": "V1.00.06",
+        "type": "8x8 hdmi2.1 matrix",
+        "ip_module_version": "10.01.17",
+        "mac_address": "02:00:00:0B:08:08",
+        "ip_address": "192.168.0.100",
+        "netmask": "255.255.255.0",
+        "gateway": "192.168.0.1",
+        "dhcp": 0,
+        "telnet_port": 23,
+        "tcp_port": 8000,
+        "network_username": 1
+      },
+      "system": {
+        "power": 1,
+        "beep": 1,
+        "panel_lock": 0,
+        "lcd_timeout": 3,
+        "baudrate": 6
+      },
+      "inputs": [
+        {
+          "name": "PS3",
+          "edid": 36,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "AppleTV",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "Computer",
+          "edid": 3,
+          "signal": 0,
+          "cable": 0,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Switch",
+          "edid": 36,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Shield",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "PS5",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "Analogue",
+          "edid": 3,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Input 8",
+          "edid": 36,
+          "signal": 0,
+          "cable": 0,
+          "cec_enabled": 0
+        }
+      ],
+      "outputs": [
+        {
+          "name": "TV",
+          "source": 2,
+          "connected": 1,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 0,
+          "arc": 1,
+          "audio_mute": 0,
+          "cec_enabled": 1,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Soundbar",
+          "source": 2,
+          "connected": 1,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 4,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 1,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 3",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 0,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 4",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 0,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 5",
+          "source": 5,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 0,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 6",
+          "source": 6,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 0,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 7",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 0,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 8",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 0,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        }
+      ],
+      "ext_audio": {
+        "mode": 0,
+        "index": 1
+      },
+      "presets": [
+        {
+          "name": "Apple TV",
+          "routing": [2, 2, 2, 2, 2, 2, 2, 2],
+          "saved": true
+        },
+        {
+          "name": "Shield",
+          "routing": [5, 5, 5, 5, 5, 5, 5, 5],
+          "saved": true
+        },
+        {
+          "name": "PS5",
+          "routing": [6, 6, 6, 6, 6, 6, 6, 6],
+          "saved": true
+        },
+        {
+          "name": "Retro",
+          "routing": [7, 7, 1, 1, 1, 1, 1, 1],
+          "saved": true
+        },
+        {
+          "name": "Preset 5",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8],
+          "saved": true
+        },
+        {
+          "name": "Preset 6",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8],
+          "saved": true
+        },
+        {
+          "name": "Preset 7",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8],
+          "saved": true
+        },
+        {
+          "name": "Preset 8",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8],
+          "saved": true
+        }
+      ],
+      "routing": [2, 2, 1, 1, 5, 6, 1, 1]
+    },
+    "state_after": {
+      "schema_version": 1,
+      "auth": {
+        "user": "Admin",
+        "password": "admin"
+      },
+      "device": {
+        "model": "BK-808",
+        "hostname": "BK-808",
+        "firmware_version": "V1.10.01",
+        "web_version": "V2.00.03",
+        "key_mcu_version": "V1.00.08",
+        "cpld_version": "V1.00.06",
+        "type": "8x8 hdmi2.1 matrix",
+        "ip_module_version": "10.01.17",
+        "mac_address": "02:00:00:0B:08:08",
+        "ip_address": "192.168.0.100",
+        "netmask": "255.255.255.0",
+        "gateway": "192.168.0.1",
+        "dhcp": 0,
+        "telnet_port": 23,
+        "tcp_port": 8000,
+        "network_username": 1
+      },
+      "system": {
+        "power": 1,
+        "beep": 1,
+        "panel_lock": 0,
+        "lcd_timeout": 3,
+        "baudrate": 6
+      },
+      "inputs": [
+        {
+          "name": "PS3",
+          "edid": 36,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "AppleTV",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "Computer",
+          "edid": 3,
+          "signal": 0,
+          "cable": 0,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Switch",
+          "edid": 36,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Shield",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "PS5",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "Analogue",
+          "edid": 3,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Input 8",
+          "edid": 36,
+          "signal": 0,
+          "cable": 0,
+          "cec_enabled": 0
+        }
+      ],
+      "outputs": [
+        {
+          "name": "TV",
+          "source": 2,
+          "connected": 1,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 0,
+          "arc": 1,
+          "audio_mute": 0,
+          "cec_enabled": 1,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Soundbar",
+          "source": 2,
+          "connected": 1,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 4,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 1,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 3",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 0,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 4",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 0,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 5",
+          "source": 5,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 0,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 6",
+          "source": 6,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 0,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 7",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 0,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 8",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 0,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        }
+      ],
+      "ext_audio": {
+        "mode": 0,
+        "index": 1
+      },
+      "presets": [
+        {
+          "name": "Apple TV",
+          "routing": [2, 2, 2, 2, 2, 2, 2, 2],
+          "saved": true
+        },
+        {
+          "name": "Shield",
+          "routing": [5, 5, 5, 5, 5, 5, 5, 5],
+          "saved": true
+        },
+        {
+          "name": "PS5",
+          "routing": [6, 6, 6, 6, 6, 6, 6, 6],
+          "saved": true
+        },
+        {
+          "name": "Retro",
+          "routing": [7, 7, 1, 1, 1, 1, 1, 1],
+          "saved": true
+        },
+        {
+          "name": "Preset 5",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8],
+          "saved": true
+        },
+        {
+          "name": "Preset 6",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8],
+          "saved": true
+        },
+        {
+          "name": "Preset 7",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8],
+          "saved": true
+        },
+        {
+          "name": "Preset 8",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8],
+          "saved": true
+        }
+      ],
+      "routing": [2, 2, 1, 1, 5, 6, 1, 1]
+    },
+    "state_diff": [],
+    "device_log": [
+      {
+        "t": 1790373274.123,
+        "channel": "http",
+        "command": "set output audio mute",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "set output audio mute",
+          "language": 0,
+          "mute": [2, 1]
+        },
+        "response": {
+          "comhead": "set output audio mute",
+          "result": 0
+        },
+        "recognised": true,
+        "fault": "reject_writes"
+      },
+      {
+        "t": 1790373274.124,
+        "channel": "http",
+        "command": "login",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "login",
+          "user": "Admin",
+          "password": "***"
+        },
+        "response": {
+          "comhead": "login",
+          "result": 1
+        },
+        "recognised": true,
+        "login_ok": true
+      },
+      {
+        "t": 1790373274.124,
+        "channel": "http",
+        "command": "set output audio mute",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "set output audio mute",
+          "language": 0,
+          "mute": [2, 1]
+        },
+        "response": {
+          "comhead": "set output audio mute",
+          "result": 0
+        },
+        "recognised": true,
+        "fault": "reject_writes"
+      },
+      {
+        "t": 1790373274.126,
+        "channel": "http",
+        "command": "get output status",
+        "recognised": true
+      },
+      {
+        "t": 1790373274.256,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      },
+      {
+        "t": 1790373274.257,
+        "channel": "http",
+        "command": "get video status",
+        "recognised": true
+      }
+    ],
+    "ws_events": [
+      {
+        "t_ms": -2,
+        "event": "connected",
+        "data": {
+          "message": "Connected to OREI Matrix WebSocket",
+          "client_count": 1
+        }
+      },
+      {
+        "t_ms": 0,
+        "event": "audio_mute",
+        "data": {
+          "output": 2,
+          "muted": true,
+          "optimistic": true
+        }
+      }
+    ],
+    "screenshots": [],
+    "client_diagnostics": null,
+    "operator": [],
+    "restore": null,
+    "notes": []
+  },
+  "checks": [
+    {
+      "description": "response HTTP >= 400 and body contains {'success': False}",
+      "result": "pass",
+      "detail": "HTTP 500; body {\"success\": false, \"data\": null, \"error\": \"Failed to set output 2 audio mute\"}",
+      "finding": null,
+      "linked_finding": "BE-12",
+      "note": null
+    },
+    {
+      "description": "device outputs[1].audio_mute == 0",
+      "result": "pass",
+      "detail": "outputs[1].audio_mute = 0",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device otherwise unchanged",
+      "result": "pass",
+      "detail": "no other changes",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "hub GET /api/status/outputs -> data.outputs[1].muted == False (HTTP 200)",
+      "result": "pass",
+      "detail": "HTTP 200; data.outputs[1].muted = false",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    }
+  ],
+  "findings": [],
+  "covers": [
+    "run.py",
+    "src/orei_matrix.py",
+    "src/telnet_client.py",
+    "src/_task_supervisor.py",
+    "src/rest_api/app.py",
+    "src/rest_api/utils.py",
+    "src/rest_api/websocket.py",
+    "src/rest_api/outputs.py"
+  ]
+}

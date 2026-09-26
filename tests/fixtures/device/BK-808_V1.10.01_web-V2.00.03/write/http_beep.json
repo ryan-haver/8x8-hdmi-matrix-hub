@@ -11,6 +11,7 @@
     "power": 1,
     "beep": 1,
     "lock": 0,
+    "lcd": 3,
     "routing": [
       7,
       7,
@@ -34,6 +35,16 @@
     "output_names": [
       "TV",
       "Sound",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "preset_names": [
+      "Out1",
+      "Out2",
       "Out3",
       "Out4",
       "Out5",
@@ -152,6 +163,7 @@
       7,
       8
     ],
+    "exa_index": 1,
     "presets": null,
     "lcd_line": null,
     "errors": []
@@ -203,8 +215,8 @@
         },
         "error": null,
         "timing": {
-          "started_at": "2026-09-25T20:29:37.237509Z",
-          "elapsed_ms": 260.27
+          "started_at": "2026-09-25T22:07:30.951508Z",
+          "elapsed_ms": 238.36
         },
         "outcome": "applied"
       },
@@ -264,8 +276,8 @@
         },
         "error": null,
         "timing": {
-          "started_at": "2026-09-25T20:29:39.592376Z",
-          "elapsed_ms": 228.22
+          "started_at": "2026-09-25T22:07:34.148839Z",
+          "elapsed_ms": 364.8
         },
         "outcome": "rejected"
       },
@@ -286,5 +298,5 @@
     }
   },
   "mode": "write",
-  "captured_at": "2026-09-25T20:29:45.858919Z"
+  "captured_at": "2026-09-25T22:07:41.088396Z"
 }

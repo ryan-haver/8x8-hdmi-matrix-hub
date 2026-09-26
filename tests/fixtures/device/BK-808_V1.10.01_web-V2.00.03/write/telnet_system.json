@@ -1,7 +1,7 @@
 {
   "format": "orei-hil-capture/1",
   "id": "write/telnet_system",
-  "title": "Telnet beep / lock / stream",
+  "title": "Telnet beep / lock",
   "group": "telnet",
   "answers": [
     "telnet-set-acks"
@@ -10,6 +10,7 @@
     "power": 1,
     "beep": 1,
     "lock": 0,
+    "lcd": 3,
     "routing": [
       7,
       7,
@@ -33,6 +34,16 @@
     "output_names": [
       "TV",
       "Sound",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "preset_names": [
+      "Out1",
+      "Out2",
       "Out3",
       "Out4",
       "Out5",
@@ -151,6 +162,7 @@
       7,
       8
     ],
+    "exa_index": 1,
     "presets": null,
     "lcd_line": null,
     "errors": []
@@ -171,18 +183,18 @@
           "text": "s beep 0!\r\nbeep off\r\n",
           "chunks": [
             {
-              "t_ms": 30.35,
+              "t_ms": 29.97,
               "len": 11
             },
             {
-              "t_ms": 213.21,
+              "t_ms": 213.57,
               "len": 10
             }
           ],
           "completion": "idle",
           "idle_ms": 1000,
-          "first_byte_ms": 30.35,
-          "elapsed_ms": 1214.73,
+          "first_byte_ms": 29.97,
+          "elapsed_ms": 1214.09,
           "analysis": {
             "line_endings": {
               "crlf": 2,
@@ -203,8 +215,8 @@
         },
         "error": null,
         "timing": {
-          "started_at": "2026-09-25T20:30:56.867211Z",
-          "elapsed_ms": 1214.73
+          "started_at": "2026-09-25T22:09:33.612522Z",
+          "elapsed_ms": 1214.09
         },
         "outcome": "applied"
       },
@@ -233,18 +245,18 @@
           "text": "s lock 1!\r\npanel button lock on\r\n",
           "chunks": [
             {
-              "t_ms": 34.59,
+              "t_ms": 47.75,
               "len": 11
             },
             {
-              "t_ms": 168.24,
+              "t_ms": 182.12,
               "len": 22
             }
           ],
           "completion": "idle",
           "idle_ms": 1000,
-          "first_byte_ms": 34.59,
-          "elapsed_ms": 1169.59,
+          "first_byte_ms": 47.75,
+          "elapsed_ms": 1183.27,
           "analysis": {
             "line_endings": {
               "crlf": 2,
@@ -265,8 +277,8 @@
         },
         "error": null,
         "timing": {
-          "started_at": "2026-09-25T20:31:00.010657Z",
-          "elapsed_ms": 1169.59
+          "started_at": "2026-09-25T22:09:36.725053Z",
+          "elapsed_ms": 1183.27
         },
         "outcome": "applied"
       },
@@ -279,63 +291,6 @@
         ]
       ],
       "outcome": "applied"
-    },
-    {
-      "describe": "output 8 stream -> 1",
-      "kind": "write",
-      "exchange": {
-        "kind": "telnet",
-        "role": "write",
-        "label": "s out 8 stream 1",
-        "command": "s out 8 stream 1",
-        "sent_b64": "cyBvdXQgOCBzdHJlYW0gMSENCg==",
-        "sent_text": "s out 8 stream 1!\r\n",
-        "response": {
-          "body_b64": "cyBvdXQgOCBzdHJlYW0gMSENCkUwMA0K",
-          "text": "s out 8 stream 1!\r\nE00\r\n",
-          "chunks": [
-            {
-              "t_ms": 34.62,
-              "len": 19
-            },
-            {
-              "t_ms": 561.01,
-              "len": 5
-            }
-          ],
-          "completion": "idle",
-          "idle_ms": 1000,
-          "first_byte_ms": 34.62,
-          "elapsed_ms": 1561.07,
-          "analysis": {
-            "line_endings": {
-              "crlf": 2,
-              "lf": 0,
-              "cr": 0
-            },
-            "lines": [
-              "s out 8 stream 1!",
-              "E00"
-            ],
-            "ends_with_newline": true,
-            "trailing_without_newline": "",
-            "last_line": "E00",
-            "error_code": "E00",
-            "error_codes_seen": [
-              "E00"
-            ],
-            "iac": []
-          }
-        },
-        "error": null,
-        "timing": {
-          "started_at": "2026-09-25T20:31:03.354475Z",
-          "elapsed_ms": 1561.07
-        },
-        "outcome": "not-applied"
-      },
-      "diff": [],
-      "outcome": "not-applied"
     }
   ],
   "restored": true,
@@ -345,12 +300,9 @@
       "applied": [
         "beep off",
         "panel button lock on"
-      ],
-      "not-applied": [
-        "E00"
       ]
     }
   },
   "mode": "write",
-  "captured_at": "2026-09-25T20:31:11.502885Z"
+  "captured_at": "2026-09-25T22:09:44.700471Z"
 }

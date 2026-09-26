@@ -1,0 +1,680 @@
+{
+  "format": "orei-hil-capture/1",
+  "id": "write/http_ext_audio_mode",
+  "title": "Ext-audio mode (set ext-audio mode; mode)",
+  "group": "ext-audio",
+  "answers": [
+    "write-ok-results",
+    "write-fail-result",
+    "web-ui-commands",
+    "exa-commands"
+  ],
+  "before": {
+    "power": 1,
+    "beep": 1,
+    "lock": 0,
+    "lcd": 3,
+    "routing": [
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7
+    ],
+    "input_names": [
+      "NES",
+      "SNES",
+      "Sega",
+      "N64",
+      "Switch",
+      "PS3",
+      "Apple",
+      "Switcher"
+    ],
+    "output_names": [
+      "TV",
+      "Sound",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "preset_names": [
+      "Out1",
+      "Out2",
+      "Out3",
+      "Out4",
+      "Out5",
+      "Out6",
+      "Out7",
+      "Out8"
+    ],
+    "stream": [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "hdcp": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "hdr": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "scaler": [
+      0,
+      4,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "arc": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "mute": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "edid": [
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36
+    ],
+    "cec_in": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "cec_out": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "exa_mode": 0,
+    "exa_enable": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "exa_source": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "exa_index": 1,
+    "presets": null,
+    "lcd_line": null,
+    "errors": []
+  },
+  "steps": [
+    {
+      "describe": "ext-audio mode -> 1",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set ext-audio mode",
+        "comhead": "set ext-audio mode",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 59"
+          ],
+          "json": {
+            "comhead": "set ext-audio mode",
+            "language": 0,
+            "mode": 1
+          },
+          "body_text": "{\"comhead\": \"set ext-audio mode\", \"language\": 0, \"mode\": 1}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IGV4dC1hdWRpbyBtb2RlIiwicG93ZXIiOjEsImFsbHNvdXJjZSI6WzcsNyw3LDcsNyw3LDcsN10sImFsbG91dCI6WzEsMSwxLDEsMSwxLDEsMV0sImFsbGlucHV0bmFtZSI6WyJORVMiLCJTTkVTIiwiU2VnYSIsIk42NCIsIlN3aXRjaCIsIlBTMyIsIkFwcGxlIiwiU3dpdGNoZXIiXSwiYWxsb3V0cHV0bmFtZSI6WyJUViIsIlNvdW5kIiwiT3V0MyIsIk91dDQiLCJPdXQ1IiwiT3V0NiIsIk91dDciLCJPdXQ4Il0sInJlc3VsdCI6MX0NCg==",
+          "body_text": "{\"comhead\":\"set ext-audio mode\",\"power\":1,\"allsource\":[7,7,7,7,7,7,7,7],\"allout\":[1,1,1,1,1,1,1,1],\"allinputname\":[\"NES\",\"SNES\",\"Sega\",\"N64\",\"Switch\",\"PS3\",\"Apple\",\"Switcher\"],\"alloutputname\":[\"TV\",\"Sound\",\"Out3\",\"Out4\",\"Out5\",\"Out6\",\"Out7\",\"Out8\"],\"result\":1}\r\n",
+          "json": {
+            "comhead": "set ext-audio mode",
+            "power": 1,
+            "allsource": [
+              7,
+              7,
+              7,
+              7,
+              7,
+              7,
+              7,
+              7
+            ],
+            "allout": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "allinputname": [
+              "NES",
+              "SNES",
+              "Sega",
+              "N64",
+              "Switch",
+              "PS3",
+              "Apple",
+              "Switcher"
+            ],
+            "alloutputname": [
+              "TV",
+              "Sound",
+              "Out3",
+              "Out4",
+              "Out5",
+              "Out6",
+              "Out7",
+              "Out8"
+            ],
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:06:36.512083Z",
+          "elapsed_ms": 279.17
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "exa_mode",
+          null,
+          0,
+          1
+        ],
+        [
+          "exa_source",
+          1,
+          1,
+          7
+        ],
+        [
+          "exa_source",
+          2,
+          2,
+          7
+        ],
+        [
+          "exa_source",
+          3,
+          3,
+          7
+        ],
+        [
+          "exa_source",
+          4,
+          4,
+          7
+        ],
+        [
+          "exa_source",
+          5,
+          5,
+          7
+        ],
+        [
+          "exa_source",
+          6,
+          6,
+          7
+        ],
+        [
+          "exa_source",
+          8,
+          8,
+          7
+        ]
+      ],
+      "outcome": "applied"
+    },
+    {
+      "describe": "ext-audio mode -> 2",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set ext-audio mode",
+        "comhead": "set ext-audio mode",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 59"
+          ],
+          "json": {
+            "comhead": "set ext-audio mode",
+            "language": 0,
+            "mode": 2
+          },
+          "body_text": "{\"comhead\": \"set ext-audio mode\", \"language\": 0, \"mode\": 2}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IGV4dC1hdWRpbyBtb2RlIiwicG93ZXIiOjEsImFsbHNvdXJjZSI6WzEsMSwzLDQsNSw2LDcsOF0sImFsbG91dCI6WzEsMSwxLDEsMSwxLDEsMV0sImFsbGlucHV0bmFtZSI6WyJORVMiLCJTTkVTIiwiU2VnYSIsIk42NCIsIlN3aXRjaCIsIlBTMyIsIkFwcGxlIiwiU3dpdGNoZXIiXSwiYWxsb3V0cHV0bmFtZSI6WyJUViIsIlNvdW5kIiwiT3V0MyIsIk91dDQiLCJPdXQ1IiwiT3V0NiIsIk91dDciLCJPdXQ4Il0sInJlc3VsdCI6MX0NCg==",
+          "body_text": "{\"comhead\":\"set ext-audio mode\",\"power\":1,\"allsource\":[1,1,3,4,5,6,7,8],\"allout\":[1,1,1,1,1,1,1,1],\"allinputname\":[\"NES\",\"SNES\",\"Sega\",\"N64\",\"Switch\",\"PS3\",\"Apple\",\"Switcher\"],\"alloutputname\":[\"TV\",\"Sound\",\"Out3\",\"Out4\",\"Out5\",\"Out6\",\"Out7\",\"Out8\"],\"result\":1}\r\n",
+          "json": {
+            "comhead": "set ext-audio mode",
+            "power": 1,
+            "allsource": [
+              1,
+              1,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ],
+            "allout": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "allinputname": [
+              "NES",
+              "SNES",
+              "Sega",
+              "N64",
+              "Switch",
+              "PS3",
+              "Apple",
+              "Switcher"
+            ],
+            "alloutputname": [
+              "TV",
+              "Sound",
+              "Out3",
+              "Out4",
+              "Out5",
+              "Out6",
+              "Out7",
+              "Out8"
+            ],
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:06:38.785977Z",
+          "elapsed_ms": 280.12
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "exa_mode",
+          null,
+          1,
+          2
+        ],
+        [
+          "exa_source",
+          1,
+          7,
+          1
+        ],
+        [
+          "exa_source",
+          2,
+          7,
+          1
+        ],
+        [
+          "exa_source",
+          3,
+          7,
+          3
+        ],
+        [
+          "exa_source",
+          4,
+          7,
+          4
+        ],
+        [
+          "exa_source",
+          5,
+          7,
+          5
+        ],
+        [
+          "exa_source",
+          6,
+          7,
+          6
+        ],
+        [
+          "exa_source",
+          8,
+          7,
+          8
+        ]
+      ],
+      "outcome": "applied"
+    },
+    {
+      "describe": "ext-audio mode -> 0",
+      "kind": "write",
+      "exchange": {
+        "kind": "http",
+        "role": "write",
+        "label": "set ext-audio mode",
+        "comhead": "set ext-audio mode",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 59"
+          ],
+          "json": {
+            "comhead": "set ext-audio mode",
+            "language": 0,
+            "mode": 0
+          },
+          "body_text": "{\"comhead\": \"set ext-audio mode\", \"language\": 0, \"mode\": 0}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IGV4dC1hdWRpbyBtb2RlIiwicG93ZXIiOjEsImFsbHNvdXJjZSI6WzEsMiwzLDQsNSw2LDcsOF0sImFsbG91dCI6WzEsMSwxLDEsMSwxLDEsMV0sImFsbGlucHV0bmFtZSI6WyJORVMiLCJTTkVTIiwiU2VnYSIsIk42NCIsIlN3aXRjaCIsIlBTMyIsIkFwcGxlIiwiU3dpdGNoZXIiXSwiYWxsb3V0cHV0bmFtZSI6WyJUViIsIlNvdW5kIiwiT3V0MyIsIk91dDQiLCJPdXQ1IiwiT3V0NiIsIk91dDciLCJPdXQ4Il0sInJlc3VsdCI6MX0NCg==",
+          "body_text": "{\"comhead\":\"set ext-audio mode\",\"power\":1,\"allsource\":[1,2,3,4,5,6,7,8],\"allout\":[1,1,1,1,1,1,1,1],\"allinputname\":[\"NES\",\"SNES\",\"Sega\",\"N64\",\"Switch\",\"PS3\",\"Apple\",\"Switcher\"],\"alloutputname\":[\"TV\",\"Sound\",\"Out3\",\"Out4\",\"Out5\",\"Out6\",\"Out7\",\"Out8\"],\"result\":1}\r\n",
+          "json": {
+            "comhead": "set ext-audio mode",
+            "power": 1,
+            "allsource": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ],
+            "allout": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "allinputname": [
+              "NES",
+              "SNES",
+              "Sega",
+              "N64",
+              "Switch",
+              "PS3",
+              "Apple",
+              "Switcher"
+            ],
+            "alloutputname": [
+              "TV",
+              "Sound",
+              "Out3",
+              "Out4",
+              "Out5",
+              "Out6",
+              "Out7",
+              "Out8"
+            ],
+            "result": 1
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:06:41.053786Z",
+          "elapsed_ms": 249.95
+        },
+        "outcome": "applied"
+      },
+      "diff": [
+        [
+          "exa_mode",
+          null,
+          2,
+          0
+        ],
+        [
+          "exa_source",
+          2,
+          1,
+          2
+        ]
+      ],
+      "outcome": "applied"
+    },
+    {
+      "describe": "invalid mode 3",
+      "kind": "invalid",
+      "exchange": {
+        "kind": "http",
+        "role": "write-invalid",
+        "label": "set ext-audio mode",
+        "comhead": "set ext-audio mode",
+        "request": {
+          "method": "POST",
+          "path": "/cgi-bin/instr",
+          "headers": [
+            "Host: 192.168.0.100",
+            "Content-Type: application/json",
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "User-Agent: Python/3.12 aiohttp/3.13.3",
+            "Content-Length: 59"
+          ],
+          "json": {
+            "comhead": "set ext-audio mode",
+            "language": 0,
+            "mode": 3
+          },
+          "body_text": "{\"comhead\": \"set ext-audio mode\", \"language\": 0, \"mode\": 3}"
+        },
+        "response": {
+          "status": 200,
+          "reason": "OK",
+          "http_version": "1.1",
+          "headers": [
+            "Connection: Keep-Alive",
+            "Transfer-Encoding: chunked",
+            "Keep-Alive: timeout=200",
+            "content-type: text/plain"
+          ],
+          "body_b64": "eyJjb21oZWFkIjoic2V0IGV4dC1hdWRpbyBtb2RlIiwicG93ZXIiOjEsImFsbHNvdXJjZSI6WzEsMSwzLDQsNSw2LDcsOF0sImFsbG91dCI6WzEsMSwxLDEsMSwxLDEsMV0sImFsbGlucHV0bmFtZSI6WyJORVMiLCJTTkVTIiwiU2VnYSIsIk42NCIsIlN3aXRjaCIsIlBTMyIsIkFwcGxlIiwiU3dpdGNoZXIiXSwiYWxsb3V0cHV0bmFtZSI6WyJUViIsIlNvdW5kIiwiT3V0MyIsIk91dDQiLCJPdXQ1IiwiT3V0NiIsIk91dDciLCJPdXQ4Il0sInJlc3VsdCI6MH0NCg==",
+          "body_text": "{\"comhead\":\"set ext-audio mode\",\"power\":1,\"allsource\":[1,1,3,4,5,6,7,8],\"allout\":[1,1,1,1,1,1,1,1],\"allinputname\":[\"NES\",\"SNES\",\"Sega\",\"N64\",\"Switch\",\"PS3\",\"Apple\",\"Switcher\"],\"alloutputname\":[\"TV\",\"Sound\",\"Out3\",\"Out4\",\"Out5\",\"Out6\",\"Out7\",\"Out8\"],\"result\":0}\r\n",
+          "json": {
+            "comhead": "set ext-audio mode",
+            "power": 1,
+            "allsource": [
+              1,
+              1,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ],
+            "allout": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "allinputname": [
+              "NES",
+              "SNES",
+              "Sega",
+              "N64",
+              "Switch",
+              "PS3",
+              "Apple",
+              "Switcher"
+            ],
+            "alloutputname": [
+              "TV",
+              "Sound",
+              "Out3",
+              "Out4",
+              "Out5",
+              "Out6",
+              "Out7",
+              "Out8"
+            ],
+            "result": 0
+          },
+          "json_error": null
+        },
+        "error": null,
+        "timing": {
+          "started_at": "2026-09-25T22:06:43.348650Z",
+          "elapsed_ms": 265.06
+        },
+        "outcome": "rejected"
+      },
+      "diff": [],
+      "outcome": "rejected"
+    }
+  ],
+  "restored": true,
+  "restore_remaining": [],
+  "findings": {
+    "results_by_outcome": {
+      "applied": [
+        1
+      ],
+      "rejected": [
+        0
+      ]
+    }
+  },
+  "mode": "write",
+  "captured_at": "2026-09-25T22:06:47.336711Z"
+}
