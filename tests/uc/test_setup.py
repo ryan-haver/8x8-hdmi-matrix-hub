@@ -12,11 +12,13 @@ import asyncio
 import json
 from pathlib import Path
 
+import aiohttp
+
 from tools.uc_remote_sim import UcRemoteSim
 from tools.validate.device import SimDevice
 from tools.validate.stack import SimulatorProcess, free_port
 
-from ._helpers import CYCLE, INPUT_NAMES, POLL, known_bug, sent
+from ._helpers import CYCLE, INPUT_NAMES, POLL, known_bug, sent, wait_for
 
 
 def _config(hub) -> dict:
@@ -71,6 +73,26 @@ async def test_setup_starts_live_updates_without_a_remote_connect(uc_hub_factory
         await sim.patch_state({"outputs": {"1": {"source": 7}}})
         await remote.wait_event("entity_change", lambda d: d["entity_id"] == "media_player.output_2"
                                 and d["attributes"].get("source") == INPUT_NAMES[6], since=since, timeout=CYCLE)
+
+
+async def test_matrix_host_serves_the_hub_before_any_remote_setup(uc_hub_factory,
+                                                                   uc_simulator: SimulatorProcess) -> None:
+    """Without a saved setup the driver uses MATRIX_HOST, so the web app has the matrix before a Remote is set up
+    (the variable is never saved; the Remote's setup then saves the configuration as usual)."""
+    hub = await uc_hub_factory(restore=False, extra_env={"MATRIX_HOST": uc_simulator.host,
+                                                         "MATRIX_PORT": str(uc_simulator.https_port)})
+    async with aiohttp.ClientSession(base_url=hub.base_url, headers={"X-Forwarded-For": "10.88.0.3"}) as web:
+        async def web_connected() -> bool:
+            async with web.get("/api/status") as resp:
+                return bool(((await resp.json()).get("data") or {}).get("connected"))
+
+        assert await wait_for(web_connected, timeout=CYCLE + 5)
+    assert not Path(hub.data_dir, "config_state.json").exists()
+    async with UcRemoteSim(hub.uc_url) as remote:
+        assert len(await remote.get_available_entities()) == 74
+        outcome = await remote.setup_driver({"host": uc_simulator.host, "port": uc_simulator.https_port})
+        assert outcome.state == "OK"
+    assert _config(hub)["host"] == uc_simulator.host
 
 
 async def test_setup_with_an_unreachable_matrix_fails_cleanly(uc_hub_factory) -> None:

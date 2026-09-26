@@ -826,6 +826,65 @@ class TestStartupHelpers:
         monkeypatch.setenv("UC_INTEGRATION_HTTP_PORT", "19095")
         assert driver.integration_port() == 19095
 
+    def test_rest_port_prefers_api_port(self, monkeypatch):
+        import driver
+
+        monkeypatch.delenv("API_PORT", raising=False)
+        monkeypatch.delenv("REST_API_PORT", raising=False)
+        assert driver.rest_api_port() == 8080
+        monkeypatch.setenv("REST_API_PORT", "8181")
+        assert driver.rest_api_port() == 8181  # deprecated name still honoured
+        monkeypatch.setenv("API_PORT", "8282")
+        assert driver.rest_api_port() == 8282
+
+    def test_integration_port_from_a_given_metadata_file(self, tmp_path, monkeypatch):
+        import driver
+
+        monkeypatch.delenv("UC_INTEGRATION_HTTP_PORT", raising=False)
+        metadata = tmp_path / "driver.json"
+        metadata.write_text('{"port": 9123}', encoding="utf-8")
+        assert driver.integration_port(metadata) == 9123
+
+    async def test_matrix_host_is_used_only_without_a_saved_setup(self, tmp_path, monkeypatch):
+        """With UC on, MATRIX_HOST gives the web app a matrix before any Remote setup; a saved setup wins."""
+        import driver
+
+        started = []
+
+        async def fake_poller():
+            started.append(True)
+
+        class FakeMatrix:
+            def __init__(self, host, port=443):
+                self.host, self.port = host, port
+                self.events = type("E", (), {"on": lambda *a: None})()
+
+        monkeypatch.setattr(driver, "OreiMatrix", FakeMatrix)
+        monkeypatch.setattr(driver, "start_status_polling", fake_poller)
+        monkeypatch.setattr(driver, "_wire_rest_api", lambda: None)
+        monkeypatch.setattr(driver, "install_entities", lambda **_: None)
+        monkeypatch.setattr(driver, "_spawn", lambda coro, name: coro.close())
+        monkeypatch.setattr(driver, "CONFIG_FILE", tmp_path / "config_state.json")
+        monkeypatch.setattr(driver._driver_state, "api", None)
+        monkeypatch.setattr(driver._driver_state, "matrix_device", None)
+        monkeypatch.setattr(driver._driver_state, "startup_task", None)
+        monkeypatch.setattr(driver._driver_state, "input_names", {})
+        monkeypatch.setattr(driver._driver_state, "output_names", {})
+        monkeypatch.delenv("MATRIX_PORT", raising=False)
+        monkeypatch.delenv("OREI_PORT", raising=False)
+
+        monkeypatch.setenv("MATRIX_HOST", "")
+        assert await driver.restore_from_config() is False  # nothing configured: wait for setup
+
+        monkeypatch.setenv("MATRIX_HOST", "10.0.0.7")
+        assert await driver.restore_from_config() is True
+        assert (driver.get_matrix().host, driver.get_matrix().port) == ("10.0.0.7", 443)
+        assert not (tmp_path / "config_state.json").exists()  # never saved from the variable
+
+        driver.save_config("10.0.0.9", 8443, {1: "PS5"})
+        assert await driver.restore_from_config() is True
+        assert (driver.get_matrix().host, driver.get_matrix().port) == ("10.0.0.9", 8443)
+
     def test_config_file_uses_the_ucapi_config_dir(self, tmp_path, monkeypatch):
         import driver
 

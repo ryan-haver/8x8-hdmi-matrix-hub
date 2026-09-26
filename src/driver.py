@@ -82,7 +82,12 @@ from rest_api import (
 _LOG = logging.getLogger("driver")
 
 # REST API configuration
-REST_API_PORT = int(os.environ.get("REST_API_PORT", "8080"))
+def rest_api_port() -> int:
+    """The hub's REST port: API_PORT (as everywhere in the hub), else the older REST_API_PORT, else 8080."""
+    return int(os.environ.get("API_PORT") or os.environ.get("REST_API_PORT") or "8080")
+
+
+REST_API_PORT = rest_api_port()
 REST_API_ENABLED = os.environ.get("REST_API_ENABLED", "true").lower() == "true"
 
 # Status polling configuration
@@ -694,13 +699,13 @@ def check_port_available(port: int) -> bool:
         raise
 
 
-def integration_port() -> int:
+def integration_port(driver_json: Path | None = None) -> int:
     """The integration WebSocket port ucapi will listen on (UC_INTEGRATION_HTTP_PORT, else driver.json)."""
     env = os.environ.get("UC_INTEGRATION_HTTP_PORT")
     if env:
         return int(env)
     try:
-        return int(json.loads(DRIVER_JSON.read_text(encoding="utf-8")).get("port", 9090))
+        return int(json.loads((driver_json or DRIVER_JSON).read_text(encoding="utf-8")).get("port", 9090))
     except (OSError, ValueError):
         return 9090
 
@@ -1846,12 +1851,23 @@ async def restore_from_config() -> bool:
     background (:func:`startup_connect`); until it is up, entities are
     UNAVAILABLE with unknown values.
 
+    Without a saved setup, ``MATRIX_HOST`` (and ``MATRIX_PORT``/``OREI_PORT``)
+    is used, so the web app has the matrix before a Remote is set up. It is
+    never saved: a saved setup (the Remote's) always wins over the variable.
+
     :return: True if a configuration was restored, False otherwise
     """
-    config = load_config()
+    config: dict[str, Any] | None = load_config()
+    from_env = False
     if not config:
-        _LOG.info("No saved configuration found - waiting for setup")
-        return False
+        env_host = os.environ.get("MATRIX_HOST", "").strip()
+        if not env_host:
+            _LOG.info("No saved configuration found - waiting for setup")
+            return False
+        env_port = int(os.environ.get("MATRIX_PORT") or os.environ.get("OREI_PORT") or "443")
+        config = {"host": env_host, "port": env_port}
+        from_env = True
+        _LOG.info("No saved setup: using MATRIX_HOST %s:%d until the Remote's setup saves one", env_host, env_port)
 
     host = config.get("host")
     port = config.get("port", 443)
@@ -1859,7 +1875,7 @@ async def restore_from_config() -> bool:
         _LOG.warning("No host in saved configuration")
         return False
 
-    _LOG.info(f"Restoring from saved config: host={host}, port={port}")
+    _LOG.info(f"Restoring: host={host}, port={port}")
     input_names = config.get("input_names", {})
     output_names = config.get("output_names", {})
     set_input_names(input_names if input_names else {i: f"Input {i}" for i in range(1, 9)})
@@ -1871,12 +1887,15 @@ async def restore_from_config() -> bool:
     install_entities()
     _wire_rest_api()
     await start_status_polling()
-    _driver_state.startup_task = _spawn(startup_connect(matrix), "matrix_startup_connect")
+    _driver_state.startup_task = _spawn(startup_connect(matrix, save=not from_env), "matrix_startup_connect")
     return True
 
 
-async def startup_connect(matrix: OreiMatrix) -> None:
-    """Connect the restored matrix; if it is unreachable, let it keep trying on its own."""
+async def startup_connect(matrix: OreiMatrix, *, save: bool = True) -> None:
+    """Connect the restored matrix; if it is unreachable, let it keep trying on its own.
+
+    ``save``: store refreshed names in the saved setup (not for a MATRIX_HOST-only start).
+    """
     try:
         ok = await matrix.connect()
     except Exception as e:
@@ -1890,7 +1909,7 @@ async def startup_connect(matrix: OreiMatrix) -> None:
         await publish_device_state()
         return
     try:
-        await refresh_names(matrix, save=True)
+        await refresh_names(matrix, save=save)
     except Exception as e:
         _LOG.warning(f"Could not refresh names at start-up: {e}")
     await publish_device_state()
@@ -2037,8 +2056,13 @@ def handle_exit_signal(signame, loop):
     asyncio.create_task(shutdown(loop))
 
 
-def main() -> None:
-    """Run the driver: integration WebSocket, then restore, then the REST API (UC-19)."""
+def main(driver_json: str | Path | None = None) -> None:
+    """Run the driver: integration WebSocket, then restore, then the REST API (UC-19).
+
+    :param driver_json: the driver metadata file to publish (default: ``driver.json`` next to the
+        package). A caller that adjusts the metadata (e.g. a driver URL) passes its own copy.
+    """
+    metadata = Path(driver_json) if driver_json else DRIVER_JSON
     logging.basicConfig(
         level=logging.DEBUG,
         format="%(asctime)s | %(levelname)-8s | %(name)s | %(message)s",
@@ -2059,7 +2083,7 @@ def main() -> None:
             sys.exit(1)
 
     # Check that the integration port is available, wait if not (BE-21: the configured port, any OS)
-    uc_port = integration_port()
+    uc_port = integration_port(metadata)
     if not check_port_available(uc_port):
         _LOG.warning(f"Port {uc_port} is in use, waiting for it to become available...")
         if not wait_for_port(uc_port, timeout=15):
@@ -2102,7 +2126,7 @@ def main() -> None:
     for attempt in range(max_retries):
         try:
             _LOG.info(f"Initializing API (attempt {attempt + 1}/{max_retries})...")
-            loop.run_until_complete(api.init(str(DRIVER_JSON), setup_handler))
+            loop.run_until_complete(api.init(str(metadata), setup_handler))
             _LOG.info("API initialized successfully")
             break
         except Exception as e:
