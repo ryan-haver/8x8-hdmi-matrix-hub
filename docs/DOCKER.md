@@ -71,10 +71,10 @@ off (`UC_DISABLE_MDNS_PUBLISH=true`) and sets
 `UC_DRIVER_URL=ws://$HUB_HOST_IP:$UC_HOST_PORT`, the address the integration
 advertises in its metadata. The Remote does not discover the integration by
 itself; register it once through the Remote's REST API (user `web-configurator`,
-password = the web configurator PIN):
+password = the web configurator PIN; curl prompts for it):
 
 ```bash
-curl -u "web-configurator:<PIN>" -H 'Content-Type: application/json' \
+curl -u web-configurator -H 'Content-Type: application/json' \
   http://<remote-ip>/api/intg/drivers \
   -d '{"driver_id": "hdmi_matrix", "driver_url": "ws://192.168.1.20:9095"}'
 ```
