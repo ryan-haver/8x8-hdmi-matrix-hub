@@ -804,10 +804,10 @@ features:
     rest: ['POST /api/preset/{preset}/save']
   target: V2
   current: V1
-  basis: tests/test_rest_api.py TestControlEndpoints (mocked).
+  basis: 'Scenario presets.save_custom_mapping (V2, custom mapping body); tests/test_rest_api.py TestControlEndpoints (mocked).'
   evidence: []
   findings: [API-14]
-  scenarios: []
+  scenarios: [presets.save_custom_mapping]
 - id: F-API-009
   area: api
   title: POST /api/power/on|off
@@ -973,8 +973,8 @@ features:
         /api/v2/scenes/{scene_id}/steps', 'DELETE /api/v2/scenes/{scene_id}/steps/{index}', 'PUT|DELETE /api/v2/scenes/{scene_id}/override',
       'GET /api/v2/scenes/{scene_id}/history']
   target: V2
-  current: V0
-  basis: No test exercises any /api/v2/scenes route (TST-03).
+  current: V2
+  basis: 'tests/sim/test_sim_scenes_v2.py exercises every /api/v2/scenes route on the real hub + simulator and asserts the device effect of execute (V2).'
   evidence: []
   findings: [API-05, API-01, API-02, TST-03]
   scenarios: []
@@ -1219,11 +1219,12 @@ features:
   interfaces:
     ws: [scene_execution_error]
   target: V2
-  current: V0
-  basis: No test.
+  current: V1
+  basis: 'Scenario scenes.partial_failure receives scene_execution_error on /ws (V2 evidence; recorded level capped at V1 by UI-02:
+    the web client does not handle the event).'
   evidence: []
   findings: [API-01, UI-02]
-  scenarios: []
+  scenarios: [scenes.partial_failure]
 - id: F-API-042
   area: api
   title: WS heartbeat (ping / pong)
@@ -1263,10 +1264,10 @@ features:
     flic: ['POST /api/profile/{id}/recall']
   target: V4
   current: V1
-  basis: tests/test_rest_api.py TestProfileAPI recall (mocked matrix).
+  basis: 'Scenarios profiles.recall_routing and profiles.recall_rejected (V2); tests/sim/test_sim_profiles.py recall tests (real hub + simulator). Recall reports failed outputs with 207/500 since WP-C1 (API-08).'
   evidence: []
   findings: [API-08, API-19]
-  scenarios: [profiles.recall_routing]
+  scenarios: [profiles.recall_routing, profiles.recall_rejected]
 - id: F-DOM-003
   area: domain
   title: 'Recall a profile: its output settings (mute, HDR, HDCP, enable) are applied'
@@ -1276,7 +1277,7 @@ features:
     files: ['profiles.json outputs.{n}.audio_mute|hdr_mode|hdcp_mode']
   target: V4
   current: V1
-  basis: tests/test_rest_api.py TestProfileAPI recall uses a MagicMock matrix, which has every method, so it cannot see VAL-01.
+  basis: 'Scenario profiles.recall_output_settings (V2) and tests/sim/test_sim_profiles.py::test_recall_applies_mute_hdr_and_hdcp: mute, HDR (API 1-based -> device code) and HDCP are applied with the real OreiMatrix setters since WP-C1 (VAL-01).'
   evidence: []
   findings: [VAL-01, API-22]
   scenarios: [profiles.recall_output_settings]
@@ -1289,7 +1290,7 @@ features:
     files: [profiles.json power_on_macro]
   target: V4
   current: V1
-  basis: tests/test_rest_api.py TestProfileCecMacroEndpoints (mocked).
+  basis: 'Scenario profiles.recall_power_macro (V2) and tests/sim/test_sim_profiles.py::test_recall_runs_the_power_on_macro: CEC frames reach the simulator in modular mode since WP-C1 wired the macro CEC sender (VAL-02).'
   evidence: []
   findings: [VAL-02, BE-02, API-08]
   scenarios: [profiles.recall_power_macro]
@@ -1328,10 +1329,10 @@ features:
     ui: [dialog/scene-cec]
   target: V3
   current: V1
-  basis: tests/test_cec_resolver.py; tests/test_rest_api.py TestSceneCecConfigEndpoints (mocked).
+  basis: 'Scenario profiles.cec_auto_resolve (V2); tests/sim/test_sim_profiles.py auto-resolve tests; tests/test_cec_resolver.py. The v1 auto-resolve route works since WP-C1 (API-23).'
   evidence: []
   findings: [API-23]
-  scenarios: []
+  scenarios: [profiles.cec_auto_resolve]
 - id: F-DOM-008
   area: domain
   title: Profile execution log
@@ -1367,11 +1368,11 @@ features:
     ui: [editor/scene/new, editor/scene/edit]
     files: [scenes.json]
   target: V3
-  current: V1
-  basis: tests/test_scene_manager.py (manager only; no v2 route is exercised).
+  current: V2
+  basis: 'Scenarios scenes.edit_with_profile_step and scenes.invalid_edit_rejected (V2); tests/sim/test_sim_scenes_v2.py (every /api/v2/scenes route on the real hub + simulator); tests/test_scene_manager.py.'
   evidence: []
   findings: [API-05, API-13, API-12]
-  scenarios: []
+  scenarios: [scenes.edit_with_profile_step, scenes.invalid_edit_rejected]
 - id: F-DOM-011
   area: domain
   title: 'Run a scene: profile steps'
@@ -1381,11 +1382,11 @@ features:
     ws: [scene_execution_error]
     ui: [drawer/settings/scenes]
   target: V4
-  current: V1
-  basis: tests/test_scene_execution.py TestSceneExecutorProfile (mocked matrix).
+  current: V2
+  basis: 'Scenarios scenes.run_* and scenes.partial_failure (V2, effects read back from the simulator); tests/sim/test_sim_scenes_v2.py; tests/test_scene_execution.py (spec''d OreiMatrix double).'
   evidence: []
-  findings: [API-01, API-02, API-08]
-  scenarios: []
+  findings: [API-01, API-02, API-08, VAL-07, VAL-11]
+  scenarios: [scenes.run_profile_macro_preset, scenes.run_protected, scenes.partial_failure, scenes.run_unknown]
 - id: F-DOM-012
   area: domain
   title: 'Run a scene: macro steps'
@@ -1393,11 +1394,11 @@ features:
   interfaces:
     rest: ['POST /api/v2/scenes/{scene_id}/execute']
   target: V4
-  current: V1
-  basis: tests/test_scene_execution.py TestSceneExecutorMacroStep (mocked).
+  current: V2
+  basis: 'Scenarios scenes.run_shortcut_and_macro, scenes.run_profile_macro_preset, scenes.run_rejected (V2: CEC frames in the simulator command log); tests/sim/test_sim_scenes_v2.py.'
   evidence: []
   findings: [API-03, VAL-02]
-  scenarios: []
+  scenarios: [scenes.run_profile_macro_preset, scenes.run_shortcut_and_macro, scenes.run_rejected]
 - id: F-DOM-013
   area: domain
   title: 'Run a scene: delay and shortcut steps'
@@ -1406,9 +1407,9 @@ features:
     rest: ['POST /api/v2/scenes/{scene_id}/execute']
   target: V3
   current: V1
-  basis: tests/test_scene_execution.py (mocked).
+  basis: 'Shortcut steps are proven with F-DOM-011/012 (scenes.run_protected, scenes.run_shortcut_and_macro). There is no delay step type (scene_manager.VALID_STEP_TYPES = profile, system_action, macro), so this feature stays unproven until one exists (VAL-09).'
   evidence: []
-  findings: [API-01, API-08]
+  findings: [API-01, API-08, VAL-09]
   scenarios: []
 - id: F-DOM-014
   area: domain
@@ -1417,11 +1418,11 @@ features:
   interfaces:
     rest: ['PUT|DELETE /api/v2/scenes/{scene_id}/override']
   target: V3
-  current: V1
-  basis: tests/test_scene_execution.py TestApplyOverridesToProfile; tests/test_scene_manager.py TestSceneManagerOverrides.
+  current: V2
+  basis: 'Scenarios scenes.override_leaves_setting and scenes.run_profile_macro_preset (V2): an override leaves the setting unchanged on the device (API-04); tests/sim/test_sim_scenes_v2.py::test_overrides_leave_the_setting_unchanged.'
   evidence: []
   findings: [API-04]
-  scenarios: []
+  scenarios: [scenes.run_profile_macro_preset, scenes.override_leaves_setting]
 - id: F-DOM-015
   area: domain
   title: Protect a scene with a passcode
@@ -1431,10 +1432,10 @@ features:
     ui: [editor/scene/passcode]
   target: V3
   current: V1
-  basis: tests/test_scene_execution.py TestSceneExecutorPassword; tests/test_scene_manager.py TestSceneManagerPassword.
+  basis: 'Scenarios scenes.run_protected and scenes.run_needs_passcode (V2); tests/sim/test_sim_scenes_v2.py passcode tests; tests/test_scene_execution.py TestSceneExecutorPassword.'
   evidence: []
   findings: [SEC-05, SEC-06]
-  scenarios: []
+  scenarios: [scenes.run_protected, scenes.run_needs_passcode]
 - id: F-DOM-016
   area: domain
   title: Validate a scene and detect conflicting steps
@@ -1446,7 +1447,7 @@ features:
   current: V1
   basis: tests/test_scene_manager.py TestDetectConflicts.
   evidence: []
-  findings: []
+  findings: [VAL-10]
   scenarios: []
 - id: F-DOM-017
   area: domain
@@ -1455,11 +1456,11 @@ features:
   interfaces:
     rest: ['GET /api/v2/scenes/{scene_id}/history']
   target: V3
-  current: V1
-  basis: tests/test_scene_manager.py (history API of the manager).
+  current: V2
+  basis: 'Scenario scenes.partial_failure reads the history back through the hub (V2); tests/sim/test_sim_scenes_v2.py history checks.'
   evidence: []
   findings: [API-02]
-  scenarios: []
+  scenarios: [scenes.partial_failure]
 - id: F-DOM-018
   area: domain
   title: Legacy 'scenes' (v1) as aliases of profiles
@@ -1497,10 +1498,10 @@ features:
     flic: ['POST /api/cec/macro/{id}/execute']
   target: V4
   current: V1
-  basis: tests/test_cec_macros.py TestMacroExecution (fake sender).
+  basis: 'Scenario macros.run_volume_up (V2: three CEC frames in the simulator command log); tests/sim/test_sim_profiles.py::test_macro_execute_sends_cec_frames; tests/test_cec_macros.py.'
   evidence: []
-  findings: [VAL-02, BE-02]
-  scenarios: []
+  findings: [VAL-02, BE-02, VAL-08]
+  scenarios: [macros.run_volume_up]
 - id: F-DOM-021
   area: domain
   title: Test / dry-run a macro
@@ -1534,66 +1535,68 @@ features:
     ui: [drawer/shortcuts/default]
     kiosk: [kiosk/shortcuts/default]
   target: V3
-  current: V1
-  basis: tests/test_system_shortcuts.py TestExecuteShortcut (mocked matrix).
+  current: V2
+  basis: 'Scenarios shortcuts.route_* (V2); tests/sim/test_sim_shortcuts.py shortcut tests; tests/test_system_shortcuts.py (spec''d double).'
   evidence: []
   findings: [API-01]
-  scenarios: []
+  scenarios: [shortcuts.route_input_to_output, shortcuts.route_one_to_one, shortcuts.unknown]
 - id: F-DOM-024
   area: domain
   title: 'Built-in shortcut: power everything off'
   claim: src/system_shortcuts.py power_off_all
   interfaces: *id003
   target: V3
-  current: V1
-  basis: tests/test_system_shortcuts.py (mocked).
+  current: V2
+  basis: 'Scenario shortcuts.power_off_all (V2: one `set poweronoff`, API-06); tests/sim/test_sim_shortcuts.py::test_power_off_all_shortcut_sends_one_command.'
   evidence: []
   findings: [API-06]
-  scenarios: []
+  scenarios: [shortcuts.power_off_all]
 - id: F-DOM-025
   area: domain
   title: 'Built-in shortcuts: mute / unmute all outputs'
   claim: src/system_shortcuts.py mute_all_audio
   interfaces: *id003
   target: V3
-  current: V1
-  basis: tests/test_system_shortcuts.py (mocked).
+  current: V2
+  basis: 'Scenarios shortcuts.mute_all, shortcuts.unmute_all, shortcuts.mute_rejected (V2); tests/sim/test_sim_shortcuts.py.'
   evidence: []
   findings: [API-08]
-  scenarios: []
+  scenarios: [shortcuts.mute_all, shortcuts.unmute_all, shortcuts.mute_rejected]
 - id: F-DOM-026
   area: domain
   title: 'Built-in shortcuts: recall preset 1-8'
   claim: src/system_shortcuts.py preset_recall_N
   interfaces: *id003
   target: V3
-  current: V1
-  basis: tests/test_system_shortcuts.py (mocked).
+  current: V2
+  basis: 'Scenario shortcuts.preset_recall (V2); tests/sim/test_sim_shortcuts.py::test_other_shortcuts.'
   evidence: []
   findings: [API-08]
-  scenarios: []
+  scenarios: [shortcuts.preset_recall]
 - id: F-DOM-027
   area: domain
   title: 'Built-in shortcuts: beep, panel lock, reboot'
   claim: src/system_shortcuts.py system actions
   interfaces: *id003
   target: V3
-  current: V1
-  basis: tests/test_system_shortcuts.py (mocked).
+  current: V2
+  basis: 'Scenarios shortcuts.beep_off and shortcuts.panel_lock (V2); reboot is covered by tests/test_system_shortcuts.py only.'
   evidence: []
   findings: [API-08]
-  scenarios: []
+  scenarios: [shortcuts.beep_off, shortcuts.panel_lock]
 - id: F-DOM-028
   area: domain
   title: 'Built-in shortcuts: LCD timeout'
   claim: src/system_shortcuts.py lcd_timeout_*
   interfaces: *id003
   target: V3
-  current: V1
-  basis: tests/test_system_shortcuts.py (mocked).
+  current: V2
+  basis: 'Scenario shortcuts.lcd_15s (V2: device LCD code 2 = 15 s; label ''LCD: 15s'', key lcd_timeout_10s kept);
+    tests/sim/test_sim_shortcuts.py::test_lcd_shortcuts_set_the_device_code. The device command itself is web-UI-derived until
+    a hardware write run proves it (HIL-09).'
   evidence: []
   findings: [API-07]
-  scenarios: []
+  scenarios: [shortcuts.lcd_15s]
 - id: F-DOM-029
   area: domain
   title: Create, rename, reorder and delete user shortcuts
@@ -1671,10 +1674,10 @@ features:
     ui: [drawer/presets/expanded]
   target: V3
   current: V1
-  basis: tests/test_rest_api.py TestControlEndpoints preset save (mocked).
+  basis: 'Scenario presets.save_custom_mapping (V2); tests/sim/test_sim_preset_save.py custom preset save tests (fresh routing, lock, refusal without a readable routing).'
   evidence: []
   findings: [API-14]
-  scenarios: []
+  scenarios: [presets.save_custom_mapping]
 - id: F-DOM-035
   area: domain
   title: Theme presets and custom themes

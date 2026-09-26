@@ -117,6 +117,7 @@ def _reset_rest_api_globals() -> None:
     control = sys.modules.get("rest_api.control")
     if control is not None:
         control._cycle_locks = {i: asyncio.Lock() for i in control._cycle_locks}
+        control._preset_save_lock = None
 
     device_settings = sys.modules.get("rest_api.device_settings")
     if device_settings is not None:
