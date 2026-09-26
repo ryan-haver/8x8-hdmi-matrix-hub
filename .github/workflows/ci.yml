@@ -302,7 +302,17 @@ jobs:
       - name: Deployment tests (pytest -m docker tests/deploy)
         env:
           HUB_IMAGE: hdmi-matrix-hub:ci
+          DEPLOY_EVIDENCE_DIR: build/deploy-evidence
         run: mkdir -p build && pytest tests/deploy -m docker -v --tb=short -rs --basetemp=build/deploy-tmp
+
+      - name: Upload deployment evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: deployment-evidence
+          path: build/deploy-evidence/
+          retention-days: 30
+          if-no-files-found: ignore
 
   # UI smoke + visual regression (docs/REMEDIATION_PLAN.md §5.3). Runs in the
   # same pinned Playwright image that generates the baselines locally

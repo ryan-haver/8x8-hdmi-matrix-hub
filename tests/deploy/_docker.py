@@ -15,6 +15,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+from ._evidence import RECORDER
+
 ROOT = Path(__file__).resolve().parents[2]
 
 #: TEST-NET-1 (RFC 5737): never a real device. Used where a test needs a matrix address but no matrix.
@@ -61,11 +63,15 @@ def http(url: str, *, method: str = "GET", body: Any = None, timeout: float = 10
     data = None if body is None else json.dumps(body).encode()
     req = urllib.request.Request(url, data=data, method=method,  # noqa: S310 - local test containers
                                  headers={"Content-Type": "application/json"} if data else {})
+    path = "/" + url.split("/", 3)[3] if url.count("/") >= 3 else url
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:  # noqa: S310
-            return resp.status, resp.read()
+            result = resp.status, resp.read()
     except urllib.error.HTTPError as exc:
-        return exc.code, exc.read()
+        result = exc.code, exc.read()
+    if "/_sim/" not in path:
+        RECORDER.request(method, path, result[0])
+    return result
 
 
 def http_json(url: str, **kwargs: Any) -> tuple[int, Any]:

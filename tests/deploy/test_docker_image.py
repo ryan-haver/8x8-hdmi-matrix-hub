@@ -19,6 +19,7 @@ import pytest
 from tools.uc_remote_sim import UcRemoteSim
 
 from ._docker import PUBLISH_IP, Container, docker, free_port, http, http_json, unique
+from ._evidence import RECORDER
 from .conftest import Simulator
 
 pytestmark = pytest.mark.docker
@@ -71,18 +72,27 @@ def hub(request: pytest.FixtureRequest, hub_image: str, network: str, simulator:
         "-e", "PYTHONPROFILEIMPORTTIME=1",
     ]
     uc_host_port = None
+    record = RECORDER.start(f"deploy.image_{mode}")
     try:
         if mode == "uc":
             _seed_remote_setup(hub_image, volume, simulator)
+            record.procedure.append(f"seed /data/config_state.json (a completed Remote setup): {simulator.host}:"
+                                    f"{simulator.https_port}")
             uc_host_port = free_port()
             args += [
                 "-p", f"{PUBLISH_IP}:{uc_host_port}:9095",
                 "-e", "UC_ENABLED=true", "-e", "UC_DISABLE_MDNS_PUBLISH=true",
                 "-e", f"UC_DRIVER_URL=ws://127.0.0.1:{uc_host_port}",
             ]
+        record.procedure.append("docker " + " ".join(args + [hub_image]))
+        record.entry = f"docker image {hub_image} (python run.py, UC_ENABLED={'true' if mode == 'uc' else 'unset'})"
+        record.image_digest = docker("image", "inspect", "-f", "{{.Id}}", hub_image).stdout.strip()
+        record.hub_env = {a.split("=", 1)[0]: a.split("=", 1)[1] for a in args[args.index("-e"):] if "=" in a}
+        record.state_before = {"routing": _sim_routing(simulator)}
         docker(*args, hub_image)
         container.wait_healthy_api(90)
         yield Hub(mode, container, volume, uc_host_port)
+        record.state_after = {"routing": _sim_routing(simulator)}
     finally:
         if request.node.session.testsfailed:
             lines = [line for line in container.logs().splitlines() if not line.startswith("import time:")]

@@ -25,6 +25,7 @@ from dataclasses import dataclass
 import pytest
 
 from ._docker import PUBLISH_IP, ROOT, Container, docker, docker_available, free_port, unique, wait_http
+from ._evidence import RECORDER
 
 SIM_ALIAS = "matrix-sim"
 SIM_HTTPS_PORT = 8443
@@ -101,3 +102,44 @@ def simulator(hub_image: str, network: str, tmp_path_factory: pytest.TempPathFac
         yield Simulator(container)
     finally:
         container.remove()
+
+
+# ---------------------------------------------------------------------------
+# Evidence (docs/validation/README.md): every test is one check of its scenario
+# ---------------------------------------------------------------------------
+
+
+def _scenario_of(item: pytest.Item) -> str | None:
+    module = item.module.__name__.rsplit(".", 1)[-1] if getattr(item, "module", None) else ""
+    if module == "test_compose":
+        return "deploy.compose"
+    if module == "test_docker_image":
+        mode = getattr(item, "callspec", None) and item.callspec.params.get("hub")
+        return f"deploy.image_{mode}" if mode else None
+    return None
+
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item: pytest.Item, call: pytest.CallInfo[None]):
+    outcome = yield
+    report = outcome.get_result()
+    scenario = _scenario_of(item)
+    if scenario is None:
+        return
+    # the call phase, or a setup that failed/skipped (the test body never ran)
+    if report.when == "call" or (report.when == "setup" and not report.passed):
+        doc = (getattr(item, "function", None).__doc__ or "").strip().splitlines()  # type: ignore[union-attr]
+        name = item.originalname if hasattr(item, "originalname") else item.name
+        description = name + (f": {doc[0]}" if doc else "")
+        if report.passed:
+            detail = f"passed in {report.duration:.1f}s"
+        elif report.skipped:
+            detail = f"skipped: {report.longrepr[2] if isinstance(report.longrepr, tuple) else report.longrepr}"
+        else:
+            detail = str(report.longrepr)[-1500:]
+        RECORDER.get(scenario).check(description, report.outcome, detail)
+
+
+def pytest_sessionfinish(session: pytest.Session) -> None:
+    for path in RECORDER.write():
+        print(f"deployment evidence: {path}")

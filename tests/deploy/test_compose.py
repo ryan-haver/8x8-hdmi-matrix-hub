@@ -18,7 +18,8 @@ import pytest
 
 from tools.uc_remote_sim import UcRemoteSim
 
-from ._docker import NO_MATRIX, ROOT, Container, docker, free_port, http, http_json, port_open, unique
+from ._docker import NO_MATRIX, ROOT, Container, docker, free_port, http, http_json, port_open, unique, wait_http
+from ._evidence import RECORDER
 
 pytestmark = pytest.mark.docker
 
@@ -39,6 +40,10 @@ class Project:
                       env=self.env, check=check, timeout=300)
 
     def up(self) -> None:
+        shown = [f.rsplit("/", 1)[-1].rsplit("\\", 1)[-1] for f in self.files[:-1]]
+        settings = {k: v for k, v in self.env.items() if v and k != "MATRIX_DATA_DIR"}
+        RECORDER.start("deploy.compose").procedure.append(
+            f"docker compose {' '.join('-f ' + f for f in shown)} up -d  ({settings}; image under test)")
         self.compose("up", "-d", "--no-build", "--pull", "never")
 
     def down(self) -> None:
@@ -81,8 +86,6 @@ def project(hub_image: str, tmp_path: Path) -> Iterator[Callable[..., Project]]:
 
 
 def _wait_api(port: int, container: Container) -> dict:
-    from ._docker import wait_http
-
     status, body = wait_http(f"http://127.0.0.1:{port}/api/health", 90, container.running)
     assert status == 200
     return json.loads(body)["data"]
