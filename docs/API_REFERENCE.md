@@ -1042,19 +1042,10 @@ Environment variables:
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `REST_API_PORT` | `8080` | Port for REST API server |
-| `REST_API_ENABLED` | `true` | Enable/disable REST API |
+| `API_PORT` | `8080` | Port for the REST API, web UI and kiosk (`REST_API_PORT` is a deprecated alias) |
 
-To disable the REST API:
-```bash
-REST_API_ENABLED=false python src/driver.py
-```
-
-Or in docker-compose.yml:
-```yaml
-environment:
-  - REST_API_ENABLED=false
-```
+The REST API is the core of the hub and always runs (`REST_API_ENABLED=false` is
+ignored). All environment variables: [DOCKER.md](DOCKER.md#environment-variables).
 
 ---
 

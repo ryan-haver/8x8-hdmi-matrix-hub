@@ -1,0 +1,20 @@
+# Remote 3 integration with bridge networking (docs/DOCKER.md).
+#
+#   HUB_HOST_IP=192.168.1.20 docker compose -f docker-compose.yml -f docker-compose.uc-bridge.yml up -d
+#
+# For hosts without host networking (Docker Desktop, some NAS, Kubernetes).
+# mDNS from inside a bridge network does not reach the LAN, so it is switched
+# off and the integration advertises a fixed driver URL instead:
+# ws://HUB_HOST_IP:UC_HOST_PORT. The Remote does not discover it by itself:
+# register it once through the Remote's REST API (docs/DOCKER.md has the curl
+# command: POST http://<remote-ip>/api/intg/drivers with that driver_url),
+# then set it up in the web configurator like a discovered integration.
+
+services:
+  hdmi-matrix-hub:
+    ports:
+      - "${UC_HOST_PORT:-9095}:9095" # Remote 3 integration WebSocket
+    environment:
+      UC_ENABLED: "true"
+      UC_DISABLE_MDNS_PUBLISH: "true"
+      UC_DRIVER_URL: ws://${HUB_HOST_IP:?set HUB_HOST_IP to this machine's LAN IP address}:${UC_HOST_PORT:-9095}

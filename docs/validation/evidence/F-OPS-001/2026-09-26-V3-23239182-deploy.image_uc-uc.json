@@ -1,0 +1,268 @@
+{
+  "schema_version": 1,
+  "features": ["F-OPS-001", "F-OPS-005", "F-OPS-011", "F-OPS-015"],
+  "level": "V3",
+  "scenario": "deploy.image_uc",
+  "scenario_title": "Shipped image, Remote 3 integration on (bridge, mDNS off, UC_DRIVER_URL), against the simulator",
+  "scenario_kind": "happy",
+  "target": "sim",
+  "client": "uc",
+  "result": "pass",
+  "gate": "ok",
+  "blocked_reason": null,
+  "commit": {
+    "sha": "232391822a4d5a56d923f46f87fee7cb787f75d3",
+    "short": "23239182",
+    "branch": "wp-d2-deployment",
+    "dirty": false,
+    "dirty_files": []
+  },
+  "timestamp": {
+    "started": "2026-09-26T01:18:52.333Z",
+    "finished": "2026-09-26T01:19:08.480Z"
+  },
+  "operator": "automation",
+  "environment": {
+    "target": "sim",
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "hub": {
+      "entry": "docker image hdmi-matrix-hub:deploy-test (python run.py, UC_ENABLED=true)",
+      "version": null,
+      "api_version": null,
+      "image_digest": "sha256:c10069767bcdb3f8f231a3372c9f4d53987210de7e621112f16434f205983351",
+      "env": {
+        "MATRIX_HOST": "matrix-sim",
+        "MATRIX_PORT": "8443",
+        "OREI_TELNET_PORT": "2323",
+        "PYTHONPROFILEIMPORTTIME": "1",
+        "UC_ENABLED": "true",
+        "UC_DISABLE_MDNS_PUBLISH": "true",
+        "UC_DRIVER_URL": "ws://127.0.0.1:54929"
+      }
+    },
+    "client": {
+      "name": "uc",
+      "runner": "pytest tests/deploy (HTTP, docker CLI, tools/uc_remote_sim.py)"
+    },
+    "simulator": {
+      "seed_state": "tools/simulator/states/default.json",
+      "container": true
+    }
+  },
+  "procedure": [
+    "seed /data/config_state.json (a completed Remote setup): matrix-sim:8443",
+    "docker run -d --name hubtest-uc-8c2763d9 --network hubtest-5bbadedc -p 127.0.0.1:54922:8080 -v hubtest-data-74ca02e9:/data --health-interval 2s --health-start-period 30s -e MATRIX_HOST=matrix-sim -e MATRIX_PORT=8443 -e OREI_TELNET_PORT=2323 -e PYTHONPROFILEIMPORTTIME=1 -p 127.0.0.1:54929:9095 -e UC_ENABLED=true -e UC_DISABLE_MDNS_PUBLISH=true -e UC_DRIVER_URL=ws://127.0.0.1:54929 hdmi-matrix-hub:deploy-test"
+  ],
+  "observations": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/health",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/health",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/ui",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/kiosk",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/css/style.css",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/status",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/status",
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "path": "/api/switch",
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "path": "/api/switch",
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "path": "/api/themes",
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "path": "/api/profile",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/health",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/themes",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/profile/deploy-test",
+        "status": 200
+      }
+    ],
+    "response_status": null,
+    "hub_reads": [],
+    "state_before": {
+      "routing": {
+        "1": 2,
+        "2": 2,
+        "3": 1,
+        "4": 1,
+        "5": 5,
+        "6": 6,
+        "7": 1,
+        "8": 1
+      }
+    },
+    "state_after": {
+      "routing": {
+        "1": 2,
+        "2": 2,
+        "3": 1,
+        "4": 1,
+        "5": 5,
+        "6": 6,
+        "7": 1,
+        "8": 1
+      }
+    },
+    "state_diff": [],
+    "device_log": [],
+    "ws_events": [],
+    "screenshots": [],
+    "operator": [],
+    "restore": null,
+    "notes": []
+  },
+  "checks": [
+    {
+      "description": "test_health_endpoint_is_healthy",
+      "result": "pass",
+      "detail": "passed in 0.1s",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "test_image_healthcheck_reports_healthy",
+      "result": "pass",
+      "detail": "passed in 2.2s",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "test_web_ui_and_kiosk_are_served",
+      "result": "pass",
+      "detail": "passed in 0.2s",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "test_status_comes_from_the_simulator",
+      "result": "pass",
+      "detail": "passed in 0.1s",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "test_switch_reaches_the_simulator",
+      "result": "pass",
+      "detail": "passed in 0.3s",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "test_integration_port_open_only_with_uc",
+      "result": "pass",
+      "detail": "passed in 0.2s",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "test_remote_reaches_the_integration_at_the_driver_url",
+      "result": "pass",
+      "detail": "passed in 0.0s",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "test_ucapi_imported_only_with_uc",
+      "result": "pass",
+      "detail": "passed in 0.1s",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "test_runs_as_non_root",
+      "result": "pass",
+      "detail": "passed in 0.3s",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "test_data_persists_across_restart",
+      "result": "pass",
+      "detail": "passed in 5.0s",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "test_stops_cleanly_on_sigterm",
+      "result": "pass",
+      "detail": "passed in 0.8s",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    }
+  ],
+  "findings": [],
+  "covers": [
+    "Dockerfile",
+    ".dockerignore",
+    "run.py",
+    "driver.json",
+    "requirements.txt",
+    "requirements-uc.txt",
+    "src/rest_api/app.py",
+    "src/rest_api/core.py",
+    "src/rest_api/static.py",
+    "src/persistence.py",
+    "src/driver.py"
+  ]
+}

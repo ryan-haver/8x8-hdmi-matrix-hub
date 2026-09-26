@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import pytest
 
-from tools.uc_remote_sim import ConnectionClosedError, UcRemoteSim
+from tools.uc_remote_sim import UcRemoteSim
 from tools.validate.device import SimDevice
 
 from ._helpers import CYCLE, INPUT_NAMES, SEED_STATE, cec_frames, known_bug, port_mask, sent, wait_for, writes
@@ -156,7 +156,6 @@ async def test_unknown_cec_command_is_rejected_without_a_frame(uc_remote: UcRemo
     assert not uc_remote.closed
 
 
-@known_bug("UC-22", "send_cmd ignores `repeat` (and `delay`/`hold`): a held volume key sends one step")
 async def test_send_cmd_repeat_sends_the_command_repeatedly(uc_remote: UcRemoteSim, sim: SimDevice) -> None:
     await sim.clear_log()
     resp = await uc_remote.remote_send_cmd("remote.output_1_cec", "VOLUME_UP", repeat=3, delay=50)
@@ -184,8 +183,6 @@ UC01_CASES = [
 ]
 
 
-@known_bug("UC-01", "every remote command except send_cmd raises AttributeError in the CEC handler; ucapi does "
-           "not catch it and closes the Remote's WebSocket with 1011", raises=ConnectionClosedError)
 @pytest.mark.parametrize(("entity_id", "cmd_id", "params", "frames"), UC01_CASES,
                          ids=[f"{e.split('.')[1]}-{c}" + ("-noparams" if c == "send_cmd" else "")
                               for e, c, _, _ in UC01_CASES])
@@ -193,14 +190,9 @@ async def test_cec_remote_power_and_sequence_commands(uc_remote: UcRemoteSim, si
                                                       cmd_id: str, params: dict | None,
                                                       frames: list | None) -> None:
     """on/off/toggle/send_cmd_sequence answer (200, or 400 for a malformed send_cmd), the frames reach the
-    matrix, and the connection stays open (audit §7 case 5)."""
+    matrix, and the connection stays open (audit §7 case 5; UC-01: these used to close it with 1011)."""
     await sim.clear_log()
-    try:
-        resp = await uc_remote.entity_command(entity_id, cmd_id, params)
-    except ConnectionClosedError as exc:
-        # Today's failure mode, pinned exactly: the driver drops the connection with 1011 (internal error).
-        assert exc.code == 1011, f"connection closed with {exc.code}, expected the known 1011"
-        raise
+    resp = await uc_remote.entity_command(entity_id, cmd_id, params)
     assert not uc_remote.closed
     expected_code = 400 if cmd_id == "send_cmd" else 200
     assert resp["code"] == expected_code
@@ -211,21 +203,62 @@ async def test_cec_remote_power_and_sequence_commands(uc_remote: UcRemoteSim, si
     assert (await uc_remote.get_driver_version())["code"] == 200
 
 
-async def test_a_crashing_command_takes_down_only_that_connection(uc_remote_factory, sim: SimDevice) -> None:
-    """Pins the UC-01 blast radius: the WebSocket that sent the command is closed with 1011 (a real Remote
-    then marks every entity of the integration unavailable and reconnects); other connections survive."""
+@pytest.mark.parametrize(("entity_id", "obj", "port", "on", "off"), [
+    ("remote.output_4_cec", 1, 4, PINNED_OUTPUT_CEC_INDEX["POWER_ON"], PINNED_OUTPUT_CEC_INDEX["POWER_OFF"]),
+    ("remote.input_5_cec", 0, 5, PINNED_INPUT_CEC_INDEX["POWER_ON"], PINNED_INPUT_CEC_INDEX["POWER_OFF"]),
+])
+async def test_cec_remote_toggle_follows_the_tracked_power_state(uc_remote: UcRemoteSim, sim: SimDevice,
+                                                                 entity_id: str, obj: int, port: int, on: int,
+                                                                 off: int) -> None:
+    """The hub cannot read a device's power: the remote starts UNKNOWN, toggle from UNKNOWN powers on, then
+    toggle alternates, and the state the Remote sees follows every power command (UC-01; UC-10 rule)."""
+    assert (await uc_remote.entity_state(entity_id))["state"] == "UNKNOWN"
+    await sim.clear_log()
+    for _ in range(3):
+        assert (await uc_remote.remote_toggle(entity_id))["code"] == 200
+    frames = cec_frames(await sim.log())
+    assert [f["index"] for f in frames] == [on, off, on]
+    assert all(f["object"] == obj and f["port"] == port_mask(port) for f in frames)
+    assert (await uc_remote.entity_state(entity_id))["state"] == "ON"
+    assert (await uc_remote.remote_off(entity_id))["code"] == 200
+    assert (await uc_remote.entity_state(entity_id))["state"] == "OFF"
+
+
+async def test_send_cmd_sequence_repeat_and_the_button_mapping_form(uc_remote: UcRemoteSim, sim: SimDevice) -> None:
+    """entity_remote.md: `repeat` applies to each command of a sequence; a button mapping sends the sequence
+    as one comma-separated string."""
+    await sim.clear_log()
+    resp = await uc_remote.remote_send_cmd_sequence("remote.input_2_cec", ["UP", "SELECT"], repeat=2, delay=20)
+    assert resp["code"] == 200
+    resp = await uc_remote.entity_command("remote.input_2_cec", "send_cmd_sequence",
+                                          {"sequence": "LEFT,BACK", "delay": 20})
+    assert resp["code"] == 200
+    assert [f["index"] for f in cec_frames(await sim.log())] == [
+        PINNED_INPUT_CEC_INDEX[c] for c in ("UP", "UP", "SELECT", "SELECT", "LEFT", "BACK")]
+
+
+async def test_a_sequence_with_an_unknown_command_sends_nothing(uc_remote: UcRemoteSim, sim: SimDevice) -> None:
+    """Every command of a request is checked before the first frame goes out: 400 and no frame."""
+    await sim.clear_log()
+    resp = await uc_remote.remote_send_cmd_sequence("remote.output_1_cec", ["POWER_ON", "MENU"])
+    assert resp["code"] == 400
+    assert cec_frames(await sim.log()) == []
+    assert not uc_remote.closed
+
+
+async def test_bad_parameters_answer_400_and_no_connection_closes(uc_remote_factory, sim: SimDevice) -> None:
+    """A malformed request is answered on the connection that sent it; nothing is closed (UC-01 used to close
+    the sender's WebSocket with 1011) and other connections are untouched."""
     bystander = await uc_remote_factory()
-    victim = await uc_remote_factory()
-    try:
-        await victim.remote_on("remote.output_1_cec")
-        pytest.fail("UC-01 fixed? remote_on answered; delete this test with the UC-01 fix")
-    except ConnectionClosedError as exc:
-        assert exc.code == 1011
-    assert victim.close_code == 1011
+    remote = await uc_remote_factory()
+    await sim.clear_log()
+    resp = await remote.entity_command("remote.output_1_cec", "send_cmd", {"command": "VOLUME_UP", "repeat": "x"})
+    assert resp["code"] == 400
+    assert (await remote.entity_command("remote.output_1_cec", "cursor_up"))["code"] == 501
+    assert cec_frames(await sim.log()) == []
+    assert not remote.closed and not bystander.closed
+    assert (await remote.remote_send_cmd("remote.output_1_cec", "POWER_ON"))["code"] == 200
     assert (await bystander.get_driver_version())["code"] == 200
-    # The driver keeps serving new connections.
-    again = await uc_remote_factory()
-    assert (await again.remote_send_cmd("remote.output_1_cec", "POWER_ON"))["code"] == 200
 
 
 # ---------------------------------------------------------------------- media player (TV power / volume)
@@ -244,16 +277,22 @@ async def test_media_player_power_volume_and_mute_send_output_cec(uc_remote: UcR
     assert (await uc_remote.entity_state("media_player.output_2"))["state"] == "OFF"
 
 
-@known_bug("UC-10", "the media player starts UNKNOWN, and toggle from UNKNOWN sends CEC power OFF (BE-24): "
-           "the first toggle turns a TV that is off... off")
 async def test_media_player_first_toggle_does_not_turn_the_tv_off(uc_remote: UcRemoteSim, sim: SimDevice) -> None:
+    """UC-10: the display's power is unknown at first; a toggle from UNKNOWN powers it on, never off."""
     assert (await uc_remote.entity_state("media_player.output_1"))["state"] == "UNKNOWN"
     await sim.clear_log()
     assert (await uc_remote.entity_command("media_player.output_1", "toggle"))["code"] == 200
     # Power off is display index 1 (BE-14). Before WP-A4 part 2 this compared against the source
     # table's power off (2), so the new, correct index made the still-present bug look fixed.
     power_off = {"object": 1, "port": port_mask(1), "index": PINNED_OUTPUT_CEC_INDEX["POWER_OFF"]}
-    assert power_off not in cec_frames(await sim.log())
+    power_on = {"object": 1, "port": port_mask(1), "index": PINNED_OUTPUT_CEC_INDEX["POWER_ON"]}
+    assert cec_frames(await sim.log()) == [power_on]
+    assert (await uc_remote.entity_state("media_player.output_1"))["state"] == "ON"
+    # The display's CEC remote shows the same tracked power, and the next toggle turns the display off.
+    assert (await uc_remote.entity_state("remote.output_1_cec"))["state"] == "ON"
+    assert (await uc_remote.entity_command("media_player.output_1", "toggle"))["code"] == 200
+    assert cec_frames(await sim.log()) == [power_on, power_off]
+    assert (await uc_remote.entity_state("media_player.output_1"))["state"] == "OFF"
 
 
 # ---------------------------------------------------------------------- matrix power switch

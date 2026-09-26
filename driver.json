@@ -9,7 +9,6 @@
   "description": {
     "en": "Integration for 8x8 HDMI Matrix with scene/preset support"
   },
-  "driver_url": "",
   "developer": {
     "name": "Ryan Haver",
     "url": "https://github.com/ryan-haver/8x8-hdmi-matrix-hub"

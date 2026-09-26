@@ -252,17 +252,19 @@ jobs:
           GITLEAKS_CONFIG: .gitleaks.toml
           GITLEAKS_ENABLE_COMMENTS: 'false'
 
+  # The one image (D11), built once and started for real (WP-D2, V3 deployment):
+  # tests/deploy runs it with the integrations off and with the Remote 3
+  # integration on, against the simulator in a container, and brings up each
+  # compose variant (default, UC bridge, UC host networking). Checks /api/health
+  # and the image HEALTHCHECK, web UI + kiosk, simulator-backed status and a
+  # switch, port 9095 only with UC, ucapi not imported without UC, non-root,
+  # data kept across a restart, clean SIGTERM stop. `publish` needs this job.
   docker-build:
-    name: Docker build (${{ matrix.target }})
-    if: github.event_name == 'pull_request'
+    name: Docker image (build + deployment tests)
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     permissions:
       contents: read
-    strategy:
-      fail-fast: false
-      matrix:
-        target: [full, api-only]
     steps:
       - uses: actions/checkout@v7
         with:
@@ -270,16 +272,47 @@ jobs:
 
       - uses: docker/setup-buildx-action@v4
 
-      # Single-arch (amd64) on PRs for speed; publish builds amd64 + arm64.
-      - name: Build ${{ matrix.target }}
+      # Single-arch (amd64) and loaded into the local daemon for the tests;
+      # publish builds amd64 + arm64.
+      - name: Build image
         uses: docker/build-push-action@v7
         with:
           context: .
           file: ./Dockerfile
-          target: ${{ matrix.target }}
           push: false
-          cache-from: type=gha,scope=${{ matrix.target }}
-          cache-to: type=gha,mode=max,scope=${{ matrix.target }}
+          load: true
+          tags: hdmi-matrix-hub:ci
+          cache-from: type=gha,scope=hub
+          cache-to: type=gha,mode=max,scope=hub
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-uc.txt
+            pyproject.toml
+
+      - name: Install test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-uc.txt -e ".[dev]"
+
+      - name: Deployment tests (pytest -m docker tests/deploy)
+        env:
+          HUB_IMAGE: hdmi-matrix-hub:ci
+          DEPLOY_EVIDENCE_DIR: build/deploy-evidence
+        run: mkdir -p build && pytest tests/deploy -m docker -v --tb=short -rs --basetemp=build/deploy-tmp
+
+      - name: Upload deployment evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: deployment-evidence
+          path: build/deploy-evidence/
+          retention-days: 30
+          if-no-files-found: ignore
 
   # UI smoke + visual regression (docs/REMEDIATION_PLAN.md §5.3). Runs in the
   # same pinned Playwright image that generates the baselines locally
@@ -585,7 +618,7 @@ jobs:
     name: Build and push to GHCR
     # Does not depend on `ui` yet: the visual baselines are new (Phase 0) and
     # must prove stable in CI first. Add `ui` here once they have.
-    needs: [lint, typecheck, test, uc, ha-test, gitleaks]
+    needs: [lint, typecheck, test, uc, ha-test, gitleaks, docker-build]
     if: >-
       github.event_name != 'pull_request' &&
       (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
@@ -630,10 +663,9 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          target: full
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha,scope=full
-          cache-to: type=gha,mode=max,scope=full
+          cache-from: type=gha,scope=hub
+          cache-to: type=gha,mode=max,scope=hub
