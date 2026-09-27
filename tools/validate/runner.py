@@ -28,6 +28,9 @@ from .clients import CLIENTS, ActionResult, ApiClient, Client, HubInfo, NotSuppo
 from .device import RESTORABLE_DOMAINS, HardwareDevice, SimDevice
 from .evidence import SCHEMA_VERSION, record_stem, redact, write_record
 from .model import (
+    RUNNER_INTENTS,
+    Action,
+    ClientState,
     CommandSent,
     Device,
     DeviceUnchanged,
@@ -378,7 +381,10 @@ class Runner:
     def _refusal(self, sc: Scenario, client: Client) -> str | None:
         if client.name not in sc.clients:
             return f"scenario is not defined for client '{client.name}'"
-        if not client.supports(sc.action):
+        if sc.action.intent in RUNNER_INTENTS:
+            if not client.observes:
+                return f"client '{client.name}' cannot observe a '{sc.action.intent}'"
+        elif not client.supports(sc.action):
             return f"client '{client.name}' cannot perform '{sc.action.intent}'"
         if self.o.target not in sc.targets:
             return f"scenario does not run on target '{self.o.target}'"
@@ -436,6 +442,18 @@ class Runner:
                     await dev.set_faults(sc.faults)
                     procedure.append(f"inject simulator fault {sc.faults}")
                 state_before = await dev.state()
+                # Preconditions on what the client shows (ClientState.before): wait for them, so a
+                # passing check afterwards proves a change the client saw.
+                for exp in sc.expect:
+                    if isinstance(exp, ClientState) and exp.before is not None and client.observes:
+                        pre = await self._client_state(client, exp.key, exp.before, exp.timeout)
+                        procedure.append(f"client showed {exp.key} = {pre['value']!r} before the action"
+                                         + ("" if pre["ok"] else f" (expected {exp.before!r})"))
+                        if not pre["ok"]:
+                            checks.append({"description": f"client shows {exp.key} == {exp.before!r} before the action",
+                                           "result": "fail", "detail": f"{exp.key} = {pre['value']!r}",
+                                           "finding": exp.finding, "linked_finding": exp.finding,
+                                           "note": exp.note or None})
                 log_cursor = len(await dev.log()) if isinstance(dev, SimDevice) else 0
                 # ---- the action
                 stem = record_stem(started[:10], str(level), self.commit["short"], sc.id, client.name)
@@ -444,7 +462,10 @@ class Runner:
                 t_action = time.time()
                 procedure.append(f"action ({client.name}): {sc.action.describe()}")
                 try:
-                    result = await client.perform(sc.action)
+                    if sc.action.intent in RUNNER_INTENTS:
+                        result = await self._device_change(dev, sc.action)
+                    else:
+                        result = await client.perform(sc.action)
                 except NotSupportedError:
                     return Outcome(sc.id, client.name, "skipped", gate="skipped",
                                    reason=f"client cannot perform {sc.action.intent}")
@@ -573,6 +594,35 @@ class Runner:
         except ValueError:
             return p.as_posix()
 
+    # ------------------------------------------------------------ runner-performed actions
+
+    async def _device_change(self, dev: SimDevice | HardwareDevice, action: Action) -> ActionResult:
+        """The device changes behind the hub's back (``device_change``): simulator event or state patch."""
+        if not isinstance(dev, SimDevice):
+            raise RuntimeError("device_change needs the simulator")
+        result = ActionResult(intent=action.intent, ok=False)
+        t0 = time.perf_counter()
+        if "event" in action.params:
+            await dev.event(action.params["event"])
+            result.steps.append(f"simulator event {action.params['event']}")
+        else:
+            await dev.patch_state(action.params["patch"])
+            result.steps.append(f"simulator state patch {action.params['patch']}")
+        result.ok = True
+        result.elapsed_ms = round((time.perf_counter() - t0) * 1000, 1)
+        return result
+
+    @staticmethod
+    async def _client_state(client: Client, key: str, expected: Any, timeout: float) -> dict[str, Any]:
+        """Poll ``client.observe(key)`` until it equals ``expected`` or ``timeout`` passes."""
+        deadline = time.monotonic() + timeout
+        while True:
+            value = await client.observe(key)
+            ok = value == expected
+            if ok or time.monotonic() >= deadline:
+                return {"ok": ok, "value": value}
+            await asyncio.sleep(0.5)
+
     # ------------------------------------------------------------ checks
 
     async def _check(self, exp: Expectation, sc: Scenario, client: Client, result: ActionResult,
@@ -662,6 +712,15 @@ class Runner:
                 verdict = "pass" if ok else "fail"
                 shown = got if found else "<absent>"
                 detail = f"HTTP {status}; {exp.field_path or 'body'} = {json.dumps(shown, default=str)[:200]}"
+            elif isinstance(exp, ClientState):
+                if not client.observes:
+                    return {"description": exp.describe(), "result": "n/a",
+                            "detail": f"client '{client.name}' has no view of {exp.key}", "finding": None,
+                            "linked_finding": exp.finding, "note": exp.note or None}
+                t0 = time.monotonic()
+                seen = await self._client_state(client, exp.key, exp.equals, exp.timeout)
+                verdict = "pass" if seen["ok"] else "fail"
+                detail = f"{exp.key} = {seen['value']!r} after {time.monotonic() - t0:.1f} s"
             elif isinstance(exp, WsEvent):
                 deadline = time.monotonic() + exp.timeout
                 while True:

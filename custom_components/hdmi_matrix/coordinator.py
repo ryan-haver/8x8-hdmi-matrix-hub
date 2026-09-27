@@ -1,99 +1,131 @@
-"""DataUpdateCoordinator for OREI HDMI Matrix integration."""
+"""Polls the hub's REST API for the matrix state."""
+
+from __future__ import annotations
 
 import asyncio
-from datetime import timedelta
+from dataclasses import dataclass, field
+from typing import Any
 
-import aiohttp
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
-from .const import DOMAIN, LOGGER
+from .api import HubClient, HubError
+from .const import CONF_SCAN_INTERVAL, DOMAIN, LOGGER, PORT_COUNT, PRESET_COUNT, scan_interval
 
 
-class OreiMatrixCoordinator(DataUpdateCoordinator):
-    """Class to manage fetching status data from the OREI HDMI Matrix REST API."""
+@dataclass
+class MatrixData:
+    """One poll of the hub.
 
-    def __init__(self, hass, host, port):
-        """Initialize the coordinator."""
-        self.host = host
-        self.port = port
-        self.base_url = f"http://{host}:{port}"
-        self._poll_lock = asyncio.Lock()  # prevent overlapping polls
+    ``status`` is ``/api/status`` (routing ``{"1": 2, ...}``, names, ``power``).
+    ``outputs``/``inputs`` are ``None`` when their endpoint failed in this poll,
+    so the entities that depend on them report unavailable instead of "off".
+    """
 
+    status: dict[str, Any]
+    outputs: list[dict[str, Any]] | None = None
+    inputs: list[dict[str, Any]] | None = None
+    errors: dict[str, str] = field(default_factory=dict)
+
+    # ------------------------------------------------------------ helpers
+
+    @staticmethod
+    def _name(names: Any, number: int) -> str | None:
+        if not isinstance(names, dict):
+            return None
+        value = names.get(str(number), names.get(number))  # JSON keys are strings
+        return str(value) if value else None
+
+    def input_name(self, number: int) -> str:
+        return self._name(self.status.get("input_names"), number) or f"Input {number}"
+
+    def output_name(self, number: int) -> str:
+        return self._name(self.status.get("output_names"), number) or f"Output {number}"
+
+    def preset_name(self, number: int) -> str:
+        return self._name(self.status.get("preset_names"), number) or f"Preset {number}"
+
+    def routed_input(self, output: int) -> int | None:
+        """The input routed to ``output`` (``/api/status`` ``routing`` is a mapping, HA-02)."""
+        routing = self.status.get("routing")
+        value: Any = None
+        if isinstance(routing, dict):
+            value = routing.get(str(output), routing.get(output))
+        elif isinstance(routing, list) and 0 < output <= len(routing):  # older hubs: a list
+            value = routing[output - 1]
+        return value if isinstance(value, int) and not isinstance(value, bool) else None
+
+    def output(self, number: int) -> dict[str, Any] | None:
+        for out in self.outputs or ():
+            if out.get("number") == number:
+                return out
+        return None
+
+    def input(self, number: int) -> dict[str, Any] | None:
+        for inp in self.inputs or ():
+            if inp.get("number") == number:
+                return inp
+        return None
+
+    @property
+    def power(self) -> str | None:
+        power = self.status.get("power")
+        return power if power in ("on", "off") else None
+
+    def names(self) -> tuple[tuple[str, ...], tuple[str, ...], tuple[str, ...]]:
+        """Every hub-side name, to notice renames (entity names include them)."""
+        return (
+            tuple(self.input_name(n) for n in range(1, PORT_COUNT + 1)),
+            tuple(self.output_name(n) for n in range(1, PORT_COUNT + 1)),
+            tuple(self.preset_name(n) for n in range(1, PRESET_COUNT + 1)),
+        )
+
+
+class HdmiMatrixCoordinator(DataUpdateCoordinator[MatrixData]):
+    """Fetches ``/api/status``, ``/api/status/outputs`` and ``/api/status/inputs`` together."""
+
+    config_entry: ConfigEntry
+
+    def __init__(self, hass: HomeAssistant, entry: ConfigEntry, client: HubClient) -> None:
         super().__init__(
             hass,
             LOGGER,
+            config_entry=entry,
             name=DOMAIN,
-            update_interval=timedelta(seconds=15),
+            update_interval=scan_interval(entry.options.get(CONF_SCAN_INTERVAL)),
         )
+        self.client = client
 
-    async def _async_update_data(self):
-        """Fetch status data from OREI REST API endpoints."""
-        if self._poll_lock.locked():
-            LOGGER.warning("Previous poll still running, skipping this interval")
-            return self.data  # return stale data rather than overlapping
+    async def _async_update_data(self) -> MatrixData:
+        # DataUpdateCoordinator never runs two refreshes at once, so no extra lock (HA-09).
+        status, outputs, inputs = await asyncio.gather(
+            self.client.status(), self.client.outputs(), self.client.inputs(), return_exceptions=True
+        )
+        if isinstance(status, BaseException):
+            if isinstance(status, HubError):
+                raise UpdateFailed(f"Error communicating with the hub: {status}") from status
+            raise status
+        data = MatrixData(status=status)
+        for key, result in (("outputs", outputs), ("inputs", inputs)):
+            if isinstance(result, HubError):
+                LOGGER.warning("Could not read %s from the hub: %s", key, result)
+                data.errors[key] = str(result)
+            elif isinstance(result, BaseException):
+                raise result
+            else:
+                setattr(data, key, result)
+        return data
 
-        async with self._poll_lock:
-            session = async_get_clientsession(self.hass)
 
-            try:
-                # Fetch all statuses in parallel. Each call has a 10s timeout so
-                # the coordinator never blocks the HA event loop longer than that,
-                # even when the matrix is unreachable.
-                _timeout = aiohttp.ClientTimeout(total=10)
-                status_task = session.get(f"{self.base_url}/api/status", timeout=_timeout)
-                outputs_task = session.get(f"{self.base_url}/api/status/outputs", timeout=_timeout)
-                inputs_task = session.get(f"{self.base_url}/api/status/inputs", timeout=_timeout)
+@dataclass
+class HdmiMatrixRuntimeData:
+    """What a loaded entry keeps in ``entry.runtime_data`` (HA-07)."""
 
-                responses = await asyncio.gather(status_task, outputs_task, inputs_task, return_exceptions=True)
+    client: HubClient
+    coordinator: HdmiMatrixCoordinator
+    #: ``/api/status/device`` at setup (model, firmware_version, mac_address); empty if unavailable.
+    device: dict[str, Any] = field(default_factory=dict)
 
-                data = {}
 
-                # 1. Parse basic status
-                status_resp = responses[0]
-                if isinstance(status_resp, Exception):
-                    raise UpdateFailed(f"Failed to reach matrix: {status_resp}")
-                if status_resp.status != 200:
-                    raise UpdateFailed(f"Status endpoint returned HTTP {status_resp.status}")
-                status_json = await status_resp.json()
-                if not status_json.get("success"):
-                    raise UpdateFailed(f"Status API error: {status_json.get('error')}")
-                # CRITICAL: handle null data explicitly. `.get("data", {})` only
-                # handles missing key — if the API returns `{"data": null}` the
-                # default {} is NOT used and data["status"] becomes None,
-                # which crashes every HA entity that accesses it.
-                status_data = status_json.get("data")
-                if status_data is None:
-                    raise UpdateFailed("Matrix API returned null status data")
-                data["status"] = status_data
-
-                # 2. Parse outputs status
-                outputs_resp = responses[1]
-                if not isinstance(outputs_resp, Exception) and outputs_resp.status == 200:
-                    outputs_json = await outputs_resp.json()
-                    if outputs_json.get("success"):
-                        data["outputs"] = outputs_json.get("data", {}).get("outputs", [])
-                    else:
-                        LOGGER.warning("Output status API returned error: %s", outputs_json.get("error"))
-                elif isinstance(outputs_resp, Exception):
-                    LOGGER.warning("Failed to fetch output status: %s", outputs_resp)
-                else:
-                    LOGGER.warning("Output status endpoint returned HTTP %s", outputs_resp.status)
-
-                # 3. Parse inputs status
-                inputs_resp = responses[2]
-                if not isinstance(inputs_resp, Exception) and inputs_resp.status == 200:
-                    inputs_json = await inputs_resp.json()
-                    if inputs_json.get("success"):
-                        data["inputs"] = inputs_json.get("data", {}).get("inputs", [])
-                    else:
-                        LOGGER.warning("Input status API returned error: %s", inputs_json.get("error"))
-                elif isinstance(inputs_resp, Exception):
-                    LOGGER.warning("Failed to fetch input status: %s", inputs_resp)
-                else:
-                    LOGGER.warning("Input status endpoint returned HTTP %s", inputs_resp.status)
-
-                return data
-
-            except Exception as err:
-                raise UpdateFailed(f"Error communicating with OREI Matrix: {err}")
+HdmiMatrixConfigEntry = ConfigEntry[HdmiMatrixRuntimeData]

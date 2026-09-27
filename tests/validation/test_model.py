@@ -6,9 +6,11 @@ import pytest
 
 from tools.validate.clients.api import rest_call
 from tools.validate.clients.base import NotSupportedError
+from tools.validate.clients.ha import HomeAssistantClient
 from tools.validate.clients.uc import RemoteClient
 from tools.validate.model import (
     INTENTS,
+    ClientState,
     Device,
     Level,
     Scenario,
@@ -72,6 +74,11 @@ def test_scenario_validation():
             _scenario(**bad)
     # faults are fine when the scenario is simulator-only
     assert _scenario(faults={"drop_http": True}, targets=("sim",)).faults
+    # so is a change made behind the hub's back (the runner patches the simulator)
+    change = act("device_change", event={"type": "signal", "port": 3, "present": True})
+    with pytest.raises(ValueError):
+        _scenario(action=change)
+    assert _scenario(action=change, targets=("sim",)).action.intent == "device_change"
 
 
 def test_known_findings_collects_check_links():
@@ -108,14 +115,69 @@ def test_api_client_maps_every_intent():
         "cec_input": {"input": 1, "command": "power_on"}, "cec_output": {"output": 1, "command": "power_on"},
         "profile_recall": {"profile_id": "p"}, "request": {"method": "GET", "path": "/api/health"},
     }
-    # uc_command is the Remote's raw escape hatch, as `request` is the api client's
-    assert set(samples) == set(INTENTS) - {"uc_command"}
+    # uc_command / ha_* are the Remote's and Home Assistant's own actions, as `request` is the api client's;
+    # device_change is carried out by the runner itself.
+    assert set(samples) == set(INTENTS) - {"uc_command", "ha_service", "ha_config_flow", "ha_reconfigure",
+                                           "device_change"}
     for intent, params in samples.items():
         method, path, _ = rest_call(act(intent, **params))
         assert method in ("GET", "POST") and path.startswith("/api/")
     with pytest.raises(NotSupportedError):
         rest_call(act("uc_command", entity_id="button.preset_1", cmd_id="push"))
     assert rest_call(act("route_all", input=3)) == ("POST", "/api/switch", {"input": 3})
+
+
+def test_ha_client_intents_exist_and_it_observes():
+    assert HomeAssistantClient.intents <= set(INTENTS)
+    assert HomeAssistantClient.observes and not RemoteClient.observes
+    assert "request" not in HomeAssistantClient.intents
+    assert ClientState("switch.power", equals="on", before="off").describe() == \
+        "client shows switch.power == 'on' (was 'off')"
+
+
+class _StubHa(HomeAssistantClient):
+    """The ha client's intent mapping, without a container: entity ids and select options are stubbed."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.entry_id = "entry1"
+
+    async def _entity_id(self, key: str) -> str:
+        return f"{key.split('.')[0]}.hdmi_matrix_{key.split('.', 1)[1]}"
+
+    async def _state(self, entity_id: str) -> dict:
+        return {"state": "AppleTV", "attributes": {"options": ["PS3", "AppleTV", "Computer", "Switch", "Shield", "PS5"]}}
+
+
+@pytest.mark.parametrize(
+    ("action", "call"),
+    [
+        (act("route", input=6, output=1),
+         ("select", "select_option", {"entity_id": "select.hdmi_matrix_output_1_source", "option": "PS5"})),
+        (act("preset_recall", preset=3), ("button", "press", {"entity_id": "button.hdmi_matrix_preset_3"})),
+        (act("matrix_power", on=False), ("switch", "turn_off", {"entity_id": "switch.hdmi_matrix_power"})),
+        (act("output_mute", output=2, muted=True), ("switch", "turn_on", {"entity_id": "switch.hdmi_matrix_output_2_mute"})),
+        (act("output_setting", output=3, setting="enable", body={"enabled": False}),
+         ("switch", "turn_off", {"entity_id": "switch.hdmi_matrix_output_3_stream"})),
+        (act("cec_output", output=1, command="power_on"),
+         ("hdmi_matrix", "send_cec_command", {"port_type": "output", "port_num": 1, "command": "power_on"})),
+        (act("ha_service", domain="hdmi_matrix", service="recall_preset", data={"preset": 2}, target="entry"),
+         ("hdmi_matrix", "recall_preset", {"preset": 2, "config_entry_id": "entry1"})),
+    ],
+)
+def test_ha_client_maps_intents_to_service_calls(action, call):
+    import asyncio
+
+    assert asyncio.run(_StubHa()._service_call(action)) == call
+
+
+def test_ha_client_rejects_what_home_assistant_cannot_do():
+    import asyncio
+
+    with pytest.raises(NotSupportedError):
+        asyncio.run(_StubHa()._service_call(act("output_setting", output=1, setting="hdcp", body={"mode": 1})))
+    with pytest.raises(NotSupportedError):
+        asyncio.run(_StubHa()._service_call(act("route", input=8, output=1)))  # only 6 options stubbed
 
 
 def test_uc_client_intents_exist_and_need_the_uc_hub():

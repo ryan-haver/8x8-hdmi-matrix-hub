@@ -200,8 +200,7 @@ jobs:
     name: hassfest
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    # TODO(HA-04, HA-14): make blocking in Phase 2
-    continue-on-error: true
+    # Blocking since WP-D1 (HA-04, HA-13 fixed).
     permissions:
       contents: read
     steps:
@@ -217,8 +216,7 @@ jobs:
     name: HACS validation
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    # TODO(HA-04, HA-14): make blocking in Phase 2
-    continue-on-error: true
+    # Blocking since WP-D1; brands pass via custom_components/hdmi_matrix/brand/ (HA-14).
     permissions:
       contents: read
     steps:
@@ -558,6 +556,61 @@ jobs:
         run: >-
           "$VALIDATE_PYTHON" -m tools.validate check --expect-clients api,browser,uc
           --evidence build/validation/evidence --run-summary build/validation/run-summary.json
+
+  # Home Assistant as a real client (docs/validation/README.md, WP-D1): the
+  # simulator -> the hub (run.py) -> a real homeassistant/home-assistant
+  # container with custom_components/hdmi_matrix installed and configured
+  # through Home Assistant's own API. Runs on the bare runner (Docker is there;
+  # the `validation` job's Playwright container has none). Fails on a scenario
+  # failing without a linked open finding, or if the ha client ran nothing.
+  validation-ha:
+    name: Validation (Home Assistant container)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-uc.txt
+            pyproject.toml
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-uc.txt -e ".[dev]" "pyyaml>=6.0" "jsonschema>=4.20"
+
+      - name: Run Home Assistant scenarios (simulator, ha client)
+        run: python -m tools.validate run --client ha --operator automation --out build/validation-ha
+
+      - name: Generate ledger
+        if: always()
+        run: >-
+          python -m tools.validate ledger --timestamp
+          --evidence build/validation-ha/evidence --run-summary build/validation-ha/run-summary.json
+          --out build/validation-ha/LEDGER.md
+
+      - name: Upload evidence, ledger and Home Assistant log
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: validation-ha-evidence
+          path: build/validation-ha/
+          retention-days: 30
+
+      - name: Gate (no unexplained failures, no feature below its recorded level)
+        run: >-
+          python -m tools.validate check --expect-clients ha
+          --evidence build/validation-ha/evidence --run-summary build/validation-ha/run-summary.json
 
   publish:
     name: Build and push to GHCR

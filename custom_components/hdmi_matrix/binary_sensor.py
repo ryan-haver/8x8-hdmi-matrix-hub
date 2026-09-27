@@ -1,137 +1,72 @@
-"""Support for OREI HDMI Matrix binary sensors."""
+"""Input signal and output display binary sensors."""
+
+from __future__ import annotations
 
 from homeassistant.components.binary_sensor import BinarySensorDeviceClass, BinarySensorEntity
-from homeassistant.helpers.device_registry import DeviceInfo
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN
+from .const import PORT_COUNT
+from .coordinator import HdmiMatrixConfigEntry
+from .entity import HdmiMatrixEntity, port_label
+
+PARALLEL_UPDATES = 0
 
 
-async def async_setup_entry(hass, entry, async_add_entities):
-    """Set up the OREI Matrix binary sensor entities."""
-    coordinator = hass.data[DOMAIN][entry.entry_id]
-
-    entities = []
-
-    # 1. Input Signal Sensors
-    input_count = len(coordinator.data.get("status", {}).get("input_names", {})) or 8
-    for i in range(1, input_count + 1):
-        entities.append(OreiInputSignalSensor(coordinator, i))
-
-    # 2. Output Connection Sensors
-    # FIX (R1): outputs live at data["outputs"], not data["status"]["outputs"].
-    # The coordinator stores outputs/inputs as separate top-level keys
-    # populated from the /api/status/outputs and /api/status/inputs endpoints.
-    output_count = len(coordinator.data.get("outputs", [])) or 8
-    for i in range(1, output_count + 1):
-        entities.append(OreiOutputConnectionSensor(coordinator, i))
-
+async def async_setup_entry(
+    hass: HomeAssistant, entry: HdmiMatrixConfigEntry, async_add_entities: AddEntitiesCallback
+) -> None:
+    entities: list[BinarySensorEntity] = [HdmiMatrixInputSignal(entry, n) for n in range(1, PORT_COUNT + 1)]
+    entities.extend(HdmiMatrixOutputDisplay(entry, n) for n in range(1, PORT_COUNT + 1))
     async_add_entities(entities)
 
 
-class OreiInputSignalSensor(CoordinatorEntity, BinarySensorEntity):
-    """Binary sensor for HDMI input video signal active status."""
+class HdmiMatrixInputSignal(HdmiMatrixEntity, BinarySensorEntity):
+    """On while the source on this input sends a video signal."""
 
-    def __init__(self, coordinator, input_num):
-        """Initialize the sensor."""
-        super().__init__(coordinator)
-        self.input_num = input_num
-        self._attr_unique_id = f"{coordinator.host}_input_{input_num}_signal"
+    _attr_device_class = BinarySensorDeviceClass.CONNECTIVITY
 
-    @property
-    def device_info(self) -> DeviceInfo:
-        """Return device registry information."""
-        return DeviceInfo(
-            identifiers={(DOMAIN, self.coordinator.host)},
-            name=f"OREI HDMI Matrix ({self.coordinator.host})",
-            manufacturer="OREI",
-            model="BK-808",
-            sw_version="1.0.0",
-        )
+    def __init__(self, entry: HdmiMatrixConfigEntry, number: int) -> None:
+        data = entry.runtime_data.coordinator.data
+        label = port_label(number, data.input_name(number), f"Input {number}")
+        super().__init__(entry, f"input_{number}_signal", "input_signal", {"input": label})
+        self.number = number
 
     @property
     def available(self) -> bool:
-        """Return True if the coordinator has fresh data.
-
-        When the matrix is unreachable or the API returns unexpected data,
-        the coordinator raises UpdateFailed and ``data`` may be stale or
-        incomplete. In that case we report unavailable rather than
-        a misleading "Off" state.
-        """
-        return (
-            self.coordinator.last_update_success
-            and bool(self.coordinator.data.get("inputs"))
-        )
-
-    @property
-    def name(self) -> str:
-        """Return the name of the sensor."""
-        input_names = self.coordinator.data.get("status", {}).get("input_names", {})
-        custom_name = input_names.get(str(self.input_num)) or input_names.get(self.input_num)
-        if custom_name:
-            return f"Input {self.input_num} ({custom_name}) Signal"
-        return f"Input {self.input_num} Signal"
+        # Unavailable, not "off", when the input status could not be read (F10.3).
+        return super().available and self.coordinator.data.input(self.number) is not None
 
     @property
     def is_on(self) -> bool | None:
-        """Return true if video signal is active, None if unknown."""
-        if not self.available:
+        inp = self.coordinator.data.input(self.number)
+        if inp is None:
             return None
-        inputs = self.coordinator.data.get("inputs", [])
-        for inp in inputs:
-            if inp.get("number") == self.input_num:
-                return inp.get("signal_active", inp.get("signalActive")) is True
-        return False
+        return inp.get("signalActive", inp.get("signal_active")) is True
+
+
+class HdmiMatrixOutputDisplay(HdmiMatrixEntity, BinarySensorEntity):
+    """On while a display is connected to this output."""
+
+    _attr_device_class = BinarySensorDeviceClass.PLUG
+
+    def __init__(self, entry: HdmiMatrixConfigEntry, number: int) -> None:
+        data = entry.runtime_data.coordinator.data
+        label = port_label(number, data.output_name(number), f"Output {number}")
+        super().__init__(entry, f"output_{number}_connected", "output_display", {"output": label})
+        self.number = number
 
     @property
-    def device_class(self):
-        """Return the device class."""
-        return BinarySensorDeviceClass.CONNECTIVITY
-
-
-class OreiOutputConnectionSensor(CoordinatorEntity, BinarySensorEntity):
-    """Binary sensor for HDMI output display connection status."""
-
-    def __init__(self, coordinator, output_num):
-        """Initialize the sensor."""
-        super().__init__(coordinator)
-        self.output_num = output_num
-        self._attr_unique_id = f"{coordinator.host}_output_{output_num}_connected"
+    def available(self) -> bool:
+        return super().available and self.coordinator.data.output(self.number) is not None
 
     @property
-    def device_info(self) -> DeviceInfo:
-        """Return device registry information."""
-        return DeviceInfo(
-            identifiers={(DOMAIN, self.coordinator.host)},
-            name=f"OREI HDMI Matrix ({self.coordinator.host})",
-            manufacturer="OREI",
-            model="BK-808",
-            sw_version="1.0.0",
-        )
-
-    @property
-    def name(self) -> str:
-        """Return the name of the sensor."""
-        output_names = self.coordinator.data["status"].get("output_names", {})
-        custom_name = output_names.get(str(self.output_num)) or output_names.get(self.output_num)
-        if custom_name:
-            return f"Output {self.output_num} ({custom_name}) Display"
-        return f"Output {self.output_num} Display"
-
-    @property
-    def is_on(self) -> bool:
-        """Return true if display is connected."""
-        outputs = self.coordinator.data.get("outputs", [])
-        for out in outputs:
-            if out.get("number") == self.output_num:
-                # Prefer cableConnected, fallback to connected
-                cable = out.get("cable_connected", out.get("cableConnected"))
-                if cable is not None:
-                    return cable is True
-                return out.get("connected") is True
-        return False
-
-    @property
-    def device_class(self):
-        """Return the device class."""
-        return BinarySensorDeviceClass.PLUG
+    def is_on(self) -> bool | None:
+        out = self.coordinator.data.output(self.number)
+        if out is None:
+            return None
+        # cableConnected is None when the hub has no cable status (no Telnet); then use connected.
+        cable = out.get("cableConnected", out.get("cable_connected"))
+        if cable is not None:
+            return cable is True
+        return out.get("connected") is True

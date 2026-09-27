@@ -28,3 +28,6 @@ WEB_DRAWERS = (
 
 #: The Unfolded Circle integration as it ships (run.py legacy mode -> src/driver.py on ucapi).
 UC_DRIVER = ("src/driver.py", "driver.json", "requirements-uc.txt", "src/rest_api/__init__.py")
+
+#: The Home Assistant custom component the `ha` client installs in a real Home Assistant (WP-D1).
+HA_COMPONENT = ("custom_components/hdmi_matrix",)

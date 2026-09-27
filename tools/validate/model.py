@@ -164,7 +164,19 @@ INTENTS: dict[str, str] = {
     "profile_recall": "recall profile `profile_id` (optional `passcode`)",
     "request": "raw HTTP `method` `path` with optional `json` body (api client only)",
     "uc_command": "Remote 3 entity command `cmd_id` with optional `params` on `entity_id` (uc client only)",
+    "ha_service": "Home Assistant service `domain`.`service` with `data` (ha client only)",
+    "ha_config_flow": "add the hub in Home Assistant through the integration's config flow, then set "
+                      "`options` through its options flow (ha client only)",
+    "ha_reconfigure": "point the Home Assistant entry at the hub by `host` (`\"ip\"`: the Docker host's IP) "
+                      "through the reconfigure flow (ha client only)",
+    "device_change": (
+        "the device changes on its own (cable, signal, front panel): simulator `event` (POST /_sim/event) or "
+        "state `patch`; performed by the runner (sim only), checked through the client with ClientState"
+    ),
 }
+
+#: Intents the runner carries out itself; the client only observes their effect.
+RUNNER_INTENTS = frozenset({"device_change"})
 
 
 # --------------------------------------------------------------------------- expectations
@@ -291,6 +303,28 @@ class Hub(Expectation):
 
 
 @dataclass(frozen=True)
+class ClientState(Expectation):
+    """What the client itself shows after the action, e.g. a Home Assistant entity state.
+
+    ``key`` is client-specific (the ``ha`` client: ``<platform>.<unique-id suffix>``
+    such as ``select.output_1_source``, ``@attribute`` for an attribute, or
+    ``device.<field>`` / ``entry.<field>``). ``before``, if given, is a precondition:
+    the runner waits until the client shows it before the action, so the check
+    proves a *change*. Polled until ``timeout``. Clients that cannot observe
+    report ``n/a``.
+    """
+
+    key: str
+    equals: Any = None
+    before: Any = None
+    timeout: float = 30.0
+
+    def describe(self) -> str:
+        before = f" (was {self.before!r})" if self.before is not None else ""
+        return f"client shows {self.key} == {self.equals!r}{before}"
+
+
+@dataclass(frozen=True)
 class WsEvent(Expectation):
     """A WebSocket client connected to /ws received ``event`` whose data contains ``data``."""
 
@@ -371,6 +405,8 @@ class Scenario:
             raise ValueError(f"scenario {self.id} must declare the code paths it covers (staleness)")
         if self.faults and "hardware" in self.targets:
             raise ValueError(f"scenario {self.id}: fault injection is simulator-only; set targets=('sim',)")
+        if self.action.intent in RUNNER_INTENTS and "hardware" in self.targets:
+            raise ValueError(f"scenario {self.id}: '{self.action.intent}' is simulator-only; set targets=('sim',)")
 
     def features_for(self, client: str) -> tuple[str, ...]:
         return (*self.features, *self.client_features.get(client, ()))
