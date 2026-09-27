@@ -115,6 +115,7 @@ async def test_rest_status_from_real_device_answers(hub, simulator):
     assert data["routing"] == {str(i): 7 for i in range(1, 9)}
     assert data["input_names"] == {str(i): n for i, n in enumerate(NAMES_IN, 1)}
     assert data["output_names"] == {str(i): n for i, n in enumerate(NAMES_OUT, 1)}
+    assert data["power"] == "on"  # HA-03: clients read matrix power from /api/status
 
     outputs = (await (await hub.get("/api/status/outputs")).json())["data"]["outputs"]
     assert [o["number"] for o in outputs] == list(range(1, 9))
@@ -188,6 +189,19 @@ def test_format_status_keeps_eight_outputs_of_a_nine_entry_allsource():
 
     out = _format_status(raw, _Device(), {}, {})
     assert out["routing"] == dict.fromkeys(range(1, 9), 7) and len(out["outputs"]) == 8
+
+
+@pytest.mark.parametrize(("raw_power", "expected"), [("on", "on"), ("off", "off"), (None, None)])
+def test_format_status_reports_matrix_power(raw_power, expected):
+    """HA-03: /api/status carries the matrix power ("on"/"off"); absent when the read had none."""
+    raw = {"routing": [1] * 8, "input_names": NAMES_IN, "output_names": NAMES_OUT, "preset_names": []}
+    if raw_power is not None:
+        raw["power"] = raw_power
+
+    class _Device:
+        host = "matrix"
+
+    assert _format_status(raw, _Device(), {}, {}).get("power") == expected
 
 
 # ------------------------------------------------------------------ Telnet

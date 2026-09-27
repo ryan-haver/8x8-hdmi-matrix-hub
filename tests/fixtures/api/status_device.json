@@ -1,0 +1,47 @@
+{
+  "data": {
+    "device": {
+      "dhcp": false,
+      "firmware_version": "V1.10.01",
+      "gateway": "192.0.2.1",
+      "hostname": "BK-808",
+      "ip_address": "192.0.2.10",
+      "mac_address": "02:00:00:0B:08:08",
+      "model": "BK-808",
+      "subnet": "255.255.255.0",
+      "tcp_port": 8000,
+      "telnet_port": 23,
+      "web_version": "V2.00.03"
+    },
+    "raw": {
+      "network": {
+        "comhead": "get network",
+        "dhcp": 0,
+        "gateway": "192.0.2.1",
+        "hostname": "BK-808",
+        "ipaddress": "192.0.2.10",
+        "macaddress": "02:00:00:0B:08:08",
+        "model": "BK-808",
+        "power": 1,
+        "subnet": "255.255.255.0",
+        "tcpport": 8000,
+        "telnetport": 23,
+        "username": 1
+      },
+      "status": {
+        "comhead": "get status",
+        "gateway": "192.0.2.1",
+        "hostname": "BK-808",
+        "ipaddress": "192.0.2.10",
+        "macaddress": "02:00:00:0B:08:08",
+        "model": "BK-808",
+        "power": 1,
+        "subnet": "255.255.255.0",
+        "version": "V1.10.01",
+        "webversion": "V2.00.03"
+      }
+    }
+  },
+  "error": null,
+  "success": true
+}

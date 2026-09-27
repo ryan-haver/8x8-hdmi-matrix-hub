@@ -8,7 +8,9 @@
 //   node tools/ui/run-in-container.mjs shell                           interactive shell
 //
 // npm scripts: visual:test, visual:update. Extra args after `--` go to
-// Playwright, e.g. `npm run visual:test -- --grep "drawer/theme"`.
+// Playwright, e.g. `npm run visual:test -- --grep "drawer/theme"`. Passing
+// `--project=<name>` runs only those projects instead of every visual
+// project, e.g. `npm run visual:update -- --project=kiosk-tab-a11`.
 //
 // Works on Windows (Docker Desktop, PowerShell or Git Bash), macOS and Linux.
 // The repo is bind-mounted at /work. node_modules inside the container is a
@@ -23,7 +25,8 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '.
 const VOLUME_NODE_MODULES = 'hdmi-hub-ui-node-modules';
 const VOLUME_CACHE = 'hdmi-hub-ui-cache';
 const CONFIG = 'tests/e2e/playwright.config.ts';
-const VISUAL_PROJECTS = ['desktop', 'tablet', 'phone', 'kiosk'];
+// Keep in sync with tests/e2e/support/viewports.ts (VIEWPORTS) and the CI ui job.
+const VISUAL_PROJECTS = ['desktop', 'tablet', 'phone', 'kiosk-tab-a11', 'kiosk-iphone16promax'];
 
 const [mode = 'test', ...rest] = process.argv.slice(2);
 const passthrough = rest[0] === '--' ? rest.slice(1) : rest;
@@ -34,7 +37,9 @@ let playwright;
 switch (mode) {
   case 'test':
   case 'update': {
-    const args = ['npx', 'playwright', 'test', '-c', CONFIG, ...VISUAL_PROJECTS.map((p) => `--project=${p}`)];
+    const ownProjects = passthrough.some((a) => a === '--project' || a.startsWith('--project='));
+    const projects = ownProjects ? [] : VISUAL_PROJECTS.map((p) => `--project=${p}`);
+    const args = ['npx', 'playwright', 'test', '-c', CONFIG, ...projects];
     if (mode === 'update') args.push('--update-snapshots=changed');
     playwright = [...args, ...passthrough].map(quote).join(' ');
     break;

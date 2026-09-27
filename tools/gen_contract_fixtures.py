@@ -89,6 +89,35 @@ RAW_DEVICE_RESPONSES: dict[str, dict[str, Any]] = {
         "inactive": [0, 1, 0, 1, 0, 1, 0, 0],  # 1 = signal present (AppleTV, Switch, PS5)
         "inname": INPUT_NAMES,
     },
+    # Field names and value formats as captured on the real BK-808 (V1.10.01,
+    # tests/fixtures/device/.../http/get_status.json, get_network.json); the
+    # host name and MAC (redacted in the capture) are documentation values.
+    "get status": {
+        "comhead": "get status",
+        "power": 1,
+        "version": "V1.10.01",
+        "hostname": "BK-808",
+        "ipaddress": MATRIX_HOST,
+        "subnet": "255.255.255.0",
+        "gateway": "192.0.2.1",
+        "macaddress": "02:00:00:0B:08:08",
+        "model": "BK-808",
+        "webversion": "V2.00.03",
+    },
+    "get network": {
+        "comhead": "get network",
+        "power": 1,
+        "dhcp": 0,
+        "ipaddress": MATRIX_HOST,
+        "subnet": "255.255.255.0",
+        "gateway": "192.0.2.1",
+        "telnetport": 23,
+        "tcpport": 8000,
+        "macaddress": "02:00:00:0B:08:08",
+        "hostname": "BK-808",
+        "username": 1,
+        "model": "BK-808",
+    },
 }
 
 # fixture file name -> hub route
@@ -97,6 +126,7 @@ FIXTURES: dict[str, str] = {
     "status.json": "/api/status",
     "status_outputs.json": "/api/status/outputs",
     "status_inputs.json": "/api/status/inputs",
+    "status_device.json": "/api/status/device",
     "presets.json": "/api/presets",
     "inputs.json": "/api/inputs",
     "outputs.json": "/api/outputs",

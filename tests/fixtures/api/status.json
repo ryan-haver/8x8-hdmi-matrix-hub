@@ -32,6 +32,7 @@
       5,
       7
     ],
+    "power": "on",
     "preset_names": {
       "1": "Movie Night",
       "2": "Gaming",

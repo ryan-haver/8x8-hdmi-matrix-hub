@@ -59,6 +59,8 @@ class Client(ABC):
     #: How the runner starts the hub for this client (``tools.validate.stack.HUB_MODES``):
     #: ``api`` = modular API-only mode, ``uc`` = the shipped legacy mode with the UC integration.
     hub_mode: str = "api"
+    #: Whether :meth:`observe` works (``ClientState`` checks, ``device_change`` scenarios).
+    observes: bool = False
     #: Per-action context set by the runner before :meth:`perform`:
     #: ``label`` (scenario id, for artifact names) and ``forwarded_for`` (the
     #: client address this scenario uses; the hub rate-limits per client).
@@ -81,6 +83,10 @@ class Client(ABC):
     @abstractmethod
     async def stop(self) -> None:
         """Release everything started in :meth:`start`."""
+
+    async def observe(self, key: str) -> Any:
+        """What the client shows for ``key`` (``ClientState``); clients that cannot observe raise."""
+        raise NotSupportedError(f"client '{self.name}' cannot observe {key!r}")
 
     def environment(self) -> dict[str, Any]:
         """Client versions for the evidence record."""

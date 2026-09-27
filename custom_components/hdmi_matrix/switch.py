@@ -1,196 +1,95 @@
-"""Support for OREI HDMI Matrix switches."""
+"""Matrix power, and per-output audio mute and stream switches."""
 
-import aiohttp
+from __future__ import annotations
+
+from typing import Any
+
 from homeassistant.components.switch import SwitchEntity
-from homeassistant.helpers.device_registry import DeviceInfo
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN, LOGGER
+from .const import PORT_COUNT
+from .coordinator import HdmiMatrixConfigEntry
+from .entity import HdmiMatrixEntity, port_label
 
-# 10s timeout for all matrix HTTP calls — prevents the HA UI from hanging
-# when the matrix is unreachable.
-_TIMEOUT = aiohttp.ClientTimeout(total=10)
+PARALLEL_UPDATES = 1
 
 
-async def async_setup_entry(hass, entry, async_add_entities):
-    """Set up the OREI Matrix switch entities."""
-    coordinator = hass.data[DOMAIN][entry.entry_id]
-
-    entities = []
-
-    # 1. Power Switch
-    entities.append(OreiPowerSwitch(coordinator))
-
-    # 2. Output Mute and Stream Switches
-    # BK-808 always has 8 output ports
-    for i in range(1, 9):
-        entities.append(OreiOutputMuteSwitch(coordinator, i))
-        entities.append(OreiOutputStreamSwitch(coordinator, i))
-
+async def async_setup_entry(
+    hass: HomeAssistant, entry: HdmiMatrixConfigEntry, async_add_entities: AddEntitiesCallback
+) -> None:
+    entities: list[SwitchEntity] = [HdmiMatrixPowerSwitch(entry)]
+    for n in range(1, PORT_COUNT + 1):
+        entities.append(HdmiMatrixOutputMuteSwitch(entry, n))
+        entities.append(HdmiMatrixOutputStreamSwitch(entry, n))
     async_add_entities(entities)
 
 
-class OreiPowerSwitch(CoordinatorEntity, SwitchEntity):
-    """Representation of the OREI Matrix power switch."""
+class HdmiMatrixPowerSwitch(HdmiMatrixEntity, SwitchEntity):
+    """Matrix power (on / standby), read from ``/api/status`` ``power`` (HA-03)."""
 
-    def __init__(self, coordinator):
-        """Initialize the power switch."""
-        super().__init__(coordinator)
-        self._attr_name = "Matrix Power"
-        self._attr_unique_id = f"{coordinator.host}_power"
+    def __init__(self, entry: HdmiMatrixConfigEntry) -> None:
+        super().__init__(entry, "power", "power")
 
     @property
-    def device_info(self) -> DeviceInfo:
-        """Return device registry information."""
-        return DeviceInfo(
-            identifiers={(DOMAIN, self.coordinator.host)},
-            name=f"OREI HDMI Matrix ({self.coordinator.host})",
-            manufacturer="OREI",
-            model="BK-808",
-            sw_version="1.0.0",
-        )
+    def available(self) -> bool:
+        return super().available and self.coordinator.data.power is not None
 
     @property
-    def is_on(self) -> bool:
-        """Return true if matrix is powered on."""
-        return self.coordinator.data["status"].get("power") == "on"
+    def is_on(self) -> bool | None:
+        power = self.coordinator.data.power
+        return None if power is None else power == "on"
 
-    async def async_turn_on(self, **kwargs) -> None:
-        """Power on the matrix."""
-        session = self.coordinator.hass.helpers.aiohttp_client.async_get_clientsession()
-        url = f"{self.coordinator.base_url}/api/power/on"
-        try:
-            async with session.post(url, timeout=_TIMEOUT) as resp:
-                if resp.status == 200:
-                    json_resp = await resp.json()
-                    if json_resp.get("success"):
-                        await self.coordinator.async_request_refresh()
-                    else:
-                        LOGGER.error("Failed to power on: %s", json_resp.get("error"))
-        except Exception as err:
-            LOGGER.error("Error powering on: %s", err)
+    async def async_turn_on(self, **kwargs: Any) -> None:
+        await self._write(self.client.set_power(True))
 
-    async def async_turn_off(self, **kwargs) -> None:
-        """Power off the matrix."""
-        session = self.coordinator.hass.helpers.aiohttp_client.async_get_clientsession()
-        url = f"{self.coordinator.base_url}/api/power/off"
-        try:
-            async with session.post(url, timeout=_TIMEOUT) as resp:
-                if resp.status == 200:
-                    json_resp = await resp.json()
-                    if json_resp.get("success"):
-                        await self.coordinator.async_request_refresh()
-                    else:
-                        LOGGER.error("Failed to power off: %s", json_resp.get("error"))
-        except Exception as err:
-            LOGGER.error("Error powering off: %s", err)
+    async def async_turn_off(self, **kwargs: Any) -> None:
+        await self._write(self.client.set_power(False))
 
 
-class OreiOutputMuteSwitch(CoordinatorEntity, SwitchEntity):
-    """Representation of an OREI Matrix output mute toggle."""
+class _OutputSwitch(HdmiMatrixEntity, SwitchEntity):
+    """A switch backed by one field of ``/api/status/outputs``."""
 
-    def __init__(self, coordinator, output_num):
-        """Initialize the mute switch."""
-        super().__init__(coordinator)
-        self.output_num = output_num
-        self._attr_name = f"Output {output_num} Mute"
-        self._attr_unique_id = f"{coordinator.host}_output_{output_num}_mute"
+    field: str
+    suffix: str
+
+    def __init__(self, entry: HdmiMatrixConfigEntry, output: int) -> None:
+        data = entry.runtime_data.coordinator.data
+        label = port_label(output, data.output_name(output), f"Output {output}")
+        super().__init__(entry, f"output_{output}_{self.suffix}", f"output_{self.suffix}", {"output": label})
+        self.output = output
 
     @property
-    def device_info(self) -> DeviceInfo:
-        """Return device registry information."""
-        return DeviceInfo(
-            identifiers={(DOMAIN, self.coordinator.host)},
-            name=f"OREI HDMI Matrix ({self.coordinator.host})",
-            manufacturer="OREI",
-            model="BK-808",
-            sw_version="1.0.0",
-        )
+    def available(self) -> bool:
+        return super().available and self.coordinator.data.output(self.output) is not None
 
     @property
-    def is_on(self) -> bool:
-        """Return true if output audio is muted."""
-        outputs = self.coordinator.data.get("outputs", [])
-        for out in outputs:
-            if out.get("number") == self.output_num:
-                return out.get("muted") is True
-        return False
-
-    async def async_turn_on(self, **kwargs) -> None:
-        """Mute output audio."""
-        await self._set_mute_state(True)
-
-    async def async_turn_off(self, **kwargs) -> None:
-        """Unmute output audio."""
-        await self._set_mute_state(False)
-
-    async def _set_mute_state(self, muted: bool) -> None:
-        """Send mute POST request."""
-        session = self.coordinator.hass.helpers.aiohttp_client.async_get_clientsession()
-        url = f"{self.coordinator.base_url}/api/output/{self.output_num}/mute"
-        payload = {"muted": muted}
-        try:
-            async with session.post(url, json=payload, timeout=_TIMEOUT) as resp:
-                if resp.status == 200:
-                    json_resp = await resp.json()
-                    if json_resp.get("success"):
-                        await self.coordinator.async_request_refresh()
-                    else:
-                        LOGGER.error("Failed to set mute: %s", json_resp.get("error"))
-        except Exception as err:
-            LOGGER.error("Error setting mute: %s", err)
+    def is_on(self) -> bool | None:
+        out = self.coordinator.data.output(self.output)
+        return None if out is None else out.get(self.field) is True
 
 
-class OreiOutputStreamSwitch(CoordinatorEntity, SwitchEntity):
-    """Representation of an OREI Matrix output stream toggle."""
+class HdmiMatrixOutputMuteSwitch(_OutputSwitch):
+    """Audio mute of one output (on = muted)."""
 
-    def __init__(self, coordinator, output_num):
-        """Initialize the stream switch."""
-        super().__init__(coordinator)
-        self.output_num = output_num
-        self._attr_name = f"Output {output_num} Stream"
-        self._attr_unique_id = f"{coordinator.host}_output_{output_num}_stream"
+    field = "muted"
+    suffix = "mute"
 
-    @property
-    def device_info(self) -> DeviceInfo:
-        """Return device registry information."""
-        return DeviceInfo(
-            identifiers={(DOMAIN, self.coordinator.host)},
-            name=f"OREI HDMI Matrix ({self.coordinator.host})",
-            manufacturer="OREI",
-            model="BK-808",
-            sw_version="1.0.0",
-        )
+    async def async_turn_on(self, **kwargs: Any) -> None:
+        await self._write(self.client.set_mute(self.output, True))
 
-    @property
-    def is_on(self) -> bool:
-        """Return true if output stream is enabled."""
-        outputs = self.coordinator.data.get("outputs", [])
-        for out in outputs:
-            if out.get("number") == self.output_num:
-                return out.get("enabled") is True
-        return False
+    async def async_turn_off(self, **kwargs: Any) -> None:
+        await self._write(self.client.set_mute(self.output, False))
 
-    async def async_turn_on(self, **kwargs) -> None:
-        """Enable output stream."""
-        await self._set_stream_state(True)
 
-    async def async_turn_off(self, **kwargs) -> None:
-        """Disable output stream."""
-        await self._set_stream_state(False)
+class HdmiMatrixOutputStreamSwitch(_OutputSwitch):
+    """Video stream of one output (off = the output is disabled)."""
 
-    async def _set_stream_state(self, enabled: bool) -> None:
-        """Send enable POST request."""
-        session = self.coordinator.hass.helpers.aiohttp_client.async_get_clientsession()
-        url = f"{self.coordinator.base_url}/api/output/{self.output_num}/enable"
-        payload = {"enabled": enabled}
-        try:
-            async with session.post(url, json=payload, timeout=_TIMEOUT) as resp:
-                if resp.status == 200:
-                    json_resp = await resp.json()
-                    if json_resp.get("success"):
-                        await self.coordinator.async_request_refresh()
-                    else:
-                        LOGGER.error("Failed to set stream: %s", json_resp.get("error"))
-        except Exception as err:
-            LOGGER.error("Error setting stream: %s", err)
+    field = "enabled"
+    suffix = "stream"
+
+    async def async_turn_on(self, **kwargs: Any) -> None:
+        await self._write(self.client.set_stream(self.output, True))
+
+    async def async_turn_off(self, **kwargs: Any) -> None:
+        await self._write(self.client.set_stream(self.output, False))

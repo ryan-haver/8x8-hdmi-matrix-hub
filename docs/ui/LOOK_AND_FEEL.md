@@ -140,6 +140,6 @@ These are recorded as found in the current UI, and the approved baseline capture
 - [ ] Spacing, radii, and durations come from the scales above.
 - [ ] Glow is used only for active or focused states.
 - [ ] Legible at card opacity 0.4 and 1.0.
-- [ ] Works at desktop, tablet, phone, and kiosk sizes; touch targets ≥ 44px.
+- [ ] Works at desktop, tablet, phone, and kiosk-device sizes (Galaxy Tab A11 landscape, iPhone 16 Pro Max portrait; see `tests/e2e/README.md`); touch targets ≥ 44px.
 - [ ] Visible focus ring; reduced-motion respected.
 - [ ] Before/after captures reviewed and approved (§5.3).

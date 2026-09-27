@@ -31,6 +31,11 @@ def _format_status(raw_status: dict[str, Any], matrix_device, input_names: dict[
         "host": raw_status.get("host", matrix_device.host),
     }
 
+    # Matrix power ("on" / "off"), read with the status (the device answers reads
+    # in standby too). Clients such as the Home Assistant power switch use it (HA-03).
+    if raw_status.get("power") in ("on", "off"):
+        status["power"] = raw_status["power"]
+
     # Routing: convert array to map {output: input}
     routing_array = raw_status.get("routing", [])
     if routing_array:
