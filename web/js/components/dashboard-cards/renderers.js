@@ -15,17 +15,21 @@ const UNPIN_ICON = `<svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" st
                             <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                         </svg>`;
 
+/** Lock shown in the icon slot of a passcode-protected card (UI-50: one indicator, icon-sized). */
+const LOCK_ICON = `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-label="Passcode protected" role="img"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;
+
 /**
- * One dashboard card. Every value is escaped here except `titleExtra`, which
- * is fixed markup (the lock icon).
+ * One dashboard card. Every value is escaped here; a protected card shows the
+ * lock in its icon slot instead of its emoji (UI-50: it showed the emoji and an
+ * oversized SVG lock next to the title).
  */
-function dashboardCardHtml({ kind, key, type, id, icon, title, titleExtra = '', meta = '', action }) {
+function dashboardCardHtml({ kind, key, type, id, icon, title, locked = false, meta = '', action }) {
     const e = Helpers.escapeHtml;
     return `
             <div class="dashboard-card dashboard-card-${kind} scene-card" data-card-key="${e(key)}">
-                <div class="scene-icon dashboard-card-icon">${e(icon)}</div>
+                <div class="scene-icon dashboard-card-icon"${locked ? ' title="Passcode protected"' : ''}>${locked ? LOCK_ICON : e(icon)}</div>
                 <div class="scene-info">
-                    <span class="scene-name dashboard-card-title">${e(title)}${titleExtra}</span>
+                    <span class="scene-name dashboard-card-title">${e(title)}</span>
                     ${meta ? `<span class="scene-outputs dashboard-card-meta">${e(meta)}</span>` : ''}
                 </div>
                 <div class="scene-actions">
@@ -113,8 +117,7 @@ window.dashboardCardRenderers = {
 
         return dashboardCardHtml({
             kind: 'scene', key: `${card.type}:${card.id}`, type: 'scene', id: scene.id,
-            icon: scene.icon || '🎬', title: scene.name, action: 'Execute',
-            titleExtra: isProtected ? ` <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" title="Password protected"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>` : '',
+            icon: scene.icon || '🎬', title: scene.name, action: 'Execute', locked: !!isProtected,
             meta: `${stepCount} step${stepCount !== 1 ? 's' : ''}`,
         });
     },

@@ -763,6 +763,25 @@
             background: rgba(255, 255, 255, 0.15);
         }
 
+        /* Passcode PIN pad (UI-48): digits, entered dots and the delete key sized for touch (UI-50) */
+        #passcodeDisplay {
+            font-size: 2rem;
+            line-height: 1.2;
+            letter-spacing: 0.4em;
+            min-height: 1.2em;
+            text-align: center;
+            color: var(--text-primary);
+        }
+
+        #passcodePad .remote-cmd-btn.action-btn {
+            font-size: 1.25rem;
+        }
+
+        #passcodePad .remote-cmd-btn.action-btn[data-pin-action="back"] {
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+
         /* Playback buttons */
         .remote-cmd-btn.media-btn {
             background: rgba(255, 255, 255, 0.05);
@@ -1301,7 +1320,7 @@
             </div>
             <div class="kiosk-modal-body">
                 <p class="wizard-instruction" id="passcodeInstruction">This profile is passcode protected.</p>
-                <p class="wizard-instruction" id="passcodeDisplay" style="text-align:center; letter-spacing:0.4em; min-height:1.5em;"></p>
+                <p class="wizard-instruction" id="passcodeDisplay"></p>
                 <div class="remote-section" id="passcodePad">
                     <div class="remote-btn-row">
                         <button class="remote-cmd-btn action-btn" data-digit="1">1</button>

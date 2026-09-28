@@ -838,12 +838,12 @@ class DashboardManager {
                         </svg>
                         <span>Dashboard Cards</span>
                     </div>
-                    <button class="btn btn-sm btn-secondary" id="add-card-btn">
-                        <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <!-- UI-50: the dashboard section's own "+" button style (btn-add), so the title stays on one line -->
+                    <button class="btn-icon btn-add" id="add-card-btn" title="Add card to dashboard" aria-label="Add card to dashboard">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="12" y1="5" x2="12" y2="19"/>
                             <line x1="5" y1="12" x2="19" y2="12"/>
                         </svg>
-                        Add Card
                     </button>
                 </div>
                 <div class="dashboard-widget-content">
