@@ -1,12 +1,29 @@
 /**
- * OREI Matrix Control - WebSocket Handler
- * Handles real-time updates from the matrix
+ * Hub WebSocket client: the browser side of the /ws contract
+ * (docs/api/WEBSOCKET.md, protocol 1). Used by the web UI (app.js) and the
+ * kiosk (kiosk.html).
+ *
+ * - Messages are {event, data}; every one is handed to onMessage as
+ *   {type: <event>, data: <payload>} (payloads are passed through unchanged).
+ * - Reconnects for as long as the page is open (1 s doubling to 30 s). On
+ *   every (re)connect the hub sends `connected` and a `status` snapshot, so a
+ *   reconnect also resyncs the page (UI-03).
+ * - Heartbeat: {command: 'ping'} every 25 s; a socket that has received
+ *   nothing for 60 s is closed and reconnected. The hub also sends protocol
+ *   pings, which the browser answers by itself (API-10).
+ * - Tracks the matrix link the hub reports (`connected.matrix`,
+ *   `matrix_connection`, `status`) and reports it through onMatrixStatus, so
+ *   the page can tell "hub unreachable" from "matrix unreachable".
  */
+
+const WS_PING_INTERVAL_MS = 25000;
+const WS_SILENCE_LIMIT_MS = 60000;
 
 class MatrixWebSocket {
     constructor(options = {}) {
         this.onMessage = options.onMessage || (() => {});
         this.onStatusChange = options.onStatusChange || (() => {});
+        this.onMatrixStatus = options.onMatrixStatus || (() => {});
         this.onError = options.onError || (() => {});
         this.onReconnecting = options.onReconnecting || (() => {});
 
@@ -15,219 +32,160 @@ class MatrixWebSocket {
         this.reconnectDelay = 1000;
         this.maxReconnectDelay = 30000;
         this.reconnectAttempts = 0;
-        this.maxReconnectAttempts = 50;
         this.reconnectTimer = null;
         this.pingInterval = null;
         this.url = null;
-        this.status = 'disconnected'; // 'disconnected' | 'connecting' | 'connected' | 'reconnecting' | 'failed'
+        this.protocol = null;
+        this.lastMessageAt = 0;
+        this.stopped = false;
+        /** The matrix link as the hub last reported it: {connected, state, host} or null (not known yet). */
+        this.matrix = null;
+        this.status = 'disconnected'; // 'disconnected' | 'connecting' | 'connected' | 'reconnecting'
+    }
+
+    log(...args) {
+        if (window.Logger && typeof window.Logger.log === 'function') window.Logger.log(...args);
     }
 
     /**
-     * Connect to the WebSocket server
+     * Connect to the hub's /ws
      */
     connect() {
-        if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-            Logger.log('WebSocket already connected');
+        if (this.ws && (this.ws.readyState === WebSocket.OPEN || this.ws.readyState === WebSocket.CONNECTING)) {
             return;
         }
-
-        // Build WebSocket URL
+        this.stopped = false;
         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
         this.url = `${protocol}//${window.location.host}/ws`;
-
-        this.status = 'connecting';
-        Logger.log(`Connecting to WebSocket: ${this.url}`);
+        this.status = this.reconnectAttempts > 0 ? 'reconnecting' : 'connecting';
+        this.log(`Connecting to WebSocket: ${this.url}`);
 
         try {
             this.ws = new WebSocket(this.url);
-            this.setupEventHandlers();
+            this.setupEventHandlers(this.ws);
         } catch (error) {
             console.error('WebSocket connection error:', error);
-            this.status = 'disconnected';
             this.scheduleReconnect();
         }
     }
 
-    /**
-     * Set up WebSocket event handlers
-     */
-    setupEventHandlers() {
-        this.ws.onopen = () => {
-            Logger.log('WebSocket connected');
+    setupEventHandlers(ws) {
+        ws.onopen = () => {
+            if (ws !== this.ws) return;
+            this.log('WebSocket connected');
             this.connected = true;
+            this.status = 'connected';
             this.reconnectDelay = 1000;
             this.reconnectAttempts = 0;
+            this.lastMessageAt = Date.now();
             this.onStatusChange(true);
-            
-            // Start ping interval to keep connection alive
             this.startPingInterval();
         };
 
-        this.ws.onmessage = (event) => {
+        ws.onmessage = (event) => {
+            if (ws !== this.ws) return;
+            let msg;
             try {
-                const data = JSON.parse(event.data);
-                this.handleMessage(data);
+                msg = JSON.parse(event.data);
             } catch (error) {
                 console.error('Failed to parse WebSocket message:', error);
+                return;
             }
+            this.handleMessage(msg);
         };
 
-        this.ws.onclose = (event) => {
-            Logger.log(`WebSocket closed: code=${event.code}, reason=${event.reason}`);
+        ws.onclose = (event) => {
+            if (ws !== this.ws) return;
+            this.log(`WebSocket closed: code=${event.code}, reason=${event.reason}`);
+            this.ws = null;
             this.connected = false;
-            this.onStatusChange(false);
             this.stopPingInterval();
-            
-            // Don't reconnect if closed intentionally
-            if (event.code !== 1000) {
-                this.scheduleReconnect();
-            }
+            this.onStatusChange(false);
+            if (!this.stopped) this.scheduleReconnect();
         };
 
-        this.ws.onerror = (error) => {
-            console.error('WebSocket error:', error);
+        ws.onerror = (error) => {
+            if (ws !== this.ws) return;
             this.onError(error);
         };
     }
 
     /**
-     * Handle incoming WebSocket message
+     * One hub message: {event, data} (docs/api/WEBSOCKET.md)
      */
-    handleMessage(rawData) {
-        Logger.ws('RX', rawData);
-        
-        // Normalize message format - server broadcasts use {"event": "...", "data": {...}}
-        // Direct messages use {"type": "...", ...}
-        let msgType = rawData.type || rawData.event;
-        let data = rawData.data || rawData;
-        
-        // Handle different message types
-        switch (msgType) {
-            case 'status':
-                // Full status update
-                this.onMessage({ type: 'status', data: data });
-                break;
-                
-            case 'switch':
-                // Single route change
-                this.onMessage({
-                    type: 'switch',
-                    output: data.output,
-                    input: data.input
-                });
-                break;
-            
-            case 'switch_all':
-                // All outputs routed to single input
-                this.onMessage({
-                    type: 'switch_all',
-                    input: data.input,
-                    outputs: data.outputs
-                });
-                break;
-                
-            case 'audio_mute':
-                // Audio mute change
-                this.onMessage({
-                    type: 'audio_mute',
-                    output: data.output,
-                    muted: data.muted
-                });
-                break;
-                
-            case 'preset_recall':
-                // Preset was recalled - need full refresh
-                this.onMessage({
-                    type: 'preset_recall',
-                    preset: data.preset
-                });
-                break;
-                
-            case 'scene_recall':
-                // Scene was recalled - need full refresh
-                this.onMessage({
-                    type: 'scene_recall',
-                    scene: data.scene
-                });
-                break;
-            
-            case 'routing_change':
-                // Routing changed from driver polling
-                this.onMessage({
-                    type: 'switch',
-                    output: data.output,
-                    input: data.input
-                });
-                break;
-            
-            case 'signal_change':
-                // Input signal changed
-                this.onMessage({
-                    type: 'signal_change',
-                    input: data.input,
-                    active: data.active
-                });
-                break;
-                
+    handleMessage(msg) {
+        this.lastMessageAt = Date.now();
+        if (window.Logger && typeof window.Logger.ws === 'function') window.Logger.ws('RX', msg);
+        const type = msg && msg.event;
+        if (typeof type !== 'string') return;
+        const data = msg.data && typeof msg.data === 'object' ? msg.data : {};
+
+        switch (type) {
             case 'pong':
-                // Ping response - connection is alive
+                return;
+            case 'connected':
+                this.protocol = data.protocol ?? null;
+                if (data.matrix) this.setMatrix(data.matrix);
                 break;
-                
-            default:
-                // Pass through unknown messages
-                this.onMessage(rawData);
+            case 'matrix_connection':
+                this.setMatrix(data);
+                break;
+            case 'status':
+                this.setMatrix({ connected: data.connected, state: data.state, host: data.host });
+                break;
+        }
+        this.onMessage({ type, data });
+    }
+
+    setMatrix(link) {
+        const next = {
+            connected: link.connected === true,
+            state: link.state || (link.connected ? 'connected' : 'disconnected'),
+            host: link.host ?? null,
+        };
+        const prev = this.matrix;
+        this.matrix = next;
+        if (!prev || prev.connected !== next.connected || prev.state !== next.state) {
+            this.onMatrixStatus(next);
         }
     }
 
-    /**
-     * Schedule a reconnection attempt
-     */
+    /** Ask the hub for a fresh `status` snapshot (e.g. after a failed command). */
+    requestStatus() {
+        this.send({ command: 'get_status' });
+    }
+
     scheduleReconnect() {
         if (this.reconnectTimer) {
             clearTimeout(this.reconnectTimer);
         }
-
-        if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-            console.error('Max reconnection attempts reached');
-            this.status = 'failed';
-            this.onError(new Error('Unable to connect to server'));
-            return;
-        }
-
         this.reconnectAttempts++;
         this.status = 'reconnecting';
-        Logger.log(`Scheduling reconnect in ${this.reconnectDelay}ms (attempt ${this.reconnectAttempts})`);
-
-        // Notify listeners of reconnection attempt
-        this.onReconnecting({
-            attempt: this.reconnectAttempts,
-            maxAttempts: this.maxReconnectAttempts,
-            delayMs: this.reconnectDelay,
-        });
+        const delayMs = this.reconnectDelay;
+        this.log(`Scheduling reconnect in ${delayMs}ms (attempt ${this.reconnectAttempts})`);
+        this.onReconnecting({ attempt: this.reconnectAttempts, delayMs });
 
         this.reconnectTimer = setTimeout(() => {
+            this.reconnectTimer = null;
             this.connect();
-        }, this.reconnectDelay);
+        }, delayMs);
 
-        // Exponential backoff
         this.reconnectDelay = Math.min(this.reconnectDelay * 2, this.maxReconnectDelay);
     }
 
-    /**
-     * Start ping interval to keep connection alive
-     */
     startPingInterval() {
         this.stopPingInterval();
         this.pingInterval = setInterval(() => {
-            if (this.connected && this.ws.readyState === WebSocket.OPEN) {
-                this.send({ type: 'ping' });
+            if (!this.isConnected()) return;
+            if (Date.now() - this.lastMessageAt > WS_SILENCE_LIMIT_MS) {
+                this.log('WebSocket silent for too long; reconnecting');
+                this.ws.close(4000, 'No messages from the hub');
+                return;
             }
-        }, 30000);
+            this.send({ command: 'ping' });
+        }, WS_PING_INTERVAL_MS);
     }
 
-    /**
-     * Stop ping interval
-     */
     stopPingInterval() {
         if (this.pingInterval) {
             clearInterval(this.pingInterval);
@@ -235,44 +193,34 @@ class MatrixWebSocket {
         }
     }
 
-    /**
-     * Send a message to the server
-     */
     send(data) {
-        if (this.connected && this.ws.readyState === WebSocket.OPEN) {
+        if (this.isConnected()) {
             this.ws.send(JSON.stringify(data));
-        } else {
-            console.warn('Cannot send - WebSocket not connected');
         }
     }
 
     /**
-     * Disconnect from the WebSocket server
+     * Close the socket and stop reconnecting
      */
     disconnect() {
+        this.stopped = true;
         this.stopPingInterval();
-        
         if (this.reconnectTimer) {
             clearTimeout(this.reconnectTimer);
             this.reconnectTimer = null;
         }
-
-        if (this.ws) {
-            this.ws.close(1000, 'Client disconnect');
-            this.ws = null;
-        }
-
+        const ws = this.ws;
+        this.ws = null;
+        if (ws) ws.close(1000, 'Client disconnect');
+        const wasConnected = this.connected;
         this.connected = false;
-        this.onStatusChange(false);
+        this.status = 'disconnected';
+        if (wasConnected) this.onStatusChange(false);
     }
 
-    /**
-     * Check if connected
-     */
     isConnected() {
-        return this.connected && this.ws && this.ws.readyState === WebSocket.OPEN;
+        return this.connected && !!this.ws && this.ws.readyState === WebSocket.OPEN;
     }
 }
 
-// Export for use
 window.MatrixWebSocket = MatrixWebSocket;
