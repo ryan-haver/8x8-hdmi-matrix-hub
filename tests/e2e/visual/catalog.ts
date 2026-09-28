@@ -1806,6 +1806,15 @@ export const CATALOG: CatalogEntry[] = [
     page: 'kiosk',
     themed: true,
     description: 'Kiosk PIN pad for a passcode-protected profile (Kids Gaming), two digits entered.',
+    // Captures block hub writes (the recall POST); answer it the way the hub does for a protected profile.
+    routes: (page) =>
+      page.route('**/api/profile/kids_gaming/recall', (route) =>
+        route.fulfill({
+          status: 403,
+          contentType: 'application/json',
+          json: { success: false, data: { error: 'passcode_required', profile_id: 'kids_gaming' }, error: null },
+        }),
+      ),
     setup: async ({ page }) => {
       await kioskTab(page, 'profiles');
       await page.locator('#profilesGrid .kiosk-btn', { hasText: 'Kids Gaming' }).click();
