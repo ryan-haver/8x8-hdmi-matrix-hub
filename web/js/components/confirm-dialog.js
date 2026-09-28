@@ -191,7 +191,7 @@ class ConfirmDialog {
     static async confirmDelete(itemName) {
         return ConfirmDialog.confirm({
             title: 'Delete',
-            message: `Are you sure you want to delete "${itemName}"? This action cannot be undone.`,
+            message: `Are you sure you want to delete "${Helpers.escapeHtml(itemName)}"? This action cannot be undone.`,
             confirmText: 'Delete',
             cancelText: 'Keep',
             variant: 'danger'

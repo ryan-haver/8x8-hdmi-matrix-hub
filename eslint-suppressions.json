@@ -1,15 +1,12 @@
 {
   "web/js/api.js": {
     "no-dupe-class-members": {
-      "count": 2
+      "count": 1
     }
   },
   "web/js/app.js": {
     "no-case-declarations": {
       "count": 1
-    },
-    "no-unused-vars": {
-      "count": 2
     }
   },
   "web/js/components/cec-macro-editor.js": {

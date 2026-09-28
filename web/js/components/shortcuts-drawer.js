@@ -202,7 +202,7 @@ class ShortcutsDrawer {
         for (const [cat, items] of Object.entries(groups)) {
             html += `
                 <div class="drawer-section">
-                    <h4 class="drawer-section-title">${categoryLabels[cat] || cat}</h4>
+                    <h4 class="drawer-section-title">${Helpers.escapeHtml(categoryLabels[cat] || cat)}</h4>
                     <div class="shortcuts-list">
                         ${items.map(sc => this.renderShortcut(sc)).join('')}
                     </div>
@@ -221,7 +221,7 @@ class ShortcutsDrawer {
 
         return `
             <div class="shortcut-row" data-shortcut-id="${Helpers.escapeHtml(sc.id)}">
-                <div class="shortcut-icon">${sc.icon || '⚡'}</div>
+                <div class="shortcut-icon">${Helpers.escapeHtml(sc.icon || '⚡')}</div>
                 <div class="shortcut-body">
                     ${isEditing ? `
                         <input type="text" class="shortcut-rename-input" value="${Helpers.escapeHtml(sc.label || sc.name || sc.id)}" maxlength="40">
@@ -295,7 +295,7 @@ class ShortcutsDrawer {
         content.querySelectorAll('.shortcut-save-btn').forEach(btn => {
             btn.addEventListener('click', async () => {
                 const id = btn.dataset.id;
-                const input = content.querySelector(`.shortcut-row[data-shortcut-id="${id}"] .shortcut-rename-input`);
+                const input = content.querySelector(`.shortcut-row[data-shortcut-id="${CSS.escape(id)}"] .shortcut-rename-input`);
                 const newName = input ? input.value.trim() : '';
                 if (!newName) return;
                 try {
@@ -415,7 +415,7 @@ class ShortcutsDrawer {
         shortcuts.slice(0, 8).forEach(sc => {
             html += `
                 <button class="shortcut-widget-btn" data-id="${Helpers.escapeHtml(sc.id)}" title="${Helpers.escapeHtml(sc.label || sc.name || sc.id)}">
-                    <span class="shortcut-icon">${sc.icon || '⚡'}</span>
+                    <span class="shortcut-icon">${Helpers.escapeHtml(sc.icon || '⚡')}</span>
                     <span class="shortcut-label">${Helpers.escapeHtml(sc.label || sc.name || sc.id)}</span>
                 </button>
             `;

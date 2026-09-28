@@ -270,7 +270,7 @@ class IntegrationsDrawer {
                     <label for="flic-btn-identifier">Custom Button Identifier</label>
                     <input type="text" id="flic-btn-identifier" class="input" 
                            placeholder="e.g. Living Room or 90:88:a9:5b:10:62" 
-                           value="${this.flicConfig.buttonIdentifier || ''}" />
+                           value="${Helpers.escapeHtml(this.flicConfig.buttonIdentifier || '')}" />
                 </div>
                 <p class="settings-hint" style="margin-top: 4px; margin-bottom: 0; font-size: var(--font-size-xs);">
                     Filter by a specific button. Choose "Trigger on All Buttons", select a discovered button, or specify a custom name/MAC.
@@ -485,7 +485,7 @@ class IntegrationsDrawer {
             this.discoveredButtons.forEach(btn => {
                 const isSelected = (currentId === btn.bdaddr || currentId === btn.name);
                 if (isSelected) isCustom = false;
-                optionsHtml += `<option value="${btn.bdaddr}" ${isSelected ? 'selected' : ''}>${btn.name} (${btn.bdaddr})</option>`;
+                optionsHtml += `<option value="${Helpers.escapeHtml(btn.bdaddr)}" ${isSelected ? 'selected' : ''}>${Helpers.escapeHtml(btn.name)} (${Helpers.escapeHtml(btn.bdaddr)})</option>`;
             });
         }
         
@@ -518,7 +518,7 @@ class IntegrationsDrawer {
                 <div class="form-row">
                     <label for="flic-preset-num">Preset Number</label>
                     <select id="flic-preset-num" class="select select-sm">
-                        ${[1,2,3,4,5,6,7,8].map(n => `<option value="${n}" ${this.flicConfig.presetNum === n ? 'selected' : ''}>Preset ${n} (${state.presets[n]?.name || 'Unnamed'})</option>`).join('')}
+                        ${[1,2,3,4,5,6,7,8].map(n => `<option value="${n}" ${this.flicConfig.presetNum === n ? 'selected' : ''}>Preset ${n} (${Helpers.escapeHtml(state.presets[n]?.name || 'Unnamed')})</option>`).join('')}
                     </select>
                 </div>
             `;
@@ -531,7 +531,7 @@ class IntegrationsDrawer {
                     <div class="form-row">
                         <label for="flic-profile-id">Select Profile</label>
                         <select id="flic-profile-id" class="select select-sm">
-                            ${profiles.map(p => `<option value="${p.id}" ${this.flicConfig.profileId === p.id ? 'selected' : ''}>${p.icon || '🎬'} ${p.name}</option>`).join('')}
+                            ${profiles.map(p => `<option value="${Helpers.escapeHtml(p.id)}" ${this.flicConfig.profileId === p.id ? 'selected' : ''}>${Helpers.escapeHtml(p.icon || '🎬')} ${Helpers.escapeHtml(p.name)}</option>`).join('')}
                         </select>
                     </div>
                 `;
@@ -541,7 +541,7 @@ class IntegrationsDrawer {
                 <div class="form-row">
                     <label for="flic-input-num">Select Input Source</label>
                     <select id="flic-input-num" class="select select-sm">
-                        ${[1,2,3,4,5,6,7,8].map(n => `<option value="${n}" ${this.flicConfig.inputNum === n ? 'selected' : ''}>Input ${n} (${state.getInputName(n)})</option>`).join('')}
+                        ${[1,2,3,4,5,6,7,8].map(n => `<option value="${n}" ${this.flicConfig.inputNum === n ? 'selected' : ''}>Input ${n} (${Helpers.escapeHtml(state.getInputName(n))})</option>`).join('')}
                     </select>
                 </div>
             `;
@@ -550,13 +550,13 @@ class IntegrationsDrawer {
                 <div class="form-row">
                     <label for="flic-output-num">Select Output Display</label>
                     <select id="flic-output-num" class="select select-sm">
-                        ${[1,2,3,4,5,6,7,8].map(n => `<option value="${n}" ${this.flicConfig.outputNum === n ? 'selected' : ''}>Output ${n} (${state.getOutputName(n)})</option>`).join('')}
+                        ${[1,2,3,4,5,6,7,8].map(n => `<option value="${n}" ${this.flicConfig.outputNum === n ? 'selected' : ''}>Output ${n} (${Helpers.escapeHtml(state.getOutputName(n))})</option>`).join('')}
                     </select>
                 </div>
                 <div class="form-row">
                     <label for="flic-input-num">Route Source</label>
                     <select id="flic-input-num" class="select select-sm">
-                        ${[1,2,3,4,5,6,7,8].map(n => `<option value="${n}" ${this.flicConfig.inputNum === n ? 'selected' : ''}>Input ${n} (${state.getInputName(n)})</option>`).join('')}
+                        ${[1,2,3,4,5,6,7,8].map(n => `<option value="${n}" ${this.flicConfig.inputNum === n ? 'selected' : ''}>Input ${n} (${Helpers.escapeHtml(state.getInputName(n))})</option>`).join('')}
                     </select>
                 </div>
             `;
@@ -565,7 +565,7 @@ class IntegrationsDrawer {
                 <div class="form-row">
                     <label for="flic-output-num">Target Output</label>
                     <select id="flic-output-num" class="select select-sm">
-                        ${[1,2,3,4,5,6,7,8].map(n => `<option value="${n}" ${this.flicConfig.outputNum === n ? 'selected' : ''}>Output ${n} (${state.getOutputName(n)})</option>`).join('')}
+                        ${[1,2,3,4,5,6,7,8].map(n => `<option value="${n}" ${this.flicConfig.outputNum === n ? 'selected' : ''}>Output ${n} (${Helpers.escapeHtml(state.getOutputName(n))})</option>`).join('')}
                     </select>
                 </div>
                 <div class="form-row">
@@ -581,7 +581,7 @@ class IntegrationsDrawer {
                 <div class="form-row">
                     <label for="flic-output-num">Target Output (CEC Display)</label>
                     <select id="flic-output-num" class="select select-sm">
-                        ${[1,2,3,4,5,6,7,8].map(n => `<option value="${n}" ${this.flicConfig.outputNum === n ? 'selected' : ''}>Output ${n} (${state.getOutputName(n)})</option>`).join('')}
+                        ${[1,2,3,4,5,6,7,8].map(n => `<option value="${n}" ${this.flicConfig.outputNum === n ? 'selected' : ''}>Output ${n} (${Helpers.escapeHtml(state.getOutputName(n))})</option>`).join('')}
                     </select>
                 </div>
                 <div class="form-row">
@@ -652,7 +652,7 @@ class IntegrationsDrawer {
             <select id="flic-cec-port" class="select select-sm">
                 ${[1,2,3,4,5,6,7,8].map(n => `
                     <option value="${n}" ${this.flicConfig.cecTargetPort === n ? 'selected' : ''}>
-                        Port ${n} (${isInput ? state.getInputName(n) : state.getOutputName(n)})
+                        Port ${n} (${Helpers.escapeHtml(isInput ? state.getInputName(n) : state.getOutputName(n))})
                     </option>
                 `).join('')}
             </select>
@@ -1028,7 +1028,7 @@ console.log("${modelName} Control script loaded successfully!");
                     <li>If discovery is active, the Remote will show <strong>"${Helpers.escapeHtml(driverName)}"</strong> (representing your ${Helpers.escapeHtml(modelName)}) under discovered integrations.</li>
                     <li>If it doesn't appear, choose <strong>Manual Setup</strong> and enter:
                         <ul>
-                            <li><strong>IP Address:</strong> <code>${ip}</code></li>
+                            <li><strong>IP Address:</strong> <code>${Helpers.escapeHtml(ip)}</code></li>
                             <li><strong>Port:</strong> <code>${driverPort}</code></li>
                         </ul>
                     </li>
@@ -1045,7 +1045,7 @@ console.log("${modelName} Control script loaded successfully!");
                     <span class="info-label">mDNS Identifier:</span>
                     <span class="info-value">${Helpers.escapeHtml(driverId)}</span>
                     <span class="info-label">Discovery URL:</span>
-                    <span class="info-value">http://${ip}:${driverPort}/</span>
+                    <span class="info-value">http://${Helpers.escapeHtml(ip)}:${driverPort}/</span>
                     <span class="info-label">Status:</span>
                     <span class="info-value text-success">✓ Driver Active</span>
                 </div>
