@@ -876,10 +876,11 @@ class CECTray {
     async onActiveSceneChanged(scene) {
         if (scene && scene.id) {
             try {
-                // Load CEC config for this scene
-                const result = await api.getSceneCecConfig(scene.id);
-                if (result.success && result.cec_config) {
-                    this.activeSceneConfig = result.cec_config;
+                // Load the profile's CEC config (UI-45: this called api.getSceneCecConfig,
+                // which did not exist, so a recalled profile's targets never applied)
+                const result = await api.getProfileCecConfig(scene.id);
+                if (result.success && result.data?.cec_config) {
+                    this.activeSceneConfig = result.data.cec_config;
                     this.activeSceneName = scene.name;
                     this.container.classList.add('scene-active');
                 } else {
@@ -1152,15 +1153,13 @@ class CECTray {
     }
     
     /**
-     * Parse a target string like "input_3" or "output_2"
+     * Parse a target string like "input_3" or "output_2"; also the "input:3"
+     * form config.CecConfig documents (API-25: both are stored today).
      */
     parseTargetString(target) {
         if (!target || typeof target !== 'string') return null;
-        const parts = target.split('_');
-        if (parts.length !== 2) return null;
-        const port = parseInt(parts[1], 10);
-        if (isNaN(port)) return null;
-        return { type: parts[0], port };
+        const m = /^(input|output)[_:](\d+)$/.exec(target);
+        return m ? { type: m[1], port: parseInt(m[2], 10) } : null;
     }
     
     /**

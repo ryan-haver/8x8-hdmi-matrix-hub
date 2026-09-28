@@ -295,10 +295,7 @@ class ScenesPanel {
         if (outcome.status !== 'ok' && outcome.status !== 'partial') return;
 
         try {
-            // Set this as the active profile for CEC tray integration
-            state.setActiveScene(scene);
-            state.setActiveProfile(scene);
-            
+            // The active profile (CEC tray targets) is set by RunAction (UI-45).
             // Refresh status
             const status = await api.getStatus();
             state.applyStatus(status);

@@ -62,13 +62,21 @@ async function runProfileOrScene(kind, id, { name, successMessage } = {}) {
         }
     }
 
+    // UI-45: the recalled profile becomes the active one, so the CEC tray uses its CEC targets.
+    const activate = () => {
+        if (kind !== 'profile') return;
+        const profile = (window.state?.profiles || []).find((p) => p.id === id) || { id, name: label };
+        window.state?.setActiveProfile(profile);
+    };
     if (result?.success) {
         toast.success(successMessage || `"${label}" ${kind === 'scene' ? 'executed' : 'recalled'}`);
+        activate();
         return { status: 'ok', result };
     }
     // A 2xx answer with success:false is a partial run (HTTP 207).
     const what = kind === 'scene' ? 'ran partly' : 'applied partly';
     toast.warning(`"${label}" ${what}: ${describePartialRun(kind, result?.data)}`, 6000);
+    activate();
     return { status: 'partial', result };
 }
 
