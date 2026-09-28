@@ -440,7 +440,7 @@ export const CATALOG: CatalogEntry[] = [
       },
       note:
         t === 'profiles' || t === 'macros'
-          ? `Always empty today: state.${t === 'profiles' ? 'profiles' : 'cecMacros'} is never loaded by the main UI.`
+          ? `Before WP-E1 (UI-27) always empty: state.${t === 'profiles' ? 'profiles' : 'cecMacros'} was never loaded by the main UI.`
           : undefined,
     }),
   ),
