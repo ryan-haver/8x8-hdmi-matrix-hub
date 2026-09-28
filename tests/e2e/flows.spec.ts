@@ -852,6 +852,8 @@ test.describe('WP-E1 UI flows', () => {
     await page.evaluate(() => (window as any).settingsDrawer.close()); // eslint-disable-line @typescript-eslint/no-explicit-any
     await page.locator('.cec-tray-fab').click();
     await page.locator('#cec-tray.expanded').waitFor();
+    // The config is applied once its response has been read: the tray names the target first.
+    await expect(page.locator('#cec-tray.expanded [data-target="navigation"] .target-abbrev').first()).toHaveText('PS5');
     const sent = page.waitForRequest((r) => /\/api\/cec\/(input|output)\/\d\/up$/.test(new URL(r.url()).pathname));
     await page.locator('#cec-tray.expanded [data-cmd="up"]:visible').first().click();
     expect(new URL((await sent).url()).pathname).toBe('/api/cec/input/6/up');
