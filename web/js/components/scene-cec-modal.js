@@ -102,7 +102,7 @@ class SceneCecModal {
                 <div class="settings-modal-body">
                     <div class="scene-cec-header">
                         <span class="scene-name-label">Scene: <strong id="cec-scene-name">--</strong></span>
-                        <div class="auto-resolve-toggle">
+                        <div class="auto-resolve-toggle toggle-switch">
                             <input type="checkbox" id="cec-auto-resolve" class="toggle-input">
                             <label for="cec-auto-resolve" class="toggle-slider"></label>
                             <span class="toggle-label">Auto-resolve targets</span>
@@ -186,8 +186,9 @@ class SceneCecModal {
         
         // Get CEC config from scene or create default
         try {
-            const result = await api.getSceneCecConfig(scene.id);
-            this.cecConfig = result.cec_config || this.getDefaultConfig();
+            // UI-30: the dialog edits a profile's CEC targets (/api/profile/{id}/cec)
+            const result = await api.getProfileCecConfig(scene.id);
+            this.cecConfig = result?.data?.cec_config || this.getDefaultConfig();
         } catch (error) {
             console.warn('Failed to load CEC config, using defaults:', error);
             this.cecConfig = this.getDefaultConfig();
@@ -200,7 +201,8 @@ class SceneCecModal {
         this.renderCategories();
         this.updateCategoriesState();
         
-        // Show modal
+        // Show modal (UI-30: the overlay is shown by .visible, not by aria-hidden)
+        this.modal.classList.add('visible');
         this.modal.setAttribute('aria-hidden', 'false');
     }
 
@@ -208,6 +210,7 @@ class SceneCecModal {
      * Close the modal
      */
     close() {
+        this.modal.classList.remove('visible');
         this.modal.setAttribute('aria-hidden', 'true');
         this.currentScene = null;
         this.cecConfig = null;
@@ -314,7 +317,7 @@ class SceneCecModal {
             const typeClass = parsed.type === 'input' ? 'input-target' : 'output-target';
             
             return `
-                <span class="target-chip ${typeClass}" data-target="${target}">
+                <span class="target-chip ${typeClass}" data-target="${Helpers.escapeHtml(target)}">
                     <span class="chip-label">${Helpers.escapeHtml(name)}</span>
                     <button class="target-chip-remove" title="Remove">×</button>
                 </span>
@@ -520,10 +523,10 @@ class SceneCecModal {
                 Resolving...
             `;
             
-            const result = await api.autoResolveCecConfig(this.currentScene.id, false);
+            const result = await api.autoResolveProfileCecConfig(this.currentScene.id);
             
-            if (result.success && result.resolved_cec_config) {
-                this.cecConfig = result.resolved_cec_config;
+            if (result.success && result.data) {
+                this.cecConfig = result.data;
                 this.cecConfig.auto_resolved = true;
                 this.modal.querySelector('#cec-auto-resolve').checked = true;
                 this.renderCategories();
@@ -559,14 +562,13 @@ class SceneCecModal {
             saveBtn.disabled = true;
             saveBtn.textContent = 'Saving...';
             
-            await api.updateSceneCecConfig(this.currentScene.id, this.cecConfig);
+            await api.updateProfileCecConfig(this.currentScene.id, this.cecConfig);
             
             toast.success('CEC configuration saved');
             this.close();
             
-            // Refresh scenes list
-            const result = await api.listScenes();
-            state.setScenes(result.scenes || []);
+            // Refresh the profiles list (UI-27)
+            await state.loadProfiles();
             
         } catch (error) {
             console.error('Save failed:', error);

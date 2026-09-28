@@ -448,8 +448,8 @@ class ProfileEditor {
             const isChecked = selectedMacros.includes(macro.id);
             return `
                 <label class="macro-checkbox">
-                    <input type="checkbox" name="profile-macros" value="${macro.id}" ${isChecked ? 'checked' : ''}>
-                    <span class="macro-icon">${macro.icon || '⚡'}</span>
+                    <input type="checkbox" name="profile-macros" value="${Helpers.escapeHtml(macro.id)}" ${isChecked ? 'checked' : ''}>
+                    <span class="macro-icon">${Helpers.escapeHtml(macro.icon || '⚡')}</span>
                     <span class="macro-name">${Helpers.escapeHtml(macro.name)}</span>
                 </label>
             `;
@@ -711,7 +711,7 @@ class ProfileEditor {
         // Open CEC config modal
         if (window.sceneCecModal) {
             try {
-                const fullProfile = await api.getScene(this.currentProfile.id);
+                const fullProfile = await api.getProfile(this.currentProfile.id); // UI-30: was /api/v2/scenes/{id}
                 if (fullProfile?.success) {
                     window.sceneCecModal.open(fullProfile.data || fullProfile);
                 } else {
@@ -730,8 +730,7 @@ class ProfileEditor {
      */
     async refreshProfilesList() {
         try {
-            const result = await api.listScenes();
-            state.setScenes(result.scenes || []);
+            await state.loadProfiles(); // UI-27: /api/profiles, not /api/v2/scenes
         } catch (error) {
             console.error('Failed to refresh profiles:', error);
         }

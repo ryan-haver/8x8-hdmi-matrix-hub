@@ -570,28 +570,28 @@ class MatrixApp {
             }
             
             // Load info and status in parallel
-            const [info, status, scenesResult, inputStatus, outputStatus, deviceSettings, shortcutsResult] = await Promise.all([
+            // UI-27: profiles and CEC macros come from their own routes (the
+            // Profiles tab read /api/v2/scenes with the wrong response path, and
+            // nothing loaded state.profiles / state.cecMacros).
+            const [info, status, , inputStatus, outputStatus] = await Promise.all([
                 api.getInfo().catch(() => null),
                 api.getStatus().catch(() => null),
-                api.listScenes().catch(() => ({ scenes: [] })),
+                state.loadProfiles().catch(() => []),
                 api.getInputStatus().catch(() => null),
                 api.getOutputStatus().catch(() => null),
                 state.loadDeviceSettings().catch(() => false),
-                state.loadSystemShortcuts().catch(() => [])
+                state.loadSystemShortcuts().catch(() => []),
+                state.loadCecMacros().catch(() => [])
             ]);
-            
+
             if (info) {
                 state.applyInfo(info);
             }
-            
+
             if (status) {
                 state.applyStatus(status);
             }
-            
-            if (scenesResult?.scenes) {
-                state.setScenes(scenesResult.scenes);
-            }
-            
+
             // Apply HDMI status data
             if (inputStatus?.data?.inputs) {
                 this.applyInputStatus(inputStatus.data.inputs);
@@ -720,22 +720,20 @@ class MatrixApp {
         toast.info('Refreshing...');
         
         try {
-            const [status, scenesResult, inputStatus, outputStatus] = await Promise.all([
+            const [status, , inputStatus, outputStatus] = await Promise.all([
                 api.getStatus().catch(e => {
                     console.warn('Status refresh failed:', e);
                     return null;
                 }),
-                api.listScenes().catch(() => ({ scenes: [] })),
+                state.loadProfiles().catch(() => []), // UI-27 (cleared the Profiles tab before)
                 api.getInputStatus().catch(() => null),
                 api.getOutputStatus().catch(() => null)
             ]);
-            
+
             if (status) {
                 state.applyStatus(status);
             }
-            
-            state.setScenes(scenesResult?.scenes || []);
-            
+
             // Refresh HDMI status
             if (inputStatus?.data?.inputs) {
                 this.applyInputStatus(inputStatus.data.inputs);

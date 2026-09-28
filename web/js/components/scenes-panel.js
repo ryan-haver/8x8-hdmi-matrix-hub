@@ -44,36 +44,37 @@ class ScenesPanel {
         
         pinnedProfiles.forEach(scene => {
             const outputCount = scene.output_count || Object.keys(scene.outputs || {}).length;
-            const icon = scene.icon || '📺';
+            const icon = Helpers.escapeHtml(scene.icon || '📺');
+            const sceneId = Helpers.escapeHtml(scene.id);
             const hasMacros = scene.macro_count > 0 || (scene.macros && scene.macros.length > 0) || scene.power_on_macro || scene.power_off_macro;
             const isActive = state.activeProfile && state.activeProfile.id === scene.id;
             
             html += `
-                <div class="scene-card ${hasMacros ? 'has-macros' : ''}${isActive ? ' active' : ''}" data-scene-id="${scene.id}">
+                <div class="scene-card ${hasMacros ? 'has-macros' : ''}${isActive ? ' active' : ''}" data-scene-id="${sceneId}">
                     <div class="scene-icon">${icon}</div>
                     <div class="scene-info">
                         <span class="scene-name">${Helpers.escapeHtml(scene.name)}</span>
                         <span class="scene-outputs">${outputCount} outputs</span>
                     </div>
                     <div class="scene-actions">
-                        <button class="btn-icon btn-api-copy api-copy-btn" data-scene-id="${scene.id}" data-scene-name="${Helpers.escapeHtml(scene.name)}" title="Get API endpoint for Flic/automation">
+                        <button class="btn-icon btn-api-copy api-copy-btn" data-scene-id="${sceneId}" data-scene-name="${Helpers.escapeHtml(scene.name)}" title="Get API endpoint for Flic/automation">
                             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
                                 <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
                             </svg>
                         </button>
-                        <button class="btn-icon edit-scene-btn" data-scene-id="${scene.id}" title="Edit profile">
+                        <button class="btn-icon edit-scene-btn" data-scene-id="${sceneId}" title="Edit profile">
                             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
                                 <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                             </svg>
                         </button>
-                        <button class="btn btn-sm btn-primary recall-scene-btn" data-scene-id="${scene.id}" title="Activate profile">
+                        <button class="btn btn-sm btn-primary recall-scene-btn" data-scene-id="${sceneId}" title="Activate profile">
                             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polygon points="5 3 19 12 5 21 5 3"/>
                             </svg>
                         </button>
-                        <button class="btn-icon delete-scene-btn" data-scene-id="${scene.id}" title="Delete profile">
+                        <button class="btn-icon delete-scene-btn" data-scene-id="${sceneId}" title="Delete profile">
                             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="3 6 5 6 21 6"/>
                                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
@@ -142,8 +143,8 @@ class ScenesPanel {
         }
         
         try {
-            // Get full profile details
-            const fullProfile = await api.getScene(sceneId);
+            // Get full profile details (UI-27: this read /api/v2/scenes/{id})
+            const fullProfile = await api.getProfile(sceneId);
             if (fullProfile?.success) {
                 const profileData = fullProfile.data || fullProfile;
                 if (window.profileEditor) {
@@ -171,10 +172,10 @@ class ScenesPanel {
         
         // Get full profile details if needed
         try {
-            const fullScene = await api.getScene(sceneId);
+            const fullScene = await api.getProfile(sceneId);
             if (fullScene.success) {
                 if (window.sceneCecModal) {
-                    window.sceneCecModal.open(fullScene);
+                    window.sceneCecModal.open(fullScene.data || fullScene);
                 } else {
                     toast.error('CEC modal not loaded');
                 }
@@ -285,10 +286,15 @@ class ScenesPanel {
         const scene = state.scenes.find(s => s.id === sceneId);
         const sceneName = scene?.name || 'Profile';
         
+        // UI-27: api.recallScene did not exist. UI-01 / VAL-11: passcode prompt
+        // and partial results, the same as every other place that runs a profile.
+        const outcome = await window.RunAction.runProfileOrScene('profile', sceneId, {
+            name: sceneName,
+            successMessage: `"${sceneName}" activated`,
+        });
+        if (outcome.status !== 'ok' && outcome.status !== 'partial') return;
+
         try {
-            await api.recallScene(sceneId);
-            toast.success(`"${sceneName}" activated`);
-            
             // Set this as the active profile for CEC tray integration
             state.setActiveScene(scene);
             state.setActiveProfile(scene);
@@ -297,7 +303,7 @@ class ScenesPanel {
             const status = await api.getStatus();
             state.applyStatus(status);
         } catch (error) {
-            toast.error(`Failed to recall scene: ${error.message}`);
+            console.warn('Status refresh after profile recall failed:', error);
         }
     }
 
@@ -313,8 +319,9 @@ class ScenesPanel {
         }
         
         try {
-            await api.deleteScene(sceneId);
+            await api.deleteProfile(sceneId); // UI-27: this deleted a v2 scene id
             state.removeScene(sceneId);
+            state.loadProfiles().catch(() => {});
             toast.success(`"${sceneName}" deleted`);
         } catch (error) {
             toast.error(`Failed to delete profile: ${error.message}`);
@@ -326,8 +333,7 @@ class ScenesPanel {
      */
     async loadScenes() {
         try {
-            const result = await api.listScenes();
-            state.setScenes(result.scenes || []);
+            await state.loadProfiles(); // UI-27: /api/profiles, not /api/v2/scenes
         } catch (error) {
             console.error('Failed to load profiles:', error);
         }

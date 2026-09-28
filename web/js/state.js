@@ -523,7 +523,33 @@ class AppState {
     async loadDashboardLayout() {
         const result = await window.api.getDashboardLayout().catch(() => ({ success: false }));
         this.dashboardCards = result?.data?.cards || [];
+        // UI-27: the dashboard renders its cards on this event; without it the
+        // cards appeared only if the layout beat a 100 ms timer.
+        this.emit('dashboardCards', this.dashboardCards);
         return this.dashboardCards;
+    }
+
+    /**
+     * Load the profiles from the hub (UI-27: nothing loaded them). The Profiles
+     * tab and profile manager read them as `scenes` (legacy name), everything
+     * else as `profiles`.
+     */
+    async loadProfiles() {
+        const result = await window.api.listProfiles();
+        const profiles = result?.data?.profiles || [];
+        this.setProfiles(profiles);
+        this.setScenes(profiles);
+        return profiles;
+    }
+
+    /**
+     * Load the CEC macros from the hub (UI-27: dashboard macro cards, scene editor).
+     */
+    async loadCecMacros() {
+        const result = await window.api.getMacros();
+        this.cecMacros = result?.data?.macros || [];
+        this.emit('cecMacros', this.cecMacros);
+        return this.cecMacros;
     }
 
     /**
