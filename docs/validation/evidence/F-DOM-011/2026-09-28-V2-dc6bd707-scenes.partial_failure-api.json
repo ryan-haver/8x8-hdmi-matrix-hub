@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "features": ["F-DOM-005"],
+  "features": ["F-DOM-011", "F-DOM-017", "F-API-041"],
   "level": "V2",
-  "scenario": "profiles.recall_wrong_passcode",
-  "scenario_title": "A wrong passcode applies nothing and the UI says so",
+  "scenario": "scenes.partial_failure",
+  "scenario_title": "A scene with a failing step answers 207 with per-step results and records the error",
   "scenario_kind": "failure",
   "target": "sim",
   "client": "api",
@@ -11,15 +11,15 @@
   "gate": "ok",
   "blocked_reason": null,
   "commit": {
-    "sha": "50ce7c105b0233c2d9da36ad64546aff35f9052c",
+    "sha": "dc6bd707743e80896d2d67574555facf044c83d1",
     "branch": "wp-e1-ui-fixes",
     "dirty_files": [],
-    "short": "50ce7c10",
+    "short": "dc6bd707",
     "dirty": false
   },
   "timestamp": {
-    "started": "2026-09-28T16:43:26.017Z",
-    "finished": "2026-09-28T16:43:26.237Z"
+    "started": "2026-09-28T17:27:21.236Z",
+    "finished": "2026-09-28T17:27:21.477Z"
   },
   "operator": "automation",
   "environment": {
@@ -35,8 +35,8 @@
         "USE_MODULAR": "true",
         "UC_ENABLED": "false",
         "MATRIX_HOST": "127.0.0.1",
-        "MATRIX_PORT": "62739",
-        "OREI_TELNET_PORT": "62740",
+        "MATRIX_PORT": "54473",
+        "OREI_TELNET_PORT": "54474",
         "TRUST_PROXY_HEADERS": "true",
         "TRUSTED_PROXY_IPS": "127.0.0.1",
         "LOG_LEVEL": "INFO"
@@ -57,31 +57,75 @@
   "procedure": [
     "reset the simulator to the seed state",
     "let the hub read the matrix (/ws get_status), so it is in sync before the action",
-    "action (api): profile_recall(profile_id='kids_gaming', passcode='9999')",
-    "  POST /api/profile/kids_gaming/recall {'passcode': '9999'} -> HTTP 403"
+    "setup (api): request(method='PUT', path='/api/v2/scenes/scene_goodnight01', json={'steps': [{'type': 'system_action', 'id': 'mute_all_audio'}, {'type': 'profile', 'id': 'no_such_profile'}]}) -> HTTP 200",
+    "action (api): scene_run(scene_id='scene_goodnight01')",
+    "  POST /api/v2/scenes/scene_goodnight01/execute -> HTTP 207",
+    "cleanup (api): request(method='PUT', path='/api/v2/scenes/scene_goodnight01', json={'name': 'Good Night', 'steps': [{'type': 'system_action', 'id': 'mute_all_audio'}, {'type': 'macro', 'id': 'macro_all_off'}], 'overrides': {}}) -> HTTP 200"
   ],
   "observations": {
     "requests": [
       {
         "method": "POST",
-        "path": "/api/profile/kids_gaming/recall",
-        "body": {
-          "passcode": "***"
-        },
-        "status": 403,
+        "path": "/api/v2/scenes/scene_goodnight01/execute",
+        "body": null,
+        "status": 207,
         "response": {
           "success": false,
           "data": {
-            "error": "invalid_passcode",
-            "profile_id": "kids_gaming"
-          },
-          "error": null
+            "scene_id": "scene_goodnight01",
+            "success": false,
+            "steps_completed": 1,
+            "total_steps": 2,
+            "step_results": [
+              {
+                "step_index": 0,
+                "type": "system_action",
+                "id": "mute_all_audio",
+                "success": true,
+                "detail": "All audio muted",
+                "error": null
+              },
+              {
+                "step_index": 1,
+                "type": "profile",
+                "id": "no_such_profile",
+                "success": false,
+                "detail": "",
+                "error": "Profile not found"
+              }
+            ],
+            "error": "no_such_profile: Profile not found"
+          }
         },
-        "elapsed_ms": 1.3
+        "elapsed_ms": 9.0
       }
     ],
-    "response_status": 403,
-    "hub_reads": [],
+    "response_status": 207,
+    "hub_reads": [
+      {
+        "method": "GET",
+        "path": "/api/v2/scenes/scene_goodnight01/history",
+        "body": null,
+        "status": 200,
+        "response": {
+          "success": true,
+          "data": {
+            "scene_id": "scene_goodnight01",
+            "last_executed": "2026-09-28T17:27:21.460670+00:00",
+            "execution_history": [
+              {
+                "timestamp": "2026-09-28T17:27:21.460670+00:00",
+                "status": "error",
+                "steps_completed": 1,
+                "total_steps": 2,
+                "error": "no_such_profile: Profile not found"
+              }
+            ]
+          }
+        },
+        "elapsed_ms": 0.4
+      }
+    ],
     "state_before": {
       "schema_version": 1,
       "auth": {
@@ -432,7 +476,7 @@
           "hdr": 0,
           "scaler": 0,
           "arc": 1,
-          "audio_mute": 0,
+          "audio_mute": 1,
           "cec_enabled": 1,
           "ext_audio_enabled": 0,
           "ext_audio_source": 1
@@ -446,7 +490,7 @@
           "hdr": 0,
           "scaler": 4,
           "arc": 0,
-          "audio_mute": 0,
+          "audio_mute": 1,
           "cec_enabled": 1,
           "ext_audio_enabled": 0,
           "ext_audio_source": 1
@@ -460,7 +504,7 @@
           "hdr": 0,
           "scaler": 0,
           "arc": 0,
-          "audio_mute": 0,
+          "audio_mute": 1,
           "cec_enabled": 0,
           "ext_audio_enabled": 0,
           "ext_audio_source": 1
@@ -474,7 +518,7 @@
           "hdr": 0,
           "scaler": 0,
           "arc": 0,
-          "audio_mute": 0,
+          "audio_mute": 1,
           "cec_enabled": 0,
           "ext_audio_enabled": 0,
           "ext_audio_source": 1
@@ -488,7 +532,7 @@
           "hdr": 0,
           "scaler": 0,
           "arc": 0,
-          "audio_mute": 0,
+          "audio_mute": 1,
           "cec_enabled": 0,
           "ext_audio_enabled": 0,
           "ext_audio_source": 1
@@ -502,7 +546,7 @@
           "hdr": 0,
           "scaler": 0,
           "arc": 0,
-          "audio_mute": 0,
+          "audio_mute": 1,
           "cec_enabled": 0,
           "ext_audio_enabled": 0,
           "ext_audio_source": 1
@@ -516,7 +560,7 @@
           "hdr": 0,
           "scaler": 0,
           "arc": 0,
-          "audio_mute": 0,
+          "audio_mute": 1,
           "cec_enabled": 0,
           "ext_audio_enabled": 0,
           "ext_audio_source": 1
@@ -530,7 +574,7 @@
           "hdr": 0,
           "scaler": 0,
           "arc": 0,
-          "audio_mute": 0,
+          "audio_mute": 1,
           "cec_enabled": 0,
           "ext_audio_enabled": 0,
           "ext_audio_source": 1
@@ -584,11 +628,197 @@
       ],
       "routing": [2, 2, 1, 1, 5, 6, 1, 1]
     },
-    "state_diff": [],
-    "device_log": [],
+    "state_diff": [
+      {
+        "path": "outputs[0].audio_mute",
+        "before": 0,
+        "after": 1
+      },
+      {
+        "path": "outputs[1].audio_mute",
+        "before": 0,
+        "after": 1
+      },
+      {
+        "path": "outputs[2].audio_mute",
+        "before": 0,
+        "after": 1
+      },
+      {
+        "path": "outputs[3].audio_mute",
+        "before": 0,
+        "after": 1
+      },
+      {
+        "path": "outputs[4].audio_mute",
+        "before": 0,
+        "after": 1
+      },
+      {
+        "path": "outputs[5].audio_mute",
+        "before": 0,
+        "after": 1
+      },
+      {
+        "path": "outputs[6].audio_mute",
+        "before": 0,
+        "after": 1
+      },
+      {
+        "path": "outputs[7].audio_mute",
+        "before": 0,
+        "after": 1
+      }
+    ],
+    "device_log": [
+      {
+        "t": 1790616441.456,
+        "channel": "http",
+        "command": "set output audio mute",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "set output audio mute",
+          "language": 0,
+          "mute": [1, 1]
+        },
+        "response": {
+          "comhead": "set output audio mute",
+          "result": 1
+        },
+        "recognised": true,
+        "mutated": true,
+        "warnings": []
+      },
+      {
+        "t": 1790616441.458,
+        "channel": "http",
+        "command": "set output audio mute",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "set output audio mute",
+          "language": 0,
+          "mute": [2, 1]
+        },
+        "response": {
+          "comhead": "set output audio mute",
+          "result": 1
+        },
+        "recognised": true,
+        "mutated": true,
+        "warnings": []
+      },
+      {
+        "t": 1790616441.458,
+        "channel": "http",
+        "command": "set output audio mute",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "set output audio mute",
+          "language": 0,
+          "mute": [3, 1]
+        },
+        "response": {
+          "comhead": "set output audio mute",
+          "result": 1
+        },
+        "recognised": true,
+        "mutated": true,
+        "warnings": []
+      },
+      {
+        "t": 1790616441.458,
+        "channel": "http",
+        "command": "set output audio mute",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "set output audio mute",
+          "language": 0,
+          "mute": [4, 1]
+        },
+        "response": {
+          "comhead": "set output audio mute",
+          "result": 1
+        },
+        "recognised": true,
+        "mutated": true,
+        "warnings": []
+      },
+      {
+        "t": 1790616441.459,
+        "channel": "http",
+        "command": "set output audio mute",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "set output audio mute",
+          "language": 0,
+          "mute": [5, 1]
+        },
+        "response": {
+          "comhead": "set output audio mute",
+          "result": 1
+        },
+        "recognised": true,
+        "mutated": true,
+        "warnings": []
+      },
+      {
+        "t": 1790616441.459,
+        "channel": "http",
+        "command": "set output audio mute",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "set output audio mute",
+          "language": 0,
+          "mute": [6, 1]
+        },
+        "response": {
+          "comhead": "set output audio mute",
+          "result": 1
+        },
+        "recognised": true,
+        "mutated": true,
+        "warnings": []
+      },
+      {
+        "t": 1790616441.459,
+        "channel": "http",
+        "command": "set output audio mute",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "set output audio mute",
+          "language": 0,
+          "mute": [7, 1]
+        },
+        "response": {
+          "comhead": "set output audio mute",
+          "result": 1
+        },
+        "recognised": true,
+        "mutated": true,
+        "warnings": []
+      },
+      {
+        "t": 1790616441.459,
+        "channel": "http",
+        "command": "set output audio mute",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "set output audio mute",
+          "language": 0,
+          "mute": [8, 1]
+        },
+        "response": {
+          "comhead": "set output audio mute",
+          "result": 1
+        },
+        "recognised": true,
+        "mutated": true,
+        "warnings": []
+      }
+    ],
     "ws_events": [
       {
-        "t_ms": -204,
+        "t_ms": -217,
         "event": "connected",
         "data": {
           "message": "Connected to the HDMI matrix hub",
@@ -603,7 +833,7 @@
         }
       },
       {
-        "t_ms": -204,
+        "t_ms": -217,
         "event": "status",
         "data": {
           "connected": true,
@@ -826,7 +1056,7 @@
         }
       },
       {
-        "t_ms": -22,
+        "t_ms": -56,
         "event": "routing_change",
         "data": {
           "output": 1,
@@ -836,7 +1066,7 @@
         }
       },
       {
-        "t_ms": -22,
+        "t_ms": -56,
         "event": "status",
         "data": {
           "connected": true,
@@ -1057,6 +1287,17 @@
             }
           ]
         }
+      },
+      {
+        "t_ms": 10,
+        "event": "scene_execution_error",
+        "data": {
+          "scene_id": "scene_goodnight01",
+          "scene_name": "Good Night",
+          "steps_completed": 1,
+          "total_steps": 2,
+          "error": "no_such_profile: Profile not found"
+        }
       }
     ],
     "screenshots": [],
@@ -1067,15 +1308,15 @@
   },
   "checks": [
     {
-      "description": "response HTTP 403 and body contains {'success': False, 'data': {'error': 'invalid_passcode'}}",
+      "description": "response HTTP 207 and body contains {'success': False, 'data': {'steps_completed': 1, 'total_steps': 2}}",
       "result": "pass",
-      "detail": "HTTP 403; body {\"success\": false, \"data\": {\"error\": \"invalid_passcode\", \"profile_id\": \"kids_gaming\"}, \"error\": null}",
+      "detail": "HTTP 207; body {\"success\": false, \"data\": {\"scene_id\": \"scene_goodnight01\", \"success\": false, \"steps_completed\": 1, \"total_steps\": 2, \"step_results\": [{\"step_index\": 0, \"type\": \"system_action\", \"id\": \"mute_all_audio\", \"success\": true, \"detail\": \"All audio muted\", \"error\": null}, {\"step_index\": 1, \"type\": \"profile\"",
       "finding": null,
       "linked_finding": null,
       "note": null
     },
     {
-      "description": "client shows toast.error == 'Invalid passcode'",
+      "description": "client shows toast.warning == '\"Good Night\" ran partly: 1 of 2 steps succeeded'",
       "result": "n/a",
       "detail": "not checked for client 'api'",
       "finding": null,
@@ -1083,15 +1324,31 @@
       "note": null
     },
     {
-      "description": "no write command reached the device",
+      "description": "device outputs[0].audio_mute == 1",
       "result": "pass",
-      "detail": "write commands seen: []",
+      "detail": "outputs[0].audio_mute = 1",
       "finding": null,
       "linked_finding": null,
       "note": null
     },
     {
-      "description": "device otherwise unchanged",
+      "description": "WebSocket event 'scene_execution_error' with {'scene_id': 'scene_goodnight01', 'steps_completed': 1}",
+      "result": "pass",
+      "detail": "events after the action: ['scene_execution_error']",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "hub GET /api/v2/scenes/scene_goodnight01/history -> data.execution_history[-1].status == 'error' (HTTP 200)",
+      "result": "pass",
+      "detail": "HTTP 200; data.execution_history[-1].status = \"error\"",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device otherwise unchanged (allowed: outputs[*].audio_mute)",
       "result": "pass",
       "detail": "no other changes",
       "finding": null,
@@ -1101,7 +1358,7 @@
     {
       "description": "every WebSocket message follows docs/api/websocket.schema.json",
       "result": "pass",
-      "detail": "4 message(s) checked",
+      "detail": "5 message(s) checked",
       "finding": null,
       "linked_finding": null,
       "note": null
@@ -1118,10 +1375,14 @@
     "src/rest_api/websocket.py",
     "src/rest_api/events.py",
     "docs/api/websocket.schema.json",
-    "src/rest_api/profiles.py",
+    "src/rest_api/scenes_v2.py",
+    "src/scene_manager.py",
+    "src/scene_execution.py",
     "src/config.py",
     "src/cec_macros.py",
-    "src/password.py",
+    "src/system_shortcuts.py",
+    "src/rest_api/system_shortcuts.py",
+    "src/rest_api/websocket.py",
     "web/index.html",
     "web/js/app.js",
     "web/js/api.js",

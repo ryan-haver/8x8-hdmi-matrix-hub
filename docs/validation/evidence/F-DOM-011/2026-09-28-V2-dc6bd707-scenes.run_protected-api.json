@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "features": ["F-DOM-005"],
+  "features": ["F-DOM-011", "F-DOM-015"],
   "level": "V2",
-  "scenario": "profiles.recall_with_passcode",
-  "scenario_title": "A passcode-protected profile is applied with its passcode (the UI asks for it)",
+  "scenario": "scenes.run_protected",
+  "scenario_title": "Run the protected scene 'Kids' with its passcode: profile and route-shortcut steps apply",
   "scenario_kind": "happy",
   "target": "sim",
   "client": "api",
@@ -11,15 +11,15 @@
   "gate": "ok",
   "blocked_reason": null,
   "commit": {
-    "sha": "50ce7c105b0233c2d9da36ad64546aff35f9052c",
+    "sha": "dc6bd707743e80896d2d67574555facf044c83d1",
     "branch": "wp-e1-ui-fixes",
     "dirty_files": [],
-    "short": "50ce7c10",
+    "short": "dc6bd707",
     "dirty": false
   },
   "timestamp": {
-    "started": "2026-09-28T16:43:25.779Z",
-    "finished": "2026-09-28T16:43:26.000Z"
+    "started": "2026-09-28T17:27:21.059Z",
+    "finished": "2026-09-28T17:27:21.231Z"
   },
   "operator": "automation",
   "environment": {
@@ -35,8 +35,8 @@
         "USE_MODULAR": "true",
         "UC_ENABLED": "false",
         "MATRIX_HOST": "127.0.0.1",
-        "MATRIX_PORT": "62739",
-        "OREI_TELNET_PORT": "62740",
+        "MATRIX_PORT": "54473",
+        "OREI_TELNET_PORT": "54474",
         "TRUST_PROXY_HEADERS": "true",
         "TRUSTED_PROXY_IPS": "127.0.0.1",
         "LOG_LEVEL": "INFO"
@@ -57,14 +57,14 @@
   "procedure": [
     "reset the simulator to the seed state + {'outputs': {'0': {'source': 1}}}",
     "let the hub read the matrix (/ws get_status), so it is in sync before the action",
-    "action (api): profile_recall(profile_id='kids_gaming', passcode='1234')",
-    "  POST /api/profile/kids_gaming/recall {'passcode': '1234'} -> HTTP 200"
+    "action (api): scene_run(scene_id='scene_kidslocked', passcode='1234')",
+    "  POST /api/v2/scenes/scene_kidslocked/execute {'passcode': '1234'} -> HTTP 200"
   ],
   "observations": {
     "requests": [
       {
         "method": "POST",
-        "path": "/api/profile/kids_gaming/recall",
+        "path": "/api/v2/scenes/scene_kidslocked/execute",
         "body": {
           "passcode": "***"
         },
@@ -72,15 +72,32 @@
         "response": {
           "success": true,
           "data": {
-            "profile": "Kids Gaming",
-            "applied": ["Output 1 → Input 6"],
-            "failed_outputs": [],
-            "errors": null,
-            "power_on_macro": null
-          },
-          "error": null
+            "scene_id": "scene_kidslocked",
+            "success": true,
+            "steps_completed": 2,
+            "total_steps": 2,
+            "step_results": [
+              {
+                "step_index": 0,
+                "type": "profile",
+                "id": "kids_gaming",
+                "success": true,
+                "detail": "Profile 'Kids Gaming' executed",
+                "error": null
+              },
+              {
+                "step_index": 1,
+                "type": "system_action",
+                "id": "route_all_to_output",
+                "success": true,
+                "detail": "Routed Input 6 → Output 1",
+                "error": null
+              }
+            ],
+            "error": null
+          }
         },
-        "elapsed_ms": 5.0
+        "elapsed_ms": 12.1
       }
     ],
     "response_status": 200,
@@ -601,7 +618,7 @@
     ],
     "device_log": [
       {
-        "t": 1790613805.986,
+        "t": 1790616441.213,
         "channel": "http",
         "command": "video switch",
         "client": "127.0.0.1",
@@ -619,25 +636,7 @@
         "warnings": []
       },
       {
-        "t": 1790613805.987,
-        "channel": "http",
-        "command": "tx stream",
-        "client": "127.0.0.1",
-        "payload": {
-          "comhead": "tx stream",
-          "language": 0,
-          "out": [1, 1]
-        },
-        "response": {
-          "comhead": "tx stream",
-          "result": 1
-        },
-        "recognised": true,
-        "mutated": true,
-        "warnings": []
-      },
-      {
-        "t": 1790613805.988,
+        "t": 1790616441.215,
         "channel": "http",
         "command": "set output audio mute",
         "client": "127.0.0.1",
@@ -653,11 +652,29 @@
         "recognised": true,
         "mutated": true,
         "warnings": []
+      },
+      {
+        "t": 1790616441.22,
+        "channel": "http",
+        "command": "video switch",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "video switch",
+          "language": 0,
+          "source": [1, 6]
+        },
+        "response": {
+          "comhead": "video switch",
+          "result": 1
+        },
+        "recognised": true,
+        "mutated": true,
+        "warnings": []
       }
     ],
     "ws_events": [
       {
-        "t_ms": -200,
+        "t_ms": -148,
         "event": "connected",
         "data": {
           "message": "Connected to the HDMI matrix hub",
@@ -672,7 +689,7 @@
         }
       },
       {
-        "t_ms": -199,
+        "t_ms": -148,
         "event": "status",
         "data": {
           "connected": true,
@@ -895,7 +912,7 @@
         }
       },
       {
-        "t_ms": -21,
+        "t_ms": -50,
         "event": "routing_change",
         "data": {
           "output": 1,
@@ -905,7 +922,7 @@
         }
       },
       {
-        "t_ms": -21,
+        "t_ms": -50,
         "event": "status",
         "data": {
           "connected": true,
@@ -1136,9 +1153,9 @@
   },
   "checks": [
     {
-      "description": "response HTTP 200 and body contains {'success': True}",
+      "description": "response HTTP 200 and body contains {'success': True, 'data': {'steps_completed': 2, 'total_steps': 2}}",
       "result": "pass",
-      "detail": "HTTP 200; body {\"success\": true, \"data\": {\"profile\": \"Kids Gaming\", \"applied\": [\"Output 1 \\u2192 Input 6\"], \"failed_outputs\": [], \"errors\": null, \"power_on_macro\": null}, \"error\": null}",
+      "detail": "HTTP 200; body {\"success\": true, \"data\": {\"scene_id\": \"scene_kidslocked\", \"success\": true, \"steps_completed\": 2, \"total_steps\": 2, \"step_results\": [{\"step_index\": 0, \"type\": \"profile\", \"id\": \"kids_gaming\", \"success\": true, \"detail\": \"Profile 'Kids Gaming' executed\", \"error\": null}, {\"step_index\": 1, \"type\": \"syste",
       "finding": null,
       "linked_finding": null,
       "note": null
@@ -1152,15 +1169,15 @@
       "note": null
     },
     {
-      "description": "device received http 'video switch' with {'source': [1, 6]} exactly 1x",
+      "description": "device received http 'video switch' with {'source': [1, 6]} exactly 2x",
       "result": "pass",
-      "detail": "1 matching; http commands seen: [('video switch', {'comhead': 'video switch', 'language': 0, 'source': [1, 6]}), ('tx stream', {'comhead': 'tx stream', 'language': 0, 'out': [1, 1]}), ('set output audio mute', {'comhead': 'set output audio mute', 'language': 0, 'mute': [1, 0]})]",
+      "detail": "2 matching; http commands seen: [('video switch', {'comhead': 'video switch', 'language': 0, 'source': [1, 6]}), ('set output audio mute', {'comhead': 'set output audio mute', 'language': 0, 'mute': [1, 0]}), ('video switch', {'comhead': 'video switch', 'language': 0, 'source': [1, 6]})]",
       "finding": null,
       "linked_finding": null,
       "note": null
     },
     {
-      "description": "device otherwise unchanged (allowed: outputs[0].*, routing)",
+      "description": "device otherwise unchanged (allowed: outputs[0].source, routing)",
       "result": "pass",
       "detail": "no other changes",
       "finding": null,
@@ -1168,7 +1185,7 @@
       "note": null
     },
     {
-      "description": "client shows toast.success == '\"Kids Gaming\" activated'",
+      "description": "client shows toast.success == 'Scene executed'",
       "result": "n/a",
       "detail": "not checked for client 'api'",
       "finding": null,
@@ -1195,9 +1212,13 @@
     "src/rest_api/websocket.py",
     "src/rest_api/events.py",
     "docs/api/websocket.schema.json",
-    "src/rest_api/profiles.py",
+    "src/rest_api/scenes_v2.py",
+    "src/scene_manager.py",
+    "src/scene_execution.py",
     "src/config.py",
     "src/cec_macros.py",
+    "src/system_shortcuts.py",
+    "src/rest_api/system_shortcuts.py",
     "src/password.py",
     "web/index.html",
     "web/js/app.js",

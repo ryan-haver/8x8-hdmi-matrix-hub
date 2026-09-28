@@ -1,25 +1,25 @@
 {
   "schema_version": 1,
-  "features": ["F-KIO-002"],
-  "level": "V3",
-  "scenario": "kiosk.route_one_muted",
-  "scenario_title": "Kiosk: route input 3 to output 3 with 'Mute output audio' checked; only that is sent",
-  "scenario_kind": "happy",
+  "features": ["F-DOM-005"],
+  "level": "V2",
+  "scenario": "profiles.recall_needs_passcode",
+  "scenario_title": "A passcode-protected profile is not applied without its passcode",
+  "scenario_kind": "failure",
   "target": "sim",
-  "client": "browser",
+  "client": "api",
   "result": "pass",
   "gate": "ok",
   "blocked_reason": null,
   "commit": {
-    "sha": "50ce7c105b0233c2d9da36ad64546aff35f9052c",
+    "sha": "dc6bd707743e80896d2d67574555facf044c83d1",
     "branch": "wp-e1-ui-fixes",
     "dirty_files": [],
-    "short": "50ce7c10",
+    "short": "dc6bd707",
     "dirty": false
   },
   "timestamp": {
-    "started": "2026-09-28T16:43:29.353Z",
-    "finished": "2026-09-28T16:43:31.807Z"
+    "started": "2026-09-28T17:27:20.582Z",
+    "finished": "2026-09-28T17:27:20.759Z"
   },
   "operator": "automation",
   "environment": {
@@ -35,17 +35,16 @@
         "USE_MODULAR": "true",
         "UC_ENABLED": "false",
         "MATRIX_HOST": "127.0.0.1",
-        "MATRIX_PORT": "62739",
-        "OREI_TELNET_PORT": "62740",
+        "MATRIX_PORT": "54473",
+        "OREI_TELNET_PORT": "54474",
         "TRUST_PROXY_HEADERS": "true",
         "TRUSTED_PROXY_IPS": "127.0.0.1",
         "LOG_LEVEL": "INFO"
       }
     },
     "client": {
-      "name": "browser",
-      "browser": "chromium 153.0.8010.12",
-      "driver": "Playwright (@playwright/test, package-lock.json)"
+      "name": "api",
+      "aiohttp": "3.13.3"
     },
     "simulator": {
       "source_sha256": "3364e8084afaa15c",
@@ -58,34 +57,28 @@
   "procedure": [
     "reset the simulator to the seed state",
     "let the hub read the matrix (/ws get_status), so it is in sync before the action",
-    "action (browser): kiosk_route(input=3, output=3, mute=True, arc=False)",
-    "  open /kiosk and wait until it shows the inputs",
-    "  tap input 3",
-    "  choose output 3",
-    "  set \"Mute output audio\" on and ARC off",
-    "  click Apply Routing",
-    "  the kiosk sent 1 output setting requests: all 200",
-    "  the page sent POST /api/output/3/source -> HTTP 200",
-    "  the page shows: success: Routing and output parameters applied"
+    "action (api): profile_recall(profile_id='kids_gaming')",
+    "  POST /api/profile/kids_gaming/recall -> HTTP 403"
   ],
   "observations": {
     "requests": [
       {
         "method": "POST",
-        "path": "/api/output/3/source",
-        "body": "{\"input\":3}",
-        "status": 200,
-        "via": "page"
-      },
-      {
-        "method": "POST",
-        "path": "/api/output/3/mute",
-        "body": "{\"muted\":true}",
-        "status": 200,
-        "via": "page"
+        "path": "/api/profile/kids_gaming/recall",
+        "body": null,
+        "status": 403,
+        "response": {
+          "success": false,
+          "data": {
+            "error": "passcode_required",
+            "profile_id": "kids_gaming"
+          },
+          "error": null
+        },
+        "elapsed_ms": 0.9
       }
     ],
-    "response_status": 200,
+    "response_status": 403,
     "hub_reads": [],
     "state_before": {
       "schema_version": 1,
@@ -458,14 +451,14 @@
         },
         {
           "name": "Output 3",
-          "source": 3,
+          "source": 1,
           "connected": 0,
           "stream": 1,
           "hdcp": 3,
           "hdr": 0,
           "scaler": 0,
           "arc": 0,
-          "audio_mute": 1,
+          "audio_mute": 0,
           "cec_enabled": 0,
           "ext_audio_enabled": 0,
           "ext_audio_source": 1
@@ -587,120 +580,13 @@
           "saved": true
         }
       ],
-      "routing": [2, 2, 3, 1, 5, 6, 1, 1]
+      "routing": [2, 2, 1, 1, 5, 6, 1, 1]
     },
-    "state_diff": [
-      {
-        "path": "outputs[2].audio_mute",
-        "before": 0,
-        "after": 1
-      },
-      {
-        "path": "outputs[2].source",
-        "before": 1,
-        "after": 3
-      },
-      {
-        "path": "routing[2]",
-        "before": 1,
-        "after": 3
-      }
-    ],
-    "device_log": [
-      {
-        "t": 1790613809.635,
-        "channel": "http",
-        "command": "get video status",
-        "recognised": true
-      },
-      {
-        "t": 1790613809.636,
-        "channel": "http",
-        "command": "get video status",
-        "recognised": true
-      },
-      {
-        "t": 1790613809.637,
-        "channel": "http",
-        "command": "get output status",
-        "recognised": true
-      },
-      {
-        "t": 1790613809.638,
-        "channel": "http",
-        "command": "get input status",
-        "recognised": true
-      },
-      {
-        "t": 1790613809.701,
-        "channel": "telnet",
-        "command": "status",
-        "recognised": true
-      },
-      {
-        "t": 1790613810.542,
-        "channel": "http",
-        "command": "video switch",
-        "client": "127.0.0.1",
-        "payload": {
-          "comhead": "video switch",
-          "language": 0,
-          "source": [3, 3]
-        },
-        "response": {
-          "comhead": "video switch",
-          "result": 1
-        },
-        "recognised": true,
-        "mutated": true,
-        "warnings": []
-      },
-      {
-        "t": 1790613810.556,
-        "channel": "http",
-        "command": "set output audio mute",
-        "client": "127.0.0.1",
-        "payload": {
-          "comhead": "set output audio mute",
-          "language": 0,
-          "mute": [3, 1]
-        },
-        "response": {
-          "comhead": "set output audio mute",
-          "result": 1
-        },
-        "recognised": true,
-        "mutated": true,
-        "warnings": []
-      },
-      {
-        "t": 1790613810.715,
-        "channel": "http",
-        "command": "get video status",
-        "recognised": true
-      },
-      {
-        "t": 1790613810.715,
-        "channel": "http",
-        "command": "get output status",
-        "recognised": true
-      },
-      {
-        "t": 1790613810.717,
-        "channel": "http",
-        "command": "get input status",
-        "recognised": true
-      },
-      {
-        "t": 1790613810.846,
-        "channel": "telnet",
-        "command": "status",
-        "recognised": true
-      }
-    ],
+    "state_diff": [],
+    "device_log": [],
     "ws_events": [
       {
-        "t_ms": -150,
+        "t_ms": -160,
         "event": "connected",
         "data": {
           "message": "Connected to the HDMI matrix hub",
@@ -715,7 +601,7 @@
         }
       },
       {
-        "t_ms": -150,
+        "t_ms": -160,
         "event": "status",
         "data": {
           "connected": true,
@@ -725,13 +611,13 @@
             "1": 5,
             "2": 5,
             "3": 5,
-            "4": 5,
+            "4": 1,
             "5": 5,
-            "6": 5,
-            "7": 5,
-            "8": 5
+            "6": 6,
+            "7": 1,
+            "8": 1
           },
-          "outputs": [5, 5, 5, 5, 5, 5, 5, 5],
+          "outputs": [5, 5, 5, 1, 5, 6, 1, 1],
           "input_names": {
             "1": "PS3",
             "2": "AppleTV",
@@ -844,7 +730,7 @@
               "connected": true,
               "cableConnected": true,
               "enabled": true,
-              "muted": true,
+              "muted": false,
               "hdcp": 3,
               "hdr": 1,
               "scaler": 1,
@@ -860,7 +746,7 @@
               "hdcp": 3,
               "hdr": 1,
               "scaler": 5,
-              "arc": true
+              "arc": false
             },
             {
               "number": 3,
@@ -868,7 +754,7 @@
               "connected": false,
               "cableConnected": false,
               "enabled": true,
-              "muted": false,
+              "muted": true,
               "hdcp": 3,
               "hdr": 1,
               "scaler": 1,
@@ -938,7 +824,7 @@
         }
       },
       {
-        "t_ms": -52,
+        "t_ms": -21,
         "event": "routing_change",
         "data": {
           "output": 1,
@@ -948,7 +834,7 @@
         }
       },
       {
-        "t_ms": -52,
+        "t_ms": -21,
         "event": "routing_change",
         "data": {
           "output": 2,
@@ -958,7 +844,7 @@
         }
       },
       {
-        "t_ms": -52,
+        "t_ms": -21,
         "event": "routing_change",
         "data": {
           "output": 3,
@@ -968,55 +854,15 @@
         }
       },
       {
-        "t_ms": -52,
-        "event": "routing_change",
-        "data": {
-          "output": 4,
-          "input": 1,
-          "input_name": "PS3",
-          "previous_input": 5
-        }
-      },
-      {
-        "t_ms": -52,
-        "event": "routing_change",
-        "data": {
-          "output": 6,
-          "input": 6,
-          "input_name": "PS5",
-          "previous_input": 5
-        }
-      },
-      {
-        "t_ms": -52,
-        "event": "routing_change",
-        "data": {
-          "output": 7,
-          "input": 1,
-          "input_name": "PS3",
-          "previous_input": 5
-        }
-      },
-      {
-        "t_ms": -52,
-        "event": "routing_change",
-        "data": {
-          "output": 8,
-          "input": 1,
-          "input_name": "PS3",
-          "previous_input": 5
-        }
-      },
-      {
-        "t_ms": -52,
+        "t_ms": -21,
         "event": "audio_mute",
         "data": {
-          "output": 1,
+          "output": 3,
           "muted": false
         }
       },
       {
-        "t_ms": -52,
+        "t_ms": -21,
         "event": "status",
         "data": {
           "connected": true,
@@ -1237,65 +1083,33 @@
             }
           ]
         }
-      },
-      {
-        "t_ms": 1340,
-        "event": "routing_change",
-        "data": {
-          "output": 3,
-          "input": 3,
-          "input_name": "Computer",
-          "previous_input": 1
-        }
-      },
-      {
-        "t_ms": 1340,
-        "event": "audio_mute",
-        "data": {
-          "output": 3,
-          "muted": true
-        }
       }
     ],
-    "screenshots": ["2026-09-28-V3-50ce7c10-kiosk.route_one_muted-browser/after.png"],
-    "client_diagnostics": {
-      "page_api_requests": 9,
-      "page_errors": [],
-      "console_errors": [],
-      "toasts": ["success: Routing and output parameters applied"],
-      "dialogs": []
-    },
+    "screenshots": [],
+    "client_diagnostics": null,
     "operator": [],
     "restore": null,
     "notes": []
   },
   "checks": [
     {
-      "description": "device outputs[2].source == 3",
+      "description": "response HTTP 403 and body contains {'success': False, 'data': {'error': 'passcode_required'}}",
       "result": "pass",
-      "detail": "outputs[2].source = 3",
+      "detail": "HTTP 403; body {\"success\": false, \"data\": {\"error\": \"passcode_required\", \"profile_id\": \"kids_gaming\"}, \"error\": null}",
       "finding": null,
       "linked_finding": null,
       "note": null
     },
     {
-      "description": "device outputs[2].audio_mute == 1",
-      "result": "pass",
-      "detail": "outputs[2].audio_mute = 1",
+      "description": "client shows dialogs == ['\"Kids Gaming\" is passcode protected. Enter passcode:']",
+      "result": "n/a",
+      "detail": "not checked for client 'api'",
       "finding": null,
       "linked_finding": null,
       "note": null
     },
     {
-      "description": "device received http 'set output audio mute' with {'mute': [3, 1]} exactly 1x",
-      "result": "pass",
-      "detail": "1 matching; http commands seen: [('get video status', {'comhead': 'get video status', 'language': 0}), ('get video status', {'comhead': 'get video status', 'language': 0}), ('get output status', {'comhead': 'get output status', 'language': 0}), ('get input status', {'comhead': 'get input status', 'language': 0}), ('video switch', {'comhead': 'video switch', 'language': 0, 'source': [3, 3]}), ('set output audio mute', {'comhead': 'set output audio mute', 'language': 0, 'mute': [3, 1]}), ('get video status', {'comhead': 'get video status', 'language': 0}), ('get output status', {'comhead': 'get output status', 'language': 0}), ('get input status', {'comhead': 'get input status', 'language': 0})]",
-      "finding": null,
-      "linked_finding": null,
-      "note": null
-    },
-    {
-      "description": "device never received 'tx hdcp'",
+      "description": "no write command reached the device",
       "result": "pass",
       "detail": "write commands seen: []",
       "finding": null,
@@ -1303,31 +1117,7 @@
       "note": null
     },
     {
-      "description": "device never received 'set hdr conversion'",
-      "result": "pass",
-      "detail": "write commands seen: []",
-      "finding": null,
-      "linked_finding": null,
-      "note": null
-    },
-    {
-      "description": "device never received 'set video scaler'",
-      "result": "pass",
-      "detail": "write commands seen: []",
-      "finding": null,
-      "linked_finding": null,
-      "note": null
-    },
-    {
-      "description": "device never received 'set arc'",
-      "result": "pass",
-      "detail": "write commands seen: []",
-      "finding": null,
-      "linked_finding": null,
-      "note": null
-    },
-    {
-      "description": "device otherwise unchanged (allowed: outputs[2].source, outputs[2].audio_mute, routing)",
+      "description": "device otherwise unchanged",
       "result": "pass",
       "detail": "no other changes",
       "finding": null,
@@ -1335,17 +1125,9 @@
       "note": null
     },
     {
-      "description": "client shows toast.success == 'Routing and output parameters applied'",
-      "result": "pass",
-      "detail": "toast.success = 'Routing and output parameters applied' after 0.0 s",
-      "finding": null,
-      "linked_finding": null,
-      "note": null
-    },
-    {
       "description": "every WebSocket message follows docs/api/websocket.schema.json",
       "result": "pass",
-      "detail": "13 message(s) checked",
+      "detail": "7 message(s) checked",
       "finding": null,
       "linked_finding": null,
       "note": null
@@ -1362,9 +1144,20 @@
     "src/rest_api/websocket.py",
     "src/rest_api/events.py",
     "docs/api/websocket.schema.json",
-    "src/rest_api/control.py",
-    "src/rest_api/outputs.py",
-    "src/rest_api/core.py",
-    "web/kiosk.html"
+    "src/rest_api/profiles.py",
+    "src/config.py",
+    "src/cec_macros.py",
+    "src/password.py",
+    "web/index.html",
+    "web/js/app.js",
+    "web/js/api.js",
+    "web/js/state.js",
+    "web/js/websocket.js",
+    "web/js/utils/run-action.js",
+    "web/js/components/toast.js",
+    "web/js/components/scenes-panel.js",
+    "web/js/components/settings-drawer.js",
+    "web/js/utils/dashboard-manager.js",
+    "web/js/components/dashboard-cards/renderers.js"
   ]
 }

@@ -1311,8 +1311,8 @@ features:
   current: V3
   basis: 'V3: scenario profiles.recall_routing with the browser client (the Profiles tab''s Activate button, WP-E1) and the api client; profiles.recall_rejected (V2); tests/sim/test_sim_profiles.py recall tests (real hub + simulator). Recall reports failed outputs with 207/500 since WP-C1 (API-08).'
   evidence:
-  - docs/validation/evidence/F-DOM-002/2026-09-28-V2-50ce7c10-profiles.recall_routing-api.json
-  - docs/validation/evidence/F-DOM-002/2026-09-28-V3-50ce7c10-profiles.recall_routing-browser.json
+  - docs/validation/evidence/F-DOM-002/2026-09-28-V2-dc6bd707-profiles.recall_routing-api.json
+  - docs/validation/evidence/F-DOM-002/2026-09-28-V3-dc6bd707-profiles.recall_routing-browser.json
   findings: [API-08, API-19]
   scenarios: [profiles.recall_routing, profiles.recall_rejected]
 - id: F-DOM-003
@@ -1352,8 +1352,8 @@ features:
   current: V1
   basis: Scenarios profiles.recall_needs_passcode, recall_with_passcode and recall_wrong_passcode pass with the api and browser clients, and kiosk.profile_with_passcode / profile_wrong_passcode on the kiosk PIN pad (V3 evidence; WP-E1 UI-01, UI-48). Recorded level capped at V1 by the open high findings SEC-05 and SEC-06.
   evidence:
-  - docs/validation/evidence/F-KIO-008/2026-09-28-V3-50ce7c10-kiosk.profile_with_passcode-browser.json
-  - docs/validation/evidence/F-KIO-008/2026-09-28-V3-50ce7c10-kiosk.profile_wrong_passcode-browser.json
+  - docs/validation/evidence/F-KIO-008/2026-09-28-V3-dc6bd707-kiosk.profile_with_passcode-browser.json
+  - docs/validation/evidence/F-KIO-008/2026-09-28-V3-dc6bd707-kiosk.profile_wrong_passcode-browser.json
   findings: [SEC-05, SEC-06, UI-01]
   scenarios: [profiles.recall_needs_passcode, profiles.recall_with_passcode, profiles.recall_wrong_passcode, kiosk.profile_with_passcode, kiosk.profile_wrong_passcode]
 - id: F-DOM-006
@@ -1434,10 +1434,10 @@ features:
   current: V3
   basis: 'V3: scenarios scenes.run_protected (dashboard card, passcode prompt) and scenes.partial_failure (Settings drawer; the partial run is reported, VAL-11) with the browser client; scenes.run_* with the api client (V2, effects read back from the simulator); tests/sim/test_sim_scenes_v2.py; tests/test_scene_execution.py (spec''d OreiMatrix double).'
   evidence:
-  - docs/validation/evidence/F-DOM-011/2026-09-28-V2-50ce7c10-scenes.partial_failure-api.json
-  - docs/validation/evidence/F-DOM-011/2026-09-28-V2-50ce7c10-scenes.run_protected-api.json
-  - docs/validation/evidence/F-DOM-011/2026-09-28-V3-50ce7c10-scenes.partial_failure-browser.json
-  - docs/validation/evidence/F-DOM-011/2026-09-28-V3-50ce7c10-scenes.run_protected-browser.json
+  - docs/validation/evidence/F-DOM-011/2026-09-28-V2-dc6bd707-scenes.partial_failure-api.json
+  - docs/validation/evidence/F-DOM-011/2026-09-28-V2-dc6bd707-scenes.run_protected-api.json
+  - docs/validation/evidence/F-DOM-011/2026-09-28-V3-dc6bd707-scenes.partial_failure-browser.json
+  - docs/validation/evidence/F-DOM-011/2026-09-28-V3-dc6bd707-scenes.run_protected-browser.json
   - docs/validation/evidence/F-DOM-011/2026-09-28-V2-c39ee8d5-scenes.partial_failure-api.json
   findings: [API-01, API-02, API-08, VAL-07, VAL-11]
   scenarios: [scenes.run_profile_macro_preset, scenes.run_protected, scenes.partial_failure, scenes.run_unknown]
@@ -1488,8 +1488,8 @@ features:
   current: V1
   basis: 'Scenarios scenes.run_protected (api, and browser through the passcode prompt since WP-E1: V3 evidence) and scenes.run_needs_passcode (V2); tests/sim/test_sim_scenes_v2.py passcode tests; tests/test_scene_execution.py TestSceneExecutorPassword. Recorded level capped at V1 by the open high findings SEC-05 and SEC-06.'
   evidence:
-  - docs/validation/evidence/F-DOM-011/2026-09-28-V2-50ce7c10-scenes.run_protected-api.json
-  - docs/validation/evidence/F-DOM-011/2026-09-28-V3-50ce7c10-scenes.run_protected-browser.json
+  - docs/validation/evidence/F-DOM-011/2026-09-28-V2-dc6bd707-scenes.run_protected-api.json
+  - docs/validation/evidence/F-DOM-011/2026-09-28-V3-dc6bd707-scenes.run_protected-browser.json
   findings: [SEC-05, SEC-06]
   scenarios: [scenes.run_protected, scenes.run_needs_passcode]
 - id: F-DOM-016
@@ -1515,8 +1515,8 @@ features:
   current: V3
   basis: 'V3: scenario scenes.partial_failure, run from the web UI (browser client) and the api client, reads the history back through the hub; tests/sim/test_sim_scenes_v2.py history checks.'
   evidence:
-  - docs/validation/evidence/F-DOM-011/2026-09-28-V2-50ce7c10-scenes.partial_failure-api.json
-  - docs/validation/evidence/F-DOM-011/2026-09-28-V3-50ce7c10-scenes.partial_failure-browser.json
+  - docs/validation/evidence/F-DOM-011/2026-09-28-V2-dc6bd707-scenes.partial_failure-api.json
+  - docs/validation/evidence/F-DOM-011/2026-09-28-V3-dc6bd707-scenes.partial_failure-browser.json
   - docs/validation/evidence/F-DOM-011/2026-09-28-V2-c39ee8d5-scenes.partial_failure-api.json
   findings: [API-02]
   scenarios: [scenes.partial_failure]
@@ -1862,7 +1862,7 @@ features:
   current: V3
   basis: 'V3: scenario scenes.run_protected with the browser client runs the locked scene from its dashboard card through the passcode prompt; tests/e2e/flows.spec.ts runs protected scene and profile cards and checks every card type renders on load (UI-01, UI-27 fixed in WP-E1). Visual diffs pending owner approval.'
   evidence:
-  - docs/validation/evidence/F-DOM-011/2026-09-28-V3-50ce7c10-scenes.run_protected-browser.json
+  - docs/validation/evidence/F-DOM-011/2026-09-28-V3-dc6bd707-scenes.run_protected-browser.json
   findings: [UI-01, UI-27]
   scenarios: [scenes.run_protected]
 - id: F-UI-009
@@ -1911,7 +1911,7 @@ features:
   current: V3
   basis: 'V3: scenario profiles.recall_routing with the browser client (Profiles tab, Activate) and tests/e2e/flows.spec.ts ''the Profiles tab lists the hub profiles and recalls one'' (UI-27 fixed in WP-E1). Visual diffs pending owner approval.'
   evidence:
-  - docs/validation/evidence/F-DOM-002/2026-09-28-V3-50ce7c10-profiles.recall_routing-browser.json
+  - docs/validation/evidence/F-DOM-002/2026-09-28-V3-dc6bd707-profiles.recall_routing-browser.json
   findings: [UI-27]
   scenarios: [profiles.recall_routing]
 - id: F-UI-013
@@ -1936,9 +1936,9 @@ features:
   current: V3
   basis: 'V3: scenarios profiles.recall_with_passcode, recall_wrong_passcode and recall_needs_passcode with the browser client (prompt answered, wrong passcode reported, prompt cancelled: nothing sent) and tests/e2e/flows.spec.ts UI-01 tests (Settings drawer, dashboard cards). The prompt is still a native window.prompt() (UI-36, Phase 5).'
   evidence:
-  - docs/validation/evidence/F-DOM-005/2026-09-28-V3-50ce7c10-profiles.recall_needs_passcode-browser.json
-  - docs/validation/evidence/F-DOM-005/2026-09-28-V3-50ce7c10-profiles.recall_with_passcode-browser.json
-  - docs/validation/evidence/F-DOM-005/2026-09-28-V3-50ce7c10-profiles.recall_wrong_passcode-browser.json
+  - docs/validation/evidence/F-DOM-005/2026-09-28-V3-dc6bd707-profiles.recall_needs_passcode-browser.json
+  - docs/validation/evidence/F-DOM-005/2026-09-28-V3-dc6bd707-profiles.recall_with_passcode-browser.json
+  - docs/validation/evidence/F-DOM-005/2026-09-28-V3-dc6bd707-profiles.recall_wrong_passcode-browser.json
   findings: [UI-01, UI-36]
   scenarios: [profiles.recall_needs_passcode, profiles.recall_with_passcode, profiles.recall_wrong_passcode]
 - id: F-UI-015
@@ -2100,7 +2100,7 @@ features:
   current: V3
   basis: 'V3: scenario scenes.partial_failure with the browser client checks the warning toast a partial run shows (VAL-11 fixed in WP-E1); tests/e2e/flows.spec.ts checks success, partial and error toasts for profiles and scenes. Other toasts and the confirmation dialogs: visual catalog only.'
   evidence:
-  - docs/validation/evidence/F-DOM-011/2026-09-28-V3-50ce7c10-scenes.partial_failure-browser.json
+  - docs/validation/evidence/F-DOM-011/2026-09-28-V3-dc6bd707-scenes.partial_failure-browser.json
   findings: [UI-32]
   scenarios: [scenes.partial_failure]
 - id: F-UI-028
@@ -2234,7 +2234,7 @@ features:
   current: V3
   basis: 'V3: scenario kiosk.route_one_muted (browser: kiosk routing wizard, one output, ''Mute output audio'' on; only the mute is sent, routing and mute read back from the simulator, nothing else changed) and tests/e2e/flows.spec.ts UI-23/UI-46 and UI-25 tests (UI-23, UI-25 fixed in WP-E1; UI-46 owner decision 2026-09-27). Visual diffs pending owner approval.'
   evidence:
-  - docs/validation/evidence/F-KIO-002/2026-09-28-V3-50ce7c10-kiosk.route_one_muted-browser.json
+  - docs/validation/evidence/F-KIO-002/2026-09-28-V3-dc6bd707-kiosk.route_one_muted-browser.json
   findings: [UI-25, UI-23]
   scenarios: [kiosk.route_one_muted]
 - id: F-KIO-003
@@ -2247,7 +2247,7 @@ features:
   current: V3
   basis: 'V3: scenario kiosk.route_all_apply (browser: all outputs to input 5 with untouched options; only the routing changes, the soundbar keeps its audio-only scaler, no output setting command reaches the device, UI-46 owner decision 2026-09-27) and tests/e2e/smoke.spec.ts kiosk route-all (UI-23 fixed in WP-E1).'
   evidence:
-  - docs/validation/evidence/F-KIO-003/2026-09-28-V3-50ce7c10-kiosk.route_all_apply-browser.json
+  - docs/validation/evidence/F-KIO-003/2026-09-28-V3-dc6bd707-kiosk.route_all_apply-browser.json
   findings: [UI-23]
   scenarios: [kiosk.route_all_apply]
 - id: F-KIO-004
@@ -2308,8 +2308,8 @@ features:
   current: V1
   basis: 'Scenarios kiosk.profile_with_passcode and kiosk.profile_wrong_passcode (browser, V3: a protected profile run from its kiosk slot through the PIN pad, UI-48 owner decision 2026-09-27; device read back) and tests/e2e/flows.spec.ts UI-25 / UI-48 tests. Recorded V1 because creating a profile with the kiosk wizard is not asserted (the wizard opening is, UI-25).'
   evidence:
-  - docs/validation/evidence/F-KIO-008/2026-09-28-V3-50ce7c10-kiosk.profile_with_passcode-browser.json
-  - docs/validation/evidence/F-KIO-008/2026-09-28-V3-50ce7c10-kiosk.profile_wrong_passcode-browser.json
+  - docs/validation/evidence/F-KIO-008/2026-09-28-V3-dc6bd707-kiosk.profile_with_passcode-browser.json
+  - docs/validation/evidence/F-KIO-008/2026-09-28-V3-dc6bd707-kiosk.profile_wrong_passcode-browser.json
   findings: [UI-25]
   scenarios: [kiosk.profile_with_passcode, kiosk.profile_wrong_passcode]
 - id: F-KIO-009
