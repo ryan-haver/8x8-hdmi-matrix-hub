@@ -1,20 +1,20 @@
 {
   "driver_id": "hdmi_matrix",
   "version": "0.1.0",
-  "min_core_api": "0.21.0",
+  "min_core_api": "0.20.0",
   "name": {
     "en": "HDMI Matrix"
   },
   "icon": "uc:integration",
   "description": {
-    "en": "Integration for 8x8 HDMI Matrix with scene/preset support"
+    "en": "Control an OREI BK-808 8x8 HDMI matrix through the HDMI Matrix Hub: routing, the presets from the hub's web app, the matrix power, and CEC control of TVs and sources."
   },
   "developer": {
     "name": "Ryan Haver",
     "url": "https://github.com/ryan-haver/8x8-hdmi-matrix-hub"
   },
   "home_page": "https://github.com/ryan-haver/8x8-hdmi-matrix-hub",
-  "release_date": "2026-01-12",
+  "release_date": "2026-09-25",
   "port": 9095,
   "setup_data_schema": {
     "title": {
@@ -29,7 +29,7 @@
         "field": {
           "label": {
             "value": {
-              "en": "Enter the IP address of your 8x8 HDMI Matrix.\nThe device must be on the same network as your Remote."
+              "en": "Enter the IP address or host name of your HDMI matrix, as the hub reaches it. The hub (the machine running this integration) talks to the matrix; the Remote only talks to the hub.\nFor a new address you are asked for the matrix's login next (the one its own web interface uses)."
             }
           }
         }
@@ -37,18 +37,19 @@
       {
         "id": "host",
         "label": {
-          "en": "IP Address"
+          "en": "Matrix address"
         },
         "field": {
           "text": {
-            "value": "192.168.0.100"
+            "value": "",
+            "regex": "^[A-Za-z0-9](?:[A-Za-z0-9.-]{0,251}[A-Za-z0-9])?$"
           }
         }
       },
       {
         "id": "port",
         "label": {
-          "en": "TCP Port"
+          "en": "HTTPS port"
         },
         "field": {
           "number": {

@@ -6,12 +6,13 @@ what the Remote was told, not only the response code.
 
 from __future__ import annotations
 
+import aiohttp
 import pytest
 
 from tools.uc_remote_sim import UcRemoteSim
 from tools.validate.device import SimDevice
 
-from ._helpers import CYCLE, INPUT_NAMES, SEED_STATE, cec_frames, known_bug, port_mask, sent, wait_for, writes
+from ._helpers import CYCLE, INPUT_NAMES, SEED_STATE, cec_frames, port_mask, sent, wait_for, writes
 
 #: CEC command name -> index in the matrix's `cec command` frame. Written out here on purpose
 #: (a change must show up as a deliberate test change). Both tables are the BK-808's own, from its
@@ -224,6 +225,15 @@ async def test_cec_remote_toggle_follows_the_tracked_power_state(uc_remote: UcRe
     assert (await uc_remote.entity_state(entity_id))["state"] == "OFF"
 
 
+async def test_cec_remotes_advertise_the_power_toggle(uc_remote: UcRemoteSim) -> None:
+    """UC-24 / DI-13: every CEC remote offers `toggle` (a power button on the Remote), next to on/off and
+    send_cmd; the toggle itself follows the tracked power state (test above)."""
+    entities = {e["entity_id"]: e for e in await uc_remote.get_available_entities()}
+    for side in ("input", "output"):
+        for n in range(1, 9):
+            assert entities[f"remote.{side}_{n}_cec"]["features"] == ["send_cmd", "on_off", "toggle"]
+
+
 async def test_send_cmd_sequence_repeat_and_the_button_mapping_form(uc_remote: UcRemoteSim, sim: SimDevice) -> None:
     """entity_remote.md: `repeat` applies to each command of a sequence; a button mapping sends the sequence
     as one comma-separated string."""
@@ -307,18 +317,39 @@ async def test_power_switch_turns_the_matrix_off_and_on(uc_remote: UcRemoteSim, 
     assert (await uc_remote.entity_state("switch.matrix_power"))["state"] == "ON"
 
 
-@known_bug("UC-09", "switch.matrix_power starts ON and is never synced from the polled power state")
 async def test_power_switch_follows_a_front_panel_power_change(uc_remote: UcRemoteSim, sim: SimDevice) -> None:
+    """UC-09: the switch shows the matrix's reported power (seed: on) and follows a front-panel change."""
+    assert (await uc_remote.entity_state("switch.matrix_power"))["state"] == "ON"
     await sim.patch_state({"system": {"power": 0}})
 
     async def synced() -> bool:
         return (await uc_remote.entity_state("switch.matrix_power"))["state"] == "OFF"
 
     assert await wait_for(synced, timeout=CYCLE + 2)
+    await sim.patch_state({"system": {"power": 1}})
+
+    async def back_on() -> bool:
+        return (await uc_remote.entity_state("switch.matrix_power"))["state"] == "ON"
+
+    assert await wait_for(back_on, timeout=CYCLE + 2)
 
 
-@known_bug("UC-09", "the switch handler ignores the connection state: 500 instead of 503 while the matrix is "
-           "unreachable")
+async def test_power_switch_follows_the_web_app_at_once(uc_hub_factory, sim: SimDevice) -> None:
+    """UC-09: power changed in the web app (REST) reaches the Remote at once, not at the next poll (this hub
+    polls every 60 s, so only the hub's own power event can deliver it within the timeout)."""
+    hub = await uc_hub_factory(polling_interval=60)
+    async with UcRemoteSim(hub.uc_url) as remote, aiohttp.ClientSession(
+            base_url=hub.base_url, headers={"X-Forwarded-For": "10.88.0.4"}) as web:
+        await remote.attach(["switch.matrix_power"])
+        assert (await remote.entity_state("switch.matrix_power"))["state"] == "ON"
+        since = remote.mark()
+        async with web.post("/api/power/off") as resp:
+            assert resp.status == 200, await resp.text()
+        assert (await sim.state())["system"]["power"] == 0
+        await remote.wait_event("entity_change", lambda d: d["entity_id"] == "switch.matrix_power"
+                                and d["attributes"].get("state") == "OFF", since=since, timeout=5)
+
+
 async def test_power_switch_reports_unavailable_while_the_matrix_is_unreachable(uc_remote: UcRemoteSim,
                                                                               sim: SimDevice) -> None:
     await _matrix_unreachable(uc_remote, sim)

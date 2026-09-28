@@ -10,6 +10,7 @@ Handles storage of:
 
 import json
 import logging
+from collections.abc import Callable
 from pathlib import Path
 
 from aiohttp import web
@@ -85,10 +86,11 @@ def _save_settings():
         atomic_write_json(_settings_path, _settings_cache)
 
         _LOG.debug(f"Saved device settings to {_settings_path}")
-        return True
     except Exception as e:
         _LOG.exception(f"Error saving device settings: {e}")
         return False
+    _notify_change_listeners()
+    return True
 
 
 def _get_default_settings() -> dict:
@@ -209,6 +211,47 @@ def get_preset_setting(preset_num: int) -> dict:
     """Get settings for a specific preset (custom name)."""
     settings = get_device_settings()
     return settings.get("presets", {}).get(str(preset_num), {"name": f"Preset {preset_num}"})
+
+
+def preset_display_name(preset_num: int, matrix_names: list[str] | None = None) -> str:
+    """The name the web app shows for a hardware preset (``GET /api/presets``).
+
+    The name given in the web app (device settings); if there is none (or only
+    the default "Preset N"), the matrix's own preset name (``get video status``
+    ``allname``, ``matrix_names[n-1]``); else "Preset N". The Remote uses the
+    same rule (UC-14), so both show the same names.
+    """
+    default = f"Preset {preset_num}"
+    name = get_preset_setting(preset_num).get("name")
+    if name and name != default:
+        return name
+    if matrix_names and preset_num - 1 < len(matrix_names) and matrix_names[preset_num - 1]:
+        return str(matrix_names[preset_num - 1])
+    return default
+
+
+# Listeners told after every saved change of the device settings (preset names, favourites, ...), e.g.
+# the Remote integration, which shows the web app's preset names and favourites (UC-14).
+_change_listeners: list[Callable[[], None]] = []
+
+
+def add_change_listener(listener: Callable[[], None]) -> None:
+    """Call ``listener()`` after each saved device-settings change (idempotent per listener)."""
+    if listener not in _change_listeners:
+        _change_listeners.append(listener)
+
+
+def remove_change_listener(listener: Callable[[], None]) -> None:
+    if listener in _change_listeners:
+        _change_listeners.remove(listener)
+
+
+def _notify_change_listeners() -> None:
+    for listener in list(_change_listeners):
+        try:
+            listener()
+        except Exception:  # a listener must never break a settings change
+            _LOG.exception("Device-settings change listener failed")
 
 
 def set_preset_name(preset_num: int, name: str) -> bool:

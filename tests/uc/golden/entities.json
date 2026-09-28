@@ -158,7 +158,8 @@
       "entity_type": "remote",
       "features": [
         "send_cmd",
-        "on_off"
+        "on_off",
+        "toggle"
       ],
       "simple_commands": [
         "POWER_ON",
@@ -187,7 +188,8 @@
       "entity_type": "remote",
       "features": [
         "send_cmd",
-        "on_off"
+        "on_off",
+        "toggle"
       ],
       "simple_commands": [
         "POWER_ON",
@@ -216,7 +218,8 @@
       "entity_type": "remote",
       "features": [
         "send_cmd",
-        "on_off"
+        "on_off",
+        "toggle"
       ],
       "simple_commands": [
         "POWER_ON",
@@ -245,7 +248,8 @@
       "entity_type": "remote",
       "features": [
         "send_cmd",
-        "on_off"
+        "on_off",
+        "toggle"
       ],
       "simple_commands": [
         "POWER_ON",
@@ -274,7 +278,8 @@
       "entity_type": "remote",
       "features": [
         "send_cmd",
-        "on_off"
+        "on_off",
+        "toggle"
       ],
       "simple_commands": [
         "POWER_ON",
@@ -303,7 +308,8 @@
       "entity_type": "remote",
       "features": [
         "send_cmd",
-        "on_off"
+        "on_off",
+        "toggle"
       ],
       "simple_commands": [
         "POWER_ON",
@@ -332,7 +338,8 @@
       "entity_type": "remote",
       "features": [
         "send_cmd",
-        "on_off"
+        "on_off",
+        "toggle"
       ],
       "simple_commands": [
         "POWER_ON",
@@ -361,7 +368,8 @@
       "entity_type": "remote",
       "features": [
         "send_cmd",
-        "on_off"
+        "on_off",
+        "toggle"
       ],
       "simple_commands": [
         "POWER_ON",
@@ -407,7 +415,8 @@
       "entity_type": "remote",
       "features": [
         "send_cmd",
-        "on_off"
+        "on_off",
+        "toggle"
       ],
       "simple_commands": [
         "POWER_ON",
@@ -423,7 +432,8 @@
       "entity_type": "remote",
       "features": [
         "send_cmd",
-        "on_off"
+        "on_off",
+        "toggle"
       ],
       "simple_commands": [
         "POWER_ON",
@@ -439,7 +449,8 @@
       "entity_type": "remote",
       "features": [
         "send_cmd",
-        "on_off"
+        "on_off",
+        "toggle"
       ],
       "simple_commands": [
         "POWER_ON",
@@ -455,7 +466,8 @@
       "entity_type": "remote",
       "features": [
         "send_cmd",
-        "on_off"
+        "on_off",
+        "toggle"
       ],
       "simple_commands": [
         "POWER_ON",
@@ -471,7 +483,8 @@
       "entity_type": "remote",
       "features": [
         "send_cmd",
-        "on_off"
+        "on_off",
+        "toggle"
       ],
       "simple_commands": [
         "POWER_ON",
@@ -487,7 +500,8 @@
       "entity_type": "remote",
       "features": [
         "send_cmd",
-        "on_off"
+        "on_off",
+        "toggle"
       ],
       "simple_commands": [
         "POWER_ON",
@@ -503,7 +517,8 @@
       "entity_type": "remote",
       "features": [
         "send_cmd",
-        "on_off"
+        "on_off",
+        "toggle"
       ],
       "simple_commands": [
         "POWER_ON",
@@ -519,7 +534,8 @@
       "entity_type": "remote",
       "features": [
         "send_cmd",
-        "on_off"
+        "on_off",
+        "toggle"
       ],
       "simple_commands": [
         "POWER_ON",

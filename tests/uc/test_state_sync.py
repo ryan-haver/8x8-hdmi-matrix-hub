@@ -16,7 +16,7 @@ import aiohttp
 from tools.uc_remote_sim import UcRemoteSim
 from tools.validate.device import SimDevice
 
-from ._helpers import CYCLE, INPUT_NAMES, POLL, known_bug, wait_for
+from ._helpers import CYCLE, INPUT_NAMES, POLL, sent, wait_for
 
 #: Entities whose state follows the device (buttons are stateless).
 STATEFUL = ("media_player.", "sensor.", "switch.", "remote.")
@@ -58,6 +58,9 @@ async def test_subscribed_entity_states_reflect_the_device(uc_remote: UcRemoteSi
     assert await wait_for(in_sync), last
     states = {e["entity_id"]: e for e in await uc_remote.get_entity_states()}
     assert len(states) == 74, "every subscribed entity has a state"
+    # UC-09: the power switch shows the matrix's reported power (seed: on), not a made-up default.
+    assert states["switch.matrix_power"]["attributes"]["state"] == ("ON" if (await sim.state())["system"]["power"]
+                                                                   else "OFF")
     assert all(e["entity_type"] == eid.split(".")[0] for eid, e in states.items())
 
 
@@ -256,32 +259,48 @@ async def _rename_input(hub_api: aiohttp.ClientSession, port: int, name: str) ->
         assert resp.status == 200, await resp.text()
 
 
-@known_bug("UC-08", "a rename in the web app never reaches the subscribed media players: their source_list keeps "
-           "the old names")
 async def test_input_rename_updates_the_source_list(uc_remote: UcRemoteSim, sim: SimDevice,
                                                     hub_api: aiohttp.ClientSession) -> None:
+    """UC-08: a rename in the web app reaches the subscribed media players live (no reconnect, and not at a
+    poll: the poller never re-reads names), and the new name selects the source at once."""
+    since = uc_remote.mark()
     await _rename_input(hub_api, 3, "Xbox")
     assert (await sim.state())["inputs"][2]["name"] == "Xbox"
+    await uc_remote.wait_event("entity_change", lambda d: d["entity_id"] == "media_player.output_1"
+                               and "Xbox" in d["attributes"].get("source_list", []), since=since, timeout=5)
+    assert (await uc_remote.entity_state("media_player.output_1"))["source_list"][2] == "Xbox"
+    resp = await uc_remote.select_source("media_player.output_1", "Xbox")
+    assert resp["code"] == 200
+    assert (await sim.state())["outputs"][0]["source"] == 3
+    available = {e["entity_id"]: e for e in await uc_remote.get_available_entities()}
+    assert available["remote.input_3_cec"]["name"] == {"en": "Xbox CEC"}
+
+
+async def test_output_rename_updates_the_offered_entities(uc_remote: UcRemoteSim,
+                                                          hub_api: aiohttp.ClientSession) -> None:
+    """UC-08: an output rename in the web app renames the offered entities live (the Remote uses an entity's
+    name as the default when it is added; entity_change cannot rename an entity the user already added)."""
+    async with hub_api.post("/api/output/2/name", json={"name": "Den TV"}) as resp:
+        assert resp.status == 200, await resp.text()
 
     async def renamed() -> bool:
-        state = await uc_remote.entity_state("media_player.output_1")
-        return "Xbox" in (state or {}).get("source_list", [])
+        available = {e["entity_id"]: e for e in await uc_remote.get_available_entities()}
+        return available["media_player.output_2"]["name"] == {"en": "Den TV"}
 
-    assert await wait_for(renamed, timeout=CYCLE + 2)
+    assert await wait_for(renamed, timeout=5)
+    assert (await uc_remote.select_source("media_player.output_2", "PS5"))["code"] == 200
 
 
 async def test_select_source_by_new_name_after_rename(uc_remote: UcRemoteSim, sim: SimDevice,
                                                       hub_api: aiohttp.ClientSession) -> None:
-    """A rename seen at the next Remote `connect` replaces the subscribed entities in place (WP-B2, UC-05 "update
-    entities in place"): the new source name works. It used to rebuild only available_entities, so the subscribed
-    media player kept matching the old names (400). A live rename without a reconnect is still UC-08 (above)."""
-    await _rename_input(hub_api, 3, "Xbox")
+    """A rename is still right after the next Remote `connect` (WP-B2: entities replaced in place, never
+    cleared): the new source name works and the subscribed media player has the new source list."""
     since = uc_remote.mark()
+    await _rename_input(hub_api, 3, "Xbox")
     await uc_remote.send_connect()  # what the Remote sends when it reconnects / wakes
     await uc_remote.wait_event("device_state", since=since, timeout=15)
     available = {e["entity_id"]: e for e in await uc_remote.get_available_entities()}
     assert available["remote.input_3_cec"]["name"] == {"en": "Xbox CEC"}  # the rebuilt entity has the new name
-    # The subscribed media player was replaced, and the Remote was sent its new source list.
     assert (await uc_remote.entity_state("media_player.output_1"))["source_list"][2] == "Xbox"
     assert any(c["entity_id"] == "media_player.output_1" and "Xbox" in c["attributes"].get("source_list", [])
                for c in uc_remote.entity_changes(since))
@@ -290,14 +309,59 @@ async def test_select_source_by_new_name_after_rename(uc_remote: UcRemoteSim, si
     assert (await sim.state())["outputs"][0]["source"] == 3
 
 
-@known_bug("UC-14", "preset names on the Remote are hard-coded 'Preset N'; the web app's preset names (device "
-           "settings) are ignored")
-async def test_preset_names_match_the_web_app(uc_remote: UcRemoteSim, hub_api: aiohttp.ClientSession) -> None:
+async def _web_presets(hub_api: aiohttp.ClientSession) -> tuple[dict[int, str], list[int]]:
+    """Preset names and favourites as the web app reads them."""
     async with hub_api.get("/api/presets") as resp:
-        body = await resp.json()
-    web_names = {p["number"]: p["name"] for p in body["data"]["presets"]}
-    assert web_names[1] == "Apple TV Everywhere"  # tests/e2e/fixtures/data/device_settings.json
-    available = {e["entity_id"]: e for e in await uc_remote.get_available_entities()}
-    remote_names = {n: available[f"button.preset_{n}"]["name"]["en"] for n in range(1, 9)}
-    assert remote_names == web_names
+        names = {p["number"]: p["name"] for p in (await resp.json())["data"]["presets"]}
+    async with hub_api.get("/api/device-settings/favorite-presets") as resp:
+        favourites = (await resp.json())["data"]["favorite_presets"]
+    return names, favourites
 
+
+def _remote_presets(available: dict[str, dict[str, Any]]) -> tuple[dict[int, str], dict[str, list[tuple[str, str]]]]:
+    """Preset button names, and the matrix remote's pages as (label, command) lists."""
+    names = {n: available[f"button.preset_{n}"]["name"]["en"] for n in range(1, 9)}
+    pages = {
+        page["page_id"]: [(item["text"], item["command"]["cmd_id"]) for item in page["items"]]
+        for page in available["remote.orei_matrix"]["options"]["user_interface"]["pages"]
+    }
+    return names, pages
+
+
+async def test_preset_names_match_the_web_app(uc_remote: UcRemoteSim, hub_api: aiohttp.ClientSession) -> None:
+    """UC-14: the preset buttons and the matrix remote's pages use the web app's preset names (device settings,
+    else the matrix's own names), and a Favourites page lists the web app's favourite presets first."""
+    web_names, favourites = await _web_presets(hub_api)
+    assert web_names[1] == "Apple TV Everywhere"  # tests/e2e/fixtures/data/device_settings.json
+    assert web_names[3] == "PS5"  # no web app name: the matrix's own (simulator seed)
+    assert favourites == [1, 2]
+    available = {e["entity_id"]: e for e in await uc_remote.get_available_entities()}
+    remote_names, pages = _remote_presets(available)
+    assert remote_names == web_names
+    assert list(pages) == ["orei_matrix_favourites", "orei_matrix_main"]
+    assert pages["orei_matrix_favourites"] == [(web_names[n], f"PRESET_{n}") for n in favourites]
+    assert pages["orei_matrix_main"] == [(web_names[n], f"PRESET_{n}") for n in range(1, 9)]
+    # The commands keep their numbers whatever the names are (activities and macros keep working).
+    assert available["remote.orei_matrix"]["options"]["simple_commands"] == [f"PRESET_{n}" for n in range(1, 9)]
+
+
+async def test_preset_changes_in_the_web_app_reach_the_remote_live(uc_remote: UcRemoteSim, sim: SimDevice,
+                                                                   hub_api: aiohttp.ClientSession) -> None:
+    """UC-14: renaming a preset or changing the favourites in the web app updates the offered entities at once,
+    and the subscribed preset button keeps working."""
+    async with hub_api.post("/api/device-settings/preset/3/name", json={"name": "Game Night"}) as resp:
+        assert resp.status == 200, await resp.text()
+    async with hub_api.post("/api/device-settings/favorite-presets/3/toggle") as resp:
+        assert resp.status == 200, await resp.text()
+    web_names, favourites = await _web_presets(hub_api)
+    assert web_names[3] == "Game Night" and favourites == [1, 2, 3]
+
+    async def updated() -> bool:
+        names, pages = _remote_presets({e["entity_id"]: e for e in await uc_remote.get_available_entities()})
+        return names == web_names and pages.get("orei_matrix_favourites") == [
+            (web_names[n], f"PRESET_{n}") for n in favourites]
+
+    assert await wait_for(updated, timeout=5)
+    await sim.clear_log()
+    assert (await uc_remote.button_push("button.preset_3"))["code"] == 200
+    assert [p.get("index") for p in sent(await sim.log(), "preset set")] == [3]
