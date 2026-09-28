@@ -875,6 +875,16 @@
     }
 }
 
+/* Passcode lock before a name in a card row (Settings drawer, UI-49/UI-50):
+   text-sized and on the text's line, like the other inline icons. */
+.scene-info .item-lock {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+    margin-right: var(--space-1);
+    color: var(--text-secondary);
+}
+
 /* Dashboard cards (UI-27) sit in a narrow dashboard column: the actions take
    their own row, as scene cards do on very small screens (above). */
 .dashboard-cards-grid .scene-card {

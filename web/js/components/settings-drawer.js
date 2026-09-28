@@ -175,6 +175,9 @@ class SettingsDrawer {
         this.attachEventListeners(content);
     }
 
+    // UI-49 (owner decision 2026-09-27): the lists had no CSS at all. Items use the
+    // Profiles tab's card classes (scene-card, scene-icon, scene-info / scene-name /
+    // scene-outputs, scene-actions) in a card-list, so each is one card row.
     renderProfilesTab() {
         const profiles = state.profiles || [];
         if (profiles.length === 0) {
@@ -184,20 +187,20 @@ class SettingsDrawer {
         }
 
         let html = `<div class="drawer-section-title">All Profiles</div>
-            <div class="settings-list">`;
+            <div class="settings-list card-list">`;
 
         profiles.forEach(profile => {
             const isProtected = profile.password_protected;
             const isFavorite = state.favoriteProfiles?.some(p => p.id === profile.id);
             html += `
-                <div class="settings-list-item" data-profile-id="${Helpers.escapeHtml(profile.id)}">
-                    <div class="item-info">
-                        ${isProtected ? `<svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <div class="settings-list-item scene-card" data-profile-id="${Helpers.escapeHtml(profile.id)}">
+                    <div class="item-info scene-info">
+                        ${isProtected ? `<svg class="icon item-lock" aria-label="Passcode protected" role="img" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                         </svg>` : ''}
-                        <span class="item-name">${Helpers.escapeHtml(profile.name || profile.id)}</span>
+                        <span class="item-name scene-name">${Helpers.escapeHtml(profile.name || profile.id)}</span>
                     </div>
-                    <div class="item-actions">
+                    <div class="item-actions scene-actions">
                         <button class="btn-icon execute-profile-btn" data-id="${Helpers.escapeHtml(profile.id)}" title="Execute">
                             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polygon points="5 3 19 12 5 21 5 3"/>
@@ -228,21 +231,21 @@ class SettingsDrawer {
         let html = `<div class="drawer-section-title">All Scenes
             <button class="btn btn-sm btn-primary create-scene-btn">+ New</button>
         </div>
-            <div class="settings-list">`;
+            <div class="settings-list card-list">`;
 
         scenes.forEach(scene => {
             const isProtected = scene.password_protected;
             const stepCount = scene.steps?.length || 0;
             html += `
-                <div class="settings-list-item" data-scene-id="${Helpers.escapeHtml(scene.id)}">
-                    <div class="item-info">
-                        ${isProtected ? `<svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <div class="settings-list-item scene-card" data-scene-id="${Helpers.escapeHtml(scene.id)}">
+                    <div class="item-info scene-info">
+                        ${isProtected ? `<svg class="icon item-lock" aria-label="Passcode protected" role="img" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                         </svg>` : ''}
-                        <span class="item-name">${Helpers.escapeHtml(scene.name)}</span>
-                        <span class="item-meta">${stepCount} step${stepCount !== 1 ? 's' : ''}</span>
+                        <span class="item-name scene-name">${Helpers.escapeHtml(scene.name)}</span>
+                        <span class="item-meta scene-outputs">${stepCount} step${stepCount !== 1 ? 's' : ''}</span>
                     </div>
-                    <div class="item-actions">
+                    <div class="item-actions scene-actions">
                         <button class="btn-icon execute-scene-btn" data-id="${Helpers.escapeHtml(scene.id)}" title="Execute">
                             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polygon points="5 3 19 12 5 21 5 3"/>
@@ -300,15 +303,15 @@ class SettingsDrawer {
             html += `
                 <div class="drawer-section">
                     <h4 class="drawer-section-title">${categoryLabels[cat]}</h4>
-                    <div class="settings-list">`;
+                    <div class="settings-list card-list">`;
             items.forEach(action => {
                 html += `
-                    <div class="settings-list-item" data-action-key="${Helpers.escapeHtml(action.key)}">
-                        <div class="item-info">
-                            <span class="item-icon">${Helpers.escapeHtml(action.icon || '⚡')}</span>
-                            <span class="item-name">${Helpers.escapeHtml(action.label || action.key)}</span>
+                    <div class="settings-list-item scene-card" data-action-key="${Helpers.escapeHtml(action.key)}">
+                        <div class="item-icon scene-icon">${Helpers.escapeHtml(action.icon || '⚡')}</div>
+                        <div class="item-info scene-info">
+                            <span class="item-name scene-name">${Helpers.escapeHtml(action.label || action.key)}</span>
                         </div>
-                        <div class="item-actions">
+                        <div class="item-actions scene-actions">
                             <button class="btn-icon execute-action-btn" data-key="${Helpers.escapeHtml(action.key)}" title="Execute">
                                 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polygon points="5 3 19 12 5 21 5 3"/>
