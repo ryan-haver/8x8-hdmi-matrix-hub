@@ -157,7 +157,12 @@ async def background_status_refresh(matrix_device):
 
         formatted = _format_status(fresh_status, matrix_device, input_names, output_names)
         formatted["inputs"] = _format_inputs(fresh_input_status, fresh_cable_status, input_names)
-        formatted["outputs_detail"] = _format_outputs(fresh_output_status, fresh_cable_status, output_names)
+        # BE-31: the resolved names (hub cache, then the matrix's own names), not
+        # the hub cache alone - it is empty in modular mode, and every open UI
+        # would see its outputs renamed "Output N" by this broadcast.
+        formatted["outputs_detail"] = _format_outputs(
+            fresh_output_status, fresh_cable_status, formatted["output_names"]
+        )
 
         _LOG.info("Broadcasting background status update via WebSocket")
         await broadcast_status_update("status", formatted)
