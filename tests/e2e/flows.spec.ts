@@ -852,7 +852,10 @@ test.describe('WP-E1 UI flows', () => {
     await page.evaluate(() => (window as any).settingsDrawer.close()); // eslint-disable-line @typescript-eslint/no-explicit-any
     await page.locator('.cec-tray-fab').click();
     await page.locator('#cec-tray.expanded').waitFor();
-    // The config is applied once its response has been read: the tray names the target first.
+    // The recall's own routing_change events (outputs 1-3 -> input 5) arrive over the WebSocket
+    // and must not drop the profile's CEC targets.
+    await page.waitForFunction(() => [1, 2, 3].every((o) => (window as any).state.routing[o] === 5), undefined, { timeout: 15_000 }); // eslint-disable-line @typescript-eslint/no-explicit-any
+    await settle(page, 300);
     await expect(page.locator('#cec-tray.expanded [data-target="navigation"] .target-abbrev').first()).toHaveText('PS5');
     const sent = page.waitForRequest((r) => /\/api\/cec\/(input|output)\/\d\/up$/.test(new URL(r.url()).pathname));
     await page.locator('#cec-tray.expanded [data-cmd="up"]:visible').first().click();
