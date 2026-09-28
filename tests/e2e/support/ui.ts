@@ -62,8 +62,8 @@ export type PrepareOptions = {
    * background refresh to ALL open pages (src/rest_api/outputs.py:59), so
    * pages would re-render at times set by other tests, and response shaping
    * done with page.route (long names, no signal, ...) would be overwritten.
-   * The broadcast also resets output names to "Output N" (hub bug: _format_outputs
-   * uses the hub's name cache, empty in modular mode). 'drop' keeps each page
+   * The broadcast used to reset output names to "Output N" (BE-31, fixed in
+   * WP-E1). 'drop' keeps each page
    * on its own REST data; 'hold' queues them until releaseStatusFrames() (so
    * they land after the page has applied its REST data, the usual real-world
    * order; see catalog entry app/ws-status-refresh/output-names).

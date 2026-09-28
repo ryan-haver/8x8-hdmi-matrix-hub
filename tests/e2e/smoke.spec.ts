@@ -18,11 +18,7 @@ import { expect, openKiosk, openUi, preparePage, test } from './support/ui';
  * as the underlying bugs are fixed. Matched as substrings.
  */
 const KNOWN_CONSOLE_ERRORS: Array<{ page: 'ui' | 'kiosk'; text: string; why: string }> = [
-  {
-    page: 'kiosk',
-    text: 'Failed to load resource: the server responded with a status of 404',
-    why: 'kiosk.html:2514-2515 polls /api/inputs/status and /api/outputs/status, which do not exist (real routes: /api/status/inputs|outputs)',
-  },
+  // (empty) kiosk 404s from /api/inputs/status and /api/outputs/status: fixed in WP-E1 (UI-24).
 ];
 
 /**
@@ -30,10 +26,7 @@ const KNOWN_CONSOLE_ERRORS: Array<{ page: 'ui' | 'kiosk'; text: string; why: str
  * pages throws none, and the load tests require exactly that).
  */
 export const KNOWN_PAGE_ERRORS: Array<{ text: string; why: string }> = [
-  {
-    text: 'e.target.closest is not a function',
-    why: 'tooltip.js:25-28 listens for mouseenter/focus on document in the capture phase; when the pointer enters the page the target is `document`, which has no closest() (tooltip.js:35)',
-  },
+  // (empty) tooltip.js "e.target.closest is not a function": fixed in WP-E1 (UI-28).
 ];
 
 function unknownPageErrors(errors: string[]) {
@@ -138,16 +131,13 @@ test.describe('smoke', () => {
     await expect.poll(async () => (await sim.state()).outputs.map((o) => o.source), { timeout: 10_000 }).toEqual([
       5, 5, 5, 5, 5, 5, 5, 5,
     ]);
-    // Known kiosk bug: Apply also mutes every target and turns ARC on, whatever
-    // the checkboxes say (kiosk.html:1957/1964 send {enable}/{mute}; the hub reads
-    // enabled/muted, defaulting to true). Recorded so a fix shows up here.
-    const outputs = (await sim.state()).outputs;
-    test.info().annotations.push({
-      type: 'known-bug',
-      description: `kiosk route-all apply: audio_mute=${outputs.map((o) => o.audio_mute).join(',')} arc=${outputs
-        .map((o) => o.arc)
-        .join(',')}`,
-    });
+    // UI-23: Apply sends the checkboxes as the hub reads them ({muted}, {enabled});
+    // it used to send {mute}/{enable}, so the hub defaulted to true and muted every
+    // target and turned ARC on. With the defaults (both unchecked) nothing is muted
+    // and ARC is off. The settings land after the routing: poll.
+    await expect
+      .poll(async () => (await sim.state()).outputs.map((o) => `${o.audio_mute}/${o.arc}`), { timeout: 10_000 })
+      .toEqual(Array(8).fill('0/0'));
     expect(unknownPageErrors(pageProblems.pageErrors), 'unexpected page errors').toEqual([]);
   });
 });

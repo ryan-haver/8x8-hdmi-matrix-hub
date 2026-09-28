@@ -17,9 +17,6 @@
 // - Never change hub data a later entry depends on. Hardware states (no
 //   signal, unplugged cables, long names, errors) are produced by reshaping the
 //   hub's responses in the browser (routes), not by editing the simulator.
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { expect, type Page } from '@playwright/test';
 import type { ViewportName } from '../support/viewports';
 import { failJson, mutateJson, okJson, releaseStatusFrames, settle, statusFramesReceived, type PrepareOptions } from '../support/ui';
@@ -199,34 +196,8 @@ const INTERFACE = '#interface-drawer.open';
 const SHORTCUTS = '#shortcuts-drawer.open';
 const INTEGRATIONS = '#integrations-drawer.open';
 
-/** Serve /api/profiles and /api/cec/macros into the in-memory state the main UI never fills (bug: state.profiles / state.cecMacros are never loaded). */
-async function loadProfilesAndMacros(page: Page) {
-  await page.evaluate(async () => {
-    const w = window as any; // eslint-disable-line @typescript-eslint/no-explicit-any
-    const profiles = (await (await fetch('/api/profiles')).json()).data?.profiles ?? [];
-    const macros = (await (await fetch('/api/cec/macros')).json()).data?.macros ?? [];
-    w.state.setProfiles(profiles);
-    w.state.cecMacros = macros;
-  });
-}
-
-/**
- * Profiles as the Profiles tab shows them after the user has created some: the
- * only data path is the browser state cache (see PROFILES_NOTE), so it is
- * seeded from the fixture profiles.
- */
-function cachedProfiles(names?: (n: string) => string): Record<string, string> {
-  const file = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'fixtures', 'data', 'profiles.json');
-  const profiles = JSON.parse(fs.readFileSync(file, 'utf8')).profiles.map((p: Json) => ({
-    ...p,
-    name: names ? names(p.name) : p.name,
-  }));
-  // timestamp: one minute before the frozen test clock, so the 24 h cache is fresh.
-  return { orei_state_cache: JSON.stringify({ scenes: profiles, timestamp: Date.UTC(2026, 8, 24, 11, 59, 0) }) };
-}
-
-const PROFILES_NOTE =
-  'The Profiles tab only shows profiles from the browser state cache: app.js:591 reads /api/v2/scenes with the wrong response path, and the tab never calls /api/profiles.';
+/** The hub has no profiles (empty states). */
+const noProfiles = (page: Page) => okJson(page, '**/api/profiles', { profiles: [] });
 
 // ---------------------------------------------------------------------------
 // Catalog
@@ -287,7 +258,7 @@ export const CATALOG: CatalogEntry[] = [
       releaseStatusFrames(page);
       await settle(page, 400);
     },
-    note: 'Hub bug: every GET /api/status/outputs with a warm cache broadcasts a refresh whose outputs_detail names come from the hub name cache, empty in modular mode (src/rest_api/core.py:115 via outputs.py:59), so TV/Soundbar become "Output 1/2" (unless the broadcast happens to arrive before the REST response). All other entries drop these broadcasts to stay deterministic.',
+    note: 'Every GET /api/status/outputs with a warm cache makes the hub broadcast a background refresh. It used to reset the output names to "Output 1/2" (BE-31, fixed in WP-E1: the broadcast now carries the matrix names), so this should look like matrix/grid/default. All other entries drop these broadcasts to stay deterministic.',
   },
 
   // ===== Matrix ============================================================
@@ -411,9 +382,9 @@ export const CATALOG: CatalogEntry[] = [
     name: 'dashboard/default',
     page: 'ui',
     themed: true,
-    description: 'Dashboard as it loads: Routing widget pinned; server cards not rendered yet ("No cards yet").',
+    description: 'Dashboard as it loads: Routing widget pinned and the server cards from /api/dashboard/layout.',
     setup: async ({ page }) => tab(page, 'dashboard'),
-    note: 'Seeded dashboard cards do not render on load: dashboard-manager.js renders cards from a 100 ms timer before /api/dashboard/layout arrives, and nothing re-renders afterwards.',
+    note: 'UI-27 (fixed in WP-E1): the cards used to be missing on load (rendered from a 100 ms timer before the layout arrived, never re-rendered).',
   },
   {
     name: 'dashboard/cards/all-types',
@@ -421,13 +392,10 @@ export const CATALOG: CatalogEntry[] = [
     description: 'Every dashboard card type (scene, locked scene, preset, built-in and user shortcut, profile, macro, aggregate widgets) once cards are rendered.',
     setup: async ({ page }) => {
       await tab(page, 'dashboard');
-      await loadProfilesAndMacros(page);
-      await js(page, `(async () => { await window.state.loadDashboardLayout(); window.dashboardManager.renderCards(); })()`);
-      await settle(page, 300);
       await page.locator('.dashboard-cards-container').evaluate((el) => el.scrollIntoView({ block: 'start' }));
       await settle(page, 200);
     },
-    note: 'Needs an app-state nudge: profile and macro cards need state.profiles/state.cecMacros, which the main UI never loads; aggregate_widget cards render empty (renderer reads card.widget_id).',
+    note: 'aggregate_widget cards render empty: the renderer reads card.widget_id, the layout stores id (UI-44). Before WP-E1 (UI-27) the profile and macro cards also needed their data injected.',
   },
   {
     name: 'dashboard/cards/empty',
@@ -554,44 +522,44 @@ export const CATALOG: CatalogEntry[] = [
   {
     name: 'profiles/list/empty',
     page: 'ui',
-    description: 'Profiles tab as it loads today (empty, even though the hub has 4 profiles).',
+    description: 'Profiles tab when the hub has no profiles.',
+    routes: noProfiles,
     setup: async ({ page }) => tab(page, 'profiles'),
-    note: PROFILES_NOTE,
+    note: 'Before WP-E1 (UI-27) the tab was always empty: it read /api/v2/scenes with the wrong response path.',
   },
   {
     name: 'profiles/list/populated',
     page: 'ui',
     themed: true,
-    description: 'Profiles tab with profiles (pinned ones shown, incl. a passcode-protected profile).',
-    prepare: { storage: cachedProfiles() },
+    description: 'Profiles tab with the hub profiles (pinned ones shown, incl. a passcode-protected profile).',
     setup: async ({ page }) => tab(page, 'profiles'),
-    note: PROFILES_NOTE,
   },
   {
     name: 'profiles/list/long-names',
     page: 'ui',
     description: 'Profiles tab with long profile names.',
-    prepare: { storage: cachedProfiles((n) => `${n} with the Whole Family (Weekend Edition)`) },
+    routes: (page) =>
+      mutateJson(page, '**/api/profiles', (b: Json) => {
+        for (const p of b.data?.profiles ?? []) p.name = `${p.name} with the Whole Family (Weekend Edition)`;
+      }),
     setup: async ({ page }) => tab(page, 'profiles'),
-    note: PROFILES_NOTE,
   },
   {
     name: 'profiles/manager/populated',
     page: 'ui',
     description: 'Manage Profiles panel (pinned/unpinned lists).',
-    prepare: { storage: cachedProfiles() },
     setup: async ({ page }) => {
       await tab(page, 'profiles');
       await page.locator('#manage-profiles-btn').click();
       await page.locator('.profile-manager-panel.open').waitFor();
       await settle(page, 400);
     },
-    note: PROFILES_NOTE,
   },
   {
     name: 'profiles/manager/empty',
     page: 'ui',
     description: 'Manage Profiles panel with no profiles.',
+    routes: noProfiles,
     setup: async ({ page }) => {
       await tab(page, 'profiles');
       await page.locator('#manage-profiles-btn').click();
@@ -603,16 +571,13 @@ export const CATALOG: CatalogEntry[] = [
     name: 'profiles/api-endpoint-modal',
     page: 'ui',
     description: 'Profile "API endpoint" modal (URL + curl snippet for Flic/automation).',
-    prepare: { storage: cachedProfiles() },
     setup: async ({ page }) => {
       await tab(page, 'profiles');
-      // The first click throws before opening (see note); a second click opens it.
-      await page.locator('#scenes-list .api-copy-btn').first().click();
       await page.locator('#scenes-list .api-copy-btn').first().click();
       await page.locator('#api-copy-modal.open').waitFor();
       await settle(page, 300);
     },
-    note: 'The first click on the API button throws and opens nothing: createModal (api-copy.js:134) queries .api-modal-backdrop inside itself and gets null; the second click works. The URLs hard-code port 8080 (api-copy.js:13), wrong when the hub runs on another port (here 18080).',
+    note: 'The URLs hard-code port 8080 (api-copy.js:13, UI-18), wrong when the hub runs on another port (here 18080). The first click used to throw and open nothing (UI-28, fixed in WP-E1).',
   },
 
   // ===== Control Deck ======================================================
@@ -741,12 +706,12 @@ export const CATALOG: CatalogEntry[] = [
     description: 'Theme drawer editing a preset (hue swatches, name).',
     setup: async ({ page }) => {
       await drawer(page, 'drawer-theme-btn', THEME);
-      // A real click lands on edit button 3, which overlaps button 0 (see note).
-      await page.locator('.theme-drawer .preset-edit-btn[data-edit-index="0"]').dispatchEvent('click');
+      await page.locator('.theme-preset-slot[data-preset-index="0"]').hover();
+      await page.locator('.theme-preset-slot[data-preset-index="0"] .preset-edit-btn').click();
       await page.locator('#color-customization:not(.hidden)').waitFor();
       await settle(page, 300);
     },
-    note: "theme-drawer.js:122-136 nests the edit <button> inside the preset <button>; the parser splits them, so the edit buttons render as separate grid items that overlap: a click on the first preset's edit button hits the fourth's.",
+    note: "UI-31 (fixed in WP-E1): the edit <button> was nested in the preset <button>, the parser split them and every edit button landed on the same spot (a click on preset 1's hit preset 4's).",
   },
   {
     name: 'drawer/theme/low-opacity',
@@ -780,7 +745,7 @@ export const CATALOG: CatalogEntry[] = [
     page: 'ui',
     description: 'Hardware drawer: LCD timeout, beep, external audio, power controls.',
     setup: async ({ page }) => drawer(page, 'drawer-hardware-btn', HARDWARE),
-    note: 'Shows HTML defaults, not the device values: settings-panel.js loadCurrentSettings never runs (its #settings-btn trigger does not exist).',
+    note: 'Shows the device values (seed: LCD 30 s, beep on, follow video). Before WP-E1 (UI-30) it showed the HTML defaults (LCD 60 s).',
   },
   {
     name: 'drawer/interface/default',
@@ -872,7 +837,7 @@ export const CATALOG: CatalogEntry[] = [
       await settle(page, 300);
     },
     scrollTo: '#flic-dynamic-inputs',
-    note: 'Always warns "No Profiles created yet" because state.profiles is never loaded (integrations-drawer.js:526).',
+    note: 'Before WP-E1 (UI-27) it always warned "No Profiles created yet" (state.profiles was never loaded).',
   },
   {
     name: 'drawer/integrations/home-assistant',
@@ -915,23 +880,23 @@ export const CATALOG: CatalogEntry[] = [
   {
     name: 'drawer/settings/profiles',
     page: 'ui',
-    description: 'Settings drawer (Phase 8), Profiles tab as it renders today (empty).',
+    description: 'Settings drawer (Phase 8), Profiles tab when the hub has no profiles.',
+    routes: noProfiles,
     setup: async ({ page }) => {
       await js(page, `window.settingsDrawer.open('profiles')`);
       await settle(page, 500);
     },
-    note: 'No button opens this drawer (only a #settings/<tab> hash change). The Profiles tab is always empty: state.profiles is never loaded.',
+    note: 'No button opens this drawer (only a #settings/<tab> hash change). Before WP-E1 (UI-27) the Profiles tab was always empty.',
   },
   {
     name: 'drawer/settings/profiles-populated',
     page: 'ui',
     description: 'Settings drawer, Profiles tab with profiles (execute / favourite buttons).',
     setup: async ({ page }) => {
-      await loadProfilesAndMacros(page);
       await js(page, `window.settingsDrawer.open('profiles')`);
       await settle(page, 500);
     },
-    note: 'Needs state.profiles, which the app never loads; filled from /api/profiles here.',
+    note: 'No button opens this drawer (only a #settings/<tab> hash change).',
   },
   {
     name: 'drawer/settings/scenes',
@@ -1245,19 +1210,20 @@ export const CATALOG: CatalogEntry[] = [
   {
     name: 'dialog/scene-cec',
     page: 'ui',
-    description: 'Scene CEC configuration modal (targets per category).',
+    description: "CEC configuration dialog for the Movie Night profile (targets per category, loaded from /api/profile/{id}/cec).",
     setup: async ({ page }) => {
-      await js(page, `(async () => { await window.sceneCecModal.open({ id: 'movie_night', name: 'Movie Night' }); document.getElementById('scene-cec-modal').classList.add('visible'); })()`);
+      await js(page, `window.app.components.scenesPanel.openCecConfig('movie_night')`);
+      await page.locator('#scene-cec-modal.visible').waitFor();
       await settle(page, 600);
     },
-    note: 'Invisible in the app: scene-cec-modal.js:204 sets aria-hidden only, but the overlay needs .visible; it also has no UI trigger. Forced visible here.',
+    note: 'No UI trigger: nothing calls ScenesPanel.openCecConfig and the profile editor has no #open-cec-config-btn (UI-45; opened through the app here). The chips read "Output NaN": the fixture profile stores targets as "input:2" (the format config.CecConfig documents) while the dialog parses "input_2" (API-25). Before WP-E1 it never became visible and loaded nothing (UI-30), and the auto-resolve toggle covered the dialog with a large rounded shape (UI-43).',
   },
   {
     name: 'dialog/passcode-prompt',
     page: 'ui',
     description: 'Passcode prompt for a protected scene/profile.',
     viewports: [],
-    note: 'Not capturable: the passcode prompt is a native window.prompt() (settings-drawer.js showPasscodePrompt), which screenshots do not include, and its automatic trigger never fires (api.js errors carry no .status).',
+    note: 'Not capturable: the passcode prompt is a native window.prompt() (web/js/utils/run-action.js), which screenshots do not include; a styled dialog is UI-36 (Phase 5). Since WP-E1 (UI-01) it appears for every protected profile or scene; tests/e2e/flows.spec.ts drives it.',
   },
 
   // ===== Editors ===========================================================
@@ -1310,15 +1276,12 @@ export const CATALOG: CatalogEntry[] = [
     page: 'ui',
     description: 'Profile editor, editing an existing profile (macros, power macros, delete button).',
     setup: async ({ page }) => {
-      await page.evaluate(async () => {
-        const w = window as any; // eslint-disable-line @typescript-eslint/no-explicit-any
-        const profiles = (await (await fetch('/api/profiles')).json()).data.profiles;
-        await w.profileEditor.openEdit(profiles.find((p: { id: string }) => p.id === 'movie_night'));
-      });
+      await tab(page, 'profiles');
+      await page.locator('#scenes-list .edit-scene-btn[data-scene-id="movie_night"]').click();
       await page.locator('#profile-editor-modal.visible').waitFor();
       await settle(page, 800);
     },
-    note: 'The UI edit path (Profiles tab → edit) fetches /api/v2/scenes/{id} and fails; opened with the editor API here.',
+    note: 'Opened from the Profiles tab (edit button); before WP-E1 (UI-27) that path fetched /api/v2/scenes/{id} and failed.',
   },
   {
     name: 'editor/profile/edit-bottom',
@@ -1381,15 +1344,16 @@ export const CATALOG: CatalogEntry[] = [
   {
     name: 'editor/scene/validation-error',
     page: 'ui',
-    description: 'Scene editor after Save: "Scene name is required".',
+    description: 'Scene editor after Save with the name cleared: "Scene name is required".',
     setup: async ({ page }) => {
       await js(page, `window.sceneEditor.open('scene_movienight01')`);
       await page.locator('#scene-editor-modal.open').waitFor();
       await settle(page, 500);
+      await page.locator('#scene-editor-name').fill('');
       await page.locator('#scene-editor-save').click();
       await settle(page, 400);
     },
-    note: 'Always fails validation: scene-editor.js:90 renders a duplicate id="scene-name" and save() reads the hidden legacy input.',
+    note: 'Before WP-E1 (UI-26) every save failed this way: a duplicate id="scene-name" made save() read a hidden legacy input.',
   },
   {
     name: 'editor/scene/conflicts',
@@ -1459,7 +1423,7 @@ export const CATALOG: CatalogEntry[] = [
     name: 'cec-remote/output-1',
     page: 'ui',
     themed: true,
-    description: 'CEC remote opened from the TV output tile (display CEC: power, navigation, volume).',
+    description: 'CEC remote opened from the TV output tile (display CEC: power and volume only; the D-pad and Menu/Back went with UI-37).',
     setup: async ({ page }) => {
       await tab(page, 'outputs');
       await page.locator('#outputs-list .io-card[data-output="1"] .cec-btn').click();
@@ -1481,7 +1445,7 @@ export const CATALOG: CatalogEntry[] = [
   {
     name: 'cec-remote/matrix-card',
     page: 'ui',
-    description: 'CEC remote opened from a routing card in the matrix cards view.',
+    description: 'CEC remote opened from a routing card in the matrix cards view (a display: power and volume only, UI-37).',
     prepare: { storage: { 'matrix-view-mode': 'cards' } },
     setup: async ({ page }) => {
       await page.locator('#matrix-mobile-view .card-cec-btn[data-output="1"]').click();
@@ -1507,7 +1471,7 @@ export const CATALOG: CatalogEntry[] = [
       await page.locator('#cec-tray.expanded').waitFor();
       await settle(page, 400);
     },
-    note: 'Clicking the FAB throws an uncaught TypeError (cec-tray.js:1186 queries .target-name; markup uses .target-abbrev). The panel still opens.',
+    note: 'Before WP-E1 (UI-28) clicking the FAB threw an uncaught TypeError (.target-name vs .target-abbrev); the panel opened anyway.',
   },
   {
     name: 'cec-tray/target-selector',
@@ -1552,6 +1516,36 @@ export const CATALOG: CatalogEntry[] = [
       },
     }),
   ),
+  {
+    name: 'toast/partial-run',
+    page: 'ui',
+    description: 'Warning toast when a scene ran only partly (HTTP 207 success:false), after Execute on a dashboard scene card.',
+    // The hub's 207 body for a scene whose second step failed (validation scenario scenes.partial_failure).
+    routes: (page) =>
+      page.route('**/api/v2/scenes/scene_movienight01/execute', (route) =>
+        route.fulfill({
+          status: 207,
+          contentType: 'application/json',
+          json: {
+            success: false,
+            data: {
+              scene_id: 'scene_movienight01',
+              success: false,
+              steps_completed: 2,
+              total_steps: 3,
+              step_results: [{ success: true }, { success: true }, { success: false, error: 'Preset recall failed' }],
+            },
+          },
+        }),
+      ),
+    setup: async ({ page }) => {
+      await tab(page, 'dashboard');
+      await page.locator('#dashboard-cards-grid .dashboard-card-action[data-type="scene"][data-id="scene_movienight01"]').click();
+      await page.locator('#toast-container .toast.warning').waitFor();
+      await settle(page, 300);
+    },
+    note: 'VAL-11 (WP-E1): a partial run used to show nothing at all.',
+  },
   {
     name: 'toast/stacked',
     page: 'ui',
@@ -1682,7 +1676,7 @@ export const CATALOG: CatalogEntry[] = [
       await page.locator('#routingModal.show').waitFor();
       await settle(page, 400);
     },
-    note: 'The Next button on step 1 has no handler (kiosk.html:1357).',
+    note: 'Before WP-E1 (UI-25) the Next button on step 1 had no handler.',
   },
   {
     name: 'kiosk/routing-modal/step-2',
@@ -1708,7 +1702,7 @@ export const CATALOG: CatalogEntry[] = [
       await page.locator('#toggleAdvancedRouting').click();
       await settle(page, 300);
     },
-    note: 'HDR/scaler/HDCP option values do not match the API (kiosk.html:1329-1346); Apply always mutes outputs and turns ARC on.',
+    note: 'Before WP-E1 (UI-23) the HDR/scaler/HDCP option values did not match the API and Apply muted every target and turned ARC on (wrong body keys).',
   },
   {
     name: 'kiosk/cec-remote/output-1',
@@ -1724,7 +1718,7 @@ export const CATALOG: CatalogEntry[] = [
   {
     name: 'kiosk/cec-remote/display-target',
     page: 'kiosk',
-    description: 'Kiosk CEC remote targeting the display (playback hidden).',
+    description: 'Kiosk CEC remote targeting the display (D-pad, Menu/Back and playback hidden, UI-37).',
     setup: async ({ page }) => {
       await page.locator('#outputStatusGrid .output-tile').nth(0).click();
       await page.locator('#cecRemoteModal.show').waitFor();
@@ -1787,10 +1781,6 @@ export const CATALOG: CatalogEntry[] = [
       name: `kiosk/profile-wizard/step-${step}`,
       page: 'kiosk',
       description: ['', 'Profile wizard step 1: name and icon.', 'Profile wizard step 2: routing per output.', 'Profile wizard step 3: power on/off macros.'][step],
-      // Work around kiosk.html:2469 (reads data.data instead of data.data.macros,
-      // then macros.map throws and the wizard never opens).
-      routes: (page) =>
-        mutateJson(page, '**/api/cec/macros', (b: Json) => ({ ...b, data: b.data?.macros ?? [] })),
       setup: async ({ page }) => {
         await kioskTab(page, 'profiles');
         await kioskEdit(page);
@@ -1805,7 +1795,7 @@ export const CATALOG: CatalogEntry[] = [
         if (step >= 3) await page.locator('#profileNextBtn').click();
         await settle(page, 300);
       },
-      note: 'Unreachable today: the wizard throws before opening (kiosk.html:2469/2216, /api/cec/macros shape). Captured with the macros response reshaped to what the kiosk expects.',
+      note: 'Before WP-E1 (UI-25) the wizard threw before opening (it read the /api/cec/macros response with the wrong shape).',
     }),
   ),
   {

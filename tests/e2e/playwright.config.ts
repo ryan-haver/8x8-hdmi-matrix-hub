@@ -1,7 +1,9 @@
 // Playwright config for the web UI (docs/REMEDIATION_PLAN.md §5.3, Phase 0).
 //
 // Projects:
-//   smoke                      smoke.spec.ts: /ui and /kiosk load, routing, WebSocket, axe
+//   smoke                      smoke.spec.ts: /ui and /kiosk load, routing, WebSocket, axe;
+//                              flows.spec.ts: UI functional flows (WP-E1: passcode, partial runs,
+//                              profiles, dashboard, kiosk wizard, CEC remotes, escaping)
 //   desktop | tablet | phone | kiosk-tab-a11 | kiosk-iphone16promax
 //                              visual.spec.ts: every catalog entry (tests/e2e/visual/catalog.ts)
 //                              in the default preset; desktop and the two kiosk devices
@@ -105,7 +107,8 @@ export default defineConfig({
   projects: [
     {
       name: 'smoke',
-      testMatch: /smoke\.spec\.ts$/,
+      // smoke.spec.ts plus the UI functional flows (flows.spec.ts, WP-E1).
+      testMatch: /(smoke|flows)\.spec\.ts$/,
       use: { ...devices['Desktop Chrome'], viewport: VIEWPORTS.desktop.viewport },
     },
     ...VISUAL_VIEWPORTS.map(visualProject),

@@ -18,7 +18,7 @@ The Python side (hub + simulator) needs the dev dependencies:
 
 | Command | What it does | Where |
 | --- | --- | --- |
-| `npm run test:e2e` | Smoke tests (`smoke.spec.ts`) | host or container |
+| `npm run test:e2e` | Smoke tests (`smoke.spec.ts`) and UI functional flows (`flows.spec.ts`) | host or container |
 | `npm run visual:test` | Compare every catalog entry with the committed baselines | **container only** |
 | `npm run visual:update` | Write new/changed baselines (approval step) | **container only** |
 | `npm run visual:report` | Open the last Playwright HTML report (baseline / actual / diff) | host |
