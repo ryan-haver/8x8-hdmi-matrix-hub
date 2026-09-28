@@ -267,6 +267,35 @@ SCENARIOS = [
         covers=HA_HUB,
     ),
     Scenario(
+        id="ha.front_panel_route",
+        title="Home Assistant: output 2 is switched on the matrix itself; its source select follows",
+        features=("F-HA-002", "F-HA-013", "F-MTX-031"),
+        clients=HA,
+        targets=("sim",),
+        action=act("device_change", patch={"outputs": {"1": {"source": 6}}}),
+        expect=(
+            Device("outputs[1].source", equals=6),
+            ClientState("select.output_2_source", before="AppleTV", equals="PS5"),
+        ),
+        covers=HA_HUB,
+    ),
+    Scenario(
+        id="ha.matrix_offline",
+        title="Home Assistant: the matrix drops off the network and returns; entities go unavailable, then show it again",
+        kind="failure",
+        features=("F-HA-013", "F-REL-009"),
+        clients=HA,
+        targets=("sim",),
+        action=act("device_change", reboot=20),
+        expect=(
+            # /api/status answers 503 with the link state while the matrix is gone (VAL-04), never made-up names
+            ClientState("select.output_1_source", equals="unavailable", timeout=30),
+            ClientState("select.output_1_source", equals="AppleTV", timeout=90),
+        ),
+        restart_after=True,
+        covers=HA_HUB,
+    ),
+    Scenario(
         id="ha.matrix_unreachable",
         title="Home Assistant: the matrix stops answering; the entities go unavailable and a switch fails visibly",
         kind="failure",

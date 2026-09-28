@@ -52,6 +52,28 @@ from .stack import HubProcess, SimStack
 
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_OUT = ROOT / "build" / "validation"
+#: The /ws message contract every recorded WebSocket message is checked against (WP-C2).
+WS_SCHEMA = ROOT / "docs" / "api" / "websocket.schema.json"
+
+
+def ws_contract_check(events: list[dict[str, Any]]) -> dict[str, Any]:
+    """One check: every message the /ws observer received follows docs/api/websocket.schema.json."""
+    description = "every WebSocket message follows docs/api/websocket.schema.json"
+    try:
+        import jsonschema
+    except ImportError:
+        return {"description": description, "result": "n/a", "detail": "jsonschema is not installed",
+                "finding": None, "linked_finding": None, "note": None}
+    validator = jsonschema.Draft202012Validator(json.loads(WS_SCHEMA.read_text(encoding="utf-8")))
+    bad = []
+    for e in events:
+        message = {"event": e.get("event"), "data": e.get("data")}
+        errors = sorted(validator.iter_errors(message), key=str)
+        if errors:
+            bad.append(f"{e.get('event')}: {errors[0].message[:200]}")
+    return {"description": description, "result": "fail" if bad else "pass",
+            "detail": "; ".join(bad[:5]) if bad else f"{len(events)} message(s) checked",
+            "finding": None, "linked_finding": None, "note": None}
 
 #: Device paths that change on their own on real hardware (signal, hot-plug).
 VOLATILE_PATHS = ("inputs[*].signal", "inputs[*].cable", "outputs[*].connected")
@@ -146,6 +168,7 @@ class WsObserver:
         self.url = url
         self.forwarded_for = forwarded_for
         self.events: list[dict[str, Any]] = []
+        self._ws: aiohttp.ClientWebSocketResponse | None = None
         self._task: asyncio.Task[None] | None = None
         self._session: aiohttp.ClientSession | None = None
         self.error: str | None = None
@@ -158,6 +181,7 @@ class WsObserver:
             assert self._session is not None
             try:
                 async with self._session.ws_connect(self.url, heartbeat=None) as ws:
+                    self._ws = ws
                     async for msg in ws:
                         if msg.type == aiohttp.WSMsgType.TEXT:
                             try:
@@ -178,6 +202,28 @@ class WsObserver:
             await asyncio.wait_for(connected, 5)
         except TimeoutError:
             self.error = "no welcome message within 5 s"
+
+    async def sync(self, timeout: float = 15.0) -> bool:
+        """Ask the hub for a fresh read (``get_status``) and wait for its answer.
+
+        The runner resets the simulator behind the hub's back before each scenario. Until the hub has read
+        the matrix again, the changes the reset made would be announced during the scenario (docs/api/
+        WEBSOCKET.md: the hub announces what it notices). After this, they have been announced before it.
+        """
+        if self._ws is None or self._ws.closed:
+            return False
+        # The snapshot sent after `connected` must not be taken for the answer: let it arrive first.
+        settle = time.monotonic() + 3
+        while not any(e["event"] == "status" for e in self.events) and time.monotonic() < settle:
+            await asyncio.sleep(0.05)
+        t0 = time.time()
+        await self._ws.send_json({"command": "get_status"})
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            if any(e["event"] in ("status", "error") for e in self.since(t0)):
+                return any(e["event"] == "status" for e in self.since(t0))
+            await asyncio.sleep(0.05)
+        return False
 
     async def stop(self) -> None:
         if self._task:
@@ -431,6 +477,10 @@ class Runner:
             await ws.start()
             if ws.error:
                 notes.append(f"WebSocket observer: {ws.error}")
+            elif await ws.sync():
+                procedure.append("let the hub read the matrix (/ws get_status), so it is in sync before the action")
+            else:
+                notes.append("the hub did not answer get_status on /ws")
             for step in sc.setup:
                 r = await helper.perform(step)
                 procedure.append(f"setup (api): {step.describe()} -> HTTP {r.status}")
@@ -445,7 +495,8 @@ class Runner:
                 # Preconditions on what the client shows (ClientState.before): wait for them, so a
                 # passing check afterwards proves a change the client saw.
                 for exp in sc.expect:
-                    if isinstance(exp, ClientState) and exp.before is not None and client.observes:
+                    if (isinstance(exp, ClientState) and exp.before is not None and client.observes
+                            and (exp.clients is None or client.name in exp.clients)):
                         pre = await self._client_state(client, exp.key, exp.before, exp.timeout)
                         procedure.append(f"client showed {exp.key} = {pre['value']!r} before the action"
                                          + ("" if pre["ok"] else f" (expected {exp.before!r})"))
@@ -476,6 +527,8 @@ class Runner:
                 for exp in sc.expect:
                     checks.append(await self._check(exp, sc, client, result, state_before, t_action, ws, helper,
                                                     log_cursor, hub_reads))
+                if ws.events:
+                    checks.append(ws_contract_check(ws.events))
                 state_after = await dev.state()
                 if isinstance(dev, SimDevice):
                     log_excerpt = (await dev.log())[log_cursor:]
@@ -605,6 +658,9 @@ class Runner:
         if "event" in action.params:
             await dev.event(action.params["event"])
             result.steps.append(f"simulator event {action.params['event']}")
+        elif "reboot" in action.params:
+            await dev.reboot(float(action.params["reboot"]))
+            result.steps.append(f"simulator reboot: the device is offline for {action.params['reboot']} s")
         else:
             await dev.patch_state(action.params["patch"])
             result.steps.append(f"simulator state patch {action.params['patch']}")

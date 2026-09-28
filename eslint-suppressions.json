@@ -5,9 +5,6 @@
     }
   },
   "web/js/app.js": {
-    "no-case-declarations": {
-      "count": 1
-    },
     "no-unused-vars": {
       "count": 2
     }

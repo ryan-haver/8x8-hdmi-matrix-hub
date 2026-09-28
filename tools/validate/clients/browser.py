@@ -25,6 +25,12 @@ ROOT = Path(__file__).resolve().parents[3]
 class BrowserClient(Client):
     name = "browser"
     intents = frozenset({"route", "route_all", "preset_recall", "preset_rename"})
+    #: ClientState keys: ``ui.*`` / ``kiosk.*`` read from a /ui and a /kiosk page that stay open for the run
+    #: and get later changes only over the hub's WebSocket (their status reads are frozen after load):
+    #: ``ui.route.N`` (input shown for output N in the grid), ``ui.input.N`` / ``ui.output.N`` (status
+    #: colour: signal | cable | disconnected | unknown), ``ui.input_name.N``, ``ui.header`` (connected |
+    #: disconnected), ``kiosk.route.N``, ``kiosk.input.N``, ``kiosk.status`` (Connected | Disconnected).
+    observes = True
 
     def __init__(self) -> None:
         super().__init__()
@@ -103,6 +109,11 @@ class BrowserClient(Client):
         }
         result.elapsed_ms = round((time.perf_counter() - t0) * 1000, 1)
         return result
+
+    async def observe(self, key: str) -> Any:
+        if not key.startswith(("ui.", "kiosk.")):
+            raise NotSupportedError(f"the browser shows ui.* and kiosk.* keys, not {key!r}")
+        return (await self._rpc("observe", key=key)).get("value")
 
     async def stop(self) -> None:
         if self._proc is None:

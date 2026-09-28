@@ -42,16 +42,14 @@ async def handle_cec_input(request: web.Request) -> web.Response:
         input_name = input_names.get(input_num, f"Input {input_num}")
         _LOG.info(f"REST API: CEC {command} to input {input_num} ({input_name})")
 
-        # Optimistic update for power commands
-        if command in ("power_on", "power_off"):
-            await broadcast_status_update(
-                "cec_command",
-                {"type": "input", "port": input_num, "command": command, "name": input_name, "optimistic": True},
-            )
-
         success = await matrix_device.send_cec(command, input_num, is_output=False)
 
         if success:
+            # Announced after the matrix accepted it (power commands only; docs/api/WEBSOCKET.md)
+            if command in ("power_on", "power_off"):
+                await broadcast_status_update(
+                    "cec_command", {"type": "input", "port": input_num, "command": command, "name": input_name}
+                )
             return _json_response(
                 True,
                 {
@@ -97,15 +95,14 @@ async def handle_cec_output(request: web.Request) -> web.Response:
 
         _LOG.info(f"REST API: CEC {command} to output {output_num}")
 
-        # Optimistic update for power commands
-        if command in ("power_on", "power_off"):
-            await broadcast_status_update(
-                "cec_command", {"type": "output", "port": output_num, "command": command, "optimistic": True}
-            )
-
         success = await matrix_device.send_cec(command, output_num, is_output=True)
 
         if success:
+            # Announced after the matrix accepted it (power commands only; docs/api/WEBSOCKET.md)
+            if command in ("power_on", "power_off"):
+                await broadcast_status_update(
+                    "cec_command", {"type": "output", "port": output_num, "command": command}
+                )
             return _json_response(
                 True,
                 {

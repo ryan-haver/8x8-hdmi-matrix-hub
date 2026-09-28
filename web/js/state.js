@@ -8,6 +8,8 @@ class AppState {
         // Connection state
         this.connected = false;
         this.wsConnected = false;
+        // The matrix link as the hub reports it on /ws: {connected, state, host}; null = not known yet
+        this.matrixLink = null;
         
         // System info
         this.info = {
@@ -744,6 +746,14 @@ class AppState {
     setWsConnected(connected) {
         this.wsConnected = connected;
         this.emit('wsConnection', connected);
+    }
+
+    /**
+     * Update the matrix link the hub reports (docs/api/WEBSOCKET.md: connected / matrix_connection / status)
+     */
+    setMatrixLink(link) {
+        this.matrixLink = link;
+        this.emit('matrixLink', link);
     }
 
     /**

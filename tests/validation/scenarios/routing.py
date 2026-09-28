@@ -29,8 +29,8 @@ SCENARIOS = [
             Device("outputs[0].source", equals=6),
             DeviceUnchanged(allow=("outputs[0].source", "routing[0]")),
             CommandSent("video switch", {"source": [1, 6]}, count=1),
-            # /api/switch broadcasts; the grid's own route is checked in routing.grid_notifies_other_clients.
-            WsEvent("switch", {"input": 6, "output": 1}, clients=("api",)),
+            # Announced once by the hub's event stream, whichever client routed (docs/api/WEBSOCKET.md)
+            WsEvent("routing_change", {"output": 1, "input": 6}),
             Hub("/api/status", "data.routing.1", equals=6),
         ),
         observe=("Does the display on output 1 now show the source connected to input 6?",),
@@ -49,7 +49,7 @@ SCENARIOS = [
             Device("routing", equals=[4] * 8),
             DeviceUnchanged(allow=("outputs[*].source", "routing")),
             CommandSent("video switch", {"source": [0, 4]}, count=1),
-            WsEvent("switch_all", {"input": 4}),
+            WsEvent("routing_change", {"output": 8, "input": 4}),
             Hub("/api/status", "data.routing.8", equals=4),
         ),
         observe=("Do all connected displays now show the source connected to input 4?",),
@@ -64,8 +64,8 @@ SCENARIOS = [
         action=act("route", input=5, output=1),
         expect=(
             Device("outputs[0].source", equals=5),
-            WsEvent("switch", {"input": 5, "output": 1}, finding="VAL-05",
-                    note="the grid posts /api/output/1/source, which does not broadcast"),
+            # VAL-05: the grid posts /api/output/1/source, which never broadcast before WP-C2
+            WsEvent("routing_change", {"output": 1, "input": 5}),
         ),
         observe=("Does the display on output 1 now show the source connected to input 5?",),
         covers=(*HUB_CORE, *CONTROL, *WEB_CORE, *WEB_GRID),

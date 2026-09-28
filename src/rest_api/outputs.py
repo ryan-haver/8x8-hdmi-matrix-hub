@@ -21,7 +21,6 @@ from device_codes import (
 )
 
 from .utils import _json_response, get_input_names, get_matrix_device
-from .websocket import broadcast_status_update
 
 _LOG = logging.getLogger("rest_api.outputs")
 
@@ -613,9 +612,8 @@ async def handle_output_mute(request: web.Request) -> web.Response:
 
         _LOG.info(f"REST API: Setting output {output_num} audio to {'muted' if muted else 'unmuted'}")
 
-        # Optimistic update
-        await broadcast_status_update("audio_mute", {"output": output_num, "muted": muted, "optimistic": True})
-
+        # audio_mute is announced by the hub's event stream once the matrix reports the change
+        # (docs/api/WEBSOCKET.md), not before the command is sent (API-09).
         success = await matrix_device.set_output_audio_mute(output_num, muted)
 
         if success:

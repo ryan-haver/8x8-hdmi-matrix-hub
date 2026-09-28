@@ -129,6 +129,52 @@ test.describe('smoke', () => {
     expect(unknownErrors(pageProblems.consoleErrors, 'ui'), 'unexpected console errors').toEqual([]);
   });
 
+  test('the web UI reconnects after losing the hub WebSocket and resyncs from the snapshot', async ({
+    page,
+    sim,
+    pageProblems,
+  }) => {
+    // docs/api/WEBSOCKET.md: the client reconnects for as long as it runs, and every
+    // (re)connect starts with a `status` snapshot. A change made while the page was not
+    // listening must show after the reconnect although its routing_change was missed (UI-03).
+    test.setTimeout(90_000);
+    await preparePage(page, { storage: { 'matrix-view-mode': 'grid' } });
+    let refuse = false;
+    let opened = 0;
+    let current: import('@playwright/test').WebSocketRoute | null = null;
+    // Registered after preparePage's route, so this one handles /ws (and forwards every frame, snapshots included).
+    await page.routeWebSocket(/\/ws$/, (ws) => {
+      if (refuse) {
+        void ws.close({ code: 4001, reason: 'hub unreachable (test)' });
+        return;
+      }
+      opened++;
+      current = ws;
+      ws.connectToServer();
+    });
+    const headerConnected = () =>
+      page.evaluate(() => document.getElementById('header-title-text')?.classList.contains('connected') ?? false);
+    const routed = (input: number, output: number) =>
+      page.locator(`#matrix-grid .matrix-route[data-input="${input}"][data-output="${output}"]`);
+
+    await openUi(page);
+    await expect.poll(headerConnected).toBe(true);
+    await expect(routed(2, 1)).toHaveClass(/active/);
+
+    refuse = true;
+    await current!.close({ code: 4001, reason: 'hub restarted (test)' });
+    await expect.poll(headerConnected).toBe(false);
+    await sim.patch({ outputs: { '0': { source: 7 } } }); // on the front panel, while the page is not listening
+    await page.waitForTimeout(8_000); // the hub's poller (5 s) has announced it by now; this page missed it
+    await expect(routed(2, 1)).toHaveClass(/active/);
+
+    refuse = false;
+    await expect.poll(headerConnected, { timeout: 45_000 }).toBe(true);
+    await expect(routed(7, 1)).toHaveClass(/active/, { timeout: 10_000 });
+    expect(opened).toBeGreaterThanOrEqual(2);
+    expect(unknownPageErrors(pageProblems.pageErrors), 'unexpected page errors').toEqual([]);
+  });
+
   test('routing an input to all outputs from the kiosk changes the simulator', async ({ page, sim, pageProblems }) => {
     await preparePage(page);
     await openKiosk(page);

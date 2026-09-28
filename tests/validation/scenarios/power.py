@@ -1,6 +1,6 @@
 """Matrix power: standby and wake."""
 
-from tools.validate.model import CommandSent, Device, DeviceUnchanged, Hub, Response, Scenario, act
+from tools.validate.model import CommandSent, Device, DeviceUnchanged, Hub, Response, Scenario, WsEvent, act
 
 from ._paths import CONTROL, HUB_CORE
 
@@ -9,7 +9,7 @@ SCENARIOS = [
         id="power.standby",
         title="Put the matrix in standby",
         features=("F-MTX-006",),
-        client_features={"api": ("F-API-009",)},
+        client_features={"api": ("F-API-009", "F-API-040")},
         writes=("power",),
         action=act("matrix_power", on=False),
         expect=(
@@ -18,6 +18,7 @@ SCENARIOS = [
             DeviceUnchanged(allow=("system.power",)),
             CommandSent("set poweronoff", {"power": 0}, count=1),
             Hub("/api/status/system", "data.power", equals="off"),
+            WsEvent("power_change", {"power": "off"}, clients=("api",)),
         ),
         observe=("Is the matrix front panel now in standby?",),
         covers=(*HUB_CORE, *CONTROL, "src/rest_api/audio.py"),
