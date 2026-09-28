@@ -206,7 +206,11 @@ class HubProcess:
                 config = {"host": self.matrix_host, "port": self.matrix_port, **self.uc_config_extra}
                 Path(self._data_dir, "config_state.json").write_text(json.dumps(config), encoding="utf-8")
         env = self.env()
-        env["MATRIX_DATA_DIR"] = self._data_dir
+        # DATA_DIR is run.py's canonical name and wins over its MATRIX_DATA_DIR alias (run.py exports both to the
+        # modules). Set it, so a DATA_DIR inherited from the calling process (e.g. leaked by another test in the
+        # same pytest session) never points the hub at someone else's data (TST-09).
+        env.pop("MATRIX_DATA_DIR", None)
+        env["DATA_DIR"] = self._data_dir
         env["UC_CONFIG_HOME"] = self._data_dir
         self.log_dir.mkdir(parents=True, exist_ok=True)
         self.starts += 1

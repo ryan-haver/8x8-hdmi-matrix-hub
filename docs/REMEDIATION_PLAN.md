@@ -233,6 +233,7 @@ Severity: **C** critical · **H** high · **M** medium · **L** low. "Phase" is 
 | TST-06 | L | Module-global state (matrix device, managers, rate limiter) not reset between tests | `test_rest_api.py` | 0 |
 | TST-07 | L | Lint config ignores F401/F811/E722; 10 ruff errors; 43 mypy errors | `pyproject.toml:80` | 0 / 1 |
 | TST-08 | M | Atomic-write concurrency test fails on Windows (symptom of PER-01) | `test_atomic_writes.py:110` | 1 |
+| TST-09 | M | In one full `pytest` session, `tests/test_run_entry.py::test_run_server_maps_options_onto_run` leaves `DATA_DIR` set (run_server.py writes `os.environ`); the harness hubs (`tools/validate/stack.py`) inherited it, and run.py prefers `DATA_DIR` over the `MATRIX_DATA_DIR` the harness set, so later `tests/uc` hubs used that test's data dir (wrong device settings, 60 s start timeouts). CI runs `tests/uc` as its own job, so only local full runs were hit (found in WP-B3) | `tools/validate/stack.py` `HubProcess.launch`, `run_server.py:43` | 1 / WP-B3 ✅ fixed: the harness sets `DATA_DIR` itself (full `pytest` run passes) |
 
 ### 4.7 Web UI (UI)
 
@@ -707,7 +708,7 @@ Work is organised into work packages (WPs) in parallel lanes. Each WP closes reg
 | WP-C2 | C | WebSocket contract and schema; hub-owned event stream; truthful `/api/status` (API-09, 10, UI-02, UC-17 part, VAL-04, VAL-05) | WP-A1 | Every WS event at V2; live updates proven in the browser and HA at V3 | after A1 |
 | WP-D1 | D | Home Assistant fixes + real-HA-container E2E (HA-01–15) | WP-V1 | HA features at V3 in a real HA container | done on `wp-d1-home-assistant`: HA-01…13, 15 fixed; F-HA-001…013, 015…018 at V3 (HA 2026.9.3 and 2025.1.4); HA-14 brand icons added from the favicon |
 | WP-D2 | D | Docker/deployment (DEP-01–03, D11, UC-03, UC-11) | WP-A1 | Deployment features at V3 on the shipped image, UC on and off | after A1 |
-| WP-B3 | B | Remote setup flow, `ucapi` 0.7.0, names, power switch, presets (UC-02 short-term, 05, 08, 09, 14, 15, 16) | WP-B2 | Remote features at V3; setup V4 on a real Remote | done on `wp-b3-remote-setup`: UC-05, 08, 09, 14, 15, 16, 24 fixed, UC-02 short-term part (row open for Phase 3); found and fixed UC-25, 26, 27; filed UC-28; F-UC-002 stays V1 (capped by UC-02), F-UC-003/004/005/010/016 at V3; setup V4 on a real Remote pending |
+| WP-B3 | B | Remote setup flow, `ucapi` 0.7.0, names, power switch, presets (UC-02 short-term, 05, 08, 09, 14, 15, 16) | WP-B2 | Remote features at V3; setup V4 on a real Remote | done on `wp-b3-remote-setup`: UC-05, 08, 09, 14, 15, 16, 24 fixed, UC-02 short-term part (row open for Phase 3); found and fixed UC-25, 26, 27 and TST-09; filed UC-28; F-UC-002 stays V1 (capped by UC-02), F-UC-003/004/005/010/016 at V3; setup V4 on a real Remote pending |
 | WP-E1 | E | UI functional fixes (UI-01–04, 17, 23–31, BE-31, SEC-07/08 patch), each with visual review | WP-C2 | UI/kiosk flows at V3 with approved visuals | after C2 |
 | **Gate** | | **v0.2.0 "Stabilize"** (VALIDATION_PLAN §6) | WP-A1…E1 | | |
 | WP-F1 | F | Security baseline incl. Remote token auth (SEC-01–13, API-15, HA-16, UC-02, VAL-06) | v0.2.0 | Security features at V3 in all three auth configurations | |
