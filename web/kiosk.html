@@ -1249,7 +1249,7 @@
                 </div>
 
                 <!-- Navigation D-Pad Section -->
-                <div class="remote-section nav-section">
+                <div class="remote-section nav-section" id="remoteNavSection">
                     <div class="cec-dpad">
                         <button class="remote-cmd-btn dpad-up" data-cmd="up">▲</button>
                         <button class="remote-cmd-btn dpad-left" data-cmd="left">◀</button>
@@ -1322,27 +1322,29 @@
                     <div class="wizard-advanced-settings hidden" id="advancedRoutingSettings">
                         <div class="settings-row">
                             <label>HDCP Mode</label>
+                            <!-- UI-23: the hub's API values (HDCP 1 = 1.4, 2 = 2.2, 3 = follow sink); 0 ("Disable") does not exist -->
                             <select id="routingHdcpMode">
                                 <option value="3" selected>Auto</option>
                                 <option value="1">HDCP 1.4</option>
                                 <option value="2">HDCP 2.2</option>
-                                <option value="0">Disable</option>
                             </select>
                         </div>
                         <div class="settings-row">
                             <label>HDR Mode</label>
+                            <!-- UI-23: HDR API values 1 = passthrough, 2 = HDR to SDR, 3 = auto (follow sink EDID) -->
                             <select id="routingHdrMode">
-                                <option value="0" selected>Auto</option>
+                                <option value="3" selected>Auto</option>
                                 <option value="1">HDR 10</option>
                                 <option value="2">SDR</option>
                             </select>
                         </div>
                         <div class="settings-row">
                             <label>Scaler Mode</label>
+                            <!-- UI-23: scaler API values 1 = passthrough, 3 = 8K/4K to 1080p, 4 = auto (follow sink EDID) -->
                             <select id="routingScalerMode">
-                                <option value="1" selected>Auto (Display EDID)</option>
-                                <option value="0">Bypass</option>
-                                <option value="2">Force 1080p Downscale</option>
+                                <option value="4" selected>Auto (Display EDID)</option>
+                                <option value="1">Bypass</option>
+                                <option value="3">Force 1080p Downscale</option>
                             </select>
                         </div>
                         <label class="wizard-checkbox-label">
@@ -1535,10 +1537,14 @@
              * Escape HTML for safe rendering
              */
             function escapeHtml(text) {
-                if (!text) return '';
-                const div = document.createElement('div');
-                div.textContent = String(text);
-                return div.innerHTML;
+                // SEC-07: quotes too, so it is safe in attribute values
+                if (text === null || text === undefined) return '';
+                return String(text)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
             }
 
             /**
@@ -1744,14 +1750,18 @@
                 const btnDisplay = document.getElementById('btnTargetDisplay');
                 if (!btnSource || !btnDisplay) return;
                 
+                // UI-37: a display has only power, mute and volume (the device's
+                // display CEC table), so the D-pad, Menu/Back and playback are hidden.
                 if (target === 'input') {
                     btnSource.classList.add('active');
                     btnDisplay.classList.remove('active');
                     document.getElementById('remotePlaybackSection').classList.remove('hidden');
+                    document.getElementById('remoteNavSection').classList.remove('hidden');
                 } else {
                     btnSource.classList.remove('active');
                     btnDisplay.classList.add('active');
                     document.getElementById('remotePlaybackSection').classList.add('hidden');
+                    document.getElementById('remoteNavSection').classList.add('hidden');
                 }
             }
 
@@ -1804,6 +1814,7 @@
 
             function openRoutingWizard() {
                 currentWizardStep = 1;
+                selectedRoutingDestination = null;
                 document.getElementById('routingModalTitle').textContent = `Route ${inputs[selectedInputForRouting]?.name || 'Input ' + selectedInputForRouting}`;
                 
                 // Renders output cards
@@ -1814,7 +1825,7 @@
                     const currentIn = routing[o] || 0;
                     outputHtml += `
                         <button class="wizard-option-btn" data-output="${o}">
-                            ${outName} <span style="font-size:0.8rem; color:var(--text-muted); float:right;">(Current In: ${currentIn || '-'})</span>
+                            ${escapeHtml(outName)} <span style="font-size:0.8rem; color:var(--text-muted); float:right;">(Current In: ${escapeHtml(currentIn || '-')})</span>
                         </button>
                     `;
                 }
@@ -1859,6 +1870,16 @@
                 if (currentWizardStep === 2) {
                     showWizardStep('routing', 1);
                 }
+            });
+
+            // UI-25: "Next" on step 1 had no handler
+            routingNextBtn.addEventListener('click', () => {
+                if (currentWizardStep !== 1) return;
+                if (selectedRoutingDestination === null) {
+                    showToast('Choose an output first', 'info');
+                    return;
+                }
+                showWizardStep('routing', 2);
             });
 
             function showWizardStep(prefix, step) {
@@ -1954,14 +1975,14 @@
                             promises.push(fetch(`${API_BASE}/output/${t}/arc`, {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ enable: arc })
+                                body: JSON.stringify({ enabled: arc }) // UI-23: the hub reads "enabled" (default true)
                             }).catch(() => {}));
 
                             // Mute control
                             promises.push(fetch(`${API_BASE}/output/${t}/mute`, {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ mute: mute })
+                                body: JSON.stringify({ muted: mute }) // UI-23: the hub reads "muted" (default true)
                             }).catch(() => {}));
                         });
 
@@ -2096,8 +2117,15 @@
                     if (data.success) {
                         showToast('Profile activated', 'success');
                         fetchStatus(); // Sync state
+                    } else if (res.status === 207) {
+                        // VAL-11: only some outputs were applied
+                        showToast(`Profile applied partly: ${data.error || 'some settings failed'}`, 'warning');
+                        fetchStatus();
+                    } else if (data.data?.error === 'passcode_required') {
+                        // UI-01: the reason is in data.data.error (this showed "Failed: null")
+                        showToast('This profile is passcode protected', 'error');
                     } else {
-                        showToast(`Failed: ${data.error}`, 'error');
+                        showToast(`Failed: ${data.error || data.data?.error || `HTTP ${res.status}`}`, 'error');
                     }
                 } catch (err) {
                     showToast(`Error: ${err.message}`, 'error');
@@ -2150,7 +2178,7 @@
                 const row = document.createElement('div');
                 row.className = 'slot-mapping-item';
                 row.innerHTML = `
-                    <span class="slot-mapping-item-icon">${icon}</span>
+                    <span class="slot-mapping-item-icon">${escapeHtml(icon)}</span>
                     <span class="slot-mapping-item-name">${escapeHtml(name)}</span>
                 `;
                 row.addEventListener('click', clickHandler);
@@ -2197,11 +2225,11 @@
                     const outName = outputs[o]?.name || `Output ${o}`;
                     mapHtml += `
                         <div class="modal-output-row">
-                            <label>${outName}</label>
+                            <label>${escapeHtml(outName)}</label>
                             <select class="profile-output-input-select" data-output="${o}">
                                 <option value="">Keep Unchanged</option>
                                 ${Object.entries(inputs).map(([num, inp]) => `
-                                    <option value="${num}">Route to ${inp.name || 'Input ' + num}</option>
+                                    <option value="${escapeHtml(num)}">Route to ${escapeHtml(inp.name || 'Input ' + num)}</option>
                                 `).join('')}
                             </select>
                         </div>
@@ -2214,7 +2242,7 @@
                 const offSelect = document.getElementById('profilePowerOffMacro');
                 
                 const macroOptions = `<option value="">None</option>` + macros.map(m => `
-                    <option value="${m.id}">${m.name}</option>
+                    <option value="${escapeHtml(m.id)}">${escapeHtml(m.name)}</option>
                 `).join('');
                 
                 onSelect.innerHTML = macroOptions;
@@ -2333,7 +2361,7 @@
                         html += `
                             <button class="kiosk-btn" onclick="handleSlotClick('shortcut', ${i})">
                                 ${editModeActive ? `<span class="kiosk-btn-config">⚙️</span>` : ''}
-                                <span class="kiosk-btn-icon">${shortcut.icon || '⚡'}</span>
+                                <span class="kiosk-btn-icon">${escapeHtml(shortcut.icon || '⚡')}</span>
                                 <span class="kiosk-btn-name">${escapeHtml(shortcut.name)}</span>
                             </button>
                         `;
@@ -2359,7 +2387,7 @@
                         html += `
                             <button class="kiosk-btn" onclick="handleSlotClick('profile', ${i})">
                                 ${editModeActive ? `<span class="kiosk-btn-config">⚙️</span>` : ''}
-                                <span class="kiosk-btn-icon">${profileObj.icon || '📺'}</span>
+                                <span class="kiosk-btn-icon">${escapeHtml(profileObj.icon || '📺')}</span>
                                 <span class="kiosk-btn-name">${escapeHtml(profileObj.name)}</span>
                             </button>
                         `;
@@ -2432,7 +2460,7 @@
                     outputHtml += `
                         <div class="output-tile ${isConnected ? 'connected' : 'disconnected'}" onclick="handleOutputTileClick(${o})">
                             <span class="output-tile-num">OUT ${o}</span>
-                            <span class="output-tile-input">${currentInput || '-'}</span>
+                            <span class="output-tile-input">${escapeHtml(currentInput || '-')}</span>
                             <span class="output-tile-name">${currentInput ? escapeHtml(inputName) : 'None'}</span>
                         </div>
                     `;
@@ -2466,7 +2494,7 @@
                     }
                     if (macrosRes.ok) {
                         const data = await macrosRes.json();
-                        macros = data.data || [];
+                        macros = data.data?.macros || []; // UI-25: was data.data (an object), so the wizard threw
                     }
 
                     // Initialize pinned layouts arrays
@@ -2511,8 +2539,8 @@
                 try {
                     const [statusRes, inputStatusRes, outputStatusRes] = await Promise.all([
                         fetch(`${API_BASE}/status`),
-                        fetch(`${API_BASE}/inputs/status`),
-                        fetch(`${API_BASE}/outputs/status`)
+                        fetch(`${API_BASE}/status/inputs`), // UI-24: /inputs/status does not exist
+                        fetch(`${API_BASE}/status/outputs`)
                     ]);
                     
                     if (!statusRes.ok) throw new Error(`Status HTTP ${statusRes.status}`);
