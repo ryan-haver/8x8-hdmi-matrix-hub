@@ -63,20 +63,30 @@ async function runProfileOrScene(kind, id, { name, successMessage } = {}) {
     }
 
     // UI-45: the recalled profile becomes the active one, so the CEC tray uses its CEC targets.
-    const activate = () => {
+    // The profile's routing goes with it, so the routing_change events the
+    // recall itself causes (WebSocket, WP-C2) do not end the active profile.
+    const activate = async () => {
         if (kind !== 'profile') return;
         const profile = (window.state?.profiles || []).find((p) => p.id === id) || { id, name: label };
-        window.state?.setActiveProfile(profile);
+        let routing = null;
+        try {
+            const full = await window.api.getProfile(id);
+            const outputs = (full?.data || full)?.outputs || {};
+            routing = Object.fromEntries(Object.entries(outputs).map(([o, cfg]) => [String(o), Number(cfg.input)]));
+        } catch (err) {
+            console.warn('Could not read the profile routing:', err);
+        }
+        window.state?.setActiveProfile({ ...profile, routing });
     };
     if (result?.success) {
         toast.success(successMessage || `"${label}" ${kind === 'scene' ? 'executed' : 'recalled'}`);
-        activate();
+        await activate();
         return { status: 'ok', result };
     }
     // A 2xx answer with success:false is a partial run (HTTP 207).
     const what = kind === 'scene' ? 'ran partly' : 'applied partly';
     toast.warning(`"${label}" ${what}: ${describePartialRun(kind, result?.data)}`, 6000);
-    activate();
+    await activate();
     return { status: 'partial', result };
 }
 

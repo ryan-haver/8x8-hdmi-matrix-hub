@@ -811,9 +811,14 @@ class AppState {
             this.emit('route', { output, input, oldInput });
             this.emit('routing', this.routing);
             
-            // Clear active scene when routing changes manually
+            // Clear the active profile when the routing moves away from it. A change
+            // that matches the profile's own routing (the recall's routing_change
+            // events arriving over the WebSocket) keeps it (UI-45).
             if (this.activeScene) {
-                this.setActiveScene(null);
+                const expected = this.activeScene.routing?.[String(output)];
+                if (expected === undefined || Number(expected) !== Number(input)) {
+                    this.setActiveScene(null);
+                }
             }
             
             // Save to cache so next page load shows correct state
