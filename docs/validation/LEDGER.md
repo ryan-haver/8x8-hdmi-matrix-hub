@@ -1,7 +1,7 @@
 # Feature ledger
 
 > **Generated** by `python -m tools.validate ledger` — do not edit by hand. Registry: [`features.yaml`](features.yaml) · Plan: [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md) · How to add evidence: [`README.md`](README.md).
-> Commit `dc9a3dc4`
+> Commit `e81b2b48`
 
 **Level** = highest level with fresh passing evidence, else the recorded baseline (the registry's `current`), capped at V1 while an open critical/high finding is linked. **Recorded** = the registry baseline. **Fresh** = evidence commit not older than the last change to the scenario's `covers` paths.
 
@@ -11,17 +11,17 @@
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Matrix control | 31 | 1 | 25 | 1 | 4 | 0 | 0 | 31 | 6 |
 | CEC control | 11 | 0 | 10 | 0 | 1 | 0 | 0 | 11 | 4 |
-| REST/WebSocket contract | 42 | 6 | 30 | 5 | 1 | 0 | 0 | 40 | 11 |
-| Domain features | 36 | 3 | 22 | 11 | 0 | 0 | 0 | 36 | 4 |
-| Web UI | 36 | 0 | 34 | 0 | 2 | 0 | 0 | 34 | 5 |
-| Kiosk | 14 | 0 | 13 | 0 | 1 | 0 | 0 | 13 | 0 |
+| REST/WebSocket contract | 42 | 6 | 29 | 6 | 1 | 0 | 0 | 39 | 11 |
+| Domain features | 36 | 2 | 22 | 9 | 3 | 0 | 0 | 35 | 2 |
+| Web UI | 36 | 0 | 29 | 0 | 7 | 0 | 0 | 29 | 5 |
+| Kiosk | 14 | 0 | 10 | 0 | 4 | 0 | 0 | 10 | 0 |
 | Remote 3 integration | 17 | 1 | 4 | 0 | 12 | 0 | 0 | 17 | 7 |
 | Home Assistant component | 18 | 0 | 1 | 0 | 17 | 0 | 0 | 18 | 17 |
 | Flic | 10 | 3 | 7 | 0 | 0 | 0 | 0 | 10 | 0 |
-| Deployment, configuration, persistence | 20 | 3 | 8 | 2 | 7 | 0 | 0 | 20 | 0 |
-| Security controls | 15 | 10 | 5 | 0 | 0 | 0 | 0 | 15 | 0 |
+| Deployment, configuration, persistence | 20 | 3 | 8 | 2 | 7 | 0 | 0 | 20 | 7 |
+| Security controls | 15 | 9 | 5 | 0 | 1 | 0 | 0 | 14 | 0 |
 | Reliability | 18 | 13 | 5 | 0 | 0 | 0 | 0 | 18 | 2 |
-| **All** | **268** | **40** | **164** | **19** | **45** | **0** | **0** | **263** | **56** |
+| **All** | **268** | **38** | **155** | **18** | **57** | **0** | **0** | **252** | **61** |
 
 Levels: **V0** Claimed · **V1** Unit · **V2** Simulated integration · **V3** End-to-end · **V4** Hardware · **V5** Field
 
@@ -31,21 +31,21 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | Matrix control | 1 | 25 | 1 | 4 | 0 | 0 |
 | CEC control | 0 | 10 | 0 | 1 | 0 | 0 |
-| REST/WebSocket contract | 6 | 30 | 5 | 1 | 0 | 0 |
-| Domain features | 3 | 22 | 11 | 0 | 0 | 0 |
-| Web UI | 0 | 34 | 0 | 2 | 0 | 0 |
-| Kiosk | 0 | 13 | 0 | 1 | 0 | 0 |
+| REST/WebSocket contract | 6 | 29 | 6 | 1 | 0 | 0 |
+| Domain features | 2 | 22 | 9 | 3 | 0 | 0 |
+| Web UI | 0 | 29 | 0 | 7 | 0 | 0 |
+| Kiosk | 0 | 10 | 0 | 4 | 0 | 0 |
 | Remote 3 integration | 1 | 4 | 0 | 12 | 0 | 0 |
 | Home Assistant component | 0 | 1 | 0 | 17 | 0 | 0 |
 | Flic | 3 | 7 | 0 | 0 | 0 | 0 |
 | Deployment, configuration, persistence | 3 | 8 | 2 | 7 | 0 | 0 |
-| Security controls | 10 | 5 | 0 | 0 | 0 | 0 |
+| Security controls | 9 | 5 | 0 | 1 | 0 | 0 |
 | Reliability | 13 | 5 | 0 | 0 | 0 | 0 |
-| **All** | **40** | **164** | **19** | **45** | **0** | **0** |
+| **All** | **38** | **155** | **18** | **57** | **0** | **0** |
 
-- Features with fresh passing scenario evidence: **7** of 268.
+- Features with fresh passing scenario evidence: **12** of 268.
 - Features with a fresh failing scenario: **0**.
-- Features capped at V1 by an open critical/high finding: **44**.
+- Features capped at V1 by an open critical/high finding: **35**.
 
 ## Matrix control (F-MTX)
 
@@ -73,7 +73,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-MTX-020 | Front-panel LCD timeout | V4 | V1 (capped) | V1 | — | — | API-07(M), HIL-09(C) |
 | F-MTX-021 | Reboot the matrix | V4 | V1 | V1 | — | — | — |
 | F-MTX-022 | Rename inputs (names stored on the matrix) | V4 | V1 | V1 | — | — | BE-16(M), UC-08(M) |
-| F-MTX-023 | Rename outputs (names stored on the matrix) | V4 | V1 | V1 | — | — | BE-16(M), BE-31(M), UC-08(M) |
+| F-MTX-023 | Rename outputs (names stored on the matrix) | V4 | V1 | V1 | — | — | BE-16(M), UC-08(M) |
 | F-MTX-024 | Read the current routing and names | V4 | V2 | V2 | — | — | — |
 | F-MTX-025 | Show which inputs have an active signal | V4 | V1 | V1 | — | — | — |
 | F-MTX-026 | Show which cables are plugged in (Telnet link status) | V4 | V1 | V1 | — | — | HIL-03(M) |
@@ -141,9 +141,9 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-API-036 | WS event audio_mute | V2 | V1 | V1 | stale | [outputs.audio_mute·api·pass](evidence/F-MTX-007/2026-09-25-V2-22afc1a7-outputs.audio_mute-api.json)<br>[outputs.audio_mute·api·pass](evidence/F-MTX-007/2026-09-25-V2-d6668000-outputs.audio_mute-api.json) | — |
 | F-API-037 | WS events device_settings / device_settings_full | V2 | V0 | V0 | stale | [presets.rename·api·pass](evidence/F-MTX-005/2026-09-25-V2-22afc1a7-presets.rename-api.json)<br>[presets.rename·api·pass](evidence/F-MTX-005/2026-09-25-V2-d6668000-presets.rename-api.json) | — |
 | F-API-038 | WS event cec_command | V2 | V0 (capped) | V0 | stale | [cec.output_power_on·api·pass](evidence/F-CEC-005/2026-09-25-V2-22afc1a7-cec.output_power_on-api.json)<br>[cec.output_power_on·api·pass](evidence/F-CEC-005/2026-09-25-V2-d6668000-cec.output_power_on-api.json) | UI-02(H) |
-| F-API-039 | WS event status (background refresh broadcast) | V2 | V1 | V1 | — | — | BE-31(M) |
+| F-API-039 | WS event status (background refresh broadcast) | V2 | **V2** | V2 | — | — | — |
 | F-API-040 | WS live device events (routing_change, signal_change, connection_change, cable_change) | V2 | V0 | V0 | — | — | BE-24(L) |
-| F-API-041 | WS event scene_execution_error | V2 | V1 (capped) | V1 | — | — | UI-02(H) |
+| F-API-041 | WS event scene_execution_error | V2 | V1 (capped) | V1 | fresh | [scenes.partial_failure·api·pass](evidence/F-DOM-011/2026-09-28-V2-e81b2b48-scenes.partial_failure-api.json) | UI-02(H) |
 | F-API-042 | WS heartbeat (ping / pong) | V2 | V1 | V1 | — | — | API-10(M) |
 
 ## Domain features (F-DOM)
@@ -151,22 +151,22 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | ID | Feature | Target | Level | Recorded | Freshness | Evidence | Open findings |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | F-DOM-001 | Create, edit and delete profiles | V3 | V1 | V1 | — | — | API-22(M) |
-| F-DOM-002 | Recall a profile: its routing is applied | V4 | V1 | V1 | stale | [profiles.recall_routing·api·pass](evidence/F-DOM-002/2026-09-25-V2-22afc1a7-profiles.recall_routing-api.json)<br>[profiles.recall_routing·api·pass](evidence/F-DOM-002/2026-09-25-V2-d6668000-profiles.recall_routing-api.json) | API-19(M) |
+| F-DOM-002 | Recall a profile: its routing is applied | V4 | V3 | V3 | fresh | [profiles.recall_routing·api·pass](evidence/F-DOM-002/2026-09-28-V2-e81b2b48-profiles.recall_routing-api.json)<br>[profiles.recall_routing·browser·pass](evidence/F-DOM-002/2026-09-28-V3-e81b2b48-profiles.recall_routing-browser.json) | API-19(M) |
 | F-DOM-003 | Recall a profile: its output settings (mute, HDR, HDCP, enable) are applied | V4 | V1 | V1 | stale | [profiles.recall_output_settings·api·fail](evidence/F-DOM-003/2026-09-25-V2-22afc1a7-profiles.recall_output_settings-api.json)<br>[profiles.recall_output_settings·api·fail](evidence/F-DOM-003/2026-09-25-V2-d6668000-profiles.recall_output_settings-api.json) | API-22(M) |
 | F-DOM-004 | Recall a profile: its power-on / power-off macro runs | V4 | V1 | V1 | stale | [profiles.recall_power_macro·api·fail](evidence/F-DOM-004/2026-09-25-V2-22afc1a7-profiles.recall_power_macro-api.json)<br>[profiles.recall_power_macro·api·fail](evidence/F-DOM-004/2026-09-25-V2-d6668000-profiles.recall_power_macro-api.json) | — |
-| F-DOM-005 | Protect a profile with a passcode (per-item PIN) | V3 | V0 (capped) | V0 | stale | [profiles.recall_needs_passcode·api·pass](evidence/F-DOM-005/2026-09-25-V2-22afc1a7-profiles.recall_needs_passcode-api.json)<br>[profiles.recall_needs_passcode·api·pass](evidence/F-DOM-005/2026-09-25-V2-d6668000-profiles.recall_needs_passcode-api.json) | SEC-05(H), SEC-06(H), UI-01(H) |
+| F-DOM-005 | Protect a profile with a passcode (per-item PIN) | V3 | V1 (capped) | V1 | fresh | [profiles.recall_needs_passcode·api·pass](evidence/F-DOM-005/2026-09-28-V2-e81b2b48-profiles.recall_needs_passcode-api.json)<br>[profiles.recall_with_passcode·api·pass](evidence/F-DOM-005/2026-09-28-V2-e81b2b48-profiles.recall_with_passcode-api.json)<br>[profiles.recall_wrong_passcode·api·pass](evidence/F-DOM-005/2026-09-28-V2-e81b2b48-profiles.recall_wrong_passcode-api.json)<br>[profiles.recall_needs_passcode·browser·pass](evidence/F-DOM-005/2026-09-28-V3-e81b2b48-profiles.recall_needs_passcode-browser.json) | SEC-05(H), SEC-06(H) |
 | F-DOM-006 | Favourite, pin, reorder profiles and show them on the dashboard | V3 | V1 | V1 | — | — | API-20(M) |
 | F-DOM-007 | Per-profile CEC targets (nav/playback/volume/power) and auto-resolve | V3 | V1 | V1 | — | — | — |
 | F-DOM-008 | Profile execution log | V3 | V0 | V0 | — | — | — |
 | F-DOM-009 | Save the current routing as a new profile | V3 | V1 | V1 | — | — | API-12(M) |
 | F-DOM-010 | Create, edit and delete scenes (sequences of steps) | V3 | V2 | V2 | — | — | API-12(M) |
-| F-DOM-011 | Run a scene: profile steps | V4 | V2 | V2 | — | — | VAL-07(M), VAL-11(L) |
+| F-DOM-011 | Run a scene: profile steps | V4 | V3 | V3 | fresh | [scenes.partial_failure·api·pass](evidence/F-DOM-011/2026-09-28-V2-e81b2b48-scenes.partial_failure-api.json)<br>[scenes.run_protected·api·pass](evidence/F-DOM-011/2026-09-28-V2-e81b2b48-scenes.run_protected-api.json)<br>[scenes.partial_failure·browser·pass](evidence/F-DOM-011/2026-09-28-V3-e81b2b48-scenes.partial_failure-browser.json)<br>[scenes.run_protected·browser·pass](evidence/F-DOM-011/2026-09-28-V3-e81b2b48-scenes.run_protected-browser.json) | VAL-07(M) |
 | F-DOM-012 | Run a scene: macro steps | V4 | V2 | V2 | — | — | — |
 | F-DOM-013 | Run a scene: delay and shortcut steps | V3 | V1 | V1 | — | — | VAL-09(L) |
 | F-DOM-014 | Scene overrides (per-run changes to a profile step) | V3 | V2 | V2 | — | — | — |
-| F-DOM-015 | Protect a scene with a passcode | V3 | V1 (capped) | V1 | — | — | SEC-05(H), SEC-06(H) |
+| F-DOM-015 | Protect a scene with a passcode | V3 | V1 (capped) | V1 | fresh | [scenes.run_protected·api·pass](evidence/F-DOM-011/2026-09-28-V2-e81b2b48-scenes.run_protected-api.json)<br>[scenes.run_protected·browser·pass](evidence/F-DOM-011/2026-09-28-V3-e81b2b48-scenes.run_protected-browser.json) | SEC-05(H), SEC-06(H) |
 | F-DOM-016 | Validate a scene and detect conflicting steps | V3 | V1 | V1 | — | — | VAL-10(M) |
-| F-DOM-017 | Scene execution history | V3 | V2 | V2 | — | — | — |
+| F-DOM-017 | Scene execution history | V3 | **V3** | V3 | fresh | [scenes.partial_failure·api·pass](evidence/F-DOM-011/2026-09-28-V2-e81b2b48-scenes.partial_failure-api.json)<br>[scenes.partial_failure·browser·pass](evidence/F-DOM-011/2026-09-28-V3-e81b2b48-scenes.partial_failure-browser.json) | — |
 | F-DOM-018 | Legacy 'scenes' (v1) as aliases of profiles | V2 | V1 | V1 | — | — | API-12(M) |
 | F-DOM-019 | Create, edit, delete and validate CEC macros | V3 | V1 | V1 | — | — | — |
 | F-DOM-020 | Run a CEC macro (steps, targets, delays) | V4 | V1 | V1 | — | — | VAL-08(M) |
@@ -198,26 +198,26 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-UI-005 | Recall a preset from the Presets drawer | V3 | V1 | V1 | stale | [presets.recall·browser·pass](evidence/F-MTX-003/2026-09-25-V3-d6668000-presets.recall-browser.json) | — |
 | F-UI-006 | Rename a preset in the Presets drawer | V3 | V1 | V1 | stale | [presets.rename·browser·pass](evidence/F-MTX-005/2026-09-25-V3-d6668000-presets.rename-browser.json) | — |
 | F-UI-007 | Overwrite a preset / save a custom mapping from the Presets drawer | V3 | V1 | V1 | — | — | — |
-| F-UI-008 | Run profiles, scenes, presets, shortcuts and macros from dashboard cards | V3 | V1 (capped) | V1 | — | — | UI-01(H), UI-27(M) |
+| F-UI-008 | Run profiles, scenes, presets, shortcuts and macros from dashboard cards | V3 | **V3** | V3 | fresh | [scenes.run_protected·browser·pass](evidence/F-DOM-011/2026-09-28-V3-e81b2b48-scenes.run_protected-browser.json) | — |
 | F-UI-009 | Customise the dashboard (card picker, pin, reorder) | V3 | V1 | V1 | — | — | UI-08(M), API-20(M) |
 | F-UI-010 | Inputs tab: signal/cable status and input settings (name, icon, EDID) | V3 | V1 | V1 | — | — | — |
 | F-UI-011 | Outputs tab: display status and output settings (HDCP, HDR, scaler, ARC, mute) | V3 | V1 | V1 | — | — | — |
-| F-UI-012 | Profiles tab and profile manager | V3 | V1 | V1 | — | — | UI-27(M) |
+| F-UI-012 | Profiles tab and profile manager | V3 | **V3** | V3 | fresh | [profiles.recall_routing·browser·pass](evidence/F-DOM-002/2026-09-28-V3-e81b2b48-profiles.recall_routing-browser.json) | — |
 | F-UI-013 | Create and edit a profile in the profile editor | V3 | V1 | V1 | — | — | — |
-| F-UI-014 | Run a passcode-protected profile (passcode prompt) | V3 | V1 (capped) | V1 | — | — | UI-01(H), UI-36(L) |
-| F-UI-015 | Build a scene in the scene editor | V3 | V1 (capped) | V1 | — | — | UI-26(H), UI-19(L) |
+| F-UI-014 | Run a passcode-protected profile (passcode prompt) | V3 | **V3** | V3 | fresh | [profiles.recall_needs_passcode·browser·pass](evidence/F-DOM-005/2026-09-28-V3-e81b2b48-profiles.recall_needs_passcode-browser.json)<br>[profiles.recall_with_passcode·browser·pass](evidence/F-DOM-005/2026-09-28-V3-e81b2b48-profiles.recall_with_passcode-browser.json)<br>[profiles.recall_wrong_passcode·browser·pass](evidence/F-DOM-005/2026-09-28-V3-e81b2b48-profiles.recall_wrong_passcode-browser.json) | UI-36(L) |
+| F-UI-015 | Build a scene in the scene editor | V3 | **V3** | V3 | — | — | UI-19(L) |
 | F-UI-016 | Build a CEC macro in the macro editor | V3 | V1 | V1 | — | — | — |
-| F-UI-017 | CEC remote on output/input tiles and the CEC tray | V3 | V1 | V1 | — | — | UI-28(M), UI-12(M), UI-17(L) |
-| F-UI-018 | Theme presets, customisation and card opacity | V3 | V1 | V1 | — | — | UI-31(M) |
+| F-UI-017 | CEC remote on output/input tiles and the CEC tray | V3 | V1 | V1 | — | — | UI-12(M) |
+| F-UI-018 | Theme presets, customisation and card opacity | V3 | V1 | V1 | — | — | — |
 | F-UI-019 | General settings: matrix host and connection test | V3 | V1 (capped) | V1 | — | — | SEC-03(C), UI-05(M) |
 | F-UI-020 | Hardware settings: beep, panel lock, LCD, reboot | V3 | V1 | V1 | — | — | UI-05(M), UI-30(L) |
 | F-UI-021 | Interface settings | V3 | V1 | V1 | — | — | UI-05(M) |
 | F-UI-022 | Shortcuts drawer: run, rename, reorder | V3 | V1 | V1 | — | — | — |
-| F-UI-023 | Integrations drawer (Flic request builder, HA YAML, Remote 3 info) | V3 | V1 (capped) | V1 | — | — | SEC-08(H) |
-| F-UI-024 | Live updates when another client or the matrix changes something | V3 | V1 (capped) | V1 | stale | [routing.grid_notifies_other_clients·browser·fail](evidence/F-UI-024/2026-09-25-V3-d6668000-routing.grid_notifies_other_clients-browser.json) | UI-02(H), BE-31(M), VAL-05(M) |
+| F-UI-023 | Integrations drawer (Flic request builder, HA YAML, Remote 3 info) | V3 | V1 | V1 | — | — | — |
+| F-UI-024 | Live updates when another client or the matrix changes something | V3 | V1 (capped) | V1 | stale | [routing.grid_notifies_other_clients·browser·fail](evidence/F-UI-024/2026-09-25-V3-d6668000-routing.grid_notifies_other_clients-browser.json) | UI-02(H), VAL-05(M) |
 | F-UI-025 | Reconnect and resync after the WebSocket drops | V3 | V1 | V1 | — | — | UI-03(M) |
 | F-UI-026 | Show an error state when the matrix is unreachable | V3 | V1 (capped) | V1 | — | — | UI-29(M), VAL-04(H) |
-| F-UI-027 | Toasts and confirmation dialogs | V3 | V1 | V1 | — | — | UI-32(M) |
+| F-UI-027 | Toasts and confirmation dialogs | V3 | **V3** | V3 | fresh | [scenes.partial_failure·browser·pass](evidence/F-DOM-011/2026-09-28-V3-e81b2b48-scenes.partial_failure-browser.json) | UI-32(M) |
 | F-UI-028 | Keyboard shortcuts | V3 | V1 | V1 | — | — | UI-06(M) |
 | F-UI-029 | Accessibility (keyboard, focus, ARIA, contrast, zoom) | V3 | V1 | V1 | — | — | UI-07(M), UI-35(M) |
 | F-UI-030 | Debug panel | V3 | V1 | V1 | — | — | — |
@@ -225,7 +225,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-UI-032 | Animated Tron background (opt-in) | V3 | V1 | V1 | — | — | UI-16(L) |
 | F-UI-033 | Tablet and phone layouts | V3 | V1 | V1 | — | — | UI-33(L) |
 | F-UI-034 | Personalise tabs in the Control Deck (pin, reorder) | V3 | V1 | V1 | — | — | — |
-| F-UI-035 | Copy an API endpoint for automation (API button / modal) | V3 | V1 | V1 | — | — | UI-18(L), UI-28(M) |
+| F-UI-035 | Copy an API endpoint for automation (API button / modal) | V3 | V1 | V1 | — | — | UI-18(L) |
 | F-UI-036 | First-run setup wizard (matrix connection) | V3 | V1 | V1 | — | — | UI-09(M) |
 
 ## Kiosk (F-KIO)
@@ -233,13 +233,13 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | ID | Feature | Target | Level | Recorded | Freshness | Evidence | Open findings |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | F-KIO-001 | Open the kiosk; it shows the matrix connection | V3 | **V3** | V3 | — | — | — |
-| F-KIO-002 | Route a source to one display with the routing wizard | V3 | V1 (capped) | V1 | — | — | UI-25(M), UI-23(H) |
-| F-KIO-003 | Route a source to every display from the kiosk | V3 | V1 (capped) | V1 | — | — | UI-23(H) |
-| F-KIO-004 | Input and output status tiles | V3 | V1 (capped) | V1 | — | — | UI-24(H) |
+| F-KIO-002 | Route a source to one display with the routing wizard | V3 | **V3** | V3 | fresh | [kiosk.route_one_muted·browser·pass](evidence/F-KIO-002/2026-09-28-V3-e81b2b48-kiosk.route_one_muted-browser.json) | — |
+| F-KIO-003 | Route a source to every display from the kiosk | V3 | **V3** | V3 | fresh | [kiosk.route_all_apply·browser·pass](evidence/F-KIO-003/2026-09-28-V3-e81b2b48-kiosk.route_all_apply-browser.json) | — |
+| F-KIO-004 | Input and output status tiles | V3 | **V3** | V3 | — | — | — |
 | F-KIO-005 | Recall a preset from the kiosk | V3 | V1 | V1 | — | — | — |
 | F-KIO-006 | Configure which presets the kiosk shows (edit mode) | V3 | V1 | V1 | — | — | UI-08(M) |
 | F-KIO-007 | Run shortcuts from the kiosk and map them to slots | V3 | V1 | V1 | — | — | — |
-| F-KIO-008 | Run profiles from the kiosk; create one with the profile wizard | V3 | V1 | V1 | — | — | UI-25(M) |
+| F-KIO-008 | Run profiles from the kiosk; create one with the profile wizard | V3 | V1 | V1 | — | — | — |
 | F-KIO-009 | CEC remote in the kiosk | V3 | V1 | V1 | — | — | — |
 | F-KIO-010 | Kiosk live updates | V3 | V1 (capped) | V1 | — | — | UI-02(H) |
 | F-KIO-011 | Kiosk disconnected state | V3 | V1 | V1 | — | — | UI-29(M) |
@@ -305,27 +305,27 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-FLIC-007 | Register Flic buttons with the hub (button registry) | V3 | V0 | V0 | — | — | PER-02(M), API-15(L) |
 | F-FLIC-008 | Button switches every output to input N (POST /api/input/{n}) | V3 | V0 | V0 | — | — | DOC-03(—) |
 | F-FLIC-009 | Flic Hub SDK JavaScript module templates | V3 | V0 | V0 | — | — | — |
-| F-FLIC-010 | Generate Flic request URLs in the web UI | V3 | V1 (capped) | V1 | — | — | SEC-08(H) |
+| F-FLIC-010 | Generate Flic request URLs in the web UI | V3 | V1 | V1 | — | — | — |
 
 ## Deployment, configuration, persistence (F-OPS)
 
 | ID | Feature | Target | Level | Recorded | Freshness | Evidence | Open findings |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| F-OPS-001 | Run the hub from the Docker image | V4 | V3 | V3 | fresh | [deploy.image_core·api·pass](evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json) | — |
-| F-OPS-002 | Run the hub without the Remote integration (UC_ENABLED=false, the default) | V4 | V3 | V3 | fresh | [deploy.image_core·api·pass](evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json) | — |
-| F-OPS-003 | docker compose quick start | V4 | V3 | V3 | fresh | [deploy.compose·api·pass](evidence/F-OPS-003/2026-09-26-V3-23239182-deploy.compose-api.json) | — |
+| F-OPS-001 | Run the hub from the Docker image | V4 | V3 | V3 | stale | [deploy.image_core·api·pass](evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json)<br>[deploy.image_uc·uc·pass](evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_uc-uc.json) | — |
+| F-OPS-002 | Run the hub without the Remote integration (UC_ENABLED=false, the default) | V4 | V3 | V3 | stale | [deploy.image_core·api·pass](evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json) | — |
+| F-OPS-003 | docker compose quick start | V4 | V3 | V3 | stale | [deploy.compose·api·pass](evidence/F-OPS-003/2026-09-26-V3-23239182-deploy.compose-api.json) | — |
 | F-OPS-004 | Remote 3 discovery works from Docker | V4 | V2 | V2 | — | — | UC-11(M) |
-| F-OPS-005 | Container health check and auto-restart | V4 | V3 | V3 | fresh | [deploy.image_core·api·pass](evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json) | — |
-| F-OPS-006 | Point the hub at the matrix (MATRIX_HOST / MATRIX_PORT) | V4 | V3 | V3 | fresh | [deploy.image_core·api·pass](evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json) | DEP-07(M), BE-26(L) |
+| F-OPS-005 | Container health check and auto-restart | V4 | V3 | V3 | stale | [deploy.image_core·api·pass](evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json)<br>[deploy.image_uc·uc·pass](evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_uc-uc.json) | — |
+| F-OPS-006 | Point the hub at the matrix (MATRIX_HOST / MATRIX_PORT) | V4 | V3 | V3 | stale | [deploy.image_core·api·pass](evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json) | DEP-07(M), BE-26(L) |
 | F-OPS-007 | Choose the API port (API_PORT) | V4 | V2 | V2 | — | — | DEP-07(M) |
 | F-OPS-008 | Matrix credentials (OREI_USER / OREI_PASSWORD) | V4 | V1 | V1 | — | — | SEC-10(M) |
 | F-OPS-009 | Verify the matrix TLS certificate (OREI_VERIFY_SSL) | V4 | V0 | V0 | — | — | SEC-09(M) |
 | F-OPS-010 | Log level (LOG_LEVEL) | V4 | V1 | V1 | — | — | SEC-10(M) |
-| F-OPS-011 | Enable/disable integrations (UC_ENABLED) | V4 | V3 | V3 | fresh | [deploy.image_core·api·pass](evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json) | DEP-07(M), BE-20(M) |
+| F-OPS-011 | Enable/disable integrations (UC_ENABLED) | V4 | V3 | V3 | stale | [deploy.image_core·api·pass](evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json)<br>[deploy.image_uc·uc·pass](evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_uc-uc.json) | DEP-07(M), BE-20(M) |
 | F-OPS-012 | Background polling (POLLING_ENABLED / POLLING_INTERVAL) | V4 | V0 | V0 | — | — | TST-03(M) |
 | F-OPS-013 | Telnet options (OREI_TELNET_PORT, OREI_USE_TELNET_CEC) | V4 | V1 | V1 | — | — | — |
 | F-OPS-014 | Cache and retry tuning (OREI_STATUS_CACHE_TTL, OREI_CEC_CACHE_TTL, OREI_*RETR*) | V4 | V1 | V1 | — | — | — |
-| F-OPS-015 | Hub data persists across restarts (DATA_DIR) | V4 | V3 | V3 | fresh | [deploy.image_core·api·pass](evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json) | DEP-07(M) |
+| F-OPS-015 | Hub data persists across restarts (DATA_DIR) | V4 | V3 | V3 | stale | [deploy.image_core·api·pass](evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json)<br>[deploy.image_uc·uc·pass](evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_uc-uc.json) | DEP-07(M) |
 | F-OPS-016 | Writes are atomic and safe under concurrency | V4 | V1 | V1 | — | — | PER-01(M), PER-02(M), TST-08(M) |
 | F-OPS-017 | Migrate legacy data files (scenes -> profiles) | V4 | V1 | V1 | — | — | PER-03(M), API-12(M), PER-04(M) |
 | F-OPS-018 | Only one hub instance runs (process lock) | V4 | V1 | V1 | — | — | BE-18(M) |
@@ -347,7 +347,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-SEC-009 | Proxy headers trusted only from configured proxies | V3 | V0 | V0 | — | — | SEC-12(L) |
 | F-SEC-010 | Static files cannot escape the web root | V3 | V1 | V1 | — | — | SEC-13(L) |
 | F-SEC-011 | Error responses do not leak internals | V3 | V1 | V1 | — | — | SEC-11(L) |
-| F-SEC-012 | User-provided names are escaped in the UI (no XSS) | V3 | V0 (capped) | V0 | — | — | SEC-07(H), SEC-08(H) |
+| F-SEC-012 | User-provided names are escaped in the UI (no XSS) | V3 | **V3** | V3 | — | — | — |
 | F-SEC-013 | TLS certificate verification / pinning for the matrix | V3 | V0 | V0 | — | — | SEC-09(M) |
 | F-SEC-014 | No credentials in logs | V3 | V0 | V0 | — | — | SEC-10(M) |
 | F-SEC-015 | Remote 3 integration port requires authentication | V3 | V0 (capped) | V0 | — | — | UC-02(H) |
