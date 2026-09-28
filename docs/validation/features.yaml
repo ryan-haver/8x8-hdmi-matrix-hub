@@ -1144,6 +1144,7 @@ features:
   basis: 'V2: scenario live.matrix_offline (a browser run; the runner''s /ws observer gets matrix_connection down and back, /api/status answers 503 with the link state); tests/sim/test_sim_ws_contract.py (real hub app + simulator: welcome with protocol and link, snapshot, get_status, link loss and recovery, schema-checked); every message a scenario''s /ws observer receives is checked against docs/api/websocket.schema.json (tools/validate/runner.py ws_contract_check).'
   evidence:
   - docs/validation/evidence/F-REL-009/2026-09-28-V3-c39ee8d5-live.matrix_offline-browser.json
+  - docs/validation/evidence/F-REL-009/2026-09-28-V3-57747b4b-live.matrix_offline-browser.json
   findings: []
   scenarios: [live.matrix_offline]
 - id: F-API-033
@@ -2329,6 +2330,7 @@ features:
   basis: 'V3: scenario live.matrix_offline: an open /kiosk page shows Disconnected while the matrix is off the network and Connected again after it returns. The first-load visual is the catalog entry kiosk/disconnected.'
   evidence:
   - docs/validation/evidence/F-REL-009/2026-09-28-V3-c39ee8d5-live.matrix_offline-browser.json
+  - docs/validation/evidence/F-REL-009/2026-09-28-V3-57747b4b-live.matrix_offline-browser.json
   findings: [UI-29]
   scenarios: [live.matrix_offline]
 - id: F-KIO-012
@@ -3518,6 +3520,7 @@ features:
   - docs/validation/evidence/F-HA-013/2026-09-28-V3-c39ee8d5-ha.matrix_offline-ha.json
   - docs/validation/evidence/F-REL-009/2026-09-28-V2-c39ee8d5-failures.unreachable_switch-api.json
   - docs/validation/evidence/F-REL-009/2026-09-28-V3-c39ee8d5-live.matrix_offline-browser.json
+  - docs/validation/evidence/F-REL-009/2026-09-28-V3-57747b4b-live.matrix_offline-browser.json
   findings: [UI-29]
   scenarios: [failures.unreachable_switch, live.matrix_offline, ha.matrix_offline]
 - id: F-REL-010
