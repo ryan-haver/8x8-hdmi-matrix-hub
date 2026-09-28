@@ -208,7 +208,8 @@ export const CATALOG: CatalogEntry[] = [
   {
     name: 'app/header/disconnected',
     page: 'ui',
-    description: 'Header when the WebSocket cannot connect: red title pill, generic title.',
+    description: 'Header when the WebSocket cannot connect: the client keeps retrying, so the title pill shows the reconnecting (standby colour) state; generic title.',
+    note: 'Since WP-E1 (UI-03/UI-29) a WebSocket that is down and retrying has its own "reconnecting" look; red is for a hub that reports the matrix unreachable.',
     prepare: { noWebSocket: true },
     ready: false,
     setup: async ({ page }) => {
@@ -229,17 +230,19 @@ export const CATALOG: CatalogEntry[] = [
     },
     ready: false,
     setup: async ({ page }) => settle(page, 2500),
-    note: 'No error is shown: the header stays green (it only reflects the WebSocket) and the grid shows a made-up 1:1 routing with default output names.',
+    note: 'The grid says "Matrix not reachable" instead of a made-up 1:1 routing (UI-29, WP-E1). The header stays green here because the page\'s WebSocket status snapshots are dropped and the simulated matrix is up; with a hub that reports the matrix down it turns red (WP-C2).',
   },
   {
     name: 'app/header/reconnecting',
     page: 'ui',
     description: 'WebSocket closed after a good start (hub restarted): header after the socket drops, while it retries.',
     setup: async ({ page }) => {
-      await js(page, `window.state.setWsConnected(false)`);
+      // Drop the socket and hold the client in its retry wait (1 h), as after a hub restart.
+      await js(page, `(() => { const w = window.app.ws; w.reconnectDelay = 3600000; w.ws.close(); })()`);
+      await page.locator('#header-title-text.reconnecting').waitFor();
       await settle(page, 300);
     },
-    note: 'There is no distinct "reconnecting" visual: websocket.js tracks a reconnecting status but app.js never renders it, so this is the plain disconnected header over loaded data.',
+    note: 'UI-03/UI-29 (WP-E1): the retry has its own look (standby colour, tooltip "reconnecting"); it used to be the plain disconnected header.',
   },
 
   {
@@ -340,7 +343,7 @@ export const CATALOG: CatalogEntry[] = [
     routes: (page) => hang(page, '**/api/status'),
     ready: false,
     setup: async ({ page }) => settle(page, 1500),
-    note: 'No loading indicator: the grid shows a made-up 1:1 routing and default names until status arrives (the "Loading matrix..." spinner exists only in the pre-JS HTML). The same happens when the matrix is unreachable (app/matrix-unreachable).',
+    note: 'UI-29 (WP-E1): "Loading matrix..." until a real routing arrives; it used to show a made-up 1:1 routing and default names.',
   },
   {
     name: 'matrix/grid/cell-hover',
@@ -1121,7 +1124,7 @@ export const CATALOG: CatalogEntry[] = [
       await page.locator('.about-dialog.about-dialog--visible').waitFor();
       await settle(page, 800);
     },
-    note: 'No UI trigger. Always shows WebSocket "Disconnected" (about-dialog.js:167 reads a missing state.wsStatus).',
+    note: 'No UI trigger. Since WP-E1 (UI-30) the WebSocket and matrix rows come from state.wsConnected / state.matrixLink; it always showed WebSocket "Disconnected".',
   },
   {
     name: 'dialog/keyboard-shortcuts',

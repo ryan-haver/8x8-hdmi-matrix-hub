@@ -441,6 +441,116 @@ test.describe('WP-E1 UI flows', () => {
     expect(actionBox!.x + actionBox!.width).toBeGreaterThan(cardBox!.x + cardBox!.width - 80);
   });
 
+  // ----- after WP-C2: UI-03 / UI-29 / UI-04 / UI-30 / kiosk polling ---------------------
+
+  test('UI-03/UI-29: the header shows a distinct "reconnecting" state while the WebSocket retries', async ({ page }) => {
+    await preparePage(page);
+    await openUi(page);
+    const header = page.locator('#header-title-text');
+    await expect(header).toHaveClass(/connected/);
+    const colour = () => header.evaluate((el) => getComputedStyle(el).borderTopColor);
+    const connectedColour = await colour();
+    // Drop the hub socket and keep the client in its retry wait (1 h).
+    await page.evaluate(() => {
+      const w = (window as any).app.ws; // eslint-disable-line @typescript-eslint/no-explicit-any
+      w.reconnectDelay = 3_600_000;
+      w.ws.close();
+    });
+    await expect(header).toHaveClass(/reconnecting/);
+    await expect(header).not.toHaveClass(/(^|\s)(connected|disconnected)(\s|$)/);
+    await expect(header).toHaveAttribute('title', /reconnecting/i);
+    const reconnectingColour = await colour();
+    // The disconnected look (matrix not reachable), for comparison.
+    await page.evaluate(() => (window as any).state.setMatrixLink?.({ connected: false, state: 'disconnected' })); // eslint-disable-line @typescript-eslint/no-explicit-any
+    await page.evaluate(() => {
+      const w = (window as any).app.ws; // eslint-disable-line @typescript-eslint/no-explicit-any
+      w.status = 'disconnected';
+      (window as any).app.updateConnectionStatus(); // eslint-disable-line @typescript-eslint/no-explicit-any
+    });
+    await expect(header).toHaveClass(/disconnected/);
+    const disconnectedColour = await colour();
+    expect(new Set([connectedColour, reconnectingColour, disconnectedColour]).size, JSON.stringify({ connectedColour, reconnectingColour, disconnectedColour })).toBe(3);
+  });
+
+  test('UI-29: the grid shows "Loading matrix" until the first status, never a made-up routing', async ({ page }) => {
+    await preparePage(page, { storage: { 'matrix-view-mode': 'grid' } }); // WebSocket status snapshots are dropped
+    let release: () => void = () => {};
+    const held = new Promise<void>((r) => (release = r));
+    await page.route('**/api/status', async (route) => {
+      await held;
+      await route.fallback();
+    });
+    await page.goto('/ui');
+    await page.waitForFunction(() => !!(window as any).app); // eslint-disable-line @typescript-eslint/no-explicit-any
+    await settle(page, 1500);
+    await expect(page.locator('#matrix-grid .matrix-loading')).toContainText('Loading matrix');
+    await expect(page.locator('#matrix-grid .matrix-route')).toHaveCount(0);
+    release();
+    await expect(page.locator('#matrix-grid .matrix-route')).toHaveCount(64);
+    await expect(page.locator('#matrix-grid .matrix-route[data-input="2"][data-output="1"]')).toHaveClass(/active/);
+  });
+
+  test('UI-29: when the matrix is unreachable the grid says so instead of a made-up routing', async ({ page }) => {
+    await preparePage(page, { storage: { 'matrix-view-mode': 'grid' } });
+    await page.route('**/api/status', (route) =>
+      route.fulfill({ status: 503, contentType: 'application/json', json: { success: false, data: null, error: 'Matrix not connected' } }),
+    );
+    await openUi(page, { ready: false });
+    await page.waitForFunction(() => (window as any).state?.ui?.dataLoaded === true, undefined, { timeout: 20_000 }); // eslint-disable-line @typescript-eslint/no-explicit-any
+    await expect(page.locator('#matrix-grid')).toContainText('Matrix not reachable');
+    await expect(page.locator('#matrix-grid .matrix-route')).toHaveCount(0);
+  });
+
+  test('UI-04: a preset recall shows one toast on the page that recalled it and none on other pages', async ({ page, sim, browser }, info) => {
+    await preparePage(page, { storage: { 'matrix-view-mode': 'grid' } });
+    await openUi(page);
+    // Another client recalls preset 3 (PS5 everywhere) through the hub.
+    const hub = await hubApi(`10.250.${info.workerIndex % 250}.11`);
+    try {
+      expect((await hub.post('/api/preset/3')).ok()).toBeTruthy();
+    } finally {
+      await hub.dispose();
+    }
+    await expect(page.locator('#matrix-grid .matrix-route[data-input="6"][data-output="1"]')).toHaveClass(/active/, { timeout: 15_000 });
+    await settle(page, 800);
+    expect(await toasts(page)).toEqual([]);
+    // This page recalls preset 2 from the Presets drawer: its own toast only.
+    await page.locator('#menu-toggle').click();
+    await page.locator('#side-nav-drawer.open').waitFor();
+    await page.locator('#drawer-presets-btn').click();
+    await page.locator('#presets-drawer.open').waitFor();
+    await page.locator('#presets-drawer .preset-row[data-preset-number="2"] .preset-expand-btn').click();
+    await page.locator('#presets-drawer .btn-recall-preset[data-preset="2"]').click();
+    await expect.poll(async () => (await sim.state()).outputs[0].source).toBe(5);
+    await settle(page, 1500);
+    expect(await toasts(page)).toEqual(['success: Preset 2 recalled']);
+    void browser;
+  });
+
+  test('UI-30: the About dialog shows the WebSocket and matrix link from the app state', async ({ page }) => {
+    await preparePage(page);
+    await openUi(page);
+    await page.evaluate(() => (window as any).AboutDialog.show()); // eslint-disable-line @typescript-eslint/no-explicit-any
+    await page.locator('.about-dialog.about-dialog--visible').waitFor();
+    await expect(page.locator('#status-websocket')).toHaveText('Connected');
+    await expect(page.locator('#status-matrix')).toHaveText('Connected');
+  });
+
+  test('UI-24: the kiosk stays live from the WebSocket and does not poll the status routes', async ({ page, sim }) => {
+    await preparePage(page);
+    await openKiosk(page);
+    const reads: string[] = [];
+    page.on('request', (r) => {
+      const p = new URL(r.url()).pathname;
+      if (r.method() === 'GET' && /^\/api\/status(\/|$)/.test(p)) reads.push(p);
+    });
+    // A change behind the hub's back reaches the kiosk through the hub's event stream.
+    await sim.patch({ outputs: { '2': { source: 4 } } });
+    await expect(page.locator('#outputStatusGrid .output-tile').nth(2).locator('.output-tile-input')).toHaveText('4', { timeout: 15_000 });
+    await page.waitForTimeout(6000);
+    expect(reads).toEqual([]);
+  });
+
   // ----- UI-50 / UI-49: card polish, Settings drawer lists ----------------------------
 
   test('UI-50: the Dashboard Cards header is one line and a locked card shows one small lock', async ({ page }) => {
