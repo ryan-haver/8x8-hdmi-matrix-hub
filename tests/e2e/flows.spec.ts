@@ -441,6 +441,89 @@ test.describe('WP-E1 UI flows', () => {
     expect(actionBox!.x + actionBox!.width).toBeGreaterThan(cardBox!.x + cardBox!.width - 80);
   });
 
+  // ----- UI-50 / UI-49: card polish, Settings drawer lists ----------------------------
+
+  test('UI-50: the Dashboard Cards header is one line and a locked card shows one small lock', async ({ page }) => {
+    await preparePage(page);
+    await openUi(page);
+    await mainTab(page, 'dashboard');
+    await expect(page.locator('#dashboard-cards-grid .dashboard-card')).not.toHaveCount(0);
+    // The title is one line, like the other widget headers, and the header is no taller than a widget header
+    // plus the height difference of its button (28 px add button vs the 22 px unpin button).
+    const header = await page.evaluate(() => {
+      const title = document.querySelector('.dashboard-cards-container .dashboard-widget-title span')!;
+      const range = document.createRange();
+      range.selectNodeContents(title);
+      const h = (sel: string) => document.querySelector(sel)!.getBoundingClientRect().height;
+      return {
+        titleLines: new Set([...range.getClientRects()].map((r) => Math.round(r.top))).size,
+        cards: h('.dashboard-cards-container .dashboard-widget-header'),
+        routing: h('.dashboard-widget[data-widget-id="routing-dashboard"] .dashboard-widget-header'),
+      };
+    });
+    expect(header.titleLines, JSON.stringify(header)).toBe(1);
+    expect(header.cards - header.routing, JSON.stringify(header)).toBeLessThanOrEqual(6);
+    // The protected scene: exactly one lock indicator, text-sized and centred.
+    const card = page.locator('#dashboard-cards-grid .dashboard-card[data-card-key="scene:scene_kidslocked"]');
+    const info = await card.evaluate((el) => {
+      const name = el.querySelector('.dashboard-card-title') as HTMLElement;
+      const locks = [...el.querySelectorAll('svg')].filter((s) => !s.closest('.dashboard-card-unpin'));
+      const lockText = (el.querySelector('.dashboard-card-icon')?.textContent ?? '') + name.textContent;
+      const r = locks[0]?.getBoundingClientRect();
+      const slot = locks[0]?.parentElement?.getBoundingClientRect();
+      return {
+        svgLocks: locks.length,
+        emojiLocks: (lockText.match(/🔒|🔐/g) ?? []).length,
+        size: r ? Math.max(r.width, r.height) : 0,
+        offCentre: r && slot ? Math.abs(r.top + r.height / 2 - (slot.top + slot.height / 2)) : 99,
+      };
+    });
+    expect(info.svgLocks + info.emojiLocks, JSON.stringify(info)).toBe(1);
+    expect(info.size).toBeLessThanOrEqual(20);
+    expect(info.offCentre).toBeLessThanOrEqual(2);
+  });
+
+  test('UI-50: the kiosk PIN pad digits and delete key are large enough to read', async ({ page }) => {
+    await preparePage(page);
+    await openKiosk(page);
+    await page.locator('.kiosk-tab-btn[data-tab="profiles"]').click();
+    await settle(page, 300);
+    await page.locator('#profilesGrid .kiosk-btn', { hasText: 'Kids Gaming' }).click();
+    await page.locator('#passcodeModal.show').waitFor();
+    await page.locator('#passcodeModal [data-digit="1"]').click();
+    const sizes = await page.evaluate(() => ({
+      dots: parseFloat(getComputedStyle(document.getElementById('passcodeDisplay')!).fontSize),
+      back: parseFloat(getComputedStyle(document.querySelector('#passcodePad [data-pin-action="back"]')!).fontSize),
+      digit: parseFloat(getComputedStyle(document.querySelector('#passcodePad [data-digit="1"]')!).fontSize),
+    }));
+    expect(sizes.dots, JSON.stringify(sizes)).toBeGreaterThanOrEqual(28);
+    expect(sizes.back, JSON.stringify(sizes)).toBeGreaterThanOrEqual(22);
+    await page.locator('#passcodeCancelBtn').click();
+  });
+
+  test('UI-49: Settings drawer items are one card row: name and meta left, actions right', async ({ page }) => {
+    await preparePage(page);
+    await openUi(page);
+    for (const t of ['profiles', 'scenes', 'system'] as const) {
+      await openSettingsDrawer(page, t);
+      const rows = await page.locator('#settings-drawer .settings-list-item').evaluateAll((items) =>
+        items.map((el) => {
+          const name = el.querySelector('.item-name')!.getBoundingClientRect();
+          const buttons = [...el.querySelectorAll('.item-actions button')].map((b) => b.getBoundingClientRect());
+          const cs = getComputedStyle(el);
+          const centre = (r: DOMRect) => r.top + r.height / 2;
+          return {
+            name: el.querySelector('.item-name')!.textContent,
+            oneRow: buttons.every((b) => Math.abs(centre(b) - centre(name)) <= 12 && b.left > name.right),
+            surface: cs.backgroundColor !== 'rgba(0, 0, 0, 0)' && parseFloat(cs.borderTopLeftRadius) >= 8,
+          };
+        }),
+      );
+      expect(rows.length, t).toBeGreaterThan(0);
+      for (const r of rows) expect(r, `${t}: ${r.name}`).toMatchObject({ oneRow: true, surface: true });
+    }
+  });
+
   // ----- UI-31: theme presets ------------------------------------------------------
 
   test('UI-31: each theme preset has its own edit button', async ({ page }) => {
