@@ -113,8 +113,9 @@ them. Compose-only variables (`MATRIX_DATA_DIR` as the host folder, `HUB_PORT`,
 | `UC_CONFIG_HOME` | | `DATA_DIR` | Integration state (`config_state.json`, `driver.lock`) and the profile/macro/scene files |
 | `OREI_USER`, `OREI_PASSWORD` | | `Admin` / `admin` | Matrix login |
 | `OREI_VERIFY_SSL` | | `false` | Verify the matrix's TLS certificate |
-| `OREI_TELNET_PORT`, `OREI_USE_TELNET_CEC` | | `23` / `false` | Matrix Telnet options |
-| `POLLING_INTERVAL`, `POLLING_ENABLED` | | `30` / `true` | Status polling while a Remote is connected (UC mode) |
+| `OREI_TELNET_PORT`, `OREI_USE_TELNET_CEC` | | `23` / `false` | Matrix Telnet options; `OREI_TELNET_PORT` is the default for a matrix whose setup names no `telnet_port` (`POST /api/settings/matrix-host`, `config_state.json`) |
+| `STATUS_POLL_INTERVAL` | | `5` | Seconds between the hub's own status reads, the source of the live `/ws` events in every mode ([`api/WEBSOCKET.md`](api/WEBSOCKET.md)); writes, Telnet pushes and link changes trigger a read at once |
+| `POLLING_INTERVAL`, `POLLING_ENABLED` | | `30` / `true` | Remote 3 entity updates (UC mode); the `/ws` events use `STATUS_POLL_INTERVAL` |
 
 No longer used (logged and ignored): `USE_MODULAR` (the mode follows
 `UC_ENABLED`), `WEBUI_ENABLED` (the web UI and kiosk are part of the core and

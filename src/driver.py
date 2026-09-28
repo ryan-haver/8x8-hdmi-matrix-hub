@@ -72,7 +72,6 @@ except ImportError:
     )
 from rest_api import (
     RestApiServer,
-    broadcast_status_update,
     set_macro_cec_sender,
     set_matrix_device,
     update_input_names,
@@ -1376,27 +1375,21 @@ def create_matrix_remote(input_names: dict[int, str] = None) -> Remote:
 # =============================================================================
 
 
-@dataclass
-class PollMemory:
-    """What the previous successful reads returned (for the /ws change events)."""
-
-    routing: list[Any] | None = None
-    connections: list[Any] | None = None
-    inactive_inputs: list[Any] = field(default_factory=list)
-    cables: dict[str, dict[int, bool | None]] = field(default_factory=lambda: {"inputs": {}, "outputs": {}})
-
-
 def _valid_input(value: Any) -> bool:
     """Input numbers are 1-8; 0 or anything else in the routing array means "unknown" (UC-04)."""
     return isinstance(value, int) and not isinstance(value, bool) and 1 <= value <= 8
 
 
-async def poll_matrix_status(memory: PollMemory) -> None:
-    """One status poll: update the entities (last known values only) and tell /ws clients what changed.
+async def poll_matrix_status() -> None:
+    """One status poll: update the Remote's entities (last known values only).
 
     Nothing is updated from a read that failed, and a poll stops as soon as
     the matrix link is lost, so the Remote never sees placeholders ("Input 0",
     "Disconnected") for values the hub does not know (UC-04, BE-08).
+
+    The /ws events for web clients are not sent from here: the hub's own
+    event stream (rest_api/events.py) announces every change once, with or
+    without a Remote (UC-17, docs/api/WEBSOCKET.md).
     """
     matrix = get_matrix()
     await publish_device_state()
@@ -1426,13 +1419,6 @@ async def poll_matrix_status(memory: PollMemory) -> None:
                 f"sensor.output_{output_num}_connected",
                 {SensorAttr.VALUE: conn_state, SensorAttr.STATE: SensorStates.ON},
             )
-            prev_connections = memory.connections
-            if prev_connections is not None and idx < len(prev_connections):
-                if (prev_connections[idx] == 1) != is_connected:
-                    await broadcast_status_update(
-                        "connection_change",
-                        {"output": output_num, "connected": is_connected, "state": conn_state},
-                    )
 
         current_input = routing[idx] if idx < len(routing) else None
         if not _valid_input(current_input):
@@ -1442,23 +1428,7 @@ async def poll_matrix_status(memory: PollMemory) -> None:
             f"sensor.output_{output_num}_source", {SensorAttr.VALUE: input_name, SensorAttr.STATE: SensorStates.ON}
         )
         _entity_sync.update(f"media_player.output_{output_num}", {MediaPlayerAttr.SOURCE: input_name})
-        prev_routing = memory.routing
-        prev_input = prev_routing[idx] if prev_routing is not None and idx < len(prev_routing) else None
-        if _valid_input(prev_input) and prev_input != current_input:
-            await broadcast_status_update(
-                "routing_change",
-                {
-                    "output": output_num,
-                    "input": current_input,
-                    "input_name": input_name,
-                    "previous_input": prev_input,
-                },
-            )
 
-    if routing:
-        memory.routing = list(routing)
-    if connections:
-        memory.connections = list(connections)
     _LOG.debug(f"Polling complete - routing: {routing}, connections: {connections}")
 
     # Get input status for signal detection
@@ -1470,24 +1440,12 @@ async def poll_matrix_status(memory: PollMemory) -> None:
         for input_num in range(1, 9):
             # inactive array from get_input_status: 1 = signal present, 0 = no signal
             inp_idx = input_num - 1
-            has_signal = inactive_inputs[inp_idx] == 1 if inp_idx < len(inactive_inputs) else False
             if inp_idx < len(inactive_inputs):
+                has_signal = inactive_inputs[inp_idx] == 1
                 _entity_sync.update(
                     f"sensor.input_{input_num}_signal",
                     {SensorAttr.VALUE: "Active" if has_signal else "No Signal", SensorAttr.STATE: SensorStates.ON},
                 )
-            prev = memory.inactive_inputs
-            prev_had_signal = prev[inp_idx] == 1 if inp_idx < len(prev) else False
-            if prev_had_signal != has_signal:
-                await broadcast_status_update(
-                    "signal_change",
-                    {
-                        "input": input_num,
-                        "has_signal": has_signal,
-                        "input_name": _driver_state.input_names.get(input_num, f"Input {input_num}"),
-                    },
-                )
-        memory.inactive_inputs = list(inactive_inputs)
         _LOG.debug(f"Input signal polling complete - inactive: {inactive_inputs}")
 
     # Get cable status from Telnet if available
@@ -1496,7 +1454,7 @@ async def poll_matrix_status(memory: PollMemory) -> None:
         if not matrix.connected:
             return
         if cable_status:
-            for side, names in (("inputs", _driver_state.input_names), ("outputs", _driver_state.output_names)):
+            for side in ("inputs", "outputs"):
                 port_kind = side[:-1]  # "input" / "output"
                 cables = cable_status.get(side, {})
                 for port in range(1, 9):
@@ -1509,21 +1467,6 @@ async def poll_matrix_status(memory: PollMemory) -> None:
                             SensorAttr.STATE: SensorStates.ON,
                         }
                     _entity_sync.update(f"sensor.{port_kind}_{port}_cable", attrs)
-                    prev_connected = memory.cables.get(side, {}).get(port)
-                    if prev_connected != is_connected and is_connected is not None:
-                        await broadcast_status_update(
-                            "cable_change",
-                            {
-                                "type": port_kind,
-                                "port": port,
-                                "connected": is_connected,
-                                "name": names.get(port, f"{port_kind.capitalize()} {port}"),
-                            },
-                        )
-            memory.cables = {
-                "inputs": dict(cable_status.get("inputs", {})),
-                "outputs": dict(cable_status.get("outputs", {})),
-            }
 
 
 def request_poll() -> None:
@@ -1540,7 +1483,6 @@ async def status_polling_loop() -> None:
     after request_poll(). A failed poll is logged and the next one runs;
     cancellation stops it (CancelledError is re-raised).
     """
-    memory = PollMemory()
     _LOG.info(f"Status polling started (interval: {POLLING_INTERVAL}s)")
 
     while True:
@@ -1550,7 +1492,7 @@ async def status_polling_loop() -> None:
             except TimeoutError:
                 pass
             _poll_wakeup.clear()
-            await poll_matrix_status(memory)
+            await poll_matrix_status()
         except asyncio.CancelledError:
             _LOG.info("Status polling cancelled")
             raise

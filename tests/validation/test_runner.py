@@ -79,7 +79,7 @@ def test_sim_run_produces_evidence(tmp_path: Path, schema_validator):
     assert obs["requests"][0]["path"] == "/api/switch" and obs["requests"][0]["status"] == 200
     assert {"path": "outputs[0].source", "before": 2, "after": 6} in obs["state_diff"]
     assert any(e["command"] == "video switch" for e in obs["device_log"])
-    assert any(e["event"] == "switch" for e in obs["ws_events"])
+    assert any(e["event"] == "routing_change" for e in obs["ws_events"])
     assert switch["features"] == ["F-MTX-001", "F-API-005", "F-API-033"]
     assert switch["environment"]["simulator"]["source_sha256"]
     assert switch["commit"]["sha"]

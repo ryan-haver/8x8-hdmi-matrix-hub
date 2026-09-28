@@ -43,7 +43,7 @@ RECORDED_ENV = (
     "USE_MODULAR", "UC_ENABLED", "MATRIX_HOST", "MATRIX_PORT", "OREI_TELNET_PORT", "OREI_VERIFY_SSL",
     "OREI_USE_TELNET_CEC", "OREI_STATUS_CACHE_TTL", "TRUST_PROXY_HEADERS", "TRUSTED_PROXY_IPS", "LOG_LEVEL",
     "REST_API_PORT", "UC_INTEGRATION_HTTP_PORT", "UC_INTEGRATION_INTERFACE", "UC_DISABLE_MDNS_PUBLISH",
-    "POLLING_INTERVAL",
+    "POLLING_INTERVAL", "STATUS_POLL_INTERVAL",
 )
 
 HUB_MODES = ("api", "uc")
@@ -96,6 +96,9 @@ class HubProcess:
     uc_config_extra: dict[str, Any] = field(default_factory=dict)
     #: UC mode: status polling interval in whole seconds (``driver.py`` reads it with ``int()``).
     polling_interval: int = 30
+    #: The hub's own status poller (``STATUS_POLL_INTERVAL``, rest_api/events.py); ``None`` = the hub
+    #: default in API mode, ``polling_interval`` in UC mode (both pollers read at the same pace).
+    status_poll_interval: float | None = None
     #: Seconds ``stop()`` waits after terminating the hub before killing it.
     stop_timeout: float = 8.0
     #: Keep the data directory across :meth:`restart` (a restarted driver keeps its configuration).
@@ -165,6 +168,11 @@ class HubProcess:
                 "UC_DISABLE_MDNS_PUBLISH": "true",
                 "POLLING_INTERVAL": str(self.polling_interval),
             })
+        poll = self.status_poll_interval
+        if poll is None and self.mode == "uc":
+            poll = self.polling_interval
+        if poll is not None:
+            env["STATUS_POLL_INTERVAL"] = str(poll)
         env.update(self.extra_env)
         for key in ("OREI_USER", "OREI_PASSWORD", "OREI_PORT", "OREI_HOST"):
             env.pop(key, None)

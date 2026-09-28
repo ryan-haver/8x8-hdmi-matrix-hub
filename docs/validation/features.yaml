@@ -31,7 +31,7 @@ features:
     device: [video switch]
     telnet: ['s output {n} in source {m}']
     rest: [POST /api/switch, 'POST /api/output/{output}/source']
-    ws: [switch, switch_failed]
+    ws: [routing_change, switch_failed]
     ui: [matrix/grid/default, matrix/cards/routing-sheet]
     kiosk: [kiosk/routing-modal/step-2]
     uc: [media_player.output_N select_source]
@@ -53,7 +53,7 @@ features:
     device: [video switch (output 0)]
     telnet: ['s output 0 in source {m}']
     rest: [POST /api/switch (no output)]
-    ws: [switch_all, switch_all_failed]
+    ws: [routing_change, switch_all_failed]
     ui: [drawer/routing/default, drawer/routing/all-active]
     kiosk: [kiosk/routing/all-to-one]
     ha: [service hdmi_matrix.switch_input (per output)]
@@ -425,7 +425,7 @@ features:
   interfaces:
     device: [get video status]
     rest: [GET /api/status]
-    ws: [status_update]
+    ws: [status, routing_change, input_name_change, output_name_change, power_change]
     ui: [matrix/grid/default]
     kiosk: [kiosk/routing/default]
     uc: [sensor.output_N_source]
@@ -555,11 +555,10 @@ features:
     ha: [coordinator refresh]
   target: V4
   current: V1
-  basis: 'tests/sim/test_sim_hub.py::test_telnet_push_cable_event_reaches_client (driver-level: real OreiMatrix against the
-    simulator, no user interface in the path -> V1).'
+  basis: 'V3: scenarios live.front_panel_route, live.input_signal, live.display_unplugged, live.rename_elsewhere: the simulator changes behind the hub''s back and a /ui and a /kiosk page that stay open show it, with their status reads stripped so only the WebSocket can explain it (browser client). Hardware: HIL-B.'
   evidence: []
   findings: [UC-17, BE-29, BE-03]
-  scenarios: []
+  scenarios: [live.front_panel_route, live.input_signal, live.display_unplugged, live.rename_elsewhere]
 - id: F-CEC-001
   area: cec
   title: Power a source on / off over CEC
@@ -737,7 +736,7 @@ features:
     rest: [GET /, GET /api, GET /api/info]
   target: V2
   current: V1
-  basis: tests/test_rest_api.py TestHealthEndpoints (mocked); GET / is not exercised.
+  basis: 'tests/test_rest_api.py TestHealthEndpoints (mocked); GET / is not exercised. API-24 (WP-C2): /api/info reads the driver.json next to the package, whatever the working directory (tests/test_rest_api.py::TestHealthEndpoints::test_info_reads_driver_json_next_to_the_package).'
   evidence: []
   findings: [DEP-06]
   scenarios: []
@@ -1056,8 +1055,8 @@ features:
   interfaces:
     rest: [GET /api/settings, POST /api/settings/matrix-host, POST /api/settings/test-connection]
   target: V2
-  current: V0
-  basis: Not exercised by any test (TST-03).
+  current: V1
+  basis: 'tests/test_rest_api.py TestMatrixHostSettings (mocked): a new host takes its own telnet_port or the default, a bad one is refused (BE-32, WP-C2). GET /api/settings and test-connection are not exercised.'
   evidence: []
   findings: [SEC-03, TST-03]
   scenarios: []
@@ -1111,40 +1110,40 @@ features:
   scenarios: []
 - id: F-API-032
   area: api
-  title: 'WebSocket /ws: welcome, get_status, errors'
-  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  title: 'WebSocket /ws: welcome, status snapshot, get_status, matrix link, errors'
+  claim: docs/api/WEBSOCKET.md; docs/api/websocket.schema.json
   interfaces:
     rest: [GET /ws]
-    ws: [connected, status_update, error]
+    ws: [connected, status, matrix_connection, error]
   target: V2
-  current: V1
-  basis: tests/test_rest_api.py TestWebSocket.
+  current: V2
+  basis: 'V2: scenario live.matrix_offline (a browser run; the runner''s /ws observer gets matrix_connection down and back, /api/status answers 503 with the link state); tests/sim/test_sim_ws_contract.py (real hub app + simulator: welcome with protocol and link, snapshot, get_status, link loss and recovery, schema-checked); every message a scenario''s /ws observer receives is checked against docs/api/websocket.schema.json (tools/validate/runner.py ws_contract_check).'
   evidence: []
-  findings: [API-10]
-  scenarios: []
+  findings: []
+  scenarios: [live.matrix_offline]
 - id: F-API-033
   area: api
-  title: WS event switch / switch_failed
-  claim: src/rest_api/control.py broadcasts; web/js/websocket.js consumer
+  title: 'WS event routing_change (one per changed output, whoever routed) / switch_failed'
+  claim: docs/api/WEBSOCKET.md; docs/api/websocket.schema.json
   interfaces:
-    ws: [switch, switch_failed]
+    ws: [routing_change, switch_failed]
   target: V3
-  current: V1
-  basis: tests/test_rest_api.py TestWebSocket (broadcast, mocked).
+  current: V2
+  basis: 'V2: scenarios routing.switch_one (routing_change after /api/switch) and failures.unreachable_switch (switch_failed); tests/sim/test_sim_ws_contract.py (exactly one routing_change per change, grid route, a refused route announces switch_failed); every message a scenario''s /ws observer receives is checked against docs/api/websocket.schema.json (tools/validate/runner.py ws_contract_check).'
   evidence: []
-  findings: [API-09]
-  scenarios: [routing.switch_one]
+  findings: []
+  scenarios: [routing.switch_one, failures.unreachable_switch]
 - id: F-API-034
   area: api
-  title: WS event switch_all / switch_all_failed
-  claim: src/rest_api/control.py broadcasts
+  title: 'Route to all: routing_change per output that changed / switch_all_failed'
+  claim: docs/api/WEBSOCKET.md; docs/api/websocket.schema.json
   interfaces:
-    ws: [switch_all, switch_all_failed]
+    ws: [routing_change, switch_all_failed]
   target: V3
-  current: V1
-  basis: tests/test_rest_api.py TestWebSocket (broadcast, mocked).
+  current: V2
+  basis: 'V2: scenario routing.route_all (routing_change for output 8); tests/sim/test_sim_ws_contract.py::test_route_all_announces_every_output_that_changed. switch_all_failed: V1 (sent by the handler on a refused write; no scenario yet).'
   evidence: []
-  findings: [API-09]
+  findings: []
   scenarios: [routing.route_all]
 - id: F-API-035
   area: api
@@ -1153,23 +1152,23 @@ features:
   interfaces:
     ws: [preset_recall, preset_recall_failed]
   target: V3
-  current: V1
-  basis: tests/test_rest_api.py TestWebSocket (broadcast, mocked).
+  current: V2
+  basis: 'V2: scenario presets.recall (preset_recall after the matrix accepted it; the routing follows as routing_change); tests/sim/test_sim_ws_contract.py::test_preset_recall_is_announced_after_success_and_its_routing_follows.'
   evidence: []
-  findings: [API-09, UI-04]
+  findings: [UI-04]
   scenarios: [presets.recall]
 - id: F-API-036
   area: api
   title: WS event audio_mute
-  claim: src/rest_api/outputs.py broadcast
+  claim: 'src/rest_api/events.py (from the matrix''s allaudiomute, any path); docs/api/WEBSOCKET.md; docs/api/websocket.schema.json'
   interfaces:
     ws: [audio_mute]
   target: V2
-  current: V1
-  basis: No test asserts the event.
+  current: V2
+  basis: 'V2: scenario outputs.audio_mute (audio_mute after the matrix reports it) and outputs.audio_mute_rejected (a refused mute is not announced); tests/sim/test_sim_ws_contract.py.'
   evidence: []
   findings: []
-  scenarios: [outputs.audio_mute]
+  scenarios: [outputs.audio_mute, outputs.audio_mute_rejected]
 - id: F-API-037
   area: api
   title: WS events device_settings / device_settings_full
@@ -1178,7 +1177,7 @@ features:
     ws: [device_settings, device_settings_full]
   target: V2
   current: V0
-  basis: No test asserts the events.
+  basis: 'V2: scenario presets.rename (device_settings on /ws, schema-checked).'
   evidence: []
   findings: []
   scenarios: [presets.rename]
@@ -1190,34 +1189,35 @@ features:
     ws: [cec_command]
   target: V2
   current: V0
-  basis: No test asserts the event.
+  basis: 'V2: scenario cec.output_power_on (cec_command, now sent after the matrix accepted it, no `optimistic` flag). The web UI does not show it (docs/api/WEBSOCKET.md).'
   evidence: []
-  findings: [UI-02]
+  findings: []
   scenarios: [cec.output_power_on]
 - id: F-API-039
   area: api
-  title: WS event status (background refresh broadcast)
-  claim: src/rest_api/core.py background_status_refresh
+  title: 'WS status snapshot (after connect, after a first reading, get_status)'
+  claim: 'src/rest_api/events.py status_snapshot; docs/api/WEBSOCKET.md; docs/api/websocket.schema.json'
   interfaces:
     ws: [status]
   target: V2
-  current: V1
-  basis: Visual catalog app/ws-status-refresh/output-names captures its effect (render only).
+  current: V2
+  basis: 'V2: tests/sim/test_sim_ws_contract.py::test_welcome_carries_the_protocol_and_the_matrix_link_then_a_snapshot (snapshot = simulator routing, real output names: BE-31) and ::test_get_status_answers_a_status_snapshot; every scenario''s observer receives the snapshot and the runner checks it against the schema. The old background refresh no longer broadcasts.'
   evidence: []
-  findings: [BE-31, API-11]
+  findings: []
   scenarios: []
 - id: F-API-040
   area: api
-  title: WS live device events (routing_change, signal_change, connection_change, cable_change)
-  claim: src/rest_api/websocket.py docstring; README "WebSocket for real-time status updates"
+  title: 'WS live matrix events from the hub''s own poller (routing, power, signal, display, cable, mute, names)'
+  claim: 'README "WebSocket for real-time status updates"; docs/api/WEBSOCKET.md; docs/api/websocket.schema.json'
   interfaces:
-    ws: [routing_change, signal_change, connection_change, cable_change]
+    ws: [routing_change, power_change, signal_change, connection_change, cable_change, audio_mute, input_name_change, output_name_change]
+    telnet: ['push: hdmi input|output N: connect|disconnect']
   target: V2
-  current: V0
-  basis: Only emitted by the driver.py poller (legacy mode, while a Remote is connected); no test.
+  current: V2
+  basis: 'V2: scenarios live.front_panel_route, live.input_signal, live.display_unplugged (from the Telnet push, within 4 s), live.rename_elsewhere (browser runs: the runner''s /ws observer gets each event, the value is read back over REST), power.standby (api: power_change); tests/sim/test_sim_ws_contract.py and tests/test_hub_events.py. Emitted in every mode by src/rest_api/events.py (no longer by the driver''s poller).'
   evidence: []
-  findings: [UC-17, BE-08, BE-24]
-  scenarios: []
+  findings: [BE-24]
+  scenarios: [live.front_panel_route, live.input_signal, live.display_unplugged, live.rename_elsewhere, power.standby]
 - id: F-API-041
   area: api
   title: WS event scene_execution_error
@@ -1226,10 +1226,9 @@ features:
     ws: [scene_execution_error]
   target: V2
   current: V1
-  basis: 'Scenario scenes.partial_failure receives scene_execution_error on /ws (V2 evidence; recorded level capped at V1 by UI-02:
-    the web client does not handle the event).'
+  basis: 'V2: scenario scenes.partial_failure receives scene_execution_error on /ws (schema-checked). The web UI does not show it yet (WP-E1, VAL-11).'
   evidence: []
-  findings: [API-01, UI-02]
+  findings: [VAL-11]
   scenarios: [scenes.partial_failure]
 - id: F-API-042
   area: api
@@ -1239,10 +1238,10 @@ features:
     rest: [GET /ws]
     ws: [ping, pong]
   target: V2
-  current: V1
-  basis: tests/test_rest_api.py TestWebSocket ping.
+  current: V2
+  basis: 'V2: tests/sim/test_sim_ws_contract.py::test_ping_is_answered_in_both_the_contract_and_the_old_client_form and ::test_the_server_keeps_idle_clients_alive_with_protocol_pings (real hub app: protocol ping frames, {command: ping} and the old {type: ping} answered with pong). V1: tests/test_rest_api.py TestWebSocket.'
   evidence: []
-  findings: [API-10]
+  findings: []
   scenarios: []
 - id: F-DOM-001
   area: domain
@@ -1996,11 +1995,10 @@ features:
     ui: [app/ws-status-refresh/output-names]
   target: V3
   current: V1
-  basis: visual catalog app/ws-status-refresh/output-names captures the name-reset bug (screenshot baseline only; no effect
-    asserted).
+  basis: 'V3: scenarios routing.grid_notifies_other_clients (a grid route reaches another /ws client, VAL-05) and live.front_panel_route, live.input_signal, live.display_unplugged, live.rename_elsewhere (an open /ui page shows routing, signal, display and name changes made elsewhere; its status reads are stripped, so only the WebSocket can explain them).'
   evidence: []
-  findings: [UI-02, BE-31, UC-17, VAL-05]
-  scenarios: [routing.grid_notifies_other_clients]
+  findings: []
+  scenarios: [routing.grid_notifies_other_clients, live.front_panel_route, live.input_signal, live.display_unplugged, live.rename_elsewhere]
 - id: F-UI-025
   area: ui
   title: Reconnect and resync after the WebSocket drops
@@ -2264,10 +2262,10 @@ features:
     kiosk: [kiosk/routing/default]
   target: V3
   current: V1
-  basis: No test; kiosk ignores switch/switch_all (UI-02).
+  basis: 'V3: scenarios live.front_panel_route and live.input_signal: an open /kiosk page shows routing and signal changes made on the matrix (shared /js/websocket.js client; its 5 s status poll is stripped of state in the run).'
   evidence: []
-  findings: [UI-02, UC-17]
-  scenarios: []
+  findings: []
+  scenarios: [live.front_panel_route, live.input_signal]
 - id: F-KIO-011
   area: kiosk
   title: Kiosk disconnected state
@@ -2276,10 +2274,10 @@ features:
     kiosk: [kiosk/disconnected]
   target: V3
   current: V1
-  basis: visual catalog kiosk/disconnected (screenshot baseline only; no effect asserted).
+  basis: 'V3: scenario live.matrix_offline: an open /kiosk page shows Disconnected while the matrix is off the network and Connected again after it returns. The first-load visual is the catalog entry kiosk/disconnected.'
   evidence: []
   findings: [UI-29]
-  scenarios: []
+  scenarios: [live.matrix_offline]
 - id: F-KIO-012
   area: kiosk
   title: Kiosk layout and pins persist
@@ -3069,7 +3067,7 @@ features:
     env: [OREI_TELNET_PORT, OREI_USE_TELNET_CEC]
   target: V4
   current: V1
-  basis: tests/sim/test_sim_hub.py Telnet tests set OREI_TELNET_PORT.
+  basis: 'tests/sim/test_sim_hub.py Telnet tests set OREI_TELNET_PORT. BE-32 (WP-C2): the Telnet port is per matrix (OreiMatrix(telnet_port=...), POST /api/settings/matrix-host telnet_port, config_state.json telnet_port), the variable is only the default (tests/test_orei_matrix.py::test_telnet_port_is_per_matrix, tests/test_run_entry.py::test_saved_telnet_port).'
   evidence: []
   findings: []
   scenarios: []
@@ -3453,12 +3451,11 @@ features:
   interfaces:
     rest: [POST /api/switch, GET /api/status, GET /api/health]
   target: V4
-  current: V1
-  basis: tests/sim/test_sim_faults.py::test_http_500_marks_disconnected (driver-level); the drop and timeout variants are
-    strict xfails.
+  current: V3
+  basis: 'V3: scenario live.matrix_offline (browser: the /ui header and the kiosk status go disconnected and come back; /api/status answers 503 with the link, never made-up names). V2: failures.unreachable_switch; tests/sim/test_sim_ws_contract.py::test_status_is_not_made_up_when_the_status_read_fails (VAL-04: the link up but the status read failing).'
   evidence: []
-  findings: [BE-04, VAL-04, UI-29]
-  scenarios: [failures.unreachable_switch]
+  findings: [UI-29]
+  scenarios: [failures.unreachable_switch, live.matrix_offline]
 - id: F-REL-010
   area: reliability
   title: Status stays fresh (caches expire, one refresh at a time)
@@ -3490,11 +3487,11 @@ features:
   interfaces:
     ws: [routing_change, signal_change]
   target: V4
-  current: V0
-  basis: No test of the poller (TST-03).
+  current: V3
+  basis: 'V3: scenario live.front_panel_route in the core-only hub (no Remote integration at all): the hub''s own poller (src/rest_api/events.py) announces the change and the open /ui and /kiosk pages show it. UC mode: tests/uc/test_lifecycle.py front-panel tests (web clients get routing_change with and without a Remote).'
   evidence: []
-  findings: [UC-17, BE-08]
-  scenarios: []
+  findings: []
+  scenarios: [live.front_panel_route]
 - id: F-REL-013
   area: reliability
   title: The event loop never stalls (loop-lag metric)
@@ -3514,10 +3511,10 @@ features:
   interfaces:
     ws: [all broadcasts]
   target: V4
-  current: V1
-  basis: tests/test_concurrency.py TestWebSocketClientSetConcurrency (set safety only).
+  current: V2
+  basis: 'V2: tests/sim/test_sim_ws_contract.py::test_a_stalled_client_cannot_hold_up_a_command (real hub app + simulator: a client whose socket never takes a message; /api/switch still answers at once and the matrix is routed). V1: tests/test_hub_events.py (per-client queue, 5 s send timeout, 256-message limit).'
   evidence: []
-  findings: [API-09]
+  findings: []
   scenarios: []
 - id: F-REL-015
   area: reliability

@@ -90,6 +90,8 @@ def test_device_change_is_seen_by_the_client(tmp_path: Path, observing):
     assert "client showed input_3_signal = 'off' before the action" in rec["procedure"]
     assert any("simulator event" in step for step in rec["procedure"])
     assert {"path": "inputs[2].signal", "before": 0, "after": 1} in rec["observations"]["state_diff"]
-    assert [c["result"] for c in rec["checks"]] == ["pass", "pass"]
+    # Device, ClientState, and the runner's check of every /ws message against the contract schema (WP-C2)
+    assert [c["result"] for c in rec["checks"]] == ["pass", "pass", "pass"]
+    assert "websocket.schema.json" in rec["checks"][-1]["description"]
     pre = records["selftest.wrong_before"]["checks"][0]
     assert pre["description"].endswith("before the action") and pre["result"] == "fail"

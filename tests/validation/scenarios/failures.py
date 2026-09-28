@@ -14,6 +14,7 @@ SCENARIOS = [
         title="Matrix unreachable (connections dropped): routing fails visibly, no fabricated state",
         kind="failure",
         features=("F-REL-009",),
+        client_features={"api": ("F-API-033",)},
         targets=("sim",),
         faults={"drop_http": True},
         action=act("route", input=3, output=1),

@@ -52,6 +52,28 @@ from .stack import HubProcess, SimStack
 
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_OUT = ROOT / "build" / "validation"
+#: The /ws message contract every recorded WebSocket message is checked against (WP-C2).
+WS_SCHEMA = ROOT / "docs" / "api" / "websocket.schema.json"
+
+
+def ws_contract_check(events: list[dict[str, Any]]) -> dict[str, Any]:
+    """One check: every message the /ws observer received follows docs/api/websocket.schema.json."""
+    description = "every WebSocket message follows docs/api/websocket.schema.json"
+    try:
+        import jsonschema
+    except ImportError:
+        return {"description": description, "result": "n/a", "detail": "jsonschema is not installed",
+                "finding": None, "linked_finding": None, "note": None}
+    validator = jsonschema.Draft202012Validator(json.loads(WS_SCHEMA.read_text(encoding="utf-8")))
+    bad = []
+    for e in events:
+        message = {"event": e.get("event"), "data": e.get("data")}
+        errors = sorted(validator.iter_errors(message), key=str)
+        if errors:
+            bad.append(f"{e.get('event')}: {errors[0].message[:200]}")
+    return {"description": description, "result": "fail" if bad else "pass",
+            "detail": "; ".join(bad[:5]) if bad else f"{len(events)} message(s) checked",
+            "finding": None, "linked_finding": None, "note": None}
 
 #: Device paths that change on their own on real hardware (signal, hot-plug).
 VOLATILE_PATHS = ("inputs[*].signal", "inputs[*].cable", "outputs[*].connected")
@@ -445,7 +467,8 @@ class Runner:
                 # Preconditions on what the client shows (ClientState.before): wait for them, so a
                 # passing check afterwards proves a change the client saw.
                 for exp in sc.expect:
-                    if isinstance(exp, ClientState) and exp.before is not None and client.observes:
+                    if (isinstance(exp, ClientState) and exp.before is not None and client.observes
+                            and (exp.clients is None or client.name in exp.clients)):
                         pre = await self._client_state(client, exp.key, exp.before, exp.timeout)
                         procedure.append(f"client showed {exp.key} = {pre['value']!r} before the action"
                                          + ("" if pre["ok"] else f" (expected {exp.before!r})"))
@@ -476,6 +499,8 @@ class Runner:
                 for exp in sc.expect:
                     checks.append(await self._check(exp, sc, client, result, state_before, t_action, ws, helper,
                                                     log_cursor, hub_reads))
+                if ws.events:
+                    checks.append(ws_contract_check(ws.events))
                 state_after = await dev.state()
                 if isinstance(dev, SimDevice):
                     log_excerpt = (await dev.log())[log_cursor:]
@@ -605,6 +630,9 @@ class Runner:
         if "event" in action.params:
             await dev.event(action.params["event"])
             result.steps.append(f"simulator event {action.params['event']}")
+        elif "reboot" in action.params:
+            await dev.reboot(float(action.params["reboot"]))
+            result.steps.append(f"simulator reboot: the device is offline for {action.params['reboot']} s")
         else:
             await dev.patch_state(action.params["patch"])
             result.steps.append(f"simulator state patch {action.params['patch']}")

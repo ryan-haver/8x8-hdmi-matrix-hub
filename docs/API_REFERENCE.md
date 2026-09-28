@@ -7,7 +7,7 @@ The REST API provides HTTP endpoints for external integrations, enabling control
 - **Home Assistant** - via REST commands or custom component
 - **Custom scripts** - curl, Python, Node.js, etc.
 - **Any HTTP-capable device** - IoT devices, automation platforms
-- **WebSocket** - Real-time status updates
+- **WebSocket** - Real-time status updates: the contract (every event, payload and when it is sent) is [`api/WEBSOCKET.md`](api/WEBSOCKET.md)
 - **Web UI** - Responsive browser-based control panel
 
 ## API Version

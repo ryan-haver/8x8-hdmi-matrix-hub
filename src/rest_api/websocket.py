@@ -1,159 +1,100 @@
 """
-WebSocket support for real-time status updates.
+The /ws endpoint: live events for the web UI, the kiosk and any other client.
+
+The message contract (every event, its payload and when it is sent) is
+docs/api/WEBSOCKET.md, with the JSON schema docs/api/websocket.schema.json.
+The events come from the hub's event stream (rest_api/events.py): its status
+poller and the matrix's own change notifications, whatever made the change.
 """
 
-import asyncio
 import json
 import logging
-import time
 from typing import Any
 
 from aiohttp import WSMsgType, web
 
-from .utils import get_matrix_device, get_ws_clients
+from .events import get_event_stream
+from .utils import get_ws_clients
 
 _LOG = logging.getLogger("rest_api.websocket")
 
+#: Protocol-level ping every N seconds; a client that does not answer within half of it is closed (API-10).
+#: Browsers answer ping frames by themselves.
+HEARTBEAT_SECONDS = 30.0
 
-async def broadcast_status_update(event_type: str, data: dict[str, Any]):
+
+async def broadcast_status_update(event_type: str, data: dict[str, Any]) -> None:
+    """Send ``event_type`` to every /ws client.
+
+    Returns at once: each client has its own queue, so a slow client never
+    holds up the caller (API-09). Kept as a coroutine for existing callers.
+
+    :param event_type: an event of the contract (docs/api/WEBSOCKET.md)
+    :param data: its payload
     """
-    Broadcast a status update to all connected WebSocket clients.
-
-    :param event_type: Type of event (e.g., "routing_change", "connection_change", "signal_change")
-    :param data: Event data to send
-    """
-    ws_clients = get_ws_clients()
-    if not ws_clients:
-        return
-
-    message = json.dumps({"event": event_type, "data": data})
-
-    # Copy the set to avoid iteration issues if clients are added/removed during broadcast
-    clients_snapshot = set(ws_clients)
-
-    # Send to all clients, removing disconnected ones
-    disconnected = set()
-    for ws in clients_snapshot:
-        try:
-            if not ws.closed:
-                await ws.send_str(message)
-            else:
-                disconnected.add(ws)
-        except Exception as e:
-            _LOG.debug(f"Error sending to WebSocket client: {e}")
-            disconnected.add(ws)
-
-    # Clean up disconnected clients
-    ws_clients.difference_update(disconnected)
-
-    if disconnected:
-        _LOG.debug(f"Removed {len(disconnected)} disconnected WebSocket client(s)")
+    get_event_stream().publish(event_type, data)
 
 
 def get_connected_client_count() -> int:
-    """Get the number of connected WebSocket clients."""
-    return len(get_ws_clients())
-
-
-async def _heartbeat(ws, ws_clients, last_pong_time):
-    """Heartbeat coroutine that pings the client every 30 seconds and checks for pong response."""
-    try:
-        while not ws.closed:
-            await asyncio.sleep(30)
-            if ws.closed:
-                break
-            # Check if client responded to last ping within 10 seconds
-            if last_pong_time[0] > 0 and (time.monotonic() - last_pong_time[0]) > 10:
-                _LOG.warning("Client pong timeout, closing connection")
-                await ws.close()
-                break
-            try:
-                await ws.send_str(json.dumps({"event": "ping"}))
-            except Exception:
-                break
-    except asyncio.CancelledError:
-        pass
-    except Exception:
-        pass
+    """Number of connected WebSocket clients."""
+    return get_event_stream().client_count
 
 
 async def handle_websocket(request: web.Request) -> web.WebSocketResponse:
     """
-    WebSocket endpoint for real-time status updates.
+    WebSocket endpoint for live updates (docs/api/WEBSOCKET.md).
 
-    Clients connect to /ws and receive JSON messages:
-    - {"event": "connected", "data": {"message": "...", "client_count": N}}
-    - {"event": "routing_change", "data": {"output": N, "input": M, "input_name": "..."}}
-    - {"event": "connection_change", "data": {"output": N, "connected": bool, "has_signal": bool}}
-    - {"event": "signal_change", "data": {"input": N, "has_signal": bool}}
-    - {"event": "status_update", "data": {...full status...}}
+    Server -> client: ``connected`` first (protocol version and the matrix
+    link), then a ``status`` snapshot as soon as the hub has read the matrix,
+    then change events (``routing_change``, ``signal_change``, ...).
+
+    Client -> server: ``{"command": "ping"}`` -> ``pong``;
+    ``{"command": "get_status"}`` -> ``status`` (or ``error`` while the hub has
+    no status). ``{"type": "ping"}``, the form older web clients send, is
+    answered too.
     """
-    ws_clients = get_ws_clients()
-    matrix_device = get_matrix_device()
-
-    ws = web.WebSocketResponse()
+    ws = web.WebSocketResponse(heartbeat=HEARTBEAT_SECONDS)
     await ws.prepare(request)
 
-    # Send welcome message FIRST, only add to set if successful
-    try:
-        await ws.send_json(
-            {
-                "event": "connected",
-                "data": {"message": "Connected to OREI Matrix WebSocket", "client_count": len(ws_clients) + 1},
-            }
-        )
-    except Exception as e:
-        _LOG.warning(f"Failed to send welcome: {e}")
-        return ws  # Don't add to set if welcome failed
-
-    # Only add to set after successful welcome
+    stream = get_event_stream()
+    ws_clients = get_ws_clients()
     ws_clients.add(ws)
-    client_count = len(ws_clients)
-    _LOG.info(f"WebSocket client connected (total: {client_count})")
+    stream.add_client(ws)
+    _LOG.info(f"WebSocket client connected (total: {stream.client_count})")
 
-    # Track last pong time for timeout detection
-    last_pong_time = [0.0]
-
-    # Create heartbeat task after welcome message
-    heartbeat_task = asyncio.create_task(_heartbeat(ws, ws_clients, last_pong_time))
-
-    # Keep connection open and handle incoming messages
     try:
         async for msg in ws:
             if msg.type == WSMsgType.TEXT:
-                # Handle incoming commands (optional - clients can send commands via WebSocket)
-                try:
-                    data = json.loads(msg.data)
-                    command = data.get("command")
-
-                    if command == "ping":
-                        await ws.send_json({"event": "pong", "data": {}})
-                    elif command == "pong":
-                        import time
-                        last_pong_time[0] = time.monotonic()
-                    elif command == "get_status":
-                        if matrix_device and matrix_device.connected:
-                            status = await matrix_device.get_status()
-                            await ws.send_json({"event": "status_update", "data": status})
-                        else:
-                            await ws.send_json({"event": "error", "data": {"message": "Matrix not connected"}})
-                    else:
-                        await ws.send_json({"event": "error", "data": {"message": f"Unknown command: {command}"}})
-                except json.JSONDecodeError:
-                    await ws.send_json({"event": "error", "data": {"message": "Invalid JSON"}})
+                _handle_command(stream, ws, msg.data)
             elif msg.type == WSMsgType.ERROR:
                 _LOG.warning(f"WebSocket error: {ws.exception()}")
     except Exception as e:
         _LOG.debug(f"WebSocket connection error: {e}")
     finally:
-        # Cancel heartbeat task
-        heartbeat_task.cancel()
-        try:
-            await heartbeat_task
-        except asyncio.CancelledError:
-            pass
-        # Remove from connected clients
         ws_clients.discard(ws)
-        _LOG.info(f"WebSocket client disconnected (remaining: {len(ws_clients)})")
+        await stream.remove_client(ws)
+        _LOG.info(f"WebSocket client disconnected (remaining: {stream.client_count})")
 
     return ws
+
+
+def _handle_command(stream: Any, ws: web.WebSocketResponse, text: str) -> None:
+    try:
+        data = json.loads(text)
+    except json.JSONDecodeError:
+        stream.send(ws, "error", {"message": "Invalid JSON"})
+        return
+    if not isinstance(data, dict):
+        stream.send(ws, "error", {"message": "Expected a JSON object"})
+        return
+    command = data.get("command", data.get("type"))
+    if command == "ping":
+        stream.send(ws, "pong", {})
+    elif command == "get_status":
+        snapshot = stream.status_snapshot()
+        if snapshot is None:
+            stream.send(ws, "error", {"message": "Matrix status not available"})
+        else:
+            stream.send(ws, "status", snapshot)
+    else:
+        stream.send(ws, "error", {"message": f"Unknown command: {command}"})

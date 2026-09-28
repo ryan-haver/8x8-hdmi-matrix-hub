@@ -22,9 +22,6 @@ import pytest
 ROOT = Path(__file__).resolve().parents[2]
 SCHEMA = ROOT / "docs" / "api" / "websocket.schema.json"
 
-#: Every test here fails on the code before WP-C2 (API-09, API-10, VAL-04, VAL-05, UC-17, UI-02 contract).
-pytestmark = pytest.mark.xfail(strict=True, reason="WP-C2: WebSocket contract not implemented yet")
-
 #: Short poll interval so front-panel changes show up quickly in these tests.
 POLL = 0.5
 

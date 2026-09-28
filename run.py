@@ -234,6 +234,21 @@ def saved_matrix_address(config_home: Path | None) -> tuple[str, int] | None:
     return None
 
 
+def saved_telnet_port(config_home: Path | None) -> int | None:
+    """The matrix Telnet port a saved setup carries (``config_state.json`` ``telnet_port``), if any (BE-32).
+
+    ``None`` leaves the default to the matrix client: ``OREI_TELNET_PORT``, else 23.
+    """
+    if config_home is None:
+        return None
+    try:
+        data = json.loads((config_home / "config_state.json").read_text(encoding="utf-8"))
+        port = int(data["telnet_port"])
+    except (OSError, ValueError, TypeError, KeyError, AttributeError):
+        return None
+    return port if 1 <= port <= 65535 else None
+
+
 def configure_logging(level: str) -> None:
     logging.basicConfig(
         level=getattr(logging, level, logging.INFO),
@@ -252,10 +267,12 @@ async def run_core(settings: Settings) -> None:
     from rest_api import RestApiServer, set_matrix_device
 
     host, port = settings.matrix_host, settings.matrix_port
+    telnet_port: int | None = None  # None: OREI_TELNET_PORT, else 23 (BE-32)
     if not host:
         saved = saved_matrix_address(settings.uc_config_home)
         if saved:
             host, port = saved
+            telnet_port = saved_telnet_port(settings.uc_config_home)
             _LOG.info("MATRIX_HOST not set: using %s:%d from the saved Remote integration setup", host, port)
         else:
             host = DEFAULT_MATRIX_HOST
@@ -274,7 +291,7 @@ async def run_core(settings: Settings) -> None:
         with contextlib.suppress(NotImplementedError, RuntimeError, ValueError):  # Windows: no signal handlers
             loop.add_signal_handler(sig, stop.set)
 
-    matrix = OreiMatrix(host, port=port)
+    matrix = OreiMatrix(host, port=port, telnet_port=telnet_port)
     set_matrix_device(matrix, config_dir=config_dir)
 
     # The API (and /api/health) comes up first; an unreachable matrix must not delay it.

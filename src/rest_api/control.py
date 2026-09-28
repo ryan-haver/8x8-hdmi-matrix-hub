@@ -49,12 +49,12 @@ async def handle_preset(request: web.Request) -> web.Response:
 
         _LOG.info(f"REST API: Recalling preset {preset_num}")
 
-        # Optimistic update - broadcast before command for instant UI feedback
-        await broadcast_status_update("preset_recall", {"preset": preset_num, "optimistic": True})
-
         success = await matrix_device.recall_preset(preset_num)
 
         if success:
+            # Announced once the matrix accepted it; the routing it changed follows as
+            # routing_change events from the hub's event stream (docs/api/WEBSOCKET.md).
+            await broadcast_status_update("preset_recall", {"preset": preset_num})
             return _json_response(
                 True,
                 {
@@ -64,12 +64,7 @@ async def handle_preset(request: web.Request) -> web.Response:
                 },
             )
         else:
-            # Send corrective broadcast so WebSocket clients can revert the
-            # optimistic state — otherwise the UI shows a preset as active
-            # when the matrix never actually switched.
-            await broadcast_status_update(
-                "preset_recall_failed", {"preset": preset_num}
-            )
+            await broadcast_status_update("preset_recall_failed", {"preset": preset_num})
             return _json_response(False, error=f"Failed to recall preset {preset_num}", status=500)
     except ValueError:
         return _json_response(False, error="Invalid preset number", status=400)
@@ -110,11 +105,8 @@ async def handle_switch(request: web.Request) -> web.Response:
         if output_num is None:
             _LOG.info(f"REST API: Switching input {input_num} to ALL outputs")
 
-            # Optimistic update
-            await broadcast_status_update(
-                "switch_all", {"input": input_num, "outputs": list(range(1, 9)), "optimistic": True}
-            )
-
+            # The routing changes are announced by the hub's event stream (routing_change per
+            # output that changed), whichever client or device made them (docs/api/WEBSOCKET.md).
             success = await matrix_device.switch_input_to_all(input_num)
 
             if success:
@@ -127,10 +119,7 @@ async def handle_switch(request: web.Request) -> web.Response:
                     },
                 )
             else:
-                # Corrective broadcast so UI reverts optimistic state.
-                await broadcast_status_update(
-                    "switch_all_failed", {"input": input_num}
-                )
+                await broadcast_status_update("switch_all_failed", {"input": input_num})
                 return _json_response(False, error="Failed to switch routing", status=500)
 
         # Single output routing
@@ -140,9 +129,6 @@ async def handle_switch(request: web.Request) -> web.Response:
             return _json_response(False, error="Output must be 1-8", status=400)
 
         _LOG.info(f"REST API: Switching input {input_num} to output {output_num}")
-
-        # Optimistic update
-        await broadcast_status_update("switch", {"input": input_num, "output": output_num, "optimistic": True})
 
         success = await matrix_device.switch_input(input_num, output_num)
 
@@ -156,10 +142,7 @@ async def handle_switch(request: web.Request) -> web.Response:
                 },
             )
         else:
-            # Corrective broadcast so UI reverts optimistic state.
-            await broadcast_status_update(
-                "switch_failed", {"input": input_num, "output": output_num}
-            )
+            await broadcast_status_update("switch_failed", {"input": input_num, "output": output_num})
             return _json_response(False, error="Failed to switch routing", status=500)
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON body", status=400)
@@ -363,6 +346,9 @@ async def handle_output_source(request: web.Request) -> web.Response:
                 },
             )
         else:
+            # The change itself (on success) is announced by the event stream, like every
+            # routing change (VAL-05); a refusal is announced here.
+            await broadcast_status_update("switch_failed", {"input": input_num, "output": output_num})
             return _json_response(False, error="Failed to set output source", status=500)
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON body", status=400)

@@ -82,6 +82,7 @@ from .device_settings import (
     handle_toggle_favorite_preset,
     init_device_settings,
 )
+from .events import install_event_stream
 from .integrations import (
     handle_get_flic_buttons,
     handle_register_flic_buttons,
@@ -241,6 +242,9 @@ def create_rest_app(data_dir: Path | None = None) -> web.Application:
 
     # Event-loop lag / uptime / task-count sampling for /api/health
     install_runtime_monitor(app)
+
+    # The hub's live event stream (/ws) and its status poller (docs/api/WEBSOCKET.md)
+    install_event_stream(app)
 
     # Add CORS middleware for browser-based clients.
     # FIX (F13.1): validate the request Origin against an explicit allowlist

@@ -4,7 +4,8 @@
 // Reads one JSON command per line on stdin, answers one JSON line on stdout:
 //   {"id":1,"op":"start","baseURL":"http://127.0.0.1:18080","forwardedFor":"10.9.0.1","artifacts":"/abs/dir"}
 //   {"id":2,"op":"perform","intent":"route","params":{"input":3,"output":1},"label":"routing.switch_one"}
-//   {"id":3,"op":"stop"}
+//   {"id":3,"op":"observe","key":"ui.route.1"}
+//   {"id":4,"op":"stop"}
 // -> {"id":N,"ok":true,"result":{...}} | {"id":N,"ok":false,"error":"..."}
 //
 // Every action gets a fresh browser context, the same deterministic page setup
@@ -165,6 +166,110 @@ const FLOWS = {
 
 const FLOW_STORAGE = { route: { 'matrix-view-mode': 'grid' } };
 
+// ---------------------------------------------------------------------------
+// Watchers: one /ui page and one /kiosk page that stay open for the whole run,
+// like screens on the wall, and show what reached them live. After their first
+// load, the status reads they make (the kiosk polls /api/status every 5 s) still
+// reach the hub, but the answers are stripped of all matrix state: success and
+// the HTTP status stay (so "matrix unreachable" still shows), routing, names and
+// port details go. Anything a watcher shows later can only have arrived over the
+// hub's WebSocket (docs/api/WEBSOCKET.md).
+// ---------------------------------------------------------------------------
+
+const watchers = {};
+const STATE_READS = /\/api\/(status|inputs|outputs)(\/|$|\?)/;
+
+async function stripStateReads(page) {
+  await page.route(
+    (url) => STATE_READS.test(url.pathname),
+    async (route) => {
+      if (route.request().method() !== 'GET') return route.fallback();
+      let response;
+      try {
+        response = await route.fetch();
+      } catch {
+        return route.abort();
+      }
+      let body;
+      try {
+        body = await response.json();
+      } catch {
+        return route.fulfill({ response });
+      }
+      const link = body && typeof body.data === 'object' && body.data ? body.data : {};
+      const stripped = { ...body, data: body.success ? { connected: link.connected, state: link.state } : body.data };
+      return route.fulfill({ response, json: stripped });
+    },
+  );
+}
+
+async function watcher(kind) {
+  if (watchers[kind]) return watchers[kind];
+  const forwardedFor = `${cfg.forwardedFor.split('.').slice(0, 3).join('.')}.${kind === 'ui' ? 201 : 202}`;
+  const { context, page } = await newPage(kind === 'ui' ? { 'matrix-view-mode': 'grid' } : {}, forwardedFor);
+  if (kind === 'ui') {
+    await openUi(page, []);
+  } else {
+    await page.goto('/kiosk');
+    await page.locator('#kioskGrid .kiosk-btn').nth(7).waitFor({ timeout: 20_000 });
+    await page.waitForFunction(() => document.querySelector('#statusText')?.textContent === 'Connected', undefined, {
+      timeout: 20_000,
+    });
+    await page.waitForTimeout(600);
+  }
+  await stripStateReads(page);
+  watchers[kind] = { context, page };
+  return watchers[kind];
+}
+
+// What a person looking at the screen sees, read from the DOM.
+const OBSERVERS = {
+  ui: (page, parts) =>
+    page.evaluate((parts) => {
+      const statusOf = (el) => {
+        if (!el) return null;
+        const cls = [...el.classList].find((c) => c.startsWith('status-'));
+        return cls ? cls.slice('status-'.length) : null;
+      };
+      const [what, n] = parts;
+      if (what === 'route') {
+        const cell = document.querySelector(`#matrix-grid .matrix-route.active[data-output="${n}"]`);
+        return cell ? Number(cell.dataset.input) : null;
+      }
+      if (what === 'input') return statusOf(document.querySelectorAll('#matrix-grid .matrix-input-label')[n - 1]);
+      if (what === 'output') return statusOf(document.querySelectorAll('#matrix-grid .matrix-header:not(.corner)')[n - 1]);
+      if (what === 'input_name') return document.querySelectorAll('#matrix-grid .matrix-input-label')[n - 1]?.title ?? null;
+      if (what === 'header') {
+        const el = document.getElementById('header-title-text');
+        return el?.classList.contains('connected') ? 'connected' : 'disconnected';
+      }
+      throw new Error(`unknown ui key ${parts.join('.')}`);
+    }, parts),
+  kiosk: (page, parts) =>
+    page.evaluate((parts) => {
+      const [what, n] = parts;
+      if (what === 'route') {
+        const text = document.querySelectorAll('#outputStatusGrid .output-tile')[n - 1]?.querySelector('.output-tile-input')?.textContent;
+        return text && /^\d+$/.test(text.trim()) ? Number(text.trim()) : null;
+      }
+      if (what === 'input') {
+        const btn = document.querySelectorAll('#kioskGrid .kiosk-btn')[n - 1];
+        const cls = btn && [...btn.classList].find((c) => c.startsWith('status-'));
+        return cls ? cls.slice('status-'.length) : null;
+      }
+      if (what === 'status') return document.querySelector('#statusText')?.textContent ?? null;
+      throw new Error(`unknown kiosk key ${parts.join('.')}`);
+    }, parts),
+};
+
+async function observe(key) {
+  const [kind, ...rest] = key.split('.');
+  if (!OBSERVERS[kind]) throw new Error(`unknown key ${key} (ui.* or kiosk.*)`);
+  const { page } = await watcher(kind);
+  const parts = rest.map((p) => (/^\d+$/.test(p) ? Number(p) : p));
+  return OBSERVERS[kind](page, parts);
+}
+
 async function perform(msg) {
   const flow = FLOWS[msg.intent];
   if (!flow) return { unsupported: true };
@@ -213,7 +318,10 @@ rl.on('line', async (line) => {
       send({ id: msg.id, ok: true, result: { browser: `chromium ${browser.version()}` } });
     } else if (msg.op === 'perform') {
       send({ id: msg.id, ok: true, result: await perform(msg) });
+    } else if (msg.op === 'observe') {
+      send({ id: msg.id, ok: true, result: { value: await observe(msg.key) } });
     } else if (msg.op === 'stop') {
+      for (const w of Object.values(watchers)) await w.context.close().catch(() => {});
       if (browser) await browser.close();
       send({ id: msg.id, ok: true, result: {} });
       process.exit(0);
