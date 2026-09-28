@@ -314,11 +314,11 @@ class CecMacroEditor {
         }
         
         container.innerHTML = this.macros.map(macro => `
-            <div class="macro-item" data-id="${macro.id}">
-                <div class="macro-icon">${macro.icon || '⚡'}</div>
+            <div class="macro-item" data-id="${Helpers.escapeHtml(macro.id)}">
+                <div class="macro-icon">${Helpers.escapeHtml(macro.icon || '⚡')}</div>
                 <div class="macro-info">
                     <div class="macro-name">${Helpers.escapeHtml(macro.name)}</div>
-                    <div class="macro-meta">${macro.step_count} step${macro.step_count !== 1 ? 's' : ''}</div>
+                    <div class="macro-meta">${Helpers.escapeHtml(macro.step_count)} step${macro.step_count !== 1 ? 's' : ''}</div>
                 </div>
                 <div class="macro-actions">
                     <button class="btn btn-icon btn-execute" title="Execute">
@@ -370,7 +370,7 @@ class CecMacroEditor {
         const container = this.modal.querySelector('#icon-options');
         container.innerHTML = CecMacroEditor.ICONS.map(icon => `
             <button class="icon-option ${icon === this.currentMacro.icon ? 'selected' : ''}" 
-                    data-icon="${icon}">${icon}</button>
+                    data-icon="${Helpers.escapeHtml(icon)}">${Helpers.escapeHtml(icon)}</button>
         `).join('');
         
         container.querySelectorAll('.icon-option').forEach(btn => {
@@ -412,7 +412,7 @@ class CecMacroEditor {
                     <div class="step-row delay-row">
                         <label>Delay after:</label>
                         <input type="number" class="step-delay" data-field="delay_ms" 
-                               value="${step.delay_ms || 0}" min="0" max="10000" step="100">
+                               value="${Helpers.escapeHtml(step.delay_ms || 0)}" min="0" max="10000" step="100">
                         <span>ms</span>
                     </div>
                 </div>
@@ -478,7 +478,7 @@ class CecMacroEditor {
             const value = `input_${i}`;
             const selected = selectedTargets.includes(value) ? 'selected' : '';
             const name = state?.getInputName?.(i) || `Input ${i}`;
-            html += `<option value="${value}" ${selected}>${name}</option>`;
+            html += `<option value="${value}" ${selected}>${Helpers.escapeHtml(name)}</option>`;
         }
         html += '</optgroup>';
         
@@ -488,7 +488,7 @@ class CecMacroEditor {
             const value = `output_${i}`;
             const selected = selectedTargets.includes(value) ? 'selected' : '';
             const name = state?.getOutputName?.(i) || `Output ${i}`;
-            html += `<option value="${value}" ${selected}>${name}</option>`;
+            html += `<option value="${value}" ${selected}>${Helpers.escapeHtml(name)}</option>`;
         }
         html += '</optgroup>';
         

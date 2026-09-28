@@ -4,16 +4,19 @@
  */
 
 /**
- * Escapes HTML special characters to prevent XSS
+ * Escapes HTML special characters to prevent XSS. Safe in text content and in
+ * quoted attribute values (SEC-07: quotes are escaped too).
  * @param {string} text - Text to escape
  * @returns {string} Escaped HTML-safe string
  */
 function escapeHtml(text) {
     if (text === null || text === undefined) return '';
-    const str = String(text);
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
+    return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
 }
 
 /**

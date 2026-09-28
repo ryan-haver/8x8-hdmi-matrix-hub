@@ -763,6 +763,25 @@
             background: rgba(255, 255, 255, 0.15);
         }
 
+        /* Passcode PIN pad (UI-48): digits, entered dots and the delete key sized for touch (UI-50) */
+        #passcodeDisplay {
+            font-size: 2rem;
+            line-height: 1.2;
+            letter-spacing: 0.4em;
+            min-height: 1.2em;
+            text-align: center;
+            color: var(--text-primary);
+        }
+
+        #passcodePad .remote-cmd-btn.action-btn {
+            font-size: 1.25rem;
+        }
+
+        #passcodePad .remote-cmd-btn.action-btn[data-pin-action="back"] {
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+
         /* Playback buttons */
         .remote-cmd-btn.media-btn {
             background: rgba(255, 255, 255, 0.05);
@@ -1249,7 +1268,7 @@
                 </div>
 
                 <!-- Navigation D-Pad Section -->
-                <div class="remote-section nav-section">
+                <div class="remote-section nav-section" id="remoteNavSection">
                     <div class="cec-dpad">
                         <button class="remote-cmd-btn dpad-up" data-cmd="up">▲</button>
                         <button class="remote-cmd-btn dpad-left" data-cmd="left">◀</button>
@@ -1292,6 +1311,46 @@
         </div>
     </div>
 
+    <!-- Passcode PIN pad (UI-48): kiosk modal, CEC-remote action buttons, wizard footer buttons -->
+    <div class="kiosk-modal" id="passcodeModal">
+        <div class="kiosk-modal-content">
+            <div class="kiosk-modal-header">
+                <h4 id="passcodeModalTitle">Enter Passcode</h4>
+                <button class="kiosk-modal-close" id="passcodeCloseBtn">&times;</button>
+            </div>
+            <div class="kiosk-modal-body">
+                <p class="wizard-instruction" id="passcodeInstruction">This profile is passcode protected.</p>
+                <p class="wizard-instruction" id="passcodeDisplay"></p>
+                <div class="remote-section" id="passcodePad">
+                    <div class="remote-btn-row">
+                        <button class="remote-cmd-btn action-btn" data-digit="1">1</button>
+                        <button class="remote-cmd-btn action-btn" data-digit="2">2</button>
+                        <button class="remote-cmd-btn action-btn" data-digit="3">3</button>
+                    </div>
+                    <div class="remote-btn-row">
+                        <button class="remote-cmd-btn action-btn" data-digit="4">4</button>
+                        <button class="remote-cmd-btn action-btn" data-digit="5">5</button>
+                        <button class="remote-cmd-btn action-btn" data-digit="6">6</button>
+                    </div>
+                    <div class="remote-btn-row">
+                        <button class="remote-cmd-btn action-btn" data-digit="7">7</button>
+                        <button class="remote-cmd-btn action-btn" data-digit="8">8</button>
+                        <button class="remote-cmd-btn action-btn" data-digit="9">9</button>
+                    </div>
+                    <div class="remote-btn-row">
+                        <button class="remote-cmd-btn action-btn" data-pin-action="clear">Clear</button>
+                        <button class="remote-cmd-btn action-btn" data-digit="0">0</button>
+                        <button class="remote-cmd-btn action-btn" data-pin-action="back" aria-label="Delete last digit">⌫</button>
+                    </div>
+                </div>
+            </div>
+            <div class="kiosk-modal-footer">
+                <button class="btn-wizard btn-prev" id="passcodeCancelBtn">Cancel</button>
+                <button class="btn-wizard btn-save" id="passcodeOkBtn">OK</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Guided Routing Modal -->
     <div class="kiosk-modal" id="routingModal">
         <div class="kiosk-modal-content">
@@ -1322,27 +1381,29 @@
                     <div class="wizard-advanced-settings hidden" id="advancedRoutingSettings">
                         <div class="settings-row">
                             <label>HDCP Mode</label>
+                            <!-- UI-23: the hub's API values (HDCP 1 = 1.4, 2 = 2.2, 3 = follow sink); 0 ("Disable") does not exist -->
                             <select id="routingHdcpMode">
                                 <option value="3" selected>Auto</option>
                                 <option value="1">HDCP 1.4</option>
                                 <option value="2">HDCP 2.2</option>
-                                <option value="0">Disable</option>
                             </select>
                         </div>
                         <div class="settings-row">
                             <label>HDR Mode</label>
+                            <!-- UI-23: HDR API values 1 = passthrough, 2 = HDR to SDR, 3 = auto (follow sink EDID) -->
                             <select id="routingHdrMode">
-                                <option value="0" selected>Auto</option>
+                                <option value="3" selected>Auto</option>
                                 <option value="1">HDR 10</option>
                                 <option value="2">SDR</option>
                             </select>
                         </div>
                         <div class="settings-row">
                             <label>Scaler Mode</label>
+                            <!-- UI-23: scaler API values 1 = passthrough, 3 = 8K/4K to 1080p, 4 = auto (follow sink EDID) -->
                             <select id="routingScalerMode">
-                                <option value="1" selected>Auto (Display EDID)</option>
-                                <option value="0">Bypass</option>
-                                <option value="2">Force 1080p Downscale</option>
+                                <option value="4" selected>Auto (Display EDID)</option>
+                                <option value="1">Bypass</option>
+                                <option value="3">Force 1080p Downscale</option>
                             </select>
                         </div>
                         <label class="wizard-checkbox-label">
@@ -1472,7 +1533,6 @@
 
             // Configuration
             const API_BASE = '/api';
-            const POLL_INTERVAL = 5000;
 
             // State
             let connected = false;
@@ -1535,10 +1595,14 @@
              * Escape HTML for safe rendering
              */
             function escapeHtml(text) {
-                if (!text) return '';
-                const div = document.createElement('div');
-                div.textContent = String(text);
-                return div.innerHTML;
+                // SEC-07: quotes too, so it is safe in attribute values
+                if (text === null || text === undefined) return '';
+                return String(text)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
             }
 
             /**
@@ -1744,14 +1808,18 @@
                 const btnDisplay = document.getElementById('btnTargetDisplay');
                 if (!btnSource || !btnDisplay) return;
                 
+                // UI-37: a display has only power, mute and volume (the device's
+                // display CEC table), so the D-pad, Menu/Back and playback are hidden.
                 if (target === 'input') {
                     btnSource.classList.add('active');
                     btnDisplay.classList.remove('active');
                     document.getElementById('remotePlaybackSection').classList.remove('hidden');
+                    document.getElementById('remoteNavSection').classList.remove('hidden');
                 } else {
                     btnSource.classList.remove('active');
                     btnDisplay.classList.add('active');
                     document.getElementById('remotePlaybackSection').classList.add('hidden');
+                    document.getElementById('remoteNavSection').classList.add('hidden');
                 }
             }
 
@@ -1802,8 +1870,36 @@
 
             window.handleInputGridClick = handleInputGridClick;
 
+            /**
+             * UI-46 (owner decision 2026-09-27): Apply changes the routing; an output
+             * option is sent only if the user changed its control in this wizard.
+             * The controls start from their defaults each time the wizard opens.
+             */
+            const ROUTING_OPTION_CONTROLS = ['routingMuteAudio', 'routingHdcpMode', 'routingHdrMode', 'routingScalerMode', 'routingArc'];
+            let routingOptionsAtOpen = {};
+
+            function readRoutingOption(id) {
+                const el = document.getElementById(id);
+                return el.type === 'checkbox' ? el.checked : el.value;
+            }
+
+            function resetRoutingOptions() {
+                ROUTING_OPTION_CONTROLS.forEach((id) => {
+                    const el = document.getElementById(id);
+                    if (el.type === 'checkbox') el.checked = el.defaultChecked;
+                    else el.value = [...el.options].find((o) => o.defaultSelected)?.value ?? el.options[0].value;
+                });
+                routingOptionsAtOpen = Object.fromEntries(ROUTING_OPTION_CONTROLS.map((id) => [id, readRoutingOption(id)]));
+            }
+
+            function routingOptionChanged(id) {
+                return readRoutingOption(id) !== routingOptionsAtOpen[id];
+            }
+
             function openRoutingWizard() {
                 currentWizardStep = 1;
+                selectedRoutingDestination = null;
+                resetRoutingOptions();
                 document.getElementById('routingModalTitle').textContent = `Route ${inputs[selectedInputForRouting]?.name || 'Input ' + selectedInputForRouting}`;
                 
                 // Renders output cards
@@ -1814,7 +1910,7 @@
                     const currentIn = routing[o] || 0;
                     outputHtml += `
                         <button class="wizard-option-btn" data-output="${o}">
-                            ${outName} <span style="font-size:0.8rem; color:var(--text-muted); float:right;">(Current In: ${currentIn || '-'})</span>
+                            ${escapeHtml(outName)} <span style="font-size:0.8rem; color:var(--text-muted); float:right;">(Current In: ${escapeHtml(currentIn || '-')})</span>
                         </button>
                     `;
                 }
@@ -1859,6 +1955,16 @@
                 if (currentWizardStep === 2) {
                     showWizardStep('routing', 1);
                 }
+            });
+
+            // UI-25: "Next" on step 1 had no handler
+            routingNextBtn.addEventListener('click', () => {
+                if (currentWizardStep !== 1) return;
+                if (selectedRoutingDestination === null) {
+                    showToast('Choose an output first', 'info');
+                    return;
+                }
+                showWizardStep('routing', 2);
             });
 
             function showWizardStep(prefix, step) {
@@ -1926,47 +2032,29 @@
 
                     if (success) {
                         const targets = dest === 'all' ? [1,2,3,4,5,6,7,8] : [dest];
+                        // UI-46: only the options the user changed; UI-23: the body keys
+                        // the hub reads ("muted", "enabled") and its API values.
+                        const changed = [
+                            ['routingHdcpMode', 'hdcp', { mode: parseInt(hdcp) }],
+                            ['routingHdrMode', 'hdr', { mode: parseInt(hdr) }],
+                            ['routingScalerMode', 'scaler', { mode: parseInt(scaler) }],
+                            ['routingArc', 'arc', { enabled: arc }],
+                            ['routingMuteAudio', 'mute', { muted: mute }],
+                        ].filter(([control]) => routingOptionChanged(control));
                         const promises = [];
 
                         targets.forEach(t => {
-                            // HDCP mode
-                            promises.push(fetch(`${API_BASE}/output/${t}/hdcp`, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ mode: parseInt(hdcp) })
-                            }).catch(() => {}));
-
-                            // HDR mode
-                            promises.push(fetch(`${API_BASE}/output/${t}/hdr`, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ mode: parseInt(hdr) })
-                            }).catch(() => {}));
-
-                            // Scaler mode
-                            promises.push(fetch(`${API_BASE}/output/${t}/scaler`, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ mode: parseInt(scaler) })
-                            }).catch(() => {}));
-
-                            // ARC control
-                            promises.push(fetch(`${API_BASE}/output/${t}/arc`, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ enable: arc })
-                            }).catch(() => {}));
-
-                            // Mute control
-                            promises.push(fetch(`${API_BASE}/output/${t}/mute`, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ mute: mute })
-                            }).catch(() => {}));
+                            changed.forEach(([, setting, body]) => {
+                                promises.push(fetch(`${API_BASE}/output/${t}/${setting}`, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify(body)
+                                }).catch(() => {}));
+                            });
                         });
 
                         await Promise.all(promises);
-                        showToast('Routing and output parameters applied', 'success');
+                        showToast(changed.length ? 'Routing and output parameters applied' : 'Routing applied', 'success');
                         render();
                     } else {
                         showToast('Failed to execute matrix switch', 'error');
@@ -2088,16 +2176,83 @@
                 }
             }
 
+            /**
+             * UI-48 (owner decision 2026-09-27): PIN pad for protected profiles.
+             * Resolves with the digits entered, or null when cancelled.
+             */
+            let passcodeResolve = null;
+            let passcodeDigits = '';
+
+            function showPasscodeDigits() {
+                document.getElementById('passcodeDisplay').textContent = '•'.repeat(passcodeDigits.length);
+            }
+
+            function finishPasscode(value) {
+                closeModal('passcodeModal');
+                const resolve = passcodeResolve;
+                passcodeResolve = null;
+                passcodeDigits = '';
+                if (resolve) resolve(value);
+            }
+
+            function askPasscode(name) {
+                if (passcodeResolve) finishPasscode(null);
+                passcodeDigits = '';
+                showPasscodeDigits();
+                document.getElementById('passcodeInstruction').textContent = `"${name}" is passcode protected.`;
+                openModal('passcodeModal');
+                return new Promise((resolve) => { passcodeResolve = resolve; });
+            }
+
+            document.querySelectorAll('#passcodePad [data-digit]').forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    if (passcodeDigits.length < 8) passcodeDigits += btn.dataset.digit;
+                    showPasscodeDigits();
+                });
+            });
+            document.querySelector('#passcodePad [data-pin-action="clear"]').addEventListener('click', () => {
+                passcodeDigits = '';
+                showPasscodeDigits();
+            });
+            document.querySelector('#passcodePad [data-pin-action="back"]').addEventListener('click', () => {
+                passcodeDigits = passcodeDigits.slice(0, -1);
+                showPasscodeDigits();
+            });
+            document.getElementById('passcodeOkBtn').addEventListener('click', () => finishPasscode(passcodeDigits || null));
+            document.getElementById('passcodeCancelBtn').addEventListener('click', () => finishPasscode(null));
+            document.getElementById('passcodeCloseBtn').addEventListener('click', () => finishPasscode(null));
+
+            async function postRecall(id, passcode) {
+                const res = await fetch(`${API_BASE}/profile/${id}/recall`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(passcode ? { passcode } : {})
+                });
+                return { res, data: await res.json() };
+            }
+
             async function recallProfile(id) {
                 showToast('Recalling profile...', 'info');
                 try {
-                    const res = await fetch(`${API_BASE}/profile/${id}/recall`, { method: 'POST' });
-                    const data = await res.json();
+                    let { res, data } = await postRecall(id);
+                    if (res.status === 403 && data.data?.error === 'passcode_required') {
+                        // UI-48: ask, retry with it; a wrong one is "Invalid passcode" (as UI-01)
+                        const name = profiles.find((p) => p.id === id)?.name || 'Profile';
+                        const passcode = await askPasscode(name);
+                        if (!passcode) return;
+                        ({ res, data } = await postRecall(id, passcode));
+                    }
                     if (data.success) {
                         showToast('Profile activated', 'success');
                         fetchStatus(); // Sync state
+                    } else if (res.status === 207) {
+                        // VAL-11: only some outputs were applied
+                        showToast(`Profile applied partly: ${data.error || 'some settings failed'}`, 'warning');
+                        fetchStatus();
+                    } else if (data.data?.error === 'invalid_passcode') {
+                        showToast('Invalid passcode', 'error');
                     } else {
-                        showToast(`Failed: ${data.error}`, 'error');
+                        showToast(`Failed: ${data.error || data.data?.error || `HTTP ${res.status}`}`, 'error');
                     }
                 } catch (err) {
                     showToast(`Error: ${err.message}`, 'error');
@@ -2150,7 +2305,7 @@
                 const row = document.createElement('div');
                 row.className = 'slot-mapping-item';
                 row.innerHTML = `
-                    <span class="slot-mapping-item-icon">${icon}</span>
+                    <span class="slot-mapping-item-icon">${escapeHtml(icon)}</span>
                     <span class="slot-mapping-item-name">${escapeHtml(name)}</span>
                 `;
                 row.addEventListener('click', clickHandler);
@@ -2197,11 +2352,11 @@
                     const outName = outputs[o]?.name || `Output ${o}`;
                     mapHtml += `
                         <div class="modal-output-row">
-                            <label>${outName}</label>
+                            <label>${escapeHtml(outName)}</label>
                             <select class="profile-output-input-select" data-output="${o}">
                                 <option value="">Keep Unchanged</option>
                                 ${Object.entries(inputs).map(([num, inp]) => `
-                                    <option value="${num}">Route to ${inp.name || 'Input ' + num}</option>
+                                    <option value="${escapeHtml(num)}">Route to ${escapeHtml(inp.name || 'Input ' + num)}</option>
                                 `).join('')}
                             </select>
                         </div>
@@ -2214,7 +2369,7 @@
                 const offSelect = document.getElementById('profilePowerOffMacro');
                 
                 const macroOptions = `<option value="">None</option>` + macros.map(m => `
-                    <option value="${m.id}">${m.name}</option>
+                    <option value="${escapeHtml(m.id)}">${escapeHtml(m.name)}</option>
                 `).join('');
                 
                 onSelect.innerHTML = macroOptions;
@@ -2333,7 +2488,7 @@
                         html += `
                             <button class="kiosk-btn" onclick="handleSlotClick('shortcut', ${i})">
                                 ${editModeActive ? `<span class="kiosk-btn-config">⚙️</span>` : ''}
-                                <span class="kiosk-btn-icon">${shortcut.icon || '⚡'}</span>
+                                <span class="kiosk-btn-icon">${escapeHtml(shortcut.icon || '⚡')}</span>
                                 <span class="kiosk-btn-name">${escapeHtml(shortcut.name)}</span>
                             </button>
                         `;
@@ -2359,7 +2514,7 @@
                         html += `
                             <button class="kiosk-btn" onclick="handleSlotClick('profile', ${i})">
                                 ${editModeActive ? `<span class="kiosk-btn-config">⚙️</span>` : ''}
-                                <span class="kiosk-btn-icon">${profileObj.icon || '📺'}</span>
+                                <span class="kiosk-btn-icon">${escapeHtml(profileObj.icon || '📺')}</span>
                                 <span class="kiosk-btn-name">${escapeHtml(profileObj.name)}</span>
                             </button>
                         `;
@@ -2432,7 +2587,7 @@
                     outputHtml += `
                         <div class="output-tile ${isConnected ? 'connected' : 'disconnected'}" onclick="handleOutputTileClick(${o})">
                             <span class="output-tile-num">OUT ${o}</span>
-                            <span class="output-tile-input">${currentInput || '-'}</span>
+                            <span class="output-tile-input">${escapeHtml(currentInput || '-')}</span>
                             <span class="output-tile-name">${currentInput ? escapeHtml(inputName) : 'None'}</span>
                         </div>
                     `;
@@ -2466,7 +2621,7 @@
                     }
                     if (macrosRes.ok) {
                         const data = await macrosRes.json();
-                        macros = data.data || [];
+                        macros = data.data?.macros || []; // UI-25: was data.data (an object), so the wizard threw
                     }
 
                     // Initialize pinned layouts arrays
@@ -2511,8 +2666,8 @@
                 try {
                     const [statusRes, inputStatusRes, outputStatusRes] = await Promise.all([
                         fetch(`${API_BASE}/status`),
-                        fetch(`${API_BASE}/inputs/status`),
-                        fetch(`${API_BASE}/outputs/status`)
+                        fetch(`${API_BASE}/status/inputs`), // UI-24: /inputs/status does not exist
+                        fetch(`${API_BASE}/status/outputs`)
                     ]);
                     
                     if (!statusRes.ok) throw new Error(`Status HTTP ${statusRes.status}`);
@@ -2659,7 +2814,10 @@
              * Polling fallback
              */
             function startPolling() {
-                pollTimer = setInterval(fetchStatus, POLL_INTERVAL);
+                // UI-24: no status polling. The kiosk reads the status once at start and
+                // then stays live from the hub's WebSocket events; every (re)connect
+                // sends a status snapshot. Kept as a no-op in the start-up sequence.
+                pollTimer = null;
             }
 
             /**

@@ -80,7 +80,7 @@ class RouteAllDrawer {
             html += `
                 <button class="routing-btn ${isActive ? 'active' : ''} ${statusClass}" 
                         data-input="${i}"
-                        title="${isActive ? 'Currently active on all outputs' : `Route ${name} to all outputs`}">
+                        title="${isActive ? 'Currently active on all outputs' : `Route ${Helpers.escapeHtml(name)} to all outputs`}">
                     <span class="input-number">${i}</span>
                     <span class="input-name">${Helpers.escapeHtml(name)}</span>
                 </button>
@@ -416,7 +416,7 @@ class RouteAllDrawer {
             html += `
                 <button class="routing-btn ${isActive ? 'active' : ''} ${statusClass}" 
                         data-input="${i}"
-                        title="${isActive ? 'Currently active on all outputs' : `Route ${name} to all outputs`}">
+                        title="${isActive ? 'Currently active on all outputs' : `Route ${Helpers.escapeHtml(name)} to all outputs`}">
                     <div class="routing-btn-number">${i}</div>
                     <div class="routing-btn-name">${Helpers.escapeHtml(name)}</div>
                     ${isActive ? '<div class="routing-active-badge">●</div>' : ''}

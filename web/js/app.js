@@ -425,6 +425,8 @@ class MatrixApp {
             onMessage: (msg) => this.handleWebSocketMessage(msg),
             onStatusChange: (connected) => state.setWsConnected(connected),
             onMatrixStatus: (link) => state.setMatrixLink(link),
+            // UI-03: the header shows the retry as its own state
+            onReconnecting: () => this.updateConnectionStatus(),
             onError: (error) => console.error('WebSocket error:', error)
         });
 
@@ -491,8 +493,9 @@ class MatrixApp {
                 break;
 
             case 'preset_recall':
-                // Full refresh (the routing it changed also arrives as routing_change events)
-                this.refresh();
+                // UI-04: the routing it changed arrives as routing_change events. No
+                // refresh (it toasted "Refreshing..." / "Refreshed" on every open page);
+                // the page that recalled the preset shows its own toast.
                 break;
 
             case 'switch_failed':
@@ -538,6 +541,9 @@ class MatrixApp {
     /**
      * Header status: green only while the hub's WebSocket is up AND the hub
      * reports the matrix reachable. The tooltip says which one is missing.
+     * UI-03 / UI-29: while the WebSocket is down and the client is retrying, the
+     * pill shows a distinct "reconnecting" state (standby colour) instead of the
+     * red "disconnected" one.
      */
     updateConnectionStatus() {
         const titleEl = document.getElementById('header-title-text');
@@ -545,8 +551,10 @@ class MatrixApp {
         const matrix = state.matrixLink;
         const matrixUp = !matrix || matrix.connected !== false;
         const connected = state.wsConnected && matrixUp;
+        const reconnecting = !state.wsConnected && this.ws?.status === 'reconnecting';
         titleEl.classList.toggle('connected', connected);
-        titleEl.classList.toggle('disconnected', !connected);
+        titleEl.classList.toggle('reconnecting', reconnecting);
+        titleEl.classList.toggle('disconnected', !connected && !reconnecting);
         if (!state.wsConnected) {
             titleEl.title = 'Disconnected from the hub (reconnecting)';
         } else if (!matrixUp) {
@@ -586,28 +594,31 @@ class MatrixApp {
             }
             
             // Load info and status in parallel
-            const [info, status, scenesResult, inputStatus, outputStatus, deviceSettings, shortcutsResult] = await Promise.all([
+            // UI-27: profiles and CEC macros come from their own routes (the
+            // Profiles tab read /api/v2/scenes with the wrong response path, and
+            // nothing loaded state.profiles / state.cecMacros).
+            const [info, status, , inputStatus, outputStatus] = await Promise.all([
                 api.getInfo().catch(() => null),
                 api.getStatus().catch(() => null),
-                api.listScenes().catch(() => ({ scenes: [] })),
+                state.loadProfiles().catch(() => []),
                 api.getInputStatus().catch(() => null),
                 api.getOutputStatus().catch(() => null),
                 state.loadDeviceSettings().catch(() => false),
-                state.loadSystemShortcuts().catch(() => [])
+                state.loadSystemShortcuts().catch(() => []),
+                state.loadCecMacros().catch(() => [])
             ]);
-            
+
             if (info) {
                 state.applyInfo(info);
             }
-            
+
             if (status) {
                 state.applyStatus(status);
+            } else {
+                // UI-29: the grid says the matrix is not reachable instead of a made-up routing
+                state.setStatusError('Matrix not reachable');
             }
-            
-            if (scenesResult?.scenes) {
-                state.setScenes(scenesResult.scenes);
-            }
-            
+
             // Apply HDMI status data
             if (inputStatus?.data?.inputs) {
                 this.applyInputStatus(inputStatus.data.inputs);
@@ -736,22 +747,20 @@ class MatrixApp {
         toast.info('Refreshing...');
         
         try {
-            const [status, scenesResult, inputStatus, outputStatus] = await Promise.all([
+            const [status, , inputStatus, outputStatus] = await Promise.all([
                 api.getStatus().catch(e => {
                     console.warn('Status refresh failed:', e);
                     return null;
                 }),
-                api.listScenes().catch(() => ({ scenes: [] })),
+                state.loadProfiles().catch(() => []), // UI-27 (cleared the Profiles tab before)
                 api.getInputStatus().catch(() => null),
                 api.getOutputStatus().catch(() => null)
             ]);
-            
+
             if (status) {
                 state.applyStatus(status);
             }
-            
-            state.setScenes(scenesResult?.scenes || []);
-            
+
             // Refresh HDMI status
             if (inputStatus?.data?.inputs) {
                 this.applyInputStatus(inputStatus.data.inputs);

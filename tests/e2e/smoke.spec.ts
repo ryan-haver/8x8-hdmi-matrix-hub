@@ -18,11 +18,7 @@ import { expect, openKiosk, openUi, preparePage, test } from './support/ui';
  * as the underlying bugs are fixed. Matched as substrings.
  */
 const KNOWN_CONSOLE_ERRORS: Array<{ page: 'ui' | 'kiosk'; text: string; why: string }> = [
-  {
-    page: 'kiosk',
-    text: 'Failed to load resource: the server responded with a status of 404',
-    why: 'kiosk.html:2514-2515 polls /api/inputs/status and /api/outputs/status, which do not exist (real routes: /api/status/inputs|outputs)',
-  },
+  // (empty) kiosk 404s from /api/inputs/status and /api/outputs/status: fixed in WP-E1 (UI-24).
 ];
 
 /**
@@ -30,10 +26,7 @@ const KNOWN_CONSOLE_ERRORS: Array<{ page: 'ui' | 'kiosk'; text: string; why: str
  * pages throws none, and the load tests require exactly that).
  */
 export const KNOWN_PAGE_ERRORS: Array<{ text: string; why: string }> = [
-  {
-    text: 'e.target.closest is not a function',
-    why: 'tooltip.js:25-28 listens for mouseenter/focus on document in the capture phase; when the pointer enters the page the target is `document`, which has no closest() (tooltip.js:35)',
-  },
+  // (empty) tooltip.js "e.target.closest is not a function": fixed in WP-E1 (UI-28).
 ];
 
 function unknownPageErrors(errors: string[]) {
@@ -176,6 +169,7 @@ test.describe('smoke', () => {
   });
 
   test('routing an input to all outputs from the kiosk changes the simulator', async ({ page, sim, pageProblems }) => {
+    const before = (await sim.state()).outputs;
     await preparePage(page);
     await openKiosk(page);
     await page.locator('#kioskGrid .kiosk-btn').nth(4).click(); // input 5 (Shield)
@@ -184,16 +178,13 @@ test.describe('smoke', () => {
     await expect.poll(async () => (await sim.state()).outputs.map((o) => o.source), { timeout: 10_000 }).toEqual([
       5, 5, 5, 5, 5, 5, 5, 5,
     ]);
-    // Known kiosk bug: Apply also mutes every target and turns ARC on, whatever
-    // the checkboxes say (kiosk.html:1957/1964 send {enable}/{mute}; the hub reads
-    // enabled/muted, defaulting to true). Recorded so a fix shows up here.
-    const outputs = (await sim.state()).outputs;
-    test.info().annotations.push({
-      type: 'known-bug',
-      description: `kiosk route-all apply: audio_mute=${outputs.map((o) => o.audio_mute).join(',')} arc=${outputs
-        .map((o) => o.arc)
-        .join(',')}`,
-    });
+    // UI-23 / UI-46 (owner decision 2026-09-27): Apply changes the routing only;
+    // untouched options send nothing. It used to mute every target and turn ARC
+    // on ({mute}/{enable} where the hub reads muted/enabled, default true).
+    await page.waitForTimeout(1000);
+    const after = (await sim.state()).outputs.map(({ source: _source, ...rest }) => rest); // eslint-disable-line @typescript-eslint/no-unused-vars
+    const seed = before.map(({ source: _source, ...rest }) => rest); // eslint-disable-line @typescript-eslint/no-unused-vars
+    expect(after).toEqual(seed);
     expect(unknownPageErrors(pageProblems.pageErrors), 'unexpected page errors').toEqual([]);
   });
 });

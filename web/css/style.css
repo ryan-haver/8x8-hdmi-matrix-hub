@@ -207,6 +207,13 @@ body {
   box-shadow: 0 0 10px rgba(34, 197, 94, 0.2);
 }
 
+/* UI-03: the WebSocket dropped and the client is retrying (standby colour) */
+#header-title-text.reconnecting {
+  border-color: var(--status-standby);
+  color: var(--status-standby) !important;
+  box-shadow: var(--status-standby-glow);
+}
+
 #header-title-text.disconnected {
   border-color: var(--color-danger);
   color: var(--color-danger) !important;

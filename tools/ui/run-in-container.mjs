@@ -45,7 +45,8 @@ switch (mode) {
     break;
   }
   case 'smoke':
-    playwright = ['npx', 'playwright', 'test', '-c', CONFIG, '--project=smoke', ...passthrough].map(quote).join(' ');
+    // flows depends on smoke, so this runs both
+    playwright = ['npx', 'playwright', 'test', '-c', CONFIG, '--project=flows', ...passthrough].map(quote).join(' ');
     break;
   case 'shell':
     playwright = 'bash';

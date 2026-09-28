@@ -119,21 +119,22 @@ class ThemeDrawer {
                     <label class="theme-label">Theme Presets</label>
                     <div class="theme-preset-grid">
                         ${this.presets.map((preset, i) => `
-                            <button class="theme-preset-slot ${i === this.activePresetIndex ? 'active' : ''}" 
+                            <div class="theme-preset-slot ${i === this.activePresetIndex ? 'active' : ''}" 
+                                    role="button" tabindex="0"
                                     data-preset-index="${i}"
-                                    title="${preset.name}">
+                                    title="${Helpers.escapeHtml(preset.name)}">
                                 <div class="preset-colors">
-                                    <span class="preset-color primary" style="--hue: ${preset.primaryH}"></span>
-                                    <span class="preset-color secondary" style="--hue: ${preset.secondaryH}"></span>
+                                    <span class="preset-color primary" style="--hue: ${Number(preset.primaryH)}"></span>
+                                    <span class="preset-color secondary" style="--hue: ${Number(preset.secondaryH)}"></span>
                                 </div>
-                                <span class="preset-slot-name">${preset.name}</span>
+                                <span class="preset-slot-name">${Helpers.escapeHtml(preset.name)}</span>
                                 <button class="preset-edit-btn" data-edit-index="${i}" title="Edit preset">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
                                         <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                                     </svg>
                                 </button>
-                            </button>
+                            </div>
                         `).join('')}
                     </div>
                 </div>
@@ -244,13 +245,20 @@ class ThemeDrawer {
             });
         }
         
-        // Preset slot click (activate preset)
+        // Preset slot click (activate preset). UI-31: a slot is a div with
+        // role="button" (a <button> cannot contain the edit <button>: the parser
+        // split them and every edit button landed on the same spot).
         this.drawer.querySelectorAll('.theme-preset-slot').forEach(slot => {
             slot.addEventListener('click', (e) => {
                 // Don't activate if clicking edit button
                 if (e.target.closest('.preset-edit-btn')) return;
                 const index = parseInt(slot.dataset.presetIndex);
                 this.activatePreset(index);
+            });
+            slot.addEventListener('keydown', (e) => {
+                if (e.target !== slot || (e.key !== 'Enter' && e.key !== ' ')) return;
+                e.preventDefault();
+                this.activatePreset(parseInt(slot.dataset.presetIndex));
             });
         });
         

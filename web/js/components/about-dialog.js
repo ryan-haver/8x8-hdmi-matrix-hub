@@ -149,7 +149,8 @@ class AboutDialog {
                     matrixEl.innerHTML = '<span class="status-badge status-badge--success">Connected</span>';
                 }
                 if (modelEl) {
-                    modelEl.textContent = data.model || 'HDMI Matrix';
+                    // /api/status has no model; the app keeps /api/info in state.info
+                    modelEl.textContent = window.state?.info?.model || data.model || 'HDMI Matrix';
                 }
             } else {
                 if (matrixEl) {
@@ -162,12 +163,22 @@ class AboutDialog {
             }
         }
 
+        // UI-30: the link states the app already tracks. The matrix link is what the
+        // hub reports over the WebSocket (state.matrixLink) when it is known; the
+        // WebSocket status is state.wsConnected (this read a state.wsStatus that
+        // does not exist, so it always showed "Disconnected").
+        const badge = (kind, text) => `<span class="status-badge status-badge--${kind}">${text}</span>`;
+        const link = window.state?.matrixLink;
+        if (matrixEl && link) {
+            matrixEl.innerHTML = link.connected !== false ? badge('success', 'Connected') : badge('error', 'Disconnected');
+        }
+
         // WebSocket status
         if (wsEl) {
-            const wsConnected = window.state?.wsStatus === 'connected';
-            wsEl.innerHTML = wsConnected 
-                ? '<span class="status-badge status-badge--success">Connected</span>'
-                : '<span class="status-badge status-badge--warning">Disconnected</span>';
+            const reconnecting = window.app?.ws?.status === 'reconnecting';
+            wsEl.innerHTML = window.state?.wsConnected
+                ? badge('success', 'Connected')
+                : badge('warning', reconnecting ? 'Reconnecting' : 'Disconnected');
         }
     }
 

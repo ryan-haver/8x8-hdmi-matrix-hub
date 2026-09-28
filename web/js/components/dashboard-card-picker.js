@@ -166,13 +166,13 @@ class DashboardCardPicker {
             const stepCount = scene.steps?.length || 0;
 
             return `
-                <div class="picker-item ${isAdded ? 'added' : ''}" data-type="scene" data-id="${scene.id}">
-                    <span class="picker-item-icon">${scene.icon || '🎬'}</span>
+                <div class="picker-item ${isAdded ? 'added' : ''}" data-type="scene" data-id="${Helpers.escapeHtml(scene.id)}">
+                    <span class="picker-item-icon">${Helpers.escapeHtml(scene.icon || '🎬')}</span>
                     <span class="picker-item-name">${Helpers.escapeHtml(scene.name)}</span>
                     <span class="picker-item-meta">${stepCount} step${stepCount !== 1 ? 's' : ''}</span>
                     ${isAdded
                         ? '<span class="picker-item-badge">Added</span>'
-                        : `<button class="btn btn-sm btn-primary picker-add-btn" data-type="scene" data-id="${scene.id}">Add</button>`
+                        : `<button class="btn btn-sm btn-primary picker-add-btn" data-type="scene" data-id="${Helpers.escapeHtml(scene.id)}">Add</button>`
                     }
                 </div>
             `;
@@ -198,12 +198,12 @@ class DashboardCardPicker {
             const isAdded = currentKeys.has(key);
 
             return `
-                <div class="picker-item ${isAdded ? 'added' : ''}" data-type="profile" data-id="${profile.id}">
-                    <span class="picker-item-icon">${profile.icon || '🎬'}</span>
+                <div class="picker-item ${isAdded ? 'added' : ''}" data-type="profile" data-id="${Helpers.escapeHtml(profile.id)}">
+                    <span class="picker-item-icon">${Helpers.escapeHtml(profile.icon || '🎬')}</span>
                     <span class="picker-item-name">${Helpers.escapeHtml(profile.name)}</span>
                     ${isAdded
                         ? '<span class="picker-item-badge">Added</span>'
-                        : `<button class="btn btn-sm btn-primary picker-add-btn" data-type="profile" data-id="${profile.id}">Add</button>`
+                        : `<button class="btn btn-sm btn-primary picker-add-btn" data-type="profile" data-id="${Helpers.escapeHtml(profile.id)}">Add</button>`
                     }
                 </div>
             `;
@@ -258,12 +258,12 @@ class DashboardCardPicker {
                 const isAdded = currentKeys.has(key);
 
                 return `
-                    <div class="picker-item ${isAdded ? 'added' : ''}" data-type="system_shortcut" data-id="${shortcut.id}">
-                        <span class="picker-item-icon">${shortcut.icon || '⚡'}</span>
+                    <div class="picker-item ${isAdded ? 'added' : ''}" data-type="system_shortcut" data-id="${Helpers.escapeHtml(shortcut.id)}">
+                        <span class="picker-item-icon">${Helpers.escapeHtml(shortcut.icon || '⚡')}</span>
                         <span class="picker-item-name">${Helpers.escapeHtml(shortcut.name)}</span>
                         ${isAdded
                             ? '<span class="picker-item-badge">Added</span>'
-                            : `<button class="btn btn-sm btn-primary picker-add-btn" data-type="system_shortcut" data-id="${shortcut.id}">Add</button>`
+                            : `<button class="btn btn-sm btn-primary picker-add-btn" data-type="system_shortcut" data-id="${Helpers.escapeHtml(shortcut.id)}">Add</button>`
                         }
                     </div>
                 `;
@@ -289,12 +289,12 @@ class DashboardCardPicker {
             const isAdded = currentKeys.has(key);
 
             return `
-                <div class="picker-item ${isAdded ? 'added' : ''}" data-type="macro" data-id="${macro.id}">
-                    <span class="picker-item-icon">${macro.icon || '⚡'}</span>
+                <div class="picker-item ${isAdded ? 'added' : ''}" data-type="macro" data-id="${Helpers.escapeHtml(macro.id)}">
+                    <span class="picker-item-icon">${Helpers.escapeHtml(macro.icon || '⚡')}</span>
                     <span class="picker-item-name">${Helpers.escapeHtml(macro.name)}</span>
                     ${isAdded
                         ? '<span class="picker-item-badge">Added</span>'
-                        : `<button class="btn btn-sm btn-primary picker-add-btn" data-type="macro" data-id="${macro.id}">Add</button>`
+                        : `<button class="btn btn-sm btn-primary picker-add-btn" data-type="macro" data-id="${Helpers.escapeHtml(macro.id)}">Add</button>`
                     }
                 </div>
             `;

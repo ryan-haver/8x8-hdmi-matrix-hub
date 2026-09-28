@@ -29,10 +29,20 @@ class Tooltip {
     }
 
     /**
+     * The [data-tooltip] element an event is about. UI-28: these listeners run in
+     * the capture phase on document, so the target can be the document or a
+     * text node, which have no closest().
+     */
+    static targetOf(e) {
+        const el = e.target instanceof Element ? e.target : e.target?.parentElement;
+        return el ? el.closest('[data-tooltip]') : null;
+    }
+
+    /**
      * Handle mouse enter
      */
     static handleMouseEnter(e) {
-        const target = e.target.closest('[data-tooltip]');
+        const target = Tooltip.targetOf(e);
         if (target) {
             Tooltip.scheduleShow(target);
         }
@@ -42,7 +52,7 @@ class Tooltip {
      * Handle mouse leave
      */
     static handleMouseLeave(e) {
-        const target = e.target.closest('[data-tooltip]');
+        const target = Tooltip.targetOf(e);
         if (target) {
             Tooltip.scheduleHide();
         }
@@ -52,7 +62,7 @@ class Tooltip {
      * Handle focus (for keyboard accessibility)
      */
     static handleFocus(e) {
-        const target = e.target.closest('[data-tooltip]');
+        const target = Tooltip.targetOf(e);
         if (target) {
             Tooltip.show(target);
         }
@@ -62,7 +72,7 @@ class Tooltip {
      * Handle blur
      */
     static handleBlur(e) {
-        const target = e.target.closest('[data-tooltip]');
+        const target = Tooltip.targetOf(e);
         if (target) {
             Tooltip.hide();
         }

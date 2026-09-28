@@ -18,7 +18,7 @@ The Python side (hub + simulator) needs the dev dependencies:
 
 | Command | What it does | Where |
 | --- | --- | --- |
-| `npm run test:e2e` | Smoke tests (`smoke.spec.ts`) | host or container |
+| `npm run test:e2e` | Smoke tests (`smoke.spec.ts`) and UI functional flows (`flows.spec.ts`) | host or container |
 | `npm run visual:test` | Compare every catalog entry with the committed baselines | **container only** |
 | `npm run visual:update` | Write new/changed baselines (approval step) | **container only** |
 | `npm run visual:report` | Open the last Playwright HTML report (baseline / actual / diff) | host |
@@ -30,8 +30,8 @@ The Python side (hub + simulator) needs the dev dependencies:
 Extra Playwright arguments go after `--`, e.g.
 `npm run visual:test -- --grep "drawer/theme"` or
 `npm run visual:update -- --project=kiosk-tab-a11`. Any `--project` argument
-replaces the default list of visual projects (the smoke project still runs
-first as a dependency; add `--no-deps` to skip it).
+replaces the default list of visual projects (the smoke and flows projects
+still run first as dependencies; add `--no-deps` to skip them).
 
 ## The stack
 
@@ -99,9 +99,9 @@ and Flic buttons. The simulator starts from `tools/simulator/states/default.json
   if the runner is interrupted.
 - **Parallelism**: `E2E_WORKERS` (default 4; the container runner defaults to
   2 because Docker Desktop VMs are often small, and 4 Chromium workers plus
-  the stack exhausted a 3 GB VM). The smoke project runs first because it
-  changes simulator state (visual projects depend on it; `--no-deps` skips
-  it).
+  the stack exhausted a 3 GB VM). The smoke project runs first, then the
+  flows project, because both change simulator state (flows depends on
+  smoke, visual projects depend on flows; `--no-deps` skips them).
 - **Removing an entry**: Playwright never deletes obsolete snapshots; delete
   the entry's PNGs by hand (the gallery lists them as entries without
   catalog metadata).

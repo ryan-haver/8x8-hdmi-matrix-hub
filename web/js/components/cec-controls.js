@@ -89,7 +89,11 @@ class CecControls {
     }
 
     /**
-     * Render dropdown content
+     * Render dropdown content.
+     *
+     * UI-37: a display (output) only has the device's display CEC table - power
+     * on/off, mute, volume down/up (GET /api/cec/output/{n}/capabilities; BE-14) -
+     * so its remote has no navigation or playback keys (the hub refuses them).
      */
     renderDropdownContent(type, port, name, isInput) {
         return `
@@ -118,6 +122,7 @@ class CecControls {
                 </div>
             </div>
             
+            ${isInput ? `
             <div class="cec-section">
                 <div class="cec-section-title">Navigation</div>
                 <div class="cec-dpad">
@@ -145,6 +150,7 @@ class CecControls {
                     </button>
                 </div>
             </div>
+            ` : ''}
             
             ${isInput ? `
             <div class="cec-section">

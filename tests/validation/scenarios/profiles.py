@@ -8,6 +8,7 @@ output 1, then input 2); ``kids_gaming`` is protected with passcode 1234.
 """
 
 from tools.validate.model import (
+    ClientState,
     CommandSent,
     Device,
     DeviceUnchanged,
@@ -18,7 +19,7 @@ from tools.validate.model import (
     act,
 )
 
-from ._paths import HUB_CORE, PROFILES
+from ._paths import HUB_CORE, PROFILES, WEB_CORE, WEB_RUN
 
 # movie_night's CEC config as the fixture stores it (restored after auto-resolve rewrites it)
 _MOVIE_NIGHT_CEC = {
@@ -31,6 +32,9 @@ SCENARIOS = [
         id="profiles.recall_routing",
         title="Recall profile 'Game Day': outputs 1-3 show input 5",
         features=("F-DOM-002",),
+        # browser: the Profiles tab's Activate button (UI-27: the tab listed no profiles)
+        client_features={"browser": ("F-UI-012",)},
+        clients=("api", "browser"),
         writes=("routing", "outputs"),
         action=act("profile_recall", profile_id="game_day"),
         expect=(
@@ -40,9 +44,10 @@ SCENARIOS = [
             Device("outputs[2].source", equals=5),
             DeviceUnchanged(allow=("outputs[0].*", "outputs[1].*", "outputs[2].*", "routing")),
             CommandSent("video switch", {"source": [3, 5]}, count=1),
+            ClientState("toast.success", equals='"Game Day" activated', clients=("browser",)),
         ),
         observe=("Do the displays on outputs 1-3 now show the source on input 5?",),
-        covers=(*HUB_CORE, *PROFILES),
+        covers=(*HUB_CORE, *PROFILES, *WEB_CORE, *WEB_RUN),
     ),
     Scenario(
         id="profiles.recall_output_settings",
@@ -86,13 +91,53 @@ SCENARIOS = [
         title="A passcode-protected profile is not applied without its passcode",
         kind="failure",
         features=("F-DOM-005",),
+        # browser: the passcode prompt appears and is cancelled (UI-01: it never appeared)
+        client_features={"browser": ("F-UI-014",)},
+        clients=("api", "browser"),
         action=act("profile_recall", profile_id="kids_gaming"),
         expect=(
             Response(status=403, json={"success": False, "data": {"error": "passcode_required"}}),
+            ClientState("dialogs", equals=['"Kids Gaming" is passcode protected. Enter passcode:'], clients=("browser",)),
             NoCommand("*"),
             DeviceUnchanged(),
         ),
-        covers=(*HUB_CORE, *PROFILES, "src/password.py"),
+        covers=(*HUB_CORE, *PROFILES, "src/password.py", *WEB_CORE, *WEB_RUN),
+    ),
+    Scenario(
+        id="profiles.recall_with_passcode",
+        title="A passcode-protected profile is applied with its passcode (the UI asks for it)",
+        features=("F-DOM-005",),
+        client_features={"browser": ("F-UI-014",)},
+        clients=("api", "browser"),
+        writes=("routing", "outputs"),
+        sim_state={"outputs": {"0": {"source": 1}}},
+        action=act("profile_recall", profile_id="kids_gaming", passcode="1234"),
+        expect=(
+            Response(status=200, json={"success": True}),
+            Device("outputs[0].source", equals=6),
+            CommandSent("video switch", {"source": [1, 6]}, count=1),
+            DeviceUnchanged(allow=("outputs[0].*", "routing")),
+            ClientState("toast.success", equals='"Kids Gaming" activated', clients=("browser",)),
+        ),
+        observe=("Does the display on output 1 now show the source on input 6?",),
+        covers=(*HUB_CORE, *PROFILES, "src/password.py", *WEB_CORE, *WEB_RUN),
+        notes="UI-01: the web UI's passcode flow never triggered (errors had no status, it checked 401, the hub answers 403).",
+    ),
+    Scenario(
+        id="profiles.recall_wrong_passcode",
+        title="A wrong passcode applies nothing and the UI says so",
+        kind="failure",
+        features=("F-DOM-005",),
+        client_features={"browser": ("F-UI-014",)},
+        clients=("api", "browser"),
+        action=act("profile_recall", profile_id="kids_gaming", passcode="9999"),
+        expect=(
+            Response(status=403, json={"success": False, "data": {"error": "invalid_passcode"}}),
+            ClientState("toast.error", equals="Invalid passcode", clients=("browser",)),
+            NoCommand("*"),
+            DeviceUnchanged(),
+        ),
+        covers=(*HUB_CORE, *PROFILES, "src/password.py", *WEB_CORE, *WEB_RUN),
     ),
     Scenario(
         id="profiles.recall_rejected",

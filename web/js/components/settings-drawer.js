@@ -110,6 +110,8 @@ class SettingsDrawer {
         if (tab && ['profiles', 'scenes', 'system'].includes(tab)) {
             this.activeTab = tab;
         }
+        // UI-30: highlight the tab that is shown (it stayed on Profiles)
+        this.container.querySelectorAll('.drawer-tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === this.activeTab));
         // Sync hash with active tab
         if (window.location.hash !== `#settings/${this.activeTab}`) {
             window.history.replaceState(null, '', `#settings/${this.activeTab}`);
@@ -173,6 +175,9 @@ class SettingsDrawer {
         this.attachEventListeners(content);
     }
 
+    // UI-49 (owner decision 2026-09-27): the lists had no CSS at all. Items use the
+    // Profiles tab's card classes (scene-card, scene-icon, scene-info / scene-name /
+    // scene-outputs, scene-actions) in a card-list, so each is one card row.
     renderProfilesTab() {
         const profiles = state.profiles || [];
         if (profiles.length === 0) {
@@ -182,26 +187,26 @@ class SettingsDrawer {
         }
 
         let html = `<div class="drawer-section-title">All Profiles</div>
-            <div class="settings-list">`;
+            <div class="settings-list card-list">`;
 
         profiles.forEach(profile => {
             const isProtected = profile.password_protected;
             const isFavorite = state.favoriteProfiles?.some(p => p.id === profile.id);
             html += `
-                <div class="settings-list-item" data-profile-id="${profile.id}">
-                    <div class="item-info">
-                        ${isProtected ? `<svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <div class="settings-list-item scene-card" data-profile-id="${Helpers.escapeHtml(profile.id)}">
+                    <div class="item-info scene-info">
+                        ${isProtected ? `<svg class="icon item-lock" aria-label="Passcode protected" role="img" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                         </svg>` : ''}
-                        <span class="item-name">${Helpers.escapeHtml(profile.name || profile.id)}</span>
+                        <span class="item-name scene-name">${Helpers.escapeHtml(profile.name || profile.id)}</span>
                     </div>
-                    <div class="item-actions">
-                        <button class="btn-icon execute-profile-btn" data-id="${profile.id}" title="Execute">
+                    <div class="item-actions scene-actions">
+                        <button class="btn-icon execute-profile-btn" data-id="${Helpers.escapeHtml(profile.id)}" title="Execute">
                             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polygon points="5 3 19 12 5 21 5 3"/>
                             </svg>
                         </button>
-                        <button class="btn-icon toggle-fav-btn ${isFavorite ? 'active' : ''}" data-id="${profile.id}" title="${isFavorite ? 'Remove from favorites' : 'Add to favorites'}">
+                        <button class="btn-icon toggle-fav-btn ${isFavorite ? 'active' : ''}" data-id="${Helpers.escapeHtml(profile.id)}" title="${isFavorite ? 'Remove from favorites' : 'Add to favorites'}">
                             <svg class="icon" viewBox="0 0 24 24" fill="${isFavorite ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2">
                                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
                             </svg>
@@ -226,32 +231,32 @@ class SettingsDrawer {
         let html = `<div class="drawer-section-title">All Scenes
             <button class="btn btn-sm btn-primary create-scene-btn">+ New</button>
         </div>
-            <div class="settings-list">`;
+            <div class="settings-list card-list">`;
 
         scenes.forEach(scene => {
             const isProtected = scene.password_protected;
             const stepCount = scene.steps?.length || 0;
             html += `
-                <div class="settings-list-item" data-scene-id="${scene.id}">
-                    <div class="item-info">
-                        ${isProtected ? `<svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <div class="settings-list-item scene-card" data-scene-id="${Helpers.escapeHtml(scene.id)}">
+                    <div class="item-info scene-info">
+                        ${isProtected ? `<svg class="icon item-lock" aria-label="Passcode protected" role="img" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                         </svg>` : ''}
-                        <span class="item-name">${Helpers.escapeHtml(scene.name)}</span>
-                        <span class="item-meta">${stepCount} step${stepCount !== 1 ? 's' : ''}</span>
+                        <span class="item-name scene-name">${Helpers.escapeHtml(scene.name)}</span>
+                        <span class="item-meta scene-outputs">${stepCount} step${stepCount !== 1 ? 's' : ''}</span>
                     </div>
-                    <div class="item-actions">
-                        <button class="btn-icon execute-scene-btn" data-id="${scene.id}" title="Execute">
+                    <div class="item-actions scene-actions">
+                        <button class="btn-icon execute-scene-btn" data-id="${Helpers.escapeHtml(scene.id)}" title="Execute">
                             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polygon points="5 3 19 12 5 21 5 3"/>
                             </svg>
                         </button>
-                        <button class="btn-icon edit-scene-btn" data-id="${scene.id}" title="Edit">
+                        <button class="btn-icon edit-scene-btn" data-id="${Helpers.escapeHtml(scene.id)}" title="Edit">
                             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                             </svg>
                         </button>
-                        <button class="btn-icon delete-scene-btn" data-id="${scene.id}" title="Delete">
+                        <button class="btn-icon delete-scene-btn" data-id="${Helpers.escapeHtml(scene.id)}" title="Delete">
                             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
                             </svg>
@@ -298,16 +303,16 @@ class SettingsDrawer {
             html += `
                 <div class="drawer-section">
                     <h4 class="drawer-section-title">${categoryLabels[cat]}</h4>
-                    <div class="settings-list">`;
+                    <div class="settings-list card-list">`;
             items.forEach(action => {
                 html += `
-                    <div class="settings-list-item" data-action-key="${action.key}">
-                        <div class="item-info">
-                            <span class="item-icon">${action.icon || '⚡'}</span>
-                            <span class="item-name">${Helpers.escapeHtml(action.label || action.key)}</span>
+                    <div class="settings-list-item scene-card" data-action-key="${Helpers.escapeHtml(action.key)}">
+                        <div class="item-icon scene-icon">${Helpers.escapeHtml(action.icon || '⚡')}</div>
+                        <div class="item-info scene-info">
+                            <span class="item-name scene-name">${Helpers.escapeHtml(action.label || action.key)}</span>
                         </div>
-                        <div class="item-actions">
-                            <button class="btn-icon execute-action-btn" data-key="${action.key}" title="Execute">
+                        <div class="item-actions scene-actions">
+                            <button class="btn-icon execute-action-btn" data-key="${Helpers.escapeHtml(action.key)}" title="Execute">
                                 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polygon points="5 3 19 12 5 21 5 3"/>
                                 </svg>
@@ -330,21 +335,16 @@ class SettingsDrawer {
     }
 
     attachEventListeners(content) {
-        // Profile execute
+        // Profile execute (UI-01 passcode prompt, VAL-11 partial result)
         content.querySelectorAll('.execute-profile-btn').forEach(btn => {
             btn.addEventListener('click', async (e) => {
                 e.stopPropagation();
                 const id = btn.dataset.id;
-                try {
-                    await api.executeProfile(id);
-                    toast.success('Profile executed');
-                } catch (err) {
-                    if (err.status === 401) {
-                        this.showPasscodePrompt('profile', id);
-                    } else {
-                        toast.error('Failed to execute profile');
-                    }
-                }
+                const profile = (state.profiles || []).find(p => p.id === id);
+                await window.RunAction.runProfileOrScene('profile', id, {
+                    name: profile?.name,
+                    successMessage: 'Profile executed',
+                });
             });
         });
 
@@ -358,23 +358,16 @@ class SettingsDrawer {
             });
         });
 
-        // Scene execute
+        // Scene execute (UI-01 passcode prompt, VAL-11 partial result)
         content.querySelectorAll('.execute-scene-btn').forEach(btn => {
             btn.addEventListener('click', async (e) => {
                 e.stopPropagation();
                 const id = btn.dataset.id;
-                try {
-                    const result = await api.executeScene(id);
-                    if (result.success) {
-                        toast.success('Scene executed');
-                    }
-                } catch (err) {
-                    if (err.status === 401) {
-                        this.showPasscodePrompt('scene', id);
-                    } else {
-                        toast.error('Failed to execute scene');
-                    }
-                }
+                const scene = (state.phase8Scenes || []).find(s => s.id === id);
+                await window.RunAction.runProfileOrScene('scene', id, {
+                    name: scene?.name,
+                    successMessage: 'Scene executed',
+                });
             });
         });
 
@@ -424,17 +417,6 @@ class SettingsDrawer {
                 }
             });
         });
-    }
-
-    showPasscodePrompt(type, id) {
-        const passcode = prompt('This scene is password protected. Enter passcode:');
-        if (!passcode) return;
-
-        if (type === 'scene') {
-            api.executeScene(id, { passcode }).then(() => toast.success('Scene executed')).catch(() => toast.error('Invalid passcode'));
-        } else {
-            api.executeProfile(id, { passcode }).then(() => toast.success('Profile executed')).catch(() => toast.error('Invalid passcode'));
-        }
     }
 }
 

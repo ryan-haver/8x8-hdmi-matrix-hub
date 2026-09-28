@@ -86,8 +86,8 @@ class SceneEditor {
 
         body.innerHTML = `
             <div class="form-group">
-                <label for="scene-name">Name</label>
-                <input type="text" id="scene-name" class="form-control" value="${Helpers.escapeHtml(d.name || '')}" placeholder="Scene name">
+                <label for="scene-editor-name">Name</label>
+                <input type="text" id="scene-editor-name" class="form-control" value="${Helpers.escapeHtml(d.name || '')}" placeholder="Scene name">
             </div>
             <div class="form-group">
                 <label for="scene-desc">Description</label>
@@ -247,7 +247,7 @@ class SceneEditor {
                 <div class="step-item" data-index="${idx}">
                     <span class="step-icon">${icon}</span>
                     <span class="step-name">${Helpers.escapeHtml(name)}</span>
-                    <span class="step-type">${typeLabel}</span>
+                    <span class="step-type">${Helpers.escapeHtml(typeLabel)}</span>
                     <button class="btn-icon remove-step-btn" data-index="${idx}" title="Remove">
                         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
@@ -298,7 +298,7 @@ class SceneEditor {
             return `
                 <div class="conflict-group">
                     <div class="conflict-header">
-                        Output ${output} → <strong>${Helpers.escapeHtml(setting)}</strong>
+                        Output ${Helpers.escapeHtml(output)} → <strong>${Helpers.escapeHtml(setting)}</strong>
                     </div>
                     <div class="conflict-choices">
                         ${profiles.map(p => {
@@ -308,11 +308,11 @@ class SceneEditor {
                                     <input type="checkbox"
                                            data-cidx="${cIdx}"
                                            data-pid="${Helpers.escapeHtml(p.id)}"
-                                           data-output="${output}"
+                                           data-output="${Helpers.escapeHtml(output)}"
                                            data-setting="${Helpers.escapeHtml(setting)}"
                                            ${isOverridden ? 'checked' : ''}>
                                     <span class="conflict-profile">${Helpers.escapeHtml(p.name || p.id)}</span>
-                                    <span class="conflict-value">= ${JSON.stringify(p.value)}</span>
+                                    <span class="conflict-value">= ${Helpers.escapeHtml(JSON.stringify(p.value))}</span>
                                     <span class="conflict-action">${isOverridden ? '(skipped)' : '(apply)'}</span>
                                 </label>
                             `;
@@ -343,11 +343,11 @@ class SceneEditor {
         return entries.map(e => `
             <div class="override-item">
                 <span class="override-desc">
-                    ${Helpers.escapeHtml(e.profileName)} → output ${e.output} → <strong>${Helpers.escapeHtml(e.setting)}</strong> skipped
+                    ${Helpers.escapeHtml(e.profileName)} → output ${Helpers.escapeHtml(e.output)} → <strong>${Helpers.escapeHtml(e.setting)}</strong> skipped
                 </span>
                 <button class="btn-icon clear-override-btn"
                         data-pid="${Helpers.escapeHtml(e.profileId)}"
-                        data-output="${e.output}"
+                        data-output="${Helpers.escapeHtml(e.output)}"
                         data-setting="${Helpers.escapeHtml(e.setting)}"
                         title="Clear override">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -370,7 +370,8 @@ class SceneEditor {
     }
 
     async save() {
-        const name = document.getElementById('scene-name').value.trim();
+        // UI-26: index.html has a hidden legacy #scene-name; this editor's field has its own id
+        const name = document.getElementById('scene-editor-name').value.trim();
         if (!name) {
             toast.error('Scene name is required');
             return;

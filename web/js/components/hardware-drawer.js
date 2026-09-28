@@ -205,6 +205,7 @@ class HardwareDrawer {
         document.body.style.overflow = "hidden";
 
         this.refreshContent();
+        this.loadDeviceValues();
 
         if (window.FocusTrap) {
             this.focusTrap = new window.FocusTrap(this.container, () => this.close());
@@ -264,6 +265,34 @@ class HardwareDrawer {
         syncValue("lcd-timeout", "hardware-lcd-timeout");
         syncChecked("beep-enabled", "hardware-beep-enabled");
         syncValue("ext-audio-mode", "hardware-ext-audio-mode");
+    }
+
+    /**
+     * Read LCD timeout, beep and external audio mode from the matrix (UI-30: the
+     * drawer copied them from the hidden legacy settings modal, which never
+     * loads them, so it showed the HTML defaults). The legacy controls are set
+     * too, so the change forwarding above starts from the device values.
+     */
+    async loadDeviceValues() {
+        const [system, extAudio] = await Promise.all([
+            window.api.get("/api/status/system").catch(() => null),
+            window.api.getExtAudioStatus().catch(() => null),
+        ]);
+        const set = (ids, apply) => ids.forEach((id) => {
+            const el = document.getElementById(id);
+            if (el) apply(el);
+        });
+        const lcdMode = system?.data?.mode; // device code: 0 off, 1 always on, 2/3/4 = 15/30/60 s (API-07)
+        if (Number.isInteger(lcdMode) && lcdMode >= 0 && lcdMode <= 4) {
+            set(["hardware-lcd-timeout", "lcd-timeout"], (el) => { el.value = String(lcdMode); });
+        }
+        if (typeof system?.data?.beep_enabled === "boolean") {
+            set(["hardware-beep-enabled", "beep-enabled"], (el) => { el.checked = system.data.beep_enabled; });
+        }
+        const extMode = extAudio?.data?.mode;
+        if (Number.isInteger(extMode)) {
+            set(["hardware-ext-audio-mode", "ext-audio-mode"], (el) => { el.value = String(extMode); });
+        }
     }
 }
 

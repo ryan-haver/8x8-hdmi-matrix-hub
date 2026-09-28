@@ -19,6 +19,7 @@ CEC tables (BE-14): displays (object 1) 0 = on, 1 = off; sources (object 0) 1 = 
 """
 
 from tools.validate.model import (
+    ClientState,
     CommandSent,
     Device,
     DeviceUnchanged,
@@ -30,7 +31,7 @@ from tools.validate.model import (
     act,
 )
 
-from ._paths import HUB_CORE, SCENES
+from ._paths import HUB_CORE, SCENES, WEB_CORE, WEB_RUN
 
 
 def _port(n: int) -> list[int]:
@@ -89,17 +90,21 @@ SCENARIOS = [
         id="scenes.run_protected",
         title="Run the protected scene 'Kids' with its passcode: profile and route-shortcut steps apply",
         features=("F-DOM-011", "F-DOM-015"),
+        # browser: its dashboard card, answering the passcode prompt (UI-01)
+        client_features={"browser": ("F-UI-008",)},
+        clients=("api", "browser"),
         writes=("routing", "outputs"),
         sim_state={"outputs": {"0": {"source": 1}}},
-        action=_execute("scene_kidslocked", passcode="1234"),
+        action=act("scene_run", scene_id="scene_kidslocked", passcode="1234"),
         expect=(
             Response(status=200, json={"success": True, "data": {"steps_completed": 2, "total_steps": 2}}),
             Device("outputs[0].source", equals=6),
             CommandSent("video switch", {"source": [1, 6]}, count=2),
             DeviceUnchanged(allow=("outputs[0].source", "routing")),
+            ClientState("toast.success", equals="Scene executed", clients=("browser",)),
         ),
         observe=("Does the display on output 1 now show the source on input 6?",),
-        covers=(*HUB_CORE, *SCENES, "src/password.py"),
+        covers=(*HUB_CORE, *SCENES, "src/password.py", *WEB_CORE, *WEB_RUN),
         notes="API-01: both steps called OreiMatrix.switch(), which does not exist.",
     ),
     Scenario(
@@ -199,22 +204,25 @@ SCENARIOS = [
         title="A scene with a failing step answers 207 with per-step results and records the error",
         kind="failure",
         features=("F-DOM-011", "F-DOM-017"),
-        client_features={"api": ("F-API-041",)},
+        # browser: Settings drawer, Scenes tab; the partial run is reported (VAL-11: it showed nothing)
+        client_features={"api": ("F-API-041",), "browser": ("F-UI-027",)},
+        clients=("api", "browser"),
         writes=("outputs",),
         setup=(_edit_goodnight(
             steps=[{"type": "system_action", "id": "mute_all_audio"}, {"type": "profile", "id": "no_such_profile"}],
         ),),
-        action=_execute("scene_goodnight01"),
+        action=act("scene_run", scene_id="scene_goodnight01"),
         expect=(
             Response(status=207, json={"success": False, "data": {"steps_completed": 1, "total_steps": 2}}),
+            ClientState("toast.warning", equals='"Good Night" ran partly: 1 of 2 steps succeeded', clients=("browser",)),
             Device("outputs[0].audio_mute", equals=1),
             WsEvent("scene_execution_error", {"scene_id": "scene_goodnight01", "steps_completed": 1}),
             Hub("/api/v2/scenes/scene_goodnight01/history", "data.execution_history[-1].status", equals="error"),
             DeviceUnchanged(allow=("outputs[*].audio_mute",)),
         ),
         cleanup=(_RESTORE_GOODNIGHT,),
-        covers=(*HUB_CORE, *SCENES, "src/rest_api/websocket.py"),
-        notes="API-08: a scene whose steps failed answered 200 success:true.",
+        covers=(*HUB_CORE, *SCENES, "src/rest_api/websocket.py", *WEB_CORE, *WEB_RUN),
+        notes="API-08: a scene whose steps failed answered 200 success:true. VAL-11: the UI showed nothing for a 207.",
     ),
     Scenario(
         id="scenes.run_rejected",

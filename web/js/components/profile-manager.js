@@ -159,13 +159,14 @@ class ProfileManager {
      * Render a single profile item
      */
     renderProfileItem(profile, isPinned, index = 0) {
-        const icon = profile.icon || '📺';
-        const outputCount = profile.output_count || 0;
+        const icon = Helpers.escapeHtml(profile.icon || '📺');
+        const outputCount = Helpers.escapeHtml(profile.output_count || 0);
+        const profileId = Helpers.escapeHtml(profile.id);
         
         return `
             <div class="profile-manager-item ${isPinned ? 'pinned' : ''}" 
-                 data-profile-id="${profile.id}" 
-                 data-pin-order="${profile.pin_order || index}"
+                 data-profile-id="${profileId}" 
+                 data-pin-order="${Helpers.escapeHtml(profile.pin_order || index)}"
                  draggable="${isPinned}">
                 ${isPinned ? `
                     <div class="drag-handle" title="Drag to reorder">
@@ -183,20 +184,20 @@ class ProfileManager {
                 </div>
                 <div class="profile-actions">
                     <button class="btn-icon pin-toggle-btn ${isPinned ? 'pinned' : ''}" 
-                            data-profile-id="${profile.id}"
+                            data-profile-id="${profileId}"
                             data-pinned="${isPinned}"
                             title="${isPinned ? 'Unpin from main screen' : 'Pin to main screen'}">
                         <svg class="icon" viewBox="0 0 24 24" fill="${isPinned ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2">
                             <path d="M12 2L12 22M12 2L8 6M12 2L16 6M12 22L8 18M12 22L16 18"/>
                         </svg>
                     </button>
-                    <button class="btn-icon edit-profile-btn" data-profile-id="${profile.id}" title="Edit profile">
+                    <button class="btn-icon edit-profile-btn" data-profile-id="${profileId}" title="Edit profile">
                         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
                             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                         </svg>
                     </button>
-                    <button class="btn-icon delete-profile-btn" data-profile-id="${profile.id}" title="Delete profile">
+                    <button class="btn-icon delete-profile-btn" data-profile-id="${profileId}" title="Delete profile">
                         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polyline points="3 6 5 6 21 6"/>
                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
@@ -362,8 +363,9 @@ class ProfileManager {
                 const profile = state.scenes.find(s => s.id === profileId);
                 if (profile && confirm(`Delete profile "${profile.name}"?`)) {
                     try {
-                        await api.deleteScene(profileId);
+                        await api.deleteProfile(profileId); // UI-27: this deleted a v2 scene id
                         state.removeScene(profileId);
+                        state.loadProfiles().catch(() => {});
                         toast.success('Profile deleted');
                     } catch (error) {
                         toast.error('Failed to delete: ' + error.message);
@@ -401,7 +403,8 @@ class ProfileManager {
                 }
             }
             
-            await api.updateScene(profileId, { pinned, pin_order });
+            // UI-27: api.updateScene is the v2 scenes route; pins are profile fields
+            await api.updateProfile(profileId, { pinned, pin_order });
             
             // Update local state
             const scene = state.scenes.find(s => s.id === profileId);

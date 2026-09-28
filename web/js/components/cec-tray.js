@@ -714,11 +714,11 @@ class CECTray {
         
         return displayMacros.map(macro => `
             <div class="cec-tray-macro-item">
-                <button class="cec-tray-macro-btn" data-macro-id="${macro.id}" title="${Helpers.escapeHtml(macro.name)}">
-                    <span class="macro-icon">${macro.icon || '⚡'}</span>
+                <button class="cec-tray-macro-btn" data-macro-id="${Helpers.escapeHtml(macro.id)}" title="${Helpers.escapeHtml(macro.name)}">
+                    <span class="macro-icon">${Helpers.escapeHtml(macro.icon || '⚡')}</span>
                     <span class="macro-name">${Helpers.escapeHtml(macro.name)}</span>
                 </button>
-                <button class="btn-icon btn-api-copy macro-api-btn" data-macro-id="${macro.id}" data-macro-name="${Helpers.escapeHtml(macro.name)}" title="Get API endpoint">
+                <button class="btn-icon btn-api-copy macro-api-btn" data-macro-id="${Helpers.escapeHtml(macro.id)}" data-macro-name="${Helpers.escapeHtml(macro.name)}" title="Get API endpoint">
                     <svg class="icon icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
                         <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
@@ -876,10 +876,11 @@ class CECTray {
     async onActiveSceneChanged(scene) {
         if (scene && scene.id) {
             try {
-                // Load CEC config for this scene
-                const result = await api.getSceneCecConfig(scene.id);
-                if (result.success && result.cec_config) {
-                    this.activeSceneConfig = result.cec_config;
+                // Load the profile's CEC config (UI-45: this called api.getSceneCecConfig,
+                // which did not exist, so a recalled profile's targets never applied)
+                const result = await api.getProfileCecConfig(scene.id);
+                if (result.success && result.data?.cec_config) {
+                    this.activeSceneConfig = result.data.cec_config;
                     this.activeSceneName = scene.name;
                     this.container.classList.add('scene-active');
                 } else {
@@ -1152,15 +1153,13 @@ class CECTray {
     }
     
     /**
-     * Parse a target string like "input_3" or "output_2"
+     * Parse a target string like "input_3" or "output_2"; also the "input:3"
+     * form config.CecConfig documents (API-25: both are stored today).
      */
     parseTargetString(target) {
         if (!target || typeof target !== 'string') return null;
-        const parts = target.split('_');
-        if (parts.length !== 2) return null;
-        const port = parseInt(parts[1], 10);
-        if (isNaN(port)) return null;
-        return { type: parts[0], port };
+        const m = /^(input|output)[_:](\d+)$/.exec(target);
+        return m ? { type: m[1], port: parseInt(m[2], 10) } : null;
     }
     
     /**
@@ -1181,14 +1180,20 @@ class CECTray {
         const navBtn = this.panel.querySelector('[data-target="navigation"]');
         const volBtn = this.panel.querySelector('[data-target="volume"]');
         
+        // UI-28: the buttons show an abbreviated name in .target-abbrev (there is
+        // no .target-name, so this threw a TypeError on every update)
         if (navBtn) {
             const navName = this.resolvedTargets.navigation?.name || 'Not detected';
-            navBtn.querySelector('.target-name').textContent = navName;
+            const label = navBtn.querySelector('.target-abbrev');
+            if (label) label.textContent = this.abbreviateName(navName);
+            navBtn.title = `Navigation target: ${navName}`;
         }
         
         if (volBtn) {
             const volName = this.resolvedTargets.volume?.name || 'Not detected';
-            volBtn.querySelector('.target-name').textContent = volName;
+            const label = volBtn.querySelector('.target-abbrev');
+            if (label) label.textContent = this.abbreviateName(volName);
+            volBtn.title = `Volume target: ${volName}`;
         }
         
         // Update scene indicator
@@ -1232,14 +1237,17 @@ class CECTray {
             }
         });
         
-        // Close on outside click (delayed to avoid immediate close)
-        setTimeout(() => {
+        // Close on outside click (delayed to avoid immediate close). UI-17: the
+        // handler is removed whenever the selector closes, not only on an
+        // outside click (choosing an option used to leave it attached).
+        this._selectorOpenTimer = setTimeout(() => {
+            this._selectorOpenTimer = null;
             const closeHandler = (e) => {
                 if (!selector.contains(e.target) && !anchorElement.contains(e.target)) {
                     this.hideTargetSelector();
-                    document.removeEventListener('click', closeHandler);
                 }
             };
+            this._selectorCloseHandler = closeHandler;
             document.addEventListener('click', closeHandler);
         }, 10);
     }
@@ -1299,6 +1307,14 @@ class CECTray {
      * Hide target selector
      */
     hideTargetSelector() {
+        if (this._selectorOpenTimer) {
+            clearTimeout(this._selectorOpenTimer);
+            this._selectorOpenTimer = null;
+        }
+        if (this._selectorCloseHandler) {
+            document.removeEventListener('click', this._selectorCloseHandler);
+            this._selectorCloseHandler = null;
+        }
         if (this.activeSelector) {
             this.activeSelector.remove();
             this.activeSelector = null;

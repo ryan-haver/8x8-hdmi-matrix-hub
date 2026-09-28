@@ -525,7 +525,33 @@ class AppState {
     async loadDashboardLayout() {
         const result = await window.api.getDashboardLayout().catch(() => ({ success: false }));
         this.dashboardCards = result?.data?.cards || [];
+        // UI-27: the dashboard renders its cards on this event; without it the
+        // cards appeared only if the layout beat a 100 ms timer.
+        this.emit('dashboardCards', this.dashboardCards);
         return this.dashboardCards;
+    }
+
+    /**
+     * Load the profiles from the hub (UI-27: nothing loaded them). The Profiles
+     * tab and profile manager read them as `scenes` (legacy name), everything
+     * else as `profiles`.
+     */
+    async loadProfiles() {
+        const result = await window.api.listProfiles();
+        const profiles = result?.data?.profiles || [];
+        this.setProfiles(profiles);
+        this.setScenes(profiles);
+        return profiles;
+    }
+
+    /**
+     * Load the CEC macros from the hub (UI-27: dashboard macro cards, scene editor).
+     */
+    async loadCecMacros() {
+        const result = await window.api.getMacros();
+        this.cecMacros = result?.data?.macros || [];
+        this.emit('cecMacros', this.cecMacros);
+        return this.cecMacros;
     }
 
     /**
@@ -757,6 +783,14 @@ class AppState {
     }
 
     /**
+     * UI-29: the first status read failed (the grid shows this instead of a routing)
+     */
+    setStatusError(message) {
+        this.ui.statusError = message;
+        this.emit('statusError', message);
+    }
+
+    /**
      * Update system info
      */
     setInfo(info) {
@@ -777,9 +811,14 @@ class AppState {
             this.emit('route', { output, input, oldInput });
             this.emit('routing', this.routing);
             
-            // Clear active scene when routing changes manually
+            // Clear the active profile when the routing moves away from it. A change
+            // that matches the profile's own routing (the recall's routing_change
+            // events arriving over the WebSocket) keeps it (UI-45).
             if (this.activeScene) {
-                this.setActiveScene(null);
+                const expected = this.activeScene.routing?.[String(output)];
+                if (expected === undefined || Number(expected) !== Number(input)) {
+                    this.setActiveScene(null);
+                }
             }
             
             // Save to cache so next page load shows correct state
@@ -1176,6 +1215,12 @@ class AppState {
             this.emit('outputs', this.outputs);
         }
         
+        // UI-29: a real routing arrived; until then the grid shows a placeholder
+        if (data.routing && typeof data.routing === 'object' && Object.keys(data.routing).length) {
+            this.ui.statusLoaded = true;
+            this.ui.statusError = null;
+        }
+
         // Mark as loaded
         this.setLoading(false);
         this.setConnected(true);

@@ -151,6 +151,14 @@ class ProfileEditor {
                                     </select>
                                     <span class="help-text">Runs when switching to another profile</span>
                                 </div>
+                                <!-- UI-45 (owner decision 2026-09-27): the CEC targets of this profile; hidden for a new profile -->
+                                <div class="form-group" id="cec-config-section">
+                                    <label for="open-cec-config-btn">
+                                        <span class="macro-label-icon">📺</span> CEC Targets
+                                    </label>
+                                    <button type="button" class="btn btn-sm btn-secondary" id="open-cec-config-btn">CEC</button>
+                                    <span class="help-text">Which devices the CEC remote controls while this profile is active</span>
+                                </div>
                             </div>
                         </div>
 
@@ -448,8 +456,8 @@ class ProfileEditor {
             const isChecked = selectedMacros.includes(macro.id);
             return `
                 <label class="macro-checkbox">
-                    <input type="checkbox" name="profile-macros" value="${macro.id}" ${isChecked ? 'checked' : ''}>
-                    <span class="macro-icon">${macro.icon || '⚡'}</span>
+                    <input type="checkbox" name="profile-macros" value="${Helpers.escapeHtml(macro.id)}" ${isChecked ? 'checked' : ''}>
+                    <span class="macro-icon">${Helpers.escapeHtml(macro.icon || '⚡')}</span>
                     <span class="macro-name">${Helpers.escapeHtml(macro.name)}</span>
                 </label>
             `;
@@ -704,14 +712,15 @@ class ProfileEditor {
      */
     async openCecConfig() {
         if (!this.currentProfile) return;
-        
+        const profileId = this.currentProfile.id; // close() clears currentProfile
+
         // Close this modal first
         this.close();
-        
+
         // Open CEC config modal
         if (window.sceneCecModal) {
             try {
-                const fullProfile = await api.getScene(this.currentProfile.id);
+                const fullProfile = await api.getProfile(profileId); // UI-30: was /api/v2/scenes/{id}
                 if (fullProfile?.success) {
                     window.sceneCecModal.open(fullProfile.data || fullProfile);
                 } else {
@@ -730,8 +739,7 @@ class ProfileEditor {
      */
     async refreshProfilesList() {
         try {
-            const result = await api.listScenes();
-            state.setScenes(result.scenes || []);
+            await state.loadProfiles(); // UI-27: /api/profiles, not /api/v2/scenes
         } catch (error) {
             console.error('Failed to refresh profiles:', error);
         }

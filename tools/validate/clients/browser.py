@@ -24,12 +24,19 @@ ROOT = Path(__file__).resolve().parents[3]
 
 class BrowserClient(Client):
     name = "browser"
-    intents = frozenset({"route", "route_all", "preset_recall", "preset_rename"})
-    #: ClientState keys: ``ui.*`` / ``kiosk.*`` read from a /ui and a /kiosk page that stay open for the run
-    #: and get later changes only over the hub's WebSocket (their status reads are frozen after load):
-    #: ``ui.route.N`` (input shown for output N in the grid), ``ui.input.N`` / ``ui.output.N`` (status
-    #: colour: signal | cable | disconnected | unknown), ``ui.input_name.N``, ``ui.header`` (connected |
-    #: disconnected), ``kiosk.route.N``, ``kiosk.input.N``, ``kiosk.status`` (Connected | Disconnected).
+    intents = frozenset(
+        {"route", "route_all", "preset_recall", "preset_rename", "profile_recall", "scene_run", "kiosk_route"}
+    )
+    #: ClientState keys:
+    #: - ``ui.*`` / ``kiosk.*`` read from a /ui and a /kiosk page that stay open for the run
+    #:   and get later changes only over the hub's WebSocket (their status reads are frozen after load):
+    #:   ``ui.route.N`` (input shown for output N in the grid), ``ui.input.N`` / ``ui.output.N`` (status
+    #:   colour: signal | cable | disconnected | unknown), ``ui.input_name.N``, ``ui.header`` (connected |
+    #:   disconnected), ``kiosk.route.N``, ``kiosk.input.N``, ``kiosk.status`` (Connected | Disconnected).
+    #: - what the acting page showed at the end of the last action (a snapshot; the page is closed
+    #:   after each action): ``toast.<type>`` (success | warning | error | info) = text of the last
+    #:   toast of that type, ``toasts`` = every toast as "<type>: <text>", ``dialogs`` = the message
+    #:   of every window.prompt/confirm the page opened.
     observes = True
 
     def __init__(self) -> None:
@@ -37,6 +44,7 @@ class BrowserClient(Client):
         self._proc: asyncio.subprocess.Process | None = None
         self._next_id = 0
         self._browser_version = ""
+        self._shown: dict[str, Any] = {}
 
     async def _rpc(self, op: str, **payload: Any) -> dict[str, Any]:
         assert self._proc is not None and self._proc.stdin and self._proc.stdout
@@ -106,13 +114,22 @@ class BrowserClient(Client):
             "page_api_requests": res.get("apiRequestCount"),
             "page_errors": res.get("pageErrors", []),
             "console_errors": res.get("consoleErrors", []),
+            "toasts": res.get("toasts", []),
+            "dialogs": res.get("dialogs", []),
         }
+        self._shown = {"toasts": list(res.get("toasts", [])), "dialogs": list(res.get("dialogs", []))}
         result.elapsed_ms = round((time.perf_counter() - t0) * 1000, 1)
         return result
 
     async def observe(self, key: str) -> Any:
+        if key in ("toasts", "dialogs"):
+            return self._shown.get(key, [])
+        if key.startswith("toast."):
+            kind = key.split(".", 1)[1]
+            texts = [t.split(": ", 1)[1] for t in self._shown.get("toasts", []) if t.startswith(f"{kind}: ")]
+            return texts[-1] if texts else None
         if not key.startswith(("ui.", "kiosk.")):
-            raise NotSupportedError(f"the browser shows ui.* and kiosk.* keys, not {key!r}")
+            raise NotSupportedError(f"the browser shows ui.*, kiosk.*, toast.*, toasts and dialogs, not {key!r}")
         return (await self._rpc("observe", key=key)).get("value")
 
     async def stop(self) -> None:

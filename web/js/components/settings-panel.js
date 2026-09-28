@@ -353,10 +353,10 @@ class SettingsPanel {
             const inputName = state.inputs[i]?.name || `Input ${i}`;
             html += `
                 <div class="port-setting">
-                    <span class="port-setting-label">${inputName}</span>
+                    <span class="port-setting-label">${Helpers.escapeHtml(inputName)}</span>
                     <select class="select select-sm edid-select" data-input="${i}">
                         ${Object.entries(this.edidModes).map(([mode, name]) => 
-                            `<option value="${mode}">${name}</option>`
+                            `<option value="${Helpers.escapeHtml(mode)}">${Helpers.escapeHtml(name)}</option>`
                         ).join('')}
                     </select>
                 </div>

@@ -84,8 +84,12 @@ class DashboardManager {
         this.setupResizeHandler();
         this.setupContainerDragHandlers();
 
-        // Phase 7: Subscribe to state changes for dashboard cards
-        state.on('dashboardCards', () => this.renderCards());
+        // Phase 7: Subscribe to state changes for dashboard cards. UI-27: also
+        // re-render when the data the cards show arrives (profiles, scenes,
+        // macros, shortcuts load after the 100 ms first render).
+        ['dashboardCards', 'profiles', 'phase8Scenes', 'cecMacros', 'systemShortcuts'].forEach(event => {
+            state.on(event, () => this.renderCards());
+        });
     }
 
     /**
@@ -720,7 +724,10 @@ class DashboardManager {
             widgetEl.className = 'dashboard-widget';
             widgetEl.dataset.widgetId = widgetId;
             widgetEl.draggable = true;
-            this.container.appendChild(widgetEl);
+            // UI-27: pinned widgets stay in their stored order ahead of the cards
+            // panel; a widget rendered later (the CEC tray registers its widget
+            // after the cards appear) used to land after the cards.
+            this.container.insertBefore(widgetEl, this.container.querySelector(':scope > .dashboard-cards-container'));
         }
         
         widgetEl.innerHTML = `
@@ -820,19 +827,29 @@ class DashboardManager {
         if (!cardsContainer) {
             cardsContainer = document.createElement('div');
             cardsContainer.className = 'dashboard-cards-container';
+            // UI-27: drawn as a dashboard panel with the widget header/content
+            // styles (the dashboard-cards-* classes never had any CSS).
             cardsContainer.innerHTML = `
-                <div class="dashboard-cards-header">
-                    <h4>Dashboard Cards</h4>
-                    <button class="btn btn-sm btn-secondary" id="add-card-btn">
-                        <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <div class="dashboard-cards-header dashboard-widget-header">
+                    <div class="dashboard-widget-title">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+                            <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+                        </svg>
+                        <span>Dashboard Cards</span>
+                    </div>
+                    <!-- UI-50: the dashboard section's own "+" button style (btn-add), so the title stays on one line -->
+                    <button class="btn-icon btn-add" id="add-card-btn" title="Add card to dashboard" aria-label="Add card to dashboard">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="12" y1="5" x2="12" y2="19"/>
                             <line x1="5" y1="12" x2="19" y2="12"/>
                         </svg>
-                        Add Card
                     </button>
                 </div>
-                <div class="dashboard-cards-grid" id="dashboard-cards-grid">
-                    <!-- Cards rendered here -->
+                <div class="dashboard-widget-content">
+                    <div class="dashboard-cards-grid card-list" id="dashboard-cards-grid">
+                        <!-- Cards rendered here -->
+                    </div>
                 </div>
             `;
             this.container.appendChild(cardsContainer);
@@ -893,9 +910,15 @@ class DashboardManager {
                 const id = e.currentTarget.dataset.id;
 
                 try {
-                    if (type === 'profile') {
-                        await window.api.recallProfile(id);
-                        toast.success('Profile recalled');
+                    if (type === 'profile' || type === 'scene') {
+                        // UI-01 passcode prompt, VAL-11 partial result
+                        const item = type === 'profile'
+                            ? (window.state.profiles || []).find(p => p.id === id)
+                            : (window.state.phase8Scenes || []).find(s => s.id === id);
+                        await window.RunAction.runProfileOrScene(type, id, {
+                            name: item?.name,
+                            successMessage: type === 'profile' ? 'Profile recalled' : 'Scene executed',
+                        });
                     } else if (type === 'preset') {
                         await window.api.recallPreset(Number(id));
                         toast.success(`Preset ${id} recalled`);
@@ -905,19 +928,9 @@ class DashboardManager {
                     } else if (type === 'macro') {
                         await window.api.executeMacro(id);
                         toast.success('Macro executed');
-                    } else if (type === 'scene') {
-                        const result = await window.api.executeScene(id);
-                        if (result.success) {
-                            toast.success('Scene executed');
-                        }
                     }
                 } catch (error) {
-                    if (error.status === 401) {
-                        // Passcode required — handled in settings drawer
-                        toast.error('Passcode required');
-                    } else {
-                        toast.error(`Error: ${error.message}`);
-                    }
+                    toast.error(`Error: ${error.message}`);
                 }
             });
         });

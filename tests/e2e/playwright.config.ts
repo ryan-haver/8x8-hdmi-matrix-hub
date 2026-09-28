@@ -2,6 +2,8 @@
 //
 // Projects:
 //   smoke                      smoke.spec.ts: /ui and /kiosk load, routing, WebSocket, axe
+//   flows                      flows.spec.ts (after smoke): UI functional flows (WP-E1: passcode,
+//                              partial runs, profiles, dashboard, kiosk, CEC remotes, escaping)
 //   desktop | tablet | phone | kiosk-tab-a11 | kiosk-iphone16promax
 //                              visual.spec.ts: every catalog entry (tests/e2e/visual/catalog.ts)
 //                              in the default preset; desktop and the two kiosk devices
@@ -26,9 +28,9 @@ const visualProject = (name: ViewportName) => ({
   // Captures never change hub or simulator state (writes are blocked in the
   // spec, hub broadcasts are filtered per page), so they run in parallel.
   fullyParallel: true,
-  // The smoke tests DO change simulator state; running them first (and
+  // The smoke and flow tests DO change simulator state; running them first (and
   // alone) keeps them from racing the captures. Skip with --no-deps.
-  dependencies: ['smoke'],
+  dependencies: ['flows'],
   // Theme presets other than Tron Classic run on desktop and the kiosk devices only (§5.3).
   ...((THEMED_VIEWPORTS as readonly ViewportName[]).includes(name) ? {} : { grepInvert: /@themed/ }),
   use: {
@@ -106,6 +108,15 @@ export default defineConfig({
     {
       name: 'smoke',
       testMatch: /smoke\.spec\.ts$/,
+      use: { ...devices['Desktop Chrome'], viewport: VIEWPORTS.desktop.viewport },
+    },
+    {
+      // UI functional flows (flows.spec.ts, WP-E1). After the smoke tests, not
+      // beside them: both change the one shared simulator, and a smoke test that
+      // waits on a front-panel change must not see another file reset it.
+      name: 'flows',
+      testMatch: /flows\.spec\.ts$/,
+      dependencies: ['smoke'],
       use: { ...devices['Desktop Chrome'], viewport: VIEWPORTS.desktop.viewport },
     },
     ...VISUAL_VIEWPORTS.map(visualProject),

@@ -3,7 +3,39 @@
  * Handles all communication with the matrix REST API
  */
 
+/**
+ * Error thrown by MatrixAPI for a failed request (UI-01).
+ * - status: HTTP status; 0 when no answer arrived (timeout, network error)
+ * - code:   the hub's error code, e.g. "passcode_required" or "invalid_passcode"
+ *           (from data.error or error), "timeout", "network", or null
+ * - body:   the parsed JSON body of the answer, if any
+ */
+class ApiError extends Error {
+    constructor(message, { status = 0, code = null, body = null, method = null, path = null } = {}) {
+        super(message);
+        this.name = 'ApiError';
+        this.status = status;
+        this.code = code;
+        this.body = body;
+        this.method = method;
+        this.path = path;
+    }
+
+    /** The hub's machine-readable error code in an error body, if there is one. */
+    static codeFrom(body) {
+        const isCode = (v) => typeof v === 'string' && /^[a-z][a-z0-9_]*$/.test(v);
+        if (isCode(body?.data?.error)) return body.data.error;
+        if (isCode(body?.error)) return body.error;
+        return null;
+    }
+}
+
 class MatrixAPI {
+    /** Default request timeout (UI-04): no request may leave the UI waiting forever. */
+    static DEFAULT_TIMEOUT_MS = 30000;
+    /** Timeout for running a profile, scene, macro or shortcut (CEC macros can include delays). */
+    static RUN_TIMEOUT_MS = 120000;
+
     constructor(baseUrl = '') {
         // Always use same origin - the frontend talks to the backend REST API,
         // and the backend handles connecting to the physical matrix device.
@@ -73,11 +105,9 @@ class MatrixAPI {
                 lastError = error;
                 if (attempt < maxRetries) {
                     // Don't retry on 4xx client errors (except 408, 429)
-                    if (error.message && error.message.includes('HTTP 4')) {
-                        const status = parseInt(error.message.match(/HTTP (\d+)/)?.[1] || '0');
-                        if (status !== 408 && status !== 429 && status >= 400 && status < 500) {
-                            throw error; // Don't retry client errors
-                        }
+                    const status = error.status || 0;
+                    if (status >= 400 && status < 500 && status !== 408 && status !== 429) {
+                        throw error;
                     }
                     const backoff = delayMs * Math.pow(2, attempt);
                     await new Promise((resolve) => setTimeout(resolve, backoff));
@@ -87,16 +117,71 @@ class MatrixAPI {
         throw lastError;
     }
 
+    /**
+     * One HTTP exchange with a timeout (UI-04). Resolves with the parsed JSON
+     * body of any 2xx answer (a 207 partial result included); rejects with an
+     * ApiError carrying the HTTP status (0 when no answer arrived), the hub's
+     * error code and the body (UI-01).
+     * @param {string} method - HTTP method
+     * @param {string} path - API path
+     * @param {Object} options
+     * @param {*} [options.body] - JSON body (none when undefined)
+     * @param {number} [options.timeout] - Milliseconds before the request is aborted
+     * @param {Function} [options.message] - (response, body) => message for a non-2xx answer
+     */
+    async _request(method, path, { body, timeout = MatrixAPI.DEFAULT_TIMEOUT_MS, message } = {}) {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), timeout);
+        const init = { method, signal: controller.signal };
+        if (body !== undefined) {
+            init.headers = { 'Content-Type': 'application/json' };
+            init.body = JSON.stringify(body);
+        }
+        try {
+            let response;
+            try {
+                response = await fetch(`${this.baseUrl}${path}`, init);
+            } catch (error) {
+                throw MatrixAPI._transportError(error, timeout, method, path);
+            }
+            if (!response.ok) {
+                const data = await response.json().catch(() => null);
+                throw new ApiError(message ? message(response, data) : `HTTP ${response.status}`, {
+                    status: response.status,
+                    code: ApiError.codeFrom(data),
+                    body: data,
+                    method,
+                    path,
+                });
+            }
+            try {
+                return await response.json();
+            } catch (error) {
+                throw MatrixAPI._transportError(error, timeout, method, path);
+            }
+        } finally {
+            clearTimeout(timer);
+        }
+    }
+
+    /** ApiError for a request that got no (usable) answer: timeout or network/parse error. */
+    static _transportError(error, timeout, method, path) {
+        if (error instanceof ApiError) return error;
+        if (error?.name === 'AbortError') {
+            return new ApiError(`Request timed out after ${timeout / 1000} s`, { status: 0, code: 'timeout', method, path });
+        }
+        return new ApiError(error?.message || 'Network error', { status: 0, code: 'network', method, path });
+    }
+
     async get(path, options = {}) {
-        const { retries = 0 } = options;
+        const { retries = 0, timeout } = options;
         try {
             return await this._retryOperation(async () => {
                 Logger.api('GET', path);
-                const response = await fetch(`${this.baseUrl}${path}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-                const data = await response.json();
+                const data = await this._request('GET', path, {
+                    timeout,
+                    message: (response) => `HTTP ${response.status}: ${response.statusText}`,
+                });
                 Logger.apiResponse(path, data);
                 return data;
             }, retries);
@@ -107,20 +192,15 @@ class MatrixAPI {
     }
 
     async post(path, body = {}, options = {}) {
-        const { retries = 0 } = options;
+        const { retries = 0, timeout } = options;
         try {
             return await this._retryOperation(async () => {
                 Logger.api('POST', path, body);
-                const response = await fetch(`${this.baseUrl}${path}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(body)
+                const data = await this._request('POST', path, {
+                    body,
+                    timeout,
+                    message: (response, errorData) => errorData?.error || `HTTP ${response.status}`,
                 });
-                if (!response.ok) {
-                    const errorData = await response.json().catch(() => ({}));
-                    throw new Error(errorData.error || `HTTP ${response.status}`);
-                }
-                const data = await response.json();
                 Logger.apiResponse(path, data);
                 return data;
             }, retries);
@@ -130,16 +210,14 @@ class MatrixAPI {
         }
     }
 
-    async delete(path) {
+    async delete(path, options = {}) {
+        const { timeout } = options;
         try {
             Logger.api('DELETE', path);
-            const response = await fetch(`${this.baseUrl}${path}`, {
-                method: 'DELETE'
+            const data = await this._request('DELETE', path, {
+                timeout,
+                message: (response) => `HTTP ${response.status}: ${response.statusText}`,
             });
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-            }
-            const data = await response.json();
             Logger.apiResponse(path, data);
             return data;
         } catch (error) {
@@ -148,19 +226,15 @@ class MatrixAPI {
         }
     }
 
-    async put(path, body = {}) {
+    async put(path, body = {}, options = {}) {
+        const { timeout } = options;
         try {
             Logger.api('PUT', path, body);
-            const response = await fetch(`${this.baseUrl}${path}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
+            const data = await this._request('PUT', path, {
+                body,
+                timeout,
+                message: (response, errorData) => errorData?.error || `HTTP ${response.status}`,
             });
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}));
-                throw new Error(errorData.error || `HTTP ${response.status}`);
-            }
-            const data = await response.json();
             Logger.apiResponse(path, data);
             return data;
         } catch (error) {
@@ -290,8 +364,8 @@ class MatrixAPI {
         return this.delete(`/api/profile/${id}`);
     }
 
-    async recallProfile(id) {
-        return this.post(`/api/profile/${id}/recall`);
+    async recallProfile(id, { passcode } = {}) {
+        return this.post(`/api/profile/${id}/recall`, passcode ? { passcode } : {}, { timeout: MatrixAPI.RUN_TIMEOUT_MS });
     }
 
     async getProfileCecConfig(profileId) {
@@ -300,6 +374,11 @@ class MatrixAPI {
 
     async updateProfileCecConfig(profileId, cecConfig) {
         return this.post(`/api/profile/${profileId}/cec`, { cec_config: cecConfig });
+    }
+
+    async autoResolveProfileCecConfig(profileId) {
+        // Profile route under its legacy /api/scene alias (the only auto-resolve route).
+        return this.post(`/api/scene/${profileId}/cec/auto-resolve`);
     }
 
     async getProfileMacros(profileId) {
@@ -316,11 +395,6 @@ class MatrixAPI {
     async reorderProfiles(profiles) {
         // profiles: array of { id, pin_order } or { id, pinned, pin_order }
         return this.post('/api/profiles/reorder', { profiles });
-    }
-
-    async updateScene(sceneId, updates) {
-        // Wrapper for updating scene/profile properties like pinned, pin_order
-        return this.put(`/api/profile/${sceneId}`, updates);
     }
 
     // ===== EDID Management =====
@@ -443,11 +517,11 @@ class MatrixAPI {
     }
 
     async executeMacro(macroId) {
-        return this.post(`/api/cec/macro/${macroId}/execute`);
+        return this.post(`/api/cec/macro/${macroId}/execute`, {}, { timeout: MatrixAPI.RUN_TIMEOUT_MS });
     }
 
     async testMacro(macroId) {
-        return this.post(`/api/cec/macro/${macroId}/test`);
+        return this.post(`/api/cec/macro/${macroId}/test`, {}, { timeout: MatrixAPI.RUN_TIMEOUT_MS });
     }
 
     // ===== External Audio =====
@@ -543,7 +617,7 @@ class MatrixAPI {
     }
 
     async executeSystemShortcut(id, { params } = {}) {
-        return this.post(`/api/shortcuts/${id}/execute`, params ? { params } : {});
+        return this.post(`/api/shortcuts/${id}/execute`, params ? { params } : {}, { timeout: MatrixAPI.RUN_TIMEOUT_MS });
     }
 
     async renamePreset(number, name) {
@@ -649,7 +723,7 @@ class MatrixAPI {
     }
 
     async executeScene(id, { passcode } = {}) {
-        return this.post(`/api/v2/scenes/${id}/execute`, passcode ? { passcode } : {});
+        return this.post(`/api/v2/scenes/${id}/execute`, passcode ? { passcode } : {}, { timeout: MatrixAPI.RUN_TIMEOUT_MS });
     }
 
     async getSceneHistory(id) {
@@ -695,4 +769,5 @@ class MatrixAPI {
 MatrixAPI.cleanupLegacyStorage();
 
 // Create global API instance
+window.ApiError = ApiError;
 window.api = new MatrixAPI();

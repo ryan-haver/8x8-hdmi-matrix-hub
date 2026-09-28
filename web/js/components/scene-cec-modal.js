@@ -102,7 +102,7 @@ class SceneCecModal {
                 <div class="settings-modal-body">
                     <div class="scene-cec-header">
                         <span class="scene-name-label">Scene: <strong id="cec-scene-name">--</strong></span>
-                        <div class="auto-resolve-toggle">
+                        <div class="auto-resolve-toggle toggle-switch">
                             <input type="checkbox" id="cec-auto-resolve" class="toggle-input">
                             <label for="cec-auto-resolve" class="toggle-slider"></label>
                             <span class="toggle-label">Auto-resolve targets</span>
@@ -186,8 +186,9 @@ class SceneCecModal {
         
         // Get CEC config from scene or create default
         try {
-            const result = await api.getSceneCecConfig(scene.id);
-            this.cecConfig = result.cec_config || this.getDefaultConfig();
+            // UI-30: the dialog edits a profile's CEC targets (/api/profile/{id}/cec)
+            const result = await api.getProfileCecConfig(scene.id);
+            this.cecConfig = result?.data?.cec_config || this.getDefaultConfig();
         } catch (error) {
             console.warn('Failed to load CEC config, using defaults:', error);
             this.cecConfig = this.getDefaultConfig();
@@ -200,7 +201,8 @@ class SceneCecModal {
         this.renderCategories();
         this.updateCategoriesState();
         
-        // Show modal
+        // Show modal (UI-30: the overlay is shown by .visible, not by aria-hidden)
+        this.modal.classList.add('visible');
         this.modal.setAttribute('aria-hidden', 'false');
     }
 
@@ -208,6 +210,7 @@ class SceneCecModal {
      * Close the modal
      */
     close() {
+        this.modal.classList.remove('visible');
         this.modal.setAttribute('aria-hidden', 'true');
         this.currentScene = null;
         this.cecConfig = null;
@@ -314,7 +317,7 @@ class SceneCecModal {
             const typeClass = parsed.type === 'input' ? 'input-target' : 'output-target';
             
             return `
-                <span class="target-chip ${typeClass}" data-target="${target}">
+                <span class="target-chip ${typeClass}" data-target="${Helpers.escapeHtml(target)}">
                     <span class="chip-label">${Helpers.escapeHtml(name)}</span>
                     <button class="target-chip-remove" title="Remove">×</button>
                 </span>
@@ -323,25 +326,35 @@ class SceneCecModal {
     }
 
     /**
-     * Parse a target string (e.g., "input_3" → { type: 'input', port: 3 })
+     * Parse a target string: "input_3" (resolver, macros) or "input:3" (the
+     * form config.CecConfig documents) → { type: 'input', port: 3 }. Anything
+     * else (e.g. "all_inputs") → { type: null, port: null, raw }. API-25: the
+     * stored format is not normalised yet, so both are read here.
      */
     parseTarget(target) {
-        const parts = target.split('_');
-        return {
-            type: parts[0],
-            port: parseInt(parts[1], 10)
-        };
+        const m = /^(input|output)[_:](\d+)$/.exec(String(target));
+        if (!m) return { type: null, port: null, raw: String(target) };
+        return { type: m[1], port: parseInt(m[2], 10) };
+    }
+
+    /** Whether a stored target list contains a target, whatever its format. */
+    hasTarget(targets, target) {
+        const t = this.parseTarget(target);
+        return (targets || []).some(x => {
+            const p = this.parseTarget(x);
+            return p.type === t.type && p.port === t.port && (t.type !== null || p.raw === t.raw);
+        });
     }
 
     /**
-     * Get display name for a target
+     * Display name for a target: "Output 1 · TV", or "Output 1" when the port
+     * has no name of its own; unknown targets are shown as stored.
      */
     getTargetDisplayName(parsed) {
-        if (parsed.type === 'input') {
-            return state.getInputName(parsed.port) || `Input ${parsed.port}`;
-        } else {
-            return state.getOutputName(parsed.port) || `Output ${parsed.port}`;
-        }
+        if (parsed.type === null) return parsed.raw;
+        const label = `${parsed.type === 'input' ? 'Input' : 'Output'} ${parsed.port}`;
+        const name = parsed.type === 'input' ? state.getInputName(parsed.port) : state.getOutputName(parsed.port);
+        return name && name !== label ? `${label} · ${name}` : label;
     }
 
     /**
@@ -364,7 +377,7 @@ class SceneCecModal {
                 const target = `input_${i}`;
                 const name = state.getInputName(i) || `Input ${i}`;
                 const configKey = this.getCategoryConfigKey(category);
-                const isSelected = (this.cecConfig[configKey] || []).includes(target);
+                const isSelected = this.hasTarget(this.cecConfig[configKey], target);
                 options += `
                     <button class="picker-option ${isSelected ? 'selected' : ''}" 
                             data-target="${target}" 
@@ -383,7 +396,7 @@ class SceneCecModal {
                 const target = `output_${i}`;
                 const name = state.getOutputName(i) || `Output ${i}`;
                 const configKey = this.getCategoryConfigKey(category);
-                const isSelected = (this.cecConfig[configKey] || []).includes(target);
+                const isSelected = this.hasTarget(this.cecConfig[configKey], target);
                 
                 // Add indicator for special outputs
                 const outputInfo = state.outputs[i] || {};
@@ -458,7 +471,7 @@ class SceneCecModal {
             this.cecConfig[configKey] = [];
         }
         
-        if (!this.cecConfig[configKey].includes(target)) {
+        if (!this.hasTarget(this.cecConfig[configKey], target)) {
             this.cecConfig[configKey].push(target);
             this.cecConfig.auto_resolved = false;
             this.modal.querySelector('#cec-auto-resolve').checked = false;
@@ -520,10 +533,10 @@ class SceneCecModal {
                 Resolving...
             `;
             
-            const result = await api.autoResolveCecConfig(this.currentScene.id, false);
+            const result = await api.autoResolveProfileCecConfig(this.currentScene.id);
             
-            if (result.success && result.resolved_cec_config) {
-                this.cecConfig = result.resolved_cec_config;
+            if (result.success && result.data) {
+                this.cecConfig = result.data;
                 this.cecConfig.auto_resolved = true;
                 this.modal.querySelector('#cec-auto-resolve').checked = true;
                 this.renderCategories();
@@ -559,14 +572,13 @@ class SceneCecModal {
             saveBtn.disabled = true;
             saveBtn.textContent = 'Saving...';
             
-            await api.updateSceneCecConfig(this.currentScene.id, this.cecConfig);
+            await api.updateProfileCecConfig(this.currentScene.id, this.cecConfig);
             
             toast.success('CEC configuration saved');
             this.close();
             
-            // Refresh scenes list
-            const result = await api.listScenes();
-            state.setScenes(result.scenes || []);
+            // Refresh the profiles list (UI-27)
+            await state.loadProfiles();
             
         } catch (error) {
             console.error('Save failed:', error);
