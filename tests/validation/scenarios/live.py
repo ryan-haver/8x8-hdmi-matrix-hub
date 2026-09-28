@@ -92,15 +92,18 @@ SCENARIOS = [
         features=("F-REL-009", "F-API-032", "F-KIO-011"),
         clients=BROWSER,
         targets=("sim",),
-        action=act("device_change", reboot=12),
+        # Long enough that every "down" check runs inside the outage: the hub notices at its next read
+        # (STATUS_POLL_INTERVAL, 5 s) and the checks run one after another.
+        action=act("device_change", reboot=30),
         expect=(
-            WsEvent("matrix_connection", {"connected": False}, timeout=12),
+            WsEvent("matrix_connection", {"connected": False}, timeout=15),
             Hub("/api/status", "success", equals=False, status=None,
                 note="VAL-04: 503 with the link state, never 200 with made-up names"),
             Hub("/api/status", "data.connected", equals=False, status=None),
-            ClientState("ui.header", equals="disconnected", timeout=12),
-            ClientState("kiosk.status", equals="Disconnected", timeout=12),
-            WsEvent("matrix_connection", {"connected": True}, timeout=60),
+            ClientState("ui.header", before="connected", equals="disconnected", timeout=10),
+            ClientState("kiosk.status", before="Connected", equals="Disconnected", timeout=10),
+            # "state": the Telnet drop at the start of the outage is announced as connected/degraded first
+            WsEvent("matrix_connection", {"connected": True, "state": "connected"}, timeout=90),
             Hub("/api/health", "data.matrix.connected", equals=True),
             ClientState("ui.header", equals="connected", timeout=60),
             ClientState("kiosk.status", equals="Connected", timeout=60),
