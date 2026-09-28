@@ -17,8 +17,8 @@
     {
       "name": "app/header/disconnected",
       "page": "ui",
-      "description": "Header when the WebSocket cannot connect: red title pill, generic title.",
-      "note": null,
+      "description": "Header when the WebSocket cannot connect: the client keeps retrying, so the title pill shows the reconnecting (standby colour) state; generic title.",
+      "note": "Since WP-E1 (UI-03/UI-29) a WebSocket that is down and retrying has its own \"reconnecting\" look; red is for a hub that reports the matrix unreachable.",
       "themed": false,
       "viewports": null
     },
@@ -26,7 +26,7 @@
       "name": "app/matrix-unreachable",
       "page": "ui",
       "description": "Hub up but the matrix is not answering: every status call returns 503 (as the hub does when the matrix is disconnected).",
-      "note": "No error is shown: the header stays green (it only reflects the WebSocket) and the grid shows a made-up 1:1 routing with default output names.",
+      "note": "The grid says \"Matrix not reachable\" instead of a made-up 1:1 routing (UI-29, WP-E1). The header stays green here because the page's WebSocket status snapshots are dropped and the simulated matrix is up; with a hub that reports the matrix down it turns red (WP-C2).",
       "themed": false,
       "viewports": null
     },
@@ -34,7 +34,7 @@
       "name": "app/header/reconnecting",
       "page": "ui",
       "description": "WebSocket closed after a good start (hub restarted): header after the socket drops, while it retries.",
-      "note": "There is no distinct \"reconnecting\" visual: websocket.js tracks a reconnecting status but app.js never renders it, so this is the plain disconnected header over loaded data.",
+      "note": "UI-03/UI-29 (WP-E1): the retry has its own look (standby colour, tooltip \"reconnecting\"); it used to be the plain disconnected header.",
       "themed": false,
       "viewports": null
     },
@@ -122,7 +122,7 @@
       "name": "matrix/grid/status-pending",
       "page": "ui",
       "description": "Matrix while the first /api/status request is still pending.",
-      "note": "No loading indicator: the grid shows a made-up 1:1 routing and default names until status arrives (the \"Loading matrix...\" spinner exists only in the pre-JS HTML). The same happens when the matrix is unreachable (app/matrix-unreachable).",
+      "note": "UI-29 (WP-E1): \"Loading matrix...\" until a real routing arrives; it used to show a made-up 1:1 routing and default names.",
       "themed": false,
       "viewports": null
     },
@@ -157,8 +157,8 @@
     {
       "name": "dashboard/default",
       "page": "ui",
-      "description": "Dashboard as it loads: Routing widget pinned; server cards not rendered yet (\"No cards yet\").",
-      "note": "Seeded dashboard cards do not render on load: dashboard-manager.js renders cards from a 100 ms timer before /api/dashboard/layout arrives, and nothing re-renders afterwards.",
+      "description": "Dashboard as it loads: Routing widget pinned and the server cards from /api/dashboard/layout.",
+      "note": "UI-27 (fixed in WP-E1): the cards used to be missing on load (rendered from a 100 ms timer before the layout arrived, never re-rendered).",
       "themed": true,
       "viewports": null
     },
@@ -166,7 +166,7 @@
       "name": "dashboard/cards/all-types",
       "page": "ui",
       "description": "Every dashboard card type (scene, locked scene, preset, built-in and user shortcut, profile, macro, aggregate widgets) once cards are rendered.",
-      "note": "Needs an app-state nudge: profile and macro cards need state.profiles/state.cecMacros, which the main UI never loads; aggregate_widget cards render empty (renderer reads card.widget_id).",
+      "note": "aggregate_widget cards render empty: the renderer reads card.widget_id, the layout stores id (UI-44). Before WP-E1 (UI-27) the profile and macro cards also needed their data injected.",
       "themed": false,
       "viewports": null
     },
@@ -190,7 +190,7 @@
       "name": "dashboard/card-picker/profiles",
       "page": "ui",
       "description": "\"Add card\" picker, profiles tab.",
-      "note": "Always empty today: state.profiles is never loaded by the main UI.",
+      "note": "Before WP-E1 (UI-27) always empty: state.profiles was never loaded by the main UI.",
       "themed": false,
       "viewports": null
     },
@@ -222,7 +222,7 @@
       "name": "dashboard/card-picker/macros",
       "page": "ui",
       "description": "\"Add card\" picker, macros tab.",
-      "note": "Always empty today: state.cecMacros is never loaded by the main UI.",
+      "note": "Before WP-E1 (UI-27) always empty: state.cecMacros was never loaded by the main UI.",
       "themed": false,
       "viewports": null
     },
@@ -303,16 +303,16 @@
     {
       "name": "profiles/list/empty",
       "page": "ui",
-      "description": "Profiles tab as it loads today (empty, even though the hub has 4 profiles).",
-      "note": "The Profiles tab only shows profiles from the browser state cache: app.js:591 reads /api/v2/scenes with the wrong response path, and the tab never calls /api/profiles.",
+      "description": "Profiles tab when the hub has no profiles.",
+      "note": "Before WP-E1 (UI-27) the tab was always empty: it read /api/v2/scenes with the wrong response path.",
       "themed": false,
       "viewports": null
     },
     {
       "name": "profiles/list/populated",
       "page": "ui",
-      "description": "Profiles tab with profiles (pinned ones shown, incl. a passcode-protected profile).",
-      "note": "The Profiles tab only shows profiles from the browser state cache: app.js:591 reads /api/v2/scenes with the wrong response path, and the tab never calls /api/profiles.",
+      "description": "Profiles tab with the hub profiles (pinned ones shown, incl. a passcode-protected profile).",
+      "note": null,
       "themed": true,
       "viewports": null
     },
@@ -320,7 +320,7 @@
       "name": "profiles/list/long-names",
       "page": "ui",
       "description": "Profiles tab with long profile names.",
-      "note": "The Profiles tab only shows profiles from the browser state cache: app.js:591 reads /api/v2/scenes with the wrong response path, and the tab never calls /api/profiles.",
+      "note": null,
       "themed": false,
       "viewports": null
     },
@@ -328,7 +328,7 @@
       "name": "profiles/manager/populated",
       "page": "ui",
       "description": "Manage Profiles panel (pinned/unpinned lists).",
-      "note": "The Profiles tab only shows profiles from the browser state cache: app.js:591 reads /api/v2/scenes with the wrong response path, and the tab never calls /api/profiles.",
+      "note": null,
       "themed": false,
       "viewports": null
     },
@@ -344,7 +344,7 @@
       "name": "profiles/api-endpoint-modal",
       "page": "ui",
       "description": "Profile \"API endpoint\" modal (URL + curl snippet for Flic/automation).",
-      "note": "The first click on the API button throws and opens nothing: createModal (api-copy.js:134) queries .api-modal-backdrop inside itself and gets null; the second click works. The URLs hard-code port 8080 (api-copy.js:13), wrong when the hub runs on another port (here 18080).",
+      "note": "The URLs hard-code port 8080 (api-copy.js:13, UI-18), wrong when the hub runs on another port (here 18080). The first click used to throw and open nothing (UI-28, fixed in WP-E1).",
       "themed": false,
       "viewports": null
     },
@@ -466,7 +466,7 @@
       "name": "drawer/theme/customize",
       "page": "ui",
       "description": "Theme drawer editing a preset (hue swatches, name).",
-      "note": "theme-drawer.js:122-136 nests the edit <button> inside the preset <button>; the parser splits them, so the edit buttons render as separate grid items that overlap: a click on the first preset's edit button hits the fourth's.",
+      "note": "UI-31 (fixed in WP-E1): the edit <button> was nested in the preset <button>, the parser split them and every edit button landed on the same spot (a click on preset 1's hit preset 4's).",
       "themed": false,
       "viewports": null
     },
@@ -498,7 +498,7 @@
       "name": "drawer/hardware/default",
       "page": "ui",
       "description": "Hardware drawer: LCD timeout, beep, external audio, power controls.",
-      "note": "Shows HTML defaults, not the device values: settings-panel.js loadCurrentSettings never runs (its #settings-btn trigger does not exist).",
+      "note": "Shows the device values (seed: LCD 30 s, beep on, follow video). Before WP-E1 (UI-30) it showed the HTML defaults (LCD 60 s).",
       "themed": false,
       "viewports": null
     },
@@ -586,7 +586,7 @@
       "name": "drawer/integrations/flic-profile",
       "page": "ui",
       "description": "Integrations drawer, Flic tab with a profile target.",
-      "note": "Always warns \"No Profiles created yet\" because state.profiles is never loaded (integrations-drawer.js:526).",
+      "note": "Before WP-E1 (UI-27) it always warned \"No Profiles created yet\" (state.profiles was never loaded).",
       "themed": false,
       "viewports": null
     },
@@ -625,8 +625,8 @@
     {
       "name": "drawer/settings/profiles",
       "page": "ui",
-      "description": "Settings drawer (Phase 8), Profiles tab as it renders today (empty).",
-      "note": "No button opens this drawer (only a #settings/<tab> hash change). The Profiles tab is always empty: state.profiles is never loaded.",
+      "description": "Settings drawer (Phase 8), Profiles tab when the hub has no profiles.",
+      "note": "No button opens this drawer (only a #settings/<tab> hash change). Before WP-E1 (UI-27) the Profiles tab was always empty.",
       "themed": false,
       "viewports": null
     },
@@ -634,7 +634,7 @@
       "name": "drawer/settings/profiles-populated",
       "page": "ui",
       "description": "Settings drawer, Profiles tab with profiles (execute / favourite buttons).",
-      "note": "Needs state.profiles, which the app never loads; filled from /api/profiles here.",
+      "note": "No button opens this drawer (only a #settings/<tab> hash change).",
       "themed": false,
       "viewports": null
     },
@@ -814,7 +814,7 @@
       "name": "dialog/about/default",
       "page": "ui",
       "description": "About dialog (version, status, keyboard link).",
-      "note": "No UI trigger. Always shows WebSocket \"Disconnected\" (about-dialog.js:167 reads a missing state.wsStatus).",
+      "note": "No UI trigger. Since WP-E1 (UI-30) the WebSocket and matrix rows come from state.wsConnected / state.matrixLink; it always showed WebSocket \"Disconnected\".",
       "themed": false,
       "viewports": null
     },
@@ -879,8 +879,8 @@
     {
       "name": "dialog/scene-cec",
       "page": "ui",
-      "description": "Scene CEC configuration modal (targets per category).",
-      "note": "Invisible in the app: scene-cec-modal.js:204 sets aria-hidden only, but the overlay needs .visible; it also has no UI trigger. Forced visible here.",
+      "description": "CEC configuration dialog for the Movie Night profile, opened with the profile editor's CEC button (targets per category from /api/profile/{id}/cec).",
+      "note": "WP-E1: the CEC button is the owner-approved entry point (UI-45, 2026-09-27); chips read both stored target forms, \"input:2\" and \"input_2\" (API-25 read side; they showed \"Output NaN\"). Before WP-E1 the dialog never became visible and loaded nothing (UI-30), and the auto-resolve toggle covered it (UI-43).",
       "themed": false,
       "viewports": null
     },
@@ -888,7 +888,7 @@
       "name": "dialog/passcode-prompt",
       "page": "ui",
       "description": "Passcode prompt for a protected scene/profile.",
-      "note": "Not capturable: the passcode prompt is a native window.prompt() (settings-drawer.js showPasscodePrompt), which screenshots do not include, and its automatic trigger never fires (api.js errors carry no .status).",
+      "note": "Not capturable: the passcode prompt is a native window.prompt() (web/js/utils/run-action.js), which screenshots do not include; a styled dialog is UI-36 (Phase 5). Since WP-E1 (UI-01) it appears for every protected profile or scene; tests/e2e/flows.spec.ts drives it.",
       "themed": false,
       "viewports": []
     },
@@ -920,7 +920,7 @@
       "name": "editor/profile/edit",
       "page": "ui",
       "description": "Profile editor, editing an existing profile (macros, power macros, delete button).",
-      "note": "The UI edit path (Profiles tab → edit) fetches /api/v2/scenes/{id} and fails; opened with the editor API here.",
+      "note": "Opened from the Profiles tab (edit button); before WP-E1 (UI-27) that path fetched /api/v2/scenes/{id} and failed.",
       "themed": false,
       "viewports": null
     },
@@ -967,8 +967,8 @@
     {
       "name": "editor/scene/validation-error",
       "page": "ui",
-      "description": "Scene editor after Save: \"Scene name is required\".",
-      "note": "Always fails validation: scene-editor.js:90 renders a duplicate id=\"scene-name\" and save() reads the hidden legacy input.",
+      "description": "Scene editor after Save with the name cleared: \"Scene name is required\".",
+      "note": "Before WP-E1 (UI-26) every save failed this way: a duplicate id=\"scene-name\" made save() read a hidden legacy input.",
       "themed": false,
       "viewports": null
     },
@@ -1015,7 +1015,7 @@
     {
       "name": "cec-remote/output-1",
       "page": "ui",
-      "description": "CEC remote opened from the TV output tile (display CEC: power, navigation, volume).",
+      "description": "CEC remote opened from the TV output tile (display CEC: power and volume only; the D-pad and Menu/Back went with UI-37).",
       "note": null,
       "themed": true,
       "viewports": null
@@ -1031,7 +1031,7 @@
     {
       "name": "cec-remote/matrix-card",
       "page": "ui",
-      "description": "CEC remote opened from a routing card in the matrix cards view.",
+      "description": "CEC remote opened from a routing card in the matrix cards view (a display: power and volume only, UI-37).",
       "note": null,
       "themed": false,
       "viewports": null
@@ -1048,7 +1048,7 @@
       "name": "cec-tray/expanded",
       "page": "ui",
       "description": "CEC tray expanded: target buttons, power, D-pad (wide) or trackpad (narrow), playback, volume.",
-      "note": "Clicking the FAB throws an uncaught TypeError (cec-tray.js:1186 queries .target-name; markup uses .target-abbrev). The panel still opens.",
+      "note": "Before WP-E1 (UI-28) clicking the FAB threw an uncaught TypeError (.target-name vs .target-abbrev); the panel opened anyway.",
       "themed": true,
       "viewports": null
     },
@@ -1099,6 +1099,14 @@
       "page": "ui",
       "description": "info toast.",
       "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "toast/partial-run",
+      "page": "ui",
+      "description": "Warning toast when a scene ran only partly (HTTP 207 success:false), after Execute on a dashboard scene card.",
+      "note": "VAL-11 (WP-E1): a partial run used to show nothing at all.",
       "themed": false,
       "viewports": null
     },
@@ -1274,7 +1282,7 @@
       "name": "kiosk/routing-modal/step-1",
       "page": "kiosk",
       "description": "Kiosk routing wizard, step 1: choose outputs (Route to all / single output).",
-      "note": "The Next button on step 1 has no handler (kiosk.html:1357).",
+      "note": "Before WP-E1 (UI-25) the Next button on step 1 had no handler.",
       "themed": true,
       "viewports": null
     },
@@ -1290,7 +1298,7 @@
       "name": "kiosk/routing-modal/advanced",
       "page": "kiosk",
       "description": "Kiosk routing wizard, step 2 with advanced output settings.",
-      "note": "HDR/scaler/HDCP option values do not match the API (kiosk.html:1329-1346); Apply always mutes outputs and turns ARC on.",
+      "note": "Before WP-E1 (UI-23) the HDR/scaler/HDCP option values did not match the API and Apply muted every target and turned ARC on (wrong body keys). Since UI-46 (owner decision 2026-09-27) Apply sends only the options changed here.",
       "themed": false,
       "viewports": null
     },
@@ -1305,7 +1313,7 @@
     {
       "name": "kiosk/cec-remote/display-target",
       "page": "kiosk",
-      "description": "Kiosk CEC remote targeting the display (playback hidden).",
+      "description": "Kiosk CEC remote targeting the display (D-pad, Menu/Back and playback hidden, UI-37).",
       "note": null,
       "themed": false,
       "viewports": null
@@ -1346,7 +1354,7 @@
       "name": "kiosk/profile-wizard/step-1",
       "page": "kiosk",
       "description": "Profile wizard step 1: name and icon.",
-      "note": "Unreachable today: the wizard throws before opening (kiosk.html:2469/2216, /api/cec/macros shape). Captured with the macros response reshaped to what the kiosk expects.",
+      "note": "Before WP-E1 (UI-25) the wizard threw before opening (it read the /api/cec/macros response with the wrong shape).",
       "themed": false,
       "viewports": null
     },
@@ -1354,7 +1362,7 @@
       "name": "kiosk/profile-wizard/step-2",
       "page": "kiosk",
       "description": "Profile wizard step 2: routing per output.",
-      "note": "Unreachable today: the wizard throws before opening (kiosk.html:2469/2216, /api/cec/macros shape). Captured with the macros response reshaped to what the kiosk expects.",
+      "note": "Before WP-E1 (UI-25) the wizard threw before opening (it read the /api/cec/macros response with the wrong shape).",
       "themed": false,
       "viewports": null
     },
@@ -1362,8 +1370,16 @@
       "name": "kiosk/profile-wizard/step-3",
       "page": "kiosk",
       "description": "Profile wizard step 3: power on/off macros.",
-      "note": "Unreachable today: the wizard throws before opening (kiosk.html:2469/2216, /api/cec/macros shape). Captured with the macros response reshaped to what the kiosk expects.",
+      "note": "Before WP-E1 (UI-25) the wizard threw before opening (it read the /api/cec/macros response with the wrong shape).",
       "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "kiosk/passcode-pad/entry",
+      "page": "kiosk",
+      "description": "Kiosk PIN pad for a passcode-protected profile (Kids Gaming), two digits entered.",
+      "note": "UI-48 (owner decision 2026-09-27): built from the kiosk modal, CEC-remote action buttons and wizard footer buttons. The main UI still uses a native prompt (UI-36).",
+      "themed": true,
       "viewports": null
     },
     {
