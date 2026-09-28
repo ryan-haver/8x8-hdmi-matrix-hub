@@ -107,6 +107,14 @@ Then add the scenario id to the feature's `scenarios:` in `features.yaml` (a tes
 
 Subclass `tools.validate.clients.base.Client`. It needs `name`, the `intents` it can perform, `start(hub)`, `perform(action) -> ActionResult` and `stop()`. Register it in `clients/__init__.py`. Before each action the runner sets `client.context` (`label`, `forwarded_for`, `artifacts_dir`). Set `hub_mode = "uc"` if the client needs the hub with the Remote integration (the runner then passes `HubInfo.uc_url`). A client that shows state sets `observes = True` and implements `observe(key)` (for `ClientState`). The `flic` client is a placeholder that raises `NotImplementedError` naming its work package. A PASS with a real client counts as V3.
 
+**The `browser` client** (`clients/browser.py` + `browser_driver.mjs`) drives the shipped web UI in Chromium, one fresh
+page per action: `route` (matrix grid), `route_all` (Route To All drawer), `preset_recall` / `preset_rename` (Presets
+drawer), `profile_recall` (Profiles tab), `scene_run` (the scene's dashboard card, else the Settings drawer's Scenes
+tab) and `kiosk_route` (the kiosk routing wizard, `/kiosk`). A passcode prompt is answered with the action's
+`passcode`, or cancelled when it has none. `ClientState` keys (WP-E1) are a snapshot of what the page showed at the
+end of the action: `toast.<success|warning|error|info>` (the last toast of that type), `toasts`, `dialogs` (prompt
+messages).
+
 **The `uc` client** (`clients/uc.py`, WP-B1) connects like a Remote 3 (authenticate, `connect`, subscribe every entity) and maps intents to entity commands: `route` → `media_player.output_N` `select_source` with the name from the entity's source list, `preset_recall` → `button.preset_N` `push`, `matrix_power` → `switch.matrix_power`, `cec_input`/`cec_output` → `remote.input_N_cec`/`remote.output_N_cec` `send_cmd` (`power_on` → `POWER_ON`), and `uc_command` for any other entity command. A driver that drops the connection is a result, recorded with its close code (`requests[].closed`), not a blocked run; the next action reconnects. Its scenarios are in `tests/validation/scenarios/remote.py`; the protocol and lifecycle cases (setup, standby, outages, renames, the golden entity set) are the pytest suite `tests/uc`.
 
 **The `ha` client** (`clients/ha.py`, WP-D1) runs a real Home Assistant: it creates a container from a pinned

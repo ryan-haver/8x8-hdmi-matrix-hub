@@ -162,6 +162,11 @@ INTENTS: dict[str, str] = {
     "cec_input": "send CEC `command` to the source on input `input`",
     "cec_output": "send CEC `command` to the display on output `output`",
     "profile_recall": "recall profile `profile_id` (optional `passcode`)",
+    "scene_run": "run scene `scene_id` (optional `passcode`)",
+    "kiosk_route": (
+        "kiosk routing wizard: route input `input` to output `output` (a number or \"all\") with the wizard's "
+        "options `mute` and `arc` (browser client only)"
+    ),
     "request": "raw HTTP `method` `path` with optional `json` body (api client only)",
     "uc_command": "Remote 3 entity command `cmd_id` with optional `params` on `entity_id` (uc client only)",
     "ha_service": "Home Assistant service `domain`.`service` with `data` (ha client only)",

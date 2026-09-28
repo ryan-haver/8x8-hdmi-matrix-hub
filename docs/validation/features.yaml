@@ -1312,7 +1312,7 @@ features:
   basis: No test recalls a protected profile (tests/test_password.py covers hashing only).
   evidence: []
   findings: [SEC-05, SEC-06, UI-01]
-  scenarios: [profiles.recall_needs_passcode]
+  scenarios: [profiles.recall_needs_passcode, profiles.recall_with_passcode, profiles.recall_wrong_passcode]
 - id: F-DOM-006
   area: domain
   title: Favourite, pin, reorder profiles and show them on the dashboard
@@ -1807,7 +1807,7 @@ features:
   basis: visual catalog dashboard/* (screenshot baseline only; no effect asserted).
   evidence: []
   findings: [UI-01, UI-27]
-  scenarios: []
+  scenarios: [scenes.run_protected]
 - id: F-UI-009
   area: ui
   title: Customise the dashboard (card picker, pin, reorder)
@@ -1855,7 +1855,7 @@ features:
   basis: visual catalog profiles/* (screenshot baseline only; no effect asserted); the tab never loads profiles (catalog note).
   evidence: []
   findings: [UI-27]
-  scenarios: []
+  scenarios: [profiles.recall_routing]
 - id: F-UI-013
   area: ui
   title: Create and edit a profile in the profile editor
@@ -1879,7 +1879,7 @@ features:
   basis: visual catalog dialog/passcode-prompt (screenshot baseline only; no effect asserted).
   evidence: []
   findings: [UI-01, UI-36]
-  scenarios: []
+  scenarios: [profiles.recall_needs_passcode, profiles.recall_with_passcode, profiles.recall_wrong_passcode]
 - id: F-UI-015
   area: ui
   title: Build a scene in the scene editor
@@ -2037,7 +2037,7 @@ features:
   basis: visual catalog toast/*, dialog/confirm/* (screenshot baseline only; no effect asserted).
   evidence: []
   findings: [UI-32]
-  scenarios: []
+  scenarios: [scenes.partial_failure]
 - id: F-UI-028
   area: ui
   title: Keyboard shortcuts
@@ -2170,7 +2170,7 @@ features:
   basis: visual catalog kiosk/routing-modal/* (screenshot baseline only; no effect asserted).
   evidence: []
   findings: [UI-25, UI-23]
-  scenarios: []
+  scenarios: [kiosk.route_one_muted]
 - id: F-KIO-003
   area: kiosk
   title: Route a source to every display from the kiosk
@@ -2183,7 +2183,7 @@ features:
     every output and turns ARC on (UI-23, annotated as a known bug) -> capped at V1.
   evidence: []
   findings: [UI-23]
-  scenarios: []
+  scenarios: [kiosk.route_all_apply]
 - id: F-KIO-004
   area: kiosk
   title: Input and output status tiles

@@ -24,13 +24,22 @@ ROOT = Path(__file__).resolve().parents[3]
 
 class BrowserClient(Client):
     name = "browser"
-    intents = frozenset({"route", "route_all", "preset_recall", "preset_rename"})
+    intents = frozenset(
+        {"route", "route_all", "preset_recall", "preset_rename", "profile_recall", "scene_run", "kiosk_route"}
+    )
+    #: ``ClientState`` keys: what the page showed at the end of the last action
+    #: (the page is closed after each action, so this is a snapshot, not a live view):
+    #: ``toast.<type>`` (success | warning | error | info) = text of the last toast of
+    #: that type, ``toasts`` = every toast as "<type>: <text>", ``dialogs`` = the
+    #: message of every window.prompt/confirm the page opened.
+    observes = True
 
     def __init__(self) -> None:
         super().__init__()
         self._proc: asyncio.subprocess.Process | None = None
         self._next_id = 0
         self._browser_version = ""
+        self._shown: dict[str, Any] = {}
 
     async def _rpc(self, op: str, **payload: Any) -> dict[str, Any]:
         assert self._proc is not None and self._proc.stdin and self._proc.stdout
@@ -100,9 +109,22 @@ class BrowserClient(Client):
             "page_api_requests": res.get("apiRequestCount"),
             "page_errors": res.get("pageErrors", []),
             "console_errors": res.get("consoleErrors", []),
+            "toasts": res.get("toasts", []),
+            "dialogs": res.get("dialogs", []),
         }
+        self._shown = {"toasts": list(res.get("toasts", [])), "dialogs": list(res.get("dialogs", []))}
         result.elapsed_ms = round((time.perf_counter() - t0) * 1000, 1)
         return result
+
+    async def observe(self, key: str) -> Any:
+        """What the page showed at the end of the last action (see ``observes``)."""
+        if key in ("toasts", "dialogs"):
+            return self._shown.get(key, [])
+        if key.startswith("toast."):
+            kind = key.split(".", 1)[1]
+            texts = [t.split(": ", 1)[1] for t in self._shown.get("toasts", []) if t.startswith(f"{kind}: ")]
+            return texts[-1] if texts else None
+        raise NotSupportedError(f"browser client cannot observe {key!r}")
 
     async def stop(self) -> None:
         if self._proc is None:

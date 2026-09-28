@@ -34,6 +34,17 @@ WEB_DRAWERS = (
     "web/js/components/routing-drawer.js",
     "web/js/components/presets-drawer.js",
 )
+#: Running profiles and scenes from the UI (Profiles tab, dashboard cards, Settings drawer; WP-E1).
+WEB_RUN = (
+    "web/js/utils/run-action.js",
+    "web/js/components/toast.js",
+    "web/js/components/scenes-panel.js",
+    "web/js/components/settings-drawer.js",
+    "web/js/utils/dashboard-manager.js",
+    "web/js/components/dashboard-cards/renderers.js",
+)
+#: The kiosk page (one file).
+KIOSK = ("web/kiosk.html",)
 
 #: The Unfolded Circle integration as it ships (run.py legacy mode -> src/driver.py on ucapi).
 UC_DRIVER = ("src/driver.py", "driver.json", "requirements-uc.txt", "src/rest_api/__init__.py")
