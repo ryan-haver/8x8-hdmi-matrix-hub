@@ -14,19 +14,19 @@ window.dashboardCardRenderers = {
         if (!profile) return ''; // Skip missing profiles
 
         return `
-            <div class="dashboard-card dashboard-card-profile" data-card-key="${card.type}:${card.id}">
+            <div class="dashboard-card dashboard-card-profile" data-card-key="${Helpers.escapeHtml(card.type)}:${Helpers.escapeHtml(card.id)}">
                 <div class="dashboard-card-header">
                     <span class="dashboard-card-drag-handle" title="Drag to reorder">⋮⋮</span>
-                    <span class="dashboard-card-icon">${profile.icon || '🎬'}</span>
+                    <span class="dashboard-card-icon">${Helpers.escapeHtml(profile.icon || '🎬')}</span>
                     <span class="dashboard-card-title">${Helpers.escapeHtml(profile.name)}</span>
-                    <button class="dashboard-card-unpin btn-icon" data-type="profile" data-id="${profile.id}" title="Remove from dashboard">
+                    <button class="dashboard-card-unpin btn-icon" data-type="profile" data-id="${Helpers.escapeHtml(profile.id)}" title="Remove from dashboard">
                         <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                         </svg>
                     </button>
                 </div>
                 <div class="dashboard-card-body">
-                    <button class="btn btn-sm btn-primary dashboard-card-action" data-type="profile" data-id="${profile.id}">
+                    <button class="btn btn-sm btn-primary dashboard-card-action" data-type="profile" data-id="${Helpers.escapeHtml(profile.id)}">
                         Recall
                     </button>
                 </div>
@@ -44,19 +44,19 @@ window.dashboardCardRenderers = {
         const preset = context.state.presets[presetNum] || { name: `Preset ${presetNum}` };
 
         return `
-            <div class="dashboard-card dashboard-card-preset" data-card-key="${card.type}:${card.id}">
+            <div class="dashboard-card dashboard-card-preset" data-card-key="${Helpers.escapeHtml(card.type)}:${Helpers.escapeHtml(card.id)}">
                 <div class="dashboard-card-header">
                     <span class="dashboard-card-drag-handle" title="Drag to reorder">⋮⋮</span>
                     <span class="dashboard-card-icon">⚡</span>
                     <span class="dashboard-card-title">${Helpers.escapeHtml(preset.name)}</span>
-                    <button class="dashboard-card-unpin btn-icon" data-type="preset" data-id="${card.id}" title="Remove from dashboard">
+                    <button class="dashboard-card-unpin btn-icon" data-type="preset" data-id="${Helpers.escapeHtml(card.id)}" title="Remove from dashboard">
                         <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                         </svg>
                     </button>
                 </div>
                 <div class="dashboard-card-body">
-                    <button class="btn btn-sm btn-primary dashboard-card-action" data-type="preset" data-id="${card.id}">
+                    <button class="btn btn-sm btn-primary dashboard-card-action" data-type="preset" data-id="${Helpers.escapeHtml(card.id)}">
                         Recall
                     </button>
                 </div>
@@ -74,19 +74,19 @@ window.dashboardCardRenderers = {
         if (!shortcut) return ''; // Skip missing shortcuts
 
         return `
-            <div class="dashboard-card dashboard-card-shortcut" data-card-key="${card.type}:${card.id}">
+            <div class="dashboard-card dashboard-card-shortcut" data-card-key="${Helpers.escapeHtml(card.type)}:${Helpers.escapeHtml(card.id)}">
                 <div class="dashboard-card-header">
                     <span class="dashboard-card-drag-handle" title="Drag to reorder">⋮⋮</span>
-                    <span class="dashboard-card-icon">${shortcut.icon || '⚡'}</span>
+                    <span class="dashboard-card-icon">${Helpers.escapeHtml(shortcut.icon || '⚡')}</span>
                     <span class="dashboard-card-title">${Helpers.escapeHtml(shortcut.name)}</span>
-                    <button class="dashboard-card-unpin btn-icon" data-type="system_shortcut" data-id="${shortcut.id}" title="Remove from dashboard">
+                    <button class="dashboard-card-unpin btn-icon" data-type="system_shortcut" data-id="${Helpers.escapeHtml(shortcut.id)}" title="Remove from dashboard">
                         <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                         </svg>
                     </button>
                 </div>
                 <div class="dashboard-card-body">
-                    <button class="btn btn-sm btn-primary dashboard-card-action" data-type="system_shortcut" data-id="${shortcut.id}">
+                    <button class="btn btn-sm btn-primary dashboard-card-action" data-type="system_shortcut" data-id="${Helpers.escapeHtml(shortcut.id)}">
                         Execute
                     </button>
                 </div>
@@ -104,19 +104,19 @@ window.dashboardCardRenderers = {
         if (!macro) return ''; // Skip missing macros
 
         return `
-            <div class="dashboard-card dashboard-card-macro" data-card-key="${card.type}:${card.id}">
+            <div class="dashboard-card dashboard-card-macro" data-card-key="${Helpers.escapeHtml(card.type)}:${Helpers.escapeHtml(card.id)}">
                 <div class="dashboard-card-header">
                     <span class="dashboard-card-drag-handle" title="Drag to reorder">⋮⋮</span>
-                    <span class="dashboard-card-icon">${macro.icon || '⚡'}</span>
+                    <span class="dashboard-card-icon">${Helpers.escapeHtml(macro.icon || '⚡')}</span>
                     <span class="dashboard-card-title">${Helpers.escapeHtml(macro.name)}</span>
-                    <button class="dashboard-card-unpin btn-icon" data-type="macro" data-id="${macro.id}" title="Remove from dashboard">
+                    <button class="dashboard-card-unpin btn-icon" data-type="macro" data-id="${Helpers.escapeHtml(macro.id)}" title="Remove from dashboard">
                         <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                         </svg>
                     </button>
                 </div>
                 <div class="dashboard-card-body">
-                    <button class="btn btn-sm btn-primary dashboard-card-action" data-type="macro" data-id="${macro.id}">
+                    <button class="btn btn-sm btn-primary dashboard-card-action" data-type="macro" data-id="${Helpers.escapeHtml(macro.id)}">
                         Run
                     </button>
                 </div>
@@ -137,15 +137,15 @@ window.dashboardCardRenderers = {
         const isProtected = scene.password_protected;
 
         return `
-            <div class="dashboard-card dashboard-card-scene" data-card-key="${card.type}:${card.id}">
+            <div class="dashboard-card dashboard-card-scene" data-card-key="${Helpers.escapeHtml(card.type)}:${Helpers.escapeHtml(card.id)}">
                 <div class="dashboard-card-header">
                     <span class="dashboard-card-drag-handle" title="Drag to reorder">⋮⋮</span>
-                    <span class="dashboard-card-icon">${scene.icon || '🎬'}</span>
+                    <span class="dashboard-card-icon">${Helpers.escapeHtml(scene.icon || '🎬')}</span>
                     <span class="dashboard-card-title">
                         ${Helpers.escapeHtml(scene.name)}
                         ${isProtected ? `<svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" title="Password protected"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>` : ''}
                     </span>
-                    <button class="dashboard-card-unpin btn-icon" data-type="scene" data-id="${scene.id}" title="Remove from dashboard">
+                    <button class="dashboard-card-unpin btn-icon" data-type="scene" data-id="${Helpers.escapeHtml(scene.id)}" title="Remove from dashboard">
                         <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                         </svg>
@@ -153,7 +153,7 @@ window.dashboardCardRenderers = {
                 </div>
                 <div class="dashboard-card-body">
                     <span class="dashboard-card-meta">${stepCount} step${stepCount !== 1 ? 's' : ''}</span>
-                    <button class="btn btn-sm btn-primary dashboard-card-action" data-type="scene" data-id="${scene.id}">
+                    <button class="btn btn-sm btn-primary dashboard-card-action" data-type="scene" data-id="${Helpers.escapeHtml(scene.id)}">
                         Execute
                     </button>
                 </div>
@@ -174,12 +174,12 @@ window.dashboardCardRenderers = {
         const content = widget.render();
 
         return `
-            <div class="dashboard-card dashboard-card-widget" data-card-key="${card.type}:${card.widget_id}">
+            <div class="dashboard-card dashboard-card-widget" data-card-key="${Helpers.escapeHtml(card.type)}:${Helpers.escapeHtml(card.widget_id)}">
                 <div class="dashboard-card-header">
                     <span class="dashboard-card-drag-handle" title="Drag to reorder">⋮⋮</span>
                     <span class="dashboard-card-icon">${widget.icon}</span>
-                    <span class="dashboard-card-title">${widget.name}</span>
-                    <button class="dashboard-card-unpin btn-icon" data-type="aggregate_widget" data-id="${card.widget_id}" title="Remove from dashboard">
+                    <span class="dashboard-card-title">${Helpers.escapeHtml(widget.name)}</span>
+                    <button class="dashboard-card-unpin btn-icon" data-type="aggregate_widget" data-id="${Helpers.escapeHtml(card.widget_id)}" title="Remove from dashboard">
                         <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                         </svg>

@@ -84,8 +84,12 @@ class DashboardManager {
         this.setupResizeHandler();
         this.setupContainerDragHandlers();
 
-        // Phase 7: Subscribe to state changes for dashboard cards
-        state.on('dashboardCards', () => this.renderCards());
+        // Phase 7: Subscribe to state changes for dashboard cards. UI-27: also
+        // re-render when the data the cards show arrives (profiles, scenes,
+        // macros, shortcuts load after the 100 ms first render).
+        ['dashboardCards', 'profiles', 'phase8Scenes', 'cecMacros', 'systemShortcuts'].forEach(event => {
+            state.on(event, () => this.renderCards());
+        });
     }
 
     /**
@@ -893,9 +897,15 @@ class DashboardManager {
                 const id = e.currentTarget.dataset.id;
 
                 try {
-                    if (type === 'profile') {
-                        await window.api.recallProfile(id);
-                        toast.success('Profile recalled');
+                    if (type === 'profile' || type === 'scene') {
+                        // UI-01 passcode prompt, VAL-11 partial result
+                        const item = type === 'profile'
+                            ? (window.state.profiles || []).find(p => p.id === id)
+                            : (window.state.phase8Scenes || []).find(s => s.id === id);
+                        await window.RunAction.runProfileOrScene(type, id, {
+                            name: item?.name,
+                            successMessage: type === 'profile' ? 'Profile recalled' : 'Scene executed',
+                        });
                     } else if (type === 'preset') {
                         await window.api.recallPreset(Number(id));
                         toast.success(`Preset ${id} recalled`);
@@ -905,19 +915,9 @@ class DashboardManager {
                     } else if (type === 'macro') {
                         await window.api.executeMacro(id);
                         toast.success('Macro executed');
-                    } else if (type === 'scene') {
-                        const result = await window.api.executeScene(id);
-                        if (result.success) {
-                            toast.success('Scene executed');
-                        }
                     }
                 } catch (error) {
-                    if (error.status === 401) {
-                        // Passcode required — handled in settings drawer
-                        toast.error('Passcode required');
-                    } else {
-                        toast.error(`Error: ${error.message}`);
-                    }
+                    toast.error(`Error: ${error.message}`);
                 }
             });
         });
