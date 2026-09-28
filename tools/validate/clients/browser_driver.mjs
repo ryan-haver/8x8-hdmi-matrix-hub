@@ -294,7 +294,7 @@ async function perform(msg) {
       await dialog.dismiss();
     }
   });
-  let toasts = [];
+  let toasts; // what the page shows at the end (set on success and on error)
   const shot = async (tag) => {
     // Per-action directory next to the evidence record, else the run's artifacts dir.
     const dir = msg.artifacts ?? cfg.artifacts;
