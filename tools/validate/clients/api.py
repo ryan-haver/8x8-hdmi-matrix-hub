@@ -25,6 +25,8 @@ def rest_call(action: Action) -> tuple[str, str, Any]:
             return "POST", f"/api/preset/{p['preset']}/save", {}
         case "preset_rename":
             return "POST", f"/api/device-settings/preset/{p['preset']}/name", {"name": p["name"]}
+        case "port_rename":
+            return "POST", f"/api/{p['kind']}/{p['port']}/name", {"name": p["name"]}
         case "matrix_power":
             return "POST", "/api/power/on" if p["on"] else "/api/power/off", None
         case "output_mute":
@@ -47,7 +49,7 @@ class ApiClient(Client):
     name = "api"
     intents = frozenset(
         {
-            "route", "route_all", "preset_recall", "preset_save", "preset_rename", "matrix_power",
+            "route", "route_all", "preset_recall", "preset_save", "preset_rename", "port_rename", "matrix_power",
             "output_mute", "output_setting", "cec_input", "cec_output", "profile_recall", "request",
         }
     )

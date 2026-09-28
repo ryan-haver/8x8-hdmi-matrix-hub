@@ -88,9 +88,17 @@ integration. The registration API is described in the pinned core-api docs,
 
 With `UC_ENABLED=true` the Remote's setup asks for the matrix address and the
 integration saves it in `/data/config_state.json`; that saved address is the one
-the whole hub uses (`MATRIX_HOST` is ignored in this mode and the log says so).
-Until the Remote has been set up, the web UI has no matrix. Moving the matrix
-address to the core is planned (docs/audits/UC_INTEGRATION_AUDIT.md §5).
+the whole hub uses. Until the Remote has been set up, `MATRIX_HOST` (if set)
+gives the hub its matrix; it is never saved, and a saved setup wins over it.
+Moving the matrix address to the core is planned (docs/audits/UC_INTEGRATION_AUDIT.md §5).
+
+For an address the hub does not use yet, the Remote's setup first checks that
+the address answers (sending nothing to it), then asks for that matrix's login
+(the one its own web interface uses). The hub logs in with exactly that login,
+never with the one it already has, and saves it with the address in
+`config_state.json` (owner-only file permissions). Re-running the setup with the
+matrix the hub already uses needs no login. Without a login from a setup the
+matrix uses `OREI_USER` / `OREI_PASSWORD`.
 
 ## Environment variables
 
@@ -111,7 +119,7 @@ them. Compose-only variables (`MATRIX_DATA_DIR` as the host folder, `HUB_PORT`,
 | `UC_DISABLE_MDNS_PUBLISH` | `UC_DISABLE_MDNS` | `false` | `true`: do not announce by mDNS (bridge networking) |
 | `UC_DRIVER_URL` | | not set | `ws://host:port` advertised to the Remote (bridge networking); must start with `ws://` or `wss://` |
 | `UC_CONFIG_HOME` | | `DATA_DIR` | Integration state (`config_state.json`, `driver.lock`) and the profile/macro/scene files |
-| `OREI_USER`, `OREI_PASSWORD` | | `Admin` / `admin` | Matrix login |
+| `OREI_USER`, `OREI_PASSWORD` | | `Admin` / `admin` | Matrix login (a login entered in the Remote's setup takes precedence for its matrix) |
 | `OREI_VERIFY_SSL` | | `false` | Verify the matrix's TLS certificate |
 | `OREI_TELNET_PORT`, `OREI_USE_TELNET_CEC` | | `23` / `false` | Matrix Telnet options |
 | `POLLING_INTERVAL`, `POLLING_ENABLED` | | `30` / `true` | Status polling while a Remote is connected (UC mode) |
@@ -133,7 +141,7 @@ folder `MATRIX_DATA_DIR` (compose default `./data`):
 | `themes.json`, `ui_preferences.json` | Theme and web UI preferences |
 | `system_shortcuts.json`, `dashboard_layout.json` | Shortcuts and dashboard cards |
 | `profiles.json`, `cec_macros.json`, `scenes.json` | Profiles, CEC macros, legacy scenes |
-| `config_state.json`, `driver.lock` | Remote 3 integration: matrix address and names from its setup; single-instance lock |
+| `config_state.json`, `driver.lock` | Remote 3 integration: matrix address, names and the matrix login from its setup; single-instance lock |
 
 The container runs as UID/GID 1000 (build-time `--build-arg APP_UID=… APP_GID=…`
 to change it). A host folder must be writable by that user: `sudo chown -R

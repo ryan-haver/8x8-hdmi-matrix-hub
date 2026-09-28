@@ -353,7 +353,7 @@ def run_uc_driver(settings: Settings) -> None:
               settings.uc_driver_url or "not set (mDNS)")
     if settings.matrix_host:
         _LOG.info("UC_ENABLED=true: the matrix address comes from the Remote's integration setup "
-                  "(config_state.json); MATRIX_HOST=%s is used only when UC is disabled", settings.matrix_host)
+                  "(config_state.json); MATRIX_HOST=%s is used only until a setup is saved", settings.matrix_host)
     if not settings.uc_disable_mdns and settings.uc_interface in (None, "0.0.0.0"):
         _LOG.warning("mDNS is on without UC_INTEGRATION_INTERFACE: set it to this host's LAN IP so the Remote "
                      "gets a reachable address (docs/DOCKER.md, Remote 3 discovery)")

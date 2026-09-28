@@ -329,5 +329,5 @@ my-integration/
 ---
 
 **Last Updated**: January 13, 2026
-**Library Version**: v0.5.1
+**Library Version**: v0.7.0 (pinned in requirements-uc.txt, pyproject.toml, setup.py; UC-15)
 **Author**: Based on Unfolded Circle documentation and examples

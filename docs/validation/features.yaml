@@ -2326,9 +2326,7 @@ features:
     env: [UC_ENABLED, UC_INTEGRATION_INTERFACE]
   target: V4
   current: V0
-  basis: 'tests/uc (scripted Remote 3 -> real driver.py -> simulator) disables mDNS. test_handshake.py pins the metadata
-    (driver_metadata = driver.json, no driver_url: UC-03 fixed in WP-D2) and that UC_DRIVER_URL is the URL advertised;
-    tests/deploy reaches the integration at that URL from the image. mDNS discovery by a real Remote: not tested.'
+  basis: 'tests/uc (scripted Remote 3 -> real driver.py -> simulator) disables mDNS. test_handshake.py pins the metadata (driver_metadata = driver.json, no driver_url: UC-03 fixed in WP-D2) and that UC_DRIVER_URL is the URL advertised; tests/deploy reaches the integration at that URL from the image; driver.json text, validation and min_core_api fixed in WP-B3 (UC-16, tests/test_driver.py::TestDriverMetadata). mDNS discovery by a real Remote: not tested.'
   evidence: []
   findings: [UC-11, UC-16]
   scenarios: []
@@ -2340,7 +2338,7 @@ features:
     uc: [setup_driver, driver_setup_change]
   target: V4
   current: V1
-  basis: 'V1 (capped: UC-05, UC-02 open). tests/uc (scripted Remote 3 -> real driver.py -> simulator): test_setup.py::test_setup_reports_success passes since WP-B2 (BE-02 fixed: STOP/OK), ::test_setup_connects_creates_entities_and_saves_the_configuration and ::test_setup_starts_live_updates_without_a_remote_connect pass (74 entities, config saved, CONNECTED, live updates without a Remote connect). Credential step and specific errors: UC-05 (Phase 2).'
+  basis: 'V1 (capped: UC-02 open, token auth is Phase 3). tests/uc (scripted Remote 3 -> real driver.py -> simulator), all passing since WP-B3 (UC-05 fixed): test_setup.py::test_setup_reports_success (STOP/OK), ::test_setup_connects_creates_entities_and_saves_the_configuration (login page, 74 entities, address + entered login saved, control), ::test_a_new_address_asks_for_its_login_before_anything_is_sent, ::test_a_wrong_password_is_an_authorization_error, ::test_setup_errors_name_the_problem (CONNECTION_REFUSED / NOT_FOUND), ::test_the_setup_login_is_never_logged, ::test_setup_starts_live_updates_without_a_remote_connect. UC-02 short term: ::test_a_new_host_never_receives_the_stored_credentials. Setup on a real Remote (V4) pending.'
   evidence: []
   findings: [BE-02, UC-05, UC-02]
   scenarios: []
@@ -2351,8 +2349,8 @@ features:
   interfaces:
     uc: [setup_driver (reconfigure)]
   target: V4
-  current: V1
-  basis: 'V1 (capped: UC-05 open for the Phase 2 part). tests/uc (scripted Remote 3 -> real driver.py -> simulator): test_setup.py::test_reconfigure_with_a_bad_address_keeps_the_working_setup, ::test_reconfigure_keeps_the_subscribed_entities_working and ::test_reconfigure_to_another_matrix_disposes_the_old_connection pass since WP-B2 (probe before swap, subscriptions kept, old matrix disposed: BE-10).'
+  current: V3
+  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) since WP-B2/WP-B3: test_setup.py::test_reconfigure_with_a_bad_address_keeps_the_working_setup, ::test_reconfigure_keeps_the_subscribed_entities_working (same address: no login page), ::test_reconfigure_to_another_matrix_disposes_the_old_connection (login page, old matrix disposed: BE-10), ::test_the_login_entered_for_a_matrix_is_used_after_a_restart, ::test_abort_on_the_login_page_discards_the_new_address (UC-05 fixed in WP-B3). UC-02 (open, H) is linked to F-UC-002, not here. V4 on a real Remote pending.'
   evidence: []
   findings: [UC-05, BE-10]
   scenarios: []
@@ -2364,10 +2362,10 @@ features:
     uc: [button.preset_1..8 press]
   target: V4
   current: V3
-  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_commands.py::test_preset_button_recalls_the_preset (simulator routing and ''preset set'' asserted); names are a strict xfail (UC-14). Scenario remote.preset_button.'
+  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_commands.py::test_preset_button_recalls_the_preset (simulator routing and ''preset set'' asserted); since WP-B3 (UC-14) the buttons carry the web app''s preset names: test_state_sync.py::test_preset_names_match_the_web_app, ::test_preset_changes_in_the_web_app_reach_the_remote_live. Scenarios remote.preset_button, remote.preset_names_from_web_app. V4: a name change reaching an entity already added on a real Remote is UC-28.'
   evidence: []
-  findings: [UC-14]
-  scenarios: [remote.preset_button]
+  findings: [UC-14, UC-28]
+  scenarios: [remote.preset_button, remote.preset_names_from_web_app]
 - id: F-UC-005
   area: uc
   title: Matrix remote entity with a preset page
@@ -2376,10 +2374,10 @@ features:
     uc: [remote.orei_matrix send_cmd PRESET_N, remote.orei_matrix on/off]
   target: V4
   current: V3
-  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_commands.py::test_matrix_remote_preset_command_recalls_the_preset and ::test_matrix_remote_rejects_bad_commands_and_stays_connected. Scenario remote.matrix_preset_command.'
+  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_commands.py::test_matrix_remote_preset_command_recalls_the_preset and ::test_matrix_remote_rejects_bad_commands_and_stays_connected; since WP-B3 (UC-14) its pages show the web app''s preset names and a Favourites page (test_state_sync.py::test_preset_names_match_the_web_app). Scenarios remote.matrix_preset_command, remote.preset_names_from_web_app.'
   evidence: []
   findings: [UC-12]
-  scenarios: [remote.matrix_preset_command]
+  scenarios: [remote.matrix_preset_command, remote.preset_names_from_web_app]
 - id: F-UC-006
   area: uc
   title: Per-input CEC remotes (source power, navigation, playback)
@@ -2400,9 +2398,9 @@ features:
     uc: [remote.output_N_cec send_cmd, remote.output_N_cec on/off]
   target: V4
   current: V3
-  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator): the remote offers exactly the display CEC table (POWER_ON, POWER_OFF, MUTE, VOLUME_DOWN, VOLUME_UP, ACTIVE; BE-14) and send_cmd sends its exact frame (test_commands.py::test_output_cec_remote_send_cmd_sends_exact_frames, ::test_output_cec_remote_advertises_only_the_display_table); source-only keys answer 400 with no frame (::test_source_only_keys_on_the_output_cec_remote_are_rejected); since WP-B2 on/off/toggle/send_cmd_sequence work and never close the connection (::test_cec_remote_power_and_sequence_commands; UC-01) and repeat sends every step (::test_send_cmd_repeat_sends_the_command_repeatedly; UC-22). Scenarios remote.output_cec_power_on, remote.output_cec_on, remote.output_cec_toggle, remote.output_cec_volume_repeat, remote.cec_bad_sequence.'
+  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator): the remote offers exactly the display CEC table (POWER_ON, POWER_OFF, MUTE, VOLUME_DOWN, VOLUME_UP, ACTIVE; BE-14) and send_cmd sends its exact frame (test_commands.py::test_output_cec_remote_send_cmd_sends_exact_frames, ::test_output_cec_remote_advertises_only_the_display_table); source-only keys answer 400 with no frame (::test_source_only_keys_on_the_output_cec_remote_are_rejected); since WP-B2 on/off/toggle/send_cmd_sequence work and never close the connection (::test_cec_remote_power_and_sequence_commands; UC-01) and repeat sends every step (::test_send_cmd_repeat_sends_the_command_repeatedly; UC-22); since WP-B3 the CEC remotes advertise toggle (::test_cec_remotes_advertise_the_power_toggle; UC-24). Scenarios remote.output_cec_power_on, remote.output_cec_on, remote.output_cec_toggle, remote.output_cec_volume_repeat, remote.cec_bad_sequence.'
   evidence: []
-  findings: [UC-01, BE-14, UC-22]
+  findings: [UC-01, BE-14, UC-22, UC-24]
   scenarios: [remote.output_cec_power_on, remote.output_cec_on, remote.output_cec_toggle, remote.output_cec_volume_repeat, remote.cec_bad_sequence]
 - id: F-UC-008
   area: uc
@@ -2415,7 +2413,7 @@ features:
   basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_commands.py::test_select_source_routes_the_output (simulator routing, the exact ''video switch'' and the entity_change asserted); renames are strict xfails (UC-08). Scenarios remote.select_source, remote.unknown_source.'
   evidence: []
   findings: [UC-08, UC-10]
-  scenarios: [remote.select_source, remote.unknown_source]
+  scenarios: [remote.select_source, remote.unknown_source, remote.input_rename_live]
 - id: F-UC-009
   area: uc
   title: TV power / volume / mute from the output media player
@@ -2436,10 +2434,10 @@ features:
     uc: [switch.matrix_power on/off/toggle]
   target: V4
   current: V3
-  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_commands.py::test_power_switch_turns_the_matrix_off_and_on (simulator power asserted); sync and 503 while disconnected are strict xfails (UC-09). Scenario remote.power_switch_off.'
+  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_commands.py::test_power_switch_turns_the_matrix_off_and_on; since WP-B3 (UC-09) the switch follows the device (::test_power_switch_follows_a_front_panel_power_change, ::test_power_switch_follows_the_web_app_at_once) and answers 503 while the matrix is unreachable (::test_power_switch_reports_unavailable_while_the_matrix_is_unreachable). Scenarios remote.power_switch_off, remote.power_switch_follows_front_panel.'
   evidence: []
   findings: [UC-09]
-  scenarios: [remote.power_switch_off]
+  scenarios: [remote.power_switch_off, remote.power_switch_follows_front_panel]
 - id: F-UC-011
   area: uc
   title: Input signal and cable sensors
@@ -2507,11 +2505,11 @@ features:
   interfaces:
     uc: [media_player source_list, entity names]
   target: V4
-  current: V1
-  basis: 'V1 (partial: UC-08). tests/uc (scripted Remote 3 -> real driver.py -> simulator): since WP-B2 a rename is applied to the subscribed entities at the next Remote connect (test_state_sync.py::test_select_source_by_new_name_after_rename passes: new name, new source list pushed, select by the new name routes); a live rename without a reconnect is still a strict xfail (::test_input_rename_updates_the_source_list, UC-08).'
+  current: V3
+  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) since WP-B3 (UC-08): a web-app rename reaches the subscribed media players live and select by the new name works without a reconnect (test_state_sync.py::test_input_rename_updates_the_source_list, ::test_output_rename_updates_the_offered_entities; at the next connect too: ::test_select_source_by_new_name_after_rename). Scenario remote.input_rename_live. Entity names of entities already added on a Remote: UC-28 (V4).'
   evidence: []
-  findings: [UC-08, BE-16]
-  scenarios: []
+  findings: [UC-08, UC-28, BE-16]
+  scenarios: [remote.input_rename_live]
 - id: F-UC-017
   area: uc
   title: Restore the configuration at startup (also with the matrix offline)

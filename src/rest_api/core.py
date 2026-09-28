@@ -328,7 +328,7 @@ async def handle_presets(request: web.Request) -> web.Response:
         return _json_response(False, error="Matrix device not configured", status=503)
 
     try:
-        from .device_settings import get_preset_setting
+        from .device_settings import get_preset_setting, preset_display_name
 
         # Get preset names from matrix status
         preset_names = []
@@ -342,12 +342,8 @@ async def handle_presets(request: web.Request) -> web.Response:
         presets = []
         for i in range(1, 9):
             preset_sett = get_preset_setting(i)
-            name = preset_sett.get("name")
-            if not name or name == f"Preset {i}":
-                if i - 1 < len(preset_names) and preset_names[i - 1]:
-                    name = preset_names[i - 1]
-                else:
-                    name = f"Preset {i}"
+            # The same rule names the Remote's preset buttons (UC-14).
+            name = preset_display_name(i, preset_names)
 
             # Retrieve routing configuration from local settings cache
             raw_routing = preset_sett.get("routing", {})
