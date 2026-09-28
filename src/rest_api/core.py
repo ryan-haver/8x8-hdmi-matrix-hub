@@ -4,13 +4,16 @@ Core health and status endpoints.
 
 import asyncio
 import datetime
+import json
 import logging
+from pathlib import Path
 from typing import Any
 
 from aiohttp import web
 
 from device_codes import hdr_from_device, scaler_from_device
 
+from .events import link_summary
 from .runtime import runtime_snapshot
 from .utils import (
     API_VERSION,
@@ -23,12 +26,15 @@ from .utils import (
 
 _LOG = logging.getLogger("rest_api.core")
 
+#: driver.json ships next to the package (repository root, image /app), not in the working directory (API-24).
+DRIVER_JSON = Path(__file__).resolve().parents[2] / "driver.json"
+
 
 def _format_status(raw_status: dict[str, Any], matrix_device, input_names: dict[int, str], output_names: dict[int, str]) -> dict[str, Any]:
     """Format the raw matrix status dictionary for Web UI consumption."""
     status = {
-        "connected": raw_status.get("connected", True),
-        "host": raw_status.get("host", matrix_device.host),
+        "connected": getattr(matrix_device, "connected", False) is True,
+        "host": raw_status.get("host", getattr(matrix_device, "host", None)),
     }
 
     # Matrix power ("on" / "off"), read with the status (the device answers reads
@@ -141,32 +147,18 @@ def _format_outputs(status: dict[str, Any] | None, cable_status: dict[str, Any] 
 
 
 async def background_status_refresh(matrix_device):
-    """Fetch status in the background, update caches, and broadcast changes if any."""
+    """Refresh the status caches in the background after a cache hit.
+
+    Nothing is broadcast from here: the hub's event stream (events.py) reads the
+    same caches and announces what changed, once (docs/api/WEBSOCKET.md). The
+    old full ``status`` broadcast re-sent everything to every client on every
+    cache hit and reset output names in the core-only hub (BE-31).
+    """
     try:
-        # Force a refresh from the matrix hardware for all caches in parallel
-        fresh_status = await matrix_device.get_status(force_refresh=True)
-        fresh_output_status = await matrix_device.get_output_status(force_refresh=True)
-        fresh_input_status = await matrix_device.get_input_status(force_refresh=True)
-        fresh_cable_status = await matrix_device.get_all_cable_status(force_refresh=True)
-
-        # Broadcast the updated status formatted for Web UI
-        from .websocket import broadcast_status_update
-
-        input_names = get_input_names()
-        output_names = get_output_names()
-
-        formatted = _format_status(fresh_status, matrix_device, input_names, output_names)
-        formatted["inputs"] = _format_inputs(fresh_input_status, fresh_cable_status, input_names)
-        # BE-31: the resolved names (hub cache, then the matrix's own names), not
-        # the hub cache alone - it is empty in modular mode, and every open UI
-        # would see its outputs renamed "Output N" by this broadcast.
-        formatted["outputs_detail"] = _format_outputs(
-            fresh_output_status, fresh_cable_status, formatted["output_names"]
-        )
-
-        _LOG.info("Broadcasting background status update via WebSocket")
-        await broadcast_status_update("status", formatted)
-
+        await matrix_device.get_status(force_refresh=True)
+        await matrix_device.get_output_status(force_refresh=True)
+        await matrix_device.get_input_status(force_refresh=True)
+        await matrix_device.get_all_cable_status(force_refresh=True)
     except Exception as e:
         _LOG.warning("Failed background status refresh: %s", e)
 
@@ -246,19 +238,14 @@ async def handle_info(request: web.Request) -> web.Response:
     """Get API and matrix info for the Web UI."""
     matrix_device = get_matrix_device()
 
-    import json
-    from pathlib import Path
-
     driver_id = "orei_hdmi_matrix"
     driver_name = "OREI HDMI Matrix"
 
     try:
-        driver_path = Path("driver.json")
-        if driver_path.exists():
-            with open(driver_path, encoding="utf-8") as f:
-                driver_data = json.load(f)
-                driver_id = driver_data.get("driver_id", driver_id)
-                driver_name = driver_data.get("name", {}).get("en", driver_name)
+        if DRIVER_JSON.exists():
+            driver_data = json.loads(DRIVER_JSON.read_text(encoding="utf-8"))
+            driver_id = driver_data.get("driver_id", driver_id)
+            driver_name = driver_data.get("name", {}).get("en", driver_name)
     except Exception as e:
         _LOG.warning(f"Could not load driver.json: {e}")
 
@@ -289,16 +276,23 @@ async def handle_info(request: web.Request) -> web.Response:
 
 
 async def handle_status(request: web.Request) -> web.Response:
-    """Get full matrix status formatted for Web UI."""
+    """Matrix status for the web UI and Home Assistant (docs/api/WEBSOCKET.md, "Status").
+
+    200 only with data the matrix answered: the link state, routing, names and
+    power. Otherwise 503 with ``success: false`` and the link (``connected``,
+    ``state``, ``host``) in ``data``: not configured, link down, or the status
+    read failed while the link is up. Never default names presented as the
+    matrix's state (VAL-04).
+    """
     matrix_device = get_matrix_device()
     input_names = get_input_names()
     output_names = get_output_names()
 
     if matrix_device is None:
-        return _json_response(False, error="Matrix device not configured", status=503)
+        return _json_response(False, link_summary(None), error="Matrix device not configured", status=503)
 
     if not matrix_device.connected:
-        return _json_response(False, error="Matrix not connected", status=503)
+        return _json_response(False, link_summary(matrix_device), error="Matrix not connected", status=503)
 
     try:
         # Check cache validity before calling get_status
@@ -312,6 +306,11 @@ async def handle_status(request: web.Request) -> web.Response:
 
         raw_status = await matrix_device.get_status()
 
+        if not isinstance(raw_status, dict) or not raw_status.get("routing"):
+            return _json_response(
+                False, link_summary(matrix_device), error="The matrix did not answer the status read", status=503
+            )
+
         # If cache was used, refresh in the background (at most one at a time).
         if is_cached:
             _LOG.debug("Cached hit for status handler. Scheduling background refresh.")
@@ -319,6 +318,7 @@ async def handle_status(request: web.Request) -> web.Response:
 
         # Format and return response instantly
         status = _format_status(raw_status, matrix_device, input_names, output_names)
+        status["state"] = link_summary(matrix_device)["state"]
         return _json_response(True, status)
     except Exception as e:
         _LOG.error(f"Error getting status: {e}", exc_info=True)
@@ -333,7 +333,7 @@ async def handle_presets(request: web.Request) -> web.Response:
         return _json_response(False, error="Matrix device not configured", status=503)
 
     try:
-        from .device_settings import get_preset_setting
+        from .device_settings import get_preset_setting, preset_display_name
 
         # Get preset names from matrix status
         preset_names = []
@@ -347,12 +347,8 @@ async def handle_presets(request: web.Request) -> web.Response:
         presets = []
         for i in range(1, 9):
             preset_sett = get_preset_setting(i)
-            name = preset_sett.get("name")
-            if not name or name == f"Preset {i}":
-                if i - 1 < len(preset_names) and preset_names[i - 1]:
-                    name = preset_names[i - 1]
-                else:
-                    name = f"Preset {i}"
+            # The same rule names the Remote's preset buttons (UC-14).
+            name = preset_display_name(i, preset_names)
 
             # Retrieve routing configuration from local settings cache
             raw_routing = preset_sett.get("routing", {})

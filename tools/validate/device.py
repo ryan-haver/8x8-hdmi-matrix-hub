@@ -116,6 +116,10 @@ class SimDevice:
         """Cable/signal events (``POST /_sim/event``), pushed to Telnet clients like the device does."""
         await self._call("POST", "/_sim/event", event)
 
+    async def reboot(self, seconds: float) -> None:
+        """The device goes offline for ``seconds`` (HTTP and Telnet), then comes back (``POST /_sim/reboot``)."""
+        await self._call("POST", "/_sim/reboot", {"seconds": seconds})
+
     async def info(self) -> dict[str, Any]:
         st = await self._call("GET", "/_sim/state")
         return {

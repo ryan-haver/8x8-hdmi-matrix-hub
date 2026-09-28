@@ -140,6 +140,18 @@ def test_saved_matrix_address(tmp_path: Path) -> None:
     assert run.saved_matrix_address(tmp_path) is None
 
 
+def test_saved_telnet_port(tmp_path: Path) -> None:
+    """BE-32: a saved setup may carry its matrix's Telnet port; without one OREI_TELNET_PORT/23 applies."""
+    assert run.saved_telnet_port(tmp_path) is None
+    state = tmp_path / "config_state.json"
+    state.write_text(json.dumps({"host": "10.2.2.2", "port": 8443}), encoding="utf-8")
+    assert run.saved_telnet_port(tmp_path) is None
+    state.write_text(json.dumps({"host": "10.2.2.2", "telnet_port": 2323}), encoding="utf-8")
+    assert run.saved_telnet_port(tmp_path) == 2323
+    state.write_text(json.dumps({"host": "10.2.2.2", "telnet_port": 70000}), encoding="utf-8")
+    assert run.saved_telnet_port(tmp_path) is None
+
+
 def test_check_writable_creates_the_directory(tmp_path: Path) -> None:
     run.check_writable(tmp_path / "a" / "b")
     assert (tmp_path / "a" / "b").is_dir()

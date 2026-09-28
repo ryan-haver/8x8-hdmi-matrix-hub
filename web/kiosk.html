@@ -1522,6 +1522,7 @@
 
     <div class="kiosk-toast" id="kioskToast"></div>
 
+    <script src="/js/websocket.js"></script>
     <script>
         /**
          * OREI Matrix Kiosk Mode
@@ -1533,7 +1534,6 @@
             // Configuration
             const API_BASE = '/api';
             const POLL_INTERVAL = 5000;
-            const WS_RECONNECT_DELAY = 2000;
 
             // State
             let connected = false;
@@ -2732,88 +2732,83 @@
             }
 
             /**
-             * Connect to WebSocket for real-time updates
+             * Live updates from the hub (docs/api/WEBSOCKET.md), through the shared
+             * client in /js/websocket.js (reconnect, heartbeat, matrix link state).
              */
             function connectWebSocket() {
-                const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-                const wsUrl = `${protocol}//${location.host}/ws`;
+                ws = new MatrixWebSocket({
+                    onStatusChange: updateLinkStatus,
+                    onMatrixStatus: updateLinkStatus,
+                    onMessage: handleHubEvent,
+                    onError: (err) => console.error('WebSocket error:', err)
+                });
+                ws.connect();
+            }
 
-                ws = new WebSocket(wsUrl);
+            /**
+             * Connected = the hub's WebSocket is up and the hub reports the matrix reachable
+             */
+            function updateLinkStatus() {
+                updateStatus(ws.isConnected() && (!ws.matrix || ws.matrix.connected !== false));
+            }
 
-                ws.onopen = () => {
-                    console.log('WebSocket connected');
-                    updateStatus(true);
-                };
-
-                ws.onmessage = (event) => {
-                    try {
-                        const msg = JSON.parse(event.data);
-                        
-                        if (msg.event === 'routing_change' && msg.data) {
-                            routing[msg.data.output] = msg.data.input;
-                            render();
-                        } else if (msg.event === 'status_update' && msg.data) {
-                            if (msg.data.routing) routing = msg.data.routing;
-                            if (msg.data.input_names) {
-                                for (let i = 1; i <= 8; i++) {
-                                    inputs[i] = inputs[i] || {};
-                                    if (msg.data.input_names[i]) {
-                                        inputs[i].name = msg.data.input_names[i];
-                                    }
-                                }
-                            }
-                            if (msg.data.output_names) {
-                                for (let o = 1; o <= 8; o++) {
-                                    outputs[o] = outputs[o] || {};
-                                    if (msg.data.output_names[o]) {
-                                        outputs[o].name = msg.data.output_names[o];
-                                    }
-                                }
-                            }
-                            render();
-                        } else if (msg.event === 'signal_change' && msg.data) {
-                            const input = inputs[msg.data.input];
-                            if (input) {
-                                input.signalActive = msg.data.has_signal;
-                                render();
-                            }
-                        } else if (msg.event === 'input_name_change' && msg.data) {
-                            const inputNum = msg.data.input;
-                            if (inputNum >= 1 && inputNum <= 8) {
-                                inputs[inputNum] = inputs[inputNum] || {};
-                                inputs[inputNum].name = msg.data.name;
-                                render();
-                            }
-                        } else if (msg.event === 'output_name_change' && msg.data) {
-                            const outputNum = msg.data.output;
-                            if (outputNum >= 1 && outputNum <= 8) {
-                                outputs[outputNum] = outputs[outputNum] || {};
-                                outputs[outputNum].name = msg.data.name;
-                                render();
-                            }
-                        } else if (msg.event === 'output_connection' && msg.data) {
-                            const outputNum = msg.data.output;
-                            if (outputNum >= 1 && outputNum <= 8) {
-                                outputs[outputNum] = outputs[outputNum] || {};
-                                outputs[outputNum].connected = msg.data.connected;
-                                render();
-                            }
+            /**
+             * One hub event: {type, data}
+             */
+            function handleHubEvent({ type, data }) {
+                switch (type) {
+                    case 'status':
+                        // Snapshot after every (re)connect
+                        if (data.routing) routing = data.routing;
+                        for (let i = 1; i <= 8; i++) {
+                            inputs[i] = inputs[i] || {};
+                            if (data.input_names && data.input_names[i]) inputs[i].name = data.input_names[i];
                         }
-                    } catch (err) {
-                        console.error('WS message parse error:', err);
+                        for (let o = 1; o <= 8; o++) {
+                            outputs[o] = outputs[o] || {};
+                            if (data.output_names && data.output_names[o]) outputs[o].name = data.output_names[o];
+                        }
+                        (data.inputs || []).forEach(inp => {
+                            if (!inputs[inp.number]) return;
+                            inputs[inp.number].signalActive = inp.signalActive;
+                            inputs[inp.number].cableConnected = inp.cableConnected;
+                        });
+                        (data.outputs_detail || []).forEach(out => {
+                            if (!outputs[out.number]) return;
+                            outputs[out.number].connected = out.connected;
+                            outputs[out.number].cableConnected = out.cableConnected;
+                            outputs[out.number].enabled = out.enabled;
+                        });
+                        break;
+                    case 'routing_change':
+                        routing[data.output] = data.input;
+                        break;
+                    case 'signal_change':
+                        inputs[data.input] = inputs[data.input] || {};
+                        inputs[data.input].signalActive = data.has_signal;
+                        break;
+                    case 'connection_change':
+                        outputs[data.output] = outputs[data.output] || {};
+                        outputs[data.output].connected = data.connected;
+                        break;
+                    case 'cable_change': {
+                        const ports = data.type === 'input' ? inputs : outputs;
+                        ports[data.port] = ports[data.port] || {};
+                        ports[data.port].cableConnected = data.connected;
+                        break;
                     }
-                };
-
-                ws.onclose = () => {
-                    console.log('WebSocket closed, reconnecting...');
-                    updateStatus(false);
-                    setTimeout(connectWebSocket, WS_RECONNECT_DELAY);
-                };
-
-                ws.onerror = (err) => {
-                    console.error('WebSocket error:', err);
-                    ws.close();
-                };
+                    case 'input_name_change':
+                        inputs[data.input] = inputs[data.input] || {};
+                        inputs[data.input].name = data.name;
+                        break;
+                    case 'output_name_change':
+                        outputs[data.output] = outputs[data.output] || {};
+                        outputs[data.output].name = data.name;
+                        break;
+                    default:
+                        return; // nothing on screen depends on the other events
+                }
+                render();
             }
 
             /**

@@ -4,11 +4,6 @@
       "count": 1
     }
   },
-  "web/js/app.js": {
-    "no-case-declarations": {
-      "count": 1
-    }
-  },
   "web/js/components/cec-macro-editor.js": {
     "no-unused-vars": {
       "count": 1

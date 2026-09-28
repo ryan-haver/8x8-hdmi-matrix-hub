@@ -119,6 +119,18 @@ class Events(IntEnum):
     UPDATE = 3
     RECONNECTING = 4  # New event for reconnection attempts
     CONFIG_CHANGED = 5
+    #: The device state may have changed: a write was accepted (``{"write": comhead}``) or the
+    #: matrix pushed an event over Telnet (``{"push": {"inputs": {port: bool}, "outputs": {...}}}``).
+    #: The hub's event stream reads the matrix when it sees one (rest_api/events.py).
+    STATE_CHANGED = 6
+
+
+def default_telnet_port() -> int:
+    """The Telnet port for a matrix that has none configured: ``OREI_TELNET_PORT``, else 23 (BE-32)."""
+    try:
+        return int(os.environ.get("OREI_TELNET_PORT", "23"))
+    except ValueError:
+        return 23
 
 
 class ConnectionState(StrEnum):
@@ -255,20 +267,46 @@ class _HttpResult:
     timeout: bool = False
 
 
+#: Transport errors that mean "this name does not resolve" (aiohttp keeps the resolver's message).
+_DNS_ERROR_MARKERS = ("getaddrinfo", "name or service not known", "nodename nor servname",
+                      "name resolution", "no address associated")
+
+
+def _login_failure_kind(result: _HttpResult) -> str:
+    """``OreiMatrix.login_failure`` for a login request that got no usable answer."""
+    if result.kind == "auth":
+        return "auth"  # HTTP 401/403 or a login page instead of JSON
+    if result.kind == "transport":
+        text = (result.error or "").lower()
+        return "not_found" if any(m in text for m in _DNS_ERROR_MARKERS) else "refused"
+    return "other"
+
+
 class OreiMatrix:
     """Representing an OREI BK-808 HDMI Matrix device."""
 
-    def __init__(self, host: str, port: int = 443, use_https: bool = True):
+    def __init__(self, host: str, port: int = 443, use_https: bool = True, *,
+                 user: str | None = None, password: str | None = None, telnet_port: int | None = None):
         """
         Initialize the OREI Matrix device.
 
         :param host: IP address of the matrix
         :param port: Port (default 443 for HTTPS)
         :param use_https: Use HTTPS instead of HTTP (default True)
+        :param user: login user for this matrix; ``None`` = ``OREI_USER`` (default ``Admin``)
+        :param password: login password for this matrix; ``None`` = ``OREI_PASSWORD`` (default ``admin``).
+            The Remote's setup passes the credentials the user entered for a new address, so the
+            configured ones are never sent to another host (UC-02).
+        :param telnet_port: this matrix's Telnet port; ``None`` = ``OREI_TELNET_PORT``, else 23 (BE-32)
         """
         self.host = host
         self.port = port
         self.use_https = use_https
+        self._user = user
+        self._password = password
+        #: Why the last login attempt failed: ``auth`` (credentials rejected), ``timeout``,
+        #: ``not_found`` (the name does not resolve), ``refused`` (no connection), ``other``; None after success.
+        self.login_failure: str | None = None
         self._session: aiohttp.ClientSession | None = None
         self._state = ConnectionState.DISCONNECTED
         # Typed as Any: pyee annotates event names as `str`, but this codebase
@@ -292,7 +330,7 @@ class OreiMatrix:
 
         # Telnet client for CEC commands and cable detection
         self._telnet: TelnetClient | None = None
-        self._telnet_port = int(os.environ.get("OREI_TELNET_PORT", "23"))
+        self._telnet_port = telnet_port if telnet_port is not None else default_telnet_port()
         self._use_telnet_cec = os.environ.get("OREI_USE_TELNET_CEC", "false").lower() == "true"
 
         # CEC enabled status cache
@@ -426,6 +464,15 @@ class OreiMatrix:
         return self._last_successful_poll
 
     @property
+    def telnet_port(self) -> int:
+        """This matrix's Telnet port (BE-32)."""
+        return self._telnet_port
+
+    @telnet_port.setter
+    def telnet_port(self, value: int) -> None:
+        self._telnet_port = int(value)
+
+    @property
     def telnet_connected(self) -> bool:
         """Return Telnet connection status."""
         return self._telnet is not None and self._telnet.connected
@@ -454,7 +501,10 @@ class OreiMatrix:
         try:
             _LOG.info(f"Connecting Telnet to {self.host}:{self._telnet_port}")
             client = TelnetClient(
-                host=self.host, port=self._telnet_port, on_connection_change=self._on_telnet_state_change
+                host=self.host,
+                port=self._telnet_port,
+                on_status_update=self._on_telnet_push,
+                on_connection_change=self._on_telnet_state_change,
             )
             self._telnet = client
 
@@ -481,6 +531,17 @@ class OreiMatrix:
                 _LOG.warning(f"Error disposing Telnet client: {e}")
         if self.connected:
             self._set_state(self._link_up_state())
+
+    def _on_telnet_push(self, status: Any) -> None:
+        """A Telnet push (cable plugged or unplugged): tell listeners the state changed."""
+        # Cable reads are cached (BE-03); the pushed port is stale now.
+        self._cable_status_cache = None
+        push = {
+            "inputs": {port: bool(inp.connected) for port, inp in getattr(status, "inputs", {}).items()},
+            "outputs": {port: bool(out.connected) for port, out in getattr(status, "outputs", {}).items()},
+        }
+        self._output_status_cache = None  # a display (un)plugged also changes allconnect
+        self.events.emit(Events.STATE_CHANGED, {"push": push})
 
     def _on_telnet_state_change(self, state: TelnetState) -> None:
         """Track Telnet up/down as CONNECTED/DEGRADED while HTTP is up."""
@@ -591,6 +652,7 @@ class OreiMatrix:
         except Exception as ex:
             _LOG.error("Failed to connect to OREI Matrix: %s", ex)
             self._last_error = str(ex)
+            self.login_failure = "other"
             self.events.emit(Events.ERROR, str(ex))
             logged_in = False
 
@@ -610,28 +672,39 @@ class OreiMatrix:
             self._set_state(self._link_up_state())
         return True
 
+    @property
+    def has_own_credentials(self) -> bool:
+        """Whether this matrix logs in with credentials given to it (a Remote setup), not the environment's."""
+        return self._password is not None
+
+    def credentials(self) -> tuple[str, str]:
+        """The login user and password: this matrix's own, else ``OREI_USER`` / ``OREI_PASSWORD``."""
+        user = self._user if self._user is not None else os.environ.get("OREI_USER", "Admin")
+        password = self._password if self._password is not None else os.environ.get("OREI_PASSWORD", "admin")
+        return user, password
+
     async def _login(self) -> bool:
         """POST the login command; True only on an explicit success result."""
-        # Credentials can be overridden via environment variables
-        login_cmd = {
-            "comhead": "login",
-            "user": os.environ.get("OREI_USER", "Admin"),
-            "password": os.environ.get("OREI_PASSWORD", "admin"),
-        }
+        user, password = self.credentials()
+        login_cmd = {"comhead": "login", "user": user, "password": password}
         result = await self._post(login_cmd)
         if result.kind != "ok":
             if result.timeout:
                 _LOG.error("Connection timeout to OREI Matrix at %s:%d", self.host, self.port)
                 self._last_error = "Connection timeout"
+                self.login_failure = "timeout"
             else:
                 _LOG.error("Login request failed: %s", result.error)
                 self._last_error = result.error or "Login failed"
+                self.login_failure = _login_failure_kind(result)
             self.events.emit(Events.ERROR, self._last_error)
             return False
         if not is_login_success(result.data):
             _LOG.error("Login failed: %s", result.data)
             self._last_error = "Authentication failed"
+            self.login_failure = "auth"
             return False
+        self.login_failure = None
         return True
 
     async def _relogin(self) -> bool:
@@ -798,6 +871,7 @@ class OreiMatrix:
                 # Invalidate status caches on state-changing/write commands
                 _LOG.debug("Invalidating all status caches due to write command: %s", comhead)
                 self._invalidate_status_caches()
+                self.events.emit(Events.STATE_CHANGED, {"write": comhead})
             return True, result.data
 
         self._last_error = result.error
@@ -1097,11 +1171,15 @@ class OreiMatrix:
         # Command: {"comhead":"get video status","language":0}
         command = {"comhead": "get video status", "language": 0}
 
+        generation = self._cache_generation
         success, response = await self._send_command(command)
 
         if success and response:
             _LOG.debug("Video status: %s", response)
             self._last_successful_poll = datetime.datetime.now(datetime.UTC)
+            if generation == self._cache_generation:  # no write landed meanwhile
+                self._status_cache = self._status_from_video(response)
+                self._status_cache_time = time.time()
             return response
 
         _LOG.error("Failed to get video status")
@@ -1123,11 +1201,14 @@ class OreiMatrix:
         return (await self._single_flight("status", self._fetch_status)).copy()
 
     async def _fetch_status(self) -> dict[str, Any]:
-        generation = self._cache_generation
-        # Get detailed video status from matrix
+        # get_video_status() caches the status built from a successful read
         video_status = await self.get_video_status()
+        if video_status:
+            return self._status_from_video(video_status)
+        return self._status_base()
 
-        status = {
+    def _status_base(self) -> dict[str, Any]:
+        return {
             "connected": self.connected,
             "host": self.host,
             "port": self.port,
@@ -1135,19 +1216,18 @@ class OreiMatrix:
             "last_error": self._last_error,
         }
 
-        if video_status:
-            status.update(
-                {
-                    "power": "on" if video_status.get("power") == 1 else "off",
-                    "routing": per_output(video_status.get("allsource")),
-                    "input_names": video_status.get("allinputname", []),
-                    "output_names": video_status.get("alloutputname", []),
-                    "preset_names": video_status.get("allname", []),
-                }
-            )
-            if generation == self._cache_generation:  # no write landed meanwhile
-                self._status_cache = status.copy()
-                self._status_cache_time = time.time()
+    def _status_from_video(self, video_status: dict[str, Any]) -> dict[str, Any]:
+        """The ``get_status()`` dict built from one ``get video status`` answer."""
+        status = self._status_base()
+        status.update(
+            {
+                "power": "on" if video_status.get("power") == 1 else "off",
+                "routing": per_output(video_status.get("allsource")),
+                "input_names": video_status.get("allinputname", []),
+                "output_names": video_status.get("alloutputname", []),
+                "preset_names": video_status.get("allname", []),
+            }
+        )
         return status
 
     # =========================================================================

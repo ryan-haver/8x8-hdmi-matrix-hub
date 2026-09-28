@@ -8,7 +8,7 @@ import re
 
 from aiohttp import web
 
-from orei_matrix import Events
+from orei_matrix import Events, default_telnet_port
 
 from .utils import (
     _json_response,
@@ -86,9 +86,16 @@ async def handle_set_matrix_host(request: web.Request) -> web.Response:
         body = await request.json()
         host = body.get("host", "").strip()
         port = body.get("port", 443)
+        # BE-32: the Telnet port belongs to this matrix; without one the default applies
+        # (OREI_TELNET_PORT, else 23), not the previous matrix's port.
+        telnet_port = body.get("telnet_port")
 
         if not host:
             return _json_response(False, error="Host is required", status=400)
+        if telnet_port is not None and (
+            isinstance(telnet_port, bool) or not isinstance(telnet_port, int) or not 1 <= telnet_port <= 65535
+        ):
+            return _json_response(False, error="telnet_port must be a port number (1-65535)", status=400)
 
         # Validate host to prevent SSRF attacks
         if not _is_safe_host(host):
@@ -109,6 +116,7 @@ async def handle_set_matrix_host(request: web.Request) -> web.Response:
         # Update host configuration
         matrix_device.host = host
         matrix_device.port = port
+        matrix_device.telnet_port = telnet_port if telnet_port is not None else default_telnet_port()
 
         # Emit configuration changed event to reset any reconnection tasks
         matrix_device.events.emit(Events.CONFIG_CHANGED)
@@ -126,6 +134,7 @@ async def handle_set_matrix_host(request: web.Request) -> web.Response:
             {
                 "host": host,
                 "port": port,
+                "telnet_port": matrix_device.telnet_port,
                 "connected": connected,
                 "message": f"Matrix host updated to {host}:{port}"
                 + (" - Connected!" if connected else " - Connection failed"),

@@ -1,0 +1,391 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ryan-haver/8x8-hdmi-matrix-hub/docs/api/websocket.schema.json",
+  "title": "HDMI matrix hub /ws messages (protocol 1)",
+  "description": "Every message the hub sends on /ws. The prose contract (when each event is sent) is docs/api/WEBSOCKET.md. tests/sim/test_sim_ws_contract.py and the validation runner check received messages against this schema.",
+  "type": "object",
+  "required": ["event", "data"],
+  "properties": {
+    "event": {"type": "string"},
+    "data": {"type": "object"}
+  },
+  "additionalProperties": false,
+  "oneOf": [
+    {"$ref": "#/$defs/connected"},
+    {"$ref": "#/$defs/status"},
+    {"$ref": "#/$defs/matrix_connection"},
+    {"$ref": "#/$defs/routing_change"},
+    {"$ref": "#/$defs/power_change"},
+    {"$ref": "#/$defs/signal_change"},
+    {"$ref": "#/$defs/connection_change"},
+    {"$ref": "#/$defs/cable_change"},
+    {"$ref": "#/$defs/audio_mute"},
+    {"$ref": "#/$defs/input_name_change"},
+    {"$ref": "#/$defs/output_name_change"},
+    {"$ref": "#/$defs/preset_recall"},
+    {"$ref": "#/$defs/preset_recall_failed"},
+    {"$ref": "#/$defs/switch_failed"},
+    {"$ref": "#/$defs/switch_all_failed"},
+    {"$ref": "#/$defs/cec_command"},
+    {"$ref": "#/$defs/device_settings"},
+    {"$ref": "#/$defs/device_settings_full"},
+    {"$ref": "#/$defs/scene_execution_error"},
+    {"$ref": "#/$defs/pong"},
+    {"$ref": "#/$defs/error"}
+  ],
+  "$defs": {
+    "port": {"type": "integer", "minimum": 1, "maximum": 8},
+    "portKey": {"type": "string", "pattern": "^[1-8]$"},
+    "link": {
+      "type": "object",
+      "required": ["connected", "state"],
+      "properties": {
+        "configured": {"type": "boolean"},
+        "connected": {"type": "boolean"},
+        "state": {"enum": ["connected", "degraded", "connecting", "backoff", "disconnected", "not_configured"]},
+        "host": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "names": {
+      "type": "object",
+      "propertyNames": {"$ref": "#/$defs/portKey"},
+      "additionalProperties": {"type": "string"}
+    },
+    "command": {
+      "description": "Client -> server. `type` is accepted instead of `command` (older web clients sent {\"type\": \"ping\"}).",
+      "type": "object",
+      "properties": {
+        "command": {"enum": ["ping", "get_status"]},
+        "type": {"enum": ["ping", "get_status"]}
+      },
+      "anyOf": [{"required": ["command"]}, {"required": ["type"]}]
+    },
+
+    "connected": {
+      "properties": {
+        "event": {"const": "connected"},
+        "data": {
+          "type": "object",
+          "required": ["message", "client_count", "protocol", "matrix"],
+          "properties": {
+            "message": {"type": "string"},
+            "client_count": {"type": "integer", "minimum": 1},
+            "protocol": {"const": 1},
+            "matrix": {"$ref": "#/$defs/link"}
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "status": {
+      "properties": {
+        "event": {"const": "status"},
+        "data": {
+          "type": "object",
+          "required": ["connected", "state", "host", "routing", "input_names", "output_names", "inputs", "outputs_detail"],
+          "properties": {
+            "connected": {"type": "boolean"},
+            "state": {"$ref": "#/$defs/link/properties/state"},
+            "host": {"type": ["string", "null"]},
+            "power": {"enum": ["on", "off"]},
+            "routing": {
+              "type": "object",
+              "propertyNames": {"$ref": "#/$defs/portKey"},
+              "additionalProperties": {"type": "integer"}
+            },
+            "outputs": {"type": "array", "items": {"type": "integer"}, "maxItems": 8},
+            "input_names": {"$ref": "#/$defs/names"},
+            "output_names": {"$ref": "#/$defs/names"},
+            "preset_names": {"$ref": "#/$defs/names"},
+            "inputs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["number", "name", "signalActive"],
+                "properties": {
+                  "number": {"$ref": "#/$defs/port"},
+                  "name": {"type": "string"},
+                  "inactive": {"type": "boolean"},
+                  "signalActive": {"type": "boolean"},
+                  "cableConnected": {"type": ["boolean", "null"]},
+                  "sourceDetected": {"type": ["boolean", "null"]},
+                  "edid": {"type": ["integer", "null"]}
+                },
+                "additionalProperties": false
+              }
+            },
+            "outputs_detail": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["number", "name", "connected"],
+                "properties": {
+                  "number": {"$ref": "#/$defs/port"},
+                  "name": {"type": "string"},
+                  "connected": {"type": "boolean"},
+                  "cableConnected": {"type": ["boolean", "null"]},
+                  "enabled": {"type": "boolean"},
+                  "muted": {"type": "boolean"},
+                  "hdcp": {"type": ["integer", "null"]},
+                  "hdr": {"type": ["integer", "null"]},
+                  "scaler": {"type": ["integer", "null"]},
+                  "arc": {"type": "boolean"}
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "matrix_connection": {
+      "properties": {
+        "event": {"const": "matrix_connection"},
+        "data": {
+          "type": "object",
+          "required": ["connected", "state", "host"],
+          "properties": {
+            "connected": {"type": "boolean"},
+            "state": {"$ref": "#/$defs/link/properties/state"},
+            "host": {"type": ["string", "null"]}
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "routing_change": {
+      "properties": {
+        "event": {"const": "routing_change"},
+        "data": {
+          "type": "object",
+          "required": ["output", "input", "input_name", "previous_input"],
+          "properties": {
+            "output": {"$ref": "#/$defs/port"},
+            "input": {"$ref": "#/$defs/port"},
+            "input_name": {"type": "string"},
+            "previous_input": {"$ref": "#/$defs/port"}
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "power_change": {
+      "properties": {
+        "event": {"const": "power_change"},
+        "data": {
+          "type": "object",
+          "required": ["power"],
+          "properties": {"power": {"enum": ["on", "off"]}},
+          "additionalProperties": false
+        }
+      }
+    },
+    "signal_change": {
+      "properties": {
+        "event": {"const": "signal_change"},
+        "data": {
+          "type": "object",
+          "required": ["input", "has_signal", "input_name"],
+          "properties": {
+            "input": {"$ref": "#/$defs/port"},
+            "has_signal": {"type": "boolean"},
+            "input_name": {"type": "string"}
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "connection_change": {
+      "properties": {
+        "event": {"const": "connection_change"},
+        "data": {
+          "type": "object",
+          "required": ["output", "connected", "output_name"],
+          "properties": {
+            "output": {"$ref": "#/$defs/port"},
+            "connected": {"type": "boolean"},
+            "output_name": {"type": "string"}
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "cable_change": {
+      "properties": {
+        "event": {"const": "cable_change"},
+        "data": {
+          "type": "object",
+          "required": ["type", "port", "connected", "name"],
+          "properties": {
+            "type": {"enum": ["input", "output"]},
+            "port": {"$ref": "#/$defs/port"},
+            "connected": {"type": "boolean"},
+            "name": {"type": "string"}
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "audio_mute": {
+      "properties": {
+        "event": {"const": "audio_mute"},
+        "data": {
+          "type": "object",
+          "required": ["output", "muted"],
+          "properties": {
+            "output": {"$ref": "#/$defs/port"},
+            "muted": {"type": "boolean"}
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "input_name_change": {
+      "properties": {
+        "event": {"const": "input_name_change"},
+        "data": {
+          "type": "object",
+          "required": ["input", "name"],
+          "properties": {"input": {"$ref": "#/$defs/port"}, "name": {"type": "string"}},
+          "additionalProperties": false
+        }
+      }
+    },
+    "output_name_change": {
+      "properties": {
+        "event": {"const": "output_name_change"},
+        "data": {
+          "type": "object",
+          "required": ["output", "name"],
+          "properties": {"output": {"$ref": "#/$defs/port"}, "name": {"type": "string"}},
+          "additionalProperties": false
+        }
+      }
+    },
+    "preset_recall": {
+      "properties": {
+        "event": {"const": "preset_recall"},
+        "data": {
+          "type": "object",
+          "required": ["preset"],
+          "properties": {"preset": {"$ref": "#/$defs/port"}},
+          "additionalProperties": false
+        }
+      }
+    },
+    "preset_recall_failed": {
+      "properties": {
+        "event": {"const": "preset_recall_failed"},
+        "data": {
+          "type": "object",
+          "required": ["preset"],
+          "properties": {"preset": {"$ref": "#/$defs/port"}},
+          "additionalProperties": false
+        }
+      }
+    },
+    "switch_failed": {
+      "properties": {
+        "event": {"const": "switch_failed"},
+        "data": {
+          "type": "object",
+          "required": ["input", "output"],
+          "properties": {"input": {"$ref": "#/$defs/port"}, "output": {"$ref": "#/$defs/port"}},
+          "additionalProperties": false
+        }
+      }
+    },
+    "switch_all_failed": {
+      "properties": {
+        "event": {"const": "switch_all_failed"},
+        "data": {
+          "type": "object",
+          "required": ["input"],
+          "properties": {"input": {"$ref": "#/$defs/port"}},
+          "additionalProperties": false
+        }
+      }
+    },
+    "cec_command": {
+      "properties": {
+        "event": {"const": "cec_command"},
+        "data": {
+          "type": "object",
+          "required": ["type", "port", "command"],
+          "properties": {
+            "type": {"enum": ["input", "output"]},
+            "port": {"$ref": "#/$defs/port"},
+            "command": {"enum": ["power_on", "power_off"]},
+            "name": {"type": "string"}
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "device_settings": {
+      "properties": {
+        "event": {"const": "device_settings"},
+        "data": {
+          "type": "object",
+          "required": ["type", "number"],
+          "properties": {
+            "type": {"enum": ["input", "output", "preset"]},
+            "number": {"$ref": "#/$defs/port"},
+            "name": {"type": ["string", "null"]},
+            "icon": {"type": ["string", "null"]},
+            "color": {"type": ["string", "null"]}
+          }
+        }
+      }
+    },
+    "device_settings_full": {
+      "properties": {
+        "event": {"const": "device_settings_full"},
+        "data": {
+          "type": "object",
+          "properties": {
+            "inputs": {"type": "object"},
+            "outputs": {"type": "object"},
+            "presets": {"type": "object"}
+          }
+        }
+      }
+    },
+    "scene_execution_error": {
+      "properties": {
+        "event": {"const": "scene_execution_error"},
+        "data": {
+          "type": "object",
+          "required": ["scene_id", "scene_name", "steps_completed", "total_steps", "error"],
+          "properties": {
+            "scene_id": {"type": "string"},
+            "scene_name": {"type": "string"},
+            "steps_completed": {"type": "integer", "minimum": 0},
+            "total_steps": {"type": "integer", "minimum": 0},
+            "error": {"type": ["string", "null"]}
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "pong": {
+      "properties": {
+        "event": {"const": "pong"},
+        "data": {"type": "object", "maxProperties": 0}
+      }
+    },
+    "error": {
+      "properties": {
+        "event": {"const": "error"},
+        "data": {
+          "type": "object",
+          "required": ["message"],
+          "properties": {"message": {"type": "string"}},
+          "additionalProperties": false
+        }
+      }
+    }
+  }
+}

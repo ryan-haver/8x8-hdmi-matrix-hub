@@ -156,6 +156,7 @@ INTENTS: dict[str, str] = {
     "preset_recall": "recall matrix preset `preset`",
     "preset_save": "save the current routing to preset `preset`",
     "preset_rename": "rename preset `preset` to `name` (hub-side name)",
+    "port_rename": "rename `kind` (input|output) `port` to `name` in the web app (the matrix port name)",
     "matrix_power": "switch the matrix on (`on=True`) or to standby",
     "output_mute": "mute (`muted=True`) or unmute output `output` audio",
     "output_setting": "set output `output` `setting` (hdcp|hdr|scaler|arc|enable) with `body`",
@@ -175,8 +176,9 @@ INTENTS: dict[str, str] = {
     "ha_reconfigure": "point the Home Assistant entry at the hub by `host` (`\"ip\"`: the Docker host's IP) "
                       "through the reconfigure flow (ha client only)",
     "device_change": (
-        "the device changes on its own (cable, signal, front panel): simulator `event` (POST /_sim/event) or "
-        "state `patch`; performed by the runner (sim only), checked through the client with ClientState"
+        "the device changes on its own (cable, signal, front panel, power loss): simulator `event` "
+        "(POST /_sim/event), state `patch` or `reboot` seconds offline (POST /_sim/reboot); performed by the "
+        "runner (sim only), checked through the client with ClientState"
     ),
 }
 

@@ -27,11 +27,16 @@ class BrowserClient(Client):
     intents = frozenset(
         {"route", "route_all", "preset_recall", "preset_rename", "profile_recall", "scene_run", "kiosk_route"}
     )
-    #: ``ClientState`` keys: what the page showed at the end of the last action
-    #: (the page is closed after each action, so this is a snapshot, not a live view):
-    #: ``toast.<type>`` (success | warning | error | info) = text of the last toast of
-    #: that type, ``toasts`` = every toast as "<type>: <text>", ``dialogs`` = the
-    #: message of every window.prompt/confirm the page opened.
+    #: ClientState keys:
+    #: - ``ui.*`` / ``kiosk.*`` read from a /ui and a /kiosk page that stay open for the run
+    #:   and get later changes only over the hub's WebSocket (their status reads are frozen after load):
+    #:   ``ui.route.N`` (input shown for output N in the grid), ``ui.input.N`` / ``ui.output.N`` (status
+    #:   colour: signal | cable | disconnected | unknown), ``ui.input_name.N``, ``ui.header`` (connected |
+    #:   disconnected), ``kiosk.route.N``, ``kiosk.input.N``, ``kiosk.status`` (Connected | Disconnected).
+    #: - what the acting page showed at the end of the last action (a snapshot; the page is closed
+    #:   after each action): ``toast.<type>`` (success | warning | error | info) = text of the last
+    #:   toast of that type, ``toasts`` = every toast as "<type>: <text>", ``dialogs`` = the message
+    #:   of every window.prompt/confirm the page opened.
     observes = True
 
     def __init__(self) -> None:
@@ -117,14 +122,15 @@ class BrowserClient(Client):
         return result
 
     async def observe(self, key: str) -> Any:
-        """What the page showed at the end of the last action (see ``observes``)."""
         if key in ("toasts", "dialogs"):
             return self._shown.get(key, [])
         if key.startswith("toast."):
             kind = key.split(".", 1)[1]
             texts = [t.split(": ", 1)[1] for t in self._shown.get("toasts", []) if t.startswith(f"{kind}: ")]
             return texts[-1] if texts else None
-        raise NotSupportedError(f"browser client cannot observe {key!r}")
+        if not key.startswith(("ui.", "kiosk.")):
+            raise NotSupportedError(f"the browser shows ui.*, kiosk.*, toast.*, toasts and dialogs, not {key!r}")
+        return (await self._rpc("observe", key=key)).get("value")
 
     async def stop(self) -> None:
         if self._proc is None:

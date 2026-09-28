@@ -258,7 +258,7 @@ export const CATALOG: CatalogEntry[] = [
       releaseStatusFrames(page);
       await settle(page, 400);
     },
-    note: 'Every GET /api/status/outputs with a warm cache makes the hub broadcast a background refresh. It used to reset the output names to "Output 1/2" (BE-31, fixed in WP-E1: the broadcast now carries the matrix names), so this should look like matrix/grid/default. All other entries drop these broadcasts to stay deterministic.',
+    note: 'Regression guard for BE-31: after the hub status broadcast the grid keeps the real output names (TV, Soundbar). Before WP-C2 the broadcast took names from an empty cache in modular mode, so they became "Output 1/2". All other entries drop these broadcasts to stay deterministic.',
   },
 
   // ===== Matrix ============================================================

@@ -1,6 +1,6 @@
 """Output settings: audio mute (happy path and a write the matrix rejects)."""
 
-from tools.validate.model import CommandSent, Device, DeviceUnchanged, Hub, Response, Scenario, WsEvent, act
+from tools.validate.model import CommandSent, Device, DeviceUnchanged, Hub, NoWsEvent, Response, Scenario, WsEvent, act
 
 from ._paths import HUB_CORE, OUTPUTS
 
@@ -28,6 +28,7 @@ SCENARIOS = [
         title="The matrix rejects a mute command: the hub must report the failure",
         kind="failure",
         features=("F-REL-008",),
+        client_features={"api": ("F-API-036",)},
         targets=("sim",),
         faults={"reject_writes": True},
         action=act("output_mute", output=2, muted=True),
@@ -36,6 +37,8 @@ SCENARIOS = [
             Device("outputs[1].audio_mute", equals=0),
             DeviceUnchanged(),
             Hub("/api/status/outputs", "data.outputs[1].muted", equals=False),
+            # API-09/UI-02: the old handler announced the mute before sending it, refused or not
+            NoWsEvent("audio_mute", timeout=3),
         ),
         covers=(*HUB_CORE, *OUTPUTS),
     ),

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import re
 from pathlib import Path
 
@@ -123,17 +124,36 @@ def test_every_rest_route_is_in_the_registry(features):
     assert missing == [], "REST routes without a feature: " + ", ".join(missing)
 
 
-def test_every_ws_event_is_in_the_registry(features):
+def _ws_events_sent() -> set[str]:
+    """Every /ws event name the hub's code sends."""
     sources = "\n".join(
         (ROOT / p).read_text(encoding="utf-8")
-        for p in ("src/rest_api/websocket.py", "src/rest_api/control.py", "src/rest_api/outputs.py",
-                  "src/rest_api/cec.py", "src/rest_api/device_settings.py", "src/rest_api/core.py",
-                  "src/scene_execution.py", "src/driver.py")
+        for p in ("src/rest_api/websocket.py", "src/rest_api/events.py", "src/rest_api/control.py",
+                  "src/rest_api/outputs.py", "src/rest_api/cec.py", "src/rest_api/device_settings.py",
+                  "src/rest_api/core.py", "src/scene_execution.py", "src/driver.py")
     )
-    emitted = set(re.findall(r'broadcast_status_update\(\s*"([a-z_]+)"', sources))
-    emitted |= set(re.findall(r'"event":\s*"([a-z_]+)"', sources))
+    sent = set(re.findall(r'broadcast_status_update\(\s*"([a-z_]+)"', sources))
+    sent |= set(re.findall(r'"event":\s*"([a-z_]+)"', sources))
+    sent |= set(re.findall(r'\b(?:publish|message)\(\s*"([a-z_]+)"', sources))
+    sent |= set(re.findall(r'\bsend\(\s*\w+,\s*"([a-z_]+)"', sources))
+    return sent
+
+
+def _ws_contract_events() -> set[str]:
+    schema = json.loads((ROOT / "docs" / "api" / "websocket.schema.json").read_text(encoding="utf-8"))
+    return {d["properties"]["event"]["const"] for d in schema["$defs"].values()
+            if isinstance(d, dict) and "event" in d.get("properties", {})}
+
+
+def test_every_ws_event_is_in_the_contract_and_the_registry(features):
+    """The hub sends exactly the events of docs/api/websocket.schema.json, and each has a feature (WP-C2)."""
+    sent, contract = _ws_events_sent(), _ws_contract_events()
+    assert sent - contract == set(), f"sent but not in the contract: {sorted(sent - contract)}"
+    assert contract - sent == set(), f"in the contract but never sent: {sorted(contract - sent)}"
+    doc = (ROOT / "docs" / "api" / "WEBSOCKET.md").read_text(encoding="utf-8")
+    assert [e for e in sorted(contract) if f"`{e}`" not in doc] == []
     declared = {e for f in features for e in f["interfaces"].get("ws", [])}
-    assert emitted - declared == set(), f"WebSocket events without a feature: {sorted(emitted - declared)}"
+    assert contract - declared == set(), f"WebSocket events without a feature: {sorted(contract - declared)}"
 
 
 def test_every_hub_comhead_is_in_the_registry(features):

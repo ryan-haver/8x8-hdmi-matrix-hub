@@ -145,10 +145,9 @@ class MatrixApp {
             this.applyUiPreferences(e.detail);
         });
         
-        // Connection status updates
-        state.on('wsConnection', (connected) => {
-            this.updateConnectionStatus(connected);
-        });
+        // Connection status: the hub's WebSocket and the matrix link it reports
+        state.on('wsConnection', () => this.updateConnectionStatus());
+        state.on('matrixLink', () => this.updateConnectionStatus());
 
         // Dynamic header title update
         state.on('info', (info) => {
@@ -419,106 +418,111 @@ class MatrixApp {
     }
 
     /**
-     * Connect to WebSocket for real-time updates
+     * Connect to the hub's live event stream (docs/api/WEBSOCKET.md)
      */
     connectWebSocket() {
         this.ws = new MatrixWebSocket({
-            onMessage: (data) => this.handleWebSocketMessage(data),
+            onMessage: (msg) => this.handleWebSocketMessage(msg),
             onStatusChange: (connected) => state.setWsConnected(connected),
+            onMatrixStatus: (link) => state.setMatrixLink(link),
             onError: (error) => console.error('WebSocket error:', error)
         });
-        
+
         this.ws.connect();
     }
 
     /**
-     * Handle WebSocket messages
+     * Handle one hub event ({type, data}; payloads in docs/api/WEBSOCKET.md).
+     * Every change reaches every open page once, whoever made it (this page,
+     * another client, the Remote, Home Assistant or the matrix's front panel).
      */
-    handleWebSocketMessage(data) {
-        Logger.ws('RX', data);
-        
-        switch (data.type) {
-            case 'switch':
+    handleWebSocketMessage(msg) {
+        const { type, data } = msg;
+
+        switch (type) {
+            case 'status':
+                // Snapshot: sent after every (re)connect and in answer to get_status
+                state.applyStatus(data);
+                break;
+
+            case 'routing_change':
                 state.setRoute(data.output, data.input);
-                // Show toast for optimistic feedback
-                if (data.optimistic && window.toast) {
-                    const inputName = state.getInputName(data.input);
-                    const outputName = state.getOutputName(data.output);
-                    window.toast.show(`Routing ${inputName} → ${outputName}`, 'info', 2000);
-                }
                 break;
-            
-            case 'switch_all':
-                // All outputs switched to single input
-                const routing = {};
-                for (let o = 1; o <= state.info.outputCount; o++) {
-                    routing[o] = data.input;
-                }
-                state.setRouting(routing);
-                // Show toast for optimistic feedback
-                if (data.optimistic && window.toast) {
-                    const inputName = state.getInputName(data.input);
-                    window.toast.show(`Routing ${inputName} → All Outputs`, 'info', 2000);
-                }
-                break;
-            
+
             case 'signal_change':
-                // Input signal status changed
                 if (state.inputs[data.input]) {
-                    state.inputs[data.input].signalActive = data.active;
+                    state.inputs[data.input].signalActive = data.has_signal;
+                    state.updateOutputSignals();
                     state.emit('inputs', state.inputs);
                 }
                 break;
-                
+
+            case 'connection_change':
+                state.setOutputConnected(data.output, data.connected);
+                state.updateOutputSignals();
+                break;
+
+            case 'cable_change':
+                if (data.type === 'input' && state.inputs[data.port]) {
+                    state.inputs[data.port].cableConnected = data.connected;
+                    state.emit('inputs', state.inputs);
+                } else if (data.type === 'output' && state.outputs[data.port]) {
+                    state.outputs[data.port].cableConnected = data.connected;
+                    state.updateOutputSignals();
+                }
+                break;
+
             case 'audio_mute':
                 state.setOutputMute(data.output, data.muted);
-                // Show toast for optimistic feedback
-                if (data.optimistic && window.toast) {
-                    const outputName = state.getOutputName(data.output);
-                    const muteText = data.muted ? 'Muting' : 'Unmuting';
-                    window.toast.show(`${muteText} ${outputName}`, 'info', 2000);
-                }
                 break;
-                
+
+            case 'input_name_change':
+                state.setInputName(data.input, data.name);
+                break;
+
+            case 'output_name_change':
+                state.setOutputName(data.output, data.name);
+                break;
+
+            case 'device_settings':
+            case 'device_settings_full':
+                // Names, icons or colours saved on the hub
+                state.loadDeviceSettings().catch(() => {});
+                break;
+
             case 'preset_recall':
-            case 'scene_recall':
-                // Show toast for optimistic feedback
-                if (data.optimistic && window.toast) {
-                    window.toast.show(`Loading Preset ${data.preset}...`, 'info', 2000);
-                }
-                // Full refresh needed
+                // Full refresh (the routing it changed also arrives as routing_change events)
                 this.refresh();
                 break;
-                
-            case 'status':
-                if (data.data) {
-                    state.applyStatus(data.data);
-                }
+
+            case 'switch_failed':
+            case 'switch_all_failed':
+            case 'preset_recall_failed':
+                // Nothing changed on the matrix; make sure this page shows what it has
+                this.ws.requestStatus();
                 break;
-            
-            case 'cec_command':
-                // Optimistic update for CEC commands (power on/off)
-                this.handleCecCommand(data);
-                break;
+
+            // matrix_connection: handled by MatrixWebSocket (onMatrixStatus).
+            // power_change, cec_command, scene_execution_error: not shown by this page yet.
         }
     }
-    
+
     /**
      * Handle optimistic CEC command updates
      */
     handleCecCommand(data) {
         const { type, port, command, name } = data;
-        
+
         if (command === 'power_on' || command === 'power_off') {
             const isOn = command === 'power_on';
             const action = isOn ? 'Powering on' : 'Powering off';
             const targetName = name || `${type === 'output' ? 'Output' : 'Input'} ${port}`;
-            
+
             // Show toast notification
             if (window.toast) {
                 window.toast.show(`${action} ${targetName}...`, 'info', 2000);
             }
-            
+
             if (type === 'output' && state.outputs[port]) {
                 // Update output power state optimistically
                 state.outputs[port].enabled = isOn;
@@ -531,12 +535,24 @@ class MatrixApp {
         }
     }
 
-    updateConnectionStatus(connected) {
+    /**
+     * Header status: green only while the hub's WebSocket is up AND the hub
+     * reports the matrix reachable. The tooltip says which one is missing.
+     */
+    updateConnectionStatus() {
         const titleEl = document.getElementById('header-title-text');
-        if (titleEl) {
-            titleEl.classList.toggle('connected', connected);
-            titleEl.classList.toggle('disconnected', !connected);
-            titleEl.title = connected ? 'Connected' : 'Disconnected';
+        if (!titleEl) return;
+        const matrix = state.matrixLink;
+        const matrixUp = !matrix || matrix.connected !== false;
+        const connected = state.wsConnected && matrixUp;
+        titleEl.classList.toggle('connected', connected);
+        titleEl.classList.toggle('disconnected', !connected);
+        if (!state.wsConnected) {
+            titleEl.title = 'Disconnected from the hub (reconnecting)';
+        } else if (!matrixUp) {
+            titleEl.title = `Matrix not reachable (${matrix.state})`;
+        } else {
+            titleEl.title = 'Connected';
         }
     }
 

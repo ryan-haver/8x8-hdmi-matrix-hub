@@ -9,6 +9,9 @@ HUB_CORE = (
     "src/rest_api/app.py",
     "src/rest_api/utils.py",
     "src/rest_api/websocket.py",
+    # The hub's event stream and the /ws contract every scenario's WebSocket messages are checked against
+    "src/rest_api/events.py",
+    "docs/api/websocket.schema.json",
 )
 CONTROL = ("src/rest_api/control.py",)
 OUTPUTS = ("src/rest_api/outputs.py",)

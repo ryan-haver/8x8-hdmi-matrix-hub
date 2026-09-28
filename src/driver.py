@@ -24,11 +24,13 @@ Lifecycle (WP-B2, docs/audits/UC_INTEGRATION_AUDIT.md):
 
 import asyncio
 import atexit
+import contextlib
 import errno
 import functools
 import json
 import logging
 import os
+import re
 import signal
 import socket
 import sys
@@ -72,12 +74,12 @@ except ImportError:
     )
 from rest_api import (
     RestApiServer,
-    broadcast_status_update,
     set_macro_cec_sender,
     set_matrix_device,
     update_input_names,
     update_output_names,
 )
+from rest_api.device_settings import add_change_listener, get_favorite_presets, preset_display_name
 
 _LOG = logging.getLogger("driver")
 
@@ -148,6 +150,10 @@ class DriverState:
     input_names: dict[int, str] = field(default_factory=dict)
     output_names: dict[int, str] = field(default_factory=dict)
     saved_config: dict[str, Any] = field(default_factory=dict)
+    #: The matrix's own preset names (``get video status`` ``allname``), the web app's fallback (UC-14).
+    preset_matrix_names: list[str] = field(default_factory=list)
+    #: What the preset entities were built with: (names 1-8, favourites), see :func:`preset_view`.
+    preset_view: "PresetView | None" = None
     # threading.Lock (not asyncio.Lock) because input_names/output_names are
     # read by the polling task and written from REST handlers / setup flows
     # which may run in either sync or async contexts. threading.Lock works
@@ -166,6 +172,17 @@ class DriverState:
     def get_output_name(self, port: int) -> str:
         """Get output name with fallback to default."""
         return self.output_names.get(port, f"Output {port}")
+
+
+@dataclass(frozen=True)
+class PresetView:
+    """The hardware presets as the web app shows them (UC-14): names 1-8 and the favourites, in order."""
+
+    names: tuple[str, ...]
+    favourites: tuple[int, ...]
+
+    def name(self, preset: int) -> str:
+        return self.names[preset - 1]
 
 
 # Global driver state instance - THE source of truth for all state
@@ -746,15 +763,24 @@ def config_file_path() -> Path:
     return CONFIG_FILE
 
 
-def save_config(host: str, port: int, input_names: dict[int, str], output_names: dict[int, str] = None) -> None:
-    """Save configuration to file for persistence across restarts."""
-    config = {
+def save_config(host: str, port: int, input_names: dict[int, str], output_names: dict[int, str] | None = None,
+                credentials: tuple[str, str] | None = None) -> None:
+    """Save configuration to file for persistence across restarts.
+
+    ``credentials``: the matrix login entered in the Remote's setup for this
+    host (UC-02, UC-05); without them the matrix uses ``OREI_USER`` /
+    ``OREI_PASSWORD``. The file is written with owner-only permissions
+    (``atomic_write_json`` creates it with mode 0600 on POSIX).
+    """
+    config: dict[str, Any] = {
         "host": host,
         "port": port,
         "input_names": {str(k): v for k, v in input_names.items()},  # JSON requires string keys
     }
     if output_names:
         config["output_names"] = {str(k): v for k, v in output_names.items()}
+    if credentials is not None:
+        config["user"], config["password"] = credentials
     path = config_file_path()
     try:
         from _file_io import atomic_write_json
@@ -762,6 +788,11 @@ def save_config(host: str, port: int, input_names: dict[int, str], output_names:
         _LOG.info(f"Configuration saved to {path}")
     except Exception as e:
         _LOG.error(f"Failed to save configuration: {e}")
+
+
+def own_credentials(matrix: OreiMatrix) -> tuple[str, str] | None:
+    """The login a Remote setup entered for this matrix, to save with it (None: the environment's)."""
+    return matrix.credentials() if matrix.has_own_credentials else None
 
 
 def load_config() -> dict[str, Any] | None:
@@ -794,10 +825,61 @@ def load_config() -> dict[str, Any] | None:
 # =============================================================================
 
 
+def preset_view() -> PresetView:
+    """The hardware presets as the web app shows them right now (UC-14).
+
+    Names follow ``GET /api/presets`` (:func:`rest_api.device_settings.preset_display_name`:
+    the web app's name, else the matrix's own preset name, else "Preset N");
+    the favourites are the web app's favourite presets.
+    """
+    names = tuple(preset_display_name(n, _driver_state.preset_matrix_names) for n in range(1, 9))
+    return PresetView(names=names, favourites=tuple(get_favorite_presets()))
+
+
+#: The entities that show preset names or favourites.
+PRESET_ENTITY_IDS = frozenset({"remote.orei_matrix", *(f"button.preset_{n}" for n in range(1, 9))})
+MATRIX_POWER_SWITCH = "switch.matrix_power"
+
+
+def sync_matrix_power(power: Any) -> None:
+    """The matrix reported its power (``get video status`` ``power``: 1 on, 0 standby) or the hub changed it."""
+    if isinstance(power, str):
+        power = {"on": 1, "off": 0}.get(power.strip().lower(), power)
+    if power not in (0, 1) or isinstance(power, bool):
+        return  # not a value the device sends: keep the last known state
+    _entity_sync.update(MATRIX_POWER_SWITCH, {SwitchAttr.STATE: SwitchStates.ON if power else SwitchStates.OFF})
+
+
+def refresh_presets(matrix_names: list[Any] | None = None) -> bool:
+    """Rebuild the preset entities when the web app's preset names or favourites changed (UC-14).
+
+    ``matrix_names``: the matrix's own preset names when a status read just
+    returned them. Returns True when the entities were rebuilt.
+    """
+    if matrix_names is not None:
+        _driver_state.preset_matrix_names = [str(n) for n in matrix_names[:8]]
+    view = preset_view()
+    if view == _driver_state.preset_view:
+        return False
+    previous, _driver_state.preset_view = _driver_state.preset_view, view
+    if previous is not None:
+        _LOG.info("Preset names/favourites changed in the web app: %s, favourites %s",
+                  list(view.names), list(view.favourites))
+        install_entities(rebuild=True, only=PRESET_ENTITY_IDS)
+    return True
+
+
+def on_web_app_settings_changed() -> None:
+    """The web app saved its device settings (a preset renamed, a favourite toggled, ...)."""
+    refresh_presets()
+
+
 def build_entities() -> list[Any]:
     """All 74 entities, named from the current port names (one factory for restore, setup and renames)."""
-    entities: list[Any] = [create_matrix_remote(_driver_state.input_names)]
-    entities += [create_preset_button(n) for n in range(1, 9)]
+    view = _driver_state.preset_view or preset_view()
+    _driver_state.preset_view = view
+    entities: list[Any] = [create_matrix_remote(view)]
+    entities += [create_preset_button(n, view.name(n)) for n in range(1, 9)]
     for n in range(1, 9):
         entities.append(create_input_cec_remote(n, _driver_state.get_input_name(n)))
     for n in range(1, 9):
@@ -815,18 +897,21 @@ def build_entities() -> list[Any]:
     return entities
 
 
-def install_entities(*, rebuild: bool = False) -> None:
+def install_entities(*, rebuild: bool = False, only: frozenset[str] | None = None) -> None:
     """Offer the entities to the Remote (``available_entities``).
 
-    ``rebuild`` (new port names) replaces every entity object in place, in
-    both stores: the Remote's subscriptions (by entity id) stay, and it is
-    sent what changed (e.g. the source list). Subscribed entities are never
-    cleared (UC-05). Every entity keeps showing the last known state.
+    ``rebuild`` (new port or preset names) replaces every entity object (or
+    those in ``only``) in place, in both stores: the Remote's subscriptions
+    (by entity id) stay, and it is sent what changed (e.g. the source list).
+    Subscribed entities are never cleared (UC-05). Every entity keeps showing
+    the last known state.
     """
     api = _driver_state.api
     if api is None:
         return
     for entity in build_entities():
+        if only is not None and entity.id not in only:
+            continue
         if api.available_entities.contains(entity.id):
             if not rebuild:
                 continue
@@ -841,16 +926,14 @@ def install_entities(*, rebuild: bool = False) -> None:
     _LOG.info("%d entities available", len(api.available_entities.get_all()))
 
 
-def create_preset_button(preset_num: int, preset_name: str = None) -> Button:
+def create_preset_button(preset_num: int, preset_name: str | None = None) -> Button:
     """
     Create a button entity for a specific preset.
 
-
     :param preset_num: Preset number (1-8)
-    :param preset_name: Custom name for the preset (optional)
+    :param preset_name: The preset's name as the web app shows it (UC-14); "Preset N" if not given
     :return: Button entity
     """
-    # Use custom name if provided, otherwise use generic name
     display_name = preset_name if preset_name else f"Preset {preset_num}"
 
     async def preset_cmd_handler(
@@ -970,6 +1053,8 @@ def create_input_cec_remote(input_num: int, input_name: str = None) -> Remote:
         [
             RemoteFeatures.SEND_CMD,
             RemoteFeatures.ON_OFF,
+            # Power toggle (UC-24, DI-13): from the tracked power state, unknown -> on (_toggle_turns_on).
+            RemoteFeatures.TOGGLE,
         ],
         attributes={RemoteAttr.STATE: RemoteStates.UNKNOWN},
         simple_commands=CEC_COMMANDS,
@@ -1030,6 +1115,8 @@ def create_output_cec_remote(output_num: int, output_name: str = None) -> Remote
         [
             RemoteFeatures.SEND_CMD,
             RemoteFeatures.ON_OFF,
+            # Power toggle (UC-24, DI-13): from the tracked power state, unknown -> on (_toggle_turns_on).
+            RemoteFeatures.TOGGLE,
         ],
         attributes={RemoteAttr.STATE: RemoteStates.UNKNOWN},
         simple_commands=CEC_COMMANDS,
@@ -1166,9 +1253,14 @@ def create_matrix_power_switch() -> Switch:
     """
     Create a Switch entity for matrix power control.
 
+    Its state is the matrix's power as the device reports it (UC-09): UNKNOWN
+    until the first status read, then synced from every poll (a front-panel or
+    web-app power change shows within one cycle) and from the hub's own power
+    commands at once.
+
     :return: Switch entity
     """
-    entity_id = "switch.matrix_power"
+    entity_id = MATRIX_POWER_SWITCH
 
     async def switch_cmd_handler(
         entity: Switch, cmd_id: str, params: dict[str, Any] | None, websocket: Any = None
@@ -1177,13 +1269,14 @@ def create_matrix_power_switch() -> Switch:
         _LOG.info("Switch %s: %s", entity.id, cmd_id)
 
         matrix = get_matrix()
-        if matrix is None:
-            _LOG.error("Matrix device not configured")
+        if matrix is None or not matrix.connected:
+            _LOG.error("Matrix not connected")
             return StatusCodes.SERVICE_UNAVAILABLE
 
         if cmd_id == SwitchCommands.TOGGLE:
-            # The last known state (the entity itself shows UNAVAILABLE while the matrix is unreachable).
-            current = _entity_sync.value(entity.id, SwitchAttr.STATE) or entity.attributes.get(SwitchAttr.STATE)
+            # The last known state (the entity itself shows UNAVAILABLE while the matrix is unreachable);
+            # unknown -> on, like every toggle of this integration.
+            current = _entity_sync.value(entity.id, SwitchAttr.STATE)
             cmd_id = SwitchCommands.OFF if current == SwitchStates.ON else SwitchCommands.ON
 
         if cmd_id == SwitchCommands.ON:
@@ -1207,7 +1300,7 @@ def create_matrix_power_switch() -> Switch:
             SwitchFeatures.ON_OFF,
             SwitchFeatures.TOGGLE,
         ],
-        attributes={SwitchAttr.STATE: SwitchStates.ON},
+        attributes={SwitchAttr.STATE: SwitchStates.UNKNOWN},
         cmd_handler=guarded_handler(switch_cmd_handler),
     )
 
@@ -1295,16 +1388,32 @@ def create_output_cable_sensor(output_num: int, output_name: str = None) -> Sens
     return _status_sensor(f"sensor.output_{output_num}_cable", f"{display_name} Cable")
 
 
-def create_matrix_remote(input_names: dict[int, str] = None) -> Remote:
+def _preset_page(page_id: str, title: str, presets: list[int], view: PresetView) -> Any:
+    """A 4x6 page of preset buttons, two per row, labelled with the web app's preset names."""
+    from ucapi.ui import Size, UiPage, create_ui_text
+
+    items = [
+        create_ui_text(view.name(n), (i % 2) * 2, i // 2, Size(2, 1), f"PRESET_{n}")
+        for i, n in enumerate(presets)
+    ]
+    return UiPage(page_id, title, grid=Size(4, 6), items=items)
+
+
+def create_matrix_remote(view: PresetView | None = None) -> Remote:
     """
     Create a remote entity for the OREI Matrix with preset selection.
 
-    :param input_names: Optional dictionary mapping input numbers to names (for future source selector use)
+    Its pages mirror the web app's presets (UC-14): a "Favourites" page with
+    the web app's favourite presets (only when there are any; the web app's
+    quick actions list them first too), then the "Presets" page with all
+    eight, labelled with the names the web app shows. The simple commands stay
+    ``PRESET_1`` ... ``PRESET_8`` whatever the names are, so activities and
+    macros keep working after a rename.
+
+    :param view: preset names and favourites (default: "Preset N", no favourites)
     :return: Remote entity
     """
-    # Presets are saved routing configurations, use generic names
-    # (The OREI matrix doesn't expose custom preset names via API)
-    preset_labels = {i: f"Preset {i}" for i in range(1, 9)}
+    view = view or PresetView(names=tuple(f"Preset {n}" for n in range(1, 9)), favourites=())
 
     async def remote_cmd_handler(
         entity: Remote, cmd_id: str, params: dict[str, Any] | None, websocket: Any = None
@@ -1339,24 +1448,10 @@ def create_matrix_remote(input_names: dict[int, str] = None) -> Remote:
     # Define simple commands for each preset
     simple_commands = [f"PRESET_{i}" for i in range(1, 9)]
 
-    # Create UI pages for preset selection
-    from ucapi.ui import Size, UiPage, create_ui_text
-
-    main_page = UiPage(
-        "orei_matrix_main",
-        "Presets",
-        grid=Size(4, 6),
-        items=[
-            create_ui_text(preset_labels[1], 0, 0, Size(2, 1), "PRESET_1"),
-            create_ui_text(preset_labels[2], 2, 0, Size(2, 1), "PRESET_2"),
-            create_ui_text(preset_labels[3], 0, 1, Size(2, 1), "PRESET_3"),
-            create_ui_text(preset_labels[4], 2, 1, Size(2, 1), "PRESET_4"),
-            create_ui_text(preset_labels[5], 0, 2, Size(2, 1), "PRESET_5"),
-            create_ui_text(preset_labels[6], 2, 2, Size(2, 1), "PRESET_6"),
-            create_ui_text(preset_labels[7], 0, 3, Size(2, 1), "PRESET_7"),
-            create_ui_text(preset_labels[8], 2, 3, Size(2, 1), "PRESET_8"),
-        ],
-    )
+    pages = []
+    if view.favourites:
+        pages.append(_preset_page("orei_matrix_favourites", "Favourites", list(view.favourites), view))
+    pages.append(_preset_page("orei_matrix_main", "Presets", list(range(1, 9)), view))
 
     remote = Remote(
         "remote.orei_matrix",
@@ -1364,7 +1459,7 @@ def create_matrix_remote(input_names: dict[int, str] = None) -> Remote:
         [RemoteFeatures.SEND_CMD],
         attributes={RemoteAttr.STATE: RemoteStates.ON},
         simple_commands=simple_commands,
-        ui_pages=[main_page],
+        ui_pages=pages,
         cmd_handler=guarded_handler(remote_cmd_handler),
     )
 
@@ -1376,27 +1471,21 @@ def create_matrix_remote(input_names: dict[int, str] = None) -> Remote:
 # =============================================================================
 
 
-@dataclass
-class PollMemory:
-    """What the previous successful reads returned (for the /ws change events)."""
-
-    routing: list[Any] | None = None
-    connections: list[Any] | None = None
-    inactive_inputs: list[Any] = field(default_factory=list)
-    cables: dict[str, dict[int, bool | None]] = field(default_factory=lambda: {"inputs": {}, "outputs": {}})
-
-
 def _valid_input(value: Any) -> bool:
     """Input numbers are 1-8; 0 or anything else in the routing array means "unknown" (UC-04)."""
     return isinstance(value, int) and not isinstance(value, bool) and 1 <= value <= 8
 
 
-async def poll_matrix_status(memory: PollMemory) -> None:
-    """One status poll: update the entities (last known values only) and tell /ws clients what changed.
+async def poll_matrix_status() -> None:
+    """One status poll: update the Remote's entities (last known values only).
 
     Nothing is updated from a read that failed, and a poll stops as soon as
     the matrix link is lost, so the Remote never sees placeholders ("Input 0",
     "Disconnected") for values the hub does not know (UC-04, BE-08).
+
+    The /ws events for web clients are not sent from here: the hub's own
+    event stream (rest_api/events.py) announces every change once, with or
+    without a Remote (UC-17, docs/api/WEBSOCKET.md).
     """
     matrix = get_matrix()
     await publish_device_state()
@@ -1414,6 +1503,10 @@ async def poll_matrix_status(memory: PollMemory) -> None:
         _LOG.debug("Matrix link lost during the poll - keeping the last known values")
         return
 
+    if video_status:
+        sync_matrix_power(video_status.get("power"))  # UC-09
+        if isinstance(video_status.get("allname"), list):
+            refresh_presets(video_status["allname"])  # the matrix's own preset names (UC-14)
     routing = per_output(video_status.get("allsource")) if video_status else []
     connections = per_output(output_status.get("allconnect")) if output_status else []
 
@@ -1426,13 +1519,6 @@ async def poll_matrix_status(memory: PollMemory) -> None:
                 f"sensor.output_{output_num}_connected",
                 {SensorAttr.VALUE: conn_state, SensorAttr.STATE: SensorStates.ON},
             )
-            prev_connections = memory.connections
-            if prev_connections is not None and idx < len(prev_connections):
-                if (prev_connections[idx] == 1) != is_connected:
-                    await broadcast_status_update(
-                        "connection_change",
-                        {"output": output_num, "connected": is_connected, "state": conn_state},
-                    )
 
         current_input = routing[idx] if idx < len(routing) else None
         if not _valid_input(current_input):
@@ -1442,23 +1528,7 @@ async def poll_matrix_status(memory: PollMemory) -> None:
             f"sensor.output_{output_num}_source", {SensorAttr.VALUE: input_name, SensorAttr.STATE: SensorStates.ON}
         )
         _entity_sync.update(f"media_player.output_{output_num}", {MediaPlayerAttr.SOURCE: input_name})
-        prev_routing = memory.routing
-        prev_input = prev_routing[idx] if prev_routing is not None and idx < len(prev_routing) else None
-        if _valid_input(prev_input) and prev_input != current_input:
-            await broadcast_status_update(
-                "routing_change",
-                {
-                    "output": output_num,
-                    "input": current_input,
-                    "input_name": input_name,
-                    "previous_input": prev_input,
-                },
-            )
 
-    if routing:
-        memory.routing = list(routing)
-    if connections:
-        memory.connections = list(connections)
     _LOG.debug(f"Polling complete - routing: {routing}, connections: {connections}")
 
     # Get input status for signal detection
@@ -1470,24 +1540,12 @@ async def poll_matrix_status(memory: PollMemory) -> None:
         for input_num in range(1, 9):
             # inactive array from get_input_status: 1 = signal present, 0 = no signal
             inp_idx = input_num - 1
-            has_signal = inactive_inputs[inp_idx] == 1 if inp_idx < len(inactive_inputs) else False
             if inp_idx < len(inactive_inputs):
+                has_signal = inactive_inputs[inp_idx] == 1
                 _entity_sync.update(
                     f"sensor.input_{input_num}_signal",
                     {SensorAttr.VALUE: "Active" if has_signal else "No Signal", SensorAttr.STATE: SensorStates.ON},
                 )
-            prev = memory.inactive_inputs
-            prev_had_signal = prev[inp_idx] == 1 if inp_idx < len(prev) else False
-            if prev_had_signal != has_signal:
-                await broadcast_status_update(
-                    "signal_change",
-                    {
-                        "input": input_num,
-                        "has_signal": has_signal,
-                        "input_name": _driver_state.input_names.get(input_num, f"Input {input_num}"),
-                    },
-                )
-        memory.inactive_inputs = list(inactive_inputs)
         _LOG.debug(f"Input signal polling complete - inactive: {inactive_inputs}")
 
     # Get cable status from Telnet if available
@@ -1496,7 +1554,7 @@ async def poll_matrix_status(memory: PollMemory) -> None:
         if not matrix.connected:
             return
         if cable_status:
-            for side, names in (("inputs", _driver_state.input_names), ("outputs", _driver_state.output_names)):
+            for side in ("inputs", "outputs"):
                 port_kind = side[:-1]  # "input" / "output"
                 cables = cable_status.get(side, {})
                 for port in range(1, 9):
@@ -1509,21 +1567,6 @@ async def poll_matrix_status(memory: PollMemory) -> None:
                             SensorAttr.STATE: SensorStates.ON,
                         }
                     _entity_sync.update(f"sensor.{port_kind}_{port}_cable", attrs)
-                    prev_connected = memory.cables.get(side, {}).get(port)
-                    if prev_connected != is_connected and is_connected is not None:
-                        await broadcast_status_update(
-                            "cable_change",
-                            {
-                                "type": port_kind,
-                                "port": port,
-                                "connected": is_connected,
-                                "name": names.get(port, f"{port_kind.capitalize()} {port}"),
-                            },
-                        )
-            memory.cables = {
-                "inputs": dict(cable_status.get("inputs", {})),
-                "outputs": dict(cable_status.get("outputs", {})),
-            }
 
 
 def request_poll() -> None:
@@ -1540,7 +1583,6 @@ async def status_polling_loop() -> None:
     after request_poll(). A failed poll is logged and the next one runs;
     cancellation stops it (CancelledError is re-raised).
     """
-    memory = PollMemory()
     _LOG.info(f"Status polling started (interval: {POLLING_INTERVAL}s)")
 
     while True:
@@ -1550,7 +1592,7 @@ async def status_polling_loop() -> None:
             except TimeoutError:
                 pass
             _poll_wakeup.clear()
-            await poll_matrix_status(memory)
+            await poll_matrix_status()
         except asyncio.CancelledError:
             _LOG.info("Status polling cancelled")
             raise
@@ -1644,12 +1686,27 @@ async def _await_startup_connect() -> None:
             pass
 
 
+async def refresh_matrix_preset_names(matrix: OreiMatrix) -> None:
+    """Read the matrix's own preset names (``allname``) and power, and apply them (UC-14, UC-09)."""
+    try:
+        video = await matrix.get_video_status()
+    except Exception as ex:
+        _LOG.debug("Could not read the matrix's preset names: %s", ex)
+        return
+    if not video:
+        return
+    sync_matrix_power(video.get("power"))
+    if isinstance(video.get("allname"), list):
+        refresh_presets(video["allname"])
+
+
 async def refresh_names(matrix: OreiMatrix, *, save: bool = False) -> None:
     """Re-read the port names; when they changed, rebuild the offered entities with them.
 
-    Only ``available_entities`` are rebuilt: subscribed entities keep working
-    (updating them in place is UC-08).
+    The entities are replaced in place (subscriptions stay). The matrix's own
+    preset names are read too (the web app's fallback names, UC-14).
     """
+    await refresh_matrix_preset_names(matrix)
     fresh_names = await matrix.get_all_input_names()
     if not fresh_names or fresh_names == _driver_state.input_names:
         _LOG.debug("Input names unchanged")
@@ -1669,7 +1726,8 @@ async def refresh_names(matrix: OreiMatrix, *, save: bool = False) -> None:
     await update_input_names(_driver_state.input_names)
     await update_output_names(_driver_state.output_names)
     if save:
-        save_config(matrix.host, matrix.port, _driver_state.input_names, _driver_state.output_names)
+        save_config(matrix.host, matrix.port, _driver_state.input_names, _driver_state.output_names,
+                    credentials=own_credentials(matrix))
 
 
 async def on_connect() -> None:
@@ -1799,8 +1857,47 @@ def on_matrix_error(error: str):
 
 
 def on_matrix_update(update: dict[str, Any]):
-    """Handle matrix update event."""
+    """A change the hub made on the matrix (from the web app, Home Assistant, a scene, the Remote).
+
+    Shown on the Remote at once, not at the next poll or reconnect:
+
+    * ``power``: the matrix power switch (UC-09);
+    * ``input_name`` / ``output_name``: a port rename; the entities are
+      replaced in place and the subscribed media players get the new source
+      list, so a source can be chosen by its new name right away (UC-08);
+    * ``preset_name``: the matrix's own preset name (UC-14).
+    """
     _LOG.debug("Matrix update: %s", update)
+    if not isinstance(update, dict):
+        return
+    if "power" in update:
+        sync_matrix_power(update["power"])
+    renames = {key: update[key] for key in ("input_name", "output_name") if isinstance(update.get(key), dict)}
+    if renames:
+        apply_port_renames(renames.get("input_name", {}), renames.get("output_name", {}))
+    if isinstance(update.get("preset_name"), dict):
+        names = list(_driver_state.preset_matrix_names) or [f"Preset {n}" for n in range(1, 9)]
+        names += [f"Preset {n}" for n in range(len(names) + 1, 9)]
+        for preset, name in update["preset_name"].items():
+            if isinstance(preset, int) and 1 <= preset <= 8:
+                names[preset - 1] = str(name)
+        refresh_presets(names)
+
+
+def apply_port_renames(inputs: dict[int, str], outputs: dict[int, str]) -> None:
+    """Port names changed on the matrix through the hub: rebuild the entities with them (UC-08).
+
+    The REST API already updated and saved its own names; this brings the
+    Remote's entities in line (names, source lists, source selection).
+    """
+    new_inputs = {**_driver_state.input_names, **{int(k): str(v) for k, v in inputs.items()}}
+    new_outputs = {**_driver_state.output_names, **{int(k): str(v) for k, v in outputs.items()}}
+    if new_inputs == _driver_state.input_names and new_outputs == _driver_state.output_names:
+        return
+    _LOG.info("Port renamed through the hub: inputs %s, outputs %s", inputs, outputs)
+    set_input_names(new_inputs)
+    set_output_names(new_outputs)
+    install_entities(rebuild=True)
 
 
 def attach_matrix(matrix: OreiMatrix) -> None:
@@ -1881,7 +1978,8 @@ async def restore_from_config() -> bool:
     set_input_names(input_names if input_names else {i: f"Input {i}" for i in range(1, 9)})
     set_output_names(output_names if output_names else {i: f"Output {i}" for i in range(1, 9)})
 
-    matrix = OreiMatrix(host, port)
+    # The login entered in the Remote's setup for this matrix, else OREI_USER / OREI_PASSWORD (UC-02).
+    matrix = OreiMatrix(host, port, user=config.get("user"), password=config.get("password"))
     attach_matrix(matrix)
     set_matrix(matrix)
     install_entities()
@@ -1915,37 +2013,105 @@ async def startup_connect(matrix: OreiMatrix, *, save: bool = True) -> None:
     await publish_device_state()
 
 
-async def handle_driver_setup(msg: ucapi.DriverSetupRequest) -> ucapi.SetupAction:
-    """
-    Handle driver setup and reconfigure.
+#: The matrix address on the setup's first page: an IPv4 address or a host name (driver.json uses the same
+#: pattern to validate the field). No scheme, path or port.
+HOST_PATTERN = re.compile(r"^[A-Za-z0-9](?:[A-Za-z0-9.-]{0,251}[A-Za-z0-9])?$")
+#: How long the setup waits for the new address to accept a connection.
+SETUP_PROBE_TIMEOUT = 5.0
 
-    The new address is probed with a temporary matrix client first. Only if it
-    answers does it replace the working one (which is then disposed, BE-10);
-    a wrong address leaves a working installation untouched (UC-05). Entities
-    are updated in place: the subscribed ones are never cleared.
+_SETUP_ERRORS = {
+    "auth": ucapi.IntegrationSetupError.AUTHORIZATION_ERROR,
+    "timeout": ucapi.IntegrationSetupError.TIMEOUT,
+    "not_found": ucapi.IntegrationSetupError.NOT_FOUND,
+    "refused": ucapi.IntegrationSetupError.CONNECTION_REFUSED,
+}
 
-    :param msg: Setup request data
-    :return: Setup action
-    """
-    _LOG.info("Starting driver setup (reconfigure: %s)", msg.reconfigure)
-    probe: OreiMatrix | None = None
+
+@dataclass
+class PendingSetup:
+    """A setup waiting on its login page (UC-05): the address from the first page."""
+
+    host: str
+    port: int
+
+
+_pending_setup: PendingSetup | None = None
+
+
+def parse_setup_address(setup_data: dict[str, Any]) -> tuple[str, int] | None:
+    """``(host, port)`` from the first setup page, or None when they are not a usable address."""
+    host = str(setup_data.get("host") or "").strip()
+    if not HOST_PATTERN.fullmatch(host):
+        return None
     try:
-        host = msg.setup_data.get("host", "192.168.0.100")
-        port = int(msg.setup_data.get("port", 443))
-        current = get_matrix()
-        matrix: OreiMatrix
-        if current is not None and current.host == host and current.port == port and current.connected:
-            matrix = current
-            _LOG.info("Setup: keeping the working connection to %s:%d", host, port)
-        else:
-            _LOG.info("Setup: probing the matrix at %s:%d (HTTPS)", host, port)
-            probe = OreiMatrix(host, port)
-            if not await probe.connect():
-                _LOG.error("Setup: the matrix at %s:%d did not answer; nothing changed", host, port)
-                await dispose_matrix(probe)
-                return ucapi.SetupError(error_type=ucapi.IntegrationSetupError.CONNECTION_REFUSED)
-            matrix = probe
+        port = int(setup_data.get("port") or 443)
+    except (TypeError, ValueError):
+        return None
+    return (host, port) if 1 <= port <= 65535 else None
 
+
+async def probe_address(host: str, port: int, timeout: float = SETUP_PROBE_TIMEOUT
+                        ) -> ucapi.IntegrationSetupError | None:
+    """Whether the hub can open a connection to ``host:port``; nothing is sent (no credentials, UC-02).
+
+    :return: None if it can, else the setup error that says why not.
+    """
+    try:
+        _reader, writer = await asyncio.wait_for(asyncio.open_connection(host, port), timeout)
+    except TimeoutError:
+        return ucapi.IntegrationSetupError.TIMEOUT
+    except socket.gaierror:
+        return ucapi.IntegrationSetupError.NOT_FOUND
+    except OSError:
+        return ucapi.IntegrationSetupError.CONNECTION_REFUSED
+    writer.close()
+    with contextlib.suppress(Exception):
+        await writer.wait_closed()
+    return None
+
+
+def login_page(host: str, port: int) -> ucapi.RequestUserInput:
+    """The setup's credential step (UC-05): the matrix login for a new address, never pre-filled."""
+    return ucapi.RequestUserInput(
+        {"en": "Matrix login"},
+        [
+            {
+                "id": "info",
+                "label": {"en": "Matrix login"},
+                "field": {"label": {"value": {"en": (
+                    f"Enter the login of the matrix at {host}:{port}, the one its own web interface uses "
+                    "(factory default: Admin / admin). It is sent only to this address."
+                )}}},
+            },
+            {"id": "user", "label": {"en": "User"}, "field": {"text": {"value": "Admin"}}},
+            {"id": "password", "label": {"en": "Password"}, "field": {"password": {}}},
+        ],
+    )
+
+
+async def connect_for_setup(host: str, port: int, *, user: str | None = None, password: str | None = None
+                            ) -> tuple[OreiMatrix | None, ucapi.IntegrationSetupError | None]:
+    """Log in to ``host:port`` with a temporary client; on failure it is disposed and the reason returned."""
+    probe = OreiMatrix(host, port, user=user, password=password)
+    try:
+        if await probe.connect():
+            return probe, None
+        failure = probe.login_failure
+    except Exception as ex:
+        _LOG.error("Setup: connecting to %s:%d failed: %s", host, port, ex)
+        failure = "other"
+    await dispose_matrix(probe)
+    return None, _SETUP_ERRORS.get(failure or "", ucapi.IntegrationSetupError.OTHER)
+
+
+async def adopt_setup_matrix(matrix: OreiMatrix) -> ucapi.SetupAction:
+    """Make the matrix the setup connected to the hub's matrix: names, entities, saved setup, poller.
+
+    The previous matrix (if another one) is disposed (BE-10). Entities are
+    updated in place: the subscribed ones are never cleared (UC-05).
+    """
+    current = get_matrix()
+    try:
         input_names = await matrix.get_all_input_names()
         output_names = await matrix.get_output_names()
         _LOG.info(f"Input names retrieved: {input_names}")
@@ -1954,54 +2120,126 @@ async def handle_driver_setup(msg: ucapi.DriverSetupRequest) -> ucapi.SetupActio
         if matrix is not current:
             attach_matrix(matrix)
             set_matrix(matrix)
-            probe = None
             await dispose_matrix(current)
             _entity_sync.set_available(matrix.connected)
-
-        names_changed = (input_names or {}) != _driver_state.input_names or (
-            output_names or {}
-        ) != _driver_state.output_names
-        set_input_names(input_names if input_names else {})
-        set_output_names(output_names if output_names else {})
-        api = _driver_state.api
-        if api is not None and api.available_entities.get_all() and names_changed:
-            install_entities(rebuild=True)
-        else:
-            install_entities()
-
-        save_config(host, port, _driver_state.input_names, _driver_state.output_names)
-        _wire_rest_api()  # sync (BE-02: it used to be awaited, which failed every setup)
-        await start_status_polling()
-        await publish_device_state()
-        request_poll()
-        _LOG.info("Setup complete")
-        return ucapi.SetupComplete()
-
     except Exception as e:
         _LOG.error(f"Setup failed with exception: {e}", exc_info=True)
-        if probe is not None:
-            await dispose_matrix(probe)
+        if matrix is not current and get_matrix() is not matrix:
+            await dispose_matrix(matrix)
         return ucapi.SetupError(error_type=ucapi.IntegrationSetupError.OTHER)
+
+    names_changed = (input_names or {}) != _driver_state.input_names or (
+        output_names or {}
+    ) != _driver_state.output_names
+    set_input_names(input_names if input_names else {})
+    set_output_names(output_names if output_names else {})
+    await refresh_matrix_preset_names(matrix)
+    api = _driver_state.api
+    if api is not None and api.available_entities.get_all() and names_changed:
+        install_entities(rebuild=True)
+    else:
+        install_entities()
+
+    save_config(matrix.host, matrix.port, _driver_state.input_names, _driver_state.output_names,
+                credentials=own_credentials(matrix))
+    _wire_rest_api()  # sync (BE-02: it used to be awaited, which failed every setup)
+    await start_status_polling()
+    await publish_device_state()
+    request_poll()
+    _LOG.info("Setup complete (%s:%d)", matrix.host, matrix.port)
+    return ucapi.SetupComplete()
+
+
+async def handle_driver_setup(msg: ucapi.DriverSetupRequest) -> ucapi.SetupAction:
+    """
+    First setup page (address), for a new setup and a reconfigure (UC-05, UC-02 short term).
+
+    * The same address as the hub's matrix: its login already goes there, so
+      the setup completes without asking (a reconfigure that only confirms).
+      If that login is now rejected, the login page is shown.
+    * A new address: the hub first checks that it accepts a connection
+      (nothing is sent; unreachable -> CONNECTION_REFUSED / NOT_FOUND /
+      TIMEOUT), then asks for that matrix's login. The configured login is
+      never sent to a new address.
+
+    Nothing changes until a login succeeds: a typo leaves a working
+    installation untouched. The setup data is never logged (the password
+    field is also redacted by ucapi's message log).
+    """
+    global _pending_setup
+    _pending_setup = None
+    _LOG.info("Starting driver setup (reconfigure: %s)", msg.reconfigure)
+    address = parse_setup_address(msg.setup_data or {})
+    if address is None:
+        _LOG.error("Setup: the matrix address is not a host name or IP address with a port 1-65535")
+        return ucapi.SetupError(error_type=ucapi.IntegrationSetupError.NOT_FOUND)
+    host, port = address
+
+    current = get_matrix()
+    if current is not None and (current.host, current.port) == (host, port):
+        if current.connected:
+            _LOG.info("Setup: keeping the working connection to %s:%d", host, port)
+            return await adopt_setup_matrix(current)
+        _LOG.info("Setup: reconnecting to %s:%d with its saved login", host, port)
+        own = own_credentials(current)
+        matrix, error = await connect_for_setup(host, port, user=own[0] if own else None,
+                                                password=own[1] if own else None)
+        if matrix is not None:
+            return await adopt_setup_matrix(matrix)
+        if error != ucapi.IntegrationSetupError.AUTHORIZATION_ERROR:
+            _LOG.error("Setup: the matrix at %s:%d did not answer (%s); nothing changed", host, port, error)
+            return ucapi.SetupError(error_type=error or ucapi.IntegrationSetupError.OTHER)
+        _LOG.info("Setup: the saved login for %s:%d was rejected; asking for it", host, port)
+    else:
+        error = await probe_address(host, port)
+        if error is not None:
+            _LOG.error("Setup: no connection to %s:%d (%s); nothing changed", host, port, error)
+            return ucapi.SetupError(error_type=error)
+        _LOG.info("Setup: %s:%d is a new matrix address; asking for its login", host, port)
+    _pending_setup = PendingSetup(host, port)
+    return login_page(host, port)
+
+
+async def handle_setup_login(msg: ucapi.UserDataResponse) -> ucapi.SetupAction:
+    """The login page's answer: log in to the new address with exactly this login (UC-05)."""
+    global _pending_setup
+    pending, _pending_setup = _pending_setup, None
+    if pending is None:
+        _LOG.error("Setup: login received without a setup in progress")
+        return ucapi.SetupError(error_type=ucapi.IntegrationSetupError.OTHER)
+    values = msg.input_values or {}
+    user = str(values.get("user") or "").strip() or "Admin"
+    password = str(values.get("password") or "")
+    matrix, error = await connect_for_setup(pending.host, pending.port, user=user, password=password)
+    if matrix is None:
+        _LOG.error("Setup: login to %s:%d failed (%s); nothing changed", pending.host, pending.port, error)
+        return ucapi.SetupError(error_type=error or ucapi.IntegrationSetupError.OTHER)
+    return await adopt_setup_matrix(matrix)
 
 
 async def setup_handler(msg: ucapi.SetupDriver) -> ucapi.SetupAction:
     """
-    Dispatch driver setup requests.
+    Dispatch driver setup messages (driver-setup.md): the first page, the login page, abort.
 
     :param msg: Setup driver request
     :return: Setup action
     """
+    global _pending_setup
     if isinstance(msg, ucapi.DriverSetupRequest):
         result = await handle_driver_setup(msg)
-        _LOG.info(f"Setup handler returning: {type(result).__name__}")
-        return result
-
-    if isinstance(msg, ucapi.AbortDriverSetup):
-        _LOG.info("Setup aborted by the Remote (%s); the current configuration is unchanged", msg.error)
+    elif isinstance(msg, ucapi.UserDataResponse):
+        result = await handle_setup_login(msg)
+    elif isinstance(msg, ucapi.AbortDriverSetup):
+        pending, _pending_setup = _pending_setup, None
+        _LOG.info("Setup aborted by the Remote (%s)%s; the current configuration is unchanged", msg.error,
+                  f", discarding the pending setup for {pending.host}:{pending.port}" if pending else "")
         return ucapi.SetupError()
-
-    _LOG.error(f"Unsupported setup message type: {type(msg)}")
-    return ucapi.SetupError()
+    else:
+        _LOG.error(f"Unsupported setup message type: {type(msg).__name__}")
+        _pending_setup = None
+        return ucapi.SetupError(error_type=ucapi.IntegrationSetupError.OTHER)
+    _LOG.info(f"Setup handler returning: {type(result).__name__}")
+    return result
 
 
 async def shutdown(loop):
@@ -2166,6 +2404,11 @@ def main(driver_json: str | Path | None = None) -> None:
             _LOG.warning("Continuing without REST API - UC integration will still work")
     else:
         _LOG.info("REST API server disabled (REST_API_ENABLED=false)")
+
+    # The Remote shows the web app's preset names and favourites (UC-14): now that the REST API has
+    # loaded the device settings, and after every change the web app saves.
+    add_change_listener(on_web_app_settings_changed)
+    refresh_presets()
 
     # Handle graceful shutdown signals (important for Docker)
     def signal_handler(sig, frame):

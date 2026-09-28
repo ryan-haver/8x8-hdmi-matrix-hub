@@ -58,6 +58,12 @@ SPEC_VERSION = "0.16.0-beta"
 #: Remote entity commands (entity_remote.md). Everything else is a simple command sent with ``send_cmd``.
 REMOTE_COMMANDS = ("on", "off", "toggle", "send_cmd", "send_cmd_sequence")
 
+#: Entity types a Remote 3 reports for the driver's ``get_supported_entity_types`` request (entities/README.md;
+#: the request exists since firmware 0.9.2). ucapi >= 0.7.0 asks for them before it answers
+#: ``get_available_entities`` and filters the entities by them.
+REMOTE3_ENTITY_TYPES = ("button", "switch", "climate", "cover", "light", "media_player", "remote", "sensor",
+                        "ir_emitter", "select", "voice_assistant")
+
 #: WebSocket close codes worth naming in messages (RFC 6455 §7.4.1).
 CLOSE_CODES = {1000: "normal closure", 1001: "going away", 1006: "abnormal closure (no close frame)",
                1011: "internal error"}
@@ -82,7 +88,9 @@ class ConnectionClosedError(RemoteSimError):
 class Received:
     """One message from the driver."""
 
-    t: float  # time.monotonic() when received
+    #: time.perf_counter() when received. Fine-grained on purpose: on Windows time.monotonic() ticks every
+    #: ~16 ms, so an event received just before a mark() compared equal to it and counted as "since".
+    t: float
     data: dict[str, Any]
 
     @property
@@ -135,8 +143,11 @@ class UcRemoteSim:
     """
 
     def __init__(self, url: str, *, token: str | None = None, header_auth: bool = False,
-                 request_timeout: float = 10.0, heartbeat: float | None = None) -> None:
+                 request_timeout: float = 10.0, heartbeat: float | None = None,
+                 supported_entity_types: Iterable[str] | None = REMOTE3_ENTITY_TYPES) -> None:
         self.url = url
+        #: The answer to the driver's ``get_supported_entity_types`` (None: never answer, like a Remote without it).
+        self.supported_entity_types = list(supported_entity_types) if supported_entity_types is not None else None
         self.token = token
         self.header_auth = header_auth
         self.request_timeout = request_timeout
@@ -154,6 +165,7 @@ class UcRemoteSim:
         self._closed = asyncio.Event()
         self._new_message = asyncio.Event()
         self._entity_types: dict[str, str] = {}
+        self._answers: set[asyncio.Task[None]] = set()  # answers to the driver's requests, in flight
         #: Everything sent, for evidence (``(t, message)``).
         self.sent: list[tuple[float, dict[str, Any]]] = []
 
@@ -225,9 +237,9 @@ class UcRemoteSim:
                         data = json.loads(msg.data)
                     except ValueError:
                         data = {"kind": "invalid", "raw": str(msg.data)[:2000]}
-                    self._dispatch(Received(time.monotonic(), data))
+                    self._dispatch(Received(time.perf_counter(), data))
                 elif msg.type == aiohttp.WSMsgType.BINARY:
-                    self._dispatch(Received(time.monotonic(), {"kind": "binary", "size": len(msg.data)}))
+                    self._dispatch(Received(time.perf_counter(), {"kind": "binary", "size": len(msg.data)}))
                 elif msg.type in (aiohttp.WSMsgType.CLOSE, aiohttp.WSMsgType.CLOSING, aiohttp.WSMsgType.CLOSED):
                     break
                 elif msg.type == aiohttp.WSMsgType.ERROR:
@@ -261,6 +273,13 @@ class UcRemoteSim:
             fut = self._pending.pop(req_id, None) if isinstance(req_id, int) else None
             if fut is not None and not fut.done():
                 fut.set_result(data)
+        elif rec.kind == "req" and rec.msg == "get_supported_entity_types" and self.supported_entity_types is not None:
+            # A request from the driver to the Remote (ucapi >= 0.7.0 sends it before listing entities).
+            task = asyncio.get_running_loop().create_task(self._send({
+                "kind": "resp", "req_id": data.get("id"), "code": 200, "msg": "supported_entity_types",
+                "msg_data": list(self.supported_entity_types)}))
+            self._answers.add(task)
+            task.add_done_callback(self._answers.discard)
         elif rec.kind == "event" and rec.msg == "auth_required":
             # Message-based authentication (websocket.md): answer with the token.
             asyncio.get_running_loop().create_task(self._send_auth())
@@ -277,7 +296,7 @@ class UcRemoteSim:
     async def _send(self, message: dict[str, Any]) -> None:
         if self._ws is None or self._ws.closed or self.closed:
             raise ConnectionClosedError(self.close_code, self.close_reason)
-        self.sent.append((time.monotonic(), message))
+        self.sent.append((time.perf_counter(), message))
         try:
             await self._ws.send_str(json.dumps(message))
         except (ConnectionError, aiohttp.ClientError, RuntimeError) as exc:
@@ -314,7 +333,7 @@ class UcRemoteSim:
 
     def mark(self) -> float:
         """A point in time; pass it to :meth:`events_since` / :meth:`wait_event`."""
-        return time.monotonic()
+        return time.perf_counter()
 
     def events_since(self, since: float, msg: str | None = None) -> list[Received]:
         return [m for m in self.messages if m.kind == "event" and m.t >= since and (msg is None or m.msg == msg)]

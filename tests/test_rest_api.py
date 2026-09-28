@@ -125,6 +125,19 @@ class TestHealthEndpoints:
         assert data["data"]["output_count"] == 8
 
     @pytest.mark.asyncio
+    async def test_info_reads_driver_json_next_to_the_package(self, client, monkeypatch, tmp_path):
+        """API-24: the hub started from another directory still reports its own driver.json."""
+        import json
+        from pathlib import Path
+
+        expected = json.loads((Path(__file__).resolve().parents[1] / "driver.json").read_text(encoding="utf-8"))
+        monkeypatch.chdir(tmp_path)
+        resp = await client.get("/api/info")
+        data = await resp.json()
+        assert data["data"]["driver_id"] == expected["driver_id"]
+        assert data["data"]["driver_name"] == expected["name"]["en"]
+
+    @pytest.mark.asyncio
     async def test_status_endpoint(self, client, mock_matrix):
         """Test /api/status returns matrix status."""
         resp = await client.get("/api/status")
@@ -816,8 +829,42 @@ class TestRateLimiting:
             assert resp.status == 200  # Should never be rate limited
 
 
+class TestMatrixHostSettings:
+    """BE-32: the Telnet port is part of one matrix's settings; OREI_TELNET_PORT is only the default."""
+
+    @pytest.mark.asyncio
+    async def test_new_host_takes_its_own_telnet_port(self, client, mock_matrix):
+        mock_matrix.disconnect = AsyncMock()
+        resp = await client.post("/api/settings/matrix-host", json={"host": "192.0.2.50", "telnet_port": 2323})
+        assert resp.status == 200
+        assert mock_matrix.telnet_port == 2323
+        assert (await resp.json())["data"]["telnet_port"] == 2323
+
+    @pytest.mark.asyncio
+    async def test_new_host_without_a_telnet_port_gets_the_default(self, client, mock_matrix, monkeypatch):
+        monkeypatch.setenv("OREI_TELNET_PORT", "2424")
+        mock_matrix.disconnect = AsyncMock()
+        mock_matrix.telnet_port = 2323  # the previous matrix's port must not carry over
+        resp = await client.post("/api/settings/matrix-host", json={"host": "192.0.2.51"})
+        assert resp.status == 200
+        assert mock_matrix.telnet_port == 2424
+
+    @pytest.mark.asyncio
+    async def test_invalid_telnet_port_is_rejected(self, client, mock_matrix):
+        resp = await client.post("/api/settings/matrix-host", json={"host": "192.0.2.52", "telnet_port": "23"})
+        assert resp.status == 400
+
+
+async def _receive_event(ws, event: str, timeout: float = 3.0) -> dict:
+    """The next message named ``event`` (the hub may send a ``status`` snapshot in between)."""
+    while True:
+        msg = await ws.receive_json(timeout=timeout)
+        if msg["event"] == event:
+            return msg
+
+
 class TestWebSocket:
-    """Tests for WebSocket functionality."""
+    """Tests for WebSocket functionality (contract: docs/api/WEBSOCKET.md)."""
 
     @pytest.mark.asyncio
     async def test_websocket_connection(self, client, mock_matrix):
@@ -828,46 +875,37 @@ class TestWebSocket:
             assert msg["event"] == "connected"
             assert "client_count" in msg["data"]
             assert msg["data"]["client_count"] >= 1
+            assert msg["data"]["protocol"] == 1
 
     @pytest.mark.asyncio
     async def test_websocket_ping_pong(self, client, mock_matrix):
         """Test WebSocket ping command returns pong."""
         async with client.ws_connect("/ws") as ws:
-            # Skip welcome message
-            await ws.receive_json()
-
-            # Send ping
+            await _receive_event(ws, "connected")
             await ws.send_json({"command": "ping"})
-            msg = await ws.receive_json()
-            assert msg["event"] == "pong"
+            await _receive_event(ws, "pong")
 
     @pytest.mark.asyncio
     async def test_websocket_get_status(self, client, mock_matrix):
-        """Test WebSocket get_status command."""
+        """get_status answers the hub's status snapshot (the /api/status shape plus port details)."""
         mock_matrix.connected = True
-        mock_matrix.get_status.return_value = {"power": 1, "alloutsource": [1, 2, 3, 4, 5, 6, 7, 8]}
 
         async with client.ws_connect("/ws") as ws:
-            # Skip welcome message
-            await ws.receive_json()
+            await _receive_event(ws, "connected")
+            await _receive_event(ws, "status")  # the snapshot after the hub's first read
 
-            # Request status
             await ws.send_json({"command": "get_status"})
-            msg = await ws.receive_json()
-            assert msg["event"] == "status_update"
-            assert "power" in msg["data"]
+            msg = await _receive_event(ws, "status")
+            assert msg["data"]["power"] == "on"
+            assert msg["data"]["routing"] == {str(i): i for i in range(1, 9)}
 
     @pytest.mark.asyncio
     async def test_websocket_unknown_command(self, client, mock_matrix):
         """Test WebSocket returns error for unknown commands."""
         async with client.ws_connect("/ws") as ws:
-            # Skip welcome message
-            await ws.receive_json()
-
-            # Send unknown command
+            await _receive_event(ws, "connected")
             await ws.send_json({"command": "unknown_cmd"})
-            msg = await ws.receive_json()
-            assert msg["event"] == "error"
+            msg = await _receive_event(ws, "error")
             assert "Unknown command" in msg["data"]["message"]
 
 

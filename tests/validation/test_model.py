@@ -110,7 +110,8 @@ def test_select_by_feature_and_id():
 def test_api_client_maps_every_intent():
     samples = {
         "route": {"input": 1, "output": 2}, "route_all": {"input": 1}, "preset_recall": {"preset": 1},
-        "preset_save": {"preset": 1}, "preset_rename": {"preset": 1, "name": "x"}, "matrix_power": {"on": True},
+        "preset_save": {"preset": 1}, "preset_rename": {"preset": 1, "name": "x"},
+        "port_rename": {"kind": "input", "port": 3, "name": "x"}, "matrix_power": {"on": True},
         "output_mute": {"output": 1, "muted": True}, "output_setting": {"output": 1, "setting": "hdcp", "body": {"mode": 1}},
         "cec_input": {"input": 1, "command": "power_on"}, "cec_output": {"output": 1, "command": "power_on"},
         "profile_recall": {"profile_id": "p"}, "scene_run": {"scene_id": "s"},
@@ -130,7 +131,7 @@ def test_api_client_maps_every_intent():
 
 def test_ha_client_intents_exist_and_it_observes():
     assert HomeAssistantClient.intents <= set(INTENTS)
-    assert HomeAssistantClient.observes and not RemoteClient.observes
+    assert HomeAssistantClient.observes and RemoteClient.observes  # uc observes since WP-B3
     assert "request" not in HomeAssistantClient.intents
     assert ClientState("switch.power", equals="on", before="off").describe() == \
         "client shows switch.power == 'on' (was 'off')"
