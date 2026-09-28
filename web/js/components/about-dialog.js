@@ -149,7 +149,8 @@ class AboutDialog {
                     matrixEl.innerHTML = '<span class="status-badge status-badge--success">Connected</span>';
                 }
                 if (modelEl) {
-                    modelEl.textContent = data.model || 'HDMI Matrix';
+                    // /api/status has no model; the app keeps /api/info in state.info
+                    modelEl.textContent = window.state?.info?.model || data.model || 'HDMI Matrix';
                 }
             } else {
                 if (matrixEl) {
