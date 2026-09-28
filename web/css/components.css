@@ -875,6 +875,21 @@
     }
 }
 
+/* Dashboard cards (UI-27) sit in a narrow dashboard column: the actions take
+   their own row, as scene cards do on very small screens (above). */
+.dashboard-cards-grid .scene-card {
+    flex-wrap: wrap;
+    min-height: auto;
+}
+
+.dashboard-cards-grid .scene-actions {
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: var(--space-2);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--border-color);
+}
+
 /* ===== Modal ===== */
 .modal {
     position: fixed;
@@ -4324,8 +4339,9 @@
     }
 }
 
-/* Individual dashboard widget */
-.dashboard-widget {
+/* Individual dashboard widget (and the Dashboard Cards panel, drawn the same way: UI-27) */
+.dashboard-widget,
+.dashboard-cards-container {
     background: var(--card-bg);
     border: 1px solid var(--card-border);
     border-radius: var(--radius-lg);
