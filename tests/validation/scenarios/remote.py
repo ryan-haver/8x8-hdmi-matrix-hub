@@ -10,9 +10,18 @@ protocol and lifecycle checks (standby, outages, setup, renames) live in
 Entity ids: ``docs/audits/UC_INTEGRATION_AUDIT.md`` §3 and ``tests/uc/golden/entities.json``.
 """
 
-from tools.validate.model import CommandSent, Device, DeviceUnchanged, NoCommand, Response, Scenario, act
+from tools.validate.model import (
+    ClientState,
+    CommandSent,
+    Device,
+    DeviceUnchanged,
+    NoCommand,
+    Response,
+    Scenario,
+    act,
+)
 
-from ._paths import CEC, HUB_CORE, UC_DRIVER
+from ._paths import CEC, DEVICE_SETTINGS, HUB_CORE, STATUS, UC_DRIVER
 
 # Seed (tools/simulator/states/default.json): routing [2, 2, 1, 1, 5, 6, 1, 1]; input 6 "PS5";
 # preset 3 = [6] * 8; CEC enabled on outputs 1-2; the matrix is on.
@@ -141,6 +150,9 @@ SCENARIOS = [
             Response(status=200),
             CommandSent("cec command", {"object": 1, "port": [0, 0, 1, 0, 0, 0, 0, 0], "index": 0}, count=1),
             CommandSent("cec command", {"object": 1, "index": 1}, count=0),
+            # UC-24 / DI-13: the remote advertises the toggle, so the Remote offers a power button for it.
+            ClientState("remote.output_3_cec@features", equals=["send_cmd", "on_off", "toggle"]),
+            ClientState("remote.output_3_cec", equals="ON"),
         ),
         observe=("Is the display on output 3 on now (and was it not switched off)?",),
         covers=(*HUB_CORE, *UC_DRIVER, *CEC),
@@ -264,5 +276,72 @@ SCENARIOS = [
             DeviceUnchanged(),
         ),
         covers=(*HUB_CORE, *UC_DRIVER),
+    ),
+]
+
+# ---------------------------------------------------------------------- WP-B3: the Remote follows the web app
+
+#: Preset names as the web app shows them for the fixture data (tests/e2e/fixtures/data/device_settings.json:
+#: presets 1-2 named there) and the simulator seed (preset names Apple TV, Shield, PS5, Retro, Preset 5-8).
+WEB_PRESET_NAMES = ["Apple TV Everywhere", "Shield Night", "PS5", "Retro", "Preset 5", "Preset 6", "Preset 7",
+                    "Preset 8"]
+
+SCENARIOS += [
+    Scenario(
+        id="remote.power_switch_follows_front_panel",
+        title="Remote: the matrix is switched to standby on its front panel; the power switch shows OFF",
+        features=("F-UC-010",),
+        clients=UC,
+        targets=("sim",),
+        action=act("device_change", patch={"system": {"power": 0}}),
+        expect=(
+            Device("system.power", equals=0),
+            ClientState("switch.matrix_power", equals="OFF", before="ON", timeout=10),
+            NoCommand("*"),
+        ),
+        covers=(*HUB_CORE, *UC_DRIVER),
+        notes="UC-09: the switch started ON and was never synced from the polled power.",
+    ),
+    Scenario(
+        id="remote.preset_names_from_web_app",
+        title="Remote: a preset renamed in the web app shows its new name on the preset button and the matrix "
+              "remote's pages",
+        features=("F-UC-004", "F-UC-005"),
+        clients=UC,
+        action=act("preset_rename", preset=3, name="Game Night"),
+        expect=(
+            Response(status=200),
+            ClientState("button.preset_3@name", equals="Game Night", before="PS5", timeout=10),
+            ClientState("remote.orei_matrix@page:orei_matrix_main",
+                        equals=[*WEB_PRESET_NAMES[:2], "Game Night", *WEB_PRESET_NAMES[3:]], timeout=10),
+            ClientState("remote.orei_matrix@page:orei_matrix_favourites", equals=WEB_PRESET_NAMES[:2], timeout=10),
+            NoCommand("*"),
+            DeviceUnchanged(),
+        ),
+        cleanup=(act("preset_rename", preset=3, name="Preset 3"),),  # "Preset 3" = no web name: back to "PS5"
+        covers=(*HUB_CORE, *UC_DRIVER, *DEVICE_SETTINGS),
+        notes="UC-14: preset names were hard-coded 'Preset N'. Names follow GET /api/presets (web app name, else "
+              "the matrix's own); the Favourites page lists the web app's favourite presets (fixture: 1, 2).",
+    ),
+    Scenario(
+        id="remote.input_rename_live",
+        title="Remote: an input renamed in the web app appears in every output's source list at once",
+        features=("F-UC-016", "F-UC-008"),
+        clients=UC,
+        writes=("names",),
+        action=act("port_rename", kind="input", port=3, name="Xbox"),
+        expect=(
+            Response(status=200),
+            Device("inputs[2].name", equals="Xbox"),
+            ClientState("media_player.output_1@source_list",
+                        equals=["PS3", "AppleTV", "Xbox", "Switch", "Shield", "PS5", "Analogue", "Input 8"],
+                        before=["PS3", "AppleTV", "Computer", "Switch", "Shield", "PS5", "Analogue", "Input 8"],
+                        timeout=10),
+            ClientState("remote.input_3_cec@name", equals="Xbox CEC", timeout=10),
+        ),
+        cleanup=(act("port_rename", kind="input", port=3, name="Computer"),),
+        observe=("Does the Remote list 'Xbox' as a source of output 1 without reconnecting?",),
+        covers=(*HUB_CORE, *UC_DRIVER, *STATUS),
+        notes="UC-08: a web-app rename used to reach the Remote only at its next connect.",
     ),
 ]

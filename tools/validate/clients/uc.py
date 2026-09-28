@@ -15,7 +15,18 @@ matrix_power   ``switch.matrix_power`` ``on`` / ``off``
 cec_input      ``remote.input_N_cec`` ``send_cmd`` with the simple command
 cec_output     ``remote.output_N_cec`` ``send_cmd`` with the simple command
 uc_command     any entity command (``entity_id``, ``cmd_id``, ``params``)
+preset_rename  done *in the web app* (the hub's REST call the web app makes); the
+port_rename    Remote only observes the effect (WP-B3: web-app changes that must
+               reach the Remote live, UC-08, UC-14)
 =============  ===================================================================
+
+The client observes what the Remote shows (``ClientState``, WP-B3), so
+``device_change`` scenarios (front panel) run with it too. Keys:
+``<entity_id>`` (its ``state``), ``<entity_id>@<attribute>`` (e.g.
+``media_player.output_1@source_list``), and from the entity definition the
+Remote gets with ``get_available_entities``: ``<entity_id>@name`` (English
+name), ``<entity_id>@features``, ``<entity_id>@page:<page_id>`` (the labels on
+a remote entity's UI page, in order).
 
 The driver closing the connection (UC-01) is a result, not an infrastructure
 error: it is reported with its close code, and the next action reconnects.
@@ -31,6 +42,7 @@ import aiohttp
 from tools.uc_remote_sim import SPEC_VERSION, ConnectionClosedError, UcRemoteSim
 
 from ..model import Action
+from .api import rest_call
 from .base import ActionResult, Client, HubInfo, NotSupportedError
 
 
@@ -39,10 +51,16 @@ def _cec_command(name: str) -> str:
     return name.upper()
 
 
+#: Intents carried out as the web app (hub REST API), whose effect the Remote must show.
+WEB_APP_INTENTS = frozenset({"preset_rename", "port_rename"})
+
+
 class RemoteClient(Client):
     name = "uc"
     hub_mode = "uc"
-    intents = frozenset({"route", "preset_recall", "matrix_power", "cec_input", "cec_output", "uc_command"})
+    observes = True
+    intents = frozenset({"route", "preset_recall", "matrix_power", "cec_input", "cec_output", "uc_command",
+                         *WEB_APP_INTENTS})
 
     def __init__(self) -> None:
         super().__init__()
@@ -112,6 +130,8 @@ class RemoteClient(Client):
         remote = await self._session()
         if remote.closed:  # pragma: no cover - _session reconnects
             raise RuntimeError("no connection to the integration")
+        if action.intent in WEB_APP_INTENTS:
+            return await self._web_app(action, result, t0)
         entity_id, cmd_id, params = await self._command(remote, action)
         since = remote.mark()
         # Evidence record shape (evidence.schema.json "requests"): method = the Integration-API message,
@@ -146,6 +166,52 @@ class RemoteClient(Client):
         }
         result.elapsed_ms = request["elapsed_ms"]
         return result
+
+    async def _web_app(self, action: Action, result: ActionResult, t0: float) -> ActionResult:
+        """A change made in the web app (its REST call on the hub); the scenario checks what the Remote shows."""
+        assert self.hub is not None
+        method, path, body = rest_call(action)
+        forwarded = self.context.get("forwarded_for") or self.hub.forwarded_for
+        async with aiohttp.ClientSession(base_url=self.hub.base_url, headers={"X-Forwarded-For": forwarded},
+                                         timeout=aiohttp.ClientTimeout(total=30)) as web:
+            async with web.request(method, path, json=body) as resp:
+                result.status = resp.status
+                try:
+                    result.body = await resp.json(content_type=None)
+                except ValueError:
+                    result.body = await resp.text()
+        result.ok = 200 <= (result.status or 0) < 300
+        result.elapsed_ms = round((time.perf_counter() - t0) * 1000, 1)
+        result.requests.append({"method": method, "path": path, "via": "hub REST API (as the web app)",
+                                "body": body, "status": result.status, "response": result.body,
+                                "elapsed_ms": result.elapsed_ms})
+        result.steps.append(f"web app: {method} {path} {body or ''} -> {result.status}")
+        return result
+
+    async def observe(self, key: str) -> Any:
+        """What the Remote shows for ``key`` (see the module docstring); None when there is nothing."""
+        remote = await self._session()
+        entity_id, _, detail = key.partition("@")
+        if detail in ("name", "features") or detail.startswith("page:"):
+            available = {e["entity_id"]: e for e in await remote.get_available_entities()}
+            entity = available.get(entity_id)
+            if entity is None:
+                return None
+            if detail == "name":
+                name = entity.get("name")
+                return name.get("en") if isinstance(name, dict) else name
+            if detail == "features":
+                return entity.get("features")
+            page_id = detail.removeprefix("page:")
+            pages = ((entity.get("options") or {}).get("user_interface") or {}).get("pages") or []
+            for page in pages:
+                if page.get("page_id") == page_id:
+                    return [item.get("text") for item in page.get("items") or []]
+            return None
+        state = await remote.entity_state(entity_id)
+        if state is None:
+            return None
+        return state.get(detail or "state")
 
     def environment(self) -> dict[str, Any]:
         return {
