@@ -186,6 +186,7 @@ Object.assign(FLOWS, {
   // user does. A protected profile opens the passcode prompt, answered with
   // p.passcode or cancelled (see perform()).
   async profile_recall(page, p, steps) {
+    if (p.via === 'kiosk') return kioskProfileRecall(page, p, steps);
     await openUi(page, steps);
     await page.locator('.tab-btn[data-tab="profiles"]:visible').first().click();
     await page.waitForTimeout(400);
@@ -247,12 +248,39 @@ Object.assign(FLOWS, {
     steps.push('click Apply Routing');
     const response = await routed;
     const deadline = Date.now() + 20_000;
-    while (settings.length < targets * 5 && Date.now() < deadline) await page.waitForTimeout(100);
+    // UI-46: only the options that changed from their defaults (both boxes start unchecked) are sent.
+    const expected = targets * ((p.mute ? 1 : 0) + (p.arc ? 1 : 0));
+    while (settings.length < expected && Date.now() < deadline) await page.waitForTimeout(100);
+    await page.waitForTimeout(500);
     const statuses = await Promise.all(settings.map(async (r) => `${new URL(r.url()).pathname} ${r.status()}`));
     steps.push(`the kiosk sent ${settings.length} output setting requests: ${statuses.filter((s) => !s.endsWith(' 200')).join(', ') || 'all 200'}`);
     return response;
   },
 });
+
+// Kiosk Profiles tab: tap the profile's slot; a PIN pad (UI-48) is answered with
+// p.passcode digit by digit, or cancelled when there is none.
+async function kioskProfileRecall(page, p, steps) {
+  await openKiosk(page, steps);
+  await page.locator('.kiosk-tab-btn[data-tab="profiles"]').click();
+  await page.waitForTimeout(400);
+  steps.push('open the kiosk Profiles tab');
+  const call = waitForRun(page, `/api/profile/${p.profile_id}/recall`, p.passcode);
+  await page.locator('#profilesGrid .kiosk-btn', { hasText: p.name }).click();
+  steps.push(`tap the "${p.name}" slot`);
+  const pad = page.locator('#passcodeModal.show');
+  if (await pad.waitFor({ timeout: 3000 }).then(() => true, () => false)) {
+    if (p.passcode) {
+      for (const d of String(p.passcode)) await page.locator(`#passcodeModal [data-digit="${d}"]`).click();
+      await page.locator('#passcodeOkBtn').click();
+      steps.push('enter the passcode on the PIN pad and tap OK');
+    } else {
+      await page.locator('#passcodeCancelBtn').click();
+      steps.push('tap Cancel on the PIN pad');
+    }
+  }
+  return call;
+}
 
 const FLOW_STORAGE = { route: { 'matrix-view-mode': 'grid' } };
 
@@ -264,8 +292,9 @@ async function shownToasts(page) {
         const kind = ['success', 'error', 'warning', 'info'].find((k) => t.classList.contains(k)) ?? 'info';
         return `${kind}: ${t.querySelector('.toast-message')?.textContent ?? ''}`;
       });
+      // The kiosk toast keeps its last message after it hides (2.5 s): report it as shown.
       const kiosk = document.getElementById('kioskToast');
-      if (kiosk?.classList.contains('show')) {
+      if (kiosk?.textContent.trim()) {
         const kind = ['success', 'error', 'warning', 'info'].find((k) => kiosk.classList.contains(k)) ?? 'info';
         main.push(`${kind}: ${kiosk.textContent.trim()}`);
       }

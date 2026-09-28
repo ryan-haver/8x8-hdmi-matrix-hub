@@ -1320,7 +1320,7 @@ features:
   - docs/validation/evidence/F-DOM-005/2026-09-28-V3-e81b2b48-profiles.recall_with_passcode-browser.json
   - docs/validation/evidence/F-DOM-005/2026-09-28-V3-e81b2b48-profiles.recall_wrong_passcode-browser.json
   findings: [SEC-05, SEC-06, UI-01]
-  scenarios: [profiles.recall_needs_passcode, profiles.recall_with_passcode, profiles.recall_wrong_passcode]
+  scenarios: [profiles.recall_needs_passcode, profiles.recall_with_passcode, profiles.recall_wrong_passcode, kiosk.profile_with_passcode, kiosk.profile_wrong_passcode]
 - id: F-DOM-006
   area: domain
   title: Favourite, pin, reorder profiles and show them on the dashboard
@@ -2266,7 +2266,7 @@ features:
   basis: visual catalog kiosk/profiles/*, kiosk/profile-wizard/* (screenshot baseline only). tests/e2e/flows.spec.ts checks the profile wizard opens with the hub's macros (UI-25 fixed in WP-E1); running a profile from the kiosk and saving one from the wizard are not asserted.
   evidence: []
   findings: [UI-25]
-  scenarios: []
+  scenarios: [kiosk.profile_with_passcode, kiosk.profile_wrong_passcode]
 - id: F-KIO-009
   area: kiosk
   title: CEC remote in the kiosk
