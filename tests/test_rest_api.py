@@ -125,6 +125,20 @@ class TestHealthEndpoints:
         assert data["data"]["output_count"] == 8
 
     @pytest.mark.asyncio
+    @pytest.mark.xfail(strict=True, reason="API-24: /api/info reads driver.json from the working directory")
+    async def test_info_reads_driver_json_next_to_the_package(self, client, monkeypatch, tmp_path):
+        """API-24: the hub started from another directory still reports its own driver.json."""
+        import json
+        from pathlib import Path
+
+        expected = json.loads((Path(__file__).resolve().parents[1] / "driver.json").read_text(encoding="utf-8"))
+        monkeypatch.chdir(tmp_path)
+        resp = await client.get("/api/info")
+        data = await resp.json()
+        assert data["data"]["driver_id"] == expected["driver_id"]
+        assert data["data"]["driver_name"] == expected["name"]["en"]
+
+    @pytest.mark.asyncio
     async def test_status_endpoint(self, client, mock_matrix):
         """Test /api/status returns matrix status."""
         resp = await client.get("/api/status")

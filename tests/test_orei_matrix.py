@@ -631,3 +631,15 @@ def test_connected_alias_setter_maps_to_state(matrix):
     assert matrix.connected and matrix.connection_state == ConnectionState.DEGRADED  # no Telnet
     matrix._connected = False
     assert matrix.connection_state == ConnectionState.DISCONNECTED
+
+
+# BE-32: the Telnet port belongs to one matrix; OREI_TELNET_PORT is only the default.
+@pytest.mark.xfail(strict=True, reason="BE-32: OREI_TELNET_PORT applies to every matrix")
+def test_telnet_port_is_per_matrix(monkeypatch):
+    monkeypatch.setenv("OREI_TELNET_PORT", "2323")
+    configured = OreiMatrix("192.0.2.10", telnet_port=23)
+    default = OreiMatrix("192.0.2.11")
+    assert configured.telnet_port == 23
+    assert default.telnet_port == 2323
+    monkeypatch.delenv("OREI_TELNET_PORT")
+    assert OreiMatrix("192.0.2.12").telnet_port == 23
