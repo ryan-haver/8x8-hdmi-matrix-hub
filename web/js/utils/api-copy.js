@@ -131,7 +131,9 @@ class ApiCopyUtil {
         
         // Attach event listeners
         this.modal.querySelector('.api-modal-close').addEventListener('click', () => this.close());
-        this.modal.querySelector('.api-modal-backdrop').addEventListener('click', (e) => {
+        // UI-28: this.modal IS the backdrop (querying it inside itself returned
+        // null and threw, so the first click opened nothing)
+        this.modal.addEventListener('click', (e) => {
             if (e.target === this.modal) this.close();
         });
         this.modal.querySelector('.copy-all-btn').addEventListener('click', () => this.copyField('curl'));
