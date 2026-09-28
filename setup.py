@@ -48,7 +48,7 @@ setup(
     ],
     python_requires=">=3.11",
     install_requires=[
-        "ucapi>=0.5.0",
+        "ucapi==0.7.0",
         "pyee>=11.0.0",
         "aiohttp>=3.9.0",
         "psutil>=5.9.0",

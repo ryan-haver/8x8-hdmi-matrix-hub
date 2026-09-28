@@ -156,6 +156,7 @@ INTENTS: dict[str, str] = {
     "preset_recall": "recall matrix preset `preset`",
     "preset_save": "save the current routing to preset `preset`",
     "preset_rename": "rename preset `preset` to `name` (hub-side name)",
+    "port_rename": "rename `kind` (input|output) `port` to `name` in the web app (the matrix port name)",
     "matrix_power": "switch the matrix on (`on=True`) or to standby",
     "output_mute": "mute (`muted=True`) or unmute output `output` audio",
     "output_setting": "set output `output` `setting` (hdcp|hdr|scaler|arc|enable) with `body`",

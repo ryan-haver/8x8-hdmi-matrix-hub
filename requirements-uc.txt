@@ -5,5 +5,5 @@
 -r requirements.txt
 
 # UC-specific packages
-ucapi==0.5.1
+ucapi==0.7.0
 pyee==13.0.0

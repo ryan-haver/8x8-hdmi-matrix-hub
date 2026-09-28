@@ -1,7 +1,7 @@
 # Feature ledger
 
 > **Generated** by `python -m tools.validate ledger` — do not edit by hand. Registry: [`features.yaml`](features.yaml) · Plan: [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md) · How to add evidence: [`README.md`](README.md).
-> Commit `c39ee8d5`
+> Commit `f34e8434`
 
 **Level** = highest level with fresh passing evidence, else the recorded baseline (the registry's `current`), capped at V1 while an open critical/high finding is linked. **Recorded** = the registry baseline. **Fresh** = evidence commit not older than the last change to the scenario's `covers` paths.
 
@@ -15,13 +15,13 @@
 | Domain features | 36 | 3 | 22 | 11 | 0 | 0 | 0 | 36 | 4 |
 | Web UI | 36 | 0 | 29 | 0 | 7 | 0 | 0 | 29 | 0 |
 | Kiosk | 14 | 0 | 11 | 0 | 3 | 0 | 0 | 11 | 0 |
-| Remote 3 integration | 17 | 1 | 4 | 0 | 12 | 0 | 0 | 17 | 7 |
+| Remote 3 integration | 17 | 1 | 2 | 0 | 14 | 0 | 0 | 17 | 8 |
 | Home Assistant component | 18 | 0 | 1 | 0 | 17 | 0 | 0 | 18 | 10 |
 | Flic | 10 | 3 | 7 | 0 | 0 | 0 | 0 | 10 | 0 |
 | Deployment, configuration, persistence | 20 | 3 | 8 | 2 | 7 | 0 | 0 | 20 | 7 |
 | Security controls | 15 | 10 | 5 | 0 | 0 | 0 | 0 | 15 | 0 |
 | Reliability | 18 | 11 | 3 | 2 | 2 | 0 | 0 | 18 | 0 |
-| **All** | **268** | **33** | **145** | **32** | **58** | **0** | **0** | **248** | **32** |
+| **All** | **268** | **33** | **143** | **32** | **60** | **0** | **0** | **248** | **33** |
 
 Levels: **V0** Claimed · **V1** Unit · **V2** Simulated integration · **V3** End-to-end · **V4** Hardware · **V5** Field
 
@@ -35,17 +35,17 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | Domain features | 3 | 22 | 11 | 0 | 0 | 0 |
 | Web UI | 0 | 32 | 0 | 4 | 0 | 0 |
 | Kiosk | 0 | 11 | 0 | 3 | 0 | 0 |
-| Remote 3 integration | 1 | 4 | 0 | 12 | 0 | 0 |
+| Remote 3 integration | 1 | 2 | 0 | 14 | 0 | 0 |
 | Home Assistant component | 0 | 1 | 0 | 17 | 0 | 0 |
 | Flic | 3 | 7 | 0 | 0 | 0 | 0 |
 | Deployment, configuration, persistence | 3 | 8 | 2 | 7 | 0 | 0 |
 | Security controls | 10 | 5 | 0 | 0 | 0 | 0 |
 | Reliability | 12 | 3 | 1 | 2 | 0 | 0 |
-| **All** | **35** | **150** | **31** | **52** | **0** | **0** |
+| **All** | **35** | **148** | **31** | **54** | **0** | **0** |
 
 - Features with fresh passing scenario evidence: **40** of 268.
 - Features with a fresh failing scenario: **0**.
-- Features capped at V1 by an open critical/high finding: **38**.
+- Features capped at V1 by an open critical/high finding: **37**.
 
 ## Matrix control (F-MTX)
 
@@ -55,7 +55,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-MTX-002 | Route one input to every output | V4 | V3 | V3 | fresh | [routing.route_all·api·pass](evidence/F-MTX-002/2026-09-28-V2-c39ee8d5-routing.route_all-api.json)<br>[routing.route_all·browser·pass](evidence/F-MTX-002/2026-09-28-V3-c39ee8d5-routing.route_all-browser.json) | — |
 | F-MTX-003 | Recall a matrix preset (1-8) | V4 | V3 | V3 | fresh | [presets.recall·api·pass](evidence/F-MTX-003/2026-09-28-V2-c39ee8d5-presets.recall-api.json)<br>[presets.recall·browser·pass](evidence/F-MTX-003/2026-09-28-V3-c39ee8d5-presets.recall-browser.json) | — |
 | F-MTX-004 | Save the current routing to a matrix preset | V4 | V1 | V1 | — | — | — |
-| F-MTX-005 | Name presets in the web app (names shown by the API, UI, kiosk) | V4 | V3 | V0 | fresh | [presets.rename·api·pass](evidence/F-MTX-005/2026-09-28-V2-c39ee8d5-presets.rename-api.json)<br>[presets.rename·browser·pass](evidence/F-MTX-005/2026-09-28-V3-c39ee8d5-presets.rename-browser.json) | UC-14(M), BE-16(M) |
+| F-MTX-005 | Name presets in the web app (names shown by the API, UI, kiosk) | V4 | V3 | V0 | fresh | [presets.rename·api·pass](evidence/F-MTX-005/2026-09-28-V2-c39ee8d5-presets.rename-api.json)<br>[presets.rename·browser·pass](evidence/F-MTX-005/2026-09-28-V3-c39ee8d5-presets.rename-browser.json) | BE-16(M) |
 | F-MTX-006 | Matrix power on / standby | V4 | V3 | V3 | fresh | [ha.power_off·ha·pass](evidence/F-HA-003/2026-09-28-V3-c39ee8d5-ha.power_off-ha.json)<br>[ha.power_on·ha·pass](evidence/F-HA-003/2026-09-28-V3-c39ee8d5-ha.power_on-ha.json)<br>[power.standby·api·pass](evidence/F-MTX-006/2026-09-28-V2-c39ee8d5-power.standby-api.json) | — |
 | F-MTX-007 | Mute / unmute the audio of an output | V4 | V1 (capped) | V1 | fresh | [outputs.audio_mute·api·pass](evidence/F-MTX-007/2026-09-28-V2-c39ee8d5-outputs.audio_mute-api.json) | HIL-09(C) |
 | F-MTX-008 | Enable / disable an output's video stream | V4 | V1 (capped) | V1 | — | — | HIL-09(C) |
@@ -72,8 +72,8 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-MTX-019 | Front-panel lock | V4 | V1 | V1 | — | — | — |
 | F-MTX-020 | Front-panel LCD timeout | V4 | V1 (capped) | V1 | — | — | API-07(M), HIL-09(C) |
 | F-MTX-021 | Reboot the matrix | V4 | V1 | V1 | — | — | — |
-| F-MTX-022 | Rename inputs (names stored on the matrix) | V4 | V1 | V1 | — | — | BE-16(M), UC-08(M) |
-| F-MTX-023 | Rename outputs (names stored on the matrix) | V4 | V1 | V1 | — | — | BE-16(M), UC-08(M) |
+| F-MTX-022 | Rename inputs (names stored on the matrix) | V4 | V1 | V1 | — | — | BE-16(M) |
+| F-MTX-023 | Rename outputs (names stored on the matrix) | V4 | V1 | V1 | — | — | BE-16(M) |
 | F-MTX-024 | Read the current routing and names | V4 | V2 | V2 | — | — | — |
 | F-MTX-025 | Show which inputs have an active signal | V4 | V1 | V1 | — | — | — |
 | F-MTX-026 | Show which cables are plugged in (Telnet link status) | V4 | V1 | V1 | — | — | HIL-03(M) |
@@ -182,7 +182,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-DOM-030 | Favourite shortcuts and show them on the dashboard | V3 | V1 | V1 | — | — | API-20(M) |
 | F-DOM-031 | Dashboard layout (add, remove, reorder cards) | V3 | V1 | V1 | — | — | API-20(M), UI-08(M) |
 | F-DOM-032 | Input/output icons, colours and display names (device settings) | V3 | V0 | V0 | — | — | BE-16(M), UI-22(M) |
-| F-DOM-033 | Favourite presets and choose which presets the dashboard shows | V3 | V1 | V1 | — | — | UC-14(M) |
+| F-DOM-033 | Favourite presets and choose which presets the dashboard shows | V3 | V1 | V1 | — | — | — |
 | F-DOM-034 | Save a custom routing mapping into a preset | V3 | V1 | V1 | — | — | — |
 | F-DOM-035 | Theme presets and custom themes | V3 | V1 | V1 | — | — | — |
 | F-DOM-036 | UI preferences stored on the hub | V3 | V1 | V1 | — | — | — |
@@ -251,22 +251,22 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 
 | ID | Feature | Target | Level | Recorded | Freshness | Evidence | Open findings |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| F-UC-001 | Discover the integration and register the driver (mDNS, driver URL) | V4 | V0 | V0 | — | — | UC-11(M), UC-16(L) |
-| F-UC-002 | Set up the integration on the Remote | V4 | V1 (capped) | V1 | — | — | UC-05(H), UC-02(H) |
-| F-UC-003 | Reconfigure the integration (new matrix address) | V4 | V1 (capped) | V1 | — | — | UC-05(H) |
-| F-UC-004 | Preset buttons on the Remote | V4 | V3 | V3 | stale | [remote.preset_button·uc·pass](evidence/F-UC-004/2026-09-26-V3-a9b624ea-remote.preset_button-uc.json) | UC-14(M) |
-| F-UC-005 | Matrix remote entity with a preset page | V4 | V3 | V3 | stale | [remote.matrix_preset_command·uc·pass](evidence/F-UC-005/2026-09-26-V3-a9b624ea-remote.matrix_preset_command-uc.json) | UC-12(L) |
+| F-UC-001 | Discover the integration and register the driver (mDNS, driver URL) | V4 | V0 | V0 | — | — | UC-11(M) |
+| F-UC-002 | Set up the integration on the Remote | V4 | V1 (capped) | V1 | — | — | UC-02(H) |
+| F-UC-003 | Reconfigure the integration (new matrix address) | V4 | V3 | V3 | — | — | — |
+| F-UC-004 | Preset buttons on the Remote | V4 | V3 | V3 | stale | [remote.preset_button·uc·pass](evidence/F-UC-004/2026-09-26-V3-a9b624ea-remote.preset_button-uc.json)<br>[remote.preset_button·uc·pass](evidence/F-UC-004/2026-09-28-V3-a4cca7e2-remote.preset_button-uc.json) | UC-28(M) |
+| F-UC-005 | Matrix remote entity with a preset page | V4 | V3 | V3 | stale | [remote.preset_names_from_web_app·uc·pass](evidence/F-UC-004/2026-09-28-V3-a4cca7e2-remote.preset_names_from_web_app-uc.json)<br>[remote.matrix_preset_command·uc·pass](evidence/F-UC-005/2026-09-26-V3-a9b624ea-remote.matrix_preset_command-uc.json) | UC-12(L) |
 | F-UC-006 | Per-input CEC remotes (source power, navigation, playback) | V4 | V3 | V3 | stale | [remote.input_cec_command·uc·pass](evidence/F-UC-006/2026-09-26-V3-a9b624ea-remote.input_cec_command-uc.json)<br>[remote.input_cec_off·uc·pass](evidence/F-UC-006/2026-09-26-V3-a9b624ea-remote.input_cec_off-uc.json) | UC-12(L) |
 | F-UC-007 | Per-output CEC remotes (TV power, volume) | V4 | V3 | V3 | stale | [remote.cec_bad_sequence·uc·pass](evidence/F-UC-007/2026-09-26-V3-a9b624ea-remote.cec_bad_sequence-uc.json)<br>[remote.output_cec_on·uc·pass](evidence/F-UC-007/2026-09-26-V3-a9b624ea-remote.output_cec_on-uc.json) | BE-14(M) |
-| F-UC-008 | Choose an output's source from the Remote (media player source list) | V4 | V3 | V3 | stale | [remote.select_source·uc·pass](evidence/F-UC-008/2026-09-26-V3-a9b624ea-remote.select_source-uc.json)<br>[remote.unknown_source·uc·pass](evidence/F-UC-008/2026-09-26-V3-a9b624ea-remote.unknown_source-uc.json) | UC-08(M), UC-10(M) |
+| F-UC-008 | Choose an output's source from the Remote (media player source list) | V4 | V3 | V3 | stale | [remote.select_source·uc·pass](evidence/F-UC-008/2026-09-26-V3-a9b624ea-remote.select_source-uc.json)<br>[remote.unknown_source·uc·pass](evidence/F-UC-008/2026-09-26-V3-a9b624ea-remote.unknown_source-uc.json) | UC-10(M) |
 | F-UC-009 | TV power / volume / mute from the output media player | V4 | V3 | V3 | stale | [remote.media_player_toggle·uc·pass](evidence/F-UC-009/2026-09-26-V3-a9b624ea-remote.media_player_toggle-uc.json)<br>[remote.media_player_volume·uc·pass](evidence/F-UC-009/2026-09-26-V3-a9b624ea-remote.media_player_volume-uc.json) | UC-10(M), BE-24(L) |
-| F-UC-010 | Matrix power switch on the Remote | V4 | V3 | V3 | stale | [remote.power_switch_off·uc·pass](evidence/F-UC-010/2026-09-26-V3-a9b624ea-remote.power_switch_off-uc.json) | UC-09(M) |
+| F-UC-010 | Matrix power switch on the Remote | V4 | V3 | V3 | stale | [remote.power_switch_off·uc·pass](evidence/F-UC-010/2026-09-26-V3-a9b624ea-remote.power_switch_off-uc.json)<br>[remote.power_switch_follows_front_panel·uc·pass](evidence/F-UC-010/2026-09-28-V3-a4cca7e2-remote.power_switch_follows_front_panel-uc.json) | — |
 | F-UC-011 | Input signal and cable sensors | V4 | V1 | V1 | — | — | UC-13(L) |
 | F-UC-012 | Output connected, cable and source sensors | V4 | V3 | V3 | — | — | UC-13(L) |
 | F-UC-013 | Entities go unavailable while the matrix is unreachable | V4 | V3 | V3 | — | — | — |
 | F-UC-014 | Remote standby and wake | V4 | V3 | V3 | — | — | — |
 | F-UC-015 | Only changed attributes are sent to the Remote | V4 | V3 | V3 | — | — | — |
-| F-UC-016 | Renamed inputs/outputs show up on the Remote | V4 | V1 | V1 | — | — | UC-08(M), BE-16(M) |
+| F-UC-016 | Renamed inputs/outputs show up on the Remote | V4 | V3 | V3 | stale | [remote.input_rename_live·uc·pass](evidence/F-UC-016/2026-09-28-V3-a4cca7e2-remote.input_rename_live-uc.json) | UC-28(M), BE-16(M) |
 | F-UC-017 | Restore the configuration at startup (also with the matrix offline) | V4 | V3 | V3 | — | — | — |
 
 ## Home Assistant component (F-HA)
