@@ -534,6 +534,10 @@ test.describe('WP-E1 UI flows', () => {
     await page.locator('.about-dialog.about-dialog--visible').waitFor();
     await expect(page.locator('#status-websocket')).toHaveText('Connected');
     await expect(page.locator('#status-matrix')).toHaveText('Connected');
+    // The model row shows the matrix's model (/api/info, as in the header), not a generic name.
+    const model = await page.evaluate(() => (window as any).state.info.model); // eslint-disable-line @typescript-eslint/no-explicit-any
+    expect(model).toBeTruthy();
+    await expect(page.locator('#status-model')).toHaveText(model);
   });
 
   test('UI-24: the kiosk stays live from the WebSocket and does not poll the status routes', async ({ page, sim }) => {
