@@ -42,7 +42,7 @@
       "name": "app/ws-status-refresh/output-names",
       "page": "ui",
       "description": "Matrix grid after the hub's background status broadcast arrives (what a user sees ~100 ms after load).",
-      "note": "Hub bug: every GET /api/status/outputs with a warm cache broadcasts a refresh whose outputs_detail names come from the hub name cache, empty in modular mode (src/rest_api/core.py:115 via outputs.py:59), so TV/Soundbar become \"Output 1/2\" (unless the broadcast happens to arrive before the REST response). All other entries drop these broadcasts to stay deterministic.",
+      "note": "Regression guard for BE-31: after the hub status broadcast the grid keeps the real output names (TV, Soundbar). Before WP-C2 the broadcast took names from an empty cache in modular mode, so they became \"Output 1/2\". All other entries drop these broadcasts to stay deterministic.",
       "themed": false,
       "viewports": null
     },
