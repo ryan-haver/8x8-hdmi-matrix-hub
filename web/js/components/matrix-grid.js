@@ -20,6 +20,7 @@ class MatrixGrid {
         state.on('loading', (loading) => {
             if (!loading) this.render();
         });
+        state.on('statusError', () => this.render());
         
         // Re-render on resize for responsive text truncation
         window.addEventListener('resize', this.handleResize.bind(this));
@@ -256,19 +257,21 @@ class MatrixGrid {
      * Render the active layout layout container
      */
     render() {
-        const hasData = Object.keys(state.routing).length > 0;
-        if (state.ui.loading && !hasData) {
-            this.container.innerHTML = `
-                <div class="matrix-loading">
-                    <div class="spinner"></div>
-                    <p>Loading matrix...</p>
-                </div>
-            `;
-            return;
-        }
-
         const gridEl = document.getElementById('matrix-grid');
         const cardsEl = document.getElementById('matrix-mobile-view');
+
+        // UI-29: until the hub has sent a real routing, show the loading
+        // placeholder (or why there is none), never default names and routing.
+        if (!state.ui.statusLoaded) {
+            if (cardsEl) cardsEl.classList.add('hidden');
+            this.container.classList.remove('hidden');
+            this.container.className = 'matrix-grid';
+            const error = state.ui.statusError;
+            this.container.innerHTML = error
+                ? `<div class="matrix-loading"><p>${Helpers.escapeHtml(error)}</p></div>`
+                : `<div class="matrix-loading"><div class="spinner"></div><p>Loading matrix...</p></div>`;
+            return;
+        }
 
         if (!gridEl || !cardsEl) return;
 

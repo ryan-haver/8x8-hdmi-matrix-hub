@@ -425,6 +425,8 @@ class MatrixApp {
             onMessage: (msg) => this.handleWebSocketMessage(msg),
             onStatusChange: (connected) => state.setWsConnected(connected),
             onMatrixStatus: (link) => state.setMatrixLink(link),
+            // UI-03: the header shows the retry as its own state
+            onReconnecting: () => this.updateConnectionStatus(),
             onError: (error) => console.error('WebSocket error:', error)
         });
 
@@ -491,8 +493,9 @@ class MatrixApp {
                 break;
 
             case 'preset_recall':
-                // Full refresh (the routing it changed also arrives as routing_change events)
-                this.refresh();
+                // UI-04: the routing it changed arrives as routing_change events. No
+                // refresh (it toasted "Refreshing..." / "Refreshed" on every open page);
+                // the page that recalled the preset shows its own toast.
                 break;
 
             case 'switch_failed':
@@ -538,6 +541,9 @@ class MatrixApp {
     /**
      * Header status: green only while the hub's WebSocket is up AND the hub
      * reports the matrix reachable. The tooltip says which one is missing.
+     * UI-03 / UI-29: while the WebSocket is down and the client is retrying, the
+     * pill shows a distinct "reconnecting" state (standby colour) instead of the
+     * red "disconnected" one.
      */
     updateConnectionStatus() {
         const titleEl = document.getElementById('header-title-text');
@@ -545,8 +551,10 @@ class MatrixApp {
         const matrix = state.matrixLink;
         const matrixUp = !matrix || matrix.connected !== false;
         const connected = state.wsConnected && matrixUp;
+        const reconnecting = !state.wsConnected && this.ws?.status === 'reconnecting';
         titleEl.classList.toggle('connected', connected);
-        titleEl.classList.toggle('disconnected', !connected);
+        titleEl.classList.toggle('reconnecting', reconnecting);
+        titleEl.classList.toggle('disconnected', !connected && !reconnecting);
         if (!state.wsConnected) {
             titleEl.title = 'Disconnected from the hub (reconnecting)';
         } else if (!matrixUp) {
@@ -606,6 +614,9 @@ class MatrixApp {
 
             if (status) {
                 state.applyStatus(status);
+            } else {
+                // UI-29: the grid says the matrix is not reachable instead of a made-up routing
+                state.setStatusError('Matrix not reachable');
             }
 
             // Apply HDMI status data

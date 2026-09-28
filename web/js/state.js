@@ -783,6 +783,14 @@ class AppState {
     }
 
     /**
+     * UI-29: the first status read failed (the grid shows this instead of a routing)
+     */
+    setStatusError(message) {
+        this.ui.statusError = message;
+        this.emit('statusError', message);
+    }
+
+    /**
      * Update system info
      */
     setInfo(info) {
@@ -1202,6 +1210,12 @@ class AppState {
             this.emit('outputs', this.outputs);
         }
         
+        // UI-29: a real routing arrived; until then the grid shows a placeholder
+        if (data.routing && typeof data.routing === 'object' && Object.keys(data.routing).length) {
+            this.ui.statusLoaded = true;
+            this.ui.statusError = null;
+        }
+
         // Mark as loaded
         this.setLoading(false);
         this.setConnected(true);

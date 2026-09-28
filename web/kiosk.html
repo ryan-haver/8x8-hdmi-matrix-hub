@@ -1533,7 +1533,6 @@
 
             // Configuration
             const API_BASE = '/api';
-            const POLL_INTERVAL = 5000;
 
             // State
             let connected = false;
@@ -2815,7 +2814,10 @@
              * Polling fallback
              */
             function startPolling() {
-                pollTimer = setInterval(fetchStatus, POLL_INTERVAL);
+                // UI-24: no status polling. The kiosk reads the status once at start and
+                // then stays live from the hub's WebSocket events; every (re)connect
+                // sends a status snapshot. Kept as a no-op in the start-up sequence.
+                pollTimer = null;
             }
 
             /**
