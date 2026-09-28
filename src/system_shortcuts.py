@@ -40,6 +40,24 @@ LCD_TIMEOUT_MODES = {
     "always_on": LCD_TIMEOUT_ALWAYS_ON,
 }
 
+#: How the result of an LCD shortcut names the timeout it set.
+_LCD_MODE_LABELS = {
+    LCD_TIMEOUT_OFF: "off",
+    LCD_TIMEOUT_ALWAYS_ON: "always on",
+    LCD_TIMEOUT_15S: "15s",
+    LCD_TIMEOUT_30S: "30s",
+    LCD_TIMEOUT_60S: "60s",
+}
+
+#: Built-in labels that were renamed: ``{key: (old default, new default)}``.
+#: A stored label equal to the old default was never edited by the user and is
+#: migrated on load; a label the user chose is kept. API-07 (owner-approved):
+#: ``lcd_timeout_10s`` sets the device's shortest timeout, 15 s - the key stays
+#: for saved pins and Flic buttons, the label says what it does.
+_RENAMED_DEFAULT_LABELS = {
+    "lcd_timeout_10s": ("LCD: 10s", "LCD: 15s"),
+}
+
 
 @dataclass
 class SystemShortcut:
@@ -306,8 +324,8 @@ def _default_shortcuts() -> list[SystemShortcut]:
             dashboard_visible=False,
         ),
         SystemShortcut(
-            key="lcd_timeout_10s",
-            label="LCD: 10s",
+            key="lcd_timeout_10s",  # key kept for saved pins/Flic; the device's shortest timeout is 15 s
+            label="LCD: 15s",
             icon="🖥️",
             category="system",
             order=26,
@@ -431,6 +449,8 @@ class SystemShortcutManager:
                         elif key.startswith("user."):
                             self._user_shortcuts[key] = SystemShortcut.from_dict(data)
                 _LOG.debug("Loaded system shortcut prefs from %s", self.prefs_path)
+                if self._migrate_renamed_labels():
+                    self._save()
             except Exception as e:
                 _LOG.error("Error loading system shortcut prefs: %s", e)
         else:
@@ -445,6 +465,17 @@ class SystemShortcutManager:
                     dashboard_visible=default.dashboard_visible,
                 )
             self._save()
+
+    def _migrate_renamed_labels(self) -> bool:
+        """Give stored built-in labels that still equal an old default the new default; True if any changed."""
+        changed = False
+        for key, (old, new) in _RENAMED_DEFAULT_LABELS.items():
+            prefs = self._prefs.get(key)
+            if prefs is not None and prefs.label == old:
+                prefs.label = new
+                changed = True
+                _LOG.info("Renamed built-in shortcut %s from %r to %r", key, old, new)
+        return changed
 
     def _save(self) -> bool:
         try:
@@ -696,60 +727,66 @@ async def execute_shortcut(
     key = shortcut.key
     stype = shortcut.type
 
+    def outcome(ok: Any, done: str, failed: str) -> dict[str, Any]:
+        # API-08: the matrix's answer decides the result, not the absence of an exception.
+        return {"success": bool(ok), "detail": done if ok else failed, "type": stype}
+
+    async def per_output(call: Any, done: str, what: str) -> dict[str, Any]:
+        failed = [n for n in range(1, 9) if not await call(n)]
+        result = outcome(not failed, done, f"Failed to {what} output(s) {', '.join(map(str, failed))}")
+        if failed:
+            result["failed_outputs"] = failed
+        return result
+
     try:
-        # Routing templates
+        # Routing templates (API-01: OreiMatrix.switch_input, not the non-existent switch())
         if stype == "route_all_to_output":
             output = int(merged_params.get("output", 1))
             routing_input = int(merged_params.get("input", 1))
-            await matrix_device.switch(routing_input, output)
-            return {"success": True, "detail": f"Routed Input {routing_input} → Output {output}", "type": stype}
+            ok = await matrix_device.switch_input(routing_input, output)
+            return outcome(
+                ok,
+                f"Routed Input {routing_input} → Output {output}",
+                f"Failed to route Input {routing_input} → Output {output}",
+            )
 
         if stype == "route_one_to_one":
-            for n in range(1, 9):
-                await matrix_device.switch(n, n)
-            return {"success": True, "detail": "1:1 mapping applied", "type": stype}
+            return await per_output(lambda n: matrix_device.switch_input(n, n), "1:1 mapping applied", "route")
 
         if stype == "power_off_all":
-            for n in range(1, 9):
-                await matrix_device.power_off()
-            return {"success": True, "detail": "All outputs powered off", "type": stype}
+            # API-06: one matrix power-off (it used to be sent eight times).
+            ok = await matrix_device.power_off()
+            return outcome(ok, "Matrix powered off", "Failed to power off the matrix")
 
         if stype == "mute_all_audio":
-            for n in range(1, 9):
-                await matrix_device.set_output_audio_mute(n, True)
-            return {"success": True, "detail": "All audio muted", "type": stype}
+            return await per_output(lambda n: matrix_device.set_output_audio_mute(n, True), "All audio muted", "mute")
 
         if stype == "unmute_all_audio":
-            for n in range(1, 9):
-                await matrix_device.set_output_audio_mute(n, False)
-            return {"success": True, "detail": "All audio unmuted", "type": stype}
+            return await per_output(
+                lambda n: matrix_device.set_output_audio_mute(n, False), "All audio unmuted", "unmute"
+            )
 
         # Hardware presets
         if stype.startswith("preset_recall_"):
             preset_num = int(stype.split("_")[-1])
-            await matrix_device.recall_preset(preset_num)
-            return {"success": True, "detail": f"Preset {preset_num} recalled", "type": stype}
+            ok = await matrix_device.recall_preset(preset_num)
+            return outcome(ok, f"Preset {preset_num} recalled", f"Failed to recall preset {preset_num}")
 
         # System settings
         if stype == "beep_on":
-            await matrix_device.set_beep(True)
-            return {"success": True, "detail": "Beep enabled", "type": stype}
+            return outcome(await matrix_device.set_beep(True), "Beep enabled", "Failed to enable the beep")
 
         if stype == "beep_off":
-            await matrix_device.set_beep(False)
-            return {"success": True, "detail": "Beep disabled", "type": stype}
+            return outcome(await matrix_device.set_beep(False), "Beep disabled", "Failed to disable the beep")
 
         if stype == "panel_lock_on":
-            await matrix_device.set_panel_lock(True)
-            return {"success": True, "detail": "Panel locked", "type": stype}
+            return outcome(await matrix_device.set_panel_lock(True), "Panel locked", "Failed to lock the panel")
 
         if stype == "panel_lock_off":
-            await matrix_device.set_panel_lock(False)
-            return {"success": True, "detail": "Panel unlocked", "type": stype}
+            return outcome(await matrix_device.set_panel_lock(False), "Panel unlocked", "Failed to unlock the panel")
 
         if stype == "system_reboot":
-            await matrix_device.system_reboot()
-            return {"success": True, "detail": "Matrix rebooting", "type": stype}
+            return outcome(await matrix_device.system_reboot(), "Matrix rebooting", "Failed to reboot the matrix")
 
         # LCD timeout
         if stype.startswith("lcd_timeout_"):
@@ -757,8 +794,9 @@ async def execute_shortcut(
             mode = LCD_TIMEOUT_MODES.get(mode_name)
             if mode is None:
                 return {"success": False, "detail": f"Unknown LCD mode: {mode_name}", "type": stype}
-            await matrix_device.set_lcd_timeout(mode)
-            return {"success": True, "detail": f"LCD timeout set to {mode_name}", "type": stype}
+            ok = await matrix_device.set_lcd_timeout(mode)
+            label = _LCD_MODE_LABELS.get(mode, mode_name)
+            return outcome(ok, f"LCD timeout set to {label}", f"Failed to set the LCD timeout to {label}")
 
         return {"success": False, "detail": f"Unknown shortcut key: {key}", "type": stype}
 

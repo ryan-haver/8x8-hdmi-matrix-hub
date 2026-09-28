@@ -663,11 +663,19 @@ Response:
   "data": {
     "profile": "Movie Night",
     "applied": ["Output 1 → Input 2", "Output 2 → Input 2"],
+    "failed_outputs": [],
     "errors": null,
-    "power_on_macro": {"success": true, "executed_steps": 3}
-  }
+    "power_on_macro": {"success": true, "steps_executed": 2}
+  },
+  "error": null
 }
 ```
+
+Status: `200` when every output (routing, stream, mute, HDR, HDCP) and the
+power-on macro were applied; `207` when only part was (`success: false`,
+`failed_outputs` and `errors` say what the matrix did not accept); `500` when
+nothing was; `403` with `passcode_required` / `invalid_passcode` for a
+protected profile.
 
 #### GET /api/profile/{id}/macros
 Get macros assigned to a profile.

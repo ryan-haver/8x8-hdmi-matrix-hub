@@ -234,13 +234,19 @@ async def handle_save_current_as_scene(request: web.Request) -> web.Response:
 
 
 async def handle_auto_resolve_cec(request: web.Request) -> web.Response:
-    """POST /api/scene/{scene_id}/cec/auto-resolve — alias for the profile endpoint.
+    """POST /api/scene/{scene_id}/cec/auto-resolve — resolve a profile's CEC targets from its routing.
 
-    For Phase 7, this just delegates to the standard CEC config update
-    with ``auto_resolved=True``. The richer resolver (formerly
-    cec_resolver.resolve_scene_cec_config) is invoked when present.
+    Uses ``cec_resolver.resolve_scene_cec_config(active_inputs, active_outputs,
+    status)``: navigation/playback go to the lowest active input, volume to an
+    audio-only or ARC output (read from the matrix's output status), power to
+    the profile's devices. Without an output status (matrix unreachable) the
+    resolver falls back to the first output. The result is saved on the
+    profile. API-23: this used to call the resolver with the profile object
+    and ``.to_dict()`` on the dict it returns, so it always answered 500.
     """
-    from .utils import _json_response, get_profile_manager
+    from cec_resolver import resolve_scene_cec_config
+
+    from .utils import _json_response, get_matrix_device, get_profile_manager
 
     profile_manager = get_profile_manager()
     if profile_manager is None:
@@ -255,24 +261,22 @@ async def handle_auto_resolve_cec(request: web.Request) -> web.Response:
         if profile is None:
             return _json_response(False, error=f"Scene '{scene_id}' not found", status=404)
 
-        # Best-effort: try the cec_resolver if available, otherwise fall back
-        # to the default CecConfig with auto_resolved=True.
-        try:
-            from cec_resolver import resolve_scene_cec_config  # type: ignore
+        active_outputs = sorted(n for n, out in profile.outputs.items() if out.enabled)
+        active_inputs = sorted(profile.get_active_inputs())
 
-            # BUG (found by mypy, not yet in the register): the resolver takes
-            # (active_inputs, active_outputs, status) and returns a dict, so
-            # this call raises TypeError and the endpoint always returns 500.
-            # Left unchanged here (type-only pass); fix with its regression test.
-            resolved = resolve_scene_cec_config(profile)  # type: ignore[call-arg, arg-type]
-            profile_manager.update_profile(scene_id, cec_config=resolved.to_dict())  # type: ignore[attr-defined]
-            return _json_response(True, resolved.to_dict())  # type: ignore[attr-defined]
-        except ImportError:
-            # Fallback: just enable auto-resolve flag on the existing/default config
-            profile.cec_config = profile.ensure_cec_config()
-            profile.cec_config.auto_resolved = True
-            profile_manager.update_profile(scene_id, cec_config=profile.cec_config.to_dict())
-            return _json_response(True, profile.cec_config.to_dict())
+        output_status: dict = {}
+        matrix_device = get_matrix_device()
+        if matrix_device is not None and matrix_device.connected:
+            try:
+                output_status = await matrix_device.get_output_status() or {}
+            except Exception as exc:  # noqa: BLE001 - the resolver has a fallback without status
+                _LOG.warning("Auto-resolve without output status: %s", exc)
+
+        resolved = resolve_scene_cec_config(active_inputs, active_outputs, output_status)
+        updated = profile_manager.update_profile(scene_id, cec_config=resolved)
+        if updated is None or updated.cec_config is None:
+            return _json_response(False, error="Failed to save the CEC config", status=500)
+        return _json_response(True, updated.cec_config.to_dict())
     except Exception as exc:
         _LOG.error("Error auto-resolving CEC config: %s", exc)
         return _json_response(False, error=str(exc), status=500)

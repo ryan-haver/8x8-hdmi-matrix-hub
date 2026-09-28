@@ -141,3 +141,84 @@ class LoopLagProbe:
     def __exit__(self, *exc: object) -> None:
         if self._task is not None:
             self._task.cancel()
+
+
+#: The hub data the validation runner and the browser tests use (profiles,
+#: macros, scenes, shortcuts): ``tests/e2e/fixtures/data``.
+FIXTURE_DATA = ROOT / "tests" / "e2e" / "fixtures" / "data"
+
+#: REST module globals a hub fixture replaces (restored by monkeypatch).
+REST_GLOBALS = (
+    "_matrix_device",
+    "_input_names",
+    "_output_names",
+    "_config_file",
+    "_scene_manager",
+    "_profile_manager",
+    "_macro_manager",
+    "_system_shortcut_manager",
+    "_dashboard_layout_manager",
+)
+
+
+@pytest.fixture
+async def data_hub(aiohttp_client, matrix, monkeypatch, tmp_path):
+    """REST test client on the real hub app, a connected OreiMatrix and the fixture hub data.
+
+    Wired the way ``run.py`` modular mode wires it (``set_matrix_device`` then
+    ``create_rest_app``), so what these tests prove is what the shipped hub does.
+    """
+    import shutil
+
+    import rest_api.utils as api_utils
+    from rest_api import reset_rate_limiter, set_matrix_device
+    from rest_api.app import create_rest_app
+
+    for name in REST_GLOBALS:
+        monkeypatch.setattr(api_utils, name, getattr(api_utils, name))
+    monkeypatch.setattr(api_utils, "_input_names", {})
+    monkeypatch.setattr(api_utils, "_output_names", {})
+    for src in FIXTURE_DATA.glob("*.json"):
+        shutil.copy(src, tmp_path / src.name)
+    reset_rate_limiter()
+    assert await matrix.connect()
+    set_matrix_device(matrix, config_dir=str(tmp_path), data_dir=str(tmp_path))
+    client = await aiohttp_client(create_rest_app(data_dir=tmp_path))
+    client.data_dir = tmp_path  # type: ignore[attr-defined]
+    yield client
+    reset_rate_limiter()
+
+
+def sim_writes(sim: Simulator, command: str | None = None) -> list[dict]:
+    """HTTP commands the simulator received that changed its state (optionally one comhead)."""
+    return [
+        e for e in sim.log
+        if e.get("channel") == "http" and e.get("mutated") and (command is None or e.get("command") == command)
+    ]
+
+
+def sim_commands(sim: Simulator, command: str) -> list[dict]:
+    """Payloads of every HTTP ``command`` the simulator received, mutating or not (e.g. ``cec command``)."""
+    return [e.get("payload") or {} for e in sim.log if e.get("channel") == "http" and e.get("command") == command]
+
+
+# CEC tables (BE-14): displays (``object`` 1) 0 on, 1 off, 2 mute, 3 vol-, 4 vol+, 5 active;
+# sources (``object`` 0) 1 power on, 2 power off, ...
+CEC_OUT_POWER_ON, CEC_OUT_POWER_OFF, CEC_OUT_VOL_UP = 0, 1, 4
+CEC_IN_POWER_ON, CEC_IN_POWER_OFF = 1, 2
+
+
+def cec_frames(sim: Simulator, *, obj: int, index: int, to: int) -> int:
+    """How many ``cec command`` frames with this object/index the simulator received for port ``to``."""
+    port = [1 if i == to else 0 for i in range(1, 9)]
+    return sum(
+        1 for p in sim_commands(sim, "cec command")
+        if p.get("object") == obj and p.get("index") == index and p.get("port") == port
+    )
+
+
+async def body(resp) -> dict:
+    """The JSON body of an aiohttp test-client response."""
+    import json
+
+    return json.loads(await resp.text())

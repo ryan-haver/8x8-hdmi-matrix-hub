@@ -54,4 +54,28 @@ SCENARIOS = [
         covers=(*HUB_CORE, *DEVICE_SETTINGS, *WEB_CORE, *WEB_DRAWERS),
         notes="Preset names are hub-side (device settings); the matrix keeps its own names.",
     ),
+    Scenario(
+        id="presets.save_custom_mapping",
+        title="Save a custom mapping (output 1 = input 8) into preset 6; the live routing is put back",
+        features=("F-DOM-034",),
+        client_features={"api": ("F-API-008",)},
+        writes=("presets", "routing"),
+        sim_state={"outputs": {"0": {"source": 3}}},
+        action=act("request", method="POST", path="/api/preset/6/save", json={"routing": {"1": 8}}),
+        expect=(
+            Response(status=200, json={"success": True, "data": {"preset": 6}}),
+            Device("presets[5].routing[0]", equals=8),
+            Device("outputs[0].source", equals=3),
+            # the matrix can only save its live routing: route, save, route back (DI-4)
+            CommandSent("video switch", {"source": [1, 8]}, count=1),
+            CommandSent("preset save", {"index": 6}, count=1),
+            CommandSent("video switch", {"source": [1, 3]}, count=1),
+            CommandSent("video switch", count=2),
+            DeviceUnchanged(allow=("presets[5].*",)),
+        ),
+        observe=("Does output 1 show the same source as before the save?",),
+        covers=(*HUB_CORE, *CONTROL, *DEVICE_SETTINGS),
+        notes="API-14: the routing to restore is read fresh from the matrix under a lock; only the "
+              "outputs the mapping changed are routed back.",
+    ),
 ]

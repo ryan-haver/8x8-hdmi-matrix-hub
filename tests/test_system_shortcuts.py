@@ -5,12 +5,14 @@ Tests cover: SystemShortcut dataclass round-trip, SystemShortcutManager
 CRUD/persistence, and the async execute_shortcut() function.
 """
 
+import json
 import tempfile
 from pathlib import Path
-from unittest.mock import AsyncMock, MagicMock
+from unittest.mock import AsyncMock, create_autospec
 
 import pytest
 
+from orei_matrix import OreiMatrix
 from system_shortcuts import SystemShortcut, SystemShortcutManager, execute_shortcut
 
 
@@ -102,64 +104,140 @@ class TestSystemShortcutManager:
         assert shortcut.label == "Persistent"
 
 
+
+
+class TestLcdLabel:
+    """API-07 (owner-approved rename): ``lcd_timeout_10s`` sets 15 s and is labelled so; the key stays."""
+
+    @pytest.fixture
+    def temp_dir(self, tmp_path):
+        return tmp_path
+
+    @pytest.fixture
+    def mgr(self, temp_dir):
+        return SystemShortcutManager(data_dir=temp_dir)
+
+    def test_default_label(self, mgr):
+        assert mgr.get("lcd_timeout_10s").label == "LCD: 15s"
+
+    def test_stored_old_default_label_is_migrated(self, temp_dir):
+        (temp_dir / "system_shortcuts.json").write_text(
+            json.dumps({"lcd_timeout_10s": {"label": "LCD: 10s", "icon": "🖥️", "enabled": True, "order": 26}}),
+            encoding="utf-8",
+        )
+        mgr = SystemShortcutManager(data_dir=temp_dir)
+        assert mgr.get("lcd_timeout_10s").label == "LCD: 15s"
+        saved = json.loads((temp_dir / "system_shortcuts.json").read_text(encoding="utf-8"))
+        assert saved["lcd_timeout_10s"]["label"] == "LCD: 15s"
+
+    def test_a_label_the_user_chose_is_kept(self, temp_dir):
+        (temp_dir / "system_shortcuts.json").write_text(
+            json.dumps({"lcd_timeout_10s": {"label": "Panel quick", "icon": "🖥️", "enabled": True, "order": 26}}),
+            encoding="utf-8",
+        )
+        assert SystemShortcutManager(data_dir=temp_dir).get("lcd_timeout_10s").label == "Panel quick"
+
+    def test_legacy_builtin_id_still_resolves(self, mgr):
+        assert mgr.get("builtin.lcd_timeout_10s").key == "lcd_timeout_10s"
+
+
+def make_matrix(result: bool = True):
+    """An OreiMatrix double: only real methods exist (the old double had ``switch``, which OreiMatrix lacks)."""
+    matrix = create_autospec(OreiMatrix, instance=True)
+    for name in dir(OreiMatrix):
+        attr = getattr(matrix, name, None)
+        if isinstance(attr, AsyncMock):
+            attr.return_value = result
+    return matrix
+
+
+def shortcut(key: str) -> SystemShortcut:
+    return SystemShortcut(key=key, label=key, icon="⚡")
+
+
 class TestExecuteShortcut:
     """Tests for the async execute_shortcut() function."""
 
     @pytest.fixture
     def mock_matrix(self):
-        matrix = MagicMock()
-        matrix.switch = AsyncMock(return_value=None)
-        matrix.set_output_audio_mute = AsyncMock(return_value=None)
-        matrix.recall_preset = AsyncMock(return_value=None)
-        matrix.set_beep = AsyncMock(return_value=None)
-        matrix.system_reboot = AsyncMock(return_value=None)
-        matrix.power_off = AsyncMock(return_value=None)
-        return matrix
+        return make_matrix()
 
-    @pytest.mark.asyncio
     async def test_mute_all_audio(self, mock_matrix):
-        """mute_all_audio calls set_output_audio_mute for all 8 outputs."""
-        shortcut = SystemShortcut(key="mute_all_audio", label="Mute All", icon="🔇")
-        result = await execute_shortcut(shortcut, mock_matrix)
+        result = await execute_shortcut(shortcut("mute_all_audio"), mock_matrix)
         assert result["success"] is True
-        assert mock_matrix.set_output_audio_mute.call_count == 8
+        assert [c.args for c in mock_matrix.set_output_audio_mute.await_args_list] == [(n, True) for n in range(1, 9)]
 
-    @pytest.mark.asyncio
     async def test_unmute_all_audio(self, mock_matrix):
-        """unmute_all_audio calls set_output_audio_mute with False for all outputs."""
-        shortcut = SystemShortcut(key="unmute_all_audio", label="Unmute All", icon="🔊")
-        result = await execute_shortcut(shortcut, mock_matrix)
+        result = await execute_shortcut(shortcut("unmute_all_audio"), mock_matrix)
         assert result["success"] is True
-        assert mock_matrix.set_output_audio_mute.call_count == 8
+        assert [c.args for c in mock_matrix.set_output_audio_mute.await_args_list] == [(n, False) for n in range(1, 9)]
 
-    @pytest.mark.asyncio
     async def test_route_one_to_one(self, mock_matrix):
-        """route_one_to_one calls switch for all 8 outputs."""
-        shortcut = SystemShortcut(key="route_one_to_one", label="1:1", icon="🔁")
-        result = await execute_shortcut(shortcut, mock_matrix)
+        """API-01: switch_input, not the non-existent switch()."""
+        result = await execute_shortcut(shortcut("route_one_to_one"), mock_matrix)
         assert result["success"] is True
-        assert mock_matrix.switch.call_count == 8
+        assert [c.args for c in mock_matrix.switch_input.await_args_list] == [(n, n) for n in range(1, 9)]
 
-    @pytest.mark.asyncio
     async def test_route_all_to_output(self, mock_matrix):
-        """route_all_to_output routes input 1 to specified output."""
-        shortcut = SystemShortcut(key="route_all_to_output", label="All → Out", icon="🎯")
-        result = await execute_shortcut(shortcut, mock_matrix, {"output": 3})
+        """route_all_to_output routes input (default 1) to the output."""
+        result = await execute_shortcut(shortcut("route_all_to_output"), mock_matrix, {"output": 3})
         assert result["success"] is True
-        mock_matrix.switch.assert_called_with(1, 3)
+        mock_matrix.switch_input.assert_awaited_once_with(1, 3)
 
-    @pytest.mark.asyncio
+    async def test_power_off_all_powers_off_once(self, mock_matrix):
+        """API-06: the matrix power-off used to be sent eight times."""
+        result = await execute_shortcut(shortcut("power_off_all"), mock_matrix)
+        assert result["success"] is True
+        mock_matrix.power_off.assert_awaited_once_with()
+
     async def test_preset_recall(self, mock_matrix):
-        """preset_recall_N calls recall_preset with N."""
-        shortcut = SystemShortcut(key="preset_recall_5", label="Preset 5", icon="5️⃣")
-        result = await execute_shortcut(shortcut, mock_matrix)
+        result = await execute_shortcut(shortcut("preset_recall_5"), mock_matrix)
         assert result["success"] is True
-        mock_matrix.recall_preset.assert_called_with(5)
+        mock_matrix.recall_preset.assert_awaited_once_with(5)
 
-    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        ("key", "mode"),
+        [("lcd_timeout_off", 0), ("lcd_timeout_always_on", 1), ("lcd_timeout_10s", 2), ("lcd_timeout_15s", 2),
+         ("lcd_timeout_30s", 3), ("lcd_timeout_60s", 4)],
+    )
+    async def test_lcd_timeout_device_codes(self, mock_matrix, key, mode):
+        """API-07: device codes 0 off, 1 always on, 2/3/4 = 15/30/60 s."""
+        result = await execute_shortcut(shortcut(key), mock_matrix)
+        assert result["success"] is True
+        mock_matrix.set_lcd_timeout.assert_awaited_once_with(mode)
+
+    async def test_lcd_10s_result_names_15s(self, mock_matrix):
+        result = await execute_shortcut(shortcut("lcd_timeout_10s"), mock_matrix)
+        assert "15s" in result["detail"]
+
+    @pytest.mark.parametrize(
+        "key",
+        ["route_all_to_output", "route_one_to_one", "power_off_all", "mute_all_audio", "unmute_all_audio",
+         "preset_recall_1", "beep_on", "beep_off", "panel_lock_on", "panel_lock_off", "system_reboot",
+         "lcd_timeout_30s"],
+    )
+    async def test_a_refused_command_is_a_failure(self, key):
+        """API-08: the matrix's False answers were ignored and every shortcut reported success."""
+        result = await execute_shortcut(shortcut(key), make_matrix(result=False))
+        assert result["success"] is False
+        assert result["detail"].startswith("Failed")
+
+    async def test_partly_refused_mute_names_the_outputs(self):
+        matrix = make_matrix()
+        matrix.set_output_audio_mute.side_effect = lambda n, m: n not in (3, 7)
+        result = await execute_shortcut(shortcut("mute_all_audio"), matrix)
+        assert result["success"] is False
+        assert result["failed_outputs"] == [3, 7]
+        assert matrix.set_output_audio_mute.await_count == 8
+
+    async def test_an_exception_is_a_failure(self):
+        matrix = make_matrix()
+        matrix.recall_preset.side_effect = ConnectionError("gone")
+        result = await execute_shortcut(shortcut("preset_recall_2"), matrix)
+        assert result["success"] is False
+        assert "gone" in result["detail"]
+
     async def test_unknown_shortcut_returns_failure(self, mock_matrix):
-        """Unknown shortcut key returns failure."""
-        shortcut = SystemShortcut(key="unknown.key", label="Unknown", icon="❓")
-        result = await execute_shortcut(shortcut, mock_matrix)
+        result = await execute_shortcut(shortcut("unknown.key"), mock_matrix)
         assert result["success"] is False
         assert "Unknown" in result["detail"]
