@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import socket
+import time
 
 from tools.uc_remote_sim import UcRemoteSim
 from tools.validate.stack import HubProcess
@@ -80,10 +81,23 @@ async def test_connect_event_reports_device_state(uc_hub: HubProcess, uc_remote_
     assert (await remote.get_device_state())["msg_data"] == {"state": "CONNECTED"}
 
 
-async def test_unknown_request_does_not_break_the_connection(uc_hub: HubProcess, uc_remote_factory) -> None:
-    """Newer Remotes send requests ucapi 0.5.1 does not know (spec 0.16: get_runtime_info, ...).
+async def test_entities_are_listed_for_the_remotes_entity_types(uc_hub: HubProcess) -> None:
+    """ucapi 0.7.0 (UC-15) asks the Remote which entity types it supports (`get_supported_entity_types`, firmware
+    >= 0.9.2) before it answers `get_available_entities`, and waits up to 5 s for the answer. The scripted Remote
+    answers like a Remote 3 (UC-26), so the listing is prompt and complete."""
+    async with UcRemoteSim(uc_hub.uc_url) as remote:
+        t0 = time.perf_counter()
+        entities = await remote.get_available_entities()
+        took = time.perf_counter() - t0
+        assert len(entities) == 74
+        assert any(m.kind == "req" and m.msg == "get_supported_entity_types" for m in remote.messages)
+        assert took < 3, f"listing the entities took {took:.1f} s"
 
-    ucapi 0.5.1 drops them without an answer; whatever a later ucapi does, the connection must stay usable.
+
+async def test_unknown_request_does_not_break_the_connection(uc_hub: HubProcess, uc_remote_factory) -> None:
+    """Newer Remotes send requests the pinned ucapi may not know (spec 0.16: get_runtime_info, ...).
+
+    ucapi 0.5.1 dropped them without an answer; whatever the pinned ucapi does, the connection must stay usable.
     """
     remote = await uc_remote_factory(attach=False)
     try:
