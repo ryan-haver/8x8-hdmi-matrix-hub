@@ -1,25 +1,25 @@
 {
   "schema_version": 1,
-  "features": ["F-KIO-008", "F-DOM-005"],
+  "features": ["F-KIO-002"],
   "level": "V3",
-  "scenario": "kiosk.profile_wrong_passcode",
-  "scenario_title": "Kiosk: a wrong passcode applies nothing and the kiosk says 'Invalid passcode'",
-  "scenario_kind": "failure",
+  "scenario": "kiosk.route_one_muted",
+  "scenario_title": "Kiosk: route input 3 to output 3 with 'Mute output audio' checked; only that is sent",
+  "scenario_kind": "happy",
   "target": "sim",
   "client": "browser",
   "result": "pass",
   "gate": "ok",
   "blocked_reason": null,
   "commit": {
-    "sha": "dc37b6331dadc55cccacfa48786b91a3084144f5",
+    "sha": "50ce7c105b0233c2d9da36ad64546aff35f9052c",
     "branch": "wp-e1-ui-fixes",
     "dirty_files": [],
-    "short": "dc37b633",
+    "short": "50ce7c10",
     "dirty": false
   },
   "timestamp": {
-    "started": "2026-09-28T02:52:45.915Z",
-    "finished": "2026-09-28T02:52:48.199Z"
+    "started": "2026-09-28T16:43:29.353Z",
+    "finished": "2026-09-28T16:43:31.807Z"
   },
   "operator": "automation",
   "environment": {
@@ -35,8 +35,8 @@
         "USE_MODULAR": "true",
         "UC_ENABLED": "false",
         "MATRIX_HOST": "127.0.0.1",
-        "MATRIX_PORT": "52367",
-        "OREI_TELNET_PORT": "52368",
+        "MATRIX_PORT": "62739",
+        "OREI_TELNET_PORT": "62740",
         "TRUST_PROXY_HEADERS": "true",
         "TRUSTED_PROXY_IPS": "127.0.0.1",
         "LOG_LEVEL": "INFO"
@@ -57,32 +57,35 @@
   },
   "procedure": [
     "reset the simulator to the seed state",
-    "action (browser): profile_recall(profile_id='kids_gaming', name='Kids Gaming', passcode='9999', via='kiosk')",
+    "let the hub read the matrix (/ws get_status), so it is in sync before the action",
+    "action (browser): kiosk_route(input=3, output=3, mute=True, arc=False)",
     "  open /kiosk and wait until it shows the inputs",
-    "  open the kiosk Profiles tab",
-    "  tap the \"Kids Gaming\" slot",
-    "  enter the passcode on the PIN pad and tap OK",
-    "  the page sent POST /api/profile/kids_gaming/recall -> HTTP 403",
-    "  the page shows: error: Invalid passcode"
+    "  tap input 3",
+    "  choose output 3",
+    "  set \"Mute output audio\" on and ARC off",
+    "  click Apply Routing",
+    "  the kiosk sent 1 output setting requests: all 200",
+    "  the page sent POST /api/output/3/source -> HTTP 200",
+    "  the page shows: success: Routing and output parameters applied"
   ],
   "observations": {
     "requests": [
       {
         "method": "POST",
-        "path": "/api/profile/kids_gaming/recall",
-        "body": "{}",
-        "status": 403,
+        "path": "/api/output/3/source",
+        "body": "{\"input\":3}",
+        "status": 200,
         "via": "page"
       },
       {
         "method": "POST",
-        "path": "/api/profile/kids_gaming/recall",
-        "body": "{\"passcode\":\"9999\"}",
-        "status": 403,
+        "path": "/api/output/3/mute",
+        "body": "{\"muted\":true}",
+        "status": 200,
         "via": "page"
       }
     ],
-    "response_status": 403,
+    "response_status": 200,
     "hub_reads": [],
     "state_before": {
       "schema_version": 1,
@@ -455,14 +458,14 @@
         },
         {
           "name": "Output 3",
-          "source": 1,
+          "source": 3,
           "connected": 0,
           "stream": 1,
           "hdcp": 3,
           "hdr": 0,
           "scaler": 0,
           "arc": 0,
-          "audio_mute": 0,
+          "audio_mute": 1,
           "cec_enabled": 0,
           "ext_audio_enabled": 0,
           "ext_audio_source": 1
@@ -584,36 +587,112 @@
           "saved": true
         }
       ],
-      "routing": [2, 2, 1, 1, 5, 6, 1, 1]
+      "routing": [2, 2, 3, 1, 5, 6, 1, 1]
     },
-    "state_diff": [],
+    "state_diff": [
+      {
+        "path": "outputs[2].audio_mute",
+        "before": 0,
+        "after": 1
+      },
+      {
+        "path": "outputs[2].source",
+        "before": 1,
+        "after": 3
+      },
+      {
+        "path": "routing[2]",
+        "before": 1,
+        "after": 3
+      }
+    ],
     "device_log": [
       {
-        "t": 1790563966.119,
+        "t": 1790613809.635,
         "channel": "http",
         "command": "get video status",
         "recognised": true
       },
       {
-        "t": 1790563966.119,
+        "t": 1790613809.636,
         "channel": "http",
         "command": "get video status",
         "recognised": true
       },
       {
-        "t": 1790563966.121,
+        "t": 1790613809.637,
         "channel": "http",
         "command": "get output status",
         "recognised": true
       },
       {
-        "t": 1790563966.122,
+        "t": 1790613809.638,
         "channel": "http",
         "command": "get input status",
         "recognised": true
       },
       {
-        "t": 1790563966.213,
+        "t": 1790613809.701,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      },
+      {
+        "t": 1790613810.542,
+        "channel": "http",
+        "command": "video switch",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "video switch",
+          "language": 0,
+          "source": [3, 3]
+        },
+        "response": {
+          "comhead": "video switch",
+          "result": 1
+        },
+        "recognised": true,
+        "mutated": true,
+        "warnings": []
+      },
+      {
+        "t": 1790613810.556,
+        "channel": "http",
+        "command": "set output audio mute",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "set output audio mute",
+          "language": 0,
+          "mute": [3, 1]
+        },
+        "response": {
+          "comhead": "set output audio mute",
+          "result": 1
+        },
+        "recognised": true,
+        "mutated": true,
+        "warnings": []
+      },
+      {
+        "t": 1790613810.715,
+        "channel": "http",
+        "command": "get video status",
+        "recognised": true
+      },
+      {
+        "t": 1790613810.715,
+        "channel": "http",
+        "command": "get output status",
+        "recognised": true
+      },
+      {
+        "t": 1790613810.717,
+        "channel": "http",
+        "command": "get input status",
+        "recognised": true
+      },
+      {
+        "t": 1790613810.846,
         "channel": "telnet",
         "command": "status",
         "recognised": true
@@ -621,15 +700,323 @@
     ],
     "ws_events": [
       {
-        "t_ms": 0,
+        "t_ms": -150,
         "event": "connected",
         "data": {
-          "message": "Connected to OREI Matrix WebSocket",
-          "client_count": 1
+          "message": "Connected to the HDMI matrix hub",
+          "client_count": 1,
+          "protocol": 1,
+          "matrix": {
+            "configured": true,
+            "connected": true,
+            "state": "connected",
+            "host": "127.0.0.1"
+          }
         }
       },
       {
-        "t_ms": 295,
+        "t_ms": -150,
+        "event": "status",
+        "data": {
+          "connected": true,
+          "host": "127.0.0.1",
+          "power": "on",
+          "routing": {
+            "1": 5,
+            "2": 5,
+            "3": 5,
+            "4": 5,
+            "5": 5,
+            "6": 5,
+            "7": 5,
+            "8": 5
+          },
+          "outputs": [5, 5, 5, 5, 5, 5, 5, 5],
+          "input_names": {
+            "1": "PS3",
+            "2": "AppleTV",
+            "3": "Computer",
+            "4": "Switch",
+            "5": "Shield",
+            "6": "PS5",
+            "7": "Analogue",
+            "8": "Input 8"
+          },
+          "output_names": {
+            "1": "TV",
+            "2": "Soundbar",
+            "3": "Output 3",
+            "4": "Output 4",
+            "5": "Output 5",
+            "6": "Output 6",
+            "7": "Output 7",
+            "8": "Output 8"
+          },
+          "preset_names": {
+            "1": "Apple TV",
+            "2": "Shield",
+            "3": "PS5",
+            "4": "Retro",
+            "5": "Preset 5",
+            "6": "Preset 6",
+            "7": "Preset 7",
+            "8": "Preset 8"
+          },
+          "state": "connected",
+          "inputs": [
+            {
+              "number": 1,
+              "name": "PS3",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 2,
+              "name": "AppleTV",
+              "inactive": false,
+              "signalActive": true,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 3,
+              "name": "Computer",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": false,
+              "sourceDetected": false,
+              "edid": 3
+            },
+            {
+              "number": 4,
+              "name": "Switch",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 5,
+              "name": "Shield",
+              "inactive": false,
+              "signalActive": true,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 6,
+              "name": "PS5",
+              "inactive": false,
+              "signalActive": true,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 7,
+              "name": "Analogue",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 3
+            },
+            {
+              "number": 8,
+              "name": "Input 8",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": false,
+              "sourceDetected": false,
+              "edid": 36
+            }
+          ],
+          "outputs_detail": [
+            {
+              "number": 1,
+              "name": "TV",
+              "connected": true,
+              "cableConnected": true,
+              "enabled": true,
+              "muted": true,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 1,
+              "arc": true
+            },
+            {
+              "number": 2,
+              "name": "Soundbar",
+              "connected": true,
+              "cableConnected": true,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 5,
+              "arc": true
+            },
+            {
+              "number": 3,
+              "name": "Output 3",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 4,
+              "name": "Output 4",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 5,
+              "name": "Output 5",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 6,
+              "name": "Output 6",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 7,
+              "name": "Output 7",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 8,
+              "name": "Output 8",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 1,
+              "arc": false
+            }
+          ]
+        }
+      },
+      {
+        "t_ms": -52,
+        "event": "routing_change",
+        "data": {
+          "output": 1,
+          "input": 2,
+          "input_name": "AppleTV",
+          "previous_input": 5
+        }
+      },
+      {
+        "t_ms": -52,
+        "event": "routing_change",
+        "data": {
+          "output": 2,
+          "input": 2,
+          "input_name": "AppleTV",
+          "previous_input": 5
+        }
+      },
+      {
+        "t_ms": -52,
+        "event": "routing_change",
+        "data": {
+          "output": 3,
+          "input": 1,
+          "input_name": "PS3",
+          "previous_input": 5
+        }
+      },
+      {
+        "t_ms": -52,
+        "event": "routing_change",
+        "data": {
+          "output": 4,
+          "input": 1,
+          "input_name": "PS3",
+          "previous_input": 5
+        }
+      },
+      {
+        "t_ms": -52,
+        "event": "routing_change",
+        "data": {
+          "output": 6,
+          "input": 6,
+          "input_name": "PS5",
+          "previous_input": 5
+        }
+      },
+      {
+        "t_ms": -52,
+        "event": "routing_change",
+        "data": {
+          "output": 7,
+          "input": 1,
+          "input_name": "PS3",
+          "previous_input": 5
+        }
+      },
+      {
+        "t_ms": -52,
+        "event": "routing_change",
+        "data": {
+          "output": 8,
+          "input": 1,
+          "input_name": "PS3",
+          "previous_input": 5
+        }
+      },
+      {
+        "t_ms": -52,
+        "event": "audio_mute",
+        "data": {
+          "output": 1,
+          "muted": false
+        }
+      },
+      {
+        "t_ms": -52,
         "event": "status",
         "data": {
           "connected": true,
@@ -676,6 +1063,7 @@
             "7": "Preset 7",
             "8": "Preset 8"
           },
+          "state": "connected",
           "inputs": [
             {
               "number": 1,
@@ -849,17 +1237,32 @@
             }
           ]
         }
+      },
+      {
+        "t_ms": 1340,
+        "event": "routing_change",
+        "data": {
+          "output": 3,
+          "input": 3,
+          "input_name": "Computer",
+          "previous_input": 1
+        }
+      },
+      {
+        "t_ms": 1340,
+        "event": "audio_mute",
+        "data": {
+          "output": 3,
+          "muted": true
+        }
       }
     ],
-    "screenshots": ["2026-09-28-V3-dc37b633-kiosk.profile_wrong_passcode-browser/after.png"],
+    "screenshots": ["2026-09-28-V3-50ce7c10-kiosk.route_one_muted-browser/after.png"],
     "client_diagnostics": {
       "page_api_requests": 9,
       "page_errors": [],
-      "console_errors": [
-        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
-        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
-      ],
-      "toasts": ["error: Invalid passcode"],
+      "console_errors": [],
+      "toasts": ["success: Routing and output parameters applied"],
       "dialogs": []
     },
     "operator": [],
@@ -868,15 +1271,31 @@
   },
   "checks": [
     {
-      "description": "response HTTP 403",
+      "description": "device outputs[2].source == 3",
       "result": "pass",
-      "detail": "HTTP 403; body (browser)",
+      "detail": "outputs[2].source = 3",
       "finding": null,
       "linked_finding": null,
       "note": null
     },
     {
-      "description": "no write command reached the device",
+      "description": "device outputs[2].audio_mute == 1",
+      "result": "pass",
+      "detail": "outputs[2].audio_mute = 1",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device received http 'set output audio mute' with {'mute': [3, 1]} exactly 1x",
+      "result": "pass",
+      "detail": "1 matching; http commands seen: [('get video status', {'comhead': 'get video status', 'language': 0}), ('get video status', {'comhead': 'get video status', 'language': 0}), ('get output status', {'comhead': 'get output status', 'language': 0}), ('get input status', {'comhead': 'get input status', 'language': 0}), ('video switch', {'comhead': 'video switch', 'language': 0, 'source': [3, 3]}), ('set output audio mute', {'comhead': 'set output audio mute', 'language': 0, 'mute': [3, 1]}), ('get video status', {'comhead': 'get video status', 'language': 0}), ('get output status', {'comhead': 'get output status', 'language': 0}), ('get input status', {'comhead': 'get input status', 'language': 0})]",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device never received 'tx hdcp'",
       "result": "pass",
       "detail": "write commands seen: []",
       "finding": null,
@@ -884,7 +1303,31 @@
       "note": null
     },
     {
-      "description": "device otherwise unchanged",
+      "description": "device never received 'set hdr conversion'",
+      "result": "pass",
+      "detail": "write commands seen: []",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device never received 'set video scaler'",
+      "result": "pass",
+      "detail": "write commands seen: []",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device never received 'set arc'",
+      "result": "pass",
+      "detail": "write commands seen: []",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device otherwise unchanged (allowed: outputs[2].source, outputs[2].audio_mute, routing)",
       "result": "pass",
       "detail": "no other changes",
       "finding": null,
@@ -892,9 +1335,17 @@
       "note": null
     },
     {
-      "description": "client shows toast.error == 'Invalid passcode'",
+      "description": "client shows toast.success == 'Routing and output parameters applied'",
       "result": "pass",
-      "detail": "toast.error = 'Invalid passcode' after 0.0 s",
+      "detail": "toast.success = 'Routing and output parameters applied' after 0.0 s",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "every WebSocket message follows docs/api/websocket.schema.json",
+      "result": "pass",
+      "detail": "13 message(s) checked",
       "finding": null,
       "linked_finding": null,
       "note": null
@@ -909,10 +1360,11 @@
     "src/rest_api/app.py",
     "src/rest_api/utils.py",
     "src/rest_api/websocket.py",
-    "src/rest_api/profiles.py",
-    "src/config.py",
-    "src/cec_macros.py",
-    "src/password.py",
+    "src/rest_api/events.py",
+    "docs/api/websocket.schema.json",
+    "src/rest_api/control.py",
+    "src/rest_api/outputs.py",
+    "src/rest_api/core.py",
     "web/kiosk.html"
   ]
 }
