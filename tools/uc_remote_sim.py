@@ -82,7 +82,9 @@ class ConnectionClosedError(RemoteSimError):
 class Received:
     """One message from the driver."""
 
-    t: float  # time.monotonic() when received
+    #: time.perf_counter() when received. Fine-grained on purpose: on Windows time.monotonic() ticks every
+    #: ~16 ms, so an event received just before a mark() compared equal to it and counted as "since".
+    t: float
     data: dict[str, Any]
 
     @property
@@ -225,9 +227,9 @@ class UcRemoteSim:
                         data = json.loads(msg.data)
                     except ValueError:
                         data = {"kind": "invalid", "raw": str(msg.data)[:2000]}
-                    self._dispatch(Received(time.monotonic(), data))
+                    self._dispatch(Received(time.perf_counter(), data))
                 elif msg.type == aiohttp.WSMsgType.BINARY:
-                    self._dispatch(Received(time.monotonic(), {"kind": "binary", "size": len(msg.data)}))
+                    self._dispatch(Received(time.perf_counter(), {"kind": "binary", "size": len(msg.data)}))
                 elif msg.type in (aiohttp.WSMsgType.CLOSE, aiohttp.WSMsgType.CLOSING, aiohttp.WSMsgType.CLOSED):
                     break
                 elif msg.type == aiohttp.WSMsgType.ERROR:
@@ -277,7 +279,7 @@ class UcRemoteSim:
     async def _send(self, message: dict[str, Any]) -> None:
         if self._ws is None or self._ws.closed or self.closed:
             raise ConnectionClosedError(self.close_code, self.close_reason)
-        self.sent.append((time.monotonic(), message))
+        self.sent.append((time.perf_counter(), message))
         try:
             await self._ws.send_str(json.dumps(message))
         except (ConnectionError, aiohttp.ClientError, RuntimeError) as exc:
@@ -314,7 +316,7 @@ class UcRemoteSim:
 
     def mark(self) -> float:
         """A point in time; pass it to :meth:`events_since` / :meth:`wait_event`."""
-        return time.monotonic()
+        return time.perf_counter()
 
     def events_since(self, since: float, msg: str | None = None) -> list[Received]:
         return [m for m in self.messages if m.kind == "event" and m.t >= since and (msg is None or m.msg == msg)]
