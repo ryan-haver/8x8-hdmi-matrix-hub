@@ -296,8 +296,17 @@ class EventStream:
             except TimeoutError:
                 return
 
-    async def poll_once(self, *, force_cables: bool = False) -> None:
-        """Read the matrix and publish what changed since the last read."""
+    async def refresh(self) -> dict[str, Any] | None:
+        """Read the matrix now, bypassing the status caches, and return the fresh ``status`` snapshot."""
+        await self.poll_once(force=True)
+        return self.status_snapshot()
+
+    async def poll_once(self, *, force: bool = False, force_cables: bool = False) -> None:
+        """Read the matrix and publish what changed since the last read.
+
+        :param force: bypass the status caches (``get_status``: a client asked for the current state)
+        :param force_cables: bypass the cable cache (a Telnet push said a cable changed)
+        """
         if self._poll_lock is None:
             self._poll_lock = asyncio.Lock()
         async with self._poll_lock:
@@ -308,12 +317,12 @@ class EventStream:
             self._check_link(device)
             if device is None or getattr(device, "connected", False) is not True:
                 return
-            raw_status = await device.get_status()
-            raw_outputs = await device.get_output_status()
-            raw_inputs = await device.get_input_status()
+            raw_status = await device.get_status(force_refresh=force)
+            raw_outputs = await device.get_output_status(force_refresh=force)
+            raw_inputs = await device.get_input_status(force_refresh=force)
             raw_cables = None
             if getattr(device, "telnet_connected", False) is True:
-                raw_cables = await device.get_all_cable_status(force_refresh=force_cables)
+                raw_cables = await device.get_all_cable_status(force_refresh=force or force_cables)
             self._check_link(device)
             if getattr(device, "connected", False) is not True:
                 return  # the link went down during the read: keep the last known values

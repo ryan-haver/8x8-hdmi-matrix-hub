@@ -168,6 +168,7 @@ class WsObserver:
         self.url = url
         self.forwarded_for = forwarded_for
         self.events: list[dict[str, Any]] = []
+        self._ws: aiohttp.ClientWebSocketResponse | None = None
         self._task: asyncio.Task[None] | None = None
         self._session: aiohttp.ClientSession | None = None
         self.error: str | None = None
@@ -180,6 +181,7 @@ class WsObserver:
             assert self._session is not None
             try:
                 async with self._session.ws_connect(self.url, heartbeat=None) as ws:
+                    self._ws = ws
                     async for msg in ws:
                         if msg.type == aiohttp.WSMsgType.TEXT:
                             try:
@@ -200,6 +202,28 @@ class WsObserver:
             await asyncio.wait_for(connected, 5)
         except TimeoutError:
             self.error = "no welcome message within 5 s"
+
+    async def sync(self, timeout: float = 15.0) -> bool:
+        """Ask the hub for a fresh read (``get_status``) and wait for its answer.
+
+        The runner resets the simulator behind the hub's back before each scenario. Until the hub has read
+        the matrix again, the changes the reset made would be announced during the scenario (docs/api/
+        WEBSOCKET.md: the hub announces what it notices). After this, they have been announced before it.
+        """
+        if self._ws is None or self._ws.closed:
+            return False
+        # The snapshot sent after `connected` must not be taken for the answer: let it arrive first.
+        settle = time.monotonic() + 3
+        while not any(e["event"] == "status" for e in self.events) and time.monotonic() < settle:
+            await asyncio.sleep(0.05)
+        t0 = time.time()
+        await self._ws.send_json({"command": "get_status"})
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            if any(e["event"] in ("status", "error") for e in self.since(t0)):
+                return any(e["event"] == "status" for e in self.since(t0))
+            await asyncio.sleep(0.05)
+        return False
 
     async def stop(self) -> None:
         if self._task:
@@ -453,6 +477,10 @@ class Runner:
             await ws.start()
             if ws.error:
                 notes.append(f"WebSocket observer: {ws.error}")
+            elif await ws.sync():
+                procedure.append("let the hub read the matrix (/ws get_status), so it is in sync before the action")
+            else:
+                notes.append("the hub did not answer get_status on /ws")
             for step in sc.setup:
                 r = await helper.perform(step)
                 procedure.append(f"setup (api): {step.describe()} -> HTTP {r.status}")

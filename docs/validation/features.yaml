@@ -558,7 +558,7 @@ features:
   basis: 'V3: scenarios live.front_panel_route, live.input_signal, live.display_unplugged, live.rename_elsewhere: the simulator changes behind the hub''s back and a /ui and a /kiosk page that stay open show it, with their status reads stripped so only the WebSocket can explain it (browser client). Hardware: HIL-B.'
   evidence: []
   findings: [UC-17, BE-29, BE-03]
-  scenarios: [live.front_panel_route, live.input_signal, live.display_unplugged, live.rename_elsewhere]
+  scenarios: [live.front_panel_route, live.input_signal, live.display_unplugged, live.rename_elsewhere, ha.front_panel_route]
 - id: F-CEC-001
   area: cec
   title: Power a source on / off over CEC
@@ -2548,7 +2548,7 @@ features:
   evidence:
   - docs/validation/evidence/F-HA-002/2026-09-26-V3-6c22aa7a-ha.select_source-ha.json
   findings: []
-  scenarios: [ha.select_source]
+  scenarios: [ha.select_source, ha.front_panel_route]
 - id: F-HA-003
   area: ha
   title: Matrix power switch
@@ -2696,7 +2696,7 @@ features:
   - docs/validation/evidence/F-HA-009/2026-09-26-V3-6c22aa7a-ha.display_unplugged-ha.json
   - docs/validation/evidence/F-HA-013/2026-09-26-V3-6c22aa7a-ha.matrix_unreachable-ha.json
   findings: []
-  scenarios: [ha.input_signal, ha.display_unplugged, ha.matrix_unreachable]
+  scenarios: [ha.input_signal, ha.display_unplugged, ha.matrix_unreachable, ha.front_panel_route, ha.matrix_offline]
 - id: F-HA-014
   area: ha
   title: Install through HACS (custom repository)
@@ -3455,7 +3455,7 @@ features:
   basis: 'V3: scenario live.matrix_offline (browser: the /ui header and the kiosk status go disconnected and come back; /api/status answers 503 with the link, never made-up names). V2: failures.unreachable_switch; tests/sim/test_sim_ws_contract.py::test_status_is_not_made_up_when_the_status_read_fails (VAL-04: the link up but the status read failing).'
   evidence: []
   findings: [UI-29]
-  scenarios: [failures.unreachable_switch, live.matrix_offline]
+  scenarios: [failures.unreachable_switch, live.matrix_offline, ha.matrix_offline]
 - id: F-REL-010
   area: reliability
   title: Status stays fresh (caches expire, one refresh at a time)

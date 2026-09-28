@@ -23,7 +23,7 @@ Implementation: `src/rest_api/events.py` (event stream and status poller), `src/
 | 1 | server → client | `connected` (always first) |
 | 2 | server → client | `status` snapshot, as soon as the hub has read the matrix (at once if it already has) |
 | 3 | server → client | change events, as they happen |
-| any | client → server | `{"command": "ping"}` → `pong`; `{"command": "get_status"}` → `status` |
+| any | client → server | `{"command": "ping"}` → `pong`; `{"command": "get_status"}` → `status` after a fresh read of the matrix (status caches bypassed); changes that read finds are announced to every client first, as usual |
 
 **Heartbeat (API-10):** the server sends a WebSocket **protocol** ping every 30 s and closes a client that does not answer within 15 s. Browsers answer these pings by themselves. A client can also send `{"command": "ping"}` and gets `pong`. The form `{"type": "ping"}` that older web clients sent is accepted too. The web client pings every 25 s and reconnects if it has received nothing for 60 s.
 
@@ -40,7 +40,7 @@ Every server message is one JSON object: `{"event": "<name>", "data": {...}}`. N
 | Event | Payload (`data`) | Sent |
 | --- | --- | --- |
 | `connected` | `message`, `client_count` (int), `protocol` (`1`), `matrix`: link | first message on every connection |
-| `status` | the `/api/status` data plus `inputs` and `outputs_detail` (below) | after `connected` once the hub has read the matrix; in answer to `get_status`; to every client when the hub learns a value for the first time (e.g. cables after Telnet came up) |
+| `status` | the `/api/status` data plus `inputs` and `outputs_detail` (below) | after `connected` once the hub has read the matrix; in answer to `get_status` (after a fresh read); to every client when the hub learns a value for the first time (e.g. cables after Telnet came up) |
 | `matrix_connection` | `connected` (bool), `state`, `host` | the matrix link went up or down, or changed between `connected` and `degraded` (Telnet lost or back) |
 
 **Link** (`matrix` in `connected`, the `/api/status` degraded answer and `matrix_connection`): `connected` (bool: HTTP commands can be sent), `state` (`connected` · `degraded` (HTTP up, Telnet down) · `connecting` · `backoff` (lost, waiting to retry) · `disconnected` · `not_configured`), `host` (string or null), and `configured` (bool) where given.
@@ -85,7 +85,7 @@ These say what a command through the hub did. The state it changed also arrives 
 | Event | Payload | Sent |
 | --- | --- | --- |
 | `pong` | `{}` | reply to `ping` |
-| `error` | `message` | reply to invalid JSON, an unknown command, or `get_status` before the hub has read the matrix |
+| `error` | `message` | reply to invalid JSON, an unknown command, or `get_status` when the hub cannot read the matrix |
 
 ### Removed in protocol 1
 
