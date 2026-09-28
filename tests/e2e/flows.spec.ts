@@ -369,6 +369,78 @@ test.describe('WP-E1 UI flows', () => {
     }
   });
 
+  test('API-25 (read side): the CEC dialog labels targets stored as "input:2" and as "input_2"', async ({ page }) => {
+    await preparePage(page);
+    // movie_night stores the colon form (tests/e2e/fixtures/data/profiles.json); make one category use the
+    // underscore form the resolver writes, so both are on screen.
+    await page.route('**/api/profile/movie_night/cec', async (route) => {
+      if (route.request().method() !== 'GET') return route.fallback();
+      const response = await route.fetch();
+      const b = (await response.json()) as Json;
+      b.data.cec_config.playback_targets = ['input_2'];
+      await route.fulfill({ response, json: b });
+    });
+    await openUi(page);
+    await page.evaluate(() => (window as any).app.components.scenesPanel.openCecConfig('movie_night')); // eslint-disable-line @typescript-eslint/no-explicit-any
+    await expect(page.locator('#scene-cec-modal')).toBeVisible();
+    const chips = (cat: string) => page.locator(`#targets-${cat} .target-chip .chip-label`);
+    // Seed names: input 2 AppleTV, output 1 TV, output 2 Soundbar.
+    await expect(chips('navigation')).toHaveText(['Input 2 · AppleTV']);
+    await expect(chips('playback')).toHaveText(['Input 2 · AppleTV']);
+    await expect(chips('volume')).toHaveText(['Output 2 · Soundbar']);
+    await expect(chips('power_on')).toHaveText(['Input 2 · AppleTV', 'Output 1 · TV']);
+    await expect(page.locator('#scene-cec-modal .target-chip.input-target')).toHaveCount(4);
+    await expect(page.locator('#scene-cec-modal')).not.toContainText('NaN');
+  });
+
+  // ----- UI-27: dashboard cards look and order ----------------------------------------
+
+  test('UI-27: dashboard cards render as styled cards in a panel after the pinned widgets', async ({ page }) => {
+    await preparePage(page, {
+      storage: {
+        orei_dashboard_config: JSON.stringify({
+          pinnedWidgets: ['routing-dashboard', 'cec-remote'],
+          hiddenMobileWidgets: [],
+          widgetOrder: ['routing-dashboard', 'cec-remote'],
+        }),
+      },
+    });
+    await openUi(page);
+    await mainTab(page, 'dashboard');
+    await expect(page.locator('#dashboard-cards-grid .dashboard-card')).not.toHaveCount(0);
+    // The pinned widgets keep their stored order; the cards panel comes after them, also when a widget
+    // is rendered after the cards (the CEC tray registers its widget late; re-pinning renders it again).
+    const order = () =>
+      page.locator('#dashboard-widgets > *').evaluateAll((els) =>
+        els.map((e) => (e as HTMLElement).dataset.widgetId ?? (e.classList.contains('dashboard-cards-container') ? 'cards' : e.className)),
+      );
+    expect(await order()).toEqual(['routing-dashboard', 'cec-remote', 'cards']);
+    await page.evaluate(() => {
+      const dm = (window as any).dashboardManager; // eslint-disable-line @typescript-eslint/no-explicit-any
+      dm.unpinWidget('cec-remote');
+      dm.pinWidget('cec-remote');
+    });
+    expect(await order()).toEqual(['routing-dashboard', 'cec-remote', 'cards']);
+    // Panel and cards are drawn with the card surface (LOOK_AND_FEEL §3), not as bare text.
+    const look = (sel: string) =>
+      page.locator(sel).first().evaluate((el) => {
+        const cs = getComputedStyle(el);
+        return { bg: cs.backgroundColor, radius: parseFloat(cs.borderTopLeftRadius), border: parseFloat(cs.borderTopWidth) };
+      });
+    for (const sel of ['.dashboard-cards-container', '#dashboard-cards-grid .dashboard-card']) {
+      const s = await look(sel);
+      expect(s.bg, `${sel} background`).not.toBe('rgba(0, 0, 0, 0)');
+      expect(s.radius, `${sel} radius`).toBeGreaterThanOrEqual(8);
+      expect(s.border, `${sel} border`).toBeGreaterThanOrEqual(1);
+    }
+    // The action button sits inside its card, right-aligned (not loose under the title).
+    const card = page.locator('#dashboard-cards-grid .dashboard-card[data-card-key="scene:scene_movienight01"]');
+    const [cardBox, actionBox] = await Promise.all([card.boundingBox(), card.locator('.dashboard-card-action').boundingBox()]);
+    expect(actionBox!.y).toBeGreaterThanOrEqual(cardBox!.y);
+    expect(actionBox!.y + actionBox!.height).toBeLessThanOrEqual(cardBox!.y + cardBox!.height);
+    expect(actionBox!.x + actionBox!.width).toBeGreaterThan(cardBox!.x + cardBox!.width - 80);
+  });
+
   // ----- UI-31: theme presets ------------------------------------------------------
 
   test('UI-31: each theme preset has its own edit button', async ({ page }) => {
@@ -422,39 +494,174 @@ test.describe('WP-E1 UI flows', () => {
 
   // ----- UI-23..25: kiosk -----------------------------------------------------------
 
-  test('UI-23: kiosk route-all applies the options as chosen (mute unchecked leaves audio on, ARC off) with valid values', async ({
+  /** Output setting requests (HDCP/HDR/scaler/ARC/mute) the kiosk sends. */
+  function outputSettingRequests(page: Page) {
+    const sent: Array<{ path: string; status: number; body: string | null }> = [];
+    page.on('response', (r) => {
+      const p = new URL(r.url()).pathname;
+      if (/\/api\/output\/\d\/(hdcp|hdr|scaler|arc|mute)$/.test(p)) sent.push({ path: p, status: r.status(), body: r.request().postData() });
+    });
+    return sent;
+  }
+
+  /** Every output field except the routing, to prove "nothing else changed". */
+  const settingsOf = (outputs: Array<Record<string, unknown>>) => outputs.map(({ source: _source, ...rest }) => rest); // eslint-disable-line @typescript-eslint/no-unused-vars
+
+  test('UI-46: kiosk route-all with untouched options changes only the routing (the soundbar keeps its scaler)', async ({
     page,
     sim,
   }) => {
     await sim.patch({ outputs: { '0': { audio_mute: 1 }, '1': { arc: 1 } } });
+    const before = (await sim.state()).outputs;
+    expect(before[1].scaler).toBe(4); // seed: output 2 is the audio-only soundbar
     await preparePage(page);
     await openKiosk(page);
-    const settings: Array<{ path: string; status: number; body: string | null }> = [];
-    page.on('response', (r) => {
-      const p = new URL(r.url()).pathname;
-      if (/\/api\/output\/\d\/(hdcp|hdr|scaler|arc|mute)$/.test(p)) settings.push({ path: p, status: r.status(), body: r.request().postData() });
-    });
+    const sent = outputSettingRequests(page);
     await page.locator('#kioskGrid .kiosk-btn').nth(4).click();
     await page.locator('#routeToAllBtn').click();
+    await page.locator('#toggleAdvancedRouting').click(); // looking is not changing
     await page.locator('#routingApplyBtn').click();
     await expect.poll(async () => (await sim.state()).outputs.map((o) => o.source), { timeout: 10_000 }).toEqual([5, 5, 5, 5, 5, 5, 5, 5]);
-    await expect.poll(() => settings.length, { timeout: 10_000 }).toBe(40);
-    expect(settings.filter((s) => s.status !== 200), 'rejected output settings').toEqual([]);
-    const outputs = (await sim.state()).outputs;
-    expect(outputs.map((o) => o.audio_mute)).toEqual([0, 0, 0, 0, 0, 0, 0, 0]);
-    expect(outputs.map((o) => o.arc)).toEqual([0, 0, 0, 0, 0, 0, 0, 0]);
+    await settle(page, 1500);
+    expect(sent, 'output settings sent').toEqual([]);
+    expect(settingsOf((await sim.state()).outputs)).toEqual(settingsOf(before));
   });
 
-  test('UI-23: kiosk "Mute output audio" mutes the chosen output only', async ({ page, sim }) => {
+  test('UI-23/UI-46: kiosk sends only the options the user changed, with the values the hub reads', async ({ page, sim }) => {
+    const before = (await sim.state()).outputs;
     await preparePage(page);
     await openKiosk(page);
+    const sent = outputSettingRequests(page);
     await page.locator('#kioskGrid .kiosk-btn').nth(2).click();
     await page.locator('#wizardOutputsList .wizard-option-btn[data-output="3"]').click();
     await page.locator('#routingMuteAudio').check();
+    await page.locator('#toggleAdvancedRouting').click();
+    await page.locator('#routingHdrMode').selectOption({ label: 'SDR' });
     await page.locator('#routingApplyBtn').click();
     await expect.poll(async () => (await sim.state()).outputs[2].source, { timeout: 10_000 }).toBe(3);
-    await expect.poll(async () => (await sim.state()).outputs[2].audio_mute, { timeout: 10_000 }).toBe(1);
-    expect((await sim.state()).outputs.map((o) => o.audio_mute)).toEqual([0, 0, 1, 0, 0, 0, 0, 0]);
+    await expect.poll(() => sent.length, { timeout: 10_000 }).toBe(2);
+    await settle(page, 1000);
+    expect(sent.map((r) => `${r.path} ${r.body} ${r.status}`).sort()).toEqual([
+      '/api/output/3/hdr {"mode":2} 200',
+      '/api/output/3/mute {"muted":true} 200',
+    ]);
+    const after = (await sim.state()).outputs;
+    expect(after[2].audio_mute).toBe(1);
+    expect(after[2].hdr).toBe(1); // API HDR 2 (HDR to SDR) = device code 1
+    // Nothing else changed on any output.
+    const expected = settingsOf(before);
+    expected[2] = { ...expected[2], audio_mute: 1, hdr: 1 };
+    expect(settingsOf(after)).toEqual(expected);
+  });
+
+  // ----- UI-48: kiosk passcode -------------------------------------------------------
+
+  /** Kiosk Profiles tab: tap the slot showing `name`. */
+  async function kioskProfileSlot(page: Page, name: string) {
+    await page.locator('.kiosk-tab-btn[data-tab="profiles"]').click();
+    await settle(page, 300);
+    await page.locator('#profilesGrid .kiosk-btn', { hasText: name }).click();
+  }
+
+  async function kioskPin(page: Page, digits: string) {
+    for (const d of digits) await page.locator(`#passcodeModal [data-digit="${d}"]`).click();
+  }
+
+  test('UI-48: the kiosk asks for the passcode of a protected profile and applies it', async ({ page, sim }) => {
+    await preparePage(page);
+    await openKiosk(page);
+    await kioskProfileSlot(page, 'Kids Gaming');
+    await expect(page.locator('#passcodeModal')).toHaveClass(/show/);
+    await expect(page.locator('#passcodeModal')).toContainText('Kids Gaming');
+    await kioskPin(page, '1234');
+    await expect(page.locator('#passcodeDisplay')).toHaveText('••••');
+    const recall = page.waitForResponse((r) => r.url().endsWith('/api/profile/kids_gaming/recall') && !!r.request().postData()?.includes('1234'));
+    await page.locator('#passcodeOkBtn').click();
+    expect((await recall).status()).toBe(200);
+    await expect(page.locator('#passcodeModal')).not.toHaveClass(/show/);
+    await expect.poll(async () => (await sim.state()).outputs[0].source).toBe(6);
+    await expect(page.locator('#kioskToast')).toHaveText('Profile activated');
+  });
+
+  test('UI-48: a wrong kiosk passcode says "Invalid passcode"; cancel sends nothing', async ({ page, sim }) => {
+    await preparePage(page);
+    await openKiosk(page);
+    const recalls: string[] = [];
+    page.on('request', (r) => {
+      if (r.url().endsWith('/api/profile/kids_gaming/recall')) recalls.push(r.postData() ?? '');
+    });
+    await kioskProfileSlot(page, 'Kids Gaming');
+    await kioskPin(page, '9999');
+    await page.locator('#passcodeOkBtn').click();
+    await expect(page.locator('#kioskToast')).toHaveText('Invalid passcode');
+    await expect(page.locator('#kioskToast')).toHaveClass(/error/);
+    expect((await sim.state()).outputs[0].source).toBe(2);
+    await settle(page, 2800); // let the toast go
+    await kioskProfileSlot(page, 'Kids Gaming');
+    await expect(page.locator('#passcodeModal')).toHaveClass(/show/);
+    await page.locator('#passcodeCancelBtn').click();
+    await expect(page.locator('#passcodeModal')).not.toHaveClass(/show/);
+    await settle(page, 500);
+    // attempt 1: no passcode, 9999; attempt 2: no passcode, then cancelled
+    expect(recalls.map((b) => (b.includes('9999') ? '9999' : '-'))).toEqual(['-', '9999', '-']);
+    expect((await sim.state()).outputs[0].source).toBe(2);
+  });
+
+  // ----- UI-45: profile CEC targets ----------------------------------------------------
+
+  test('UI-45: the profile editor has a CEC button that opens the CEC dialog for that profile', async ({ page }) => {
+    await preparePage(page);
+    await openUi(page);
+    await mainTab(page, 'profiles');
+    await page.locator('#save-scene-btn').click(); // new profile: nothing to configure yet
+    await page.locator('#profile-editor-modal.visible').waitFor();
+    await expect(page.locator('#open-cec-config-btn')).toBeHidden();
+    await page.locator('#cancel-profile-btn').click();
+    await expect(page.locator('#profile-editor-modal')).not.toHaveClass(/visible/);
+    await page.locator('#scenes-list .edit-scene-btn[data-scene-id="movie_night"]').click();
+    await page.locator('#profile-editor-modal.visible').waitFor();
+    const button = page.locator('#open-cec-config-btn');
+    await expect(button).toBeVisible();
+    await button.click();
+    await expect(page.locator('#scene-cec-modal')).toBeVisible();
+    await expect(page.locator('#cec-scene-name')).toHaveText('Movie Night');
+    await expect(page.locator('#targets-navigation .chip-label')).toHaveText(['Input 2 · AppleTV']);
+  });
+
+  test('UI-45: after a profile is recalled the CEC tray sends to that profile\'s CEC targets', async ({ page }) => {
+    await preparePage(page);
+    // Game Day's CEC config (the fixture has none): navigation goes to input 6 (PS5).
+    await page.route('**/api/profile/game_day/cec', (route) =>
+      route.request().method() === 'GET'
+        ? route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            json: {
+              success: true,
+              data: {
+                profile_id: 'game_day',
+                cec_config: {
+                  nav_targets: ['input:6'], playback_targets: ['input:6'], volume_targets: ['output:2'],
+                  power_on_targets: [], power_off_targets: [], auto_resolved: false,
+                },
+              },
+              error: null,
+            },
+          })
+        : route.fallback(),
+    );
+    await openUi(page);
+    await openSettingsDrawer(page, 'profiles');
+    const cecLoaded = page.waitForResponse((r) => r.url().endsWith('/api/profile/game_day/cec'));
+    await page.locator('#settings-drawer .execute-profile-btn[data-id="game_day"]').click();
+    await cecLoaded;
+    await page.keyboard.press('Escape');
+    await page.evaluate(() => (window as any).settingsDrawer.close()); // eslint-disable-line @typescript-eslint/no-explicit-any
+    await page.locator('.cec-tray-fab').click();
+    await page.locator('#cec-tray.expanded').waitFor();
+    const sent = page.waitForRequest((r) => /\/api\/cec\/(input|output)\/\d\/up$/.test(new URL(r.url()).pathname));
+    await page.locator('#cec-tray.expanded [data-cmd="up"]:visible').first().click();
+    expect(new URL((await sent).url()).pathname).toBe('/api/cec/input/6/up');
   });
 
   test('UI-24: kiosk status tiles come from the real status routes', async ({ page, pageProblems }) => {

@@ -1210,13 +1210,16 @@ export const CATALOG: CatalogEntry[] = [
   {
     name: 'dialog/scene-cec',
     page: 'ui',
-    description: "CEC configuration dialog for the Movie Night profile (targets per category, loaded from /api/profile/{id}/cec).",
+    description: "CEC configuration dialog for the Movie Night profile, opened with the profile editor's CEC button (targets per category from /api/profile/{id}/cec).",
     setup: async ({ page }) => {
-      await js(page, `window.app.components.scenesPanel.openCecConfig('movie_night')`);
+      await tab(page, 'profiles');
+      await page.locator('#scenes-list .edit-scene-btn[data-scene-id="movie_night"]').click();
+      await page.locator('#profile-editor-modal.visible').waitFor();
+      await page.locator('#open-cec-config-btn').click();
       await page.locator('#scene-cec-modal.visible').waitFor();
       await settle(page, 600);
     },
-    note: 'No UI trigger: nothing calls ScenesPanel.openCecConfig and the profile editor has no #open-cec-config-btn (UI-45; opened through the app here). The chips read "Output NaN": the fixture profile stores targets as "input:2" (the format config.CecConfig documents) while the dialog parses "input_2" (API-25). Before WP-E1 it never became visible and loaded nothing (UI-30), and the auto-resolve toggle covered the dialog with a large rounded shape (UI-43).',
+    note: 'WP-E1: the CEC button is the owner-approved entry point (UI-45, 2026-09-27); chips read both stored target forms, "input:2" and "input_2" (API-25 read side; they showed "Output NaN"). Before WP-E1 the dialog never became visible and loaded nothing (UI-30), and the auto-resolve toggle covered it (UI-43).',
   },
   {
     name: 'dialog/passcode-prompt',
@@ -1702,7 +1705,7 @@ export const CATALOG: CatalogEntry[] = [
       await page.locator('#toggleAdvancedRouting').click();
       await settle(page, 300);
     },
-    note: 'Before WP-E1 (UI-23) the HDR/scaler/HDCP option values did not match the API and Apply muted every target and turned ARC on (wrong body keys).',
+    note: 'Before WP-E1 (UI-23) the HDR/scaler/HDCP option values did not match the API and Apply muted every target and turned ARC on (wrong body keys). Since UI-46 (owner decision 2026-09-27) Apply sends only the options changed here.',
   },
   {
     name: 'kiosk/cec-remote/output-1',
@@ -1798,6 +1801,24 @@ export const CATALOG: CatalogEntry[] = [
       note: 'Before WP-E1 (UI-25) the wizard threw before opening (it read the /api/cec/macros response with the wrong shape).',
     }),
   ),
+  {
+    name: 'kiosk/passcode-pad/entry',
+    page: 'kiosk',
+    themed: true,
+    description: 'Kiosk PIN pad for a passcode-protected profile (Kids Gaming), two digits entered.',
+    setup: async ({ page }) => {
+      await kioskTab(page, 'profiles');
+      await page.locator('#profilesGrid .kiosk-btn', { hasText: 'Kids Gaming' }).click();
+      await page.locator('#passcodeModal.show').waitFor();
+      await page.locator('#passcodeModal [data-digit="1"]').click();
+      await page.locator('#passcodeModal [data-digit="2"]').click();
+      await page.waitForFunction(() => !document.getElementById('kioskToast')?.classList.contains('show'), undefined, {
+        timeout: 6000,
+      });
+      await settle(page, 200);
+    },
+    note: 'UI-48 (owner decision 2026-09-27): built from the kiosk modal, CEC-remote action buttons and wizard footer buttons. The main UI still uses a native prompt (UI-36).',
+  },
   {
     name: 'kiosk/toast/success',
     page: 'kiosk',

@@ -123,6 +123,7 @@ test.describe('smoke', () => {
   });
 
   test('routing an input to all outputs from the kiosk changes the simulator', async ({ page, sim, pageProblems }) => {
+    const before = (await sim.state()).outputs;
     await preparePage(page);
     await openKiosk(page);
     await page.locator('#kioskGrid .kiosk-btn').nth(4).click(); // input 5 (Shield)
@@ -131,13 +132,13 @@ test.describe('smoke', () => {
     await expect.poll(async () => (await sim.state()).outputs.map((o) => o.source), { timeout: 10_000 }).toEqual([
       5, 5, 5, 5, 5, 5, 5, 5,
     ]);
-    // UI-23: Apply sends the checkboxes as the hub reads them ({muted}, {enabled});
-    // it used to send {mute}/{enable}, so the hub defaulted to true and muted every
-    // target and turned ARC on. With the defaults (both unchecked) nothing is muted
-    // and ARC is off. The settings land after the routing: poll.
-    await expect
-      .poll(async () => (await sim.state()).outputs.map((o) => `${o.audio_mute}/${o.arc}`), { timeout: 10_000 })
-      .toEqual(Array(8).fill('0/0'));
+    // UI-23 / UI-46 (owner decision 2026-09-27): Apply changes the routing only;
+    // untouched options send nothing. It used to mute every target and turn ARC
+    // on ({mute}/{enable} where the hub reads muted/enabled, default true).
+    await page.waitForTimeout(1000);
+    const after = (await sim.state()).outputs.map(({ source: _source, ...rest }) => rest); // eslint-disable-line @typescript-eslint/no-unused-vars
+    const seed = before.map(({ source: _source, ...rest }) => rest); // eslint-disable-line @typescript-eslint/no-unused-vars
+    expect(after).toEqual(seed);
     expect(unknownPageErrors(pageProblems.pageErrors), 'unexpected page errors').toEqual([]);
   });
 });
