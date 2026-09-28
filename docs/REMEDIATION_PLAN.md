@@ -286,7 +286,7 @@ Severity: **C** critical · **H** high · **M** medium · **L** low. "Phase" is 
 | UI-42 | L | Tab A11 kiosk routing modal uses the full 800 px height with almost no margin (will clip if the confirmed viewport is shorter) | `kiosk/routing-modal/step-1` | 5 |
 | UI-43 | M | Scene-CEC dialog: a large rounded shape covers the modal, hiding its title and footer buttons (phone and iPhone) | `dialog/scene-cec` | 2 (with UI-30) |
 | UI-37 | M | Since BE-14 the hub refuses navigation/playback CEC keys for displays (REST 400), but the web app's CEC dropdown renders the D-pad and Menu/Back for a display too (no per-target filtering found in the CEC tray or the kiosk remote either); `GET /api/cec/output/{n}/capabilities` lists the six supported keys. Needs a UI change through the UI review process | `cec-controls.js:renderDropdownContent`, `cec-tray.js`, `kiosk.html` | 2 |
-| UI-44 | L | `app.js` `handleCecCommand` sets `outputs[port].enabled` (the output's stream) from a CEC power command to the TV: CEC display power is not the output stream. It was unreachable (the `cec_command` event never reached it, UI-02) and is still not wired; fix it before showing `cec_command` (found in WP-C2) | `web/js/app.js` `handleCecCommand` | 2 / WP-E1 |
+| UI-49 | L | `app.js` `handleCecCommand` sets `outputs[port].enabled` (the output's stream) from a CEC power command to the TV: CEC display power is not the output stream. It was unreachable (the `cec_command` event never reached it, UI-02) and is still not wired; fix it before showing `cec_command` (found in WP-C2) | `web/js/app.js` `handleCecCommand` | 2 / WP-E1 |
 
 ### 4.8 Documentation (DOC)
 
