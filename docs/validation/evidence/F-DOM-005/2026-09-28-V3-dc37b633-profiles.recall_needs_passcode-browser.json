@@ -1,25 +1,25 @@
 {
   "schema_version": 1,
-  "features": ["F-DOM-002", "F-UI-012"],
+  "features": ["F-DOM-005", "F-UI-014"],
   "level": "V3",
-  "scenario": "profiles.recall_routing",
-  "scenario_title": "Recall profile 'Game Day': outputs 1-3 show input 5",
-  "scenario_kind": "happy",
+  "scenario": "profiles.recall_needs_passcode",
+  "scenario_title": "A passcode-protected profile is not applied without its passcode",
+  "scenario_kind": "failure",
   "target": "sim",
   "client": "browser",
   "result": "pass",
   "gate": "ok",
   "blocked_reason": null,
   "commit": {
-    "sha": "e81b2b48b5b642be59e1118261de3c31241f3f9b",
+    "sha": "dc37b6331dadc55cccacfa48786b91a3084144f5",
     "branch": "wp-e1-ui-fixes",
     "dirty_files": [],
-    "short": "e81b2b48",
+    "short": "dc37b633",
     "dirty": false
   },
   "timestamp": {
-    "started": "2026-09-28T01:13:18.415Z",
-    "finished": "2026-09-28T01:13:20.381Z"
+    "started": "2026-09-28T02:52:50.420Z",
+    "finished": "2026-09-28T02:52:52.439Z"
   },
   "operator": "automation",
   "environment": {
@@ -35,8 +35,8 @@
         "USE_MODULAR": "true",
         "UC_ENABLED": "false",
         "MATRIX_HOST": "127.0.0.1",
-        "MATRIX_PORT": "53065",
-        "OREI_TELNET_PORT": "53066",
+        "MATRIX_PORT": "52367",
+        "OREI_TELNET_PORT": "52368",
         "TRUST_PROXY_HEADERS": "true",
         "TRUSTED_PROXY_IPS": "127.0.0.1",
         "LOG_LEVEL": "INFO"
@@ -57,24 +57,24 @@
   },
   "procedure": [
     "reset the simulator to the seed state",
-    "action (browser): profile_recall(profile_id='game_day')",
+    "action (browser): profile_recall(profile_id='kids_gaming')",
     "  open /ui and wait until the app has loaded its data",
     "  open the Profiles tab",
-    "  click Activate on profile game_day",
-    "  the page sent POST /api/profile/game_day/recall -> HTTP 200",
-    "  the page shows: success: \"Game Day\" activated"
+    "  click Activate on profile kids_gaming",
+    "  the page sent POST /api/profile/kids_gaming/recall -> HTTP 403",
+    "  cancel the prompt \"\"Kids Gaming\" is passcode protected. Enter passcode:\""
   ],
   "observations": {
     "requests": [
       {
         "method": "POST",
-        "path": "/api/profile/game_day/recall",
+        "path": "/api/profile/kids_gaming/recall",
         "body": "{}",
-        "status": 200,
+        "status": 403,
         "via": "page"
       }
     ],
-    "response_status": 200,
+    "response_status": 403,
     "hub_reads": [],
     "state_before": {
       "schema_version": 1,
@@ -419,7 +419,7 @@
       "outputs": [
         {
           "name": "TV",
-          "source": 5,
+          "source": 2,
           "connected": 1,
           "stream": 1,
           "hdcp": 3,
@@ -433,7 +433,7 @@
         },
         {
           "name": "Soundbar",
-          "source": 5,
+          "source": 2,
           "connected": 1,
           "stream": 1,
           "hdcp": 3,
@@ -447,14 +447,14 @@
         },
         {
           "name": "Output 3",
-          "source": 5,
+          "source": 1,
           "connected": 0,
           "stream": 1,
           "hdcp": 3,
           "hdr": 0,
           "scaler": 0,
           "arc": 0,
-          "audio_mute": 1,
+          "audio_mute": 0,
           "cec_enabled": 0,
           "ext_audio_enabled": 0,
           "ext_audio_source": 1
@@ -576,258 +576,42 @@
           "saved": true
         }
       ],
-      "routing": [5, 5, 5, 1, 5, 6, 1, 1]
+      "routing": [2, 2, 1, 1, 5, 6, 1, 1]
     },
-    "state_diff": [
-      {
-        "path": "outputs[0].source",
-        "before": 2,
-        "after": 5
-      },
-      {
-        "path": "outputs[1].source",
-        "before": 2,
-        "after": 5
-      },
-      {
-        "path": "outputs[2].audio_mute",
-        "before": 0,
-        "after": 1
-      },
-      {
-        "path": "outputs[2].source",
-        "before": 1,
-        "after": 5
-      },
-      {
-        "path": "routing[0]",
-        "before": 2,
-        "after": 5
-      },
-      {
-        "path": "routing[1]",
-        "before": 2,
-        "after": 5
-      },
-      {
-        "path": "routing[2]",
-        "before": 1,
-        "after": 5
-      }
-    ],
+    "state_diff": [],
     "device_log": [
       {
-        "t": 1790557998.613,
+        "t": 1790563970.633,
         "channel": "http",
         "command": "get video status",
         "recognised": true
       },
       {
-        "t": 1790557998.616,
-        "channel": "http",
-        "command": "get status",
-        "recognised": true
-      },
-      {
-        "t": 1790557998.617,
-        "channel": "http",
-        "command": "get video status",
-        "recognised": true
-      },
-      {
-        "t": 1790557998.618,
-        "channel": "http",
-        "command": "get input status",
-        "recognised": true
-      },
-      {
-        "t": 1790557998.618,
+        "t": 1790563970.633,
         "channel": "http",
         "command": "get output status",
         "recognised": true
       },
       {
-        "t": 1790557998.619,
+        "t": 1790563970.634,
         "channel": "http",
         "command": "get input status",
         "recognised": true
       },
       {
-        "t": 1790557998.683,
+        "t": 1790563970.64,
+        "channel": "http",
+        "command": "get status",
+        "recognised": true
+      },
+      {
+        "t": 1790563970.686,
         "channel": "telnet",
         "command": "status",
         "recognised": true
       },
       {
-        "t": 1790557998.684,
-        "channel": "http",
-        "command": "get video status",
-        "recognised": true
-      },
-      {
-        "t": 1790557999.763,
-        "channel": "http",
-        "command": "video switch",
-        "client": "127.0.0.1",
-        "payload": {
-          "comhead": "video switch",
-          "language": 0,
-          "source": [1, 5]
-        },
-        "response": {
-          "comhead": "video switch",
-          "result": 1
-        },
-        "recognised": true,
-        "mutated": true,
-        "warnings": []
-      },
-      {
-        "t": 1790557999.763,
-        "channel": "http",
-        "command": "tx stream",
-        "client": "127.0.0.1",
-        "payload": {
-          "comhead": "tx stream",
-          "language": 0,
-          "out": [1, 1]
-        },
-        "response": {
-          "comhead": "tx stream",
-          "result": 1
-        },
-        "recognised": true,
-        "mutated": true,
-        "warnings": []
-      },
-      {
-        "t": 1790557999.764,
-        "channel": "http",
-        "command": "set output audio mute",
-        "client": "127.0.0.1",
-        "payload": {
-          "comhead": "set output audio mute",
-          "language": 0,
-          "mute": [1, 0]
-        },
-        "response": {
-          "comhead": "set output audio mute",
-          "result": 1
-        },
-        "recognised": true,
-        "mutated": true,
-        "warnings": []
-      },
-      {
-        "t": 1790557999.765,
-        "channel": "http",
-        "command": "video switch",
-        "client": "127.0.0.1",
-        "payload": {
-          "comhead": "video switch",
-          "language": 0,
-          "source": [2, 5]
-        },
-        "response": {
-          "comhead": "video switch",
-          "result": 1
-        },
-        "recognised": true,
-        "mutated": true,
-        "warnings": []
-      },
-      {
-        "t": 1790557999.766,
-        "channel": "http",
-        "command": "tx stream",
-        "client": "127.0.0.1",
-        "payload": {
-          "comhead": "tx stream",
-          "language": 0,
-          "out": [2, 1]
-        },
-        "response": {
-          "comhead": "tx stream",
-          "result": 1
-        },
-        "recognised": true,
-        "mutated": true,
-        "warnings": []
-      },
-      {
-        "t": 1790557999.766,
-        "channel": "http",
-        "command": "set output audio mute",
-        "client": "127.0.0.1",
-        "payload": {
-          "comhead": "set output audio mute",
-          "language": 0,
-          "mute": [2, 0]
-        },
-        "response": {
-          "comhead": "set output audio mute",
-          "result": 1
-        },
-        "recognised": true,
-        "mutated": true,
-        "warnings": []
-      },
-      {
-        "t": 1790557999.767,
-        "channel": "http",
-        "command": "video switch",
-        "client": "127.0.0.1",
-        "payload": {
-          "comhead": "video switch",
-          "language": 0,
-          "source": [3, 5]
-        },
-        "response": {
-          "comhead": "video switch",
-          "result": 1
-        },
-        "recognised": true,
-        "mutated": true,
-        "warnings": []
-      },
-      {
-        "t": 1790557999.768,
-        "channel": "http",
-        "command": "tx stream",
-        "client": "127.0.0.1",
-        "payload": {
-          "comhead": "tx stream",
-          "language": 0,
-          "out": [3, 1]
-        },
-        "response": {
-          "comhead": "tx stream",
-          "result": 1
-        },
-        "recognised": true,
-        "mutated": true,
-        "warnings": []
-      },
-      {
-        "t": 1790557999.768,
-        "channel": "http",
-        "command": "set output audio mute",
-        "client": "127.0.0.1",
-        "payload": {
-          "comhead": "set output audio mute",
-          "language": 0,
-          "mute": [3, 1]
-        },
-        "response": {
-          "comhead": "set output audio mute",
-          "result": 1
-        },
-        "recognised": true,
-        "mutated": true,
-        "warnings": []
-      },
-      {
-        "t": 1790557999.778,
+        "t": 1790563970.688,
         "channel": "http",
         "command": "get video status",
         "recognised": true
@@ -843,7 +627,7 @@
         }
       },
       {
-        "t_ms": 265,
+        "t_ms": 262,
         "event": "status",
         "data": {
           "connected": true,
@@ -1065,13 +849,16 @@
         }
       }
     ],
-    "screenshots": ["2026-09-28-V3-e81b2b48-profiles.recall_routing-browser/after.png"],
+    "screenshots": ["2026-09-28-V3-dc37b633-profiles.recall_needs_passcode-browser/after.png"],
     "client_diagnostics": {
-      "page_api_requests": 22,
+      "page_api_requests": 21,
       "page_errors": [],
-      "console_errors": [],
-      "toasts": ["success: \"Game Day\" activated"],
-      "dialogs": []
+      "console_errors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "API POST /api/profile/kids_gaming/recall failed: ApiError: HTTP 403\n    at MatrixAPI._request (http://127.0.0.1:52381/js/api.js:149:23)\n    at async http://127.0.0.1:52381/js/api.js:199:30\n    at async MatrixAPI._retryOperation (http://127.0.0.1:52381/js/api.js:103:24)\n    at async MatrixAPI.post (http://127.0.0.1:52381/js/api.js:197:20)\n    at async Object.runProfileOrScene (http://127.0.0.1:52381/js/utils/run-action.js:48:18)\n    at async ScenesPanel.recallScene (http://127.0.0.1:52381/js/components/scenes-panel.js:291:25)"
+      ],
+      "toasts": [],
+      "dialogs": ["\"Kids Gaming\" is passcode protected. Enter passcode:"]
     },
     "operator": [],
     "restore": null,
@@ -1079,57 +866,33 @@
   },
   "checks": [
     {
-      "description": "response HTTP 200 and body contains {'success': True}",
+      "description": "response HTTP 403 and body contains {'success': False, 'data': {'error': 'passcode_required'}}",
       "result": "pass",
-      "detail": "HTTP 200; body (browser)",
+      "detail": "HTTP 403; body (browser)",
       "finding": null,
       "linked_finding": null,
       "note": null
     },
     {
-      "description": "device outputs[0].source == 5",
+      "description": "client shows dialogs == ['\"Kids Gaming\" is passcode protected. Enter passcode:']",
       "result": "pass",
-      "detail": "outputs[0].source = 5",
+      "detail": "dialogs = ['\"Kids Gaming\" is passcode protected. Enter passcode:'] after 0.0 s",
       "finding": null,
       "linked_finding": null,
       "note": null
     },
     {
-      "description": "device outputs[1].source == 5",
+      "description": "no write command reached the device",
       "result": "pass",
-      "detail": "outputs[1].source = 5",
+      "detail": "write commands seen: []",
       "finding": null,
       "linked_finding": null,
       "note": null
     },
     {
-      "description": "device outputs[2].source == 5",
-      "result": "pass",
-      "detail": "outputs[2].source = 5",
-      "finding": null,
-      "linked_finding": null,
-      "note": null
-    },
-    {
-      "description": "device otherwise unchanged (allowed: outputs[0].*, outputs[1].*, outputs[2].*, routing)",
+      "description": "device otherwise unchanged",
       "result": "pass",
       "detail": "no other changes",
-      "finding": null,
-      "linked_finding": null,
-      "note": null
-    },
-    {
-      "description": "device received http 'video switch' with {'source': [3, 5]} exactly 1x",
-      "result": "pass",
-      "detail": "1 matching; http commands seen: [('get video status', {'comhead': 'get video status', 'language': 0}), ('get status', {'comhead': 'get status', 'language': 0}), ('get video status', {'comhead': 'get video status', 'language': 0}), ('get input status', {'comhead': 'get input status', 'language': 0}), ('get output status', {'comhead': 'get output status', 'language': 0}), ('get input status', {'comhead': 'get input status', 'language': 0}), ('get video status', {'comhead': 'get video status', 'language': 0}), ('video switch', {'comhead': 'video switch', 'language': 0, 'source': [1, 5]}), ('tx stream', {'comhead': 'tx stream', 'language': 0, 'out': [1, 1]}), ('set output audio mute', {'comhead': 'set output audio mute', 'language': 0, 'mute': [1, 0]}), ('video switch', {'comhead': 'video switch', 'language': 0, 'source': [2, 5]}), ('tx stream', {'comhead': 'tx stream', 'language': 0, 'out': [2, 1]})]",
-      "finding": null,
-      "linked_finding": null,
-      "note": null
-    },
-    {
-      "description": "client shows toast.success == '\"Game Day\" activated'",
-      "result": "pass",
-      "detail": "toast.success = '\"Game Day\" activated' after 0.0 s",
       "finding": null,
       "linked_finding": null,
       "note": null
@@ -1147,6 +910,7 @@
     "src/rest_api/profiles.py",
     "src/config.py",
     "src/cec_macros.py",
+    "src/password.py",
     "web/index.html",
     "web/js/app.js",
     "web/js/api.js",

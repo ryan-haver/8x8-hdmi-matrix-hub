@@ -1,25 +1,25 @@
 {
   "schema_version": 1,
-  "features": ["F-DOM-005"],
-  "level": "V2",
-  "scenario": "profiles.recall_with_passcode",
-  "scenario_title": "A passcode-protected profile is applied with its passcode (the UI asks for it)",
+  "features": ["F-KIO-003"],
+  "level": "V3",
+  "scenario": "kiosk.route_all_apply",
+  "scenario_title": "Kiosk: route input 5 to all outputs without touching the options; only the routing changes",
   "scenario_kind": "happy",
   "target": "sim",
-  "client": "api",
+  "client": "browser",
   "result": "pass",
   "gate": "ok",
   "blocked_reason": null,
   "commit": {
-    "sha": "e81b2b48b5b642be59e1118261de3c31241f3f9b",
+    "sha": "dc37b6331dadc55cccacfa48786b91a3084144f5",
     "branch": "wp-e1-ui-fixes",
     "dirty_files": [],
-    "short": "e81b2b48",
+    "short": "dc37b633",
     "dirty": false
   },
   "timestamp": {
-    "started": "2026-09-28T01:13:14.584Z",
-    "finished": "2026-09-28T01:13:14.595Z"
+    "started": "2026-09-28T02:52:38.858Z",
+    "finished": "2026-09-28T02:52:41.124Z"
   },
   "operator": "automation",
   "environment": {
@@ -35,16 +35,17 @@
         "USE_MODULAR": "true",
         "UC_ENABLED": "false",
         "MATRIX_HOST": "127.0.0.1",
-        "MATRIX_PORT": "53065",
-        "OREI_TELNET_PORT": "53066",
+        "MATRIX_PORT": "52367",
+        "OREI_TELNET_PORT": "52368",
         "TRUST_PROXY_HEADERS": "true",
         "TRUSTED_PROXY_IPS": "127.0.0.1",
         "LOG_LEVEL": "INFO"
       }
     },
     "client": {
-      "name": "api",
-      "aiohttp": "3.13.3"
+      "name": "browser",
+      "browser": "chromium 153.0.8010.12",
+      "driver": "Playwright (@playwright/test, package-lock.json)"
     },
     "simulator": {
       "source_sha256": "3364e8084afaa15c",
@@ -55,31 +56,25 @@
     }
   },
   "procedure": [
-    "reset the simulator to the seed state + {'outputs': {'0': {'source': 1}}}",
-    "action (api): profile_recall(profile_id='kids_gaming', passcode='1234')",
-    "  POST /api/profile/kids_gaming/recall {'passcode': '1234'} -> HTTP 200"
+    "reset the simulator to the seed state + {'outputs': {'0': {'audio_mute': 1}, '1': {'arc': 1}}}",
+    "action (browser): kiosk_route(input=5, output='all', mute=False, arc=False)",
+    "  open /kiosk and wait until it shows the inputs",
+    "  tap input 5",
+    "  choose \"Route to All Outputs\"",
+    "  set \"Mute output audio\" off and ARC off",
+    "  click Apply Routing",
+    "  the kiosk sent 0 output setting requests: all 200",
+    "  the page sent POST /api/switch -> HTTP 200",
+    "  the page shows: success: Routing applied"
   ],
   "observations": {
     "requests": [
       {
         "method": "POST",
-        "path": "/api/profile/kids_gaming/recall",
-        "body": {
-          "passcode": "***"
-        },
+        "path": "/api/switch",
+        "body": "{\"input\":5}",
         "status": 200,
-        "response": {
-          "success": true,
-          "data": {
-            "profile": "Kids Gaming",
-            "applied": ["Output 1 → Input 6"],
-            "failed_outputs": [],
-            "errors": null,
-            "power_on_macro": null
-          },
-          "error": null
-        },
-        "elapsed_ms": 3.4
+        "via": "page"
       }
     ],
     "response_status": 200,
@@ -176,14 +171,14 @@
       "outputs": [
         {
           "name": "TV",
-          "source": 1,
+          "source": 2,
           "connected": 1,
           "stream": 1,
           "hdcp": 3,
           "hdr": 0,
           "scaler": 0,
           "arc": 1,
-          "audio_mute": 0,
+          "audio_mute": 1,
           "cec_enabled": 1,
           "ext_audio_enabled": 0,
           "ext_audio_source": 1
@@ -196,7 +191,7 @@
           "hdcp": 3,
           "hdr": 0,
           "scaler": 4,
-          "arc": 0,
+          "arc": 1,
           "audio_mute": 0,
           "cec_enabled": 1,
           "ext_audio_enabled": 0,
@@ -333,7 +328,7 @@
           "saved": true
         }
       ],
-      "routing": [1, 2, 1, 1, 5, 6, 1, 1]
+      "routing": [2, 2, 1, 1, 5, 6, 1, 1]
     },
     "state_after": {
       "schema_version": 1,
@@ -427,12 +422,26 @@
       "outputs": [
         {
           "name": "TV",
-          "source": 6,
+          "source": 5,
           "connected": 1,
           "stream": 1,
           "hdcp": 3,
           "hdr": 0,
           "scaler": 0,
+          "arc": 1,
+          "audio_mute": 1,
+          "cec_enabled": 1,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Soundbar",
+          "source": 5,
+          "connected": 1,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 4,
           "arc": 1,
           "audio_mute": 0,
           "cec_enabled": 1,
@@ -440,22 +449,8 @@
           "ext_audio_source": 1
         },
         {
-          "name": "Soundbar",
-          "source": 2,
-          "connected": 1,
-          "stream": 1,
-          "hdcp": 3,
-          "hdr": 0,
-          "scaler": 4,
-          "arc": 0,
-          "audio_mute": 0,
-          "cec_enabled": 1,
-          "ext_audio_enabled": 0,
-          "ext_audio_source": 1
-        },
-        {
           "name": "Output 3",
-          "source": 1,
+          "source": 5,
           "connected": 0,
           "stream": 1,
           "hdcp": 3,
@@ -469,7 +464,7 @@
         },
         {
           "name": "Output 4",
-          "source": 1,
+          "source": 5,
           "connected": 0,
           "stream": 1,
           "hdcp": 3,
@@ -497,7 +492,7 @@
         },
         {
           "name": "Output 6",
-          "source": 6,
+          "source": 5,
           "connected": 0,
           "stream": 1,
           "hdcp": 3,
@@ -511,7 +506,7 @@
         },
         {
           "name": "Output 7",
-          "source": 1,
+          "source": 5,
           "connected": 0,
           "stream": 1,
           "hdcp": 3,
@@ -525,7 +520,7 @@
         },
         {
           "name": "Output 8",
-          "source": 1,
+          "source": 5,
           "connected": 0,
           "stream": 1,
           "hdcp": 3,
@@ -584,69 +579,135 @@
           "saved": true
         }
       ],
-      "routing": [6, 2, 1, 1, 5, 6, 1, 1]
+      "routing": [5, 5, 5, 5, 5, 5, 5, 5]
     },
     "state_diff": [
       {
         "path": "outputs[0].source",
+        "before": 2,
+        "after": 5
+      },
+      {
+        "path": "outputs[1].source",
+        "before": 2,
+        "after": 5
+      },
+      {
+        "path": "outputs[2].source",
         "before": 1,
-        "after": 6
+        "after": 5
+      },
+      {
+        "path": "outputs[3].source",
+        "before": 1,
+        "after": 5
+      },
+      {
+        "path": "outputs[5].source",
+        "before": 6,
+        "after": 5
+      },
+      {
+        "path": "outputs[6].source",
+        "before": 1,
+        "after": 5
+      },
+      {
+        "path": "outputs[7].source",
+        "before": 1,
+        "after": 5
       },
       {
         "path": "routing[0]",
+        "before": 2,
+        "after": 5
+      },
+      {
+        "path": "routing[1]",
+        "before": 2,
+        "after": 5
+      },
+      {
+        "path": "routing[2]",
         "before": 1,
-        "after": 6
+        "after": 5
+      },
+      {
+        "path": "routing[3]",
+        "before": 1,
+        "after": 5
+      },
+      {
+        "path": "routing[5]",
+        "before": 6,
+        "after": 5
+      },
+      {
+        "path": "routing[6]",
+        "before": 1,
+        "after": 5
+      },
+      {
+        "path": "routing[7]",
+        "before": 1,
+        "after": 5
       }
     ],
     "device_log": [
       {
-        "t": 1790557994.59,
+        "t": 1790563958.958,
+        "channel": "http",
+        "command": "get video status",
+        "recognised": true
+      },
+      {
+        "t": 1790563959.089,
+        "channel": "http",
+        "command": "get video status",
+        "recognised": true
+      },
+      {
+        "t": 1790563959.09,
+        "channel": "http",
+        "command": "get input status",
+        "recognised": true
+      },
+      {
+        "t": 1790563959.091,
+        "channel": "http",
+        "command": "get output status",
+        "recognised": true
+      },
+      {
+        "t": 1790563959.092,
+        "channel": "http",
+        "command": "get input status",
+        "recognised": true
+      },
+      {
+        "t": 1790563959.177,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      },
+      {
+        "t": 1790563959.179,
+        "channel": "http",
+        "command": "get video status",
+        "recognised": true
+      },
+      {
+        "t": 1790563960.019,
         "channel": "http",
         "command": "video switch",
         "client": "127.0.0.1",
         "payload": {
           "comhead": "video switch",
           "language": 0,
-          "source": [1, 6]
+          "source": [0, 5]
         },
         "response": {
           "comhead": "video switch",
-          "result": 1
-        },
-        "recognised": true,
-        "mutated": true,
-        "warnings": []
-      },
-      {
-        "t": 1790557994.591,
-        "channel": "http",
-        "command": "tx stream",
-        "client": "127.0.0.1",
-        "payload": {
-          "comhead": "tx stream",
-          "language": 0,
-          "out": [1, 1]
-        },
-        "response": {
-          "comhead": "tx stream",
-          "result": 1
-        },
-        "recognised": true,
-        "mutated": true,
-        "warnings": []
-      },
-      {
-        "t": 1790557994.591,
-        "channel": "http",
-        "command": "set output audio mute",
-        "client": "127.0.0.1",
-        "payload": {
-          "comhead": "set output audio mute",
-          "language": 0,
-          "mute": [1, 0]
-        },
-        "response": {
-          "comhead": "set output audio mute",
           "result": 1
         },
         "recognised": true,
@@ -656,47 +717,348 @@
     ],
     "ws_events": [
       {
-        "t_ms": -1,
+        "t_ms": 0,
         "event": "connected",
         "data": {
           "message": "Connected to OREI Matrix WebSocket",
           "client_count": 1
         }
+      },
+      {
+        "t_ms": 315,
+        "event": "status",
+        "data": {
+          "connected": true,
+          "host": "127.0.0.1",
+          "power": "on",
+          "routing": {
+            "1": 2,
+            "2": 2,
+            "3": 1,
+            "4": 1,
+            "5": 5,
+            "6": 6,
+            "7": 1,
+            "8": 1
+          },
+          "outputs": [2, 2, 1, 1, 5, 6, 1, 1],
+          "input_names": {
+            "1": "PS3",
+            "2": "AppleTV",
+            "3": "Computer",
+            "4": "Switch",
+            "5": "Shield",
+            "6": "PS5",
+            "7": "Analogue",
+            "8": "Input 8"
+          },
+          "output_names": {
+            "1": "TV",
+            "2": "Soundbar",
+            "3": "Output 3",
+            "4": "Output 4",
+            "5": "Output 5",
+            "6": "Output 6",
+            "7": "Output 7",
+            "8": "Output 8"
+          },
+          "preset_names": {
+            "1": "Apple TV",
+            "2": "Shield",
+            "3": "PS5",
+            "4": "Retro",
+            "5": "Preset 5",
+            "6": "Preset 6",
+            "7": "Preset 7",
+            "8": "Preset 8"
+          },
+          "inputs": [
+            {
+              "number": 1,
+              "name": "PS3",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 2,
+              "name": "AppleTV",
+              "inactive": false,
+              "signalActive": true,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 3,
+              "name": "Computer",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": false,
+              "sourceDetected": false,
+              "edid": 3
+            },
+            {
+              "number": 4,
+              "name": "Switch",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 5,
+              "name": "Shield",
+              "inactive": false,
+              "signalActive": true,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 6,
+              "name": "PS5",
+              "inactive": false,
+              "signalActive": true,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 7,
+              "name": "Analogue",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 3
+            },
+            {
+              "number": 8,
+              "name": "Input 8",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": false,
+              "sourceDetected": false,
+              "edid": 36
+            }
+          ],
+          "outputs_detail": [
+            {
+              "number": 1,
+              "name": "TV",
+              "connected": true,
+              "cableConnected": true,
+              "enabled": true,
+              "muted": true,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 1,
+              "arc": true
+            },
+            {
+              "number": 2,
+              "name": "Soundbar",
+              "connected": true,
+              "cableConnected": true,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 5,
+              "arc": true
+            },
+            {
+              "number": 3,
+              "name": "Output 3",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 4,
+              "name": "Output 4",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 5,
+              "name": "Output 5",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 6,
+              "name": "Output 6",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 7,
+              "name": "Output 7",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 8,
+              "name": "Output 8",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 1,
+              "arc": false
+            }
+          ]
+        }
+      },
+      {
+        "t_ms": 1155,
+        "event": "switch_all",
+        "data": {
+          "input": 5,
+          "outputs": [1, 2, 3, 4, 5, 6, 7, 8],
+          "optimistic": true
+        }
       }
     ],
-    "screenshots": [],
-    "client_diagnostics": null,
+    "screenshots": ["2026-09-28-V3-dc37b633-kiosk.route_all_apply-browser/after.png"],
+    "client_diagnostics": {
+      "page_api_requests": 8,
+      "page_errors": [],
+      "console_errors": [],
+      "toasts": ["success: Routing applied"],
+      "dialogs": []
+    },
     "operator": [],
     "restore": null,
     "notes": []
   },
   "checks": [
     {
-      "description": "response HTTP 200 and body contains {'success': True}",
+      "description": "device outputs[0].source == 5",
       "result": "pass",
-      "detail": "HTTP 200; body {\"success\": true, \"data\": {\"profile\": \"Kids Gaming\", \"applied\": [\"Output 1 \\u2192 Input 6\"], \"failed_outputs\": [], \"errors\": null, \"power_on_macro\": null}, \"error\": null}",
+      "detail": "outputs[0].source = 5",
       "finding": null,
       "linked_finding": null,
       "note": null
     },
     {
-      "description": "device outputs[0].source == 6",
+      "description": "device outputs[1].source == 5",
       "result": "pass",
-      "detail": "outputs[0].source = 6",
+      "detail": "outputs[1].source = 5",
       "finding": null,
       "linked_finding": null,
       "note": null
     },
     {
-      "description": "device received http 'video switch' with {'source': [1, 6]} exactly 1x",
+      "description": "device outputs[2].source == 5",
       "result": "pass",
-      "detail": "1 matching; http commands seen: [('video switch', {'comhead': 'video switch', 'language': 0, 'source': [1, 6]}), ('tx stream', {'comhead': 'tx stream', 'language': 0, 'out': [1, 1]}), ('set output audio mute', {'comhead': 'set output audio mute', 'language': 0, 'mute': [1, 0]})]",
+      "detail": "outputs[2].source = 5",
       "finding": null,
       "linked_finding": null,
       "note": null
     },
     {
-      "description": "device otherwise unchanged (allowed: outputs[0].*, routing)",
+      "description": "device outputs[3].source == 5",
+      "result": "pass",
+      "detail": "outputs[3].source = 5",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device outputs[4].source == 5",
+      "result": "pass",
+      "detail": "outputs[4].source = 5",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device outputs[5].source == 5",
+      "result": "pass",
+      "detail": "outputs[5].source = 5",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device outputs[6].source == 5",
+      "result": "pass",
+      "detail": "outputs[6].source = 5",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device outputs[7].source == 5",
+      "result": "pass",
+      "detail": "outputs[7].source = 5",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device outputs[1].scaler == 4",
+      "result": "pass",
+      "detail": "outputs[1].scaler = 4",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device outputs[1].arc == 1",
+      "result": "pass",
+      "detail": "outputs[1].arc = 1",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device outputs[0].audio_mute == 1",
+      "result": "pass",
+      "detail": "outputs[0].audio_mute = 1",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device otherwise unchanged (allowed: outputs[*].source, routing)",
       "result": "pass",
       "detail": "no other changes",
       "finding": null,
@@ -704,9 +1066,49 @@
       "note": null
     },
     {
-      "description": "client shows toast.success == '\"Kids Gaming\" activated'",
-      "result": "n/a",
-      "detail": "not checked for client 'api'",
+      "description": "device never received 'tx hdcp'",
+      "result": "pass",
+      "detail": "write commands seen: []",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device never received 'set hdr conversion'",
+      "result": "pass",
+      "detail": "write commands seen: []",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device never received 'set video scaler'",
+      "result": "pass",
+      "detail": "write commands seen: []",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device never received 'set arc'",
+      "result": "pass",
+      "detail": "write commands seen: []",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device never received 'set output audio mute'",
+      "result": "pass",
+      "detail": "write commands seen: []",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "client shows toast.success == 'Routing applied'",
+      "result": "pass",
+      "detail": "toast.success = 'Routing applied' after 0.0 s",
       "finding": null,
       "linked_finding": null,
       "note": null
@@ -721,20 +1123,9 @@
     "src/rest_api/app.py",
     "src/rest_api/utils.py",
     "src/rest_api/websocket.py",
-    "src/rest_api/profiles.py",
-    "src/config.py",
-    "src/cec_macros.py",
-    "src/password.py",
-    "web/index.html",
-    "web/js/app.js",
-    "web/js/api.js",
-    "web/js/state.js",
-    "web/js/websocket.js",
-    "web/js/utils/run-action.js",
-    "web/js/components/toast.js",
-    "web/js/components/scenes-panel.js",
-    "web/js/components/settings-drawer.js",
-    "web/js/utils/dashboard-manager.js",
-    "web/js/components/dashboard-cards/renderers.js"
+    "src/rest_api/control.py",
+    "src/rest_api/outputs.py",
+    "src/rest_api/core.py",
+    "web/kiosk.html"
   ]
 }

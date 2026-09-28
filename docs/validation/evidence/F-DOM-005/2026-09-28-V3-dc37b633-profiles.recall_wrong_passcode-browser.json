@@ -2,8 +2,8 @@
   "schema_version": 1,
   "features": ["F-DOM-005", "F-UI-014"],
   "level": "V3",
-  "scenario": "profiles.recall_needs_passcode",
-  "scenario_title": "A passcode-protected profile is not applied without its passcode",
+  "scenario": "profiles.recall_wrong_passcode",
+  "scenario_title": "A wrong passcode applies nothing and the UI says so",
   "scenario_kind": "failure",
   "target": "sim",
   "client": "browser",
@@ -11,15 +11,15 @@
   "gate": "ok",
   "blocked_reason": null,
   "commit": {
-    "sha": "e81b2b48b5b642be59e1118261de3c31241f3f9b",
+    "sha": "dc37b6331dadc55cccacfa48786b91a3084144f5",
     "branch": "wp-e1-ui-fixes",
     "dirty_files": [],
-    "short": "e81b2b48",
+    "short": "dc37b633",
     "dirty": false
   },
   "timestamp": {
-    "started": "2026-09-28T01:13:20.387Z",
-    "finished": "2026-09-28T01:13:22.376Z"
+    "started": "2026-09-28T02:52:54.462Z",
+    "finished": "2026-09-28T02:52:56.469Z"
   },
   "operator": "automation",
   "environment": {
@@ -35,8 +35,8 @@
         "USE_MODULAR": "true",
         "UC_ENABLED": "false",
         "MATRIX_HOST": "127.0.0.1",
-        "MATRIX_PORT": "53065",
-        "OREI_TELNET_PORT": "53066",
+        "MATRIX_PORT": "52367",
+        "OREI_TELNET_PORT": "52368",
         "TRUST_PROXY_HEADERS": "true",
         "TRUSTED_PROXY_IPS": "127.0.0.1",
         "LOG_LEVEL": "INFO"
@@ -57,12 +57,13 @@
   },
   "procedure": [
     "reset the simulator to the seed state",
-    "action (browser): profile_recall(profile_id='kids_gaming')",
+    "action (browser): profile_recall(profile_id='kids_gaming', passcode='9999')",
     "  open /ui and wait until the app has loaded its data",
     "  open the Profiles tab",
     "  click Activate on profile kids_gaming",
+    "  answer the prompt \"\"Kids Gaming\" is passcode protected. Enter passcode:\" with the passcode",
     "  the page sent POST /api/profile/kids_gaming/recall -> HTTP 403",
-    "  cancel the prompt \"\"Kids Gaming\" is passcode protected. Enter passcode:\""
+    "  the page shows: error: Invalid passcode"
   ],
   "observations": {
     "requests": [
@@ -70,6 +71,13 @@
         "method": "POST",
         "path": "/api/profile/kids_gaming/recall",
         "body": "{}",
+        "status": 403,
+        "via": "page"
+      },
+      {
+        "method": "POST",
+        "path": "/api/profile/kids_gaming/recall",
+        "body": "{\"passcode\":\"9999\"}",
         "status": 403,
         "via": "page"
       }
@@ -581,37 +589,37 @@
     "state_diff": [],
     "device_log": [
       {
-        "t": 1790558000.588,
+        "t": 1790563974.68,
         "channel": "http",
         "command": "get video status",
         "recognised": true
       },
       {
-        "t": 1790558000.59,
+        "t": 1790563974.68,
         "channel": "http",
         "command": "get output status",
         "recognised": true
       },
       {
-        "t": 1790558000.59,
+        "t": 1790563974.682,
         "channel": "http",
         "command": "get input status",
         "recognised": true
       },
       {
-        "t": 1790558000.596,
+        "t": 1790563974.682,
         "channel": "http",
         "command": "get status",
         "recognised": true
       },
       {
-        "t": 1790558000.663,
+        "t": 1790563974.729,
         "channel": "telnet",
         "command": "status",
         "recognised": true
       },
       {
-        "t": 1790558000.664,
+        "t": 1790563974.732,
         "channel": "http",
         "command": "get video status",
         "recognised": true
@@ -619,7 +627,7 @@
     ],
     "ws_events": [
       {
-        "t_ms": -1,
+        "t_ms": -2,
         "event": "connected",
         "data": {
           "message": "Connected to OREI Matrix WebSocket",
@@ -627,7 +635,7 @@
         }
       },
       {
-        "t_ms": 272,
+        "t_ms": 263,
         "event": "status",
         "data": {
           "connected": true,
@@ -849,15 +857,17 @@
         }
       }
     ],
-    "screenshots": ["2026-09-28-V3-e81b2b48-profiles.recall_needs_passcode-browser/after.png"],
+    "screenshots": ["2026-09-28-V3-dc37b633-profiles.recall_wrong_passcode-browser/after.png"],
     "client_diagnostics": {
-      "page_api_requests": 21,
+      "page_api_requests": 22,
       "page_errors": [],
       "console_errors": [
         "Failed to load resource: the server responded with a status of 403 (Forbidden)",
-        "API POST /api/profile/kids_gaming/recall failed: ApiError: HTTP 403\n    at MatrixAPI._request (http://127.0.0.1:53077/js/api.js:149:23)\n    at async http://127.0.0.1:53077/js/api.js:199:30\n    at async MatrixAPI._retryOperation (http://127.0.0.1:53077/js/api.js:103:24)\n    at async MatrixAPI.post (http://127.0.0.1:53077/js/api.js:197:20)\n    at async Object.runProfileOrScene (http://127.0.0.1:53077/js/utils/run-action.js:48:18)\n    at async ScenesPanel.recallScene (http://127.0.0.1:53077/js/components/scenes-panel.js:291:25)"
+        "API POST /api/profile/kids_gaming/recall failed: ApiError: HTTP 403\n    at MatrixAPI._request (http://127.0.0.1:52381/js/api.js:149:23)\n    at async http://127.0.0.1:52381/js/api.js:199:30\n    at async MatrixAPI._retryOperation (http://127.0.0.1:52381/js/api.js:103:24)\n    at async MatrixAPI.post (http://127.0.0.1:52381/js/api.js:197:20)\n    at async Object.runProfileOrScene (http://127.0.0.1:52381/js/utils/run-action.js:48:18)\n    at async ScenesPanel.recallScene (http://127.0.0.1:52381/js/components/scenes-panel.js:291:25)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "API POST /api/profile/kids_gaming/recall failed: ApiError: HTTP 403\n    at MatrixAPI._request (http://127.0.0.1:52381/js/api.js:149:23)\n    at async http://127.0.0.1:52381/js/api.js:199:30\n    at async MatrixAPI._retryOperation (http://127.0.0.1:52381/js/api.js:103:24)\n    at async MatrixAPI.post (http://127.0.0.1:52381/js/api.js:197:20)\n    at async Object.runProfileOrScene (http://127.0.0.1:52381/js/utils/run-action.js:57:22)\n    at async ScenesPanel.recallScene (http://127.0.0.1:52381/js/components/scenes-panel.js:291:25)"
       ],
-      "toasts": [],
+      "toasts": ["error: Invalid passcode"],
       "dialogs": ["\"Kids Gaming\" is passcode protected. Enter passcode:"]
     },
     "operator": [],
@@ -866,7 +876,7 @@
   },
   "checks": [
     {
-      "description": "response HTTP 403 and body contains {'success': False, 'data': {'error': 'passcode_required'}}",
+      "description": "response HTTP 403 and body contains {'success': False, 'data': {'error': 'invalid_passcode'}}",
       "result": "pass",
       "detail": "HTTP 403; body (browser)",
       "finding": null,
@@ -874,9 +884,9 @@
       "note": null
     },
     {
-      "description": "client shows dialogs == ['\"Kids Gaming\" is passcode protected. Enter passcode:']",
+      "description": "client shows toast.error == 'Invalid passcode'",
       "result": "pass",
-      "detail": "dialogs = ['\"Kids Gaming\" is passcode protected. Enter passcode:'] after 0.0 s",
+      "detail": "toast.error = 'Invalid passcode' after 0.0 s",
       "finding": null,
       "linked_finding": null,
       "note": null

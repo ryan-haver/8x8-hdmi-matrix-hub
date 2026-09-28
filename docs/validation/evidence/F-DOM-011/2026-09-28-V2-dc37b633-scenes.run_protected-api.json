@@ -1,25 +1,25 @@
 {
   "schema_version": 1,
-  "features": ["F-DOM-005"],
+  "features": ["F-DOM-011", "F-DOM-015"],
   "level": "V2",
-  "scenario": "profiles.recall_needs_passcode",
-  "scenario_title": "A passcode-protected profile is not applied without its passcode",
-  "scenario_kind": "failure",
+  "scenario": "scenes.run_protected",
+  "scenario_title": "Run the protected scene 'Kids' with its passcode: profile and route-shortcut steps apply",
+  "scenario_kind": "happy",
   "target": "sim",
   "client": "api",
   "result": "pass",
   "gate": "ok",
   "blocked_reason": null,
   "commit": {
-    "sha": "e81b2b48b5b642be59e1118261de3c31241f3f9b",
+    "sha": "dc37b6331dadc55cccacfa48786b91a3084144f5",
     "branch": "wp-e1-ui-fixes",
     "dirty_files": [],
-    "short": "e81b2b48",
+    "short": "dc37b633",
     "dirty": false
   },
   "timestamp": {
-    "started": "2026-09-28T01:13:14.573Z",
-    "finished": "2026-09-28T01:13:14.580Z"
+    "started": "2026-09-28T02:52:37.759Z",
+    "finished": "2026-09-28T02:52:37.779Z"
   },
   "operator": "automation",
   "environment": {
@@ -35,8 +35,8 @@
         "USE_MODULAR": "true",
         "UC_ENABLED": "false",
         "MATRIX_HOST": "127.0.0.1",
-        "MATRIX_PORT": "53065",
-        "OREI_TELNET_PORT": "53066",
+        "MATRIX_PORT": "52367",
+        "OREI_TELNET_PORT": "52368",
         "TRUST_PROXY_HEADERS": "true",
         "TRUSTED_PROXY_IPS": "127.0.0.1",
         "LOG_LEVEL": "INFO"
@@ -55,29 +55,51 @@
     }
   },
   "procedure": [
-    "reset the simulator to the seed state",
-    "action (api): profile_recall(profile_id='kids_gaming')",
-    "  POST /api/profile/kids_gaming/recall -> HTTP 403"
+    "reset the simulator to the seed state + {'outputs': {'0': {'source': 1}}}",
+    "action (api): scene_run(scene_id='scene_kidslocked', passcode='1234')",
+    "  POST /api/v2/scenes/scene_kidslocked/execute {'passcode': '1234'} -> HTTP 200"
   ],
   "observations": {
     "requests": [
       {
         "method": "POST",
-        "path": "/api/profile/kids_gaming/recall",
-        "body": null,
-        "status": 403,
-        "response": {
-          "success": false,
-          "data": {
-            "error": "passcode_required",
-            "profile_id": "kids_gaming"
-          },
-          "error": null
+        "path": "/api/v2/scenes/scene_kidslocked/execute",
+        "body": {
+          "passcode": "***"
         },
-        "elapsed_ms": 0.5
+        "status": 200,
+        "response": {
+          "success": true,
+          "data": {
+            "scene_id": "scene_kidslocked",
+            "success": true,
+            "steps_completed": 2,
+            "total_steps": 2,
+            "step_results": [
+              {
+                "step_index": 0,
+                "type": "profile",
+                "id": "kids_gaming",
+                "success": true,
+                "detail": "Profile 'Kids Gaming' executed",
+                "error": null
+              },
+              {
+                "step_index": 1,
+                "type": "system_action",
+                "id": "route_all_to_output",
+                "success": true,
+                "detail": "Routed Input 6 → Output 1",
+                "error": null
+              }
+            ],
+            "error": null
+          }
+        },
+        "elapsed_ms": 13.8
       }
     ],
-    "response_status": 403,
+    "response_status": 200,
     "hub_reads": [],
     "state_before": {
       "schema_version": 1,
@@ -171,7 +193,7 @@
       "outputs": [
         {
           "name": "TV",
-          "source": 2,
+          "source": 1,
           "connected": 1,
           "stream": 1,
           "hdcp": 3,
@@ -328,7 +350,7 @@
           "saved": true
         }
       ],
-      "routing": [2, 2, 1, 1, 5, 6, 1, 1]
+      "routing": [1, 2, 1, 1, 5, 6, 1, 1]
     },
     "state_after": {
       "schema_version": 1,
@@ -422,7 +444,7 @@
       "outputs": [
         {
           "name": "TV",
-          "source": 2,
+          "source": 6,
           "connected": 1,
           "stream": 1,
           "hdcp": 3,
@@ -579,10 +601,76 @@
           "saved": true
         }
       ],
-      "routing": [2, 2, 1, 1, 5, 6, 1, 1]
+      "routing": [6, 2, 1, 1, 5, 6, 1, 1]
     },
-    "state_diff": [],
-    "device_log": [],
+    "state_diff": [
+      {
+        "path": "outputs[0].source",
+        "before": 1,
+        "after": 6
+      },
+      {
+        "path": "routing[0]",
+        "before": 1,
+        "after": 6
+      }
+    ],
+    "device_log": [
+      {
+        "t": 1790563957.766,
+        "channel": "http",
+        "command": "video switch",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "video switch",
+          "language": 0,
+          "source": [1, 6]
+        },
+        "response": {
+          "comhead": "video switch",
+          "result": 1
+        },
+        "recognised": true,
+        "mutated": true,
+        "warnings": []
+      },
+      {
+        "t": 1790563957.766,
+        "channel": "http",
+        "command": "set output audio mute",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "set output audio mute",
+          "language": 0,
+          "mute": [1, 0]
+        },
+        "response": {
+          "comhead": "set output audio mute",
+          "result": 1
+        },
+        "recognised": true,
+        "mutated": true,
+        "warnings": []
+      },
+      {
+        "t": 1790563957.773,
+        "channel": "http",
+        "command": "video switch",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "video switch",
+          "language": 0,
+          "source": [1, 6]
+        },
+        "response": {
+          "comhead": "video switch",
+          "result": 1
+        },
+        "recognised": true,
+        "mutated": true,
+        "warnings": []
+      }
+    ],
     "ws_events": [
       {
         "t_ms": -1,
@@ -601,33 +689,41 @@
   },
   "checks": [
     {
-      "description": "response HTTP 403 and body contains {'success': False, 'data': {'error': 'passcode_required'}}",
+      "description": "response HTTP 200 and body contains {'success': True, 'data': {'steps_completed': 2, 'total_steps': 2}}",
       "result": "pass",
-      "detail": "HTTP 403; body {\"success\": false, \"data\": {\"error\": \"passcode_required\", \"profile_id\": \"kids_gaming\"}, \"error\": null}",
+      "detail": "HTTP 200; body {\"success\": true, \"data\": {\"scene_id\": \"scene_kidslocked\", \"success\": true, \"steps_completed\": 2, \"total_steps\": 2, \"step_results\": [{\"step_index\": 0, \"type\": \"profile\", \"id\": \"kids_gaming\", \"success\": true, \"detail\": \"Profile 'Kids Gaming' executed\", \"error\": null}, {\"step_index\": 1, \"type\": \"syste",
       "finding": null,
       "linked_finding": null,
       "note": null
     },
     {
-      "description": "client shows dialogs == ['\"Kids Gaming\" is passcode protected. Enter passcode:']",
-      "result": "n/a",
-      "detail": "not checked for client 'api'",
-      "finding": null,
-      "linked_finding": null,
-      "note": null
-    },
-    {
-      "description": "no write command reached the device",
+      "description": "device outputs[0].source == 6",
       "result": "pass",
-      "detail": "write commands seen: []",
+      "detail": "outputs[0].source = 6",
       "finding": null,
       "linked_finding": null,
       "note": null
     },
     {
-      "description": "device otherwise unchanged",
+      "description": "device received http 'video switch' with {'source': [1, 6]} exactly 2x",
+      "result": "pass",
+      "detail": "2 matching; http commands seen: [('video switch', {'comhead': 'video switch', 'language': 0, 'source': [1, 6]}), ('set output audio mute', {'comhead': 'set output audio mute', 'language': 0, 'mute': [1, 0]}), ('video switch', {'comhead': 'video switch', 'language': 0, 'source': [1, 6]})]",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device otherwise unchanged (allowed: outputs[0].source, routing)",
       "result": "pass",
       "detail": "no other changes",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "client shows toast.success == 'Scene executed'",
+      "result": "n/a",
+      "detail": "not checked for client 'api'",
       "finding": null,
       "linked_finding": null,
       "note": null
@@ -642,9 +738,13 @@
     "src/rest_api/app.py",
     "src/rest_api/utils.py",
     "src/rest_api/websocket.py",
-    "src/rest_api/profiles.py",
+    "src/rest_api/scenes_v2.py",
+    "src/scene_manager.py",
+    "src/scene_execution.py",
     "src/config.py",
     "src/cec_macros.py",
+    "src/system_shortcuts.py",
+    "src/rest_api/system_shortcuts.py",
     "src/password.py",
     "web/index.html",
     "web/js/app.js",

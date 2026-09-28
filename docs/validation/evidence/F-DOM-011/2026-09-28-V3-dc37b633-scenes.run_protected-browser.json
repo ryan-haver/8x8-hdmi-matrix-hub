@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "features": ["F-KIO-002"],
+  "features": ["F-DOM-011", "F-DOM-015", "F-UI-008"],
   "level": "V3",
-  "scenario": "kiosk.route_one_muted",
-  "scenario_title": "Kiosk: route input 3 to output 3 with 'Mute output audio' checked; only output 3 changes",
+  "scenario": "scenes.run_protected",
+  "scenario_title": "Run the protected scene 'Kids' with its passcode: profile and route-shortcut steps apply",
   "scenario_kind": "happy",
   "target": "sim",
   "client": "browser",
@@ -11,15 +11,15 @@
   "gate": "ok",
   "blocked_reason": null,
   "commit": {
-    "sha": "e81b2b48b5b642be59e1118261de3c31241f3f9b",
+    "sha": "dc37b6331dadc55cccacfa48786b91a3084144f5",
     "branch": "wp-e1-ui-fixes",
     "dirty_files": [],
-    "short": "e81b2b48",
+    "short": "dc37b633",
     "dirty": false
   },
   "timestamp": {
-    "started": "2026-09-28T01:13:16.744Z",
-    "finished": "2026-09-28T01:13:18.410Z"
+    "started": "2026-09-28T02:52:56.477Z",
+    "finished": "2026-09-28T02:52:58.493Z"
   },
   "operator": "automation",
   "environment": {
@@ -35,8 +35,8 @@
         "USE_MODULAR": "true",
         "UC_ENABLED": "false",
         "MATRIX_HOST": "127.0.0.1",
-        "MATRIX_PORT": "53065",
-        "OREI_TELNET_PORT": "53066",
+        "MATRIX_PORT": "52367",
+        "OREI_TELNET_PORT": "52368",
         "TRUST_PROXY_HEADERS": "true",
         "TRUSTED_PROXY_IPS": "127.0.0.1",
         "LOG_LEVEL": "INFO"
@@ -56,58 +56,28 @@
     }
   },
   "procedure": [
-    "reset the simulator to the seed state",
-    "action (browser): kiosk_route(input=3, output=3, mute=True, arc=False)",
-    "  open /kiosk and wait until it shows the inputs",
-    "  tap input 3",
-    "  choose output 3",
-    "  set \"Mute output audio\" on and ARC off",
-    "  click Apply Routing",
-    "  the kiosk sent 5 output setting requests: all 200",
-    "  the page sent POST /api/output/3/source -> HTTP 200",
-    "  the page shows: success: Routing and output parameters applied"
+    "reset the simulator to the seed state + {'outputs': {'0': {'source': 1}}}",
+    "action (browser): scene_run(scene_id='scene_kidslocked', passcode='1234')",
+    "  open /ui and wait until the app has loaded its data",
+    "  open the Dashboard tab; scene scene_kidslocked has a card",
+    "  click Execute on scene scene_kidslocked",
+    "  answer the prompt \"\"Kids (Locked)\" is passcode protected. Enter passcode:\" with the passcode",
+    "  the page sent POST /api/v2/scenes/scene_kidslocked/execute -> HTTP 200",
+    "  the page shows: success: Scene executed"
   ],
   "observations": {
     "requests": [
       {
         "method": "POST",
-        "path": "/api/output/3/source",
-        "body": "{\"input\":3}",
-        "status": 200,
+        "path": "/api/v2/scenes/scene_kidslocked/execute",
+        "body": "{}",
+        "status": 403,
         "via": "page"
       },
       {
         "method": "POST",
-        "path": "/api/output/3/hdcp",
-        "body": "{\"mode\":3}",
-        "status": 200,
-        "via": "page"
-      },
-      {
-        "method": "POST",
-        "path": "/api/output/3/hdr",
-        "body": "{\"mode\":3}",
-        "status": 200,
-        "via": "page"
-      },
-      {
-        "method": "POST",
-        "path": "/api/output/3/scaler",
-        "body": "{\"mode\":4}",
-        "status": 200,
-        "via": "page"
-      },
-      {
-        "method": "POST",
-        "path": "/api/output/3/arc",
-        "body": "{\"enabled\":false}",
-        "status": 200,
-        "via": "page"
-      },
-      {
-        "method": "POST",
-        "path": "/api/output/3/mute",
-        "body": "{\"muted\":true}",
+        "path": "/api/v2/scenes/scene_kidslocked/execute",
+        "body": "{\"passcode\":\"1234\"}",
         "status": 200,
         "via": "page"
       }
@@ -206,7 +176,7 @@
       "outputs": [
         {
           "name": "TV",
-          "source": 2,
+          "source": 1,
           "connected": 1,
           "stream": 1,
           "hdcp": 3,
@@ -363,7 +333,7 @@
           "saved": true
         }
       ],
-      "routing": [2, 2, 1, 1, 5, 6, 1, 1]
+      "routing": [1, 2, 1, 1, 5, 6, 1, 1]
     },
     "state_after": {
       "schema_version": 1,
@@ -457,7 +427,7 @@
       "outputs": [
         {
           "name": "TV",
-          "source": 2,
+          "source": 6,
           "connected": 1,
           "stream": 1,
           "hdcp": 3,
@@ -485,14 +455,14 @@
         },
         {
           "name": "Output 3",
-          "source": 3,
+          "source": 1,
           "connected": 0,
           "stream": 1,
           "hdcp": 3,
-          "hdr": 2,
-          "scaler": 3,
+          "hdr": 0,
+          "scaler": 0,
           "arc": 0,
-          "audio_mute": 1,
+          "audio_mute": 0,
           "cec_enabled": 0,
           "ext_audio_enabled": 0,
           "ext_audio_source": 1
@@ -614,87 +584,66 @@
           "saved": true
         }
       ],
-      "routing": [2, 2, 3, 1, 5, 6, 1, 1]
+      "routing": [6, 2, 1, 1, 5, 6, 1, 1]
     },
     "state_diff": [
       {
-        "path": "outputs[2].audio_mute",
-        "before": 0,
-        "after": 1
-      },
-      {
-        "path": "outputs[2].hdr",
-        "before": 0,
-        "after": 2
-      },
-      {
-        "path": "outputs[2].scaler",
-        "before": 0,
-        "after": 3
-      },
-      {
-        "path": "outputs[2].source",
+        "path": "outputs[0].source",
         "before": 1,
-        "after": 3
+        "after": 6
       },
       {
-        "path": "routing[2]",
+        "path": "routing[0]",
         "before": 1,
-        "after": 3
+        "after": 6
       }
     ],
     "device_log": [
       {
-        "t": 1790557996.82,
+        "t": 1790563976.681,
         "channel": "http",
         "command": "get video status",
         "recognised": true
       },
       {
-        "t": 1790557996.864,
-        "channel": "http",
-        "command": "get video status",
-        "recognised": true
-      },
-      {
-        "t": 1790557996.865,
-        "channel": "http",
-        "command": "get input status",
-        "recognised": true
-      },
-      {
-        "t": 1790557996.865,
+        "t": 1790563976.682,
         "channel": "http",
         "command": "get output status",
         "recognised": true
       },
       {
-        "t": 1790557996.866,
+        "t": 1790563976.682,
         "channel": "http",
         "command": "get input status",
         "recognised": true
       },
       {
-        "t": 1790557996.909,
-        "channel": "telnet",
-        "command": "status",
+        "t": 1790563976.689,
+        "channel": "http",
+        "command": "get status",
         "recognised": true
       },
       {
-        "t": 1790557996.911,
+        "t": 1790563976.693,
         "channel": "http",
         "command": "get video status",
         "recognised": true
       },
       {
-        "t": 1790557997.745,
+        "t": 1790563976.783,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      },
+      {
+        "t": 1790563977.857,
         "channel": "http",
         "command": "video switch",
         "client": "127.0.0.1",
         "payload": {
           "comhead": "video switch",
           "language": 0,
-          "source": [3, 3]
+          "source": [1, 6]
         },
         "response": {
           "comhead": "video switch",
@@ -705,89 +654,35 @@
         "warnings": []
       },
       {
-        "t": 1790557997.759,
-        "channel": "http",
-        "command": "tx hdcp",
-        "client": "127.0.0.1",
-        "payload": {
-          "comhead": "tx hdcp",
-          "language": 0,
-          "hdcp": [3, 3]
-        },
-        "response": {
-          "comhead": "tx hdcp",
-          "result": 1
-        },
-        "recognised": true,
-        "mutated": true,
-        "warnings": []
-      },
-      {
-        "t": 1790557997.76,
-        "channel": "http",
-        "command": "set hdr conversion",
-        "client": "127.0.0.1",
-        "payload": {
-          "comhead": "set hdr conversion",
-          "language": 0,
-          "hdr": [3, 2]
-        },
-        "response": {
-          "comhead": "set hdr conversion",
-          "result": 1
-        },
-        "recognised": true,
-        "mutated": true,
-        "warnings": []
-      },
-      {
-        "t": 1790557997.761,
-        "channel": "http",
-        "command": "set video scaler",
-        "client": "127.0.0.1",
-        "payload": {
-          "comhead": "set video scaler",
-          "language": 0,
-          "scaler": [3, 3]
-        },
-        "response": {
-          "comhead": "set video scaler",
-          "result": 1
-        },
-        "recognised": true,
-        "mutated": true,
-        "warnings": []
-      },
-      {
-        "t": 1790557997.761,
-        "channel": "http",
-        "command": "set arc",
-        "client": "127.0.0.1",
-        "payload": {
-          "comhead": "set arc",
-          "language": 0,
-          "arc": [3, 0]
-        },
-        "response": {
-          "comhead": "set arc",
-          "result": 1
-        },
-        "recognised": true,
-        "mutated": true,
-        "warnings": []
-      },
-      {
-        "t": 1790557997.762,
+        "t": 1790563977.858,
         "channel": "http",
         "command": "set output audio mute",
         "client": "127.0.0.1",
         "payload": {
           "comhead": "set output audio mute",
           "language": 0,
-          "mute": [3, 1]
+          "mute": [1, 0]
         },
         "response": {
           "comhead": "set output audio mute",
+          "result": 1
+        },
+        "recognised": true,
+        "mutated": true,
+        "warnings": []
+      },
+      {
+        "t": 1790563977.864,
+        "channel": "http",
+        "command": "video switch",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "video switch",
+          "language": 0,
+          "source": [1, 6]
+        },
+        "response": {
+          "comhead": "video switch",
           "result": 1
         },
         "recognised": true,
@@ -797,7 +692,7 @@
     ],
     "ws_events": [
       {
-        "t_ms": -1,
+        "t_ms": 0,
         "event": "connected",
         "data": {
           "message": "Connected to OREI Matrix WebSocket",
@@ -805,14 +700,14 @@
         }
       },
       {
-        "t_ms": 163,
+        "t_ms": 303,
         "event": "status",
         "data": {
           "connected": true,
           "host": "127.0.0.1",
           "power": "on",
           "routing": {
-            "1": 2,
+            "1": 1,
             "2": 2,
             "3": 1,
             "4": 1,
@@ -821,7 +716,7 @@
             "7": 1,
             "8": 1
           },
-          "outputs": [2, 2, 1, 1, 5, 6, 1, 1],
+          "outputs": [1, 2, 1, 1, 5, 6, 1, 1],
           "input_names": {
             "1": "PS3",
             "2": "AppleTV",
@@ -1025,24 +920,18 @@
             }
           ]
         }
-      },
-      {
-        "t_ms": 1011,
-        "event": "audio_mute",
-        "data": {
-          "output": 3,
-          "muted": true,
-          "optimistic": true
-        }
       }
     ],
-    "screenshots": ["2026-09-28-V3-e81b2b48-kiosk.route_one_muted-browser/after.png"],
+    "screenshots": ["2026-09-28-V3-dc37b633-scenes.run_protected-browser/after.png"],
     "client_diagnostics": {
-      "page_api_requests": 13,
+      "page_api_requests": 22,
       "page_errors": [],
-      "console_errors": [],
-      "toasts": ["success: Routing and output parameters applied"],
-      "dialogs": []
+      "console_errors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "API POST /api/v2/scenes/scene_kidslocked/execute failed: ApiError: HTTP 403\n    at MatrixAPI._request (http://127.0.0.1:52381/js/api.js:149:23)\n    at async http://127.0.0.1:52381/js/api.js:199:30\n    at async MatrixAPI._retryOperation (http://127.0.0.1:52381/js/api.js:103:24)\n    at async MatrixAPI.post (http://127.0.0.1:52381/js/api.js:197:20)\n    at async Object.runProfileOrScene (http://127.0.0.1:52381/js/utils/run-action.js:48:18)\n    at async HTMLButtonElement.<anonymous> (http://127.0.0.1:52381/js/utils/dashboard-manager.js:918:25)"
+      ],
+      "toasts": ["success: Scene executed"],
+      "dialogs": ["\"Kids (Locked)\" is passcode protected. Enter passcode:"]
     },
     "operator": [],
     "restore": null,
@@ -1050,31 +939,31 @@
   },
   "checks": [
     {
-      "description": "device outputs[2].source == 3",
+      "description": "response HTTP 200 and body contains {'success': True, 'data': {'steps_completed': 2, 'total_steps': 2}}",
       "result": "pass",
-      "detail": "outputs[2].source = 3",
+      "detail": "HTTP 200; body (browser)",
       "finding": null,
       "linked_finding": null,
       "note": null
     },
     {
-      "description": "device outputs[2].audio_mute == 1",
+      "description": "device outputs[0].source == 6",
       "result": "pass",
-      "detail": "outputs[2].audio_mute = 1",
+      "detail": "outputs[0].source = 6",
       "finding": null,
       "linked_finding": null,
       "note": null
     },
     {
-      "description": "device received http 'set output audio mute' with {'mute': [3, 1]} exactly 1x",
+      "description": "device received http 'video switch' with {'source': [1, 6]} exactly 2x",
       "result": "pass",
-      "detail": "1 matching; http commands seen: [('get video status', {'comhead': 'get video status', 'language': 0}), ('get video status', {'comhead': 'get video status', 'language': 0}), ('get input status', {'comhead': 'get input status', 'language': 0}), ('get output status', {'comhead': 'get output status', 'language': 0}), ('get input status', {'comhead': 'get input status', 'language': 0}), ('get video status', {'comhead': 'get video status', 'language': 0}), ('video switch', {'comhead': 'video switch', 'language': 0, 'source': [3, 3]}), ('tx hdcp', {'comhead': 'tx hdcp', 'language': 0, 'hdcp': [3, 3]}), ('set hdr conversion', {'comhead': 'set hdr conversion', 'language': 0, 'hdr': [3, 2]}), ('set video scaler', {'comhead': 'set video scaler', 'language': 0, 'scaler': [3, 3]}), ('set arc', {'comhead': 'set arc', 'language': 0, 'arc': [3, 0]}), ('set output audio mute', {'comhead': 'set output audio mute', 'language': 0, 'mute': [3, 1]})]",
+      "detail": "2 matching; http commands seen: [('get video status', {'comhead': 'get video status', 'language': 0}), ('get output status', {'comhead': 'get output status', 'language': 0}), ('get input status', {'comhead': 'get input status', 'language': 0}), ('get status', {'comhead': 'get status', 'language': 0}), ('get video status', {'comhead': 'get video status', 'language': 0}), ('video switch', {'comhead': 'video switch', 'language': 0, 'source': [1, 6]}), ('set output audio mute', {'comhead': 'set output audio mute', 'language': 0, 'mute': [1, 0]}), ('video switch', {'comhead': 'video switch', 'language': 0, 'source': [1, 6]})]",
       "finding": null,
       "linked_finding": null,
       "note": null
     },
     {
-      "description": "device otherwise unchanged (allowed: outputs[2].*, routing)",
+      "description": "device otherwise unchanged (allowed: outputs[0].source, routing)",
       "result": "pass",
       "detail": "no other changes",
       "finding": null,
@@ -1082,9 +971,9 @@
       "note": null
     },
     {
-      "description": "client shows toast.success == 'Routing and output parameters applied'",
+      "description": "client shows toast.success == 'Scene executed'",
       "result": "pass",
-      "detail": "toast.success = 'Routing and output parameters applied' after 0.0 s",
+      "detail": "toast.success = 'Scene executed' after 0.0 s",
       "finding": null,
       "linked_finding": null,
       "note": null
@@ -1099,9 +988,24 @@
     "src/rest_api/app.py",
     "src/rest_api/utils.py",
     "src/rest_api/websocket.py",
-    "src/rest_api/control.py",
-    "src/rest_api/outputs.py",
-    "src/rest_api/core.py",
-    "web/kiosk.html"
+    "src/rest_api/scenes_v2.py",
+    "src/scene_manager.py",
+    "src/scene_execution.py",
+    "src/config.py",
+    "src/cec_macros.py",
+    "src/system_shortcuts.py",
+    "src/rest_api/system_shortcuts.py",
+    "src/password.py",
+    "web/index.html",
+    "web/js/app.js",
+    "web/js/api.js",
+    "web/js/state.js",
+    "web/js/websocket.js",
+    "web/js/utils/run-action.js",
+    "web/js/components/toast.js",
+    "web/js/components/scenes-panel.js",
+    "web/js/components/settings-drawer.js",
+    "web/js/utils/dashboard-manager.js",
+    "web/js/components/dashboard-cards/renderers.js"
   ]
 }

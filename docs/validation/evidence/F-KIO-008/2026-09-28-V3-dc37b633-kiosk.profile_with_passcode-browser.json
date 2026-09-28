@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "features": ["F-DOM-011", "F-DOM-015", "F-UI-008"],
+  "features": ["F-KIO-008", "F-DOM-005"],
   "level": "V3",
-  "scenario": "scenes.run_protected",
-  "scenario_title": "Run the protected scene 'Kids' with its passcode: profile and route-shortcut steps apply",
+  "scenario": "kiosk.profile_with_passcode",
+  "scenario_title": "Kiosk: run the protected profile 'Kids Gaming' by entering its passcode on the PIN pad",
   "scenario_kind": "happy",
   "target": "sim",
   "client": "browser",
@@ -11,15 +11,15 @@
   "gate": "ok",
   "blocked_reason": null,
   "commit": {
-    "sha": "e81b2b48b5b642be59e1118261de3c31241f3f9b",
+    "sha": "dc37b6331dadc55cccacfa48786b91a3084144f5",
     "branch": "wp-e1-ui-fixes",
     "dirty_files": [],
-    "short": "e81b2b48",
+    "short": "dc37b633",
     "dirty": false
   },
   "timestamp": {
-    "started": "2026-09-28T01:13:26.366Z",
-    "finished": "2026-09-28T01:13:28.548Z"
+    "started": "2026-09-28T02:52:43.502Z",
+    "finished": "2026-09-28T02:52:45.905Z"
   },
   "operator": "automation",
   "environment": {
@@ -35,8 +35,8 @@
         "USE_MODULAR": "true",
         "UC_ENABLED": "false",
         "MATRIX_HOST": "127.0.0.1",
-        "MATRIX_PORT": "53065",
-        "OREI_TELNET_PORT": "53066",
+        "MATRIX_PORT": "52367",
+        "OREI_TELNET_PORT": "52368",
         "TRUST_PROXY_HEADERS": "true",
         "TRUSTED_PROXY_IPS": "127.0.0.1",
         "LOG_LEVEL": "INFO"
@@ -57,26 +57,26 @@
   },
   "procedure": [
     "reset the simulator to the seed state + {'outputs': {'0': {'source': 1}}}",
-    "action (browser): scene_run(scene_id='scene_kidslocked', passcode='1234')",
-    "  open /ui and wait until the app has loaded its data",
-    "  open the Dashboard tab; scene scene_kidslocked has a card",
-    "  click Execute on scene scene_kidslocked",
-    "  answer the prompt \"\"Kids (Locked)\" is passcode protected. Enter passcode:\" with the passcode",
-    "  the page sent POST /api/v2/scenes/scene_kidslocked/execute -> HTTP 200",
-    "  the page shows: success: Scene executed"
+    "action (browser): profile_recall(profile_id='kids_gaming', name='Kids Gaming', passcode='1234', via='kiosk')",
+    "  open /kiosk and wait until it shows the inputs",
+    "  open the kiosk Profiles tab",
+    "  tap the \"Kids Gaming\" slot",
+    "  enter the passcode on the PIN pad and tap OK",
+    "  the page sent POST /api/profile/kids_gaming/recall -> HTTP 200",
+    "  the page shows: success: Profile activated"
   ],
   "observations": {
     "requests": [
       {
         "method": "POST",
-        "path": "/api/v2/scenes/scene_kidslocked/execute",
+        "path": "/api/profile/kids_gaming/recall",
         "body": "{}",
         "status": 403,
         "via": "page"
       },
       {
         "method": "POST",
-        "path": "/api/v2/scenes/scene_kidslocked/execute",
+        "path": "/api/profile/kids_gaming/recall",
         "body": "{\"passcode\":\"1234\"}",
         "status": 200,
         "via": "page"
@@ -600,43 +600,49 @@
     ],
     "device_log": [
       {
-        "t": 1790558006.699,
+        "t": 1790563963.591,
         "channel": "http",
         "command": "get video status",
         "recognised": true
       },
       {
-        "t": 1790558006.7,
+        "t": 1790563963.684,
         "channel": "http",
-        "command": "get output status",
+        "command": "get video status",
         "recognised": true
       },
       {
-        "t": 1790558006.701,
+        "t": 1790563963.685,
         "channel": "http",
         "command": "get input status",
         "recognised": true
       },
       {
-        "t": 1790558006.711,
+        "t": 1790563963.687,
         "channel": "http",
-        "command": "get status",
+        "command": "get output status",
         "recognised": true
       },
       {
-        "t": 1790558006.713,
+        "t": 1790563963.687,
         "channel": "http",
-        "command": "get video status",
+        "command": "get input status",
         "recognised": true
       },
       {
-        "t": 1790558006.818,
+        "t": 1790563963.753,
         "channel": "telnet",
         "command": "status",
         "recognised": true
       },
       {
-        "t": 1790558007.912,
+        "t": 1790563963.755,
+        "channel": "http",
+        "command": "get video status",
+        "recognised": true
+      },
+      {
+        "t": 1790563965.263,
         "channel": "http",
         "command": "video switch",
         "client": "127.0.0.1",
@@ -654,7 +660,25 @@
         "warnings": []
       },
       {
-        "t": 1790558007.913,
+        "t": 1790563965.264,
+        "channel": "http",
+        "command": "tx stream",
+        "client": "127.0.0.1",
+        "payload": {
+          "comhead": "tx stream",
+          "language": 0,
+          "out": [1, 1]
+        },
+        "response": {
+          "comhead": "tx stream",
+          "result": 1
+        },
+        "recognised": true,
+        "mutated": true,
+        "warnings": []
+      },
+      {
+        "t": 1790563965.264,
         "channel": "http",
         "command": "set output audio mute",
         "client": "127.0.0.1",
@@ -672,22 +696,34 @@
         "warnings": []
       },
       {
-        "t": 1790558007.916,
+        "t": 1790563965.268,
         "channel": "http",
-        "command": "video switch",
-        "client": "127.0.0.1",
-        "payload": {
-          "comhead": "video switch",
-          "language": 0,
-          "source": [1, 6]
-        },
-        "response": {
-          "comhead": "video switch",
-          "result": 1
-        },
-        "recognised": true,
-        "mutated": true,
-        "warnings": []
+        "command": "get video status",
+        "recognised": true
+      },
+      {
+        "t": 1790563965.268,
+        "channel": "http",
+        "command": "get input status",
+        "recognised": true
+      },
+      {
+        "t": 1790563965.268,
+        "channel": "http",
+        "command": "get output status",
+        "recognised": true
+      },
+      {
+        "t": 1790563965.334,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      },
+      {
+        "t": 1790563965.337,
+        "channel": "http",
+        "command": "get video status",
+        "recognised": true
       }
     ],
     "ws_events": [
@@ -700,7 +736,7 @@
         }
       },
       {
-        "t_ms": 448,
+        "t_ms": 247,
         "event": "status",
         "data": {
           "connected": true,
@@ -922,16 +958,13 @@
         }
       }
     ],
-    "screenshots": ["2026-09-28-V3-e81b2b48-scenes.run_protected-browser/after.png"],
+    "screenshots": ["2026-09-28-V3-dc37b633-kiosk.profile_with_passcode-browser/after.png"],
     "client_diagnostics": {
-      "page_api_requests": 22,
+      "page_api_requests": 12,
       "page_errors": [],
-      "console_errors": [
-        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
-        "API POST /api/v2/scenes/scene_kidslocked/execute failed: ApiError: HTTP 403\n    at MatrixAPI._request (http://127.0.0.1:53077/js/api.js:149:23)\n    at async http://127.0.0.1:53077/js/api.js:199:30\n    at async MatrixAPI._retryOperation (http://127.0.0.1:53077/js/api.js:103:24)\n    at async MatrixAPI.post (http://127.0.0.1:53077/js/api.js:197:20)\n    at async Object.runProfileOrScene (http://127.0.0.1:53077/js/utils/run-action.js:48:18)\n    at async HTMLButtonElement.<anonymous> (http://127.0.0.1:53077/js/utils/dashboard-manager.js:905:25)"
-      ],
-      "toasts": ["success: Scene executed"],
-      "dialogs": ["\"Kids (Locked)\" is passcode protected. Enter passcode:"]
+      "console_errors": ["Failed to load resource: the server responded with a status of 403 (Forbidden)"],
+      "toasts": ["success: Profile activated"],
+      "dialogs": []
     },
     "operator": [],
     "restore": null,
@@ -939,7 +972,7 @@
   },
   "checks": [
     {
-      "description": "response HTTP 200 and body contains {'success': True, 'data': {'steps_completed': 2, 'total_steps': 2}}",
+      "description": "response HTTP 200",
       "result": "pass",
       "detail": "HTTP 200; body (browser)",
       "finding": null,
@@ -955,15 +988,15 @@
       "note": null
     },
     {
-      "description": "device received http 'video switch' with {'source': [1, 6]} exactly 2x",
+      "description": "device received http 'video switch' with {'source': [1, 6]} exactly 1x",
       "result": "pass",
-      "detail": "2 matching; http commands seen: [('get video status', {'comhead': 'get video status', 'language': 0}), ('get output status', {'comhead': 'get output status', 'language': 0}), ('get input status', {'comhead': 'get input status', 'language': 0}), ('get status', {'comhead': 'get status', 'language': 0}), ('get video status', {'comhead': 'get video status', 'language': 0}), ('video switch', {'comhead': 'video switch', 'language': 0, 'source': [1, 6]}), ('set output audio mute', {'comhead': 'set output audio mute', 'language': 0, 'mute': [1, 0]}), ('video switch', {'comhead': 'video switch', 'language': 0, 'source': [1, 6]})]",
+      "detail": "1 matching; http commands seen: [('get video status', {'comhead': 'get video status', 'language': 0}), ('get video status', {'comhead': 'get video status', 'language': 0}), ('get input status', {'comhead': 'get input status', 'language': 0}), ('get output status', {'comhead': 'get output status', 'language': 0}), ('get input status', {'comhead': 'get input status', 'language': 0}), ('get video status', {'comhead': 'get video status', 'language': 0}), ('video switch', {'comhead': 'video switch', 'language': 0, 'source': [1, 6]}), ('tx stream', {'comhead': 'tx stream', 'language': 0, 'out': [1, 1]}), ('set output audio mute', {'comhead': 'set output audio mute', 'language': 0, 'mute': [1, 0]}), ('get video status', {'comhead': 'get video status', 'language': 0}), ('get input status', {'comhead': 'get input status', 'language': 0}), ('get output status', {'comhead': 'get output status', 'language': 0})]",
       "finding": null,
       "linked_finding": null,
       "note": null
     },
     {
-      "description": "device otherwise unchanged (allowed: outputs[0].source, routing)",
+      "description": "device otherwise unchanged (allowed: outputs[0].*, routing)",
       "result": "pass",
       "detail": "no other changes",
       "finding": null,
@@ -971,9 +1004,9 @@
       "note": null
     },
     {
-      "description": "client shows toast.success == 'Scene executed'",
+      "description": "client shows toast.success == 'Profile activated'",
       "result": "pass",
-      "detail": "toast.success = 'Scene executed' after 0.0 s",
+      "detail": "toast.success = 'Profile activated' after 0.0 s",
       "finding": null,
       "linked_finding": null,
       "note": null
@@ -988,24 +1021,10 @@
     "src/rest_api/app.py",
     "src/rest_api/utils.py",
     "src/rest_api/websocket.py",
-    "src/rest_api/scenes_v2.py",
-    "src/scene_manager.py",
-    "src/scene_execution.py",
+    "src/rest_api/profiles.py",
     "src/config.py",
     "src/cec_macros.py",
-    "src/system_shortcuts.py",
-    "src/rest_api/system_shortcuts.py",
     "src/password.py",
-    "web/index.html",
-    "web/js/app.js",
-    "web/js/api.js",
-    "web/js/state.js",
-    "web/js/websocket.js",
-    "web/js/utils/run-action.js",
-    "web/js/components/toast.js",
-    "web/js/components/scenes-panel.js",
-    "web/js/components/settings-drawer.js",
-    "web/js/utils/dashboard-manager.js",
-    "web/js/components/dashboard-cards/renderers.js"
+    "web/kiosk.html"
   ]
 }
