@@ -255,20 +255,45 @@ class _HttpResult:
     timeout: bool = False
 
 
+#: Transport errors that mean "this name does not resolve" (aiohttp keeps the resolver's message).
+_DNS_ERROR_MARKERS = ("getaddrinfo", "name or service not known", "nodename nor servname",
+                      "name resolution", "no address associated")
+
+
+def _login_failure_kind(result: _HttpResult) -> str:
+    """``OreiMatrix.login_failure`` for a login request that got no usable answer."""
+    if result.kind == "auth":
+        return "auth"  # HTTP 401/403 or a login page instead of JSON
+    if result.kind == "transport":
+        text = (result.error or "").lower()
+        return "not_found" if any(m in text for m in _DNS_ERROR_MARKERS) else "refused"
+    return "other"
+
+
 class OreiMatrix:
     """Representing an OREI BK-808 HDMI Matrix device."""
 
-    def __init__(self, host: str, port: int = 443, use_https: bool = True):
+    def __init__(self, host: str, port: int = 443, use_https: bool = True, *,
+                 user: str | None = None, password: str | None = None):
         """
         Initialize the OREI Matrix device.
 
         :param host: IP address of the matrix
         :param port: Port (default 443 for HTTPS)
         :param use_https: Use HTTPS instead of HTTP (default True)
+        :param user: login user for this matrix; ``None`` = ``OREI_USER`` (default ``Admin``)
+        :param password: login password for this matrix; ``None`` = ``OREI_PASSWORD`` (default ``admin``).
+            The Remote's setup passes the credentials the user entered for a new address, so the
+            configured ones are never sent to another host (UC-02).
         """
         self.host = host
         self.port = port
         self.use_https = use_https
+        self._user = user
+        self._password = password
+        #: Why the last login attempt failed: ``auth`` (credentials rejected), ``timeout``,
+        #: ``not_found`` (the name does not resolve), ``refused`` (no connection), ``other``; None after success.
+        self.login_failure: str | None = None
         self._session: aiohttp.ClientSession | None = None
         self._state = ConnectionState.DISCONNECTED
         # Typed as Any: pyee annotates event names as `str`, but this codebase
@@ -591,6 +616,7 @@ class OreiMatrix:
         except Exception as ex:
             _LOG.error("Failed to connect to OREI Matrix: %s", ex)
             self._last_error = str(ex)
+            self.login_failure = "other"
             self.events.emit(Events.ERROR, str(ex))
             logged_in = False
 
@@ -610,28 +636,39 @@ class OreiMatrix:
             self._set_state(self._link_up_state())
         return True
 
+    @property
+    def has_own_credentials(self) -> bool:
+        """Whether this matrix logs in with credentials given to it (a Remote setup), not the environment's."""
+        return self._password is not None
+
+    def credentials(self) -> tuple[str, str]:
+        """The login user and password: this matrix's own, else ``OREI_USER`` / ``OREI_PASSWORD``."""
+        user = self._user if self._user is not None else os.environ.get("OREI_USER", "Admin")
+        password = self._password if self._password is not None else os.environ.get("OREI_PASSWORD", "admin")
+        return user, password
+
     async def _login(self) -> bool:
         """POST the login command; True only on an explicit success result."""
-        # Credentials can be overridden via environment variables
-        login_cmd = {
-            "comhead": "login",
-            "user": os.environ.get("OREI_USER", "Admin"),
-            "password": os.environ.get("OREI_PASSWORD", "admin"),
-        }
+        user, password = self.credentials()
+        login_cmd = {"comhead": "login", "user": user, "password": password}
         result = await self._post(login_cmd)
         if result.kind != "ok":
             if result.timeout:
                 _LOG.error("Connection timeout to OREI Matrix at %s:%d", self.host, self.port)
                 self._last_error = "Connection timeout"
+                self.login_failure = "timeout"
             else:
                 _LOG.error("Login request failed: %s", result.error)
                 self._last_error = result.error or "Login failed"
+                self.login_failure = _login_failure_kind(result)
             self.events.emit(Events.ERROR, self._last_error)
             return False
         if not is_login_success(result.data):
             _LOG.error("Login failed: %s", result.data)
             self._last_error = "Authentication failed"
+            self.login_failure = "auth"
             return False
+        self.login_failure = None
         return True
 
     async def _relogin(self) -> bool:
