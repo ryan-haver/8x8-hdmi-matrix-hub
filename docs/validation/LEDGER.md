@@ -1,7 +1,7 @@
 # Feature ledger
 
 > **Generated** by `python -m tools.validate ledger` — do not edit by hand. Registry: [`features.yaml`](features.yaml) · Plan: [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md) · How to add evidence: [`README.md`](README.md).
-> Commit `7aa17c95`
+> Commit `9ef6d31f`
 
 **Level** = highest level with fresh passing evidence, else the recorded baseline (the registry's `current`), capped at V1 while an open critical/high finding is linked. **Recorded** = the registry baseline. **Fresh** = evidence commit not older than the last change to the scenario's `covers` paths.
 
@@ -11,7 +11,7 @@
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Matrix control | 31 | 1 | 24 | 1 | 5 | 0 | 0 | 31 | 7 |
 | CEC control | 11 | 0 | 10 | 0 | 1 | 0 | 0 | 11 | 4 |
-| REST/WebSocket contract | 42 | 2 | 23 | 16 | 1 | 0 | 0 | 32 | 13 |
+| REST/WebSocket contract | 42 | 1 | 17 | 23 | 1 | 0 | 0 | 26 | 13 |
 | Domain features | 36 | 2 | 17 | 1 | 16 | 0 | 0 | 26 | 0 |
 | Web UI | 36 | 0 | 25 | 0 | 11 | 0 | 0 | 25 | 6 |
 | Kiosk | 14 | 0 | 7 | 0 | 7 | 0 | 0 | 7 | 2 |
@@ -21,7 +21,7 @@
 | Deployment, configuration, persistence | 20 | 3 | 8 | 2 | 7 | 0 | 0 | 20 | 7 |
 | Security controls | 15 | 9 | 5 | 0 | 1 | 0 | 0 | 14 | 0 |
 | Reliability | 18 | 12 | 3 | 1 | 2 | 0 | 0 | 18 | 3 |
-| **All** | **268** | **33** | **132** | **21** | **82** | **0** | **0** | **229** | **67** |
+| **All** | **268** | **32** | **126** | **28** | **82** | **0** | **0** | **223** | **67** |
 
 Levels: **V0** Claimed · **V1** Unit · **V2** Simulated integration · **V3** End-to-end · **V4** Hardware · **V5** Field
 
@@ -43,7 +43,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | Reliability | 12 | 3 | 1 | 2 | 0 | 0 |
 | **All** | **33** | **133** | **27** | **75** | **0** | **0** |
 
-- Features with fresh passing scenario evidence: **25** of 268.
+- Features with fresh passing scenario evidence: **33** of 268.
 - Features with a fresh failing scenario: **0**.
 - Features capped at V1 by an open critical/high finding: **28**.
 
@@ -106,7 +106,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-API-001 | GET /api/health (liveness, matrix connection, runtime metrics) | V3 | V2 | V2 | — | — | — |
 | F-API-002 | API info and root (GET /, /api, /api/info) | V2 | V1 | V1 | — | — | DEP-06(M) |
 | F-API-003 | GET /api/status | V3 | V2 | V2 | — | — | — |
-| F-API-004 | Detailed status (GET /api/status/full\|inputs\|outputs\|cables\|edid\|ext-audio\|system\|device\|cec) | V3 | V1 | V1 | — | — | — |
+| F-API-004 | Detailed status (GET /api/status/full\|inputs\|outputs\|cables\|edid\|ext-audio\|system\|device\|cec) | V3 | V2 | V1 | fresh | [contracts.cables·api·pass](evidence/F-API-004/2026-10-01-V2-9ef6d31f-contracts.cables-api.json)<br>[contracts.cec_status·api·pass](evidence/F-API-004/2026-10-01-V2-9ef6d31f-contracts.cec_status-api.json) | — |
 | F-API-005 | POST /api/switch (one output or all) | V3 | V2 | V2 | stale | [routing.switch_one·api·pass](evidence/F-MTX-001/2026-09-25-V2-d6668000-routing.switch_one-api.json)<br>[routing.switch_one·api·pass](evidence/F-MTX-001/2026-09-28-V2-c39ee8d5-routing.switch_one-api.json) | — |
 | F-API-006 | POST /api/output/{output}/source and input cycling | V3 | V1 | V1 | — | — | — |
 | F-API-007 | POST /api/preset/{preset} (recall) | V3 | V2 | V2 | stale | [presets.recall·api·pass](evidence/F-MTX-003/2026-09-25-V2-22afc1a7-presets.recall-api.json)<br>[presets.recall·api·pass](evidence/F-MTX-003/2026-09-25-V2-d6668000-presets.recall-api.json) | — |
@@ -116,21 +116,21 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-API-011 | EDID routes | V2 | V1 | V1 | — | — | — |
 | F-API-012 | External audio routes | V2 | V1 | V1 | — | — | — |
 | F-API-013 | System setting routes (beep, panel lock, LCD, reboot) | V2 | V1 | V1 | — | — | — |
-| F-API-014 | System info and storage routes | V2 | V1 | V1 | — | — | SEC-11(L) |
+| F-API-014 | System info and storage routes | V2 | **V2** | V1 | fresh | [contracts.storage·api·pass](evidence/F-API-014/2026-10-01-V2-9ef6d31f-contracts.storage-api.json)<br>[contracts.system_info·api·pass](evidence/F-API-014/2026-10-01-V2-9ef6d31f-contracts.system_info-api.json) | SEC-11(L) |
 | F-API-015 | CEC command routes | V3 | V1 | V1 | stale | [cec.input_power_on·api·pass](evidence/F-CEC-001/2026-09-25-V2-22afc1a7-cec.input_power_on-api.json)<br>[cec.input_power_on·api·pass](evidence/F-CEC-001/2026-09-25-V2-d6668000-cec.input_power_on-api.json) | — |
-| F-API-016 | CEC catalogue, capability and enable routes | V2 | V1 | V1 | — | — | — |
-| F-API-017 | Device settings routes (icons, display names, preset names, favourite/dashboard presets) | V2 | V1 | V1 | — | — | — |
+| F-API-016 | CEC catalogue, capability and enable routes | V2 | **V2** | V1 | fresh | [contracts.cec_input_catalog·api·pass](evidence/F-API-016/2026-10-01-V2-9ef6d31f-contracts.cec_input_catalog-api.json)<br>[contracts.cec_invalid_type·api·pass](evidence/F-API-016/2026-10-01-V2-9ef6d31f-contracts.cec_invalid_type-api.json)<br>[contracts.cec_output_catalog·api·pass](evidence/F-API-016/2026-10-01-V2-9ef6d31f-contracts.cec_output_catalog-api.json) | — |
+| F-API-017 | Device settings routes (icons, display names, preset names, favourite/dashboard presets) | V2 | **V2** | V1 | fresh | [contracts.device_settings·api·pass](evidence/F-API-017/2026-10-01-V2-9ef6d31f-contracts.device_settings-api.json)<br>[contracts.input_settings·api·pass](evidence/F-API-017/2026-10-01-V2-9ef6d31f-contracts.input_settings-api.json)<br>[contracts.invalid_input_settings·api·pass](evidence/F-API-017/2026-10-01-V2-9ef6d31f-contracts.invalid_input_settings-api.json)<br>[contracts.invalid_output_settings·api·pass](evidence/F-API-017/2026-10-01-V2-9ef6d31f-contracts.invalid_output_settings-api.json) | — |
 | F-API-018 | Name routes (POST /api/input\|output/{n}/name) | V2 | V0 | V0 | — | — | BE-16(M) |
 | F-API-019 | Profile routes | V2 | V1 (capped) | V1 | — | — | SEC-04(H) |
 | F-API-020 | Scene v1 alias routes (/api/scene*, /api/scenes) | V2 | V1 | V1 | — | — | API-12(M) |
 | F-API-021 | Scene v2 routes (/api/v2/scenes*) | V2 | **V2** | V2 | — | — | TST-03(M) |
 | F-API-022 | Response envelope and input validation (4xx before anything reaches the matrix) | V2 | V1 | V1 | stale | [failures.bad_input·api·pass](evidence/F-API-022/2026-09-25-V2-22afc1a7-failures.bad_input-api.json)<br>[failures.bad_input·api·pass](evidence/F-API-022/2026-09-25-V2-d6668000-failures.bad_input-api.json) | API-15(L), SEC-11(L), API-21(L) |
 | F-API-023 | Macro routes | V2 | V1 | V1 | — | — | — |
-| F-API-024 | Shortcut routes (/api/system-shortcuts* and the /api/shortcuts* aliases) | V2 | V1 | V1 | — | — | — |
+| F-API-024 | Shortcut routes (/api/system-shortcuts* and the /api/shortcuts* aliases) | V2 | **V2** | V1 | fresh | [contracts.shortcut_alias·api·pass](evidence/F-API-024/2026-10-01-V2-9ef6d31f-contracts.shortcut_alias-api.json)<br>[contracts.shortcut_dashboard·api·pass](evidence/F-API-024/2026-10-01-V2-9ef6d31f-contracts.shortcut_dashboard-api.json)<br>[contracts.shortcut_favorites·api·pass](evidence/F-API-024/2026-10-01-V2-9ef6d31f-contracts.shortcut_favorites-api.json)<br>[contracts.shortcut_unknown·api·pass](evidence/F-API-024/2026-10-01-V2-9ef6d31f-contracts.shortcut_unknown-api.json) | — |
 | F-API-025 | Dashboard layout routes | V2 | V1 | V1 | — | — | API-20(M) |
-| F-API-026 | Themes and UI preference routes | V2 | V1 | V1 | — | — | — |
-| F-API-027 | Settings routes (matrix host, test connection) | V2 | V1 (capped) | V1 | — | — | SEC-03(C), TST-03(M) |
-| F-API-028 | Flic integration routes | V2 | V0 | V0 | — | — | PER-02(M), API-15(L), TST-03(M) |
+| F-API-026 | Themes and UI preference routes | V2 | **V2** | V1 | fresh | [contracts.themes·api·pass](evidence/F-API-026/2026-10-01-V2-9ef6d31f-contracts.themes-api.json)<br>[contracts.ui_preferences·api·pass](evidence/F-API-026/2026-10-01-V2-9ef6d31f-contracts.ui_preferences-api.json) | — |
+| F-API-027 | Settings routes (matrix host, test connection) | V2 | V1 (capped) | V1 | fresh | [contracts.settings·api·pass](evidence/F-API-027/2026-10-01-V2-9ef6d31f-contracts.settings-api.json) | SEC-03(C), TST-03(M) |
+| F-API-028 | Flic integration routes | V2 | **V2** | V0 | fresh | [contracts.flic_buttons·api·pass](evidence/F-API-028/2026-10-01-V2-9ef6d31f-contracts.flic_buttons-api.json) | PER-02(M), API-15(L), TST-03(M) |
 | F-API-029 | Web UI, kiosk and static asset routes | V3 | **V3** | V3 | — | — | SEC-13(L) |
 | F-API-030 | Rate limiting (60 requests / 10 s per client) | V2 | V1 | V1 | — | — | SEC-12(L), VAL-06(L) |
 | F-API-031 | CORS headers | V2 | V1 (capped) | V1 | — | — | SEC-02(C) |

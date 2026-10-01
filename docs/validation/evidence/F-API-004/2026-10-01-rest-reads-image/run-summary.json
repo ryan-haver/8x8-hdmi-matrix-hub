@@ -1,0 +1,278 @@
+{
+  "commit": {
+    "sha": "9ef6d31f69bfd0e251475ea93ea09126f85ea243",
+    "branch": "wp-rest-read-contracts",
+    "dirty_files": [],
+    "short": "9ef6d31f",
+    "dirty": false
+  },
+  "target": "sim",
+  "clients": [
+    "api"
+  ],
+  "operator": "automation",
+  "finished": "2026-10-01T18:22:08.421Z",
+  "aborted": null,
+  "outcomes": [
+    {
+      "scenario": "contracts.cec_status",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-004"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-004/2026-10-01-V2-9ef6d31f-contracts.cec_status-api.json"
+    },
+    {
+      "scenario": "contracts.cables",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-004"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-004/2026-10-01-V2-9ef6d31f-contracts.cables-api.json"
+    },
+    {
+      "scenario": "contracts.cec_input_catalog",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-016/2026-10-01-V2-9ef6d31f-contracts.cec_input_catalog-api.json"
+    },
+    {
+      "scenario": "contracts.cec_output_catalog",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-016/2026-10-01-V2-9ef6d31f-contracts.cec_output_catalog-api.json"
+    },
+    {
+      "scenario": "contracts.cec_invalid_type",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-016/2026-10-01-V2-9ef6d31f-contracts.cec_invalid_type-api.json"
+    },
+    {
+      "scenario": "contracts.device_settings",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-017/2026-10-01-V2-9ef6d31f-contracts.device_settings-api.json"
+    },
+    {
+      "scenario": "contracts.input_settings",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-017/2026-10-01-V2-9ef6d31f-contracts.input_settings-api.json"
+    },
+    {
+      "scenario": "contracts.output_settings",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-017/2026-10-01-V2-9ef6d31f-contracts.output_settings-api.json"
+    },
+    {
+      "scenario": "contracts.invalid_input_settings",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-017/2026-10-01-V2-9ef6d31f-contracts.invalid_input_settings-api.json"
+    },
+    {
+      "scenario": "contracts.invalid_output_settings",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-017/2026-10-01-V2-9ef6d31f-contracts.invalid_output_settings-api.json"
+    },
+    {
+      "scenario": "contracts.shortcut_favorites",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-024"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-024/2026-10-01-V2-9ef6d31f-contracts.shortcut_favorites-api.json"
+    },
+    {
+      "scenario": "contracts.shortcut_dashboard",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-024"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-024/2026-10-01-V2-9ef6d31f-contracts.shortcut_dashboard-api.json"
+    },
+    {
+      "scenario": "contracts.shortcut_alias",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-024"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-024/2026-10-01-V2-9ef6d31f-contracts.shortcut_alias-api.json"
+    },
+    {
+      "scenario": "contracts.shortcut_unknown",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-024"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-024/2026-10-01-V2-9ef6d31f-contracts.shortcut_unknown-api.json"
+    },
+    {
+      "scenario": "contracts.themes",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-026"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-026/2026-10-01-V2-9ef6d31f-contracts.themes-api.json"
+    },
+    {
+      "scenario": "contracts.ui_preferences",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-026"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-026/2026-10-01-V2-9ef6d31f-contracts.ui_preferences-api.json"
+    },
+    {
+      "scenario": "contracts.settings",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-027/2026-10-01-V2-9ef6d31f-contracts.settings-api.json"
+    },
+    {
+      "scenario": "contracts.system_info",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-014"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-014/2026-10-01-V2-9ef6d31f-contracts.system_info-api.json"
+    },
+    {
+      "scenario": "contracts.storage",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-014"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-014/2026-10-01-V2-9ef6d31f-contracts.storage-api.json"
+    },
+    {
+      "scenario": "contracts.flic_buttons",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-028/2026-10-01-V2-9ef6d31f-contracts.flic_buttons-api.json"
+    }
+  ]
+}

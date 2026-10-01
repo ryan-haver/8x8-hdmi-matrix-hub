@@ -781,7 +781,9 @@ features:
   target: V3
   current: V1
   basis: 'Recorded V1 baseline: tests/test_rest_api.py TestStatusEndpoints (mocked). New simulator read tests cover cable and CEC status, including unavailable/disconnected cases.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-API-004/2026-10-01-V2-9ef6d31f-contracts.cables-api.json
+  - docs/validation/evidence/F-API-004/2026-10-01-V2-9ef6d31f-contracts.cec_status-api.json
   findings: [BE-03]
   scenarios: [contracts.cec_status, contracts.cables]
 - id: F-API-005
@@ -906,7 +908,9 @@ features:
   target: V2
   current: V1
   basis: 'Recorded V1 baseline: tests/test_persistence.py TestStorageEndpoint (handler-level). New simulator reads verify runtime info and the actual fixture storage directory.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-API-014/2026-10-01-V2-9ef6d31f-contracts.storage-api.json
+  - docs/validation/evidence/F-API-014/2026-10-01-V2-9ef6d31f-contracts.system_info-api.json
   findings: [SEC-11]
   scenarios: [contracts.system_info, contracts.storage]
 - id: F-API-015
@@ -932,7 +936,10 @@ features:
   target: V2
   current: V1
   basis: 'Recorded V1 baseline: tests/test_rest_api.py TestCecCommandEndpoints (mocked). New simulator reads verify typed command catalogs and invalid types; output enable remains unexercised.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-API-016/2026-10-01-V2-9ef6d31f-contracts.cec_input_catalog-api.json
+  - docs/validation/evidence/F-API-016/2026-10-01-V2-9ef6d31f-contracts.cec_invalid_type-api.json
+  - docs/validation/evidence/F-API-016/2026-10-01-V2-9ef6d31f-contracts.cec_output_catalog-api.json
   findings: [BE-13]
   scenarios: [contracts.cec_input_catalog, contracts.cec_output_catalog, contracts.cec_invalid_type]
 - id: F-API-017
@@ -947,7 +954,12 @@ features:
   target: V2
   current: V1
   basis: 'Recorded V1 baseline: tests/test_device_settings_presets.py (favourite/dashboard presets). New simulator reads verify all/individual saved settings and invalid ports; remaining writes need route coverage.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-API-017/2026-10-01-V2-9ef6d31f-contracts.device_settings-api.json
+  - docs/validation/evidence/F-API-017/2026-10-01-V2-9ef6d31f-contracts.input_settings-api.json
+  - docs/validation/evidence/F-API-017/2026-10-01-V2-9ef6d31f-contracts.invalid_input_settings-api.json
+  - docs/validation/evidence/F-API-017/2026-10-01-V2-9ef6d31f-contracts.invalid_output_settings-api.json
+  - docs/validation/evidence/F-API-017/2026-10-01-V2-9ef6d31f-contracts.output_settings-api.json
   findings: []
   scenarios: [contracts.device_settings, contracts.input_settings, contracts.output_settings, contracts.invalid_input_settings, contracts.invalid_output_settings]
 - id: F-API-018
@@ -1045,7 +1057,11 @@ features:
   target: V2
   current: V1
   basis: 'Recorded V1 baseline: tests/test_rest_api.py TestSystemShortcutsAPI (mocked). New simulator tests verify read alias equivalence and enabled filtering; write aliases remain unexercised.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-API-024/2026-10-01-V2-9ef6d31f-contracts.shortcut_alias-api.json
+  - docs/validation/evidence/F-API-024/2026-10-01-V2-9ef6d31f-contracts.shortcut_dashboard-api.json
+  - docs/validation/evidence/F-API-024/2026-10-01-V2-9ef6d31f-contracts.shortcut_favorites-api.json
+  - docs/validation/evidence/F-API-024/2026-10-01-V2-9ef6d31f-contracts.shortcut_unknown-api.json
   findings: [API-01, API-06, API-08]
   scenarios: [contracts.shortcut_favorites, contracts.shortcut_dashboard, contracts.shortcut_alias, contracts.shortcut_unknown]
 - id: F-API-025
@@ -1069,7 +1085,9 @@ features:
   target: V2
   current: V1
   basis: 'Recorded V1 baseline: tests/test_rest_themes_ui.py (handler-level). New simulator reads verify saved nondefault themes/UI preferences; write routes still need coverage.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-API-026/2026-10-01-V2-9ef6d31f-contracts.themes-api.json
+  - docs/validation/evidence/F-API-026/2026-10-01-V2-9ef6d31f-contracts.ui_preferences-api.json
   findings: []
   scenarios: [contracts.themes, contracts.ui_preferences]
 - id: F-API-027
@@ -1081,7 +1099,8 @@ features:
   target: V2
   current: V1
   basis: 'Recorded V1 baseline: tests/test_rest_api.py TestMatrixHostSettings (mocked): a new host takes its own telnet_port or the default, a bad one is refused (BE-32, WP-C2). New simulator reads verify GET /api/settings connection state; test-connection remains unexercised.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-API-027/2026-10-01-V2-9ef6d31f-contracts.settings-api.json
   findings: [SEC-03, TST-03]
   scenarios: [contracts.settings]
 - id: F-API-028
@@ -1093,7 +1112,8 @@ features:
   target: V2
   current: V0
   basis: 'Recorded V0 baseline predates the simulator read tests. GET /api/integrations/flic/buttons now returns saved fixture registrations; the registration write route still needs coverage (TST-03).'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-API-028/2026-10-01-V2-9ef6d31f-contracts.flic_buttons-api.json
   findings: [PER-02, API-15, TST-03]
   scenarios: [contracts.flic_buttons]
 - id: F-API-029
