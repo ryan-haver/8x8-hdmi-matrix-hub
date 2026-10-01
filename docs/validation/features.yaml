@@ -1597,7 +1597,7 @@ features:
   claim: README "CEC Macro System"
   interfaces:
     rest: ['POST /api/cec/macro/{macro_id}/execute']
-    ui: [editor/cec-macro/list]
+    ui: [editor/cec-macro/list, dashboard/cards/all-types]
     flic: ['POST /api/cec/macro/{id}/execute']
   target: V4
   current: V3
@@ -1609,7 +1609,7 @@ features:
   - docs/validation/evidence/F-DOM-020/2026-10-01-V2-97d0d2af-scenes.macro_stops_after_refusal-api.json
   - docs/validation/evidence/F-DOM-020/2026-10-01-V3-97d0d2af-scenes.macro_stops_after_refusal-browser.json
   findings: [VAL-02, BE-02, VAL-08]
-  scenarios: [macros.run_volume_up, scenes.macro_continues_after_refusal, scenes.macro_stops_after_refusal]
+  scenarios: [macros.run_volume_up, macros.run_rejected, scenes.macro_continues_after_refusal, scenes.macro_stops_after_refusal]
 - id: F-DOM-021
   area: domain
   title: Test / dry-run a macro

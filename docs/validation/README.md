@@ -116,6 +116,13 @@ tab) and `kiosk_route` (the kiosk routing wizard, `/kiosk`). A passcode prompt i
 end of the action: `toast.<success|warning|error|info>` (the last toast of that type), `toasts`, `dialogs` (prompt
 messages).
 
+`macro_run` clicks Run on a saved macro's dashboard card, adding it through the card picker if needed;
+`shortcut_run` opens the Control Deck's
+Shortcuts drawer and clicks Execute on a built-in shortcut. Browser runs use the saved shortcut parameters.
+Nonempty REST parameter overrides are unsupported in the browser client, because the drawer has no inputs
+for them. These scenarios check simulator readback or CEC command counts and the visible success/error toast;
+rejection cases verify that the device state stays unchanged and no success toast appears.
+
 **The `uc` client** (`clients/uc.py`, WP-B1) connects like a Remote 3 (authenticate, `connect`, subscribe every entity) and maps intents to entity commands: `route` → `media_player.output_N` `select_source` with the name from the entity's source list, `preset_recall` → `button.preset_N` `push`, `matrix_power` → `switch.matrix_power`, `cec_input`/`cec_output` → `remote.input_N_cec`/`remote.output_N_cec` `send_cmd` (`power_on` → `POWER_ON`), and `uc_command` for any other entity command. A driver that drops the connection is a result, recorded with its close code (`requests[].closed`), not a blocked run; the next action reconnects. Its scenarios are in `tests/validation/scenarios/remote.py`; the protocol and lifecycle cases (setup, standby, outages, renames, the golden entity set) are the pytest suite `tests/uc`.
 
 **The `browser` client as an observer** (WP-C2): besides the per-action pages, it keeps one `/ui` page and one `/kiosk` page open for the whole run, like screens on a wall. After they load, their status reads (`/api/status*`, the kiosk's 5 s poll) still reach the hub, but the answers are stripped of all matrix state, so anything they show later can only have come over `/ws`. `ClientState` keys: `ui.route.N` (the input the grid shows for output N), `ui.input.N` / `ui.output.N` (status colour: `signal`, `cable`, `disconnected`, `unknown`), `ui.input_name.N`, `ui.header` (`connected`/`disconnected`), `kiosk.route.N`, `kiosk.input.N`, `kiosk.status` (`Connected`/`Disconnected`). Scenarios: `tests/validation/scenarios/live.py`.

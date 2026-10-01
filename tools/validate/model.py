@@ -164,6 +164,8 @@ INTENTS: dict[str, str] = {
     "cec_output": "send CEC `command` to the display on output `output`",
     "profile_recall": "recall profile `profile_id` (optional `passcode`)",
     "scene_run": "run scene `scene_id` (optional `passcode`)",
+    "macro_run": "run CEC macro `macro_id` from its dashboard card or REST API",
+    "shortcut_run": "run built-in shortcut `key` (optional REST-only `params`)",
     "scene_wait_edit": "add a `seconds` wait to scene `scene_id` through its editor",
     "scene_conflicts": "open scene `scene_id` and read the saved profiles' conflicts",
     "kiosk_route": (

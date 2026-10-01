@@ -5,16 +5,28 @@ power on; beep on; panel unlocked; LCD code 3 (30 s); preset 3 = input 6
 everywhere. The shortcut labels come from tests/e2e/fixtures/data/system_shortcuts.json.
 """
 
-from tools.validate.model import CommandSent, Device, DeviceUnchanged, Hub, NoCommand, Response, Scenario, act
+from tools.validate.model import (
+    ClientState,
+    CommandSent,
+    Device,
+    DeviceUnchanged,
+    Hub,
+    NoCommand,
+    Response,
+    Scenario,
+    act,
+)
 
-from ._paths import CONTROL, HUB_CORE, SHORTCUTS
+from ._paths import CONTROL, HUB_CORE, SHORTCUTS, WEB_CORE
 
 
 def _run(key: str, **params):
-    return act("request", method="POST", path=f"/api/system-shortcuts/{key}/execute", json={"params": params})
+    return act("shortcut_run", key=key, params=params)
 
 
-_COVERS = (*HUB_CORE, *SHORTCUTS)
+_COVERS = (*HUB_CORE, *SHORTCUTS, *WEB_CORE,
+           "web/js/components/side-nav-drawer.js", "web/js/components/shortcuts-drawer.js",
+           "web/js/components/toast.js")
 
 SCENARIOS = [
     Scenario(
@@ -37,6 +49,7 @@ SCENARIOS = [
         id="shortcuts.route_one_to_one",
         title="Shortcut '1:1 Mapping': output N shows input N",
         features=("F-DOM-023",),
+        clients=("api", "browser"),
         writes=("routing",),
         action=_run("route_one_to_one"),
         expect=(
@@ -44,6 +57,7 @@ SCENARIOS = [
             Device("routing", equals=[1, 2, 3, 4, 5, 6, 7, 8]),
             CommandSent("video switch", count=8),
             DeviceUnchanged(allow=("outputs[*].source", "routing")),
+            ClientState("toast.success", equals="Shortcut executed", clients=("browser",)),
         ),
         observe=("Does each display show the source on the input with its own number?",),
         covers=_COVERS,
@@ -52,12 +66,14 @@ SCENARIOS = [
         id="shortcuts.power_off_all",
         title="Shortcut 'Power Off All': the matrix goes to standby with one command",
         features=("F-DOM-024",),
+        clients=("api", "browser"),
         writes=("power",),
         action=_run("power_off_all"),
         expect=(
             Response(status=200, json={"success": True}),
             Device("system.power", equals=0),
             CommandSent("set poweronoff", {"power": 0}, count=1),
+            ClientState("toast.success", equals="Shortcut executed", clients=("browser",)),
         ),
         observe=("Is the matrix now in standby?",),
         covers=_COVERS,
@@ -67,15 +83,15 @@ SCENARIOS = [
         id="shortcuts.mute_all",
         title="Shortcut 'Mute All Audio': every output is muted",
         features=("F-DOM-025",),
+        clients=("api", "browser"),
         writes=("outputs",),
         action=_run("mute_all_audio"),
         expect=(
             Response(status=200, json={"success": True}),
-            Device("outputs[0].audio_mute", equals=1),
-            Device("outputs[1].audio_mute", equals=1),
-            Device("outputs[7].audio_mute", equals=1),
+            *(Device(f"outputs[{i}].audio_mute", equals=1) for i in range(8)),
             CommandSent("set output audio mute", count=8),
             DeviceUnchanged(allow=("outputs[*].audio_mute",)),
+            ClientState("toast.success", equals="Shortcut executed", clients=("browser",)),
         ),
         observe=("Is the audio on every output muted?",),
         covers=_COVERS,
@@ -84,15 +100,16 @@ SCENARIOS = [
         id="shortcuts.unmute_all",
         title="Shortcut 'Unmute All Audio': every output is unmuted",
         features=("F-DOM-025",),
+        clients=("api", "browser"),
         writes=("outputs",),
         sim_state={"outputs": {str(i): {"audio_mute": 1} for i in range(8)}},
         action=_run("unmute_all_audio"),
         expect=(
             Response(status=200, json={"success": True}),
-            Device("outputs[0].audio_mute", equals=0),
-            Device("outputs[7].audio_mute", equals=0),
+            *(Device(f"outputs[{i}].audio_mute", equals=0) for i in range(8)),
             CommandSent("set output audio mute", count=8),
             DeviceUnchanged(allow=("outputs[*].audio_mute",)),
+            ClientState("toast.success", equals="Shortcut executed", clients=("browser",)),
         ),
         observe=("Is the audio on every output playing again?",),
         covers=_COVERS,
@@ -102,12 +119,15 @@ SCENARIOS = [
         title="The matrix refuses the mute: the shortcut reports the failure (500)",
         kind="failure",
         features=("F-DOM-025",),
+        clients=("api", "browser"),
         targets=("sim",),
         faults={"reject_writes": True},
         action=_run("mute_all_audio"),
         expect=(
             Response(status=500, json={"success": False, "data": {"failed_outputs": [1, 2, 3, 4, 5, 6, 7, 8]}}),
             DeviceUnchanged(),
+            ClientState("toast.error", equals="Failed to execute shortcut", clients=("browser",)),
+            ClientState("toast.success", equals=None, clients=("browser",)),
         ),
         covers=_COVERS,
         notes="API-08: the matrix's answers were ignored and every shortcut reported success.",
@@ -116,6 +136,7 @@ SCENARIOS = [
         id="shortcuts.preset_recall",
         title="Shortcut 'Preset 3': the matrix applies preset 3",
         features=("F-DOM-026",),
+        clients=("api", "browser"),
         writes=("routing",),
         action=_run("preset_recall_3"),
         expect=(
@@ -123,6 +144,7 @@ SCENARIOS = [
             Device("routing", equals=[6] * 8),
             CommandSent("preset set", {"index": 3}, count=1),
             DeviceUnchanged(allow=("outputs[*].source", "routing")),
+            ClientState("toast.success", equals="Shortcut executed", clients=("browser",)),
         ),
         observe=("Do the displays now show the sources stored in preset 3?",),
         covers=(*_COVERS, *CONTROL),
@@ -161,6 +183,7 @@ SCENARIOS = [
         id="shortcuts.lcd_15s",
         title="Shortcut 'LCD: 15s' (key lcd_timeout_10s): the LCD turns off after 15 s",
         features=("F-DOM-028",),
+        clients=("api", "browser"),
         writes=("system",),
         action=_run("lcd_timeout_10s"),
         expect=(
@@ -170,6 +193,7 @@ SCENARIOS = [
             CommandSent("set lcd on time", {"lcd on time": 2}, count=1),
             Hub("/api/system-shortcuts/lcd_timeout_10s", "data.label", equals="LCD: 15s"),
             DeviceUnchanged(allow=("system.lcd_timeout",)),
+            ClientState("toast.success", equals="Shortcut executed", clients=("browser",)),
         ),
         observe=("Does the front-panel LCD turn off about 15 seconds after the last button press?",),
         covers=_COVERS,

@@ -115,6 +115,7 @@ def test_api_client_maps_every_intent():
         "output_mute": {"output": 1, "muted": True}, "output_setting": {"output": 1, "setting": "hdcp", "body": {"mode": 1}},
         "cec_input": {"input": 1, "command": "power_on"}, "cec_output": {"output": 1, "command": "power_on"},
         "profile_recall": {"profile_id": "p"}, "scene_run": {"scene_id": "s"},
+        "macro_run": {"macro_id": "m"}, "shortcut_run": {"key": "mute_all_audio"},
         "scene_wait_edit": {"scene_id": "s", "steps": []}, "scene_conflicts": {"scene_id": "s"},
         "request": {"method": "GET", "path": "/api/health"},
     }
