@@ -716,8 +716,8 @@ Work is organised into work packages (WPs) in parallel lanes. Each WP closes reg
 
 | WP | Lane | Scope (register IDs) | Depends on | Exit evidence | Status |
 | --- | --- | --- | --- | --- | --- |
-| WP-V1 | V | ✅ Validation framework: `features.yaml` registry (every feature, ~200), evidence schema, scenario runner (`tools/validate/`), `LEDGER.md` generator, CI enforcement | — | Ledger generated in CI; every feature listed with its current honest level | next |
-| WP-V2 | V | **C0 baseline truth:** run every feature at V2/V3 on the simulator against current code; failures become findings | WP-V1 | First `LEDGER.md`; new register rows | after V1 |
+| WP-V1 | V | ✅ Validation framework: `features.yaml` registry (268 features), evidence schema, scenario runner (`tools/validate/`), `LEDGER.md` generator, CI enforcement | — | Ledger generated in CI; every feature listed with its current honest level | implemented; see [validation workflow](validation/README.md) |
+| WP-V2 | V | **C0 baseline truth:** run every feature at V2/V3 on the simulator against current code; failures become findings | WP-V1 | First `LEDGER.md`; new register rows | in progress: 26 clean shipped-image records for direct macro/shortcut flows, 81 features at V3 and 22 at V2; C0 remains incomplete. [2026-10-01 report](validation/2026-10-01-domain-ui.md) |
 | WP-A1 | A | Transport reliability (BE-01, 03, 04, 05, 07, 11, 12, 17, 28–30, API-11) | — | Transport and reliability features at V2 with fault injection; loop lag < 100 ms under faults | ✅ merged 2026-09-25 |
 | WP-A2 | A | Persistence and process lock (PER-01–03, TST-08, BE-18) | — | Persistence features at V2 on Windows and Linux | ✅ merged 2026-09-25 |
 | WP-A3 | A | Hardware capture tooling (HIL-A) | — | Capture round-trip proven on the simulator | ✅ merged 2026-09-25 |
@@ -742,7 +742,7 @@ Work is organised into work packages (WPs) in parallel lanes. Each WP closes reg
 | WP-V3 | V | **C8 release validation:** HIL-B/C/D/E, 72 h soak, validation report | all | Every feature at target; V5 soak | |
 | **Gate** | | **v1.0.0** | WP-V3 | | |
 
-**Running in parallel now:** WP-A1, WP-A2, WP-A3. **Next:** WP-V1 (touches only `tools/validate/`, `tests/validation/`, `docs/validation/`, CI), then WP-V2. Then WP-B1, WP-C2 and WP-D2 once WP-A1 merges. WP-D1 can start as soon as WP-V1 lands.
+**Current checkpoint (2026-10-01):** WP-E1 merged on 2026-09-28 with approved visuals. WP-C4 implementation and V3 shipped-image proof are complete on `wp-c4-scenes`; scene-editor visual approval and profile recall V4 remain pending. The next validation batch on `wp-domain-ui-validation` adds direct macro/shortcut browser proof ([report](validation/2026-10-01-domain-ui.md)). Continue C0 coverage in batches; owner-present hardware checks and the SEC-01–03 release-gate decision remain pending.
 
 ## 8. Definition of done (every PR)
 

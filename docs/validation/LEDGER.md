@@ -1,7 +1,7 @@
 # Feature ledger
 
 > **Generated** by `python -m tools.validate ledger` — do not edit by hand. Registry: [`features.yaml`](features.yaml) · Plan: [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md) · How to add evidence: [`README.md`](README.md).
-> Commit `97d0d2af`
+> Commit `9362fd00`
 
 **Level** = highest level with fresh passing evidence, else the recorded baseline (the registry's `current`), capped at V1 while an open critical/high finding is linked. **Recorded** = the registry baseline. **Fresh** = evidence commit not older than the last change to the scenario's `covers` paths.
 
@@ -12,7 +12,7 @@
 | Matrix control | 31 | 1 | 24 | 1 | 5 | 0 | 0 | 31 | 7 |
 | CEC control | 11 | 0 | 10 | 0 | 1 | 0 | 0 | 11 | 4 |
 | REST/WebSocket contract | 42 | 2 | 23 | 16 | 1 | 0 | 0 | 32 | 13 |
-| Domain features | 36 | 2 | 17 | 7 | 10 | 0 | 0 | 32 | 0 |
+| Domain features | 36 | 2 | 17 | 2 | 15 | 0 | 0 | 27 | 0 |
 | Web UI | 36 | 0 | 25 | 0 | 11 | 0 | 0 | 25 | 6 |
 | Kiosk | 14 | 0 | 7 | 0 | 7 | 0 | 0 | 7 | 2 |
 | Remote 3 integration | 17 | 1 | 2 | 0 | 14 | 0 | 0 | 17 | 8 |
@@ -21,7 +21,7 @@
 | Deployment, configuration, persistence | 20 | 3 | 8 | 2 | 7 | 0 | 0 | 20 | 7 |
 | Security controls | 15 | 9 | 5 | 0 | 1 | 0 | 0 | 14 | 0 |
 | Reliability | 18 | 12 | 3 | 1 | 2 | 0 | 0 | 18 | 3 |
-| **All** | **268** | **33** | **132** | **27** | **76** | **0** | **0** | **235** | **67** |
+| **All** | **268** | **33** | **132** | **22** | **81** | **0** | **0** | **230** | **67** |
 
 Levels: **V0** Claimed · **V1** Unit · **V2** Simulated integration · **V3** End-to-end · **V4** Hardware · **V5** Field
 
@@ -43,7 +43,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | Reliability | 12 | 3 | 1 | 2 | 0 | 0 |
 | **All** | **33** | **133** | **27** | **75** | **0** | **0** |
 
-- Features with fresh passing scenario evidence: **19** of 268.
+- Features with fresh passing scenario evidence: **25** of 268.
 - Features with a fresh failing scenario: **0**.
 - Features capped at V1 by an open critical/high finding: **28**.
 
@@ -161,7 +161,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-DOM-009 | Save the current routing as a new profile | V3 | V1 | V1 | — | — | API-12(M) |
 | F-DOM-010 | Create, edit and delete scenes (sequences of steps) | V3 | V2 | V2 | — | — | API-12(M) |
 | F-DOM-011 | Run a scene: profile steps | V4 | V3 | V3 | fresh | [scenes.disabled_output_state·api·pass](evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.disabled_output_state-api.json)<br>[scenes.partial_failure·api·pass](evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.partial_failure-api.json)<br>[scenes.run_profile_macro_preset·api·pass](evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.run_profile_macro_preset-api.json)<br>[scenes.run_protected·api·pass](evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.run_protected-api.json) | — |
-| F-DOM-012 | Run a scene: macro steps | V4 | V3 | V3 | fresh | [scenes.run_profile_macro_preset·api·pass](evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.run_profile_macro_preset-api.json)<br>[scenes.run_profile_macro_preset·browser·pass](evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.run_profile_macro_preset-browser.json)<br>[scenes.macro_continues_after_refusal·api·pass](evidence/F-DOM-012/2026-10-01-V2-97d0d2af-scenes.macro_continues_after_refusal-api.json)<br>[scenes.run_rejected·api·pass](evidence/F-DOM-012/2026-10-01-V2-97d0d2af-scenes.run_rejected-api.json) | — |
+| F-DOM-012 | Run a scene: macro steps | V4 | V3 | V3 | fresh | [scenes.run_profile_macro_preset·api·pass](evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.run_profile_macro_preset-api.json)<br>[scenes.run_profile_macro_preset·browser·pass](evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.run_profile_macro_preset-browser.json)<br>[scenes.macro_continues_after_refusal·api·pass](evidence/F-DOM-012/2026-10-01-V2-9362fd00-scenes.macro_continues_after_refusal-api.json)<br>[scenes.macro_continues_after_refusal·api·pass](evidence/F-DOM-012/2026-10-01-V2-97d0d2af-scenes.macro_continues_after_refusal-api.json) | — |
 | F-DOM-013 | Run a scene: wait and shortcut steps | V3 | **V3** | V3 | fresh | [scenes.wait_between_actions·api·pass](evidence/F-DOM-013/2026-10-01-V2-97d0d2af-scenes.wait_between_actions-api.json)<br>[scenes.wait_edit·api·pass](evidence/F-DOM-013/2026-10-01-V2-97d0d2af-scenes.wait_edit-api.json)<br>[scenes.wait_between_actions·browser·pass](evidence/F-DOM-013/2026-10-01-V3-97d0d2af-scenes.wait_between_actions-browser.json)<br>[scenes.wait_edit·browser·pass](evidence/F-DOM-013/2026-10-01-V3-97d0d2af-scenes.wait_edit-browser.json) | — |
 | F-DOM-014 | Scene overrides (per-run changes to a profile step) | V3 | **V3** | V3 | fresh | [scenes.run_profile_macro_preset·api·pass](evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.run_profile_macro_preset-api.json)<br>[scenes.run_profile_macro_preset·browser·pass](evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.run_profile_macro_preset-browser.json)<br>[scenes.enabled_override·api·pass](evidence/F-DOM-014/2026-10-01-V2-97d0d2af-scenes.enabled_override-api.json)<br>[scenes.override_leaves_setting·api·pass](evidence/F-DOM-014/2026-10-01-V2-97d0d2af-scenes.override_leaves_setting-api.json) | — |
 | F-DOM-015 | Protect a scene with a passcode | V3 | V1 (capped) | V1 | fresh | [scenes.run_protected·api·pass](evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.run_protected-api.json)<br>[scenes.run_protected·browser·pass](evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.run_protected-browser.json) | SEC-05(H), SEC-06(H) |
@@ -169,15 +169,15 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-DOM-017 | Scene execution history | V3 | **V3** | V3 | fresh | [scenes.partial_failure·api·pass](evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.partial_failure-api.json)<br>[scenes.partial_failure·browser·pass](evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.partial_failure-browser.json) | — |
 | F-DOM-018 | Legacy 'scenes' (v1) as aliases of profiles | V2 | V1 | V1 | — | — | API-12(M) |
 | F-DOM-019 | Create, edit, delete and validate CEC macros | V3 | V1 | V1 | — | — | — |
-| F-DOM-020 | Run a CEC macro (steps, targets, delays) | V4 | V3 | V3 | fresh | [scenes.macro_continues_after_refusal·api·pass](evidence/F-DOM-012/2026-10-01-V2-97d0d2af-scenes.macro_continues_after_refusal-api.json)<br>[scenes.macro_continues_after_refusal·browser·pass](evidence/F-DOM-012/2026-10-01-V3-97d0d2af-scenes.macro_continues_after_refusal-browser.json)<br>[macros.run_volume_up·api·pass](evidence/F-DOM-020/2026-10-01-V2-97d0d2af-macros.run_volume_up-api.json)<br>[scenes.macro_stops_after_refusal·api·pass](evidence/F-DOM-020/2026-10-01-V2-97d0d2af-scenes.macro_stops_after_refusal-api.json) | — |
+| F-DOM-020 | Run a CEC macro (steps, targets, delays) | V4 | V3 | V3 | fresh | [scenes.macro_continues_after_refusal·api·pass](evidence/F-DOM-012/2026-10-01-V2-9362fd00-scenes.macro_continues_after_refusal-api.json)<br>[scenes.macro_continues_after_refusal·api·pass](evidence/F-DOM-012/2026-10-01-V2-97d0d2af-scenes.macro_continues_after_refusal-api.json)<br>[scenes.macro_continues_after_refusal·browser·pass](evidence/F-DOM-012/2026-10-01-V3-9362fd00-scenes.macro_continues_after_refusal-browser.json)<br>[scenes.macro_continues_after_refusal·browser·pass](evidence/F-DOM-012/2026-10-01-V3-97d0d2af-scenes.macro_continues_after_refusal-browser.json) | — |
 | F-DOM-021 | Test / dry-run a macro | V3 | V1 | V1 | — | — | — |
 | F-DOM-022 | Favourite macros and show them on the dashboard | V3 | V1 | V1 | — | — | API-20(M) |
-| F-DOM-023 | Built-in shortcuts: route all to an output, one-to-one routing | V3 | V2 | V2 | — | — | — |
-| F-DOM-024 | Built-in shortcut: power everything off | V3 | V2 | V2 | — | — | — |
-| F-DOM-025 | Built-in shortcuts: mute / unmute all outputs | V3 | V2 | V2 | — | — | — |
-| F-DOM-026 | Built-in shortcuts: recall preset 1-8 | V3 | V2 | V2 | — | — | — |
-| F-DOM-027 | Built-in shortcuts: beep, panel lock, reboot | V3 | V2 | V2 | — | — | — |
-| F-DOM-028 | Built-in shortcuts: LCD timeout | V3 | V2 | V2 | — | — | API-07(M) |
+| F-DOM-023 | Built-in shortcuts: route all to an output, one-to-one routing | V3 | **V3** | V2 | fresh | [shortcuts.route_input_to_output·api·pass](evidence/F-DOM-023/2026-10-01-V2-9362fd00-shortcuts.route_input_to_output-api.json)<br>[shortcuts.route_one_to_one·api·pass](evidence/F-DOM-023/2026-10-01-V2-9362fd00-shortcuts.route_one_to_one-api.json)<br>[shortcuts.unknown·api·pass](evidence/F-DOM-023/2026-10-01-V2-9362fd00-shortcuts.unknown-api.json)<br>[shortcuts.route_one_to_one·browser·pass](evidence/F-DOM-023/2026-10-01-V3-9362fd00-shortcuts.route_one_to_one-browser.json) | — |
+| F-DOM-024 | Built-in shortcut: power everything off | V3 | **V3** | V2 | fresh | [shortcuts.power_off_all·api·pass](evidence/F-DOM-024/2026-10-01-V2-9362fd00-shortcuts.power_off_all-api.json)<br>[shortcuts.power_off_all·browser·pass](evidence/F-DOM-024/2026-10-01-V3-9362fd00-shortcuts.power_off_all-browser.json) | — |
+| F-DOM-025 | Built-in shortcuts: mute / unmute all outputs | V3 | **V3** | V2 | fresh | [shortcuts.mute_all·api·pass](evidence/F-DOM-025/2026-10-01-V2-9362fd00-shortcuts.mute_all-api.json)<br>[shortcuts.mute_rejected·api·pass](evidence/F-DOM-025/2026-10-01-V2-9362fd00-shortcuts.mute_rejected-api.json)<br>[shortcuts.unmute_all·api·pass](evidence/F-DOM-025/2026-10-01-V2-9362fd00-shortcuts.unmute_all-api.json)<br>[shortcuts.mute_all·browser·pass](evidence/F-DOM-025/2026-10-01-V3-9362fd00-shortcuts.mute_all-browser.json) | — |
+| F-DOM-026 | Built-in shortcuts: recall preset 1-8 | V3 | **V3** | V2 | fresh | [shortcuts.preset_recall·api·pass](evidence/F-DOM-026/2026-10-01-V2-9362fd00-shortcuts.preset_recall-api.json)<br>[shortcuts.preset_recall·browser·pass](evidence/F-DOM-026/2026-10-01-V3-9362fd00-shortcuts.preset_recall-browser.json) | — |
+| F-DOM-027 | Built-in shortcuts: beep, panel lock, reboot | V3 | V2 | V2 | fresh | [shortcuts.beep_off·api·pass](evidence/F-DOM-027/2026-10-01-V2-9362fd00-shortcuts.beep_off-api.json)<br>[shortcuts.panel_lock·api·pass](evidence/F-DOM-027/2026-10-01-V2-9362fd00-shortcuts.panel_lock-api.json) | — |
+| F-DOM-028 | Built-in shortcuts: LCD timeout | V3 | **V3** | V2 | fresh | [shortcuts.lcd_15s·api·pass](evidence/F-DOM-028/2026-10-01-V2-9362fd00-shortcuts.lcd_15s-api.json)<br>[shortcuts.lcd_15s·browser·pass](evidence/F-DOM-028/2026-10-01-V3-9362fd00-shortcuts.lcd_15s-browser.json) | API-07(M) |
 | F-DOM-029 | Create, rename, reorder and delete user shortcuts | V3 | V1 | V1 | — | — | — |
 | F-DOM-030 | Favourite shortcuts and show them on the dashboard | V3 | V1 | V1 | — | — | API-20(M) |
 | F-DOM-031 | Dashboard layout (add, remove, reorder cards) | V3 | V1 | V1 | — | — | API-20(M), UI-08(M) |

@@ -1,0 +1,17 @@
+{
+  "hub": "domain-proof-hub-83896fd2e519",
+  "scope": "Disposable simulator and fixture data; no real hardware",
+  "digest": "sha256:7edf885a563d70679ea073035846e87f013a41eeb9c66b028b11e8983c86f364",
+  "simulator": "domain-proof-sim-83896fd2e519",
+  "image": "hdmi-matrix-hub:wp-domain-ui-validation",
+  "features": [
+    "F-DOM-020",
+    "F-DOM-023",
+    "F-DOM-024",
+    "F-DOM-025",
+    "F-DOM-026",
+    "F-DOM-027",
+    "F-DOM-028"
+  ],
+  "source_commit": "9362fd009efe7ad910a05a175eaabd22e780d003"
+}
