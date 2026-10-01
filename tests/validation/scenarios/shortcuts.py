@@ -153,6 +153,7 @@ SCENARIOS = [
         id="shortcuts.beep_off",
         title="Shortcut 'Beep Off': the matrix stops beeping",
         features=("F-DOM-027",),
+        clients=("api", "browser"),
         writes=("system",),
         action=_run("beep_off"),
         expect=(
@@ -160,6 +161,7 @@ SCENARIOS = [
             Device("system.beep", equals=0),
             CommandSent("set beep", {"beep": 0}, count=1),
             DeviceUnchanged(allow=("system.beep",)),
+            ClientState("toast.success", equals="Shortcut executed", clients=("browser",)),
         ),
         observe=("Does a front-panel button press now make no beep?",),
         covers=_COVERS,
@@ -168,6 +170,7 @@ SCENARIOS = [
         id="shortcuts.panel_lock",
         title="Shortcut 'Panel Lock On': the front panel is locked",
         features=("F-DOM-027",),
+        clients=("api", "browser"),
         writes=("system",),
         action=_run("panel_lock_on"),
         expect=(
@@ -175,6 +178,7 @@ SCENARIOS = [
             Device("system.panel_lock", equals=1),
             CommandSent("set panel lock", {"lock": 1}, count=1),
             DeviceUnchanged(allow=("system.panel_lock",)),
+            ClientState("toast.success", equals="Shortcut executed", clients=("browser",)),
         ),
         observe=("Do the front-panel buttons now do nothing?",),
         covers=_COVERS,
@@ -212,3 +216,89 @@ SCENARIOS = [
         covers=_COVERS,
     ),
 ]
+
+
+# Each mode starts from a different device value: readback proves a transition,
+# rather than accepting a no-op whose precondition already matched the target.
+_SYSTEM_MODES = (
+    ("beep_on", "beep_on", "F-DOM-027", "beep", 0, 1, "set beep", "beep", "Beep On",
+     "Does a front-panel button press now make a beep?"),
+    ("panel_unlock", "panel_lock_off", "F-DOM-027", "panel_lock", 1, 0, "set panel lock", "lock",
+     "Panel Lock Off", "Do the front-panel buttons respond again?"),
+    ("lcd_off", "lcd_timeout_off", "F-DOM-028", "lcd_timeout", 3, 0, "set lcd on time", "lcd on time",
+     "LCD: Off", "Is the front-panel LCD off?"),
+    ("lcd_always_on", "lcd_timeout_always_on", "F-DOM-028", "lcd_timeout", 3, 1, "set lcd on time", "lcd on time",
+     "LCD: Always On", "Does the front-panel LCD stay on for more than 60 seconds?"),
+    ("lcd_30s", "lcd_timeout_30s", "F-DOM-028", "lcd_timeout", 1, 3, "set lcd on time", "lcd on time",
+     "LCD: 30s", "Does the front-panel LCD turn off about 30 seconds after the last button press?"),
+    ("lcd_60s", "lcd_timeout_60s", "F-DOM-028", "lcd_timeout", 3, 4, "set lcd on time", "lcd on time",
+     "LCD: 60s", "Does the front-panel LCD turn off about 60 seconds after the last button press?"),
+)
+
+for sid, key, feature, field, before, after, command, argument, label, question in _SYSTEM_MODES:
+    SCENARIOS.append(Scenario(
+        id=f"shortcuts.{sid}",
+        title=f"Shortcut '{label}': change {field} from {before} to device code {after}",
+        features=(feature,),
+        clients=("api", "browser"),
+        writes=("system",),
+        sim_state={"system": {field: before}},
+        action=_run(key),
+        expect=(
+            Response(status=200, json={"success": True}),
+            Device(f"system.{field}", equals=after),
+            CommandSent(command, {argument: after}, count=1),
+            DeviceUnchanged(allow=(f"system.{field}",)),
+            ClientState("toast.success", equals="Shortcut executed", clients=("browser",)),
+        ),
+        observe=(question,),
+        covers=_COVERS,
+        notes=("Proves the stored LCD device code; physical timing requires the hardware observation."
+               if field == "lcd_timeout" else ""),
+    ))
+
+for sid, key, feature, command, arguments in (
+    ("beep_rejected", "beep_off", "F-DOM-027", "set beep", {"beep": 0}),
+    ("panel_lock_rejected", "panel_lock_on", "F-DOM-027", "set panel lock", {"lock": 1}),
+    ("lcd_rejected", "lcd_timeout_always_on", "F-DOM-028", "set lcd on time", {"lcd on time": 1}),
+):
+    SCENARIOS.append(Scenario(
+        id=f"shortcuts.{sid}",
+        title=f"The matrix refuses '{key}': unchanged settings and failure feedback",
+        kind="failure",
+        features=(feature,),
+        clients=("api", "browser"),
+        targets=("sim",),
+        faults={"reject_writes": True},
+        action=_run(key),
+        expect=(
+            Response(status=500, json={"success": False}),
+            # _send_command treats result=0 as a possible expired session:
+            # one re-login and one retry, then reports the persistent refusal.
+            CommandSent(command, arguments, count=2),
+            DeviceUnchanged(),
+            ClientState("toast.error", equals="Failed to execute shortcut", clients=("browser",)),
+            ClientState("toast.success", equals=None, clients=("browser",)),
+        ),
+        covers=_COVERS,
+    ))
+
+SCENARIOS.append(Scenario(
+    id="shortcuts.disabled_reboot",
+    title="The fixture's disabled reboot shortcut is refused before any matrix command",
+    kind="failure",
+    features=("F-DOM-027",),
+    clients=("api", "browser"),
+    targets=("sim",),
+    action=_run("system_reboot"),
+    expect=(
+        Response(status=400, json={"success": False}),
+        NoCommand("*"),
+        NoCommand("reboot"),
+        DeviceUnchanged(),
+        ClientState("toast.error", equals="Failed to execute shortcut", clients=("browser",)),
+        ClientState("toast.success", equals=None, clients=("browser",)),
+    ),
+    covers=(*_COVERS, "tests/e2e/fixtures/data/system_shortcuts.json"),
+    notes="Proves the disabled guard only; an enabled reboot and reconnection remain unproven.",
+))

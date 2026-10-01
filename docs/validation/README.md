@@ -120,7 +120,10 @@ messages).
 `shortcut_run` opens the Control Deck's
 Shortcuts drawer and clicks Execute on a built-in shortcut. Browser runs use the saved shortcut parameters.
 Nonempty REST parameter overrides are unsupported in the browser client, because the drawer has no inputs
-for them. These scenarios check simulator readback or CEC command counts and the visible success/error toast;
+for them. System shortcuts cover beep on/off, panel lock/unlock and all five LCD device codes, each starting
+from a different device value. Rejected beep, lock and LCD writes require unchanged state and failure feedback;
+the fixture's disabled reboot must send no matrix command. LCD timing and an enabled reboot still need
+separate proof. These scenarios check simulator readback or CEC command counts and the visible success/error toast;
 rejection cases verify that the device state stays unchanged and no success toast appears.
 
 **The `uc` client** (`clients/uc.py`, WP-B1) connects like a Remote 3 (authenticate, `connect`, subscribe every entity) and maps intents to entity commands: `route` → `media_player.output_N` `select_source` with the name from the entity's source list, `preset_recall` → `button.preset_N` `push`, `matrix_power` → `switch.matrix_power`, `cec_input`/`cec_output` → `remote.input_N_cec`/`remote.output_N_cec` `send_cmd` (`power_on` → `POWER_ON`), and `uc_command` for any other entity command. A driver that drops the connection is a result, recorded with its close code (`requests[].closed`), not a blocked run; the next action reconnects. Its scenarios are in `tests/validation/scenarios/remote.py`; the protocol and lifecycle cases (setup, standby, outages, renames, the golden entity set) are the pytest suite `tests/uc`.

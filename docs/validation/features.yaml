@@ -1717,7 +1717,8 @@ features:
   - docs/validation/evidence/F-DOM-027/2026-10-01-V2-9362fd00-shortcuts.beep_off-api.json
   - docs/validation/evidence/F-DOM-027/2026-10-01-V2-9362fd00-shortcuts.panel_lock-api.json
   findings: [API-08]
-  scenarios: [shortcuts.beep_off, shortcuts.panel_lock]
+  scenarios: [shortcuts.beep_off, shortcuts.beep_on, shortcuts.panel_lock, shortcuts.panel_unlock,
+    shortcuts.beep_rejected, shortcuts.panel_lock_rejected, shortcuts.disabled_reboot]
 - id: F-DOM-028
   area: domain
   title: 'Built-in shortcuts: LCD timeout'
@@ -1732,7 +1733,8 @@ features:
   - docs/validation/evidence/F-DOM-028/2026-10-01-V2-9362fd00-shortcuts.lcd_15s-api.json
   - docs/validation/evidence/F-DOM-028/2026-10-01-V3-9362fd00-shortcuts.lcd_15s-browser.json
   findings: [API-07]
-  scenarios: [shortcuts.lcd_15s]
+  scenarios: [shortcuts.lcd_15s, shortcuts.lcd_off, shortcuts.lcd_always_on, shortcuts.lcd_30s,
+    shortcuts.lcd_60s, shortcuts.lcd_rejected]
 - id: F-DOM-029
   area: domain
   title: Create, rename, reorder and delete user shortcuts
