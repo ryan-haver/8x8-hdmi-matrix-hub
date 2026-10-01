@@ -4,7 +4,7 @@ This directory implements [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md). The short 
 
 | File | What it is |
 | --- | --- |
-| [`features.yaml`](features.yaml) | The registry: every user-facing feature (265), its interfaces, target level, **recorded** level with the reason (`basis`), linked findings and scenarios. Maintained by hand. |
+| [`features.yaml`](features.yaml) | The registry: every user-facing feature (268), its interfaces, target level, **recorded** level with the reason (`basis`), linked findings and scenarios. Maintained by hand. |
 | [`LEDGER.md`](LEDGER.md) | Generated report: level per feature from fresh evidence, freshness, open findings, summary per area. Never edit it by hand. |
 | [`evidence.schema.json`](evidence.schema.json) | JSON schema of an evidence record. |
 | [`evidence/`](evidence/README.md) | Committed evidence records (milestones, hardware sessions). CI evidence is an artifact. |
@@ -103,6 +103,12 @@ Then add the scenario id to the feature's `scenarios:` in `features.yaml` (a tes
 - **The WebSocket contract** (`docs/api/WEBSOCKET.md`, WP-C2): the runner's `/ws` observer connects before each action and sends `get_status`, so the hub has read the reset simulator before the action (changes the reset made are announced before it, not during the scenario). Every message it records is checked against `docs/api/websocket.schema.json`; that check is added to every scenario that received messages, and a contract violation fails it.
 - **Failure paths** are scenarios with `kind="failure"`, `faults={...}` (simulator fault injection, see `tools/simulator/README.md`) and `targets=("sim",)`.
 - Scenarios that fail because of a known bug stay in. Link the finding on the failing check. If the bug is new, add it to `findings_pending.yaml` first.
+
+`contracts.*` scenarios in `tests/validation/scenarios/contracts.py` exercise focused REST reads and invalid
+read requests against fixture data. They require correct response values, unchanged matrix state and no device
+writes or protocol warnings. Their V2 records prove only these reads, even when a feature ID also groups write
+routes. `tests/sim/test_sim_rest_reads.py` additionally checks complete response envelopes, saved nondefault
+preferences, shortcut alias equivalence/filtering, disconnected status errors and both kiosk HTML aliases.
 
 ## Adding a client
 

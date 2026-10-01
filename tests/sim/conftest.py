@@ -171,8 +171,14 @@ async def data_hub(aiohttp_client, matrix, monkeypatch, tmp_path):
     import shutil
 
     import rest_api.utils as api_utils
+    from persistence import reset_data_dir_cache
     from rest_api import reset_rate_limiter, set_matrix_device
     from rest_api.app import create_rest_app
+
+    # run.py exports this before wiring the app. Flic and runtime diagnostics
+    # resolve storage from the environment rather than create_rest_app's arg.
+    monkeypatch.setenv("MATRIX_DATA_DIR", str(tmp_path))
+    reset_data_dir_cache()
 
     for name in REST_GLOBALS:
         monkeypatch.setattr(api_utils, name, getattr(api_utils, name))
@@ -185,8 +191,12 @@ async def data_hub(aiohttp_client, matrix, monkeypatch, tmp_path):
     set_matrix_device(matrix, config_dir=str(tmp_path), data_dir=str(tmp_path))
     client = await aiohttp_client(create_rest_app(data_dir=tmp_path))
     client.data_dir = tmp_path  # type: ignore[attr-defined]
-    yield client
-    reset_rate_limiter()
+    try:
+        yield client
+    finally:
+        # Stop the app's poller before the matrix/simulator fixtures disconnect.
+        await client.close()
+        reset_rate_limiter()
 
 
 def sim_writes(sim: Simulator, command: str | None = None) -> list[dict]:

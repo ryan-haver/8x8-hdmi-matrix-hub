@@ -780,10 +780,10 @@ features:
       GET /api/status/ext-audio, GET /api/status/system, GET /api/status/device, GET /api/status/cec]
   target: V3
   current: V1
-  basis: tests/test_rest_api.py TestStatusEndpoints (mocked); cables and cec are not exercised.
+  basis: 'Recorded V1 baseline: tests/test_rest_api.py TestStatusEndpoints (mocked). New simulator read tests cover cable and CEC status, including unavailable/disconnected cases.'
   evidence: []
   findings: [BE-03]
-  scenarios: []
+  scenarios: [contracts.cec_status, contracts.cables]
 - id: F-API-005
   area: api
   title: POST /api/switch (one output or all)
@@ -905,10 +905,10 @@ features:
     rest: [GET /api/system/info, GET /api/system/storage]
   target: V2
   current: V1
-  basis: tests/test_persistence.py TestStorageEndpoint (handler-level); /api/system/info is not exercised.
+  basis: 'Recorded V1 baseline: tests/test_persistence.py TestStorageEndpoint (handler-level). New simulator reads verify runtime info and the actual fixture storage directory.'
   evidence: []
   findings: [SEC-11]
-  scenarios: []
+  scenarios: [contracts.system_info, contracts.storage]
 - id: F-API-015
   area: api
   title: CEC command routes
@@ -931,10 +931,10 @@ features:
       'GET /api/cec/output/{output}/capabilities', 'POST /api/cec/input/{port}/enable', 'POST /api/cec/output/{port}/enable']
   target: V2
   current: V1
-  basis: tests/test_rest_api.py TestCecCommandEndpoints (mocked); commands/{type} and output enable are not exercised.
+  basis: 'Recorded V1 baseline: tests/test_rest_api.py TestCecCommandEndpoints (mocked). New simulator reads verify typed command catalogs and invalid types; output enable remains unexercised.'
   evidence: []
   findings: [BE-13]
-  scenarios: []
+  scenarios: [contracts.cec_input_catalog, contracts.cec_output_catalog, contracts.cec_invalid_type]
 - id: F-API-017
   area: api
   title: Device settings routes (icons, display names, preset names, favourite/dashboard presets)
@@ -946,10 +946,10 @@ features:
       GET /api/device-settings/dashboard-presets, PUT /api/device-settings/dashboard-presets, 'POST /api/device-settings/dashboard-presets/{preset}/toggle']
   target: V2
   current: V1
-  basis: tests/test_device_settings_presets.py (favourite/dashboard presets); the other 7 routes are not exercised.
+  basis: 'Recorded V1 baseline: tests/test_device_settings_presets.py (favourite/dashboard presets). New simulator reads verify all/individual saved settings and invalid ports; remaining writes need route coverage.'
   evidence: []
   findings: []
-  scenarios: []
+  scenarios: [contracts.device_settings, contracts.input_settings, contracts.output_settings, contracts.invalid_input_settings, contracts.invalid_output_settings]
 - id: F-API-018
   area: api
   title: Name routes (POST /api/input|output/{n}/name)
@@ -1044,10 +1044,10 @@ features:
         (10 aliases)]
   target: V2
   current: V1
-  basis: tests/test_rest_api.py TestSystemShortcutsAPI (mocked); none of the /api/shortcuts* aliases is exercised.
+  basis: 'Recorded V1 baseline: tests/test_rest_api.py TestSystemShortcutsAPI (mocked). New simulator tests verify read alias equivalence and enabled filtering; write aliases remain unexercised.'
   evidence: []
   findings: [API-01, API-06, API-08]
-  scenarios: []
+  scenarios: [contracts.shortcut_favorites, contracts.shortcut_dashboard, contracts.shortcut_alias, contracts.shortcut_unknown]
 - id: F-API-025
   area: api
   title: Dashboard layout routes
@@ -1068,10 +1068,10 @@ features:
     rest: [GET /api/themes, PUT /api/themes, POST /api/themes/reset, GET /api/ui/preferences, PUT /api/ui/preferences]
   target: V2
   current: V1
-  basis: tests/test_rest_themes_ui.py (handler-level; routes not resolved).
+  basis: 'Recorded V1 baseline: tests/test_rest_themes_ui.py (handler-level). New simulator reads verify saved nondefault themes/UI preferences; write routes still need coverage.'
   evidence: []
   findings: []
-  scenarios: []
+  scenarios: [contracts.themes, contracts.ui_preferences]
 - id: F-API-027
   area: api
   title: Settings routes (matrix host, test connection)
@@ -1080,10 +1080,10 @@ features:
     rest: [GET /api/settings, POST /api/settings/matrix-host, POST /api/settings/test-connection]
   target: V2
   current: V1
-  basis: 'tests/test_rest_api.py TestMatrixHostSettings (mocked): a new host takes its own telnet_port or the default, a bad one is refused (BE-32, WP-C2). GET /api/settings and test-connection are not exercised.'
+  basis: 'Recorded V1 baseline: tests/test_rest_api.py TestMatrixHostSettings (mocked): a new host takes its own telnet_port or the default, a bad one is refused (BE-32, WP-C2). New simulator reads verify GET /api/settings connection state; test-connection remains unexercised.'
   evidence: []
   findings: [SEC-03, TST-03]
-  scenarios: []
+  scenarios: [contracts.settings]
 - id: F-API-028
   area: api
   title: Flic integration routes
@@ -1092,10 +1092,10 @@ features:
     rest: [GET /api/integrations/flic/buttons, POST /api/integrations/flic/register]
   target: V2
   current: V0
-  basis: Not exercised by any test (TST-03).
+  basis: 'Recorded V0 baseline predates the simulator read tests. GET /api/integrations/flic/buttons now returns saved fixture registrations; the registration write route still needs coverage (TST-03).'
   evidence: []
   findings: [PER-02, API-15, TST-03]
-  scenarios: []
+  scenarios: [contracts.flic_buttons]
 - id: F-API-029
   area: api
   title: Web UI, kiosk and static asset routes
