@@ -188,7 +188,7 @@ async def data_hub(aiohttp_client, matrix, monkeypatch, tmp_path):
         shutil.copy(src, tmp_path / src.name)
     reset_rate_limiter()
     assert await matrix.connect()
-    set_matrix_device(matrix, config_dir=str(tmp_path), data_dir=str(tmp_path))
+    set_matrix_device(matrix, config_dir=str(tmp_path), data_dir=str(tmp_path), config_file=tmp_path / "config.json")
     client = await aiohttp_client(create_rest_app(data_dir=tmp_path))
     client.data_dir = tmp_path  # type: ignore[attr-defined]
     try:

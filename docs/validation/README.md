@@ -152,6 +152,16 @@ Scenarios: `tests/validation/scenarios/home_assistant.py`.
 
 ## Recorded baseline (C-pre, 2026-09-25)
 
+`tests/sim/test_sim_rest_writes.py` exercises the remaining 21 write routes
+through the registered REST app, verifies saved files and manager reloads, and
+checks actual device effects for output names, CEC enable, and shortcut runs.
+It includes storage-failure regressions and explicit-null power-macro clearing.
+`tests/validation/scenarios/writes.py` adds 21 simulator API scenarios for
+shipped-image response/readback proof. Successful user-shortcut deletion and
+storage refusals are covered by pytest; the image deletion scenario checks
+that a built-in shortcut cannot be deleted. Use disposable hub data: shortcut
+creation leaves an additional test shortcut in storage.
+
 WP-C4 adds browser intents `scene_wait_edit` (edit, prompt for a duration, save)
 and `scene_conflicts` (open a saved scene and read its real conflicts). Browser
 observations `scene.conflict_count` and `scene.values` come from the visible

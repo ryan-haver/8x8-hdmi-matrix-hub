@@ -46,19 +46,22 @@ def _load_buttons_if_needed():
     _loaded = True
 
 
-def _save_buttons():
+def _save_buttons() -> bool:
     """Save the in-memory registered buttons dict to persistent storage."""
     file_path = _get_flic_file_path()
     try:
         # Atomic replace + serialized writers (PER-02): a crash or a
         # concurrent registration can no longer leave a truncated file.
         atomic_write_json(file_path, _registered_buttons, indent=4)
+        return True
     except Exception as e:
         _LOG.warning(f"Failed to save registered Flic buttons: {e}")
+        return False
 
 
 async def handle_register_flic_buttons(request: web.Request) -> web.Response:
     """Register Flic buttons reported by the Flic Hub SDK script."""
+    global _registered_buttons
     try:
         _load_buttons_if_needed()
         body = await request.json()
@@ -67,6 +70,7 @@ async def handle_register_flic_buttons(request: web.Request) -> web.Response:
         if not isinstance(buttons, list):
             return _json_response(False, error="Invalid buttons payload", status=400)
 
+        previous = _registered_buttons.copy()
         updated = False
         for btn in buttons:
             if not isinstance(btn, dict) or "bdaddr" not in btn:
@@ -84,7 +88,9 @@ async def handle_register_flic_buttons(request: web.Request) -> web.Response:
                 updated = True
 
         if updated:
-            _save_buttons()
+            if not _save_buttons():
+                _registered_buttons = previous
+                return _json_response(False, error="Failed to save registered Flic buttons", status=500)
             _LOG.info(f"Registered/updated Flic buttons. Total active: {len(_registered_buttons)}")
 
         return _json_response(True, {"count": len(_registered_buttons)})

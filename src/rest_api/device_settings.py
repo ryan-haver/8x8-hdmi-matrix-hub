@@ -11,6 +11,7 @@ Handles storage of:
 import json
 import logging
 from collections.abc import Callable
+from copy import deepcopy
 from pathlib import Path
 
 from aiohttp import web
@@ -166,6 +167,7 @@ def set_input_setting(
 ) -> bool:
     """Update settings for a specific input."""
     global _settings_cache
+    previous = deepcopy(_settings_cache)
 
     if "inputs" not in _settings_cache:
         _settings_cache["inputs"] = {}
@@ -181,7 +183,7 @@ def set_input_setting(
     if color is not None:
         _settings_cache["inputs"][key]["color"] = color
 
-    return _save_settings()
+    return _save_or_restore(previous)
 
 
 def set_output_setting(
@@ -189,6 +191,7 @@ def set_output_setting(
 ) -> bool:
     """Update settings for a specific output."""
     global _settings_cache
+    previous = deepcopy(_settings_cache)
 
     if "outputs" not in _settings_cache:
         _settings_cache["outputs"] = {}
@@ -204,7 +207,16 @@ def set_output_setting(
     if color is not None:
         _settings_cache["outputs"][key]["color"] = color
 
-    return _save_settings()
+    return _save_or_restore(previous)
+
+
+def _save_or_restore(previous: dict) -> bool:
+    """Keep reads consistent with disk when a settings update cannot be saved."""
+    global _settings_cache
+    if _save_settings():
+        return True
+    _settings_cache = previous
+    return False
 
 
 def get_preset_setting(preset_num: int) -> dict:
@@ -257,13 +269,14 @@ def _notify_change_listeners() -> None:
 def set_preset_name(preset_num: int, name: str) -> bool:
     """Update custom name for a preset."""
     global _settings_cache
+    previous = deepcopy(_settings_cache)
     if "presets" not in _settings_cache:
         _settings_cache["presets"] = {}
     key = str(preset_num)
     if key not in _settings_cache["presets"]:
         _settings_cache["presets"][key] = {}
     _settings_cache["presets"][key]["name"] = name
-    return _save_settings()
+    return _save_or_restore(previous)
 
 
 def set_preset_routing(preset_num: int, routing: dict[int, int]) -> bool:
@@ -509,6 +522,7 @@ async def handle_bulk_update_settings(request: web.Request) -> web.Response:
         updated_inputs = []
         updated_outputs = []
         errors = []
+        save_failed = False
 
         # Update inputs
         if "inputs" in data:
@@ -524,13 +538,17 @@ async def handle_bulk_update_settings(request: web.Request) -> web.Response:
                 if not isinstance(settings, dict):
                     errors.append(f"inputs.{input_num}: must be an object")
                     continue
-                set_input_setting(
+                saved = set_input_setting(
                     input_num,
                     name=settings.get("name"),
                     icon=settings.get("icon"),
                     color=settings.get("color"),
                 )
-                updated_inputs.append(input_num)
+                if saved:
+                    updated_inputs.append(input_num)
+                else:
+                    save_failed = True
+                    errors.append(f"inputs.{input_num}: failed to save settings")
 
         # Update outputs
         if "outputs" in data:
@@ -546,25 +564,32 @@ async def handle_bulk_update_settings(request: web.Request) -> web.Response:
                 if not isinstance(settings, dict):
                     errors.append(f"outputs.{output_num}: must be an object")
                     continue
-                set_output_setting(
+                saved = set_output_setting(
                     output_num,
                     name=settings.get("name"),
                     icon=settings.get("icon"),
                     color=settings.get("color"),
                 )
-                updated_outputs.append(output_num)
+                if saved:
+                    updated_outputs.append(output_num)
+                else:
+                    save_failed = True
+                    errors.append(f"outputs.{output_num}: failed to save settings")
 
         # Broadcast full settings update
-        await broadcast_status_update("device_settings_full", get_device_settings())
+        if updated_inputs or updated_outputs:
+            await broadcast_status_update("device_settings_full", get_device_settings())
 
         return _json_response(
-            True,
+            not save_failed,
             {
                 "updated_inputs": updated_inputs,
                 "updated_outputs": updated_outputs,
                 "errors": errors if errors else None,
                 "settings": get_device_settings(),
             },
+            error="Failed to save device settings" if save_failed else None,
+            status=500 if save_failed else 200,
         )
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON body", status=400)

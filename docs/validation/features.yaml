@@ -935,13 +935,13 @@ features:
       'GET /api/cec/output/{output}/capabilities', 'POST /api/cec/input/{port}/enable', 'POST /api/cec/output/{port}/enable']
   target: V2
   current: V1
-  basis: 'Recorded V1 baseline: tests/test_rest_api.py TestCecCommandEndpoints (mocked). New simulator reads verify typed command catalogs and invalid types; output enable remains unexercised.'
+  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
   evidence:
   - docs/validation/evidence/F-API-016/2026-10-01-V2-9ef6d31f-contracts.cec_input_catalog-api.json
   - docs/validation/evidence/F-API-016/2026-10-01-V2-9ef6d31f-contracts.cec_invalid_type-api.json
   - docs/validation/evidence/F-API-016/2026-10-01-V2-9ef6d31f-contracts.cec_output_catalog-api.json
   findings: [BE-13]
-  scenarios: [contracts.cec_input_catalog, contracts.cec_output_catalog, contracts.cec_invalid_type]
+  scenarios: [contracts.cec_input_catalog, contracts.cec_output_catalog, contracts.cec_invalid_type, writes.cec_output_enable]
 - id: F-API-017
   area: api
   title: Device settings routes (icons, display names, preset names, favourite/dashboard presets)
@@ -953,7 +953,7 @@ features:
       GET /api/device-settings/dashboard-presets, PUT /api/device-settings/dashboard-presets, 'POST /api/device-settings/dashboard-presets/{preset}/toggle']
   target: V2
   current: V1
-  basis: 'Recorded V1 baseline: tests/test_device_settings_presets.py (favourite/dashboard presets). New simulator reads verify all/individual saved settings and invalid ports; remaining writes need route coverage.'
+  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
   evidence:
   - docs/validation/evidence/F-API-017/2026-10-01-V2-9ef6d31f-contracts.device_settings-api.json
   - docs/validation/evidence/F-API-017/2026-10-01-V2-9ef6d31f-contracts.input_settings-api.json
@@ -961,7 +961,7 @@ features:
   - docs/validation/evidence/F-API-017/2026-10-01-V2-9ef6d31f-contracts.invalid_output_settings-api.json
   - docs/validation/evidence/F-API-017/2026-10-01-V2-9ef6d31f-contracts.output_settings-api.json
   findings: []
-  scenarios: [contracts.device_settings, contracts.input_settings, contracts.output_settings, contracts.invalid_input_settings, contracts.invalid_output_settings]
+  scenarios: [contracts.device_settings, contracts.input_settings, contracts.output_settings, contracts.invalid_input_settings, contracts.invalid_output_settings, writes.input_settings, writes.output_settings, writes.bulk_settings, writes.preset_name]
 - id: F-API-018
   area: api
   title: Name routes (POST /api/input|output/{n}/name)
@@ -970,10 +970,10 @@ features:
     rest: ['POST /api/input/{input}/name', 'POST /api/output/{output}/name']
   target: V2
   current: V0
-  basis: Not exercised by any test.
+  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
   evidence: []
   findings: [BE-16]
-  scenarios: []
+  scenarios: [writes.output_name]
 - id: F-API-019
   area: api
   title: Profile routes
@@ -985,11 +985,10 @@ features:
       'POST|PUT /api/profile/{profile_id}/dashboard', 'GET /api/profile/{profile_id}/execution-log']
   target: V2
   current: V1
-  basis: tests/test_rest_api.py TestProfileAPI, TestProfileCecMacroEndpoints, TestProfileFavoriteDashboardAPI (mocked); reorder,
-    execution-log and PUT cec/macros are not exercised.
+  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
   evidence: []
   findings: [SEC-04, API-08]
-  scenarios: []
+  scenarios: [writes.profile_cec, writes.profile_macros, writes.profile_reorder]
 - id: F-API-020
   area: api
   title: Scene v1 alias routes (/api/scene*, /api/scenes)
@@ -1056,14 +1055,14 @@ features:
         (10 aliases)]
   target: V2
   current: V1
-  basis: 'Recorded V1 baseline: tests/test_rest_api.py TestSystemShortcutsAPI (mocked). New simulator tests verify read alias equivalence and enabled filtering; write aliases remain unexercised.'
+  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
   evidence:
   - docs/validation/evidence/F-API-024/2026-10-01-V2-9ef6d31f-contracts.shortcut_alias-api.json
   - docs/validation/evidence/F-API-024/2026-10-01-V2-9ef6d31f-contracts.shortcut_dashboard-api.json
   - docs/validation/evidence/F-API-024/2026-10-01-V2-9ef6d31f-contracts.shortcut_favorites-api.json
   - docs/validation/evidence/F-API-024/2026-10-01-V2-9ef6d31f-contracts.shortcut_unknown-api.json
   findings: [API-01, API-06, API-08]
-  scenarios: [contracts.shortcut_favorites, contracts.shortcut_dashboard, contracts.shortcut_alias, contracts.shortcut_unknown]
+  scenarios: [contracts.shortcut_favorites, contracts.shortcut_dashboard, contracts.shortcut_alias, contracts.shortcut_unknown, writes.shortcut_create, writes.shortcut_update, writes.shortcut_favorite, writes.shortcut_dashboard, writes.shortcut_reorder, writes.shortcut_execute, writes.shortcut_delete_builtin]
 - id: F-API-025
   area: api
   title: Dashboard layout routes
@@ -1084,12 +1083,12 @@ features:
     rest: [GET /api/themes, PUT /api/themes, POST /api/themes/reset, GET /api/ui/preferences, PUT /api/ui/preferences]
   target: V2
   current: V1
-  basis: 'Recorded V1 baseline: tests/test_rest_themes_ui.py (handler-level). New simulator reads verify saved nondefault themes/UI preferences; write routes still need coverage.'
+  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
   evidence:
   - docs/validation/evidence/F-API-026/2026-10-01-V2-9ef6d31f-contracts.themes-api.json
   - docs/validation/evidence/F-API-026/2026-10-01-V2-9ef6d31f-contracts.ui_preferences-api.json
   findings: []
-  scenarios: [contracts.themes, contracts.ui_preferences]
+  scenarios: [contracts.themes, contracts.ui_preferences, writes.themes, writes.themes_reset, writes.ui_preferences]
 - id: F-API-027
   area: api
   title: Settings routes (matrix host, test connection)
@@ -1098,11 +1097,11 @@ features:
     rest: [GET /api/settings, POST /api/settings/matrix-host, POST /api/settings/test-connection]
   target: V2
   current: V1
-  basis: 'Recorded V1 baseline: tests/test_rest_api.py TestMatrixHostSettings (mocked): a new host takes its own telnet_port or the default, a bad one is refused (BE-32, WP-C2). New simulator reads verify GET /api/settings connection state; test-connection remains unexercised.'
+  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
   evidence:
   - docs/validation/evidence/F-API-027/2026-10-01-V2-9ef6d31f-contracts.settings-api.json
   findings: [SEC-03, TST-03]
-  scenarios: [contracts.settings]
+  scenarios: [contracts.settings, writes.connection_test]
 - id: F-API-028
   area: api
   title: Flic integration routes
@@ -1111,11 +1110,11 @@ features:
     rest: [GET /api/integrations/flic/buttons, POST /api/integrations/flic/register]
   target: V2
   current: V0
-  basis: 'Recorded V0 baseline predates the simulator read tests. GET /api/integrations/flic/buttons now returns saved fixture registrations; the registration write route still needs coverage (TST-03).'
+  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
   evidence:
   - docs/validation/evidence/F-API-028/2026-10-01-V2-9ef6d31f-contracts.flic_buttons-api.json
   findings: [PER-02, API-15, TST-03]
-  scenarios: [contracts.flic_buttons]
+  scenarios: [contracts.flic_buttons, writes.flic_register]
 - id: F-API-029
   area: api
   title: Web UI, kiosk and static asset routes

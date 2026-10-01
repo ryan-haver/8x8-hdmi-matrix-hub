@@ -704,6 +704,10 @@ Response:
 #### POST /api/profile/{id}/macros
 Update macro assignments for a profile.
 
+`PUT` is also supported. Set `power_on_macro` or `power_off_macro` to `null`
+to clear that assignment; omitting a field preserves its current value. The
+same clearing behavior applies to `PUT /api/profile/{id}`.
+
 ```bash
 curl -X POST http://localhost:8080/api/profile/movie_night/macros \
   -H "Content-Type: application/json" \
@@ -1116,6 +1120,13 @@ curl http://localhost:8080/api/device-settings
 
 #### POST /api/device-settings
 Update all device settings.
+
+The response lists persisted ports in `updated_inputs` and `updated_outputs`
+and rejected entries in `errors`. Invalid entries do not prevent valid entries
+from being saved. A storage failure returns HTTP 500 with `success: false`;
+earlier saved entries remain applied and failed entries retain their previous
+values. Individual input/output settings and preset names also retain their
+previous values when saving fails.
 
 ```bash
 curl -X POST http://localhost:8080/api/device-settings \
