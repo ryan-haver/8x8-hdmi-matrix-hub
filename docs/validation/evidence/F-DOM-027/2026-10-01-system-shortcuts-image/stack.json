@@ -1,0 +1,12 @@
+{
+  "image": "hdmi-matrix-hub:wp-system-shortcut-validation",
+  "scope": "Disposable simulator and fixture data; no real hardware",
+  "hub": "system-proof-hub-f3bab4988bf2",
+  "simulator": "system-proof-sim-f3bab4988bf2",
+  "source_commit": "7aa17c95d9b62ea63581ecccc03a4448660704ec",
+  "digest": "sha256:75952b42546eac673d865264c77c2da46ad1740d50bf7e489335b5e960ce08e3",
+  "features": [
+    "F-DOM-027",
+    "F-DOM-028"
+  ]
+}

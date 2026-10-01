@@ -1714,6 +1714,20 @@ features:
   current: V2
   basis: 'Scenarios shortcuts.beep_off and shortcuts.panel_lock (V2); reboot is covered by tests/test_system_shortcuts.py only.'
   evidence:
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V2-7aa17c95-shortcuts.beep_off-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V2-7aa17c95-shortcuts.beep_on-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V2-7aa17c95-shortcuts.beep_rejected-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V2-7aa17c95-shortcuts.disabled_reboot-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V2-7aa17c95-shortcuts.panel_lock-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V2-7aa17c95-shortcuts.panel_lock_rejected-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V2-7aa17c95-shortcuts.panel_unlock-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V3-7aa17c95-shortcuts.beep_off-browser.json
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V3-7aa17c95-shortcuts.beep_on-browser.json
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V3-7aa17c95-shortcuts.beep_rejected-browser.json
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V3-7aa17c95-shortcuts.disabled_reboot-browser.json
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V3-7aa17c95-shortcuts.panel_lock-browser.json
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V3-7aa17c95-shortcuts.panel_lock_rejected-browser.json
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V3-7aa17c95-shortcuts.panel_unlock-browser.json
   - docs/validation/evidence/F-DOM-027/2026-10-01-V2-9362fd00-shortcuts.beep_off-api.json
   - docs/validation/evidence/F-DOM-027/2026-10-01-V2-9362fd00-shortcuts.panel_lock-api.json
   findings: [API-08]
@@ -1730,6 +1744,18 @@ features:
     tests/sim/test_sim_shortcuts.py::test_lcd_shortcuts_set_the_device_code. The device command itself is web-UI-derived until
     a hardware write run proves it (HIL-09).'
   evidence:
+  - docs/validation/evidence/F-DOM-028/2026-10-01-V2-7aa17c95-shortcuts.lcd_15s-api.json
+  - docs/validation/evidence/F-DOM-028/2026-10-01-V2-7aa17c95-shortcuts.lcd_30s-api.json
+  - docs/validation/evidence/F-DOM-028/2026-10-01-V2-7aa17c95-shortcuts.lcd_60s-api.json
+  - docs/validation/evidence/F-DOM-028/2026-10-01-V2-7aa17c95-shortcuts.lcd_always_on-api.json
+  - docs/validation/evidence/F-DOM-028/2026-10-01-V2-7aa17c95-shortcuts.lcd_off-api.json
+  - docs/validation/evidence/F-DOM-028/2026-10-01-V2-7aa17c95-shortcuts.lcd_rejected-api.json
+  - docs/validation/evidence/F-DOM-028/2026-10-01-V3-7aa17c95-shortcuts.lcd_15s-browser.json
+  - docs/validation/evidence/F-DOM-028/2026-10-01-V3-7aa17c95-shortcuts.lcd_30s-browser.json
+  - docs/validation/evidence/F-DOM-028/2026-10-01-V3-7aa17c95-shortcuts.lcd_60s-browser.json
+  - docs/validation/evidence/F-DOM-028/2026-10-01-V3-7aa17c95-shortcuts.lcd_always_on-browser.json
+  - docs/validation/evidence/F-DOM-028/2026-10-01-V3-7aa17c95-shortcuts.lcd_off-browser.json
+  - docs/validation/evidence/F-DOM-028/2026-10-01-V3-7aa17c95-shortcuts.lcd_rejected-browser.json
   - docs/validation/evidence/F-DOM-028/2026-10-01-V2-9362fd00-shortcuts.lcd_15s-api.json
   - docs/validation/evidence/F-DOM-028/2026-10-01-V3-9362fd00-shortcuts.lcd_15s-browser.json
   findings: [API-07]

@@ -1,7 +1,7 @@
 # Feature ledger
 
 > **Generated** by `python -m tools.validate ledger` — do not edit by hand. Registry: [`features.yaml`](features.yaml) · Plan: [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md) · How to add evidence: [`README.md`](README.md).
-> Commit `9362fd00`
+> Commit `7aa17c95`
 
 **Level** = highest level with fresh passing evidence, else the recorded baseline (the registry's `current`), capped at V1 while an open critical/high finding is linked. **Recorded** = the registry baseline. **Fresh** = evidence commit not older than the last change to the scenario's `covers` paths.
 
@@ -12,7 +12,7 @@
 | Matrix control | 31 | 1 | 24 | 1 | 5 | 0 | 0 | 31 | 7 |
 | CEC control | 11 | 0 | 10 | 0 | 1 | 0 | 0 | 11 | 4 |
 | REST/WebSocket contract | 42 | 2 | 23 | 16 | 1 | 0 | 0 | 32 | 13 |
-| Domain features | 36 | 2 | 17 | 2 | 15 | 0 | 0 | 27 | 0 |
+| Domain features | 36 | 2 | 17 | 1 | 16 | 0 | 0 | 26 | 0 |
 | Web UI | 36 | 0 | 25 | 0 | 11 | 0 | 0 | 25 | 6 |
 | Kiosk | 14 | 0 | 7 | 0 | 7 | 0 | 0 | 7 | 2 |
 | Remote 3 integration | 17 | 1 | 2 | 0 | 14 | 0 | 0 | 17 | 8 |
@@ -21,7 +21,7 @@
 | Deployment, configuration, persistence | 20 | 3 | 8 | 2 | 7 | 0 | 0 | 20 | 7 |
 | Security controls | 15 | 9 | 5 | 0 | 1 | 0 | 0 | 14 | 0 |
 | Reliability | 18 | 12 | 3 | 1 | 2 | 0 | 0 | 18 | 3 |
-| **All** | **268** | **33** | **132** | **22** | **81** | **0** | **0** | **230** | **67** |
+| **All** | **268** | **33** | **132** | **21** | **82** | **0** | **0** | **229** | **67** |
 
 Levels: **V0** Claimed · **V1** Unit · **V2** Simulated integration · **V3** End-to-end · **V4** Hardware · **V5** Field
 
@@ -176,8 +176,8 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-DOM-024 | Built-in shortcut: power everything off | V3 | **V3** | V2 | fresh | [shortcuts.power_off_all·api·pass](evidence/F-DOM-024/2026-10-01-V2-9362fd00-shortcuts.power_off_all-api.json)<br>[shortcuts.power_off_all·browser·pass](evidence/F-DOM-024/2026-10-01-V3-9362fd00-shortcuts.power_off_all-browser.json) | — |
 | F-DOM-025 | Built-in shortcuts: mute / unmute all outputs | V3 | **V3** | V2 | fresh | [shortcuts.mute_all·api·pass](evidence/F-DOM-025/2026-10-01-V2-9362fd00-shortcuts.mute_all-api.json)<br>[shortcuts.mute_rejected·api·pass](evidence/F-DOM-025/2026-10-01-V2-9362fd00-shortcuts.mute_rejected-api.json)<br>[shortcuts.unmute_all·api·pass](evidence/F-DOM-025/2026-10-01-V2-9362fd00-shortcuts.unmute_all-api.json)<br>[shortcuts.mute_all·browser·pass](evidence/F-DOM-025/2026-10-01-V3-9362fd00-shortcuts.mute_all-browser.json) | — |
 | F-DOM-026 | Built-in shortcuts: recall preset 1-8 | V3 | **V3** | V2 | fresh | [shortcuts.preset_recall·api·pass](evidence/F-DOM-026/2026-10-01-V2-9362fd00-shortcuts.preset_recall-api.json)<br>[shortcuts.preset_recall·browser·pass](evidence/F-DOM-026/2026-10-01-V3-9362fd00-shortcuts.preset_recall-browser.json) | — |
-| F-DOM-027 | Built-in shortcuts: beep, panel lock, reboot | V3 | V2 | V2 | fresh | [shortcuts.beep_off·api·pass](evidence/F-DOM-027/2026-10-01-V2-9362fd00-shortcuts.beep_off-api.json)<br>[shortcuts.panel_lock·api·pass](evidence/F-DOM-027/2026-10-01-V2-9362fd00-shortcuts.panel_lock-api.json) | — |
-| F-DOM-028 | Built-in shortcuts: LCD timeout | V3 | **V3** | V2 | fresh | [shortcuts.lcd_15s·api·pass](evidence/F-DOM-028/2026-10-01-V2-9362fd00-shortcuts.lcd_15s-api.json)<br>[shortcuts.lcd_15s·browser·pass](evidence/F-DOM-028/2026-10-01-V3-9362fd00-shortcuts.lcd_15s-browser.json) | API-07(M) |
+| F-DOM-027 | Built-in shortcuts: beep, panel lock, reboot | V3 | **V3** | V2 | fresh | [shortcuts.beep_off·api·pass](evidence/F-DOM-027/2026-10-01-V2-7aa17c95-shortcuts.beep_off-api.json)<br>[shortcuts.beep_on·api·pass](evidence/F-DOM-027/2026-10-01-V2-7aa17c95-shortcuts.beep_on-api.json)<br>[shortcuts.beep_rejected·api·pass](evidence/F-DOM-027/2026-10-01-V2-7aa17c95-shortcuts.beep_rejected-api.json)<br>[shortcuts.disabled_reboot·api·pass](evidence/F-DOM-027/2026-10-01-V2-7aa17c95-shortcuts.disabled_reboot-api.json) | — |
+| F-DOM-028 | Built-in shortcuts: LCD timeout | V3 | **V3** | V2 | fresh | [shortcuts.lcd_15s·api·pass](evidence/F-DOM-028/2026-10-01-V2-7aa17c95-shortcuts.lcd_15s-api.json)<br>[shortcuts.lcd_30s·api·pass](evidence/F-DOM-028/2026-10-01-V2-7aa17c95-shortcuts.lcd_30s-api.json)<br>[shortcuts.lcd_60s·api·pass](evidence/F-DOM-028/2026-10-01-V2-7aa17c95-shortcuts.lcd_60s-api.json)<br>[shortcuts.lcd_always_on·api·pass](evidence/F-DOM-028/2026-10-01-V2-7aa17c95-shortcuts.lcd_always_on-api.json) | API-07(M) |
 | F-DOM-029 | Create, rename, reorder and delete user shortcuts | V3 | V1 | V1 | — | — | — |
 | F-DOM-030 | Favourite shortcuts and show them on the dashboard | V3 | V1 | V1 | — | — | API-20(M) |
 | F-DOM-031 | Dashboard layout (add, remove, reorder cards) | V3 | V1 | V1 | — | — | API-20(M), UI-08(M) |

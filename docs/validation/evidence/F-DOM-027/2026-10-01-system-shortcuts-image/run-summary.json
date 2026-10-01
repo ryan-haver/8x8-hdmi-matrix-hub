@@ -1,0 +1,357 @@
+{
+  "commit": {
+    "sha": "7aa17c95d9b62ea63581ecccc03a4448660704ec",
+    "branch": "wp-system-shortcut-validation",
+    "dirty_files": [],
+    "short": "7aa17c95",
+    "dirty": false
+  },
+  "target": "sim",
+  "clients": [
+    "api",
+    "browser"
+  ],
+  "operator": "automation",
+  "finished": "2026-10-01T17:53:35.385Z",
+  "aborted": null,
+  "outcomes": [
+    {
+      "scenario": "shortcuts.beep_off",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V2-7aa17c95-shortcuts.beep_off-api.json"
+    },
+    {
+      "scenario": "shortcuts.panel_lock",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V2-7aa17c95-shortcuts.panel_lock-api.json"
+    },
+    {
+      "scenario": "shortcuts.lcd_15s",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-028/2026-10-01-V2-7aa17c95-shortcuts.lcd_15s-api.json"
+    },
+    {
+      "scenario": "shortcuts.beep_on",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V2-7aa17c95-shortcuts.beep_on-api.json"
+    },
+    {
+      "scenario": "shortcuts.panel_unlock",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V2-7aa17c95-shortcuts.panel_unlock-api.json"
+    },
+    {
+      "scenario": "shortcuts.lcd_off",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-028/2026-10-01-V2-7aa17c95-shortcuts.lcd_off-api.json"
+    },
+    {
+      "scenario": "shortcuts.lcd_always_on",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-028/2026-10-01-V2-7aa17c95-shortcuts.lcd_always_on-api.json"
+    },
+    {
+      "scenario": "shortcuts.lcd_30s",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-028/2026-10-01-V2-7aa17c95-shortcuts.lcd_30s-api.json"
+    },
+    {
+      "scenario": "shortcuts.lcd_60s",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-028/2026-10-01-V2-7aa17c95-shortcuts.lcd_60s-api.json"
+    },
+    {
+      "scenario": "shortcuts.beep_rejected",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V2-7aa17c95-shortcuts.beep_rejected-api.json"
+    },
+    {
+      "scenario": "shortcuts.panel_lock_rejected",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V2-7aa17c95-shortcuts.panel_lock_rejected-api.json"
+    },
+    {
+      "scenario": "shortcuts.lcd_rejected",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-028/2026-10-01-V2-7aa17c95-shortcuts.lcd_rejected-api.json"
+    },
+    {
+      "scenario": "shortcuts.disabled_reboot",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V2-7aa17c95-shortcuts.disabled_reboot-api.json"
+    },
+    {
+      "scenario": "shortcuts.beep_off",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V3-7aa17c95-shortcuts.beep_off-browser.json"
+    },
+    {
+      "scenario": "shortcuts.panel_lock",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V3-7aa17c95-shortcuts.panel_lock-browser.json"
+    },
+    {
+      "scenario": "shortcuts.lcd_15s",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-028/2026-10-01-V3-7aa17c95-shortcuts.lcd_15s-browser.json"
+    },
+    {
+      "scenario": "shortcuts.beep_on",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V3-7aa17c95-shortcuts.beep_on-browser.json"
+    },
+    {
+      "scenario": "shortcuts.panel_unlock",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V3-7aa17c95-shortcuts.panel_unlock-browser.json"
+    },
+    {
+      "scenario": "shortcuts.lcd_off",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-028/2026-10-01-V3-7aa17c95-shortcuts.lcd_off-browser.json"
+    },
+    {
+      "scenario": "shortcuts.lcd_always_on",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-028/2026-10-01-V3-7aa17c95-shortcuts.lcd_always_on-browser.json"
+    },
+    {
+      "scenario": "shortcuts.lcd_30s",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-028/2026-10-01-V3-7aa17c95-shortcuts.lcd_30s-browser.json"
+    },
+    {
+      "scenario": "shortcuts.lcd_60s",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-028/2026-10-01-V3-7aa17c95-shortcuts.lcd_60s-browser.json"
+    },
+    {
+      "scenario": "shortcuts.beep_rejected",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V3-7aa17c95-shortcuts.beep_rejected-browser.json"
+    },
+    {
+      "scenario": "shortcuts.panel_lock_rejected",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V3-7aa17c95-shortcuts.panel_lock_rejected-browser.json"
+    },
+    {
+      "scenario": "shortcuts.lcd_rejected",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-028/2026-10-01-V3-7aa17c95-shortcuts.lcd_rejected-browser.json"
+    },
+    {
+      "scenario": "shortcuts.disabled_reboot",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V3-7aa17c95-shortcuts.disabled_reboot-browser.json"
+    }
+  ]
+}
