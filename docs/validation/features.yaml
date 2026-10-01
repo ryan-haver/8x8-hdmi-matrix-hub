@@ -395,8 +395,12 @@ features:
     flic: [POST /api/system/reboot]
   target: V4
   current: V1
-  basis: tests/test_rest_api.py TestSystemSettingsEndpoints reboot (mocked). No test reboots the simulator through the hub.
-  evidence: []
+  basis: 'Enabled simulator reboot via the real REST app and both shortcut aliases; HTTP-only and Telnet lifecycle tests, refusal and missing-acknowledgement fallback. Packaged-image records prove one simulator reboot and automatic recovery. Confirmation-dialog UI, HA/Flic triggers and physical reboot acknowledgement/timing require separate proof.'
+  evidence:
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.direct-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.enabled_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.legacy_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V3-b0c1a32e-reboot.enabled_shortcut-browser.json
   findings: []
   scenarios: [reboot.direct, reboot.legacy_shortcut, reboot.enabled_shortcut]
 - id: F-MTX-022
@@ -899,8 +903,12 @@ features:
     rest: [POST /api/system/beep, POST /api/system/panel_lock, POST /api/system/lcd, GET /api/system/lcd/modes, POST /api/system/reboot]
   target: V2
   current: V1
-  basis: tests/test_rest_api.py TestSystemSettingsEndpoints, TestLcdTimeoutControl (mocked).
-  evidence: []
+  basis: 'Existing mocked system-settings tests plus enabled simulator reboot contracts through the registered app. Reboot refusal returns 500 with exactly one HTTP attempt. System-mode scenarios separately cover beep, panel lock and LCD writes; this batch records the reboot portion.'
+  evidence:
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.direct-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.enabled_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.legacy_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V3-b0c1a32e-reboot.enabled_shortcut-browser.json
   findings: [BE-12]
   scenarios: [reboot.direct, reboot.legacy_shortcut, reboot.enabled_shortcut]
 - id: F-API-014
@@ -1205,6 +1213,11 @@ features:
   current: V2
   basis: 'V2: scenario live.matrix_offline (a browser run; the runner''s /ws observer gets matrix_connection down and back, /api/status answers 503 with the link state); tests/sim/test_sim_ws_contract.py (real hub app + simulator: welcome with protocol and link, snapshot, get_status, link loss and recovery, schema-checked); every message a scenario''s /ws observer receives is checked against docs/api/websocket.schema.json (tools/validate/runner.py ws_contract_check).'
   evidence:
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.direct-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.enabled_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.legacy_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V3-b0c1a32e-reboot.enabled_shortcut-browser.json
+  - docs/validation/evidence/F-REL-009/2026-10-01-V3-b0c1a32e-live.matrix_offline-browser.json
   - docs/validation/evidence/F-REL-009/2026-09-28-V3-c39ee8d5-live.matrix_offline-browser.json
   - docs/validation/evidence/F-REL-009/2026-09-28-V3-57747b4b-live.matrix_offline-browser.json
   findings: []
@@ -1794,8 +1807,13 @@ features:
   interfaces: *id003
   target: V3
   current: V2
-  basis: 'Scenarios shortcuts.beep_off and shortcuts.panel_lock (V2); reboot is covered by tests/test_system_shortcuts.py only.'
+  basis: 'System-mode and refusal scenarios plus disabled_reboot and reboot.enabled_shortcut API/browser records. Enabled simulator reboot emits one Telnet command and restores the connection; hardware reboot behaviour remains pending.'
   evidence:
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V2-b0c1a32e-shortcuts.disabled_reboot-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V3-b0c1a32e-shortcuts.disabled_reboot-browser.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.enabled_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.legacy_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V3-b0c1a32e-reboot.enabled_shortcut-browser.json
   - docs/validation/evidence/F-DOM-027/2026-10-01-V2-7aa17c95-shortcuts.beep_off-api.json
   - docs/validation/evidence/F-DOM-027/2026-10-01-V2-7aa17c95-shortcuts.beep_on-api.json
   - docs/validation/evidence/F-DOM-027/2026-10-01-V2-7aa17c95-shortcuts.beep_rejected-api.json
@@ -2547,6 +2565,7 @@ features:
   current: V3
   basis: 'V3: scenario live.matrix_offline: an open /kiosk page shows Disconnected while the matrix is off the network and Connected again after it returns. The first-load visual is the catalog entry kiosk/disconnected.'
   evidence:
+  - docs/validation/evidence/F-REL-009/2026-10-01-V3-b0c1a32e-live.matrix_offline-browser.json
   - docs/validation/evidence/F-REL-009/2026-09-28-V3-c39ee8d5-live.matrix_offline-browser.json
   - docs/validation/evidence/F-REL-009/2026-09-28-V3-57747b4b-live.matrix_offline-browser.json
   findings: [UI-29]
@@ -3632,8 +3651,12 @@ features:
     device: [login, get video status]
   target: V4
   current: V0
-  basis: tests/test_driver.py TestReconnectDelay covers the delay maths only; the reconnect loop cancels itself (BE-06).
-  evidence: []
+  basis: 'Enabled reboot automatically restores HTTP and Telnet through the matrix reconnect supervisor; tests/sim/test_sim_enabled_reboot.py and packaged-image reboot records. The live.matrix_offline browser record also proves recovery after a 30-second simulator outage. Hardware and broader outage/soak cases remain pending.'
+  evidence:
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.direct-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.enabled_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.legacy_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V3-b0c1a32e-reboot.enabled_shortcut-browser.json
   findings: [BE-04, BE-06, BE-17]
   scenarios: [reboot.direct, reboot.legacy_shortcut, reboot.enabled_shortcut]
 - id: F-REL-002
@@ -3682,9 +3705,12 @@ features:
     telnet: [reboot]
   target: V4
   current: V0
-  basis: tests/sim/test_sim_faults.py::test_recovers_after_device_reboot is a strict xfail (BE-04); only a manual disconnect/connect
-    works (::test_explicit_reconnect_after_reboot).
-  evidence: []
+  basis: 'Enabled reboot through REST and both shortcut aliases recovers automatically without manual connect, preserves device settings and permits a subsequent REST routing write (tests/sim/test_sim_enabled_reboot.py). Packaged-image records include actual simulator reboot logs and ordered link events. Physical power-cycle/reboot remains pending.'
+  evidence:
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.direct-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.enabled_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.legacy_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V3-b0c1a32e-reboot.enabled_shortcut-browser.json
   findings: [BE-04, BE-28]
   scenarios: [reboot.direct, reboot.legacy_shortcut, reboot.enabled_shortcut]
 - id: F-REL-006
@@ -3735,6 +3761,7 @@ features:
   current: V3
   basis: 'V3: scenario live.matrix_offline (browser: the /ui header and the kiosk status go disconnected and come back; /api/status answers 503 with the link, never made-up names). V2: failures.unreachable_switch; tests/sim/test_sim_ws_contract.py::test_status_is_not_made_up_when_the_status_read_fails (VAL-04: the link up but the status read failing).'
   evidence:
+  - docs/validation/evidence/F-REL-009/2026-10-01-V3-b0c1a32e-live.matrix_offline-browser.json
   - docs/validation/evidence/F-HA-013/2026-09-28-V3-c39ee8d5-ha.matrix_offline-ha.json
   - docs/validation/evidence/F-REL-009/2026-09-28-V2-c39ee8d5-failures.unreachable_switch-api.json
   - docs/validation/evidence/F-REL-009/2026-09-28-V3-c39ee8d5-live.matrix_offline-browser.json
