@@ -42,6 +42,10 @@ features:
   basis: 'V3: tests/e2e/smoke.spec.ts ''routing an input to an output in the matrix grid changes the simulator'' (browser
     click -> simulator state asserted). V2: tests/sim/test_sim_e2e.py::test_switch_changes_simulator_state.'
   evidence:
+  - docs/validation/evidence/F-HA-002/2026-10-01-V3-2a28a93e-ha.select_source-ha.json
+  - docs/validation/evidence/F-MTX-001/2026-10-01-V2-2a28a93e-routing.switch_one-api.json
+  - docs/validation/evidence/F-MTX-001/2026-10-01-V3-2a28a93e-routing.switch_one-browser.json
+  - docs/validation/evidence/F-UC-008/2026-10-01-V3-2a28a93e-remote.select_source-uc.json
   - docs/validation/evidence/F-HA-002/2026-09-26-V3-6c22aa7a-ha.select_source-ha.json
   - docs/validation/evidence/F-MTX-001/2026-09-28-V2-c39ee8d5-routing.switch_one-api.json
   - docs/validation/evidence/F-MTX-001/2026-09-28-V3-c39ee8d5-routing.switch_one-browser.json
@@ -64,6 +68,8 @@ features:
   basis: 'V3: tests/e2e/smoke.spec.ts ''routing an input to all outputs from the kiosk changes the simulator'' (asserts simulator
     routing). V2: tests/sim/test_sim_e2e.py::test_switch_all_and_preset.'
   evidence:
+  - docs/validation/evidence/F-MTX-002/2026-10-01-V2-2a28a93e-routing.route_all-api.json
+  - docs/validation/evidence/F-MTX-002/2026-10-01-V3-2a28a93e-routing.route_all-browser.json
   - docs/validation/evidence/F-MTX-002/2026-09-28-V2-c39ee8d5-routing.route_all-api.json
   - docs/validation/evidence/F-MTX-002/2026-09-28-V3-c39ee8d5-routing.route_all-browser.json
   findings: [BE-12]
@@ -86,6 +92,10 @@ features:
   current: V3
   basis: 'V3: ha.preset_button (ha client: a real Home Assistant container drives it; simulator state read back). V2: tests/sim/test_sim_e2e.py::test_switch_all_and_preset (POST /api/preset/3 -> simulator routing asserted).'
   evidence:
+  - docs/validation/evidence/F-HA-006/2026-10-01-V3-2a28a93e-ha.preset_button-ha.json
+  - docs/validation/evidence/F-MTX-003/2026-10-01-V2-2a28a93e-presets.recall-api.json
+  - docs/validation/evidence/F-MTX-003/2026-10-01-V3-2a28a93e-presets.recall-browser.json
+  - docs/validation/evidence/F-UC-004/2026-10-01-V3-2a28a93e-remote.preset_button-uc.json
   - docs/validation/evidence/F-HA-006/2026-09-26-V3-6c22aa7a-ha.preset_button-ha.json
   - docs/validation/evidence/F-MTX-003/2026-09-28-V2-c39ee8d5-presets.recall-api.json
   - docs/validation/evidence/F-MTX-003/2026-09-28-V3-c39ee8d5-presets.recall-browser.json
@@ -125,6 +135,8 @@ features:
   basis: No test renames a preset (route not exercised by any test); the visual catalog entry drawer/presets/rename only captures
     the edit field.
   evidence:
+  - docs/validation/evidence/F-MTX-005/2026-10-01-V2-2a28a93e-presets.rename-api.json
+  - docs/validation/evidence/F-MTX-005/2026-10-01-V3-2a28a93e-presets.rename-browser.json
   - docs/validation/evidence/F-MTX-005/2026-10-01-V2-dba2f21d-presets.rename-api.json
   - docs/validation/evidence/F-MTX-005/2026-10-01-V3-dba2f21d-presets.rename-browser.json
   - docs/validation/evidence/F-MTX-005/2026-09-28-V2-c39ee8d5-presets.rename-api.json
@@ -148,6 +160,11 @@ features:
   basis: 'V3: ha.power_off, ha.power_on (ha client: a real Home Assistant container drives it; simulator state read back). tests/sim/test_sim_hub.py::test_power (driver-level: real OreiMatrix against the simulator, no user interface in
     the path -> V1); tests/test_rest_api.py TestControlEndpoints (mocked).'
   evidence:
+  - docs/validation/evidence/F-HA-003/2026-10-01-V3-2a28a93e-ha.power_off-ha.json
+  - docs/validation/evidence/F-HA-003/2026-10-01-V3-2a28a93e-ha.power_on-ha.json
+  - docs/validation/evidence/F-MTX-006/2026-10-01-V2-2a28a93e-power.standby-api.json
+  - docs/validation/evidence/F-MTX-006/2026-10-01-V2-2a28a93e-power.wake-api.json
+  - docs/validation/evidence/F-UC-010/2026-10-01-V3-2a28a93e-remote.power_switch_off-uc.json
   - docs/validation/evidence/F-HA-003/2026-09-26-V3-6c22aa7a-ha.power_off-ha.json
   - docs/validation/evidence/F-HA-003/2026-09-26-V3-6c22aa7a-ha.power_on-ha.json
   - docs/validation/evidence/F-MTX-006/2026-09-28-V2-c39ee8d5-power.standby-api.json
@@ -173,6 +190,8 @@ features:
     and tests/sim/test_sim_real_commands.py (payload `{"mute": [2, 1]}` on the simulator log). Recorded V2 before WP-A4
     part 2, lowered: On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
   evidence:
+  - docs/validation/evidence/F-HA-004/2026-10-01-V3-2a28a93e-ha.mute_switch-ha.json
+  - docs/validation/evidence/F-MTX-007/2026-10-01-V2-2a28a93e-outputs.audio_mute-api.json
   - docs/validation/evidence/F-HA-004/2026-09-26-V3-6c22aa7a-ha.mute_switch-ha.json
   - docs/validation/evidence/F-MTX-007/2026-09-28-V2-c39ee8d5-outputs.audio_mute-api.json
   findings: [BE-12, HIL-09]
@@ -397,6 +416,10 @@ features:
   current: V1
   basis: 'Enabled simulator reboot via the real REST app and both shortcut aliases; HTTP-only and Telnet lifecycle tests, refusal and missing-acknowledgement fallback. Packaged-image records prove one simulator reboot and automatic recovery. Confirmation-dialog UI, HA/Flic triggers and physical reboot acknowledgement/timing require separate proof.'
   evidence:
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.direct-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.enabled_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.legacy_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V3-2a28a93e-reboot.enabled_shortcut-browser.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.direct-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.enabled_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.legacy_shortcut-api.json
@@ -575,6 +598,11 @@ features:
   current: V3
   basis: 'V3: scenarios live.front_panel_route, live.input_signal, live.display_unplugged, live.rename_elsewhere: the simulator changes behind the hub''s back and a /ui and a /kiosk page that stay open show it, with their status reads stripped so only the WebSocket can explain it (browser client). Hardware: HIL-B.'
   evidence:
+  - docs/validation/evidence/F-HA-002/2026-10-01-V3-2a28a93e-ha.front_panel_route-ha.json
+  - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.display_unplugged-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.front_panel_route-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.input_signal-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.rename_elsewhere-browser.json
   - docs/validation/evidence/F-HA-002/2026-09-28-V3-c39ee8d5-ha.front_panel_route-ha.json
   - docs/validation/evidence/F-MTX-031/2026-09-28-V3-c39ee8d5-live.display_unplugged-browser.json
   - docs/validation/evidence/F-MTX-031/2026-09-28-V3-c39ee8d5-live.front_panel_route-browser.json
@@ -598,7 +626,8 @@ features:
   current: V1
   basis: 'tests/sim/test_sim_hub.py::test_cec_http_auto_enables_port (driver-level: real OreiMatrix against the simulator,
     no user interface in the path -> V1); tests/test_rest_api.py TestCecCommandEndpoints (mocked); tests/test_driver.py TestCecCommandResolution.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-CEC-001/2026-10-01-V2-2a28a93e-cec.input_power_on-api.json
   findings: []
   scenarios: [cec.input_power_on]
 - id: F-CEC-002
@@ -655,6 +684,9 @@ features:
   basis: 'V3: ha.service_cec_display (ha client: a real Home Assistant container drives it; simulator state read back). tests/sim/test_sim_hub.py::test_telnet_cec (Telnet path, POWER_ON to output 1) (driver-level: real OreiMatrix against
     the simulator, no user interface in the path -> V1); tests/test_rest_api.py TestCecCommandEndpoints (mocked).'
   evidence:
+  - docs/validation/evidence/F-CEC-005/2026-10-01-V2-2a28a93e-cec.output_power_on-api.json
+  - docs/validation/evidence/F-HA-012/2026-10-01-V3-2a28a93e-ha.service_cec_display-ha.json
+  - docs/validation/evidence/F-UC-007/2026-10-01-V3-2a28a93e-remote.output_cec_power_on-uc.json
   - docs/validation/evidence/F-HA-012/2026-09-26-V3-6c22aa7a-ha.service_cec_display-ha.json
   - docs/validation/evidence/F-CEC-005/2026-09-28-V2-c39ee8d5-cec.output_power_on-api.json
   - docs/validation/evidence/F-HA-012/2026-09-28-V3-c39ee8d5-ha.service_cec_display-ha.json
@@ -668,7 +700,8 @@ features:
   target: V4
   current: V1
   basis: tests/test_rest_api.py TestCecCommandEndpoints (mocked).
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-CEC-006/2026-10-01-V2-2a28a93e-cec.output_volume_up-api.json
   findings: [BE-14, VAL-03]
   scenarios: [cec.output_volume_up]
 - id: F-CEC-007
@@ -681,7 +714,8 @@ features:
   current: V1
   basis: 'tests/sim/test_sim_hub.py::test_cec_http_auto_enables_port (driver-level: real OreiMatrix against the simulator,
     no user interface in the path -> V1).'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-CEC-001/2026-10-01-V2-2a28a93e-cec.input_power_on-api.json
   findings: [BE-13]
   scenarios: [cec.input_power_on]
 - id: F-CEC-008
@@ -693,11 +727,9 @@ features:
     rest: ['POST /api/cec/input/{port}/enable', 'POST /api/cec/output/{port}/enable']
   target: V4
   current: V1
-  basis: 'tests/sim/test_sim_hub.py::test_cec_enable_single_port_shape (driver-level: real OreiMatrix against the simulator,
-    no user interface in the path -> V1); tests/test_rest_api.py (input enable, mocked). Output enable is not exercised by
-    any test.'
+  basis: 'V1: real REST/simulator tests cover both input/output enable and disable, including warm caches and external changes; tests/sim/test_sim_cec_enable_snapshot.py also covers concurrent edits and failed/incomplete reads. The output-enable packaged-image record is currently classified under F-API-016 rather than this feature ID.'
   evidence: []
-  findings: [BE-13]
+  findings: [BE-13, BE-35]
   scenarios: []
 - id: F-CEC-009
   area: cec
@@ -788,6 +820,8 @@ features:
   current: V1
   basis: 'Recorded V1 baseline: tests/test_rest_api.py TestStatusEndpoints (mocked). New simulator read tests cover cable and CEC status, including unavailable/disconnected cases.'
   evidence:
+  - docs/validation/evidence/F-API-004/2026-10-01-V2-2a28a93e-contracts.cables-api.json
+  - docs/validation/evidence/F-API-004/2026-10-01-V2-2a28a93e-contracts.cec_status-api.json
   - docs/validation/evidence/F-API-004/2026-10-01-V2-dba2f21d-contracts.cables-api.json
   - docs/validation/evidence/F-API-004/2026-10-01-V2-dba2f21d-contracts.cec_status-api.json
   - docs/validation/evidence/F-API-004/2026-10-01-V2-9ef6d31f-contracts.cables-api.json
@@ -804,6 +838,8 @@ features:
   current: V2
   basis: 'V2: tests/sim/test_sim_e2e.py::test_switch_changes_simulator_state, ::test_switch_all_and_preset.'
   evidence:
+  - docs/validation/evidence/F-MTX-001/2026-10-01-V2-2a28a93e-routing.switch_one-api.json
+  - docs/validation/evidence/F-MTX-002/2026-10-01-V2-2a28a93e-routing.route_all-api.json
   - docs/validation/evidence/F-MTX-001/2026-09-28-V2-c39ee8d5-routing.switch_one-api.json
   - docs/validation/evidence/F-MTX-002/2026-09-28-V2-c39ee8d5-routing.route_all-api.json
   findings: [BE-12]
@@ -830,6 +866,7 @@ features:
   current: V2
   basis: 'V2: tests/sim/test_sim_e2e.py::test_switch_all_and_preset.'
   evidence:
+  - docs/validation/evidence/F-MTX-003/2026-10-01-V2-2a28a93e-presets.recall-api.json
   - docs/validation/evidence/F-MTX-003/2026-09-28-V2-c39ee8d5-presets.recall-api.json
   findings: []
   scenarios: [presets.recall]
@@ -855,6 +892,8 @@ features:
   current: V1
   basis: tests/test_rest_api.py TestControlEndpoints (mocked).
   evidence:
+  - docs/validation/evidence/F-MTX-006/2026-10-01-V2-2a28a93e-power.standby-api.json
+  - docs/validation/evidence/F-MTX-006/2026-10-01-V2-2a28a93e-power.wake-api.json
   - docs/validation/evidence/F-MTX-006/2026-09-28-V2-c39ee8d5-power.standby-api.json
   findings: []
   scenarios: [power.standby, power.wake]
@@ -905,6 +944,10 @@ features:
   current: V1
   basis: 'Existing mocked system-settings tests plus enabled simulator reboot contracts through the registered app. Reboot refusal returns 500 with exactly one HTTP attempt. System-mode scenarios separately cover beep, panel lock and LCD writes; this batch records the reboot portion.'
   evidence:
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.direct-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.enabled_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.legacy_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V3-2a28a93e-reboot.enabled_shortcut-browser.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.direct-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.enabled_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.legacy_shortcut-api.json
@@ -921,6 +964,8 @@ features:
   current: V1
   basis: 'Recorded V1 baseline: tests/test_persistence.py TestStorageEndpoint (handler-level). New simulator reads verify runtime info and the actual fixture storage directory.'
   evidence:
+  - docs/validation/evidence/F-API-014/2026-10-01-V2-2a28a93e-contracts.storage-api.json
+  - docs/validation/evidence/F-API-014/2026-10-01-V2-2a28a93e-contracts.system_info-api.json
   - docs/validation/evidence/F-API-014/2026-10-01-V2-dba2f21d-contracts.storage-api.json
   - docs/validation/evidence/F-API-014/2026-10-01-V2-dba2f21d-contracts.system_info-api.json
   - docs/validation/evidence/F-API-014/2026-10-01-V2-9ef6d31f-contracts.storage-api.json
@@ -937,6 +982,9 @@ features:
   current: V1
   basis: tests/test_rest_api.py TestCecCommandEndpoints (mocked).
   evidence:
+  - docs/validation/evidence/F-CEC-001/2026-10-01-V2-2a28a93e-cec.input_power_on-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-01-V2-2a28a93e-cec.output_power_on-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-01-V2-2a28a93e-cec.output_volume_up-api.json
   - docs/validation/evidence/F-CEC-005/2026-09-28-V2-c39ee8d5-cec.output_power_on-api.json
   findings: []
   scenarios: [cec.input_power_on, cec.output_power_on, cec.output_volume_up]
@@ -949,8 +997,13 @@ features:
       'GET /api/cec/output/{output}/capabilities', 'POST /api/cec/input/{port}/enable', 'POST /api/cec/output/{port}/enable']
   target: V2
   current: V1
-  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
+  basis: 'Registered-route simulator reads/writes and fresh packaged-image records. Single-port CEC writes preserve current arrays; tests/sim/test_sim_cec_enable_snapshot.py covers external changes, concurrent edits and failed/incomplete reads (BE-35). Grouped capability routes still have scope beyond the selected scenarios.'
   evidence:
+  - docs/validation/evidence/F-API-016/2026-10-01-V2-72cc71dc-writes.cec_output_enable-api.json
+  - docs/validation/evidence/F-API-016/2026-10-01-V2-2a28a93e-contracts.cec_input_catalog-api.json
+  - docs/validation/evidence/F-API-016/2026-10-01-V2-2a28a93e-contracts.cec_invalid_type-api.json
+  - docs/validation/evidence/F-API-016/2026-10-01-V2-2a28a93e-contracts.cec_output_catalog-api.json
+  - docs/validation/evidence/F-API-016/2026-10-01-V2-2a28a93e-writes.cec_output_enable-api.json
   - docs/validation/evidence/F-API-016/2026-10-01-V2-dba2f21d-contracts.cec_input_catalog-api.json
   - docs/validation/evidence/F-API-016/2026-10-01-V2-dba2f21d-contracts.cec_invalid_type-api.json
   - docs/validation/evidence/F-API-016/2026-10-01-V2-dba2f21d-contracts.cec_output_catalog-api.json
@@ -958,7 +1011,7 @@ features:
   - docs/validation/evidence/F-API-016/2026-10-01-V2-9ef6d31f-contracts.cec_input_catalog-api.json
   - docs/validation/evidence/F-API-016/2026-10-01-V2-9ef6d31f-contracts.cec_invalid_type-api.json
   - docs/validation/evidence/F-API-016/2026-10-01-V2-9ef6d31f-contracts.cec_output_catalog-api.json
-  findings: [BE-13]
+  findings: [BE-13, BE-35]
   scenarios: [contracts.cec_input_catalog, contracts.cec_output_catalog, contracts.cec_invalid_type, writes.cec_output_enable]
 - id: F-API-017
   area: api
@@ -973,6 +1026,15 @@ features:
   current: V1
   basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
   evidence:
+  - docs/validation/evidence/F-API-017/2026-10-01-V2-2a28a93e-contracts.device_settings-api.json
+  - docs/validation/evidence/F-API-017/2026-10-01-V2-2a28a93e-contracts.input_settings-api.json
+  - docs/validation/evidence/F-API-017/2026-10-01-V2-2a28a93e-contracts.invalid_input_settings-api.json
+  - docs/validation/evidence/F-API-017/2026-10-01-V2-2a28a93e-contracts.invalid_output_settings-api.json
+  - docs/validation/evidence/F-API-017/2026-10-01-V2-2a28a93e-contracts.output_settings-api.json
+  - docs/validation/evidence/F-API-017/2026-10-01-V2-2a28a93e-writes.bulk_settings-api.json
+  - docs/validation/evidence/F-API-017/2026-10-01-V2-2a28a93e-writes.input_settings-api.json
+  - docs/validation/evidence/F-API-017/2026-10-01-V2-2a28a93e-writes.output_settings-api.json
+  - docs/validation/evidence/F-API-017/2026-10-01-V2-2a28a93e-writes.preset_name-api.json
   - docs/validation/evidence/F-API-017/2026-10-01-V2-dba2f21d-contracts.device_settings-api.json
   - docs/validation/evidence/F-API-017/2026-10-01-V2-dba2f21d-contracts.input_settings-api.json
   - docs/validation/evidence/F-API-017/2026-10-01-V2-dba2f21d-contracts.invalid_input_settings-api.json
@@ -999,6 +1061,7 @@ features:
   current: V0
   basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
   evidence:
+  - docs/validation/evidence/F-API-018/2026-10-01-V2-2a28a93e-writes.output_name-api.json
   - docs/validation/evidence/F-API-018/2026-10-01-V2-dba2f21d-writes.output_name-api.json
   findings: [BE-16]
   scenarios: [writes.output_name]
@@ -1015,6 +1078,9 @@ features:
   current: V1
   basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
   evidence:
+  - docs/validation/evidence/F-API-019/2026-10-01-V2-2a28a93e-writes.profile_cec-api.json
+  - docs/validation/evidence/F-API-019/2026-10-01-V2-2a28a93e-writes.profile_macros-api.json
+  - docs/validation/evidence/F-API-019/2026-10-01-V2-2a28a93e-writes.profile_reorder-api.json
   - docs/validation/evidence/F-API-019/2026-10-01-V2-dba2f21d-writes.profile_cec-api.json
   - docs/validation/evidence/F-API-019/2026-10-01-V2-dba2f21d-writes.profile_macros-api.json
   - docs/validation/evidence/F-API-019/2026-10-01-V2-dba2f21d-writes.profile_reorder-api.json
@@ -1058,7 +1124,8 @@ features:
   target: V2
   current: V1
   basis: tests/test_rest_api.py TestErrorHandling (mocked).
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-API-022/2026-10-01-V2-2a28a93e-failures.bad_input-api.json
   findings: [API-15, SEC-11, API-21]
   scenarios: [failures.bad_input]
 - id: F-API-023
@@ -1088,6 +1155,17 @@ features:
   current: V1
   basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
   evidence:
+  - docs/validation/evidence/F-API-024/2026-10-01-V2-2a28a93e-contracts.shortcut_alias-api.json
+  - docs/validation/evidence/F-API-024/2026-10-01-V2-2a28a93e-contracts.shortcut_dashboard-api.json
+  - docs/validation/evidence/F-API-024/2026-10-01-V2-2a28a93e-contracts.shortcut_favorites-api.json
+  - docs/validation/evidence/F-API-024/2026-10-01-V2-2a28a93e-contracts.shortcut_unknown-api.json
+  - docs/validation/evidence/F-API-024/2026-10-01-V2-2a28a93e-writes.shortcut_create-api.json
+  - docs/validation/evidence/F-API-024/2026-10-01-V2-2a28a93e-writes.shortcut_dashboard-api.json
+  - docs/validation/evidence/F-API-024/2026-10-01-V2-2a28a93e-writes.shortcut_delete_builtin-api.json
+  - docs/validation/evidence/F-API-024/2026-10-01-V2-2a28a93e-writes.shortcut_execute-api.json
+  - docs/validation/evidence/F-API-024/2026-10-01-V2-2a28a93e-writes.shortcut_favorite-api.json
+  - docs/validation/evidence/F-API-024/2026-10-01-V2-2a28a93e-writes.shortcut_reorder-api.json
+  - docs/validation/evidence/F-API-024/2026-10-01-V2-2a28a93e-writes.shortcut_update-api.json
   - docs/validation/evidence/F-API-024/2026-10-01-V2-dba2f21d-contracts.shortcut_alias-api.json
   - docs/validation/evidence/F-API-024/2026-10-01-V2-dba2f21d-contracts.shortcut_dashboard-api.json
   - docs/validation/evidence/F-API-024/2026-10-01-V2-dba2f21d-contracts.shortcut_favorites-api.json
@@ -1127,6 +1205,11 @@ features:
   current: V1
   basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
   evidence:
+  - docs/validation/evidence/F-API-026/2026-10-01-V2-2a28a93e-contracts.themes-api.json
+  - docs/validation/evidence/F-API-026/2026-10-01-V2-2a28a93e-contracts.ui_preferences-api.json
+  - docs/validation/evidence/F-API-026/2026-10-01-V2-2a28a93e-writes.themes-api.json
+  - docs/validation/evidence/F-API-026/2026-10-01-V2-2a28a93e-writes.themes_reset-api.json
+  - docs/validation/evidence/F-API-026/2026-10-01-V2-2a28a93e-writes.ui_preferences-api.json
   - docs/validation/evidence/F-API-026/2026-10-01-V2-dba2f21d-contracts.themes-api.json
   - docs/validation/evidence/F-API-026/2026-10-01-V2-dba2f21d-contracts.ui_preferences-api.json
   - docs/validation/evidence/F-API-026/2026-10-01-V2-dba2f21d-writes.themes-api.json
@@ -1146,6 +1229,8 @@ features:
   current: V1
   basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
   evidence:
+  - docs/validation/evidence/F-API-027/2026-10-01-V2-2a28a93e-contracts.settings-api.json
+  - docs/validation/evidence/F-API-027/2026-10-01-V2-2a28a93e-writes.connection_test-api.json
   - docs/validation/evidence/F-API-027/2026-10-01-V2-dba2f21d-contracts.settings-api.json
   - docs/validation/evidence/F-API-027/2026-10-01-V2-dba2f21d-writes.connection_test-api.json
   - docs/validation/evidence/F-API-027/2026-10-01-V2-9ef6d31f-contracts.settings-api.json
@@ -1161,6 +1246,8 @@ features:
   current: V0
   basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
   evidence:
+  - docs/validation/evidence/F-API-028/2026-10-01-V2-2a28a93e-contracts.flic_buttons-api.json
+  - docs/validation/evidence/F-API-028/2026-10-01-V2-2a28a93e-writes.flic_register-api.json
   - docs/validation/evidence/F-API-028/2026-10-01-V2-dba2f21d-contracts.flic_buttons-api.json
   - docs/validation/evidence/F-API-028/2026-10-01-V2-dba2f21d-writes.flic_register-api.json
   - docs/validation/evidence/F-API-028/2026-10-01-V2-9ef6d31f-contracts.flic_buttons-api.json
@@ -1213,6 +1300,11 @@ features:
   current: V2
   basis: 'V2: scenario live.matrix_offline (a browser run; the runner''s /ws observer gets matrix_connection down and back, /api/status answers 503 with the link state); tests/sim/test_sim_ws_contract.py (real hub app + simulator: welcome with protocol and link, snapshot, get_status, link loss and recovery, schema-checked); every message a scenario''s /ws observer receives is checked against docs/api/websocket.schema.json (tools/validate/runner.py ws_contract_check).'
   evidence:
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.direct-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.enabled_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.legacy_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V3-2a28a93e-reboot.enabled_shortcut-browser.json
+  - docs/validation/evidence/F-REL-009/2026-10-01-V3-2a28a93e-live.matrix_offline-browser.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.direct-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.enabled_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.legacy_shortcut-api.json
@@ -1232,6 +1324,8 @@ features:
   current: V2
   basis: 'V2: scenarios routing.switch_one (routing_change after /api/switch) and failures.unreachable_switch (switch_failed); tests/sim/test_sim_ws_contract.py (exactly one routing_change per change, grid route, a refused route announces switch_failed); every message a scenario''s /ws observer receives is checked against docs/api/websocket.schema.json (tools/validate/runner.py ws_contract_check).'
   evidence:
+  - docs/validation/evidence/F-MTX-001/2026-10-01-V2-2a28a93e-routing.switch_one-api.json
+  - docs/validation/evidence/F-REL-009/2026-10-01-V2-2a28a93e-failures.unreachable_switch-api.json
   - docs/validation/evidence/F-MTX-001/2026-09-28-V2-c39ee8d5-routing.switch_one-api.json
   - docs/validation/evidence/F-REL-009/2026-09-28-V2-c39ee8d5-failures.unreachable_switch-api.json
   findings: []
@@ -1246,6 +1340,7 @@ features:
   current: V2
   basis: 'V2: scenario routing.route_all (routing_change for output 8); tests/sim/test_sim_ws_contract.py::test_route_all_announces_every_output_that_changed. switch_all_failed: V1 (sent by the handler on a refused write; no scenario yet).'
   evidence:
+  - docs/validation/evidence/F-MTX-002/2026-10-01-V2-2a28a93e-routing.route_all-api.json
   - docs/validation/evidence/F-MTX-002/2026-09-28-V2-c39ee8d5-routing.route_all-api.json
   findings: []
   scenarios: [routing.route_all]
@@ -1259,6 +1354,7 @@ features:
   current: V2
   basis: 'V2: scenario presets.recall (preset_recall after the matrix accepted it; the routing follows as routing_change); tests/sim/test_sim_ws_contract.py::test_preset_recall_is_announced_after_success_and_its_routing_follows. tests/e2e/flows.spec.ts UI-04 test: the web UI no longer refreshes (and toasts) on every page for this event.'
   evidence:
+  - docs/validation/evidence/F-MTX-003/2026-10-01-V2-2a28a93e-presets.recall-api.json
   - docs/validation/evidence/F-MTX-003/2026-09-28-V2-c39ee8d5-presets.recall-api.json
   findings: [UI-04]
   scenarios: [presets.recall]
@@ -1272,6 +1368,8 @@ features:
   current: V2
   basis: 'V2: scenario outputs.audio_mute (audio_mute after the matrix reports it) and outputs.audio_mute_rejected (a refused mute is not announced); tests/sim/test_sim_ws_contract.py.'
   evidence:
+  - docs/validation/evidence/F-MTX-007/2026-10-01-V2-2a28a93e-outputs.audio_mute-api.json
+  - docs/validation/evidence/F-REL-008/2026-10-01-V2-2a28a93e-outputs.audio_mute_rejected-api.json
   - docs/validation/evidence/F-MTX-007/2026-09-28-V2-c39ee8d5-outputs.audio_mute-api.json
   - docs/validation/evidence/F-REL-008/2026-09-28-V2-c39ee8d5-outputs.audio_mute_rejected-api.json
   findings: []
@@ -1286,6 +1384,7 @@ features:
   current: V2
   basis: 'V2: scenario presets.rename (device_settings on /ws, schema-checked).'
   evidence:
+  - docs/validation/evidence/F-MTX-005/2026-10-01-V2-2a28a93e-presets.rename-api.json
   - docs/validation/evidence/F-MTX-005/2026-10-01-V2-dba2f21d-presets.rename-api.json
   - docs/validation/evidence/F-MTX-005/2026-09-28-V2-c39ee8d5-presets.rename-api.json
   findings: []
@@ -1300,6 +1399,7 @@ features:
   current: V2
   basis: 'V2: scenario cec.output_power_on (cec_command, now sent after the matrix accepted it, no `optimistic` flag). The web UI does not show it (docs/api/WEBSOCKET.md).'
   evidence:
+  - docs/validation/evidence/F-CEC-005/2026-10-01-V2-2a28a93e-cec.output_power_on-api.json
   - docs/validation/evidence/F-CEC-005/2026-09-28-V2-c39ee8d5-cec.output_power_on-api.json
   findings: []
   scenarios: [cec.output_power_on]
@@ -1326,6 +1426,11 @@ features:
   current: V2
   basis: 'V2: scenarios live.front_panel_route, live.input_signal, live.display_unplugged (from the Telnet push, within 4 s), live.rename_elsewhere (browser runs: the runner''s /ws observer gets each event, the value is read back over REST), power.standby (api: power_change); tests/sim/test_sim_ws_contract.py and tests/test_hub_events.py. Emitted in every mode by src/rest_api/events.py (no longer by the driver''s poller).'
   evidence:
+  - docs/validation/evidence/F-MTX-006/2026-10-01-V2-2a28a93e-power.standby-api.json
+  - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.display_unplugged-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.front_panel_route-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.input_signal-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.rename_elsewhere-browser.json
   - docs/validation/evidence/F-MTX-006/2026-09-28-V2-c39ee8d5-power.standby-api.json
   - docs/validation/evidence/F-MTX-031/2026-09-28-V3-c39ee8d5-live.display_unplugged-browser.json
   - docs/validation/evidence/F-MTX-031/2026-09-28-V3-c39ee8d5-live.front_panel_route-browser.json
@@ -1343,6 +1448,7 @@ features:
   current: V2
   basis: 'V2: scenario scenes.partial_failure receives scene_execution_error on /ws (schema-checked). The web UI does not show it yet (WP-E1, VAL-11).'
   evidence:
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.partial_failure-api.json
   - docs/validation/evidence/F-DOM-011/2026-09-28-V2-c39ee8d5-scenes.partial_failure-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.partial_failure-api.json
   findings: [VAL-11]
@@ -1388,6 +1494,11 @@ features:
   current: V3
   basis: 'WP-C4 V3 on the shipped image: browser profile activation applies routing, including disabled outputs; API refusal cases verify truthful failures. Shared recall/scene state writer (DI-11). V4 awaits the owner.'
   evidence:
+  - docs/validation/evidence/F-DOM-002/2026-10-01-V2-2a28a93e-profiles.recall_disabled_output-api.json
+  - docs/validation/evidence/F-DOM-002/2026-10-01-V2-2a28a93e-profiles.recall_rejected-api.json
+  - docs/validation/evidence/F-DOM-002/2026-10-01-V2-2a28a93e-profiles.recall_routing-api.json
+  - docs/validation/evidence/F-DOM-002/2026-10-01-V3-2a28a93e-profiles.recall_disabled_output-browser.json
+  - docs/validation/evidence/F-DOM-002/2026-10-01-V3-2a28a93e-profiles.recall_routing-browser.json
   - docs/validation/evidence/F-DOM-002/2026-10-01-V2-dba2f21d-profiles.recall_disabled_output-api.json
   - docs/validation/evidence/F-DOM-002/2026-10-01-V2-dba2f21d-profiles.recall_rejected-api.json
   - docs/validation/evidence/F-DOM-002/2026-10-01-V2-dba2f21d-profiles.recall_routing-api.json
@@ -1413,6 +1524,10 @@ features:
   current: V3
   basis: 'WP-C4 V3: profiles.recall_output_settings and profiles.recall_disabled_output activate profiles through Chromium and read mute, HDR, HDCP and stream state back from the simulator on the shipped image. V4 awaits the owner; scaler/ARC persistence remains API-22.'
   evidence:
+  - docs/validation/evidence/F-DOM-002/2026-10-01-V2-2a28a93e-profiles.recall_disabled_output-api.json
+  - docs/validation/evidence/F-DOM-002/2026-10-01-V3-2a28a93e-profiles.recall_disabled_output-browser.json
+  - docs/validation/evidence/F-DOM-003/2026-10-01-V2-2a28a93e-profiles.recall_output_settings-api.json
+  - docs/validation/evidence/F-DOM-003/2026-10-01-V3-2a28a93e-profiles.recall_output_settings-browser.json
   - docs/validation/evidence/F-DOM-002/2026-10-01-V2-dba2f21d-profiles.recall_disabled_output-api.json
   - docs/validation/evidence/F-DOM-002/2026-10-01-V3-dba2f21d-profiles.recall_disabled_output-browser.json
   - docs/validation/evidence/F-DOM-003/2026-10-01-V2-dba2f21d-profiles.recall_output_settings-api.json
@@ -1434,6 +1549,8 @@ features:
   current: V3
   basis: 'WP-C4 V3: profiles.recall_power_macro activates the profile through Chromium on the shipped image and verifies its power-on CEC frames in the simulator. This recall feature covers power_on_macro; a stored power_off_macro is not run by recall. Physical TV/source observation remains V4.'
   evidence:
+  - docs/validation/evidence/F-DOM-004/2026-10-01-V2-2a28a93e-profiles.recall_power_macro-api.json
+  - docs/validation/evidence/F-DOM-004/2026-10-01-V3-2a28a93e-profiles.recall_power_macro-browser.json
   - docs/validation/evidence/F-DOM-004/2026-10-01-V2-dba2f21d-profiles.recall_power_macro-api.json
   - docs/validation/evidence/F-DOM-004/2026-10-01-V3-dba2f21d-profiles.recall_power_macro-browser.json
   - docs/validation/evidence/F-DOM-004/2026-10-01-V2-97d0d2af-profiles.recall_power_macro-api.json
@@ -1451,6 +1568,14 @@ features:
   current: V1
   basis: Scenarios profiles.recall_needs_passcode, recall_with_passcode and recall_wrong_passcode pass with the api and browser clients, and kiosk.profile_with_passcode / profile_wrong_passcode on the kiosk PIN pad (V3 evidence; WP-E1 UI-01, UI-48). Recorded level capped at V1 by the open high findings SEC-05 and SEC-06.
   evidence:
+  - docs/validation/evidence/F-DOM-005/2026-10-01-V2-2a28a93e-profiles.recall_needs_passcode-api.json
+  - docs/validation/evidence/F-DOM-005/2026-10-01-V2-2a28a93e-profiles.recall_with_passcode-api.json
+  - docs/validation/evidence/F-DOM-005/2026-10-01-V2-2a28a93e-profiles.recall_wrong_passcode-api.json
+  - docs/validation/evidence/F-DOM-005/2026-10-01-V3-2a28a93e-profiles.recall_needs_passcode-browser.json
+  - docs/validation/evidence/F-DOM-005/2026-10-01-V3-2a28a93e-profiles.recall_with_passcode-browser.json
+  - docs/validation/evidence/F-DOM-005/2026-10-01-V3-2a28a93e-profiles.recall_wrong_passcode-browser.json
+  - docs/validation/evidence/F-KIO-008/2026-10-01-V3-2a28a93e-kiosk.profile_with_passcode-browser.json
+  - docs/validation/evidence/F-KIO-008/2026-10-01-V3-2a28a93e-kiosk.profile_wrong_passcode-browser.json
   - docs/validation/evidence/F-DOM-005/2026-10-01-V2-dba2f21d-profiles.recall_needs_passcode-api.json
   - docs/validation/evidence/F-DOM-005/2026-10-01-V2-dba2f21d-profiles.recall_with_passcode-api.json
   - docs/validation/evidence/F-DOM-005/2026-10-01-V2-dba2f21d-profiles.recall_wrong_passcode-api.json
@@ -1543,6 +1668,15 @@ features:
   current: V3
   basis: 'WP-C4 V3: browser execution on the shipped image verifies full profile state, disabled output routing/stream, no implicit profile macros, truthful partial failures and history. Explicit scene steps own sequencing (DI-11).'
   evidence:
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.disabled_output_state-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.partial_failure-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.run_profile_macro_preset-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.run_protected-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.run_unknown-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.disabled_output_state-browser.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.partial_failure-browser.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.run_profile_macro_preset-browser.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.run_protected-browser.json
   - docs/validation/evidence/F-DOM-011/2026-09-28-V2-dc6bd707-scenes.partial_failure-api.json
   - docs/validation/evidence/F-DOM-011/2026-09-28-V2-dc6bd707-scenes.run_protected-api.json
   - docs/validation/evidence/F-DOM-011/2026-09-28-V3-dc6bd707-scenes.partial_failure-browser.json
@@ -1569,6 +1703,12 @@ features:
   current: V3
   basis: 'WP-C4 V3: browser-run scene macro steps send exactly the explicit CEC frames; a single refused target does not prevent later commands when the saved continue_on_error policy is true. Device command logs prove the effects.'
   evidence:
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.run_profile_macro_preset-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.run_profile_macro_preset-browser.json
+  - docs/validation/evidence/F-DOM-012/2026-10-01-V2-2a28a93e-scenes.macro_continues_after_refusal-api.json
+  - docs/validation/evidence/F-DOM-012/2026-10-01-V2-2a28a93e-scenes.run_rejected-api.json
+  - docs/validation/evidence/F-DOM-012/2026-10-01-V2-2a28a93e-scenes.run_shortcut_and_macro-api.json
+  - docs/validation/evidence/F-DOM-012/2026-10-01-V3-2a28a93e-scenes.macro_continues_after_refusal-browser.json
   - docs/validation/evidence/F-DOM-012/2026-10-01-V2-9362fd00-scenes.macro_continues_after_refusal-api.json
   - docs/validation/evidence/F-DOM-012/2026-10-01-V3-9362fd00-scenes.macro_continues_after_refusal-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.run_profile_macro_preset-api.json
@@ -1589,6 +1729,10 @@ features:
   current: V3
   basis: 'WP-C4 V3 (DI-12): the browser adds two 0.5-second waits, removes one, saves and reads back exactly one wait; scene execution places the wait between actual shortcut commands, whose simulator timestamps are at least 0.5 seconds apart. Unit/API/UI regressions reject invalid durations.'
   evidence:
+  - docs/validation/evidence/F-DOM-013/2026-10-01-V2-2a28a93e-scenes.wait_between_actions-api.json
+  - docs/validation/evidence/F-DOM-013/2026-10-01-V2-2a28a93e-scenes.wait_edit-api.json
+  - docs/validation/evidence/F-DOM-013/2026-10-01-V3-2a28a93e-scenes.wait_between_actions-browser.json
+  - docs/validation/evidence/F-DOM-013/2026-10-01-V3-2a28a93e-scenes.wait_edit-browser.json
   - docs/validation/evidence/F-DOM-013/2026-10-01-V2-97d0d2af-scenes.wait_between_actions-api.json
   - docs/validation/evidence/F-DOM-013/2026-10-01-V2-97d0d2af-scenes.wait_edit-api.json
   - docs/validation/evidence/F-DOM-013/2026-10-01-V3-97d0d2af-scenes.wait_between_actions-browser.json
@@ -1605,6 +1749,11 @@ features:
   current: V3
   basis: 'WP-C4 V3: browser-run scenes apply routing while leaving an overridden input, audio mute or enabled setting unchanged on the simulator. Disabled outputs still receive all unskipped state writes.'
   evidence:
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.run_profile_macro_preset-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.run_profile_macro_preset-browser.json
+  - docs/validation/evidence/F-DOM-014/2026-10-01-V2-2a28a93e-scenes.enabled_override-api.json
+  - docs/validation/evidence/F-DOM-014/2026-10-01-V2-2a28a93e-scenes.override_leaves_setting-api.json
+  - docs/validation/evidence/F-DOM-014/2026-10-01-V3-2a28a93e-scenes.enabled_override-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.run_profile_macro_preset-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.run_profile_macro_preset-browser.json
   - docs/validation/evidence/F-DOM-014/2026-10-01-V2-97d0d2af-scenes.enabled_override-api.json
@@ -1623,6 +1772,8 @@ features:
   current: V1
   basis: 'Scenarios scenes.run_protected (api, and browser through the passcode prompt since WP-E1: V3 evidence) and scenes.run_needs_passcode (V2); tests/sim/test_sim_scenes_v2.py passcode tests; tests/test_scene_execution.py TestSceneExecutorPassword. Recorded level capped at V1 by the open high findings SEC-05 and SEC-06.'
   evidence:
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.run_protected-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.run_protected-browser.json
   - docs/validation/evidence/F-DOM-011/2026-09-28-V2-dc6bd707-scenes.run_protected-api.json
   - docs/validation/evidence/F-DOM-011/2026-09-28-V3-dc6bd707-scenes.run_protected-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.run_protected-api.json
@@ -1640,6 +1791,8 @@ features:
   current: V3
   basis: 'WP-C4 V3: the saved scene editor displays three actual differing profile settings, including default mute values; browser observations verify each displayed value and the API reports has_conflicts=true. Identical, absent and overridden values are covered by unit regressions.'
   evidence:
+  - docs/validation/evidence/F-DOM-016/2026-10-01-V2-2a28a93e-scenes.conflicts_visible-api.json
+  - docs/validation/evidence/F-DOM-016/2026-10-01-V3-2a28a93e-scenes.conflicts_visible-browser.json
   - docs/validation/evidence/F-DOM-016/2026-10-01-V2-97d0d2af-scenes.conflicts_visible-api.json
   - docs/validation/evidence/F-DOM-016/2026-10-01-V3-97d0d2af-scenes.conflicts_visible-browser.json
   findings: [VAL-10]
@@ -1654,6 +1807,8 @@ features:
   current: V3
   basis: 'V3: scenario scenes.partial_failure, run from the web UI (browser client) and the api client, reads the history back through the hub; tests/sim/test_sim_scenes_v2.py history checks.'
   evidence:
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.partial_failure-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.partial_failure-browser.json
   - docs/validation/evidence/F-DOM-011/2026-09-28-V2-dc6bd707-scenes.partial_failure-api.json
   - docs/validation/evidence/F-DOM-011/2026-09-28-V3-dc6bd707-scenes.partial_failure-browser.json
   - docs/validation/evidence/F-DOM-011/2026-09-28-V2-c39ee8d5-scenes.partial_failure-api.json
@@ -1700,6 +1855,14 @@ features:
   current: V3
   basis: 'WP-C4 V3: browser-run macros send CEC commands on the shipped image. Single-refusal scenarios prove saved continue_on_error continues to later accepted commands, while the default policy stops. The REST default-timeout contract is pinned separately by the simulator endpoint regression.'
   evidence:
+  - docs/validation/evidence/F-DOM-012/2026-10-01-V2-2a28a93e-scenes.macro_continues_after_refusal-api.json
+  - docs/validation/evidence/F-DOM-012/2026-10-01-V3-2a28a93e-scenes.macro_continues_after_refusal-browser.json
+  - docs/validation/evidence/F-DOM-020/2026-10-01-V2-2a28a93e-macros.run_rejected-api.json
+  - docs/validation/evidence/F-DOM-020/2026-10-01-V2-2a28a93e-macros.run_volume_up-api.json
+  - docs/validation/evidence/F-DOM-020/2026-10-01-V2-2a28a93e-scenes.macro_stops_after_refusal-api.json
+  - docs/validation/evidence/F-DOM-020/2026-10-01-V3-2a28a93e-macros.run_rejected-browser.json
+  - docs/validation/evidence/F-DOM-020/2026-10-01-V3-2a28a93e-macros.run_volume_up-browser.json
+  - docs/validation/evidence/F-DOM-020/2026-10-01-V3-2a28a93e-scenes.macro_stops_after_refusal-browser.json
   - docs/validation/evidence/F-DOM-012/2026-10-01-V2-9362fd00-scenes.macro_continues_after_refusal-api.json
   - docs/validation/evidence/F-DOM-012/2026-10-01-V3-9362fd00-scenes.macro_continues_after_refusal-browser.json
   - docs/validation/evidence/F-DOM-020/2026-10-01-V2-9362fd00-macros.run_rejected-api.json
@@ -1751,6 +1914,10 @@ features:
   current: V2
   basis: 'Scenarios shortcuts.route_* (V2); tests/sim/test_sim_shortcuts.py shortcut tests; tests/test_system_shortcuts.py (spec''d double).'
   evidence:
+  - docs/validation/evidence/F-DOM-023/2026-10-01-V2-2a28a93e-shortcuts.route_input_to_output-api.json
+  - docs/validation/evidence/F-DOM-023/2026-10-01-V2-2a28a93e-shortcuts.route_one_to_one-api.json
+  - docs/validation/evidence/F-DOM-023/2026-10-01-V2-2a28a93e-shortcuts.unknown-api.json
+  - docs/validation/evidence/F-DOM-023/2026-10-01-V3-2a28a93e-shortcuts.route_one_to_one-browser.json
   - docs/validation/evidence/F-DOM-023/2026-10-01-V2-9362fd00-shortcuts.route_input_to_output-api.json
   - docs/validation/evidence/F-DOM-023/2026-10-01-V2-9362fd00-shortcuts.route_one_to_one-api.json
   - docs/validation/evidence/F-DOM-023/2026-10-01-V2-9362fd00-shortcuts.unknown-api.json
@@ -1766,6 +1933,8 @@ features:
   current: V2
   basis: 'Scenario shortcuts.power_off_all (V2: one `set poweronoff`, API-06); tests/sim/test_sim_shortcuts.py::test_power_off_all_shortcut_sends_one_command.'
   evidence:
+  - docs/validation/evidence/F-DOM-024/2026-10-01-V2-2a28a93e-shortcuts.power_off_all-api.json
+  - docs/validation/evidence/F-DOM-024/2026-10-01-V3-2a28a93e-shortcuts.power_off_all-browser.json
   - docs/validation/evidence/F-DOM-024/2026-10-01-V2-9362fd00-shortcuts.power_off_all-api.json
   - docs/validation/evidence/F-DOM-024/2026-10-01-V3-9362fd00-shortcuts.power_off_all-browser.json
   findings: [API-06]
@@ -1779,6 +1948,12 @@ features:
   current: V2
   basis: 'Scenarios shortcuts.mute_all, shortcuts.unmute_all, shortcuts.mute_rejected (V2); tests/sim/test_sim_shortcuts.py.'
   evidence:
+  - docs/validation/evidence/F-DOM-025/2026-10-01-V2-2a28a93e-shortcuts.mute_all-api.json
+  - docs/validation/evidence/F-DOM-025/2026-10-01-V2-2a28a93e-shortcuts.mute_rejected-api.json
+  - docs/validation/evidence/F-DOM-025/2026-10-01-V2-2a28a93e-shortcuts.unmute_all-api.json
+  - docs/validation/evidence/F-DOM-025/2026-10-01-V3-2a28a93e-shortcuts.mute_all-browser.json
+  - docs/validation/evidence/F-DOM-025/2026-10-01-V3-2a28a93e-shortcuts.mute_rejected-browser.json
+  - docs/validation/evidence/F-DOM-025/2026-10-01-V3-2a28a93e-shortcuts.unmute_all-browser.json
   - docs/validation/evidence/F-DOM-025/2026-10-01-V2-9362fd00-shortcuts.mute_all-api.json
   - docs/validation/evidence/F-DOM-025/2026-10-01-V2-9362fd00-shortcuts.mute_rejected-api.json
   - docs/validation/evidence/F-DOM-025/2026-10-01-V2-9362fd00-shortcuts.unmute_all-api.json
@@ -1796,6 +1971,8 @@ features:
   current: V2
   basis: 'Scenario shortcuts.preset_recall (V2); tests/sim/test_sim_shortcuts.py::test_other_shortcuts.'
   evidence:
+  - docs/validation/evidence/F-DOM-026/2026-10-01-V2-2a28a93e-shortcuts.preset_recall-api.json
+  - docs/validation/evidence/F-DOM-026/2026-10-01-V3-2a28a93e-shortcuts.preset_recall-browser.json
   - docs/validation/evidence/F-DOM-026/2026-10-01-V2-9362fd00-shortcuts.preset_recall-api.json
   - docs/validation/evidence/F-DOM-026/2026-10-01-V3-9362fd00-shortcuts.preset_recall-browser.json
   findings: [API-08]
@@ -1809,6 +1986,23 @@ features:
   current: V2
   basis: 'System-mode and refusal scenarios plus disabled_reboot and reboot.enabled_shortcut API/browser records. Enabled simulator reboot emits one Telnet command and restores the connection; hardware reboot behaviour remains pending.'
   evidence:
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V2-2a28a93e-shortcuts.beep_off-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V2-2a28a93e-shortcuts.beep_on-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V2-2a28a93e-shortcuts.beep_rejected-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V2-2a28a93e-shortcuts.disabled_reboot-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V2-2a28a93e-shortcuts.panel_lock-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V2-2a28a93e-shortcuts.panel_lock_rejected-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V2-2a28a93e-shortcuts.panel_unlock-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V3-2a28a93e-shortcuts.beep_off-browser.json
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V3-2a28a93e-shortcuts.beep_on-browser.json
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V3-2a28a93e-shortcuts.beep_rejected-browser.json
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V3-2a28a93e-shortcuts.disabled_reboot-browser.json
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V3-2a28a93e-shortcuts.panel_lock-browser.json
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V3-2a28a93e-shortcuts.panel_lock_rejected-browser.json
+  - docs/validation/evidence/F-DOM-027/2026-10-01-V3-2a28a93e-shortcuts.panel_unlock-browser.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.enabled_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.legacy_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V3-2a28a93e-reboot.enabled_shortcut-browser.json
   - docs/validation/evidence/F-DOM-027/2026-10-01-V2-b0c1a32e-shortcuts.disabled_reboot-api.json
   - docs/validation/evidence/F-DOM-027/2026-10-01-V3-b0c1a32e-shortcuts.disabled_reboot-browser.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.enabled_shortcut-api.json
@@ -1844,6 +2038,18 @@ features:
     tests/sim/test_sim_shortcuts.py::test_lcd_shortcuts_set_the_device_code. The device command itself is web-UI-derived until
     a hardware write run proves it (HIL-09).'
   evidence:
+  - docs/validation/evidence/F-DOM-028/2026-10-01-V2-2a28a93e-shortcuts.lcd_15s-api.json
+  - docs/validation/evidence/F-DOM-028/2026-10-01-V2-2a28a93e-shortcuts.lcd_30s-api.json
+  - docs/validation/evidence/F-DOM-028/2026-10-01-V2-2a28a93e-shortcuts.lcd_60s-api.json
+  - docs/validation/evidence/F-DOM-028/2026-10-01-V2-2a28a93e-shortcuts.lcd_always_on-api.json
+  - docs/validation/evidence/F-DOM-028/2026-10-01-V2-2a28a93e-shortcuts.lcd_off-api.json
+  - docs/validation/evidence/F-DOM-028/2026-10-01-V2-2a28a93e-shortcuts.lcd_rejected-api.json
+  - docs/validation/evidence/F-DOM-028/2026-10-01-V3-2a28a93e-shortcuts.lcd_15s-browser.json
+  - docs/validation/evidence/F-DOM-028/2026-10-01-V3-2a28a93e-shortcuts.lcd_30s-browser.json
+  - docs/validation/evidence/F-DOM-028/2026-10-01-V3-2a28a93e-shortcuts.lcd_60s-browser.json
+  - docs/validation/evidence/F-DOM-028/2026-10-01-V3-2a28a93e-shortcuts.lcd_always_on-browser.json
+  - docs/validation/evidence/F-DOM-028/2026-10-01-V3-2a28a93e-shortcuts.lcd_off-browser.json
+  - docs/validation/evidence/F-DOM-028/2026-10-01-V3-2a28a93e-shortcuts.lcd_rejected-browser.json
   - docs/validation/evidence/F-DOM-028/2026-10-01-V2-7aa17c95-shortcuts.lcd_15s-api.json
   - docs/validation/evidence/F-DOM-028/2026-10-01-V2-7aa17c95-shortcuts.lcd_30s-api.json
   - docs/validation/evidence/F-DOM-028/2026-10-01-V2-7aa17c95-shortcuts.lcd_60s-api.json
@@ -1991,6 +2197,7 @@ features:
   current: V3
   basis: 'V3: tests/e2e/smoke.spec.ts ''routing an input to an output in the matrix grid changes the simulator''.'
   evidence:
+  - docs/validation/evidence/F-MTX-001/2026-10-01-V3-2a28a93e-routing.switch_one-browser.json
   - docs/validation/evidence/F-MTX-001/2026-09-28-V3-c39ee8d5-routing.switch_one-browser.json
   findings: []
   scenarios: [routing.switch_one]
@@ -2016,6 +2223,7 @@ features:
   current: V1
   basis: visual catalog drawer/routing/* (screenshot baseline only; no effect asserted).
   evidence:
+  - docs/validation/evidence/F-MTX-002/2026-10-01-V3-2a28a93e-routing.route_all-browser.json
   - docs/validation/evidence/F-MTX-002/2026-09-28-V3-c39ee8d5-routing.route_all-browser.json
   findings: []
   scenarios: [routing.route_all]
@@ -2029,6 +2237,7 @@ features:
   current: V1
   basis: visual catalog drawer/presets/* (screenshot baseline only; no effect asserted).
   evidence:
+  - docs/validation/evidence/F-MTX-003/2026-10-01-V3-2a28a93e-presets.recall-browser.json
   - docs/validation/evidence/F-MTX-003/2026-09-28-V3-c39ee8d5-presets.recall-browser.json
   findings: []
   scenarios: [presets.recall]
@@ -2042,6 +2251,7 @@ features:
   current: V1
   basis: visual catalog drawer/presets/rename (screenshot baseline only; no effect asserted).
   evidence:
+  - docs/validation/evidence/F-MTX-005/2026-10-01-V3-2a28a93e-presets.rename-browser.json
   - docs/validation/evidence/F-MTX-005/2026-10-01-V3-dba2f21d-presets.rename-browser.json
   - docs/validation/evidence/F-MTX-005/2026-09-28-V3-c39ee8d5-presets.rename-browser.json
   findings: []
@@ -2068,6 +2278,7 @@ features:
   current: V3
   basis: 'V3: scenario scenes.run_protected with the browser client runs the locked scene from its dashboard card through the passcode prompt; tests/e2e/flows.spec.ts runs protected scene and profile cards and checks every card type renders on load (UI-01, UI-27 fixed in WP-E1). Visual diffs pending owner approval.'
   evidence:
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.run_protected-browser.json
   - docs/validation/evidence/F-DOM-011/2026-09-28-V3-dc6bd707-scenes.run_protected-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.run_protected-browser.json
   findings: [UI-01, UI-27]
@@ -2118,6 +2329,7 @@ features:
   current: V3
   basis: 'V3: scenario profiles.recall_routing with the browser client (Profiles tab, Activate) and tests/e2e/flows.spec.ts ''the Profiles tab lists the hub profiles and recalls one'' (UI-27 fixed in WP-E1). Visual diffs pending owner approval.'
   evidence:
+  - docs/validation/evidence/F-DOM-002/2026-10-01-V3-2a28a93e-profiles.recall_routing-browser.json
   - docs/validation/evidence/F-DOM-002/2026-10-01-V3-dba2f21d-profiles.recall_routing-browser.json
   - docs/validation/evidence/F-DOM-002/2026-09-28-V3-dc6bd707-profiles.recall_routing-browser.json
   - docs/validation/evidence/F-DOM-002/2026-10-01-V3-97d0d2af-profiles.recall_routing-browser.json
@@ -2145,6 +2357,9 @@ features:
   current: V3
   basis: 'V3: scenarios profiles.recall_with_passcode, recall_wrong_passcode and recall_needs_passcode with the browser client (prompt answered, wrong passcode reported, prompt cancelled: nothing sent) and tests/e2e/flows.spec.ts UI-01 tests (Settings drawer, dashboard cards). The prompt is still a native window.prompt() (UI-36, Phase 5).'
   evidence:
+  - docs/validation/evidence/F-DOM-005/2026-10-01-V3-2a28a93e-profiles.recall_needs_passcode-browser.json
+  - docs/validation/evidence/F-DOM-005/2026-10-01-V3-2a28a93e-profiles.recall_with_passcode-browser.json
+  - docs/validation/evidence/F-DOM-005/2026-10-01-V3-2a28a93e-profiles.recall_wrong_passcode-browser.json
   - docs/validation/evidence/F-DOM-005/2026-10-01-V3-dba2f21d-profiles.recall_needs_passcode-browser.json
   - docs/validation/evidence/F-DOM-005/2026-10-01-V3-dba2f21d-profiles.recall_with_passcode-browser.json
   - docs/validation/evidence/F-DOM-005/2026-10-01-V3-dba2f21d-profiles.recall_wrong_passcode-browser.json
@@ -2271,6 +2486,11 @@ features:
   current: V3
   basis: 'V3: scenarios routing.grid_notifies_other_clients (a grid route reaches another /ws client, VAL-05) and live.front_panel_route, live.input_signal, live.display_unplugged, live.rename_elsewhere (an open /ui page shows routing, signal, display and name changes made elsewhere; its status reads are stripped, so only the WebSocket can explain them).'
   evidence:
+  - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.display_unplugged-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.front_panel_route-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.input_signal-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.rename_elsewhere-browser.json
+  - docs/validation/evidence/F-UI-024/2026-10-01-V3-2a28a93e-routing.grid_notifies_other_clients-browser.json
   - docs/validation/evidence/F-MTX-031/2026-09-28-V3-c39ee8d5-live.display_unplugged-browser.json
   - docs/validation/evidence/F-MTX-031/2026-09-28-V3-c39ee8d5-live.front_panel_route-browser.json
   - docs/validation/evidence/F-MTX-031/2026-09-28-V3-c39ee8d5-live.input_signal-browser.json
@@ -2312,6 +2532,7 @@ features:
   current: V3
   basis: 'V3: scenario scenes.partial_failure with the browser client checks the warning toast a partial run shows (VAL-11 fixed in WP-E1); tests/e2e/flows.spec.ts checks success, partial and error toasts for profiles and scenes. Other toasts and the confirmation dialogs: visual catalog only.'
   evidence:
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.partial_failure-browser.json
   - docs/validation/evidence/F-DOM-011/2026-09-28-V3-dc6bd707-scenes.partial_failure-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.partial_failure-browser.json
   findings: [UI-32]
@@ -2447,6 +2668,7 @@ features:
   current: V3
   basis: 'V3: scenario kiosk.route_one_muted (browser: kiosk routing wizard, one output, ''Mute output audio'' on; only the mute is sent, routing and mute read back from the simulator, nothing else changed) and tests/e2e/flows.spec.ts UI-23/UI-46 and UI-25 tests (UI-23, UI-25 fixed in WP-E1; UI-46 owner decision 2026-09-27). Visual diffs pending owner approval.'
   evidence:
+  - docs/validation/evidence/F-KIO-002/2026-10-01-V3-2a28a93e-kiosk.route_one_muted-browser.json
   - docs/validation/evidence/F-KIO-002/2026-09-28-V3-dc6bd707-kiosk.route_one_muted-browser.json
   findings: [UI-25, UI-23]
   scenarios: [kiosk.route_one_muted]
@@ -2460,6 +2682,7 @@ features:
   current: V3
   basis: 'V3: scenario kiosk.route_all_apply (browser: all outputs to input 5 with untouched options; only the routing changes, the soundbar keeps its audio-only scaler, no output setting command reaches the device, UI-46 owner decision 2026-09-27) and tests/e2e/smoke.spec.ts kiosk route-all (UI-23 fixed in WP-E1).'
   evidence:
+  - docs/validation/evidence/F-KIO-003/2026-10-01-V3-2a28a93e-kiosk.route_all_apply-browser.json
   - docs/validation/evidence/F-KIO-003/2026-09-28-V3-dc6bd707-kiosk.route_all_apply-browser.json
   findings: [UI-23]
   scenarios: [kiosk.route_all_apply]
@@ -2521,6 +2744,8 @@ features:
   current: V1
   basis: 'Scenarios kiosk.profile_with_passcode and kiosk.profile_wrong_passcode (browser, V3: a protected profile run from its kiosk slot through the PIN pad, UI-48 owner decision 2026-09-27; device read back) and tests/e2e/flows.spec.ts UI-25 / UI-48 tests. Recorded V1 because creating a profile with the kiosk wizard is not asserted (the wizard opening is, UI-25).'
   evidence:
+  - docs/validation/evidence/F-KIO-008/2026-10-01-V3-2a28a93e-kiosk.profile_with_passcode-browser.json
+  - docs/validation/evidence/F-KIO-008/2026-10-01-V3-2a28a93e-kiosk.profile_wrong_passcode-browser.json
   - docs/validation/evidence/F-KIO-008/2026-10-01-V3-dba2f21d-kiosk.profile_with_passcode-browser.json
   - docs/validation/evidence/F-KIO-008/2026-10-01-V3-dba2f21d-kiosk.profile_wrong_passcode-browser.json
   - docs/validation/evidence/F-KIO-008/2026-09-28-V3-dc6bd707-kiosk.profile_with_passcode-browser.json
@@ -2551,6 +2776,8 @@ features:
   current: V3
   basis: 'V3: scenarios live.front_panel_route and live.input_signal: an open /kiosk page shows routing and signal changes made on the matrix (shared /js/websocket.js client). tests/e2e/flows.spec.ts UI-24 test: the kiosk makes no status reads after start and still shows a matrix-side change (WP-E1 removed its 5 s status poll).'
   evidence:
+  - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.front_panel_route-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.input_signal-browser.json
   - docs/validation/evidence/F-MTX-031/2026-09-28-V3-c39ee8d5-live.front_panel_route-browser.json
   - docs/validation/evidence/F-MTX-031/2026-09-28-V3-c39ee8d5-live.input_signal-browser.json
   findings: []
@@ -2565,6 +2792,7 @@ features:
   current: V3
   basis: 'V3: scenario live.matrix_offline: an open /kiosk page shows Disconnected while the matrix is off the network and Connected again after it returns. The first-load visual is the catalog entry kiosk/disconnected.'
   evidence:
+  - docs/validation/evidence/F-REL-009/2026-10-01-V3-2a28a93e-live.matrix_offline-browser.json
   - docs/validation/evidence/F-REL-009/2026-10-01-V3-b0c1a32e-live.matrix_offline-browser.json
   - docs/validation/evidence/F-REL-009/2026-09-28-V3-c39ee8d5-live.matrix_offline-browser.json
   - docs/validation/evidence/F-REL-009/2026-09-28-V3-57747b4b-live.matrix_offline-browser.json
@@ -2653,7 +2881,9 @@ features:
   target: V4
   current: V3
   basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_commands.py::test_preset_button_recalls_the_preset (simulator routing and ''preset set'' asserted); since WP-B3 (UC-14) the buttons carry the web app''s preset names: test_state_sync.py::test_preset_names_match_the_web_app, ::test_preset_changes_in_the_web_app_reach_the_remote_live. Scenarios remote.preset_button, remote.preset_names_from_web_app. V4: a name change reaching an entity already added on a real Remote is UC-28.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-UC-004/2026-10-01-V3-2a28a93e-remote.preset_button-uc.json
+  - docs/validation/evidence/F-UC-004/2026-10-01-V3-2a28a93e-remote.preset_names_from_web_app-uc.json
   findings: [UC-14, UC-28]
   scenarios: [remote.preset_button, remote.preset_names_from_web_app]
 - id: F-UC-005
@@ -2665,7 +2895,9 @@ features:
   target: V4
   current: V3
   basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_commands.py::test_matrix_remote_preset_command_recalls_the_preset and ::test_matrix_remote_rejects_bad_commands_and_stays_connected; since WP-B3 (UC-14) its pages show the web app''s preset names and a Favourites page (test_state_sync.py::test_preset_names_match_the_web_app). Scenarios remote.matrix_preset_command, remote.preset_names_from_web_app.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-UC-004/2026-10-01-V3-2a28a93e-remote.preset_names_from_web_app-uc.json
+  - docs/validation/evidence/F-UC-005/2026-10-01-V3-2a28a93e-remote.matrix_preset_command-uc.json
   findings: [UC-12]
   scenarios: [remote.matrix_preset_command, remote.preset_names_from_web_app]
 - id: F-UC-006
@@ -2677,7 +2909,10 @@ features:
   target: V4
   current: V3
   basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator): send_cmd sends the exact CEC frame for all 19 commands (test_commands.py::test_input_cec_remote_send_cmd_sends_exact_frames); since WP-B2 on/off/toggle/send_cmd_sequence answer 200 with the exact frames and the connection stays open (::test_cec_remote_power_and_sequence_commands, ::test_cec_remote_toggle_follows_the_tracked_power_state; UC-01), repeat applies per command (::test_send_cmd_sequence_repeat_and_the_button_mapping_form; UC-22). Scenarios remote.input_cec_command, remote.input_cec_off, remote.input_cec_sequence.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-UC-006/2026-10-01-V3-2a28a93e-remote.input_cec_command-uc.json
+  - docs/validation/evidence/F-UC-006/2026-10-01-V3-2a28a93e-remote.input_cec_off-uc.json
+  - docs/validation/evidence/F-UC-006/2026-10-01-V3-2a28a93e-remote.input_cec_sequence-uc.json
   findings: [UC-01, UC-12, UC-22]
   scenarios: [remote.input_cec_command, remote.input_cec_off, remote.input_cec_sequence]
 - id: F-UC-007
@@ -2689,7 +2924,12 @@ features:
   target: V4
   current: V3
   basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator): the remote offers exactly the display CEC table (POWER_ON, POWER_OFF, MUTE, VOLUME_DOWN, VOLUME_UP, ACTIVE; BE-14) and send_cmd sends its exact frame (test_commands.py::test_output_cec_remote_send_cmd_sends_exact_frames, ::test_output_cec_remote_advertises_only_the_display_table); source-only keys answer 400 with no frame (::test_source_only_keys_on_the_output_cec_remote_are_rejected); since WP-B2 on/off/toggle/send_cmd_sequence work and never close the connection (::test_cec_remote_power_and_sequence_commands; UC-01) and repeat sends every step (::test_send_cmd_repeat_sends_the_command_repeatedly; UC-22); since WP-B3 the CEC remotes advertise toggle (::test_cec_remotes_advertise_the_power_toggle; UC-24). Scenarios remote.output_cec_power_on, remote.output_cec_on, remote.output_cec_toggle, remote.output_cec_volume_repeat, remote.cec_bad_sequence.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-UC-007/2026-10-01-V3-2a28a93e-remote.cec_bad_sequence-uc.json
+  - docs/validation/evidence/F-UC-007/2026-10-01-V3-2a28a93e-remote.output_cec_on-uc.json
+  - docs/validation/evidence/F-UC-007/2026-10-01-V3-2a28a93e-remote.output_cec_power_on-uc.json
+  - docs/validation/evidence/F-UC-007/2026-10-01-V3-2a28a93e-remote.output_cec_toggle-uc.json
+  - docs/validation/evidence/F-UC-007/2026-10-01-V3-2a28a93e-remote.output_cec_volume_repeat-uc.json
   findings: [UC-01, BE-14, UC-22, UC-24]
   scenarios: [remote.output_cec_power_on, remote.output_cec_on, remote.output_cec_toggle, remote.output_cec_volume_repeat, remote.cec_bad_sequence]
 - id: F-UC-008
@@ -2701,7 +2941,10 @@ features:
   target: V4
   current: V3
   basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_commands.py::test_select_source_routes_the_output (simulator routing, the exact ''video switch'' and the entity_change asserted); renames are strict xfails (UC-08). Scenarios remote.select_source, remote.unknown_source.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-UC-008/2026-10-01-V3-2a28a93e-remote.select_source-uc.json
+  - docs/validation/evidence/F-UC-008/2026-10-01-V3-2a28a93e-remote.unknown_source-uc.json
+  - docs/validation/evidence/F-UC-016/2026-10-01-V3-2a28a93e-remote.input_rename_live-uc.json
   findings: [UC-08, UC-10]
   scenarios: [remote.select_source, remote.unknown_source, remote.input_rename_live]
 - id: F-UC-009
@@ -2713,7 +2956,9 @@ features:
   target: V4
   current: V3
   basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_commands.py::test_media_player_power_volume_and_mute_send_output_cec (exact CEC frames of the display table asserted: on 0, off 1, mute 2, volume down 3, volume up 4; BE-14); since WP-B2 the first toggle powers the display on and toggle then follows the tracked power (::test_media_player_first_toggle_does_not_turn_the_tv_off; UC-10 toggle part). Scenarios remote.media_player_volume, remote.media_player_toggle.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-UC-009/2026-10-01-V3-2a28a93e-remote.media_player_toggle-uc.json
+  - docs/validation/evidence/F-UC-009/2026-10-01-V3-2a28a93e-remote.media_player_volume-uc.json
   findings: [UC-10, BE-24]
   scenarios: [remote.media_player_volume, remote.media_player_toggle]
 - id: F-UC-010
@@ -2725,7 +2970,9 @@ features:
   target: V4
   current: V3
   basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_commands.py::test_power_switch_turns_the_matrix_off_and_on; since WP-B3 (UC-09) the switch follows the device (::test_power_switch_follows_a_front_panel_power_change, ::test_power_switch_follows_the_web_app_at_once) and answers 503 while the matrix is unreachable (::test_power_switch_reports_unavailable_while_the_matrix_is_unreachable). Scenarios remote.power_switch_off, remote.power_switch_follows_front_panel.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-UC-010/2026-10-01-V3-2a28a93e-remote.power_switch_follows_front_panel-uc.json
+  - docs/validation/evidence/F-UC-010/2026-10-01-V3-2a28a93e-remote.power_switch_off-uc.json
   findings: [UC-09]
   scenarios: [remote.power_switch_off, remote.power_switch_follows_front_panel]
 - id: F-UC-011
@@ -2797,7 +3044,8 @@ features:
   target: V4
   current: V3
   basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) since WP-B3 (UC-08): a web-app rename reaches the subscribed media players live and select by the new name works without a reconnect (test_state_sync.py::test_input_rename_updates_the_source_list, ::test_output_rename_updates_the_offered_entities; at the next connect too: ::test_select_source_by_new_name_after_rename). Scenario remote.input_rename_live. Entity names of entities already added on a Remote: UC-28 (V4).'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-UC-016/2026-10-01-V3-2a28a93e-remote.input_rename_live-uc.json
   findings: [UC-08, UC-28, BE-16]
   scenarios: [remote.input_rename_live]
 - id: F-UC-017
@@ -2823,6 +3071,7 @@ features:
   current: V3
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.config_flow; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_config_flow.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
+  - docs/validation/evidence/F-HA-001/2026-10-01-V3-2a28a93e-ha.config_flow-ha.json
   - docs/validation/evidence/F-HA-001/2026-09-26-V3-6c22aa7a-ha.config_flow-ha.json
   - docs/validation/evidence/F-HA-001/2026-09-28-V3-c39ee8d5-ha.config_flow-ha.json
   findings: []
@@ -2837,6 +3086,8 @@ features:
   current: V3
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.select_source; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_select.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
+  - docs/validation/evidence/F-HA-002/2026-10-01-V3-2a28a93e-ha.front_panel_route-ha.json
+  - docs/validation/evidence/F-HA-002/2026-10-01-V3-2a28a93e-ha.select_source-ha.json
   - docs/validation/evidence/F-HA-002/2026-09-26-V3-6c22aa7a-ha.select_source-ha.json
   - docs/validation/evidence/F-HA-002/2026-09-28-V3-c39ee8d5-ha.front_panel_route-ha.json
   findings: []
@@ -2851,6 +3102,8 @@ features:
   current: V3
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenarios ha.power_off, ha.power_on; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_switch.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
+  - docs/validation/evidence/F-HA-003/2026-10-01-V3-2a28a93e-ha.power_off-ha.json
+  - docs/validation/evidence/F-HA-003/2026-10-01-V3-2a28a93e-ha.power_on-ha.json
   - docs/validation/evidence/F-HA-003/2026-09-26-V3-6c22aa7a-ha.power_off-ha.json
   - docs/validation/evidence/F-HA-003/2026-09-26-V3-6c22aa7a-ha.power_on-ha.json
   - docs/validation/evidence/F-HA-003/2026-09-28-V3-c39ee8d5-ha.power_off-ha.json
@@ -2867,6 +3120,7 @@ features:
   current: V3
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.mute_switch; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_switch.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
+  - docs/validation/evidence/F-HA-004/2026-10-01-V3-2a28a93e-ha.mute_switch-ha.json
   - docs/validation/evidence/F-HA-004/2026-09-26-V3-6c22aa7a-ha.mute_switch-ha.json
   findings: []
   scenarios: [ha.mute_switch]
@@ -2880,6 +3134,7 @@ features:
   current: V3
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.stream_switch; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_switch.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
+  - docs/validation/evidence/F-HA-005/2026-10-01-V3-2a28a93e-ha.stream_switch-ha.json
   - docs/validation/evidence/F-HA-005/2026-09-26-V3-6c22aa7a-ha.stream_switch-ha.json
   findings: []
   scenarios: [ha.stream_switch]
@@ -2893,6 +3148,7 @@ features:
   current: V3
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.preset_button; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_button.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
+  - docs/validation/evidence/F-HA-006/2026-10-01-V3-2a28a93e-ha.preset_button-ha.json
   - docs/validation/evidence/F-HA-006/2026-09-26-V3-6c22aa7a-ha.preset_button-ha.json
   findings: []
   scenarios: [ha.preset_button]
@@ -2906,6 +3162,7 @@ features:
   current: V3
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.reboot_button; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_button.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
+  - docs/validation/evidence/F-HA-007/2026-10-01-V3-2a28a93e-ha.reboot_button-ha.json
   - docs/validation/evidence/F-HA-007/2026-09-26-V3-6c22aa7a-ha.reboot_button-ha.json
   findings: []
   scenarios: [ha.reboot_button]
@@ -2919,6 +3176,7 @@ features:
   current: V3
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.input_signal; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_binary_sensor.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
+  - docs/validation/evidence/F-HA-008/2026-10-01-V3-2a28a93e-ha.input_signal-ha.json
   - docs/validation/evidence/F-HA-008/2026-09-26-V3-6c22aa7a-ha.input_signal-ha.json
   findings: []
   scenarios: [ha.input_signal]
@@ -2932,6 +3190,7 @@ features:
   current: V3
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.display_unplugged; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_binary_sensor.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
+  - docs/validation/evidence/F-HA-009/2026-10-01-V3-2a28a93e-ha.display_unplugged-ha.json
   - docs/validation/evidence/F-HA-009/2026-09-26-V3-6c22aa7a-ha.display_unplugged-ha.json
   findings: []
   scenarios: [ha.display_unplugged]
@@ -2945,6 +3204,7 @@ features:
   current: V3
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.service_recall_preset; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_services.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
+  - docs/validation/evidence/F-HA-010/2026-10-01-V3-2a28a93e-ha.service_recall_preset-ha.json
   - docs/validation/evidence/F-HA-010/2026-09-26-V3-6c22aa7a-ha.service_recall_preset-ha.json
   findings: []
   scenarios: [ha.service_recall_preset]
@@ -2958,6 +3218,7 @@ features:
   current: V3
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.service_switch_input; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_services.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
+  - docs/validation/evidence/F-HA-011/2026-10-01-V3-2a28a93e-ha.service_switch_input-ha.json
   - docs/validation/evidence/F-HA-011/2026-09-26-V3-6c22aa7a-ha.service_switch_input-ha.json
   findings: []
   scenarios: [ha.service_switch_input]
@@ -2971,6 +3232,9 @@ features:
   current: V3
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenarios ha.service_cec_display, ha.service_cec_source, ha.service_cec_invalid; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_services.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
+  - docs/validation/evidence/F-HA-012/2026-10-01-V3-2a28a93e-ha.service_cec_display-ha.json
+  - docs/validation/evidence/F-HA-012/2026-10-01-V3-2a28a93e-ha.service_cec_invalid-ha.json
+  - docs/validation/evidence/F-HA-012/2026-10-01-V3-2a28a93e-ha.service_cec_source-ha.json
   - docs/validation/evidence/F-HA-012/2026-09-26-V3-6c22aa7a-ha.service_cec_display-ha.json
   - docs/validation/evidence/F-HA-012/2026-09-26-V3-6c22aa7a-ha.service_cec_invalid-ha.json
   - docs/validation/evidence/F-HA-012/2026-09-26-V3-6c22aa7a-ha.service_cec_source-ha.json
@@ -2987,6 +3251,11 @@ features:
   current: V3
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenarios ha.input_signal, ha.display_unplugged, ha.matrix_unreachable; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_init.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
+  - docs/validation/evidence/F-HA-002/2026-10-01-V3-2a28a93e-ha.front_panel_route-ha.json
+  - docs/validation/evidence/F-HA-008/2026-10-01-V3-2a28a93e-ha.input_signal-ha.json
+  - docs/validation/evidence/F-HA-009/2026-10-01-V3-2a28a93e-ha.display_unplugged-ha.json
+  - docs/validation/evidence/F-HA-013/2026-10-01-V3-2a28a93e-ha.matrix_offline-ha.json
+  - docs/validation/evidence/F-HA-013/2026-10-01-V3-2a28a93e-ha.matrix_unreachable-ha.json
   - docs/validation/evidence/F-HA-008/2026-09-26-V3-6c22aa7a-ha.input_signal-ha.json
   - docs/validation/evidence/F-HA-009/2026-09-26-V3-6c22aa7a-ha.display_unplugged-ha.json
   - docs/validation/evidence/F-HA-013/2026-09-26-V3-6c22aa7a-ha.matrix_unreachable-ha.json
@@ -3016,6 +3285,7 @@ features:
   current: V3
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.config_flow; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_init.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
+  - docs/validation/evidence/F-HA-001/2026-10-01-V3-2a28a93e-ha.config_flow-ha.json
   - docs/validation/evidence/F-HA-001/2026-09-26-V3-6c22aa7a-ha.config_flow-ha.json
   - docs/validation/evidence/F-HA-001/2026-09-28-V3-c39ee8d5-ha.config_flow-ha.json
   findings: []
@@ -3030,6 +3300,7 @@ features:
   current: V3
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.reconfigure; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_config_flow.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
+  - docs/validation/evidence/F-HA-016/2026-10-01-V3-2a28a93e-ha.reconfigure-ha.json
   - docs/validation/evidence/F-HA-016/2026-09-26-V3-6c22aa7a-ha.reconfigure-ha.json
   findings: []
   scenarios: [ha.reconfigure]
@@ -3043,6 +3314,7 @@ features:
   current: V3
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.config_flow (sets 5 s; every later scenario relies on it); effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_config_flow.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
+  - docs/validation/evidence/F-HA-001/2026-10-01-V3-2a28a93e-ha.config_flow-ha.json
   - docs/validation/evidence/F-HA-001/2026-09-26-V3-6c22aa7a-ha.config_flow-ha.json
   - docs/validation/evidence/F-HA-001/2026-09-28-V3-c39ee8d5-ha.config_flow-ha.json
   findings: []
@@ -3057,6 +3329,8 @@ features:
   current: V3
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenarios ha.service_recall_preset (entry), ha.service_switch_input (device); effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_services.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
+  - docs/validation/evidence/F-HA-010/2026-10-01-V3-2a28a93e-ha.service_recall_preset-ha.json
+  - docs/validation/evidence/F-HA-011/2026-10-01-V3-2a28a93e-ha.service_switch_input-ha.json
   - docs/validation/evidence/F-HA-010/2026-09-26-V3-6c22aa7a-ha.service_recall_preset-ha.json
   - docs/validation/evidence/F-HA-011/2026-09-26-V3-6c22aa7a-ha.service_switch_input-ha.json
   findings: []
@@ -3653,6 +3927,10 @@ features:
   current: V0
   basis: 'Enabled reboot automatically restores HTTP and Telnet through the matrix reconnect supervisor; tests/sim/test_sim_enabled_reboot.py and packaged-image reboot records. The live.matrix_offline browser record also proves recovery after a 30-second simulator outage. Hardware and broader outage/soak cases remain pending.'
   evidence:
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.direct-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.enabled_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.legacy_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V3-2a28a93e-reboot.enabled_shortcut-browser.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.direct-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.enabled_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.legacy_shortcut-api.json
@@ -3707,6 +3985,10 @@ features:
   current: V0
   basis: 'Enabled reboot through REST and both shortcut aliases recovers automatically without manual connect, preserves device settings and permits a subsequent REST routing write (tests/sim/test_sim_enabled_reboot.py). Packaged-image records include actual simulator reboot logs and ordered link events. Physical power-cycle/reboot remains pending.'
   evidence:
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.direct-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.enabled_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.legacy_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-01-V3-2a28a93e-reboot.enabled_shortcut-browser.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.direct-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.enabled_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.legacy_shortcut-api.json
@@ -3748,6 +4030,7 @@ features:
   basis: tests/sim/test_sim_faults.py::test_rejected_output_setting_reports_failure and ::test_rejected_switch_all_reports_failure
     are strict xfails (BE-12).
   evidence:
+  - docs/validation/evidence/F-REL-008/2026-10-01-V2-2a28a93e-outputs.audio_mute_rejected-api.json
   - docs/validation/evidence/F-REL-008/2026-09-28-V2-c39ee8d5-outputs.audio_mute_rejected-api.json
   findings: [BE-12]
   scenarios: [outputs.audio_mute_rejected]
@@ -3761,6 +4044,9 @@ features:
   current: V3
   basis: 'V3: scenario live.matrix_offline (browser: the /ui header and the kiosk status go disconnected and come back; /api/status answers 503 with the link, never made-up names). V2: failures.unreachable_switch; tests/sim/test_sim_ws_contract.py::test_status_is_not_made_up_when_the_status_read_fails (VAL-04: the link up but the status read failing).'
   evidence:
+  - docs/validation/evidence/F-HA-013/2026-10-01-V3-2a28a93e-ha.matrix_offline-ha.json
+  - docs/validation/evidence/F-REL-009/2026-10-01-V2-2a28a93e-failures.unreachable_switch-api.json
+  - docs/validation/evidence/F-REL-009/2026-10-01-V3-2a28a93e-live.matrix_offline-browser.json
   - docs/validation/evidence/F-REL-009/2026-10-01-V3-b0c1a32e-live.matrix_offline-browser.json
   - docs/validation/evidence/F-HA-013/2026-09-28-V3-c39ee8d5-ha.matrix_offline-ha.json
   - docs/validation/evidence/F-REL-009/2026-09-28-V2-c39ee8d5-failures.unreachable_switch-api.json
@@ -3802,6 +4088,7 @@ features:
   current: V3
   basis: 'V3: scenario live.front_panel_route in the core-only hub (no Remote integration at all): the hub''s own poller (src/rest_api/events.py) announces the change and the open /ui and /kiosk pages show it. UC mode: tests/uc/test_lifecycle.py front-panel tests (web clients get routing_change with and without a Remote).'
   evidence:
+  - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.front_panel_route-browser.json
   - docs/validation/evidence/F-MTX-031/2026-09-28-V3-c39ee8d5-live.front_panel_route-browser.json
   findings: []
   scenarios: [live.front_panel_route]

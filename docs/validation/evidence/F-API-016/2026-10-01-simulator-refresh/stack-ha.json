@@ -1,0 +1,10 @@
+{
+  "digest": "sha256:1b7b72c01322972198e2660896ca6a4270cce740d4c32d701a16eaa12b580dc0",
+  "simulator": "refresh-proof-sim-f192eb8fdbc8",
+  "selection": "build/refresh-selection-ha.json",
+  "source_commit": "2a28a93ea3243e412894ab2f84930c86c7f1aaf5",
+  "scope": "Disposable simulator and fixture data; no real hardware",
+  "hub": "refresh-proof-hub-f192eb8fdbc8",
+  "client": "ha",
+  "image": "hdmi-matrix-hub:wp-simulator-evidence-refresh"
+}

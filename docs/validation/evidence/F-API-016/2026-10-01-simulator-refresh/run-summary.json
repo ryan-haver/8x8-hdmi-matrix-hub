@@ -1,0 +1,2613 @@
+{
+  "commit": {
+    "sha": "2a28a93ea3243e412894ab2f84930c86c7f1aaf5",
+    "branch": "wp-simulator-evidence-refresh",
+    "dirty_files": [],
+    "short": "2a28a93e",
+    "dirty": false
+  },
+  "target": "sim",
+  "clients": [
+    "api",
+    "browser",
+    "ha",
+    "uc"
+  ],
+  "operator": "automation",
+  "finished": "2026-10-01T22:19:18.170Z",
+  "aborted": null,
+  "outcomes": [
+    {
+      "scenario": "cec.input_power_on",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-001",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-001/2026-10-01-V2-2a28a93e-cec.input_power_on-api.json"
+    },
+    {
+      "scenario": "cec.output_power_on",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-005",
+        "F-API-015",
+        "F-API-038"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-005/2026-10-01-V2-2a28a93e-cec.output_power_on-api.json"
+    },
+    {
+      "scenario": "cec.output_volume_up",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-006",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-006/2026-10-01-V2-2a28a93e-cec.output_volume_up-api.json"
+    },
+    {
+      "scenario": "contracts.cables",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-004"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-004/2026-10-01-V2-2a28a93e-contracts.cables-api.json"
+    },
+    {
+      "scenario": "contracts.cec_input_catalog",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-016/2026-10-01-V2-2a28a93e-contracts.cec_input_catalog-api.json"
+    },
+    {
+      "scenario": "contracts.cec_invalid_type",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-016/2026-10-01-V2-2a28a93e-contracts.cec_invalid_type-api.json"
+    },
+    {
+      "scenario": "contracts.cec_output_catalog",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-016/2026-10-01-V2-2a28a93e-contracts.cec_output_catalog-api.json"
+    },
+    {
+      "scenario": "contracts.cec_status",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-004"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-004/2026-10-01-V2-2a28a93e-contracts.cec_status-api.json"
+    },
+    {
+      "scenario": "contracts.device_settings",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-017/2026-10-01-V2-2a28a93e-contracts.device_settings-api.json"
+    },
+    {
+      "scenario": "contracts.flic_buttons",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-028/2026-10-01-V2-2a28a93e-contracts.flic_buttons-api.json"
+    },
+    {
+      "scenario": "contracts.input_settings",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-017/2026-10-01-V2-2a28a93e-contracts.input_settings-api.json"
+    },
+    {
+      "scenario": "contracts.invalid_input_settings",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-017/2026-10-01-V2-2a28a93e-contracts.invalid_input_settings-api.json"
+    },
+    {
+      "scenario": "contracts.invalid_output_settings",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-017/2026-10-01-V2-2a28a93e-contracts.invalid_output_settings-api.json"
+    },
+    {
+      "scenario": "contracts.output_settings",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-017/2026-10-01-V2-2a28a93e-contracts.output_settings-api.json"
+    },
+    {
+      "scenario": "contracts.settings",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-027/2026-10-01-V2-2a28a93e-contracts.settings-api.json"
+    },
+    {
+      "scenario": "contracts.shortcut_alias",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-024"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-024/2026-10-01-V2-2a28a93e-contracts.shortcut_alias-api.json"
+    },
+    {
+      "scenario": "contracts.shortcut_dashboard",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-024"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-024/2026-10-01-V2-2a28a93e-contracts.shortcut_dashboard-api.json"
+    },
+    {
+      "scenario": "contracts.shortcut_favorites",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-024"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-024/2026-10-01-V2-2a28a93e-contracts.shortcut_favorites-api.json"
+    },
+    {
+      "scenario": "contracts.shortcut_unknown",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-024"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-024/2026-10-01-V2-2a28a93e-contracts.shortcut_unknown-api.json"
+    },
+    {
+      "scenario": "contracts.storage",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-014"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-014/2026-10-01-V2-2a28a93e-contracts.storage-api.json"
+    },
+    {
+      "scenario": "contracts.system_info",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-014"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-014/2026-10-01-V2-2a28a93e-contracts.system_info-api.json"
+    },
+    {
+      "scenario": "contracts.themes",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-026"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-026/2026-10-01-V2-2a28a93e-contracts.themes-api.json"
+    },
+    {
+      "scenario": "contracts.ui_preferences",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-026"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-026/2026-10-01-V2-2a28a93e-contracts.ui_preferences-api.json"
+    },
+    {
+      "scenario": "failures.bad_input",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-022"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-022/2026-10-01-V2-2a28a93e-failures.bad_input-api.json"
+    },
+    {
+      "scenario": "macros.run_rejected",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-020/2026-10-01-V2-2a28a93e-macros.run_rejected-api.json"
+    },
+    {
+      "scenario": "macros.run_volume_up",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-020/2026-10-01-V2-2a28a93e-macros.run_volume_up-api.json"
+    },
+    {
+      "scenario": "outputs.audio_mute",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-007",
+        "F-API-036"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-007/2026-10-01-V2-2a28a93e-outputs.audio_mute-api.json"
+    },
+    {
+      "scenario": "outputs.audio_mute_rejected",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-REL-008",
+        "F-API-036"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-REL-008/2026-10-01-V2-2a28a93e-outputs.audio_mute_rejected-api.json"
+    },
+    {
+      "scenario": "power.standby",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-006",
+        "F-API-009",
+        "F-API-040"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-006/2026-10-01-V2-2a28a93e-power.standby-api.json"
+    },
+    {
+      "scenario": "power.wake",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-006",
+        "F-API-009"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-006/2026-10-01-V2-2a28a93e-power.wake-api.json"
+    },
+    {
+      "scenario": "presets.recall",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-003",
+        "F-API-007",
+        "F-API-035"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-003/2026-10-01-V2-2a28a93e-presets.recall-api.json"
+    },
+    {
+      "scenario": "presets.rename",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-005",
+        "F-API-037"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-005/2026-10-01-V2-2a28a93e-presets.rename-api.json"
+    },
+    {
+      "scenario": "profiles.recall_disabled_output",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-002",
+        "F-DOM-003"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-002/2026-10-01-V2-2a28a93e-profiles.recall_disabled_output-api.json"
+    },
+    {
+      "scenario": "profiles.recall_needs_passcode",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-005"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-005/2026-10-01-V2-2a28a93e-profiles.recall_needs_passcode-api.json"
+    },
+    {
+      "scenario": "profiles.recall_output_settings",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-003"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-003/2026-10-01-V2-2a28a93e-profiles.recall_output_settings-api.json"
+    },
+    {
+      "scenario": "profiles.recall_power_macro",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-004"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-004/2026-10-01-V2-2a28a93e-profiles.recall_power_macro-api.json"
+    },
+    {
+      "scenario": "profiles.recall_rejected",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-002"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-002/2026-10-01-V2-2a28a93e-profiles.recall_rejected-api.json"
+    },
+    {
+      "scenario": "profiles.recall_routing",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-002"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-002/2026-10-01-V2-2a28a93e-profiles.recall_routing-api.json"
+    },
+    {
+      "scenario": "profiles.recall_with_passcode",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-005"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-005/2026-10-01-V2-2a28a93e-profiles.recall_with_passcode-api.json"
+    },
+    {
+      "scenario": "profiles.recall_wrong_passcode",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-005"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-005/2026-10-01-V2-2a28a93e-profiles.recall_wrong_passcode-api.json"
+    },
+    {
+      "scenario": "reboot.direct",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-021",
+        "F-API-013",
+        "F-REL-001",
+        "F-REL-005",
+        "F-API-032"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.direct-api.json"
+    },
+    {
+      "scenario": "reboot.enabled_shortcut",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-021",
+        "F-API-013",
+        "F-REL-001",
+        "F-REL-005",
+        "F-API-032",
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.enabled_shortcut-api.json"
+    },
+    {
+      "scenario": "reboot.legacy_shortcut",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-021",
+        "F-API-013",
+        "F-REL-001",
+        "F-REL-005",
+        "F-API-032",
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.legacy_shortcut-api.json"
+    },
+    {
+      "scenario": "routing.route_all",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-002",
+        "F-API-005",
+        "F-API-034"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-002/2026-10-01-V2-2a28a93e-routing.route_all-api.json"
+    },
+    {
+      "scenario": "routing.switch_one",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-001",
+        "F-API-005",
+        "F-API-033"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-001/2026-10-01-V2-2a28a93e-routing.switch_one-api.json"
+    },
+    {
+      "scenario": "scenes.conflicts_visible",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-016/2026-10-01-V2-2a28a93e-scenes.conflicts_visible-api.json"
+    },
+    {
+      "scenario": "scenes.disabled_output_state",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-011"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.disabled_output_state-api.json"
+    },
+    {
+      "scenario": "scenes.enabled_override",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-014"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-014/2026-10-01-V2-2a28a93e-scenes.enabled_override-api.json"
+    },
+    {
+      "scenario": "scenes.macro_continues_after_refusal",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-012",
+        "F-DOM-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-012/2026-10-01-V2-2a28a93e-scenes.macro_continues_after_refusal-api.json"
+    },
+    {
+      "scenario": "scenes.macro_stops_after_refusal",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-020/2026-10-01-V2-2a28a93e-scenes.macro_stops_after_refusal-api.json"
+    },
+    {
+      "scenario": "scenes.override_leaves_setting",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-014"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-014/2026-10-01-V2-2a28a93e-scenes.override_leaves_setting-api.json"
+    },
+    {
+      "scenario": "scenes.partial_failure",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-011",
+        "F-DOM-017",
+        "F-API-041"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.partial_failure-api.json"
+    },
+    {
+      "scenario": "scenes.run_profile_macro_preset",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-011",
+        "F-DOM-012",
+        "F-DOM-014"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.run_profile_macro_preset-api.json"
+    },
+    {
+      "scenario": "scenes.run_protected",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-011",
+        "F-DOM-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.run_protected-api.json"
+    },
+    {
+      "scenario": "scenes.run_rejected",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-012"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-012/2026-10-01-V2-2a28a93e-scenes.run_rejected-api.json"
+    },
+    {
+      "scenario": "scenes.run_shortcut_and_macro",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-012"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-012/2026-10-01-V2-2a28a93e-scenes.run_shortcut_and_macro-api.json"
+    },
+    {
+      "scenario": "scenes.run_unknown",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-011"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.run_unknown-api.json"
+    },
+    {
+      "scenario": "scenes.wait_between_actions",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-013"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-013/2026-10-01-V2-2a28a93e-scenes.wait_between_actions-api.json"
+    },
+    {
+      "scenario": "scenes.wait_edit",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-013"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-013/2026-10-01-V2-2a28a93e-scenes.wait_edit-api.json"
+    },
+    {
+      "scenario": "shortcuts.beep_off",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V2-2a28a93e-shortcuts.beep_off-api.json"
+    },
+    {
+      "scenario": "shortcuts.beep_on",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V2-2a28a93e-shortcuts.beep_on-api.json"
+    },
+    {
+      "scenario": "shortcuts.beep_rejected",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V2-2a28a93e-shortcuts.beep_rejected-api.json"
+    },
+    {
+      "scenario": "shortcuts.disabled_reboot",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V2-2a28a93e-shortcuts.disabled_reboot-api.json"
+    },
+    {
+      "scenario": "shortcuts.lcd_15s",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-028/2026-10-01-V2-2a28a93e-shortcuts.lcd_15s-api.json"
+    },
+    {
+      "scenario": "shortcuts.lcd_30s",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-028/2026-10-01-V2-2a28a93e-shortcuts.lcd_30s-api.json"
+    },
+    {
+      "scenario": "shortcuts.lcd_60s",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-028/2026-10-01-V2-2a28a93e-shortcuts.lcd_60s-api.json"
+    },
+    {
+      "scenario": "shortcuts.lcd_always_on",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-028/2026-10-01-V2-2a28a93e-shortcuts.lcd_always_on-api.json"
+    },
+    {
+      "scenario": "shortcuts.lcd_off",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-028/2026-10-01-V2-2a28a93e-shortcuts.lcd_off-api.json"
+    },
+    {
+      "scenario": "shortcuts.lcd_rejected",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-028/2026-10-01-V2-2a28a93e-shortcuts.lcd_rejected-api.json"
+    },
+    {
+      "scenario": "shortcuts.mute_all",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-025"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-025/2026-10-01-V2-2a28a93e-shortcuts.mute_all-api.json"
+    },
+    {
+      "scenario": "shortcuts.mute_rejected",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-025"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-025/2026-10-01-V2-2a28a93e-shortcuts.mute_rejected-api.json"
+    },
+    {
+      "scenario": "shortcuts.panel_lock",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V2-2a28a93e-shortcuts.panel_lock-api.json"
+    },
+    {
+      "scenario": "shortcuts.panel_lock_rejected",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V2-2a28a93e-shortcuts.panel_lock_rejected-api.json"
+    },
+    {
+      "scenario": "shortcuts.panel_unlock",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V2-2a28a93e-shortcuts.panel_unlock-api.json"
+    },
+    {
+      "scenario": "shortcuts.power_off_all",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-024"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-024/2026-10-01-V2-2a28a93e-shortcuts.power_off_all-api.json"
+    },
+    {
+      "scenario": "shortcuts.preset_recall",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-026"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-026/2026-10-01-V2-2a28a93e-shortcuts.preset_recall-api.json"
+    },
+    {
+      "scenario": "shortcuts.route_input_to_output",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-023"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-023/2026-10-01-V2-2a28a93e-shortcuts.route_input_to_output-api.json"
+    },
+    {
+      "scenario": "shortcuts.route_one_to_one",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-023"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-023/2026-10-01-V2-2a28a93e-shortcuts.route_one_to_one-api.json"
+    },
+    {
+      "scenario": "shortcuts.unknown",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-023"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-023/2026-10-01-V2-2a28a93e-shortcuts.unknown-api.json"
+    },
+    {
+      "scenario": "shortcuts.unmute_all",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-025"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-025/2026-10-01-V2-2a28a93e-shortcuts.unmute_all-api.json"
+    },
+    {
+      "scenario": "writes.bulk_settings",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-017/2026-10-01-V2-2a28a93e-writes.bulk_settings-api.json"
+    },
+    {
+      "scenario": "writes.cec_output_enable",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-016/2026-10-01-V2-2a28a93e-writes.cec_output_enable-api.json"
+    },
+    {
+      "scenario": "writes.connection_test",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-027/2026-10-01-V2-2a28a93e-writes.connection_test-api.json"
+    },
+    {
+      "scenario": "writes.flic_register",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-028/2026-10-01-V2-2a28a93e-writes.flic_register-api.json"
+    },
+    {
+      "scenario": "writes.input_settings",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-017/2026-10-01-V2-2a28a93e-writes.input_settings-api.json"
+    },
+    {
+      "scenario": "writes.output_name",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-018"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-018/2026-10-01-V2-2a28a93e-writes.output_name-api.json"
+    },
+    {
+      "scenario": "writes.output_settings",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-017/2026-10-01-V2-2a28a93e-writes.output_settings-api.json"
+    },
+    {
+      "scenario": "writes.preset_name",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-017/2026-10-01-V2-2a28a93e-writes.preset_name-api.json"
+    },
+    {
+      "scenario": "writes.profile_cec",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-019/2026-10-01-V2-2a28a93e-writes.profile_cec-api.json"
+    },
+    {
+      "scenario": "writes.profile_macros",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-019/2026-10-01-V2-2a28a93e-writes.profile_macros-api.json"
+    },
+    {
+      "scenario": "writes.profile_reorder",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-019/2026-10-01-V2-2a28a93e-writes.profile_reorder-api.json"
+    },
+    {
+      "scenario": "writes.shortcut_create",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-024"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-024/2026-10-01-V2-2a28a93e-writes.shortcut_create-api.json"
+    },
+    {
+      "scenario": "writes.shortcut_dashboard",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-024"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-024/2026-10-01-V2-2a28a93e-writes.shortcut_dashboard-api.json"
+    },
+    {
+      "scenario": "writes.shortcut_delete_builtin",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-024"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-024/2026-10-01-V2-2a28a93e-writes.shortcut_delete_builtin-api.json"
+    },
+    {
+      "scenario": "writes.shortcut_execute",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-024"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-024/2026-10-01-V2-2a28a93e-writes.shortcut_execute-api.json"
+    },
+    {
+      "scenario": "writes.shortcut_favorite",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-024"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-024/2026-10-01-V2-2a28a93e-writes.shortcut_favorite-api.json"
+    },
+    {
+      "scenario": "writes.shortcut_reorder",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-024"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-024/2026-10-01-V2-2a28a93e-writes.shortcut_reorder-api.json"
+    },
+    {
+      "scenario": "writes.shortcut_update",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-024"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-024/2026-10-01-V2-2a28a93e-writes.shortcut_update-api.json"
+    },
+    {
+      "scenario": "writes.themes",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-026"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-026/2026-10-01-V2-2a28a93e-writes.themes-api.json"
+    },
+    {
+      "scenario": "writes.themes_reset",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-026"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-026/2026-10-01-V2-2a28a93e-writes.themes_reset-api.json"
+    },
+    {
+      "scenario": "writes.ui_preferences",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-026"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-API-026/2026-10-01-V2-2a28a93e-writes.ui_preferences-api.json"
+    },
+    {
+      "scenario": "failures.unreachable_switch",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-REL-009",
+        "F-API-033"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-REL-009/2026-10-01-V2-2a28a93e-failures.unreachable_switch-api.json"
+    },
+    {
+      "scenario": "kiosk.profile_with_passcode",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-KIO-008",
+        "F-DOM-005"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-KIO-008/2026-10-01-V3-2a28a93e-kiosk.profile_with_passcode-browser.json"
+    },
+    {
+      "scenario": "kiosk.profile_wrong_passcode",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-KIO-008",
+        "F-DOM-005"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-KIO-008/2026-10-01-V3-2a28a93e-kiosk.profile_wrong_passcode-browser.json"
+    },
+    {
+      "scenario": "kiosk.route_all_apply",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-KIO-003"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-KIO-003/2026-10-01-V3-2a28a93e-kiosk.route_all_apply-browser.json"
+    },
+    {
+      "scenario": "kiosk.route_one_muted",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-KIO-002"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-KIO-002/2026-10-01-V3-2a28a93e-kiosk.route_one_muted-browser.json"
+    },
+    {
+      "scenario": "live.display_unplugged",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-MTX-031",
+        "F-API-040",
+        "F-UI-024"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.display_unplugged-browser.json"
+    },
+    {
+      "scenario": "live.front_panel_route",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-MTX-031",
+        "F-REL-012",
+        "F-API-040",
+        "F-UI-024",
+        "F-KIO-010"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.front_panel_route-browser.json"
+    },
+    {
+      "scenario": "live.input_signal",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-MTX-031",
+        "F-API-040",
+        "F-UI-024",
+        "F-KIO-010"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.input_signal-browser.json"
+    },
+    {
+      "scenario": "live.rename_elsewhere",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-MTX-031",
+        "F-API-040",
+        "F-UI-024"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.rename_elsewhere-browser.json"
+    },
+    {
+      "scenario": "macros.run_rejected",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-020/2026-10-01-V3-2a28a93e-macros.run_rejected-browser.json"
+    },
+    {
+      "scenario": "macros.run_volume_up",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-020/2026-10-01-V3-2a28a93e-macros.run_volume_up-browser.json"
+    },
+    {
+      "scenario": "presets.recall",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-MTX-003",
+        "F-UI-005"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-003/2026-10-01-V3-2a28a93e-presets.recall-browser.json"
+    },
+    {
+      "scenario": "presets.rename",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-MTX-005",
+        "F-UI-006"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-005/2026-10-01-V3-2a28a93e-presets.rename-browser.json"
+    },
+    {
+      "scenario": "profiles.recall_disabled_output",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-002",
+        "F-DOM-003"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-002/2026-10-01-V3-2a28a93e-profiles.recall_disabled_output-browser.json"
+    },
+    {
+      "scenario": "profiles.recall_needs_passcode",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-005",
+        "F-UI-014"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-005/2026-10-01-V3-2a28a93e-profiles.recall_needs_passcode-browser.json"
+    },
+    {
+      "scenario": "profiles.recall_output_settings",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-003"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-003/2026-10-01-V3-2a28a93e-profiles.recall_output_settings-browser.json"
+    },
+    {
+      "scenario": "profiles.recall_power_macro",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-004"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-004/2026-10-01-V3-2a28a93e-profiles.recall_power_macro-browser.json"
+    },
+    {
+      "scenario": "profiles.recall_routing",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-002",
+        "F-UI-012"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-002/2026-10-01-V3-2a28a93e-profiles.recall_routing-browser.json"
+    },
+    {
+      "scenario": "profiles.recall_with_passcode",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-005",
+        "F-UI-014"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-005/2026-10-01-V3-2a28a93e-profiles.recall_with_passcode-browser.json"
+    },
+    {
+      "scenario": "profiles.recall_wrong_passcode",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-005",
+        "F-UI-014"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-005/2026-10-01-V3-2a28a93e-profiles.recall_wrong_passcode-browser.json"
+    },
+    {
+      "scenario": "reboot.enabled_shortcut",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-MTX-021",
+        "F-API-013",
+        "F-REL-001",
+        "F-REL-005",
+        "F-API-032",
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-021/2026-10-01-V3-2a28a93e-reboot.enabled_shortcut-browser.json"
+    },
+    {
+      "scenario": "routing.grid_notifies_other_clients",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-UI-024"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-UI-024/2026-10-01-V3-2a28a93e-routing.grid_notifies_other_clients-browser.json"
+    },
+    {
+      "scenario": "routing.route_all",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-MTX-002",
+        "F-UI-004"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-002/2026-10-01-V3-2a28a93e-routing.route_all-browser.json"
+    },
+    {
+      "scenario": "routing.switch_one",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-MTX-001",
+        "F-UI-002"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-001/2026-10-01-V3-2a28a93e-routing.switch_one-browser.json"
+    },
+    {
+      "scenario": "scenes.conflicts_visible",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-016/2026-10-01-V3-2a28a93e-scenes.conflicts_visible-browser.json"
+    },
+    {
+      "scenario": "scenes.disabled_output_state",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-011"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.disabled_output_state-browser.json"
+    },
+    {
+      "scenario": "scenes.enabled_override",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-014"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-014/2026-10-01-V3-2a28a93e-scenes.enabled_override-browser.json"
+    },
+    {
+      "scenario": "scenes.macro_continues_after_refusal",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-012",
+        "F-DOM-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-012/2026-10-01-V3-2a28a93e-scenes.macro_continues_after_refusal-browser.json"
+    },
+    {
+      "scenario": "scenes.macro_stops_after_refusal",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-020/2026-10-01-V3-2a28a93e-scenes.macro_stops_after_refusal-browser.json"
+    },
+    {
+      "scenario": "scenes.partial_failure",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-011",
+        "F-DOM-017",
+        "F-UI-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.partial_failure-browser.json"
+    },
+    {
+      "scenario": "scenes.run_profile_macro_preset",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-011",
+        "F-DOM-012",
+        "F-DOM-014"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.run_profile_macro_preset-browser.json"
+    },
+    {
+      "scenario": "scenes.run_protected",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-011",
+        "F-DOM-015",
+        "F-UI-008"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.run_protected-browser.json"
+    },
+    {
+      "scenario": "scenes.wait_between_actions",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-013"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-013/2026-10-01-V3-2a28a93e-scenes.wait_between_actions-browser.json"
+    },
+    {
+      "scenario": "scenes.wait_edit",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-013"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-013/2026-10-01-V3-2a28a93e-scenes.wait_edit-browser.json"
+    },
+    {
+      "scenario": "shortcuts.beep_off",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V3-2a28a93e-shortcuts.beep_off-browser.json"
+    },
+    {
+      "scenario": "shortcuts.beep_on",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V3-2a28a93e-shortcuts.beep_on-browser.json"
+    },
+    {
+      "scenario": "shortcuts.beep_rejected",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V3-2a28a93e-shortcuts.beep_rejected-browser.json"
+    },
+    {
+      "scenario": "shortcuts.disabled_reboot",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V3-2a28a93e-shortcuts.disabled_reboot-browser.json"
+    },
+    {
+      "scenario": "shortcuts.lcd_15s",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-028/2026-10-01-V3-2a28a93e-shortcuts.lcd_15s-browser.json"
+    },
+    {
+      "scenario": "shortcuts.lcd_30s",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-028/2026-10-01-V3-2a28a93e-shortcuts.lcd_30s-browser.json"
+    },
+    {
+      "scenario": "shortcuts.lcd_60s",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-028/2026-10-01-V3-2a28a93e-shortcuts.lcd_60s-browser.json"
+    },
+    {
+      "scenario": "shortcuts.lcd_always_on",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-028/2026-10-01-V3-2a28a93e-shortcuts.lcd_always_on-browser.json"
+    },
+    {
+      "scenario": "shortcuts.lcd_off",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-028/2026-10-01-V3-2a28a93e-shortcuts.lcd_off-browser.json"
+    },
+    {
+      "scenario": "shortcuts.lcd_rejected",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-028/2026-10-01-V3-2a28a93e-shortcuts.lcd_rejected-browser.json"
+    },
+    {
+      "scenario": "shortcuts.mute_all",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-025"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-025/2026-10-01-V3-2a28a93e-shortcuts.mute_all-browser.json"
+    },
+    {
+      "scenario": "shortcuts.mute_rejected",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-025"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-025/2026-10-01-V3-2a28a93e-shortcuts.mute_rejected-browser.json"
+    },
+    {
+      "scenario": "shortcuts.panel_lock",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V3-2a28a93e-shortcuts.panel_lock-browser.json"
+    },
+    {
+      "scenario": "shortcuts.panel_lock_rejected",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V3-2a28a93e-shortcuts.panel_lock_rejected-browser.json"
+    },
+    {
+      "scenario": "shortcuts.panel_unlock",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V3-2a28a93e-shortcuts.panel_unlock-browser.json"
+    },
+    {
+      "scenario": "shortcuts.power_off_all",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-024"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-024/2026-10-01-V3-2a28a93e-shortcuts.power_off_all-browser.json"
+    },
+    {
+      "scenario": "shortcuts.preset_recall",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-026"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-026/2026-10-01-V3-2a28a93e-shortcuts.preset_recall-browser.json"
+    },
+    {
+      "scenario": "shortcuts.route_one_to_one",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-023"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-023/2026-10-01-V3-2a28a93e-shortcuts.route_one_to_one-browser.json"
+    },
+    {
+      "scenario": "shortcuts.unmute_all",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-025"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-025/2026-10-01-V3-2a28a93e-shortcuts.unmute_all-browser.json"
+    },
+    {
+      "scenario": "live.matrix_offline",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-REL-009",
+        "F-API-032",
+        "F-KIO-011"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-REL-009/2026-10-01-V3-2a28a93e-live.matrix_offline-browser.json"
+    },
+    {
+      "scenario": "ha.config_flow",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-001",
+        "F-HA-015",
+        "F-HA-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-001/2026-10-01-V3-2a28a93e-ha.config_flow-ha.json"
+    },
+    {
+      "scenario": "ha.display_unplugged",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-009",
+        "F-HA-013"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-009/2026-10-01-V3-2a28a93e-ha.display_unplugged-ha.json"
+    },
+    {
+      "scenario": "ha.front_panel_route",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-002",
+        "F-HA-013",
+        "F-MTX-031"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-002/2026-10-01-V3-2a28a93e-ha.front_panel_route-ha.json"
+    },
+    {
+      "scenario": "ha.input_signal",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-008",
+        "F-HA-013"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-008/2026-10-01-V3-2a28a93e-ha.input_signal-ha.json"
+    },
+    {
+      "scenario": "ha.mute_switch",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-004",
+        "F-MTX-007"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-004/2026-10-01-V3-2a28a93e-ha.mute_switch-ha.json"
+    },
+    {
+      "scenario": "ha.power_off",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-003",
+        "F-MTX-006"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-003/2026-10-01-V3-2a28a93e-ha.power_off-ha.json"
+    },
+    {
+      "scenario": "ha.power_on",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-003",
+        "F-MTX-006"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-003/2026-10-01-V3-2a28a93e-ha.power_on-ha.json"
+    },
+    {
+      "scenario": "ha.preset_button",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-006",
+        "F-MTX-003"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-006/2026-10-01-V3-2a28a93e-ha.preset_button-ha.json"
+    },
+    {
+      "scenario": "ha.reconfigure",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-016/2026-10-01-V3-2a28a93e-ha.reconfigure-ha.json"
+    },
+    {
+      "scenario": "ha.select_source",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-002",
+        "F-MTX-001"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-002/2026-10-01-V3-2a28a93e-ha.select_source-ha.json"
+    },
+    {
+      "scenario": "ha.service_cec_display",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-012",
+        "F-CEC-005"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-012/2026-10-01-V3-2a28a93e-ha.service_cec_display-ha.json"
+    },
+    {
+      "scenario": "ha.service_cec_invalid",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-012"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-012/2026-10-01-V3-2a28a93e-ha.service_cec_invalid-ha.json"
+    },
+    {
+      "scenario": "ha.service_cec_source",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-012"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-012/2026-10-01-V3-2a28a93e-ha.service_cec_source-ha.json"
+    },
+    {
+      "scenario": "ha.service_recall_preset",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-010",
+        "F-HA-018"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-010/2026-10-01-V3-2a28a93e-ha.service_recall_preset-ha.json"
+    },
+    {
+      "scenario": "ha.service_switch_input",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-011",
+        "F-HA-018"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-011/2026-10-01-V3-2a28a93e-ha.service_switch_input-ha.json"
+    },
+    {
+      "scenario": "ha.stream_switch",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-005"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-005/2026-10-01-V3-2a28a93e-ha.stream_switch-ha.json"
+    },
+    {
+      "scenario": "ha.matrix_offline",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-013",
+        "F-REL-009"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-013/2026-10-01-V3-2a28a93e-ha.matrix_offline-ha.json"
+    },
+    {
+      "scenario": "ha.matrix_unreachable",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-013"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-013/2026-10-01-V3-2a28a93e-ha.matrix_unreachable-ha.json"
+    },
+    {
+      "scenario": "ha.reboot_button",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-007"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-007/2026-10-01-V3-2a28a93e-ha.reboot_button-ha.json"
+    },
+    {
+      "scenario": "remote.cec_bad_sequence",
+      "client": "uc",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-UC-007"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-UC-007/2026-10-01-V3-2a28a93e-remote.cec_bad_sequence-uc.json"
+    },
+    {
+      "scenario": "remote.input_cec_command",
+      "client": "uc",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-UC-006"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-UC-006/2026-10-01-V3-2a28a93e-remote.input_cec_command-uc.json"
+    },
+    {
+      "scenario": "remote.input_cec_off",
+      "client": "uc",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-UC-006"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-UC-006/2026-10-01-V3-2a28a93e-remote.input_cec_off-uc.json"
+    },
+    {
+      "scenario": "remote.input_cec_sequence",
+      "client": "uc",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-UC-006"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-UC-006/2026-10-01-V3-2a28a93e-remote.input_cec_sequence-uc.json"
+    },
+    {
+      "scenario": "remote.input_rename_live",
+      "client": "uc",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-UC-016",
+        "F-UC-008"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-UC-016/2026-10-01-V3-2a28a93e-remote.input_rename_live-uc.json"
+    },
+    {
+      "scenario": "remote.matrix_preset_command",
+      "client": "uc",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-UC-005"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-UC-005/2026-10-01-V3-2a28a93e-remote.matrix_preset_command-uc.json"
+    },
+    {
+      "scenario": "remote.media_player_toggle",
+      "client": "uc",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-UC-009"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-UC-009/2026-10-01-V3-2a28a93e-remote.media_player_toggle-uc.json"
+    },
+    {
+      "scenario": "remote.media_player_volume",
+      "client": "uc",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-UC-009"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-UC-009/2026-10-01-V3-2a28a93e-remote.media_player_volume-uc.json"
+    },
+    {
+      "scenario": "remote.output_cec_on",
+      "client": "uc",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-UC-007"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-UC-007/2026-10-01-V3-2a28a93e-remote.output_cec_on-uc.json"
+    },
+    {
+      "scenario": "remote.output_cec_power_on",
+      "client": "uc",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-UC-007",
+        "F-CEC-005"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-UC-007/2026-10-01-V3-2a28a93e-remote.output_cec_power_on-uc.json"
+    },
+    {
+      "scenario": "remote.output_cec_toggle",
+      "client": "uc",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-UC-007"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-UC-007/2026-10-01-V3-2a28a93e-remote.output_cec_toggle-uc.json"
+    },
+    {
+      "scenario": "remote.output_cec_volume_repeat",
+      "client": "uc",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-UC-007"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-UC-007/2026-10-01-V3-2a28a93e-remote.output_cec_volume_repeat-uc.json"
+    },
+    {
+      "scenario": "remote.power_switch_follows_front_panel",
+      "client": "uc",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-UC-010"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-UC-010/2026-10-01-V3-2a28a93e-remote.power_switch_follows_front_panel-uc.json"
+    },
+    {
+      "scenario": "remote.power_switch_off",
+      "client": "uc",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-UC-010",
+        "F-MTX-006"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-UC-010/2026-10-01-V3-2a28a93e-remote.power_switch_off-uc.json"
+    },
+    {
+      "scenario": "remote.preset_button",
+      "client": "uc",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-UC-004",
+        "F-MTX-003"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-UC-004/2026-10-01-V3-2a28a93e-remote.preset_button-uc.json"
+    },
+    {
+      "scenario": "remote.preset_names_from_web_app",
+      "client": "uc",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-UC-004",
+        "F-UC-005"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-UC-004/2026-10-01-V3-2a28a93e-remote.preset_names_from_web_app-uc.json"
+    },
+    {
+      "scenario": "remote.select_source",
+      "client": "uc",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-UC-008",
+        "F-MTX-001"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-UC-008/2026-10-01-V3-2a28a93e-remote.select_source-uc.json"
+    },
+    {
+      "scenario": "remote.unknown_source",
+      "client": "uc",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-UC-008"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-UC-008/2026-10-01-V3-2a28a93e-remote.unknown_source-uc.json"
+    }
+  ]
+}
