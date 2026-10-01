@@ -398,7 +398,7 @@ features:
   basis: tests/test_rest_api.py TestSystemSettingsEndpoints reboot (mocked). No test reboots the simulator through the hub.
   evidence: []
   findings: []
-  scenarios: []
+  scenarios: [reboot.direct, reboot.legacy_shortcut, reboot.enabled_shortcut]
 - id: F-MTX-022
   area: matrix
   title: Rename inputs (names stored on the matrix)
@@ -902,7 +902,7 @@ features:
   basis: tests/test_rest_api.py TestSystemSettingsEndpoints, TestLcdTimeoutControl (mocked).
   evidence: []
   findings: [BE-12]
-  scenarios: []
+  scenarios: [reboot.direct, reboot.legacy_shortcut, reboot.enabled_shortcut]
 - id: F-API-014
   area: api
   title: System info and storage routes
@@ -1208,7 +1208,7 @@ features:
   - docs/validation/evidence/F-REL-009/2026-09-28-V3-c39ee8d5-live.matrix_offline-browser.json
   - docs/validation/evidence/F-REL-009/2026-09-28-V3-57747b4b-live.matrix_offline-browser.json
   findings: []
-  scenarios: [live.matrix_offline]
+  scenarios: [live.matrix_offline, reboot.direct, reboot.legacy_shortcut, reboot.enabled_shortcut]
 - id: F-API-033
   area: api
   title: 'WS event routing_change (one per changed output, whoever routed) / switch_failed'
@@ -1814,7 +1814,7 @@ features:
   - docs/validation/evidence/F-DOM-027/2026-10-01-V2-9362fd00-shortcuts.panel_lock-api.json
   findings: [API-08]
   scenarios: [shortcuts.beep_off, shortcuts.beep_on, shortcuts.panel_lock, shortcuts.panel_unlock,
-    shortcuts.beep_rejected, shortcuts.panel_lock_rejected, shortcuts.disabled_reboot]
+    shortcuts.beep_rejected, shortcuts.panel_lock_rejected, shortcuts.disabled_reboot, reboot.legacy_shortcut, reboot.enabled_shortcut]
 - id: F-DOM-028
   area: domain
   title: 'Built-in shortcuts: LCD timeout'
@@ -3635,7 +3635,7 @@ features:
   basis: tests/test_driver.py TestReconnectDelay covers the delay maths only; the reconnect loop cancels itself (BE-06).
   evidence: []
   findings: [BE-04, BE-06, BE-17]
-  scenarios: []
+  scenarios: [reboot.direct, reboot.legacy_shortcut, reboot.enabled_shortcut]
 - id: F-REL-002
   area: reliability
   title: Report the connection state truthfully on errors and timeouts
@@ -3686,7 +3686,7 @@ features:
     works (::test_explicit_reconnect_after_reboot).
   evidence: []
   findings: [BE-04, BE-28]
-  scenarios: []
+  scenarios: [reboot.direct, reboot.legacy_shortcut, reboot.enabled_shortcut]
 - id: F-REL-006
   area: reliability
   title: Detect a dropped Telnet connection and reconnect

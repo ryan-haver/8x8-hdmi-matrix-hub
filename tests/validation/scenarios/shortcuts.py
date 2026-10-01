@@ -300,5 +300,5 @@ SCENARIOS.append(Scenario(
         ClientState("toast.success", equals=None, clients=("browser",)),
     ),
     covers=(*_COVERS, "tests/e2e/fixtures/data/system_shortcuts.json"),
-    notes="Proves the disabled guard only; an enabled reboot and reconnection remain unproven.",
+    notes="Proves the disabled guard; reboot.enabled_shortcut separately checks an enabled simulator reboot and recovery.",
 ))
