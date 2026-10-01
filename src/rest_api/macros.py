@@ -276,7 +276,7 @@ async def handle_execute_macro(request: web.Request) -> web.Response:
             if not isinstance(timeout_s, (int, float)) or timeout_s <= 0:
                 return _json_response(False, error="timeout_s must be a positive number", status=400)
 
-        result = await macro_manager.execute_macro(macro_id, timeout_s=timeout_s)
+        result = await macro_manager.execute_macro(macro_id, timeout_s=timeout_s if timeout_s is not None else 300.0)
 
         if result.get("success"):
             return _json_response(True, result)

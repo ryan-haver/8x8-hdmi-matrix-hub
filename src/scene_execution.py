@@ -8,13 +8,22 @@ This module is responsible for:
 4. Emitting WebSocket events on errors
 """
 
+import asyncio
 import logging
 from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 from typing import Any
 
 from config import Profile, ProfileManager
-from scene_manager import STEP_TYPE_MACRO, STEP_TYPE_PROFILE, STEP_TYPE_SYSTEM_ACTION, Scene, SceneManager
+from profile_execution import apply_profile_state
+from scene_manager import (
+    STEP_TYPE_MACRO,
+    STEP_TYPE_PROFILE,
+    STEP_TYPE_SYSTEM_ACTION,
+    STEP_TYPE_WAIT,
+    Scene,
+    SceneManager,
+)
 from system_shortcuts import (
     SystemShortcutManager as SystemActionManager,
 )
@@ -84,9 +93,6 @@ def overridden_settings(scene: Scene, profile_id: str) -> dict[int, set[str]]:
     stored as ``False`` is not active. API-04: overrides used to reset the
     setting to a default instead, so an ``input`` override routed Input 1.
 
-    ``enabled`` can be overridden too, but the scene executor never changes an
-    output's stream state, so there is nothing to leave unchanged for it.
-
     :returns: ``{output_num: {"input", "hdcp", ...}}``
     """
     skipped: dict[int, set[str]] = {}
@@ -102,45 +108,6 @@ def overridden_settings(scene: Scene, profile_id: str) -> dict[int, set[str]]:
 # =============================================================================
 
 
-async def _apply_output(matrix_device, output_num: int, output_cfg: Any, skip: set[str]) -> list[str]:
-    """Apply one output of a profile; returns what the matrix did not accept (empty = all applied).
-
-    Uses the real ``OreiMatrix`` methods and checks their result (API-01,
-    API-08). HDR and scaler values are the hub's 1-based API values;
-    ``OreiMatrix`` maps them to the device codes (``device_codes``).
-    """
-    failed: list[str] = []
-
-    async def apply(what: str, call: Any) -> None:
-        try:
-            ok = await call
-        except Exception as exc:  # noqa: BLE001 - one failed write must not stop the other outputs
-            _LOG.error("Output %d %s failed: %s", output_num, what, exc)
-            ok = False
-        if not ok:
-            failed.append(what)
-
-    if "input" not in skip:
-        await apply(f"route input {output_cfg.input}", matrix_device.switch_input(output_cfg.input, output_num))
-    hdcp = getattr(output_cfg, "hdcp_mode", None)
-    if hdcp is not None and "hdcp" not in skip:
-        await apply(f"HDCP {hdcp}", matrix_device.set_output_hdcp(output_num, hdcp))
-    hdr = getattr(output_cfg, "hdr_mode", None)
-    if hdr is not None and "hdr" not in skip:
-        await apply(f"HDR {hdr}", matrix_device.set_output_hdr(output_num, hdr))
-    # Profiles do not store scaler/ARC yet (API-22); applied when present.
-    scaler = getattr(output_cfg, "scaler_mode", None)
-    if scaler is not None and "scaler" not in skip:
-        await apply(f"scaler {scaler}", matrix_device.set_output_scaler(output_num, scaler))
-    arc = getattr(output_cfg, "arc", None)
-    if arc is not None and "arc" not in skip:
-        await apply(f"ARC {'on' if arc else 'off'}", matrix_device.set_output_arc(output_num, bool(arc)))
-    mute = getattr(output_cfg, "audio_mute", None)
-    if mute is not None and "audio_mute" not in skip:
-        await apply("mute" if mute else "unmute", matrix_device.set_output_audio_mute(output_num, bool(mute)))
-    return failed
-
-
 def _macro_error(outcome: dict[str, Any]) -> str:
     """A one-line reason from a ``MacroManager.execute_macro`` result."""
     if outcome.get("error"):
@@ -153,67 +120,16 @@ async def _execute_profile(
     profile: Profile,
     matrix_device,
     skip: dict[int, set[str]] | None = None,
-    macro_manager: Any | None = None,
 ) -> StepResult:
-    """
-    Execute a single Profile against the matrix.
-
-    Applies routing and per-output settings of every enabled output (outputs a
-    profile marks disabled are not touched), then runs the profile's macros in
-    order through the ``MacroManager`` (docs/PHASE_8_SPEC.md "Execute each
-    macro in order"). Every matrix answer is checked: the step fails if
-    anything was not applied, and the error names the output and the setting.
-
-    :param profile: Profile to execute
-    :param matrix_device: OreiMatrix instance
-    :param skip: settings to leave unchanged per output (scene overrides, :func:`overridden_settings`)
-    :param macro_manager: MacroManager that runs the profile's macros
-    """
-    skip = skip or {}
-    problems: list[str] = []
-    applied = 0
-    try:
-        for output_num in sorted(profile.outputs):
-            output_cfg = profile.outputs[output_num]
-            if not output_cfg.enabled:
-                continue
-            failed = await _apply_output(matrix_device, output_num, output_cfg, skip.get(output_num, set()))
-            if failed:
-                problems.append(f"output {output_num}: {', '.join(failed)} not applied")
-            else:
-                applied += 1
-
-        # API-03: macros run through the MacroManager (targets like "output_1"),
-        # which sends each step with the configured CEC sender (VAL-02).
-        for macro_id in profile.macros:
-            if macro_manager is None:
-                problems.append(f"macro {macro_id}: macro manager not available")
-                continue
-            if macro_manager.get_macro(macro_id) is None:
-                problems.append(f"macro {macro_id}: not found")
-                continue
-            outcome = await macro_manager.execute_macro(macro_id)
-            if not outcome.get("success"):
-                problems.append(f"macro {macro_id}: {_macro_error(outcome)}")
-    except Exception as exc:  # noqa: BLE001 - reported as a failed step; the scene continues
-        _LOG.error("Profile %s execution failed: %s", profile.id, exc)
-        problems.append(str(exc))
-
-    if problems:
-        return StepResult(
-            step_index=0,
-            step_type=STEP_TYPE_PROFILE,
-            step_id=profile.id,
-            success=False,
-            detail=f"Profile '{profile.name}': {applied} output(s) applied",
-            error="; ".join(problems),
-        )
+    """Apply recall's exact state with scene overrides, without any macros (DI-11)."""
+    outcome = await apply_profile_state(profile, matrix_device, skip)
     return StepResult(
-        step_index=0,  # Will be overwritten by caller
+        step_index=0,
         step_type=STEP_TYPE_PROFILE,
         step_id=profile.id,
-        success=True,
-        detail=f"Profile '{profile.name}' executed",
+        success=not outcome.errors,
+        detail=f"Profile '{profile.name}': {len(outcome.applied)} output(s) applied",
+        error="; ".join(outcome.errors) if outcome.errors else None,
     )
 
 
@@ -238,7 +154,7 @@ class SceneExecutor:
         self.scene_manager = scene_manager
         self.profile_manager = profile_manager
         self.system_action_manager = system_action_manager
-        # MacroManager is optional — macro steps and profile macros fail without it
+        # MacroManager is optional — scene macro steps fail without it
         self.macro_manager = macro_manager
 
     async def execute_scene(
@@ -294,6 +210,15 @@ class SceneExecutor:
                 result = await self._execute_system_action_step(step, matrix_device)
             elif step.type == STEP_TYPE_MACRO:
                 result = await self._execute_macro_step(step, matrix_device)
+            elif step.type == STEP_TYPE_WAIT:
+                error = step.validate()
+                if error is None:
+                    await asyncio.sleep(step.params["seconds"])
+                result = StepResult(
+                    step_index=i, step_type=STEP_TYPE_WAIT, step_id=step.id,
+                    success=error is None, detail=f"Waited {step.params.get('seconds')} seconds" if error is None else "",
+                    error=error,
+                )
             else:
                 result = StepResult(
                     step_index=i,
@@ -358,7 +283,6 @@ class SceneExecutor:
             profile,
             matrix_device,
             skip=overridden_settings(scene, profile.id),
-            macro_manager=self.macro_manager,
         )
 
         # Log to profile's execution history (API-02: persisted with the manager's save())

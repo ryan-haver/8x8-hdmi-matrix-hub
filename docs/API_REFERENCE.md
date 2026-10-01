@@ -882,6 +882,10 @@ curl -X DELETE http://localhost:8080/api/cec/macro/theater-on
 #### POST /api/cec/macro/{id}/execute
 Execute a CEC macro on the live matrix.
 
+Uses the macro's saved `continue_on_error` policy. When true, later steps run
+after a refusal, but the overall result still reports failure. An optional
+JSON body can set `timeout_s`; when omitted the limit is 300 seconds.
+
 ```bash
 curl -X POST http://localhost:8080/api/cec/macro/theater-on/execute
 ```

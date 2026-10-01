@@ -136,6 +136,21 @@ Scenarios: `tests/validation/scenarios/home_assistant.py`.
 
 ## Recorded baseline (C-pre, 2026-09-25)
 
+WP-C4 adds browser intents `scene_wait_edit` (edit, prompt for a duration, save)
+and `scene_conflicts` (open a saved scene and read its real conflicts). Browser
+observations `scene.conflict_count` and `scene.values` come from the visible
+conflict rows. `CommandGap(before, after, seconds)` checks simulator command
+timestamps, so a wait is proven by the pause between device writes. Fault
+`reject_write_count` scopes `reject_writes` to the next N writes; `comheads`
+can limit it to CEC while subsequent commands succeed.
+
+To prove a flow against the shipped Docker image, start an isolated simulator
+and hub container with the seeded `tests/e2e/fixtures/data`, then use
+`run --target sim --sim-control-url <control URL> --hub-url <hub URL>
+--hub-image-digest <docker image inspect ID> --client browser --record`.
+The runner resets that **disposable simulator** between scenarios. It does not
+start or stop those external containers, and cannot switch them to UC mode.
+
 `current` in `features.yaml` was set from the proof that existed before this framework, and set conservatively:
 
 - **V1** for unit and mocked tests, for driver-level simulator tests (a real `OreiMatrix` against the simulator, with no user interface in the path), and for visual baselines (screenshots only).

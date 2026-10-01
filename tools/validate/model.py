@@ -164,6 +164,8 @@ INTENTS: dict[str, str] = {
     "cec_output": "send CEC `command` to the display on output `output`",
     "profile_recall": "recall profile `profile_id` (optional `passcode`)",
     "scene_run": "run scene `scene_id` (optional `passcode`)",
+    "scene_wait_edit": "add a `seconds` wait to scene `scene_id` through its editor",
+    "scene_conflicts": "open scene `scene_id` and read the saved profiles' conflicts",
     "kiosk_route": (
         "kiosk routing wizard: route input `input` to output `output` (a number or \"all\") with the wizard's "
         "options `mute` and `arc` (browser client only)"
@@ -249,6 +251,18 @@ class CommandSent(Expectation):
         extra = f" with {self.payload}" if self.payload else ""
         n = f" exactly {self.count}x" if self.count is not None else ""
         return f"device received {self.channel} '{self.command}'{extra}{n}"
+
+
+@dataclass(frozen=True)
+class CommandGap(Expectation):
+    """Prove ordering and a minimum pause between two simulator commands."""
+
+    before: str
+    after: str
+    seconds: float
+
+    def describe(self) -> str:
+        return f"device '{self.after}' follows '{self.before}' by at least {self.seconds}s"
 
 
 @dataclass(frozen=True)

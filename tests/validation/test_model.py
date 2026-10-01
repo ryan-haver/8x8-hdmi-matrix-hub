@@ -115,6 +115,7 @@ def test_api_client_maps_every_intent():
         "output_mute": {"output": 1, "muted": True}, "output_setting": {"output": 1, "setting": "hdcp", "body": {"mode": 1}},
         "cec_input": {"input": 1, "command": "power_on"}, "cec_output": {"output": 1, "command": "power_on"},
         "profile_recall": {"profile_id": "p"}, "scene_run": {"scene_id": "s"},
+        "scene_wait_edit": {"scene_id": "s", "steps": []}, "scene_conflicts": {"scene_id": "s"},
         "request": {"method": "GET", "path": "/api/health"},
     }
     # uc_command / ha_* are the Remote's and Home Assistant's own actions, as `request` is the api client's
@@ -123,7 +124,7 @@ def test_api_client_maps_every_intent():
                                            "kiosk_route", "device_change"}
     for intent, params in samples.items():
         method, path, _ = rest_call(act(intent, **params))
-        assert method in ("GET", "POST") and path.startswith("/api/")
+        assert method in ("GET", "POST", "PUT") and path.startswith("/api/")
     with pytest.raises(NotSupportedError):
         rest_call(act("uc_command", entity_id="button.preset_1", cmd_id="push"))
     assert rest_call(act("route_all", input=3)) == ("POST", "/api/switch", {"input": 3})

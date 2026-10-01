@@ -89,6 +89,29 @@ def test_sim_run_produces_evidence(tmp_path: Path, schema_validator):
     assert len(errors) == 1 and "selftest.impossible" in errors[0]
 
 
+def test_existing_simulator_and_hub_are_used_without_starting_another_hub(tmp_path):
+    from tools.validate.stack import HubProcess
+
+    sim = SimulatorProcess(log_dir=tmp_path / "sim")
+    sim.start()
+    hub = HubProcess(matrix_host="127.0.0.1", matrix_port=sim.https_port, telnet_port=sim.telnet_port,
+                     log_dir=tmp_path / "hub")
+    hub.start()
+    try:
+        runner = Runner(RunOptions(out_dir=tmp_path / "proof", hub_url=hub.base_url,
+                                    sim_control_url=sim.control_url, hub_image_digest="sha256:test"))
+        outcomes = asyncio.run(runner.run([discover()["routing.switch_one"]]))
+        assert outcomes[0].status == "pass"
+        assert runner.stack is None and runner.hub.starts == 0
+        record = iter_records([tmp_path / "proof" / "evidence"])[0].data
+        assert record["environment"]["hub"]["entry"] == hub.base_url
+        assert record["environment"]["hub"]["image_digest"] == "sha256:test"
+        assert hub.ready()  # the runner did not stop someone else's hub
+    finally:
+        hub.stop()
+        sim.stop()
+
+
 @pytest.fixture
 def fake_matrix(tmp_path: Path):
     """The simulator, used as if it were a real BK-808 (only its device ports are given to the runner)."""

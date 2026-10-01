@@ -46,6 +46,12 @@ export default [
       'test-results/**',
       'ui-gallery/**',
       'web/assets/**',
+      '.claude/**', // Local worktrees are separate checkouts, not this project's source.
+      'reference/**', // Pinned upstream references are gitignored.
+      'build/**',
+      '.venv/**',
+      'archive/**',
+      '_backups/**',
       '**/*.ts', // Playwright specs are type-checked by Playwright's own TS transform
     ],
   },

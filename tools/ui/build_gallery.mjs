@@ -9,6 +9,8 @@
 //   --base <ref>        compare the working-tree baselines with the baselines at <ref>
 //   --changed-only      (with --base) only include entries that differ
 //   --out <dir>         output directory (default ui-gallery/)
+//   --snapshots <dir>   candidate captures (default approved baseline directory)
+//   --entries <prefix> only entries beginning with this catalog path
 //   --viewports <list>  only these viewports (projects), comma-separated,
 //                       e.g. --viewports kiosk-tab-a11,kiosk-iphone16promax
 //   --thumb <px>        thumbnail width (default 360)
@@ -33,7 +35,6 @@ import sharp from 'sharp';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SNAP_REL = 'tests/e2e/visual/__snapshots__';
-const SNAP_DIR = path.join(ROOT, SNAP_REL);
 // Keep in sync with tests/e2e/support/viewports.ts (VIEWPORTS).
 const VIEWPORT_ORDER = ['desktop', 'tablet', 'phone', 'kiosk-tab-a11', 'kiosk-iphone16promax'];
 const THEME_ORDER = ['tron-classic', 'neon', 'royal', 'vaporwave'];
@@ -46,6 +47,8 @@ const opt = (name, fallback) => {
   return i >= 0 ? args[i + 1] : fallback;
 };
 const baseRef = opt('--base', null);
+const entryPrefix = opt('--entries', null);
+const SNAP_DIR = path.resolve(ROOT, opt('--snapshots', SNAP_REL));
 const changedOnly = args.includes('--changed-only');
 const outDir = path.resolve(ROOT, opt('--out', 'ui-gallery'));
 const thumbWidth = Number(opt('--thumb', 360));
@@ -75,6 +78,7 @@ function loadWorkingTree() {
       if (e.isDirectory()) walk(full);
       else if (e.name.endsWith('.png')) {
         const key = path.relative(SNAP_DIR, full).split(path.sep).join('/');
+        if (entryPrefix && !parseKey(key).entry.startsWith(entryPrefix)) continue;
         out.set(key, smudgeIfPointer(fs.readFileSync(full), full));
       }
     }
@@ -88,6 +92,7 @@ function loadRef(ref) {
   const list = git(['ls-tree', '-r', '--name-only', ref, '--', SNAP_REL]).toString().split('\n').filter(Boolean);
   for (const file of list) {
     if (!file.endsWith('.png')) continue;
+    if (entryPrefix && !parseKey(file.slice(SNAP_REL.length + 1)).entry.startsWith(entryPrefix)) continue;
     const blob = git(['cat-file', 'blob', `${ref}:${file}`]);
     out.set(file.slice(SNAP_REL.length + 1), smudgeIfPointer(blob, `${ref}:${file}`));
   }

@@ -93,6 +93,28 @@ async def test_macro_execute_sends_cec_frames(data_hub, simulator):
     assert cec_frames(simulator, obj=1, index=CEC_OUT_VOL_UP, to=2) == 3
 
 
+async def test_macro_endpoint_uses_default_timeout_when_body_is_absent(data_hub, monkeypatch):
+    from unittest.mock import AsyncMock
+
+    from rest_api.utils import get_macro_manager
+
+    execute = AsyncMock(return_value={"success": True})
+    monkeypatch.setattr(get_macro_manager(), "execute_macro", execute)
+    assert (await data_hub.post("/api/cec/macro/macro_volume_up/execute")).status == 200
+    execute.assert_awaited_once_with("macro_volume_up", timeout_s=300.0)
+
+
+async def test_macro_endpoint_continues_after_one_device_refusal(data_hub, simulator):
+    simulator.faults.update({"reject_writes": True, "reject_write_count": 1, "comheads": ["cec command"]})
+    resp = await data_hub.post("/api/cec/macro/macro_all_off/execute")
+    assert resp.status == 500  # continuing never hides the failed first command
+    assert cec_frames(simulator, obj=1, index=1, to=2) == 1  # final step still reaches the device
+    commands = [e for e in simulator.log if e.get("command") == "cec command"]
+    assert len(commands) == 5
+    assert commands[0]["response"]["result"] == 0
+    assert commands[-1]["response"]["result"] == 1
+
+
 async def test_macro_sender_refuses_without_a_connected_matrix(data_hub, simulator):
     from rest_api.utils import get_matrix_device, matrix_cec_sender
 

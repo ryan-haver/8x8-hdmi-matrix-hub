@@ -448,7 +448,11 @@ class Simulator:
             entry["response"] = resp
             return resp, entry
 
-        if self.faults.reject_writes and comhead in HANDLERS and comhead not in READ_COMMANDS:
+        if (self.faults.reject_writes and comhead in HANDLERS and comhead not in READ_COMMANDS
+                and (self.faults.comheads is None or comhead in self.faults.comheads)
+                and (self.faults.reject_write_count is None or self.faults.reject_write_count > 0)):
+            if self.faults.reject_write_count is not None:
+                self.faults.reject_write_count -= 1
             resp = {"comhead": comhead, "result": proto.RESULT_FAIL}
             entry = self._record("http", comhead, client=client, payload=payload, response=resp,
                                  recognised=True, fault="reject_writes")

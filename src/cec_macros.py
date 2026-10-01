@@ -381,14 +381,14 @@ class MacroManager:
     async def execute_macro(
         self,
         macro_id: str,
-        continue_on_error: bool = False,
+        continue_on_error: bool | None = None,
         timeout_s: float = 300.0,
     ) -> dict[str, Any]:
         """
         Execute a macro.
 
         :param macro_id: Macro identifier
-        :param continue_on_error: If False, halt execution on first step failure
+        :param continue_on_error: Override the saved policy; None uses the macro's policy
         :param timeout_s: Overall execution timeout in seconds (default 300s)
         :return: Execution result with success status and details
         """
@@ -404,6 +404,9 @@ class MacroManager:
                 "success": False,
                 "error": "CEC sender not configured",
             }
+
+        if continue_on_error is None:
+            continue_on_error = macro.continue_on_error
 
         _LOG.info("Executing macro: %s (%s)", macro.name, macro_id)
 

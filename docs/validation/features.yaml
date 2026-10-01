@@ -1314,7 +1314,7 @@ features:
   - docs/validation/evidence/F-DOM-002/2026-09-28-V2-dc6bd707-profiles.recall_routing-api.json
   - docs/validation/evidence/F-DOM-002/2026-09-28-V3-dc6bd707-profiles.recall_routing-browser.json
   findings: [API-08, API-19]
-  scenarios: [profiles.recall_routing, profiles.recall_rejected]
+  scenarios: [profiles.recall_routing, profiles.recall_rejected, profiles.recall_disabled_output]
 - id: F-DOM-003
   area: domain
   title: 'Recall a profile: its output settings (mute, HDR, HDCP, enable) are applied'
@@ -1327,7 +1327,7 @@ features:
   basis: 'Scenario profiles.recall_output_settings (V2) and tests/sim/test_sim_profiles.py::test_recall_applies_mute_hdr_and_hdcp: mute, HDR (API 1-based -> device code) and HDCP are applied with the real OreiMatrix setters since WP-C1 (VAL-01).'
   evidence: []
   findings: [VAL-01, API-22]
-  scenarios: [profiles.recall_output_settings]
+  scenarios: [profiles.recall_output_settings, profiles.recall_disabled_output]
 - id: F-DOM-004
   area: domain
   title: 'Recall a profile: its power-on / power-off macro runs'
@@ -1440,7 +1440,7 @@ features:
   - docs/validation/evidence/F-DOM-011/2026-09-28-V3-dc6bd707-scenes.run_protected-browser.json
   - docs/validation/evidence/F-DOM-011/2026-09-28-V2-c39ee8d5-scenes.partial_failure-api.json
   findings: [API-01, API-02, API-08, VAL-07, VAL-11]
-  scenarios: [scenes.run_profile_macro_preset, scenes.run_protected, scenes.partial_failure, scenes.run_unknown]
+  scenarios: [scenes.run_profile_macro_preset, scenes.run_protected, scenes.partial_failure, scenes.run_unknown, scenes.disabled_output_state]
 - id: F-DOM-012
   area: domain
   title: 'Run a scene: macro steps'
@@ -1452,7 +1452,7 @@ features:
   basis: 'Scenarios scenes.run_shortcut_and_macro, scenes.run_profile_macro_preset, scenes.run_rejected (V2: CEC frames in the simulator command log); tests/sim/test_sim_scenes_v2.py.'
   evidence: []
   findings: [API-03, VAL-02]
-  scenarios: [scenes.run_profile_macro_preset, scenes.run_shortcut_and_macro, scenes.run_rejected]
+  scenarios: [scenes.run_profile_macro_preset, scenes.run_shortcut_and_macro, scenes.run_rejected, scenes.macro_continues_after_refusal]
 - id: F-DOM-013
   area: domain
   title: 'Run a scene: delay and shortcut steps'
@@ -1464,7 +1464,7 @@ features:
   basis: 'Shortcut steps are proven with F-DOM-011/012 (scenes.run_protected, scenes.run_shortcut_and_macro). There is no delay step type (scene_manager.VALID_STEP_TYPES = profile, system_action, macro), so this feature stays unproven until one exists (VAL-09).'
   evidence: []
   findings: [API-01, API-08, VAL-09]
-  scenarios: []
+  scenarios: [scenes.wait_between_actions, scenes.wait_edit]
 - id: F-DOM-014
   area: domain
   title: Scene overrides (per-run changes to a profile step)
@@ -1476,7 +1476,7 @@ features:
   basis: 'Scenarios scenes.override_leaves_setting and scenes.run_profile_macro_preset (V2): an override leaves the setting unchanged on the device (API-04); tests/sim/test_sim_scenes_v2.py::test_overrides_leave_the_setting_unchanged.'
   evidence: []
   findings: [API-04]
-  scenarios: [scenes.run_profile_macro_preset, scenes.override_leaves_setting]
+  scenarios: [scenes.run_profile_macro_preset, scenes.override_leaves_setting, scenes.enabled_override]
 - id: F-DOM-015
   area: domain
   title: Protect a scene with a passcode
@@ -1504,7 +1504,7 @@ features:
   basis: tests/test_scene_manager.py TestDetectConflicts.
   evidence: []
   findings: [VAL-10]
-  scenarios: []
+  scenarios: [scenes.conflicts_visible]
 - id: F-DOM-017
   area: domain
   title: Scene execution history
@@ -1560,7 +1560,7 @@ features:
   basis: 'Scenario macros.run_volume_up (V2: three CEC frames in the simulator command log); tests/sim/test_sim_profiles.py::test_macro_execute_sends_cec_frames; tests/test_cec_macros.py.'
   evidence: []
   findings: [VAL-02, BE-02, VAL-08]
-  scenarios: [macros.run_volume_up]
+  scenarios: [macros.run_volume_up, scenes.macro_continues_after_refusal, scenes.macro_stops_after_refusal]
 - id: F-DOM-021
   area: domain
   title: Test / dry-run a macro

@@ -93,7 +93,7 @@ class TestOverriddenSettings:
 class TestSceneExecutorProfile:
     """Profile steps use the real OreiMatrix methods and check their answers."""
 
-    async def test_applies_routing_and_settings_of_enabled_outputs(self, executor, scenes):
+    async def test_applies_routing_and_settings_of_all_outputs(self, executor, scenes):
         scene, _ = scenes.create_scene(name="Test", steps=[SceneStep(type=STEP_TYPE_PROFILE, id="p1")])
         matrix = make_matrix()
         result = await executor.execute_scene(scene.id, matrix)
@@ -101,12 +101,14 @@ class TestSceneExecutorProfile:
         assert result.steps_completed == 1 and result.total_steps == 1
         matrix.switch_input.assert_any_await(4, 1)
         matrix.switch_input.assert_any_await(5, 2)
-        assert matrix.switch_input.await_count == 2  # output 3 is disabled in the profile
+        matrix.switch_input.assert_any_await(6, 3)
+        assert matrix.switch_input.await_count == 3
         matrix.set_output_hdcp.assert_awaited_once_with(1, 2)
         matrix.set_output_hdr.assert_awaited_once_with(1, 1)  # API value; OreiMatrix maps it to the device code
         matrix.set_output_audio_mute.assert_any_await(1, True)
         matrix.set_output_audio_mute.assert_any_await(2, False)
-        matrix.set_output_enable.assert_not_awaited()  # the scene executor does not change stream state
+        matrix.set_output_enable.assert_any_await(1, True)
+        matrix.set_output_enable.assert_any_await(3, False)
 
     async def test_overridden_settings_are_left_unchanged(self, executor, scenes):
         """API-04: an input override used to route Input 1; a mute override used to unmute."""
@@ -115,10 +117,10 @@ class TestSceneExecutorProfile:
         matrix = make_matrix()
         result = await executor.execute_scene(scene.id, matrix)
         assert result.success is True, result.error
-        assert [c.args for c in matrix.switch_input.await_args_list] == [(5, 2)]
+        assert [c.args for c in matrix.switch_input.await_args_list] == [(5, 2), (6, 3)]
         matrix.set_output_hdr.assert_not_awaited()
         matrix.set_output_hdcp.assert_awaited_once_with(1, 2)
-        assert [c.args for c in matrix.set_output_audio_mute.await_args_list] == [(2, False)]
+        assert [c.args for c in matrix.set_output_audio_mute.await_args_list] == [(2, False), (3, False)]
 
     async def test_a_refused_write_fails_the_step(self, executor, scenes):
         """API-08: the matrix's False answers used to be ignored."""
@@ -150,8 +152,8 @@ class TestSceneExecutorProfile:
         log = reloaded.get_profile("p1").execution_log
         assert log[-1]["scene_id"] == scene.id and log[-1]["status"] == "success"
 
-    async def test_profile_macros_run_through_the_macro_manager(self, scenes, profiles, tmp_path):
-        """API-03: the old code called ``.get()`` on the MacroStep dataclass and expected ``input:3`` targets."""
+    async def test_scene_profile_step_does_not_run_quick_access_macros(self, scenes, profiles, tmp_path):
+        """DI-11: only the scene's explicit macro steps send CEC commands."""
         profiles.update_profile("p1", macros=["m1"])
         mm = MagicMock()
         mm.get_macro.return_value = MagicMock(steps=[])
@@ -160,9 +162,9 @@ class TestSceneExecutorProfile:
         scene, _ = scenes.create_scene(name="Test", steps=[SceneStep(type=STEP_TYPE_PROFILE, id="p1")])
         result = await ex.execute_scene(scene.id, make_matrix())
         assert result.success is True, result.error
-        mm.execute_macro.assert_awaited_once_with("m1")
+        mm.execute_macro.assert_not_awaited()
 
-    async def test_a_failed_profile_macro_fails_the_step(self, scenes, profiles, tmp_path):
+    async def test_profile_macro_failure_cannot_affect_a_state_step(self, scenes, profiles, tmp_path):
         profiles.update_profile("p1", macros=["m1"])
         mm = MagicMock()
         mm.get_macro.return_value = MagicMock(steps=[])
@@ -170,8 +172,8 @@ class TestSceneExecutorProfile:
         ex = SceneExecutor(scenes, profiles, SystemShortcutManager(tmp_path / "sc"), macro_manager=mm)
         scene, _ = scenes.create_scene(name="Test", steps=[SceneStep(type=STEP_TYPE_PROFILE, id="p1")])
         result = await ex.execute_scene(scene.id, make_matrix())
-        assert result.success is False
-        assert "CEC sender not configured" in result.error
+        assert result.success is True
+        mm.execute_macro.assert_not_awaited()
 
     async def test_unknown_profile(self, executor, scenes):
         scene, _ = scenes.create_scene(name="Test", steps=[SceneStep(type=STEP_TYPE_PROFILE, id="nope")])

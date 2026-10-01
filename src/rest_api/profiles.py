@@ -9,6 +9,8 @@ import logging
 
 from aiohttp import web
 
+from profile_execution import apply_profile_state
+
 from .utils import _json_response, get_macro_manager, get_matrix_device, get_profile_manager
 
 _LOG = logging.getLogger("rest_api.profiles")
@@ -311,42 +313,10 @@ async def handle_recall_profile(request: web.Request) -> web.Response:
                     f"Power-on macro '{profile.power_on_macro}': {power_on_result.get('error') or 'failed'}"
                 )
 
-        # Apply profile settings. VAL-01: the real OreiMatrix setters (the old
-        # hasattr() checks named methods that do not exist, so mute, HDR and
-        # HDCP were silently skipped). API-08: every answer is checked; an
-        # output counts as applied only if all of its writes were accepted.
-        applied = []
-        failed_outputs = []
-
-        for output_num in sorted(profile.outputs):
-            output_config = profile.outputs[output_num]
-            writes = [
-                (f"route input {output_config.input}", matrix_device.switch_input(output_config.input, output_num)),
-                ("stream on" if output_config.enabled else "stream off",
-                 matrix_device.set_output_enable(output_num, output_config.enabled)),
-                ("mute" if output_config.audio_mute else "unmute",
-                 matrix_device.set_output_audio_mute(output_num, output_config.audio_mute)),
-            ]
-            if output_config.hdr_mode is not None:  # API value 1-3; OreiMatrix maps it to the device code
-                writes.append((f"HDR {output_config.hdr_mode}",
-                               matrix_device.set_output_hdr(output_num, output_config.hdr_mode)))
-            if output_config.hdcp_mode is not None:
-                writes.append((f"HDCP {output_config.hdcp_mode}",
-                               matrix_device.set_output_hdcp(output_num, output_config.hdcp_mode)))
-            not_applied = []
-            for what, call in writes:
-                try:
-                    ok = await call
-                except Exception as e:
-                    _LOG.error(f"Profile '{profile.name}' output {output_num} {what} failed: {e}")
-                    ok = False
-                if not ok:
-                    not_applied.append(what)
-            if not_applied:
-                failed_outputs.append(output_num)
-                errors.append(f"Output {output_num}: {', '.join(not_applied)} not applied")
-            else:
-                applied.append(f"Output {output_num} → Input {output_config.input}")
+        state_result = await apply_profile_state(profile, matrix_device)
+        applied = state_result.applied
+        failed_outputs = state_result.failed_outputs
+        errors.extend(state_result.errors)
 
         _LOG.info(
             f"Profile '{profile.name}' recalled: {len(applied)} outputs configured, {len(failed_outputs)} failed"

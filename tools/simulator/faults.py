@@ -39,6 +39,8 @@ class Faults:
     wrong_password: bool = False
     #: Answer every write with result 0 and do not change state.
     reject_writes: bool = False
+    #: Refuse only the next N writes (optionally scoped by comheads); None = all.
+    reject_write_count: int | None = None
     #: How "not logged in / session expired" is reported.
     session_expired_style: str = proto.SESSION_EXPIRED_STYLE
 

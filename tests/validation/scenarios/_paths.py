@@ -16,12 +16,13 @@ HUB_CORE = (
 CONTROL = ("src/rest_api/control.py",)
 OUTPUTS = ("src/rest_api/outputs.py",)
 CEC = ("src/rest_api/cec.py", "src/cec_commands.py")
-PROFILES = ("src/rest_api/profiles.py", "src/config.py", "src/cec_macros.py")
+PROFILES = ("src/rest_api/profiles.py", "src/profile_execution.py", "src/config.py", "src/cec_macros.py")
 SHORTCUTS = ("src/system_shortcuts.py", "src/rest_api/system_shortcuts.py")
 SCENES = (
     "src/rest_api/scenes_v2.py",
     "src/scene_manager.py",
     "src/scene_execution.py",
+    "src/profile_execution.py",
     "src/config.py",
     "src/cec_macros.py",
     *SHORTCUTS,

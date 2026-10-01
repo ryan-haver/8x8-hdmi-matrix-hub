@@ -6,3 +6,4 @@
 # UI visual baselines (docs/REMEDIATION_PLAN.md §5.3) are stored in Git LFS.
 # The LFS hooks are in .githooks/ because core.hooksPath points there.
 tests/e2e/visual/**/*.png filter=lfs diff=lfs merge=lfs -text
+docs/validation/evidence/**/*.png filter=lfs diff=lfs merge=lfs -text
