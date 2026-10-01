@@ -796,6 +796,15 @@ curl -X POST http://localhost:8080/api/cec/output/1/power_on
 curl -X POST http://localhost:8080/api/cec/output/1/mute
 ```
 
+#### POST /api/cec/input/{1-8}/enable and /api/cec/output/{1-8}/enable
+
+Set a port's CEC enable flag with `{"enabled": true}` or `{"enabled": false}`.
+The hub reads the current input/output flags before replacing the device's
+arrays, preserving other ports and serializing concurrent single-port edits.
+If a complete current snapshot cannot be read, the route returns HTTP 500
+without sending the write. Another controller can still change the device
+between the read and write; the device protocol provides no atomic port edit.
+
 ---
 
 ## CEC Macros (v2.9.0+) ⭐

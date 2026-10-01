@@ -305,7 +305,9 @@ class TestAdvancedOutputControl:
         """Test enabling/disabling CEC per port."""
         mock_response = MagicMock()
         mock_response.status = 200
-        mock_response.text = AsyncMock(return_value='{"result":1}')
+        mock_response.text = AsyncMock(return_value=(
+            '{"result":1,"inputindex":[1,1,1,1,1,1,1,1],"outputindex":[1,1,1,1,1,1,1,1]}'
+        ))
         mock_response.__aenter__ = AsyncMock(return_value=mock_response)
         mock_response.__aexit__ = AsyncMock(return_value=None)
 
