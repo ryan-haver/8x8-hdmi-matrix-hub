@@ -1,0 +1,11 @@
+{
+  "selection": "build/cec-selection-api.json",
+  "client": "api",
+  "hub": "cec-proof-hub-8da1ed3a11d0",
+  "source_commit": "d434d3d88943ef5faf3452c219a3ec3b0bfdad25",
+  "digest": "sha256:1b7b72c01322972198e2660896ca6a4270cce740d4c32d701a16eaa12b580dc0",
+  "image": "hdmi-matrix-hub:wp-simulator-evidence-refresh",
+  "scope": "Disposable simulator and fixture data; no real hardware",
+  "cec_transport": "HTTP (OREI_USE_TELNET_CEC=false)",
+  "simulator": "cec-proof-sim-8da1ed3a11d0"
+}

@@ -1017,6 +1017,22 @@ features:
   basis: 'tests/sim/test_sim_hub.py::test_cec_http_auto_enables_port (driver-level: real OreiMatrix against the simulator,
     no user interface in the path -> V1); tests/test_rest_api.py TestCecCommandEndpoints (mocked); tests/test_driver.py TestCecCommandResolution.'
   evidence:
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_1_power_off-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_1_power_on-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_2_power_off-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_2_power_on-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_3_power_off-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_3_power_on-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_4_power_off-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_4_power_on-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_5_power_off-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_5_power_on-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_6_power_off-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_6_power_on-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_7_power_off-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_7_power_on-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_8_power_off-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_8_power_on-api.json
   - docs/validation/evidence/F-CEC-001/2026-10-01-V2-2a28a93e-cec.input_power_on-api.json
   findings: []
   scenarios:
@@ -1046,7 +1062,63 @@ features:
   current: V1
   basis: 'tests/sim/test_sim_hub.py::test_cec_http_auto_enables_port (driver-level: real OreiMatrix against the simulator,
     no user interface in the path -> V1); tests/test_rest_api.py TestCecCommandEndpoints (mocked); tests/test_driver.py TestCecCommandResolution.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_1_back-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_1_down-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_1_left-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_1_menu-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_1_right-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_1_select-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_1_up-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_2_back-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_2_down-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_2_left-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_2_menu-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_2_right-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_2_select-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_2_up-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_3_back-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_3_down-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_3_left-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_3_menu-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_3_right-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_3_select-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_3_up-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_4_back-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_4_down-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_4_left-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_4_menu-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_4_right-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_4_select-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_4_up-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_5_back-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_5_down-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_5_left-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_5_menu-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_5_right-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_5_select-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_5_up-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_6_back-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_6_down-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_6_left-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_6_menu-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_6_right-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_6_select-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_6_up-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_7_back-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_7_down-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_7_left-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_7_menu-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_7_right-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_7_select-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_7_up-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_8_back-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_8_down-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_8_left-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_8_menu-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_8_right-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_8_select-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_8_up-api.json
   findings: [VAL-03]
   scenarios:
   - cec_controls.input_1_up
@@ -1114,7 +1186,63 @@ features:
   current: V1
   basis: 'tests/sim/test_sim_hub.py::test_cec_http_auto_enables_port (driver-level: real OreiMatrix against the simulator,
     no user interface in the path -> V1); tests/test_rest_api.py TestCecCommandEndpoints (mocked); tests/test_driver.py TestCecCommandResolution.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_1_fast_forward-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_1_next-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_1_pause-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_1_play-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_1_previous-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_1_rewind-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_1_stop-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_2_fast_forward-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_2_next-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_2_pause-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_2_play-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_2_previous-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_2_rewind-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_2_stop-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_3_fast_forward-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_3_next-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_3_pause-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_3_play-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_3_previous-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_3_rewind-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_3_stop-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_4_fast_forward-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_4_next-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_4_pause-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_4_play-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_4_previous-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_4_rewind-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_4_stop-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_5_fast_forward-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_5_next-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_5_pause-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_5_play-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_5_previous-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_5_rewind-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_5_stop-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_6_fast_forward-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_6_next-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_6_pause-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_6_play-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_6_previous-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_6_rewind-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_6_stop-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_7_fast_forward-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_7_next-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_7_pause-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_7_play-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_7_previous-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_7_rewind-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_7_stop-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_8_fast_forward-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_8_next-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_8_pause-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_8_play-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_8_previous-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_8_rewind-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_8_stop-api.json
   findings: [VAL-03]
   scenarios:
   - cec_controls.input_1_previous
@@ -1182,7 +1310,31 @@ features:
   current: V1
   basis: 'tests/sim/test_sim_hub.py::test_cec_http_auto_enables_port (driver-level: real OreiMatrix against the simulator,
     no user interface in the path -> V1); tests/test_rest_api.py TestCecCommandEndpoints (mocked); tests/test_driver.py TestCecCommandResolution.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_1_mute-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_1_volume_down-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_1_volume_up-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_2_mute-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_2_volume_down-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_2_volume_up-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_3_mute-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_3_volume_down-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_3_volume_up-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_4_mute-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_4_volume_down-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_4_volume_up-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_5_mute-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_5_volume_down-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_5_volume_up-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_6_mute-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_6_volume_down-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_6_volume_up-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_7_mute-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_7_volume_down-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_7_volume_up-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_8_mute-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_8_volume_down-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_8_volume_up-api.json
   findings: [VAL-03]
   scenarios:
   - cec_controls.input_1_mute
@@ -1227,6 +1379,22 @@ features:
   basis: 'V3: ha.service_cec_display (ha client: a real Home Assistant container drives it; simulator state read back). tests/sim/test_sim_hub.py::test_telnet_cec (Telnet path, POWER_ON to output 1) (driver-level: real OreiMatrix against
     the simulator, no user interface in the path -> V1); tests/test_rest_api.py TestCecCommandEndpoints (mocked).'
   evidence:
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_1_power_off-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_1_power_on-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_2_power_off-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_2_power_on-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_3_power_off-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_3_power_on-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_4_power_off-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_4_power_on-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_5_power_off-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_5_power_on-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_6_power_off-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_6_power_on-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_7_power_off-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_7_power_on-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_8_power_off-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_8_power_on-api.json
   - docs/validation/evidence/F-CEC-005/2026-10-01-V2-2a28a93e-cec.output_power_on-api.json
   - docs/validation/evidence/F-HA-012/2026-10-01-V3-2a28a93e-ha.service_cec_display-ha.json
   - docs/validation/evidence/F-UC-007/2026-10-01-V3-2a28a93e-remote.output_cec_power_on-uc.json
@@ -1263,6 +1431,30 @@ features:
   current: V1
   basis: tests/test_rest_api.py TestCecCommandEndpoints (mocked).
   evidence:
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_1_mute-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_1_volume_down-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_1_volume_up-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_2_mute-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_2_volume_down-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_2_volume_up-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_3_mute-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_3_volume_down-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_3_volume_up-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_4_mute-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_4_volume_down-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_4_volume_up-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_5_mute-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_5_volume_down-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_5_volume_up-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_6_mute-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_6_volume_down-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_6_volume_up-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_7_mute-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_7_volume_down-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_7_volume_up-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_8_mute-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_8_volume_down-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_8_volume_up-api.json
   - docs/validation/evidence/F-CEC-006/2026-10-01-V2-2a28a93e-cec.output_volume_up-api.json
   findings: [BE-14, VAL-03]
   scenarios:
@@ -1302,6 +1494,222 @@ features:
   basis: 'tests/sim/test_sim_hub.py::test_cec_http_auto_enables_port (driver-level: real OreiMatrix against the simulator,
     no user interface in the path -> V1).'
   evidence:
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.output_1_active-api.json
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.output_2_active-api.json
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.output_3_active-api.json
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.output_4_active-api.json
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.output_5_active-api.json
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.output_6_active-api.json
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.output_7_active-api.json
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.output_8_active-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_1_power_off-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_1_power_on-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_2_power_off-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_2_power_on-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_3_power_off-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_3_power_on-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_4_power_off-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_4_power_on-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_5_power_off-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_5_power_on-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_6_power_off-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_6_power_on-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_7_power_off-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_7_power_on-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_8_power_off-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_8_power_on-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_1_back-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_1_down-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_1_left-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_1_menu-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_1_right-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_1_select-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_1_up-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_2_back-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_2_down-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_2_left-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_2_menu-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_2_right-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_2_select-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_2_up-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_3_back-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_3_down-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_3_left-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_3_menu-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_3_right-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_3_select-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_3_up-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_4_back-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_4_down-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_4_left-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_4_menu-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_4_right-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_4_select-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_4_up-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_5_back-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_5_down-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_5_left-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_5_menu-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_5_right-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_5_select-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_5_up-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_6_back-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_6_down-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_6_left-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_6_menu-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_6_right-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_6_select-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_6_up-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_7_back-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_7_down-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_7_left-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_7_menu-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_7_right-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_7_select-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_7_up-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_8_back-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_8_down-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_8_left-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_8_menu-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_8_right-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_8_select-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_8_up-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_1_fast_forward-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_1_next-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_1_pause-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_1_play-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_1_previous-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_1_rewind-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_1_stop-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_2_fast_forward-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_2_next-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_2_pause-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_2_play-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_2_previous-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_2_rewind-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_2_stop-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_3_fast_forward-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_3_next-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_3_pause-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_3_play-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_3_previous-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_3_rewind-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_3_stop-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_4_fast_forward-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_4_next-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_4_pause-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_4_play-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_4_previous-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_4_rewind-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_4_stop-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_5_fast_forward-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_5_next-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_5_pause-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_5_play-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_5_previous-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_5_rewind-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_5_stop-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_6_fast_forward-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_6_next-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_6_pause-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_6_play-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_6_previous-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_6_rewind-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_6_stop-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_7_fast_forward-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_7_next-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_7_pause-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_7_play-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_7_previous-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_7_rewind-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_7_stop-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_8_fast_forward-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_8_next-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_8_pause-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_8_play-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_8_previous-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_8_rewind-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_8_stop-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_1_mute-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_1_volume_down-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_1_volume_up-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_2_mute-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_2_volume_down-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_2_volume_up-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_3_mute-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_3_volume_down-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_3_volume_up-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_4_mute-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_4_volume_down-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_4_volume_up-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_5_mute-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_5_volume_down-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_5_volume_up-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_6_mute-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_6_volume_down-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_6_volume_up-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_7_mute-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_7_volume_down-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_7_volume_up-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_8_mute-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_8_volume_down-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_8_volume_up-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_1_power_off-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_1_power_on-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_2_power_off-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_2_power_on-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_3_power_off-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_3_power_on-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_4_power_off-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_4_power_on-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_5_power_off-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_5_power_on-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_6_power_off-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_6_power_on-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_7_power_off-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_7_power_on-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_8_power_off-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_8_power_on-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_1_mute-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_1_volume_down-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_1_volume_up-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_2_mute-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_2_volume_down-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_2_volume_up-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_3_mute-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_3_volume_down-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_3_volume_up-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_4_mute-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_4_volume_down-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_4_volume_up-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_5_mute-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_5_volume_down-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_5_volume_up-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_6_mute-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_6_volume_down-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_6_volume_up-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_7_mute-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_7_volume_down-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_7_volume_up-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_8_mute-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_8_volume_down-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_8_volume_up-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.input_1_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.input_2_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.input_3_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.input_4_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.input_5_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.input_6_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.input_7_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.input_8_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.output_1_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.output_2_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.output_3_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.output_4_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.output_5_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.output_6_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.output_7_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.output_8_already_enabled-api.json
   - docs/validation/evidence/F-CEC-001/2026-10-01-V2-2a28a93e-cec.input_power_on-api.json
   findings: [BE-13]
   scenarios:
@@ -1531,8 +1939,48 @@ features:
     rest: ['POST /api/cec/input/{port}/enable', 'POST /api/cec/output/{port}/enable']
   target: V4
   current: V1
-  basis: 'V1: real REST/simulator tests cover both input/output enable and disable, including warm caches and external changes; tests/sim/test_sim_cec_enable_snapshot.py also covers concurrent edits and failed/incomplete reads. The output-enable packaged-image record is currently classified under F-API-016 rather than this feature ID.'
-  evidence: []
+  basis: "Recorded V1 baseline: real REST/simulator tests cover both input/output enable and disable, warm caches, external changes, concurrent edits and failed/incomplete reads (BE-35). The cec_controls packaged-image scenarios now provide linked V2 proof for both flag values on all 16 ports, default enable, boundaries and refusal; all other flags are preserved."
+  evidence:
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_1_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_1_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_2_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_2_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_3_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_3_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_4_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_4_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_5_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_5_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_6_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_6_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_7_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_7_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_8_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_8_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_enable_default-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_enable_port_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_enable_port_9-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_enable_refused-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_1_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_1_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_2_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_2_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_3_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_3_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_4_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_4_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_5_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_5_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_6_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_6_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_7_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_7_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_8_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_8_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_enable_default-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_enable_port_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_enable_port_9-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_enable_refused-api.json
   findings: [BE-13, BE-35]
   scenarios:
   - cec_controls.input_1_enable_0
@@ -1584,9 +2032,12 @@ features:
     rest: [GET /api/status/cec]
   target: V4
   current: V1
-  basis: 'tests/sim/test_sim_hub.py::test_cec_http_auto_enables_port reads the CEC cache (driver-level: real OreiMatrix against
-    the simulator, no user interface in the path -> V1). GET /api/status/cec is not exercised by any test.'
-  evidence: []
+  basis: "Recorded V1 baseline: driver-level CEC cache reads. The cec_controls packaged-image scenarios now exercise GET /api/status/cec against independent all-off/all-on/mixed matrix flags and a failed matrix read, including raw and formatted arrays."
+  evidence:
+  - docs/validation/evidence/F-CEC-009/2026-10-02-V2-d434d3d8-cec_controls.status_mixed-api.json
+  - docs/validation/evidence/F-CEC-009/2026-10-02-V2-d434d3d8-cec_controls.status_off-api.json
+  - docs/validation/evidence/F-CEC-009/2026-10-02-V2-d434d3d8-cec_controls.status_on-api.json
+  - docs/validation/evidence/F-CEC-009/2026-10-02-V2-d434d3d8-cec_controls.status_unavailable-api.json
   findings: []
   scenarios:
   - cec_controls.status_off
@@ -1668,6 +2119,10 @@ features:
   current: V1
   basis: 'Recorded V1 baseline: tests/test_rest_api.py TestStatusEndpoints (mocked). New simulator read tests cover cable and CEC status, including unavailable/disconnected cases.'
   evidence:
+  - docs/validation/evidence/F-CEC-009/2026-10-02-V2-d434d3d8-cec_controls.status_mixed-api.json
+  - docs/validation/evidence/F-CEC-009/2026-10-02-V2-d434d3d8-cec_controls.status_off-api.json
+  - docs/validation/evidence/F-CEC-009/2026-10-02-V2-d434d3d8-cec_controls.status_on-api.json
+  - docs/validation/evidence/F-CEC-009/2026-10-02-V2-d434d3d8-cec_controls.status_unavailable-api.json
   - docs/validation/evidence/F-API-004/2026-10-01-V2-2a28a93e-contracts.cables-api.json
   - docs/validation/evidence/F-API-004/2026-10-01-V2-2a28a93e-contracts.cec_status-api.json
   - docs/validation/evidence/F-API-004/2026-10-01-V2-dba2f21d-contracts.cables-api.json
@@ -1852,6 +2307,235 @@ features:
   current: V1
   basis: tests/test_rest_api.py TestCecCommandEndpoints (mocked).
   evidence:
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.input_command_port_0-api.json
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.input_command_port_9-api.json
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.input_command_port_invalid-api.json
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.input_command_refused-api.json
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.input_unsupported_active-api.json
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.input_unsupported_unknown-api.json
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.output_1_active-api.json
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.output_2_active-api.json
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.output_3_active-api.json
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.output_4_active-api.json
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.output_5_active-api.json
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.output_6_active-api.json
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.output_7_active-api.json
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.output_8_active-api.json
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.output_command_port_0-api.json
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.output_command_port_9-api.json
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.output_command_port_invalid-api.json
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.output_command_refused-api.json
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.output_unsupported_play-api.json
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.output_unsupported_unknown-api.json
+  - docs/validation/evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.output_unsupported_up-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_1_power_off-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_1_power_on-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_2_power_off-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_2_power_on-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_3_power_off-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_3_power_on-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_4_power_off-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_4_power_on-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_5_power_off-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_5_power_on-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_6_power_off-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_6_power_on-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_7_power_off-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_7_power_on-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_8_power_off-api.json
+  - docs/validation/evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_8_power_on-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_1_back-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_1_down-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_1_left-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_1_menu-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_1_right-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_1_select-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_1_up-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_2_back-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_2_down-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_2_left-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_2_menu-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_2_right-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_2_select-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_2_up-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_3_back-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_3_down-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_3_left-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_3_menu-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_3_right-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_3_select-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_3_up-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_4_back-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_4_down-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_4_left-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_4_menu-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_4_right-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_4_select-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_4_up-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_5_back-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_5_down-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_5_left-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_5_menu-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_5_right-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_5_select-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_5_up-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_6_back-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_6_down-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_6_left-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_6_menu-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_6_right-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_6_select-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_6_up-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_7_back-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_7_down-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_7_left-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_7_menu-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_7_right-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_7_select-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_7_up-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_8_back-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_8_down-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_8_left-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_8_menu-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_8_right-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_8_select-api.json
+  - docs/validation/evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_8_up-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_1_fast_forward-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_1_next-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_1_pause-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_1_play-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_1_previous-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_1_rewind-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_1_stop-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_2_fast_forward-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_2_next-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_2_pause-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_2_play-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_2_previous-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_2_rewind-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_2_stop-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_3_fast_forward-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_3_next-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_3_pause-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_3_play-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_3_previous-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_3_rewind-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_3_stop-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_4_fast_forward-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_4_next-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_4_pause-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_4_play-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_4_previous-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_4_rewind-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_4_stop-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_5_fast_forward-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_5_next-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_5_pause-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_5_play-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_5_previous-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_5_rewind-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_5_stop-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_6_fast_forward-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_6_next-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_6_pause-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_6_play-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_6_previous-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_6_rewind-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_6_stop-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_7_fast_forward-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_7_next-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_7_pause-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_7_play-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_7_previous-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_7_rewind-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_7_stop-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_8_fast_forward-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_8_next-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_8_pause-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_8_play-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_8_previous-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_8_rewind-api.json
+  - docs/validation/evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_8_stop-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_1_mute-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_1_volume_down-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_1_volume_up-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_2_mute-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_2_volume_down-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_2_volume_up-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_3_mute-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_3_volume_down-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_3_volume_up-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_4_mute-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_4_volume_down-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_4_volume_up-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_5_mute-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_5_volume_down-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_5_volume_up-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_6_mute-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_6_volume_down-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_6_volume_up-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_7_mute-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_7_volume_down-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_7_volume_up-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_8_mute-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_8_volume_down-api.json
+  - docs/validation/evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_8_volume_up-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_1_power_off-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_1_power_on-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_2_power_off-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_2_power_on-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_3_power_off-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_3_power_on-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_4_power_off-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_4_power_on-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_5_power_off-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_5_power_on-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_6_power_off-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_6_power_on-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_7_power_off-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_7_power_on-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_8_power_off-api.json
+  - docs/validation/evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_8_power_on-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_1_mute-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_1_volume_down-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_1_volume_up-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_2_mute-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_2_volume_down-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_2_volume_up-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_3_mute-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_3_volume_down-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_3_volume_up-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_4_mute-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_4_volume_down-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_4_volume_up-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_5_mute-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_5_volume_down-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_5_volume_up-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_6_mute-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_6_volume_down-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_6_volume_up-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_7_mute-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_7_volume_down-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_7_volume_up-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_8_mute-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_8_volume_down-api.json
+  - docs/validation/evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_8_volume_up-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.input_1_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.input_2_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.input_3_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.input_4_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.input_5_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.input_6_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.input_7_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.input_8_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.output_1_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.output_2_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.output_3_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.output_4_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.output_5_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.output_6_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.output_7_already_enabled-api.json
+  - docs/validation/evidence/F-CEC-007/2026-10-02-V2-d434d3d8-cec_controls.output_8_already_enabled-api.json
   - docs/validation/evidence/F-CEC-001/2026-10-01-V2-2a28a93e-cec.input_power_on-api.json
   - docs/validation/evidence/F-CEC-005/2026-10-01-V2-2a28a93e-cec.output_power_on-api.json
   - docs/validation/evidence/F-CEC-006/2026-10-01-V2-2a28a93e-cec.output_volume_up-api.json
@@ -2101,6 +2785,46 @@ features:
   current: V1
   basis: 'Registered-route simulator reads/writes and fresh packaged-image records. Single-port CEC writes preserve current arrays; tests/sim/test_sim_cec_enable_snapshot.py covers external changes, concurrent edits and failed/incomplete reads (BE-35). Grouped capability routes still have scope beyond the selected scenarios.'
   evidence:
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_1_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_1_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_2_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_2_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_3_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_3_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_4_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_4_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_5_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_5_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_6_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_6_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_7_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_7_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_8_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_8_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_enable_default-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_enable_port_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_enable_port_9-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_enable_refused-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_1_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_1_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_2_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_2_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_3_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_3_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_4_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_4_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_5_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_5_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_6_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_6_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_7_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_7_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_8_enable_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_8_enable_1-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_enable_default-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_enable_port_0-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_enable_port_9-api.json
+  - docs/validation/evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.output_enable_refused-api.json
   - docs/validation/evidence/F-API-016/2026-10-01-V2-72cc71dc-writes.cec_output_enable-api.json
   - docs/validation/evidence/F-API-016/2026-10-01-V2-2a28a93e-contracts.cec_input_catalog-api.json
   - docs/validation/evidence/F-API-016/2026-10-01-V2-2a28a93e-contracts.cec_invalid_type-api.json

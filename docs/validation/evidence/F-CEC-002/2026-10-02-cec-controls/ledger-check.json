@@ -1,0 +1,25 @@
+{
+  "gate": "ok",
+  "batch_records": 273,
+  "batch_failures": 0,
+  "existing_known_failure_records": 8,
+  "unlinked_regressions": 0,
+  "promoted_to_V2": [
+    "F-CEC-002",
+    "F-CEC-003",
+    "F-CEC-004",
+    "F-CEC-008",
+    "F-CEC-009"
+  ],
+  "levels": {
+    "V3": 92,
+    "V2": 51,
+    "V1": 98,
+    "V0": 27
+  },
+  "fresh_passing_features": 135,
+  "fresh_failing_features": 1,
+  "stale_features": 0,
+  "below_target": 216,
+  "capped_features": 28
+}

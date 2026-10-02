@@ -1,7 +1,7 @@
 # Feature ledger
 
 > **Generated** by `python -m tools.validate ledger` — do not edit by hand. Registry: [`features.yaml`](features.yaml) · Plan: [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md) · How to add evidence: [`README.md`](README.md).
-> Commit `f4f417bf`
+> Commit `d434d3d8`
 
 **Level** = highest level with fresh passing evidence, else the recorded baseline (the registry's `current`), capped at V1 while an open critical/high finding is linked. **Recorded** = the registry baseline. **Fresh** = evidence commit not older than the last change to the scenario's `covers` paths.
 
@@ -10,7 +10,7 @@
 | Area | Features | V0 | V1 | V2 | V3 | V4 | V5 | Below target | Stale evidence |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Matrix control | 31 | 0 | 13 | 11 | 7 | 0 | 0 | 31 | 0 |
-| CEC control | 11 | 0 | 7 | 3 | 1 | 0 | 0 | 11 | 0 |
+| CEC control | 11 | 0 | 2 | 8 | 1 | 0 | 0 | 11 | 0 |
 | REST/WebSocket contract | 42 | 0 | 12 | 26 | 4 | 0 | 0 | 22 | 0 |
 | Domain features | 36 | 2 | 16 | 2 | 16 | 0 | 0 | 26 | 0 |
 | Web UI | 36 | 0 | 22 | 0 | 14 | 0 | 0 | 22 | 0 |
@@ -21,7 +21,7 @@
 | Deployment, configuration, persistence | 20 | 3 | 8 | 2 | 7 | 0 | 0 | 20 | 0 |
 | Security controls | 15 | 9 | 5 | 0 | 1 | 0 | 0 | 14 | 0 |
 | Reliability | 18 | 9 | 3 | 2 | 4 | 0 | 0 | 18 | 0 |
-| **All** | **268** | **27** | **103** | **46** | **92** | **0** | **0** | **216** | **0** |
+| **All** | **268** | **27** | **98** | **51** | **92** | **0** | **0** | **216** | **0** |
 
 Levels: **V0** Claimed · **V1** Unit · **V2** Simulated integration · **V3** End-to-end · **V4** Hardware · **V5** Field
 
@@ -43,11 +43,11 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | Reliability | 12 | 3 | 1 | 2 | 0 | 0 |
 | **All** | **33** | **133** | **27** | **75** | **0** | **0** |
 
-- Features with fresh passing scenario evidence: **130** of 268.
+- Features with fresh passing scenario evidence: **135** of 268.
 - Features with a fresh failing scenario: **1**: `F-MTX-030`.
 - Features capped at V1 by an open critical/high finding: **28**.
 
-Last run: target `sim`, clients ['api'], commit `f4f417bf` — fail: 8, pass: 16
+Last run: target `sim`, clients ['api'], commit `d434d3d8` — pass: 273
 
 ## Matrix control (F-MTX)
 
@@ -89,15 +89,15 @@ Last run: target `sim`, clients ['api'], commit `f4f417bf` — fail: 8, pass: 16
 
 | ID | Feature | Target | Level | Recorded | Freshness | Evidence | Open findings |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| F-CEC-001 | Power a source on / off over CEC | V4 | V2 | V1 | fresh | [cec.input_power_on·api·pass](evidence/F-CEC-001/2026-10-01-V2-2a28a93e-cec.input_power_on-api.json) | — |
-| F-CEC-002 | Navigate a source's menus over CEC (up/down/left/right/select/menu/back) | V4 | V1 | V1 | — | — | — |
-| F-CEC-003 | Control playback on a source over CEC | V4 | V1 | V1 | — | — | — |
-| F-CEC-004 | Source volume / mute over CEC | V4 | V1 | V1 | — | — | — |
-| F-CEC-005 | Turn a display (TV) on / off over CEC | V4 | V3 | V3 | fresh | [cec.output_power_on·api·pass](evidence/F-CEC-005/2026-10-01-V2-2a28a93e-cec.output_power_on-api.json)<br>[ha.service_cec_display·ha·pass](evidence/F-HA-012/2026-10-01-V3-2a28a93e-ha.service_cec_display-ha.json)<br>[remote.output_cec_power_on·uc·pass](evidence/F-UC-007/2026-10-01-V3-2a28a93e-remote.output_cec_power_on-uc.json) | BE-14(M) |
-| F-CEC-006 | Display / soundbar volume and mute over CEC | V4 | V2 | V1 | fresh | [cec.output_volume_up·api·pass](evidence/F-CEC-006/2026-10-01-V2-2a28a93e-cec.output_volume_up-api.json) | BE-14(M) |
-| F-CEC-007 | Enable CEC on the target port automatically before a command | V4 | V2 | V1 | fresh | [cec.input_power_on·api·pass](evidence/F-CEC-001/2026-10-01-V2-2a28a93e-cec.input_power_on-api.json) | — |
-| F-CEC-008 | Enable / disable CEC per port | V4 | V1 | V1 | — | — | — |
-| F-CEC-009 | Read which ports have CEC enabled | V4 | V1 | V1 | — | — | — |
+| F-CEC-001 | Power a source on / off over CEC | V4 | V2 | V1 | fresh | [cec.input_power_on·api·pass](evidence/F-CEC-001/2026-10-01-V2-2a28a93e-cec.input_power_on-api.json)<br>[cec_controls.input_1_power_off·api·pass](evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_1_power_off-api.json)<br>[cec_controls.input_1_power_on·api·pass](evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_1_power_on-api.json)<br>[cec_controls.input_2_power_off·api·pass](evidence/F-CEC-001/2026-10-02-V2-d434d3d8-cec_controls.input_2_power_off-api.json) | — |
+| F-CEC-002 | Navigate a source's menus over CEC (up/down/left/right/select/menu/back) | V4 | V2 | V1 | fresh | [cec_controls.input_1_back·api·pass](evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_1_back-api.json)<br>[cec_controls.input_1_down·api·pass](evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_1_down-api.json)<br>[cec_controls.input_1_left·api·pass](evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_1_left-api.json)<br>[cec_controls.input_1_menu·api·pass](evidence/F-CEC-002/2026-10-02-V2-d434d3d8-cec_controls.input_1_menu-api.json) | — |
+| F-CEC-003 | Control playback on a source over CEC | V4 | V2 | V1 | fresh | [cec_controls.input_1_fast_forward·api·pass](evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_1_fast_forward-api.json)<br>[cec_controls.input_1_next·api·pass](evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_1_next-api.json)<br>[cec_controls.input_1_pause·api·pass](evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_1_pause-api.json)<br>[cec_controls.input_1_play·api·pass](evidence/F-CEC-003/2026-10-02-V2-d434d3d8-cec_controls.input_1_play-api.json) | — |
+| F-CEC-004 | Source volume / mute over CEC | V4 | V2 | V1 | fresh | [cec_controls.input_1_mute·api·pass](evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_1_mute-api.json)<br>[cec_controls.input_1_volume_down·api·pass](evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_1_volume_down-api.json)<br>[cec_controls.input_1_volume_up·api·pass](evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_1_volume_up-api.json)<br>[cec_controls.input_2_mute·api·pass](evidence/F-CEC-004/2026-10-02-V2-d434d3d8-cec_controls.input_2_mute-api.json) | — |
+| F-CEC-005 | Turn a display (TV) on / off over CEC | V4 | V3 | V3 | fresh | [cec.output_power_on·api·pass](evidence/F-CEC-005/2026-10-01-V2-2a28a93e-cec.output_power_on-api.json)<br>[cec_controls.output_1_power_off·api·pass](evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_1_power_off-api.json)<br>[cec_controls.output_1_power_on·api·pass](evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_1_power_on-api.json)<br>[cec_controls.output_2_power_off·api·pass](evidence/F-CEC-005/2026-10-02-V2-d434d3d8-cec_controls.output_2_power_off-api.json) | BE-14(M) |
+| F-CEC-006 | Display / soundbar volume and mute over CEC | V4 | V2 | V1 | fresh | [cec.output_volume_up·api·pass](evidence/F-CEC-006/2026-10-01-V2-2a28a93e-cec.output_volume_up-api.json)<br>[cec_controls.output_1_mute·api·pass](evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_1_mute-api.json)<br>[cec_controls.output_1_volume_down·api·pass](evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_1_volume_down-api.json)<br>[cec_controls.output_1_volume_up·api·pass](evidence/F-CEC-006/2026-10-02-V2-d434d3d8-cec_controls.output_1_volume_up-api.json) | BE-14(M) |
+| F-CEC-007 | Enable CEC on the target port automatically before a command | V4 | V2 | V1 | fresh | [cec_controls.output_1_active·api·pass](evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.output_1_active-api.json)<br>[cec_controls.output_2_active·api·pass](evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.output_2_active-api.json)<br>[cec_controls.output_3_active·api·pass](evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.output_3_active-api.json)<br>[cec_controls.output_4_active·api·pass](evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.output_4_active-api.json) | — |
+| F-CEC-008 | Enable / disable CEC per port | V4 | V2 | V1 | fresh | [cec_controls.input_1_enable_0·api·pass](evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_1_enable_0-api.json)<br>[cec_controls.input_1_enable_1·api·pass](evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_1_enable_1-api.json)<br>[cec_controls.input_2_enable_0·api·pass](evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_2_enable_0-api.json)<br>[cec_controls.input_2_enable_1·api·pass](evidence/F-CEC-008/2026-10-02-V2-d434d3d8-cec_controls.input_2_enable_1-api.json) | — |
+| F-CEC-009 | Read which ports have CEC enabled | V4 | V2 | V1 | fresh | [cec_controls.status_mixed·api·pass](evidence/F-CEC-009/2026-10-02-V2-d434d3d8-cec_controls.status_mixed-api.json)<br>[cec_controls.status_off·api·pass](evidence/F-CEC-009/2026-10-02-V2-d434d3d8-cec_controls.status_off-api.json)<br>[cec_controls.status_on·api·pass](evidence/F-CEC-009/2026-10-02-V2-d434d3d8-cec_controls.status_on-api.json)<br>[cec_controls.status_unavailable·api·pass](evidence/F-CEC-009/2026-10-02-V2-d434d3d8-cec_controls.status_unavailable-api.json) | — |
 | F-CEC-010 | Send CEC over Telnet (OREI_USE_TELNET_CEC) | V4 | V1 | V1 | — | — | — |
 | F-CEC-011 | List CEC commands and per-port capabilities (incl. audio-only outputs) | V4 | V1 | V1 | — | — | BE-15(M) |
 
@@ -108,7 +108,7 @@ Last run: target `sim`, clients ['api'], commit `f4f417bf` — fail: 8, pass: 16
 | F-API-001 | GET /api/health (liveness, matrix connection, runtime metrics) | V3 | V2 | V2 | — | — | — |
 | F-API-002 | API info and root (GET /, /api, /api/info) | V2 | V1 | V1 | — | — | DEP-06(M) |
 | F-API-003 | GET /api/status | V3 | V2 | V2 | — | — | — |
-| F-API-004 | Detailed status (GET /api/status/full\|inputs\|outputs\|cables\|edid\|ext-audio\|system\|device\|cec) | V3 | V2 | V1 | fresh | [contracts.cables·api·pass](evidence/F-API-004/2026-10-01-V2-2a28a93e-contracts.cables-api.json)<br>[contracts.cec_status·api·pass](evidence/F-API-004/2026-10-01-V2-2a28a93e-contracts.cec_status-api.json) | — |
+| F-API-004 | Detailed status (GET /api/status/full\|inputs\|outputs\|cables\|edid\|ext-audio\|system\|device\|cec) | V3 | V2 | V1 | fresh | [contracts.cables·api·pass](evidence/F-API-004/2026-10-01-V2-2a28a93e-contracts.cables-api.json)<br>[contracts.cec_status·api·pass](evidence/F-API-004/2026-10-01-V2-2a28a93e-contracts.cec_status-api.json)<br>[cec_controls.status_mixed·api·pass](evidence/F-CEC-009/2026-10-02-V2-d434d3d8-cec_controls.status_mixed-api.json)<br>[cec_controls.status_off·api·pass](evidence/F-CEC-009/2026-10-02-V2-d434d3d8-cec_controls.status_off-api.json) | — |
 | F-API-005 | POST /api/switch (one output or all) | V3 | V2 | V2 | fresh | [routing.switch_one·api·pass](evidence/F-MTX-001/2026-10-01-V2-2a28a93e-routing.switch_one-api.json)<br>[routing.route_all·api·pass](evidence/F-MTX-002/2026-10-01-V2-2a28a93e-routing.route_all-api.json) | — |
 | F-API-006 | POST /api/output/{output}/source and input cycling | V3 | V1 | V1 | — | — | — |
 | F-API-007 | POST /api/preset/{preset} (recall) | V3 | V2 | V2 | fresh | [presets.recall·api·pass](evidence/F-MTX-003/2026-10-01-V2-2a28a93e-presets.recall-api.json) | — |
@@ -119,7 +119,7 @@ Last run: target `sim`, clients ['api'], commit `f4f417bf` — fail: 8, pass: 16
 | F-API-012 | External audio routes | V2 | V1 | V1 | — | — | — |
 | F-API-013 | System setting routes (beep, panel lock, LCD, reboot) | V2 | **V3** | V1 | fresh | [reboot.direct·api·pass](evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.direct-api.json)<br>[reboot.enabled_shortcut·api·pass](evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.enabled_shortcut-api.json)<br>[reboot.legacy_shortcut·api·pass](evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.legacy_shortcut-api.json)<br>[reboot.enabled_shortcut·browser·pass](evidence/F-MTX-021/2026-10-01-V3-2a28a93e-reboot.enabled_shortcut-browser.json) | — |
 | F-API-014 | System info and storage routes | V2 | **V2** | V1 | fresh | [contracts.storage·api·pass](evidence/F-API-014/2026-10-01-V2-2a28a93e-contracts.storage-api.json)<br>[contracts.system_info·api·pass](evidence/F-API-014/2026-10-01-V2-2a28a93e-contracts.system_info-api.json) | SEC-11(L) |
-| F-API-015 | CEC command routes | V3 | V2 | V1 | fresh | [cec.input_power_on·api·pass](evidence/F-CEC-001/2026-10-01-V2-2a28a93e-cec.input_power_on-api.json)<br>[cec.output_power_on·api·pass](evidence/F-CEC-005/2026-10-01-V2-2a28a93e-cec.output_power_on-api.json)<br>[cec.output_volume_up·api·pass](evidence/F-CEC-006/2026-10-01-V2-2a28a93e-cec.output_volume_up-api.json) | — |
+| F-API-015 | CEC command routes | V3 | V2 | V1 | fresh | [cec_controls.input_command_port_0·api·pass](evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.input_command_port_0-api.json)<br>[cec_controls.input_command_port_9·api·pass](evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.input_command_port_9-api.json)<br>[cec_controls.input_command_port_invalid·api·pass](evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.input_command_port_invalid-api.json)<br>[cec_controls.input_command_refused·api·pass](evidence/F-API-015/2026-10-02-V2-d434d3d8-cec_controls.input_command_refused-api.json) | — |
 | F-API-016 | CEC catalogue, capability and enable routes | V2 | **V2** | V1 | fresh | [contracts.cec_input_catalog·api·pass](evidence/F-API-016/2026-10-01-V2-2a28a93e-contracts.cec_input_catalog-api.json)<br>[contracts.cec_invalid_type·api·pass](evidence/F-API-016/2026-10-01-V2-2a28a93e-contracts.cec_invalid_type-api.json)<br>[contracts.cec_output_catalog·api·pass](evidence/F-API-016/2026-10-01-V2-2a28a93e-contracts.cec_output_catalog-api.json)<br>[writes.cec_output_enable·api·pass](evidence/F-API-016/2026-10-01-V2-2a28a93e-writes.cec_output_enable-api.json) | — |
 | F-API-017 | Device settings routes (icons, display names, preset names, favourite/dashboard presets) | V2 | **V2** | V1 | fresh | [contracts.device_settings·api·pass](evidence/F-API-017/2026-10-01-V2-2a28a93e-contracts.device_settings-api.json)<br>[contracts.input_settings·api·pass](evidence/F-API-017/2026-10-01-V2-2a28a93e-contracts.input_settings-api.json)<br>[contracts.invalid_input_settings·api·pass](evidence/F-API-017/2026-10-01-V2-2a28a93e-contracts.invalid_input_settings-api.json)<br>[contracts.invalid_output_settings·api·pass](evidence/F-API-017/2026-10-01-V2-2a28a93e-contracts.invalid_output_settings-api.json) | — |
 | F-API-018 | Name routes (POST /api/input\|output/{n}/name) | V2 | **V2** | V0 | fresh | [writes.output_name·api·pass](evidence/F-API-018/2026-10-01-V2-2a28a93e-writes.output_name-api.json) | BE-16(M) |
