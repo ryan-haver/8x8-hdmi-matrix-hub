@@ -1,0 +1,10 @@
+{
+  "selection": "build/preset-selection-api.json",
+  "client": "api",
+  "simulator": "preset-proof-sim-7d35362397f8",
+  "scope": "Disposable simulator and fixture data; no real hardware",
+  "image": "hdmi-matrix-hub:wp-simulator-evidence-refresh",
+  "source_commit": "f4f417bfed08303c1b0cb38bc0af92eb0dbec999",
+  "digest": "sha256:1b7b72c01322972198e2660896ca6a4270cce740d4c32d701a16eaa12b580dc0",
+  "hub": "preset-proof-hub-7d35362397f8"
+}

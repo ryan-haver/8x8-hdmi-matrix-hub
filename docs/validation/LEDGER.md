@@ -1,7 +1,7 @@
 # Feature ledger
 
 > **Generated** by `python -m tools.validate ledger` — do not edit by hand. Registry: [`features.yaml`](features.yaml) · Plan: [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md) · How to add evidence: [`README.md`](README.md).
-> Commit `31f5c05a`
+> Commit `f4f417bf`
 
 **Level** = highest level with fresh passing evidence, else the recorded baseline (the registry's `current`), capped at V1 while an open critical/high finding is linked. **Recorded** = the registry baseline. **Fresh** = evidence commit not older than the last change to the scenario's `covers` paths.
 
@@ -11,8 +11,8 @@
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Matrix control | 31 | 0 | 13 | 11 | 7 | 0 | 0 | 31 | 0 |
 | CEC control | 11 | 0 | 7 | 3 | 1 | 0 | 0 | 11 | 0 |
-| REST/WebSocket contract | 42 | 0 | 13 | 25 | 4 | 0 | 0 | 23 | 0 |
-| Domain features | 36 | 2 | 17 | 1 | 16 | 0 | 0 | 26 | 0 |
+| REST/WebSocket contract | 42 | 0 | 12 | 26 | 4 | 0 | 0 | 22 | 0 |
+| Domain features | 36 | 2 | 16 | 2 | 16 | 0 | 0 | 26 | 0 |
 | Web UI | 36 | 0 | 22 | 0 | 14 | 0 | 0 | 22 | 0 |
 | Kiosk | 14 | 0 | 7 | 0 | 7 | 0 | 0 | 7 | 0 |
 | Remote 3 integration | 17 | 1 | 2 | 0 | 14 | 0 | 0 | 17 | 0 |
@@ -21,7 +21,7 @@
 | Deployment, configuration, persistence | 20 | 3 | 8 | 2 | 7 | 0 | 0 | 20 | 0 |
 | Security controls | 15 | 9 | 5 | 0 | 1 | 0 | 0 | 14 | 0 |
 | Reliability | 18 | 9 | 3 | 2 | 4 | 0 | 0 | 18 | 0 |
-| **All** | **268** | **27** | **105** | **44** | **92** | **0** | **0** | **217** | **0** |
+| **All** | **268** | **27** | **103** | **46** | **92** | **0** | **0** | **216** | **0** |
 
 Levels: **V0** Claimed · **V1** Unit · **V2** Simulated integration · **V3** End-to-end · **V4** Hardware · **V5** Field
 
@@ -43,11 +43,11 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | Reliability | 12 | 3 | 1 | 2 | 0 | 0 |
 | **All** | **33** | **133** | **27** | **75** | **0** | **0** |
 
-- Features with fresh passing scenario evidence: **128** of 268.
-- Features with a fresh failing scenario: **0**.
+- Features with fresh passing scenario evidence: **130** of 268.
+- Features with a fresh failing scenario: **1**: `F-MTX-030`.
 - Features capped at V1 by an open critical/high finding: **28**.
 
-Last run: target `sim`, clients ['api'], commit `31f5c05a` — pass: 183
+Last run: target `sim`, clients ['api'], commit `f4f417bf` — fail: 8, pass: 16
 
 ## Matrix control (F-MTX)
 
@@ -56,7 +56,7 @@ Last run: target `sim`, clients ['api'], commit `31f5c05a` — pass: 183
 | F-MTX-001 | Route one input to one output | V4 | V3 | V3 | fresh | [ha.select_source·ha·pass](evidence/F-HA-002/2026-10-01-V3-2a28a93e-ha.select_source-ha.json)<br>[routing.switch_one·api·pass](evidence/F-MTX-001/2026-10-01-V2-2a28a93e-routing.switch_one-api.json)<br>[routing.switch_one·browser·pass](evidence/F-MTX-001/2026-10-01-V3-2a28a93e-routing.switch_one-browser.json)<br>[remote.select_source·uc·pass](evidence/F-UC-008/2026-10-01-V3-2a28a93e-remote.select_source-uc.json) | — |
 | F-MTX-002 | Route one input to every output | V4 | V3 | V3 | fresh | [routing.route_all·api·pass](evidence/F-MTX-002/2026-10-01-V2-2a28a93e-routing.route_all-api.json)<br>[routing.route_all·browser·pass](evidence/F-MTX-002/2026-10-01-V3-2a28a93e-routing.route_all-browser.json) | — |
 | F-MTX-003 | Recall a matrix preset (1-8) | V4 | V3 | V3 | fresh | [ha.preset_button·ha·pass](evidence/F-HA-006/2026-10-01-V3-2a28a93e-ha.preset_button-ha.json)<br>[presets.recall·api·pass](evidence/F-MTX-003/2026-10-01-V2-2a28a93e-presets.recall-api.json)<br>[presets.recall·browser·pass](evidence/F-MTX-003/2026-10-01-V3-2a28a93e-presets.recall-browser.json)<br>[remote.preset_button·uc·pass](evidence/F-UC-004/2026-10-01-V3-2a28a93e-remote.preset_button-uc.json) | — |
-| F-MTX-004 | Save the current routing to a matrix preset | V4 | V2 | V1 | fresh | [matrix.preset_invalid_slot·api·pass](evidence/F-MTX-004/2026-10-02-V2-e015d3e1-matrix.preset_invalid_slot-api.json)<br>[matrix.preset_refused·api·pass](evidence/F-MTX-004/2026-10-02-V2-e015d3e1-matrix.preset_refused-api.json)<br>[matrix.save_current_preset·api·pass](evidence/F-MTX-004/2026-10-02-V2-e015d3e1-matrix.save_current_preset-api.json) | — |
+| F-MTX-004 | Save the current routing to a matrix preset | V4 | V2 | V1 | fresh | [matrix.preset_invalid_slot·api·pass](evidence/F-MTX-004/2026-10-02-V2-e015d3e1-matrix.preset_invalid_slot-api.json)<br>[matrix.preset_refused·api·pass](evidence/F-MTX-004/2026-10-02-V2-e015d3e1-matrix.preset_refused-api.json)<br>[matrix.save_current_preset·api·pass](evidence/F-MTX-004/2026-10-02-V2-e015d3e1-matrix.save_current_preset-api.json)<br>[preset_read.saved_current_1·api·pass](evidence/F-MTX-004/2026-10-02-V2-f4f417bf-preset_read.saved_current_1-api.json) | — |
 | F-MTX-005 | Name presets in the web app (names shown by the API, UI, kiosk) | V4 | V3 | V0 | fresh | [presets.rename·api·pass](evidence/F-MTX-005/2026-10-01-V2-2a28a93e-presets.rename-api.json)<br>[presets.rename·browser·pass](evidence/F-MTX-005/2026-10-01-V3-2a28a93e-presets.rename-browser.json) | BE-16(M) |
 | F-MTX-006 | Matrix power on / standby | V4 | V3 | V3 | fresh | [ha.power_off·ha·pass](evidence/F-HA-003/2026-10-01-V3-2a28a93e-ha.power_off-ha.json)<br>[ha.power_on·ha·pass](evidence/F-HA-003/2026-10-01-V3-2a28a93e-ha.power_on-ha.json)<br>[power.standby·api·pass](evidence/F-MTX-006/2026-10-01-V2-2a28a93e-power.standby-api.json)<br>[power.wake·api·pass](evidence/F-MTX-006/2026-10-01-V2-2a28a93e-power.wake-api.json) | — |
 | F-MTX-007 | Mute / unmute the audio of an output | V4 | V1 (capped) | V1 | fresh | [ha.mute_switch·ha·pass](evidence/F-HA-004/2026-10-01-V3-2a28a93e-ha.mute_switch-ha.json)<br>[outputs.audio_mute·api·pass](evidence/F-MTX-007/2026-10-01-V2-2a28a93e-outputs.audio_mute-api.json) | HIL-09(C) |
@@ -82,7 +82,7 @@ Last run: target `sim`, clients ['api'], commit `31f5c05a` — pass: 183
 | F-MTX-027 | Show which outputs have a display connected | V4 | V2 | V1 | fresh | [status.display_1_0·api·pass](evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_1_0-api.json)<br>[status.display_1_1·api·pass](evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_1_1-api.json)<br>[status.display_2_0·api·pass](evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_2_0-api.json)<br>[status.display_2_1·api·pass](evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_2_1-api.json) | — |
 | F-MTX-028 | Show device info (model, firmware, network) | V4 | V2 | V1 | fresh | [status.device_dhcp_0·api·pass](evidence/F-MTX-028/2026-10-02-V2-31f5c05a-status.device_dhcp_0-api.json)<br>[status.device_dhcp_1·api·pass](evidence/F-MTX-028/2026-10-02-V2-31f5c05a-status.device_dhcp_1-api.json)<br>[status.runtime_info·api·pass](evidence/F-MTX-028/2026-10-02-V2-31f5c05a-status.runtime_info-api.json)<br>[status.system_power_0·api·pass](evidence/F-MTX-028/2026-10-02-V2-31f5c05a-status.system_power_0-api.json) | — |
 | F-MTX-029 | Cycle an output to the next / previous input | V4 | V2 | V1 | fresh | [status.cycle_next_1_1·api·pass](evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_1_1-api.json)<br>[status.cycle_next_1_2·api·pass](evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_1_2-api.json)<br>[status.cycle_next_1_3·api·pass](evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_1_3-api.json)<br>[status.cycle_next_1_4·api·pass](evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_1_4-api.json) | — |
-| F-MTX-030 | Read a preset's stored routing | V4 | V1 | V1 | — | — | — |
+| F-MTX-030 | Read a preset's stored routing | V4 | V1 | V1 | fresh | [preset_read.device_slot_1·api·fail](evidence/F-MTX-030/2026-10-02-V2-f4f417bf-preset_read.device_slot_1-api.json)<br>[preset_read.device_slot_2·api·fail](evidence/F-MTX-030/2026-10-02-V2-f4f417bf-preset_read.device_slot_2-api.json)<br>[preset_read.device_slot_3·api·fail](evidence/F-MTX-030/2026-10-02-V2-f4f417bf-preset_read.device_slot_3-api.json)<br>[preset_read.device_slot_4·api·fail](evidence/F-MTX-030/2026-10-02-V2-f4f417bf-preset_read.device_slot_4-api.json) | BE-36(M) |
 | F-MTX-031 | Notice changes made outside the hub (front panel, cable plugged, source on/off) | V4 | V3 | V3 | fresh | [ha.front_panel_route·ha·pass](evidence/F-HA-002/2026-10-01-V3-2a28a93e-ha.front_panel_route-ha.json)<br>[live.display_unplugged·browser·pass](evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.display_unplugged-browser.json)<br>[live.front_panel_route·browser·pass](evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.front_panel_route-browser.json)<br>[live.input_signal·browser·pass](evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.input_signal-browser.json) | — |
 
 ## CEC control (F-CEC)
@@ -112,7 +112,7 @@ Last run: target `sim`, clients ['api'], commit `31f5c05a` — pass: 183
 | F-API-005 | POST /api/switch (one output or all) | V3 | V2 | V2 | fresh | [routing.switch_one·api·pass](evidence/F-MTX-001/2026-10-01-V2-2a28a93e-routing.switch_one-api.json)<br>[routing.route_all·api·pass](evidence/F-MTX-002/2026-10-01-V2-2a28a93e-routing.route_all-api.json) | — |
 | F-API-006 | POST /api/output/{output}/source and input cycling | V3 | V1 | V1 | — | — | — |
 | F-API-007 | POST /api/preset/{preset} (recall) | V3 | V2 | V2 | fresh | [presets.recall·api·pass](evidence/F-MTX-003/2026-10-01-V2-2a28a93e-presets.recall-api.json) | — |
-| F-API-008 | POST /api/preset/{preset}/save | V2 | V1 | V1 | — | — | — |
+| F-API-008 | POST /api/preset/{preset}/save | V2 | **V2** | V1 | fresh | [preset_read.saved_partial_1·api·pass](evidence/F-DOM-034/2026-10-02-V2-f4f417bf-preset_read.saved_partial_1-api.json)<br>[preset_read.saved_partial_2·api·pass](evidence/F-DOM-034/2026-10-02-V2-f4f417bf-preset_read.saved_partial_2-api.json)<br>[preset_read.saved_partial_3·api·pass](evidence/F-DOM-034/2026-10-02-V2-f4f417bf-preset_read.saved_partial_3-api.json)<br>[preset_read.saved_partial_4·api·pass](evidence/F-DOM-034/2026-10-02-V2-f4f417bf-preset_read.saved_partial_4-api.json) | — |
 | F-API-009 | POST /api/power/on\|off | V3 | V2 | V1 | fresh | [power.standby·api·pass](evidence/F-MTX-006/2026-10-01-V2-2a28a93e-power.standby-api.json)<br>[power.wake·api·pass](evidence/F-MTX-006/2026-10-01-V2-2a28a93e-power.wake-api.json) | — |
 | F-API-010 | Output setting routes (mute, enable, hdcp, hdr, scaler, arc) | V2 | V1 | V1 | — | — | API-15(L) |
 | F-API-011 | EDID routes | V2 | V1 | V1 | — | — | — |
@@ -185,7 +185,7 @@ Last run: target `sim`, clients ['api'], commit `31f5c05a` — pass: 183
 | F-DOM-031 | Dashboard layout (add, remove, reorder cards) | V3 | V1 | V1 | — | — | API-20(M), UI-08(M) |
 | F-DOM-032 | Input/output icons, colours and display names (device settings) | V3 | V0 | V0 | — | — | BE-16(M), UI-22(M) |
 | F-DOM-033 | Favourite presets and choose which presets the dashboard shows | V3 | V1 | V1 | — | — | — |
-| F-DOM-034 | Save a custom routing mapping into a preset | V3 | V1 | V1 | — | — | — |
+| F-DOM-034 | Save a custom routing mapping into a preset | V3 | V2 | V1 | fresh | [preset_read.saved_partial_1·api·pass](evidence/F-DOM-034/2026-10-02-V2-f4f417bf-preset_read.saved_partial_1-api.json)<br>[preset_read.saved_partial_2·api·pass](evidence/F-DOM-034/2026-10-02-V2-f4f417bf-preset_read.saved_partial_2-api.json)<br>[preset_read.saved_partial_3·api·pass](evidence/F-DOM-034/2026-10-02-V2-f4f417bf-preset_read.saved_partial_3-api.json)<br>[preset_read.saved_partial_4·api·pass](evidence/F-DOM-034/2026-10-02-V2-f4f417bf-preset_read.saved_partial_4-api.json) | — |
 | F-DOM-035 | Theme presets and custom themes | V3 | V1 | V1 | — | — | — |
 | F-DOM-036 | UI preferences stored on the hub | V3 | V1 | V1 | — | — | — |
 

@@ -1,0 +1,19 @@
+{
+  "source_commit": "f4f417bfed08303c1b0cb38bc0af92eb0dbec999",
+  "image_digest": "sha256:1b7b72c01322972198e2660896ca6a4270cce740d4c32d701a16eaa12b580dc0",
+  "records": 24,
+  "passing_records": 16,
+  "known_failure_records": 8,
+  "finding": "BE-36",
+  "unlinked_regressions": 0,
+  "features": [
+    "F-API-008",
+    "F-DOM-034",
+    "F-MTX-004",
+    "F-MTX-030"
+  ],
+  "matches_checkout_files": 176,
+  "schema_errors": 0,
+  "dirty_records": 0,
+  "hardware_exercised": false
+}

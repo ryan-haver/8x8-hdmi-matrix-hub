@@ -117,6 +117,14 @@ features:
   basis: 'tests/sim/test_sim_hub.py::test_recall_and_save_preset (driver-level: real OreiMatrix against the simulator, no
     user interface in the path -> V1); tests/test_rest_api.py TestControlEndpoints (mocked matrix).'
   evidence:
+  - docs/validation/evidence/F-MTX-004/2026-10-02-V2-f4f417bf-preset_read.saved_current_1-api.json
+  - docs/validation/evidence/F-MTX-004/2026-10-02-V2-f4f417bf-preset_read.saved_current_2-api.json
+  - docs/validation/evidence/F-MTX-004/2026-10-02-V2-f4f417bf-preset_read.saved_current_3-api.json
+  - docs/validation/evidence/F-MTX-004/2026-10-02-V2-f4f417bf-preset_read.saved_current_4-api.json
+  - docs/validation/evidence/F-MTX-004/2026-10-02-V2-f4f417bf-preset_read.saved_current_5-api.json
+  - docs/validation/evidence/F-MTX-004/2026-10-02-V2-f4f417bf-preset_read.saved_current_6-api.json
+  - docs/validation/evidence/F-MTX-004/2026-10-02-V2-f4f417bf-preset_read.saved_current_7-api.json
+  - docs/validation/evidence/F-MTX-004/2026-10-02-V2-f4f417bf-preset_read.saved_current_8-api.json
   - docs/validation/evidence/F-MTX-004/2026-10-02-V2-e015d3e1-matrix.preset_invalid_slot-api.json
   - docs/validation/evidence/F-MTX-004/2026-10-02-V2-e015d3e1-matrix.preset_refused-api.json
   - docs/validation/evidence/F-MTX-004/2026-10-02-V2-e015d3e1-matrix.save_current_preset-api.json
@@ -956,7 +964,15 @@ features:
     captured on V1.10.01 (8 lines, one TCP segment each, or an empty slot) through the real TelnetClient in
     tests/test_telnet_real_captures.py; HTTP preset get is not implemented by that firmware (HIL-01), so there is no HTTP
     path: tests/sim/test_golden_hub.py::test_get_preset_info_never_uses_the_http_preset_read.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-MTX-030/2026-10-02-V2-f4f417bf-preset_read.device_slot_1-api.json
+  - docs/validation/evidence/F-MTX-030/2026-10-02-V2-f4f417bf-preset_read.device_slot_2-api.json
+  - docs/validation/evidence/F-MTX-030/2026-10-02-V2-f4f417bf-preset_read.device_slot_3-api.json
+  - docs/validation/evidence/F-MTX-030/2026-10-02-V2-f4f417bf-preset_read.device_slot_4-api.json
+  - docs/validation/evidence/F-MTX-030/2026-10-02-V2-f4f417bf-preset_read.device_slot_5-api.json
+  - docs/validation/evidence/F-MTX-030/2026-10-02-V2-f4f417bf-preset_read.device_slot_6-api.json
+  - docs/validation/evidence/F-MTX-030/2026-10-02-V2-f4f417bf-preset_read.device_slot_7-api.json
+  - docs/validation/evidence/F-MTX-030/2026-10-02-V2-f4f417bf-preset_read.device_slot_8-api.json
   findings: [HIL-01, BE-36]
   scenarios: [preset_read.device_slot_1, preset_read.device_slot_2, preset_read.device_slot_3, preset_read.device_slot_4, preset_read.device_slot_5, preset_read.device_slot_6, preset_read.device_slot_7, preset_read.device_slot_8]
 - id: F-MTX-031
@@ -1253,7 +1269,23 @@ features:
   target: V2
   current: V1
   basis: 'Scenario presets.save_custom_mapping (V2, custom mapping body); tests/test_rest_api.py TestControlEndpoints (mocked).'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-DOM-034/2026-10-02-V2-f4f417bf-preset_read.saved_partial_1-api.json
+  - docs/validation/evidence/F-DOM-034/2026-10-02-V2-f4f417bf-preset_read.saved_partial_2-api.json
+  - docs/validation/evidence/F-DOM-034/2026-10-02-V2-f4f417bf-preset_read.saved_partial_3-api.json
+  - docs/validation/evidence/F-DOM-034/2026-10-02-V2-f4f417bf-preset_read.saved_partial_4-api.json
+  - docs/validation/evidence/F-DOM-034/2026-10-02-V2-f4f417bf-preset_read.saved_partial_5-api.json
+  - docs/validation/evidence/F-DOM-034/2026-10-02-V2-f4f417bf-preset_read.saved_partial_6-api.json
+  - docs/validation/evidence/F-DOM-034/2026-10-02-V2-f4f417bf-preset_read.saved_partial_7-api.json
+  - docs/validation/evidence/F-DOM-034/2026-10-02-V2-f4f417bf-preset_read.saved_partial_8-api.json
+  - docs/validation/evidence/F-MTX-004/2026-10-02-V2-f4f417bf-preset_read.saved_current_1-api.json
+  - docs/validation/evidence/F-MTX-004/2026-10-02-V2-f4f417bf-preset_read.saved_current_2-api.json
+  - docs/validation/evidence/F-MTX-004/2026-10-02-V2-f4f417bf-preset_read.saved_current_3-api.json
+  - docs/validation/evidence/F-MTX-004/2026-10-02-V2-f4f417bf-preset_read.saved_current_4-api.json
+  - docs/validation/evidence/F-MTX-004/2026-10-02-V2-f4f417bf-preset_read.saved_current_5-api.json
+  - docs/validation/evidence/F-MTX-004/2026-10-02-V2-f4f417bf-preset_read.saved_current_6-api.json
+  - docs/validation/evidence/F-MTX-004/2026-10-02-V2-f4f417bf-preset_read.saved_current_7-api.json
+  - docs/validation/evidence/F-MTX-004/2026-10-02-V2-f4f417bf-preset_read.saved_current_8-api.json
   findings: [API-14]
   scenarios: [presets.save_custom_mapping, preset_read.saved_current_1, preset_read.saved_partial_1, preset_read.saved_current_2, preset_read.saved_partial_2, preset_read.saved_current_3, preset_read.saved_partial_3, preset_read.saved_current_4, preset_read.saved_partial_4, preset_read.saved_current_5, preset_read.saved_partial_5, preset_read.saved_current_6, preset_read.saved_partial_6, preset_read.saved_current_7, preset_read.saved_partial_7, preset_read.saved_current_8, preset_read.saved_partial_8]
 - id: F-API-009
@@ -2519,7 +2551,15 @@ features:
   target: V3
   current: V1
   basis: 'Scenario presets.save_custom_mapping (V2); tests/sim/test_sim_preset_save.py custom preset save tests (fresh routing, lock, refusal without a readable routing).'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-DOM-034/2026-10-02-V2-f4f417bf-preset_read.saved_partial_1-api.json
+  - docs/validation/evidence/F-DOM-034/2026-10-02-V2-f4f417bf-preset_read.saved_partial_2-api.json
+  - docs/validation/evidence/F-DOM-034/2026-10-02-V2-f4f417bf-preset_read.saved_partial_3-api.json
+  - docs/validation/evidence/F-DOM-034/2026-10-02-V2-f4f417bf-preset_read.saved_partial_4-api.json
+  - docs/validation/evidence/F-DOM-034/2026-10-02-V2-f4f417bf-preset_read.saved_partial_5-api.json
+  - docs/validation/evidence/F-DOM-034/2026-10-02-V2-f4f417bf-preset_read.saved_partial_6-api.json
+  - docs/validation/evidence/F-DOM-034/2026-10-02-V2-f4f417bf-preset_read.saved_partial_7-api.json
+  - docs/validation/evidence/F-DOM-034/2026-10-02-V2-f4f417bf-preset_read.saved_partial_8-api.json
   findings: [API-14]
   scenarios: [presets.save_custom_mapping, preset_read.saved_partial_1, preset_read.saved_partial_2, preset_read.saved_partial_3, preset_read.saved_partial_4, preset_read.saved_partial_5, preset_read.saved_partial_6, preset_read.saved_partial_7, preset_read.saved_partial_8]
 - id: F-DOM-035
