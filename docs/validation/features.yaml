@@ -214,7 +214,12 @@ features:
   basis: 'tests/sim/test_sim_hub.py::test_output_settings and tests/sim/test_sim_real_commands.py (driver-level: real OreiMatrix
     against the simulator, payload on the simulator log -> V1); tests/test_rest_api.py TestAdvancedOutputControl (mocked).
     On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-MTX-008/2026-10-02-V2-972b8c40-settings.enable_0-api.json
+  - docs/validation/evidence/F-MTX-008/2026-10-02-V2-972b8c40-settings.enable_1-api.json
+  - docs/validation/evidence/F-MTX-008/2026-10-02-V2-972b8c40-settings.enable_port_0-api.json
+  - docs/validation/evidence/F-MTX-008/2026-10-02-V2-972b8c40-settings.enable_port_9-api.json
+  - docs/validation/evidence/F-MTX-008/2026-10-02-V2-972b8c40-settings.enable_refused-api.json
   findings: [BE-12, HIL-09]
   scenarios: [settings.enable_0, settings.enable_1, settings.enable_refused, settings.enable_port_0, settings.enable_port_9]
 - id: F-MTX-009
@@ -231,7 +236,18 @@ features:
   basis: 'tests/sim/test_sim_hub.py::test_output_settings and tests/sim/test_sim_real_commands.py (driver-level: real OreiMatrix
     against the simulator, payload on the simulator log -> V1); tests/test_rest_api.py TestAdvancedOutputControl (mocked).
     On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-MTX-009/2026-10-02-V2-972b8c40-settings.hdcp_1-api.json
+  - docs/validation/evidence/F-MTX-009/2026-10-02-V2-972b8c40-settings.hdcp_2-api.json
+  - docs/validation/evidence/F-MTX-009/2026-10-02-V2-972b8c40-settings.hdcp_3-api.json
+  - docs/validation/evidence/F-MTX-009/2026-10-02-V2-972b8c40-settings.hdcp_4-api.json
+  - docs/validation/evidence/F-MTX-009/2026-10-02-V2-972b8c40-settings.hdcp_5-api.json
+  - docs/validation/evidence/F-MTX-009/2026-10-02-V2-972b8c40-settings.hdcp_invalid_0-api.json
+  - docs/validation/evidence/F-MTX-009/2026-10-02-V2-972b8c40-settings.hdcp_invalid_6-api.json
+  - docs/validation/evidence/F-MTX-009/2026-10-02-V2-972b8c40-settings.hdcp_missing_mode-api.json
+  - docs/validation/evidence/F-MTX-009/2026-10-02-V2-972b8c40-settings.hdcp_port_0-api.json
+  - docs/validation/evidence/F-MTX-009/2026-10-02-V2-972b8c40-settings.hdcp_port_9-api.json
+  - docs/validation/evidence/F-MTX-009/2026-10-02-V2-972b8c40-settings.hdcp_refused-api.json
   findings: [BE-12, HIL-09]
   scenarios: [settings.hdcp_1, settings.hdcp_2, settings.hdcp_3, settings.hdcp_4, settings.hdcp_5, settings.hdcp_refused, settings.hdcp_port_0, settings.hdcp_port_9, settings.hdcp_invalid_0, settings.hdcp_invalid_6, settings.hdcp_missing_mode]
 - id: F-MTX-010
@@ -248,7 +264,16 @@ features:
   basis: 'tests/sim/test_sim_hub.py::test_output_settings and tests/sim/test_sim_real_commands.py (driver-level: real OreiMatrix
     against the simulator, payload on the simulator log -> V1); tests/test_rest_api.py TestAdvancedOutputControl (mocked).
     On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-MTX-010/2026-10-02-V2-972b8c40-settings.hdr_1-api.json
+  - docs/validation/evidence/F-MTX-010/2026-10-02-V2-972b8c40-settings.hdr_2-api.json
+  - docs/validation/evidence/F-MTX-010/2026-10-02-V2-972b8c40-settings.hdr_3-api.json
+  - docs/validation/evidence/F-MTX-010/2026-10-02-V2-972b8c40-settings.hdr_invalid_0-api.json
+  - docs/validation/evidence/F-MTX-010/2026-10-02-V2-972b8c40-settings.hdr_invalid_4-api.json
+  - docs/validation/evidence/F-MTX-010/2026-10-02-V2-972b8c40-settings.hdr_missing_mode-api.json
+  - docs/validation/evidence/F-MTX-010/2026-10-02-V2-972b8c40-settings.hdr_port_0-api.json
+  - docs/validation/evidence/F-MTX-010/2026-10-02-V2-972b8c40-settings.hdr_port_9-api.json
+  - docs/validation/evidence/F-MTX-010/2026-10-02-V2-972b8c40-settings.hdr_refused-api.json
   findings: [BE-12, HIL-09]
   scenarios: [settings.hdr_1, settings.hdr_2, settings.hdr_3, settings.hdr_refused, settings.hdr_port_0, settings.hdr_port_9, settings.hdr_invalid_0, settings.hdr_invalid_4, settings.hdr_missing_mode]
 - id: F-MTX-011
@@ -265,7 +290,18 @@ features:
   basis: 'tests/sim/test_sim_hub.py::test_output_settings and tests/sim/test_sim_real_commands.py (driver-level: real OreiMatrix
     against the simulator, payload on the simulator log -> V1); tests/test_rest_api.py TestAdvancedOutputControl (mocked).
     On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-MTX-011/2026-10-02-V2-972b8c40-settings.scaler_1-api.json
+  - docs/validation/evidence/F-MTX-011/2026-10-02-V2-972b8c40-settings.scaler_2-api.json
+  - docs/validation/evidence/F-MTX-011/2026-10-02-V2-972b8c40-settings.scaler_3-api.json
+  - docs/validation/evidence/F-MTX-011/2026-10-02-V2-972b8c40-settings.scaler_4-api.json
+  - docs/validation/evidence/F-MTX-011/2026-10-02-V2-972b8c40-settings.scaler_5-api.json
+  - docs/validation/evidence/F-MTX-011/2026-10-02-V2-972b8c40-settings.scaler_invalid_0-api.json
+  - docs/validation/evidence/F-MTX-011/2026-10-02-V2-972b8c40-settings.scaler_invalid_6-api.json
+  - docs/validation/evidence/F-MTX-011/2026-10-02-V2-972b8c40-settings.scaler_missing_mode-api.json
+  - docs/validation/evidence/F-MTX-011/2026-10-02-V2-972b8c40-settings.scaler_port_0-api.json
+  - docs/validation/evidence/F-MTX-011/2026-10-02-V2-972b8c40-settings.scaler_port_9-api.json
+  - docs/validation/evidence/F-MTX-011/2026-10-02-V2-972b8c40-settings.scaler_refused-api.json
   findings: [BE-12, BE-15, HIL-09]
   scenarios: [settings.scaler_1, settings.scaler_2, settings.scaler_3, settings.scaler_4, settings.scaler_5, settings.scaler_refused, settings.scaler_port_0, settings.scaler_port_9, settings.scaler_invalid_0, settings.scaler_invalid_6, settings.scaler_missing_mode]
 - id: F-MTX-012
@@ -282,7 +318,12 @@ features:
   basis: 'tests/sim/test_sim_hub.py::test_output_settings and tests/sim/test_sim_real_commands.py (driver-level: real OreiMatrix
     against the simulator, payload on the simulator log -> V1); tests/test_rest_api.py TestAdvancedOutputControl (mocked).
     On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-MTX-012/2026-10-02-V2-972b8c40-settings.arc_0-api.json
+  - docs/validation/evidence/F-MTX-012/2026-10-02-V2-972b8c40-settings.arc_1-api.json
+  - docs/validation/evidence/F-MTX-012/2026-10-02-V2-972b8c40-settings.arc_port_0-api.json
+  - docs/validation/evidence/F-MTX-012/2026-10-02-V2-972b8c40-settings.arc_port_9-api.json
+  - docs/validation/evidence/F-MTX-012/2026-10-02-V2-972b8c40-settings.arc_refused-api.json
   findings: [BE-12, HIL-09]
   scenarios: [settings.arc_0, settings.arc_1, settings.arc_refused, settings.arc_port_0, settings.arc_port_9]
 - id: F-MTX-013
@@ -298,7 +339,17 @@ features:
   basis: 'tests/sim/test_sim_hub.py::test_edid and tests/sim/test_sim_real_commands.py (driver-level: real OreiMatrix against
     the simulator -> V1); tests/test_rest_api.py TestEdidControl (mocked). EDID ids 1-47 are the device web interface''s
     list (36 = 8K FRL 12G HDR 7.1CH, as V1.10.01 reports). On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-MTX-013/2026-10-02-V2-972b8c40-settings.edid_input_0-api.json
+  - docs/validation/evidence/F-MTX-013/2026-10-02-V2-972b8c40-settings.edid_input_9-api.json
+  - docs/validation/evidence/F-MTX-013/2026-10-02-V2-972b8c40-settings.edid_missing_mode-api.json
+  - docs/validation/evidence/F-MTX-013/2026-10-02-V2-972b8c40-settings.edid_mode_0-api.json
+  - docs/validation/evidence/F-MTX-013/2026-10-02-V2-972b8c40-settings.edid_mode_1-api.json
+  - docs/validation/evidence/F-MTX-013/2026-10-02-V2-972b8c40-settings.edid_mode_12-api.json
+  - docs/validation/evidence/F-MTX-013/2026-10-02-V2-972b8c40-settings.edid_mode_36-api.json
+  - docs/validation/evidence/F-MTX-013/2026-10-02-V2-972b8c40-settings.edid_mode_39-api.json
+  - docs/validation/evidence/F-MTX-013/2026-10-02-V2-972b8c40-settings.edid_mode_48-api.json
+  - docs/validation/evidence/F-MTX-013/2026-10-02-V2-972b8c40-settings.edid_refused-api.json
   findings: [BE-12, HIL-09]
   scenarios: [settings.edid_mode_1, settings.edid_mode_12, settings.edid_mode_36, settings.edid_mode_39, settings.edid_input_0, settings.edid_input_9, settings.edid_mode_0, settings.edid_mode_48, settings.edid_missing_mode, settings.edid_refused]
 - id: F-MTX-014
@@ -312,7 +363,18 @@ features:
   current: V1
   basis: 'tests/sim/test_sim_hub.py::test_edid (copy_edid_from_output sends set edid 39+N) (driver-level -> V1). Neither
     `copy edid` nor `set input edid 14+N` is answered by V1.10.01 (BE-25). On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_invalid_0-api.json
+  - docs/validation/evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_invalid_9-api.json
+  - docs/validation/evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_output_1-api.json
+  - docs/validation/evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_output_2-api.json
+  - docs/validation/evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_output_3-api.json
+  - docs/validation/evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_output_4-api.json
+  - docs/validation/evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_output_5-api.json
+  - docs/validation/evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_output_6-api.json
+  - docs/validation/evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_output_7-api.json
+  - docs/validation/evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_output_8-api.json
+  - docs/validation/evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_refused-api.json
   findings: [BE-25, HIL-09]
   scenarios: [settings.edid_copy_output_1, settings.edid_copy_output_2, settings.edid_copy_output_3, settings.edid_copy_output_4, settings.edid_copy_output_5, settings.edid_copy_output_6, settings.edid_copy_output_7, settings.edid_copy_output_8, settings.edid_copy_invalid_0, settings.edid_copy_invalid_9, settings.edid_copy_refused]
 - id: F-MTX-015

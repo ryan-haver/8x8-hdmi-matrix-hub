@@ -1,7 +1,7 @@
 # Feature ledger
 
 > **Generated** by `python -m tools.validate ledger` — do not edit by hand. Registry: [`features.yaml`](features.yaml) · Plan: [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md) · How to add evidence: [`README.md`](README.md).
-> Commit `e015d3e1`
+> Commit `972b8c40`
 
 **Level** = highest level with fresh passing evidence, else the recorded baseline (the registry's `current`), capped at V1 while an open critical/high finding is linked. **Recorded** = the registry baseline. **Fresh** = evidence commit not older than the last change to the scenario's `covers` paths.
 
@@ -43,11 +43,11 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | Reliability | 12 | 3 | 1 | 2 | 0 | 0 |
 | **All** | **33** | **133** | **27** | **75** | **0** | **0** |
 
-- Features with fresh passing scenario evidence: **112** of 268.
+- Features with fresh passing scenario evidence: **119** of 268.
 - Features with a fresh failing scenario: **0**.
 - Features capped at V1 by an open critical/high finding: **28**.
 
-Last run: target `sim`, clients ['api'], commit `e015d3e1` — pass: 29
+Last run: target `sim`, clients ['api'], commit `972b8c40` — pass: 62
 
 ## Matrix control (F-MTX)
 
@@ -60,13 +60,13 @@ Last run: target `sim`, clients ['api'], commit `e015d3e1` — pass: 29
 | F-MTX-005 | Name presets in the web app (names shown by the API, UI, kiosk) | V4 | V3 | V0 | fresh | [presets.rename·api·pass](evidence/F-MTX-005/2026-10-01-V2-2a28a93e-presets.rename-api.json)<br>[presets.rename·browser·pass](evidence/F-MTX-005/2026-10-01-V3-2a28a93e-presets.rename-browser.json) | BE-16(M) |
 | F-MTX-006 | Matrix power on / standby | V4 | V3 | V3 | fresh | [ha.power_off·ha·pass](evidence/F-HA-003/2026-10-01-V3-2a28a93e-ha.power_off-ha.json)<br>[ha.power_on·ha·pass](evidence/F-HA-003/2026-10-01-V3-2a28a93e-ha.power_on-ha.json)<br>[power.standby·api·pass](evidence/F-MTX-006/2026-10-01-V2-2a28a93e-power.standby-api.json)<br>[power.wake·api·pass](evidence/F-MTX-006/2026-10-01-V2-2a28a93e-power.wake-api.json) | — |
 | F-MTX-007 | Mute / unmute the audio of an output | V4 | V1 (capped) | V1 | fresh | [ha.mute_switch·ha·pass](evidence/F-HA-004/2026-10-01-V3-2a28a93e-ha.mute_switch-ha.json)<br>[outputs.audio_mute·api·pass](evidence/F-MTX-007/2026-10-01-V2-2a28a93e-outputs.audio_mute-api.json) | HIL-09(C) |
-| F-MTX-008 | Enable / disable an output's video stream | V4 | V1 (capped) | V1 | — | — | HIL-09(C) |
-| F-MTX-009 | Set an output's HDCP mode | V4 | V1 (capped) | V1 | — | — | HIL-09(C) |
-| F-MTX-010 | Set an output's HDR mode | V4 | V1 (capped) | V1 | — | — | HIL-09(C) |
-| F-MTX-011 | Set an output's scaler mode (incl. audio-only) | V4 | V1 (capped) | V1 | — | — | BE-15(M), HIL-09(C) |
-| F-MTX-012 | Enable / disable ARC on an output | V4 | V1 (capped) | V1 | — | — | HIL-09(C) |
-| F-MTX-013 | Set an input's EDID | V4 | V1 (capped) | V1 | — | — | HIL-09(C) |
-| F-MTX-014 | Copy EDID from a connected display | V4 | V1 (capped) | V1 | — | — | BE-25(L), HIL-09(C) |
+| F-MTX-008 | Enable / disable an output's video stream | V4 | V1 (capped) | V1 | fresh | [settings.enable_0·api·pass](evidence/F-MTX-008/2026-10-02-V2-972b8c40-settings.enable_0-api.json)<br>[settings.enable_1·api·pass](evidence/F-MTX-008/2026-10-02-V2-972b8c40-settings.enable_1-api.json)<br>[settings.enable_port_0·api·pass](evidence/F-MTX-008/2026-10-02-V2-972b8c40-settings.enable_port_0-api.json)<br>[settings.enable_port_9·api·pass](evidence/F-MTX-008/2026-10-02-V2-972b8c40-settings.enable_port_9-api.json) | HIL-09(C) |
+| F-MTX-009 | Set an output's HDCP mode | V4 | V1 (capped) | V1 | fresh | [settings.hdcp_1·api·pass](evidence/F-MTX-009/2026-10-02-V2-972b8c40-settings.hdcp_1-api.json)<br>[settings.hdcp_2·api·pass](evidence/F-MTX-009/2026-10-02-V2-972b8c40-settings.hdcp_2-api.json)<br>[settings.hdcp_3·api·pass](evidence/F-MTX-009/2026-10-02-V2-972b8c40-settings.hdcp_3-api.json)<br>[settings.hdcp_4·api·pass](evidence/F-MTX-009/2026-10-02-V2-972b8c40-settings.hdcp_4-api.json) | HIL-09(C) |
+| F-MTX-010 | Set an output's HDR mode | V4 | V1 (capped) | V1 | fresh | [settings.hdr_1·api·pass](evidence/F-MTX-010/2026-10-02-V2-972b8c40-settings.hdr_1-api.json)<br>[settings.hdr_2·api·pass](evidence/F-MTX-010/2026-10-02-V2-972b8c40-settings.hdr_2-api.json)<br>[settings.hdr_3·api·pass](evidence/F-MTX-010/2026-10-02-V2-972b8c40-settings.hdr_3-api.json)<br>[settings.hdr_invalid_0·api·pass](evidence/F-MTX-010/2026-10-02-V2-972b8c40-settings.hdr_invalid_0-api.json) | HIL-09(C) |
+| F-MTX-011 | Set an output's scaler mode (incl. audio-only) | V4 | V1 (capped) | V1 | fresh | [settings.scaler_1·api·pass](evidence/F-MTX-011/2026-10-02-V2-972b8c40-settings.scaler_1-api.json)<br>[settings.scaler_2·api·pass](evidence/F-MTX-011/2026-10-02-V2-972b8c40-settings.scaler_2-api.json)<br>[settings.scaler_3·api·pass](evidence/F-MTX-011/2026-10-02-V2-972b8c40-settings.scaler_3-api.json)<br>[settings.scaler_4·api·pass](evidence/F-MTX-011/2026-10-02-V2-972b8c40-settings.scaler_4-api.json) | BE-15(M), HIL-09(C) |
+| F-MTX-012 | Enable / disable ARC on an output | V4 | V1 (capped) | V1 | fresh | [settings.arc_0·api·pass](evidence/F-MTX-012/2026-10-02-V2-972b8c40-settings.arc_0-api.json)<br>[settings.arc_1·api·pass](evidence/F-MTX-012/2026-10-02-V2-972b8c40-settings.arc_1-api.json)<br>[settings.arc_port_0·api·pass](evidence/F-MTX-012/2026-10-02-V2-972b8c40-settings.arc_port_0-api.json)<br>[settings.arc_port_9·api·pass](evidence/F-MTX-012/2026-10-02-V2-972b8c40-settings.arc_port_9-api.json) | HIL-09(C) |
+| F-MTX-013 | Set an input's EDID | V4 | V1 (capped) | V1 | fresh | [settings.edid_input_0·api·pass](evidence/F-MTX-013/2026-10-02-V2-972b8c40-settings.edid_input_0-api.json)<br>[settings.edid_input_9·api·pass](evidence/F-MTX-013/2026-10-02-V2-972b8c40-settings.edid_input_9-api.json)<br>[settings.edid_missing_mode·api·pass](evidence/F-MTX-013/2026-10-02-V2-972b8c40-settings.edid_missing_mode-api.json)<br>[settings.edid_mode_0·api·pass](evidence/F-MTX-013/2026-10-02-V2-972b8c40-settings.edid_mode_0-api.json) | HIL-09(C) |
+| F-MTX-014 | Copy EDID from a connected display | V4 | V1 (capped) | V1 | fresh | [settings.edid_copy_invalid_0·api·pass](evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_invalid_0-api.json)<br>[settings.edid_copy_invalid_9·api·pass](evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_invalid_9-api.json)<br>[settings.edid_copy_output_1·api·pass](evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_output_1-api.json)<br>[settings.edid_copy_output_2·api·pass](evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_output_2-api.json) | BE-25(L), HIL-09(C) |
 | F-MTX-015 | External audio: matrix mode | V4 | V1 (capped) | V1 | — | — | HIL-09(C) |
 | F-MTX-016 | External audio: enable per output | V4 | V1 (capped) | V1 | — | — | HIL-09(C) |
 | F-MTX-017 | External audio: source per output | V4 | V1 (capped) | V1 | — | — | HIL-09(C) |

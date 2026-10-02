@@ -1,0 +1,824 @@
+{
+  "commit": {
+    "sha": "972b8c40f5a25e0d8a66c3038eb54af0cacc9c64",
+    "branch": "wp-output-edid-validation",
+    "dirty_files": [],
+    "short": "972b8c40",
+    "dirty": false
+  },
+  "target": "sim",
+  "clients": [
+    "api"
+  ],
+  "operator": "automation",
+  "finished": "2026-10-02T03:38:14.031Z",
+  "aborted": null,
+  "outcomes": [
+    {
+      "scenario": "settings.arc_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-012"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-012/2026-10-02-V2-972b8c40-settings.arc_0-api.json"
+    },
+    {
+      "scenario": "settings.arc_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-012"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-012/2026-10-02-V2-972b8c40-settings.arc_1-api.json"
+    },
+    {
+      "scenario": "settings.arc_port_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-012"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-012/2026-10-02-V2-972b8c40-settings.arc_port_0-api.json"
+    },
+    {
+      "scenario": "settings.arc_port_9",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-012"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-012/2026-10-02-V2-972b8c40-settings.arc_port_9-api.json"
+    },
+    {
+      "scenario": "settings.arc_refused",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-012"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-012/2026-10-02-V2-972b8c40-settings.arc_refused-api.json"
+    },
+    {
+      "scenario": "settings.edid_copy_invalid_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-014"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_invalid_0-api.json"
+    },
+    {
+      "scenario": "settings.edid_copy_invalid_9",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-014"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_invalid_9-api.json"
+    },
+    {
+      "scenario": "settings.edid_copy_output_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-014"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_output_1-api.json"
+    },
+    {
+      "scenario": "settings.edid_copy_output_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-014"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_output_2-api.json"
+    },
+    {
+      "scenario": "settings.edid_copy_output_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-014"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_output_3-api.json"
+    },
+    {
+      "scenario": "settings.edid_copy_output_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-014"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_output_4-api.json"
+    },
+    {
+      "scenario": "settings.edid_copy_output_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-014"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_output_5-api.json"
+    },
+    {
+      "scenario": "settings.edid_copy_output_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-014"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_output_6-api.json"
+    },
+    {
+      "scenario": "settings.edid_copy_output_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-014"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_output_7-api.json"
+    },
+    {
+      "scenario": "settings.edid_copy_output_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-014"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_output_8-api.json"
+    },
+    {
+      "scenario": "settings.edid_copy_refused",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-014"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_refused-api.json"
+    },
+    {
+      "scenario": "settings.edid_input_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-013"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-013/2026-10-02-V2-972b8c40-settings.edid_input_0-api.json"
+    },
+    {
+      "scenario": "settings.edid_input_9",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-013"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-013/2026-10-02-V2-972b8c40-settings.edid_input_9-api.json"
+    },
+    {
+      "scenario": "settings.edid_missing_mode",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-013"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-013/2026-10-02-V2-972b8c40-settings.edid_missing_mode-api.json"
+    },
+    {
+      "scenario": "settings.edid_mode_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-013"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-013/2026-10-02-V2-972b8c40-settings.edid_mode_0-api.json"
+    },
+    {
+      "scenario": "settings.edid_mode_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-013"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-013/2026-10-02-V2-972b8c40-settings.edid_mode_1-api.json"
+    },
+    {
+      "scenario": "settings.edid_mode_12",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-013"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-013/2026-10-02-V2-972b8c40-settings.edid_mode_12-api.json"
+    },
+    {
+      "scenario": "settings.edid_mode_36",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-013"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-013/2026-10-02-V2-972b8c40-settings.edid_mode_36-api.json"
+    },
+    {
+      "scenario": "settings.edid_mode_39",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-013"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-013/2026-10-02-V2-972b8c40-settings.edid_mode_39-api.json"
+    },
+    {
+      "scenario": "settings.edid_mode_48",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-013"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-013/2026-10-02-V2-972b8c40-settings.edid_mode_48-api.json"
+    },
+    {
+      "scenario": "settings.edid_refused",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-013"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-013/2026-10-02-V2-972b8c40-settings.edid_refused-api.json"
+    },
+    {
+      "scenario": "settings.enable_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-008"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-008/2026-10-02-V2-972b8c40-settings.enable_0-api.json"
+    },
+    {
+      "scenario": "settings.enable_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-008"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-008/2026-10-02-V2-972b8c40-settings.enable_1-api.json"
+    },
+    {
+      "scenario": "settings.enable_port_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-008"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-008/2026-10-02-V2-972b8c40-settings.enable_port_0-api.json"
+    },
+    {
+      "scenario": "settings.enable_port_9",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-008"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-008/2026-10-02-V2-972b8c40-settings.enable_port_9-api.json"
+    },
+    {
+      "scenario": "settings.enable_refused",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-008"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-008/2026-10-02-V2-972b8c40-settings.enable_refused-api.json"
+    },
+    {
+      "scenario": "settings.hdcp_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-009"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-009/2026-10-02-V2-972b8c40-settings.hdcp_1-api.json"
+    },
+    {
+      "scenario": "settings.hdcp_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-009"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-009/2026-10-02-V2-972b8c40-settings.hdcp_2-api.json"
+    },
+    {
+      "scenario": "settings.hdcp_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-009"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-009/2026-10-02-V2-972b8c40-settings.hdcp_3-api.json"
+    },
+    {
+      "scenario": "settings.hdcp_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-009"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-009/2026-10-02-V2-972b8c40-settings.hdcp_4-api.json"
+    },
+    {
+      "scenario": "settings.hdcp_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-009"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-009/2026-10-02-V2-972b8c40-settings.hdcp_5-api.json"
+    },
+    {
+      "scenario": "settings.hdcp_invalid_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-009"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-009/2026-10-02-V2-972b8c40-settings.hdcp_invalid_0-api.json"
+    },
+    {
+      "scenario": "settings.hdcp_invalid_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-009"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-009/2026-10-02-V2-972b8c40-settings.hdcp_invalid_6-api.json"
+    },
+    {
+      "scenario": "settings.hdcp_missing_mode",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-009"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-009/2026-10-02-V2-972b8c40-settings.hdcp_missing_mode-api.json"
+    },
+    {
+      "scenario": "settings.hdcp_port_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-009"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-009/2026-10-02-V2-972b8c40-settings.hdcp_port_0-api.json"
+    },
+    {
+      "scenario": "settings.hdcp_port_9",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-009"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-009/2026-10-02-V2-972b8c40-settings.hdcp_port_9-api.json"
+    },
+    {
+      "scenario": "settings.hdcp_refused",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-009"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-009/2026-10-02-V2-972b8c40-settings.hdcp_refused-api.json"
+    },
+    {
+      "scenario": "settings.hdr_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-010"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-010/2026-10-02-V2-972b8c40-settings.hdr_1-api.json"
+    },
+    {
+      "scenario": "settings.hdr_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-010"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-010/2026-10-02-V2-972b8c40-settings.hdr_2-api.json"
+    },
+    {
+      "scenario": "settings.hdr_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-010"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-010/2026-10-02-V2-972b8c40-settings.hdr_3-api.json"
+    },
+    {
+      "scenario": "settings.hdr_invalid_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-010"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-010/2026-10-02-V2-972b8c40-settings.hdr_invalid_0-api.json"
+    },
+    {
+      "scenario": "settings.hdr_invalid_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-010"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-010/2026-10-02-V2-972b8c40-settings.hdr_invalid_4-api.json"
+    },
+    {
+      "scenario": "settings.hdr_missing_mode",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-010"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-010/2026-10-02-V2-972b8c40-settings.hdr_missing_mode-api.json"
+    },
+    {
+      "scenario": "settings.hdr_port_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-010"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-010/2026-10-02-V2-972b8c40-settings.hdr_port_0-api.json"
+    },
+    {
+      "scenario": "settings.hdr_port_9",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-010"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-010/2026-10-02-V2-972b8c40-settings.hdr_port_9-api.json"
+    },
+    {
+      "scenario": "settings.hdr_refused",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-010"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-010/2026-10-02-V2-972b8c40-settings.hdr_refused-api.json"
+    },
+    {
+      "scenario": "settings.scaler_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-011"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-011/2026-10-02-V2-972b8c40-settings.scaler_1-api.json"
+    },
+    {
+      "scenario": "settings.scaler_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-011"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-011/2026-10-02-V2-972b8c40-settings.scaler_2-api.json"
+    },
+    {
+      "scenario": "settings.scaler_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-011"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-011/2026-10-02-V2-972b8c40-settings.scaler_3-api.json"
+    },
+    {
+      "scenario": "settings.scaler_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-011"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-011/2026-10-02-V2-972b8c40-settings.scaler_4-api.json"
+    },
+    {
+      "scenario": "settings.scaler_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-011"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-011/2026-10-02-V2-972b8c40-settings.scaler_5-api.json"
+    },
+    {
+      "scenario": "settings.scaler_invalid_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-011"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-011/2026-10-02-V2-972b8c40-settings.scaler_invalid_0-api.json"
+    },
+    {
+      "scenario": "settings.scaler_invalid_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-011"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-011/2026-10-02-V2-972b8c40-settings.scaler_invalid_6-api.json"
+    },
+    {
+      "scenario": "settings.scaler_missing_mode",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-011"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-011/2026-10-02-V2-972b8c40-settings.scaler_missing_mode-api.json"
+    },
+    {
+      "scenario": "settings.scaler_port_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-011"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-011/2026-10-02-V2-972b8c40-settings.scaler_port_0-api.json"
+    },
+    {
+      "scenario": "settings.scaler_port_9",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-011"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-011/2026-10-02-V2-972b8c40-settings.scaler_port_9-api.json"
+    },
+    {
+      "scenario": "settings.scaler_refused",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-011"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-011/2026-10-02-V2-972b8c40-settings.scaler_refused-api.json"
+    }
+  ]
+}
