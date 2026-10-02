@@ -4506,6 +4506,49 @@ features:
   current: V1
   basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
   evidence:
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_get_default-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_get_missing-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_get_saved-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_empty-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_manual-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_missing-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_reject_auto_type-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_reject_config_type-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_reject_nav_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_reject_playback_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_reject_power_off_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_reject_power_on_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_reject_target_type-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_reject_unknown_key-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_reject_volume_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_wrapped-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_empty-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_manual-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_missing-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_reject_auto_type-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_reject_config_type-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_reject_nav_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_reject_playback_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_reject_power_off_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_reject_power_on_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_reject_target_type-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_reject_unknown_key-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_reject_volume_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_wrapped-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_targets_port_1-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_targets_port_2-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_targets_port_3-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_targets_port_4-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_targets_port_5-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_targets_port_6-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_targets_port_7-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_targets_port_8-api.json
+  - docs/validation/evidence/F-DOM-008/2026-10-02-V2-ed4cb0fb-profile_state.history_empty-api.json
+  - docs/validation/evidence/F-DOM-008/2026-10-02-V2-ed4cb0fb-profile_state.history_failure-api.json
+  - docs/validation/evidence/F-DOM-008/2026-10-02-V2-ed4cb0fb-profile_state.history_missing-api.json
+  - docs/validation/evidence/F-DOM-008/2026-10-02-V2-ed4cb0fb-profile_state.history_order-api.json
+  - docs/validation/evidence/F-DOM-008/2026-10-02-V2-ed4cb0fb-profile_state.history_read_after_scene-api.json
+  - docs/validation/evidence/F-DOM-008/2026-10-02-V2-ed4cb0fb-profile_state.history_success-api.json
   - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.clear_assignments-api.json
   - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_assignments-api.json
   - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_defaults-api.json
@@ -4671,9 +4714,73 @@ features:
       POST /api/scene/save-current, 'GET|POST|PUT /api/scene/{scene_id}/cec', 'POST /api/scene/{scene_id}/cec/auto-resolve']
   target: V2
   current: V1
-  basis: tests/test_rest_api.py TestSceneControl, TestSceneRecallValidation, TestSceneCecConfigEndpoints (mocked); auto-resolve
-    not exercised.
-  evidence: []
+  basis: "Recorded V1 baseline: mocked legacy scene tests. The profile_state packaged-image scenarios add V2 proof for create/read/list/delete/recall aliases, CEC config/auto-resolve, missing/invalid requests and save-current. API-27 read failures are linked; API-12 remains open. Status cache TTL is explicitly zero."
+  evidence:
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_create-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_create_invalid-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_delete-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_delete_missing-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_get-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_get_missing-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_list-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_post_missing-api.json
+  - docs/validation/evidence/F-DOM-002/2026-10-02-V2-ed4cb0fb-profile_state.alias_recall-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_get_default-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_get_missing-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_get_saved-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_empty-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_manual-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_missing-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_reject_auto_type-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_reject_config_type-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_reject_nav_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_reject_playback_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_reject_power_off_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_reject_power_on_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_reject_target_type-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_reject_unknown_key-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_reject_volume_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_wrapped-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_empty-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_manual-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_missing-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_reject_auto_type-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_reject_config_type-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_reject_nav_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_reject_playback_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_reject_power_off_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_reject_power_on_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_reject_target_type-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_reject_unknown_key-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_reject_volume_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_wrapped-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_all_disabled-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_all_disconnected-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_arc_priority-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_audio_priority-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_default-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_disconnected_audio-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_missing-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_multiple_audio-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_port_1-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_port_2-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_port_3-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_port_4-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_port_5-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_port_6-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_port_7-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_port_8-api.json
+  - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_defaults-api.json
+  - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_output_read_failure-api.json
+  - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_pattern_0-api.json
+  - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_pattern_1-api.json
+  - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_pattern_2-api.json
+  - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_pattern_3-api.json
+  - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_pattern_4-api.json
+  - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_pattern_5-api.json
+  - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_pattern_6-api.json
+  - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_pattern_7-api.json
+  - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_video_read_failure-api.json
   findings: [API-23, API-12, API-27]
   scenarios:
   - profile_state.cec_scene_post_manual
@@ -5120,6 +5227,14 @@ features:
   current: V1
   basis: "Recorded V1 baseline: tests/test_config.py TestProfileManager and mocked REST tests. The profile_crud packaged-image scenarios add V2 proof for create/replace/edit/delete, output and macro/CEC readback, assignment clearing, missing profiles and create boundaries. API-22 create/edit scaler/ARC round trips fail and remain linked. Restart persistence, browser behavior and exhaustive invalid edit shapes are outside this batch."
   evidence:
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_create-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_create_invalid-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_delete-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_delete_missing-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_get-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_get_missing-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_list-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_post_missing-api.json
   - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.clear_assignments-api.json
   - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_assignments-api.json
   - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_defaults-api.json
@@ -5205,6 +5320,7 @@ features:
   current: V3
   basis: 'WP-C4 V3 on the shipped image: browser profile activation applies routing, including disabled outputs; API refusal cases verify truthful failures. Shared recall/scene state writer (DI-11). V4 awaits the owner.'
   evidence:
+  - docs/validation/evidence/F-DOM-002/2026-10-02-V2-ed4cb0fb-profile_state.alias_recall-api.json
   - docs/validation/evidence/F-DOM-002/2026-10-01-V2-2a28a93e-profiles.recall_disabled_output-api.json
   - docs/validation/evidence/F-DOM-002/2026-10-01-V2-2a28a93e-profiles.recall_rejected-api.json
   - docs/validation/evidence/F-DOM-002/2026-10-01-V2-2a28a93e-profiles.recall_routing-api.json
@@ -5367,8 +5483,90 @@ features:
     ui: [dialog/scene-cec]
   target: V3
   current: V1
-  basis: 'Scenario profiles.cec_auto_resolve (V2); tests/sim/test_sim_profiles.py auto-resolve tests; tests/test_cec_resolver.py. The v1 auto-resolve route works since WP-C1 (API-23).'
-  evidence: []
+  basis: "Recorded V1 baseline: mocked CEC tests and tests/sim/test_sim_profiles.py. The profile_state packaged-image scenarios add V2 proof for canonical/legacy CEC reads/writes, manual/default/wrapped configurations, invalid structural writes preserving prior data, every port and resolver audio/ARC/default/disconnected/disabled selection. Status caching is disabled. API-25 target-string semantics, browser behavior and physical CEC effects are outside this batch."
+  evidence:
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_get_default-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_get_missing-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_get_saved-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_empty-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_manual-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_missing-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_reject_auto_type-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_reject_config_type-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_reject_nav_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_reject_playback_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_reject_power_off_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_reject_power_on_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_reject_target_type-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_reject_unknown_key-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_reject_volume_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_wrapped-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_empty-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_manual-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_missing-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_reject_auto_type-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_reject_config_type-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_reject_nav_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_reject_playback_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_reject_power_off_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_reject_power_on_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_reject_target_type-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_reject_unknown_key-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_reject_volume_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_wrapped-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_get_default-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_get_missing-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_get_saved-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_empty-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_manual-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_missing-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_reject_auto_type-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_reject_config_type-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_reject_nav_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_reject_playback_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_reject_power_off_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_reject_power_on_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_reject_target_type-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_reject_unknown_key-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_reject_volume_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_wrapped-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_empty-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_manual-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_missing-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_reject_auto_type-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_reject_config_type-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_reject_nav_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_reject_playback_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_reject_power_off_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_reject_power_on_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_reject_target_type-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_reject_unknown_key-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_reject_volume_targets-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_wrapped-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_targets_port_1-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_targets_port_2-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_targets_port_3-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_targets_port_4-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_targets_port_5-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_targets_port_6-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_targets_port_7-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_targets_port_8-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_all_disabled-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_all_disconnected-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_arc_priority-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_audio_priority-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_default-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_disconnected_audio-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_missing-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_multiple_audio-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_port_1-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_port_2-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_port_3-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_port_4-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_port_5-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_port_6-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_port_7-api.json
+  - docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_port_8-api.json
   findings: [API-23]
   scenarios:
   - profiles.cec_auto_resolve
@@ -5462,8 +5660,14 @@ features:
     rest: ['GET /api/profile/{profile_id}/execution-log']
   target: V3
   current: V0
-  basis: Not exercised by any test.
-  evidence: []
+  basis: "Recorded V0 baseline. The profile_state packaged-image scenarios add V2 proof for empty/missing history, real scene profile steps producing success/error entries, separate reads, count/list agreement, UTC timestamps and append order. Seven-day expiry and restart persistence are not exercised."
+  evidence:
+  - docs/validation/evidence/F-DOM-008/2026-10-02-V2-ed4cb0fb-profile_state.history_empty-api.json
+  - docs/validation/evidence/F-DOM-008/2026-10-02-V2-ed4cb0fb-profile_state.history_failure-api.json
+  - docs/validation/evidence/F-DOM-008/2026-10-02-V2-ed4cb0fb-profile_state.history_missing-api.json
+  - docs/validation/evidence/F-DOM-008/2026-10-02-V2-ed4cb0fb-profile_state.history_order-api.json
+  - docs/validation/evidence/F-DOM-008/2026-10-02-V2-ed4cb0fb-profile_state.history_read_after_scene-api.json
+  - docs/validation/evidence/F-DOM-008/2026-10-02-V2-ed4cb0fb-profile_state.history_success-api.json
   findings: []
   scenarios:
   - profile_state.history_empty
@@ -5481,8 +5685,19 @@ features:
     ui: [modal/save-profile/legacy]
   target: V3
   current: V1
-  basis: tests/test_rest_api.py TestSceneControl save-current (mocked).
-  evidence: []
+  basis: "Recorded V1 baseline: mocked save-current tests. The profile_state packaged-image scenarios add V2 proof for all 64 routing pairs, mute/HDR/HDCP capture and default name/icon with independent stored readback. API-27 output/video read failures produce empty/fabricated captures and remain linked. Status caching is disabled; disabled-stream capture, browser behavior and restart persistence remain outside this batch."
+  evidence:
+  - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_defaults-api.json
+  - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_output_read_failure-api.json
+  - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_pattern_0-api.json
+  - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_pattern_1-api.json
+  - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_pattern_2-api.json
+  - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_pattern_3-api.json
+  - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_pattern_4-api.json
+  - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_pattern_5-api.json
+  - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_pattern_6-api.json
+  - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_pattern_7-api.json
+  - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_video_read_failure-api.json
   findings: [API-12, API-27]
   scenarios:
   - profile_state.capture_pattern_0

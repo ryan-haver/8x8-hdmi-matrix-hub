@@ -1,0 +1,13 @@
+{
+  "client": "api",
+  "hub": "profile-state-proof-hub-11f5db37b1b1",
+  "status_cache_ttl": "0",
+  "scope": "Disposable simulator and fixture data; no real hardware",
+  "selection": "build/profile-state-selection-api.json",
+  "source_commit": "ed4cb0fb7876a468fc54b64eef420bd851c4fc38",
+  "simulator": "profile-state-proof-sim-11f5db37b1b1",
+  "mode": "api",
+  "digest": "sha256:1b7b72c01322972198e2660896ca6a4270cce740d4c32d701a16eaa12b580dc0",
+  "image": "hdmi-matrix-hub:wp-simulator-evidence-refresh",
+  "cec_transport": "false"
+}

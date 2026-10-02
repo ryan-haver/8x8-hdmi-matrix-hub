@@ -1,7 +1,7 @@
 # Feature ledger
 
 > **Generated** by `python -m tools.validate ledger` — do not edit by hand. Registry: [`features.yaml`](features.yaml) · Plan: [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md) · How to add evidence: [`README.md`](README.md).
-> Commit `0b9cbe87`
+> Commit `ed4cb0fb`
 
 **Level** = highest level with fresh passing evidence, else the recorded baseline (the registry's `current`), capped at V1 while an open critical/high finding is linked. **Recorded** = the registry baseline. **Fresh** = evidence commit not older than the last change to the scenario's `covers` paths.
 
@@ -11,8 +11,8 @@
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Matrix control | 31 | 0 | 13 | 11 | 7 | 0 | 0 | 31 | 0 |
 | CEC control | 11 | 0 | 0 | 10 | 1 | 0 | 0 | 11 | 0 |
-| REST/WebSocket contract | 42 | 0 | 12 | 26 | 4 | 0 | 0 | 22 | 0 |
-| Domain features | 36 | 2 | 14 | 4 | 16 | 0 | 0 | 26 | 0 |
+| REST/WebSocket contract | 42 | 0 | 11 | 27 | 4 | 0 | 0 | 21 | 0 |
+| Domain features | 36 | 1 | 12 | 7 | 16 | 0 | 0 | 26 | 0 |
 | Web UI | 36 | 0 | 22 | 0 | 14 | 0 | 0 | 22 | 0 |
 | Kiosk | 14 | 0 | 7 | 0 | 7 | 0 | 0 | 7 | 0 |
 | Remote 3 integration | 17 | 1 | 2 | 0 | 14 | 0 | 0 | 17 | 0 |
@@ -21,7 +21,7 @@
 | Deployment, configuration, persistence | 20 | 3 | 8 | 2 | 7 | 0 | 0 | 20 | 0 |
 | Security controls | 15 | 9 | 5 | 0 | 1 | 0 | 0 | 14 | 0 |
 | Reliability | 18 | 9 | 3 | 2 | 4 | 0 | 0 | 18 | 0 |
-| **All** | **268** | **27** | **94** | **55** | **92** | **0** | **0** | **216** | **0** |
+| **All** | **268** | **26** | **91** | **59** | **92** | **0** | **0** | **215** | **0** |
 
 Levels: **V0** Claimed · **V1** Unit · **V2** Simulated integration · **V3** End-to-end · **V4** Hardware · **V5** Field
 
@@ -43,11 +43,11 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | Reliability | 12 | 3 | 1 | 2 | 0 | 0 |
 | **All** | **33** | **133** | **27** | **75** | **0** | **0** |
 
-- Features with fresh passing scenario evidence: **139** of 268.
-- Features with a fresh failing scenario: **5**: `F-MTX-030`, `F-CEC-010`, `F-API-015`, `F-API-019`, `F-DOM-001`.
+- Features with fresh passing scenario evidence: **143** of 268.
+- Features with a fresh failing scenario: **7**: `F-MTX-030`, `F-CEC-010`, `F-API-015`, `F-API-019`, `F-API-020`, `F-DOM-001`, `F-DOM-009`.
 - Features capped at V1 by an open critical/high finding: **28**.
 
-Last run: target `sim`, clients ['api'], commit `0b9cbe87` — fail: 2, pass: 49
+Last run: target `sim`, clients ['api'], commit `ed4cb0fb` — fail: 2, pass: 106
 
 ## Matrix control (F-MTX)
 
@@ -124,7 +124,7 @@ Last run: target `sim`, clients ['api'], commit `0b9cbe87` — fail: 2, pass: 49
 | F-API-017 | Device settings routes (icons, display names, preset names, favourite/dashboard presets) | V2 | **V2** | V1 | fresh | [contracts.device_settings·api·pass](evidence/F-API-017/2026-10-01-V2-2a28a93e-contracts.device_settings-api.json)<br>[contracts.input_settings·api·pass](evidence/F-API-017/2026-10-01-V2-2a28a93e-contracts.input_settings-api.json)<br>[contracts.invalid_input_settings·api·pass](evidence/F-API-017/2026-10-01-V2-2a28a93e-contracts.invalid_input_settings-api.json)<br>[contracts.invalid_output_settings·api·pass](evidence/F-API-017/2026-10-01-V2-2a28a93e-contracts.invalid_output_settings-api.json) | — |
 | F-API-018 | Name routes (POST /api/input\|output/{n}/name) | V2 | **V2** | V0 | fresh | [writes.output_name·api·pass](evidence/F-API-018/2026-10-01-V2-2a28a93e-writes.output_name-api.json) | BE-16(M) |
 | F-API-019 | Profile routes | V2 | V1 (capped) | V1 | fresh | [writes.profile_cec·api·pass](evidence/F-API-019/2026-10-01-V2-2a28a93e-writes.profile_cec-api.json)<br>[writes.profile_macros·api·pass](evidence/F-API-019/2026-10-01-V2-2a28a93e-writes.profile_macros-api.json)<br>[writes.profile_reorder·api·pass](evidence/F-API-019/2026-10-01-V2-2a28a93e-writes.profile_reorder-api.json)<br>[profile_crud.clear_assignments·api·pass](evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.clear_assignments-api.json) | SEC-04(H), API-22(M) |
-| F-API-020 | Scene v1 alias routes (/api/scene*, /api/scenes) | V2 | V1 | V1 | — | — | API-12(M) |
+| F-API-020 | Scene v1 alias routes (/api/scene*, /api/scenes) | V2 | **V2** | V1 | fresh | [profile_state.alias_create·api·pass](evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_create-api.json)<br>[profile_state.alias_create_invalid·api·pass](evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_create_invalid-api.json)<br>[profile_state.alias_delete·api·pass](evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_delete-api.json)<br>[profile_state.alias_delete_missing·api·pass](evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_delete_missing-api.json) | API-12(M), API-27(M) |
 | F-API-021 | Scene v2 routes (/api/v2/scenes*) | V2 | **V2** | V2 | — | — | TST-03(M) |
 | F-API-022 | Response envelope and input validation (4xx before anything reaches the matrix) | V2 | **V2** | V1 | fresh | [failures.bad_input·api·pass](evidence/F-API-022/2026-10-01-V2-2a28a93e-failures.bad_input-api.json) | API-15(L), SEC-11(L), API-21(L) |
 | F-API-023 | Macro routes | V2 | V1 | V1 | — | — | — |
@@ -158,9 +158,9 @@ Last run: target `sim`, clients ['api'], commit `0b9cbe87` — fail: 2, pass: 49
 | F-DOM-004 | Recall a profile: its power-on macro runs | V4 | V3 | V3 | fresh | [profiles.recall_power_macro·api·pass](evidence/F-DOM-004/2026-10-01-V2-2a28a93e-profiles.recall_power_macro-api.json)<br>[profiles.recall_power_macro·browser·pass](evidence/F-DOM-004/2026-10-01-V3-2a28a93e-profiles.recall_power_macro-browser.json) | — |
 | F-DOM-005 | Protect a profile with a passcode (per-item PIN) | V3 | V1 (capped) | V1 | fresh | [profiles.recall_needs_passcode·api·pass](evidence/F-DOM-005/2026-10-01-V2-2a28a93e-profiles.recall_needs_passcode-api.json)<br>[profiles.recall_with_passcode·api·pass](evidence/F-DOM-005/2026-10-01-V2-2a28a93e-profiles.recall_with_passcode-api.json)<br>[profiles.recall_wrong_passcode·api·pass](evidence/F-DOM-005/2026-10-01-V2-2a28a93e-profiles.recall_wrong_passcode-api.json)<br>[profiles.recall_needs_passcode·browser·pass](evidence/F-DOM-005/2026-10-01-V3-2a28a93e-profiles.recall_needs_passcode-browser.json) | SEC-05(H), SEC-06(H) |
 | F-DOM-006 | Favourite, pin, reorder profiles and show them on the dashboard | V3 | V2 | V1 | fresh | [profile_crud.dashboard_missing_field·api·pass](evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.dashboard_missing_field-api.json)<br>[profile_crud.dashboard_post_false·api·pass](evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.dashboard_post_false-api.json)<br>[profile_crud.dashboard_post_missing·api·pass](evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.dashboard_post_missing-api.json)<br>[profile_crud.dashboard_post_true·api·pass](evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.dashboard_post_true-api.json) | API-20(M) |
-| F-DOM-007 | Per-profile CEC targets (nav/playback/volume/power) and auto-resolve | V3 | V1 | V1 | — | — | — |
-| F-DOM-008 | Profile execution log | V3 | V0 | V0 | — | — | — |
-| F-DOM-009 | Save the current routing as a new profile | V3 | V1 | V1 | — | — | API-12(M) |
+| F-DOM-007 | Per-profile CEC targets (nav/playback/volume/power) and auto-resolve | V3 | V2 | V1 | fresh | [profile_state.cec_profile_get_default·api·pass](evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_get_default-api.json)<br>[profile_state.cec_profile_get_missing·api·pass](evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_get_missing-api.json)<br>[profile_state.cec_profile_get_saved·api·pass](evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_get_saved-api.json)<br>[profile_state.cec_profile_post_empty·api·pass](evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_empty-api.json) | — |
+| F-DOM-008 | Profile execution log | V3 | V2 | V0 | fresh | [profile_state.history_empty·api·pass](evidence/F-DOM-008/2026-10-02-V2-ed4cb0fb-profile_state.history_empty-api.json)<br>[profile_state.history_failure·api·pass](evidence/F-DOM-008/2026-10-02-V2-ed4cb0fb-profile_state.history_failure-api.json)<br>[profile_state.history_missing·api·pass](evidence/F-DOM-008/2026-10-02-V2-ed4cb0fb-profile_state.history_missing-api.json)<br>[profile_state.history_order·api·pass](evidence/F-DOM-008/2026-10-02-V2-ed4cb0fb-profile_state.history_order-api.json) | — |
+| F-DOM-009 | Save the current routing as a new profile | V3 | V2 | V1 | fresh | [profile_state.capture_defaults·api·pass](evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_defaults-api.json)<br>[profile_state.capture_pattern_0·api·pass](evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_pattern_0-api.json)<br>[profile_state.capture_pattern_1·api·pass](evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_pattern_1-api.json)<br>[profile_state.capture_pattern_2·api·pass](evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_pattern_2-api.json) | API-12(M), API-27(M) |
 | F-DOM-010 | Create, edit and delete scenes (sequences of steps) | V3 | V2 | V2 | — | — | API-12(M) |
 | F-DOM-011 | Run a scene: profile steps | V4 | V3 | V3 | fresh | [scenes.disabled_output_state·api·pass](evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.disabled_output_state-api.json)<br>[scenes.partial_failure·api·pass](evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.partial_failure-api.json)<br>[scenes.run_profile_macro_preset·api·pass](evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.run_profile_macro_preset-api.json)<br>[scenes.run_protected·api·pass](evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.run_protected-api.json) | — |
 | F-DOM-012 | Run a scene: macro steps | V4 | V3 | V3 | fresh | [scenes.run_profile_macro_preset·api·pass](evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.run_profile_macro_preset-api.json)<br>[scenes.run_profile_macro_preset·browser·pass](evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.run_profile_macro_preset-browser.json)<br>[scenes.macro_continues_after_refusal·api·pass](evidence/F-DOM-012/2026-10-01-V2-2a28a93e-scenes.macro_continues_after_refusal-api.json)<br>[scenes.run_rejected·api·pass](evidence/F-DOM-012/2026-10-01-V2-2a28a93e-scenes.run_rejected-api.json) | — |

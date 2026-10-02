@@ -549,6 +549,12 @@ curl -X POST http://localhost:8080/api/scene/save-current \
 
 ---
 
+**Known baseline gap (API-27):** Save-current can return success after a failed
+matrix status read. With status caching disabled, an output-read failure saves
+an empty profile and a video-read failure substitutes Input 1 on every output.
+The [profile-state validation report](validation/2026-10-02-profile-state.md)
+retains both failures; complete-read validation remains pending.
+
 ### Profiles (v2.10.0+)
 
 Enhanced scenes with macro support. Profiles are the preferred API for saving and recalling configurations.
