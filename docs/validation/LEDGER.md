@@ -1,7 +1,7 @@
 # Feature ledger
 
 > **Generated** by `python -m tools.validate ledger` — do not edit by hand. Registry: [`features.yaml`](features.yaml) · Plan: [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md) · How to add evidence: [`README.md`](README.md).
-> Commit `972b8c40`
+> Commit `f7afdac1`
 
 **Level** = highest level with fresh passing evidence, else the recorded baseline (the registry's `current`), capped at V1 while an open critical/high finding is linked. **Recorded** = the registry baseline. **Fresh** = evidence commit not older than the last change to the scenario's `covers` paths.
 
@@ -43,11 +43,11 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | Reliability | 12 | 3 | 1 | 2 | 0 | 0 |
 | **All** | **33** | **133** | **27** | **75** | **0** | **0** |
 
-- Features with fresh passing scenario evidence: **119** of 268.
+- Features with fresh passing scenario evidence: **122** of 268.
 - Features with a fresh failing scenario: **0**.
 - Features capped at V1 by an open critical/high finding: **28**.
 
-Last run: target `sim`, clients ['api'], commit `972b8c40` — pass: 62
+Last run: target `sim`, clients ['api'], commit `f7afdac1` — pass: 100
 
 ## Matrix control (F-MTX)
 
@@ -67,9 +67,9 @@ Last run: target `sim`, clients ['api'], commit `972b8c40` — pass: 62
 | F-MTX-012 | Enable / disable ARC on an output | V4 | V1 (capped) | V1 | fresh | [settings.arc_0·api·pass](evidence/F-MTX-012/2026-10-02-V2-972b8c40-settings.arc_0-api.json)<br>[settings.arc_1·api·pass](evidence/F-MTX-012/2026-10-02-V2-972b8c40-settings.arc_1-api.json)<br>[settings.arc_port_0·api·pass](evidence/F-MTX-012/2026-10-02-V2-972b8c40-settings.arc_port_0-api.json)<br>[settings.arc_port_9·api·pass](evidence/F-MTX-012/2026-10-02-V2-972b8c40-settings.arc_port_9-api.json) | HIL-09(C) |
 | F-MTX-013 | Set an input's EDID | V4 | V1 (capped) | V1 | fresh | [settings.edid_input_0·api·pass](evidence/F-MTX-013/2026-10-02-V2-972b8c40-settings.edid_input_0-api.json)<br>[settings.edid_input_9·api·pass](evidence/F-MTX-013/2026-10-02-V2-972b8c40-settings.edid_input_9-api.json)<br>[settings.edid_missing_mode·api·pass](evidence/F-MTX-013/2026-10-02-V2-972b8c40-settings.edid_missing_mode-api.json)<br>[settings.edid_mode_0·api·pass](evidence/F-MTX-013/2026-10-02-V2-972b8c40-settings.edid_mode_0-api.json) | HIL-09(C) |
 | F-MTX-014 | Copy EDID from a connected display | V4 | V1 (capped) | V1 | fresh | [settings.edid_copy_invalid_0·api·pass](evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_invalid_0-api.json)<br>[settings.edid_copy_invalid_9·api·pass](evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_invalid_9-api.json)<br>[settings.edid_copy_output_1·api·pass](evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_output_1-api.json)<br>[settings.edid_copy_output_2·api·pass](evidence/F-MTX-014/2026-10-02-V2-972b8c40-settings.edid_copy_output_2-api.json) | BE-25(L), HIL-09(C) |
-| F-MTX-015 | External audio: matrix mode | V4 | V1 (capped) | V1 | — | — | HIL-09(C) |
-| F-MTX-016 | External audio: enable per output | V4 | V1 (capped) | V1 | — | — | HIL-09(C) |
-| F-MTX-017 | External audio: source per output | V4 | V1 (capped) | V1 | — | — | HIL-09(C) |
+| F-MTX-015 | External audio: matrix mode | V4 | V1 (capped) | V1 | fresh | [audio.mode_0·api·pass](evidence/F-MTX-015/2026-10-02-V2-f7afdac1-audio.mode_0-api.json)<br>[audio.mode_1·api·pass](evidence/F-MTX-015/2026-10-02-V2-f7afdac1-audio.mode_1-api.json)<br>[audio.mode_2·api·pass](evidence/F-MTX-015/2026-10-02-V2-f7afdac1-audio.mode_2-api.json)<br>[audio.mode_catalog·api·pass](evidence/F-MTX-015/2026-10-02-V2-f7afdac1-audio.mode_catalog-api.json) | HIL-09(C) |
+| F-MTX-016 | External audio: enable per output | V4 | V1 (capped) | V1 | fresh | [audio.enable_1_0·api·pass](evidence/F-MTX-016/2026-10-02-V2-f7afdac1-audio.enable_1_0-api.json)<br>[audio.enable_1_1·api·pass](evidence/F-MTX-016/2026-10-02-V2-f7afdac1-audio.enable_1_1-api.json)<br>[audio.enable_2_0·api·pass](evidence/F-MTX-016/2026-10-02-V2-f7afdac1-audio.enable_2_0-api.json)<br>[audio.enable_2_1·api·pass](evidence/F-MTX-016/2026-10-02-V2-f7afdac1-audio.enable_2_1-api.json) | HIL-09(C) |
+| F-MTX-017 | External audio: source per output | V4 | V1 (capped) | V1 | fresh | [audio.source_1_1·api·pass](evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_1_1-api.json)<br>[audio.source_1_2·api·pass](evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_1_2-api.json)<br>[audio.source_1_3·api·pass](evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_1_3-api.json)<br>[audio.source_1_4·api·pass](evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_1_4-api.json) | HIL-09(C) |
 | F-MTX-018 | Front-panel beep on / off | V4 | V2 | V1 | fresh | [matrix.beep_off·api·pass](evidence/F-MTX-018/2026-10-02-V2-e015d3e1-matrix.beep_off-api.json)<br>[matrix.beep_on·api·pass](evidence/F-MTX-018/2026-10-02-V2-e015d3e1-matrix.beep_on-api.json)<br>[matrix.beep_refused·api·pass](evidence/F-MTX-018/2026-10-02-V2-e015d3e1-matrix.beep_refused-api.json) | — |
 | F-MTX-019 | Front-panel lock | V4 | V2 | V1 | fresh | [matrix.panel_lock_off·api·pass](evidence/F-MTX-019/2026-10-02-V2-e015d3e1-matrix.panel_lock_off-api.json)<br>[matrix.panel_lock_on·api·pass](evidence/F-MTX-019/2026-10-02-V2-e015d3e1-matrix.panel_lock_on-api.json)<br>[matrix.panel_lock_refused·api·pass](evidence/F-MTX-019/2026-10-02-V2-e015d3e1-matrix.panel_lock_refused-api.json) | — |
 | F-MTX-020 | Front-panel LCD timeout | V4 | V1 (capped) | V1 | fresh | [matrix.lcd_invalid_mode·api·pass](evidence/F-MTX-020/2026-10-02-V2-e015d3e1-matrix.lcd_invalid_mode-api.json)<br>[matrix.lcd_missing_mode·api·pass](evidence/F-MTX-020/2026-10-02-V2-e015d3e1-matrix.lcd_missing_mode-api.json)<br>[matrix.lcd_mode_0·api·pass](evidence/F-MTX-020/2026-10-02-V2-e015d3e1-matrix.lcd_mode_0-api.json)<br>[matrix.lcd_mode_1·api·pass](evidence/F-MTX-020/2026-10-02-V2-e015d3e1-matrix.lcd_mode_1-api.json) | API-07(M), HIL-09(C) |
