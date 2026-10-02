@@ -1,7 +1,7 @@
 # Feature ledger
 
 > **Generated** by `python -m tools.validate ledger` — do not edit by hand. Registry: [`features.yaml`](features.yaml) · Plan: [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md) · How to add evidence: [`README.md`](README.md).
-> Commit `1d0a4a94`
+> Commit `e015d3e1`
 
 **Level** = highest level with fresh passing evidence, else the recorded baseline (the registry's `current`), capped at V1 while an open critical/high finding is linked. **Recorded** = the registry baseline. **Fresh** = evidence commit not older than the last change to the scenario's `covers` paths.
 
@@ -9,7 +9,7 @@
 
 | Area | Features | V0 | V1 | V2 | V3 | V4 | V5 | Below target | Stale evidence |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Matrix control | 31 | 0 | 23 | 1 | 7 | 0 | 0 | 31 | 0 |
+| Matrix control | 31 | 0 | 18 | 6 | 7 | 0 | 0 | 31 | 0 |
 | CEC control | 11 | 0 | 7 | 3 | 1 | 0 | 0 | 11 | 0 |
 | REST/WebSocket contract | 42 | 0 | 13 | 25 | 4 | 0 | 0 | 23 | 0 |
 | Domain features | 36 | 2 | 17 | 1 | 16 | 0 | 0 | 26 | 0 |
@@ -21,7 +21,7 @@
 | Deployment, configuration, persistence | 20 | 3 | 8 | 2 | 7 | 0 | 0 | 20 | 0 |
 | Security controls | 15 | 9 | 5 | 0 | 1 | 0 | 0 | 14 | 0 |
 | Reliability | 18 | 9 | 3 | 2 | 4 | 0 | 0 | 18 | 0 |
-| **All** | **268** | **27** | **115** | **34** | **92** | **0** | **0** | **217** | **0** |
+| **All** | **268** | **27** | **110** | **39** | **92** | **0** | **0** | **217** | **0** |
 
 Levels: **V0** Claimed · **V1** Unit · **V2** Simulated integration · **V3** End-to-end · **V4** Hardware · **V5** Field
 
@@ -43,11 +43,11 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | Reliability | 12 | 3 | 1 | 2 | 0 | 0 |
 | **All** | **33** | **133** | **27** | **75** | **0** | **0** |
 
-- Features with fresh passing scenario evidence: **106** of 268.
+- Features with fresh passing scenario evidence: **112** of 268.
 - Features with a fresh failing scenario: **0**.
 - Features capped at V1 by an open critical/high finding: **28**.
 
-Last run: target `sim`, clients ['api', 'uc'], commit `1d0a4a94` — pass: 3
+Last run: target `sim`, clients ['api'], commit `e015d3e1` — pass: 29
 
 ## Matrix control (F-MTX)
 
@@ -56,7 +56,7 @@ Last run: target `sim`, clients ['api', 'uc'], commit `1d0a4a94` — pass: 3
 | F-MTX-001 | Route one input to one output | V4 | V3 | V3 | fresh | [ha.select_source·ha·pass](evidence/F-HA-002/2026-10-01-V3-2a28a93e-ha.select_source-ha.json)<br>[routing.switch_one·api·pass](evidence/F-MTX-001/2026-10-01-V2-2a28a93e-routing.switch_one-api.json)<br>[routing.switch_one·browser·pass](evidence/F-MTX-001/2026-10-01-V3-2a28a93e-routing.switch_one-browser.json)<br>[remote.select_source·uc·pass](evidence/F-UC-008/2026-10-01-V3-2a28a93e-remote.select_source-uc.json) | — |
 | F-MTX-002 | Route one input to every output | V4 | V3 | V3 | fresh | [routing.route_all·api·pass](evidence/F-MTX-002/2026-10-01-V2-2a28a93e-routing.route_all-api.json)<br>[routing.route_all·browser·pass](evidence/F-MTX-002/2026-10-01-V3-2a28a93e-routing.route_all-browser.json) | — |
 | F-MTX-003 | Recall a matrix preset (1-8) | V4 | V3 | V3 | fresh | [ha.preset_button·ha·pass](evidence/F-HA-006/2026-10-01-V3-2a28a93e-ha.preset_button-ha.json)<br>[presets.recall·api·pass](evidence/F-MTX-003/2026-10-01-V2-2a28a93e-presets.recall-api.json)<br>[presets.recall·browser·pass](evidence/F-MTX-003/2026-10-01-V3-2a28a93e-presets.recall-browser.json)<br>[remote.preset_button·uc·pass](evidence/F-UC-004/2026-10-01-V3-2a28a93e-remote.preset_button-uc.json) | — |
-| F-MTX-004 | Save the current routing to a matrix preset | V4 | V1 | V1 | — | — | — |
+| F-MTX-004 | Save the current routing to a matrix preset | V4 | V2 | V1 | fresh | [matrix.preset_invalid_slot·api·pass](evidence/F-MTX-004/2026-10-02-V2-e015d3e1-matrix.preset_invalid_slot-api.json)<br>[matrix.preset_refused·api·pass](evidence/F-MTX-004/2026-10-02-V2-e015d3e1-matrix.preset_refused-api.json)<br>[matrix.save_current_preset·api·pass](evidence/F-MTX-004/2026-10-02-V2-e015d3e1-matrix.save_current_preset-api.json) | — |
 | F-MTX-005 | Name presets in the web app (names shown by the API, UI, kiosk) | V4 | V3 | V0 | fresh | [presets.rename·api·pass](evidence/F-MTX-005/2026-10-01-V2-2a28a93e-presets.rename-api.json)<br>[presets.rename·browser·pass](evidence/F-MTX-005/2026-10-01-V3-2a28a93e-presets.rename-browser.json) | BE-16(M) |
 | F-MTX-006 | Matrix power on / standby | V4 | V3 | V3 | fresh | [ha.power_off·ha·pass](evidence/F-HA-003/2026-10-01-V3-2a28a93e-ha.power_off-ha.json)<br>[ha.power_on·ha·pass](evidence/F-HA-003/2026-10-01-V3-2a28a93e-ha.power_on-ha.json)<br>[power.standby·api·pass](evidence/F-MTX-006/2026-10-01-V2-2a28a93e-power.standby-api.json)<br>[power.wake·api·pass](evidence/F-MTX-006/2026-10-01-V2-2a28a93e-power.wake-api.json) | — |
 | F-MTX-007 | Mute / unmute the audio of an output | V4 | V1 (capped) | V1 | fresh | [ha.mute_switch·ha·pass](evidence/F-HA-004/2026-10-01-V3-2a28a93e-ha.mute_switch-ha.json)<br>[outputs.audio_mute·api·pass](evidence/F-MTX-007/2026-10-01-V2-2a28a93e-outputs.audio_mute-api.json) | HIL-09(C) |
@@ -70,12 +70,12 @@ Last run: target `sim`, clients ['api', 'uc'], commit `1d0a4a94` — pass: 3
 | F-MTX-015 | External audio: matrix mode | V4 | V1 (capped) | V1 | — | — | HIL-09(C) |
 | F-MTX-016 | External audio: enable per output | V4 | V1 (capped) | V1 | — | — | HIL-09(C) |
 | F-MTX-017 | External audio: source per output | V4 | V1 (capped) | V1 | — | — | HIL-09(C) |
-| F-MTX-018 | Front-panel beep on / off | V4 | V1 | V1 | — | — | — |
-| F-MTX-019 | Front-panel lock | V4 | V1 | V1 | — | — | — |
-| F-MTX-020 | Front-panel LCD timeout | V4 | V1 (capped) | V1 | — | — | API-07(M), HIL-09(C) |
+| F-MTX-018 | Front-panel beep on / off | V4 | V2 | V1 | fresh | [matrix.beep_off·api·pass](evidence/F-MTX-018/2026-10-02-V2-e015d3e1-matrix.beep_off-api.json)<br>[matrix.beep_on·api·pass](evidence/F-MTX-018/2026-10-02-V2-e015d3e1-matrix.beep_on-api.json)<br>[matrix.beep_refused·api·pass](evidence/F-MTX-018/2026-10-02-V2-e015d3e1-matrix.beep_refused-api.json) | — |
+| F-MTX-019 | Front-panel lock | V4 | V2 | V1 | fresh | [matrix.panel_lock_off·api·pass](evidence/F-MTX-019/2026-10-02-V2-e015d3e1-matrix.panel_lock_off-api.json)<br>[matrix.panel_lock_on·api·pass](evidence/F-MTX-019/2026-10-02-V2-e015d3e1-matrix.panel_lock_on-api.json)<br>[matrix.panel_lock_refused·api·pass](evidence/F-MTX-019/2026-10-02-V2-e015d3e1-matrix.panel_lock_refused-api.json) | — |
+| F-MTX-020 | Front-panel LCD timeout | V4 | V1 (capped) | V1 | fresh | [matrix.lcd_invalid_mode·api·pass](evidence/F-MTX-020/2026-10-02-V2-e015d3e1-matrix.lcd_invalid_mode-api.json)<br>[matrix.lcd_missing_mode·api·pass](evidence/F-MTX-020/2026-10-02-V2-e015d3e1-matrix.lcd_missing_mode-api.json)<br>[matrix.lcd_mode_0·api·pass](evidence/F-MTX-020/2026-10-02-V2-e015d3e1-matrix.lcd_mode_0-api.json)<br>[matrix.lcd_mode_1·api·pass](evidence/F-MTX-020/2026-10-02-V2-e015d3e1-matrix.lcd_mode_1-api.json) | API-07(M), HIL-09(C) |
 | F-MTX-021 | Reboot the matrix | V4 | V3 | V1 | fresh | [reboot.direct·api·pass](evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.direct-api.json)<br>[reboot.enabled_shortcut·api·pass](evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.enabled_shortcut-api.json)<br>[reboot.legacy_shortcut·api·pass](evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.legacy_shortcut-api.json)<br>[reboot.enabled_shortcut·browser·pass](evidence/F-MTX-021/2026-10-01-V3-2a28a93e-reboot.enabled_shortcut-browser.json) | — |
-| F-MTX-022 | Rename inputs (names stored on the matrix) | V4 | V1 | V1 | — | — | BE-16(M) |
-| F-MTX-023 | Rename outputs (names stored on the matrix) | V4 | V1 | V1 | — | — | BE-16(M) |
+| F-MTX-022 | Rename inputs (names stored on the matrix) | V4 | V2 | V1 | fresh | [matrix.input_blank_name·api·pass](evidence/F-MTX-022/2026-10-02-V2-e015d3e1-matrix.input_blank_name-api.json)<br>[matrix.input_invalid_port·api·pass](evidence/F-MTX-022/2026-10-02-V2-e015d3e1-matrix.input_invalid_port-api.json)<br>[matrix.input_long_name·api·pass](evidence/F-MTX-022/2026-10-02-V2-e015d3e1-matrix.input_long_name-api.json)<br>[matrix.input_name·api·pass](evidence/F-MTX-022/2026-10-02-V2-e015d3e1-matrix.input_name-api.json) | BE-16(M) |
+| F-MTX-023 | Rename outputs (names stored on the matrix) | V4 | V2 | V1 | fresh | [matrix.output_blank_name·api·pass](evidence/F-MTX-023/2026-10-02-V2-e015d3e1-matrix.output_blank_name-api.json)<br>[matrix.output_invalid_port·api·pass](evidence/F-MTX-023/2026-10-02-V2-e015d3e1-matrix.output_invalid_port-api.json)<br>[matrix.output_long_name·api·pass](evidence/F-MTX-023/2026-10-02-V2-e015d3e1-matrix.output_long_name-api.json)<br>[matrix.output_name·api·pass](evidence/F-MTX-023/2026-10-02-V2-e015d3e1-matrix.output_name-api.json) | BE-16(M) |
 | F-MTX-024 | Read the current routing and names | V4 | V2 | V2 | — | — | — |
 | F-MTX-025 | Show which inputs have an active signal | V4 | V1 | V1 | — | — | — |
 | F-MTX-026 | Show which cables are plugged in (Telnet link status) | V4 | V1 | V1 | — | — | HIL-03(M) |

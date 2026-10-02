@@ -1,0 +1,19 @@
+{
+  "source_commit": "e015d3e127fba07f1393aa5e5a4c457d555794b3",
+  "image_digest": "sha256:1b7b72c01322972198e2660896ca6a4270cce740d4c32d701a16eaa12b580dc0",
+  "result": "pass",
+  "records": 29,
+  "features": [
+    "F-MTX-004",
+    "F-MTX-018",
+    "F-MTX-019",
+    "F-MTX-020",
+    "F-MTX-022",
+    "F-MTX-023"
+  ],
+  "matches_checkout_files": 176,
+  "schema_errors": 0,
+  "dirty_records": 0,
+  "failed_checks": 0,
+  "hardware_exercised": false
+}

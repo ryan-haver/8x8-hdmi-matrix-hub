@@ -116,7 +116,10 @@ features:
   current: V1
   basis: 'tests/sim/test_sim_hub.py::test_recall_and_save_preset (driver-level: real OreiMatrix against the simulator, no
     user interface in the path -> V1); tests/test_rest_api.py TestControlEndpoints (mocked matrix).'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-MTX-004/2026-10-02-V2-e015d3e1-matrix.preset_invalid_slot-api.json
+  - docs/validation/evidence/F-MTX-004/2026-10-02-V2-e015d3e1-matrix.preset_refused-api.json
+  - docs/validation/evidence/F-MTX-004/2026-10-02-V2-e015d3e1-matrix.save_current_preset-api.json
   findings: []
   scenarios: [matrix.save_current_preset, matrix.preset_invalid_slot, matrix.preset_refused]
 - id: F-MTX-005
@@ -366,7 +369,10 @@ features:
   current: V1
   basis: 'tests/sim/test_sim_hub.py::test_system_settings (driver-level: real OreiMatrix against the simulator, no user interface
     in the path -> V1); tests/test_rest_api.py TestSystemSettingsEndpoints (mocked).'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-MTX-018/2026-10-02-V2-e015d3e1-matrix.beep_off-api.json
+  - docs/validation/evidence/F-MTX-018/2026-10-02-V2-e015d3e1-matrix.beep_on-api.json
+  - docs/validation/evidence/F-MTX-018/2026-10-02-V2-e015d3e1-matrix.beep_refused-api.json
   findings: [BE-12]
   scenarios: [matrix.beep_off, matrix.beep_on, matrix.beep_refused]
 - id: F-MTX-019
@@ -381,7 +387,10 @@ features:
   current: V1
   basis: 'tests/sim/test_sim_hub.py::test_system_settings (driver-level: real OreiMatrix against the simulator, no user interface
     in the path -> V1); tests/test_rest_api.py TestSystemSettingsEndpoints (mocked).'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-MTX-019/2026-10-02-V2-e015d3e1-matrix.panel_lock_off-api.json
+  - docs/validation/evidence/F-MTX-019/2026-10-02-V2-e015d3e1-matrix.panel_lock_on-api.json
+  - docs/validation/evidence/F-MTX-019/2026-10-02-V2-e015d3e1-matrix.panel_lock_refused-api.json
   findings: [BE-12]
   scenarios: [matrix.panel_lock_off, matrix.panel_lock_on, matrix.panel_lock_refused]
 - id: F-MTX-020
@@ -398,7 +407,15 @@ features:
     tests/test_rest_api.py TestLcdTimeoutControl (mocked). V1.10.01 rejected the old {"time": N} payload for every code
     (captured, result 0); the hub now sends {"lcd on time": N} and reads the code back as `get system status.mode`
     (captured: 3 = "lcd on 30 seconds"). On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-MTX-020/2026-10-02-V2-e015d3e1-matrix.lcd_invalid_mode-api.json
+  - docs/validation/evidence/F-MTX-020/2026-10-02-V2-e015d3e1-matrix.lcd_missing_mode-api.json
+  - docs/validation/evidence/F-MTX-020/2026-10-02-V2-e015d3e1-matrix.lcd_mode_0-api.json
+  - docs/validation/evidence/F-MTX-020/2026-10-02-V2-e015d3e1-matrix.lcd_mode_1-api.json
+  - docs/validation/evidence/F-MTX-020/2026-10-02-V2-e015d3e1-matrix.lcd_mode_2-api.json
+  - docs/validation/evidence/F-MTX-020/2026-10-02-V2-e015d3e1-matrix.lcd_mode_3-api.json
+  - docs/validation/evidence/F-MTX-020/2026-10-02-V2-e015d3e1-matrix.lcd_mode_4-api.json
+  - docs/validation/evidence/F-MTX-020/2026-10-02-V2-e015d3e1-matrix.lcd_refused-api.json
   findings: [API-07, BE-12, HIL-09]
   scenarios: [matrix.lcd_mode_0, matrix.lcd_mode_1, matrix.lcd_mode_2, matrix.lcd_mode_3, matrix.lcd_mode_4, matrix.lcd_invalid_mode, matrix.lcd_missing_mode, matrix.lcd_refused]
 - id: F-MTX-021
@@ -439,8 +456,14 @@ features:
   target: V4
   current: V1
   basis: 'tests/sim/test_sim_hub.py::test_set_names (driver-level: real OreiMatrix against the simulator, no user interface
-    in the path -> V1). The REST route is not exercised by any test.'
-  evidence: []
+    in the path -> V1). Direct REST simulator scenarios now prove device names and hub readback, the 32-character limit, invalid-request no-write behavior and device refusal. Cross-client rename propagation still requires separate proof.'
+  evidence:
+  - docs/validation/evidence/F-MTX-022/2026-10-02-V2-e015d3e1-matrix.input_blank_name-api.json
+  - docs/validation/evidence/F-MTX-022/2026-10-02-V2-e015d3e1-matrix.input_invalid_port-api.json
+  - docs/validation/evidence/F-MTX-022/2026-10-02-V2-e015d3e1-matrix.input_long_name-api.json
+  - docs/validation/evidence/F-MTX-022/2026-10-02-V2-e015d3e1-matrix.input_name-api.json
+  - docs/validation/evidence/F-MTX-022/2026-10-02-V2-e015d3e1-matrix.input_name_limit-api.json
+  - docs/validation/evidence/F-MTX-022/2026-10-02-V2-e015d3e1-matrix.input_name_refused-api.json
   findings: [BE-16, UC-08]
   scenarios: [matrix.input_name, matrix.input_name_limit, matrix.input_blank_name, matrix.input_long_name, matrix.input_invalid_port, matrix.input_name_refused]
 - id: F-MTX-023
@@ -455,8 +478,14 @@ features:
   target: V4
   current: V1
   basis: 'tests/sim/test_sim_hub.py::test_set_names (driver-level: real OreiMatrix against the simulator, no user interface
-    in the path -> V1). The REST route is not exercised by any test.'
-  evidence: []
+    in the path -> V1). Direct REST simulator scenarios now prove device names and hub readback, the 32-character limit, invalid-request no-write behavior and device refusal. Cross-client rename propagation still requires separate proof.'
+  evidence:
+  - docs/validation/evidence/F-MTX-023/2026-10-02-V2-e015d3e1-matrix.output_blank_name-api.json
+  - docs/validation/evidence/F-MTX-023/2026-10-02-V2-e015d3e1-matrix.output_invalid_port-api.json
+  - docs/validation/evidence/F-MTX-023/2026-10-02-V2-e015d3e1-matrix.output_long_name-api.json
+  - docs/validation/evidence/F-MTX-023/2026-10-02-V2-e015d3e1-matrix.output_name-api.json
+  - docs/validation/evidence/F-MTX-023/2026-10-02-V2-e015d3e1-matrix.output_name_limit-api.json
+  - docs/validation/evidence/F-MTX-023/2026-10-02-V2-e015d3e1-matrix.output_name_refused-api.json
   findings: [BE-16, BE-31, UC-08]
   scenarios: [matrix.output_name, matrix.output_name_limit, matrix.output_blank_name, matrix.output_long_name, matrix.output_invalid_port, matrix.output_name_refused]
 - id: F-MTX-024
