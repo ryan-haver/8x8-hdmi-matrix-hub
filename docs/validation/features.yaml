@@ -4716,6 +4716,8 @@ features:
   current: V1
   basis: "Recorded V1 baseline: mocked legacy scene tests. The profile_state packaged-image scenarios add V2 proof for create/read/list/delete/recall aliases, CEC config/auto-resolve, missing/invalid requests and save-current. API-27 read failures are linked; API-12 remains open. Status cache TTL is explicitly zero."
   evidence:
+  - docs/validation/evidence/F-DOM-018/2026-10-02-V2-1aafbbf4-domain_manage.legacy_list-api.json
+  - docs/validation/evidence/F-DOM-018/2026-10-02-V2-1aafbbf4-domain_manage.legacy_recall-api.json
   - docs/validation/evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_create-api.json
   - docs/validation/evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_create_invalid-api.json
   - docs/validation/evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_delete-api.json
@@ -4862,7 +4864,51 @@ features:
   target: V2
   current: V2
   basis: 'tests/sim/test_sim_scenes_v2.py exercises every /api/v2/scenes route on the real hub + simulator and asserts the device effect of execute (V2).'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_a_list-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_b_create_reject_body_type-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_b_create_reject_duplicate_profile-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_b_create_reject_missing_id-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_b_create_reject_name_empty-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_b_create_reject_protected_profile-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_b_create_reject_step_type-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_b_create_reject_steps_type-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_b_create_reject_unknown_type-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_b_create_reject_wait_boolean-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_b_create_reject_wait_long-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_b_create_reject_wait_short-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_b_create_reject_wait_string-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_c_create-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_d_edit-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_d_update_reject_body_type-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_d_update_reject_duplicate_profile-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_d_update_reject_missing_id-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_d_update_reject_name_empty-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_d_update_reject_protected_profile-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_d_update_reject_step_type-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_d_update_reject_steps_type-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_d_update_reject_unknown_type-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_d_update_reject_wait_boolean-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_d_update_reject_wait_long-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_d_update_reject_wait_short-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_d_update_reject_wait_string-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_e_add_profile-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_e_add_protected-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_e_add_wait_max-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_e_add_wait_min-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_f_remove-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_f_remove_invalid_2-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_f_remove_invalid_invalid-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_f_remove_invalid_negative_1-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_g_override-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_g_override_clear-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_g_override_reject_key-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_g_override_reject_nine-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_g_override_reject_zero-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_h_delete_missing-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_h_get_missing-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_h_put_missing-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_z_delete-api.json
   findings: [API-05, API-01, API-02, TST-03]
   scenarios:
   - domain_manage.scene_a_list
@@ -4932,8 +4978,79 @@ features:
       'POST /api/cec/macro/{macro_id}/favorite', 'POST /api/cec/macro/{macro_id}/dashboard']
   target: V2
   current: V1
-  basis: tests/test_rest_api.py TestMacroAPI, TestMacroFavoriteDashboardAPI (mocked).
-  evidence: []
+  basis: "Recorded V1 baseline: mocked macro API tests. The domain_manage packaged-image scenarios add V2 proof for macro management, validation boundaries/refusals, favorite/dashboard flags, collection ordering and non-executing dry-run. API-28 edit description inconsistency remains linked. Macro execution and physical CEC effects are outside this management batch."
+  evidence:
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_all_commands-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_create-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_create_delay_boundary-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_create_description_boundary-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_create_description_long-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_create_lowercase_command-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_create_name_boundary-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_create_steps_boundary-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_create_targets_boundary-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_delete-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_delete_missing-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_edit_metadata-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_edit_steps-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_get-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_get_missing-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_command_missing-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_command_type-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_command_unknown-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_delay_boolean-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_delay_float-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_delay_long-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_delay_negative-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_input_command_on_output-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_name_long-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_name_type-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_output_command_on_input-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_step_type-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_steps_empty-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_steps_limit-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_steps_type-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_target_colon-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_target_nine-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_target_type-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_target_zero-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_targets_empty-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_targets_limit-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_targets_type-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_missing-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_command_missing-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_command_type-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_command_unknown-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_delay_boolean-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_delay_float-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_delay_long-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_delay_negative-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_input_command_on_output-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_name_long-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_name_type-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_output_command_on_input-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_step_type-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_steps_empty-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_steps_limit-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_steps_type-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_target_colon-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_target_nine-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_target_type-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_target_zero-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_targets_empty-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_targets_limit-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_targets_type-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_replace-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_update_description_long-api.json
+  - docs/validation/evidence/F-DOM-021/2026-10-02-V2-1aafbbf4-domain_manage.macro_dry_run-api.json
+  - docs/validation/evidence/F-DOM-021/2026-10-02-V2-1aafbbf4-domain_manage.macro_dry_run_missing-api.json
+  - docs/validation/evidence/F-DOM-022/2026-10-02-V2-1aafbbf4-domain_manage.macro_dashboard_false-api.json
+  - docs/validation/evidence/F-DOM-022/2026-10-02-V2-1aafbbf4-domain_manage.macro_dashboard_missing-api.json
+  - docs/validation/evidence/F-DOM-022/2026-10-02-V2-1aafbbf4-domain_manage.macro_dashboard_true-api.json
+  - docs/validation/evidence/F-DOM-022/2026-10-02-V2-1aafbbf4-domain_manage.macro_favorite_false-api.json
+  - docs/validation/evidence/F-DOM-022/2026-10-02-V2-1aafbbf4-domain_manage.macro_favorite_list-api.json
+  - docs/validation/evidence/F-DOM-022/2026-10-02-V2-1aafbbf4-domain_manage.macro_favorite_missing-api.json
+  - docs/validation/evidence/F-DOM-022/2026-10-02-V2-1aafbbf4-domain_manage.macro_favorite_true-api.json
   findings: [VAL-02, API-28]
   scenarios:
   - domain_manage.macro_create
@@ -5840,7 +5957,51 @@ features:
   target: V3
   current: V2
   basis: 'Scenarios scenes.edit_with_profile_step and scenes.invalid_edit_rejected (V2); tests/sim/test_sim_scenes_v2.py (every /api/v2/scenes route on the real hub + simulator); tests/test_scene_manager.py.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_a_list-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_b_create_reject_body_type-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_b_create_reject_duplicate_profile-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_b_create_reject_missing_id-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_b_create_reject_name_empty-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_b_create_reject_protected_profile-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_b_create_reject_step_type-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_b_create_reject_steps_type-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_b_create_reject_unknown_type-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_b_create_reject_wait_boolean-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_b_create_reject_wait_long-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_b_create_reject_wait_short-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_b_create_reject_wait_string-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_c_create-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_d_edit-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_d_update_reject_body_type-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_d_update_reject_duplicate_profile-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_d_update_reject_missing_id-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_d_update_reject_name_empty-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_d_update_reject_protected_profile-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_d_update_reject_step_type-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_d_update_reject_steps_type-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_d_update_reject_unknown_type-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_d_update_reject_wait_boolean-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_d_update_reject_wait_long-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_d_update_reject_wait_short-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_d_update_reject_wait_string-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_e_add_profile-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_e_add_protected-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_e_add_wait_max-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_e_add_wait_min-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_f_remove-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_f_remove_invalid_2-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_f_remove_invalid_invalid-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_f_remove_invalid_negative_1-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_g_override-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_g_override_clear-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_g_override_reject_key-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_g_override_reject_nine-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_g_override_reject_zero-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_h_delete_missing-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_h_get_missing-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_h_put_missing-api.json
+  - docs/validation/evidence/F-DOM-010/2026-10-02-V2-1aafbbf4-domain_manage.scene_z_delete-api.json
   findings: [API-05, API-13, API-12]
   scenarios:
   - scenes.edit_with_profile_step
@@ -6057,8 +6218,10 @@ features:
     rest: [GET /api/scenes, 'POST /api/scene/{scene_id}/recall']
   target: V2
   current: V1
-  basis: tests/test_rest_api.py TestSceneControl, TestSceneRecallValidation (mocked).
-  evidence: []
+  basis: "Recorded V1 baseline: mocked legacy tests. The domain_manage packaged-image scenarios add V2 proof for list aliases with canonical readback and recall routing Output 1 to Input 5. API-12/API-23 remain linked; compatibility across restart is outside this batch."
+  evidence:
+  - docs/validation/evidence/F-DOM-018/2026-10-02-V2-1aafbbf4-domain_manage.legacy_list-api.json
+  - docs/validation/evidence/F-DOM-018/2026-10-02-V2-1aafbbf4-domain_manage.legacy_recall-api.json
   findings: [API-12, API-23]
   scenarios:
   - domain_manage.legacy_list
@@ -6074,8 +6237,70 @@ features:
     files: [cec_macros.json]
   target: V3
   current: V1
-  basis: tests/test_cec_macros.py; tests/test_macro_validation.py; tests/test_rest_api.py TestMacroAPI (mocked).
-  evidence: []
+  basis: "Recorded V1 baseline: mocked macro tests. The domain_manage packaged-image scenarios add V2 proof for create/read/replace/edit/delete, invalid writes preserving prior data, command/target restrictions and boundary limits. API-28 remains open: edits persist descriptions over 2000 characters. Browser rendering, restart persistence and storage failure handling are outside this batch."
+  evidence:
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_all_commands-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_create-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_create_delay_boundary-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_create_description_boundary-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_create_description_long-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_create_lowercase_command-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_create_name_boundary-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_create_steps_boundary-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_create_targets_boundary-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_delete-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_delete_missing-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_edit_metadata-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_edit_steps-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_get-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_get_missing-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_command_missing-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_command_type-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_command_unknown-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_delay_boolean-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_delay_float-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_delay_long-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_delay_negative-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_input_command_on_output-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_name_long-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_name_type-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_output_command_on_input-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_step_type-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_steps_empty-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_steps_limit-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_steps_type-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_target_colon-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_target_nine-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_target_type-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_target_zero-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_targets_empty-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_targets_limit-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_post_reject_targets_type-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_missing-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_command_missing-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_command_type-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_command_unknown-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_delay_boolean-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_delay_float-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_delay_long-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_delay_negative-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_input_command_on_output-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_name_long-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_name_type-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_output_command_on_input-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_step_type-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_steps_empty-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_steps_limit-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_steps_type-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_target_colon-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_target_nine-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_target_type-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_target_zero-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_targets_empty-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_targets_limit-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_put_reject_targets_type-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_replace-api.json
+  - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_update_description_long-api.json
   findings: [API-28]
   scenarios:
   - domain_manage.macro_create
@@ -6183,8 +6408,10 @@ features:
     rest: ['POST /api/cec/macro/{macro_id}/test']
   target: V3
   current: V1
-  basis: tests/test_rest_api.py TestMacroAPI test (mocked).
-  evidence: []
+  basis: "Recorded V1 baseline: mocked dry-run tests. The domain_manage packaged-image scenarios add V2 proof for a 25-step sequence covering every source/display command, no issues, 1500 ms duration, unchanged complete saved steps and no CEC commands or device changes. Missing macros return 404. Browser behavior is outside this batch."
+  evidence:
+  - docs/validation/evidence/F-DOM-021/2026-10-02-V2-1aafbbf4-domain_manage.macro_dry_run-api.json
+  - docs/validation/evidence/F-DOM-021/2026-10-02-V2-1aafbbf4-domain_manage.macro_dry_run_missing-api.json
   findings: []
   scenarios:
   - domain_manage.macro_dry_run
@@ -6197,8 +6424,15 @@ features:
     rest: ['POST /api/cec/macro/{macro_id}/favorite', 'POST /api/cec/macro/{macro_id}/dashboard', GET /api/cec/macros/favorites]
   target: V3
   current: V1
-  basis: tests/test_rest_api.py TestMacroFavoriteDashboardAPI (mocked).
-  evidence: []
+  basis: "Recorded V1 baseline: mocked toggle tests. The domain_manage packaged-image scenarios add V2 proof for favorite/dashboard toggles in both directions, missing IDs and sorted favorite collection with independent reads. API-20 layout/source-of-truth semantics and browser rendering remain outside this proof."
+  evidence:
+  - docs/validation/evidence/F-DOM-022/2026-10-02-V2-1aafbbf4-domain_manage.macro_dashboard_false-api.json
+  - docs/validation/evidence/F-DOM-022/2026-10-02-V2-1aafbbf4-domain_manage.macro_dashboard_missing-api.json
+  - docs/validation/evidence/F-DOM-022/2026-10-02-V2-1aafbbf4-domain_manage.macro_dashboard_true-api.json
+  - docs/validation/evidence/F-DOM-022/2026-10-02-V2-1aafbbf4-domain_manage.macro_favorite_false-api.json
+  - docs/validation/evidence/F-DOM-022/2026-10-02-V2-1aafbbf4-domain_manage.macro_favorite_list-api.json
+  - docs/validation/evidence/F-DOM-022/2026-10-02-V2-1aafbbf4-domain_manage.macro_favorite_missing-api.json
+  - docs/validation/evidence/F-DOM-022/2026-10-02-V2-1aafbbf4-domain_manage.macro_favorite_true-api.json
   findings: [API-20]
   scenarios:
   - domain_manage.macro_favorite_true

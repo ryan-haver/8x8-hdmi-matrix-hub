@@ -834,6 +834,11 @@ between the read and write; the device protocol provides no atomic port edit.
 
 CEC Macros are saved sequences of CEC commands that can be executed atomically with optional delays between steps.
 
+**Known baseline gap (API-28):** Macro creation rejects descriptions longer
+than 2000 characters, but macro edits currently accept and persist them.
+The [scene/macro management report](validation/2026-10-02-domain-management.md)
+retains this failure; symmetric edit validation remains pending.
+
 ### Macro Step Format
 
 Each macro consists of ordered steps. Each step specifies:
