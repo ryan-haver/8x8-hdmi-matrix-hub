@@ -216,7 +216,7 @@ features:
     On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
   evidence: []
   findings: [BE-12, HIL-09]
-  scenarios: []
+  scenarios: [settings.enable_0, settings.enable_1, settings.enable_refused, settings.enable_port_0, settings.enable_port_9]
 - id: F-MTX-009
   area: matrix
   title: Set an output's HDCP mode
@@ -233,7 +233,7 @@ features:
     On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
   evidence: []
   findings: [BE-12, HIL-09]
-  scenarios: []
+  scenarios: [settings.hdcp_1, settings.hdcp_2, settings.hdcp_3, settings.hdcp_4, settings.hdcp_5, settings.hdcp_refused, settings.hdcp_port_0, settings.hdcp_port_9, settings.hdcp_invalid_0, settings.hdcp_invalid_6, settings.hdcp_missing_mode]
 - id: F-MTX-010
   area: matrix
   title: Set an output's HDR mode
@@ -250,7 +250,7 @@ features:
     On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
   evidence: []
   findings: [BE-12, HIL-09]
-  scenarios: []
+  scenarios: [settings.hdr_1, settings.hdr_2, settings.hdr_3, settings.hdr_refused, settings.hdr_port_0, settings.hdr_port_9, settings.hdr_invalid_0, settings.hdr_invalid_4, settings.hdr_missing_mode]
 - id: F-MTX-011
   area: matrix
   title: Set an output's scaler mode (incl. audio-only)
@@ -267,7 +267,7 @@ features:
     On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
   evidence: []
   findings: [BE-12, BE-15, HIL-09]
-  scenarios: []
+  scenarios: [settings.scaler_1, settings.scaler_2, settings.scaler_3, settings.scaler_4, settings.scaler_5, settings.scaler_refused, settings.scaler_port_0, settings.scaler_port_9, settings.scaler_invalid_0, settings.scaler_invalid_6, settings.scaler_missing_mode]
 - id: F-MTX-012
   area: matrix
   title: Enable / disable ARC on an output
@@ -284,7 +284,7 @@ features:
     On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
   evidence: []
   findings: [BE-12, HIL-09]
-  scenarios: []
+  scenarios: [settings.arc_0, settings.arc_1, settings.arc_refused, settings.arc_port_0, settings.arc_port_9]
 - id: F-MTX-013
   area: matrix
   title: Set an input's EDID
@@ -300,7 +300,7 @@ features:
     list (36 = 8K FRL 12G HDR 7.1CH, as V1.10.01 reports). On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
   evidence: []
   findings: [BE-12, HIL-09]
-  scenarios: []
+  scenarios: [settings.edid_mode_1, settings.edid_mode_12, settings.edid_mode_36, settings.edid_mode_39, settings.edid_input_0, settings.edid_input_9, settings.edid_mode_0, settings.edid_mode_48, settings.edid_missing_mode, settings.edid_refused]
 - id: F-MTX-014
   area: matrix
   title: Copy EDID from a connected display
@@ -314,7 +314,7 @@ features:
     `copy edid` nor `set input edid 14+N` is answered by V1.10.01 (BE-25). On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
   evidence: []
   findings: [BE-25, HIL-09]
-  scenarios: []
+  scenarios: [settings.edid_copy_output_1, settings.edid_copy_output_2, settings.edid_copy_output_3, settings.edid_copy_output_4, settings.edid_copy_output_5, settings.edid_copy_output_6, settings.edid_copy_output_7, settings.edid_copy_output_8, settings.edid_copy_invalid_0, settings.edid_copy_invalid_9, settings.edid_copy_refused]
 - id: F-MTX-015
   area: matrix
   title: 'External audio: matrix mode'
