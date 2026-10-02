@@ -4848,6 +4848,8 @@ features:
   - profile_state.alias_get_missing
   - profile_state.alias_delete_missing
   - profile_state.alias_post_missing
+  - domain_manage.legacy_list
+  - domain_manage.legacy_recall
 - id: F-API-021
   area: api
   title: Scene v2 routes (/api/v2/scenes*)
@@ -4862,7 +4864,51 @@ features:
   basis: 'tests/sim/test_sim_scenes_v2.py exercises every /api/v2/scenes route on the real hub + simulator and asserts the device effect of execute (V2).'
   evidence: []
   findings: [API-05, API-01, API-02, TST-03]
-  scenarios: []
+  scenarios:
+  - domain_manage.scene_a_list
+  - domain_manage.scene_b_create_reject_body_type
+  - domain_manage.scene_d_update_reject_body_type
+  - domain_manage.scene_b_create_reject_name_empty
+  - domain_manage.scene_d_update_reject_name_empty
+  - domain_manage.scene_b_create_reject_steps_type
+  - domain_manage.scene_d_update_reject_steps_type
+  - domain_manage.scene_b_create_reject_step_type
+  - domain_manage.scene_d_update_reject_step_type
+  - domain_manage.scene_b_create_reject_unknown_type
+  - domain_manage.scene_d_update_reject_unknown_type
+  - domain_manage.scene_b_create_reject_missing_id
+  - domain_manage.scene_d_update_reject_missing_id
+  - domain_manage.scene_b_create_reject_duplicate_profile
+  - domain_manage.scene_d_update_reject_duplicate_profile
+  - domain_manage.scene_b_create_reject_protected_profile
+  - domain_manage.scene_d_update_reject_protected_profile
+  - domain_manage.scene_b_create_reject_wait_short
+  - domain_manage.scene_d_update_reject_wait_short
+  - domain_manage.scene_b_create_reject_wait_long
+  - domain_manage.scene_d_update_reject_wait_long
+  - domain_manage.scene_b_create_reject_wait_boolean
+  - domain_manage.scene_d_update_reject_wait_boolean
+  - domain_manage.scene_b_create_reject_wait_string
+  - domain_manage.scene_d_update_reject_wait_string
+  - domain_manage.scene_c_create
+  - domain_manage.scene_d_edit
+  - domain_manage.scene_e_add_profile
+  - domain_manage.scene_e_add_wait_min
+  - domain_manage.scene_e_add_wait_max
+  - domain_manage.scene_e_add_protected
+  - domain_manage.scene_f_remove
+  - domain_manage.scene_f_remove_invalid_negative_1
+  - domain_manage.scene_f_remove_invalid_2
+  - domain_manage.scene_f_remove_invalid_invalid
+  - domain_manage.scene_g_override
+  - domain_manage.scene_g_override_clear
+  - domain_manage.scene_g_override_reject_zero
+  - domain_manage.scene_g_override_reject_nine
+  - domain_manage.scene_g_override_reject_key
+  - domain_manage.scene_h_get_missing
+  - domain_manage.scene_h_put_missing
+  - domain_manage.scene_h_delete_missing
+  - domain_manage.scene_z_delete
 - id: F-API-022
   area: api
   title: Response envelope and input validation (4xx before anything reaches the matrix)
@@ -4888,8 +4934,79 @@ features:
   current: V1
   basis: tests/test_rest_api.py TestMacroAPI, TestMacroFavoriteDashboardAPI (mocked).
   evidence: []
-  findings: [VAL-02]
-  scenarios: []
+  findings: [VAL-02, API-28]
+  scenarios:
+  - domain_manage.macro_create
+  - domain_manage.macro_get
+  - domain_manage.macro_replace
+  - domain_manage.macro_edit_metadata
+  - domain_manage.macro_edit_steps
+  - domain_manage.macro_delete
+  - domain_manage.macro_post_reject_name_type
+  - domain_manage.macro_post_reject_name_long
+  - domain_manage.macro_post_reject_steps_type
+  - domain_manage.macro_post_reject_steps_empty
+  - domain_manage.macro_post_reject_step_type
+  - domain_manage.macro_post_reject_command_missing
+  - domain_manage.macro_post_reject_command_type
+  - domain_manage.macro_post_reject_command_unknown
+  - domain_manage.macro_post_reject_targets_empty
+  - domain_manage.macro_post_reject_targets_type
+  - domain_manage.macro_post_reject_target_zero
+  - domain_manage.macro_post_reject_target_nine
+  - domain_manage.macro_post_reject_target_colon
+  - domain_manage.macro_post_reject_target_type
+  - domain_manage.macro_post_reject_input_command_on_output
+  - domain_manage.macro_post_reject_output_command_on_input
+  - domain_manage.macro_post_reject_steps_limit
+  - domain_manage.macro_post_reject_targets_limit
+  - domain_manage.macro_post_reject_delay_negative
+  - domain_manage.macro_post_reject_delay_long
+  - domain_manage.macro_post_reject_delay_boolean
+  - domain_manage.macro_post_reject_delay_float
+  - domain_manage.macro_put_reject_name_type
+  - domain_manage.macro_put_reject_name_long
+  - domain_manage.macro_put_reject_steps_type
+  - domain_manage.macro_put_reject_steps_empty
+  - domain_manage.macro_put_reject_step_type
+  - domain_manage.macro_put_reject_command_missing
+  - domain_manage.macro_put_reject_command_type
+  - domain_manage.macro_put_reject_command_unknown
+  - domain_manage.macro_put_reject_targets_empty
+  - domain_manage.macro_put_reject_targets_type
+  - domain_manage.macro_put_reject_target_zero
+  - domain_manage.macro_put_reject_target_nine
+  - domain_manage.macro_put_reject_target_colon
+  - domain_manage.macro_put_reject_target_type
+  - domain_manage.macro_put_reject_input_command_on_output
+  - domain_manage.macro_put_reject_output_command_on_input
+  - domain_manage.macro_put_reject_steps_limit
+  - domain_manage.macro_put_reject_targets_limit
+  - domain_manage.macro_put_reject_delay_negative
+  - domain_manage.macro_put_reject_delay_long
+  - domain_manage.macro_put_reject_delay_boolean
+  - domain_manage.macro_put_reject_delay_float
+  - domain_manage.macro_create_description_long
+  - domain_manage.macro_update_description_long
+  - domain_manage.macro_create_name_boundary
+  - domain_manage.macro_create_description_boundary
+  - domain_manage.macro_create_steps_boundary
+  - domain_manage.macro_create_targets_boundary
+  - domain_manage.macro_create_delay_boundary
+  - domain_manage.macro_create_lowercase_command
+  - domain_manage.macro_get_missing
+  - domain_manage.macro_put_missing
+  - domain_manage.macro_delete_missing
+  - domain_manage.macro_all_commands
+  - domain_manage.macro_dry_run
+  - domain_manage.macro_dry_run_missing
+  - domain_manage.macro_favorite_true
+  - domain_manage.macro_favorite_false
+  - domain_manage.macro_favorite_missing
+  - domain_manage.macro_dashboard_true
+  - domain_manage.macro_dashboard_false
+  - domain_manage.macro_dashboard_missing
+  - domain_manage.macro_favorite_list
 - id: F-API-024
   area: api
   title: Shortcut routes (/api/system-shortcuts* and the /api/shortcuts* aliases)
@@ -5725,7 +5842,53 @@ features:
   basis: 'Scenarios scenes.edit_with_profile_step and scenes.invalid_edit_rejected (V2); tests/sim/test_sim_scenes_v2.py (every /api/v2/scenes route on the real hub + simulator); tests/test_scene_manager.py.'
   evidence: []
   findings: [API-05, API-13, API-12]
-  scenarios: [scenes.edit_with_profile_step, scenes.invalid_edit_rejected]
+  scenarios:
+  - scenes.edit_with_profile_step
+  - scenes.invalid_edit_rejected
+  - domain_manage.scene_a_list
+  - domain_manage.scene_b_create_reject_body_type
+  - domain_manage.scene_d_update_reject_body_type
+  - domain_manage.scene_b_create_reject_name_empty
+  - domain_manage.scene_d_update_reject_name_empty
+  - domain_manage.scene_b_create_reject_steps_type
+  - domain_manage.scene_d_update_reject_steps_type
+  - domain_manage.scene_b_create_reject_step_type
+  - domain_manage.scene_d_update_reject_step_type
+  - domain_manage.scene_b_create_reject_unknown_type
+  - domain_manage.scene_d_update_reject_unknown_type
+  - domain_manage.scene_b_create_reject_missing_id
+  - domain_manage.scene_d_update_reject_missing_id
+  - domain_manage.scene_b_create_reject_duplicate_profile
+  - domain_manage.scene_d_update_reject_duplicate_profile
+  - domain_manage.scene_b_create_reject_protected_profile
+  - domain_manage.scene_d_update_reject_protected_profile
+  - domain_manage.scene_b_create_reject_wait_short
+  - domain_manage.scene_d_update_reject_wait_short
+  - domain_manage.scene_b_create_reject_wait_long
+  - domain_manage.scene_d_update_reject_wait_long
+  - domain_manage.scene_b_create_reject_wait_boolean
+  - domain_manage.scene_d_update_reject_wait_boolean
+  - domain_manage.scene_b_create_reject_wait_string
+  - domain_manage.scene_d_update_reject_wait_string
+  - domain_manage.scene_c_create
+  - domain_manage.scene_d_edit
+  - domain_manage.scene_e_add_profile
+  - domain_manage.scene_e_add_wait_min
+  - domain_manage.scene_e_add_wait_max
+  - domain_manage.scene_e_add_protected
+  - domain_manage.scene_f_remove
+  - domain_manage.scene_f_remove_invalid_negative_1
+  - domain_manage.scene_f_remove_invalid_2
+  - domain_manage.scene_f_remove_invalid_invalid
+  - domain_manage.scene_g_override
+  - domain_manage.scene_g_override_clear
+  - domain_manage.scene_g_override_reject_zero
+  - domain_manage.scene_g_override_reject_nine
+  - domain_manage.scene_g_override_reject_key
+  - domain_manage.scene_h_get_missing
+  - domain_manage.scene_h_put_missing
+  - domain_manage.scene_h_delete_missing
+  - domain_manage.scene_z_delete
 - id: F-DOM-011
   area: domain
   title: 'Run a scene: profile steps'
@@ -5897,7 +6060,9 @@ features:
   basis: tests/test_rest_api.py TestSceneControl, TestSceneRecallValidation (mocked).
   evidence: []
   findings: [API-12, API-23]
-  scenarios: []
+  scenarios:
+  - domain_manage.legacy_list
+  - domain_manage.legacy_recall
   target_note: 'DI-1: deprecated aliases, kept for one release; contract-level proof is enough'
 - id: F-DOM-019
   area: domain
@@ -5911,8 +6076,70 @@ features:
   current: V1
   basis: tests/test_cec_macros.py; tests/test_macro_validation.py; tests/test_rest_api.py TestMacroAPI (mocked).
   evidence: []
-  findings: []
-  scenarios: []
+  findings: [API-28]
+  scenarios:
+  - domain_manage.macro_create
+  - domain_manage.macro_get
+  - domain_manage.macro_replace
+  - domain_manage.macro_edit_metadata
+  - domain_manage.macro_edit_steps
+  - domain_manage.macro_delete
+  - domain_manage.macro_post_reject_name_type
+  - domain_manage.macro_post_reject_name_long
+  - domain_manage.macro_post_reject_steps_type
+  - domain_manage.macro_post_reject_steps_empty
+  - domain_manage.macro_post_reject_step_type
+  - domain_manage.macro_post_reject_command_missing
+  - domain_manage.macro_post_reject_command_type
+  - domain_manage.macro_post_reject_command_unknown
+  - domain_manage.macro_post_reject_targets_empty
+  - domain_manage.macro_post_reject_targets_type
+  - domain_manage.macro_post_reject_target_zero
+  - domain_manage.macro_post_reject_target_nine
+  - domain_manage.macro_post_reject_target_colon
+  - domain_manage.macro_post_reject_target_type
+  - domain_manage.macro_post_reject_input_command_on_output
+  - domain_manage.macro_post_reject_output_command_on_input
+  - domain_manage.macro_post_reject_steps_limit
+  - domain_manage.macro_post_reject_targets_limit
+  - domain_manage.macro_post_reject_delay_negative
+  - domain_manage.macro_post_reject_delay_long
+  - domain_manage.macro_post_reject_delay_boolean
+  - domain_manage.macro_post_reject_delay_float
+  - domain_manage.macro_put_reject_name_type
+  - domain_manage.macro_put_reject_name_long
+  - domain_manage.macro_put_reject_steps_type
+  - domain_manage.macro_put_reject_steps_empty
+  - domain_manage.macro_put_reject_step_type
+  - domain_manage.macro_put_reject_command_missing
+  - domain_manage.macro_put_reject_command_type
+  - domain_manage.macro_put_reject_command_unknown
+  - domain_manage.macro_put_reject_targets_empty
+  - domain_manage.macro_put_reject_targets_type
+  - domain_manage.macro_put_reject_target_zero
+  - domain_manage.macro_put_reject_target_nine
+  - domain_manage.macro_put_reject_target_colon
+  - domain_manage.macro_put_reject_target_type
+  - domain_manage.macro_put_reject_input_command_on_output
+  - domain_manage.macro_put_reject_output_command_on_input
+  - domain_manage.macro_put_reject_steps_limit
+  - domain_manage.macro_put_reject_targets_limit
+  - domain_manage.macro_put_reject_delay_negative
+  - domain_manage.macro_put_reject_delay_long
+  - domain_manage.macro_put_reject_delay_boolean
+  - domain_manage.macro_put_reject_delay_float
+  - domain_manage.macro_create_description_long
+  - domain_manage.macro_update_description_long
+  - domain_manage.macro_create_name_boundary
+  - domain_manage.macro_create_description_boundary
+  - domain_manage.macro_create_steps_boundary
+  - domain_manage.macro_create_targets_boundary
+  - domain_manage.macro_create_delay_boundary
+  - domain_manage.macro_create_lowercase_command
+  - domain_manage.macro_get_missing
+  - domain_manage.macro_put_missing
+  - domain_manage.macro_delete_missing
+  - domain_manage.macro_all_commands
 - id: F-DOM-020
   area: domain
   title: Run a CEC macro (steps, targets, delays)
@@ -5959,7 +6186,9 @@ features:
   basis: tests/test_rest_api.py TestMacroAPI test (mocked).
   evidence: []
   findings: []
-  scenarios: []
+  scenarios:
+  - domain_manage.macro_dry_run
+  - domain_manage.macro_dry_run_missing
 - id: F-DOM-022
   area: domain
   title: Favourite macros and show them on the dashboard
@@ -5971,7 +6200,14 @@ features:
   basis: tests/test_rest_api.py TestMacroFavoriteDashboardAPI (mocked).
   evidence: []
   findings: [API-20]
-  scenarios: []
+  scenarios:
+  - domain_manage.macro_favorite_true
+  - domain_manage.macro_favorite_false
+  - domain_manage.macro_favorite_missing
+  - domain_manage.macro_dashboard_true
+  - domain_manage.macro_dashboard_false
+  - domain_manage.macro_dashboard_missing
+  - domain_manage.macro_favorite_list
 - id: F-DOM-023
   area: domain
   title: 'Built-in shortcuts: route all to an output, one-to-one routing'
