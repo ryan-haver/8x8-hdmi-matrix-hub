@@ -669,7 +669,7 @@ features:
     in golden mode serving the byte-exact MCU V1.10.01 read capture, 9-entry allsource).'
   evidence: []
   findings: [API-11, HIL-04]
-  scenarios: []
+  scenarios: [status.routing_mixed, status.routing_one_to_one, status.routing_all_1, status.routing_all_8]
 - id: F-MTX-025
   area: matrix
   title: Show which inputs have an active signal
@@ -687,7 +687,7 @@ features:
     in the path -> V1); tests/test_rest_api.py TestStatusEndpoints (mocked).'
   evidence: []
   findings: [BE-03]
-  scenarios: []
+  scenarios: [status.signal_1_0, status.signal_1_1, status.signal_2_0, status.signal_2_1, status.signal_3_0, status.signal_3_1, status.signal_4_0, status.signal_4_1, status.signal_5_0, status.signal_5_1, status.signal_6_0, status.signal_6_1, status.signal_7_0, status.signal_7_1, status.signal_8_0, status.signal_8_1]
 - id: F-MTX-026
   area: matrix
   title: Show which cables are plugged in (Telnet link status)
@@ -706,7 +706,7 @@ features:
     /api/status/cables is not exercised by any test.'
   evidence: []
   findings: [BE-03, BE-29, BE-30, HIL-03]
-  scenarios: []
+  scenarios: [status.cables_none, status.cables_all, status.cables_alternating, status.cables_reverse]
 - id: F-MTX-027
   area: matrix
   title: Show which outputs have a display connected
@@ -725,7 +725,7 @@ features:
     -> simulator in golden mode serving the V1.10.01 get output status capture: `name`, 9-entry arrays).'
   evidence: []
   findings: [BE-03]
-  scenarios: []
+  scenarios: [status.display_1_0, status.display_1_1, status.display_2_0, status.display_2_1, status.display_3_0, status.display_3_1, status.display_4_0, status.display_4_1, status.display_5_0, status.display_5_1, status.display_6_0, status.display_6_1, status.display_7_0, status.display_7_1, status.display_8_0, status.display_8_1]
 - id: F-MTX-028
   area: matrix
   title: Show device info (model, firmware, network)
@@ -743,7 +743,7 @@ features:
     status as captured on V1.10.01) and tests/test_telnet_real_captures.py (banner, r fw version, r type).'
   evidence: []
   findings: []
-  scenarios: []
+  scenarios: [status.device_dhcp_0, status.device_dhcp_1, status.system_power_0, status.system_power_1, status.runtime_info]
 - id: F-MTX-029
   area: matrix
   title: Cycle an output to the next / previous input
@@ -756,7 +756,7 @@ features:
   basis: tests/test_rest_api.py TestInputCycling (mocked).
   evidence: []
   findings: []
-  scenarios: []
+  scenarios: [status.cycle_next_1_1, status.cycle_next_1_2, status.cycle_next_1_3, status.cycle_next_1_4, status.cycle_next_1_5, status.cycle_next_1_6, status.cycle_next_1_7, status.cycle_next_1_8, status.cycle_next_2_1, status.cycle_next_2_2, status.cycle_next_2_3, status.cycle_next_2_4, status.cycle_next_2_5, status.cycle_next_2_6, status.cycle_next_2_7, status.cycle_next_2_8, status.cycle_next_3_1, status.cycle_next_3_2, status.cycle_next_3_3, status.cycle_next_3_4, status.cycle_next_3_5, status.cycle_next_3_6, status.cycle_next_3_7, status.cycle_next_3_8, status.cycle_next_4_1, status.cycle_next_4_2, status.cycle_next_4_3, status.cycle_next_4_4, status.cycle_next_4_5, status.cycle_next_4_6, status.cycle_next_4_7, status.cycle_next_4_8, status.cycle_next_5_1, status.cycle_next_5_2, status.cycle_next_5_3, status.cycle_next_5_4, status.cycle_next_5_5, status.cycle_next_5_6, status.cycle_next_5_7, status.cycle_next_5_8, status.cycle_next_6_1, status.cycle_next_6_2, status.cycle_next_6_3, status.cycle_next_6_4, status.cycle_next_6_5, status.cycle_next_6_6, status.cycle_next_6_7, status.cycle_next_6_8, status.cycle_next_7_1, status.cycle_next_7_2, status.cycle_next_7_3, status.cycle_next_7_4, status.cycle_next_7_5, status.cycle_next_7_6, status.cycle_next_7_7, status.cycle_next_7_8, status.cycle_next_8_1, status.cycle_next_8_2, status.cycle_next_8_3, status.cycle_next_8_4, status.cycle_next_8_5, status.cycle_next_8_6, status.cycle_next_8_7, status.cycle_next_8_8, status.cycle_next_default, status.cycle_next_invalid_0, status.cycle_next_invalid_9, status.cycle_next_invalid_invalid, status.cycle_next_refused, status.cycle_previous_1_1, status.cycle_previous_1_2, status.cycle_previous_1_3, status.cycle_previous_1_4, status.cycle_previous_1_5, status.cycle_previous_1_6, status.cycle_previous_1_7, status.cycle_previous_1_8, status.cycle_previous_2_1, status.cycle_previous_2_2, status.cycle_previous_2_3, status.cycle_previous_2_4, status.cycle_previous_2_5, status.cycle_previous_2_6, status.cycle_previous_2_7, status.cycle_previous_2_8, status.cycle_previous_3_1, status.cycle_previous_3_2, status.cycle_previous_3_3, status.cycle_previous_3_4, status.cycle_previous_3_5, status.cycle_previous_3_6, status.cycle_previous_3_7, status.cycle_previous_3_8, status.cycle_previous_4_1, status.cycle_previous_4_2, status.cycle_previous_4_3, status.cycle_previous_4_4, status.cycle_previous_4_5, status.cycle_previous_4_6, status.cycle_previous_4_7, status.cycle_previous_4_8, status.cycle_previous_5_1, status.cycle_previous_5_2, status.cycle_previous_5_3, status.cycle_previous_5_4, status.cycle_previous_5_5, status.cycle_previous_5_6, status.cycle_previous_5_7, status.cycle_previous_5_8, status.cycle_previous_6_1, status.cycle_previous_6_2, status.cycle_previous_6_3, status.cycle_previous_6_4, status.cycle_previous_6_5, status.cycle_previous_6_6, status.cycle_previous_6_7, status.cycle_previous_6_8, status.cycle_previous_7_1, status.cycle_previous_7_2, status.cycle_previous_7_3, status.cycle_previous_7_4, status.cycle_previous_7_5, status.cycle_previous_7_6, status.cycle_previous_7_7, status.cycle_previous_7_8, status.cycle_previous_8_1, status.cycle_previous_8_2, status.cycle_previous_8_3, status.cycle_previous_8_4, status.cycle_previous_8_5, status.cycle_previous_8_6, status.cycle_previous_8_7, status.cycle_previous_8_8, status.cycle_previous_default, status.cycle_previous_invalid_0, status.cycle_previous_invalid_9, status.cycle_previous_invalid_invalid, status.cycle_previous_refused]
 - id: F-MTX-030
   area: matrix
   title: Read a preset's stored routing
