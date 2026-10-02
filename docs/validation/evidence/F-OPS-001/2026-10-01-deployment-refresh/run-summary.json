@@ -1,0 +1,63 @@
+{
+  "commit": {
+    "sha": "1d0a4a948f84463acf2e5aa516eed4b2e06cc418",
+    "short": "1d0a4a94",
+    "branch": "wp-deployment-evidence-refresh",
+    "dirty": false,
+    "dirty_files": []
+  },
+  "target": "sim",
+  "clients": [
+    "api",
+    "uc"
+  ],
+  "operator": "automation",
+  "finished": "2026-10-02T02:36:00.267Z",
+  "aborted": null,
+  "outcomes": [
+    {
+      "scenario": "deploy.image_core",
+      "client": "api",
+      "status": "pass",
+      "gate": "ok",
+      "evidence": "docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_core-api.json",
+      "features": [
+        "F-OPS-001",
+        "F-OPS-002",
+        "F-OPS-005",
+        "F-OPS-006",
+        "F-OPS-011",
+        "F-OPS-015"
+      ]
+    },
+    {
+      "scenario": "deploy.image_uc",
+      "client": "uc",
+      "status": "pass",
+      "gate": "ok",
+      "evidence": "docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_uc-uc.json",
+      "features": [
+        "F-OPS-001",
+        "F-OPS-005",
+        "F-OPS-011",
+        "F-OPS-015"
+      ]
+    },
+    {
+      "scenario": "deploy.compose",
+      "client": "api",
+      "status": "pass",
+      "gate": "ok",
+      "evidence": "docs/validation/evidence/F-OPS-003/2026-10-02-V3-1d0a4a94-deploy.compose-api.json",
+      "features": [
+        "F-OPS-003"
+      ]
+    }
+  ],
+  "pytest": {
+    "passed": 25,
+    "skipped": 1,
+    "failed": 0,
+    "skip_reason": "Remote integration disabled in core mode"
+  }
+}

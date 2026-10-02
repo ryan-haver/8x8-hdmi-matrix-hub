@@ -3475,7 +3475,7 @@ features:
     Remote 3 integration on, against the BK-808 simulator in a container: /api/health, /ui, /kiosk and static assets
     served, /api/status equals the simulator routing and a switch changes it, UID 1000 with read-only app code, clean
     SIGTERM stop. CI docker-build job. Deployment evidence deploy.image_core, deploy.image_uc.'
-  evidence: [docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_uc-uc.json]
+  evidence: [docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_uc-uc.json, docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_uc-uc.json]
   findings: []
   scenarios: []
 - id: F-OPS-002
@@ -3490,7 +3490,7 @@ features:
   basis: 'V3 (WP-D2, DEP-03 fixed): tests/deploy/test_docker_image.py[core]: the image with UC_ENABLED unset serves the
     core against the simulator, port 9095 is closed and the PYTHONPROFILEIMPORTTIME trace has no ucapi module;
     tests/test_run_entry.py proves the same for `python -X importtime run.py`. Deployment evidence deploy.image_core.'
-  evidence: [docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json]
+  evidence: [docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json]
   findings: []
   scenarios: []
 - id: F-OPS-003
@@ -3504,9 +3504,10 @@ features:
   basis: 'V3 (WP-D2, DEP-01 fixed): tests/deploy/test_compose.py: `docker compose up -d` with docker-compose.yml alone
     starts the hub (health, /ui, 9095 closed); with docker-compose.uc-bridge.yml the scripted Remote reaches the
     integration at the advertised UC_DRIVER_URL; with docker-compose.uc-host.yml (Linux/CI only) the API and 9095
-    listen on the host; both UC files refuse to start without HUB_HOST_IP. Deployment evidence deploy.compose (the
-    committed record is from Docker Desktop, where the host-networking check is n/a; CI runs it on Linux).'
-  evidence: [docs/validation/evidence/F-OPS-003/2026-09-26-V3-23239182-deploy.compose-api.json]
+    listen on the host; both UC files refuse to start without HUB_HOST_IP. Deployment evidence deploy.compose: the 2026-10-01 Docker Desktop rerun uses a Linux runner with host
+    networking enabled; all four Compose checks pass, including host networking. Real Remote mDNS discovery
+    remains F-OPS-004 / HIL-E.'
+  evidence: [docs/validation/evidence/F-OPS-003/2026-10-02-V3-1d0a4a94-deploy.compose-api.json, docs/validation/evidence/F-OPS-003/2026-09-26-V3-23239182-deploy.compose-api.json]
   findings: []
   scenarios: []
 - id: F-OPS-004
@@ -3537,7 +3538,7 @@ features:
   basis: 'V3 (WP-D2): the image HEALTHCHECK (`python run.py healthcheck`, follows API_PORT) reports healthy in both
     modes (tests/deploy/test_docker_image.py::test_image_healthcheck_reports_healthy, run with a 2 s interval). Not
     tested: a restart triggered by an unhealthy state (restart policy).'
-  evidence: [docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_uc-uc.json]
+  evidence: [docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_uc-uc.json, docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_uc-uc.json]
   findings: []
   scenarios: []
 - id: F-OPS-006
@@ -3552,7 +3553,7 @@ features:
     routing and switches it (tests/deploy/test_docker_image.py[core]); tests/test_run_entry.py: OREI_HOST/OREI_PORT
     are warned aliases, the canonical name wins, bad ports stop the hub. With UC_ENABLED=true the address comes from
     the Remote setup (DEP-07, still open).'
-  evidence: [docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json]
+  evidence: [docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json]
   findings: [DEP-07, BE-26]
   scenarios: []
 - id: F-OPS-007
@@ -3617,7 +3618,7 @@ features:
     the scripted Remote connects and ucapi is in the import trace (tests/deploy/test_docker_image.py). WEBUI_ENABLED,
     USE_MODULAR and REST_API_ENABLED=false are ignored with a warning (the web UI and REST API are the core;
     tests/test_run_entry.py). The integration loader itself is Phase 4 (BE-20).'
-  evidence: [docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_uc-uc.json]
+  evidence: [docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_uc-uc.json, docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_uc-uc.json]
   findings: [DEP-07, BE-20]
   scenarios: []
 - id: F-OPS-012
@@ -3669,7 +3670,7 @@ features:
     `docker restart`, in both modes, from the /data volume (tests/deploy/test_docker_image.py::
     test_data_persists_across_restart); an unwritable data dir stops the hub with a chown hint
     (tests/test_run_entry.py). tests/test_persistence.py TestPersistenceRoundTrip (in-process).'
-  evidence: [docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_uc-uc.json]
+  evidence: [docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_uc-uc.json, docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_uc-uc.json]
   findings: [DEP-07]
   scenarios: []
 - id: F-OPS-016

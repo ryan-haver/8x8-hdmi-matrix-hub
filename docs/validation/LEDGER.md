@@ -1,7 +1,7 @@
 # Feature ledger
 
 > **Generated** by `python -m tools.validate ledger` — do not edit by hand. Registry: [`features.yaml`](features.yaml) · Plan: [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md) · How to add evidence: [`README.md`](README.md).
-> Commit `2a28a93e`
+> Commit `1d0a4a94`
 
 **Level** = highest level with fresh passing evidence, else the recorded baseline (the registry's `current`), capped at V1 while an open critical/high finding is linked. **Recorded** = the registry baseline. **Fresh** = evidence commit not older than the last change to the scenario's `covers` paths.
 
@@ -18,10 +18,10 @@
 | Remote 3 integration | 17 | 1 | 2 | 0 | 14 | 0 | 0 | 17 | 0 |
 | Home Assistant component | 18 | 0 | 1 | 0 | 17 | 0 | 0 | 18 | 0 |
 | Flic | 10 | 3 | 7 | 0 | 0 | 0 | 0 | 10 | 0 |
-| Deployment, configuration, persistence | 20 | 3 | 8 | 2 | 7 | 0 | 0 | 20 | 7 |
+| Deployment, configuration, persistence | 20 | 3 | 8 | 2 | 7 | 0 | 0 | 20 | 0 |
 | Security controls | 15 | 9 | 5 | 0 | 1 | 0 | 0 | 14 | 0 |
 | Reliability | 18 | 9 | 3 | 2 | 4 | 0 | 0 | 18 | 0 |
-| **All** | **268** | **27** | **115** | **34** | **92** | **0** | **0** | **217** | **7** |
+| **All** | **268** | **27** | **115** | **34** | **92** | **0** | **0** | **217** | **0** |
 
 Levels: **V0** Claimed · **V1** Unit · **V2** Simulated integration · **V3** End-to-end · **V4** Hardware · **V5** Field
 
@@ -43,11 +43,11 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | Reliability | 12 | 3 | 1 | 2 | 0 | 0 |
 | **All** | **33** | **133** | **27** | **75** | **0** | **0** |
 
-- Features with fresh passing scenario evidence: **99** of 268.
+- Features with fresh passing scenario evidence: **106** of 268.
 - Features with a fresh failing scenario: **0**.
 - Features capped at V1 by an open critical/high finding: **28**.
 
-Last run: target `sim`, clients ['api', 'browser', 'ha', 'uc'], commit `2a28a93e` — pass: 192
+Last run: target `sim`, clients ['api', 'uc'], commit `1d0a4a94` — pass: 3
 
 ## Matrix control (F-MTX)
 
@@ -313,21 +313,21 @@ Last run: target `sim`, clients ['api', 'browser', 'ha', 'uc'], commit `2a28a93e
 
 | ID | Feature | Target | Level | Recorded | Freshness | Evidence | Open findings |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| F-OPS-001 | Run the hub from the Docker image | V4 | V3 | V3 | stale | [deploy.image_core·api·pass](evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json)<br>[deploy.image_uc·uc·pass](evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_uc-uc.json) | — |
-| F-OPS-002 | Run the hub without the Remote integration (UC_ENABLED=false, the default) | V4 | V3 | V3 | stale | [deploy.image_core·api·pass](evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json) | — |
-| F-OPS-003 | docker compose quick start | V4 | V3 | V3 | stale | [deploy.compose·api·pass](evidence/F-OPS-003/2026-09-26-V3-23239182-deploy.compose-api.json) | — |
+| F-OPS-001 | Run the hub from the Docker image | V4 | V3 | V3 | fresh | [deploy.image_core·api·pass](evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_core-api.json)<br>[deploy.image_uc·uc·pass](evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_uc-uc.json) | — |
+| F-OPS-002 | Run the hub without the Remote integration (UC_ENABLED=false, the default) | V4 | V3 | V3 | fresh | [deploy.image_core·api·pass](evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_core-api.json) | — |
+| F-OPS-003 | docker compose quick start | V4 | V3 | V3 | fresh | [deploy.compose·api·pass](evidence/F-OPS-003/2026-10-02-V3-1d0a4a94-deploy.compose-api.json) | — |
 | F-OPS-004 | Remote 3 discovery works from Docker | V4 | V2 | V2 | — | — | UC-11(M) |
-| F-OPS-005 | Container health check and auto-restart | V4 | V3 | V3 | stale | [deploy.image_core·api·pass](evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json)<br>[deploy.image_uc·uc·pass](evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_uc-uc.json) | — |
-| F-OPS-006 | Point the hub at the matrix (MATRIX_HOST / MATRIX_PORT) | V4 | V3 | V3 | stale | [deploy.image_core·api·pass](evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json) | DEP-07(M), BE-26(L) |
+| F-OPS-005 | Container health check and auto-restart | V4 | V3 | V3 | fresh | [deploy.image_core·api·pass](evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_core-api.json)<br>[deploy.image_uc·uc·pass](evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_uc-uc.json) | — |
+| F-OPS-006 | Point the hub at the matrix (MATRIX_HOST / MATRIX_PORT) | V4 | V3 | V3 | fresh | [deploy.image_core·api·pass](evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_core-api.json) | DEP-07(M), BE-26(L) |
 | F-OPS-007 | Choose the API port (API_PORT) | V4 | V2 | V2 | — | — | DEP-07(M) |
 | F-OPS-008 | Matrix credentials (OREI_USER / OREI_PASSWORD) | V4 | V1 | V1 | — | — | SEC-10(M) |
 | F-OPS-009 | Verify the matrix TLS certificate (OREI_VERIFY_SSL) | V4 | V0 | V0 | — | — | SEC-09(M) |
 | F-OPS-010 | Log level (LOG_LEVEL) | V4 | V1 | V1 | — | — | SEC-10(M) |
-| F-OPS-011 | Enable/disable integrations (UC_ENABLED) | V4 | V3 | V3 | stale | [deploy.image_core·api·pass](evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json)<br>[deploy.image_uc·uc·pass](evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_uc-uc.json) | DEP-07(M), BE-20(M) |
+| F-OPS-011 | Enable/disable integrations (UC_ENABLED) | V4 | V3 | V3 | fresh | [deploy.image_core·api·pass](evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_core-api.json)<br>[deploy.image_uc·uc·pass](evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_uc-uc.json) | DEP-07(M), BE-20(M) |
 | F-OPS-012 | Background polling (POLLING_ENABLED / POLLING_INTERVAL) | V4 | V0 | V0 | — | — | TST-03(M) |
 | F-OPS-013 | Telnet options (OREI_TELNET_PORT, OREI_USE_TELNET_CEC) | V4 | V1 | V1 | — | — | — |
 | F-OPS-014 | Cache and retry tuning (OREI_STATUS_CACHE_TTL, OREI_CEC_CACHE_TTL, OREI_*RETR*) | V4 | V1 | V1 | — | — | — |
-| F-OPS-015 | Hub data persists across restarts (DATA_DIR) | V4 | V3 | V3 | stale | [deploy.image_core·api·pass](evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json)<br>[deploy.image_uc·uc·pass](evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_uc-uc.json) | DEP-07(M) |
+| F-OPS-015 | Hub data persists across restarts (DATA_DIR) | V4 | V3 | V3 | fresh | [deploy.image_core·api·pass](evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_core-api.json)<br>[deploy.image_uc·uc·pass](evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_uc-uc.json) | DEP-07(M) |
 | F-OPS-016 | Writes are atomic and safe under concurrency | V4 | V1 | V1 | — | — | PER-01(M), PER-02(M), TST-08(M) |
 | F-OPS-017 | Migrate legacy data files (scenes -> profiles) | V4 | V1 | V1 | — | — | PER-03(M), API-12(M), PER-04(M) |
 | F-OPS-018 | Only one hub instance runs (process lock) | V4 | V1 | V1 | — | — | BE-18(M) |

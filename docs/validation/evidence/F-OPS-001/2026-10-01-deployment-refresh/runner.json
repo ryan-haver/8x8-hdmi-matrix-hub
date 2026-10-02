@@ -1,0 +1,8 @@
+{
+  "source_commit": "1d0a4a948f84463acf2e5aa516eed4b2e06cc418",
+  "branch": "wp-deployment-evidence-refresh",
+  "pytest_exit_code": 0,
+  "image": "hdmi-matrix-hub:wp-simulator-evidence-refresh",
+  "runner_network": "host",
+  "compose_bind_mapping": "/work/ -> /run/desktop/mnt/host/c/scripts/unfoldedcircle-orei-hdmi-matrix-integration/"
+}
