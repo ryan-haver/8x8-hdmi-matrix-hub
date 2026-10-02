@@ -1019,7 +1019,24 @@ features:
   evidence:
   - docs/validation/evidence/F-CEC-001/2026-10-01-V2-2a28a93e-cec.input_power_on-api.json
   findings: []
-  scenarios: [cec.input_power_on]
+  scenarios:
+  - cec.input_power_on
+  - cec_controls.input_1_power_on
+  - cec_controls.input_1_power_off
+  - cec_controls.input_2_power_on
+  - cec_controls.input_2_power_off
+  - cec_controls.input_3_power_on
+  - cec_controls.input_3_power_off
+  - cec_controls.input_4_power_on
+  - cec_controls.input_4_power_off
+  - cec_controls.input_5_power_on
+  - cec_controls.input_5_power_off
+  - cec_controls.input_6_power_on
+  - cec_controls.input_6_power_off
+  - cec_controls.input_7_power_on
+  - cec_controls.input_7_power_off
+  - cec_controls.input_8_power_on
+  - cec_controls.input_8_power_off
 - id: F-CEC-002
   area: cec
   title: Navigate a source's menus over CEC (up/down/left/right/select/menu/back)
@@ -1031,7 +1048,63 @@ features:
     no user interface in the path -> V1); tests/test_rest_api.py TestCecCommandEndpoints (mocked); tests/test_driver.py TestCecCommandResolution.'
   evidence: []
   findings: [VAL-03]
-  scenarios: []
+  scenarios:
+  - cec_controls.input_1_up
+  - cec_controls.input_1_left
+  - cec_controls.input_1_select
+  - cec_controls.input_1_right
+  - cec_controls.input_1_menu
+  - cec_controls.input_1_down
+  - cec_controls.input_1_back
+  - cec_controls.input_2_up
+  - cec_controls.input_2_left
+  - cec_controls.input_2_select
+  - cec_controls.input_2_right
+  - cec_controls.input_2_menu
+  - cec_controls.input_2_down
+  - cec_controls.input_2_back
+  - cec_controls.input_3_up
+  - cec_controls.input_3_left
+  - cec_controls.input_3_select
+  - cec_controls.input_3_right
+  - cec_controls.input_3_menu
+  - cec_controls.input_3_down
+  - cec_controls.input_3_back
+  - cec_controls.input_4_up
+  - cec_controls.input_4_left
+  - cec_controls.input_4_select
+  - cec_controls.input_4_right
+  - cec_controls.input_4_menu
+  - cec_controls.input_4_down
+  - cec_controls.input_4_back
+  - cec_controls.input_5_up
+  - cec_controls.input_5_left
+  - cec_controls.input_5_select
+  - cec_controls.input_5_right
+  - cec_controls.input_5_menu
+  - cec_controls.input_5_down
+  - cec_controls.input_5_back
+  - cec_controls.input_6_up
+  - cec_controls.input_6_left
+  - cec_controls.input_6_select
+  - cec_controls.input_6_right
+  - cec_controls.input_6_menu
+  - cec_controls.input_6_down
+  - cec_controls.input_6_back
+  - cec_controls.input_7_up
+  - cec_controls.input_7_left
+  - cec_controls.input_7_select
+  - cec_controls.input_7_right
+  - cec_controls.input_7_menu
+  - cec_controls.input_7_down
+  - cec_controls.input_7_back
+  - cec_controls.input_8_up
+  - cec_controls.input_8_left
+  - cec_controls.input_8_select
+  - cec_controls.input_8_right
+  - cec_controls.input_8_menu
+  - cec_controls.input_8_down
+  - cec_controls.input_8_back
 - id: F-CEC-003
   area: cec
   title: Control playback on a source over CEC
@@ -1043,7 +1116,63 @@ features:
     no user interface in the path -> V1); tests/test_rest_api.py TestCecCommandEndpoints (mocked); tests/test_driver.py TestCecCommandResolution.'
   evidence: []
   findings: [VAL-03]
-  scenarios: []
+  scenarios:
+  - cec_controls.input_1_previous
+  - cec_controls.input_1_play
+  - cec_controls.input_1_next
+  - cec_controls.input_1_rewind
+  - cec_controls.input_1_pause
+  - cec_controls.input_1_fast_forward
+  - cec_controls.input_1_stop
+  - cec_controls.input_2_previous
+  - cec_controls.input_2_play
+  - cec_controls.input_2_next
+  - cec_controls.input_2_rewind
+  - cec_controls.input_2_pause
+  - cec_controls.input_2_fast_forward
+  - cec_controls.input_2_stop
+  - cec_controls.input_3_previous
+  - cec_controls.input_3_play
+  - cec_controls.input_3_next
+  - cec_controls.input_3_rewind
+  - cec_controls.input_3_pause
+  - cec_controls.input_3_fast_forward
+  - cec_controls.input_3_stop
+  - cec_controls.input_4_previous
+  - cec_controls.input_4_play
+  - cec_controls.input_4_next
+  - cec_controls.input_4_rewind
+  - cec_controls.input_4_pause
+  - cec_controls.input_4_fast_forward
+  - cec_controls.input_4_stop
+  - cec_controls.input_5_previous
+  - cec_controls.input_5_play
+  - cec_controls.input_5_next
+  - cec_controls.input_5_rewind
+  - cec_controls.input_5_pause
+  - cec_controls.input_5_fast_forward
+  - cec_controls.input_5_stop
+  - cec_controls.input_6_previous
+  - cec_controls.input_6_play
+  - cec_controls.input_6_next
+  - cec_controls.input_6_rewind
+  - cec_controls.input_6_pause
+  - cec_controls.input_6_fast_forward
+  - cec_controls.input_6_stop
+  - cec_controls.input_7_previous
+  - cec_controls.input_7_play
+  - cec_controls.input_7_next
+  - cec_controls.input_7_rewind
+  - cec_controls.input_7_pause
+  - cec_controls.input_7_fast_forward
+  - cec_controls.input_7_stop
+  - cec_controls.input_8_previous
+  - cec_controls.input_8_play
+  - cec_controls.input_8_next
+  - cec_controls.input_8_rewind
+  - cec_controls.input_8_pause
+  - cec_controls.input_8_fast_forward
+  - cec_controls.input_8_stop
 - id: F-CEC-004
   area: cec
   title: Source volume / mute over CEC
@@ -1055,7 +1184,31 @@ features:
     no user interface in the path -> V1); tests/test_rest_api.py TestCecCommandEndpoints (mocked); tests/test_driver.py TestCecCommandResolution.'
   evidence: []
   findings: [VAL-03]
-  scenarios: []
+  scenarios:
+  - cec_controls.input_1_mute
+  - cec_controls.input_1_volume_down
+  - cec_controls.input_1_volume_up
+  - cec_controls.input_2_mute
+  - cec_controls.input_2_volume_down
+  - cec_controls.input_2_volume_up
+  - cec_controls.input_3_mute
+  - cec_controls.input_3_volume_down
+  - cec_controls.input_3_volume_up
+  - cec_controls.input_4_mute
+  - cec_controls.input_4_volume_down
+  - cec_controls.input_4_volume_up
+  - cec_controls.input_5_mute
+  - cec_controls.input_5_volume_down
+  - cec_controls.input_5_volume_up
+  - cec_controls.input_6_mute
+  - cec_controls.input_6_volume_down
+  - cec_controls.input_6_volume_up
+  - cec_controls.input_7_mute
+  - cec_controls.input_7_volume_down
+  - cec_controls.input_7_volume_up
+  - cec_controls.input_8_mute
+  - cec_controls.input_8_volume_down
+  - cec_controls.input_8_volume_up
 - id: F-CEC-005
   area: cec
   title: Turn a display (TV) on / off over CEC
@@ -1081,7 +1234,26 @@ features:
   - docs/validation/evidence/F-CEC-005/2026-09-28-V2-c39ee8d5-cec.output_power_on-api.json
   - docs/validation/evidence/F-HA-012/2026-09-28-V3-c39ee8d5-ha.service_cec_display-ha.json
   findings: [BE-14]
-  scenarios: [cec.output_power_on, remote.output_cec_power_on, ha.service_cec_display]
+  scenarios:
+  - cec.output_power_on
+  - remote.output_cec_power_on
+  - ha.service_cec_display
+  - cec_controls.output_1_power_on
+  - cec_controls.output_1_power_off
+  - cec_controls.output_2_power_on
+  - cec_controls.output_2_power_off
+  - cec_controls.output_3_power_on
+  - cec_controls.output_3_power_off
+  - cec_controls.output_4_power_on
+  - cec_controls.output_4_power_off
+  - cec_controls.output_5_power_on
+  - cec_controls.output_5_power_off
+  - cec_controls.output_6_power_on
+  - cec_controls.output_6_power_off
+  - cec_controls.output_7_power_on
+  - cec_controls.output_7_power_off
+  - cec_controls.output_8_power_on
+  - cec_controls.output_8_power_off
 - id: F-CEC-006
   area: cec
   title: Display / soundbar volume and mute over CEC
@@ -1093,7 +1265,32 @@ features:
   evidence:
   - docs/validation/evidence/F-CEC-006/2026-10-01-V2-2a28a93e-cec.output_volume_up-api.json
   findings: [BE-14, VAL-03]
-  scenarios: [cec.output_volume_up]
+  scenarios:
+  - cec.output_volume_up
+  - cec_controls.output_1_mute
+  - cec_controls.output_1_volume_down
+  - cec_controls.output_1_volume_up
+  - cec_controls.output_2_mute
+  - cec_controls.output_2_volume_down
+  - cec_controls.output_2_volume_up
+  - cec_controls.output_3_mute
+  - cec_controls.output_3_volume_down
+  - cec_controls.output_3_volume_up
+  - cec_controls.output_4_mute
+  - cec_controls.output_4_volume_down
+  - cec_controls.output_4_volume_up
+  - cec_controls.output_5_mute
+  - cec_controls.output_5_volume_down
+  - cec_controls.output_5_volume_up
+  - cec_controls.output_6_mute
+  - cec_controls.output_6_volume_down
+  - cec_controls.output_6_volume_up
+  - cec_controls.output_7_mute
+  - cec_controls.output_7_volume_down
+  - cec_controls.output_7_volume_up
+  - cec_controls.output_8_mute
+  - cec_controls.output_8_volume_down
+  - cec_controls.output_8_volume_up
 - id: F-CEC-007
   area: cec
   title: Enable CEC on the target port automatically before a command
@@ -1107,7 +1304,224 @@ features:
   evidence:
   - docs/validation/evidence/F-CEC-001/2026-10-01-V2-2a28a93e-cec.input_power_on-api.json
   findings: [BE-13]
-  scenarios: [cec.input_power_on]
+  scenarios:
+  - cec.input_power_on
+  - cec_controls.input_1_power_on
+  - cec_controls.input_1_power_off
+  - cec_controls.input_1_up
+  - cec_controls.input_1_left
+  - cec_controls.input_1_select
+  - cec_controls.input_1_right
+  - cec_controls.input_1_menu
+  - cec_controls.input_1_down
+  - cec_controls.input_1_back
+  - cec_controls.input_1_previous
+  - cec_controls.input_1_play
+  - cec_controls.input_1_next
+  - cec_controls.input_1_rewind
+  - cec_controls.input_1_pause
+  - cec_controls.input_1_fast_forward
+  - cec_controls.input_1_stop
+  - cec_controls.input_1_mute
+  - cec_controls.input_1_volume_down
+  - cec_controls.input_1_volume_up
+  - cec_controls.input_1_already_enabled
+  - cec_controls.input_2_power_on
+  - cec_controls.input_2_power_off
+  - cec_controls.input_2_up
+  - cec_controls.input_2_left
+  - cec_controls.input_2_select
+  - cec_controls.input_2_right
+  - cec_controls.input_2_menu
+  - cec_controls.input_2_down
+  - cec_controls.input_2_back
+  - cec_controls.input_2_previous
+  - cec_controls.input_2_play
+  - cec_controls.input_2_next
+  - cec_controls.input_2_rewind
+  - cec_controls.input_2_pause
+  - cec_controls.input_2_fast_forward
+  - cec_controls.input_2_stop
+  - cec_controls.input_2_mute
+  - cec_controls.input_2_volume_down
+  - cec_controls.input_2_volume_up
+  - cec_controls.input_2_already_enabled
+  - cec_controls.input_3_power_on
+  - cec_controls.input_3_power_off
+  - cec_controls.input_3_up
+  - cec_controls.input_3_left
+  - cec_controls.input_3_select
+  - cec_controls.input_3_right
+  - cec_controls.input_3_menu
+  - cec_controls.input_3_down
+  - cec_controls.input_3_back
+  - cec_controls.input_3_previous
+  - cec_controls.input_3_play
+  - cec_controls.input_3_next
+  - cec_controls.input_3_rewind
+  - cec_controls.input_3_pause
+  - cec_controls.input_3_fast_forward
+  - cec_controls.input_3_stop
+  - cec_controls.input_3_mute
+  - cec_controls.input_3_volume_down
+  - cec_controls.input_3_volume_up
+  - cec_controls.input_3_already_enabled
+  - cec_controls.input_4_power_on
+  - cec_controls.input_4_power_off
+  - cec_controls.input_4_up
+  - cec_controls.input_4_left
+  - cec_controls.input_4_select
+  - cec_controls.input_4_right
+  - cec_controls.input_4_menu
+  - cec_controls.input_4_down
+  - cec_controls.input_4_back
+  - cec_controls.input_4_previous
+  - cec_controls.input_4_play
+  - cec_controls.input_4_next
+  - cec_controls.input_4_rewind
+  - cec_controls.input_4_pause
+  - cec_controls.input_4_fast_forward
+  - cec_controls.input_4_stop
+  - cec_controls.input_4_mute
+  - cec_controls.input_4_volume_down
+  - cec_controls.input_4_volume_up
+  - cec_controls.input_4_already_enabled
+  - cec_controls.input_5_power_on
+  - cec_controls.input_5_power_off
+  - cec_controls.input_5_up
+  - cec_controls.input_5_left
+  - cec_controls.input_5_select
+  - cec_controls.input_5_right
+  - cec_controls.input_5_menu
+  - cec_controls.input_5_down
+  - cec_controls.input_5_back
+  - cec_controls.input_5_previous
+  - cec_controls.input_5_play
+  - cec_controls.input_5_next
+  - cec_controls.input_5_rewind
+  - cec_controls.input_5_pause
+  - cec_controls.input_5_fast_forward
+  - cec_controls.input_5_stop
+  - cec_controls.input_5_mute
+  - cec_controls.input_5_volume_down
+  - cec_controls.input_5_volume_up
+  - cec_controls.input_5_already_enabled
+  - cec_controls.input_6_power_on
+  - cec_controls.input_6_power_off
+  - cec_controls.input_6_up
+  - cec_controls.input_6_left
+  - cec_controls.input_6_select
+  - cec_controls.input_6_right
+  - cec_controls.input_6_menu
+  - cec_controls.input_6_down
+  - cec_controls.input_6_back
+  - cec_controls.input_6_previous
+  - cec_controls.input_6_play
+  - cec_controls.input_6_next
+  - cec_controls.input_6_rewind
+  - cec_controls.input_6_pause
+  - cec_controls.input_6_fast_forward
+  - cec_controls.input_6_stop
+  - cec_controls.input_6_mute
+  - cec_controls.input_6_volume_down
+  - cec_controls.input_6_volume_up
+  - cec_controls.input_6_already_enabled
+  - cec_controls.input_7_power_on
+  - cec_controls.input_7_power_off
+  - cec_controls.input_7_up
+  - cec_controls.input_7_left
+  - cec_controls.input_7_select
+  - cec_controls.input_7_right
+  - cec_controls.input_7_menu
+  - cec_controls.input_7_down
+  - cec_controls.input_7_back
+  - cec_controls.input_7_previous
+  - cec_controls.input_7_play
+  - cec_controls.input_7_next
+  - cec_controls.input_7_rewind
+  - cec_controls.input_7_pause
+  - cec_controls.input_7_fast_forward
+  - cec_controls.input_7_stop
+  - cec_controls.input_7_mute
+  - cec_controls.input_7_volume_down
+  - cec_controls.input_7_volume_up
+  - cec_controls.input_7_already_enabled
+  - cec_controls.input_8_power_on
+  - cec_controls.input_8_power_off
+  - cec_controls.input_8_up
+  - cec_controls.input_8_left
+  - cec_controls.input_8_select
+  - cec_controls.input_8_right
+  - cec_controls.input_8_menu
+  - cec_controls.input_8_down
+  - cec_controls.input_8_back
+  - cec_controls.input_8_previous
+  - cec_controls.input_8_play
+  - cec_controls.input_8_next
+  - cec_controls.input_8_rewind
+  - cec_controls.input_8_pause
+  - cec_controls.input_8_fast_forward
+  - cec_controls.input_8_stop
+  - cec_controls.input_8_mute
+  - cec_controls.input_8_volume_down
+  - cec_controls.input_8_volume_up
+  - cec_controls.input_8_already_enabled
+  - cec_controls.output_1_power_on
+  - cec_controls.output_1_power_off
+  - cec_controls.output_1_mute
+  - cec_controls.output_1_volume_down
+  - cec_controls.output_1_volume_up
+  - cec_controls.output_1_active
+  - cec_controls.output_1_already_enabled
+  - cec_controls.output_2_power_on
+  - cec_controls.output_2_power_off
+  - cec_controls.output_2_mute
+  - cec_controls.output_2_volume_down
+  - cec_controls.output_2_volume_up
+  - cec_controls.output_2_active
+  - cec_controls.output_2_already_enabled
+  - cec_controls.output_3_power_on
+  - cec_controls.output_3_power_off
+  - cec_controls.output_3_mute
+  - cec_controls.output_3_volume_down
+  - cec_controls.output_3_volume_up
+  - cec_controls.output_3_active
+  - cec_controls.output_3_already_enabled
+  - cec_controls.output_4_power_on
+  - cec_controls.output_4_power_off
+  - cec_controls.output_4_mute
+  - cec_controls.output_4_volume_down
+  - cec_controls.output_4_volume_up
+  - cec_controls.output_4_active
+  - cec_controls.output_4_already_enabled
+  - cec_controls.output_5_power_on
+  - cec_controls.output_5_power_off
+  - cec_controls.output_5_mute
+  - cec_controls.output_5_volume_down
+  - cec_controls.output_5_volume_up
+  - cec_controls.output_5_active
+  - cec_controls.output_5_already_enabled
+  - cec_controls.output_6_power_on
+  - cec_controls.output_6_power_off
+  - cec_controls.output_6_mute
+  - cec_controls.output_6_volume_down
+  - cec_controls.output_6_volume_up
+  - cec_controls.output_6_active
+  - cec_controls.output_6_already_enabled
+  - cec_controls.output_7_power_on
+  - cec_controls.output_7_power_off
+  - cec_controls.output_7_mute
+  - cec_controls.output_7_volume_down
+  - cec_controls.output_7_volume_up
+  - cec_controls.output_7_active
+  - cec_controls.output_7_already_enabled
+  - cec_controls.output_8_power_on
+  - cec_controls.output_8_power_off
+  - cec_controls.output_8_mute
+  - cec_controls.output_8_volume_down
+  - cec_controls.output_8_volume_up
+  - cec_controls.output_8_active
+  - cec_controls.output_8_already_enabled
 - id: F-CEC-008
   area: cec
   title: Enable / disable CEC per port
@@ -1120,7 +1534,47 @@ features:
   basis: 'V1: real REST/simulator tests cover both input/output enable and disable, including warm caches and external changes; tests/sim/test_sim_cec_enable_snapshot.py also covers concurrent edits and failed/incomplete reads. The output-enable packaged-image record is currently classified under F-API-016 rather than this feature ID.'
   evidence: []
   findings: [BE-13, BE-35]
-  scenarios: []
+  scenarios:
+  - cec_controls.input_1_enable_0
+  - cec_controls.input_1_enable_1
+  - cec_controls.input_2_enable_0
+  - cec_controls.input_2_enable_1
+  - cec_controls.input_3_enable_0
+  - cec_controls.input_3_enable_1
+  - cec_controls.input_4_enable_0
+  - cec_controls.input_4_enable_1
+  - cec_controls.input_5_enable_0
+  - cec_controls.input_5_enable_1
+  - cec_controls.input_6_enable_0
+  - cec_controls.input_6_enable_1
+  - cec_controls.input_7_enable_0
+  - cec_controls.input_7_enable_1
+  - cec_controls.input_8_enable_0
+  - cec_controls.input_8_enable_1
+  - cec_controls.input_enable_default
+  - cec_controls.input_enable_port_0
+  - cec_controls.input_enable_port_9
+  - cec_controls.input_enable_refused
+  - cec_controls.output_1_enable_0
+  - cec_controls.output_1_enable_1
+  - cec_controls.output_2_enable_0
+  - cec_controls.output_2_enable_1
+  - cec_controls.output_3_enable_0
+  - cec_controls.output_3_enable_1
+  - cec_controls.output_4_enable_0
+  - cec_controls.output_4_enable_1
+  - cec_controls.output_5_enable_0
+  - cec_controls.output_5_enable_1
+  - cec_controls.output_6_enable_0
+  - cec_controls.output_6_enable_1
+  - cec_controls.output_7_enable_0
+  - cec_controls.output_7_enable_1
+  - cec_controls.output_8_enable_0
+  - cec_controls.output_8_enable_1
+  - cec_controls.output_enable_default
+  - cec_controls.output_enable_port_0
+  - cec_controls.output_enable_port_9
+  - cec_controls.output_enable_refused
 - id: F-CEC-009
   area: cec
   title: Read which ports have CEC enabled
@@ -1134,7 +1588,11 @@ features:
     the simulator, no user interface in the path -> V1). GET /api/status/cec is not exercised by any test.'
   evidence: []
   findings: []
-  scenarios: []
+  scenarios:
+  - cec_controls.status_off
+  - cec_controls.status_on
+  - cec_controls.status_mixed
+  - cec_controls.status_unavailable
 - id: F-CEC-010
   area: cec
   title: Send CEC over Telnet (OREI_USE_TELNET_CEC)
@@ -1217,7 +1675,13 @@ features:
   - docs/validation/evidence/F-API-004/2026-10-01-V2-9ef6d31f-contracts.cables-api.json
   - docs/validation/evidence/F-API-004/2026-10-01-V2-9ef6d31f-contracts.cec_status-api.json
   findings: [BE-03]
-  scenarios: [contracts.cec_status, contracts.cables]
+  scenarios:
+  - contracts.cec_status
+  - contracts.cables
+  - cec_controls.status_off
+  - cec_controls.status_on
+  - cec_controls.status_mixed
+  - cec_controls.status_unavailable
 - id: F-API-005
   area: api
   title: POST /api/switch (one output or all)
@@ -1393,7 +1857,239 @@ features:
   - docs/validation/evidence/F-CEC-006/2026-10-01-V2-2a28a93e-cec.output_volume_up-api.json
   - docs/validation/evidence/F-CEC-005/2026-09-28-V2-c39ee8d5-cec.output_power_on-api.json
   findings: []
-  scenarios: [cec.input_power_on, cec.output_power_on, cec.output_volume_up]
+  scenarios:
+  - cec.input_power_on
+  - cec.output_power_on
+  - cec.output_volume_up
+  - cec_controls.input_1_power_on
+  - cec_controls.input_1_power_off
+  - cec_controls.input_1_up
+  - cec_controls.input_1_left
+  - cec_controls.input_1_select
+  - cec_controls.input_1_right
+  - cec_controls.input_1_menu
+  - cec_controls.input_1_down
+  - cec_controls.input_1_back
+  - cec_controls.input_1_previous
+  - cec_controls.input_1_play
+  - cec_controls.input_1_next
+  - cec_controls.input_1_rewind
+  - cec_controls.input_1_pause
+  - cec_controls.input_1_fast_forward
+  - cec_controls.input_1_stop
+  - cec_controls.input_1_mute
+  - cec_controls.input_1_volume_down
+  - cec_controls.input_1_volume_up
+  - cec_controls.input_1_already_enabled
+  - cec_controls.input_2_power_on
+  - cec_controls.input_2_power_off
+  - cec_controls.input_2_up
+  - cec_controls.input_2_left
+  - cec_controls.input_2_select
+  - cec_controls.input_2_right
+  - cec_controls.input_2_menu
+  - cec_controls.input_2_down
+  - cec_controls.input_2_back
+  - cec_controls.input_2_previous
+  - cec_controls.input_2_play
+  - cec_controls.input_2_next
+  - cec_controls.input_2_rewind
+  - cec_controls.input_2_pause
+  - cec_controls.input_2_fast_forward
+  - cec_controls.input_2_stop
+  - cec_controls.input_2_mute
+  - cec_controls.input_2_volume_down
+  - cec_controls.input_2_volume_up
+  - cec_controls.input_2_already_enabled
+  - cec_controls.input_3_power_on
+  - cec_controls.input_3_power_off
+  - cec_controls.input_3_up
+  - cec_controls.input_3_left
+  - cec_controls.input_3_select
+  - cec_controls.input_3_right
+  - cec_controls.input_3_menu
+  - cec_controls.input_3_down
+  - cec_controls.input_3_back
+  - cec_controls.input_3_previous
+  - cec_controls.input_3_play
+  - cec_controls.input_3_next
+  - cec_controls.input_3_rewind
+  - cec_controls.input_3_pause
+  - cec_controls.input_3_fast_forward
+  - cec_controls.input_3_stop
+  - cec_controls.input_3_mute
+  - cec_controls.input_3_volume_down
+  - cec_controls.input_3_volume_up
+  - cec_controls.input_3_already_enabled
+  - cec_controls.input_4_power_on
+  - cec_controls.input_4_power_off
+  - cec_controls.input_4_up
+  - cec_controls.input_4_left
+  - cec_controls.input_4_select
+  - cec_controls.input_4_right
+  - cec_controls.input_4_menu
+  - cec_controls.input_4_down
+  - cec_controls.input_4_back
+  - cec_controls.input_4_previous
+  - cec_controls.input_4_play
+  - cec_controls.input_4_next
+  - cec_controls.input_4_rewind
+  - cec_controls.input_4_pause
+  - cec_controls.input_4_fast_forward
+  - cec_controls.input_4_stop
+  - cec_controls.input_4_mute
+  - cec_controls.input_4_volume_down
+  - cec_controls.input_4_volume_up
+  - cec_controls.input_4_already_enabled
+  - cec_controls.input_5_power_on
+  - cec_controls.input_5_power_off
+  - cec_controls.input_5_up
+  - cec_controls.input_5_left
+  - cec_controls.input_5_select
+  - cec_controls.input_5_right
+  - cec_controls.input_5_menu
+  - cec_controls.input_5_down
+  - cec_controls.input_5_back
+  - cec_controls.input_5_previous
+  - cec_controls.input_5_play
+  - cec_controls.input_5_next
+  - cec_controls.input_5_rewind
+  - cec_controls.input_5_pause
+  - cec_controls.input_5_fast_forward
+  - cec_controls.input_5_stop
+  - cec_controls.input_5_mute
+  - cec_controls.input_5_volume_down
+  - cec_controls.input_5_volume_up
+  - cec_controls.input_5_already_enabled
+  - cec_controls.input_6_power_on
+  - cec_controls.input_6_power_off
+  - cec_controls.input_6_up
+  - cec_controls.input_6_left
+  - cec_controls.input_6_select
+  - cec_controls.input_6_right
+  - cec_controls.input_6_menu
+  - cec_controls.input_6_down
+  - cec_controls.input_6_back
+  - cec_controls.input_6_previous
+  - cec_controls.input_6_play
+  - cec_controls.input_6_next
+  - cec_controls.input_6_rewind
+  - cec_controls.input_6_pause
+  - cec_controls.input_6_fast_forward
+  - cec_controls.input_6_stop
+  - cec_controls.input_6_mute
+  - cec_controls.input_6_volume_down
+  - cec_controls.input_6_volume_up
+  - cec_controls.input_6_already_enabled
+  - cec_controls.input_7_power_on
+  - cec_controls.input_7_power_off
+  - cec_controls.input_7_up
+  - cec_controls.input_7_left
+  - cec_controls.input_7_select
+  - cec_controls.input_7_right
+  - cec_controls.input_7_menu
+  - cec_controls.input_7_down
+  - cec_controls.input_7_back
+  - cec_controls.input_7_previous
+  - cec_controls.input_7_play
+  - cec_controls.input_7_next
+  - cec_controls.input_7_rewind
+  - cec_controls.input_7_pause
+  - cec_controls.input_7_fast_forward
+  - cec_controls.input_7_stop
+  - cec_controls.input_7_mute
+  - cec_controls.input_7_volume_down
+  - cec_controls.input_7_volume_up
+  - cec_controls.input_7_already_enabled
+  - cec_controls.input_8_power_on
+  - cec_controls.input_8_power_off
+  - cec_controls.input_8_up
+  - cec_controls.input_8_left
+  - cec_controls.input_8_select
+  - cec_controls.input_8_right
+  - cec_controls.input_8_menu
+  - cec_controls.input_8_down
+  - cec_controls.input_8_back
+  - cec_controls.input_8_previous
+  - cec_controls.input_8_play
+  - cec_controls.input_8_next
+  - cec_controls.input_8_rewind
+  - cec_controls.input_8_pause
+  - cec_controls.input_8_fast_forward
+  - cec_controls.input_8_stop
+  - cec_controls.input_8_mute
+  - cec_controls.input_8_volume_down
+  - cec_controls.input_8_volume_up
+  - cec_controls.input_8_already_enabled
+  - cec_controls.input_command_port_0
+  - cec_controls.input_command_port_9
+  - cec_controls.input_command_port_invalid
+  - cec_controls.input_command_refused
+  - cec_controls.output_1_power_on
+  - cec_controls.output_1_power_off
+  - cec_controls.output_1_mute
+  - cec_controls.output_1_volume_down
+  - cec_controls.output_1_volume_up
+  - cec_controls.output_1_active
+  - cec_controls.output_1_already_enabled
+  - cec_controls.output_2_power_on
+  - cec_controls.output_2_power_off
+  - cec_controls.output_2_mute
+  - cec_controls.output_2_volume_down
+  - cec_controls.output_2_volume_up
+  - cec_controls.output_2_active
+  - cec_controls.output_2_already_enabled
+  - cec_controls.output_3_power_on
+  - cec_controls.output_3_power_off
+  - cec_controls.output_3_mute
+  - cec_controls.output_3_volume_down
+  - cec_controls.output_3_volume_up
+  - cec_controls.output_3_active
+  - cec_controls.output_3_already_enabled
+  - cec_controls.output_4_power_on
+  - cec_controls.output_4_power_off
+  - cec_controls.output_4_mute
+  - cec_controls.output_4_volume_down
+  - cec_controls.output_4_volume_up
+  - cec_controls.output_4_active
+  - cec_controls.output_4_already_enabled
+  - cec_controls.output_5_power_on
+  - cec_controls.output_5_power_off
+  - cec_controls.output_5_mute
+  - cec_controls.output_5_volume_down
+  - cec_controls.output_5_volume_up
+  - cec_controls.output_5_active
+  - cec_controls.output_5_already_enabled
+  - cec_controls.output_6_power_on
+  - cec_controls.output_6_power_off
+  - cec_controls.output_6_mute
+  - cec_controls.output_6_volume_down
+  - cec_controls.output_6_volume_up
+  - cec_controls.output_6_active
+  - cec_controls.output_6_already_enabled
+  - cec_controls.output_7_power_on
+  - cec_controls.output_7_power_off
+  - cec_controls.output_7_mute
+  - cec_controls.output_7_volume_down
+  - cec_controls.output_7_volume_up
+  - cec_controls.output_7_active
+  - cec_controls.output_7_already_enabled
+  - cec_controls.output_8_power_on
+  - cec_controls.output_8_power_off
+  - cec_controls.output_8_mute
+  - cec_controls.output_8_volume_down
+  - cec_controls.output_8_volume_up
+  - cec_controls.output_8_active
+  - cec_controls.output_8_already_enabled
+  - cec_controls.output_command_port_0
+  - cec_controls.output_command_port_9
+  - cec_controls.output_command_port_invalid
+  - cec_controls.output_command_refused
+  - cec_controls.input_unsupported_active
+  - cec_controls.input_unsupported_unknown
+  - cec_controls.output_unsupported_up
+  - cec_controls.output_unsupported_play
+  - cec_controls.output_unsupported_unknown
 - id: F-API-016
   area: api
   title: CEC catalogue, capability and enable routes
@@ -1418,7 +2114,51 @@ features:
   - docs/validation/evidence/F-API-016/2026-10-01-V2-9ef6d31f-contracts.cec_invalid_type-api.json
   - docs/validation/evidence/F-API-016/2026-10-01-V2-9ef6d31f-contracts.cec_output_catalog-api.json
   findings: [BE-13, BE-35]
-  scenarios: [contracts.cec_input_catalog, contracts.cec_output_catalog, contracts.cec_invalid_type, writes.cec_output_enable]
+  scenarios:
+  - contracts.cec_input_catalog
+  - contracts.cec_output_catalog
+  - contracts.cec_invalid_type
+  - writes.cec_output_enable
+  - cec_controls.input_1_enable_0
+  - cec_controls.input_1_enable_1
+  - cec_controls.input_2_enable_0
+  - cec_controls.input_2_enable_1
+  - cec_controls.input_3_enable_0
+  - cec_controls.input_3_enable_1
+  - cec_controls.input_4_enable_0
+  - cec_controls.input_4_enable_1
+  - cec_controls.input_5_enable_0
+  - cec_controls.input_5_enable_1
+  - cec_controls.input_6_enable_0
+  - cec_controls.input_6_enable_1
+  - cec_controls.input_7_enable_0
+  - cec_controls.input_7_enable_1
+  - cec_controls.input_8_enable_0
+  - cec_controls.input_8_enable_1
+  - cec_controls.input_enable_default
+  - cec_controls.input_enable_port_0
+  - cec_controls.input_enable_port_9
+  - cec_controls.input_enable_refused
+  - cec_controls.output_1_enable_0
+  - cec_controls.output_1_enable_1
+  - cec_controls.output_2_enable_0
+  - cec_controls.output_2_enable_1
+  - cec_controls.output_3_enable_0
+  - cec_controls.output_3_enable_1
+  - cec_controls.output_4_enable_0
+  - cec_controls.output_4_enable_1
+  - cec_controls.output_5_enable_0
+  - cec_controls.output_5_enable_1
+  - cec_controls.output_6_enable_0
+  - cec_controls.output_6_enable_1
+  - cec_controls.output_7_enable_0
+  - cec_controls.output_7_enable_1
+  - cec_controls.output_8_enable_0
+  - cec_controls.output_8_enable_1
+  - cec_controls.output_enable_default
+  - cec_controls.output_enable_port_0
+  - cec_controls.output_enable_port_9
+  - cec_controls.output_enable_refused
 - id: F-API-017
   area: api
   title: Device settings routes (icons, display names, preset names, favourite/dashboard presets)
