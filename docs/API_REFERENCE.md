@@ -135,7 +135,13 @@ Response:
 ```
 
 #### GET /api/presets
-List all presets with their names.
+List all presets with their display names and hub-saved routing mappings.
+
+`routing` comes from the hub's device-settings cache. A current-routing save
+records all eight outputs; a custom save records only the submitted mapping.
+An empty mapping means the hub has no cached routing for that slot. It does
+not establish that the matrix slot is empty. This endpoint does not query the
+matrix's stored preset routes or detect external preset edits (BE-36).
 
 ```bash
 curl http://localhost:8080/api/presets
