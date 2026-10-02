@@ -118,7 +118,7 @@ features:
     user interface in the path -> V1); tests/test_rest_api.py TestControlEndpoints (mocked matrix).'
   evidence: []
   findings: []
-  scenarios: []
+  scenarios: [matrix.save_current_preset, matrix.preset_invalid_slot, matrix.preset_refused]
 - id: F-MTX-005
   area: matrix
   title: Name presets in the web app (names shown by the API, UI, kiosk)
@@ -368,7 +368,7 @@ features:
     in the path -> V1); tests/test_rest_api.py TestSystemSettingsEndpoints (mocked).'
   evidence: []
   findings: [BE-12]
-  scenarios: []
+  scenarios: [matrix.beep_off, matrix.beep_on, matrix.beep_refused]
 - id: F-MTX-019
   area: matrix
   title: Front-panel lock
@@ -383,7 +383,7 @@ features:
     in the path -> V1); tests/test_rest_api.py TestSystemSettingsEndpoints (mocked).'
   evidence: []
   findings: [BE-12]
-  scenarios: []
+  scenarios: [matrix.panel_lock_off, matrix.panel_lock_on, matrix.panel_lock_refused]
 - id: F-MTX-020
   area: matrix
   title: Front-panel LCD timeout
@@ -400,7 +400,7 @@ features:
     (captured: 3 = "lcd on 30 seconds"). On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface''s command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.'
   evidence: []
   findings: [API-07, BE-12, HIL-09]
-  scenarios: []
+  scenarios: [matrix.lcd_mode_0, matrix.lcd_mode_1, matrix.lcd_mode_2, matrix.lcd_mode_3, matrix.lcd_mode_4, matrix.lcd_invalid_mode, matrix.lcd_missing_mode, matrix.lcd_refused]
 - id: F-MTX-021
   area: matrix
   title: Reboot the matrix
@@ -442,7 +442,7 @@ features:
     in the path -> V1). The REST route is not exercised by any test.'
   evidence: []
   findings: [BE-16, UC-08]
-  scenarios: []
+  scenarios: [matrix.input_name, matrix.input_name_limit, matrix.input_blank_name, matrix.input_long_name, matrix.input_invalid_port, matrix.input_name_refused]
 - id: F-MTX-023
   area: matrix
   title: Rename outputs (names stored on the matrix)
@@ -458,7 +458,7 @@ features:
     in the path -> V1). The REST route is not exercised by any test.'
   evidence: []
   findings: [BE-16, BE-31, UC-08]
-  scenarios: []
+  scenarios: [matrix.output_name, matrix.output_name_limit, matrix.output_blank_name, matrix.output_long_name, matrix.output_invalid_port, matrix.output_name_refused]
 - id: F-MTX-024
   area: matrix
   title: Read the current routing and names
