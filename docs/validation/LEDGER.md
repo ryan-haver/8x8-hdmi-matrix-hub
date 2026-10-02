@@ -1,7 +1,7 @@
 # Feature ledger
 
 > **Generated** by `python -m tools.validate ledger` — do not edit by hand. Registry: [`features.yaml`](features.yaml) · Plan: [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md) · How to add evidence: [`README.md`](README.md).
-> Commit `f7afdac1`
+> Commit `31f5c05a`
 
 **Level** = highest level with fresh passing evidence, else the recorded baseline (the registry's `current`), capped at V1 while an open critical/high finding is linked. **Recorded** = the registry baseline. **Fresh** = evidence commit not older than the last change to the scenario's `covers` paths.
 
@@ -9,7 +9,7 @@
 
 | Area | Features | V0 | V1 | V2 | V3 | V4 | V5 | Below target | Stale evidence |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Matrix control | 31 | 0 | 18 | 6 | 7 | 0 | 0 | 31 | 0 |
+| Matrix control | 31 | 0 | 13 | 11 | 7 | 0 | 0 | 31 | 0 |
 | CEC control | 11 | 0 | 7 | 3 | 1 | 0 | 0 | 11 | 0 |
 | REST/WebSocket contract | 42 | 0 | 13 | 25 | 4 | 0 | 0 | 23 | 0 |
 | Domain features | 36 | 2 | 17 | 1 | 16 | 0 | 0 | 26 | 0 |
@@ -21,7 +21,7 @@
 | Deployment, configuration, persistence | 20 | 3 | 8 | 2 | 7 | 0 | 0 | 20 | 0 |
 | Security controls | 15 | 9 | 5 | 0 | 1 | 0 | 0 | 14 | 0 |
 | Reliability | 18 | 9 | 3 | 2 | 4 | 0 | 0 | 18 | 0 |
-| **All** | **268** | **27** | **110** | **39** | **92** | **0** | **0** | **217** | **0** |
+| **All** | **268** | **27** | **105** | **44** | **92** | **0** | **0** | **217** | **0** |
 
 Levels: **V0** Claimed · **V1** Unit · **V2** Simulated integration · **V3** End-to-end · **V4** Hardware · **V5** Field
 
@@ -43,11 +43,11 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | Reliability | 12 | 3 | 1 | 2 | 0 | 0 |
 | **All** | **33** | **133** | **27** | **75** | **0** | **0** |
 
-- Features with fresh passing scenario evidence: **122** of 268.
+- Features with fresh passing scenario evidence: **128** of 268.
 - Features with a fresh failing scenario: **0**.
 - Features capped at V1 by an open critical/high finding: **28**.
 
-Last run: target `sim`, clients ['api'], commit `f7afdac1` — pass: 100
+Last run: target `sim`, clients ['api'], commit `31f5c05a` — pass: 183
 
 ## Matrix control (F-MTX)
 
@@ -76,12 +76,12 @@ Last run: target `sim`, clients ['api'], commit `f7afdac1` — pass: 100
 | F-MTX-021 | Reboot the matrix | V4 | V3 | V1 | fresh | [reboot.direct·api·pass](evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.direct-api.json)<br>[reboot.enabled_shortcut·api·pass](evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.enabled_shortcut-api.json)<br>[reboot.legacy_shortcut·api·pass](evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.legacy_shortcut-api.json)<br>[reboot.enabled_shortcut·browser·pass](evidence/F-MTX-021/2026-10-01-V3-2a28a93e-reboot.enabled_shortcut-browser.json) | — |
 | F-MTX-022 | Rename inputs (names stored on the matrix) | V4 | V2 | V1 | fresh | [matrix.input_blank_name·api·pass](evidence/F-MTX-022/2026-10-02-V2-e015d3e1-matrix.input_blank_name-api.json)<br>[matrix.input_invalid_port·api·pass](evidence/F-MTX-022/2026-10-02-V2-e015d3e1-matrix.input_invalid_port-api.json)<br>[matrix.input_long_name·api·pass](evidence/F-MTX-022/2026-10-02-V2-e015d3e1-matrix.input_long_name-api.json)<br>[matrix.input_name·api·pass](evidence/F-MTX-022/2026-10-02-V2-e015d3e1-matrix.input_name-api.json) | BE-16(M) |
 | F-MTX-023 | Rename outputs (names stored on the matrix) | V4 | V2 | V1 | fresh | [matrix.output_blank_name·api·pass](evidence/F-MTX-023/2026-10-02-V2-e015d3e1-matrix.output_blank_name-api.json)<br>[matrix.output_invalid_port·api·pass](evidence/F-MTX-023/2026-10-02-V2-e015d3e1-matrix.output_invalid_port-api.json)<br>[matrix.output_long_name·api·pass](evidence/F-MTX-023/2026-10-02-V2-e015d3e1-matrix.output_long_name-api.json)<br>[matrix.output_name·api·pass](evidence/F-MTX-023/2026-10-02-V2-e015d3e1-matrix.output_name-api.json) | BE-16(M) |
-| F-MTX-024 | Read the current routing and names | V4 | V2 | V2 | — | — | — |
-| F-MTX-025 | Show which inputs have an active signal | V4 | V1 | V1 | — | — | — |
-| F-MTX-026 | Show which cables are plugged in (Telnet link status) | V4 | V1 | V1 | — | — | HIL-03(M) |
-| F-MTX-027 | Show which outputs have a display connected | V4 | V1 | V1 | — | — | — |
-| F-MTX-028 | Show device info (model, firmware, network) | V4 | V1 | V1 | — | — | — |
-| F-MTX-029 | Cycle an output to the next / previous input | V4 | V1 | V1 | — | — | — |
+| F-MTX-024 | Read the current routing and names | V4 | V2 | V2 | fresh | [status.routing_all_1·api·pass](evidence/F-MTX-024/2026-10-02-V2-31f5c05a-status.routing_all_1-api.json)<br>[status.routing_all_8·api·pass](evidence/F-MTX-024/2026-10-02-V2-31f5c05a-status.routing_all_8-api.json)<br>[status.routing_mixed·api·pass](evidence/F-MTX-024/2026-10-02-V2-31f5c05a-status.routing_mixed-api.json)<br>[status.routing_one_to_one·api·pass](evidence/F-MTX-024/2026-10-02-V2-31f5c05a-status.routing_one_to_one-api.json) | — |
+| F-MTX-025 | Show which inputs have an active signal | V4 | V2 | V1 | fresh | [status.signal_1_0·api·pass](evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_1_0-api.json)<br>[status.signal_1_1·api·pass](evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_1_1-api.json)<br>[status.signal_2_0·api·pass](evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_2_0-api.json)<br>[status.signal_2_1·api·pass](evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_2_1-api.json) | — |
+| F-MTX-026 | Show which cables are plugged in (Telnet link status) | V4 | V2 | V1 | fresh | [status.cables_all·api·pass](evidence/F-MTX-026/2026-10-02-V2-31f5c05a-status.cables_all-api.json)<br>[status.cables_alternating·api·pass](evidence/F-MTX-026/2026-10-02-V2-31f5c05a-status.cables_alternating-api.json)<br>[status.cables_none·api·pass](evidence/F-MTX-026/2026-10-02-V2-31f5c05a-status.cables_none-api.json)<br>[status.cables_reverse·api·pass](evidence/F-MTX-026/2026-10-02-V2-31f5c05a-status.cables_reverse-api.json) | HIL-03(M) |
+| F-MTX-027 | Show which outputs have a display connected | V4 | V2 | V1 | fresh | [status.display_1_0·api·pass](evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_1_0-api.json)<br>[status.display_1_1·api·pass](evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_1_1-api.json)<br>[status.display_2_0·api·pass](evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_2_0-api.json)<br>[status.display_2_1·api·pass](evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_2_1-api.json) | — |
+| F-MTX-028 | Show device info (model, firmware, network) | V4 | V2 | V1 | fresh | [status.device_dhcp_0·api·pass](evidence/F-MTX-028/2026-10-02-V2-31f5c05a-status.device_dhcp_0-api.json)<br>[status.device_dhcp_1·api·pass](evidence/F-MTX-028/2026-10-02-V2-31f5c05a-status.device_dhcp_1-api.json)<br>[status.runtime_info·api·pass](evidence/F-MTX-028/2026-10-02-V2-31f5c05a-status.runtime_info-api.json)<br>[status.system_power_0·api·pass](evidence/F-MTX-028/2026-10-02-V2-31f5c05a-status.system_power_0-api.json) | — |
+| F-MTX-029 | Cycle an output to the next / previous input | V4 | V2 | V1 | fresh | [status.cycle_next_1_1·api·pass](evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_1_1-api.json)<br>[status.cycle_next_1_2·api·pass](evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_1_2-api.json)<br>[status.cycle_next_1_3·api·pass](evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_1_3-api.json)<br>[status.cycle_next_1_4·api·pass](evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_1_4-api.json) | — |
 | F-MTX-030 | Read a preset's stored routing | V4 | V1 | V1 | — | — | — |
 | F-MTX-031 | Notice changes made outside the hub (front panel, cable plugged, source on/off) | V4 | V3 | V3 | fresh | [ha.front_panel_route·ha·pass](evidence/F-HA-002/2026-10-01-V3-2a28a93e-ha.front_panel_route-ha.json)<br>[live.display_unplugged·browser·pass](evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.display_unplugged-browser.json)<br>[live.front_panel_route·browser·pass](evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.front_panel_route-browser.json)<br>[live.input_signal·browser·pass](evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.input_signal-browser.json) | — |
 

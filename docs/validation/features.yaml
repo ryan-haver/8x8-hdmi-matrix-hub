@@ -667,7 +667,11 @@ features:
   basis: 'V2: tests/sim/test_sim_e2e.py::test_status_reflects_simulator (REST status equals simulator state). V2 against
     real device data: tests/sim/test_golden_hub.py::test_rest_status_from_real_device_answers (REST -> real hub -> simulator
     in golden mode serving the byte-exact MCU V1.10.01 read capture, 9-entry allsource).'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-MTX-024/2026-10-02-V2-31f5c05a-status.routing_all_1-api.json
+  - docs/validation/evidence/F-MTX-024/2026-10-02-V2-31f5c05a-status.routing_all_8-api.json
+  - docs/validation/evidence/F-MTX-024/2026-10-02-V2-31f5c05a-status.routing_mixed-api.json
+  - docs/validation/evidence/F-MTX-024/2026-10-02-V2-31f5c05a-status.routing_one_to_one-api.json
   findings: [API-11, HIL-04]
   scenarios: [status.routing_mixed, status.routing_one_to_one, status.routing_all_1, status.routing_all_8]
 - id: F-MTX-025
@@ -685,7 +689,23 @@ features:
   current: V1
   basis: 'tests/sim/test_sim_hub.py::test_capabilities (driver-level: real OreiMatrix against the simulator, no user interface
     in the path -> V1); tests/test_rest_api.py TestStatusEndpoints (mocked).'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_1_0-api.json
+  - docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_1_1-api.json
+  - docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_2_0-api.json
+  - docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_2_1-api.json
+  - docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_3_0-api.json
+  - docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_3_1-api.json
+  - docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_4_0-api.json
+  - docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_4_1-api.json
+  - docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_5_0-api.json
+  - docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_5_1-api.json
+  - docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_6_0-api.json
+  - docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_6_1-api.json
+  - docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_7_0-api.json
+  - docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_7_1-api.json
+  - docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_8_0-api.json
+  - docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_8_1-api.json
   findings: [BE-03]
   scenarios: [status.signal_1_0, status.signal_1_1, status.signal_2_0, status.signal_2_1, status.signal_3_0, status.signal_3_1, status.signal_4_0, status.signal_4_1, status.signal_5_0, status.signal_5_1, status.signal_6_0, status.signal_6_1, status.signal_7_0, status.signal_7_1, status.signal_8_0, status.signal_8_1]
 - id: F-MTX-026
@@ -704,7 +724,11 @@ features:
     (real TelnetClient against a replay of the captured V1.10.01 segments and timing: banner with IAC, echo, status dump,
     r link) and tests/sim/test_golden_hub.py::test_telnet_banner_cables_and_presets_from_real_device_bytes. GET
     /api/status/cables is not exercised by any test.'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-MTX-026/2026-10-02-V2-31f5c05a-status.cables_all-api.json
+  - docs/validation/evidence/F-MTX-026/2026-10-02-V2-31f5c05a-status.cables_alternating-api.json
+  - docs/validation/evidence/F-MTX-026/2026-10-02-V2-31f5c05a-status.cables_none-api.json
+  - docs/validation/evidence/F-MTX-026/2026-10-02-V2-31f5c05a-status.cables_reverse-api.json
   findings: [BE-03, BE-29, BE-30, HIL-03]
   scenarios: [status.cables_none, status.cables_all, status.cables_alternating, status.cables_reverse]
 - id: F-MTX-027
@@ -723,7 +747,23 @@ features:
     in the path -> V1); tests/test_rest_api.py TestStatusEndpoints (mocked). V2 against real device data, not yet recorded
     as evidence: tests/sim/test_golden_hub.py::test_rest_status_from_real_device_answers (GET /api/status/outputs -> real hub
     -> simulator in golden mode serving the V1.10.01 get output status capture: `name`, 9-entry arrays).'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_1_0-api.json
+  - docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_1_1-api.json
+  - docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_2_0-api.json
+  - docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_2_1-api.json
+  - docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_3_0-api.json
+  - docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_3_1-api.json
+  - docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_4_0-api.json
+  - docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_4_1-api.json
+  - docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_5_0-api.json
+  - docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_5_1-api.json
+  - docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_6_0-api.json
+  - docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_6_1-api.json
+  - docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_7_0-api.json
+  - docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_7_1-api.json
+  - docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_8_0-api.json
+  - docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_8_1-api.json
   findings: [BE-03]
   scenarios: [status.display_1_0, status.display_1_1, status.display_2_0, status.display_2_1, status.display_3_0, status.display_3_1, status.display_4_0, status.display_4_1, status.display_5_0, status.display_5_1, status.display_6_0, status.display_6_1, status.display_7_0, status.display_7_1, status.display_8_0, status.display_8_1]
 - id: F-MTX-028
@@ -741,7 +781,12 @@ features:
     OreiMatrix against the simulator, no user interface in the path -> V1). Against real device data (driver-level, V1):
     tests/sim/test_golden_hub.py::test_login_and_status_reads_parse_the_device_bytes (get status, get network, get system
     status as captured on V1.10.01) and tests/test_telnet_real_captures.py (banner, r fw version, r type).'
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-MTX-028/2026-10-02-V2-31f5c05a-status.device_dhcp_0-api.json
+  - docs/validation/evidence/F-MTX-028/2026-10-02-V2-31f5c05a-status.device_dhcp_1-api.json
+  - docs/validation/evidence/F-MTX-028/2026-10-02-V2-31f5c05a-status.runtime_info-api.json
+  - docs/validation/evidence/F-MTX-028/2026-10-02-V2-31f5c05a-status.system_power_0-api.json
+  - docs/validation/evidence/F-MTX-028/2026-10-02-V2-31f5c05a-status.system_power_1-api.json
   findings: []
   scenarios: [status.device_dhcp_0, status.device_dhcp_1, status.system_power_0, status.system_power_1, status.runtime_info]
 - id: F-MTX-029
@@ -754,7 +799,145 @@ features:
   target: V4
   current: V1
   basis: tests/test_rest_api.py TestInputCycling (mocked).
-  evidence: []
+  evidence:
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_1_1-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_1_2-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_1_3-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_1_4-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_1_5-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_1_6-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_1_7-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_1_8-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_2_1-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_2_2-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_2_3-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_2_4-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_2_5-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_2_6-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_2_7-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_2_8-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_3_1-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_3_2-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_3_3-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_3_4-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_3_5-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_3_6-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_3_7-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_3_8-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_4_1-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_4_2-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_4_3-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_4_4-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_4_5-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_4_6-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_4_7-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_4_8-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_5_1-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_5_2-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_5_3-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_5_4-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_5_5-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_5_6-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_5_7-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_5_8-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_6_1-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_6_2-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_6_3-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_6_4-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_6_5-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_6_6-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_6_7-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_6_8-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_7_1-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_7_2-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_7_3-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_7_4-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_7_5-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_7_6-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_7_7-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_7_8-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_8_1-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_8_2-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_8_3-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_8_4-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_8_5-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_8_6-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_8_7-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_8_8-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_default-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_invalid_0-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_invalid_9-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_invalid_invalid-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_refused-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_1_1-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_1_2-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_1_3-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_1_4-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_1_5-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_1_6-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_1_7-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_1_8-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_2_1-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_2_2-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_2_3-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_2_4-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_2_5-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_2_6-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_2_7-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_2_8-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_3_1-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_3_2-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_3_3-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_3_4-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_3_5-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_3_6-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_3_7-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_3_8-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_4_1-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_4_2-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_4_3-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_4_4-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_4_5-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_4_6-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_4_7-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_4_8-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_5_1-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_5_2-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_5_3-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_5_4-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_5_5-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_5_6-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_5_7-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_5_8-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_6_1-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_6_2-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_6_3-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_6_4-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_6_5-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_6_6-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_6_7-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_6_8-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_7_1-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_7_2-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_7_3-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_7_4-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_7_5-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_7_6-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_7_7-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_7_8-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_8_1-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_8_2-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_8_3-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_8_4-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_8_5-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_8_6-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_8_7-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_8_8-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_default-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_invalid_0-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_invalid_9-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_invalid_invalid-api.json
+  - docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_refused-api.json
   findings: []
   scenarios: [status.cycle_next_1_1, status.cycle_next_1_2, status.cycle_next_1_3, status.cycle_next_1_4, status.cycle_next_1_5, status.cycle_next_1_6, status.cycle_next_1_7, status.cycle_next_1_8, status.cycle_next_2_1, status.cycle_next_2_2, status.cycle_next_2_3, status.cycle_next_2_4, status.cycle_next_2_5, status.cycle_next_2_6, status.cycle_next_2_7, status.cycle_next_2_8, status.cycle_next_3_1, status.cycle_next_3_2, status.cycle_next_3_3, status.cycle_next_3_4, status.cycle_next_3_5, status.cycle_next_3_6, status.cycle_next_3_7, status.cycle_next_3_8, status.cycle_next_4_1, status.cycle_next_4_2, status.cycle_next_4_3, status.cycle_next_4_4, status.cycle_next_4_5, status.cycle_next_4_6, status.cycle_next_4_7, status.cycle_next_4_8, status.cycle_next_5_1, status.cycle_next_5_2, status.cycle_next_5_3, status.cycle_next_5_4, status.cycle_next_5_5, status.cycle_next_5_6, status.cycle_next_5_7, status.cycle_next_5_8, status.cycle_next_6_1, status.cycle_next_6_2, status.cycle_next_6_3, status.cycle_next_6_4, status.cycle_next_6_5, status.cycle_next_6_6, status.cycle_next_6_7, status.cycle_next_6_8, status.cycle_next_7_1, status.cycle_next_7_2, status.cycle_next_7_3, status.cycle_next_7_4, status.cycle_next_7_5, status.cycle_next_7_6, status.cycle_next_7_7, status.cycle_next_7_8, status.cycle_next_8_1, status.cycle_next_8_2, status.cycle_next_8_3, status.cycle_next_8_4, status.cycle_next_8_5, status.cycle_next_8_6, status.cycle_next_8_7, status.cycle_next_8_8, status.cycle_next_default, status.cycle_next_invalid_0, status.cycle_next_invalid_9, status.cycle_next_invalid_invalid, status.cycle_next_refused, status.cycle_previous_1_1, status.cycle_previous_1_2, status.cycle_previous_1_3, status.cycle_previous_1_4, status.cycle_previous_1_5, status.cycle_previous_1_6, status.cycle_previous_1_7, status.cycle_previous_1_8, status.cycle_previous_2_1, status.cycle_previous_2_2, status.cycle_previous_2_3, status.cycle_previous_2_4, status.cycle_previous_2_5, status.cycle_previous_2_6, status.cycle_previous_2_7, status.cycle_previous_2_8, status.cycle_previous_3_1, status.cycle_previous_3_2, status.cycle_previous_3_3, status.cycle_previous_3_4, status.cycle_previous_3_5, status.cycle_previous_3_6, status.cycle_previous_3_7, status.cycle_previous_3_8, status.cycle_previous_4_1, status.cycle_previous_4_2, status.cycle_previous_4_3, status.cycle_previous_4_4, status.cycle_previous_4_5, status.cycle_previous_4_6, status.cycle_previous_4_7, status.cycle_previous_4_8, status.cycle_previous_5_1, status.cycle_previous_5_2, status.cycle_previous_5_3, status.cycle_previous_5_4, status.cycle_previous_5_5, status.cycle_previous_5_6, status.cycle_previous_5_7, status.cycle_previous_5_8, status.cycle_previous_6_1, status.cycle_previous_6_2, status.cycle_previous_6_3, status.cycle_previous_6_4, status.cycle_previous_6_5, status.cycle_previous_6_6, status.cycle_previous_6_7, status.cycle_previous_6_8, status.cycle_previous_7_1, status.cycle_previous_7_2, status.cycle_previous_7_3, status.cycle_previous_7_4, status.cycle_previous_7_5, status.cycle_previous_7_6, status.cycle_previous_7_7, status.cycle_previous_7_8, status.cycle_previous_8_1, status.cycle_previous_8_2, status.cycle_previous_8_3, status.cycle_previous_8_4, status.cycle_previous_8_5, status.cycle_previous_8_6, status.cycle_previous_8_7, status.cycle_previous_8_8, status.cycle_previous_default, status.cycle_previous_invalid_0, status.cycle_previous_invalid_9, status.cycle_previous_invalid_invalid, status.cycle_previous_refused]
 - id: F-MTX-030
