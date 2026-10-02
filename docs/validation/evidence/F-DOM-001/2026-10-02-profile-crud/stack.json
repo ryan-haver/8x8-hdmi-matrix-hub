@@ -1,0 +1,12 @@
+{
+  "image": "hdmi-matrix-hub:wp-simulator-evidence-refresh",
+  "mode": "api",
+  "selection": "build/profile-crud-selection-api.json",
+  "source_commit": "0b9cbe878608cff9780edf42fe8c0efd4a90668d",
+  "simulator": "profile-crud-proof-sim-d22bc74bb7b9",
+  "scope": "Disposable simulator and fixture data; no real hardware",
+  "cec_transport": "false",
+  "digest": "sha256:1b7b72c01322972198e2660896ca6a4270cce740d4c32d701a16eaa12b580dc0",
+  "client": "api",
+  "hub": "profile-crud-proof-hub-d22bc74bb7b9"
+}

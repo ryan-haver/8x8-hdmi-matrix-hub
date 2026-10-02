@@ -4506,6 +4506,57 @@ features:
   current: V1
   basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
   evidence:
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.clear_assignments-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_assignments-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_defaults-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_port_1-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_port_2-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_port_3-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_port_4-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_port_5-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_port_6-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_port_7-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_port_8-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_reject_input_nine-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_reject_input_zero-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_reject_missing_id-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_reject_missing_input-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_reject_missing_name-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_reject_missing_outputs-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_reject_output_nine-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_reject_output_zero-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.delete-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.delete_missing-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.edit_assignments-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.edit_empty-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.edit_metadata-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.edit_missing-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.edit_outputs-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.edit_unknown_only-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.get_missing-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.post_scaler_arc-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.put_scaler_arc-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.replace_existing-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.dashboard_missing_field-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.dashboard_post_false-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.dashboard_post_missing-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.dashboard_post_true-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.dashboard_put_false-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.dashboard_put_missing-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.dashboard_put_true-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.favorite_list_exclusion-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.favorite_list_order-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.favorite_missing_field-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.favorite_post_false-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.favorite_post_missing-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.favorite_post_true-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.favorite_put_false-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.favorite_put_missing-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.favorite_put_true-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.pin_edit-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.reorder-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.reorder_empty-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.reorder_partial-api.json
   - docs/validation/evidence/F-API-019/2026-10-01-V2-2a28a93e-writes.profile_cec-api.json
   - docs/validation/evidence/F-API-019/2026-10-01-V2-2a28a93e-writes.profile_macros-api.json
   - docs/validation/evidence/F-API-019/2026-10-01-V2-2a28a93e-writes.profile_reorder-api.json
@@ -4959,8 +5010,39 @@ features:
     files: [profiles.json]
   target: V3
   current: V1
-  basis: tests/test_config.py TestProfileManager; tests/test_rest_api.py TestProfileAPI (mocked).
-  evidence: []
+  basis: "Recorded V1 baseline: tests/test_config.py TestProfileManager and mocked REST tests. The profile_crud packaged-image scenarios add V2 proof for create/replace/edit/delete, output and macro/CEC readback, assignment clearing, missing profiles and create boundaries. API-22 create/edit scaler/ARC round trips fail and remain linked. Restart persistence, browser behavior and exhaustive invalid edit shapes are outside this batch."
+  evidence:
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.clear_assignments-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_assignments-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_defaults-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_port_1-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_port_2-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_port_3-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_port_4-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_port_5-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_port_6-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_port_7-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_port_8-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_reject_input_nine-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_reject_input_zero-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_reject_missing_id-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_reject_missing_input-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_reject_missing_name-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_reject_missing_outputs-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_reject_output_nine-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_reject_output_zero-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.delete-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.delete_missing-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.edit_assignments-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.edit_empty-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.edit_metadata-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.edit_missing-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.edit_outputs-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.edit_unknown_only-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.get_missing-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.post_scaler_arc-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.put_scaler_arc-api.json
+  - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.replace_existing-api.json
   findings: [API-22]
   scenarios:
   - profile_crud.create_defaults
@@ -5112,8 +5194,28 @@ features:
     ui: [profiles/manager/populated]
   target: V3
   current: V1
-  basis: tests/test_rest_api.py TestProfileFavoriteDashboardAPI (mocked); reorder not exercised.
-  evidence: []
+  basis: "Recorded V1 baseline: mocked favorite/dashboard tests. The profile_crud packaged-image scenarios add V2 proof for favorite/dashboard toggle/set in both directions, favorite ordering/exclusion, pin editing, reorder/partial errors and empty/missing requests. API-20 layout reconciliation and pin-capacity policy remain unproven."
+  evidence:
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.dashboard_missing_field-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.dashboard_post_false-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.dashboard_post_missing-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.dashboard_post_true-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.dashboard_put_false-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.dashboard_put_missing-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.dashboard_put_true-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.favorite_list_exclusion-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.favorite_list_order-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.favorite_missing_field-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.favorite_post_false-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.favorite_post_missing-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.favorite_post_true-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.favorite_put_false-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.favorite_put_missing-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.favorite_put_true-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.pin_edit-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.reorder-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.reorder_empty-api.json
+  - docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.reorder_partial-api.json
   findings: [API-20]
   scenarios:
   - profile_crud.favorite_post_false

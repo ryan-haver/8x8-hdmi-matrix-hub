@@ -648,6 +648,11 @@ curl -X PUT http://localhost:8080/api/profile/movie_night \
 
 **Accepted fields**: `name`, `icon`, `outputs`, `cec_config`, `macros`, `power_on_macro`, `power_off_macro`, `pinned`, `pin_order`, `favorite`, `dashboard_visible`, `password_protected`, `passcode_hash`, `description`. Unknown fields are silently ignored.
 
+**Known baseline gap (API-22):** Profile creation and editing currently discard
+output `scaler_mode` and `arc` fields while returning success. Independent
+packaged-image reads confirm that those fields are absent from the saved
+profile response. See the [profile CRUD validation report](validation/2026-10-02-profile-crud.md).
+
 #### DELETE /api/profile/{id}
 Delete a profile.
 

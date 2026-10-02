@@ -1,0 +1,20 @@
+{
+  "source_commit": "0b9cbe878608cff9780edf42fe8c0efd4a90668d",
+  "image_digest": "sha256:1b7b72c01322972198e2660896ca6a4270cce740d4c32d701a16eaa12b580dc0",
+  "records": 51,
+  "passing_records": 49,
+  "known_failure_records": 2,
+  "finding": "API-22",
+  "unlinked_regressions": 0,
+  "features": [
+    "F-API-019",
+    "F-DOM-001",
+    "F-DOM-006"
+  ],
+  "matches_checkout_files": 176,
+  "schema_errors": 0,
+  "dirty_records": 0,
+  "checks_not_applicable": 0,
+  "matrix_unchanged_records": 51,
+  "hardware_exercised": false
+}
