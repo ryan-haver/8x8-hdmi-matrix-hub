@@ -1,0 +1,12 @@
+{
+  "image": "hdmi-matrix-hub:wp-simulator-evidence-refresh",
+  "simulator": "cec-cap-proof-sim-e0827850a22a",
+  "selection": "build/cec-cap-selection-telnet.json",
+  "digest": "sha256:1b7b72c01322972198e2660896ca6a4270cce740d4c32d701a16eaa12b580dc0",
+  "mode": "telnet",
+  "hub": "cec-cap-proof-hub-e0827850a22a",
+  "client": "api",
+  "scope": "Disposable simulator and fixture data; no real hardware",
+  "source_commit": "a538a8ef4c52f79419f8a2c6514d05ff4a6ea7fc",
+  "cec_transport": "true"
+}

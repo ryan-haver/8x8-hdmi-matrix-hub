@@ -1,0 +1,3064 @@
+{
+  "commit": {
+    "sha": "a538a8ef4c52f79419f8a2c6514d05ff4a6ea7fc",
+    "branch": "wp-cec-capability-telnet-validation",
+    "dirty_files": [],
+    "short": "a538a8ef",
+    "dirty": false
+  },
+  "target": "sim",
+  "clients": [
+    "api"
+  ],
+  "operator": "automation",
+  "finished": "2026-10-02T17:45:32.803Z",
+  "aborted": null,
+  "outcomes": [
+    {
+      "scenario": "cec_telnet.input_1_back",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_1_back-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_1_down",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_1_down-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_1_fast_forward",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_1_fast_forward-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_1_left",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_1_left-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_1_menu",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_1_menu-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_1_mute",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_1_mute-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_1_next",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_1_next-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_1_pause",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_1_pause-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_1_play",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_1_play-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_1_power_off",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_1_power_off-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_1_power_on",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_1_power_on-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_1_previous",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_1_previous-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_1_rewind",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_1_rewind-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_1_right",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_1_right-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_1_select",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_1_select-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_1_stop",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_1_stop-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_1_up",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_1_up-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_1_volume_down",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_1_volume_down-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_1_volume_up",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_1_volume_up-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_2_back",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_2_back-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_2_down",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_2_down-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_2_fast_forward",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_2_fast_forward-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_2_left",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_2_left-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_2_menu",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_2_menu-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_2_mute",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_2_mute-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_2_next",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_2_next-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_2_pause",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_2_pause-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_2_play",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_2_play-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_2_power_off",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_2_power_off-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_2_power_on",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_2_power_on-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_2_previous",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_2_previous-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_2_rewind",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_2_rewind-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_2_right",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_2_right-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_2_select",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_2_select-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_2_stop",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_2_stop-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_2_up",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_2_up-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_2_volume_down",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_2_volume_down-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_2_volume_up",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_2_volume_up-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_3_back",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_3_back-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_3_down",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_3_down-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_3_fast_forward",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_3_fast_forward-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_3_left",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_3_left-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_3_menu",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_3_menu-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_3_mute",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_3_mute-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_3_next",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_3_next-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_3_pause",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_3_pause-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_3_play",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_3_play-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_3_power_off",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_3_power_off-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_3_power_on",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_3_power_on-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_3_previous",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_3_previous-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_3_rewind",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_3_rewind-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_3_right",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_3_right-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_3_select",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_3_select-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_3_stop",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_3_stop-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_3_up",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_3_up-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_3_volume_down",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_3_volume_down-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_3_volume_up",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_3_volume_up-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_4_back",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_4_back-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_4_down",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_4_down-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_4_fast_forward",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_4_fast_forward-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_4_left",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_4_left-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_4_menu",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_4_menu-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_4_mute",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_4_mute-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_4_next",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_4_next-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_4_pause",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_4_pause-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_4_play",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_4_play-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_4_power_off",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_4_power_off-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_4_power_on",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_4_power_on-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_4_previous",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_4_previous-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_4_rewind",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_4_rewind-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_4_right",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_4_right-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_4_select",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_4_select-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_4_stop",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_4_stop-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_4_up",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_4_up-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_4_volume_down",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_4_volume_down-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_4_volume_up",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_4_volume_up-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_5_back",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_5_back-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_5_down",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_5_down-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_5_fast_forward",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_5_fast_forward-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_5_left",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_5_left-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_5_menu",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_5_menu-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_5_mute",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_5_mute-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_5_next",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_5_next-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_5_pause",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_5_pause-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_5_play",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_5_play-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_5_power_off",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_5_power_off-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_5_power_on",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_5_power_on-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_5_previous",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_5_previous-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_5_rewind",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_5_rewind-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_5_right",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_5_right-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_5_select",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_5_select-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_5_stop",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_5_stop-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_5_up",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_5_up-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_5_volume_down",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_5_volume_down-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_5_volume_up",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_5_volume_up-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_6_back",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_6_back-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_6_down",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_6_down-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_6_fast_forward",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_6_fast_forward-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_6_left",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_6_left-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_6_menu",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_6_menu-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_6_mute",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_6_mute-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_6_next",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_6_next-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_6_pause",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_6_pause-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_6_play",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_6_play-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_6_power_off",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_6_power_off-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_6_power_on",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_6_power_on-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_6_previous",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_6_previous-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_6_rewind",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_6_rewind-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_6_right",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_6_right-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_6_select",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_6_select-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_6_stop",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_6_stop-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_6_up",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_6_up-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_6_volume_down",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_6_volume_down-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_6_volume_up",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_6_volume_up-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_7_back",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_7_back-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_7_down",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_7_down-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_7_fast_forward",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_7_fast_forward-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_7_left",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_7_left-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_7_menu",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_7_menu-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_7_mute",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_7_mute-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_7_next",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_7_next-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_7_pause",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_7_pause-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_7_play",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_7_play-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_7_power_off",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_7_power_off-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_7_power_on",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_7_power_on-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_7_previous",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_7_previous-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_7_rewind",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_7_rewind-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_7_right",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_7_right-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_7_select",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_7_select-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_7_stop",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_7_stop-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_7_up",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_7_up-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_7_volume_down",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_7_volume_down-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_7_volume_up",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_7_volume_up-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_8_back",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_8_back-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_8_down",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_8_down-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_8_fast_forward",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_8_fast_forward-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_8_left",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_8_left-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_8_menu",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_8_menu-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_8_mute",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_8_mute-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_8_next",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_8_next-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_8_pause",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_8_pause-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_8_play",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_8_play-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_8_power_off",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_8_power_off-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_8_power_on",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_8_power_on-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_8_previous",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_8_previous-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_8_rewind",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_8_rewind-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_8_right",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_8_right-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_8_select",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_8_select-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_8_stop",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_8_stop-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_8_up",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_8_up-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_8_volume_down",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_8_volume_down-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_8_volume_up",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_8_volume_up-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_1_active",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_1_active-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_1_mute",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_1_mute-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_1_power_off",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_1_power_off-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_1_power_on",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_1_power_on-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_1_volume_down",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_1_volume_down-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_1_volume_up",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_1_volume_up-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_2_active",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_2_active-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_2_mute",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_2_mute-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_2_power_off",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_2_power_off-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_2_power_on",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_2_power_on-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_2_volume_down",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_2_volume_down-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_2_volume_up",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_2_volume_up-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_3_active",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_3_active-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_3_mute",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_3_mute-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_3_power_off",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_3_power_off-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_3_power_on",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_3_power_on-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_3_volume_down",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_3_volume_down-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_3_volume_up",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_3_volume_up-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_4_active",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_4_active-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_4_mute",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_4_mute-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_4_power_off",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_4_power_off-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_4_power_on",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_4_power_on-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_4_volume_down",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_4_volume_down-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_4_volume_up",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_4_volume_up-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_5_active",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_5_active-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_5_mute",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_5_mute-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_5_power_off",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_5_power_off-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_5_power_on",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_5_power_on-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_5_volume_down",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_5_volume_down-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_5_volume_up",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_5_volume_up-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_6_active",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_6_active-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_6_mute",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_6_mute-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_6_power_off",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_6_power_off-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_6_power_on",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_6_power_on-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_6_volume_down",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_6_volume_down-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_6_volume_up",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_6_volume_up-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_7_active",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_7_active-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_7_mute",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_7_mute-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_7_power_off",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_7_power_off-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_7_power_on",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_7_power_on-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_7_volume_down",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_7_volume_down-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_7_volume_up",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_7_volume_up-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_8_active",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_8_active-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_8_mute",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_8_mute-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_8_power_off",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_8_power_off-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_8_power_on",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_8_power_on-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_8_volume_down",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_8_volume_down-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_8_volume_up",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-CEC-007",
+        "F-API-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_8_volume_up-api.json"
+    },
+    {
+      "scenario": "cec_telnet.input_interrupted_volume",
+      "client": "api",
+      "status": "fail",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-API-015"
+      ],
+      "failed_checks": [
+        {
+          "description": "response HTTP 500 and body contains {'success': False}",
+          "finding": "BE-37"
+        },
+        {
+          "description": "device never received 'cec command'",
+          "finding": "BE-37"
+        }
+      ],
+      "gate": "known-failure",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_interrupted_volume-api.json"
+    },
+    {
+      "scenario": "cec_telnet.output_interrupted_volume",
+      "client": "api",
+      "status": "fail",
+      "level": "V2",
+      "features": [
+        "F-CEC-010",
+        "F-API-015"
+      ],
+      "failed_checks": [
+        {
+          "description": "response HTTP 500 and body contains {'success': False}",
+          "finding": "BE-37"
+        },
+        {
+          "description": "device never received 'cec command'",
+          "finding": "BE-37"
+        }
+      ],
+      "gate": "known-failure",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_interrupted_volume-api.json"
+    }
+  ]
+}
