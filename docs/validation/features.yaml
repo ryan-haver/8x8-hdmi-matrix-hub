@@ -4512,8 +4512,62 @@ features:
   - docs/validation/evidence/F-API-019/2026-10-01-V2-dba2f21d-writes.profile_cec-api.json
   - docs/validation/evidence/F-API-019/2026-10-01-V2-dba2f21d-writes.profile_macros-api.json
   - docs/validation/evidence/F-API-019/2026-10-01-V2-dba2f21d-writes.profile_reorder-api.json
-  findings: [SEC-04, API-08]
-  scenarios: [writes.profile_cec, writes.profile_macros, writes.profile_reorder]
+  findings: [SEC-04, API-08, API-22]
+  scenarios:
+  - writes.profile_cec
+  - writes.profile_macros
+  - writes.profile_reorder
+  - profile_crud.create_defaults
+  - profile_crud.replace_existing
+  - profile_crud.edit_metadata
+  - profile_crud.edit_outputs
+  - profile_crud.edit_assignments
+  - profile_crud.clear_assignments
+  - profile_crud.delete
+  - profile_crud.get_missing
+  - profile_crud.edit_missing
+  - profile_crud.delete_missing
+  - profile_crud.edit_unknown_only
+  - profile_crud.edit_empty
+  - profile_crud.create_port_1
+  - profile_crud.create_port_2
+  - profile_crud.create_port_3
+  - profile_crud.create_port_4
+  - profile_crud.create_port_5
+  - profile_crud.create_port_6
+  - profile_crud.create_port_7
+  - profile_crud.create_port_8
+  - profile_crud.create_reject_missing_id
+  - profile_crud.create_reject_missing_name
+  - profile_crud.create_reject_missing_outputs
+  - profile_crud.create_reject_missing_input
+  - profile_crud.create_reject_output_zero
+  - profile_crud.create_reject_output_nine
+  - profile_crud.create_reject_input_zero
+  - profile_crud.create_reject_input_nine
+  - profile_crud.favorite_post_false
+  - profile_crud.favorite_post_true
+  - profile_crud.favorite_put_false
+  - profile_crud.favorite_put_true
+  - profile_crud.favorite_missing_field
+  - profile_crud.favorite_post_missing
+  - profile_crud.favorite_put_missing
+  - profile_crud.dashboard_post_false
+  - profile_crud.dashboard_post_true
+  - profile_crud.dashboard_put_false
+  - profile_crud.dashboard_put_true
+  - profile_crud.dashboard_missing_field
+  - profile_crud.dashboard_post_missing
+  - profile_crud.dashboard_put_missing
+  - profile_crud.pin_edit
+  - profile_crud.reorder
+  - profile_crud.reorder_partial
+  - profile_crud.reorder_empty
+  - profile_crud.create_assignments
+  - profile_crud.favorite_list_order
+  - profile_crud.favorite_list_exclusion
+  - profile_crud.post_scaler_arc
+  - profile_crud.put_scaler_arc
 - id: F-API-020
   area: api
   title: Scene v1 alias routes (/api/scene*, /api/scenes)
@@ -4908,7 +4962,38 @@ features:
   basis: tests/test_config.py TestProfileManager; tests/test_rest_api.py TestProfileAPI (mocked).
   evidence: []
   findings: [API-22]
-  scenarios: []
+  scenarios:
+  - profile_crud.create_defaults
+  - profile_crud.replace_existing
+  - profile_crud.edit_metadata
+  - profile_crud.edit_outputs
+  - profile_crud.edit_assignments
+  - profile_crud.clear_assignments
+  - profile_crud.delete
+  - profile_crud.get_missing
+  - profile_crud.edit_missing
+  - profile_crud.delete_missing
+  - profile_crud.edit_unknown_only
+  - profile_crud.edit_empty
+  - profile_crud.create_port_1
+  - profile_crud.create_port_2
+  - profile_crud.create_port_3
+  - profile_crud.create_port_4
+  - profile_crud.create_port_5
+  - profile_crud.create_port_6
+  - profile_crud.create_port_7
+  - profile_crud.create_port_8
+  - profile_crud.create_reject_missing_id
+  - profile_crud.create_reject_missing_name
+  - profile_crud.create_reject_missing_outputs
+  - profile_crud.create_reject_missing_input
+  - profile_crud.create_reject_output_zero
+  - profile_crud.create_reject_output_nine
+  - profile_crud.create_reject_input_zero
+  - profile_crud.create_reject_input_nine
+  - profile_crud.create_assignments
+  - profile_crud.post_scaler_arc
+  - profile_crud.put_scaler_arc
 - id: F-DOM-002
   area: domain
   title: 'Recall a profile: its routing is applied'
@@ -5030,7 +5115,27 @@ features:
   basis: tests/test_rest_api.py TestProfileFavoriteDashboardAPI (mocked); reorder not exercised.
   evidence: []
   findings: [API-20]
-  scenarios: []
+  scenarios:
+  - profile_crud.favorite_post_false
+  - profile_crud.favorite_post_true
+  - profile_crud.favorite_put_false
+  - profile_crud.favorite_put_true
+  - profile_crud.favorite_missing_field
+  - profile_crud.favorite_post_missing
+  - profile_crud.favorite_put_missing
+  - profile_crud.dashboard_post_false
+  - profile_crud.dashboard_post_true
+  - profile_crud.dashboard_put_false
+  - profile_crud.dashboard_put_true
+  - profile_crud.dashboard_missing_field
+  - profile_crud.dashboard_post_missing
+  - profile_crud.dashboard_put_missing
+  - profile_crud.pin_edit
+  - profile_crud.reorder
+  - profile_crud.reorder_partial
+  - profile_crud.reorder_empty
+  - profile_crud.favorite_list_order
+  - profile_crud.favorite_list_exclusion
 - id: F-DOM-007
   area: domain
   title: Per-profile CEC targets (nav/playback/volume/power) and auto-resolve
