@@ -729,6 +729,12 @@ curl -X POST http://localhost:8080/api/profile/movie_night/macros \
 
 Send CEC commands to input devices (sources) or output devices (TVs/displays).
 
+With `OREI_USE_TELNET_CEC=true`, commands use Telnet when connected and fall
+back to HTTP when Telnet does not acknowledge them. BE-37 records an ambiguity:
+an interrupted reply can cause an HTTP resend after the matrix already processed
+the Telnet command. A successful API response does not establish that a volume
+step was sent only once. This remains open in the C0 baseline.
+
 #### GET /api/cec/commands
 List all available CEC commands.
 
