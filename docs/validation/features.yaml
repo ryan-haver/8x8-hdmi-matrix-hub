@@ -46,9 +46,6 @@ features:
   - docs/validation/evidence/F-MTX-001/2026-10-01-V2-2a28a93e-routing.switch_one-api.json
   - docs/validation/evidence/F-MTX-001/2026-10-01-V3-2a28a93e-routing.switch_one-browser.json
   - docs/validation/evidence/F-UC-008/2026-10-01-V3-2a28a93e-remote.select_source-uc.json
-  - docs/validation/evidence/F-HA-002/2026-09-26-V3-6c22aa7a-ha.select_source-ha.json
-  - docs/validation/evidence/F-MTX-001/2026-09-28-V2-c39ee8d5-routing.switch_one-api.json
-  - docs/validation/evidence/F-MTX-001/2026-09-28-V3-c39ee8d5-routing.switch_one-browser.json
   findings: []
   scenarios: [routing.switch_one, remote.select_source, ha.select_source]
 - id: F-MTX-002
@@ -70,8 +67,6 @@ features:
   evidence:
   - docs/validation/evidence/F-MTX-002/2026-10-01-V2-2a28a93e-routing.route_all-api.json
   - docs/validation/evidence/F-MTX-002/2026-10-01-V3-2a28a93e-routing.route_all-browser.json
-  - docs/validation/evidence/F-MTX-002/2026-09-28-V2-c39ee8d5-routing.route_all-api.json
-  - docs/validation/evidence/F-MTX-002/2026-09-28-V3-c39ee8d5-routing.route_all-browser.json
   findings: [BE-12]
   scenarios: [routing.route_all]
 - id: F-MTX-003
@@ -96,9 +91,6 @@ features:
   - docs/validation/evidence/F-MTX-003/2026-10-01-V2-2a28a93e-presets.recall-api.json
   - docs/validation/evidence/F-MTX-003/2026-10-01-V3-2a28a93e-presets.recall-browser.json
   - docs/validation/evidence/F-UC-004/2026-10-01-V3-2a28a93e-remote.preset_button-uc.json
-  - docs/validation/evidence/F-HA-006/2026-09-26-V3-6c22aa7a-ha.preset_button-ha.json
-  - docs/validation/evidence/F-MTX-003/2026-09-28-V2-c39ee8d5-presets.recall-api.json
-  - docs/validation/evidence/F-MTX-003/2026-09-28-V3-c39ee8d5-presets.recall-browser.json
   findings: []
   scenarios: [presets.recall, remote.preset_button, ha.preset_button]
 - id: F-MTX-004
@@ -148,10 +140,6 @@ features:
   evidence:
   - docs/validation/evidence/F-MTX-005/2026-10-01-V2-2a28a93e-presets.rename-api.json
   - docs/validation/evidence/F-MTX-005/2026-10-01-V3-2a28a93e-presets.rename-browser.json
-  - docs/validation/evidence/F-MTX-005/2026-10-01-V2-dba2f21d-presets.rename-api.json
-  - docs/validation/evidence/F-MTX-005/2026-10-01-V3-dba2f21d-presets.rename-browser.json
-  - docs/validation/evidence/F-MTX-005/2026-09-28-V2-c39ee8d5-presets.rename-api.json
-  - docs/validation/evidence/F-MTX-005/2026-09-28-V3-c39ee8d5-presets.rename-browser.json
   findings: [UC-14, BE-16]
   scenarios: [presets.rename]
 - id: F-MTX-006
@@ -176,11 +164,6 @@ features:
   - docs/validation/evidence/F-MTX-006/2026-10-01-V2-2a28a93e-power.standby-api.json
   - docs/validation/evidence/F-MTX-006/2026-10-01-V2-2a28a93e-power.wake-api.json
   - docs/validation/evidence/F-UC-010/2026-10-01-V3-2a28a93e-remote.power_switch_off-uc.json
-  - docs/validation/evidence/F-HA-003/2026-09-26-V3-6c22aa7a-ha.power_off-ha.json
-  - docs/validation/evidence/F-HA-003/2026-09-26-V3-6c22aa7a-ha.power_on-ha.json
-  - docs/validation/evidence/F-MTX-006/2026-09-28-V2-c39ee8d5-power.standby-api.json
-  - docs/validation/evidence/F-HA-003/2026-09-28-V3-c39ee8d5-ha.power_off-ha.json
-  - docs/validation/evidence/F-HA-003/2026-09-28-V3-c39ee8d5-ha.power_on-ha.json
   findings: []
   scenarios: [power.standby, power.wake, remote.power_switch_off, ha.power_off, ha.power_on]
 - id: F-MTX-007
@@ -203,8 +186,6 @@ features:
   evidence:
   - docs/validation/evidence/F-HA-004/2026-10-01-V3-2a28a93e-ha.mute_switch-ha.json
   - docs/validation/evidence/F-MTX-007/2026-10-01-V2-2a28a93e-outputs.audio_mute-api.json
-  - docs/validation/evidence/F-HA-004/2026-09-26-V3-6c22aa7a-ha.mute_switch-ha.json
-  - docs/validation/evidence/F-MTX-007/2026-09-28-V2-c39ee8d5-outputs.audio_mute-api.json
   findings: [BE-12, HIL-09]
   scenarios: [outputs.audio_mute, ha.mute_switch]
 - id: F-MTX-008
@@ -607,10 +588,6 @@ features:
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.enabled_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.legacy_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V3-2a28a93e-reboot.enabled_shortcut-browser.json
-  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.direct-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.enabled_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.legacy_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-01-V3-b0c1a32e-reboot.enabled_shortcut-browser.json
   findings: []
   scenarios: [reboot.direct, reboot.legacy_shortcut, reboot.enabled_shortcut]
 - id: F-MTX-022
@@ -993,11 +970,6 @@ features:
   - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.front_panel_route-browser.json
   - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.input_signal-browser.json
   - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.rename_elsewhere-browser.json
-  - docs/validation/evidence/F-HA-002/2026-09-28-V3-c39ee8d5-ha.front_panel_route-ha.json
-  - docs/validation/evidence/F-MTX-031/2026-09-28-V3-c39ee8d5-live.display_unplugged-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-09-28-V3-c39ee8d5-live.front_panel_route-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-09-28-V3-c39ee8d5-live.input_signal-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-09-28-V3-c39ee8d5-live.rename_elsewhere-browser.json
   findings: [UC-17, BE-29, BE-03]
   scenarios: [live.front_panel_route, live.input_signal, live.display_unplugged, live.rename_elsewhere, ha.front_panel_route]
 - id: F-CEC-001
@@ -1398,9 +1370,6 @@ features:
   - docs/validation/evidence/F-CEC-005/2026-10-01-V2-2a28a93e-cec.output_power_on-api.json
   - docs/validation/evidence/F-HA-012/2026-10-01-V3-2a28a93e-ha.service_cec_display-ha.json
   - docs/validation/evidence/F-UC-007/2026-10-01-V3-2a28a93e-remote.output_cec_power_on-uc.json
-  - docs/validation/evidence/F-HA-012/2026-09-26-V3-6c22aa7a-ha.service_cec_display-ha.json
-  - docs/validation/evidence/F-CEC-005/2026-09-28-V2-c39ee8d5-cec.output_power_on-api.json
-  - docs/validation/evidence/F-HA-012/2026-09-28-V3-c39ee8d5-ha.service_cec_display-ha.json
   findings: [BE-14]
   scenarios:
   - cec.output_power_on
@@ -3103,10 +3072,6 @@ features:
   - docs/validation/evidence/F-CEC-009/2026-10-02-V2-d434d3d8-cec_controls.status_unavailable-api.json
   - docs/validation/evidence/F-API-004/2026-10-01-V2-2a28a93e-contracts.cables-api.json
   - docs/validation/evidence/F-API-004/2026-10-01-V2-2a28a93e-contracts.cec_status-api.json
-  - docs/validation/evidence/F-API-004/2026-10-01-V2-dba2f21d-contracts.cables-api.json
-  - docs/validation/evidence/F-API-004/2026-10-01-V2-dba2f21d-contracts.cec_status-api.json
-  - docs/validation/evidence/F-API-004/2026-10-01-V2-9ef6d31f-contracts.cables-api.json
-  - docs/validation/evidence/F-API-004/2026-10-01-V2-9ef6d31f-contracts.cec_status-api.json
   findings: [BE-03]
   scenarios:
   - contracts.cec_status
@@ -3127,8 +3092,6 @@ features:
   evidence:
   - docs/validation/evidence/F-MTX-001/2026-10-01-V2-2a28a93e-routing.switch_one-api.json
   - docs/validation/evidence/F-MTX-002/2026-10-01-V2-2a28a93e-routing.route_all-api.json
-  - docs/validation/evidence/F-MTX-001/2026-09-28-V2-c39ee8d5-routing.switch_one-api.json
-  - docs/validation/evidence/F-MTX-002/2026-09-28-V2-c39ee8d5-routing.route_all-api.json
   findings: [BE-12]
   scenarios: [routing.switch_one, routing.route_all]
 - id: F-API-006
@@ -3154,7 +3117,6 @@ features:
   basis: 'V2: tests/sim/test_sim_e2e.py::test_switch_all_and_preset.'
   evidence:
   - docs/validation/evidence/F-MTX-003/2026-10-01-V2-2a28a93e-presets.recall-api.json
-  - docs/validation/evidence/F-MTX-003/2026-09-28-V2-c39ee8d5-presets.recall-api.json
   findings: []
   scenarios: [presets.recall]
 - id: F-API-008
@@ -3197,7 +3159,6 @@ features:
   evidence:
   - docs/validation/evidence/F-MTX-006/2026-10-01-V2-2a28a93e-power.standby-api.json
   - docs/validation/evidence/F-MTX-006/2026-10-01-V2-2a28a93e-power.wake-api.json
-  - docs/validation/evidence/F-MTX-006/2026-09-28-V2-c39ee8d5-power.standby-api.json
   findings: []
   scenarios: [power.standby, power.wake]
 - id: F-API-010
@@ -3251,10 +3212,6 @@ features:
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.enabled_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.legacy_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V3-2a28a93e-reboot.enabled_shortcut-browser.json
-  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.direct-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.enabled_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.legacy_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-01-V3-b0c1a32e-reboot.enabled_shortcut-browser.json
   findings: [BE-12]
   scenarios: [reboot.direct, reboot.legacy_shortcut, reboot.enabled_shortcut]
 - id: F-API-014
@@ -3269,10 +3226,6 @@ features:
   evidence:
   - docs/validation/evidence/F-API-014/2026-10-01-V2-2a28a93e-contracts.storage-api.json
   - docs/validation/evidence/F-API-014/2026-10-01-V2-2a28a93e-contracts.system_info-api.json
-  - docs/validation/evidence/F-API-014/2026-10-01-V2-dba2f21d-contracts.storage-api.json
-  - docs/validation/evidence/F-API-014/2026-10-01-V2-dba2f21d-contracts.system_info-api.json
-  - docs/validation/evidence/F-API-014/2026-10-01-V2-9ef6d31f-contracts.storage-api.json
-  - docs/validation/evidence/F-API-014/2026-10-01-V2-9ef6d31f-contracts.system_info-api.json
   findings: [SEC-11]
   scenarios: [contracts.system_info, contracts.storage]
 - id: F-API-015
@@ -3719,7 +3672,6 @@ features:
   - docs/validation/evidence/F-CEC-001/2026-10-01-V2-2a28a93e-cec.input_power_on-api.json
   - docs/validation/evidence/F-CEC-005/2026-10-01-V2-2a28a93e-cec.output_power_on-api.json
   - docs/validation/evidence/F-CEC-006/2026-10-01-V2-2a28a93e-cec.output_volume_up-api.json
-  - docs/validation/evidence/F-CEC-005/2026-09-28-V2-c39ee8d5-cec.output_power_on-api.json
   findings: [BE-37]
   scenarios:
   - cec.input_power_on
@@ -4300,13 +4252,6 @@ features:
   - docs/validation/evidence/F-API-016/2026-10-01-V2-2a28a93e-contracts.cec_invalid_type-api.json
   - docs/validation/evidence/F-API-016/2026-10-01-V2-2a28a93e-contracts.cec_output_catalog-api.json
   - docs/validation/evidence/F-API-016/2026-10-01-V2-2a28a93e-writes.cec_output_enable-api.json
-  - docs/validation/evidence/F-API-016/2026-10-01-V2-dba2f21d-contracts.cec_input_catalog-api.json
-  - docs/validation/evidence/F-API-016/2026-10-01-V2-dba2f21d-contracts.cec_invalid_type-api.json
-  - docs/validation/evidence/F-API-016/2026-10-01-V2-dba2f21d-contracts.cec_output_catalog-api.json
-  - docs/validation/evidence/F-API-016/2026-10-01-V2-dba2f21d-writes.cec_output_enable-api.json
-  - docs/validation/evidence/F-API-016/2026-10-01-V2-9ef6d31f-contracts.cec_input_catalog-api.json
-  - docs/validation/evidence/F-API-016/2026-10-01-V2-9ef6d31f-contracts.cec_invalid_type-api.json
-  - docs/validation/evidence/F-API-016/2026-10-01-V2-9ef6d31f-contracts.cec_output_catalog-api.json
   findings: [BE-13, BE-35]
   scenarios:
   - contracts.cec_input_catalog
@@ -4463,20 +4408,6 @@ features:
   - docs/validation/evidence/F-API-017/2026-10-01-V2-2a28a93e-writes.input_settings-api.json
   - docs/validation/evidence/F-API-017/2026-10-01-V2-2a28a93e-writes.output_settings-api.json
   - docs/validation/evidence/F-API-017/2026-10-01-V2-2a28a93e-writes.preset_name-api.json
-  - docs/validation/evidence/F-API-017/2026-10-01-V2-dba2f21d-contracts.device_settings-api.json
-  - docs/validation/evidence/F-API-017/2026-10-01-V2-dba2f21d-contracts.input_settings-api.json
-  - docs/validation/evidence/F-API-017/2026-10-01-V2-dba2f21d-contracts.invalid_input_settings-api.json
-  - docs/validation/evidence/F-API-017/2026-10-01-V2-dba2f21d-contracts.invalid_output_settings-api.json
-  - docs/validation/evidence/F-API-017/2026-10-01-V2-dba2f21d-contracts.output_settings-api.json
-  - docs/validation/evidence/F-API-017/2026-10-01-V2-dba2f21d-writes.bulk_settings-api.json
-  - docs/validation/evidence/F-API-017/2026-10-01-V2-dba2f21d-writes.input_settings-api.json
-  - docs/validation/evidence/F-API-017/2026-10-01-V2-dba2f21d-writes.output_settings-api.json
-  - docs/validation/evidence/F-API-017/2026-10-01-V2-dba2f21d-writes.preset_name-api.json
-  - docs/validation/evidence/F-API-017/2026-10-01-V2-9ef6d31f-contracts.device_settings-api.json
-  - docs/validation/evidence/F-API-017/2026-10-01-V2-9ef6d31f-contracts.input_settings-api.json
-  - docs/validation/evidence/F-API-017/2026-10-01-V2-9ef6d31f-contracts.invalid_input_settings-api.json
-  - docs/validation/evidence/F-API-017/2026-10-01-V2-9ef6d31f-contracts.invalid_output_settings-api.json
-  - docs/validation/evidence/F-API-017/2026-10-01-V2-9ef6d31f-contracts.output_settings-api.json
   findings: []
   scenarios: [contracts.device_settings, contracts.input_settings, contracts.output_settings, contracts.invalid_input_settings, contracts.invalid_output_settings, writes.input_settings, writes.output_settings, writes.bulk_settings, writes.preset_name]
 - id: F-API-018
@@ -4490,7 +4421,6 @@ features:
   basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
   evidence:
   - docs/validation/evidence/F-API-018/2026-10-01-V2-2a28a93e-writes.output_name-api.json
-  - docs/validation/evidence/F-API-018/2026-10-01-V2-dba2f21d-writes.output_name-api.json
   findings: [BE-16]
   scenarios: [writes.output_name]
 - id: F-API-019
@@ -4603,9 +4533,6 @@ features:
   - docs/validation/evidence/F-API-019/2026-10-01-V2-2a28a93e-writes.profile_cec-api.json
   - docs/validation/evidence/F-API-019/2026-10-01-V2-2a28a93e-writes.profile_macros-api.json
   - docs/validation/evidence/F-API-019/2026-10-01-V2-2a28a93e-writes.profile_reorder-api.json
-  - docs/validation/evidence/F-API-019/2026-10-01-V2-dba2f21d-writes.profile_cec-api.json
-  - docs/validation/evidence/F-API-019/2026-10-01-V2-dba2f21d-writes.profile_macros-api.json
-  - docs/validation/evidence/F-API-019/2026-10-01-V2-dba2f21d-writes.profile_reorder-api.json
   findings: [SEC-04, API-08, API-22]
   scenarios:
   - writes.profile_cec
@@ -5148,21 +5075,6 @@ features:
   - docs/validation/evidence/F-API-024/2026-10-01-V2-2a28a93e-writes.shortcut_favorite-api.json
   - docs/validation/evidence/F-API-024/2026-10-01-V2-2a28a93e-writes.shortcut_reorder-api.json
   - docs/validation/evidence/F-API-024/2026-10-01-V2-2a28a93e-writes.shortcut_update-api.json
-  - docs/validation/evidence/F-API-024/2026-10-01-V2-dba2f21d-contracts.shortcut_alias-api.json
-  - docs/validation/evidence/F-API-024/2026-10-01-V2-dba2f21d-contracts.shortcut_dashboard-api.json
-  - docs/validation/evidence/F-API-024/2026-10-01-V2-dba2f21d-contracts.shortcut_favorites-api.json
-  - docs/validation/evidence/F-API-024/2026-10-01-V2-dba2f21d-contracts.shortcut_unknown-api.json
-  - docs/validation/evidence/F-API-024/2026-10-01-V2-dba2f21d-writes.shortcut_create-api.json
-  - docs/validation/evidence/F-API-024/2026-10-01-V2-dba2f21d-writes.shortcut_dashboard-api.json
-  - docs/validation/evidence/F-API-024/2026-10-01-V2-dba2f21d-writes.shortcut_delete_builtin-api.json
-  - docs/validation/evidence/F-API-024/2026-10-01-V2-dba2f21d-writes.shortcut_execute-api.json
-  - docs/validation/evidence/F-API-024/2026-10-01-V2-dba2f21d-writes.shortcut_favorite-api.json
-  - docs/validation/evidence/F-API-024/2026-10-01-V2-dba2f21d-writes.shortcut_reorder-api.json
-  - docs/validation/evidence/F-API-024/2026-10-01-V2-dba2f21d-writes.shortcut_update-api.json
-  - docs/validation/evidence/F-API-024/2026-10-01-V2-9ef6d31f-contracts.shortcut_alias-api.json
-  - docs/validation/evidence/F-API-024/2026-10-01-V2-9ef6d31f-contracts.shortcut_dashboard-api.json
-  - docs/validation/evidence/F-API-024/2026-10-01-V2-9ef6d31f-contracts.shortcut_favorites-api.json
-  - docs/validation/evidence/F-API-024/2026-10-01-V2-9ef6d31f-contracts.shortcut_unknown-api.json
   findings: [API-01, API-06, API-08]
   scenarios: [contracts.shortcut_favorites, contracts.shortcut_dashboard, contracts.shortcut_alias, contracts.shortcut_unknown, writes.shortcut_create, writes.shortcut_update, writes.shortcut_favorite, writes.shortcut_dashboard, writes.shortcut_reorder, writes.shortcut_execute, writes.shortcut_delete_builtin]
 - id: F-API-025
@@ -5192,13 +5104,6 @@ features:
   - docs/validation/evidence/F-API-026/2026-10-01-V2-2a28a93e-writes.themes-api.json
   - docs/validation/evidence/F-API-026/2026-10-01-V2-2a28a93e-writes.themes_reset-api.json
   - docs/validation/evidence/F-API-026/2026-10-01-V2-2a28a93e-writes.ui_preferences-api.json
-  - docs/validation/evidence/F-API-026/2026-10-01-V2-dba2f21d-contracts.themes-api.json
-  - docs/validation/evidence/F-API-026/2026-10-01-V2-dba2f21d-contracts.ui_preferences-api.json
-  - docs/validation/evidence/F-API-026/2026-10-01-V2-dba2f21d-writes.themes-api.json
-  - docs/validation/evidence/F-API-026/2026-10-01-V2-dba2f21d-writes.themes_reset-api.json
-  - docs/validation/evidence/F-API-026/2026-10-01-V2-dba2f21d-writes.ui_preferences-api.json
-  - docs/validation/evidence/F-API-026/2026-10-01-V2-9ef6d31f-contracts.themes-api.json
-  - docs/validation/evidence/F-API-026/2026-10-01-V2-9ef6d31f-contracts.ui_preferences-api.json
   findings: []
   scenarios: [contracts.themes, contracts.ui_preferences, writes.themes, writes.themes_reset, writes.ui_preferences]
 - id: F-API-027
@@ -5213,9 +5118,6 @@ features:
   evidence:
   - docs/validation/evidence/F-API-027/2026-10-01-V2-2a28a93e-contracts.settings-api.json
   - docs/validation/evidence/F-API-027/2026-10-01-V2-2a28a93e-writes.connection_test-api.json
-  - docs/validation/evidence/F-API-027/2026-10-01-V2-dba2f21d-contracts.settings-api.json
-  - docs/validation/evidence/F-API-027/2026-10-01-V2-dba2f21d-writes.connection_test-api.json
-  - docs/validation/evidence/F-API-027/2026-10-01-V2-9ef6d31f-contracts.settings-api.json
   findings: [SEC-03, TST-03]
   scenarios: [contracts.settings, writes.connection_test]
 - id: F-API-028
@@ -5230,9 +5132,6 @@ features:
   evidence:
   - docs/validation/evidence/F-API-028/2026-10-01-V2-2a28a93e-contracts.flic_buttons-api.json
   - docs/validation/evidence/F-API-028/2026-10-01-V2-2a28a93e-writes.flic_register-api.json
-  - docs/validation/evidence/F-API-028/2026-10-01-V2-dba2f21d-contracts.flic_buttons-api.json
-  - docs/validation/evidence/F-API-028/2026-10-01-V2-dba2f21d-writes.flic_register-api.json
-  - docs/validation/evidence/F-API-028/2026-10-01-V2-9ef6d31f-contracts.flic_buttons-api.json
   findings: [PER-02, API-15, TST-03]
   scenarios: [contracts.flic_buttons, writes.flic_register]
 - id: F-API-029
@@ -5287,13 +5186,6 @@ features:
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.legacy_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V3-2a28a93e-reboot.enabled_shortcut-browser.json
   - docs/validation/evidence/F-REL-009/2026-10-01-V3-2a28a93e-live.matrix_offline-browser.json
-  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.direct-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.enabled_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.legacy_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-01-V3-b0c1a32e-reboot.enabled_shortcut-browser.json
-  - docs/validation/evidence/F-REL-009/2026-10-01-V3-b0c1a32e-live.matrix_offline-browser.json
-  - docs/validation/evidence/F-REL-009/2026-09-28-V3-c39ee8d5-live.matrix_offline-browser.json
-  - docs/validation/evidence/F-REL-009/2026-09-28-V3-57747b4b-live.matrix_offline-browser.json
   findings: []
   scenarios: [live.matrix_offline, reboot.direct, reboot.legacy_shortcut, reboot.enabled_shortcut]
 - id: F-API-033
@@ -5308,8 +5200,6 @@ features:
   evidence:
   - docs/validation/evidence/F-MTX-001/2026-10-01-V2-2a28a93e-routing.switch_one-api.json
   - docs/validation/evidence/F-REL-009/2026-10-01-V2-2a28a93e-failures.unreachable_switch-api.json
-  - docs/validation/evidence/F-MTX-001/2026-09-28-V2-c39ee8d5-routing.switch_one-api.json
-  - docs/validation/evidence/F-REL-009/2026-09-28-V2-c39ee8d5-failures.unreachable_switch-api.json
   findings: []
   scenarios: [routing.switch_one, failures.unreachable_switch]
 - id: F-API-034
@@ -5323,7 +5213,6 @@ features:
   basis: 'V2: scenario routing.route_all (routing_change for output 8); tests/sim/test_sim_ws_contract.py::test_route_all_announces_every_output_that_changed. switch_all_failed: V1 (sent by the handler on a refused write; no scenario yet).'
   evidence:
   - docs/validation/evidence/F-MTX-002/2026-10-01-V2-2a28a93e-routing.route_all-api.json
-  - docs/validation/evidence/F-MTX-002/2026-09-28-V2-c39ee8d5-routing.route_all-api.json
   findings: []
   scenarios: [routing.route_all]
 - id: F-API-035
@@ -5337,7 +5226,6 @@ features:
   basis: 'V2: scenario presets.recall (preset_recall after the matrix accepted it; the routing follows as routing_change); tests/sim/test_sim_ws_contract.py::test_preset_recall_is_announced_after_success_and_its_routing_follows. tests/e2e/flows.spec.ts UI-04 test: the web UI no longer refreshes (and toasts) on every page for this event.'
   evidence:
   - docs/validation/evidence/F-MTX-003/2026-10-01-V2-2a28a93e-presets.recall-api.json
-  - docs/validation/evidence/F-MTX-003/2026-09-28-V2-c39ee8d5-presets.recall-api.json
   findings: [UI-04]
   scenarios: [presets.recall]
 - id: F-API-036
@@ -5352,8 +5240,6 @@ features:
   evidence:
   - docs/validation/evidence/F-MTX-007/2026-10-01-V2-2a28a93e-outputs.audio_mute-api.json
   - docs/validation/evidence/F-REL-008/2026-10-01-V2-2a28a93e-outputs.audio_mute_rejected-api.json
-  - docs/validation/evidence/F-MTX-007/2026-09-28-V2-c39ee8d5-outputs.audio_mute-api.json
-  - docs/validation/evidence/F-REL-008/2026-09-28-V2-c39ee8d5-outputs.audio_mute_rejected-api.json
   findings: []
   scenarios: [outputs.audio_mute, outputs.audio_mute_rejected]
 - id: F-API-037
@@ -5367,8 +5253,6 @@ features:
   basis: 'V2: scenario presets.rename (device_settings on /ws, schema-checked).'
   evidence:
   - docs/validation/evidence/F-MTX-005/2026-10-01-V2-2a28a93e-presets.rename-api.json
-  - docs/validation/evidence/F-MTX-005/2026-10-01-V2-dba2f21d-presets.rename-api.json
-  - docs/validation/evidence/F-MTX-005/2026-09-28-V2-c39ee8d5-presets.rename-api.json
   findings: []
   scenarios: [presets.rename]
 - id: F-API-038
@@ -5382,7 +5266,6 @@ features:
   basis: 'V2: scenario cec.output_power_on (cec_command, now sent after the matrix accepted it, no `optimistic` flag). The web UI does not show it (docs/api/WEBSOCKET.md).'
   evidence:
   - docs/validation/evidence/F-CEC-005/2026-10-01-V2-2a28a93e-cec.output_power_on-api.json
-  - docs/validation/evidence/F-CEC-005/2026-09-28-V2-c39ee8d5-cec.output_power_on-api.json
   findings: []
   scenarios: [cec.output_power_on]
 - id: F-API-039
@@ -5413,11 +5296,6 @@ features:
   - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.front_panel_route-browser.json
   - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.input_signal-browser.json
   - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.rename_elsewhere-browser.json
-  - docs/validation/evidence/F-MTX-006/2026-09-28-V2-c39ee8d5-power.standby-api.json
-  - docs/validation/evidence/F-MTX-031/2026-09-28-V3-c39ee8d5-live.display_unplugged-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-09-28-V3-c39ee8d5-live.front_panel_route-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-09-28-V3-c39ee8d5-live.input_signal-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-09-28-V3-c39ee8d5-live.rename_elsewhere-browser.json
   findings: [BE-24]
   scenarios: [live.front_panel_route, live.input_signal, live.display_unplugged, live.rename_elsewhere, power.standby]
 - id: F-API-041
@@ -5431,7 +5309,6 @@ features:
   basis: 'V2: scenario scenes.partial_failure receives scene_execution_error on /ws (schema-checked). The web UI does not show it yet (WP-E1, VAL-11).'
   evidence:
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.partial_failure-api.json
-  - docs/validation/evidence/F-DOM-011/2026-09-28-V2-c39ee8d5-scenes.partial_failure-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.partial_failure-api.json
   findings: [VAL-11]
   scenarios: [scenes.partial_failure]
@@ -5560,13 +5437,6 @@ features:
   - docs/validation/evidence/F-DOM-002/2026-10-01-V2-2a28a93e-profiles.recall_routing-api.json
   - docs/validation/evidence/F-DOM-002/2026-10-01-V3-2a28a93e-profiles.recall_disabled_output-browser.json
   - docs/validation/evidence/F-DOM-002/2026-10-01-V3-2a28a93e-profiles.recall_routing-browser.json
-  - docs/validation/evidence/F-DOM-002/2026-10-01-V2-dba2f21d-profiles.recall_disabled_output-api.json
-  - docs/validation/evidence/F-DOM-002/2026-10-01-V2-dba2f21d-profiles.recall_rejected-api.json
-  - docs/validation/evidence/F-DOM-002/2026-10-01-V2-dba2f21d-profiles.recall_routing-api.json
-  - docs/validation/evidence/F-DOM-002/2026-10-01-V3-dba2f21d-profiles.recall_disabled_output-browser.json
-  - docs/validation/evidence/F-DOM-002/2026-10-01-V3-dba2f21d-profiles.recall_routing-browser.json
-  - docs/validation/evidence/F-DOM-002/2026-09-28-V2-dc6bd707-profiles.recall_routing-api.json
-  - docs/validation/evidence/F-DOM-002/2026-09-28-V3-dc6bd707-profiles.recall_routing-browser.json
   - docs/validation/evidence/F-DOM-002/2026-10-01-V2-97d0d2af-profiles.recall_disabled_output-api.json
   - docs/validation/evidence/F-DOM-002/2026-10-01-V2-97d0d2af-profiles.recall_rejected-api.json
   - docs/validation/evidence/F-DOM-002/2026-10-01-V2-97d0d2af-profiles.recall_routing-api.json
@@ -5593,10 +5463,6 @@ features:
   - docs/validation/evidence/F-DOM-002/2026-10-01-V3-2a28a93e-profiles.recall_disabled_output-browser.json
   - docs/validation/evidence/F-DOM-003/2026-10-01-V2-2a28a93e-profiles.recall_output_settings-api.json
   - docs/validation/evidence/F-DOM-003/2026-10-01-V3-2a28a93e-profiles.recall_output_settings-browser.json
-  - docs/validation/evidence/F-DOM-002/2026-10-01-V2-dba2f21d-profiles.recall_disabled_output-api.json
-  - docs/validation/evidence/F-DOM-002/2026-10-01-V3-dba2f21d-profiles.recall_disabled_output-browser.json
-  - docs/validation/evidence/F-DOM-003/2026-10-01-V2-dba2f21d-profiles.recall_output_settings-api.json
-  - docs/validation/evidence/F-DOM-003/2026-10-01-V3-dba2f21d-profiles.recall_output_settings-browser.json
   - docs/validation/evidence/F-DOM-002/2026-10-01-V2-97d0d2af-profiles.recall_disabled_output-api.json
   - docs/validation/evidence/F-DOM-002/2026-10-01-V3-97d0d2af-profiles.recall_disabled_output-browser.json
   - docs/validation/evidence/F-DOM-003/2026-10-01-V2-97d0d2af-profiles.recall_output_settings-api.json
@@ -5616,8 +5482,6 @@ features:
   evidence:
   - docs/validation/evidence/F-DOM-004/2026-10-01-V2-2a28a93e-profiles.recall_power_macro-api.json
   - docs/validation/evidence/F-DOM-004/2026-10-01-V3-2a28a93e-profiles.recall_power_macro-browser.json
-  - docs/validation/evidence/F-DOM-004/2026-10-01-V2-dba2f21d-profiles.recall_power_macro-api.json
-  - docs/validation/evidence/F-DOM-004/2026-10-01-V3-dba2f21d-profiles.recall_power_macro-browser.json
   - docs/validation/evidence/F-DOM-004/2026-10-01-V2-97d0d2af-profiles.recall_power_macro-api.json
   - docs/validation/evidence/F-DOM-004/2026-10-01-V3-97d0d2af-profiles.recall_power_macro-browser.json
   findings: [VAL-02, BE-02, API-08]
@@ -5641,16 +5505,6 @@ features:
   - docs/validation/evidence/F-DOM-005/2026-10-01-V3-2a28a93e-profiles.recall_wrong_passcode-browser.json
   - docs/validation/evidence/F-KIO-008/2026-10-01-V3-2a28a93e-kiosk.profile_with_passcode-browser.json
   - docs/validation/evidence/F-KIO-008/2026-10-01-V3-2a28a93e-kiosk.profile_wrong_passcode-browser.json
-  - docs/validation/evidence/F-DOM-005/2026-10-01-V2-dba2f21d-profiles.recall_needs_passcode-api.json
-  - docs/validation/evidence/F-DOM-005/2026-10-01-V2-dba2f21d-profiles.recall_with_passcode-api.json
-  - docs/validation/evidence/F-DOM-005/2026-10-01-V2-dba2f21d-profiles.recall_wrong_passcode-api.json
-  - docs/validation/evidence/F-DOM-005/2026-10-01-V3-dba2f21d-profiles.recall_needs_passcode-browser.json
-  - docs/validation/evidence/F-DOM-005/2026-10-01-V3-dba2f21d-profiles.recall_with_passcode-browser.json
-  - docs/validation/evidence/F-DOM-005/2026-10-01-V3-dba2f21d-profiles.recall_wrong_passcode-browser.json
-  - docs/validation/evidence/F-KIO-008/2026-10-01-V3-dba2f21d-kiosk.profile_with_passcode-browser.json
-  - docs/validation/evidence/F-KIO-008/2026-10-01-V3-dba2f21d-kiosk.profile_wrong_passcode-browser.json
-  - docs/validation/evidence/F-KIO-008/2026-09-28-V3-dc6bd707-kiosk.profile_with_passcode-browser.json
-  - docs/validation/evidence/F-KIO-008/2026-09-28-V3-dc6bd707-kiosk.profile_wrong_passcode-browser.json
   - docs/validation/evidence/F-KIO-008/2026-10-01-V3-97d0d2af-kiosk.profile_with_passcode-browser.json
   - docs/validation/evidence/F-KIO-008/2026-10-01-V3-97d0d2af-kiosk.profile_wrong_passcode-browser.json
   findings: [SEC-05, SEC-06, UI-01]
@@ -6071,11 +5925,6 @@ features:
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.partial_failure-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.run_profile_macro_preset-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.run_protected-browser.json
-  - docs/validation/evidence/F-DOM-011/2026-09-28-V2-dc6bd707-scenes.partial_failure-api.json
-  - docs/validation/evidence/F-DOM-011/2026-09-28-V2-dc6bd707-scenes.run_protected-api.json
-  - docs/validation/evidence/F-DOM-011/2026-09-28-V3-dc6bd707-scenes.partial_failure-browser.json
-  - docs/validation/evidence/F-DOM-011/2026-09-28-V3-dc6bd707-scenes.run_protected-browser.json
-  - docs/validation/evidence/F-DOM-011/2026-09-28-V2-c39ee8d5-scenes.partial_failure-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.disabled_output_state-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.partial_failure-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.run_profile_macro_preset-api.json
@@ -6103,8 +5952,6 @@ features:
   - docs/validation/evidence/F-DOM-012/2026-10-01-V2-2a28a93e-scenes.run_rejected-api.json
   - docs/validation/evidence/F-DOM-012/2026-10-01-V2-2a28a93e-scenes.run_shortcut_and_macro-api.json
   - docs/validation/evidence/F-DOM-012/2026-10-01-V3-2a28a93e-scenes.macro_continues_after_refusal-browser.json
-  - docs/validation/evidence/F-DOM-012/2026-10-01-V2-9362fd00-scenes.macro_continues_after_refusal-api.json
-  - docs/validation/evidence/F-DOM-012/2026-10-01-V3-9362fd00-scenes.macro_continues_after_refusal-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.run_profile_macro_preset-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.run_profile_macro_preset-browser.json
   - docs/validation/evidence/F-DOM-012/2026-10-01-V2-97d0d2af-scenes.macro_continues_after_refusal-api.json
@@ -6168,8 +6015,6 @@ features:
   evidence:
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.run_protected-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.run_protected-browser.json
-  - docs/validation/evidence/F-DOM-011/2026-09-28-V2-dc6bd707-scenes.run_protected-api.json
-  - docs/validation/evidence/F-DOM-011/2026-09-28-V3-dc6bd707-scenes.run_protected-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.run_protected-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.run_protected-browser.json
   findings: [SEC-05, SEC-06]
@@ -6203,9 +6048,6 @@ features:
   evidence:
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.partial_failure-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.partial_failure-browser.json
-  - docs/validation/evidence/F-DOM-011/2026-09-28-V2-dc6bd707-scenes.partial_failure-api.json
-  - docs/validation/evidence/F-DOM-011/2026-09-28-V3-dc6bd707-scenes.partial_failure-browser.json
-  - docs/validation/evidence/F-DOM-011/2026-09-28-V2-c39ee8d5-scenes.partial_failure-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.partial_failure-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.partial_failure-browser.json
   findings: [API-02]
@@ -6385,14 +6227,8 @@ features:
   - docs/validation/evidence/F-DOM-020/2026-10-01-V3-2a28a93e-macros.run_rejected-browser.json
   - docs/validation/evidence/F-DOM-020/2026-10-01-V3-2a28a93e-macros.run_volume_up-browser.json
   - docs/validation/evidence/F-DOM-020/2026-10-01-V3-2a28a93e-scenes.macro_stops_after_refusal-browser.json
-  - docs/validation/evidence/F-DOM-012/2026-10-01-V2-9362fd00-scenes.macro_continues_after_refusal-api.json
-  - docs/validation/evidence/F-DOM-012/2026-10-01-V3-9362fd00-scenes.macro_continues_after_refusal-browser.json
-  - docs/validation/evidence/F-DOM-020/2026-10-01-V2-9362fd00-macros.run_rejected-api.json
-  - docs/validation/evidence/F-DOM-020/2026-10-01-V2-9362fd00-macros.run_volume_up-api.json
-  - docs/validation/evidence/F-DOM-020/2026-10-01-V2-9362fd00-scenes.macro_stops_after_refusal-api.json
   - docs/validation/evidence/F-DOM-020/2026-10-01-V3-9362fd00-macros.run_rejected-browser.json
   - docs/validation/evidence/F-DOM-020/2026-10-01-V3-9362fd00-macros.run_volume_up-browser.json
-  - docs/validation/evidence/F-DOM-020/2026-10-01-V3-9362fd00-scenes.macro_stops_after_refusal-browser.json
   - docs/validation/evidence/F-DOM-012/2026-10-01-V2-97d0d2af-scenes.macro_continues_after_refusal-api.json
   - docs/validation/evidence/F-DOM-012/2026-10-01-V3-97d0d2af-scenes.macro_continues_after_refusal-browser.json
   - docs/validation/evidence/F-DOM-020/2026-10-01-V2-97d0d2af-macros.run_volume_up-api.json
@@ -6458,9 +6294,6 @@ features:
   - docs/validation/evidence/F-DOM-023/2026-10-01-V2-2a28a93e-shortcuts.route_one_to_one-api.json
   - docs/validation/evidence/F-DOM-023/2026-10-01-V2-2a28a93e-shortcuts.unknown-api.json
   - docs/validation/evidence/F-DOM-023/2026-10-01-V3-2a28a93e-shortcuts.route_one_to_one-browser.json
-  - docs/validation/evidence/F-DOM-023/2026-10-01-V2-9362fd00-shortcuts.route_input_to_output-api.json
-  - docs/validation/evidence/F-DOM-023/2026-10-01-V2-9362fd00-shortcuts.route_one_to_one-api.json
-  - docs/validation/evidence/F-DOM-023/2026-10-01-V2-9362fd00-shortcuts.unknown-api.json
   - docs/validation/evidence/F-DOM-023/2026-10-01-V3-9362fd00-shortcuts.route_one_to_one-browser.json
   findings: [API-01]
   scenarios: [shortcuts.route_input_to_output, shortcuts.route_one_to_one, shortcuts.unknown]
@@ -6475,7 +6308,6 @@ features:
   evidence:
   - docs/validation/evidence/F-DOM-024/2026-10-01-V2-2a28a93e-shortcuts.power_off_all-api.json
   - docs/validation/evidence/F-DOM-024/2026-10-01-V3-2a28a93e-shortcuts.power_off_all-browser.json
-  - docs/validation/evidence/F-DOM-024/2026-10-01-V2-9362fd00-shortcuts.power_off_all-api.json
   - docs/validation/evidence/F-DOM-024/2026-10-01-V3-9362fd00-shortcuts.power_off_all-browser.json
   findings: [API-06]
   scenarios: [shortcuts.power_off_all]
@@ -6494,9 +6326,6 @@ features:
   - docs/validation/evidence/F-DOM-025/2026-10-01-V3-2a28a93e-shortcuts.mute_all-browser.json
   - docs/validation/evidence/F-DOM-025/2026-10-01-V3-2a28a93e-shortcuts.mute_rejected-browser.json
   - docs/validation/evidence/F-DOM-025/2026-10-01-V3-2a28a93e-shortcuts.unmute_all-browser.json
-  - docs/validation/evidence/F-DOM-025/2026-10-01-V2-9362fd00-shortcuts.mute_all-api.json
-  - docs/validation/evidence/F-DOM-025/2026-10-01-V2-9362fd00-shortcuts.mute_rejected-api.json
-  - docs/validation/evidence/F-DOM-025/2026-10-01-V2-9362fd00-shortcuts.unmute_all-api.json
   - docs/validation/evidence/F-DOM-025/2026-10-01-V3-9362fd00-shortcuts.mute_all-browser.json
   - docs/validation/evidence/F-DOM-025/2026-10-01-V3-9362fd00-shortcuts.mute_rejected-browser.json
   - docs/validation/evidence/F-DOM-025/2026-10-01-V3-9362fd00-shortcuts.unmute_all-browser.json
@@ -6513,7 +6342,6 @@ features:
   evidence:
   - docs/validation/evidence/F-DOM-026/2026-10-01-V2-2a28a93e-shortcuts.preset_recall-api.json
   - docs/validation/evidence/F-DOM-026/2026-10-01-V3-2a28a93e-shortcuts.preset_recall-browser.json
-  - docs/validation/evidence/F-DOM-026/2026-10-01-V2-9362fd00-shortcuts.preset_recall-api.json
   - docs/validation/evidence/F-DOM-026/2026-10-01-V3-9362fd00-shortcuts.preset_recall-browser.json
   findings: [API-08]
   scenarios: [shortcuts.preset_recall]
@@ -6543,27 +6371,9 @@ features:
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.enabled_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.legacy_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V3-2a28a93e-reboot.enabled_shortcut-browser.json
-  - docs/validation/evidence/F-DOM-027/2026-10-01-V2-b0c1a32e-shortcuts.disabled_reboot-api.json
-  - docs/validation/evidence/F-DOM-027/2026-10-01-V3-b0c1a32e-shortcuts.disabled_reboot-browser.json
-  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.enabled_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.legacy_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-01-V3-b0c1a32e-reboot.enabled_shortcut-browser.json
-  - docs/validation/evidence/F-DOM-027/2026-10-01-V2-7aa17c95-shortcuts.beep_off-api.json
-  - docs/validation/evidence/F-DOM-027/2026-10-01-V2-7aa17c95-shortcuts.beep_on-api.json
-  - docs/validation/evidence/F-DOM-027/2026-10-01-V2-7aa17c95-shortcuts.beep_rejected-api.json
-  - docs/validation/evidence/F-DOM-027/2026-10-01-V2-7aa17c95-shortcuts.disabled_reboot-api.json
-  - docs/validation/evidence/F-DOM-027/2026-10-01-V2-7aa17c95-shortcuts.panel_lock-api.json
-  - docs/validation/evidence/F-DOM-027/2026-10-01-V2-7aa17c95-shortcuts.panel_lock_rejected-api.json
-  - docs/validation/evidence/F-DOM-027/2026-10-01-V2-7aa17c95-shortcuts.panel_unlock-api.json
-  - docs/validation/evidence/F-DOM-027/2026-10-01-V3-7aa17c95-shortcuts.beep_off-browser.json
   - docs/validation/evidence/F-DOM-027/2026-10-01-V3-7aa17c95-shortcuts.beep_on-browser.json
-  - docs/validation/evidence/F-DOM-027/2026-10-01-V3-7aa17c95-shortcuts.beep_rejected-browser.json
   - docs/validation/evidence/F-DOM-027/2026-10-01-V3-7aa17c95-shortcuts.disabled_reboot-browser.json
-  - docs/validation/evidence/F-DOM-027/2026-10-01-V3-7aa17c95-shortcuts.panel_lock-browser.json
-  - docs/validation/evidence/F-DOM-027/2026-10-01-V3-7aa17c95-shortcuts.panel_lock_rejected-browser.json
   - docs/validation/evidence/F-DOM-027/2026-10-01-V3-7aa17c95-shortcuts.panel_unlock-browser.json
-  - docs/validation/evidence/F-DOM-027/2026-10-01-V2-9362fd00-shortcuts.beep_off-api.json
-  - docs/validation/evidence/F-DOM-027/2026-10-01-V2-9362fd00-shortcuts.panel_lock-api.json
   findings: [API-08]
   scenarios: [shortcuts.beep_off, shortcuts.beep_on, shortcuts.panel_lock, shortcuts.panel_unlock,
     shortcuts.beep_rejected, shortcuts.panel_lock_rejected, shortcuts.disabled_reboot, reboot.legacy_shortcut, reboot.enabled_shortcut]
@@ -6590,19 +6400,8 @@ features:
   - docs/validation/evidence/F-DOM-028/2026-10-01-V3-2a28a93e-shortcuts.lcd_always_on-browser.json
   - docs/validation/evidence/F-DOM-028/2026-10-01-V3-2a28a93e-shortcuts.lcd_off-browser.json
   - docs/validation/evidence/F-DOM-028/2026-10-01-V3-2a28a93e-shortcuts.lcd_rejected-browser.json
-  - docs/validation/evidence/F-DOM-028/2026-10-01-V2-7aa17c95-shortcuts.lcd_15s-api.json
-  - docs/validation/evidence/F-DOM-028/2026-10-01-V2-7aa17c95-shortcuts.lcd_30s-api.json
-  - docs/validation/evidence/F-DOM-028/2026-10-01-V2-7aa17c95-shortcuts.lcd_60s-api.json
-  - docs/validation/evidence/F-DOM-028/2026-10-01-V2-7aa17c95-shortcuts.lcd_always_on-api.json
-  - docs/validation/evidence/F-DOM-028/2026-10-01-V2-7aa17c95-shortcuts.lcd_off-api.json
-  - docs/validation/evidence/F-DOM-028/2026-10-01-V2-7aa17c95-shortcuts.lcd_rejected-api.json
-  - docs/validation/evidence/F-DOM-028/2026-10-01-V3-7aa17c95-shortcuts.lcd_15s-browser.json
-  - docs/validation/evidence/F-DOM-028/2026-10-01-V3-7aa17c95-shortcuts.lcd_30s-browser.json
-  - docs/validation/evidence/F-DOM-028/2026-10-01-V3-7aa17c95-shortcuts.lcd_60s-browser.json
   - docs/validation/evidence/F-DOM-028/2026-10-01-V3-7aa17c95-shortcuts.lcd_always_on-browser.json
-  - docs/validation/evidence/F-DOM-028/2026-10-01-V3-7aa17c95-shortcuts.lcd_off-browser.json
   - docs/validation/evidence/F-DOM-028/2026-10-01-V3-7aa17c95-shortcuts.lcd_rejected-browser.json
-  - docs/validation/evidence/F-DOM-028/2026-10-01-V2-9362fd00-shortcuts.lcd_15s-api.json
   - docs/validation/evidence/F-DOM-028/2026-10-01-V3-9362fd00-shortcuts.lcd_15s-browser.json
   findings: [API-07]
   scenarios: [shortcuts.lcd_15s, shortcuts.lcd_off, shortcuts.lcd_always_on, shortcuts.lcd_30s,
@@ -6746,7 +6545,6 @@ features:
   basis: 'V3: tests/e2e/smoke.spec.ts ''routing an input to an output in the matrix grid changes the simulator''.'
   evidence:
   - docs/validation/evidence/F-MTX-001/2026-10-01-V3-2a28a93e-routing.switch_one-browser.json
-  - docs/validation/evidence/F-MTX-001/2026-09-28-V3-c39ee8d5-routing.switch_one-browser.json
   findings: []
   scenarios: [routing.switch_one]
 - id: F-UI-003
@@ -6772,7 +6570,6 @@ features:
   basis: visual catalog drawer/routing/* (screenshot baseline only; no effect asserted).
   evidence:
   - docs/validation/evidence/F-MTX-002/2026-10-01-V3-2a28a93e-routing.route_all-browser.json
-  - docs/validation/evidence/F-MTX-002/2026-09-28-V3-c39ee8d5-routing.route_all-browser.json
   findings: []
   scenarios: [routing.route_all]
 - id: F-UI-005
@@ -6786,7 +6583,6 @@ features:
   basis: visual catalog drawer/presets/* (screenshot baseline only; no effect asserted).
   evidence:
   - docs/validation/evidence/F-MTX-003/2026-10-01-V3-2a28a93e-presets.recall-browser.json
-  - docs/validation/evidence/F-MTX-003/2026-09-28-V3-c39ee8d5-presets.recall-browser.json
   findings: []
   scenarios: [presets.recall]
 - id: F-UI-006
@@ -6800,8 +6596,6 @@ features:
   basis: visual catalog drawer/presets/rename (screenshot baseline only; no effect asserted).
   evidence:
   - docs/validation/evidence/F-MTX-005/2026-10-01-V3-2a28a93e-presets.rename-browser.json
-  - docs/validation/evidence/F-MTX-005/2026-10-01-V3-dba2f21d-presets.rename-browser.json
-  - docs/validation/evidence/F-MTX-005/2026-09-28-V3-c39ee8d5-presets.rename-browser.json
   findings: []
   scenarios: [presets.rename]
 - id: F-UI-007
@@ -6827,7 +6621,6 @@ features:
   basis: 'V3: scenario scenes.run_protected with the browser client runs the locked scene from its dashboard card through the passcode prompt; tests/e2e/flows.spec.ts runs protected scene and profile cards and checks every card type renders on load (UI-01, UI-27 fixed in WP-E1). Visual diffs pending owner approval.'
   evidence:
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.run_protected-browser.json
-  - docs/validation/evidence/F-DOM-011/2026-09-28-V3-dc6bd707-scenes.run_protected-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.run_protected-browser.json
   findings: [UI-01, UI-27]
   scenarios: [scenes.run_protected]
@@ -6878,8 +6671,6 @@ features:
   basis: 'V3: scenario profiles.recall_routing with the browser client (Profiles tab, Activate) and tests/e2e/flows.spec.ts ''the Profiles tab lists the hub profiles and recalls one'' (UI-27 fixed in WP-E1). Visual diffs pending owner approval.'
   evidence:
   - docs/validation/evidence/F-DOM-002/2026-10-01-V3-2a28a93e-profiles.recall_routing-browser.json
-  - docs/validation/evidence/F-DOM-002/2026-10-01-V3-dba2f21d-profiles.recall_routing-browser.json
-  - docs/validation/evidence/F-DOM-002/2026-09-28-V3-dc6bd707-profiles.recall_routing-browser.json
   - docs/validation/evidence/F-DOM-002/2026-10-01-V3-97d0d2af-profiles.recall_routing-browser.json
   findings: [UI-27]
   scenarios: [profiles.recall_routing]
@@ -6908,12 +6699,6 @@ features:
   - docs/validation/evidence/F-DOM-005/2026-10-01-V3-2a28a93e-profiles.recall_needs_passcode-browser.json
   - docs/validation/evidence/F-DOM-005/2026-10-01-V3-2a28a93e-profiles.recall_with_passcode-browser.json
   - docs/validation/evidence/F-DOM-005/2026-10-01-V3-2a28a93e-profiles.recall_wrong_passcode-browser.json
-  - docs/validation/evidence/F-DOM-005/2026-10-01-V3-dba2f21d-profiles.recall_needs_passcode-browser.json
-  - docs/validation/evidence/F-DOM-005/2026-10-01-V3-dba2f21d-profiles.recall_with_passcode-browser.json
-  - docs/validation/evidence/F-DOM-005/2026-10-01-V3-dba2f21d-profiles.recall_wrong_passcode-browser.json
-  - docs/validation/evidence/F-DOM-005/2026-09-28-V3-dc6bd707-profiles.recall_needs_passcode-browser.json
-  - docs/validation/evidence/F-DOM-005/2026-09-28-V3-dc6bd707-profiles.recall_with_passcode-browser.json
-  - docs/validation/evidence/F-DOM-005/2026-09-28-V3-dc6bd707-profiles.recall_wrong_passcode-browser.json
   findings: [UI-01, UI-36]
   scenarios: [profiles.recall_needs_passcode, profiles.recall_with_passcode, profiles.recall_wrong_passcode]
 - id: F-UI-015
@@ -7039,11 +6824,6 @@ features:
   - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.input_signal-browser.json
   - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.rename_elsewhere-browser.json
   - docs/validation/evidence/F-UI-024/2026-10-01-V3-2a28a93e-routing.grid_notifies_other_clients-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-09-28-V3-c39ee8d5-live.display_unplugged-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-09-28-V3-c39ee8d5-live.front_panel_route-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-09-28-V3-c39ee8d5-live.input_signal-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-09-28-V3-c39ee8d5-live.rename_elsewhere-browser.json
-  - docs/validation/evidence/F-UI-024/2026-09-28-V3-c39ee8d5-routing.grid_notifies_other_clients-browser.json
   findings: []
   scenarios: [routing.grid_notifies_other_clients, live.front_panel_route, live.input_signal, live.display_unplugged, live.rename_elsewhere]
 - id: F-UI-025
@@ -7081,7 +6861,6 @@ features:
   basis: 'V3: scenario scenes.partial_failure with the browser client checks the warning toast a partial run shows (VAL-11 fixed in WP-E1); tests/e2e/flows.spec.ts checks success, partial and error toasts for profiles and scenes. Other toasts and the confirmation dialogs: visual catalog only.'
   evidence:
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.partial_failure-browser.json
-  - docs/validation/evidence/F-DOM-011/2026-09-28-V3-dc6bd707-scenes.partial_failure-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.partial_failure-browser.json
   findings: [UI-32]
   scenarios: [scenes.partial_failure]
@@ -7217,7 +6996,6 @@ features:
   basis: 'V3: scenario kiosk.route_one_muted (browser: kiosk routing wizard, one output, ''Mute output audio'' on; only the mute is sent, routing and mute read back from the simulator, nothing else changed) and tests/e2e/flows.spec.ts UI-23/UI-46 and UI-25 tests (UI-23, UI-25 fixed in WP-E1; UI-46 owner decision 2026-09-27). Visual diffs pending owner approval.'
   evidence:
   - docs/validation/evidence/F-KIO-002/2026-10-01-V3-2a28a93e-kiosk.route_one_muted-browser.json
-  - docs/validation/evidence/F-KIO-002/2026-09-28-V3-dc6bd707-kiosk.route_one_muted-browser.json
   findings: [UI-25, UI-23]
   scenarios: [kiosk.route_one_muted]
 - id: F-KIO-003
@@ -7231,7 +7009,6 @@ features:
   basis: 'V3: scenario kiosk.route_all_apply (browser: all outputs to input 5 with untouched options; only the routing changes, the soundbar keeps its audio-only scaler, no output setting command reaches the device, UI-46 owner decision 2026-09-27) and tests/e2e/smoke.spec.ts kiosk route-all (UI-23 fixed in WP-E1).'
   evidence:
   - docs/validation/evidence/F-KIO-003/2026-10-01-V3-2a28a93e-kiosk.route_all_apply-browser.json
-  - docs/validation/evidence/F-KIO-003/2026-09-28-V3-dc6bd707-kiosk.route_all_apply-browser.json
   findings: [UI-23]
   scenarios: [kiosk.route_all_apply]
 - id: F-KIO-004
@@ -7294,10 +7071,6 @@ features:
   evidence:
   - docs/validation/evidence/F-KIO-008/2026-10-01-V3-2a28a93e-kiosk.profile_with_passcode-browser.json
   - docs/validation/evidence/F-KIO-008/2026-10-01-V3-2a28a93e-kiosk.profile_wrong_passcode-browser.json
-  - docs/validation/evidence/F-KIO-008/2026-10-01-V3-dba2f21d-kiosk.profile_with_passcode-browser.json
-  - docs/validation/evidence/F-KIO-008/2026-10-01-V3-dba2f21d-kiosk.profile_wrong_passcode-browser.json
-  - docs/validation/evidence/F-KIO-008/2026-09-28-V3-dc6bd707-kiosk.profile_with_passcode-browser.json
-  - docs/validation/evidence/F-KIO-008/2026-09-28-V3-dc6bd707-kiosk.profile_wrong_passcode-browser.json
   - docs/validation/evidence/F-KIO-008/2026-10-01-V3-97d0d2af-kiosk.profile_with_passcode-browser.json
   - docs/validation/evidence/F-KIO-008/2026-10-01-V3-97d0d2af-kiosk.profile_wrong_passcode-browser.json
   findings: [UI-25]
@@ -7326,8 +7099,6 @@ features:
   evidence:
   - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.front_panel_route-browser.json
   - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.input_signal-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-09-28-V3-c39ee8d5-live.front_panel_route-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-09-28-V3-c39ee8d5-live.input_signal-browser.json
   findings: []
   scenarios: [live.front_panel_route, live.input_signal]
 - id: F-KIO-011
@@ -7341,9 +7112,6 @@ features:
   basis: 'V3: scenario live.matrix_offline: an open /kiosk page shows Disconnected while the matrix is off the network and Connected again after it returns. The first-load visual is the catalog entry kiosk/disconnected.'
   evidence:
   - docs/validation/evidence/F-REL-009/2026-10-01-V3-2a28a93e-live.matrix_offline-browser.json
-  - docs/validation/evidence/F-REL-009/2026-10-01-V3-b0c1a32e-live.matrix_offline-browser.json
-  - docs/validation/evidence/F-REL-009/2026-09-28-V3-c39ee8d5-live.matrix_offline-browser.json
-  - docs/validation/evidence/F-REL-009/2026-09-28-V3-57747b4b-live.matrix_offline-browser.json
   findings: [UI-29]
   scenarios: [live.matrix_offline]
 - id: F-KIO-012
@@ -7620,8 +7388,6 @@ features:
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.config_flow; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_config_flow.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
   - docs/validation/evidence/F-HA-001/2026-10-01-V3-2a28a93e-ha.config_flow-ha.json
-  - docs/validation/evidence/F-HA-001/2026-09-26-V3-6c22aa7a-ha.config_flow-ha.json
-  - docs/validation/evidence/F-HA-001/2026-09-28-V3-c39ee8d5-ha.config_flow-ha.json
   findings: []
   scenarios: [ha.config_flow]
 - id: F-HA-002
@@ -7636,8 +7402,6 @@ features:
   evidence:
   - docs/validation/evidence/F-HA-002/2026-10-01-V3-2a28a93e-ha.front_panel_route-ha.json
   - docs/validation/evidence/F-HA-002/2026-10-01-V3-2a28a93e-ha.select_source-ha.json
-  - docs/validation/evidence/F-HA-002/2026-09-26-V3-6c22aa7a-ha.select_source-ha.json
-  - docs/validation/evidence/F-HA-002/2026-09-28-V3-c39ee8d5-ha.front_panel_route-ha.json
   findings: []
   scenarios: [ha.select_source, ha.front_panel_route]
 - id: F-HA-003
@@ -7652,10 +7416,6 @@ features:
   evidence:
   - docs/validation/evidence/F-HA-003/2026-10-01-V3-2a28a93e-ha.power_off-ha.json
   - docs/validation/evidence/F-HA-003/2026-10-01-V3-2a28a93e-ha.power_on-ha.json
-  - docs/validation/evidence/F-HA-003/2026-09-26-V3-6c22aa7a-ha.power_off-ha.json
-  - docs/validation/evidence/F-HA-003/2026-09-26-V3-6c22aa7a-ha.power_on-ha.json
-  - docs/validation/evidence/F-HA-003/2026-09-28-V3-c39ee8d5-ha.power_off-ha.json
-  - docs/validation/evidence/F-HA-003/2026-09-28-V3-c39ee8d5-ha.power_on-ha.json
   findings: []
   scenarios: [ha.power_off, ha.power_on]
 - id: F-HA-004
@@ -7669,7 +7429,6 @@ features:
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.mute_switch; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_switch.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
   - docs/validation/evidence/F-HA-004/2026-10-01-V3-2a28a93e-ha.mute_switch-ha.json
-  - docs/validation/evidence/F-HA-004/2026-09-26-V3-6c22aa7a-ha.mute_switch-ha.json
   findings: []
   scenarios: [ha.mute_switch]
 - id: F-HA-005
@@ -7683,7 +7442,6 @@ features:
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.stream_switch; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_switch.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
   - docs/validation/evidence/F-HA-005/2026-10-01-V3-2a28a93e-ha.stream_switch-ha.json
-  - docs/validation/evidence/F-HA-005/2026-09-26-V3-6c22aa7a-ha.stream_switch-ha.json
   findings: []
   scenarios: [ha.stream_switch]
 - id: F-HA-006
@@ -7697,7 +7455,6 @@ features:
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.preset_button; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_button.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
   - docs/validation/evidence/F-HA-006/2026-10-01-V3-2a28a93e-ha.preset_button-ha.json
-  - docs/validation/evidence/F-HA-006/2026-09-26-V3-6c22aa7a-ha.preset_button-ha.json
   findings: []
   scenarios: [ha.preset_button]
 - id: F-HA-007
@@ -7711,7 +7468,6 @@ features:
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.reboot_button; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_button.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
   - docs/validation/evidence/F-HA-007/2026-10-01-V3-2a28a93e-ha.reboot_button-ha.json
-  - docs/validation/evidence/F-HA-007/2026-09-26-V3-6c22aa7a-ha.reboot_button-ha.json
   findings: []
   scenarios: [ha.reboot_button]
 - id: F-HA-008
@@ -7725,7 +7481,6 @@ features:
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.input_signal; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_binary_sensor.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
   - docs/validation/evidence/F-HA-008/2026-10-01-V3-2a28a93e-ha.input_signal-ha.json
-  - docs/validation/evidence/F-HA-008/2026-09-26-V3-6c22aa7a-ha.input_signal-ha.json
   findings: []
   scenarios: [ha.input_signal]
 - id: F-HA-009
@@ -7739,7 +7494,6 @@ features:
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.display_unplugged; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_binary_sensor.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
   - docs/validation/evidence/F-HA-009/2026-10-01-V3-2a28a93e-ha.display_unplugged-ha.json
-  - docs/validation/evidence/F-HA-009/2026-09-26-V3-6c22aa7a-ha.display_unplugged-ha.json
   findings: []
   scenarios: [ha.display_unplugged]
 - id: F-HA-010
@@ -7753,7 +7507,6 @@ features:
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.service_recall_preset; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_services.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
   - docs/validation/evidence/F-HA-010/2026-10-01-V3-2a28a93e-ha.service_recall_preset-ha.json
-  - docs/validation/evidence/F-HA-010/2026-09-26-V3-6c22aa7a-ha.service_recall_preset-ha.json
   findings: []
   scenarios: [ha.service_recall_preset]
 - id: F-HA-011
@@ -7767,7 +7520,6 @@ features:
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.service_switch_input; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_services.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
   - docs/validation/evidence/F-HA-011/2026-10-01-V3-2a28a93e-ha.service_switch_input-ha.json
-  - docs/validation/evidence/F-HA-011/2026-09-26-V3-6c22aa7a-ha.service_switch_input-ha.json
   findings: []
   scenarios: [ha.service_switch_input]
 - id: F-HA-012
@@ -7783,10 +7535,6 @@ features:
   - docs/validation/evidence/F-HA-012/2026-10-01-V3-2a28a93e-ha.service_cec_display-ha.json
   - docs/validation/evidence/F-HA-012/2026-10-01-V3-2a28a93e-ha.service_cec_invalid-ha.json
   - docs/validation/evidence/F-HA-012/2026-10-01-V3-2a28a93e-ha.service_cec_source-ha.json
-  - docs/validation/evidence/F-HA-012/2026-09-26-V3-6c22aa7a-ha.service_cec_display-ha.json
-  - docs/validation/evidence/F-HA-012/2026-09-26-V3-6c22aa7a-ha.service_cec_invalid-ha.json
-  - docs/validation/evidence/F-HA-012/2026-09-26-V3-6c22aa7a-ha.service_cec_source-ha.json
-  - docs/validation/evidence/F-HA-012/2026-09-28-V3-c39ee8d5-ha.service_cec_display-ha.json
   findings: []
   scenarios: [ha.service_cec_display, ha.service_cec_source, ha.service_cec_invalid]
 - id: F-HA-013
@@ -7804,11 +7552,6 @@ features:
   - docs/validation/evidence/F-HA-009/2026-10-01-V3-2a28a93e-ha.display_unplugged-ha.json
   - docs/validation/evidence/F-HA-013/2026-10-01-V3-2a28a93e-ha.matrix_offline-ha.json
   - docs/validation/evidence/F-HA-013/2026-10-01-V3-2a28a93e-ha.matrix_unreachable-ha.json
-  - docs/validation/evidence/F-HA-008/2026-09-26-V3-6c22aa7a-ha.input_signal-ha.json
-  - docs/validation/evidence/F-HA-009/2026-09-26-V3-6c22aa7a-ha.display_unplugged-ha.json
-  - docs/validation/evidence/F-HA-013/2026-09-26-V3-6c22aa7a-ha.matrix_unreachable-ha.json
-  - docs/validation/evidence/F-HA-002/2026-09-28-V3-c39ee8d5-ha.front_panel_route-ha.json
-  - docs/validation/evidence/F-HA-013/2026-09-28-V3-c39ee8d5-ha.matrix_offline-ha.json
   findings: []
   scenarios: [ha.input_signal, ha.display_unplugged, ha.matrix_unreachable, ha.front_panel_route, ha.matrix_offline]
 - id: F-HA-014
@@ -7834,8 +7577,6 @@ features:
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.config_flow; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_init.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
   - docs/validation/evidence/F-HA-001/2026-10-01-V3-2a28a93e-ha.config_flow-ha.json
-  - docs/validation/evidence/F-HA-001/2026-09-26-V3-6c22aa7a-ha.config_flow-ha.json
-  - docs/validation/evidence/F-HA-001/2026-09-28-V3-c39ee8d5-ha.config_flow-ha.json
   findings: []
   scenarios: [ha.config_flow]
 - id: F-HA-016
@@ -7849,7 +7590,6 @@ features:
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.reconfigure; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_config_flow.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
   - docs/validation/evidence/F-HA-016/2026-10-01-V3-2a28a93e-ha.reconfigure-ha.json
-  - docs/validation/evidence/F-HA-016/2026-09-26-V3-6c22aa7a-ha.reconfigure-ha.json
   findings: []
   scenarios: [ha.reconfigure]
 - id: F-HA-017
@@ -7863,8 +7603,6 @@ features:
   basis: 'V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.config_flow (sets 5 s; every later scenario relies on it); effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_config_flow.py (pytest-homeassistant-custom-component, contract fixtures).'
   evidence:
   - docs/validation/evidence/F-HA-001/2026-10-01-V3-2a28a93e-ha.config_flow-ha.json
-  - docs/validation/evidence/F-HA-001/2026-09-26-V3-6c22aa7a-ha.config_flow-ha.json
-  - docs/validation/evidence/F-HA-001/2026-09-28-V3-c39ee8d5-ha.config_flow-ha.json
   findings: []
   scenarios: [ha.config_flow]
 - id: F-HA-018
@@ -7879,8 +7617,6 @@ features:
   evidence:
   - docs/validation/evidence/F-HA-010/2026-10-01-V3-2a28a93e-ha.service_recall_preset-ha.json
   - docs/validation/evidence/F-HA-011/2026-10-01-V3-2a28a93e-ha.service_switch_input-ha.json
-  - docs/validation/evidence/F-HA-010/2026-09-26-V3-6c22aa7a-ha.service_recall_preset-ha.json
-  - docs/validation/evidence/F-HA-011/2026-09-26-V3-6c22aa7a-ha.service_switch_input-ha.json
   findings: []
   scenarios: [ha.service_recall_preset, ha.service_switch_input]
 - id: F-FLIC-001
@@ -8023,7 +7759,7 @@ features:
     Remote 3 integration on, against the BK-808 simulator in a container: /api/health, /ui, /kiosk and static assets
     served, /api/status equals the simulator routing and a switch changes it, UID 1000 with read-only app code, clean
     SIGTERM stop. CI docker-build job. Deployment evidence deploy.image_core, deploy.image_uc.'
-  evidence: [docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_uc-uc.json, docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_uc-uc.json]
+  evidence: [docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_uc-uc.json]
   findings: []
   scenarios: []
 - id: F-OPS-002
@@ -8038,7 +7774,7 @@ features:
   basis: 'V3 (WP-D2, DEP-03 fixed): tests/deploy/test_docker_image.py[core]: the image with UC_ENABLED unset serves the
     core against the simulator, port 9095 is closed and the PYTHONPROFILEIMPORTTIME trace has no ucapi module;
     tests/test_run_entry.py proves the same for `python -X importtime run.py`. Deployment evidence deploy.image_core.'
-  evidence: [docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json]
+  evidence: [docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_core-api.json]
   findings: []
   scenarios: []
 - id: F-OPS-003
@@ -8055,7 +7791,7 @@ features:
     listen on the host; both UC files refuse to start without HUB_HOST_IP. Deployment evidence deploy.compose: the 2026-10-01 Docker Desktop rerun uses a Linux runner with host
     networking enabled; all four Compose checks pass, including host networking. Real Remote mDNS discovery
     remains F-OPS-004 / HIL-E.'
-  evidence: [docs/validation/evidence/F-OPS-003/2026-10-02-V3-1d0a4a94-deploy.compose-api.json, docs/validation/evidence/F-OPS-003/2026-09-26-V3-23239182-deploy.compose-api.json]
+  evidence: [docs/validation/evidence/F-OPS-003/2026-10-02-V3-1d0a4a94-deploy.compose-api.json]
   findings: []
   scenarios: []
 - id: F-OPS-004
@@ -8086,7 +7822,7 @@ features:
   basis: 'V3 (WP-D2): the image HEALTHCHECK (`python run.py healthcheck`, follows API_PORT) reports healthy in both
     modes (tests/deploy/test_docker_image.py::test_image_healthcheck_reports_healthy, run with a 2 s interval). Not
     tested: a restart triggered by an unhealthy state (restart policy).'
-  evidence: [docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_uc-uc.json, docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_uc-uc.json]
+  evidence: [docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_uc-uc.json]
   findings: []
   scenarios: []
 - id: F-OPS-006
@@ -8101,7 +7837,7 @@ features:
     routing and switches it (tests/deploy/test_docker_image.py[core]); tests/test_run_entry.py: OREI_HOST/OREI_PORT
     are warned aliases, the canonical name wins, bad ports stop the hub. With UC_ENABLED=true the address comes from
     the Remote setup (DEP-07, still open).'
-  evidence: [docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json]
+  evidence: [docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_core-api.json]
   findings: [DEP-07, BE-26]
   scenarios: []
 - id: F-OPS-007
@@ -8166,7 +7902,7 @@ features:
     the scripted Remote connects and ucapi is in the import trace (tests/deploy/test_docker_image.py). WEBUI_ENABLED,
     USE_MODULAR and REST_API_ENABLED=false are ignored with a warning (the web UI and REST API are the core;
     tests/test_run_entry.py). The integration loader itself is Phase 4 (BE-20).'
-  evidence: [docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_uc-uc.json, docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_uc-uc.json]
+  evidence: [docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_uc-uc.json]
   findings: [DEP-07, BE-20]
   scenarios: []
 - id: F-OPS-012
@@ -8218,7 +7954,7 @@ features:
     `docker restart`, in both modes, from the /data volume (tests/deploy/test_docker_image.py::
     test_data_persists_across_restart); an unwritable data dir stops the hub with a chown hint
     (tests/test_run_entry.py). tests/test_persistence.py TestPersistenceRoundTrip (in-process).'
-  evidence: [docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_uc-uc.json, docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-09-26-V3-23239182-deploy.image_uc-uc.json]
+  evidence: [docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_core-api.json, docs/validation/evidence/F-OPS-001/2026-10-02-V3-1d0a4a94-deploy.image_uc-uc.json]
   findings: [DEP-07]
   scenarios: []
 - id: F-OPS-016
@@ -8480,10 +8216,6 @@ features:
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.enabled_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.legacy_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V3-2a28a93e-reboot.enabled_shortcut-browser.json
-  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.direct-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.enabled_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.legacy_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-01-V3-b0c1a32e-reboot.enabled_shortcut-browser.json
   findings: [BE-04, BE-06, BE-17]
   scenarios: [reboot.direct, reboot.legacy_shortcut, reboot.enabled_shortcut]
 - id: F-REL-002
@@ -8538,10 +8270,6 @@ features:
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.enabled_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.legacy_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V3-2a28a93e-reboot.enabled_shortcut-browser.json
-  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.direct-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.enabled_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.legacy_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-01-V3-b0c1a32e-reboot.enabled_shortcut-browser.json
   findings: [BE-04, BE-28]
   scenarios: [reboot.direct, reboot.legacy_shortcut, reboot.enabled_shortcut]
 - id: F-REL-006
@@ -8580,7 +8308,6 @@ features:
     are strict xfails (BE-12).
   evidence:
   - docs/validation/evidence/F-REL-008/2026-10-01-V2-2a28a93e-outputs.audio_mute_rejected-api.json
-  - docs/validation/evidence/F-REL-008/2026-09-28-V2-c39ee8d5-outputs.audio_mute_rejected-api.json
   findings: [BE-12]
   scenarios: [outputs.audio_mute_rejected]
 - id: F-REL-009
@@ -8596,11 +8323,6 @@ features:
   - docs/validation/evidence/F-HA-013/2026-10-01-V3-2a28a93e-ha.matrix_offline-ha.json
   - docs/validation/evidence/F-REL-009/2026-10-01-V2-2a28a93e-failures.unreachable_switch-api.json
   - docs/validation/evidence/F-REL-009/2026-10-01-V3-2a28a93e-live.matrix_offline-browser.json
-  - docs/validation/evidence/F-REL-009/2026-10-01-V3-b0c1a32e-live.matrix_offline-browser.json
-  - docs/validation/evidence/F-HA-013/2026-09-28-V3-c39ee8d5-ha.matrix_offline-ha.json
-  - docs/validation/evidence/F-REL-009/2026-09-28-V2-c39ee8d5-failures.unreachable_switch-api.json
-  - docs/validation/evidence/F-REL-009/2026-09-28-V3-c39ee8d5-live.matrix_offline-browser.json
-  - docs/validation/evidence/F-REL-009/2026-09-28-V3-57747b4b-live.matrix_offline-browser.json
   findings: [UI-29]
   scenarios: [failures.unreachable_switch, live.matrix_offline, ha.matrix_offline]
 - id: F-REL-010
@@ -8638,7 +8360,6 @@ features:
   basis: 'V3: scenario live.front_panel_route in the core-only hub (no Remote integration at all): the hub''s own poller (src/rest_api/events.py) announces the change and the open /ui and /kiosk pages show it. UC mode: tests/uc/test_lifecycle.py front-panel tests (web clients get routing_change with and without a Remote).'
   evidence:
   - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.front_panel_route-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-09-28-V3-c39ee8d5-live.front_panel_route-browser.json
   findings: []
   scenarios: [live.front_panel_route]
 - id: F-REL-013

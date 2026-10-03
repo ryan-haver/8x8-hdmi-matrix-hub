@@ -1,7 +1,7 @@
 # Feature ledger
 
 > **Generated** by `python -m tools.validate ledger` — do not edit by hand. Registry: [`features.yaml`](features.yaml) · Plan: [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md) · How to add evidence: [`README.md`](README.md).
-> Commit `1aafbbf4`
+> Commit `7a9e333c`
 
 **Level** = highest level with fresh passing evidence, else the recorded baseline (the registry's `current`), capped at V1 while an open critical/high finding is linked. **Recorded** = the registry baseline. **Fresh** = evidence commit not older than the last change to the scenario's `covers` paths.
 
@@ -46,8 +46,6 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 - Features with fresh passing scenario evidence: **150** of 268.
 - Features with a fresh failing scenario: **9**: `F-MTX-030`, `F-CEC-010`, `F-API-015`, `F-API-019`, `F-API-020`, `F-API-023`, `F-DOM-001`, `F-DOM-009`, `F-DOM-019`.
 - Features capped at V1 by an open critical/high finding: **28**.
-
-Last run: target `sim`, clients ['api'], commit `1aafbbf4` — fail: 1, pass: 116
 
 ## Matrix control (F-MTX)
 
