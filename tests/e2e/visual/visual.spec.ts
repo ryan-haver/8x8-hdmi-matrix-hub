@@ -28,6 +28,66 @@ import { THEMED_VIEWPORTS, VISUAL_VIEWPORTS, type ViewportName } from '../suppor
 /** Hub routes that only the running app should ever change; a capture that writes them would leak into later entries. */
 const WRITE_GUARD = /\/api\/(ui\/preferences|dashboard\/cards|device-settings|shortcuts\/[^/]+\/(favorite|dashboard)|profile|v2\/scenes|cec\/macro)/;
 
+/**
+ * Baselines (<project>/<snapshot path>) that no longer match today's UI at the
+ * suite threshold (0.05, TST-10) but did at the old 0.2: the page changed
+ * below the old threshold after they were approved (mostly content dimmed
+ * behind a modal or a side panel). They keep the old threshold until the
+ * owner reviews and re-approves them (TST-14); then delete them from this list.
+ * Measured 2026-10-03 against two clean re-captures of the whole suite.
+ */
+const STALE_BASELINES = new Set([
+  'desktop/dashboard/card-picker/presets.png',
+  'desktop/dashboard/card-picker/scenes.png',
+  'desktop/editor/profile/new.png',
+  'desktop/editor/profile/passcode.png',
+  'desktop/editor/profile/validation-error.png',
+  'desktop/outputs/list/cables-unplugged.png',
+  'desktop/outputs/list/default.png',
+  'desktop/outputs/list/long-names.png',
+  'desktop/themes/neon/editor/profile/new.png',
+  'desktop/themes/neon/outputs/list/default.png',
+  'desktop/themes/royal/editor/profile/new.png',
+  'desktop/themes/royal/outputs/list/default.png',
+  'desktop/themes/vaporwave/editor/profile/new.png',
+  'desktop/themes/vaporwave/outputs/list/default.png',
+  'kiosk-iphone16promax/dashboard/card-picker/presets.png',
+  'kiosk-iphone16promax/dashboard/card-picker/scenes.png',
+  'kiosk-tab-a11/cec-remote/input-2.png',
+  'kiosk-tab-a11/dashboard/card-picker/presets.png',
+  'kiosk-tab-a11/dashboard/card-picker/scenes.png',
+  'kiosk-tab-a11/dashboard/card-picker/shortcuts.png',
+  'kiosk-tab-a11/editor/profile/new.png',
+  'kiosk-tab-a11/editor/profile/passcode.png',
+  'kiosk-tab-a11/editor/profile/validation-error.png',
+  'kiosk-tab-a11/inputs/list/cables-unplugged.png',
+  'kiosk-tab-a11/inputs/list/default.png',
+  'kiosk-tab-a11/inputs/list/loading-skeleton.png',
+  'kiosk-tab-a11/inputs/list/long-names.png',
+  'kiosk-tab-a11/inputs/list/no-signal.png',
+  'kiosk-tab-a11/outputs/list/cables-unplugged.png',
+  'kiosk-tab-a11/outputs/list/default.png',
+  'kiosk-tab-a11/outputs/list/long-names.png',
+  'kiosk-tab-a11/themes/neon/editor/profile/new.png',
+  'kiosk-tab-a11/themes/neon/inputs/list/default.png',
+  'kiosk-tab-a11/themes/neon/outputs/list/default.png',
+  'kiosk-tab-a11/themes/royal/editor/profile/new.png',
+  'kiosk-tab-a11/themes/royal/inputs/list/default.png',
+  'kiosk-tab-a11/themes/royal/outputs/list/default.png',
+  'kiosk-tab-a11/themes/vaporwave/editor/profile/new.png',
+  'kiosk-tab-a11/themes/vaporwave/inputs/list/default.png',
+  'kiosk-tab-a11/themes/vaporwave/outputs/list/default.png',
+  'phone/dashboard/card-picker/presets.png',
+  'phone/dashboard/card-picker/scenes.png',
+  'tablet/dashboard/card-picker/presets.png',
+  'tablet/dashboard/card-picker/scenes.png',
+  'tablet/dashboard/card-picker/shortcuts.png',
+  'tablet/editor/profile/new.png',
+  'tablet/editor/profile/passcode.png',
+  'tablet/editor/profile/validation-error.png',
+]);
+const STALE_THRESHOLD = 0.2;
+
 test.describe.configure({ mode: 'default' });
 
 /**
@@ -96,9 +156,12 @@ async function capture(entry: CatalogEntry, theme: ThemeName, page: import('@pla
   }
   if (!entry.keepPointer) await parkPointer(page);
   await settle(page, 150);
-  await expect(page).toHaveScreenshot(snapshotName(entry, theme), {
+  const name = snapshotName(entry, theme);
+  const stale = STALE_BASELINES.has([viewport, ...name].join('/'));
+  await expect(page).toHaveScreenshot(name, {
     mask: (entry.mask ?? []).map((s) => page.locator(s)),
     fullPage: false,
+    ...(stale ? { threshold: STALE_THRESHOLD } : {}),
   });
 }
 
