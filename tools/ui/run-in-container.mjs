@@ -11,6 +11,8 @@
 // Playwright, e.g. `npm run visual:test -- --grep "drawer/theme"`. Passing
 // `--project=<name>` runs only those projects instead of every visual
 // project, e.g. `npm run visual:update -- --project=kiosk-tab-a11`.
+// `--review-dir build/<dir>` (before or after `--`) writes captures there
+// instead of into the baseline tree, for owner review.
 //
 // Works on Windows (Docker Desktop, PowerShell or Git Bash), macOS and Linux.
 // The repo is bind-mounted at /work. node_modules inside the container is a
@@ -29,7 +31,10 @@ const CONFIG = 'tests/e2e/playwright.config.ts';
 const VISUAL_PROJECTS = ['desktop', 'tablet', 'phone', 'kiosk-tab-a11', 'kiosk-iphone16promax'];
 
 const [mode = 'test', ...rest] = process.argv.slice(2);
-const args = rest[0] === '--' ? rest.slice(1) : rest;
+// Drop the first `--` wherever it is (TST-13): `update --review-dir build/x -- --grep y`
+// used to hand Playwright a literal `--`, after which it ignored every option.
+const sep = rest.indexOf('--');
+const args = sep >= 0 ? [...rest.slice(0, sep), ...rest.slice(sep + 1)] : rest;
 // Capture candidate images outside the approved baseline tree for owner review.
 const reviewAt = args.indexOf('--review-dir');
 const reviewDir = reviewAt >= 0 ? args[reviewAt + 1] : null;
