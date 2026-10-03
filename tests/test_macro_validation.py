@@ -283,6 +283,42 @@ class TestMacroDelayValidation:
         assert resp.status == 400
 
 
+class TestMacroDescriptionValidation:
+    """API-28: create (POST) and edit (PUT) enforce the same description limit."""
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("handler_name", ["handle_create_macro", "handle_update_macro"])
+    async def test_over_limit_description_rejected(self, mock_macro_manager, make_request, handler_name):
+        from rest_api import macros
+
+        body = {"name": "test", "description": "D" * (macros.MAX_DESCRIPTION_LEN + 1),
+                "steps": [{"command": "POWER_ON", "targets": ["input_1"]}]}
+        resp = await getattr(macros, handler_name)(make_request(body))
+        assert resp.status == 400
+        assert f"Description exceeds {macros.MAX_DESCRIPTION_LEN} characters" in resp.text
+        mock_macro_manager.create_macro.assert_not_called()
+        mock_macro_manager.update_macro.assert_not_called()
+
+    @pytest.mark.asyncio
+    async def test_edit_description_only_over_limit_rejected(self, mock_macro_manager, make_request):
+        """The reproduced case: a PUT that only changes the description."""
+        from rest_api.macros import MAX_DESCRIPTION_LEN, handle_update_macro
+
+        resp = await handle_update_macro(make_request({"description": "D" * (MAX_DESCRIPTION_LEN + 1)}))
+        assert resp.status == 400
+        mock_macro_manager.update_macro.assert_not_called()
+
+    @pytest.mark.asyncio
+    async def test_edit_description_at_limit_accepted(self, mock_macro_manager, make_request):
+        from rest_api.macros import MAX_DESCRIPTION_LEN, handle_update_macro
+
+        description = "D" * MAX_DESCRIPTION_LEN
+        mock_macro_manager.update_macro = MagicMock(return_value=MagicMock(to_dict=lambda: {"id": "macro_test"}))
+        resp = await handle_update_macro(make_request({"description": description}))
+        assert resp.status == 200
+        assert mock_macro_manager.update_macro.call_args.kwargs["description"] == description
+
+
 class TestMacroValidSubmission:
     """A well-formed macro should be accepted."""
 
