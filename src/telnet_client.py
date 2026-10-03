@@ -82,9 +82,30 @@ class ConnectionLostError(ConnectionError):
 
 
 class CommandError(TelnetError):
-    """Command execution errors."""
+    """Command execution errors.
 
-    pass
+    ``sent`` is True when the command may have reached the matrix before the
+    failure (it was written, then the answer was lost), so the matrix may have
+    run it (BE-37). False means it was never written.
+    """
+
+    def __init__(self, message: str, *, sent: bool = True) -> None:
+        super().__init__(message)
+        self.sent = sent
+
+
+class CecOutcome(Enum):
+    """What is known about a Telnet CEC command after sending it (BE-37)."""
+
+    #: The matrix acknowledged the command.
+    ACKNOWLEDGED = "acknowledged"
+    #: The matrix answered with an error code (E00/E01): it did not run the command.
+    REJECTED = "rejected"
+    #: The command was never written (no connection): the matrix did not see it.
+    NOT_SENT = "not_sent"
+    #: The command was written but its answer was lost, cut short or never came:
+    #: the matrix may or may not have run it.
+    UNKNOWN = "unknown"
 
 
 class TelnetState(Enum):
@@ -399,6 +420,7 @@ class TelnetClient:
             raise ConnectionError("Not connected")
 
         self._command_pending = True
+        written = False
         try:
             async with self._command_lock:
                 # Wait for push listener to exit its read block
@@ -419,6 +441,7 @@ class TelnetClient:
                 _LOG.debug(f"Telnet TX: {repr(full_cmd)}")
                 # FIX (F4.3): Escape any 0xFF bytes per RFC 854 §3
                 encoded_cmd = self._filter.escape_ff(full_cmd.encode())
+                written = True  # from here on the matrix may have received it (BE-37)
                 writer.write(encoded_cmd)
                 await writer.drain()
 
@@ -457,7 +480,7 @@ class TelnetClient:
             _LOG.error(f"Telnet command error ({command}): {e}")
             # Close the socket (BE-11), mark disconnected and trigger reconnect
             self._connection_lost(str(e))
-            raise CommandError(f"Command failed: {e}") from e
+            raise CommandError(f"Command failed: {e}", sent=written) from e
         finally:
             self._command_pending = False
 
@@ -957,17 +980,7 @@ class TelnetClient:
             _LOG.error(f"Invalid input number: {input_num}")
             return False
 
-        try:
-            telnet_cmd = f"s cec in {input_num} {command}"
-            response = await self._send_raw(telnet_cmd)
-            if not self._command_ok(response, telnet_cmd):
-                _LOG.warning(f"CEC input command failed: {command} on input {input_num}")
-                return False
-            _LOG.info(f"CEC input {input_num}: {command} sent successfully")
-            return True
-        except Exception as e:
-            _LOG.error(f"CEC input command error: {e}")
-            return False
+        return await self.send_cec("input", input_num, command) is CecOutcome.ACKNOWLEDGED
 
     # Output CEC Commands
 
@@ -1006,17 +1019,46 @@ class TelnetClient:
             _LOG.error(f"Invalid output number: {output_num}")
             return False
 
+        return await self.send_cec("output", output_num, command) is CecOutcome.ACKNOWLEDGED
+
+    async def send_cec(self, kind: str, port: int, command: str) -> CecOutcome:
+        """Send one CEC command (``kind`` "input" or "output") and report what is known about it.
+
+        Unlike a plain success flag, the outcome tells a caller whether trying
+        again over another transport is safe (BE-37): only after
+        :attr:`CecOutcome.REJECTED` or :attr:`CecOutcome.NOT_SENT` did the
+        matrix certainly not run the command. After :attr:`CecOutcome.UNKNOWN`
+        (written, then the answer was lost, cut short or never came) it may
+        have, and a non-idempotent command such as a volume step must not be
+        sent again.
+        """
+        if kind not in ("input", "output") or not 1 <= port <= 8:
+            _LOG.error(f"Invalid CEC target: {kind} {port}")
+            return CecOutcome.NOT_SENT
+        if kind == "input":
+            telnet_cmd = f"s cec in {port} {command}"
+        else:
+            telnet_cmd = f"s cec hdmi out {port} {command}"
         try:
-            telnet_cmd = f"s cec hdmi out {output_num} {command}"
             response = await self._send_raw(telnet_cmd)
-            if not self._command_ok(response, telnet_cmd):
-                _LOG.warning(f"CEC output command failed: {command} on output {output_num}")
-                return False
-            _LOG.info(f"CEC output {output_num}: {command} sent successfully")
-            return True
-        except Exception as e:
-            _LOG.error(f"CEC output command error: {e}")
-            return False
+        except CommandError as e:
+            if e.sent:
+                _LOG.error(f"CEC {kind} {port} {command}: outcome unknown, the answer was lost ({e})")
+                return CecOutcome.UNKNOWN
+            _LOG.warning(f"CEC {kind} {port} {command} not sent: {e}")
+            return CecOutcome.NOT_SENT
+        except Exception as e:  # not connected: raised before anything was written
+            _LOG.warning(f"CEC {kind} {port} {command} not sent: {e}")
+            return CecOutcome.NOT_SENT
+        if response_error(response) is not None:
+            self._command_ok(response, telnet_cmd)  # logs the rejection
+            return CecOutcome.REJECTED
+        if not self._command_ok(response, telnet_cmd):
+            # Written but never acknowledged (no answer, or only the echo).
+            _LOG.error(f"CEC {kind} {port} {command}: outcome unknown, no acknowledgement")
+            return CecOutcome.UNKNOWN
+        _LOG.info(f"CEC {kind} {port}: {command} sent successfully")
+        return CecOutcome.ACKNOWLEDGED
 
     # =========================================================================
     # Preset Commands (via Telnet)
@@ -1072,7 +1114,13 @@ class TelnetClient:
             # V1.10.01: one "outputX->inputY" line per output, or
             # "preset N is none,please save a preset" for an empty slot.
             empty = is_preset_empty(response)
-            return {"preset": preset_num, "routing": {} if empty else preset_routing(response), "saved": not empty}
+            routing = {} if empty else preset_routing(response)
+            if not empty and (response_error(response) is not None or set(routing) != set(range(1, 9))):
+                # An error code, or an answer cut short (timeout): not a read
+                # of the slot. Never report part of it as the stored routing (BE-36).
+                _LOG.warning(f"Incomplete answer to 'r preset {preset_num}': {response!r}")
+                return None
+            return {"preset": preset_num, "routing": routing, "saved": not empty}
         except Exception as e:
             _LOG.error(f"Get preset info error: {e}")
             return None

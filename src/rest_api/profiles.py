@@ -9,6 +9,7 @@ import logging
 
 from aiohttp import web
 
+from device_codes import SCALER_MODES
 from profile_execution import apply_profile_state
 
 from .utils import _json_response, get_macro_manager, get_matrix_device, get_profile_manager
@@ -39,6 +40,28 @@ REORDER_UPDATE_FIELDS = frozenset({
     "pinned",
     "pin_order",
 })
+
+
+def _validate_output_settings(outputs) -> str | None:
+    """Check the optional ``scaler_mode`` / ``arc`` of each output (API-22).
+
+    Shared by create and edit. ``scaler_mode`` is the 1-based API value of
+    :data:`device_codes.SCALER_MODES`; ``arc`` is a boolean; null or absent
+    leaves the setting unset. Other output fields keep their existing checks.
+    """
+    if not isinstance(outputs, dict):
+        return None
+    for output_key, config in outputs.items():
+        if not isinstance(config, dict):
+            continue
+        scaler = config.get("scaler_mode")
+        if scaler is not None and (type(scaler) is not int or scaler not in SCALER_MODES):
+            return (f"Output {output_key}: scaler_mode must be one of {sorted(SCALER_MODES)} "
+                    f"({', '.join(f'{k}={v}' for k, v in SCALER_MODES.items())})")
+        arc = config.get("arc")
+        if arc is not None and not isinstance(arc, bool):
+            return f"Output {output_key}: arc must be true or false"
+    return None
 
 
 def _validate_cec_config(cec_config: dict) -> str | None:
@@ -149,6 +172,9 @@ async def handle_create_profile(request: web.Request) -> web.Response:
                     return _json_response(False, error=f"Invalid input for output {output_num}", status=400)
             except (ValueError, TypeError) as e:
                 return _json_response(False, error=f"Invalid output configuration: {e}", status=400)
+        settings_error = _validate_output_settings(outputs)
+        if settings_error:
+            return _json_response(False, error=settings_error, status=400)
 
         # Validate macro references if provided
         if macros and macro_manager:
@@ -213,6 +239,9 @@ async def handle_update_profile(request: web.Request) -> web.Response:
                 error="No valid fields to update",
                 status=400,
             )
+        settings_error = _validate_output_settings(updates.get("outputs"))
+        if settings_error:
+            return _json_response(False, error=settings_error, status=400)
 
         updated = profile_manager.update_profile(profile_id, **updates)
         if updated:

@@ -337,12 +337,19 @@ async def handle_presets(request: web.Request) -> web.Response:
 
         # Get preset names from matrix status
         preset_names = []
+        # BE-36: the routing a preset holds is read from the matrix slot itself
+        # (Telnet `r preset N`, cached briefly); names and favourites stay hub data.
+        slots: dict[int, dict] = {}
         if matrix_device.connected:
             try:
                 status = await matrix_device.get_status()
                 preset_names = status.get("preset_names", [])
             except Exception as e:
                 _LOG.warning(f"Could not get preset names from matrix: {e}")
+            try:
+                slots = await matrix_device.get_preset_slots()
+            except Exception as e:
+                _LOG.warning(f"Could not read the preset slots from the matrix: {e}")
 
         presets = []
         for i in range(1, 9):
@@ -350,14 +357,23 @@ async def handle_presets(request: web.Request) -> web.Response:
             # The same rule names the Remote's preset buttons (UC-14).
             name = preset_display_name(i, preset_names)
 
-            # Retrieve routing configuration from local settings cache
-            raw_routing = preset_sett.get("routing", {})
-            routing = {int(k): v for k, v in raw_routing.items()} if raw_routing else {}
+            slot = slots.get(i) if isinstance(slots, dict) else None
+            if isinstance(slot, dict):
+                # What the matrix holds in the slot (an empty slot has no routing).
+                routing = {int(k): v for k, v in (slot.get("routing") or {}).items()}
+                routing_source = "matrix"
+            else:
+                # The slot could not be read: the routing the hub saved last,
+                # marked as such, never presented as read from the matrix.
+                raw_routing = preset_sett.get("routing", {})
+                routing = {int(k): v for k, v in raw_routing.items()} if raw_routing else {}
+                routing_source = "saved"
 
             presets.append({
                 "number": i,
                 "name": name,
                 "routing": routing,
+                "routing_source": routing_source,
                 "endpoint": f"/api/preset/{i}",
                 "save_endpoint": f"/api/preset/{i}/save",
             })
