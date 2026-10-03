@@ -6827,3 +6827,139 @@
     white-space: nowrap;
 }
 
+/* ===== Scene editor (UI-53) =====
+   The profile editor's field, focus, checkbox and section-text styles; steps
+   and overrides are the Profiles tab's card rows (scene-card), as UI-49. */
+#scene-editor-modal .form-control {
+    width: 100%;
+    padding: var(--space-2) var(--space-3);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: var(--font-size-base);
+    line-height: 1.5;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+#scene-editor-modal textarea.form-control {
+    display: block;
+    resize: vertical;
+}
+
+#scene-editor-modal .form-control::placeholder {
+    color: var(--text-muted);
+}
+
+#scene-editor-modal .form-control:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+#scene-editor-modal .checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: 0;
+    cursor: pointer;
+}
+
+/* The app's checkbox (macro checkboxes): accent-coloured, 18 px */
+#scene-editor-modal .checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+
+#scene-editor-modal .scene-steps-section,
+#scene-editor-modal .conflict-warnings,
+#scene-editor-modal .overrides-section {
+    margin-top: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border-color);
+}
+
+#scene-editor-modal .scene-steps-section h4,
+#scene-editor-modal .conflict-warnings h4,
+#scene-editor-modal .overrides-section h4 {
+    margin: 0 0 var(--space-2);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+}
+
+#scene-editor-modal .scene-steps-section .section-header {
+    margin-bottom: var(--space-3);
+}
+
+#scene-editor-modal .scene-steps-section .section-header h4 {
+    margin: 0;
+}
+
+#scene-editor-modal .btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+#scene-editor-modal .section-help,
+#scene-editor-modal .conflict-help,
+#scene-editor-modal .empty-hint {
+    margin: 0 0 var(--space-3);
+    font-size: var(--font-size-xs);
+    line-height: 1.5;
+    color: var(--text-muted);
+}
+
+#scene-editor-modal .empty-hint {
+    margin: 0;
+    font-size: var(--font-size-sm);
+}
+
+/* Step rows: the card row look over the CEC macro editor's .step-item rule */
+#scene-editor-modal .step-item.scene-card {
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    margin-bottom: 0;
+    background-color: var(--card-bg);
+    border-radius: var(--radius-lg);
+}
+
+#scene-editor-modal .step-icon .icon {
+    width: 20px;
+    height: 20px;
+    color: var(--accent);
+}
+
+#scene-editor-modal .override-desc {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+#scene-editor-modal .conflict-group {
+    margin-bottom: var(--space-3);
+}
+
+#scene-editor-modal .conflict-header {
+    margin-bottom: var(--space-2);
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+#scene-editor-modal .conflict-choices {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+#scene-editor-modal .conflict-value,
+#scene-editor-modal .conflict-action {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+}
+
