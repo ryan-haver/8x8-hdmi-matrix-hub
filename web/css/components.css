@@ -6878,8 +6878,8 @@
 #scene-editor-modal .scene-steps-section,
 #scene-editor-modal .conflict-warnings,
 #scene-editor-modal .overrides-section {
-    margin-top: var(--space-4);
-    padding-top: var(--space-4);
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
     border-top: 1px solid var(--border-color);
 }
 
@@ -6920,14 +6920,21 @@
     font-size: var(--font-size-sm);
 }
 
-/* Step rows: the card row look over the CEC macro editor's .step-item rule */
+/* Step rows: the card row look over the CEC macro editor's .step-item rule.
+   Compact rows (as the dashboard cards, min-height auto) keep the editor
+   about as tall as before. */
 #scene-editor-modal .step-item.scene-card {
     align-items: center;
     gap: var(--space-3);
-    padding: var(--space-3) var(--space-4);
     margin-bottom: 0;
     background-color: var(--card-bg);
     border-radius: var(--radius-lg);
+}
+
+#scene-editor-modal .step-item.scene-card,
+#scene-editor-modal .override-item.scene-card {
+    min-height: auto;
+    padding: var(--space-2) var(--space-3);
 }
 
 #scene-editor-modal .step-icon .icon {
