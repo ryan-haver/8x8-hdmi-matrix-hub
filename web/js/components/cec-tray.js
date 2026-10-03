@@ -397,7 +397,7 @@ class CECTray {
      * Called when state changes - refresh widget if pinned
      */
     onStateChange() {
-        if (window.dashboardManager && window.dashboardManager.isWidgetPinned('cec-remote')) {
+        if (window.dashboardManager) { // pinned widget and any dashboard card of it (UI-44)
             window.dashboardManager.refreshWidget('cec-remote');
         }
     }
@@ -1043,7 +1043,7 @@ class CECTray {
      * Refresh the dashboard widget if it's pinned
      */
     refreshDashboardWidget() {
-        if (window.dashboardManager && window.dashboardManager.isWidgetPinned('cec-remote')) {
+        if (window.dashboardManager) { // pinned widget and any dashboard card of it (UI-44)
             window.dashboardManager.refreshWidget('cec-remote');
         }
     }
@@ -1200,7 +1200,7 @@ class CECTray {
         this.updateSceneIndicator();
         
         // Also refresh widget if pinned to dashboard
-        if (window.dashboardManager && window.dashboardManager.isWidgetPinned('cec-remote')) {
+        if (window.dashboardManager) { // pinned widget and any dashboard card of it (UI-44)
             window.dashboardManager.refreshWidget('cec-remote');
         }
     }
