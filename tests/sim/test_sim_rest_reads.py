@@ -34,14 +34,14 @@ async def _get(client, path, status=200):
 
 
 async def test_device_settings_returns_saved_customizations(data_hub, simulator):
-    expected = json.loads((FIXTURE_DATA / "device_settings.json").read_text())
+    expected = json.loads((FIXTURE_DATA / "device_settings.json").read_text(encoding="utf-8"))
     assert (await _get(data_hub, "/api/device-settings"))["data"] == expected
     assert sim_writes(simulator) == []
 
 
 @pytest.mark.parametrize("kind,port", [(kind, port) for kind in ("input", "output") for port in (1, 8)])
 async def test_individual_settings_match_saved_port(data_hub, simulator, kind, port):
-    saved = json.loads((FIXTURE_DATA / "device_settings.json").read_text())
+    saved = json.loads((FIXTURE_DATA / "device_settings.json").read_text(encoding="utf-8"))
     data = (await _get(data_hub, f"/api/device-settings/{kind}/{port}"))["data"]
     assert data == {kind: port, **saved[f"{kind}s"][str(port)]}
     assert sim_writes(simulator) == []
@@ -97,7 +97,7 @@ async def test_preferences_reads_return_saved_values(data_hub, simulator, path, 
 
 
 async def test_flic_read_returns_registered_fixture_buttons(data_hub, simulator):
-    saved = json.loads((FIXTURE_DATA / "flic_buttons.json").read_text())
+    saved = json.loads((FIXTURE_DATA / "flic_buttons.json").read_text(encoding="utf-8"))
     assert (await _get(data_hub, "/api/integrations/flic/buttons"))["data"] == {"buttons": list(saved.values())}
     assert sim_writes(simulator) == []
 

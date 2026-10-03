@@ -25,7 +25,7 @@ async def _request(client, method, path, payload=None, status=200):
 
 
 def _saved(client, name):
-    return json.loads((client.data_dir / name).read_text())
+    return json.loads((client.data_dir / name).read_text(encoding="utf-8"))
 
 
 @pytest.mark.parametrize("kind,port", [(kind, port) for kind in ("input", "output") for port in (1, 8)])
