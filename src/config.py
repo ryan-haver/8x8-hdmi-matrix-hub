@@ -128,6 +128,10 @@ class SceneOutput:
     audio_mute: bool = False  # Whether audio is muted
     hdr_mode: int | None = None  # HDR mode (1=passthrough, 2=HDR→SDR, 3=auto)
     hdcp_mode: int | None = None  # HDCP mode (1=1.4, 2=2.2, 3=follow sink, etc.)
+    # API-22: kept and returned like the other optional settings. Scaler is the
+    # 1-based API value (device_codes.SCALER_MODES, 5 = audio only).
+    scaler_mode: int | None = None
+    arc: bool | None = None  # ARC on/off
 
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
@@ -136,6 +140,10 @@ class SceneOutput:
             result["hdr_mode"] = self.hdr_mode
         if self.hdcp_mode is not None:
             result["hdcp_mode"] = self.hdcp_mode
+        if self.scaler_mode is not None:
+            result["scaler_mode"] = self.scaler_mode
+        if self.arc is not None:
+            result["arc"] = self.arc
         return result
 
     @staticmethod
@@ -147,6 +155,8 @@ class SceneOutput:
             audio_mute=data.get("audio_mute", False),
             hdr_mode=data.get("hdr_mode"),
             hdcp_mode=data.get("hdcp_mode"),
+            scaler_mode=data.get("scaler_mode"),
+            arc=data.get("arc"),
         )
 
 

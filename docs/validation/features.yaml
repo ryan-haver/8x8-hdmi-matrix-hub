@@ -4589,6 +4589,10 @@ features:
   - profile_crud.favorite_list_exclusion
   - profile_crud.post_scaler_arc
   - profile_crud.put_scaler_arc
+  - profile_crud.post_scaler_invalid
+  - profile_crud.post_arc_invalid
+  - profile_crud.put_scaler_invalid
+  - profile_crud.put_arc_invalid
   - profile_state.cec_profile_post_manual
   - profile_state.cec_profile_post_empty
   - profile_state.cec_profile_post_wrapped
@@ -5410,6 +5414,10 @@ features:
   - profile_crud.create_assignments
   - profile_crud.post_scaler_arc
   - profile_crud.put_scaler_arc
+  - profile_crud.post_scaler_invalid
+  - profile_crud.post_arc_invalid
+  - profile_crud.put_scaler_invalid
+  - profile_crud.put_arc_invalid
   - profile_state.alias_create
   - profile_state.alias_get
   - profile_state.alias_list
