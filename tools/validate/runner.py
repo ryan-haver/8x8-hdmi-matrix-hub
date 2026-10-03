@@ -166,7 +166,16 @@ class Outcome:
 
 
 class WsObserver:
-    """A plain WebSocket client on the hub's /ws that records every event."""
+    """A plain WebSocket client on the hub's /ws that records every event.
+
+    Event times (``e["t"]``) come from :meth:`now`, a high-resolution monotonic clock: the wall clock
+    ticks only every ~15.6 ms on Windows, so an event received just before a mark could carry the same
+    time and count as after it (TST-15). Take marks with ``ws.now()``.
+    """
+
+    @staticmethod
+    def now() -> float:
+        return time.perf_counter()
 
     def __init__(self, url: str, forwarded_for: str) -> None:
         self.url = url
@@ -192,7 +201,7 @@ class WsObserver:
                                 data = json.loads(msg.data)
                             except ValueError:
                                 continue
-                            self.events.append({"t": time.time(), "event": data.get("event"), "data": data.get("data")})
+                            self.events.append({"t": self.now(), "event": data.get("event"), "data": data.get("data")})
                             if not connected.done():
                                 connected.set_result(True)
             except (aiohttp.ClientError, OSError) as exc:
@@ -220,12 +229,14 @@ class WsObserver:
         settle = time.monotonic() + 3
         while not any(e["event"] == "status" for e in self.events) and time.monotonic() < settle:
             await asyncio.sleep(0.05)
-        t0 = time.time()
+        # Only events received after the request count: ordered by position in the list, not by time.
+        mark = len(self.events)
         await self._ws.send_json({"command": "get_status"})
         deadline = time.monotonic() + timeout
         while time.monotonic() < deadline:
-            if any(e["event"] in ("status", "error") for e in self.since(t0)):
-                return any(e["event"] == "status" for e in self.since(t0))
+            answers = [e["event"] for e in self.events[mark:] if e["event"] in ("status", "error")]
+            if answers:
+                return answers[0] == "status"
             await asyncio.sleep(0.05)
         return False
 
@@ -474,7 +485,7 @@ class Runner:
         log_excerpt: list[dict[str, Any]] = []
         operator: list[dict[str, Any]] = []
         hub_reads: list[dict[str, Any]] = []
-        t_action = time.time()
+        t_action = WsObserver.now()
         blocked: str | None = None
         try:
             # ---- prepare the device
@@ -520,7 +531,7 @@ class Runner:
                 stem = record_stem(started[:10], str(level), self.commit["short"], sc.id, client.name)
                 artifacts_dir = self.evidence_dir / sc.features_for(client.name)[0] / stem
                 client.context = {"label": sc.id, "forwarded_for": xff, "artifacts_dir": str(artifacts_dir)}
-                t_action = time.time()
+                t_action = WsObserver.now()
                 procedure.append(f"action ({client.name}): {sc.action.describe()}")
                 try:
                     if sc.action.intent in RUNNER_INTENTS:
