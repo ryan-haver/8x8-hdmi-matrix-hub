@@ -1,0 +1,10 @@
+{
+  "selection": "build/status-selection-api.json",
+  "hub": "status-proof-hub-ecfaed7d5509",
+  "digest": "sha256:1b7b72c01322972198e2660896ca6a4270cce740d4c32d701a16eaa12b580dc0",
+  "source_commit": "31f5c05af505d010aa90aaad61798e45ef2e5ef6",
+  "scope": "Disposable simulator and fixture data; no real hardware",
+  "image": "hdmi-matrix-hub:wp-simulator-evidence-refresh",
+  "simulator": "status-proof-sim-ecfaed7d5509",
+  "client": "api"
+}

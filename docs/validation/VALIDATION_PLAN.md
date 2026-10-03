@@ -105,7 +105,7 @@ The same scenario runs against the simulator in CI and against the real matrix i
 
 | Release | Gate |
 | --- | --- |
-| **v0.2.0 "Stabilize"** | C0 and C0-HW complete. Every matrix, CEC, domain, Remote, and HA feature at V3 or better on the simulator. Routing, presets, matrix power, and TV CEC power at V4. No open critical findings. No feature lower than in C0. |
+| **v0.2.0 "Stabilize"** | C0 and C0-HW complete. Every matrix, CEC, domain, Remote, and HA feature at V3 or better on the simulator. Routing, presets, matrix power, and TV CEC power at V4. No open critical findings outside the Phase 3 security set (SEC-01..SEC-03 stay open for v0.3.0; v0.2.0 ships as a pre-release whose notes say the hub has no authentication yet and belongs on a trusted LAN, DI-14). No feature lower than in C0. |
 | **v0.3.0 "Secure"** | Every security feature at V3 with negative tests in all three auth configurations (no PIN, admin PIN, admin + control PIN). Kiosk, Flic, and HA flows at V3 with and without a control PIN. V4 spot check with an admin PIN set. |
 | **v1.0.0** | Every feature at its target level with fresh evidence. V5 soak passed. `VALIDATION_REPORT.md` published. The supported-hardware table lists only what was validated. |
 

@@ -1,0 +1,10 @@
+{
+  "simulator": "audio-proof-sim-631de157bab4",
+  "source_commit": "f7afdac1d3b18da109c1144bcef93c1240e33520",
+  "image": "hdmi-matrix-hub:wp-simulator-evidence-refresh",
+  "client": "api",
+  "selection": "build/audio-selection-api.json",
+  "scope": "Disposable simulator and fixture data; no real hardware",
+  "hub": "audio-proof-hub-631de157bab4",
+  "digest": "sha256:1b7b72c01322972198e2660896ca6a4270cce740d4c32d701a16eaa12b580dc0"
+}

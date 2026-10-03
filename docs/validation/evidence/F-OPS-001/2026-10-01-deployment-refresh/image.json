@@ -1,0 +1,9 @@
+{
+  "image": "hdmi-matrix-hub:wp-simulator-evidence-refresh",
+  "image_digest": "sha256:1b7b72c01322972198e2660896ca6a4270cce740d4c32d701a16eaa12b580dc0",
+  "source_commit": "1d0a4a948f84463acf2e5aa516eed4b2e06cc418",
+  "matches_checkout_files": 176,
+  "compose_image_source": "tests/deploy/test_compose.py test-only image override",
+  "compose_record_image_digest": null,
+  "note": "The Compose recorder does not populate its image digest; the test override and runner metadata identify the image."
+}

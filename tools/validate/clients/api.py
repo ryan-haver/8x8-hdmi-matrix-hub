@@ -43,6 +43,10 @@ def rest_call(action: Action) -> tuple[str, str, Any]:
         case "scene_run":
             body = {"passcode": p["passcode"]} if p.get("passcode") else None
             return "POST", f"/api/v2/scenes/{p['scene_id']}/execute", body
+        case "macro_run":
+            return "POST", f"/api/cec/macro/{p['macro_id']}/execute", {}
+        case "shortcut_run":
+            return "POST", f"/api/system-shortcuts/{p['key']}/execute", {"params": p.get("params", {})}
         case "scene_conflicts":
             return "POST", f"/api/v2/scenes/{p['scene_id']}/validate", None
         case "scene_wait_edit":
@@ -58,7 +62,7 @@ class ApiClient(Client):
         {
             "route", "route_all", "preset_recall", "preset_save", "preset_rename", "port_rename", "matrix_power",
             "output_mute", "output_setting", "cec_input", "cec_output", "profile_recall", "scene_run",
-            "scene_conflicts", "scene_wait_edit", "request",
+            "scene_conflicts", "scene_wait_edit", "macro_run", "shortcut_run", "request",
         }
     )
 

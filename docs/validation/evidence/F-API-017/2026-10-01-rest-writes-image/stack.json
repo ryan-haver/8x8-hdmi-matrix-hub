@@ -1,0 +1,20 @@
+﻿{
+    "features":  [
+                     "F-API-004",
+                     "F-API-014",
+                     "F-API-016",
+                     "F-API-017",
+                     "F-API-018",
+                     "F-API-019",
+                     "F-API-024",
+                     "F-API-026",
+                     "F-API-027",
+                     "F-API-028"
+                 ],
+    "scope":  "Disposable simulator and fixture data; no real hardware",
+    "simulator":  "rest-proof-sim-177607f28641",
+    "source_commit":  "dba2f21d3333f63a2b13917fdfbaf308e3c9aaa5",
+    "hub":  "rest-proof-hub-177607f28641",
+    "image":  "hdmi-matrix-hub:wp-rest-write-contracts",
+    "digest":  "sha256:807413ccf61a729f9d867c6522f878ce923bc05ebfb87ee0369df2cc2f190ebc"
+}

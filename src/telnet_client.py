@@ -1144,8 +1144,7 @@ class TelnetClient:
     async def reboot(self) -> bool:
         """Reboot the matrix."""
         try:
-            await self._send_raw("reboot")
-            return True  # Connection will drop after reboot
+            return self._command_ok(await self._send_raw("reboot"), "reboot")
         except Exception as e:
             _LOG.error(f"Reboot error: {e}")
             return False

@@ -1,0 +1,1318 @@
+{
+  "commit": {
+    "sha": "f7afdac1d3b18da109c1144bcef93c1240e33520",
+    "branch": "wp-external-audio-validation",
+    "dirty_files": [],
+    "short": "f7afdac1",
+    "dirty": false
+  },
+  "target": "sim",
+  "clients": [
+    "api"
+  ],
+  "operator": "automation",
+  "finished": "2026-10-02T04:02:06.591Z",
+  "aborted": null,
+  "outcomes": [
+    {
+      "scenario": "audio.enable_1_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-016/2026-10-02-V2-f7afdac1-audio.enable_1_0-api.json"
+    },
+    {
+      "scenario": "audio.enable_1_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-016/2026-10-02-V2-f7afdac1-audio.enable_1_1-api.json"
+    },
+    {
+      "scenario": "audio.enable_2_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-016/2026-10-02-V2-f7afdac1-audio.enable_2_0-api.json"
+    },
+    {
+      "scenario": "audio.enable_2_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-016/2026-10-02-V2-f7afdac1-audio.enable_2_1-api.json"
+    },
+    {
+      "scenario": "audio.enable_3_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-016/2026-10-02-V2-f7afdac1-audio.enable_3_0-api.json"
+    },
+    {
+      "scenario": "audio.enable_3_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-016/2026-10-02-V2-f7afdac1-audio.enable_3_1-api.json"
+    },
+    {
+      "scenario": "audio.enable_4_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-016/2026-10-02-V2-f7afdac1-audio.enable_4_0-api.json"
+    },
+    {
+      "scenario": "audio.enable_4_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-016/2026-10-02-V2-f7afdac1-audio.enable_4_1-api.json"
+    },
+    {
+      "scenario": "audio.enable_5_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-016/2026-10-02-V2-f7afdac1-audio.enable_5_0-api.json"
+    },
+    {
+      "scenario": "audio.enable_5_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-016/2026-10-02-V2-f7afdac1-audio.enable_5_1-api.json"
+    },
+    {
+      "scenario": "audio.enable_6_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-016/2026-10-02-V2-f7afdac1-audio.enable_6_0-api.json"
+    },
+    {
+      "scenario": "audio.enable_6_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-016/2026-10-02-V2-f7afdac1-audio.enable_6_1-api.json"
+    },
+    {
+      "scenario": "audio.enable_7_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-016/2026-10-02-V2-f7afdac1-audio.enable_7_0-api.json"
+    },
+    {
+      "scenario": "audio.enable_7_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-016/2026-10-02-V2-f7afdac1-audio.enable_7_1-api.json"
+    },
+    {
+      "scenario": "audio.enable_8_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-016/2026-10-02-V2-f7afdac1-audio.enable_8_0-api.json"
+    },
+    {
+      "scenario": "audio.enable_8_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-016/2026-10-02-V2-f7afdac1-audio.enable_8_1-api.json"
+    },
+    {
+      "scenario": "audio.enable_missing",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-016/2026-10-02-V2-f7afdac1-audio.enable_missing-api.json"
+    },
+    {
+      "scenario": "audio.enable_port_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-016/2026-10-02-V2-f7afdac1-audio.enable_port_0-api.json"
+    },
+    {
+      "scenario": "audio.enable_port_9",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-016/2026-10-02-V2-f7afdac1-audio.enable_port_9-api.json"
+    },
+    {
+      "scenario": "audio.enable_refused",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-016/2026-10-02-V2-f7afdac1-audio.enable_refused-api.json"
+    },
+    {
+      "scenario": "audio.mode_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-015/2026-10-02-V2-f7afdac1-audio.mode_0-api.json"
+    },
+    {
+      "scenario": "audio.mode_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-015/2026-10-02-V2-f7afdac1-audio.mode_1-api.json"
+    },
+    {
+      "scenario": "audio.mode_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-015/2026-10-02-V2-f7afdac1-audio.mode_2-api.json"
+    },
+    {
+      "scenario": "audio.mode_catalog",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-015/2026-10-02-V2-f7afdac1-audio.mode_catalog-api.json"
+    },
+    {
+      "scenario": "audio.mode_high",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-015/2026-10-02-V2-f7afdac1-audio.mode_high-api.json"
+    },
+    {
+      "scenario": "audio.mode_missing",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-015/2026-10-02-V2-f7afdac1-audio.mode_missing-api.json"
+    },
+    {
+      "scenario": "audio.mode_negative",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-015/2026-10-02-V2-f7afdac1-audio.mode_negative-api.json"
+    },
+    {
+      "scenario": "audio.mode_noninteger",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-015/2026-10-02-V2-f7afdac1-audio.mode_noninteger-api.json"
+    },
+    {
+      "scenario": "audio.mode_refused",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-015"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-015/2026-10-02-V2-f7afdac1-audio.mode_refused-api.json"
+    },
+    {
+      "scenario": "audio.source_1_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_1_1-api.json"
+    },
+    {
+      "scenario": "audio.source_1_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_1_2-api.json"
+    },
+    {
+      "scenario": "audio.source_1_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_1_3-api.json"
+    },
+    {
+      "scenario": "audio.source_1_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_1_4-api.json"
+    },
+    {
+      "scenario": "audio.source_1_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_1_5-api.json"
+    },
+    {
+      "scenario": "audio.source_1_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_1_6-api.json"
+    },
+    {
+      "scenario": "audio.source_1_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_1_7-api.json"
+    },
+    {
+      "scenario": "audio.source_1_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_1_8-api.json"
+    },
+    {
+      "scenario": "audio.source_2_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_2_1-api.json"
+    },
+    {
+      "scenario": "audio.source_2_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_2_2-api.json"
+    },
+    {
+      "scenario": "audio.source_2_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_2_3-api.json"
+    },
+    {
+      "scenario": "audio.source_2_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_2_4-api.json"
+    },
+    {
+      "scenario": "audio.source_2_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_2_5-api.json"
+    },
+    {
+      "scenario": "audio.source_2_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_2_6-api.json"
+    },
+    {
+      "scenario": "audio.source_2_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_2_7-api.json"
+    },
+    {
+      "scenario": "audio.source_2_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_2_8-api.json"
+    },
+    {
+      "scenario": "audio.source_3_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_3_1-api.json"
+    },
+    {
+      "scenario": "audio.source_3_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_3_2-api.json"
+    },
+    {
+      "scenario": "audio.source_3_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_3_3-api.json"
+    },
+    {
+      "scenario": "audio.source_3_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_3_4-api.json"
+    },
+    {
+      "scenario": "audio.source_3_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_3_5-api.json"
+    },
+    {
+      "scenario": "audio.source_3_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_3_6-api.json"
+    },
+    {
+      "scenario": "audio.source_3_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_3_7-api.json"
+    },
+    {
+      "scenario": "audio.source_3_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_3_8-api.json"
+    },
+    {
+      "scenario": "audio.source_4_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_4_1-api.json"
+    },
+    {
+      "scenario": "audio.source_4_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_4_2-api.json"
+    },
+    {
+      "scenario": "audio.source_4_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_4_3-api.json"
+    },
+    {
+      "scenario": "audio.source_4_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_4_4-api.json"
+    },
+    {
+      "scenario": "audio.source_4_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_4_5-api.json"
+    },
+    {
+      "scenario": "audio.source_4_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_4_6-api.json"
+    },
+    {
+      "scenario": "audio.source_4_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_4_7-api.json"
+    },
+    {
+      "scenario": "audio.source_4_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_4_8-api.json"
+    },
+    {
+      "scenario": "audio.source_5_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_5_1-api.json"
+    },
+    {
+      "scenario": "audio.source_5_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_5_2-api.json"
+    },
+    {
+      "scenario": "audio.source_5_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_5_3-api.json"
+    },
+    {
+      "scenario": "audio.source_5_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_5_4-api.json"
+    },
+    {
+      "scenario": "audio.source_5_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_5_5-api.json"
+    },
+    {
+      "scenario": "audio.source_5_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_5_6-api.json"
+    },
+    {
+      "scenario": "audio.source_5_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_5_7-api.json"
+    },
+    {
+      "scenario": "audio.source_5_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_5_8-api.json"
+    },
+    {
+      "scenario": "audio.source_6_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_6_1-api.json"
+    },
+    {
+      "scenario": "audio.source_6_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_6_2-api.json"
+    },
+    {
+      "scenario": "audio.source_6_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_6_3-api.json"
+    },
+    {
+      "scenario": "audio.source_6_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_6_4-api.json"
+    },
+    {
+      "scenario": "audio.source_6_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_6_5-api.json"
+    },
+    {
+      "scenario": "audio.source_6_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_6_6-api.json"
+    },
+    {
+      "scenario": "audio.source_6_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_6_7-api.json"
+    },
+    {
+      "scenario": "audio.source_6_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_6_8-api.json"
+    },
+    {
+      "scenario": "audio.source_7_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_7_1-api.json"
+    },
+    {
+      "scenario": "audio.source_7_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_7_2-api.json"
+    },
+    {
+      "scenario": "audio.source_7_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_7_3-api.json"
+    },
+    {
+      "scenario": "audio.source_7_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_7_4-api.json"
+    },
+    {
+      "scenario": "audio.source_7_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_7_5-api.json"
+    },
+    {
+      "scenario": "audio.source_7_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_7_6-api.json"
+    },
+    {
+      "scenario": "audio.source_7_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_7_7-api.json"
+    },
+    {
+      "scenario": "audio.source_7_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_7_8-api.json"
+    },
+    {
+      "scenario": "audio.source_8_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_8_1-api.json"
+    },
+    {
+      "scenario": "audio.source_8_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_8_2-api.json"
+    },
+    {
+      "scenario": "audio.source_8_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_8_3-api.json"
+    },
+    {
+      "scenario": "audio.source_8_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_8_4-api.json"
+    },
+    {
+      "scenario": "audio.source_8_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_8_5-api.json"
+    },
+    {
+      "scenario": "audio.source_8_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_8_6-api.json"
+    },
+    {
+      "scenario": "audio.source_8_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_8_7-api.json"
+    },
+    {
+      "scenario": "audio.source_8_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_8_8-api.json"
+    },
+    {
+      "scenario": "audio.source_high",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_high-api.json"
+    },
+    {
+      "scenario": "audio.source_low",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_low-api.json"
+    },
+    {
+      "scenario": "audio.source_missing",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_missing-api.json"
+    },
+    {
+      "scenario": "audio.source_noninteger",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_noninteger-api.json"
+    },
+    {
+      "scenario": "audio.source_port_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_port_0-api.json"
+    },
+    {
+      "scenario": "audio.source_port_9",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_port_9-api.json"
+    },
+    {
+      "scenario": "audio.source_refused",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-017/2026-10-02-V2-f7afdac1-audio.source_refused-api.json"
+    }
+  ]
+}

@@ -1,0 +1,131 @@
+{
+  "commit": {
+    "sha": "b0c1a32e98796a00c2fc07e843148d99253e3dad",
+    "branch": "wp-enabled-reboot-validation",
+    "dirty_files": [],
+    "short": "b0c1a32e",
+    "dirty": false
+  },
+  "target": "sim",
+  "clients": [
+    "api",
+    "browser"
+  ],
+  "operator": "automation",
+  "finished": "2026-10-01T20:17:01.380Z",
+  "aborted": null,
+  "outcomes": [
+    {
+      "scenario": "reboot.direct",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-021",
+        "F-API-013",
+        "F-REL-001",
+        "F-REL-005",
+        "F-API-032"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.direct-api.json"
+    },
+    {
+      "scenario": "reboot.legacy_shortcut",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-021",
+        "F-API-013",
+        "F-REL-001",
+        "F-REL-005",
+        "F-API-032",
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.legacy_shortcut-api.json"
+    },
+    {
+      "scenario": "reboot.enabled_shortcut",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-021",
+        "F-API-013",
+        "F-REL-001",
+        "F-REL-005",
+        "F-API-032",
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.enabled_shortcut-api.json"
+    },
+    {
+      "scenario": "shortcuts.disabled_reboot",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V2-b0c1a32e-shortcuts.disabled_reboot-api.json"
+    },
+    {
+      "scenario": "live.matrix_offline",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-REL-009",
+        "F-API-032",
+        "F-KIO-011"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-REL-009/2026-10-01-V3-b0c1a32e-live.matrix_offline-browser.json"
+    },
+    {
+      "scenario": "reboot.enabled_shortcut",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-MTX-021",
+        "F-API-013",
+        "F-REL-001",
+        "F-REL-005",
+        "F-API-032",
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-021/2026-10-01-V3-b0c1a32e-reboot.enabled_shortcut-browser.json"
+    },
+    {
+      "scenario": "shortcuts.disabled_reboot",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-DOM-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-027/2026-10-01-V3-b0c1a32e-shortcuts.disabled_reboot-browser.json"
+    }
+  ]
+}

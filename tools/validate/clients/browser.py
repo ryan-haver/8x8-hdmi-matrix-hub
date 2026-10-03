@@ -26,7 +26,7 @@ class BrowserClient(Client):
     name = "browser"
     intents = frozenset(
         {"route", "route_all", "preset_recall", "preset_rename", "profile_recall", "scene_run", "scene_wait_edit",
-         "scene_conflicts", "kiosk_route"}
+         "scene_conflicts", "macro_run", "shortcut_run", "kiosk_route"}
     )
     #: ClientState keys:
     #: - ``ui.*`` / ``kiosk.*`` read from a /ui and a /kiosk page that stay open for the run

@@ -1,0 +1,30 @@
+{
+  "source_commit": "1aafbbf4ec1d4d1897ec4b7ee19d1602082584a5",
+  "image_digest": "sha256:1b7b72c01322972198e2660896ca6a4270cce740d4c32d701a16eaa12b580dc0",
+  "records": 117,
+  "passing_records": 116,
+  "known_failure_records": 1,
+  "finding": "API-28",
+  "unlinked_regressions": 0,
+  "features": [
+    "F-API-020",
+    "F-API-021",
+    "F-API-023",
+    "F-DOM-010",
+    "F-DOM-018",
+    "F-DOM-019",
+    "F-DOM-021",
+    "F-DOM-022"
+  ],
+  "matches_checkout_files": 176,
+  "schema_errors": 0,
+  "dirty_records": 0,
+  "checks_not_applicable": 0,
+  "matrix_unchanged_records": 116,
+  "dry_run_steps_audited": 25,
+  "dry_run_duration_ms": 1500,
+  "created_scene_id_and_steps_audited": true,
+  "deleted_scene_and_retained_fixture_audited": true,
+  "cec_transport": "false",
+  "hardware_exercised": false
+}

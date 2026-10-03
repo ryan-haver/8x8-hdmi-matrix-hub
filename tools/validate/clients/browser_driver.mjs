@@ -183,6 +183,43 @@ async function openKiosk(page, steps) {
 }
 
 Object.assign(FLOWS, {
+  async macro_run(page, p, steps) {
+    await openUi(page, steps);
+    await page.locator('.tab-btn[data-tab="dashboard"]:visible').first().click();
+    const card = page.locator(`#dashboard-cards-grid .dashboard-card-action[data-type="macro"][data-id="${p.macro_id}"]`);
+    if (!(await card.count())) {
+      await page.locator('#add-card-btn').click();
+      await page.locator('#dashboard-card-picker.visible .picker-tab-btn[data-tab="macros"]').click();
+      await Promise.all([
+        waitForCall(page, 'POST', '/api/dashboard/cards'),
+        page.locator(`#dashboard-card-picker .picker-add-btn[data-type="macro"][data-id="${p.macro_id}"]`).click(),
+      ]);
+      await card.waitFor({ state: 'attached' });
+      await page.locator('#close-picker-btn').click();
+      // Dismiss setup feedback before checking the macro's own success/error.
+      await page.locator('#toast-container .toast.success .toast-close').click();
+      await page.locator('#toast-container .toast.success').waitFor({ state: 'detached' });
+      steps.push(`add macro ${p.macro_id} through the dashboard card picker and dismiss its setup toast`);
+    }
+    const [response] = await Promise.all([
+      waitForRun(page, `/api/cec/macro/${p.macro_id}/execute`),
+      card.click(),
+    ]);
+    steps.push(`click Run on the dashboard card for macro ${p.macro_id}`);
+    return response;
+  },
+  async shortcut_run(page, p, steps) {
+    await openUi(page, steps);
+    await openDrawer(page, 'drawer-shortcuts-btn', '#shortcuts-drawer.open', steps);
+    // The Phase 7 UI keeps the one_to_one alias for this legacy REST key.
+    const id = `builtin.${p.key === 'route_one_to_one' ? 'one_to_one' : p.key}`;
+    const [response] = await Promise.all([
+      waitForRun(page, `/api/shortcuts/${id}/execute`),
+      page.locator(`#shortcuts-drawer .shortcut-execute-btn[data-id="${id}"]`).click(),
+    ]);
+    steps.push(`click Execute on shortcut ${id}`);
+    return response;
+  },
   // Recall from the Profiles tab (web/js/components/scenes-panel.js), the way a
   // user does. A protected profile opens the passcode prompt, answered with
   // p.passcode or cancelled (see perform()).
@@ -441,6 +478,8 @@ async function observe(key) {
 async function perform(msg) {
   const flow = FLOWS[msg.intent];
   if (!flow) return { unsupported: true };
+  // The drawer executes saved parameters; it has no inputs for REST overrides.
+  if (msg.intent === 'shortcut_run' && Object.keys(msg.params?.params ?? {}).length) return { unsupported: true };
   const { context, page, problems } = await newPage(FLOW_STORAGE[msg.intent] ?? {}, msg.forwardedFor);
   const steps = [];
   const screenshots = [];

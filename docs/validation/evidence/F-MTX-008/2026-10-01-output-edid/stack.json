@@ -1,0 +1,10 @@
+{
+  "digest": "sha256:1b7b72c01322972198e2660896ca6a4270cce740d4c32d701a16eaa12b580dc0",
+  "selection": "build/output-selection-api.json",
+  "scope": "Disposable simulator and fixture data; no real hardware",
+  "source_commit": "972b8c40f5a25e0d8a66c3038eb54af0cacc9c64",
+  "hub": "output-proof-hub-d5e1de9d7a7b",
+  "simulator": "output-proof-sim-d5e1de9d7a7b",
+  "client": "api",
+  "image": "hdmi-matrix-hub:wp-simulator-evidence-refresh"
+}

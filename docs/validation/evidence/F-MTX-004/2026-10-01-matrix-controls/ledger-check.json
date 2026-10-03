@@ -1,0 +1,54 @@
+{
+  "gate": "ok",
+  "known_failures": 0,
+  "levels": {
+    "V3": 92,
+    "V2": 39,
+    "V1": 110,
+    "V0": 27
+  },
+  "fresh_passing_features": 112,
+  "stale_features": 0,
+  "below_target": 217,
+  "capped_features": 28,
+  "selected": [
+    {
+      "id": "F-MTX-004",
+      "level": "V2",
+      "proven": "V2",
+      "capped_by": []
+    },
+    {
+      "id": "F-MTX-018",
+      "level": "V2",
+      "proven": "V2",
+      "capped_by": []
+    },
+    {
+      "id": "F-MTX-019",
+      "level": "V2",
+      "proven": "V2",
+      "capped_by": []
+    },
+    {
+      "id": "F-MTX-020",
+      "level": "V1",
+      "proven": "V2",
+      "capped_by": [
+        "HIL-09"
+      ]
+    },
+    {
+      "id": "F-MTX-022",
+      "level": "V2",
+      "proven": "V2",
+      "capped_by": []
+    },
+    {
+      "id": "F-MTX-023",
+      "level": "V2",
+      "proven": "V2",
+      "capped_by": []
+    }
+  ]
+}

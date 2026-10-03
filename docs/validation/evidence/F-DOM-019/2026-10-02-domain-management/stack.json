@@ -1,0 +1,12 @@
+{
+  "hub": "domain-manage-proof-hub-2adfb74832e9",
+  "scope": "Disposable simulator and fixture data; no real hardware",
+  "digest": "sha256:1b7b72c01322972198e2660896ca6a4270cce740d4c32d701a16eaa12b580dc0",
+  "source_commit": "1aafbbf4ec1d4d1897ec4b7ee19d1602082584a5",
+  "selection": "build/domain-manage-selection-api.json",
+  "cec_transport": "false",
+  "image": "hdmi-matrix-hub:wp-simulator-evidence-refresh",
+  "mode": "api",
+  "simulator": "domain-manage-proof-sim-2adfb74832e9",
+  "client": "api"
+}

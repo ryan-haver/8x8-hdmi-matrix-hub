@@ -1,0 +1,17 @@
+{
+  "gate": "ok",
+  "known_failure_records": 8,
+  "unlinked_regressions": 0,
+  "device_preset_readback_level": "V1",
+  "levels": {
+    "V3": 92,
+    "V2": 46,
+    "V1": 103,
+    "V0": 27
+  },
+  "fresh_passing_features": 130,
+  "fresh_failing_features": 1,
+  "stale_features": 0,
+  "below_target": 216,
+  "capped_features": 28
+}

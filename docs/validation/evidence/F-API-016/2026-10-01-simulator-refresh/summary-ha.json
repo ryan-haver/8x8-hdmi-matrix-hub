@@ -1,0 +1,280 @@
+{
+  "commit": {
+    "sha": "2a28a93ea3243e412894ab2f84930c86c7f1aaf5",
+    "branch": "wp-simulator-evidence-refresh",
+    "dirty_files": [],
+    "short": "2a28a93e",
+    "dirty": false
+  },
+  "target": "sim",
+  "clients": [
+    "ha"
+  ],
+  "operator": "automation",
+  "finished": "2026-10-01T22:19:18.170Z",
+  "aborted": null,
+  "outcomes": [
+    {
+      "scenario": "ha.config_flow",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-001",
+        "F-HA-015",
+        "F-HA-017"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-001/2026-10-01-V3-2a28a93e-ha.config_flow-ha.json"
+    },
+    {
+      "scenario": "ha.display_unplugged",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-009",
+        "F-HA-013"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-009/2026-10-01-V3-2a28a93e-ha.display_unplugged-ha.json"
+    },
+    {
+      "scenario": "ha.front_panel_route",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-002",
+        "F-HA-013",
+        "F-MTX-031"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-002/2026-10-01-V3-2a28a93e-ha.front_panel_route-ha.json"
+    },
+    {
+      "scenario": "ha.input_signal",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-008",
+        "F-HA-013"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-008/2026-10-01-V3-2a28a93e-ha.input_signal-ha.json"
+    },
+    {
+      "scenario": "ha.mute_switch",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-004",
+        "F-MTX-007"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-004/2026-10-01-V3-2a28a93e-ha.mute_switch-ha.json"
+    },
+    {
+      "scenario": "ha.power_off",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-003",
+        "F-MTX-006"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-003/2026-10-01-V3-2a28a93e-ha.power_off-ha.json"
+    },
+    {
+      "scenario": "ha.power_on",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-003",
+        "F-MTX-006"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-003/2026-10-01-V3-2a28a93e-ha.power_on-ha.json"
+    },
+    {
+      "scenario": "ha.preset_button",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-006",
+        "F-MTX-003"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-006/2026-10-01-V3-2a28a93e-ha.preset_button-ha.json"
+    },
+    {
+      "scenario": "ha.reconfigure",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-016/2026-10-01-V3-2a28a93e-ha.reconfigure-ha.json"
+    },
+    {
+      "scenario": "ha.select_source",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-002",
+        "F-MTX-001"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-002/2026-10-01-V3-2a28a93e-ha.select_source-ha.json"
+    },
+    {
+      "scenario": "ha.service_cec_display",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-012",
+        "F-CEC-005"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-012/2026-10-01-V3-2a28a93e-ha.service_cec_display-ha.json"
+    },
+    {
+      "scenario": "ha.service_cec_invalid",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-012"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-012/2026-10-01-V3-2a28a93e-ha.service_cec_invalid-ha.json"
+    },
+    {
+      "scenario": "ha.service_cec_source",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-012"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-012/2026-10-01-V3-2a28a93e-ha.service_cec_source-ha.json"
+    },
+    {
+      "scenario": "ha.service_recall_preset",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-010",
+        "F-HA-018"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-010/2026-10-01-V3-2a28a93e-ha.service_recall_preset-ha.json"
+    },
+    {
+      "scenario": "ha.service_switch_input",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-011",
+        "F-HA-018"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-011/2026-10-01-V3-2a28a93e-ha.service_switch_input-ha.json"
+    },
+    {
+      "scenario": "ha.stream_switch",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-005"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-005/2026-10-01-V3-2a28a93e-ha.stream_switch-ha.json"
+    },
+    {
+      "scenario": "ha.matrix_offline",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-013",
+        "F-REL-009"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-013/2026-10-01-V3-2a28a93e-ha.matrix_offline-ha.json"
+    },
+    {
+      "scenario": "ha.matrix_unreachable",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-013"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-013/2026-10-01-V3-2a28a93e-ha.matrix_unreachable-ha.json"
+    },
+    {
+      "scenario": "ha.reboot_button",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-007"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-HA-007/2026-10-01-V3-2a28a93e-ha.reboot_button-ha.json"
+    }
+  ]
+}

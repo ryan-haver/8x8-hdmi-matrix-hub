@@ -1,0 +1,6 @@
+{
+  "matrix_connected": true,
+  "telnet_connected": true,
+  "button_state": "unknown",
+  "reason": "the prior fault case leaves the button unavailable until the HA coordinator polls"
+}

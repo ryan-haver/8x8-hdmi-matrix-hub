@@ -1,0 +1,21 @@
+[
+  "ha.config_flow",
+  "ha.display_unplugged",
+  "ha.front_panel_route",
+  "ha.input_signal",
+  "ha.matrix_offline",
+  "ha.matrix_unreachable",
+  "ha.mute_switch",
+  "ha.power_off",
+  "ha.power_on",
+  "ha.preset_button",
+  "ha.reboot_button",
+  "ha.reconfigure",
+  "ha.select_source",
+  "ha.service_cec_display",
+  "ha.service_cec_invalid",
+  "ha.service_cec_source",
+  "ha.service_recall_preset",
+  "ha.service_switch_input",
+  "ha.stream_switch"
+]

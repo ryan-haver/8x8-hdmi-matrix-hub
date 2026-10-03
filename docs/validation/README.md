@@ -4,7 +4,7 @@ This directory implements [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md). The short 
 
 | File | What it is |
 | --- | --- |
-| [`features.yaml`](features.yaml) | The registry: every user-facing feature (265), its interfaces, target level, **recorded** level with the reason (`basis`), linked findings and scenarios. Maintained by hand. |
+| [`features.yaml`](features.yaml) | The registry: every user-facing feature (268), its interfaces, target level, **recorded** level with the reason (`basis`), linked findings and scenarios. Maintained by hand. |
 | [`LEDGER.md`](LEDGER.md) | Generated report: level per feature from fresh evidence, freshness, open findings, summary per area. Never edit it by hand. |
 | [`evidence.schema.json`](evidence.schema.json) | JSON schema of an evidence record. |
 | [`evidence/`](evidence/README.md) | Committed evidence records (milestones, hardware sessions). CI evidence is an artifact. |
@@ -104,6 +104,12 @@ Then add the scenario id to the feature's `scenarios:` in `features.yaml` (a tes
 - **Failure paths** are scenarios with `kind="failure"`, `faults={...}` (simulator fault injection, see `tools/simulator/README.md`) and `targets=("sim",)`.
 - Scenarios that fail because of a known bug stay in. Link the finding on the failing check. If the bug is new, add it to `findings_pending.yaml` first.
 
+`contracts.*` scenarios in `tests/validation/scenarios/contracts.py` exercise focused REST reads and invalid
+read requests against fixture data. They require correct response values, unchanged matrix state and no device
+writes or protocol warnings. Their V2 records prove only these reads, even when a feature ID also groups write
+routes. `tests/sim/test_sim_rest_reads.py` additionally checks complete response envelopes, saved nondefault
+preferences, shortcut alias equivalence/filtering, disconnected status errors and both kiosk HTML aliases.
+
 ## Adding a client
 
 Subclass `tools.validate.clients.base.Client`. It needs `name`, the `intents` it can perform, `start(hub)`, `perform(action) -> ActionResult` and `stop()`. Register it in `clients/__init__.py`. Before each action the runner sets `client.context` (`label`, `forwarded_for`, `artifacts_dir`). Set `hub_mode = "uc"` if the client needs the hub with the Remote integration (the runner then passes `HubInfo.uc_url`). A client that shows state sets `observes = True` and implements `observe(key)` (for `ClientState`). The `flic` client is a placeholder that raises `NotImplementedError` naming its work package. A PASS with a real client counts as V3.
@@ -115,6 +121,18 @@ tab) and `kiosk_route` (the kiosk routing wizard, `/kiosk`). A passcode prompt i
 `passcode`, or cancelled when it has none. `ClientState` keys (WP-E1) are a snapshot of what the page showed at the
 end of the action: `toast.<success|warning|error|info>` (the last toast of that type), `toasts`, `dialogs` (prompt
 messages).
+
+`macro_run` clicks Run on a saved macro's dashboard card, adding it through the card picker if needed;
+`shortcut_run` opens the Control Deck's
+Shortcuts drawer and clicks Execute on a built-in shortcut. Browser runs use the saved shortcut parameters.
+Nonempty REST parameter overrides are unsupported in the browser client, because the drawer has no inputs
+for them. System shortcuts cover beep on/off, panel lock/unlock and all five LCD device codes, each starting
+from a different device value. Rejected beep, lock and LCD writes require unchanged state and failure feedback;
+the fixture's disabled reboot must send no matrix command. The simulator-only `reboot.*` scenarios temporarily
+enable reboot and verify one Telnet command, link loss, automatic HTTP/Telnet recovery and preserved settings;
+`reboot.enabled_shortcut` also runs through the browser drawer. Physical LCD timing and reboot acknowledgement/timing
+still need hardware proof. These scenarios check simulator readback or CEC command counts and the visible success/error toast;
+rejection cases verify that the device state stays unchanged and no success toast appears.
 
 **The `uc` client** (`clients/uc.py`, WP-B1) connects like a Remote 3 (authenticate, `connect`, subscribe every entity) and maps intents to entity commands: `route` → `media_player.output_N` `select_source` with the name from the entity's source list, `preset_recall` → `button.preset_N` `push`, `matrix_power` → `switch.matrix_power`, `cec_input`/`cec_output` → `remote.input_N_cec`/`remote.output_N_cec` `send_cmd` (`power_on` → `POWER_ON`), and `uc_command` for any other entity command. A driver that drops the connection is a result, recorded with its close code (`requests[].closed`), not a blocked run; the next action reconnects. Its scenarios are in `tests/validation/scenarios/remote.py`; the protocol and lifecycle cases (setup, standby, outages, renames, the golden entity set) are the pytest suite `tests/uc`.
 
@@ -135,6 +153,16 @@ reconfigure flow); the result maps to 200 / 400 (validation error) / 404 / 500 (
 Scenarios: `tests/validation/scenarios/home_assistant.py`.
 
 ## Recorded baseline (C-pre, 2026-09-25)
+
+`tests/sim/test_sim_rest_writes.py` exercises the remaining 21 write routes
+through the registered REST app, verifies saved files and manager reloads, and
+checks actual device effects for output names, CEC enable, and shortcut runs.
+It includes storage-failure regressions and explicit-null power-macro clearing.
+`tests/validation/scenarios/writes.py` adds 21 simulator API scenarios for
+shipped-image response/readback proof. Successful user-shortcut deletion and
+storage refusals are covered by pytest; the image deletion scenario checks
+that a built-in shortcut cannot be deleted. Use disposable hub data: shortcut
+creation leaves an additional test shortcut in storage.
 
 WP-C4 adds browser intents `scene_wait_edit` (edit, prompt for a duration, save)
 and `scene_conflicts` (open a saved scene and read its real conflicts). Browser

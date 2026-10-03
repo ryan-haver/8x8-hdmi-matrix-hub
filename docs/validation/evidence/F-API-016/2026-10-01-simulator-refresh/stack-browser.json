@@ -1,0 +1,10 @@
+{
+  "digest": "sha256:1b7b72c01322972198e2660896ca6a4270cce740d4c32d701a16eaa12b580dc0",
+  "source_commit": "2a28a93ea3243e412894ab2f84930c86c7f1aaf5",
+  "hub": "refresh-proof-hub-2e9538e05cfe",
+  "simulator": "refresh-proof-sim-2e9538e05cfe",
+  "selection": "build/refresh-selection-browser.json",
+  "scope": "Disposable simulator and fixture data; no real hardware",
+  "client": "browser",
+  "image": "hdmi-matrix-hub:wp-simulator-evidence-refresh"
+}

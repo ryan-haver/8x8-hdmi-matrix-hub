@@ -1,0 +1,28 @@
+{
+  "source_commit": "d434d3d88943ef5faf3452c219a3ec3b0bfdad25",
+  "image_digest": "sha256:1b7b72c01322972198e2660896ca6a4270cce740d4c32d701a16eaa12b580dc0",
+  "records": 273,
+  "passing_records": 273,
+  "unlinked_regressions": 0,
+  "features": [
+    "F-API-004",
+    "F-API-015",
+    "F-API-016",
+    "F-CEC-001",
+    "F-CEC-002",
+    "F-CEC-003",
+    "F-CEC-004",
+    "F-CEC-005",
+    "F-CEC-006",
+    "F-CEC-007",
+    "F-CEC-008",
+    "F-CEC-009"
+  ],
+  "matches_checkout_files": 176,
+  "schema_errors": 0,
+  "dirty_records": 0,
+  "checks_not_applicable": 0,
+  "cec_transport": "HTTP (OREI_USE_TELNET_CEC=false)",
+  "hardware_exercised": false,
+  "auto_enable_order_verified": 200
+}

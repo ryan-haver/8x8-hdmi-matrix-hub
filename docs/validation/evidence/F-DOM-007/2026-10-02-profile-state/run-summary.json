@@ -1,0 +1,1548 @@
+{
+  "commit": {
+    "sha": "ed4cb0fb7876a468fc54b64eef420bd851c4fc38",
+    "branch": "wp-profile-state-validation",
+    "dirty_files": [],
+    "short": "ed4cb0fb",
+    "dirty": false
+  },
+  "target": "sim",
+  "clients": [
+    "api"
+  ],
+  "operator": "automation",
+  "finished": "2026-10-02T20:21:34.439Z",
+  "aborted": null,
+  "outcomes": [
+    {
+      "scenario": "profile_state.alias_create",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_create-api.json"
+    },
+    {
+      "scenario": "profile_state.alias_create_invalid",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_create_invalid-api.json"
+    },
+    {
+      "scenario": "profile_state.alias_delete",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_delete-api.json"
+    },
+    {
+      "scenario": "profile_state.alias_delete_missing",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_delete_missing-api.json"
+    },
+    {
+      "scenario": "profile_state.alias_get",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_get-api.json"
+    },
+    {
+      "scenario": "profile_state.alias_get_missing",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_get_missing-api.json"
+    },
+    {
+      "scenario": "profile_state.alias_list",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_list-api.json"
+    },
+    {
+      "scenario": "profile_state.alias_post_missing",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-ed4cb0fb-profile_state.alias_post_missing-api.json"
+    },
+    {
+      "scenario": "profile_state.alias_recall",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-002",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-002/2026-10-02-V2-ed4cb0fb-profile_state.alias_recall-api.json"
+    },
+    {
+      "scenario": "profile_state.capture_defaults",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-009",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_defaults-api.json"
+    },
+    {
+      "scenario": "profile_state.capture_pattern_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-009",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_pattern_0-api.json"
+    },
+    {
+      "scenario": "profile_state.capture_pattern_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-009",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_pattern_1-api.json"
+    },
+    {
+      "scenario": "profile_state.capture_pattern_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-009",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_pattern_2-api.json"
+    },
+    {
+      "scenario": "profile_state.capture_pattern_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-009",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_pattern_3-api.json"
+    },
+    {
+      "scenario": "profile_state.capture_pattern_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-009",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_pattern_4-api.json"
+    },
+    {
+      "scenario": "profile_state.capture_pattern_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-009",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_pattern_5-api.json"
+    },
+    {
+      "scenario": "profile_state.capture_pattern_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-009",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_pattern_6-api.json"
+    },
+    {
+      "scenario": "profile_state.capture_pattern_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-009",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_pattern_7-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_get_default",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_get_default-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_get_missing",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_get_missing-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_get_saved",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_get_saved-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_post_empty",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_empty-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_post_manual",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_manual-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_post_missing",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_missing-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_post_reject_auto_type",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_reject_auto_type-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_post_reject_config_type",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_reject_config_type-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_post_reject_nav_targets",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_reject_nav_targets-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_post_reject_playback_targets",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_reject_playback_targets-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_post_reject_power_off_targets",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_reject_power_off_targets-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_post_reject_power_on_targets",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_reject_power_on_targets-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_post_reject_target_type",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_reject_target_type-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_post_reject_unknown_key",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_reject_unknown_key-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_post_reject_volume_targets",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_reject_volume_targets-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_post_wrapped",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_post_wrapped-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_put_empty",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_empty-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_put_manual",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_manual-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_put_missing",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_missing-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_put_reject_auto_type",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_reject_auto_type-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_put_reject_config_type",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_reject_config_type-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_put_reject_nav_targets",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_reject_nav_targets-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_put_reject_playback_targets",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_reject_playback_targets-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_put_reject_power_off_targets",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_reject_power_off_targets-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_put_reject_power_on_targets",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_reject_power_on_targets-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_put_reject_target_type",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_reject_target_type-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_put_reject_unknown_key",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_reject_unknown_key-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_put_reject_volume_targets",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_reject_volume_targets-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_profile_put_wrapped",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_profile_put_wrapped-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_get_default",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_get_default-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_get_missing",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_get_missing-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_get_saved",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_get_saved-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_post_empty",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_empty-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_post_manual",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_manual-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_post_missing",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_missing-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_post_reject_auto_type",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_reject_auto_type-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_post_reject_config_type",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_reject_config_type-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_post_reject_nav_targets",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_reject_nav_targets-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_post_reject_playback_targets",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_reject_playback_targets-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_post_reject_power_off_targets",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_reject_power_off_targets-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_post_reject_power_on_targets",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_reject_power_on_targets-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_post_reject_target_type",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_reject_target_type-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_post_reject_unknown_key",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_reject_unknown_key-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_post_reject_volume_targets",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_reject_volume_targets-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_post_wrapped",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_post_wrapped-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_put_empty",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_empty-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_put_manual",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_manual-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_put_missing",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_missing-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_put_reject_auto_type",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_reject_auto_type-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_put_reject_config_type",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_reject_config_type-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_put_reject_nav_targets",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_reject_nav_targets-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_put_reject_playback_targets",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_reject_playback_targets-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_put_reject_power_off_targets",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_reject_power_off_targets-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_put_reject_power_on_targets",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_reject_power_on_targets-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_put_reject_target_type",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_reject_target_type-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_put_reject_unknown_key",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_reject_unknown_key-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_put_reject_volume_targets",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_reject_volume_targets-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_scene_put_wrapped",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_scene_put_wrapped-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_targets_port_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_targets_port_1-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_targets_port_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_targets_port_2-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_targets_port_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_targets_port_3-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_targets_port_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_targets_port_4-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_targets_port_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_targets_port_5-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_targets_port_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_targets_port_6-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_targets_port_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_targets_port_7-api.json"
+    },
+    {
+      "scenario": "profile_state.cec_targets_port_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.cec_targets_port_8-api.json"
+    },
+    {
+      "scenario": "profile_state.history_empty",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-008",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-008/2026-10-02-V2-ed4cb0fb-profile_state.history_empty-api.json"
+    },
+    {
+      "scenario": "profile_state.history_missing",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-008",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-008/2026-10-02-V2-ed4cb0fb-profile_state.history_missing-api.json"
+    },
+    {
+      "scenario": "profile_state.history_order",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-008",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-008/2026-10-02-V2-ed4cb0fb-profile_state.history_order-api.json"
+    },
+    {
+      "scenario": "profile_state.history_read_after_scene",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-008",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-008/2026-10-02-V2-ed4cb0fb-profile_state.history_read_after_scene-api.json"
+    },
+    {
+      "scenario": "profile_state.history_success",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-008",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-008/2026-10-02-V2-ed4cb0fb-profile_state.history_success-api.json"
+    },
+    {
+      "scenario": "profile_state.resolve_all_disabled",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_all_disabled-api.json"
+    },
+    {
+      "scenario": "profile_state.resolve_all_disconnected",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_all_disconnected-api.json"
+    },
+    {
+      "scenario": "profile_state.resolve_arc_priority",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_arc_priority-api.json"
+    },
+    {
+      "scenario": "profile_state.resolve_audio_priority",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_audio_priority-api.json"
+    },
+    {
+      "scenario": "profile_state.resolve_default",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_default-api.json"
+    },
+    {
+      "scenario": "profile_state.resolve_disconnected_audio",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_disconnected_audio-api.json"
+    },
+    {
+      "scenario": "profile_state.resolve_missing",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_missing-api.json"
+    },
+    {
+      "scenario": "profile_state.resolve_multiple_audio",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_multiple_audio-api.json"
+    },
+    {
+      "scenario": "profile_state.resolve_port_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_port_1-api.json"
+    },
+    {
+      "scenario": "profile_state.resolve_port_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_port_2-api.json"
+    },
+    {
+      "scenario": "profile_state.resolve_port_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_port_3-api.json"
+    },
+    {
+      "scenario": "profile_state.resolve_port_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_port_4-api.json"
+    },
+    {
+      "scenario": "profile_state.resolve_port_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_port_5-api.json"
+    },
+    {
+      "scenario": "profile_state.resolve_port_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_port_6-api.json"
+    },
+    {
+      "scenario": "profile_state.resolve_port_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_port_7-api.json"
+    },
+    {
+      "scenario": "profile_state.resolve_port_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-007",
+        "F-API-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-007/2026-10-02-V2-ed4cb0fb-profile_state.resolve_port_8-api.json"
+    },
+    {
+      "scenario": "profile_state.capture_output_read_failure",
+      "client": "api",
+      "status": "fail",
+      "level": "V2",
+      "features": [
+        "F-DOM-009",
+        "F-API-020"
+      ],
+      "failed_checks": [
+        {
+          "description": "response HTTP 502 and body contains {'success': False}",
+          "finding": "API-27"
+        },
+        {
+          "description": "hub GET /api/profile/validation_state -> success == False (HTTP 404)",
+          "finding": "API-27"
+        }
+      ],
+      "gate": "known-failure",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_output_read_failure-api.json"
+    },
+    {
+      "scenario": "profile_state.capture_video_read_failure",
+      "client": "api",
+      "status": "fail",
+      "level": "V2",
+      "features": [
+        "F-DOM-009",
+        "F-API-020"
+      ],
+      "failed_checks": [
+        {
+          "description": "response HTTP 502 and body contains {'success': False}",
+          "finding": "API-27"
+        },
+        {
+          "description": "hub GET /api/profile/validation_state -> success == False (HTTP 404)",
+          "finding": "API-27"
+        }
+      ],
+      "gate": "known-failure",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_video_read_failure-api.json"
+    },
+    {
+      "scenario": "profile_state.history_failure",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-008",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-008/2026-10-02-V2-ed4cb0fb-profile_state.history_failure-api.json"
+    }
+  ]
+}

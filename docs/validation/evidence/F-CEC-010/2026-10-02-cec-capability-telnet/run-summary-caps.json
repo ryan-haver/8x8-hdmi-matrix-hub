@@ -1,0 +1,1250 @@
+{
+  "commit": {
+    "sha": "a538a8ef4c52f79419f8a2c6514d05ff4a6ea7fc",
+    "branch": "wp-cec-capability-telnet-validation",
+    "dirty_files": [],
+    "short": "a538a8ef",
+    "dirty": false
+  },
+  "target": "sim",
+  "clients": [
+    "api"
+  ],
+  "operator": "automation",
+  "finished": "2026-10-02T17:44:32.242Z",
+  "aborted": null,
+  "outcomes": [
+    {
+      "scenario": "cec_caps.all_pattern_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.all_pattern_0-api.json"
+    },
+    {
+      "scenario": "cec_caps.all_pattern_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.all_pattern_1-api.json"
+    },
+    {
+      "scenario": "cec_caps.all_pattern_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.all_pattern_2-api.json"
+    },
+    {
+      "scenario": "cec_caps.command_catalog",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.command_catalog-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_1_signal_0_cec_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_1_signal_0_cec_0-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_1_signal_0_cec_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_1_signal_0_cec_1-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_1_signal_1_cec_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_1_signal_1_cec_0-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_1_signal_1_cec_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_1_signal_1_cec_1-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_2_signal_0_cec_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_2_signal_0_cec_0-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_2_signal_0_cec_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_2_signal_0_cec_1-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_2_signal_1_cec_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_2_signal_1_cec_0-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_2_signal_1_cec_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_2_signal_1_cec_1-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_3_signal_0_cec_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_3_signal_0_cec_0-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_3_signal_0_cec_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_3_signal_0_cec_1-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_3_signal_1_cec_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_3_signal_1_cec_0-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_3_signal_1_cec_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_3_signal_1_cec_1-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_4_signal_0_cec_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_4_signal_0_cec_0-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_4_signal_0_cec_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_4_signal_0_cec_1-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_4_signal_1_cec_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_4_signal_1_cec_0-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_4_signal_1_cec_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_4_signal_1_cec_1-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_5_signal_0_cec_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_5_signal_0_cec_0-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_5_signal_0_cec_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_5_signal_0_cec_1-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_5_signal_1_cec_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_5_signal_1_cec_0-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_5_signal_1_cec_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_5_signal_1_cec_1-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_6_signal_0_cec_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_6_signal_0_cec_0-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_6_signal_0_cec_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_6_signal_0_cec_1-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_6_signal_1_cec_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_6_signal_1_cec_0-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_6_signal_1_cec_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_6_signal_1_cec_1-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_7_signal_0_cec_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_7_signal_0_cec_0-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_7_signal_0_cec_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_7_signal_0_cec_1-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_7_signal_1_cec_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_7_signal_1_cec_0-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_7_signal_1_cec_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_7_signal_1_cec_1-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_8_signal_0_cec_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_8_signal_0_cec_0-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_8_signal_0_cec_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_8_signal_0_cec_1-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_8_signal_1_cec_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_8_signal_1_cec_0-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_8_signal_1_cec_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_8_signal_1_cec_1-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_catalog",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_catalog-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_invalid_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_invalid_0-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_invalid_9",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_invalid_9-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_invalid_invalid",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_invalid_invalid-api.json"
+    },
+    {
+      "scenario": "cec_caps.invalid_catalog",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.invalid_catalog-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_1_scaler_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_1_scaler_0-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_1_scaler_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_1_scaler_1-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_1_scaler_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_1_scaler_2-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_1_scaler_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_1_scaler_3-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_1_scaler_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_1_scaler_4-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_2_scaler_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_2_scaler_0-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_2_scaler_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_2_scaler_1-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_2_scaler_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_2_scaler_2-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_2_scaler_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_2_scaler_3-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_2_scaler_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_2_scaler_4-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_3_scaler_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_3_scaler_0-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_3_scaler_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_3_scaler_1-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_3_scaler_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_3_scaler_2-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_3_scaler_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_3_scaler_3-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_3_scaler_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_3_scaler_4-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_4_scaler_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_4_scaler_0-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_4_scaler_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_4_scaler_1-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_4_scaler_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_4_scaler_2-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_4_scaler_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_4_scaler_3-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_4_scaler_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_4_scaler_4-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_5_scaler_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_5_scaler_0-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_5_scaler_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_5_scaler_1-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_5_scaler_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_5_scaler_2-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_5_scaler_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_5_scaler_3-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_5_scaler_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_5_scaler_4-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_6_scaler_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_6_scaler_0-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_6_scaler_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_6_scaler_1-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_6_scaler_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_6_scaler_2-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_6_scaler_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_6_scaler_3-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_6_scaler_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_6_scaler_4-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_7_scaler_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_7_scaler_0-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_7_scaler_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_7_scaler_1-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_7_scaler_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_7_scaler_2-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_7_scaler_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_7_scaler_3-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_7_scaler_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_7_scaler_4-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_8_scaler_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_8_scaler_0-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_8_scaler_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_8_scaler_1-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_8_scaler_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_8_scaler_2-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_8_scaler_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_8_scaler_3-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_8_scaler_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_8_scaler_4-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_catalog",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_catalog-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_invalid_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_invalid_0-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_invalid_9",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_invalid_9-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_invalid_invalid",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_invalid_invalid-api.json"
+    },
+    {
+      "scenario": "cec_caps.all_read_unavailable",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.all_read_unavailable-api.json"
+    },
+    {
+      "scenario": "cec_caps.input_read_unavailable",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.input_read_unavailable-api.json"
+    },
+    {
+      "scenario": "cec_caps.output_read_unavailable",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-CEC-011/2026-10-02-V2-a538a8ef-cec_caps.output_read_unavailable-api.json"
+    }
+  ]
+}

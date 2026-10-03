@@ -1,0 +1,40 @@
+{
+  "gate": "ok",
+  "known_failures": 0,
+  "levels": {
+    "V3": 92,
+    "V2": 39,
+    "V1": 110,
+    "V0": 27
+  },
+  "fresh_passing_features": 122,
+  "stale_features": 0,
+  "below_target": 217,
+  "capped_features": 28,
+  "selected": [
+    {
+      "id": "F-MTX-015",
+      "level": "V1",
+      "proven": "V2",
+      "capped_by": [
+        "HIL-09"
+      ]
+    },
+    {
+      "id": "F-MTX-016",
+      "level": "V1",
+      "proven": "V2",
+      "capped_by": [
+        "HIL-09"
+      ]
+    },
+    {
+      "id": "F-MTX-017",
+      "level": "V1",
+      "proven": "V2",
+      "capped_by": [
+        "HIL-09"
+      ]
+    }
+  ]
+}

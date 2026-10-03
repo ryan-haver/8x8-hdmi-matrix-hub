@@ -135,7 +135,13 @@ Response:
 ```
 
 #### GET /api/presets
-List all presets with their names.
+List all presets with their display names and hub-saved routing mappings.
+
+`routing` comes from the hub's device-settings cache. A current-routing save
+records all eight outputs; a custom save records only the submitted mapping.
+An empty mapping means the hub has no cached routing for that slot. It does
+not establish that the matrix slot is empty. This endpoint does not query the
+matrix's stored preset routes or detect external preset edits (BE-36).
 
 ```bash
 curl http://localhost:8080/api/presets
@@ -543,6 +549,12 @@ curl -X POST http://localhost:8080/api/scene/save-current \
 
 ---
 
+**Known baseline gap (API-27):** Save-current can return success after a failed
+matrix status read. With status caching disabled, an output-read failure saves
+an empty profile and a video-read failure substitutes Input 1 on every output.
+The [profile-state validation report](validation/2026-10-02-profile-state.md)
+retains both failures; complete-read validation remains pending.
+
 ### Profiles (v2.10.0+)
 
 Enhanced scenes with macro support. Profiles are the preferred API for saving and recalling configurations.
@@ -642,6 +654,11 @@ curl -X PUT http://localhost:8080/api/profile/movie_night \
 
 **Accepted fields**: `name`, `icon`, `outputs`, `cec_config`, `macros`, `power_on_macro`, `power_off_macro`, `pinned`, `pin_order`, `favorite`, `dashboard_visible`, `password_protected`, `passcode_hash`, `description`. Unknown fields are silently ignored.
 
+**Known baseline gap (API-22):** Profile creation and editing currently discard
+output `scaler_mode` and `arc` fields while returning success. Independent
+packaged-image reads confirm that those fields are absent from the saved
+profile response. See the [profile CRUD validation report](validation/2026-10-02-profile-crud.md).
+
 #### DELETE /api/profile/{id}
 Delete a profile.
 
@@ -704,6 +721,10 @@ Response:
 #### POST /api/profile/{id}/macros
 Update macro assignments for a profile.
 
+`PUT` is also supported. Set `power_on_macro` or `power_off_macro` to `null`
+to clear that assignment; omitting a field preserves its current value. The
+same clearing behavior applies to `PUT /api/profile/{id}`.
+
 ```bash
 curl -X POST http://localhost:8080/api/profile/movie_night/macros \
   -H "Content-Type: application/json" \
@@ -718,6 +739,12 @@ curl -X POST http://localhost:8080/api/profile/movie_night/macros \
 ### CEC Control
 
 Send CEC commands to input devices (sources) or output devices (TVs/displays).
+
+With `OREI_USE_TELNET_CEC=true`, commands use Telnet when connected and fall
+back to HTTP when Telnet does not acknowledge them. BE-37 records an ambiguity:
+an interrupted reply can cause an HTTP resend after the matrix already processed
+the Telnet command. A successful API response does not establish that a volume
+step was sent only once. This remains open in the C0 baseline.
 
 #### GET /api/cec/commands
 List all available CEC commands.
@@ -792,11 +819,25 @@ curl -X POST http://localhost:8080/api/cec/output/1/power_on
 curl -X POST http://localhost:8080/api/cec/output/1/mute
 ```
 
+#### POST /api/cec/input/{1-8}/enable and /api/cec/output/{1-8}/enable
+
+Set a port's CEC enable flag with `{"enabled": true}` or `{"enabled": false}`.
+The hub reads the current input/output flags before replacing the device's
+arrays, preserving other ports and serializing concurrent single-port edits.
+If a complete current snapshot cannot be read, the route returns HTTP 500
+without sending the write. Another controller can still change the device
+between the read and write; the device protocol provides no atomic port edit.
+
 ---
 
 ## CEC Macros (v2.9.0+) ⭐
 
 CEC Macros are saved sequences of CEC commands that can be executed atomically with optional delays between steps.
+
+**Known baseline gap (API-28):** Macro creation rejects descriptions longer
+than 2000 characters, but macro edits currently accept and persist them.
+The [scene/macro management report](validation/2026-10-02-domain-management.md)
+retains this failure; symmetric edit validation remains pending.
 
 ### Macro Step Format
 
@@ -1116,6 +1157,13 @@ curl http://localhost:8080/api/device-settings
 
 #### POST /api/device-settings
 Update all device settings.
+
+The response lists persisted ports in `updated_inputs` and `updated_outputs`
+and rejected entries in `errors`. Invalid entries do not prevent valid entries
+from being saved. A storage failure returns HTTP 500 with `success: false`;
+earlier saved entries remain applied and failed entries retain their previous
+values. Individual input/output settings and preset names also retain their
+previous values when saving fails.
 
 ```bash
 curl -X POST http://localhost:8080/api/device-settings \

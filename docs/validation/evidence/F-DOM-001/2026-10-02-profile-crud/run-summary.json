@@ -1,0 +1,742 @@
+{
+  "commit": {
+    "sha": "0b9cbe878608cff9780edf42fe8c0efd4a90668d",
+    "branch": "wp-profile-crud-validation",
+    "dirty_files": [],
+    "short": "0b9cbe87",
+    "dirty": false
+  },
+  "target": "sim",
+  "clients": [
+    "api"
+  ],
+  "operator": "automation",
+  "finished": "2026-10-02T18:19:03.959Z",
+  "aborted": null,
+  "outcomes": [
+    {
+      "scenario": "profile_crud.clear_assignments",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.clear_assignments-api.json"
+    },
+    {
+      "scenario": "profile_crud.create_assignments",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_assignments-api.json"
+    },
+    {
+      "scenario": "profile_crud.create_defaults",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_defaults-api.json"
+    },
+    {
+      "scenario": "profile_crud.create_port_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_port_1-api.json"
+    },
+    {
+      "scenario": "profile_crud.create_port_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_port_2-api.json"
+    },
+    {
+      "scenario": "profile_crud.create_port_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_port_3-api.json"
+    },
+    {
+      "scenario": "profile_crud.create_port_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_port_4-api.json"
+    },
+    {
+      "scenario": "profile_crud.create_port_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_port_5-api.json"
+    },
+    {
+      "scenario": "profile_crud.create_port_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_port_6-api.json"
+    },
+    {
+      "scenario": "profile_crud.create_port_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_port_7-api.json"
+    },
+    {
+      "scenario": "profile_crud.create_port_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_port_8-api.json"
+    },
+    {
+      "scenario": "profile_crud.create_reject_input_nine",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_reject_input_nine-api.json"
+    },
+    {
+      "scenario": "profile_crud.create_reject_input_zero",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_reject_input_zero-api.json"
+    },
+    {
+      "scenario": "profile_crud.create_reject_missing_id",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_reject_missing_id-api.json"
+    },
+    {
+      "scenario": "profile_crud.create_reject_missing_input",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_reject_missing_input-api.json"
+    },
+    {
+      "scenario": "profile_crud.create_reject_missing_name",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_reject_missing_name-api.json"
+    },
+    {
+      "scenario": "profile_crud.create_reject_missing_outputs",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_reject_missing_outputs-api.json"
+    },
+    {
+      "scenario": "profile_crud.create_reject_output_nine",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_reject_output_nine-api.json"
+    },
+    {
+      "scenario": "profile_crud.create_reject_output_zero",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.create_reject_output_zero-api.json"
+    },
+    {
+      "scenario": "profile_crud.dashboard_missing_field",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-006",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.dashboard_missing_field-api.json"
+    },
+    {
+      "scenario": "profile_crud.dashboard_post_false",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-006",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.dashboard_post_false-api.json"
+    },
+    {
+      "scenario": "profile_crud.dashboard_post_missing",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-006",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.dashboard_post_missing-api.json"
+    },
+    {
+      "scenario": "profile_crud.dashboard_post_true",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-006",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.dashboard_post_true-api.json"
+    },
+    {
+      "scenario": "profile_crud.dashboard_put_false",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-006",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.dashboard_put_false-api.json"
+    },
+    {
+      "scenario": "profile_crud.dashboard_put_missing",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-006",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.dashboard_put_missing-api.json"
+    },
+    {
+      "scenario": "profile_crud.dashboard_put_true",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-006",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.dashboard_put_true-api.json"
+    },
+    {
+      "scenario": "profile_crud.delete",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.delete-api.json"
+    },
+    {
+      "scenario": "profile_crud.delete_missing",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.delete_missing-api.json"
+    },
+    {
+      "scenario": "profile_crud.edit_assignments",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.edit_assignments-api.json"
+    },
+    {
+      "scenario": "profile_crud.edit_empty",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.edit_empty-api.json"
+    },
+    {
+      "scenario": "profile_crud.edit_metadata",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.edit_metadata-api.json"
+    },
+    {
+      "scenario": "profile_crud.edit_missing",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.edit_missing-api.json"
+    },
+    {
+      "scenario": "profile_crud.edit_outputs",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.edit_outputs-api.json"
+    },
+    {
+      "scenario": "profile_crud.edit_unknown_only",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.edit_unknown_only-api.json"
+    },
+    {
+      "scenario": "profile_crud.favorite_list_exclusion",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-006",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.favorite_list_exclusion-api.json"
+    },
+    {
+      "scenario": "profile_crud.favorite_list_order",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-006",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.favorite_list_order-api.json"
+    },
+    {
+      "scenario": "profile_crud.favorite_missing_field",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-006",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.favorite_missing_field-api.json"
+    },
+    {
+      "scenario": "profile_crud.favorite_post_false",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-006",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.favorite_post_false-api.json"
+    },
+    {
+      "scenario": "profile_crud.favorite_post_missing",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-006",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.favorite_post_missing-api.json"
+    },
+    {
+      "scenario": "profile_crud.favorite_post_true",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-006",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.favorite_post_true-api.json"
+    },
+    {
+      "scenario": "profile_crud.favorite_put_false",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-006",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.favorite_put_false-api.json"
+    },
+    {
+      "scenario": "profile_crud.favorite_put_missing",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-006",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.favorite_put_missing-api.json"
+    },
+    {
+      "scenario": "profile_crud.favorite_put_true",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-006",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.favorite_put_true-api.json"
+    },
+    {
+      "scenario": "profile_crud.get_missing",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.get_missing-api.json"
+    },
+    {
+      "scenario": "profile_crud.pin_edit",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-006",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.pin_edit-api.json"
+    },
+    {
+      "scenario": "profile_crud.post_scaler_arc",
+      "client": "api",
+      "status": "fail",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [
+        {
+          "description": "hub GET /api/profile/validation_crud -> data.outputs == {'1': {'input': 2, 'enabled': True, 'audio_mute': False, 'scaler_mode': 4, 'arc': True}} (HTTP 200)",
+          "finding": "API-22"
+        }
+      ],
+      "gate": "known-failure",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.post_scaler_arc-api.json"
+    },
+    {
+      "scenario": "profile_crud.put_scaler_arc",
+      "client": "api",
+      "status": "fail",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [
+        {
+          "description": "hub GET /api/profile/validation_crud -> data.outputs == {'1': {'input': 2, 'enabled': True, 'audio_mute': False, 'scaler_mode': 4, 'arc': True}} (HTTP 200)",
+          "finding": "API-22"
+        }
+      ],
+      "gate": "known-failure",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.put_scaler_arc-api.json"
+    },
+    {
+      "scenario": "profile_crud.reorder",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-006",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.reorder-api.json"
+    },
+    {
+      "scenario": "profile_crud.reorder_empty",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-006",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.reorder_empty-api.json"
+    },
+    {
+      "scenario": "profile_crud.reorder_partial",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-006",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-006/2026-10-02-V2-0b9cbe87-profile_crud.reorder_partial-api.json"
+    },
+    {
+      "scenario": "profile_crud.replace_existing",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-DOM-001",
+        "F-API-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.replace_existing-api.json"
+    }
+  ]
+}

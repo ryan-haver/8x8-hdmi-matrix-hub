@@ -1,0 +1,27 @@
+{
+  "source_commit": "a538a8ef4c52f79419f8a2c6514d05ff4a6ea7fc",
+  "image_digest": "sha256:1b7b72c01322972198e2660896ca6a4270cce740d4c32d701a16eaa12b580dc0",
+  "records": 290,
+  "passing_records": 288,
+  "known_failure_records": 2,
+  "finding": "BE-37",
+  "unlinked_regressions": 0,
+  "features": [
+    "F-API-015",
+    "F-API-016",
+    "F-CEC-007",
+    "F-CEC-010",
+    "F-CEC-011"
+  ],
+  "matches_checkout_files": 176,
+  "schema_errors": 0,
+  "dirty_records": 0,
+  "checks_not_applicable": 0,
+  "telnet_enable_order_verified": 200,
+  "interrupted_reply_resends_verified": 2,
+  "transports": {
+    "caps": "OREI_USE_TELNET_CEC=false",
+    "telnet": "OREI_USE_TELNET_CEC=true"
+  },
+  "hardware_exercised": false
+}

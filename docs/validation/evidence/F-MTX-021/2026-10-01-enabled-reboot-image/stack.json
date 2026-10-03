@@ -1,0 +1,18 @@
+{
+  "hub": "reboot-proof-hub-ae20b47c020f",
+  "scope": "Disposable simulator and fixture data; no real hardware",
+  "image": "hdmi-matrix-hub:wp-enabled-reboot-validation",
+  "digest": "sha256:1d7eee094200943ea52175bf58a56893e7a713122e02a29fc3fb51f73810f7af",
+  "simulator": "reboot-proof-sim-ae20b47c020f",
+  "features": [
+    "F-MTX-021",
+    "F-API-013",
+    "F-API-032",
+    "F-DOM-027",
+    "F-REL-001",
+    "F-REL-005",
+    "F-REL-009",
+    "F-KIO-011"
+  ],
+  "source_commit": "b0c1a32e98796a00c2fc07e843148d99253e3dad"
+}

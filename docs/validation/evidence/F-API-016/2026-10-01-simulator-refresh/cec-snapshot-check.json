@@ -1,0 +1,9 @@
+{
+  "result": "pass",
+  "before_fix_record": "/work/docs/validation/evidence/F-API-016/2026-10-01-V2-72cc71dc-writes.cec_output_enable-api.json",
+  "after_fix_record": "/work/docs/validation/evidence/F-API-016/2026-10-01-V2-2a28a93e-writes.cec_output_enable-api.json",
+  "source_commit": "2a28a93ea3243e412894ab2f84930c86c7f1aaf5",
+  "preserved_input_1": 0,
+  "current_snapshot_read_before_write": true,
+  "port_write_count": 1
+}

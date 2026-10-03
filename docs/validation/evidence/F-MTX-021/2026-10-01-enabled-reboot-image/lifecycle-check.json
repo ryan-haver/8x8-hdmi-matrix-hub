@@ -1,0 +1,35 @@
+{
+  "source_commit": "b0c1a32e98796a00c2fc07e843148d99253e3dad",
+  "image_digest": "sha256:1d7eee094200943ea52175bf58a56893e7a713122e02a29fc3fb51f73810f7af",
+  "result": "pass",
+  "records": [
+    {
+      "record": "docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.direct-api.json",
+      "boots": 1,
+      "attempts": 1,
+      "disconnected_ms": 110,
+      "recovered_ms": 7288
+    },
+    {
+      "record": "docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.enabled_shortcut-api.json",
+      "boots": 1,
+      "attempts": 1,
+      "disconnected_ms": 105,
+      "recovered_ms": 7066
+    },
+    {
+      "record": "docs/validation/evidence/F-MTX-021/2026-10-01-V2-b0c1a32e-reboot.legacy_shortcut-api.json",
+      "boots": 1,
+      "attempts": 1,
+      "disconnected_ms": 85,
+      "recovered_ms": 8174
+    },
+    {
+      "record": "docs/validation/evidence/F-MTX-021/2026-10-01-V3-b0c1a32e-reboot.enabled_shortcut-browser.json",
+      "boots": 1,
+      "attempts": 1,
+      "disconnected_ms": 2486,
+      "recovered_ms": 9421
+    }
+  ]
+}

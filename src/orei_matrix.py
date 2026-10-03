@@ -350,6 +350,9 @@ class OreiMatrix:
 
         # Protects _cec_enabled_cache reads/writes from concurrent coroutines.
         self._cec_cache_lock = asyncio.Lock()
+        # A single-port edit reads and replaces both device arrays. Serialize
+        # these transactions so concurrent edits cannot overwrite one another.
+        self._cec_write_lock = asyncio.Lock()
 
         # Status caches to speed up UI loads (BE-03). Every cache below expires
         # after OREI_STATUS_CACHE_TTL seconds; writes invalidate all of them.
@@ -1964,38 +1967,29 @@ class OreiMatrix:
             _LOG.error("Invalid port number: %d", port_num)
             return False
 
-        # Ensure we have current state
-        if not await self._is_cec_cache_valid():
-            await self.refresh_cec_status()
-
-        # Build the new arrays preserving existing state
-        async with self._cec_cache_lock:
-            input_array = [1 if self._cec_enabled_cache["inputs"][i] else 0 for i in range(8)]
-            output_array = [1 if self._cec_enabled_cache["outputs"][i] else 0 for i in range(8)]
-
-        # Update the target port
-        if is_output:
-            output_array[port_num - 1] = 1 if enabled else 0
-        else:
-            input_array[port_num - 1] = 1 if enabled else 0
-
-        # Send the command
-        command = {"comhead": "set cec index", "language": 0, "inputindex": input_array, "outputindex": output_array}
-
-        _LOG.debug("Setting CEC index: %s", command)
-        success, response = await self._send_command(command)
-
-        if self._check_write(success, response, command):
-            # Update cache immediately
-            if is_output:
-                self._cec_enabled_cache["outputs"][port_num - 1] = enabled
-            else:
-                self._cec_enabled_cache["inputs"][port_num - 1] = enabled
-
-            _LOG.info(
-                "✓ CEC %s on %s %d", "enabled" if enabled else "disabled", "output" if is_output else "input", port_num
-            )
-            return True
+        async with self._cec_write_lock:
+            # The cache is useful for reads, but another controller may have
+            # changed any flag since it was populated. Never write cached arrays.
+            status = await self.get_cec_status()
+            arrays = [status.get(key) for key in ("inputindex", "outputindex")] if isinstance(status, dict) else []
+            if len(arrays) != 2 or any(
+                not isinstance(values, list) or len(values) < 8
+                or any(not isinstance(v, int) or v not in (0, 1) for v in values[:8])
+                for values in arrays
+            ):
+                _LOG.error("Cannot edit a CEC port without a complete current snapshot")
+                return False
+            input_array, output_array = [list(values[:8]) for values in arrays]
+            (output_array if is_output else input_array)[port_num - 1] = int(enabled)
+            command = {"comhead": "set cec index", "language": 0, "inputindex": input_array, "outputindex": output_array}
+            _LOG.debug("Setting CEC index: %s", command)
+            success, response = await self._send_command(command)
+            if self._check_write(success, response, command):
+                await self._update_cec_cache(command)
+                _LOG.info(
+                    "✓ CEC %s on %s %d", "enabled" if enabled else "disabled", "output" if is_output else "input", port_num
+                )
+                return True
 
         _LOG.error("Failed to set CEC enabled on %s %d", "output" if is_output else "input", port_num)
         return False

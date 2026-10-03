@@ -197,6 +197,11 @@ async def handle_update_profile(request: web.Request) -> web.Response:
         # FIX (F12.3): whitelist fields to prevent mass assignment of
         # internal fields like passcode_hash, created_at, etc.
         updates = {k: v for k, v in data.items() if k in PROFILE_UPDATE_FIELDS}
+        # The manager uses None for an omitted update and an empty string to
+        # clear a power macro. JSON null is an explicit clear request.
+        for field in ("power_on_macro", "power_off_macro"):
+            if field in updates and updates[field] is None:
+                updates[field] = ""
         ignored = set(data.keys()) - PROFILE_UPDATE_FIELDS
         if ignored:
             _LOG.warning(
@@ -451,9 +456,9 @@ async def handle_profile_macros(request: web.Request) -> web.Response:
             if "macros" in data:
                 updates["macros"] = data["macros"]
             if "power_on_macro" in data:
-                updates["power_on_macro"] = data["power_on_macro"]
+                updates["power_on_macro"] = "" if data["power_on_macro"] is None else data["power_on_macro"]
             if "power_off_macro" in data:
-                updates["power_off_macro"] = data["power_off_macro"]
+                updates["power_off_macro"] = "" if data["power_off_macro"] is None else data["power_off_macro"]
 
             if not updates:
                 return _json_response(False, error="No macro fields to update", status=400)

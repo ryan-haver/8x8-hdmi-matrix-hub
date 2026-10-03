@@ -1,0 +1,2397 @@
+{
+  "commit": {
+    "sha": "31f5c05af505d010aa90aaad61798e45ef2e5ef6",
+    "branch": "wp-matrix-status-cycling-validation",
+    "dirty_files": [],
+    "short": "31f5c05a",
+    "dirty": false
+  },
+  "target": "sim",
+  "clients": [
+    "api"
+  ],
+  "operator": "automation",
+  "finished": "2026-10-02T04:37:28.061Z",
+  "aborted": null,
+  "outcomes": [
+    {
+      "scenario": "status.cables_all",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-026"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-026/2026-10-02-V2-31f5c05a-status.cables_all-api.json"
+    },
+    {
+      "scenario": "status.cables_alternating",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-026"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-026/2026-10-02-V2-31f5c05a-status.cables_alternating-api.json"
+    },
+    {
+      "scenario": "status.cables_none",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-026"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-026/2026-10-02-V2-31f5c05a-status.cables_none-api.json"
+    },
+    {
+      "scenario": "status.cables_reverse",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-026"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-026/2026-10-02-V2-31f5c05a-status.cables_reverse-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_1_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_1_1-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_1_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_1_2-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_1_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_1_3-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_1_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_1_4-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_1_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_1_5-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_1_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_1_6-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_1_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_1_7-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_1_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_1_8-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_2_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_2_1-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_2_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_2_2-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_2_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_2_3-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_2_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_2_4-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_2_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_2_5-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_2_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_2_6-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_2_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_2_7-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_2_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_2_8-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_3_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_3_1-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_3_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_3_2-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_3_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_3_3-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_3_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_3_4-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_3_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_3_5-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_3_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_3_6-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_3_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_3_7-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_3_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_3_8-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_4_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_4_1-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_4_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_4_2-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_4_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_4_3-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_4_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_4_4-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_4_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_4_5-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_4_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_4_6-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_4_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_4_7-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_4_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_4_8-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_5_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_5_1-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_5_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_5_2-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_5_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_5_3-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_5_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_5_4-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_5_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_5_5-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_5_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_5_6-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_5_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_5_7-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_5_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_5_8-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_6_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_6_1-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_6_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_6_2-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_6_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_6_3-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_6_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_6_4-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_6_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_6_5-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_6_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_6_6-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_6_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_6_7-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_6_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_6_8-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_7_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_7_1-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_7_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_7_2-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_7_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_7_3-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_7_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_7_4-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_7_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_7_5-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_7_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_7_6-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_7_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_7_7-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_7_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_7_8-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_8_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_8_1-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_8_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_8_2-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_8_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_8_3-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_8_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_8_4-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_8_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_8_5-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_8_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_8_6-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_8_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_8_7-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_8_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_8_8-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_default",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_default-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_invalid_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_invalid_0-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_invalid_9",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_invalid_9-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_invalid_invalid",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_invalid_invalid-api.json"
+    },
+    {
+      "scenario": "status.cycle_next_refused",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_next_refused-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_1_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_1_1-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_1_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_1_2-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_1_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_1_3-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_1_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_1_4-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_1_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_1_5-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_1_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_1_6-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_1_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_1_7-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_1_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_1_8-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_2_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_2_1-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_2_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_2_2-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_2_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_2_3-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_2_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_2_4-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_2_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_2_5-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_2_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_2_6-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_2_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_2_7-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_2_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_2_8-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_3_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_3_1-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_3_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_3_2-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_3_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_3_3-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_3_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_3_4-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_3_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_3_5-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_3_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_3_6-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_3_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_3_7-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_3_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_3_8-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_4_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_4_1-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_4_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_4_2-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_4_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_4_3-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_4_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_4_4-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_4_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_4_5-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_4_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_4_6-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_4_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_4_7-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_4_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_4_8-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_5_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_5_1-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_5_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_5_2-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_5_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_5_3-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_5_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_5_4-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_5_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_5_5-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_5_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_5_6-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_5_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_5_7-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_5_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_5_8-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_6_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_6_1-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_6_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_6_2-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_6_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_6_3-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_6_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_6_4-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_6_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_6_5-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_6_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_6_6-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_6_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_6_7-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_6_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_6_8-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_7_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_7_1-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_7_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_7_2-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_7_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_7_3-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_7_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_7_4-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_7_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_7_5-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_7_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_7_6-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_7_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_7_7-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_7_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_7_8-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_8_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_8_1-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_8_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_8_2-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_8_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_8_3-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_8_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_8_4-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_8_5",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_8_5-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_8_6",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_8_6-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_8_7",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_8_7-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_8_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_8_8-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_default",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_default-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_invalid_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_invalid_0-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_invalid_9",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_invalid_9-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_invalid_invalid",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_invalid_invalid-api.json"
+    },
+    {
+      "scenario": "status.cycle_previous_refused",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-029"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-029/2026-10-02-V2-31f5c05a-status.cycle_previous_refused-api.json"
+    },
+    {
+      "scenario": "status.device_dhcp_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-028/2026-10-02-V2-31f5c05a-status.device_dhcp_0-api.json"
+    },
+    {
+      "scenario": "status.device_dhcp_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-028/2026-10-02-V2-31f5c05a-status.device_dhcp_1-api.json"
+    },
+    {
+      "scenario": "status.display_1_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_1_0-api.json"
+    },
+    {
+      "scenario": "status.display_1_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_1_1-api.json"
+    },
+    {
+      "scenario": "status.display_2_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_2_0-api.json"
+    },
+    {
+      "scenario": "status.display_2_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_2_1-api.json"
+    },
+    {
+      "scenario": "status.display_3_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_3_0-api.json"
+    },
+    {
+      "scenario": "status.display_3_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_3_1-api.json"
+    },
+    {
+      "scenario": "status.display_4_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_4_0-api.json"
+    },
+    {
+      "scenario": "status.display_4_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_4_1-api.json"
+    },
+    {
+      "scenario": "status.display_5_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_5_0-api.json"
+    },
+    {
+      "scenario": "status.display_5_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_5_1-api.json"
+    },
+    {
+      "scenario": "status.display_6_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_6_0-api.json"
+    },
+    {
+      "scenario": "status.display_6_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_6_1-api.json"
+    },
+    {
+      "scenario": "status.display_7_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_7_0-api.json"
+    },
+    {
+      "scenario": "status.display_7_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_7_1-api.json"
+    },
+    {
+      "scenario": "status.display_8_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_8_0-api.json"
+    },
+    {
+      "scenario": "status.display_8_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-027"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-027/2026-10-02-V2-31f5c05a-status.display_8_1-api.json"
+    },
+    {
+      "scenario": "status.routing_all_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-024"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-024/2026-10-02-V2-31f5c05a-status.routing_all_1-api.json"
+    },
+    {
+      "scenario": "status.routing_all_8",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-024"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-024/2026-10-02-V2-31f5c05a-status.routing_all_8-api.json"
+    },
+    {
+      "scenario": "status.routing_mixed",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-024"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-024/2026-10-02-V2-31f5c05a-status.routing_mixed-api.json"
+    },
+    {
+      "scenario": "status.routing_one_to_one",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-024"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-024/2026-10-02-V2-31f5c05a-status.routing_one_to_one-api.json"
+    },
+    {
+      "scenario": "status.runtime_info",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-028/2026-10-02-V2-31f5c05a-status.runtime_info-api.json"
+    },
+    {
+      "scenario": "status.signal_1_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-025"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_1_0-api.json"
+    },
+    {
+      "scenario": "status.signal_1_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-025"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_1_1-api.json"
+    },
+    {
+      "scenario": "status.signal_2_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-025"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_2_0-api.json"
+    },
+    {
+      "scenario": "status.signal_2_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-025"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_2_1-api.json"
+    },
+    {
+      "scenario": "status.signal_3_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-025"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_3_0-api.json"
+    },
+    {
+      "scenario": "status.signal_3_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-025"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_3_1-api.json"
+    },
+    {
+      "scenario": "status.signal_4_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-025"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_4_0-api.json"
+    },
+    {
+      "scenario": "status.signal_4_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-025"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_4_1-api.json"
+    },
+    {
+      "scenario": "status.signal_5_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-025"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_5_0-api.json"
+    },
+    {
+      "scenario": "status.signal_5_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-025"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_5_1-api.json"
+    },
+    {
+      "scenario": "status.signal_6_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-025"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_6_0-api.json"
+    },
+    {
+      "scenario": "status.signal_6_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-025"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_6_1-api.json"
+    },
+    {
+      "scenario": "status.signal_7_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-025"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_7_0-api.json"
+    },
+    {
+      "scenario": "status.signal_7_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-025"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_7_1-api.json"
+    },
+    {
+      "scenario": "status.signal_8_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-025"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_8_0-api.json"
+    },
+    {
+      "scenario": "status.signal_8_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-025"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-025/2026-10-02-V2-31f5c05a-status.signal_8_1-api.json"
+    },
+    {
+      "scenario": "status.system_power_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-028/2026-10-02-V2-31f5c05a-status.system_power_0-api.json"
+    },
+    {
+      "scenario": "status.system_power_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-028"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-028/2026-10-02-V2-31f5c05a-status.system_power_1-api.json"
+    }
+  ]
+}

@@ -1,0 +1,395 @@
+{
+  "commit": {
+    "sha": "e015d3e127fba07f1393aa5e5a4c457d555794b3",
+    "branch": "wp-matrix-control-validation",
+    "dirty_files": [],
+    "short": "e015d3e1",
+    "dirty": false
+  },
+  "target": "sim",
+  "clients": [
+    "api"
+  ],
+  "operator": "automation",
+  "finished": "2026-10-02T03:04:49.917Z",
+  "aborted": null,
+  "outcomes": [
+    {
+      "scenario": "matrix.beep_off",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-018"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-018/2026-10-02-V2-e015d3e1-matrix.beep_off-api.json"
+    },
+    {
+      "scenario": "matrix.beep_on",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-018"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-018/2026-10-02-V2-e015d3e1-matrix.beep_on-api.json"
+    },
+    {
+      "scenario": "matrix.beep_refused",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-018"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-018/2026-10-02-V2-e015d3e1-matrix.beep_refused-api.json"
+    },
+    {
+      "scenario": "matrix.input_blank_name",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-022"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-022/2026-10-02-V2-e015d3e1-matrix.input_blank_name-api.json"
+    },
+    {
+      "scenario": "matrix.input_invalid_port",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-022"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-022/2026-10-02-V2-e015d3e1-matrix.input_invalid_port-api.json"
+    },
+    {
+      "scenario": "matrix.input_long_name",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-022"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-022/2026-10-02-V2-e015d3e1-matrix.input_long_name-api.json"
+    },
+    {
+      "scenario": "matrix.input_name",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-022"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-022/2026-10-02-V2-e015d3e1-matrix.input_name-api.json"
+    },
+    {
+      "scenario": "matrix.input_name_limit",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-022"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-022/2026-10-02-V2-e015d3e1-matrix.input_name_limit-api.json"
+    },
+    {
+      "scenario": "matrix.input_name_refused",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-022"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-022/2026-10-02-V2-e015d3e1-matrix.input_name_refused-api.json"
+    },
+    {
+      "scenario": "matrix.lcd_invalid_mode",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-020/2026-10-02-V2-e015d3e1-matrix.lcd_invalid_mode-api.json"
+    },
+    {
+      "scenario": "matrix.lcd_missing_mode",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-020/2026-10-02-V2-e015d3e1-matrix.lcd_missing_mode-api.json"
+    },
+    {
+      "scenario": "matrix.lcd_mode_0",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-020/2026-10-02-V2-e015d3e1-matrix.lcd_mode_0-api.json"
+    },
+    {
+      "scenario": "matrix.lcd_mode_1",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-020/2026-10-02-V2-e015d3e1-matrix.lcd_mode_1-api.json"
+    },
+    {
+      "scenario": "matrix.lcd_mode_2",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-020/2026-10-02-V2-e015d3e1-matrix.lcd_mode_2-api.json"
+    },
+    {
+      "scenario": "matrix.lcd_mode_3",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-020/2026-10-02-V2-e015d3e1-matrix.lcd_mode_3-api.json"
+    },
+    {
+      "scenario": "matrix.lcd_mode_4",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-020/2026-10-02-V2-e015d3e1-matrix.lcd_mode_4-api.json"
+    },
+    {
+      "scenario": "matrix.lcd_refused",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-020"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-020/2026-10-02-V2-e015d3e1-matrix.lcd_refused-api.json"
+    },
+    {
+      "scenario": "matrix.output_blank_name",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-023"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-023/2026-10-02-V2-e015d3e1-matrix.output_blank_name-api.json"
+    },
+    {
+      "scenario": "matrix.output_invalid_port",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-023"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-023/2026-10-02-V2-e015d3e1-matrix.output_invalid_port-api.json"
+    },
+    {
+      "scenario": "matrix.output_long_name",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-023"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-023/2026-10-02-V2-e015d3e1-matrix.output_long_name-api.json"
+    },
+    {
+      "scenario": "matrix.output_name",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-023"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-023/2026-10-02-V2-e015d3e1-matrix.output_name-api.json"
+    },
+    {
+      "scenario": "matrix.output_name_limit",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-023"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-023/2026-10-02-V2-e015d3e1-matrix.output_name_limit-api.json"
+    },
+    {
+      "scenario": "matrix.output_name_refused",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-023"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-023/2026-10-02-V2-e015d3e1-matrix.output_name_refused-api.json"
+    },
+    {
+      "scenario": "matrix.panel_lock_off",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-019/2026-10-02-V2-e015d3e1-matrix.panel_lock_off-api.json"
+    },
+    {
+      "scenario": "matrix.panel_lock_on",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-019/2026-10-02-V2-e015d3e1-matrix.panel_lock_on-api.json"
+    },
+    {
+      "scenario": "matrix.panel_lock_refused",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-019"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-019/2026-10-02-V2-e015d3e1-matrix.panel_lock_refused-api.json"
+    },
+    {
+      "scenario": "matrix.preset_invalid_slot",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-004"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-004/2026-10-02-V2-e015d3e1-matrix.preset_invalid_slot-api.json"
+    },
+    {
+      "scenario": "matrix.preset_refused",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-004"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-004/2026-10-02-V2-e015d3e1-matrix.preset_refused-api.json"
+    },
+    {
+      "scenario": "matrix.save_current_preset",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-MTX-004"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "/work/docs/validation/evidence/F-MTX-004/2026-10-02-V2-e015d3e1-matrix.save_current_preset-api.json"
+    }
+  ]
+}

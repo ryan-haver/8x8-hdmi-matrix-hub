@@ -1,0 +1,24 @@
+{
+  "gate": "ok",
+  "batch_records": 108,
+  "batch_passes": 106,
+  "batch_known_failures": 2,
+  "unlinked_regressions": 0,
+  "promoted_to_V2": [
+    "F-DOM-007",
+    "F-DOM-008",
+    "F-DOM-009",
+    "F-API-020"
+  ],
+  "levels": {
+    "V3": 92,
+    "V2": 59,
+    "V1": 91,
+    "V0": 26
+  },
+  "fresh_passing_features": 143,
+  "fresh_failing_features": 7,
+  "stale_features": 0,
+  "below_target": 215,
+  "capped_features": 28
+}
