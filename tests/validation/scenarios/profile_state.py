@@ -181,8 +181,8 @@ for read in ("video", "output"):
     SCENARIOS.append(_case(f"capture_{read}_read_failure", "F-DOM-009", "POST", "/api/scene/save-current",
                            {"id": _ID}, api="F-API-020", setup=(), faults={"http_status": 500,
                            "comheads": [f"get {read} status"]}, expect=(
-                               Response(status=502, json={"success": False}, finding="API-27"),
-                               Hub(_PROFILE, "success", equals=False, status=404, finding="API-27"),
+                               Response(status=502, json={"success": False}),
+                               Hub(_PROFILE, "success", equals=False, status=404),
                                NoCommand("*"), NoCommand("cec command"), DeviceUnchanged(), NoProtocolWarnings())))
 
 _ALIAS = f"/api/scene/{_ID}"
