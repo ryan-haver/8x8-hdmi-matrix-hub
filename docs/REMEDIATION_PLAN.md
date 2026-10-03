@@ -59,6 +59,7 @@ These are places where features overlap or where fixing the bug properly changes
 | DI-11 | **Scene profile step vs profile recall** *(agreed 2026-09-27)* | VAL-07: recall applies the full state and runs the profile's power-on macro; a scene's profile step skips disabled outputs, ignores stream on/off and runs the quick-access macro list, so Movie Night sends TV-on twice | A scene's profile step applies exactly the state recall applies (one shared code path) and runs **no** macros; the scene's own steps do the sequencing (profile = state, scene = sequence, DI-2) |
 | DI-12 | **Scene wait step** *(agreed 2026-09-27)* | VAL-09: F-DOM-013 claims a delay step that does not exist | Add a `wait` step type (0.5–30 s), e.g. to let a TV finish powering on before the next step |
 | DI-13 | **Remote CEC power toggle** *(agreed 2026-09-27)* | UC-24: CEC remote entities have on/off but no toggle | Add `TOGGLE` in WP-B3, from the known power state; unknown state turns the device on (as UC-10's fix) |
+| DI-14 | **v0.2.0 gate and the security criticals** *(agreed 2026-10-03)* | The v0.2.0 gate (VALIDATION_PLAN §6) required "no open critical findings", but the only open criticals, SEC-01..SEC-03, are the planned Phase 3 / v0.3.0 security work | The v0.2.0 gate excludes the Phase 3 security set; SEC-01..03 are closed by v0.3.0. v0.2.0 is a pre-release whose release notes state that the hub has no authentication yet and must run on a trusted LAN |
 
 ---
 
