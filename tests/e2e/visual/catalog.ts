@@ -401,6 +401,17 @@ export const CATALOG: CatalogEntry[] = [
     note: 'UI-44 (fixed): the aggregate_widget cards render their widget (Routing; CEC Remote, stored as the legacy id "cec-tray"); they rendered empty because the renderer read card.widget_id and the layout stores id. The seed Quick Actions card stays empty: its widget was retired in Phase 8 (UI-55, owner decision). Before WP-E1 (UI-27) the profile and macro cards also needed their data injected.',
   },
   {
+    name: 'dashboard/cards/widgets',
+    page: 'ui',
+    description: 'The aggregate_widget cards at the end of the Dashboard Cards panel (Routing, CEC Remote), scrolled into view.',
+    setup: async ({ page }) => {
+      await tab(page, 'dashboard');
+      await page.locator('#dashboard-cards-grid .dashboard-card-widget').first().evaluate((el) => el.scrollIntoView({ block: 'start' }));
+      await settle(page, 200);
+    },
+    note: 'UI-44 (new entry): before the fix these cards rendered nothing, so the panel ended after the macro card. The seed Quick Actions card has no widget to show (retired in Phase 8, UI-55).',
+  },
+  {
     name: 'dashboard/cards/empty',
     page: 'ui',
     description: 'Dashboard cards area with no cards.',
