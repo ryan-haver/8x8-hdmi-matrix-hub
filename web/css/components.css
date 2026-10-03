@@ -1830,20 +1830,31 @@
     margin: 0;
 }
 
+/* UI-52: a glass icon button like the app's other close buttons (.btn-icon):
+   no native button face or border. */
 .modal-close-btn {
     width: 32px;
     height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 0;
+    background: transparent;
+    border: none;
     border-radius: var(--radius-md);
     color: var(--text-secondary);
+    cursor: pointer;
     transition: background-color 0.2s, color 0.2s;
 }
 
 .modal-close-btn:hover {
     background-color: var(--accent-dim);
     color: var(--accent);
+}
+
+.modal-close-btn:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
 }
 
 .modal-close-btn svg {
@@ -6798,4 +6809,21 @@
     margin: 0;
 }
 
+
+/* ===== Dashboard "Add Card" picker (UI-52) =====
+   The drawer tabs and the Profiles tab's card rows (scene-card, as UI-49).
+   The five tabs stay on one line; on a narrow dialog the row scrolls. */
+.dashboard-card-picker-modal .drawer-tabs {
+    margin: 0;
+    padding: 0;
+    gap: var(--space-1);
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.dashboard-card-picker-modal .drawer-tab-btn {
+    flex-shrink: 0;
+    padding: var(--space-2);
+    white-space: nowrap;
+}
 
