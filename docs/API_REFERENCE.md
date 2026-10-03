@@ -135,13 +135,21 @@ Response:
 ```
 
 #### GET /api/presets
-List all presets with their display names and hub-saved routing mappings.
+List all presets with their display names and the routing each slot holds.
 
-`routing` comes from the hub's device-settings cache. A current-routing save
-records all eight outputs; a custom save records only the submitted mapping.
-An empty mapping means the hub has no cached routing for that slot. It does
-not establish that the matrix slot is empty. This endpoint does not query the
-matrix's stored preset routes or detect external preset edits (BE-36).
+`routing` is read from the matrix itself: each slot with Telnet
+`r preset N` (the only preset read the BK-808 firmware answers). Slots changed
+outside the hub (front panel, another client) are reported as stored, and a
+custom save reports the whole slot it stored. The reads are cached for
+`OREI_STATUS_CACHE_TTL` seconds (default 3); preset saves and other writes
+expire the cache. `routing_source` says where the routing came from:
+
+- `"matrix"`: read from the matrix slot. An empty mapping means the slot is empty.
+- `"saved"`: the slot could not be read (Telnet not connected, no or incomplete
+  answer); `routing` is the copy the hub saved last, which may be stale or
+  empty. It is never presented as read from the matrix.
+
+Names (and favourites) are the hub's (web app) data (BE-36).
 
 ```bash
 curl http://localhost:8080/api/presets
@@ -153,8 +161,10 @@ Response:
   "success": true,
   "data": {
     "presets": [
-      {"number": 1, "name": "PS3", "endpoint": "/api/preset/1"},
-      {"number": 2, "name": "AppleTV", "endpoint": "/api/preset/2"},
+      {"number": 1, "name": "PS3", "routing": {"1": 1, "2": 1, "3": 2, "4": 2, "5": 5, "6": 6, "7": 1, "8": 1},
+       "routing_source": "matrix", "endpoint": "/api/preset/1", "save_endpoint": "/api/preset/1/save"},
+      {"number": 2, "name": "AppleTV", "routing": {}, "routing_source": "matrix",
+       "endpoint": "/api/preset/2", "save_endpoint": "/api/preset/2/save"},
       ...
     ]
   }
@@ -547,13 +557,12 @@ curl -X POST http://localhost:8080/api/scene/save-current \
   -d '{"id": "current", "name": "Current Setup"}'
 ```
 
----
+The profile is created only from a complete read of the matrix: the routing
+(`get video status`) and the output settings (`get output status`) of all
+eight outputs. If either read fails or is incomplete, the answer is `502`
+(`success: false`, the reason in `error`) and no profile is created (API-27).
 
-**Known baseline gap (API-27):** Save-current can return success after a failed
-matrix status read. With status caching disabled, an output-read failure saves
-an empty profile and a video-read failure substitutes Input 1 on every output.
-The [profile-state validation report](validation/2026-10-02-profile-state.md)
-retains both failures; complete-read validation remains pending.
+---
 
 ### Profiles (v2.10.0+)
 
@@ -654,10 +663,13 @@ curl -X PUT http://localhost:8080/api/profile/movie_night \
 
 **Accepted fields**: `name`, `icon`, `outputs`, `cec_config`, `macros`, `power_on_macro`, `power_off_macro`, `pinned`, `pin_order`, `favorite`, `dashboard_visible`, `password_protected`, `passcode_hash`, `description`. Unknown fields are silently ignored.
 
-**Known baseline gap (API-22):** Profile creation and editing currently discard
-output `scaler_mode` and `arc` fields while returning success. Independent
-packaged-image reads confirm that those fields are absent from the saved
-profile response. See the [profile CRUD validation report](validation/2026-10-02-profile-crud.md).
+**Output settings** (create and edit): each output takes `input` (1-8),
+`enabled`, `audio_mute`, and the optional `hdr_mode` (1-3), `hdcp_mode`,
+`scaler_mode` (1-5: 1 passthrough, 2 8K to 4K, 3 8K/4K to 1080p, 4 auto,
+5 audio only) and `arc` (`true`/`false`). Optional settings that are omitted
+or `null` stay unset and are not returned. An invalid `scaler_mode` or `arc`
+is answered with `400` and nothing is saved (API-22). Profile recall and scene
+profile steps do not apply `scaler_mode` or `arc` yet (API-29).
 
 #### DELETE /api/profile/{id}
 Delete a profile.
@@ -740,11 +752,13 @@ curl -X POST http://localhost:8080/api/profile/movie_night/macros \
 
 Send CEC commands to input devices (sources) or output devices (TVs/displays).
 
-With `OREI_USE_TELNET_CEC=true`, commands use Telnet when connected and fall
-back to HTTP when Telnet does not acknowledge them. BE-37 records an ambiguity:
-an interrupted reply can cause an HTTP resend after the matrix already processed
-the Telnet command. A successful API response does not establish that a volume
-step was sent only once. This remains open in the C0 baseline.
+With `OREI_USE_TELNET_CEC=true`, commands use Telnet when connected. They fall
+back to HTTP only when the matrix certainly did not run the Telnet command:
+Telnet was not connected, or the matrix answered with an error code
+(`E00`/`E01`). When the command was written but its acknowledgement was lost,
+cut short or never came, the matrix may already have run it; CEC commands are
+not idempotent (a volume step, a toggle), so the command is not resent and the
+request fails with `500` (BE-37).
 
 #### GET /api/cec/commands
 List all available CEC commands.
@@ -834,10 +848,9 @@ between the read and write; the device protocol provides no atomic port edit.
 
 CEC Macros are saved sequences of CEC commands that can be executed atomically with optional delays between steps.
 
-**Known baseline gap (API-28):** Macro creation rejects descriptions longer
-than 2000 characters, but macro edits currently accept and persist them.
-The [scene/macro management report](validation/2026-10-02-domain-management.md)
-retains this failure; symmetric edit validation remains pending.
+Creation (`POST`) and editing (`PUT`) apply the same limits: a name of at most
+200 characters and a description of at most 2000. A longer one is answered with
+`400` and the macro is not changed (API-28).
 
 ### Macro Step Format
 
