@@ -42,6 +42,8 @@ features:
   basis: 'V3: tests/e2e/smoke.spec.ts ''routing an input to an output in the matrix grid changes the simulator'' (browser
     click -> simulator state asserted). V2: tests/sim/test_sim_e2e.py::test_switch_changes_simulator_state.'
   evidence:
+  - docs/validation/evidence/F-MTX-001/2026-10-03-V2-01f62641-routing.switch_one-api.json
+  - docs/validation/evidence/F-MTX-001/2026-10-03-V3-01f62641-routing.switch_one-browser.json
   - docs/validation/evidence/F-HA-002/2026-10-01-V3-2a28a93e-ha.select_source-ha.json
   - docs/validation/evidence/F-MTX-001/2026-10-01-V2-2a28a93e-routing.switch_one-api.json
   - docs/validation/evidence/F-MTX-001/2026-10-01-V3-2a28a93e-routing.switch_one-browser.json
@@ -65,6 +67,8 @@ features:
   basis: 'V3: tests/e2e/smoke.spec.ts ''routing an input to all outputs from the kiosk changes the simulator'' (asserts simulator
     routing). V2: tests/sim/test_sim_e2e.py::test_switch_all_and_preset.'
   evidence:
+  - docs/validation/evidence/F-MTX-002/2026-10-03-V2-01f62641-routing.route_all-api.json
+  - docs/validation/evidence/F-MTX-002/2026-10-03-V3-01f62641-routing.route_all-browser.json
   - docs/validation/evidence/F-MTX-002/2026-10-01-V2-2a28a93e-routing.route_all-api.json
   - docs/validation/evidence/F-MTX-002/2026-10-01-V3-2a28a93e-routing.route_all-browser.json
   findings: [BE-12]
@@ -87,6 +91,8 @@ features:
   current: V3
   basis: 'V3: ha.preset_button (ha client: a real Home Assistant container drives it; simulator state read back). V2: tests/sim/test_sim_e2e.py::test_switch_all_and_preset (POST /api/preset/3 -> simulator routing asserted).'
   evidence:
+  - docs/validation/evidence/F-MTX-003/2026-10-03-V2-01f62641-presets.recall-api.json
+  - docs/validation/evidence/F-MTX-003/2026-10-03-V3-01f62641-presets.recall-browser.json
   - docs/validation/evidence/F-HA-006/2026-10-01-V3-2a28a93e-ha.preset_button-ha.json
   - docs/validation/evidence/F-MTX-003/2026-10-01-V2-2a28a93e-presets.recall-api.json
   - docs/validation/evidence/F-MTX-003/2026-10-01-V3-2a28a93e-presets.recall-browser.json
@@ -138,6 +144,8 @@ features:
   basis: No test renames a preset (route not exercised by any test); the visual catalog entry drawer/presets/rename only captures
     the edit field.
   evidence:
+  - docs/validation/evidence/F-MTX-005/2026-10-03-V2-01f62641-presets.rename-api.json
+  - docs/validation/evidence/F-MTX-005/2026-10-03-V3-01f62641-presets.rename-browser.json
   - docs/validation/evidence/F-MTX-005/2026-10-01-V2-2a28a93e-presets.rename-api.json
   - docs/validation/evidence/F-MTX-005/2026-10-01-V3-2a28a93e-presets.rename-browser.json
   findings: [UC-14, BE-16]
@@ -584,6 +592,10 @@ features:
   current: V1
   basis: 'Enabled simulator reboot via the real REST app and both shortcut aliases; HTTP-only and Telnet lifecycle tests, refusal and missing-acknowledgement fallback. Packaged-image records prove one simulator reboot and automatic recovery. Confirmation-dialog UI, HA/Flic triggers and physical reboot acknowledgement/timing require separate proof.'
   evidence:
+  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-01f62641-reboot.direct-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-01f62641-reboot.enabled_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-01f62641-reboot.legacy_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-03-V3-01f62641-reboot.enabled_shortcut-browser.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.direct-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.enabled_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.legacy_shortcut-api.json
@@ -965,6 +977,10 @@ features:
   current: V3
   basis: 'V3: scenarios live.front_panel_route, live.input_signal, live.display_unplugged, live.rename_elsewhere: the simulator changes behind the hub''s back and a /ui and a /kiosk page that stay open show it, with their status reads stripped so only the WebSocket can explain it (browser client). Hardware: HIL-B.'
   evidence:
+  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-01f62641-live.display_unplugged-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-01f62641-live.front_panel_route-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-01f62641-live.input_signal-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-01f62641-live.rename_elsewhere-browser.json
   - docs/validation/evidence/F-HA-002/2026-10-01-V3-2a28a93e-ha.front_panel_route-ha.json
   - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.display_unplugged-browser.json
   - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.front_panel_route-browser.json
@@ -3090,6 +3106,8 @@ features:
   current: V2
   basis: 'V2: tests/sim/test_sim_e2e.py::test_switch_changes_simulator_state, ::test_switch_all_and_preset.'
   evidence:
+  - docs/validation/evidence/F-MTX-001/2026-10-03-V2-01f62641-routing.switch_one-api.json
+  - docs/validation/evidence/F-MTX-002/2026-10-03-V2-01f62641-routing.route_all-api.json
   - docs/validation/evidence/F-MTX-001/2026-10-01-V2-2a28a93e-routing.switch_one-api.json
   - docs/validation/evidence/F-MTX-002/2026-10-01-V2-2a28a93e-routing.route_all-api.json
   findings: [BE-12]
@@ -3116,6 +3134,7 @@ features:
   current: V2
   basis: 'V2: tests/sim/test_sim_e2e.py::test_switch_all_and_preset.'
   evidence:
+  - docs/validation/evidence/F-MTX-003/2026-10-03-V2-01f62641-presets.recall-api.json
   - docs/validation/evidence/F-MTX-003/2026-10-01-V2-2a28a93e-presets.recall-api.json
   findings: []
   scenarios: [presets.recall]
@@ -3208,6 +3227,10 @@ features:
   current: V1
   basis: 'Existing mocked system-settings tests plus enabled simulator reboot contracts through the registered app. Reboot refusal returns 500 with exactly one HTTP attempt. System-mode scenarios separately cover beep, panel lock and LCD writes; this batch records the reboot portion.'
   evidence:
+  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-01f62641-reboot.direct-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-01f62641-reboot.enabled_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-01f62641-reboot.legacy_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-03-V3-01f62641-reboot.enabled_shortcut-browser.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.direct-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.enabled_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.legacy_shortcut-api.json
@@ -5181,6 +5204,11 @@ features:
   current: V2
   basis: 'V2: scenario live.matrix_offline (a browser run; the runner''s /ws observer gets matrix_connection down and back, /api/status answers 503 with the link state); tests/sim/test_sim_ws_contract.py (real hub app + simulator: welcome with protocol and link, snapshot, get_status, link loss and recovery, schema-checked); every message a scenario''s /ws observer receives is checked against docs/api/websocket.schema.json (tools/validate/runner.py ws_contract_check).'
   evidence:
+  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-01f62641-reboot.direct-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-01f62641-reboot.enabled_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-01f62641-reboot.legacy_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-03-V3-01f62641-reboot.enabled_shortcut-browser.json
+  - docs/validation/evidence/F-REL-009/2026-10-03-V3-01f62641-live.matrix_offline-browser.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.direct-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.enabled_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.legacy_shortcut-api.json
@@ -5198,6 +5226,7 @@ features:
   current: V2
   basis: 'V2: scenarios routing.switch_one (routing_change after /api/switch) and failures.unreachable_switch (switch_failed); tests/sim/test_sim_ws_contract.py (exactly one routing_change per change, grid route, a refused route announces switch_failed); every message a scenario''s /ws observer receives is checked against docs/api/websocket.schema.json (tools/validate/runner.py ws_contract_check).'
   evidence:
+  - docs/validation/evidence/F-MTX-001/2026-10-03-V2-01f62641-routing.switch_one-api.json
   - docs/validation/evidence/F-MTX-001/2026-10-01-V2-2a28a93e-routing.switch_one-api.json
   - docs/validation/evidence/F-REL-009/2026-10-01-V2-2a28a93e-failures.unreachable_switch-api.json
   findings: []
@@ -5212,6 +5241,7 @@ features:
   current: V2
   basis: 'V2: scenario routing.route_all (routing_change for output 8); tests/sim/test_sim_ws_contract.py::test_route_all_announces_every_output_that_changed. switch_all_failed: V1 (sent by the handler on a refused write; no scenario yet).'
   evidence:
+  - docs/validation/evidence/F-MTX-002/2026-10-03-V2-01f62641-routing.route_all-api.json
   - docs/validation/evidence/F-MTX-002/2026-10-01-V2-2a28a93e-routing.route_all-api.json
   findings: []
   scenarios: [routing.route_all]
@@ -5225,6 +5255,7 @@ features:
   current: V2
   basis: 'V2: scenario presets.recall (preset_recall after the matrix accepted it; the routing follows as routing_change); tests/sim/test_sim_ws_contract.py::test_preset_recall_is_announced_after_success_and_its_routing_follows. tests/e2e/flows.spec.ts UI-04 test: the web UI no longer refreshes (and toasts) on every page for this event.'
   evidence:
+  - docs/validation/evidence/F-MTX-003/2026-10-03-V2-01f62641-presets.recall-api.json
   - docs/validation/evidence/F-MTX-003/2026-10-01-V2-2a28a93e-presets.recall-api.json
   findings: [UI-04]
   scenarios: [presets.recall]
@@ -5252,6 +5283,7 @@ features:
   current: V2
   basis: 'V2: scenario presets.rename (device_settings on /ws, schema-checked).'
   evidence:
+  - docs/validation/evidence/F-MTX-005/2026-10-03-V2-01f62641-presets.rename-api.json
   - docs/validation/evidence/F-MTX-005/2026-10-01-V2-2a28a93e-presets.rename-api.json
   findings: []
   scenarios: [presets.rename]
@@ -5291,6 +5323,10 @@ features:
   current: V2
   basis: 'V2: scenarios live.front_panel_route, live.input_signal, live.display_unplugged (from the Telnet push, within 4 s), live.rename_elsewhere (browser runs: the runner''s /ws observer gets each event, the value is read back over REST), power.standby (api: power_change); tests/sim/test_sim_ws_contract.py and tests/test_hub_events.py. Emitted in every mode by src/rest_api/events.py (no longer by the driver''s poller).'
   evidence:
+  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-01f62641-live.display_unplugged-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-01f62641-live.front_panel_route-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-01f62641-live.input_signal-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-01f62641-live.rename_elsewhere-browser.json
   - docs/validation/evidence/F-MTX-006/2026-10-01-V2-2a28a93e-power.standby-api.json
   - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.display_unplugged-browser.json
   - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.front_panel_route-browser.json
@@ -5308,6 +5344,7 @@ features:
   current: V2
   basis: 'V2: scenario scenes.partial_failure receives scene_execution_error on /ws (schema-checked). The web UI does not show it yet (WP-E1, VAL-11).'
   evidence:
+  - docs/validation/evidence/F-DOM-011/2026-10-03-V2-01f62641-scenes.partial_failure-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.partial_failure-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.partial_failure-api.json
   findings: [VAL-11]
@@ -5431,6 +5468,10 @@ features:
   current: V3
   basis: 'WP-C4 V3 on the shipped image: browser profile activation applies routing, including disabled outputs; API refusal cases verify truthful failures. Shared recall/scene state writer (DI-11). V4 awaits the owner.'
   evidence:
+  - docs/validation/evidence/F-DOM-002/2026-10-03-V2-01f62641-profiles.recall_disabled_output-api.json
+  - docs/validation/evidence/F-DOM-002/2026-10-03-V2-01f62641-profiles.recall_routing-api.json
+  - docs/validation/evidence/F-DOM-002/2026-10-03-V3-01f62641-profiles.recall_disabled_output-browser.json
+  - docs/validation/evidence/F-DOM-002/2026-10-03-V3-01f62641-profiles.recall_routing-browser.json
   - docs/validation/evidence/F-DOM-002/2026-10-02-V2-ed4cb0fb-profile_state.alias_recall-api.json
   - docs/validation/evidence/F-DOM-002/2026-10-01-V2-2a28a93e-profiles.recall_disabled_output-api.json
   - docs/validation/evidence/F-DOM-002/2026-10-01-V2-2a28a93e-profiles.recall_rejected-api.json
@@ -5459,6 +5500,8 @@ features:
   current: V3
   basis: 'WP-C4 V3: profiles.recall_output_settings and profiles.recall_disabled_output activate profiles through Chromium and read mute, HDR, HDCP and stream state back from the simulator on the shipped image. V4 awaits the owner; scaler/ARC persistence remains API-22.'
   evidence:
+  - docs/validation/evidence/F-DOM-002/2026-10-03-V2-01f62641-profiles.recall_disabled_output-api.json
+  - docs/validation/evidence/F-DOM-002/2026-10-03-V3-01f62641-profiles.recall_disabled_output-browser.json
   - docs/validation/evidence/F-DOM-002/2026-10-01-V2-2a28a93e-profiles.recall_disabled_output-api.json
   - docs/validation/evidence/F-DOM-002/2026-10-01-V3-2a28a93e-profiles.recall_disabled_output-browser.json
   - docs/validation/evidence/F-DOM-003/2026-10-01-V2-2a28a93e-profiles.recall_output_settings-api.json
@@ -5497,6 +5540,12 @@ features:
   current: V1
   basis: Scenarios profiles.recall_needs_passcode, recall_with_passcode and recall_wrong_passcode pass with the api and browser clients, and kiosk.profile_with_passcode / profile_wrong_passcode on the kiosk PIN pad (V3 evidence; WP-E1 UI-01, UI-48). Recorded level capped at V1 by the open high findings SEC-05 and SEC-06.
   evidence:
+  - docs/validation/evidence/F-DOM-005/2026-10-03-V2-01f62641-profiles.recall_needs_passcode-api.json
+  - docs/validation/evidence/F-DOM-005/2026-10-03-V2-01f62641-profiles.recall_with_passcode-api.json
+  - docs/validation/evidence/F-DOM-005/2026-10-03-V2-01f62641-profiles.recall_wrong_passcode-api.json
+  - docs/validation/evidence/F-DOM-005/2026-10-03-V3-01f62641-profiles.recall_needs_passcode-browser.json
+  - docs/validation/evidence/F-DOM-005/2026-10-03-V3-01f62641-profiles.recall_with_passcode-browser.json
+  - docs/validation/evidence/F-DOM-005/2026-10-03-V3-01f62641-profiles.recall_wrong_passcode-browser.json
   - docs/validation/evidence/F-DOM-005/2026-10-01-V2-2a28a93e-profiles.recall_needs_passcode-api.json
   - docs/validation/evidence/F-DOM-005/2026-10-01-V2-2a28a93e-profiles.recall_with_passcode-api.json
   - docs/validation/evidence/F-DOM-005/2026-10-01-V2-2a28a93e-profiles.recall_wrong_passcode-api.json
@@ -5916,12 +5965,17 @@ features:
   current: V3
   basis: 'WP-C4 V3: browser execution on the shipped image verifies full profile state, disabled output routing/stream, no implicit profile macros, truthful partial failures and history. Explicit scene steps own sequencing (DI-11).'
   evidence:
+  - docs/validation/evidence/F-DOM-011/2026-10-03-V2-01f62641-scenes.disabled_output_state-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-03-V2-01f62641-scenes.partial_failure-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-03-V2-01f62641-scenes.run_protected-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-03-V3-01f62641-scenes.disabled_output_state-browser.json
+  - docs/validation/evidence/F-DOM-011/2026-10-03-V3-01f62641-scenes.partial_failure-browser.json
+  - docs/validation/evidence/F-DOM-011/2026-10-03-V3-01f62641-scenes.run_protected-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.disabled_output_state-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.partial_failure-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.run_profile_macro_preset-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.run_protected-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.run_unknown-api.json
-  - docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.disabled_output_state-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.partial_failure-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.run_profile_macro_preset-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.run_protected-browser.json
@@ -5946,6 +6000,8 @@ features:
   current: V3
   basis: 'WP-C4 V3: browser-run scene macro steps send exactly the explicit CEC frames; a single refused target does not prevent later commands when the saved continue_on_error policy is true. Device command logs prove the effects.'
   evidence:
+  - docs/validation/evidence/F-DOM-012/2026-10-03-V2-01f62641-scenes.macro_continues_after_refusal-api.json
+  - docs/validation/evidence/F-DOM-012/2026-10-03-V3-01f62641-scenes.macro_continues_after_refusal-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.run_profile_macro_preset-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.run_profile_macro_preset-browser.json
   - docs/validation/evidence/F-DOM-012/2026-10-01-V2-2a28a93e-scenes.macro_continues_after_refusal-api.json
@@ -5970,6 +6026,10 @@ features:
   current: V3
   basis: 'WP-C4 V3 (DI-12): the browser adds two 0.5-second waits, removes one, saves and reads back exactly one wait; scene execution places the wait between actual shortcut commands, whose simulator timestamps are at least 0.5 seconds apart. Unit/API/UI regressions reject invalid durations.'
   evidence:
+  - docs/validation/evidence/F-DOM-013/2026-10-03-V2-01f62641-scenes.wait_between_actions-api.json
+  - docs/validation/evidence/F-DOM-013/2026-10-03-V2-01f62641-scenes.wait_edit-api.json
+  - docs/validation/evidence/F-DOM-013/2026-10-03-V3-01f62641-scenes.wait_between_actions-browser.json
+  - docs/validation/evidence/F-DOM-013/2026-10-03-V3-01f62641-scenes.wait_edit-browser.json
   - docs/validation/evidence/F-DOM-013/2026-10-01-V2-2a28a93e-scenes.wait_between_actions-api.json
   - docs/validation/evidence/F-DOM-013/2026-10-01-V2-2a28a93e-scenes.wait_edit-api.json
   - docs/validation/evidence/F-DOM-013/2026-10-01-V3-2a28a93e-scenes.wait_between_actions-browser.json
@@ -5990,11 +6050,12 @@ features:
   current: V3
   basis: 'WP-C4 V3: browser-run scenes apply routing while leaving an overridden input, audio mute or enabled setting unchanged on the simulator. Disabled outputs still receive all unskipped state writes.'
   evidence:
+  - docs/validation/evidence/F-DOM-014/2026-10-03-V2-01f62641-scenes.enabled_override-api.json
+  - docs/validation/evidence/F-DOM-014/2026-10-03-V3-01f62641-scenes.enabled_override-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.run_profile_macro_preset-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.run_profile_macro_preset-browser.json
   - docs/validation/evidence/F-DOM-014/2026-10-01-V2-2a28a93e-scenes.enabled_override-api.json
   - docs/validation/evidence/F-DOM-014/2026-10-01-V2-2a28a93e-scenes.override_leaves_setting-api.json
-  - docs/validation/evidence/F-DOM-014/2026-10-01-V3-2a28a93e-scenes.enabled_override-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.run_profile_macro_preset-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.run_profile_macro_preset-browser.json
   - docs/validation/evidence/F-DOM-014/2026-10-01-V2-97d0d2af-scenes.enabled_override-api.json
@@ -6013,6 +6074,8 @@ features:
   current: V1
   basis: 'Scenarios scenes.run_protected (api, and browser through the passcode prompt since WP-E1: V3 evidence) and scenes.run_needs_passcode (V2); tests/sim/test_sim_scenes_v2.py passcode tests; tests/test_scene_execution.py TestSceneExecutorPassword. Recorded level capped at V1 by the open high findings SEC-05 and SEC-06.'
   evidence:
+  - docs/validation/evidence/F-DOM-011/2026-10-03-V2-01f62641-scenes.run_protected-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-03-V3-01f62641-scenes.run_protected-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.run_protected-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.run_protected-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.run_protected-api.json
@@ -6030,6 +6093,8 @@ features:
   current: V3
   basis: 'WP-C4 V3: the saved scene editor displays three actual differing profile settings, including default mute values; browser observations verify each displayed value and the API reports has_conflicts=true. Identical, absent and overridden values are covered by unit regressions.'
   evidence:
+  - docs/validation/evidence/F-DOM-016/2026-10-03-V2-01f62641-scenes.conflicts_visible-api.json
+  - docs/validation/evidence/F-DOM-016/2026-10-03-V3-01f62641-scenes.conflicts_visible-browser.json
   - docs/validation/evidence/F-DOM-016/2026-10-01-V2-2a28a93e-scenes.conflicts_visible-api.json
   - docs/validation/evidence/F-DOM-016/2026-10-01-V3-2a28a93e-scenes.conflicts_visible-browser.json
   - docs/validation/evidence/F-DOM-016/2026-10-01-V2-97d0d2af-scenes.conflicts_visible-api.json
@@ -6046,6 +6111,8 @@ features:
   current: V3
   basis: 'V3: scenario scenes.partial_failure, run from the web UI (browser client) and the api client, reads the history back through the hub; tests/sim/test_sim_scenes_v2.py history checks.'
   evidence:
+  - docs/validation/evidence/F-DOM-011/2026-10-03-V2-01f62641-scenes.partial_failure-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-03-V3-01f62641-scenes.partial_failure-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-2a28a93e-scenes.partial_failure-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.partial_failure-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.partial_failure-api.json
@@ -6219,14 +6286,18 @@ features:
   current: V3
   basis: 'WP-C4 V3: browser-run macros send CEC commands on the shipped image. Single-refusal scenarios prove saved continue_on_error continues to later accepted commands, while the default policy stops. The REST default-timeout contract is pinned separately by the simulator endpoint regression.'
   evidence:
+  - docs/validation/evidence/F-DOM-012/2026-10-03-V2-01f62641-scenes.macro_continues_after_refusal-api.json
+  - docs/validation/evidence/F-DOM-012/2026-10-03-V3-01f62641-scenes.macro_continues_after_refusal-browser.json
+  - docs/validation/evidence/F-DOM-020/2026-10-03-V2-01f62641-macros.run_rejected-api.json
+  - docs/validation/evidence/F-DOM-020/2026-10-03-V2-01f62641-macros.run_volume_up-api.json
+  - docs/validation/evidence/F-DOM-020/2026-10-03-V2-01f62641-scenes.macro_stops_after_refusal-api.json
+  - docs/validation/evidence/F-DOM-020/2026-10-03-V3-01f62641-macros.run_rejected-browser.json
+  - docs/validation/evidence/F-DOM-020/2026-10-03-V3-01f62641-macros.run_volume_up-browser.json
+  - docs/validation/evidence/F-DOM-020/2026-10-03-V3-01f62641-scenes.macro_stops_after_refusal-browser.json
   - docs/validation/evidence/F-DOM-012/2026-10-01-V2-2a28a93e-scenes.macro_continues_after_refusal-api.json
   - docs/validation/evidence/F-DOM-012/2026-10-01-V3-2a28a93e-scenes.macro_continues_after_refusal-browser.json
   - docs/validation/evidence/F-DOM-020/2026-10-01-V2-2a28a93e-macros.run_rejected-api.json
   - docs/validation/evidence/F-DOM-020/2026-10-01-V2-2a28a93e-macros.run_volume_up-api.json
-  - docs/validation/evidence/F-DOM-020/2026-10-01-V2-2a28a93e-scenes.macro_stops_after_refusal-api.json
-  - docs/validation/evidence/F-DOM-020/2026-10-01-V3-2a28a93e-macros.run_rejected-browser.json
-  - docs/validation/evidence/F-DOM-020/2026-10-01-V3-2a28a93e-macros.run_volume_up-browser.json
-  - docs/validation/evidence/F-DOM-020/2026-10-01-V3-2a28a93e-scenes.macro_stops_after_refusal-browser.json
   - docs/validation/evidence/F-DOM-020/2026-10-01-V3-9362fd00-macros.run_rejected-browser.json
   - docs/validation/evidence/F-DOM-020/2026-10-01-V3-9362fd00-macros.run_volume_up-browser.json
   - docs/validation/evidence/F-DOM-012/2026-10-01-V2-97d0d2af-scenes.macro_continues_after_refusal-api.json
@@ -6290,6 +6361,10 @@ features:
   current: V2
   basis: 'Scenarios shortcuts.route_* (V2); tests/sim/test_sim_shortcuts.py shortcut tests; tests/test_system_shortcuts.py (spec''d double).'
   evidence:
+  - docs/validation/evidence/F-DOM-023/2026-10-03-V2-01f62641-shortcuts.route_input_to_output-api.json
+  - docs/validation/evidence/F-DOM-023/2026-10-03-V2-01f62641-shortcuts.route_one_to_one-api.json
+  - docs/validation/evidence/F-DOM-023/2026-10-03-V2-01f62641-shortcuts.unknown-api.json
+  - docs/validation/evidence/F-DOM-023/2026-10-03-V3-01f62641-shortcuts.route_one_to_one-browser.json
   - docs/validation/evidence/F-DOM-023/2026-10-01-V2-2a28a93e-shortcuts.route_input_to_output-api.json
   - docs/validation/evidence/F-DOM-023/2026-10-01-V2-2a28a93e-shortcuts.route_one_to_one-api.json
   - docs/validation/evidence/F-DOM-023/2026-10-01-V2-2a28a93e-shortcuts.unknown-api.json
@@ -6306,6 +6381,8 @@ features:
   current: V2
   basis: 'Scenario shortcuts.power_off_all (V2: one `set poweronoff`, API-06); tests/sim/test_sim_shortcuts.py::test_power_off_all_shortcut_sends_one_command.'
   evidence:
+  - docs/validation/evidence/F-DOM-024/2026-10-03-V2-01f62641-shortcuts.power_off_all-api.json
+  - docs/validation/evidence/F-DOM-024/2026-10-03-V3-01f62641-shortcuts.power_off_all-browser.json
   - docs/validation/evidence/F-DOM-024/2026-10-01-V2-2a28a93e-shortcuts.power_off_all-api.json
   - docs/validation/evidence/F-DOM-024/2026-10-01-V3-2a28a93e-shortcuts.power_off_all-browser.json
   - docs/validation/evidence/F-DOM-024/2026-10-01-V3-9362fd00-shortcuts.power_off_all-browser.json
@@ -6320,12 +6397,16 @@ features:
   current: V2
   basis: 'Scenarios shortcuts.mute_all, shortcuts.unmute_all, shortcuts.mute_rejected (V2); tests/sim/test_sim_shortcuts.py.'
   evidence:
+  - docs/validation/evidence/F-DOM-025/2026-10-03-V2-01f62641-shortcuts.mute_all-api.json
+  - docs/validation/evidence/F-DOM-025/2026-10-03-V2-01f62641-shortcuts.mute_rejected-api.json
+  - docs/validation/evidence/F-DOM-025/2026-10-03-V2-01f62641-shortcuts.unmute_all-api.json
+  - docs/validation/evidence/F-DOM-025/2026-10-03-V3-01f62641-shortcuts.mute_all-browser.json
+  - docs/validation/evidence/F-DOM-025/2026-10-03-V3-01f62641-shortcuts.mute_rejected-browser.json
+  - docs/validation/evidence/F-DOM-025/2026-10-03-V3-01f62641-shortcuts.unmute_all-browser.json
   - docs/validation/evidence/F-DOM-025/2026-10-01-V2-2a28a93e-shortcuts.mute_all-api.json
   - docs/validation/evidence/F-DOM-025/2026-10-01-V2-2a28a93e-shortcuts.mute_rejected-api.json
   - docs/validation/evidence/F-DOM-025/2026-10-01-V2-2a28a93e-shortcuts.unmute_all-api.json
   - docs/validation/evidence/F-DOM-025/2026-10-01-V3-2a28a93e-shortcuts.mute_all-browser.json
-  - docs/validation/evidence/F-DOM-025/2026-10-01-V3-2a28a93e-shortcuts.mute_rejected-browser.json
-  - docs/validation/evidence/F-DOM-025/2026-10-01-V3-2a28a93e-shortcuts.unmute_all-browser.json
   - docs/validation/evidence/F-DOM-025/2026-10-01-V3-9362fd00-shortcuts.mute_all-browser.json
   - docs/validation/evidence/F-DOM-025/2026-10-01-V3-9362fd00-shortcuts.mute_rejected-browser.json
   - docs/validation/evidence/F-DOM-025/2026-10-01-V3-9362fd00-shortcuts.unmute_all-browser.json
@@ -6340,6 +6421,8 @@ features:
   current: V2
   basis: 'Scenario shortcuts.preset_recall (V2); tests/sim/test_sim_shortcuts.py::test_other_shortcuts.'
   evidence:
+  - docs/validation/evidence/F-DOM-026/2026-10-03-V2-01f62641-shortcuts.preset_recall-api.json
+  - docs/validation/evidence/F-DOM-026/2026-10-03-V3-01f62641-shortcuts.preset_recall-browser.json
   - docs/validation/evidence/F-DOM-026/2026-10-01-V2-2a28a93e-shortcuts.preset_recall-api.json
   - docs/validation/evidence/F-DOM-026/2026-10-01-V3-2a28a93e-shortcuts.preset_recall-browser.json
   - docs/validation/evidence/F-DOM-026/2026-10-01-V3-9362fd00-shortcuts.preset_recall-browser.json
@@ -6354,20 +6437,27 @@ features:
   current: V2
   basis: 'System-mode and refusal scenarios plus disabled_reboot and reboot.enabled_shortcut API/browser records. Enabled simulator reboot emits one Telnet command and restores the connection; hardware reboot behaviour remains pending.'
   evidence:
+  - docs/validation/evidence/F-DOM-027/2026-10-03-V2-01f62641-shortcuts.beep_off-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-03-V2-01f62641-shortcuts.beep_on-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-03-V2-01f62641-shortcuts.beep_rejected-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-03-V2-01f62641-shortcuts.disabled_reboot-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-03-V2-01f62641-shortcuts.panel_lock-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-03-V2-01f62641-shortcuts.panel_lock_rejected-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-03-V2-01f62641-shortcuts.panel_unlock-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-03-V3-01f62641-shortcuts.beep_off-browser.json
+  - docs/validation/evidence/F-DOM-027/2026-10-03-V3-01f62641-shortcuts.beep_on-browser.json
+  - docs/validation/evidence/F-DOM-027/2026-10-03-V3-01f62641-shortcuts.beep_rejected-browser.json
+  - docs/validation/evidence/F-DOM-027/2026-10-03-V3-01f62641-shortcuts.disabled_reboot-browser.json
+  - docs/validation/evidence/F-DOM-027/2026-10-03-V3-01f62641-shortcuts.panel_lock-browser.json
+  - docs/validation/evidence/F-DOM-027/2026-10-03-V3-01f62641-shortcuts.panel_lock_rejected-browser.json
+  - docs/validation/evidence/F-DOM-027/2026-10-03-V3-01f62641-shortcuts.panel_unlock-browser.json
+  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-01f62641-reboot.enabled_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-01f62641-reboot.legacy_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-03-V3-01f62641-reboot.enabled_shortcut-browser.json
   - docs/validation/evidence/F-DOM-027/2026-10-01-V2-2a28a93e-shortcuts.beep_off-api.json
   - docs/validation/evidence/F-DOM-027/2026-10-01-V2-2a28a93e-shortcuts.beep_on-api.json
   - docs/validation/evidence/F-DOM-027/2026-10-01-V2-2a28a93e-shortcuts.beep_rejected-api.json
   - docs/validation/evidence/F-DOM-027/2026-10-01-V2-2a28a93e-shortcuts.disabled_reboot-api.json
-  - docs/validation/evidence/F-DOM-027/2026-10-01-V2-2a28a93e-shortcuts.panel_lock-api.json
-  - docs/validation/evidence/F-DOM-027/2026-10-01-V2-2a28a93e-shortcuts.panel_lock_rejected-api.json
-  - docs/validation/evidence/F-DOM-027/2026-10-01-V2-2a28a93e-shortcuts.panel_unlock-api.json
-  - docs/validation/evidence/F-DOM-027/2026-10-01-V3-2a28a93e-shortcuts.beep_off-browser.json
-  - docs/validation/evidence/F-DOM-027/2026-10-01-V3-2a28a93e-shortcuts.beep_on-browser.json
-  - docs/validation/evidence/F-DOM-027/2026-10-01-V3-2a28a93e-shortcuts.beep_rejected-browser.json
-  - docs/validation/evidence/F-DOM-027/2026-10-01-V3-2a28a93e-shortcuts.disabled_reboot-browser.json
-  - docs/validation/evidence/F-DOM-027/2026-10-01-V3-2a28a93e-shortcuts.panel_lock-browser.json
-  - docs/validation/evidence/F-DOM-027/2026-10-01-V3-2a28a93e-shortcuts.panel_lock_rejected-browser.json
-  - docs/validation/evidence/F-DOM-027/2026-10-01-V3-2a28a93e-shortcuts.panel_unlock-browser.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.enabled_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.legacy_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V3-2a28a93e-reboot.enabled_shortcut-browser.json
@@ -6388,18 +6478,22 @@ features:
     tests/sim/test_sim_shortcuts.py::test_lcd_shortcuts_set_the_device_code. The device command itself is web-UI-derived until
     a hardware write run proves it (HIL-09).'
   evidence:
+  - docs/validation/evidence/F-DOM-028/2026-10-03-V2-01f62641-shortcuts.lcd_15s-api.json
+  - docs/validation/evidence/F-DOM-028/2026-10-03-V2-01f62641-shortcuts.lcd_30s-api.json
+  - docs/validation/evidence/F-DOM-028/2026-10-03-V2-01f62641-shortcuts.lcd_60s-api.json
+  - docs/validation/evidence/F-DOM-028/2026-10-03-V2-01f62641-shortcuts.lcd_always_on-api.json
+  - docs/validation/evidence/F-DOM-028/2026-10-03-V2-01f62641-shortcuts.lcd_off-api.json
+  - docs/validation/evidence/F-DOM-028/2026-10-03-V2-01f62641-shortcuts.lcd_rejected-api.json
+  - docs/validation/evidence/F-DOM-028/2026-10-03-V3-01f62641-shortcuts.lcd_15s-browser.json
+  - docs/validation/evidence/F-DOM-028/2026-10-03-V3-01f62641-shortcuts.lcd_30s-browser.json
+  - docs/validation/evidence/F-DOM-028/2026-10-03-V3-01f62641-shortcuts.lcd_60s-browser.json
+  - docs/validation/evidence/F-DOM-028/2026-10-03-V3-01f62641-shortcuts.lcd_always_on-browser.json
+  - docs/validation/evidence/F-DOM-028/2026-10-03-V3-01f62641-shortcuts.lcd_off-browser.json
+  - docs/validation/evidence/F-DOM-028/2026-10-03-V3-01f62641-shortcuts.lcd_rejected-browser.json
   - docs/validation/evidence/F-DOM-028/2026-10-01-V2-2a28a93e-shortcuts.lcd_15s-api.json
   - docs/validation/evidence/F-DOM-028/2026-10-01-V2-2a28a93e-shortcuts.lcd_30s-api.json
   - docs/validation/evidence/F-DOM-028/2026-10-01-V2-2a28a93e-shortcuts.lcd_60s-api.json
   - docs/validation/evidence/F-DOM-028/2026-10-01-V2-2a28a93e-shortcuts.lcd_always_on-api.json
-  - docs/validation/evidence/F-DOM-028/2026-10-01-V2-2a28a93e-shortcuts.lcd_off-api.json
-  - docs/validation/evidence/F-DOM-028/2026-10-01-V2-2a28a93e-shortcuts.lcd_rejected-api.json
-  - docs/validation/evidence/F-DOM-028/2026-10-01-V3-2a28a93e-shortcuts.lcd_15s-browser.json
-  - docs/validation/evidence/F-DOM-028/2026-10-01-V3-2a28a93e-shortcuts.lcd_30s-browser.json
-  - docs/validation/evidence/F-DOM-028/2026-10-01-V3-2a28a93e-shortcuts.lcd_60s-browser.json
-  - docs/validation/evidence/F-DOM-028/2026-10-01-V3-2a28a93e-shortcuts.lcd_always_on-browser.json
-  - docs/validation/evidence/F-DOM-028/2026-10-01-V3-2a28a93e-shortcuts.lcd_off-browser.json
-  - docs/validation/evidence/F-DOM-028/2026-10-01-V3-2a28a93e-shortcuts.lcd_rejected-browser.json
   - docs/validation/evidence/F-DOM-028/2026-10-01-V3-7aa17c95-shortcuts.lcd_always_on-browser.json
   - docs/validation/evidence/F-DOM-028/2026-10-01-V3-7aa17c95-shortcuts.lcd_rejected-browser.json
   - docs/validation/evidence/F-DOM-028/2026-10-01-V3-9362fd00-shortcuts.lcd_15s-browser.json
@@ -6544,6 +6638,7 @@ features:
   current: V3
   basis: 'V3: tests/e2e/smoke.spec.ts ''routing an input to an output in the matrix grid changes the simulator''.'
   evidence:
+  - docs/validation/evidence/F-MTX-001/2026-10-03-V3-01f62641-routing.switch_one-browser.json
   - docs/validation/evidence/F-MTX-001/2026-10-01-V3-2a28a93e-routing.switch_one-browser.json
   findings: []
   scenarios: [routing.switch_one]
@@ -6569,6 +6664,7 @@ features:
   current: V1
   basis: visual catalog drawer/routing/* (screenshot baseline only; no effect asserted).
   evidence:
+  - docs/validation/evidence/F-MTX-002/2026-10-03-V3-01f62641-routing.route_all-browser.json
   - docs/validation/evidence/F-MTX-002/2026-10-01-V3-2a28a93e-routing.route_all-browser.json
   findings: []
   scenarios: [routing.route_all]
@@ -6582,6 +6678,7 @@ features:
   current: V1
   basis: visual catalog drawer/presets/* (screenshot baseline only; no effect asserted).
   evidence:
+  - docs/validation/evidence/F-MTX-003/2026-10-03-V3-01f62641-presets.recall-browser.json
   - docs/validation/evidence/F-MTX-003/2026-10-01-V3-2a28a93e-presets.recall-browser.json
   findings: []
   scenarios: [presets.recall]
@@ -6595,6 +6692,7 @@ features:
   current: V1
   basis: visual catalog drawer/presets/rename (screenshot baseline only; no effect asserted).
   evidence:
+  - docs/validation/evidence/F-MTX-005/2026-10-03-V3-01f62641-presets.rename-browser.json
   - docs/validation/evidence/F-MTX-005/2026-10-01-V3-2a28a93e-presets.rename-browser.json
   findings: []
   scenarios: [presets.rename]
@@ -6620,6 +6718,7 @@ features:
   current: V3
   basis: 'V3: scenario scenes.run_protected with the browser client runs the locked scene from its dashboard card through the passcode prompt; tests/e2e/flows.spec.ts runs protected scene and profile cards and checks every card type renders on load (UI-01, UI-27 fixed in WP-E1). Visual diffs pending owner approval.'
   evidence:
+  - docs/validation/evidence/F-DOM-011/2026-10-03-V3-01f62641-scenes.run_protected-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.run_protected-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.run_protected-browser.json
   findings: [UI-01, UI-27]
@@ -6670,6 +6769,7 @@ features:
   current: V3
   basis: 'V3: scenario profiles.recall_routing with the browser client (Profiles tab, Activate) and tests/e2e/flows.spec.ts ''the Profiles tab lists the hub profiles and recalls one'' (UI-27 fixed in WP-E1). Visual diffs pending owner approval.'
   evidence:
+  - docs/validation/evidence/F-DOM-002/2026-10-03-V3-01f62641-profiles.recall_routing-browser.json
   - docs/validation/evidence/F-DOM-002/2026-10-01-V3-2a28a93e-profiles.recall_routing-browser.json
   - docs/validation/evidence/F-DOM-002/2026-10-01-V3-97d0d2af-profiles.recall_routing-browser.json
   findings: [UI-27]
@@ -6696,6 +6796,9 @@ features:
   current: V3
   basis: 'V3: scenarios profiles.recall_with_passcode, recall_wrong_passcode and recall_needs_passcode with the browser client (prompt answered, wrong passcode reported, prompt cancelled: nothing sent) and tests/e2e/flows.spec.ts UI-01 tests (Settings drawer, dashboard cards). The prompt is still a native window.prompt() (UI-36, Phase 5).'
   evidence:
+  - docs/validation/evidence/F-DOM-005/2026-10-03-V3-01f62641-profiles.recall_needs_passcode-browser.json
+  - docs/validation/evidence/F-DOM-005/2026-10-03-V3-01f62641-profiles.recall_with_passcode-browser.json
+  - docs/validation/evidence/F-DOM-005/2026-10-03-V3-01f62641-profiles.recall_wrong_passcode-browser.json
   - docs/validation/evidence/F-DOM-005/2026-10-01-V3-2a28a93e-profiles.recall_needs_passcode-browser.json
   - docs/validation/evidence/F-DOM-005/2026-10-01-V3-2a28a93e-profiles.recall_with_passcode-browser.json
   - docs/validation/evidence/F-DOM-005/2026-10-01-V3-2a28a93e-profiles.recall_wrong_passcode-browser.json
@@ -6819,6 +6922,10 @@ features:
   current: V3
   basis: 'V3: scenarios routing.grid_notifies_other_clients (a grid route reaches another /ws client, VAL-05) and live.front_panel_route, live.input_signal, live.display_unplugged, live.rename_elsewhere (an open /ui page shows routing, signal, display and name changes made elsewhere; its status reads are stripped, so only the WebSocket can explain them).'
   evidence:
+  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-01f62641-live.display_unplugged-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-01f62641-live.front_panel_route-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-01f62641-live.input_signal-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-01f62641-live.rename_elsewhere-browser.json
   - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.display_unplugged-browser.json
   - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.front_panel_route-browser.json
   - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.input_signal-browser.json
@@ -6860,6 +6967,7 @@ features:
   current: V3
   basis: 'V3: scenario scenes.partial_failure with the browser client checks the warning toast a partial run shows (VAL-11 fixed in WP-E1); tests/e2e/flows.spec.ts checks success, partial and error toasts for profiles and scenes. Other toasts and the confirmation dialogs: visual catalog only.'
   evidence:
+  - docs/validation/evidence/F-DOM-011/2026-10-03-V3-01f62641-scenes.partial_failure-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-2a28a93e-scenes.partial_failure-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.partial_failure-browser.json
   findings: [UI-32]
@@ -7097,6 +7205,8 @@ features:
   current: V3
   basis: 'V3: scenarios live.front_panel_route and live.input_signal: an open /kiosk page shows routing and signal changes made on the matrix (shared /js/websocket.js client). tests/e2e/flows.spec.ts UI-24 test: the kiosk makes no status reads after start and still shows a matrix-side change (WP-E1 removed its 5 s status poll).'
   evidence:
+  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-01f62641-live.front_panel_route-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-01f62641-live.input_signal-browser.json
   - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.front_panel_route-browser.json
   - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.input_signal-browser.json
   findings: []
@@ -7111,6 +7221,7 @@ features:
   current: V3
   basis: 'V3: scenario live.matrix_offline: an open /kiosk page shows Disconnected while the matrix is off the network and Connected again after it returns. The first-load visual is the catalog entry kiosk/disconnected.'
   evidence:
+  - docs/validation/evidence/F-REL-009/2026-10-03-V3-01f62641-live.matrix_offline-browser.json
   - docs/validation/evidence/F-REL-009/2026-10-01-V3-2a28a93e-live.matrix_offline-browser.json
   findings: [UI-29]
   scenarios: [live.matrix_offline]
@@ -8212,6 +8323,10 @@ features:
   current: V0
   basis: 'Enabled reboot automatically restores HTTP and Telnet through the matrix reconnect supervisor; tests/sim/test_sim_enabled_reboot.py and packaged-image reboot records. The live.matrix_offline browser record also proves recovery after a 30-second simulator outage. Hardware and broader outage/soak cases remain pending.'
   evidence:
+  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-01f62641-reboot.direct-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-01f62641-reboot.enabled_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-01f62641-reboot.legacy_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-03-V3-01f62641-reboot.enabled_shortcut-browser.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.direct-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.enabled_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.legacy_shortcut-api.json
@@ -8266,6 +8381,10 @@ features:
   current: V0
   basis: 'Enabled reboot through REST and both shortcut aliases recovers automatically without manual connect, preserves device settings and permits a subsequent REST routing write (tests/sim/test_sim_enabled_reboot.py). Packaged-image records include actual simulator reboot logs and ordered link events. Physical power-cycle/reboot remains pending.'
   evidence:
+  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-01f62641-reboot.direct-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-01f62641-reboot.enabled_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-01f62641-reboot.legacy_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-03-V3-01f62641-reboot.enabled_shortcut-browser.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.direct-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.enabled_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-01-V2-2a28a93e-reboot.legacy_shortcut-api.json
@@ -8320,6 +8439,7 @@ features:
   current: V3
   basis: 'V3: scenario live.matrix_offline (browser: the /ui header and the kiosk status go disconnected and come back; /api/status answers 503 with the link, never made-up names). V2: failures.unreachable_switch; tests/sim/test_sim_ws_contract.py::test_status_is_not_made_up_when_the_status_read_fails (VAL-04: the link up but the status read failing).'
   evidence:
+  - docs/validation/evidence/F-REL-009/2026-10-03-V3-01f62641-live.matrix_offline-browser.json
   - docs/validation/evidence/F-HA-013/2026-10-01-V3-2a28a93e-ha.matrix_offline-ha.json
   - docs/validation/evidence/F-REL-009/2026-10-01-V2-2a28a93e-failures.unreachable_switch-api.json
   - docs/validation/evidence/F-REL-009/2026-10-01-V3-2a28a93e-live.matrix_offline-browser.json
@@ -8359,6 +8479,7 @@ features:
   current: V3
   basis: 'V3: scenario live.front_panel_route in the core-only hub (no Remote integration at all): the hub''s own poller (src/rest_api/events.py) announces the change and the open /ui and /kiosk pages show it. UC mode: tests/uc/test_lifecycle.py front-panel tests (web clients get routing_change with and without a Remote).'
   evidence:
+  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-01f62641-live.front_panel_route-browser.json
   - docs/validation/evidence/F-MTX-031/2026-10-01-V3-2a28a93e-live.front_panel_route-browser.json
   findings: []
   scenarios: [live.front_panel_route]
