@@ -30,7 +30,12 @@ class AppState {
         
         // Output states
         this.outputs = {};
-        
+
+        // UI-51: the last CEC power command the matrix accepted per port
+        // ("output:1" -> {type, port, command, at}). A command sent, not the
+        // device's power state, and never the output's stream (outputs[n].enabled).
+        this.cecPowerCommands = {};
+
         // Hardware presets
         this.presets = {};
         
@@ -899,6 +904,16 @@ class AppState {
             this.emit('outputs', this.outputs);
             this.saveCachedState();
         }
+    }
+
+    /**
+     * Record a CEC power command the matrix accepted (cec_command, UI-51).
+     * Changes no input or output state.
+     */
+    recordCecPowerCommand(type, port, command) {
+        const entry = { type, port, command, at: Date.now() };
+        this.cecPowerCommands[`${type}:${port}`] = entry;
+        this.emit('cecPowerCommand', entry);
     }
 
     /**
