@@ -223,6 +223,36 @@ Object.assign(FLOWS, {
     steps.push(`click Execute on scene ${p.scene_id}`);
     return call;
   },
+  async scene_wait_edit(page, p, steps) {
+    await openUi(page, steps);
+    await page.evaluate(() => { window.location.hash = '#settings/scenes'; });
+    await page.locator('#settings-drawer.open').waitFor();
+    await page.locator(`#settings-drawer .edit-scene-btn[data-id="${p.scene_id}"]`).click();
+    await page.locator('#scene-editor-modal.open').waitFor();
+    await page.locator('#settings-drawer.open').waitFor({ state: 'hidden' });
+    await page.locator('#add-wait-step-btn').click();
+    await page.locator('#scene-steps-list .step-item').filter({ hasText: `${p.seconds} seconds` }).waitFor();
+    steps.push(`edit ${p.scene_id}, add a ${p.seconds}-second wait through the duration prompt`);
+    await page.locator('#add-wait-step-btn').click();
+    await page.waitForFunction(() => document.querySelectorAll('#scene-steps-list .step-item').length === 2);
+    await page.locator('.remove-step-btn[data-index="0"]').click();
+    await page.waitForFunction(() => document.querySelectorAll('#scene-steps-list .step-item').length === 1);
+    steps.push('add a second wait, remove the first, and verify exactly one step remains after rerendering');
+    const call = waitForCall(page, 'PUT', `/api/v2/scenes/${p.scene_id}`);
+    await page.locator('#scene-editor-save').click();
+    steps.push('save the scene through the editor');
+    return call;
+  },
+  async scene_conflicts(page, p, steps) {
+    await openUi(page, steps);
+    await page.evaluate(() => { window.location.hash = '#settings/scenes'; });
+    await page.locator('#settings-drawer.open').waitFor();
+    const call = waitForCall(page, 'POST', `/api/v2/scenes/${p.scene_id}/validate`);
+    await page.locator(`#settings-drawer .edit-scene-btn[data-id="${p.scene_id}"]`).click();
+    await page.locator('#scene-editor-modal.open .conflict-warnings').waitFor();
+    steps.push('open the saved scene through Settings; read its actual profile conflicts');
+    return call;
+  },
   // Kiosk routing wizard (web/kiosk.html): tap an input, choose the output (or
   // "Route to All Outputs"), set the options, Apply. The flow ends when the last
   // output setting request has answered.
@@ -419,7 +449,7 @@ async function perform(msg) {
   const dialogs = [];
   page.on('dialog', async (dialog) => {
     dialogs.push(dialog.message());
-    const passcode = msg.params?.passcode;
+    const passcode = msg.intent === 'scene_wait_edit' ? msg.params?.seconds : msg.params?.passcode;
     if (dialog.type() === 'prompt' && passcode) {
       steps.push(`answer the prompt "${dialog.message()}" with the passcode`);
       await dialog.accept(String(passcode));
@@ -439,6 +469,7 @@ async function perform(msg) {
     screenshots.push(file);
   };
   let status = null;
+  let shown = {};
   let error = null;
   try {
     const response = await flow(page, msg.params ?? {}, steps);
@@ -447,6 +478,10 @@ async function perform(msg) {
     await page.waitForLoadState('networkidle', { timeout: 3000 }).catch(() => {});
     await page.waitForTimeout(500);
     toasts = await shownToasts(page);
+    if (msg.intent === 'scene_conflicts') {
+      shown = { 'scene.conflict_count': await page.locator('.conflict-group').count(),
+        'scene.values': await page.locator('.conflict-choice .conflict-value').allTextContents() };
+    }
     if (toasts.length) steps.push(`the page shows: ${toasts.join(' | ')}`);
     await shot('after');
   } catch (e) {
@@ -456,7 +491,7 @@ async function perform(msg) {
   } finally {
     await context.close();
   }
-  return { status, error, steps, screenshots, toasts, dialogs, ...problems };
+  return { status, error, steps, screenshots, toasts, dialogs, shown, ...problems };
 }
 
 const rl = readline.createInterface({ input: process.stdin });

@@ -62,6 +62,7 @@ py-modules = [
     "orei_matrix",
     "password",
     "persistence",
+    "profile_execution",
     "scene_execution",
     "scene_manager",
     "system_shortcuts",

@@ -68,8 +68,11 @@ class SceneEditor {
         }
 
         this.render();
+        // The editor must be reachable above the drawer that launched it.
+        window.settingsDrawer?.close();
         this.modal.classList.add('open');
         this.modal.setAttribute('aria-hidden', 'false');
+        if (sceneId) await this.validateScene();
     }
 
     close() {
@@ -111,6 +114,7 @@ class SceneEditor {
                         <button class="btn btn-sm btn-secondary" id="add-profile-step-btn">+ Profile</button>
                         <button class="btn btn-sm btn-secondary" id="add-action-step-btn">+ System Action</button>
                         <button class="btn btn-sm btn-secondary" id="add-macro-step-btn">+ Macro</button>
+                        <button class="btn btn-sm btn-secondary" id="add-wait-step-btn">+ Wait</button>
                     </div>
                 </div>
                 <div id="scene-steps-list">
@@ -146,9 +150,11 @@ class SceneEditor {
         document.getElementById('add-profile-step-btn').addEventListener('click', () => this.addStep('profile'));
         document.getElementById('add-action-step-btn').addEventListener('click', () => this.addStep('system_action'));
         document.getElementById('add-macro-step-btn').addEventListener('click', () => this.addStep('macro'));
+        document.getElementById('add-wait-step-btn').addEventListener('click', () => this.addStep('wait'));
 
         // Remove step buttons (delegated)
-        body.addEventListener('click', (e) => {
+        // The body survives render(); replace its handlers instead of accumulating them.
+        body.onclick = (e) => {
             if (e.target.closest('.remove-step-btn')) {
                 const idx = parseInt(e.target.closest('.remove-step-btn').dataset.index);
                 this.sceneData.steps.splice(idx, 1);
@@ -173,10 +179,10 @@ class SceneEditor {
                 this.render();
                 this.persistOverrides();
             }
-        });
+        };
 
         // Conflict checkbox changes (delegated)
-        body.addEventListener('change', (e) => {
+        body.onchange = (e) => {
             if (e.target.matches('.conflict-choice input[type="checkbox"]')) {
                 const cb = e.target;
                 const pid = cb.dataset.pid;
@@ -189,7 +195,7 @@ class SceneEditor {
                 this.render();
                 this.persistOverrides();
             }
-        });
+        };
     }
 
     /**
@@ -219,7 +225,7 @@ class SceneEditor {
     renderStepsList() {
         const steps = this.sceneData.steps || [];
         if (steps.length === 0) {
-            return '<p class="empty-hint">No steps yet. Add profiles, system actions, or macros above.</p>';
+            return '<p class="empty-hint">No steps yet. Add profiles, system actions, macros, or waits above.</p>';
         }
 
         return steps.map((step, idx) => {
@@ -237,6 +243,10 @@ class SceneEditor {
                 icon = `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>`;
                 name = state.cecMacros?.find(m => m.id === step.id)?.name || step.id;
                 typeLabel = 'Macro';
+            } else if (step.type === 'wait') {
+                icon = `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>`;
+                name = `${step.params.seconds} seconds`;
+                typeLabel = 'Wait';
             } else {
                 icon = `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>`;
                 name = step.id;
@@ -258,6 +268,10 @@ class SceneEditor {
     }
 
     addStep(type) {
+        // Preserve unsaved form fields across re-rendering the step list.
+        this.sceneData.name = document.getElementById('scene-editor-name').value;
+        this.sceneData.description = document.getElementById('scene-desc').value;
+        this.sceneData.password_protected = document.getElementById('scene-password-protected').checked;
         if (type === 'profile') {
             const profiles = state.profiles || [];
             const id = prompt(`Enter profile ID:\n${profiles.map(p => `${p.id}: ${p.name}`).join('\n')}`);
@@ -280,6 +294,16 @@ class SceneEditor {
                 this.sceneData.steps.push({ type: 'macro', id });
                 this.render();
             }
+        } else if (type === 'wait') {
+            const value = prompt('Wait duration in seconds (0.5–30):', '1');
+            if (value === null) return;
+            const seconds = Number(value);
+            if (!Number.isFinite(seconds) || seconds < 0.5 || seconds > 30) {
+                toast.error('Wait must be between 0.5 and 30 seconds');
+                return;
+            }
+            this.sceneData.steps.push({ type: 'wait', id: '', params: { seconds } });
+            this.render();
         }
     }
 

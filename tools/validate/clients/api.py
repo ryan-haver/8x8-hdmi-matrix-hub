@@ -43,6 +43,10 @@ def rest_call(action: Action) -> tuple[str, str, Any]:
         case "scene_run":
             body = {"passcode": p["passcode"]} if p.get("passcode") else None
             return "POST", f"/api/v2/scenes/{p['scene_id']}/execute", body
+        case "scene_conflicts":
+            return "POST", f"/api/v2/scenes/{p['scene_id']}/validate", None
+        case "scene_wait_edit":
+            return "PUT", f"/api/v2/scenes/{p['scene_id']}", {"steps": p["steps"]}
         case "request":
             return p.get("method", "GET").upper(), p["path"], p.get("json")
     raise NotSupportedError(action.intent)
@@ -53,7 +57,8 @@ class ApiClient(Client):
     intents = frozenset(
         {
             "route", "route_all", "preset_recall", "preset_save", "preset_rename", "port_rename", "matrix_power",
-            "output_mute", "output_setting", "cec_input", "cec_output", "profile_recall", "scene_run", "request",
+            "output_mute", "output_setting", "cec_input", "cec_output", "profile_recall", "scene_run",
+            "scene_conflicts", "scene_wait_edit", "request",
         }
     )
 

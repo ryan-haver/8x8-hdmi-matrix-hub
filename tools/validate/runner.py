@@ -31,6 +31,7 @@ from .model import (
     RUNNER_INTENTS,
     Action,
     ClientState,
+    CommandGap,
     CommandSent,
     Device,
     DeviceUnchanged,
@@ -138,6 +139,9 @@ class RunOptions:
     matrix_password: str = "admin"
     telnet_port: int = 23
     hub_url: str | None = None
+    #: Existing disposable simulator + shipped hub image (V3); never a hardware URL.
+    sim_control_url: str | None = None
+    hub_image_digest: str | None = None
     allow_writes: bool = False
     allow_unrestorable: bool = False
     answers: dict[str, list[dict[str, Any]]] = field(default_factory=dict)
@@ -284,7 +288,12 @@ class Runner:
         # Start the hub in the mode the first client needs (the uc client needs the UC integration).
         first = CLIENTS.get(self.o.clients[0]) if self.o.clients else None
         mode = first.hub_mode if first else "api"
-        if self.o.target == "sim":
+        if self.o.sim_control_url:
+            if self.o.target != "sim" or not self.o.hub_url:
+                raise ValueError("sim_control_url requires target sim and an existing hub_url")
+            self.hub = self._hardware_hub("api")
+            self.hub_health = self.hub.start()
+        elif self.o.target == "sim":
             self.stack = SimStack(logs)
             self.stack.start(mode)
             self.hub_health = self.stack.health
@@ -350,9 +359,9 @@ class Runner:
                 "entry": self._hub_process().entry if self._hub_process() else self.o.hub_url,
                 "version": self.hub_health.get("version"),
                 "api_version": self.hub_health.get("api_version"),
-                "image_digest": None,
+                "image_digest": self.o.hub_image_digest,
                 "env": (self.stack.hub.recorded_env() if self.stack and self.stack.hub
-                        else self.hub.recorded_env() if self.hub else {}),
+                        else self.hub.recorded_env() if self.hub and not self.hub.external_url else {}),
             },
             "client": client.environment(),
         }
@@ -369,8 +378,9 @@ class Runner:
         await asyncio.to_thread(self._start_system)
         try:
             if self.o.target == "sim":
-                assert self.stack is not None
-                dev: SimDevice | HardwareDevice = SimDevice(self.stack.sim.control_url)
+                sim_url = self.o.sim_control_url or (self.stack.sim.control_url if self.stack else None)
+                assert sim_url is not None
+                dev: SimDevice | HardwareDevice = SimDevice(sim_url)
             else:
                 dev = HardwareDevice(self.o.matrix_host or "", self.o.matrix_port, https=self.o.matrix_https,
                                      user=self.o.matrix_user, password=self.o.matrix_password)
@@ -710,7 +720,7 @@ class Runner:
                 ]
                 verdict = "fail" if changed else "pass"
                 detail = f"unexpected changes: {changed[:10]}" if changed else "no other changes"
-            elif isinstance(exp, CommandSent | NoCommand | NoProtocolWarnings):
+            elif isinstance(exp, CommandSent | CommandGap | NoCommand | NoProtocolWarnings):
                 if not isinstance(dev, SimDevice):
                     return {"description": exp.describe(), "result": "n/a",
                             "detail": "no command log on hardware; proven by readback/observation", "finding": None}
@@ -722,6 +732,12 @@ class Runner:
                     verdict = "pass" if ok else "fail"
                     seen = [(e.get("command"), e.get("payload")) for e in entries if e.get("channel") == exp.channel]
                     detail = f"{len(hits)} matching; {exp.channel} commands seen: {seen[:12]}"
+                elif isinstance(exp, CommandGap):
+                    first = next((e for e in entries if e.get("command") == exp.before), None)
+                    last = next((e for e in entries if e.get("command") == exp.after), None)
+                    gap = last["t"] - first["t"] if first and last else None
+                    verdict = "pass" if gap is not None and gap >= exp.seconds else "fail"
+                    detail = f"device command gap = {gap!r}s"
                 elif isinstance(exp, NoCommand):
                     hits = [e for e in entries if e.get("channel") in ("http", "telnet")
                             and (e.get("mutated") if exp.command == "*" else e.get("command") == exp.command)]

@@ -62,6 +62,8 @@ def _cmd_run(args: argparse.Namespace) -> int:
         matrix_password=args.matrix_password or os.environ.get("MATRIX_PASSWORD", "admin"),
         telnet_port=args.telnet_port,
         hub_url=args.hub_url,
+        sim_control_url=args.sim_control_url,
+        hub_image_digest=args.hub_image_digest,
         allow_writes=args.allow_writes,
         allow_unrestorable=args.allow_unrestorable,
         answers=answers,
@@ -138,6 +140,8 @@ def main(argv: list[str] | None = None) -> int:
     r.add_argument("--operator", help="who ran it ('automation' for CI; a person's name for hardware)")
     r.add_argument("--record", action="store_true",
                    help="write evidence into docs/validation/evidence (milestone/hardware records to commit)")
+    r.add_argument("--sim-control-url", help="control URL of an existing disposable simulator; requires --hub-url")
+    r.add_argument("--hub-image-digest", help="image ID from docker inspect for the existing hub under validation")
     hw = r.add_argument_group("hardware target (never used by CI)")
     hw.add_argument("--matrix-host")
     hw.add_argument("--matrix-port", type=int, default=443)

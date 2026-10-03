@@ -1268,6 +1268,7 @@ features:
   basis: 'V2: scenario scenes.partial_failure receives scene_execution_error on /ws (schema-checked). The web UI does not show it yet (WP-E1, VAL-11).'
   evidence:
   - docs/validation/evidence/F-DOM-011/2026-09-28-V2-c39ee8d5-scenes.partial_failure-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.partial_failure-api.json
   findings: [VAL-11]
   scenarios: [scenes.partial_failure]
 - id: F-API-042
@@ -1309,12 +1310,17 @@ features:
     flic: ['POST /api/profile/{id}/recall']
   target: V4
   current: V3
-  basis: 'V3: scenario profiles.recall_routing with the browser client (the Profiles tab''s Activate button, WP-E1) and the api client; profiles.recall_rejected (V2); tests/sim/test_sim_profiles.py recall tests (real hub + simulator). Recall reports failed outputs with 207/500 since WP-C1 (API-08).'
+  basis: 'WP-C4 V3 on the shipped image: browser profile activation applies routing, including disabled outputs; API refusal cases verify truthful failures. Shared recall/scene state writer (DI-11). V4 awaits the owner.'
   evidence:
   - docs/validation/evidence/F-DOM-002/2026-09-28-V2-dc6bd707-profiles.recall_routing-api.json
   - docs/validation/evidence/F-DOM-002/2026-09-28-V3-dc6bd707-profiles.recall_routing-browser.json
+  - docs/validation/evidence/F-DOM-002/2026-10-01-V2-97d0d2af-profiles.recall_disabled_output-api.json
+  - docs/validation/evidence/F-DOM-002/2026-10-01-V2-97d0d2af-profiles.recall_rejected-api.json
+  - docs/validation/evidence/F-DOM-002/2026-10-01-V2-97d0d2af-profiles.recall_routing-api.json
+  - docs/validation/evidence/F-DOM-002/2026-10-01-V3-97d0d2af-profiles.recall_disabled_output-browser.json
+  - docs/validation/evidence/F-DOM-002/2026-10-01-V3-97d0d2af-profiles.recall_routing-browser.json
   findings: [API-08, API-19]
-  scenarios: [profiles.recall_routing, profiles.recall_rejected]
+  scenarios: [profiles.recall_routing, profiles.recall_rejected, profiles.recall_disabled_output]
 - id: F-DOM-003
   area: domain
   title: 'Recall a profile: its output settings (mute, HDR, HDCP, enable) are applied'
@@ -1323,22 +1329,28 @@ features:
     rest: ['POST /api/profile/{profile_id}/recall']
     files: ['profiles.json outputs.{n}.audio_mute|hdr_mode|hdcp_mode']
   target: V4
-  current: V1
-  basis: 'Scenario profiles.recall_output_settings (V2) and tests/sim/test_sim_profiles.py::test_recall_applies_mute_hdr_and_hdcp: mute, HDR (API 1-based -> device code) and HDCP are applied with the real OreiMatrix setters since WP-C1 (VAL-01).'
-  evidence: []
+  current: V3
+  basis: 'WP-C4 V3: profiles.recall_output_settings and profiles.recall_disabled_output activate profiles through Chromium and read mute, HDR, HDCP and stream state back from the simulator on the shipped image. V4 awaits the owner; scaler/ARC persistence remains API-22.'
+  evidence:
+  - docs/validation/evidence/F-DOM-002/2026-10-01-V2-97d0d2af-profiles.recall_disabled_output-api.json
+  - docs/validation/evidence/F-DOM-002/2026-10-01-V3-97d0d2af-profiles.recall_disabled_output-browser.json
+  - docs/validation/evidence/F-DOM-003/2026-10-01-V2-97d0d2af-profiles.recall_output_settings-api.json
+  - docs/validation/evidence/F-DOM-003/2026-10-01-V3-97d0d2af-profiles.recall_output_settings-browser.json
   findings: [VAL-01, API-22]
-  scenarios: [profiles.recall_output_settings]
+  scenarios: [profiles.recall_output_settings, profiles.recall_disabled_output]
 - id: F-DOM-004
   area: domain
-  title: 'Recall a profile: its power-on / power-off macro runs'
+  title: 'Recall a profile: its power-on macro runs'
   claim: README "CEC macros, and power automation"
   interfaces:
     rest: ['POST /api/profile/{profile_id}/recall']
     files: [profiles.json power_on_macro]
   target: V4
-  current: V1
-  basis: 'Scenario profiles.recall_power_macro (V2) and tests/sim/test_sim_profiles.py::test_recall_runs_the_power_on_macro: CEC frames reach the simulator in modular mode since WP-C1 wired the macro CEC sender (VAL-02).'
-  evidence: []
+  current: V3
+  basis: 'WP-C4 V3: profiles.recall_power_macro activates the profile through Chromium on the shipped image and verifies its power-on CEC frames in the simulator. This recall feature covers power_on_macro; a stored power_off_macro is not run by recall. Physical TV/source observation remains V4.'
+  evidence:
+  - docs/validation/evidence/F-DOM-004/2026-10-01-V2-97d0d2af-profiles.recall_power_macro-api.json
+  - docs/validation/evidence/F-DOM-004/2026-10-01-V3-97d0d2af-profiles.recall_power_macro-browser.json
   findings: [VAL-02, BE-02, API-08]
   scenarios: [profiles.recall_power_macro]
 - id: F-DOM-005
@@ -1354,6 +1366,8 @@ features:
   evidence:
   - docs/validation/evidence/F-KIO-008/2026-09-28-V3-dc6bd707-kiosk.profile_with_passcode-browser.json
   - docs/validation/evidence/F-KIO-008/2026-09-28-V3-dc6bd707-kiosk.profile_wrong_passcode-browser.json
+  - docs/validation/evidence/F-KIO-008/2026-10-01-V3-97d0d2af-kiosk.profile_with_passcode-browser.json
+  - docs/validation/evidence/F-KIO-008/2026-10-01-V3-97d0d2af-kiosk.profile_wrong_passcode-browser.json
   findings: [SEC-05, SEC-06, UI-01]
   scenarios: [profiles.recall_needs_passcode, profiles.recall_with_passcode, profiles.recall_wrong_passcode, kiosk.profile_with_passcode, kiosk.profile_wrong_passcode]
 - id: F-DOM-006
@@ -1432,15 +1446,24 @@ features:
     ui: [drawer/settings/scenes]
   target: V4
   current: V3
-  basis: 'V3: scenarios scenes.run_protected (dashboard card, passcode prompt) and scenes.partial_failure (Settings drawer; the partial run is reported, VAL-11) with the browser client; scenes.run_* with the api client (V2, effects read back from the simulator); tests/sim/test_sim_scenes_v2.py; tests/test_scene_execution.py (spec''d OreiMatrix double).'
+  basis: 'WP-C4 V3: browser execution on the shipped image verifies full profile state, disabled output routing/stream, no implicit profile macros, truthful partial failures and history. Explicit scene steps own sequencing (DI-11).'
   evidence:
   - docs/validation/evidence/F-DOM-011/2026-09-28-V2-dc6bd707-scenes.partial_failure-api.json
   - docs/validation/evidence/F-DOM-011/2026-09-28-V2-dc6bd707-scenes.run_protected-api.json
   - docs/validation/evidence/F-DOM-011/2026-09-28-V3-dc6bd707-scenes.partial_failure-browser.json
   - docs/validation/evidence/F-DOM-011/2026-09-28-V3-dc6bd707-scenes.run_protected-browser.json
   - docs/validation/evidence/F-DOM-011/2026-09-28-V2-c39ee8d5-scenes.partial_failure-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.disabled_output_state-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.partial_failure-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.run_profile_macro_preset-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.run_protected-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.run_unknown-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.disabled_output_state-browser.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.partial_failure-browser.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.run_profile_macro_preset-browser.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.run_protected-browser.json
   findings: [API-01, API-02, API-08, VAL-07, VAL-11]
-  scenarios: [scenes.run_profile_macro_preset, scenes.run_protected, scenes.partial_failure, scenes.run_unknown]
+  scenarios: [scenes.run_profile_macro_preset, scenes.run_protected, scenes.partial_failure, scenes.run_unknown, scenes.disabled_output_state]
 - id: F-DOM-012
   area: domain
   title: 'Run a scene: macro steps'
@@ -1448,23 +1471,33 @@ features:
   interfaces:
     rest: ['POST /api/v2/scenes/{scene_id}/execute']
   target: V4
-  current: V2
-  basis: 'Scenarios scenes.run_shortcut_and_macro, scenes.run_profile_macro_preset, scenes.run_rejected (V2: CEC frames in the simulator command log); tests/sim/test_sim_scenes_v2.py.'
-  evidence: []
+  current: V3
+  basis: 'WP-C4 V3: browser-run scene macro steps send exactly the explicit CEC frames; a single refused target does not prevent later commands when the saved continue_on_error policy is true. Device command logs prove the effects.'
+  evidence:
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.run_profile_macro_preset-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.run_profile_macro_preset-browser.json
+  - docs/validation/evidence/F-DOM-012/2026-10-01-V2-97d0d2af-scenes.macro_continues_after_refusal-api.json
+  - docs/validation/evidence/F-DOM-012/2026-10-01-V2-97d0d2af-scenes.run_rejected-api.json
+  - docs/validation/evidence/F-DOM-012/2026-10-01-V2-97d0d2af-scenes.run_shortcut_and_macro-api.json
+  - docs/validation/evidence/F-DOM-012/2026-10-01-V3-97d0d2af-scenes.macro_continues_after_refusal-browser.json
   findings: [API-03, VAL-02]
-  scenarios: [scenes.run_profile_macro_preset, scenes.run_shortcut_and_macro, scenes.run_rejected]
+  scenarios: [scenes.run_profile_macro_preset, scenes.run_shortcut_and_macro, scenes.run_rejected, scenes.macro_continues_after_refusal]
 - id: F-DOM-013
   area: domain
-  title: 'Run a scene: delay and shortcut steps'
+  title: 'Run a scene: wait and shortcut steps'
   claim: docs/PHASE_8_SPEC.md scene step types
   interfaces:
     rest: ['POST /api/v2/scenes/{scene_id}/execute']
   target: V3
-  current: V1
-  basis: 'Shortcut steps are proven with F-DOM-011/012 (scenes.run_protected, scenes.run_shortcut_and_macro). There is no delay step type (scene_manager.VALID_STEP_TYPES = profile, system_action, macro), so this feature stays unproven until one exists (VAL-09).'
-  evidence: []
+  current: V3
+  basis: 'WP-C4 V3 (DI-12): the browser adds two 0.5-second waits, removes one, saves and reads back exactly one wait; scene execution places the wait between actual shortcut commands, whose simulator timestamps are at least 0.5 seconds apart. Unit/API/UI regressions reject invalid durations.'
+  evidence:
+  - docs/validation/evidence/F-DOM-013/2026-10-01-V2-97d0d2af-scenes.wait_between_actions-api.json
+  - docs/validation/evidence/F-DOM-013/2026-10-01-V2-97d0d2af-scenes.wait_edit-api.json
+  - docs/validation/evidence/F-DOM-013/2026-10-01-V3-97d0d2af-scenes.wait_between_actions-browser.json
+  - docs/validation/evidence/F-DOM-013/2026-10-01-V3-97d0d2af-scenes.wait_edit-browser.json
   findings: [API-01, API-08, VAL-09]
-  scenarios: []
+  scenarios: [scenes.wait_between_actions, scenes.wait_edit]
 - id: F-DOM-014
   area: domain
   title: Scene overrides (per-run changes to a profile step)
@@ -1472,11 +1505,16 @@ features:
   interfaces:
     rest: ['PUT|DELETE /api/v2/scenes/{scene_id}/override']
   target: V3
-  current: V2
-  basis: 'Scenarios scenes.override_leaves_setting and scenes.run_profile_macro_preset (V2): an override leaves the setting unchanged on the device (API-04); tests/sim/test_sim_scenes_v2.py::test_overrides_leave_the_setting_unchanged.'
-  evidence: []
+  current: V3
+  basis: 'WP-C4 V3: browser-run scenes apply routing while leaving an overridden input, audio mute or enabled setting unchanged on the simulator. Disabled outputs still receive all unskipped state writes.'
+  evidence:
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.run_profile_macro_preset-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.run_profile_macro_preset-browser.json
+  - docs/validation/evidence/F-DOM-014/2026-10-01-V2-97d0d2af-scenes.enabled_override-api.json
+  - docs/validation/evidence/F-DOM-014/2026-10-01-V2-97d0d2af-scenes.override_leaves_setting-api.json
+  - docs/validation/evidence/F-DOM-014/2026-10-01-V3-97d0d2af-scenes.enabled_override-browser.json
   findings: [API-04]
-  scenarios: [scenes.run_profile_macro_preset, scenes.override_leaves_setting]
+  scenarios: [scenes.run_profile_macro_preset, scenes.override_leaves_setting, scenes.enabled_override]
 - id: F-DOM-015
   area: domain
   title: Protect a scene with a passcode
@@ -1490,6 +1528,8 @@ features:
   evidence:
   - docs/validation/evidence/F-DOM-011/2026-09-28-V2-dc6bd707-scenes.run_protected-api.json
   - docs/validation/evidence/F-DOM-011/2026-09-28-V3-dc6bd707-scenes.run_protected-browser.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.run_protected-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.run_protected-browser.json
   findings: [SEC-05, SEC-06]
   scenarios: [scenes.run_protected, scenes.run_needs_passcode]
 - id: F-DOM-016
@@ -1500,11 +1540,13 @@ features:
     rest: ['POST /api/v2/scenes/{scene_id}/validate']
     ui: [editor/scene/conflicts, editor/scene/validation-error]
   target: V3
-  current: V1
-  basis: tests/test_scene_manager.py TestDetectConflicts.
-  evidence: []
+  current: V3
+  basis: 'WP-C4 V3: the saved scene editor displays three actual differing profile settings, including default mute values; browser observations verify each displayed value and the API reports has_conflicts=true. Identical, absent and overridden values are covered by unit regressions.'
+  evidence:
+  - docs/validation/evidence/F-DOM-016/2026-10-01-V2-97d0d2af-scenes.conflicts_visible-api.json
+  - docs/validation/evidence/F-DOM-016/2026-10-01-V3-97d0d2af-scenes.conflicts_visible-browser.json
   findings: [VAL-10]
-  scenarios: []
+  scenarios: [scenes.conflicts_visible]
 - id: F-DOM-017
   area: domain
   title: Scene execution history
@@ -1518,6 +1560,8 @@ features:
   - docs/validation/evidence/F-DOM-011/2026-09-28-V2-dc6bd707-scenes.partial_failure-api.json
   - docs/validation/evidence/F-DOM-011/2026-09-28-V3-dc6bd707-scenes.partial_failure-browser.json
   - docs/validation/evidence/F-DOM-011/2026-09-28-V2-c39ee8d5-scenes.partial_failure-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.partial_failure-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.partial_failure-browser.json
   findings: [API-02]
   scenarios: [scenes.partial_failure]
 - id: F-DOM-018
@@ -1556,11 +1600,16 @@ features:
     ui: [editor/cec-macro/list]
     flic: ['POST /api/cec/macro/{id}/execute']
   target: V4
-  current: V1
-  basis: 'Scenario macros.run_volume_up (V2: three CEC frames in the simulator command log); tests/sim/test_sim_profiles.py::test_macro_execute_sends_cec_frames; tests/test_cec_macros.py.'
-  evidence: []
+  current: V3
+  basis: 'WP-C4 V3: browser-run macros send CEC commands on the shipped image. Single-refusal scenarios prove saved continue_on_error continues to later accepted commands, while the default policy stops. The REST default-timeout contract is pinned separately by the simulator endpoint regression.'
+  evidence:
+  - docs/validation/evidence/F-DOM-012/2026-10-01-V2-97d0d2af-scenes.macro_continues_after_refusal-api.json
+  - docs/validation/evidence/F-DOM-012/2026-10-01-V3-97d0d2af-scenes.macro_continues_after_refusal-browser.json
+  - docs/validation/evidence/F-DOM-020/2026-10-01-V2-97d0d2af-macros.run_volume_up-api.json
+  - docs/validation/evidence/F-DOM-020/2026-10-01-V2-97d0d2af-scenes.macro_stops_after_refusal-api.json
+  - docs/validation/evidence/F-DOM-020/2026-10-01-V3-97d0d2af-scenes.macro_stops_after_refusal-browser.json
   findings: [VAL-02, BE-02, VAL-08]
-  scenarios: [macros.run_volume_up]
+  scenarios: [macros.run_volume_up, scenes.macro_continues_after_refusal, scenes.macro_stops_after_refusal]
 - id: F-DOM-021
   area: domain
   title: Test / dry-run a macro
@@ -1863,6 +1912,7 @@ features:
   basis: 'V3: scenario scenes.run_protected with the browser client runs the locked scene from its dashboard card through the passcode prompt; tests/e2e/flows.spec.ts runs protected scene and profile cards and checks every card type renders on load (UI-01, UI-27 fixed in WP-E1). Visual diffs pending owner approval.'
   evidence:
   - docs/validation/evidence/F-DOM-011/2026-09-28-V3-dc6bd707-scenes.run_protected-browser.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.run_protected-browser.json
   findings: [UI-01, UI-27]
   scenarios: [scenes.run_protected]
 - id: F-UI-009
@@ -1912,6 +1962,7 @@ features:
   basis: 'V3: scenario profiles.recall_routing with the browser client (Profiles tab, Activate) and tests/e2e/flows.spec.ts ''the Profiles tab lists the hub profiles and recalls one'' (UI-27 fixed in WP-E1). Visual diffs pending owner approval.'
   evidence:
   - docs/validation/evidence/F-DOM-002/2026-09-28-V3-dc6bd707-profiles.recall_routing-browser.json
+  - docs/validation/evidence/F-DOM-002/2026-10-01-V3-97d0d2af-profiles.recall_routing-browser.json
   findings: [UI-27]
   scenarios: [profiles.recall_routing]
 - id: F-UI-013
@@ -2101,6 +2152,7 @@ features:
   basis: 'V3: scenario scenes.partial_failure with the browser client checks the warning toast a partial run shows (VAL-11 fixed in WP-E1); tests/e2e/flows.spec.ts checks success, partial and error toasts for profiles and scenes. Other toasts and the confirmation dialogs: visual catalog only.'
   evidence:
   - docs/validation/evidence/F-DOM-011/2026-09-28-V3-dc6bd707-scenes.partial_failure-browser.json
+  - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.partial_failure-browser.json
   findings: [UI-32]
   scenarios: [scenes.partial_failure]
 - id: F-UI-028
@@ -2310,6 +2362,8 @@ features:
   evidence:
   - docs/validation/evidence/F-KIO-008/2026-09-28-V3-dc6bd707-kiosk.profile_with_passcode-browser.json
   - docs/validation/evidence/F-KIO-008/2026-09-28-V3-dc6bd707-kiosk.profile_wrong_passcode-browser.json
+  - docs/validation/evidence/F-KIO-008/2026-10-01-V3-97d0d2af-kiosk.profile_with_passcode-browser.json
+  - docs/validation/evidence/F-KIO-008/2026-10-01-V3-97d0d2af-kiosk.profile_wrong_passcode-browser.json
   findings: [UI-25]
   scenarios: [kiosk.profile_with_passcode, kiosk.profile_wrong_passcode]
 - id: F-KIO-009

@@ -2,6 +2,18 @@
 
 > Spec version 1.0 — 2026-06-20
 
+> **Implementation update (WP-C4, 2026-09-30; DI-11/DI-12):** a scene profile
+> step applies the same routing, stream on/off, mute, HDR and HDCP state as
+> profile recall, through `src/profile_execution.py`. Disabled outputs are
+> routed and their streams turned off. Scene overrides leave the selected
+> setting unchanged. Profile steps run **no** quick-access or power macros;
+> profile recall still runs its power-on macro. Only explicit scene macro
+> steps send CEC. A `wait` step pauses for `params.seconds` (0.5–30, finite
+> numeric seconds), requires no ID, and can be cancelled. Conflict validation
+> reports differing values that would actually be written, including defaults
+> and disabled outputs; omitted optional settings and overridden writes are
+> excluded. These rules supersede conflicting details in the original design.
+
 ## Goals
 
 1. Collapse Profiles, Quick Actions, Presets, and System Actions into a unified, modular architecture

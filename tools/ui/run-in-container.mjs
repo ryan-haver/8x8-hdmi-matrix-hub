@@ -29,7 +29,14 @@ const CONFIG = 'tests/e2e/playwright.config.ts';
 const VISUAL_PROJECTS = ['desktop', 'tablet', 'phone', 'kiosk-tab-a11', 'kiosk-iphone16promax'];
 
 const [mode = 'test', ...rest] = process.argv.slice(2);
-const passthrough = rest[0] === '--' ? rest.slice(1) : rest;
+const args = rest[0] === '--' ? rest.slice(1) : rest;
+// Capture candidate images outside the approved baseline tree for owner review.
+const reviewAt = args.indexOf('--review-dir');
+const reviewDir = reviewAt >= 0 ? args[reviewAt + 1] : null;
+if (reviewAt >= 0 && (!reviewDir || !/^build\/[a-zA-Z0-9_/-]+$/.test(reviewDir))) {
+  throw new Error('--review-dir must be a directory below build/');
+}
+const passthrough = args.filter((_, i) => reviewAt < 0 || (i !== reviewAt && i !== reviewAt + 1));
 
 const quote = (s) => `'${String(s).replace(/'/g, `'\\''`)}'`;
 
@@ -40,7 +47,7 @@ switch (mode) {
     const ownProjects = passthrough.some((a) => a === '--project' || a.startsWith('--project='));
     const projects = ownProjects ? [] : VISUAL_PROJECTS.map((p) => `--project=${p}`);
     const args = ['npx', 'playwright', 'test', '-c', CONFIG, ...projects];
-    if (mode === 'update') args.push('--update-snapshots=changed');
+    args.push(mode === 'update' ? '--update-snapshots=changed' : '--update-snapshots=none');
     playwright = [...args, ...passthrough].map(quote).join(' ');
     break;
   }
@@ -81,7 +88,7 @@ const script = [
   'copy_back() { for i in 1 2 3 4 5; do mkdir -p "$2" && cp -a -u "$1/." "$2/" && return 0; echo "[ui-container] copy to $2 failed (attempt $i), retrying" >&2; sleep 3; done; return 1; }',
   'status=0',
   `${playwright} || status=$?`,
-  'if ! copy_back "$E2E_SNAPSHOT_DIR" "$SNAP"; then status=1; fi',
+  `if ! copy_back "$E2E_SNAPSHOT_DIR" ${reviewDir ? quote(reviewDir) : '"$SNAP"'}; then status=1; fi`,
   'rm -rf test-results playwright-report',
   'if [ -d "$E2E_OUTPUT_DIR" ]; then copy_back "$E2E_OUTPUT_DIR" test-results || status=1; fi',
   'if [ -d "$E2E_REPORT_DIR" ]; then copy_back "$E2E_REPORT_DIR" playwright-report || status=1; fi',

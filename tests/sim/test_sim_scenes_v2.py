@@ -16,6 +16,7 @@ VAL-02.
 from __future__ import annotations
 
 import json
+import time
 
 import pytest
 
@@ -250,13 +251,38 @@ async def test_execute_profile_step_applies_output_settings_and_logs(data_hub, s
     assert hist["last_executed"] is not None
 
 
-async def test_execute_profile_step_runs_the_profile_macros_through_the_macro_manager(data_hub, simulator):
-    """API-03 + VAL-02: the profile's macros send real CEC frames (targets ``output_1`` / ``input_2``)."""
+async def test_execute_profile_step_never_runs_profile_macros(data_hub, simulator):
+    """DI-11: neither the power macro nor quick-access macros belong to a scene state step."""
     scene = await create(data_hub, name="Movie", steps=[{"type": "profile", "id": "movie_night"}])
     resp = await data_hub.post(f"/api/v2/scenes/{scene['id']}/execute")
     assert resp.status == 200, await resp.text()
-    assert cec_frames(simulator, obj=1, index=OUT_POWER_ON, to=1) == 1
-    assert cec_frames(simulator, obj=0, index=IN_POWER_ON, to=2) == 1
+    assert cec_frames(simulator, obj=1, index=OUT_POWER_ON, to=1) == 0
+    assert cec_frames(simulator, obj=0, index=IN_POWER_ON, to=2) == 0
+
+
+async def test_scene_profile_and_recall_apply_identical_state_including_disabled_stream(data_hub, simulator):
+    resp = await data_hub.post("/api/profile/retro_hour/recall")
+    assert resp.status == 200
+    recalled = [(o.source, o.stream, o.audio_mute, o.hdcp, o.hdr) for o in simulator.state.outputs]
+    simulator.state.outputs[0].source = 1
+    simulator.state.outputs[1].source = 2
+    simulator.state.outputs[1].stream = 1
+    scene = await create(data_hub, name="Retro", steps=[{"type": "profile", "id": "retro_hour"}])
+    assert (await data_hub.post(f"/api/v2/scenes/{scene['id']}/execute")).status == 200
+    assert [(o.source, o.stream, o.audio_mute, o.hdcp, o.hdr) for o in simulator.state.outputs] == recalled
+
+
+async def test_wait_delays_next_device_write(data_hub, simulator):
+    scene = await create(data_hub, name="Wait", steps=[
+        {"type": "system_action", "id": "beep_off"}, {"type": "wait", "params": {"seconds": 0.5}},
+        {"type": "system_action", "id": "route_all_to_output", "params": {"input": 6, "output": 1}},
+    ])
+    started = time.monotonic()
+    resp = await data_hub.post(f"/api/v2/scenes/{scene['id']}/execute")
+    assert resp.status == 200, await resp.text()
+    assert time.monotonic() - started >= 0.5
+    commands = {e["command"]: e for e in simulator.log if e["command"] in ("set beep", "video switch")}
+    assert commands["video switch"]["t"] - commands["set beep"]["t"] >= 0.5
 
 
 async def test_overrides_leave_the_setting_unchanged(data_hub, simulator):

@@ -16,6 +16,7 @@ import copy
 import dataclasses
 import json
 import logging
+import math
 import uuid
 from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
@@ -36,7 +37,8 @@ _HISTORY_RETENTION = timedelta(days=7)
 STEP_TYPE_PROFILE = "profile"
 STEP_TYPE_SYSTEM_ACTION = "system_action"
 STEP_TYPE_MACRO = "macro"
-VALID_STEP_TYPES = frozenset({STEP_TYPE_PROFILE, STEP_TYPE_SYSTEM_ACTION, STEP_TYPE_MACRO})
+STEP_TYPE_WAIT = "wait"
+VALID_STEP_TYPES = frozenset({STEP_TYPE_PROFILE, STEP_TYPE_SYSTEM_ACTION, STEP_TYPE_MACRO, STEP_TYPE_WAIT})
 
 #: Settings keys that can be overridden per-scene
 OVERRIDABLE_SETTINGS = frozenset(
@@ -92,6 +94,7 @@ class SceneStep:
                  - ``"profile"`` — execute a Profile
                  - ``"system_action"`` — execute a SystemAction by key
                  - ``"macro"`` — execute a saved CEC Macro by ID
+                 - ``"wait"`` — pause for ``params.seconds`` (0.5–30 seconds)
     :param id: For ``profile`` steps: the Profile ID.
                For ``system_action`` steps: the SystemAction key.
                For ``macro`` steps: the CEC Macro ID.
@@ -121,6 +124,12 @@ class SceneStep:
         """Return None if valid, or an error string if invalid."""
         if self.type not in VALID_STEP_TYPES:
             return f"Invalid step type: {self.type!r}"
+        if self.type == STEP_TYPE_WAIT:
+            seconds = self.params.get("seconds")
+            if (isinstance(seconds, bool) or not isinstance(seconds, (int, float))
+                    or not 0.5 <= seconds <= 30 or not math.isfinite(seconds)):
+                return "Wait seconds must be a finite number from 0.5 to 30"
+            return None
         if not self.id:
             return "Step id cannot be empty"
         return None
@@ -372,14 +381,12 @@ def detect_conflicts(
     """
     Detect conflicting output settings across all Profile steps in a Scene.
 
-    A conflict exists when two profiles set different non-default values for
-    the same output's same setting.
-
-    Default values (no conflict):
-      enabled=True, input=1, hdcp=3, hdr=3, scaler=0, arc=False, audio_mute=False
+    A conflict exists when profiles write different values to the same setting.
+    Defaults are writes too; absent optional settings and overridden writes
+    cannot conflict. Disabled outputs still receive their profile state.
     """
     # Per-output, per-profile settings collected from profile steps
-    output_profile_settings: dict[int, dict[str, tuple[str, str, Any]]] = {}
+    output_profile_settings: dict[int, dict[str, list[tuple[str, str, Any]]]] = {}
 
     for step in scene.steps:
         if step.type != STEP_TYPE_PROFILE:
@@ -392,33 +399,23 @@ def detect_conflicts(
         for output_num, output_cfg in profile.outputs.items():
             # Skip outputs that are disabled in the scene (via override)
             disabled_settings = overrides_for_profile.get(output_num, {})
-            if not output_cfg.enabled:
-                continue  # disabled outputs don't conflict
 
             # Check each setting
             for setting_key, value in _output_settings_iter(output_cfg):
                 # Skip disabled settings
                 if disabled_settings.get(setting_key):
                     continue
-                # Skip default values
-                if _is_default(setting_key, value):
+                if value is None:
                     continue
 
-                if output_num not in output_profile_settings:
-                    output_profile_settings[output_num] = {}
-                if setting_key in output_profile_settings[output_num]:
-                    existing_pid, existing_pname, existing_val = output_profile_settings[output_num][setting_key]
-                    if existing_val != value:
-                        # Conflict!
-                        pass
-                else:
-                    output_profile_settings[output_num][setting_key] = (step.id, profile.name, value)
+                entries = output_profile_settings.setdefault(output_num, {}).setdefault(setting_key, [])
+                entries.append((step.id, profile.name, value))
 
     # Build conflict entries from duplicates
     conflicts: list[ConflictEntry] = []
-    for output_num, settings_map in output_profile_settings.items():
-        for setting_key, entries_list in _group_by_setting(settings_map).items():
-            if len(entries_list) > 1:
+    for output_num, settings_map in sorted(output_profile_settings.items()):
+        for setting_key, entries_list in settings_map.items():
+            if any(entry[2] != entries_list[0][2] for entry in entries_list[1:]):
                 # Multiple different values = conflict
                 conflicts.append(
                     ConflictEntry(
@@ -438,33 +435,8 @@ def _output_settings_iter(output_cfg) -> list[tuple[str, Any]]:
         ("enabled", output_cfg.enabled),
         ("hdcp", getattr(output_cfg, "hdcp_mode", None)),
         ("hdr", getattr(output_cfg, "hdr_mode", None)),
-        ("scaler", getattr(output_cfg, "scaler_mode", None)),
-        ("arc", getattr(output_cfg, "arc", False)),
         ("audio_mute", getattr(output_cfg, "audio_mute", False)),
     ]
-
-
-def _is_default(setting_key: str, value: Any) -> bool:
-    defaults = {
-        "enabled": True,
-        "input": 1,
-        "hdcp": 3,
-        "hdr": 3,
-        "scaler": 0,
-        "arc": False,
-        "audio_mute": False,
-    }
-    return defaults.get(setting_key) == value
-
-
-def _group_by_setting(settings_map: dict[str, tuple[str, str, Any]]) -> dict[str, list[tuple[str, str, Any]]]:
-    """Group by setting_key, returning {setting_key: [(pid, pname, value), ...]}."""
-    groups: dict[str, list[tuple[str, str, Any]]] = {}
-    for setting_key, entry in settings_map.items():
-        if setting_key not in groups:
-            groups[setting_key] = []
-        groups[setting_key].append(entry)
-    return groups
 
 
 # =============================================================================

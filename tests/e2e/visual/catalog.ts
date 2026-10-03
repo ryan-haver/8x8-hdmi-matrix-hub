@@ -1315,7 +1315,7 @@ export const CATALOG: CatalogEntry[] = [
       await page.locator('#scene-editor-modal.open').waitFor();
       await settle(page, 500);
     },
-    note: 'Opens behind the Settings drawer (.modal z-index 200 < drawer 1040).',
+    note: 'WP-C4 closes the launching Settings drawer so the editor is usable.',
   },
   {
     name: 'editor/scene/new-standalone',
@@ -1360,6 +1360,17 @@ export const CATALOG: CatalogEntry[] = [
       await settle(page, 400);
     },
     note: 'Before WP-E1 (UI-26) every save failed this way: a duplicate id="scene-name" made save() read a hidden legacy input.',
+  },
+  {
+    name: 'editor/scene/wait',
+    page: 'ui',
+    description: 'Scene editor with a 0.5-second wait step between a profile and a macro.',
+    setup: async ({ page }) => {
+      await js(page, `window.sceneEditor.open('scene_movienight01')`);
+      await page.locator('#scene-editor-modal.open').waitFor();
+      await js(page, `(() => { const e = window.sceneEditor; e.sceneData.steps.splice(2, 0, { type: 'wait', id: '', params: { seconds: 0.5 } }); e.render(); })()`);
+      await settle(page, 500);
+    },
   },
   {
     name: 'editor/scene/conflicts',

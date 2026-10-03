@@ -25,7 +25,8 @@ ROOT = Path(__file__).resolve().parents[3]
 class BrowserClient(Client):
     name = "browser"
     intents = frozenset(
-        {"route", "route_all", "preset_recall", "preset_rename", "profile_recall", "scene_run", "kiosk_route"}
+        {"route", "route_all", "preset_recall", "preset_rename", "profile_recall", "scene_run", "scene_wait_edit",
+         "scene_conflicts", "kiosk_route"}
     )
     #: ClientState keys:
     #: - ``ui.*`` / ``kiosk.*`` read from a /ui and a /kiosk page that stay open for the run
@@ -118,10 +119,13 @@ class BrowserClient(Client):
             "dialogs": res.get("dialogs", []),
         }
         self._shown = {"toasts": list(res.get("toasts", [])), "dialogs": list(res.get("dialogs", []))}
+        self._shown.update(res.get("shown", {}))
         result.elapsed_ms = round((time.perf_counter() - t0) * 1000, 1)
         return result
 
     async def observe(self, key: str) -> Any:
+        if key.startswith("scene."):
+            return self._shown.get(key)
         if key in ("toasts", "dialogs"):
             return self._shown.get(key, [])
         if key.startswith("toast."):
