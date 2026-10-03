@@ -1114,7 +1114,13 @@ class TelnetClient:
             # V1.10.01: one "outputX->inputY" line per output, or
             # "preset N is none,please save a preset" for an empty slot.
             empty = is_preset_empty(response)
-            return {"preset": preset_num, "routing": {} if empty else preset_routing(response), "saved": not empty}
+            routing = {} if empty else preset_routing(response)
+            if not empty and (response_error(response) is not None or set(routing) != set(range(1, 9))):
+                # An error code, or an answer cut short (timeout): not a read
+                # of the slot. Never report part of it as the stored routing (BE-36).
+                _LOG.warning(f"Incomplete answer to 'r preset {preset_num}': {response!r}")
+                return None
+            return {"preset": preset_num, "routing": routing, "saved": not empty}
         except Exception as e:
             _LOG.error(f"Get preset info error: {e}")
             return None
