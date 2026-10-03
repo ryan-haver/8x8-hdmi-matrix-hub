@@ -63,7 +63,7 @@ try:
     from .device_codes import (
         LCD_TIMEOUT_MODES as DEVICE_LCD_MODES,
     )
-    from .telnet_client import MatrixStatus, TelnetClient, TelnetState
+    from .telnet_client import CecOutcome, MatrixStatus, TelnetClient, TelnetState
 except ImportError:
     from _task_supervisor import cancel_and_wait, create_supervised_task  # type: ignore[no-redef]
     from device_codes import (  # type: ignore[no-redef]
@@ -88,7 +88,7 @@ except ImportError:
     from device_codes import (
         LCD_TIMEOUT_MODES as DEVICE_LCD_MODES,
     )
-    from telnet_client import MatrixStatus, TelnetClient, TelnetState
+    from telnet_client import CecOutcome, MatrixStatus, TelnetClient, TelnetState
 
 _LOG = logging.getLogger(__name__)
 
@@ -1400,19 +1400,26 @@ class OreiMatrix:
         if self._use_telnet_cec and self._telnet and self._telnet.connected:
             telnet_cmd = self._CEC_NAME_TO_TELNET.get(name)
             if telnet_cmd:
+                kind = "output" if is_output else "input"
                 try:
-                    if is_output:
-                        success = await self._telnet._send_cec_output(port_num, telnet_cmd)
-                    else:
-                        success = await self._telnet._send_cec_input(port_num, telnet_cmd)
-
-                    if success:
-                        _LOG.debug(
-                            "CEC via Telnet: %s %d -> %s", "output" if is_output else "input", port_num, telnet_cmd
-                        )
-                        return True
-                except Exception as e:
-                    _LOG.warning(f"Telnet CEC failed, falling back to HTTP: {e}")
+                    outcome = await self._telnet.send_cec(kind, port_num, telnet_cmd)
+                except Exception as e:  # defensive: send_cec reports, it does not raise
+                    _LOG.error("Telnet CEC %s %d %s raised: %s", kind, port_num, telnet_cmd, e)
+                    outcome = CecOutcome.UNKNOWN
+                if outcome is CecOutcome.ACKNOWLEDGED:
+                    _LOG.debug("CEC via Telnet: %s %d -> %s", kind, port_num, telnet_cmd)
+                    return True
+                if outcome is CecOutcome.UNKNOWN:
+                    # BE-37: the command was written but its answer was lost, so
+                    # the matrix may already have run it. CEC commands are not
+                    # idempotent (a volume step, a toggle), and like every
+                    # non-idempotent command after an ambiguous failure
+                    # (NON_IDEMPOTENT_COMMANDS) it is never resent: report failure.
+                    self._last_error = f"CEC {name} to {kind} {port_num}: outcome unknown (Telnet answer lost); not resent"
+                    _LOG.error("%s", self._last_error)
+                    return False
+                # REJECTED / NOT_SENT: the matrix did not run it, HTTP may try.
+                _LOG.warning("Telnet CEC %s %d %s %s, falling back to HTTP", kind, port_num, telnet_cmd, outcome.value)
 
         # Fall back to HTTP
         _LOG.debug("CEC via HTTP: %s %d -> index %d", "output" if is_output else "input", port_num, command_index)
