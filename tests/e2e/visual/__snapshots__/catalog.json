@@ -936,7 +936,7 @@
       "name": "editor/scene/new",
       "page": "ui",
       "description": "Scene editor, new scene (from the Settings drawer Scenes tab).",
-      "note": "Opens behind the Settings drawer (.modal z-index 200 < drawer 1040).",
+      "note": "WP-C4 closes the launching Settings drawer so the editor is usable.",
       "themed": false,
       "viewports": null
     },
@@ -969,6 +969,14 @@
       "page": "ui",
       "description": "Scene editor after Save with the name cleared: \"Scene name is required\".",
       "note": "Before WP-E1 (UI-26) every save failed this way: a duplicate id=\"scene-name\" made save() read a hidden legacy input.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "editor/scene/wait",
+      "page": "ui",
+      "description": "Scene editor with a 0.5-second wait step between a profile and a macro.",
+      "note": null,
       "themed": false,
       "viewports": null
     },
