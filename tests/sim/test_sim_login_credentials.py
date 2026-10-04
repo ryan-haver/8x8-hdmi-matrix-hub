@@ -7,6 +7,7 @@ matrix address its own login; the environment's (``OREI_USER`` /
 
 from __future__ import annotations
 
+import socket
 from unittest.mock import AsyncMock
 
 import orei_matrix
@@ -58,7 +59,17 @@ async def test_a_rejected_login_is_reported_as_auth(fast_hub) -> None:
         await m.disconnect()
 
 
-async def test_no_connection_is_reported_as_refused_and_a_bad_name_as_not_found() -> None:
+async def test_no_connection_is_reported_as_refused_and_a_bad_name_as_not_found(monkeypatch) -> None:
+    # The name must fail to resolve at once: real DNS for a `.invalid` name can take longer than the
+    # login timeout on some networks (11 s seen on Windows), which reads as "timeout" (TST-17).
+    real_getaddrinfo = socket.getaddrinfo
+
+    def getaddrinfo(host, *args, **kwargs):
+        if host == "no-such-matrix.invalid":
+            raise socket.gaierror(socket.EAI_NONAME, "Name or service not known")
+        return real_getaddrinfo(host, *args, **kwargs)
+
+    monkeypatch.setattr(socket, "getaddrinfo", getaddrinfo)
     refused = orei_matrix.OreiMatrix("127.0.0.1", port=free_port(), user="Admin", password="x")
     unknown = orei_matrix.OreiMatrix("no-such-matrix.invalid", port=443, user="Admin", password="x")
     try:

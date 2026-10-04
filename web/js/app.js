@@ -505,37 +505,28 @@ class MatrixApp {
                 this.ws.requestStatus();
                 break;
 
+            case 'cec_command':
+                this.handleCecCommand(data);
+                break;
+
             // matrix_connection: handled by MatrixWebSocket (onMatrixStatus).
-            // power_change, cec_command, scene_execution_error: not shown by this page yet.
+            // power_change, scene_execution_error: not shown by this page yet.
         }
     }
 
     /**
-     * Handle optimistic CEC command updates
+     * cec_command: the matrix accepted a CEC power command for a port
+     * (docs/api/WEBSOCKET.md). UI-51: this is not the output's stream
+     * (outputs[n].enabled, the matrix's own output on/off) and it is not
+     * proof that the display or source changed power (CEC is one-way and the
+     * device may ignore it), so it changes no port state. It is kept apart as
+     * the last CEC power command per port (state.cecPowerCommands) and is not
+     * shown yet: a visible indicator is an owner decision (D5).
      */
     handleCecCommand(data) {
-        const { type, port, command, name } = data;
-
-        if (command === 'power_on' || command === 'power_off') {
-            const isOn = command === 'power_on';
-            const action = isOn ? 'Powering on' : 'Powering off';
-            const targetName = name || `${type === 'output' ? 'Output' : 'Input'} ${port}`;
-
-            // Show toast notification
-            if (window.toast) {
-                window.toast.show(`${action} ${targetName}...`, 'info', 2000);
-            }
-
-            if (type === 'output' && state.outputs[port]) {
-                // Update output power state optimistically
-                state.outputs[port].enabled = isOn;
-                state.emit('outputs', state.outputs);
-            } else if (type === 'input' && state.inputs[port]) {
-                // Could track input device power state if needed
-                // For now, just trigger a refresh of input panel
-                state.emit('inputs', state.inputs);
-            }
-        }
+        const { type, port, command } = data || {};
+        if ((type !== 'input' && type !== 'output') || (command !== 'power_on' && command !== 'power_off')) return;
+        state.recordCecPowerCommand(type, Number(port), command);
     }
 
     /**
