@@ -39,6 +39,25 @@ MAX_TARGETS_PER_STEP = 16
 MAX_DELAY_MS = 60_000  # 60s per step delay max
 
 
+def _validate_macro_text(name, description, *, name_required: bool) -> str | None:
+    """Return an error string for an invalid macro name or description, else None.
+
+    Shared by create (POST) and edit (PUT) so both enforce the same limits
+    (API-28: PUT used to accept descriptions over MAX_DESCRIPTION_LEN).
+    ``name_required`` is True on create; on edit an omitted name is kept.
+    """
+    if name_required and not name:
+        return "Missing 'name' parameter"
+    if name is not None:
+        if not isinstance(name, str):
+            return "'name' must be a string"
+        if len(name) > MAX_NAME_LEN:
+            return f"Name exceeds {MAX_NAME_LEN} characters"
+    if isinstance(description, str) and len(description) > MAX_DESCRIPTION_LEN:
+        return f"Description exceeds {MAX_DESCRIPTION_LEN} characters"
+    return None
+
+
 def _validate_macro_steps(steps):
     """Return an error string if invalid, else None. Pure function for reuse."""
     if not isinstance(steps, list):
@@ -139,21 +158,9 @@ async def handle_create_macro(request: web.Request) -> web.Response:
         description = data.get("description", "")
         macro_id = data.get("id")
 
-        if not name:
-            return _json_response(False, error="Missing 'name' parameter", status=400)
-        if not isinstance(name, str):
-            return _json_response(False, error="'name' must be a string", status=400)
-        if len(name) > MAX_NAME_LEN:
-            return _json_response(
-                False, error=f"Name exceeds {MAX_NAME_LEN} characters", status=400
-            )
-
-        if isinstance(description, str) and len(description) > MAX_DESCRIPTION_LEN:
-            return _json_response(
-                False,
-                error=f"Description exceeds {MAX_DESCRIPTION_LEN} characters",
-                status=400,
-            )
+        text_error = _validate_macro_text(name, description, name_required=True)
+        if text_error:
+            return _json_response(False, error=text_error, status=400)
 
         # Comprehensive validation: command whitelist, targets format,
         # command/target type matching, delay range, max step count.
@@ -197,14 +204,10 @@ async def handle_update_macro(request: web.Request) -> web.Response:
         icon = data.get("icon")
         description = data.get("description")
 
-        # Validate name length if provided
-        if name is not None:
-            if not isinstance(name, str):
-                return _json_response(False, error="'name' must be a string", status=400)
-            if len(name) > MAX_NAME_LEN:
-                return _json_response(
-                    False, error=f"Name exceeds {MAX_NAME_LEN} characters", status=400
-                )
+        # The same name/description limits as create (API-28).
+        text_error = _validate_macro_text(name, description, name_required=False)
+        if text_error:
+            return _json_response(False, error=text_error, status=400)
 
         # Comprehensive validation of new steps if provided
         if steps is not None:

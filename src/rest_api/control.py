@@ -438,7 +438,10 @@ async def handle_preset_save(request: web.Request) -> web.Response:
 
             if success:
                 from .device_settings import set_preset_routing
-                set_preset_routing(preset_num, parsed_routing)
+                # The matrix saved its whole live routing: the outputs not in the
+                # request kept their original input (BE-36: keep that full mapping,
+                # not just the submitted part, as the hub's fallback copy).
+                set_preset_routing(preset_num, {**original_routing, **parsed_routing})
                 return _json_response(
                     True,
                     {

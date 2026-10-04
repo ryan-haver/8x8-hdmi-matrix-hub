@@ -168,6 +168,19 @@ async def data_hub(aiohttp_client, matrix, monkeypatch, tmp_path):
     Wired the way ``run.py`` modular mode wires it (``set_matrix_device`` then
     ``create_rest_app``), so what these tests prove is what the shipped hub does.
     """
+    async for client in _data_hub(aiohttp_client, matrix, monkeypatch, tmp_path):
+        yield client
+
+
+@pytest.fixture
+async def telnet_data_hub(aiohttp_client, matrix_with_telnet, monkeypatch, tmp_path):
+    """``data_hub`` with the real Telnet client connected (e.g. ``r preset N`` reads)."""
+    async for client in _data_hub(aiohttp_client, matrix_with_telnet, monkeypatch, tmp_path):
+        assert matrix_with_telnet.telnet_connected
+        yield client
+
+
+async def _data_hub(aiohttp_client, matrix, monkeypatch, tmp_path):
     import shutil
 
     import rest_api.utils as api_utils

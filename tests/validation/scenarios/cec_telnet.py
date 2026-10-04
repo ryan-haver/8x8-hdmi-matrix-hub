@@ -53,8 +53,8 @@ for kind, table in (("input", _INPUT), ("output", _OUTPUT)):
                 notes="Requires OREI_USE_TELNET_CEC=true and a ready Telnet link. Enable flags use HTTP; CEC dispatch uses Telnet only.",
             ))
 
-# Desired behavior after an ambiguous acknowledgement: surface failure instead
-# of resending a non-idempotent volume step. C0 records the actual outcome.
+# BE-37: after an ambiguous acknowledgement the hub reports failure instead of
+# resending the non-idempotent volume step over HTTP.
 for kind in ("input", "output"):
     prefix = "s cec in" if kind == "input" else "s cec hdmi out"
     SCENARIOS.append(Scenario(
@@ -63,8 +63,8 @@ for kind in ("input", "output"):
         sim_state={"inputs": {"7": {"cec_enabled": 1}}, "outputs": {"7": {"cec_enabled": 1}}}, setup=_WARM,
         faults={"telnet_close_mid_command": True, "telnet_fault_count": 1},
         action=act(f"cec_{kind}", **{kind: 8, "command": "volume_up"}),
-        expect=(Response(status=500, json={"success": False}, finding="BE-37"),
-                CommandSent(f"{prefix} 8 vol+", channel="telnet", count=1), NoCommand("cec command", finding="BE-37"),
+        expect=(Response(status=500, json={"success": False}),
+                CommandSent(f"{prefix} 8 vol+", channel="telnet", count=1), NoCommand("cec command"),
                 NoCommand("set cec index"), DeviceUnchanged(), NoProtocolWarnings()), covers=_COVERS,
         notes="The simulator processes the Telnet command before truncating its reply. A second HTTP frame is an ambiguous resend; physical duplicate volume effects require hardware observation.",
     ))

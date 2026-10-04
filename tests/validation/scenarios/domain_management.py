@@ -92,8 +92,8 @@ SCENARIOS.append(Scenario(
     id="domain_manage.macro_update_description_long", title="Macro update refuses an over-limit description",
     features=("F-DOM-019", "F-API-023"), targets=("sim",), kind="failure", setup=(_MCREATE,), cleanup=(_MDELETE,),
     action=act("request", method="PUT", path=_MACRO, json={"description": "D" * 2001}),
-    expect=(Response(status=400, json={"success": False}, finding="API-28"),
-            Hub(_MACRO, "data.description", equals="Base", finding="API-28"), NoCommand("*"),
+    expect=(Response(status=400, json={"success": False}),
+            Hub(_MACRO, "data.description", equals="Base"), NoCommand("*"),
             NoCommand("cec command"), DeviceUnchanged(), NoProtocolWarnings()), covers=_COVERS,
 ))
 for sid, body in (("name_boundary", {"name": "N" * 200}), ("description_boundary", {"description": "D" * 2000}),
