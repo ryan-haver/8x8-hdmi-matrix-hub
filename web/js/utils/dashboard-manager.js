@@ -215,6 +215,14 @@ class DashboardManager {
         }
         // Update visibility after registering
         this.updateDashboardVisibility();
+
+        // UI-44: a layout card for this widget (aggregate_widget) skipped while the
+        // widget was not registered yet (the CEC tray registers late) renders now
+        const ids = window.dashboardCardIds;
+        if (ids && (window.state?.dashboardCards || []).some(card =>
+            card.type === 'aggregate_widget' && ids.registeredWidgetId(ids.aggregateWidgetId(card)) === config.id)) {
+            this.renderCards();
+        }
     }
 
     /**
@@ -773,16 +781,24 @@ class DashboardManager {
      * Re-render a specific widget (called when its content changes)
      */
     refreshWidget(widgetId) {
-        if (!this.pinnedWidgets.has(widgetId)) return;
-        
         const widget = this.registeredWidgets.get(widgetId);
         if (!widget) return;
-        
-        const contentEl = document.querySelector(`#dashboard-widget-${widgetId} .dashboard-widget-content`);
-        if (contentEl) {
-            contentEl.innerHTML = widget.render();
-            widget.onMount(document.getElementById(`dashboard-widget-${widgetId}`));
+
+        if (this.pinnedWidgets.has(widgetId)) {
+            const contentEl = document.querySelector(`#dashboard-widget-${widgetId} .dashboard-widget-content`);
+            if (contentEl) {
+                contentEl.innerHTML = widget.render();
+                widget.onMount(document.getElementById(`dashboard-widget-${widgetId}`));
+            }
         }
+
+        // UI-44: the same widget shown as a dashboard card (aggregate_widget) stays current too
+        this.container?.querySelectorAll(`.dashboard-card-widget[data-widget-id="${CSS.escape(widgetId)}"]`).forEach(cardEl => {
+            const body = cardEl.querySelector('.dashboard-card-body');
+            if (!body) return;
+            body.innerHTML = widget.render();
+            widget.onMount(cardEl);
+        });
     }
 
     /**
@@ -895,6 +911,11 @@ class DashboardManager {
 
         grid.innerHTML = html;
         this.attachCardEventListeners(grid);
+
+        // UI-44: a widget card runs its widget's handlers, as a pinned widget does
+        grid.querySelectorAll('.dashboard-card-widget').forEach(cardEl => {
+            this.registeredWidgets.get(cardEl.dataset.widgetId)?.onMount(cardEl);
+        });
     }
 
     /**
@@ -1043,7 +1064,7 @@ class DashboardManager {
      * Get the current index of a widget in the container
      */
     getWidgetIndex(widgetEl) {
-        const widgets = Array.from(this.container.querySelectorAll('.dashboard-widget'));
+        const widgets = Array.from(this.container.querySelectorAll(':scope > .dashboard-widget'));
         return widgets.indexOf(widgetEl);
     }
 
@@ -1051,7 +1072,7 @@ class DashboardManager {
      * Update widget order from current desktop DOM order
      */
     updateOrderFromDOM() {
-        const widgets = Array.from(this.container.querySelectorAll('.dashboard-widget'));
+        const widgets = Array.from(this.container.querySelectorAll(':scope > .dashboard-widget'));
         this.widgetOrder = widgets.map(w => w.dataset.widgetId);
     }
 
@@ -1172,7 +1193,7 @@ class DashboardManager {
             e.preventDefault();
             if (!this.dragState.isDragging) return;
             
-            const widgets = this.container.querySelectorAll('.dashboard-widget:not(.dragging)');
+            const widgets = this.container.querySelectorAll(':scope > .dashboard-widget:not(.dragging)');
             if (widgets.length === 0) {
                 this.container.appendChild(this.dragState.placeholder);
             }

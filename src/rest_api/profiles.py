@@ -9,6 +9,7 @@ import logging
 
 from aiohttp import web
 
+from device_codes import SCALER_MODES
 from profile_execution import apply_profile_state
 
 from .utils import _json_response, get_macro_manager, get_matrix_device, get_profile_manager
@@ -39,6 +40,54 @@ REORDER_UPDATE_FIELDS = frozenset({
     "pinned",
     "pin_order",
 })
+
+
+def _validate_outputs(outputs) -> str | None:
+    """Check a profile's ``outputs`` map; the one validator for create and edit (API-30).
+
+    Output numbers and inputs are 1-8, every output names its input, and the
+    optional settings pass :func:`_validate_output_settings`. Returns an error
+    string, or None if the map is valid.
+    """
+    if not isinstance(outputs, dict):
+        return "'outputs' must be an object"
+    for output_key, config in outputs.items():
+        try:
+            output_num = int(output_key)
+            if output_num < 1 or output_num > 8:
+                return f"Invalid output number: {output_num}"
+            if not isinstance(config, dict):
+                return f"Output {output_num} must be an object"
+            input_num = config.get("input")
+            if input_num is None:
+                return f"Output {output_num} missing 'input'"
+            if int(input_num) < 1 or int(input_num) > 8:
+                return f"Invalid input for output {output_num}"
+        except (ValueError, TypeError) as e:
+            return f"Invalid output configuration: {e}"
+    return _validate_output_settings(outputs)
+
+
+def _validate_output_settings(outputs) -> str | None:
+    """Check the optional ``scaler_mode`` / ``arc`` of each output (API-22).
+
+    Shared by create and edit. ``scaler_mode`` is the 1-based API value of
+    :data:`device_codes.SCALER_MODES`; ``arc`` is a boolean; null or absent
+    leaves the setting unset. Other output fields keep their existing checks.
+    """
+    if not isinstance(outputs, dict):
+        return None
+    for output_key, config in outputs.items():
+        if not isinstance(config, dict):
+            continue
+        scaler = config.get("scaler_mode")
+        if scaler is not None and (type(scaler) is not int or scaler not in SCALER_MODES):
+            return (f"Output {output_key}: scaler_mode must be one of {sorted(SCALER_MODES)} "
+                    f"({', '.join(f'{k}={v}' for k, v in SCALER_MODES.items())})")
+        arc = config.get("arc")
+        if arc is not None and not isinstance(arc, bool):
+            return f"Output {output_key}: arc must be true or false"
+    return None
 
 
 def _validate_cec_config(cec_config: dict) -> str | None:
@@ -135,20 +184,9 @@ async def handle_create_profile(request: web.Request) -> web.Response:
         if not outputs:
             return _json_response(False, error="Missing 'outputs' parameter", status=400)
 
-        # Validate outputs
-        for output_key, config in outputs.items():
-            try:
-                output_num = int(output_key)
-                if output_num < 1 or output_num > 8:
-                    return _json_response(False, error=f"Invalid output number: {output_num}", status=400)
-
-                input_num = config.get("input")
-                if input_num is None:
-                    return _json_response(False, error=f"Output {output_num} missing 'input'", status=400)
-                if int(input_num) < 1 or int(input_num) > 8:
-                    return _json_response(False, error=f"Invalid input for output {output_num}", status=400)
-            except (ValueError, TypeError) as e:
-                return _json_response(False, error=f"Invalid output configuration: {e}", status=400)
+        outputs_error = _validate_outputs(outputs)
+        if outputs_error:
+            return _json_response(False, error=outputs_error, status=400)
 
         # Validate macro references if provided
         if macros and macro_manager:
@@ -213,6 +251,10 @@ async def handle_update_profile(request: web.Request) -> web.Response:
                 error="No valid fields to update",
                 status=400,
             )
+        if "outputs" in updates:
+            outputs_error = _validate_outputs(updates["outputs"])
+            if outputs_error:
+                return _json_response(False, error=outputs_error, status=400)
 
         updated = profile_manager.update_profile(profile_id, **updates)
         if updated:

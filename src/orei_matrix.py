@@ -23,6 +23,7 @@ status read. Only when that health read fails too is the link marked lost.
 """
 
 import asyncio
+import copy
 import datetime
 import json
 import logging
@@ -63,7 +64,7 @@ try:
     from .device_codes import (
         LCD_TIMEOUT_MODES as DEVICE_LCD_MODES,
     )
-    from .telnet_client import MatrixStatus, TelnetClient, TelnetState
+    from .telnet_client import CecOutcome, MatrixStatus, TelnetClient, TelnetState
 except ImportError:
     from _task_supervisor import cancel_and_wait, create_supervised_task  # type: ignore[no-redef]
     from device_codes import (  # type: ignore[no-redef]
@@ -88,7 +89,7 @@ except ImportError:
     from device_codes import (
         LCD_TIMEOUT_MODES as DEVICE_LCD_MODES,
     )
-    from telnet_client import MatrixStatus, TelnetClient, TelnetState
+    from telnet_client import CecOutcome, MatrixStatus, TelnetClient, TelnetState
 
 _LOG = logging.getLogger(__name__)
 
@@ -242,6 +243,12 @@ def _is_read_command(comhead: str) -> bool:
 # ambiguous failure answer, because the first send may already have acted.
 NON_IDEMPOTENT_COMMANDS = frozenset({"cec command"})
 
+# The only CEC commands that may be sent again over HTTP after a Telnet send
+# whose outcome is unknown (written, answer lost): power on and power off set
+# a state, so a second frame changes nothing. Every other CEC command (volume,
+# mute, navigation, playback, ``ACTIVE``) is never resent (BE-37, BE-38).
+CEC_SAFE_TO_RESEND = frozenset({"POWER_ON", "POWER_OFF"})
+
 
 def _looks_like_login_page(text: str) -> bool:
     # HIL-A: confirm -- some firmwares may answer an expired session with the
@@ -373,6 +380,11 @@ class OreiMatrix:
 
         self._cable_status_cache: dict[str, Any] | None = None
         self._cable_status_cache_time: float = 0.0
+
+        # Preset slot routing read from the matrix (``r preset N``, BE-36):
+        # {slot: {"routing": {output: input}, "saved": bool}} for the slots read.
+        self._preset_cache: dict[int, dict[str, Any]] | None = None
+        self._preset_cache_time: float = 0.0
 
         # UTC time of the last successful status read (for /api/health)
         self._last_successful_poll: datetime.datetime | None = None
@@ -828,6 +840,7 @@ class OreiMatrix:
         self._output_status_cache = None
         self._input_status_cache = None
         self._cable_status_cache = None
+        self._preset_cache = None
 
     async def _send_command(self, command: dict, retry_on_failure: bool = True) -> tuple[bool, dict | None]:
         """
@@ -986,6 +999,40 @@ class OreiMatrix:
             preset,
         )
         return None
+
+    async def get_preset_slots(self, force_refresh: bool = False) -> dict[int, dict[str, Any]]:
+        """The routing stored in the matrix's preset slots, read from the matrix itself (BE-36).
+
+        Each slot is read with Telnet ``r preset N``, the only preset read this
+        firmware answers (HIL-01/HIL-05). Returns ``{slot: {"routing": {output:
+        input}, "saved": bool}}`` for every slot that gave a complete answer
+        (eight routing lines, or the empty-slot line: ``saved`` False and no
+        routing). A slot missing from the result could not be read (Telnet not
+        connected, no or incomplete answer), so its routing is unknown. Reading
+        stops at the first slot that fails, since the rest would wait on the
+        same link.
+
+        Cached for ``OREI_STATUS_CACHE_TTL`` seconds like the status caches;
+        every write (preset save, rename, ...) and every forced status read
+        expire it, and concurrent reads share one pass over the slots.
+        """
+        if not force_refresh and self._preset_cache is not None and self._cache_fresh(self._preset_cache_time):
+            return copy.deepcopy(self._preset_cache)
+        return copy.deepcopy(await self._single_flight("presets", self._fetch_preset_slots))
+
+    async def _fetch_preset_slots(self) -> dict[int, dict[str, Any]]:
+        generation = self._cache_generation
+        slots: dict[int, dict[str, Any]] = {}
+        for preset in range(1, 9):
+            info = await self.get_preset_info(preset)
+            if info is None:
+                _LOG.warning("Preset routing read stopped at slot %d: no complete answer from the matrix", preset)
+                break
+            slots[preset] = {"routing": dict(info.get("routing") or {}), "saved": bool(info.get("saved"))}
+        if generation == self._cache_generation:  # no write landed meanwhile
+            self._preset_cache = copy.deepcopy(slots)
+            self._preset_cache_time = time.time()
+        return slots
 
     async def get_all_input_names(self) -> dict[int, str]:
         """
@@ -1201,6 +1248,10 @@ class OreiMatrix:
         if not force_refresh and self._status_cache is not None and self._cache_fresh(self._status_cache_time):
             _LOG.debug("Returning cached status (cache age: %.2fs)", time.time() - self._status_cache_time)
             return self._status_cache.copy()
+        if force_refresh:
+            # A caller wants the matrix as it is now (e.g. a /ws get_status):
+            # the next preset catalog read goes to the matrix as well.
+            self._preset_cache = None
         return (await self._single_flight("status", self._fetch_status)).copy()
 
     async def _fetch_status(self) -> dict[str, Any]:
@@ -1400,19 +1451,26 @@ class OreiMatrix:
         if self._use_telnet_cec and self._telnet and self._telnet.connected:
             telnet_cmd = self._CEC_NAME_TO_TELNET.get(name)
             if telnet_cmd:
+                kind = "output" if is_output else "input"
                 try:
-                    if is_output:
-                        success = await self._telnet._send_cec_output(port_num, telnet_cmd)
-                    else:
-                        success = await self._telnet._send_cec_input(port_num, telnet_cmd)
-
-                    if success:
-                        _LOG.debug(
-                            "CEC via Telnet: %s %d -> %s", "output" if is_output else "input", port_num, telnet_cmd
-                        )
-                        return True
-                except Exception as e:
-                    _LOG.warning(f"Telnet CEC failed, falling back to HTTP: {e}")
+                    outcome = await self._telnet.send_cec(kind, port_num, telnet_cmd)
+                except Exception as e:  # defensive: send_cec reports, it does not raise
+                    _LOG.error("Telnet CEC %s %d %s raised: %s", kind, port_num, telnet_cmd, e)
+                    outcome = CecOutcome.UNKNOWN
+                if outcome is CecOutcome.ACKNOWLEDGED:
+                    _LOG.debug("CEC via Telnet: %s %d -> %s", kind, port_num, telnet_cmd)
+                    return True
+                if outcome is CecOutcome.UNKNOWN and name not in CEC_SAFE_TO_RESEND:
+                    # BE-37: the command was written but its answer was lost, so
+                    # the matrix may already have run it. A volume step, a
+                    # toggle or a key press would run twice: never resent,
+                    # report failure. Only CEC_SAFE_TO_RESEND may go on to HTTP.
+                    self._last_error = f"CEC {name} to {kind} {port_num}: outcome unknown (Telnet answer lost); not resent"
+                    _LOG.error("%s", self._last_error)
+                    return False
+                # REJECTED / NOT_SENT: the matrix did not run it; UNKNOWN for a
+                # power on/off: a second frame is harmless. HTTP may try.
+                _LOG.warning("Telnet CEC %s %d %s %s, falling back to HTTP", kind, port_num, telnet_cmd, outcome.value)
 
         # Fall back to HTTP
         _LOG.debug("CEC via HTTP: %s %d -> index %d", "output" if is_output else "input", port_num, command_index)

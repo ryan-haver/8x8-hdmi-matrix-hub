@@ -96,6 +96,13 @@ for sid, payload in (("missing_id", {"name": "Invalid", "outputs": {"1": {"input
     SCENARIOS.append(_case(f"create_reject_{sid}", "POST", "/api/profile", payload, status=400,
                            setup=(), cleanup=(), checks=(Hub(_PATH, "success", equals=False, status=404),)))
 
+# API-30: an edit applies the same output checks as creation; the saved outputs stay as they were.
+for sid, outputs in (("missing_input", {"1": {"enabled": True}}), ("output_zero", {"0": {"input": 1}}),
+                     ("output_nine", {"9": {"input": 1}}), ("input_zero", {"1": {"input": 0}}),
+                     ("input_nine", {"1": {"input": 9}})):
+    SCENARIOS.append(_case(f"edit_reject_{sid}", "PUT", _PATH, {"outputs": outputs}, status=400,
+                           checks=(Hub(_PATH, "data.outputs", equals=_BASE["outputs"]),)))
+
 for endpoint, field in (("favorite", "favorite"), ("dashboard", "dashboard_visible")):
     for method in ("POST", "PUT"):
         for desired in (False, True):
@@ -160,13 +167,22 @@ SCENARIOS.append(_case("favorite_list_exclusion", "GET", "/api/profiles/favorite
                                Hub("/api/profiles/favorites", "data.profiles[2].favorite", absent_or_false=True),
                                Hub(_PATH, "data.favorite", equals=False))))
 
-# API-22: these saved fields are needed by the executor but absent from the
-# Profile output model. Keep the desired round-trip check as a known failure.
+# API-22: scaler mode (API value 1-5, device_codes.SCALER_MODES) and ARC are
+# saved and read back on create and edit; invalid values are refused.
 for method in ("POST", "PUT"):
     outputs = {"1": {"input": 2, "enabled": True, "audio_mute": False, "scaler_mode": 4, "arc": True}}
     SCENARIOS.append(_case(f"{method.lower()}_scaler_arc", method,
                            "/api/profile" if method == "POST" else _PATH,
                            {**_BASE, "outputs": outputs} if method == "POST" else {"outputs": outputs},
                            setup=() if method == "POST" else (_CREATE,),
-                           failure=True,
-                           checks=(Hub(_PATH, "data.outputs", equals=outputs, finding="API-22"),)))
+                           data={"outputs": outputs},
+                           checks=(Hub(_PATH, "data.outputs", equals=outputs),)))
+    for sid, bad in (("scaler_invalid", {"scaler_mode": 6}), ("arc_invalid", {"arc": "on"})):
+        invalid = {"1": {"input": 2, **bad}}
+        SCENARIOS.append(_case(f"{method.lower()}_{sid}", method,
+                               "/api/profile" if method == "POST" else _PATH,
+                               {**_BASE, "outputs": invalid} if method == "POST" else {"outputs": invalid},
+                               setup=() if method == "POST" else (_CREATE,),
+                               cleanup=() if method == "POST" else (_DELETE,), status=400,
+                               checks=(Hub(_PATH, "success", equals=False, status=404),) if method == "POST"
+                               else (Hub(_PATH, "data.outputs", equals=_BASE["outputs"]),)))

@@ -22,7 +22,7 @@ class SceneEditor {
             <div class="modal-content modal-lg">
                 <div class="modal-header">
                     <h2 class="modal-title" id="scene-editor-title">New Scene</h2>
-                    <button class="modal-close" aria-label="Close">
+                    <button class="btn-icon modal-close" aria-label="Close">
                         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                         </svg>
@@ -117,7 +117,7 @@ class SceneEditor {
                         <button class="btn btn-sm btn-secondary" id="add-wait-step-btn">+ Wait</button>
                     </div>
                 </div>
-                <div id="scene-steps-list">
+                <div id="scene-steps-list" class="card-list">
                     ${this.renderStepsList()}
                 </div>
             </div>
@@ -135,7 +135,7 @@ class SceneEditor {
             <div class="overrides-section">
                 <h4>Active Overrides</h4>
                 <p class="section-help">These settings will be skipped during scene execution.</p>
-                <div class="overrides-list">
+                <div class="overrides-list card-list">
                     ${this.renderOverridesList()}
                 </div>
             </div>` : ''}
@@ -254,15 +254,19 @@ class SceneEditor {
             }
 
             return `
-                <div class="step-item" data-index="${idx}">
-                    <span class="step-icon">${icon}</span>
-                    <span class="step-name">${Helpers.escapeHtml(name)}</span>
-                    <span class="step-type">${Helpers.escapeHtml(typeLabel)}</span>
-                    <button class="btn-icon remove-step-btn" data-index="${idx}" title="Remove">
-                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                        </svg>
-                    </button>
+                <div class="step-item scene-card" data-index="${idx}">
+                    <span class="step-icon scene-icon">${icon}</span>
+                    <div class="scene-info">
+                        <span class="step-name scene-name">${Helpers.escapeHtml(name)}</span>
+                        <span class="step-type scene-outputs">${Helpers.escapeHtml(typeLabel)}</span>
+                    </div>
+                    <div class="scene-actions">
+                        <button class="btn-icon remove-step-btn" data-index="${idx}" title="Remove" aria-label="Remove step">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </div>
                 </div>`;
         }).join('');
     }
@@ -328,7 +332,7 @@ class SceneEditor {
                         ${profiles.map(p => {
                             const isOverridden = this.sceneData.overrides?.[p.id]?.[output]?.[setting] === true;
                             return `
-                                <label class="conflict-choice ${isOverridden ? 'overridden' : ''}">
+                                <label class="conflict-choice macro-checkbox ${isOverridden ? 'overridden' : ''}">
                                     <input type="checkbox"
                                            data-cidx="${cIdx}"
                                            data-pid="${Helpers.escapeHtml(p.id)}"
@@ -365,19 +369,23 @@ class SceneEditor {
         }
         if (entries.length === 0) return '';
         return entries.map(e => `
-            <div class="override-item">
-                <span class="override-desc">
-                    ${Helpers.escapeHtml(e.profileName)} → output ${Helpers.escapeHtml(e.output)} → <strong>${Helpers.escapeHtml(e.setting)}</strong> skipped
-                </span>
-                <button class="btn-icon clear-override-btn"
-                        data-pid="${Helpers.escapeHtml(e.profileId)}"
-                        data-output="${Helpers.escapeHtml(e.output)}"
-                        data-setting="${Helpers.escapeHtml(e.setting)}"
-                        title="Clear override">
-                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                    </svg>
-                </button>
+            <div class="override-item scene-card">
+                <div class="scene-info">
+                    <span class="override-desc">
+                        ${Helpers.escapeHtml(e.profileName)} → output ${Helpers.escapeHtml(e.output)} → <strong>${Helpers.escapeHtml(e.setting)}</strong> skipped
+                    </span>
+                </div>
+                <div class="scene-actions">
+                    <button class="btn-icon clear-override-btn"
+                            data-pid="${Helpers.escapeHtml(e.profileId)}"
+                            data-output="${Helpers.escapeHtml(e.output)}"
+                            data-setting="${Helpers.escapeHtml(e.setting)}"
+                            title="Clear override" aria-label="Clear override">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
         `).join('');
     }

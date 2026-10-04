@@ -130,6 +130,70 @@ async def handle_scene_cec_config(request: web.Request) -> web.Response:
 # =============================================================================
 
 
+def _complete(values: object, count: int = 8) -> list | None:
+    """The first ``count`` entries of a device array, or None if it has fewer."""
+    if isinstance(values, list) and len(values) >= count:
+        return values[:count]
+    return None
+
+
+async def _capture_current_outputs(matrix_device) -> tuple[dict[int, dict] | None, str | None]:
+    """Read the state of all 8 outputs for save-current: ``(outputs, None)`` or ``(None, reason)``.
+
+    Routing comes from ``get video status`` (``allsource``; the real device's
+    ``get output status`` has none, MCU V1.10.01 capture), the output
+    settings from ``get output status``. Both reads must succeed and carry an
+    entry for every output (the device appends a ninth entry that is not an
+    output, HIL-04); otherwise the capture fails (API-27).
+    """
+    if hasattr(matrix_device, "get_output_status"):
+        status = await matrix_device.get_output_status()
+        if not isinstance(status, dict):
+            return None, "the output status read failed"
+        video = await matrix_device.get_video_status() if hasattr(matrix_device, "get_video_status") else None
+        allsource = _complete((video or {}).get("allsource")) or _complete(status.get("allsource"))
+        if allsource is None or any(type(src) is not int or not 1 <= src <= 8 for src in allsource):
+            return None, "the routing (video status) read failed or was incomplete"
+        allout = _complete(status.get("allout"))
+        allaudiomute = _complete(status.get("allaudiomute"))
+        if allout is None or allaudiomute is None:
+            return None, "the output status read was incomplete"
+        # API-31: each output's stream state as the matrix reports it (1 on, 0 off);
+        # anything else is not a reading and is not replaced with a default.
+        if any(type(v) is not int or v not in (0, 1) for v in allout):
+            return None, "the output stream state (allout) was not 0 or 1 for every output"
+        allhdr = status.get("allhdr") or []
+        allhdcp = status.get("allhdcp") or []
+        outputs: dict[int, dict] = {}
+        for i in range(8):
+            outputs[i + 1] = {
+                "input": allsource[i],
+                "enabled": allout[i] == 1,
+                "audio_mute": bool(allaudiomute[i]),
+                # scenes store API values: device HDR 0-2 -> 1-3 (HIL-02)
+                "hdr_mode": hdr_from_device(allhdr[i]) if i < len(allhdr) else None,
+                "hdcp_mode": int(allhdcp[i]) if i < len(allhdcp) else None,
+            }
+        return outputs, None
+    if hasattr(matrix_device, "get_full_status"):
+        full = await matrix_device.get_full_status()
+        raw_outputs = getattr(full, "outputs", {}) or {}
+        outputs = {}
+        for out_num, out_data in raw_outputs.items():
+            if isinstance(out_data, dict) and isinstance(out_data.get("input"), int):
+                outputs[int(out_num)] = {
+                    "input": out_data["input"],
+                    "enabled": bool(out_data.get("enabled", True)),
+                    "audio_mute": bool(out_data.get("audio_mute", False)),
+                    "hdr_mode": out_data.get("hdr_mode"),
+                    "hdcp_mode": out_data.get("hdcp_mode"),
+                }
+        if set(outputs) != set(range(1, 9)):
+            return None, "the status read did not cover all 8 outputs"
+        return outputs, None
+    return None, "the matrix device cannot report its status"
+
+
 async def handle_save_current_as_scene(request: web.Request) -> web.Response:
     """POST /api/scene/save-current — capture current matrix state as a new profile.
 
@@ -156,62 +220,17 @@ async def handle_save_current_as_scene(request: web.Request) -> web.Response:
         # and for clients that want stable references.
         profile_id = body.get("id") or f"scene_{uuid.uuid4().hex[:8]}"
 
-        # Get current routing for all outputs. The matrix device exposes
-        # this via ``get_output_status()`` which returns arrays
-        # (``allsource``, ``allout``, ``allaudiomute``, ``allhdr``,
-        # ``allhdcp``) indexed by position; fall back to
-        # ``get_full_status()`` if the richer dataclass API is available.
-        outputs: dict[int, dict] = {}
+        # API-27: the profile is only created from a complete read of the
+        # matrix. A failed or incomplete read is reported (502) and nothing is
+        # saved; no output and no routing is ever filled in with a default.
         try:
-            if hasattr(matrix_device, "get_output_status"):
-                status = await matrix_device.get_output_status()
-                if isinstance(status, dict):
-                    # The routing lives in ``get video status``: the real
-                    # device's ``get output status`` has no ``allsource``
-                    # (MCU V1.10.01 capture), which made every output "input 1".
-                    video = None
-                    if hasattr(matrix_device, "get_video_status"):
-                        video = await matrix_device.get_video_status()
-                    allsource = (video or {}).get("allsource") or status.get("allsource", [])
-                    allout = status.get("allout", [])
-                    allaudiomute = status.get("allaudiomute", [])
-                    allhdr = status.get("allhdr", [])
-                    allhdcp = status.get("allhdcp", [])
-                    # ``allout`` is indexed by position (i+1 = output number).
-                    # The device appends a ninth entry that is not an output
-                    # (HIL-04), so only the first 8 positions are outputs.
-                    for i in range(min(len(allout), 8)):
-                        try:
-                            outputs[i + 1] = {
-                                "input": int(allsource[i]) if i < len(allsource) else 1,
-                                "enabled": True,
-                                "audio_mute": bool(allaudiomute[i]) if i < len(allaudiomute) else False,
-                                # scenes store API values: device HDR 0-2 -> 1-3 (HIL-02)
-                                "hdr_mode": hdr_from_device(allhdr[i]) if i < len(allhdr) else None,
-                                "hdcp_mode": int(allhdcp[i]) if i < len(allhdcp) else None,
-                            }
-                        except (TypeError, ValueError, IndexError):
-                            continue
-            elif hasattr(matrix_device, "get_full_status"):
-                full = await matrix_device.get_full_status()
-                raw_outputs = getattr(full, "outputs", {}) or {}
-                for out_num, out_data in raw_outputs.items():
-                    try:
-                        out_n = int(out_num)
-                    except (TypeError, ValueError):
-                        continue
-                    if isinstance(out_data, dict):
-                        outputs[out_n] = {
-                            "input": int(out_data.get("input", 1)),
-                            "enabled": bool(out_data.get("enabled", True)),
-                            "audio_mute": bool(out_data.get("audio_mute", False)),
-                            "hdr_mode": out_data.get("hdr_mode"),
-                            "hdcp_mode": out_data.get("hdcp_mode"),
-                        }
+            outputs, read_error = await _capture_current_outputs(matrix_device)
         except Exception as exc:
+            outputs, read_error = None, str(exc)
+        if outputs is None:
             return _json_response(
                 False,
-                error=f"Failed to read matrix status: {exc}",
+                error=f"Failed to read matrix status: {read_error}; profile not saved",
                 status=502,
             )
 
