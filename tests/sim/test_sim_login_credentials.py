@@ -60,17 +60,13 @@ async def test_a_rejected_login_is_reported_as_auth(fast_hub) -> None:
 
 
 async def test_no_connection_is_reported_as_refused_and_a_bad_name_as_not_found(monkeypatch) -> None:
-    # The unknown name must not depend on the host's resolver: on Windows a
-    # name DNS says does not exist can still take ~11 s in the system's
-    # fallback lookups, longer than the login timeout ("timeout", not
-    # "not_found"). aiohttp's default ThreadedResolver calls
-    # socket.getaddrinfo, so that name fails at once; every other host
-    # (the refused case's real loopback connection) resolves normally.
+    # The name must fail to resolve at once: real DNS for a `.invalid` name can take longer than the
+    # login timeout on some networks (11 s seen on Windows), which reads as "timeout" (TST-17).
     real_getaddrinfo = socket.getaddrinfo
 
     def getaddrinfo(host, *args, **kwargs):
         if host == "no-such-matrix.invalid":
-            raise socket.gaierror(socket.EAI_NONAME, "getaddrinfo failed")
+            raise socket.gaierror(socket.EAI_NONAME, "Name or service not known")
         return real_getaddrinfo(host, *args, **kwargs)
 
     monkeypatch.setattr(socket, "getaddrinfo", getaddrinfo)
