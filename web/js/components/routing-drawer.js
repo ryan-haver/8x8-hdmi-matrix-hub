@@ -27,7 +27,7 @@ class RouteAllDrawer {
     onStateChange() {
         this.render();
         // Also refresh widget if pinned to dashboard
-        if (window.dashboardManager && window.dashboardManager.isWidgetPinned('routing-dashboard')) {
+        if (window.dashboardManager) { // pinned widget and any dashboard card of it (UI-44)
             window.dashboardManager.refreshWidget('routing-dashboard');
         }
     }

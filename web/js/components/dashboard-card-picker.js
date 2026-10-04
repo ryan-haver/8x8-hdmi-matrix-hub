@@ -38,14 +38,15 @@ class DashboardCardPicker {
                 </div>
                 <div class="settings-modal-body">
                     <p class="section-help">Select an item to add to your dashboard.</p>
-                    <div class="picker-tabs">
-                        <button class="picker-tab-btn active" data-tab="profiles">Profiles</button>
-                        <button class="picker-tab-btn" data-tab="scenes">Scenes</button>
-                        <button class="picker-tab-btn" data-tab="presets">Presets</button>
-                        <button class="picker-tab-btn" data-tab="shortcuts">Shortcuts</button>
-                        <button class="picker-tab-btn" data-tab="macros">Macros</button>
+                    <!-- UI-52: the app's tab and card-row styles (drawer tabs; Profiles tab cards, as UI-49) -->
+                    <div class="picker-tabs drawer-tabs">
+                        <button class="picker-tab-btn drawer-tab-btn active" data-tab="profiles">Profiles</button>
+                        <button class="picker-tab-btn drawer-tab-btn" data-tab="scenes">Scenes</button>
+                        <button class="picker-tab-btn drawer-tab-btn" data-tab="presets">Presets</button>
+                        <button class="picker-tab-btn drawer-tab-btn" data-tab="shortcuts">Shortcuts</button>
+                        <button class="picker-tab-btn drawer-tab-btn" data-tab="macros">Macros</button>
                     </div>
-                    <div class="picker-content" id="picker-content">
+                    <div class="picker-content card-list" id="picker-content">
                         <!-- Content rendered dynamically -->
                     </div>
                 </div>
@@ -121,7 +122,7 @@ class DashboardCardPicker {
         const cards = window.state.dashboardCards || [];
         cards.forEach(card => {
             if (card.type === 'aggregate_widget') {
-                keys.add(`${card.type}:${card.widget_id}`);
+                keys.add(`${card.type}:${window.dashboardCardIds.aggregateWidgetId(card)}`); // UI-44: id or widget_id
             } else {
                 keys.add(`${card.type}:${card.id}`);
             }
@@ -165,17 +166,10 @@ class DashboardCardPicker {
             const isAdded = currentKeys.has(key);
             const stepCount = scene.steps?.length || 0;
 
-            return `
-                <div class="picker-item ${isAdded ? 'added' : ''}" data-type="scene" data-id="${Helpers.escapeHtml(scene.id)}">
-                    <span class="picker-item-icon">${Helpers.escapeHtml(scene.icon || '🎬')}</span>
-                    <span class="picker-item-name">${Helpers.escapeHtml(scene.name)}</span>
-                    <span class="picker-item-meta">${stepCount} step${stepCount !== 1 ? 's' : ''}</span>
-                    ${isAdded
-                        ? '<span class="picker-item-badge">Added</span>'
-                        : `<button class="btn btn-sm btn-primary picker-add-btn" data-type="scene" data-id="${Helpers.escapeHtml(scene.id)}">Add</button>`
-                    }
-                </div>
-            `;
+            return this.itemHtml({
+                type: 'scene', id: scene.id, icon: scene.icon || '🎬', name: scene.name,
+                meta: `${stepCount} step${stepCount !== 1 ? 's' : ''}`, isAdded,
+            });
         }).join('');
 
         container.innerHTML = html;
@@ -197,16 +191,7 @@ class DashboardCardPicker {
             const key = `profile:${profile.id}`;
             const isAdded = currentKeys.has(key);
 
-            return `
-                <div class="picker-item ${isAdded ? 'added' : ''}" data-type="profile" data-id="${Helpers.escapeHtml(profile.id)}">
-                    <span class="picker-item-icon">${Helpers.escapeHtml(profile.icon || '🎬')}</span>
-                    <span class="picker-item-name">${Helpers.escapeHtml(profile.name)}</span>
-                    ${isAdded
-                        ? '<span class="picker-item-badge">Added</span>'
-                        : `<button class="btn btn-sm btn-primary picker-add-btn" data-type="profile" data-id="${Helpers.escapeHtml(profile.id)}">Add</button>`
-                    }
-                </div>
-            `;
+            return this.itemHtml({ type: 'profile', id: profile.id, icon: profile.icon || '🎬', name: profile.name, isAdded });
         }).join('');
 
         container.innerHTML = html;
@@ -224,16 +209,7 @@ class DashboardCardPicker {
             const key = `preset:${i}`;
             const isAdded = currentKeys.has(key);
 
-            html += `
-                <div class="picker-item ${isAdded ? 'added' : ''}" data-type="preset" data-id="${i}">
-                    <span class="picker-item-icon">⚡</span>
-                    <span class="picker-item-name">${Helpers.escapeHtml(preset.name)}</span>
-                    ${isAdded
-                        ? '<span class="picker-item-badge">Added</span>'
-                        : `<button class="btn btn-sm btn-primary picker-add-btn" data-type="preset" data-id="${i}">Add</button>`
-                    }
-                </div>
-            `;
+            html += this.itemHtml({ type: 'preset', id: String(i), icon: '⚡', name: preset.name, isAdded });
         }
 
         container.innerHTML = html;
@@ -257,16 +233,7 @@ class DashboardCardPicker {
                 const key = `system_shortcut:${shortcut.id}`;
                 const isAdded = currentKeys.has(key);
 
-                return `
-                    <div class="picker-item ${isAdded ? 'added' : ''}" data-type="system_shortcut" data-id="${Helpers.escapeHtml(shortcut.id)}">
-                        <span class="picker-item-icon">${Helpers.escapeHtml(shortcut.icon || '⚡')}</span>
-                        <span class="picker-item-name">${Helpers.escapeHtml(shortcut.name)}</span>
-                        ${isAdded
-                            ? '<span class="picker-item-badge">Added</span>'
-                            : `<button class="btn btn-sm btn-primary picker-add-btn" data-type="system_shortcut" data-id="${Helpers.escapeHtml(shortcut.id)}">Add</button>`
-                        }
-                    </div>
-                `;
+                return this.itemHtml({ type: 'system_shortcut', id: shortcut.id, icon: shortcut.icon || '⚡', name: shortcut.name, isAdded });
             }).join('');
 
         container.innerHTML = html;
@@ -288,20 +255,35 @@ class DashboardCardPicker {
             const key = `macro:${macro.id}`;
             const isAdded = currentKeys.has(key);
 
-            return `
-                <div class="picker-item ${isAdded ? 'added' : ''}" data-type="macro" data-id="${Helpers.escapeHtml(macro.id)}">
-                    <span class="picker-item-icon">${Helpers.escapeHtml(macro.icon || '⚡')}</span>
-                    <span class="picker-item-name">${Helpers.escapeHtml(macro.name)}</span>
-                    ${isAdded
-                        ? '<span class="picker-item-badge">Added</span>'
-                        : `<button class="btn btn-sm btn-primary picker-add-btn" data-type="macro" data-id="${Helpers.escapeHtml(macro.id)}">Add</button>`
-                    }
-                </div>
-            `;
+            return this.itemHtml({ type: 'macro', id: macro.id, icon: macro.icon || '⚡', name: macro.name, isAdded });
         }).join('');
 
         container.innerHTML = html;
         this.attachPickerListeners(container);
+    }
+
+    /**
+     * One picker item (UI-52): a card row from the Profiles tab's card classes
+     * (scene-card, as the Settings drawer since UI-49): icon, name and meta
+     * left, the Add button or "Added" right. Every value is escaped here.
+     */
+    itemHtml({ type, id, icon, name, meta = '', isAdded }) {
+        const e = Helpers.escapeHtml;
+        return `
+                <div class="picker-item scene-card ${isAdded ? 'added' : ''}" data-type="${e(type)}" data-id="${e(id)}">
+                    <span class="picker-item-icon scene-icon">${e(icon)}</span>
+                    <div class="scene-info">
+                        <span class="picker-item-name scene-name">${e(name)}</span>
+                        ${meta ? `<span class="picker-item-meta scene-outputs">${e(meta)}</span>` : ''}
+                    </div>
+                    <div class="scene-actions">
+                        ${isAdded
+                            ? '<span class="picker-item-badge scene-outputs">Added</span>'
+                            : `<button class="btn btn-sm btn-primary picker-add-btn" data-type="${e(type)}" data-id="${e(id)}">Add</button>`
+                        }
+                    </div>
+                </div>
+            `;
     }
 
     /**

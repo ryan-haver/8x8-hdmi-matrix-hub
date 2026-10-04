@@ -398,7 +398,18 @@ export const CATALOG: CatalogEntry[] = [
       await page.locator('.dashboard-cards-container').evaluate((el) => el.scrollIntoView({ block: 'start' }));
       await settle(page, 200);
     },
-    note: 'aggregate_widget cards render empty: the renderer reads card.widget_id, the layout stores id (UI-44). Before WP-E1 (UI-27) the profile and macro cards also needed their data injected.',
+    note: 'UI-44 (fixed): the aggregate_widget cards render their widget (Routing; CEC Remote, stored as the legacy id "cec-tray"); they rendered empty because the renderer read card.widget_id and the layout stores id. The seed Quick Actions card stays empty: its widget was retired in Phase 8 (UI-55, owner decision). Before WP-E1 (UI-27) the profile and macro cards also needed their data injected.',
+  },
+  {
+    name: 'dashboard/cards/widgets',
+    page: 'ui',
+    description: 'The aggregate_widget cards at the end of the Dashboard Cards panel (Routing, CEC Remote), scrolled into view.',
+    setup: async ({ page }) => {
+      await tab(page, 'dashboard');
+      await page.locator('#dashboard-cards-grid .dashboard-card-widget').first().evaluate((el) => el.scrollIntoView({ block: 'start' }));
+      await settle(page, 200);
+    },
+    note: 'UI-44 (new entry): before the fix these cards rendered nothing, so the panel ended after the macro card. The seed Quick Actions card has no widget to show (retired in Phase 8, UI-55).',
   },
   {
     name: 'dashboard/cards/empty',
@@ -438,10 +449,14 @@ export const CATALOG: CatalogEntry[] = [
         await page.locator(`#dashboard-card-picker .picker-tab-btn[data-tab="${t}"]`).click();
         await settle(page, 400);
       },
-      note:
+      note: [
+        'UI-52: tabs drawn as the drawer tabs, items as card rows (name and meta left, Add or "Added" right), glass close button; they were native buttons and one run of text.',
         t === 'profiles' || t === 'macros'
           ? `Before WP-E1 (UI-27) always empty: state.${t === 'profiles' ? 'profiles' : 'cecMacros'} was never loaded by the main UI.`
-          : undefined,
+          : '',
+      ]
+        .filter(Boolean)
+        .join(' '),
     }),
   ),
 
@@ -1336,6 +1351,7 @@ export const CATALOG: CatalogEntry[] = [
       await page.locator('#scene-editor-modal.open').waitFor();
       await settle(page, 800);
     },
+    note: 'UI-53: fields, checkbox and close button as in the rest of the app; steps and overrides are card rows (all editor/scene/* entries). They were a native monospace textarea, native checkbox and white close box, and steps ran together.',
   },
   {
     name: 'editor/scene/passcode',

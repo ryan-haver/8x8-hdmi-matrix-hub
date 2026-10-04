@@ -1009,4 +1009,238 @@ test.describe('WP-E1 UI flows', () => {
     expect(await page.evaluate(() => (window as any).__xss ?? 0)).toBe(0); // eslint-disable-line @typescript-eslint/no-explicit-any
     expect(await page.locator('img[src="x"]').count()).toBe(0);
   });
+
+  // ----- UI-44 / UI-51 / UI-52 / UI-53 ------------------------------------------------
+
+  test('UI-44: aggregate_widget cards from the layout render their widget and it works', async ({ page, sim }) => {
+    await preparePage(page);
+    await openUi(page);
+    await mainTab(page, 'dashboard');
+    // The seed layout stores { type: 'aggregate_widget', id } for routing-dashboard, quick-actions and cec-tray
+    // (the hub's legacy id for the widget the CEC tray registers as cec-remote). The Quick Actions widget was
+    // retired in Phase 8 (app.js never creates the drawer that registers it), so that card has nothing to
+    // render: UI-55, an owner decision.
+    const cards = page.locator('#dashboard-cards-grid .dashboard-card-widget');
+    await expect(cards).toHaveCount(2);
+    await expect(cards.locator('.dashboard-card-title')).toHaveText(['Routing', 'CEC Remote']);
+    expect(await page.evaluate(() => (window as any).dashboardManager.registeredWidgets.has('quick-actions'))).toBe(false); // eslint-disable-line @typescript-eslint/no-explicit-any
+    // The card keeps the stored id, so removing it removes that layout entry.
+    expect(await cards.evaluateAll((els) => els.map((e) => (e as HTMLElement).dataset.cardKey))).toEqual([
+      'aggregate_widget:routing-dashboard',
+      'aggregate_widget:cec-tray',
+    ]);
+    expect(await cards.locator('.dashboard-card-unpin').evaluateAll((els) => els.map((e) => (e as HTMLElement).dataset.id))).toEqual([
+      'routing-dashboard',
+      'cec-tray',
+    ]);
+    // Each card shows its widget's content, and the widget's buttons work in the card.
+    for (const [key, sel] of [
+      ['routing-dashboard', '.routing-btn'],
+      ['cec-tray', '.cec-widget-cmd-btn'],
+    ]) {
+      await expect(page.locator(`.dashboard-card-widget[data-card-key="aggregate_widget:${key}"] ${sel}`).first()).toBeVisible();
+    }
+    const routing = page.locator('.dashboard-card-widget[data-card-key="aggregate_widget:routing-dashboard"]');
+    await routing.locator('.routing-btn[data-input="3"]').click();
+    await expect.poll(async () => (await sim.state()).outputs.map((o: Json) => o.source)).toEqual([3, 3, 3, 3, 3, 3, 3, 3]);
+    // The card follows the routing like the pinned widget (refreshWidget updates both).
+    await expect(routing.locator('.routing-btn[data-input="3"]')).toHaveClass(/active/);
+    const cec = page.locator('.dashboard-card-widget[data-card-key="aggregate_widget:cec-tray"]');
+    const sent = page.waitForRequest((r) => r.method() === 'POST' && /\/api\/cec\/(input|output)\/\d\/power_on$/.test(new URL(r.url()).pathname));
+    await cec.locator('.cec-widget-cmd-btn.power-on').click();
+    await sent;
+  });
+
+  test('UI-44: an aggregate_widget card stored with widget_id renders too', async ({ page }) => {
+    await preparePage(page);
+    await page.route('**/api/dashboard/layout', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        json: { success: true, error: null, data: { version: 1, cards: [{ type: 'aggregate_widget', widget_id: 'routing-dashboard', order: 0 }] } },
+      }),
+    );
+    await openUi(page);
+    await mainTab(page, 'dashboard');
+    const card = page.locator('#dashboard-cards-grid .dashboard-card-widget');
+    await expect(card).toHaveCount(1);
+    await expect(card).toHaveAttribute('data-card-key', 'aggregate_widget:routing-dashboard');
+    await expect(card.locator('.routing-btn')).toHaveCount(8);
+  });
+
+  test('UI-51: a cec_command event never changes the output stream; it is kept apart as the last CEC power command', async ({
+    page,
+  }) => {
+    await preparePage(page);
+    await openUi(page);
+    const r = await page.evaluate(() => {
+      const w = window as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+      const s = w.state;
+      const streams = () => Object.fromEntries(Object.entries(s.outputs).map(([k, o]) => [k, (o as Json).enabled]));
+      const before = streams();
+      let outputEvents = 0;
+      s.on('outputs', () => outputEvents++);
+      // The contract's cec_command events (docs/api/WEBSOCKET.md), and the handler called directly.
+      w.app.handleWebSocketMessage({ type: 'cec_command', data: { type: 'output', port: 1, command: 'power_off' } });
+      w.app.handleWebSocketMessage({ type: 'cec_command', data: { type: 'input', port: 2, command: 'power_on', name: 'AppleTV' } });
+      w.app.handleCecCommand({ type: 'output', port: 2, command: 'power_off' });
+      return { before, after: streams(), outputEvents, record: s.cecPowerCommands };
+    });
+    expect(r.after).toEqual(r.before);
+    expect(Object.values(r.before)).toContain(true);
+    expect(r.outputEvents).toBe(0);
+    expect(r.record).toMatchObject({
+      'output:1': { type: 'output', port: 1, command: 'power_off' },
+      'input:2': { type: 'input', port: 2, command: 'power_on' },
+      'output:2': { type: 'output', port: 2, command: 'power_off' },
+    });
+    // Nothing new is shown for it (a visible indicator is an owner decision, D5).
+    expect(await toasts(page)).toEqual([]);
+  });
+
+  /** Computed look of the rows matching `sel`, and whether their actions sit right of the name on one row. */
+  async function rowLook(page: Page, sel: string, name: string, actions: string) {
+    return page.locator(sel).evaluateAll(
+      (items, [nameSel, actionSel]) =>
+        items.map((el) => {
+          const n = el.querySelector(nameSel)!.getBoundingClientRect();
+          const acts = [...el.querySelectorAll(actionSel)].map((b) => b.getBoundingClientRect());
+          const cs = getComputedStyle(el);
+          const centre = (r: DOMRect) => r.top + r.height / 2;
+          const box = el.getBoundingClientRect();
+          return {
+            text: el.querySelector(nameSel)!.textContent?.trim(),
+            oneRow: acts.length > 0 && acts.every((b) => Math.abs(centre(b) - centre(n)) <= 12 && b.left > n.right),
+            actionRight: acts.length > 0 && acts.every((b) => b.right > box.right - 80),
+            surface: cs.backgroundColor !== 'rgba(0, 0, 0, 0)' && parseFloat(cs.borderTopLeftRadius) >= 8,
+            top: box.top,
+            bottom: box.bottom,
+          };
+        }),
+      [name, actions],
+    );
+  }
+
+  /** A close button drawn like the app's glass icon buttons: no native face, no border. */
+  async function expectGlassClose(page: Page, sel: string) {
+    const look = await page.locator(sel).evaluate((el) => {
+      const cs = getComputedStyle(el);
+      return { bg: cs.backgroundColor, borderStyle: cs.borderTopStyle };
+    });
+    expect(look, sel).toEqual({ bg: 'rgba(0, 0, 0, 0)', borderStyle: 'none' });
+  }
+
+  /** The active theme's accent colour as computed RGB. */
+  async function accentColor(page: Page) {
+    return page.evaluate(() => {
+      const probe = document.createElement('span');
+      probe.style.color = 'var(--accent)';
+      document.body.appendChild(probe);
+      const c = getComputedStyle(probe).color;
+      probe.remove();
+      return c;
+    });
+  }
+
+  test('UI-52: the Add Card picker has tab-styled tabs and one row per item; its close button is a glass icon button', async ({ page }) => {
+    await preparePage(page);
+    await openUi(page);
+    await mainTab(page, 'dashboard');
+    await page.locator('#add-dashboard-card-btn').click();
+    await page.locator('#dashboard-card-picker.visible').waitFor();
+    // Tabs look like the app's other tabs (Settings drawer): no native button face, accent underline when active.
+    const accent = await accentColor(page);
+    const tabs = await page.locator('#dashboard-card-picker .picker-tab-btn').evaluateAll((els) =>
+      els.map((b) => {
+        const cs = getComputedStyle(b);
+        return {
+          active: b.classList.contains('active'),
+          bg: cs.backgroundColor,
+          top: cs.borderTopWidth,
+          bottom: cs.borderBottomWidth,
+          bottomColor: cs.borderBottomColor,
+          color: cs.color,
+          row: Math.round(b.getBoundingClientRect().top),
+        };
+      }),
+    );
+    for (const t of tabs) {
+      expect(t.bg, JSON.stringify(t)).toBe('rgba(0, 0, 0, 0)');
+      expect(t.top, JSON.stringify(t)).toBe('0px');
+      expect(t.bottom, JSON.stringify(t)).toBe('2px');
+      if (t.active) expect([t.color, t.bottomColor]).toEqual([accent, accent]);
+      else expect(t.color).not.toBe(accent);
+    }
+    expect(new Set(tabs.map((t) => t.row)).size, 'tabs on one line').toBe(1);
+    for (const t of ['profiles', 'scenes', 'presets', 'shortcuts', 'macros']) {
+      await page.locator(`#dashboard-card-picker .picker-tab-btn[data-tab="${t}"]`).click();
+      await settle(page, 200);
+      const rows = await rowLook(page, '#picker-content .picker-item', '.picker-item-name', '.picker-add-btn, .picker-item-badge');
+      expect(rows.length, t).toBeGreaterThan(0);
+      for (const r of rows) expect(r, `${t}: ${r.text}`).toMatchObject({ oneRow: true, actionRight: true, surface: true });
+      for (let i = 1; i < rows.length; i++) expect(rows[i].top, `${t}: rows overlap`).toBeGreaterThanOrEqual(rows[i - 1].bottom);
+    }
+    await expectGlassClose(page, '#dashboard-card-picker .modal-close-btn');
+  });
+
+  test('UI-52: the profile editor and CEC dialog close buttons are glass icon buttons', async ({ page }) => {
+    await preparePage(page);
+    await openUi(page);
+    await mainTab(page, 'profiles');
+    await page.locator('#scenes-list .edit-scene-btn[data-scene-id="movie_night"]').click();
+    await page.locator('#profile-editor-modal.visible').waitFor();
+    await expectGlassClose(page, '#profile-editor-modal .modal-close-btn');
+    await page.locator('#open-cec-config-btn').click();
+    await expect(page.locator('#scene-cec-modal')).toBeVisible();
+    await expectGlassClose(page, '#scene-cec-modal .modal-close-btn');
+  });
+
+  test('UI-53: the scene editor fields, checkbox, steps and overrides are styled like the rest of the app', async ({ page }) => {
+    await preparePage(page);
+    await openUi(page);
+    await openSettingsDrawer(page, 'scenes');
+    await page.locator('#settings-drawer .edit-scene-btn[data-id="scene_movienight01"]').click();
+    await expect(page.locator('#scene-editor-modal')).toHaveClass(/open/);
+    await page.locator('#scene-password-protected').check();
+    const accent = await accentColor(page);
+    const look = await page.evaluate(() => {
+      const field = (sel: string) => {
+        const cs = getComputedStyle(document.querySelector(sel)!);
+        return { bg: cs.backgroundColor, border: cs.borderTopColor, radius: cs.borderTopLeftRadius, font: cs.fontFamily, color: cs.color };
+      };
+      const box = document.querySelector('#scene-password-protected')!;
+      return {
+        body: getComputedStyle(document.body).fontFamily,
+        name: field('#scene-editor-name'),
+        desc: field('#scene-desc'),
+        pass: field('#scene-passcode'),
+        checkbox: { accent: getComputedStyle(box).accentColor, size: box.getBoundingClientRect().width },
+      };
+    });
+    // Description and passcode look like the Name field (not a native monospace textarea or a white box).
+    expect(look.desc, JSON.stringify(look)).toEqual(look.name);
+    expect(look.pass, JSON.stringify(look)).toEqual(look.name);
+    expect(look.desc.font).toBe(look.body);
+    // The checkbox is drawn in the accent colour at the app's checkbox size (macro checkboxes, 18 px).
+    expect(look.checkbox.accent).toBe(accent);
+    expect(look.checkbox.size).toBeGreaterThanOrEqual(18);
+    // Steps are distinct card rows: name and type left, remove button right, on one row.
+    const steps = await rowLook(page, '#scene-steps-list .step-item', '.step-name', '.remove-step-btn');
+    expect(steps.length).toBe(3);
+    for (const r of steps) expect(r, r.text).toMatchObject({ oneRow: true, actionRight: true, surface: true });
+    for (let i = 1; i < steps.length; i++) expect(steps[i].top - steps[i - 1].bottom).toBeGreaterThanOrEqual(4);
+    // The step type is secondary text next to the name, not the same run of text.
+    const typeVsName = await page.locator('#scene-steps-list .step-item').first().evaluate((el) => {
+      const n = getComputedStyle(el.querySelector('.step-name')!);
+      const t = getComputedStyle(el.querySelector('.step-type')!);
+      return { nameSize: parseFloat(n.fontSize), typeSize: parseFloat(t.fontSize), nameColor: n.color, typeColor: t.color };
+    });
+    expect(typeVsName.typeSize).toBeLessThan(typeVsName.nameSize);
+    expect(typeVsName.typeColor).not.toBe(typeVsName.nameColor);
+    // An override is one row with its clear button on the right.
+    const overrides = await rowLook(page, '#scene-editor-modal .override-item', '.override-desc', '.clear-override-btn');
+    expect(overrides.length).toBeGreaterThan(0);
+    for (const r of overrides) expect(r, r.text).toMatchObject({ oneRow: true, actionRight: true, surface: true });
+    await expectGlassClose(page, '#scene-editor-modal .modal-close');
+  });
 });

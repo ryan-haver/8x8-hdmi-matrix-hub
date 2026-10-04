@@ -166,7 +166,15 @@
       "name": "dashboard/cards/all-types",
       "page": "ui",
       "description": "Every dashboard card type (scene, locked scene, preset, built-in and user shortcut, profile, macro, aggregate widgets) once cards are rendered.",
-      "note": "aggregate_widget cards render empty: the renderer reads card.widget_id, the layout stores id (UI-44). Before WP-E1 (UI-27) the profile and macro cards also needed their data injected.",
+      "note": "UI-44 (fixed): the aggregate_widget cards render their widget (Routing; CEC Remote, stored as the legacy id \"cec-tray\"); they rendered empty because the renderer read card.widget_id and the layout stores id. The seed Quick Actions card stays empty: its widget was retired in Phase 8 (UI-55, owner decision). Before WP-E1 (UI-27) the profile and macro cards also needed their data injected.",
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "dashboard/cards/widgets",
+      "page": "ui",
+      "description": "The aggregate_widget cards at the end of the Dashboard Cards panel (Routing, CEC Remote), scrolled into view.",
+      "note": "UI-44 (new entry): before the fix these cards rendered nothing, so the panel ended after the macro card. The seed Quick Actions card has no widget to show (retired in Phase 8, UI-55).",
       "themed": false,
       "viewports": null
     },
@@ -190,7 +198,7 @@
       "name": "dashboard/card-picker/profiles",
       "page": "ui",
       "description": "\"Add card\" picker, profiles tab.",
-      "note": "Before WP-E1 (UI-27) always empty: state.profiles was never loaded by the main UI.",
+      "note": "UI-52: tabs drawn as the drawer tabs, items as card rows (name and meta left, Add or \"Added\" right), glass close button; they were native buttons and one run of text. Before WP-E1 (UI-27) always empty: state.profiles was never loaded by the main UI.",
       "themed": false,
       "viewports": null
     },
@@ -198,7 +206,7 @@
       "name": "dashboard/card-picker/scenes",
       "page": "ui",
       "description": "\"Add card\" picker, scenes tab.",
-      "note": null,
+      "note": "UI-52: tabs drawn as the drawer tabs, items as card rows (name and meta left, Add or \"Added\" right), glass close button; they were native buttons and one run of text.",
       "themed": false,
       "viewports": null
     },
@@ -206,7 +214,7 @@
       "name": "dashboard/card-picker/presets",
       "page": "ui",
       "description": "\"Add card\" picker, presets tab.",
-      "note": null,
+      "note": "UI-52: tabs drawn as the drawer tabs, items as card rows (name and meta left, Add or \"Added\" right), glass close button; they were native buttons and one run of text.",
       "themed": false,
       "viewports": null
     },
@@ -214,7 +222,7 @@
       "name": "dashboard/card-picker/shortcuts",
       "page": "ui",
       "description": "\"Add card\" picker, shortcuts tab.",
-      "note": null,
+      "note": "UI-52: tabs drawn as the drawer tabs, items as card rows (name and meta left, Add or \"Added\" right), glass close button; they were native buttons and one run of text.",
       "themed": false,
       "viewports": null
     },
@@ -222,7 +230,7 @@
       "name": "dashboard/card-picker/macros",
       "page": "ui",
       "description": "\"Add card\" picker, macros tab.",
-      "note": "Before WP-E1 (UI-27) always empty: state.cecMacros was never loaded by the main UI.",
+      "note": "UI-52: tabs drawn as the drawer tabs, items as card rows (name and meta left, Add or \"Added\" right), glass close button; they were native buttons and one run of text. Before WP-E1 (UI-27) always empty: state.cecMacros was never loaded by the main UI.",
       "themed": false,
       "viewports": null
     },
@@ -952,7 +960,7 @@
       "name": "editor/scene/edit",
       "page": "ui",
       "description": "Scene editor editing \"Movie Night\" (macro, profile and system-action steps; override).",
-      "note": null,
+      "note": "UI-53: fields, checkbox and close button as in the rest of the app; steps and overrides are card rows (all editor/scene/* entries). They were a native monospace textarea, native checkbox and white close box, and steps ran together.",
       "themed": false,
       "viewports": null
     },
