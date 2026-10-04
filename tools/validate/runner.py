@@ -166,7 +166,16 @@ class Outcome:
 
 
 class WsObserver:
-    """A plain WebSocket client on the hub's /ws that records every event."""
+    """A plain WebSocket client on the hub's /ws that records every event.
+
+    Event times (``e["t"]``) come from :meth:`now`, a high-resolution monotonic clock: the wall clock
+    ticks only every ~15.6 ms on Windows, so an event received just before a mark could carry the same
+    time and count as after it (TST-15). Take marks with ``ws.now()``.
+    """
+
+    @staticmethod
+    def now() -> float:
+        return time.perf_counter()
 
     def __init__(self, url: str, forwarded_for: str) -> None:
         self.url = url
@@ -192,7 +201,7 @@ class WsObserver:
                                 data = json.loads(msg.data)
                             except ValueError:
                                 continue
-                            self.events.append({"t": time.time(), "event": data.get("event"), "data": data.get("data")})
+                            self.events.append({"t": self.now(), "event": data.get("event"), "data": data.get("data")})
                             if not connected.done():
                                 connected.set_result(True)
             except (aiohttp.ClientError, OSError) as exc:
@@ -220,12 +229,14 @@ class WsObserver:
         settle = time.monotonic() + 3
         while not any(e["event"] == "status" for e in self.events) and time.monotonic() < settle:
             await asyncio.sleep(0.05)
-        t0 = time.time()
+        # Only events received after the request count: ordered by position in the list, not by time.
+        mark = len(self.events)
         await self._ws.send_json({"command": "get_status"})
         deadline = time.monotonic() + timeout
         while time.monotonic() < deadline:
-            if any(e["event"] in ("status", "error") for e in self.since(t0)):
-                return any(e["event"] == "status" for e in self.since(t0))
+            answers = [e["event"] for e in self.events[mark:] if e["event"] in ("status", "error")]
+            if answers:
+                return answers[0] == "status"
             await asyncio.sleep(0.05)
         return False
 
@@ -240,6 +251,8 @@ class WsObserver:
             await self._session.close()
 
     def since(self, t0: float) -> list[dict[str, Any]]:
+        if t0 > 1e8:  # a wall-clock time (time.time()) would silently match nothing
+            raise ValueError("WsObserver.since() takes a mark from WsObserver.now(), not time.time()")
         return [e for e in self.events if e["t"] >= t0]
 
 
@@ -373,6 +386,41 @@ class Runner:
 
     # ------------------------------------------------------------ public
 
+    @staticmethod
+    def _scenario_environment(sc: Scenario) -> dict[str, str]:
+        # Faults must reach a fresh device read. Happy paths retain the hub's
+        # normal cache behavior, including preset read-count assertions.
+        return {"OREI_USE_TELNET_CEC": "false", "OREI_STATUS_CACHE_TTL": "0" if sc.faults else "3", **sc.hub_env}
+
+    def _scenario_environment_changes(self, sc: Scenario) -> bool:
+        if self.stack is None or self.stack.hub is None:
+            return False  # External hubs and real hardware keep the operator's settings.
+        desired = self._scenario_environment(sc)
+        return self.stack.hub.extra_env != desired
+
+    def _use_scenario_environment(self, sc: Scenario) -> None:
+        if not self._scenario_environment_changes(sc):
+            return
+        assert self.stack is not None and self.stack.hub is not None
+        self.stack.hub.extra_env = self._scenario_environment(sc)
+        self._restart_hub()
+
+    def _client_hub_info(self) -> HubInfo:
+        hub = self._hub_process()
+        return HubInfo(self.base_url, forwarded_for=self._xff(), artifacts_dir=self.o.out_dir / "artifacts",
+                       uc_url=hub.uc_url if hub is not None and hub.mode == "uc" else None)
+
+    async def _wait_sim_telnet(self, helper: ApiClient) -> None:
+        if self.stack is None:
+            return
+        deadline = time.perf_counter() + 10
+        while time.perf_counter() < deadline:
+            status, _, _ = await helper.request("GET", "/api/status/cables")
+            if status == 200:
+                return
+            await asyncio.sleep(0.05)
+        raise RuntimeError("simulator Telnet link did not become ready before the scenario")
+
     async def run(self, scenarios: list[Scenario]) -> list[Outcome]:
         self.evidence_dir.mkdir(parents=True, exist_ok=True)
         await asyncio.to_thread(self._start_system)
@@ -402,10 +450,9 @@ class Runner:
         try:
             if any(client_name in sc.clients for sc in scenarios):
                 await asyncio.to_thread(self._use_hub_mode, client.hub_mode)
-            hub = self._hub_process()
-            hub_info = HubInfo(self.base_url, forwarded_for=self._xff(), artifacts_dir=self.o.out_dir / "artifacts",
-                               uc_url=hub.uc_url if hub is not None and hub.mode == "uc" else None)
-            await client.start(hub_info)
+                first = next(sc for sc in scenarios if client_name in sc.clients)
+                await asyncio.to_thread(self._use_scenario_environment, first)
+            await client.start(self._client_hub_info())
         except (NotImplementedError, RuntimeError) as exc:
             for sc in scenarios:
                 if client_name in sc.clients:
@@ -425,6 +472,10 @@ class Runner:
                     self.outcomes.append(Outcome(sc.id, client_name, "skipped", gate="skipped", reason=reason))
                     print(f"[validate] skip    {sc.id} [{client_name}]: {reason}", flush=True)
                     continue
+                if self._scenario_environment_changes(sc):
+                    await client.stop()
+                    await asyncio.to_thread(self._use_scenario_environment, sc)
+                    await client.start(self._client_hub_info())
                 outcome = await self._run_one(sc, client)
                 self.outcomes.append(outcome)
                 mark = {"pass": "PASS", "fail": "FAIL", "blocked": "BLOCKED"}.get(outcome.status, outcome.status)
@@ -474,13 +525,16 @@ class Runner:
         log_excerpt: list[dict[str, Any]] = []
         operator: list[dict[str, Any]] = []
         hub_reads: list[dict[str, Any]] = []
-        t_action = time.time()
+        t_action = WsObserver.now()
         blocked: str | None = None
         try:
             # ---- prepare the device
             if isinstance(dev, SimDevice):
                 await dev.reset(sc.sim_state)
                 procedure.append("reset the simulator to the seed state" + (f" + {sc.sim_state}" if sc.sim_state else ""))
+                await self._wait_sim_telnet(helper)
+                if self.stack is not None:
+                    procedure.append("wait for the simulator Telnet link before setup and fault injection")
             else:
                 snapshot = await dev.state()
                 procedure.append("snapshot the matrix state (readback)")
@@ -520,7 +574,7 @@ class Runner:
                 stem = record_stem(started[:10], str(level), self.commit["short"], sc.id, client.name)
                 artifacts_dir = self.evidence_dir / sc.features_for(client.name)[0] / stem
                 client.context = {"label": sc.id, "forwarded_for": xff, "artifacts_dir": str(artifacts_dir)}
-                t_action = time.time()
+                t_action = WsObserver.now()
                 procedure.append(f"action ({client.name}): {sc.action.describe()}")
                 try:
                     if sc.action.intent in RUNNER_INTENTS:

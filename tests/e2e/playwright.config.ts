@@ -24,7 +24,8 @@ const CI = !!process.env.CI;
 
 const visualProject = (name: ViewportName) => ({
   name,
-  testMatch: /visual\/visual\.spec\.ts$/,
+  // visual.spec.ts: screenshots; status-colours.spec.ts: computed status colours (TST-10)
+  testMatch: /visual\/(visual|status-colours)\.spec\.ts$/,
   // Captures never change hub or simulator state (writes are blocked in the
   // spec, hub broadcasts are filtered per page), so they run in parallel.
   fullyParallel: true,
@@ -73,9 +74,15 @@ export default defineConfig({
       animations: 'disabled',
       caret: 'hide',
       scale: 'css',
-      // Per-pixel colour threshold (Playwright default); no pixel budget:
-      // baselines are rendered in the same pinned container as CI.
-      threshold: 0.2,
+      // Per-pixel colour threshold (pixelmatch YIQ distance); no pixel budget:
+      // baselines are rendered in the same pinned container as CI, where
+      // re-renders are deterministic. TST-10: Playwright's default 0.2 let a
+      // status colour change pass (#ef4444 red vs the orange standby colour
+      // is ~0.13 even on solid pixels; the header pill and kiosk dot changing
+      // red <-> orange passed). 0.05 catches it at >= 40% pixel coverage.
+      // TST-14: the owner re-approved all drifted baselines on 2026-10-04;
+      // every approved screenshot now compares at this threshold.
+      threshold: 0.05,
       maxDiffPixels: 0,
     },
   },

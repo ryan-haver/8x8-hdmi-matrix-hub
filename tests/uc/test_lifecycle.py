@@ -32,7 +32,7 @@ async def _routing_change_reaches_web_clients(sim: SimDevice, ws: WsObserver, ou
     (if it runs) had time for two polls.
     """
     await asyncio.sleep(2 * POLL + 0.5)
-    t0 = time.time()
+    t0 = ws.now()
     await sim.patch_state({"outputs": {str(output - 1): {"source": source}}})
 
     async def seen() -> bool:

@@ -8,7 +8,6 @@ one poll cycle; outages must be reported, not papered over.
 from __future__ import annotations
 
 import asyncio
-import time
 from typing import Any
 
 import aiohttp
@@ -157,7 +156,7 @@ async def test_a_partial_subscription_still_gets_updates(uc_remote_factory, sim:
     remote = await uc_remote_factory(entity_ids=["media_player.output_1"])
     await remote.wait_event("entity_change", lambda d: d["entity_id"] == "media_player.output_1", timeout=CYCLE)
     await asyncio.sleep(POLL + 0.5)
-    t0 = time.time()
+    t0 = hub_ws.now()
     since = remote.mark()
     await sim.event({"type": "cable", "port_type": "output", "port": 1, "connected": False})
     await sim.patch_state({"outputs": {"0": {"source": 3}}})

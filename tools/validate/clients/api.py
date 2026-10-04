@@ -89,6 +89,11 @@ class ApiClient(Client):
         assert self._session is not None, "client not started"
         t0 = time.perf_counter()
         kwargs: dict[str, Any] = {} if body is None else {"json": body}
+        # The scenario's own client address (TST-16): the hub rate-limits per address
+        # (60 requests / 10 s), so one address for the whole run made fast modules hit 429.
+        forwarded = self.context.get("forwarded_for")
+        if forwarded:
+            kwargs["headers"] = {"X-Forwarded-For": forwarded}
         async with self._session.request(method, path, **kwargs) as resp:
             text = await resp.text()
             try:

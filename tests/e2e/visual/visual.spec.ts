@@ -28,6 +28,12 @@ import { THEMED_VIEWPORTS, VISUAL_VIEWPORTS, type ViewportName } from '../suppor
 /** Hub routes that only the running app should ever change; a capture that writes them would leak into later entries. */
 const WRITE_GUARD = /\/api\/(ui\/preferences|dashboard\/cards|device-settings|shortcuts\/[^/]+\/(favorite|dashboard)|profile|v2\/scenes|cec\/macro)/;
 
+/** TST-14: all 21 drifted baselines approved by the owner on 2026-10-04.
+ * Every snapshot now uses the suite threshold (0.05, TST-10).
+ */
+const STALE_BASELINES = new Set<string>();
+const STALE_THRESHOLD = 0.2;
+
 test.describe.configure({ mode: 'default' });
 
 /**
@@ -96,9 +102,12 @@ async function capture(entry: CatalogEntry, theme: ThemeName, page: import('@pla
   }
   if (!entry.keepPointer) await parkPointer(page);
   await settle(page, 150);
-  await expect(page).toHaveScreenshot(snapshotName(entry, theme), {
+  const name = snapshotName(entry, theme);
+  const stale = STALE_BASELINES.has([viewport, ...name].join('/'));
+  await expect(page).toHaveScreenshot(name, {
     mask: (entry.mask ?? []).map((s) => page.locator(s)),
     fullPage: false,
+    ...(stale ? { threshold: STALE_THRESHOLD } : {}),
   });
 }
 
