@@ -40,6 +40,25 @@ ledger was unchanged before and after. The
 [combined run summary](evidence/F-DOM-003/2026-10-04-backend-followups/run-summary.json)
 and the harness are archived next to it.
 
+## After merging main (PR #26)
+
+The merge brings main's `web/` changes and its evidence refresh, recorded at
+`5674ff51`. The evidence folder is now the union of both parents' records.
+`features.yaml` lists both sides. Freshness was checked at the merge commit
+`d6baf3ca`:
+
+- main's `web/` change made 45 API pairs stale (scenarios whose covers include
+  the web files) and 47 browser pairs;
+- this branch's `src/` changes made main's own records stale;
+- every other (scenario, client) pair still had a fresh record.
+
+Only those 92 pairs were recorded again, against the image built at `d6baf3ca`
+(`sha256:2103d7114eae70bb2b25dfae6ca843a3bedf716a4474dd1551276cc31200c528`). All
+92 pass ([summary](evidence/F-DOM-003/2026-10-04-backend-followups/run-summary-merge.json);
+selection by `stale_list.py`, run by `run_stale.sh`). The owner's script then
+pruned 1,262 superseded records from both sides, and the ledger was unchanged
+before and after. The ledger reports zero stale features.
+
 ## What this does not prove
 
 The effect of the video mode and ARC writes on a real display or soundbar, and

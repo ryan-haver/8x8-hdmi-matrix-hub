@@ -45,13 +45,11 @@ features:
   - docs/validation/evidence/F-MTX-001/2026-10-04-V2-5674ff51-routing.switch_one-api.json
   - docs/validation/evidence/F-MTX-001/2026-10-04-V3-5674ff51-routing.switch_one-browser.json
   - docs/validation/evidence/F-HA-002/2026-10-03-V3-b30436af-ha.select_source-ha.json
-  - docs/validation/evidence/F-MTX-001/2026-10-03-V2-b30436af-routing.switch_one-api.json
-  - docs/validation/evidence/F-MTX-001/2026-10-03-V3-b30436af-routing.switch_one-browser.json
   - docs/validation/evidence/F-UC-008/2026-10-03-V3-b30436af-remote.select_source-uc.json
   - docs/validation/evidence/F-HA-002/2026-10-04-V3-7dbc4dc7-ha.select_source-ha.json
-  - docs/validation/evidence/F-MTX-001/2026-10-04-V2-7dbc4dc7-routing.switch_one-api.json
-  - docs/validation/evidence/F-MTX-001/2026-10-04-V3-7dbc4dc7-routing.switch_one-browser.json
   - docs/validation/evidence/F-UC-008/2026-10-04-V3-7dbc4dc7-remote.select_source-uc.json
+  - docs/validation/evidence/F-MTX-001/2026-10-04-V2-d6baf3ca-routing.switch_one-api.json
+  - docs/validation/evidence/F-MTX-001/2026-10-04-V3-d6baf3ca-routing.switch_one-browser.json
   findings: []
   scenarios: [routing.switch_one, remote.select_source, ha.select_source]
 - id: F-MTX-002
@@ -73,10 +71,8 @@ features:
   evidence:
   - docs/validation/evidence/F-MTX-002/2026-10-04-V2-5674ff51-routing.route_all-api.json
   - docs/validation/evidence/F-MTX-002/2026-10-04-V3-5674ff51-routing.route_all-browser.json
-  - docs/validation/evidence/F-MTX-002/2026-10-03-V2-b30436af-routing.route_all-api.json
-  - docs/validation/evidence/F-MTX-002/2026-10-03-V3-b30436af-routing.route_all-browser.json
-  - docs/validation/evidence/F-MTX-002/2026-10-04-V2-7dbc4dc7-routing.route_all-api.json
-  - docs/validation/evidence/F-MTX-002/2026-10-04-V3-7dbc4dc7-routing.route_all-browser.json
+  - docs/validation/evidence/F-MTX-002/2026-10-04-V2-d6baf3ca-routing.route_all-api.json
+  - docs/validation/evidence/F-MTX-002/2026-10-04-V3-d6baf3ca-routing.route_all-browser.json
   findings: [BE-12]
   scenarios: [routing.route_all]
 - id: F-MTX-003
@@ -100,13 +96,11 @@ features:
   - docs/validation/evidence/F-MTX-003/2026-10-04-V2-5674ff51-presets.recall-api.json
   - docs/validation/evidence/F-MTX-003/2026-10-04-V3-5674ff51-presets.recall-browser.json
   - docs/validation/evidence/F-HA-006/2026-10-03-V3-b30436af-ha.preset_button-ha.json
-  - docs/validation/evidence/F-MTX-003/2026-10-03-V2-b30436af-presets.recall-api.json
-  - docs/validation/evidence/F-MTX-003/2026-10-03-V3-b30436af-presets.recall-browser.json
   - docs/validation/evidence/F-UC-004/2026-10-03-V3-b30436af-remote.preset_button-uc.json
   - docs/validation/evidence/F-HA-006/2026-10-04-V3-7dbc4dc7-ha.preset_button-ha.json
-  - docs/validation/evidence/F-MTX-003/2026-10-04-V2-7dbc4dc7-presets.recall-api.json
-  - docs/validation/evidence/F-MTX-003/2026-10-04-V3-7dbc4dc7-presets.recall-browser.json
   - docs/validation/evidence/F-UC-004/2026-10-04-V3-7dbc4dc7-remote.preset_button-uc.json
+  - docs/validation/evidence/F-MTX-003/2026-10-04-V2-d6baf3ca-presets.recall-api.json
+  - docs/validation/evidence/F-MTX-003/2026-10-04-V3-d6baf3ca-presets.recall-browser.json
   findings: []
   scenarios: [presets.recall, remote.preset_button, ha.preset_button]
 - id: F-MTX-004
@@ -160,10 +154,8 @@ features:
   evidence:
   - docs/validation/evidence/F-MTX-005/2026-10-04-V2-5674ff51-presets.rename-api.json
   - docs/validation/evidence/F-MTX-005/2026-10-04-V3-5674ff51-presets.rename-browser.json
-  - docs/validation/evidence/F-MTX-005/2026-10-03-V2-b30436af-presets.rename-api.json
-  - docs/validation/evidence/F-MTX-005/2026-10-03-V3-b30436af-presets.rename-browser.json
-  - docs/validation/evidence/F-MTX-005/2026-10-04-V2-7dbc4dc7-presets.rename-api.json
-  - docs/validation/evidence/F-MTX-005/2026-10-04-V3-7dbc4dc7-presets.rename-browser.json
+  - docs/validation/evidence/F-MTX-005/2026-10-04-V2-d6baf3ca-presets.rename-api.json
+  - docs/validation/evidence/F-MTX-005/2026-10-04-V3-d6baf3ca-presets.rename-browser.json
   findings: [UC-14, BE-16]
   scenarios: [presets.rename]
 - id: F-MTX-006
@@ -669,14 +661,10 @@ features:
   - docs/validation/evidence/F-MTX-021/2026-10-04-V2-5674ff51-reboot.enabled_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-04-V2-5674ff51-reboot.legacy_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-04-V3-5674ff51-reboot.enabled_shortcut-browser.json
-  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-b30436af-reboot.direct-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-b30436af-reboot.enabled_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-b30436af-reboot.legacy_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-03-V3-b30436af-reboot.enabled_shortcut-browser.json
-  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-7dbc4dc7-reboot.direct-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-7dbc4dc7-reboot.enabled_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-7dbc4dc7-reboot.legacy_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-04-V3-7dbc4dc7-reboot.enabled_shortcut-browser.json
+  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.direct-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.enabled_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.legacy_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-04-V3-d6baf3ca-reboot.enabled_shortcut-browser.json
   findings: []
   scenarios: [reboot.direct, reboot.legacy_shortcut, reboot.enabled_shortcut]
 - id: F-MTX-022
@@ -1106,15 +1094,11 @@ features:
   - docs/validation/evidence/F-MTX-031/2026-10-04-V3-5674ff51-live.input_signal-browser.json
   - docs/validation/evidence/F-MTX-031/2026-10-04-V3-5674ff51-live.rename_elsewhere-browser.json
   - docs/validation/evidence/F-HA-002/2026-10-03-V3-b30436af-ha.front_panel_route-ha.json
-  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-b30436af-live.display_unplugged-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-b30436af-live.front_panel_route-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-b30436af-live.input_signal-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-b30436af-live.rename_elsewhere-browser.json
   - docs/validation/evidence/F-HA-002/2026-10-04-V3-7dbc4dc7-ha.front_panel_route-ha.json
-  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-7dbc4dc7-live.display_unplugged-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-7dbc4dc7-live.front_panel_route-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-7dbc4dc7-live.input_signal-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-7dbc4dc7-live.rename_elsewhere-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-d6baf3ca-live.display_unplugged-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-d6baf3ca-live.front_panel_route-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-d6baf3ca-live.input_signal-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-d6baf3ca-live.rename_elsewhere-browser.json
   findings: [UC-17, BE-29, BE-03]
   scenarios: [live.front_panel_route, live.input_signal, live.display_unplugged, live.rename_elsewhere, ha.front_panel_route]
 - id: F-CEC-001
@@ -3325,10 +3309,8 @@ features:
   evidence:
   - docs/validation/evidence/F-MTX-001/2026-10-04-V2-5674ff51-routing.switch_one-api.json
   - docs/validation/evidence/F-MTX-002/2026-10-04-V2-5674ff51-routing.route_all-api.json
-  - docs/validation/evidence/F-MTX-001/2026-10-03-V2-b30436af-routing.switch_one-api.json
-  - docs/validation/evidence/F-MTX-002/2026-10-03-V2-b30436af-routing.route_all-api.json
-  - docs/validation/evidence/F-MTX-001/2026-10-04-V2-7dbc4dc7-routing.switch_one-api.json
-  - docs/validation/evidence/F-MTX-002/2026-10-04-V2-7dbc4dc7-routing.route_all-api.json
+  - docs/validation/evidence/F-MTX-001/2026-10-04-V2-d6baf3ca-routing.switch_one-api.json
+  - docs/validation/evidence/F-MTX-002/2026-10-04-V2-d6baf3ca-routing.route_all-api.json
   findings: [BE-12]
   scenarios: [routing.switch_one, routing.route_all]
 - id: F-API-006
@@ -3354,8 +3336,7 @@ features:
   basis: 'V2: tests/sim/test_sim_e2e.py::test_switch_all_and_preset.'
   evidence:
   - docs/validation/evidence/F-MTX-003/2026-10-04-V2-5674ff51-presets.recall-api.json
-  - docs/validation/evidence/F-MTX-003/2026-10-03-V2-b30436af-presets.recall-api.json
-  - docs/validation/evidence/F-MTX-003/2026-10-04-V2-7dbc4dc7-presets.recall-api.json
+  - docs/validation/evidence/F-MTX-003/2026-10-04-V2-d6baf3ca-presets.recall-api.json
   findings: []
   scenarios: [presets.recall]
 - id: F-API-008
@@ -3459,14 +3440,10 @@ features:
   - docs/validation/evidence/F-MTX-021/2026-10-04-V2-5674ff51-reboot.enabled_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-04-V2-5674ff51-reboot.legacy_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-04-V3-5674ff51-reboot.enabled_shortcut-browser.json
-  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-b30436af-reboot.direct-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-b30436af-reboot.enabled_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-b30436af-reboot.legacy_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-03-V3-b30436af-reboot.enabled_shortcut-browser.json
-  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-7dbc4dc7-reboot.direct-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-7dbc4dc7-reboot.enabled_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-7dbc4dc7-reboot.legacy_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-04-V3-7dbc4dc7-reboot.enabled_shortcut-browser.json
+  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.direct-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.enabled_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.legacy_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-04-V3-d6baf3ca-reboot.enabled_shortcut-browser.json
   findings: [BE-12]
   scenarios: [reboot.direct, reboot.legacy_shortcut, reboot.enabled_shortcut]
 - id: F-API-014
@@ -5588,16 +5565,11 @@ features:
   - docs/validation/evidence/F-MTX-021/2026-10-04-V2-5674ff51-reboot.legacy_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-04-V3-5674ff51-reboot.enabled_shortcut-browser.json
   - docs/validation/evidence/F-REL-009/2026-10-04-V3-5674ff51-live.matrix_offline-browser.json
-  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-b30436af-reboot.direct-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-b30436af-reboot.enabled_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-b30436af-reboot.legacy_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-03-V3-b30436af-reboot.enabled_shortcut-browser.json
-  - docs/validation/evidence/F-REL-009/2026-10-03-V3-b30436af-live.matrix_offline-browser.json
-  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-7dbc4dc7-reboot.direct-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-7dbc4dc7-reboot.enabled_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-7dbc4dc7-reboot.legacy_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-04-V3-7dbc4dc7-reboot.enabled_shortcut-browser.json
-  - docs/validation/evidence/F-REL-009/2026-10-04-V3-7dbc4dc7-live.matrix_offline-browser.json
+  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.direct-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.enabled_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.legacy_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-04-V3-d6baf3ca-reboot.enabled_shortcut-browser.json
+  - docs/validation/evidence/F-REL-009/2026-10-04-V3-d6baf3ca-live.matrix_offline-browser.json
   findings: []
   scenarios: [live.matrix_offline, reboot.direct, reboot.legacy_shortcut, reboot.enabled_shortcut]
 - id: F-API-033
@@ -5611,10 +5583,9 @@ features:
   basis: 'V2: scenarios routing.switch_one (routing_change after /api/switch) and failures.unreachable_switch (switch_failed); tests/sim/test_sim_ws_contract.py (exactly one routing_change per change, grid route, a refused route announces switch_failed); every message a scenario''s /ws observer receives is checked against docs/api/websocket.schema.json (tools/validate/runner.py ws_contract_check).'
   evidence:
   - docs/validation/evidence/F-MTX-001/2026-10-04-V2-5674ff51-routing.switch_one-api.json
-  - docs/validation/evidence/F-MTX-001/2026-10-03-V2-b30436af-routing.switch_one-api.json
   - docs/validation/evidence/F-REL-009/2026-10-03-V2-b30436af-failures.unreachable_switch-api.json
-  - docs/validation/evidence/F-MTX-001/2026-10-04-V2-7dbc4dc7-routing.switch_one-api.json
   - docs/validation/evidence/F-REL-009/2026-10-04-V2-7dbc4dc7-failures.unreachable_switch-api.json
+  - docs/validation/evidence/F-MTX-001/2026-10-04-V2-d6baf3ca-routing.switch_one-api.json
   findings: []
   scenarios: [routing.switch_one, failures.unreachable_switch]
 - id: F-API-034
@@ -5628,8 +5599,7 @@ features:
   basis: 'V2: scenario routing.route_all (routing_change for output 8); tests/sim/test_sim_ws_contract.py::test_route_all_announces_every_output_that_changed. switch_all_failed: V1 (sent by the handler on a refused write; no scenario yet).'
   evidence:
   - docs/validation/evidence/F-MTX-002/2026-10-04-V2-5674ff51-routing.route_all-api.json
-  - docs/validation/evidence/F-MTX-002/2026-10-03-V2-b30436af-routing.route_all-api.json
-  - docs/validation/evidence/F-MTX-002/2026-10-04-V2-7dbc4dc7-routing.route_all-api.json
+  - docs/validation/evidence/F-MTX-002/2026-10-04-V2-d6baf3ca-routing.route_all-api.json
   findings: []
   scenarios: [routing.route_all]
 - id: F-API-035
@@ -5643,8 +5613,7 @@ features:
   basis: 'V2: scenario presets.recall (preset_recall after the matrix accepted it; the routing follows as routing_change); tests/sim/test_sim_ws_contract.py::test_preset_recall_is_announced_after_success_and_its_routing_follows. tests/e2e/flows.spec.ts UI-04 test: the web UI no longer refreshes (and toasts) on every page for this event.'
   evidence:
   - docs/validation/evidence/F-MTX-003/2026-10-04-V2-5674ff51-presets.recall-api.json
-  - docs/validation/evidence/F-MTX-003/2026-10-03-V2-b30436af-presets.recall-api.json
-  - docs/validation/evidence/F-MTX-003/2026-10-04-V2-7dbc4dc7-presets.recall-api.json
+  - docs/validation/evidence/F-MTX-003/2026-10-04-V2-d6baf3ca-presets.recall-api.json
   findings: [UI-04]
   scenarios: [presets.recall]
 - id: F-API-036
@@ -5674,8 +5643,7 @@ features:
   basis: 'V2: scenario presets.rename (device_settings on /ws, schema-checked).'
   evidence:
   - docs/validation/evidence/F-MTX-005/2026-10-04-V2-5674ff51-presets.rename-api.json
-  - docs/validation/evidence/F-MTX-005/2026-10-03-V2-b30436af-presets.rename-api.json
-  - docs/validation/evidence/F-MTX-005/2026-10-04-V2-7dbc4dc7-presets.rename-api.json
+  - docs/validation/evidence/F-MTX-005/2026-10-04-V2-d6baf3ca-presets.rename-api.json
   findings: []
   scenarios: [presets.rename]
 - id: F-API-038
@@ -5720,15 +5688,11 @@ features:
   - docs/validation/evidence/F-MTX-031/2026-10-04-V3-5674ff51-live.input_signal-browser.json
   - docs/validation/evidence/F-MTX-031/2026-10-04-V3-5674ff51-live.rename_elsewhere-browser.json
   - docs/validation/evidence/F-MTX-006/2026-10-03-V2-b30436af-power.standby-api.json
-  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-b30436af-live.display_unplugged-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-b30436af-live.front_panel_route-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-b30436af-live.input_signal-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-b30436af-live.rename_elsewhere-browser.json
   - docs/validation/evidence/F-MTX-006/2026-10-04-V2-7dbc4dc7-power.standby-api.json
-  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-7dbc4dc7-live.display_unplugged-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-7dbc4dc7-live.front_panel_route-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-7dbc4dc7-live.input_signal-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-7dbc4dc7-live.rename_elsewhere-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-d6baf3ca-live.display_unplugged-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-d6baf3ca-live.front_panel_route-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-d6baf3ca-live.input_signal-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-d6baf3ca-live.rename_elsewhere-browser.json
   findings: [BE-24]
   scenarios: [live.front_panel_route, live.input_signal, live.display_unplugged, live.rename_elsewhere, power.standby]
 - id: F-API-041
@@ -5743,8 +5707,7 @@ features:
   evidence:
   - docs/validation/evidence/F-DOM-011/2026-10-04-V2-5674ff51-scenes.partial_failure-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.partial_failure-api.json
-  - docs/validation/evidence/F-DOM-011/2026-10-03-V2-b30436af-scenes.partial_failure-api.json
-  - docs/validation/evidence/F-DOM-011/2026-10-04-V2-7dbc4dc7-scenes.partial_failure-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-04-V2-d6baf3ca-scenes.partial_failure-api.json
   findings: [VAL-11]
   scenarios: [scenes.partial_failure]
 - id: F-API-042
@@ -5904,17 +5867,13 @@ features:
   - docs/validation/evidence/F-DOM-002/2026-10-01-V3-97d0d2af-profiles.recall_disabled_output-browser.json
   - docs/validation/evidence/F-DOM-002/2026-10-01-V3-97d0d2af-profiles.recall_routing-browser.json
   - docs/validation/evidence/F-DOM-002/2026-10-03-V2-b30436af-profile_state.alias_recall-api.json
-  - docs/validation/evidence/F-DOM-002/2026-10-03-V2-b30436af-profiles.recall_disabled_output-api.json
   - docs/validation/evidence/F-DOM-002/2026-10-03-V2-b30436af-profiles.recall_rejected-api.json
-  - docs/validation/evidence/F-DOM-002/2026-10-03-V2-b30436af-profiles.recall_routing-api.json
-  - docs/validation/evidence/F-DOM-002/2026-10-03-V3-b30436af-profiles.recall_disabled_output-browser.json
-  - docs/validation/evidence/F-DOM-002/2026-10-03-V3-b30436af-profiles.recall_routing-browser.json
   - docs/validation/evidence/F-DOM-002/2026-10-04-V2-7dbc4dc7-profile_state.alias_recall-api.json
-  - docs/validation/evidence/F-DOM-002/2026-10-04-V2-7dbc4dc7-profiles.recall_disabled_output-api.json
   - docs/validation/evidence/F-DOM-002/2026-10-04-V2-7dbc4dc7-profiles.recall_rejected-api.json
-  - docs/validation/evidence/F-DOM-002/2026-10-04-V2-7dbc4dc7-profiles.recall_routing-api.json
-  - docs/validation/evidence/F-DOM-002/2026-10-04-V3-7dbc4dc7-profiles.recall_disabled_output-browser.json
-  - docs/validation/evidence/F-DOM-002/2026-10-04-V3-7dbc4dc7-profiles.recall_routing-browser.json
+  - docs/validation/evidence/F-DOM-002/2026-10-04-V2-d6baf3ca-profiles.recall_disabled_output-api.json
+  - docs/validation/evidence/F-DOM-002/2026-10-04-V2-d6baf3ca-profiles.recall_routing-api.json
+  - docs/validation/evidence/F-DOM-002/2026-10-04-V3-d6baf3ca-profiles.recall_disabled_output-browser.json
+  - docs/validation/evidence/F-DOM-002/2026-10-04-V3-d6baf3ca-profiles.recall_routing-browser.json
   findings: [API-08, API-19]
   scenarios:
   - profiles.recall_routing
@@ -5938,17 +5897,15 @@ features:
   - docs/validation/evidence/F-DOM-002/2026-10-01-V3-97d0d2af-profiles.recall_disabled_output-browser.json
   - docs/validation/evidence/F-DOM-003/2026-10-01-V2-97d0d2af-profiles.recall_output_settings-api.json
   - docs/validation/evidence/F-DOM-003/2026-10-01-V3-97d0d2af-profiles.recall_output_settings-browser.json
-  - docs/validation/evidence/F-DOM-002/2026-10-03-V2-b30436af-profiles.recall_disabled_output-api.json
-  - docs/validation/evidence/F-DOM-002/2026-10-03-V3-b30436af-profiles.recall_disabled_output-browser.json
   - docs/validation/evidence/F-DOM-003/2026-10-03-V2-b30436af-profiles.recall_output_settings-api.json
   - docs/validation/evidence/F-DOM-003/2026-10-03-V3-b30436af-profiles.recall_output_settings-browser.json
-  - docs/validation/evidence/F-DOM-002/2026-10-04-V2-7dbc4dc7-profiles.recall_disabled_output-api.json
-  - docs/validation/evidence/F-DOM-002/2026-10-04-V3-7dbc4dc7-profiles.recall_disabled_output-browser.json
   - docs/validation/evidence/F-DOM-003/2026-10-04-V2-7dbc4dc7-profiles.recall_leaves_unset_scaler_arc-api.json
   - docs/validation/evidence/F-DOM-003/2026-10-04-V2-7dbc4dc7-profiles.recall_output_settings-api.json
-  - docs/validation/evidence/F-DOM-003/2026-10-04-V2-7dbc4dc7-profiles.recall_scaler_arc-api.json
   - docs/validation/evidence/F-DOM-003/2026-10-04-V3-7dbc4dc7-profiles.recall_output_settings-browser.json
-  - docs/validation/evidence/F-DOM-003/2026-10-04-V3-7dbc4dc7-profiles.recall_scaler_arc-browser.json
+  - docs/validation/evidence/F-DOM-002/2026-10-04-V2-d6baf3ca-profiles.recall_disabled_output-api.json
+  - docs/validation/evidence/F-DOM-002/2026-10-04-V3-d6baf3ca-profiles.recall_disabled_output-browser.json
+  - docs/validation/evidence/F-DOM-003/2026-10-04-V2-d6baf3ca-profiles.recall_scaler_arc-api.json
+  - docs/validation/evidence/F-DOM-003/2026-10-04-V3-d6baf3ca-profiles.recall_scaler_arc-browser.json
   findings: [VAL-01, API-22, API-29]
   scenarios: [profiles.recall_output_settings, profiles.recall_disabled_output, profiles.recall_scaler_arc, profiles.recall_leaves_unset_scaler_arc]
 - id: F-DOM-004
@@ -5989,22 +5946,16 @@ features:
   - docs/validation/evidence/F-DOM-005/2026-10-04-V3-5674ff51-profiles.recall_wrong_passcode-browser.json
   - docs/validation/evidence/F-KIO-008/2026-10-01-V3-97d0d2af-kiosk.profile_with_passcode-browser.json
   - docs/validation/evidence/F-KIO-008/2026-10-01-V3-97d0d2af-kiosk.profile_wrong_passcode-browser.json
-  - docs/validation/evidence/F-DOM-005/2026-10-03-V2-b30436af-profiles.recall_needs_passcode-api.json
-  - docs/validation/evidence/F-DOM-005/2026-10-03-V2-b30436af-profiles.recall_with_passcode-api.json
-  - docs/validation/evidence/F-DOM-005/2026-10-03-V2-b30436af-profiles.recall_wrong_passcode-api.json
-  - docs/validation/evidence/F-DOM-005/2026-10-03-V3-b30436af-profiles.recall_needs_passcode-browser.json
-  - docs/validation/evidence/F-DOM-005/2026-10-03-V3-b30436af-profiles.recall_with_passcode-browser.json
-  - docs/validation/evidence/F-DOM-005/2026-10-03-V3-b30436af-profiles.recall_wrong_passcode-browser.json
   - docs/validation/evidence/F-KIO-008/2026-10-03-V3-b30436af-kiosk.profile_with_passcode-browser.json
   - docs/validation/evidence/F-KIO-008/2026-10-03-V3-b30436af-kiosk.profile_wrong_passcode-browser.json
-  - docs/validation/evidence/F-DOM-005/2026-10-04-V2-7dbc4dc7-profiles.recall_needs_passcode-api.json
-  - docs/validation/evidence/F-DOM-005/2026-10-04-V2-7dbc4dc7-profiles.recall_with_passcode-api.json
-  - docs/validation/evidence/F-DOM-005/2026-10-04-V2-7dbc4dc7-profiles.recall_wrong_passcode-api.json
-  - docs/validation/evidence/F-DOM-005/2026-10-04-V3-7dbc4dc7-profiles.recall_needs_passcode-browser.json
-  - docs/validation/evidence/F-DOM-005/2026-10-04-V3-7dbc4dc7-profiles.recall_with_passcode-browser.json
-  - docs/validation/evidence/F-DOM-005/2026-10-04-V3-7dbc4dc7-profiles.recall_wrong_passcode-browser.json
   - docs/validation/evidence/F-KIO-008/2026-10-04-V3-7dbc4dc7-kiosk.profile_with_passcode-browser.json
   - docs/validation/evidence/F-KIO-008/2026-10-04-V3-7dbc4dc7-kiosk.profile_wrong_passcode-browser.json
+  - docs/validation/evidence/F-DOM-005/2026-10-04-V2-d6baf3ca-profiles.recall_needs_passcode-api.json
+  - docs/validation/evidence/F-DOM-005/2026-10-04-V2-d6baf3ca-profiles.recall_with_passcode-api.json
+  - docs/validation/evidence/F-DOM-005/2026-10-04-V2-d6baf3ca-profiles.recall_wrong_passcode-api.json
+  - docs/validation/evidence/F-DOM-005/2026-10-04-V3-d6baf3ca-profiles.recall_needs_passcode-browser.json
+  - docs/validation/evidence/F-DOM-005/2026-10-04-V3-d6baf3ca-profiles.recall_with_passcode-browser.json
+  - docs/validation/evidence/F-DOM-005/2026-10-04-V3-d6baf3ca-profiles.recall_wrong_passcode-browser.json
   findings: [SEC-05, SEC-06, UI-01]
   scenarios: [profiles.recall_needs_passcode, profiles.recall_with_passcode, profiles.recall_wrong_passcode, kiosk.profile_with_passcode, kiosk.profile_wrong_passcode]
 - id: F-DOM-006
@@ -6444,7 +6395,6 @@ features:
   - docs/validation/evidence/F-DOM-011/2026-10-04-V2-5674ff51-scenes.disabled_output_state-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-04-V2-5674ff51-scenes.partial_failure-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-04-V2-5674ff51-scenes.run_protected-api.json
-  - docs/validation/evidence/F-DOM-011/2026-10-04-V3-5674ff51-scenes.disabled_output_state-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-04-V3-5674ff51-scenes.partial_failure-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-04-V3-5674ff51-scenes.run_protected-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.disabled_output_state-api.json
@@ -6456,23 +6406,18 @@ features:
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.partial_failure-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.run_profile_macro_preset-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.run_protected-browser.json
-  - docs/validation/evidence/F-DOM-011/2026-10-03-V2-b30436af-scenes.disabled_output_state-api.json
-  - docs/validation/evidence/F-DOM-011/2026-10-03-V2-b30436af-scenes.partial_failure-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-03-V2-b30436af-scenes.run_profile_macro_preset-api.json
-  - docs/validation/evidence/F-DOM-011/2026-10-03-V2-b30436af-scenes.run_protected-api.json
-  - docs/validation/evidence/F-DOM-011/2026-10-03-V3-b30436af-scenes.partial_failure-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-03-V3-b30436af-scenes.run_profile_macro_preset-browser.json
-  - docs/validation/evidence/F-DOM-011/2026-10-03-V3-b30436af-scenes.run_protected-browser.json
-  - docs/validation/evidence/F-DOM-011/2026-10-04-V2-7dbc4dc7-scenes.disabled_output_state-api.json
-  - docs/validation/evidence/F-DOM-011/2026-10-04-V2-7dbc4dc7-scenes.partial_failure-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-04-V2-7dbc4dc7-scenes.profile_step_scaler_arc-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-04-V2-7dbc4dc7-scenes.run_profile_macro_preset-api.json
-  - docs/validation/evidence/F-DOM-011/2026-10-04-V2-7dbc4dc7-scenes.run_protected-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-04-V2-7dbc4dc7-scenes.run_unknown-api.json
-  - docs/validation/evidence/F-DOM-011/2026-10-04-V3-7dbc4dc7-scenes.disabled_output_state-browser.json
-  - docs/validation/evidence/F-DOM-011/2026-10-04-V3-7dbc4dc7-scenes.partial_failure-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-04-V3-7dbc4dc7-scenes.run_profile_macro_preset-browser.json
-  - docs/validation/evidence/F-DOM-011/2026-10-04-V3-7dbc4dc7-scenes.run_protected-browser.json
+  - docs/validation/evidence/F-DOM-011/2026-10-04-V2-d6baf3ca-scenes.disabled_output_state-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-04-V2-d6baf3ca-scenes.partial_failure-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-04-V2-d6baf3ca-scenes.run_protected-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-04-V3-d6baf3ca-scenes.disabled_output_state-browser.json
+  - docs/validation/evidence/F-DOM-011/2026-10-04-V3-d6baf3ca-scenes.partial_failure-browser.json
+  - docs/validation/evidence/F-DOM-011/2026-10-04-V3-d6baf3ca-scenes.run_protected-browser.json
   findings: [API-01, API-02, API-08, VAL-07, VAL-11]
   scenarios: [scenes.run_profile_macro_preset, scenes.run_protected, scenes.partial_failure, scenes.run_unknown, scenes.disabled_output_state, scenes.profile_step_scaler_arc]
 - id: F-DOM-012
@@ -6495,15 +6440,13 @@ features:
   - docs/validation/evidence/F-DOM-012/2026-10-01-V3-97d0d2af-scenes.macro_continues_after_refusal-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-03-V2-b30436af-scenes.run_profile_macro_preset-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-03-V3-b30436af-scenes.run_profile_macro_preset-browser.json
-  - docs/validation/evidence/F-DOM-012/2026-10-03-V2-b30436af-scenes.macro_continues_after_refusal-api.json
   - docs/validation/evidence/F-DOM-012/2026-10-03-V2-b30436af-scenes.run_rejected-api.json
-  - docs/validation/evidence/F-DOM-012/2026-10-03-V3-b30436af-scenes.macro_continues_after_refusal-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-04-V2-7dbc4dc7-scenes.run_profile_macro_preset-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-04-V3-7dbc4dc7-scenes.run_profile_macro_preset-browser.json
-  - docs/validation/evidence/F-DOM-012/2026-10-04-V2-7dbc4dc7-scenes.macro_continues_after_refusal-api.json
   - docs/validation/evidence/F-DOM-012/2026-10-04-V2-7dbc4dc7-scenes.run_rejected-api.json
   - docs/validation/evidence/F-DOM-012/2026-10-04-V2-7dbc4dc7-scenes.run_shortcut_and_macro-api.json
-  - docs/validation/evidence/F-DOM-012/2026-10-04-V3-7dbc4dc7-scenes.macro_continues_after_refusal-browser.json
+  - docs/validation/evidence/F-DOM-012/2026-10-04-V2-d6baf3ca-scenes.macro_continues_after_refusal-api.json
+  - docs/validation/evidence/F-DOM-012/2026-10-04-V3-d6baf3ca-scenes.macro_continues_after_refusal-browser.json
   findings: [API-03, VAL-02]
   scenarios: [scenes.run_profile_macro_preset, scenes.run_shortcut_and_macro, scenes.run_rejected, scenes.macro_continues_after_refusal]
 - id: F-DOM-013
@@ -6524,14 +6467,10 @@ features:
   - docs/validation/evidence/F-DOM-013/2026-10-01-V2-97d0d2af-scenes.wait_edit-api.json
   - docs/validation/evidence/F-DOM-013/2026-10-01-V3-97d0d2af-scenes.wait_between_actions-browser.json
   - docs/validation/evidence/F-DOM-013/2026-10-01-V3-97d0d2af-scenes.wait_edit-browser.json
-  - docs/validation/evidence/F-DOM-013/2026-10-03-V2-b30436af-scenes.wait_between_actions-api.json
-  - docs/validation/evidence/F-DOM-013/2026-10-03-V2-b30436af-scenes.wait_edit-api.json
-  - docs/validation/evidence/F-DOM-013/2026-10-03-V3-b30436af-scenes.wait_between_actions-browser.json
-  - docs/validation/evidence/F-DOM-013/2026-10-03-V3-b30436af-scenes.wait_edit-browser.json
-  - docs/validation/evidence/F-DOM-013/2026-10-04-V2-7dbc4dc7-scenes.wait_between_actions-api.json
-  - docs/validation/evidence/F-DOM-013/2026-10-04-V2-7dbc4dc7-scenes.wait_edit-api.json
-  - docs/validation/evidence/F-DOM-013/2026-10-04-V3-7dbc4dc7-scenes.wait_between_actions-browser.json
-  - docs/validation/evidence/F-DOM-013/2026-10-04-V3-7dbc4dc7-scenes.wait_edit-browser.json
+  - docs/validation/evidence/F-DOM-013/2026-10-04-V2-d6baf3ca-scenes.wait_between_actions-api.json
+  - docs/validation/evidence/F-DOM-013/2026-10-04-V2-d6baf3ca-scenes.wait_edit-api.json
+  - docs/validation/evidence/F-DOM-013/2026-10-04-V3-d6baf3ca-scenes.wait_between_actions-browser.json
+  - docs/validation/evidence/F-DOM-013/2026-10-04-V3-d6baf3ca-scenes.wait_edit-browser.json
   findings: [API-01, API-08, VAL-09]
   scenarios: [scenes.wait_between_actions, scenes.wait_edit]
 - id: F-DOM-014
@@ -6545,7 +6484,6 @@ features:
   basis: 'WP-C4 V3: browser-run scenes apply routing while leaving an overridden input, audio mute or enabled setting unchanged on the simulator. Disabled outputs still receive all unskipped state writes.'
   evidence:
   - docs/validation/evidence/F-DOM-014/2026-10-04-V2-5674ff51-scenes.enabled_override-api.json
-  - docs/validation/evidence/F-DOM-014/2026-10-04-V3-5674ff51-scenes.enabled_override-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.run_profile_macro_preset-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.run_profile_macro_preset-browser.json
   - docs/validation/evidence/F-DOM-014/2026-10-01-V2-97d0d2af-scenes.enabled_override-api.json
@@ -6553,14 +6491,13 @@ features:
   - docs/validation/evidence/F-DOM-014/2026-10-01-V3-97d0d2af-scenes.enabled_override-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-03-V2-b30436af-scenes.run_profile_macro_preset-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-03-V3-b30436af-scenes.run_profile_macro_preset-browser.json
-  - docs/validation/evidence/F-DOM-014/2026-10-03-V2-b30436af-scenes.enabled_override-api.json
   - docs/validation/evidence/F-DOM-014/2026-10-03-V2-b30436af-scenes.override_leaves_setting-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-04-V2-7dbc4dc7-scenes.run_profile_macro_preset-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-04-V3-7dbc4dc7-scenes.run_profile_macro_preset-browser.json
-  - docs/validation/evidence/F-DOM-014/2026-10-04-V2-7dbc4dc7-scenes.enabled_override-api.json
   - docs/validation/evidence/F-DOM-014/2026-10-04-V2-7dbc4dc7-scenes.override_leaves_scaler_arc-api.json
   - docs/validation/evidence/F-DOM-014/2026-10-04-V2-7dbc4dc7-scenes.override_leaves_setting-api.json
-  - docs/validation/evidence/F-DOM-014/2026-10-04-V3-7dbc4dc7-scenes.enabled_override-browser.json
+  - docs/validation/evidence/F-DOM-014/2026-10-04-V2-d6baf3ca-scenes.enabled_override-api.json
+  - docs/validation/evidence/F-DOM-014/2026-10-04-V3-d6baf3ca-scenes.enabled_override-browser.json
   findings: [API-04]
   scenarios: [scenes.run_profile_macro_preset, scenes.override_leaves_setting, scenes.enabled_override, scenes.override_leaves_scaler_arc]
 - id: F-DOM-015
@@ -6578,12 +6515,10 @@ features:
   - docs/validation/evidence/F-DOM-011/2026-10-04-V3-5674ff51-scenes.run_protected-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.run_protected-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.run_protected-browser.json
-  - docs/validation/evidence/F-DOM-011/2026-10-03-V2-b30436af-scenes.run_protected-api.json
-  - docs/validation/evidence/F-DOM-011/2026-10-03-V3-b30436af-scenes.run_protected-browser.json
   - docs/validation/evidence/F-DOM-015/2026-10-03-V2-b30436af-scenes.run_needs_passcode-api.json
-  - docs/validation/evidence/F-DOM-011/2026-10-04-V2-7dbc4dc7-scenes.run_protected-api.json
-  - docs/validation/evidence/F-DOM-011/2026-10-04-V3-7dbc4dc7-scenes.run_protected-browser.json
   - docs/validation/evidence/F-DOM-015/2026-10-04-V2-7dbc4dc7-scenes.run_needs_passcode-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-04-V2-d6baf3ca-scenes.run_protected-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-04-V3-d6baf3ca-scenes.run_protected-browser.json
   findings: [SEC-05, SEC-06]
   scenarios: [scenes.run_protected, scenes.run_needs_passcode]
 - id: F-DOM-016
@@ -6601,11 +6536,9 @@ features:
   - docs/validation/evidence/F-DOM-016/2026-10-04-V3-5674ff51-scenes.conflicts_visible-browser.json
   - docs/validation/evidence/F-DOM-016/2026-10-01-V2-97d0d2af-scenes.conflicts_visible-api.json
   - docs/validation/evidence/F-DOM-016/2026-10-01-V3-97d0d2af-scenes.conflicts_visible-browser.json
-  - docs/validation/evidence/F-DOM-016/2026-10-03-V2-b30436af-scenes.conflicts_visible-api.json
-  - docs/validation/evidence/F-DOM-016/2026-10-03-V3-b30436af-scenes.conflicts_visible-browser.json
   - docs/validation/evidence/F-DOM-016/2026-10-04-V2-7dbc4dc7-scenes.conflicts_scaler_arc-api.json
-  - docs/validation/evidence/F-DOM-016/2026-10-04-V2-7dbc4dc7-scenes.conflicts_visible-api.json
-  - docs/validation/evidence/F-DOM-016/2026-10-04-V3-7dbc4dc7-scenes.conflicts_visible-browser.json
+  - docs/validation/evidence/F-DOM-016/2026-10-04-V2-d6baf3ca-scenes.conflicts_visible-api.json
+  - docs/validation/evidence/F-DOM-016/2026-10-04-V3-d6baf3ca-scenes.conflicts_visible-browser.json
   findings: [VAL-10]
   scenarios: [scenes.conflicts_visible, scenes.conflicts_scaler_arc]
 - id: F-DOM-017
@@ -6622,10 +6555,8 @@ features:
   - docs/validation/evidence/F-DOM-011/2026-10-04-V3-5674ff51-scenes.partial_failure-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.partial_failure-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.partial_failure-browser.json
-  - docs/validation/evidence/F-DOM-011/2026-10-03-V2-b30436af-scenes.partial_failure-api.json
-  - docs/validation/evidence/F-DOM-011/2026-10-03-V3-b30436af-scenes.partial_failure-browser.json
-  - docs/validation/evidence/F-DOM-011/2026-10-04-V2-7dbc4dc7-scenes.partial_failure-api.json
-  - docs/validation/evidence/F-DOM-011/2026-10-04-V3-7dbc4dc7-scenes.partial_failure-browser.json
+  - docs/validation/evidence/F-DOM-011/2026-10-04-V2-d6baf3ca-scenes.partial_failure-api.json
+  - docs/validation/evidence/F-DOM-011/2026-10-04-V3-d6baf3ca-scenes.partial_failure-browser.json
   findings: [API-02]
   scenarios: [scenes.partial_failure]
 - id: F-DOM-018
@@ -6806,10 +6737,6 @@ features:
   - docs/validation/evidence/F-DOM-012/2026-10-04-V3-5674ff51-scenes.macro_continues_after_refusal-browser.json
   - docs/validation/evidence/F-DOM-020/2026-10-04-V2-5674ff51-macros.run_rejected-api.json
   - docs/validation/evidence/F-DOM-020/2026-10-04-V2-5674ff51-macros.run_volume_up-api.json
-  - docs/validation/evidence/F-DOM-020/2026-10-04-V2-5674ff51-scenes.macro_stops_after_refusal-api.json
-  - docs/validation/evidence/F-DOM-020/2026-10-04-V3-5674ff51-macros.run_rejected-browser.json
-  - docs/validation/evidence/F-DOM-020/2026-10-04-V3-5674ff51-macros.run_volume_up-browser.json
-  - docs/validation/evidence/F-DOM-020/2026-10-04-V3-5674ff51-scenes.macro_stops_after_refusal-browser.json
   - docs/validation/evidence/F-DOM-020/2026-10-01-V3-9362fd00-macros.run_rejected-browser.json
   - docs/validation/evidence/F-DOM-020/2026-10-01-V3-9362fd00-macros.run_volume_up-browser.json
   - docs/validation/evidence/F-DOM-012/2026-10-01-V2-97d0d2af-scenes.macro_continues_after_refusal-api.json
@@ -6817,18 +6744,14 @@ features:
   - docs/validation/evidence/F-DOM-020/2026-10-01-V2-97d0d2af-macros.run_volume_up-api.json
   - docs/validation/evidence/F-DOM-020/2026-10-01-V2-97d0d2af-scenes.macro_stops_after_refusal-api.json
   - docs/validation/evidence/F-DOM-020/2026-10-01-V3-97d0d2af-scenes.macro_stops_after_refusal-browser.json
-  - docs/validation/evidence/F-DOM-012/2026-10-03-V2-b30436af-scenes.macro_continues_after_refusal-api.json
-  - docs/validation/evidence/F-DOM-012/2026-10-03-V3-b30436af-scenes.macro_continues_after_refusal-browser.json
-  - docs/validation/evidence/F-DOM-020/2026-10-03-V2-b30436af-macros.run_rejected-api.json
-  - docs/validation/evidence/F-DOM-020/2026-10-03-V2-b30436af-macros.run_volume_up-api.json
-  - docs/validation/evidence/F-DOM-012/2026-10-04-V2-7dbc4dc7-scenes.macro_continues_after_refusal-api.json
-  - docs/validation/evidence/F-DOM-012/2026-10-04-V3-7dbc4dc7-scenes.macro_continues_after_refusal-browser.json
-  - docs/validation/evidence/F-DOM-020/2026-10-04-V2-7dbc4dc7-macros.run_rejected-api.json
-  - docs/validation/evidence/F-DOM-020/2026-10-04-V2-7dbc4dc7-macros.run_volume_up-api.json
-  - docs/validation/evidence/F-DOM-020/2026-10-04-V2-7dbc4dc7-scenes.macro_stops_after_refusal-api.json
-  - docs/validation/evidence/F-DOM-020/2026-10-04-V3-7dbc4dc7-macros.run_rejected-browser.json
-  - docs/validation/evidence/F-DOM-020/2026-10-04-V3-7dbc4dc7-macros.run_volume_up-browser.json
-  - docs/validation/evidence/F-DOM-020/2026-10-04-V3-7dbc4dc7-scenes.macro_stops_after_refusal-browser.json
+  - docs/validation/evidence/F-DOM-012/2026-10-04-V2-d6baf3ca-scenes.macro_continues_after_refusal-api.json
+  - docs/validation/evidence/F-DOM-012/2026-10-04-V3-d6baf3ca-scenes.macro_continues_after_refusal-browser.json
+  - docs/validation/evidence/F-DOM-020/2026-10-04-V2-d6baf3ca-macros.run_rejected-api.json
+  - docs/validation/evidence/F-DOM-020/2026-10-04-V2-d6baf3ca-macros.run_volume_up-api.json
+  - docs/validation/evidence/F-DOM-020/2026-10-04-V2-d6baf3ca-scenes.macro_stops_after_refusal-api.json
+  - docs/validation/evidence/F-DOM-020/2026-10-04-V3-d6baf3ca-macros.run_rejected-browser.json
+  - docs/validation/evidence/F-DOM-020/2026-10-04-V3-d6baf3ca-macros.run_volume_up-browser.json
+  - docs/validation/evidence/F-DOM-020/2026-10-04-V3-d6baf3ca-scenes.macro_stops_after_refusal-browser.json
   findings: [VAL-02, BE-02, VAL-08]
   scenarios: [macros.run_volume_up, macros.run_rejected, scenes.macro_continues_after_refusal, scenes.macro_stops_after_refusal]
 - id: F-DOM-021
@@ -6896,14 +6819,10 @@ features:
   - docs/validation/evidence/F-DOM-023/2026-10-04-V2-5674ff51-shortcuts.unknown-api.json
   - docs/validation/evidence/F-DOM-023/2026-10-04-V3-5674ff51-shortcuts.route_one_to_one-browser.json
   - docs/validation/evidence/F-DOM-023/2026-10-01-V3-9362fd00-shortcuts.route_one_to_one-browser.json
-  - docs/validation/evidence/F-DOM-023/2026-10-03-V2-b30436af-shortcuts.route_input_to_output-api.json
-  - docs/validation/evidence/F-DOM-023/2026-10-03-V2-b30436af-shortcuts.route_one_to_one-api.json
-  - docs/validation/evidence/F-DOM-023/2026-10-03-V2-b30436af-shortcuts.unknown-api.json
-  - docs/validation/evidence/F-DOM-023/2026-10-03-V3-b30436af-shortcuts.route_one_to_one-browser.json
-  - docs/validation/evidence/F-DOM-023/2026-10-04-V2-7dbc4dc7-shortcuts.route_input_to_output-api.json
-  - docs/validation/evidence/F-DOM-023/2026-10-04-V2-7dbc4dc7-shortcuts.route_one_to_one-api.json
-  - docs/validation/evidence/F-DOM-023/2026-10-04-V2-7dbc4dc7-shortcuts.unknown-api.json
-  - docs/validation/evidence/F-DOM-023/2026-10-04-V3-7dbc4dc7-shortcuts.route_one_to_one-browser.json
+  - docs/validation/evidence/F-DOM-023/2026-10-04-V2-d6baf3ca-shortcuts.route_input_to_output-api.json
+  - docs/validation/evidence/F-DOM-023/2026-10-04-V2-d6baf3ca-shortcuts.route_one_to_one-api.json
+  - docs/validation/evidence/F-DOM-023/2026-10-04-V2-d6baf3ca-shortcuts.unknown-api.json
+  - docs/validation/evidence/F-DOM-023/2026-10-04-V3-d6baf3ca-shortcuts.route_one_to_one-browser.json
   findings: [API-01]
   scenarios: [shortcuts.route_input_to_output, shortcuts.route_one_to_one, shortcuts.unknown]
 - id: F-DOM-024
@@ -6918,10 +6837,8 @@ features:
   - docs/validation/evidence/F-DOM-024/2026-10-04-V2-5674ff51-shortcuts.power_off_all-api.json
   - docs/validation/evidence/F-DOM-024/2026-10-04-V3-5674ff51-shortcuts.power_off_all-browser.json
   - docs/validation/evidence/F-DOM-024/2026-10-01-V3-9362fd00-shortcuts.power_off_all-browser.json
-  - docs/validation/evidence/F-DOM-024/2026-10-03-V2-b30436af-shortcuts.power_off_all-api.json
-  - docs/validation/evidence/F-DOM-024/2026-10-03-V3-b30436af-shortcuts.power_off_all-browser.json
-  - docs/validation/evidence/F-DOM-024/2026-10-04-V2-7dbc4dc7-shortcuts.power_off_all-api.json
-  - docs/validation/evidence/F-DOM-024/2026-10-04-V3-7dbc4dc7-shortcuts.power_off_all-browser.json
+  - docs/validation/evidence/F-DOM-024/2026-10-04-V2-d6baf3ca-shortcuts.power_off_all-api.json
+  - docs/validation/evidence/F-DOM-024/2026-10-04-V3-d6baf3ca-shortcuts.power_off_all-browser.json
   findings: [API-06]
   scenarios: [shortcuts.power_off_all]
 - id: F-DOM-025
@@ -6937,21 +6854,15 @@ features:
   - docs/validation/evidence/F-DOM-025/2026-10-04-V2-5674ff51-shortcuts.mute_rejected-api.json
   - docs/validation/evidence/F-DOM-025/2026-10-04-V2-5674ff51-shortcuts.unmute_all-api.json
   - docs/validation/evidence/F-DOM-025/2026-10-04-V3-5674ff51-shortcuts.mute_all-browser.json
-  - docs/validation/evidence/F-DOM-025/2026-10-04-V3-5674ff51-shortcuts.mute_rejected-browser.json
-  - docs/validation/evidence/F-DOM-025/2026-10-04-V3-5674ff51-shortcuts.unmute_all-browser.json
   - docs/validation/evidence/F-DOM-025/2026-10-01-V3-9362fd00-shortcuts.mute_all-browser.json
   - docs/validation/evidence/F-DOM-025/2026-10-01-V3-9362fd00-shortcuts.mute_rejected-browser.json
   - docs/validation/evidence/F-DOM-025/2026-10-01-V3-9362fd00-shortcuts.unmute_all-browser.json
-  - docs/validation/evidence/F-DOM-025/2026-10-03-V2-b30436af-shortcuts.mute_all-api.json
-  - docs/validation/evidence/F-DOM-025/2026-10-03-V2-b30436af-shortcuts.mute_rejected-api.json
-  - docs/validation/evidence/F-DOM-025/2026-10-03-V2-b30436af-shortcuts.unmute_all-api.json
-  - docs/validation/evidence/F-DOM-025/2026-10-03-V3-b30436af-shortcuts.mute_all-browser.json
-  - docs/validation/evidence/F-DOM-025/2026-10-04-V2-7dbc4dc7-shortcuts.mute_all-api.json
-  - docs/validation/evidence/F-DOM-025/2026-10-04-V2-7dbc4dc7-shortcuts.mute_rejected-api.json
-  - docs/validation/evidence/F-DOM-025/2026-10-04-V2-7dbc4dc7-shortcuts.unmute_all-api.json
-  - docs/validation/evidence/F-DOM-025/2026-10-04-V3-7dbc4dc7-shortcuts.mute_all-browser.json
-  - docs/validation/evidence/F-DOM-025/2026-10-04-V3-7dbc4dc7-shortcuts.mute_rejected-browser.json
-  - docs/validation/evidence/F-DOM-025/2026-10-04-V3-7dbc4dc7-shortcuts.unmute_all-browser.json
+  - docs/validation/evidence/F-DOM-025/2026-10-04-V2-d6baf3ca-shortcuts.mute_all-api.json
+  - docs/validation/evidence/F-DOM-025/2026-10-04-V2-d6baf3ca-shortcuts.mute_rejected-api.json
+  - docs/validation/evidence/F-DOM-025/2026-10-04-V2-d6baf3ca-shortcuts.unmute_all-api.json
+  - docs/validation/evidence/F-DOM-025/2026-10-04-V3-d6baf3ca-shortcuts.mute_all-browser.json
+  - docs/validation/evidence/F-DOM-025/2026-10-04-V3-d6baf3ca-shortcuts.mute_rejected-browser.json
+  - docs/validation/evidence/F-DOM-025/2026-10-04-V3-d6baf3ca-shortcuts.unmute_all-browser.json
   findings: [API-08]
   scenarios: [shortcuts.mute_all, shortcuts.unmute_all, shortcuts.mute_rejected]
 - id: F-DOM-026
@@ -6966,10 +6877,8 @@ features:
   - docs/validation/evidence/F-DOM-026/2026-10-04-V2-5674ff51-shortcuts.preset_recall-api.json
   - docs/validation/evidence/F-DOM-026/2026-10-04-V3-5674ff51-shortcuts.preset_recall-browser.json
   - docs/validation/evidence/F-DOM-026/2026-10-01-V3-9362fd00-shortcuts.preset_recall-browser.json
-  - docs/validation/evidence/F-DOM-026/2026-10-03-V2-b30436af-shortcuts.preset_recall-api.json
-  - docs/validation/evidence/F-DOM-026/2026-10-03-V3-b30436af-shortcuts.preset_recall-browser.json
-  - docs/validation/evidence/F-DOM-026/2026-10-04-V2-7dbc4dc7-shortcuts.preset_recall-api.json
-  - docs/validation/evidence/F-DOM-026/2026-10-04-V3-7dbc4dc7-shortcuts.preset_recall-browser.json
+  - docs/validation/evidence/F-DOM-026/2026-10-04-V2-d6baf3ca-shortcuts.preset_recall-api.json
+  - docs/validation/evidence/F-DOM-026/2026-10-04-V3-d6baf3ca-shortcuts.preset_recall-browser.json
   findings: [API-08]
   scenarios: [shortcuts.preset_recall]
 - id: F-DOM-027
@@ -6985,46 +6894,29 @@ features:
   - docs/validation/evidence/F-DOM-027/2026-10-04-V2-5674ff51-shortcuts.beep_on-api.json
   - docs/validation/evidence/F-DOM-027/2026-10-04-V2-5674ff51-shortcuts.beep_rejected-api.json
   - docs/validation/evidence/F-DOM-027/2026-10-04-V2-5674ff51-shortcuts.disabled_reboot-api.json
-  - docs/validation/evidence/F-DOM-027/2026-10-04-V2-5674ff51-shortcuts.panel_lock-api.json
-  - docs/validation/evidence/F-DOM-027/2026-10-04-V2-5674ff51-shortcuts.panel_lock_rejected-api.json
-  - docs/validation/evidence/F-DOM-027/2026-10-04-V2-5674ff51-shortcuts.panel_unlock-api.json
-  - docs/validation/evidence/F-DOM-027/2026-10-04-V3-5674ff51-shortcuts.beep_off-browser.json
-  - docs/validation/evidence/F-DOM-027/2026-10-04-V3-5674ff51-shortcuts.beep_on-browser.json
-  - docs/validation/evidence/F-DOM-027/2026-10-04-V3-5674ff51-shortcuts.beep_rejected-browser.json
-  - docs/validation/evidence/F-DOM-027/2026-10-04-V3-5674ff51-shortcuts.disabled_reboot-browser.json
-  - docs/validation/evidence/F-DOM-027/2026-10-04-V3-5674ff51-shortcuts.panel_lock-browser.json
-  - docs/validation/evidence/F-DOM-027/2026-10-04-V3-5674ff51-shortcuts.panel_lock_rejected-browser.json
-  - docs/validation/evidence/F-DOM-027/2026-10-04-V3-5674ff51-shortcuts.panel_unlock-browser.json
   - docs/validation/evidence/F-MTX-021/2026-10-04-V2-5674ff51-reboot.enabled_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-04-V2-5674ff51-reboot.legacy_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-04-V3-5674ff51-reboot.enabled_shortcut-browser.json
   - docs/validation/evidence/F-DOM-027/2026-10-01-V3-7aa17c95-shortcuts.beep_on-browser.json
   - docs/validation/evidence/F-DOM-027/2026-10-01-V3-7aa17c95-shortcuts.disabled_reboot-browser.json
   - docs/validation/evidence/F-DOM-027/2026-10-01-V3-7aa17c95-shortcuts.panel_unlock-browser.json
-  - docs/validation/evidence/F-DOM-027/2026-10-03-V2-b30436af-shortcuts.beep_off-api.json
-  - docs/validation/evidence/F-DOM-027/2026-10-03-V2-b30436af-shortcuts.beep_on-api.json
-  - docs/validation/evidence/F-DOM-027/2026-10-03-V2-b30436af-shortcuts.beep_rejected-api.json
-  - docs/validation/evidence/F-DOM-027/2026-10-03-V2-b30436af-shortcuts.disabled_reboot-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-b30436af-reboot.enabled_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-b30436af-reboot.legacy_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-03-V3-b30436af-reboot.enabled_shortcut-browser.json
-  - docs/validation/evidence/F-DOM-027/2026-10-04-V2-7dbc4dc7-shortcuts.beep_off-api.json
-  - docs/validation/evidence/F-DOM-027/2026-10-04-V2-7dbc4dc7-shortcuts.beep_on-api.json
-  - docs/validation/evidence/F-DOM-027/2026-10-04-V2-7dbc4dc7-shortcuts.beep_rejected-api.json
-  - docs/validation/evidence/F-DOM-027/2026-10-04-V2-7dbc4dc7-shortcuts.disabled_reboot-api.json
-  - docs/validation/evidence/F-DOM-027/2026-10-04-V2-7dbc4dc7-shortcuts.panel_lock-api.json
-  - docs/validation/evidence/F-DOM-027/2026-10-04-V2-7dbc4dc7-shortcuts.panel_lock_rejected-api.json
-  - docs/validation/evidence/F-DOM-027/2026-10-04-V2-7dbc4dc7-shortcuts.panel_unlock-api.json
-  - docs/validation/evidence/F-DOM-027/2026-10-04-V3-7dbc4dc7-shortcuts.beep_off-browser.json
-  - docs/validation/evidence/F-DOM-027/2026-10-04-V3-7dbc4dc7-shortcuts.beep_on-browser.json
-  - docs/validation/evidence/F-DOM-027/2026-10-04-V3-7dbc4dc7-shortcuts.beep_rejected-browser.json
-  - docs/validation/evidence/F-DOM-027/2026-10-04-V3-7dbc4dc7-shortcuts.disabled_reboot-browser.json
-  - docs/validation/evidence/F-DOM-027/2026-10-04-V3-7dbc4dc7-shortcuts.panel_lock-browser.json
-  - docs/validation/evidence/F-DOM-027/2026-10-04-V3-7dbc4dc7-shortcuts.panel_lock_rejected-browser.json
-  - docs/validation/evidence/F-DOM-027/2026-10-04-V3-7dbc4dc7-shortcuts.panel_unlock-browser.json
-  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-7dbc4dc7-reboot.enabled_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-7dbc4dc7-reboot.legacy_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-04-V3-7dbc4dc7-reboot.enabled_shortcut-browser.json
+  - docs/validation/evidence/F-DOM-027/2026-10-04-V2-d6baf3ca-shortcuts.beep_off-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-04-V2-d6baf3ca-shortcuts.beep_on-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-04-V2-d6baf3ca-shortcuts.beep_rejected-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-04-V2-d6baf3ca-shortcuts.disabled_reboot-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-04-V2-d6baf3ca-shortcuts.panel_lock-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-04-V2-d6baf3ca-shortcuts.panel_lock_rejected-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-04-V2-d6baf3ca-shortcuts.panel_unlock-api.json
+  - docs/validation/evidence/F-DOM-027/2026-10-04-V3-d6baf3ca-shortcuts.beep_off-browser.json
+  - docs/validation/evidence/F-DOM-027/2026-10-04-V3-d6baf3ca-shortcuts.beep_on-browser.json
+  - docs/validation/evidence/F-DOM-027/2026-10-04-V3-d6baf3ca-shortcuts.beep_rejected-browser.json
+  - docs/validation/evidence/F-DOM-027/2026-10-04-V3-d6baf3ca-shortcuts.disabled_reboot-browser.json
+  - docs/validation/evidence/F-DOM-027/2026-10-04-V3-d6baf3ca-shortcuts.panel_lock-browser.json
+  - docs/validation/evidence/F-DOM-027/2026-10-04-V3-d6baf3ca-shortcuts.panel_lock_rejected-browser.json
+  - docs/validation/evidence/F-DOM-027/2026-10-04-V3-d6baf3ca-shortcuts.panel_unlock-browser.json
+  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.enabled_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.legacy_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-04-V3-d6baf3ca-reboot.enabled_shortcut-browser.json
   findings: [API-08]
   scenarios: [shortcuts.beep_off, shortcuts.beep_on, shortcuts.panel_lock, shortcuts.panel_unlock,
     shortcuts.beep_rejected, shortcuts.panel_lock_rejected, shortcuts.disabled_reboot, reboot.legacy_shortcut, reboot.enabled_shortcut]
@@ -7043,33 +6935,21 @@ features:
   - docs/validation/evidence/F-DOM-028/2026-10-04-V2-5674ff51-shortcuts.lcd_30s-api.json
   - docs/validation/evidence/F-DOM-028/2026-10-04-V2-5674ff51-shortcuts.lcd_60s-api.json
   - docs/validation/evidence/F-DOM-028/2026-10-04-V2-5674ff51-shortcuts.lcd_always_on-api.json
-  - docs/validation/evidence/F-DOM-028/2026-10-04-V2-5674ff51-shortcuts.lcd_off-api.json
-  - docs/validation/evidence/F-DOM-028/2026-10-04-V2-5674ff51-shortcuts.lcd_rejected-api.json
-  - docs/validation/evidence/F-DOM-028/2026-10-04-V3-5674ff51-shortcuts.lcd_15s-browser.json
-  - docs/validation/evidence/F-DOM-028/2026-10-04-V3-5674ff51-shortcuts.lcd_30s-browser.json
-  - docs/validation/evidence/F-DOM-028/2026-10-04-V3-5674ff51-shortcuts.lcd_60s-browser.json
-  - docs/validation/evidence/F-DOM-028/2026-10-04-V3-5674ff51-shortcuts.lcd_always_on-browser.json
-  - docs/validation/evidence/F-DOM-028/2026-10-04-V3-5674ff51-shortcuts.lcd_off-browser.json
-  - docs/validation/evidence/F-DOM-028/2026-10-04-V3-5674ff51-shortcuts.lcd_rejected-browser.json
   - docs/validation/evidence/F-DOM-028/2026-10-01-V3-7aa17c95-shortcuts.lcd_always_on-browser.json
   - docs/validation/evidence/F-DOM-028/2026-10-01-V3-7aa17c95-shortcuts.lcd_rejected-browser.json
   - docs/validation/evidence/F-DOM-028/2026-10-01-V3-9362fd00-shortcuts.lcd_15s-browser.json
-  - docs/validation/evidence/F-DOM-028/2026-10-03-V2-b30436af-shortcuts.lcd_15s-api.json
-  - docs/validation/evidence/F-DOM-028/2026-10-03-V2-b30436af-shortcuts.lcd_30s-api.json
-  - docs/validation/evidence/F-DOM-028/2026-10-03-V2-b30436af-shortcuts.lcd_60s-api.json
-  - docs/validation/evidence/F-DOM-028/2026-10-03-V2-b30436af-shortcuts.lcd_always_on-api.json
-  - docs/validation/evidence/F-DOM-028/2026-10-04-V2-7dbc4dc7-shortcuts.lcd_15s-api.json
-  - docs/validation/evidence/F-DOM-028/2026-10-04-V2-7dbc4dc7-shortcuts.lcd_30s-api.json
-  - docs/validation/evidence/F-DOM-028/2026-10-04-V2-7dbc4dc7-shortcuts.lcd_60s-api.json
-  - docs/validation/evidence/F-DOM-028/2026-10-04-V2-7dbc4dc7-shortcuts.lcd_always_on-api.json
-  - docs/validation/evidence/F-DOM-028/2026-10-04-V2-7dbc4dc7-shortcuts.lcd_off-api.json
-  - docs/validation/evidence/F-DOM-028/2026-10-04-V2-7dbc4dc7-shortcuts.lcd_rejected-api.json
-  - docs/validation/evidence/F-DOM-028/2026-10-04-V3-7dbc4dc7-shortcuts.lcd_15s-browser.json
-  - docs/validation/evidence/F-DOM-028/2026-10-04-V3-7dbc4dc7-shortcuts.lcd_30s-browser.json
-  - docs/validation/evidence/F-DOM-028/2026-10-04-V3-7dbc4dc7-shortcuts.lcd_60s-browser.json
-  - docs/validation/evidence/F-DOM-028/2026-10-04-V3-7dbc4dc7-shortcuts.lcd_always_on-browser.json
-  - docs/validation/evidence/F-DOM-028/2026-10-04-V3-7dbc4dc7-shortcuts.lcd_off-browser.json
-  - docs/validation/evidence/F-DOM-028/2026-10-04-V3-7dbc4dc7-shortcuts.lcd_rejected-browser.json
+  - docs/validation/evidence/F-DOM-028/2026-10-04-V2-d6baf3ca-shortcuts.lcd_15s-api.json
+  - docs/validation/evidence/F-DOM-028/2026-10-04-V2-d6baf3ca-shortcuts.lcd_30s-api.json
+  - docs/validation/evidence/F-DOM-028/2026-10-04-V2-d6baf3ca-shortcuts.lcd_60s-api.json
+  - docs/validation/evidence/F-DOM-028/2026-10-04-V2-d6baf3ca-shortcuts.lcd_always_on-api.json
+  - docs/validation/evidence/F-DOM-028/2026-10-04-V2-d6baf3ca-shortcuts.lcd_off-api.json
+  - docs/validation/evidence/F-DOM-028/2026-10-04-V2-d6baf3ca-shortcuts.lcd_rejected-api.json
+  - docs/validation/evidence/F-DOM-028/2026-10-04-V3-d6baf3ca-shortcuts.lcd_15s-browser.json
+  - docs/validation/evidence/F-DOM-028/2026-10-04-V3-d6baf3ca-shortcuts.lcd_30s-browser.json
+  - docs/validation/evidence/F-DOM-028/2026-10-04-V3-d6baf3ca-shortcuts.lcd_60s-browser.json
+  - docs/validation/evidence/F-DOM-028/2026-10-04-V3-d6baf3ca-shortcuts.lcd_always_on-browser.json
+  - docs/validation/evidence/F-DOM-028/2026-10-04-V3-d6baf3ca-shortcuts.lcd_off-browser.json
+  - docs/validation/evidence/F-DOM-028/2026-10-04-V3-d6baf3ca-shortcuts.lcd_rejected-browser.json
   findings: [API-07]
   scenarios: [shortcuts.lcd_15s, shortcuts.lcd_off, shortcuts.lcd_always_on, shortcuts.lcd_30s,
     shortcuts.lcd_60s, shortcuts.lcd_rejected]
@@ -7217,8 +7097,7 @@ features:
   basis: 'V3: tests/e2e/smoke.spec.ts ''routing an input to an output in the matrix grid changes the simulator''.'
   evidence:
   - docs/validation/evidence/F-MTX-001/2026-10-04-V3-5674ff51-routing.switch_one-browser.json
-  - docs/validation/evidence/F-MTX-001/2026-10-03-V3-b30436af-routing.switch_one-browser.json
-  - docs/validation/evidence/F-MTX-001/2026-10-04-V3-7dbc4dc7-routing.switch_one-browser.json
+  - docs/validation/evidence/F-MTX-001/2026-10-04-V3-d6baf3ca-routing.switch_one-browser.json
   findings: []
   scenarios: [routing.switch_one]
 - id: F-UI-003
@@ -7244,8 +7123,7 @@ features:
   basis: visual catalog drawer/routing/* (screenshot baseline only; no effect asserted).
   evidence:
   - docs/validation/evidence/F-MTX-002/2026-10-04-V3-5674ff51-routing.route_all-browser.json
-  - docs/validation/evidence/F-MTX-002/2026-10-03-V3-b30436af-routing.route_all-browser.json
-  - docs/validation/evidence/F-MTX-002/2026-10-04-V3-7dbc4dc7-routing.route_all-browser.json
+  - docs/validation/evidence/F-MTX-002/2026-10-04-V3-d6baf3ca-routing.route_all-browser.json
   findings: []
   scenarios: [routing.route_all]
 - id: F-UI-005
@@ -7259,8 +7137,7 @@ features:
   basis: visual catalog drawer/presets/* (screenshot baseline only; no effect asserted).
   evidence:
   - docs/validation/evidence/F-MTX-003/2026-10-04-V3-5674ff51-presets.recall-browser.json
-  - docs/validation/evidence/F-MTX-003/2026-10-03-V3-b30436af-presets.recall-browser.json
-  - docs/validation/evidence/F-MTX-003/2026-10-04-V3-7dbc4dc7-presets.recall-browser.json
+  - docs/validation/evidence/F-MTX-003/2026-10-04-V3-d6baf3ca-presets.recall-browser.json
   findings: []
   scenarios: [presets.recall]
 - id: F-UI-006
@@ -7274,8 +7151,7 @@ features:
   basis: visual catalog drawer/presets/rename (screenshot baseline only; no effect asserted).
   evidence:
   - docs/validation/evidence/F-MTX-005/2026-10-04-V3-5674ff51-presets.rename-browser.json
-  - docs/validation/evidence/F-MTX-005/2026-10-03-V3-b30436af-presets.rename-browser.json
-  - docs/validation/evidence/F-MTX-005/2026-10-04-V3-7dbc4dc7-presets.rename-browser.json
+  - docs/validation/evidence/F-MTX-005/2026-10-04-V3-d6baf3ca-presets.rename-browser.json
   findings: []
   scenarios: [presets.rename]
 - id: F-UI-007
@@ -7302,8 +7178,7 @@ features:
   evidence:
   - docs/validation/evidence/F-DOM-011/2026-10-04-V3-5674ff51-scenes.run_protected-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.run_protected-browser.json
-  - docs/validation/evidence/F-DOM-011/2026-10-03-V3-b30436af-scenes.run_protected-browser.json
-  - docs/validation/evidence/F-DOM-011/2026-10-04-V3-7dbc4dc7-scenes.run_protected-browser.json
+  - docs/validation/evidence/F-DOM-011/2026-10-04-V3-d6baf3ca-scenes.run_protected-browser.json
   findings: [UI-01, UI-27]
   scenarios: [scenes.run_protected]
 - id: F-UI-009
@@ -7354,8 +7229,7 @@ features:
   evidence:
   - docs/validation/evidence/F-DOM-002/2026-10-04-V3-5674ff51-profiles.recall_routing-browser.json
   - docs/validation/evidence/F-DOM-002/2026-10-01-V3-97d0d2af-profiles.recall_routing-browser.json
-  - docs/validation/evidence/F-DOM-002/2026-10-03-V3-b30436af-profiles.recall_routing-browser.json
-  - docs/validation/evidence/F-DOM-002/2026-10-04-V3-7dbc4dc7-profiles.recall_routing-browser.json
+  - docs/validation/evidence/F-DOM-002/2026-10-04-V3-d6baf3ca-profiles.recall_routing-browser.json
   findings: [UI-27]
   scenarios: [profiles.recall_routing]
 - id: F-UI-013
@@ -7383,12 +7257,9 @@ features:
   - docs/validation/evidence/F-DOM-005/2026-10-04-V3-5674ff51-profiles.recall_needs_passcode-browser.json
   - docs/validation/evidence/F-DOM-005/2026-10-04-V3-5674ff51-profiles.recall_with_passcode-browser.json
   - docs/validation/evidence/F-DOM-005/2026-10-04-V3-5674ff51-profiles.recall_wrong_passcode-browser.json
-  - docs/validation/evidence/F-DOM-005/2026-10-03-V3-b30436af-profiles.recall_needs_passcode-browser.json
-  - docs/validation/evidence/F-DOM-005/2026-10-03-V3-b30436af-profiles.recall_with_passcode-browser.json
-  - docs/validation/evidence/F-DOM-005/2026-10-03-V3-b30436af-profiles.recall_wrong_passcode-browser.json
-  - docs/validation/evidence/F-DOM-005/2026-10-04-V3-7dbc4dc7-profiles.recall_needs_passcode-browser.json
-  - docs/validation/evidence/F-DOM-005/2026-10-04-V3-7dbc4dc7-profiles.recall_with_passcode-browser.json
-  - docs/validation/evidence/F-DOM-005/2026-10-04-V3-7dbc4dc7-profiles.recall_wrong_passcode-browser.json
+  - docs/validation/evidence/F-DOM-005/2026-10-04-V3-d6baf3ca-profiles.recall_needs_passcode-browser.json
+  - docs/validation/evidence/F-DOM-005/2026-10-04-V3-d6baf3ca-profiles.recall_with_passcode-browser.json
+  - docs/validation/evidence/F-DOM-005/2026-10-04-V3-d6baf3ca-profiles.recall_wrong_passcode-browser.json
   findings: [UI-01, UI-36]
   scenarios: [profiles.recall_needs_passcode, profiles.recall_with_passcode, profiles.recall_wrong_passcode]
 - id: F-UI-015
@@ -7513,15 +7384,11 @@ features:
   - docs/validation/evidence/F-MTX-031/2026-10-04-V3-5674ff51-live.front_panel_route-browser.json
   - docs/validation/evidence/F-MTX-031/2026-10-04-V3-5674ff51-live.input_signal-browser.json
   - docs/validation/evidence/F-MTX-031/2026-10-04-V3-5674ff51-live.rename_elsewhere-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-b30436af-live.display_unplugged-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-b30436af-live.front_panel_route-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-b30436af-live.input_signal-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-b30436af-live.rename_elsewhere-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-7dbc4dc7-live.display_unplugged-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-7dbc4dc7-live.front_panel_route-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-7dbc4dc7-live.input_signal-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-7dbc4dc7-live.rename_elsewhere-browser.json
-  - docs/validation/evidence/F-UI-024/2026-10-04-V3-7dbc4dc7-routing.grid_notifies_other_clients-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-d6baf3ca-live.display_unplugged-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-d6baf3ca-live.front_panel_route-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-d6baf3ca-live.input_signal-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-d6baf3ca-live.rename_elsewhere-browser.json
+  - docs/validation/evidence/F-UI-024/2026-10-04-V3-d6baf3ca-routing.grid_notifies_other_clients-browser.json
   findings: []
   scenarios: [routing.grid_notifies_other_clients, live.front_panel_route, live.input_signal, live.display_unplugged, live.rename_elsewhere]
 - id: F-UI-025
@@ -7560,8 +7427,7 @@ features:
   evidence:
   - docs/validation/evidence/F-DOM-011/2026-10-04-V3-5674ff51-scenes.partial_failure-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.partial_failure-browser.json
-  - docs/validation/evidence/F-DOM-011/2026-10-03-V3-b30436af-scenes.partial_failure-browser.json
-  - docs/validation/evidence/F-DOM-011/2026-10-04-V3-7dbc4dc7-scenes.partial_failure-browser.json
+  - docs/validation/evidence/F-DOM-011/2026-10-04-V3-d6baf3ca-scenes.partial_failure-browser.json
   findings: [UI-32]
   scenarios: [scenes.partial_failure]
 - id: F-UI-028
@@ -7803,10 +7669,8 @@ features:
   evidence:
   - docs/validation/evidence/F-MTX-031/2026-10-04-V3-5674ff51-live.front_panel_route-browser.json
   - docs/validation/evidence/F-MTX-031/2026-10-04-V3-5674ff51-live.input_signal-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-b30436af-live.front_panel_route-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-b30436af-live.input_signal-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-7dbc4dc7-live.front_panel_route-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-7dbc4dc7-live.input_signal-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-d6baf3ca-live.front_panel_route-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-d6baf3ca-live.input_signal-browser.json
   findings: []
   scenarios: [live.front_panel_route, live.input_signal]
 - id: F-KIO-011
@@ -7820,8 +7684,7 @@ features:
   basis: 'V3: scenario live.matrix_offline: an open /kiosk page shows Disconnected while the matrix is off the network and Connected again after it returns. The first-load visual is the catalog entry kiosk/disconnected.'
   evidence:
   - docs/validation/evidence/F-REL-009/2026-10-04-V3-5674ff51-live.matrix_offline-browser.json
-  - docs/validation/evidence/F-REL-009/2026-10-03-V3-b30436af-live.matrix_offline-browser.json
-  - docs/validation/evidence/F-REL-009/2026-10-04-V3-7dbc4dc7-live.matrix_offline-browser.json
+  - docs/validation/evidence/F-REL-009/2026-10-04-V3-d6baf3ca-live.matrix_offline-browser.json
   findings: [UI-29]
   scenarios: [live.matrix_offline]
 - id: F-KIO-012
@@ -8981,14 +8844,10 @@ features:
   - docs/validation/evidence/F-MTX-021/2026-10-04-V2-5674ff51-reboot.enabled_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-04-V2-5674ff51-reboot.legacy_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-04-V3-5674ff51-reboot.enabled_shortcut-browser.json
-  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-b30436af-reboot.direct-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-b30436af-reboot.enabled_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-b30436af-reboot.legacy_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-03-V3-b30436af-reboot.enabled_shortcut-browser.json
-  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-7dbc4dc7-reboot.direct-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-7dbc4dc7-reboot.enabled_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-7dbc4dc7-reboot.legacy_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-04-V3-7dbc4dc7-reboot.enabled_shortcut-browser.json
+  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.direct-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.enabled_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.legacy_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-04-V3-d6baf3ca-reboot.enabled_shortcut-browser.json
   findings: [BE-04, BE-06, BE-17]
   scenarios: [reboot.direct, reboot.legacy_shortcut, reboot.enabled_shortcut]
 - id: F-REL-002
@@ -9043,14 +8902,10 @@ features:
   - docs/validation/evidence/F-MTX-021/2026-10-04-V2-5674ff51-reboot.enabled_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-04-V2-5674ff51-reboot.legacy_shortcut-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-04-V3-5674ff51-reboot.enabled_shortcut-browser.json
-  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-b30436af-reboot.direct-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-b30436af-reboot.enabled_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-03-V2-b30436af-reboot.legacy_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-03-V3-b30436af-reboot.enabled_shortcut-browser.json
-  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-7dbc4dc7-reboot.direct-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-7dbc4dc7-reboot.enabled_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-7dbc4dc7-reboot.legacy_shortcut-api.json
-  - docs/validation/evidence/F-MTX-021/2026-10-04-V3-7dbc4dc7-reboot.enabled_shortcut-browser.json
+  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.direct-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.enabled_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.legacy_shortcut-api.json
+  - docs/validation/evidence/F-MTX-021/2026-10-04-V3-d6baf3ca-reboot.enabled_shortcut-browser.json
   findings: [BE-04, BE-28]
   scenarios: [reboot.direct, reboot.legacy_shortcut, reboot.enabled_shortcut]
 - id: F-REL-006
@@ -9105,10 +8960,9 @@ features:
   - docs/validation/evidence/F-REL-009/2026-10-04-V3-5674ff51-live.matrix_offline-browser.json
   - docs/validation/evidence/F-HA-013/2026-10-03-V3-b30436af-ha.matrix_offline-ha.json
   - docs/validation/evidence/F-REL-009/2026-10-03-V2-b30436af-failures.unreachable_switch-api.json
-  - docs/validation/evidence/F-REL-009/2026-10-03-V3-b30436af-live.matrix_offline-browser.json
   - docs/validation/evidence/F-HA-013/2026-10-04-V3-7dbc4dc7-ha.matrix_offline-ha.json
   - docs/validation/evidence/F-REL-009/2026-10-04-V2-7dbc4dc7-failures.unreachable_switch-api.json
-  - docs/validation/evidence/F-REL-009/2026-10-04-V3-7dbc4dc7-live.matrix_offline-browser.json
+  - docs/validation/evidence/F-REL-009/2026-10-04-V3-d6baf3ca-live.matrix_offline-browser.json
   findings: [UI-29]
   scenarios: [failures.unreachable_switch, live.matrix_offline, ha.matrix_offline]
 - id: F-REL-010
@@ -9146,8 +9000,7 @@ features:
   basis: 'V3: scenario live.front_panel_route in the core-only hub (no Remote integration at all): the hub''s own poller (src/rest_api/events.py) announces the change and the open /ui and /kiosk pages show it. UC mode: tests/uc/test_lifecycle.py front-panel tests (web clients get routing_change with and without a Remote).'
   evidence:
   - docs/validation/evidence/F-MTX-031/2026-10-04-V3-5674ff51-live.front_panel_route-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-10-03-V3-b30436af-live.front_panel_route-browser.json
-  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-7dbc4dc7-live.front_panel_route-browser.json
+  - docs/validation/evidence/F-MTX-031/2026-10-04-V3-d6baf3ca-live.front_panel_route-browser.json
   findings: []
   scenarios: [live.front_panel_route]
 - id: F-REL-013
