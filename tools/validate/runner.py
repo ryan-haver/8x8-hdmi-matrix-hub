@@ -251,6 +251,8 @@ class WsObserver:
             await self._session.close()
 
     def since(self, t0: float) -> list[dict[str, Any]]:
+        if t0 > 1e8:  # a wall-clock time (time.time()) would silently match nothing
+            raise ValueError("WsObserver.since() takes a mark from WsObserver.now(), not time.time()")
         return [e for e in self.events if e["t"] >= t0]
 
 

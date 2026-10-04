@@ -5,6 +5,7 @@ from __future__ import annotations
 import time
 from typing import Any
 
+import pytest
 from aiohttp import web
 from aiohttp.test_utils import TestServer
 
@@ -80,3 +81,11 @@ async def test_api_client_uses_the_scenario_address():
         finally:
             await client.stop()
     assert seen == ["10.77.0.1", "10.77.0.2", "10.77.0.3"]
+
+
+def test_since_refuses_a_wall_clock_mark():
+    """A time.time() mark against perf_counter event times would silently match nothing."""
+    ws = WsObserver("ws://unused/ws", "10.0.0.1")
+    with pytest.raises(ValueError, match="WsObserver.now"):
+        ws.since(time.time())
+    assert ws.since(ws.now()) == []
