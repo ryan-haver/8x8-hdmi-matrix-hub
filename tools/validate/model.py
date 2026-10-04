@@ -390,10 +390,10 @@ class Scenario:
     :param cleanup: actions run through the api client afterwards (hub-side data).
     :param findings: open register rows known to make this scenario fail as a whole.
     :param restart_after: restart the hub afterwards (it may be left in a bad state).
-      :param client_features: extra features proven only with that client, e.g.
-          ``{"browser": ("F-UI-002",)}`` - the UI flow is only exercised in the browser.
-      :param hub_env: scenario-specific overrides for a runner-managed simulator
-          hub. External hubs and hardware are configured by the operator.
+    :param client_features: extra features proven only with that client, e.g.
+        ``{"browser": ("F-UI-002",)}`` - the UI flow is only exercised in the browser.
+    :param hub_env: scenario-specific overrides for a runner-managed simulator
+        hub. External hubs and hardware are configured by the operator.
     """
 
     id: str

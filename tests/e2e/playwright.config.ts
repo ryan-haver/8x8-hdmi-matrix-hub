@@ -80,8 +80,8 @@ export default defineConfig({
       // status colour change pass (#ef4444 red vs the orange standby colour
       // is ~0.13 even on solid pixels; the header pill and kiosk dot changing
       // red <-> orange passed). 0.05 catches it at >= 40% pixel coverage.
-      // Baselines that drifted below 0.2 before this change keep 0.2 until
-      // re-approved: STALE_BASELINES in visual/visual.spec.ts.
+      // TST-14: the owner re-approved all drifted baselines on 2026-10-04;
+      // every approved screenshot now compares at this threshold.
       threshold: 0.05,
       maxDiffPixels: 0,
     },

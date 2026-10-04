@@ -386,17 +386,23 @@ class Runner:
 
     # ------------------------------------------------------------ public
 
+    @staticmethod
+    def _scenario_environment(sc: Scenario) -> dict[str, str]:
+        # Faults must reach a fresh device read. Happy paths retain the hub's
+        # normal cache behavior, including preset read-count assertions.
+        return {"OREI_USE_TELNET_CEC": "false", "OREI_STATUS_CACHE_TTL": "0" if sc.faults else "3", **sc.hub_env}
+
     def _scenario_environment_changes(self, sc: Scenario) -> bool:
         if self.stack is None or self.stack.hub is None:
             return False  # External hubs and real hardware keep the operator's settings.
-        desired = {"OREI_USE_TELNET_CEC": "false", "OREI_STATUS_CACHE_TTL": "0", **sc.hub_env}
+        desired = self._scenario_environment(sc)
         return self.stack.hub.extra_env != desired
 
     def _use_scenario_environment(self, sc: Scenario) -> None:
         if not self._scenario_environment_changes(sc):
             return
         assert self.stack is not None and self.stack.hub is not None
-        self.stack.hub.extra_env = {"OREI_USE_TELNET_CEC": "false", "OREI_STATUS_CACHE_TTL": "0", **sc.hub_env}
+        self.stack.hub.extra_env = self._scenario_environment(sc)
         self._restart_hub()
 
     def _client_hub_info(self) -> HubInfo:

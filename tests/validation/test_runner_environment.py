@@ -29,6 +29,7 @@ def test_simulator_reads_are_ready_and_faults_reach_the_measured_read(tmp_path):
     scenarios = discover()
     chosen = [scenarios[name] for name in (
         "contracts.cables", "profile_state.capture_output_read_failure",
+        "preset_read.device_slot_1",
     )]
     runner = Runner(RunOptions(target="sim", clients=("api",), out_dir=tmp_path))
     outcomes = asyncio.run(runner.run(chosen))
