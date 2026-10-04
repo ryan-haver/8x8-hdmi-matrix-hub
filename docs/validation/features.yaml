@@ -5860,7 +5860,7 @@ features:
   - docs/validation/evidence/F-DOM-003/2026-10-03-V2-b30436af-profiles.recall_output_settings-api.json
   - docs/validation/evidence/F-DOM-003/2026-10-03-V3-b30436af-profiles.recall_output_settings-browser.json
   findings: [VAL-01, API-22, API-29]
-  scenarios: [profiles.recall_output_settings, profiles.recall_disabled_output]
+  scenarios: [profiles.recall_output_settings, profiles.recall_disabled_output, profiles.recall_scaler_arc, profiles.recall_leaves_unset_scaler_arc]
 - id: F-DOM-004
   area: domain
   title: 'Recall a profile: its power-on macro runs'
@@ -6369,7 +6369,7 @@ features:
   - docs/validation/evidence/F-DOM-011/2026-10-03-V3-b30436af-scenes.run_profile_macro_preset-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-03-V3-b30436af-scenes.run_protected-browser.json
   findings: [API-01, API-02, API-08, VAL-07, VAL-11]
-  scenarios: [scenes.run_profile_macro_preset, scenes.run_protected, scenes.partial_failure, scenes.run_unknown, scenes.disabled_output_state]
+  scenarios: [scenes.run_profile_macro_preset, scenes.run_protected, scenes.partial_failure, scenes.run_unknown, scenes.disabled_output_state, scenes.profile_step_scaler_arc]
 - id: F-DOM-012
   area: domain
   title: 'Run a scene: macro steps'
@@ -6448,7 +6448,7 @@ features:
   - docs/validation/evidence/F-DOM-014/2026-10-03-V2-b30436af-scenes.override_leaves_setting-api.json
   - docs/validation/evidence/F-DOM-014/2026-10-03-V3-b30436af-scenes.enabled_override-browser.json
   findings: [API-04]
-  scenarios: [scenes.run_profile_macro_preset, scenes.override_leaves_setting, scenes.enabled_override]
+  scenarios: [scenes.run_profile_macro_preset, scenes.override_leaves_setting, scenes.enabled_override, scenes.override_leaves_scaler_arc]
 - id: F-DOM-015
   area: domain
   title: Protect a scene with a passcode
@@ -6487,7 +6487,7 @@ features:
   - docs/validation/evidence/F-DOM-016/2026-10-03-V2-b30436af-scenes.conflicts_visible-api.json
   - docs/validation/evidence/F-DOM-016/2026-10-03-V3-b30436af-scenes.conflicts_visible-browser.json
   findings: [VAL-10]
-  scenarios: [scenes.conflicts_visible]
+  scenarios: [scenes.conflicts_visible, scenes.conflicts_scaler_arc]
 - id: F-DOM-017
   area: domain
   title: Scene execution history

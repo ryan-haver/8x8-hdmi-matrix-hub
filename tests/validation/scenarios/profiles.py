@@ -194,3 +194,52 @@ SCENARIOS = [
         notes="API-23: the endpoint called the resolver with the wrong arguments and always answered 500.",
     ),
 ]
+
+# API-29: recall applies a profile's saved scaler (API 1-5 -> device 0-4, ``set video scaler``) and
+# ARC (``set arc``), the commands proven on the BK-808 (HIL-09); unset settings are left alone.
+_SCALER_ARC = {"id": "validation_scaler_arc", "name": "Scaler ARC", "icon": "S",
+               "outputs": {"1": {"input": 3, "scaler_mode": 5, "arc": True},
+                           "3": {"input": 4, "scaler_mode": 1, "arc": False}}}
+SCENARIOS += [
+    Scenario(
+        id="profiles.recall_scaler_arc",
+        title="Recall a profile with scaler and ARC: both are applied to the matrix (API-29)",
+        features=("F-DOM-003",),
+        clients=("api", "browser"),
+        writes=("routing", "outputs"),
+        sim_state={"outputs": {"0": {"scaler": 0, "arc": 0}, "2": {"scaler": 3, "arc": 1}}},
+        setup=(act("request", method="POST", path="/api/profile", json=_SCALER_ARC),),
+        action=act("profile_recall", profile_id="validation_scaler_arc"),
+        expect=(
+            Response(status=200, json={"success": True}),
+            Device("outputs[0].scaler", equals=4, timeout=2),  # API 5 (audio only) -> device 4
+            Device("outputs[0].arc", equals=1, timeout=2),
+            Device("outputs[2].scaler", equals=0, timeout=2),  # API 1 (passthrough) -> device 0
+            Device("outputs[2].arc", equals=0, timeout=2),
+            CommandSent("set video scaler", {"scaler": [1, 4]}, count=1),
+            CommandSent("set video scaler", {"scaler": [3, 0]}, count=1),
+            CommandSent("set arc", {"arc": [1, 1]}, count=1),
+            CommandSent("set arc", {"arc": [3, 0]}, count=1),
+        ),
+        cleanup=(act("request", method="DELETE", path="/api/profile/validation_scaler_arc"),),
+        observe=("Does output 1 now pass audio only with ARC on, and output 3 pass video through with ARC off?",),
+        covers=(*HUB_CORE, *PROFILES, *WEB_CORE, *WEB_RUN),
+    ),
+    Scenario(
+        id="profiles.recall_leaves_unset_scaler_arc",
+        title="Recall a profile without scaler/ARC: neither is written (API-29)",
+        features=("F-DOM-003",),
+        writes=("routing", "outputs"),
+        sim_state={"outputs": {"0": {"scaler": 2, "arc": 1}}},
+        action=act("profile_recall", profile_id="movie_night"),
+        expect=(
+            Response(status=200, json={"success": True}),
+            Device("outputs[0].scaler", equals=2),
+            Device("outputs[0].arc", equals=1),
+            NoCommand("set video scaler"),
+            NoCommand("set arc"),
+        ),
+        observe=("Does output 1 keep its video mode and ARC setting after the recall?",),
+        covers=(*HUB_CORE, *PROFILES),
+    ),
+]

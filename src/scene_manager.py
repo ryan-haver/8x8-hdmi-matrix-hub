@@ -435,6 +435,8 @@ def _output_settings_iter(output_cfg) -> list[tuple[str, Any]]:
         ("enabled", output_cfg.enabled),
         ("hdcp", getattr(output_cfg, "hdcp_mode", None)),
         ("hdr", getattr(output_cfg, "hdr_mode", None)),
+        ("scaler", getattr(output_cfg, "scaler_mode", None)),
+        ("arc", getattr(output_cfg, "arc", None)),
         ("audio_mute", getattr(output_cfg, "audio_mute", False)),
     ]
 
