@@ -3025,6 +3025,10 @@ features:
   - cec_telnet.output_8_active
   - cec_telnet.input_interrupted_volume
   - cec_telnet.output_interrupted_volume
+  - cec_telnet.input_interrupted_power_on
+  - cec_telnet.input_interrupted_power_off
+  - cec_telnet.output_interrupted_power_on
+  - cec_telnet.output_interrupted_power_off
 - id: F-CEC-011
   area: cec
   title: List CEC commands and per-port capabilities (incl. audio-only outputs)
@@ -4368,6 +4372,10 @@ features:
   - cec_telnet.output_8_active
   - cec_telnet.input_interrupted_volume
   - cec_telnet.output_interrupted_volume
+  - cec_telnet.input_interrupted_power_on
+  - cec_telnet.input_interrupted_power_off
+  - cec_telnet.output_interrupted_power_on
+  - cec_telnet.output_interrupted_power_off
 - id: F-API-016
   area: api
   title: CEC catalogue, capability and enable routes

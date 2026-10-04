@@ -68,3 +68,22 @@ for kind in ("input", "output"):
                 NoCommand("set cec index"), DeviceUnchanged(), NoProtocolWarnings()), covers=_COVERS,
         notes="The simulator processes the Telnet command before truncating its reply. A second HTTP frame is an ambiguous resend; physical duplicate volume effects require hardware observation.",
     ))
+
+# BE-38: power on/off set a state, so after the same interrupted reply they may be sent again over
+# HTTP (orei_matrix.CEC_SAFE_TO_RESEND); the request succeeds with one Telnet and one HTTP frame.
+for kind, command, word, index in (("input", "power_on", "on", 1), ("input", "power_off", "off", 2),
+                                   ("output", "power_on", "on", 0), ("output", "power_off", "off", 1)):
+    prefix = "s cec in" if kind == "input" else "s cec hdmi out"
+    SCENARIOS.append(Scenario(
+        id=f"cec_telnet.{kind}_interrupted_{command}", title=f"Telnet CEC {kind}: interrupted {command} is sent again over HTTP",
+        features=("F-CEC-010", "F-API-015"), targets=("sim",), kind="failure", writes=("physical",),
+        sim_state={"inputs": {"7": {"cec_enabled": 1}}, "outputs": {"7": {"cec_enabled": 1}}}, setup=_WARM,
+        faults={"telnet_close_mid_command": True, "telnet_fault_count": 1},
+        action=act(f"cec_{kind}", **{kind: 8, "command": command}),
+        expect=(Response(status=200, json={"success": True}),
+                CommandSent(f"{prefix} 8 {word}", channel="telnet", count=1),
+                CommandSent("cec command", {"object": 1 if kind == "output" else 0, "port": [0] * 7 + [1],
+                                            "index": index}, count=1),
+                NoCommand("set cec index"), DeviceUnchanged(), NoProtocolWarnings()), covers=_COVERS,
+        notes="Power on/off are idempotent, so the HTTP frame after a lost Telnet answer is harmless (BE-38).",
+    ))
