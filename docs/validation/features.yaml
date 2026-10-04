@@ -4938,6 +4938,11 @@ features:
   - profile_state.history_success
   - profile_state.history_order
   - profile_state.history_failure
+  - profile_crud.edit_reject_missing_input
+  - profile_crud.edit_reject_output_zero
+  - profile_crud.edit_reject_output_nine
+  - profile_crud.edit_reject_input_zero
+  - profile_crud.edit_reject_input_nine
 - id: F-API-020
   area: api
   title: Scene v1 alias routes (/api/scene*, /api/scenes)
@@ -5801,6 +5806,11 @@ features:
   - profile_state.alias_get_missing
   - profile_state.alias_delete_missing
   - profile_state.alias_post_missing
+  - profile_crud.edit_reject_missing_input
+  - profile_crud.edit_reject_output_zero
+  - profile_crud.edit_reject_output_nine
+  - profile_crud.edit_reject_input_zero
+  - profile_crud.edit_reject_input_nine
 - id: F-DOM-002
   area: domain
   title: 'Recall a profile: its routing is applied'

@@ -9,6 +9,10 @@
 
 from __future__ import annotations
 
+import json
+
+import pytest
+
 from .conftest import body, sim_writes
 
 _SET = {"1": {"input": 3, "scaler_mode": 5, "arc": True}, "2": {"input": 4, "scaler_mode": 1, "arc": False}}
@@ -92,3 +96,24 @@ async def test_scene_validation_reports_scaler_and_arc_conflicts(data_hub):
     resp = await data_hub.post(f"/api/v2/scenes/{sid}/validate")
     conflicts = (await body(resp))["data"]["conflicts"]
     assert {c["setting"] for c in conflicts} == {"scaler", "arc"}
+
+
+# ============================================================================= API-30
+
+
+@pytest.mark.parametrize("outputs", [{"9": {"input": 1}}, {"0": {"input": 1}}, {"1": {"input": 9}},
+                                     {"1": {"input": 0}}, {"1": {}}, {"x": {"input": 1}}])
+async def test_put_refuses_what_post_refuses(data_hub, outputs):
+    before = (await body(await data_hub.get("/api/profile/movie_night")))["data"]
+    post = await data_hub.post("/api/profile", json={"id": "movie_night", "name": "X", "outputs": outputs})
+    put = await data_hub.put("/api/profile/movie_night", json={"outputs": outputs})
+    assert post.status == put.status == 400, (await post.text(), await put.text())
+    assert (await body(post))["error"] == (await body(put))["error"]
+    assert (await body(await data_hub.get("/api/profile/movie_night")))["data"] == before
+    saved = json.loads((data_hub.data_dir / "profiles.json").read_text(encoding="utf-8"))
+    assert next(p for p in saved["profiles"] if p["id"] == "movie_night")["outputs"] == before["outputs"]
+
+
+async def test_put_accepts_valid_outputs(data_hub):
+    resp = await data_hub.put("/api/profile/movie_night", json={"outputs": {"8": {"input": 8}}})
+    assert resp.status == 200, await resp.text()
