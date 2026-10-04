@@ -386,6 +386,35 @@ class Runner:
 
     # ------------------------------------------------------------ public
 
+    def _scenario_environment_changes(self, sc: Scenario) -> bool:
+        if self.stack is None or self.stack.hub is None:
+            return False  # External hubs and real hardware keep the operator's settings.
+        desired = {"OREI_USE_TELNET_CEC": "false", "OREI_STATUS_CACHE_TTL": "0", **sc.hub_env}
+        return self.stack.hub.extra_env != desired
+
+    def _use_scenario_environment(self, sc: Scenario) -> None:
+        if not self._scenario_environment_changes(sc):
+            return
+        assert self.stack is not None and self.stack.hub is not None
+        self.stack.hub.extra_env = {"OREI_USE_TELNET_CEC": "false", "OREI_STATUS_CACHE_TTL": "0", **sc.hub_env}
+        self._restart_hub()
+
+    def _client_hub_info(self) -> HubInfo:
+        hub = self._hub_process()
+        return HubInfo(self.base_url, forwarded_for=self._xff(), artifacts_dir=self.o.out_dir / "artifacts",
+                       uc_url=hub.uc_url if hub is not None and hub.mode == "uc" else None)
+
+    async def _wait_sim_telnet(self, helper: ApiClient) -> None:
+        if self.stack is None:
+            return
+        deadline = time.perf_counter() + 10
+        while time.perf_counter() < deadline:
+            status, _, _ = await helper.request("GET", "/api/status/cables")
+            if status == 200:
+                return
+            await asyncio.sleep(0.05)
+        raise RuntimeError("simulator Telnet link did not become ready before the scenario")
+
     async def run(self, scenarios: list[Scenario]) -> list[Outcome]:
         self.evidence_dir.mkdir(parents=True, exist_ok=True)
         await asyncio.to_thread(self._start_system)
@@ -415,10 +444,9 @@ class Runner:
         try:
             if any(client_name in sc.clients for sc in scenarios):
                 await asyncio.to_thread(self._use_hub_mode, client.hub_mode)
-            hub = self._hub_process()
-            hub_info = HubInfo(self.base_url, forwarded_for=self._xff(), artifacts_dir=self.o.out_dir / "artifacts",
-                               uc_url=hub.uc_url if hub is not None and hub.mode == "uc" else None)
-            await client.start(hub_info)
+                first = next(sc for sc in scenarios if client_name in sc.clients)
+                await asyncio.to_thread(self._use_scenario_environment, first)
+            await client.start(self._client_hub_info())
         except (NotImplementedError, RuntimeError) as exc:
             for sc in scenarios:
                 if client_name in sc.clients:
@@ -438,6 +466,10 @@ class Runner:
                     self.outcomes.append(Outcome(sc.id, client_name, "skipped", gate="skipped", reason=reason))
                     print(f"[validate] skip    {sc.id} [{client_name}]: {reason}", flush=True)
                     continue
+                if self._scenario_environment_changes(sc):
+                    await client.stop()
+                    await asyncio.to_thread(self._use_scenario_environment, sc)
+                    await client.start(self._client_hub_info())
                 outcome = await self._run_one(sc, client)
                 self.outcomes.append(outcome)
                 mark = {"pass": "PASS", "fail": "FAIL", "blocked": "BLOCKED"}.get(outcome.status, outcome.status)
@@ -494,6 +526,9 @@ class Runner:
             if isinstance(dev, SimDevice):
                 await dev.reset(sc.sim_state)
                 procedure.append("reset the simulator to the seed state" + (f" + {sc.sim_state}" if sc.sim_state else ""))
+                await self._wait_sim_telnet(helper)
+                if self.stack is not None:
+                    procedure.append("wait for the simulator Telnet link before setup and fault injection")
             else:
                 snapshot = await dev.state()
                 procedure.append("snapshot the matrix state (readback)")

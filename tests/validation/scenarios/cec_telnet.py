@@ -4,6 +4,8 @@ Healthy acknowledgements follow the simulator's documented HIL assumption.
 No physical CEC effect is simulated or claimed.
 """
 
+from dataclasses import replace
+
 from tools.validate.model import (
     CommandSent,
     Device,
@@ -87,3 +89,7 @@ for kind, command, word, index in (("input", "power_on", "on", 1), ("input", "po
                 NoCommand("set cec index"), DeviceUnchanged(), NoProtocolWarnings()), covers=_COVERS,
         notes="Power on/off are idempotent, so the HTTP frame after a lost Telnet answer is harmless (BE-38).",
     ))
+
+# TST-19: the standard CI run also includes HTTP-only CEC scenarios. Declare
+# this family's opt-in instead of depending on the invoking shell's environment.
+SCENARIOS = [replace(sc, hub_env={"OREI_USE_TELNET_CEC": "true"}) for sc in SCENARIOS]
