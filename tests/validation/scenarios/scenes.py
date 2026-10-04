@@ -341,3 +341,83 @@ SCENARIOS = [
         covers=(*HUB_CORE, *SCENES),
     ),
 ]
+
+# API-29: a scene's profile step applies the same scaler/ARC state as recall (DI-11);
+# an override of either leaves it alone, and differing values are reported as conflicts.
+_SA = {"id": "validation_scene_sa", "name": "Scene SA", "icon": "S",
+       "outputs": {"1": {"input": 3, "scaler_mode": 5, "arc": True}, "2": {"input": 4, "scaler_mode": 1}}}
+_SB = {"id": "validation_scene_sb", "name": "Scene SB", "icon": "S",
+       "outputs": {"1": {"input": 3, "scaler_mode": 4, "arc": False}}}
+_DEL_SA = act("request", method="DELETE", path="/api/profile/validation_scene_sa")
+_DEL_SB = act("request", method="DELETE", path="/api/profile/validation_scene_sb")
+SCENARIOS += [
+    Scenario(
+        id="scenes.profile_step_scaler_arc",
+        title="A scene's profile step applies the profile's scaler and ARC like recall (API-29)",
+        features=("F-DOM-011",),
+        writes=("routing", "outputs"),
+        sim_state={"outputs": {"0": {"scaler": 0, "arc": 0}, "1": {"scaler": 3}}},
+        setup=(act("request", method="POST", path="/api/profile", json=_SA),
+               _edit_goodnight(steps=[{"type": "profile", "id": "validation_scene_sa"}], overrides={})),
+        action=_execute("scene_goodnight01"),
+        expect=(
+            Response(status=200, json={"success": True}),
+            Device("outputs[0].scaler", equals=4, timeout=2),  # API 5 (audio only) -> device 4
+            Device("outputs[0].arc", equals=1, timeout=2),
+            Device("outputs[1].scaler", equals=0, timeout=2),  # API 1 (passthrough) -> device 0
+            CommandSent("set video scaler", {"scaler": [1, 4]}, count=1),
+            CommandSent("set video scaler", {"scaler": [2, 0]}, count=1),
+            CommandSent("set arc", {"arc": [1, 1]}, count=1),
+            CommandSent("set arc", {"arc": [2, 0]}, count=0),  # output 2 has no saved ARC
+        ),
+        cleanup=(_RESTORE_GOODNIGHT, _DEL_SA),
+        observe=("Does output 1 now pass audio only with ARC on, and output 2 pass video through?",),
+        covers=(*HUB_CORE, *SCENES),
+    ),
+    Scenario(
+        id="scenes.override_leaves_scaler_arc",
+        title="Scene overrides of scaler and ARC leave both alone on that output (API-29)",
+        features=("F-DOM-014",),
+        writes=("routing", "outputs"),
+        sim_state={"outputs": {"0": {"scaler": 2, "arc": 0}, "1": {"scaler": 3}}},
+        setup=(act("request", method="POST", path="/api/profile", json=_SA),
+               _edit_goodnight(steps=[{"type": "profile", "id": "validation_scene_sa"}],
+                               overrides={"validation_scene_sa": {"1": {"scaler": True, "arc": True}}})),
+        action=_execute("scene_goodnight01"),
+        expect=(
+            Response(status=200, json={"success": True}),
+            Device("outputs[1].scaler", equals=0, timeout=2),
+            Device("outputs[0].scaler", equals=2),
+            Device("outputs[0].arc", equals=0),
+            CommandSent("set video scaler", {"scaler": [1, 4]}, count=0),
+            CommandSent("set arc", {"arc": [1, 1]}, count=0),
+        ),
+        cleanup=(_RESTORE_GOODNIGHT, _DEL_SA),
+        observe=("Does output 1 keep its video mode and ARC setting while output 2 passes video through?",),
+        covers=(*HUB_CORE, *SCENES),
+    ),
+    Scenario(
+        id="scenes.conflicts_scaler_arc",
+        title="Scene validation reports differing scaler and ARC values across profile steps (API-29)",
+        features=("F-DOM-016",),
+        setup=(act("request", method="POST", path="/api/profile", json=_SA),
+               act("request", method="POST", path="/api/profile", json=_SB),
+               _edit_goodnight(steps=[{"type": "profile", "id": "validation_scene_sa"},
+                                      {"type": "profile", "id": "validation_scene_sb"}], overrides={})),
+        action=act("request", method="POST", path="/api/v2/scenes/scene_goodnight01/validate"),
+        expect=(
+            Response(status=200, json={"success": True, "data": {"conflicts": [
+                {"output": 1, "setting": "scaler", "profiles": [
+                    {"id": "validation_scene_sa", "name": "Scene SA", "value": 5},
+                    {"id": "validation_scene_sb", "name": "Scene SB", "value": 4}]},
+                {"output": 1, "setting": "arc", "profiles": [
+                    {"id": "validation_scene_sa", "name": "Scene SA", "value": True},
+                    {"id": "validation_scene_sb", "name": "Scene SB", "value": False}]},
+            ]}}),
+            NoCommand("*"),
+            DeviceUnchanged(),
+        ),
+        cleanup=(_RESTORE_GOODNIGHT, _DEL_SA, _DEL_SB),
+        covers=(*HUB_CORE, *SCENES),
+    ),
+]

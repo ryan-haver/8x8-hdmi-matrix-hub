@@ -38,6 +38,14 @@ async def apply_profile_state(
             writes.append(("hdr", f"HDR {cfg.hdr_mode}", matrix_device.set_output_hdr, (output_num, cfg.hdr_mode)))
         if cfg.hdcp_mode is not None:
             writes.append(("hdcp", f"HDCP {cfg.hdcp_mode}", matrix_device.set_output_hdcp, (output_num, cfg.hdcp_mode)))
+        # API-29: saved scaler (API value 1-5; OreiMatrix maps it to the device
+        # code, ``set video scaler``) and ARC (``set arc``); unset = untouched.
+        if cfg.scaler_mode is not None:
+            writes.append(("scaler", f"scaler {cfg.scaler_mode}", matrix_device.set_output_scaler,
+                           (output_num, cfg.scaler_mode)))
+        if cfg.arc is not None:
+            writes.append(("arc", "ARC on" if cfg.arc else "ARC off", matrix_device.set_output_arc,
+                           (output_num, bool(cfg.arc))))
         failed = []
         for key, what, setter, args in writes:
             if key in skipped:

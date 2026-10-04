@@ -1,4 +1,5 @@
-"""BE-37: a Telnet CEC command whose outcome is unknown is never resent over HTTP.
+"""BE-37/BE-38: a Telnet CEC command whose outcome is unknown is not resent over HTTP,
+except power on/off (``orei_matrix.CEC_SAFE_TO_RESEND``), which set a state.
 
 The real ``OreiMatrix`` + ``TelnetClient`` against the simulator, with
 ``OREI_USE_TELNET_CEC`` on. The simulator runs a Telnet command before it
@@ -10,6 +11,7 @@ volume step twice.
 import pytest
 
 import telnet_client
+from device_codes import CEC_INPUT_COMMANDS, CEC_OUTPUT_COMMANDS
 
 
 def _commands(simulator, channel):
@@ -73,3 +75,37 @@ async def test_send_cec_outcomes(telnet_cec, simulator):
     assert await t.send_cec("output", 1, "vol+") is telnet_client.CecOutcome.UNKNOWN
     assert not t.connected  # the cut connection is detected (BE-29)
     assert await t.send_cec("output", 1, "vol+") is telnet_client.CecOutcome.NOT_SENT
+
+
+# ----------------------------------------------------------------------------- BE-38
+
+_ALL = [(False, n) for n in CEC_INPUT_COMMANDS] + [(True, n) for n in CEC_OUTPUT_COMMANDS]
+
+
+def test_the_resend_safe_set_is_power_on_and_off_only():
+    import orei_matrix
+
+    assert orei_matrix.CEC_SAFE_TO_RESEND == frozenset({"POWER_ON", "POWER_OFF"})
+
+
+@pytest.mark.parametrize(("is_output", "name"), _ALL, ids=[f"{'out' if o else 'in'}-{n}" for o, n in _ALL])
+async def test_http_fallback_after_an_unknown_outcome_only_for_power(telnet_cec, simulator, is_output, name):
+    """BE-38: power on/off are resent over HTTP after a lost Telnet answer; every other command is not."""
+    simulator.state.inputs[7].cec_enabled = 1
+    simulator.state.outputs[7].cec_enabled = 1
+    await telnet_cec.ensure_cec_enabled(8, is_output)
+    simulator.faults.update({"telnet_close_mid_command": True, "telnet_fault_count": 1})
+    start = len(simulator.log)
+
+    ok = await telnet_cec.send_cec(name, 8, is_output=is_output)
+
+    new = list(simulator.log)[start:]
+    telnet = [e["command"] for e in new if e["channel"] == "telnet" and e["command"].startswith("s cec")]
+    http = [e for e in new if e["channel"] != "telnet" and e["command"] == "cec command"]
+    assert len(telnet) == 1  # the Telnet frame whose answer was cut
+    if name in ("POWER_ON", "POWER_OFF"):
+        assert ok is True
+        assert len(http) == 1 and http[0]["payload"]["port"] == [0] * 7 + [1]
+    else:
+        assert ok is False
+        assert http == []

@@ -96,6 +96,13 @@ for sid, payload in (("missing_id", {"name": "Invalid", "outputs": {"1": {"input
     SCENARIOS.append(_case(f"create_reject_{sid}", "POST", "/api/profile", payload, status=400,
                            setup=(), cleanup=(), checks=(Hub(_PATH, "success", equals=False, status=404),)))
 
+# API-30: an edit applies the same output checks as creation; the saved outputs stay as they were.
+for sid, outputs in (("missing_input", {"1": {"enabled": True}}), ("output_zero", {"0": {"input": 1}}),
+                     ("output_nine", {"9": {"input": 1}}), ("input_zero", {"1": {"input": 0}}),
+                     ("input_nine", {"1": {"input": 9}})):
+    SCENARIOS.append(_case(f"edit_reject_{sid}", "PUT", _PATH, {"outputs": outputs}, status=400,
+                           checks=(Hub(_PATH, "data.outputs", equals=_BASE["outputs"]),)))
+
 for endpoint, field in (("favorite", "favorite"), ("dashboard", "dashboard_visible")):
     for method in ("POST", "PUT"):
         for desired in (False, True):

@@ -243,6 +243,12 @@ def _is_read_command(comhead: str) -> bool:
 # ambiguous failure answer, because the first send may already have acted.
 NON_IDEMPOTENT_COMMANDS = frozenset({"cec command"})
 
+# The only CEC commands that may be sent again over HTTP after a Telnet send
+# whose outcome is unknown (written, answer lost): power on and power off set
+# a state, so a second frame changes nothing. Every other CEC command (volume,
+# mute, navigation, playback, ``ACTIVE``) is never resent (BE-37, BE-38).
+CEC_SAFE_TO_RESEND = frozenset({"POWER_ON", "POWER_OFF"})
+
 
 def _looks_like_login_page(text: str) -> bool:
     # HIL-A: confirm -- some firmwares may answer an expired session with the
@@ -1454,16 +1460,16 @@ class OreiMatrix:
                 if outcome is CecOutcome.ACKNOWLEDGED:
                     _LOG.debug("CEC via Telnet: %s %d -> %s", kind, port_num, telnet_cmd)
                     return True
-                if outcome is CecOutcome.UNKNOWN:
+                if outcome is CecOutcome.UNKNOWN and name not in CEC_SAFE_TO_RESEND:
                     # BE-37: the command was written but its answer was lost, so
-                    # the matrix may already have run it. CEC commands are not
-                    # idempotent (a volume step, a toggle), and like every
-                    # non-idempotent command after an ambiguous failure
-                    # (NON_IDEMPOTENT_COMMANDS) it is never resent: report failure.
+                    # the matrix may already have run it. A volume step, a
+                    # toggle or a key press would run twice: never resent,
+                    # report failure. Only CEC_SAFE_TO_RESEND may go on to HTTP.
                     self._last_error = f"CEC {name} to {kind} {port_num}: outcome unknown (Telnet answer lost); not resent"
                     _LOG.error("%s", self._last_error)
                     return False
-                # REJECTED / NOT_SENT: the matrix did not run it, HTTP may try.
+                # REJECTED / NOT_SENT: the matrix did not run it; UNKNOWN for a
+                # power on/off: a second frame is harmless. HTTP may try.
                 _LOG.warning("Telnet CEC %s %d %s %s, falling back to HTTP", kind, port_num, telnet_cmd, outcome.value)
 
         # Fall back to HTTP

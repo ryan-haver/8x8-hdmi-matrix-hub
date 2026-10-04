@@ -158,13 +158,17 @@ async def _capture_current_outputs(matrix_device) -> tuple[dict[int, dict] | Non
         allaudiomute = _complete(status.get("allaudiomute"))
         if allout is None or allaudiomute is None:
             return None, "the output status read was incomplete"
+        # API-31: each output's stream state as the matrix reports it (1 on, 0 off);
+        # anything else is not a reading and is not replaced with a default.
+        if any(type(v) is not int or v not in (0, 1) for v in allout):
+            return None, "the output stream state (allout) was not 0 or 1 for every output"
         allhdr = status.get("allhdr") or []
         allhdcp = status.get("allhdcp") or []
         outputs: dict[int, dict] = {}
         for i in range(8):
             outputs[i + 1] = {
                 "input": allsource[i],
-                "enabled": True,
+                "enabled": allout[i] == 1,
                 "audio_mute": bool(allaudiomute[i]),
                 # scenes store API values: device HDR 0-2 -> 1-3 (HIL-02)
                 "hdr_mode": hdr_from_device(allhdr[i]) if i < len(allhdr) else None,
