@@ -561,6 +561,8 @@ The profile is created only from a complete read of the matrix: the routing
 (`get video status`) and the output settings (`get output status`) of all
 eight outputs. If either read fails or is incomplete, the answer is `502`
 (`success: false`, the reason in `error`) and no profile is created (API-27).
+Each output's `enabled` is its stream state as the matrix reports it
+(`allout`: 1 on, 0 off); any other value is refused the same way (API-31).
 
 ---
 
@@ -668,8 +670,11 @@ curl -X PUT http://localhost:8080/api/profile/movie_night \
 `scaler_mode` (1-5: 1 passthrough, 2 8K to 4K, 3 8K/4K to 1080p, 4 auto,
 5 audio only) and `arc` (`true`/`false`). Optional settings that are omitted
 or `null` stay unset and are not returned. An invalid `scaler_mode` or `arc`
-is answered with `400` and nothing is saved (API-22). Profile recall and scene
-profile steps do not apply `scaler_mode` or `arc` yet (API-29).
+is answered with `400` and nothing is saved (API-22). Create and edit apply the
+same checks: an output or input outside 1-8, or an output without `input`, is
+answered with `400` and the profile is not changed (API-30). Profile recall and
+scene profile steps apply a saved `scaler_mode` (`set video scaler`) and `arc`
+(`set arc`); when a profile does not set them they are left as they are (API-29).
 
 #### DELETE /api/profile/{id}
 Delete a profile.
@@ -700,7 +705,7 @@ Response:
 }
 ```
 
-Status: `200` when every output (routing, stream, mute, HDR, HDCP) and the
+Status: `200` when every output (routing, stream, mute, HDR, HDCP, scaler, ARC) and the
 power-on macro were applied; `207` when only part was (`success: false`,
 `failed_outputs` and `errors` say what the matrix did not accept); `500` when
 nothing was; `403` with `passcode_required` / `invalid_passcode` for a
@@ -756,9 +761,10 @@ With `OREI_USE_TELNET_CEC=true`, commands use Telnet when connected. They fall
 back to HTTP only when the matrix certainly did not run the Telnet command:
 Telnet was not connected, or the matrix answered with an error code
 (`E00`/`E01`). When the command was written but its acknowledgement was lost,
-cut short or never came, the matrix may already have run it; CEC commands are
-not idempotent (a volume step, a toggle), so the command is not resent and the
-request fails with `500` (BE-37).
+cut short or never came, the matrix may already have run it. Then only power on
+and power off, which set a state and are safe to send twice, go on to HTTP
+(BE-38); every other command (volume, mute, navigation, playback, `active`) is
+not resent and the request fails with `500` (BE-37).
 
 #### GET /api/cec/commands
 List all available CEC commands.
