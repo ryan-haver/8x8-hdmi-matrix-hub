@@ -28,38 +28,10 @@ import { THEMED_VIEWPORTS, VISUAL_VIEWPORTS, type ViewportName } from '../suppor
 /** Hub routes that only the running app should ever change; a capture that writes them would leak into later entries. */
 const WRITE_GUARD = /\/api\/(ui\/preferences|dashboard\/cards|device-settings|shortcuts\/[^/]+\/(favorite|dashboard)|profile|v2\/scenes|cec\/macro)/;
 
-/**
- * Baselines (<project>/<snapshot path>) that no longer match today's UI at the
- * suite threshold (0.05, TST-10) but did at the old 0.2: content blurred
- * behind the main panel changed after they were approved (UI-27: the Profiles
- * side panel now lists profiles; the dashboard column now shows its cards).
- * They keep the old threshold until the owner reviews and re-approves them
- * (TST-14); then delete them from this list. Measured 2026-10-04 at the merge
- * with main 14f5e49, identical in two clean re-captures of the whole suite.
+/** TST-14: all 21 drifted baselines approved by the owner on 2026-10-04.
+ * Every snapshot now uses the suite threshold (0.05, TST-10).
  */
-const STALE_BASELINES = new Set([
-  'desktop/outputs/list/cables-unplugged.png',
-  'desktop/outputs/list/default.png',
-  'desktop/outputs/list/long-names.png',
-  'desktop/themes/neon/outputs/list/default.png',
-  'desktop/themes/royal/outputs/list/default.png',
-  'desktop/themes/vaporwave/outputs/list/default.png',
-  'kiosk-tab-a11/cec-remote/input-2.png',
-  'kiosk-tab-a11/inputs/list/cables-unplugged.png',
-  'kiosk-tab-a11/inputs/list/default.png',
-  'kiosk-tab-a11/inputs/list/loading-skeleton.png',
-  'kiosk-tab-a11/inputs/list/long-names.png',
-  'kiosk-tab-a11/inputs/list/no-signal.png',
-  'kiosk-tab-a11/outputs/list/cables-unplugged.png',
-  'kiosk-tab-a11/outputs/list/default.png',
-  'kiosk-tab-a11/outputs/list/long-names.png',
-  'kiosk-tab-a11/themes/neon/inputs/list/default.png',
-  'kiosk-tab-a11/themes/neon/outputs/list/default.png',
-  'kiosk-tab-a11/themes/royal/inputs/list/default.png',
-  'kiosk-tab-a11/themes/royal/outputs/list/default.png',
-  'kiosk-tab-a11/themes/vaporwave/inputs/list/default.png',
-  'kiosk-tab-a11/themes/vaporwave/outputs/list/default.png',
-]);
+const STALE_BASELINES = new Set<string>();
 const STALE_THRESHOLD = 0.2;
 
 test.describe.configure({ mode: 'default' });
