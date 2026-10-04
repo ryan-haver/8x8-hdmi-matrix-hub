@@ -174,6 +174,19 @@ for pattern in range(8):
                            {"id": _ID, "name": "Captured Routing", "icon": "C"}, api="F-API-020", state=state,
                            setup=(), data={"id": _ID, "name": "Captured Routing", "icon": "C", "outputs": expected},
                            checks=(Hub(_PROFILE, "data.outputs", equals=expected),)))
+# API-31: each output's stream state is captured as the matrix reports it (allout), not "enabled" for all.
+_streams_state, _streams_expected = {"outputs": {}}, {}
+for port in range(1, 9):
+    stream = 0 if port in (2, 5, 8) else 1
+    _streams_state["outputs"][str(port - 1)] = {"source": port, "stream": stream, "audio_mute": 0, "hdr": 0,
+                                                "hdcp": 3}
+    _streams_expected[str(port)] = {"input": port, "enabled": stream == 1, "audio_mute": False,
+                                    "hdr_mode": 1, "hdcp_mode": 3}
+SCENARIOS.append(_case("capture_stream_states", "F-DOM-009", "POST", "/api/scene/save-current",
+                       {"id": _ID, "name": "Captured Streams", "icon": "C"}, api="F-API-020",
+                       state=_streams_state, setup=(),
+                       data={"id": _ID, "name": "Captured Streams", "outputs": _streams_expected},
+                       checks=(Hub(_PROFILE, "data.outputs", equals=_streams_expected),)))
 SCENARIOS.append(_case("capture_defaults", "F-DOM-009", "POST", "/api/scene/save-current", {"id": _ID},
                        api="F-API-020", setup=(), data={"id": _ID, "name": "Captured Scene", "icon": "\U0001f4fa"},
                        checks=(Hub(_PROFILE, "data.name", equals="Captured Scene"),)))

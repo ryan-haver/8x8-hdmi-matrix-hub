@@ -117,3 +117,36 @@ async def test_put_refuses_what_post_refuses(data_hub, outputs):
 async def test_put_accepts_valid_outputs(data_hub):
     resp = await data_hub.put("/api/profile/movie_night", json={"outputs": {"8": {"input": 8}}})
     assert resp.status == 200, await resp.text()
+
+
+# ============================================================================= API-31
+
+
+async def test_save_current_records_the_real_stream_state(data_hub, simulator):
+    from rest_api.utils import get_matrix_device
+
+    get_matrix_device()._status_cache_ttl = 0.0
+    for i, out in enumerate(simulator.state.outputs):
+        out.stream = 0 if i in (2, 5) else 1
+    resp = await data_hub.post("/api/scene/save-current", json={"id": "cap", "name": "Cap"})
+    assert resp.status == 200, await resp.text()
+    outputs = (await body(await data_hub.get("/api/profile/cap")))["data"]["outputs"]
+    assert {k: v["enabled"] for k, v in outputs.items()} == {str(o): o not in (3, 6) for o in range(1, 9)}
+
+
+async def test_save_current_refuses_an_unknown_stream_state(data_hub, simulator, monkeypatch):
+    """A stream value that is neither 0 nor 1 is not guessed (no ``enabled: true`` by default)."""
+    from rest_api.utils import get_matrix_device
+
+    device = get_matrix_device()
+    real = device.get_output_status
+
+    async def odd(force_refresh: bool = False):
+        status = await real(force_refresh=True)
+        status["allout"] = [1, 1, 7, 1, 1, 1, 1, 1, 255]
+        return status
+
+    monkeypatch.setattr(device, "get_output_status", odd)
+    resp = await data_hub.post("/api/scene/save-current", json={"id": "cap", "name": "Cap"})
+    assert resp.status == 502, await resp.text()
+    assert (await data_hub.get("/api/profile/cap")).status == 404

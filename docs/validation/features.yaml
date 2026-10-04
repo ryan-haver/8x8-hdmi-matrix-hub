@@ -5102,6 +5102,7 @@ features:
   - profile_state.alias_post_missing
   - domain_manage.legacy_list
   - domain_manage.legacy_recall
+  - profile_state.capture_stream_states
 - id: F-API-021
   area: api
   title: Scene v2 routes (/api/v2/scenes*)
@@ -6230,6 +6231,7 @@ features:
   - profile_state.capture_defaults
   - profile_state.capture_video_read_failure
   - profile_state.capture_output_read_failure
+  - profile_state.capture_stream_states
 - id: F-DOM-010
   area: domain
   title: Create, edit and delete scenes (sequences of steps)
