@@ -40,6 +40,8 @@ from .model import (
     NoCommand,
     NoProtocolWarnings,
     NoWsEvent,
+    PresetCatalog,
+    PresetRouting,
     Response,
     Scenario,
     WsEvent,
@@ -82,6 +84,38 @@ VOLATILE_PATHS = ("inputs[*].signal", "inputs[*].cable", "outputs[*].connected")
 
 def _now() -> str:
     return dt.datetime.now(dt.UTC).isoformat(timespec="milliseconds").replace("+00:00", "Z")
+
+
+def compare_preset_catalog(hub_presets: list[dict[str, Any]],
+                           device_slots: dict[int, list[int] | None]) -> list[dict[str, Any]]:
+    """Slots where ``GET /api/presets`` disagrees with the device's own slot (``PresetCatalog``)."""
+    by_number = {p.get("number"): p for p in hub_presets if isinstance(p, dict)}
+    problems: list[dict[str, Any]] = []
+    for n in range(1, 9):
+        entry = by_number.get(n)
+        if entry is None:
+            problems.append({"slot": n, "problem": "missing from the hub's catalog"})
+            continue
+        stored = device_slots.get(n)
+        expected = {} if stored is None else {str(o): i for o, i in enumerate(stored, start=1)}
+        reported = {str(k): v for k, v in (entry.get("routing") or {}).items()}
+        if entry.get("routing_source") != "matrix" or reported != expected:
+            problems.append({"slot": n, "routing_source": entry.get("routing_source"),
+                             "hub": reported, "device": expected})
+    return problems
+
+
+def preset_routing_verdict(before: list[Any] | None, after: list[Any] | None,
+                           slot: list[int] | None) -> tuple[str, str]:
+    """``PresetRouting``: the routing after a recall against the slot the device stores."""
+    if slot is None:
+        return "fail", "the slot is empty on the device"
+    if before == slot:
+        return "fail", ("inconclusive: the live routing already equalled the slot before the recall; "
+                        "route something else first")
+    if after == slot:
+        return "pass", f"routing = the slot's stored routing {slot}"
+    return "fail", f"routing = {after}, the slot stores {slot}"
 
 
 def _subset(expected: Any, actual: Any) -> bool:
@@ -410,8 +444,17 @@ class Runner:
         return HubInfo(self.base_url, forwarded_for=self._xff(), artifacts_dir=self.o.out_dir / "artifacts",
                        uc_url=hub.uc_url if hub is not None and hub.mode == "uc" else None)
 
-    async def _wait_sim_telnet(self, helper: ApiClient) -> None:
-        if self.stack is None:
+    def _runner_started_hub(self) -> bool:
+        """The hub is ours: the simulator stack's, or one started for a matrix (not --hub-url)."""
+        return self.stack is not None or (self.hub is not None and not self.o.hub_url)
+
+    async def _wait_hub_telnet(self, helper: ApiClient) -> None:
+        """Wait for the hub's Telnet link to the matrix (simulator or hardware) before a scenario.
+
+        Preset slot reads (BE-36), cable status and Telnet CEC need it; a hub the runner just
+        started connects Telnet a moment after HTTP is up. An operator's own hub is not waited for.
+        """
+        if not self._runner_started_hub():
             return
         deadline = time.perf_counter() + 10
         while time.perf_counter() < deadline:
@@ -419,7 +462,7 @@ class Runner:
             if status == 200:
                 return
             await asyncio.sleep(0.05)
-        raise RuntimeError("simulator Telnet link did not become ready before the scenario")
+        raise RuntimeError("the hub's Telnet link to the matrix did not become ready before the scenario")
 
     async def run(self, scenarios: list[Scenario]) -> list[Outcome]:
         self.evidence_dir.mkdir(parents=True, exist_ok=True)
@@ -431,7 +474,8 @@ class Runner:
                 dev: SimDevice | HardwareDevice = SimDevice(sim_url)
             else:
                 dev = HardwareDevice(self.o.matrix_host or "", self.o.matrix_port, https=self.o.matrix_https,
-                                     user=self.o.matrix_user, password=self.o.matrix_password)
+                                     user=self.o.matrix_user, password=self.o.matrix_password,
+                                     telnet_port=self.o.telnet_port)
             async with dev:
                 self.device = dev
                 self.device_info = await dev.info()
@@ -532,10 +576,13 @@ class Runner:
             if isinstance(dev, SimDevice):
                 await dev.reset(sc.sim_state)
                 procedure.append("reset the simulator to the seed state" + (f" + {sc.sim_state}" if sc.sim_state else ""))
-                await self._wait_sim_telnet(helper)
+                await self._wait_hub_telnet(helper)
                 if self.stack is not None:
                     procedure.append("wait for the simulator Telnet link before setup and fault injection")
             else:
+                await self._wait_hub_telnet(helper)
+                if self._runner_started_hub():
+                    procedure.append("wait for the hub's Telnet link to the matrix")
                 snapshot = await dev.state()
                 procedure.append("snapshot the matrix state (readback)")
             await ws.start()
@@ -838,6 +885,23 @@ class Runner:
                 verdict = "pass" if ok else "fail"
                 shown = got if found else "<absent>"
                 detail = f"HTTP {status}; {exp.field_path or 'body'} = {json.dumps(shown, default=str)[:200]}"
+            elif isinstance(exp, PresetRouting):
+                stored = (await dev.preset_slots()).get(exp.slot)
+                deadline = time.monotonic() + exp.timeout
+                while True:
+                    after = (await dev.state()).get("routing")
+                    verdict, detail = preset_routing_verdict(before.get("routing"), after, stored)
+                    if verdict == "pass" or stored is None or time.monotonic() >= deadline:
+                        break
+                    await asyncio.sleep(0.25)
+            elif isinstance(exp, PresetCatalog):
+                status, body, exchange = await helper.request("GET", "/api/presets")
+                hub_reads.append(exchange)
+                slots = await dev.preset_slots()
+                problems = compare_preset_catalog(resolve(body, "data.presets"), slots)
+                verdict = "pass" if status == 200 and not problems else "fail"
+                detail = (f"HTTP {status}; 8 slots agree ({sum(v is not None for v in slots.values())} stored, "
+                          f"{sum(v is None for v in slots.values())} empty)") if verdict == "pass" else                     f"HTTP {status}; disagreements: {json.dumps(problems)[:600]}"
             elif isinstance(exp, ClientState):
                 if not client.observes:
                     return {"description": exp.describe(), "result": "n/a",

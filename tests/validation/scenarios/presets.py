@@ -6,6 +6,7 @@ from tools.validate.model import (
     DeviceUnchanged,
     Hub,
     NoCommand,
+    PresetRouting,
     Response,
     Scenario,
     WsEvent,
@@ -28,7 +29,7 @@ SCENARIOS = [
         action=act("preset_recall", preset=3),
         expect=(
             Response(status=200),
-            Device("routing", equals=[6] * 8),
+            PresetRouting(3),
             DeviceUnchanged(allow=("outputs[*].source", "routing")),
             CommandSent("preset set", {"index": 3}, count=1),
             WsEvent("preset_recall", {"preset": 3}),

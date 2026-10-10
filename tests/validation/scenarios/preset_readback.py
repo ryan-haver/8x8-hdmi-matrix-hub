@@ -13,6 +13,7 @@ from tools.validate.model import (
     Hub,
     NoCommand,
     NoProtocolWarnings,
+    PresetCatalog,
     Response,
     Scenario,
     act,
@@ -82,3 +83,21 @@ for slot in range(1, 9):
         notes="A custom save of output 1 stores the whole live routing on the matrix; the catalog and the "
               "hub's fallback copy report all eight outputs, not only the submitted one.",
     ))
+
+# Read-only, so it also runs on a real matrix without --allow-writes (HIL session 2): whatever the
+# owner's slots hold, the catalog must report each one as the device stores it. The device side is
+# read without the hub (Telnet ``r preset N`` on hardware). On the simulator the slots are seeded
+# independently of the hub's saved copies, with one empty slot.
+SCENARIOS.append(Scenario(
+    id="preset_read.catalog_matches_device",
+    title="The preset catalog reports every slot exactly as the matrix stores it (BE-36)",
+    features=("F-MTX-030",), targets=("sim", "hardware"),
+    sim_state={"presets": {"0": {"routing": [2, 4, 4, 4, 4, 4, 4, 4], "saved": True},
+                           "3": {"routing": [8, 7, 6, 5, 4, 3, 2, 1], "saved": True},
+                           "7": {"routing": [1, 1, 1, 1, 1, 1, 1, 1], "saved": False}}},
+    action=act("request", method="GET", path="/api/presets"),
+    expect=(Response(status=200, json={"success": True}), PresetCatalog(),
+            NoCommand("*"), DeviceUnchanged(), NoProtocolWarnings()),
+    covers=_COVERS,
+    notes="Hardware V4 for F-MTX-030 without writing the matrix: the operator's own slots are the test data.",
+))

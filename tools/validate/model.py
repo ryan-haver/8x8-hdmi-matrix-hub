@@ -326,6 +326,35 @@ class Hub(Expectation):
 
 
 @dataclass(frozen=True)
+class PresetCatalog(Expectation):
+    """``GET /api/presets`` agrees with the device's own preset slots (BE-36).
+
+    Every slot must be reported as read from the matrix (``routing_source: "matrix"``) with
+    exactly the routing the device stores, ``{}`` for an empty slot. The device side is read
+    without the hub: the simulator's state, or Telnet ``r preset N`` on hardware.
+    """
+
+    def describe(self) -> str:
+        return "hub GET /api/presets: every slot read from the matrix and equal to the device's own slot"
+
+
+@dataclass(frozen=True)
+class PresetRouting(Expectation):
+    """After a recall the device's routing equals what preset ``slot`` stores on the device.
+
+    The slot is read from the device itself (simulator state, or Telnet ``r preset N`` on
+    hardware), so the check holds whatever the operator's slot contains. A recall whose slot
+    already matched the live routing proves nothing and fails as inconclusive.
+    """
+
+    slot: int
+    timeout: float = 5.0
+
+    def describe(self) -> str:
+        return f"device routing == the routing preset {self.slot} stores on the device"
+
+
+@dataclass(frozen=True)
 class ClientState(Expectation):
     """What the client itself shows after the action, e.g. a Home Assistant entity state.
 

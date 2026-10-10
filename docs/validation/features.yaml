@@ -962,7 +962,7 @@ features:
   - docs/validation/evidence/F-MTX-030/2026-10-04-V2-7dbc4dc7-preset_read.device_slot_7-api.json
   - docs/validation/evidence/F-MTX-030/2026-10-04-V2-7dbc4dc7-preset_read.device_slot_8-api.json
   findings: [HIL-01, BE-36]
-  scenarios: [preset_read.device_slot_1, preset_read.device_slot_2, preset_read.device_slot_3, preset_read.device_slot_4, preset_read.device_slot_5, preset_read.device_slot_6, preset_read.device_slot_7, preset_read.device_slot_8]
+  scenarios: [preset_read.device_slot_1, preset_read.device_slot_2, preset_read.device_slot_3, preset_read.device_slot_4, preset_read.device_slot_5, preset_read.device_slot_6, preset_read.device_slot_7, preset_read.device_slot_8, preset_read.catalog_matches_device]
 - id: F-MTX-031
   area: matrix
   title: Notice changes made outside the hub (front panel, cable plugged, source on/off)
@@ -4754,7 +4754,6 @@ features:
   basis: 'V2: scenario scenes.partial_failure receives scene_execution_error on /ws (schema-checked). The web UI does not show it yet (WP-E1, VAL-11).'
   evidence:
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.partial_failure-api.json
-  - docs/validation/evidence/F-DOM-011/2026-10-04-V2-d6baf3ca-scenes.partial_failure-api.json
   findings: [VAL-11]
   scenarios: [scenes.partial_failure]
 - id: F-API-042
@@ -4903,10 +4902,6 @@ features:
   - docs/validation/evidence/F-DOM-002/2026-10-01-V3-97d0d2af-profiles.recall_routing-browser.json
   - docs/validation/evidence/F-DOM-002/2026-10-04-V2-7dbc4dc7-profile_state.alias_recall-api.json
   - docs/validation/evidence/F-DOM-002/2026-10-04-V2-7dbc4dc7-profiles.recall_rejected-api.json
-  - docs/validation/evidence/F-DOM-002/2026-10-04-V2-d6baf3ca-profiles.recall_disabled_output-api.json
-  - docs/validation/evidence/F-DOM-002/2026-10-04-V2-d6baf3ca-profiles.recall_routing-api.json
-  - docs/validation/evidence/F-DOM-002/2026-10-04-V3-d6baf3ca-profiles.recall_disabled_output-browser.json
-  - docs/validation/evidence/F-DOM-002/2026-10-04-V3-d6baf3ca-profiles.recall_routing-browser.json
   findings: [API-08, API-19]
   scenarios:
   - profiles.recall_routing
@@ -4931,8 +4926,6 @@ features:
   - docs/validation/evidence/F-DOM-003/2026-10-04-V2-7dbc4dc7-profiles.recall_leaves_unset_scaler_arc-api.json
   - docs/validation/evidence/F-DOM-003/2026-10-04-V2-7dbc4dc7-profiles.recall_output_settings-api.json
   - docs/validation/evidence/F-DOM-003/2026-10-04-V3-7dbc4dc7-profiles.recall_output_settings-browser.json
-  - docs/validation/evidence/F-DOM-002/2026-10-04-V2-d6baf3ca-profiles.recall_disabled_output-api.json
-  - docs/validation/evidence/F-DOM-002/2026-10-04-V3-d6baf3ca-profiles.recall_disabled_output-browser.json
   findings: [VAL-01, API-22, API-29]
   scenarios: [profiles.recall_output_settings, profiles.recall_disabled_output, profiles.recall_scaler_arc, profiles.recall_leaves_unset_scaler_arc]
 - id: F-DOM-004
@@ -4967,12 +4960,6 @@ features:
   - docs/validation/evidence/F-KIO-008/2026-10-01-V3-97d0d2af-kiosk.profile_wrong_passcode-browser.json
   - docs/validation/evidence/F-KIO-008/2026-10-04-V3-7dbc4dc7-kiosk.profile_with_passcode-browser.json
   - docs/validation/evidence/F-KIO-008/2026-10-04-V3-7dbc4dc7-kiosk.profile_wrong_passcode-browser.json
-  - docs/validation/evidence/F-DOM-005/2026-10-04-V2-d6baf3ca-profiles.recall_needs_passcode-api.json
-  - docs/validation/evidence/F-DOM-005/2026-10-04-V2-d6baf3ca-profiles.recall_with_passcode-api.json
-  - docs/validation/evidence/F-DOM-005/2026-10-04-V2-d6baf3ca-profiles.recall_wrong_passcode-api.json
-  - docs/validation/evidence/F-DOM-005/2026-10-04-V3-d6baf3ca-profiles.recall_needs_passcode-browser.json
-  - docs/validation/evidence/F-DOM-005/2026-10-04-V3-d6baf3ca-profiles.recall_with_passcode-browser.json
-  - docs/validation/evidence/F-DOM-005/2026-10-04-V3-d6baf3ca-profiles.recall_wrong_passcode-browser.json
   findings: [SEC-05, SEC-06, UI-01]
   scenarios: [profiles.recall_needs_passcode, profiles.recall_with_passcode, profiles.recall_wrong_passcode, kiosk.profile_with_passcode, kiosk.profile_wrong_passcode]
 - id: F-DOM-006
@@ -5402,11 +5389,6 @@ features:
   - docs/validation/evidence/F-DOM-011/2026-10-04-V2-7dbc4dc7-scenes.run_profile_macro_preset-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-04-V2-7dbc4dc7-scenes.run_unknown-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-04-V3-7dbc4dc7-scenes.run_profile_macro_preset-browser.json
-  - docs/validation/evidence/F-DOM-011/2026-10-04-V2-d6baf3ca-scenes.disabled_output_state-api.json
-  - docs/validation/evidence/F-DOM-011/2026-10-04-V2-d6baf3ca-scenes.partial_failure-api.json
-  - docs/validation/evidence/F-DOM-011/2026-10-04-V2-d6baf3ca-scenes.run_protected-api.json
-  - docs/validation/evidence/F-DOM-011/2026-10-04-V3-d6baf3ca-scenes.partial_failure-browser.json
-  - docs/validation/evidence/F-DOM-011/2026-10-04-V3-d6baf3ca-scenes.run_protected-browser.json
   findings: [API-01, API-02, API-08, VAL-07, VAL-11]
   scenarios: [scenes.run_profile_macro_preset, scenes.run_protected, scenes.partial_failure, scenes.run_unknown, scenes.disabled_output_state, scenes.profile_step_scaler_arc]
 - id: F-DOM-012
@@ -5429,8 +5411,6 @@ features:
   - docs/validation/evidence/F-DOM-011/2026-10-04-V3-7dbc4dc7-scenes.run_profile_macro_preset-browser.json
   - docs/validation/evidence/F-DOM-012/2026-10-04-V2-7dbc4dc7-scenes.run_rejected-api.json
   - docs/validation/evidence/F-DOM-012/2026-10-04-V2-7dbc4dc7-scenes.run_shortcut_and_macro-api.json
-  - docs/validation/evidence/F-DOM-012/2026-10-04-V2-d6baf3ca-scenes.macro_continues_after_refusal-api.json
-  - docs/validation/evidence/F-DOM-012/2026-10-04-V3-d6baf3ca-scenes.macro_continues_after_refusal-browser.json
   findings: [API-03, VAL-02]
   scenarios: [scenes.run_profile_macro_preset, scenes.run_shortcut_and_macro, scenes.run_rejected, scenes.macro_continues_after_refusal]
 - id: F-DOM-013
@@ -5447,10 +5427,6 @@ features:
   - docs/validation/evidence/F-DOM-013/2026-10-01-V2-97d0d2af-scenes.wait_edit-api.json
   - docs/validation/evidence/F-DOM-013/2026-10-01-V3-97d0d2af-scenes.wait_between_actions-browser.json
   - docs/validation/evidence/F-DOM-013/2026-10-01-V3-97d0d2af-scenes.wait_edit-browser.json
-  - docs/validation/evidence/F-DOM-013/2026-10-04-V2-d6baf3ca-scenes.wait_between_actions-api.json
-  - docs/validation/evidence/F-DOM-013/2026-10-04-V2-d6baf3ca-scenes.wait_edit-api.json
-  - docs/validation/evidence/F-DOM-013/2026-10-04-V3-d6baf3ca-scenes.wait_between_actions-browser.json
-  - docs/validation/evidence/F-DOM-013/2026-10-04-V3-d6baf3ca-scenes.wait_edit-browser.json
   findings: [API-01, API-08, VAL-09]
   scenarios: [scenes.wait_between_actions, scenes.wait_edit]
 - id: F-DOM-014
@@ -5488,8 +5464,6 @@ features:
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.run_protected-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.run_protected-browser.json
   - docs/validation/evidence/F-DOM-015/2026-10-04-V2-7dbc4dc7-scenes.run_needs_passcode-api.json
-  - docs/validation/evidence/F-DOM-011/2026-10-04-V2-d6baf3ca-scenes.run_protected-api.json
-  - docs/validation/evidence/F-DOM-011/2026-10-04-V3-d6baf3ca-scenes.run_protected-browser.json
   findings: [SEC-05, SEC-06]
   scenarios: [scenes.run_protected, scenes.run_needs_passcode]
 - id: F-DOM-016
@@ -5506,8 +5480,6 @@ features:
   - docs/validation/evidence/F-DOM-016/2026-10-01-V2-97d0d2af-scenes.conflicts_visible-api.json
   - docs/validation/evidence/F-DOM-016/2026-10-01-V3-97d0d2af-scenes.conflicts_visible-browser.json
   - docs/validation/evidence/F-DOM-016/2026-10-04-V2-7dbc4dc7-scenes.conflicts_scaler_arc-api.json
-  - docs/validation/evidence/F-DOM-016/2026-10-04-V2-d6baf3ca-scenes.conflicts_visible-api.json
-  - docs/validation/evidence/F-DOM-016/2026-10-04-V3-d6baf3ca-scenes.conflicts_visible-browser.json
   findings: [VAL-10]
   scenarios: [scenes.conflicts_visible, scenes.conflicts_scaler_arc]
 - id: F-DOM-017
@@ -5522,8 +5494,6 @@ features:
   evidence:
   - docs/validation/evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.partial_failure-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.partial_failure-browser.json
-  - docs/validation/evidence/F-DOM-011/2026-10-04-V2-d6baf3ca-scenes.partial_failure-api.json
-  - docs/validation/evidence/F-DOM-011/2026-10-04-V3-d6baf3ca-scenes.partial_failure-browser.json
   findings: [API-02]
   scenarios: [scenes.partial_failure]
 - id: F-DOM-018
@@ -5701,10 +5671,6 @@ features:
   - docs/validation/evidence/F-DOM-020/2026-10-01-V2-97d0d2af-macros.run_volume_up-api.json
   - docs/validation/evidence/F-DOM-020/2026-10-01-V2-97d0d2af-scenes.macro_stops_after_refusal-api.json
   - docs/validation/evidence/F-DOM-020/2026-10-01-V3-97d0d2af-scenes.macro_stops_after_refusal-browser.json
-  - docs/validation/evidence/F-DOM-012/2026-10-04-V2-d6baf3ca-scenes.macro_continues_after_refusal-api.json
-  - docs/validation/evidence/F-DOM-012/2026-10-04-V3-d6baf3ca-scenes.macro_continues_after_refusal-browser.json
-  - docs/validation/evidence/F-DOM-020/2026-10-04-V2-d6baf3ca-macros.run_rejected-api.json
-  - docs/validation/evidence/F-DOM-020/2026-10-04-V2-d6baf3ca-macros.run_volume_up-api.json
   findings: [VAL-02, BE-02, VAL-08]
   scenarios: [macros.run_volume_up, macros.run_rejected, scenes.macro_continues_after_refusal, scenes.macro_stops_after_refusal]
 - id: F-DOM-021
@@ -6093,7 +6059,6 @@ features:
   basis: 'V3: scenario scenes.run_protected with the browser client runs the locked scene from its dashboard card through the passcode prompt; tests/e2e/flows.spec.ts runs protected scene and profile cards and checks every card type renders on load (UI-01, UI-27 fixed in WP-E1). Visual diffs pending owner approval.'
   evidence:
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.run_protected-browser.json
-  - docs/validation/evidence/F-DOM-011/2026-10-04-V3-d6baf3ca-scenes.run_protected-browser.json
   findings: [UI-01, UI-27]
   scenarios: [scenes.run_protected]
 - id: F-UI-009
@@ -6143,7 +6108,6 @@ features:
   basis: 'V3: scenario profiles.recall_routing with the browser client (Profiles tab, Activate) and tests/e2e/flows.spec.ts ''the Profiles tab lists the hub profiles and recalls one'' (UI-27 fixed in WP-E1). Visual diffs pending owner approval.'
   evidence:
   - docs/validation/evidence/F-DOM-002/2026-10-01-V3-97d0d2af-profiles.recall_routing-browser.json
-  - docs/validation/evidence/F-DOM-002/2026-10-04-V3-d6baf3ca-profiles.recall_routing-browser.json
   findings: [UI-27]
   scenarios: [profiles.recall_routing]
 - id: F-UI-013
@@ -6167,10 +6131,7 @@ features:
   target: V3
   current: V3
   basis: 'V3: scenarios profiles.recall_with_passcode, recall_wrong_passcode and recall_needs_passcode with the browser client (prompt answered, wrong passcode reported, prompt cancelled: nothing sent) and tests/e2e/flows.spec.ts UI-01 tests (Settings drawer, dashboard cards). The prompt is still a native window.prompt() (UI-36, Phase 5).'
-  evidence:
-  - docs/validation/evidence/F-DOM-005/2026-10-04-V3-d6baf3ca-profiles.recall_needs_passcode-browser.json
-  - docs/validation/evidence/F-DOM-005/2026-10-04-V3-d6baf3ca-profiles.recall_with_passcode-browser.json
-  - docs/validation/evidence/F-DOM-005/2026-10-04-V3-d6baf3ca-profiles.recall_wrong_passcode-browser.json
+  evidence: []
   findings: [UI-01, UI-36]
   scenarios: [profiles.recall_needs_passcode, profiles.recall_with_passcode, profiles.recall_wrong_passcode]
 - id: F-UI-015
@@ -6333,7 +6294,6 @@ features:
   basis: 'V3: scenario scenes.partial_failure with the browser client checks the warning toast a partial run shows (VAL-11 fixed in WP-E1); tests/e2e/flows.spec.ts checks success, partial and error toasts for profiles and scenes. Other toasts and the confirmation dialogs: visual catalog only.'
   evidence:
   - docs/validation/evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.partial_failure-browser.json
-  - docs/validation/evidence/F-DOM-011/2026-10-04-V3-d6baf3ca-scenes.partial_failure-browser.json
   findings: [UI-32]
   scenarios: [scenes.partial_failure]
 - id: F-UI-028
