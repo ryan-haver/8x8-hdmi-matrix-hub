@@ -1012,60 +1012,57 @@ test.describe('WP-E1 UI flows', () => {
 
   // ----- UI-44 / UI-51 / UI-52 / UI-53 ------------------------------------------------
 
-  test('UI-44: aggregate_widget cards from the layout render their widget and it works', async ({ page, sim }) => {
+  // ----- UI-55 / UI-57 (owner decision 2026-10-09): widgets are pinned, never dashboard cards ----------
+
+  test('UI-55/UI-57: the hub drops stored widget cards; each widget shows once and the cards panel holds items only', async ({
+    page,
+  }, info) => {
+    const hub = await hubApi(`10.250.${info.workerIndex % 250}.12`);
+    // The seed layout (tests/e2e/fixtures/data/dashboard_layout.json) is a stored pre-UI-57 layout: the
+    // aggregate_widget cards every install was seeded with (cec-tray, routing-dashboard, quick-actions,
+    // orders 0-2), then seven item cards (orders 3-9). The hub drops the three when it loads the file and
+    // renumbers the rest from 0. (Other flows may append cards later in a run, so only the stored seven
+    // are checked by position.)
+    const layout = await (await hub.get('/api/dashboard/layout')).json();
+    expect(layout.data.cards.slice(0, 7).map((c: Json) => `${c.type}:${c.id}:${c.order}`)).toEqual([
+      'scene:scene_movienight01:0',
+      'scene:scene_kidslocked:1',
+      'preset:2:2',
+      'system_shortcut:builtin.mute_all_audio:3',
+      'system_shortcut:user.a1b2c3d4e5f6:4',
+      'profile:movie_night:5',
+      'macro:macro_tv_on:6',
+    ]);
+    expect(layout.data.cards.filter((c: Json) => c.type === 'aggregate_widget')).toEqual([]);
+    expect((await hub.post('/api/dashboard/cards', { data: { type: 'aggregate_widget', id: 'cec-tray' } })).status()).toBe(400);
+
     await preparePage(page);
     await openUi(page);
     await mainTab(page, 'dashboard');
-    // The seed layout stores { type: 'aggregate_widget', id } for routing-dashboard, quick-actions and cec-tray
-    // (the hub's legacy id for the widget the CEC tray registers as cec-remote). The Quick Actions widget was
-    // retired in Phase 8 (app.js never creates the drawer that registers it), so that card has nothing to
-    // render: UI-55, an owner decision.
-    const cards = page.locator('#dashboard-cards-grid .dashboard-card-widget');
-    await expect(cards).toHaveCount(2);
-    await expect(cards.locator('.dashboard-card-title')).toHaveText(['Routing', 'CEC Remote']);
-    expect(await page.evaluate(() => (window as any).dashboardManager.registeredWidgets.has('quick-actions'))).toBe(false); // eslint-disable-line @typescript-eslint/no-explicit-any
-    // The card keeps the stored id, so removing it removes that layout entry.
-    expect(await cards.evaluateAll((els) => els.map((e) => (e as HTMLElement).dataset.cardKey))).toEqual([
-      'aggregate_widget:routing-dashboard',
-      'aggregate_widget:cec-tray',
-    ]);
-    expect(await cards.locator('.dashboard-card-unpin').evaluateAll((els) => els.map((e) => (e as HTMLElement).dataset.id))).toEqual([
-      'routing-dashboard',
-      'cec-tray',
-    ]);
-    // Each card shows its widget's content, and the widget's buttons work in the card.
-    for (const [key, sel] of [
-      ['routing-dashboard', '.routing-btn'],
-      ['cec-tray', '.cec-widget-cmd-btn'],
-    ]) {
-      await expect(page.locator(`.dashboard-card-widget[data-card-key="aggregate_widget:${key}"] ${sel}`).first()).toBeVisible();
-    }
-    const routing = page.locator('.dashboard-card-widget[data-card-key="aggregate_widget:routing-dashboard"]');
-    await routing.locator('.routing-btn[data-input="3"]').click();
-    await expect.poll(async () => (await sim.state()).outputs.map((o: Json) => o.source)).toEqual([3, 3, 3, 3, 3, 3, 3, 3]);
-    // The card follows the routing like the pinned widget (refreshWidget updates both).
-    await expect(routing.locator('.routing-btn[data-input="3"]')).toHaveClass(/active/);
-    const cec = page.locator('.dashboard-card-widget[data-card-key="aggregate_widget:cec-tray"]');
-    const sent = page.waitForRequest((r) => r.method() === 'POST' && /\/api\/cec\/(input|output)\/\d\/power_on$/.test(new URL(r.url()).pathname));
-    await cec.locator('.cec-widget-cmd-btn.power-on').click();
-    await sent;
+    await expect(page.locator('#dashboard-cards-grid .dashboard-card').first()).toBeVisible();
+    // Only item cards in the panel; the pinned Routing widget once.
+    await expect(page.locator('#dashboard-cards-grid .dashboard-card-widget')).toHaveCount(0);
+    await expect(page.locator('#dashboard-widgets > .dashboard-widget[data-widget-id="routing-dashboard"]')).toHaveCount(1);
+    await expect(page.locator('#dashboard-widgets .routing-btn')).toHaveCount(8);
   });
 
-  test('UI-44: an aggregate_widget card stored with widget_id renders too', async ({ page }) => {
-    await preparePage(page);
-    await page.route('**/api/dashboard/layout', (route) =>
-      route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        json: { success: true, error: null, data: { version: 1, cards: [{ type: 'aggregate_widget', widget_id: 'routing-dashboard', order: 0 }] } },
-      }),
-    );
+  test('UI-57: a first visit pins every widget it registers, once each', async ({ page }) => {
+    // No saved dashboard config: a browser's first visit. The CEC tray registers its widget ~100 ms after the
+    // Routing drawer; before UI-57 the first registration saved the config and the CEC Remote was not pinned.
+    await preparePage(page, { storage: { orei_dashboard_config: null } });
     await openUi(page);
     await mainTab(page, 'dashboard');
-    const card = page.locator('#dashboard-cards-grid .dashboard-card-widget');
-    await expect(card).toHaveCount(1);
-    await expect(card).toHaveAttribute('data-card-key', 'aggregate_widget:routing-dashboard');
-    await expect(card.locator('.routing-btn')).toHaveCount(8);
+    const pinned = page.locator('#dashboard-widgets > .dashboard-widget');
+    await expect(pinned).toHaveCount(2);
+    expect(await pinned.evaluateAll((els) => els.map((e) => (e as HTMLElement).dataset.widgetId))).toEqual([
+      'routing-dashboard',
+      'cec-remote',
+    ]);
+    // One CEC Remote on the page: its control ids are unique again.
+    await expect(page.locator('[id="cec-widget-dpad"]')).toHaveCount(1);
+    await expect(page.locator('#dashboard-cards-grid .dashboard-card-widget')).toHaveCount(0);
+    const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('orei_dashboard_config') ?? '{}'));
+    expect(saved.pinnedWidgets).toEqual(['routing-dashboard', 'cec-remote']);
   });
 
   test('UI-51: a cec_command event never changes the output stream; it is kept apart as the last CEC power command', async ({
@@ -1193,6 +1190,62 @@ test.describe('WP-E1 UI flows', () => {
     await page.locator('#open-cec-config-btn').click();
     await expect(page.locator('#scene-cec-modal')).toBeVisible();
     await expectGlassClose(page, '#scene-cec-modal .modal-close-btn');
+  });
+
+  test('UI-56: the Settings drawer close button is a glass icon button like the other drawers\' close buttons', async ({ page }) => {
+    await preparePage(page);
+    await openUi(page);
+    await openSettingsDrawer(page, 'profiles');
+    const close = '#settings-drawer .drawer-header .drawer-close-btn';
+    await expectGlassClose(page, close);
+    // Same box, shape and colour as a glass icon button (btn-icon, e.g. the Routing drawer's close) in the same header.
+    const [own, reference] = await page.locator(close).evaluate((el) => {
+      const probe = document.createElement('button');
+      probe.className = 'btn-icon';
+      probe.innerHTML = el.innerHTML;
+      el.parentElement!.appendChild(probe);
+      const look = (b: Element) => {
+        const cs = getComputedStyle(b);
+        const r = b.getBoundingClientRect();
+        return { w: Math.round(r.width), h: Math.round(r.height), radius: cs.borderTopLeftRadius, color: cs.color, cursor: cs.cursor };
+      };
+      const out = [look(el), look(probe)];
+      probe.remove();
+      return out;
+    });
+    expect(own).toEqual(reference);
+  });
+
+  test('UI-58: a tall dialog stays between the fixed header and the bottom tab bar', async ({ page }) => {
+    await preparePage(page);
+    // The kiosk tablet (800 px high) and a phone: the scene editor with the seed's three steps and an override
+    // is taller than the space below the header on both.
+    for (const viewport of [{ width: 1340, height: 800 }, { width: 390, height: 844 }]) {
+      await page.setViewportSize(viewport);
+      await openUi(page);
+      await openSettingsDrawer(page, 'scenes');
+      await page.locator('#settings-drawer .edit-scene-btn[data-id="scene_movienight01"]').click();
+      await expect(page.locator('#scene-editor-modal')).toHaveClass(/open/);
+      await settle(page, 300);
+      const box = await page.evaluate(() => {
+        const rect = (sel: string) => document.querySelector(sel)!.getBoundingClientRect();
+        const tabs = rect('.mobile-tabs');
+        // The tab bar is at the bottom on phones; from 768 px it sits in the header.
+        const tabsAtBottom = getComputedStyle(document.querySelector('.mobile-tabs')!).position === 'fixed' && tabs.top > window.innerHeight / 2;
+        const dialog = rect('#scene-editor-modal .modal-content');
+        return {
+          headerBottom: rect('.header').bottom,
+          limit: tabsAtBottom ? tabs.top : window.innerHeight,
+          top: dialog.top,
+          bottom: dialog.bottom,
+          scrolls: document.querySelector('#scene-editor-modal .modal-content')!.scrollHeight > dialog.height,
+        };
+      });
+      const label = `${viewport.width}x${viewport.height}: ${JSON.stringify(box)}`;
+      expect(box.top, label).toBeGreaterThanOrEqual(box.headerBottom);
+      expect(box.bottom, label).toBeLessThanOrEqual(box.limit);
+      expect(box.scrolls, `${label}: the content is taller than the space, so it scrolls inside the dialog`).toBe(true);
+    }
   });
 
   test('UI-53: the scene editor fields, checkbox, steps and overrides are styled like the rest of the app', async ({ page }) => {

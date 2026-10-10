@@ -120,56 +120,5 @@ window.dashboardCardRenderers = {
             icon: scene.icon || '🎬', title: scene.name, action: 'Execute', locked: !!isProtected,
             meta: `${stepCount} step${stepCount !== 1 ? 's' : ''}`,
         });
-    },
-
-    /**
-     * Render an aggregate widget card (legacy compatibility)
-     *
-     * UI-44: the layout stores the widget in `id` (src/dashboard_layout.py);
-     * older clients wrote `widget_id`. Both are read. The hub's legacy widget
-     * id "cec-tray" names the widget the CEC tray registers as "cec-remote".
-     * The card keeps the stored id (card key, remove button), so removing it
-     * removes that layout entry. The widget's own header style is reused; the
-     * dashboard calls the widget's onMount on the card so its buttons work.
-     * @param {Object} card - Card data with type:'aggregate_widget' and id (or widget_id)
-     * @param {Object} context - Provides state and action helpers
-     */
-    aggregate_widget: function(card, context) {
-        const storedId = aggregateWidgetId(card);
-        const widgetId = registeredWidgetId(storedId);
-        const widget = context.dashboardManager.registeredWidgets.get(widgetId);
-        if (!widget) return ''; // Skip widgets this page does not have
-
-        const e = Helpers.escapeHtml;
-        return `
-            <div class="dashboard-card dashboard-card-widget dashboard-widget" data-card-key="${e(card.type)}:${e(storedId)}" data-widget-id="${e(widgetId)}">
-                <div class="dashboard-widget-header">
-                    <div class="dashboard-widget-title">
-                        <span class="dashboard-card-icon">${widget.icon}</span>
-                        <span class="dashboard-card-title">${e(widget.name)}</span>
-                    </div>
-                    <button class="dashboard-card-unpin dashboard-widget-unpin" data-type="aggregate_widget" data-id="${e(storedId)}" title="Remove from dashboard" aria-label="Remove from dashboard">
-                        ${UNPIN_ICON}
-                    </button>
-                </div>
-                <div class="dashboard-widget-content dashboard-card-body">
-                    ${widget.render()}
-                </div>
-            </div>
-        `;
     }
 };
-
-/** Widget id a layout card stores: `id` (the hub's layout) or `widget_id` (older clients). UI-44 */
-function aggregateWidgetId(card) {
-    return card.id ?? card.widget_id;
-}
-
-/** Hub legacy widget ids whose widget registers under another name (src/dashboard_layout.py LEGACY_AGGREGATE_WIDGETS). */
-const LEGACY_WIDGET_ALIASES = { 'cec-tray': 'cec-remote' };
-
-function registeredWidgetId(storedId) {
-    return LEGACY_WIDGET_ALIASES[storedId] ?? storedId;
-}
-
-window.dashboardCardIds = { aggregateWidgetId, registeredWidgetId };

@@ -5,8 +5,9 @@ Endpoints for managing the Dashboard tab's card grid (Phase 7).
 
 The dashboard layout is a single ordered list of cards. Each card has a
 ``type`` discriminator (``profile``, ``preset``, ``system_shortcut``,
-``macro``, or ``aggregate_widget``) and an ``id`` whose interpretation
-depends on the type (profile id, preset number 1-8, shortcut id, etc.).
+``macro`` or ``scene``) and an ``id`` whose interpretation depends on the
+type (profile id, preset number 1-8, shortcut id, etc.). The retired
+``aggregate_widget`` type is refused (UI-57).
 
 Routes (registered in app.py):
 

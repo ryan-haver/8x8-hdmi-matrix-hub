@@ -5,6 +5,7 @@ Tests cover: round-trip serialization, validation, card CRUD,
 deduplication, and order compaction.
 """
 
+import json
 import sys
 import tempfile
 from pathlib import Path
@@ -17,7 +18,6 @@ from dashboard_layout import (
     CARD_AGGREGATE_WIDGET,
     CARD_PRESET,
     CARD_PROFILE,
-    LEGACY_AGGREGATE_WIDGETS,
     DashboardCard,
     DashboardLayout,
     DashboardLayoutManager,
@@ -109,19 +109,93 @@ class TestDashboardLayoutDataclass:
 class TestDashboardLayoutManagerInit:
     """Tests for DashboardLayoutManager initialization and seeding."""
 
-    def test_seeds_three_legacy_aggregate_widgets_on_first_load(self):
-        """Manager seeds exactly the 3 legacy aggregate widgets when file is absent."""
+    def test_first_load_seeds_an_empty_layout(self):
+        """UI-55/UI-57: a new install starts with no cards (no widget cards)."""
         with tempfile.TemporaryDirectory() as tmpdir:
             mgr = DashboardLayoutManager(Path(tmpdir))
-            layout = mgr.get_layout()
-            assert len(layout.cards) == 3
+            assert mgr.list_cards() == []
+            assert json.loads((Path(tmpdir) / "dashboard_layout.json").read_text(encoding="utf-8")) == {
+                "version": 1,
+                "cards": [],
+            }
 
-    def test_legacy_widget_ids_are_present(self):
-        """The 3 seeded cards have the expected LEGACY_AGGREGATE_WIDGETS ids."""
+
+def _write_layout(data_dir: Path, cards: list[dict]) -> Path:
+    path = data_dir / "dashboard_layout.json"
+    path.write_text(json.dumps({"version": 1, "cards": cards}), encoding="utf-8")
+    return path
+
+
+# The layout every install seeded before UI-55/UI-57, with a user's profile card after it
+_LEGACY_SEEDED = [
+    {"type": "aggregate_widget", "id": "cec-tray", "order": 0},
+    {"type": "aggregate_widget", "id": "routing-dashboard", "order": 1},
+    {"type": "aggregate_widget", "id": "quick-actions", "order": 2},
+    {"type": "profile", "id": "movie_night", "order": 3},
+]
+
+
+class TestRetiredWidgetCards:
+    """UI-55/UI-57 (owner decision 2026-10-09): widgets live only as pinned widgets.
+
+    The dashboard layout holds items only. Stored widget cards (the retired
+    ``aggregate_widget`` type) are dropped once on load, and new ones are refused.
+    """
+
+    def test_stored_widget_cards_are_dropped_on_load(self):
+        """The three seeded widget cards go; the user's cards stay, in order, renumbered."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            _write_layout(Path(tmpdir), _LEGACY_SEEDED)
+            mgr = DashboardLayoutManager(Path(tmpdir))
+            assert [(c.type, c.id, c.order) for c in mgr.list_cards()] == [(CARD_PROFILE, "movie_night", 0)]
+
+    def test_the_migration_is_saved(self):
+        """The cleaned layout is written back, so the next load (and other readers) see it."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = _write_layout(Path(tmpdir), _LEGACY_SEEDED)
+            DashboardLayoutManager(Path(tmpdir))
+            assert json.loads(path.read_text(encoding="utf-8"))["cards"] == [
+                {"type": "profile", "id": "movie_night", "order": 0}
+            ]
+
+    def test_a_layout_without_widget_cards_is_not_rewritten(self):
+        """Loading a layout that needs no migration leaves the file untouched."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            original = json.dumps({"version": 1, "cards": [{"type": "preset", "id": "2", "order": 5}]})
+            path = Path(tmpdir) / "dashboard_layout.json"
+            path.write_text(original, encoding="utf-8")
+            DashboardLayoutManager(Path(tmpdir))
+            assert path.read_text(encoding="utf-8") == original
+
+    def test_widget_card_type_is_refused(self):
+        """add_card and from_dict reject the retired widget card type."""
         with tempfile.TemporaryDirectory() as tmpdir:
             mgr = DashboardLayoutManager(Path(tmpdir))
-            card_ids = {c.id for c in mgr.list_cards()}
-            assert card_ids == set(LEGACY_AGGREGATE_WIDGETS)
+            assert mgr.add_card(CARD_AGGREGATE_WIDGET, "routing-dashboard") is False
+            assert mgr.list_cards() == []
+        with pytest.raises(ValueError, match="Unknown card type"):
+            DashboardCard.from_dict({"type": CARD_AGGREGATE_WIDGET, "id": "cec-tray"})
+
+    def test_replace_layout_drops_widget_cards(self):
+        """A bulk replace containing a widget card keeps only the item cards."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            mgr = DashboardLayoutManager(Path(tmpdir))
+            mgr.replace_layout(
+                DashboardLayout(
+                    cards=[
+                        DashboardCard(type=CARD_AGGREGATE_WIDGET, id="routing-dashboard", order=0),
+                        DashboardCard(type=CARD_PRESET, id="1", order=1),
+                    ]
+                )
+            )
+            assert [(c.type, c.id) for c in mgr.list_cards()] == [(CARD_PRESET, "1")]
+
+
+def _manager_with_cards(tmpdir: str, *cards: tuple[str, str]) -> DashboardLayoutManager:
+    _write_layout(
+        Path(tmpdir), [{"type": card_type, "id": card_id, "order": i} for i, (card_type, card_id) in enumerate(cards)]
+    )
+    return DashboardLayoutManager(Path(tmpdir))
 
 
 class TestDashboardLayoutManagerQueries:
@@ -130,7 +204,7 @@ class TestDashboardLayoutManagerQueries:
     def test_get_layout_returns_full_layout(self):
         """get_layout() returns the complete DashboardLayout object."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            mgr = DashboardLayoutManager(Path(tmpdir))
+            mgr = _manager_with_cards(tmpdir, (CARD_PROFILE, "a"), (CARD_PRESET, "1"), (CARD_PROFILE, "b"))
             layout = mgr.get_layout()
             assert isinstance(layout, DashboardLayout)
             assert len(layout.cards) == 3
@@ -138,7 +212,7 @@ class TestDashboardLayoutManagerQueries:
     def test_list_cards_returns_cards_sorted_by_order(self):
         """list_cards() returns all cards sorted by order."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            mgr = DashboardLayoutManager(Path(tmpdir))
+            mgr = _manager_with_cards(tmpdir, (CARD_PROFILE, "a"), (CARD_PRESET, "1"), (CARD_PROFILE, "b"))
             cards = mgr.list_cards()
             assert len(cards) == 3
             orders = [c.order for c in cards]
@@ -147,10 +221,9 @@ class TestDashboardLayoutManagerQueries:
     def test_has_card_returns_true_for_existing(self):
         """has_card(type, id) returns True for a card that is present."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            mgr = DashboardLayoutManager(Path(tmpdir))
-            assert mgr.has_card(CARD_AGGREGATE_WIDGET, "cec-tray") is True
-            assert mgr.has_card(CARD_AGGREGATE_WIDGET, "routing-dashboard") is True
-            assert mgr.has_card(CARD_AGGREGATE_WIDGET, "quick-actions") is True
+            mgr = _manager_with_cards(tmpdir, (CARD_PROFILE, "a"), (CARD_PRESET, "1"))
+            assert mgr.has_card(CARD_PROFILE, "a") is True
+            assert mgr.has_card(CARD_PRESET, "1") is True
 
     def test_has_card_returns_false_for_missing(self):
         """has_card(type, id) returns False for a card that is not present."""
@@ -166,11 +239,11 @@ class TestDashboardLayoutManagerMutations:
     def test_add_card_appends_to_end(self):
         """add_card(type, id) adds a new card with the next order value."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            mgr = DashboardLayoutManager(Path(tmpdir))
+            mgr = _manager_with_cards(tmpdir, (CARD_PROFILE, "a"), (CARD_PRESET, "1"), (CARD_PROFILE, "b"))
             result = mgr.add_card(CARD_PROFILE, "my_profile")
             assert result is True
             assert mgr.has_card(CARD_PROFILE, "my_profile") is True
-            # Should be at the end (order = 3, since 0,1,2 were the legacy ones)
+            # Should be at the end (order = 3, after the three stored cards)
             cards = mgr.list_cards()
             new_card = next(c for c in cards if c.id == "my_profile")
             assert new_card.order == 3
@@ -194,11 +267,11 @@ class TestDashboardLayoutManagerMutations:
     def test_remove_card_deletes_and_compacts_order(self):
         """remove_card(type, id) removes the card and recompacts remaining order values."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            mgr = DashboardLayoutManager(Path(tmpdir))
-            # Remove the middle widget (routing-dashboard, order=1)
-            result = mgr.remove_card(CARD_AGGREGATE_WIDGET, "routing-dashboard")
+            mgr = _manager_with_cards(tmpdir, (CARD_PROFILE, "a"), (CARD_PRESET, "1"), (CARD_PROFILE, "b"))
+            # Remove the middle card (preset 1, order=1)
+            result = mgr.remove_card(CARD_PRESET, "1")
             assert result is True
-            assert mgr.has_card(CARD_AGGREGATE_WIDGET, "routing-dashboard") is False
+            assert mgr.has_card(CARD_PRESET, "1") is False
             # Remaining cards should have compacted orders 0 and 1
             cards = mgr.list_cards()
             orders = [c.order for c in cards]

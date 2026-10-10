@@ -392,24 +392,13 @@ export const CATALOG: CatalogEntry[] = [
   {
     name: 'dashboard/cards/all-types',
     page: 'ui',
-    description: 'Every dashboard card type (scene, locked scene, preset, built-in and user shortcut, profile, macro, aggregate widgets) once cards are rendered.',
+    description: 'Every dashboard card type (scene, locked scene, preset, built-in and user shortcut, profile, macro) once cards are rendered.',
     setup: async ({ page }) => {
       await tab(page, 'dashboard');
       await page.locator('.dashboard-cards-container').evaluate((el) => el.scrollIntoView({ block: 'start' }));
       await settle(page, 200);
     },
-    note: 'UI-44 (fixed): the aggregate_widget cards render their widget (Routing; CEC Remote, stored as the legacy id "cec-tray"); they rendered empty because the renderer read card.widget_id and the layout stores id. The seed Quick Actions card stays empty: its widget was retired in Phase 8 (UI-55, owner decision). Before WP-E1 (UI-27) the profile and macro cards also needed their data injected.',
-  },
-  {
-    name: 'dashboard/cards/widgets',
-    page: 'ui',
-    description: 'The aggregate_widget cards at the end of the Dashboard Cards panel (Routing, CEC Remote), scrolled into view.',
-    setup: async ({ page }) => {
-      await tab(page, 'dashboard');
-      await page.locator('#dashboard-cards-grid .dashboard-card-widget').first().evaluate((el) => el.scrollIntoView({ block: 'start' }));
-      await settle(page, 200);
-    },
-    note: 'UI-44 (new entry): before the fix these cards rendered nothing, so the panel ended after the macro card. The seed Quick Actions card has no widget to show (retired in Phase 8, UI-55).',
+    note: 'UI-55/UI-57 (owner decision 2026-10-09): widgets are pinned, never cards. The seed layout still stores the pre-UI-57 aggregate_widget cards (CEC Remote, Routing, Quick Actions) ahead of the item cards; the hub drops them on load. Before that (UI-44) they showed the pinned widgets a second time and Quick Actions empty, after the macro card. Before WP-E1 (UI-27) the profile and macro cards also needed their data injected.',
   },
   {
     name: 'dashboard/cards/empty',
@@ -436,6 +425,18 @@ export const CATALOG: CatalogEntry[] = [
       },
     },
     setup: async ({ page }) => tab(page, 'dashboard'),
+  },
+  {
+    name: 'dashboard/first-visit',
+    page: 'ui',
+    description: "Dashboard on a browser's first visit (no saved dashboard config): every registered widget pinned once, Routing then CEC Remote.",
+    prepare: { storage: { orei_dashboard_config: null } },
+    setup: async ({ page }) => {
+      await tab(page, 'dashboard');
+      await page.locator('#dashboard-widget-cec-remote').waitFor();
+      await settle(page, 200);
+    },
+    note: 'UI-57 (new entry, owner decision 2026-10-09): before the fix only Routing was pinned (the CEC tray registers its widget after the first registration saved the config); the CEC Remote showed only as a dashboard card.',
   },
   ...(['profiles', 'scenes', 'presets', 'shortcuts', 'macros'] as const).map(
     (t): CatalogEntry => ({
