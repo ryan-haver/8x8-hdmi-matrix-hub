@@ -4933,8 +4933,6 @@ features:
   - docs/validation/evidence/F-DOM-003/2026-10-04-V3-7dbc4dc7-profiles.recall_output_settings-browser.json
   - docs/validation/evidence/F-DOM-002/2026-10-04-V2-d6baf3ca-profiles.recall_disabled_output-api.json
   - docs/validation/evidence/F-DOM-002/2026-10-04-V3-d6baf3ca-profiles.recall_disabled_output-browser.json
-  - docs/validation/evidence/F-DOM-003/2026-10-04-V2-d6baf3ca-profiles.recall_scaler_arc-api.json
-  - docs/validation/evidence/F-DOM-003/2026-10-04-V3-d6baf3ca-profiles.recall_scaler_arc-browser.json
   findings: [VAL-01, API-22, API-29]
   scenarios: [profiles.recall_output_settings, profiles.recall_disabled_output, profiles.recall_scaler_arc, profiles.recall_leaves_unset_scaler_arc]
 - id: F-DOM-004
@@ -5407,7 +5405,6 @@ features:
   - docs/validation/evidence/F-DOM-011/2026-10-04-V2-d6baf3ca-scenes.disabled_output_state-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-04-V2-d6baf3ca-scenes.partial_failure-api.json
   - docs/validation/evidence/F-DOM-011/2026-10-04-V2-d6baf3ca-scenes.run_protected-api.json
-  - docs/validation/evidence/F-DOM-011/2026-10-04-V3-d6baf3ca-scenes.disabled_output_state-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-04-V3-d6baf3ca-scenes.partial_failure-browser.json
   - docs/validation/evidence/F-DOM-011/2026-10-04-V3-d6baf3ca-scenes.run_protected-browser.json
   findings: [API-01, API-02, API-08, VAL-07, VAL-11]
@@ -5475,8 +5472,6 @@ features:
   - docs/validation/evidence/F-DOM-011/2026-10-04-V3-7dbc4dc7-scenes.run_profile_macro_preset-browser.json
   - docs/validation/evidence/F-DOM-014/2026-10-04-V2-7dbc4dc7-scenes.override_leaves_scaler_arc-api.json
   - docs/validation/evidence/F-DOM-014/2026-10-04-V2-7dbc4dc7-scenes.override_leaves_setting-api.json
-  - docs/validation/evidence/F-DOM-014/2026-10-04-V2-d6baf3ca-scenes.enabled_override-api.json
-  - docs/validation/evidence/F-DOM-014/2026-10-04-V3-d6baf3ca-scenes.enabled_override-browser.json
   findings: [API-04]
   scenarios: [scenes.run_profile_macro_preset, scenes.override_leaves_setting, scenes.enabled_override, scenes.override_leaves_scaler_arc]
 - id: F-DOM-015
@@ -5710,10 +5705,6 @@ features:
   - docs/validation/evidence/F-DOM-012/2026-10-04-V3-d6baf3ca-scenes.macro_continues_after_refusal-browser.json
   - docs/validation/evidence/F-DOM-020/2026-10-04-V2-d6baf3ca-macros.run_rejected-api.json
   - docs/validation/evidence/F-DOM-020/2026-10-04-V2-d6baf3ca-macros.run_volume_up-api.json
-  - docs/validation/evidence/F-DOM-020/2026-10-04-V2-d6baf3ca-scenes.macro_stops_after_refusal-api.json
-  - docs/validation/evidence/F-DOM-020/2026-10-04-V3-d6baf3ca-macros.run_rejected-browser.json
-  - docs/validation/evidence/F-DOM-020/2026-10-04-V3-d6baf3ca-macros.run_volume_up-browser.json
-  - docs/validation/evidence/F-DOM-020/2026-10-04-V3-d6baf3ca-scenes.macro_stops_after_refusal-browser.json
   findings: [VAL-02, BE-02, VAL-08]
   scenarios: [macros.run_volume_up, macros.run_rejected, scenes.macro_continues_after_refusal, scenes.macro_stops_after_refusal]
 - id: F-DOM-021
