@@ -908,10 +908,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--space-4);
+    /* UI-58: centred in the space below the fixed header (z-index 300, above this layer),
+       so a tall dialog no longer slides its title under it */
+    padding: calc(var(--header-height) + var(--space-4)) var(--space-4) var(--space-4);
     opacity: 0;
     visibility: hidden;
     transition: all var(--transition-normal);
+}
+
+/* UI-58: phones also keep the dialog above the bottom tab bar */
+@media (max-width: 767px) {
+    .modal {
+        padding-bottom: calc(var(--tabs-height) + var(--space-4));
+    }
 }
 
 .modal[aria-hidden="false"] {
@@ -929,7 +938,8 @@
     position: relative;
     width: 100%;
     max-width: 500px;
-    max-height: 90vh;
+    /* UI-58: at most the space between the bars (was 90vh of the whole viewport) */
+    max-height: 100%;
     overflow-y: auto;
     background-color: var(--bg-secondary);
     border-radius: var(--radius-xl);

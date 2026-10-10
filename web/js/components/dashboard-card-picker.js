@@ -120,13 +120,7 @@ class DashboardCardPicker {
     getCurrentCardKeys() {
         const keys = new Set();
         const cards = window.state.dashboardCards || [];
-        cards.forEach(card => {
-            if (card.type === 'aggregate_widget') {
-                keys.add(`${card.type}:${window.dashboardCardIds.aggregateWidgetId(card)}`); // UI-44: id or widget_id
-            } else {
-                keys.add(`${card.type}:${card.id}`);
-            }
-        });
+        cards.forEach(card => keys.add(`${card.type}:${card.id}`));
         return keys;
     }
 

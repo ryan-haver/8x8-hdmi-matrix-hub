@@ -2298,15 +2298,36 @@ class TestDashboardLayoutAPI:
         return await aiohttp_client(app_with_data_dir)
 
     @pytest.mark.asyncio
-    async def test_get_layout_returns_3_legacy_widgets(self, client_with_data_dir):
-        """GET /api/dashboard/layout returns layout with 3 legacy aggregate widgets."""
+    async def test_get_layout_starts_empty(self, client_with_data_dir):
+        """GET /api/dashboard/layout on a new install returns no cards (UI-55/UI-57: no widget cards)."""
         resp = await client_with_data_dir.get("/api/dashboard/layout")
         assert resp.status == 200
         data = await resp.json()
         assert data["success"] is True
-        assert len(data["data"]["cards"]) == 3
-        ids = {c["id"] for c in data["data"]["cards"]}
-        assert ids == {"cec-tray", "routing-dashboard", "quick-actions"}
+        assert data["data"] == {"version": 1, "cards": []}
+
+    @pytest.mark.asyncio
+    async def test_widget_cards_are_refused(self, client_with_data_dir):
+        """UI-57 (owner decision 2026-10-09): widgets are pinned in the browser, not dashboard cards.
+
+        POST refuses the retired aggregate_widget type, and PUT drops it.
+        """
+        resp = await client_with_data_dir.post(
+            "/api/dashboard/cards", json={"type": "aggregate_widget", "id": "routing-dashboard"}
+        )
+        assert resp.status == 400
+        resp = await client_with_data_dir.put(
+            "/api/dashboard/layout",
+            json={
+                "cards": [
+                    {"type": "aggregate_widget", "id": "cec-tray", "order": 0},
+                    {"type": "preset", "id": "1", "order": 1},
+                ]
+            },
+        )
+        assert resp.status == 200
+        data = await resp.json()
+        assert data["data"]["cards"] == [{"type": "preset", "id": "1", "order": 0}]
 
     @pytest.mark.asyncio
     async def test_put_layout_replaces_layout(self, client_with_data_dir):
@@ -2388,15 +2409,13 @@ class TestDashboardLayoutAPI:
 
     @pytest.mark.asyncio
     async def test_remove_card(self, client_with_data_dir):
-        """DELETE /api/dashboard/cards?type=aggregate_widget&id=cec-tray removes the card."""
-        resp = await client_with_data_dir.delete(
-            "/api/dashboard/cards", params={"type": "aggregate_widget", "id": "cec-tray"}
-        )
+        """DELETE /api/dashboard/cards?type=preset&id=4 removes the card."""
+        await client_with_data_dir.post("/api/dashboard/cards", json={"type": "preset", "id": "4"})
+        resp = await client_with_data_dir.delete("/api/dashboard/cards", params={"type": "preset", "id": "4"})
         assert resp.status == 200
         # Verify it's gone from the layout
         data = await resp.json()
-        remaining_ids = {c["id"] for c in data["data"]["cards"]}
-        assert "cec-tray" not in remaining_ids
+        assert data["data"]["cards"] == []
 
     @pytest.mark.asyncio
     async def test_remove_card_not_found_returns_404(self, client_with_data_dir):

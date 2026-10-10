@@ -7,7 +7,10 @@ The Dashboard tab renders a grid of cards. Each card is one of:
 - **preset**: A hardware preset 1-8 (one-tap recall)
 - **system_shortcut**: A built-in quick-routing shortcut like "All → Out 1"
 - **macro**: A CEC macro (one-tap execute)
-- **aggregate_widget**: A built-in multi-item widget (CEC Tray, Routing, etc.)
+- **scene**: A scene (one-tap execute)
+
+Widgets (Routing, CEC Remote) are not cards: the web UI pins them per
+browser. The former ``aggregate_widget`` card type is retired (UI-55/UI-57).
 
 Storage
 -------
@@ -23,11 +26,11 @@ order*.
 Backwards Compatibility
 -----------------------
 
-On first load, the layout is seeded with the three legacy aggregate
-widgets (cec-tray, routing-dashboard, quick-actions) so existing users
-see the same dashboard as before. Adding/removing/reordering individual
-cards is then purely additive — the legacy widgets stay until the user
-removes them.
+A new install starts with an empty layout. Earlier versions seeded three
+``aggregate_widget`` cards (cec-tray, routing-dashboard, quick-actions);
+they showed the pinned Routing and CEC Remote widgets a second time and the
+retired Quick Actions widget as an empty card. Loading a stored layout drops
+them once and saves the result (UI-55/UI-57, owner decision 2026-10-09).
 """
 
 import json
@@ -57,13 +60,11 @@ VALID_CARD_TYPES = frozenset(
         CARD_SYSTEM_SHORTCUT,
         CARD_MACRO,
         CARD_SCENE,
-        CARD_AGGREGATE_WIDGET,
     }
 )
 
-# The three legacy aggregate widgets that shipped pre-Phase 7.
-# They remain in the default layout for backwards compatibility.
-LEGACY_AGGREGATE_WIDGETS = ("cec-tray", "routing-dashboard", "quick-actions")
+# Card types older versions stored; a stored layout drops them on load (UI-55/UI-57).
+RETIRED_CARD_TYPES = frozenset({CARD_AGGREGATE_WIDGET})
 
 
 @dataclass
@@ -73,7 +74,7 @@ class DashboardCard:
 
     :param type: One of :data:`VALID_CARD_TYPES`
     :param id: Identifier — profile id, preset number (1-8), shortcut id,
-                macro id, or aggregate-widget id (e.g. ``cec-tray``)
+                macro id, or scene id
     :param order: Position in the grid (lower = earlier; ties broken by id)
     """
 
@@ -144,12 +145,24 @@ class DashboardLayout:
 
 
 def _default_layout() -> DashboardLayout:
-    """The first-run layout: the three legacy aggregate widgets only."""
-    cards = [
-        DashboardCard(type=CARD_AGGREGATE_WIDGET, id=widget_id, order=i)
-        for i, widget_id in enumerate(LEGACY_AGGREGATE_WIDGETS)
-    ]
-    return DashboardLayout(cards=cards, version=1)
+    """The first-run layout: no cards."""
+    return DashboardLayout(cards=[], version=1)
+
+
+def _drop_retired_cards(payload: dict[str, Any]) -> bool:
+    """Remove cards of a retired type from a stored layout payload, in place.
+
+    :return: True if any card was removed
+    """
+    cards = payload.get("cards")
+    if not isinstance(cards, list):
+        return False
+    kept = [c for c in cards if not (isinstance(c, dict) and c.get("type") in RETIRED_CARD_TYPES)]
+    if len(kept) == len(cards):
+        return False
+    _LOG.info("Removing %d retired widget card(s) from the dashboard layout", len(cards) - len(kept))
+    payload["cards"] = kept
+    return True
 
 
 class DashboardLayoutManager:
@@ -157,8 +170,7 @@ class DashboardLayoutManager:
     CRUD + persistence for the dashboard layout.
 
     The manager owns a single ``DashboardLayout`` value. On first access
-    the default (legacy aggregate widgets) is seeded; subsequent loads
-    preserve user edits.
+    an empty layout is seeded; subsequent loads preserve user edits.
     """
 
     def __init__(self, data_dir: Path | None = None):
@@ -186,7 +198,12 @@ class DashboardLayoutManager:
             self._layout = _default_layout()
             self._save()
             return
+        migrated = isinstance(payload, dict) and _drop_retired_cards(payload)
         self._layout = DashboardLayout.from_dict(payload)
+        if migrated:
+            for i, c in enumerate(self._layout.cards):
+                c.order = i
+            self._save()
 
     def _save(self) -> bool:
         """Persist the current layout to disk atomically."""

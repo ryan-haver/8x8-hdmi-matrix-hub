@@ -29,7 +29,7 @@ class DashboardManager {
         // Default standard tabs in order
         this.defaultStandardTabs = ['tab:matrix', 'tab:inputs', 'tab:outputs', 'tab:scenes'];
 
-        // Phase 7: Card type renderers (profile, preset, system_shortcut, macro, aggregate_widget)
+        // Phase 7: Card type renderers (profile, preset, system_shortcut, macro, scene)
         this.cardRenderers = new Map();
         
         // Dashboard container element (desktop)
@@ -69,7 +69,10 @@ class DashboardManager {
         
         // Storage key
         this.storageKey = 'orei_dashboard_config';
-        
+
+        // True when this browser had no saved config at page load (set by loadConfig)
+        this.firstVisit = false;
+
         // Load saved configuration
         this.loadConfig();
     }
@@ -196,13 +199,14 @@ class DashboardManager {
             component: config.component || null
         });
         
-        // Auto-pin on first load, otherwise respect saved config
-        const hasNoSavedConfig = !localStorage.getItem(this.storageKey);
-        const shouldPin = hasNoSavedConfig || this.pinnedWidgets.has(config.id);
-        
+        // Auto-pin on a first visit, otherwise respect saved config. UI-57: decided
+        // once per page load; asking localStorage here skipped the CEC Remote, which
+        // registers after the first widget saved the config.
+        const shouldPin = this.firstVisit || this.pinnedWidgets.has(config.id);
+
         if (shouldPin) {
             // Add to pinned set if first load
-            if (hasNoSavedConfig && !this.pinnedWidgets.has(config.id)) {
+            if (this.firstVisit && !this.pinnedWidgets.has(config.id)) {
                 this.pinnedWidgets.add(config.id);
                 if (!this.widgetOrder.includes(config.id)) {
                     this.widgetOrder.push(config.id);
@@ -215,14 +219,6 @@ class DashboardManager {
         }
         // Update visibility after registering
         this.updateDashboardVisibility();
-
-        // UI-44: a layout card for this widget (aggregate_widget) skipped while the
-        // widget was not registered yet (the CEC tray registers late) renders now
-        const ids = window.dashboardCardIds;
-        if (ids && (window.state?.dashboardCards || []).some(card =>
-            card.type === 'aggregate_widget' && ids.registeredWidgetId(ids.aggregateWidgetId(card)) === config.id)) {
-            this.renderCards();
-        }
     }
 
     /**
@@ -791,14 +787,6 @@ class DashboardManager {
                 widget.onMount(document.getElementById(`dashboard-widget-${widgetId}`));
             }
         }
-
-        // UI-44: the same widget shown as a dashboard card (aggregate_widget) stays current too
-        this.container?.querySelectorAll(`.dashboard-card-widget[data-widget-id="${CSS.escape(widgetId)}"]`).forEach(cardEl => {
-            const body = cardEl.querySelector('.dashboard-card-body');
-            if (!body) return;
-            body.innerHTML = widget.render();
-            widget.onMount(cardEl);
-        });
     }
 
     /**
@@ -893,12 +881,8 @@ class DashboardManager {
 
         let html = '';
         cards.forEach(card => {
-            let renderer;
-            if (card.type === 'aggregate_widget') {
-                renderer = window.dashboardCardRenderers.aggregate_widget;
-            } else {
-                renderer = window.dashboardCardRenderers[card.type];
-            }
+            // UI-57: widgets are pinned, never cards; the hub no longer stores aggregate_widget cards
+            const renderer = window.dashboardCardRenderers[card.type];
 
             if (renderer) {
                 try {
@@ -911,11 +895,6 @@ class DashboardManager {
 
         grid.innerHTML = html;
         this.attachCardEventListeners(grid);
-
-        // UI-44: a widget card runs its widget's handlers, as a pinned widget does
-        grid.querySelectorAll('.dashboard-card-widget').forEach(cardEl => {
-            this.registeredWidgets.get(cardEl.dataset.widgetId)?.onMount(cardEl);
-        });
     }
 
     /**
@@ -1134,6 +1113,7 @@ class DashboardManager {
     loadConfig() {
         try {
             const saved = localStorage.getItem(this.storageKey);
+            this.firstVisit = !saved;
             if (saved) {
                 const config = JSON.parse(saved);
                 this.pinnedWidgets = new Set(config.pinnedWidgets || []);
