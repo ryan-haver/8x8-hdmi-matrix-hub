@@ -1,50 +1,45 @@
 {
   "schema_version": 1,
-  "features": ["F-DOM-005"],
-  "level": "V2",
-  "scenario": "profiles.recall_wrong_passcode",
-  "scenario_title": "A wrong passcode applies nothing and the UI says so",
-  "scenario_kind": "failure",
+  "features": [
+    "F-MTX-003",
+    "F-UI-005"
+  ],
+  "level": "V3",
+  "scenario": "presets.recall",
+  "scenario_title": "Recall preset 3; the matrix applies its stored routing",
+  "scenario_kind": "happy",
   "target": "sim",
-  "client": "api",
+  "client": "browser",
   "result": "pass",
   "gate": "ok",
   "blocked_reason": null,
   "commit": {
-    "sha": "d6baf3ca2574c1c780ab344cee49dfa93d93f26b",
-    "branch": "fix-backend-followups",
+    "sha": "b6dbfaca892606ab3f682ea4aee552e4564bb91f",
+    "branch": "hil-session-2-prep",
     "dirty_files": [],
-    "short": "d6baf3ca",
+    "short": "b6dbfaca",
     "dirty": false
   },
   "timestamp": {
-    "started": "2026-10-04T04:44:39.088Z",
-    "finished": "2026-10-04T04:44:39.254Z"
+    "started": "2026-10-10T06:20:00.425Z",
+    "finished": "2026-10-10T06:20:03.017Z"
   },
   "operator": "automation",
   "environment": {
     "target": "sim",
     "python": "3.12.10",
-    "platform": "Windows-11-10.0.26200-SP0",
+    "platform": "Windows-11-10.0.26300-SP0",
     "hub": {
-      "entry": "http://127.0.0.1:62438",
+      "entry": "http://127.0.0.1:18580",
       "version": "2.10.0",
       "api_version": "2.10.0",
-      "image_digest": "sha256:2103d7114eae70bb2b25dfae6ca843a3bedf716a4474dd1551276cc31200c528",
-      "env": {
-        "UC_ENABLED": "false",
-        "MATRIX_HOST": "domain-matrix",
-        "MATRIX_PORT": "8443",
-        "OREI_TELNET_PORT": "2323",
-        "OREI_USE_TELNET_CEC": "false",
-        "TRUST_PROXY_HEADERS": "true",
-        "TRUSTED_PROXY_IPS": "127.0.0.1,172.16.0.0/12,192.168.0.0/16",
-        "LOG_LEVEL": "INFO"
-      }
+      "image_digest": "sha256:2bd619278c98d61294ab82371f95113d05b659b352f970dc6dea08534226fd96",
+      "env": {}
     },
     "client": {
-      "name": "api",
-      "aiohttp": "3.13.3"
+      "name": "browser",
+      "browser": "chromium 153.0.8010.12",
+      "driver": "Playwright (@playwright/test, package-lock.json)"
     },
     "simulator": {
       "source_sha256": "23f7439ea94f5fcc",
@@ -57,36 +52,31 @@
   "procedure": [
     "reset the simulator to the seed state",
     "let the hub read the matrix (/ws get_status), so it is in sync before the action",
-    "action (api): profile_recall(profile_id='kids_gaming', passcode='9999')",
-    "  POST /api/profile/kids_gaming/recall {'passcode': '9999'} -> HTTP 403"
+    "action (browser): preset_recall(preset=3)",
+    "  open /ui and wait until the app has loaded its data",
+    "  open the Control Deck and the presets drawer",
+    "  expand preset 3",
+    "  click Recall on preset 3",
+    "  the page sent POST /api/preset/3 -> HTTP 200",
+    "  the page shows: success: Preset 3 recalled"
   ],
   "observations": {
     "requests": [
       {
         "method": "POST",
-        "path": "/api/profile/kids_gaming/recall",
-        "body": {
-          "passcode": "***"
-        },
-        "status": 403,
-        "response": {
-          "success": false,
-          "data": {
-            "error": "invalid_passcode",
-            "profile_id": "kids_gaming"
-          },
-          "error": null
-        },
-        "elapsed_ms": 1.9
+        "path": "/api/preset/3",
+        "body": "{}",
+        "status": 200,
+        "via": "page"
       }
     ],
-    "response_status": 403,
+    "response_status": 200,
     "hub_reads": [],
     "state_before": {
       "schema_version": 1,
       "auth": {
         "user": "Admin",
-        "password": "admin"
+        "password": "***"
       },
       "device": {
         "model": "BK-808",
@@ -292,52 +282,133 @@
       "presets": [
         {
           "name": "Apple TV",
-          "routing": [2, 2, 2, 2, 2, 2, 2, 2],
+          "routing": [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
           "saved": true
         },
         {
           "name": "Shield",
-          "routing": [5, 5, 5, 5, 5, 5, 5, 5],
+          "routing": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
           "saved": true
         },
         {
           "name": "PS5",
-          "routing": [6, 6, 6, 6, 6, 6, 6, 6],
+          "routing": [
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6
+          ],
           "saved": true
         },
         {
           "name": "Retro",
-          "routing": [7, 7, 1, 1, 1, 1, 1, 1],
+          "routing": [
+            7,
+            7,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
           "saved": true
         },
         {
           "name": "Preset 5",
-          "routing": [1, 2, 3, 4, 5, 6, 7, 8],
+          "routing": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
           "saved": true
         },
         {
           "name": "Preset 6",
-          "routing": [1, 2, 3, 4, 5, 6, 7, 8],
+          "routing": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
           "saved": true
         },
         {
           "name": "Preset 7",
-          "routing": [1, 2, 3, 4, 5, 6, 7, 8],
+          "routing": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
           "saved": true
         },
         {
           "name": "Preset 8",
-          "routing": [1, 2, 3, 4, 5, 6, 7, 8],
+          "routing": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
           "saved": true
         }
       ],
-      "routing": [2, 2, 1, 1, 5, 6, 1, 1]
+      "routing": [
+        2,
+        2,
+        1,
+        1,
+        5,
+        6,
+        1,
+        1
+      ]
     },
     "state_after": {
       "schema_version": 1,
       "auth": {
         "user": "Admin",
-        "password": "admin"
+        "password": "***"
       },
       "device": {
         "model": "BK-808",
@@ -425,7 +496,7 @@
       "outputs": [
         {
           "name": "TV",
-          "source": 2,
+          "source": 6,
           "connected": 1,
           "stream": 1,
           "hdcp": 3,
@@ -439,7 +510,7 @@
         },
         {
           "name": "Soundbar",
-          "source": 2,
+          "source": 6,
           "connected": 1,
           "stream": 1,
           "hdcp": 3,
@@ -453,7 +524,7 @@
         },
         {
           "name": "Output 3",
-          "source": 1,
+          "source": 6,
           "connected": 0,
           "stream": 1,
           "hdcp": 3,
@@ -467,7 +538,7 @@
         },
         {
           "name": "Output 4",
-          "source": 1,
+          "source": 6,
           "connected": 0,
           "stream": 1,
           "hdcp": 3,
@@ -481,7 +552,7 @@
         },
         {
           "name": "Output 5",
-          "source": 5,
+          "source": 6,
           "connected": 0,
           "stream": 1,
           "hdcp": 3,
@@ -509,7 +580,7 @@
         },
         {
           "name": "Output 7",
-          "source": 1,
+          "source": 6,
           "connected": 0,
           "stream": 1,
           "hdcp": 3,
@@ -523,7 +594,7 @@
         },
         {
           "name": "Output 8",
-          "source": 1,
+          "source": 6,
           "connected": 0,
           "stream": 1,
           "hdcp": 3,
@@ -543,52 +614,331 @@
       "presets": [
         {
           "name": "Apple TV",
-          "routing": [2, 2, 2, 2, 2, 2, 2, 2],
+          "routing": [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
           "saved": true
         },
         {
           "name": "Shield",
-          "routing": [5, 5, 5, 5, 5, 5, 5, 5],
+          "routing": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
           "saved": true
         },
         {
           "name": "PS5",
-          "routing": [6, 6, 6, 6, 6, 6, 6, 6],
+          "routing": [
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6
+          ],
           "saved": true
         },
         {
           "name": "Retro",
-          "routing": [7, 7, 1, 1, 1, 1, 1, 1],
+          "routing": [
+            7,
+            7,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
           "saved": true
         },
         {
           "name": "Preset 5",
-          "routing": [1, 2, 3, 4, 5, 6, 7, 8],
+          "routing": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
           "saved": true
         },
         {
           "name": "Preset 6",
-          "routing": [1, 2, 3, 4, 5, 6, 7, 8],
+          "routing": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
           "saved": true
         },
         {
           "name": "Preset 7",
-          "routing": [1, 2, 3, 4, 5, 6, 7, 8],
+          "routing": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
           "saved": true
         },
         {
           "name": "Preset 8",
-          "routing": [1, 2, 3, 4, 5, 6, 7, 8],
+          "routing": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
           "saved": true
         }
       ],
-      "routing": [2, 2, 1, 1, 5, 6, 1, 1]
+      "routing": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6
+      ]
     },
-    "state_diff": [],
-    "device_log": [],
+    "state_diff": [
+      {
+        "path": "outputs[0].source",
+        "before": 2,
+        "after": 6
+      },
+      {
+        "path": "outputs[1].source",
+        "before": 2,
+        "after": 6
+      },
+      {
+        "path": "outputs[2].source",
+        "before": 1,
+        "after": 6
+      },
+      {
+        "path": "outputs[3].source",
+        "before": 1,
+        "after": 6
+      },
+      {
+        "path": "outputs[4].source",
+        "before": 5,
+        "after": 6
+      },
+      {
+        "path": "outputs[6].source",
+        "before": 1,
+        "after": 6
+      },
+      {
+        "path": "outputs[7].source",
+        "before": 1,
+        "after": 6
+      },
+      {
+        "path": "routing[0]",
+        "before": 2,
+        "after": 6
+      },
+      {
+        "path": "routing[1]",
+        "before": 2,
+        "after": 6
+      },
+      {
+        "path": "routing[2]",
+        "before": 1,
+        "after": 6
+      },
+      {
+        "path": "routing[3]",
+        "before": 1,
+        "after": 6
+      },
+      {
+        "path": "routing[4]",
+        "before": 5,
+        "after": 6
+      },
+      {
+        "path": "routing[6]",
+        "before": 1,
+        "after": 6
+      },
+      {
+        "path": "routing[7]",
+        "before": 1,
+        "after": 6
+      }
+    ],
+    "device_log": [
+      {
+        "t": 1791613200.977,
+        "channel": "http",
+        "command": "get video status",
+        "recognised": true
+      },
+      {
+        "t": 1791613200.978,
+        "channel": "http",
+        "command": "get output status",
+        "recognised": true
+      },
+      {
+        "t": 1791613200.98,
+        "channel": "http",
+        "command": "get input status",
+        "recognised": true
+      },
+      {
+        "t": 1791613200.988,
+        "channel": "http",
+        "command": "get status",
+        "recognised": true
+      },
+      {
+        "t": 1791613200.99,
+        "channel": "http",
+        "command": "get video status",
+        "recognised": true
+      },
+      {
+        "t": 1791613201.085,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      },
+      {
+        "t": 1791613201.826,
+        "channel": "telnet",
+        "command": "r preset 1",
+        "recognised": true
+      },
+      {
+        "t": 1791613201.827,
+        "channel": "telnet",
+        "command": "r preset 2",
+        "recognised": true
+      },
+      {
+        "t": 1791613201.827,
+        "channel": "telnet",
+        "command": "r preset 3",
+        "recognised": true
+      },
+      {
+        "t": 1791613201.828,
+        "channel": "telnet",
+        "command": "r preset 4",
+        "recognised": true
+      },
+      {
+        "t": 1791613201.828,
+        "channel": "telnet",
+        "command": "r preset 5",
+        "recognised": true
+      },
+      {
+        "t": 1791613201.829,
+        "channel": "telnet",
+        "command": "r preset 6",
+        "recognised": true
+      },
+      {
+        "t": 1791613201.829,
+        "channel": "telnet",
+        "command": "r preset 7",
+        "recognised": true
+      },
+      {
+        "t": 1791613201.829,
+        "channel": "telnet",
+        "command": "r preset 8",
+        "recognised": true
+      },
+      {
+        "t": 1791613202.367,
+        "channel": "http",
+        "command": "preset set",
+        "client": "172.25.0.3",
+        "payload": {
+          "comhead": "preset set",
+          "language": 0,
+          "index": 3
+        },
+        "response": {
+          "comhead": "preset set",
+          "result": 1
+        },
+        "recognised": true,
+        "mutated": true,
+        "warnings": []
+      },
+      {
+        "t": 1791613202.381,
+        "channel": "http",
+        "command": "get video status",
+        "recognised": true
+      },
+      {
+        "t": 1791613202.519,
+        "channel": "http",
+        "command": "get output status",
+        "recognised": true
+      },
+      {
+        "t": 1791613202.52,
+        "channel": "http",
+        "command": "get input status",
+        "recognised": true
+      },
+      {
+        "t": 1791613202.582,
+        "channel": "telnet",
+        "command": "status",
+        "recognised": true
+      }
+    ],
     "ws_events": [
       {
-        "t_ms": -142,
+        "t_ms": -102,
         "event": "connected",
         "data": {
           "message": "Connected to the HDMI matrix hub",
@@ -603,7 +953,7 @@
         }
       },
       {
-        "t_ms": -142,
+        "t_ms": -101,
         "event": "status",
         "data": {
           "connected": true,
@@ -611,15 +961,24 @@
           "power": "on",
           "routing": {
             "1": 6,
-            "2": 2,
-            "3": 1,
-            "4": 1,
-            "5": 5,
+            "2": 6,
+            "3": 6,
+            "4": 6,
+            "5": 6,
             "6": 6,
-            "7": 1,
-            "8": 1
+            "7": 6,
+            "8": 6
           },
-          "outputs": [6, 2, 1, 1, 5, 6, 1, 1],
+          "outputs": [
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6
+          ],
           "input_names": {
             "1": "PS3",
             "2": "AppleTV",
@@ -837,6 +1196,66 @@
       },
       {
         "t_ms": -3,
+        "event": "routing_change",
+        "data": {
+          "output": 2,
+          "input": 2,
+          "input_name": "AppleTV",
+          "previous_input": 6
+        }
+      },
+      {
+        "t_ms": -3,
+        "event": "routing_change",
+        "data": {
+          "output": 3,
+          "input": 1,
+          "input_name": "PS3",
+          "previous_input": 6
+        }
+      },
+      {
+        "t_ms": -3,
+        "event": "routing_change",
+        "data": {
+          "output": 4,
+          "input": 1,
+          "input_name": "PS3",
+          "previous_input": 6
+        }
+      },
+      {
+        "t_ms": -3,
+        "event": "routing_change",
+        "data": {
+          "output": 5,
+          "input": 5,
+          "input_name": "Shield",
+          "previous_input": 6
+        }
+      },
+      {
+        "t_ms": -3,
+        "event": "routing_change",
+        "data": {
+          "output": 7,
+          "input": 1,
+          "input_name": "PS3",
+          "previous_input": 6
+        }
+      },
+      {
+        "t_ms": -3,
+        "event": "routing_change",
+        "data": {
+          "output": 8,
+          "input": 1,
+          "input_name": "PS3",
+          "previous_input": 6
+        }
+      },
+      {
+        "t_ms": -3,
         "event": "status",
         "data": {
           "connected": true,
@@ -852,7 +1271,16 @@
             "7": 1,
             "8": 1
           },
-          "outputs": [2, 2, 1, 1, 5, 6, 1, 1],
+          "outputs": [
+            2,
+            2,
+            1,
+            1,
+            5,
+            6,
+            1,
+            1
+          ],
           "input_names": {
             "1": "PS3",
             "2": "AppleTV",
@@ -1057,41 +1485,120 @@
             }
           ]
         }
+      },
+      {
+        "t_ms": 1833,
+        "event": "preset_recall",
+        "data": {
+          "preset": 3
+        }
+      },
+      {
+        "t_ms": 2048,
+        "event": "routing_change",
+        "data": {
+          "output": 1,
+          "input": 6,
+          "input_name": "PS5",
+          "previous_input": 2
+        }
+      },
+      {
+        "t_ms": 2048,
+        "event": "routing_change",
+        "data": {
+          "output": 2,
+          "input": 6,
+          "input_name": "PS5",
+          "previous_input": 2
+        }
+      },
+      {
+        "t_ms": 2048,
+        "event": "routing_change",
+        "data": {
+          "output": 3,
+          "input": 6,
+          "input_name": "PS5",
+          "previous_input": 1
+        }
+      },
+      {
+        "t_ms": 2048,
+        "event": "routing_change",
+        "data": {
+          "output": 4,
+          "input": 6,
+          "input_name": "PS5",
+          "previous_input": 1
+        }
+      },
+      {
+        "t_ms": 2048,
+        "event": "routing_change",
+        "data": {
+          "output": 5,
+          "input": 6,
+          "input_name": "PS5",
+          "previous_input": 5
+        }
+      },
+      {
+        "t_ms": 2048,
+        "event": "routing_change",
+        "data": {
+          "output": 7,
+          "input": 6,
+          "input_name": "PS5",
+          "previous_input": 1
+        }
+      },
+      {
+        "t_ms": 2048,
+        "event": "routing_change",
+        "data": {
+          "output": 8,
+          "input": 6,
+          "input_name": "PS5",
+          "previous_input": 1
+        }
       }
     ],
-    "screenshots": [],
-    "client_diagnostics": null,
+    "screenshots": [
+      "2026-10-10-V3-b6dbfaca-presets.recall-browser/after.png"
+    ],
+    "client_diagnostics": {
+      "page_api_requests": 23,
+      "page_errors": [],
+      "console_errors": [],
+      "toasts": [
+        "success: Preset 3 recalled"
+      ],
+      "dialogs": []
+    },
     "operator": [],
     "restore": null,
     "notes": []
   },
   "checks": [
     {
-      "description": "response HTTP 403 and body contains {'success': False, 'data': {'error': 'invalid_passcode'}}",
+      "description": "response HTTP 200",
       "result": "pass",
-      "detail": "HTTP 403; body {\"success\": false, \"data\": {\"error\": \"invalid_passcode\", \"profile_id\": \"kids_gaming\"}, \"error\": null}",
+      "detail": "HTTP 200; body (browser)",
       "finding": null,
       "linked_finding": null,
       "note": null
     },
     {
-      "description": "client shows toast.error == 'Invalid passcode'",
-      "result": "n/a",
-      "detail": "not checked for client 'api'",
-      "finding": null,
-      "linked_finding": null,
-      "note": null
-    },
-    {
-      "description": "no write command reached the device",
+      "description": "device routing == the routing preset 3 stores on the device",
       "result": "pass",
-      "detail": "write commands seen: []",
+      "detail": "routing = the slot's stored routing [6, 6, 6, 6, 6, 6, 6, 6]",
       "finding": null,
       "linked_finding": null,
       "note": null
     },
     {
-      "description": "device otherwise unchanged",
+      "description": "device otherwise unchanged (allowed: outputs[*].source, routing)",
       "result": "pass",
       "detail": "no other changes",
       "finding": null,
@@ -1099,9 +1606,25 @@
       "note": null
     },
     {
+      "description": "device received http 'preset set' with {'index': 3} exactly 1x",
+      "result": "pass",
+      "detail": "1 matching; http commands seen: [('get video status', {'comhead': 'get video status', 'language': 0}), ('get output status', {'comhead': 'get output status', 'language': 0}), ('get input status', {'comhead': 'get input status', 'language': 0}), ('get status', {'comhead': 'get status', 'language': 0}), ('get video status', {'comhead': 'get video status', 'language': 0}), ('preset set', {'comhead': 'preset set', 'language': 0, 'index': 3}), ('get video status', {'comhead': 'get video status', 'language': 0}), ('get output status', {'comhead': 'get output status', 'language': 0}), ('get input status', {'comhead': 'get input status', 'language': 0})]",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "WebSocket event 'preset_recall' with {'preset': 3}",
+      "result": "pass",
+      "detail": "events after the action: ['preset_recall', 'routing_change', 'routing_change', 'routing_change', 'routing_change', 'routing_change', 'routing_change', 'routing_change']",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
       "description": "every WebSocket message follows docs/api/websocket.schema.json",
       "result": "pass",
-      "detail": "4 message(s) checked",
+      "detail": "18 message(s) checked",
       "finding": null,
       "linked_finding": null,
       "note": null
@@ -1118,21 +1641,14 @@
     "src/rest_api/websocket.py",
     "src/rest_api/events.py",
     "docs/api/websocket.schema.json",
-    "src/rest_api/profiles.py",
-    "src/profile_execution.py",
-    "src/config.py",
-    "src/cec_macros.py",
-    "src/password.py",
+    "src/rest_api/control.py",
     "web/index.html",
     "web/js/app.js",
     "web/js/api.js",
     "web/js/state.js",
     "web/js/websocket.js",
-    "web/js/utils/run-action.js",
-    "web/js/components/toast.js",
-    "web/js/components/scenes-panel.js",
-    "web/js/components/settings-drawer.js",
-    "web/js/utils/dashboard-manager.js",
-    "web/js/components/dashboard-cards/renderers.js"
+    "web/js/components/side-nav-drawer.js",
+    "web/js/components/routing-drawer.js",
+    "web/js/components/presets-drawer.js"
   ]
 }
