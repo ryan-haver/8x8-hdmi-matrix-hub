@@ -962,7 +962,7 @@ features:
   - docs/validation/evidence/F-MTX-030/2026-10-04-V2-7dbc4dc7-preset_read.device_slot_7-api.json
   - docs/validation/evidence/F-MTX-030/2026-10-04-V2-7dbc4dc7-preset_read.device_slot_8-api.json
   findings: [HIL-01, BE-36]
-  scenarios: [preset_read.device_slot_1, preset_read.device_slot_2, preset_read.device_slot_3, preset_read.device_slot_4, preset_read.device_slot_5, preset_read.device_slot_6, preset_read.device_slot_7, preset_read.device_slot_8]
+  scenarios: [preset_read.device_slot_1, preset_read.device_slot_2, preset_read.device_slot_3, preset_read.device_slot_4, preset_read.device_slot_5, preset_read.device_slot_6, preset_read.device_slot_7, preset_read.device_slot_8, preset_read.catalog_matches_device]
 - id: F-MTX-031
   area: matrix
   title: Notice changes made outside the hub (front panel, cable plugged, source on/off)

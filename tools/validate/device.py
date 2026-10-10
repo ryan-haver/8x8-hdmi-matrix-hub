@@ -96,6 +96,12 @@ class SimDevice:
         await self._call("DELETE", "/_sim/faults")
         await self._call("DELETE", "/_sim/log")
 
+    async def preset_slots(self) -> dict[int, list[int] | None]:
+        """Slot N -> the 8 inputs it stores, or None for an empty slot (simulator ground truth)."""
+        presets = (await self.state()).get("presets") or []
+        return {n: (list(p["routing"]) if p.get("saved", True) else None)
+                for n, p in enumerate(presets[:8], start=1)}
+
     async def set_faults(self, faults: dict[str, Any]) -> None:
         await self._call("POST", "/_sim/faults", faults)
 
@@ -141,10 +147,10 @@ class HardwareDevice:
     has_log = False
 
     def __init__(self, host: str, port: int = 443, *, https: bool = True, user: str = "Admin",
-                 password: str = "admin", verify_tls: bool = False) -> None:
+                 password: str = "admin", verify_tls: bool = False, telnet_port: int = 23) -> None:
         scheme = "https" if https else "http"
         self.url = f"{scheme}://{host}:{port}/cgi-bin/instr"
-        self.host, self.port = host, port
+        self.host, self.port, self.telnet_port = host, port, telnet_port
         self._user, self._password = user, password
         self._ssl: ssl.SSLContext | bool = ssl.create_default_context() if verify_tls else False
         self._session: aiohttp.ClientSession | None = None
@@ -247,6 +253,32 @@ class HardwareDevice:
                 "presets": [{"name": n} for n in (video.get("allname") or [])],
             }
         )
+
+    async def preset_slots(self) -> dict[int, list[int] | None]:
+        """Slot N -> the 8 inputs it stores, or None for an empty slot, read over Telnet ``r preset N``.
+
+        The firmware answers no HTTP preset read (HIL-01), so the slots are read on a Telnet
+        session of our own (a second concurrent session works, HIL session 1), still without the
+        hub. Uses the HIL capture tool's client and parser, both proven on the device.
+        """
+        from tools.hil.capture.snapshot import parse_preset
+        from tools.hil.capture.transport import TelnetRecorder
+
+        tn = TelnetRecorder(self.host, self.telnet_port)
+        banner = await tn.connect()
+        if banner.get("error"):
+            raise RuntimeError(f"device Telnet {self.host}:{self.telnet_port}: {banner['error']}")
+        try:
+            slots: dict[int, list[int] | None] = {}
+            for n in range(1, 9):
+                exchange = await tn.command(f"r preset {n}")
+                parsed = parse_preset((exchange.get("response") or {}).get("text"))
+                if parsed is None:
+                    raise RuntimeError(f"no complete 'r preset {n}' answer from the device: {exchange.get('error')}")
+                slots[n] = parsed["routing"] if parsed["saved"] else None
+            return slots
+        finally:
+            await tn.close()
 
     # ------------------------------------------------------------ restore
 
