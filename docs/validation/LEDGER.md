@@ -1,7 +1,7 @@
 # Feature ledger
 
 > **Generated** by `python -m tools.validate ledger` — do not edit by hand. Registry: [`features.yaml`](features.yaml) · Plan: [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md) · How to add evidence: [`README.md`](README.md).
-> Commit `b6dbfaca`
+> Commit `56fb9eaf`
 
 **Level** = highest level with fresh passing evidence, else the recorded baseline (the registry's `current`), capped at V1 while an open critical/high finding is linked. **Recorded** = the registry baseline. **Fresh** = evidence commit not older than the last change to the scenario's `covers` paths.
 
@@ -130,7 +130,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-API-025 | Dashboard layout routes | V2 | **V2** | V1 | fresh | [dashboard.widget_card_refused·api·pass](evidence/F-DOM-031/2026-10-10-V2-b3aced1b-dashboard.widget_card_refused-api.json)<br>[dashboard.widget_cards_dropped·api·pass](evidence/F-DOM-031/2026-10-10-V2-b3aced1b-dashboard.widget_cards_dropped-api.json) | API-20(M) |
 | F-API-026 | Themes and UI preference routes | V2 | **V2** | V1 | fresh | [contracts.themes·api·pass](evidence/F-API-026/2026-10-04-V2-7dbc4dc7-contracts.themes-api.json)<br>[contracts.ui_preferences·api·pass](evidence/F-API-026/2026-10-04-V2-7dbc4dc7-contracts.ui_preferences-api.json)<br>[writes.themes·api·pass](evidence/F-API-026/2026-10-04-V2-7dbc4dc7-writes.themes-api.json)<br>[writes.themes_reset·api·pass](evidence/F-API-026/2026-10-04-V2-7dbc4dc7-writes.themes_reset-api.json) | — |
 | F-API-027 | Settings routes (matrix host, test connection) | V2 | V1 (capped) | V1 | fresh | [contracts.settings·api·pass](evidence/F-API-027/2026-10-04-V2-7dbc4dc7-contracts.settings-api.json)<br>[writes.connection_test·api·pass](evidence/F-API-027/2026-10-04-V2-7dbc4dc7-writes.connection_test-api.json) | SEC-03(C), TST-03(M) |
-| F-API-028 | Flic integration routes | V2 | **V2** | V0 | fresh | [contracts.flic_buttons·api·pass](evidence/F-API-028/2026-10-04-V2-7dbc4dc7-contracts.flic_buttons-api.json)<br>[writes.flic_register·api·pass](evidence/F-API-028/2026-10-04-V2-7dbc4dc7-writes.flic_register-api.json) | PER-02(M), API-15(L), TST-03(M) |
+| F-API-028 | Flic integration routes | V2 | **V2** | V0 | fresh | [contracts.flic_buttons·api·pass](evidence/F-API-028/2026-10-04-V2-7dbc4dc7-contracts.flic_buttons-api.json)<br>[writes.flic_register·api·pass](evidence/F-API-028/2026-10-04-V2-7dbc4dc7-writes.flic_register-api.json) | API-15(L), TST-03(M) |
 | F-API-029 | Web UI, kiosk and static asset routes | V3 | **V3** | V3 | — | — | SEC-13(L) |
 | F-API-030 | Rate limiting (60 requests / 10 s per client) | V2 | V1 | V1 | — | — | SEC-12(L), VAL-06(L) |
 | F-API-031 | CORS headers | V2 | V1 (capped) | V1 | — | — | SEC-02(C) |
@@ -302,7 +302,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-FLIC-004 | Flic Twist cycles an output through its inputs | V3 | V1 | V1 | — | — | — |
 | F-FLIC-005 | Flic Twist controls TV volume and mute over CEC | V3 | V1 | V1 | — | — | BE-14(M) |
 | F-FLIC-006 | Button recalls a profile or runs a macro | V3 | V1 | V1 | — | — | — |
-| F-FLIC-007 | Register Flic buttons with the hub (button registry) | V3 | V0 | V0 | — | — | PER-02(M), API-15(L) |
+| F-FLIC-007 | Register Flic buttons with the hub (button registry) | V3 | V0 | V0 | — | — | API-15(L) |
 | F-FLIC-008 | Button switches every output to input N (POST /api/input/{n}) | V3 | V0 | V0 | — | — | DOC-03(—) |
 | F-FLIC-009 | Flic Hub SDK JavaScript module templates | V3 | V0 | V0 | — | — | — |
 | F-FLIC-010 | Generate Flic request URLs in the web UI | V3 | V1 | V1 | — | — | — |
@@ -326,9 +326,9 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-OPS-013 | Telnet options (OREI_TELNET_PORT, OREI_USE_TELNET_CEC) | V4 | V1 | V1 | — | — | — |
 | F-OPS-014 | Cache and retry tuning (OREI_STATUS_CACHE_TTL, OREI_CEC_CACHE_TTL, OREI_*RETR*) | V4 | V1 | V1 | — | — | — |
 | F-OPS-015 | Hub data persists across restarts (DATA_DIR) | V4 | V3 | V3 | fresh | [deploy.image_core·api·pass](evidence/F-OPS-001/2026-10-03-V3-b30436af-deploy.image_core-api.json)<br>[deploy.image_uc·uc·pass](evidence/F-OPS-001/2026-10-03-V3-b30436af-deploy.image_uc-uc.json) | DEP-07(M) |
-| F-OPS-016 | Writes are atomic and safe under concurrency | V4 | V1 | V1 | — | — | PER-01(M), PER-02(M), TST-08(M) |
-| F-OPS-017 | Migrate legacy data files (scenes -> profiles) | V4 | V1 | V1 | — | — | PER-03(M), API-12(M), PER-04(M) |
-| F-OPS-018 | Only one hub instance runs (process lock) | V4 | V1 | V1 | — | — | BE-18(M) |
+| F-OPS-016 | Writes are atomic and safe under concurrency | V4 | V1 | V1 | — | — | — |
+| F-OPS-017 | Migrate legacy data files (scenes -> profiles) | V4 | V1 | V1 | — | — | API-12(M), PER-04(M) |
+| F-OPS-018 | Only one hub instance runs (process lock) | V4 | V1 | V1 | — | — | — |
 | F-OPS-019 | One consistent version everywhere | V4 | V1 | V1 | — | — | DEP-06(M) |
 | F-OPS-020 | Multi-arch images (amd64 + arm64) | V4 | V0 | V0 | — | — | — |
 
