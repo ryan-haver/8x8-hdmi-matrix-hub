@@ -200,9 +200,9 @@ def plan_restore(current: Snapshot, target: Snapshot, lcd_modes: dict[str, int] 
                 act("preset_saved", i, True, False, {"comhead": "preset clear", "language": 0, "index": i},
                     "the slot was empty before")
     if current.preset_names is not None and target.preset_names is not None:
-        for i, (x, y) in enumerate(zip(current.preset_names, target.preset_names, strict=False), 1):
-            if x != y:
-                act("preset_names", i, x, y, cmd.preset_name(i, y))
+        for i, (cur_name, tgt_name) in enumerate(zip(current.preset_names, target.preset_names, strict=False), 1):
+            if cur_name != tgt_name:
+                act("preset_names", i, cur_name, tgt_name, cmd.preset_name(i, tgt_name))
 
     # 3. live routing
     if live is not None and target.routing is not None:
@@ -214,9 +214,9 @@ def plan_restore(current: Snapshot, target: Snapshot, lcd_modes: dict[str, int] 
     for name, builder in (("input_names", cmd.input_name), ("output_names", cmd.output_name)):
         cur, tgt = getattr(current, name), getattr(target, name)
         if cur is not None and tgt is not None:
-            for port, (x, y) in enumerate(zip(cur, tgt, strict=False), 1):
-                if x != y:
-                    act(name, port, x, y, builder(port, y))
+            for port, (cur_name, tgt_name) in enumerate(zip(cur, tgt, strict=False), 1):
+                if cur_name != tgt_name:
+                    act(name, port, cur_name, tgt_name, builder(port, tgt_name))
 
     # 5. per-output settings (device codes)
     for setting in cmd.OUTPUT_SETTINGS:

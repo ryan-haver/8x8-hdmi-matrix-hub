@@ -9,9 +9,13 @@ import pytest
 from aiohttp import web
 from aiohttp.test_utils import TestServer
 
+from src.driver import check_port_available
 from tools.validate.clients.api import ApiClient
-from tools.validate.clients.base import HubInfo
-from tools.validate.runner import WsObserver
+from tools.validate.clients.base import ActionResult, HubInfo
+from tools.validate.device import SimDevice
+from tools.validate.model import Action, CommandGap, Scenario
+from tools.validate.runner import Runner, RunOptions, WsObserver
+from tools.validate.stack import HubProcess, free_port
 
 
 class _FakeWs:
@@ -89,3 +93,114 @@ def test_since_refuses_a_wall_clock_mark():
     with pytest.raises(ValueError, match="WsObserver.now"):
         ws.since(time.time())
     assert ws.since(ws.now()) == []
+
+
+class _FakeSimDevice(SimDevice):
+    def __init__(self, entries: list[dict[str, Any]]) -> None:
+        super().__init__("http://unused")
+        self._entries = entries
+
+    async def log(self, limit: int = 500) -> list[dict[str, Any]]:
+        return self._entries[:limit]
+
+
+async def test_command_gap_tolerates_windows_timer_quantum_and_rejects_short_waits():
+    """Windows asyncio.sleep(0.5) wakes on 15.625 ms GetTickCount64 ticks and simulator logs round to 1 ms,
+    so a genuine 0.5 s wait can measure 0.495-0.499 s; shorter or missing waits still fail."""
+    runner = Runner(RunOptions())
+    sc = Scenario(
+        id="t.gap",
+        title="t",
+        features=("F-DOM-013",),
+        action=Action("route"),
+        expect=(),
+        covers=("src/rest_api/scenes.py",),
+    )
+    client = ApiClient()
+    ws = WsObserver("ws://unused/ws", "10.0.0.1")
+    gap = CommandGap("set beep", "video switch", 0.5)
+
+    for t1, t2, expected in (
+        (1000.001, 1000.500, "pass"),  # 0.499 s (1 ms rounding / localhost transit)
+        (1000.005, 1000.500, "pass"),  # 0.495 s (Windows 15.625 ms timer tick seen in CI)
+        (1000.050, 1000.500, "fail"),  # 0.450 s (genuinely short wait)
+    ):
+        runner.device = _FakeSimDevice([
+            {"t": t1, "channel": "http", "command": "set beep"},
+            {"t": t2, "channel": "http", "command": "video switch"},
+        ])
+        verdict = await runner._check(gap, sc, client, ActionResult("route", ok=True), {}, 0.0, ws, client, 0, [])
+        assert verdict["result"] == expected, (t1, t2, verdict)
+
+    runner.device = _FakeSimDevice([{"t": 1000.0, "channel": "http", "command": "set beep"}])
+    missing = await runner._check(gap, sc, client, ActionResult("route", ok=True), {}, 0.0, ws, client, 0, [])
+    assert missing["result"] == "fail"
+
+
+def test_free_port_skips_ports_bound_on_all_interfaces(monkeypatch):
+    """TST-18: on Windows a socket bound to 0.0.0.0:port still lets bind(('127.0.0.1', port)) succeed,
+    and then driver.py's check_port_available(('0.0.0.0', port)) fails with WinError 10013."""
+    import socket as _socket
+
+    with _socket.socket(_socket.AF_INET, _socket.SOCK_STREAM) as holder:
+        holder.bind(("0.0.0.0", 0))
+        held_port = int(holder.getsockname()[1])
+
+        real_socket = _socket.socket
+        first_call = True
+
+        class _ProbeSocket(real_socket):
+            def bind(self, address):  # type: ignore[override]
+                nonlocal first_call
+                host, port = address
+                if first_call and port == 0:
+                    first_call = False
+                    return super().bind((host, held_port))
+                return super().bind(address)
+
+        monkeypatch.setattr("tools.validate.stack.socket.socket", _ProbeSocket)
+        picked = free_port("127.0.0.1")
+        assert picked != held_port
+        assert check_port_available(picked) is True
+
+
+def test_hub_process_retries_when_an_auto_picked_port_is_taken_before_bind(tmp_path, monkeypatch):
+    """TST-18: if another process grabs the ephemeral port between free_port() and the hub's bind,
+    HubProcess retries on a fresh port instead of failing the test."""
+    import socket as _socket
+
+    holder = _socket.socket(_socket.AF_INET, _socket.SOCK_STREAM)
+    holder.bind(("0.0.0.0", 0))
+    stolen_port = int(holder.getsockname()[1])
+
+    real_free_port = free_port
+    calls = 0
+
+    def _steal_first_uc_port(host: str = "127.0.0.1") -> int:
+        nonlocal calls
+        calls += 1
+        if calls == 2:  # 1st call = api_port, 2nd call = uc_port
+            return stolen_port
+        return real_free_port(host)
+
+    monkeypatch.setattr("tools.validate.stack.free_port", _steal_first_uc_port)
+    hub = HubProcess(
+        matrix_host="127.0.0.1",
+        matrix_port=real_free_port(),
+        telnet_port=real_free_port(),
+        log_dir=tmp_path / "hub-logs",
+        mode="uc",
+        uc_restore=False,
+        stop_timeout=3,
+        extra_env={"MATRIX_HOST": ""},
+    )
+    try:
+        hub.launch()
+        health = hub.wait_ready(timeout=25)
+        assert health
+        assert hub.uc_port != stolen_port
+        assert hub.starts >= 2
+    finally:
+        hub.stop()
+        holder.close()
+

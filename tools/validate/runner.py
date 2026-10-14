@@ -836,8 +836,10 @@ class Runner:
                 elif isinstance(exp, CommandGap):
                     first = next((e for e in entries if e.get("command") == exp.before), None)
                     last = next((e for e in entries if e.get("command") == exp.after), None)
-                    gap = last["t"] - first["t"] if first and last else None
-                    verdict = "pass" if gap is not None and gap >= exp.seconds else "fail"
+                    gap = round(last["t"] - first["t"], 3) if first and last else None
+                    # Windows asyncio.sleep wakes on 15.625 ms GetTickCount64 ticks and the simulator
+                    # rounds entry["t"] to 1 ms; allow one timer tick + rounding (20 ms).
+                    verdict = "pass" if gap is not None and gap + 0.020 >= exp.seconds else "fail"
                     detail = f"device command gap = {gap!r}s"
                 elif isinstance(exp, NoCommand):
                     hits = [e for e in entries if e.get("channel") in ("http", "telnet")
@@ -908,9 +910,9 @@ class Runner:
                             "detail": f"client '{client.name}' has no view of {exp.key}", "finding": None,
                             "linked_finding": exp.finding, "note": exp.note or None}
                 t0 = time.monotonic()
-                seen = await self._client_state(client, exp.key, exp.equals, exp.timeout)
-                verdict = "pass" if seen["ok"] else "fail"
-                detail = f"{exp.key} = {seen['value']!r} after {time.monotonic() - t0:.1f} s"
+                state_seen = await self._client_state(client, exp.key, exp.equals, exp.timeout)
+                verdict = "pass" if state_seen["ok"] else "fail"
+                detail = f"{exp.key} = {state_seen['value']!r} after {time.monotonic() - t0:.1f} s"
             elif isinstance(exp, WsEvent):
                 deadline = time.monotonic() + exp.timeout
                 while True:
