@@ -62,17 +62,17 @@ async def run_read(cap: Capture, login_exchange: dict) -> None:
         "exchanges": [banner],
     })
     con.print(f"Telnet reads ({len(cmd.TELNET_READS)}):")
-    for spec in cmd.TELNET_READS:
-        ex = await cap.telnet.command(spec.command, role="read")
+    for tspec in cmd.TELNET_READS:
+        ex = await cap.telnet.command(tspec.command, role="read")
         resp = ex.get("response") or {}
-        con.print(f"  {spec.command:<16} -> {resp.get('completion', ex.get('error'))} "
+        con.print(f"  {tspec.command:<16} -> {resp.get('completion', ex.get('error'))} "
                   f"{len(resp.get('text', ''))} chars")
         if ex.get("error"):
-            cap.errors.append(f"telnet {spec.command}: {ex['error']['message']}")
+            cap.errors.append(f"telnet {tspec.command}: {ex['error']['message']}")
             if not cap.telnet.connected:
                 await cap.reconnect_telnet()
-        cap.add(RecordIds.telnet_read(spec.slug), {
-            "title": f"Telnet read: {spec.command}",
-            "answers": list(spec.answers),
+        cap.add(RecordIds.telnet_read(tspec.slug), {
+            "title": f"Telnet read: {tspec.command}",
+            "answers": list(tspec.answers),
             "exchanges": [ex],
         })

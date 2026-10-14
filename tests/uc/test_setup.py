@@ -167,9 +167,27 @@ async def test_setup_with_an_unreachable_matrix_fails_cleanly(uc_hub_factory) ->
     assert not Path(hub.data_dir, "config_state.json").exists()
 
 
-async def test_setup_errors_name_the_problem(uc_hub_factory) -> None:
-    """UC-05 specific errors: a name that does not resolve and an address that is not one are NOT_FOUND."""
-    hub = await uc_hub_factory(restore=False)
+async def test_setup_errors_name_the_problem(uc_hub_factory, tmp_path: Path) -> None:
+    """UC-05 specific errors: a name that does not resolve and an address that is not one are NOT_FOUND.
+
+    TST-17: on Windows the host's DNS/LLMNR lookup for ``.invalid`` can take >5 s (exceeding probe_address's
+    5 s timeout and reporting TIMEOUT). Simulate that slow OS resolver in the hub subprocess so the harness's
+    RFC 6761 ``.invalid`` fast-fail override is proven.
+    """
+    slow_dns = tmp_path / "slow_dns"
+    slow_dns.mkdir()
+    (slow_dns / "sitecustomize.py").write_text(
+        "import socket, time\n"
+        "_orig = socket.getaddrinfo\n"
+        "def _slow(host, *a, **kw):\n"
+        "    if isinstance(host, str) and host.rstrip('.').lower().endswith('.invalid'):\n"
+        "        time.sleep(6.0)\n"
+        "        raise socket.gaierror(socket.EAI_NONAME, 'Name or service not known')\n"
+        "    return _orig(host, *a, **kw)\n"
+        "socket.getaddrinfo = _slow\n",
+        encoding="utf-8",
+    )
+    hub = await uc_hub_factory(restore=False, extra_env={"PYTHONPATH": str(slow_dns)})
     async with UcRemoteSim(hub.uc_url) as remote:
         unknown = await remote.setup_driver({"host": "no-such-matrix.invalid", "port": 443}, timeout=60)
         assert unknown.final == {"event_type": "STOP", "state": "ERROR", "error": "NOT_FOUND"}

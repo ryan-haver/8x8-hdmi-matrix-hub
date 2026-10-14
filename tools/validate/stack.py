@@ -37,6 +37,7 @@ from tools.dev_stack import _stop, _wait_for
 ROOT = Path(__file__).resolve().parents[2]
 FIXTURE_DATA = ROOT / "tests" / "e2e" / "fixtures" / "data"
 SEED_STATE = ROOT / "tools" / "simulator" / "states" / "default.json"
+HARNESS_SITE = Path(__file__).resolve().parent / "_site"
 
 #: Hub environment recorded in every evidence record (values, not secrets).
 RECORDED_ENV = (
@@ -47,6 +48,16 @@ RECORDED_ENV = (
 )
 
 HUB_MODES = ("api", "uc")
+_MAX_BIND_ATTEMPTS = 3
+_BIND_ERROR_MARKERS = (
+    "Failed to start REST API server",
+    "check_port_available",
+    "WinError 10013",
+    "WinError 10048",
+    "Address already in use",
+    "Errno 98",
+    "Errno 48",
+)
 
 
 #: Ports this process already handed out. The OS may return the same free port
@@ -55,14 +66,30 @@ HUB_MODES = ("api", "uc")
 _HANDED_OUT: set[int] = set()
 
 
+def _can_bind_wildcard(port: int) -> bool:
+    """True when ``0.0.0.0:port`` can be bound the way ``driver.py`` and ``aiohttp`` bind it (TST-18)."""
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            s.bind(("0.0.0.0", port))
+    except OSError:
+        return False
+    return True
+
+
 def free_port(host: str = "127.0.0.1") -> int:
     for _ in range(50):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.bind((host, 0))
             port = int(s.getsockname()[1])
-        if port not in _HANDED_OUT:
-            _HANDED_OUT.add(port)
-            return port
+        if port in _HANDED_OUT:
+            continue
+        _HANDED_OUT.add(port)
+        # On Windows a socket bound to 0.0.0.0:port still lets bind(('127.0.0.1', port))
+        # succeed, and then the hub's 0.0.0.0 bind fails with WinError 10013/10048 (TST-18).
+        if host != "0.0.0.0" and not _can_bind_wildcard(port):
+            continue
+        return port
     raise RuntimeError("no unused free port found")
 
 
@@ -106,11 +133,15 @@ class HubProcess:
     _proc: subprocess.Popen[bytes] | None = None
     _data_dir: str | None = None
     _log: IO[bytes] | None = None
+    _auto_api_port: bool = field(init=False, default=False)
+    _auto_uc_port: bool = field(init=False, default=False)
     starts: int = 0
 
     def __post_init__(self) -> None:
         if self.mode not in HUB_MODES:
             raise ValueError(f"hub mode must be one of {HUB_MODES}, not {self.mode!r}")
+        self._auto_api_port = self.api_port == 0
+        self._auto_uc_port = self.uc_port == 0
 
     @property
     def base_url(self) -> str:
@@ -174,6 +205,8 @@ class HubProcess:
         if poll is not None:
             env["STATUS_POLL_INTERVAL"] = str(poll)
         env.update(self.extra_env)
+        existing_py = env.get("PYTHONPATH", "")
+        env["PYTHONPATH"] = f"{HARNESS_SITE}{os.pathsep}{existing_py}" if existing_py else str(HARNESS_SITE)
         for key in ("OREI_USER", "OREI_PASSWORD", "OREI_PORT", "OREI_HOST"):
             env.pop(key, None)
         if self.matrix_user:
@@ -227,6 +260,20 @@ class HubProcess:
             [sys.executable, "run.py"], cwd=ROOT, env=env, stdout=self._log, stderr=subprocess.STDOUT
         )
 
+    def _can_retry_bind(self) -> bool:
+        if not (self._auto_api_port or (self.mode == "uc" and self._auto_uc_port)):
+            return False
+        tail = self.log_tail(60)
+        return any(m in tail for m in _BIND_ERROR_MARKERS)
+
+    def _relaunch_on_fresh_ports(self) -> None:
+        self.stop(keep_data=True)
+        if self._auto_api_port:
+            self.api_port = 0
+        if self._auto_uc_port:
+            self.uc_port = 0
+        self.launch()
+
     def ready(self) -> bool:
         """One non-blocking readiness probe (``/api/health`` port and, in UC mode, the integration port)."""
         if self._proc is None or self._proc.poll() is not None:
@@ -238,18 +285,24 @@ class HubProcess:
     def wait_ready(self, timeout: float = 60) -> dict[str, Any]:
         """Block until ``/api/health`` answers and, in UC mode, the integration port accepts."""
         assert self._proc is not None, "launch() first"
-        try:
-            health = _wait_for(f"{self.base_url}/api/health", self._proc, timeout, "hub")
-        except RuntimeError as exc:
-            raise RuntimeError(f"{exc}\n--- {self.log_path} (tail) ---\n{self.log_tail()}") from None
-        if self.mode == "uc":
-            # driver.py starts the REST API after api.init(), so the WebSocket is normally up already.
-            deadline = time.monotonic() + 10
-            while not port_open(self.host, self.uc_port):
-                if time.monotonic() > deadline or self._proc.poll() is not None:
-                    raise RuntimeError(f"UC integration not listening on {self.uc_url} (log: {self.log_path})")
-                time.sleep(0.1)
-        return health.get("data", {})
+        for attempt in range(1, _MAX_BIND_ATTEMPTS + 1):
+            assert self._proc is not None
+            try:
+                health = _wait_for(f"{self.base_url}/api/health", self._proc, timeout, "hub")
+                if self.mode == "uc":
+                    # driver.py starts the REST API after api.init(), so the WebSocket is normally up already.
+                    deadline = time.monotonic() + 10
+                    while not port_open(self.host, self.uc_port):
+                        if time.monotonic() > deadline or self._proc.poll() is not None:
+                            raise RuntimeError(f"UC integration not listening on {self.uc_url} (log: {self.log_path})")
+                        time.sleep(0.1)
+                return health.get("data", {})
+            except RuntimeError as exc:
+                if attempt < _MAX_BIND_ATTEMPTS and self._can_retry_bind():
+                    self._relaunch_on_fresh_ports()
+                    continue
+                raise RuntimeError(f"{exc}\n--- {self.log_path} (tail) ---\n{self.log_tail()}") from None
+        raise AssertionError("unreachable")
 
     def log_tail(self, lines: int = 40) -> str:
         try:
