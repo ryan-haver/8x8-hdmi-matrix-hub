@@ -101,3 +101,16 @@ def test_preset_recall_proves_v4_whatever_the_slot_holds(tmp_path: Path, fake_ma
                                allow_writes=True, answers={"presets.recall": [{"answer": "y"}]}))
     outcome = asyncio.run(runner.run([discover()["presets.recall"]]))[0]
     assert (outcome.status, outcome.level) == ("pass", "V4"), outcome.failed_checks
+
+
+def test_preset_save_custom_mapping_targets_sim_only():
+    """presets.save_custom_mapping seeds sim_state, reads presets[5] from general state, and overwrites slot 6."""
+    scenarios = discover()
+    assert scenarios["presets.save_custom_mapping"].targets == ("sim",)
+    for scenario in scenarios.values():
+        if "hardware" in scenario.targets:
+            assert not any(
+                getattr(check, "kind", None) == "device" and str(getattr(check, "path", "")).startswith("presets")
+                for check in scenario.expect
+            ), f"{scenario.id} targets hardware but reads sim-only Device('presets...')"
+

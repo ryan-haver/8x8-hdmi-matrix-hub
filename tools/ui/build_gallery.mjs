@@ -147,7 +147,7 @@ function diff(beforeBuf, afterBuf) {
   }
   const out = new PNG({ width: a.width, height: a.height });
   const pixels = pixelmatch(a.data, b.data, out.data, a.width, a.height, {
-    threshold: 0.1,
+    threshold: 0.05, // Match tests/e2e/playwright.config.ts (TST-10)
     alpha: 0.25,
     diffColor: [255, 0, 64],
     diffColorAlt: [0, 200, 255],

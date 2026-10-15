@@ -179,7 +179,9 @@
   --z-sticky: 200;
   --z-fixed: 300;
   --z-modal-backdrop: 400;
+  --z-drawer: 450;
   --z-modal: 500;
+  --z-modal-nested: 550;
   --z-toast: 600;
   --z-tooltip: 700;
 
@@ -1020,7 +1022,7 @@
 .confirm-dialog {
   position: fixed;
   inset: 0;
-  z-index: var(--z-modal);
+  z-index: var(--z-modal-nested);
   display: flex;
   align-items: center;
   justify-content: center;

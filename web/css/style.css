@@ -619,14 +619,13 @@ body {
   position: absolute;
   top: -40px;
   left: var(--space-2);
-  z-index: 10000;
+  z-index: var(--z-tooltip);
   padding: var(--space-2) var(--space-4);
   background: var(--accent-primary, #00ffff);
   color: var(--bg-primary, #000);
   text-decoration: none;
   border-radius: var(--radius-md, 4px);
   font-weight: 600;
-  z-index: 9999;
   transition: top 0.2s ease;
 }
 
@@ -776,14 +775,10 @@ body.high-contrast .skeleton {
 }
 
 /* ===== Slide-Out Navigation Hamburger Drawer ===== */
-/* Z-index layering (highest to lowest):
-   1050: side-nav-drawer (left)
-   1040: general-drawer, hardware-drawer, interface-drawer (right - settings)
-   1030: quick-actions-drawer (right)
-   1020: routing-drawer (right)
-   1010: theme-drawer (right)
-    950: side-nav-backdrop (full screen, BELOW right-side drawers)
-     99: header/footer (normal)
+/* Z-index layering follows LOOK_AND_FEEL.md §5 (theme.css --z-* tokens):
+   450 (--z-drawer): side-nav-drawer and right-side drawers
+   400 (--z-modal-backdrop): drawer backdrops (below all open drawers)
+   300 (--z-fixed): header, mobile tab bar, CEC tray
 */
 .side-nav-backdrop {
   position: fixed;
@@ -792,7 +787,7 @@ body.high-contrast .skeleton {
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.6);
-  z-index: 950;
+  z-index: var(--z-modal-backdrop);
   opacity: 0;
   pointer-events: none;
   transition: opacity var(--transition-normal);
@@ -816,7 +811,7 @@ body.high-contrast .skeleton {
   -webkit-backdrop-filter: blur(20px);
   border-right: 2px solid var(--accent, #00c8c8);
   box-shadow: 8px 0 32px rgba(0, 0, 0, 0.6);
-  z-index: 1050;
+  z-index: var(--z-drawer);
   display: flex;
   flex-direction: column;
   transform: translateX(-100%);

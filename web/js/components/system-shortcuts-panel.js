@@ -433,7 +433,7 @@ class SystemShortcutsPanel {
         popup.innerHTML = `
             <div class="icon-picker-grid">${iconHtml}</div>
         `;
-        popup.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:8px;padding:12px;z-index:10000;box-shadow:0 4px 20px rgba(0,0,0,0.5);';
+        popup.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:8px;padding:12px;z-index:var(--z-modal-nested);box-shadow:0 4px 20px rgba(0,0,0,0.5);';
 
         const closePopup = () => popup.remove();
 

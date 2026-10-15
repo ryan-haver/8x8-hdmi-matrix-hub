@@ -1108,7 +1108,7 @@ export const CATALOG: CatalogEntry[] = [
       await page.locator('.confirm-dialog.confirm-dialog--visible').waitFor();
       await settle(page, 400);
     },
-    note: 'Renders under the Hardware drawer: .confirm-dialog z-index 500 < drawer 1040.',
+    note: 'UI-32/UI-59: .confirm-dialog (--z-modal-nested 550) renders above the Hardware drawer (--z-drawer 450).',
   },
   {
     name: 'dialog/confirm/power-cycle',
@@ -1273,7 +1273,7 @@ export const CATALOG: CatalogEntry[] = [
       await page.locator('#save-profile-btn').click();
       await settle(page, 400);
     },
-    note: 'The warning toast (z-index 300) renders under the modal.',
+    note: 'UI-32/UI-59: the warning toast (--z-toast 600) renders above the modal (--z-modal 500).',
   },
   {
     name: 'editor/profile/passcode',

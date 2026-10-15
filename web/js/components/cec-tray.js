@@ -1221,7 +1221,6 @@ class CECTray {
         selector.style.position = 'fixed';
         selector.style.top = `${rect.bottom + 4}px`;
         selector.style.left = `${rect.left}px`;
-        selector.style.zIndex = '1001';
         
         document.body.appendChild(selector);
         this.activeSelector = selector;

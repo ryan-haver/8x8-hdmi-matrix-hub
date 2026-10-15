@@ -40,7 +40,6 @@ class CecControls {
         const isMobile = window.innerWidth <= 480;
         
         dropdown.style.position = 'fixed';
-        dropdown.style.zIndex = '1000';
         
         if (isMobile) {
             // On mobile, let CSS handle the full-width positioning
@@ -53,7 +52,8 @@ class CecControls {
             dropdown.style.left = `${rect.left}px`;
         }
         
-        document.body.appendChild(dropdown);
+        const firstDrawer = document.querySelector('.routing-drawer, .settings-drawer');
+        document.body.insertBefore(dropdown, firstDrawer || null);
         this.activeDropdown = dropdown;
         this.activeType = type;
         this.activePort = port;

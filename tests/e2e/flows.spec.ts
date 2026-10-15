@@ -1296,4 +1296,97 @@ test.describe('WP-E1 UI flows', () => {
     for (const r of overrides) expect(r, r.text).toMatchObject({ oneRow: true, actionRight: true, surface: true });
     await expectGlassClose(page, '#scene-editor-modal .modal-close');
   });
+
+  test('UI-32/UI-59: overlays follow the z-index token scale so confirm dialogs, modals and toasts stack above drawers and backdrops', async ({
+    page,
+  }) => {
+    await preparePage(page);
+    await openUi(page);
+
+    // 1. Every layer uses the documented token scale (LOOK_AND_FEEL.md §5).
+    const layers = await page.evaluate(() => {
+      const z = (sel: string) => {
+        const el = document.querySelector(sel);
+        return el ? Number(getComputedStyle(el).zIndex) : NaN;
+      };
+      return {
+        header: z('.header'),
+        mobileTabs: z('.mobile-tabs'),
+        cecTray: z('.cec-tray'),
+        sideNavBackdrop: z('.side-nav-backdrop'),
+        routingBackdrop: z('.routing-backdrop'),
+        themeBackdrop: z('.theme-drawer-overlay'),
+        settingsBackdrop: z('.settings-drawer-backdrop'),
+        sideNavDrawer: z('.side-nav-drawer'),
+        routingDrawer: z('.routing-drawer'),
+        themeDrawer: z('.theme-drawer'),
+        settingsDrawer: z('.settings-drawer'),
+        bottomSheet: z('.bottom-sheet'),
+        modal: z('.modal'),
+        settingsModalOverlay: z('.settings-modal-overlay'),
+        iconPicker: z('.icon-picker-overlay'),
+        toastContainer: z('.toast-container'),
+        skipLink: z('.skip-to-content'),
+      };
+    });
+    expect(layers).toEqual({
+      header: 300,
+      mobileTabs: 300,
+      cecTray: 300,
+      sideNavBackdrop: 400,
+      routingBackdrop: 400,
+      themeBackdrop: 400,
+      settingsBackdrop: 400,
+      sideNavDrawer: 450,
+      routingDrawer: 450,
+      themeDrawer: 450,
+      settingsDrawer: 450,
+      bottomSheet: 450,
+      modal: 500,
+      settingsModalOverlay: 500,
+      iconPicker: 550,
+      toastContainer: 600,
+      skipLink: 700,
+    });
+
+    /** True when the topmost element at the centre of `sel` is inside `sel`. */
+    const isTopmost = (sel: string) =>
+      page.locator(sel).evaluate((el) => {
+        const r = el.getBoundingClientRect();
+        const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+        return Boolean(hit && el.contains(hit));
+      });
+
+    // 2. Confirm dialog opened from Hardware → Reboot sits above the open Hardware drawer.
+    await page.locator('#menu-toggle').click();
+    await page.locator('#side-nav-drawer.open').waitFor();
+    await page.locator('#drawer-hardware-btn').click();
+    await page.locator('#hardware-drawer.open').waitFor();
+    await page.locator('#hardware-reboot-btn').click();
+    await page.locator('.confirm-dialog.confirm-dialog--visible').waitFor();
+    expect(await page.evaluate(() => Number(getComputedStyle(document.querySelector('.confirm-dialog')!).zIndex))).toBe(550);
+    expect(await isTopmost('.confirm-dialog__content')).toBe(true);
+    await page.locator('.confirm-dialog__cancel').click();
+    await page.keyboard.press('Escape');
+
+    // 3. A validation toast inside the profile editor sits above the modal overlay.
+    await mainTab(page, 'profiles');
+    await page.locator('#save-scene-btn').click();
+    await page.locator('#profile-editor-modal.visible').waitFor();
+    await page.locator('#profile-name').fill('');
+    await page.locator('#save-profile-btn').click();
+    await page.locator('#toast-container .toast').first().waitFor();
+    expect(await isTopmost('#toast-container .toast')).toBe(true);
+    await page.locator('#cancel-profile-btn').click();
+
+    // 4. Even if a right-side drawer stays open, a .modal dialog (scene editor) stacks above it.
+    await page.evaluate(() => {
+      const w = window as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+      w.settingsDrawer.open('scenes');
+      w.sceneEditor.open('scene_movienight01');
+    });
+    await page.locator('#scene-editor-modal.open').waitFor();
+    expect(await isTopmost('#scene-editor-modal .modal-content')).toBe(true);
+  });
 });
+
