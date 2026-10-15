@@ -1,7 +1,7 @@
 # Feature ledger
 
 > **Generated** by `python -m tools.validate ledger` — do not edit by hand. Registry: [`features.yaml`](features.yaml) · Plan: [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md) · How to add evidence: [`README.md`](README.md).
-> Commit `56fb9eaf`
+> Commit `b67b8d38`
 
 **Level** = highest level with fresh passing evidence, else the recorded baseline (the registry's `current`), capped at V1 while an open critical/high finding is linked. **Recorded** = the registry baseline. **Fresh** = evidence commit not older than the last change to the scenario's `covers` paths.
 
@@ -217,7 +217,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-UI-024 | Live updates when another client or the matrix changes something | V3 | **V3** | V3 | fresh | [live.display_unplugged·browser·pass](evidence/F-MTX-031/2026-10-04-V3-d6baf3ca-live.display_unplugged-browser.json)<br>[live.front_panel_route·browser·pass](evidence/F-MTX-031/2026-10-04-V3-d6baf3ca-live.front_panel_route-browser.json)<br>[live.input_signal·browser·pass](evidence/F-MTX-031/2026-10-04-V3-d6baf3ca-live.input_signal-browser.json)<br>[live.rename_elsewhere·browser·pass](evidence/F-MTX-031/2026-10-04-V3-d6baf3ca-live.rename_elsewhere-browser.json) | — |
 | F-UI-025 | Reconnect and resync after the WebSocket drops | V3 | **V3** | V3 | — | — | — |
 | F-UI-026 | Show an error state when the matrix is unreachable | V3 | **V3** | V3 | — | — | — |
-| F-UI-027 | Toasts and confirmation dialogs | V3 | **V3** | V3 | fresh | [scenes.partial_failure·browser·pass](evidence/F-DOM-011/2026-10-10-V3-b3aced1b-scenes.partial_failure-browser.json) | UI-32(M) |
+| F-UI-027 | Toasts and confirmation dialogs | V3 | **V3** | V3 | fresh | [scenes.partial_failure·browser·pass](evidence/F-DOM-011/2026-10-10-V3-b3aced1b-scenes.partial_failure-browser.json) | — |
 | F-UI-028 | Keyboard shortcuts | V3 | V1 | V1 | — | — | UI-06(M) |
 | F-UI-029 | Accessibility (keyboard, focus, ARIA, contrast, zoom) | V3 | V1 | V1 | — | — | UI-07(M), UI-35(M) |
 | F-UI-030 | Debug panel | V3 | V1 | V1 | — | — | — |
