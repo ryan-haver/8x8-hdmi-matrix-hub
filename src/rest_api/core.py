@@ -22,7 +22,9 @@ from .utils import (
     get_input_names,
     get_matrix_device,
     get_output_names,
+    safe_error_message,
 )
+from .validation import BadRequestError, parse_json_object
 
 _LOG = logging.getLogger("rest_api.core")
 
@@ -321,8 +323,7 @@ async def handle_status(request: web.Request) -> web.Response:
         status["state"] = link_summary(matrix_device)["state"]
         return _json_response(True, status)
     except Exception as e:
-        _LOG.error(f"Error getting status: {e}", exc_info=True)
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "getting status"), status=500)
 
 
 async def handle_presets(request: web.Request) -> web.Response:
@@ -380,8 +381,7 @@ async def handle_presets(request: web.Request) -> web.Response:
 
         return _json_response(True, {"presets": presets})
     except Exception as e:
-        _LOG.exception(f"Error getting presets: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "getting presets"), status=500)
 
 
 async def handle_inputs(request: web.Request) -> web.Response:
@@ -404,8 +404,7 @@ async def handle_inputs(request: web.Request) -> web.Response:
             )
         return _json_response(True, {"inputs": inputs})
     except Exception as e:
-        _LOG.exception(f"Error getting inputs: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "getting inputs"), status=500)
 
 
 async def handle_outputs(request: web.Request) -> web.Response:
@@ -439,8 +438,7 @@ async def handle_outputs(request: web.Request) -> web.Response:
             )
         return _json_response(True, {"outputs": outputs})
     except Exception as e:
-        _LOG.exception(f"Error getting outputs: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "getting outputs"), status=500)
 
 
 async def handle_set_input_name(request: web.Request) -> web.Response:
@@ -460,8 +458,11 @@ async def handle_set_input_name(request: web.Request) -> web.Response:
         return _json_response(False, error="Invalid input number", status=400)
 
     try:
-        body = await request.json()
-        name = body.get("name", "").strip()
+        body = await parse_json_object(request)
+        name = body.get("name", "")
+        if not isinstance(name, str):
+            return _json_response(False, error="'name' must be a string", status=400)
+        name = name.strip()
         if not name:
             return _json_response(False, error="Name is required", status=400)
         if len(name) > 32:
@@ -483,9 +484,10 @@ async def handle_set_input_name(request: web.Request) -> web.Response:
         return _json_response(
             True, {"input": input_num, "name": name, "message": f"Input {input_num} renamed to '{name}'"}
         )
+    except BadRequestError as exc:
+        return exc.response()
     except Exception as e:
-        _LOG.exception(f"Error setting input name: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "setting input name"), status=500)
 
 
 async def handle_set_output_name(request: web.Request) -> web.Response:
@@ -505,8 +507,11 @@ async def handle_set_output_name(request: web.Request) -> web.Response:
         return _json_response(False, error="Invalid output number", status=400)
 
     try:
-        body = await request.json()
-        name = body.get("name", "").strip()
+        body = await parse_json_object(request)
+        name = body.get("name", "")
+        if not isinstance(name, str):
+            return _json_response(False, error="'name' must be a string", status=400)
+        name = name.strip()
         if not name:
             return _json_response(False, error="Name is required", status=400)
         if len(name) > 32:
@@ -528,6 +533,7 @@ async def handle_set_output_name(request: web.Request) -> web.Response:
         return _json_response(
             True, {"output": output_num, "name": name, "message": f"Output {output_num} renamed to '{name}'"}
         )
+    except BadRequestError as exc:
+        return exc.response()
     except Exception as e:
-        _LOG.exception(f"Error setting output name: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "setting output name"), status=500)

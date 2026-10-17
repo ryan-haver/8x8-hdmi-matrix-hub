@@ -4,7 +4,6 @@ Unified System Shortcuts REST API.
 Exposes `/api/shortcuts` endpoints mapping to the consolidated SystemShortcut manager.
 """
 
-import json
 import logging
 
 from aiohttp import web
@@ -15,9 +14,31 @@ from .utils import (
     _json_response,
     get_matrix_device,
     get_system_shortcut_manager,
+    safe_error_message,
+)
+from .validation import (
+    ICON_MAX_LENGTH,
+    NAME_MAX_LENGTH,
+    BadRequestError,
+    optional_bool,
+    optional_string,
+    parse_json_object,
+    validate_int,
+    validate_list,
+    validate_string,
 )
 
 _LOG = logging.getLogger("rest_api.system_shortcuts")
+
+
+def _params_from(body: dict) -> dict:
+    """The body's ``params`` object (``{}`` when absent); anything other than an object is a 400."""
+    params = body.get("params")
+    if params is None:
+        return {}
+    if not isinstance(params, dict):
+        raise BadRequestError("'params' must be an object")
+    return params
 
 
 # =============================================================================
@@ -35,8 +56,7 @@ async def handle_list_shortcuts(request: web.Request) -> web.Response:
         shortcuts = manager.list_shortcuts(enabled_only=enabled_only)
         return _json_response(True, {"shortcuts": [s.to_dict() for s in shortcuts], "count": len(shortcuts)})
     except Exception as exc:
-        _LOG.error("Error listing system shortcuts: %s", exc)
-        return _json_response(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "listing system shortcuts"), status=500)
 
 
 async def handle_list_favorite_shortcuts(request: web.Request) -> web.Response:
@@ -48,8 +68,7 @@ async def handle_list_favorite_shortcuts(request: web.Request) -> web.Response:
         shortcuts = manager.list_favorites()
         return _json_response(True, {"shortcuts": [s.to_dict() for s in shortcuts], "count": len(shortcuts)})
     except Exception as exc:
-        _LOG.error("Error listing favorite shortcuts: %s", exc)
-        return _json_response(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "listing favorite shortcuts"), status=500)
 
 
 async def handle_list_dashboard_shortcuts(request: web.Request) -> web.Response:
@@ -61,8 +80,7 @@ async def handle_list_dashboard_shortcuts(request: web.Request) -> web.Response:
         shortcuts = manager.list_dashboard()
         return _json_response(True, {"shortcuts": [s.to_dict() for s in shortcuts], "count": len(shortcuts)})
     except Exception as exc:
-        _LOG.error("Error listing dashboard shortcuts: %s", exc)
-        return _json_response(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "listing dashboard shortcuts"), status=500)
 
 
 async def handle_get_shortcut(request: web.Request) -> web.Response:
@@ -79,8 +97,7 @@ async def handle_get_shortcut(request: web.Request) -> web.Response:
             return _json_response(False, error=f"Shortcut '{key}' not found", status=404)
         return _json_response(True, sc.to_dict())
     except Exception as exc:
-        _LOG.error("Error getting shortcut: %s", exc)
-        return _json_response(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "getting shortcut"), status=500)
 
 
 # =============================================================================
@@ -101,27 +118,28 @@ async def handle_update_shortcut(request: web.Request) -> web.Response:
         if sc is None:
             return _json_response(False, error=f"Shortcut '{key}' not found", status=404)
 
-        body = await request.json()
+        body = await parse_json_object(request)
+        label = body.get("label") or body.get("name")
+        order = body.get("order")
 
         success = manager.update_prefs(
             key,
-            label=body.get("label") or body.get("name"),
-            icon=body.get("icon"),
-            enabled=body.get("enabled"),
-            order=body.get("order"),
-            favorite=body.get("favorite"),
-            dashboard_visible=body.get("dashboard_visible"),
+            label=None if label is None else validate_string(label, "label", max_length=NAME_MAX_LENGTH),
+            icon=optional_string(body, "icon", max_length=ICON_MAX_LENGTH),
+            enabled=optional_bool(body, "enabled"),
+            order=None if order is None else validate_int(order, "order", minimum=0, maximum=10_000),
+            favorite=optional_bool(body, "favorite"),
+            dashboard_visible=optional_bool(body, "dashboard_visible"),
         )
         if not success:
             return _json_response(False, error="Failed to update shortcut preferences", status=500)
 
         updated_sc = manager.get(key)
         return _json_response(True, updated_sc.to_dict())
-    except json.JSONDecodeError:
-        return _json_response(False, error="Invalid JSON body", status=400)
+    except BadRequestError as exc:
+        return exc.response()
     except Exception as exc:
-        _LOG.error("Error updating shortcut %s: %s", key, exc)
-        return _json_response(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "updating shortcut"), status=500)
 
 
 async def handle_toggle_favorite(request: web.Request) -> web.Response:
@@ -137,8 +155,7 @@ async def handle_toggle_favorite(request: web.Request) -> web.Response:
         new_state = manager.toggle_favorite(key)
         return _json_response(True, {"id": key, "key": key, "favorite": new_state})
     except Exception as exc:
-        _LOG.error("Error toggling shortcut favorite: %s", exc)
-        return _json_response(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "toggling shortcut favorite"), status=500)
 
 
 async def handle_toggle_dashboard(request: web.Request) -> web.Response:
@@ -154,8 +171,7 @@ async def handle_toggle_dashboard(request: web.Request) -> web.Response:
         new_state = manager.toggle_dashboard_visible(key)
         return _json_response(True, {"id": key, "key": key, "dashboard_visible": new_state})
     except Exception as exc:
-        _LOG.error("Error toggling shortcut dashboard flag: %s", exc)
-        return _json_response(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "toggling shortcut dashboard flag"), status=500)
 
 
 async def handle_execute_shortcut(request: web.Request) -> web.Response:
@@ -175,15 +191,15 @@ async def handle_execute_shortcut(request: web.Request) -> web.Response:
         if matrix is None:
             return _json_response(False, error="Matrix device not connected", status=503)
 
-        data = await request.json() if request.can_read_body else {}
-        params = data.get("params", {})
+        params = _params_from(await parse_json_object(request, allow_empty=True))
 
         result = await execute_shortcut(sc, matrix, params)
         status = 200 if result.get("success") else 500
         return _json_response(result.get("success", False), result, status=status)
+    except BadRequestError as exc:
+        return exc.response()
     except Exception as exc:
-        _LOG.error("Error executing shortcut %s: %s", key, exc)
-        return _json_response(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "executing shortcut"), status=500)
 
 
 async def handle_reorder_shortcuts(request: web.Request) -> web.Response:
@@ -192,18 +208,20 @@ async def handle_reorder_shortcuts(request: web.Request) -> web.Response:
     if manager is None:
         return _json_response(False, error="System shortcut manager not initialized", status=503)
     try:
-        body = await request.json()
+        body = await parse_json_object(request)
         ordered_ids = body.get("ordered_ids") or body.get("ordered_keys", [])
         if not isinstance(ordered_ids, list):
             return _json_response(False, error="ordered_ids must be a list", status=400)
+        validate_list(ordered_ids, "ordered_ids")
+        if not all(isinstance(key, str) for key in ordered_ids):
+            return _json_response(False, error="ordered_ids must be a list of strings", status=400)
         if not manager.reorder(ordered_ids):
             return _json_response(False, error="Failed to reorder shortcuts", status=500)
         return _json_response(True, {"reordered": True, "count": len(ordered_ids)})
-    except json.JSONDecodeError:
-        return _json_response(False, error="Invalid JSON body", status=400)
+    except BadRequestError as exc:
+        return exc.response()
     except Exception as exc:
-        _LOG.error("Error reordering shortcuts: %s", exc)
-        return _json_response(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "reordering shortcuts"), status=500)
 
 
 async def handle_create_shortcut(request: web.Request) -> web.Response:
@@ -212,14 +230,16 @@ async def handle_create_shortcut(request: web.Request) -> web.Response:
     if manager is None:
         return _json_response(False, error="System shortcut manager not initialized", status=503)
     try:
-        body = await request.json()
+        body = await parse_json_object(request)
         name = body.get("name") or body.get("label")
-        icon = body.get("icon", "⚡")
+        icon = optional_string(body, "icon", max_length=ICON_MAX_LENGTH) or "⚡"
         type = body.get("type")
-        params = body.get("params", {})
+        params = _params_from(body)
 
         if not name or not type:
             return _json_response(False, error="name and type are required fields", status=400)
+
+        name = validate_string(name, "name", max_length=NAME_MAX_LENGTH)
 
         if not isinstance(type, str) or not type.strip():
             return _json_response(False, error="type must be a non-empty string", status=400)
@@ -229,11 +249,10 @@ async def handle_create_shortcut(request: web.Request) -> web.Response:
             return _json_response(False, error="Failed to create shortcut. Ensure type is valid.", status=400)
 
         return _json_response(True, sc.to_dict(), status=201)
-    except json.JSONDecodeError:
-        return _json_response(False, error="Invalid JSON body", status=400)
+    except BadRequestError as exc:
+        return exc.response()
     except Exception as exc:
-        _LOG.error("Error creating user shortcut: %s", exc)
-        return _json_response(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "creating user shortcut"), status=500)
 
 
 async def handle_delete_shortcut(request: web.Request) -> web.Response:
@@ -259,5 +278,4 @@ async def handle_delete_shortcut(request: web.Request) -> web.Response:
 
         return _json_response(True, {"deleted": True, "id": key, "key": key})
     except Exception as exc:
-        _LOG.error("Error deleting shortcut %s: %s", key, exc)
-        return _json_response(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "deleting shortcut"), status=500)

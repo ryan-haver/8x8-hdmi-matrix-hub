@@ -38,6 +38,7 @@ from .profiles import (
     handle_profile_cec_config,
     handle_recall_profile,
 )
+from .validation import ICON_MAX_LENGTH, NAME_MAX_LENGTH, BadRequestError, optional_string, parse_json_object
 
 _LOG = logging.getLogger("rest_api.scenes")
 
@@ -202,7 +203,7 @@ async def handle_save_current_as_scene(request: web.Request) -> web.Response:
     Reads the current routing from the matrix device and persists it as
     a new Profile via the same code path the regular create endpoint uses.
     """
-    from .utils import _json_response, get_matrix_device, get_profile_manager
+    from .utils import _json_response, get_matrix_device, get_profile_manager, safe_error_message
 
     profile_manager = get_profile_manager()
     matrix_device = get_matrix_device()
@@ -213,12 +214,12 @@ async def handle_save_current_as_scene(request: web.Request) -> web.Response:
         return _json_response(False, error="Matrix device not available", status=503)
 
     try:
-        body = await request.json()
-        name = body.get("name", "Captured Scene")
-        icon = body.get("icon", "📺")
+        body = await parse_json_object(request)
+        name = optional_string(body, "name", max_length=NAME_MAX_LENGTH) or "Captured Scene"
+        icon = optional_string(body, "icon", max_length=ICON_MAX_LENGTH) or "📺"
         # Accept an explicit id from the request body for testability
         # and for clients that want stable references.
-        profile_id = body.get("id") or f"scene_{uuid.uuid4().hex[:8]}"
+        profile_id = optional_string(body, "id", max_length=NAME_MAX_LENGTH) or f"scene_{uuid.uuid4().hex[:8]}"
 
         # API-27: the profile is only created from a complete read of the
         # matrix. A failed or incomplete read is reported (502) and nothing is
@@ -226,7 +227,7 @@ async def handle_save_current_as_scene(request: web.Request) -> web.Response:
         try:
             outputs, read_error = await _capture_current_outputs(matrix_device)
         except Exception as exc:
-            outputs, read_error = None, str(exc)
+            outputs, read_error = None, safe_error_message(exc, "reading matrix status to save a scene")
         if outputs is None:
             return _json_response(
                 False,
@@ -241,15 +242,10 @@ async def handle_save_current_as_scene(request: web.Request) -> web.Response:
             icon=icon,
         )
         return _json_response(True, profile.to_dict(), status=200)
-    except json.JSONDecodeError:
-        from .utils import _json_response as _jr
-
-        return _jr(False, error="Invalid JSON body", status=400)
+    except BadRequestError as exc:
+        return exc.response()
     except Exception as exc:
-        from .utils import _json_response as _jr
-
-        _LOG.error("Error saving current as scene: %s", exc)
-        return _jr(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "saving current as scene"), status=500)
 
 
 async def handle_auto_resolve_cec(request: web.Request) -> web.Response:
@@ -265,7 +261,7 @@ async def handle_auto_resolve_cec(request: web.Request) -> web.Response:
     """
     from cec_resolver import resolve_scene_cec_config
 
-    from .utils import _json_response, get_matrix_device, get_profile_manager
+    from .utils import _json_response, get_matrix_device, get_profile_manager, safe_error_message
 
     profile_manager = get_profile_manager()
     if profile_manager is None:
@@ -297,5 +293,4 @@ async def handle_auto_resolve_cec(request: web.Request) -> web.Response:
             return _json_response(False, error="Failed to save the CEC config", status=500)
         return _json_response(True, updated.cec_config.to_dict())
     except Exception as exc:
-        _LOG.error("Error auto-resolving CEC config: %s", exc)
-        return _json_response(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "auto-resolving CEC config"), status=500)

@@ -8,7 +8,8 @@ Verifies:
 - Legacy files at the old hardcoded ``data/`` path are migrated transparently
 - The new init functions (``init_themes``, ``init_ui_preferences``) and the
   existing ``init_device_settings`` all resolve to the same configured dir
-- The ``/api/system/storage`` endpoint returns the resolved layout
+- The ``/api/system/storage`` endpoint reports the storage state without
+  disclosing paths or file names (SEC-11)
 """
 
 import json
@@ -527,30 +528,84 @@ class TestPersistenceRoundTrip:
 
 
 class TestStorageEndpoint:
-    """The new ``/api/system/storage`` diagnostic endpoint."""
+    """The ``/api/system/storage`` diagnostic endpoint (SEC-11: no paths, no file names)."""
+
+    #: Keys that would disclose the server's directory layout or its files.
+    PATH_KEYS = (
+        "data_dir",
+        "config_dir",
+        "matrix_data_dir_env",
+        "uc_config_home_env",
+        "project_root",
+        "path",
+        "data_dir_files",
+        "data_dir_error",
+    )
 
     @pytest.mark.asyncio
-    async def test_storage_endpoint_returns_layout(self, monkeypatch, tmp_path):
+    async def test_storage_endpoint_returns_sanitized_layout(self, monkeypatch, tmp_path):
+        from persistence import reset_data_dir_cache
         from rest_api.system import handle_get_storage
 
+        (tmp_path / "themes.json").write_text("{}", encoding="utf-8")
+        (tmp_path / "ui_preferences.json").write_text("{}", encoding="utf-8")
+        (tmp_path / "subdir").mkdir()
         monkeypatch.setenv("MATRIX_DATA_DIR", str(tmp_path))
-        # Also reset the persistence cache so the handler sees the new env
-        from persistence import reset_data_dir_cache
-
         reset_data_dir_cache()
 
-        request = MagicMock()
-        response = await handle_get_storage(request)
+        response = await handle_get_storage(MagicMock())
 
         body = json.loads(response.body)
         assert body["success"] is True
-        assert body["data"]["data_dir"] == tmp_path.resolve().__str__()
-        assert body["data"]["matrix_data_dir_env"] == str(tmp_path)
-        # The new dir was created; it should be empty or have any migrated files
-        assert "data_dir_files" in body["data"]
+        assert body["data"] == {
+            "source": "MATRIX_DATA_DIR",
+            "data_dir_exists": True,
+            "config_dir_exists": body["data"]["config_dir_exists"],
+            "writable": True,
+            "file_count": 2,
+        }
+        assert isinstance(body["data"]["config_dir_exists"], bool)
 
     @pytest.mark.asyncio
-    async def test_info_endpoint_includes_storage(self, monkeypatch, tmp_path):
+    async def test_storage_endpoint_discloses_no_paths_or_file_names(self, monkeypatch, tmp_path):
+        from persistence import reset_data_dir_cache
+        from rest_api.system import handle_get_storage
+
+        (tmp_path / "device_settings.json").write_text("{}", encoding="utf-8")
+        monkeypatch.setenv("MATRIX_DATA_DIR", str(tmp_path))
+        monkeypatch.setenv("UC_CONFIG_HOME", str(tmp_path / "uc"))
+        reset_data_dir_cache()
+
+        response = await handle_get_storage(MagicMock())
+
+        body = json.loads(response.body)
+        for key in self.PATH_KEYS:
+            assert key not in body["data"]
+        assert str(tmp_path) not in response.text
+        assert tmp_path.name not in response.text
+        assert "device_settings.json" not in response.text
+
+    @pytest.mark.asyncio
+    async def test_storage_source_follows_resolution_order(self, monkeypatch, tmp_path):
+        from persistence import reset_data_dir_cache
+        from rest_api.system import handle_get_storage
+
+        monkeypatch.setenv("UC_CONFIG_HOME", str(tmp_path))
+        reset_data_dir_cache()
+        body = json.loads((await handle_get_storage(MagicMock())).body)
+        assert body["data"]["source"] == "UC_CONFIG_HOME"
+        # $UC_CONFIG_HOME/data was not created, so there is nothing to write to yet.
+        assert body["data"]["data_dir_exists"] is False
+        assert body["data"]["writable"] is False
+        assert body["data"]["file_count"] == 0
+
+        monkeypatch.delenv("UC_CONFIG_HOME")
+        reset_data_dir_cache()
+        body = json.loads((await handle_get_storage(MagicMock())).body)
+        assert body["data"]["source"] == "default"
+
+    @pytest.mark.asyncio
+    async def test_info_endpoint_includes_sanitized_storage(self, monkeypatch, tmp_path):
         from persistence import reset_data_dir_cache
         from rest_api.system import handle_get_info
 
@@ -565,5 +620,9 @@ class TestStorageEndpoint:
         assert "python_version" in body["data"]
         assert "platform" in body["data"]
         assert "rest_api_version" in body["data"]
-        assert "storage" in body["data"]
-        assert body["data"]["storage"]["data_dir"] == tmp_path.resolve().__str__()
+        storage = body["data"]["storage"]
+        assert storage["source"] == "MATRIX_DATA_DIR"
+        assert storage["data_dir_exists"] is True
+        for key in self.PATH_KEYS:
+            assert key not in storage
+        assert str(tmp_path) not in response.text

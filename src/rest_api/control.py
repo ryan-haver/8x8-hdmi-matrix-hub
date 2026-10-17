@@ -3,12 +3,12 @@ Control endpoints for preset, switch, and power operations.
 """
 
 import asyncio
-import json
 import logging
 
 from aiohttp import web
 
 from .utils import _json_response, get_input_names, get_matrix_device, require_connected, safe_error_message
+from .validation import BadRequestError, parse_json_object, require_field, validate_port
 from .websocket import broadcast_status_update
 
 _LOG = logging.getLogger("rest_api.control")
@@ -69,7 +69,6 @@ async def handle_preset(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid preset number", status=400)
     except Exception as e:
-        _LOG.exception(f"Error recalling preset: {e}")
         return _json_response(False, error=safe_error_message(e, "recalling preset"), status=500)
 
 
@@ -84,22 +83,14 @@ async def handle_switch(request: web.Request) -> web.Response:
         return _json_response(False, error="Matrix not connected", status=503)
 
     try:
-        data = await request.json()
+        data = await parse_json_object(request)
         # Check for unknown fields
         allowed_fields = {"input", "output"}
         extra = set(data.keys()) - allowed_fields
         if extra:
             return _json_response(False, error=f"Unknown fields: {sorted(extra)}", status=400)
-        input_num = data.get("input")
+        input_num = validate_port(require_field(data, "input", "'input' is required"), "Input")
         output_num = data.get("output")
-
-        if input_num is None:
-            return _json_response(False, error="'input' is required", status=400)
-
-        input_num = int(input_num)
-
-        if input_num < 1 or input_num > 8:
-            return _json_response(False, error="Input must be 1-8", status=400)
 
         # If output is not specified, route to ALL outputs
         if output_num is None:
@@ -123,10 +114,7 @@ async def handle_switch(request: web.Request) -> web.Response:
                 return _json_response(False, error="Failed to switch routing", status=500)
 
         # Single output routing
-        output_num = int(output_num)
-
-        if output_num < 1 or output_num > 8:
-            return _json_response(False, error="Output must be 1-8", status=400)
+        output_num = validate_port(output_num, "Output")
 
         _LOG.info(f"REST API: Switching input {input_num} to output {output_num}")
 
@@ -144,10 +132,9 @@ async def handle_switch(request: web.Request) -> web.Response:
         else:
             await broadcast_status_update("switch_failed", {"input": input_num, "output": output_num})
             return _json_response(False, error="Failed to switch routing", status=500)
-    except json.JSONDecodeError:
-        return _json_response(False, error="Invalid JSON body", status=400)
+    except BadRequestError as exc:
+        return exc.response()
     except Exception as e:
-        _LOG.exception(f"Error switching: {e}")
         return _json_response(False, error=safe_error_message(e, "switching routing"), status=500)
 
 
@@ -170,7 +157,6 @@ async def handle_power_on(request: web.Request) -> web.Response:
         else:
             return _json_response(False, error="Failed to power on matrix", status=500)
     except Exception as e:
-        _LOG.exception(f"Error powering on: {e}")
         return _json_response(False, error=safe_error_message(e, "powering on"), status=500)
 
 
@@ -193,7 +179,6 @@ async def handle_power_off(request: web.Request) -> web.Response:
         else:
             return _json_response(False, error="Failed to power off matrix", status=500)
     except Exception as e:
-        _LOG.exception(f"Error powering off: {e}")
         return _json_response(False, error=safe_error_message(e, "powering off"), status=500)
 
 
@@ -248,7 +233,6 @@ async def handle_input_next(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid output number", status=400)
     except Exception as e:
-        _LOG.exception(f"Error cycling to next input: {e}")
         return _json_response(False, error=safe_error_message(e, "cycling to next input"), status=500)
 
 
@@ -300,7 +284,6 @@ async def handle_input_previous(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid output number", status=400)
     except Exception as e:
-        _LOG.exception(f"Error cycling to previous input: {e}")
         return _json_response(False, error=safe_error_message(e, "cycling to previous input"), status=500)
 
 
@@ -320,15 +303,8 @@ async def handle_output_source(request: web.Request) -> web.Response:
         if output_num < 1 or output_num > 8:
             return _json_response(False, error="Output must be 1-8", status=400)
 
-        data = await request.json()
-        input_num = data.get("input")
-
-        if input_num is None:
-            return _json_response(False, error="'input' is required in body", status=400)
-
-        input_num = int(input_num)
-        if input_num < 1 or input_num > 8:
-            return _json_response(False, error="Input must be 1-8", status=400)
+        data = await parse_json_object(request)
+        input_num = validate_port(require_field(data, "input", "'input' is required in body"), "Input")
 
         input_name = input_names.get(input_num, f"Input {input_num}")
         _LOG.info(f"REST API: Setting output {output_num} source to input {input_num} ({input_name})")
@@ -350,12 +326,11 @@ async def handle_output_source(request: web.Request) -> web.Response:
             # routing change (VAL-05); a refusal is announced here.
             await broadcast_status_update("switch_failed", {"input": input_num, "output": output_num})
             return _json_response(False, error="Failed to set output source", status=500)
-    except json.JSONDecodeError:
-        return _json_response(False, error="Invalid JSON body", status=400)
+    except BadRequestError as exc:
+        return exc.response()
     except ValueError:
         return _json_response(False, error="Invalid output/input number", status=400)
     except Exception as e:
-        _LOG.exception(f"Error setting output source: {e}")
         return _json_response(False, error=safe_error_message(e, "setting output source"), status=500)
 
 
@@ -369,27 +344,20 @@ async def handle_preset_save(request: web.Request) -> web.Response:
         if preset_num < 1 or preset_num > 8:
             return _json_response(False, error="Preset must be 1-8", status=400)
 
-        # Check if we have a custom routing body
-        custom_routing = None
-        if request.can_read_body:
-            try:
-                body = await request.json()
-                custom_routing = body.get("routing")
-            except Exception:
-                pass
+        # The body is optional; with one, "routing" (if given) is the custom routing to save.
+        body = await parse_json_object(request, allow_empty=True)
+        custom_routing = body.get("routing")
+        if custom_routing is not None and not isinstance(custom_routing, dict):
+            return _json_response(False, error="'routing' must be an object of output: input", status=400)
 
         if custom_routing:
             # Validate routing
-            parsed_routing = {}
-            for out_s, in_s in custom_routing.items():
-                try:
-                    out_num = int(out_s)
-                    in_num = int(in_s)
-                    if not (1 <= out_num <= 8 and 1 <= in_num <= 8):
-                        return _json_response(False, error="Outputs and inputs must be 1-8", status=400)
-                    parsed_routing[out_num] = in_num
-                except (ValueError, TypeError):
-                    return _json_response(False, error="Invalid output/input format", status=400)
+            parsed_routing = {
+                validate_port(out_s, message="Outputs and inputs must be 1-8"): validate_port(
+                    in_s, message="Outputs and inputs must be 1-8"
+                )
+                for out_s, in_s in custom_routing.items()
+            }
 
             # The matrix can only save its live routing, so a custom save
             # routes the displays temporarily, saves, and routes them back
@@ -477,8 +445,9 @@ async def handle_preset_save(request: web.Request) -> web.Response:
             else:
                 return _json_response(False, error=f"Failed to save preset {preset_num}", status=500)
 
+    except BadRequestError as exc:
+        return exc.response()
     except ValueError:
         return _json_response(False, error="Invalid preset number", status=400)
     except Exception as e:
-        _LOG.exception(f"Error saving preset: {e}")
         return _json_response(False, error=safe_error_message(e, "saving preset"), status=500)
