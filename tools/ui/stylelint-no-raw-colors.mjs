@@ -1,6 +1,6 @@
 // Stylelint plugin: `hub/no-raw-colors`.
 //
-// Colours must come from the design tokens in web/css/theme.css
+// Colours must come from the design tokens in web/css/tokens.css
 // (docs/ui/LOOK_AND_FEEL.md §2, §10). This rule flags literal colour values
 // anywhere else:
 //   - hex colours (#fff, #0a0e14, #00e5cc80)
@@ -9,7 +9,8 @@
 //     token-derived and allowed)
 //   - common named colours (white, black, red, ...) in colour-bearing properties
 // `transparent`, `currentColor`, `inherit` and friends are always allowed.
-// theme.css is exempted in stylelint.config.js, since it defines the tokens.
+// theme.css and tokens.css are exempted in stylelint.config.js, since they
+// define the tokens.
 import stylelint from 'stylelint';
 
 const {
@@ -19,7 +20,7 @@ const {
 
 const ruleName = 'hub/no-raw-colors';
 const messages = ruleMessages(ruleName, {
-  rejected: (value) => `Unexpected raw colour "${value}"; use a token from web/css/theme.css`,
+  rejected: (value) => `Unexpected raw colour "${value}"; use a token from web/css/tokens.css`,
 });
 const meta = { url: 'docs/ui/LOOK_AND_FEEL.md' };
 

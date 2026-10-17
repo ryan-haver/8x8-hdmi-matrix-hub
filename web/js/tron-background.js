@@ -50,6 +50,23 @@ class TronBackground {
         this.moveInterval = 80; // ms between moves (slower = less frantic)
         this.timeSinceMove = 0;
         
+        // Frame pacing (UI-16): the background is decoration, so it is capped at
+        // 30 fps instead of redrawing on every ~16ms animation frame. Frames that
+        // arrive early are skipped, but the loop keeps scheduling.
+        this.maxFps = 30;
+        this.frameInterval = 1000 / this.maxFps;
+        this.lastRenderTime = 0;
+        
+        // Accessibility (UI-16): with prefers-reduced-motion: reduce we draw one
+        // static frame and never start the loop.
+        this.isPausedForReducedMotion = false;
+        
+        // Low-power devices (UI-16): canvas shadowBlur is by far the most
+        // expensive part of the draw, so it is capped hard there. Off by default
+        // for capable devices, which keeps the existing rendering untouched.
+        this.isLowPowerMode = TronBackground.detectLowPowerMode();
+        this.lowPowerMaxShadowBlur = 4;
+        
         // Bind methods
         this.animate = this.animate.bind(this);
         this.handleResize = this.handleResize.bind(this);
@@ -259,6 +276,18 @@ class TronBackground {
         this.init();
         this.isRunning = true;
         this.lastTime = performance.now();
+        // 0 makes the first frame render immediately (and deterministically, for
+        // visual snapshots) instead of waiting out the frame interval.
+        this.lastRenderTime = 0;
+        
+        // Reduced motion (UI-16): one static frame, no animation loop.
+        if (TronBackground.prefersReducedMotion()) {
+            this.isPausedForReducedMotion = true;
+            this.render();
+            return;
+        }
+        
+        this.isPausedForReducedMotion = false;
         this.animate();
     }
     
@@ -291,6 +320,14 @@ class TronBackground {
     animate(currentTime = performance.now()) {
         if (!this.isRunning) return;
         
+        // Reduced motion (UI-16): stop scheduling frames. start() already drew
+        // the single static frame, so nothing else is needed here. Re-checking
+        // per frame also picks up an OS-level setting changed while running.
+        if (this.isPausedForReducedMotion || TronBackground.prefersReducedMotion()) {
+            this.isPausedForReducedMotion = true;
+            return;
+        }
+        
         const deltaTime = currentTime - this.lastTime;
         this.lastTime = currentTime;
         
@@ -305,10 +342,52 @@ class TronBackground {
         // Update particles
         this.updateParticles(deltaTime);
         
-        // Render
-        this.render();
+        // Render, capped at maxFps (UI-16). Early frames skip the draw - the
+        // simulation above still advances - but the loop stays scheduled so the
+        // next frame is ready on time.
+        if (this.lastRenderTime === 0 || currentTime - this.lastRenderTime >= this.frameInterval) {
+            this.lastRenderTime = currentTime;
+            this.render();
+        }
         
         this.animationId = requestAnimationFrame(this.animate);
+    }
+    
+    /**
+     * Whether the user asked for reduced motion (UI-16, LOOK_AND_FEEL.md 6)
+     */
+    static prefersReducedMotion() {
+        return Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches);
+    }
+    
+    /**
+     * Guess whether we are on a low-power device (UI-16): few CPU cores or a
+     * small memory budget. Unknown devices are treated as capable, so the
+     * default rendering is unchanged.
+     */
+    static detectLowPowerMode() {
+        const nav = window.navigator || {};
+        const cores = Number(nav.hardwareConcurrency) || 0;
+        const memory = Number(nav.deviceMemory) || 0;
+        return (cores > 0 && cores <= 4) || (memory > 0 && memory <= 4);
+    }
+    
+    /**
+     * Turn the low-power budget on or off at runtime (kiosk / TV browsers, or a
+     * user toggle). Shadow blur is capped at lowPowerMaxShadowBlur while on.
+     */
+    setLowPowerMode(enabled) {
+        this.isLowPowerMode = Boolean(enabled);
+    }
+    
+    /**
+     * Set the canvas shadow blur, capped on low-power devices (UI-16).
+     * A capable device gets the exact value it asked for.
+     */
+    setShadowBlur(blur) {
+        this.ctx.shadowBlur = this.isLowPowerMode
+            ? Math.min(blur, this.lowPowerMaxShadowBlur)
+            : blur;
     }
     
     /**
@@ -975,7 +1054,7 @@ class TronBackground {
         ctx.textBaseline = 'middle';
         
         // Glow effect
-        ctx.shadowBlur = 20;
+        this.setShadowBlur(20);
         ctx.shadowColor = `rgb(${winnerColor.r}, ${winnerColor.g}, ${winnerColor.b})`;
         
         // Draw text
@@ -988,7 +1067,7 @@ class TronBackground {
         ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
         ctx.fillText(`${this.scores.cyan} - ${this.scores.orange}`, w / 2, h / 2 + 20);
         
-        ctx.shadowBlur = 0;
+        this.setShadowBlur(0);
     }
     
     /**
@@ -1033,7 +1112,7 @@ class TronBackground {
             if (trail.length < 2) continue;
             
             // Draw trail with glow
-            ctx.shadowBlur = 10;
+            this.setShadowBlur(10);
             ctx.shadowColor = `rgb(${color.r}, ${color.g}, ${color.b})`;
             ctx.strokeStyle = `rgba(${color.r}, ${color.g}, ${color.b}, 0.8)`;
             ctx.lineWidth = 3;
@@ -1048,7 +1127,7 @@ class TronBackground {
             }
             
             ctx.stroke();
-            ctx.shadowBlur = 0;
+            this.setShadowBlur(0);
         }
     }
     
@@ -1065,7 +1144,7 @@ class TronBackground {
             const color = cycle.color;
             
             // Glow effect
-            ctx.shadowBlur = 15;
+            this.setShadowBlur(15);
             ctx.shadowColor = `rgb(${color.r}, ${color.g}, ${color.b})`;
             
             // Draw cycle head
@@ -1080,7 +1159,7 @@ class TronBackground {
             ctx.arc(x, y, 2, 0, Math.PI * 2);
             ctx.fill();
             
-            ctx.shadowBlur = 0;
+            this.setShadowBlur(0);
         }
     }
     
@@ -1093,7 +1172,7 @@ class TronBackground {
         for (const p of this.particles) {
             const alpha = p.life;
             ctx.fillStyle = `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, ${alpha})`;
-            ctx.shadowBlur = 8;
+            this.setShadowBlur(8);
             ctx.shadowColor = `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, ${alpha})`;
             
             ctx.beginPath();
@@ -1101,7 +1180,7 @@ class TronBackground {
             ctx.fill();
         }
         
-        ctx.shadowBlur = 0;
+        this.setShadowBlur(0);
     }
     
     /**
