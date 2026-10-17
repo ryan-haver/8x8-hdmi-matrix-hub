@@ -60,6 +60,7 @@ SCENARIOS = [
         title="Save a custom mapping (output 1 = input 8) into preset 6; the live routing is put back",
         features=("F-DOM-034",),
         client_features={"api": ("F-API-008",)},
+        targets=("sim",),
         writes=("presets", "routing"),
         sim_state={"outputs": {"0": {"source": 3}}},
         action=act("request", method="POST", path="/api/preset/6/save", json={"routing": {"1": 8}}),

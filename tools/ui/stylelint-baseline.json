@@ -7,9 +7,9 @@
   "web/css/components.css": {
     "declaration-block-no-duplicate-properties": 1,
     "declaration-property-value-keyword-no-deprecated": 1,
-    "hub/no-raw-colors": 196,
-    "no-descending-specificity": 83,
-    "no-duplicate-selectors": 20
+    "hub/no-raw-colors": 189,
+    "no-descending-specificity": 82,
+    "no-duplicate-selectors": 11
   },
   "web/css/icon-picker.css": {
     "hub/no-raw-colors": 38,
@@ -23,7 +23,6 @@
     "property-no-deprecated": 1
   },
   "web/css/style.css": {
-    "declaration-block-no-duplicate-properties": 1,
     "declaration-property-value-keyword-no-deprecated": 1,
     "hub/no-raw-colors": 76,
     "no-descending-specificity": 5,

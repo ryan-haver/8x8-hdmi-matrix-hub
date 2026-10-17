@@ -52,6 +52,8 @@ _MAX_BIND_ATTEMPTS = 3
 _BIND_ERROR_MARKERS = (
     "Failed to start REST API server",
     "check_port_available",
+    "Could not bind to port",
+    "is in use, waiting for it",
     "WinError 10013",
     "WinError 10048",
     "Address already in use",

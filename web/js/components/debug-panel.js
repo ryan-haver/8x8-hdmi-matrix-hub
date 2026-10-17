@@ -171,7 +171,7 @@ class DebugPanel {
                 border: none;
                 font-size: 24px;
                 cursor: pointer;
-                z-index: 900;
+                z-index: var(--z-fixed);
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -197,7 +197,7 @@ class DebugPanel {
                 background: var(--card-background, #1e293b);
                 border: 1px solid var(--border-color, #334155);
                 border-radius: 12px;
-                z-index: 9998;
+                z-index: var(--z-modal);
                 display: none;
                 flex-direction: column;
                 font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;

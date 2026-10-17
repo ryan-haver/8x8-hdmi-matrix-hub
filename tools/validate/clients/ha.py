@@ -236,6 +236,8 @@ class HomeAssistantClient(Client):
         if self._session is not None:
             await self._session.close()
             self._session = None
+        self.entry_id = None
+        self._registry.clear()
         if self.container:
             if self.log_dir is not None:
                 self.log_dir.mkdir(parents=True, exist_ok=True)

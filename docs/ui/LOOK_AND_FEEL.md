@@ -86,7 +86,7 @@ The swatch picker offers eight hues (Cyan 187, Orange 25, Crimson 350, Lime 80, 
 - **Spacing scale (4px base):** 4, 8, 12, 16, 20, 24, 32, 40, 48 (`--space-1` … `--space-12`). Components use only these values.
 - **Radii:** 4 (small chips), 8, 12 (cards), 10 (buttons, inputs), 16 (modals, drawers), full (pills, toggles).
 - **Shadows:** `--shadow-sm/md/lg/xl`, plus accent glows (`--glow-cyan-sm` 8px, `--glow-cyan` 16px, `--glow-cyan-lg` 24+48px). Glow means "active or focused". Don't use it for decoration.
-- **Z-index layers:** base 0 · dropdown 100 · sticky 200 · fixed 300 · modal backdrop 400 · modal 500 · toast 600 · tooltip 700.
+- **Z-index layers:** base 0 · dropdown 100 · sticky 200 · fixed 300 · modal/drawer backdrop 400 · drawer 450 · modal 500 · nested modal/confirm 550 · toast 600 · tooltip 700.
 
 ## 6. Motion
 

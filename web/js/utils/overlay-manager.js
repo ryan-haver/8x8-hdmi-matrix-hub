@@ -16,6 +16,18 @@ class OverlayManager {
      */
     register(name, options) {
         this.overlays.set(name, options);
+        // Keep .routing-drawer elements before .settings-drawer in document.body so
+        // equal z-index (var(--z-drawer)) preserves closed-drawer shadow stacking order.
+        if (name === 'routing-drawer' || name === 'shortcuts-drawer' || name === 'presets-drawer') {
+            const firstSettings = document.body?.querySelector('.settings-drawer-backdrop, .settings-drawer');
+            if (firstSettings) {
+                for (const el of document.body.querySelectorAll('.routing-backdrop, .routing-drawer')) {
+                    if (firstSettings.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING) {
+                        document.body.insertBefore(el, firstSettings);
+                    }
+                }
+            }
+        }
     }
 
     /**
