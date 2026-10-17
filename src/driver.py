@@ -27,6 +27,7 @@ import atexit
 import contextlib
 import errno
 import functools
+import hmac
 import json
 import logging
 import os
@@ -42,6 +43,7 @@ from pathlib import Path
 from typing import Any
 
 import ucapi
+import ucapi.api as ucapi_api
 from ucapi import Button, MediaPlayer, Sensor, StatusCodes, Switch
 from ucapi.media_player import Attributes as MediaPlayerAttr
 from ucapi.media_player import Commands as MediaPlayerCommands
@@ -2169,13 +2171,26 @@ async def handle_driver_setup(msg: ucapi.DriverSetupRequest) -> ucapi.SetupActio
     global _pending_setup
     _pending_setup = None
     _LOG.info("Starting driver setup (reconfigure: %s)", msg.reconfigure)
-    address = parse_setup_address(msg.setup_data or {})
+    setup_data = msg.setup_data or {}
+    address = parse_setup_address(setup_data)
     if address is None:
         _LOG.error("Setup: the matrix address is not a host name or IP address with a port 1-65535")
         return ucapi.SetupError(error_type=ucapi.IntegrationSetupError.NOT_FOUND)
     host, port = address
 
     current = get_matrix()
+    token = os.environ.get("UC_AUTH_TOKEN") or os.environ.get("ADMIN_PIN")
+    supplied = next((setup_data.get(key) for key in ("auth_token", "token", "pin")
+                     if isinstance(setup_data.get(key), str)), None)
+    if token and (not isinstance(supplied, str) or not hmac.compare_digest(supplied, token)):
+        _LOG.warning("Setup: authorization token missing or invalid")
+        return ucapi.SetupError(error_type=ucapi.IntegrationSetupError.AUTHORIZATION_ERROR)
+    current_credentials = current.credentials() if isinstance(current, OreiMatrix) else None
+    if not token and current_credentials is not None and (current.host, current.port) != (host, port):
+        current_password = setup_data.get("current_password")
+        if not isinstance(current_password, str) or not hmac.compare_digest(current_password, current_credentials[1]):
+            _LOG.warning("Setup: current matrix password required to change its address")
+            return ucapi.SetupError(error_type=ucapi.IntegrationSetupError.AUTHORIZATION_ERROR)
     if current is not None and (current.host, current.port) == (host, port):
         if current.connected:
             _LOG.info("Setup: keeping the working connection to %s:%d", host, port)
@@ -2301,8 +2316,11 @@ def main(driver_json: str | Path | None = None) -> None:
         package). A caller that adjusts the metadata (e.g. a driver URL) passes its own copy.
     """
     metadata = Path(driver_json) if driver_json else DRIVER_JSON
+
+    # ucapi's DEBUG message sanitizer omits these setup-specific secret fields.
+    ucapi_api._SENSITIVE_KEYS.update({"auth_token", "pin", "current_password"})
     logging.basicConfig(
-        level=logging.DEBUG,
+        level=getattr(logging, os.environ.get("LOG_LEVEL", "INFO").upper(), logging.INFO),
         format="%(asctime)s | %(levelname)-8s | %(name)s | %(message)s",
     )
 
@@ -2365,6 +2383,16 @@ def main(driver_json: str | Path | None = None) -> None:
         try:
             _LOG.info(f"Initializing API (attempt {attempt + 1}/{max_retries})...")
             loop.run_until_complete(api.init(str(metadata), setup_handler))
+            setup_settings = api._driver_info.get("setup_data_schema", {}).get("settings", [])
+            if os.environ.get("UC_AUTH_TOKEN") or os.environ.get("ADMIN_PIN"):
+                api._driver_info["pwd"] = True
+                setup_settings[:] = [s for s in setup_settings if s.get("id") != "current_password"]
+                setup_settings.append({"id": "auth_token", "label": {"en": "Hub setup token"},
+                                       "field": {"password": {}}})
+            elif not any(s.get("id") == "current_password" for s in setup_settings):
+                setup_settings.append({"id": "current_password",
+                                       "label": {"en": "Current matrix password (when changing address)"},
+                                       "field": {"password": {}}})
             _LOG.info("API initialized successfully")
             break
         except Exception as e:

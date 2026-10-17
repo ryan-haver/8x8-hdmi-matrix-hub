@@ -6,15 +6,106 @@ Handles profile CRUD, recall, and macro associations.
 
 import json
 import logging
+import math
+from typing import Any
 
 from aiohttp import web
 
 from device_codes import SCALER_MODES
+from password import (
+    PIN_CLEAR,
+    PIN_SET,
+    attempt_pin,
+    check_pin_lockout,
+    hash_passcode_async,
+    requested_pin_change,
+    reset_pin_lockout,
+    verify_passcode_async,
+)
 from profile_execution import apply_profile_state
 
 from .utils import _json_response, get_macro_manager, get_matrix_device, get_profile_manager
 
 _LOG = logging.getLogger("rest_api.profiles")
+
+# PIN fields of POST /api/profile and PUT /api/profile/{id} (SEC-05). They are
+# read by requested_pin_change(), never passed to update_profile() as-is.
+PROFILE_PIN_FIELDS = frozenset({
+    "passcode",
+    "current_passcode",
+    "remove_passcode",
+    "password_protected",
+})
+
+# Header that may carry the current passcode (DELETE requests often have no body)
+PASSCODE_HEADER = "X-Passcode"
+
+
+def _pin_key(profile_id: str) -> str:
+    """Attempt-limiter key of a profile (SEC-06)."""
+    return f"profile:{profile_id}"
+
+
+def _supplied_pin(request: web.Request, data: dict[str, Any], *fields: str) -> Any:
+    """The passcode a request supplies: the first non-empty body field, else the X-Passcode header."""
+    for name in fields:
+        value = data.get(name)
+        if value not in (None, ""):
+            return value
+    return request.headers.get(PASSCODE_HEADER) or None
+
+
+async def _optional_json(request: web.Request) -> dict[str, Any]:
+    """The JSON object body of a request that may have none (raises JSONDecodeError if malformed)."""
+    if not request.can_read_body:
+        return {}
+    data = await request.json()
+    return data if isinstance(data, dict) else {}
+
+
+def _pin_locked_response(profile_id: str, retry_after: float) -> web.Response:
+    """429 for a profile locked out after too many wrong passcodes (F-SEC-007)."""
+    seconds = max(1, math.ceil(retry_after))
+    response = _json_response(
+        False,
+        {"error": "passcode_locked", "profile_id": profile_id, "retry_after": seconds},
+        error=f"Too many wrong passcodes; try again in {seconds} s",
+        status=429,
+    )
+    response.headers["Retry-After"] = str(seconds)
+    return response
+
+
+async def _check_profile_pin(profile, passcode: Any) -> web.Response | None:
+    """
+    Check ``passcode`` against a protected profile under the attempt limiter.
+
+    Returns None if it matches, else the response to send: 429 while the
+    profile is locked out, 403 ``passcode_required`` / ``invalid_passcode``.
+    PBKDF2 runs in a thread (SEC-06).
+    """
+    key = _pin_key(profile.id)
+    retry_after = check_pin_lockout(key)
+    if retry_after > 0:
+        return _pin_locked_response(profile.id, retry_after)
+    if passcode in (None, ""):
+        return _json_response(False, {"error": "passcode_required", "profile_id": profile.id}, status=403)
+    attempt = await attempt_pin(key, lambda: verify_passcode_async(passcode, profile.passcode_hash))
+    if attempt.locked:
+        return _pin_locked_response(profile.id, attempt.retry_after)
+    if not attempt.ok:
+        _LOG.warning("Wrong passcode for profile '%s'", profile.id)
+        return _json_response(False, {"error": "invalid_passcode", "profile_id": profile.id}, status=403)
+    return None
+
+
+async def _pin_updates(action: str | None, new_pin: str | None) -> dict[str, Any]:
+    """``update_profile()``/``create_profile()`` kwargs for a requested PIN change."""
+    if action == PIN_SET:
+        return {"password_protected": True, "passcode_hash": await hash_passcode_async(new_pin)}
+    if action == PIN_CLEAR:
+        return {"password_protected": False, "passcode_hash": ""}
+    return {}
 
 # Whitelist of fields that may be updated via PUT /api/profile/{id}.
 # Without this, any field in the JSON body is passed through to
@@ -165,6 +256,8 @@ async def handle_create_profile(request: web.Request) -> web.Response:
 
     try:
         data = await request.json()
+        if not isinstance(data, dict):
+            return _json_response(False, error="Body must be a JSON object", status=400)
 
         profile_id = data.get("id")
         name = data.get("name")
@@ -194,6 +287,18 @@ async def handle_create_profile(request: web.Request) -> web.Response:
                 if not macro_manager.get_macro(macro_id):
                     _LOG.warning(f"Profile references non-existent macro: {macro_id}")
 
+        # PIN (SEC-05): a new profile may set one; replacing a protected
+        # profile keeps its PIN, and changing or clearing it needs the current one.
+        existing = profile_manager.get_profile(profile_id)
+        protected_now = existing is not None and existing.is_password_protected()
+        action, new_pin, pin_error = requested_pin_change(data, protected_now)
+        if pin_error:
+            return _json_response(False, error=pin_error, status=400)
+        if action is not None and protected_now:
+            denied = await _check_profile_pin(existing, _supplied_pin(request, data, "current_passcode"))
+            if denied is not None:
+                return denied
+
         profile = profile_manager.create_profile(
             profile_id=profile_id,
             name=name,
@@ -203,6 +308,7 @@ async def handle_create_profile(request: web.Request) -> web.Response:
             macros=macros,
             power_on_macro=power_on_macro,
             power_off_macro=power_off_macro,
+            **await _pin_updates(action, new_pin),
         )
         _LOG.info(f"Profile '{name}' ({profile_id}) created/updated")
 
@@ -231,6 +337,8 @@ async def handle_update_profile(request: web.Request) -> web.Response:
             return _json_response(False, error=f"Profile '{profile_id}' not found", status=404)
 
         data = await request.json()
+        if not isinstance(data, dict):
+            return _json_response(False, error="Body must be a JSON object", status=400)
 
         # FIX (F12.3): whitelist fields to prevent mass assignment of
         # internal fields like passcode_hash, created_at, etc.
@@ -240,12 +348,12 @@ async def handle_update_profile(request: web.Request) -> web.Response:
         for field in ("power_on_macro", "power_off_macro"):
             if field in updates and updates[field] is None:
                 updates[field] = ""
-        ignored = set(data.keys()) - PROFILE_UPDATE_FIELDS
+        ignored = set(data.keys()) - PROFILE_UPDATE_FIELDS - PROFILE_PIN_FIELDS
         if ignored:
             _LOG.warning(
                 "Profile update ignored unexpected fields: %s", sorted(ignored)
             )
-        if not updates:
+        if not updates and not PROFILE_PIN_FIELDS & data.keys():
             return _json_response(
                 False,
                 error="No valid fields to update",
@@ -255,6 +363,21 @@ async def handle_update_profile(request: web.Request) -> web.Response:
             outputs_error = _validate_outputs(updates["outputs"])
             if outputs_error:
                 return _json_response(False, error=outputs_error, status=400)
+
+        # PIN (SEC-05): set, change or clear; changing or clearing an existing
+        # PIN needs the current one ("current_passcode" or the X-Passcode header).
+        protected_now = profile.is_password_protected()
+        action, new_pin, pin_error = requested_pin_change(data, protected_now)
+        if pin_error:
+            return _json_response(False, error=pin_error, status=400)
+        if action is not None and protected_now:
+            denied = await _check_profile_pin(profile, _supplied_pin(request, data, "current_passcode"))
+            if denied is not None:
+                return denied
+        updates.update(await _pin_updates(action, new_pin))
+        if not updates:
+            # Only PIN fields that change nothing (e.g. password_protected: true on a protected profile)
+            return _json_response(True, profile.to_dict())
 
         updated = profile_manager.update_profile(profile_id, **updates)
         if updated:
@@ -282,11 +405,26 @@ async def handle_delete_profile(request: web.Request) -> web.Response:
         if not profile_id:
             return _json_response(False, error="Profile ID required", status=400)
 
+        profile = profile_manager.get_profile(profile_id)
+        if profile is None:
+            return _json_response(False, error=f"Profile '{profile_id}' not found", status=404)
+
+        # Deleting a protected profile needs its passcode (SEC-05): body
+        # "current_passcode"/"passcode" or the X-Passcode header.
+        if profile.is_password_protected():
+            data = await _optional_json(request)
+            denied = await _check_profile_pin(profile, _supplied_pin(request, data, "current_passcode", "passcode"))
+            if denied is not None:
+                return denied
+
         if profile_manager.delete_profile(profile_id):
+            reset_pin_lockout(_pin_key(profile_id))
             _LOG.info(f"Profile '{profile_id}' deleted")
             return _json_response(True, {"deleted": profile_id})
         else:
             return _json_response(False, error=f"Profile '{profile_id}' not found", status=404)
+    except json.JSONDecodeError:
+        return _json_response(False, error="Invalid JSON", status=400)
     except Exception as e:
         _LOG.exception(f"Error deleting profile: {e}")
         return _json_response(False, error=str(e), status=500)
@@ -316,30 +454,16 @@ async def handle_recall_profile(request: web.Request) -> web.Response:
         if profile is None:
             return _json_response(False, error=f"Profile '{profile_id}' not found", status=404)
 
-        # Password protection check
-        if profile.password_protected:
-            data = await request.json() if request.can_read_body else {}
-            passcode = data.get("passcode")
-            if not passcode:
-                return _json_response(
-                    False,
-                    {
-                        "error": "passcode_required",
-                        "profile_id": profile_id,
-                    },
-                    status=403,
-                )
-            from password import needs_passcode, verify_passcode
-
-            if not needs_passcode(profile.passcode_hash) or not verify_passcode(passcode, profile.passcode_hash):
-                return _json_response(
-                    False,
-                    {
-                        "error": "invalid_passcode",
-                        "profile_id": profile_id,
-                    },
-                    status=403,
-                )
+        # Password protection check: 429 while locked out after wrong
+        # passcodes, PBKDF2 off the event loop (SEC-06 / F-SEC-007)
+        if profile.is_password_protected():
+            try:
+                data = await _optional_json(request)
+            except json.JSONDecodeError:
+                return _json_response(False, error="Invalid JSON", status=400)
+            denied = await _check_profile_pin(profile, data.get("passcode"))
+            if denied is not None:
+                return denied
 
         # Execute power-on macro if configured
         power_on_result = None

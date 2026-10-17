@@ -24,12 +24,23 @@ System Actions:
 
 import json
 import logging
+import math
 from typing import Any
 
 from aiohttp import web
 
+from password import (
+    PIN_CLEAR,
+    PIN_SET,
+    attempt_pin,
+    check_pin_lockout,
+    hash_passcode_async,
+    requested_pin_change,
+    reset_pin_lockout,
+)
 from scene_manager import (
     STEP_TYPE_PROFILE,
+    Scene,
     SceneManager,
     SceneStep,
     detect_conflicts,
@@ -54,7 +65,28 @@ def _get_scene_manager() -> "SceneManager":
     return _phase8_scene_manager
 
 
-def _get_executor():
+class _PasscodeCheckedSceneManager:
+    """
+    The SceneManager as the executor sees it once the REST layer has checked
+    the passcode of ``scene_id`` (with the attempt limiter, off the event
+    loop): the executor's own synchronous re-check would run PBKDF2 on the
+    event loop again (SEC-06), so it is answered from that result.
+    """
+
+    def __init__(self, manager: SceneManager, scene_id: str):
+        self._manager = manager
+        self._scene_id = scene_id
+
+    def verify_passcode(self, scene_id: str, passcode: str) -> bool:
+        if scene_id == self._scene_id:
+            return True
+        return self._manager.verify_passcode(scene_id, passcode)
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._manager, name)
+
+
+def _get_executor(passcode_checked_scene: str | None = None):
     from persistence import get_data_dir
     from rest_api.utils import get_macro_manager, get_system_shortcut_manager
     from scene_execution import SceneExecutor
@@ -63,8 +95,11 @@ def _get_executor():
     # The hub's shortcut manager (the one the shortcut routes edit); a private
     # instance only when the REST layer was not set up with one.
     sam = get_system_shortcut_manager() or SystemActionManager(get_data_dir())
+    scene_manager: Any = _get_scene_manager()
+    if passcode_checked_scene is not None:
+        scene_manager = _PasscodeCheckedSceneManager(scene_manager, passcode_checked_scene)
     return SceneExecutor(
-        scene_manager=_get_scene_manager(),
+        scene_manager=scene_manager,
         profile_manager=_get_profile_manager(),
         system_action_manager=sam,
         macro_manager=get_macro_manager(),
@@ -95,6 +130,90 @@ def _profile_map(steps: list[SceneStep]) -> dict[str, Any]:
             if profile is not None:
                 found[step.id] = profile
     return found
+
+
+def _all_profiles_map() -> dict[str, Any]:
+    """``{profile_id: Profile}`` for every profile, for PIN inheritance (SEC-04 / SEC-05)."""
+    from rest_api.utils import get_profile_manager
+
+    pm = get_profile_manager()
+    return pm.get_profiles_map() if pm is not None else {}
+
+
+def _scene_dict(mgr: SceneManager, scene: Scene, profiles_map: dict[str, Any]) -> dict[str, Any]:
+    """
+    A scene as clients see it: never ``passcode_hash`` (F-SEC-005), and
+    ``password_protected`` true when a PIN is needed to run it, its own or
+    inherited from a protected Profile (``passcode_inherited``).
+    """
+    result = scene.to_dict()
+    result["password_protected"] = mgr.is_scene_password_protected(scene.id, profiles_map)
+    result["passcode_inherited"] = mgr.is_passcode_inherited(scene.id, profiles_map)
+    return result
+
+
+def _pin_key(scene_id: str) -> str:
+    """Attempt-limiter key of a scene (SEC-06)."""
+    return f"scene:{scene_id}"
+
+
+async def _optional_json(request: web.Request) -> dict[str, Any]:
+    """The JSON object body of a request that may have none (raises JSONDecodeError if malformed)."""
+    if not request.can_read_body:
+        return {}
+    data = await request.json()
+    return data if isinstance(data, dict) else {}
+
+
+def _supplied_pin(request: web.Request, data: dict[str, Any], *fields: str) -> Any:
+    """The passcode a request supplies: the first non-empty body field, else the X-Passcode header."""
+    for name in fields:
+        value = data.get(name)
+        if value not in (None, ""):
+            return value
+    return request.headers.get("X-Passcode") or None
+
+
+async def _pin_locked_response(scene_id: str, retry_after: float) -> web.Response:
+    """429 for a scene locked out after too many wrong passcodes (F-SEC-007)."""
+    seconds = max(1, math.ceil(retry_after))
+    response = await _json_response(
+        False,
+        {"error": "passcode_locked", "scene_id": scene_id, "retry_after": seconds, "requires_scene_passcode": True},
+        error=f"Too many wrong passcodes; try again in {seconds} s",
+        status=429,
+    )
+    response.headers["Retry-After"] = str(seconds)
+    return response
+
+
+async def _check_scene_pin(
+    mgr: SceneManager, scene_id: str, passcode: Any, profiles_map: dict[str, Any]
+) -> web.Response | None:
+    """
+    Check ``passcode`` for a protected scene (own or inherited PIN) under the
+    attempt limiter. Returns None if it matches, else the response to send:
+    429 while locked out, 403 ``passcode_required`` / ``invalid_passcode``.
+    """
+    key = _pin_key(scene_id)
+    retry_after = check_pin_lockout(key)
+    if retry_after > 0:
+        return await _pin_locked_response(scene_id, retry_after)
+    if passcode in (None, ""):
+        error = "passcode_required"
+    else:
+        attempt = await attempt_pin(key, lambda: mgr.verify_scene_passcode_async(scene_id, passcode, profiles_map))
+        if attempt.locked:
+            return await _pin_locked_response(scene_id, attempt.retry_after)
+        if attempt.ok:
+            return None
+        _LOG.warning("Wrong passcode for scene '%s'", scene_id)
+        error = "invalid_passcode"
+    return await _json_response(
+        False,
+        {"error": error, "scene_id": scene_id, "requires_scene_passcode": True},
+        status=403,
+    )
 
 
 def _parse_steps(raw: Any) -> list[SceneStep]:
@@ -157,10 +276,11 @@ async def handle_list_scenes(request: web.Request) -> web.Response:
     try:
         mgr = _get_scene_manager()
         scenes = mgr.list_scenes()
+        profiles_map = _all_profiles_map()
         return await _json_response(
             True,
             {
-                "scenes": [s.to_dict() for s in scenes],
+                "scenes": [_scene_dict(mgr, s, profiles_map) for s in scenes],
                 "count": len(scenes),
             },
         )
@@ -186,27 +306,25 @@ async def handle_create_scene(request: web.Request) -> web.Response:
             if err:
                 return await _json_response(False, error=f"Step {i}: {err}", status=400)
 
-        # Password inheritance check: scene containing protected profile must itself be protected
-        if not bool(data.get("password_protected", False)) and mgr.steps_reference_protected_profile(
-            steps, _profile_map(steps)
-        ):
-            return await _json_response(
-                False,
-                error="Scene contains a password-protected Profile; the Scene must also be password-protected",
-                status=400,
-            )
+        action, new_pin, pin_error = requested_pin_change(data, has_own_pin=False)
+        if pin_error:
+            return await _json_response(False, error=pin_error, status=400)
 
+        # The manager enforces PIN inheritance (a scene containing a protected
+        # profile must itself be protected) with the profile map (SEC-05).
+        profiles_map = _all_profiles_map()
         scene, err = mgr.create_scene(
             name=data.get("name", "Unnamed Scene"),
             icon=data.get("icon", "🎬"),
             steps=steps,
-            password_protected=bool(data.get("password_protected", False)),
-            passcode=data.get("passcode"),
+            password_protected=action == PIN_SET,
+            passcode_hash=await hash_passcode_async(new_pin) if action == PIN_SET else None,
+            profiles_map=profiles_map,
         )
         if err:
             return await _json_response(False, error=err, status=400)
 
-        return await _json_response(True, {"scene": scene.to_dict()}, status=201)
+        return await _json_response(True, {"scene": _scene_dict(mgr, scene, profiles_map)}, status=201)
     except json.JSONDecodeError:
         return await _json_response(False, error="Invalid JSON body", status=400)
     except Exception as e:
@@ -222,7 +340,7 @@ async def handle_get_scene(request: web.Request) -> web.Response:
         scene = mgr.get_scene(scene_id)
         if scene is None:
             return await _json_response(False, error="Scene not found", status=404)
-        return await _json_response(True, {"scene": scene.to_dict()})
+        return await _json_response(True, {"scene": _scene_dict(mgr, scene, _all_profiles_map())})
     except Exception as e:
         _LOG.error("Error getting scene %s: %s", scene_id, e)
         return await _json_response(False, error=str(e), status=500)
@@ -236,7 +354,8 @@ async def handle_update_scene(request: web.Request) -> web.Response:
         if not isinstance(data, dict):
             return await _json_response(False, error="Body must be a JSON object", status=400)
         mgr = _get_scene_manager()
-        if mgr.get_scene(scene_id) is None:
+        existing = mgr.get_scene(scene_id)
+        if existing is None:
             return await _json_response(False, error="Scene not found", status=404)
 
         # Parse (and validate) everything before anything is changed (API-13)
@@ -250,23 +369,29 @@ async def handle_update_scene(request: web.Request) -> web.Response:
         except ValueError as exc:
             return await _json_response(False, error=str(exc), status=400)
 
-        # Password inheritance check
-        password_protected = data.get("password_protected")
-        if steps is not None and not password_protected:
-            profile_map = _profile_map(steps)
-            existing = mgr.get_scene(scene_id)
-            scene_is_protected = (
-                password_protected
-                if password_protected is not None
-                else (existing.password_protected if existing else False)
+        # PIN (SEC-05): setting, changing or removing the PIN of a protected
+        # scene (own PIN or one inherited from a protected profile) needs the
+        # current passcode ("current_passcode" or the X-Passcode header).
+        profiles_map = _all_profiles_map()
+        protected_now = mgr.is_scene_password_protected(scene_id, profiles_map)
+        action, new_pin, pin_error = requested_pin_change(
+            data, has_own_pin=existing.is_password_protected(), protected=protected_now
+        )
+        if pin_error:
+            return await _json_response(False, error=pin_error, status=400)
+        if action is not None and protected_now:
+            denied = await _check_scene_pin(
+                mgr, scene_id, _supplied_pin(request, data, "current_passcode"), profiles_map
             )
-            if not scene_is_protected and mgr.steps_reference_protected_profile(steps, profile_map):
-                return await _json_response(
-                    False,
-                    error="Scene contains a password-protected Profile; the Scene must also be password-protected",
-                    status=400,
-                )
+            if denied is not None:
+                return denied
+        pin_kwargs: dict[str, Any] = {}
+        if action == PIN_SET:
+            pin_kwargs = {"password_protected": True, "passcode_hash": await hash_passcode_async(new_pin)}
+        elif action == PIN_CLEAR:
+            pin_kwargs = {"password_protected": False}
 
+        # The manager enforces PIN inheritance with the profile map
         scene, err = mgr.update_scene(
             scene_id,
             name=data.get("name"),
@@ -276,13 +401,13 @@ async def handle_update_scene(request: web.Request) -> web.Response:
             favorite=data.get("favorite"),
             dashboard_visible=data.get("dashboard_visible"),
             dashboard_order=data.get("dashboard_order"),
-            password_protected=password_protected,
-            passcode=data.get("passcode"),
+            profiles_map=profiles_map,
+            **pin_kwargs,
         )
         if err:
             return await _json_response(False, error=err, status=400)
 
-        return await _json_response(True, {"scene": scene.to_dict()})
+        return await _json_response(True, {"scene": _scene_dict(mgr, scene, profiles_map)})
     except json.JSONDecodeError:
         return await _json_response(False, error="Invalid JSON body", status=400)
     except Exception as e:
@@ -295,9 +420,26 @@ async def handle_delete_scene(request: web.Request) -> web.Response:
     try:
         scene_id = request.match_info["scene_id"]
         mgr = _get_scene_manager()
+        if mgr.get_scene(scene_id) is None:
+            return await _json_response(False, error="Scene not found", status=404)
+
+        # Deleting a protected scene needs its passcode (SEC-05): body
+        # "current_passcode"/"passcode" or the X-Passcode header.
+        profiles_map = _all_profiles_map()
+        if mgr.is_scene_password_protected(scene_id, profiles_map):
+            data = await _optional_json(request)
+            denied = await _check_scene_pin(
+                mgr, scene_id, _supplied_pin(request, data, "current_passcode", "passcode"), profiles_map
+            )
+            if denied is not None:
+                return denied
+
         if not mgr.delete_scene(scene_id):
             return await _json_response(False, error="Scene not found", status=404)
+        reset_pin_lockout(_pin_key(scene_id))
         return await _json_response(True, {"deleted": scene_id})
+    except json.JSONDecodeError:
+        return await _json_response(False, error="Invalid JSON body", status=400)
     except Exception as e:
         _LOG.error("Error deleting scene %s: %s", scene_id, e)
         return await _json_response(False, error=str(e), status=500)
@@ -312,8 +454,8 @@ async def handle_execute_scene(request: web.Request) -> web.Response:
     """POST /api/v2/scenes/{scene_id}/execute — execute a scene."""
     try:
         scene_id = request.match_info["scene_id"]
-        data = await request.json() if request.can_read_body else {}
-        passcode = data.get("passcode") if isinstance(data, dict) else None
+        data = await _optional_json(request)
+        passcode = data.get("passcode")
 
         from rest_api.utils import get_matrix_device
 
@@ -321,10 +463,21 @@ async def handle_execute_scene(request: web.Request) -> web.Response:
         if matrix is None:
             return await _json_response(False, error="Matrix not connected", status=503)
 
-        if _get_scene_manager().get_scene(scene_id) is None:
+        mgr = _get_scene_manager()
+        if mgr.get_scene(scene_id) is None:
             return await _json_response(False, error="Scene not found", status=404)
 
-        executor = _get_executor()
+        # Own or inherited PIN, checked under the attempt limiter with PBKDF2
+        # off the event loop (SEC-04, SEC-06 / F-SEC-007)
+        passcode_checked = None
+        profiles_map = _all_profiles_map()
+        if mgr.is_scene_password_protected(scene_id, profiles_map):
+            denied = await _check_scene_pin(mgr, scene_id, passcode, profiles_map)
+            if denied is not None:
+                return denied
+            passcode_checked = scene_id
+
+        executor = _get_executor(passcode_checked)
         result = await executor.execute_scene(scene_id, matrix, passcode=passcode)
 
         if not result.success and result.error in ("passcode_required", "invalid_passcode"):

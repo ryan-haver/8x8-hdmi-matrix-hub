@@ -10,7 +10,8 @@ from aiohttp import web
 
 from device_codes import CEC_OUTPUT_COMMANDS
 
-from .utils import _json_response, get_input_names, get_matrix_device
+from .utils import _json_response, get_input_names, get_matrix_device, safe_error_message
+from .validation import BadRequestError, optional_bool, parse_json_object, validate_port
 from .websocket import broadcast_status_update
 
 _LOG = logging.getLogger("rest_api.cec")
@@ -64,8 +65,7 @@ async def handle_cec_input(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid input number", status=400)
     except Exception as e:
-        _LOG.exception(f"Error sending CEC command: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "sending CEC command"), status=500)
 
 
 async def handle_cec_output(request: web.Request) -> web.Response:
@@ -116,8 +116,7 @@ async def handle_cec_output(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid output number", status=400)
     except Exception as e:
-        _LOG.exception(f"Error sending CEC command: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "sending CEC command"), status=500)
 
 
 async def handle_cec_commands(request: web.Request) -> web.Response:
@@ -210,8 +209,7 @@ async def handle_cec_status(request: web.Request) -> web.Response:
         else:
             return _json_response(False, error="Failed to get CEC status", status=500)
     except Exception as e:
-        _LOG.exception(f"Error getting CEC status: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "getting CEC status"), status=500)
 
 
 async def handle_cec_capabilities(request: web.Request) -> web.Response:
@@ -248,8 +246,7 @@ async def handle_cec_capabilities(request: web.Request) -> web.Response:
         else:
             return _json_response(False, error="Failed to get capabilities", status=500)
     except Exception as e:
-        _LOG.exception(f"Error getting CEC capabilities: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "getting CEC capabilities"), status=500)
 
 
 async def handle_input_capabilities(request: web.Request) -> web.Response:
@@ -275,8 +272,7 @@ async def handle_input_capabilities(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid input number", status=400)
     except Exception as e:
-        _LOG.exception(f"Error getting input capabilities: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "getting input capabilities"), status=500)
 
 
 async def handle_output_capabilities(request: web.Request) -> web.Response:
@@ -302,8 +298,7 @@ async def handle_output_capabilities(request: web.Request) -> web.Response:
     except ValueError:
         return _json_response(False, error="Invalid output number", status=400)
     except Exception as e:
-        _LOG.exception(f"Error getting output capabilities: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "getting output capabilities"), status=500)
 
 
 async def handle_cec_commands_by_type(request: web.Request) -> web.Response:
@@ -352,8 +347,7 @@ async def handle_cec_commands_by_type(request: web.Request) -> web.Response:
             },
         )
     except Exception as e:
-        _LOG.exception(f"Error getting CEC commands by type: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "getting CEC commands by type"), status=500)
 
 
 async def handle_cec_enable(request: web.Request) -> web.Response:
@@ -368,15 +362,12 @@ async def handle_cec_enable(request: web.Request) -> web.Response:
 
     try:
         port_type = request.match_info["port_type"]  # "input" or "output"
-        port_num = int(request.match_info["port"])
-
         if port_type not in ("input", "output"):
             return _json_response(False, error="port_type must be 'input' or 'output'", status=400)
-        if port_num < 1 or port_num > 8:
-            return _json_response(False, error="Port must be 1-8", status=400)
+        port_num = validate_port(request.match_info["port"])
 
-        data = await request.json()
-        enabled = data.get("enabled", True)
+        data = await parse_json_object(request)
+        enabled = optional_bool(data, "enabled", True)
 
         _LOG.info(f"REST API: Setting CEC for {port_type} {port_num} to {'enabled' if enabled else 'disabled'}")
         success = await matrix_device.set_cec_enable(port_type, port_num, enabled)
@@ -393,9 +384,10 @@ async def handle_cec_enable(request: web.Request) -> web.Response:
             )
         else:
             return _json_response(False, error=f"Failed to set CEC for {port_type} {port_num}", status=500)
+    except BadRequestError as exc:
+        return exc.response()
     except Exception as e:
-        _LOG.exception(f"Error setting CEC enable: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "setting CEC enable"), status=500)
 
 
 async def handle_cec_enable_input(request: web.Request) -> web.Response:
@@ -409,12 +401,10 @@ async def handle_cec_enable_input(request: web.Request) -> web.Response:
         return _json_response(False, error="Matrix not connected", status=503)
 
     try:
-        port_num = int(request.match_info["port"])
-        if port_num < 1 or port_num > 8:
-            return _json_response(False, error="Port must be 1-8", status=400)
+        port_num = validate_port(request.match_info["port"])
 
-        data = await request.json()
-        enabled = data.get("enabled", True)
+        data = await parse_json_object(request)
+        enabled = optional_bool(data, "enabled", True)
 
         _LOG.info(f"REST API: Setting CEC for input {port_num} to {'enabled' if enabled else 'disabled'}")
         success = await matrix_device.set_cec_enable("input", port_num, enabled)
@@ -431,9 +421,10 @@ async def handle_cec_enable_input(request: web.Request) -> web.Response:
             )
         else:
             return _json_response(False, error=f"Failed to set CEC for input {port_num}", status=500)
+    except BadRequestError as exc:
+        return exc.response()
     except Exception as e:
-        _LOG.exception(f"Error setting CEC enable: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "setting CEC enable"), status=500)
 
 
 async def handle_cec_enable_output(request: web.Request) -> web.Response:
@@ -447,12 +438,10 @@ async def handle_cec_enable_output(request: web.Request) -> web.Response:
         return _json_response(False, error="Matrix not connected", status=503)
 
     try:
-        port_num = int(request.match_info["port"])
-        if port_num < 1 or port_num > 8:
-            return _json_response(False, error="Port must be 1-8", status=400)
+        port_num = validate_port(request.match_info["port"])
 
-        data = await request.json()
-        enabled = data.get("enabled", True)
+        data = await parse_json_object(request)
+        enabled = optional_bool(data, "enabled", True)
 
         _LOG.info(f"REST API: Setting CEC for output {port_num} to {'enabled' if enabled else 'disabled'}")
         success = await matrix_device.set_cec_enable("output", port_num, enabled)
@@ -469,6 +458,7 @@ async def handle_cec_enable_output(request: web.Request) -> web.Response:
             )
         else:
             return _json_response(False, error=f"Failed to set CEC for output {port_num}", status=500)
+    except BadRequestError as exc:
+        return exc.response()
     except Exception as e:
-        _LOG.exception(f"Error setting CEC enable: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "setting CEC enable"), status=500)

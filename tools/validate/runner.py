@@ -599,9 +599,7 @@ class Runner:
                     blocked = f"setup step {step.describe()} failed: HTTP {r.status} {r.error or ''}".strip()
                     break
             if blocked is None:
-                if sc.faults and isinstance(dev, SimDevice):
-                    await dev.set_faults(sc.faults)
-                    procedure.append(f"inject simulator fault {sc.faults}")
+                await client.prepare(sc.action)
                 state_before = await dev.state()
                 # Preconditions on what the client shows (ClientState.before): wait for them, so a
                 # passing check afterwards proves a change the client saw.
@@ -616,6 +614,9 @@ class Runner:
                                            "result": "fail", "detail": f"{exp.key} = {pre['value']!r}",
                                            "finding": exp.finding, "linked_finding": exp.finding,
                                            "note": exp.note or None})
+                if sc.faults and isinstance(dev, SimDevice):
+                    await dev.set_faults(sc.faults)
+                    procedure.append(f"inject simulator fault {sc.faults}")
                 log_cursor = len(await dev.log()) if isinstance(dev, SimDevice) else 0
                 # ---- the action
                 stem = record_stem(started[:10], str(level), self.commit["short"], sc.id, client.name)

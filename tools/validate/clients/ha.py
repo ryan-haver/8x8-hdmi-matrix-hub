@@ -462,6 +462,10 @@ class HomeAssistantClient(Client):
                 return p["domain"], p["service"], data
         raise NotSupportedError(action.intent)
 
+    async def prepare(self, action: Action) -> None:
+        if action.intent != "ha_config_flow":
+            await self._ensure_entry()
+
     async def perform(self, action: Action) -> ActionResult:
         if action.intent not in self.intents:
             raise NotSupportedError(action.intent)

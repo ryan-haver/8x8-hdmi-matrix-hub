@@ -1,56 +1,68 @@
 """
 System information endpoints.
 
-Exposes the resolved storage layout and runtime metadata so operators
-can verify their Docker volume mounts are pointing where they expect.
+Report how persistent storage was resolved and whether it is usable, so
+operators can verify their Docker volume mounts. SEC-11: the responses carry
+no filesystem paths and no file names; those stay in the server log.
 """
 
 import logging
 import os
-from pathlib import Path
 from typing import Any
 
 from aiohttp import web
 
-from persistence import describe_storage_layout
+from persistence import get_config_dir, get_data_dir
 
-from .utils import _json_response
+from .utils import _json_response, safe_error_message
 
 _LOG = logging.getLogger("rest_api.system")
 
 
-async def handle_get_storage(request: web.Request) -> web.Response:
-    """GET /api/system/storage - Return the resolved persistent storage layout.
+def _storage_source() -> str:
+    """Which setting chose the data directory (the order of ``persistence.get_data_dir``)."""
+    if os.environ.get("MATRIX_DATA_DIR"):
+        return "MATRIX_DATA_DIR"
+    if os.environ.get("UC_CONFIG_HOME"):
+        return "UC_CONFIG_HOME"
+    return "default"
 
-    Useful for verifying that ``MATRIX_DATA_DIR`` and ``UC_CONFIG_HOME``
-    point where the operator expects inside the container. Also handy
-    when debugging "my settings didn't persist" reports.
+
+def _storage_summary() -> dict[str, Any]:
+    """Path-free storage diagnostics: where the setting came from, existence, writability, file count."""
+    data_dir = get_data_dir()
+    config_dir = get_config_dir()
+    data_dir_exists = data_dir.is_dir()
+
+    file_count: int | None = 0
+    if data_dir_exists:
+        try:
+            file_count = sum(1 for entry in data_dir.iterdir() if entry.is_file())
+        except OSError as exc:
+            _LOG.warning("Could not list the data directory %s: %s", data_dir, exc)
+            file_count = None
+
+    return {
+        "source": _storage_source(),
+        "data_dir_exists": data_dir_exists,
+        "config_dir_exists": config_dir.is_dir(),
+        "writable": data_dir_exists and os.access(data_dir, os.W_OK),
+        "file_count": file_count,
+    }
+
+
+async def handle_get_storage(request: web.Request) -> web.Response:
+    """GET /api/system/storage - Report whether persistent storage is set up and usable.
+
+    Useful for verifying that ``MATRIX_DATA_DIR`` or ``UC_CONFIG_HOME`` took
+    effect inside the container, and when debugging "my settings didn't
+    persist" reports. The resolved paths are logged, never returned (SEC-11).
     """
     try:
-        layout: dict[str, Any] = describe_storage_layout()
-
-        # Enrich with size/contents info for diagnostics.
-        data_dir = Path(layout["data_dir"])
-        config_dir = Path(layout["config_dir"])
-
-        layout["data_dir_exists"] = data_dir.exists()
-        layout["config_dir_exists"] = config_dir.exists()
-
-        # List top-level files in the data dir (if it exists) so the
-        # operator can see what state has been written.
-        if data_dir.exists() and data_dir.is_dir():
-            try:
-                layout["data_dir_files"] = sorted(entry.name for entry in data_dir.iterdir() if entry.is_file())
-            except OSError as exc:
-                layout["data_dir_files"] = []
-                layout["data_dir_error"] = str(exc)
-        else:
-            layout["data_dir_files"] = []
-
-        return _json_response(True, layout)
+        _LOG.debug("Storage layout: data_dir=%s config_dir=%s", get_data_dir(), get_config_dir())
+        return _json_response(True, _storage_summary())
     except Exception as exc:
-        _LOG.error("Error getting storage layout: %s", exc)
-        return _json_response(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "getting storage layout"), status=500)
 
 
 async def handle_get_info(request: web.Request) -> web.Response:
@@ -60,12 +72,11 @@ async def handle_get_info(request: web.Request) -> web.Response:
             "python_version": _get_python_version(),
             "platform": os.name,
             "rest_api_version": _get_rest_api_version(),
-            "storage": describe_storage_layout(),
+            "storage": _storage_summary(),
         }
         return _json_response(True, info)
     except Exception as exc:
-        _LOG.error("Error getting system info: %s", exc)
-        return _json_response(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "getting system info"), status=500)
 
 
 def _get_python_version() -> str:

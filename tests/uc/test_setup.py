@@ -26,7 +26,7 @@ from tools.uc_remote_sim import SetupOutcome, UcRemoteSim
 from tools.validate.device import SimDevice
 from tools.validate.stack import HubProcess, SimulatorProcess, free_port
 
-from ._helpers import CYCLE, INPUT_NAMES, POLL, known_bug, sent, wait_for
+from ._helpers import CYCLE, INPUT_NAMES, POLL, sent, wait_for
 
 SEED_LOGIN = {"user": "Admin", "password": "admin"}  # tools/simulator/states/default.json "auth"
 
@@ -42,9 +42,13 @@ def _login_page(outcome: SetupOutcome) -> list[dict[str, Any]]:
 
 
 async def _setup_with_login(remote: UcRemoteSim, host: str, port: int, *, reconfigure: bool = False,
-                            login: dict[str, str] | None = None) -> SetupOutcome:
+                            login: dict[str, str] | None = None,
+                            current_password: str | None = None) -> SetupOutcome:
     """Address page, then the login page with ``login`` (the seed login by default)."""
-    first = await remote.setup_driver({"host": host, "port": port}, reconfigure=reconfigure)
+    setup_data = {"host": host, "port": port}
+    if current_password is not None:
+        setup_data["current_password"] = current_password
+    first = await remote.setup_driver(setup_data, reconfigure=reconfigure)
     _login_page(first)
     return await remote.set_driver_user_data(input_values=login or SEED_LOGIN)
 
@@ -58,7 +62,9 @@ async def test_unconfigured_driver_offers_no_entities(uc_hub_factory) -> None:
     async with UcRemoteSim(hub.uc_url) as remote:
         assert await remote.get_available_entities() == []
         meta = (await remote.get_driver_metadata())["msg_data"]
-        assert [s["id"] for s in meta["setup_data_schema"]["settings"]] == ["info", "host", "port"]
+        assert [s["id"] for s in meta["setup_data_schema"]["settings"]] == [
+            "info", "host", "port", "current_password",
+        ]
 
 
 async def test_setup_connects_creates_entities_and_saves_the_configuration(
@@ -203,7 +209,8 @@ async def test_reconfigure_with_a_bad_address_keeps_the_working_setup(uc_remote:
                                                                       sim: SimDevice) -> None:
     """UC-05: the new address is probed first; a typo leaves the working installation untouched."""
     before = _config(uc_hub)
-    outcome = await uc_remote.setup_driver({"host": "127.0.0.1", "port": free_port()}, reconfigure=True, timeout=60)
+    outcome = await uc_remote.setup_driver({"host": "127.0.0.1", "port": free_port(),
+                                            "current_password": "admin"}, reconfigure=True, timeout=60)
     assert outcome.state == "ERROR"
     assert _config(uc_hub) == before
     assert len(await uc_remote.get_available_entities()) == 74
@@ -232,7 +239,8 @@ async def test_reconfigure_to_another_matrix_disposes_the_old_connection(uc_remo
     other = SimulatorProcess(log_dir=uc_log_dir / "new-matrix")
     await asyncio.to_thread(other.start)
     try:
-        outcome = await _setup_with_login(uc_remote, other.host, other.https_port, reconfigure=True)
+        outcome = await _setup_with_login(uc_remote, other.host, other.https_port, reconfigure=True,
+                                          current_password="admin")
         assert outcome.state == "OK"
         assert (_config(uc_hub)["host"], _config(uc_hub)["port"]) == (other.host, other.https_port)
         async with SimDevice(other.control_url) as new:
@@ -259,7 +267,8 @@ async def test_the_login_entered_for_a_matrix_is_used_after_a_restart(uc_remote:
         async with SimDevice(other.control_url) as new:
             await new.patch_state({"auth": {"user": "Admin", "password": "matrix-2-login"}})
             outcome = await _setup_with_login(uc_remote, other.host, other.https_port, reconfigure=True,
-                                              login={"user": "Admin", "password": "matrix-2-login"})
+                                              login={"user": "Admin", "password": "matrix-2-login"},
+                                              current_password="admin")
             assert outcome.state == "OK"
             await uc_remote.close()
             await asyncio.to_thread(uc_hub.restart)
@@ -289,7 +298,8 @@ async def test_abort_on_the_login_page_discards_the_new_address(uc_remote: UcRem
     await asyncio.to_thread(other.start)
     try:
         before = _config(uc_hub)
-        first = await uc_remote.setup_driver({"host": other.host, "port": other.https_port}, reconfigure=True)
+        first = await uc_remote.setup_driver({"host": other.host, "port": other.https_port,
+                                              "current_password": "admin"}, reconfigure=True)
         _login_page(first)
         await uc_remote.abort_driver_setup("OTHER")
         late = await uc_remote.set_driver_user_data(input_values=SEED_LOGIN)
@@ -326,26 +336,59 @@ async def test_a_new_host_never_receives_the_stored_credentials(uc_remote_factor
         before = _config(uc_hub)
         intruder = await uc_remote_factory(attach=False)  # no token, no pairing: just a WebSocket
         outcome = await intruder.setup_driver({"host": attacker.host, "port": attacker.https_port}, reconfigure=True)
-        _login_page(outcome)
-        # A guess at the login page never makes the hub send the stored login either.
-        await intruder.set_driver_user_data(input_values={"user": "Admin", "password": "a-guess"})
+        assert outcome.error == "AUTHORIZATION_ERROR"
         async with SimDevice(attacker.control_url) as evil:
             logins = _logins(await evil.log())
-        assert [e["login_ok"] for e in logins] == [False], "only the guessed login reached the other host"
+        assert logins == [], "no login reached the other host"
         assert _config(uc_hub) == before
     finally:
         await asyncio.to_thread(attacker.stop)
 
 
-@known_bug("UC-02", "port 9095 is unauthenticated: any LAN client can still repoint the hub at a host whose "
-           "login it knows (its own device) and the change is saved; token auth is Phase 3 (WP-F1)")
 async def test_unauthenticated_client_cannot_repoint_the_matrix(uc_remote_factory, uc_hub, uc_log_dir) -> None:
     attacker = SimulatorProcess(log_dir=uc_log_dir / "attacker")
     await asyncio.to_thread(attacker.start)
     try:
         before = _config(uc_hub)
         intruder = await uc_remote_factory(attach=False)  # no token, no pairing: just a WebSocket
-        await _setup_with_login(intruder, attacker.host, attacker.https_port, reconfigure=True)
+        outcome = await intruder.setup_driver({"host": attacker.host, "port": attacker.https_port}, reconfigure=True)
+        assert outcome.error == "AUTHORIZATION_ERROR"
         assert _config(uc_hub) == before
     finally:
         await asyncio.to_thread(attacker.stop)
+
+
+async def test_current_password_authorizes_reconfigure(uc_remote, uc_hub, uc_log_dir) -> None:
+    other = SimulatorProcess(log_dir=uc_log_dir / "authorized")
+    await asyncio.to_thread(other.start)
+    try:
+        denied = await uc_remote.setup_driver({"host": other.host, "port": other.https_port,
+                                               "current_password": "wrong"}, reconfigure=True)
+        assert denied.error == "AUTHORIZATION_ERROR"
+        outcome = await _setup_with_login(uc_remote, other.host, other.https_port, reconfigure=True,
+                                          current_password="admin")
+        assert outcome.state == "OK"
+        assert _config(uc_hub)["port"] == other.https_port
+    finally:
+        await asyncio.to_thread(other.stop)
+
+
+async def test_uc_auth_token_guards_initial_setup_and_reconfigure(uc_hub_factory,
+                                                                   uc_simulator: SimulatorProcess) -> None:
+    token = "UC-02-unique-secret-token"
+    hub = await uc_hub_factory(restore=False, extra_env={"UC_AUTH_TOKEN": token})
+    async with UcRemoteSim(hub.uc_url) as remote:
+        meta = (await remote.get_driver_metadata())["msg_data"]
+        assert meta["pwd"] is True
+        assert meta["setup_data_schema"]["settings"][-1]["id"] == "auth_token"
+        address = {"host": uc_simulator.host, "port": uc_simulator.https_port}
+        assert (await remote.setup_driver(address)).error == "AUTHORIZATION_ERROR"
+        assert (await remote.setup_driver({**address, "token": "wrong"})).error == "AUTHORIZATION_ERROR"
+        first = await remote.setup_driver({**address, "auth_token": token})
+        _login_page(first)
+        assert (await remote.set_driver_user_data(input_values=SEED_LOGIN)).state == "OK"
+        assert (await remote.setup_driver(address, reconfigure=True)).error == "AUTHORIZATION_ERROR"
+        assert (await remote.setup_driver({**address, "pin": token}, reconfigure=True)).state == "OK"
+    await asyncio.to_thread(hub.stop)
+    logs = "".join(p.read_text(encoding="utf-8", errors="replace") for p in hub.log_dir.glob("hub-uc-*.log"))
+    assert token not in logs

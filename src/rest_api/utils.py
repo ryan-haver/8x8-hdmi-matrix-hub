@@ -143,6 +143,7 @@ _rate_limit_lock = asyncio.Lock()     # Protects _rate_limit_tracker dict.
 # =============================================================================
 
 RATE_LIMIT_REQUESTS = 60  # Max requests per window
+RATE_LIMIT_READ_REQUESTS = int(os.environ.get("RATE_LIMIT_READ_REQUESTS", "300"))
 RATE_LIMIT_WINDOW = 10.0  # Window size in seconds
 RATE_LIMIT_MAX_TRACKED_IPS = 10000  # Maximum unique IPs to track
 _rate_limit_tracker: dict[str, list[float]] = defaultdict(list)
@@ -181,7 +182,7 @@ def _cleanup_stale_rate_limits():
         _LOG.debug(f"Cleaned up {len(stale_ips)} stale rate limit entries")
 
 
-async def _check_rate_limit(client_ip: str) -> bool:
+async def _check_rate_limit(client_ip: str, bucket: str = "write") -> bool:
     """
     Check if a client has exceeded the rate limit.
 
@@ -201,23 +202,25 @@ async def _check_rate_limit(client_ip: str) -> bool:
 
         # Reject immediately if at capacity and this IP is new — prevents
         # unbounded growth from a single flood source consuming all slots.
+        tracker_key = f"{bucket}:{client_ip}"
+        limit = RATE_LIMIT_READ_REQUESTS if bucket == "read" else RATE_LIMIT_REQUESTS
         if (
-            client_ip not in _rate_limit_tracker
+            tracker_key not in _rate_limit_tracker
             and len(_rate_limit_tracker) >= RATE_LIMIT_MAX_TRACKED_IPS
         ):
             return False
 
         # Clean up old timestamps for this IP
-        _rate_limit_tracker[client_ip] = [
-            ts for ts in _rate_limit_tracker[client_ip] if ts > window_start
+        _rate_limit_tracker[tracker_key] = [
+            ts for ts in _rate_limit_tracker[tracker_key] if ts > window_start
         ]
 
         # Check if under limit
-        if len(_rate_limit_tracker[client_ip]) >= RATE_LIMIT_REQUESTS:
+        if len(_rate_limit_tracker[tracker_key]) >= limit:
             return False
 
         # Record this request
-        _rate_limit_tracker[client_ip].append(now)
+        _rate_limit_tracker[tracker_key].append(now)
         return True
 
 
@@ -277,11 +280,6 @@ def _get_client_ip(request: web.Request) -> str:
                                         pass
                     except ValueError:
                         pass
-                else:
-                    # No trusted IPs configured — trust X-Forwarded-For (legacy behavior)
-                    forwarded = request.headers.get("X-Forwarded-For")
-                    if forwarded:
-                        return forwarded.split(",")[0].strip()
 
     # Fall back to peer address (direct connection)
     transport = request.transport
@@ -568,16 +566,13 @@ async def rate_limit_middleware(request: web.Request, handler):
         or path.startswith("/assets/")
         or path.startswith("/api/health")
         or path.endswith(".ico")
-        or path.endswith(".svg")
-        or path.endswith(".png")
-        or path.endswith(".jpg")
-        or path.endswith(".webp")
     ):
         return await handler(request)
 
     client_ip = _get_client_ip(request)
 
-    if not await _check_rate_limit(client_ip):
+    bucket = "read" if request.method in ("GET", "HEAD", "OPTIONS") else "write"
+    if not await _check_rate_limit(client_ip, bucket):
         _LOG.warning(f"Rate limit exceeded for {client_ip}")
         return _json_response(False, error="Rate limit exceeded. Please slow down.", status=429)
 

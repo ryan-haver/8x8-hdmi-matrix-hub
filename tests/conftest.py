@@ -141,6 +141,10 @@ def _reset_rest_api_globals() -> None:
     if scenes_v2 is not None:
         scenes_v2._phase8_scene_manager = None
 
+    password = sys.modules.get("password")
+    if password is not None and hasattr(password, "reset_pin_lockout"):
+        password.reset_pin_lockout()
+
 
 @pytest.fixture(autouse=True)
 def _isolate_global_state(tmp_path_factory, monkeypatch):

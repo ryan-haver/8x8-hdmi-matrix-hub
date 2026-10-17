@@ -802,11 +802,12 @@ class TestErrorHandling:
 
     @pytest.mark.asyncio
     async def test_cors_headers_present(self, client):
-        """Test CORS headers are included in responses."""
+        """Default CORS is same-origin; configured origins are echoed."""
         resp = await client.get("/api/health")
-
-        assert "Access-Control-Allow-Origin" in resp.headers
-        assert resp.headers["Access-Control-Allow-Origin"] == "*"
+        assert "Access-Control-Allow-Origin" not in resp.headers
+        origin = str(client.make_url("/")).rstrip("/")
+        resp = await client.get("/api/health", headers={"Origin": origin})
+        assert resp.headers["Access-Control-Allow-Origin"] == origin
 
 
 class TestRateLimiting:

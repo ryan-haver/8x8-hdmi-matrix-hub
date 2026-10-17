@@ -106,14 +106,17 @@ async def test_flic_read_returns_registered_fixture_buttons(data_hub, simulator)
 async def test_runtime_diagnostics_describe_the_actual_data_directory(data_hub, path):
     data = (await _get(data_hub, path))["data"]
     layout = data["storage"] if path.endswith("info") else data
-    assert layout["data_dir"] == str(data_hub.data_dir)
+    # SEC-11: the state of the data directory, never its path or its file names.
+    assert layout["source"] == "MATRIX_DATA_DIR"
+    assert layout["data_dir_exists"] is True
+    assert layout["writable"] is True
+    assert layout["file_count"] >= len(list(FIXTURE_DATA.glob("*.json")))
+    assert not {"data_dir", "config_dir", "matrix_data_dir_env", "data_dir_files"} & set(layout)
+    assert str(data_hub.data_dir) not in json.dumps(data)
     if path.endswith("info"):
         assert data["platform"] == os.name
         assert data["python_version"] == ".".join(str(n) for n in sys.version_info[:3])
         assert data["rest_api_version"] == "2.10.0"
-    else:
-        assert data["data_dir_exists"] is True
-        assert set(src.name for src in FIXTURE_DATA.glob("*.json")) <= set(data["data_dir_files"])
 
 
 async def test_settings_read_tracks_connection_state(data_hub, matrix):

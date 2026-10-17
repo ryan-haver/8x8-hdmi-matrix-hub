@@ -38,10 +38,11 @@ class HubResponseError(HubError):
 class HubClient:
     """The hub at ``http://host:port``."""
 
-    def __init__(self, session: aiohttp.ClientSession, host: str, port: int) -> None:
+    def __init__(self, session: aiohttp.ClientSession, host: str, port: int, api_key: str | None = None) -> None:
         self._session = session
         self.host = host
         self.port = port
+        self.api_key = api_key
         # An IPv6 literal needs brackets in a URL (found by the ha validation client on Docker Desktop).
         url_host = f"[{host}]" if ":" in host and not host.startswith("[") else host
         self.base_url = f"http://{url_host}:{port}"
@@ -50,6 +51,8 @@ class HubClient:
     async def _request(self, method: str, path: str, payload: dict[str, Any] | None = None) -> Any:
         """One request; returns the ``data`` member of a successful answer."""
         kwargs: dict[str, Any] = {"timeout": self._timeout}
+        if self.api_key:
+            kwargs["headers"] = {"X-API-Key": self.api_key}
         if payload is not None:
             kwargs["json"] = payload
         try:

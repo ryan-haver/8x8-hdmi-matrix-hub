@@ -28,7 +28,8 @@ from dashboard_layout import (
     DashboardLayout,
 )
 
-from .utils import _json_response, get_dashboard_layout_manager
+from .utils import _json_response, get_dashboard_layout_manager, safe_error_message
+from .validation import BadRequestError, parse_json_object, validate_int, validate_list, validate_preset
 
 _LOG = logging.getLogger("rest_api.dashboard_layout")
 
@@ -50,12 +51,9 @@ def _parse_card_id(raw, *, card_type: str) -> str | None:
     """
     if card_type == CARD_PRESET:
         try:
-            n = int(raw)
-        except (TypeError, ValueError):
+            return str(validate_preset(raw))
+        except BadRequestError:
             return None
-        if n < 1 or n > 8:
-            return None
-        return str(n)
     if not isinstance(raw, str) or not raw:
         return None
     return raw
@@ -75,8 +73,7 @@ async def handle_get_layout(request: web.Request) -> web.Response:
         layout = manager.get_layout()
         return _json_response(True, layout.to_dict())
     except Exception as exc:
-        _LOG.error("Error getting dashboard layout: %s", exc)
-        return _json_response(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "getting dashboard layout"), status=500)
 
 
 # =============================================================================
@@ -96,10 +93,12 @@ async def handle_replace_layout(request: web.Request) -> web.Response:
     if manager is None:
         return _json_response(False, error="Dashboard layout manager not initialized", status=503)
     try:
-        body = await request.json()
+        body = await parse_json_object(request)
         cards_raw = body.get("cards", [])
         if not isinstance(cards_raw, list):
             return _json_response(False, error="cards must be a list", status=400)
+        validate_list(cards_raw, "cards")
+        version = validate_int(body.get("version", 1), "version", minimum=1, maximum=1000)
 
         cards: list[DashboardCard] = []
         for entry in cards_raw:
@@ -111,15 +110,16 @@ async def handle_replace_layout(request: web.Request) -> web.Response:
 
         new_layout = DashboardLayout(
             cards=cards,
-            version=int(body.get("version", 1)),
+            version=version,
         )
         if not manager.replace_layout(new_layout):
             return _json_response(False, error="Failed to save layout", status=500)
 
         return _json_response(True, manager.get_layout().to_dict())
+    except BadRequestError as exc:
+        return exc.response()
     except Exception as exc:
-        _LOG.error("Error replacing dashboard layout: %s", exc)
-        return _json_response(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "replacing dashboard layout"), status=500)
 
 
 async def handle_add_card(request: web.Request) -> web.Response:
@@ -131,7 +131,7 @@ async def handle_add_card(request: web.Request) -> web.Response:
     if manager is None:
         return _json_response(False, error="Dashboard layout manager not initialized", status=503)
     try:
-        body = await request.json()
+        body = await parse_json_object(request)
         card_type = _parse_card_type(body.get("type", ""))
         if card_type is None:
             return _json_response(
@@ -154,9 +154,10 @@ async def handle_add_card(request: web.Request) -> web.Response:
             return _json_response(False, error="Failed to add card", status=500)
 
         return _json_response(True, manager.get_layout().to_dict(), status=201)
+    except BadRequestError as exc:
+        return exc.response()
     except Exception as exc:
-        _LOG.error("Error adding dashboard card: %s", exc)
-        return _json_response(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "adding dashboard card"), status=500)
 
 
 async def handle_remove_card(request: web.Request) -> web.Response:
@@ -185,5 +186,4 @@ async def handle_remove_card(request: web.Request) -> web.Response:
 
         return _json_response(True, manager.get_layout().to_dict())
     except Exception as exc:
-        _LOG.error("Error removing dashboard card: %s", exc)
-        return _json_response(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "removing dashboard card"), status=500)

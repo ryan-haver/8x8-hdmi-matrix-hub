@@ -33,12 +33,31 @@ async def handle_kiosk_ui(request: web.Request) -> web.StreamResponse:
     return web.Response(text="Kiosk UI not found", status=404)
 
 
+def _resolve_static_path(request_path: str) -> Path | None:
+    """Return the resolved file path ``request_path`` names, or None if it is outside the web directory.
+
+    SEC-13: the path is resolved (``..`` segments, symlinks, absolute or
+    drive-qualified parts) before the containment check, so neither a
+    traversal nor a symlink pointing elsewhere can leave ``_WEB_DIR``.
+    """
+    if "\x00" in request_path:
+        return None
+    try:
+        web_root = _WEB_DIR.resolve()
+        normalized = request_path.replace("\\", "/").lstrip("/")
+        resolved = (web_root / normalized).resolve()
+    except (OSError, ValueError):
+        return None
+    if not resolved.is_relative_to(web_root):
+        return None
+    return resolved
+
+
 async def handle_static_file(request: web.Request) -> web.StreamResponse:
     """Serve static files (CSS, JS, assets)."""
-    request_path = request.path
-
-    # Security: prevent directory traversal
-    if ".." in request_path:
+    full_path = _resolve_static_path(request.path)
+    if full_path is None:
+        _LOG.warning("Refused static path outside the web directory: %r", request.path)
         return web.Response(text="Forbidden", status=403)
 
     content_types = {
@@ -52,9 +71,7 @@ async def handle_static_file(request: web.Request) -> web.StreamResponse:
         ".woff2": "font/woff2",
     }
 
-    full_path = _WEB_DIR / request_path.lstrip("/")
-
-    if full_path.exists() and full_path.is_file():
+    if full_path.is_file():
         suffix = full_path.suffix.lower()
         content_type = content_types.get(suffix, "application/octet-stream")
         headers = {

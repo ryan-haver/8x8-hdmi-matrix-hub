@@ -14,7 +14,11 @@ from aiohttp import web
 
 from persistence import ensure_data_dir, get_data_dir, migrate_legacy_file
 
-from .utils import _json_response
+from .utils import _json_response, safe_error_message
+from .validation import NAME_MAX_LENGTH, BadRequestError, parse_json_object, validate_list, validate_string
+
+#: The web UI has a handful of tabs; this only bounds what one request can store (API-15).
+MAX_TABS = 50
 
 _LOG = logging.getLogger("rest_api.ui")
 
@@ -93,7 +97,7 @@ async def handle_get_ui_preferences(request: web.Request) -> web.Response:
 async def handle_set_ui_preferences(request: web.Request) -> web.Response:
     """Update UI preferences persistently."""
     try:
-        body = await request.json()
+        body = await parse_json_object(request)
 
         pinned_tabs = body.get("pinnedTabs")
         tab_order = body.get("tabOrder")
@@ -104,9 +108,15 @@ async def handle_set_ui_preferences(request: web.Request) -> web.Response:
         if not isinstance(tab_order, list):
             return _json_response(False, error="tabOrder must be a list", status=400)
 
-        # Enforce content types to be strings
-        pinned_tabs = [str(t) for t in pinned_tabs]
-        tab_order = [str(t) for t in tab_order]
+        # Tab ids are short strings
+        pinned_tabs = [
+            validate_string(t, "pinnedTabs", max_length=NAME_MAX_LENGTH)
+            for t in validate_list(pinned_tabs, "pinnedTabs", max_items=MAX_TABS)
+        ]
+        tab_order = [
+            validate_string(t, "tabOrder", max_length=NAME_MAX_LENGTH)
+            for t in validate_list(tab_order, "tabOrder", max_items=MAX_TABS)
+        ]
 
         prefs_data = {"pinnedTabs": pinned_tabs, "tabOrder": tab_order}
 
@@ -116,8 +126,7 @@ async def handle_set_ui_preferences(request: web.Request) -> web.Response:
         else:
             return _json_response(False, error="Failed to save UI preferences", status=500)
 
-    except json.JSONDecodeError:
-        return _json_response(False, error="Invalid JSON body", status=400)
+    except BadRequestError as exc:
+        return exc.response()
     except Exception as e:
-        _LOG.exception(f"Error updating UI preferences: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "updating UI preferences"), status=500)

@@ -4,13 +4,13 @@ CEC Macro management endpoints.
 Handles macro CRUD, execution, and testing.
 """
 
-import json
 import logging
 import re
 
 from aiohttp import web
 
-from .utils import _json_response, get_macro_manager
+from .utils import _json_response, get_macro_manager, safe_error_message
+from .validation import ICON_MAX_LENGTH, NAME_MAX_LENGTH, BadRequestError, optional_string, parse_json_object
 
 _LOG = logging.getLogger("rest_api.macros")
 
@@ -53,6 +53,8 @@ def _validate_macro_text(name, description, *, name_required: bool) -> str | Non
             return "'name' must be a string"
         if len(name) > MAX_NAME_LEN:
             return f"Name exceeds {MAX_NAME_LEN} characters"
+    if description is not None and not isinstance(description, str):
+        return "'description' must be a string"
     if isinstance(description, str) and len(description) > MAX_DESCRIPTION_LEN:
         return f"Description exceeds {MAX_DESCRIPTION_LEN} characters"
     return None
@@ -116,8 +118,7 @@ async def handle_list_macros(request: web.Request) -> web.Response:
         macros = macro_manager.list_macros()
         return _json_response(True, {"macros": macros})
     except Exception as e:
-        _LOG.exception(f"Error listing macros: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "listing macros"), status=500)
 
 
 async def handle_get_macro(request: web.Request) -> web.Response:
@@ -138,8 +139,7 @@ async def handle_get_macro(request: web.Request) -> web.Response:
 
         return _json_response(True, macro.to_dict())
     except Exception as e:
-        _LOG.exception(f"Error getting macro: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "getting macro"), status=500)
 
 
 async def handle_create_macro(request: web.Request) -> web.Response:
@@ -150,13 +150,13 @@ async def handle_create_macro(request: web.Request) -> web.Response:
         return _json_response(False, error="Macro manager not initialized", status=503)
 
     try:
-        data = await request.json()
+        data = await parse_json_object(request)
 
         name = data.get("name")
         steps = data.get("steps", [])
-        icon = data.get("icon", "⚡")
+        icon = optional_string(data, "icon", max_length=ICON_MAX_LENGTH) or "⚡"
         description = data.get("description", "")
-        macro_id = data.get("id")
+        macro_id = optional_string(data, "id", max_length=NAME_MAX_LENGTH)
 
         text_error = _validate_macro_text(name, description, name_required=True)
         if text_error:
@@ -178,11 +178,10 @@ async def handle_create_macro(request: web.Request) -> web.Response:
         _LOG.info(f"Macro '{name}' ({macro.id}) created")
 
         return _json_response(True, macro.to_dict())
-    except json.JSONDecodeError:
-        return _json_response(False, error="Invalid JSON", status=400)
+    except BadRequestError as exc:
+        return exc.response()
     except Exception as e:
-        _LOG.exception(f"Error creating macro: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "creating macro"), status=500)
 
 
 async def handle_update_macro(request: web.Request) -> web.Response:
@@ -197,11 +196,11 @@ async def handle_update_macro(request: web.Request) -> web.Response:
         if not macro_id:
             return _json_response(False, error="Macro ID required", status=400)
 
-        data = await request.json()
+        data = await parse_json_object(request)
 
         name = data.get("name")
         steps = data.get("steps")
-        icon = data.get("icon")
+        icon = optional_string(data, "icon", max_length=ICON_MAX_LENGTH)
         description = data.get("description")
 
         # The same name/description limits as create (API-28).
@@ -228,11 +227,10 @@ async def handle_update_macro(request: web.Request) -> web.Response:
 
         _LOG.info(f"Macro '{macro_id}' updated")
         return _json_response(True, macro.to_dict())
-    except json.JSONDecodeError:
-        return _json_response(False, error="Invalid JSON", status=400)
+    except BadRequestError as exc:
+        return exc.response()
     except Exception as e:
-        _LOG.exception(f"Error updating macro: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "updating macro"), status=500)
 
 
 async def handle_delete_macro(request: web.Request) -> web.Response:
@@ -253,8 +251,7 @@ async def handle_delete_macro(request: web.Request) -> web.Response:
         else:
             return _json_response(False, error=f"Macro '{macro_id}' not found", status=404)
     except Exception as e:
-        _LOG.exception(f"Error deleting macro: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "deleting macro"), status=500)
 
 
 async def handle_execute_macro(request: web.Request) -> web.Response:
@@ -273,10 +270,10 @@ async def handle_execute_macro(request: web.Request) -> web.Response:
             return _json_response(False, error=f"Macro '{macro_id}' not found", status=404)
 
         # Parse optional timeout_s parameter from request body
-        data = await request.json() if request.can_read_body else {}
+        data = await parse_json_object(request, allow_empty=True)
         timeout_s = data.get("timeout_s")
         if timeout_s is not None:
-            if not isinstance(timeout_s, (int, float)) or timeout_s <= 0:
+            if isinstance(timeout_s, bool) or not isinstance(timeout_s, (int, float)) or timeout_s <= 0:
                 return _json_response(False, error="timeout_s must be a positive number", status=400)
 
         result = await macro_manager.execute_macro(macro_id, timeout_s=timeout_s if timeout_s is not None else 300.0)
@@ -285,11 +282,10 @@ async def handle_execute_macro(request: web.Request) -> web.Response:
             return _json_response(True, result)
         else:
             return _json_response(False, error=result.get("error", "Execution failed"), status=500)
-    except json.JSONDecodeError:
-        return _json_response(False, error="Invalid JSON", status=400)
+    except BadRequestError as exc:
+        return exc.response()
     except Exception as e:
-        _LOG.exception(f"Error executing macro: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "executing macro"), status=500)
 
 
 async def handle_test_macro(request: web.Request) -> web.Response:
@@ -311,8 +307,7 @@ async def handle_test_macro(request: web.Request) -> web.Response:
 
         return _json_response(True, result)
     except Exception as e:
-        _LOG.exception(f"Error testing macro: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "testing macro"), status=500)
 
 
 # =============================================================================
@@ -334,8 +329,7 @@ async def handle_list_favorite_macros(request: web.Request) -> web.Response:
             },
         )
     except Exception as e:
-        _LOG.exception(f"Error listing favorite macros: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "listing favorite macros"), status=500)
 
 
 async def handle_toggle_macro_favorite(request: web.Request) -> web.Response:
@@ -358,8 +352,7 @@ async def handle_toggle_macro_favorite(request: web.Request) -> web.Response:
             },
         )
     except Exception as e:
-        _LOG.exception(f"Error toggling macro favorite: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "toggling macro favorite"), status=500)
 
 
 async def handle_toggle_macro_dashboard(request: web.Request) -> web.Response:
@@ -382,5 +375,4 @@ async def handle_toggle_macro_dashboard(request: web.Request) -> web.Response:
             },
         )
     except Exception as e:
-        _LOG.exception(f"Error toggling macro dashboard flag: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "toggling macro dashboard flag"), status=500)

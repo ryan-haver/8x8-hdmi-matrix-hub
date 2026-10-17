@@ -23,7 +23,14 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
-from password import PasswordError, hash_passcode, needs_passcode, verify_passcode
+from password import (
+    PasswordError,
+    ensure_hashed_passcode,
+    hash_passcode,
+    needs_passcode,
+    verify_passcode,
+    verify_passcode_async,
+)
 from persistence import ensure_data_dir, get_data_dir
 
 _LOG = logging.getLogger("scene_manager")
@@ -197,8 +204,18 @@ class Scene:
     last_executed: str | None = None
     execution_history: list[ExecutionHistoryEntry] = field(default_factory=list)
 
-    def to_dict(self) -> dict[str, Any]:
-        return {
+    def is_password_protected(self) -> bool:
+        """True if the scene has its own passcode (the flag or a stored hash; fails closed)."""
+        return self.password_protected or needs_passcode(self.passcode_hash)
+
+    def to_dict(self, include_hash: bool = False) -> dict[str, Any]:
+        """
+        Convert to dictionary.
+
+        :param include_hash: include ``passcode_hash``; only for persistence,
+                             never for clients (SEC-04 / F-SEC-005)
+        """
+        result = {
             "id": self.id,
             "name": self.name,
             "icon": self.icon,
@@ -210,11 +227,13 @@ class Scene:
             "favorite": self.favorite,
             "dashboard_visible": self.dashboard_visible,
             "dashboard_order": self.dashboard_order,
-            "password_protected": self.password_protected,
-            "passcode_hash": self.passcode_hash,
+            "password_protected": self.is_password_protected(),
             "last_executed": self.last_executed,
             "execution_history": [e.to_dict() for e in self.execution_history],
         }
+        if include_hash:
+            result["passcode_hash"] = self.passcode_hash
+        return result
 
     @staticmethod
     def from_dict(data: dict[str, Any]) -> "Scene":
@@ -239,7 +258,8 @@ class Scene:
             dashboard_visible=bool(data.get("dashboard_visible", False)),
             dashboard_order=int(data.get("dashboard_order", 0)),
             password_protected=bool(data.get("password_protected", False)),
-            passcode_hash=data.get("passcode_hash", ""),
+            # A raw PIN found on load is hashed (F-SEC-004)
+            passcode_hash=ensure_hashed_passcode(data.get("passcode_hash")) or "",
             last_executed=data.get("last_executed"),
             execution_history=history,
         )
@@ -441,6 +461,28 @@ def _output_settings_iter(output_cfg) -> list[tuple[str, Any]]:
     ]
 
 
+def _profile_is_protected(profile: Any) -> bool:
+    """True if a Profile (or Profile-like object) needs a passcode."""
+    check = getattr(profile, "is_password_protected", None)
+    if callable(check):
+        return bool(check())
+    return bool(getattr(profile, "password_protected", False)) or needs_passcode(getattr(profile, "passcode_hash", ""))
+
+
+def _protected_profiles(steps: list[SceneStep], profile_map: dict[str, Any] | None) -> list[Any]:
+    """The distinct protected Profiles that profile steps reference (none without a map)."""
+    if not profile_map:
+        return []
+    found: dict[str, Any] = {}
+    for step in steps:
+        if step.type != STEP_TYPE_PROFILE or step.id in found:
+            continue
+        profile = profile_map.get(step.id)
+        if profile is not None and _profile_is_protected(profile):
+            found[step.id] = profile
+    return list(found.values())
+
+
 # =============================================================================
 # Scene Manager
 # =============================================================================
@@ -468,17 +510,24 @@ class SceneManager:
         try:
             with open(self.scenes_file, encoding="utf-8") as f:
                 data = json.load(f)
+            rehashed = False
             for scene_data in data.get("scenes", []):
                 scene = Scene.from_dict(scene_data)
                 self._scenes[scene.id] = scene
+                rehashed |= scene.passcode_hash != (scene_data.get("passcode_hash") or "")
             _LOG.info("Loaded %d scenes", len(self._scenes))
         except Exception as e:
             _LOG.error("Failed to load scenes: %s", e)
+            return
+        if rehashed:
+            # Replace the plaintext PIN on disk with its hash (F-SEC-004)
+            _LOG.warning("Hashed a plaintext scene passcode found in %s", self.scenes_file)
+            self._save()
 
     def _save(self) -> bool:
         try:
             ensure_data_dir(self.data_dir)
-            data = {"scenes": [s.to_dict() for s in self._scenes.values()]}
+            data = {"scenes": [s.to_dict(include_hash=True) for s in self._scenes.values()]}
             from _file_io import atomic_write_json
             atomic_write_json(self.scenes_file, data)
             return True
@@ -513,13 +562,75 @@ class SceneManager:
             # Callers in the REST API path supply the map explicitly.
             return False
 
-        for step in steps:
-            if step.type != STEP_TYPE_PROFILE:
-                continue
-            profile = profile_map.get(step.id)
-            if profile is not None and getattr(profile, "password_protected", False):
-                return True
-        return False
+        return bool(_protected_profiles(steps, profile_map))
+
+    # ---- Passcodes (SEC-04, SEC-05, SEC-06) ----
+
+    def is_scene_password_protected(self, scene_id: str, profiles_map: dict[str, Any] | None = None) -> bool:
+        """
+        True if running the scene needs a passcode: its own, or one inherited
+        from a protected Profile among its steps (``profiles_map`` is
+        ``{profile_id: Profile}``; without it only the scene's own PIN counts).
+        """
+        scene = self._scenes.get(scene_id)
+        if scene is None:
+            return False
+        return scene.is_password_protected() or bool(_protected_profiles(scene.steps, profiles_map))
+
+    def is_passcode_inherited(self, scene_id: str, profiles_map: dict[str, Any] | None = None) -> bool:
+        """True if the scene has no PIN of its own but runs a protected Profile."""
+        scene = self._scenes.get(scene_id)
+        if scene is None or scene.is_password_protected():
+            return False
+        return bool(_protected_profiles(scene.steps, profiles_map))
+
+    def _passcode_hashes(self, scene: Scene, profiles_map: dict[str, Any] | None) -> list[str]:
+        """
+        The hashes a passcode must match to run ``scene``: the scene's own, or
+        else those of every protected Profile it runs. A protected item with no
+        hash contributes ``""``, which never verifies (fails closed).
+        """
+        if scene.is_password_protected():
+            return [scene.passcode_hash]
+        return [getattr(p, "passcode_hash", "") or "" for p in _protected_profiles(scene.steps, profiles_map)]
+
+    def verify_scene_passcode(
+        self, scene_id: str, passcode: str | None, profiles_map: dict[str, Any] | None = None
+    ) -> bool:
+        """
+        Verify ``passcode`` for running the scene (synchronous; the REST layer
+        uses :meth:`verify_scene_passcode_async`).
+
+        Unknown scenes fail; unprotected scenes pass.
+        """
+        scene = self._scenes.get(scene_id)
+        if scene is None:
+            return False
+        hashes = self._passcode_hashes(scene, profiles_map)
+        if not hashes:
+            return True
+        try:
+            return all(needs_passcode(h) and verify_passcode(passcode, h) for h in hashes)
+        except PasswordError:
+            return False
+
+    async def verify_scene_passcode_async(
+        self, scene_id: str, passcode: str | None, profiles_map: dict[str, Any] | None = None
+    ) -> bool:
+        """:meth:`verify_scene_passcode` with PBKDF2 in the thread executor (SEC-06)."""
+        scene = self._scenes.get(scene_id)
+        if scene is None:
+            return False
+        hashes = self._passcode_hashes(scene, profiles_map)
+        if not hashes:
+            return True
+        try:
+            for stored in hashes:
+                if not needs_passcode(stored) or not await verify_passcode_async(passcode, stored):
+                    return False
+        except PasswordError:
+            return False
+        return True
 
     # ---- Create ----
 
@@ -530,6 +641,8 @@ class SceneManager:
         steps: list[SceneStep] | None = None,
         password_protected: bool = False,
         passcode: str | None = None,
+        passcode_hash: str | None = None,
+        profiles_map: dict[str, Any] | None = None,
     ) -> tuple[Scene | None, str | None]:
         """
         Create a new scene.
@@ -539,20 +652,27 @@ class SceneManager:
         :param steps: Initial steps list
         :param password_protected: Whether this scene requires a passcode
         :param passcode: Plaintext passcode (required if password_protected is True)
+        :param passcode_hash: Already-hashed passcode, used instead of ``passcode``
+                              (the REST layer hashes in a thread, SEC-06)
+        :param profiles_map: ``{profile_id: Profile}`` for the inheritance check
         :returns: (created_scene, error_string) — scene is None if error
         """
         scene_id = f"scene_{uuid.uuid4().hex[:12]}"
-        passcode_hash = ""
         step_list = steps or []
 
         # Password inheritance: scene containing a protected profile must itself be protected
-        if not password_protected and self.steps_reference_protected_profile(step_list):
+        if not password_protected and self.steps_reference_protected_profile(step_list, profiles_map):
             return None, ("Scene contains a password-protected Profile; the Scene must also be password-protected")
 
-        if password_protected:
+        if not password_protected:
+            passcode_hash = ""
+        elif not passcode_hash:
             if not passcode:
                 return None, "passcode required when password_protected is True"
-            passcode_hash = hash_passcode(passcode)
+            try:
+                passcode_hash = hash_passcode(passcode)
+            except PasswordError as e:
+                return None, str(e)
 
         scene = Scene(
             id=scene_id,
@@ -586,6 +706,8 @@ class SceneManager:
         dashboard_order: int | None = None,
         password_protected: bool | None = None,
         passcode: str | None = None,
+        passcode_hash: str | None = None,
+        profiles_map: dict[str, Any] | None = None,
     ) -> tuple[Scene | None, str | None]:
         """
         Update an existing scene.
@@ -594,6 +716,11 @@ class SceneManager:
         it replaces the stored scene: a rejected update leaves the scene as it
         was, in memory and on disk (API-13).
 
+        ``password_protected=False`` removes the scene's PIN. Callers check the
+        current PIN first (SEC-05); the REST layer does.
+
+        :param passcode_hash: Already-hashed new passcode, used instead of ``passcode``
+        :param profiles_map: ``{profile_id: Profile}`` for the inheritance check
         :returns: (updated_scene, error_string)
         """
         scene = self._scenes.get(scene_id)
@@ -622,13 +749,20 @@ class SceneManager:
             candidate.dashboard_order = dashboard_order
         if password_protected is not None:
             candidate.password_protected = password_protected
-            if password_protected and passcode:
-                candidate.passcode_hash = hash_passcode(passcode)
-            elif password_protected and not candidate.passcode_hash:
+            if not password_protected:
+                candidate.passcode_hash = ""
+            elif passcode_hash:
+                candidate.passcode_hash = passcode_hash
+            elif passcode:
+                try:
+                    candidate.passcode_hash = hash_passcode(passcode)
+                except PasswordError as e:
+                    return None, str(e)
+            elif not candidate.passcode_hash:
                 return None, "passcode required when enabling password protection"
 
         # Password inheritance: scene containing a protected profile must itself be protected
-        if not candidate.password_protected and self.steps_reference_protected_profile(candidate.steps):
+        if not candidate.password_protected and self.steps_reference_protected_profile(candidate.steps, profiles_map):
             return None, ("Scene contains a password-protected Profile; the Scene must also be password-protected")
 
         valid, errors = candidate.is_valid()
@@ -719,18 +853,8 @@ class SceneManager:
         return scene, None
 
     def verify_passcode(self, scene_id: str, passcode: str) -> bool:
-        """Verify a passcode against a scene's stored hash."""
-        scene = self._scenes.get(scene_id)
-        if scene is None:
-            return False
-        if not scene.password_protected:
-            return True
-        if not needs_passcode(scene.passcode_hash):
-            return True
-        try:
-            return verify_passcode(passcode, scene.passcode_hash)
-        except PasswordError:
-            return False
+        """Verify a passcode against a scene's own stored hash (see :meth:`verify_scene_passcode`)."""
+        return self.verify_scene_passcode(scene_id, passcode)
 
     # ---- Delete ----
 

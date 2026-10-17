@@ -1140,7 +1140,7 @@ class TestDriverMetadata:
         import driver
 
         settings = {s["id"]: s for s in meta["setup_data_schema"]["settings"]}
-        assert list(settings) == ["info", "host", "port"]
+        assert list(settings) == ["info", "host", "port", "current_password"]
         text = settings["host"]["field"]["text"]
         assert text["value"] == ""  # no made-up default address
         assert text["regex"] == driver.HOST_PATTERN.pattern  # the Remote validates like the driver does
