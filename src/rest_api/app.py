@@ -290,6 +290,9 @@ def create_rest_app(data_dir: Path | None = None) -> web.Application:
     app.router.add_get("/css/{path:.*}", handle_static_file)
     app.router.add_get("/js/{path:.*}", handle_static_file)
     app.router.add_get("/assets/{path:.*}", handle_static_file)
+    # Web App Manifest (UI-21). The spec requires it at the origin root, which
+    # is outside the /css, /js and /assets prefixes above.
+    app.router.add_get("/manifest.json", handle_static_file)
 
     # Register API routes
     app.router.add_get("/", handle_api_root)
