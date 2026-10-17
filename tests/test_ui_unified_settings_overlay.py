@@ -23,6 +23,8 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
+import pytest
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 OVERLAY_MANAGER_JS = REPO_ROOT / "web" / "js" / "utils" / "overlay-manager.js"
 UNIFIED_SETTINGS_JS = REPO_ROOT / "web" / "js" / "components" / "unified-settings-drawer.js"
@@ -755,6 +757,8 @@ class TestJavaScriptLinting:
         env = os.environ.copy()
         local_nm = REPO_ROOT / "node_modules"
         shared_nm = Path("C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/node_modules")
+        if not local_nm.exists() and not shared_nm.exists():
+            pytest.skip("node_modules is not installed")
         if not local_nm.exists() and shared_nm.exists():
             bin_dir = str(shared_nm / ".bin")
             env["PATH"] = f"{bin_dir}{os.pathsep}{env.get('PATH', '')}"

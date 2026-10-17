@@ -582,6 +582,7 @@ class TestBackendEndpoints:
 # =============================================================================
 
 
+@pytest.mark.skipif(not (ROOT_DIR / "node_modules").is_dir(), reason="node_modules is not installed")
 def test_npm_run_lint_js_passes():
     """Verify that npm run lint:js runs cleanly with zero ESLint errors."""
     proc = subprocess.run(
@@ -592,3 +593,4 @@ def test_npm_run_lint_js_passes():
         shell=sys.platform == "win32",
     )
     assert proc.returncode == 0, f"ESLint failed:\n{proc.stderr}\n{proc.stdout}"
+

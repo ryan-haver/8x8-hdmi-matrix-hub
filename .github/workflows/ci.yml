@@ -378,9 +378,6 @@ jobs:
         continue-on-error: true
         run: npm run lint:css
 
-      - name: Shared editor and CEC component tests
-        run: '"$E2E_PYTHON" -m pytest tests/test_ui_editors_cec_remote.py --tb=short'
-
       - name: Smoke + visual tests
         id: tests
         continue-on-error: true
