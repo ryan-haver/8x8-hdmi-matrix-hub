@@ -1,8 +1,8 @@
 // Stylelint config (dev-only tooling; see package.json).
 //
 // `hub/no-raw-colors` (tools/ui/stylelint-no-raw-colors.mjs) enforces that
-// colours come from the tokens in web/css/theme.css (docs/ui/LOOK_AND_FEEL.md).
-//
+// colours come from the design tokens in web/css/tokens.css
+// (docs/ui/LOOK_AND_FEEL.md).
 // Existing violations: web/ is frozen until the Phase 0 UI baseline is signed
 // off, so current findings are recorded per file and rule in
 // tools/ui/stylelint-baseline.json. `npm run lint:css` prints every finding
@@ -18,7 +18,7 @@ export default {
   overrides: [
     {
       // The token source of truth may (must) contain literal colours.
-      files: ['web/css/theme.css'],
+      files: ['web/css/tokens.css', 'web/css/theme.css'],
       rules: { 'hub/no-raw-colors': null },
     },
   ],

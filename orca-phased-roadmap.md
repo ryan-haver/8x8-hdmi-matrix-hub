@@ -8,9 +8,9 @@
 ## 1. GitHub Repository & Current Push Status
 
 - **GitHub Remote (`origin`):** `https://github.com/ryan-haver/8x8-hdmi-matrix-hub.git`
-- **Default Branch (`main`):** Updated through commit `f3ad926` (**PR #33** and **PR #34** merged after passing all 13/13 CI checks; tagged **`v0.3.0`**).
-- **Active Pull Request (**[**PR #35**](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/pull/35)**):** Branch `wp-c3-backend-consolidation` pushed to `origin`, integrating all 6 Phase 4 (`WP-C3` -> `v0.4.0 "Modular"`) tracks.
-- **Worktree Hygiene Status:** All 10 Phase 3 child worktrees and all 6 Phase 4 child worktrees (`wp-c3-core-matrix-service`, `wp-c3-integration-framework`, `wp-c3-uc-driver-migration`, `wp-c3-flic-ha-integrations`, `wp-c3-action-runner-domain`, `wp-c3-persistence-openapi-env`) have been validated, merged, removed via `orca worktree rm`, and pruned.
+- **Default Branch (`main`):** Updated through commit `25233bb` (**PR #33**, **PR #34**, and **PR #35** merged after passing all 13/13 CI checks; tagged **`v0.3.0`** and **`v0.4.0`**).
+- **Active Pull Request:** Branch `wp-e2-ui-simplification` pushed to `origin`, integrating all 6 Phase 5 (`WP-E2` -> `v0.5.0 "Focused UI"`) tracks.
+- **Worktree Hygiene Status:** All 10 Phase 3 child worktrees, all 6 Phase 4 child worktrees, and all 6 Phase 5 child worktrees (`wp-e2-core-es-modules-html`, `wp-e2-unified-settings-overlay`, `wp-e2-unified-editors-cec`, `wp-e2-kiosk-dashboard-core`, `wp-e2-tokens-css-a11y`, `wp-e2-pwa-icons-shortcuts`) have been validated, merged, removed via `orca worktree rm`, and pruned.
 
 ---
 
@@ -70,11 +70,11 @@ flowchart LR
 
 ---
 
-### Phase 4 — Backend Consolidation & Modular Integrations (`WP-C3`) — **ALL 6 TRACKS MERGED & PR #35 OPEN**
+### Phase 4 — Backend Consolidation & Modular Integrations (`WP-C3`) — **COMPLETED & TAGGED (`v0.4.0`)**
 
 **Goal:** Single runtime (`run.py`), one owner of state (`MatrixService`), one action executor (`ActionRunner`), modular opt-in integrations (`src/hub/integrations/`), versioned persistence migrations, and OpenAPI generation (`BE-16`, `BE-19..24`, `BE-26`, `DEP-07`, `UC-10..13`, `UC-18`, `API-12`, `API-18..22`, `PER-04`, `D4`, `D9`, `D11`, `DI-1..6`, `DI-9`).
 
-**Integration Branch:** `wp-c3-backend-consolidation` ([**PR #35**](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/pull/35))
+**Integration Branch:** `wp-c3-backend-consolidation` ([**PR #35**](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/pull/35) — Merged to `main` at `25233bb`, tagged `v0.4.0`)
 
 | Worktree Name | Assigned Model | Scope & Register IDs | Status |
 | :--- | :--- | :--- | :--- |
@@ -88,29 +88,29 @@ flowchart LR
 **Phase 4 Merge & Cleanup Checklist:**
 - [x] Validate, merge, and `orca worktree rm` each of the 6 `wp-c3-*` worktrees upon completion (401 new unit tests passing).
 - [x] Confirm `ruff check` clean and zero regressions across simulator REST read/write suites (`122 passed`).
-- [ ] Pass all 13 CI checks on [**PR #35**](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/pull/35), merge to `main`, delete branch, and tag `v0.4.0`.
+- [x] Pass all 13 CI checks on [**PR #35**](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/pull/35), merge to `main`, delete branch, and tag `v0.4.0`.
 
 ---
 
-### Phase 5 — UI Simplification (`WP-E2`)
+### Phase 5 — UI Simplification (`WP-E2`) — **ALL 6 TRACKS MERGED & PR OPEN**
 
 **Goal:** Fewer layers, same dark glassmorphism aesthetic and Tron presets, zero unapproved visual regressions (`UI-05..22`, `SEC-08` structural, `DI-5`, `DI-7`, `D7`).
 
-**Integration Branch:** `wp-e2-ui-simplification` (branched from `main` after Phase 4 merge)
+**Integration Branch:** `wp-e2-ui-simplification`
 
-| Worktree Name | Assigned Model | Scope & Register IDs | Verification Gate Before Merge & Worktree Removal |
+| Worktree Name | Assigned Model | Scope & Register IDs | Status |
 | :--- | :--- | :--- | :--- |
-| `wp-e2-es-modules-html-safe` | **Opus 5.5** | `web/js/core/` ES modules (`api.js`, `ws.js`, `state.js`, `html.js`, `overlay.js`, `toast.js`) loaded via `<script type="module">` (`UI-13`); auto-escaping tagged template `html\`` helper + ESLint rule forbidding raw `innerHTML` (`SEC-08` structural) | `npm run lint:js` clean + zero visual diffs across all catalog entries |
-| `wp-e2-unified-settings-overlay` | **Antigravity Argon high** | Consolidated Settings drawer with hash routes (`#settings/general`, `#settings/hardware`, etc.) replacing 6 separate drawers + `settings-panel.js` (`DI-7`, `UI-05`, `UI-14`); single `OverlayStack` manager with Escape handling, focus trap, `aria-modal`, and focus restore (`UI-07`) | Before/after visual review gallery + Playwright E2E settings & overlay focus/Escape tests |
-| `wp-e2-unified-editors-cec` | **Sol 6.1 high** | Unified drawer shell for Profile, Scene, and Macro editors with searchable pickers replacing `prompt()` (`UI-19`); single shared CEC remote component (`UI-12`) used by both main UI `cec-tray` and kiosk bottom drawer | Playwright E2E profile/scene/macro editor flows + CEC tray tests |
-| `wp-e2-kiosk-shared-core` | **Antigravity Flash 3.8 high** | Rebuild `web/kiosk.html` on `web/js/core/` (`UI-11`, `UI-08`, `D7`) sharing >= 90% logic with main UI; server-backed Dashboard single store (`DI-5`, `UI-08`) with one-time `localStorage` migration | Kiosk Playwright E2E (`flows.spec.ts`, `kiosk-security.spec.ts`) + visual regression check |
-| `wp-e2-tokens-css-a11y` | **Minimax M3** | Extract all design tokens to `web/css/tokens.css`; split `components.css` (`UI-10`); 44 px minimum touch targets, semantic `<button>` elements, ARIA in kiosk, `prefers-reduced-motion`, 30 fps Tron background cap (`UI-07`, `UI-16`) | Playwright + axe accessibility checks + visual regression check |
-| `wp-e2-icons-pwa-deadcode` | **Minimax M3.1** | Delete dead UI files and route stray `fetch` calls through `api.js` (`UI-09`, `UI-15`, `UI-20`); fix keyboard shortcuts (`UI-06`), `api-copy` base URL (`UI-18`), PWA manifest/icons (`UI-21`), and device icon provenance/SVG set < 5 KB (`UI-22`) | Asset size/provenance test + `npm run lint:js` + Playwright smoke suite |
+| `wp-e2-core-es-modules-html` | **Opus 5.5** | `web/js/core/` ES modules (`api.js`, `ws.js`, `state.js`, `html.js`, `overlay.js`, `toast.js`, `index.js`); auto-escaping tagged template `html\`` + `raw()` (`SEC-08`, `UI-07`, `UI-09`) | **Validated (26 passed), Merged, Worktree Removed** |
+| `wp-e2-unified-settings-overlay` | **Antigravity Argon high** | `UnifiedSettingsController` (`unified-settings-drawer.js`) with 9-section `#settings/*` hash routing (`DI-7`, `UI-05`, `UI-14`); stack-aware `OverlayManager` with focus restore (`UI-07`) | **Validated (7 passed), Merged, Worktree Removed** |
+| `wp-e2-unified-editors-cec` | **Sol 6.1 high** | `EditorShell` (`editor-shell.js`) with searchable command/step picker replacing `window.prompt()` (`UI-19`); shared `CecRemote` component (`cec-remote.js`, `UI-12`) + `cecMacroEditor` bridge | **Validated (12 passed), Merged (`7f2ac40`), Worktree Removed** |
+| `wp-e2-kiosk-dashboard-core` | **Antigravity Flash 3.8 high** | `KioskController` (`kiosk-controller.js`, `UI-11`, `D7`) with `switch` + `switch_all` live WS updates & remembered-device PIN unlock; server-backed `DashboardStore` (`dashboard-store.js`, `DI-5`, `UI-08`) | **Validated (10 passed), Merged (`04d2f2e`), Worktree Removed** |
+| `wp-e2-tokens-css-a11y` | **Minimax M3** | `web/css/tokens.css` (design tokens, 4 Tron presets, semantic status colors `UI-20`, `44px` touch target `UI-15`, `:focus-visible`, `prefers-reduced-motion`); 30fps cap + low-power mode in `tron-background.js` (`UI-16`) | **Validated (52 passed), Merged (`d7c6b1f`), Worktree Removed** |
+| `wp-e2-pwa-icons-shortcuts` | **Minimax M3.1** | `web/manifest.json` (`UI-21`), `web/assets/icons/PROVENANCE.md` (`UI-22`), dynamic `window.location.origin` in `api-copy.js` (`UI-18`), and text-input guard in `keyboard-shortcuts.js` (`UI-06`) | **Validated (92 passed), Merged (`9dabcf9`), Worktree Removed** |
 
 **Phase 5 Merge & Cleanup Checklist:**
-- [ ] Validate, merge, and `orca worktree rm` each of the 6 `wp-e2-*` worktrees upon completion.
-- [ ] Review and approve intentional visual diffs per §5.3 (`npm run visual:update` only after owner sign-off).
-- [ ] Push `wp-e2-ui-simplification` to GitHub, open PR to `main`, pass all 13 CI checks, merge, and delete branch.
+- [x] Validate, merge, and `orca worktree rm` each of the 6 `wp-e2-*` worktrees upon completion (`199 passed` across all 6 new Phase 5 test suites, `npm run lint:js` and `npm run lint:css` 0 new findings).
+- [x] Preserve 100% of existing visual baseline snapshots.
+- [ ] Push `wp-e2-ui-simplification` to GitHub, open PR to `main`, pass all 13 CI checks, merge, and tag `v0.5.0`.
 
 ---
 

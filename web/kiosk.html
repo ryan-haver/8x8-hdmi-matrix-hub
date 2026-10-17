@@ -1838,10 +1838,11 @@
             document.getElementById('btnTargetSource').addEventListener('click', () => setRemoteTarget('input'));
             document.getElementById('btnTargetDisplay').addEventListener('click', () => setRemoteTarget('output'));
 
-            // Click listener for all remote command buttons
-            document.querySelectorAll('#cecRemoteModal .remote-cmd-btn').forEach(btn => {
-                btn.addEventListener('click', async (e) => {
-                    const cmd = e.currentTarget.dataset.cmd;
+            // Share command handling while retaining the kiosk's existing markup.
+            import('/js/components/cec-remote.js').then(() => window.CecRemote.attachEvents(
+                document.getElementById('cecRemoteModal'), {
+                commandSelector: '.remote-cmd-btn',
+                onCommand: async (cmd, action, button) => {
                     if (!cmd) return;
 
                     const targetType = activeRemoteTarget; // 'input' or 'output'
@@ -1853,9 +1854,9 @@
                     }
 
                     // Button press animation (scale down)
-                    e.currentTarget.style.transform = 'scale(0.9)';
+                    button.style.transform = 'scale(0.9)';
                     setTimeout(() => {
-                        e.currentTarget.style.transform = '';
+                        button.style.transform = '';
                     }, 100);
 
                     try {
@@ -1869,8 +1870,8 @@
                     } catch (err) {
                         showToast(`Error: ${err.message}`, 'error');
                     }
-                });
-            });
+                }
+            }));
 
             /**
              * Tab 1: Routing Tab Functions & Multi-step Wizard

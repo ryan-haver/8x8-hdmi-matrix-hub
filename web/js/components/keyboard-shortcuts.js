@@ -54,7 +54,11 @@ class KeyboardShortcuts {
             KeyboardShortcuts.toggleHelp();
         });
         KeyboardShortcuts.register('Escape', 'Close dialogs/menus', () => {
-            // Close any open modals, menus, etc.
+            // Close any open modals, menus, etc. Drawers and modals register
+            // with the overlay manager (UI-06), so a single Escape closes the
+            // topmost overlay instead of only the context menu and this help.
+            window.overlayStack?.closeTop();
+            window.overlayManager?.closeActive();
             ContextMenu?.closeAll();
             KeyboardShortcuts.hideHelp();
         });
@@ -107,18 +111,50 @@ class KeyboardShortcuts {
     }
 
     /**
+     * True when a key event comes from somewhere the user is typing or
+     * selecting text, so a shortcut must not steal it (UI-06).
+     *
+     * Covers <input> (all input types except non-text buttons), <textarea>,
+     * <select> and anything inside a contenteditable region - a shortcut such
+     * as "1" or "n" would otherwise be inserted into the field instead of
+     * navigating.
+     *
+     * @param {EventTarget|null} target - Event target (or the active element)
+     * @returns {boolean} True when the event belongs to a text-entry control
+     */
+    static isTypingTarget(target) {
+        const element = target instanceof Element ? target : null;
+        if (!element) return false;
+
+        if (element.isContentEditable) return true;
+        // Older browsers (and some embedded WebViews) lack isContentEditable
+        // but still expose the attribute.
+        if (element.closest?.('[contenteditable="true"]')) return true;
+
+        const tagName = element.tagName;
+        if (tagName === 'TEXTAREA' || tagName === 'SELECT') return true;
+        if (tagName !== 'INPUT') return false;
+
+        // Buttons submit on Enter/Space; every other input type takes printable
+        // keys, so all of them suppress shortcuts.
+        const type = (element.getAttribute('type') || 'text').toLowerCase();
+        return !['button', 'submit', 'reset', 'image'].includes(type);
+    }
+
+    /**
      * Handle keydown event
      */
     static handleKeydown = (e) => {
         if (!KeyboardShortcuts.enabled) return;
-        
-        // Ignore if typing in input/textarea
-        const target = e.target;
-        if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) {
-            // Only allow Escape
+
+        // Ignore if typing in input/textarea/select or a contenteditable region.
+        // Escape is still handled: it blurs the field or closes the top overlay.
+        const target = e.target || document.activeElement;
+        if (KeyboardShortcuts.isTypingTarget(target)) {
             if (e.key !== 'Escape') return;
+            if (typeof target.blur === 'function') target.blur();
         }
-        
+
         const parsed = {
             ctrl: e.ctrlKey,
             shift: e.shiftKey,

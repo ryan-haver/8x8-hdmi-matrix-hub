@@ -127,8 +127,9 @@ class SettingsDrawer {
         this.container.classList.remove('open');
         this.backdrop.classList.remove('open');
         document.body.style.overflow = '';
-        // Clear hash when drawer closes
-        if (window.location.hash.startsWith('#settings/')) {
+        // Clear hash when drawer closes (only if hash belongs to settings-drawer tabs)
+        const currentTab = window.location.hash.replace('#settings/', '').trim().toLowerCase();
+        if (window.location.hash.startsWith('#settings/') && ['profiles', 'scenes', 'system', ''].includes(currentTab)) {
             window.history.replaceState(null, '', window.location.pathname + window.location.search);
         }
     }
@@ -142,11 +143,32 @@ class SettingsDrawer {
      * Initialize hash-based routing. Opens drawer when URL hash matches #settings/*.
      */
     initHashRouting() {
+        const delegatedSections = ['general', 'hardware', 'interface', 'theme', 'integrations', 'shortcuts'];
         window.addEventListener('hashchange', () => {
             const hash = window.location.hash;
             if (hash.startsWith('#settings/')) {
-                const tab = hash.replace('#settings/', '');
-                this.open(tab);
+                const tab = hash.replace('#settings/', '').trim().toLowerCase();
+                if (delegatedSections.includes(tab)) {
+                    if (window.unifiedSettings && typeof window.unifiedSettings.open === 'function') {
+                        window.unifiedSettings.open(tab);
+                    } else {
+                        const overlayName = `${tab}-drawer`;
+                        const reg = window.overlayManager?.overlays?.get(overlayName);
+                        const globalDrawer = window[`${tab}Drawer`];
+                        if (reg && typeof reg.open === 'function') {
+                            reg.open();
+                        } else if (globalDrawer && typeof globalDrawer.open === 'function') {
+                            globalDrawer.open();
+                        } else if (window.overlayManager) {
+                            window.overlayManager.onOpen(overlayName);
+                        }
+                        if (window.location.hash !== `#settings/${tab}`) {
+                            window.history.replaceState(null, '', `#settings/${tab}`);
+                        }
+                    }
+                } else {
+                    this.open(tab);
+                }
             } else if (this.isOpen) {
                 this.close();
             }
@@ -154,7 +176,7 @@ class SettingsDrawer {
         // Check initial hash
         const hash = window.location.hash;
         if (hash.startsWith('#settings/')) {
-            const tab = hash.replace('#settings/', '');
+            const tab = hash.replace('#settings/', '').trim().toLowerCase();
             if (['profiles', 'scenes', 'system'].includes(tab)) {
                 this.activeTab = tab;
             }

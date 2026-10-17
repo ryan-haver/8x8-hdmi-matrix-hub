@@ -219,12 +219,13 @@ class CecMacroEditor {
     /**
      * Open the modal
      */
-    async open() {
+    async open(macroId) {
         this.modal.setAttribute('aria-hidden', 'false');
         this.modal.classList.add('visible');
         document.body.style.overflow = 'hidden';
         await this.loadMacros();
         this.showListView();
+        if (macroId) await this.editMacro(macroId);
     }
 
     /**
@@ -675,3 +676,6 @@ class CecMacroEditor {
 
 // Global instance
 const cecMacroEditor = new CecMacroEditor();
+
+// Keep classic-script callers and window-based UI triggers on the same editor.
+window.cecMacroEditor = cecMacroEditor;
