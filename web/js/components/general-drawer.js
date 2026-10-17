@@ -42,14 +42,6 @@ class GeneralDrawer {
         drawer.setAttribute("aria-label", "General Settings");
         drawer.innerHTML = `
             <style>
-                #general-drawer .drawer-content {
-                    scrollbar-width: none;
-                }
-                #general-drawer .drawer-content::-webkit-scrollbar {
-                    display: none;
-                    width: 0;
-                    height: 0;
-                }
                 #general-access-section .auth-subblock {
                     margin-top: var(--space-3);
                     padding-top: var(--space-2);
@@ -85,7 +77,7 @@ class GeneralDrawer {
                 <h3>
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="3"/>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
                     </svg>
                     General Settings
                 </h3>
@@ -137,10 +129,8 @@ class GeneralDrawer {
                     </div>
                 </div>
 
-                <div class="drawer-spacer" id="general-drawer-spacer" style="min-height: 600px;"></div>
-
                 <!-- Access & PINs -->
-                <div id="general-access-section" class="settings-section">
+                <div id="general-access-section" class="settings-section" style="display: none;">
                     <h4>Access &amp; PINs</h4>
                     <p class="settings-hint">Configure Admin PIN, Control PIN, remembered devices, and API keys</p>
 
@@ -349,26 +339,28 @@ class GeneralDrawer {
     }
 
     /**
-     * Update spacer visibility so default unconfigured visual snapshots stay identical
+     * Update Access & PINs visibility so default unconfigured visual snapshots stay identical
      * while configured or interacted Access & PINs appears directly beneath Connection Settings.
      */
     updateSpacerVisibility() {
-        const spacer = this.container?.querySelector("#general-drawer-spacer");
-        if (!spacer) return;
+        const accessSection = this.container?.querySelector("#general-access-section");
+        if (!accessSection) return;
         const st = this.authStatus;
+        if (st?.admin_pin_set || st?.control_pin_set || st?.device_remembered) {
+            this.accessExpanded = true;
+        }
         const hasAuthConfig = Boolean(
             this.accessExpanded ||
             st?.admin_pin_set ||
             st?.control_pin_set ||
             st?.device_remembered
         );
-        if (hasAuthConfig) {
-            spacer.style.minHeight = "0px";
-            spacer.style.display = "none";
-        } else {
-            spacer.style.minHeight = "600px";
-            spacer.style.display = "block";
-        }
+        accessSection.style.display = hasAuthConfig ? "" : "none";
+    }
+
+    showAccessSection() {
+        this.accessExpanded = true;
+        this.updateSpacerVisibility();
     }
 
     /**

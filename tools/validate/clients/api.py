@@ -84,16 +84,33 @@ class ApiClient(Client):
             await self._session.close()
             self._session = None
 
-    async def request(self, method: str, path: str, body: Any = None) -> tuple[int, Any, dict[str, Any]]:
+    async def request(
+        self,
+        method: str,
+        path: str,
+        body: Any = None,
+        *,
+        headers: dict[str, str] | None = None,
+        data: Any = None,
+    ) -> tuple[int, Any, dict[str, Any]]:
         """One HTTP exchange; returns ``(status, parsed body, record)``."""
         assert self._session is not None, "client not started"
         t0 = time.perf_counter()
-        kwargs: dict[str, Any] = {} if body is None else {"json": body}
+        kwargs: dict[str, Any] = {}
+        if data is not None:
+            kwargs["data"] = data
+        elif body is not None:
+            kwargs["json"] = body
         # The scenario's own client address (TST-16): the hub rate-limits per address
         # (60 requests / 10 s), so one address for the whole run made fast modules hit 429.
+        req_headers: dict[str, str] = {}
         forwarded = self.context.get("forwarded_for")
         if forwarded:
-            kwargs["headers"] = {"X-Forwarded-For": forwarded}
+            req_headers["X-Forwarded-For"] = forwarded
+        if headers:
+            req_headers.update(headers)
+        if req_headers:
+            kwargs["headers"] = req_headers
         async with self._session.request(method, path, **kwargs) as resp:
             text = await resp.text()
             try:
@@ -103,7 +120,7 @@ class ApiClient(Client):
             record = {
                 "method": method,
                 "path": path,
-                "body": body,
+                "body": body if body is not None else data,
                 "status": resp.status,
                 "response": parsed,
                 "elapsed_ms": round((time.perf_counter() - t0) * 1000, 1),
@@ -112,10 +129,12 @@ class ApiClient(Client):
 
     async def perform(self, action: Action) -> ActionResult:
         method, path, body = rest_call(action)
+        headers = action.params.get("headers") if action.intent == "request" else None
+        data = action.params.get("data") if action.intent == "request" else None
         result = ActionResult(intent=action.intent, ok=False)
         t0 = time.perf_counter()
         try:
-            status, parsed, record = await self.request(method, path, body)
+            status, parsed, record = await self.request(method, path, body, headers=headers, data=data)
             result.requests.append(record)
             result.status, result.body = status, parsed
             result.ok = 200 <= status < 300

@@ -540,7 +540,11 @@ class TestValidationHelpers:
     def test_bad_request_error_response_is_a_400(self):
         resp = BadRequestError("nope").response()
         assert resp.status == 400
-        assert json.loads(resp.body) == {"success": False, "data": None, "error": "nope"}
+        payload = json.loads(resp.body)
+        assert payload["success"] is False
+        assert payload["data"] is None
+        assert payload["error"] == "nope"
+        assert isinstance(payload.get("error_id"), str) and payload["error_id"]
 
     @pytest.mark.parametrize("value", [1, 8, "3", " 5 "])
     def test_validate_port_accepts(self, value):
