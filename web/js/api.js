@@ -11,22 +11,45 @@
  * - body:   the parsed JSON body of the answer, if any
  */
 class ApiError extends Error {
-    constructor(message, { status = 0, code = null, body = null, method = null, path = null } = {}) {
+    constructor(message, { status = 0, code = null, level = undefined, body = null, method = null, path = null } = {}) {
         super(message);
         this.name = 'ApiError';
         this.status = status;
         this.code = code;
+        const resolvedLevel = level !== undefined ? level : ApiError.levelFrom(code, body);
+        if (resolvedLevel !== undefined && resolvedLevel !== null) {
+            this.level = resolvedLevel;
+        }
         this.body = body;
         this.method = method;
         this.path = path;
     }
 
     /** The hub's machine-readable error code in an error body, if there is one. */
-    static codeFrom(body) {
+    static codeFrom(body, rawText = '') {
         const isCode = (v) => typeof v === 'string' && /^[a-z][a-z0-9_]*$/.test(v);
+        if (isCode(body?.code)) return body.code;
         if (isCode(body?.data?.error)) return body.data.error;
         if (isCode(body?.error)) return body.error;
+        const text = `${typeof body?.error === 'string' ? body.error : ''} ${typeof body?.message === 'string' ? body.message : ''} ${rawText || ''}`.trim();
+        if (/admin unlock required|admin pin required|current admin pin required/i.test(text)) {
+            return 'admin_pin_required';
+        }
+        if (/control unlock|control pin required/i.test(text)) {
+            return 'control_pin_required';
+        }
+        if (/incorrect pin|invalid pin/i.test(text)) {
+            return 'invalid_pin';
+        }
         return null;
+    }
+
+    /** The required access level ('admin' or 'control') for an auth error, if applicable. */
+    static levelFrom(code, body) {
+        if (body?.level === 'admin' || body?.level === 'control') return body.level;
+        if (code === 'admin_pin_required') return 'admin';
+        if (code === 'control_pin_required') return 'control';
+        return undefined;
     }
 }
 
@@ -129,7 +152,11 @@ class MatrixAPI {
      * @param {number} [options.timeout] - Milliseconds before the request is aborted
      * @param {Function} [options.message] - (response, body) => message for a non-2xx answer
      */
-    async _request(method, path, { body, timeout = MatrixAPI.DEFAULT_TIMEOUT_MS, message } = {}) {
+    async _request(method, path, { body, timeout = MatrixAPI.DEFAULT_TIMEOUT_MS, message, _authRetried = false } = {}) {
+        const suppressAuthPrompt = Boolean(typeof window !== 'undefined' && window._suppressNextAuthPrompt);
+        if (typeof window !== 'undefined' && window._suppressNextAuthPrompt) {
+            window._suppressNextAuthPrompt = false;
+        }
         const controller = new AbortController();
         const timer = setTimeout(() => controller.abort(), timeout);
         const init = { method, signal: controller.signal };
@@ -137,6 +164,7 @@ class MatrixAPI {
             init.headers = { 'Content-Type': 'application/json' };
             init.body = JSON.stringify(body);
         }
+        let apiErrorToRetry;
         try {
             let response;
             try {
@@ -145,23 +173,62 @@ class MatrixAPI {
                 throw MatrixAPI._transportError(error, timeout, method, path);
             }
             if (!response.ok) {
-                const data = await response.json().catch(() => null);
-                throw new ApiError(message ? message(response, data) : `HTTP ${response.status}`, {
+                const rawText = await response.text().catch(() => '');
+                let data = null;
+                if (rawText) {
+                    try {
+                        data = JSON.parse(rawText);
+                    } catch {
+                        data = { error: rawText.trim() };
+                    }
+                }
+                const code = ApiError.codeFrom(data, rawText);
+                const level = ApiError.levelFrom(code, data);
+                const apiErr = new ApiError(message ? message(response, data) : `HTTP ${response.status}`, {
                     status: response.status,
-                    code: ApiError.codeFrom(data),
+                    code,
+                    level,
                     body: data,
                     method,
                     path,
                 });
-            }
-            try {
-                return await response.json();
-            } catch (error) {
-                throw MatrixAPI._transportError(error, timeout, method, path);
+                const isAuthRequired =
+                    (response.status === 401 || response.status === 403) &&
+                    (code === 'admin_pin_required' || code === 'control_pin_required');
+                const canAutoPrompt =
+                    isAuthRequired &&
+                    !_authRetried &&
+                    !suppressAuthPrompt &&
+                    !path.startsWith('/api/auth/') &&
+                    method !== 'GET' &&
+                    typeof window !== 'undefined' &&
+                    typeof window.RunAction?.promptAndUnlock === 'function';
+                if (canAutoPrompt) {
+                    apiErrorToRetry = apiErr;
+                } else {
+                    throw apiErr;
+                }
+            } else {
+                try {
+                    return await response.json();
+                } catch (error) {
+                    throw MatrixAPI._transportError(error, timeout, method, path);
+                }
             }
         } finally {
             clearTimeout(timer);
         }
+
+        if (apiErrorToRetry) {
+            const outcome = await window.RunAction.promptAndUnlock(apiErrorToRetry);
+            if (!outcome || outcome.status !== 'ok') {
+                Object.defineProperty(apiErrorToRetry, '_authPromptHandled', { value: true, enumerable: false });
+                Object.defineProperty(apiErrorToRetry, '_authOutcome', { value: outcome, enumerable: false });
+                throw apiErrorToRetry;
+            }
+            return this._request(method, path, { body, timeout, message, _authRetried: true });
+        }
+        return null;
     }
 
     /** ApiError for a request that got no (usable) answer: timeout or network/parse error. */
@@ -762,6 +829,110 @@ class MatrixAPI {
 
     async executeSystemAction(key, { params } = {}) {
         return this.executeSystemShortcut(key, { params });
+    }
+
+    // ===== Access & Auth API (/api/auth/*) =====
+
+    async getAuthStatus() {
+        return this.get('/api/auth/status');
+    }
+
+    async unlockAuth({ pin, level = 'admin', remember_device = false, device_name } = {}) {
+        const payload = { pin, level, remember_device: Boolean(remember_device) };
+        if (device_name !== undefined) {
+            payload.device_name = device_name;
+        }
+        return this.post('/api/auth/unlock', payload);
+    }
+
+    async lockAuth() {
+        return this.post('/api/auth/lock', {});
+    }
+
+    async setAuthPin(data = {}) {
+        if (data && (data.admin_pin !== undefined || data.control_pin !== undefined) && data.pin === undefined) {
+            let lastRes = null;
+            if (data.admin_pin !== undefined) {
+                const payload = { level: 'admin', pin: data.admin_pin || '' };
+                if (data.current_pin !== undefined) payload.current_pin = data.current_pin;
+                lastRes = await this.post('/api/auth/pin', payload);
+            }
+            if (data.control_pin !== undefined) {
+                const payload = { level: 'control', pin: data.control_pin || '' };
+                if (data.current_pin !== undefined) payload.current_pin = data.current_pin;
+                lastRes = await this.post('/api/auth/pin', payload);
+            }
+            return lastRes;
+        }
+        const payload = {
+            level: data.level || 'admin',
+            pin: data.pin ?? '',
+        };
+        if (data.current_pin !== undefined) {
+            payload.current_pin = data.current_pin;
+        }
+        return this.post('/api/auth/pin', payload);
+    }
+
+    async updateAuthPin(data = {}) {
+        return this.setAuthPin(data);
+    }
+
+    async getAuthDevices() {
+        return this.get('/api/auth/devices');
+    }
+
+    async listAuthDevices() {
+        return this.getAuthDevices();
+    }
+
+    async deleteAuthDevice(id) {
+        return this.delete(`/api/auth/devices/${encodeURIComponent(id)}`);
+    }
+
+    async revokeAuthDevice(id) {
+        return this.deleteAuthDevice(id);
+    }
+
+    async getApiKeys() {
+        return this.get('/api/auth/api-keys');
+    }
+
+    async listApiKeys() {
+        return this.getApiKeys();
+    }
+
+    async getAuthApiKeys() {
+        return this.getApiKeys();
+    }
+
+    async listAuthApiKeys() {
+        return this.getApiKeys();
+    }
+
+    async createApiKey(nameOrOptions = '') {
+        const name = typeof nameOrOptions === 'string' ? nameOrOptions : (nameOrOptions?.name ?? '');
+        return this.post('/api/auth/api-keys', { name });
+    }
+
+    async createAuthApiKey(nameOrOptions = '') {
+        return this.createApiKey(nameOrOptions);
+    }
+
+    async deleteApiKey(id) {
+        return this.delete(`/api/auth/api-keys/${encodeURIComponent(id)}`);
+    }
+
+    async revokeApiKey(id) {
+        return this.deleteApiKey(id);
+    }
+
+    async deleteAuthApiKey(id) {
+        return this.deleteApiKey(id);
+    }
+
+    async revokeAuthApiKey(id) {
+        return this.deleteApiKey(id);
     }
 }
 
