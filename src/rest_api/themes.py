@@ -15,7 +15,8 @@ from aiohttp import web
 
 from persistence import ensure_data_dir, get_data_dir, migrate_legacy_file
 
-from .utils import _json_response
+from .utils import _json_response, safe_error_message
+from .validation import NAME_MAX_LENGTH, BadRequestError, optional_string, parse_json_object, validate_int
 
 _LOG = logging.getLogger("rest_api.themes")
 
@@ -101,7 +102,7 @@ async def handle_get_themes(request: web.Request) -> web.Response:
 async def handle_put_themes(request: web.Request) -> web.Response:
     """Update theme settings."""
     try:
-        body = await request.json()
+        body = await parse_json_object(request)
 
         # Validate required fields
         if "presets" not in body:
@@ -114,20 +115,31 @@ async def handle_put_themes(request: web.Request) -> web.Response:
 
         # Validate each preset
         for i, preset in enumerate(presets):
+            if not isinstance(preset, dict):
+                return _json_response(False, error=f"Preset {i} must be an object", status=400)
             if not isinstance(preset.get("primaryH"), (int, float)):
                 return _json_response(False, error=f"Preset {i} missing valid primaryH", status=400)
             if not isinstance(preset.get("secondaryH"), (int, float)):
                 return _json_response(False, error=f"Preset {i} missing valid secondaryH", status=400)
+            optional_string(preset, "name", max_length=NAME_MAX_LENGTH, allow_empty=True)
             if not preset.get("name"):
                 preset["name"] = f"Preset {i + 1}"
             if not preset.get("id"):
                 preset["id"] = f"preset-{i + 1}"
 
+        # Out-of-range numbers are wrapped/clamped as before; non-numbers are a 400 (API-15).
+        active_index = validate_int(
+            body.get("activePresetIndex", 0), "activePresetIndex", minimum=-(2**31), maximum=2**31
+        )
+        card_opacity = body.get("cardOpacity", 0.8)
+        if isinstance(card_opacity, bool) or not isinstance(card_opacity, (int, float)):
+            return _json_response(False, error="cardOpacity must be a number", status=400)
+
         # Build clean data object
         theme_data = {
             "presets": presets,
-            "activePresetIndex": int(body.get("activePresetIndex", 0)) % 4,
-            "cardOpacity": max(0, min(1, float(body.get("cardOpacity", 0.8)))),
+            "activePresetIndex": active_index % 4,
+            "cardOpacity": max(0, min(1, float(card_opacity))),
             "hoverPreference": body.get("hoverPreference", "primary")
             if body.get("hoverPreference") in ["primary", "secondary"]
             else "primary",
@@ -139,11 +151,10 @@ async def handle_put_themes(request: web.Request) -> web.Response:
         else:
             return _json_response(False, error="Failed to save theme settings", status=500)
 
-    except json.JSONDecodeError:
-        return _json_response(False, error="Invalid JSON body", status=400)
+    except BadRequestError as exc:
+        return exc.response()
     except Exception as e:
-        _LOG.exception(f"Error updating themes: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "updating themes"), status=500)
 
 
 async def handle_reset_themes(request: web.Request) -> web.Response:

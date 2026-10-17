@@ -10,7 +10,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.typing import ConfigType
 
 from .api import HubClient, HubError
-from .const import CONF_IP_ADDRESS, CONF_PORT, DOMAIN, LOGGER, PLATFORMS
+from .const import CONF_API_KEY, CONF_IP_ADDRESS, CONF_PORT, DOMAIN, LOGGER, PLATFORMS
 from .coordinator import HdmiMatrixConfigEntry, HdmiMatrixCoordinator, HdmiMatrixRuntimeData
 from .services import async_setup_services
 
@@ -25,7 +25,10 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
 async def async_setup_entry(hass: HomeAssistant, entry: HdmiMatrixConfigEntry) -> bool:
     """Connect to the hub, fetch the first state, and set up the platforms."""
-    client = HubClient(async_get_clientsession(hass), entry.data[CONF_IP_ADDRESS], entry.data[CONF_PORT])
+    client = HubClient(
+        async_get_clientsession(hass), entry.data[CONF_IP_ADDRESS], entry.data[CONF_PORT],
+        entry.options.get(CONF_API_KEY, entry.data.get(CONF_API_KEY)),
+    )
 
     device: dict = {}
     try:

@@ -181,6 +181,17 @@ from .scenes_v2 import (
 from .scenes_v2 import (
     set_phase8_scene_manager as _set_phase8_scene_manager,
 )
+from .security import (
+    SecurityManager,
+    allowed_origin,
+    auth_api_keys,
+    auth_devices,
+    auth_lock,
+    auth_pin,
+    auth_status,
+    auth_unlock,
+    security_middleware,
+)
 from .settings import (
     handle_get_settings,
     handle_set_matrix_host,
@@ -239,25 +250,13 @@ def create_rest_app(data_dir: Path | None = None) -> web.Application:
     data_dir = Path(data_dir).resolve()
 
     app = web.Application(middlewares=[rate_limit_middleware])
+    app["security_manager"] = SecurityManager(data_dir)
 
     # Event-loop lag / uptime / task-count sampling for /api/health
     install_runtime_monitor(app)
 
     # The hub's live event stream (/ws) and its status poller (docs/api/WEBSOCKET.md)
     install_event_stream(app)
-
-    # Add CORS middleware for browser-based clients.
-    # FIX (F13.1): validate the request Origin against an explicit allowlist
-    # rather than always returning "*". Wildcard "*" is dangerous if
-    # credentials support is ever added — cookies / auth headers would be
-    # exposed to any origin. Set ``CORS_ALLOWED_ORIGINS`` to a comma-separated
-    # list (e.g. "https://app.example.com,https://other.example.com") to
-    # restrict origins. Empty/``*`` preserves the legacy permissive default.
-    _allowed_origins_env = os.environ.get("CORS_ALLOWED_ORIGINS", "*").strip()
-    if _allowed_origins_env == "*" or _allowed_origins_env == "":
-        _allowed_origins = None  # wildcard — accept any origin
-    else:
-        _allowed_origins = {o.strip() for o in _allowed_origins_env.split(",") if o.strip()}
 
     @web.middleware
     async def cors_middleware(request: web.Request, handler):
@@ -267,24 +266,20 @@ def create_rest_app(data_dir: Path | None = None) -> web.Application:
             response = await handler(request)
 
         origin = request.headers.get("Origin")
-        if _allowed_origins is None:
-            # Wildcard mode — preserve legacy behavior
+        if os.environ.get("CORS_ALLOWED_ORIGINS", "").strip() == "*":
             response.headers["Access-Control-Allow-Origin"] = "*"
-        elif origin and origin in _allowed_origins:
-            # Specific allowlist match — echo the origin (CORS spec requires
-            # echoing the exact origin, not "*", when credentials are used)
+        elif origin and allowed_origin(request, origin):
             response.headers["Access-Control-Allow-Origin"] = origin
-        # else: origin not in allowlist — don't set the header; browser
-        # will block the response. This is the secure default.
 
         # Always add Vary header - caches must not serve wrong-origin responses
         response.headers["Vary"] = "Origin"
 
         response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
-        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type, X-API-Key, X-Admin-PIN"
         response.headers["Access-Control-Max-Age"] = "86400"
         return response
 
+    app.middlewares.append(security_middleware)
     app.middlewares.append(cors_middleware)
 
     # Web UI routes (serve before API routes)
@@ -299,6 +294,15 @@ def create_rest_app(data_dir: Path | None = None) -> web.Application:
     # Register API routes
     app.router.add_get("/", handle_api_root)
     app.router.add_get("/api", handle_api_root)
+    app.router.add_get("/api/auth/status", auth_status)
+    app.router.add_post("/api/auth/unlock", auth_unlock)
+    app.router.add_post("/api/auth/lock", auth_lock)
+    app.router.add_post("/api/auth/pin", auth_pin)
+    app.router.add_get("/api/auth/devices", auth_devices)
+    app.router.add_delete("/api/auth/devices/{device_id}", auth_devices)
+    app.router.add_get("/api/auth/api-keys", auth_api_keys)
+    app.router.add_post("/api/auth/api-keys", auth_api_keys)
+    app.router.add_delete("/api/auth/api-keys/{key_id}", auth_api_keys)
 
     # Health & Basic Status
     app.router.add_get("/api/health", handle_health)
@@ -545,7 +549,8 @@ class RestApiServer:
 
         try:
             self.app = create_rest_app()
-            self.runner = web.AppRunner(self.app)
+            # aiohttp's default access log includes query strings, which can carry ?key=.
+            self.runner = web.AppRunner(self.app, access_log=None)
             await self.runner.setup()
 
             self.site = web.TCPSite(self.runner, self.host, self.port)

@@ -30,6 +30,7 @@ import logging
 import os
 import random
 import re
+import ssl
 import time
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
@@ -92,6 +93,47 @@ except ImportError:
     from telnet_client import CecOutcome, MatrixStatus, TelnetClient, TelnetState
 
 _LOG = logging.getLogger(__name__)
+
+
+def _redact_log_value(value: Any) -> Any:
+    """Remove password values from structured and rendered matrix log messages."""
+    if isinstance(value, dict):
+        return {key: "***REDACTED***" if str(key).lower() == "password" else _redact_log_value(item)
+                for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return type(value)(_redact_log_value(item) for item in value)
+    if isinstance(value, str):
+        quoted = re.sub(
+            r"(?i)([\"']?password[\"']?\s*[:=]\s*)([\"'])(.*?)(\2)",
+            r"\1\2***REDACTED***\4",
+            value,
+        )
+        return re.sub(r"(?i)(\bpassword[\"']?\s*[:=]\s*)(?![\"'])([^\s,}]+)",
+                      r"\1***REDACTED***", quoted)
+    return value
+
+
+class _PasswordLogFilter(logging.Filter):
+    def filter(self, record: logging.LogRecord) -> bool:
+        record.msg = _redact_log_value(record.msg)
+        record.args = _redact_log_value(record.args)
+        return True
+
+
+_LOG.addFilter(_PasswordLogFilter())
+
+
+def _matrix_tls_policy() -> bool | ssl.SSLContext | aiohttp.Fingerprint:
+    """HTTPS verification setting for matrix requests."""
+    fingerprint = os.environ.get("MATRIX_TLS_FINGERPRINT", "").replace(":", "").strip()
+    ca_cert = os.environ.get("MATRIX_CA_CERT", "").strip()
+    if fingerprint:
+        if len(fingerprint) != 64:
+            raise ValueError("MATRIX_TLS_FINGERPRINT must be a SHA-256 fingerprint")
+        return aiohttp.Fingerprint(bytes.fromhex(fingerprint))
+    if ca_cert:
+        return ssl.create_default_context(cafile=ca_cert)
+    return os.environ.get("OREI_VERIFY_SSL", "false").lower() == "true"
 
 # Connection retry configuration
 MAX_RETRIES = int(os.environ.get("OREI_MAX_RETRIES", "5"))
@@ -639,7 +681,8 @@ class OreiMatrix:
 
     def _url(self) -> str:
         protocol = "https" if self.use_https else "http"
-        return f"{protocol}://{self.host}:{self.port}/cgi-bin/instr"
+        host = f"[{self.host}]" if ":" in self.host else self.host
+        return f"{protocol}://{host}:{self.port}/cgi-bin/instr"
 
     async def _connect_once(self) -> bool:
         """One login attempt, then Telnet. Used through :meth:`connect`."""
@@ -650,13 +693,12 @@ class OreiMatrix:
             protocol = "https" if self.use_https else "http"
             _LOG.info("Connecting to OREI Matrix at %s://%s:%d", protocol, self.host, self.port)
 
-            # SSL verification is disabled by default. Set OREI_VERIFY_SSL=true
-            # to enable strict verification if a CA-signed certificate is installed.
+            # A fingerprint takes precedence over a custom CA; both opt in to TLS verification.
             if not self._session:
                 if self.use_https:
-                    ssl_enabled = os.environ.get("OREI_VERIFY_SSL", "false").lower() == "true"
-                    connector = aiohttp.TCPConnector(ssl=ssl_enabled)
-                    if not ssl_enabled:
+                    tls_policy = _matrix_tls_policy()
+                    connector = aiohttp.TCPConnector(ssl=tls_policy)
+                    if tls_policy is False:
                         _LOG.warning("SSL verification disabled for matrix connection")
                 else:
                     connector = None
@@ -691,6 +733,15 @@ class OreiMatrix:
     def has_own_credentials(self) -> bool:
         """Whether this matrix logs in with credentials given to it (a Remote setup), not the environment's."""
         return self._password is not None
+
+    @property
+    def password(self) -> str | None:
+        """Effective password, including the environment or device default."""
+        return self.credentials()[1]
+
+    @password.setter
+    def password(self, value: str) -> None:
+        self._password = value
 
     def credentials(self) -> tuple[str, str]:
         """The login user and password: this matrix's own, else ``OREI_USER`` / ``OREI_PASSWORD``."""
@@ -764,13 +815,15 @@ class OreiMatrix:
             return _HttpResult("auth", error=f"HTTP {status}")
         if status != 200:
             return _HttpResult("http_error", error=f"HTTP {status}")
-        _LOG.debug("Command response (raw): %s", text)
+        if payload.get("comhead") != "login":
+            _LOG.debug("Command response (raw): %s", text)
         try:
             data = json.loads(text)
         except ValueError as ex:
             if _looks_like_login_page(text):
                 return _HttpResult("auth", error="Session expired (login page)")
-            _LOG.warning("Could not parse JSON response: %s (raw: %.200s)", ex, text)
+            if payload.get("comhead") != "login":
+                _LOG.warning("Could not parse JSON response: %s (raw: %.200s)", ex, text)
             return _HttpResult("bad_response", error=f"Unparseable matrix response: {ex}")
         if not isinstance(data, dict):
             return _HttpResult("bad_response", error="Unparseable matrix response: not a JSON object")

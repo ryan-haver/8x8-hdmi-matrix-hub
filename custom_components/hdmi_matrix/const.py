@@ -15,6 +15,7 @@ DEFAULT_PORT = 8080
 
 CONF_IP_ADDRESS = "host"
 CONF_PORT = "port"
+CONF_API_KEY = "api_key"
 CONF_SCAN_INTERVAL = "scan_interval"
 
 DEFAULT_SCAN_INTERVAL = 15  # seconds
