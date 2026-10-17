@@ -2,109 +2,93 @@
 REST API handlers for integration discovery and auto-registration.
 """
 
-import json
+from __future__ import annotations
+
 import logging
 from pathlib import Path
 
 from aiohttp import web
 
+import hub.integrations.flic as _flic_mod
 from _file_io import atomic_write_json
+from hub.integrations.flic import (
+    FlicButtonRegistry,
+    FlicIntegration,
+)
 from persistence import get_data_dir
-
-from .utils import _json_response, safe_error_message
-from .validation import BadRequestError, parse_json_object
 
 _LOG = logging.getLogger("rest_api.integrations")
 
-_registered_buttons: dict[str, dict] = {}
+_default_registry = FlicButtonRegistry()
+_default_integration = FlicIntegration(registry=_default_registry)
+
+# Backward-compatibility exports and state
+_registered_buttons: dict[str, dict] = _default_registry._buttons
 _loaded = False
+
+__all__ = [
+    "_default_integration",
+    "_default_registry",
+    "_get_flic_file_path",
+    "_load_buttons_if_needed",
+    "_loaded",
+    "_registered_buttons",
+    "_save_buttons",
+    "atomic_write_json",
+    "get_data_dir",
+    "handle_get_flic_buttons",
+    "handle_register_flic_buttons",
+]
+
+
+def _sync_flic_hooks() -> None:
+    """Propagate any monkeypatches on rest_api.integrations into hub.integrations.flic."""
+    _flic_mod.atomic_write_json = atomic_write_json
+    _flic_mod.get_data_dir = get_data_dir
 
 
 def _get_flic_file_path() -> Path:
     """Return the persistent file path for registered Flic buttons."""
-    return get_data_dir() / "flic_buttons.json"
+    _sync_flic_hooks()
+    return _default_registry.file_path
 
 
-def _load_buttons_if_needed():
+def _load_buttons_if_needed() -> None:
     """Load registered buttons from persistent storage if not already loaded."""
     global _loaded, _registered_buttons
-    if _loaded:
-        return
-
-    file_path = _get_flic_file_path()
-    if file_path.exists():
-        try:
-            with open(file_path, encoding="utf-8") as f:
-                data = json.load(f)
-                if isinstance(data, dict):
-                    _registered_buttons = data
-                elif isinstance(data, list):
-                    # Convert legacy list structure to dict
-                    _registered_buttons = {btn["bdaddr"]: btn for btn in data if "bdaddr" in btn}
-            _LOG.info(f"Loaded {len(_registered_buttons)} registered Flic buttons from storage")
-        except Exception as e:
-            _LOG.warning(f"Failed to load registered Flic buttons: {e}")
-    _loaded = True
+    _sync_flic_hooks()
+    _default_registry._loaded = _loaded
+    _default_registry.load_if_needed()
+    _registered_buttons = _default_registry._buttons
+    _loaded = _default_registry._loaded
 
 
 def _save_buttons() -> bool:
     """Save the in-memory registered buttons dict to persistent storage."""
-    file_path = _get_flic_file_path()
-    try:
-        # Atomic replace + serialized writers (PER-02): a crash or a
-        # concurrent registration can no longer leave a truncated file.
-        atomic_write_json(file_path, _registered_buttons, indent=4)
-        return True
-    except Exception as e:
-        _LOG.warning(f"Failed to save registered Flic buttons: {e}")
-        return False
+    _sync_flic_hooks()
+    _default_registry._buttons = _registered_buttons
+    return _default_registry.save()
 
 
 async def handle_register_flic_buttons(request: web.Request) -> web.Response:
     """Register Flic buttons reported by the Flic Hub SDK script."""
-    global _registered_buttons
-    try:
-        _load_buttons_if_needed()
-        body = await parse_json_object(request)
-        buttons = body.get("buttons", [])
-
-        if not isinstance(buttons, list):
-            return _json_response(False, error="Invalid buttons payload", status=400)
-
-        previous = _registered_buttons.copy()
-        updated = False
-        for btn in buttons:
-            if not isinstance(btn, dict) or "bdaddr" not in btn:
-                continue
-            bdaddr = btn["bdaddr"]
-            name = btn.get("name", bdaddr)
-
-            # Check if this button is new or its name has changed
-            if bdaddr not in _registered_buttons or _registered_buttons[bdaddr].get("name") != name:
-                _registered_buttons[bdaddr] = {
-                    "bdaddr": bdaddr,
-                    "name": name,
-                    "serial": btn.get("serial", ""),
-                }
-                updated = True
-
-        if updated:
-            if not _save_buttons():
-                _registered_buttons = previous
-                return _json_response(False, error="Failed to save registered Flic buttons", status=500)
-            _LOG.info(f"Registered/updated Flic buttons. Total active: {len(_registered_buttons)}")
-
-        return _json_response(True, {"count": len(_registered_buttons)})
-    except BadRequestError as e:
-        return _json_response(False, error=str(e), status=400)
-    except Exception as e:
-        return _json_response(False, error=safe_error_message(e, "registering Flic buttons"), status=500)
+    global _registered_buttons, _loaded
+    _sync_flic_hooks()
+    _default_registry._buttons = _registered_buttons
+    _default_registry._loaded = _loaded
+    response = await _default_integration.handle_register(request)
+    _registered_buttons = _default_registry._buttons
+    _loaded = _default_registry._loaded
+    return response
 
 
 async def handle_get_flic_buttons(request: web.Request) -> web.Response:
     """Retrieve all registered Flic buttons."""
-    try:
-        _load_buttons_if_needed()
-        return _json_response(True, {"buttons": list(_registered_buttons.values())})
-    except Exception as e:
-        return _json_response(False, error=safe_error_message(e, "retrieving Flic buttons"), status=500)
+    global _registered_buttons, _loaded
+    _sync_flic_hooks()
+    _default_registry._buttons = _registered_buttons
+    _default_registry._loaded = _loaded
+    response = await _default_integration.handle_get_buttons(request)
+    _registered_buttons = _default_registry._buttons
+    _loaded = _default_registry._loaded
+    return response

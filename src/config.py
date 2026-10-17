@@ -121,6 +121,26 @@ class CecConfig:
             self.power_off_targets = targets
 
 
+# =============================================================================
+# Output settings shared by scenes and profiles
+# =============================================================================
+
+#: Both spellings of a saved scaler (API-22): ``scaler_mode`` is the documented
+#: REST field, ``scaler`` the name the domain layer uses for the same 1-based
+#: API value (:data:`device_codes.SCALER_MODES`). A request may send either and
+#: the stored setting is returned as ``scaler_mode``.
+SCALER_FIELDS: tuple[str, ...] = ("scaler_mode", "scaler")
+
+
+def _saved_scaler(data: dict[str, Any]) -> Any:
+    """The scaler an output asks for, from either spelling; None when unset."""
+    for name in SCALER_FIELDS:
+        value = data.get(name)
+        if value is not None:
+            return value
+    return None
+
+
 @dataclass
 class SceneOutput:
     """Configuration for a single output in a scene."""
@@ -134,6 +154,11 @@ class SceneOutput:
     # 1-based API value (device_codes.SCALER_MODES, 5 = audio only).
     scaler_mode: int | None = None
     arc: bool | None = None  # ARC on/off
+
+    @property
+    def scaler(self) -> int | None:
+        """The same saved value as :attr:`scaler_mode` (the name the domain layer uses)."""
+        return self.scaler_mode
 
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
@@ -157,7 +182,9 @@ class SceneOutput:
             audio_mute=data.get("audio_mute", False),
             hdr_mode=data.get("hdr_mode"),
             hdcp_mode=data.get("hdcp_mode"),
-            scaler_mode=data.get("scaler_mode"),
+            # API-22: "scaler" is accepted as well as "scaler_mode"; a request
+            # that sends only one of them must not lose it.
+            scaler_mode=_saved_scaler(data),
             arc=data.get("arc"),
         )
 
@@ -587,13 +614,20 @@ class ProfileManager:
             return False
 
     def list_profiles(self) -> list[dict[str, Any]]:
-        """List all profiles with summary info."""
+        """
+        List all profiles with summary info.
+
+        API-22: the summary carries the stored output settings too, so a client
+        that lists profiles sees the same scaler/ARC values a read of the
+        profile itself returns (and the two never disagree).
+        """
         return [
             {
                 "id": p.id,
                 "name": p.name,
                 "icon": p.icon,
                 "output_count": len(p.outputs),
+                "outputs": {str(k): v.to_dict() for k, v in p.outputs.items()},
                 "has_cec_config": p.has_cec_config(),
                 "macro_count": len(p.macros),
                 "pinned": p.pinned,

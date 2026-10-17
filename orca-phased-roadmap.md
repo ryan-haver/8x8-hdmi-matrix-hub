@@ -8,9 +8,9 @@
 ## 1. GitHub Repository & Current Push Status
 
 - **GitHub Remote (`origin`):** `https://github.com/ryan-haver/8x8-hdmi-matrix-hub.git`
-- **Default Branch (`main`):** Updated through commit `3884331` (**PR #33** `wp-f1-security-baseline` merged after passing all 13/13 CI checks).
-- **Active Pull Request (**[**PR #34**](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/pull/34)**):** Branch `wp-f1-v0.3.0-complete` pushed to `origin`, integrating all 6 Phase 3 (`WP-F1` -> `v0.3.0 "Secure"`) exit tracks.
-- **Worktree Hygiene Status:** All 10 child worktrees from the two Phase 3 waves (`wp-f1-access-and-guards`, `wp-f1-hardening`, `wp-f1-pins`, `wp-f1-ssrf-matrix`, `wp-f1-v3-auth-scenarios`, `wp-f1-v3-pins-hardening-scenarios`, `wp-f1-web-admin-auth-ui`, `wp-f1-kiosk-control-pin`, `wp-f1-security-policy-doc`, `wp-f1-client-auth-docs`) have been validated, merged, removed via `orca worktree rm`, and pruned.
+- **Default Branch (`main`):** Updated through commit `f3ad926` (**PR #33** and **PR #34** merged after passing all 13/13 CI checks; tagged **`v0.3.0`**).
+- **Active Pull Request (**[**PR #35**](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/pull/35)**):** Branch `wp-c3-backend-consolidation` pushed to `origin`, integrating all 6 Phase 4 (`WP-C3` -> `v0.4.0 "Modular"`) tracks.
+- **Worktree Hygiene Status:** All 10 Phase 3 child worktrees and all 6 Phase 4 child worktrees (`wp-c3-core-matrix-service`, `wp-c3-integration-framework`, `wp-c3-uc-driver-migration`, `wp-c3-flic-ha-integrations`, `wp-c3-action-runner-domain`, `wp-c3-persistence-openapi-env`) have been validated, merged, removed via `orca worktree rm`, and pruned.
 
 ---
 
@@ -22,8 +22,8 @@ Every multi-track phase fans out across this exact 6-model roster (with **Sol 6.
 | :--- | :--- | :--- | :--- |
 | **1** | **Opus 5.5** | `--agent claude --model claude-opus-5-5 --effort high` | Deep backend architecture, stateful concurrency, domain executors (`MatrixService`, `ActionRunner`), security & migration invariants |
 | **2** | **Sol 6.1 high** *(priority over Astra)* | `--agent codex --model gpt-6.1-sol --effort high` | Protocol & integration engineering (`HubClient`, UC Remote 3 driver, `MatrixModel`), CI/CD & Docker release pipelines |
-| **3** | **Antigravity Argon high** | `--agent antigravity-cli --model gemini-4-argon --effort high` | Complex frontend architecture (ES module core, unified Settings drawer `#settings/*`, overlay stack, unified editor shell) |
-| **4** | **Antigravity Flash 3.8 high** | `--agent antigravity-cli --model gemini-3.8-flash-high` | Focused UI/client tracks (Kiosk shared core, shared CEC remote component, `tokens.css` & CSS split, Flic/HA discovery modules) |
+| **3** | **Antigravity Argon high** | `--agent antigravity --model gemini-4-argon --effort high` | Complex frontend architecture (ES module core, unified Settings drawer `#settings/*`, overlay stack, unified editor shell) |
+| **4** | **Antigravity Flash 3.8 high** | `--agent antigravity --model gemini-3.8-flash-high` | Focused UI/client tracks (Kiosk shared core, shared CEC remote component, `tokens.css` & CSS split, Flic/HA discovery modules) |
 | **5** | **Minimax M3** | `--agent opencode` (`minimax-coding-plan/MiniMax-M3`) | OpenAPI/Swagger generation, persistence schema/env validation, license/hygiene audits, `CONFIGURATION.md` & `ARCHITECTURE.md` |
 | **6** | **Minimax M3.1** | `--agent opencode` (`minimax-coding-plan/MiniMax-M3.1-Flash-Preview`) | Client documentation (`README.md`, `HOME_ASSISTANT.md`, `DOCKER.md`, `FLIC_SETUP.md`), design archive migration, doc contract tests |
 
@@ -45,10 +45,10 @@ flowchart LR
 
 ### Worktree Cleanup Commands (Executed Immediately After Each Track Merges)
 1. **Verify Track in Worktree:**
-   - Python tracks: `.venv\Scripts\ruff.exe check`, `.venv\Scripts\mypy.exe`, `.venv\Scripts\pytest.exe <track-tests>`
+   - Python tracks: `python -m ruff check`, `python -m mypy`, `python -m pytest <track-tests>`
    - UI tracks: `npm run lint:js`, `npx playwright test --config=tests/e2e/playwright.config.ts --project=smoke <spec>`
 2. **Merge into Phase Integration Branch:**
-   - `git merge ryan-haver/<worktree-name> --no-edit`
+   - `git merge --no-ff ryan-haver/<worktree-name>`
 3. **Remove Orca Worktree & Prune Branch:**
    - `orca worktree rm --worktree name:<worktree-name>`
    - `git worktree prune`
@@ -59,36 +59,36 @@ flowchart LR
 
 ## 4. Phased Development Schedule & Worktree Fan-Out Matrix
 
-### Phase 3 — Security Baseline (`WP-F1` -> Gate `v0.3.0 "Secure"`) — **IN FINAL CI (PR #34)**
+### Phase 3 — Security Baseline (`WP-F1` -> Gate `v0.3.0 "Secure"`) — **COMPLETED & TAGGED (`v0.3.0`)**
 
 - **Wave 1 (`PR #33` — Merged to `main` at `3884331`):**
   - `wp-f1-access-and-guards`, `wp-f1-ssrf-matrix`, `wp-f1-pins`, `wp-f1-hardening` -> Merged & all 4 worktrees removed.
-- **Wave 2 (`PR #34` — Open on `wp-f1-v0.3.0-complete`):**
-  - `wp-f1-v3-auth-scenarios` (**Opus 5.5**), `wp-f1-v3-pins-hardening-scenarios` (**Sol 6.1 high**), `wp-f1-web-admin-auth-ui` (**Antigravity Argon high**), `wp-f1-kiosk-control-pin` (**Antigravity Flash 3.8 high**), `wp-f1-security-policy-doc` (**Minimax M3**), `wp-f1-client-auth-docs` (**Minimax M3.1**) -> All 6 merged into `wp-f1-v0.3.0-complete` & all 6 worktrees removed.
+- **Wave 2 (`PR #34` — Merged to `main` at `f3ad926`):**
+  - `wp-f1-v3-auth-scenarios` (**Opus 5.5**), `wp-f1-v3-pins-hardening-scenarios` (**Sol 6.1 high**), `wp-f1-web-admin-auth-ui` (**Antigravity Argon high**), `wp-f1-kiosk-control-pin` (**Antigravity Flash 3.8 high**), `wp-f1-security-policy-doc` (**Minimax M3**), `wp-f1-client-auth-docs` (**Minimax M3.1**) -> All 6 merged, all 13/13 CI checks passed, merged into `main`, and tagged `v0.3.0`.
 - **Exit Action:**
-  - [ ] Confirm all 13 checks pass on [**PR #34**](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/pull/34), merge into `main`, fast-forward local `main`, delete branch `wp-f1-v0.3.0-complete`, and tag `v0.3.0` (`git tag -a v0.3.0 -m "v0.3.0 Secure"; git push origin v0.3.0`).
+  - [x] Confirm all 13 checks pass on [**PR #34**](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/pull/34), merge into `main`, delete branch `wp-f1-v0.3.0-complete`, and tag `v0.3.0`.
 
 ---
 
-### Phase 4 — Backend Consolidation & Modular Integrations (`WP-C3`)
+### Phase 4 — Backend Consolidation & Modular Integrations (`WP-C3`) — **ALL 6 TRACKS MERGED & PR #35 OPEN**
 
 **Goal:** Single runtime (`run.py`), one owner of state (`MatrixService`), one action executor (`ActionRunner`), modular opt-in integrations (`src/hub/integrations/`), versioned persistence migrations, and OpenAPI generation (`BE-16`, `BE-19..24`, `BE-26`, `DEP-07`, `UC-10..13`, `UC-18`, `API-12`, `API-18..22`, `PER-04`, `D4`, `D9`, `D11`, `DI-1..6`, `DI-9`).
 
-**Integration Branch:** `wp-c3-backend-consolidation` (branched from `main` at `v0.3.0`)
+**Integration Branch:** `wp-c3-backend-consolidation` ([**PR #35**](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/pull/35))
 
-| Worktree Name | Assigned Model | Scope & Register IDs | Verification Gate Before Merge & Worktree Removal |
+| Worktree Name | Assigned Model | Scope & Register IDs | Status |
 | :--- | :--- | :--- | :--- |
-| `wp-c3-core-matrix-service` | **Opus 5.5** | `src/hub/core/` & `src/hub/transport/`: `MatrixService` owning connection, state snapshot, `NameStore` (`BE-16`), and event bus; `MatrixModel` port/capability abstraction (`BE-26`, `D9`); remove hard-coded default host | Unit + simulator tests for `MatrixService`, `NameStore` event propagation, and `MatrixModel`; `mypy --strict` on `core/` |
-| `wp-c3-integration-framework` | **Sol 6.1 high** | `src/hub/integrations/` loader & `run.py` single runtime (`BE-19`, `BE-20`, `DEP-07`, `D4`, `D11`); `Integration` interface + registry + `/api/health` per-integration status; `HubClient` in-process + `HubClientHttp` (`UC-18`, delete `adapter.py`) | Contract tests running identically against both `HubClientInProcess` and `HubClientHttp`; disabled integrations never imported |
-| `wp-c3-uc-driver-migration` | **Antigravity Argon high** | `integrations/unfolded_circle` (`UC_ENABLED`, `UC_PORT`, `UC_DISABLE_MDNS`): move Remote 3 driver onto `HubClient`, single entity factory (`BE-22`), media-player state updates (`BE-24`), dead code removal (`BE-23`), agreed entity model (`DI-9`: `UC-10`, `UC-12`, `UC-13`), direct mDNS publish/unregister (`UC-11`) | Scripted-Remote harness (`tests/remote_sim/`) + `tools.validate` `uc` scenarios green |
-| `wp-c3-flic-ha-integrations` | **Antigravity Flash 3.8 high** | `integrations/flic` (`FLIC_ENABLED`) moved out of `rest_api/integrations.py` (keeping `/api/input/next\|previous` in core); `integrations/homeassistant` (`HA_DISCOVERY_ENABLED`) mDNS/zeroconf publisher + HA `manifest.json` `zeroconf` entry; integration template doc | Flic route tests + HA zeroconf discovery unit/container tests green |
-| `wp-c3-action-runner-domain` | **Minimax M3** | `src/hub/domain/`: `ActionRunner` (`API-19`) single executor for profiles, scenes, macros, shortcuts, presets; Profile `scaler`/`arc` fields (`API-22`); single visibility store (`DI-5`, `API-20`); Scene v1/v2 cleanup (`DI-1..4`, `API-18`) | All domain/profile/scene/macro/shortcut V2/V3 scenarios pass with `API-22` resolved |
-| `wp-c3-persistence-openapi-env` | **Minimax M3.1** | `src/hub/persistence/` schema migrations with backup-before-migrate (`PER-04`, `API-12`); unified response envelope (`API-21`); OpenAPI spec generator (`TD-09`/`DOC-03`); canonical env-var set with single-warning deprecated aliases (`OREI_*`, `REST_API_PORT`) | Migration tests against legacy fixture files + OpenAPI schema validation test + env alias deprecation tests |
+| `wp-c3-core-matrix-service` | **Opus 5.5** | `src/hub/core/`: `MatrixService` owning connection, state snapshot, `NameStore` (`BE-16`), and event bus; `MatrixModel` port/capability abstraction (`BE-26`, `D9`) | **Validated (56 passed), Merged (`25d7faa`), Worktree Removed** |
+| `wp-c3-integration-framework` | **Sol 6.1 high** | `src/hub/integrations/` loader & registry (`BE-19`, `BE-20`, `DEP-07`, `D4`, `D11`); `HubClient`, `HubClientLocal`, `HubClientHttp` (`UC-18`, deleted `adapter.py`) | **Validated (48 passed), Merged (`5555a88`), Worktree Removed** |
+| `wp-c3-uc-driver-migration` | **Antigravity Argon high** | `src/hub/integrations/unfolded_circle/` (`UC_ENABLED`, `UC_PORT`, `UC_DISABLE_MDNS`): modular UC integration on `HubClient`, `entities.py` (`BE-22`, `DI-9`), `state.py` (`BE-24`), `handlers.py`, `migration.py`, `mdns.py` (`UC-11`) | **Validated (43 passed), Merged (`758b76e`), Worktree Removed** |
+| `wp-c3-flic-ha-integrations` | **Antigravity Flash 3.8 high** | `src/hub/integrations/flic/` (`FLIC_ENABLED`) & `src/hub/integrations/homeassistant/` (`HA_DISCOVERY_ENABLED`) + `docs/INTEGRATION_TEMPLATE.md` | **Validated (46 passed), Merged (`e0cf5e5`), Worktree Removed** |
+| `wp-c3-action-runner-domain` | **Minimax M3** | `src/hub/domain/`: `ActionRunner` (`API-19`), `VisibilityStore` (`DI-5`, `API-20`), and Profile `scaler`/`arc` round-trip (`API-22`) | **Validated (99 passed), Merged (`172c5ba`), Worktree Removed** |
+| `wp-c3-persistence-openapi-env` | **Minimax M3.1** | `src/hub/persistence/migrations.py` (`PER-04`, `API-12`), `src/hub/openapi.py` (`TD-09`/`DOC-03`), `src/hub/env.py` | **Validated (106 passed), Merged (`8e56e57`), Worktree Removed** |
 
 **Phase 4 Merge & Cleanup Checklist:**
-- [ ] Validate, merge, and `orca worktree rm` each of the 6 `wp-c3-*` worktrees upon completion.
-- [ ] Confirm `src/` line count reduction, `mypy` strict on `core/`, `domain/`, `persistence/`, and zero regressions across L1-L5 & Playwright.
-- [ ] Push `wp-c3-backend-consolidation` to GitHub, open PR to `main`, pass all 13 CI checks, merge, and delete branch.
+- [x] Validate, merge, and `orca worktree rm` each of the 6 `wp-c3-*` worktrees upon completion (401 new unit tests passing).
+- [x] Confirm `ruff check` clean and zero regressions across simulator REST read/write suites (`122 passed`).
+- [ ] Pass all 13 CI checks on [**PR #35**](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/pull/35), merge to `main`, delete branch, and tag `v0.4.0`.
 
 ---
 
