@@ -11,6 +11,7 @@ from typing import Any
 
 from aiohttp import web
 
+from config import SCALER_FIELDS
 from device_codes import SCALER_MODES
 from password import (
     PIN_CLEAR,
@@ -160,21 +161,28 @@ def _validate_outputs(outputs) -> str | None:
 
 
 def _validate_output_settings(outputs) -> str | None:
-    """Check the optional ``scaler_mode`` / ``arc`` of each output (API-22).
+    """Check the optional ``scaler_mode`` / ``scaler`` and ``arc`` of each output (API-22).
 
-    Shared by create and edit. ``scaler_mode`` is the 1-based API value of
-    :data:`device_codes.SCALER_MODES`; ``arc`` is a boolean; null or absent
-    leaves the setting unset. Other output fields keep their existing checks.
+    Shared by create and edit. The scaler is the 1-based API value of
+    :data:`device_codes.SCALER_MODES` and may be sent as ``scaler_mode`` or as
+    its ``scaler`` alias (``config.SCALER_FIELDS``); ``arc`` is a boolean. Null
+    or absent leaves the setting unset. Other output fields keep their existing
+    checks.
     """
     if not isinstance(outputs, dict):
         return None
+    modes = ", ".join(f"{key}={name}" for key, name in SCALER_MODES.items())
     for output_key, config in outputs.items():
         if not isinstance(config, dict):
             continue
-        scaler = config.get("scaler_mode")
-        if scaler is not None and (type(scaler) is not int or scaler not in SCALER_MODES):
-            return (f"Output {output_key}: scaler_mode must be one of {sorted(SCALER_MODES)} "
-                    f"({', '.join(f'{k}={v}' for k, v in SCALER_MODES.items())})")
+        # Both spellings of the same setting: they have to agree, or the saved
+        # value would depend on which one the caller happened to send.
+        asked = {field: config[field] for field in SCALER_FIELDS if config.get(field) is not None}
+        if len(set(asked.values())) > 1:
+            return f"Output {output_key}: scaler_mode and scaler disagree ({asked})"
+        for field, value in asked.items():
+            if type(value) is not int or value not in SCALER_MODES:
+                return f"Output {output_key}: {field} must be one of {sorted(SCALER_MODES)} ({modes})"
         arc = config.get("arc")
         if arc is not None and not isinstance(arc, bool):
             return f"Output {output_key}: arc must be true or false"

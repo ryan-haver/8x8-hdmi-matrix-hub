@@ -5,7 +5,6 @@ This module provides the UC Remote driver functionality by consuming
 the REST API rather than directly communicating with the hardware.
 """
 
-from .adapter import MatrixApiAdapter
 from .api_client import MatrixApiClient
 from .entities import (
     CEC_INPUT_COMMANDS,
@@ -18,7 +17,6 @@ from .entities import (
 
 __all__ = [
     "MatrixApiClient",
-    "MatrixApiAdapter",
     "EntityContext",
     "create_preset_button_with_context",
     "create_input_cec_remote_with_context",
