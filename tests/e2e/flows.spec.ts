@@ -963,6 +963,11 @@ test.describe('WP-E1 UI flows', () => {
       await page.locator(root).waitFor();
       await settle(page, 300);
       await page.keyboard.press('Escape');
+      await expect(page.locator(root)).toHaveCount(0);
+      // Escape dismisses one overlay at a time (UI-07), then returns focus.
+      await expect(page.locator('#side-nav-drawer.open')).toBeVisible();
+      await page.keyboard.press('Escape');
+      await expect(page.locator('#side-nav-drawer.open')).toHaveCount(0);
     }
     await settle(page, 500);
     expect(await page.evaluate(() => (window as any).__xss ?? 0)).toBe(0); // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -1368,6 +1373,10 @@ test.describe('WP-E1 UI flows', () => {
     expect(await isTopmost('.confirm-dialog__content')).toBe(true);
     await page.locator('.confirm-dialog__cancel').click();
     await page.keyboard.press('Escape');
+    await expect(page.locator('#hardware-drawer.open')).toHaveCount(0);
+    await expect(page.locator('#side-nav-drawer.open')).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#side-nav-drawer.open')).toHaveCount(0);
 
     // 3. A validation toast inside the profile editor sits above the modal overlay.
     await mainTab(page, 'profiles');
