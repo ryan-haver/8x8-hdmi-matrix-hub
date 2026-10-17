@@ -28,11 +28,13 @@ except ImportError:
     pass
 
 try:
+    import hub.integrations.flic as _flic_mod
     from hub.integrations.flic import (
         FlicButtonRegistry,
         FlicIntegration,
     )
 except ImportError:
+    import src.hub.integrations.flic as _flic_mod  # type: ignore[no-redef]
     from src.hub.integrations.flic import (
         FlicButtonRegistry,
         FlicIntegration,
@@ -62,14 +64,22 @@ __all__ = [
 ]
 
 
+def _sync_flic_hooks() -> None:
+    """Propagate any monkeypatches on rest_api.integrations into hub.integrations.flic."""
+    _flic_mod.atomic_write_json = atomic_write_json
+    _flic_mod.get_data_dir = get_data_dir
+
+
 def _get_flic_file_path() -> Path:
     """Return the persistent file path for registered Flic buttons."""
+    _sync_flic_hooks()
     return _default_registry.file_path
 
 
 def _load_buttons_if_needed() -> None:
     """Load registered buttons from persistent storage if not already loaded."""
     global _loaded, _registered_buttons
+    _sync_flic_hooks()
     _default_registry._loaded = _loaded
     _default_registry.load_if_needed()
     _registered_buttons = _default_registry._buttons
@@ -78,6 +88,7 @@ def _load_buttons_if_needed() -> None:
 
 def _save_buttons() -> bool:
     """Save the in-memory registered buttons dict to persistent storage."""
+    _sync_flic_hooks()
     _default_registry._buttons = _registered_buttons
     return _default_registry.save()
 
@@ -85,6 +96,7 @@ def _save_buttons() -> bool:
 async def handle_register_flic_buttons(request: web.Request) -> web.Response:
     """Register Flic buttons reported by the Flic Hub SDK script."""
     global _registered_buttons, _loaded
+    _sync_flic_hooks()
     _default_registry._buttons = _registered_buttons
     _default_registry._loaded = _loaded
     response = await _default_integration.handle_register(request)
@@ -96,6 +108,7 @@ async def handle_register_flic_buttons(request: web.Request) -> web.Response:
 async def handle_get_flic_buttons(request: web.Request) -> web.Response:
     """Retrieve all registered Flic buttons."""
     global _registered_buttons, _loaded
+    _sync_flic_hooks()
     _default_registry._buttons = _registered_buttons
     _default_registry._loaded = _loaded
     response = await _default_integration.handle_get_buttons(request)

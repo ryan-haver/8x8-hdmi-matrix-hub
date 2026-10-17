@@ -97,9 +97,12 @@ class FakeMatrix:
 
 
 @pytest.fixture(autouse=True)
-def _cheap_pins(monkeypatch):
-    """Cheap PBKDF2 and a clean attempt limiter, so passcode tests stay quick."""
+def _cheap_pins(monkeypatch, tmp_path):
+    """Cheap PBKDF2, clean attempt limiter, and hermetic legacy data path."""
+    import persistence
+
     monkeypatch.setenv("MATRIX_PASSWORD_ITERATIONS", "1000")
+    monkeypatch.setattr(persistence, "get_legacy_data_paths", lambda: [tmp_path / "_empty_legacy"])
     reset_pin_lockout()
     yield
     reset_pin_lockout()
@@ -895,12 +898,12 @@ def test_snapshot_follows_the_changes(store, profile_manager, macro_manager, pre
     assert snapshot["presets"]["1"] == {"favorite": True, "show_on_dashboard": True}
 
 
-def test_visibility_store_from_runtime_binds_the_running_hub(mock_matrix):
+def test_visibility_store_from_runtime_binds_the_running_hub(mock_matrix, tmp_path):
     from rest_api.utils import set_macro_manager, set_profile_manager
 
     set_matrix_device(mock_matrix)
-    set_profile_manager(ProfileManager(config_dir="."))
-    set_macro_manager(MacroManager(config_dir="."))
+    set_profile_manager(ProfileManager(config_dir=str(tmp_path)))
+    set_macro_manager(MacroManager(config_dir=str(tmp_path)))
 
     store = VisibilityStore.from_runtime()
 

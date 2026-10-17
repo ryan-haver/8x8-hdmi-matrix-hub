@@ -173,8 +173,12 @@ class FlicIntegration(Integration):
         config: FlicIntegrationConfig | None = None,
         registry: FlicButtonRegistry | None = None,
     ) -> None:
-        self.config = config or self.config_from_env({})
-        self.registry = registry or FlicButtonRegistry(data_dir=self.config.data_dir)
+        self.config = config if config is not None else self.config_from_env({})
+        self.registry = (
+            registry
+            if registry is not None
+            else FlicButtonRegistry(data_dir=self.config.data_dir)
+        )
         self.hub_client: Any = None
         self._started: bool = False
 
