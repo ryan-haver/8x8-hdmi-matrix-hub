@@ -58,6 +58,15 @@
             "max": 65535
           }
         }
+      },
+      {
+        "id": "current_password",
+        "label": {
+          "en": "Current matrix password (when changing address)"
+        },
+        "field": {
+          "password": {}
+        }
       }
     ]
   }

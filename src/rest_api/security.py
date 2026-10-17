@@ -55,7 +55,7 @@ def allowed_host(host: str) -> bool:
         return True
     except ValueError:
         pass
-    if name == "localhost" or name.endswith(".local"):
+    if name in ("localhost", "host.docker.internal") or name.endswith(".local"):
         return True
     configured = {item.strip().lower() for item in os.environ.get("ALLOWED_HOSTS", "").split(",")}
     return name in configured or host.lower() in configured

@@ -40,9 +40,12 @@ def _resolve_static_path(request_path: str) -> Path | None:
     drive-qualified parts) before the containment check, so neither a
     traversal nor a symlink pointing elsewhere can leave ``_WEB_DIR``.
     """
+    if "\x00" in request_path:
+        return None
     try:
         web_root = _WEB_DIR.resolve()
-        resolved = (web_root / request_path.lstrip("/\\")).resolve()
+        normalized = request_path.replace("\\", "/").lstrip("/")
+        resolved = (web_root / normalized).resolve()
     except (OSError, ValueError):
         return None
     if not resolved.is_relative_to(web_root):

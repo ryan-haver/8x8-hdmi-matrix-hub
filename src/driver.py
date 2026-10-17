@@ -2386,9 +2386,10 @@ def main(driver_json: str | Path | None = None) -> None:
             setup_settings = api._driver_info.get("setup_data_schema", {}).get("settings", [])
             if os.environ.get("UC_AUTH_TOKEN") or os.environ.get("ADMIN_PIN"):
                 api._driver_info["pwd"] = True
+                setup_settings[:] = [s for s in setup_settings if s.get("id") != "current_password"]
                 setup_settings.append({"id": "auth_token", "label": {"en": "Hub setup token"},
                                        "field": {"password": {}}})
-            else:
+            elif not any(s.get("id") == "current_password" for s in setup_settings):
                 setup_settings.append({"id": "current_password",
                                        "label": {"en": "Current matrix password (when changing address)"},
                                        "field": {"password": {}}})

@@ -4,13 +4,14 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import time
 
 import pytest
 from aiohttp import WSServerHandshakeError
 
 from rest_api import utils
 from rest_api.app import create_rest_app
-from rest_api.security import route_level
+from rest_api.security import SESSION_IDLE, route_level
 
 
 @pytest.fixture
@@ -87,7 +88,7 @@ async def test_pin_change_with_current_pin_and_idle_timeout(client):
     security = client.server.app["security_manager"]
     assert security.sessions
     for token, (level, _) in list(security.sessions.items()):
-        security.sessions[token] = (level, 0)
+        security.sessions[token] = (level, time.monotonic() - SESSION_IDLE - 1)
     assert (await (await client.get("/api/auth/status")).json())["session_level"] == "none"
 
 
@@ -119,6 +120,7 @@ async def test_host_origin_content_type_and_cors(client, monkeypatch):
     assert (await client.get("/api/health", headers={"Host": "evil.example.com"})).status in (403, 421)
     assert (await client.options("/api/power/on", headers={"Host": "evil.example.com"})).status in (403, 421)
     assert (await client.get("/api/health", headers={"Host": "hub.local"})).status == 200
+    assert (await client.get("/api/health", headers={"Host": "host.docker.internal:8080"})).status == 200
     assert (await client.post("/api/power/on", headers={"Origin": "http://evil.example.com"})).status == 403
     assert (await client.post("/api/power/on", headers={"Referer": "http://evil.example.com/page"})).status == 403
     assert (await client.post("/api/power/on", data="hello", headers={"Content-Type": "text/plain"})).status == 415
