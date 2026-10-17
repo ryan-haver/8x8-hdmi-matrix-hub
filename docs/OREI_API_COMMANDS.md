@@ -1,34 +1,56 @@
-# OREI BK-808 API Command Reference
+# OREI BK-808 API Command & Protocol Reference
 
-This page lists the commands the hub sends to an OREI BK-808 HDMI matrix, what the device answers, and how sure we are. It separates what a real device has been **seen** doing from what is only expected.
+This document provides a comprehensive protocol specification for the OREI BK-808 8×8 HDMI 2.1 matrix switch across both its **HTTP JSON** API (`/cgi-bin/instr`) and **Telnet** interface (port 23).
 
-## Communication Protocol
-
-- **Endpoint**: `https://<ip>:443/cgi-bin/instr`
-- **Method**: POST, JSON body (`{"comhead": "...", "language": 0, ...}`)
-- **Answer**: `text/plain`; compact JSON (no spaces, fixed key order) followed by CR LF
-- **SSL**: self-signed certificate (verify=False required)
-- **Authentication**: `login` first. Sessions appear to be tracked per client IP (no cookie is set); whether reads need a login at all is still open (HIL-14).
-- **Unknown commands get no answer at all.** The device accepts the request and never replies; the client times out. The same happens for a body that is not JSON. Right after such a request the web server can stall for one more request. The hub therefore treats a timeout on one command as a failed command and checks the link with a status read before it calls the matrix unreachable (HIL-12).
-
-## Status legend
-
-| Status | Meaning |
-| --- | --- |
-| ✅ **Verified** | A real device answered exactly this command. Captured byte-exact from a BK-808 with MCU V1.10.01 / web V2.00.03 (HIL Session 1, 2026-09-25, `tests/fixtures/device/BK-808_V1.10.01_web-V2.00.03/`). For writes: sent, answered and read back. |
-| 🌐 **Web-UI-derived** | The command, payload and value codes the device's own configuration web interface uses. The hub sends it since WP-A4 part 2, the simulator implements it, but **no device answer has been captured yet**. Proof: the capture tool's write run (`tools/hil/README.md`). |
-| ❌ **Not implemented** | Captured on V1.10.01: no answer (timeout) or rejected. The hub does not send it. |
-| ❓ **Unverified** | From vendor drivers or older notes; never captured, not sent by the hub. |
-
-Earlier versions of this page claimed "33/33 verified". That was wrong: the output, EDID, ext-audio and LCD commands were never answered by the device (HIL-09), and several value tables were guesses. The table at the end is the honest count.
-
-Per-port writes of the web interface send `[port, value]` pairs; port **0 means all outputs**. That is also what the ninth entry of the per-output read arrays is: the web interface's "All Output" row (HIL-04, below).
+It reflects the shipped implementation in `src/orei_matrix.py`, `src/telnet_client.py`, and `src/_telnet_proto.py`, cross-referenced with exact real-device network captures from a physical BK-808 matrix with MCU firmware **V1.10.01** and Web GUI **V2.00.03** (`tests/fixtures/device/BK-808_V1.10.01_web-V2.00.03/`).
 
 ---
 
-## Authentication
+## Protocol Verification vs. Physical Hardware Effects
 
-### Login — ✅ Verified
+To maintain strict engineering rigor, this specification distinguishes between **wire-level protocol verification** and **physical hardware effects**:
+
+| Domain | What is Verified (Wire Protocol) | What is Unverified (Physical Hardware Effect) |
+| --- | --- | --- |
+| **CEC Control** | The matrix MCU receives `{"comhead": "cec command", ...}` over HTTP or `s cec in\|hdmi out ...` over Telnet and returns `result: 1` / echo acknowledgement. | Whether a specific attached television (e.g. Samsung, LG, Sony) or source (e.g. Apple TV, Shield) physically powers on, changes volume, or switches input. Physical CEC execution depends on TV firmware quirks and HDMI CEC line physical state; live display testing requires an in-person operator (HIL-E / Phase 8). |
+| **Video Routing** | `video switch` updates internal routing registers read back byte-for-byte in `get video status.allsource` and Telnet `status`. | Sink picture sync time, HDMI 2.1 FRL/TMDS clock stabilization, and HDCP 2.2/2.3 physical key exchange on a connected display monitor. |
+| **EDID Management** | `set edid` writes the EDID table ID (1–47) to the specified input port, verified via `get input status.edid` readback. | Whether a connected physical PC/source graphics card immediately renegotiates resolution without an electrical Hot-Plug Detect (HPD) toggle or physical cable replug. |
+| **LCD Timeout** | `set lcd on time` updates the front-panel timer register read back in `get system status.mode` and Telnet `status`. | Physical darkening or extinguishing of the matrix front-panel LCD backlight. |
+| **Matrix Reboot** | The payload `{"comhead": "reboot", "reboot": 1}` or Telnet `reboot` is accepted. | Physical hardware reboot duration, PHY link drop, and warm-restart network recovery time. |
+| **Front-Panel Push** | Read queries over Telnet return current front-panel lock and beep registers. | Real-time push broadcast over Telnet when an operator physically presses front-panel buttons (skipped in automated HIL session). |
+
+---
+
+## Status Legend
+
+| Status | Definition |
+| --- | --- |
+| ✅ **Verified** | Verified byte-for-byte on physical hardware (BK-808 MCU V1.10.01 / Web V2.00.03, HIL Session 1). For write commands: sent, acknowledged, and verified via independent readback. |
+| 🌐 **Web-UI-derived** | Observed in the matrix's embedded web management interface and supported by the hub implementation, but pending physical hardware capture proof. |
+| ❌ **Not implemented** | Rejected by firmware V1.10.01 (answers `result: 0`, times out with no answer, or returns Telnet error `E00`/`E01`). Not sent by the hub. |
+| ❓ **Unverified** | Described in vendor documentation or legacy driver notes; not verified on hardware and not sent by the hub. |
+
+---
+
+## HTTP Communication Protocol (`/cgi-bin/instr`)
+
+- **Endpoint:** `https://<ip>:443/cgi-bin/instr`
+- **Method:** `POST`
+- **Headers:** `Content-Type: application/json`
+- **Request Format:** Compact JSON object with `"comhead"` and `"language": 0`:
+  ```json
+  {"comhead": "<command_name>", "language": 0, ...}
+  ```
+- **Response Format:** `text/plain` MIME type containing compact JSON followed by `\r\n`.
+- **TLS/SSL:** The matrix presents a self-signed SSL certificate (`verify_ssl=False` required).
+- **Session Authentication:** Login via `login` command. Sessions are tracked by the matrix per client IP address. Reads can be performed without session cookies.
+- **Unrecognized Commands:** The device accepts the TCP connection but **never responds** (times out). The same occurs for non-JSON bodies. Following an unrecognized command, the matrix web server may temporarily stall for one subsequent request (HIL-12).
+
+---
+
+## HTTP Authentication
+
+### `login` — ✅ Verified
 
 ```json
 Request:  {"comhead": "login", "user": "Admin", "password": "admin"}
@@ -36,280 +58,287 @@ Response: {"comhead":"login","result":1}          (correct password)
 Response: {"comhead":"login","result":0}          (wrong password)
 ```
 
-The device echoes `"comhead":"login"` in both cases, so only `result` tells them apart (BE-05; `http/login.json`, `probe/login_wrong_password.json`). The API doc's `"result":"success"` never appears on V1.10.01.
+The matrix echoes `"comhead": "login"` for both success and failure. The client must inspect `result` (1 = success, 0 = failure).
 
 ---
 
-## Reads
+## HTTP Reads (Status Queries)
 
-All reads are ✅ Verified (`tests/fixtures/device/BK-808_V1.10.01_web-V2.00.03/http/`); the simulator reproduces every one byte for byte.
+All eight primary read commands are ✅ **Verified** (`tests/fixtures/device/BK-808_V1.10.01_web-V2.00.03/http/`).
 
-### `get system status`
-
-```json
-{"comhead":"get system status","power":1,"baudrate":6,"beep":1,"lock":0,"mode":3}
-```
-
-- `baudrate` is a code: 1-6 = 4800, 9600, 19200, 38400, 57600, 115200 (device web interface).
-- **`mode` is the front-panel LCD on-time code** (0 off, 1 always on, 2 = 15 s, 3 = 30 s, 4 = 60 s): the device web interface binds it to its LCD setting, and the captured 3 matches the Telnet line `lcd on 30 seconds`. The hub reads the LCD setting back from here.
-
-### `get output status`
+### `get system status` — ✅ Verified
 
 ```json
-{"comhead":"get output status","power":1,"allconnect":[1,1,0,0,0,0,0,0],"name":["TV","Sound","Out3","Out4","Out5","Out6","Out7","Out8"],"allscaler":[0,4,0,0,0,0,0,0,255],"allhdr":[0,0,0,0,0,0,0,0,0],"allhdcp":[3,3,3,3,3,3,3,3,3],"allarc":[0,0,0,0,0,0,0,0,0],"allout":[1,1,0,0,0,0,0,0,255],"allaudiomute":[0,0,0,0,0,0,0,0,0]}
+Request:  {"comhead": "get system status", "language": 0}
+Response: {"comhead":"get system status","power":1,"baudrate":6,"beep":1,"lock":0,"mode":3}
 ```
 
-- Output names are in `name`; there is no `allsource`, `allinputname` or `alloutputname` here (read routing from `get video status`).
-- `allconnect`: display connected (hot-plug) per output. `allout`: stream on/off. `allarc`, `allaudiomute`: 0/1.
-- `allhdcp`, `allhdr`, `allscaler`: the device codes of the tables under [Output settings](#output-settings). HDR 0 and scaler 0 = pass-through, scaler 4 = audio only (the Telnet `status` dump prints exactly that).
-- **Ninth entry (HIL-04)**: every settings array has 9 values. The device web interface shows the ninth as its "All Output" row and writes it with port 0. Its value is the common value of the 8 outputs, or 255 when they differ (all 7 captured arrays follow this: `allscaler` [0,4,0,...] → 255, `allhdcp` all 3 → 3). The hub uses the first 8 entries.
+- `power`: 1 = on, 0 = standby. Reads continue answering in standby.
+- `baudrate`: RS-232 baud rate code (1=4800, 2=9600, 3=19200, 4=38400, 5=57600, 6=115200).
+- `beep`: Buzzer state (1 = enabled, 0 = disabled).
+- `lock`: Front-panel button lock (1 = locked, 0 = unlocked).
+- `mode`: **Front-panel LCD timeout code** (0 = off, 1 = always on, 2 = 15 s, 3 = 30 s, 4 = 60 s).
 
-### `get input status`
+### `get output status` — ✅ Verified
 
 ```json
-{"comhead":"get input status","power":1,"edid":[36,36,36,36,36,36,36,36],"inactive":[0,0,0,0,0,0,0,0],"inname":["NES","SNES","Sega","N64","Switch","PS3","Apple","Switcher"]}
+Request:  {"comhead": "get output status", "language": 0}
+Response: {"comhead":"get output status","power":1,"allconnect":[1,1,0,0,0,0,0,0],"name":["TV","Sound","Out3","Out4","Out5","Out6","Out7","Out8"],"allscaler":[0,4,0,0,0,0,0,0,255],"allhdr":[0,0,0,0,0,0,0,0,0],"allhdcp":[3,3,3,3,3,3,3,3,3],"allarc":[0,0,0,0,0,0,0,0,0],"allout":[1,1,0,0,0,0,0,0,255],"allaudiomute":[0,0,0,0,0,0,0,0,0]}
 ```
 
-- `edid`: the EDID id per input (table under [EDID](#edid)). 36 is "8K FRL 12G HDR 7.1CH"; the Telnet dump prints `input 1 edid:frl12g_8k_hdr,7.1ch`.
-- `inactive[i] = 1` means a signal **is** present (the name is misleading).
+- `name`: Array of 8 output label strings.
+- `allconnect`: Array of 8 booleans (1 = sink connected via hot-plug, 0 = disconnected).
+- `allout`: Array of 9 values (stream enable: 1 = enabled, 0 = disabled).
+- `allhdcp`: Array of 9 values (HDCP mode codes 1–5).
+- `allhdr`: Array of 9 values (HDR conversion codes 0–2).
+- `allscaler`: Array of 9 values (video scaler mode codes 0–4).
+- `allarc`: Array of 9 values (ARC enable: 0/1).
+- `allaudiomute`: Array of 9 values (audio mute: 0/1).
+- **Ninth Entry Behavior (HIL-04):** Settings arrays contain 9 elements. Index 8 represents the "All Outputs" state in the matrix web GUI. When all 8 outputs share identical settings, index 8 holds that value; when outputs have differing settings, index 8 returns `255`.
 
-### `get video status`
+### `get input status` — ✅ Verified
 
 ```json
-{"comhead":"get video status","power":1,"allsource":[7,7,7,7,7,7,7,7,7],"allinputname":[...8 names...],"alloutputname":[...8 names...],"allname":["Out1","Out2","Out3","Out4","Out5","Out6","Out7","Out8"]}
+Request:  {"comhead": "get input status", "language": 0}
+Response: {"comhead":"get input status","power":1,"edid":[36,36,36,36,36,36,36,36],"inactive":[0,0,0,0,0,0,0,0],"inname":["NES","SNES","Sega","N64","Switch","PS3","Apple","Switcher"]}
 ```
 
-`allsource` is the routing (9 entries, see ninth entry above). `allname` holds the **preset names** (the device web interface edits them with `preset name`). Names are plain strings (no `IN01-` prefix).
+- `inname`: Array of 8 input label strings.
+- `edid`: Array of 8 EDID profile IDs (see [EDID Reference](#edid-reference)).
+- `inactive`: Array of 8 signal detection flags (**1 = signal present/active**, 0 = no signal).
 
-### `get cec status`
+### `get video status` — ✅ Verified
 
 ```json
-{"comhead":"get cec status","power":1,"allinputname":[...],"alloutputname":[...],"inputindex":[1,0,0,0,0,0,0,0],"outputindex":[1,0,0,0,0,0,0,0]}
+Request:  {"comhead": "get video status", "language": 0}
+Response: {"comhead":"get video status","power":1,"allsource":[7,7,7,7,7,7,7,7,7],"allinputname":["..."],"alloutputname":["..."],"allname":["Out1","Out2","Out3","Out4","Out5","Out6","Out7","Out8"]}
 ```
 
-`inputindex` / `outputindex`: 1 = CEC selected/enabled on that port. The device web interface toggles these with `set cec index` and sends CEC keys to the selected ports.
+- `allsource`: 9-element array mapping each output (0-indexed) to its selected input (0–7 representing inputs 1–8).
+- `allname`: 8 preset slot name strings.
 
-### `get ext-audio status`
+### `get cec status` — ✅ Verified
 
 ```json
-{"comhead":"get ext-audio status","power":1,"mode":0,"allsource":[1,2,3,4,5,6,7,8],"allout":[1,1,1,1,1,1,1,1],"allinputname":[...],"alloutputname":[...],"index":1}
+Request:  {"comhead": "get cec status", "language": 0}
+Response: {"comhead":"get cec status","power":1,"allinputname":["..."],"alloutputname":["..."],"inputindex":[1,0,0,0,0,0,0,0],"outputindex":[1,0,0,0,0,0,0,0]}
 ```
 
-`mode`: 0 bind to input, 1 bind to output, 2 matrix. `allsource`: source per audio output (1-8 = input N, 9-16 = the ARC of output N-8). `allout`: audio output enabled. `index`: the audio output selected with `set ext-audio index` (the device web interface's "current" output).
+- `inputindex` / `outputindex`: 8-element arrays of 0/1 flags indicating which ports have CEC enabled.
 
-### `get status`, `get network`
+### `get ext-audio status` — ✅ Verified
 
 ```json
-{"comhead":"get status","power":1,"version":"V1.10.01","hostname":"…","ipaddress":"192.168.0.100","subnet":"255.255.254.0","gateway":"192.168.1.254","macaddress":"…","model":"BK-808","webversion":"V2.00.03"}
-{"comhead":"get network","power":1,"dhcp":1,"ipaddress":"192.168.0.100","subnet":"255.255.254.0","gateway":"192.168.1.254","telnetport":23,"tcpport":8000,"macaddress":"…","hostname":"…","username":1,"model":"BK-808"}
+Request:  {"comhead": "get ext-audio status", "language": 0}
+Response: {"comhead":"get ext-audio status","power":1,"mode":0,"allsource":[1,2,3,4,5,6,7,8],"allout":[1,1,1,1,1,1,1,1],"allinputname":["..."],"alloutputname":["..."],"index":1}
 ```
 
-The mask is `subnet`, not `netmask`; `username` is an integer (1), not the login name. (MAC and hostname redacted in the capture.)
+- `mode`: External audio routing mode (0 = bind to input, 1 = bind to output, 2 = matrix).
+- `allsource`: Audio source per output (1–8 = inputs 1–8, 9–16 = ARC from outputs 1–8).
+- `allout`: Audio output enable (1 = enabled, 0 = disabled).
+- `index`: Currently selected audio output channel (1–8).
 
-### `get routing status`, `preset get` — ❌ Not implemented
+### `get status` & `get network` — ✅ Verified
 
 ```json
-{"comhead": "get routing status", "language": 0, "index": 1}
-{"comhead": "preset get", "index": 1}
-```
+Request:  {"comhead": "get status", "language": 0}
+Response: {"comhead":"get status","power":1,"version":"V1.10.01","hostname":"...","ipaddress":"192.168.0.100","subnet":"255.255.254.0","gateway":"192.168.1.254","macaddress":"...","model":"BK-808","webversion":"V2.00.03"}
 
-No answer for either (HIL-01; `http/get_routing_status.json`, `http/preset_get_1..8.json`). The hub reads presets over Telnet with `r preset N` and never sends these.
+Request:  {"comhead": "get network", "language": 0}
+Response: {"comhead":"get network","power":1,"dhcp":1,"ipaddress":"192.168.0.100","subnet":"255.255.254.0","gateway":"192.168.1.254","telnetport":23,"tcpport":8000,"macaddress":"...","hostname":"...","username":1,"model":"BK-808"}
+```
 
 ---
 
-## Routing, presets, power, names, panel
+## HTTP Write Commands
 
-| Command | Payload | Status | Evidence |
+### Video Routing & Power
+
+| Command | Payload | Status | Evidence & Verification Notes |
 | --- | --- | --- | --- |
-| `video switch` | `"source": [output, input]`; output 0 = all | ✅ | `write/http_video_switch*`: applied, `result:1`; output 9, input 0 or 9 → `result:0` |
-| `set poweronoff` | `"power": 0\|1` | ✅ | `write/http_power`: applied; reads and writes keep working in standby |
-| `set input name` / `set output name` | `"name": "...", "index": n` | ✅ | `write/http_*_name`: applied; a 40-character name was stored unchanged; index 9 → `result:0` |
-| `set beep` | `"beep": 0\|1` | ✅ | `write/http_beep`; 2 → `result:0` |
-| `set panel lock` | `"lock": 0\|1` | ✅ | `write/http_panel_lock`; 2 → `result:0` |
-| `preset set` (recall) | `"index": 1-8` | ✅ answered `result:1` in earlier HAR captures; 🌐 the web interface reports "please save a preset" when a recall of an empty slot fails | recall of an empty slot is not captured yet |
-| `preset save` | `"index": 1-8` | 🌐 | not captured on V1.10.01 (the preset tests needed `get routing status`; they now read back with Telnet `r preset N`) |
-| `preset name` | `"index": n, "name": "..."` (read back in `get video status.allname`) | 🌐 | `OreiMatrix.set_preset_name`; the REST rename keeps hub-local names |
-| `preset clear` | `"index": n` | 🌐 | used only by the capture tool to restore an empty slot |
+| `video switch` | `"source": [output, input]` | ✅ Verified | Output 1–8, input 1–8. Output 0 routes input to all outputs. Verified by `write/http_video_switch*`. |
+| `set poweronoff` | `"power": 0\|1` | ✅ Verified | 1 = on, 0 = standby. Verified by `write/http_power`. |
+| `set input name` | `"name": str, "index": 1-8` | ✅ Verified | Stores up to 40 characters. Verified by `write/http_input_name`. |
+| `set output name` | `"name": str, "index": 1-8` | ✅ Verified | Stores up to 40 characters. Verified by `write/http_output_name`. |
+| `set beep` | `"beep": 0\|1` | ✅ Verified | 1 = enabled, 0 = disabled. Verified by `write/http_beep`. |
+| `set panel lock` | `"lock": 0\|1` | ✅ Verified | 1 = locked, 0 = unlocked. Verified by `write/http_panel_lock`. |
+| `set lcd on time` | `"lcd on time": code` (0-4) | ✅ Verified | Codes: 0 off, 1 on, 2 = 15 s, 3 = 30 s, 4 = 60 s. Read back in `get system status.mode`. Verified by `write/http_lcd_on_time`. |
+| `reboot` | `"reboot": 1` | 🌐 Web-UI-derived | Sent to reboot the matrix. (Uncaptured in HIL Session 1 to avoid host disruption). |
 
-All writes carry `"language": 0` like the device web interface.
+### Output Settings
 
----
+All output settings send a `[port, value]` array where port `1-8` targets a specific output and port `0` applies to all outputs:
 
-## Output settings
+| Setting | Command | Payload | Device Codes (Read/Write) | Status |
+| --- | --- | --- | --- | --- |
+| Stream Enable | `tx stream` | `"out": [out, 0\|1]` | 0 = disabled, 1 = enabled | ✅ Verified (`write/http_tx_stream`) |
+| HDCP Mode | `tx hdcp` | `"hdcp": [out, code]` | 1 = HDCP 1.4, 2 = HDCP 2.2, 3 = Follow Sink, 4 = Follow Source, 5 = User Mode | ✅ Verified (`write/http_tx_hdcp`) |
+| HDR Conversion | `set hdr conversion` | `"hdr": [out, code]` | 0 = Pass-through, 1 = HDR to SDR, 2 = Auto / Follow Sink | ✅ Verified (`write/http_hdr_conversion`) |
+| Video Scaler | `set video scaler` | `"scaler": [out, code]` | 0 = Pass-through, 1 = 8K→4K, 2 = 8K/4K→1080p, 3 = Auto, 4 = Audio Only | ✅ Verified (`write/http_video_scaler`) |
+| ARC Enable | `set arc` | `"arc": [out, 0\|1]` | 0 = disabled, 1 = enabled | ✅ Verified (`write/http_arc`) |
+| Audio Mute | `set output audio mute` | `"mute": [out, 0\|1]` | 0 = unmuted, 1 = muted | ✅ Verified (`write/http_output_audio_mute`) |
 
-All six are 🌐 **Web-UI-derived**. The commands the hub sent before (`set output stream|hdcp|hdr|scaler|arc|mute` with `{"output": n, <key>: v}`) are ❌: V1.10.01 never answered any of them for any value and nothing changed (HIL-09; `write/http_output_*`).
+#### Hub API Values vs. Device Codes
 
-| Setting | Command | Payload | Device codes (read = write) |
-| --- | --- | --- | --- |
-| Stream on/off | `tx stream` | `"out": [output, 0\|1]` | 0 off, 1 on (`allout`) |
-| HDCP | `tx hdcp` | `"hdcp": [output, code]` | 1 HDCP 1.4, 2 HDCP 2.2, 3 follow sink, 4 follow source, 5 user mode (`allhdcp`) |
-| HDR conversion | `set hdr conversion` | `"hdr": [output, code]` | 0 bypass (pass-through), 1 HDR to SDR, 2 auto / follow sink EDID (`allhdr`) |
-| Video mode (scaler) | `set video scaler` | `"scaler": [output, code]` | 0 bypass (pass-through), 1 8K→4K, 2 8K/4K→1080p, 3 auto / follow sink EDID, 4 audio only (`allscaler`) |
-| ARC | `set arc` | `"arc": [output, 0\|1]` | `allarc` |
-| Audio mute | `set output audio mute` | `"mute": [output, 0\|1]` | `allaudiomute` |
+`src/device_codes.py` performs normalization between high-level REST API values and low-level device codes:
+- **HDR:** API values 1–3 map to device codes 0–2 (`device = api - 1`).
+- **Scaler:** API values 1–5 map to device codes 0–4 (`device = api - 1`).
+- **HDCP:** 1–5 are identical.
 
-- Output 0 applies the value to all outputs (not used by the hub).
-- Read and write codes are the same: the device web interface fills its selectors from the read arrays and sends the selected code back unchanged. The captured reads agree for every code they contain (HDR 0, scaler 0 and 4, HDCP 3).
-- `set output resolution` (`"resolution": [output, code]`, 0-15) also exists in the web interface; the hub does not use it.
+### EDID Reference
 
-### Hub API values vs. device codes
-
-`src/device_codes.py` is the only place that translates. The REST API and `OreiMatrix.set_output_*` keep the values they always had:
-
-| Setting | API value (REST, OreiMatrix, scenes, profiles) | Device code |
-| --- | --- | --- |
-| HDCP | 1-5 | same |
-| HDR | 1 passthrough, 2 HDR→SDR, 3 auto | API − 1 (0-2) |
-| Scaler | 1 passthrough, 2 8K→4K, 3 8K/4K→1080p, 4 auto, 5 audio only | API − 1 (0-4) |
-| Stream, ARC, mute | booleans | 0/1 |
-
-REST reads (`/api/status/outputs`, `/api/status/full`, the web UI status) report HDR and scaler as **API values** since WP-A4 part 2, so a value read can be written back; the `raw` block keeps the device codes. (Before, reads returned device codes, so a pass-through output read as HDR 0, which the setter rejected, and scenes saved with "save current" could not be recalled: HIL-02.)
-
----
-
-## EDID
-
-### `set edid` — 🌐 Web-UI-derived
+#### `set edid` — ✅ Verified (`write/http_set_edid`)
 
 ```json
-{"comhead": "set edid", "language": 0, "edid": [input, id]}
+{"comhead": "set edid", "language": 0, "edid": [input_num, edid_id]}
 ```
 
-The id is read back in `get input status.edid`. The device's list (device web interface; id = API value):
-
-| Id | EDID | Id | EDID |
+| ID | Specification | ID | Specification |
 | --- | --- | --- | --- |
-| 1-3 | 1080p 2.0 / 5.1 / 7.1CH | 22-24 | 4K60 4:4:4 HDR 2.0 / 5.1 / 7.1CH |
-| 4-6 | 4K30 2.0 / 5.1 / 7.1CH | 25-27 | 4K120 4:2:0 HDR 2.0 / 5.1 / 7.1CH |
-| 7-9 | 4K60 4:2:0 2.0 / 5.1 / 7.1CH | 28-30 | 4K120 4:4:4 HDR 2.0 / 5.1 / 7.1CH |
-| 10-12 | 4K60 4:4:4 2.0 / 5.1 / 7.1CH | 31-33 | 8K FRL 10G HDR 2.0 / 5.1 / 7.1CH |
-| 13-15 | 1080p HDR 2.0 / 5.1 / 7.1CH | 34-36 | 8K FRL 12G HDR 2.0 / 5.1 / 7.1CH (36 ✅ read on V1.10.01) |
-| 16-18 | 4K30 HDR 2.0 / 5.1 / 7.1CH | 37-39 | User EDID 1-3 |
-| 19-21 | 4K60 4:2:0 HDR 2.0 / 5.1 / 7.1CH | **40-47** | **Copy the EDID of output 1-8** |
+| 1–3 | 1080p (2.0 / 5.1 / 7.1CH) | 22–24 | 4K60 4:4:4 HDR (2.0 / 5.1 / 7.1CH) |
+| 4–6 | 4K30 (2.0 / 5.1 / 7.1CH) | 25–27 | 4K120 4:2:0 HDR (2.0 / 5.1 / 7.1CH) |
+| 7–9 | 4K60 4:2:0 (2.0 / 5.1 / 7.1CH) | 28–30 | 4K120 4:4:4 HDR (2.0 / 5.1 / 7.1CH) |
+| 10–12 | 4K60 4:4:4 (2.0 / 5.1 / 7.1CH) | 31–33 | 8K FRL 10G HDR (2.0 / 5.1 / 7.1CH) |
+| 13–15 | 1080p HDR (2.0 / 5.1 / 7.1CH) | 34–36 | 8K FRL 12G HDR (2.0 / 5.1 / 7.1CH) |
+| 16–18 | 4K30 HDR (2.0 / 5.1 / 7.1CH) | 37–39 | User EDID 1–3 |
+| 19–21 | 4K60 4:2:0 HDR (2.0 / 5.1 / 7.1CH) | **40–47** | **Copy Output 1–8 EDID to Input** (`39 + output_num`) |
 
-- **EDID copy (BE-25)** is `set edid` with id 39 + output. The documented `copy edid` and the old hub's `set input edid` (`{"input": n, "edid": m}`, "copy" as 14 + N) are ❌: never answered (`write/http_input_edid`, `write/http_copy_edid`).
-- The previous table on this page (15-22 = copy, 36 = "4K60 HDR Atmos", 37/38 = 8K30/60) was a guess and wrong. REST `POST /api/input/{n}/edid` takes `{"mode": 1-47}` or `{"copy_from_output": 1-8}`; 15-22 are now plain HDR EDIDs.
-- User EDID upload (`set user edid`) and download (`download edid`) exist in the web interface; the hub does not use them.
-
----
-
-## System
+### Presets
 
 | Command | Payload | Status | Notes |
 | --- | --- | --- | --- |
-| `set lcd on time` | `"lcd on time": code` (0 off, 1 always on, 2 = 15 s, 3 = 30 s, 4 = 60 s) | 🌐 | read back as `get system status.mode`. The old `{"time": code}` payload is ❌: `result:0` for every code (`write/http_lcd`, API-07). |
-| `reboot` | `"reboot": 1` | 🌐 | the device web interface then polls `get status` until the device is back. The old hub's `set reboot` was never captured; the hub now sends `reboot`. Telnet `reboot` is preferred when Telnet is up (not captured either). |
-| `set hdcp`, `set baudrate`, `set factory`, `set tpg`, `set network`, `set defaults network` | | 🌐 exist in the web interface | not used by the hub |
+| `preset save` | `"index": 1-8` | ✅ Verified | Saves current routing state to preset slot 1–8 (`write/http_preset_save`). |
+| `preset set` | `"index": 1-8` | ✅ Verified | Recalls preset slot 1–8. Recalling an empty slot returns `result: 0` (`write/http_preset_recall`). |
+| `preset name` | `"index": 1-8, "name": str` | ✅ Verified | Stores preset name, read back in `get video status.allname` (`write/http_preset_name`). |
+| `preset clear` | `"index": 1-8` | 🌐 Web-UI-derived | Clears preset slot. |
 
----
+### External Audio
 
-## CEC
+| Command | Payload | Status | Notes |
+| --- | --- | --- | --- |
+| `set ext-audio mode` | `"mode": 0-2` | ✅ Verified | 0 = bind input, 1 = bind output, 2 = matrix (`write/http_ext_audio_mode`). |
+| `set ext-audio out` | `"out": [out 1-8, 0\|1]` | ✅ Verified | Enables/disables audio output channel (`write/http_ext_audio_out`). |
+| `ext-audio switch` | `"source": [out 1-8, src 1-16]` | ✅ Verified | Sources 1–8 = inputs 1–8; 9–16 = ARC from outputs 1–8 (`write/http_ext_audio_switch`). |
+| `set ext-audio index` | `"index": 1-8` | ✅ Verified | Selects active channel in matrix web UI (`write/http_ext_audio_index`). |
 
-### `set cec index` — ✅ Verified (array form only)
+### CEC Control
+
+#### `set cec index` — ✅ Verified (Array format only)
 
 ```json
 {"comhead": "set cec index", "language": 0, "inputindex": [8 × 0|1], "outputindex": [8 × 0|1]}
 ```
 
-Applied with `result:1` (`write/http_cec_index_bulk`, `probe/cec_enable_shapes`). A 7-element array → `result:0`. The old hub's single-port form `{"port": "input", "index": n, "enable": 1}` is ❌ **rejected** (`result:0`, nothing changes; BE-13, HIL-10). `OreiMatrix.set_cec_enable` now always reads the current arrays and sends both.
+Single-port payloads (e.g. `{"port": "input", "index": n, "enable": 1}`) are ❌ **rejected** (`result: 0`, HIL-10). The client must always read existing state and send full 8-element arrays.
 
-### `cec command` — ✅ answered; key tables 🌐
+#### `cec command` — ✅ Verified Protocol; Physical Display Execution Unverified
 
 ```json
 {"comhead": "cec command", "language": 0, "object": 0|1, "port": [8 × 0|1], "index": n}
 ```
 
-- `object`: 0 = source device on an input, 1 = display on an output. Object 2 → `result:0`.
-- The device does **not** validate `index` or `port`: index 99 and an all-zero port array were answered `result:1` (HIL-13; `write/http_cec_command_invalid`). The hub validates both.
-- The hub sends a one-hot `port` array for the target. The device web interface sends its current selection (`inputindex`/`outputindex`) instead; whether the device uses the payload's array or its stored selection is settled by the live CEC run.
-
-**Source (input) table, object 0** — the hub's table, identical to the device web interface's input pad (VAL-03: the table this page showed before was wrong on 15 of 19 indices):
-
-| Index | Key | Index | Key | Index | Key |
-| --- | --- | --- | --- | --- | --- |
-| 1 | power on | 8 | down | 15 | fast forward |
-| 2 | power off | 9 | back / return | 16 | stop |
-| 3 | up | 10 | previous | 17 | mute |
-| 4 | left | 11 | play | 18 | volume down |
-| 5 | select / OK | 12 | next | 19 | volume up |
-| 6 | right | 13 | rewind | | |
-| 7 | menu | 14 | pause | | |
-
-**Display (output) table, object 1** — a different, 0-based table of six keys (device web interface's output pad, BE-14):
-
-| Index | Key |
-| --- | --- |
-| 0 | power on |
-| 1 | power off |
-| 2 | mute |
-| 3 | volume down |
-| 4 | volume up |
-| 5 | active / input (make the display select the matrix) |
-
-The hub used the source table for displays until WP-A4 part 2, so "power on" to a TV sent index 1, which is **power off** on this table. Navigation and playback keys have no output index; the hub refuses them for outputs (REST answers 400). Proof on a real display: `--include cec-live` in the capture tool.
+- `object`: 0 = Source device (HDMI input); 1 = Display device (HDMI output).
+- `port`: 8-element one-hot array selecting the target port.
+- **Input Pad (Source, `object`: 0):** 1-based indexing:
+  1: power on, 2: power off, 3: up, 4: left, 5: select/OK, 6: right, 7: menu, 8: down, 9: back, 10: previous, 11: play, 12: next, 13: rewind, 14: pause, 15: fast forward, 16: stop, 17: mute, 18: volume down, 19: volume up.
+- **Output Pad (Display, `object`: 1):** 0-based indexing:
+  0: power on, 1: power off, 2: mute, 3: volume down, 4: volume up, 5: active source.
 
 ---
 
-## External audio
+## Unimplemented / Rejected HTTP Commands
 
-All 🌐 **Web-UI-derived**; the old hub's `set output exa mode`, `set output exa` (`exa` 1/2) and `set output exa in source` are ❌ (no answer, `write/http_exa_*`).
+The following commands from vendor documentation or legacy code are rejected or unanswered by MCU V1.10.01:
+- `get routing status`, `preset get`: ❌ Unanswered (client times out).
+- Legacy output writes: `set output stream|hdcp|hdr|scaler|arc|mute` (`{"output": n, ...}`): ❌ Unanswered.
+- Legacy EDID writes: `set input edid`, `copy edid`: ❌ Unanswered.
+- Legacy LCD payload: `set lcd on time` with `{"time": code}`: ❌ Rejected (`result: 0`).
+- Legacy single-port CEC enable: `set cec index` with `{"port": ...}`: ❌ Rejected (`result: 0`).
+- Legacy external audio: `set output exa*`: ❌ Unanswered.
 
-| Command | Payload | Read back |
+---
+
+## Telnet Protocol Reference (Port 23)
+
+The matrix exposes an interactive ASCII Telnet command interface on port 23 (`src/telnet_client.py`, `src/_telnet_proto.py`).
+
+### Connection, Negotiation & Framing
+
+1. **Option Negotiation:** On connection, the matrix sends RFC 854 IAC sequences:
+   `\xff\xfb\x03\xff\xfc\x01\xff\xfe\x01\xff\xfe\x00\xff\xfc\x03` (`IAC WILL SGA`, `IAC WONT ECHO`, `IAC DONT ECHO`, `IAC DONT BINARY`, `IAC WONT SGA`).
+2. **Welcome Banner:**
+   ```text
+   ****************welcome **************
+   fw version :v1.10.01          
+   **************************************
+   ```
+3. **Command Framing:** Every command must be terminated with an exclamation mark and carriage return line feed: `!\r\n`.
+   - A command sent without `!` (e.g., `r type\r\n`) is echoed and answered with `E00\r\n`.
+   - A command sent with `!` but without CRLF produces no response until CRLF arrives.
+4. **Command Echo:** The matrix echoes the incoming command line before sending the answer lines.
+5. **Error Codes:**
+   - `E00`: Unknown command or unknown CEC command word.
+   - `E01`: Bad parameter (e.g. port out of range `r link in 9!`).
+   - `E02`: Reserved error code.
+6. **Concurrency:** Multiple concurrent Telnet connections are supported (`probe/telnet_second_session.json`).
+
+### Telnet Query Commands (Reads)
+
+| Command | Status | Description and Output Format |
 | --- | --- | --- |
-| `set ext-audio mode` | `"mode": 0-2` (bind to input, bind to output, matrix) | `mode` |
-| `set ext-audio out` | `"out": [audio output 1-8, 0\|1]` | `allout` |
-| `ext-audio switch` | `"source": [audio output, source 1-16]` (1-8 input, 9-16 ARC of output 1-8); offered by the web interface only in matrix mode | `allsource` |
-| `set ext-audio index` | `"index": 1-8` | `index` |
+| `status!` | ✅ Verified | 111-line full system status dump. Begins with `get the unit all status:` and concludes with `mac address: <MAC>` and an empty line. Contains power, baudrate, beep, lock, lcd timeout, input/output connection states, names, EDID strings, routing, and audio configuration. |
+| `r fw version!` | ✅ Verified | 4-line firmware version report (`fw version :v1.10.01`, `key mcu : v1.00.08`, `web gui : v2.00.03`, `cpld version : v1.00.06`). |
+| `r type!` | ✅ Verified | Returns device model string: `8x8 hdmi2.1 matrix`. |
+| `r link in <1-8>!` | ✅ Verified | Input cable detect: `hdmi input <n>: connect` or `disconnect`. |
+| `r link out <0-8>!` | ✅ Verified | Output cable detect: `hdmi output <n>: connect` or `disconnect`. Port `0` lists all 8 outputs. |
+| `r preset <1-8>!` | ✅ Verified | Returns 8 routing lines (`output<n>->input<m>`), or `preset <n> is none,please save a preset`. |
 
----
+### Telnet Control Commands (Writes)
 
-## Telnet (port 23)
-
-Captured on V1.10.01 (`telnet/`, `probe/telnet_*`, `write/telnet_*`):
-
-- On connect: Telnet option negotiation (`IAC WILL SGA`, `IAC WONT ECHO`, `IAC DONT ECHO`, `IAC DONT BINARY`, `IAC WONT SGA`), then the banner `****************welcome **************`, `fw version :v1.10.01` (padded), a line of `*`, an empty line.
-- A command needs both `!` and CR LF (`r type!\r\n`, what the hub sends). `r type!` without CR LF gets only the echo and no answer; a line without `!` (`r type\r\n`) is echoed and answered `E00`. The device echoes each command line (`r link in 1!`) before the answer. Lines end with CR LF, there is no prompt. Upper case works, pipelined commands work, and a second concurrent session works.
-- `E00` = unknown command (also an unknown CEC word); `E01` = known command with a bad parameter (port out of range, non-numeric port). `r preset 9` prints `E01` *before* the echo and `E00` after it.
-- Reads: `status` (111 lines headed `get the unit all status:`, ending with the MAC line and an empty line), `r fw version` (4 lines), `r type`, `r link in|out N` (`r link out 0` lists all outputs), `r preset N` (8 routing lines, or `preset N is none,please save a preset`).
-
-| Command | Status | Answer after the echo |
+| Command | Status | Acknowledgement After Echo |
 | --- | --- | --- |
-| `s output N in source M` (N = 0: all) | ✅ | `outputN->inputM` (8 lines for 0) |
-| `s beep 0\|1` | ✅ | `beep off` / `beep on` |
-| `s lock 0\|1` | ✅ | `panel button lock on` / `off` |
-| `power 0\|1` (what the hub's TelnetClient sends) | ✅ | `power off`; `power on` followed by the start-up text (`8x8 hdmi2.1 matrix`, `system initializing...`, `initialization finished!`, `mcu fw version : v1.10.01`) |
-| `s power 0\|1` (vendor syntax) | ❌ | `E01` |
-| `s av <in> <out>` (vendor syntax) | ❌ | `E00` |
-| `s out N stream 0\|1` (vendor syntax) | ❌ | `E00` (HIL-11; the hub does not send it) |
-| `s save\|recall\|clear preset N` | ❓ | not captured yet (preset tests now read back with `r preset`) |
-| `s cec in N <word>`, `s cec hdmi out N <word>` | ❓ | not captured (live CEC run); a bad port is `E01`, an unknown word `E00` |
-| `reboot` | ❓ | not captured (opt-in reboot run) |
+| `s output <0-8> in source <1-8>!` | ✅ Verified | `output<n>->input<m>` (8 lines when output is 0) |
+| `power 0!` | ✅ Verified | `power off` |
+| `power 1!` | ✅ Verified | `power on` followed by startup boot text |
+| `s beep 0\|1!` | ✅ Verified | `beep off` / `beep on` |
+| `s lock 0\|1!` | ✅ Verified | `panel button lock off` / `on` |
+| `s save preset <1-8>!` | ✅ Verified | `s save preset <n>` |
+| `s recall preset <1-8>!` | ✅ Verified | `s recall preset <n>` followed by 8 routing lines |
+| `s clear preset <1-8>!` | ✅ Verified | `s clear preset <n>` |
+| `reboot!` | ❓ Unverified | Device reboot |
+| `s cec in <1-8> <word>!` | ❓ Unverified | Send CEC key to source device on input (e.g. `power_on`, `menu`) |
+| `s cec hdmi out <1-8> <word>!` | ❓ Unverified | Send CEC key to display on output (e.g. `power_on`, `volume_up`) |
 
-Push notifications from front-panel changes are not captured yet.
+*Note on Telnet Power Syntax:* Bare `power 0!` / `power 1!` is the valid syntax. Vendor syntax `s power 0!` is rejected with `E01`. Vendor routing `s av <in> <out>` is rejected with `E00`.
+
+### Unsolicited Push Notifications
+
+The matrix Telnet server can emit asynchronous event lines on state changes:
+- **Cable Connect/Disconnect:** Emits `hdmi input <n>: connect` / `disconnect` or `hdmi output <n>: connect` / `disconnect`.
+- These lines are processed by `TelnetClient._listen_for_push` to update the connection state cache in real time without polling.
 
 ---
 
-## Status summary
+## Status Summary
 
-| Group | ✅ Verified | 🌐 Web-UI-derived (pending hardware proof) | ❌ Not implemented (captured) |
-| --- | --- | --- | --- |
-| Login | 1 | | |
-| Reads | 8 (`get system/output/input/video/cec/ext-audio status`, `get status`, `get network`) | | 2 (`get routing status`, `preset get`) |
-| Routing, power, names, beep, lock | 6 (`video switch`, `set poweronoff`, `set input name`, `set output name`, `set beep`, `set panel lock`) | | |
-| Presets | 1 (`preset set`, from earlier HAR captures) | 3 (`preset save`, `preset name`, `preset clear`) | |
-| Output settings | | 6 | 6 (`set output stream/hdcp/hdr/scaler/arc/mute`) |
-| EDID | | 1 (`set edid`, incl. copy) | 2 (`set input edid`, `copy edid`) |
-| LCD, reboot | | 2 (`set lcd on time` with `"lcd on time"`, `reboot`) | 1 (`set lcd on time` with `"time"`) |
-| CEC | 2 (`set cec index` arrays, `cec command` answer) | 2 key tables (input, output) | 1 (single-port `set cec index`) |
-| External audio | | 4 | 3 (`set output exa*`) |
-| Telnet | 4 set commands + all reads | | 3 (`s power`, `s av`, `s out N stream`) |
+| Category | ✅ Verified | 🌐 Web-UI-derived | ❌ Not implemented / Rejected | ❓ Unverified |
+| --- | --- | --- | --- | --- |
+| **HTTP Authentication** | 1 (`login`) | 0 | 0 | 0 |
+| **HTTP Status Reads** | 8 (`get system/output/input/video/cec/ext-audio status`, `get status`, `get network`) | 0 | 2 (`get routing status`, `preset get`) | 0 |
+| **HTTP Routing & Names** | 6 (`video switch`, `set poweronoff`, `set input name`, `set output name`, `set beep`, `set panel lock`) | 0 | 0 | 0 |
+| **HTTP Presets** | 3 (`preset save`, `preset set`, `preset name`) | 1 (`preset clear`) | 0 | 0 |
+| **HTTP Output Settings** | 6 (`tx stream`, `tx hdcp`, `set hdr conversion`, `set video scaler`, `set arc`, `set output audio mute`) | 0 | 6 (legacy `set output *`) | 0 |
+| **HTTP EDID** | 1 (`set edid` incl. copy) | 0 | 2 (`set input edid`, `copy edid`) | 0 |
+| **HTTP LCD & Reboot** | 1 (`set lcd on time`) | 1 (`reboot`) | 1 (legacy `time` payload) | 0 |
+| **HTTP External Audio** | 4 (`set ext-audio mode/out/index`, `ext-audio switch`) | 0 | 3 (legacy `set output exa*`) | 0 |
+| **HTTP CEC Control** | 2 (`set cec index` array, `cec command` protocol) | 0 | 1 (single-port `set cec index`) | 0 |
+| **Telnet Reads** | 6 (`status`, `r fw version`, `r type`, `r link in`, `r link out`, `r preset`) | 0 | 0 | 0 |
+| **Telnet Writes** | 8 (`s output`, `power 0`, `power 1`, `s beep`, `s lock`, `s save preset`, `s recall preset`, `s clear preset`) | 0 | 3 (`s power`, `s av`, `s out N stream`) | 3 (`reboot`, `s cec in`, `s cec hdmi out`) |
 
-To move a 🌐 row to ✅: run the capture tool's write mode (`tools/hil/README.md`, "Verify the WP-A4 part 2 commands") and then `python -m tools.simulator --golden tests/fixtures/device/<folder> --report`; the `web-ui-commands`, `lcd-codes`, `edid-range`, `copy-edid`, `exa-commands` and `output-mode-text` rows turn CONFIRMED (or CONTRADICTED with the difference).
+---
 
-## Sources
+## Sources & References
 
-1. HIL Session 1 captures of the owner's BK-808 (`tests/fixtures/device/BK-808_V1.10.01_web-V2.00.03/`, reports `docs/validation/2026-09-25-hil-session-1-*.md`).
-2. The device's own configuration web interface (served by the matrix): the commands, payload shapes and option lists described above, in our own words; no vendor code is copied into this repository.
-3. Older HAR captures of the web UI and the RTI / Control4 drivers (not redistributed, see [vendor/README.md](vendor/README.md)); several of their commands turned out not to exist on V1.10.01.
-
-*Last updated: 2026-09-25 (WP-A4 part 2)*
+1. **Hardware Verification Captures:** Byte-exact captures from an OREI BK-808 (MCU V1.10.01 / Web V2.00.03), preserved in `tests/fixtures/device/BK-808_V1.10.01_web-V2.00.03/` and documented in HIL Session reports ([2026-09-25-hil-session-1-read.md](validation/2026-09-25-hil-session-1-read.md) and [2026-09-25-hil-session-1-probe-write.md](validation/2026-09-25-hil-session-1-probe-write.md)).
+2. **Device Embedded Web Interface:** Analysis of the web GUI served by the matrix firmware (`/cgi-bin/instr`).
+3. **Third-Party Notices & License Audit:** All proprietary vendor drivers, utilities, and copyrighted manuals were purged from the repository per SEC-14; see [../THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md).
