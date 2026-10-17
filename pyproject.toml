@@ -1,13 +1,14 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
+requires = ["setuptools>=77.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "ucapi-orei-hdmi-matrix"
-version = "0.1.0"
+dynamic = ["version"]
 description = "OREI BK-808 HDMI Matrix integration for Unfolded Circle Remote Two/3"
 readme = "README.md"
-license = {text = "MPL-2.0"}
+license = "MPL-2.0"
+license-files = ["LICENSE"]
 requires-python = ">=3.11"
 authors = [
     {name = "Ryan Haver", email = "13879652+ryan-haver@users.noreply.github.com"}
@@ -15,7 +16,6 @@ authors = [
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: End Users/Desktop",
-    "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",
@@ -31,6 +31,8 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
+    "build>=1.2",
+    "pip-tools>=7.5",
     "pytest>=7.0.0",
     "pytest-asyncio>=0.21.0",
     "pytest-aiohttp>=1.0.0",
@@ -51,13 +53,18 @@ Homepage = "https://github.com/ryan-haver/8x8-hdmi-matrix-hub"
 Repository = "https://github.com/ryan-haver/8x8-hdmi-matrix-hub"
 
 [tool.setuptools]
-package-dir = {"" = "src"}
+package-dir = {"" = "src", "web" = "web"}
 py-modules = [
+    "_file_io",
+    "_process_lock",
+    "_task_supervisor",
+    "_telnet_proto",
     "cec_commands",
     "cec_macros",
     "cec_resolver",
     "config",
     "dashboard_layout",
+    "device_codes",
     "driver",
     "orei_matrix",
     "password",
@@ -67,10 +74,21 @@ py-modules = [
     "scene_manager",
     "system_shortcuts",
     "telnet_client",
+    "version",
 ]
 
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["src", "."]
+include = ["hub*", "integrations*", "rest_api*", "web"]
+
+[tool.setuptools.dynamic]
+version = {attr = "hub.__version__"}
+
+[tool.setuptools.package-data]
+web = ["**/*.html", "**/*.json", "**/*.js", "**/*.css", "**/*.svg"]
+
+[tool.setuptools.data-files]
+"." = ["driver.json"]
 
 [tool.black]
 line-length = 120

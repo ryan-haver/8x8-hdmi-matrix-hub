@@ -1,9 +1,3 @@
-# Unfolded Circle integration dependencies
-# Install with: pip install -r requirements-uc.txt
-
-# Include core dependencies
+# Compatibility entry point: the runtime lock includes Unfolded Circle support.
+# Install with: python -m pip install --require-hashes -r requirements-uc.txt
 -r requirements.txt
-
-# UC-specific packages
-ucapi==0.7.0
-pyee==13.0.0
