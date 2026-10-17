@@ -1,88 +1,159 @@
 # Home Assistant Integration Guide
 
-> **Status**: REST API v2.10.0 (with WebSocket, Profiles & CEC Macros) | HACS component `hdmi_matrix` (Home Assistant 2025.1+)
-
-This guide explains how to integrate the OREI HDMI Matrix with Home Assistant.
+> **Status**: Hub REST API current (`v0.4.0`) | HACS component `hdmi_matrix` (Home Assistant 2025.1+)
+>
+> Sources of truth: `src/rest_api/app.py` (every route) and
+> `src/rest_api/security.py` (access model). This guide covers the two ways
+> to expose the hub to Home Assistant: **Option A** — built-in `rest_command`
+> and `rest` sensor with the plain HTTP API — and **Option B** — the proper
+> HACS custom component under `custom_components/hdmi_matrix/`.
 
 ## Integration Options
 
-### Option A: REST Commands (Available Now ✅)
-Use Home Assistant's built-in REST integration with the REST API.
+### Option A: REST Commands / sensor (no install required)
 
-**Pros**: No custom code, works immediately, full API access
-**Cons**: Manual configuration, no automatic entity discovery
+Use Home Assistant's built-in `rest_command` and `rest` integrations against
+the hub's plain HTTP API.
 
-### Option B: HACS Custom Component (Full Integration)
-A proper Home Assistant integration with entities, services, and device registry.
+**Pros**: no custom code, works immediately, full API access
+**Cons**: manual configuration, no automatic entity discovery
 
-**Pros**: Full functionality, proper UI, automations, device tracking
-**Cons**: Installed through HACS (custom repository)
+### Option B: HACS custom component (recommended)
+
+A proper Home Assistant integration: a device in the device registry, entities,
+services, polling, options flow and device tracking.
+
+**Pros**: full functionality, proper UI, automations, device tracking
+**Cons**: installed through HACS (custom repository)
+
+The hub's `manifest.json` field `iot_class` is `local_polling`; the integration
+is a local hub that polls the device. There is no cloud dependency.
 
 ---
 
-## Option A: REST Commands ✅ READY
+## Option A: REST Commands
 
 ### Prerequisites
-- OREI Matrix integration running (Docker or standalone)
-- REST API running on port 8080
-- Home Assistant installed
 
-### Available Endpoints
+- OREI Matrix hub running (Docker or `python run.py`).
+- REST API reachable on port 8080 (the hub default `API_PORT`).
+- Home Assistant installed (any current release; the `rest` integration has
+  been part of HA for years).
+
+### Available endpoints
+
+The route table mirrors `src/rest_api/app.py`. The hub answers every URL
+below by default; on a locked hub the *control* group requires an API key
+(`X-API-Key` header or `?key=` query) and the *admin* group requires an
+admin session (see "API key / control PIN" below).
+
+#### Reads
 
 | Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/status` | GET | Get matrix status and routing |
-| `/api/input/{n}` | POST | Switch all outputs to input N |
+| --- | --- | --- |
+| `/api/status` | GET | Matrix status, power state, all inputs/outputs/presets |
+| `/api/info` | GET | Hub info, version, capabilities |
+| `/api/health` | GET | Health check (used by Docker `HEALTHCHECK`) |
+| `/api/inputs` | GET | Input names |
+| `/api/outputs` | GET | Output names |
+| `/api/presets` | GET | Preset names |
+| `/api/edid/modes` | GET | Available EDID modes |
+| `/api/system/lcd/modes` | GET | Available LCD timeout modes |
+| `/api/system/storage` | GET | Data dir, config dir, env-sourced paths |
+| `/api/system/info` | GET | Hub info + canonical env-var table |
+| `/api/ext-audio/modes` | GET | External audio binding modes |
+| `/api/cec/commands` | GET | CEC command list |
+| `/api/cec/commands/{type}` | GET | CEC commands for `input` or `output` |
+| `/api/cec/capabilities` | GET | CEC capabilities summary |
+| `/api/cec/input/{n}/capabilities` | GET | Capabilities for input N |
+| `/api/cec/output/{n}/capabilities` | GET | Capabilities for output N |
+
+#### Routing & control (control-level on a locked hub)
+
+| Endpoint | Method | Description |
+| --- | --- | --- |
+| `/api/input/{n}` | POST | Switch all outputs to input N (legacy; `POST /api/switch` is the documented body form) |
+| `/api/switch` | POST | Body `{"outputs": {"1": 2, "2": 2}}` — set per-output sources |
 | `/api/input/next?output=N` | POST | Cycle to next input on output N |
 | `/api/input/previous?output=N` | POST | Cycle to previous input on output N |
-| `/api/output/{n}/source` | POST | Set specific output to specific input |
+| `/api/output/{n}/source` | POST | Set output N to a specific input (`{"input": N}`) |
+| `/api/output/{n}/enable` | POST | Enable/disable the output stream (`{"enabled": bool}`) |
+| `/api/output/{n}/arc` | POST | Enable/disable ARC (`{"enabled": bool}`) |
+| `/api/output/{n}/mute` | POST | Mute/unmute audio (`{"muted": bool}`) |
 | `/api/preset/{n}` | POST | Recall preset N (1-8) |
-| `/api/preset/{n}/save` | POST | Save current routing to preset N |
 | `/api/power/on` | POST | Power on matrix |
 | `/api/power/off` | POST | Power off matrix |
-| `/api/output/{n}/enable` | POST | Enable/disable output stream |
-| `/api/output/{n}/hdcp` | POST | Set HDCP mode (1-5) |
-| `/api/output/{n}/hdr` | POST | Set HDR mode (1-3) |
-| `/api/output/{n}/scaler` | POST | Set scaler mode (1-5) |
-| `/api/output/{n}/arc` | POST | Enable/disable ARC |
-| `/api/output/{n}/mute` | POST | Mute/unmute audio output |
-| `/api/cec/{type}/{n}/enable` | POST | Enable/disable CEC per port |
-| `/api/cec/input/{n}/power_on` | POST | CEC power on input device |
-| `/api/cec/input/{n}/power_off` | POST | CEC power off input device |
-| `/api/cec/input/{n}/play` | POST | CEC play command |
-| `/api/cec/input/{n}/pause` | POST | CEC pause command |
-| `/api/cec/output/{n}/volume_up` | POST | CEC volume up on output |
-| `/api/cec/output/{n}/volume_down` | POST | CEC volume down on output |
-| `/api/cec/output/{n}/mute` | POST | CEC mute on output |
-| `/api/system/reboot` | POST | Reboot matrix |
-| `/api/edid/modes` | GET | List EDID modes (v2.5+) |
-| `/api/input/{n}/edid` | POST | Set EDID mode for input (v2.5+) |
-| `/api/system/lcd/modes` | GET | List LCD timeout modes (v2.5+) |
-| `/api/system/lcd` | POST | Set LCD timeout (v2.5+) |
-| `/api/ext-audio/modes` | GET | List ext-audio modes (v2.6+) |
-| `/api/ext-audio/mode` | POST | Set ext-audio mode (v2.6+) |
-| `/api/ext-audio/{n}/enable` | POST | Enable/disable ext-audio (v2.6+) |
-| `/api/ext-audio/{n}/source` | POST | Set ext-audio source (v2.6+) |
-| `/api/scenes` | GET | List scenes (v2.7+) |
-| `/api/scene/{id}` | GET | Get scene details (v2.7+) |
-| `/api/scene` | POST | Create/update scene (v2.7+) |
-| `/api/scene/{id}` | DELETE | Delete scene (v2.7+) |
-| `/api/scene/{id}/recall` | POST | Apply scene (v2.7+) |
-| `/api/scene/save-current` | POST | Save current state as scene (v2.7+) |
-| `/api/profiles` | GET | List profiles (v2.10+) ⭐ |
-| `/api/profile/{id}` | GET | Get profile details (v2.10+) ⭐ |
-| `/api/profile` | POST | Create profile (v2.10+) ⭐ |
-| `/api/profile/{id}` | PUT | Update profile (v2.10+) ⭐ |
-| `/api/profile/{id}` | DELETE | Delete profile (v2.10+) ⭐ |
-| `/api/profile/{id}/recall` | POST | Activate profile (v2.10+) ⭐ |
-| `/api/profile/{id}/cec` | GET/POST/PUT | Profile CEC config (v2.10+) ⭐ |
-| `/api/profile/{id}/macros` | GET/POST/PUT | Profile macros (v2.10+) ⭐ |
-| `/api/profiles/reorder` | POST | Reorder profiles (v2.10+) ⭐ |
-| `/api/cec/macros` | GET | List CEC macros (v2.9+) ⭐ |
-| `/api/cec/macro` | POST | Create CEC macro (v2.9+) ⭐ |
-| `/api/cec/macro/{id}` | GET/PUT/DELETE | Manage CEC macro (v2.9+) ⭐ |
-| `/api/cec/macro/{id}/execute` | POST | Execute macro (v2.9+) ⭐ |
-| `/api/cec/macro/{id}/test` | POST | Test macro (dry run) (v2.9+) ⭐ |
+| `/api/system/beep` | POST | Beep the matrix buzzer |
+| `/api/system/lcd` | POST | Set LCD timeout mode (`{"mode": 0-4}`) |
+| `/api/cec/input/{n}/enable` | POST | Enable/disable CEC on input N |
+| `/api/cec/output/{n}/enable` | POST | Enable/disable CEC on output N |
+| `/api/cec/input/{n}/{command}` | POST | CEC command on input N (e.g. `play`, `pause`, `power_on`) |
+| `/api/cec/output/{n}/{command}` | POST | CEC command on output N (e.g. `volume_up`, `mute`, `power_on`) |
+| `/api/profile/{id}/recall` | POST | Activate a saved profile |
+| `/api/scene/{id}/recall` | POST | Apply a saved scene |
+| `/api/cec/macro/{id}/execute` | POST | Run a CEC macro |
+| `/api/cec/macro/{id}/test` | POST | Test (dry-run) a CEC macro |
+| `/api/ext-audio/{n}/enable` | POST | Enable/disable ext-audio for output N |
+| `/api/ext-audio/{n}/source` | POST | Bind ext-audio input for output N |
+| `/api/ext-audio/mode` | POST | Set binding mode (`{"mode": 0-2}`) |
+| `/api/integrations/flic/buttons` | GET | List registered Flic buttons |
+| `/api/integrations/flic/register` | POST | Register Flic buttons from a Flic Hub (admin) |
+
+#### Profile / scene / macro management (admin)
+
+| Endpoint | Method | Description |
+| --- | --- | --- |
+| `/api/profiles` | GET | List profiles |
+| `/api/profile/{id}` | GET / PUT / DELETE | Profile CRUD |
+| `/api/profile` | POST | Create profile |
+| `/api/profiles/reorder` | POST | Reorder profiles |
+| `/api/profile/{id}/cec` | GET / POST / PUT | Profile CEC config |
+| `/api/profile/{id}/macros` | GET / POST / PUT | Profile macros |
+| `/api/scenes` | GET | List scenes (v1) |
+| `/api/scene/{id}` | GET / DELETE | Scene detail / delete |
+| `/api/scene` | POST | Create / update scene |
+| `/api/scene/{id}/cec` | GET / POST / PUT | Scene CEC config |
+| `/api/scene/save-current` | POST | Save current state as a scene |
+| `/api/v2/scenes` | GET / POST | List / create v2 scenes |
+| `/api/v2/scenes/{id}` | GET / PUT / DELETE | v2 scene CRUD |
+| `/api/v2/scenes/{id}/execute` | POST | Run a v2 scene |
+| `/api/cec/macros` | GET | List CEC macros |
+| `/api/cec/macro` | POST | Create CEC macro |
+| `/api/cec/macro/{id}` | GET / PUT / DELETE | Manage macro |
+
+#### Admin (admin PIN required when set)
+
+| Endpoint | Method | Description |
+| --- | --- | --- |
+| `/api/auth/status` | GET | `{admin_pin_set, control_pin_set, session_level, device_remembered}` |
+| `/api/auth/unlock` | POST | `{"level": "admin"\|"control", "pin": "..."}` — opens a session |
+| `/api/auth/login` | POST | Alias for `/api/auth/unlock` |
+| `/api/auth/lock` | POST | Ends the current session |
+| `/api/auth/pin` | POST | Set / change / clear an admin or control PIN (admin session required to touch admin) |
+| `/api/auth/devices` | GET | List "remembered device" tokens |
+| `/api/auth/devices/{id}` | DELETE | Forget a device |
+| `/api/auth/api-keys` | GET / POST | List / create named API keys (admin) |
+| `/api/auth/api-keys/{id}` | DELETE | Revoke an API key |
+| `/api/settings` | GET | Hub settings |
+| `/api/settings/matrix-host` | POST | Update the matrix address (admin) |
+| `/api/settings/test-connection` | POST | Probe an address (admin) |
+| `/api/themes` | GET / PUT | Theme tokens |
+| `/api/themes/reset` | POST | Reset themes to defaults |
+| `/api/ui/preferences` | GET / PUT | UI preferences |
+| `/api/dashboard/layout` | GET / POST / PUT | Replace the dashboard layout |
+| `/api/dashboard/cards` | POST / DELETE | Add / remove a card |
+| `/api/device-settings` | GET / POST | Bulk update device settings |
+| `/api/device-settings/input/{n}` | GET / POST | Input settings |
+| `/api/device-settings/output/{n}` | GET / POST | Output settings |
+| `/api/device-settings/preset/{n}/name` | POST | Rename preset |
+| `/api/input/{n}/name` | POST | Rename input (admin) |
+| `/api/input/{n}/edid` | POST | Set EDID mode (admin) |
+| `/api/output/{n}/name` | POST | Rename output (admin) |
+| `/api/output/{n}/hdcp` | POST | HDCP mode (admin) |
+| `/api/output/{n}/hdr` | POST | HDR mode (admin) |
+| `/api/output/{n}/scaler` | POST | Scaler mode (admin) |
+| `/api/system/reboot` | POST | Reboot the matrix (admin) |
+| `/api/system/panel_lock` | POST | Front-panel lock (admin) |
 
 ### Configuration
 
@@ -125,7 +196,7 @@ rest_command:
     url: "http://192.168.1.145:8080/api/power/off"
     method: POST
 
-  # Input cycling (NEW in v2.1.0)
+  # Input cycling
   orei_input_next:
     url: "http://192.168.1.145:8080/api/input/next?output={{ output }}"
     method: POST
@@ -133,19 +204,19 @@ rest_command:
     url: "http://192.168.1.145:8080/api/input/previous?output={{ output }}"
     method: POST
 
-  # Direct output control (NEW in v2.1.0)
+  # Direct output control
   orei_set_output_source:
     url: "http://192.168.1.145:8080/api/output/{{ output }}/source"
     method: POST
     content_type: "application/json"
     payload: '{"input": {{ input }}}'
 
-  # Global input switching
+  # Global input switching (legacy)
   orei_switch_all_to_input:
     url: "http://192.168.1.145:8080/api/input/{{ input }}"
     method: POST
 
-  # Advanced Output Control (NEW in v2.2.0)
+  # Advanced output control
   orei_set_hdcp:
     url: "http://192.168.1.145:8080/api/output/{{ output }}/hdcp"
     method: POST
@@ -177,31 +248,31 @@ rest_command:
     content_type: "application/json"
     payload: '{"enabled": {{ enabled }}}'
 
-  # Preset Management (NEW in v2.2.0)
+  # Preset Management
   orei_save_preset:
     url: "http://192.168.1.145:8080/api/preset/{{ preset }}/save"
     method: POST
 
-  # System Control (NEW in v2.2.0)
+  # System Control
   orei_reboot:
     url: "http://192.168.1.145:8080/api/system/reboot"
     method: POST
 
-  # EDID Control (NEW in v2.5.0)
+  # EDID Control
   orei_set_edid:
     url: "http://192.168.1.145:8080/api/input/{{ input }}/edid"
     method: POST
     content_type: "application/json"
     payload: '{"mode": {{ mode }}}'
 
-  # LCD Control (NEW in v2.5.0)
+  # LCD Control
   orei_set_lcd_timeout:
     url: "http://192.168.1.145:8080/api/system/lcd"
     method: POST
     content_type: "application/json"
     payload: '{"mode": {{ mode }}}'  # 0=Off, 1=Always, 2=15s, 3=30s, 4=60s
 
-  # External Audio Control (NEW in v2.6.0)
+  # External Audio Control
   orei_set_ext_audio_mode:
     url: "http://192.168.1.145:8080/api/ext-audio/mode"
     method: POST
@@ -218,7 +289,7 @@ rest_command:
     content_type: "application/json"
     payload: '{"input": {{ input }}}'
 
-  # Scene Control (NEW in v2.7.0)
+  # Scene Control
   orei_recall_scene:
     url: "http://192.168.1.145:8080/api/scene/{{ scene_id }}/recall"
     method: POST
@@ -227,6 +298,14 @@ rest_command:
     method: POST
     content_type: "application/json"
     payload: '{"id": "{{ scene_id }}", "name": "{{ scene_name }}"}'
+
+  # Profile & Macro (control level)
+  orei_recall_profile:
+    url: "http://192.168.1.145:8080/api/profile/{{ profile_id }}/recall"
+    method: POST
+  orei_run_cec_macro:
+    url: "http://192.168.1.145:8080/api/cec/macro/{{ macro_id }}/execute"
+    method: POST
 
   # CEC commands
   orei_cec_play:
@@ -252,9 +331,54 @@ rest_command:
     method: POST
 ```
 
-### REST Sensor for Matrix Status
+### API key (only needed when the hub's control lock is on)
 
-Monitor matrix state in Home Assistant:
+The hub has an optional **control lock** (`CONTROL_PIN`) and an optional
+**admin PIN** (`ADMIN_PIN`). With neither set, every URL above works as-is.
+
+When the control lock is on, control-level requests (most of what Flic/HA
+send) need an API key; admin requests always need an admin session when an
+admin PIN is set. `X-API-Key` is the header the integration uses; `?key=…`
+is the equivalent on a URL (the Flic guide uses this form).
+
+```bash
+# Create a key (admin session required; cookies carry the session)
+curl -X POST http://192.168.1.145:8080/api/auth/api-keys \
+  -H "Content-Type: application/json" \
+  -b cookies.txt \
+  -d '{"name": "Home Assistant"}'
+# => {"id": "6f1c…", "key": "u3k…<the key value>…"}   (201 Created)
+```
+
+```yaml
+# Use it on a rest_command
+rest_command:
+  orei_preset_2:
+    url: "http://192.168.1.145:8080/api/preset/2?key=u3k…"
+    method: POST
+```
+
+```yaml
+# Or in the rest sensor (header form)
+sensor:
+  - platform: rest
+    name: OREI Matrix Status
+    resource: "http://192.168.1.145:8080/api/status"
+    headers:
+      X-API-Key: "u3k…"
+    value_template: "{{ value_json.power_state }}"
+    json_attributes:
+      - outputs
+      - input_names
+      - output_names
+    scan_interval: 30
+```
+
+`src/rest_api/security.py:api_key_valid` accepts the key from `X-API-Key`
+or `?key=`; the access model is documented in `SECURITY.md` §"Two-level
+access model".
+
+### REST sensor for matrix status
 
 ```yaml
 sensor:
@@ -289,7 +413,7 @@ template:
           {% endif %}
 ```
 
-### Using in Automations
+### Using in automations
 
 ```yaml
 automation:
@@ -337,7 +461,6 @@ automation:
           output: 3  # Office TV
           input: 7   # PC input
 
-  # Scene-based automations (NEW in v2.7.0)
   - alias: "Recall Movie Night Scene"
     trigger:
       - platform: state
@@ -362,7 +485,7 @@ automation:
           scene_name: "Quick Save"
 ```
 
-### Using in Scripts
+### Using in scripts
 
 ```yaml
 script:
@@ -395,9 +518,10 @@ script:
           output: 1
 ```
 
-### Dashboard Cards
+### Dashboard cards
 
-#### Preset Button Row
+#### Preset button row
+
 ```yaml
 type: horizontal-stack
 cards:
@@ -427,7 +551,8 @@ cards:
       service: rest_command.orei_preset_6
 ```
 
-#### Input Navigation Buttons
+#### Input navigation buttons
+
 ```yaml
 type: horizontal-stack
 cards:
@@ -449,7 +574,8 @@ cards:
         output: 1
 ```
 
-#### Matrix Status Card
+#### Matrix status card
+
 ```yaml
 type: entities
 title: OREI Matrix Status
@@ -462,7 +588,8 @@ entities:
     name: Bedroom
 ```
 
-#### Power Control Row
+#### Power control row
+
 ```yaml
 type: horizontal-stack
 cards:
@@ -491,18 +618,24 @@ integration is exercised in a real Home Assistant container by
 `python -m tools.validate run --client ha`.
 
 ### Installation
-1. HACS -> Integrations -> Custom repositories: add this repository (category *Integration*).
+
+1. HACS → Integrations → Custom repositories: add this repository (category *Integration*).
 2. Install **HDMI Matrix** and restart Home Assistant.
-3. Settings -> Devices & services -> Add integration -> **HDMI Matrix**.
+3. Settings → Devices & services → Add integration → **HDMI Matrix**.
 4. Enter the hub's host and port (default 8080). The matrix is identified by its
    MAC, so a later address change keeps entities and history. If the hub's control lock
    is enabled, enter an **API key** too (see [below](#api-key-required-only-when-the-hubs-control-lock-is-on)).
 
+The integration is configured through the standard Home Assistant **config
+flow** (`custom_components/hdmi_matrix/config_flow.py`): an initial *user*
+form with host / port / api-key, a *reconfigure* flow for address changes,
+and an *options* flow for the polling interval and the api-key.
+
 **Reconfigure** (the entry's menu) changes the hub address; it refuses a hub that
 controls a different matrix. **Options** set the polling interval (5-300 s,
-default 15 s).
+default 15 s) and the same API key field.
 
-### API Key (required only when the hub's control lock is on)
+### API key (required only when the hub's control lock is on)
 
 The hub has an optional control lock (`CONTROL_PIN`). It is **off by default**, and
 while it is off the API key field is not needed — leave it empty.
@@ -549,13 +682,14 @@ curl http://192.168.1.145:8080/api/auth/status
 `headers: {"X-API-Key": "<key>"}` to the command, or append `?key=<key>` to the URL.
 
 ### Entities (one device per matrix, names include the hub's port names)
+
 | Entity | What it does |
 | --- | --- |
 | `select` Output N source | Input shown on output N; options are the hub's input names |
 | `switch` Power | Matrix on / standby |
 | `switch` Output N mute / Output N stream | Audio mute and video stream of output N |
 | `button` Recall preset N | Recalls preset slot N (1-8) |
-| `button` Reboot | Restarts the matrix (configuration category) |
+| `button` Reboot | Restarts the matrix (admin route) |
 | `binary_sensor` Input N signal | On while the source on input N sends video |
 | `binary_sensor` Output N display | On while a display is connected to output N |
 
@@ -563,6 +697,7 @@ Entities become unavailable (not "off") when the hub or the matrix cannot be rea
 Renaming an input, output or preset on the hub renames the entities after the next poll.
 
 ### Services
+
 All three accept an optional `config_entry_id` or `device_id`; without one, the
 only configured matrix is used. Invalid values are rejected before anything is
 sent, and a failure reported by the hub is raised as an error.
@@ -573,6 +708,8 @@ sent, and a failure reported by the hub is raised as an error.
 | `hdmi_matrix.switch_input` | `output` (1-8), `input` (1-8) |
 | `hdmi_matrix.send_cec_command` | `port_type` (`input` / `output`), `port_num` (1-8), `command`: sources accept `power_on`, `power_off`, `up`, `down`, `left`, `right`, `select`, `menu`, `back`, `previous`, `play`, `pause`, `stop`, `next`, `rewind`, `fast_forward`, `mute`, `volume_down`, `volume_up`; displays accept `power_on`, `power_off`, `mute`, `volume_down`, `volume_up`, `active` |
 
+The full service schema lives in `custom_components/hdmi_matrix/services.yaml`.
+
 ---
 
 ## Alexa Integration (via Home Assistant)
@@ -580,17 +717,21 @@ sent, and a failure reported by the hub is raised as an error.
 Once integrated with Home Assistant, you can expose entities to Alexa:
 
 ### Using Home Assistant Cloud (Nabu Casa)
+
 1. Subscribe to Nabu Casa
 2. Link Alexa skill
 3. Expose OREI entities
 
 ### Voice Commands
+
 - *"Alexa, turn on PS5"* → Triggers preset 6
 - *"Alexa, switch to Apple TV"* → Triggers preset 2
 - *"Alexa, turn off the matrix"* → Power off
 
 ### Routine Examples
+
 Create Alexa routines that trigger HA automations:
+
 - *"Alexa, movie time"* → Dim lights + Switch to Shield + Start Plex
 - *"Alexa, gaming mode"* → Switch to PS5 + Set game picture mode
 
@@ -617,6 +758,7 @@ in. The key travels as an HTTP header over the hub's plain-HTTP REST API, so kee
 Assistant and the hub on a trusted LAN or a VPN.
 
 ### REST Commands Not Working
+
 1. Verify the integration is running:
    ```bash
    curl http://192.168.1.145:8080/api/status
@@ -625,15 +767,20 @@ Assistant and the hub on a trusted LAN or a VPN.
 3. Verify network connectivity from HA to Docker host
 
 ### Sensor Not Updating
+
 - Check `scan_interval` setting (default 30 seconds)
 - Verify the API returns valid JSON
 - Check HA developer tools for sensor attributes
 
 ### Template Sensors Show "Unknown"
+
 - Wait for first sensor update after restart
 - Verify the REST sensor is returning data
 - Check template syntax in developer tools
 
----
+### Admin actions (`/api/system/reboot`, rename output, etc.) return 401
 
-*Last updated: REST API v2.10.0*
+The admin PIN is set on the hub. The HACS integration does **not** store an
+admin PIN: open the hub's Web UI (`http://HUB/ui`), sign in, and run the
+action from there (or unlock the admin session programmatically with
+`POST /api/auth/unlock` and pass the session cookie).
