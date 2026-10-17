@@ -16,6 +16,10 @@ class MatrixApp {
     async init() {
         Logger.info('OREI Matrix Control initializing...');
 
+        // Load shared editor behavior without changing the baseline HTML shells.
+        await import('./components/editor-shell.js');
+        window.EditorShell.installSceneEditor(window.sceneEditor, state);
+
         // Phase 7: Migrate localStorage favorites/dashboard to server before initial load
         await this.migrateLocalStorageToServer();
 

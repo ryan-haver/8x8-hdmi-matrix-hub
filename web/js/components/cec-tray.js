@@ -5,6 +5,8 @@
  * Supports manual target override, position customization, and scene-based CEC profiles.
  */
 
+const cecRemoteReady = import('./cec-remote.js');
+
 class CECTray {
     constructor() {
         this.isExpanded = false;
@@ -249,17 +251,11 @@ class CECTray {
     attachWidgetEventListeners(widgetEl) {
         if (!widgetEl) return;
         
-        // Command buttons
-        widgetEl.querySelectorAll('.cec-widget-cmd-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const action = btn.dataset.action;
-                const cmd = btn.dataset.cmd;
-                if (action && cmd) {
-                    this.executeCommand(action, cmd);
-                }
-            });
-        });
-        
+        cecRemoteReady.then(() => window.CecRemote.attachEvents(widgetEl, {
+            commandSelector: '.cec-widget-cmd-btn',
+            onCommand: (cmd, action) => this.executeCommand(action, cmd)
+        }));
+
         // Target buttons
         widgetEl.querySelectorAll('.cec-widget-target-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -270,120 +266,17 @@ class CECTray {
             });
         });
         
-        // Initialize trackpad for widget
-        this.initWidgetTrackpad(widgetEl);
     }
     
     /**
      * Initialize trackpad gesture handling for widget
      */
     initWidgetTrackpad(widgetEl) {
-        const trackpad = widgetEl.querySelector('#cec-widget-trackpad');
-        if (!trackpad) return;
-        
-        const surface = trackpad.querySelector('.trackpad-surface');
-        const feedback = trackpad.querySelector('.trackpad-feedback');
-        
-        let startX = 0;
-        let startY = 0;
-        let startTime = 0;
-        let isActive = false;
-        
-        const SWIPE_THRESHOLD = 30;
-        const TAP_THRESHOLD = 10;
-        const TAP_TIME = 300;
-        
-        const showFeedback = (direction) => {
-            feedback.className = 'trackpad-feedback';
-            feedback.classList.add('active', direction);
-            setTimeout(() => {
-                feedback.classList.remove('active', direction);
-            }, 200);
-        };
-        
-        const handleGestureEnd = (endX, endY) => {
-            if (!isActive) return;
-            isActive = false;
-            
-            const deltaX = endX - startX;
-            const deltaY = endY - startY;
-            const deltaTime = Date.now() - startTime;
-            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-            
-            if (deltaTime < TAP_TIME && distance < TAP_THRESHOLD) {
-                showFeedback('tap');
-                this.sendNavCommand('select');
-                return;
-            }
-            
-            if (distance >= SWIPE_THRESHOLD) {
-                const absX = Math.abs(deltaX);
-                const absY = Math.abs(deltaY);
-                
-                if (absX > absY) {
-                    if (deltaX > 0) {
-                        showFeedback('right');
-                        this.sendNavCommand('right');
-                    } else {
-                        showFeedback('left');
-                        this.sendNavCommand('left');
-                    }
-                } else {
-                    if (deltaY > 0) {
-                        showFeedback('down');
-                        this.sendNavCommand('down');
-                    } else {
-                        showFeedback('up');
-                        this.sendNavCommand('up');
-                    }
-                }
-            }
-        };
-        
-        // Touch events
-        surface.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            const touch = e.touches[0];
-            startX = touch.clientX;
-            startY = touch.clientY;
-            startTime = Date.now();
-            isActive = true;
-            surface.classList.add('touching');
-        }, { passive: false });
-        
-        surface.addEventListener('touchend', (e) => {
-            surface.classList.remove('touching');
-            if (e.changedTouches.length > 0) {
-                const touch = e.changedTouches[0];
-                handleGestureEnd(touch.clientX, touch.clientY);
-            }
-        });
-        
-        surface.addEventListener('touchcancel', () => {
-            surface.classList.remove('touching');
-            isActive = false;
-        });
-        
-        // Mouse events
-        surface.addEventListener('mousedown', (e) => {
-            startX = e.clientX;
-            startY = e.clientY;
-            startTime = Date.now();
-            isActive = true;
-            surface.classList.add('touching');
-        });
-        
-        surface.addEventListener('mouseup', (e) => {
-            surface.classList.remove('touching');
-            handleGestureEnd(e.clientX, e.clientY);
-        });
-        
-        surface.addEventListener('mouseleave', () => {
-            surface.classList.remove('touching');
-            isActive = false;
-        });
+        return cecRemoteReady.then(() => window.CecRemote.attachTrackpad(
+            widgetEl.querySelector('.trackpad-surface'), cmd => this.sendNavCommand(cmd)
+        ));
     }
-    
+
     /**
      * Show target selector dropdown for widget
      */
@@ -809,16 +702,11 @@ class CECTray {
             }
         });
         
-        // Command buttons
-        this.panel.addEventListener('click', (e) => {
-            const cmdBtn = e.target.closest('.cec-tray-cmd-btn');
-            if (cmdBtn) {
-                const action = cmdBtn.dataset.action;
-                const cmd = cmdBtn.dataset.cmd;
-                this.executeCommand(action, cmd);
-            }
-        });
-        
+        cecRemoteReady.then(() => window.CecRemote.attachEvents(this.panel, {
+            commandSelector: '.cec-tray-cmd-btn',
+            onCommand: (cmd, action) => this.executeCommand(action, cmd)
+        }));
+
         // Macro buttons
         this.panel.addEventListener('click', (e) => {
             const macroBtn = e.target.closest('.cec-tray-macro-btn');
@@ -846,8 +734,8 @@ class CECTray {
         // Edit macros button
         this.panel.addEventListener('click', (e) => {
             if (e.target.closest('.cec-tray-edit-macros-btn') || e.target.closest('.cec-tray-macro-more')) {
-                if (typeof cecMacroEditor !== 'undefined') {
-                    cecMacroEditor.open();
+                if (window.cecMacroEditor) {
+                    window.cecMacroEditor.open();
                 }
             }
         });
@@ -1481,116 +1369,11 @@ class CECTray {
      * Initialize trackpad gesture handling
      */
     initTrackpad() {
-        const trackpad = this.panel.querySelector('#cec-trackpad');
-        if (!trackpad) return;
-        
-        const surface = trackpad.querySelector('.trackpad-surface');
-        const feedback = trackpad.querySelector('.trackpad-feedback');
-        
-        let startX = 0;
-        let startY = 0;
-        let startTime = 0;
-        let isActive = false;
-        
-        const SWIPE_THRESHOLD = 30;  // Minimum distance for swipe
-        const TAP_THRESHOLD = 10;    // Max movement for tap
-        const TAP_TIME = 300;        // Max time for tap (ms)
-        
-        const showFeedback = (direction) => {
-            feedback.className = 'trackpad-feedback';
-            feedback.classList.add('active', direction);
-            setTimeout(() => {
-                feedback.classList.remove('active', direction);
-            }, 200);
-        };
-        
-        const handleGestureEnd = (endX, endY) => {
-            if (!isActive) return;
-            isActive = false;
-            
-            const deltaX = endX - startX;
-            const deltaY = endY - startY;
-            const deltaTime = Date.now() - startTime;
-            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-            
-            // Check for tap (short time, minimal movement)
-            if (deltaTime < TAP_TIME && distance < TAP_THRESHOLD) {
-                showFeedback('tap');
-                this.sendNavCommand('select');
-                return;
-            }
-            
-            // Check for swipe
-            if (distance >= SWIPE_THRESHOLD) {
-                const absX = Math.abs(deltaX);
-                const absY = Math.abs(deltaY);
-                
-                if (absX > absY) {
-                    // Horizontal swipe
-                    if (deltaX > 0) {
-                        showFeedback('right');
-                        this.sendNavCommand('right');
-                    } else {
-                        showFeedback('left');
-                        this.sendNavCommand('left');
-                    }
-                } else {
-                    // Vertical swipe
-                    if (deltaY > 0) {
-                        showFeedback('down');
-                        this.sendNavCommand('down');
-                    } else {
-                        showFeedback('up');
-                        this.sendNavCommand('up');
-                    }
-                }
-            }
-        };
-        
-        // Touch events
-        surface.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            const touch = e.touches[0];
-            startX = touch.clientX;
-            startY = touch.clientY;
-            startTime = Date.now();
-            isActive = true;
-            surface.classList.add('touching');
-        }, { passive: false });
-        
-        surface.addEventListener('touchend', (e) => {
-            surface.classList.remove('touching');
-            if (e.changedTouches.length > 0) {
-                const touch = e.changedTouches[0];
-                handleGestureEnd(touch.clientX, touch.clientY);
-            }
-        });
-        
-        surface.addEventListener('touchcancel', () => {
-            surface.classList.remove('touching');
-            isActive = false;
-        });
-        
-        // Mouse events (for desktop testing)
-        surface.addEventListener('mousedown', (e) => {
-            startX = e.clientX;
-            startY = e.clientY;
-            startTime = Date.now();
-            isActive = true;
-            surface.classList.add('touching');
-        });
-        
-        surface.addEventListener('mouseup', (e) => {
-            surface.classList.remove('touching');
-            handleGestureEnd(e.clientX, e.clientY);
-        });
-        
-        surface.addEventListener('mouseleave', () => {
-            surface.classList.remove('touching');
-            isActive = false;
-        });
+        return cecRemoteReady.then(() => window.CecRemote.attachTrackpad(
+            this.panel.querySelector('.trackpad-surface'), cmd => this.sendNavCommand(cmd)
+        ));
     }
-    
+
     /**
      * Send a navigation command via CEC
      */
@@ -1600,7 +1383,7 @@ class CECTray {
             toast.warning('No navigation target selected');
             return;
         }
-        this.sendCommand('nav', cmd);
+        this.executeCommand('nav', cmd);
     }
 
     /**
