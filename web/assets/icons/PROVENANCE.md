@@ -8,11 +8,11 @@ of unknown origin/licence; `_icon-paths.json` is 2.9 MB and single icons reach
 confirmed, replace it with a permissively licensed set or redraw in-house as
 clean vector paths ... Target < 5 KB per icon."*
 
-Enforced by `tests/test_ui_pwa_icons_shortcuts.py`.
+Enforced by `tests/test_ui_pwa_icons_shortcuts.py` and `tests/test_license_and_protocol_docs.py`.
 
-## Where the icons come from
+## Where the icons came from (Historical Background)
 
-The set was **not** drawn in-house. It was auto-traced from PNG sprites:
+The original icon set was auto-traced from external PNG sprites:
 
 | Step | Tool |
 | --- | --- |
@@ -21,68 +21,37 @@ The set was **not** drawn in-house. It was auto-traced from PNG sprites:
 | Vectorisation | `potrace` (`optTolerance 0.4`, `optCurve true`) + SVGO |
 | Output | one `<path fill="#00e5cc">` per icon on a `viewBox="0 0 1024 1024"` grid |
 
-`scripts/convert-icons-to-svg.js` reads its sources from
+`scripts/convert-icons-to-svg.js` read its sources from
 `C:\Users\ryanh\.gemini\antigravity\brain\03e28c61-...` - a path outside this
-repository. **Those PNGs are not in the repository**, so the sprite artwork
-cannot be re-derived from a clean checkout, and no licence, author or
-attribution for it could be established. The tracer also recorded only what the
-pixel grid resolved to, which is why the outlines carried thousands of
-sub-pixel steps and single icons reached **376 KB** (`htpc.svg` before this
-change).
+repository. **Those PNGs were not in the repository**, so the sprite artwork
+could not be re-derived from a clean checkout, and no licence, author or
+attribution for it could be established. That left the licence status
+**unresolved** and created the provenance risk tracked in **UI-22**.
+The auto-traced files also suffered from extreme size inflation: `_icon-paths.json`
+reached **2.9 MB** and individual files reached **376 KB** (`htpc.svg`).
 
-## What changed on 2026-10-17 (WP-E2, UI-22)
+## Complete In-House Line Vector Replacement (WP-G1, UI-22 Resolution)
 
-`scripts/optimize_device_icons.py` re-traced every icon at the resolution the UI
-actually draws it at (192 px grid), re-fitted the contours as clean Catmull-Rom
-cubics on integer coordinates, dropped tracing speckle, and rewrote each file as
-a single compact path:
+On 2026-10-17, under **WP-G1**, all 57 external SVG icons in `web/assets/icons/svg/`
+were completely replaced with original in-house code-authored vector line geometry
+(`tools/generate_clean_device_icons.py`) under the project's **Mozilla Public License Version 2.0 (MPL-2.0)**:
 
-* **57 files, 3,105,918 -> 128,398 bytes (95.9% smaller).**
-* **Largest file: 5,000 bytes** (`xbox_controller.svg`), budget 5,120 bytes.
-* `_icon-paths.json` regenerated from the new paths: **2,908,419 -> 123,718 bytes**.
-* Fill is now `currentColor`, so the files inherit the surrounding text colour
-  when they are inlined; `viewBox` is unchanged.
+* **100% In-House Code-Authored:** Designed directly in code with clean geometric line primitives (`viewBox="0 0 1024 1024"`, `fill="currentColor"`).
+* **Zero Tracing:** The old unlicensed potrace sprite traces were completely discarded.
+* **Massive Footprint Reduction:**
+  - 57 files: **3,105,918 -> 44,249 bytes (98.6% reduction)** across the entire set.
+  - Largest file: **1,478 bytes** (`nintendo_switch.svg`), well below the **5,120 bytes (5 KB)** budget.
+  - Smallest file: **458 bytes** (`monitor.svg`).
+  - `_icon-paths.json` regenerated: **2,908,419 -> 39,031 bytes (98.7% reduction)**.
+* **Licence Status: RESOLVED (In-House MPL-2.0)**
+  - All 57 device icons are now original works created within this repository under **MPL-2.0**.
+  - The UI-22 distribution blocker and provenance risk are fully resolved.
 
-The pipeline is lossy by design (it drops the tracing hairline work that no
-22-48 px display can resolve), so it refuses to re-trace a file it already
-wrote unless `--force` is passed; re-running is a no-op.
+## Runtime Usage Notes
 
-### Licence status: still open
-
-This change makes the assets *maintainable*, not *licence-clean*. The new
-geometry is a derivative of the same unlicensed PNG sprites, so the provenance
-risk recorded in UI-22 is unchanged:
-
-* the sprite artwork is **not** redistributable until its licence is confirmed,
-  and
-* the release gate *"Licence audit of every bundled asset ... release blocked
-  until UI-22 is resolved"* in `docs/REMEDIATION_PLAN.md` §4.3 stays **open**.
-
-The clean fix is still the one the plan asks for: replace this set with
-permissively licensed line icons (MIT/ISC) or redraw in-house, matching the
-inline icons in `web/js/utils/icon-library.js`. Nothing in the running UI blocks
-that change - see below.
-
-## Findings worth keeping
-
-* **The UI does not load these files.** `IconLibrary.getIconHtml()` -
-   the only icon renderer the UI calls (`icon-picker.js`, profile/preset
-   editors) - always returns the inline 24x24 icons and its own comment says
-   *"External SVGs are disabled due to quality issues"*. The only consumer of
-   these files, `IconLibrary.getIconElement()`, has no callers. The directory
-   is therefore dead weight today, which is why replacing it is low risk.
-* **Seven files are sprite sheets, not single devices**: `apple_tv`,
-  `bluray_player`, `cable_box`, `fire_tv`, `mac_mini`, `roku_stick` and
-  `xbox_series_x` rasterise to a grid of 15-22 device glyphs, because the
-  converter traced the whole sheet into each file.
-* **`device_icons_set.png.svg` has no icon in it.** It contains a loop covering
-   the full `0 0 1024 1024` canvas, so with the non-zero fill rule it renders as
-   a solid block; the 389 glyph loops inside it are absorbed. It is kept only as
-   the record of the sprite trace.
-* Fine interior detail is lost by the budget pass (mean silhouette overlap with
-   the pre-2026-10-17 drawings is 0.89; the sprite sheets and
-   `atari_2600.svg`, which are mostly hairline work, are the outliers). For a
-   22-48 px icon that detail was sub-pixel anyway.
+* **Core UI Inline Icons Unaffected:**
+  `IconLibrary.getIconHtml()` in `web/js/utils/icon-library.js`—the primary renderer called by the UI (`icon-picker.js`, profile/preset editors)—continues to render the 24×24 inline SVG paths authored in JavaScript. Its comment notes: *"External SVGs are disabled due to quality issues"*.
+* `device_icons_set.png.svg` has been redrawn as a clean 8×8 matrix cross-point switch grid symbol on the 1024×1024 canvas (replacing the previous full-canvas solid black block trace).
 
 ## Size budget
 
@@ -90,77 +59,74 @@ Budget: **< 5,120 bytes per SVG** (`docs/REMEDIATION_PLAN.md` target is 5 KB).
 
 | File | Bytes | KiB |
 | --- | ---: | ---: |
-| `apple_tv.svg` | 3,450 | 3.4 |
-| `atari_2600.svg` | 765 | 0.7 |
-| `av_receiver.svg` | 702 | 0.7 |
-| `bedroom.svg` | 3,667 | 3.6 |
-| `bluray_player.svg` | 3,579 | 3.5 |
-| `cable_box.svg` | 3,369 | 3.3 |
-| `chromecast.svg` | 422 | 0.4 |
-| `curved_tv.svg` | 732 | 0.7 |
-| `device_icons_set.png.svg` | 139 | 0.1 |
-| `dreamcast.svg` | 2,085 | 2.0 |
-| `fire_tv.svg` | 3,088 | 3.0 |
-| `game_room.svg` | 3,760 | 3.7 |
-| `gamecube.svg` | 1,524 | 1.5 |
-| `gaming_pc.svg` | 4,565 | 4.5 |
-| `gaming_scene.svg` | 1,729 | 1.7 |
-| `generic_device.svg` | 687 | 0.7 |
-| `generic_input.svg` | 1,491 | 1.5 |
-| `generic_output.svg` | 969 | 0.9 |
-| `hdmi_switch.svg` | 2,510 | 2.5 |
-| `headphones.svg` | 3,940 | 3.8 |
-| `htpc.svg` | 4,701 | 4.6 |
-| `laptop.svg` | 1,073 | 1.0 |
-| `living_room.svg` | 2,280 | 2.2 |
-| `mac_mini.svg` | 2,497 | 2.4 |
-| `monitor.svg` | 3,469 | 3.4 |
-| `movie_scene.svg` | 2,212 | 2.2 |
-| `music_scene.svg` | 2,749 | 2.7 |
-| `n64.svg` | 1,049 | 1.0 |
-| `nes_console.svg` | 1,460 | 1.4 |
-| `nintendo_switch.svg` | 1,453 | 1.4 |
-| `nvidia_shield.svg` | 949 | 0.9 |
-| `office_room.svg` | 3,300 | 3.2 |
-| `playstation_5.svg` | 980 | 1.0 |
-| `projector.svg` | 1,507 | 1.5 |
-| `ps2.svg` | 3,582 | 3.5 |
-| `ps3.svg` | 1,438 | 1.4 |
-| `ps4.svg` | 2,614 | 2.6 |
-| `ps_controller.svg` | 2,967 | 2.9 |
-| `roku_stick.svg` | 3,122 | 3.0 |
-| `security_camera.svg` | 1,942 | 1.9 |
-| `sega_genesis.svg` | 1,283 | 1.3 |
-| `server_rack.svg` | 2,485 | 2.4 |
-| `settings_gear.svg` | 1,764 | 1.7 |
-| `snes_console.svg` | 1,327 | 1.3 |
-| `soundbar.svg` | 2,832 | 2.8 |
-| `speaker.svg` | 3,236 | 3.2 |
-| `sports_scene.svg` | 3,730 | 3.6 |
-| `steam_deck.svg` | 2,199 | 2.1 |
-| `subwoofer.svg` | 3,601 | 3.5 |
-| `tablet.svg` | 269 | 0.3 |
-| `television.svg` | 1,346 | 1.3 |
-| `turntable.svg` | 960 | 0.9 |
-| `wii.svg` | 3,049 | 3.0 |
-| `xbox_360.svg` | 1,050 | 1.0 |
-| `xbox_controller.svg` | 5,000 | 4.9 |
-| `xbox_one.svg` | 2,323 | 2.3 |
-| `xbox_series_x.svg` | 3,484 | 3.4 |
+| `apple_tv.svg` | 609 | 0.6 |
+| `atari_2600.svg` | 790 | 0.8 |
+| `av_receiver.svg` | 861 | 0.8 |
+| `bedroom.svg` | 908 | 0.9 |
+| `bluray_player.svg` | 635 | 0.6 |
+| `cable_box.svg` | 645 | 0.6 |
+| `chromecast.svg` | 599 | 0.6 |
+| `curved_tv.svg` | 669 | 0.7 |
+| `device_icons_set.png.svg` | 971 | 0.9 |
+| `dreamcast.svg` | 822 | 0.8 |
+| `fire_tv.svg` | 777 | 0.8 |
+| `game_room.svg` | 925 | 0.9 |
+| `gamecube.svg` | 818 | 0.8 |
+| `gaming_pc.svg` | 652 | 0.6 |
+| `gaming_scene.svg` | 917 | 0.9 |
+| `generic_device.svg` | 528 | 0.5 |
+| `generic_input.svg` | 704 | 0.7 |
+| `generic_output.svg` | 558 | 0.5 |
+| `hdmi_switch.svg` | 953 | 0.9 |
+| `headphones.svg` | 850 | 0.8 |
+| `htpc.svg` | 651 | 0.6 |
+| `laptop.svg` | 592 | 0.6 |
+| `living_room.svg` | 1,115 | 1.1 |
+| `mac_mini.svg` | 521 | 0.5 |
+| `monitor.svg` | 458 | 0.4 |
+| `movie_scene.svg` | 990 | 1.0 |
+| `music_scene.svg` | 499 | 0.5 |
+| `n64.svg` | 805 | 0.8 |
+| `nes_console.svg` | 798 | 0.8 |
+| `nintendo_switch.svg` | 1,478 | 1.4 |
+| `nvidia_shield.svg` | 529 | 0.5 |
+| `office_room.svg` | 644 | 0.6 |
+| `playstation_5.svg` | 850 | 0.8 |
+| `projector.svg` | 1,112 | 1.1 |
+| `ps2.svg` | 716 | 0.7 |
+| `ps3.svg` | 636 | 0.6 |
+| `ps4.svg` | 582 | 0.6 |
+| `ps_controller.svg` | 1,171 | 1.1 |
+| `roku_stick.svg` | 671 | 0.7 |
+| `security_camera.svg` | 806 | 0.8 |
+| `sega_genesis.svg` | 806 | 0.8 |
+| `server_rack.svg` | 1,184 | 1.2 |
+| `settings_gear.svg` | 1,452 | 1.4 |
+| `snes_console.svg` | 767 | 0.7 |
+| `soundbar.svg` | 630 | 0.6 |
+| `speaker.svg` | 668 | 0.7 |
+| `sports_scene.svg` | 551 | 0.5 |
+| `steam_deck.svg` | 1,018 | 1.0 |
+| `subwoofer.svg` | 603 | 0.6 |
+| `tablet.svg` | 682 | 0.7 |
+| `television.svg` | 515 | 0.5 |
+| `turntable.svg` | 754 | 0.7 |
+| `wii.svg` | 582 | 0.6 |
+| `xbox_360.svg` | 658 | 0.6 |
+| `xbox_controller.svg` | 984 | 1.0 |
+| `xbox_one.svg` | 521 | 0.5 |
+| `xbox_series_x.svg` | 578 | 0.6 |
 
 `web/assets/favicon.svg` (908 bytes, referenced by `web/manifest.json` and the
 `<link rel="icon">` in `index.html`) is hand-drawn in this repository: flat
 rounded rectangles for the matrix panel and its inputs, `#3b82f6`/`#2563eb`
 gradient, no external source.
 
-## Rebuilding
+## Rebuilding Clean Icons
 
 ```bash
-python scripts/optimize_device_icons.py           # rewrite any traced icon
-python scripts/optimize_device_icons.py --check   # report only, write nothing
-python scripts/optimize_device_icons.py --render out.png television
+python tools/generate_clean_device_icons.py
 ```
 
-Standard library only (Pillow is used solely by `--render`).
-`tests/test_ui_pwa_icons_shortcuts.py` fails if any SVG goes back over the
-budget, loses its `viewBox` or stops using `currentColor`.
+Generates all 57 SVG files and `_icon-paths.json` from original vector primitives.
+`tests/test_ui_pwa_icons_shortcuts.py` fails if any SVG goes over the budget, loses its `viewBox` or stops using `currentColor`.
