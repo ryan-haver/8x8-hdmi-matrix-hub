@@ -150,13 +150,23 @@ def test_free_port_skips_ports_bound_on_all_interfaces(monkeypatch):
         first_call = True
 
         class _ProbeSocket(real_socket):
+            _faked_port: int | None = None
+
             def bind(self, address):  # type: ignore[override]
                 nonlocal first_call
                 host, port = address
-                if first_call and port == 0:
+                if first_call and port == 0 and host != "0.0.0.0":
                     first_call = False
-                    return super().bind((host, held_port))
+                    # Simulate Windows allowing bind(('127.0.0.1', held_port)) while
+                    # 0.0.0.0:held_port is held (Linux raises EADDRINUSE on bind itself).
+                    self._faked_port = held_port
+                    return None
                 return super().bind(address)
+
+            def getsockname(self):  # type: ignore[override]
+                if self._faked_port is not None:
+                    return ("127.0.0.1", self._faked_port)
+                return super().getsockname()
 
         monkeypatch.setattr("tools.validate.stack.socket.socket", _ProbeSocket)
         picked = free_port("127.0.0.1")
@@ -203,4 +213,17 @@ def test_hub_process_retries_when_an_auto_picked_port_is_taken_before_bind(tmp_p
     finally:
         hub.stop()
         holder.close()
+
+
+async def test_ha_client_stop_clears_entry_id_and_registry():
+    """When _run_client restarts HomeAssistantClient for a scenario environment change (e.g. faults),
+    stop() must clear entry_id and _registry so the fresh container adds a new config entry."""
+    from tools.validate.clients.ha import HomeAssistantClient
+
+    ha = HomeAssistantClient()
+    ha.entry_id = "01OLDENTRYID"
+    ha._registry = {"uid_1": {"entity_id": "switch.output_1_mute"}}
+    await ha.stop()
+    assert ha.entry_id is None
+    assert ha._registry == {}
 
