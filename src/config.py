@@ -11,6 +11,8 @@ import os
 from dataclasses import dataclass, field
 from typing import Any
 
+from password import ensure_hashed_passcode, needs_passcode
+
 _LOG = logging.getLogger(__name__)
 
 
@@ -384,8 +386,17 @@ class Profile:
     # Phase 8: Execution history (last 7 days)
     execution_log: list[dict] = field(default_factory=list)  # [{timestamp, scene_id, scene_name, status, error}]
 
-    def to_dict(self) -> dict[str, Any]:
-        """Convert to dictionary."""
+    def is_password_protected(self) -> bool:
+        """True if a passcode is needed to run this profile (the flag or a stored hash; fails closed)."""
+        return self.password_protected or needs_passcode(self.passcode_hash)
+
+    def to_dict(self, include_hash: bool = False) -> dict[str, Any]:
+        """
+        Convert to dictionary.
+
+        :param include_hash: include ``passcode_hash``; only for persistence,
+                             never for clients (SEC-04 / F-SEC-005)
+        """
         result = {
             "id": self.id,
             "name": self.name,
@@ -397,10 +408,11 @@ class Profile:
             "favorite": self.favorite,
             "dashboard_visible": self.dashboard_visible,
             "dashboard_order": self.dashboard_order,
-            "password_protected": self.password_protected,
-            "passcode_hash": self.passcode_hash,
+            "password_protected": self.is_password_protected(),
             "execution_log": list(self.execution_log),
         }
+        if include_hash:
+            result["passcode_hash"] = self.passcode_hash
         if self.cec_config is not None:
             result["cec_config"] = self.cec_config.to_dict()
         if self.power_on_macro:
@@ -435,7 +447,8 @@ class Profile:
             dashboard_visible=data.get("dashboard_visible", False),
             dashboard_order=data.get("dashboard_order", 0),
             password_protected=bool(data.get("password_protected", False)),
-            passcode_hash=data.get("passcode_hash", ""),
+            # A raw PIN found on load is hashed (F-SEC-004)
+            passcode_hash=ensure_hashed_passcode(data.get("passcode_hash")) or "",
             execution_log=list(data.get("execution_log", [])),
         )
 
@@ -526,11 +539,17 @@ class ProfileManager:
             with open(self.profiles_file, encoding="utf-8") as f:
                 data = json.load(f)
                 self._profiles = {}
+                rehashed = False
                 for profile_data in data.get("profiles", []):
                     profile = Profile.from_dict(profile_data)
                     self._profiles[profile.id] = profile
+                    rehashed |= profile.passcode_hash != (profile_data.get("passcode_hash") or "")
                 _LOG.info("Loaded %d profiles", len(self._profiles))
-                return True
+            if rehashed:
+                # Replace the plaintext PIN on disk with its hash (F-SEC-004)
+                _LOG.warning("Hashed a plaintext profile passcode found in %s", self.profiles_file)
+                self.save()
+            return True
         except Exception as ex:
             _LOG.error("Failed to load profiles: %s", ex)
             return False
@@ -558,7 +577,7 @@ class ProfileManager:
         """Save profiles to file atomically."""
         try:
             os.makedirs(self.config_dir, exist_ok=True)
-            data = {"version": 2, "profiles": [p.to_dict() for p in self._profiles.values()]}
+            data = {"version": 2, "profiles": [p.to_dict(include_hash=True) for p in self._profiles.values()]}
             from _file_io import atomic_write_json
             atomic_write_json(self.profiles_file, data)
             _LOG.info("Saved %d profiles", len(self._profiles))
@@ -579,6 +598,8 @@ class ProfileManager:
                 "macro_count": len(p.macros),
                 "pinned": p.pinned,
                 "pin_order": p.pin_order,
+                # UI-47: the Settings drawer shows a lock for protected profiles
+                "password_protected": p.is_password_protected(),
             }
             for p in self._profiles.values()
         ]
@@ -586,6 +607,10 @@ class ProfileManager:
     def get_profile(self, profile_id: str) -> Profile | None:
         """Get a profile by ID."""
         return self._profiles.get(profile_id)
+
+    def get_profiles_map(self) -> dict[str, Profile]:
+        """``{profile_id: Profile}`` for every profile (a copy; for scene PIN inheritance checks)."""
+        return dict(self._profiles)
 
     def create_profile(
         self,
@@ -599,8 +624,21 @@ class ProfileManager:
         power_off_macro: str | None = None,
         pinned: bool | None = None,
         pin_order: int | None = None,
+        password_protected: bool | None = None,
+        passcode_hash: str | None = None,
     ) -> Profile:
-        """Create or update a profile."""
+        """
+        Create or update a profile.
+
+        ``password_protected`` / ``passcode_hash`` left as None keep the PIN of
+        the profile being replaced, so overwriting a protected profile never
+        drops its protection (SEC-05).
+        """
+        existing = self._profiles.get(profile_id)
+        if password_protected is None:
+            password_protected = existing.password_protected if existing else False
+        if passcode_hash is None:
+            passcode_hash = existing.passcode_hash if existing else ""
         profile_outputs = {}
         for output_num, config in outputs.items():
             profile_outputs[int(output_num)] = SceneOutput.from_dict(config)
@@ -637,6 +675,8 @@ class ProfileManager:
             power_off_macro=power_off_macro,
             pinned=pinned,
             pin_order=pin_order,
+            password_protected=password_protected,
+            passcode_hash=passcode_hash,
         )
         self._profiles[profile_id] = profile
         self.save()
