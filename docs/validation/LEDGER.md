@@ -1,7 +1,7 @@
 # Feature ledger
 
 > **Generated** by `python -m tools.validate ledger` — do not edit by hand. Registry: [`features.yaml`](features.yaml) · Plan: [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md) · How to add evidence: [`README.md`](README.md).
-> Commit `02bc90a4`
+> Commit `5d5cd412`
 
 **Level** = highest level with fresh passing evidence, else the recorded baseline (the registry's `current`), capped at V1 while an open critical/high finding is linked. **Recorded** = the registry baseline. **Fresh** = evidence commit not older than the last change to the scenario's `covers` paths.
 
@@ -19,9 +19,9 @@
 | Home Assistant component | 18 | 0 | 1 | 0 | 17 | 0 | 0 | 18 | 17 |
 | Flic | 10 | 3 | 7 | 0 | 0 | 0 | 0 | 10 | 0 |
 | Deployment, configuration, persistence | 20 | 3 | 8 | 2 | 7 | 0 | 0 | 20 | 7 |
-| Security controls | 15 | 9 | 5 | 0 | 1 | 0 | 0 | 14 | 0 |
+| Security controls | 15 | 0 | 13 | 0 | 2 | 0 | 0 | 13 | 0 |
 | Reliability | 18 | 12 | 3 | 1 | 2 | 0 | 0 | 18 | 5 |
-| **All** | **268** | **33** | **133** | **27** | **75** | **0** | **0** | **236** | **153** |
+| **All** | **268** | **24** | **141** | **27** | **76** | **0** | **0** | **235** | **153** |
 
 Levels: **V0** Claimed · **V1** Unit · **V2** Simulated integration · **V3** End-to-end · **V4** Hardware · **V5** Field
 
@@ -39,13 +39,13 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | Home Assistant component | 0 | 1 | 0 | 17 | 0 | 0 |
 | Flic | 3 | 7 | 0 | 0 | 0 | 0 |
 | Deployment, configuration, persistence | 3 | 8 | 2 | 7 | 0 | 0 |
-| Security controls | 9 | 5 | 0 | 1 | 0 | 0 |
+| Security controls | 0 | 13 | 0 | 2 | 0 | 0 |
 | Reliability | 12 | 3 | 1 | 2 | 0 | 0 |
-| **All** | **33** | **133** | **27** | **75** | **0** | **0** |
+| **All** | **24** | **141** | **27** | **76** | **0** | **0** |
 
 - Features with fresh passing scenario evidence: **0** of 268.
 - Features with a fresh failing scenario: **0**.
-- Features capped at V1 by an open critical/high finding: **28**.
+- Features capped at V1 by an open critical/high finding: **12**.
 
 ## Matrix control (F-MTX)
 
@@ -112,28 +112,28 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-API-007 | POST /api/preset/{preset} (recall) | V3 | V2 | V2 | stale | [presets.recall·api·pass](evidence/F-MTX-003/2026-10-04-V2-d6baf3ca-presets.recall-api.json)<br>[presets.recall·api·pass](evidence/F-MTX-003/2026-10-10-V2-b6dbfaca-presets.recall-api.json) | — |
 | F-API-008 | POST /api/preset/{preset}/save | V2 | V1 | V1 | stale | [preset_read.saved_partial_1·api·pass](evidence/F-DOM-034/2026-10-04-V2-7dbc4dc7-preset_read.saved_partial_1-api.json)<br>[preset_read.saved_partial_2·api·pass](evidence/F-DOM-034/2026-10-04-V2-7dbc4dc7-preset_read.saved_partial_2-api.json) | — |
 | F-API-009 | POST /api/power/on\|off | V3 | V1 | V1 | stale | [power.standby·api·pass](evidence/F-MTX-006/2026-10-04-V2-7dbc4dc7-power.standby-api.json)<br>[power.wake·api·pass](evidence/F-MTX-006/2026-10-04-V2-7dbc4dc7-power.wake-api.json) | — |
-| F-API-010 | Output setting routes (mute, enable, hdcp, hdr, scaler, arc) | V2 | V1 | V1 | — | — | API-15(L) |
+| F-API-010 | Output setting routes (mute, enable, hdcp, hdr, scaler, arc) | V2 | V1 | V1 | — | — | — |
 | F-API-011 | EDID routes | V2 | V1 | V1 | — | — | — |
 | F-API-012 | External audio routes | V2 | V1 | V1 | — | — | — |
 | F-API-013 | System setting routes (beep, panel lock, LCD, reboot) | V2 | V1 | V1 | stale | [reboot.direct·api·pass](evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.direct-api.json)<br>[reboot.enabled_shortcut·api·pass](evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.enabled_shortcut-api.json) | — |
-| F-API-014 | System info and storage routes | V2 | V1 | V1 | stale | [contracts.storage·api·pass](evidence/F-API-014/2026-10-04-V2-7dbc4dc7-contracts.storage-api.json)<br>[contracts.system_info·api·pass](evidence/F-API-014/2026-10-04-V2-7dbc4dc7-contracts.system_info-api.json) | SEC-11(L) |
+| F-API-014 | System info and storage routes | V2 | V1 | V1 | stale | [contracts.storage·api·pass](evidence/F-API-014/2026-10-04-V2-7dbc4dc7-contracts.storage-api.json)<br>[contracts.system_info·api·pass](evidence/F-API-014/2026-10-04-V2-7dbc4dc7-contracts.system_info-api.json) | — |
 | F-API-015 | CEC command routes | V3 | V1 | V1 | stale | [cec_controls.input_command_port_0·api·pass](evidence/F-API-015/2026-10-04-V2-7dbc4dc7-cec_controls.input_command_port_0-api.json)<br>[cec_controls.input_command_port_9·api·pass](evidence/F-API-015/2026-10-04-V2-7dbc4dc7-cec_controls.input_command_port_9-api.json) | — |
 | F-API-016 | CEC catalogue, capability and enable routes | V2 | V1 | V1 | stale | [writes.cec_output_enable·api·fail](evidence/F-API-016/2026-10-01-V2-72cc71dc-writes.cec_output_enable-api.json)<br>[contracts.cec_input_catalog·api·pass](evidence/F-API-016/2026-10-04-V2-7dbc4dc7-contracts.cec_input_catalog-api.json) | — |
 | F-API-017 | Device settings routes (icons, display names, preset names, favourite/dashboard presets) | V2 | V1 | V1 | stale | [contracts.device_settings·api·pass](evidence/F-API-017/2026-10-04-V2-7dbc4dc7-contracts.device_settings-api.json)<br>[contracts.input_settings·api·pass](evidence/F-API-017/2026-10-04-V2-7dbc4dc7-contracts.input_settings-api.json) | — |
 | F-API-018 | Name routes (POST /api/input\|output/{n}/name) | V2 | V0 | V0 | stale | [writes.output_name·api·pass](evidence/F-API-018/2026-10-04-V2-7dbc4dc7-writes.output_name-api.json) | BE-16(M) |
-| F-API-019 | Profile routes | V2 | V1 (capped) | V1 | stale | [writes.profile_cec·api·pass](evidence/F-API-019/2026-10-04-V2-7dbc4dc7-writes.profile_cec-api.json)<br>[writes.profile_macros·api·pass](evidence/F-API-019/2026-10-04-V2-7dbc4dc7-writes.profile_macros-api.json) | SEC-04(H) |
+| F-API-019 | Profile routes | V2 | V1 | V1 | stale | [writes.profile_cec·api·pass](evidence/F-API-019/2026-10-04-V2-7dbc4dc7-writes.profile_cec-api.json)<br>[writes.profile_macros·api·pass](evidence/F-API-019/2026-10-04-V2-7dbc4dc7-writes.profile_macros-api.json) | — |
 | F-API-020 | Scene v1 alias routes (/api/scene*, /api/scenes) | V2 | V1 | V1 | stale | [profile_state.alias_create·api·pass](evidence/F-DOM-001/2026-10-04-V2-7dbc4dc7-profile_state.alias_create-api.json)<br>[profile_state.alias_create_invalid·api·pass](evidence/F-DOM-001/2026-10-04-V2-7dbc4dc7-profile_state.alias_create_invalid-api.json) | API-12(M) |
 | F-API-021 | Scene v2 routes (/api/v2/scenes*) | V2 | **V2** | V2 | stale | [domain_manage.scene_a_list·api·pass](evidence/F-DOM-010/2026-10-04-V2-7dbc4dc7-domain_manage.scene_a_list-api.json)<br>[domain_manage.scene_b_create_reject_body_type·api·pass](evidence/F-DOM-010/2026-10-04-V2-7dbc4dc7-domain_manage.scene_b_create_reject_body_type-api.json) | TST-03(M) |
-| F-API-022 | Response envelope and input validation (4xx before anything reaches the matrix) | V2 | V1 | V1 | stale | [failures.bad_input·api·pass](evidence/F-API-022/2026-10-04-V2-7dbc4dc7-failures.bad_input-api.json) | API-15(L), SEC-11(L), API-21(L) |
+| F-API-022 | Response envelope and input validation (4xx before anything reaches the matrix) | V2 | V1 | V1 | stale | [failures.bad_input·api·pass](evidence/F-API-022/2026-10-04-V2-7dbc4dc7-failures.bad_input-api.json) | API-21(L) |
 | F-API-023 | Macro routes | V2 | V1 | V1 | stale | [domain_manage.macro_update_description_long·api·fail](evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_update_description_long-api.json)<br>[domain_manage.macro_all_commands·api·pass](evidence/F-DOM-019/2026-10-04-V2-7dbc4dc7-domain_manage.macro_all_commands-api.json) | — |
 | F-API-024 | Shortcut routes (/api/system-shortcuts* and the /api/shortcuts* aliases) | V2 | V1 | V1 | stale | [contracts.shortcut_alias·api·pass](evidence/F-API-024/2026-10-04-V2-7dbc4dc7-contracts.shortcut_alias-api.json)<br>[contracts.shortcut_dashboard·api·pass](evidence/F-API-024/2026-10-04-V2-7dbc4dc7-contracts.shortcut_dashboard-api.json) | — |
 | F-API-025 | Dashboard layout routes | V2 | V1 | V1 | stale | [dashboard.widget_card_refused·api·pass](evidence/F-DOM-031/2026-10-10-V2-b3aced1b-dashboard.widget_card_refused-api.json)<br>[dashboard.widget_cards_dropped·api·pass](evidence/F-DOM-031/2026-10-10-V2-b3aced1b-dashboard.widget_cards_dropped-api.json) | API-20(M) |
 | F-API-026 | Themes and UI preference routes | V2 | V1 | V1 | stale | [contracts.themes·api·pass](evidence/F-API-026/2026-10-04-V2-7dbc4dc7-contracts.themes-api.json)<br>[contracts.ui_preferences·api·pass](evidence/F-API-026/2026-10-04-V2-7dbc4dc7-contracts.ui_preferences-api.json) | — |
-| F-API-027 | Settings routes (matrix host, test connection) | V2 | V1 (capped) | V1 | stale | [contracts.settings·api·pass](evidence/F-API-027/2026-10-04-V2-7dbc4dc7-contracts.settings-api.json)<br>[writes.connection_test·api·pass](evidence/F-API-027/2026-10-04-V2-7dbc4dc7-writes.connection_test-api.json) | SEC-03(C), TST-03(M) |
-| F-API-028 | Flic integration routes | V2 | V0 | V0 | stale | [contracts.flic_buttons·api·pass](evidence/F-API-028/2026-10-04-V2-7dbc4dc7-contracts.flic_buttons-api.json)<br>[writes.flic_register·api·pass](evidence/F-API-028/2026-10-04-V2-7dbc4dc7-writes.flic_register-api.json) | API-15(L), TST-03(M) |
-| F-API-029 | Web UI, kiosk and static asset routes | V3 | **V3** | V3 | — | — | SEC-13(L) |
-| F-API-030 | Rate limiting (60 requests / 10 s per client) | V2 | V1 | V1 | — | — | SEC-12(L), VAL-06(L) |
-| F-API-031 | CORS headers | V2 | V1 (capped) | V1 | — | — | SEC-02(C) |
+| F-API-027 | Settings routes (matrix host, test connection) | V2 | V1 | V1 | stale | [contracts.settings·api·pass](evidence/F-API-027/2026-10-04-V2-7dbc4dc7-contracts.settings-api.json)<br>[writes.connection_test·api·pass](evidence/F-API-027/2026-10-04-V2-7dbc4dc7-writes.connection_test-api.json) | TST-03(M) |
+| F-API-028 | Flic integration routes | V2 | V0 | V0 | stale | [contracts.flic_buttons·api·pass](evidence/F-API-028/2026-10-04-V2-7dbc4dc7-contracts.flic_buttons-api.json)<br>[writes.flic_register·api·pass](evidence/F-API-028/2026-10-04-V2-7dbc4dc7-writes.flic_register-api.json) | TST-03(M) |
+| F-API-029 | Web UI, kiosk and static asset routes | V3 | **V3** | V3 | — | — | — |
+| F-API-030 | Rate limiting (60 requests / 10 s per client) | V2 | V1 | V1 | — | — | — |
+| F-API-031 | CORS headers | V2 | V1 | V1 | — | — | — |
 | F-API-032 | WebSocket /ws: welcome, status snapshot, get_status, matrix link, errors | V2 | **V2** | V2 | stale | [reboot.direct·api·pass](evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.direct-api.json)<br>[reboot.enabled_shortcut·api·pass](evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.enabled_shortcut-api.json) | — |
 | F-API-033 | WS event routing_change (one per changed output, whoever routed) / switch_failed | V3 | V2 | V2 | stale | [routing.switch_one·api·pass](evidence/F-MTX-001/2026-10-04-V2-d6baf3ca-routing.switch_one-api.json)<br>[failures.unreachable_switch·api·pass](evidence/F-REL-009/2026-10-04-V2-7dbc4dc7-failures.unreachable_switch-api.json) | — |
 | F-API-034 | Route to all: routing_change per output that changed / switch_all_failed | V3 | V2 | V2 | stale | [routing.route_all·api·pass](evidence/F-MTX-002/2026-10-04-V2-d6baf3ca-routing.route_all-api.json) | — |
@@ -154,7 +154,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-DOM-002 | Recall a profile: its routing is applied | V4 | V3 | V3 | stale | [profiles.recall_disabled_output·api·pass](evidence/F-DOM-002/2026-10-01-V2-97d0d2af-profiles.recall_disabled_output-api.json)<br>[profiles.recall_rejected·api·pass](evidence/F-DOM-002/2026-10-01-V2-97d0d2af-profiles.recall_rejected-api.json) | API-19(M) |
 | F-DOM-003 | Recall a profile: its output settings (mute, HDR, HDCP, enable) are applied | V4 | V3 | V3 | stale | [profiles.recall_disabled_output·api·pass](evidence/F-DOM-002/2026-10-01-V2-97d0d2af-profiles.recall_disabled_output-api.json)<br>[profiles.recall_disabled_output·browser·pass](evidence/F-DOM-002/2026-10-01-V3-97d0d2af-profiles.recall_disabled_output-browser.json) | — |
 | F-DOM-004 | Recall a profile: its power-on macro runs | V4 | V3 | V3 | stale | [profiles.recall_power_macro·api·fail](evidence/F-DOM-004/2026-09-25-V2-22afc1a7-profiles.recall_power_macro-api.json)<br>[profiles.recall_power_macro·api·pass](evidence/F-DOM-004/2026-10-01-V2-97d0d2af-profiles.recall_power_macro-api.json) | — |
-| F-DOM-005 | Protect a profile with a passcode (per-item PIN) | V3 | V1 (capped) | V1 | stale | [profiles.recall_needs_passcode·api·pass](evidence/F-DOM-005/2026-10-10-V2-b3aced1b-profiles.recall_needs_passcode-api.json)<br>[profiles.recall_with_passcode·api·pass](evidence/F-DOM-005/2026-10-10-V2-b3aced1b-profiles.recall_with_passcode-api.json) | SEC-05(H), SEC-06(H) |
+| F-DOM-005 | Protect a profile with a passcode (per-item PIN) | V3 | V1 | V1 | stale | [profiles.recall_needs_passcode·api·pass](evidence/F-DOM-005/2026-10-10-V2-b3aced1b-profiles.recall_needs_passcode-api.json)<br>[profiles.recall_with_passcode·api·pass](evidence/F-DOM-005/2026-10-10-V2-b3aced1b-profiles.recall_with_passcode-api.json) | — |
 | F-DOM-006 | Favourite, pin, reorder profiles and show them on the dashboard | V3 | V1 | V1 | stale | [profile_crud.dashboard_missing_field·api·pass](evidence/F-DOM-006/2026-10-04-V2-7dbc4dc7-profile_crud.dashboard_missing_field-api.json)<br>[profile_crud.dashboard_post_false·api·pass](evidence/F-DOM-006/2026-10-04-V2-7dbc4dc7-profile_crud.dashboard_post_false-api.json) | API-20(M) |
 | F-DOM-007 | Per-profile CEC targets (nav/playback/volume/power) and auto-resolve | V3 | V1 | V1 | stale | [profile_state.cec_profile_get_default·api·pass](evidence/F-DOM-007/2026-10-04-V2-7dbc4dc7-profile_state.cec_profile_get_default-api.json)<br>[profile_state.cec_profile_get_missing·api·pass](evidence/F-DOM-007/2026-10-04-V2-7dbc4dc7-profile_state.cec_profile_get_missing-api.json) | — |
 | F-DOM-008 | Profile execution log | V3 | V0 | V0 | stale | [profile_state.history_empty·api·pass](evidence/F-DOM-008/2026-10-04-V2-7dbc4dc7-profile_state.history_empty-api.json)<br>[profile_state.history_failure·api·pass](evidence/F-DOM-008/2026-10-04-V2-7dbc4dc7-profile_state.history_failure-api.json) | — |
@@ -164,7 +164,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-DOM-012 | Run a scene: macro steps | V4 | V3 | V3 | stale | [scenes.run_profile_macro_preset·api·pass](evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.run_profile_macro_preset-api.json)<br>[scenes.run_profile_macro_preset·browser·pass](evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.run_profile_macro_preset-browser.json) | — |
 | F-DOM-013 | Run a scene: wait and shortcut steps | V3 | **V3** | V3 | stale | [scenes.wait_between_actions·api·pass](evidence/F-DOM-013/2026-10-01-V2-97d0d2af-scenes.wait_between_actions-api.json)<br>[scenes.wait_edit·api·pass](evidence/F-DOM-013/2026-10-01-V2-97d0d2af-scenes.wait_edit-api.json) | — |
 | F-DOM-014 | Scene overrides (per-run changes to a profile step) | V3 | **V3** | V3 | stale | [scenes.run_profile_macro_preset·api·pass](evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.run_profile_macro_preset-api.json)<br>[scenes.run_profile_macro_preset·browser·pass](evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.run_profile_macro_preset-browser.json) | — |
-| F-DOM-015 | Protect a scene with a passcode | V3 | V1 (capped) | V1 | stale | [scenes.run_protected·api·pass](evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.run_protected-api.json)<br>[scenes.run_protected·browser·pass](evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.run_protected-browser.json) | SEC-05(H), SEC-06(H) |
+| F-DOM-015 | Protect a scene with a passcode | V3 | V1 | V1 | stale | [scenes.run_protected·api·pass](evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.run_protected-api.json)<br>[scenes.run_protected·browser·pass](evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.run_protected-browser.json) | — |
 | F-DOM-016 | Validate a scene and detect conflicting steps | V3 | **V3** | V3 | stale | [scenes.conflicts_visible·api·pass](evidence/F-DOM-016/2026-10-01-V2-97d0d2af-scenes.conflicts_visible-api.json)<br>[scenes.conflicts_visible·browser·pass](evidence/F-DOM-016/2026-10-01-V3-97d0d2af-scenes.conflicts_visible-browser.json) | — |
 | F-DOM-017 | Scene execution history | V3 | **V3** | V3 | stale | [scenes.partial_failure·api·pass](evidence/F-DOM-011/2026-10-01-V2-97d0d2af-scenes.partial_failure-api.json)<br>[scenes.partial_failure·browser·pass](evidence/F-DOM-011/2026-10-01-V3-97d0d2af-scenes.partial_failure-browser.json) | — |
 | F-DOM-018 | Legacy 'scenes' (v1) as aliases of profiles | V2 | V1 | V1 | stale | [domain_manage.legacy_list·api·pass](evidence/F-DOM-018/2026-10-04-V2-7dbc4dc7-domain_manage.legacy_list-api.json)<br>[domain_manage.legacy_recall·api·pass](evidence/F-DOM-018/2026-10-04-V2-7dbc4dc7-domain_manage.legacy_recall-api.json) | API-12(M) |
@@ -209,7 +209,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-UI-016 | Build a CEC macro in the macro editor | V3 | V1 | V1 | — | — | — |
 | F-UI-017 | CEC remote on output/input tiles and the CEC tray | V3 | V1 | V1 | — | — | UI-12(M) |
 | F-UI-018 | Theme presets, customisation and card opacity | V3 | V1 | V1 | — | — | — |
-| F-UI-019 | General settings: matrix host and connection test | V3 | V1 (capped) | V1 | — | — | SEC-03(C), UI-05(M) |
+| F-UI-019 | General settings: matrix host and connection test | V3 | V1 | V1 | — | — | UI-05(M) |
 | F-UI-020 | Hardware settings: beep, panel lock, LCD, reboot | V3 | V1 | V1 | — | — | UI-05(M) |
 | F-UI-021 | Interface settings | V3 | V1 | V1 | — | — | UI-05(M) |
 | F-UI-022 | Shortcuts drawer: run, rename, reorder | V3 | V1 | V1 | — | — | — |
@@ -252,7 +252,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | ID | Feature | Target | Level | Recorded | Freshness | Evidence | Open findings |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | F-UC-001 | Discover the integration and register the driver (mDNS, driver URL) | V4 | V0 | V0 | — | — | UC-11(M) |
-| F-UC-002 | Set up the integration on the Remote | V4 | V1 (capped) | V1 | — | — | UC-02(H) |
+| F-UC-002 | Set up the integration on the Remote | V4 | V1 | V1 | — | — | — |
 | F-UC-003 | Reconfigure the integration (new matrix address) | V4 | V3 | V3 | — | — | — |
 | F-UC-004 | Preset buttons on the Remote | V4 | V3 | V3 | stale | [remote.preset_button·uc·pass](evidence/F-UC-004/2026-10-04-V3-7dbc4dc7-remote.preset_button-uc.json)<br>[remote.preset_names_from_web_app·uc·pass](evidence/F-UC-004/2026-10-04-V3-7dbc4dc7-remote.preset_names_from_web_app-uc.json) | UC-28(M) |
 | F-UC-005 | Matrix remote entity with a preset page | V4 | V3 | V3 | stale | [remote.preset_names_from_web_app·uc·pass](evidence/F-UC-004/2026-10-04-V3-7dbc4dc7-remote.preset_names_from_web_app-uc.json)<br>[remote.matrix_preset_command·uc·pass](evidence/F-UC-005/2026-10-04-V3-7dbc4dc7-remote.matrix_preset_command-uc.json) | UC-12(L) |
@@ -302,7 +302,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-FLIC-004 | Flic Twist cycles an output through its inputs | V3 | V1 | V1 | — | — | — |
 | F-FLIC-005 | Flic Twist controls TV volume and mute over CEC | V3 | V1 | V1 | — | — | BE-14(M) |
 | F-FLIC-006 | Button recalls a profile or runs a macro | V3 | V1 | V1 | — | — | — |
-| F-FLIC-007 | Register Flic buttons with the hub (button registry) | V3 | V0 | V0 | — | — | API-15(L) |
+| F-FLIC-007 | Register Flic buttons with the hub (button registry) | V3 | V0 | V0 | — | — | — |
 | F-FLIC-008 | Button switches every output to input N (POST /api/input/{n}) | V3 | V0 | V0 | — | — | DOC-03(—) |
 | F-FLIC-009 | Flic Hub SDK JavaScript module templates | V3 | V0 | V0 | — | — | — |
 | F-FLIC-010 | Generate Flic request URLs in the web UI | V3 | V1 | V1 | — | — | — |
@@ -318,9 +318,9 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-OPS-005 | Container health check and auto-restart | V4 | V3 | V3 | stale | [deploy.image_core·api·pass](evidence/F-OPS-001/2026-10-03-V3-b30436af-deploy.image_core-api.json)<br>[deploy.image_uc·uc·pass](evidence/F-OPS-001/2026-10-03-V3-b30436af-deploy.image_uc-uc.json) | — |
 | F-OPS-006 | Point the hub at the matrix (MATRIX_HOST / MATRIX_PORT) | V4 | V3 | V3 | stale | [deploy.image_core·api·pass](evidence/F-OPS-001/2026-10-03-V3-b30436af-deploy.image_core-api.json) | DEP-07(M), BE-26(L) |
 | F-OPS-007 | Choose the API port (API_PORT) | V4 | V2 | V2 | — | — | DEP-07(M) |
-| F-OPS-008 | Matrix credentials (OREI_USER / OREI_PASSWORD) | V4 | V1 | V1 | — | — | SEC-10(M) |
-| F-OPS-009 | Verify the matrix TLS certificate (OREI_VERIFY_SSL) | V4 | V0 | V0 | — | — | SEC-09(M) |
-| F-OPS-010 | Log level (LOG_LEVEL) | V4 | V1 | V1 | — | — | SEC-10(M) |
+| F-OPS-008 | Matrix credentials (OREI_USER / OREI_PASSWORD) | V4 | V1 | V1 | — | — | — |
+| F-OPS-009 | Verify the matrix TLS certificate (OREI_VERIFY_SSL) | V4 | V0 | V0 | — | — | — |
+| F-OPS-010 | Log level (LOG_LEVEL) | V4 | V1 | V1 | — | — | — |
 | F-OPS-011 | Enable/disable integrations (UC_ENABLED) | V4 | V3 | V3 | stale | [deploy.image_core·api·pass](evidence/F-OPS-001/2026-10-03-V3-b30436af-deploy.image_core-api.json)<br>[deploy.image_uc·uc·pass](evidence/F-OPS-001/2026-10-03-V3-b30436af-deploy.image_uc-uc.json) | DEP-07(M), BE-20(M) |
 | F-OPS-012 | Background polling (POLLING_ENABLED / POLLING_INTERVAL) | V4 | V0 | V0 | — | — | TST-03(M) |
 | F-OPS-013 | Telnet options (OREI_TELNET_PORT, OREI_USE_TELNET_CEC) | V4 | V1 | V1 | — | — | — |
@@ -336,21 +336,21 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 
 | ID | Feature | Target | Level | Recorded | Freshness | Evidence | Open findings |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| F-SEC-001 | Optional admin / control PIN gate | V3 | V0 (capped) | V0 | — | — | SEC-01(C) |
-| F-SEC-002 | Cross-site request protection (CORS, Origin, Content-Type, Host allow-list) | V3 | V1 (capped) | V1 | — | — | SEC-02(C) |
-| F-SEC-003 | Matrix host changes cannot leak the matrix password (SSRF guard) | V3 | V0 (capped) | V0 | — | — | SEC-03(C) |
-| F-SEC-004 | Profile/scene passcodes are stored as PBKDF2 hashes | V3 | V1 (capped) | V1 | — | — | SEC-06(H) |
-| F-SEC-005 | Passcode hashes are never sent to clients | V3 | V0 (capped) | V0 | — | — | SEC-04(H) |
-| F-SEC-006 | Changing or removing a PIN needs the current PIN | V3 | V0 (capped) | V0 | — | — | SEC-05(H) |
-| F-SEC-007 | Wrong-PIN attempts are limited and do not stall the hub | V3 | V0 (capped) | V0 | — | — | SEC-06(H) |
-| F-SEC-008 | Rate limiting per client | V3 | V1 | V1 | — | — | SEC-12(L), VAL-06(L) |
-| F-SEC-009 | Proxy headers trusted only from configured proxies | V3 | V0 | V0 | — | — | SEC-12(L) |
-| F-SEC-010 | Static files cannot escape the web root | V3 | V1 | V1 | — | — | SEC-13(L) |
-| F-SEC-011 | Error responses do not leak internals | V3 | V1 | V1 | — | — | SEC-11(L) |
+| F-SEC-001 | Optional admin / control PIN gate | V3 | V1 | V1 | — | — | — |
+| F-SEC-002 | Cross-site request protection (CORS, Origin, Content-Type, Host allow-list) | V3 | V1 | V1 | — | — | — |
+| F-SEC-003 | Matrix host changes cannot leak the matrix password (SSRF guard) | V3 | V1 | V1 | — | — | — |
+| F-SEC-004 | Profile/scene passcodes are stored as PBKDF2 hashes | V3 | V1 | V1 | — | — | — |
+| F-SEC-005 | Passcode hashes are never sent to clients | V3 | V1 | V1 | — | — | — |
+| F-SEC-006 | Changing or removing a PIN needs the current PIN | V3 | V1 | V1 | — | — | — |
+| F-SEC-007 | Wrong-PIN attempts are limited and do not stall the hub | V3 | V1 | V1 | — | — | — |
+| F-SEC-008 | Rate limiting per client | V3 | V1 | V1 | — | — | — |
+| F-SEC-009 | Proxy headers trusted only from configured proxies | V3 | V1 | V1 | — | — | — |
+| F-SEC-010 | Static files cannot escape the web root | V3 | V1 | V1 | — | — | — |
+| F-SEC-011 | Error responses do not leak internals | V3 | V1 | V1 | — | — | — |
 | F-SEC-012 | User-provided names are escaped in the UI (no XSS) | V3 | **V3** | V3 | — | — | — |
-| F-SEC-013 | TLS certificate verification / pinning for the matrix | V3 | V0 | V0 | — | — | SEC-09(M) |
-| F-SEC-014 | No credentials in logs | V3 | V0 | V0 | — | — | SEC-10(M) |
-| F-SEC-015 | Remote 3 integration port requires authentication | V3 | V0 (capped) | V0 | — | — | UC-02(H) |
+| F-SEC-013 | TLS certificate verification / pinning for the matrix | V3 | V1 | V1 | — | — | — |
+| F-SEC-014 | No credentials in logs | V3 | V1 | V1 | — | — | — |
+| F-SEC-015 | Remote 3 integration port requires authentication | V3 | **V3** | V3 | — | — | — |
 
 ## Reliability (F-REL)
 
@@ -368,7 +368,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-REL-010 | Status stays fresh (caches expire, one refresh at a time) | V4 | V1 | V1 | — | — | — |
 | F-REL-011 | API calls are not blocked while the hub reconnects | V4 | V0 | V0 | — | — | — |
 | F-REL-012 | Background polling keeps state live without a Remote connected | V4 | V3 | V3 | stale | [live.front_panel_route·browser·pass](evidence/F-MTX-031/2026-10-04-V3-d6baf3ca-live.front_panel_route-browser.json) | — |
-| F-REL-013 | The event loop never stalls (loop-lag metric) | V4 | V1 (capped) | V1 | — | — | SEC-06(H) |
+| F-REL-013 | The event loop never stalls (loop-lag metric) | V4 | V1 | V1 | — | — | — |
 | F-REL-014 | A slow WebSocket client cannot stall commands | V4 | V2 | V2 | — | — | — |
 | F-REL-015 | Tolerate slow and malformed matrix responses | V4 | V1 | V1 | — | — | — |
 | F-REL-016 | Standby does not start reconnect storms or duplicate pollers | V4 | V0 | V0 | — | — | — |

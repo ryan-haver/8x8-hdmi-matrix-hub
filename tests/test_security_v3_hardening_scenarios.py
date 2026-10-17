@@ -419,7 +419,6 @@ async def test_validation_errors_are_generic(hub, raw, message):
     assert sim.state.to_dict() == before
 
 
-@pytest.mark.xfail(strict=True, reason="F-SEC-011: validation errors do not yet emit error_id/X-Error-Id")
 @pytest.mark.parametrize("raw", [b'{"input":', b'{"input":1,"output":9}'])
 async def test_validation_errors_include_correlation_id(hub, raw):
     client, _, _, _ = hub
@@ -480,12 +479,7 @@ def test_invalid_fingerprint_is_rejected(monkeypatch, value):
         _matrix_tls_policy()
 
 
-@pytest.mark.parametrize("key", [
-    "password",
-    pytest.param("passcode", marks=pytest.mark.xfail(strict=True, reason="F-SEC-014: matrix filter only redacts password")),
-    pytest.param("key", marks=pytest.mark.xfail(strict=True, reason="F-SEC-014: matrix filter only redacts password")),
-    pytest.param("auth_token", marks=pytest.mark.xfail(strict=True, reason="F-SEC-014: matrix filter only redacts password")),
-])
+@pytest.mark.parametrize("key", ["password", "passcode", "key", "auth_token"])
 @pytest.mark.parametrize("style", ["structured", "json", "assignment"])
 def test_log_filter_redacts_credentials_without_losing_safe_fields(caplog, key, style):
     """F-SEC-014: exercise the installed filter through logging at DEBUG."""

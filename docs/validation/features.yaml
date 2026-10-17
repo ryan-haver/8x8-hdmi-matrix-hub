@@ -7464,7 +7464,7 @@ features:
 - id: F-SEC-001
   area: security
   title: Optional admin / control PIN gate
-  claim: docs/REMEDIATION_PLAN.md D2, Phase 3 (planned)
+  claim: docs/REMEDIATION_PLAN.md D2, Phase 3
   interfaces:
     rest:
     - all mutating routes
@@ -7479,11 +7479,23 @@ features:
     - DELETE /api/auth/api-keys/{key_id}
     ws: [/ws]
   target: V3
-  current: V0
-  basis: Not implemented yet (Phase 3).
+  current: V1
+  basis: 'tests/test_security_access_and_guards.py and tests/test_security_v3_auth_scenarios.py exercise open, admin-PIN, and admin+control-PIN configurations, session cookies, remembered-device tokens, and API keys against the real hub and simulator; tests/e2e/kiosk-security.spec.ts exercises Kiosk CONTROL_PIN unlock.'
   evidence: []
   findings: [SEC-01]
-  scenarios: []
+  scenarios:
+  - security_auth.admin_pin_blocks_admin_route
+  - security_auth.api_key_not_admin
+  - security_auth.api_key_status_level
+  - security_auth.clear_pin_restores_open
+  - security_auth.control_api_key_routes
+  - security_auth.control_pin_blocks_routing
+  - security_auth.credentials_open
+  - security_auth.matrix_host_admin_pin
+  - security_auth.pin_change_needs_current_pin
+  - security_auth.status_open
+  - security_auth.unlock_admin
+  - security_auth.unlock_wrong_pin
 - id: F-SEC-002
   area: security
   title: Cross-site request protection (CORS, Origin, Content-Type, Host allow-list)
@@ -7493,10 +7505,15 @@ features:
     env: [CORS_ALLOWED_ORIGINS]
   target: V3
   current: V1
-  basis: tests/test_rest_api.py CORS header tests (mocked).
+  basis: 'tests/test_security_access_and_guards.py and tests/test_security_v3_auth_scenarios.py verify Host allow-list / DNS-rebinding rejection, Origin/Referer enforcement, Content-Type: application/json requirement, and WebSocket Origin checks.'
   evidence: []
   findings: [SEC-02]
-  scenarios: []
+  scenarios:
+  - security_auth.cross_site_allowed_origin
+  - security_auth.cross_site_bad_host
+  - security_auth.cross_site_content_type
+  - security_auth.cross_site_origin
+  - security_auth.cross_site_referer
 - id: F-SEC-003
   area: security
   title: Matrix host changes cannot leak the matrix password (SSRF guard)
@@ -7504,11 +7521,17 @@ features:
   interfaces:
     rest: [POST /api/settings/matrix-host]
   target: V3
-  current: V0
-  basis: Not exercised by any test.
+  current: V1
+  basis: 'tests/test_security_ssrf_tls.py and tests/test_security_v3_auth_scenarios.py verify matrix-host password re-entry requirement and SSRF rejection for loopback, link-local, IPv4-mapped IPv6, and cloud metadata addresses.'
   evidence: []
   findings: [SEC-03]
-  scenarios: []
+  scenarios:
+  - security_auth.matrix_host_admin_pin
+  - security_auth.matrix_host_link_local
+  - security_auth.matrix_host_loopback
+  - security_auth.matrix_host_mapped_loopback
+  - security_auth.matrix_host_metadata
+  - security_auth.matrix_host_password_required
 - id: F-SEC-004
   area: security
   title: Profile/scene passcodes are stored as PBKDF2 hashes
@@ -7518,10 +7541,12 @@ features:
     files: [profiles.json passcode_hash]
   target: V3
   current: V1
-  basis: tests/test_password.py.
+  basis: 'tests/test_password.py, tests/test_profiles_scenes_pins.py, and tests/test_security_v3_hardening_scenarios.py verify PBKDF2-HMAC-SHA256 storage, independent per-item salts, and legacy plaintext migration.'
   evidence: []
   findings: [SEC-06]
-  scenarios: []
+  scenarios:
+  - security_hardening.profile_read_protected
+  - security_hardening.scene_read_protected
 - id: F-SEC-005
   area: security
   title: Passcode hashes are never sent to clients
@@ -7529,11 +7554,13 @@ features:
   interfaces:
     rest: ['GET /api/profile/{profile_id}', GET /api/v2/scenes]
   target: V3
-  current: V0
-  basis: No test; the hash is returned today.
+  current: V1
+  basis: 'tests/test_profiles_scenes_pins.py and tests/test_security_v3_hardening_scenarios.py verify passcode_hash is never serialized in profile or scene detail/list responses.'
   evidence: []
   findings: [SEC-04]
-  scenarios: []
+  scenarios:
+  - security_hardening.profile_read_protected
+  - security_hardening.scene_read_protected
 - id: F-SEC-006
   area: security
   title: Changing or removing a PIN needs the current PIN
@@ -7541,11 +7568,22 @@ features:
   interfaces:
     rest: ['PUT /api/profile/{profile_id}', 'PUT /api/v2/scenes/{scene_id}']
   target: V3
-  current: V0
-  basis: No test.
+  current: V1
+  basis: 'tests/test_profiles_scenes_pins.py and tests/test_security_v3_hardening_scenarios.py verify changing/removing a PIN or deleting a protected profile/scene requires current_passcode.'
   evidence: []
   findings: [SEC-05]
-  scenarios: []
+  scenarios:
+  - security_hardening.profile_change_requires_pin
+  - security_hardening.profile_change_with_pin
+  - security_hardening.profile_delete_requires_pin
+  - security_hardening.profile_delete_with_pin
+  - security_hardening.profile_remove_requires_pin
+  - security_hardening.profile_remove_with_pin
+  - security_hardening.scene_change_requires_pin
+  - security_hardening.scene_change_with_pin
+  - security_hardening.scene_delete_requires_pin
+  - security_hardening.scene_remove_requires_pin
+  - security_hardening.scene_remove_with_pin
 - id: F-SEC-007
   area: security
   title: Wrong-PIN attempts are limited and do not stall the hub
@@ -7553,11 +7591,13 @@ features:
   interfaces:
     rest: ['POST /api/profile/{profile_id}/recall']
   target: V3
-  current: V0
-  basis: No test.
+  current: V1
+  basis: 'tests/test_profiles_scenes_pins.py and tests/test_security_v3_hardening_scenarios.py verify per-item exponential lockout (429 + Retry-After) and thread-executor PBKDF2 keeping /api/health loop_lag_ms < 100.'
   evidence: []
   findings: [SEC-06]
-  scenarios: []
+  scenarios:
+  - security_hardening.profile_wrong_pin
+  - security_hardening.scene_wrong_pin
 - id: F-SEC-008
   area: security
   title: Rate limiting per client
@@ -7566,7 +7606,7 @@ features:
     rest: [all /api routes]
   target: V3
   current: V1
-  basis: tests/test_rest_api.py TestRateLimiting.
+  basis: 'tests/test_rest_api.py TestRateLimiting and tests/test_security_v3_hardening_scenarios.py verify separate read/write rate-limit buckets and /api/health exemption.'
   evidence: []
   findings: [SEC-12, VAL-06]
   scenarios: []
@@ -7577,8 +7617,8 @@ features:
   interfaces:
     env: [TRUST_PROXY_HEADERS, TRUSTED_PROXY_IPS]
   target: V3
-  current: V0
-  basis: No test.
+  current: V1
+  basis: 'tests/test_security_v3_hardening_scenarios.py verifies TRUST_PROXY_HEADERS and TRUSTED_PROXY_IPS rightmost-untrusted X-Forwarded-For extraction.'
   evidence: []
   findings: [SEC-12]
   scenarios: []
@@ -7590,10 +7630,12 @@ features:
     rest: ['GET /css/{path}', 'GET /js/{path}', 'GET /assets/{path}']
   target: V3
   current: V1
-  basis: tests/test_rest_api.py TestWebUI::test_directory_traversal_blocked.
+  basis: 'tests/test_security_hardening.py and tests/test_security_v3_hardening_scenarios.py verify resolve() + is_relative_to containment against slash, backslash, and URL-encoded traversal.'
   evidence: []
   findings: [SEC-13]
-  scenarios: []
+  scenarios:
+  - security_hardening.static_traversal_backslash
+  - security_hardening.static_traversal_slash
 - id: F-SEC-011
   area: security
   title: Error responses do not leak internals
@@ -7602,10 +7644,12 @@ features:
     rest: [all routes]
   target: V3
   current: V1
-  basis: tests/test_rest_api.py TestErrorHandling.
+  basis: 'tests/test_security_hardening.py and tests/test_security_v3_hardening_scenarios.py verify generic error messages with correlation IDs (error_id / X-Error-Id) and path-free /api/system/storage.'
   evidence: []
   findings: [SEC-11]
-  scenarios: []
+  scenarios:
+  - security_hardening.invalid_schema
+  - security_hardening.non_object_json
 - id: F-SEC-012
   area: security
   title: User-provided names are escaped in the UI (no XSS)
@@ -7626,8 +7670,8 @@ features:
   interfaces:
     env: [OREI_VERIFY_SSL]
   target: V3
-  current: V0
-  basis: No test.
+  current: V1
+  basis: 'tests/test_security_ssrf_tls.py and tests/test_security_v3_hardening_scenarios.py verify OREI_VERIFY_SSL, MATRIX_CA_CERT, and MATRIX_TLS_FINGERPRINT SHA-256 pinning against real HTTPS handshakes.'
   evidence: []
   findings: [SEC-09]
   scenarios: []
@@ -7638,8 +7682,8 @@ features:
   interfaces:
     env: [LOG_LEVEL]
   target: V3
-  current: V0
-  basis: No test.
+  current: V1
+  basis: 'tests/test_security_ssrf_tls.py and tests/test_security_v3_hardening_scenarios.py verify _PasswordLogFilter redacts password, passcode, key, and auth_token across structured, JSON, and key=value log messages.'
   evidence: []
   findings: [SEC-10]
   scenarios: []
@@ -7650,8 +7694,8 @@ features:
   interfaces:
     uc: ['ws://hub:9095']
   target: V3
-  current: V0
-  basis: Not implemented (Phase 3).
+  current: V3
+  basis: 'V3: tests/uc/test_setup.py and tests/test_security_v3_hardening_scenarios.py::test_uc_auth_token_guards_setup_and_reconfigure exercise a real driver process with UC_AUTH_TOKEN and UcRemoteSim.'
   evidence: []
   findings: [UC-02]
   scenarios: []
