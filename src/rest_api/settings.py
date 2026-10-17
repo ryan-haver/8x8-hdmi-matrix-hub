@@ -2,9 +2,12 @@
 Settings endpoints for backend configuration.
 """
 
+import asyncio
 import ipaddress
 import logging
+import os
 import re
+import socket
 
 from aiohttp import web
 
@@ -13,53 +16,49 @@ from orei_matrix import Events, default_telnet_port
 from .utils import (
     _json_response,
     get_matrix_device,
+    safe_error_message,
 )
 
 _LOG = logging.getLogger("rest_api.settings")
 
-# Blocklist of addresses that must never be used as matrix hosts.
-_SSRF_BLOCKED = {
-    "0.0.0.0",
-    "127.0.0.1",
-    "::1",
-    "169.254.169.254",  # AWS metadata / cloud metadata services
-}
-_SSRF_BLOCKED_CIDRS = [
-    ipaddress.ip_network("127.0.0.0/8"),
-    ipaddress.ip_network("169.254.0.0/16"),
-    ipaddress.ip_network("::1/128"),
-    ipaddress.ip_network("fe80::/10"),
-]
+_ALLOWED_MATRIX_NETWORKS = tuple(ipaddress.ip_network(cidr) for cidr in (
+    "10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "fc00::/7",
+    "192.0.2.0/24", "198.51.100.0/24", "203.0.113.0/24",
+))
 _HOSTNAME_RE = re.compile(r"^[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?)*$")
+_LEGACY_IP_RE = re.compile(r"(?:0x[0-9a-f]+|[0-9]+)(?:\.(?:0x[0-9a-f]+|[0-9]+))*", re.IGNORECASE)
 
 
-def _is_safe_host(host: str) -> bool:
-    """Reject hosts that could be used for SSRF attacks."""
-    host = host.strip()
-    if not host:
+def _is_allowed_address(addr: ipaddress.IPv4Address | ipaddress.IPv6Address) -> bool:
+    """Every DNS answer must meet this policy, including mapped IPv4 addresses."""
+    if isinstance(addr, ipaddress.IPv6Address) and addr.ipv4_mapped:
+        addr = addr.ipv4_mapped
+    if addr.is_loopback or addr.is_link_local or addr.is_unspecified or addr.is_multicast:
         return False
-
-    # Prevent URL schemes from being injected.
-    if "://" in host or "/" in host:
+    if addr in ipaddress.ip_network("169.254.0.0/16"):
         return False
-
-    # IPv4 / IPv6 direct check.
-    try:
-        addr = ipaddress.ip_address(host)
-    except ValueError:
-        pass  # Not an IP — validate hostname.
-    else:
-        if str(addr) in _SSRF_BLOCKED:
-            return False
-        for net in _SSRF_BLOCKED_CIDRS:
-            if addr in net:
-                return False
+    if any(addr in network for network in _ALLOWED_MATRIX_NETWORKS):
         return True
+    return os.environ.get("ALLOW_PUBLIC_MATRIX_HOST", "").lower() == "true" and addr.is_global
 
-    # Hostname validation (must be a valid FQDN).
-    if not _HOSTNAME_RE.fullmatch(host):
+
+async def _is_safe_host(host: str, port: int) -> bool:
+    """Resolve first, then reject the host if any returned address is unsafe."""
+    if not host or "://" in host or "/" in host:
         return False
-    return True
+    try:
+        addresses = [ipaddress.ip_address(host)]
+    except ValueError:
+        if not _HOSTNAME_RE.fullmatch(host) or _LEGACY_IP_RE.fullmatch(host):
+            return False
+        try:
+            answers = await asyncio.get_running_loop().getaddrinfo(
+                host, port, type=socket.SOCK_STREAM,
+            )
+            addresses = [ipaddress.ip_address(answer[4][0]) for answer in answers]
+        except (OSError, ValueError):
+            return False
+    return bool(addresses) and all(_is_allowed_address(addr) for addr in addresses)
 
 
 async def handle_get_settings(request: web.Request) -> web.Response:
@@ -84,7 +83,8 @@ async def handle_set_matrix_host(request: web.Request) -> web.Response:
 
     try:
         body = await request.json()
-        host = body.get("host", "").strip()
+        host_value = body.get("host", "")
+        host = host_value.strip() if isinstance(host_value, str) else ""
         port = body.get("port", 443)
         # BE-32: the Telnet port belongs to this matrix; without one the default applies
         # (OREI_TELNET_PORT, else 23), not the previous matrix's port.
@@ -92,18 +92,24 @@ async def handle_set_matrix_host(request: web.Request) -> web.Response:
 
         if not host:
             return _json_response(False, error="Host is required", status=400)
+        if isinstance(port, bool) or not isinstance(port, int) or not 1 <= port <= 65535:
+            return _json_response(False, error="port must be a port number (1-65535)", status=400)
         if telnet_port is not None and (
             isinstance(telnet_port, bool) or not isinstance(telnet_port, int) or not 1 <= telnet_port <= 65535
         ):
             return _json_response(False, error="telnet_port must be a port number (1-65535)", status=400)
 
         # Validate host to prevent SSRF attacks
-        if not _is_safe_host(host):
+        if not await _is_safe_host(host, port):
             return _json_response(False, error="Invalid host address", status=400)
 
         # Update the matrix device host
         old_host = matrix_device.host
         old_port = matrix_device.port
+        password = body.get("password")
+        if host != old_host and isinstance(getattr(matrix_device, "password", None), str) and matrix_device.password:
+            if not isinstance(password, str) or not password:
+                return _json_response(False, error="Password is required when changing the matrix host", status=400)
 
         _LOG.info(f"Updating matrix host from {old_host}:{old_port} to {host}:{port}")
 
@@ -116,6 +122,8 @@ async def handle_set_matrix_host(request: web.Request) -> web.Response:
         # Update host configuration
         matrix_device.host = host
         matrix_device.port = port
+        if host != old_host and isinstance(password, str) and password:
+            matrix_device.password = password
         matrix_device.telnet_port = telnet_port if telnet_port is not None else default_telnet_port()
 
         # Emit configuration changed event to reset any reconnection tasks
@@ -142,8 +150,7 @@ async def handle_set_matrix_host(request: web.Request) -> web.Response:
         )
 
     except Exception as e:
-        _LOG.exception(f"Error setting matrix host: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "Error setting matrix host"), status=500)
 
 
 async def handle_test_matrix_connection(request: web.Request) -> web.Response:
@@ -186,7 +193,6 @@ async def handle_test_matrix_connection(request: web.Request) -> web.Response:
             )
 
     except Exception as e:
-        _LOG.exception(f"Error testing matrix connection: {e}")
         # FIX (F13.2): return success=False with status 503 instead of
         # success=True with connected=False on exception.
         return _json_response(
@@ -194,7 +200,7 @@ async def handle_test_matrix_connection(request: web.Request) -> web.Response:
             {
                 "connected": False,
                 "host": matrix_device.host if matrix_device else None,
-                "error": str(e),
+                "error": safe_error_message(e, "Error testing matrix connection"),
             },
             status=503,
         )
