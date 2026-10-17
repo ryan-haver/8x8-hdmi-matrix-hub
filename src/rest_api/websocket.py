@@ -10,12 +10,14 @@ poller and the matrix's own change notifications, whatever made the change.
 import asyncio
 import json
 import logging
+import os
 from typing import Any
 
 from aiohttp import WSMsgType, web
 
 from .events import get_event_stream
-from .utils import get_ws_clients
+from .security import allowed_origin, manager
+from .utils import _ws_clients_lock, get_ws_clients
 
 _LOG = logging.getLogger("rest_api.websocket")
 
@@ -57,12 +59,18 @@ async def handle_websocket(request: web.Request) -> web.WebSocketResponse:
     matrix (or ``error`` when the hub cannot read it). ``{"type": "ping"}``,
     the form older web clients send, is answered too.
     """
-    ws = web.WebSocketResponse(heartbeat=HEARTBEAT_SECONDS)
-    await ws.prepare(request)
-
+    origin = request.headers.get("Origin")
+    if origin and not allowed_origin(request, origin):
+        raise web.HTTPForbidden(text="WebSocket Origin denied")
     stream = get_event_stream()
     ws_clients = get_ws_clients()
-    ws_clients.add(ws)
+    ws = web.WebSocketResponse(heartbeat=HEARTBEAT_SECONDS)
+    ws["access_level"] = manager(request).access_level(request)
+    async with _ws_clients_lock:
+        if len(ws_clients) >= int(os.environ.get("MAX_WS_CLIENTS", "32")):
+            raise web.HTTPServiceUnavailable(text="WebSocket client limit reached")
+        await ws.prepare(request)
+        ws_clients.add(ws)
     stream.add_client(ws)
     _LOG.info(f"WebSocket client connected (total: {stream.client_count})")
 
@@ -75,7 +83,8 @@ async def handle_websocket(request: web.Request) -> web.WebSocketResponse:
     except Exception as e:
         _LOG.debug(f"WebSocket connection error: {e}")
     finally:
-        ws_clients.discard(ws)
+        async with _ws_clients_lock:
+            ws_clients.discard(ws)
         await stream.remove_client(ws)
         _LOG.info(f"WebSocket client disconnected (remaining: {stream.client_count})")
 

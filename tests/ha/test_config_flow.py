@@ -12,7 +12,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResultType, InvalidData
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.hdmi_matrix.const import DOMAIN
+from custom_components.hdmi_matrix.const import CONF_API_KEY, DOMAIN
 
 from .helpers import BASE_URL, HOST, MAC, PORT, MockHub, coordinator
 
@@ -54,6 +54,15 @@ async def test_user_flow_success(hass: HomeAssistant, hub: MockHub, mock_setup_e
     assert result["result"].unique_id == MAC
     assert len(mock_setup_entry.mock_calls) == 1
     assert [c[1].path for c in hub.mock.mock_calls] == ["/api/health", "/api/status/device"]
+
+
+async def test_user_flow_with_api_key(hass: HomeAssistant, hub: MockHub, mock_setup_entry) -> None:
+    """A keyed hub receives the key during probing and stores it for runtime requests."""
+    result = await _start_flow(hass)
+    result = await hass.config_entries.flow.async_configure(result["flow_id"], {**USER_INPUT, CONF_API_KEY: "ha-key"})
+    assert result["type"] is FlowResultType.CREATE_ENTRY
+    assert result["data"][CONF_API_KEY] == "ha-key"
+    assert all(headers.get("X-API-Key") == "ha-key" for _, _, _, headers in hub.mock.mock_calls)
 
 
 async def test_user_flow_matrix_offline_uses_address(hass: HomeAssistant, hub: MockHub, mock_setup_entry) -> None:

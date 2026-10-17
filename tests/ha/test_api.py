@@ -62,6 +62,23 @@ async def test_every_response_is_released(server: TestServer) -> None:
         assert not connector._acquired, "a response was not released"  # noqa: SLF001
 
 
+async def test_api_key_is_sent_on_rest_requests() -> None:
+    seen: list[str | None] = []
+
+    async def record(request: web.Request) -> web.Response:
+        seen.append(request.headers.get("X-API-Key"))
+        return web.json_response({"success": True, "data": {}, "error": None})
+
+    app = web.Application()
+    app.router.add_get("/api/health", record)
+    app.router.add_post("/api/power/on", record)
+    async with TestServer(app, host="127.0.0.1") as server, aiohttp.ClientSession() as session:
+        client = HubClient(session, "127.0.0.1", server.port, "ha-key")
+        await client.health()
+        await client.set_power(True)
+    assert seen == ["ha-key", "ha-key"]
+
+
 async def test_unreachable_hub_is_a_connection_error() -> None:
     async with aiohttp.ClientSession() as session:
         client = HubClient(session, "127.0.0.1", 9)  # discard port: connection refused

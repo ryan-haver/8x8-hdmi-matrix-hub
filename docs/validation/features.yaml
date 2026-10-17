@@ -7466,7 +7466,17 @@ features:
   title: Optional admin / control PIN gate
   claim: docs/REMEDIATION_PLAN.md D2, Phase 3 (planned)
   interfaces:
-    rest: [all mutating routes]
+    rest:
+    - all mutating routes
+    - GET /api/auth/status
+    - POST /api/auth/unlock
+    - POST /api/auth/lock
+    - POST /api/auth/pin
+    - GET /api/auth/devices
+    - DELETE /api/auth/devices/{device_id}
+    - GET /api/auth/api-keys
+    - POST /api/auth/api-keys
+    - DELETE /api/auth/api-keys/{key_id}
     ws: [/ws]
   target: V3
   current: V0
