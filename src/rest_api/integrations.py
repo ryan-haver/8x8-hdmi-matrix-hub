@@ -5,40 +5,17 @@ REST API handlers for integration discovery and auto-registration.
 from __future__ import annotations
 
 import logging
-import sys
 from pathlib import Path
 
 from aiohttp import web
 
+import hub.integrations.flic as _flic_mod
 from _file_io import atomic_write_json
+from hub.integrations.flic import (
+    FlicButtonRegistry,
+    FlicIntegration,
+)
 from persistence import get_data_dir
-
-# Ensure local hub package directories are discoverable even if hub was imported
-# from the parent editable install.
-_src_dir = Path(__file__).resolve().parent.parent
-if str(_src_dir) not in sys.path:
-    sys.path.insert(0, str(_src_dir))
-try:
-    import hub
-
-    _local_hub_dir = str(_src_dir / "hub")
-    if _local_hub_dir not in hub.__path__:
-        hub.__path__.append(_local_hub_dir)
-except ImportError:
-    pass
-
-try:
-    import hub.integrations.flic as _flic_mod
-    from hub.integrations.flic import (
-        FlicButtonRegistry,
-        FlicIntegration,
-    )
-except ImportError:
-    import src.hub.integrations.flic as _flic_mod  # type: ignore[no-redef]
-    from src.hub.integrations.flic import (
-        FlicButtonRegistry,
-        FlicIntegration,
-    )
 
 _LOG = logging.getLogger("rest_api.integrations")
 

@@ -17,21 +17,7 @@ from persistence import get_data_dir
 
 _LOG = logging.getLogger("hub.integrations.flic")
 
-# Base class fallback if integration framework base is not yet merged
-try:
-    from hub.integrations.base import Integration
-except ImportError:
-    try:
-        from src.hub.integrations.base import Integration  # type: ignore[no-redef]
-    except ImportError:
-        class Integration:  # type: ignore[no-redef]
-            """Fallback base class when integration framework base is not present."""
-
-            name: str
-            env_flag: str
-
-            def routes(self) -> list[Any]:
-                return []
+from hub.integrations.base import Integration
 
 
 @dataclass(frozen=True)
@@ -209,12 +195,8 @@ class FlicIntegration(Integration):
 
     async def handle_register(self, request: web.Request) -> web.Response:
         """Handle POST /api/integrations/flic/register."""
-        try:
-            from rest_api.utils import _json_response, safe_error_message
-            from rest_api.validation import BadRequestError, parse_json_object
-        except ImportError:
-            from src.rest_api.utils import _json_response, safe_error_message
-            from src.rest_api.validation import BadRequestError, parse_json_object
+        from rest_api.utils import _json_response, safe_error_message
+        from rest_api.validation import BadRequestError, parse_json_object
 
         try:
             body = await parse_json_object(request)
@@ -234,10 +216,7 @@ class FlicIntegration(Integration):
 
     async def handle_get_buttons(self, request: web.Request) -> web.Response:
         """Handle GET /api/integrations/flic/buttons."""
-        try:
-            from rest_api.utils import _json_response, safe_error_message
-        except ImportError:
-            from src.rest_api.utils import _json_response, safe_error_message
+        from rest_api.utils import _json_response, safe_error_message
 
         try:
             buttons = self.registry.list_buttons()

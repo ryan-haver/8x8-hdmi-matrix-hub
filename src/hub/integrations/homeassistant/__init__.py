@@ -13,21 +13,7 @@ _LOG = logging.getLogger("hub.integrations.homeassistant")
 
 SERVICE_TYPE = "_orei-hdmi-matrix._tcp.local."
 
-# Base class fallback if integration framework base is not yet merged
-try:
-    from hub.integrations.base import Integration
-except ImportError:
-    try:
-        from src.hub.integrations.base import Integration  # type: ignore[no-redef]
-    except ImportError:
-        class Integration:  # type: ignore[no-redef]
-            """Fallback base class when integration framework base is not present."""
-
-            name: str
-            env_flag: str
-
-            def routes(self) -> list[Any]:
-                return []
+from hub.integrations.base import Integration
 
 
 def _enabled(val: str) -> bool:
