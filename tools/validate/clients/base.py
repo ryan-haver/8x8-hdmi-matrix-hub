@@ -84,6 +84,9 @@ class Client(ABC):
     async def stop(self) -> None:
         """Release everything started in :meth:`start`."""
 
+    async def prepare(self, action: Action) -> None:  # noqa: B027 - optional hook
+        """Ensure the client is configured and ready before simulator faults are injected."""
+
     async def observe(self, key: str) -> Any:
         """What the client shows for ``key`` (``ClientState``); clients that cannot observe raise."""
         raise NotSupportedError(f"client '{self.name}' cannot observe {key!r}")
