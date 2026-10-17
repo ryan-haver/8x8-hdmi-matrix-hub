@@ -1,0 +1,22 @@
+{
+  "name": "OREI 8x8 HDMI Matrix Control",
+  "short_name": "OREI Matrix",
+  "description": "Control an OREI 8x8 HDMI matrix: routing, presets, scenes, CEC, audio and system settings.",
+  "start_url": "/",
+  "scope": "/",
+  "id": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#09090d",
+  "theme_color": "#00d4ff",
+  "categories": ["utilities", "productivity"],
+  "icons": [
+    {
+      "src": "/assets/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any maskable",
+      "label": "OREI 8x8 HDMI Matrix Control"
+    }
+  ]
+}

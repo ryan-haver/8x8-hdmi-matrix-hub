@@ -4584,10 +4584,10 @@ features:
   title: Web UI, kiosk and static asset routes
   claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
   interfaces:
-    rest: [GET /ui, GET /ui/, GET /kiosk, GET /kiosk/, 'GET /css/{path}', 'GET /js/{path}', 'GET /assets/{path}']
+    rest: [GET /ui, GET /ui/, GET /kiosk, GET /kiosk/, GET /manifest.json, 'GET /css/{path}', 'GET /js/{path}', 'GET /assets/{path}']
   target: V3
   current: V3
-  basis: 'V3: tests/e2e/smoke.spec.ts loads /ui and /kiosk in Chromium with no page errors; tests/test_rest_api.py TestWebUI.'
+  basis: 'V3: tests/e2e/smoke.spec.ts loads /ui and /kiosk in Chromium with no page errors; tests/test_rest_api.py TestWebUI; tests/test_ui_pwa_icons_shortcuts.py reads GET /manifest.json (UI-21).'
   evidence: []
   findings: [SEC-13]
   scenarios: []

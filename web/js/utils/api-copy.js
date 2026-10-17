@@ -10,7 +10,13 @@
 class ApiCopyUtil {
     constructor() {
         this.modal = null;
-        this.baseUrl = `http://${window.location.hostname}:8080`;
+        // UI-18: derive the base URL from the page instead of assuming
+        // "http://<hostname>:8080". Behind a reverse proxy, on HTTPS, or on any
+        // other port the hard-coded value produced copy-paste commands that did
+        // not reach this hub. window.location.origin keeps scheme, host and
+        // port of the page the user is actually on.
+        this.baseUrl = window.location.origin
+            || `${window.location.protocol}//${window.location.host}`;
         // Defer modal creation until needed
     }
     
