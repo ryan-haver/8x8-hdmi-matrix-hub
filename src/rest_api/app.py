@@ -296,6 +296,7 @@ def create_rest_app(data_dir: Path | None = None) -> web.Application:
     app.router.add_get("/api", handle_api_root)
     app.router.add_get("/api/auth/status", auth_status)
     app.router.add_post("/api/auth/unlock", auth_unlock)
+    app.router.add_post("/api/auth/login", auth_unlock)
     app.router.add_post("/api/auth/lock", auth_lock)
     app.router.add_post("/api/auth/pin", auth_pin)
     app.router.add_get("/api/auth/devices", auth_devices)
@@ -367,6 +368,7 @@ def create_rest_app(data_dir: Path | None = None) -> web.Application:
     # Dashboard Layout (Phase 7) — server-backed card ordering
     app.router.add_get("/api/dashboard/layout", handle_get_layout)
     app.router.add_put("/api/dashboard/layout", handle_replace_layout)
+    app.router.add_post("/api/dashboard/layout", handle_replace_layout)
     app.router.add_post("/api/dashboard/cards", handle_add_card)
     app.router.add_delete("/api/dashboard/cards", handle_remove_card)
 
