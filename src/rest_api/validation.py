@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import json
 import re
+import uuid
 from typing import Any
 
 from aiohttp import web
@@ -45,7 +46,11 @@ class BadRequestError(Exception):
 
     def response(self) -> web.Response:
         """The 400 response for this error."""
-        return _json_response(False, error=self.message, status=400)
+        error_id = uuid.uuid4().hex[:8]
+        resp = _json_response(False, error=self.message, status=400)
+        body = json.loads(resp.text or "{}")
+        body["error_id"] = error_id
+        return web.json_response(body, status=400, headers={"X-Error-Id": error_id})
 
 
 async def parse_json_object(request: web.Request, *, allow_empty: bool = False) -> dict[str, Any]:

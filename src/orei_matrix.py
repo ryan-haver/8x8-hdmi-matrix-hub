@@ -95,20 +95,23 @@ except ImportError:
 _LOG = logging.getLogger(__name__)
 
 
+_REDACTED_LOG_KEYS = {"password", "passcode", "key", "auth_token"}
+
+
 def _redact_log_value(value: Any) -> Any:
-    """Remove password values from structured and rendered matrix log messages."""
+    """Remove credential values from structured and rendered matrix log messages."""
     if isinstance(value, dict):
-        return {key: "***REDACTED***" if str(key).lower() == "password" else _redact_log_value(item)
+        return {key: "***REDACTED***" if str(key).lower() in _REDACTED_LOG_KEYS else _redact_log_value(item)
                 for key, item in value.items()}
     if isinstance(value, (list, tuple)):
         return type(value)(_redact_log_value(item) for item in value)
     if isinstance(value, str):
         quoted = re.sub(
-            r"(?i)([\"']?password[\"']?\s*[:=]\s*)([\"'])(.*?)(\2)",
+            r"(?i)([\"']?(?:password|passcode|key|auth_token)[\"']?\s*[:=]\s*)([\"'])(.*?)(\2)",
             r"\1\2***REDACTED***\4",
             value,
         )
-        return re.sub(r"(?i)(\bpassword[\"']?\s*[:=]\s*)(?![\"'])([^\s,}]+)",
+        return re.sub(r"(?i)(\b(?:password|passcode|key|auth_token)[\"']?\s*[:=]\s*)(?![\"'])([^\s,}]+)",
                       r"\1***REDACTED***", quoted)
     return value
 

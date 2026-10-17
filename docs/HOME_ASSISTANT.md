@@ -495,11 +495,58 @@ integration is exercised in a real Home Assistant container by
 2. Install **HDMI Matrix** and restart Home Assistant.
 3. Settings -> Devices & services -> Add integration -> **HDMI Matrix**.
 4. Enter the hub's host and port (default 8080). The matrix is identified by its
-   MAC, so a later address change keeps entities and history.
+   MAC, so a later address change keeps entities and history. If the hub's control lock
+   is enabled, enter an **API key** too (see [below](#api-key-required-only-when-the-hubs-control-lock-is-on)).
 
 **Reconfigure** (the entry's menu) changes the hub address; it refuses a hub that
 controls a different matrix. **Options** set the polling interval (5-300 s,
 default 15 s).
+
+### API Key (required only when the hub's control lock is on)
+
+The hub has an optional control lock (`CONTROL_PIN`). It is **off by default**, and
+while it is off the API key field is not needed — leave it empty.
+
+When the hub owner enables the control lock, control-level requests (polling, entities,
+services) must carry an API key, or Home Assistant sees `401 Unauthorized` and the
+entities go unavailable. Create one on the hub — its **Settings → Security → API keys**
+page, or with `POST /api/auth/api-keys` (both step by step in
+[FLIC_SETUP.md](FLIC_SETUP.md#generate-an-api-key)) — and paste it into the **API key**
+field of:
+
+| Flow | Where the field appears |
+|------|-------------------------|
+| Initial add | Settings → Devices & services → Add integration → **HDMI Matrix** |
+| Reconfigure | The entry's menu → **Reconfigure** (changing the hub address) |
+| Options | The entry's menu → **Configure** (alongside the polling interval) |
+
+The field is optional in all three, stored as `api_key` in the config entry (options
+override the entry value), and used like this:
+
+- **Sent as a header, not a login.** Every hub request carries `X-API-Key: <key>`;
+  there is no cookie, session, or re-authentication step. Nothing about the flow
+  changes once it is set.
+- **Used during setup too.** The config flow's connectivity check sends the key, so a
+  locked hub completes setup instead of failing with *cannot_connect*.
+- **Reconfigure keeps it.** Leaving the field as it is keeps the stored key; the flow
+  is also the place to add one to an entry created before the hub was locked.
+- **Control level only.** That is all the integration uses. An API key cannot unlock
+  admin routes, so the **Reboot** button (an admin route) needs an admin PIN session
+  and will report an error if the hub has an admin PIN set. Everything else —
+  polling, output sources, presets, power, mute, stream, signal/display sensors, and
+  all services — is control level and works with the key.
+- **Rotating a key:** create the new key on the hub, paste it into **Options** (or
+  **Reconfigure**), then delete the old one in the hub's settings.
+
+Check what the hub requires at any time:
+
+```bash
+curl http://192.168.1.145:8080/api/auth/status
+# => {"admin_pin_set": false, "control_pin_set": true, "session_level": "none", …}
+```
+
+**Option A (`rest_command`)?** Those calls are plain HTTP too: add
+`headers: {"X-API-Key": "<key>"}` to the command, or append `?key=<key>` to the URL.
 
 ### Entities (one device per matrix, names include the hub's port names)
 | Entity | What it does |
@@ -550,6 +597,24 @@ Create Alexa routines that trigger HA automations:
 ---
 
 ## Troubleshooting
+
+### Entities Unavailable, or setup fails to connect
+
+The hub may have its control lock enabled, which requires an API key on every request:
+
+1. Ask the hub owner whether `CONTROL_PIN` is set (or run
+   `curl http://HUB:8080/api/auth/status` and look at `control_pin_set`).
+2. If it is, get an API key from the hub (**Settings → Security → API keys**, or
+   `POST /api/auth/api-keys` — see
+   [FLIC_SETUP.md](FLIC_SETUP.md#generate-an-api-key)) and enter it in the
+   integration's **Options** (or **Reconfigure**) as the **API key** field — see
+   [API Key](#api-key-required-only-when-the-hubs-control-lock-is-on).
+3. The integration reloads itself after the change; entities return on the next poll.
+
+A `cannot_connect` error during initial setup usually means the host or port is wrong;
+on a locked hub it can also mean the key was missing, so re-run the flow with it filled
+in. The key travels as an HTTP header over the hub's plain-HTTP REST API, so keep Home
+Assistant and the hub on a trusted LAN or a VPN.
 
 ### REST Commands Not Working
 1. Verify the integration is running:

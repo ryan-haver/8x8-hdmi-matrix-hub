@@ -10,6 +10,7 @@ This guide explains how to configure Flic smart buttons to control your OREI HDM
 - [Quick Start](#quick-start)
 - [Supported Button Types](#supported-button-types)
 - [Available API Endpoints](#available-api-endpoints)
+- [Authentication (Keyless vs. Keyed Setup)](#authentication-keyless-vs-keyed-setup)
 - [Configuration Steps](#configuration-steps)
 - [Basic Examples](#example-configurations)
 - [Profiles Integration](#profiles-integration) ⭐ NEW
@@ -26,6 +27,9 @@ This guide explains how to configure Flic smart buttons to control your OREI HDM
 - Flic buttons (Original, Twist, or Duo)
 - Flic app installed on your phone
 - All devices on the same network
+- The hub's control-lock setting known — every URL below works as-is in the default
+  keyless setup; see [Authentication](#authentication-keyless-vs-keyed-setup) if the
+  owner has enabled a control PIN
 
 ## Quick Start
 
@@ -82,6 +86,170 @@ Rotary dial with button - **ideal for cycling through inputs**:
 | `/api/cec/macros` | GET | List all CEC macros |
 | `/api/cec/macro/{id}/execute` | POST | Execute a CEC macro |
 
+## Authentication (Keyless vs. Keyed Setup)
+
+Every button press is an HTTP request to the hub, so the only question is whether the
+hub's **control lock** is enabled. There are exactly two setups:
+
+| Setup | Hub configuration | What a Flic button needs |
+|-------|-------------------|---------------------------|
+| **Keyless** (default) | `CONTROL_PIN` is **not** set | Nothing. No PIN, no key, no login — only `Content-Type: application/json` on requests that carry a body. |
+| **Keyed** | `CONTROL_PIN` is set | An **API key**, sent as an `X-API-Key: <key>` header or as a `?key=<key>` query parameter. |
+
+### Keyless (the default)
+
+With `CONTROL_PIN` unset, every control-level route — routing, presets, profile/scene
+recall, macros, CEC, matrix power, status — is open on the LAN. **All URLs in this
+guide work exactly as written.** The one requirement that always applies is a JSON
+content type on a mutating request that sends a body:
+
+```bash
+curl -X POST http://192.168.1.145:8080/api/output/1/source \
+  -H "Content-Type: application/json" \
+  -d '{"input": 3}'
+```
+
+Requests without a body (`/api/preset/2`, `/api/power/off`, `/api/cec/…`) need no
+headers at all — a Flic "Internet Request" action with just a URL and `POST` is enough.
+
+### Keyed (Control Lock enabled)
+
+When the owner sets `CONTROL_PIN` on the hub, control-level routes require an unlock.
+Browsers and the kiosk unlock once (a session cookie, or a long-lived "remembered
+device" cookie) and then work normally — but a Flic button press is a single stateless
+request, so it has nowhere to keep a cookie. That is what the **API key** is for: a
+shared secret the hub accepts on every request, from any client.
+
+What the key does and does not unlock:
+
+| Route group | Examples | With `CONTROL_PIN` set |
+|-------------|----------|-------------------------|
+| Control | `/api/input/next`, `/api/input/previous`, `/api/output/{n}/source`, `/api/output/{n}/enable`, `/api/preset/{n}`, `/api/power/*`, `/api/cec/**`, `/api/profile/{id}/recall`, `/api/scene/{id}/recall`, `/api/cec/macro/{id}/execute`, `/api/system/beep`, `/api/system/lcd` | **API key or unlock required** — this is what Flic uses |
+| Admin | `/api/settings`, `/api/dashboard`, `/api/theme/**`, `/api/profile` (create/update/delete), `/api/scene` (create), `/api/cec/macro` (create), `/api/output/{n}/hdcp`, `/api/input/{n}/edid`, `/api/system/reboot`, `/api/auth/**` | Always open unless an **admin PIN** is set; an API key **never** grants admin access |
+| Reads and a few legacy routes | `GET /api/status` and every other read; e.g. `POST /api/input/{n}` | Never gated — a key changes nothing for them |
+
+So a Flic button can recall a profile or run a macro with a key, but cannot create
+one — profile, scene, and macro creation are admin actions done in the Web UI. The
+gate is applied per route class rather than blanket, so when a button URL is not in the
+first row, test it with `curl` and read the response code instead of assuming.
+
+#### 1. Generate an API key
+
+**Web UI:** keys are created and revoked on the hub's **Settings → Security → API keys**
+page; give the key a name such as `Flic buttons` and copy the value, which is shown
+once. If your build does not show that section, use the REST API below — it is the same
+key either way.
+
+**REST API (always available):** creating and revoking keys is an admin action, so
+unlock an admin session first (the cookie is returned in `Set-Cookie`):
+
+```bash
+# 1. Unlock an admin session (ADMIN_PIN is only needed if one is set)
+curl -X POST http://192.168.1.145:8080/api/auth/unlock \
+  -H "Content-Type: application/json" \
+  -c cookies.txt \
+  -d '{"level": "admin", "pin": "<ADMIN_PIN>"}'
+
+# 2. Create the key — the value is returned once and never again
+curl -X POST http://192.168.1.145:8080/api/auth/api-keys \
+  -H "Content-Type: application/json" \
+  -b cookies.txt \
+  -d '{"name": "Flic buttons"}'
+# => {"id": "6f1c…", "key": "u3k…<the key value>…"}   (201 Created)
+
+# 3. List keys (names and ids only — the value is stored hashed)
+curl http://192.168.1.145:8080/api/auth/api-keys -b cookies.txt
+
+# 4. Revoke a key (e.g. a Hub that was lost or re-imaged)
+curl -X DELETE http://192.168.1.145:8080/api/auth/api-keys/6f1c… -b cookies.txt
+```
+
+**Headless alternative:** a key supplied in the hub's environment is accepted in the
+same places — set `API_KEY` (or `CONTROL_API_KEY`) on the hub and use that value. Handy
+for scripted installs; manage named keys through the Web UI instead when you can.
+
+#### 2a. Keyed setup with the `X-API-Key` header
+
+Best for Flic Hub SDK scripts and any client that can set headers:
+
+```bash
+curl -X POST http://192.168.1.145:8080/api/profile/movie-night/recall \
+  -H "X-API-Key: <key>" \
+  -H "Content-Type: application/json"
+```
+
+In the Flic Hub SDK, add the header to every request:
+
+```javascript
+var API_BASE = "http://192.168.1.145:8080";
+var API_KEY = "<key>";   // one secret for the whole module
+
+function recallProfile(profileId) {
+    http.makeRequest({
+        url: API_BASE + "/api/profile/" + profileId + "/recall",
+        method: "POST",
+        headers: {"Content-Type": "application/json", "X-API-Key": API_KEY}
+    }, function(err, res) {
+        console.log(err ? "Error recalling profile: " + err : "Recalled " + profileId);
+    });
+}
+```
+
+In the Flic app, add the same header to the button's Internet Request action where the
+app offers a header list. If your app version or firmware does not expose one, use the
+`?key=` form below — it needs nothing but the URL.
+
+#### 2b. Keyed setup with the `?key=` query parameter
+
+Best for Flic app "Internet Request" actions, where setting a header is awkward or the
+firmware's header list is empty. Append the key to the URL:
+
+```
+URL:    http://192.168.1.145:8080/api/preset/2?key=<key>
+Method: POST
+```
+
+Combine it with other query parameters — order does not matter:
+
+| Action | Keyed URL |
+|--------|-----------|
+| Recall preset 2 | `http://192.168.1.145:8080/api/preset/2?key=<key>` |
+| Next input on output 1 | `http://192.168.1.145:8080/api/input/next?output=1&key=<key>` |
+| Previous input on output 1 | `http://192.168.1.145:8080/api/input/previous?output=1&key=<key>` |
+| Recall a profile | `http://192.168.1.145:8080/api/profile/movie-night/recall?key=<key>` |
+| Run a CEC macro | `http://192.168.1.145:8080/api/cec/macro/theater-on/execute?key=<key>` |
+| Power off | `http://192.168.1.145:8080/api/power/off?key=<key>` |
+
+```bash
+# Equivalent from a shell or a script
+curl -X POST "http://192.168.1.145:8080/api/input/next?output=1&key=<key>"
+```
+
+**Log safety:** `?key=` values are not written to the hub's log. The HTTP access log
+(which prints full request lines, including query strings) is disabled on the hub
+precisely so a key in a URL cannot land in `docker logs`; keys are stored hashed and
+listed afterwards by name and id only. Still treat a key as a secret — anyone holding
+it can control the matrix from anywhere on the LAN.
+
+### Troubleshooting authentication
+
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| `401 Unauthorized` — *Control unlock or API key required* | `CONTROL_PIN` is set and the request carried no key | Add `X-API-Key` or `?key=` to every control request |
+| `401 Unauthorized` — *Admin unlock required* | An **admin** route (create a profile/macro, EDID, reboot) was called with a key | Do that one in the Web UI; an API key is control-level only |
+| `415 Unsupported Media Type` — *JSON Content-Type required* | A request with a body had no `Content-Type: application/json` | Add the header; bodyless POSTs need none |
+| Key stopped working after a hub restart | The key was revoked, or the hub's data directory was reset | Create a new key and update the button/Hub module |
+| Setup fails but `curl` to the same URL works | The URL carries a stale `?key=` value | Remove it (keyless) or re-copy the current key |
+
+Check what the hub thinks of the current request level:
+
+```bash
+curl http://192.168.1.145:8080/api/auth/status
+# => {"admin_pin_set": true, "control_pin_set": true, "session_level": "none", …}
+```
+
+---
+
 ## Configuration Steps
 
 ### 1. Find Your API URL
@@ -98,6 +266,10 @@ Example: `http://192.168.1.145:8080`
 1. Scroll to **Tools** section
 2. Select **Internet Request**
 3. Configure the request:
+4. For requests with a body (e.g. `/api/output/1/source`), add the header
+   `Content-Type: application/json`. If the hub's control lock is enabled, add
+   `X-API-Key: <key>` here, or append `?key=<key>` to the URL — see
+   [Authentication](#authentication-keyless-vs-keyed-setup).
 
 ## Example Configurations
 
@@ -505,6 +677,15 @@ For advanced users, the Flic Hub SDK allows you to write custom JavaScript modul
 3. **Create new module**: Click "New Module"
 4. **Paste code and save**
 
+The examples below are for a keyless hub. If the hub's control lock is enabled, keep
+the key in one variable and send it on every request (see
+[Keyed setup with the `X-API-Key` header](#2a-keyed-setup-with-the-x-api-key-header)):
+
+```javascript
+var API_KEY = "<key>";
+// add to each request:  headers: {"Content-Type": "application/json", "X-API-Key": API_KEY}
+```
+
 ### SDK Example: Toggle Profile
 
 This module toggles between two profiles with a single button press:
@@ -770,6 +951,10 @@ console.log("Flic Twist Handler loaded");
 ## Troubleshooting
 
 ### Button press has no effect
+
+If the button returns `401`, the hub has a control PIN set — see
+[Authentication](#authentication-keyless-vs-keyed-setup).
+
 1. Check that the Docker container is running:
    ```bash
    docker ps | grep orei

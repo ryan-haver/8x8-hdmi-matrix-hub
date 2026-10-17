@@ -50,7 +50,86 @@ async def handle_user_data(msg: ucapi.UserDataResponse) -> ucapi.SetupAction:
 - `RequestUserInput(title, settings)` - Need more user input (multi-step)
 - `RequestUserConfirmation(title, header, footer)` - Need user to confirm something
 
-### 3. Entity Lifecycle
+### 3. Setup Authentication (UC-02)
+
+The integration WebSocket listens on TCP **9095** (`driver.json` → `port`, overridable
+with `UC_INTEGRATION_HTTP_PORT`) and answers on every network interface, so the setup
+conversation must be authorized and the port itself should be firewalled.
+
+**Setup token — `UC_AUTH_TOKEN` (or `ADMIN_PIN` as fallback secret)**
+
+Set `UC_AUTH_TOKEN` in the hub's environment and the driver:
+
+- advertises **`pwd: true`** in the driver metadata (the mDNS TXT record), so the Remote
+  asks for a password instead of running an unauthenticated setup;
+- adds a **"Hub setup token"** field to the setup page instead of the matrix-password
+  field; and
+- requires the token on **every** `DriverSetupRequest` — a first setup *and* a
+  reconfigure. A missing or wrong token returns
+  `ucapi.SetupError(error_type=ucapi.IntegrationSetupError.AUTHORIZATION_ERROR)` and
+  changes nothing on the hub.
+
+```yaml
+# docker-compose.yml (hub service)
+environment:
+  UC_ENABLED: "true"
+  UC_AUTH_TOKEN: "<long random secret>"
+```
+
+The Remote sends the token with the address:
+
+```
+DriverSetupRequest  setup_data = {"host": "192.168.1.100", "port": 443, "auth_token": "…"}
+```
+
+The driver accepts it as `auth_token`, `token`, or `pin`, compares it with
+`hmac.compare_digest`, and never logs it: `auth_token`, `token`, `pin`, and
+`current_password` are added to ucapi's sensitive-key list, so the value is redacted in
+the Remote's message log as well as in the driver's own logs.
+
+If `ADMIN_PIN` is set and `UC_AUTH_TOKEN` is not, the admin PIN doubles as the setup
+token — one secret for both. Prefer a dedicated `UC_AUTH_TOKEN` so the PIN can be
+changed or cleared without re-provisioning every Remote. A token change likewise
+requires re-entering it on each Remote (`pwd` is advertised at startup).
+
+**Without a token: the current matrix password guards address changes**
+
+With no token set, the setup page keeps the **"Current matrix password (when changing
+address)"** field. Changing the matrix host or port then requires re-entering that
+matrix's password; a missing or wrong value returns `AUTHORIZATION_ERROR` and the
+running configuration stays untouched. The stored password is never sent to a new
+address: the driver first checks the target answers, then asks for that matrix's login.
+
+**Network: firewall port 9095**
+
+The token protects *setup*, not the transport — anything that can reach TCP 9095 can
+still subscribe to the entities and control the matrix. Restrict the port to the
+Remote's IP, in the file that matches how the hub runs:
+
+```yaml
+# docker-compose.uc-bridge.yml (bridge networking): replace the published
+# port so 9095 is reachable on the hub's LAN address only.
+services:
+  hdmi-matrix-hub:
+    ports:
+      - "192.168.1.20:${UC_HOST_PORT:-9095}:9095"   # Remote 3 only
+      # was: "${UC_HOST_PORT:-9095}:9095"  (every interface)
+```
+
+```bash
+# docker-compose.uc-host.yml (host networking): 9095 is the host's own port,
+# so the firewall is the only place to restrict it.
+sudo ufw allow from 192.168.1.60 to any port 9095 proto tcp   # the Remote
+sudo ufw deny 9095/tcp                                        # everyone else
+```
+
+Apply the rule on the host that actually terminates the port — with host networking that
+is the Docker host itself, not the container. A Remote on another subnet or VLAN should
+reach the hub over a VPN rather than through an open port. If you change the port the
+hub advertises, keep `UC_DRIVER_URL` in step: it is the `driver_url` the Remote is
+registered with, and it must name the address you just allowed.
+
+### 4. Entity Lifecycle
 
 **Adding Entities:**
 ```python
@@ -92,7 +171,7 @@ async def cmd_handler(entity, cmd_id, params, websocket) -> ucapi.StatusCodes:
     return ucapi.StatusCodes.OK
 ```
 
-### 4. Device State Management
+### 5. Device State Management
 
 **Device States:**
 - `CONNECTED` - Ready and connected
@@ -107,7 +186,7 @@ async def on_connect():
     await api.set_device_state(ucapi.DeviceStates.CONNECTED)
 ```
 
-### 5. Remote Entity Specifics
+### 6. Remote Entity Specifics
 
 **Features:**
 - `ON_OFF` - Has on/off commands
@@ -219,6 +298,7 @@ async def setup_handler(msg: ucapi.SetupDriver) -> ucapi.SetupAction:
 5. **Handle `reconfigure` flag properly** (don't clear on reconfigure)
 6. **Return appropriate StatusCodes** from command handlers
 7. **Update entity attributes** when state changes
+8. **Require a setup token** (`UC_AUTH_TOKEN`) and keep the setup token redacted from logs
 
 ### DON'T:
 1. **Don't manually add to `configured_entities`** (library does this on subscription)
@@ -267,6 +347,19 @@ _LOG.debug("Configured: %s", list(api.configured_entities._storage.keys()))
 - Forgot to return `SetupAction` from handler
 - Setup taking too long (timeout)
 
+**`AUTHORIZATION_ERROR` on the Remote**
+- `UC_AUTH_TOKEN` (or `ADMIN_PIN`) is set on the hub and the Remote sent no token or the
+  wrong one — enter the **"Hub setup token"** on the setup page; a reconfigure needs it
+  too, not just the first setup.
+- The token was changed on the hub, so Remotes still hold the old value. Keep the token
+  stable, or re-enter it on every Remote after changing it.
+- No token is configured, but the matrix address was changed: re-enter the **current
+  matrix password** in the field the setup page shows.
+- Hub log lines: `Setup: authorization token missing or invalid` or
+  `Setup: current matrix password required to change its address`.
+- Note that a port-9095 firewall rule blocking the Remote produces the same "setup does
+  nothing" symptom from the Remote's side — check reachability before changing tokens.
+
 ## File Structure
 
 ```
@@ -312,6 +405,12 @@ my-integration/
   }
 }
 ```
+
+`"port"` is the integration WebSocket port the Remote connects to (the OREI hub uses
+9095; `UC_INTEGRATION_HTTP_PORT` overrides it). The hub does not put `"pwd"` or the
+token field in `driver.json`: when `UC_AUTH_TOKEN`/`ADMIN_PIN` is set, the driver adds
+`pwd: true` and the **Hub setup token** field to the published metadata at startup —
+see [Setup Authentication](#3-setup-authentication-uc-02).
 
 ## References
 
