@@ -40,6 +40,9 @@ class FakeClock:
 @pytest.fixture(autouse=True)
 def _fast_pins(monkeypatch):
     """Cheap hashing, a clean limiter and a controllable limiter clock for every test."""
+    import persistence
+
+    monkeypatch.setattr(persistence, "get_legacy_data_paths", lambda: [])
     monkeypatch.setenv("MATRIX_PASSWORD_ITERATIONS", "1000")
     clock = FakeClock()
     monkeypatch.setattr(get_pin_tracker(), "clock", clock)

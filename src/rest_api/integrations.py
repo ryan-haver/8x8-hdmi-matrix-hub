@@ -11,7 +11,8 @@ from aiohttp import web
 from _file_io import atomic_write_json
 from persistence import get_data_dir
 
-from .utils import _json_response
+from .utils import _json_response, safe_error_message
+from .validation import BadRequestError, parse_json_object
 
 _LOG = logging.getLogger("rest_api.integrations")
 
@@ -64,7 +65,7 @@ async def handle_register_flic_buttons(request: web.Request) -> web.Response:
     global _registered_buttons
     try:
         _load_buttons_if_needed()
-        body = await request.json()
+        body = await parse_json_object(request)
         buttons = body.get("buttons", [])
 
         if not isinstance(buttons, list):
@@ -94,9 +95,10 @@ async def handle_register_flic_buttons(request: web.Request) -> web.Response:
             _LOG.info(f"Registered/updated Flic buttons. Total active: {len(_registered_buttons)}")
 
         return _json_response(True, {"count": len(_registered_buttons)})
+    except BadRequestError as e:
+        return _json_response(False, error=str(e), status=400)
     except Exception as e:
-        _LOG.exception(f"Error registering Flic buttons: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "registering Flic buttons"), status=500)
 
 
 async def handle_get_flic_buttons(request: web.Request) -> web.Response:
@@ -105,5 +107,4 @@ async def handle_get_flic_buttons(request: web.Request) -> web.Response:
         _load_buttons_if_needed()
         return _json_response(True, {"buttons": list(_registered_buttons.values())})
     except Exception as e:
-        _LOG.exception(f"Error retrieving Flic buttons: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "retrieving Flic buttons"), status=500)
