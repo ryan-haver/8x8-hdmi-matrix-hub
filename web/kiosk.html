@@ -1312,8 +1312,8 @@
     </div>
 
     <!-- Passcode PIN pad (UI-48): kiosk modal, CEC-remote action buttons, wizard footer buttons -->
-    <div class="kiosk-modal" id="passcodeModal">
-        <div class="kiosk-modal-content">
+    <div class="kiosk-modal" id="passcodeModal" data-modal="passcode-modal">
+        <div class="kiosk-modal-content" id="passcode-modal">
             <div class="kiosk-modal-header">
                 <h4 id="passcodeModalTitle">Enter Passcode</h4>
                 <button class="kiosk-modal-close" id="passcodeCloseBtn">&times;</button>
@@ -1740,11 +1740,23 @@
              * Modal Dialog Helper Functions
              */
             function openModal(id) {
-                document.getElementById(id).classList.add('show');
+                const targetId = id === 'passcode-modal' ? 'passcodeModal' : id;
+                const el = document.getElementById(targetId);
+                if (el) el.classList.add('show');
+                const alias = document.getElementById('passcode-modal');
+                if (alias && (targetId === 'passcodeModal' || id === 'passcode-modal')) {
+                    alias.classList.add('show');
+                }
             }
 
             function closeModal(id) {
-                document.getElementById(id).classList.remove('show');
+                const targetId = id === 'passcode-modal' ? 'passcodeModal' : id;
+                const el = document.getElementById(targetId);
+                if (el) el.classList.remove('show');
+                const alias = document.getElementById('passcode-modal');
+                if (alias && (targetId === 'passcodeModal' || id === 'passcode-modal')) {
+                    alias.classList.remove('show');
+                }
             }
 
             window.closeModal = closeModal;
@@ -1847,7 +1859,7 @@
                     }, 100);
 
                     try {
-                        const res = await fetch(`${API_BASE}/cec/${targetType}/${targetPort}/${cmd}`, { method: 'POST' });
+                        const res = await apiCall(`${API_BASE}/cec/${targetType}/${targetPort}/${cmd}`, { method: 'POST' });
                         const data = await res.json();
                         if (data.success) {
                             showToast(`CEC ${cmd.replace('_', ' ')} sent`, 'success');
@@ -2007,7 +2019,7 @@
                 try {
                     let success = false;
                     if (dest === 'all') {
-                        const res = await fetch(`${API_BASE}/switch`, {
+                        const res = await apiCall(`${API_BASE}/switch`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ input: input })
@@ -2018,7 +2030,7 @@
                             for (let o = 1; o <= 8; o++) routing[o] = input;
                         }
                     } else {
-                        const res = await fetch(`${API_BASE}/output/${dest}/source`, {
+                        const res = await apiCall(`${API_BASE}/output/${dest}/source`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ input: input })
@@ -2045,7 +2057,7 @@
 
                         targets.forEach(t => {
                             changed.forEach(([, setting, body]) => {
-                                promises.push(fetch(`${API_BASE}/output/${t}/${setting}`, {
+                                promises.push(apiCall(`${API_BASE}/output/${t}/${setting}`, {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json' },
                                     body: JSON.stringify(body)
@@ -2085,7 +2097,7 @@
             async function recallPreset(num) {
                 showToast(`Recalling preset ${num}...`, 'info');
                 try {
-                    const res = await fetch(`${API_BASE}/preset/${num}`, { method: 'POST' });
+                    const res = await apiCall(`${API_BASE}/preset/${num}`, { method: 'POST' });
                     const data = await res.json();
                     if (data.success) {
                         showToast(`Preset recalled: ${data.name || 'Preset ' + num}`, 'success');
@@ -2102,7 +2114,7 @@
                 const num = selectedPresetForConfig;
                 showToast(`Saving current routing map to Preset ${num}...`, 'info');
                 try {
-                    const res = await fetch(`${API_BASE}/preset/${num}/save`, { method: 'POST' });
+                    const res = await apiCall(`${API_BASE}/preset/${num}/save`, { method: 'POST' });
                     const data = await res.json();
                     if (data.success) {
                         showToast('Preset routing state saved successfully', 'success');
@@ -2123,7 +2135,7 @@
                 showToast('Renaming preset...', 'info');
 
                 try {
-                    const res = await fetch(`${API_BASE}/device-settings/preset/${num}/name`, {
+                    const res = await apiCall(`${API_BASE}/device-settings/preset/${num}/name`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ name: newName })
@@ -2164,7 +2176,7 @@
             async function executeShortcut(key) {
                 showToast('Executing shortcut...', 'info');
                 try {
-                    const res = await fetch(`${API_BASE}/shortcuts/${key}/execute`, { method: 'POST' });
+                    const res = await apiCall(`${API_BASE}/shortcuts/${key}/execute`, { method: 'POST' });
                     const data = await res.json();
                     if (data.success) {
                         showToast('Shortcut executed', 'success');
@@ -2177,53 +2189,268 @@
             }
 
             /**
-             * UI-48 (owner decision 2026-09-27): PIN pad for protected profiles.
+             * Check Hub Auth Status
+             */
+            async function checkAuthStatus() {
+                try {
+                    const res = await fetch(`${API_BASE}/auth/status`);
+                    if (!res.ok) return null;
+                    return await res.json();
+                } catch {
+                    return null;
+                }
+            }
+
+            function isControlLocked(status) {
+                if (!status) return false;
+                if (typeof status.control_unlocked === 'boolean') {
+                    return !status.control_unlocked;
+                }
+                if (!status.control_pin_set) {
+                    return false;
+                }
+                if (status.session_level === 'control' || status.session_level === 'admin' || Boolean(status.device_remembered)) {
+                    return false;
+                }
+                return true;
+            }
+
+            /**
+             * UI-48 (owner decision 2026-09-27): PIN pad for protected profiles & control PIN unlock.
              * Resolves with the digits entered, or null when cancelled.
              */
             let passcodeResolve = null;
             let passcodeDigits = '';
+            let currentPasscodeOpts = null;
+            let passcodeSubmitting = false;
 
             function showPasscodeDigits() {
-                document.getElementById('passcodeDisplay').textContent = '•'.repeat(passcodeDigits.length);
+                const el = document.getElementById('passcodeDisplay');
+                if (el) el.textContent = '•'.repeat(passcodeDigits.length);
             }
 
             function finishPasscode(value) {
                 closeModal('passcodeModal');
                 const resolve = passcodeResolve;
                 passcodeResolve = null;
+                currentPasscodeOpts = null;
                 passcodeDigits = '';
+                passcodeSubmitting = false;
                 if (resolve) resolve(value);
             }
 
-            function askPasscode(name) {
+            async function handlePasscodeOk() {
+                if (passcodeSubmitting) return;
+                const value = passcodeDigits || null;
+                if (currentPasscodeOpts && typeof currentPasscodeOpts.onSubmit === 'function') {
+                    if (!value) return;
+                    passcodeSubmitting = true;
+                    try {
+                        const ok = await currentPasscodeOpts.onSubmit(value);
+                        if (ok) {
+                            finishPasscode(value);
+                        } else {
+                            passcodeDigits = '';
+                            showPasscodeDigits();
+                            passcodeSubmitting = false;
+                        }
+                    } catch (err) {
+                        passcodeDigits = '';
+                        showPasscodeDigits();
+                        passcodeSubmitting = false;
+                    }
+                } else {
+                    finishPasscode(value);
+                }
+            }
+
+            function promptPasscodeModal(options = {}) {
+                const opts = typeof options === 'string' ? { instruction: options } : (options || {});
+                currentPasscodeOpts = opts;
+                passcodeSubmitting = false;
+                const title = opts.title || 'Enter Passcode';
+                const instruction = opts.instruction || 'Enter PIN to unlock.';
+
                 if (passcodeResolve) finishPasscode(null);
                 passcodeDigits = '';
                 showPasscodeDigits();
-                document.getElementById('passcodeInstruction').textContent = `"${name}" is passcode protected.`;
+
+                const titleEl = document.getElementById('passcodeModalTitle');
+                if (titleEl) titleEl.textContent = title;
+
+                const instEl = document.getElementById('passcodeInstruction');
+                if (instEl) instEl.textContent = instruction;
+
                 openModal('passcodeModal');
                 return new Promise((resolve) => { passcodeResolve = resolve; });
             }
 
+            function askPasscode(name) {
+                return promptPasscodeModal({
+                    title: 'Enter Passcode',
+                    instruction: `"${name}" is passcode protected.`
+                });
+            }
+
+            window.promptPasscodeModal = promptPasscodeModal;
+            window.askPasscode = askPasscode;
+
             document.querySelectorAll('#passcodePad [data-digit]').forEach((btn) => {
                 btn.addEventListener('click', () => {
+                    if (passcodeSubmitting) return;
                     if (passcodeDigits.length < 8) passcodeDigits += btn.dataset.digit;
                     showPasscodeDigits();
                 });
             });
             document.querySelector('#passcodePad [data-pin-action="clear"]').addEventListener('click', () => {
+                if (passcodeSubmitting) return;
                 passcodeDigits = '';
                 showPasscodeDigits();
             });
             document.querySelector('#passcodePad [data-pin-action="back"]').addEventListener('click', () => {
+                if (passcodeSubmitting) return;
                 passcodeDigits = passcodeDigits.slice(0, -1);
                 showPasscodeDigits();
             });
-            document.getElementById('passcodeOkBtn').addEventListener('click', () => finishPasscode(passcodeDigits || null));
-            document.getElementById('passcodeCancelBtn').addEventListener('click', () => finishPasscode(null));
-            document.getElementById('passcodeCloseBtn').addEventListener('click', () => finishPasscode(null));
+            document.getElementById('passcodeOkBtn').addEventListener('click', () => handlePasscodeOk());
+            document.getElementById('passcodeCancelBtn').addEventListener('click', () => {
+                if (passcodeSubmitting) return;
+                finishPasscode(null);
+            });
+            document.getElementById('passcodeCloseBtn').addEventListener('click', () => {
+                if (passcodeSubmitting) return;
+                finishPasscode(null);
+            });
+
+            let unlockPromise = null;
+
+            async function unlockControl(promptOpts = {}) {
+                if (unlockPromise) {
+                    return unlockPromise;
+                }
+
+                unlockPromise = (async () => {
+                    let unlocked = false;
+                    await promptPasscodeModal({
+                        title: promptOpts.title || 'Enter Control PIN',
+                        instruction: promptOpts.instruction || 'Enter Control PIN to unlock kiosk.',
+                        onSubmit: async (pin) => {
+                            if (!pin) return false;
+                            try {
+                                const res = await fetch(`${API_BASE}/auth/unlock`, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({
+                                        pin,
+                                        level: 'control',
+                                        remember_device: true,
+                                        device_name: 'Kiosk'
+                                    })
+                                });
+
+                                if (res.ok) {
+                                    showToast('Kiosk unlocked', 'success');
+                                    unlocked = true;
+                                    return true;
+                                }
+
+                                if (res.status === 429) {
+                                    showToast('PIN temporarily locked', 'error');
+                                    const instEl = document.getElementById('passcodeInstruction');
+                                    if (instEl) instEl.textContent = 'PIN temporarily locked. Try again later.';
+                                    return false;
+                                }
+
+                                showToast('Incorrect PIN', 'error');
+                                const instEl = document.getElementById('passcodeInstruction');
+                                if (instEl) instEl.textContent = 'Incorrect PIN. Please try again.';
+                                return false;
+                            } catch (err) {
+                                showToast(`Unlock failed: ${err.message}`, 'error');
+                                return false;
+                            }
+                        }
+                    });
+
+                    return unlocked;
+                })();
+
+                try {
+                    return await unlockPromise;
+                } finally {
+                    unlockPromise = null;
+                }
+            }
+
+            async function ensureControlUnlocked() {
+                const status = await checkAuthStatus();
+                if (isControlLocked(status)) {
+                    const unlocked = await unlockControl();
+                    if (unlocked) {
+                        await loadStartupData();
+                        await fetchStatus();
+                    }
+                    return unlocked;
+                }
+                return true;
+            }
+
+            window.unlockControl = unlockControl;
+            window.ensureControlUnlocked = ensureControlUnlocked;
+
+            /**
+             * API Call wrapper that detects control PIN lock and prompts for unlock
+             */
+            async function apiCall(url, options = {}) {
+                let res = await fetch(url, options);
+
+                if (res.status === 401 || res.status === 403) {
+                    let isControlRequired = false;
+                    try {
+                        const clone = res.clone();
+                        const text = await clone.text();
+                        try {
+                            const body = JSON.parse(text);
+                            const code = body?.code || body?.error || body?.data?.error;
+                            if (code === 'control_pin_required') {
+                                isControlRequired = true;
+                            }
+                        } catch {
+                            // not JSON
+                        }
+                        if (!isControlRequired && (text.includes('Control unlock') || text.includes('control_pin_required'))) {
+                            isControlRequired = true;
+                        }
+                    } catch {
+                        // ignore clone error
+                    }
+
+                    if (!isControlRequired && res.status === 401) {
+                        try {
+                            const status = await checkAuthStatus();
+                            if (status && isControlLocked(status)) {
+                                isControlRequired = true;
+                            }
+                        } catch {
+                            // ignore
+                        }
+                    }
+
+                    if (isControlRequired) {
+                        const unlocked = await unlockControl();
+                        if (unlocked) {
+                            res = await fetch(url, options);
+                            fetchStatus();
+                        }
+                    }
+                }
+
+                return res;
+            }
+            window.apiCall = apiCall;
 
             async function postRecall(id, passcode) {
-                const res = await fetch(`${API_BASE}/profile/${id}/recall`, {
+                const res = await apiCall(`${API_BASE}/profile/${id}/recall`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(passcode ? { passcode } : {})
@@ -2430,7 +2657,7 @@
                 };
 
                 try {
-                    const res = await fetch(`${API_BASE}/profile`, {
+                    const res = await apiCall(`${API_BASE}/profile`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(profilePayload)
@@ -2895,6 +3122,9 @@
                     }
                     window.lastTouchEnd = now;
                 }, false);
+
+                // Check and prompt for Control PIN if required
+                await ensureControlUnlocked();
             }
 
             // Start when ready
