@@ -8,10 +8,10 @@ macros, scenes, shortcuts, ...).
 
 The hub runs in one of two modes:
 
-* ``api`` (default): modular API-only mode (``USE_MODULAR=true UC_ENABLED=false``).
-* ``uc``: the shipped default, legacy mode, in which ``run.py`` executes
-  ``src/driver.py``: REST API + web UI + the Unfolded Circle integration
-  WebSocket (``ucapi``). The integration listens on its own free port with mDNS
+* ``api`` (default): shared runtime with ``UC_ENABLED=false``.
+* ``uc``: the same shared runtime with ``UC_ENABLED=true``: REST API + web UI
+  + the Unfolded Circle integration WebSocket (``ucapi``).
+  The integration listens on its own free port with mDNS
   publishing disabled, and ``config_state.json`` is seeded with the matrix
   address, so the driver restores its entities at start-up the way an installed
   and configured integration does. ``uc_restore=False`` starts it unconfigured,
@@ -44,7 +44,7 @@ RECORDED_ENV = (
     "USE_MODULAR", "UC_ENABLED", "MATRIX_HOST", "MATRIX_PORT", "OREI_TELNET_PORT", "OREI_VERIFY_SSL",
     "OREI_USE_TELNET_CEC", "OREI_STATUS_CACHE_TTL", "TRUST_PROXY_HEADERS", "TRUSTED_PROXY_IPS", "LOG_LEVEL",
     "REST_API_PORT", "UC_INTEGRATION_HTTP_PORT", "UC_INTEGRATION_INTERFACE", "UC_DISABLE_MDNS_PUBLISH",
-    "POLLING_INTERVAL", "STATUS_POLL_INTERVAL",
+    "POLLING_INTERVAL", "STATUS_POLL_INTERVAL", "FLIC_ENABLED", "HA_DISCOVERY_ENABLED",
 )
 
 HUB_MODES = ("api", "uc")
@@ -163,9 +163,7 @@ class HubProcess:
         """How the hub was started, for evidence records."""
         if self.external_url:
             return self.external_url
-        if self.mode == "uc":
-            return "run.py legacy mode (src/driver.py: REST API + UC integration, UC_ENABLED=true)"
-        return "run.py (USE_MODULAR=true, UC_ENABLED=false)"
+        return f"run.py -> hub.cli shared runtime (UC_ENABLED={'true' if self.mode == 'uc' else 'false'})"
 
     @property
     def log_path(self) -> Path:
@@ -175,8 +173,9 @@ class HubProcess:
     def env(self) -> dict[str, str]:
         env = {
             **os.environ,
-            "USE_MODULAR": "true",
             "UC_ENABLED": "false",
+            "FLIC_ENABLED": "true",
+            "HA_DISCOVERY_ENABLED": "false",
             "MATRIX_HOST": self.matrix_host,
             "MATRIX_PORT": str(self.matrix_port),
             "OREI_TELNET_PORT": str(self.telnet_port),
@@ -191,10 +190,7 @@ class HubProcess:
         }
         if self.mode == "uc":
             env.update({
-                "USE_MODULAR": "false",
                 "UC_ENABLED": "true",
-                # driver.py reads REST_API_PORT (run.py's API_PORT is modular mode only).
-                "REST_API_PORT": str(self.api_port),
                 # ucapi reads these: WebSocket port and bind address; never publish mDNS from tests.
                 "UC_INTEGRATION_HTTP_PORT": str(self.uc_port),
                 "UC_INTEGRATION_INTERFACE": self.host,
@@ -292,7 +288,7 @@ class HubProcess:
             try:
                 health = _wait_for(f"{self.base_url}/api/health", self._proc, timeout, "hub")
                 if self.mode == "uc":
-                    # driver.py starts the REST API after api.init(), so the WebSocket is normally up already.
+                    # REST starts before integrations; wait for the actual UC SDK listener too.
                     deadline = time.monotonic() + 10
                     while not port_open(self.host, self.uc_port):
                         if time.monotonic() > deadline or self._proc.poll() is not None:

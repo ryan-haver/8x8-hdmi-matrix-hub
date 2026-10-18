@@ -13,6 +13,7 @@ from . import cec, macros, power, presets, profiles, routing
 _COVERS = (
     "tools/validate/clients/flic.py", "tools/validate/clients/flic_driver.mjs",
     "web/js/components/integrations-drawer.js", "src/hub/runtime", "run.py",
+    "src/hub/cli.py", "src/hub/runtime_paths.py",
 )
 _BASE = {s.id: s for module in (cec, macros, power, presets, profiles, routing) for s in module.SCENARIOS}
 
