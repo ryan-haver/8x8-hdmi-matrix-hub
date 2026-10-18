@@ -382,6 +382,38 @@ class HubRuntime:
                     self._process_lock.release()
                 self._started = False
 
+    # UC uses this explicit capability rather than guessing from the result type.
+    reconfigure_persists_config_state = True
+
+    @property
+    def reconfiguring(self):
+        return self._reconfigure_lock.locked()
+
+    def persist_uc_names(self):
+        """Persist live names only for the already authorized, saved address.
+
+        Synchronous by design: no transition can interleave between the guard
+        and the atomic write. Candidate/rollback notifications may arrive late.
+        """
+        if self.reconfiguring or self._stopping or self.address is None:
+            return
+        path = self.prepared.paths.config_dir / "config_state.json"
+        if not path.exists():
+            return  # An environment bootstrap has not been adopted by setup.
+        previous = json.loads(path.read_text(encoding="utf-8"))
+        if (previous.get("host"), int(previous.get("port") or 443)) != (self.address.host, self.address.port):
+            return  # Transient REST reconfiguration must not become permanent.
+        names = self.service.names.snapshot()
+        updated = dict(previous)
+        updated.update(
+            input_names={str(k): v for k, v in names["inputs"].items()},
+            output_names={str(k): v for k, v in names["outputs"].items()},
+        )
+        if updated != previous:
+            from _file_io import atomic_write_json
+
+            atomic_write_json(path, updated)
+
     async def reconfigure(self, address: MatrixAddress, *, persist=False) -> ReconfigureResult:
         async with self._reconfigure_lock:
             if self._stopping:
@@ -431,6 +463,7 @@ class HubRuntime:
                         raise _ReconfigureError(
                             error if error in {"auth", "timeout", "not_found", "refused"} else "other"
                         )
+                    self._rebind_rest()
                     if persist:
                         from _file_io import atomic_write_json
 
@@ -440,11 +473,17 @@ class HubRuntime:
                             host=address.host,
                             port=address.port,
                             telnet_port=address.telnet_port,
-                            user=address.user,
-                            password=address.password,
+                            input_names={str(k): v for k, v in self.service.names.snapshot()["inputs"].items()},
+                            output_names={str(k): v for k, v in self.service.names.snapshot()["outputs"].items()},
                         )
+                        # Bootstrap credentials live in the client's environment, not
+                        # MatrixAddress. Only explicitly address-bound logins belong on disk.
+                        previous.pop("user", None)
+                        previous.pop("password", None)
+                        if address.user is not None and address.password is not None:
+                            previous.update(user=address.user, password=address.password)
+                        # Last fallible step: no await or rebinding after the commit.
                         atomic_write_json(path, previous)
-                    self._rebind_rest()
                     return ReconfigureResult(True, connected=True)
                 except BaseException as exc:
 
