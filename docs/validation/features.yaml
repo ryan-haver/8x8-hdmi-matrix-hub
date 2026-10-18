@@ -3817,7 +3817,7 @@ features:
       GET /api/device-settings/dashboard-presets, PUT /api/device-settings/dashboard-presets, 'POST /api/device-settings/dashboard-presets/{preset}/toggle']
   target: V2
   current: V1
-  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
+  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. R2 private storage projection: test_device_settings_private_extensions_survive_edits_without_public_exposure verifies real registered reads, edit/reload persistence, schema preservation and no private extension exposure. Recorded level retained pending the fresh integrated campaign. Historical shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
   evidence:
   - docs/validation/evidence/F-API-017/2026-10-04-V2-7dbc4dc7-contracts.device_settings-api.json
   - docs/validation/evidence/F-API-017/2026-10-04-V2-7dbc4dc7-contracts.input_settings-api.json

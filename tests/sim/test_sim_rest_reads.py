@@ -39,6 +39,34 @@ async def test_device_settings_returns_saved_customizations(data_hub, simulator)
     assert sim_writes(simulator) == []
 
 
+async def test_device_settings_private_extensions_survive_edits_without_public_exposure(data_hub, simulator):
+    from rest_api import device_settings
+
+    path = data_hub.data_dir / "device_settings.json"
+    stored = json.loads(path.read_text(encoding="utf-8"))
+    private = {"password": "synthetic-private-extension"}
+    stored["credentials"] = private
+    for kind in ("inputs", "outputs", "presets"):
+        stored[kind]["1"]["credentials"] = private
+    path.write_text(json.dumps(stored), encoding="utf-8")
+    device_settings.init_device_settings(data_hub.data_dir)
+
+    for route in ("/api/device-settings", "/api/device-settings/input/1", "/api/device-settings/output/1"):
+        public = await _get(data_hub, route)
+        assert "synthetic-private-extension" not in json.dumps(public)
+        assert "credentials" not in json.dumps(public)
+        assert "schema_version" not in json.dumps(public)
+    response = await data_hub.post("/api/device-settings/input/1", json={"name": "Edited display name"})
+    assert response.status == 200, await response.text()
+    assert (await _get(data_hub, "/api/device-settings/input/1"))["data"]["name"] == "Edited display name"
+    device_settings.init_device_settings(data_hub.data_dir)
+    assert (await _get(data_hub, "/api/device-settings/input/1"))["data"]["name"] == "Edited display name"
+    saved = json.loads(path.read_text(encoding="utf-8"))
+    assert saved["schema_version"] == 2 and saved["credentials"] == private
+    assert all(saved[kind]["1"]["credentials"] == private for kind in ("inputs", "outputs", "presets"))
+    assert sim_writes(simulator) == []
+
+
 @pytest.mark.parametrize("kind,port", [(kind, port) for kind in ("input", "output") for port in (1, 8)])
 async def test_individual_settings_match_saved_port(data_hub, simulator, kind, port):
     saved = json.loads((FIXTURE_DATA / "device_settings.json").read_text(encoding="utf-8"))
