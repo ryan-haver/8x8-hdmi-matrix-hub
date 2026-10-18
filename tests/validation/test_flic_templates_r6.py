@@ -24,6 +24,10 @@ import pytest
 
 from tools.validate.clients import FlicClient
 from tools.validate.clients.flic import (
+    FlicButtonInfo,
+    FlicReplayError,
+    FlicSdkEngine,
+    FlicSdkEvent,
     build_drawer_request,
     generate_flic_sdk_snippet,
     run_flic_driver,
@@ -200,13 +204,13 @@ def test_anti_drift_gesture_condition_mutation_detected(tmp_path: Path):
 
 
 def test_environment_evidence_node_and_sha256():
-    """Environment reports source file SHA-256, real Node version, and unobserved stubs."""
+    """Environment reports actual source/Node and distinguishes stubs from unknown hardware."""
     client = FlicClient()
     env = client.environment()
 
     assert env["name"] == "flic"
     assert env["transport"] == "aiohttp"
-    assert "sdk_version" not in env  # Invented version stripped
+    assert env["sdk_version"] == "unknown"
 
     # Real Node version (e.g. v24.20.0)
     assert env["node_version"].startswith("v")
@@ -217,15 +221,77 @@ def test_environment_evidence_node_and_sha256():
     actual_hash = hashlib.sha256(DRAWER_JS.read_bytes()).hexdigest()
     assert env["drawer_source_sha256"] == actual_hash
 
-    # Explicit unobserved runtime labels
-    assert env["node_stubs"] == "unobserved"
-    assert env["flic_sdk_runtime"] == "unobserved"
-    assert env["physical_buttons"] == "unobserved"
+    assert "used for generated SDK callback replay" in env["node_stubs"]
+    assert env["flic_sdk_runtime"].startswith("unknown")
+    assert env["physical_buttons"].startswith("unknown")
 
 
 # ==========================================
 # NODE SDK HARNESS & CALLBACK VERIFICATION
 # ==========================================
+
+
+@pytest.mark.parametrize("mutation", ["path", "body"])
+def test_startup_request_consumes_actual_source_and_detects_drift(tmp_path, mutation):
+    buttons = [FlicButtonInfo("Kitchen", "aa:bb", "SN-1")]
+    baseline = FlicSdkEngine(origin="http://localhost:8080").startup_request(buttons)
+    content = DRAWER_JS.read_text(encoding="utf-8")
+    if mutation == "path":
+        changed = content.replace('/api/integrations/flic/register', '/api/integrations/flic/drifted')
+    else:
+        changed = content.replace('JSON.stringify({buttons: buttons})', 'JSON.stringify({buttons: buttons, revision: 9})')
+    assert changed != content
+    source = tmp_path / "mutated.js"
+    source.write_text(changed, encoding="utf-8")
+    actual = FlicSdkEngine(origin="http://localhost:8080", source_path=source).startup_request(buttons)
+    assert actual != baseline
+    assert actual["body"]["buttons"] == [{"name": "Kitchen", "bdaddr": "aa:bb", "serial": "SN-1"}]
+    if mutation == "path":
+        assert actual["url"] == "http://localhost:8080/api/integrations/flic/drifted"
+    else:
+        assert actual["body"]["revision"] == 9
+
+
+@pytest.mark.parametrize("mutation, message", [
+    ("duplicate", "captured 2"), ("missing", "captured 0"),
+    ("body", "Malformed SDK startup registration"), ("json", "Malformed SDK JSON"),
+    ("method", "Malformed SDK HTTP"),
+])
+def test_startup_rejects_actual_multiplicity_and_malformed_requests(tmp_path, mutation, message):
+    content = DRAWER_JS.read_text(encoding="utf-8")
+    if mutation == "duplicate":
+        # Invoke registration twice within the generated SDK script.
+        content = content.replace('    http.makeRequest({\n        url: API_BASE + "/api/integrations/flic/register",',
+                                  '    for (var repeat = 0; repeat < 2; repeat++) http.makeRequest({\n'
+                                  '        url: API_BASE + "/api/integrations/flic/register",')
+    elif mutation == "missing":
+        content = content.replace('buttonManager.getButtons().map', 'buttonManager.nonexistent().map')
+    elif mutation == "body":
+        content = content.replace('JSON.stringify({buttons: buttons})', 'JSON.stringify({buttons: "invalid"})')
+    elif mutation == "json":
+        content = content.replace('JSON.stringify({buttons: buttons})', '"invalid-json"')
+    else:
+        content = content.replace('method: "POST",\n        headers:', 'method: "GET",\n        headers:')
+    source = tmp_path / "invalid.js"
+    source.write_text(content, encoding="utf-8")
+    engine = FlicSdkEngine(origin="http://localhost:8080", source_path=source)
+    with pytest.raises(FlicReplayError, match=message):
+        engine.startup_request([])
+
+
+def test_event_rejects_all_actual_requests_instead_of_selecting_first():
+    engine = FlicSdkEngine(origin="http://localhost:8080")
+    engine.snippet += '''
+buttonManager.on("buttonSingleOrDoubleClickOrHold", function(obj) {
+    http.makeRequest({url: API_BASE + "/api/preset/2", method: "POST"}, function() {});
+});'''
+    capture = run_flic_driver("--harness", {"script": engine.snippet, "events": [{
+        "eventName": "buttonSingleOrDoubleClickOrHold", "payload": {"isSingleClick": True},
+    }]})
+    assert capture["eventResults"][0]["requestsTriggered"] == 2
+    assert len(capture["eventResults"][0]["requests"]) == 2
+    with pytest.raises(FlicReplayError, match="captured 2"):
+        engine.evaluate_event(FlicSdkEvent("buttonSingleOrDoubleClickOrHold", "aa:bb", is_single_click=True), {})
 
 
 @pytest.mark.skipif(not shutil.which("node"), reason="Node.js runtime not found on PATH")
@@ -276,6 +342,7 @@ def test_node_sdk_harness_single_click_and_filter(tmp_path: Path):
         capture_output=True,
         text=True,
         check=True,
+        timeout=10,
     )
     res = json.loads(proc.stdout)
 
@@ -334,6 +401,7 @@ def test_node_sdk_harness_duo_and_twist(tmp_path: Path):
         capture_output=True,
         text=True,
         check=True,
+        timeout=10,
     )
     res_duo = json.loads(proc_duo.stdout)
     assert res_duo["eventResults"][0]["requestsTriggered"] == 1
@@ -365,6 +433,7 @@ def test_node_sdk_harness_duo_and_twist(tmp_path: Path):
         capture_output=True,
         text=True,
         check=True,
+        timeout=10,
     )
     res_twist = json.loads(proc_twist.stdout)
     assert res_twist["eventResults"][0]["requestsTriggered"] == 1

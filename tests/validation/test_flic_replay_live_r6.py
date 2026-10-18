@@ -15,13 +15,16 @@ and asserts:
 
 from __future__ import annotations
 
+import inspect
 from typing import Any
 
 import aiohttp
 import pytest
 
+from rest_api.app import create_rest_app
 from tools.validate.clients import FlicClient
 from tools.validate.clients.base import HubInfo
+from tools.validate.clients.flic import DEFAULT_DRAWER_PATH
 from tools.validate.device import SimDevice
 from tools.validate.model import act
 from tools.validate.stack import HubProcess, SimulatorProcess
@@ -382,14 +385,19 @@ async def test_live_revoked_api_key_refusal(live_stack, flic_client):
 
 @pytest.mark.asyncio
 async def test_live_flic_registration_persisted(live_stack, flic_client):
-    """SDK startup button registration: POST /api/integrations/flic/register."""
-    _, hub = live_stack
+    """Execute generated SDK startup and prove one actual registration with no matrix write."""
+    sim, hub = live_stack
+    cursor = len(await _get_sim_log(sim))
     buttons = [
         {"name": "Theater Remote Flic", "bdaddr": "90:88:a9:5b:10:99", "serial": "SN-THEATER-01"}
     ]
-    res = await flic_client.perform(act("flic_register", buttons=buttons))
+    res = await flic_client.perform(act("flic_sdk_event", run_startup_registration=True, buttons=buttons))
     assert res.status == 200
     assert res.ok is True
+    assert len(res.requests) == 1
+    assert res.requests[0]["metadata"]["request_type"] == "generated_sdk_startup"
+    assert res.requests[0]["body"] == {"buttons": buttons}
+    assert (await _get_sim_log(sim))[cursor:] == []
 
     # Verify buttons are retrievable via GET /api/integrations/flic/buttons
     async with aiohttp.ClientSession(base_url=hub.base_url) as session:
@@ -570,3 +578,84 @@ async def test_live_profile_pin_refusal_and_manual_passcode(live_stack, flic_cli
     finally:
         async with aiohttp.ClientSession(base_url=hub.base_url) as session:
             await session.delete(f"/api/profile/{profile_id}", headers={"X-Passcode": "7788"})
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("matching", [False, True])
+async def test_live_sdk_startup_401_is_failure_with_zero_writes(live_stack, flic_client, matching):
+    sim, hub = live_stack
+    await _reset_sim(sim)
+    async with aiohttp.ClientSession(base_url=hub.base_url) as session:
+        async with session.post("/api/auth/pin", json={"level": "admin", "pin": "5544"}) as response:
+            assert response.status == 200
+        try:
+            cursor = len(await _get_sim_log(sim))
+            state_before = await _get_sim_state(sim)
+            result = await flic_client.perform(act(
+                "flic_sdk_event", run_startup_registration=True, target_type="switch_output",
+                input_num=7, output_num=1,
+                event={"event_name": "buttonSingleOrDoubleClickOrHold", "is_single_click": matching},
+            ))
+            assert result.status == 401 and not result.ok
+            assert len(result.requests) == 1
+            assert result.requests[0]["path"] == "/api/integrations/flic/register"
+            assert result.requests[0]["metadata"]["auth_mode"] == "keyless"
+            assert "X-API-Key" not in result.requests[0]["headers"]
+            assert (await _get_sim_log(sim))[cursor:] == []
+            assert (await _get_sim_state(sim))["outputs"] == state_before["outputs"]
+        finally:
+            async with session.post(
+                "/api/auth/pin", json={"level": "admin", "pin": None, "current_pin": "5544"}
+            ) as response:
+                assert response.status == 200
+
+
+@pytest.mark.asyncio
+async def test_live_sdk_startup_404_uses_actual_generated_path_with_zero_writes(live_stack, flic_client, tmp_path):
+    sim, _ = live_stack
+    source = tmp_path / "drawer.js"
+    source.write_text(DEFAULT_DRAWER_PATH.read_text(encoding="utf-8").replace(
+        '/api/integrations/flic/register', '/api/integrations/flic/missing-startup'
+    ), encoding="utf-8")
+    cursor = len(await _get_sim_log(sim))
+    state_before = await _get_sim_state(sim)
+    result = await flic_client.perform(act(
+        "flic_sdk_event", source_path=str(source), run_startup_registration=True,
+        target_type="switch_output", input_num=8, output_num=1,
+        event={"event_name": "buttonSingleOrDoubleClickOrHold", "is_single_click": True},
+    ))
+    assert result.status == 404 and not result.ok
+    assert len(result.requests) == 1
+    assert result.requests[0]["path"] == "/api/integrations/flic/missing-startup"
+    assert (await _get_sim_log(sim))[cursor:] == []
+    assert (await _get_sim_state(sim))["outputs"] == state_before["outputs"]
+
+
+@pytest.mark.skipif(
+    "integration_routes" not in inspect.signature(create_rest_app).parameters,
+    reason="PENDING R5 integrated gate: pre-R5 runtime ignores FLIC_ENABLED=false; actual disabled registry routes must return 404",
+)
+@pytest.mark.asyncio
+async def test_live_flic_disabled_registry_startup_404_zero_writes(live_stack, tmp_path):
+    """Run unchanged generated startup against a real runtime configured with Flic disabled."""
+    sim, _ = live_stack
+    hub = HubProcess(
+        matrix_host="127.0.0.1", matrix_port=sim.https_port, telnet_port=sim.telnet_port,
+        log_dir=tmp_path / "disabled-hub", extra_env={"FLIC_ENABLED": "false"},
+    )
+    client = FlicClient()
+    hub.start()
+    try:
+        await client.start(HubInfo(hub.base_url))
+        cursor = len(await _get_sim_log(sim))
+        result = await client.perform(act("flic_sdk_event", run_startup_registration=True))
+        assert result.status == 404 and not result.ok
+        assert len(result.requests) == 1
+        assert result.requests[0]["path"] == "/api/integrations/flic/register"
+        async with aiohttp.ClientSession(base_url=hub.base_url) as session:
+            async with session.get("/api/integrations/flic/buttons") as response:
+                assert response.status == 404
+        assert (await _get_sim_log(sim))[cursor:] == []
+    finally:
+        await client.stop()
+        hub.stop()

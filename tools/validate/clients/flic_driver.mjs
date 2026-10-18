@@ -111,8 +111,11 @@ export function generateOutput(config = {}, options = {}) {
 
   drawer.updateFlicOutput();
 
-  const method = getOrCreate('#flic-out-method').textContent || 'POST';
-  const fullUrl = getOrCreate('#flic-out-url').textContent || '';
+  const method = getOrCreate('#flic-out-method').textContent;
+  const fullUrl = getOrCreate('#flic-out-url').textContent;
+  if (!method || !fullUrl || !fullUrl.startsWith(origin + '/')) {
+    throw new Error('Malformed generated Flic request');
+  }
   const urlPath = fullUrl.startsWith(origin) ? fullUrl.slice(origin.length) : fullUrl;
   const bodyText = getOrCreate('#flic-out-body').textContent || '';
   const bodyRow = getOrCreate('#flic-out-body-row');
@@ -123,10 +126,11 @@ export function generateOutput(config = {}, options = {}) {
     try {
       bodyObj = JSON.parse(bodyText);
     } catch {
-      bodyObj = bodyText;
+      throw new Error('Malformed generated Flic JSON body');
     }
   }
   const snippet = getOrCreate('#flic-sdk-code-block').textContent || '';
+  if (!snippet.trim()) throw new Error('Missing generated Flic SDK snippet');
 
   return {
     method,
@@ -176,8 +180,8 @@ export function runSdkHarness({ script, scriptPath, buttons = [], events = [] })
       requests.push({
         url: opts.url,
         method: opts.method,
-        headers: opts.headers || {},
-        content: opts.content || null
+        headers: opts.headers ?? {},
+        content: opts.content ?? null
       });
       if (typeof cb === 'function') {
         cb(null, { statusCode: 200, content: '{"success":true}' });
@@ -199,6 +203,7 @@ export function runSdkHarness({ script, scriptPath, buttons = [], events = [] })
   const wrapper = new Function('require', 'console', `\n${scriptCode}\n`);
   wrapper(customRequire, { log: () => {}, error: () => {} });
   const startupRequestsCount = requests.length;
+  const startupRequests = requests.slice();
 
   const eventResults = [];
   for (const evt of events) {
@@ -218,6 +223,7 @@ export function runSdkHarness({ script, scriptPath, buttons = [], events = [] })
   return {
     allRequests: requests,
     startupRequestsCount,
+    startupRequests,
     eventResults
   };
 }

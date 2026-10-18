@@ -2,6 +2,13 @@
 
 from __future__ import annotations
 
+import json
+import subprocess
+import sys
+from dataclasses import asdict
+from urllib.parse import quote
+
+import aiohttp
 import pytest
 from aiohttp import web
 
@@ -9,6 +16,7 @@ from tools.validate.clients import FlicClient, NotSupportedError, make_client
 from tools.validate.clients.base import HubInfo
 from tools.validate.clients.flic import (
     FlicButtonInfo,
+    FlicReplayError,
     FlicSdkEngine,
     FlicSdkEvent,
     build_drawer_request,
@@ -16,6 +24,7 @@ from tools.validate.clients.flic import (
     redact_body,
     redact_headers,
     redact_path,
+    run_flic_driver,
 )
 from tools.validate.model import act
 
@@ -73,10 +82,10 @@ def test_environment_evidence():
     assert env["transport"] == "aiohttp"
     assert "web/js/components/integrations-drawer.js" in env["templates"]
     assert "docs/FLIC_SETUP.md" in env["templates"]
-    assert env["node_stubs"] == "unobserved"
-    assert env["flic_sdk_runtime"] == "unobserved"
-    assert env["physical_buttons"] == "unobserved"
-    assert "sdk_version" not in env
+    assert "used for generated SDK callback replay" in env["node_stubs"]
+    assert env["flic_sdk_runtime"].startswith("unknown")
+    assert env["physical_buttons"].startswith("unknown")
+    assert env["sdk_version"] == "unknown"
 
 
 def test_build_drawer_request_exact_base_requests():
@@ -390,5 +399,253 @@ async def test_flic_client_error_redaction_on_connection_failure():
         assert "super-secret-token" not in "".join(res.steps)
         if "key=" in res.error:
             assert "key=***REDACTED***" in res.error
+    finally:
+        await client.stop()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("startup", [False, True])
+async def test_complete_result_redacts_secret_response_and_keeps_partial_details(aiohttp_server, startup):
+    key, pin = "manual/key + token", "776655"
+    response = {
+        "success": False, "applied": [{"output": 1, "input": 2}], "failed_outputs": [2],
+        "nested": [{"passcode_hash": "hash-pass", "password_hash": "hash-word", "pin_hash": "hash-pin"}],
+        "errors": [f"partial error: {key}; PIN {pin}; https://host/path?%6bey=unknown%2Fsecret&output=2"],
+        "url": f"https://user:credential@host/path?password={quote(pin)}&input=2",
+        "echo": quote(key, safe=""),
+        "numeric_pin_echo": int(pin),
+    }
+
+    async def handler(request):
+        return web.json_response(response, status=207)
+
+    app = web.Application()
+    app.router.add_post("/api/profile/p/recall", handler)
+    app.router.add_post("/api/integrations/flic/register", handler)
+    server = await aiohttp_server(app)
+    client = FlicClient()
+    await client.start(HubInfo(str(server.make_url(""))))
+    try:
+        action = (act("flic_sdk_event", run_startup_registration=True, api_key=key, manual_passcode=pin)
+                  if startup else act("profile_recall", profile_id="p", api_key=key, manual_passcode=pin))
+        result = await client.perform(action)
+        serialized = json.dumps(asdict(result))
+        for secret in (key, quote(key, safe=""), pin, "hash-pass", "hash-word", "hash-pin",
+                       "unknown%2Fsecret", "credential"):
+            assert secret not in serialized
+        assert not result.ok and result.status == 207
+        assert result.body["applied"] == [{"output": 1, "input": 2}]
+        assert result.body["failed_outputs"] == [2]
+        assert "partial error" in result.body["errors"][0]
+        assert "output=2" in result.body["errors"][0]
+        assert result.requests[0]["response"] == result.body
+        if startup:
+            assert result.requests[0]["metadata"]["auth_mode"] == "keyless"
+            assert "X-API-Key" not in result.requests[0]["headers"]
+        else:
+            assert result.requests[0]["metadata"]["manual_auth"] is True
+    finally:
+        await client.stop()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("startup", [False, True])
+async def test_explicit_secret_bearing_aiohttp_exception_is_never_stored(monkeypatch, startup):
+    key, pin = "explicit/key + secret", "654321"
+    exception = aiohttp.ClientError(
+        f"request failed https://host/path?key={quote(key, safe='')}&pin={pin}; raw key {key}"
+    )
+    assert pin in str(exception) and quote(key, safe="") in str(exception)
+    client = FlicClient()
+    await client.start(HubInfo("http://127.0.0.1:8080"))
+
+    def fail(*args, **kwargs):
+        raise exception
+
+    monkeypatch.setattr(client._session, "request", fail)
+    client.context = {"forwarded_for": f"https://test/path?key={quote(key, safe='')}&output=2"}
+    try:
+        action = (act("flic_sdk_event", run_startup_registration=True, api_key=key, manual_passcode=pin)
+                  if startup else act("profile_recall", profile_id="p", api_key=key, auth_mode="query",
+                                     manual_passcode=pin))
+        result = await client.perform(action)
+        serialized = json.dumps(asdict(result))
+        assert not result.ok and result.error == "HTTP transport failed"
+        assert result.status is None
+        assert len(result.requests) == 1
+        for secret in (key, quote(key, safe=""), pin, str(exception)):
+            assert secret not in serialized
+        assert "harness_headers" in result.requests[0]["metadata"]
+        assert "output=2" in serialized
+    finally:
+        await client.stop()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("status, success", [(401, False), (404, False), (200, False)])
+@pytest.mark.parametrize("matching", [False, True])
+async def test_startup_failure_cannot_be_hidden_by_event(aiohttp_server, status, success, matching):
+    matrix_writes = []
+
+    async def register(request):
+        assert "X-API-Key" not in request.headers
+        return web.json_response({"success": success, "error": "registration refused"}, status=status)
+
+    async def write(request):
+        matrix_writes.append(request.path)
+        return web.json_response({"success": True})
+
+    app = web.Application()
+    app.router.add_post("/api/integrations/flic/register", register)
+    app.router.add_post("/api/preset/1", write)
+    server = await aiohttp_server(app)
+    client = FlicClient()
+    await client.start(HubInfo(str(server.make_url(""))))
+    try:
+        result = await client.perform(act(
+            "flic_sdk_event", run_startup_registration=True, api_key="must-not-be-injected",
+            event={"event_name": "buttonSingleOrDoubleClickOrHold", "is_single_click": matching},
+        ))
+        assert not result.ok and result.status == status
+        assert len(result.requests) == 1
+        assert result.body["error"] == "registration refused"
+        assert not matrix_writes
+    finally:
+        await client.stop()
+
+
+@pytest.mark.asyncio
+async def test_sdk_startup_replays_actual_mutated_path_body_and_header_provenance(aiohttp_server, tmp_path):
+    from tools.validate.clients.flic import DEFAULT_DRAWER_PATH
+
+    source = tmp_path / "drawer.js"
+    source.write_text(DEFAULT_DRAWER_PATH.read_text(encoding="utf-8").replace(
+        '/api/integrations/flic/register', '/api/flic-startup-drift'
+    ).replace('JSON.stringify({buttons: buttons})', 'JSON.stringify({buttons: buttons, revision: 9})'), encoding="utf-8")
+    received = []
+
+    async def register(request):
+        received.append((request.path, await request.json(), dict(request.headers)))
+        return web.json_response({"success": True})
+
+    app = web.Application()
+    app.router.add_post("/api/flic-startup-drift", register)
+    server = await aiohttp_server(app)
+    client = FlicClient()
+    await client.start(HubInfo(str(server.make_url("")), forwarded_for="10.99.0.88"))
+    try:
+        result = await client.perform(act(
+            "flic_sdk_event", source_path=str(source), run_startup_registration=True,
+            buttons=[{"name": "Kitchen", "bdaddr": "aa:bb", "serial": "S1"}],
+        ))
+        assert result.ok and result.status == 200
+        assert len(received) == len(result.requests) == 1
+        assert received[0][0] == result.requests[0]["path"] == "/api/flic-startup-drift"
+        assert received[0][1] == result.requests[0]["body"] == {
+            "buttons": [{"name": "Kitchen", "bdaddr": "aa:bb", "serial": "S1"}], "revision": 9,
+        }
+        assert "X-API-Key" not in received[0][2]
+        assert result.requests[0]["metadata"]["harness_headers"] == {"X-Forwarded-For": "10.99.0.88"}
+    finally:
+        await client.stop()
+
+
+def test_discovery_import_does_not_execute_node():
+    script = '''
+import subprocess
+def forbidden(*args, **kwargs):
+    raise AssertionError("subprocess execution during requirements-only discovery")
+subprocess.run = forbidden
+from tools.validate.clients import make_client
+assert make_client("flic").name == "flic"
+'''
+    subprocess.run([sys.executable, "-c", script], check=True, capture_output=True, text=True, timeout=10)
+
+
+@pytest.mark.parametrize("failure, message", [
+    (FileNotFoundError(), "executable not found"),
+    (subprocess.TimeoutExpired("node", 10), "execution limit"),
+    (subprocess.CalledProcessError(1, "node", stderr="secret URL"), "invalid template"),
+])
+def test_node_execution_failures_are_explicit_and_bounded(monkeypatch, failure, message):
+    from tools.validate.clients import flic
+
+    def fail(*args, **kwargs):
+        assert kwargs["timeout"] == flic.NODE_TIMEOUT_SECONDS
+        raise failure
+
+    monkeypatch.setattr(flic.subprocess, "run", fail)
+    with pytest.raises(FlicReplayError, match=message):
+        run_flic_driver("--generate", {})
+
+
+def test_actual_invalid_template_and_infinite_template_have_visible_errors(tmp_path, monkeypatch):
+    from tools.validate.clients import flic
+
+    source = tmp_path / "invalid.js"
+    source.write_text("invalid syntax !!!", encoding="utf-8")
+    with pytest.raises(FlicReplayError, match="invalid template"):
+        build_drawer_request(act("preset_recall", preset=1), source_path=source)
+    source.write_text("while (true) {}", encoding="utf-8")
+    monkeypatch.setattr(flic, "NODE_TIMEOUT_SECONDS", 0.3)
+    with pytest.raises(FlicReplayError, match="execution limit"):
+        build_drawer_request(act("preset_recall", preset=1), source_path=source)
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("phase", ["startup", "event"])
+async def test_duplicate_generated_requests_fail_visibly_before_matrix_write(aiohttp_server, monkeypatch, phase):
+    original_init = FlicSdkEngine.__init__
+
+    def inject_duplicate(self, **kwargs):
+        original_init(self, **kwargs)
+        duplicate = 'http.makeRequest({url: API_BASE + "/api/preset/2", method: "POST"}, function() {});'
+        self.snippet += (duplicate if phase == "startup" else
+                         'buttonManager.on("buttonSingleOrDoubleClickOrHold", function(obj) {' + duplicate + '});')
+
+    monkeypatch.setattr(FlicSdkEngine, "__init__", inject_duplicate)
+    received = []
+
+    async def handler(request):
+        received.append(request.path)
+        return web.json_response({"success": True})
+
+    app = web.Application()
+    app.router.add_post("/{path:.*}", handler)
+    server = await aiohttp_server(app)
+    client = FlicClient()
+    await client.start(HubInfo(str(server.make_url(""))))
+    try:
+        result = await client.perform(act(
+            "flic_sdk_event", run_startup_registration=True,
+            event={"event_name": "buttonSingleOrDoubleClickOrHold", "is_single_click": True},
+        ))
+        assert not result.ok and "captured 2" in result.error
+        assert all(path == "/api/integrations/flic/register" for path in received)
+        if phase == "startup":
+            assert received == [] and result.requests == []
+        else:
+            assert received == ["/api/integrations/flic/register"]
+            assert len(result.requests) == 1 and result.requests[0]["status"] == 200
+    finally:
+        await client.stop()
+
+
+@pytest.mark.asyncio
+async def test_missing_node_is_a_visible_failed_action_result(monkeypatch):
+    from tools.validate.clients import flic
+
+    client = FlicClient()
+    await client.start(HubInfo("http://127.0.0.1:8080"))
+
+    def missing(*args, **kwargs):
+        raise FileNotFoundError("node not found")
+
+    monkeypatch.setattr(flic.subprocess, "run", missing)
+    try:
+        result = await client.perform(act("preset_recall", preset=1))
+        assert not result.ok and "executable not found" in result.error
+        assert result.requests == [] and result.status is None
+        assert "unavailable" in client.environment()["node_version"]
     finally:
         await client.stop()

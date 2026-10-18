@@ -24,7 +24,7 @@ import re
 import subprocess
 import time
 import urllib.parse
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
@@ -36,15 +36,31 @@ from .base import ActionResult, Client, HubInfo, NotSupportedError
 REPO_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_DRAWER_PATH = REPO_ROOT / "web" / "js" / "components" / "integrations-drawer.js"
 DRIVER_MJS = REPO_ROOT / "tools" / "validate" / "clients" / "flic_driver.mjs"
+NODE_TIMEOUT_SECONDS = 10
+REDACTED = "***REDACTED***"
+SECRET_FIELDS = frozenset({
+    "passcode", "pin", "password", "key", "secret", "api_key", "manual_passcode",
+    "passcode_hash", "password_hash", "pin_hash", "authorization", "x-api-key", "x-admin-pin", "x-passcode",
+})
+
+
+class FlicReplayError(RuntimeError):
+    """An explicit failure to execute or validate the authoritative template."""
 
 
 def get_node_version() -> str:
-    """Return the installed Node.js version string, or 'unknown' if unavailable."""
+    """Probe Node on demand; importing/discovering this client never launches it."""
     try:
-        res = subprocess.run(["node", "-v"], capture_output=True, text=True, check=True)
+        res = subprocess.run(
+            ["node", "-v"], capture_output=True, text=True, check=True, timeout=NODE_TIMEOUT_SECONDS
+        )
         return res.stdout.strip()
-    except Exception:
-        return "unknown"
+    except FileNotFoundError:
+        return "unavailable: Node.js executable not found"
+    except subprocess.TimeoutExpired:
+        return "unavailable: Node.js version probe timed out"
+    except (OSError, subprocess.CalledProcessError):
+        return "unavailable: Node.js version probe failed"
 
 
 def get_drawer_sha256(source_path: Path | None = None) -> str:
@@ -57,44 +73,81 @@ def get_drawer_sha256(source_path: Path | None = None) -> str:
 
 def run_flic_driver(mode: str, payload: dict[str, Any]) -> dict[str, Any]:
     """Execute flic_driver.mjs in Node with JSON payload."""
-    res = subprocess.run(
-        ["node", str(DRIVER_MJS), mode],
-        input=json.dumps(payload),
-        capture_output=True,
-        text=True,
-        check=True,
-    )
-    return json.loads(res.stdout)
+    try:
+        res = subprocess.run(
+            ["node", str(DRIVER_MJS), mode], input=json.dumps(payload),
+            capture_output=True, text=True, check=True, timeout=NODE_TIMEOUT_SECONDS,
+        )
+    except FileNotFoundError:
+        raise FlicReplayError("Flic replay requires Node.js; executable not found") from None
+    except subprocess.TimeoutExpired:
+        raise FlicReplayError(f"Flic Node driver exceeded {NODE_TIMEOUT_SECONDS}s execution limit") from None
+    except (OSError, subprocess.CalledProcessError):
+        # stderr can contain the generated script, URLs and credentials.
+        raise FlicReplayError("Flic Node driver failed: invalid template, source or SDK execution") from None
+    try:
+        output = json.loads(res.stdout)
+    except ValueError:
+        raise FlicReplayError("Flic Node driver returned invalid JSON") from None
+    if not isinstance(output, dict):
+        raise FlicReplayError("Flic Node driver returned a malformed result")
+    return output
 
 
-def redact_path(path: str) -> str:
-    """Mask ?key=... and &key=... query strings in URLs/paths/strings."""
-    return re.sub(r"([?&]key=)[^&]+", r"\1***REDACTED***", path)
+def redact_path(path: str, secrets: tuple[str, ...] = ()) -> str:
+    """Redact secret URL parameters (including encoded names) inside arbitrary strings."""
+    def replace_query(match: re.Match[str]) -> str:
+        name = urllib.parse.unquote(match[2]).lower()
+        return match[1] + match[2] + "=" + (REDACTED if name in SECRET_FIELDS else match[3])
+
+    path = re.sub(r"([?&])([^=\s?&#]+)=([^&\s\"'<>#]*)", replace_query, path)
+    path = re.sub(r"(https?://)[^/\s@]+@", r"\1***REDACTED***@", path, flags=re.IGNORECASE)
+    for secret in sorted(set(secrets), key=len, reverse=True):
+        if not secret:
+            continue
+        variants = {secret, urllib.parse.quote(secret, safe=""), urllib.parse.quote_plus(secret)}
+        variants |= {urllib.parse.quote(v, safe="") for v in variants}
+        for variant in sorted(variants, key=len, reverse=True):
+            path = path.replace(variant, REDACTED)
+    return path
 
 
 def redact_headers(headers: dict[str, str]) -> dict[str, str]:
     """Mask authentication headers."""
-    redacted = dict(headers)
-    for k in list(redacted.keys()):
-        if k.lower() in ("x-api-key", "authorization", "x-admin-pin"):
-            redacted[k] = "***REDACTED***"
-    return redacted
+    return redact_body(headers)
 
 
-def redact_body(body: Any) -> Any:
-    """Mask passwords, PINs, and secret keys in JSON payloads."""
+def _secret_values(body: Any) -> tuple[str, ...]:
+    values: list[str] = []
+    if isinstance(body, dict):
+        for key, value in body.items():
+            if str(key).lower() in SECRET_FIELDS and isinstance(value, (str, int)):
+                values.append(str(value))
+            values.extend(_secret_values(value))
+    elif isinstance(body, (list, tuple)):
+        for item in body:
+            values.extend(_secret_values(item))
+    return tuple(values)
+
+
+def redact_body(body: Any, secrets: tuple[str, ...] = ()) -> Any:
+    """Sanitize structured evidence and echoed secrets without losing partial effects."""
+    secrets = secrets + _secret_values(body)
     if isinstance(body, dict):
         out: dict[str, Any] = {}
         for k, v in body.items():
-            if k.lower() in ("passcode", "pin", "password", "key", "secret", "api_key"):
-                out[k] = "***REDACTED***"
-            elif isinstance(v, (dict, list)):
-                out[k] = redact_body(v)
+            safe_key = redact_path(str(k), secrets)
+            if str(k).lower() in SECRET_FIELDS:
+                out[safe_key] = REDACTED
             else:
-                out[k] = v
+                out[safe_key] = redact_body(v, secrets)
         return out
-    if isinstance(body, list):
-        return [redact_body(item) for item in body]
+    if isinstance(body, (list, tuple)):
+        return [redact_body(item, secrets) for item in body]
+    if isinstance(body, str):
+        return redact_path(body, secrets)
+    if isinstance(body, int) and not isinstance(body, bool) and str(body) in secrets:
+        return REDACTED
     return body
 
 
@@ -127,7 +180,9 @@ def build_drawer_request(
     Returns: (method, path, body, headers, metadata)
     """
     p = action.params
-    metadata: dict[str, Any] = {"request_type": "generated_drawer"}
+    metadata: dict[str, Any] = {
+        "request_type": "generated_drawer", "drawer_source_sha256": get_drawer_sha256(source_path),
+    }
     method = "POST"
     headers: dict[str, str] = {}
     body: Any = None
@@ -285,12 +340,14 @@ def build_drawer_request(
         case "macro_run":
             macro_id = str(p.get("macro_id", ""))
             path = f"/api/cec/macro/{macro_id}/execute"
+            metadata["request_type"] = "manual_protocol"
 
         case "flic_register":
             buttons = p.get("buttons", [])
             path = "/api/integrations/flic/register"
             body = {"buttons": buttons}
             headers["Content-Type"] = "application/json"
+            metadata["request_type"] = "manual_protocol"
 
         case _:
             raise NotSupportedError(f"intent {action.intent!r} is not supported by Flic replay")
@@ -298,6 +355,7 @@ def build_drawer_request(
     # Documented manual API key variants
     api_key = p.get("api_key")
     if api_key is not None:
+        metadata["manual_auth"] = True
         auth_mode = str(p.get("auth_mode") or p.get("key_placement", "header")).lower()
         if auth_mode == "query" or p.get("query_key", False):
             encoded_key = urllib.parse.quote(str(api_key), safe="")
@@ -433,17 +491,45 @@ class FlicSdkEngine:
         )
 
     def startup_request(self, buttons: list[FlicButtonInfo]) -> dict[str, Any]:
-        """Returns the SDK startup button registration HTTP request."""
-        payload = [
-            {"name": b.name, "bdaddr": b.bdaddr, "serial": b.serial}
-            for b in buttons
-        ]
-        return {
-            "method": "POST",
-            "url": f"{self.origin}/api/integrations/flic/register",
-            "headers": {"Content-Type": "application/json"},
-            "body": {"buttons": payload},
-        }
+        """Capture the sole registration from execution of the actual generated script."""
+        res = run_flic_driver("--harness", {"script": self.snippet, "buttons": [asdict(b) for b in buttons]})
+        return self._startup_from_harness(res)
+
+    def _decode_request(self, req: Any) -> dict[str, Any]:
+        if not isinstance(req, dict):
+            raise FlicReplayError("Malformed SDK HTTP request")
+        method, url, headers = req.get("method"), req.get("url"), req.get("headers")
+        if (
+            method != "POST" or not isinstance(url, str) or not url.startswith(self.origin + "/")
+            or not isinstance(headers, dict)
+            or any(not isinstance(k, str) or not isinstance(v, str) for k, v in headers.items())
+        ):
+            raise FlicReplayError("Malformed SDK HTTP method, URL or headers")
+        content = req.get("content")
+        try:
+            body = json.loads(content) if content is not None else None
+        except (TypeError, ValueError):
+            raise FlicReplayError("Malformed SDK JSON request body") from None
+        return {"method": method, "url": url, "headers": headers, "body": body}
+
+    def _startup_from_harness(self, res: dict[str, Any]) -> dict[str, Any]:
+        requests = res.get("startupRequests")
+        if not isinstance(requests, list) or res.get("startupRequestsCount") != len(requests):
+            raise FlicReplayError("Malformed SDK startup capture")
+        if len(requests) != 1:
+            raise FlicReplayError(f"Expected exactly one SDK startup registration; captured {len(requests)}")
+        req = self._decode_request(requests[0])
+        body = req["body"]
+        if (
+            req["headers"].get("Content-Type") != "application/json"
+            or not isinstance(body, dict) or not isinstance(body.get("buttons"), list)
+            or any(
+                not isinstance(b, dict) or any(not isinstance(b.get(k), str) for k in ("name", "bdaddr", "serial"))
+                for b in body["buttons"]
+            )
+        ):
+            raise FlicReplayError("Malformed SDK startup registration body or content type")
+        return req
 
     def evaluate_event(
         self,
@@ -479,24 +565,18 @@ class FlicSdkEngine:
         }
 
         res = run_flic_driver("--harness", harness_payload)
+        self._startup_from_harness(res)
         event_results = res.get("eventResults", [])
-        if not event_results or event_results[0].get("requestsTriggered", 0) == 0:
+        if not isinstance(event_results, list) or len(event_results) != 1:
+            raise FlicReplayError("Expected exactly one SDK event evaluation")
+        requests = event_results[0].get("requests")
+        if not isinstance(requests, list) or event_results[0].get("requestsTriggered") != len(requests):
+            raise FlicReplayError("Malformed SDK event request capture")
+        if len(requests) > 1:
+            raise FlicReplayError(f"Expected at most one SDK event request; captured {len(requests)}")
+        if not requests:
             return None
-
-        req = event_results[0]["requests"][0]
-        body = None
-        if req.get("content"):
-            try:
-                body = json.loads(req["content"])
-            except Exception:
-                body = req["content"]
-
-        return {
-            "method": req.get("method", "POST"),
-            "url": req.get("url", ""),
-            "headers": req.get("headers", {}),
-            "body": body,
-        }
+        return self._decode_request(requests[0])
 
 
 class FlicClient(Client):
@@ -541,7 +621,6 @@ class FlicClient(Client):
         self._session = aiohttp.ClientSession(
             base_url=hub.base_url,
             timeout=aiohttp.ClientTimeout(total=30),
-            headers={"X-Forwarded-For": hub.forwarded_for},
         )
 
     async def stop(self) -> None:
@@ -566,17 +645,29 @@ class FlicClient(Client):
                 "web/js/utils/api-copy.js",
                 "docs/FLIC_SETUP.md",
             ],
-            "node_stubs": "unobserved",
-            "flic_sdk_runtime": "unobserved",
-            "physical_buttons": "unobserved",
+            "node_stubs": "used for generated SDK callback replay (buttons/http and DOM/state)",
+            "flic_sdk_runtime": "unknown: physical SDK not observed",
+            "sdk_version": "unknown",
+            "physical_buttons": "unknown: no hardware tested",
         }
 
     async def perform(self, action: Action) -> ActionResult:
+        """Return only sanitized evidence, including on template/transport failure."""
         if not self.supports(action):
             raise NotSupportedError(f"client '{self.name}' cannot perform '{action.intent}'")
-
-        assert self._session is not None, "client not started"
         result = ActionResult(intent=action.intent, ok=False)
+        t0 = time.perf_counter()
+        try:
+            await self._perform(action, result)
+        except FlicReplayError as exc:
+            result.ok = False
+            result.error = str(exc)
+            result.steps.append(result.error)
+        result.elapsed_ms = round((time.perf_counter() - t0) * 1000, 1)
+        return ActionResult(**redact_body(asdict(result), _secret_values(action.params)))
+
+    async def _perform(self, action: Action, result: ActionResult) -> None:
+        assert self._session is not None, "client not started"
         t0 = time.perf_counter()
 
         # Handle SDK event simulation intent
@@ -599,6 +690,7 @@ class FlicClient(Client):
                 cec_target_port=int(p.get("cec_target_port", 1)),
                 cec_cmd=str(p.get("cec_cmd", "power_on")),
                 legacy_all_output=bool(p.get("legacy_all_output", False)),
+                source_path=Path(p["source_path"]) if p.get("source_path") else None,
             )
 
             # Optional startup registration phase
@@ -606,23 +698,18 @@ class FlicClient(Client):
                 buttons_raw = p.get("buttons", [])
                 buttons = [FlicButtonInfo(b["name"], b["bdaddr"], b.get("serial", "")) for b in buttons_raw]
                 reg_req = engine.startup_request(buttons)
-                reg_record = {
-                    "method": reg_req["method"],
-                    "path": "/api/integrations/flic/register",
-                    "headers": reg_req["headers"],
-                    "body": redact_body(reg_req["body"]),
-                }
-                async with self._session.request(
-                    reg_req["method"], "/api/integrations/flic/register", json=reg_req["body"], headers=reg_req["headers"]
-                ) as resp:
-                    parsed: Any = None
-                    try:
-                        parsed = await resp.json(content_type=None)
-                    except ValueError:
-                        parsed = await resp.text()
-                    reg_record["status"] = resp.status
-                    reg_record["response"] = parsed
-                    result.requests.append(reg_record)
+                await self._send(
+                    result, reg_req["method"], reg_req["url"][len(engine.origin):],
+                    reg_req["body"], reg_req["headers"],
+                    {
+                        "request_type": "generated_sdk_startup", "auth_mode": "keyless", "captured_requests": 1,
+                        "drawer_source_sha256": get_drawer_sha256(engine.source_path),
+                    },
+                    t0, _secret_values(action.params),
+                )
+                if not result.ok:
+                    result.steps.append("SDK startup registration failed; event replay stopped")
+                    return
 
             # Event dispatch
             evt_data = p.get("event", {})
@@ -642,34 +729,47 @@ class FlicClient(Client):
             if req_spec is None:
                 # Event did not match trigger or filter: zero requests triggered
                 result.ok = True
-                result.status = 200
+                # No synthetic HTTP status for an event that made no HTTP request.
                 result.steps.append(f"SDK event {evt.event_name} ignored (no matching trigger or button filter)")
                 result.elapsed_ms = round((time.perf_counter() - t0) * 1000, 1)
-                return result
+                return
 
             # Matching event: make the single triggered HTTP request
             target_path = req_spec["url"].replace(engine.origin, "", 1)
             method = req_spec["method"]
             body = req_spec["body"]
             headers = req_spec["headers"]
-            metadata = {"request_type": "flic_sdk_event"}
+            metadata = {
+                "request_type": "flic_sdk_event", "auth_mode": "keyless", "captured_requests": 1,
+                "protocol_variant": "legacy_defect" if engine.legacy_all_output else "generated_sdk",
+                "drawer_source_sha256": get_drawer_sha256(engine.source_path),
+            }
         else:
             method, target_path, body, headers, metadata = build_drawer_request(action)
 
+        await self._send(result, method, target_path, body, headers, metadata, t0, _secret_values(action.params))
+
+    async def _send(
+        self, result: ActionResult, method: str, target_path: str, body: Any,
+        headers: dict[str, str], metadata: dict[str, Any], t0: float, secrets: tuple[str, ...],
+    ) -> None:
+        assert self._session is not None
         req_headers: dict[str, str] = {}
-        forwarded = self.context.get("forwarded_for")
+        forwarded = self.context.get("forwarded_for") or (self.hub.forwarded_for if self.hub else None)
         if forwarded:
             req_headers["X-Forwarded-For"] = forwarded
+            metadata = {**metadata, "harness_headers": {"X-Forwarded-For": forwarded}}
         if headers:
             req_headers.update(headers)
 
         record: dict[str, Any] = {
             "method": method,
-            "path": redact_path(target_path),
-            "headers": redact_headers(req_headers),
-            "body": redact_body(body),
-            "metadata": metadata,
+            "path": redact_path(target_path, secrets),
+            "headers": redact_body(req_headers, secrets),
+            "body": redact_body(body, secrets),
+            "metadata": redact_body(metadata, secrets),
         }
+        result.requests.append(record)
 
         try:
             req_kwargs: dict[str, Any] = {"headers": req_headers}
@@ -677,18 +777,17 @@ class FlicClient(Client):
                 req_kwargs["json"] = body
 
             async with self._session.request(method, target_path, **req_kwargs) as resp:
-                text = await resp.text()
+                response_text = await resp.text()
                 try:
-                    parsed_resp: Any = await resp.json(content_type=None) if text else None
+                    parsed_resp: Any = json.loads(response_text) if response_text else None
                 except ValueError:
-                    parsed_resp = text[:2000]
+                    parsed_resp = response_text[:2000]
 
                 record["status"] = resp.status
-                record["response"] = parsed_resp
+                record["response"] = redact_body(parsed_resp, secrets)
                 record["elapsed_ms"] = round((time.perf_counter() - t0) * 1000, 1)
-                result.requests.append(record)
                 result.status = resp.status
-                result.body = parsed_resp
+                result.body = record["response"]
 
                 # Check HTTP envelope and partial effects
                 is_http_ok = 200 <= resp.status < 300
@@ -700,14 +799,14 @@ class FlicClient(Client):
 
                 result.ok = is_http_ok and not is_multi_status_207 and is_payload_success
                 result.steps.append(
-                    f"{method} {redact_path(target_path)}"
-                    + (f" {redact_body(body)}" if body is not None else "")
+                    f"{method} {redact_path(target_path, secrets)}"
+                    + (f" {redact_body(body, secrets)}" if body is not None else "")
                     + f" -> HTTP {resp.status}"
                 )
         except (aiohttp.ClientError, TimeoutError) as exc:
-            raw_err = f"{type(exc).__name__}: {exc}"
-            result.error = redact_path(raw_err)
-            result.steps.append(f"{method} {redact_path(target_path)} -> {result.error}")
+            result.ok = False
+            result.error = "HTTP request timed out" if isinstance(exc, TimeoutError) else "HTTP transport failed"
+            record["error"] = result.error
+            result.steps.append(f"{method} {redact_path(target_path, secrets)} -> {result.error}")
 
         result.elapsed_ms = round((time.perf_counter() - t0) * 1000, 1)
-        return result
