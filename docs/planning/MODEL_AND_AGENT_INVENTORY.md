@@ -136,3 +136,5 @@ honestly, and preserve the authoritative Orca receipt/handle. Never use an
 Anthropic fallback after a quota or model-selection failure. Use a higher
 reasoning level only for a concrete unresolved problem; no automatic `ultra`
 delegation or unsupervised helper fan-out bypassing the roster.
+Before creating the worktree, also inspect setup hooks and default agent tabs
+so an otherwise valid launch does not start an excluded agent as a side effect.

@@ -223,6 +223,10 @@ work. A requested label or successful terminal creation does not prove it.
 Audit all automatic helper and fallback routes against the non-Anthropic
 allowlist before using a multi-model harness. If the effective model cannot be
 established, mark the assignment unverified and use a confirmed alternative.
+Inspect worktree setup hooks and default agent tabs as well: explicitly choosing
+one worker must not implicitly start an excluded agent alongside it. Use a
+supported per-worktree configuration; do not change global defaults or launch
+an excluded agent first and attempt to stop it afterward.
 Do not silently relabel M3 as M3.1, spend paid credits to test catalog-only
 providers, or change global account/model settings as part of this plan.
 
