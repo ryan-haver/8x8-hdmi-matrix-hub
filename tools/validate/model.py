@@ -140,7 +140,11 @@ class Action:
     params: dict[str, Any] = field(default_factory=dict)
 
     def describe(self) -> str:
-        args = ", ".join(f"{k}={v!r}" for k, v in self.params.items())
+        # Descriptions become persisted evidence procedures, including manual auth
+        # variants. Import lazily because evidence also uses Level from this module.
+        from .evidence import redact
+
+        args = ", ".join(f"{k}={v!r}" for k, v in redact(self.params).items())
         return f"{self.intent}({args})"
 
 

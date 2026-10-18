@@ -35,6 +35,20 @@ def test_levels():
         Level.parse("V9")
 
 
+def test_action_description_does_not_persist_manual_auth_or_pin_secrets():
+    action = act(
+        "profile_recall", profile_id="movie_night", api_key="key-needle",
+        manual_passcode="pin-needle", body={"pin_hash": "hash-needle", "key": "body-key-needle"},
+        path="/api/profile/movie_night/recall?key=encoded%26needle&output=1",
+    )
+    description = action.describe()
+    assert "movie_night" in description and "output=1" in description
+    for secret in ("key-needle", "pin-needle", "hash-needle", "body-key-needle", "encoded%26needle"):
+        assert secret not in description
+    assert action.params["api_key"] == "key-needle"
+    assert action.params["body"]["pin_hash"] == "hash-needle"
+
+
 def test_resolve_paths():
     assert resolve(STATE, "system.power") == 1
     assert resolve(STATE, "outputs[1].source") == 5
