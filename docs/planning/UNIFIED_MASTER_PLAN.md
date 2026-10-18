@@ -12,16 +12,20 @@ criteria come from [the remediation plan](../REMEDIATION_PLAN.md) and
    Commit `1aab559` corrects browser assertions for stacked overlays and limits
    the PIN latency test to its verification window. Local validation passed:
    Ruff, 2,793 Python tests, 175/175 REST routes, and 59 browser smoke/flow tests.
-   CI run `39080173082`: 1,093 UI tests passed, 33 skipped, eight snapshots failed.
+   CI run `39083178584`: 1,098 UI tests passed, 33 skipped, three snapshots failed.
    Five modal differences were the corrected deployment port; their fixture now
    asserts the live origin before normalizing capture text. Three Tron snapshots
    retain small temporal changes from the 30-fps cap and await owner approval
    in `build/phase5-visual-review/index.html`. No baselines were changed.
    Merge only after all applicable CI checks pass, then tag `v0.5.0` on the merge
    commit and merge `main` into the release integration branch.
-3. Integrate Phases 6–7 on `wp-g1-g2-release-and-docs`, validate the combined
-   result, open its PR to `main`, and merge after CI passes. Synchronize package
-   versions with the release bump script before tagging `v1.0.0-rc1`.
+3. All six Phase 6/7 tracks are integrated on `wp-g1-g2-release-and-docs`.
+   [Draft PR #37](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/pull/37) is open.
+   Commit `d04fcd5` passed 3,329 tests, four skips and 177/177 routes; `ec850d2`
+   adds the validated Phase 5 capture fixtures. Harness-only `f55660e` passed 86
+   validation tests plus requirements-only Linux discovery. Metadata is
+   `1.0.0rc1`, mapped to Git tag `v1.0.0-rc1`. Merge/tag only after PR #36 and
+   all applicable CI gates pass.
 4. Run Phase 8 against the candidate and publish the validation report. Tag
    `v1.0.0` only when the final gates below have evidence.
 
@@ -29,9 +33,9 @@ criteria come from [the remediation plan](../REMEDIATION_PLAN.md) and
 
 | Track | Requested model | Scope | State |
 | --- | --- | --- | --- |
-| `wp-g1-packaging-version-locks` | Sol 6.1 high | Packaging, canonical version, atomic bump script, hashed locks | Merged `14477d5`, worktree removed. Coordinator added RC version/notice coverage: 22 packaging tests passed, including coexistence with an editable install. |
+| `wp-g1-packaging-version-locks` | Sol 6.1 high | Packaging, canonical version, validated bump script with rollback, hashed locks | Merged `14477d5`, worktree removed. Coordinator added RC version/notice coverage: 22 packaging tests passed, including coexistence with an editable install. |
 | `wp-g1-ci-multiarch-hygiene` | Opus 5.5 high | Docker context, Git guard, pinned build dependencies, Dependabot, multiarch | Merged `de6693f`, worktree removed; coordinator reran 61 non-Docker tests. Worker also proved amd64/arm64 publication in a disposable local registry and arm64 health under QEMU. |
-| `wp-g2-openapi-swagger-config-docs` | Argon high | OpenAPI/Swagger routes, API/config reference, registry and ledger | Merged `5366eff`, worktree removed; 172 coordinator tests passed, followed by corrected response/auth metadata and three passing read-only scenarios. |
+| `wp-g2-openapi-swagger-config-docs` | Argon high | OpenAPI/Swagger routes, API/config reference, registry and ledger | Merged `5366eff`, worktree removed; 172 coordinator tests passed, followed by corrected response/auth metadata and four passing read-only contract scenarios. |
 | `wp-g1-license-asset-audit` | Flash 3.8 high | Notices, original replacement device SVGs, protocol reference | Merged `f0a1641`, worktree removed. Coordinator expanded inventory to 17 locked packages, checked SVG rendering/reproduction and retained upstream notices. |
 | `wp-g2-readme-architecture-changelog` | MiniMax M3 | README, architecture, integrations, changelog, roadmap, docs index | Merged review correction `1b65297`, worktree removed; 87 coordinator documentation/security tests passed. Coordinator refreshed RC/version text and archive links. |
 | `wp-g2-client-guides-doc-archive` | MiniMax M3.1 | HA, Docker, Flic, UC, contributing guides | Merged `c4524ed`, worktree removed; coordinator tests: 310 passed after review corrections. Installed session reported M3 and exhausted its plan after committing. |
@@ -45,7 +49,7 @@ it to make the worktree count look clean.
 
 REST additions or changes require `docs/validation/features.yaml`, simulator
 reads in `tests/sim/test_sim_rest_reads.py`, and `python -m tools.validate ledger`.
-The final suite must retain 100% route coverage. The RC image `sha256:5c9f50df...` passed 26 deployment/context tests (two expected skips); its 17 dependency license inventories were verified inside the image.
+The final suite must retain 100% route coverage. The final amd64 RC image `sha256:e0ab773c...` passed 26 deployment/context tests (two expected skips); its 17 dependency license inventories were verified. The arm64 image built and passed canonical info/health checks under QEMU.
 
 ## Final validation gates and discovered gaps
 
@@ -54,9 +58,9 @@ The final suite must retain 100% route coverage. The RC image `sha256:5c9f50df..
   still constructs `OreiMatrix` and `RestApiServer` directly or delegates to
   `src/driver.py` for UC. Documentation must distinguish the framework from
   actual runtime behavior. Runtime consolidation is not proven complete.
-- **Simulator and clients:** regenerate fresh API/browser/scripted-Remote and
-  Home Assistant evidence on the release candidate; record failures and any
-  features below their targets without relabeling them as passes.
+- **Simulator and clients:** candidate API/browser/scripted-Remote and Home
+  Assistant runs passed as recorded below. Features below their target and the
+  Flic replay placeholder remain visible; these runs do not close hardware gates.
 - **Hardware:** owner-observed HIL-B regression, HIL-C fault injection, HIL-E
   real-client checks, firmware versions, and physical CEC observations remain
   required. Existing checked-in ledger evidence contains no V4/V5 records.
@@ -68,3 +72,18 @@ The final suite must retain 100% route coverage. The RC image `sha256:5c9f50df..
 Phase 8 is called `WP-V3` in the checked-in remediation plan. The handoff's
 `WP-F2` label refers to this final validation gate, not a separate implemented
 work package. No final release tag should imply these unresolved gates passed.
+
+## Candidate campaign results
+
+The [candidate report](../validation/VALIDATION_REPORT.md) retains all 268 feature
+rows and links the real summaries. Clean source commit `ec850d2`: API 1,411,
+browser 54, scripted Remote 18, real HA container 19 passes. Clean harness commit
+`f55660e`, through the built image: API 27 and browser 17 passes. The combined
+regression gate passed with zero known/unexplained failures. The dedicated Flic
+replay client is still a placeholder (one explicit skip), not V3 client proof.
+The separate scripted-Remote pytest suite passed 100 tests.
+
+All six worker worktrees and the coordinator's visual-repair worktree are removed;
+only the main checkout remains. No `v0.5.0`, `v1.0.0-rc1`, or `v1.0.0` tag was
+created during this coordination session. Phase 5 visual approval, runtime
+framework consolidation and the owner-observed hardware/field gates remain open.

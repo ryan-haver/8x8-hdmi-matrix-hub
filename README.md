@@ -20,10 +20,10 @@
 
 ## 🔌 Compatible devices
 
-The integration supports **8×8 HDMI 2.1 matrix switches based on the
-HDCVT HDP-MXC88A platform**. These switches are sold under multiple
-brand names but share the same hardware, firmware, and control
-protocol — they are software-interchangeable.
+The hub targets the **OREI BK-808** HTTPS/Telnet protocol, anchored by the
+checked-in real-device captures. The other HDCVT HDP-MXC88A family models below
+are compatibility candidates; their hardware/firmware behavior has not been
+validated for this release.
 
 | Brand                  | Model         | Product                                                                                                                            | Status        |
 | ---------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------- |

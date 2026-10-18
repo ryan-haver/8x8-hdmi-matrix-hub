@@ -1,0 +1,23 @@
+{
+  "base": "http://127.0.0.1:62559",
+  "results": [
+    {
+      "mode": "online",
+      "routes": 177,
+      "pageErrors": [],
+      "savedPin": false,
+      "pinPersistenceTested": true
+    },
+    {
+      "mode": "offline",
+      "routes": 177,
+      "pageErrors": [],
+      "savedPin": null,
+      "pinPersistenceTested": false
+    }
+  ],
+  "observed_at": "2026-10-18T01:14:33.176384+00:00",
+  "source_commit": "f55660ee088408e368d5d7e4f1f7a0c1a7cfe7b3",
+  "tracked_changes": "documentation/report only; application source unchanged",
+  "image_id": "sha256:e0ab773c06ec8ff69d6cbd0416630072943cf49d8279b6539fa6b1c3e5cf7beb"
+}

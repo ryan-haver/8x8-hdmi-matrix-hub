@@ -131,7 +131,7 @@ flowchart LR
 
 **Phases 6 & 7 Merge & Cleanup Checklist:**
 - [x] Validate, merge, and `orca worktree rm` each of the 6 `wp-g1-*` / `wp-g2-*` worktrees upon completion. All six tracks integrated; current status and evidence are in `docs/planning/UNIFIED_MASTER_PLAN.md`.
-- [ ] Push `wp-g1-g2-release-and-docs` to GitHub, open PR to `main`, pass all 13 CI checks, merge, and delete branch.
+- [ ] Finish [draft PR #37](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/pull/37): branch pushed and PR opened; CI, Phase 5 visual approval, merge and tag are pending. See the unified master plan and candidate validation report.
 
 ---
 
