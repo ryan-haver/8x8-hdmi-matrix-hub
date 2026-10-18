@@ -194,3 +194,26 @@ async def test_kiosk_aliases_serve_the_shipped_html(data_hub, path):
     assert response.content_type == "text/html"
     expected = Path(__file__).resolve().parents[2] / "web" / "kiosk.html"
     assert await response.read() == expected.read_bytes()
+
+
+async def test_openapi_spec_and_swagger_docs_reads(data_hub, simulator):
+    from hub.openapi import validate_openapi_spec
+
+    spec_resp = await data_hub.get("/api/openapi.json")
+    assert spec_resp.status == 200
+    assert spec_resp.content_type == "application/json"
+    spec = await spec_resp.json()
+    assert spec["openapi"] == "3.1.0"
+    assert validate_openapi_spec(spec) == []
+    assert "/api/openapi.json" in spec["paths"]
+    assert "/api/docs" in spec["paths"]
+
+    docs_resp = await data_hub.get("/api/docs")
+    assert docs_resp.status == 200
+    assert docs_resp.content_type == "text/html"
+    html = await docs_resp.text()
+    assert "SwaggerUIBundle" in html
+    assert "/api/openapi.json" in html
+    assert 'id="swagger-ui"' in html
+    assert sim_writes(simulator) == []
+

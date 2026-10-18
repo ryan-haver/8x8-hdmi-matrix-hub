@@ -198,8 +198,10 @@ from .settings import (
     handle_test_matrix_connection,
 )
 from .static import (
+    handle_api_docs,
     handle_api_root,
     handle_kiosk_ui,
+    handle_openapi_spec,
     handle_static_file,
     handle_web_ui,
 )
@@ -297,6 +299,8 @@ def create_rest_app(data_dir: Path | None = None) -> web.Application:
     # Register API routes
     app.router.add_get("/", handle_api_root)
     app.router.add_get("/api", handle_api_root)
+    app.router.add_get("/api/openapi.json", handle_openapi_spec)
+    app.router.add_get("/api/docs", handle_api_docs)
     app.router.add_get("/api/auth/status", auth_status)
     app.router.add_post("/api/auth/unlock", auth_unlock)
     app.router.add_post("/api/auth/login", auth_unlock)

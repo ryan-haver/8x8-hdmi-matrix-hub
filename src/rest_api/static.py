@@ -9,12 +9,26 @@ from pathlib import Path
 
 from aiohttp import web
 
+from hub.openapi import build_openapi_spec, spec_to_json, swagger_ui_html
+
 from .utils import API_VERSION, _json_response
 
 _LOG = logging.getLogger("rest_api.static")
 
-# Web UI directory (from src/rest_api/ up to project root /web)
-_WEB_DIR = Path(__file__).parent.parent.parent / "web"
+# Web UI directory (repo root /web in source checkout, or package /web in wheel install)
+_REPO_WEB_DIR = Path(__file__).resolve().parents[2] / "web"
+_WEB_DIR = _REPO_WEB_DIR if _REPO_WEB_DIR.exists() else Path(__file__).resolve().parents[1] / "web"
+
+
+async def handle_openapi_spec(request: web.Request) -> web.Response:
+    """Serve the live OpenAPI 3.1.0 specification as JSON (DOC-03, TD-09)."""
+    spec = build_openapi_spec(request.app)
+    return web.Response(text=spec_to_json(spec), content_type="application/json")
+
+
+async def handle_api_docs(request: web.Request) -> web.Response:
+    """Serve the interactive Swagger UI documentation page (DOC-03, TD-09)."""
+    return web.Response(text=swagger_ui_html(spec_url="/api/openapi.json"), content_type="text/html")
 
 
 async def handle_web_ui(request: web.Request) -> web.StreamResponse:
@@ -96,6 +110,8 @@ async def handle_api_root(request: web.Request) -> web.Response:
             },
             "status": {
                 "GET /api/health": "Health check",
+                "GET /api/openapi.json": "OpenAPI 3.1.0 specification (JSON)",
+                "GET /api/docs": "Interactive Swagger UI API documentation",
                 "GET /api/status": "Basic matrix status",
                 "GET /api/status/full": "Comprehensive status from all endpoints",
                 "GET /api/presets": "List all presets with names",
