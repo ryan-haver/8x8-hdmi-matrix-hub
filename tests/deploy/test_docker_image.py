@@ -1,6 +1,6 @@
 """The shipped image, started the two ways a user runs it (V3 deployment, WP-D2).
 
-``core``: integrations off (the default). ``uc``: the Remote 3 integration on, in
+``core``: UC off (the default; Flic retains its enabled default). ``uc``: Remote 3 on, in
 bridge networking (mDNS off, UC_DRIVER_URL set), with ``config_state.json`` in the
 data volume the way a completed Remote setup leaves it. Both point at the
 simulator container. Tests run in file order for each mode; the last one stops
