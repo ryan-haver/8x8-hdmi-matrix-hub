@@ -46,7 +46,7 @@ dev = [
 ]
 
 [project.scripts]
-orei-matrix-driver = "driver:main"
+orei-matrix-driver = "hub.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/ryan-haver/8x8-hdmi-matrix-hub"
