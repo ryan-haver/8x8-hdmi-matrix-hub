@@ -178,6 +178,11 @@ INTENTS: dict[str, str] = {
     ),
     "request": "raw HTTP `method` `path` with optional `json` body (api client only)",
     "uc_command": "Remote 3 entity command `cmd_id` with optional `params` on `entity_id` (uc client only)",
+    "flic_register": "documented manual Flic button registration with `buttons` (flic replay client only)",
+    "cycle_input": "replay generated next/previous input request for `output` and `direction` (flic replay client)",
+    "volume_control": "replay generated output CEC volume request for `output` and `direction` (flic replay client)",
+    "flic_sdk_event": "execute the actual generated SDK callback for `event` and `button_registry` using Node stubs "
+                      "(flic replay client only; no physical SDK/button observation)",
     "ha_service": "Home Assistant service `domain`.`service` with `data` (ha client only)",
     "ha_config_flow": "add the hub in Home Assistant through the integration's config flow, then set "
                       "`options` through its options flow (ha client only)",

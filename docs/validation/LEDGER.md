@@ -1,7 +1,7 @@
 # Feature ledger
 
 > **Generated** by `python -m tools.validate ledger` — do not edit by hand. Registry: [`features.yaml`](features.yaml) · Plan: [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md) · How to add evidence: [`README.md`](README.md).
-> Commit `952a14ad`
+> Commit `809f9341`
 
 **Level** = highest level with fresh passing evidence, else the recorded baseline (the registry's `current`), capped at V1 while an open critical/high finding is linked. **Recorded** = the registry baseline. **Fresh** = evidence commit not older than the last change to the scenario's `covers` paths.
 
@@ -303,7 +303,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-FLIC-005 | Flic Twist controls TV volume and mute over CEC | V3 | V1 | V1 | — | — | BE-14(M) |
 | F-FLIC-006 | Button recalls a profile or runs a macro | V3 | V1 | V1 | — | — | — |
 | F-FLIC-007 | Register Flic buttons with the hub (button registry) | V3 | V0 | V0 | — | — | — |
-| F-FLIC-008 | Button switches every output to input N (POST /api/input/{n}) | V3 | V0 | V0 | — | — | — |
+| F-FLIC-008 | Button switches every output to input N (POST /api/switch with JSON input) | V3 | V0 | V0 | — | — | — |
 | F-FLIC-009 | Flic Hub SDK JavaScript module templates | V3 | V0 | V0 | — | — | — |
 | F-FLIC-010 | Generate Flic request URLs in the web UI | V3 | V1 | V1 | — | — | — |
 

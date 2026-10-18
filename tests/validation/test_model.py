@@ -6,6 +6,7 @@ import pytest
 
 from tools.validate.clients.api import rest_call
 from tools.validate.clients.base import NotSupportedError
+from tools.validate.clients.flic import FlicClient
 from tools.validate.clients.ha import HomeAssistantClient
 from tools.validate.clients.uc import RemoteClient
 from tools.validate.model import (
@@ -133,9 +134,10 @@ def test_api_client_maps_every_intent():
         "scene_wait_edit": {"scene_id": "s", "steps": []}, "scene_conflicts": {"scene_id": "s"},
         "request": {"method": "GET", "path": "/api/health"},
     }
-    # uc_command / ha_* are the Remote's and Home Assistant's own actions, as `request` is the api client's
+    # uc_command / ha_* / flic_* belong to their clients, as `request` is the api client's
     # and kiosk_route the browser's; device_change is carried out by the runner itself.
     assert set(samples) == set(INTENTS) - {"uc_command", "ha_service", "ha_config_flow", "ha_reconfigure",
+                                           "flic_register", "flic_sdk_event", "cycle_input", "volume_control",
                                            "kiosk_route", "device_change"}
     for intent, params in samples.items():
         method, path, _ = rest_call(act(intent, **params))
@@ -147,6 +149,7 @@ def test_api_client_maps_every_intent():
 
 def test_ha_client_intents_exist_and_it_observes():
     assert HomeAssistantClient.intents <= set(INTENTS)
+    assert FlicClient.intents <= set(INTENTS)
     assert HomeAssistantClient.observes and RemoteClient.observes  # uc observes since WP-B3
     assert "request" not in HomeAssistantClient.intents
     assert ClientState("switch.power", equals="on", before="off").describe() == \

@@ -7059,11 +7059,10 @@ features:
     flic: ['POST http://hub:8080/api/preset/{n} (no body)']
   target: V3
   current: V1
-  basis: 'The same REST route has mocked tests only, or a sim test that is not a Flic request replay; no test replays the
-    Flic Hub''s request. Closest: tests/sim/test_sim_e2e.py::test_switch_all_and_preset (POST /api/preset/3, no body).'
+  basis: "R6 implementation: tests/validation/test_flic_replay_r6.py, tests/validation/test_flic_templates_r6.py and tests/validation/test_flic_replay_live_r6.py exercise the dedicated client and actual generator with Node stubs; 74 coordinator tests passed in its isolated pre-R1 worktree, one disabled-route test awaits integrated startup. Recorded level retained until fresh normal-entry/image campaign. Physical Flic Hub, SDK version/buttons and physical CEC effects remain unobserved."
   evidence: []
   findings: []
-  scenarios: []
+  scenarios: ["flic.preset"]
 - id: F-FLIC-002
   area: flic
   title: Button hold powers the matrix off / on
@@ -7072,11 +7071,10 @@ features:
     flic: [POST /api/power/off, POST /api/power/on]
   target: V3
   current: V1
-  basis: The same REST route has mocked tests only, or a sim test that is not a Flic request replay; no test replays the Flic
-    Hub's request.
+  basis: "R6 implementation: tests/validation/test_flic_replay_r6.py, tests/validation/test_flic_templates_r6.py and tests/validation/test_flic_replay_live_r6.py exercise the dedicated client and actual generator with Node stubs; 74 coordinator tests passed in its isolated pre-R1 worktree, one disabled-route test awaits integrated startup. Recorded level retained until fresh normal-entry/image campaign. Physical Flic Hub, SDK version/buttons and physical CEC effects remain unobserved."
   evidence: []
   findings: []
-  scenarios: []
+  scenarios: ["flic.power_off", "flic.power_on"]
 - id: F-FLIC-003
   area: flic
   title: Button powers a source on over CEC
@@ -7085,11 +7083,10 @@ features:
     flic: ['POST /api/cec/input/{n}/power_on']
   target: V3
   current: V1
-  basis: The same REST route has mocked tests only, or a sim test that is not a Flic request replay; no test replays the Flic
-    Hub's request.
+  basis: "R6 implementation: tests/validation/test_flic_replay_r6.py, tests/validation/test_flic_templates_r6.py and tests/validation/test_flic_replay_live_r6.py exercise the dedicated client and actual generator with Node stubs; 74 coordinator tests passed in its isolated pre-R1 worktree, one disabled-route test awaits integrated startup. Recorded level retained until fresh normal-entry/image campaign. Physical Flic Hub, SDK version/buttons and physical CEC effects remain unobserved."
   evidence: []
   findings: []
-  scenarios: []
+  scenarios: ["flic.source_power"]
 - id: F-FLIC-004
   area: flic
   title: Flic Twist cycles an output through its inputs
@@ -7098,11 +7095,10 @@ features:
     flic: ['POST /api/input/next?output=N', 'POST /api/input/previous?output=N']
   target: V3
   current: V1
-  basis: The same REST route has mocked tests only, or a sim test that is not a Flic request replay; no test replays the Flic
-    Hub's request.
+  basis: "R6 implementation: tests/validation/test_flic_replay_r6.py, tests/validation/test_flic_templates_r6.py and tests/validation/test_flic_replay_live_r6.py exercise the dedicated client and actual generator with Node stubs; 74 coordinator tests passed in its isolated pre-R1 worktree, one disabled-route test awaits integrated startup. Recorded level retained until fresh normal-entry/image campaign. Physical Flic Hub, SDK version/buttons and physical CEC effects remain unobserved."
   evidence: []
   findings: []
-  scenarios: []
+  scenarios: ["flic.cycle_next", "flic.sdk_twist_next", "flic.sdk_twist_previous"]
 - id: F-FLIC-005
   area: flic
   title: Flic Twist controls TV volume and mute over CEC
@@ -7111,11 +7107,10 @@ features:
     flic: ['POST /api/cec/output/{n}/volume_up', 'POST /api/cec/output/{n}/volume_down', 'POST /api/cec/output/{n}/mute']
   target: V3
   current: V1
-  basis: The same REST route has mocked tests only, or a sim test that is not a Flic request replay; no test replays the Flic
-    Hub's request.
+  basis: "R6 implementation: tests/validation/test_flic_replay_r6.py, tests/validation/test_flic_templates_r6.py and tests/validation/test_flic_replay_live_r6.py exercise the dedicated client and actual generator with Node stubs; 74 coordinator tests passed in its isolated pre-R1 worktree, one disabled-route test awaits integrated startup. Recorded level retained until fresh normal-entry/image campaign. Physical Flic Hub, SDK version/buttons and physical CEC effects remain unobserved."
   evidence: []
   findings: [BE-14, VAL-03]
-  scenarios: []
+  scenarios: ["flic.display_volume", "flic.cec_output_navigation_refused"]
 - id: F-FLIC-006
   area: flic
   title: Button recalls a profile or runs a macro
@@ -7124,11 +7119,10 @@ features:
     flic: ['POST /api/profile/{id}/recall', 'POST /api/cec/macro/{id}/execute']
   target: V3
   current: V1
-  basis: The same REST route has mocked tests only, or a sim test that is not a Flic request replay; no test replays the Flic
-    Hub's request.
+  basis: "R6 implementation: tests/validation/test_flic_replay_r6.py, tests/validation/test_flic_templates_r6.py and tests/validation/test_flic_replay_live_r6.py exercise the dedicated client and actual generator with Node stubs; 74 coordinator tests passed in its isolated pre-R1 worktree, one disabled-route test awaits integrated startup. Recorded level retained until fresh normal-entry/image campaign. Physical Flic Hub, SDK version/buttons and physical CEC effects remain unobserved. Macro execution is a documented manual protocol variant, not a generated drawer action."
   evidence: []
   findings: [VAL-02, API-08]
-  scenarios: []
+  scenarios: ["flic.profile", "flic.profile_pin_refused", "flic.manual_macro", "flic.manual_macro_refused", "flic.unknown_profile"]
 - id: F-FLIC-007
   area: flic
   title: Register Flic buttons with the hub (button registry)
@@ -7138,22 +7132,22 @@ features:
     files: [flic_buttons.json]
   target: V3
   current: V0
-  basis: Not exercised by any test.
+  basis: "R6 implementation: tests/validation/test_flic_replay_r6.py, tests/validation/test_flic_templates_r6.py and tests/validation/test_flic_replay_live_r6.py exercise the dedicated client and actual generator with Node stubs; 74 coordinator tests passed in its isolated pre-R1 worktree, one disabled-route test awaits integrated startup. Recorded level retained until fresh normal-entry/image campaign. Physical Flic Hub, SDK version/buttons and physical CEC effects remain unobserved."
   evidence: []
   findings: [PER-02, API-15]
-  scenarios: []
+  scenarios: ["flic.register"]
 - id: F-FLIC-008
   area: flic
-  title: Button switches every output to input N (POST /api/input/{n})
+  title: Button switches every output to input N (POST /api/switch with JSON input)
   claim: docs/FLIC_SETUP.md endpoint table
   interfaces:
-    flic: ['POST /api/input/{n}']
+    flic: ['POST /api/switch with JSON input']
   target: V3
   current: V0
-  basis: The documented route does not exist in src/rest_api/app.py (DOC-03).
+  basis: "R6 implementation: tests/validation/test_flic_replay_r6.py, tests/validation/test_flic_templates_r6.py and tests/validation/test_flic_replay_live_r6.py exercise the dedicated client and actual generator with Node stubs; 74 coordinator tests passed in its isolated pre-R1 worktree, one disabled-route test awaits integrated startup. Recorded level retained until fresh normal-entry/image campaign. Physical Flic Hub, SDK version/buttons and physical CEC effects remain unobserved."
   evidence: []
   findings: [DOC-03]
-  scenarios: []
+  scenarios: ["flic.all_outputs"]
 - id: F-FLIC-009
   area: flic
   title: Flic Hub SDK JavaScript module templates
@@ -7162,10 +7156,10 @@ features:
     docs: [docs/FLIC_SETUP.md Flic Hub SDK section]
   target: V3
   current: V0
-  basis: Templates are documentation only; never executed.
+  basis: "R6 implementation: tests/validation/test_flic_replay_r6.py, tests/validation/test_flic_templates_r6.py and tests/validation/test_flic_replay_live_r6.py exercise the dedicated client and actual generator with Node stubs; 74 coordinator tests passed in its isolated pre-R1 worktree, one disabled-route test awaits integrated startup. Recorded level retained until fresh normal-entry/image campaign. Physical Flic Hub, SDK version/buttons and physical CEC effects remain unobserved."
   evidence: []
   findings: []
-  scenarios: []
+  scenarios: ["flic.sdk_single", "flic.sdk_double", "flic.sdk_hold", "flic.sdk_filter_mismatch", "flic.sdk_startup_and_click", "flic.sdk_duo_left", "flic.sdk_duo_right", "flic.sdk_twist_next", "flic.sdk_twist_previous"]
 - id: F-FLIC-010
   area: flic
   title: Generate Flic request URLs in the web UI
@@ -7174,10 +7168,10 @@ features:
     ui: [drawer/integrations/flic-generated-request, drawer/integrations/flic-cec]
   target: V3
   current: V1
-  basis: visual catalog drawer/integrations/flic-*(screenshot baseline only).
+  basis: "R6 implementation: tests/validation/test_flic_replay_r6.py, tests/validation/test_flic_templates_r6.py and tests/validation/test_flic_replay_live_r6.py exercise the dedicated client and actual generator with Node stubs; 74 coordinator tests passed in its isolated pre-R1 worktree, one disabled-route test awaits integrated startup. Recorded level retained until fresh normal-entry/image campaign. Physical Flic Hub, SDK version/buttons and physical CEC effects remain unobserved. Node DOM stubs prove generator output; browser rendering/catalog review remains a separate check."
   evidence: []
   findings: [SEC-08]
-  scenarios: []
+  scenarios: ["flic.preset", "flic.power_off", "flic.power_on", "flic.source_power", "flic.display_volume", "flic.profile", "flic.profile_pin_refused", "flic.all_outputs", "flic.cycle_next", "flic.cec_output_navigation_refused", "flic.sdk_single", "flic.sdk_double", "flic.sdk_hold", "flic.sdk_startup_and_click", "flic.sdk_duo_left", "flic.sdk_duo_right"]
 - id: F-OPS-001
   area: ops
   title: Run the hub from the Docker image

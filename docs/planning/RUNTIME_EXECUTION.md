@@ -20,6 +20,12 @@ worker, helper, automatic fallback or default tab is authorized.
   one unchanged real-startup test remains pending R2's production migration
   barrier. This accepts the shared runtime foundation, not complete startup
   or UC/image behavior. Its terminal was released and worktree removed/pruned.
+- **R6, Flash 3.8 high plus focused Sol 6.1 high correction:** final candidate
+  `d7866fa`, merged as `809f934`. Coordinator independently ran 74 tests with
+  one explicit integrated disabled-route test pending. Review checked actual
+  generator/startup capture, callback multiplicity, failure results and evidence
+  redaction. Terminals were released and its worktree removed/pruned. Shipped
+  image and physical Flic Hub/SDK/buttons remain separate acceptance gates.
 
 ## First implementation wave
 
@@ -30,7 +36,7 @@ All four worktrees start from accepted contract merge `70de5d9`.
 | R1 `wp-runtime-core-composition` | Sol 6.1 high / Codex | Foundation accepted/merged; actual startup awaits peer integration |
 | R2 `wp-runtime-persistence-wiring` | MiniMax M3 / OpenCode | Native configuration and active Build session identify M3; implementation underway |
 | R3 `wp-runtime-uc-adapter` | Argon high / Antigravity | Effective launch plus Gemini 4 Argon/high session header observed; implementation underway |
-| R6 `wp-validation-flic-replay` | Flash 3.8 high / Antigravity; focused Sol follow-up | Second candidate passed 44 coordinator tests; final exact-replay/evidence corrections active in the same worktree |
+| R6 `wp-validation-flic-replay` | Flash 3.8 high / Antigravity; focused Sol follow-up | Accepted/merged `809f934`; 74 tests passed, one integrated disabled-route gate pending; worktree removed |
 
 Launch observations alone are not acceptance evidence. R4/R5
 remain dependent on accepted R1/R2/R3 integration; the final campaign precedes
@@ -90,8 +96,12 @@ auth/redaction checks and the later integrated campaign. That follow-up settled
 at `119cfac`; coordinator independently ran 44 tests successfully, but review
 still found copied startup registration, silently truncated callback requests
 and incomplete response/error redaction. Its Flash terminal was released.
-Fresh **Sol 6.1 high / Codex** now owns focused Task `task_04743d5e528d`, Dispatch
-`ctx_f0288cfc3a99`, in the same worktree. R7 also waits for its acceptance.
+Fresh **Sol 6.1 high / Codex** completed focused Task `task_04743d5e528d`, Dispatch
+`ctx_f0288cfc3a99`, in the same worktree. Accepted final result is recorded above.
+Its automatic broad pre-commit hook reached 3,209 passes before local missing
+`@eslint/js` ESM resolution failed; owned lint/syntax checks passed. This is not
+recorded as a successful full-suite run. The commit used an invocation-only
+hook bypass, with no dependency/global configuration change.
 
 Shared evidence commit `f116d61` redacts manual-auth/PIN values from persisted
 action descriptions, including nested hashes and query keys, without changing
