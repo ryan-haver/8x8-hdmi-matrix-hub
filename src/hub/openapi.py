@@ -40,6 +40,8 @@ from typing import Any
 
 from aiohttp import web
 
+import hub
+
 _LOG = logging.getLogger("hub.openapi")
 
 #: The OpenAPI version this generator emits.
@@ -69,11 +71,13 @@ _PATH_TAGS: dict[str, str] = {
     "cec": "cec",
     "dashboard": "dashboard",
     "device-settings": "device-settings",
+    "docs": "docs",
     "edid": "status",
     "ext-audio": "audio",
     "input": "matrix",
     "inputs": "matrix",
     "integrations": "integrations",
+    "openapi.json": "docs",
     "output": "matrix",
     "outputs": "matrix",
     "power": "matrix",
@@ -130,6 +134,7 @@ _TAG_ORDER: tuple[str, ...] = (
     "settings",
     "auth",
     "system",
+    "docs",
     "websocket",
     "web-ui",
     "static",
@@ -138,6 +143,7 @@ _TAG_ORDER: tuple[str, ...] = (
 
 _TAG_DESCRIPTIONS: dict[str, str] = {
     "auth": "Sessions, the admin PIN and API keys.",
+    "docs": "OpenAPI 3.1 specification and interactive Swagger UI documentation.",
     "matrix": "Routing, presets, power and port names.",
     "status": "Matrix status snapshots.",
     "cec": "CEC capabilities, commands and macros.",
@@ -408,7 +414,7 @@ def build_openapi_spec(
     app: web.Application | None = None,
     *,
     title: str = "8x8 HDMI Matrix Hub API",
-    version: str = "0.3.0",
+    version: str = hub.__version__,
 ) -> dict[str, Any]:
     """Build the OpenAPI 3.1 document for the hub.
 
@@ -529,6 +535,120 @@ def spec_to_json(spec: dict[str, Any], *, indent: int = 2) -> str:
     return json.dumps(spec, indent=indent, sort_keys=True) + "\n"
 
 
+def swagger_ui_html(
+    *,
+    spec_url: str = "/api/openapi.json",
+    title: str = "8x8 HDMI Matrix Hub API — Swagger UI",
+) -> str:
+    """Return a lightweight Swagger UI HTML page for ``/api/docs`` (DOC-03, TD-09).
+
+    Loads ``SwaggerUIBundle`` pointed at ``spec_url`` when online and includes a
+    self-contained offline fallback that fetches ``spec_url`` and renders the
+    route catalog directly when the browser has no internet access.
+    """
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5.17.14/swagger-ui.css" />
+  <style>
+    body {{
+      margin: 0;
+      background: #0b0f17;
+      color: #e6edf3;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }}
+    .hub-docs-banner {{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      background: #111827;
+      border-bottom: 1px solid #1f2937;
+      font-size: 14px;
+    }}
+    .hub-docs-banner a {{
+      color: #38bdf8;
+      text-decoration: none;
+      margin-left: 16px;
+    }}
+    #swagger-ui {{
+      background: #ffffff;
+      color: #111827;
+      min-height: calc(100vh - 49px);
+    }}
+    .offline-fallback {{
+      padding: 24px;
+      background: #0b0f17;
+      color: #e6edf3;
+    }}
+    .offline-fallback code {{
+      color: #38bdf8;
+    }}
+  </style>
+</head>
+<body>
+  <header class="hub-docs-banner">
+    <strong>{title}</strong>
+    <nav>
+      <a href="{spec_url}">OpenAPI 3.1 JSON ({spec_url})</a>
+      <a href="/ui">Web UI</a>
+      <a href="/kiosk">Kiosk</a>
+    </nav>
+  </header>
+  <main id="swagger-ui"></main>
+  <script src="https://unpkg.com/swagger-ui-dist@5.17.14/swagger-ui-bundle.js" crossorigin></script>
+  <script>
+    (function () {{
+      var specUrl = {json.dumps(spec_url)};
+      if (window.SwaggerUIBundle) {{
+        var presets = [window.SwaggerUIBundle.presets.apis];
+        if (window.SwaggerUIBundle.SwaggerUIStandalonePreset) {{
+          presets.push(window.SwaggerUIBundle.SwaggerUIStandalonePreset);
+        }}
+        window.ui = window.SwaggerUIBundle({{
+          url: specUrl,
+          dom_id: "#swagger-ui",
+          layout: "BaseLayout",
+          deepLinking: true,
+          persistAuthorization: true,
+          presets: presets
+        }});
+        return;
+      }}
+      fetch(specUrl)
+        .then(function (r) {{ return r.json(); }})
+        .then(function (spec) {{
+          var root = document.getElementById("swagger-ui");
+          var wrap = document.createElement("div");
+          wrap.className = "offline-fallback";
+          var h1 = document.createElement("h1");
+          h1.textContent = (spec.info && spec.info.title) || "API Reference";
+          wrap.appendChild(h1);
+          var paths = spec.paths || {{}};
+          Object.keys(paths).sort().forEach(function (p) {{
+            Object.keys(paths[p]).forEach(function (m) {{
+              var row = document.createElement("div");
+              var code = document.createElement("code");
+              code.textContent = m.toUpperCase() + " " + p;
+              row.appendChild(code);
+              var summary = (paths[p][m] && paths[p][m].summary) ? " — " + paths[p][m].summary : "";
+              row.appendChild(document.createTextNode(summary));
+              wrap.appendChild(row);
+            }});
+          }});
+          root.replaceChildren(wrap);
+        }})
+        .catch(function () {{}});
+    }})();
+  </script>
+</body>
+</html>
+"""
+
+
 __all__ = [
     "API_KEY_HEADER_NAME",
     "API_KEY_QUERY_NAME",
@@ -541,6 +661,7 @@ __all__ = [
     "route_inventory",
     "security_schemes",
     "spec_to_json",
+    "swagger_ui_html",
     "tag_for",
     "validate_openapi_spec",
 ]

@@ -85,8 +85,9 @@ def _get_data_dir():
 # API Version
 API_VERSION = "2.10.0"
 
-# Web UI directory
-_WEB_DIR = Path(__file__).parent.parent.parent / "web"
+# Web UI directory (repo root /web in source checkout, or package /web in wheel install)
+_REPO_WEB_DIR = Path(__file__).resolve().parents[2] / "web"
+_WEB_DIR = _REPO_WEB_DIR if _REPO_WEB_DIR.exists() else Path(__file__).resolve().parents[1] / "web"
 
 # Security configuration
 # Set TRUST_PROXY_HEADERS=true if running behind a trusted reverse proxy

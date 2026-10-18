@@ -2636,13 +2636,13 @@ features:
   - cec_caps.all_read_unavailable
 - id: F-API-001
   area: api
-  title: GET /api/health (liveness, matrix connection, runtime metrics)
-  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  title: GET /api/health, /api/openapi.json, /api/docs (liveness, matrix connection, runtime metrics, OpenAPI 3.1 & Swagger UI)
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table; src/hub/openapi.py
   interfaces:
-    rest: [GET /api/health]
+    rest: [GET /api/health, GET /api/openapi.json, GET /api/docs]
   target: V3
   current: V2
-  basis: 'V2: tests/sim/test_sim_e2e.py::test_health_reports_matrix_and_runtime; tests/test_health.py.'
+  basis: 'V2: tests/sim/test_sim_e2e.py::test_health_reports_matrix_and_runtime; tests/sim/test_sim_rest_reads.py::test_openapi_spec_and_swagger_docs_reads; tests/test_health.py; tests/test_openapi_and_config_docs.py.'
   evidence: []
   findings: []
   scenarios: []
