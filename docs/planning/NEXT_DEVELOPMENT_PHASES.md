@@ -1,6 +1,7 @@
 # Runtime completion and release plan
 
-Status: planned, not dispatched. Updated 2026-10-18. This is the next execution
+Status: executing; R0 accepted and the first implementation wave dispatched.
+See the [execution record](RUNTIME_EXECUTION.md). Updated 2026-10-18. This is the next execution
 plan after the integrated Phase 6/7 work. It supplements the original Phase 8
 validation gate rather than renumbering historical phases.
 

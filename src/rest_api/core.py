@@ -159,6 +159,11 @@ async def background_status_refresh(matrix_device):
     old full ``status`` broadcast re-sent everything to every client on every
     cache hit and reset output names in the core-only hub (BE-31).
     """
+    from .utils import get_runtime
+    runtime = get_runtime()
+    if runtime is not None and matrix_device is runtime.matrix:
+        runtime.request_refresh()
+        return
     try:
         await matrix_device.get_status(force_refresh=True)
         await matrix_device.get_output_status(force_refresh=True)
@@ -180,6 +185,11 @@ def schedule_background_refresh(matrix_device) -> asyncio.Task:
     :return: the running (or newly started) refresh task
     """
     global _refresh_task
+    from .utils import get_runtime
+    runtime = get_runtime()
+    if runtime is not None and matrix_device is runtime.matrix:
+        runtime.request_refresh()
+        return runtime._refresh_task
     task = _refresh_task
     loop = asyncio.get_running_loop()
     if task is not None and not task.done() and task.get_loop() is loop:
@@ -210,7 +220,7 @@ def _matrix_health(matrix_device) -> dict[str, Any]:
         last_poll = None
     host = getattr(matrix_device, "host", None)
     return {
-        "configured": True,
+        "configured": getattr(matrix_device, "configured", True) is not False,
         "connected": getattr(matrix_device, "connected", False) is True,
         "host": host if isinstance(host, str) else None,
         "last_successful_poll": last_poll,
@@ -235,6 +245,7 @@ async def handle_health(request: web.Request) -> web.Response:
             "version": API_VERSION,
             "matrix": _matrix_health(get_matrix_device()),
             "runtime": runtime_snapshot(request.app),
+            "integrations": request.app.get("integration_health_provider", lambda: {})(),
         },
     )
 

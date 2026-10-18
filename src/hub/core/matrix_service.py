@@ -28,6 +28,7 @@ import logging
 import re
 import time
 from collections.abc import Awaitable
+from copy import deepcopy
 from typing import Any, Protocol, TypeVar
 
 from .event_bus import (
@@ -138,6 +139,8 @@ class MatrixService:
                 raise ValueError("NameStore publishes on a different EventBus")
             bus = bus or names.bus
         self._client = client
+        self._client_generation = 0
+        self._raw: dict[str, Any] = {}
         self._model = model
         self._bus = bus if bus is not None else EventBus()
         self._names = names if names is not None else NameStore(model, self._bus)
@@ -258,6 +261,40 @@ class MatrixService:
 
     # -- connection -------------------------------------------------------
 
+    def replace_client(self, client: MatrixClient, *, names: NameStore | None = None) -> None:
+        """Reset state at a transaction boundary; old reads cannot commit afterward."""
+        self._client_generation += 1
+        self._client = client
+        self._raw = {}
+        self._routing = dict.fromkeys(self._model.output_range())
+        self._power = None
+        self._signal = dict.fromkeys(self._model.input_range())
+        self._cables = {"inputs": dict.fromkeys(self._model.input_range()),
+                        "outputs": dict.fromkeys(self._model.output_range())}
+        self._display = {o: dict.fromkeys(f for _, f in self._display_fields()) for o in self._model.output_range()}
+        self._last_refresh = None
+        self._last_error = None
+        self._names = names if names is not None else NameStore(self._model, self._bus)
+        self._set_connected(False)
+
+    def raw_snapshot(self) -> dict[str, Any]:
+        """Lossless protocol fields plus current command-confirmed state for REST."""
+        raw = deepcopy(self._raw)
+        if "video" in raw:
+            raw["video"].update(allsource=[self._routing[o] for o in self._model.output_range()],
+                                 power=int(self._power) if self._power is not None else None,
+                                 allinputname=list(self.inputs.values()), alloutputname=list(self.outputs.values()),
+                                 allname=list(self.presets.values()))
+        if "status" in raw:
+            raw["status"].update(
+                routing=[self._routing[o] for o in self._model.output_range()],
+                power="on" if self._power else "off", connected=self.connected,
+                host=self.host, port=self.port,
+                input_names=list(self.inputs.values()), output_names=list(self.outputs.values()),
+                preset_names=list(self.presets.values()),
+            )
+        return raw
+
     def _set_connected(self, connected: bool, error: str | None = None) -> None:
         if error is not None:
             self._last_error = error
@@ -282,11 +319,18 @@ class MatrixService:
         self._set_connected(connected)
 
     async def _safe(self, what: str, call: Awaitable[_T]) -> _T | None:
+        generation = self._client_generation
         try:
             return await call
-        except Exception as e:
-            _LOG.exception("Matrix %s failed", what)
-            self._last_error = f"{what}: {e}"
+        except Exception as exc:
+            message = str(exc)
+            for field in ("password", "user"):
+                secret = getattr(self._client, field, None)
+                if isinstance(secret, str) and secret:
+                    message = message.replace(secret, "[redacted]")
+            _LOG.error("Matrix %s failed: %s", what, message)
+            if generation == self._client_generation:
+                self._last_error = f"{what}: {message}"
             return None
 
     async def connect(self) -> bool:
@@ -316,28 +360,47 @@ class MatrixService:
         cable and display reads are best effort and leave their part as it was.
         """
         async with self._refresh_lock:
+            previous_raw = deepcopy(self._raw)
+            client = self._client
+            client_generation = self._client_generation
             generation = self._write_generation
-            video = await self._safe("status read", self._client.get_video_status())
+            video = await self._safe("status read", client.get_video_status())
+            if client_generation != self._client_generation:
+                return False
             if not isinstance(video, dict):
                 self._sync_connection()
                 return False
             if generation == self._write_generation:  # no write landed meanwhile
                 self._apply_video_status(video)
+                self._raw["video"] = deepcopy(video)
+                self._raw["status"] = {"routing": deepcopy(video.get("allsource", [])),
+                                       "power": "on" if video.get("power") == 1 else "off"}
 
-            input_status = await self._safe("input status read", self._client.get_input_status(force_refresh=True))
+            input_status = await self._safe("input status read", client.get_input_status(force_refresh=True))
+            if client_generation != self._client_generation:
+                return False
             if isinstance(input_status, dict):
+                self._raw["inputs"] = deepcopy(input_status)
                 self._apply_signal(input_status)
 
-            cables = await self._safe("cable status read", self._client.get_all_cable_status(force_refresh=True))
+            cables = await self._safe("cable status read", client.get_all_cable_status(force_refresh=True))
+            if client_generation != self._client_generation:
+                return False
             if isinstance(cables, dict):
+                self._raw["cables"] = deepcopy(cables)
                 self._apply_cables(cables)
 
-            output_status = await self._safe("output status read", self._client.get_output_status(force_refresh=True))
+            output_status = await self._safe("output status read", client.get_output_status(force_refresh=True))
+            if client_generation != self._client_generation:
+                return False
             if isinstance(output_status, dict):
+                self._raw["outputs"] = deepcopy(output_status)
                 self._apply_display(output_status)
 
             self._last_refresh = time.time()
             self._sync_connection()
+            if self._raw != previous_raw:
+                self._bus.publish("snapshot", {})
             return True
 
     def _apply_video_status(self, video: dict[str, Any]) -> None:

@@ -21,9 +21,11 @@ effective-model checks pass, Luna handles bounded guides/evidence indexing,
 and Astra handles contract design and independent review. M3.1/DeepSeek are
 conditional alternatives, not assumed successful launches.
 
-These worktrees are **planned, not launched**. The next step is R0 contract and
-access preflight, then independent workers in dependency order, with immediate
-validation, merge and cleanup. Hardware and soak gates remain owner-observed.
+R0 is accepted and merged, with its worktree removed. R1/R2/R3/R6 are dispatched
+from that contract; R4/R5/R7/R8 retain their dependencies. The
+[execution record](RUNTIME_EXECUTION.md) tracks effective model observations,
+ownership clarifications and acceptance. Hardware and soak gates remain
+owner-observed.
 
 ## Release sequence
 

@@ -1,16 +1,20 @@
-"""Comprehensive unit tests for `src/hub/integrations/unfolded_circle/` (Phase 4 / WP-C3)."""
+"""Comprehensive unit tests for `src/hub/integrations/unfolded_circle/` (Phase 4 / WP-C3 / R3)."""
 
 from __future__ import annotations
 
 import json
+import socket
+from collections import deque
 from pathlib import Path
 from typing import Any
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
+import ucapi
 
 from hub import __version__
 from src.hub.integrations.unfolded_circle import (
+    APPROVED_GOLDEN_ENTITY_IDS,
     STANDARD_CEC_COMMANDS,
     SURVIVING_GOLDEN_ENTITY_IDS,
     UC_MDNS_SERVICE_TYPE,
@@ -19,10 +23,19 @@ from src.hub.integrations.unfolded_circle import (
     UCIntegrationConfig,
     UCMdnsPublisher,
     UnfoldedCircleIntegration,
+    build_compatible_entities,
     build_entities,
+    build_ucapi_entities,
     config_from_env,
     migrate_legacy_config_state,
 )
+
+
+def _free_port() -> int:
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.bind(("127.0.0.1", 0))
+        return int(s.getsockname()[1])
+
 
 # =============================================================================
 # 1. config.py tests
@@ -75,12 +88,14 @@ def test_config_supports_deprecated_aliases(tmp_path: Path) -> None:
         "UC_PORT": "9099",
         "UC_DISABLE_MDNS": "true",
         "DATA_DIR": str(tmp_path),
+        "ADMIN_PIN": "pin-456",
     }
     cfg = config_from_env(env)
     assert cfg.enabled is True
     assert cfg.port == 9099
     assert cfg.disable_mdns_publish is True
-    assert cfg.config_home == tmp_path / "uc"
+    assert cfg.config_home == tmp_path
+    assert cfg.auth_token == "pin-456"
 
 
 def test_config_canonical_overrides_alias() -> None:
@@ -166,11 +181,24 @@ def test_build_entities_includes_select_and_binary_sensors() -> None:
 def test_build_entities_without_select_and_with_legacy_sensors() -> None:
     entities = build_entities(_sample_snapshot(), include_select=False, include_legacy_sensors=True)
     ids = {e["entity_id"] for e in entities}
+    assert ids == APPROVED_GOLDEN_ENTITY_IDS
+    assert len(entities) == 74
     assert not any(eid.startswith("select.") for eid in ids)
     assert "sensor.input_1_cable" in ids
     assert "sensor.output_1_connected" in ids
     assert "sensor.output_1_cable" in ids
     assert "sensor.output_1_source" in ids
+
+
+def test_build_compatible_and_ucapi_entities_match_approved_golden_catalog() -> None:
+    compat = build_compatible_entities(_sample_snapshot())
+    assert len(compat) == 74
+    assert {e["entity_id"] for e in compat} == APPROVED_GOLDEN_ENTITY_IDS
+
+    uc_entities = build_ucapi_entities(_sample_snapshot(), compatible=True)
+    assert len(uc_entities) == 74
+    assert {e.id for e in uc_entities} == APPROVED_GOLDEN_ENTITY_IDS
+    assert all(isinstance(e, ucapi.Entity) for e in uc_entities)
 
 
 def test_cec_remotes_use_standard_uc_commands_button_mapping_and_icons() -> None:
@@ -339,6 +367,10 @@ def test_projector_resync_returns_full_attributes() -> None:
 def test_projector_live_renames_update_in_place_without_clearing_configured_entities() -> None:
     proj = EntityStateProjector()
     proj.project_snapshot(_sample_snapshot(), force=True)
+    # Entities are not marked configured merely because they are available
+    assert proj.configured_entities == {}
+
+    proj.subscribe_entities(["remote.input_1_cec", "media_player.output_1", "select.output_1_source"])
     configured_before = set(proj.configured_entities.keys())
 
     diff = proj.apply_event("names", {"inputs": {1: "Xbox Series X"}, "outputs": {1: "Theater OLED"}})
@@ -619,7 +651,7 @@ async def test_dispatcher_returns_501_for_unimplemented_commands() -> None:
 # =============================================================================
 
 
-def test_migrate_legacy_config_state_extracts_fields_and_writes_migrated(tmp_path: Path) -> None:
+def test_migrate_legacy_config_state_preserves_primary_file_and_credentials(tmp_path: Path) -> None:
     legacy_file = tmp_path / "config_state.json"
     legacy_file.write_text(
         json.dumps(
@@ -627,6 +659,8 @@ def test_migrate_legacy_config_state_extracts_fields_and_writes_migrated(tmp_pat
                 "host": "192.168.1.200",
                 "port": 443,
                 "telnet_port": 2323,
+                "user": "Admin",
+                "password": "matrix-secret",
                 "input_names": {"1": "Apple TV", "2": "Shield"},
                 "output_names": {"1": "Living Room"},
             }
@@ -639,15 +673,17 @@ def test_migrate_legacy_config_state_extracts_fields_and_writes_migrated(tmp_pat
     assert migrated["host"] == "192.168.1.200"
     assert migrated["port"] == 443
     assert migrated["telnet_port"] == 2323
+    assert migrated["user"] == "Admin"
+    assert migrated["password"] == "matrix-secret"
     assert migrated["input_names"] == {1: "Apple TV", 2: "Shield"}
     assert migrated["output_names"] == {1: "Living Room"}
-    assert not legacy_file.exists()
-    assert (tmp_path / "config_state.json.migrated").exists()
+    # Non-destructive: primary config_state.json remains intact on disk
+    assert legacy_file.exists()
 
 
-def test_migrate_legacy_config_state_is_idempotent(tmp_path: Path) -> None:
-    legacy_file = tmp_path / "config_state.json"
-    legacy_file.write_text(
+def test_migrate_legacy_config_state_is_idempotent_and_recovers_migrated_fallback(tmp_path: Path) -> None:
+    migrated_only = tmp_path / "config_state.json.migrated"
+    migrated_only.write_text(
         json.dumps({"host": "10.0.0.50", "port": 8443, "telnet_port": 23}),
         encoding="utf-8",
     )
@@ -655,6 +691,9 @@ def test_migrate_legacy_config_state_is_idempotent(tmp_path: Path) -> None:
     first = migrate_legacy_config_state(tmp_path)
     second = migrate_legacy_config_state(tmp_path)
     assert first == second == {"host": "10.0.0.50", "port": 8443, "telnet_port": 23}
+    # Restored primary config_state.json without deleting fallback
+    assert (tmp_path / "config_state.json").exists()
+    assert migrated_only.exists()
 
 
 def test_migrate_legacy_config_state_returns_none_when_absent_or_invalid(tmp_path: Path) -> None:
@@ -722,10 +761,11 @@ async def test_integration_start_subscribes_migrates_and_reports_health(tmp_path
         json.dumps({"host": "192.168.1.100", "port": 443, "telnet_port": 23}),
         encoding="utf-8",
     )
+    port = _free_port()
     cfg = config_from_env(
         {
             "UC_ENABLED": "true",
-            "UC_PORT": "9095",
+            "UC_PORT": str(port),
             "UC_DISABLE_MDNS": "true",
             "UC_CONFIG_HOME": str(tmp_path),
         }
@@ -741,11 +781,16 @@ async def test_integration_start_subscribes_migrates_and_reports_health(tmp_path
 
     await integration.start(hub)
     assert integration.running is True
+    assert isinstance(integration.api, ucapi.IntegrationAPI)
     assert integration.migrated_config == {"host": "192.168.1.100", "port": 443, "telnet_port": 23}
-    assert (tmp_path / "config_state.json.migrated").exists()
+    assert (tmp_path / "config_state.json").exists()
     assert integration.health()["status"] == "ok"
     assert integration.health()["device_state"] == "CONNECTED"
-    assert integration.health()["entity_count"] == len(integration.entities)
+    assert integration.health()["entity_count"] == len(integration.entities) == 74
+    assert integration.health()["configured_entity_count"] == 0
+    assert len(integration.api.available_entities.get_all()) == 74
+    assert await integration.api.configured_entities.get_states() == []
+    assert isinstance(integration.pushed_updates, deque)
     hub.subscribe.assert_called_once()
 
     await integration.stop()
@@ -757,7 +802,15 @@ async def test_integration_start_subscribes_migrates_and_reports_health(tmp_path
 async def test_integration_standby_pauses_pushes_without_disconnecting_matrix_and_wake_resyncs(
     tmp_path: Path,
 ) -> None:
-    cfg = config_from_env({"UC_ENABLED": "true", "UC_DISABLE_MDNS": "true", "UC_CONFIG_HOME": str(tmp_path)})
+    port = _free_port()
+    cfg = config_from_env(
+        {
+            "UC_ENABLED": "true",
+            "UC_PORT": str(port),
+            "UC_DISABLE_MDNS": "true",
+            "UC_CONFIG_HOME": str(tmp_path),
+        }
+    )
     hub = _make_mock_hub()
     hub.disconnect = AsyncMock()
     captured_cb: list[Any] = []
