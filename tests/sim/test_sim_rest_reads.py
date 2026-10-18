@@ -196,6 +196,16 @@ async def test_kiosk_aliases_serve_the_shipped_html(data_hub, path):
     assert await response.read() == expected.read_bytes()
 
 
+async def test_health_includes_integration_lifecycle_mapping(data_hub, simulator, monkeypatch):
+    assert (await _get(data_hub, "/api/health"))["data"]["integrations"] == {}
+    states = {"flic": {"running": True, "button_count": 2}}
+    monkeypatch.setitem(data_hub.server.app, "integration_health_provider", lambda: states)
+    assert (await _get(data_hub, "/api/health"))["data"]["integrations"] == states
+    states["flic"]["running"] = False
+    assert (await _get(data_hub, "/api/health"))["data"]["integrations"]["flic"]["running"] is False
+    assert sim_writes(simulator) == []
+
+
 async def test_openapi_spec_and_swagger_docs_reads(data_hub, simulator):
     from hub.openapi import validate_openapi_spec
 

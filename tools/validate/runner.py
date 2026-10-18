@@ -635,6 +635,15 @@ class Runner:
                 procedure.extend(f"  {s}" for s in result.steps)
                 if result.error:
                     notes.append(f"client error: {result.error}")
+                    # An unchanged device is expected for a filtered SDK callback,
+                    # but also happens when replay never ran (e.g. missing Node).
+                    # Keep expected HTTP refusals separate: those have a response
+                    # status/body and need not set a replay/transport error.
+                    checks.append({
+                        "description": "client action completed without a replay or transport error",
+                        "result": "fail", "detail": redact(result.error),
+                        "finding": None, "linked_finding": None, "note": None,
+                    })
                 # ---- expectations
                 for exp in sc.expect:
                     checks.append(await self._check(exp, sc, client, result, state_before, t_action, ws, helper,
