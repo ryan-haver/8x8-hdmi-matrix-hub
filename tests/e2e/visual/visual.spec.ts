@@ -151,6 +151,12 @@ for (const entry of CATALOG) {
 test('special/tron-background/paused-frame', async ({ page }, info) => {
   const vp = info.project.name as ViewportName;
   test.skip(!(THEMED_VIEWPORTS as readonly ViewportName[]).includes(vp), `captured at ${THEMED_VIEWPORTS.join(', ')} only`);
+  // This baseline describes the capable-device rendering. CI's CPU count must
+  // not select UI-16's low-power blur budget; that mode has separate unit tests.
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'hardwareConcurrency', { get: () => 8 });
+    Object.defineProperty(navigator, 'deviceMemory', { get: () => 8 });
+  });
   await preparePage(page, { realClock: true, storage: { 'matrix-view-mode': 'grid' } });
   await page.clock.install({ time: FIXED_TIME });
   await page.clock.resume();
