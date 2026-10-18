@@ -1,0 +1,47 @@
+# Dependency update PRs (SEC-15). Actions are SHA-pinned and the Docker base
+# image is digest-pinned; Dependabot keeps those pins and their version comments
+# current. Updates are grouped and monthly so each ecosystem opens at most one
+# PR per month: every PR runs the full CI workflow.
+version: 2
+updates:
+  # .github/workflows/*.yml `uses:` pins (SHA + `# vX.Y.Z` comment).
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 2
+    commit-message:
+      prefix: ci
+    groups:
+      github-actions:
+        patterns:
+          - '*'
+
+  # Dockerfile `FROM python:3.12-slim@sha256:...`. The minor Python version is
+  # a deliberate choice (pyproject requires-python), so only digest and patch
+  # updates of the same tag are proposed.
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 2
+    commit-message:
+      prefix: build
+    ignore:
+      - dependency-name: python
+        update-types:
+          - version-update:semver-major
+          - version-update:semver-minor
+
+  # requirements*.txt and pyproject.toml.
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 2
+    commit-message:
+      prefix: deps
+    groups:
+      python:
+        patterns:
+          - '*'
