@@ -144,11 +144,22 @@ def save_config_state(
     base_dir = Path(config_home)
     target = base_dir / LEGACY_CONFIG_FILENAME
 
-    payload: dict[str, Any] = {
-        "host": str(host).strip(),
-        "port": int(port),
-        "input_names": {str(k): str(v) for k, v in (input_names or {}).items()},
-    }
+    # Retain private extensions without carrying another address's names/login.
+    payload: dict[str, Any] = {}
+    if target.exists():
+        previous = json.loads(target.read_text(encoding="utf-8"))
+        if not isinstance(previous, dict):
+            raise ValueError("UC configuration must be an object")
+        payload.update(previous)
+    for key in ("telnet_port", "input_names", "output_names", "user", "password"):
+        payload.pop(key, None)
+    payload.update(
+        {
+            "host": str(host).strip(),
+            "port": int(port),
+            "input_names": {str(k): str(v) for k, v in (input_names or {}).items()},
+        }
+    )
     if telnet_port is not None:
         payload["telnet_port"] = int(telnet_port)
     if output_names:

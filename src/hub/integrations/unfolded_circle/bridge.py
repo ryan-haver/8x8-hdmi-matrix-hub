@@ -31,6 +31,7 @@ _LOG = logging.getLogger("uc.bridge")
 
 DEFAULT_DRIVER_JSON_PATH = Path(__file__).resolve().parents[4] / "driver.json"
 MAX_DIAGNOSTIC_UPDATES = 100
+CLEANUP_TIMEOUT = 2.0
 
 
 def _ensure_sensitive_keys() -> None:
@@ -95,6 +96,12 @@ class UCBridge:
         self._ws_stop_event: asyncio.Event | None = None
         self._temp_driver_file: Path | None = None
         self._background_tasks: set[asyncio.Task[Any]] = set()
+        self._stop_task: asyncio.Task[None] | None = None
+        self._runtime_name_baseline: Any = None
+
+    def _persistence_runtime(self) -> Any:
+        owner = getattr(self._reconfigure_hook, "__self__", None)
+        return owner if getattr(owner, "reconfigure_persists_config_state", False) else None
 
     @property
     def running(self) -> bool:
@@ -116,6 +123,10 @@ class UCBridge:
             self._driver_metadata = driver_metadata
 
     def _schedule_task(self, coro: Any) -> asyncio.Task[Any] | None:
+        if self._stop_task is not None:
+            if inspect.iscoroutine(coro):
+                coro.close()
+            return None
         try:
             loop = asyncio.get_running_loop()
         except RuntimeError:
@@ -289,10 +300,13 @@ class UCBridge:
                     exc = server_task.exception()
                     if exc is not None:
                         raise exc
+                    if not self._ws_ready_event.is_set():
+                        raise RuntimeError("UC WebSocket task exited before opening its listener")
                 await self._ws_ready_event.wait()
             finally:
                 if not ready_waiter.done():
                     ready_waiter.cancel()
+                await asyncio.gather(ready_waiter, return_exceptions=True)
 
     def _sync_entities_from_projector(self, snapshot: Mapping[str, Any] | None = None) -> None:
         """Install or refresh entities in ``api.available_entities`` and replace subscribed entities in place."""
@@ -402,6 +416,7 @@ class UCBridge:
 
     async def start(self, hub_client: Any) -> None:
         """Start the UC integration server, project initial state if configured, subscribe, and publish mDNS."""
+        self._stop_task = None
         _ensure_sensitive_keys()
         self.migrated_config = migrate_legacy_config_state(self.config.config_home)
         self.hub_client = hub_client
@@ -421,13 +436,15 @@ class UCBridge:
         )
 
         loop = asyncio.get_running_loop()
-        self.api = self._api_factory(loop) if self._api_factory is not None else ucapi.IntegrationAPI(loop)
-        self._register_api_listeners(self.api)
-
         try:
+            self.api = self._api_factory(loop) if self._api_factory is not None else ucapi.IntegrationAPI(loop)
+            self._register_api_listeners(self.api)
             configured = self._is_configured_at_start()
             if configured:
                 snapshot = await self._fetch_snapshot()
+                runtime = self._persistence_runtime()
+                if runtime is not None:
+                    self._runtime_name_baseline = runtime.service.names.snapshot()
                 self.dispatcher.update_pin_blocks(snapshot)
                 initial_diff = self.projector.project_snapshot(snapshot, force=True)
                 self._sync_entities_from_projector(snapshot)
@@ -454,7 +471,7 @@ class UCBridge:
             await self.mdns.start()
             self._running = True
             _LOG.info("UCBridge started on port %d (%d available entities)", self.config.port, len(self.entities))
-        except Exception:
+        except BaseException:
             await self._rollback_start()
             raise
 
@@ -464,43 +481,65 @@ class UCBridge:
 
     async def stop(self) -> None:
         """Stop the UC integration server, unsubscribe from hub events, and unregister mDNS (`UC-11`)."""
+        if self._stop_task is None:
+            self._stop_task = asyncio.create_task(self._stop(), name="uc_bridge_stop")
+        await asyncio.shield(self._stop_task)
+
+    async def _bounded_cleanup(self, awaitable: Any) -> None:
+        task = asyncio.ensure_future(awaitable)
+        done, pending = await asyncio.wait({task}, timeout=CLEANUP_TIMEOUT)
+        if pending:
+            task.cancel()
+            # A cancellation-resistant SDK task must not hold the listener open.
+            task.add_done_callback(lambda completed: None if completed.cancelled() else completed.exception())
+            _LOG.warning("UC cleanup phase exceeded deadline")
+        elif done and not task.cancelled():
+            try:
+                task.result()
+            except Exception:
+                _LOG.debug("UC cleanup phase failed", exc_info=True)
+
+    async def _stop(self) -> None:
+        self._running = False
+        # Close the accept socket before waiting on callbacks or SDK tasks.
+        if self._ws_stop_event is not None:
+            self._ws_stop_event.set()
+        server, self._ws_server = self._ws_server, None
+        if server is not None:
+            server.close()
+
         unsub, self._unsubscribe = self._unsubscribe, None
         if unsub is not None:
             try:
                 res = unsub()
                 if inspect.isawaitable(res):
-                    await res
-            except Exception:
+                    await self._bounded_cleanup(res)
+            except (Exception, asyncio.CancelledError):
                 _LOG.debug("Error unsubscribing from hub events", exc_info=True)
 
-        await self.mdns.stop()
+        await self._bounded_cleanup(self.mdns.stop())
 
-        for task in list(self._background_tasks):
-            task.cancel()
-        if self._background_tasks:
-            await asyncio.gather(*self._background_tasks, return_exceptions=True)
-        self._background_tasks.clear()
-
-        if self._ws_stop_event is not None:
-            self._ws_stop_event.set()
-
-        if self._ws_server is not None:
-            try:
-                self._ws_server.close()
-                await asyncio.wait_for(self._ws_server.wait_closed(), timeout=3.0)
-            except Exception:
-                _LOG.debug("Error closing UC WebSocket server", exc_info=True)
-            finally:
-                self._ws_server = None
-
+        tasks: set[asyncio.Future[Any]] = set(self._background_tasks)
+        if self.setup_handler is not None:
+            tasks.update(self.setup_handler.cancel_pending())
         if self.api is not None:
             server_task = getattr(self.api, "_server_task", None)
-            if isinstance(server_task, asyncio.Task) and not server_task.done():
-                server_task.cancel()
-                try:
-                    await asyncio.wait_for(server_task, timeout=2.0)
-                except (asyncio.CancelledError, Exception):
-                    pass
+            if isinstance(server_task, asyncio.Task):
+                tasks.add(server_task)
+        tasks = {task for task in tasks if task is not asyncio.current_task() and not task.done()}
+        for task in tasks:
+            task.cancel()
+        if tasks:
+            _, pending = await asyncio.wait(tasks, timeout=CLEANUP_TIMEOUT)
+            for task in tasks:
+                if task in pending:
+                    task.add_done_callback(lambda completed: None if completed.cancelled() else completed.exception())
+                elif not task.cancelled():
+                    task.exception()
+        self._background_tasks.clear()
+
+        if server is not None:
+            await self._bounded_cleanup(server.wait_closed())
 
         if self._temp_driver_file is not None:
             try:
@@ -517,6 +556,9 @@ class UCBridge:
 
     async def _on_setup_complete(self, address: Any, save_credentials: bool) -> None:
         snapshot = await self._fetch_snapshot()
+        runtime = self._persistence_runtime()
+        if runtime is not None:
+            self._runtime_name_baseline = runtime.service.names.snapshot()
         if self.dispatcher is not None:
             self.dispatcher.update_pin_blocks(snapshot)
 
@@ -533,15 +575,18 @@ class UCBridge:
         user = getattr(address, "user", None)
         password = getattr(address, "password", None)
         creds = (str(user), str(password)) if (save_credentials and user and password) else None
-        save_config_state(
-            self.config.config_home,
-            host=host,
-            port=port,
-            telnet_port=int(telnet_port) if telnet_port is not None else None,
-            input_names=dict(self.projector.input_names),
-            output_names=dict(self.projector.output_names),
-            credentials=creds,
-        )
+        if self._persistence_runtime() is None:
+            # Standalone hooks retain their library writer. The active runtime
+            # has already saved within its rollback-protected transaction.
+            save_config_state(
+                self.config.config_home,
+                host=host,
+                port=port,
+                telnet_port=int(telnet_port) if telnet_port is not None else None,
+                input_names=dict(self.projector.input_names),
+                output_names=dict(self.projector.output_names),
+                credentials=creds,
+            )
         self.migrated_config = load_config_state(self.config.config_home)
         await self._publish_device_state(force=True)
 
@@ -640,13 +685,25 @@ class UCBridge:
         await self._publish_device_state()
 
     def _persist_renamed_ports(self) -> None:
+        # HubClientLocal can deliver candidate/rollback name events after the
+        # runtime lock is released. Never let this library writer race the
+        # runtime's persistence authority, even for delayed events.
+        runtime = self._persistence_runtime()
+        if runtime is not None:
+            if runtime.reconfiguring:
+                return
+            current = runtime.service.names.snapshot()
+            if current != self._runtime_name_baseline:
+                runtime.persist_uc_names()
+                self._runtime_name_baseline = current
+            return
         saved = self.migrated_config or load_config_state(self.config.config_home)
         if not saved or not saved.get("host"):
             return
         creds: tuple[str, str] | None = None
         if saved.get("user") and saved.get("password"):
             creds = (str(saved["user"]), str(saved["password"]))
-        self.migrated_config = save_config_state(
+        save_config_state(
             self.config.config_home,
             host=str(saved["host"]),
             port=int(saved.get("port", 443)),
@@ -655,12 +712,14 @@ class UCBridge:
             output_names=dict(self.projector.output_names),
             credentials=creds,
         )
+        self.migrated_config = load_config_state(self.config.config_home)
 
     def _on_hub_event(
         self,
         event: Any,
         data: dict[str, Any] | None = None,
     ) -> dict[str, dict[str, Any]]:
+        payload: Mapping[str, Any]
         if isinstance(event, str):
             kind = event.strip().lower()
             payload = data if isinstance(data, Mapping) else {}

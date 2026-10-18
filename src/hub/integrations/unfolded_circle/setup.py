@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import hmac
+import inspect
 import logging
 import os
 import re
@@ -189,6 +190,7 @@ class UCSetupHandler:
         self._on_setup_complete = on_setup_complete
         self._probe_fn = probe_fn if probe_fn is not None else probe_address
         self._pending_setup: PendingSetup | None = None
+        self._active_reconfigurations: set[asyncio.Future[Any]] = set()
 
     @property
     def pending_setup(self) -> PendingSetup | None:
@@ -316,25 +318,46 @@ class UCSetupHandler:
         reconfigure_fn = self._reconfigure_getter()
         if reconfigure_fn is None:
             return True, None, address
+        # Inspect before calling: a TypeError from inside a hook must never
+        # trigger a second, potentially partially executed reconfiguration.
         try:
-            res = reconfigure_fn(address, persist=True)
+            inspect.signature(reconfigure_fn).bind(address, persist=True)
         except TypeError:
             res = reconfigure_fn(address)
-        out = await res if asyncio.iscoroutine(res) else res
+        else:
+            res = reconfigure_fn(address, persist=True)
+        if inspect.isawaitable(res):
+            task = asyncio.ensure_future(res)
+            self._active_reconfigurations.add(task)
+            try:
+                out = await task
+            finally:
+                self._active_reconfigurations.discard(task)
+        else:
+            out = res
+        current = self._current_address_getter()
+        effective_addr = current() if current is not None else None
+        effective_addr = effective_addr if effective_addr is not None else address
         if isinstance(out, bool):
-            return (True, None, address) if out else (False, ucapi.IntegrationSetupError.OTHER, address)
+            return (True, None, effective_addr) if out else (False, ucapi.IntegrationSetupError.OTHER, address)
         if isinstance(out, Mapping):
             ok = bool(out.get("success", False))
             err_kind = out.get("error_kind") or out.get("error")
-            return (ok, None if ok else map_error_kind(err_kind), address)
+            return (ok, None if ok else map_error_kind(err_kind), effective_addr)
         ok = bool(getattr(out, "success", False))
         err_kind = getattr(out, "error_kind", None)
-        res_addr = getattr(out, "address", None)
-        effective_addr = res_addr if res_addr is not None and hasattr(res_addr, "host") else address
         return (ok, None if ok else map_error_kind(err_kind), effective_addr)
 
     async def __call__(self, msg: ucapi.SetupDriver) -> ucapi.SetupAction:
         return await self.handle(msg)
+
+    def cancel_pending(self) -> set[asyncio.Future[Any]]:
+        """Abort pending input and cancel owned runtime transactions for rollback."""
+        self._pending_setup = None
+        tasks = set(self._active_reconfigurations)
+        for task in tasks:
+            task.cancel()
+        return tasks
 
     async def handle(self, msg: ucapi.SetupDriver) -> ucapi.SetupAction:
         """Process a setup lifecycle request from ``ucapi.IntegrationAPI``."""
@@ -343,7 +366,9 @@ class UCSetupHandler:
         if isinstance(msg, ucapi.UserDataResponse):
             return await self._handle_user_data(msg)
         if isinstance(msg, ucapi.AbortDriverSetup):
-            self._pending_setup = None
+            tasks = self.cancel_pending()
+            if tasks:
+                await asyncio.gather(*tasks, return_exceptions=True)
             _LOG.info("Setup aborted by Remote (%s)", msg.error)
             return ucapi.SetupError()
         return ucapi.SetupError()
