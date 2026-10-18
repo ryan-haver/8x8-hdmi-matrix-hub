@@ -165,8 +165,9 @@ REST_GLOBALS = (
 async def data_hub(aiohttp_client, matrix, monkeypatch, tmp_path):
     """REST test client on the real hub app, a connected OreiMatrix and the fixture hub data.
 
-    Wired the way ``run.py`` modular mode wires it (``set_matrix_device`` then
-    ``create_rest_app``), so what these tests prove is what the shipped hub does.
+    This lower-level app fixture uses ``set_matrix_device`` and ``create_rest_app``.
+    Normal-entry shared composition is exercised separately by runtime and
+    source/installed/image tests; this fixture does not replace those gates.
     """
     async for client in _data_hub(aiohttp_client, matrix, monkeypatch, tmp_path):
         yield client

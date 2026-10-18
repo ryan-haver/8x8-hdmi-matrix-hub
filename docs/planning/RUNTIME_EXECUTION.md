@@ -39,6 +39,14 @@ worker, helper, automatic fallback or default tab is authorized.
   events, single-writer counts, live renames and SDK cleanup passed. Its
   terminal was released and worktree removed/pruned. Actual normal-entry,
   installed UC and shipped-image behavior still await R2 and the later tracks.
+- **R2, MiniMax M3 checkpoint / fresh Sol 6.1 high completion:** final
+  `168fc03`, merged as `59a2e8e`. Coordinator independently ran 666 persistence,
+  security, scene, source and installed-entry tests with one platform skip,
+  plus 68 configuration tests; mypy passed all 90 source files and focused
+  Ruff passed. Review checked original-byte failure preservation, private
+  projections, real edit/save/restart and legacy imports. The worker was
+  released and worktree removed/pruned. Full image/client and R4/R5 behavior
+  remain separate gates; these focused results are not a full product campaign.
 
 ## First implementation wave
 
@@ -47,7 +55,7 @@ All four worktrees start from accepted contract merge `70de5d9`.
 | Track / worktree | Selected model and harness | Current evidence |
 | --- | --- | --- |
 | R1 `wp-runtime-core-composition` | Sol 6.1 high / Codex | Foundation accepted/merged; actual startup awaits peer integration |
-| R2 `wp-runtime-persistence-wiring` | MiniMax M3 / OpenCode checkpoint; fresh Sol 6.1 high finish | M3 settled failed at `cf7ea7c` and was released; Sol retry is implementing the full storage boundary on integrated base `5ec374e` |
+| R2 `wp-runtime-persistence-wiring` | MiniMax M3 / OpenCode checkpoint; fresh Sol 6.1 high finish | Accepted/merged `59a2e8e`; 734 independent passes, one platform skip; worktree removed |
 | R3 `wp-runtime-uc-adapter` | Argon high / Antigravity; Sol transaction follow-up | Accepted/merged `ccc9483`; 151 coordinator tests passed; worktree removed |
 | R6 `wp-validation-flic-replay` | Flash 3.8 high / Antigravity; focused Sol follow-up | Accepted/merged `809f934`; 74 tests passed, one integrated disabled-route gate pending; worktree removed |
 
@@ -107,7 +115,14 @@ Task `task_02e6418f9110`. Requested/effective launch preferences matched.
 The finish brief requires real edit/save/restart preservation, fail-closed
 backups and malformed/future files, safe legacy scene reconciliation, Flic
 metadata preparation, and unchanged source/installed startup tests. This is
-active work, not an accepted migration or startup result.
+subsequently accepted as recorded above. Final ownership transfers also covered
+five exact obsolete migration/layout expectations, one malformed Flic fixture
+sentinel, the shared simulator's canonical scene-copy filename, and replacing a
+probabilistic PIN substring check with hash-format/verification assertions.
+Unsafe-input tests retain exact-byte preservation; public security assertions
+were retained. R5 must use the accepted `load_versioned_json`,
+`flat_map_records('flic_buttons.json', payload)` and `save_versioned_json` seam,
+projecting only the known button fields to public callers.
 
 R6 candidate `465c10d` is not accepted. Its original tests passed, but review
 found a copied generator rather than proof against the actual UI generator,

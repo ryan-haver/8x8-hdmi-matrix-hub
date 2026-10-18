@@ -23,8 +23,9 @@ conditional alternatives, not assumed successful launches.
 
 R0, R1, R1P, R3/R3B and R6 are accepted and merged, with their worktrees
 removed. R2's M3 checkpoint was preserved after a failed full-scope result;
-a fresh Sol 6.1 high attempt is completing persistence on the integrated base.
-R4/R5 wait for accepted R2; R7/R8 follow the remaining code and fresh campaigns. The
+fresh Sol 6.1 high completed persistence, accepted as `59a2e8e` after 734
+independent passes and one platform skip. R4/R5 are the next parallel wave;
+R7/R8 follow the remaining code and fresh campaigns. The
 [execution record](RUNTIME_EXECUTION.md) tracks effective model observations,
 ownership clarifications and acceptance. Hardware and soak gates remain
 owner-observed.
