@@ -210,7 +210,11 @@ async def test_created_pin_is_hashed_on_disk_and_never_exposed(hub, kind):
         _assert_no_hash(detail)
         listing = await (await client.get("/api/profiles" if kind == "profile" else "/api/v2/scenes")).json()
         _assert_no_hash(listing)
-        stored = json.loads((directory / ("profiles.json" if kind == "profile" else "scenes.json")).read_text(encoding="utf-8"))
+        # R2 contract §4: scene_manager.SceneManager persists to scenes_v2.json.
+        # Profiles keep their filename. The barrier's _maybe_import_legacy fallback
+        # copies a non-empty legacy scenes.json into scenes_v2.json on first load.
+        on_disk_name = "profiles.json" if kind == "profile" else "scenes_v2.json"
+        stored = json.loads((directory / on_disk_name).read_text(encoding="utf-8"))
         saved = next(item for item in stored["profiles" if kind == "profile" else "scenes"]
                      if item["id"] == resource["id"])
         encoded = saved["passcode_hash"]

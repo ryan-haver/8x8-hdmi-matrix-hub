@@ -21,6 +21,22 @@ from typing import Any
 _LOG = logging.getLogger(__name__)
 
 
+def _write_blocked(filename: str) -> bool:
+    try:
+        from hub.persistence.startup import is_write_blocked
+    except ImportError:  # pragma: no cover — pre-orchestration test envs
+        return False
+    return is_write_blocked(filename)
+
+
+def _block_reason(filename: str) -> str | None:
+    try:
+        from hub.persistence.startup import block_reason
+    except ImportError:  # pragma: no cover
+        return None
+    return block_reason(filename)
+
+
 # =============================================================================
 # Macro Data Structures
 # =============================================================================
@@ -79,6 +95,10 @@ class CecMacro:
     dashboard_order: int = 0  # Position within the Dashboard card grid
     # Execution behavior flags
     continue_on_error: bool = False  # If True, continue executing remaining steps on failure
+    # R2 contract §4: unknown scalar metadata at the record level passes through
+    # load/edit/save untouched. Populated by ``from_dict`` from any extra keys
+    # the dataclass did not declare and re-emitted by ``to_dict``.
+    _unknown_fields: dict[str, Any] = field(default_factory=dict, repr=False, compare=False)
 
     def __post_init__(self):
         """Set timestamps if not provided."""
@@ -89,8 +109,13 @@ class CecMacro:
             self.updated_at = now
 
     def to_dict(self) -> dict[str, Any]:
-        """Convert to dictionary for JSON serialization."""
-        return {
+        """Convert to dictionary for JSON serialization.
+
+        R2 contract §4: unknown scalar metadata at the record level must pass
+        through load/edit/save untouched. ``from_dict`` collects it into the
+        hidden ``_unknown_fields`` bag and this method re-emits it.
+        """
+        result: dict[str, Any] = {
             "id": self.id,
             "name": self.name,
             "icon": self.icon,
@@ -103,11 +128,27 @@ class CecMacro:
             "dashboard_order": self.dashboard_order,
             "continue_on_error": self.continue_on_error,
         }
+        unknown = getattr(self, "_unknown_fields", None)
+        if unknown:
+            for key, value in unknown.items():
+                if key not in result:
+                    result[key] = value
+        return result
 
     @staticmethod
     def from_dict(data: dict[str, Any]) -> "CecMacro":
-        """Create from dictionary."""
+        """Create from dictionary.
+
+        Unknown scalar metadata is preserved in ``_unknown_fields`` and
+        re-emitted by :meth:`to_dict` so round-trips do not drop operator data.
+        """
         steps = [MacroStep.from_dict(s) for s in data.get("steps", [])]
+        declared_keys = {
+            "id", "name", "icon", "description", "steps",
+            "created_at", "updated_at", "favorite", "dashboard_visible",
+            "dashboard_order", "continue_on_error",
+        }
+        unknown = {k: v for k, v in data.items() if k not in declared_keys}
         return CecMacro(
             id=data.get("id", ""),
             name=data.get("name", "Unnamed Macro"),
@@ -120,6 +161,7 @@ class CecMacro:
             dashboard_visible=data.get("dashboard_visible", False),
             dashboard_order=data.get("dashboard_order", 0),
             continue_on_error=data.get("continue_on_error", False),
+            _unknown_fields=unknown,
         )
 
     def update_timestamp(self):
@@ -186,6 +228,9 @@ class MacroManager:
 
     def save(self) -> bool:
         """Save macros to file atomically."""
+        if _write_blocked("cec_macros.json"):
+            _LOG.error("Refusing to save cec_macros.json: %s", _block_reason("cec_macros.json"))
+            return False
         try:
             os.makedirs(self.config_dir, exist_ok=True)
             data = {"version": 1, "macros": [m.to_dict() for m in self._macros.values()]}

@@ -43,6 +43,22 @@ from persistence import ensure_data_dir, get_data_dir, migrate_legacy_file
 
 _LOG = logging.getLogger("dashboard_layout")
 
+
+def _write_blocked(filename: str) -> bool:
+    try:
+        from hub.persistence.startup import is_write_blocked
+    except ImportError:  # pragma: no cover — pre-orchestration test envs
+        return False
+    return is_write_blocked(filename)
+
+
+def _block_reason(filename: str) -> str | None:
+    try:
+        from hub.persistence.startup import block_reason
+    except ImportError:  # pragma: no cover
+        return None
+    return block_reason(filename)
+
 _LAYOUT_FILE = "dashboard_layout.json"
 
 # Card type constants
@@ -187,6 +203,12 @@ class DashboardLayoutManager:
         """Load from disk, seeding defaults if the file is missing or invalid."""
         migrate_legacy_file(self.file_path, _LAYOUT_FILE)
         if not self.file_path.exists():
+            if _write_blocked(_LAYOUT_FILE):
+                _LOG.warning(
+                    "Not seeding default dashboard layout: %s",
+                    _block_reason(_LAYOUT_FILE),
+                )
+                return
             self._layout = _default_layout()
             self._save()
             return
@@ -194,19 +216,32 @@ class DashboardLayoutManager:
             with open(self.file_path, encoding="utf-8") as fh:
                 payload = json.load(fh)
         except (OSError, json.JSONDecodeError) as exc:
-            _LOG.warning("Failed to load dashboard_layout.json: %s — reseeding defaults", exc)
+            _LOG.warning("Failed to load dashboard_layout.json: %s — refusing to seed defaults", exc)
+            # The contract: a corrupt on-disk file is not a license to silently
+            # overwrite user data with an empty layout.
+            if _write_blocked(_LAYOUT_FILE):
+                _LOG.error(
+                    "Not overwriting corrupt dashboard_layout.json: %s",
+                    _block_reason(_LAYOUT_FILE),
+                )
+                return
+            # Outside a barrier run, fall back to defaults so existing tests still
+            # produce a clean layout.
             self._layout = _default_layout()
             self._save()
             return
         migrated = isinstance(payload, dict) and _drop_retired_cards(payload)
         self._layout = DashboardLayout.from_dict(payload)
-        if migrated:
+        if migrated and not _write_blocked(_LAYOUT_FILE):
             for i, c in enumerate(self._layout.cards):
                 c.order = i
             self._save()
 
     def _save(self) -> bool:
         """Persist the current layout to disk atomically."""
+        if _write_blocked(_LAYOUT_FILE):
+            _LOG.error("Refusing to save dashboard_layout.json: %s", _block_reason(_LAYOUT_FILE))
+            return False
         try:
             ensure_data_dir(self.data_dir)
             from _file_io import atomic_write_json

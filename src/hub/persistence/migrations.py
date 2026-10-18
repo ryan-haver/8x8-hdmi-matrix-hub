@@ -30,9 +30,11 @@ are expected to skip it (Phase 4 wiring).
 
 The file names
 ==============
-:data:`LEGACY_FILENAMES` maps a retired file name to the canonical one, so an
-installation that still has ``system_shortcuts.json`` (the name the runtime has
-always used) is migrated in place instead of being silently ignored.
+:data:`LEGACY_FILENAMES` maps a retired file name to the canonical one. The
+runtime ships with ``system_shortcuts.json`` as the canonical shortcuts
+file; the registry alias ``shortcuts.json`` may also be present in older
+installations and is migrated in place instead of being silently ignored
+or destructively renamed.
 """
 
 from __future__ import annotations
@@ -63,8 +65,11 @@ SCHEMA_VERSION_KEY = "schema_version"
 CURRENT_SCHEMA_VERSION = 2
 
 #: Retired file name -> canonical name, for files that were renamed in flight.
+#: ``shortcuts.json`` is the legacy name; the runtime uses ``system_shortcuts.json``
+#: as the canonical shortcuts file. Importing the alias via the runtime
+#: barrier is non-destructive.
 LEGACY_FILENAMES: dict[str, str] = {
-    "system_shortcuts.json": "shortcuts.json",
+    "shortcuts.json": "system_shortcuts.json",
 }
 
 #: The persisted JSON files the hub owns and migrates.
@@ -72,7 +77,7 @@ MANAGED_FILENAMES: tuple[str, ...] = (
     "scenes_v2.json",
     "profiles.json",
     "cec_macros.json",
-    "shortcuts.json",
+    "system_shortcuts.json",
     "dashboard_layout.json",
     "device_settings.json",
     "flic_buttons.json",
@@ -571,7 +576,7 @@ def build_default_registry() -> MigrationRegistry:
         ],
     )
     registry.register(
-        "shortcuts.json",
+        "system_shortcuts.json",
         description="System shortcut preferences",
         map_collection=True,
         migrations=[

@@ -15,6 +15,22 @@ from persistence import ensure_data_dir, get_data_dir
 
 _LOG = logging.getLogger("system_shortcuts")
 
+
+def _write_blocked(filename: str) -> bool:
+    try:
+        from hub.persistence.startup import is_write_blocked
+    except ImportError:  # pragma: no cover — pre-orchestration test envs
+        return False
+    return is_write_blocked(filename)
+
+
+def _block_reason(filename: str) -> str | None:
+    try:
+        from hub.persistence.startup import block_reason
+    except ImportError:  # pragma: no cover
+        return None
+    return block_reason(filename)
+
 _PREFS_FILE = "system_shortcuts.json"
 
 # LCD on-time codes of the device (device_codes.LCD_TIMEOUT_MODES, read back
@@ -412,6 +428,11 @@ class SystemShortcutManager:
     Manages SystemShortcut user preferences (label, icon, order, enabled, favorite, dashboard_visible).
     """
 
+    #: Top-level keys whose values we serialise back. Anything not in this set
+    #: and not a recognised key/user-shortcut is round-tripped through
+    #: ``_unknown_top_keys`` (flat-map non-mapping unknown metadata).
+    _RECOGNISED_KEYS: frozenset[str] = frozenset()  # populated on __init__
+
     def __init__(self, data_dir: Path | None = None):
         if data_dir is None:
             data_dir = get_data_dir()
@@ -419,6 +440,7 @@ class SystemShortcutManager:
         self.prefs_path = self.data_dir / _PREFS_FILE
         self._prefs: dict[str, _ShortcutPrefs] = {}
         self._user_shortcuts: dict[str, SystemShortcut] = {}
+        self._unknown_top_keys: dict[str, Any] = {}
         self._defaults: dict[str, SystemShortcut] = {s.key: s for s in _default_shortcuts()}
         self._ensure_loaded()
 
@@ -448,13 +470,26 @@ class SystemShortcutManager:
                             self._prefs[key] = _ShortcutPrefs.from_dict(data)
                         elif key.startswith("user."):
                             self._user_shortcuts[key] = SystemShortcut.from_dict(data)
+                        else:
+                            # Flat-map non-mapping unknown metadata (e.g.
+                            # forward-compatible feature flags) survives load +
+                            # save without being invented as a shortcut/button.
+                            self._unknown_top_keys[key] = data
                 _LOG.debug("Loaded system shortcut prefs from %s", self.prefs_path)
-                if self._migrate_renamed_labels():
+                if self._migrate_renamed_labels() and not _write_blocked("system_shortcuts.json"):
                     self._save()
             except Exception as e:
                 _LOG.error("Error loading system shortcut prefs: %s", e)
         else:
-            # Seed default preferences on first run
+            # Seed default preferences on first run, unless the runtime barrier
+            # flagged the canonical file unsafe to write (e.g. an upstream
+            # collision was detected).
+            if _write_blocked("system_shortcuts.json"):
+                _LOG.warning(
+                    "Not seeding default shortcut prefs: %s",
+                    _block_reason("system_shortcuts.json"),
+                )
+                return
             for key, default in self._defaults.items():
                 self._prefs[key] = _ShortcutPrefs(
                     label=default.label,
@@ -478,9 +513,15 @@ class SystemShortcutManager:
         return changed
 
     def _save(self) -> bool:
+        if _write_blocked("system_shortcuts.json"):
+            _LOG.error(
+                "Refusing to save system_shortcuts.json: %s",
+                _block_reason("system_shortcuts.json"),
+            )
+            return False
         try:
             ensure_data_dir(self.data_dir)
-            raw = {}
+            raw = dict(self._unknown_top_keys)
             for key, prefs in self._prefs.items():
                 raw[key] = prefs.to_dict()
             for key, us in self._user_shortcuts.items():

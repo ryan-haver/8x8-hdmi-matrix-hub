@@ -162,7 +162,7 @@ class TestHashNeverSent:
         assert resp.status == 200
         assert_no_hash(await resp.text())
 
-        saved = json.loads((data_dir / "scenes.json").read_text(encoding="utf-8"))
+        saved = json.loads((data_dir / "scenes_v2.json").read_text(encoding="utf-8"))
         assert saved["scenes"][0]["passcode_hash"].startswith("pbkdf2_sha256$")
 
     async def test_scene_reports_protection_inherited_from_a_profile(self, client):

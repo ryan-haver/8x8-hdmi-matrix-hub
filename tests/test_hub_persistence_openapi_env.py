@@ -153,7 +153,7 @@ def test_every_managed_file_is_registered():
         "scenes_v2.json",
         "profiles.json",
         "cec_macros.json",
-        "shortcuts.json",
+        "system_shortcuts.json",
         "dashboard_layout.json",
         "device_settings.json",
         "flic_buttons.json",
@@ -161,9 +161,13 @@ def test_every_managed_file_is_registered():
 
 
 def test_registry_knows_the_retired_shortcut_filename():
-    assert LEGACY_FILENAMES == {"system_shortcuts.json": "shortcuts.json"}
-    assert DEFAULT_REGISTRY.resolve("system_shortcuts.json") == "shortcuts.json"
+    """R2 (contract §4): ``system_shortcuts.json`` is the canonical shipped name;
+    ``shortcuts.json`` is the legacy alias the runtime barrier imports from."""
+    assert LEGACY_FILENAMES == {"shortcuts.json": "system_shortcuts.json"}
+    assert DEFAULT_REGISTRY.resolve("system_shortcuts.json") == "system_shortcuts.json"
+    assert DEFAULT_REGISTRY.resolve("shortcuts.json") == "system_shortcuts.json"
     assert DEFAULT_REGISTRY.has("system_shortcuts.json")
+    assert DEFAULT_REGISTRY.has("shortcuts.json")
     assert not DEFAULT_REGISTRY.has("profiles_v9.json")
 
 
@@ -460,7 +464,7 @@ def test_migrate_all_data_files_covers_every_managed_file(tmp_path):
     write_json(tmp_path / "scenes_v2.json", LEGACY_SCENES_LIST)
     write_json(tmp_path / "profiles.json", LEGACY_PROFILES_LIST)
     write_json(tmp_path / "cec_macros.json", LEGACY_MACROS_LIST)
-    write_json(tmp_path / "shortcuts.json", LEGACY_SHORTCUTS_LIST)
+    write_json(tmp_path / "system_shortcuts.json", LEGACY_SHORTCUTS_LIST)
     write_json(tmp_path / "dashboard_layout.json", LEGACY_LAYOUT_LIST)
     write_json(tmp_path / "device_settings.json", LEGACY_DEVICE_SETTINGS_LISTS)
     write_json(tmp_path / "flic_buttons.json", LEGACY_FLIC_LIST)

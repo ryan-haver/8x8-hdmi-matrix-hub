@@ -31,6 +31,22 @@ from .websocket import broadcast_status_update
 
 _LOG = logging.getLogger("rest_api.device_settings")
 
+
+def _write_blocked(filename: str) -> bool:
+    try:
+        from hub.persistence.startup import is_write_blocked
+    except ImportError:  # pragma: no cover — pre-orchestration test envs
+        return False
+    return is_write_blocked(filename)
+
+
+def _block_reason(filename: str) -> str | None:
+    try:
+        from hub.persistence.startup import block_reason
+    except ImportError:  # pragma: no cover
+        return None
+    return block_reason(filename)
+
 # Storage file location (resolved from persistent data dir at init time)
 _SETTINGS_FILE = "device_settings.json"
 _settings_path: Path | None = None
@@ -68,7 +84,15 @@ def _load_settings():
     global _settings_cache
 
     if _settings_path is None or not _settings_path.exists():
+        if _write_blocked(_SETTINGS_FILE):
+            _LOG.warning(
+                "Not seeding default device settings: %s",
+                _block_reason(_SETTINGS_FILE),
+            )
+            _settings_cache = {}
+            return
         _settings_cache = _get_default_settings()
+        _save_settings()
         return
 
     try:
@@ -76,7 +100,15 @@ def _load_settings():
             _settings_cache = json.load(f)
         _LOG.debug(f"Loaded device settings from {_settings_path}")
     except Exception as e:
-        _LOG.exception(f"Error loading device settings: {e}")
+        _LOG.exception("Error loading device settings: %s", e)
+        if _write_blocked(_SETTINGS_FILE):
+            _LOG.error(
+                "Not overwriting corrupt %s: %s",
+                _SETTINGS_FILE,
+                _block_reason(_SETTINGS_FILE),
+            )
+            _settings_cache = {}
+            return
         _settings_cache = _get_default_settings()
 
 
@@ -84,6 +116,11 @@ def _save_settings():
     """Save settings cache to disk."""
     if _settings_path is None:
         _LOG.warning("Cannot save settings: path not initialized")
+        return False
+    if _write_blocked(_SETTINGS_FILE):
+        _LOG.error(
+            "Refusing to save %s: %s", _SETTINGS_FILE, _block_reason(_SETTINGS_FILE)
+        )
         return False
 
     try:

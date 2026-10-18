@@ -16,6 +16,28 @@ from password import ensure_hashed_passcode, needs_passcode
 _LOG = logging.getLogger(__name__)
 
 
+def _write_blocked(filename: str) -> bool:
+    """Return True when the runtime barrier has flagged ``filename`` unsafe to write.
+
+    Tolerates the pre-barrier state (no barrier run yet → not blocked), so
+    legacy tests and direct callers without a runtime composition root keep
+    working exactly as before.
+    """
+    try:
+        from hub.persistence.startup import is_write_blocked
+    except ImportError:  # pragma: no cover — pre-orchestration test envs
+        return False
+    return is_write_blocked(filename)
+
+
+def _block_reason(filename: str) -> str | None:
+    try:
+        from hub.persistence.startup import block_reason
+    except ImportError:  # pragma: no cover
+        return None
+    return block_reason(filename)
+
+
 # =============================================================================
 # CEC Configuration for Scenes
 # =============================================================================
@@ -290,6 +312,9 @@ class SceneManager:
 
     def save(self) -> bool:
         """Save scenes to file atomically."""
+        if _write_blocked("scenes.json"):
+            _LOG.error("Refusing to save scenes.json: %s", _block_reason("scenes.json"))
+            return False
         try:
             os.makedirs(self.config_dir, exist_ok=True)
             data = {"scenes": [s.to_dict() for s in self._scenes.values()]}
@@ -412,6 +437,9 @@ class Profile:
     passcode_hash: str = ""  # Hashed passcode (empty if not protected)
     # Phase 8: Execution history (last 7 days)
     execution_log: list[dict] = field(default_factory=list)  # [{timestamp, scene_id, scene_name, status, error}]
+    # R2 contract §4: unknown record-level scalar metadata passes through load/edit/save
+    # untouched. Populated by ``from_dict``; re-emitted by ``to_dict``.
+    _unknown_fields: dict[str, Any] = field(default_factory=dict, repr=False, compare=False)
 
     def is_password_protected(self) -> bool:
         """True if a passcode is needed to run this profile (the flag or a stored hash; fails closed)."""
@@ -423,8 +451,11 @@ class Profile:
 
         :param include_hash: include ``passcode_hash``; only for persistence,
                              never for clients (SEC-04 / F-SEC-005)
+
+        Unknown record-level scalar metadata (``_unknown_fields``) is re-emitted
+        so operator data and forward-compatible keys survive every save roundtrip.
         """
-        result = {
+        result: dict[str, Any] = {
             "id": self.id,
             "name": self.name,
             "icon": self.icon,
@@ -446,11 +477,20 @@ class Profile:
             result["power_on_macro"] = self.power_on_macro
         if self.power_off_macro:
             result["power_off_macro"] = self.power_off_macro
+        # Re-emit record-level unknowns so they survive the next save.
+        for key, value in self._unknown_fields.items():
+            if key not in result:
+                result[key] = value
         return result
 
     @staticmethod
     def from_dict(data: dict[str, Any]) -> "Profile":
-        """Create from dictionary."""
+        """Create from dictionary.
+
+        Unknown record-level scalar metadata is captured in ``_unknown_fields``
+        and re-emitted by :meth:`to_dict` so it survives every load/edit/save
+        roundtrip on disk.
+        """
         outputs = {}
         for k, v in data.get("outputs", {}).items():
             outputs[int(k)] = SceneOutput.from_dict(v)
@@ -458,6 +498,14 @@ class Profile:
         cec_config = None
         if "cec_config" in data:
             cec_config = CecConfig.from_dict(data["cec_config"])
+
+        declared_keys = {
+            "id", "name", "icon", "outputs", "cec_config", "macros",
+            "power_on_macro", "power_off_macro", "pinned", "pin_order",
+            "favorite", "dashboard_visible", "dashboard_order",
+            "password_protected", "passcode_hash", "execution_log",
+        }
+        unknown = {k: v for k, v in data.items() if k not in declared_keys}
 
         return Profile(
             id=data.get("id", ""),
@@ -477,6 +525,7 @@ class Profile:
             # A raw PIN found on load is hashed (F-SEC-004)
             passcode_hash=ensure_hashed_passcode(data.get("passcode_hash")) or "",
             execution_log=list(data.get("execution_log", [])),
+            _unknown_fields=unknown,
         )
 
     @staticmethod
@@ -522,6 +571,9 @@ class ProfileManager:
     - Supporting both Scene and Profile data formats
     """
 
+    #: Top-level keys ProfileManager owns on disk.
+    _DECLARED_TOP_KEYS = frozenset({"profiles", "version"})
+
     def __init__(self, config_dir: str = None):
         """
         Initialize profile manager.
@@ -537,6 +589,9 @@ class ProfileManager:
         self.profiles_file = os.path.join(config_dir, "profiles.json")
         self.legacy_scenes_file = os.path.join(config_dir, "scenes.json")
         self._profiles: dict[str, Profile] = {}
+        # Top-level keys read from disk that the manager does not declare; emitted on save
+        # so operator data and forward-compatible fields survive PIN-rehash and other edits.
+        self._unknown_top_keys: dict[str, Any] = {}
         self.load()
 
     def load(self) -> bool:
@@ -566,6 +621,11 @@ class ProfileManager:
             with open(self.profiles_file, encoding="utf-8") as f:
                 data = json.load(f)
                 self._profiles = {}
+                self._unknown_top_keys = {
+                    k: v
+                    for k, v in data.items()
+                    if k not in self._DECLARED_TOP_KEYS
+                }
                 rehashed = False
                 for profile_data in data.get("profiles", []):
                     profile = Profile.from_dict(profile_data)
@@ -573,9 +633,17 @@ class ProfileManager:
                     rehashed |= profile.passcode_hash != (profile_data.get("passcode_hash") or "")
                 _LOG.info("Loaded %d profiles", len(self._profiles))
             if rehashed:
-                # Replace the plaintext PIN on disk with its hash (F-SEC-004)
-                _LOG.warning("Hashed a plaintext profile passcode found in %s", self.profiles_file)
-                self.save()
+                # Replace the plaintext PIN on disk with its hash (F-SEC-004).
+                # The runtime barrier may have flagged the file unsafe to write
+                # (e.g. the file was written by a newer release); in that case
+                # leave the plaintext on disk and surface the choice through logs.
+                if _write_blocked("profiles.json"):
+                    _LOG.warning(
+                        "profiles.json is flagged unsafe to write (%s); leaving plaintext PIN unchanged on disk",
+                        _block_reason("profiles.json"),
+                    )
+                else:
+                    self.save()
             return True
         except Exception as ex:
             _LOG.error("Failed to load profiles: %s", ex)
@@ -583,6 +651,12 @@ class ProfileManager:
 
     def _migrate_from_scenes(self) -> bool:
         """Migrate data from scenes.json to profiles.json."""
+        if _write_blocked("profiles.json"):
+            _LOG.error(
+                "Refusing to migrate scenes.json → profiles.json: %s",
+                _block_reason("profiles.json"),
+            )
+            return False
         try:
             with open(self.legacy_scenes_file, encoding="utf-8") as f:
                 data = json.load(f)
@@ -601,12 +675,40 @@ class ProfileManager:
             return False
 
     def save(self) -> bool:
-        """Save profiles to file atomically."""
+        """Save profiles to file atomically.
+
+        The on-disk payload preserves:
+        * the legacy file-format marker ``version`` (kept for legacy readers),
+        * unknown top-level keys captured on load (forward compatibility +
+          operator metadata),
+        * the runtime ``schema_version`` (the migrations registry's marker),
+        * each profile's unknown record-level fields (via
+          :meth:`Profile.to_dict`).
+        """
+        if _write_blocked("profiles.json"):
+            _LOG.error("Refusing to save profiles.json: %s", _block_reason("profiles.json"))
+            return False
         try:
             os.makedirs(self.config_dir, exist_ok=True)
-            data = {"version": 2, "profiles": [p.to_dict(include_hash=True) for p in self._profiles.values()]}
+            data: dict[str, Any] = {"version": 2}
+            data.update(self._unknown_top_keys)
+            data["profiles"] = [
+                p.to_dict(include_hash=True) for p in self._profiles.values()
+            ]
+            # Mark the current schema version WITHOUT dropping the legacy
+            # ``version`` key readers and tests expect. ``hub.persistence``
+            # ``save_versioned_json`` would default to a wholesale re-emit that
+            # loses the ``version: 2`` marker, so we stamp manually here.
             from _file_io import atomic_write_json
-            atomic_write_json(self.profiles_file, data)
+            from hub.persistence.migrations import CURRENT_SCHEMA_VERSION, SCHEMA_VERSION_KEY
+
+            stamped: dict[str, Any] = {}
+            for key, value in data.items():
+                if key == SCHEMA_VERSION_KEY:
+                    continue
+                stamped[key] = value
+            stamped[SCHEMA_VERSION_KEY] = CURRENT_SCHEMA_VERSION
+            atomic_write_json(self.profiles_file, stamped)
             _LOG.info("Saved %d profiles", len(self._profiles))
             return True
         except Exception as ex:
