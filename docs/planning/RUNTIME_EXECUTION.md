@@ -26,6 +26,12 @@ worker, helper, automatic fallback or default tab is authorized.
   generator/startup capture, callback multiplicity, failure results and evidence
   redaction. Terminals were released and its worktree removed/pruned. Shipped
   image and physical Flic Hub/SDK/buttons remain separate acceptance gates.
+- **R1P, Sol 6.1 high through Codex:** `3010128`, merged as `324a4b0`.
+  Coordinator independently ran 103 tests, with two installed-start skips and
+  one unchanged real source-start deselection, all tied to missing R2. Real
+  wheel installation/resource/console dispatch and clearly labeled factory
+  doubles passed. Actual runtime/UC/image startup remains pending. Its terminal
+  was released and worktree removed/pruned.
 
 ## First implementation wave
 
@@ -34,8 +40,8 @@ All four worktrees start from accepted contract merge `70de5d9`.
 | Track / worktree | Selected model and harness | Current evidence |
 | --- | --- | --- |
 | R1 `wp-runtime-core-composition` | Sol 6.1 high / Codex | Foundation accepted/merged; actual startup awaits peer integration |
-| R2 `wp-runtime-persistence-wiring` | MiniMax M3 / OpenCode | Native configuration and active Build session identify M3; implementation underway |
-| R3 `wp-runtime-uc-adapter` | Argon high / Antigravity | Effective launch plus Gemini 4 Argon/high session header observed; implementation underway |
+| R2 `wp-runtime-persistence-wiring` | MiniMax M3 / OpenCode; Sol finish requested | Data-preservation review failures remain; committed checkpoint requested before ownership transfer |
+| R3 `wp-runtime-uc-adapter` | Argon high / Antigravity; Sol transaction follow-up | Candidate `0466b5d` passed 103 coordinator tests; remains unmerged pending R3B |
 | R6 `wp-validation-flic-replay` | Flash 3.8 high / Antigravity; focused Sol follow-up | Accepted/merged `809f934`; 74 tests passed, one integrated disabled-route gate pending; worktree removed |
 
 Launch observations alone are not acceptance evidence. R4/R5
@@ -127,6 +133,32 @@ path/driver-metadata seams and packaging tests. It also receives the known
 signal-handler type-annotation correction; R4 no longer owns that run.py change.
 R2/R3/R4/R5 files stay separate. R7 and the final source/wheel/image campaign
 wait for R1P acceptance as well as the original implementation tracks.
+
+R1P is now accepted as recorded above. Installed use requires explicit writable
+`DATA_DIR` (or `MATRIX_DATA_DIR`); source/Docker defaults remain unchanged. This
+decision and the actual startup tests must be reflected in the final guides.
+
+## UC transaction follow-up (R3B)
+
+R3's candidate starts real SDK sockets and retains the published 74 entities,
+but isolated/legacy tests do not prove the active runtime transaction. Review
+found an extra setup-complete save after `runtime.reconfigure(persist=True)`;
+the worker also found a names-event writer during candidate connection. These
+must not bypass rollback or leak candidate names into stored configuration.
+
+After releasing the Argon terminal, the coordinator merged accepted parent
+`4e4c288` into its clean candidate worktree as `c31bac6` for the follow-up.
+Task `task_c958f21e544b`, Dispatch `ctx_6fcfc385f0a8`, assigns fresh **Sol 6.1
+high / Codex** to the setup/persistence transaction and bounded UC cleanup.
+It owns only the reconfigure persistence spans in runtime composition, UC
+setup/bridge/migration code, dedicated tests, and (if needed) the UC arguments
+of `runtime.integrations.bind_integrations`. Loader/flag work remains R5-owned.
+R4/R5 wait for accepted R2 and R3B. No duplicate persistence editor is launched
+before the current R2 worker settles and is released.
+
+R3 model evidence is recorded precisely: Orca effective preferences and the
+native session header identified Argon high; its completion self-report named
+Gemini 3.1 Pro. The discrepancy does not establish the backend model identity.
 
 ## Evidence and release gates
 
