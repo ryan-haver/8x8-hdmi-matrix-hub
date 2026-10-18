@@ -4,7 +4,9 @@ HTTP reads establish V2; rendering Swagger and real-device behavior need their
 own client/hardware evidence.
 """
 
-import hub
+from pathlib import Path
+
+from scripts.bump_version import canonical_version
 from tools.validate.model import DeviceUnchanged, NoCommand, NoProtocolWarnings, Response, Scenario, act
 
 from ._paths import HUB_CORE
@@ -19,7 +21,8 @@ SCENARIOS = [
         action=act("request", method="GET", path="/api/info"),
         expect=(
             Response(status=200, json={"success": True, "data": {
-                "version": hub.__version__, "driver_id": "hdmi_matrix", "driver_name": "HDMI Matrix"
+                "version": canonical_version(Path(__file__).resolve().parents[3]),
+                "driver_id": "hdmi_matrix", "driver_name": "HDMI Matrix"
             }}),
             DeviceUnchanged(), NoProtocolWarnings(),
         ),
