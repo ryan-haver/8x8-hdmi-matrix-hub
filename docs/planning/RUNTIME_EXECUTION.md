@@ -32,6 +32,13 @@ worker, helper, automatic fallback or default tab is authorized.
   wheel installation/resource/console dispatch and clearly labeled factory
   doubles passed. Actual runtime/UC/image startup remains pending. Its terminal
   was released and worktree removed/pruned.
+- **R3 plus R3B, Argon implementation / Sol 6.1 high transaction correction:**
+  final `3c523df`, merged as `ccc9483`. Coordinator independently ran 151
+  targeted tests, including 17 actual-runtime/SDK transaction tests with a
+  labeled R2 barrier shim and transport doubles. Setup/save rollback, queued
+  events, single-writer counts, live renames and SDK cleanup passed. Its
+  terminal was released and worktree removed/pruned. Actual normal-entry,
+  installed UC and shipped-image behavior still await R2 and the later tracks.
 
 ## First implementation wave
 
@@ -41,7 +48,7 @@ All four worktrees start from accepted contract merge `70de5d9`.
 | --- | --- | --- |
 | R1 `wp-runtime-core-composition` | Sol 6.1 high / Codex | Foundation accepted/merged; actual startup awaits peer integration |
 | R2 `wp-runtime-persistence-wiring` | MiniMax M3 / OpenCode; Sol finish requested | Data-preservation review failures remain; committed checkpoint requested before ownership transfer |
-| R3 `wp-runtime-uc-adapter` | Argon high / Antigravity; Sol transaction follow-up | Candidate `0466b5d` passed 103 coordinator tests; remains unmerged pending R3B |
+| R3 `wp-runtime-uc-adapter` | Argon high / Antigravity; Sol transaction follow-up | Accepted/merged `ccc9483`; 151 coordinator tests passed; worktree removed |
 | R6 `wp-validation-flic-replay` | Flash 3.8 high / Antigravity; focused Sol follow-up | Accepted/merged `809f934`; 74 tests passed, one integrated disabled-route gate pending; worktree removed |
 
 Launch observations alone are not acceptance evidence. R4/R5
@@ -159,6 +166,14 @@ before the current R2 worker settles and is released.
 R3 model evidence is recorded precisely: Orca effective preferences and the
 native session header identified Argon high; its completion self-report named
 Gemini 3.1 Pro. The discrepancy does not establish the backend model identity.
+
+After combining R1P/R3B, full `mypy src/` found one dataclass-class narrowing
+error in the entity normalizer. Coordinator excluded classes from `asdict`;
+45 typed-UC regressions passed, owned Ruff passed, and mypy passed all 89
+source files. Shared harness metadata now records the actual `hub.cli` entry,
+Flic/HA flags and active runtime/UC paths for evidence freshness; 38 focused
+registry/model/error-pipeline checks passed. Full source-client runs remain
+pending the real persistence integration.
 
 ## Evidence and release gates
 

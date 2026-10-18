@@ -140,7 +140,7 @@ def normalize_snapshot(snapshot: Any) -> dict[str, Any]:
         return {}
     if isinstance(snapshot, Mapping):
         return dict(snapshot)
-    if is_dataclass(snapshot):
+    if is_dataclass(snapshot) and not isinstance(snapshot, type):
         return asdict(snapshot)
     result: dict[str, Any] = {}
     for attr in (
