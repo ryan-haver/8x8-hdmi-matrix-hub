@@ -172,10 +172,11 @@ class HubClientHttp(EventPublisher, HubClient):
             body["output"] = output_num
         return (await self._post("/api/switch", body)).get("success") is True
 
-    async def cycle_input(self, direction: str, output_num: int = 1) -> bool:
+    async def cycle_input(self, direction: str, output_num: int = 1, *, cycle: bool = True) -> bool:
         if direction not in {"next", "previous"}:
             raise ValueError("direction must be next or previous")
-        return (await self._post(f"/api/input/{direction}?output={output_num}")).get("success") is True
+        query = f"?output={output_num}" + ("&cycle=false" if not cycle else "")
+        return (await self._post(f"/api/input/{direction}{query}")).get("success") is True
 
     async def recall_preset(self, preset: int) -> bool:
         return (await self._post(f"/api/preset/{preset}")).get("success") is True
