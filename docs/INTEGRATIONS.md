@@ -2,8 +2,7 @@
 
 > How the hub talks to the outside world. This document splits the
 > framework's opt-in `Integration` contract from the shipped
-> integration surface so a reader cannot confuse the two — that
-> confusion is what tripped up the previous pass.
+> integration surface.
 >
 > **Two layers, kept apart on purpose:**
 >
@@ -216,7 +215,7 @@ lands), but does not currently gate the always-mounted REST routes.
 ## 4. Shipped Home Assistant integration — HACS component
 
 > **What ships today:** the HACS component at
-> [`custom_components/hdmi_matrix/`](custom_components/hdmi_matrix/),
+> [`custom_components/hdmi_matrix/`](../custom_components/hdmi_matrix/),
 > installed like any other HACS integration and configured manually
 > in *Devices & Services*.
 

@@ -559,7 +559,8 @@ def test_ci_reads_the_canonical_version_without_importing(ci: dict) -> None:
         assert got.returncode == 0, got.stderr
         assert got.stdout.strip() == expected, job_id
         # A release tag must name the same version.
-        assert '"$GITHUB_REF_NAME" != "v$version"' in step["run"], job_id
+        assert 'release_tag=$(python3 scripts/bump_version.py --tag)' in step["run"], job_id
+        assert '"$GITHUB_REF_NAME" != "$release_tag"' in step["run"], job_id
 
 
 def test_images_are_labelled_with_the_canonical_version(ci: dict) -> None:

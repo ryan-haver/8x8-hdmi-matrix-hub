@@ -43,9 +43,9 @@ Docker.
 - The hub's control-lock setting known — every URL below works as-is in the
   default keyless setup; see [Authentication](#authentication-keyless-vs-keyed-setup)
   if the owner has enabled a control PIN.
-- `FLIC_ENABLED` is **on by default** (`src/hub/integrations/flic/__init__.py`
-  — `FlicIntegrationConfig.config_from_env`). Set `FLIC_ENABLED=false` to
-  disable Flic button registration if you do not use it.
+- The Flic REST compatibility routes are always mounted. The newer framework
+  defines `FLIC_ENABLED`, but the shipped compatibility handlers do not read
+  that environment flag; `FLIC_ENABLED=false` does not disable registration.
 
 ## Quick Start
 
@@ -98,7 +98,7 @@ table groups them by access level (see
 
 | Endpoint | Method | Description |
 | --- | --- | --- |
-| `/api/input/{n}` | POST | Switch all outputs to input N |
+| `/api/switch` | POST | Switch all outputs with body `{"input": N}`, or one output with `{"input": N, "output": M}` |
 | `/api/input/next?output=N` | POST | Cycle to next input on output N |
 | `/api/input/previous?output=N` | POST | Cycle to previous input on output N |
 | `/api/output/{n}/source` | POST | Set output N to input (body: `{"input": N}`) |
@@ -172,8 +172,8 @@ What the key does and does not unlock:
 | Route group | Examples | With `CONTROL_PIN` set |
 |-------------|----------|-------------------------|
 | Control | `/api/input/next`, `/api/input/previous`, `/api/output/{n}/source`, `/api/output/{n}/enable`, `/api/preset/{n}`, `/api/power/*`, `/api/cec/**`, `/api/profile/{id}/recall`, `/api/scene/{id}/recall`, `/api/cec/macro/{id}/execute`, `/api/system/beep`, `/api/system/lcd` | **API key or unlock required** — this is what Flic uses |
-| Admin | `/api/settings`, `/api/dashboard`, `/api/theme/**`, `/api/profile` (create/update/delete), `/api/scene` (create), `/api/cec/macro` (create), `/api/output/{n}/hdcp`, `/api/input/{n}/edid`, `/api/system/reboot`, `/api/auth/**`, `/api/integrations/flic/register` | Always open unless an **admin PIN** is set; an API key **never** grants admin access |
-| Reads and a few legacy routes | `GET /api/status`, `GET /api/auth/status`, `GET /api/integrations/flic/buttons`, and every other read; `POST /api/input/{n}` (legacy global switch) | Never gated — a key changes nothing for them |
+| Admin | Mutations under `/api/settings`, `/api/dashboard`, `/api/themes`, profile/scene/macro management, `/api/output/{n}/hdcp`, `/api/input/{n}/edid`, `/api/system/reboot`, `/api/integrations/flic/register`; also `/api/auth/devices` and `/api/auth/api-keys` reads | An **admin PIN**, when configured, requires an admin session or valid `X-Admin-PIN`; an API key grants control access only |
+| Public reads | `GET /api/status`, `GET /api/auth/status`, `GET /api/integrations/flic/buttons` and ordinary data reads | No unlock required; authentication-management reads above are the exception |
 
 So a Flic button can recall a profile or run a macro with a key, but cannot
 create one — profile, scene, and macro creation are admin actions done in

@@ -25,9 +25,7 @@ permissions: {}
 
 env:
   PYTHON_VERSION: '3.12'
-  # Pinned so CI results do not drift with new tool releases.
-  RUFF_VERSION: '0.15.18'
-  MYPY_VERSION: '2.1.0'
+  # Python tooling and runtime versions come from the hashed development lock.
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
@@ -48,7 +46,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Install ruff
-        run: python -m pip install "ruff==${RUFF_VERSION}"
+        run: python -m pip install --require-hashes -r requirements-dev.txt
 
       - name: ruff check
         run: |
@@ -78,12 +76,11 @@ jobs:
           cache: pip
           cache-dependency-path: |
             requirements.txt
-            requirements-uc.txt
+            requirements-dev.txt
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements-uc.txt "mypy==${MYPY_VERSION}"
+          python -m pip install --require-hashes -r requirements-dev.txt
 
       - name: mypy
         run: mypy src/
@@ -105,13 +102,13 @@ jobs:
           cache: pip
           cache-dependency-path: |
             requirements.txt
-            requirements-uc.txt
+            requirements-dev.txt
             pyproject.toml
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements-uc.txt -e ".[dev]"
+          python -m pip install --require-hashes -r requirements-dev.txt
+          python -m pip install --no-deps --no-build-isolation -e .
 
       # tests/uc (scripted Remote against the real driver) runs in its own job below.
       - name: pytest
@@ -141,13 +138,13 @@ jobs:
           cache: pip
           cache-dependency-path: |
             requirements.txt
-            requirements-uc.txt
+            requirements-dev.txt
             pyproject.toml
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements-uc.txt -e ".[dev]"
+          python -m pip install --require-hashes -r requirements-dev.txt
+          python -m pip install --no-deps --no-build-isolation -e .
 
       - name: pytest tests/uc
         run: mkdir -p build && pytest tests/uc -v --tb=short -rxX --basetemp=build/uc-tmp
@@ -310,8 +307,9 @@ jobs:
         run: |
           version=$(python3 -c 'import ast, pathlib; tree = ast.parse(pathlib.Path("src/hub/__init__.py").read_text(encoding="utf-8")); print(next(n.value.value for n in tree.body if isinstance(n, ast.Assign) and [getattr(t, "id", None) for t in n.targets] == ["__version__"]))')
           if [ -z "$version" ]; then echo "::error::no __version__ in src/hub/__init__.py"; exit 1; fi
-          if [ "$GITHUB_REF_TYPE" = tag ] && [ "$GITHUB_REF_NAME" != "v$version" ]; then
-            echo "::error::tag $GITHUB_REF_NAME does not match hub.__version__ $version"; exit 1
+          release_tag=$(python3 scripts/bump_version.py --tag)
+          if [ "$GITHUB_REF_TYPE" = tag ] && [ "$GITHUB_REF_NAME" != "$release_tag" ]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match expected $release_tag (hub.__version__ $version)"; exit 1
           fi
           echo "Version: $version"
           echo "version=$version" >> "$GITHUB_OUTPUT"
@@ -362,13 +360,13 @@ jobs:
           cache: pip
           cache-dependency-path: |
             requirements.txt
-            requirements-uc.txt
+            requirements-dev.txt
             pyproject.toml
 
       - name: Install test dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements-uc.txt -e ".[dev]"
+          python -m pip install --require-hashes -r requirements-dev.txt
+          python -m pip install --no-deps --no-build-isolation -e .
 
       # Plus the BuildKit export of the real build context (.dockerignore, DEP-09).
       - name: Deployment tests (pytest -m docker tests/deploy)
@@ -608,8 +606,8 @@ jobs:
           out=$(bash tools/ui/container-setup.sh | tee /dev/stderr)
           echo "VALIDATE_PYTHON=${out##*E2E_PYTHON=}" >> "$GITHUB_ENV"
 
-      - name: Install validation dependencies
-        run: '"$VALIDATE_PYTHON" -m pip install --quiet "pyyaml>=6.0" "jsonschema>=4.20"'
+      - name: Verify locked validation dependencies
+        run: '"$VALIDATE_PYTHON" -m pip check'
 
       - name: Run scenarios (simulator, api + browser + uc)
         run: >-
@@ -660,13 +658,13 @@ jobs:
           cache: pip
           cache-dependency-path: |
             requirements.txt
-            requirements-uc.txt
+            requirements-dev.txt
             pyproject.toml
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements-uc.txt -e ".[dev]" "pyyaml>=6.0" "jsonschema>=4.20"
+          python -m pip install --require-hashes -r requirements-dev.txt
+          python -m pip install --no-deps --no-build-isolation -e .
 
       - name: Run Home Assistant scenarios (simulator, ha client)
         run: python -m tools.validate run --client ha --operator automation --out build/validation-ha
@@ -733,8 +731,9 @@ jobs:
         run: |
           version=$(python3 -c 'import ast, pathlib; tree = ast.parse(pathlib.Path("src/hub/__init__.py").read_text(encoding="utf-8")); print(next(n.value.value for n in tree.body if isinstance(n, ast.Assign) and [getattr(t, "id", None) for t in n.targets] == ["__version__"]))')
           if [ -z "$version" ]; then echo "::error::no __version__ in src/hub/__init__.py"; exit 1; fi
-          if [ "$GITHUB_REF_TYPE" = tag ] && [ "$GITHUB_REF_NAME" != "v$version" ]; then
-            echo "::error::tag $GITHUB_REF_NAME does not match hub.__version__ $version"; exit 1
+          release_tag=$(python3 scripts/bump_version.py --tag)
+          if [ "$GITHUB_REF_TYPE" = tag ] && [ "$GITHUB_REF_NAME" != "$release_tag" ]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match expected $release_tag (hub.__version__ $version)"; exit 1
           fi
           echo "Version: $version"
           echo "version=$version" >> "$GITHUB_OUTPUT"

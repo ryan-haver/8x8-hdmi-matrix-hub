@@ -1,7 +1,7 @@
 # Feature ledger
 
 > **Generated** by `python -m tools.validate ledger` — do not edit by hand. Registry: [`features.yaml`](features.yaml) · Plan: [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md) · How to add evidence: [`README.md`](README.md).
-> Commit `41094f41`
+> Commit `d4af9590`
 
 **Level** = highest level with fresh passing evidence, else the recorded baseline (the registry's `current`), capped at V1 while an open critical/high finding is linked. **Recorded** = the registry baseline. **Fresh** = evidence commit not older than the last change to the scenario's `covers` paths.
 
@@ -104,7 +104,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | ID | Feature | Target | Level | Recorded | Freshness | Evidence | Open findings |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | F-API-001 | GET /api/health, /api/openapi.json, /api/docs (liveness, matrix connection, runtime metrics, OpenAPI 3.1 & Swagger UI) | V3 | V2 | V2 | — | — | — |
-| F-API-002 | API info and root (GET /, /api, /api/info) | V2 | V1 | V1 | — | — | DEP-06(M) |
+| F-API-002 | API info and root (GET /, /api, /api/info) | V2 | V1 | V1 | — | — | — |
 | F-API-003 | GET /api/status | V3 | V2 | V2 | — | — | — |
 | F-API-004 | Detailed status (GET /api/status/full\|inputs\|outputs\|cables\|edid\|ext-audio\|system\|device\|cec) | V3 | V1 | V1 | stale | [contracts.cables·api·pass](evidence/F-API-004/2026-10-04-V2-7dbc4dc7-contracts.cables-api.json)<br>[contracts.cec_status·api·pass](evidence/F-API-004/2026-10-04-V2-7dbc4dc7-contracts.cec_status-api.json) | — |
 | F-API-005 | POST /api/switch (one output or all) | V3 | V2 | V2 | stale | [routing.switch_one·api·pass](evidence/F-MTX-001/2026-10-04-V2-d6baf3ca-routing.switch_one-api.json)<br>[routing.route_all·api·pass](evidence/F-MTX-002/2026-10-04-V2-d6baf3ca-routing.route_all-api.json) | — |
@@ -181,7 +181,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-DOM-029 | Create, rename, reorder and delete user shortcuts | V3 | V1 | V1 | — | — | — |
 | F-DOM-030 | Favourite shortcuts and show them on the dashboard | V3 | V1 | V1 | — | — | API-20(M) |
 | F-DOM-031 | Dashboard layout (add, remove, reorder cards) | V3 | V1 | V1 | stale | [dashboard.widget_card_refused·api·pass](evidence/F-DOM-031/2026-10-10-V2-b3aced1b-dashboard.widget_card_refused-api.json)<br>[dashboard.widget_cards_dropped·api·pass](evidence/F-DOM-031/2026-10-10-V2-b3aced1b-dashboard.widget_cards_dropped-api.json) | API-20(M), UI-08(M) |
-| F-DOM-032 | Input/output icons, colours and display names (device settings) | V3 | V0 | V0 | — | — | BE-16(M), UI-22(M) |
+| F-DOM-032 | Input/output icons, colours and display names (device settings) | V3 | V0 | V0 | — | — | BE-16(M) |
 | F-DOM-033 | Favourite presets and choose which presets the dashboard shows | V3 | V1 | V1 | — | — | — |
 | F-DOM-034 | Save a custom routing mapping into a preset | V3 | V1 | V1 | stale | [preset_read.saved_partial_1·api·pass](evidence/F-DOM-034/2026-10-04-V2-7dbc4dc7-preset_read.saved_partial_1-api.json)<br>[preset_read.saved_partial_2·api·pass](evidence/F-DOM-034/2026-10-04-V2-7dbc4dc7-preset_read.saved_partial_2-api.json) | — |
 | F-DOM-035 | Theme presets and custom themes | V3 | V1 | V1 | — | — | — |
@@ -303,7 +303,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-FLIC-005 | Flic Twist controls TV volume and mute over CEC | V3 | V1 | V1 | — | — | BE-14(M) |
 | F-FLIC-006 | Button recalls a profile or runs a macro | V3 | V1 | V1 | — | — | — |
 | F-FLIC-007 | Register Flic buttons with the hub (button registry) | V3 | V0 | V0 | — | — | — |
-| F-FLIC-008 | Button switches every output to input N (POST /api/input/{n}) | V3 | V0 | V0 | — | — | DOC-03(—) |
+| F-FLIC-008 | Button switches every output to input N (POST /api/input/{n}) | V3 | V0 | V0 | — | — | — |
 | F-FLIC-009 | Flic Hub SDK JavaScript module templates | V3 | V0 | V0 | — | — | — |
 | F-FLIC-010 | Generate Flic request URLs in the web UI | V3 | V1 | V1 | — | — | — |
 
@@ -329,7 +329,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-OPS-016 | Writes are atomic and safe under concurrency | V4 | V1 | V1 | — | — | — |
 | F-OPS-017 | Migrate legacy data files (scenes -> profiles) | V4 | V1 | V1 | — | — | API-12(M), PER-04(M) |
 | F-OPS-018 | Only one hub instance runs (process lock) | V4 | V1 | V1 | — | — | — |
-| F-OPS-019 | One consistent version everywhere | V4 | V1 | V1 | — | — | DEP-06(M) |
+| F-OPS-019 | One consistent version everywhere | V4 | V1 | V1 | — | — | — |
 | F-OPS-020 | Multi-arch images (amd64 + arm64) | V4 | V0 | V0 | — | — | — |
 
 ## Security controls (F-SEC)

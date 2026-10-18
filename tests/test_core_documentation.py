@@ -117,7 +117,7 @@ class TestReadme:
 
     FILENAME = "README.md"
 
-    @pytest.fixture(scope="class")
+    @pytest.fixture
     def text(self) -> str:
         return _read(self.FILENAME)
 
@@ -226,15 +226,15 @@ class TestArchitecture:
 
     FILENAME = "docs/ARCHITECTURE.md"
 
-    @pytest.fixture(scope="class")
+    @pytest.fixture
     def text(self) -> str:
         return _read(self.FILENAME)
 
-    @pytest.fixture(scope="class")
+    @pytest.fixture
     def rest_app(self) -> str:
         return _rest_app_text()
 
-    @pytest.fixture(scope="class")
+    @pytest.fixture
     def run_text(self) -> str:
         return _run_py_text()
 
@@ -368,7 +368,7 @@ class TestIntegrations:
 
     FILENAME = "docs/INTEGRATIONS.md"
 
-    @pytest.fixture(scope="class")
+    @pytest.fixture
     def text(self) -> str:
         return _read(self.FILENAME)
 
@@ -386,15 +386,14 @@ class TestIntegrations:
                 f"{self.FILENAME} must reference the framework '{integration}' integration"
             )
 
-    def test_flic_handlers_always_mounted(self, text: str) -> str:
+    def test_flic_handlers_always_mounted(self, text: str) -> None:
         """The doc says the Flic REST handlers are always mounted; FLIC_ENABLED does not disable them."""
         lowered = text.lower()
         assert "always" in lowered and "mount" in lowered, (
             f"{self.FILENAME} must explain that the Flic REST handlers are always mounted"
         )
-        return text
 
-    def test_ha_discovery_not_wired(self, text: str) -> str:
+    def test_ha_discovery_not_wired(self, text: str) -> None:
         """The doc says ``HA_DISCOVERY_ENABLED`` is not wired to startup."""
         lowered = text.lower()
         assert "ha_discovery_enabled" in lowered, (
@@ -403,7 +402,6 @@ class TestIntegrations:
         assert "not wired" in lowered or "no auto-discovery" in lowered or "not read by" in lowered, (
             f"{self.FILENAME} must say HA_DISCOVERY_ENABLED is not wired to runtime startup"
         )
-        return text
 
     def test_documents_hacs_component(self, text: str) -> None:
         """Home Assistant ships as a HACS component and a separate framework module."""
@@ -422,7 +420,7 @@ class TestDocsReadme:
 
     FILENAME = "docs/README.md"
 
-    @pytest.fixture(scope="class")
+    @pytest.fixture
     def text(self) -> str:
         return _read(self.FILENAME)
 
@@ -434,11 +432,11 @@ class TestDocsReadme:
 
     def test_links_validation_ledger(self, text: str) -> None:
         """The validation ledger is the proof of function (DOC-10 evidence links)."""
-        assert "docs/validation/LEDGER.md" in text, (
-            f"{self.FILENAME} must link docs/validation/LEDGER.md"
+        assert "](validation/LEDGER.md)" in text, (
+            f"{self.FILENAME} must link to the ledger relative to docs/"
         )
-        assert "docs/validation/VALIDATION_PLAN.md" in text, (
-            f"{self.FILENAME} must link docs/validation/VALIDATION_PLAN.md"
+        assert "](validation/VALIDATION_PLAN.md)" in text, (
+            f"{self.FILENAME} must link to the validation plan relative to docs/"
         )
 
     def test_links_root_readme_and_changelog(self, text: str) -> None:
@@ -492,7 +490,7 @@ class TestChangelog:
 
     FILENAME = "CHANGELOG.md"
 
-    @pytest.fixture(scope="class")
+    @pytest.fixture
     def text(self) -> str:
         return _read(self.FILENAME)
 
@@ -561,7 +559,7 @@ class TestRoadmap:
 
     FILENAME = "ROADMAP.md"
 
-    @pytest.fixture(scope="class")
+    @pytest.fixture
     def text(self) -> str:
         return _read(self.FILENAME)
 

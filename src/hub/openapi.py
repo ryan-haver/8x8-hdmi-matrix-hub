@@ -10,16 +10,16 @@ that, so a script can produce the document without a running hub.
 Two things are asserted rather than derived:
 
 ``components.schemas.ApiResponseEnvelope``
-    Every JSON endpoint answers with the same envelope (API-21): ``success``,
+    JSON control endpoints answer with the same envelope (API-21): ``success``,
     ``data``, ``error`` and ``error_id`` — the correlation id a client quotes
     when reporting a failure. Endpoints that answer with something else (the
-    web UI, static assets, the WebSocket upgrade) are described as such instead
+    OpenAPI document, web UI, static assets, the WebSocket upgrade) are described as such instead
     of being forced into the envelope.
 
 ``components.securitySchemes``
-    The hub has three ways to prove who is calling: the admin session cookie,
-    an API key in ``X-API-Key``, and the same key in ``?key=`` for clients that
-    cannot set headers.
+    Authentication follows the live route policy: public reads, admin unlocks,
+    and control sessions/API keys. PIN checks apply when the corresponding PIN
+    is configured; API keys grant control access, never admin access.
 
 :func:`validate_openapi_spec` re-checks the structural rules the 3.1 schema
 requires, so a generator change that would produce an unusable document fails a
@@ -300,13 +300,25 @@ def envelope_schema() -> dict[str, Any]:
 
 
 def security_schemes() -> dict[str, Any]:
-    """The three ways a caller authenticates against the hub."""
+    """Credentials accepted by the live security middleware."""
     return {
         "AdminSessionCookie": {
             "type": "apiKey",
             "in": "cookie",
             "name": SESSION_COOKIE_NAME,
-            "description": "Set by POST /api/auth/unlock (or /api/auth/pin) after the admin PIN.",
+            "description": "Session set by POST /api/auth/unlock; admin routes require an admin session.",
+        },
+        "AdminPinHeader": {
+            "type": "apiKey",
+            "in": "header",
+            "name": "X-Admin-PIN",
+            "description": "Admin PIN for admin routes; API keys cannot authorize these routes.",
+        },
+        "RememberedDeviceCookie": {
+            "type": "apiKey",
+            "in": "cookie",
+            "name": "orei_device_token",
+            "description": "Remembered-device cookie grants control access, never admin access.",
         },
         "ControlApiKeyHeader": {
             "type": "apiKey",
@@ -343,6 +355,26 @@ def _responses(route: RouteInfo) -> dict[str, Any]:
     if not route.is_api:
         return {"200": {"description": route.summary or "Success"}}
 
+    if route.path == "/api/docs":
+        return {"200": {
+            "description": "Interactive API documentation",
+            "content": {"text/html": {"schema": {"type": "string"}}},
+        }}
+    if route.path == "/api/openapi.json":
+        return {"200": {
+            "description": "OpenAPI 3.1 specification",
+            "content": {"application/json": {"schema": {
+                "type": "object",
+                "required": ["openapi", "info", "paths"],
+                "properties": {
+                    "openapi": {"type": "string", "const": OPENAPI_VERSION},
+                    "info": {"type": "object"},
+                    "paths": {"type": "object"},
+                },
+                "additionalProperties": True,
+            }}},
+        }}
+
     responses: dict[str, Any] = {
         "200": {
             "description": route.summary or "Success",
@@ -374,7 +406,19 @@ def _operation(route: RouteInfo, security: Sequence[dict[str, Any]]) -> dict[str
     if parameters:
         operation["parameters"] = parameters
     if route.is_api:
-        operation["security"] = list(security)
+        # Import at generation time: REST static handlers import this module.
+        from rest_api.security import route_level
+
+        level = route_level(route.method, route.path)
+        operation["x-required-access"] = level or "public"
+        if level == "admin":
+            operation["security"] = [{"AdminSessionCookie": []}, {"AdminPinHeader": []}]
+        elif level == "control":
+            operation["security"] = [*security, {"RememberedDeviceCookie": []}]
+        else:
+            operation["security"] = []
+        if level:
+            operation["x-auth-condition"] = f"Required when {level.upper()}_PIN is configured."
         if route.method in _BODY_METHODS:
             operation["requestBody"] = {
                 "required": False,
@@ -450,7 +494,7 @@ def build_openapi_spec(
             "schemas": {"ApiResponseEnvelope": envelope_schema()},
             "securitySchemes": security_schemes(),
         },
-        "security": security,
+        "security": [],
     }
 
 
@@ -613,7 +657,7 @@ def swagger_ui_html(
           dom_id: "#swagger-ui",
           layout: "BaseLayout",
           deepLinking: true,
-          persistAuthorization: true,
+          persistAuthorization: false,
           presets: presets
         }});
         return;

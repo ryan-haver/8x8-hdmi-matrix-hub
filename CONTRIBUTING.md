@@ -20,7 +20,7 @@ git clone https://github.com/ryan-haver/8x8-hdmi-matrix-hub.git
 cd 8x8-hdmi-matrix-hub
 ```
 
-### 2. Create a virtual environment (Python 3.11 or 3.12)
+### 2. Create a virtual environment (Python 3.12 for the checked-in locks)
 
 ```bash
 python -m venv .venv
@@ -34,17 +34,19 @@ labels (DEP-06). The runtime entry point is **`run.py`** — `python run.py`
 boots the core (REST API, web UI at `/ui`, kiosk at `/kiosk`); setting
 `UC_ENABLED=true` also starts the Remote 3 integration on WebSocket
 port `9095` (`docs/DOCKER.md`, `run.py:9-12`). Tests target Python 3.12
-(the project supports 3.11 / 3.12 in `pyproject.toml`; HA tests need 3.13+).
+(the metadata supports Python 3.11 and Python 3.12; HA tests need 3.13+).
 
 ### 3. Install dependencies (hashed, locked)
 
-`requirements.txt` is hashed and locked. The Unified Circle integration
-needs `requirements-uc.txt` on top of it (`run.py` will refuse to start
-the integration if `ucapi` is missing).
+`requirements.txt` locks the runtime and integration dependencies, including
+Unfolded Circle's `ucapi`. `requirements-uc.txt` is a compatibility include.
+`requirements-dev.txt` adds the development and build tools with hashes.
+It includes pytest, pytest-asyncio, Ruff, Mypy, and the packaging tools.
 
 ```bash
-pip install -r requirements-uc.txt
-pip install -e ".[dev]"   # pytest, pytest-asyncio, ruff, mypy, jsonschema, pyyaml, …
+python -m pip install --require-hashes -r requirements-dev.txt
+python -m pip install --no-deps -e .
+python -m pip check
 ```
 
 ### 4. (Optional) Install git hooks
@@ -53,8 +55,9 @@ pip install -e ".[dev]"   # pytest, pytest-asyncio, ruff, mypy, jsonschema, pyya
 git config core.hooksPath .githooks
 ```
 
-The hooks run Ruff and Mypy on staged files so CI failures don't reach
-the PR.
+The pre-commit hook runs Ruff over the source and test trees, followed by
+pytest excluding the separate Home Assistant and scripted-Remote suites.
+Mypy runs separately in CI; run it locally before a Python change.
 
 ## Project Structure
 
@@ -64,7 +67,7 @@ the PR.
 ├── run_server.py           # thin wrapper kept for backwards compatibility
 ├── driver.json             # UC Remote 3 driver metadata (port 9095)
 ├── requirements.txt        # core runtime deps (hashed)
-├── requirements-uc.txt     # adds ucapi for the Remote 3 integration
+├── requirements-uc.txt     # compatibility include of the runtime lock
 ├── pyproject.toml          # packaging, ruff, mypy, pytest config (DEP-04)
 ├── Dockerfile              # one image; UC off unless UC_ENABLED=true
 ├── docker-compose.yml      # core service (REST API + web UI + kiosk)
@@ -72,9 +75,9 @@ the PR.
 ├── docker-compose.uc-bridge.yml  # UC override — bridge networking, no mDNS
 ├── src/
 │   ├── hub/                # canonical env vars, OpenAPI, persistence
-│   │   ├── env.py          # one table of every env var (DOC-12)
+│   │   ├── env.py          # framework environment metadata
 │   │   ├── openapi.py
-│   │   ├── core/           # MatrixService (single owner of state)
+│   │   ├── core/           # MatrixService framework; runtime wiring pending
 │   │   ├── domain/         # ActionRunner, VisibilityStore, profiles
 │   │   ├── persistence/
 │   │   └── integrations/   # modular integrations framework
@@ -305,8 +308,8 @@ Use clear, descriptive commit messages following Conventional Commits:
 - `refactor: Move config to separate module`
 - `test: Cover control PIN on preset routes`
 
-The integration / release branches squash-merge; the messages of the
-individual commits still help reviewers and `git blame`.
+Release integration branches use merge commits so the validated track history
+remains available to reviewers and `git blame`.
 
 ## Questions?
 

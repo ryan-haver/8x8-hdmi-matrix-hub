@@ -127,7 +127,7 @@ Severity: **C** critical · **H** high · **M** medium · **L** low. "Phase" is 
 | BE-24 | L | MediaPlayer state not updated by poller; first poll broadcasts `signal_change` for every active input | `driver.py` poller | 4 (WP-C2: the /ws half is fixed: a first reading is never announced as a change, and the driver no longer broadcasts; the MediaPlayer state stays with Phase 4) |
 | BE-25 | L | `copy_edid_from_output` uses `set input edid` 14+N; docs describe `copy edid` | `orei_matrix.py` | 1 (HIL) / WP-A4 part 2: `copy edid` and `set input edid 14+N` get no answer (captured); copy is `set edid` 39+N (web-UI-derived, proven with HIL-09) |
 | BE-26 | L | Hard-coded default host `192.168.0.100`; ~62 `range(1, 9)` / `[0]*8` | many | 4 |
-| BE-27 | L | Runtime leftovers in `src/` (`driver.lock`, `config_state.json`, egg-info) | `src/` | 6 |
+| BE-27 | L | Runtime leftovers in `src/` (`driver.lock`, `config_state.json`, egg-info) | `src/` | 6 / WP-G1 ✅ fixed: tracked runtime leftovers removed; tools/check_repo_hygiene.py rejects newly committed leftovers, binaries, captures and oversized non-LFS blobs; tests/test_repo_hygiene_and_docker.py |
 | BE-28 | C | Telnet push listener busy-loops at EOF (`read()` returns `b""`, loop `continue`s without yielding) → hub event loop frozen at 100% CPU after a matrix reboot or network drop (found by simulator, SIM-02) | `telnet_client.py:478-495` | 1 / WP-A1 ✅ fixed (PR #5): EOF is a lost connection (no spin); loop lag ≤ 16 ms during a simulated reboot |
 | BE-29 | H | Telnet EOF never detected: `_send_raw` spins to timeout and `telnet_connected` stays true; truncated `status` dump makes every missing port read as disconnected (SIM-01) | `telnet_client.py:271-273,667-671,685-689` | 1 / WP-A1 ✅ fixed (PR #5): EOF detected, state → disconnected; missing ports read as unknown |
 | BE-30 | L | `get_all_cable_status` sends `status!` twice per poll | `orei_matrix.py:1148-1150` | 1 / WP-A1 ✅ fixed (PR #5): one `status!` per cable poll |
@@ -160,7 +160,7 @@ Severity: **C** critical · **H** high · **M** medium · **L** low. "Phase" is 
 | API-14 | M | Custom preset save re-routes live TVs, restores from stale routing, no lock | `control.py:383-424` | 2 / WP-C1 ✅ fixed within current behaviour (it still re-routes the live displays briefly; DI-4 decides that): one save at a time, routing read fresh from the matrix (refused if unreadable), no save if the temporary routing failed, only the changed outputs routed back. Proof: `tests/sim/test_sim_preset_save.py`, scenario `presets.save_custom_mapping` |
 | API-15 | L | Input validation: body types, truthy-string booleans (`"false"` enables), unchecked output numbers/override keys, unbounded Flic registration | `outputs.py:367`, `config.py:667`, `integrations.py:67-84` | 3 / WP-F1 ✅ fixed: `src/rest_api/validation.py` (`parse_json_object`, `validate_int`, `validate_port`, `validate_bool`, `validate_string`, `validate_steps`), Flic button registry bounded (`MAX_FLIC_BUTTONS=100`); `tests/test_security_hardening.py`, `security_hardening.*` |
 | API-16 | L | `sys.path.insert` on every request (9 handlers) | `audio.py`, `outputs.py`, `cec.py` | 1 |
-| API-17 | L | `config/*.json` seed files contain personal test data in legacy schema | `config/` | 6 |
+| API-17 | L | `config/*.json` seed files contain personal test data in legacy schema | `config/` | 6 / WP-G1 ✅ fixed: config/*.json replaced with small fictional examples parsed by Profile, legacy Scene and CecMacro; config/README.md describes their scope |
 | API-18 | L | `config.SceneManager` (v1) dead | `config.py`, `utils.py:388-395` | 4 |
 | API-19 | M | Three divergent "apply profile" paths (recall handler, scene executor, shortcut executor) | `profiles.py`, `scene_execution.py`, `system_shortcuts.py` | 4 |
 | API-20 | M | Dashboard layout claims to be source of truth, but 5 entity types carry their own favorite/dashboard flags; deletes orphan cards | `dashboard_layout.py`, managers | 4 |
@@ -228,16 +228,16 @@ Severity: **C** critical · **H** high · **M** medium · **L** low. "Phase" is 
 | DEP-01 | H | Every compose service has `profiles:` (`default` is not special) → `docker-compose up` starts nothing | `docker-compose.yml:36-38,80-81` | 2 / WP-D2 ✅ fixed: one service, no profiles; `tests/deploy/test_compose.py` |
 | DEP-02 | H | Bridge networking, but UC mDNS discovery requires host networking (per DOCKER.md) | `docker-compose.yml` | 2 / WP-D2 ✅ fixed: `docker-compose.uc-host.yml` (host networking, mDNS on `HUB_HOST_IP`) and `docker-compose.uc-bridge.yml` (mDNS off, `UC_DRIVER_URL`); discovery by a real Remote is still HIL-E (F-OPS-004) |
 | DEP-03 | C | API-only image runs legacy `driver.py` (imports `ucapi`), but `ucapi` is not installed → cannot start | `run.py:138-147`, `Dockerfile:42-60` | 2 / WP-D2 ✅ fixed: one image; `UC_ENABLED=false` runs the core without importing `ucapi` (`tests/deploy`, `tests/test_run_entry.py`) |
-| DEP-04 | M | `setup.py` and `pyproject.toml` both present; both omit `_file_io`, `_task_supervisor`, `_telnet_proto` | root | 6 |
+| DEP-04 | M | `setup.py` and `pyproject.toml` both present; both omit `_file_io`, `_task_supervisor`, `_telnet_proto` | root | 6 / WP-G1 ✅ fixed: pyproject.toml is sole metadata, legacy modules and web resources are included; stable/RC wheel and sdist tests in tests/test_packaging_version_sync.py |
 | DEP-05 | M | CI: no `pull_request` trigger; ruff only on `src/`; mypy non-blocking; no hassfest/HACS validation; no gitleaks; QEMU set up but no multi-arch platforms | `.github/workflows/docker-publish.yml` | 0 |
-| DEP-06 | M | Five version numbers (0.1.0, 1.0.0, 2.10.0, README 2.7.0, HA sw 1.0.0); `driver_id` fallback mismatch | `driver.json`, `pyproject.toml`, `utils.py:86`, `manifest.json`, `core.py:170` | 6 |
+| DEP-06 | M | Five version numbers (0.1.0, 1.0.0, 2.10.0, README 2.7.0, HA sw 1.0.0); `driver_id` fallback mismatch | `driver.json`, `pyproject.toml`, `utils.py:86`, `manifest.json`, `core.py:170` | 6 / WP-G1 ✅ fixed: canonical hub.__version__, synchronized manifests and compatibility imports, /api/info version, Docker build labels, bump/check/tag script; API_VERSION remains a separate contract version |
 | DEP-07 | M | Env-var surface inconsistent: `API_PORT` vs `REST_API_PORT`, `MATRIX_HOST` ignored in default mode, `WEBUI_ENABLED` no-op, `USE_MODULAR` | `run.py`, `driver.py:60` | 4 (WP-D2: `run.py` reads one set of names, old names are warned aliases, `USE_MODULAR`/`WEBUI_ENABLED` ignored; still open: with UC on, `driver.py` takes the matrix address from the Remote setup, not `MATRIX_HOST`) |
-| DEP-08 | L | No lockfile/hashes for transitive deps; base image not digest-pinned; no dev requirements file | `requirements*.txt` | 6 |
+| DEP-08 | L | No lockfile/hashes for transitive deps; base image not digest-pinned; no dev requirements file | `requirements*.txt` | 6 / WP-G1 ✅ fixed: hashed runtime/dev locks, digest-pinned Python/Playwright bases and SHA-pinned actions; CI/container setup uses the dev lock; HA test plugin remains separately pinned for Python 3.13 |
 | DEP-09 | L | `.dockerignore` misses `docs/`, `archive/`, `tests/`, agent/cache dirs | `.dockerignore` | 6 / WP-D2 ✅ fixed: allow-list (`src/`, `web/`, entry scripts, `driver.json`, requirements) |
 | DEP-10 | L | `.gitignore` misses `.playwright-mcp/`, tool caches | `.gitignore` | 0 ✅ fixed (`eceb599`): `.playwright-mcp/`, `.mypy_cache/`, `.ruff_cache/`, `node_modules/`, `playwright-report/`, `test-results/`, `build/` ignored |
 | DEP-11 | L | Pre-commit hook runs the full suite, silently skips `test_atomic_writes.py`, silently passes without ruff | `.githooks/pre-commit` | 0 ✅ fixed (`455f83d`): `.githooks/pre-commit` runs ruff + fast unit tests including `test_atomic_writes.py` and fails if ruff/pytest is missing |
-| DEP-12 | L | One-off scripts (`_upgrade_log_calls.py`, ad-hoc telnet scripts) | `scripts/` | 6 |
-| DEP-13 | L | `full_codebase_audit_prompt.md` at repo root | root | 6 |
+| DEP-12 | L | One-off scripts (`_upgrade_log_calls.py`, ad-hoc telnet scripts) | `scripts/` | 6 / WP-G1 ✅ fixed: obsolete upgrade, bitmap-trace and ad-hoc Telnet/API discovery scripts removed; maintained tools/capture replaces hardware probing |
+| DEP-13 | L | `full_codebase_audit_prompt.md` at repo root | root | 6 / WP-G1 ✅ fixed: full_codebase_audit_prompt.md removed from the repository root |
 
 ### 4.6 Tests (TST)
 
@@ -288,7 +288,7 @@ Severity: **C** critical · **H** high · **M** medium · **L** low. "Phase" is 
 | UI-19 | L | `scene-editor` uses `prompt()` for step targets | `scene-editor.js:263-278` | 5 |
 | UI-20 | L | `about-dialog`/`integrations-drawer` call `fetch` directly | — | 5 |
 | UI-21 | L | PWA manifest marked done in plan, not present | `web/` | 5 |
-| UI-22 | M | Device icon set is a bitmap trace of a PNG sprite of unknown origin/licence (`device_icons_set.png.svg`); `_icon-paths.json` is 2.9 MB and single icons reach 376 KB | `web/assets/icons/svg/`, `scripts/convert-icons-to-svg.js` | 5 / 6 |
+| UI-22 | M | Device icon set is a bitmap trace of a PNG sprite of unknown origin/licence (`device_icons_set.png.svg`); `_icon-paths.json` is 2.9 MB and single icons reach 376 KB | `web/assets/icons/svg/`, `scripts/convert-icons-to-svg.js` | 5 / 6 ✅ fixed: 57 original reproducible SVGs replace unknown traces (all under 5 KB); original provenance and 17 runtime dependency license inventories retained; tests/test_license_and_protocol_docs.py |
 | UI-23 | H | Kiosk "Apply" sends `{mute}`/`{enable}` but the hub reads `muted`/`enabled` (default true) → can mute/unmute outputs unintentionally; kiosk HDR/scaler/HDCP option values don't match the API | `kiosk.html` | 2 / WP-E1 ✅ fixed: Apply sends {muted} / {enabled}; HDCP/HDR/scaler options carry API values (HDCP "Disable" removed: no such mode). Proof: scenarios kiosk.route_all_apply and kiosk.route_one_muted (browser, V3, device read back), tests/e2e/flows.spec.ts UI-23, smoke.spec.ts kiosk route-all. Owner decision UI-46 (only changed options are sent) and HDCP "Disable" removal confirmed 2026-09-27 |
 | UI-24 | H | Kiosk calls non-existent `/api/inputs/status` and `/api/outputs/status` (real: `/api/status/*`) → input tiles always grey, footer tiles always dimmed | `kiosk.html:2514` | 2 / WP-E1 ✅ fixed: the kiosk polls /api/status/inputs and /api/status/outputs. Proof: tests/e2e/flows.spec.ts UI-24 (no 404, tiles follow the simulator), smoke.spec.ts kiosk load without console errors; visual pending approval / After WP-C2: the kiosk no longer polls the status routes every 5 s; it reads once at start and stays live from the WebSocket. Proof: tests/e2e/flows.spec.ts "the kiosk stays live from the WebSocket and does not poll the status routes" |
 | UI-25 | M | Kiosk profile wizard never opens (reads the macros response shape wrong); routing wizard step 1 "Next" has no handler | `kiosk.html:2469` | 2 / WP-E1 ✅ fixed: the wizard reads data.macros; step 1 "Next" has a handler (and the wizard starts with no destination). Proof: tests/e2e/flows.spec.ts UI-25 tests; catalog kiosk/profile-wizard/* now captured without the reshaped response |
@@ -331,19 +331,19 @@ Severity: **C** critical · **H** high · **M** medium · **L** low. "Phase" is 
 
 | ID | Finding | Phase |
 | --- | --- | --- |
-| DOC-01 | `PROJECT_ROADMAP.md` frozen at 2026-01-22 (HACS "NEXT", entity count 58 vs 74, 283 tests, `rest_api.py`) | 7 |
-| DOC-02 | README: wrong API-only instructions, env-var table (≈20 vars missing, 3 wrong), `orei_matrix` component path, test counts, API version, root-level paths, `s recall scene X!` table, legacy "Original Setup" half, duplicate future-features lists | 7 |
-| DOC-03 | `API_REFERENCE.md` covers 62/163 routes; WebSocket undocumented; `/api/scene*` presented as a feature; `POST /api/input/{n}` documented in FLIC/HA docs but doesn't exist | 7 |
-| DOC-04 | `HOME_ASSISTANT.md` calls the component "planned"; entity/service names don't exist | 7 |
-| DOC-05 | `DOCKER.md` networking, container name, non-existent `docker-compose.multi.yml` | 7 |
-| DOC-06 | `CEC_CONTROL_ARCHITECTURE.md` self-contradictory statuses, plural paths | 7 |
-| DOC-07 | `PHASE_8_SPEC.md` diverges from implementation (routes, PBKDF2, shortcuts kept, system_actions files) | 7 |
-| DOC-08 | `WEB_UI_IMPLEMENTATION_PLAN.md` stale file tree, PWA falsely ✅ | 7 |
-| DOC-09 | `IR_CONTROL_ROADMAP.md` version plan collides with used versions | 7 |
-| DOC-10 | `MASTER_INDEX.md` + `docs/README.md` overlap; external "Antigravity" references; four phase-numbering schemes | 7 |
-| DOC-11 | `OREI_API_COMMANDS.md` claims 33/33 verified but body says unverified; no Telnet section | 7 (after HIL) |
-| DOC-12 | Missing: CONFIGURATION, ARCHITECTURE, CHANGELOG, VALIDATION report, SECURITY | 7 |
-| DOC-13 | `CONTRIBUTING.md` outdated (container name, install path, hooks, mypy) | 7 |
+| DOC-01 | `PROJECT_ROADMAP.md` frozen at 2026-01-22 (HACS "NEXT", entity count 58 vs 74, 283 tests, `rest_api.py`) | 7 / WP-G2 ✅ fixed: ROADMAP.md and compatibility link from PROJECT_ROADMAP.md |
+| DOC-02 | README: wrong API-only instructions, env-var table (≈20 vars missing, 3 wrong), `orei_matrix` component path, test counts, API version, root-level paths, `s recall scene X!` table, legacy "Original Setup" half, duplicate future-features lists | 7 / WP-G2 ✅ fixed: README runtime/install/hardware claims corrected |
+| DOC-03 | `API_REFERENCE.md` covers 62/163 routes; WebSocket undocumented; `/api/scene*` presented as a feature; `POST /api/input/{n}` documented in FLIC/HA docs but doesn't exist | 7 / WP-G2 ✅ fixed: 177-route catalog, WebSocket reference, OpenAPI/Swagger routes and corrected client templates |
+| DOC-04 | `HOME_ASSISTANT.md` calls the component "planned"; entity/service names don't exist | 7 / WP-G2 ✅ fixed: HOME_ASSISTANT.md documents the shipped component and valid routes |
+| DOC-05 | `DOCKER.md` networking, container name, non-existent `docker-compose.multi.yml` | 7 / WP-G2 ✅ fixed: DOCKER.md describes actual compose modes, networking and persistence |
+| DOC-06 | `CEC_CONTROL_ARCHITECTURE.md` self-contradictory statuses, plural paths | 7 / WP-G2 ✅ fixed: historical design archived with deviation banner and compatibility link |
+| DOC-07 | `PHASE_8_SPEC.md` diverges from implementation (routes, PBKDF2, shortcuts kept, system_actions files) | 7 / WP-G2 ✅ fixed: historical domain/UI proposal archived with deviation banner |
+| DOC-08 | `WEB_UI_IMPLEMENTATION_PLAN.md` stale file tree, PWA falsely ✅ | 7 / WP-G2 ✅ fixed: historical UI plan archived with deviation banner |
+| DOC-09 | `IR_CONTROL_ROADMAP.md` version plan collides with used versions | 7 / WP-G2 ✅ fixed: IR proposal moved without assigned release versions |
+| DOC-10 | `MASTER_INDEX.md` + `docs/README.md` overlap; external "Antigravity" references; four phase-numbering schemes | 7 / WP-G2 ✅ fixed: unified docs/README.md index; MASTER_INDEX.md compatibility link |
+| DOC-11 | `OREI_API_COMMANDS.md` claims 33/33 verified but body says unverified; no Telnet section | 7 / WP-G2 ✅ fixed: protocol reference distinguishes captured/rejected/unverified commands and physical CEC; includes Telnet |
+| DOC-12 | Missing: CONFIGURATION, ARCHITECTURE, CHANGELOG, VALIDATION report, SECURITY | 7 / WP-G2 ✅ fixed: configuration, architecture, changelog and candidate validation report added; final hardware gates stay pending |
+| DOC-13 | `CONTRIBUTING.md` outdated (container name, install path, hooks, mypy) | 7 / WP-G2 ✅ fixed: contributing guide matches locked install, hooks and checks |
 
 ### 4.9 Unfolded Circle Remote integration (UC)
 
@@ -370,7 +370,7 @@ Full detail (location, user impact, fix) in [`docs/audits/UC_INTEGRATION_AUDIT.m
 | UC-17 | H | Hub liveness tied to the Remote: poller (only source of live WS events) runs only while a Remote is connected; standby disconnects the matrix | 1 (wave 2) / 4 (WP-B2 ✅ fixed: the poller starts with the hub and is never stopped by a Remote; standby keeps the matrix connected; `tests/uc/test_lifecycle.py` UC-17 tests. MatrixService ownership of polling remains Phase 4) / WP-C2 ✅ hub-owned event stream: `src/rest_api/events.py` polls (`STATUS_POLL_INTERVAL`, 5 s) and reads at once after any accepted write, a Telnet push or a link change, in every mode (the core-only hub had no poller at all); the driver's poller no longer broadcasts, so each change is announced once. Proof: `live.front_panel_route` V3 in the core-only hub, `tests/uc/test_lifecycle.py` front-panel tests (UC mode) |
 | UC-18 | H | Modular path non-functional against the real API (envelope, allconnect, switch-all, next/previous, WS client); mocked tests hide it | 4 |
 | UC-19 | L | Restore blocks startup before the WS server; config path ignores `ucapi`; CWD-relative `driver.json`; `__main__`-only `api` global | 1 (wave 2) / 4 (WP-B2 ✅ fixed: the WebSocket starts before the restore, which never waits for the matrix; the config file is in `api.config_dir_path` (legacy location still read); `driver.json` next to the package; `_driver_state.api` only, `main(driver_json=...)` entry point (a caller can pass adjusted metadata); without a saved setup `MATRIX_HOST` gives the hub its matrix before any Remote setup (never saved; a saved setup wins); REST port from `API_PORT` (`REST_API_PORT` fallback); `tests/uc/test_lifecycle.py::test_integration_port_opens_promptly_when_the_matrix_hangs`, `tests/test_driver.py::TestStartupHelpers`) |
-| UC-20 | M | Vendored UC API docs several spec versions stale (official sources now pinned locally via `tools/uc_reference.py`) | 7 |
+| UC-20 | M | Vendored UC API docs several spec versions stale (official sources now pinned locally via `tools/uc_reference.py`) | 7 / WP-G2 ✅ fixed: upstream snapshots moved to docs/vendor with source/version/license headers and unknown exact source commit stated; current pinned reference guide retained |
 | UC-21 | H | No scripted-Remote test harness (✅ built in WP-B1: `tools/uc_remote_sim.py`, `tests/uc/`) | 1 (wave 2, first) / WP-B1 ✅ fixed: `tools/uc_remote_sim.py` and `tests/uc/` blocking CI job |
 | UC-22 | M | CEC remote `send_cmd` ignores `repeat`/`delay`/`hold`: holding a volume key sends a single CEC step (found by the WP-B1 harness) | 1 (wave 2, with UC-01) / WP-B2 ✅ fixed: `repeat`, `delay` and `hold` are honoured for `send_cmd` and `send_cmd_sequence` (bounded: repeat 20, 5 s) (`tests/uc/test_commands.py::test_send_cmd_repeat_sends_the_command_repeatedly`, `::test_send_cmd_sequence_repeat_and_the_button_mapping_form`; scenario `remote.output_cec_volume_repeat`) |
 | UC-23 | M | After BE-14 (displays use the device's six-key output table), `remote.output_N_cec` still advertised 12 simple commands; 7 of them (UP, DOWN, LEFT, RIGHT, SELECT, MENU, BACK) have no display index, so the Remote showed keys that always failed (500) | 1 / WP-A4 part 2 ✅ fixed: the remote's simple commands are the display table (POWER_ON, POWER_OFF, MUTE, VOLUME_DOWN, VOLUME_UP, ACTIVE), its UI page shows only those, and other keys answer 400 without a frame (`tests/uc/test_commands.py`; golden entity set updated) |
@@ -705,24 +705,24 @@ Per DI-7, the consolidated Settings drawer is mocked up first and reviewed via a
 
 ### Phase 6 — Repository hygiene & release engineering (1-2 days)
 
-- [ ] (History purge and LICENSE moved to Phase 0.) Re-verify no vendor binaries or HAR captures crept back in; add a CI check rejecting `*.bin`, `*.exe`, `*.c4z`, `*.har`, and files > 2 MB outside LFS-tracked snapshot paths.
-- [ ] Licence audit of every bundled asset (icons, fonts, images) with a `THIRD_PARTY_NOTICES.md`; release blocked until UI-22 is resolved.
-- [ ] Delete `setup.py`; `pyproject.toml` as sole metadata with correct packages (DEP-04).
-- [ ] Single version source (e.g. `hub/__init__.py:__version__`) feeding `driver.json`, HA `manifest.json`, `/api/info`, Docker labels; release script bumps all (DEP-06).
-- [ ] Locked, hashed requirements (`pip-compile`), `requirements-dev.txt`, digest-pinned base image, SHA-pinned actions, Dependabot/Renovate (DEP-08, SEC-15).
-- [ ] `.dockerignore`, remove `src/` leftovers, remove one-off scripts, remove `full_codebase_audit_prompt.md`, replace `config/*.json` seeds with clean examples (DEP-09, DEP-12, DEP-13, BE-27, API-17).
-- [ ] Multi-arch images (amd64 + arm64) published on tag.
+- [x] (History purge and LICENSE moved to Phase 0.) Re-verify no vendor binaries or HAR captures crept back in; add a CI check rejecting `*.bin`, `*.exe`, `*.c4z`, `*.har`, and files > 2 MB outside LFS-tracked snapshot paths.
+- [x] Licence audit of every bundled asset (icons, fonts, images) with a `THIRD_PARTY_NOTICES.md`; release blocked until UI-22 is resolved.
+- [x] Delete `setup.py`; `pyproject.toml` as sole metadata with correct packages (DEP-04).
+- [x] Single version source (e.g. `hub/__init__.py:__version__`) feeding `driver.json`, HA `manifest.json`, `/api/info`, Docker labels; release script bumps all (DEP-06).
+- [x] Locked, hashed requirements (`pip-compile`), `requirements-dev.txt`, digest-pinned base image, SHA-pinned actions, Dependabot/Renovate (DEP-08, SEC-15).
+- [x] `.dockerignore`, remove `src/` leftovers, remove one-off scripts, remove `full_codebase_audit_prompt.md`, replace `config/*.json` seeds with clean examples (DEP-09, DEP-12, DEP-13, BE-27, API-17).
+- [ ] Multi-arch images (amd64 + arm64) published on tag. Local publication/label checks and arm64 QEMU health passed; the final GitHub tag publication is pending.
 
 ### Phase 7 — Documentation (2-3 days)
 
-- [ ] `README.md` rewritten: what it is, supported hardware, a copy-paste `docker-compose.yml` quick start for a home/lab host, first-run walkthrough (matrix host, credentials, optional admin PIN), enabling integrations via env vars (Remote 3, Flic, HA discovery), clients (HA component via HACS, Web/Kiosk), security note, troubleshooting (DOC-02).
-- [ ] New: `docs/CONFIGURATION.md` (every env var, generated or checked by a test against the code), `docs/ARCHITECTURE.md` (§3 of this plan, updated), `CHANGELOG.md` (from git history + this plan), `SECURITY.md`, `docs/INTEGRATIONS.md` (one section per integration: env vars, ports, network requirements, setup steps) (DOC-12).
-- [ ] `docs/API_REFERENCE.md` generated from OpenAPI + WS event schema; Swagger UI served at `/api/docs` (DOC-03).
-- [ ] Rewrite `HOME_ASSISTANT.md` around the real component (REST examples as appendix) (DOC-04); fix `DOCKER.md` (DOC-05), `FLIC_SETUP.md` routes, `CONTRIBUTING.md` (DOC-13).
-- [ ] `OREI_API_COMMANDS.md` updated from HIL-A captures + new Telnet section (DOC-11).
-- [ ] Merge `MASTER_INDEX.md` + `docs/README.md` into one index (DOC-10); replace `PROJECT_ROADMAP.md` with a short `ROADMAP.md` of open items (DOC-01).
-- [ ] Refresh or replace the vendored UC API docs with a source/version header; update or retire `UNFOLDED_CIRCLE_INTEGRATION_GUIDE.md` (UC-20).
-- [ ] Archive `WEB_UI_IMPLEMENTATION_PLAN.md`, `CEC_CONTROL_ARCHITECTURE.md`, `PHASE_8_SPEC.md` to `docs/archive/design/` with a banner listing deviations (DOC-06…08); move `IR_CONTROL_ROADMAP.md` to `docs/proposals/` without version numbers (DOC-09); move vendored UC API docs to `docs/vendor/`.
+- [x] `README.md` rewritten: what it is, supported hardware, a copy-paste `docker-compose.yml` quick start for a home/lab host, first-run walkthrough (matrix host, credentials, optional admin PIN), enabling integrations via env vars (Remote 3, Flic, HA discovery), clients (HA component via HACS, Web/Kiosk), security note, troubleshooting (DOC-02).
+- [x] New: `docs/CONFIGURATION.md` (every env var, generated or checked by a test against the code), `docs/ARCHITECTURE.md` (§3 of this plan, updated), `CHANGELOG.md` (from git history + this plan), `SECURITY.md`, `docs/INTEGRATIONS.md` (one section per integration: env vars, ports, network requirements, setup steps) (DOC-12).
+- [x] `docs/API_REFERENCE.md` generated from OpenAPI + WS event schema; Swagger UI served at `/api/docs` (DOC-03).
+- [x] Rewrite `HOME_ASSISTANT.md` around the real component (REST examples as appendix) (DOC-04); fix `DOCKER.md` (DOC-05), `FLIC_SETUP.md` routes, `CONTRIBUTING.md` (DOC-13).
+- [x] `OREI_API_COMMANDS.md` updated from HIL-A captures + new Telnet section (DOC-11).
+- [x] Merge `MASTER_INDEX.md` + `docs/README.md` into one index (DOC-10); replace `PROJECT_ROADMAP.md` with a short `ROADMAP.md` of open items (DOC-01).
+- [x] Refresh or replace the vendored UC API docs with a source/version header; update or retire `UNFOLDED_CIRCLE_INTEGRATION_GUIDE.md` (UC-20).
+- [x] Archive `WEB_UI_IMPLEMENTATION_PLAN.md`, `CEC_CONTROL_ARCHITECTURE.md`, `PHASE_8_SPEC.md` to `docs/archive/design/` with a banner listing deviations (DOC-06…08); move `IR_CONTROL_ROADMAP.md` to `docs/proposals/` without version numbers (DOC-09); move vendored UC API docs to `docs/vendor/`.
 
 ### Phase 8 — Validation campaign & 1.0 release (3-5 days + 72 h soak)
 

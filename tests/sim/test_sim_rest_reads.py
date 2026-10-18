@@ -217,3 +217,19 @@ async def test_openapi_spec_and_swagger_docs_reads(data_hub, simulator):
     assert 'id="swagger-ui"' in html
     assert sim_writes(simulator) == []
 
+
+@pytest.mark.parametrize("corrupt", [False, True])
+async def test_info_manifest_fallback_keeps_the_driver_identity(data_hub, simulator, tmp_path, monkeypatch, corrupt):
+    import hub
+    from rest_api import core
+
+    manifest = tmp_path / "missing-driver.json"
+    if corrupt:
+        manifest.write_text("{broken", encoding="utf-8")
+    monkeypatch.setattr(core, "DRIVER_JSON", manifest)
+    info = (await _get(data_hub, "/api/info"))["data"]
+    assert info["driver_id"] == "hdmi_matrix"
+    assert info["driver_name"] == "HDMI Matrix"
+    assert info["version"] == hub.__version__
+    assert sim_writes(simulator) == []
+

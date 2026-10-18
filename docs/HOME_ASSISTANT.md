@@ -59,8 +59,8 @@ admin session (see "API key / control PIN" below).
 | `/api/presets` | GET | Preset names |
 | `/api/edid/modes` | GET | Available EDID modes |
 | `/api/system/lcd/modes` | GET | Available LCD timeout modes |
-| `/api/system/storage` | GET | Data dir, config dir, env-sourced paths |
-| `/api/system/info` | GET | Hub info + canonical env-var table |
+| `/api/system/storage` | GET | Path-free storage diagnostics: source, existence, writability and file count |
+| `/api/system/info` | GET | Python/platform/API versions and storage diagnostics |
 | `/api/ext-audio/modes` | GET | External audio binding modes |
 | `/api/cec/commands` | GET | CEC command list |
 | `/api/cec/commands/{type}` | GET | CEC commands for `input` or `output` |
@@ -72,8 +72,7 @@ admin session (see "API key / control PIN" below).
 
 | Endpoint | Method | Description |
 | --- | --- | --- |
-| `/api/input/{n}` | POST | Switch all outputs to input N (legacy; `POST /api/switch` is the documented body form) |
-| `/api/switch` | POST | Body `{"outputs": {"1": 2, "2": 2}}` — set per-output sources |
+| `/api/switch` | POST | Body `{"input": 2, "output": 1}` routes one output; omit `output` to route all outputs |
 | `/api/input/next?output=N` | POST | Cycle to next input on output N |
 | `/api/input/previous?output=N` | POST | Cycle to previous input on output N |
 | `/api/output/{n}/source` | POST | Set output N to a specific input (`{"input": N}`) |
@@ -99,7 +98,11 @@ admin session (see "API key / control PIN" below).
 | `/api/integrations/flic/buttons` | GET | List registered Flic buttons |
 | `/api/integrations/flic/register` | POST | Register Flic buttons from a Flic Hub (admin) |
 
-#### Profile / scene / macro management (admin)
+#### Profile / scene / macro management
+
+The GET methods in this group are public reads; mutations require admin
+access when an admin PIN is configured. Recall and execution are control-level
+operations as listed above.
 
 | Endpoint | Method | Description |
 | --- | --- | --- |
@@ -121,7 +124,12 @@ admin session (see "API key / control PIN" below).
 | `/api/cec/macro` | POST | Create CEC macro |
 | `/api/cec/macro/{id}` | GET / PUT / DELETE | Manage macro |
 
-#### Admin (admin PIN required when set)
+#### Settings and authentication
+
+Settings reads are public. Settings mutations and authentication-management
+reads (`/api/auth/devices`, `/api/auth/api-keys`) require admin access when a
+PIN is configured. Unlock/status/lock are public authentication endpoints;
+PIN changes apply their own current-admin verification.
 
 | Endpoint | Method | Description |
 | --- | --- | --- |

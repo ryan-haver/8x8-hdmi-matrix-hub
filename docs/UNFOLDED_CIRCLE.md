@@ -41,8 +41,8 @@ The hub has **one** image. The core (REST API, web UI at `/ui`, kiosk at
 `/kiosk`) always runs. The Remote 3 integration is **opt-in**: it is only
 imported when `UC_ENABLED=true`; otherwise `ucapi` is never imported and
 port 9095 stays closed (`run.py:run_uc_driver`,
-`src/driver.py:handle_setup_*`). The variables resolve through one table
-(`src/hub/env.py`) so this guide and the code agree.
+`src/driver.py:handle_setup_*`). `run.py` resolves the shipped startup settings;
+`src/hub/env.py` also describes the newer framework's configuration.
 
 | Variable | Default | Effect |
 | --- | --- | --- |
@@ -57,8 +57,8 @@ port 9095 stays closed (`run.py:run_uc_driver`,
 | `MATRIX_HOST` | the address a Remote setup saved, else `192.168.0.100` | Matrix IP / host name. With `UC_ENABLED=true` the Remote's setup wins once a setup is saved. |
 | `DATA_DIR` | image: `/data` | Persistent data directory (UC state and integration settings live here). |
 | `STATUS_POLL_INTERVAL` | `5` | Seconds between the hub's own status reads. |
-| `FLIC_ENABLED` | `true` | Accept button registrations from a Flic Hub. |
-| `HA_DISCOVERY_ENABLED` | `false` | Publish the hub to Home Assistant over mDNS / zeroconf. |
+| `FLIC_ENABLED` | `true` in the framework | Not applied by the current REST compatibility handlers; registration remains available. |
+| `HA_DISCOVERY_ENABLED` | `false` in the framework | Discovery module is not started by `run.py` yet; configure HA manually. |
 
 `POLLING_INTERVAL`, `POLLING_ENABLED` and the retired names (`USE_MODULAR`,
 `WEBUI_ENABLED`, `REST_API_ENABLED=false`) are documented in

@@ -38,6 +38,8 @@ from pathlib import Path
 
 import pytest
 
+from rest_api import create_rest_app
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 DOCS_DIR = REPO_ROOT / "docs"
@@ -53,6 +55,33 @@ INTEGRATION_TEMPLATE_MD = DOCS_DIR / "INTEGRATION_TEMPLATE.md"
 UC_INTEGRATION_GUIDE_MD = DOCS_DIR / "UNFOLDED_CIRCLE_INTEGRATION_GUIDE.md"
 REMEDIATION_PLAN_MD = DOCS_DIR / "REMEDIATION_PLAN.md"
 SECURITY_MD = REPO_ROOT / "SECURITY.md"
+
+
+@pytest.mark.parametrize("guide", [HOME_ASSISTANT_MD, FLIC_SETUP_MD])
+def test_documented_endpoint_table_matches_registered_routes(guide: Path, tmp_path: Path) -> None:
+    """Reject invented legacy endpoints or unsupported methods in client guides."""
+    app = create_rest_app(data_dir=tmp_path)
+
+    def normalized(path: str) -> str:
+        return re.sub(r"\{[^}]+\}", "{}", path.split("?", 1)[0])
+
+    actual = {
+        (route.method, normalized(route.resource.canonical))
+        for route in app.router.routes()
+    }
+    rows = re.findall(
+        r"^\| `(/api/[^`]+)` \| ((?:GET|POST|PUT|DELETE)(?: / (?:GET|POST|PUT|DELETE))*) \|",
+        guide.read_text(encoding="utf-8"),
+        re.MULTILINE,
+    )
+    assert rows, f"No endpoint table found in {guide.name}"
+    missing = [
+        f"{method} {path}"
+        for path, methods in rows
+        for method in methods.split(" / ")
+        if (method, normalized(path)) not in actual
+    ]
+    assert not missing, f"{guide.name} documents unregistered routes: {missing}"
 
 
 # =============================================================================
@@ -761,7 +790,10 @@ def test_contributing_no_setup_py_install_command(contributing: str) -> None:
     """Guards against the legacy DOC-13 finding: ``setup.py`` is gone (DEP-04)."""
     # ``setup.py`` may still be mentioned in "no longer needed" context; the install
     # command itself must not use it.
-    install_lines = [line for line in contributing.splitlines() if line.strip().startswith("pip install")]
+    install_lines = [
+        line for line in contributing.splitlines()
+        if re.match(r"(?:python -m )?pip install\b", line.strip())
+    ]
     assert install_lines, "CONTRIBUTING.md has no install command"
     for line in install_lines:
         assert "setup.py" not in line, f"CONTRIBUTING.md install command still references setup.py: {line.strip()}"

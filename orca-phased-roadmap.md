@@ -118,7 +118,7 @@ flowchart LR
 
 **Goal:** Single-source packaging (`pyproject.toml`), single `__version__`, hashed lockfiles, digest/SHA-pinned Docker & GitHub Actions, multi-arch image publishing, license audit (`THIRD_PARTY_NOTICES.md`), generated `API_REFERENCE.md` + `/api/docs` Swagger UI, and complete documentation (`DEP-04..13`, `SEC-15`, `BE-27`, `API-17`, `DOC-01..13`, `UC-20`).
 
-**Integration Branch:** `wp-g1-g2-release-and-docs` (branched from `main` after Phase 5 merge)
+**Integration Branch:** `wp-g1-g2-release-and-docs` (branched from Phase 5; merge `main` after PR #36 passes)
 
 | Worktree Name | Assigned Model | Scope & Register IDs | Verification Gate Before Merge & Worktree Removal |
 | :--- | :--- | :--- | :--- |
@@ -130,7 +130,7 @@ flowchart LR
 | `wp-g2-client-guides-doc-archive` | **Minimax M3.1** | Finalize `HOME_ASSISTANT.md` (`DOC-04`), `DOCKER.md` (`DOC-05`), `FLIC_SETUP.md`, `CONTRIBUTING.md` (`DOC-13`), UC docs (`UC-20`); archive legacy design plans to `docs/archive/design/` (`DOC-06..09`) | All doc tests & link checks pass |
 
 **Phases 6 & 7 Merge & Cleanup Checklist:**
-- [ ] Validate, merge, and `orca worktree rm` each of the 6 `wp-g1-*` / `wp-g2-*` worktrees upon completion.
+- [x] Validate, merge, and `orca worktree rm` each of the 6 `wp-g1-*` / `wp-g2-*` worktrees upon completion. All six tracks integrated; current status and evidence are in `docs/planning/UNIFIED_MASTER_PLAN.md`.
 - [ ] Push `wp-g1-g2-release-and-docs` to GitHub, open PR to `main`, pass all 13 CI checks, merge, and delete branch.
 
 ---

@@ -51,6 +51,21 @@ class TestOpenApiAndSwaggerRoutes:
         assert spec["servers"] == [{"url": "/", "description": "This hub, on the port API_PORT listens on."}]
         assert validate_openapi_spec(spec) == []
 
+        # The specification describes the actual response bodies of its own routes.
+        spec_schema = spec["paths"]["/api/openapi.json"]["get"]["responses"]["200"]["content"]["application/json"]["schema"]
+        assert "$ref" not in spec_schema
+        assert set(spec_schema["required"]) <= spec.keys()
+        assert spec_schema["properties"]["openapi"]["const"] == spec["openapi"]
+        docs_content = spec["paths"]["/api/docs"]["get"]["responses"]["200"]["content"]
+        docs_resp = await client.get("/api/docs")
+        assert docs_content[docs_resp.content_type]["schema"] == {"type": "string"}
+        assert "application/json" not in docs_content
+        assert spec["paths"]["/api/docs"]["get"]["security"] == []
+        assert spec["paths"]["/api/openapi.json"]["get"]["security"] == []
+        from rest_api.security import DEVICE_COOKIE
+
+        assert spec["components"]["securitySchemes"]["RememberedDeviceCookie"]["name"] == DEVICE_COOKIE
+
         expected_routes = route_inventory(app)
         for route in expected_routes:
             assert route.path in spec["paths"]
@@ -72,6 +87,7 @@ class TestOpenApiAndSwaggerRoutes:
         assert "window.SwaggerUIBundle" in html
         assert "window.SwaggerUIBundle.presets.apis" in html
         assert 'layout: "BaseLayout"' in html
+        assert "persistAuthorization: false" in html
         assert '"/api/openapi.json"' in html
         assert "offline-fallback" in html
 

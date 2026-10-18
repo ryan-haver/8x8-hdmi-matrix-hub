@@ -660,7 +660,7 @@ def generate_all() -> None:
     for name, d in sorted(icon_paths.items()):
         # Normalize name for filename
         fname = f"{name}.svg"
-        svg_content = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><path fill="currentColor" d="{d}"/></svg>\n'
+        svg_content = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><path fill="currentColor" fill-rule="evenodd" d="{d}"/></svg>\n'
 
         # Verify valid XML
         root = ET.fromstring(svg_content)

@@ -53,11 +53,11 @@ The following fields are accepted by `PUT /api/profile/{id}`:
 http://<host>:8080/api
 ```
 
-Default: `http://192.168.1.145:8080/api` (Docker host IP)
+Default port: `8080`. Use the hub host's address; configure `API_PORT` to change it.
 
 ## Response Format & OpenAPI 3.1 Contract
 
-All JSON API responses use the uniform `ApiResponseEnvelope` schema (`#/components/schemas/ApiResponseEnvelope` in `GET /api/openapi.json`):
+JSON control API responses use the uniform `ApiResponseEnvelope` schema (`#/components/schemas/ApiResponseEnvelope` in `GET /api/openapi.json`). The specification endpoint itself returns a raw OpenAPI document; `/api/docs` returns HTML.
 
 ```json
 {
@@ -100,7 +100,8 @@ Read endpoints (`GET`) are open by default (except `GET /api/auth/devices` and `
 | Session Cookie | `AdminSessionCookie` | Cookie: `orei_session` | `admin` or `control` | Set by `POST /api/auth/unlock` (or `/api/auth/login`). Refreshed on activity (`30m` idle timeout). |
 | API Key Header | `ControlApiKeyHeader` | Header: `X-API-Key` | `control` | API key created via `POST /api/auth/api-keys` or configured via `API_KEY` / `CONTROL_API_KEY`. |
 | API Key Query | `ControlApiKeyQuery` | Query: `?key=<token>` | `control` | Same API key passed in URL query string for clients that cannot set HTTP headers. |
-| Admin PIN Header | *(Direct header)* | Header: `X-Admin-PIN` | `admin` | Direct Admin PIN verification for stateless admin requests when `ADMIN_PIN` is configured. |
+| Admin PIN Header | `AdminPinHeader` | Header: `X-Admin-PIN` | `admin` | Direct Admin PIN verification for stateless admin requests when `ADMIN_PIN` is configured. |
+| Remembered device | `RememberedDeviceCookie` | Cookie: `orei_device_token` | `control` | A device remembered during unlock; never grants admin access. |
 
 ---
 

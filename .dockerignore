@@ -10,6 +10,9 @@
 !driver.json
 !requirements.txt
 !requirements-uc.txt
+!LICENSE
+!THIRD_PARTY_NOTICES.md
+!LICENSES/
 
 # Never ship caches, packaging output or local state from inside the allowed
 # folders (BE-27 leftovers such as src/driver.lock, src/config_state.json and

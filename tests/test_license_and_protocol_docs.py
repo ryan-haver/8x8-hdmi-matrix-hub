@@ -9,6 +9,8 @@ Owned scope for WP-G1 (UI-22, DOC-11):
 
 from __future__ import annotations
 
+import hashlib
+import json
 import re
 from pathlib import Path
 
@@ -21,6 +23,38 @@ PROVENANCE_MD = REPO_ROOT / "web" / "assets" / "icons" / "PROVENANCE.md"
 LICENSE_FILE = REPO_ROOT / "LICENSE"
 SRC_OREI_MATRIX = REPO_ROOT / "src" / "orei_matrix.py"
 SRC_TELNET_CLIENT = REPO_ROOT / "src" / "telnet_client.py"
+
+
+def test_locked_runtime_license_inventory_is_complete() -> None:
+    """A newly locked transitive dependency must retain its actual license files."""
+    lock = (REPO_ROOT / "requirements.txt").read_text(encoding="utf-8")
+    packages = dict(re.findall(r"^([A-Za-z0-9_.-]+)==([^\s\\]+)", lock, re.MULTILINE))
+    def normalize(name: str) -> str:
+        return re.sub(r"[-_.]+", "-", name).lower()
+    expected = {normalize(name): version for name, version in packages.items()}
+    root = REPO_ROOT / "LICENSES" / "python"
+    records = json.loads((root / "manifest.json").read_text(encoding="utf-8"))
+    actual = {normalize(item["name"]): item["version"] for item in records}
+    assert expected and actual == expected
+    for record in records:
+        assert record["declared_license"] and record["files"]
+        for item in record["files"]:
+            path = root / item["path"]
+            assert path.resolve().is_relative_to(root.resolve())
+            assert hashlib.sha256(path.read_bytes()).hexdigest() == item["sha256"]
+
+
+def test_clean_icon_generator_reproduces_shipped_assets(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Generated assets must be reproducible without the old external sprites."""
+    from tools import generate_clean_device_icons as generator
+
+    monkeypatch.setattr(generator, "ICONS_DIR", tmp_path)
+    monkeypatch.setattr(generator, "ICON_PATHS_JSON", tmp_path / "_icon-paths.json")
+    generator.generate_all()
+    source = REPO_ROOT / "web/assets/icons/svg"
+    generated = {item.name: item.read_bytes() for item in tmp_path.iterdir()}
+    assert len(generated) == 58
+    assert generated == {name: (source / name).read_bytes() for name in generated}
 
 
 @pytest.fixture(scope="module")

@@ -183,12 +183,11 @@ def test_provenance_covers_the_open_questions(provenance: str, detail: str) -> N
 
 
 def test_provenance_states_the_licence_status(provenance: str) -> None:
-    """The licence is still unresolved, and the document must say so."""
+    """The current set is original MPL-2.0 artwork; retain the historical risk."""
     lowered = provenance.lower()
     assert "licence" in lowered
-    assert "undetermined" in lowered or "unresolved" in lowered or "still open" in lowered, (
-        "PROVENANCE.md must state that the icon licence is still unresolved"
-    )
+    assert "mpl-2.0" in lowered and "generate_clean_device_icons.py" in lowered
+    assert "original" in lowered and "replaced" in lowered
 
 
 @pytest.fixture(scope="module")

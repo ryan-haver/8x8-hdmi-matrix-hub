@@ -155,8 +155,8 @@ still work and one warning at start-up lists them. Compose-only variables
 | `OREI_TELNET_PORT`, `OREI_USE_TELNET_CEC` | | `23` / `false` | Matrix Telnet options; `OREI_TELNET_PORT` is the default for a matrix whose setup names no `telnet_port` (`POST /api/settings/matrix-host`, `config_state.json`) |
 | `STATUS_POLL_INTERVAL` | | `5` | Seconds between the hub's own status reads, the source of the live `/ws` events in every mode ([`api/WEBSOCKET.md`](api/WEBSOCKET.md)); writes, Telnet pushes and link changes trigger a read at once |
 | `POLLING_INTERVAL`, `POLLING_ENABLED` | | `30` / `true` | Remote 3 entity updates (UC mode); the `/ws` events use `STATUS_POLL_INTERVAL` |
-| `FLIC_ENABLED` | | `true` | Accept button registrations from a Flic Hub (`src/hub/integrations/flic/__init__.py`) — defaults to true so legacy `/api/integrations/flic/*` routes continue to work; opt-out with `FLIC_ENABLED=false` |
-| `HA_DISCOVERY_ENABLED` | | `false` | Publish the hub to Home Assistant over mDNS/zeroconf |
+| `FLIC_ENABLED` | | `true` in the framework | Framework flag; the current REST compatibility handlers remain mounted and do not read this environment flag. It does not disable Flic registration in the shipped runtime. |
+| `HA_DISCOVERY_ENABLED` | | `false` in the framework | Framework flag; `run.py` does not start the discovery module yet. Add the Home Assistant component manually. |
 
 A bad port number or a `UC_DRIVER_URL` that is not a WebSocket URL stops the hub
 with exit code 2 and a message saying what to fix (`run.py:_port`,

@@ -1,34 +1,15 @@
 # Architecture
 
-> Two architectures sit on top of each other today and this document
-> keeps them apart on purpose, because confusing them is what tripped up
-> the previous pass:
->
-> 1. **The shipped runtime** — the path a packet actually takes from
->    `python run.py` down to the OREI matrix. This is what `run.py`,
->    `src/driver.py`, `src/rest_api/`, `src/orei_matrix.py` and the
->    shipped Docker image do today. Wire-up is small and direct: one
->    `OreiMatrix`, one `RestApiServer`, and (when `UC_ENABLED=true`) one
->    legacy `src/driver.py` sub-process.
-> 2. **The framework libraries** — `src/hub/core/MatrixService`,
->    `src/hub/domain/ActionRunner`, `src/hub/integrations/{base,hub_client,...}`,
->    `src/hub/persistence/migrations.py` and `src/hub/openapi.py`. These
->    are implemented, unit-tested and shipped as importable code. They
->    are **not yet wired into `run.py` or `src/driver.py`**. The
->    standalone REST app, the deployment test suite and the UC/HIL paths
->    still go through `src/orei_matrix.py` and `src/persistence.py`
->    directly. Until the wiring lands, this section calls them out as
->    *framework APIs with pending runtime wiring* and links the test
->    coverage that proves the libraries work in isolation.
->
-> **Validation:** every shipped surface is registered under
-> [`docs/validation/features.yaml`](validation/features.yaml); the row-by-row
-> state lives in [`docs/validation/LEDGER.md`](validation/LEDGER.md).
-> **No hardware (V4) evidence is on file for any release tag yet.**
-> HIL Session 2 (`docs/validation/HIL_SESSION_2_RUNBOOK.md`) and the
-> Phase 8 / WP-V3 campaign are the next concrete steps on that path —
-> see [`../ROADMAP.md`](../ROADMAP.md) §5 and
-> [`../CHANGELOG.md`](../CHANGELOG.md) §"Pending hardware validation".
+The shipped runtime starts `OreiMatrix` and `RestApiServer` directly from
+`run.py`; UC mode invokes `src/driver.py` in the same process through `runpy`.
+`src/hub/core/matrix_service.py`, `src/hub/domain/action_runner.py`, the
+integration loader and persistence migrations are implemented framework
+libraries with pending runtime wiring. OpenAPI generation is connected to the
+REST app at `/api/openapi.json` and `/api/docs`.
+
+The [feature registry](validation/features.yaml) and [ledger](validation/LEDGER.md)
+record proof levels. The release hardware campaign has no completed V4/V5
+records yet; see [the validation report](validation/VALIDATION_REPORT.md).
 
 ---
 
@@ -81,7 +62,7 @@ managers in `src/rest_api/`), **not** through
 `src/hub/persistence/migrations.py`. `hub.persistence` is a framework
 library that ships the file-versioning machinery; it is intentionally
 not yet what `OreiMatrix` state or the existing JSON stores call. The
-`migration_test_*` pytest suite under `tests/hub/` exercises the
+`tests/test_hub_persistence_openapi_env.py` exercises the
 framework's migrations in isolation; that is not the same thing as
 saying every persisted JSON today is `schema_version`-wrapped.
 
@@ -96,12 +77,8 @@ the same release ships:
   document for the shipped REST app.
 * **`GET /api/docs`** — Swagger UI rendered from the same document.
 
-Until this commit's base `41094f4` these mounts were not present in
-the shipped REST app and the generator ran only in the unit suite; in
-this release they ride along with `src/hub/openapi.py`. The
-generator still ships as a library (`build_openapi_spec` takes any
-`aiohttp` app), so external clients can produce their own OpenAPI 3.1
-spec from a fork's app without re-running the hub.
+The generator also remains usable as a library: `build_openapi_spec` accepts
+an `aiohttp` application and derives the specification from its live router.
 
 Generated reference: [`docs/API_REFERENCE.md`](API_REFERENCE.md)
 (owned by `wp-g2-openapi-swagger-config-docs`).

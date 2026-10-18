@@ -1,7 +1,9 @@
 """Synchronize release manifests with the canonical hub version.
 
 Run ``python scripts/bump_version.py --check`` before a release, or pass an
-explicit X.Y.Z version to update it. Packaging and the legacy ``version`` module
+explicit X.Y.Z or X.Y.ZrcN version to update it. The canonical prerelease spelling
+is PEP 440 (``1.0.0rc1``); its Git release tag is ``v1.0.0-rc1``.
+Packaging and the legacy ``version`` module
 read hub.__version__ directly. All inputs are validated and replacements staged
 before any file changes; an ordinary write failure rolls back completed writes.
 This is not a multi-file transaction against process termination or power loss.
@@ -21,7 +23,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 VERSION_FILE = Path("src/hub/__init__.py")
 MANIFESTS = (Path("driver.json"), Path("custom_components/hdmi_matrix/manifest.json"))
-RELEASE_VERSION = re.compile(r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\Z")
+RELEASE_VERSION = re.compile(
+    r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(?:rc(?:0|[1-9][0-9]*))?\Z"
+)
 
 
 def canonical_version(root: Path) -> str:
@@ -36,14 +40,21 @@ def canonical_version(root: Path) -> str:
         raise ValueError("Expected exactly one canonical __version__ assignment")
     version = ast.literal_eval(assignments[0].value)
     if not isinstance(version, str) or not RELEASE_VERSION.fullmatch(version):
-        raise ValueError("Canonical version must be an X.Y.Z release")
+        raise ValueError("Canonical version must be X.Y.Z or X.Y.ZrcN")
     return version
+
+
+def release_tag(version: str) -> str:
+    """Return the Git/SemVer tag for a canonical Python release version."""
+    if not RELEASE_VERSION.fullmatch(version):
+        raise ValueError("Version must be X.Y.Z or X.Y.ZrcN with no leading zeros")
+    return "v" + re.sub(r"rc([0-9]+)$", r"-rc\1", version)
 
 
 def version_plan(root: Path, version: str) -> dict[Path, bytes]:
     """Validate every input and return changed bytes, preserving file formatting."""
     if not RELEASE_VERSION.fullmatch(version):
-        raise ValueError("Version must be X.Y.Z with no leading zeros")
+        raise ValueError("Version must be X.Y.Z or X.Y.ZrcN with no leading zeros")
     current = canonical_version(root)
     config = tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))
     if "version" in config["project"] or config["tool"]["setuptools"]["dynamic"]["version"] != {
@@ -103,9 +114,18 @@ def apply_plan(plan: dict[Path, bytes]) -> None:
 def main() -> int:
     """Check synchronization or set an explicit release version."""
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("version", nargs="?", help="Explicit release version (X.Y.Z)")
+    parser.add_argument("version", nargs="?", help="Explicit release version (X.Y.Z or X.Y.ZrcN)")
     parser.add_argument("--check", action="store_true", help="Check without changing files")
+    parser.add_argument("--tag", action="store_true", help="Print the canonical Git release tag without changing files")
     args = parser.parse_args()
+    if args.tag:
+        if args.version or args.check:
+            parser.error("--tag cannot be combined with a version or --check")
+        try:
+            print(release_tag(canonical_version(ROOT)))
+        except (OSError, ValueError, SyntaxError) as error:
+            parser.exit(1, f"Version check failed: {error}\n")
+        return 0
     if args.check and args.version:
         parser.error("--check cannot be combined with a version")
     if not args.check and args.version is None:

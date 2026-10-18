@@ -18,16 +18,20 @@ export npm_config_cache="$CACHE/npm"
 mkdir -p "$CACHE"
 
 # --- Python: the image has python3 3.12 but no pip/ensurepip ---------------
-req_hash=$(cat requirements.txt requirements-uc.txt | sha256sum | cut -d' ' -f1)
+req_hash=$(cat requirements.txt requirements-dev.txt tools/ui/container-setup.sh | sha256sum | cut -d' ' -f1)
 if [ ! -x "$VENV/bin/python" ] || [ "$(cat "$VENV/.req-hash" 2>/dev/null)" != "$req_hash" ]; then
     echo "[ui-setup] creating Python venv in $VENV"
     rm -rf "$VENV"
     python3 -m venv --without-pip "$VENV"
-    if [ ! -f "$CACHE/get-pip.py" ]; then
-        python3 -c "import urllib.request; urllib.request.urlretrieve('https://bootstrap.pypa.io/get-pip.py', '$CACHE/get-pip.py')"
+    # Pin the official bootstrap to an immutable commit and verify its bytes.
+    bootstrap_sha=fb24e693bab954209a063d90953621412ccad4a500905a726286e038f508ddf6
+    if [ ! -f "$CACHE/get-pip.py" ] || ! echo "$bootstrap_sha  $CACHE/get-pip.py" | sha256sum --check --status; then
+        python3 -c "import urllib.request; urllib.request.urlretrieve('https://raw.githubusercontent.com/pypa/get-pip/f6f644156f23dfe9acc06e7b9ca75eee311f2e37/public/get-pip.py', '$CACHE/get-pip.py')"
     fi
-    "$VENV/bin/python" "$CACHE/get-pip.py" --quiet
-    "$VENV/bin/python" -m pip install --quiet -r requirements-uc.txt "cryptography>=42.0.0"
+    echo "$bootstrap_sha  $CACHE/get-pip.py" | sha256sum --check --status
+    "$VENV/bin/python" "$CACHE/get-pip.py" --quiet --no-setuptools --no-wheel 'pip==26.2.1'
+    "$VENV/bin/python" -m pip install --quiet --require-hashes -r requirements-dev.txt
+    "$VENV/bin/python" -m pip check
     echo "$req_hash" > "$VENV/.req-hash"
 else
     echo "[ui-setup] Python venv up to date ($VENV)"

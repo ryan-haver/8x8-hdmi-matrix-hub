@@ -13,10 +13,25 @@ sees what was proved, not only what was merged.
 > `git tag`'s commit; a feature below target is reported as such in the
 > feature row, not hidden here.
 >
-> **Version alignment (DEP-06).** The single source of truth is
-> `src/hub/__init__.py::__version__`. The current value is `0.3.0`;
-> release-bump to `0.5.0` is owned by the coordinator after the WP-E2 /
-> WP-G merges land. **Do not claim a tag that has not been pushed.**
+> **Version alignment (DEP-06):** `src/hub/__init__.py::__version__` is canonical.
+> Use `scripts/bump_version.py` to synchronize manifests and check the release tag.
+
+---
+
+## [1.0.0rc1] — Release candidate — Phases 6–7 — pending tag
+
+- Consolidate packaging in `pyproject.toml`, synchronize release versions, and
+  lock runtime/development dependencies with hashes.
+- Harden Docker contexts and CI publication gates; check repository binaries,
+  capture files and oversized non-LFS objects; configure Dependabot.
+- Serve `/api/openapi.json` and `/api/docs`; document all 177 routes and the
+  configuration variables with runtime/framework limitations.
+- Replace unattributed device SVGs with reproducible original artwork; bundle
+  runtime dependency license texts in distributions and images.
+- Refresh operator/developer guides, architecture, roadmap and protocol reference;
+  retain compatibility links to archived design and vendor documents.
+- Hardware validation, the 72-hour soak and runtime framework consolidation remain
+  pending. See [the validation report](docs/validation/VALIDATION_REPORT.md).
 
 ---
 
@@ -26,13 +41,12 @@ sees what was proved, not only what was merged.
 > `wp-e2-ui-simplification` and forwarded into
 > `wp-g1-g2-release-and-docs` (this branch's base, `41094f4`).
 >
-> **Tag:** `0.5.0` has **not** been pushed. The source still carries
-> `__version__ = "0.3.0"` in `src/hub/__init__.py`; release bump is the
-> coordinator's responsibility after the Phase 6/7 worktree set merges.
+> **Tag:** PR #36 is awaiting its final CI check before the `v0.5.0` tag.
+> The Phase 6/7 RC synchronizes the previously separate package manifests.
 >
 > **Runtime wiring reality (don't be misled by the framework):** the
-> Focused UI is the shipped web UI, and the OpenAPI generator is now
-> mounted at `/api/openapi.json` and Swagger UI at `/api/docs`. The
+> Focused UI is the shipped web UI. OpenAPI serving is added in the
+> Phase 6/7 candidate above. The
 > following are still **library code in `src/hub/`** with unit-test
 > coverage (`tests/test_hub_*`); they are **not** what `run.py` or
 > `src/driver.py` instantiate:

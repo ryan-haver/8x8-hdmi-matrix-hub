@@ -12,10 +12,9 @@
 > runtime wiring (see [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 > §2).
 >
-> **One `__version__` per shipped source.** Today:
-> `src/hub/__init__.py::__version__` and the live tag of
-> `git log` agree on `0.3.0`. The release-bump step lives with the
-> coordinator — re-tagging to `0.5.0` happens after the merge.
+> **Version:** `src/hub/__init__.py::__version__` is the canonical source.
+> `python scripts/bump_version.py --check` verifies release manifests;
+> `--tag` prints the matching release tag.
 
 ---
 
@@ -28,21 +27,20 @@ protocol — they are software-interchangeable.
 
 | Brand                  | Model         | Product                                                                                                                            | Status        |
 | ---------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| **OREI**               | BK-808        | [orei.com/bk-808](https://orei.com/products/8k-8x8-hdmi-matrix-switcher-4k-120hz-hdcp-2-3-hdr-edid-dolby-vision-atmos-downscaling-bk-808) | ✅ **Tested** |
+| **OREI**               | BK-808        | [orei.com/bk-808](https://orei.com/products/8k-8x8-hdmi-matrix-switcher-4k-120hz-hdcp-2-3-hdr-edid-dolby-vision-atmos-downscaling-bk-808) | Captured protocol baseline |
 | HDCVT (OEM)            | HDP-MXC88A    | [hdcvt.com](https://www.hdcvt.com/HDMIMatrix/328.html)                                                                            | 🔲 Untested   |
 | Simplified MFG         | M88-8K        | [simplifiedmfg.com](https://www.simplifiedmfg.com/simplified-products/m88-8k)                                                                            | 🔲 Untested   |
 | BZBGEAR                | BG-8K-88MA    | [bzbgear.com](https://bzbgear.com/product/bg-8k-88ma-8x8-8k-uhd-hdmi-2-1-matrix-switcher-with-auto-downscaling-audio-de-embedding-8k60-4k120-and-vrr-fva-allm-support/) | 🔲 Untested   |
 | WolfPack (HDTV Supply) | HDTVHDPMXC88A | [hdtvsupply.com](https://www.hdtvsupply.com/wolfpack-8k-60-hz-8x8-hdmi-matrix-switch.html)                                         | 🔲 Untested   |
 | A-NeuVideo             | ANI-8-8K60-S  | [a-neuvideo.com](https://www.a-neuvideo.com/shop/product_info.php?products_id=269)                                                  | 🔲 Untested   |
 
-> "Tested" means the matrix's HTTPS / Telnet protocol is exercised
-> by a V2 (simulator) or V3 (real client) scenario — see
-> [`docs/validation/LEDGER.md`](docs/validation/LEDGER.md).
-> **No row in the supported table is at V4 (hardware on a real OREI
-> BK-808) yet** — that gate is the Phase 8 / WP-V3 campaign and HIL
-> Session 2, see [`ROADMAP.md`](ROADMAP.md) §5. If you have one of
-> the untested models and can confirm compatibility, please [open an
-> issue](../../issues).
+> The BK-808 protocol baseline comes from the checked-in real-device captures.
+> The full release hardware campaign is not complete yet: Phase 8 / WP-V3
+> still requires owner-observed V4 checks and the V5 soak. See the
+> [validation report](docs/validation/VALIDATION_REPORT.md) and
+> [feature ledger](docs/validation/LEDGER.md). Other listed models are
+> compatibility candidates with no release hardware validation on file.
+> Report results through [GitHub issues](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/issues).
 
 ### Hardware requirements
 
@@ -72,7 +70,7 @@ protocol — they are software-interchangeable.
   * Fast reconnection via the `UC_DRIVER_URL` setup field.
   * mDNS advertisement (or explicit `UC_DRIVER_URL` for bridge
     networking).
-  * See [`docs/UNFOLDED_CIRCLE_INTEGRATION_GUIDE.md`](docs/UNFOLDED_CIRCLE_INTEGRATION_GUIDE.md).
+  * See [`docs/UNFOLDED_CIRCLE.md`](docs/UNFOLDED_CIRCLE.md).
 
 * **REST API** — full matrix control documented in
   [`docs/API_REFERENCE.md`](docs/API_REFERENCE.md) (generated from
@@ -232,10 +230,9 @@ That starts the **core** (REST API + web UI + kiosk) from one image.
 | **+ Remote 3**, host networking, found via mDNS                                        | `HUB_HOST_IP=<this host's LAN IP> docker compose -f docker-compose.yml -f docker-compose.uc-host.yml up -d` |
 | **+ Remote 3**, bridge networking, fixed `UC_DRIVER_URL`                               | `HUB_HOST_IP=<this host's LAN IP> docker compose -f docker-compose.yml -f docker-compose.uc-bridge.yml up -d` |
 
-The Flic REST routes
-(`POST /api/integrations/flic/register`,
-`GET /api/integrations/flic/buttons`) and the HACS HA component
-ship in the same image and do not need a separate env flag. See
+The Flic REST routes (`POST /api/integrations/flic/register`,
+`GET /api/integrations/flic/buttons`) ship in the hub image. Install the
+HACS component separately in Home Assistant. Neither needs a hub startup flag. See
 [`docs/DOCKER.md`](docs/DOCKER.md) for persistent storage, networking
 and upgrading.
 
@@ -243,18 +240,23 @@ and upgrading.
 
 ```bash
 python -m venv .venv
-. .venv/Scripts/activate            # Windows
-# source .venv/bin/activate         # Linux/macOS
-pip install -r requirements-uc.txt   # the UC extras live in this file
+source .venv/bin/activate          # Linux/macOS
+python -m pip install --require-hashes -r requirements.txt
 
-MATRIX_HOST=192.168.1.50 python run.py               # core only
+export MATRIX_HOST=192.168.1.50
+python run.py                                        # core only
 UC_ENABLED=true python run.py                        # core + Remote 3 (port 9095)
 ```
 
+On PowerShell, activate with `.venv\Scripts\Activate.ps1` and set
+`$env:MATRIX_HOST = "192.168.1.50"`; use `$env:UC_ENABLED = "true"` for UC mode.
+The runtime lock includes UC dependencies; `requirements-uc.txt` remains a
+compatibility include. Locks are validated on Python 3.12.
+
 ### Core environment variables
 
-See [`docs/CONFIGURATION.md`](docs/CONFIGURATION.md) (generated from
-`src/hub/env.py`) for the full canonical table with defaults,
+See [`docs/CONFIGURATION.md`](docs/CONFIGURATION.md) (checked against
+the source) for the full table with defaults,
 retired aliases and the `OREI_*` knobs that are *deliberately not*
 aliases.
 
@@ -493,9 +495,8 @@ soak until Phase 8 / WP-V3 produces that evidence — see
 This integration is provided as-is under the **Mozilla Public License
 v2.0**. See [LICENSE](LICENSE).
 
-A full attribution list of every third-party icon, font and asset is
-maintained by [`wp-g1-license-asset-audit`](../../issues) in
-`THIRD_PARTY_NOTICES.md`.
+Dependency licenses, original icon provenance, and upstream document attribution
+are recorded in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ---
 

@@ -60,18 +60,27 @@ def test_versions_and_discovery_match_canonical() -> None:
     run("scripts/bump_version.py", "--check", cwd=ROOT)
 
 
-def test_bump_roundtrip_preserves_every_byte(release_copy: Path) -> None:
+@pytest.mark.parametrize("target_version", ["9.8.7", "1.0.0rc1"])
+def test_bump_roundtrip_preserves_every_byte(release_copy: Path, target_version: str) -> None:
     original = snapshot(release_copy)
-    run("scripts/bump_version.py", "9.8.7", cwd=release_copy)
+    run("scripts/bump_version.py", target_version, cwd=release_copy)
     run("scripts/bump_version.py", "--check", cwd=release_copy)
-    assert bump_version.canonical_version(release_copy) == "9.8.7"
+    assert bump_version.canonical_version(release_copy) == target_version
     for manifest in bump_version.MANIFESTS:
-        assert json.loads((release_copy / manifest).read_bytes())["version"] == "9.8.7"
+        assert json.loads((release_copy / manifest).read_bytes())["version"] == target_version
     run("scripts/bump_version.py", __version__, cwd=release_copy)
     assert snapshot(release_copy) == original
 
 
-@pytest.mark.parametrize("version", ["v1.2.3", "1.2", "01.2.3", "1.2.3rc1", "1.2.3\n", "1.2.3;echo bad"])
+@pytest.mark.parametrize("version, tag", [("1.0.0rc1", "v1.0.0-rc1"), ("1.0.0", "v1.0.0")])
+def test_release_tag_matches_canonical_version(release_copy: Path, version: str, tag: str) -> None:
+    run("scripts/bump_version.py", version, cwd=release_copy)
+    original = snapshot(release_copy)
+    assert run("scripts/bump_version.py", "--tag", cwd=release_copy).stdout.strip() == tag
+    assert snapshot(release_copy) == original
+
+
+@pytest.mark.parametrize("version", ["v1.2.3", "1.2", "01.2.3", "1.2.3-rc1", "1.2.3rc01", "1.2.3\n", "1.2.3;echo bad"])
 def test_invalid_version_does_not_write(release_copy: Path, version: str) -> None:
     original = snapshot(release_copy)
     with pytest.raises(ValueError, match="Version must"):
@@ -150,20 +159,29 @@ def test_locks_are_fully_pinned_and_hashed(filename: str) -> None:
         assert re.search(r"--hash=sha256:[a-f0-9]{64}(?:\s|$)", line), line
 
 
-@pytest.fixture(scope="module")
-def distributions(tmp_path_factory: pytest.TempPathFactory) -> tuple[Path, Path]:
+@pytest.fixture(scope="module", params=[None, "1.0.0rc1"])
+def distributions(tmp_path_factory: pytest.TempPathFactory, request: pytest.FixtureRequest) -> tuple[Path, Path, str]:
     project = tmp_path_factory.mktemp("packaging")
-    for name in ("pyproject.toml", "LICENSE", "README.md", "driver.json"):
+    for name in ("pyproject.toml", "LICENSE", "THIRD_PARTY_NOTICES.md", "README.md", "driver.json"):
         shutil.copyfile(ROOT / name, project / name)
+    shutil.copytree(ROOT / "LICENSES", project / "LICENSES")
     shutil.copytree(ROOT / "src", project / "src", ignore=shutil.ignore_patterns("__pycache__", "*.egg-info"))
     shutil.copytree(ROOT / "web", project / "web")
+    for manifest in bump_version.MANIFESTS:
+        target = project / manifest
+        if not target.exists():
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(ROOT / manifest, target)
+    expected_version = request.param or __version__
+    if request.param:
+        bump_version.apply_plan(bump_version.version_plan(project, expected_version))
     # Default build creates an sdist and then builds the wheel from that sdist.
     run("-m", "build", "--no-isolation", cwd=project)
-    return next((project / "dist").glob("*.whl")), next((project / "dist").glob("*.tar.gz"))
+    return next((project / "dist").glob("*.whl")), next((project / "dist").glob("*.tar.gz")), expected_version
 
 
-def test_built_metadata_modules_and_assets(distributions: tuple[Path, Path]) -> None:
-    wheel, sdist = distributions
+def test_built_metadata_modules_and_assets(distributions: tuple[Path, Path, str]) -> None:
+    wheel, sdist, expected_version = distributions
     config = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
     modules = {f"{name}.py" for name in config["tool"]["setuptools"]["py-modules"]}
     # Check every top-level source module, including private runtime helpers.
@@ -177,7 +195,7 @@ def test_built_metadata_modules_and_assets(distributions: tuple[Path, Path]) -> 
         assert modules | assets | {"hub/core/matrix_service.py", "rest_api/app.py"} <= names
         metadata = BytesParser().parsebytes(archive.read(next(name for name in names if name.endswith("/METADATA"))))
         assert metadata["Name"] == config["project"]["name"]
-        assert metadata["Version"] == __version__
+        assert metadata["Version"] == expected_version
         assert metadata["Requires-Python"] == ">=3.11"
         assert metadata["License-Expression"] == "MPL-2.0"
         requirements = metadata.get_all("Requires-Dist", [])
@@ -186,15 +204,19 @@ def test_built_metadata_modules_and_assets(distributions: tuple[Path, Path]) -> 
         entrypoints = archive.read(next(name for name in names if name.endswith("/entry_points.txt"))).decode()
         assert "orei-matrix-driver = driver:main" in entrypoints
         driver_manifest = next(name for name in names if name.endswith(".data/data/driver.json"))
-        assert json.loads(archive.read(driver_manifest))["version"] == __version__
+        assert json.loads(archive.read(driver_manifest))["version"] == expected_version
+        license_files = {"LICENSE", "THIRD_PARTY_NOTICES.md"} | {
+            path.relative_to(ROOT).as_posix() for path in (ROOT / "LICENSES").rglob("*") if path.is_file()
+        }
+        assert all(any(name.endswith("/licenses/" + license_file) for name in names) for license_file in license_files)
     with tarfile.open(sdist) as archive:
         names = {name.partition("/")[2] for name in archive.getnames()}
-        assert {f"src/{module}" for module in modules} | assets | {"driver.json", "pyproject.toml"} <= names
+        assert {f"src/{module}" for module in modules} | assets | license_files | {"driver.json", "pyproject.toml"} <= names
         assert "setup.py" not in names
 
 
-def test_installed_wheel_imports_outside_checkout(distributions: tuple[Path, Path], tmp_path: Path) -> None:
-    wheel, _ = distributions
+def test_installed_wheel_imports_outside_checkout(distributions: tuple[Path, Path, str], tmp_path: Path) -> None:
+    wheel, _, _ = distributions
     target = tmp_path / "installed"
     run("-m", "pip", "install", "--no-deps", "--target", str(target), str(wheel), cwd=tmp_path)
     code = (

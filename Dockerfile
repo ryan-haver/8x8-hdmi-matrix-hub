@@ -52,6 +52,8 @@ RUN groupadd --gid "${APP_GID}" app \
 COPY src/ ./src/
 COPY web/ ./web/
 COPY run.py run_server.py driver.json ./
+COPY LICENSE THIRD_PARTY_NOTICES.md ./
+COPY LICENSES/ ./LICENSES/
 RUN python -m compileall -q src run.py
 
 ENV DATA_DIR=/data \

@@ -28,9 +28,10 @@
 
 | Channel    | State                                      | Next tag                                                                                      | Source of truth               |
 | ---------- | ------------------------------------------ | --------------------------------------------------------------------------------------------- | ----------------------------- |
-| **Latest** | forward-merged Worktree Phase 5 + 6/7      | **`0.5.0` ("Focused UI")** once WP-G2 merges open the PR and the coordinator bumps `src/hub/__init__.py` (currently `0.3.0`). Do not claim `0.5.0` was pushed — it hasn't. | `src/hub/__init__.py::__version__` is the single source of truth (`DEP-06`). |
-| **Stable** | merged work                                | **`0.4.0` ("Consolidate")** already tagged                                                     | `git tag -l` reports `v0.3.0`, `v0.4.0` |
-| **Long-term** | open                                      | **`1.0.0` ("Release")` — Phase 8 / WP-V3 validation campaign                                  | this document                 |
+| **Candidate** | Phases 6–7 integrated for review | `v1.0.0-rc1` after the integration PR passes CI and merges | Canonical version and bump-script checks |
+| **Milestone** | Phase 5 PR #36 | `v0.5.0` after its final CI check and merge | GitHub PR and annotated Git tag |
+| **Stable milestone** | Phases 0–4 merged | `v0.4.0` already tagged | Git history |
+| **Final** | Phase 8 / WP-V3 gates pending | `v1.0.0` after hardware, field and feature-target evidence | Validation report and ledger |
 
 Only `1.0.0` carries a public "all features at target, hardware
 signed off" claim. Every earlier tag is a milestone that records what
@@ -41,8 +42,8 @@ real-device proof.
 
 ## 2. Release history
 
-The history is **read from the ledger**, not written here by hand, so
-the roadmap cannot drift from the registry.
+Release history is summarized here. Consult Git tags for release commits and
+the ledger for proof levels; this document is maintained alongside them.
 
 ### `0.5.0` — "Focused UI" — Phase 5 (WP-E2) — *pending tag*
 
@@ -61,9 +62,8 @@ the roadmap cannot drift from the registry.
   `web/css/tokens.css`.
 - **Runtime note.** The web UI is the shipped surface; the rest of
   the project continues to use `OreiMatrix` + `RestApiServer`.
-- **Tag status.** `v0.5.0` is **not** in `git tag`. Source
-  `__version__` is `0.3.0`. The bump lives with the coordinator
-  after the WP-G1/G2 PR lands.
+- **Tag status.** PR #36 awaits its final CI check before merge and `v0.5.0`.
+
 - **Evidence.** Web UI rows are V1 unit + V3 browser. **V4 (real
   hardware tablet) is not recorded for v0.5.x** — HIL Session 2 is
   the next step; see §5.
@@ -180,7 +180,7 @@ is "below target" when the ledger says so.
 
 ## 5. What comes next
 
-### Phase 6 — Repository hygiene (WP-G1) — *in flight on `wp-g1-g2-release-and-docs`*
+### Phases 6–7 — Repository hygiene and documentation (WP-G1 / WP-G2) — *in flight on `wp-g1-g2-release-and-docs`*
 
 - **`wp-g1-packaging-version-locks`** — delete `setup.py`, single
   `hub.__init__.__version__` (DEP-04, DEP-06), hashed
@@ -215,11 +215,10 @@ is "below target" when the ledger says so.
 - **Tests:** `tests/test_core_documentation.py` (structural checks
   on every owned doc) — done in this branch.
 
-### Phase 7 → Phase 8 — Validation campaign (WP-V3) — *after Phase 6*
+### Phase 8 — Validation campaign (WP-V3) — after Phases 6–7
 
-> Phase 8 / WP-V3 is the **final** hardware campaign. There is no
-> Phase 7 validation work to do separately; the WP-V3 deliverables
-> follow the Phase 6 merge.
+Phase 7 covers documentation. Phase 8 / WP-V3 is the final validation campaign
+following the Phase 6/7 integration merge.
 
 - **HIL Session 2** — owner-present V4 runs of routing, presets,
   matrix power, CEC power/volume on the TV, one profile recall
@@ -277,8 +276,8 @@ use case is and what protocol/API the device exposes.
 - **What shipped is true today.** A tag is a snapshot of the merge
   branch, not a forward promise. The changelog records what
   changed in each tag; the ledger records what the tag did and did
-  not prove. The `v0.5.0` row here is **pending tag** — the
-  source still says `0.3.0` and the bump is the coordinator's.
+  not prove. Pending tags remain identified until their CI gates pass and
+  the annotated tags are pushed.
 - **What is pending is dated.** HIL Session 2 is the next concrete
   step on the V4 path; the ledger's "Stale evidence" column is
   what we will refresh there.

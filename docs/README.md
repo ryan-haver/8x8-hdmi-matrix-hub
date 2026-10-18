@@ -1,26 +1,11 @@
 # Documentation Index
 
-> The unified entry point for the **8×8 HDMI Matrix Hub** docs. Every
-> doc on this page is either owned by a phase worktree or generated
-> from the source; both kinds are tagged as such so the reader knows
-> what to trust and where to validate.
->
-> **The shipped vs framework split runs through every doc.** The
-> runtime is `OreiMatrix` + `RestApiServer` (UC mode runs
-> `src/driver.py`); the framework libraries under `src/hub/` —
-> `MatrixService`, `ActionRunner`, `IntegrationRegistry`,
-> `hub.persistence.migrations`, `hub.openapi` mount, `hub.env` —
-> are tested, importable libraries with **pending runtime
-> wiring**. See [`ARCHITECTURE.md`](ARCHITECTURE.md) §2.
->
-> **The single rule for what gets claimed in this folder:** any
-> feature that is described as "works" must have a passing evidence
-> record at the level the validation plan requires. The ledger —
-> reachable at [`docs/validation/LEDGER.md`](validation/LEDGER.md)
-> and referenced throughout as
-> `docs/validation/LEDGER.md` — lists every feature row with the
-> level, the freshness, and the open findings. That is the one
-> place the docs are forced to stay honest.
+Start with the deployment and client guides below. The architecture documents
+identify the shipped `OreiMatrix` / `RestApiServer` paths and framework modules
+with pending runtime wiring. OpenAPI generation is connected to the REST app.
+The [feature ledger](validation/LEDGER.md) records proof levels and freshness;
+[the release report](validation/VALIDATION_REPORT.md) records candidate checks
+and outstanding hardware gates.
 
 ---
 
@@ -28,24 +13,23 @@
 
 | Document                                                          | What you get                                                                                                       | Owner / source |
 | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------- |
-| [`../README.md`](../README.md)                                    | Project pitch, quick start, hardware list, env-var cheat-sheet                                                      | this worktree (DOC-02) |
-| [`../ROADMAP.md`](../ROADMAP.md)                                  | Phases, tags, what shipped, what is pending, what is not on the plan, framework-wiring gap                          | this worktree (DOC-01) |
-| [`../CHANGELOG.md`](../CHANGELOG.md)                              | v0.3.0 Secure, v0.4.0 Consolidate, v0.5.0 Focused UI (pending tag), the pending-hardware and pending-wiring sections | this worktree (DOC-12) |
-| [`ARCHITECTURE.md`](ARCHITECTURE.md)                              | The shipped runtime vs the `src/hub/` framework libraries (with pending wiring)                                    | this worktree |
-| [`INTEGRATIONS.md`](INTEGRATIONS.md)                              | The `Integration` framework contract + the three shipped integrations (Unfolded Circle legacy driver, Flic REST handlers, Home Assistant HACS) | this worktree |
+| [`../README.md`](../README.md)                                    | Project pitch, quick start, hardware list, env-var cheat-sheet                                                      | Maintained documentation (DOC-02) |
+| [`../ROADMAP.md`](../ROADMAP.md)                                  | Phases, tags, what shipped, what is pending, what is not on the plan, framework-wiring gap                          | Maintained documentation (DOC-01) |
+| [`../CHANGELOG.md`](../CHANGELOG.md)                              | v0.3.0 Secure, v0.4.0 Consolidate, v0.5.0 Focused UI and the RC, with pending-hardware and pending-wiring sections | Maintained documentation (DOC-12) |
+| [`ARCHITECTURE.md`](ARCHITECTURE.md)                              | The shipped runtime vs the `src/hub/` framework libraries (with pending wiring)                                    | Maintained documentation |
+| [`INTEGRATIONS.md`](INTEGRATIONS.md)                              | The `Integration` framework contract + the three shipped integrations (Unfolded Circle legacy driver, Flic REST handlers, Home Assistant HACS) | Maintained documentation |
 
 ---
 
 ## 2. Generated reference
 
-These docs are produced from the source by tools that ship in the
-repo. They live here too so readers can search them, but the source
-of truth is the code:
+The OpenAPI route catalog and ledger are generated from code and evidence.
+The configuration reference is maintained against the source and checked by tests:
 
 | Document                                       | Generated from                                                                                       | Mount point / status                                                                                     | Owner / source |
 | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | -------------- |
 | [`API_REFERENCE.md`](API_REFERENCE.md)         | `src/hub/openapi.py::build_openapi_spec(app)` (framework library) + the WebSocket schema at [`api/websocket.schema.json`](api/websocket.schema.json) | Shipped today at `GET /api/openapi.json` (raw document) and Swagger UI at `GET /api/docs`, wired by the `wp-g2-openapi-swagger-config-docs` track. | `wp-g2-openapi-swagger-config-docs` (DOC-03) |
-| [`CONFIGURATION.md`](CONFIGURATION.md)         | `src/hub/env.py::CORE_ENV_VARS` and `INTEGRATION_ENV_VARS` (DI-12)                                  | Library-only today; `run.py` keeps its own `RETIRED_ENV` warnings until the migration lands           | `wp-g2-openapi-swagger-config-docs` (DOC-12) |
+| [`CONFIGURATION.md`](CONFIGURATION.md)         | `src/hub/env.py::CORE_ENV_VARS` and `INTEGRATION_ENV_VARS` (DI-12)                                  | Documents runtime variables and aliases separately from framework-only flags           | `wp-g2-openapi-swagger-config-docs` (DOC-12) |
 | `validation/LEDGER.md`                         | `python -m tools.validate ledger` over `validation/features.yaml` + `validation/evidence/`            | generated; do not edit by hand                                                                          | generated    |
 
 When one of these moves, regenerate it from the source and commit
@@ -63,7 +47,7 @@ needs:
 | [`DOCKER.md`](DOCKER.md)                                            | Anyone deploying with Docker   | `wp-g2-client-guides-doc-archive` (DOC-05) |
 | [`HOME_ASSISTANT.md`](HOME_ASSISTANT.md)                            | Home Assistant users           | `wp-g2-client-guides-doc-archive` (DOC-04) |
 | [`FLIC_SETUP.md`](FLIC_SETUP.md)                                    | Flic Hub owners                | `wp-g2-client-guides-doc-archive` |
-| [`UNFOLDED_CIRCLE_INTEGRATION_GUIDE.md`](UNFOLDED_CIRCLE_INTEGRATION_GUIDE.md) | Remote 3 operators             | `wp-g2-client-guides-doc-archive` (UC-20) |
+| [`UNFOLDED_CIRCLE.md`](UNFOLDED_CIRCLE.md) | Remote 3 operators             | `wp-g2-client-guides-doc-archive` (UC-20) |
 | `SECURITY.md` (project root)                                        | Threat model, two-level access, always-on protections, vulnerability disclosure | `wp-f1-security-policy-doc` |
 
 ---
@@ -74,8 +58,8 @@ needs:
 | ---------------------------------------------------------------- | --------------------------------- | -------------- |
 | `CONTRIBUTING.md` (project root)                                 | Contributors                      | `wp-g2-client-guides-doc-archive` (DOC-13) |
 | [`INTEGRATION_TEMPLATE.md`](INTEGRATION_TEMPLATE.md)             | New framework integration authors | merged in Phase 4 (track 4) |
-| [`INTEGRATIONS.md`](INTEGRATIONS.md)                             | Operating the opt-in framework (and the shipped legacy driver) | this worktree |
-| [`ARCHITECTURE.md`](ARCHITECTURE.md)                             | Anyone reading the runtime source or the `src/hub/` framework | this worktree |
+| [`INTEGRATIONS.md`](INTEGRATIONS.md)                             | Operating the opt-in framework (and the shipped legacy driver) | Maintained documentation |
+| [`ARCHITECTURE.md`](ARCHITECTURE.md)                             | Anyone reading the runtime source or the `src/hub/` framework | Maintained documentation |
 
 ---
 
@@ -163,11 +147,19 @@ before v1.0.0 has to close.
 | Document                                          | What it is |
 | ------------------------------------------------- | ---------- |
 | [`PROJECT_ROADMAP.md`](PROJECT_ROADMAP.md)        | The pre-Phase-1 roadmap (Sprints 1–9, etc.). Kept for context; **see [`../ROADMAP.md`](../ROADMAP.md) for the current plan** |
-| [`MASTER_INDEX.md`](MASTER_INDEX.md)              | An older doc index; kept until [`ARCHITECTURE.md`](ARCHITECTURE.md), [`INTEGRATIONS.md`](INTEGRATIONS.md), [`API_REFERENCE.md`](API_REFERENCE.md) and [`CONFIGURATION.md`](CONFIGURATION.md) are all populated |
+| [`MASTER_INDEX.md`](MASTER_INDEX.md)              | Compatibility link to this index |
 | `WEB_UI_IMPLEMENTATION_PLAN.md`                   | The pre-Phase-5 web UI plan; superseded by the architecture and the WP-E2 commits |
-| `PHASE_8_SPEC.md`                                 | The Phase 8 (v1.0.0) validation campaign spec |
+| [`PHASE_8_SPEC.md`](PHASE_8_SPEC.md)               | Compatibility link to a historical domain/UI proposal; final release gates are in `validation/VALIDATION_PLAN.md` |
 | `docs/ui/LOOK_AND_FEEL.md`                        | The Focused-UI visual baseline reference |
 
-The legacy `*.har` files in this folder are kept as historical HTTP
-capture artifacts (they are not loaded by the code); they will be
-moved to `archive/` by the coordinator after the doc merges land.
+Protocol captures used by the simulator are retained under `tests/fixtures/device/`.
+The repository guard rejects newly committed HAR captures and binary executables.
+
+## Current plan and retained references
+
+- [Unified master plan](planning/UNIFIED_MASTER_PLAN.md)
+- [Release validation report](validation/VALIDATION_REPORT.md)
+- [Validation plan and release gates](validation/VALIDATION_PLAN.md)
+- [Historical design archive](archive/design/WEB_UI_IMPLEMENTATION_PLAN.md)
+- [IR proposal](proposals/IR_CONTROL.md)
+- [Upstream UC reference guide](vendor/UNFOLDED_CIRCLE.md)

@@ -243,8 +243,8 @@ async def handle_info(request: web.Request) -> web.Response:
     """Get API and matrix info for the Web UI."""
     matrix_device = get_matrix_device()
 
-    driver_id = "orei_hdmi_matrix"
-    driver_name = "OREI HDMI Matrix"
+    driver_id = "hdmi_matrix"
+    driver_name = "HDMI Matrix"
 
     try:
         if DRIVER_JSON.exists():
