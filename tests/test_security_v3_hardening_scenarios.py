@@ -66,6 +66,7 @@ async def simulator():
 @pytest.fixture
 async def hub(aiohttp_client, simulator, tmp_path, monkeypatch):
     shutil.copytree(FIXTURES, tmp_path, dirs_exist_ok=True)
+    (tmp_path / "scenes.json").rename(tmp_path / "scenes_v2.json")
     matrix = OreiMatrix("127.0.0.1", port=simulator.https_port)
     # These contracts concern HTTP/PIN/TLS, so avoid the unrelated Telnet startup.
     monkeypatch.setattr(matrix, "_connect_telnet", AsyncMock(return_value=False))

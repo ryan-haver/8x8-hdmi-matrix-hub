@@ -14,7 +14,6 @@ defines the NEW unified Scene concept for Phase 8.
 
 import copy
 import dataclasses
-import json
 import logging
 import math
 import uuid
@@ -24,7 +23,6 @@ from pathlib import Path
 from typing import Any
 
 from _file_io import atomic_read_json
-from hub.persistence.migrations import SCHEMA_VERSION_KEY, backup_path_for
 from password import (
     PasswordError,
     ensure_hashed_passcode,
@@ -36,24 +34,17 @@ from password import (
 from persistence import ensure_data_dir, get_data_dir
 
 
-def _write_blocked(filename: str) -> bool:
-    """``True`` when :func:`hub.persistence.startup.prepare_runtime_storage` has
-    declared ``filename`` unsafe to write. The lookup is tolerant of the
-    pre-barrier state (no barrier run yet → not blocked).
-    """
-    try:
-        from hub.persistence.startup import is_write_blocked
-    except ImportError:  # pragma: no cover — pre-orchestration test envs
-        return False
-    return is_write_blocked(filename)
+def _write_blocked(path) -> bool:
+    from hub.persistence.startup import is_write_blocked
+
+    return is_write_blocked(path)
 
 
-def _block_reason(filename: str) -> str | None:
-    try:
-        from hub.persistence.startup import block_reason
-    except ImportError:  # pragma: no cover
-        return None
-    return block_reason(filename)
+def _block_reason(path) -> str | None:
+    from hub.persistence.startup import block_reason
+
+    return block_reason(path)
+
 
 _LOG = logging.getLogger("scene_manager")
 
@@ -159,8 +150,12 @@ class SceneStep:
             return f"Invalid step type: {self.type!r}"
         if self.type == STEP_TYPE_WAIT:
             seconds = self.params.get("seconds")
-            if (isinstance(seconds, bool) or not isinstance(seconds, (int, float))
-                    or not 0.5 <= seconds <= 30 or not math.isfinite(seconds)):
+            if (
+                isinstance(seconds, bool)
+                or not isinstance(seconds, (int, float))
+                or not 0.5 <= seconds <= 30
+                or not math.isfinite(seconds)
+            ):
                 return "Wait seconds must be a finite number from 0.5 to 30"
             return None
         if not self.id:
@@ -230,7 +225,7 @@ class Scene:
     last_executed: str | None = None
     execution_history: list[ExecutionHistoryEntry] = field(default_factory=list)
     # R2 contract §4: unknown record-level scalar metadata passes through
-    # load/edit/save untouched. Populated by ``from_dict``; re-emitted by ``to_dict``.
+    # load/edit/save on disk; public serializers exclude these private fields.
     _unknown_fields: dict[str, Any] = field(default_factory=dict, repr=False, compare=False)
 
     def is_password_protected(self) -> bool:
@@ -244,8 +239,8 @@ class Scene:
         :param include_hash: include ``passcode_hash``; only for persistence,
                              never for clients (SEC-04 / F-SEC-005)
 
-        Unknown record-level scalar metadata is re-emitted so the saved
-        payload stays lossless across load/edit/save.
+        Unknown extension fields are excluded from this public projection;
+        the private storage writer preserves them separately.
         """
         result: dict[str, Any] = {
             "id": self.id,
@@ -253,7 +248,10 @@ class Scene:
             "icon": self.icon,
             "steps": [s.to_dict() for s in self.steps],
             "overrides": {
-                pid: {str(out_num): settings for out_num, settings in out_map.items()}
+                pid: {
+                    str(out_num): {key: value for key, value in settings.items() if key in OVERRIDABLE_SETTINGS}
+                    for out_num, settings in out_map.items()
+                }
                 for pid, out_map in self.overrides.items()
             },
             "favorite": self.favorite,
@@ -265,10 +263,6 @@ class Scene:
         }
         if include_hash:
             result["passcode_hash"] = self.passcode_hash
-        # Re-emit record-level unknowns so they survive save roundtrips.
-        for key, value in self._unknown_fields.items():
-            if key not in result:
-                result[key] = value
         return result
 
     @staticmethod
@@ -279,15 +273,27 @@ class Scene:
         for pid, outers in overrides_raw.items():
             out_map: dict[int, dict[str, bool]] = {}
             for out_str, settings in outers.items():
-                out_map[int(out_str)] = settings
-            overrides[pid] = out_map
+                known = {key: value for key, value in settings.items() if key in OVERRIDABLE_SETTINGS}
+                if known:
+                    out_map[int(out_str)] = known
+            if out_map:
+                overrides[pid] = out_map
 
         history = [ExecutionHistoryEntry.from_dict(h) for h in data.get("execution_history", [])]
 
         declared_keys = {
-            "id", "name", "icon", "steps", "overrides", "favorite",
-            "dashboard_visible", "dashboard_order", "password_protected",
-            "passcode_hash", "last_executed", "execution_history",
+            "id",
+            "name",
+            "icon",
+            "steps",
+            "overrides",
+            "favorite",
+            "dashboard_visible",
+            "dashboard_order",
+            "password_protected",
+            "passcode_hash",
+            "last_executed",
+            "execution_history",
         }
         unknown = {k: v for k, v in data.items() if k not in declared_keys}
 
@@ -550,165 +556,52 @@ class SceneManager:
         self._unknown_top_keys: dict[str, Any] = {}
         self._ensure_loaded()
 
-    def _maybe_import_legacy(self, legacy: Path) -> None:
-        """Import a legacy ``scenes.json`` into ``scenes_v2.json`` with a backup.
-
-        Mirrors the runtime barrier behaviour for callers that create the
-        manager without going through :func:`hub.persistence.startup.prepare_runtime_storage`
-        (legacy tests, tools, direct REST instantiations). The original
-        ``scenes.json`` bytes are copied to ``<name>.v0.bak`` byte-for-byte
-        first; the canonical target is then written *losslessly* from the
-        same in-memory payload (only the runtime ``schema_version`` is
-        added). The contract distinguishes the legacy config.Scene shape
-        (``{"scenes": [{"outputs": {...}}]}``) from the unified
-        scene_manager.Scene shape (``{"scenes": [{"steps": [...]}]}``),
-        so a file whose records all look like the *legacy* format is left
-        alone — importing it would lose the ``outputs`` map. Files that
-        already follow the unified shape are imported as-is.
-        """
-
-        try:
-            payload = atomic_read_json(legacy)
-        except (ValueError, OSError) as exc:
-            _LOG.warning("Could not read legacy %s during fallback import: %s", legacy, exc)
-            return
-        if not isinstance(payload, (dict, list)):
-            _LOG.warning("Legacy %s is not a recognised scene container; skipping", legacy)
-            return
-
-        # Distinct schemas: only import unified-shape scenes. The legacy
-        # config.SceneManager schema's records describe output routing and
-        # have no ``steps`` field — conflating them would mean rewriting
-        # operator data that R4 owns (see R2 / R4 disjoint ownership).
-        raw_scenes = payload.get("scenes", []) if isinstance(payload, dict) else payload
-        if not isinstance(raw_scenes, list) or not raw_scenes:
-            return
-        if not all(isinstance(s, dict) and "steps" in s for s in raw_scenes):
-            # Treat the file as legacy config.SceneManager content; do not
-            # import. The SceneManager just operates against the empty
-            # canonical file.
-            return
-
-        backup_path = backup_path_for(legacy, 0)
-        backup_path.parent.mkdir(parents=True, exist_ok=True)
-        from _file_io import atomic_write_json
-        try:
-            # Preserve the original bytes first (raw copy), so the operator
-            # can recover the un-modified legacy file even if the import step
-            # below fails.
-            import shutil
-
-            try:
-                shutil.copy2(legacy, backup_path)
-            except OSError:
-                # Fall back to atomic_write_json if the sidecar is not
-                # writable directly.
-                atomic_write_json(backup_path, payload)
-
-            # Build the canonical target losslessly, only stamping the
-            # runtime schema version on top. Unknown top-level fields stay.
-            stamped: dict[str, Any] = {}
-            for key, value in payload.items():
-                if key == SCHEMA_VERSION_KEY:
-                    continue
-                stamped[key] = value
-            from hub.persistence.migrations import CURRENT_SCHEMA_VERSION
-
-            stamped[SCHEMA_VERSION_KEY] = CURRENT_SCHEMA_VERSION
-            atomic_write_json(self.scenes_file, stamped)
-        except OSError as exc:
-            _LOG.warning("Could not back up / import legacy scenes file: %s", exc)
-            return
-        _LOG.info(
-            "Imported legacy %s into %s (backup at %s)", legacy.name, self.scenes_file.name, backup_path.name
-        )
-
     def _ensure_loaded(self) -> None:
-        if not self.scenes_file.exists():
-            # The runtime barrier imports a recognised legacy ``scenes.json`` to
-            # ``scenes_v2.json`` before the manager is constructed; if the manager
-            # is used directly (no barrier), fall back to importing here so legacy
-            # test fixtures (and old installations started without the barrier)
-            # get the same data preservation. Backup is unconditional.
+        from hub.persistence.migrations import load_versioned_json
+        from hub.persistence.startup import prepare_scene_files
+        from persistence import migrate_legacy_file
+
+        migrate_legacy_file(self.scenes_file, "scenes_v2.json")
+        migrate_legacy_file(self.data_dir / SCENES_LEGACY_FILE, SCENES_LEGACY_FILE)
+        prepare_scene_files(self.data_dir)
+        data = load_versioned_json(self.scenes_file, default=None)
+        if data is None:
             legacy = self.data_dir / SCENES_LEGACY_FILE
-            if legacy.exists() and not _write_blocked("scenes_v2.json"):
-                self._maybe_import_legacy(legacy)
-                if not self.scenes_file.exists():
-                    # Either the legacy was not a unified-scenes shape (the
-                    # contract-bound config.SceneManager shape has ``outputs``
-                    # rather than ``steps``) or it was empty. We do *not*
-                    # synthesise a canonical file in that case — the operator's
-                    # legacy remains the only record the runtime barrier can
-                    # inspect, and materialising an empty scenes_v2.json
-                    # without their knowledge would mask the collision.
-                    if self._legacy_shape_is_unified(legacy):
-                        if not self._save_initial_empty():
-                            return
-                    else:
-                        _LOG.info(
-                            "Legacy %s has an unrecognised shape; "
-                            "leaving scenes_v2.json for the runtime barrier to inspect",
-                            legacy.name,
-                        )
-                        return
-            elif not _write_blocked("scenes_v2.json"):
-                # No legacy, no scenes_v2.json → first run. The contract allows
-                # this (empty scenes may initialise empty without deleting source).
-                if not self._save_initial_empty():
+            if legacy.exists():
+                from hub.persistence.startup import scene_shape
+
+                if scene_shape(atomic_read_json(legacy)) == "legacy":
                     return
-            else:
-                _LOG.info("Scenes file not found (first run): %s", self.scenes_file)
-                return
-        try:
-            with open(self.scenes_file, encoding="utf-8") as f:
-                data = json.load(f)
-            self._unknown_top_keys = {
-                k: v for k, v in data.items() if k not in {"scenes"}
-            }
-            rehashed = False
-            for scene_data in data.get("scenes", []):
-                scene = Scene.from_dict(scene_data)
-                self._scenes[scene.id] = scene
-                rehashed |= scene.passcode_hash != (scene_data.get("passcode_hash") or "")
-            _LOG.info("Loaded %d scenes", len(self._scenes))
-        except Exception as e:
-            _LOG.error("Failed to load scenes: %s", e)
+            if not self._save_initial_empty():
+                from hub.persistence import MigrationError
+
+                raise MigrationError(f"{self.scenes_file}: defaults could not be saved")
             return
-        if rehashed:
-            # Replace the plaintext PIN on disk with its hash (F-SEC-004).
-            # The barrier may have flagged the file as unsafe to write; if so we
-            # silently skip the rewrite rather than overwrite a file the operator
-            # has not consented to.
-            if _write_blocked("scenes_v2.json"):
-                _LOG.warning(
-                    "Scene file is flagged unsafe to write (%s); leaving plaintext PIN unchanged on disk",
-                    _block_reason("scenes_v2.json"),
-                )
-            else:
-                self._save()
+        self._unknown_top_keys = {k: v for k, v in data.items() if k != "scenes"}
+        rehashed = False
+        for raw in data["scenes"]:
+            scene = Scene.from_dict(raw)
+            self._scenes[scene.id] = scene
+            rehashed |= scene.passcode_hash != (raw.get("passcode_hash") or "")
+        if rehashed and not self._save():
+            from hub.persistence import MigrationError
+
+            raise MigrationError(f"{self.scenes_file}: PIN rehash could not be saved")
 
     def _save(self) -> bool:
-        if _write_blocked("scenes_v2.json"):
+        if _write_blocked(self.scenes_file):
             _LOG.error(
                 "Refusing to save scenes: %s",
-                _block_reason("scenes_v2.json"),
+                _block_reason(self.scenes_file),
             )
             return False
         try:
             ensure_data_dir(self.data_dir)
-            data: dict[str, Any] = dict(self._unknown_top_keys)
+            data: dict[str, Any] = {}
             data["scenes"] = [s.to_dict(include_hash=True) for s in self._scenes.values()]
-            # Stamp the runtime schema version without dropping unknown top-level keys.
-            from _file_io import atomic_write_json
-            from hub.persistence.migrations import CURRENT_SCHEMA_VERSION, SCHEMA_VERSION_KEY
+            from hub.persistence.migrations import save_versioned_json
 
-            stamped: dict[str, Any] = {}
-            for key, value in data.items():
-                if key == SCHEMA_VERSION_KEY:
-                    continue
-                stamped[key] = value
-            stamped[SCHEMA_VERSION_KEY] = CURRENT_SCHEMA_VERSION
-            atomic_write_json(self.scenes_file, stamped)
+            save_versioned_json(self.scenes_file, data)
             return True
         except Exception as e:
             _LOG.error("Failed to save scenes: %s", e)
@@ -718,40 +611,13 @@ class SceneManager:
         """Materialise ``scenes_v2.json`` with an empty scenes list (first run / no legacy)."""
         try:
             ensure_data_dir(self.data_dir)
-            from _file_io import atomic_write_json
+            from hub.persistence.migrations import save_versioned_json as atomic_write_json
 
             atomic_write_json(self.scenes_file, {"scenes": []})
             return True
         except Exception as e:
             _LOG.error("Failed to seed scenes_v2.json: %s", e)
             return False
-
-    @staticmethod
-    def _legacy_shape_is_unified(legacy: Path) -> bool:
-        """``True`` when ``legacy`` looks like unified ``scene_manager.Scene`` records.
-
-        The legacy ``config.SceneManager`` schema uses ``outputs``, not ``steps``
-        — it owns R4 territory, and re-emitting it through the unified
-        importer would lose operator data. Returning ``False`` here makes the
-        manager leave the canonical file unwritten, so the runtime barrier
-        (or the operator) sees the collision directly.
-
-        An *empty* legacy payload is treated as ambiguous: there are no
-        records to discriminate the schema, so the contract's "empty scenes
-        may initialise empty" rule applies and the manager materialises the
-        canonical target with an empty list.
-        """
-        try:
-            payload = atomic_read_json(legacy)
-        except (ValueError, OSError):
-            return False
-        raw_scenes = payload.get("scenes", []) if isinstance(payload, dict) else payload
-        if not isinstance(raw_scenes, list):
-            return False
-        if not raw_scenes:
-            # Empty list — ambiguous; safe to initialise an empty canonical.
-            return True
-        return all(isinstance(s, dict) and "steps" in s for s in raw_scenes)
 
     # ---- Read ----
 

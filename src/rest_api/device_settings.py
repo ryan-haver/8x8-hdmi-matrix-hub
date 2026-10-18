@@ -8,7 +8,6 @@ Handles storage of:
 - Per-device metadata
 """
 
-import json
 import logging
 from collections.abc import Callable
 from copy import deepcopy
@@ -32,20 +31,19 @@ from .websocket import broadcast_status_update
 _LOG = logging.getLogger("rest_api.device_settings")
 
 
-def _write_blocked(filename: str) -> bool:
-    try:
-        from hub.persistence.startup import is_write_blocked
-    except ImportError:  # pragma: no cover — pre-orchestration test envs
+def _write_blocked(path) -> bool:
+    if path is None:
         return False
-    return is_write_blocked(filename)
+    from hub.persistence.startup import is_write_blocked
+
+    return is_write_blocked(path)
 
 
-def _block_reason(filename: str) -> str | None:
-    try:
-        from hub.persistence.startup import block_reason
-    except ImportError:  # pragma: no cover
-        return None
-    return block_reason(filename)
+def _block_reason(path) -> str | None:
+    from hub.persistence.startup import block_reason
+
+    return block_reason(path)
+
 
 # Storage file location (resolved from persistent data dir at init time)
 _SETTINGS_FILE = "device_settings.json"
@@ -84,32 +82,23 @@ def _load_settings():
     global _settings_cache
 
     if _settings_path is None or not _settings_path.exists():
-        if _write_blocked(_SETTINGS_FILE):
+        if _write_blocked(_settings_path):
             _LOG.warning(
                 "Not seeding default device settings: %s",
-                _block_reason(_SETTINGS_FILE),
+                _block_reason(_settings_path),
             )
             _settings_cache = {}
             return
         _settings_cache = _get_default_settings()
-        _save_settings()
+        if _settings_path is not None and not _save_settings():
+            from hub.persistence import MigrationError
+
+            raise MigrationError(f"{_settings_path}: defaults could not be saved")
         return
 
-    try:
-        with open(_settings_path, encoding="utf-8") as f:
-            _settings_cache = json.load(f)
-        _LOG.debug(f"Loaded device settings from {_settings_path}")
-    except Exception as e:
-        _LOG.exception("Error loading device settings: %s", e)
-        if _write_blocked(_SETTINGS_FILE):
-            _LOG.error(
-                "Not overwriting corrupt %s: %s",
-                _SETTINGS_FILE,
-                _block_reason(_SETTINGS_FILE),
-            )
-            _settings_cache = {}
-            return
-        _settings_cache = _get_default_settings()
+    from hub.persistence.migrations import load_versioned_json
+
+    _settings_cache = load_versioned_json(_settings_path)
 
 
 def _save_settings():
@@ -117,17 +106,15 @@ def _save_settings():
     if _settings_path is None:
         _LOG.warning("Cannot save settings: path not initialized")
         return False
-    if _write_blocked(_SETTINGS_FILE):
-        _LOG.error(
-            "Refusing to save %s: %s", _SETTINGS_FILE, _block_reason(_SETTINGS_FILE)
-        )
+    if _write_blocked(_settings_path):
+        _LOG.error("Refusing to save %s: %s", _SETTINGS_FILE, _block_reason(_settings_path))
         return False
 
     try:
         # Ensure directory exists
         _settings_path.parent.mkdir(parents=True, exist_ok=True)
 
-        from _file_io import atomic_write_json
+        from hub.persistence.migrations import save_versioned_json as atomic_write_json
 
         atomic_write_json(_settings_path, _settings_cache)
 
@@ -178,7 +165,17 @@ def get_device_settings() -> dict:
     """Get all device settings."""
     if not _settings_cache:
         _load_settings()
-    return _settings_cache
+    public = {
+        k: deepcopy(v) for k, v in _settings_cache.items() if k in {"version", "favorite_presets", "dashboard_presets"}
+    }
+    for key in ("inputs", "outputs", "presets"):
+        if key in _settings_cache:
+            fields = {"name", "routing"} if key == "presets" else {"name", "icon", "color"}
+            public[key] = {
+                port: {k: deepcopy(v) for k, v in record.items() if k in fields}
+                for port, record in _settings_cache[key].items()
+            }
+    return public
 
 
 def get_input_setting(input_num: int) -> dict:

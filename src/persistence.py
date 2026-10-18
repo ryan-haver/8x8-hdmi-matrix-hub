@@ -175,7 +175,7 @@ def migrate_legacy_file(target_file: Path, filename: str) -> bool:
       unreadable file is not a corrupt one.
     - If the target exists but is corrupt (not valid JSON/UTF-8), it is only
       replaced once a readable, valid legacy file is in hand; the corrupt
-      content is first copied to ``<name>.corrupt`` (best effort).
+      content is first copied to ``<name>.corrupt``; backup failure prevents replacement.
     - The target is never deleted. Writes go through ``atomic_write_json`` so
       a crash mid-migration cannot leave a partial file.
 
@@ -185,6 +185,9 @@ def migrate_legacy_file(target_file: Path, filename: str) -> bool:
     """
     import json as _json
 
+    from hub.persistence.migrations import DEFAULT_REGISTRY, MigrationError, validate_payload, write_backup
+
+    managed = DEFAULT_REGISTRY.has(filename) or filename == "scenes.json"
     target_corrupt = False
     if target_file.exists():
         try:
@@ -198,11 +201,6 @@ def migrate_legacy_file(target_file: Path, filename: str) -> bool:
             _LOG.warning("Cannot read migration target %s (%s); leaving it untouched", target_file, exc)
             return False
 
-    with _persistence_lock:
-        if filename in _legacy_migrations:
-            # Already migrated in this process.
-            return False
-
     for legacy_dir in get_legacy_data_paths():
         legacy_file = legacy_dir / filename
         if legacy_file.exists() and legacy_file.resolve() != target_file.resolve():
@@ -212,19 +210,35 @@ def migrate_legacy_file(target_file: Path, filename: str) -> bool:
                     _legacy_data = _json.load(_f)
             except (ValueError, OSError) as exc:
                 _LOG.warning("Could not migrate legacy file %s: %s", legacy_file, exc)
+                if managed:
+                    raise MigrationError(f"{legacy_file}: unreadable legacy source") from exc
                 return False
+            if managed:
+                if filename == "scenes.json":
+                    from hub.persistence.startup import scene_shape
+
+                    scene_shape(_legacy_data)
+                else:
+                    validate_payload(filename, _legacy_data)
+                if write_backup(legacy_file, DEFAULT_REGISTRY.detect_version(_legacy_data)) is None:
+                    raise MigrationError(f"{legacy_file}: backup failed before legacy-location import")
+                if DEFAULT_REGISTRY.has(filename):
+                    _legacy_data = DEFAULT_REGISTRY.apply(filename, _legacy_data)[0]
             try:
                 target_file.parent.mkdir(parents=True, exist_ok=True)
                 if target_corrupt:
                     _preserve_corrupt_file(target_file)
                 # Use atomic write for migration target — prevents partial writes
                 from _file_io import atomic_write_json
+
                 atomic_write_json(target_file, _legacy_data)
             except OSError as exc:
                 _LOG.warning("Could not write migrated file %s: %s", target_file, exc)
+                if managed:
+                    raise MigrationError(f"{target_file}: legacy-location import failed") from exc
                 return False
             with _persistence_lock:
-                _legacy_migrations.add(filename)
+                _legacy_migrations.add(str(target_file.resolve()))
             _LOG.info("Migrated legacy file %s -> %s", legacy_file, target_file)
             return True
 
@@ -232,15 +246,16 @@ def migrate_legacy_file(target_file: Path, filename: str) -> bool:
 
 
 def _preserve_corrupt_file(path: Path) -> None:
-    """Best-effort copy of a corrupt file to ``<name>.corrupt`` before it is replaced."""
+    """Preserve corrupt original bytes, refusing a conflicting existing backup."""
     import shutil
 
     backup = path.with_name(f"{path.name}.corrupt")
-    try:
-        shutil.copy2(path, backup)
-        _LOG.warning("Saved corrupt %s as %s", path, backup)
-    except OSError as exc:
-        _LOG.warning("Could not back up corrupt %s: %s", path, exc)
+    if backup.exists():
+        if backup.read_bytes() != path.read_bytes():
+            raise OSError(f"Corrupt backup already contains different bytes: {backup}")
+        return
+    shutil.copy2(path, backup)
+    _LOG.warning("Saved corrupt %s as %s", path, backup)
 
 
 def reset_data_dir_cache() -> None:

@@ -40,6 +40,7 @@ or destructively renamed.
 from __future__ import annotations
 
 import logging
+import re
 import shutil
 import sys
 from collections.abc import Callable, Iterable, Mapping
@@ -93,6 +94,333 @@ class MigrationError(ValueError):
 
 class SchemaVersionError(MigrationError):
     """A file was written by a newer release than this one understands."""
+
+
+def is_button_key(key: str) -> bool:
+    """Whether a flat-map key identifies a button rather than extension metadata."""
+    return bool(re.fullmatch(r"(?:[0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}", key))
+
+
+def is_shortcut_key(key: str) -> bool:
+    key = _normalize_shortcut_key(key)
+    return key.startswith("user.") or key in {
+        "route_all_to_output",
+        "route_one_to_one",
+        "power_off_all",
+        "mute_all_audio",
+        "unmute_all_audio",
+        "beep_on",
+        "beep_off",
+        "panel_lock_on",
+        "panel_lock_off",
+        "system_reboot",
+        "lcd_timeout_off",
+        "lcd_timeout_10s",
+        "lcd_timeout_30s",
+        "lcd_timeout_60s",
+        "lcd_timeout_always_on",
+        *(f"preset_recall_{n}" for n in range(1, 9)),
+    }
+
+
+def flat_map_records(filename: str, payload: Mapping) -> dict[str, dict]:
+    """Reader seam for R5: schema/extension metadata never count as records.
+
+    Call after ``load_versioned_json`` and save surviving records with
+    ``save_versioned_json``; the latter preserves opaque metadata and unknown
+    fields without resurrecting deleted records. Public callers still project
+    the known button fields rather than returning this private storage view.
+    """
+    predicate = is_button_key if filename == "flic_buttons.json" else is_shortcut_key
+    return {key: dict(value) for key, value in payload.items() if predicate(key) and isinstance(value, Mapping)}
+
+
+def validate_payload(filename: str, payload: Any) -> None:
+    """Reject shapes that readers would otherwise silently discard or default.
+
+    Legacy optional fields can be absent; a present known container must have
+    the supported shape. Extension keys are opaque, including scalar flat-map
+    metadata. Validation never hashes PINs or changes the payload.
+    """
+    filename = LEGACY_FILENAMES.get(filename, filename)
+    if filename == "scenes.json":
+        from .startup import scene_shape
+
+        if scene_shape(payload) not in ("legacy", "empty"):
+            raise MigrationError("scenes.json: legacy writer cannot overwrite unified scenes")
+        return
+    if isinstance(payload, Mapping) and SCHEMA_VERSION_KEY in payload:
+        version = payload[SCHEMA_VERSION_KEY]
+        if isinstance(version, bool) or not isinstance(version, int) or version < 0:
+            raise MigrationError(f"{filename}: invalid schema_version")
+        if version > CURRENT_SCHEMA_VERSION:
+            raise SchemaVersionError(f"{filename}: schema_version {version} is newer than {CURRENT_SCHEMA_VERSION}")
+    collections = {
+        "profiles.json": "profiles",
+        "scenes_v2.json": "scenes",
+        "cec_macros.json": "macros",
+        "dashboard_layout.json": "cards",
+    }
+    collection = collections.get(filename)
+    if collection:
+        if collection == "cards" and isinstance(payload, Mapping) and "version" in payload:
+            _validate_integer(filename, "version", payload["version"])
+        records = payload.get(collection) if isinstance(payload, Mapping) else payload
+        if not isinstance(records, list) or any(not isinstance(r, Mapping) for r in records):
+            raise MigrationError(f"{filename}: {collection} must be a list of objects")
+        identities = set()
+        for record in records:
+            if collection == "cards" and not isinstance(record.get("type"), str):
+                raise MigrationError(f"{filename}: invalid card type")
+            identity = (record.get("type"), record.get("id")) if collection == "cards" else record.get("id")
+            if not isinstance(record.get("id"), str) or not record["id"] or identity in identities:
+                raise MigrationError(f"{filename}: missing or duplicate record identity")
+            identities.add(identity)
+            for key in ("name", "icon", "passcode_hash"):
+                if key in record and record[key] is not None and not isinstance(record[key], str):
+                    raise MigrationError(f"{filename}: invalid {key}")
+            for key in ("pinned", "favorite", "dashboard_visible", "password_protected", "continue_on_error"):
+                if key in record and not isinstance(record[key], bool):
+                    raise MigrationError(f"{filename}: {key} must be a boolean")
+            for key in ("dashboard_order", "pin_order", "order"):
+                if key in record:
+                    _validate_integer(filename, key, record[key])
+            if filename == "scenes_v2.json" and "outputs" in record:
+                raise MigrationError(f"{filename}: legacy output-state scene in unified catalog")
+            if collection == "cards" and record.get("type") not in {
+                "profile",
+                "preset",
+                "system_shortcut",
+                "macro",
+                "scene",
+                "aggregate_widget",
+            }:
+                raise MigrationError(f"{filename}: unsupported card type")
+            for key in ("outputs", "cec_config", "overrides", "params"):
+                if key in record and not isinstance(record[key], Mapping):
+                    raise MigrationError(f"{filename}: {key} must be an object")
+            for key in ("steps", "actions", "items", "macros", "execution_log", "execution_history"):
+                if key in record and not isinstance(record[key], list):
+                    raise MigrationError(f"{filename}: {key} must be a list")
+            if "outputs" in record:
+                for port, setting in record["outputs"].items():
+                    if not str(port).isdigit() or not isinstance(setting, Mapping):
+                        raise MigrationError(f"{filename}: invalid output settings")
+                    if "input" in setting and (
+                        isinstance(setting["input"], bool)
+                        or not isinstance(setting["input"], int)
+                        or not 1 <= setting["input"] <= 8
+                    ):
+                        raise MigrationError(f"{filename}: invalid output input")
+            for key in ("nav_targets", "playback_targets", "volume_targets", "power_on_targets", "power_off_targets"):
+                config = record.get("cec_config", {})
+                if key in config and not isinstance(config[key], list):
+                    raise MigrationError(f"{filename}: invalid CEC targets")
+            for profile_outputs in record.get("overrides", {}).values():
+                if not isinstance(profile_outputs, Mapping) or any(
+                    not str(port).isdigit() or not isinstance(settings, Mapping)
+                    for port, settings in profile_outputs.items()
+                ):
+                    raise MigrationError(f"{filename}: invalid scene overrides")
+                for settings in profile_outputs.values():
+                    if any(key in _OVERRIDE_FIELDS and not isinstance(value, bool) for key, value in settings.items()):
+                        raise MigrationError(f"{filename}: known override flags must be boolean")
+            for key in ("steps", "actions", "items"):
+                for step in record.get(key, []):
+                    if not isinstance(step, Mapping):
+                        raise MigrationError(f"{filename}: invalid step")
+                    if "targets" in step and not isinstance(step["targets"], list):
+                        raise MigrationError(f"{filename}: targets must be a list")
+                    if "params" in step and not isinstance(step["params"], Mapping):
+                        raise MigrationError(f"{filename}: step params must be an object")
+                    if "delay_ms" in step:
+                        _validate_integer(filename, "delay_ms", step["delay_ms"])
+            for key in ("execution_history", "execution_log"):
+                if any(not isinstance(item, Mapping) for item in record.get(key, [])):
+                    raise MigrationError(f"{filename}: invalid {key} record")
+                if key == "execution_history":
+                    for item in record.get(key, []):
+                        for field_name in ("steps_completed", "total_steps"):
+                            if field_name in item:
+                                _validate_integer(filename, field_name, item[field_name])
+        return
+    if filename == "device_settings.json":
+        if not isinstance(payload, Mapping):
+            raise MigrationError(f"{filename}: expected an object")
+        for key in ("inputs", "outputs", "presets"):
+            if key not in payload:
+                continue
+            values = payload[key]
+            if isinstance(values, Mapping):
+                values = values.values()
+            elif not isinstance(values, list):
+                raise MigrationError(f"{filename}: {key} must be a port map or legacy list")
+            elif payload.get(SCHEMA_VERSION_KEY) == CURRENT_SCHEMA_VERSION:
+                raise MigrationError(f"{filename}: current {key} must be a port map")
+            else:
+                ports = set()
+                for item in values:
+                    port = item.get("port", item.get("number")) if isinstance(item, Mapping) else None
+                    _validate_integer(filename, "legacy port identity", port)
+                    if not 1 <= int(port) <= 8 or int(port) in ports:
+                        raise MigrationError(f"{filename}: invalid or duplicate port identity")
+                    ports.add(int(port))
+            if any(not isinstance(item, Mapping) for item in values):
+                raise MigrationError(f"{filename}: invalid {key} record")
+        for key in ("favorite_presets", "dashboard_presets"):
+            if key in payload and not isinstance(payload[key], list):
+                raise MigrationError(f"{filename}: {key} must be a list")
+        return
+    if filename in ("flic_buttons.json", "system_shortcuts.json"):
+        if isinstance(payload, list):
+            if any(not isinstance(item, Mapping) for item in payload):
+                raise MigrationError(f"{filename}: invalid legacy record list")
+            identities = set()
+            for item in payload:
+                identity = (
+                    item.get("bdaddr") or item.get("address")
+                    if filename == "flic_buttons.json"
+                    else item.get("key") or item.get("id")
+                )
+                if not isinstance(identity, str) or not identity:
+                    raise MigrationError(f"{filename}: legacy record has no identity")
+                identity = _normalize_shortcut_key(identity) if filename == "system_shortcuts.json" else identity
+                if identity in identities or (filename == "flic_buttons.json" and not is_button_key(identity)):
+                    raise MigrationError(f"{filename}: invalid or duplicate legacy identity")
+                identities.add(identity)
+                if "order" in item:
+                    _validate_integer(filename, "order", item["order"])
+            return
+        if not isinstance(payload, Mapping):
+            raise MigrationError(f"{filename}: expected an object or legacy list")
+        for key, value in payload.items():
+            if filename == "flic_buttons.json" and is_button_key(key):
+                if not isinstance(value, (Mapping, str)):
+                    raise MigrationError(f"{filename}: invalid button record")
+                if isinstance(value, str) and payload.get(SCHEMA_VERSION_KEY) == CURRENT_SCHEMA_VERSION:
+                    raise MigrationError(f"{filename}: current button must be an object")
+                if isinstance(value, Mapping) and value.get("bdaddr", key) != key:
+                    raise MigrationError(f"{filename}: conflicting button address")
+            elif filename == "system_shortcuts.json" and is_shortcut_key(key):
+                if not isinstance(value, Mapping):
+                    raise MigrationError(f"{filename}: invalid shortcut record")
+                if "params" in value and not isinstance(value["params"], Mapping):
+                    raise MigrationError(f"{filename}: invalid shortcut params")
+                if "order" in value:
+                    _validate_integer(filename, "shortcut order", value["order"])
+
+
+def _validate_integer(filename: str, key: str, value: Any) -> None:
+    try:
+        if isinstance(value, bool) or not isinstance(value, (int, str)):
+            raise ValueError
+        int(value)
+    except (ValueError, TypeError, OverflowError) as exc:
+        raise MigrationError(f"{filename}: invalid {key}") from exc
+
+
+# Storage ownership is explicit: absent known fields stay deleted. Only unknown
+# fields of surviving identities are copied; removed records are never restored.
+_PROFILE_FIELDS = set(
+    "id name icon outputs cec_config macros power_on_macro power_off_macro pinned pin_order favorite dashboard_visible dashboard_order password_protected passcode_hash execution_log".split()
+)
+_SCENE_FIELDS = set(
+    "id name icon steps overrides favorite dashboard_visible dashboard_order password_protected passcode_hash last_executed execution_history".split()
+)
+_MACRO_FIELDS = set(
+    "id name icon description steps continue_on_error favorite dashboard_visible dashboard_order created_at updated_at".split()
+)
+_SHORTCUT_FIELDS = set(
+    "key id name label icon enabled order category favorite dashboard_visible builtin params type".split()
+)
+_OUTPUT_FIELDS = set("input enabled scaler scaler_mode hdcp_mode hdr_mode audio_mute arc".split())
+_CEC_FIELDS = set(
+    "nav_targets playback_targets volume_targets power_on_targets power_off_targets auto_resolved".split()
+)
+_OVERRIDE_FIELDS = {"input", "enabled", "hdcp", "hdr", "scaler", "arc", "audio_mute"}
+
+
+def _with_extensions(old: Any, new: Mapping, owned: set[str]) -> dict:
+    result = {k: v for k, v in old.items() if k not in owned} if isinstance(old, Mapping) else {}
+    result.update(new)
+    return result
+
+
+def _storage_record(old: Any, new: Mapping, owned: set[str]) -> dict:
+    result = _with_extensions(old, new, owned)
+    old = old if isinstance(old, Mapping) else {}
+    if "overrides" in new:
+        # Retain opaque nested metadata when the last known flag is cleared.
+        # Absent known flags must never be restored from the old raw object.
+        previous, updated = old.get("overrides", {}), new["overrides"]
+        overrides = {}
+        for profile_id in previous.keys() | updated.keys():
+            outputs = {}
+            before, after = previous.get(profile_id, {}), updated.get(profile_id, {})
+            for port in before.keys() | after.keys():
+                settings = _with_extensions(before.get(port, {}), after.get(port, {}), _OVERRIDE_FIELDS)
+                if settings:
+                    outputs[port] = settings
+            if outputs:
+                overrides[profile_id] = outputs
+        result["overrides"] = overrides
+    if "outputs" in new:
+        result["outputs"] = {
+            k: _with_extensions(old.get("outputs", {}).get(k, {}), v, _OUTPUT_FIELDS) for k, v in new["outputs"].items()
+        }
+    if "cec_config" in new:
+        result["cec_config"] = _with_extensions(old.get("cec_config", {}), new["cec_config"], _CEC_FIELDS)
+    if "steps" in new:
+        # Match the unchanged command/reference identity, never the old index:
+        # deleting/reordering a step must not move private fields to another step.
+        remaining = list(old.get("steps", []))
+        steps = []
+        for step in new["steps"]:
+            keys = ("command", "targets") if "command" in step else ("type", "id")
+            previous = next((s for s in remaining if all(s.get(k) == step.get(k) for k in keys)), {})
+            if previous:
+                remaining.remove(previous)
+            steps.append(_with_extensions(previous, step, set("command targets delay_ms type id params".split())))
+        result["steps"] = steps
+    if "execution_history" in new:
+        previous = {r.get("timestamp"): r for r in old.get("execution_history", [])}
+        fields = {"timestamp", "status", "steps_completed", "total_steps", "error"}
+        result["execution_history"] = [
+            _with_extensions(previous.get(r.get("timestamp"), {}), r, fields) for r in new["execution_history"]
+        ]
+    return result
+
+
+def storage_payload(filename: str, old: Any, new: Mapping) -> dict:
+    """Private lossless serialization, separate from public model projections."""
+    filename = LEGACY_FILENAMES.get(filename, filename)
+    catalogs = {
+        "profiles.json": ("profiles", _PROFILE_FIELDS),
+        "scenes.json": ("scenes", {"id", "name", "outputs", "cec_config"}),
+        "scenes_v2.json": ("scenes", _SCENE_FIELDS),
+        "cec_macros.json": ("macros", _MACRO_FIELDS),
+        "dashboard_layout.json": ("cards", {"type", "id", "order"}),
+    }
+    old = old if isinstance(old, Mapping) else {}
+    if filename in catalogs:
+        collection, fields = catalogs[filename]
+        result = _with_extensions(old, new, {collection, "schema_version"})
+        identify = (lambda r: (r.get("type"), r.get("id"))) if collection == "cards" else (lambda r: r.get("id"))
+        records = {identify(r): r for r in old.get(collection, [])}
+        result[collection] = [_storage_record(records.get(identify(r), {}), r, fields) for r in new[collection]]
+        return result
+    if filename in ("system_shortcuts.json", "flic_buttons.json"):
+        predicate = is_button_key if filename == "flic_buttons.json" else is_shortcut_key
+        fields = {"bdaddr", "name", "serial"} if filename == "flic_buttons.json" else _SHORTCUT_FIELDS
+        result = {k: v for k, v in old.items() if not predicate(k)}
+        result.update(
+            {
+                k: _with_extensions(old.get(k, {}), v, fields) if predicate(k) and isinstance(v, Mapping) else v
+                for k, v in new.items()
+            }
+        )
+        return result
+    return dict(new)
 
 
 # ---------------------------------------------------------------------------
@@ -158,11 +486,7 @@ def _ensure_map_collection(payload: Any) -> Any:
     """v1 -> v2: the file is a flat ``{record key: record}`` map, as v0 wrote it."""
     if not isinstance(payload, Mapping):
         raise MigrationError(f"expected an object, got {type(payload).__name__}")
-    return {
-        str(key): dict(item)
-        for key, item in payload.items()
-        if str(key) != SCHEMA_VERSION_KEY and isinstance(item, Mapping)
-    }
+    return dict(payload)
 
 
 # ---------------------------------------------------------------------------
@@ -172,6 +496,7 @@ def _ensure_map_collection(payload: Any) -> Any:
 
 def _migrate_flic_buttons_v1(payload: Any) -> Any:
     """``flic_buttons.json``: a bare list of buttons becomes a map keyed by bdaddr."""
+    metadata = {}
     entries: list[tuple[dict[str, Any], str]] = []
     if isinstance(payload, list):
         entries = [(item, _text(item.get("bdaddr") or item.get("address"))) for item in _records(payload)]
@@ -180,15 +505,20 @@ def _migrate_flic_buttons_v1(payload: Any) -> Any:
             key_text = _text(key)
             if key_text == SCHEMA_VERSION_KEY:
                 continue
-            if isinstance(item, Mapping):
+            if isinstance(item, Mapping) and (is_button_key(key_text) or item.get("bdaddr")):
                 entries.append((dict(item), _text(item.get("bdaddr")) or key_text))
+            elif isinstance(item, Mapping):
+                metadata[key_text] = dict(item)
             else:
-                # ``{"80:e4:...": "Couch Button"}``: the value was the button name.
-                entries.append(({"name": item}, key_text))
+                # Only an address identifies the old shorthand button format.
+                if is_button_key(key_text):
+                    entries.append(({"name": item}, key_text))
+                else:
+                    metadata[key_text] = item
     else:
         raise MigrationError(f"expected an object or a list, got {type(payload).__name__}")
 
-    buttons: dict[str, Any] = {}
+    buttons: dict[str, Any] = dict(metadata)
     for item, bdaddr in entries:
         if not bdaddr:
             continue
@@ -292,6 +622,7 @@ def _normalize_shortcut_key(key: str) -> str:
 
 def _migrate_shortcuts_v1(payload: Any) -> Any:
     """``shortcuts.json``: bare list -> the flat ``{key: prefs}`` map the reader uses."""
+    metadata = {}
     if isinstance(payload, list):
         items = _records(payload)
     elif isinstance(payload, Mapping):
@@ -300,13 +631,18 @@ def _migrate_shortcuts_v1(payload: Any) -> Any:
             key_text = _text(key)
             if key_text == SCHEMA_VERSION_KEY:
                 continue
+            if not is_shortcut_key(key_text):
+                metadata[key_text] = value
+                continue
+            if not isinstance(value, Mapping):
+                raise MigrationError(f"invalid shortcut record: {key_text}")
             items.append(dict(value) if isinstance(value, Mapping) else {"label": value})
             items[-1].setdefault("key", key_text)
             items[-1].setdefault("id", key_text)
     else:
         raise MigrationError(f"expected an object or a list, got {type(payload).__name__}")
 
-    shortcuts: dict[str, Any] = {}
+    shortcuts: dict[str, Any] = dict(metadata)
     for item in items:
         raw_key = _text(item.get("key")) or _text(item.get("id"))
         if not raw_key:
@@ -386,7 +722,9 @@ def _migrate_device_settings_v2(payload: Any) -> Any:
         raise MigrationError(f"expected an object, got {type(payload).__name__}")
     data = dict(payload)
     for key in ("inputs", "outputs", "presets"):
-        if not isinstance(data.get(key), Mapping):
+        if isinstance(data.get(key), list):
+            data[key] = _index_keyed(data[key])
+        elif not isinstance(data.get(key), Mapping):
             data[key] = {}
     return data
 
@@ -522,6 +860,7 @@ class MigrationRegistry:
         :raises MigrationError: the payload has a shape no migration accepts.
         """
         spec = self.spec(filename)
+        validate_payload(filename, payload)
         version = self.detect_version(payload)
         if version > self._current_version:
             raise SchemaVersionError(
@@ -608,7 +947,7 @@ def build_default_registry() -> MigrationRegistry:
         map_collection=True,
         migrations=[
             (1, _migrate_flic_buttons_v1),
-            (2, _ensure_map_collection),
+            (2, _migrate_flic_buttons_v1),
         ],
     )
     return registry
@@ -616,6 +955,24 @@ def build_default_registry() -> MigrationRegistry:
 
 #: The registry the module-level helpers use.
 DEFAULT_REGISTRY = build_default_registry()
+
+# Absolute paths prevent one failed volume from poisoning a different volume.
+_WRITE_FAILURES: dict[Path, str] = {}
+
+
+def block_path(path: Path | str, reason: str) -> None:
+    _WRITE_FAILURES[Path(path).resolve()] = reason
+
+
+def assert_writable(path: Path | str) -> None:
+    path = Path(path).resolve()
+    if path in _WRITE_FAILURES:
+        raise MigrationError(f"{path}: {_WRITE_FAILURES[path]}")
+    if path.exists() and (DEFAULT_REGISTRY.has(path.name) or path.name == "scenes.json"):
+        try:
+            validate_payload(path.name, atomic_read_json(path))
+        except (ValueError, OSError) as exc:
+            raise MigrationError(f"{path}: refusing unsafe write: {exc}") from exc
 
 
 # ---------------------------------------------------------------------------
@@ -632,6 +989,7 @@ class MigrationResult:
     ``missing``      there is no such file (nothing to do, not an error)
     ``unsupported``  the file was written by a newer release; left untouched
     ``unreadable``   the file is not valid JSON; left untouched
+    ``preserved``    an import source was validated and kept byte-for-byte
     """
 
     path: Path
@@ -662,8 +1020,13 @@ def write_backup(path: Path, from_version: int) -> Path | None:
     """
     target = backup_path_for(path, from_version)
     if target.exists():
-        _LOG.info("Keeping the existing migration backup %s", target)
-        return target
+        try:
+            if target.read_bytes() == path.read_bytes():
+                return target
+        except OSError:
+            pass
+        _LOG.error("Backup %s already contains different bytes; refusing to overwrite it", target)
+        return None
     try:
         shutil.copy2(path, target)
     except OSError as exc:
@@ -714,6 +1077,7 @@ def migrate_data_file(
             to_version=registry.current_version,
         )
     if version == registry.current_version:
+        validate_payload(path.name, payload)
         return MigrationResult(path=path, status="current", from_version=version, to_version=version)
 
     try:
@@ -723,17 +1087,15 @@ def migrate_data_file(
         return MigrationResult(path=path, status="unreadable", from_version=version)
 
     backup_file = write_backup(path, version) if backup else None
+    if backup and backup_file is None:
+        block_path(path, "backup failed before migration")
+        raise MigrationError(f"{path}: backup failed before migration")
     try:
         atomic_write_json(path, migrated)
     except (OSError, TimeoutError) as exc:
+        block_path(path, "atomic migration replacement failed")
         _LOG.error("Could not write the migrated %s: %s (the backup is intact)", path.name, exc)
-        return MigrationResult(
-            path=path,
-            status="unreadable",
-            from_version=version,
-            applied=tuple(applied),
-            backup=backup_file,
-        )
+        raise MigrationError(f"{path}: atomic migration replacement failed") from exc
 
     _LOG.info(
         "Migrated %s from schema_version %d to %d%s",
@@ -778,7 +1140,7 @@ def migrate_all_data_files(
             continue
         result = migrate_data_file(directory / name, registry=registry, backup=backup)
         if result.status != "missing":
-            results[registry.resolve(name)] = result
+            results[name] = result
     return results
 
 
@@ -792,24 +1154,41 @@ def load_versioned_json(
 ) -> Any:
     """Read a data file, migrating it on the way through when it is behind.
 
-    :param default: returned when the file does not exist or cannot be parsed.
+    :param default: returned only when the file does not exist.
     :param migrate: set False to read the file exactly as it is on disk.
     """
     registry = registry or DEFAULT_REGISTRY
     path = Path(path)
+    assert_writable(path)
+    if migrate and registry is DEFAULT_REGISTRY:
+        # Generic readers share the constructor import boundary: checking only
+        # the target's existence can turn an alias into a default-seeding path.
+        from .startup import prepare_profile_file, prepare_scene_files, prepare_shortcut_files
+
+        if path.name == "profiles.json":
+            prepare_profile_file(path.parent)
+        elif path.name == "scenes_v2.json":
+            prepare_scene_files(path.parent)
+        elif path.name == "system_shortcuts.json":
+            prepare_shortcut_files(path.parent)
     if not path.exists():
         return default
 
     try:
         payload = atomic_read_json(path)
     except (ValueError, OSError) as exc:
-        _LOG.warning("Could not read %s: %s", path.name, exc)
-        return default
+        block_path(path, "unreadable input")
+        raise MigrationError(f"{path}: could not read stored data") from exc
 
     if not migrate or not registry.has(path.name):
+        if registry.has(path.name) or path.name == "scenes.json":
+            validate_payload(path.name, payload)
         return payload
 
     result = migrate_data_file(path, registry=registry, backup=backup)
+    if result.status in ("unreadable", "unsupported"):
+        block_path(path, result.status)
+        raise MigrationError(f"{path}: {result.status} stored data")
     if not result.migrated:
         return payload
     # Re-read: the caller wants the current shape, which may carry fields the
@@ -826,17 +1205,24 @@ def save_versioned_json(
 ) -> bool:
     """Write a data file with the current ``schema_version`` stamped on it.
 
-    Unlike :func:`load_versioned_json` this never migrates: the caller owns the
-    payload, so the file is written as given (plus the version) and atomically.
+    Validate the existing file and import boundary before merging private
+    extensions into surviving records. Missing known fields and records stay
+    deleted. Public projections remain independent of this disk encoder.
 
     :returns: False when ``payload`` is not a JSON object (nothing is written).
     """
     registry = registry or DEFAULT_REGISTRY
     path = Path(path)
+    assert_writable(path)
     if not isinstance(payload, Mapping):
         _LOG.warning("Refusing to write %s: expected an object, got %s", path.name, type(payload).__name__)
         return False
 
+    if registry.has(path.name) or path.name == "scenes.json":
+        validate_payload(path.name, payload)
+    old = load_versioned_json(path, registry=registry, default={})
+    if registry.has(path.name) or path.name == "scenes.json":
+        payload = storage_payload(path.name, old, payload)
     stamped: dict[str, Any] = {SCHEMA_VERSION_KEY: registry.current_version}
     for key, value in payload.items():
         if key != SCHEMA_VERSION_KEY:

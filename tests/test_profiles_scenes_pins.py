@@ -145,7 +145,7 @@ class TestHashNeverSent:
         await make_profile(client, "kids", PIN)
         saved = json.loads((data_dir / "profiles.json").read_text(encoding="utf-8"))
         stored = saved["profiles"][0]["passcode_hash"]
-        assert stored.startswith("pbkdf2_sha256$") and PIN not in stored
+        assert password.is_passcode_hash(stored) and stored != PIN
         assert password.verify_passcode(PIN, stored)
 
     async def test_scene_routes_never_return_the_hash(self, client, data_dir):
