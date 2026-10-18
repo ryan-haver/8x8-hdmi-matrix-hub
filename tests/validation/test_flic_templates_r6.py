@@ -1,0 +1,242 @@
+"""Template verification for Flic button integrations (R6).
+
+Compares generated requests and JS SDK snippets against authoritative sources:
+- web/js/components/integrations-drawer.js
+- web/js/utils/api-copy.js
+- docs/FLIC_SETUP.md
+- tests/fixtures/flic_replay_r6/template_manifest.json
+
+Exercises actual generated SDK callbacks in Node.js with stubbed buttons/http.
+"""
+
+from __future__ import annotations
+
+import json
+import re
+import shutil
+import subprocess
+from pathlib import Path
+
+import pytest
+
+from tools.validate.clients.flic import generate_flic_sdk_snippet
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+DRAWER_JS = REPO_ROOT / "web" / "js" / "components" / "integrations-drawer.js"
+API_COPY_JS = REPO_ROOT / "web" / "js" / "utils" / "api-copy.js"
+DOC_FLIC = REPO_ROOT / "docs" / "FLIC_SETUP.md"
+FIXTURES_DIR = REPO_ROOT / "tests" / "fixtures" / "flic_replay_r6"
+MANIFEST_JSON = FIXTURES_DIR / "template_manifest.json"
+NODE_HARNESS = FIXTURES_DIR / "node_sdk_harness.cjs"
+
+
+def test_template_manifest_fixture_exists():
+    assert MANIFEST_JSON.is_file()
+    data = json.loads(MANIFEST_JSON.read_text(encoding="utf-8"))
+    assert "pre_fix_templates" in data
+    assert "post_fix_templates" in data
+    assert data["pre_fix_templates"]["switch_all"]["path_template"] == "/api/input/{input}"
+    assert data["post_fix_templates"]["switch_all"]["path_template"] == "/api/switch"
+
+
+def test_drawer_source_switch_all_updated_to_api_switch():
+    content = DRAWER_JS.read_text(encoding="utf-8")
+    # Verify switch_all now points to /api/switch with bodyObj = { input: config.inputNum }
+    assert "case 'switch_all':" in content
+    switch_all_match = re.search(
+        r"case 'switch_all':\s*urlPath = ['\"]/api/switch['\"];\s*bodyObj = \{\s*input:\s*config\.inputNum\s*\};",
+        content,
+    )
+    assert switch_all_match is not None, (
+        "integrations-drawer.js must route switch_all to /api/switch with JSON input bodyObj"
+    )
+
+
+def test_drawer_source_all_base_requests_match():
+    content = DRAWER_JS.read_text(encoding="utf-8")
+    assert "case 'preset':" in content
+    assert "`/api/preset/${config.presetNum}`" in content
+    assert "case 'profile':" in content
+    assert "`/api/profile/${config.profileId}/recall`" in content
+    assert "case 'switch_output':" in content
+    assert "`/api/output/${config.outputNum}/source`" in content
+    assert "case 'cycle_input':" in content
+    assert "`/api/input/${config.cycleDir}?output=${config.outputNum}`" in content
+    assert "case 'volume_control':" in content
+    assert "`/api/cec/output/${config.outputNum}/${config.volDir}`" in content
+    assert "case 'power':" in content
+    assert "`/api/power/${config.powerCmd}`" in content
+    assert "case 'cec':" in content
+    assert "`/api/cec/${config.cecTargetType}/${config.cecTargetPort}/${config.cecCmd}`" in content
+    assert "url: API_BASE + \"/api/integrations/flic/register\"" in content
+
+
+def test_api_copy_js_matches_rest_endpoints():
+    content = API_COPY_JS.read_text(encoding="utf-8")
+    assert "endpoint: `/api/preset/${preset}`" in content
+    assert "endpoint: `/api/profile/${encodeURIComponent(id)}/recall`" in content
+    assert "endpoint: '/api/switch'" in content
+    assert "endpoint: `/api/input/next?output=${output}`" in content
+    assert "endpoint: `/api/input/previous?output=${output}`" in content
+    assert "endpoint: `/api/power/${on ? 'on' : 'off'}`" in content
+    assert "endpoint: `/api/cec/${targetType}/${port}/${command}`" in content
+
+
+def test_flic_setup_doc_matches_table():
+    doc = DOC_FLIC.read_text(encoding="utf-8")
+    assert "/api/preset/{n}" in doc or "/api/preset/1" in doc or "/api/preset/2" in doc
+    assert "/api/profile/{id}/recall" in doc
+    assert "/api/switch" in doc
+    assert "/api/input/next?output=N" in doc or "/api/input/next?output=1" in doc
+    assert "/api/input/previous?output=N" in doc or "/api/input/previous?output=1" in doc
+    assert "/api/output/{n}/source" in doc or "/api/output/1/source" in doc
+    assert "/api/power/on" in doc
+    assert "/api/power/off" in doc
+    assert "/api/integrations/flic/register" in doc
+    assert "X-API-Key: <key>" in doc
+    assert "?key=<key>" in doc
+    assert "&key=<key>" in doc
+
+
+@pytest.mark.skipif(not shutil.which("node"), reason="Node.js runtime not found on PATH")
+def test_node_sdk_harness_single_click_and_filter(tmp_path: Path):
+    """Exercise generated JavaScript in real Node.js with stubbed buttons/http."""
+    snippet = generate_flic_sdk_snippet(
+        origin="http://127.0.0.1:8080",
+        button_type="button",
+        button_identifier="Kitchen Button",
+        target_type="switch_output",
+        gesture="single",
+        output_num=1,
+        input_num=2,
+    )
+    script_file = tmp_path / "kitchen_single.js"
+    script_file.write_text(snippet, encoding="utf-8")
+
+    buttons = [
+        {"name": "Kitchen Button", "bdaddr": "11:22:33:44:55:66", "serial": "FLIC-001"},
+        {"name": "Living Room", "bdaddr": "aa:bb:cc:dd:ee:ff", "serial": "FLIC-002"},
+    ]
+    events = [
+        # 1. Matching button, matching single click -> 1 request
+        {
+            "eventName": "buttonSingleOrDoubleClickOrHold",
+            "payload": {"bdaddr": "11:22:33:44:55:66", "isSingleClick": True, "isDoubleClick": False, "isHold": False},
+        },
+        # 2. Matching button, non-matching double click -> 0 requests
+        {
+            "eventName": "buttonSingleOrDoubleClickOrHold",
+            "payload": {"bdaddr": "11:22:33:44:55:66", "isSingleClick": False, "isDoubleClick": True, "isHold": False},
+        },
+        # 3. Non-matching button, matching single click -> 0 requests
+        {
+            "eventName": "buttonSingleOrDoubleClickOrHold",
+            "payload": {"bdaddr": "aa:bb:cc:dd:ee:ff", "isSingleClick": True, "isDoubleClick": False, "isHold": False},
+        },
+    ]
+
+    harness_input = {
+        "scriptPath": str(script_file),
+        "buttons": buttons,
+        "events": events,
+    }
+    proc = subprocess.run(
+        ["node", str(NODE_HARNESS)],
+        input=json.dumps(harness_input),
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    res = json.loads(proc.stdout)
+
+    # 1 startup registration request
+    assert res["startupRequestsCount"] == 1
+    reg_req = res["allRequests"][0]
+    assert reg_req["url"] == "http://127.0.0.1:8080/api/integrations/flic/register"
+    assert reg_req["method"] == "POST"
+    reg_body = json.loads(reg_req["content"])
+    assert len(reg_body["buttons"]) == 2
+    assert reg_body["buttons"][0]["name"] == "Kitchen Button"
+
+    # Event 1: matching single click triggered 1 request
+    assert res["eventResults"][0]["requestsTriggered"] == 1
+    action_req = res["eventResults"][0]["requests"][0]
+    assert action_req["url"] == "http://127.0.0.1:8080/api/output/1/source"
+    assert json.loads(action_req["content"]) == {"input": 2}
+
+    # Event 2: double click triggered 0 requests
+    assert res["eventResults"][1]["requestsTriggered"] == 0
+
+    # Event 3: wrong button triggered 0 requests
+    assert res["eventResults"][2]["requestsTriggered"] == 0
+
+
+@pytest.mark.skipif(not shutil.which("node"), reason="Node.js runtime not found on PATH")
+def test_node_sdk_harness_duo_and_twist(tmp_path: Path):
+    # Duo left double click
+    snippet_duo = generate_flic_sdk_snippet(
+        origin="http://127.0.0.1:8080",
+        button_type="duo",
+        button_identifier="",
+        target_type="preset",
+        gesture="left_double",
+        preset_num=3,
+    )
+    script_duo = tmp_path / "duo.js"
+    script_duo.write_text(snippet_duo, encoding="utf-8")
+
+    duo_events = [
+        # Left double click (buttonNumber 0, isDoubleClick true) -> 1 request
+        {
+            "eventName": "buttonSingleOrDoubleClickOrHold",
+            "payload": {"bdaddr": "00:11:22:33:44:55", "buttonNumber": 0, "isSingleClick": False, "isDoubleClick": True, "isHold": False},
+        },
+        # Right double click (buttonNumber 1) -> 0 requests
+        {
+            "eventName": "buttonSingleOrDoubleClickOrHold",
+            "payload": {"bdaddr": "00:11:22:33:44:55", "buttonNumber": 1, "isSingleClick": False, "isDoubleClick": True, "isHold": False},
+        },
+    ]
+
+    proc_duo = subprocess.run(
+        ["node", str(NODE_HARNESS)],
+        input=json.dumps({"scriptPath": str(script_duo), "buttons": [], "events": duo_events}),
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    res_duo = json.loads(proc_duo.stdout)
+    assert res_duo["eventResults"][0]["requestsTriggered"] == 1
+    assert res_duo["eventResults"][0]["requests"][0]["url"] == "http://127.0.0.1:8080/api/preset/3"
+    assert res_duo["eventResults"][1]["requestsTriggered"] == 0
+
+    # Twist rotate clockwise
+    snippet_twist = generate_flic_sdk_snippet(
+        origin="http://127.0.0.1:8080",
+        button_type="twist",
+        target_type="cycle_input",
+        gesture="rotate_cw",
+        cycle_dir="next",
+        output_num=1,
+    )
+    script_twist = tmp_path / "twist.js"
+    script_twist.write_text(snippet_twist, encoding="utf-8")
+
+    twist_events = [
+        # Rotate CW (direction > 0) -> 1 request
+        {"eventName": "buttonRotate", "payload": {"bdaddr": "00:11:22:33:44:55", "direction": 1}},
+        # Rotate CCW (direction < 0) -> 0 requests
+        {"eventName": "buttonRotate", "payload": {"bdaddr": "00:11:22:33:44:55", "direction": -1}},
+    ]
+
+    proc_twist = subprocess.run(
+        ["node", str(NODE_HARNESS)],
+        input=json.dumps({"scriptPath": str(script_twist), "buttons": [], "events": twist_events}),
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    res_twist = json.loads(proc_twist.stdout)
+    assert res_twist["eventResults"][0]["requestsTriggered"] == 1
+    assert res_twist["eventResults"][0]["requests"][0]["url"] == "http://127.0.0.1:8080/api/input/next?output=1"
+    assert res_twist["eventResults"][1]["requestsTriggered"] == 0
