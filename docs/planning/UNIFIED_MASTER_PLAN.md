@@ -21,8 +21,10 @@ effective-model checks pass, Luna handles bounded guides/evidence indexing,
 and Astra handles contract design and independent review. M3.1/DeepSeek are
 conditional alternatives, not assumed successful launches.
 
-R0 is accepted and merged, with its worktree removed. R1/R2/R3/R6 are dispatched
-from that contract; R4/R5/R7/R8 retain their dependencies. The
+R0, R1, R1P, R3/R3B and R6 are accepted and merged, with their worktrees
+removed. R2's M3 checkpoint was preserved after a failed full-scope result;
+a fresh Sol 6.1 high attempt is completing persistence on the integrated base.
+R4/R5 wait for accepted R2; R7/R8 follow the remaining code and fresh campaigns. The
 [execution record](RUNTIME_EXECUTION.md) tracks effective model observations,
 ownership clarifications and acceptance. Hardware and soak gates remain
 owner-observed.
@@ -75,11 +77,11 @@ The final suite must retain 100% route coverage. The final amd64 RC image `sha25
 
 ## Final validation gates and discovered gaps
 
-- **Runtime wiring:** the Phase 4 `MatrixService`, `ActionRunner`, and
-  `IntegrationLoader` classes exist and have tests, but the shipped `run.py`
-  still constructs `OreiMatrix` and `RestApiServer` directly or delegates to
-  `src/driver.py` for UC. Documentation must distinguish the framework from
-  actual runtime behavior. Runtime consolidation is not proven complete.
+- **Runtime wiring:** the Phase 6/7 candidate described below predates runtime
+  consolidation. On `wp-runtime-completion`, the shared composition, installed
+  console and UC bridge are now merged, but persistence, action parity and
+  integration lifecycle acceptance remain. Fresh source, installed-package and
+  image/client campaigns are required before claiming complete runtime behavior.
 - **Simulator and clients:** candidate API/browser/scripted-Remote and Home
   Assistant runs passed as recorded below. Features below their target and the
   Flic replay placeholder remain visible; these runs do not close hardware gates.

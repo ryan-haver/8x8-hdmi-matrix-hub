@@ -1,6 +1,7 @@
 # Runtime completion and release plan
 
-Status: executing; R0 accepted and the first implementation wave dispatched.
+Status: executing; R0/R1/R1P/R3/R3B/R6 accepted, R2 persistence finish active;
+R4/R5 follow its acceptance, then integrated campaigns, R7 guides and R8 review.
 See the [execution record](RUNTIME_EXECUTION.md). Updated 2026-10-18. This is the next execution
 plan after the integrated Phase 6/7 work. It supplements the original Phase 8
 validation gate rather than renumbering historical phases.
@@ -14,12 +15,13 @@ exact IDs, access limitations and capability sources.
 
 ## What must be completed
 
-The current application still starts `OreiMatrix` and `RestApiServer` directly
-or delegates to `src/driver.py`. The new service, executor, integration loader
-and persistence migrations have unit coverage but are not the shipped runtime.
-Flic routes ignore `FLIC_ENABLED`; HA discovery is not started by its flag;
-the dedicated Flic validation client is a placeholder. Completing these paths
-is development work before final validation, not a documentation-only closure.
+At the start of this plan, the application constructed `OreiMatrix` and
+`RestApiServer` directly or delegated to `src/driver.py`; the service, executor,
+loader and migrations were separate frameworks. Shared composition, packaged
+entrypoint, UC bridge and dedicated Flic replay are now accepted on the runtime
+branch. Persistence acceptance, action parity, flag/lifecycle completion and
+fresh integrated validation remain. Completing these paths is development work
+before final validation, not a documentation-only closure.
 
 No work below approves the three pending Tron snapshots. PR #36 and PR #37
 remain subject to their own CI and review gates. Their latest runs both fail
@@ -94,6 +96,13 @@ assign R2 to Argon high and record the change. If Google is constrained, Sol hig
 is the fallback for critical wiring and Luna high for bounded client/docs work.
 No fallback may use Anthropic. Prefer a fresh reviewer who did not author the
 implementation; unresolved critical review findings block acceptance.
+
+Execution adjustment: M3 produced a committed R2 checkpoint but did not complete
+the storage acceptance boundary. After its failed outcome and release, fresh
+Sol 6.1 high took over the same worktree and Task. Sol also completed bounded
+R1P installed-entry and R3B transaction corrections. These quality-driven
+assignments are recorded in the execution record; the original model balance
+does not override data-preservation or transaction requirements.
 
 ## Worktree briefs and acceptance
 
