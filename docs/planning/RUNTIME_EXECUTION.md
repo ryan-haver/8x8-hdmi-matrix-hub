@@ -30,7 +30,7 @@ All four worktrees start from accepted contract merge `70de5d9`.
 | R1 `wp-runtime-core-composition` | Sol 6.1 high / Codex | Foundation accepted/merged; actual startup awaits peer integration |
 | R2 `wp-runtime-persistence-wiring` | MiniMax M3 / OpenCode | Native configuration and active Build session identify M3; implementation underway |
 | R3 `wp-runtime-uc-adapter` | Argon high / Antigravity | Effective launch plus Gemini 4 Argon/high session header observed; implementation underway |
-| R6 `wp-validation-flic-replay` | Flash 3.8 high / Antigravity | Initial candidate passed 37 coordinator tests; review follow-up active in the same terminal/worktree |
+| R6 `wp-validation-flic-replay` | Flash 3.8 high / Antigravity; focused Sol follow-up | Second candidate passed 44 coordinator tests; final exact-replay/evidence corrections active in the same worktree |
 
 Launch observations alone are not acceptance evidence. R4/R5
 remain dependent on accepted R1/R2/R3 integration; the final campaign precedes
@@ -70,6 +70,15 @@ Filename-only persistence expectation updates are permitted in
 `tests/test_profiles_scenes_pins.py` and
 `tests/test_security_v3_hardening_scenarios.py`; hashing/security assertions
 remain intact and dedicated legacy plaintext-PIN import coverage is required.
+Two on-disk filename expectations in `tests/sim/test_sim_scenes_v2.py` are also
+transferred; its API/value assertions remain intact.
+
+Coordinator reproduced pre-merge R2 blockers with synthetic data: version-zero
+preparation continued after backup failure, and a real profile save/PIN rehash
+dropped unknown fields plus the schema marker. These are acceptance failures
+under correction, not changes accepted into this branch. R3 is correcting a
+setup/address signature mismatch against the real R1 types; its private UC
+metadata must not change the shared runtime interface.
 
 R6 candidate `465c10d` is not accepted. Its original tests passed, but review
 found a copied generator rather than proof against the actual UI generator,
@@ -77,7 +86,16 @@ incomplete refusal/partial-result checks and unsafe error evidence. Follow-up
 Task `task_2c07e3bae5ba` reuses its proven Flash terminal under Dispatch
 `ctx_5c50aeae95ca`. A narrow JS bridge in `tools/validate/clients/` is also
 authorized. R7 waits for this follow-up's acceptance, exact-template replay,
-auth/redaction checks and the later integrated campaign.
+auth/redaction checks and the later integrated campaign. That follow-up settled
+at `119cfac`; coordinator independently ran 44 tests successfully, but review
+still found copied startup registration, silently truncated callback requests
+and incomplete response/error redaction. Its Flash terminal was released.
+Fresh **Sol 6.1 high / Codex** now owns focused Task `task_04743d5e528d`, Dispatch
+`ctx_f0288cfc3a99`, in the same worktree. R7 also waits for its acceptance.
+
+Shared evidence commit `f116d61` redacts manual-auth/PIN values from persisted
+action descriptions, including nested hashes and query keys, without changing
+transport parameters. Nineteen model tests and 23 evidence/ledger tests passed.
 
 ## Evidence and release gates
 
