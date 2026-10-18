@@ -29,16 +29,12 @@ REST_API_PORT, OREI_API_PORT, MATRIX_DATA_DIR, UC_PORT, UC_DISABLE_MDNS. USE_MOD
 and WEBUI_ENABLED are ignored: the mode follows UC_ENABLED and the web UI is part
 of the core.
 
-With UC_ENABLED=true the hub runs ``src/driver.py`` exactly as before (REST API, web
-UI and the integration in one process). Moving the integration onto the core as a
-module is Phase 4 (docs/audits/UC_INTEGRATION_AUDIT.md §5).
+Both UC modes use one asynchronous runtime and the same matrix owner.
 """
 
 from __future__ import annotations
 
 import asyncio
-import contextlib
-import importlib.util
 import json
 import logging
 import os
@@ -257,67 +253,57 @@ def configure_logging(level: str) -> None:
 
 
 # ---------------------------------------------------------------------------
-# Core only (UC_ENABLED=false)
+# Shared runtime (both UC modes)
 # ---------------------------------------------------------------------------
 
 
 async def run_core(settings: Settings) -> None:
-    """Core services: matrix connection, REST API, web UI and kiosk. No integration is imported."""
-    from orei_matrix import OreiMatrix
-    from rest_api import RestApiServer, set_matrix_device
-
-    host, port = settings.matrix_host, settings.matrix_port
-    telnet_port: int | None = None  # None: OREI_TELNET_PORT, else 23 (BE-32)
-    if not host:
-        saved = saved_matrix_address(settings.uc_config_home)
-        if saved:
-            host, port = saved
-            telnet_port = saved_telnet_port(settings.uc_config_home)
-            _LOG.info("MATRIX_HOST not set: using %s:%d from the saved Remote integration setup", host, port)
-        else:
-            host = DEFAULT_MATRIX_HOST
-            _LOG.warning("MATRIX_HOST not set: trying %s:%d (set MATRIX_HOST to your matrix's address)", host, port)
-
-    config_dir = str(settings.uc_config_home or PROJECT_ROOT / "config")
-    _LOG.info("Matrix:       %s:%d", host, port)
-    _LOG.info("API / web UI: http://0.0.0.0:%d/ui  kiosk: /kiosk", settings.api_port)
-    _LOG.info("Data:         %s (config: %s)", settings.data_dir or "(module defaults)", config_dir)
-    _LOG.info("Integrations: none enabled (UC_ENABLED=false); ucapi imported: %s", "ucapi" in sys.modules)
+    """Run both integration modes through the shared composition root."""
+    from hub.runtime.composition import build_runtime
 
     stop = asyncio.Event()
     loop = asyncio.get_running_loop()
+    installed = []
     for sig in (signal.SIGTERM, signal.SIGINT):
-        # Python as PID 1 in a container ignores SIGTERM unless a handler is installed.
-        with contextlib.suppress(NotImplementedError, RuntimeError, ValueError):  # Windows: no signal handlers
-            loop.add_signal_handler(sig, stop.set)
-
-    matrix = OreiMatrix(host, port=port, telnet_port=telnet_port)
-    set_matrix_device(matrix, config_dir=config_dir)
-
-    # The API (and /api/health) comes up first; an unreachable matrix must not delay it.
-    api_server = RestApiServer(host="0.0.0.0", port=settings.api_port)
-    await api_server.start()
-    try:
         try:
-            if await matrix.connect():
-                _LOG.info("Connected to the matrix")
-            else:
-                _LOG.warning("Matrix not reachable at start-up; it reconnects when available")
-        except Exception as exc:  # noqa: BLE001 - the hub keeps serving regardless
-            _LOG.warning("Could not connect to the matrix on start-up: %s", exc)
-        _LOG.info("Hub running (core only). Stop with Ctrl+C or SIGTERM.")
-        await stop.wait()
-        _LOG.info("Shutting down...")
+            loop.add_signal_handler(sig, stop.set)
+            installed.append((sig, None))
+        except (NotImplementedError, RuntimeError, ValueError):
+            try:
+                previous = signal.getsignal(sig)
+                signal.signal(sig, lambda *_: loop.call_soon_threadsafe(stop.set))
+                installed.append((sig, previous))
+            except (OSError, ValueError):
+                pass
+    runtime = startup = stopped = None
+    try:
+        runtime = build_runtime(settings, environ=dict(os.environ))
+        startup = asyncio.create_task(runtime.start(), name="hub_startup")
+        stopped = asyncio.create_task(stop.wait(), name="hub_stop_signal")
+        done, _ = await asyncio.wait({startup, stopped}, return_when=asyncio.FIRST_COMPLETED)
+        if startup in done:
+            await startup
+            _LOG.info("Hub running; ucapi imported: %s", "ucapi" in sys.modules)
+            await stopped
     finally:
-        with contextlib.suppress(Exception):
-            await asyncio.wait_for(api_server.stop(), timeout=5)
-        with contextlib.suppress(Exception):
-            await asyncio.wait_for(matrix.disconnect(), timeout=5)
-        _LOG.info("Stopped.")
+        try:
+            if startup is not None and not startup.done():
+                startup.cancel()
+            if runtime is not None:
+                await runtime.stop()
+            if stopped is not None:
+                stopped.cancel()
+            await asyncio.gather(*(task for task in (startup, stopped) if task is not None), return_exceptions=True)
+        finally:
+            for sig, previous in installed:
+                if previous is None:
+                    loop.remove_signal_handler(sig)
+                else:
+                    signal.signal(sig, previous)
 
 
 # ---------------------------------------------------------------------------
-# Core + Unfolded Circle integration (UC_ENABLED=true): src/driver.py as today
+# Metadata compatibility helpers (the runtime passes metadata directly to UC)
 # ---------------------------------------------------------------------------
 
 
@@ -355,31 +341,8 @@ def use_driver_metadata(metadata_path: Path) -> Callable[[], None]:
 
 
 def run_uc_driver(settings: Settings) -> None:
-    """Run src/driver.py in this process (REST API + web UI + Remote integration), as before."""
-    import runpy
-
-    if importlib.util.find_spec("ucapi") is None:
-        raise ConfigError("UC_ENABLED=true but the ucapi package is not installed (pip install -r requirements-uc.txt)")
-
-    _LOG.info("API / web UI: http://0.0.0.0:%d/ui  kiosk: /kiosk", settings.api_port)
-    _LOG.info("Data:         %s (integration state: %s)", settings.data_dir or "(module defaults)",
-              settings.uc_config_home or "(driver default)")
-    _LOG.info("Integrations: Unfolded Circle Remote (port %s, mDNS %s, driver URL %s)",
-              settings.uc_port or "from driver.json",
-              "off" if settings.uc_disable_mdns else f"on, address {settings.uc_interface or 'all interfaces'}",
-              settings.uc_driver_url or "not set (mDNS)")
-    if settings.matrix_host:
-        _LOG.info("UC_ENABLED=true: the matrix address comes from the Remote's integration setup "
-                  "(config_state.json); MATRIX_HOST=%s is used only until a setup is saved", settings.matrix_host)
-    if not settings.uc_disable_mdns and settings.uc_interface in (None, "0.0.0.0"):
-        _LOG.warning("mDNS is on without UC_INTEGRATION_INTERFACE: set it to this host's LAN IP so the Remote "
-                     "gets a reachable address (docs/DOCKER.md, Remote 3 discovery)")
-
-    if settings.uc_driver_url:
-        use_driver_metadata(write_driver_metadata(settings.uc_driver_url))
-
-    os.chdir(PROJECT_ROOT)  # driver.py opens "driver.json" relative to the working directory
-    runpy.run_path(str(SRC_PATH / "driver.py"), run_name="__main__")
+    """Compatibility entry for callers; UC uses the same runtime as core mode."""
+    asyncio.run(run_core(settings))
 
 
 # ---------------------------------------------------------------------------
@@ -421,10 +384,7 @@ def main(argv: list[str] | None = None) -> int:
             check_writable(directory)
         export_env(settings, os.environ)
         sys.path.insert(0, str(SRC_PATH))
-        if settings.uc_enabled:
-            run_uc_driver(settings)
-        else:
-            asyncio.run(run_core(settings))
+        asyncio.run(run_core(settings))
     except ConfigError as exc:
         _LOG.error("Configuration error: %s", exc)
         return 2
