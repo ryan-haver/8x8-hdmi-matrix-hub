@@ -47,7 +47,7 @@ All four worktrees start from accepted contract merge `70de5d9`.
 | Track / worktree | Selected model and harness | Current evidence |
 | --- | --- | --- |
 | R1 `wp-runtime-core-composition` | Sol 6.1 high / Codex | Foundation accepted/merged; actual startup awaits peer integration |
-| R2 `wp-runtime-persistence-wiring` | MiniMax M3 / OpenCode; Sol finish requested | Data-preservation review failures remain; committed checkpoint requested before ownership transfer |
+| R2 `wp-runtime-persistence-wiring` | MiniMax M3 / OpenCode checkpoint; fresh Sol 6.1 high finish | M3 settled failed at `cf7ea7c` and was released; Sol retry is implementing the full storage boundary on integrated base `5ec374e` |
 | R3 `wp-runtime-uc-adapter` | Argon high / Antigravity; Sol transaction follow-up | Accepted/merged `ccc9483`; 151 coordinator tests passed; worktree removed |
 | R6 `wp-validation-flic-replay` | Flash 3.8 high / Antigravity; focused Sol follow-up | Accepted/merged `809f934`; 74 tests passed, one integrated disabled-route gate pending; worktree removed |
 
@@ -98,6 +98,16 @@ dropped unknown fields plus the schema marker. These are acceptance failures
 under correction, not changes accepted into this branch. R3 is correcting a
 setup/address signature mismatch against the real R1 types; its private UC
 metadata must not change the shared runtime interface.
+
+R2's M3 attempt subsequently settled with a failed full-scope checkpoint at
+`cf7ea7c`; its terminal was released. The coordinator merged accepted parent
+`99e9d56` into that clean child as `5ec374e`, preserving the checkpoint. Fresh
+**Sol 6.1 high / Codex** now owns retry Dispatch `ctx_cde87530b675` on the same
+Task `task_02e6418f9110`. Requested/effective launch preferences matched.
+The finish brief requires real edit/save/restart preservation, fail-closed
+backups and malformed/future files, safe legacy scene reconciliation, Flic
+metadata preparation, and unchanged source/installed startup tests. This is
+active work, not an accepted migration or startup result.
 
 R6 candidate `465c10d` is not accepted. Its original tests passed, but review
 found a copied generator rather than proof against the actual UI generator,
@@ -174,6 +184,11 @@ source files. Shared harness metadata now records the actual `hub.cli` entry,
 Flic/HA flags and active runtime/UC paths for evidence freshness; 38 focused
 registry/model/error-pipeline checks passed. Full source-client runs remain
 pending the real persistence integration.
+
+Deployment evidence now covers the shipped source, assets, runtime entrypoints
+and license files, rather than only legacy driver paths. Sixteen evidence-schema
+tests and focused Ruff checks passed. Old deployment records remain historical;
+these metadata changes do not imply a fresh image run.
 
 ## Evidence and release gates
 
