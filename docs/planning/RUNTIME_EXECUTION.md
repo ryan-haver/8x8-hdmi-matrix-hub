@@ -107,6 +107,27 @@ Shared evidence commit `f116d61` redacts manual-auth/PIN values from persisted
 action descriptions, including nested hashes and query keys, without changing
 transport parameters. Nineteen model tests and 23 evidence/ledger tests passed.
 
+Shared campaign commit `6e06bf0` registers 23 Flic scenarios and the client's
+four specialized intents, and prevents replay/transport errors from passing an
+unchanged-device check. Combined registry/model/evidence/runner checks: 61
+passed. The recorded Flic levels are retained pending a fresh runtime campaign.
+
+## Installed entrypoint scope extension (R1P)
+
+Source review found the packaged `orei-matrix-driver` console command still
+targets `driver:main`, bypassing the accepted shared runtime and migration
+barrier. Installed runtime path/metadata resolution also assumes a checkout.
+This is a shipped-path gap, not a completed packaging test result.
+
+Explicit Task `task_7cc233ade54f`, Dispatch `ctx_1346bbff7935`, assigns
+**Sol 6.1 high / Codex** to `wp-runtime-installed-entry`, based on `6e06bf0`.
+Effective launch and an active turn were observed. Ownership is restricted to
+packaged bootstrap/console metadata, root compatibility wrappers, narrow default
+path/driver-metadata seams and packaging tests. It also receives the known
+signal-handler type-annotation correction; R4 no longer owns that run.py change.
+R2/R3/R4/R5 files stay separate. R7 and the final source/wheel/image campaign
+wait for R1P acceptance as well as the original implementation tracks.
+
 ## Evidence and release gates
 
 Accepted worker reports must include the commit, actual files, targeted tests,
