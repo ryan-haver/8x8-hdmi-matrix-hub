@@ -4,7 +4,8 @@ One image runs the whole hub. The **core** (matrix control, REST API, web UI at
 `/ui`, kiosk at `/kiosk`) always runs. **Integrations** are switched on with
 environment variables; a disabled integration is not imported and opens no
 port. Today there is one: the Unfolded Circle Remote 3 integration
-(`UC_ENABLED=true`, WebSocket port 9095).
+(`UC_ENABLED=true`, WebSocket port 9095). The hub resolves every variable
+through one table — `src/hub/env.py` — so this guide and the code agree.
 
 ## Quick start (Docker Compose)
 
@@ -100,11 +101,36 @@ never with the one it already has, and saves it with the address in
 matrix the hub already uses needs no login. Without a login from a setup the
 matrix uses `OREI_USER` / `OREI_PASSWORD`.
 
+### Setup token (`UC_AUTH_TOKEN` / `ADMIN_PIN` fallback)
+
+When `UC_AUTH_TOKEN` is set (or `ADMIN_PIN` is set and `UC_AUTH_TOKEN` is not),
+the driver:
+
+- advertises **`pwd: true`** in the mDNS TXT record, so the Remote asks for a
+  password instead of running an unauthenticated setup;
+- adds a **"Hub setup token"** field to the setup page;
+- requires the token on every `DriverSetupRequest` (a first setup *and* a
+  reconfigure). A missing or wrong token returns
+  `ucapi.SetupError(error_type=ucapi.IntegrationSetupError.AUTHORIZATION_ERROR)`
+  and changes nothing on the hub.
+
+The driver accepts the token as `auth_token`, `token`, or `pin` and compares it
+with `hmac.compare_digest`; the value is never logged. Without one, the setup
+page keeps the **"Current matrix password (when changing address)"** field, and
+changing the matrix host or port requires re-entering the matrix's password
+(stored password is never sent to a new address — `src/driver.py:2182-2193`).
+
+The token guards *setup*, not the transport: anything that can reach TCP 9095
+can still subscribe to the entities and control the matrix. Restrict the port
+to the Remote's IP at the firewall (see "Network: firewall port 9095" in
+`docs/UNFOLDED_CIRCLE.md`).
+
 ## Environment variables
 
-run.py reads these; deprecated names still work and one warning at start-up lists
-them. Compose-only variables (`MATRIX_DATA_DIR` as the host folder, `HUB_PORT`,
-`HUB_HOST_IP`, `UC_HOST_PORT`, `HUB_CONTAINER_NAME`) only change the compose files.
+`run.py` resolves every variable through `src/hub/env.py`; deprecated names
+still work and one warning at start-up lists them. Compose-only variables
+(`MATRIX_DATA_DIR` as the host folder, `HUB_PORT`, `HUB_HOST_IP`, `UC_HOST_PORT`,
+`HUB_CONTAINER_NAME`) only change the compose files.
 
 | Variable | Deprecated names | Default | Effect |
 | --- | --- | --- | --- |
@@ -112,24 +138,42 @@ them. Compose-only variables (`MATRIX_DATA_DIR` as the host folder, `HUB_PORT`,
 | `MATRIX_PORT` | `OREI_PORT` | `443` | Matrix HTTPS port |
 | `API_PORT` | `REST_API_PORT`, `OREI_API_PORT` | `8080` | REST API, web UI and kiosk port (in the container) |
 | `DATA_DIR` | `MATRIX_DATA_DIR` (in the container) | image: `/data`; local: the modules' defaults | Persistent data directory; must be writable |
-| `LOG_LEVEL` | | `INFO` | `DEBUG`, `INFO`, `WARNING`, `ERROR` |
+| `LOG_LEVEL` | | `INFO` | `DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL` |
+| `ADMIN_PIN` | | unset | Admin PIN — when set, admin-level routes require an unlocked session |
+| `CONTROL_PIN` | | unset | Optional second PIN that unlocks control-level access only (Flic, kiosk "remembered device", REST `?key=`) |
+| `ALLOWED_HOSTS` | | unset | Comma-separated Host header values accepted in addition to IPs and `localhost` |
+| `CORS_ALLOWED_ORIGINS` | | unset | Comma-separated allowed origins, or `*`. Same-origin is always allowed |
 | `UC_ENABLED` | | `false` | `true` starts the Remote 3 integration; otherwise `ucapi` is not imported and 9095 stays closed |
 | `UC_INTEGRATION_HTTP_PORT` | `UC_PORT` | `9095` (driver.json) | Integration WebSocket port |
 | `UC_INTEGRATION_INTERFACE` | | all interfaces | Bind address, also the address mDNS announces: set it to the LAN IP |
 | `UC_DISABLE_MDNS_PUBLISH` | `UC_DISABLE_MDNS` | `false` | `true`: do not announce by mDNS (bridge networking) |
 | `UC_DRIVER_URL` | | not set | `ws://host:port` advertised to the Remote (bridge networking); must start with `ws://` or `wss://` |
 | `UC_CONFIG_HOME` | | `DATA_DIR` | Integration state (`config_state.json`, `driver.lock`) and the profile/macro/scene files |
+| `UC_AUTH_TOKEN` | | unset | Setup token — when set, `pwd: true` and the "Hub setup token" field are added; falls back to `ADMIN_PIN` |
 | `OREI_USER`, `OREI_PASSWORD` | | `Admin` / `admin` | Matrix login (a login entered in the Remote's setup takes precedence for its matrix) |
 | `OREI_VERIFY_SSL` | | `false` | Verify the matrix's TLS certificate |
 | `OREI_TELNET_PORT`, `OREI_USE_TELNET_CEC` | | `23` / `false` | Matrix Telnet options; `OREI_TELNET_PORT` is the default for a matrix whose setup names no `telnet_port` (`POST /api/settings/matrix-host`, `config_state.json`) |
 | `STATUS_POLL_INTERVAL` | | `5` | Seconds between the hub's own status reads, the source of the live `/ws` events in every mode ([`api/WEBSOCKET.md`](api/WEBSOCKET.md)); writes, Telnet pushes and link changes trigger a read at once |
 | `POLLING_INTERVAL`, `POLLING_ENABLED` | | `30` / `true` | Remote 3 entity updates (UC mode); the `/ws` events use `STATUS_POLL_INTERVAL` |
+| `FLIC_ENABLED` | | `true` in the framework | Framework flag; the current REST compatibility handlers remain mounted and do not read this environment flag. It does not disable Flic registration in the shipped runtime. |
+| `HA_DISCOVERY_ENABLED` | | `false` in the framework | Framework flag; `run.py` does not start the discovery module yet. Add the Home Assistant component manually. |
 
-No longer used (logged and ignored): `USE_MODULAR` (the mode follows
-`UC_ENABLED`), `WEBUI_ENABLED` (the web UI and kiosk are part of the core and
-always served), `REST_API_ENABLED=false` (the REST API is the core).
 A bad port number or a `UC_DRIVER_URL` that is not a WebSocket URL stops the hub
-with exit code 2 and a message saying what to fix.
+with exit code 2 and a message saying what to fix (`run.py:_port`,
+`run.py:load_settings`).
+
+### Retired variables (logged and ignored)
+
+These are accepted but no longer change behaviour:
+
+- `USE_MODULAR` — the mode follows `UC_ENABLED`.
+- `WEBUI_ENABLED` — the web UI and kiosk are part of the core and always served.
+- `REST_API_ENABLED=false` — the REST API is the core and always runs.
+
+The legacy `REST_API_PORT`, `OREI_API_PORT`, `MATRIX_DATA_DIR`, `UC_PORT` and
+`UC_DISABLE_MDNS` names are still read as aliases for their canonical names;
+one warning at start-up names them. See `src/hub/env.py` and `run.py:resolve_env`
+for the full table.
 
 ## Persistent storage
 
@@ -143,6 +187,8 @@ folder `MATRIX_DATA_DIR` (compose default `./data`):
 | `system_shortcuts.json`, `dashboard_layout.json` | Shortcuts and dashboard cards |
 | `profiles.json`, `cec_macros.json`, `scenes.json` | Profiles, CEC macros, legacy scenes |
 | `config_state.json`, `driver.lock` | Remote 3 integration: matrix address, names and the matrix login from its setup; single-instance lock |
+| `security.json` | Admin / control PIN hashes, persistent "remembered device" tokens and named API key hashes (`src/rest_api/security.py`) |
+| `flic_buttons.json` | Registered Flic buttons (`src/hub/integrations/flic/__init__.py:FlicButtonRegistry`) |
 
 The container runs as UID/GID 1000 (build-time `--build-arg APP_UID=… APP_GID=…`
 to change it). A host folder must be writable by that user: `sudo chown -R
@@ -228,6 +274,15 @@ Create a stack from `docker-compose.yml` and add `MATRIX_HOST` and
   `Integrations: Unfolded Circle Remote (port 9095, mDNS on, address …)`.
 - Make sure the firewall allows TCP 9095 and mDNS (UDP 5353).
 - Or register it by URL (bridge networking, above).
+
+### The Remote 3 reports `AUTHORIZATION_ERROR` on setup
+
+- The hub has `UC_AUTH_TOKEN` (or `ADMIN_PIN`) set; enter the **"Hub setup token"**
+  on the Remote's setup page. A reconfigure needs it too, not just the first
+  setup (`src/driver.py:2182-2193`).
+- A token change requires re-entering it on each Remote (`pwd` is advertised at
+  startup). Keep the token stable, or re-enter it on every Remote after
+  changing it.
 
 ### The container keeps restarting
 

@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import json
 import re
+import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -22,6 +24,24 @@ from tools.validate.registry import (
 from tools.validate.scenarios import discover
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
+def test_scenario_discovery_does_not_require_an_installed_hub():
+    """The validation CLI must discover scenarios in a requirements-only checkout."""
+    code = """
+import sys
+class UninstalledHub:
+    def find_spec(self, fullname, path=None, target=None):
+        if fullname == 'hub' or fullname.startswith('hub.'):
+            raise ModuleNotFoundError("No module named 'hub'", name=fullname)
+sys.meta_path.insert(0, UninstalledHub())
+from tools.validate.scenarios import discover
+assert {'contracts.api_info', 'contracts.openapi_spec', 'contracts.api_docs'} <= discover().keys()
+"""
+    result = subprocess.run(
+        [sys.executable, "-c", code], cwd=ROOT, capture_output=True, text=True, timeout=30,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
 
 
 @pytest.fixture(scope="module")

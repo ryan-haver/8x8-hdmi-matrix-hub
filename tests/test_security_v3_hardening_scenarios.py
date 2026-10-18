@@ -294,6 +294,10 @@ async def test_wrong_pin_keeps_health_responsive_during_pbkdf2(hub, kind, monkey
 
         monkeypatch.setattr(password, "verify_passcode", held_verify)
         await asyncio.sleep(0.03)
+        # Measure the verification window, excluding fixture creation and
+        # unrelated startup scheduling delays from the monitor's rolling peak.
+        client.app[RUNTIME_MONITOR_KEY]._samples.clear()
+        await asyncio.sleep(0.03)
         suffix = "recall" if kind == "profile" else "execute"
         before = sim.state.to_dict()
         pending = asyncio.create_task(client.post(f"{resource['path']}/{suffix}", json={"passcode": "9999"}))

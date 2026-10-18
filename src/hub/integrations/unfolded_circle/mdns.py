@@ -7,6 +7,8 @@ import logging
 import socket
 from typing import Any
 
+from hub import __version__
+
 from .config import UCIntegrationConfig
 
 _LOG = logging.getLogger("uc.mdns")
@@ -38,7 +40,7 @@ class UCMdnsPublisher:
         *,
         driver_id: str = "hdmi_matrix",
         name: str = "HDMI Matrix",
-        version: str = "0.1.0",
+        version: str = __version__,
         developer: str = "Ryan Haver",
         port: int | None = None,
         interface: str | None = None,

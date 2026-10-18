@@ -190,7 +190,10 @@ async def connected(service: MatrixService) -> MatrixService:
 
 
 def test_package_version() -> None:
-    assert __version__ == "0.3.0"
+    from packaging.version import Version
+
+    # Release bumps, including RCs, must retain a canonical PEP 440 version.
+    assert str(Version(__version__)) == __version__
 
 
 # =============================================================================

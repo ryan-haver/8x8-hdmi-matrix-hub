@@ -9,6 +9,8 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import Any
 
+from hub import __version__
+
 _LOG = logging.getLogger("hub.integrations.homeassistant")
 
 SERVICE_TYPE = "_orei-hdmi-matrix._tcp.local."
@@ -83,7 +85,7 @@ class HomeAssistantDiscoveryIntegration(Integration):
     def build_zeroconf_properties(self, snapshot: Any = None) -> dict[str, str]:
         """Build dictionary of properties advertised in the Zeroconf TXT record."""
         props: dict[str, str] = {
-            "version": "1.1.0",
+            "version": __version__,
             "service": "orei_hdmi_matrix",
             "api_port": str(self.config.api_port),
             "path": "/api",

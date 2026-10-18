@@ -9,6 +9,7 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
+from hub import __version__
 from src.hub.integrations.unfolded_circle import (
     STANDARD_CEC_COMMANDS,
     SURVIVING_GOLDEN_ENTITY_IDS,
@@ -676,7 +677,7 @@ def test_mdns_service_info_without_auth_token_omits_pwd() -> None:
     assert info["name"] == f"hdmi_matrix.{UC_MDNS_SERVICE_TYPE}"
     assert info["port"] == 9095
     assert info["address"] == "192.168.1.25"
-    assert info["properties"]["ver"] == "0.1.0"
+    assert info["properties"]["ver"] == __version__
     assert info["properties"]["developer"] == "Ryan Haver"
     assert "pwd" not in info["properties"]
 

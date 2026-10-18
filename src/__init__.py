@@ -4,4 +4,4 @@ OREI HDMI Matrix Integration for Unfolded Circle Remote.
 This package provides the integration driver and OREI matrix control library.
 """
 
-__version__ = "0.1.0"
+from .hub import __version__ as __version__

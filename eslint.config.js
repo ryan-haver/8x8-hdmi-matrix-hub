@@ -5,6 +5,9 @@
 // from the source at lint time (see appGlobals below), so the list never goes
 // stale and `no-undef` still catches genuinely undefined names.
 //
+// web/js/core/ holds ES modules (WP-E2): they share nothing through the global
+// scope, so only their window.* assignments count as app globals.
+//
 // Existing violations: web/ is frozen until the Phase 0 UI baseline is signed
 // off, so current findings are recorded in eslint-suppressions.json (ESLint
 // bulk suppressions) instead of being fixed. `npm run lint:js` therefore
@@ -17,6 +20,7 @@ import js from '@eslint/js';
 import globals from 'globals';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
+const coreDir = path.join(root, 'web', 'js', 'core');
 
 /** Collect names declared at the top level of the classic scripts or assigned to window.*. */
 function appGlobals() {
@@ -27,8 +31,10 @@ function appGlobals() {
       if (entry.isDirectory()) walk(full);
       else if (entry.name.endsWith('.js')) {
         const src = fs.readFileSync(full, 'utf8');
-        for (const m of src.matchAll(/^(?:async\s+)?(?:function\*?|class|const|let|var)\s+([A-Za-z_$][\w$]*)/gm)) {
-          names.add(m[1]);
+        if (!full.startsWith(coreDir + path.sep)) {
+          for (const m of src.matchAll(/^(?:async\s+)?(?:function\*?|class|const|let|var)\s+([A-Za-z_$][\w$]*)/gm)) {
+            names.add(m[1]);
+          }
         }
         for (const m of src.matchAll(/\bwindow\.([A-Za-z_$][\w$]*)\s*=(?!=)/g)) names.add(m[1]);
       }
@@ -59,6 +65,7 @@ export default [
   {
     // The browser app: classic scripts sharing one global scope.
     files: ['web/js/**/*.js'],
+    ignores: ['web/js/core/**'],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'script',
@@ -69,6 +76,15 @@ export default [
       // module system today, not an accidental redeclaration or unused var.
       'no-redeclare': ['error', { builtinGlobals: false }],
       'no-unused-vars': ['error', { vars: 'local', args: 'none', caughtErrors: 'none' }],
+    },
+  },
+  {
+    // The browser app's ES modules (WP-E2): imports/exports, no shared globals.
+    files: ['web/js/core/**/*.js'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'module',
+      globals: { ...globals.browser },
     },
   },
   {

@@ -10,10 +10,18 @@
 #
 #   docker build -t hdmi-matrix-hub .
 #
+# The image version label is the hub's one version (hub.__version__ in
+# src/hub/__init__.py), passed in as a build argument; CI reads it from that
+# file. For a labelled local build:
+#   docker build --build-arg VERSION="$(python -c "import sys; sys.path.insert(0, 'src'); import hub; print(hub.__version__)")" -t hdmi-matrix-hub .
+#
 # The old build targets `full` and `api-only` are kept as aliases of the same
 # image (UC is off unless UC_ENABLED=true); they will be removed in a later release.
 
-FROM python:3.12-slim AS hub
+# Base image pinned by digest (SEC-15): the multi-platform index of python:3.12-slim,
+# so amd64 and arm64 builds both resolve to a known image. Dependabot
+# (.github/dependabot.yml) proposes digest updates; keep the tag beside it.
+FROM python:3.12-slim@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1 AS hub
 
 LABEL org.opencontainers.image.title="8x8 HDMI Matrix Hub" \
       org.opencontainers.image.description="REST API, web UI, kiosk and integrations for 8x8 HDMI matrix switches" \
@@ -44,6 +52,8 @@ RUN groupadd --gid "${APP_GID}" app \
 COPY src/ ./src/
 COPY web/ ./web/
 COPY run.py run_server.py driver.json ./
+COPY LICENSE THIRD_PARTY_NOTICES.md ./
+COPY LICENSES/ ./LICENSES/
 RUN python -m compileall -q src run.py
 
 ENV DATA_DIR=/data \
@@ -58,6 +68,12 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=3 \
     CMD ["python", "run.py", "healthcheck"]
 
 USER appuser
+
+# hub.__version__ ("unknown" without the build argument). Declared last: an ARG
+# takes part in the cache key of every later RUN, so a version bump must not
+# reinstall the dependencies.
+ARG VERSION=unknown
+LABEL org.opencontainers.image.version="${VERSION}"
 
 CMD ["python", "run.py"]
 

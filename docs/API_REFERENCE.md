@@ -53,11 +53,11 @@ The following fields are accepted by `PUT /api/profile/{id}`:
 http://<host>:8080/api
 ```
 
-Default: `http://192.168.1.145:8080/api` (Docker host IP)
+Default port: `8080`. Use the hub host's address; configure `API_PORT` to change it.
 
-## Response Format
+## Response Format & OpenAPI 3.1 Contract
 
-All responses are JSON with consistent structure:
+JSON control API responses use the uniform `ApiResponseEnvelope` schema (`#/components/schemas/ApiResponseEnvelope` in `GET /api/openapi.json`). The specification endpoint itself returns a raw OpenAPI document; `/api/docs` returns HTML.
 
 ```json
 {
@@ -67,26 +67,47 @@ All responses are JSON with consistent structure:
 }
 ```
 
-Error responses:
+Error responses include a client-safe message and, for unexpected server errors (`500`), an `error_id` correlation identifier that matches the server log line:
 ```json
 {
   "success": false,
   "data": null,
-  "error": "Error message here"
+  "error": "Error message here",
+  "error_id": "a1b2c3d4"
 }
 ```
 
 HTTP Status Codes:
 - `200` - Success
-- `400` - Bad request (invalid parameters)
-- `500` - Server error
+- `201` - Created (e.g., `POST /api/auth/api-keys`, `POST /api/v2/scenes`)
+- `207` - Multi-Status (partial profile recall)
+- `400` - Bad request (invalid parameters or validation failure)
+- `401` - Unauthorized (session unlock, PIN, or API key required)
+- `403` - Forbidden (cross-origin mutation denied or insufficient access level)
+- `404` - Resource not found
+- `415` - Unsupported Media Type (JSON `Content-Type: application/json` required for non-empty mutation bodies)
+- `421` - Misdirected Request (`Host` header not in `ALLOWED_HOSTS`, localhost, `.local`, or IP literal)
+- `429` - Too Many Requests (rate limit or PIN lockout)
+- `500` - Internal server error (includes `error_id`)
 - `503` - Service unavailable (matrix not connected)
+
+### Authentication & Security Schemes
+
+Read endpoints (`GET`) are open by default (except `GET /api/auth/devices` and `GET /api/auth/api-keys`, which require `admin` when `ADMIN_PIN` is set). Mutation endpoints (`POST`, `PUT`, `DELETE`, `PATCH`) enforce two access tiers when `ADMIN_PIN` or `CONTROL_PIN` is configured:
+
+| Scheme | OpenAPI Name | Location | Tier | Description |
+|--------|--------------|----------|------|-------------|
+| Session Cookie | `AdminSessionCookie` | Cookie: `orei_session` | `admin` or `control` | Set by `POST /api/auth/unlock` (or `/api/auth/login`). Refreshed on activity (`30m` idle timeout). |
+| API Key Header | `ControlApiKeyHeader` | Header: `X-API-Key` | `control` | API key created via `POST /api/auth/api-keys` or configured via `API_KEY` / `CONTROL_API_KEY`. |
+| API Key Query | `ControlApiKeyQuery` | Query: `?key=<token>` | `control` | Same API key passed in URL query string for clients that cannot set HTTP headers. |
+| Admin PIN Header | `AdminPinHeader` | Header: `X-Admin-PIN` | `admin` | Direct Admin PIN verification for stateless admin requests when `ADMIN_PIN` is configured. |
+| Remembered device | `RememberedDeviceCookie` | Cookie: `orei_device_token` | `control` | A device remembered during unlock; never grants admin access. |
 
 ---
 
 ## Endpoints
 
-### Health & Status
+### Health, OpenAPI & Status
 
 #### GET /api/health
 Health check endpoint for monitoring.
@@ -101,9 +122,39 @@ Response:
   "success": true,
   "data": {
     "status": "healthy",
-    "service": "orei-hdmi-matrix"
-  }
+    "service": "orei-hdmi-matrix",
+    "api_version": "2.10.0",
+    "version": "2.10.0",
+    "matrix": {
+      "configured": true,
+      "connected": true,
+      "host": "192.168.0.100",
+      "last_successful_poll": "2026-10-17T12:00:00+00:00",
+      "telnet_connected": true
+    },
+    "runtime": {
+      "uptime_s": 120.5,
+      "loop_lag_ms": 0.4,
+      "task_count": 6,
+      "ws_clients": 1
+    }
+  },
+  "error": null
 }
+```
+
+#### GET /api/openapi.json
+Returns the live OpenAPI 3.1.0 specification document generated from the application's registered routes (`src/hub/openapi.py`). Default server URL is relative (`/`).
+
+```bash
+curl http://localhost:8080/api/openapi.json
+```
+
+#### GET /api/docs
+Serves the interactive Swagger UI HTML page backed by `/api/openapi.json` (with an offline route-catalog fallback for air-gapped LANs).
+
+```bash
+curl http://localhost:8080/api/docs
 ```
 
 #### GET /api/status
@@ -446,7 +497,9 @@ curl -X POST http://localhost:8080/api/ext-audio/1/source \
 
 ---
 
-### Scenes (v2.7.0+)
+### Scenes (v2.7.0+ — Legacy v1 Compatibility Aliases)
+
+> **Deprecation / Compatibility Note**: The `/api/scenes` and `/api/scene/*` endpoints are **legacy v1 compatibility aliases** backed by the same storage as Profiles (`/api/profiles` and `/api/profile/*`). New integrations should use **Profiles** (`/api/profiles`, `/api/profile/{profile_id}`) for saved matrix configurations with macro/icon support, or **Scenes v2** (`/api/v2/scenes`, `/api/v2/scenes/{scene_id}`) for multi-step orchestrated scenes with step validation, per-profile overrides, and execution history.
 
 Save and recall named routing configurations (activity-based presets).
 
@@ -1114,10 +1167,10 @@ Environment variables:
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `API_PORT` | `8080` | Port for the REST API, web UI and kiosk (`REST_API_PORT` is a deprecated alias) |
+| `API_PORT` | `8080` | Port for the REST API, web UI and kiosk (`REST_API_PORT` and `OREI_API_PORT` are deprecated aliases) |
 
 The REST API is the core of the hub and always runs (`REST_API_ENABLED=false` is
-ignored). All environment variables: [DOCKER.md](DOCKER.md#environment-variables).
+ignored). For the complete environment variable reference (canonical core variables, integration variables, deprecated aliases, retired flags, and transport/security tuning knobs), see [CONFIGURATION.md](CONFIGURATION.md) and [DOCKER.md](DOCKER.md#environment-variables).
 
 ---
 
@@ -1379,3 +1432,228 @@ Response:
   }
 }
 ```
+
+---
+
+## WebSocket Protocol 1 Reference (`/ws`)
+
+The hub streams live matrix state and action notifications over `GET /ws` (Protocol `1`). Full prose contract: [`docs/api/WEBSOCKET.md`](api/WEBSOCKET.md); JSON Schema: [`docs/api/websocket.schema.json`](api/websocket.schema.json).
+
+### Client -> Server Commands
+
+| Command (`command` or `type`) | Payload | Response Event | Description |
+|-------------------------------|---------|----------------|-------------|
+| `ping` | `{"command": "ping"}` | `pong` | Heartbeat check; server answers `{"event": "pong", "data": {}}`. |
+| `get_status` | `{"command": "get_status"}` | `status` or `matrix_connection` | Request an immediate full status snapshot (or link state when matrix is offline). |
+
+### Server -> Client Events (21 Schema Events)
+
+| Event (`event`) | Required `data` Fields | Description |
+|-----------------|------------------------|-------------|
+| `connected` | `message`, `client_count`, `protocol`, `matrix` | Sent immediately on WebSocket connection with client count, protocol version (1), and matrix link summary. |
+| `status` | `connected`, `state`, `host`, `routing`, `input_names`, `output_names`, `inputs`, `outputs_detail` | Full matrix status snapshot (routing, input/output names, signal/connection state, power, HDCP/HDR/scaler/ARC). |
+| `matrix_connection` | `connected`, `state`, `host` | Matrix link state transition (`connected`, `degraded`, `connecting`, `backoff`, `disconnected`, `not_configured`). |
+| `routing_change` | `output`, `input`, `input_name`, `previous_input` | An output changed its routed input (`output`, `input`, `input_name`, `previous_input`). |
+| `power_change` | `power` | Matrix power state changed (`on` or `off`). |
+| `signal_change` | `input`, `has_signal`, `input_name` | Input active video signal detection changed (`input`, `has_signal`, `input_name`). |
+| `connection_change` | `output`, `connected`, `output_name` | Output sink/HPD connection detection changed (`output`, `connected`, `output_name`). |
+| `cable_change` | `type`, `port`, `connected`, `name` | Telnet physical cable state changed on an input or output (`type`, `port`, `connected`, `name`). |
+| `audio_mute` | `output`, `muted` | Output audio mute state changed (`output`, `muted`). |
+| `input_name_change` | `input`, `name` | Input port display name changed (`input`, `name`). |
+| `output_name_change` | `output`, `name` | Output port display name changed (`output`, `name`). |
+| `preset_recall` | `preset` | Hardware preset 1-8 recalled (`preset`). |
+| `preset_recall_failed` | `preset` | Hardware preset 1-8 recall failed (`preset`). |
+| `switch_failed` | `input`, `output` | Single output switch failed on the matrix (`input`, `output`). |
+| `switch_all_failed` | `input` | Route-to-all switch failed on the matrix (`input`). |
+| `cec_command` | `type`, `port`, `command` | CEC power command sent to an input or output port (`type`, `port`, `command`). |
+| `device_settings` | `type`, `number` | Single input/output/preset customization updated (`type`, `number`, optional `name`, `icon`, `color`). |
+| `device_settings_full` | *(none / optional)* | Bulk device settings updated (`inputs`, `outputs`, `presets`). |
+| `scene_execution_error` | `scene_id`, `scene_name`, `steps_completed`, `total_steps`, `error` | Scene v2 execution encountered a step failure (`scene_id`, `scene_name`, `steps_completed`, `total_steps`, `error`). |
+| `pong` | *(none / optional)* | Reply to client `ping` command. |
+| `error` | `message` | Client command error (`message`). |
+
+---
+
+## Complete OpenAPI 3.1 Route Catalog
+
+Every route registered by `src/rest_api/app.py::create_rest_app()` and emitted by `src/hub/openapi.py::build_openapi_spec()` (`GET /api/openapi.json`):
+
+| Method & Path | Tag | Access Level | Operation ID | Summary |
+|---------------|-----|--------------|--------------|---------|
+| `DELETE /api/auth/api-keys/{key_id}` | `auth` | `admin` | `delete_api_auth_api_keys_key_id` | auth api keys |
+| `DELETE /api/auth/devices/{device_id}` | `auth` | `admin` | `delete_api_auth_devices_device_id` | auth devices |
+| `DELETE /api/cec/macro/{macro_id}` | `cec` | `admin` | `delete_api_cec_macro_macro_id` | Delete a CEC macro. |
+| `DELETE /api/dashboard/cards` | `dashboard` | `admin` | `delete_api_dashboard_cards` | DELETE /api/dashboard/cards?type=profile&id=movie_night — remove a card. |
+| `DELETE /api/profile/{profile_id}` | `profiles` | `admin` | `delete_api_profile_profile_id` | Delete a profile. |
+| `DELETE /api/scene/{scene_id}` | `scenes` | `admin` | `delete_api_scene_scene_id` | handle delete profile *(legacy alias for `/api/profile*`)* |
+| `DELETE /api/shortcuts/{key}` | `shortcuts` | `admin` | `delete_api_shortcuts_key` | DELETE /api/shortcuts/{key} — delete a user-defined shortcut. |
+| `DELETE /api/system-shortcuts/{key}` | `system-shortcuts` | `admin` | `delete_api_system_shortcuts_key` | DELETE /api/shortcuts/{key} — delete a user-defined shortcut. |
+| `DELETE /api/v2/scenes/{scene_id}` | `v2` | `admin` | `delete_api_v2_scenes_scene_id` | DELETE /api/v2/scenes/{scene_id} — delete a scene. |
+| `DELETE /api/v2/scenes/{scene_id}/override` | `v2` | `admin` | `delete_api_v2_scenes_scene_id_override` | DELETE /api/v2/scenes/{scene_id}/override — remove an override. |
+| `DELETE /api/v2/scenes/{scene_id}/steps/{index}` | `v2` | `admin` | `delete_api_v2_scenes_scene_id_steps_index` | DELETE /api/v2/scenes/{scene_id}/steps/{index} — remove step at index. |
+| `GET /` | `root` | `public` | `get_root` | API documentation/index endpoint. |
+| `GET /api` | `root` | `public` | `get_api` | API documentation/index endpoint. |
+| `GET /api/auth/api-keys` | `auth` | `admin` | `get_api_auth_api_keys` | auth api keys |
+| `GET /api/auth/devices` | `auth` | `admin` | `get_api_auth_devices` | auth devices |
+| `GET /api/auth/status` | `auth` | `public` | `get_api_auth_status` | auth status |
+| `GET /api/cec/capabilities` | `cec` | `public` | `get_api_cec_capabilities` | Get CEC capabilities for all input and output devices. |
+| `GET /api/cec/commands` | `cec` | `public` | `get_api_cec_commands` | List available CEC commands. |
+| `GET /api/cec/commands/{type}` | `cec` | `public` | `get_api_cec_commands_type` | Get supported CEC commands for a device type (input or output). |
+| `GET /api/cec/input/{input}/capabilities` | `cec` | `public` | `get_api_cec_input_input_capabilities` | Get CEC capabilities for a specific input device. |
+| `GET /api/cec/macro/{macro_id}` | `cec` | `public` | `get_api_cec_macro_macro_id` | Get details of a specific macro. |
+| `GET /api/cec/macros` | `cec` | `public` | `get_api_cec_macros` | List all saved CEC macros. |
+| `GET /api/cec/macros/favorites` | `cec` | `public` | `get_api_cec_macros_favorites` | GET /api/cec/macros/favorites — list macros marked as favorites. |
+| `GET /api/cec/output/{output}/capabilities` | `cec` | `public` | `get_api_cec_output_output_capabilities` | Get CEC capabilities for a specific output device. |
+| `GET /api/dashboard/layout` | `dashboard` | `public` | `get_api_dashboard_layout` | GET /api/dashboard/layout — return the current full layout. |
+| `GET /api/device-settings` | `device-settings` | `public` | `get_api_device_settings` | GET /api/device-settings - Get all device settings. |
+| `GET /api/device-settings/dashboard-presets` | `device-settings` | `public` | `get_api_device_settings_dashboard_presets` | GET /api/device-settings/dashboard-presets — list dashboard-pinned preset numbers. |
+| `GET /api/device-settings/favorite-presets` | `device-settings` | `public` | `get_api_device_settings_favorite_presets` | GET /api/device-settings/favorite-presets — list favorite preset numbers. |
+| `GET /api/device-settings/input/{input}` | `device-settings` | `public` | `get_api_device_settings_input_input` | GET /api/device-settings/input/{input} - Get settings for a specific input. |
+| `GET /api/device-settings/output/{output}` | `device-settings` | `public` | `get_api_device_settings_output_output` | GET /api/device-settings/output/{output} - Get settings for a specific output. |
+| `GET /api/docs` | `docs` | `public` | `get_api_docs` | Serve the interactive Swagger UI documentation page (DOC-03, TD-09). |
+| `GET /api/edid/modes` | `status` | `public` | `get_api_edid_modes` | Get available EDID modes. |
+| `GET /api/ext-audio/modes` | `audio` | `public` | `get_api_ext_audio_modes` | Get available ext-audio modes. |
+| `GET /api/health` | `health` | `public` | `get_api_health` | Health check endpoint. |
+| `GET /api/info` | `info` | `public` | `get_api_info` | Get API and matrix info for the Web UI. |
+| `GET /api/inputs` | `matrix` | `public` | `get_api_inputs` | Get all inputs with their names. |
+| `GET /api/integrations/flic/buttons` | `integrations` | `public` | `get_api_integrations_flic_buttons` | Retrieve all registered Flic buttons. |
+| `GET /api/openapi.json` | `docs` | `public` | `get_api_openapi_json` | Serve the live OpenAPI 3.1.0 specification as JSON (DOC-03, TD-09). |
+| `GET /api/outputs` | `matrix` | `public` | `get_api_outputs` | Get all outputs with their names. |
+| `GET /api/presets` | `matrix` | `public` | `get_api_presets` | Get all presets with their names and routing configurations. |
+| `GET /api/profile/{profile_id}` | `profiles` | `public` | `get_api_profile_profile_id` | Get details of a specific profile. |
+| `GET /api/profile/{profile_id}/cec` | `profiles` | `public` | `get_api_profile_profile_id_cec` | Get or update CEC configuration for a profile. |
+| `GET /api/profile/{profile_id}/execution-log` | `profiles` | `public` | `get_api_profile_profile_id_execution_log` | GET /api/profile/{profile_id}/execution-log — return last 7 days of executions. |
+| `GET /api/profile/{profile_id}/macros` | `profiles` | `public` | `get_api_profile_profile_id_macros` | Get or update the macros assigned to a profile. |
+| `GET /api/profiles` | `profiles` | `public` | `get_api_profiles` | List all saved profiles. |
+| `GET /api/profiles/favorites` | `profiles` | `public` | `get_api_profiles_favorites` | GET /api/profiles/favorites — list profiles marked as favorites. |
+| `GET /api/scene/{scene_id}` | `scenes` | `public` | `get_api_scene_scene_id` | handle get profile *(legacy alias for `/api/profile*`)* |
+| `GET /api/scene/{scene_id}/cec` | `scenes` | `public` | `get_api_scene_scene_id_cec` | Alias for ``handle_profile_cec_config`` that normalizes the URL key. *(legacy alias for `/api/profile*`)* |
+| `GET /api/scenes` | `scenes` | `public` | `get_api_scenes` | Alias for ``handle_list_profiles`` that renames ``profiles`` → ``scenes``. *(legacy alias for `/api/profile*`)* |
+| `GET /api/settings` | `settings` | `public` | `get_api_settings` | Get current backend settings. |
+| `GET /api/shortcuts` | `shortcuts` | `public` | `get_api_shortcuts` | GET /api/shortcuts — list all shortcuts (with custom name/icon/order/flags). |
+| `GET /api/shortcuts/dashboard` | `shortcuts` | `public` | `get_api_shortcuts_dashboard` | GET /api/shortcuts/dashboard — list dashboard-visible shortcuts only. |
+| `GET /api/shortcuts/favorites` | `shortcuts` | `public` | `get_api_shortcuts_favorites` | GET /api/shortcuts/favorites — list favorite shortcuts only. |
+| `GET /api/shortcuts/{key}` | `shortcuts` | `public` | `get_api_shortcuts_key` | GET /api/shortcuts/{key} — get a single shortcut. |
+| `GET /api/status` | `status` | `public` | `get_api_status` | Matrix status for the web UI and Home Assistant (docs/api/WEBSOCKET.md, "Status"). |
+| `GET /api/status/cables` | `status` | `public` | `get_api_status_cables` | Get cable connection status for all inputs and outputs via Telnet. |
+| `GET /api/status/cec` | `status` | `public` | `get_api_status_cec` | Get CEC configuration status. |
+| `GET /api/status/device` | `status` | `public` | `get_api_status_device` | Get device/firmware information. |
+| `GET /api/status/edid` | `status` | `public` | `get_api_status_edid` | Get EDID configuration status for all inputs. |
+| `GET /api/status/ext-audio` | `status` | `public` | `get_api_status_ext_audio` | Get external audio matrix status. |
+| `GET /api/status/full` | `status` | `public` | `get_api_status_full` | Get comprehensive matrix status from all status endpoints. |
+| `GET /api/status/inputs` | `status` | `public` | `get_api_status_inputs` | Get detailed input status including signal and cable detection. |
+| `GET /api/status/outputs` | `status` | `public` | `get_api_status_outputs` | Get detailed output/display status including connection detection. |
+| `GET /api/status/system` | `status` | `public` | `get_api_status_system` | Get system settings status. |
+| `GET /api/system-shortcuts` | `system-shortcuts` | `public` | `get_api_system_shortcuts` | GET /api/shortcuts — list all shortcuts (with custom name/icon/order/flags). |
+| `GET /api/system-shortcuts/dashboard` | `system-shortcuts` | `public` | `get_api_system_shortcuts_dashboard` | GET /api/shortcuts/dashboard — list dashboard-visible shortcuts only. |
+| `GET /api/system-shortcuts/favorites` | `system-shortcuts` | `public` | `get_api_system_shortcuts_favorites` | GET /api/shortcuts/favorites — list favorite shortcuts only. |
+| `GET /api/system-shortcuts/{key}` | `system-shortcuts` | `public` | `get_api_system_shortcuts_key` | GET /api/shortcuts/{key} — get a single shortcut. |
+| `GET /api/system/info` | `system` | `public` | `get_api_system_info` | GET /api/system/info - Return basic runtime system information. |
+| `GET /api/system/lcd/modes` | `system` | `public` | `get_api_system_lcd_modes` | Get available LCD timeout modes. |
+| `GET /api/system/storage` | `system` | `public` | `get_api_system_storage` | GET /api/system/storage - Report whether persistent storage is set up and usable. |
+| `GET /api/themes` | `settings` | `public` | `get_api_themes` | Get current theme settings. |
+| `GET /api/ui/preferences` | `settings` | `public` | `get_api_ui_preferences` | Get current UI preferences (pinned tabs and sorting order). |
+| `GET /api/v2/scenes` | `v2` | `public` | `get_api_v2_scenes` | GET /api/v2/scenes — list all scenes. |
+| `GET /api/v2/scenes/{scene_id}` | `v2` | `public` | `get_api_v2_scenes_scene_id` | GET /api/v2/scenes/{scene_id} — get a scene by ID. |
+| `GET /api/v2/scenes/{scene_id}/history` | `v2` | `public` | `get_api_v2_scenes_scene_id_history` | GET /api/v2/scenes/{scene_id}/history — get execution history. |
+| `GET /assets/{path}` | `static` | `public` | `get_assets_path` | Serve static files (CSS, JS, assets). |
+| `GET /css/{path}` | `static` | `public` | `get_css_path` | Serve static files (CSS, JS, assets). |
+| `GET /js/{path}` | `static` | `public` | `get_js_path` | Serve static files (CSS, JS, assets). |
+| `GET /kiosk` | `web-ui` | `public` | `get_kiosk` | Serve the Kiosk Mode page for simple input switching on tablets. |
+| `GET /kiosk/` | `web-ui` | `public` | `get_kiosk_index` | Serve the Kiosk Mode page for simple input switching on tablets. |
+| `GET /manifest.json` | `web-ui` | `public` | `get_manifest_json` | Serve static files (CSS, JS, assets). |
+| `GET /ui` | `web-ui` | `public` | `get_ui` | Serve the main Web UI page. |
+| `GET /ui/` | `web-ui` | `public` | `get_ui_index` | Serve the main Web UI page. |
+| `GET /ws` | `websocket` | `public` | `get_ws` | WebSocket endpoint for live updates (docs/api/WEBSOCKET.md). |
+| `POST /api/auth/api-keys` | `auth` | `admin` | `post_api_auth_api_keys` | auth api keys |
+| `POST /api/auth/lock` | `auth` | `public` | `post_api_auth_lock` | auth lock |
+| `POST /api/auth/login` | `auth` | `public` | `post_api_auth_login` | auth unlock |
+| `POST /api/auth/pin` | `auth` | `public` | `post_api_auth_pin` | auth pin |
+| `POST /api/auth/unlock` | `auth` | `public` | `post_api_auth_unlock` | auth unlock |
+| `POST /api/cec/input/{input}/{command}` | `cec` | `control` | `post_api_cec_input_input_command` | Send CEC command to an input device. |
+| `POST /api/cec/input/{port}/enable` | `cec` | `control` | `post_api_cec_input_port_enable` | Enable or disable CEC for an input port. |
+| `POST /api/cec/macro` | `cec` | `admin` | `post_api_cec_macro` | Create a new CEC macro. |
+| `POST /api/cec/macro/{macro_id}/dashboard` | `cec` | `admin` | `post_api_cec_macro_macro_id_dashboard` | POST /api/cec/macro/{id}/dashboard — toggle dashboard-visible flag. |
+| `POST /api/cec/macro/{macro_id}/execute` | `cec` | `control` | `post_api_cec_macro_macro_id_execute` | Execute a CEC macro. |
+| `POST /api/cec/macro/{macro_id}/favorite` | `cec` | `admin` | `post_api_cec_macro_macro_id_favorite` | POST /api/cec/macro/{id}/favorite — toggle favorite flag. |
+| `POST /api/cec/macro/{macro_id}/test` | `cec` | `control` | `post_api_cec_macro_macro_id_test` | Test/validate a CEC macro without executing (dry run). |
+| `POST /api/cec/output/{output}/{command}` | `cec` | `control` | `post_api_cec_output_output_command` | Send CEC command to an output device (TV). |
+| `POST /api/cec/output/{port}/enable` | `cec` | `control` | `post_api_cec_output_port_enable` | Enable or disable CEC for an output port. |
+| `POST /api/dashboard/cards` | `dashboard` | `admin` | `post_api_dashboard_cards` | POST /api/dashboard/cards — add a single card. |
+| `POST /api/dashboard/layout` | `dashboard` | `admin` | `post_api_dashboard_layout` | PUT /api/dashboard/layout — replace the full layout atomically. |
+| `POST /api/device-settings` | `device-settings` | `admin` | `post_api_device_settings` | POST /api/device-settings - Bulk update device settings. |
+| `POST /api/device-settings/dashboard-presets/{preset}/toggle` | `device-settings` | `admin` | `post_api_device_settings_dashboard_presets_preset_toggle` | POST /api/device-settings/dashboard-presets/{preset}/toggle — toggle one preset. |
+| `POST /api/device-settings/favorite-presets/{preset}/toggle` | `device-settings` | `admin` | `post_api_device_settings_favorite_presets_preset_toggle` | POST /api/device-settings/favorite-presets/{preset}/toggle — toggle one preset. |
+| `POST /api/device-settings/input/{input}` | `device-settings` | `admin` | `post_api_device_settings_input_input` | POST /api/device-settings/input/{input} - Update settings for a specific input. |
+| `POST /api/device-settings/output/{output}` | `device-settings` | `admin` | `post_api_device_settings_output_output` | POST /api/device-settings/output/{output} - Update settings for a specific output. |
+| `POST /api/device-settings/preset/{preset}/name` | `device-settings` | `admin` | `post_api_device_settings_preset_preset_name` | POST /api/device-settings/preset/{preset}/name - Rename a preset. |
+| `POST /api/ext-audio/mode` | `audio` | `control` | `post_api_ext_audio_mode` | Set external audio routing mode. |
+| `POST /api/ext-audio/{output}/enable` | `audio` | `control` | `post_api_ext_audio_output_enable` | Enable or disable ext-audio on a specific output. |
+| `POST /api/ext-audio/{output}/source` | `audio` | `control` | `post_api_ext_audio_output_source` | Set audio source for a specific ext-audio output. |
+| `POST /api/input/next` | `matrix` | `control` | `post_api_input_next` | Cycle to the next input on the specified output (default: output 1). |
+| `POST /api/input/previous` | `matrix` | `control` | `post_api_input_previous` | Cycle to the previous input on the specified output (default: output 1). |
+| `POST /api/input/{input}/edid` | `matrix` | `admin` | `post_api_input_input_edid` | Set EDID mode for a specific input. |
+| `POST /api/input/{input}/name` | `matrix` | `admin` | `post_api_input_input_name` | Set the name of an input (sends to matrix and updates local cache). |
+| `POST /api/integrations/flic/register` | `integrations` | `admin` | `post_api_integrations_flic_register` | Register Flic buttons reported by the Flic Hub SDK script. |
+| `POST /api/output/{output}/arc` | `matrix` | `control` | `post_api_output_output_arc` | Enable or disable ARC for an output. |
+| `POST /api/output/{output}/enable` | `matrix` | `control` | `post_api_output_output_enable` | Enable or disable output video stream. |
+| `POST /api/output/{output}/hdcp` | `matrix` | `admin` | `post_api_output_output_hdcp` | Set HDCP mode for an output. |
+| `POST /api/output/{output}/hdr` | `matrix` | `admin` | `post_api_output_output_hdr` | Set HDR mode for an output. |
+| `POST /api/output/{output}/mute` | `matrix` | `control` | `post_api_output_output_mute` | Mute or unmute audio for an output. |
+| `POST /api/output/{output}/name` | `matrix` | `admin` | `post_api_output_output_name` | Set the name of an output (sends to matrix and updates local cache). |
+| `POST /api/output/{output}/scaler` | `matrix` | `admin` | `post_api_output_output_scaler` | Set scaler mode for an output. |
+| `POST /api/output/{output}/source` | `matrix` | `control` | `post_api_output_output_source` | Set the input source for a specific output. |
+| `POST /api/power/off` | `matrix` | `control` | `post_api_power_off` | Power off the matrix. |
+| `POST /api/power/on` | `matrix` | `control` | `post_api_power_on` | Power on the matrix. |
+| `POST /api/preset/{preset}` | `matrix` | `control` | `post_api_preset_preset` | Recall a preset. |
+| `POST /api/preset/{preset}/save` | `matrix` | `admin` | `post_api_preset_preset_save` | Save current routing or a custom routing mapping to a preset. |
+| `POST /api/profile` | `profiles` | `admin` | `post_api_profile` | Create or update a profile. |
+| `POST /api/profile/{profile_id}/cec` | `profiles` | `admin` | `post_api_profile_profile_id_cec` | Get or update CEC configuration for a profile. |
+| `POST /api/profile/{profile_id}/dashboard` | `profiles` | `admin` | `post_api_profile_profile_id_dashboard` | POST /api/profile/{id}/dashboard — toggle dashboard-visible flag. |
+| `POST /api/profile/{profile_id}/favorite` | `profiles` | `admin` | `post_api_profile_profile_id_favorite` | POST /api/profile/{id}/favorite — toggle the favorite flag. |
+| `POST /api/profile/{profile_id}/macros` | `profiles` | `admin` | `post_api_profile_profile_id_macros` | Get or update the macros assigned to a profile. |
+| `POST /api/profile/{profile_id}/recall` | `profiles` | `control` | `post_api_profile_profile_id_recall` | Recall a profile, applying all its settings to the matrix. |
+| `POST /api/profiles/reorder` | `profiles` | `admin` | `post_api_profiles_reorder` | Bulk update pin order and pinned status for profiles. |
+| `POST /api/scene` | `scenes` | `admin` | `post_api_scene` | Create or update a profile. *(legacy alias for `/api/profile*`)* |
+| `POST /api/scene/save-current` | `scenes` | `admin` | `post_api_scene_save_current` | POST /api/scene/save-current — capture current matrix state as a new profile. *(legacy alias for `/api/profile*`)* |
+| `POST /api/scene/{scene_id}/cec` | `scenes` | `admin` | `post_api_scene_scene_id_cec` | Alias for ``handle_profile_cec_config`` that normalizes the URL key. *(legacy alias for `/api/profile*`)* |
+| `POST /api/scene/{scene_id}/cec/auto-resolve` | `scenes` | `admin` | `post_api_scene_scene_id_cec_auto_resolve` | POST /api/scene/{scene_id}/cec/auto-resolve — resolve a profile's CEC targets from its routing. *(legacy alias for `/api/profile*`)* |
+| `POST /api/scene/{scene_id}/recall` | `scenes` | `control` | `post_api_scene_scene_id_recall` | Alias for ``handle_recall_profile`` that normalizes the URL key and *(legacy alias for `/api/profile*`)* |
+| `POST /api/settings/matrix-host` | `settings` | `admin` | `post_api_settings_matrix_host` | Set the matrix host address (reconfigures backend connection). |
+| `POST /api/settings/test-connection` | `settings` | `admin` | `post_api_settings_test_connection` | Test connection to the currently configured matrix. |
+| `POST /api/shortcuts` | `shortcuts` | `admin` | `post_api_shortcuts` | POST /api/shortcuts — create a user-defined shortcut. |
+| `POST /api/shortcuts/{key}/dashboard` | `shortcuts` | `admin` | `post_api_shortcuts_key_dashboard` | POST /api/shortcuts/{key}/dashboard — toggle the dashboard_visible flag. |
+| `POST /api/shortcuts/{key}/execute` | `shortcuts` | `control` | `post_api_shortcuts_key_execute` | POST /api/shortcuts/{key}/execute — execute the shortcut against the matrix. |
+| `POST /api/shortcuts/{key}/favorite` | `shortcuts` | `admin` | `post_api_shortcuts_key_favorite` | POST /api/shortcuts/{key}/favorite — toggle the favorite flag. |
+| `POST /api/switch` | `matrix` | `control` | `post_api_switch` | Route an input to an output, or to all outputs if output is not specified. |
+| `POST /api/system-shortcuts` | `system-shortcuts` | `admin` | `post_api_system_shortcuts` | POST /api/shortcuts — create a user-defined shortcut. |
+| `POST /api/system-shortcuts/{key}/dashboard` | `system-shortcuts` | `admin` | `post_api_system_shortcuts_key_dashboard` | POST /api/shortcuts/{key}/dashboard — toggle the dashboard_visible flag. |
+| `POST /api/system-shortcuts/{key}/execute` | `system-shortcuts` | `control` | `post_api_system_shortcuts_key_execute` | POST /api/shortcuts/{key}/execute — execute the shortcut against the matrix. |
+| `POST /api/system-shortcuts/{key}/favorite` | `system-shortcuts` | `admin` | `post_api_system_shortcuts_key_favorite` | POST /api/shortcuts/{key}/favorite — toggle the favorite flag. |
+| `POST /api/system/beep` | `system` | `control` | `post_api_system_beep` | Enable or disable system beep. |
+| `POST /api/system/lcd` | `system` | `control` | `post_api_system_lcd` | Set LCD display timeout. |
+| `POST /api/system/panel_lock` | `system` | `admin` | `post_api_system_panel_lock` | Lock or unlock front panel. |
+| `POST /api/system/reboot` | `system` | `admin` | `post_api_system_reboot` | Reboot the matrix. |
+| `POST /api/themes/reset` | `settings` | `admin` | `post_api_themes_reset` | Reset theme settings to defaults. |
+| `POST /api/v2/scenes` | `v2` | `admin` | `post_api_v2_scenes` | POST /api/v2/scenes — create a new scene. |
+| `POST /api/v2/scenes/{scene_id}/execute` | `v2` | `control` | `post_api_v2_scenes_scene_id_execute` | POST /api/v2/scenes/{scene_id}/execute — execute a scene. |
+| `POST /api/v2/scenes/{scene_id}/steps` | `v2` | `admin` | `post_api_v2_scenes_scene_id_steps` | POST /api/v2/scenes/{scene_id}/steps — add a step to a scene. |
+| `POST /api/v2/scenes/{scene_id}/validate` | `v2` | `public` | `post_api_v2_scenes_scene_id_validate` | POST /api/v2/scenes/{scene_id}/validate — detect conflicts in scene steps. |
+| `PUT /api/cec/macro/{macro_id}` | `cec` | `admin` | `put_api_cec_macro_macro_id` | Update an existing CEC macro. |
+| `PUT /api/dashboard/layout` | `dashboard` | `admin` | `put_api_dashboard_layout` | PUT /api/dashboard/layout — replace the full layout atomically. |
+| `PUT /api/device-settings/dashboard-presets` | `device-settings` | `admin` | `put_api_device_settings_dashboard_presets` | PUT /api/device-settings/dashboard-presets — replace the full dashboard list. |
+| `PUT /api/device-settings/favorite-presets` | `device-settings` | `admin` | `put_api_device_settings_favorite_presets` | PUT /api/device-settings/favorite-presets — replace the full favorites list. |
+| `PUT /api/profile/{profile_id}` | `profiles` | `admin` | `put_api_profile_profile_id` | Update an existing profile's properties. |
+| `PUT /api/profile/{profile_id}/cec` | `profiles` | `admin` | `put_api_profile_profile_id_cec` | Get or update CEC configuration for a profile. |
+| `PUT /api/profile/{profile_id}/dashboard` | `profiles` | `admin` | `put_api_profile_profile_id_dashboard` | PUT /api/profile/{id}/dashboard — explicitly set dashboard-visible flag. |
+| `PUT /api/profile/{profile_id}/favorite` | `profiles` | `admin` | `put_api_profile_profile_id_favorite` | PUT /api/profile/{id}/favorite — explicitly set favorite flag. |
+| `PUT /api/profile/{profile_id}/macros` | `profiles` | `admin` | `put_api_profile_profile_id_macros` | Get or update the macros assigned to a profile. |
+| `PUT /api/scene/{scene_id}/cec` | `scenes` | `admin` | `put_api_scene_scene_id_cec` | Alias for ``handle_profile_cec_config`` that normalizes the URL key. *(legacy alias for `/api/profile*`)* |
+| `PUT /api/shortcuts/reorder` | `shortcuts` | `admin` | `put_api_shortcuts_reorder` | PUT /api/shortcuts/reorder — bulk reorder shortcuts by key list. |
+| `PUT /api/shortcuts/{key}` | `shortcuts` | `admin` | `put_api_shortcuts_key` | PUT /api/shortcuts/{key} — update label, icon, enabled, order, favorite, and dashboard flags. |
+| `PUT /api/system-shortcuts/reorder` | `system-shortcuts` | `admin` | `put_api_system_shortcuts_reorder` | PUT /api/shortcuts/reorder — bulk reorder shortcuts by key list. |
+| `PUT /api/system-shortcuts/{key}` | `system-shortcuts` | `admin` | `put_api_system_shortcuts_key` | PUT /api/shortcuts/{key} — update label, icon, enabled, order, favorite, and dashboard flags. |
+| `PUT /api/themes` | `settings` | `admin` | `put_api_themes` | Update theme settings. |
+| `PUT /api/ui/preferences` | `settings` | `admin` | `put_api_ui_preferences` | Update UI preferences persistently. |
+| `PUT /api/v2/scenes/{scene_id}` | `v2` | `admin` | `put_api_v2_scenes_scene_id` | PUT /api/v2/scenes/{scene_id} — update a scene. |
+| `PUT /api/v2/scenes/{scene_id}/override` | `v2` | `admin` | `put_api_v2_scenes_scene_id_override` | PUT /api/v2/scenes/{scene_id}/override — set a per-profile output override. |

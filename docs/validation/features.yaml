@@ -2636,16 +2636,16 @@ features:
   - cec_caps.all_read_unavailable
 - id: F-API-001
   area: api
-  title: GET /api/health (liveness, matrix connection, runtime metrics)
-  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
+  title: GET /api/health, /api/openapi.json, /api/docs (liveness, matrix connection, runtime metrics, OpenAPI 3.1 & Swagger UI)
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table; src/hub/openapi.py
   interfaces:
-    rest: [GET /api/health]
+    rest: [GET /api/health, GET /api/openapi.json, GET /api/docs]
   target: V3
   current: V2
-  basis: 'V2: tests/sim/test_sim_e2e.py::test_health_reports_matrix_and_runtime; tests/test_health.py.'
+  basis: 'V2: tests/sim/test_sim_e2e.py::test_health_reports_matrix_and_runtime; tests/sim/test_sim_rest_reads.py::test_openapi_spec_and_swagger_docs_reads; tests/test_health.py; tests/test_openapi_and_config_docs.py.'
   evidence: []
   findings: []
-  scenarios: []
+  scenarios: [contracts.health, contracts.openapi_spec, contracts.api_docs]
 - id: F-API-002
   area: api
   title: API info and root (GET /, /api, /api/info)
@@ -2654,10 +2654,10 @@ features:
     rest: [GET /, GET /api, GET /api/info]
   target: V2
   current: V1
-  basis: 'tests/test_rest_api.py TestHealthEndpoints (mocked); GET / is not exercised. API-24 (WP-C2): /api/info reads the driver.json next to the package, whatever the working directory (tests/test_rest_api.py::TestHealthEndpoints::test_info_reads_driver_json_next_to_the_package).'
+  basis: 'tests/test_rest_api.py TestHealthEndpoints; API-24: /api/info reads driver.json independent of cwd. DEP-06: canonical version and matching identity when the manifest is absent or corrupt (tests/sim/test_sim_rest_reads.py::test_info_manifest_fallback_keeps_the_driver_identity). GET / needs separate evidence.'
   evidence: []
   findings: [DEP-06]
-  scenarios: []
+  scenarios: [contracts.api_info]
 - id: F-API-003
   area: api
   title: GET /api/status
@@ -4527,7 +4527,7 @@ features:
   title: Dashboard layout routes
   claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
   interfaces:
-    rest: [GET /api/dashboard/layout, PUT /api/dashboard/layout, POST /api/dashboard/cards, DELETE /api/dashboard/cards]
+    rest: [GET /api/dashboard/layout, PUT /api/dashboard/layout, POST /api/dashboard/layout, POST /api/dashboard/cards, DELETE /api/dashboard/cards]
   target: V2
   current: V1
   basis: tests/test_rest_api.py TestDashboardLayoutAPI (mocked).
@@ -4584,7 +4584,7 @@ features:
   title: Web UI, kiosk and static asset routes
   claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
   interfaces:
-    rest: [GET /ui, GET /ui/, GET /kiosk, GET /kiosk/, 'GET /css/{path}', 'GET /js/{path}', 'GET /assets/{path}']
+    rest: [GET /ui, GET /ui/, GET /kiosk, GET /kiosk/, GET /manifest.json, 'GET /css/{path}', 'GET /js/{path}', 'GET /assets/{path}']
   target: V3
   current: V3
   basis: 'V3: tests/e2e/smoke.spec.ts loads /ui and /kiosk in Chromium with no page errors; tests/test_rest_api.py TestWebUI.'
@@ -7470,6 +7470,7 @@ features:
     - all mutating routes
     - GET /api/auth/status
     - POST /api/auth/unlock
+    - POST /api/auth/login
     - POST /api/auth/lock
     - POST /api/auth/pin
     - GET /api/auth/devices

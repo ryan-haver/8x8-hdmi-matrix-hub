@@ -6,4 +6,4 @@ model (:class:`hub.core.MatrixModel`), the name store and the event bus that
 REST, WebSocket and the integrations subscribe to.
 """
 
-__version__ = "0.3.0"
+__version__ = "1.0.0rc1"

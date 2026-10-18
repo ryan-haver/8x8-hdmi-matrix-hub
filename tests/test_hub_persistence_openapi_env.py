@@ -645,7 +645,7 @@ def test_a_regex_path_converter_does_not_reach_the_template(rest_app):
 
 def test_every_json_operation_answers_with_the_envelope(spec):
     for path, item in spec["paths"].items():
-        if not path.startswith("/api"):
+        if not path.startswith("/api") or path in {"/api/docs", "/api/openapi.json"}:
             continue
         for method, operation in item.items():
             schema = operation["responses"]["200"]["content"]["application/json"]["schema"]
@@ -670,11 +670,19 @@ def test_every_operation_carries_security_and_a_tag(spec):
             assert operation["tags"], f"{method} {path}"
             assert operation["operationId"], f"{method} {path}"
             if path.startswith("/api"):
-                assert operation["security"] == [
-                    {"AdminSessionCookie": []},
-                    {"ControlApiKeyHeader": []},
-                    {"ControlApiKeyQuery": []},
-                ]
+                from rest_api.security import route_level
+
+                level = route_level(method.upper(), path)
+                assert operation["x-required-access"] == (level or "public")
+                schemes = {name for alternative in operation["security"] for name in alternative}
+                if level == "admin":
+                    assert schemes == {"AdminSessionCookie", "AdminPinHeader"}
+                elif level == "control":
+                    assert schemes == {
+                        "AdminSessionCookie", "ControlApiKeyHeader", "ControlApiKeyQuery", "RememberedDeviceCookie"
+                    }
+                else:
+                    assert operation["security"] == []
 
 
 def test_operation_ids_are_unique(spec):

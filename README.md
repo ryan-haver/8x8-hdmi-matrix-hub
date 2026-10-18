@@ -1,129 +1,219 @@
-# 8x8 HDMI Matrix Hub
+# 8×8 HDMI Matrix Hub
 
-> A unified API bridge for controlling 8x8 HDMI Matrix switches from Unfolded Circle Remote 3, Flic smart buttons, Home Assistant, and more.
+> A unified API bridge for controlling 8×8 HDMI Matrix switches from
+> Unfolded Circle Remote 3, Flic smart buttons, and Home Assistant.
+>
+> **One Docker image, two runtime modes.** The same image serves the
+> core REST API + web UI + kiosk on port `8080`. With
+> `UC_ENABLED=true`, the same image starts the legacy Unfolded Circle
+> driver on port `9095` alongside the core. Both modes start the
+> exact same `OreiMatrix` + `RestApiServer` underneath — the modular
+> hub framework under `src/hub/` ships library code with pending
+> runtime wiring (see [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+> §2).
+>
+> **Version:** `src/hub/__init__.py::__version__` is the canonical source.
+> `python scripts/bump_version.py --check` verifies release manifests;
+> `--tag` prints the matching release tag.
 
-## 🔌 Compatible Devices
+---
 
-This integration supports **8x8 HDMI 2.1 matrix switches based on the HDCVT HDP-MXC88A platform**. These switches are sold under multiple brand names but share identical hardware, firmware, and control protocols—making them fully interchangeable from a software perspective.
+## 🔌 Compatible devices
 
-### Why So Many Brands?
+The hub targets the **OREI BK-808** HTTPS/Telnet protocol, anchored by the
+checked-in real-device captures. The other HDCVT HDP-MXC88A family models below
+are compatibility candidates; their hardware/firmware behavior has not been
+validated for this release.
 
-The **HDCVT HDP-MXC88A** is an OEM (Original Equipment Manufacturer) product that is white-labeled and sold by various AV equipment companies. This means:
-
-- ✅ **Same hardware** - Identical internal components and build
-- ✅ **Same firmware** - Same web interface and control protocol
-- ✅ **Same API** - HTTP/Telnet commands work across all brands
-- ✅ **Same features** - 8K60Hz, 4K120Hz, HDMI 2.1, HDCP 2.3, Dolby Vision, etc.
-
-### Supported Models
-
-| Brand                  | Model         | Product Page                                                                                                                              | Status        |
-| ---------------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| **OREI**               | BK-808        | [orei.com/bk-808](https://orei.com/products/8k-8x8-hdmi-matrix-switcher-4k-120hz-hdcp-2-3-hdr-edid-dolby-vision-atmos-downscaling-bk-808) | ✅ **Tested** |
-| HDCVT (OEM)            | HDP-MXC88A    | [hdcvt.com](https://www.hdcvt.com/HDMIMatrix/328.html)                                                                 | 🔲 Untested   |
+| Brand                  | Model         | Product                                                                                                                            | Status        |
+| ---------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| **OREI**               | BK-808        | [orei.com/bk-808](https://orei.com/products/8k-8x8-hdmi-matrix-switcher-4k-120hz-hdcp-2-3-hdr-edid-dolby-vision-atmos-downscaling-bk-808) | Captured protocol baseline |
+| HDCVT (OEM)            | HDP-MXC88A    | [hdcvt.com](https://www.hdcvt.com/HDMIMatrix/328.html)                                                                            | 🔲 Untested   |
 | Simplified MFG         | M88-8K        | [simplifiedmfg.com](https://www.simplifiedmfg.com/simplified-products/m88-8k)                                                                            | 🔲 Untested   |
-| BZBGEAR                | BG-8K-88MA    | [bzbgear.com](https://bzbgear.com/product/bg-8k-88ma-8x8-8k-uhd-hdmi-2-1-matrix-switcher-with-auto-downscaling-audio-de-embedding-8k60-4k120-and-vrr-fva-allm-support/)             | 🔲 Untested   |
-| WolfPack (HDTV Supply) | HDTVHDPMXC88A | [hdtvsupply.com](https://www.hdtvsupply.com/wolfpack-8k-60-hz-8x8-hdmi-matrix-switch.html)                                                               | 🔲 Untested   |
-| A-NeuVideo             | ANI-8-8K60-S  | [a-neuvideo.com](https://www.a-neuvideo.com/shop/product_info.php?products_id=269)                                                                            | 🔲 Untested   |
+| BZBGEAR                | BG-8K-88MA    | [bzbgear.com](https://bzbgear.com/product/bg-8k-88ma-8x8-8k-uhd-hdmi-2-1-matrix-switcher-with-auto-downscaling-audio-de-embedding-8k60-4k120-and-vrr-fva-allm-support/) | 🔲 Untested   |
+| WolfPack (HDTV Supply) | HDTVHDPMXC88A | [hdtvsupply.com](https://www.hdtvsupply.com/wolfpack-8k-60-hz-8x8-hdmi-matrix-switch.html)                                         | 🔲 Untested   |
+| A-NeuVideo             | ANI-8-8K60-S  | [a-neuvideo.com](https://www.a-neuvideo.com/shop/product_info.php?products_id=269)                                                  | 🔲 Untested   |
 
-> [!NOTE]
-> If you have one of the untested models and can confirm compatibility, please [open an issue](../../issues) to help us update this list!
+> The BK-808 protocol baseline comes from the checked-in real-device captures.
+> The full release hardware campaign is not complete yet: Phase 8 / WP-V3
+> still requires owner-observed V4 checks and the V5 soak. See the
+> [validation report](docs/validation/VALIDATION_REPORT.md) and
+> [feature ledger](docs/validation/LEDGER.md). Other listed models are
+> compatibility candidates with no release hardware validation on file.
+> Report results through [GitHub issues](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/issues).
 
-### Hardware Requirements
+### Hardware requirements
 
-- HDMI 2.1 8x8 Matrix Switch (one of the compatible models above)
-- Network connectivity (HTTPS on port 443)
-- Control interface: Web GUI, RS-232, or TCP/IP
+* HDMI 2.1 8×8 Matrix Switch (a model from the list above).
+* Network connectivity (HTTPS on port `443`, Telnet on port `23` for
+  CEC and cable detection).
+* Control interface: web GUI, RS-232 or TCP/IP.
+
+---
 
 ## 🎯 Features
 
-### ✅ Implemented
+> The matrix is the focus; the matrix is the API. The architecture
+> document ([`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)) splits
+> what is shipped today from the framework libraries under
+> `src/hub/`; this README only summarises the shipped surface.
 
-- **Unfolded Circle Remote 3 Integration**
-  - 8 preset buttons with dynamic names from matrix
-  - Matrix remote entity with preset selection UI
-  - CEC control for all 8 inputs (navigation, playback, power)
-  - Per-input CEC remote entities
-  - Fast reconnection via static driver URL
+### ✅ Shipped
 
-- **REST API (v2.10.0)** ✅
-  - Full matrix control via HTTP endpoints
-  - WebSocket for real-time status updates
-  - Rate limiting and CORS support
-  - Comprehensive error handling
+* **Unfolded Circle Remote 3 integration** — `UC_ENABLED=true`
+  switches `run.py` to `run_uc()`, which hands off to the legacy
+  `src/driver.py`. The legacy driver owns:
+  * 8 preset buttons with dynamic names from the matrix.
+  * Matrix remote entity with preset-selection UI.
+  * CEC control for all 8 inputs (navigation, playback, power).
+  * Per-input CEC remote entities.
+  * Fast reconnection via the `UC_DRIVER_URL` setup field.
+  * mDNS advertisement (or explicit `UC_DRIVER_URL` for bridge
+    networking).
+  * See [`docs/UNFOLDED_CIRCLE.md`](docs/UNFOLDED_CIRCLE.md).
 
-- **Advanced Output Control**
-  - HDCP mode selection (1.4, 2.2, follow sink/source)
-  - HDR mode (passthrough, HDR→SDR, auto)
-  - Scaler settings (4K/8K downscaling)
-  - ARC control per output
-  - Audio mute per output
+* **REST API** — full matrix control documented in
+  [`docs/API_REFERENCE.md`](docs/API_REFERENCE.md) (generated from
+  `src/hub/openapi.py::build_openapi_spec(app)`; **in this release the
+  shipped REST app mounts `/api/openapi.json` (raw OpenAPI 3.1 document)
+  and `/api/docs` (Swagger UI)**, wired by the
+  `wp-g2-openapi-swagger-config-docs` track).
+  * WebSocket at `/ws` for real-time status updates, schema in
+    [`docs/api/websocket.schema.json`](docs/api/websocket.schema.json).
+  * Rate limiting, CORS, and the unified `{success, data, error}`
+    envelope (`API-21`).
+  * Three authentication paths: admin session cookie, `X-API-Key`
+    header, `?key=` query for clients that cannot set headers
+    (see [`SECURITY.md`](SECURITY.md)).
 
-- **EDID Management**
-  - Per-input EDID configuration
-  - Copy EDID from connected displays
-  - Support for 4K60 HDR, 8K, Atmos
+* **Advanced output control** — HDCP mode (1.4 / 2.2 / follow sink/source),
+  HDR mode (passthrough, HDR→SDR, auto), scaler settings (4K / 8K
+  downscaling, audio-only), ARC per output, audio mute per output.
 
-- **External Audio Routing**
-  - Independent audio matrix control
-  - Bind to input/output or matrix mode
-  - Per-output audio source selection
+* **EDID management** — per-input EDID configuration, copy-EDID-from-display,
+  4K60 HDR, 8K, Atmos.
 
-- **Profiles (Activity-Based Routing)**
-  - Save named routing configurations
-  - Include HDR/HDCP/audio settings, CEC macros, and power automation
-  - Recall profiles with single command
-  - Unlimited profiles (vs. 8 hardware presets)
-  - Backward compatible with legacy "Scenes" terminology
+* **External audio routing** — independent audio matrix control,
+  bind to input/output or matrix mode, per-output audio source.
 
-- **Docker Deployment**
-  - Containerized for easy deployment
-  - Persistent configuration across restarts
-  - Health checks and auto-restart
+* **Profiles (activity-based routing)** — named routing configurations
+  with HDR / HDCP / audio settings, CEC macros, and power automation.
+  Unlimited profiles (the matrix has eight hardware presets; profiles
+  are software).
 
-- **Flic Smart Button Integration**
-  - Internet Request template support for Flic Original / Flic 2 (single/double clicks, holds)
-  - Flic Duo zone-based multi-room button and profile mapping
-  - Flic Twist rotation-to-cycling HDMI inputs mapping (`/api/input/next` and `/api/input/previous`)
-  - Flic Twist press actions for volume, CEC, and mute controls
-  - Pre-built Flic Hub SDK Javascript templates for in-hub custom modules
+* **Focused UI (the `/ui` page)** — installed at the project root.
+  See *Focused UI* below.
 
-- **CEC Macro System**
-  - Custom multi-step CEC command sequences (power on/off, volume, inputs, delays)
-  - Test/dry-run capabilities via API
-  - Integration with Profiles for room-level automated startup/shutdown sequences
+* **Kiosk (`/kiosk`)** — shared `KioskController` (`web/js/components/
+  kiosk-controller.js`) with `switch` / `switch_all` live WebSocket
+  updates and a remembered-device PIN unlock.
 
+* **Docker deployment** — single image that contains the core and the
+  UC driver. Core starts with `docker compose up -d`; UC mode is
+  added with `docker-compose.uc-host.yml` (host networking, mDNS)
+  or `docker-compose.uc-bridge.yml` (bridge networking, fixed driver
+  URL).
 
-- **Home Assistant Custom HACS Component**
-  - UI-based config flow (setup via IP address & port)
-  - Output source routing `select` entities mapping to custom input names
-  - Switch controls for matrix power, audio mute, and output stream enable/disable
-  - Button controls to recall presets 1-8 and reboot the device
-  - Binary sensors for input active video signals and output display connection status
-  - Custom native service integrations (`recall_preset`, `switch_input`, `send_cec_command`)
+* **Flic REST handlers** — the Flic button integration registers
+  itself via `POST /api/integrations/flic/register` and is read via
+  `GET /api/integrations/flic/buttons`. **These routes are always
+  mounted**; the framework-level `FLIC_ENABLED` flag (default
+  `true`) does not currently disable them — see the table in
+  [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) §3 for the shipped
+  contract. The user-facing guide at
+  [`docs/FLIC_SETUP.md`](docs/FLIC_SETUP.md) describes Flic Hub
+  configuration with the operator.
 
-### 🔲 Coming Soon
+* **CEC macro system** — custom multi-step CEC command sequences
+  (power on/off, volume, inputs, delays), test/dry-run via the API.
 
-- Alexa voice control (via HA)
-- Flic hardware validation (pending hardware)
-- OpenAPI 3.0 specification & Swagger UI integration
-- Automated scheduling engine (cron-like profile triggers)
-- Outgoing webhook support and MQTT broker integration
+* **Home Assistant HACS component** at
+  [`custom_components/hdmi_matrix/`](custom_components/hdmi_matrix/)
+  — config flow, HA-native entities, custom services. **Install it
+  through HACS like any other integration** and configure it manually
+  in *Devices & Services*. The framework-level `HA_DISCOVERY_ENABLED`
+  flag exists in `src/hub/integrations/homeassistant/` but is **not
+  wired to startup** — setting it does not start discovery, and there
+  is no MQTT-style auto-discovery payload. See
+  [`docs/HOME_ASSISTANT.md`](docs/HOME_ASSISTANT.md) and
+  [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) §3.
 
+### 🔲 Not on the current plan
+
+See [`ROADMAP.md`](ROADMAP.md) §6 for the things the project
+deliberately does not promise:
+
+* Native Alexa skill (control it through Home Assistant instead).
+* Schedule / cron-like triggers for profile recall.
+* MQTT broker integration (the framework supports one; no worktree
+  exists and no `/api/integrations` general endpoint exists).
+* React / Vue rewrite of the web UI.
+* Other matrix brands beyond the HDCVT HDP-MXC88A family.
+
+---
+
+## 🎨 Focused UI
+
+The `/ui` page is built from the ES modules in
+[`web/js/core/`](web/js/core/) (`api`, `ws`, `state`, `html` with
+XSS-safe auto-escape, `overlay`, `toast`), the unified components in
+[`web/js/components/`](web/js/components/) (`unified-settings-drawer`,
+`editor-shell`, `cec-remote`, `kiosk-controller`, `dashboard-store`),
+and the design tokens in
+[`web/css/tokens.css`](web/css/tokens.css).
+
+What that means for the user:
+
+* A single `UnifiedSettingsController` with `#settings/*` hash routing
+  replaces nine page-specific drawers.
+* The `OverlayStack` keeps `#side-nav`, `#settings-drawer`,
+  `#hardware-drawer`, confirm modals and the editor shell on a single
+  z-index scale (`UI-59`); `Escape` dismisses one layer at a time
+  and restores focus to its trigger.
+* `EditorShell` replaces `window.prompt()` with a searchable command
+  / step picker for every macro/scene/profile edit.
+* `prefers-reduced-motion`, `:focus-visible`, **44 px touch targets**
+  (`UI-15`) and four Tron background presets
+  (`classic`, `neon`, `glass`, `matrix`) are part of the design
+  token sheet.
+* The background caps at **30 fps** (`UI-16`) and a low-power mode
+  turns the Tron grid off when the tab is hidden.
+* `web/manifest.json` makes the UI installable as a PWA; the icon
+  provenance record lives in
+  [`web/assets/icons/PROVENANCE.md`](web/assets/icons/PROVENANCE.md).
+
+> The Focused UI ships with v0.5.0. V1 unit + V3 (simulator, browser)
+> evidence is in [`docs/validation/LEDGER.md`](docs/validation/LEDGER.md);
+> V4 (hardware tablet, see `UI-44`) is not yet recorded for v0.5.x —
+> that gate is Phase 8 / WP-V3.
+
+---
 
 ## 📚 Documentation
 
-| Document                                       | Description                           |
-| ---------------------------------------------- | ------------------------------------- |
-| [Project Roadmap](docs/PROJECT_ROADMAP.md)     | Development phases, progress tracking |
-| [API Reference](docs/API_REFERENCE.md)         | REST API v2.7.0 documentation         |
-| [Home Assistant](docs/HOME_ASSISTANT.md)       | HA integration guide with examples    |
-| [OREI API Commands](docs/OREI_API_COMMANDS.md) | Matrix protocol reference             |
-| [Flic Setup](docs/FLIC_SETUP.md)               | Flic button configuration             |
+| Document                                              | Description                                                |
+| ----------------------------------------------------- | ---------------------------------------------------------- |
+| [ROADMAP.md](ROADMAP.md)                              | Phases, tags, what shipped, what is pending, what's off-plan |
+| [CHANGELOG.md](CHANGELOG.md)                          | v0.3.0 Secure, v0.4.0 Consolidate, v0.5.0 Focused UI, the pending-hardware section |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)          | **Shipped runtime vs `src/hub/` framework (pending wiring)** |
+| [docs/INTEGRATIONS.md](docs/INTEGRATIONS.md)          | The opt-in `Integration` framework + the three shipped integrations |
+| [docs/README.md](docs/README.md)                      | This folder's unified index (DOC-10)                        |
+| [docs/API_REFERENCE.md](docs/API_REFERENCE.md)        | REST + WS contract (generated from `src/hub/openapi.py`; shipped at `GET /api/openapi.json` + Swagger UI at `GET /api/docs`) |
+| [docs/CONFIGURATION.md](docs/CONFIGURATION.md)        | Every env var, generated from `src/hub/env.py`             |
+| [docs/HOME_ASSISTANT.md](docs/HOME_ASSISTANT.md)      | HA integration guide                                       |
+| [docs/DOCKER.md](docs/DOCKER.md)                      | Docker deployment guide                                    |
+| [docs/FLIC_SETUP.md](docs/FLIC_SETUP.md)              | Flic button configuration                                  |
+| [docs/UNFOLDED_CIRCLE_INTEGRATION_GUIDE.md](docs/UNFOLDED_CIRCLE_INTEGRATION_GUIDE.md) | UC Remote 3 setup and usage                |
+| [docs/INTEGRATION_TEMPLATE.md](docs/INTEGRATION_TEMPLATE.md) | Developer guide: build a new modular integration     |
+| [docs/validation/LEDGER.md](docs/validation/LEDGER.md) | The proof of function — what works today, at which level, with what freshness, with which open findings |
+| [docs/OREI_API_COMMANDS.md](docs/OREI_API_COMMANDS.md) | Matrix protocol reference                                 |
+| [SECURITY.md](SECURITY.md)                            | Threat model, access model, disclosure                     |
 
-## 🚀 Quick Start
+---
 
-### Docker (Recommended)
+## 🚀 Quick start
+
+### Docker (recommended)
 
 ```bash
 mkdir -p data && sudo chown 1000:1000 data     # Linux: the container runs as UID 1000
@@ -132,421 +222,288 @@ docker compose logs -f
 # Web UI: http://<docker-host>:8080/ui   Kiosk: http://<docker-host>:8080/kiosk
 ```
 
-That starts the core (REST API, web UI, kiosk). Integrations are switched on with
-environment variables; the image contains all of them.
+That starts the **core** (REST API + web UI + kiosk) from one image.
 
-| Setup | Command |
-| ----- | ------- |
-| **Core** (web UI, kiosk, REST for HA/Flic/scripts) | `docker compose up -d` |
-| **+ Remote 3**, host networking, found by mDNS (recommended) | `HUB_HOST_IP=<this host's LAN IP> docker compose -f docker-compose.yml -f docker-compose.uc-host.yml up -d` |
-| **+ Remote 3**, bridge networking, fixed driver URL | `HUB_HOST_IP=<this host's LAN IP> docker compose -f docker-compose.yml -f docker-compose.uc-bridge.yml up -d` |
+| Setup                                                                                   | Command                                                              |
+| --------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| **Core** (web UI, kiosk, REST for HA / Flic / scripts)                                  | `docker compose up -d`                                               |
+| **+ Remote 3**, host networking, found via mDNS                                        | `HUB_HOST_IP=<this host's LAN IP> docker compose -f docker-compose.yml -f docker-compose.uc-host.yml up -d` |
+| **+ Remote 3**, bridge networking, fixed `UC_DRIVER_URL`                               | `HUB_HOST_IP=<this host's LAN IP> docker compose -f docker-compose.yml -f docker-compose.uc-bridge.yml up -d` |
 
-See [docs/DOCKER.md](docs/DOCKER.md) for persistent storage, networking and upgrading.
+The Flic REST routes (`POST /api/integrations/flic/register`,
+`GET /api/integrations/flic/buttons`) ship in the hub image. Install the
+HACS component separately in Home Assistant. Neither needs a hub startup flag. See
+[`docs/DOCKER.md`](docs/DOCKER.md) for persistent storage, networking
+and upgrading.
 
-### Manual Installation
+### Manual install
 
 ```bash
 python -m venv .venv
-.venv\Scripts\activate  # Windows
-pip install -r requirements-uc.txt
+source .venv/bin/activate          # Linux/macOS
+python -m pip install --require-hashes -r requirements.txt
 
-MATRIX_HOST=192.168.1.50 python run.py                  # core only
-UC_ENABLED=true python run.py                           # core + Remote 3 integration (port 9095)
+export MATRIX_HOST=192.168.1.50
+python run.py                                        # core only
+UC_ENABLED=true python run.py                        # core + Remote 3 (port 9095)
 ```
 
-### Environment Variables
+On PowerShell, activate with `.venv\Scripts\Activate.ps1` and set
+`$env:MATRIX_HOST = "192.168.1.50"`; use `$env:UC_ENABLED = "true"` for UC mode.
+The runtime lock includes UC dependencies; `requirements-uc.txt` remains a
+compatibility include. Locks are validated on Python 3.12.
 
-| Variable | Default | Description |
-| -------- | ------- | ----------- |
-| `MATRIX_HOST` | `192.168.0.100` | Matrix IP address (with `UC_ENABLED=true` the Remote's setup sets it) |
-| `MATRIX_PORT` | `443` | Matrix HTTPS port |
-| `API_PORT` | `8080` | REST API, web UI and kiosk port |
-| `DATA_DIR` | image: `/data` | Persistent data (settings, profiles, macros, integration state) |
-| `UC_ENABLED` | `false` | Start the Unfolded Circle Remote 3 integration |
-| `LOG_LEVEL` | `INFO` | Logging verbosity |
-| `OREI_VERIFY_SSL` | `false` | Verify the matrix's TLS certificate |
+### Core environment variables
 
-The Remote integration's variables (`UC_INTEGRATION_HTTP_PORT`, `UC_INTEGRATION_INTERFACE`,
-`UC_DISABLE_MDNS_PUBLISH`, `UC_DRIVER_URL`, `UC_CONFIG_HOME`) and the deprecated names
-(`OREI_HOST`, `OREI_PORT`, `REST_API_PORT`, `OREI_API_PORT`, `MATRIX_DATA_DIR`; `USE_MODULAR`
-and `WEBUI_ENABLED` are ignored) are in [docs/DOCKER.md](docs/DOCKER.md#environment-variables).
+See [`docs/CONFIGURATION.md`](docs/CONFIGURATION.md) (checked against
+the source) for the full table with defaults,
+retired aliases and the `OREI_*` knobs that are *deliberately not*
+aliases.
 
-## 📁 Project Structure
+| Variable        | Default                                       | Description                                              |
+| --------------- | --------------------------------------------- | -------------------------------------------------------- |
+| `MATRIX_HOST`   | `192.168.0.100`                               | Matrix IP (with `UC_ENABLED=true` the Remote sets it)    |
+| `MATRIX_PORT`   | `443`                                         | Matrix HTTPS port                                       |
+| `API_PORT`      | `8080`                                        | REST API + web UI + kiosk                               |
+| `DATA_DIR`      | image: `/data`                                | Persistent data (settings, profiles, macros, integration state) |
+| `UC_ENABLED`    | `false`                                       | Start the Unfolded Circle Remote 3 driver (`src/driver.py`) |
+| `LOG_LEVEL`     | `INFO`                                        | Logging verbosity                                        |
+| `OREI_VERIFY_SSL` | `false`                                     | Verify the matrix's TLS certificate                      |
 
-```
-├── src/
-│   ├── driver.py              # Main UC integration driver
-│   ├── orei_matrix.py         # Matrix control library
-│   ├── telnet_client.py       # Async Telnet client (CEC, cable detection)
-│   ├── config.py              # Configuration management
-│   ├── scene_manager.py       # Scene/profile persistence
-│   ├── scene_execution.py     # Scene execution engine
-│   ├── cec_macros.py          # CEC macro definitions
-│   ├── cec_commands.py        # CEC byte-level protocol
-│   ├── cec_resolver.py        # CEC address resolution
-│   ├── system_shortcuts.py    # Quick-action shortcuts
-│   ├── dashboard_layout.py    # Dashboard card layout
-│   ├── persistence.py         # Data directory resolution
-│   ├── password.py            # PIN-based passcode hashing
-│   ├── _file_io.py           # File I/O utilities
-│   ├── _task_supervisor.py   # Task supervision and error handling
-│   ├── _telnet_proto.py      # Telnet protocol implementation
-│   ├── rest_api/              # REST API server (22 modules)
-│   │   ├── app.py             # aiohttp application factory
-│   │   ├── control.py         # Routing and power endpoints
-│   │   ├── outputs.py         # Per-output settings (HDCP, HDR, EDID)
-│   │   ├── cec.py             # CEC command endpoints
-│   │   ├── macros.py          # CEC macro CRUD and execution
-│   │   ├── profiles.py        # Profile management
-│   │   ├── scenes.py          # Scene API (v1, backward compat)
-│   │   ├── scenes_v2.py       # Scene API (v2, Phase 8)
-│   │   ├── websocket.py       # WebSocket broadcast
-│   │   └── ...                # (14 more modules)
-│   └── integrations/          # Modular integration modules
-│       └── unfolded_circle/   # UC Remote integration
-│           ├── api_client.py  # REST API client
-│           ├── entities.py    # UC entity factories
-│           └── adapter.py     # OreiMatrix adapter
-├── custom_components/         # Home Assistant HACS component
-│   └── orei_matrix/
-├── web/                       # Web UI dashboard
-├── docs/                      # Documentation
-├── tests/                     # Test suite (24 files)
-├── run.py                     # The one entry point (core + opt-in integrations)
-├── run_server.py              # Deprecated alias of run.py (core only)
-├── Dockerfile                 # One image with every integration
-├── docker-compose.yml         # Core; docker-compose.uc-*.yml add the Remote 3
-├── requirements.txt           # Core dependencies
-└── requirements-uc.txt        # UC-specific dependencies
-```
+> `FLIC_ENABLED`, `HA_DISCOVERY_ENABLED` and the rest of the
+> `INTEGRATION_ENV_VARS` table are **framework flags** declared by
+> `src/hub/integrations/*`. They are not read by the shipped
+> `run.py` / `src/driver.py` startup; setting them does not turn the
+> corresponding integration on or off. See
+> [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) §3 for what each
+> flag actually does in shipped vs framework terms.
+
+The deprecated names (`OREI_HOST`, `OREI_PORT`, `REST_API_PORT`,
+`OREI_API_PORT`, `MATRIX_DATA_DIR`, `UC_PORT`, `UC_DISABLE_MDNS`,
+`USE_MODULAR`, `WEBUI_ENABLED`) are read once at start-up and
+produce a single deprecation message — see
+[`docs/CONFIGURATION.md`](docs/CONFIGURATION.md).
+
+---
 
 ## 🏗️ Architecture
 
+The deep dive lives in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+The one-screen version, on purpose honest about what is shipped today
+vs what is library-only under `src/hub/`:
+
 ```
-┌─────────────────┐     ┌──────────────────────┐     ┌─────────────┐
-│ Remote 3        │────▶│                      │────▶│             │
-│ (WebSocket:9095)│     │   Integration Hub    │     │ OREI Matrix │
-├─────────────────┤     │                      │     │ (HTTPS:443) │
-│ Flic Buttons    │────▶│  ┌────────────────┐  │     │             │
-│ (REST:8080)     │     │  │ orei_matrix.py │  │     │  - Presets  │
-├─────────────────┤     │  │ (Control Lib)  │  │     │  - Routing  │
-│ Home Assistant  │────▶│  └────────────────┘  │     │  - CEC      │
-│ (REST:8080)     │     │                      │     │             │
-└─────────────────┘     └──────────────────────┘     └─────────────┘
+       ┌─────────────────────────────────────────────────────────────┐
+       │           web/  (Focused UI: /ui, /kiosk, PWA)            │
+       └────────────────────────┬────────────────────────────────────┘
+                                │ REST + WebSocket
+                                ▼
+       ┌─────────────────────────────────────────────────────────────┐
+       │  src/rest_api/  (22 modules in src/rest_api/)               │
+       │  src/rest_api/app.py::create_rest_app                      │
+       │  src/rest_api/RestApiServer.start                          │   ← always
+       └────────────────────────┬────────────────────────────────────┘
+                                │ delegates to
+                                ▼
+       ┌─────────────────────────────────────────────────────────────┐
+       │  src/orei_matrix.py  +  src/telnet_client.py               │
+       │  (HTTPS / Telnet transports; the only matrix client)        │
+       └────────────────────────┬────────────────────────────────────┘
+                                │
+                                ▼
+                        ┌───────────────┐
+                        │  OREI Matrix  │
+                        └───────────────┘
+
+  UC mode (UC_ENABLED=true): run.py runs src/driver.py in the same process;
+  src/driver.py starts the same OreiMatrix + RestApiServer plus the Remote 3
+  integration WebSocket on port 9095.
+
+  Framework library (not yet wired into run.py / src/driver.py):
+  ┌─────────────────────────────────────────────────────────────┐
+  │  src/hub/                                                    │
+  │    core/             MatrixService, MatrixModel, NameStore,    │
+  │                      EventBus  (framework, library-only)       │
+  │    domain/           ActionRunner, VisibilityStore             │
+  │                      (framework, library-only)                 │
+  │    integrations/     Integration / IntegrationRegistry /        │
+  │                      IntegrationLoader + HubClient (Local/Http)│
+  │                      (framework, library-only)                 │
+  │    persistence/      hub.persistence.migrations                │
+  │                      (framework, library-only)                 │
+  │    env.py            canonical env table                       │
+  │                      (framework, library-only)                 │
+  │    openapi.py        build_openapi_spec (mounted at            │
+  │                      /api/openapi.json and /api/docs)          │
+  │                      (framework, library-only)                 │
+  └─────────────────────────────────────────────────────────────┘
 ```
+
+Three guarantees hold end-to-end on the *shipped* runtime:
+
+1. **One startup path per mode.** `run.py` reads `UC_ENABLED` and
+   either runs `run_core()` (`OreiMatrix` + `RestApiServer`) or
+   `run_uc()` (`runpy.run_path("src/driver.py")`).
+2. **One matrix client.** Whether UC mode is on or off, the actual
+   matrix is reached through `src/orei_matrix.py.OreiMatrix`.
+3. **One REST surface.** Both modes bind `RestApiServer` on the same
+   `API_PORT` with the same routes from `src/rest_api/`.
+
+Three claims are *intentionally* not made:
+
+* That `hub.core.MatrixService` is the runtime owner — it's a
+  framework library waiting to be wired in.
+* That `hub.domain.ActionRunner` dispatches every action — it's the
+  same; REST handlers currently call the per-kind managers directly.
+* That setting `FLIC_ENABLED=false` disables the Flic REST handlers —
+  the handlers are always mounted; the flag is framework-level state.
+
+---
+
+## 🧪 Validation
+
+Every shipped feature in the table above is in the registry at
+[`docs/validation/features.yaml`](docs/validation/features.yaml), and
+its row-by-row status is in
+[`docs/validation/LEDGER.md`](docs/validation/LEDGER.md). What the
+levels mean and how evidence is recorded is in
+[`docs/validation/VALIDATION_PLAN.md`](docs/validation/VALIDATION_PLAN.md)
+(short version: [docs/validation/README.md](docs/validation/README.md)).
+
+**Honest status today:**
+
+* **268 features** in the registry.
+* **0** features at V4 (hardware on a real OREI BK-808) for any tag.
+* **0** features at V5 (72 h soak) for any tag.
+* **12** features capped at V1 by an open critical / high finding.
+* Most matrix control and CEC paths are V3 (simulator + a real
+  client); some output settings paths are still capped at V1 by
+  `HIL-09` (the `hdcvt-port-led` flicker); see the ledger for the
+  row-by-row state.
+
+This README does not claim hardware evidence at V4 or a passing 72 h
+soak until Phase 8 / WP-V3 produces that evidence — see
+[`ROADMAP.md`](ROADMAP.md) §5 and [`CHANGELOG.md`](CHANGELOG.md)
+§"Pending hardware validation".
+
+---
 
 ## 📡 Ports
 
-| Port | Protocol | Purpose |
-| ---- | -------- | ------- |
-| 9095 | WebSocket | Unfolded Circle integration (only with `UC_ENABLED=true`) |
-| 8080 | HTTP | REST API (Flic, HA, scripts), web UI, kiosk |
+| Port  | Protocol   | Purpose                                                  |
+| ----- | ---------- | -------------------------------------------------------- |
+| 8080  | HTTP / WS  | REST API, web UI (`/ui`), kiosk (`/kiosk`)               |
+| 9095  | WebSocket  | Unfolded Circle Remote 3 integration (only with `UC_ENABLED=true`) |
+
+> **Do not expose either port to the public internet.** Behind a
+> reverse proxy on `127.0.0.1`, on a LAN behind a firewall, or on a
+> VPN (Tailscale / WireGuard). The full security baseline is in
+> [SECURITY.md](SECURITY.md).
 
 ---
 
-## Original Setup Instructions
-
-### Prerequisites
-
-- Unfolded Circle Remote Two or Remote 3 (optional, for UC integration)
-- Compatible 8x8 HDMI Matrix (see [Compatible Devices](#-compatible-devices) above)
-- Matrix and integration hub on the same network
-- Python 3.11 or newer (for local development)
-
-## Installation
-
-### External Integration (Development/Testing)
-
-1. Clone or download this repository to your computer:
-
-   ```bash
-   git clone <repository-url>
-   cd unfoldedcircle-orei-hdmi-matrix-integration
-   ```
-
-2. Create a virtual environment and install dependencies:
-
-   ```bash
-   python -m venv .venv
-   .venv\Scripts\activate  # Windows
-   # source .venv/bin/activate  # Linux/macOS
-   pip install -r requirements.txt
-   ```
-
-3. Run the integration driver:
-
-   ```bash
-   python src/driver.py
-   ```
-
-4. On your Remote 3:
-   - Go to **Settings** → **Integrations**
-   - Add a new integration
-   - Select **OREI HDMI Matrix**
-   - Enter the IP address of your OREI BK-808 (default: 192.168.0.100)
-   - Enter the HTTPS port (default: 443)
-
-## Configuration
-
-### Finding Your Matrix IP Address
-
-1. On the OREI BK-808 front panel, navigate to **IP INFO**
-2. Note the IP address displayed (e.g., 192.168.0.100)
-3. Use this IP address during integration setup
-
-### Preset Names
-
-The integration automatically queries your matrix for input device names. If you've named your inputs on the matrix (e.g., "PS5", "AppleTV", "Computer"), these names will appear on the preset buttons in the Remote 3 UI.
-
-To change preset names:
-
-1. Use the OREI matrix's web interface or front panel to rename inputs
-2. Restart the integration driver or reconfigure the integration
-3. New names will be fetched automatically
-
-## Usage
-
-### Using the Remote Entity
-
-1. Add the **OREI Matrix** remote entity to an activity
-2. The touchscreen will display 8 preset buttons with device names
-3. Tap any button to instantly recall that preset
-
-### Using Preset Buttons
-
-1. Add individual **Preset X** button entities to your activities
-2. Press a button to recall the corresponding preset
-3. Combine with other entities for complex automations
-
-## Technical Details
-
-### Connection Protocol
-
-- **Primary Protocol**: HTTPS (JSON over HTTP POST) — port 443
-- **Secondary Protocol**: Telnet (port 23) — for CEC commands and cable detection
-- **Endpoint**: `/cgi-bin/instr`
-- **Authentication**: Username `Admin`, Password `admin` (defaults, configurable via `OREI_USER`/`OREI_PASSWORD` env vars)
-
-### Supported Commands
-
-The matrix uses JSON commands over HTTPS:
-
-- **Login**: `{"comhead":"login","user":"Admin","password":"admin"}`
-- **Recall Preset**: `{"comhead":"preset set","language":0,"index":<1-8>}`
-- **Get Video Status**: `{"comhead":"get video status","language":0}`
-- **Switch Input**: `{"comhead":"video switch","language":0,"source":[<output>,<input>]}`
-- **Power On/Off**: `{"comhead":"set poweronoff","language":0,"power":<0|1>}`
-- **EDID Management**: Per-input EDID configuration
-- **HDCP/HDR Control**: Per-output HDCP mode, HDR passthrough/conversion
-- **Audio**: External audio matrix routing, per-output mute
-- **CEC**: Consumer Electronics Control via Telnet or HTTP fallback
-
-### Entity Types
-
-The integration creates:
-
-1. **Remote Entity** (`remote.orei_matrix`)
-   - Type: Remote
-   - Features: Send commands, preset selection UI
-   - State: ON/UNAVAILABLE
-
-2. **Button Entities** (`button.preset_1` through `button.preset_8`)
-   - Type: Button
-   - Action: Recall corresponding preset
-
-## Troubleshooting
-
-### Integration Shows "Unavailable"
-
-1. Verify the matrix IP address in the IP INFO menu
-2. Ensure the matrix and Remote are on the same network
-3. Check that port 443 is accessible
-4. Try pinging the matrix IP from your network
-5. Restart both the matrix and the integration
-
-### Scene Not Changing
-
-**Problem**: Button press doesn't change the scene
-
-**Solutions**:
-
-1. Verify scenes are configured on the matrix
-2. Check the integration logs for error messages
-3. Ensure the matrix is powered on
-4. Try manually recalling the scene from the matrix front panel
-5. Reconnect the integration
-
-### Logs
-
-To view integration logs:
-
-```bash
-# If running as external integration
-python3 driver.py
-```
-
-Logs will show connection status, commands sent, and any errors.
-
-## Advanced Usage
-
-### Creating Macros
-
-Combine scene recall with other actions:
-
-1. In the Remote UI, create a new macro
-2. Add a "OREI Matrix Scene X" button press
-3. Add other commands (e.g., turn on TV, switch receiver input)
-4. Assign to a custom button
-
-### Activity Integration
-
-Include the OREI Matrix in activities:
-
-1. Create a new activity (e.g., "Watch Movies")
-2. Add the OREI Matrix remote entity
-3. Set a default scene to load when starting the activity
-4. Configure scene changes for different activity states
-
-## Development
-
-### Project Structure
+## 📁 Project structure
 
 ```
-unfoldedcircle-orei-hdmi-matrix-integration/
-├── driver.py           # Main integration driver
-├── driver.json         # Driver metadata and configuration
-├── orei_matrix.py      # OREI Matrix control library
-├── requirements.txt    # Python dependencies
-└── README.md          # This file
+.
+├── run.py                       # the one entry point (core + UC sub-process)
+├── src/
+│   ├── driver.py                # the legacy UC driver (loaded with UC_ENABLED=true)
+│   ├── orei_matrix.py           # the matrix client (HTTPS / Telnet) — the shipped transport
+│   ├── telnet_client.py         # async Telnet client (CEC, cable detection)
+│   ├── persistence.py           # data-dir resolution + atomic writes (shipped path)
+│   ├── config.py                # configuration management
+│   ├── scene_manager.py         # scenes / profiles / macros persistence
+│   ├── scene_execution.py       # scene executor
+│   ├── cec_macros.py            # CEC macro definitions
+│   ├── cec_commands.py          # CEC byte-level protocol
+│   ├── cec_resolver.py          # CEC address resolution
+│   ├── system_shortcuts.py      # built-in quick-actions
+│   ├── dashboard_layout.py      # dashboard layout helpers
+│   ├── password.py              # PIN / passcode hashing
+│   ├── _file_io.py              # atomic JSON read / write
+│   ├── _task_supervisor.py      # task supervision and error handling
+│   ├── _telnet_proto.py         # Telnet protocol implementation
+│   ├── rest_api/                # 22-module aiohttp app (the shipped REST surface)
+│   ├── integrations/            # legacy UC driver support modules
+│   │   └── unfolded_circle/     #   the legacy UC integration started by src/driver.py
+│   └── hub/                     # the modular hub framework (library-only today)
+│       ├── core/                #   MatrixService, MatrixModel, NameStore, EventBus
+│       ├── domain/              #   ActionRunner, VisibilityStore
+│       ├── integrations/        #   Integration framework + HubClient + 3 integrations
+│       ├── persistence/         #   hub.persistence.migrations (not wired to runtime)
+│       ├── env.py               # canonical env table (not wired to run.py)
+│       └── openapi.py           # OpenAPI 3.1 generator (mounted at /api/openapi.json + /api/docs)
+├── web/                         # Focused UI (ES modules + tokens)
+│   ├── js/core/                 #   the unified client surface
+│   ├── js/components/           #   the unified drawer, editor shell, CEC remote, kiosk controller
+│   ├── css/tokens.css           # design tokens + 4 Tron presets + 44 px touch targets
+│   ├── index.html               # /ui
+│   ├── kiosk.html               # /kiosk
+│   └── manifest.json            # PWA install
+├── custom_components/hdmi_matrix/  # Home Assistant HACS component
+├── docs/                        # every doc lives here; see docs/README.md
+│   ├── ARCHITECTURE.md          # shipped runtime vs src/hub/ framework library
+│   ├── INTEGRATIONS.md
+│   ├── API_REFERENCE.md         # generated from src/hub/openapi.py
+│   ├── CONFIGURATION.md         # generated from src/hub/env.py
+│   ├── validation/              # the proof of function
+│   └── ...
+├── tests/                       # pytest suite + Playwright + scenario runner
+├── driver.json                  # UC driver metadata
+├── docker-compose.yml           # core
+├── docker-compose.uc-host.yml   # + UC, host networking
+├── docker-compose.uc-bridge.yml # + UC, bridge networking
+├── pyproject.toml               # one source of packaging + versioning
+├── requirements.txt             # core
+├── requirements-uc.txt          # + UC
+└── README.md                    # this file
 ```
-
-### Adding Features
-
-To add more functionality:
-
-1. Extend the `OreiMatrix` class in `orei_matrix.py`
-2. Add new command methods following the existing pattern
-3. Update the driver to expose new commands
-
-### Testing
-
-Test the integration:
-
-```bash
-# Run the driver with debug logging
-python3 driver.py
-```
-
-Connect your Remote 3 and test scene recall functionality.
-
-## Command Reference
-
-### OREI BK-808 Command Format
-
-Based on the user manual and common OREI matrix protocols:
-
-| Function               | Command Format      | Example             |
-| ---------------------- | ------------------- | ------------------- |
-| Recall Scene           | `s recall scene X!` | `s recall scene 1!` |
-| Save Scene             | `s save scene X!`   | `s save scene 3!`   |
-| Route Input to Output  | `s in X out Y!`     | `s in 1 out 5!`     |
-| All Outputs Same Input | `s in X out all!`   | `s in 2 out all!`   |
-
-**Note**: Commands are case-sensitive and must end with `!`
-
-## FAQ
-
-**Q: Can I control individual input/output routing?**  
-A: Yes! Use `POST /api/output/{output}/source` to route any input to any output, or `POST /api/switch` to switch all outputs.
-
-**Q: How many scenes can I save?**  
-A: 8 hardware presets, plus unlimited software profiles via the `/api/profiles` API with full routing, CEC macros, and power automation.
-
-**Q: Can I use RS-232 instead of TCP/IP?**  
-A: The integration uses TCP/IP. For RS-232, connect the Remote 3 dock's 3.5mm port to the matrix and use the generic RS-232 integration.
-
-**Q: Will this work with other OREI matrix models?**  
-A: This integration is designed for the BK-808. Other models may use different commands.
-
-**Q: Can I rename the scenes?**  
-A: Currently, scenes are labeled 1-8. Custom naming can be added in a future update.
-
-## Support
-
-For issues and questions:
-
-1. Check the troubleshooting section above
-2. Review the OREI BK-808 user manual
-3. Check Unfolded Circle community forums
-4. Review integration logs for error messages
-
-## Contributing
-
-Contributions are welcome! Please:
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## License
-
-This integration is provided as-is under the Mozilla Public License Version 2.0.
-
-## Credits
-
-- Based on the [Unfolded Circle Integration API](https://github.com/unfoldedcircle/integration-python-library)
-- Inspired by the [Denon AVR integration](https://github.com/unfoldedcircle/integration-denonavr)
-- Created for the Unfolded Circle Remote Two/3 community
-
-## Version History
-
-### v2.10.0 (Current)
-- Profiles with CEC macro support and power automation
-- CEC Macros — multi-step command sequences with delays
-- Device Settings — persistent per-device names, icons, colors
-- Themes and UI Preferences persistence
-- Home Assistant HACS component with config flow
-- Enhanced CEC capabilities API
-- Dashboard layout management (Phase 7)
-- Security hardening — SSRF protection, TLS verification, non-root Docker
-
-### v2.9.0
-- CEC Macros system — save and execute multi-step CEC commands
-- Macro favorites and dashboard visibility
-
-### v2.8.0
-- Web UI dashboard with real-time WebSocket updates
-- `/api/info` endpoint, debug panel
-
-### v2.7.0
-- Scenes (activity-based routing configurations)
-- Scene CEC auto-resolution
-
-### v2.6.0
-- External audio matrix routing
-- Independent audio source selection per output
-
-### v2.5.0
-- EDID management per input
-- LCD timeout settings
-
-### v2.0.0
-- Initial REST API release
-- Flic smart button support
-- WebSocket real-time status updates
-
-## Future Enhancements
-
-Planned features for future releases:
-
-- [ ] Alexa voice control (via Home Assistant)
-- [ ] OpenAPI 3.0 specification & Swagger UI
-- [ ] Automated scheduling engine (cron-like profile triggers)
-- [ ] MQTT broker integration
-- [ ] Outgoing webhook support
 
 ---
 
-**Enjoy your OREI BK-808 HDMI Matrix integration!** 🎬
+## 🆘 Troubleshooting
+
+* **Integration shows "Unavailable"** — verify the matrix IP in the
+  matrix's own `IP INFO` menu, that port `443` is reachable, then
+  restart the hub (`docker compose restart`). See the integration
+  log with `docker compose logs -f`.
+* **Scene / profile / macro does not change anything** — verify the
+  scene / profile / macro is saved (`GET /api/profiles`,
+  `GET /api/cec/macros`), check the hub logs for the failure reason,
+  and recall once more with `--allow-writes` on the hardware validator
+  if you are against a real matrix.
+* **Remote 3 will not pair** — confirm the integration WebSocket is
+  reachable from the Remote (use `UC_DRIVER_URL` and the integration
+  status at `GET /api/health` — the `matrix` block tells you the
+  connection summary).
+* **Home Assistant does not see entities** — re-add the integration
+  through *Devices & Services → Add Integration → HDMI Matrix*; the
+  HACS component installs from `custom_components/hdmi_matrix/`.
+  The shipped `HA_DISCOVERY_ENABLED` flag does *not* start a
+  discovery payload today; the `hub.integrations.homeassistant`
+  module does not run at startup.
+* **Something else** — open an issue with the hub log, the matrix
+  model / firmware, and the `GET /api/info` JSON; the maintainers
+  read [SECURITY.md](SECURITY.md) §"Reporting a vulnerability" for
+  the private path when it's a security finding.
+
+---
+
+## 📜 License
+
+This integration is provided as-is under the **Mozilla Public License
+v2.0**. See [LICENSE](LICENSE).
+
+Dependency licenses, original icon provenance, and upstream document attribution
+are recorded in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+---
+
+## 🤝 Credits
+
+* Based on the
+  [Unfolded Circle Integration API](https://github.com/unfoldedcircle/integration-python-library).
+* Inspired by the
+  [Denon AVR integration](https://github.com/unfoldedcircle/integration-denonavr).
+* Built for the Unfolded Circle Remote Two / Remote 3 community.

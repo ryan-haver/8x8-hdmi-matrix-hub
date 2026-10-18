@@ -1,0 +1,218 @@
+[
+  {
+    "name": "aiohappyeyeballs",
+    "version": "2.7.1",
+    "declared_license": "PSF-2.0",
+    "source": "https://github.com/aio-libs/aiohappyeyeballs",
+    "files": [
+      {
+        "path": "aiohappyeyeballs/LICENSE",
+        "sha256": "3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf"
+      }
+    ]
+  },
+  {
+    "name": "aiohttp",
+    "version": "3.13.3",
+    "declared_license": "Apache-2.0 AND MIT",
+    "source": "https://github.com/aio-libs/aiohttp",
+    "files": [
+      {
+        "path": "aiohttp/LICENSE.txt",
+        "sha256": "c1493e9f10d59d1fba9f9df28008e1557e33cf9fbac8ce1263aa3393982803de"
+      },
+      {
+        "path": "aiohttp/vendor/llhttp/LICENSE",
+        "sha256": "6ddfa628db76d2d87b8968bafbad60f51c4ec88100dd7bb96f97216d88af0808"
+      }
+    ]
+  },
+  {
+    "name": "aiosignal",
+    "version": "1.4.0",
+    "declared_license": "Apache 2.0",
+    "source": "https://github.com/aio-libs/aiosignal",
+    "files": [
+      {
+        "path": "aiosignal/LICENSE",
+        "sha256": "6fd5243e92dd7f98ec69c7ac377728e74905709ff527a5bf98d6d0263c04f5b6"
+      }
+    ]
+  },
+  {
+    "name": "attrs",
+    "version": "26.1.0",
+    "declared_license": "MIT",
+    "source": "https://www.attrs.org/",
+    "files": [
+      {
+        "path": "attrs/LICENSE",
+        "sha256": "882115c95dfc2af1eeb6714f8ec6d5cbcabf667caff8729f42420da63f714e9f"
+      }
+    ]
+  },
+  {
+    "name": "frozenlist",
+    "version": "1.8.0",
+    "declared_license": "Apache-2.0",
+    "source": "https://github.com/aio-libs/frozenlist",
+    "files": [
+      {
+        "path": "frozenlist/LICENSE",
+        "sha256": "6fd5243e92dd7f98ec69c7ac377728e74905709ff527a5bf98d6d0263c04f5b6"
+      }
+    ]
+  },
+  {
+    "name": "idna",
+    "version": "3.20",
+    "declared_license": "BSD-3-Clause",
+    "source": "https://github.com/kjd/idna",
+    "files": [
+      {
+        "path": "idna/LICENSE.md",
+        "sha256": "1a9a4f0e3d479a27240ddd59a9137a66ab4a0f9dfdc8ca6188cc0bfd85187f04"
+      }
+    ]
+  },
+  {
+    "name": "ifaddr",
+    "version": "0.2.0",
+    "declared_license": "MIT",
+    "source": "https://github.com/pydron/ifaddr",
+    "files": [
+      {
+        "path": "ifaddr/LICENSE.txt",
+        "sha256": "8700856576ae2bc80c63bc970250510d9213fb02fed006d5f22742c9ddde24d7"
+      }
+    ]
+  },
+  {
+    "name": "multidict",
+    "version": "6.9.1",
+    "declared_license": "Apache License 2.0",
+    "source": "https://github.com/aio-libs/multidict",
+    "files": [
+      {
+        "path": "multidict/LICENSE",
+        "sha256": "2e4be5fc6c4c72a466fcb665d726e049a6891981fe536c4f04b6366749461d23"
+      }
+    ]
+  },
+  {
+    "name": "propcache",
+    "version": "0.5.4",
+    "declared_license": "Apache-2.0",
+    "source": "https://github.com/aio-libs/propcache",
+    "files": [
+      {
+        "path": "propcache/LICENSE",
+        "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+      },
+      {
+        "path": "propcache/NOTICE",
+        "sha256": "56d6ac6c8105c0a51304c21db060e361af9a8ea0af9a75c239c28b5d13693838"
+      }
+    ]
+  },
+  {
+    "name": "protobuf",
+    "version": "6.33.6",
+    "declared_license": "3-Clause BSD License",
+    "source": "https://developers.google.com/protocol-buffers/",
+    "files": [
+      {
+        "path": "protobuf/LICENSE",
+        "sha256": "6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d"
+      }
+    ]
+  },
+  {
+    "name": "psutil",
+    "version": "7.2.1",
+    "declared_license": "BSD-3-Clause",
+    "source": "https://github.com/giampaolo/psutil",
+    "files": [
+      {
+        "path": "psutil/LICENSE",
+        "sha256": "c7adc4d5d1337a548b967421f1fbe258b93033a0417708fd6f4e38f8ecbceb80"
+      }
+    ]
+  },
+  {
+    "name": "pyee",
+    "version": "14.0.0",
+    "declared_license": "MIT",
+    "source": "https://github.com/jfhbrook/pyee",
+    "files": [
+      {
+        "path": "pyee/LICENSE",
+        "sha256": "1ff556ca206b107f10e1c562ae454d3292e0296c3510eb90eb7f114caee32a66"
+      }
+    ]
+  },
+  {
+    "name": "typing_extensions",
+    "version": "4.16.0",
+    "declared_license": "PSF-2.0",
+    "source": "https://github.com/python/typing_extensions",
+    "files": [
+      {
+        "path": "typing-extensions/LICENSE",
+        "sha256": "3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf"
+      }
+    ]
+  },
+  {
+    "name": "ucapi",
+    "version": "0.7.0",
+    "declared_license": "MPL-2.0",
+    "source": "https://github.com/unfoldedcircle/integration-python-library",
+    "files": [
+      {
+        "path": "ucapi/LICENSE",
+        "sha256": "1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5"
+      }
+    ]
+  },
+  {
+    "name": "websockets",
+    "version": "17.2",
+    "declared_license": "BSD-3-Clause",
+    "source": "https://github.com/python-websockets/websockets",
+    "files": [
+      {
+        "path": "websockets/LICENSE",
+        "sha256": "0f44514998aca209d3482d10204a8adf2aa4296ff157a36a5c0922f2280632d3"
+      }
+    ]
+  },
+  {
+    "name": "yarl",
+    "version": "1.25.1",
+    "declared_license": "Apache-2.0",
+    "source": "https://github.com/aio-libs/yarl",
+    "files": [
+      {
+        "path": "yarl/LICENSE",
+        "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+      },
+      {
+        "path": "yarl/NOTICE",
+        "sha256": "56d6ac6c8105c0a51304c21db060e361af9a8ea0af9a75c239c28b5d13693838"
+      }
+    ]
+  },
+  {
+    "name": "zeroconf",
+    "version": "0.151.5",
+    "declared_license": "LGPL-2.1-or-later",
+    "source": "https://github.com/python-zeroconf/python-zeroconf",
+    "files": [
+      {
+        "path": "zeroconf/COPYING",
+        "sha256": "8198ac074cd4ecb33592d915682dd9da60eaaf39f3f8f327dfdf1696f1ca247e"
+      }
+    ]
+  }
+]

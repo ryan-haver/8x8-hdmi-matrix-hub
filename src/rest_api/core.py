@@ -6,11 +6,13 @@ import asyncio
 import datetime
 import json
 import logging
+import sys
 from pathlib import Path
 from typing import Any
 
 from aiohttp import web
 
+import hub
 from device_codes import hdr_from_device, scaler_from_device
 
 from .events import link_summary
@@ -28,8 +30,9 @@ from .validation import BadRequestError, parse_json_object
 
 _LOG = logging.getLogger("rest_api.core")
 
-#: driver.json ships next to the package (repository root, image /app), not in the working directory (API-24).
-DRIVER_JSON = Path(__file__).resolve().parents[2] / "driver.json"
+#: driver.json ships next to the package (repository root, image /app, or sys.prefix in wheel install) (API-24).
+_REPO_DRIVER_JSON = Path(__file__).resolve().parents[2] / "driver.json"
+DRIVER_JSON = _REPO_DRIVER_JSON if _REPO_DRIVER_JSON.exists() else Path(sys.prefix) / "driver.json"
 
 
 def _format_status(raw_status: dict[str, Any], matrix_device, input_names: dict[int, str], output_names: dict[int, str]) -> dict[str, Any]:
@@ -240,8 +243,8 @@ async def handle_info(request: web.Request) -> web.Response:
     """Get API and matrix info for the Web UI."""
     matrix_device = get_matrix_device()
 
-    driver_id = "orei_hdmi_matrix"
-    driver_name = "OREI HDMI Matrix"
+    driver_id = "hdmi_matrix"
+    driver_name = "HDMI Matrix"
 
     try:
         if DRIVER_JSON.exists():
@@ -252,6 +255,7 @@ async def handle_info(request: web.Request) -> web.Response:
         _LOG.warning(f"Could not load driver.json: {e}")
 
     info = {
+        "version": hub.__version__,
         "api_version": API_VERSION,
         "service": "orei-hdmi-matrix",
         "input_count": 8,
