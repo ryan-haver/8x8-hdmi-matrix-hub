@@ -1,0 +1,193 @@
+/**
+ * WP-E2 design tokens (Phase 5, UI simplification).
+ *
+ * Single source of truth for the main UI and the kiosk: every colour, spacing
+ * step, radius, layer and motion duration the UI is allowed to use lives here,
+ * so a change to one value updates every surface that shares it. The written
+ * specification is docs/ui/LOOK_AND_FEEL.md; this file implements its
+ * §2 colour system, §5 spacing/radii/layers and §6 motion.
+ *
+ * LOAD ORDER: this file is deliberately not linked yet. The sheets it is
+ * meant to consolidate (theme.css, style.css) still carry every legacy
+ * declaration, and its global `:focus-visible` and reduced-motion rules would
+ * repaint approved screens (e.g. the `matrix/grid/cell-focus` baseline, whose
+ * cell is focused programmatically and would gain an accent ring). Linking it
+ * is the switch that turns the sheet on, and it needs the owner's visual sign-
+ * off (docs/REMEDIATION_PLAN.md 5.3, .github/CODEOWNERS). When it is linked,
+ * link it BEFORE theme.css and style.css so those keep winning the cascade for
+ * every name they share; components then migrate onto these names one at a time.
+ *
+ * Colours: the four Tron presets change the accent *hue channels* only
+ * (--accent-h/-s/-l, --secondary-h). The semantic status colours
+ * (--color-success/warning/error/info) are deliberately NOT derived from the
+ * accent: they keep fixed, widely separated hues so "error is red" stays true
+ * in every preset (UI-20).
+ *
+ * Changes to this file need the project owner's review (.github/CODEOWNERS).
+ */
+
+:root {
+  /* =====================================================
+   * SURFACES & BACKGROUNDS (LOOK_AND_FEEL.md 2.3, 3)
+   * Near-black blue page, layered surfaces, translucent glass on top.
+   * ===================================================== */
+  --bg-primary: #0a0e14;
+  --bg-secondary: #111720;
+  --bg-tertiary: #1a2130;
+  --bg-elevated: #242e40;
+  --bg-glass: rgba(17, 23, 32, 0.75);
+  --bg-glass-heavy: rgba(13, 16, 26, 0.9);
+
+  /* =====================================================
+   * DYNAMIC HSL ACCENT SYSTEM (LOOK_AND_FEEL.md 2.1)
+   * A preset swaps the channels below; every accent colour is
+   * derived from them, so no component hard-codes a hue.
+   * ===================================================== */
+  --accent-h: 187;
+  --accent-s: 92%;
+  --accent-l: 50%;
+  --secondary-h: 25;
+
+  --accent-primary: hsl(var(--accent-h), var(--accent-s), var(--accent-l));
+  --accent-primary-hover: hsl(var(--accent-h), var(--accent-s), calc(var(--accent-l) + 8%));
+  --accent-primary-active: hsl(var(--accent-h), var(--accent-s), calc(var(--accent-l) - 5%));
+  --accent-primary-dim: hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.15);
+  --accent-secondary: hsl(var(--secondary-h), 85%, 55%);
+  --accent-secondary-dim: hsla(var(--secondary-h), 85%, 55%, 0.15);
+  --accent-glow: hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.4);
+
+  /* =====================================================
+   * SEMANTIC STATUS COLOURS (UI-20)
+   * Fixed hues, at least 30 degrees apart, so every preset keeps
+   * green = success, amber = warning, red = error, blue = info.
+   * Never derive these from --accent-h.
+   * ===================================================== */
+  --color-success: hsl(142 63% 45%);
+  --color-warning: hsl(38 92% 55%);
+  --color-error: hsl(358 75% 60%);
+  --color-info: hsl(205 88% 56%);
+
+  /* =====================================================
+   * SPACING SCALE (LOOK_AND_FEEL.md 5) - 4px base
+   * ===================================================== */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+  --space-9: 40px;
+  --space-10: 48px;
+  --space-11: 64px;
+  --space-12: 80px;
+
+  /* =====================================================
+   * BORDER RADII (LOOK_AND_FEEL.md 5)
+   * ===================================================== */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-control: 10px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* =====================================================
+   * Z-INDEX SCALE (LOOK_AND_FEEL.md 5)
+   * ===================================================== */
+  --z-base: 0;
+  --z-sticky: 200;
+  --z-popover: 100;
+  --z-drawer: 450;
+  --z-modal: 500;
+  --z-toast: 600;
+
+  /* =====================================================
+   * ACCESSIBILITY (UI-15)
+   * WCAG 2.5.5 / platform guidance: every pointer target is at
+   * least 44x44 CSS px, even when the painted control is smaller.
+   * ===================================================== */
+  --touch-target-min: 44px;
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 2px;
+
+  /* =====================================================
+   * MOTION (LOOK_AND_FEEL.md 6)
+   * The reduced-motion block below collapses these to 0.01ms.
+   * ===================================================== */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+}
+
+/**
+ * The four Tron presets (LOOK_AND_FEEL.md 2.2). Only the accent channels move;
+ * everything else - surfaces, status colours, spacing, motion - is shared, so a
+ * preset swap can never change what "error" or "focus" looks like.
+ *
+ * Ids follow the app's `data-tron-theme` attribute and map onto the documented
+ * presets: legacy = Tron Classic (cyan/orange), cluu = Neon (crimson/lime),
+ * athena = Royal (indigo/gold), ares = Vaporwave (teal/pink).
+ */
+[data-tron-theme='legacy'] {
+  --accent-h: 187;
+  --accent-s: 92%;
+  --accent-l: 50%;
+  --secondary-h: 25;
+}
+
+[data-tron-theme='cluu'] {
+  --accent-h: 350;
+  --accent-s: 88%;
+  --accent-l: 55%;
+  --secondary-h: 80;
+}
+
+[data-tron-theme='athena'] {
+  --accent-h: 240;
+  --accent-s: 85%;
+  --accent-l: 58%;
+  --secondary-h: 45;
+}
+
+[data-tron-theme='ares'] {
+  --accent-h: 170;
+  --accent-s: 90%;
+  --accent-l: 50%;
+  --secondary-h: 330;
+}
+
+/**
+ * Focus ring (UI-15): every keyboard-focused control shows the accent, so focus
+ * is never invisible on the dark surfaces. Mouse focus keeps its default ring
+ * suppression because :focus-visible only matches keyboard interaction.
+ */
+:focus-visible {
+  outline: var(--focus-ring-width) solid var(--accent-primary);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/**
+ * Reduced motion (LOOK_AND_FEEL.md 6, UI-07): collapse the duration tokens to
+ * the 0.01ms trick (near-zero but still a valid duration, so transition/animation
+ * events keep firing and code that waits on them does not hang), and apply them
+ * to every element because most rules in the app still carry literal durations.
+ */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0.01ms;
+    --duration-normal: 0.01ms;
+    --duration-slow: 0.01ms;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

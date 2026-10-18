@@ -267,10 +267,18 @@ Object.assign(FLOWS, {
     await page.locator(`#settings-drawer .edit-scene-btn[data-id="${p.scene_id}"]`).click();
     await page.locator('#scene-editor-modal.open').waitFor();
     await page.locator('#settings-drawer.open').waitFor({ state: 'hidden' });
-    await page.locator('#add-wait-step-btn').click();
+    const addWaitStep = async () => {
+      await page.locator('#add-wait-step-btn').click();
+      const waitModal = page.locator('.editor-shell');
+      if (await waitModal.count()) {
+        await page.getByLabel('Wait duration in seconds').fill(String(p.seconds));
+        await waitModal.getByRole('button', { name: 'Save', exact: true }).click();
+      }
+    };
+    await addWaitStep();
     await page.locator('#scene-steps-list .step-item').filter({ hasText: `${p.seconds} seconds` }).waitFor();
     steps.push(`edit ${p.scene_id}, add a ${p.seconds}-second wait through the duration prompt`);
-    await page.locator('#add-wait-step-btn').click();
+    await addWaitStep();
     await page.waitForFunction(() => document.querySelectorAll('#scene-steps-list .step-item').length === 2);
     await page.locator('.remove-step-btn[data-index="0"]').click();
     await page.waitForFunction(() => document.querySelectorAll('#scene-steps-list .step-item').length === 1);

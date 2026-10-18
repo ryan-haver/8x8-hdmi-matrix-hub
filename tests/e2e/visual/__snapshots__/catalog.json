@@ -165,16 +165,8 @@
     {
       "name": "dashboard/cards/all-types",
       "page": "ui",
-      "description": "Every dashboard card type (scene, locked scene, preset, built-in and user shortcut, profile, macro, aggregate widgets) once cards are rendered.",
-      "note": "UI-44 (fixed): the aggregate_widget cards render their widget (Routing; CEC Remote, stored as the legacy id \"cec-tray\"); they rendered empty because the renderer read card.widget_id and the layout stores id. The seed Quick Actions card stays empty: its widget was retired in Phase 8 (UI-55, owner decision). Before WP-E1 (UI-27) the profile and macro cards also needed their data injected.",
-      "themed": false,
-      "viewports": null
-    },
-    {
-      "name": "dashboard/cards/widgets",
-      "page": "ui",
-      "description": "The aggregate_widget cards at the end of the Dashboard Cards panel (Routing, CEC Remote), scrolled into view.",
-      "note": "UI-44 (new entry): before the fix these cards rendered nothing, so the panel ended after the macro card. The seed Quick Actions card has no widget to show (retired in Phase 8, UI-55).",
+      "description": "Every dashboard card type (scene, locked scene, preset, built-in and user shortcut, profile, macro) once cards are rendered.",
+      "note": "UI-55/UI-57 (owner decision 2026-10-09): widgets are pinned, never cards. The seed layout still stores the pre-UI-57 aggregate_widget cards (CEC Remote, Routing, Quick Actions) ahead of the item cards; the hub drops them on load. Before that (UI-44) they showed the pinned widgets a second time and Quick Actions empty, after the macro card. Before WP-E1 (UI-27) the profile and macro cards also needed their data injected.",
       "themed": false,
       "viewports": null
     },
@@ -191,6 +183,14 @@
       "page": "ui",
       "description": "Dashboard with the CEC remote widget pinned next to the Routing widget.",
       "note": null,
+      "themed": false,
+      "viewports": null
+    },
+    {
+      "name": "dashboard/first-visit",
+      "page": "ui",
+      "description": "Dashboard on a browser's first visit (no saved dashboard config): every registered widget pinned once, Routing then CEC Remote.",
+      "note": "UI-57 (new entry, owner decision 2026-10-09): before the fix only Routing was pinned (the CEC tray registers its widget after the first registration saved the config); the CEC Remote showed only as a dashboard card.",
       "themed": false,
       "viewports": null
     },
@@ -352,7 +352,7 @@
       "name": "profiles/api-endpoint-modal",
       "page": "ui",
       "description": "Profile \"API endpoint\" modal (URL + curl snippet for Flic/automation).",
-      "note": "The URLs hard-code port 8080 (api-copy.js:13, UI-18), wrong when the hub runs on another port (here 18080). The first click used to throw and open nothing (UI-28, fixed in WP-E1).",
+      "note": "Verifies the actual page origin, then uses a stable port-8080 fixture for the visual comparison. UI-18 derives URLs from the current origin.",
       "themed": false,
       "viewports": null
     },
@@ -798,7 +798,7 @@
       "name": "dialog/confirm/reboot",
       "page": "ui",
       "description": "Confirm dialog (danger variant) from Hardware → Reboot.",
-      "note": "Renders under the Hardware drawer: .confirm-dialog z-index 500 < drawer 1040.",
+      "note": "UI-32/UI-59: .confirm-dialog (--z-modal-nested 550) renders above the Hardware drawer (--z-drawer 450).",
       "themed": false,
       "viewports": null
     },
@@ -912,7 +912,7 @@
       "name": "editor/profile/validation-error",
       "page": "ui",
       "description": "Profile editor after saving with no name.",
-      "note": "The warning toast (z-index 300) renders under the modal.",
+      "note": "UI-32/UI-59: the warning toast (--z-toast 600) renders above the modal (--z-modal 500).",
       "themed": false,
       "viewports": null
     },

@@ -89,7 +89,7 @@ def request_origin(request: web.Request) -> str | None:
 
 def route_level(method: str, path: str) -> str | None:
     if path.startswith("/api/auth/"):
-        if path in ("/api/auth/status", "/api/auth/unlock", "/api/auth/lock", "/api/auth/pin"):
+        if path in ("/api/auth/status", "/api/auth/unlock", "/api/auth/login", "/api/auth/lock", "/api/auth/pin"):
             return None
         return "admin"
     if method not in ("POST", "PUT", "DELETE", "PATCH"):

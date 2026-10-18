@@ -4527,7 +4527,7 @@ features:
   title: Dashboard layout routes
   claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
   interfaces:
-    rest: [GET /api/dashboard/layout, PUT /api/dashboard/layout, POST /api/dashboard/cards, DELETE /api/dashboard/cards]
+    rest: [GET /api/dashboard/layout, PUT /api/dashboard/layout, POST /api/dashboard/layout, POST /api/dashboard/cards, DELETE /api/dashboard/cards]
   target: V2
   current: V1
   basis: tests/test_rest_api.py TestDashboardLayoutAPI (mocked).
@@ -4584,7 +4584,7 @@ features:
   title: Web UI, kiosk and static asset routes
   claim: docs/API_REFERENCE.md; src/rest_api/app.py route table
   interfaces:
-    rest: [GET /ui, GET /ui/, GET /kiosk, GET /kiosk/, 'GET /css/{path}', 'GET /js/{path}', 'GET /assets/{path}']
+    rest: [GET /ui, GET /ui/, GET /kiosk, GET /kiosk/, GET /manifest.json, 'GET /css/{path}', 'GET /js/{path}', 'GET /assets/{path}']
   target: V3
   current: V3
   basis: 'V3: tests/e2e/smoke.spec.ts loads /ui and /kiosk in Chromium with no page errors; tests/test_rest_api.py TestWebUI.'
@@ -7470,6 +7470,7 @@ features:
     - all mutating routes
     - GET /api/auth/status
     - POST /api/auth/unlock
+    - POST /api/auth/login
     - POST /api/auth/lock
     - POST /api/auth/pin
     - GET /api/auth/devices
