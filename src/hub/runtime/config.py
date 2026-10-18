@@ -4,11 +4,12 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass, field
-from pathlib import Path
 from typing import TYPE_CHECKING
 
+from hub.runtime_paths import default_config_dir
+
 if TYPE_CHECKING:
-    from run import Settings
+    from hub.cli import Settings
 
 
 @dataclass(frozen=True)
@@ -30,7 +31,7 @@ class ReconfigureResult:
 def resolve_matrix_address(settings: Settings) -> MatrixAddress | None:
     """Keep credentials bound to the saved UC address and preserve core precedence."""
     saved = None
-    home = settings.uc_config_home or Path(__file__).resolve().parents[3] / "config"
+    home = settings.uc_config_home or default_config_dir(data_dir=settings.data_dir)
     primary = home / "config_state.json"
     source = primary if primary.exists() else home / "config_state.json.migrated"
     try:

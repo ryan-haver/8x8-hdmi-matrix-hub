@@ -16,6 +16,7 @@ from hub.core.event_bus import EventBus
 from hub.core.matrix_service import MatrixService
 from hub.integrations.hub_client import HubEvent, HubSnapshot
 from hub.integrations.hub_client_local import HubClientLocal
+from hub.runtime_paths import default_config_dir, driver_metadata_path
 from orei_matrix import OreiMatrix
 
 from .actions import run_action_envelope
@@ -25,7 +26,6 @@ from .integrations import bind_integrations, build_integration_loader
 from .managers import create_managers
 
 _LOG = logging.getLogger(__name__)
-ROOT = Path(__file__).resolve().parents[3]
 CLEANUP_TIMEOUT = 5.0
 
 
@@ -72,7 +72,7 @@ class HubRuntime:
         managers.macros.set_cec_sender(self.commands.send_cec)
         self.loader = build_integration_loader(self.environ)
         self.server = None
-        self.driver_metadata = ROOT / "driver.json"
+        self.driver_metadata = driver_metadata_path()
         self._temporary_metadata = None
         self._process_lock = None
         self._wake = asyncio.Event()
@@ -489,7 +489,7 @@ def build_runtime(settings, *, environ: Mapping[str, str], matrix_factory=OreiMa
 
     from persistence import get_data_dir
 
-    config_dir = (settings.uc_config_home or ROOT / "config").resolve()
+    config_dir = (settings.uc_config_home or default_config_dir(data_dir=settings.data_dir)).resolve()
     data_dir = (settings.data_dir or get_data_dir()).resolve()
     process_lock = None
     if settings.uc_enabled:
