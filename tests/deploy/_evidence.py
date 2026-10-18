@@ -44,6 +44,12 @@ SCENARIOS: dict[str, dict[str, Any]] = {
         "features": ["F-OPS-003"],
         "covers": [*COVERS_COMMON, "docker-compose.yml", "docker-compose.uc-host.yml", "docker-compose.uc-bridge.yml"],
     },
+    "deploy.discovery": {
+        "title": "Shipped HA discovery advertises a reachable API and withdraws on shutdown on a private bridge",
+        "client": "api",
+        "features": ["F-OPS-005", "F-OPS-011"],
+        "covers": [*COVERS_COMMON, "tests/deploy/test_runtime_discovery.py", "tests/deploy/fixtures/discovery_probe.py"],
+    },
 }
 
 

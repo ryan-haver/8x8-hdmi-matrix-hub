@@ -113,6 +113,8 @@ def _scenario_of(item: pytest.Item) -> str | None:
     module = item.module.__name__.rsplit(".", 1)[-1] if getattr(item, "module", None) else ""
     if module == "test_compose":
         return "deploy.compose"
+    if module == "test_runtime_discovery":
+        return "deploy.discovery"
     if module == "test_docker_image":
         mode = getattr(item, "callspec", None) and item.callspec.params.get("hub")
         return f"deploy.image_{mode}" if mode else None
