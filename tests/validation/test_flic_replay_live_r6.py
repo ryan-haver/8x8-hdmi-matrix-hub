@@ -4,11 +4,12 @@ Launches the real simulator and hub stack (run.py), performs generated requests,
 and asserts:
 - HTTP envelopes and status codes
 - Simulator hardware state changes
-- Ordered command-log deltas
-- Exact-request replay vs known pre-fix defect reproduction
-- Gesture matching vs duplicate / non-matching rejection
-- Keyless vs keyed authentication (401 on missing/wrong key, 200 on header & query keys)
-- Protected profile PIN refusal vs distinct manual passcode execution
+- Exact ordered command-log assertions proving zero duplicate writes
+- Realistic CEC semantics: commands reach the hub, assert REST 400 refusals, valid navigation & volume
+- Matrix hardware write refusal handling
+- Partial profile recall (HTTP 207 Multi-Status, ok=False, partial state diff captured)
+- Unknown targets and invalid registration payloads
+- Keyed authentication, dynamic key creation, and key revocation
 - Redaction of keys, query parameters, and passcodes in evidence
 """
 
@@ -19,7 +20,7 @@ from typing import Any
 import aiohttp
 import pytest
 
-from tools.validate.clients import FlicClient, NotSupportedError
+from tools.validate.clients import FlicClient
 from tools.validate.clients.base import HubInfo
 from tools.validate.device import SimDevice
 from tools.validate.model import act
@@ -99,7 +100,6 @@ async def test_live_pre_fix_all_output_defect_reproduction(live_stack, flic_clie
     state_after = await _get_sim_state(sim)
     sources_after = [o["source"] for o in state_after["outputs"]]
     assert sources_after == sources_before
-    assert 3 not in sources_after or sources_after != [3] * 8
 
 
 @pytest.mark.asyncio
@@ -121,9 +121,11 @@ async def test_live_post_fix_all_output_exact_replay(live_stack, flic_client):
     state_after = await _get_sim_state(sim)
     assert [o["source"] for o in state_after["outputs"]] == [4] * 8
 
-    # Assert command-log delta: matrix switch command sent
+    # Exact ordered command-log assertion: exactly one command sent, zero duplicate writes
     recent_logs = (await _get_sim_log(sim))[log_cursor:]
-    assert any("switch" in str(e.get("command", "")).lower() or str(e.get("command", "")).startswith("s ") for e in recent_logs)
+    assert len(recent_logs) == 1
+    assert recent_logs[0]["command"] == "video switch"
+    assert recent_logs[0]["payload"]["source"] == [0, 4]
 
 
 @pytest.mark.asyncio
@@ -142,8 +144,11 @@ async def test_live_route_one_output_exact_replay(live_stack, flic_client):
     state = await _get_sim_state(sim)
     assert state["outputs"][2]["source"] == 2
 
+    # Exact ordered command-log assertion: exactly 1 command sent, zero duplicates
     recent_logs = (await _get_sim_log(sim))[log_cursor:]
-    assert any("switch" in str(e.get("command", "")).lower() or str(e.get("command", "")).startswith("s ") for e in recent_logs)
+    assert len(recent_logs) == 1
+    assert recent_logs[0]["command"] == "video switch"
+    assert recent_logs[0]["payload"]["source"] == [3, 2]
 
 
 @pytest.mark.asyncio
@@ -159,8 +164,11 @@ async def test_live_preset_recall_exact_replay(live_stack, flic_client):
     assert result.requests[0]["path"] == "/api/preset/1"
     assert result.requests[0]["body"] is None
 
+    # Exact ordered command-log assertion: exactly 1 preset recall command, zero duplicates
     recent_logs = (await _get_sim_log(sim))[log_cursor:]
-    assert any("preset" in str(e.get("command", "")).lower() or str(e.get("command", "")).startswith("r ") for e in recent_logs)
+    assert len(recent_logs) == 1
+    assert recent_logs[0]["command"] == "preset set"
+    assert recent_logs[0]["payload"]["index"] == 1
 
 
 @pytest.mark.asyncio
@@ -202,22 +210,174 @@ async def test_live_matrix_power_exact_replay(live_stack, flic_client):
 
 
 @pytest.mark.asyncio
-async def test_live_cec_and_refusal(live_stack, flic_client):
-    """Generated CEC commands and refusal for unsupported combinations."""
+async def test_live_cec_semantics_and_rest_400_refusals(live_stack, flic_client):
+    """Realistic CEC semantics: requests reach the hub; assert REST 400 refusals and valid navigation/volume."""
     _, _ = live_stack
 
-    # Valid CEC output volume
-    res_vol = await flic_client.perform(act("volume_control", vol_dir="volume_up", output=1))
-    assert res_vol.status == 200
+    # 1. Valid CEC input navigation commands reach hub and succeed
+    for nav_cmd in ["up", "down", "left", "right", "select", "back", "menu"]:
+        res_nav = await flic_client.perform(act("cec_input", input=1, command=nav_cmd))
+        assert res_nav.status == 200
+        assert res_nav.ok is True
 
-    # Valid CEC output power_on
-    res_cec = await flic_client.perform(act("cec_output", output=1, command="power_on"))
-    assert res_cec.status == 200
+    # 2. Valid CEC output volume commands reach hub and succeed
+    for vol_cmd in ["volume_up", "volume_down", "mute"]:
+        res_vol = await flic_client.perform(act("volume_control", vol_dir=vol_cmd, output=1))
+        assert res_vol.status == 200
+        assert res_vol.ok is True
 
-    # Refusal: input device does not support volume_up or mute
-    assert flic_client.supports(act("cec_input", input=1, command="volume_up")) is False
-    with pytest.raises(NotSupportedError, match="cannot perform 'cec_input'"):
-        await flic_client.perform(act("cec_input", input=1, command="volume_up"))
+    # 3. Hub refusal for unsupported input navigation command:
+    res_exit = await flic_client.perform(act("cec_input", input=1, command="exit"))
+    assert res_exit.status == 400
+    assert res_exit.ok is False
+    assert "Unknown command 'exit'" in str(res_exit.body)
+
+    # 4. Hub refusal for invalid CEC target/command combination:
+    # Sending active (an output-only command) to an input source device is rejected with HTTP 400
+    res_refusal_input = await flic_client.perform(act("cec_input", input=1, command="active"))
+    assert res_refusal_input.status == 400
+    assert res_refusal_input.ok is False
+    assert "Unknown command 'active'" in str(res_refusal_input.body)
+
+    # 5. Hub refusal: sending play (an input-only command) to an output display device is rejected with HTTP 400
+    res_refusal_output = await flic_client.perform(act("cec_output", output=1, command="play"))
+    assert res_refusal_output.status == 400
+    assert res_refusal_output.ok is False
+    assert "not available for outputs" in str(res_refusal_output.body)
+
+
+@pytest.mark.asyncio
+async def test_live_matrix_hardware_write_refusal(live_stack, flic_client):
+    """Matrix refusal: when simulator rejects writes, hub returns failure and ActionResult.ok is False."""
+    sim, _ = live_stack
+    await _reset_sim(sim)
+
+    async with SimDevice(sim.control_url) as dev:
+        # Inject reject_writes fault
+        await dev.set_faults({"reject_writes": True})
+
+        try:
+            res = await flic_client.perform(act("route", input=3, output=1))
+            assert res.status >= 400
+            assert res.ok is False
+
+            # Verify simulator state was not mutated
+            state = await dev.state()
+            assert state["outputs"][0]["source"] != 3
+        finally:
+            await dev.clear_faults()
+
+
+@pytest.mark.asyncio
+async def test_live_partial_profile_recall_207_multi_status(live_stack, flic_client):
+    """Profile with component failure returns HTTP 207 Multi-Status; ActionResult.ok must be False."""
+    sim, hub = live_stack
+    await _reset_sim(sim)
+
+    # Create profile with missing power-on macro but valid output route
+    profile_id = "partial_macro_fail"
+    profile_payload = {
+        "id": profile_id,
+        "name": "Partial Profile",
+        "power_on_macro": "nonexistent_macro_xyz",
+        "outputs": {"1": {"input": 7}},
+    }
+    async with aiohttp.ClientSession(base_url=hub.base_url) as session:
+        async with session.post("/api/profile", json=profile_payload) as r:
+            assert r.status == 200
+
+    try:
+        log_cursor = len(await _get_sim_log(sim))
+        res = await flic_client.perform(act("profile_recall", profile_id=profile_id))
+
+        # Assert HTTP envelope: 207 Multi-Status
+        assert res.status == 207
+        # Invariant: partial completion with errors is NOT complete success
+        assert res.ok is False
+        assert "Macro not found" in str(res.body)
+
+        # Assert partial state diff was captured: output 1 was switched to 7
+        state = await _get_sim_state(sim)
+        assert state["outputs"][0]["source"] == 7
+
+        # Exact ordered command-log assertion: video switch, tx stream, audio mute in sequence
+        recent_logs = (await _get_sim_log(sim))[log_cursor:]
+        assert len(recent_logs) == 3
+        commands = [entry["command"] for entry in recent_logs]
+        assert commands == ["video switch", "tx stream", "set output audio mute"]
+        assert recent_logs[0]["payload"]["source"] == [1, 7]
+        # Proves zero duplicate writes
+        assert commands.count("video switch") == 1
+
+    finally:
+        async with aiohttp.ClientSession(base_url=hub.base_url) as session:
+            await session.delete(f"/api/profile/{profile_id}")
+
+
+@pytest.mark.asyncio
+async def test_live_unknown_targets(live_stack, flic_client):
+    """Calling nonexistent targets returns HTTP 404 and ok=False."""
+    _, _ = live_stack
+    res = await flic_client.perform(act("profile_recall", profile_id="nonexistent_profile_9999"))
+    assert res.status == 404
+    assert res.ok is False
+
+
+@pytest.mark.asyncio
+async def test_live_flic_registration_invalid_payload(live_stack, flic_client):
+    """Invalid Flic registration payload returns HTTP 400 and ok=False."""
+    _, _ = live_stack
+    res = await flic_client.perform(act("flic_register", buttons="invalid_not_a_list"))
+    assert res.status == 400
+    assert res.ok is False
+
+
+@pytest.mark.asyncio
+async def test_live_revoked_api_key_refusal(live_stack, flic_client):
+    """Dynamic API keys: authorized before revocation, refused with 401 after revocation."""
+    sim, hub = live_stack
+    await _reset_sim(sim)
+
+    # 1. Enable control lock PIN
+    async with aiohttp.ClientSession(base_url=hub.base_url) as session:
+        async with session.post("/api/auth/pin", json={"level": "control", "pin": "6677"}) as r:
+            assert r.status == 200
+
+    try:
+        # 2. Create a dynamic API key via POST /api/auth/api-keys
+        async with aiohttp.ClientSession(base_url=hub.base_url) as session:
+            async with session.post("/api/auth/api-keys", json={"name": "Temporary Worker Key"}) as r:
+                assert r.status == 201
+                key_info = await r.json()
+                key_id = key_info["id"]
+                dynamic_key = key_info["key"]
+
+        # 3. Request with valid dynamic key succeeds (200) and redacts secret key
+        res_ok = await flic_client.perform(
+            act("route", input=2, output=1, api_key=dynamic_key, auth_mode="query")
+        )
+        assert res_ok.status == 200
+        assert res_ok.ok is True
+        assert res_ok.requests[0]["path"] == "/api/output/1/source?key=***REDACTED***"
+        assert dynamic_key not in str(res_ok.requests[0])
+
+        # 4. Revoke key via DELETE /api/auth/api-keys/{key_id}
+        async with aiohttp.ClientSession(base_url=hub.base_url) as session:
+            async with session.delete(f"/api/auth/api-keys/{key_id}") as r:
+                assert r.status == 200
+
+        # 5. Subsequent request with revoked key must be refused with 401
+        res_revoked = await flic_client.perform(
+            act("route", input=3, output=1, api_key=dynamic_key, auth_mode="query")
+        )
+        assert res_revoked.status == 401
+        assert res_revoked.ok is False
+        assert dynamic_key not in str(res_revoked.requests[0])
+
+    finally:
+        # Clear control PIN
+        async with aiohttp.ClientSession(base_url=hub.base_url) as session:
+            await session.post("/api/auth/pin", json={"level": "control", "pin": None})
 
 
 @pytest.mark.asyncio

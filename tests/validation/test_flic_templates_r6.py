@@ -1,4 +1,4 @@
-"""Template verification for Flic button integrations (R6).
+"""Template verification and anti-drift proof for Flic button integrations (R6).
 
 Compares generated requests and JS SDK snippets against authoritative sources:
 - web/js/components/integrations-drawer.js
@@ -7,10 +7,13 @@ Compares generated requests and JS SDK snippets against authoritative sources:
 - tests/fixtures/flic_replay_r6/template_manifest.json
 
 Exercises actual generated SDK callbacks in Node.js with stubbed buttons/http.
+Proves anti-drift detection by mutating temporary copies of generator paths,
+request bodies, and gesture clauses.
 """
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import shutil
@@ -19,7 +22,13 @@ from pathlib import Path
 
 import pytest
 
-from tools.validate.clients.flic import generate_flic_sdk_snippet
+from tools.validate.clients import FlicClient
+from tools.validate.clients.flic import (
+    build_drawer_request,
+    generate_flic_sdk_snippet,
+    run_flic_driver,
+)
+from tools.validate.model import act
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DRAWER_JS = REPO_ROOT / "web" / "js" / "components" / "integrations-drawer.js"
@@ -41,7 +50,6 @@ def test_template_manifest_fixture_exists():
 
 def test_drawer_source_switch_all_updated_to_api_switch():
     content = DRAWER_JS.read_text(encoding="utf-8")
-    # Verify switch_all now points to /api/switch with bodyObj = { input: config.inputNum }
     assert "case 'switch_all':" in content
     switch_all_match = re.search(
         r"case 'switch_all':\s*urlPath = ['\"]/api/switch['\"];\s*bodyObj = \{\s*input:\s*config\.inputNum\s*\};",
@@ -68,7 +76,7 @@ def test_drawer_source_all_base_requests_match():
     assert "`/api/power/${config.powerCmd}`" in content
     assert "case 'cec':" in content
     assert "`/api/cec/${config.cecTargetType}/${config.cecTargetPort}/${config.cecCmd}`" in content
-    assert "url: API_BASE + \"/api/integrations/flic/register\"" in content
+    assert 'url: API_BASE + "/api/integrations/flic/register"' in content
 
 
 def test_api_copy_js_matches_rest_endpoints():
@@ -96,6 +104,128 @@ def test_flic_setup_doc_matches_table():
     assert "X-API-Key: <key>" in doc
     assert "?key=<key>" in doc
     assert "&key=<key>" in doc
+
+
+# ==========================================
+# ANTI-DRIFT PROOF TESTS
+# ==========================================
+
+
+def test_anti_drift_path_mutation_detected(tmp_path: Path):
+    """Mutating a generator path in integrations-drawer.js is immediately detected by the bridge."""
+    mutated_drawer = tmp_path / "integrations-drawer.js"
+    content = DRAWER_JS.read_text(encoding="utf-8")
+
+    # Baseline verification
+    _, base_path, _, _, _ = build_drawer_request(act("preset_recall", preset=1))
+    assert base_path == "/api/preset/1"
+
+    # Inject path mutation
+    mutated_content = content.replace(
+        "`/api/preset/${config.presetNum}`",
+        "`/api/drifted_preset_v2/${config.presetNum}`",
+    )
+    mutated_drawer.write_text(mutated_content, encoding="utf-8")
+
+    # Verify bridge reads and detects the drifted path
+    _, drifted_path, _, _, _ = build_drawer_request(
+        act("preset_recall", preset=1),
+        source_path=mutated_drawer,
+    )
+    assert drifted_path != base_path
+    assert drifted_path == "/api/drifted_preset_v2/1"
+
+
+def test_anti_drift_body_mutation_detected(tmp_path: Path):
+    """Mutating request body serialization in integrations-drawer.js is detected."""
+    mutated_drawer = tmp_path / "integrations-drawer.js"
+    content = DRAWER_JS.read_text(encoding="utf-8")
+
+    # Baseline verification
+    _, _, base_body, _, _ = build_drawer_request(act("route_all", input=4))
+    assert base_body == {"input": 4}
+
+    # Inject body mutation
+    mutated_content = content.replace(
+        "bodyObj = { input: config.inputNum };",
+        "bodyObj = { input: config.inputNum, drifted_schema: 'v2', extra: true };",
+    )
+    mutated_drawer.write_text(mutated_content, encoding="utf-8")
+
+    # Verify bridge detects the drifted payload
+    _, _, drifted_body, _, _ = build_drawer_request(
+        act("route_all", input=4),
+        source_path=mutated_drawer,
+    )
+    assert drifted_body != base_body
+    assert drifted_body == {"input": 4, "drifted_schema": "v2", "extra": True}
+
+
+def test_anti_drift_gesture_condition_mutation_detected(tmp_path: Path):
+    """Mutating gesture condition in integrations-drawer.js is detected and prevents execution."""
+    mutated_drawer = tmp_path / "integrations-drawer.js"
+    content = DRAWER_JS.read_text(encoding="utf-8")
+
+    # Baseline verification
+    base_snippet = generate_flic_sdk_snippet(gesture="single")
+    assert "obj.isSingleClick" in base_snippet
+
+    # Mutate gesture condition in drawer
+    mutated_content = content.replace(
+        "gesture === 'single' ? 'obj.isSingleClick'",
+        "gesture === 'single' ? 'obj.isCustomDriftedClick'",
+    )
+    mutated_drawer.write_text(mutated_content, encoding="utf-8")
+
+    # Verify bridge generated snippet reflects mutation
+    mutated_snippet = generate_flic_sdk_snippet(gesture="single", source_path=mutated_drawer)
+    assert "obj.isCustomDriftedClick" in mutated_snippet
+    assert "obj.isSingleClick" not in mutated_snippet
+
+    # Verify event evaluation in Node harness: standard single-click fails to trigger
+    harness_input = {
+        "script": mutated_snippet,
+        "buttons": [{"name": "B1", "bdaddr": "11:22:33"}],
+        "events": [
+            {
+                "eventName": "buttonSingleOrDoubleClickOrHold",
+                "payload": {"bdaddr": "11:22:33", "isSingleClick": True},
+            }
+        ],
+    }
+    res = run_flic_driver("--harness", harness_input)
+    assert res["eventResults"][0]["requestsTriggered"] == 0, (
+        "Mutated gesture clause must fail to match standard event payload"
+    )
+
+
+def test_environment_evidence_node_and_sha256():
+    """Environment reports source file SHA-256, real Node version, and unobserved stubs."""
+    client = FlicClient()
+    env = client.environment()
+
+    assert env["name"] == "flic"
+    assert env["transport"] == "aiohttp"
+    assert "sdk_version" not in env  # Invented version stripped
+
+    # Real Node version (e.g. v24.20.0)
+    assert env["node_version"].startswith("v")
+    assert "." in env["node_version"]
+
+    # Real source SHA-256 digest
+    assert len(env["drawer_source_sha256"]) == 64
+    actual_hash = hashlib.sha256(DRAWER_JS.read_bytes()).hexdigest()
+    assert env["drawer_source_sha256"] == actual_hash
+
+    # Explicit unobserved runtime labels
+    assert env["node_stubs"] == "unobserved"
+    assert env["flic_sdk_runtime"] == "unobserved"
+    assert env["physical_buttons"] == "unobserved"
+
+
+# ==========================================
+# NODE SDK HARNESS & CALLBACK VERIFICATION
+# ==========================================
 
 
 @pytest.mark.skipif(not shutil.which("node"), reason="Node.js runtime not found on PATH")

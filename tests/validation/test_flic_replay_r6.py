@@ -48,6 +48,9 @@ def test_flic_client_intents_and_unsupported_intents():
     assert client.supports(act("preset_recall", preset=1)) is True
     assert client.supports(act("route", input=2, output=1)) is True
     assert client.supports(act("route_all", input=3)) is True
+    # CEC commands reach the hub (realistic semantics: no client-side pre-filtering)
+    assert client.supports(act("cec_input", input=1, command="volume_up")) is True
+    assert client.supports(act("cec_output", output=2, command="power_off")) is True
 
     # Physical button client cannot observe state or perform UI/editor intents
     assert client.supports(act("scene_wait_edit", scene_id="s", seconds=1.0)) is False
@@ -70,6 +73,10 @@ def test_environment_evidence():
     assert env["transport"] == "aiohttp"
     assert "web/js/components/integrations-drawer.js" in env["templates"]
     assert "docs/FLIC_SETUP.md" in env["templates"]
+    assert env["node_stubs"] == "unobserved"
+    assert env["flic_sdk_runtime"] == "unobserved"
+    assert env["physical_buttons"] == "unobserved"
+    assert "sdk_version" not in env
 
 
 def test_build_drawer_request_exact_base_requests():
@@ -130,7 +137,7 @@ def test_build_drawer_request_exact_base_requests():
     assert (m, p, b, h) == ("POST", "/api/integrations/flic/register", {"buttons": buttons}, {"Content-Type": "application/json"})
 
 
-def test_auth_variants_header_and_query():
+def test_auth_variants_header_and_query_and_encoding():
     # Keyless by default
     _, _, _, h, meta = build_drawer_request(act("preset_recall", preset=1))
     assert "X-API-Key" not in h
@@ -153,6 +160,13 @@ def test_auth_variants_header_and_query():
     )
     assert p == "/api/input/next?output=2&key=secret-key-123"
     assert "X-API-Key" not in h
+
+    # Special character URL encoding test: spaces, +, &, =
+    _, p_special, _, _, _ = build_drawer_request(
+        act("preset_recall", preset=1, api_key="my key+token&value=42", auth_mode="query")
+    )
+    assert p_special == "/api/preset/1?key=my%20key%2Btoken%26value%3D42"
+    assert redact_path(p_special) == "/api/preset/1?key=***REDACTED***"
 
 
 def test_profile_pin_refusal_vs_manual_passcode_distinction():
@@ -269,9 +283,9 @@ def test_generate_sdk_snippet_contains_startup_and_handler():
     assert 'var API_BASE = "http://192.168.1.50:8080";' in snippet
     assert 'url: API_BASE + "/api/integrations/flic/register"' in snippet
     assert 'button.name === "Kitchen"' in snippet
-    assert 'obj.isSingleClick' in snippet
+    assert "obj.isSingleClick" in snippet
     assert 'url: API_BASE + "/api/output/1/source"' in snippet
-    assert 'JSON.stringify({"input": 2})' in snippet
+    assert '{"input":2}' in snippet
 
 
 @pytest.mark.asyncio
@@ -324,5 +338,57 @@ async def test_flic_client_perform_flow_against_mock_server(aiohttp_server):
         assert res_all.requests[0]["path"] == "/api/switch"
         assert res_all.requests[0]["body"] == {"input": 4}
 
+    finally:
+        await client.stop()
+
+
+@pytest.mark.asyncio
+async def test_flic_client_perform_207_multi_status_marked_not_ok(aiohttp_server):
+    """HTTP 207 Multi-Status with component failure must not be treated as complete success."""
+    async def partial_handler(request: web.Request) -> web.Response:
+        return web.json_response(
+            {
+                "success": False,
+                "profile": "partial_profile",
+                "applied": [{"output": 1, "input": 2}],
+                "errors": ["Macro not found: missing_macro"],
+            },
+            status=207,
+        )
+
+    app = web.Application()
+    app.router.add_post("/api/profile/{profile_id}/recall", partial_handler)
+
+    server = await aiohttp_server(app)
+    client = FlicClient()
+    await client.start(HubInfo(f"http://{server.host}:{server.port}"))
+
+    try:
+        res = await client.perform(act("profile_recall", profile_id="p_test"))
+        assert res.status == 207
+        assert res.ok is False
+        assert "applied" in res.body
+        assert "errors" in res.body
+    finally:
+        await client.stop()
+
+
+@pytest.mark.asyncio
+async def test_flic_client_error_redaction_on_connection_failure():
+    """Client error handling must redact sensitive query parameters from result.error."""
+    client = FlicClient()
+    # Connect to an unreachable address to trigger ClientConnectorError
+    await client.start(HubInfo("http://127.0.0.1:59999"))
+
+    try:
+        res = await client.perform(
+            act("preset_recall", preset=1, api_key="super-secret-token", auth_mode="query")
+        )
+        assert res.ok is False
+        assert res.error is not None
+        assert "super-secret-token" not in res.error
+        assert "super-secret-token" not in "".join(res.steps)
+        if "key=" in res.error:
+            assert "key=***REDACTED***" in res.error
     finally:
         await client.stop()

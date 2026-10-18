@@ -11,17 +11,21 @@ Key architectural invariants:
 2. Emits exact keyless requests matching the drawer by default.
 3. Explicitly distinguishes documented manual X-API-Key and ?key=/&key= variants.
 4. Asserts refusal for protected profile PINs on drawer requests (no synthetic bypass).
-5. Asserts refusal for invalid CEC target/command combinations.
-6. Redacts all API keys, query keys, and PIN secrets in ActionResult.requests and evidence.
-7. Exercises actual Flic Hub SDK callback patterns with stubbed button/http managers.
+5. Dispatches CEC commands directly to hub to assert REST 400 refusal semantics.
+6. Redacts all API keys, query keys, PIN secrets, and raw exception strings in ActionResult evidence.
+7. Executes real updateFlicOutput and updateFlicSdkSnippet via narrow Node driver (flic_driver.mjs).
 """
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
+import subprocess
 import time
+import urllib.parse
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 import aiohttp
@@ -29,14 +33,42 @@ import aiohttp
 from ..model import Action
 from .base import ActionResult, Client, HubInfo, NotSupportedError
 
-VALID_CEC_INPUT_COMMANDS = frozenset({"power_on", "power_off", "play", "pause"})
-VALID_CEC_OUTPUT_COMMANDS = frozenset(
-    {"power_on", "power_off", "play", "pause", "mute", "volume_up", "volume_down"}
-)
+REPO_ROOT = Path(__file__).resolve().parents[3]
+DEFAULT_DRAWER_PATH = REPO_ROOT / "web" / "js" / "components" / "integrations-drawer.js"
+DRIVER_MJS = REPO_ROOT / "tools" / "validate" / "clients" / "flic_driver.mjs"
+
+
+def get_node_version() -> str:
+    """Return the installed Node.js version string, or 'unknown' if unavailable."""
+    try:
+        res = subprocess.run(["node", "-v"], capture_output=True, text=True, check=True)
+        return res.stdout.strip()
+    except Exception:
+        return "unknown"
+
+
+def get_drawer_sha256(source_path: Path | None = None) -> str:
+    """Compute SHA-256 digest of integrations-drawer.js."""
+    target = source_path or DEFAULT_DRAWER_PATH
+    if target.is_file():
+        return hashlib.sha256(target.read_bytes()).hexdigest()
+    return "unknown"
+
+
+def run_flic_driver(mode: str, payload: dict[str, Any]) -> dict[str, Any]:
+    """Execute flic_driver.mjs in Node with JSON payload."""
+    res = subprocess.run(
+        ["node", str(DRIVER_MJS), mode],
+        input=json.dumps(payload),
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    return json.loads(res.stdout)
 
 
 def redact_path(path: str) -> str:
-    """Mask ?key=... and &key=... query strings in URLs/paths."""
+    """Mask ?key=... and &key=... query strings in URLs/paths/strings."""
     return re.sub(r"([?&]key=)[^&]+", r"\1***REDACTED***", path)
 
 
@@ -88,8 +120,9 @@ def build_drawer_request(
     action: Action,
     *,
     legacy_all_output: bool = False,
+    source_path: Path | None = None,
 ) -> tuple[str, str, Any, dict[str, str], dict[str, Any]]:
-    """Build exact request matching the Drawer / SDK templates.
+    """Build exact request matching the Drawer / SDK templates using Node bridge.
 
     Returns: (method, path, body, headers, metadata)
     """
@@ -98,21 +131,41 @@ def build_drawer_request(
     method = "POST"
     headers: dict[str, str] = {}
     body: Any = None
+    path: str = ""
 
     match action.intent:
         case "preset_recall":
             preset = int(p.get("preset", 1))
-            path = f"/api/preset/{preset}"
+            driver_out = run_flic_driver(
+                "--generate",
+                {
+                    "config": {"targetType": "preset", "presetNum": preset},
+                    "sourcePath": str(source_path) if source_path else None,
+                },
+            )
+            method = driver_out["method"]
+            path = driver_out["urlPath"]
+            body = driver_out["body"]
 
         case "profile_recall":
             profile_id = str(p.get("profile_id", ""))
-            path = f"/api/profile/{profile_id}/recall"
+            driver_out = run_flic_driver(
+                "--generate",
+                {
+                    "config": {"targetType": "profile", "profileId": profile_id},
+                    "sourcePath": str(source_path) if source_path else None,
+                },
+            )
+            method = driver_out["method"]
+            path = driver_out["urlPath"]
             # The drawer emits no body for profile recall. If a manual passcode test is explicitly
             # requested via "manual_passcode", include it and record the distinct request type.
             if p.get("manual_passcode") is not None:
                 body = {"passcode": str(p["manual_passcode"])}
                 headers["Content-Type"] = "application/json"
                 metadata["request_type"] = "manual_passcode"
+            else:
+                body = driver_out["body"]
 
         case "route_all":
             input_num = int(p.get("input", 1))
@@ -121,48 +174,113 @@ def build_drawer_request(
                 path = f"/api/input/{input_num}"
                 metadata["request_type"] = "legacy_defect"
             else:
-                path = "/api/switch"
-                body = {"input": input_num}
-                headers["Content-Type"] = "application/json"
+                driver_out = run_flic_driver(
+                    "--generate",
+                    {
+                        "config": {"targetType": "switch_all", "inputNum": input_num},
+                        "sourcePath": str(source_path) if source_path else None,
+                    },
+                )
+                method = driver_out["method"]
+                path = driver_out["urlPath"]
+                body = driver_out["body"]
+                if body is not None:
+                    headers["Content-Type"] = "application/json"
 
         case "route":
             input_num = int(p.get("input", 1))
             output_num = int(p.get("output", 1))
-            path = f"/api/output/{output_num}/source"
-            body = {"input": input_num}
-            headers["Content-Type"] = "application/json"
+            driver_out = run_flic_driver(
+                "--generate",
+                {
+                    "config": {"targetType": "switch_output", "inputNum": input_num, "outputNum": output_num},
+                    "sourcePath": str(source_path) if source_path else None,
+                },
+            )
+            method = driver_out["method"]
+            path = driver_out["urlPath"]
+            body = driver_out["body"]
+            if body is not None:
+                headers["Content-Type"] = "application/json"
 
         case "cycle_input":
             cycle_dir = str(p.get("cycle_dir") or p.get("direction", "next")).lower()
             output_num = int(p.get("output", 1))
-            path = f"/api/input/{cycle_dir}?output={output_num}"
+            driver_out = run_flic_driver(
+                "--generate",
+                {
+                    "config": {"targetType": "cycle_input", "cycleDir": cycle_dir, "outputNum": output_num},
+                    "sourcePath": str(source_path) if source_path else None,
+                },
+            )
+            method = driver_out["method"]
+            path = driver_out["urlPath"]
+            body = driver_out["body"]
 
         case "volume_control":
             vol_dir = str(p.get("vol_dir") or p.get("action") or p.get("direction", "volume_up")).lower()
             output_num = int(p.get("output", 1))
-            path = f"/api/cec/output/{output_num}/{vol_dir}"
+            driver_out = run_flic_driver(
+                "--generate",
+                {
+                    "config": {"targetType": "volume_control", "volDir": vol_dir, "outputNum": output_num},
+                    "sourcePath": str(source_path) if source_path else None,
+                },
+            )
+            method = driver_out["method"]
+            path = driver_out["urlPath"]
+            body = driver_out["body"]
 
         case "matrix_power":
             is_on = bool(p.get("on", True))
-            path = f"/api/power/{'on' if is_on else 'off'}"
+            driver_out = run_flic_driver(
+                "--generate",
+                {
+                    "config": {"targetType": "power", "powerCmd": "on" if is_on else "off"},
+                    "sourcePath": str(source_path) if source_path else None,
+                },
+            )
+            method = driver_out["method"]
+            path = driver_out["urlPath"]
+            body = driver_out["body"]
 
         case "cec_input":
             input_num = int(p.get("input", 1))
             command = str(p.get("command", "power_on")).lower()
-            if command not in VALID_CEC_INPUT_COMMANDS:
-                raise NotSupportedError(
-                    f"unsupported CEC input command {command!r}; Flic only supports {sorted(VALID_CEC_INPUT_COMMANDS)}"
-                )
-            path = f"/api/cec/input/{input_num}/{command}"
+            driver_out = run_flic_driver(
+                "--generate",
+                {
+                    "config": {
+                        "targetType": "cec",
+                        "cecTargetType": "input",
+                        "cecTargetPort": input_num,
+                        "cecCmd": command,
+                    },
+                    "sourcePath": str(source_path) if source_path else None,
+                },
+            )
+            method = driver_out["method"]
+            path = driver_out["urlPath"]
+            body = driver_out["body"]
 
         case "cec_output":
             output_num = int(p.get("output", 1))
             command = str(p.get("command", "power_on")).lower()
-            if command not in VALID_CEC_OUTPUT_COMMANDS:
-                raise NotSupportedError(
-                    f"unsupported CEC output command {command!r}; Flic only supports {sorted(VALID_CEC_OUTPUT_COMMANDS)}"
-                )
-            path = f"/api/cec/output/{output_num}/{command}"
+            driver_out = run_flic_driver(
+                "--generate",
+                {
+                    "config": {
+                        "targetType": "cec",
+                        "cecTargetType": "output",
+                        "cecTargetPort": output_num,
+                        "cecCmd": command,
+                    },
+                    "sourcePath": str(source_path) if source_path else None,
+                },
+            )
+            method = driver_out["method"]
+            path = driver_out["urlPath"]
+            body = driver_out["body"]
 
         case "macro_run":
             macro_id = str(p.get("macro_id", ""))
@@ -182,8 +300,9 @@ def build_drawer_request(
     if api_key is not None:
         auth_mode = str(p.get("auth_mode") or p.get("key_placement", "header")).lower()
         if auth_mode == "query" or p.get("query_key", False):
+            encoded_key = urllib.parse.quote(str(api_key), safe="")
             sep = "&" if "?" in path else "?"
-            path = f"{path}{sep}key={api_key}"
+            path = f"{path}{sep}key={encoded_key}"
             metadata["auth_mode"] = "query"
         else:
             headers["X-API-Key"] = str(api_key)
@@ -213,135 +332,45 @@ def generate_flic_sdk_snippet(
     cec_cmd: str = "power_on",
     model_name: str = "HDMI Matrix",
     legacy_all_output: bool = False,
+    source_path: Path | None = None,
 ) -> str:
-    """Exact JavaScript snippet generator matching updateFlicSdkSnippet in integrations-drawer.js."""
-    url_path = ""
-    body_obj: dict[str, Any] | None = None
-    method = "POST"
+    """Authoritative JavaScript snippet generator executing updateFlicSdkSnippet via Node driver."""
+    config = {
+        "buttonType": button_type,
+        "buttonIdentifier": button_identifier,
+        "targetType": target_type,
+        "gesture": gesture,
+        "presetNum": preset_num,
+        "profileId": profile_id,
+        "inputNum": input_num,
+        "outputNum": output_num,
+        "cycleDir": cycle_dir,
+        "volDir": vol_dir,
+        "powerCmd": power_cmd,
+        "cecTargetType": cec_target_type,
+        "cecTargetPort": cec_target_port,
+        "cecCmd": cec_cmd,
+    }
+    payload: dict[str, Any] = {"config": config, "origin": origin}
+    if source_path is not None:
+        payload["sourcePath"] = str(source_path)
 
-    match target_type:
-        case "preset":
-            url_path = f"/api/preset/{preset_num}"
-        case "profile":
-            url_path = f"/api/profile/{profile_id}/recall"
-        case "switch_all":
-            if legacy_all_output:
-                url_path = f"/api/input/{input_num}"
-            else:
-                url_path = "/api/switch"
-                body_obj = {"input": input_num}
-        case "switch_output":
-            url_path = f"/api/output/{output_num}/source"
-            body_obj = {"input": input_num}
-        case "cycle_input":
-            url_path = f"/api/input/{cycle_dir}?output={output_num}"
-        case "volume_control":
-            url_path = f"/api/cec/output/{output_num}/{vol_dir}"
-        case "power":
-            url_path = f"/api/power/{power_cmd}"
-        case "cec":
-            url_path = f"/api/cec/{cec_target_type}/{cec_target_port}/{cec_cmd}"
+    out = run_flic_driver("--generate", payload)
+    snippet: str = out["snippet"]
 
-    if gesture == "left_single":
-        trigger_condition = "obj.buttonNumber === 0 && obj.isSingleClick"
-        event_name = "buttonSingleOrDoubleClickOrHold"
-    elif gesture == "left_double":
-        trigger_condition = "obj.buttonNumber === 0 && obj.isDoubleClick"
-        event_name = "buttonSingleOrDoubleClickOrHold"
-    elif gesture == "left_hold":
-        trigger_condition = "obj.buttonNumber === 0 && obj.isHold"
-        event_name = "buttonSingleOrDoubleClickOrHold"
-    elif gesture == "right_single":
-        trigger_condition = "obj.buttonNumber === 1 && obj.isSingleClick"
-        event_name = "buttonSingleOrDoubleClickOrHold"
-    elif gesture == "right_double":
-        trigger_condition = "obj.buttonNumber === 1 && obj.isDoubleClick"
-        event_name = "buttonSingleOrDoubleClickOrHold"
-    elif gesture == "right_hold":
-        trigger_condition = "obj.buttonNumber === 1 && obj.isHold"
-        event_name = "buttonSingleOrDoubleClickOrHold"
-    elif gesture == "single":
-        trigger_condition = "obj.isSingleClick"
-        event_name = "buttonSingleOrDoubleClickOrHold"
-    elif gesture == "double":
-        trigger_condition = "obj.isDoubleClick"
-        event_name = "buttonSingleOrDoubleClickOrHold"
-    elif gesture == "hold":
-        trigger_condition = "obj.isHold"
-        event_name = "buttonSingleOrDoubleClickOrHold"
-    elif gesture == "rotate_cw":
-        trigger_condition = "obj.direction > 0"
-        event_name = "buttonRotate"
-    elif gesture == "rotate_ccw":
-        trigger_condition = "obj.direction < 0"
-        event_name = "buttonRotate"
-    else:
-        trigger_condition = "obj.isSingleClick"
-        event_name = "buttonSingleOrDoubleClickOrHold"
-
-    body_clause = ""
-    if body_obj is not None:
-        body_clause = f',\n            headers: {{"Content-Type": "application/json"}},\n            content: JSON.stringify({json.dumps(body_obj)})'
-
-    action_code = (
-        f'        http.makeRequest({{\n'
-        f'            url: API_BASE + "{url_path}",\n'
-        f'            method: "{method}"{body_clause}\n'
-        f'        }}, function(err, res) {{\n'
-        f'            console.log(err ? "Request failed" : "Matrix updated successfully!");\n'
-        f'        }});'
-    )
-
-    identifier = button_identifier.strip()
-    if identifier:
-        handler_body = (
-            f'    var button = buttonManager.getButton(obj.bdaddr);\n'
-            f'    if (button && (button.name === "{identifier}" || obj.bdaddr === "{identifier}")) {{\n'
-            f'        if ({trigger_condition}) {{\n'
-            f'            console.log("Flic Button trigger detected - updating {model_name}");\n'
-            f'{action_code}\n'
-            f'        }}\n'
-            f'    }}'
-        )
-    else:
-        handler_body = (
-            f'    if ({trigger_condition}) {{\n'
-            f'        console.log("Flic Button trigger detected - updating {model_name}");\n'
-            f'{action_code}\n'
-            f'    }}'
+    if legacy_all_output and target_type == "switch_all":
+        snippet = snippet.replace("/api/switch", f"/api/input/{input_num}")
+        snippet = re.sub(
+            r',\s*headers: \{"Content-Type": "application/json"\},\s*content: JSON\.stringify\(\{"input":\d+\}\)',
+            "",
+            snippet,
         )
 
-    return (
-        f'// {model_name} Hub - Flic Hub SDK Integration Script\n'
-        f'// Paste this in the Flic Hub IDE (https://hubsdk.flic.io/)\n\n'
-        f'var buttonManager = require("buttons");\n'
-        f'var http = require("http");\n\n'
-        f'var API_BASE = "{origin}";\n\n'
-        f'// Automatically register all paired buttons with the {model_name} Hub server on startup\n'
-        f'try {{\n'
-        f'    var buttons = buttonManager.getButtons().map(function(btn) {{\n'
-        f'        return {{ name: btn.name, bdaddr: btn.bdaddr, serial: btn.serialNumber || "" }};\n'
-        f'    }});\n'
-        f'    http.makeRequest({{\n'
-        f'        url: API_BASE + "/api/integrations/flic/register",\n'
-        f'        method: "POST",\n'
-        f'        headers: {{"Content-Type": "application/json"}},\n'
-        f'        content: JSON.stringify({{buttons: buttons}})\n'
-        f'    }}, function(err, res) {{\n'
-        f'        console.log(err ? "Failed to register buttons with {model_name} Hub" : "Buttons registered successfully!");\n'
-        f'    }});\n'
-        f'}} catch (e) {{\n'
-        f'    console.log("Startup registration failed: " + e);\n'
-        f'}}\n\n'
-        f'buttonManager.on("{event_name}", function(obj) {{\n'
-        f'{handler_body}\n'
-        f'}});\n\n'
-        f'console.log("{model_name} Control script loaded successfully!");\n'
-    )
+    return snippet
 
 
 class FlicSdkEngine:
-    """Simulates Flic Hub SDK execution (startup registration & gesture matching)."""
+    """Executes Flic Hub SDK scripts (startup registration & gesture matching) via Node harness."""
 
     def __init__(
         self,
@@ -362,6 +391,7 @@ class FlicSdkEngine:
         cec_target_port: int = 1,
         cec_cmd: str = "power_on",
         legacy_all_output: bool = False,
+        source_path: Path | None = None,
     ) -> None:
         self.origin = origin.rstrip("/")
         self.button_type = button_type
@@ -379,6 +409,28 @@ class FlicSdkEngine:
         self.cec_target_port = cec_target_port
         self.cec_cmd = cec_cmd
         self.legacy_all_output = legacy_all_output
+        self.source_path = source_path
+
+        # Generate authoritative snippet for this configuration
+        self.snippet = generate_flic_sdk_snippet(
+            origin=self.origin,
+            button_type=self.button_type,
+            button_identifier=self.button_identifier,
+            target_type=self.target_type,
+            gesture=self.gesture,
+            preset_num=self.preset_num,
+            profile_id=self.profile_id,
+            input_num=self.input_num,
+            output_num=self.output_num,
+            cycle_dir=self.cycle_dir,
+            vol_dir=self.vol_dir,
+            power_cmd=self.power_cmd,
+            cec_target_type=self.cec_target_type,
+            cec_target_port=self.cec_target_port,
+            cec_cmd=self.cec_cmd,
+            legacy_all_output=self.legacy_all_output,
+            source_path=self.source_path,
+        )
 
     def startup_request(self, buttons: list[FlicButtonInfo]) -> dict[str, Any]:
         """Returns the SDK startup button registration HTTP request."""
@@ -398,118 +450,52 @@ class FlicSdkEngine:
         event: FlicSdkEvent,
         button_registry: dict[str, FlicButtonInfo],
     ) -> dict[str, Any] | None:
-        """Evaluate an SDK event against configured gesture and button filter.
+        """Evaluate an SDK event against the real generated script in Node harness.
 
         Returns the HTTP request dictionary if triggered, or None if skipped/mismatched.
         """
-        # 1. Button identifier filter check
-        if self.button_identifier:
-            btn = button_registry.get(event.bdaddr)
-            if not btn:
-                return None
-            if btn.name != self.button_identifier and event.bdaddr != self.button_identifier:
-                return None
+        evt_payload: dict[str, Any] = {
+            "bdaddr": event.bdaddr,
+            "isSingleClick": event.is_single_click,
+            "isDoubleClick": event.is_double_click,
+            "isHold": event.is_hold,
+            "direction": event.direction,
+        }
+        if event.button_number is not None:
+            evt_payload["buttonNumber"] = event.button_number
 
-        # 2. Gesture condition check
-        matched = False
-        match self.gesture:
-            case "single":
-                matched = (
-                    event.event_name == "buttonSingleOrDoubleClickOrHold"
-                    and event.is_single_click
-                    and (event.button_number is None or event.button_number == 0)
-                )
-            case "double":
-                matched = (
-                    event.event_name == "buttonSingleOrDoubleClickOrHold"
-                    and event.is_double_click
-                    and (event.button_number is None or event.button_number == 0)
-                )
-            case "hold":
-                matched = (
-                    event.event_name == "buttonSingleOrDoubleClickOrHold"
-                    and event.is_hold
-                    and (event.button_number is None or event.button_number == 0)
-                )
-            case "left_single":
-                matched = (
-                    event.event_name == "buttonSingleOrDoubleClickOrHold"
-                    and event.button_number == 0
-                    and event.is_single_click
-                )
-            case "left_double":
-                matched = (
-                    event.event_name == "buttonSingleOrDoubleClickOrHold"
-                    and event.button_number == 0
-                    and event.is_double_click
-                )
-            case "left_hold":
-                matched = (
-                    event.event_name == "buttonSingleOrDoubleClickOrHold"
-                    and event.button_number == 0
-                    and event.is_hold
-                )
-            case "right_single":
-                matched = (
-                    event.event_name == "buttonSingleOrDoubleClickOrHold"
-                    and event.button_number == 1
-                    and event.is_single_click
-                )
-            case "right_double":
-                matched = (
-                    event.event_name == "buttonSingleOrDoubleClickOrHold"
-                    and event.button_number == 1
-                    and event.is_double_click
-                )
-            case "right_hold":
-                matched = (
-                    event.event_name == "buttonSingleOrDoubleClickOrHold"
-                    and event.button_number == 1
-                    and event.is_hold
-                )
-            case "rotate_cw":
-                matched = event.event_name == "buttonRotate" and event.direction > 0
-            case "rotate_ccw":
-                matched = event.event_name == "buttonRotate" and event.direction < 0
+        harness_payload = {
+            "script": self.snippet,
+            "buttons": [
+                {"name": b.name, "bdaddr": b.bdaddr, "serial": b.serial}
+                for b in button_registry.values()
+            ],
+            "events": [
+                {
+                    "eventName": event.event_name,
+                    "payload": evt_payload,
+                }
+            ],
+        }
 
-        if not matched:
+        res = run_flic_driver("--harness", harness_payload)
+        event_results = res.get("eventResults", [])
+        if not event_results or event_results[0].get("requestsTriggered", 0) == 0:
             return None
 
-        # 3. Build action HTTP request
-        url_path = ""
-        body_obj: dict[str, Any] | None = None
-        headers: dict[str, str] = {}
-
-        match self.target_type:
-            case "preset":
-                url_path = f"/api/preset/{self.preset_num}"
-            case "profile":
-                url_path = f"/api/profile/{self.profile_id}/recall"
-            case "switch_all":
-                if self.legacy_all_output:
-                    url_path = f"/api/input/{self.input_num}"
-                else:
-                    url_path = "/api/switch"
-                    body_obj = {"input": self.input_num}
-                    headers["Content-Type"] = "application/json"
-            case "switch_output":
-                url_path = f"/api/output/{self.output_num}/source"
-                body_obj = {"input": self.input_num}
-                headers["Content-Type"] = "application/json"
-            case "cycle_input":
-                url_path = f"/api/input/{self.cycle_dir}?output={self.output_num}"
-            case "volume_control":
-                url_path = f"/api/cec/output/{self.output_num}/{self.vol_dir}"
-            case "power":
-                url_path = f"/api/power/{self.power_cmd}"
-            case "cec":
-                url_path = f"/api/cec/{self.cec_target_type}/{self.cec_target_port}/{self.cec_cmd}"
+        req = event_results[0]["requests"][0]
+        body = None
+        if req.get("content"):
+            try:
+                body = json.loads(req["content"])
+            except Exception:
+                body = req["content"]
 
         return {
-            "method": "POST",
-            "url": f"{self.origin}{url_path}",
-            "headers": headers,
-            "body": body_obj,
+            "method": req.get("method", "POST"),
+            "url": req.get("url", ""),
+            "headers": req.get("headers", {}),
+            "body": body,
         }
 
 
@@ -548,14 +534,6 @@ class FlicClient(Client):
     def supports(self, action: Action) -> bool:
         if action.intent not in self.intents:
             return False
-        if action.intent == "cec_input":
-            cmd = str(action.params.get("command", "power_on")).lower()
-            if cmd not in VALID_CEC_INPUT_COMMANDS:
-                return False
-        if action.intent == "cec_output":
-            cmd = str(action.params.get("command", "power_on")).lower()
-            if cmd not in VALID_CEC_OUTPUT_COMMANDS:
-                return False
         return True
 
     async def start(self, hub: HubInfo) -> None:
@@ -581,12 +559,16 @@ class FlicClient(Client):
             "name": self.name,
             "transport": "aiohttp",
             "aiohttp": aiohttp.__version__,
+            "node_version": get_node_version(),
+            "drawer_source_sha256": get_drawer_sha256(),
             "templates": [
                 "web/js/components/integrations-drawer.js",
                 "web/js/utils/api-copy.js",
                 "docs/FLIC_SETUP.md",
             ],
-            "sdk_version": "1.0.0",
+            "node_stubs": "unobserved",
+            "flic_sdk_runtime": "unobserved",
+            "physical_buttons": "unobserved",
         }
 
     async def perform(self, action: Action) -> ActionResult:
@@ -707,14 +689,24 @@ class FlicClient(Client):
                 result.requests.append(record)
                 result.status = resp.status
                 result.body = parsed_resp
-                result.ok = 200 <= resp.status < 300
+
+                # Check HTTP envelope and partial effects
+                is_http_ok = 200 <= resp.status < 300
+                is_multi_status_207 = resp.status == 207
+                is_payload_success = True
+                if isinstance(parsed_resp, dict):
+                    if parsed_resp.get("success") is False:
+                        is_payload_success = False
+
+                result.ok = is_http_ok and not is_multi_status_207 and is_payload_success
                 result.steps.append(
                     f"{method} {redact_path(target_path)}"
                     + (f" {redact_body(body)}" if body is not None else "")
                     + f" -> HTTP {resp.status}"
                 )
         except (aiohttp.ClientError, TimeoutError) as exc:
-            result.error = f"{type(exc).__name__}: {exc}"
+            raw_err = f"{type(exc).__name__}: {exc}"
+            result.error = redact_path(raw_err)
             result.steps.append(f"{method} {redact_path(target_path)} -> {result.error}")
 
         result.elapsed_ms = round((time.perf_counter() - t0) * 1000, 1)
