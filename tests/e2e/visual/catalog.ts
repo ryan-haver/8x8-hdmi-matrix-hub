@@ -594,9 +594,24 @@ export const CATALOG: CatalogEntry[] = [
       await tab(page, 'profiles');
       await page.locator('#scenes-list .api-copy-btn').first().click();
       await page.locator('#api-copy-modal.open').waitFor();
+      // Verify UI-18 against the real test origin before normalizing volatile
+      // deployment text for the existing visual baseline (port 8080).
+      const origin = new URL(page.url()).origin;
+      const endpoint = '/api/profile/movie_night/recall';
+      await expect(page.locator('#api-url')).toHaveText(`${origin}${endpoint}`);
+      await expect(page.locator('#api-curl')).toContainText(`${origin}${endpoint}`);
+      await page.evaluate((endpoint) => {
+        const apiCopy = (window as unknown as {
+          apiCopy: { baseUrl: string; show: (config: { name: string; endpoint: string }) => void };
+        }).apiCopy;
+        const original = apiCopy.baseUrl;
+        apiCopy.baseUrl = 'http://127.0.0.1:8080';
+        apiCopy.show({ name: 'Profile: Movie Night', endpoint });
+        apiCopy.baseUrl = original;
+      }, endpoint);
       await settle(page, 300);
     },
-    note: 'The URLs hard-code port 8080 (api-copy.js:13, UI-18), wrong when the hub runs on another port (here 18080). The first click used to throw and open nothing (UI-28, fixed in WP-E1).',
+    note: 'Verifies the actual page origin, then uses a stable port-8080 fixture for the visual comparison. UI-18 derives URLs from the current origin.',
   },
 
   // ===== Control Deck ======================================================
