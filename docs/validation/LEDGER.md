@@ -1,7 +1,7 @@
 # Feature ledger
 
 > **Generated** by `python -m tools.validate ledger` — do not edit by hand. Registry: [`features.yaml`](features.yaml) · Plan: [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md) · How to add evidence: [`README.md`](README.md).
-> Commit `d4af9590`
+> Commit `952a14ad`
 
 **Level** = highest level with fresh passing evidence, else the recorded baseline (the registry's `current`), capped at V1 while an open critical/high finding is linked. **Recorded** = the registry baseline. **Fresh** = evidence commit not older than the last change to the scenario's `covers` paths.
 
@@ -103,7 +103,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 
 | ID | Feature | Target | Level | Recorded | Freshness | Evidence | Open findings |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| F-API-001 | GET /api/health, /api/openapi.json, /api/docs (liveness, matrix connection, runtime metrics, OpenAPI 3.1 & Swagger UI) | V3 | V2 | V2 | — | — | — |
+| F-API-001 | GET /api/health, /api/openapi.json, /api/docs (liveness, matrix connection, runtime metrics, integration lifecycle, OpenAPI 3.1 & Swagger UI) | V3 | V2 | V2 | — | — | — |
 | F-API-002 | API info and root (GET /, /api, /api/info) | V2 | V1 | V1 | — | — | — |
 | F-API-003 | GET /api/status | V3 | V2 | V2 | — | — | — |
 | F-API-004 | Detailed status (GET /api/status/full\|inputs\|outputs\|cables\|edid\|ext-audio\|system\|device\|cec) | V3 | V1 | V1 | stale | [contracts.cables·api·pass](evidence/F-API-004/2026-10-04-V2-7dbc4dc7-contracts.cables-api.json)<br>[contracts.cec_status·api·pass](evidence/F-API-004/2026-10-04-V2-7dbc4dc7-contracts.cec_status-api.json) | — |

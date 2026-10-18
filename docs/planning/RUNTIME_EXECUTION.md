@@ -15,6 +15,11 @@ worker, helper, automatic fallback or default tab is authorized.
   implementation briefs. The worker also checked 77 existing paths, 21 declared
   new paths and unique test ownership. Its terminal was released and its Orca
   worktree removed/pruned. This is design evidence, not a runtime test result.
+- **R1, Sol 6.1 high through Codex:** implementation `a6da11c`, merged as
+  `952a14a`. Coordinator independently ran 205 focused tests successfully;
+  one unchanged real-startup test remains pending R2's production migration
+  barrier. This accepts the shared runtime foundation, not complete startup
+  or UC/image behavior. Its terminal was released and worktree removed/pruned.
 
 ## First implementation wave
 
@@ -22,12 +27,12 @@ All four worktrees start from accepted contract merge `70de5d9`.
 
 | Track / worktree | Selected model and harness | Current evidence |
 | --- | --- | --- |
-| R1 `wp-runtime-core-composition` | Sol 6.1 high / Codex | Orca effective launch and started turn observed; implementation underway |
+| R1 `wp-runtime-core-composition` | Sol 6.1 high / Codex | Foundation accepted/merged; actual startup awaits peer integration |
 | R2 `wp-runtime-persistence-wiring` | MiniMax M3 / OpenCode | Native configuration and active Build session identify M3; implementation underway |
 | R3 `wp-runtime-uc-adapter` | Argon high / Antigravity | Effective launch plus Gemini 4 Argon/high session header observed; implementation underway |
-| R6 `wp-validation-flic-replay` | Flash 3.8 high / Antigravity | Effective launch plus Gemini 3.8 Flash/high session header observed; implementation underway |
+| R6 `wp-validation-flic-replay` | Flash 3.8 high / Antigravity | Initial candidate passed 37 coordinator tests; review follow-up active in the same terminal/worktree |
 
-These are launch observations, not acceptance or passing-test claims. R4/R5
+Launch observations alone are not acceptance evidence. R4/R5
 remain dependent on accepted R1/R2/R3 integration; the final campaign precedes
 R7 documentation and a fresh R8 review.
 
@@ -60,6 +65,19 @@ route is required. Any actual visual difference remains subject to review.
 R2 also has an explicit acceptance clarification: preserve unknown private
 storage fields without expanding public API/snapshot bodies or exposing
 credentials/PIN hashes. Test disk roundtrips and public projections separately.
+Filename-only persistence expectation updates are permitted in
+`tests/test_hub_persistence_openapi_env.py`, `tests/test_scene_manager.py`,
+`tests/test_profiles_scenes_pins.py` and
+`tests/test_security_v3_hardening_scenarios.py`; hashing/security assertions
+remain intact and dedicated legacy plaintext-PIN import coverage is required.
+
+R6 candidate `465c10d` is not accepted. Its original tests passed, but review
+found a copied generator rather than proof against the actual UI generator,
+incomplete refusal/partial-result checks and unsafe error evidence. Follow-up
+Task `task_2c07e3bae5ba` reuses its proven Flash terminal under Dispatch
+`ctx_5c50aeae95ca`. A narrow JS bridge in `tools/validate/clients/` is also
+authorized. R7 waits for this follow-up's acceptance, exact-template replay,
+auth/redaction checks and the later integrated campaign.
 
 ## Evidence and release gates
 
