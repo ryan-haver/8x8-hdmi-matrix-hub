@@ -62,7 +62,6 @@ from hub.persistence.migrations import DEFAULT_REGISTRY, build_default_registry
 LEGACY_FLIC_LIST: list[dict[str, Any]] = [
     {"bdaddr": "80:e4:da:70:00:01", "name": "Couch Button", "serial": "BG12-A00001"},
     {"name": "Kitchen Button", "address": "80:e4:da:70:00:02"},
-    {"name": "No address at all"},
 ]
 
 LEGACY_SCENES_LIST: list[dict[str, Any]] = [
@@ -153,7 +152,7 @@ def test_every_managed_file_is_registered():
         "scenes_v2.json",
         "profiles.json",
         "cec_macros.json",
-        "shortcuts.json",
+        "system_shortcuts.json",
         "dashboard_layout.json",
         "device_settings.json",
         "flic_buttons.json",
@@ -161,9 +160,13 @@ def test_every_managed_file_is_registered():
 
 
 def test_registry_knows_the_retired_shortcut_filename():
-    assert LEGACY_FILENAMES == {"system_shortcuts.json": "shortcuts.json"}
-    assert DEFAULT_REGISTRY.resolve("system_shortcuts.json") == "shortcuts.json"
+    """R2 (contract §4): ``system_shortcuts.json`` is the canonical shipped name;
+    ``shortcuts.json`` is the legacy alias the runtime barrier imports from."""
+    assert LEGACY_FILENAMES == {"shortcuts.json": "system_shortcuts.json"}
+    assert DEFAULT_REGISTRY.resolve("system_shortcuts.json") == "system_shortcuts.json"
+    assert DEFAULT_REGISTRY.resolve("shortcuts.json") == "system_shortcuts.json"
     assert DEFAULT_REGISTRY.has("system_shortcuts.json")
+    assert DEFAULT_REGISTRY.has("shortcuts.json")
     assert not DEFAULT_REGISTRY.has("profiles_v9.json")
 
 
@@ -247,8 +250,8 @@ def test_the_migrated_file_carries_the_current_schema_version(tmp_path):
     assert read_json(path)[SCHEMA_VERSION_KEY] == CURRENT_SCHEMA_VERSION
 
 
-def test_an_existing_backup_is_never_overwritten(tmp_path):
-    """A second migration of the same version keeps the bytes the operator started from."""
+def test_conflicting_backup_blocks_migration_and_preserves_both_originals(tmp_path):
+    """A prior backup is not proof that different current bytes were backed up."""
     path = write_json(tmp_path / "profiles.json", LEGACY_PROFILES_ENVELOPE)
     original = path.read_text(encoding="utf-8")
 
@@ -256,11 +259,11 @@ def test_an_existing_backup_is_never_overwritten(tmp_path):
     assert first.migrated
     # Put different v0 content back and migrate again: same target backup name.
     write_json(path, {"profiles": [{"id": "later", "name": "Written after the first migration"}]})
-    second = migrate_data_file(path)
-
-    assert second.migrated
-    assert first.backup == second.backup
-    assert second.backup.read_text(encoding="utf-8") == original
+    later = path.read_bytes()
+    with pytest.raises(MigrationError, match="backup failed"):
+        migrate_data_file(path)
+    assert path.read_bytes() == later
+    assert first.backup.read_bytes() == original.encode("utf-8")
     assert read_json(path)["profiles"][0]["id"] == "later"
 
 
@@ -332,8 +335,8 @@ def test_list_shaped_flic_buttons_become_a_map_keyed_by_address(tmp_path):
     assert migrated[SCHEMA_VERSION_KEY] == CURRENT_SCHEMA_VERSION
     assert set(migrated) - {SCHEMA_VERSION_KEY} == {"80:e4:da:70:00:01", "80:e4:da:70:00:02"}
     assert migrated["80:e4:da:70:00:01"]["serial"] == "BG12-A00001"
-    # ``address`` is the legacy spelling of ``bdaddr``; a button without any
-    # address cannot be addressed later, so it is dropped rather than invented.
+    # ``address`` is the legacy spelling of ``bdaddr``. Unidentifiable
+    # records fail closed in the dedicated runtime persistence tests.
     assert migrated["80:e4:da:70:00:02"]["bdaddr"] == "80:e4:da:70:00:02"
 
 
@@ -445,10 +448,12 @@ def test_device_settings_port_lists_become_port_keyed_maps(tmp_path):
     assert settings["version"] == 1  # untouched
 
 
-def test_migrations_never_drop_records_that_are_not_objects(tmp_path):
+def test_invalid_records_block_migration_without_pruning_user_data(tmp_path):
     path = write_json(tmp_path / "profiles.json", {"profiles": ["nonsense", None, {"id": "ok"}]})
-    migrate_data_file(path)
-    assert [p["id"] for p in read_json(path)["profiles"]] == ["ok"]
+    original = path.read_bytes()
+    assert migrate_data_file(path).status == "unreadable"
+    assert path.read_bytes() == original
+    assert not list(tmp_path.glob("*.bak"))
 
 
 # ---------------------------------------------------------------------------
@@ -460,7 +465,7 @@ def test_migrate_all_data_files_covers_every_managed_file(tmp_path):
     write_json(tmp_path / "scenes_v2.json", LEGACY_SCENES_LIST)
     write_json(tmp_path / "profiles.json", LEGACY_PROFILES_LIST)
     write_json(tmp_path / "cec_macros.json", LEGACY_MACROS_LIST)
-    write_json(tmp_path / "shortcuts.json", LEGACY_SHORTCUTS_LIST)
+    write_json(tmp_path / "system_shortcuts.json", LEGACY_SHORTCUTS_LIST)
     write_json(tmp_path / "dashboard_layout.json", LEGACY_LAYOUT_LIST)
     write_json(tmp_path / "device_settings.json", LEGACY_DEVICE_SETTINGS_LISTS)
     write_json(tmp_path / "flic_buttons.json", LEGACY_FLIC_LIST)
@@ -508,10 +513,14 @@ def test_load_versioned_json_returns_the_default_for_a_missing_file(tmp_path):
     assert load_versioned_json(tmp_path / "nope.json", default={"profiles": []}) == {"profiles": []}
 
 
-def test_load_versioned_json_returns_the_default_for_corrupt_json(tmp_path):
+def test_load_versioned_json_refuses_corrupt_input_without_default_seeding(tmp_path):
     path = tmp_path / "profiles.json"
     path.write_text("{oops", encoding="utf-8")
-    assert load_versioned_json(path, default={"profiles": []}) == {"profiles": []}
+    original = path.read_bytes()
+    with pytest.raises(MigrationError):
+        load_versioned_json(path, default={"profiles": []})
+    assert path.read_bytes() == original
+    assert not list(tmp_path.glob("*.bak"))
 
 
 def test_load_versioned_json_ignores_a_file_it_does_not_manage(tmp_path):

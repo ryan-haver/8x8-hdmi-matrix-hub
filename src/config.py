@@ -16,6 +16,18 @@ from password import ensure_hashed_passcode, needs_passcode
 _LOG = logging.getLogger(__name__)
 
 
+def _write_blocked(path) -> bool:
+    from hub.persistence.startup import is_write_blocked
+
+    return is_write_blocked(path)
+
+
+def _block_reason(path) -> str | None:
+    from hub.persistence.startup import block_reason
+
+    return block_reason(path)
+
+
 # =============================================================================
 # CEC Configuration for Scenes
 # =============================================================================
@@ -263,37 +275,33 @@ class SceneManager:
         self.load()
 
     def load(self) -> bool:
-        """Load scenes from file."""
-        # Migrate legacy scenes.json from old data directory if needed
+        """Read only the legacy output-state scene shape."""
         from pathlib import Path
 
+        from hub.persistence.migrations import MigrationError, load_versioned_json
+        from hub.persistence.startup import scene_shape
         from persistence import migrate_legacy_file
 
         migrate_legacy_file(Path(self.scenes_file), "scenes.json")
-
-        if not os.path.exists(self.scenes_file):
-            _LOG.info("Scenes file not found: %s", self.scenes_file)
+        raw = load_versioned_json(self.scenes_file, migrate=False, default=None)
+        if raw is None:
             return False
-
-        try:
-            with open(self.scenes_file, encoding="utf-8") as f:
-                data = json.load(f)
-                self._scenes = {}
-                for scene_data in data.get("scenes", []):
-                    scene = Scene.from_dict(scene_data)
-                    self._scenes[scene.id] = scene
-                _LOG.info("Loaded %d scenes", len(self._scenes))
-                return True
-        except Exception as ex:
-            _LOG.error("Failed to load scenes: %s", ex)
-            return False
+        if scene_shape(raw) not in ("legacy", "empty"):
+            raise MigrationError("scenes.json contains unified scenes; legacy reader refused")
+        records = raw.get("scenes", []) if isinstance(raw, dict) else raw
+        self._scenes = {record["id"]: Scene.from_dict(record) for record in records}
+        return True
 
     def save(self) -> bool:
         """Save scenes to file atomically."""
+        if _write_blocked(self.scenes_file):
+            _LOG.error("Refusing to save scenes.json: %s", _block_reason(self.scenes_file))
+            return False
         try:
             os.makedirs(self.config_dir, exist_ok=True)
             data = {"scenes": [s.to_dict() for s in self._scenes.values()]}
-            from _file_io import atomic_write_json
+            from hub.persistence.migrations import save_versioned_json as atomic_write_json
+
             atomic_write_json(self.scenes_file, data)
             _LOG.info("Saved %d scenes", len(self._scenes))
             return True
@@ -412,6 +420,9 @@ class Profile:
     passcode_hash: str = ""  # Hashed passcode (empty if not protected)
     # Phase 8: Execution history (last 7 days)
     execution_log: list[dict] = field(default_factory=list)  # [{timestamp, scene_id, scene_name, status, error}]
+    # R2 contract §4: unknown record-level scalar metadata passes through load/edit/save
+    # untouched on disk; public serializers exclude these private fields.
+    _unknown_fields: dict[str, Any] = field(default_factory=dict, repr=False, compare=False)
 
     def is_password_protected(self) -> bool:
         """True if a passcode is needed to run this profile (the flag or a stored hash; fails closed)."""
@@ -423,8 +434,11 @@ class Profile:
 
         :param include_hash: include ``passcode_hash``; only for persistence,
                              never for clients (SEC-04 / F-SEC-005)
+
+        Unknown extension fields are private; the storage writer preserves them
+        independently of this public projection.
         """
-        result = {
+        result: dict[str, Any] = {
             "id": self.id,
             "name": self.name,
             "icon": self.icon,
@@ -450,7 +464,12 @@ class Profile:
 
     @staticmethod
     def from_dict(data: dict[str, Any]) -> "Profile":
-        """Create from dictionary."""
+        """Create from dictionary.
+
+        Unknown record-level scalar metadata is captured in ``_unknown_fields``
+        for private diagnostics; the disk writer merges the original raw fields
+        independently of the public projection.
+        """
         outputs = {}
         for k, v in data.get("outputs", {}).items():
             outputs[int(k)] = SceneOutput.from_dict(v)
@@ -458,6 +477,26 @@ class Profile:
         cec_config = None
         if "cec_config" in data:
             cec_config = CecConfig.from_dict(data["cec_config"])
+
+        declared_keys = {
+            "id",
+            "name",
+            "icon",
+            "outputs",
+            "cec_config",
+            "macros",
+            "power_on_macro",
+            "power_off_macro",
+            "pinned",
+            "pin_order",
+            "favorite",
+            "dashboard_visible",
+            "dashboard_order",
+            "password_protected",
+            "passcode_hash",
+            "execution_log",
+        }
+        unknown = {k: v for k, v in data.items() if k not in declared_keys}
 
         return Profile(
             id=data.get("id", ""),
@@ -477,6 +516,7 @@ class Profile:
             # A raw PIN found on load is hashed (F-SEC-004)
             passcode_hash=ensure_hashed_passcode(data.get("passcode_hash")) or "",
             execution_log=list(data.get("execution_log", [])),
+            _unknown_fields=unknown,
         )
 
     @staticmethod
@@ -522,6 +562,9 @@ class ProfileManager:
     - Supporting both Scene and Profile data formats
     """
 
+    #: Top-level keys ProfileManager owns on disk.
+    _DECLARED_TOP_KEYS = frozenset({"profiles", "version"})
+
     def __init__(self, config_dir: str = None):
         """
         Initialize profile manager.
@@ -537,6 +580,9 @@ class ProfileManager:
         self.profiles_file = os.path.join(config_dir, "profiles.json")
         self.legacy_scenes_file = os.path.join(config_dir, "scenes.json")
         self._profiles: dict[str, Profile] = {}
+        # Top-level keys read from disk that the manager does not declare; emitted on save
+        # so operator data and forward-compatible fields survive PIN-rehash and other edits.
+        self._unknown_top_keys: dict[str, Any] = {}
         self.load()
 
     def load(self) -> bool:
@@ -548,65 +594,52 @@ class ProfileManager:
 
         migrate_legacy_file(Path(self.profiles_file), "profiles.json")
 
+        from hub.persistence.startup import prepare_profile_file
+
+        prepare_profile_file(Path(self.config_dir))
+
         # Try loading profiles.json first
         if os.path.exists(self.profiles_file):
             return self._load_profiles()
 
-        # Fall back to migrating from scenes.json
-        if os.path.exists(self.legacy_scenes_file):
-            _LOG.info("Migrating scenes.json to profiles.json...")
-            return self._migrate_from_scenes()
-
-        _LOG.info("No profiles or scenes file found")
         return False
 
     def _load_profiles(self) -> bool:
-        """Load profiles from profiles.json."""
-        try:
-            with open(self.profiles_file, encoding="utf-8") as f:
-                data = json.load(f)
-                self._profiles = {}
-                rehashed = False
-                for profile_data in data.get("profiles", []):
-                    profile = Profile.from_dict(profile_data)
-                    self._profiles[profile.id] = profile
-                    rehashed |= profile.passcode_hash != (profile_data.get("passcode_hash") or "")
-                _LOG.info("Loaded %d profiles", len(self._profiles))
-            if rehashed:
-                # Replace the plaintext PIN on disk with its hash (F-SEC-004)
-                _LOG.warning("Hashed a plaintext profile passcode found in %s", self.profiles_file)
-                self.save()
-            return True
-        except Exception as ex:
-            _LOG.error("Failed to load profiles: %s", ex)
-            return False
+        """Validate and migrate before parsing or rewriting a plaintext PIN."""
+        from hub.persistence.migrations import MigrationError, load_versioned_json
 
-    def _migrate_from_scenes(self) -> bool:
-        """Migrate data from scenes.json to profiles.json."""
-        try:
-            with open(self.legacy_scenes_file, encoding="utf-8") as f:
-                data = json.load(f)
-                self._profiles = {}
-                for scene_data in data.get("scenes", []):
-                    scene = Scene.from_dict(scene_data)
-                    profile = Profile.from_scene(scene)
-                    self._profiles[profile.id] = profile
-
-                # Save as profiles.json
-                self.save()
-                _LOG.info("Migrated %d scenes to profiles", len(self._profiles))
-                return True
-        except Exception as ex:
-            _LOG.error("Failed to migrate scenes: %s", ex)
-            return False
+        data = load_versioned_json(self.profiles_file)
+        self._unknown_top_keys = {k: v for k, v in data.items() if k not in self._DECLARED_TOP_KEYS}
+        self._profiles = {}
+        rehashed = False
+        for raw in data["profiles"]:
+            profile = Profile.from_dict(raw)
+            self._profiles[profile.id] = profile
+            rehashed |= profile.passcode_hash != (raw.get("passcode_hash") or "")
+        if rehashed and not self.save():
+            raise MigrationError(f"{self.profiles_file}: PIN rehash could not be saved")
+        return True
 
     def save(self) -> bool:
-        """Save profiles to file atomically."""
+        """Save profiles to file atomically.
+
+        The on-disk payload preserves:
+        * the legacy file-format marker ``version`` (kept for legacy readers),
+        * unknown top-level keys captured on load (forward compatibility +
+          operator metadata),
+        * the runtime ``schema_version`` (the migrations registry's marker),
+        * each surviving profile's unknown fields, merged by the private writer.
+        """
+        if _write_blocked(self.profiles_file):
+            _LOG.error("Refusing to save profiles.json: %s", _block_reason(self.profiles_file))
+            return False
         try:
             os.makedirs(self.config_dir, exist_ok=True)
-            data = {"version": 2, "profiles": [p.to_dict(include_hash=True) for p in self._profiles.values()]}
-            from _file_io import atomic_write_json
-            atomic_write_json(self.profiles_file, data)
+            data: dict[str, Any] = {"version": 2}
+            data["profiles"] = [p.to_dict(include_hash=True) for p in self._profiles.values()]
+            from hub.persistence.migrations import save_versioned_json
+
+            save_versioned_json(self.profiles_file, data)
             _LOG.info("Saved %d profiles", len(self._profiles))
             return True
         except Exception as ex:
