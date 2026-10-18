@@ -7,6 +7,11 @@ The [feature ledger](validation/LEDGER.md) records proof levels and freshness;
 [the release report](validation/VALIDATION_REPORT.md) records candidate checks
 and outstanding hardware gates.
 
+The next development work is specified in the
+[runtime-completion plan](planning/NEXT_DEVELOPMENT_PHASES.md), with a
+[model/agent inventory](planning/MODEL_AND_AGENT_INVENTORY.md). The future roster
+excludes Claude/Anthropic, including fallback and helper roles.
+
 ---
 
 ## 1. Start here

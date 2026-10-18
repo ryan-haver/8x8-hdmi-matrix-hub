@@ -1,5 +1,12 @@
 # Project Roadmap
 
+The next development sequence is the [runtime-completion plan](docs/planning/NEXT_DEVELOPMENT_PHASES.md):
+shared startup, persistence wiring, UC integration, action parity, Flic/HA lifecycle,
+and the Flic replay client, followed by fresh validation and the hardware/soak gate.
+Worktree/model assignments are planned there; future implementation, review and
+fallbacks exclude Claude/Anthropic under the owner's 2026-10-18 instruction.
+
+
 > Status of every phase of the **8×8 HDMI Matrix Hub** project. Each
 > entry links to the merged code paths, the validation evidence, and
 > the related docs under `docs/`.

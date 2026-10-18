@@ -5,6 +5,26 @@ in [the phased roadmap](../../orca-phased-roadmap.md). Finding IDs and acceptanc
 criteria come from [the remediation plan](../REMEDIATION_PLAN.md) and
 [the validation plan](../validation/VALIDATION_PLAN.md).
 
+## Next development and model policy (2026-10-18)
+
+The [runtime-completion plan](NEXT_DEVELOPMENT_PHASES.md) now defines R0–R8,
+their worktrees, model assignments, dependencies, file ownership and acceptance
+gates. The [model/agent inventory](MODEL_AND_AGENT_INVENTORY.md) distinguishes
+project-proven routes, configured/catalog models and unverified access.
+
+The owner excludes **all Claude/Anthropic models** from these next phases,
+including reviews, helper agents and fallbacks. This supersedes the historical
+mandatory six-model roster; it does not rewrite who completed earlier work.
+Sol 6.1 high coordinates and implements core wiring, Argon owns UC integration,
+Flash owns focused integration/client work, M3 owns persistence if quota and
+effective-model checks pass, Luna handles bounded guides/evidence indexing,
+and Astra handles contract design and independent review. M3.1/DeepSeek are
+conditional alternatives, not assumed successful launches.
+
+These worktrees are **planned, not launched**. The next step is R0 contract and
+access preflight, then independent workers in dependency order, with immediate
+validation, merge and cleanup. Hardware and soak gates remain owner-observed.
+
 ## Release sequence
 
 1. Phases 0–4 are merged into `main`; `v0.4.0` points to `25233bb`.

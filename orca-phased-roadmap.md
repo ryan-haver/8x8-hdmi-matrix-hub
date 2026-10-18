@@ -14,9 +14,22 @@
 
 ---
 
-## 2. Mandatory 6-Model Orca Roster & Routing Policy
+## 2. Current model routing policy (2026-10-18)
 
-Every multi-track phase fans out across this exact 6-model roster (with **Sol 6.1 high** prioritized over Astra):
+The owner's current instruction excludes **all Claude/Anthropic models** from
+future phases, including implementation, review, helper agents and fallbacks.
+The exact-six-model rule below is superseded for new work. Use the
+[runtime-completion plan](docs/planning/NEXT_DEVELOPMENT_PHASES.md) and
+[model/agent inventory](docs/planning/MODEL_AND_AGENT_INVENTORY.md) for assignments,
+dependencies, file ownership, access checks and accepted non-Anthropic fallbacks.
+Balance by task risk and available quota, not a fixed number of different models.
+
+<details>
+<summary>Historical roster — do not use for new launches</summary>
+
+Historical roster used for completed phases
+
+The completed phases used the following roster. It is retained as history, not launch instructions for new work:
 
 | Slot | Model Name | Orca Launch Parameters | Primary Specialty |
 | :--- | :--- | :--- | :--- |
@@ -27,20 +40,26 @@ Every multi-track phase fans out across this exact 6-model roster (with **Sol 6.
 | **5** | **Minimax M3** | `--agent opencode` (`minimax-coding-plan/MiniMax-M3`) | OpenAPI/Swagger generation, persistence schema/env validation, license/hygiene audits, `CONFIGURATION.md` & `ARCHITECTURE.md` |
 | **6** | **Minimax M3.1** | `--agent opencode` (`minimax-coding-plan/MiniMax-M3.1-Flash-Preview`) | Client documentation (`README.md`, `HOME_ASSISTANT.md`, `DOCKER.md`, `FLIC_SETUP.md`), design archive migration, doc contract tests |
 
+
+</details>
+
 ---
 
 ## 3. Standard Worktree Lifecycle Protocol (Mandatory Every Phase)
+
+Sections describing Phases 0–7 below retain their historical model assignments.
+New runtime-completion work follows the current policy in §2 and the linked plan.
 
 Every phase follows a strict **Fan-Out -> Validate -> Merge -> Clean Up -> PR** lifecycle so stale worktrees never accumulate:
 
 ```mermaid
 flowchart LR
-    A["1. Create Phase Integration Branch off main"] --> B["2. Fan Out 6 Orca Worktrees across 6-Model Roster"]
+    A["1. Create Phase Integration Branch from Verified Prerequisite Tip"] --> B["2. Start Independent Orca Worktrees by Dependency and Current Roster"]
     B --> C["3. Per-Worktree Validation (pytest / ruff / mypy / eslint / playwright)"]
     C --> D["4. Merge Verified Branch into Phase Integration Branch"]
-    D --> E["5. Immediate Cleanup (orca worktree rm + git worktree prune + git branch -D)"]
+    D --> E["5. Remove Accepted Worktree and Prune; Preserve Unmerged Work"]
     E --> F["6. Full Ledger & CI Gate on Integration Branch -> Push & Open GitHub PR"]
-    F --> G["7. All 13 GitHub Checks Green -> Merge PR to main & Delete Integration Branch"]
+    F --> G["7. All Applicable Checks Green -> Merge PR and Clean Up"]
 ```
 
 ### Worktree Cleanup Commands (Executed Immediately After Each Track Merges)
@@ -52,7 +71,7 @@ flowchart LR
 3. **Remove Orca Worktree & Prune Branch:**
    - `orca worktree rm --worktree name:<worktree-name>`
    - `git worktree prune`
-   - `git branch -D ryan-haver/<worktree-name>`
+   - Remove the branch only after verifying it is merged; preserve unmerged work.
    - Confirm `git worktree list` shows only `C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration` before opening the phase PR.
 
 ---
