@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import asyncio
 import json
-import os
 import socket
 from contextlib import contextmanager
 from pathlib import Path
@@ -305,7 +304,9 @@ def test_real_source_process_sigterm_cleans_listeners_and_records_origins(captur
         log_dir=tmp_path / "hub", mode=mode,
         extra_env={
             "R1P_STOP": str(stop), "R1P_RESULT": str(result),
-            "PYTHONPATH": os.pathsep.join((str(tmp_path), os.environ["PYTHONPATH"])),
+            # Only inject the shutdown hook. The normal source entry must
+            # locate its own modules without any inherited PYTHONPATH.
+            "PYTHONPATH": str(tmp_path),
         },
     )
     try:
