@@ -154,8 +154,8 @@ The web UI at `/ui` and the kiosk at `/kiosk` are part of the core
 
 ## 4. What still needs real-device and field proof
 
-The table below preserves the ledger's feature-level proof and target state;
-it is not a summary of the runtime campaign. The completed software campaign
+The table below preserves the earlier feature-level ledger snapshot; the linked
+current ledger retains authoritative targets and provenance. The completed software campaign
 for `1baac3de` is indexed separately; physical and field evidence remains
 outstanding. Simulator claims remain distinct from
 physical-device evidence. The simulation matrix runs the same command set
