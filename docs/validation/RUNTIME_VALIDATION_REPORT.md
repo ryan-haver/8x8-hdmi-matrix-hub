@@ -1,8 +1,8 @@
 # Runtime validation report
 
-**Disposition: hold runtime release. Completed independent review found two high-severity defects beyond the passing campaign paths below.**
+**Disposition: hold runtime release for the remaining rollback cleanup-deadline defect and fresh candidate gates.**
 
-The [independent R8 report](RUNTIME_INDEPENDENT_REVIEW.md) and its source/normal-image reproductions establish two unresolved availability defects: creating a v2 scene after legacy migration prevents the next startup, and transient reconfigure/rollback login failures can abandon automatic reconnect. Separate fresh persistence and runtime owners are correcting them. The broad campaign and formal gate below predate these findings; their passing results do not accept the candidate. Fresh candidate proofs and follow-up review are required after correction.
+The [independent R8 report](RUNTIME_INDEPENDENT_REVIEW.md) reproduced two availability defects beyond the broad campaign paths below. R2D/R1G corrections are merged, and the [R8B follow-up](RUNTIME_REVIEW_FOLLOWUP.md) passed all six original source/image cases on corrected source `e58a56b`. It accepted the scene-restart correction within its focused scope but found that rollback exceeding the unchanged five-second cleanup deadline still abandons reconnect. That remaining case fails in both actual source and the new immutable image; fresh R1H ownership is correcting it. The broad campaign and formal gate below remain tied to the older `4adbc13` candidate. They do not accept later code or override this remaining finding. Fresh complete candidate evidence and independent verification are required.
 
 The [archived manifest](runs/runtime/manifest.json) retains each actual run commit, artifact root, timestamp, scope and outcome count. These are multiple explicitly attributed runs, not a claim that every historical test ran at one final SHA. The [Phase 6/7 report](VALIDATION_REPORT.md) remains historical evidence.
 
@@ -79,7 +79,7 @@ The earlier discovery of legacy tests touching checkout runtime files is retaine
 
 ## Remaining release gates
 
-- Resolve both high R8 findings, refresh affected source/image evidence, complete follow-up independent review and final PR checks.
+- Resolve the remaining R8-02 cleanup-deadline boundary, refresh complete candidate evidence, finish independent verification and final PR checks.
 - The pending three Tron paused-frame owner visual decisions for PR #36/#37 and the approved merge/tag sequence.
 - Owner HIL-B regression, HIL-C recovery and HIL-E deployed/physical client evidence, including matrix/attached-device firmware and physical CEC effects.
 - HIL-D continuous 72-hour resource measurements and the owner's week of daily use/sign-off; follow the field runbook.

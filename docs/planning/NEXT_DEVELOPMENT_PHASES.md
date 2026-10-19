@@ -1,6 +1,6 @@
 # Runtime completion and release plan
 
-Status: release held for two high findings from completed independent review.
+Status: release held for the remaining rollback cleanup-deadline finding.
 R3E's UI ordering correction and R1F's explicit-refresh CEC cache correction are
 integrated. Clean candidate `4adbc13` passed 3,966 local core tests with four skips
 and 177/177 routes, 100 dedicated Remote tests and all 1,506 source client outcomes.
@@ -15,9 +15,13 @@ fail. Luna's R7 guides/index are merged after 413 independent tests and 214 loca
 links passed. Astra's completed [R8 review](../validation/RUNTIME_INDEPENDENT_REVIEW.md)
 reproduced legacy-scene/v2 creation breaking restart and failed reconfigure
 rollback abandoning reconnect, in both actual modules and the normal image.
-Fresh Sol 6.1 high owners address persistence startup (R2D) and runtime rollback
-(R1G) in disjoint worktrees. New source/image proof and follow-up review must
-resolve both before candidate acceptance.
+Fresh Sol 6.1 high R2D/R1G corrections are merged after independent validation
+and immediate worktree removal. The [R8B follow-up](../validation/RUNTIME_REVIEW_FOLLOWUP.md)
+passes all six original source/image cases and accepts the scene-restart fix
+within that focused scope, but reproduces automatic-reconnect loss when rollback
+exceeds the unchanged five-second cleanup deadline. Fresh Sol R1H owns that
+remaining runtime boundary. New complete candidate evidence and independent
+verification are required before acceptance.
 See the [execution record](RUNTIME_EXECUTION.md). Updated 2026-10-19. This is the next execution
 plan after the integrated Phase 6/7 work. It supplements the original Phase 8
 validation gate rather than renumbering historical phases.
@@ -36,9 +40,9 @@ At the start of this plan, the application constructed `OreiMatrix` and
 loader and migrations were separate frameworks. Shared composition, packaged
 entrypoint, UC bridge and dedicated Flic replay are now accepted on the runtime
 branch. Persistence, action parity and flag/lifecycle corrections have since
-been accepted. The remaining software work is the R2D/R1G corrections, fresh
-affected source/image validation, evidence/index reconciliation and independent
-verification of both findings' resolution. Physical
+been accepted. The remaining software work is R1H, fresh complete source/image
+validation, evidence/index reconciliation and independent verification that the
+deadline boundary is resolved. Physical
 client, recovery, soak and owner acceptance gates follow those checks.
 
 No work below approves the three pending Tron snapshots. PR #36 and PR #37

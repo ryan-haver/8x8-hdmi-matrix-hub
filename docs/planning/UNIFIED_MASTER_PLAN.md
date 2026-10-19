@@ -34,9 +34,12 @@ tied to their earlier candidate. R7 Luna's final guides/index are merged after
 413 independent tests and 214 local links passed. Completed Astra R8 review
 found two high availability defects in actual source and the normal image:
 legacy-scene migration plus v2 creation breaks restart, and transient failed
-reconfigure rollback abandons automatic reconnect. The candidate is held;
-fresh Sol 6.1 high R2D/R1G worktrees own the disjoint corrections, followed by
-fresh affected evidence and independent verification. CI passes 12/13 required jobs,
+reconfigure rollback abandons automatic reconnect. R2D/R1G corrections are now
+merged, and the R8B follow-up passes all six original source/image cases. It
+accepts the scene-restart fix within scope but reproduces reconnect loss when
+rollback exceeds its cleanup deadline. Fresh Sol 6.1 high R1H owns this remaining
+boundary; the candidate stays held pending new complete evidence and independent
+verification. Historical `4adbc13` CI passes 12/13 required jobs,
 with only the three owner-pending Tron screenshots failing. No visual/hardware
 approval or release tag is implied. The
 [execution record](RUNTIME_EXECUTION.md) tracks effective model observations,

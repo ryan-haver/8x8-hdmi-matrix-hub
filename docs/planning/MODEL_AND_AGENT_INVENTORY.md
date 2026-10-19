@@ -123,8 +123,10 @@ classification; Argon's R3E UI ordering correction is accepted; Sol completed
 R1F's explicit-refresh CEC enable-cache correction; Luna owns the final
 guides/index. Fresh Astra completed R8 and found two high defects in actual
 source and images; fresh Sol 6.1 high owners now handle disjoint R2D persistence
-and R1G rollback/reconnect corrections. Follow-up independent verification is
-required after their new candidate proofs. A
+and R1G rollback/reconnect corrections, now merged after validation. Fresh Astra
+R8B passes their original six source/image cases but finds the remaining cleanup
+deadline boundary; a fresh Sol 6.1 high R1H owns it. Further independent
+verification and fresh complete candidate evidence remain required. A
 separate Sol session completed a read-only R3E source-contract review without
 editing tracked files. Its real-payload JavaScript probe demonstrates a startup
 ordering race, while attribution to the first CI failure remains bounded.
