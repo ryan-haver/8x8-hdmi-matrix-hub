@@ -109,8 +109,9 @@ so these outcomes support task-specific assignments and review gates, rather
 than a general ranking of model quality.
 
 MiniMax M3's persistence checkpoint was preserved after its full-scope failure;
-Sol completed that track. M3.1 and DeepSeek remain conditional routes, and Luna's
-bounded documentation assignment has not launched yet. Catalog entries are
+Sol completed that track. M3.1 and DeepSeek remain conditional routes. Luna's
+bounded guide assignment has now launched with confirmed requested/effective
+`gpt-6-luna` medium; final documentation acceptance awaits campaign evidence. Catalog entries are
 still distinct from proven current capacity. The no-Anthropic policy applies to
 all retries, reviews and helpers.
 
