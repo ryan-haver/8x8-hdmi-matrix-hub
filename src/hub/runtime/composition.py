@@ -81,6 +81,10 @@ class HubRuntime:
         self._start_task = None
         self._stop_task = None
         self._operations = set()
+        # Public disconnect calls own retiring clients even after their waiter
+        # exhausts a cleanup phase. Commands cannot pass an unfinished drain.
+        self._retirements = {}
+        self._retirement_reconnect = None
         self._raw_unlisten = []
         self._settings_unlisten = None
         self._stopping = False
@@ -228,6 +232,10 @@ class HubRuntime:
             async with self.transaction:
                 if self._stopping and not nested:
                     raise RuntimeError("Hub runtime is stopping")
+                if not nested and self._retirements:
+                    await asyncio.wait(self._retirements, timeout=CLEANUP_TIMEOUT)
+                    if self._retirements:
+                        raise RuntimeError("Previous matrix cleanup has not completed")
                 yield
         finally:
             if not nested:
@@ -358,9 +366,64 @@ class HubRuntime:
         except Exception:
             _LOG.warning("Runtime cleanup phase failed", exc_info=True)
 
+    def _handoff_reconnect(self, client, generation):
+        if self._stopping or client is not self.service.client or generation != self.service._client_generation:
+            return
+        if self._retirements:
+            self._retirement_reconnect = client, generation
+            return
+        self._retirement_reconnect = None
+        if self.address and not client.connected:
+            reconnect = getattr(client, "start_auto_reconnect", None)
+            if callable(reconnect):
+                reconnect()
+
+    def _retirement_finished(self, task):
+        # Retrieve every result, including late failures. A failed public drain
+        # cannot prove transport disposal: retain its client and command fence.
+        try:
+            task.result()
+        except BaseException:
+            _LOG.error("Matrix retirement failed; commands remain fenced")
+            return
+        self._retirements.pop(task, None)
+        if self._retirement_reconnect:
+            self._handoff_reconnect(*self._retirement_reconnect)
+
+    def _begin_retirement(self, client):
+        task = next((task for task, owner in self._retirements.items() if owner is client), None)
+        if task is None:
+            task = asyncio.create_task(client.disconnect(), name="hub_matrix_retirement")
+            self._retirements[task] = client
+            task.add_done_callback(self._retirement_finished)
+        return task
+
+    async def _retire_client(self, client, *, interrupted=lambda: None):
+        task = self._begin_retirement(client)
+        try:
+            await asyncio.shield(task)
+        except asyncio.CancelledError:
+            # Restore logical identity before any further cancellable await.
+            # The public disconnect may defer cancellation until real close
+            # finishes; never cancel or abandon that resource-owning task.
+            interrupted()
+            deadline = asyncio.get_running_loop().time() + CLEANUP_TIMEOUT
+            while not task.done():
+                remaining = deadline - asyncio.get_running_loop().time()
+                if remaining <= 0:
+                    _LOG.warning("Matrix retirement still pending after bounded settling phase")
+                    break
+                try:
+                    await asyncio.wait({task}, timeout=remaining)
+                except asyncio.CancelledError:
+                    # Repeated caller cancellation must not reset the budget.
+                    continue
+            raise
+
     async def stop(self):
         if self._stop_task is None:
             self._stopping = True
+            self._retirement_reconnect = None
             self._stop_task = asyncio.create_task(self._stop(), name="hub_runtime_stop")
         await asyncio.shield(self._stop_task)
 
@@ -378,7 +441,18 @@ class HubRuntime:
             if self.server:
                 await self._cleanup(self.server.stop)
             await self._cleanup(self.local.close)
-            await self._cleanup(self.service.disconnect)
+            # Shutdown is an explicit lifecycle drain, not background retry.
+            # Retry previously failed public disposals once under the stop fence;
+            # never discard a pending drain or infer closure from client fields.
+            for task, client in tuple(self._retirements.items()):
+                if task.done():
+                    self._retirements.pop(task)
+                    self._begin_retirement(client)
+            self._begin_retirement(self.service.client)
+            await asyncio.wait(self._retirements, timeout=CLEANUP_TIMEOUT)
+            self.service._sync_connection()
+            if self._retirements:
+                _LOG.warning("Shutdown retains fenced matrix retirement ownership")
             await self.bus.drain(timeout=CLEANUP_TIMEOUT)
         finally:
             try:
@@ -440,9 +514,10 @@ class HubRuntime:
             return await self._reconfigure(address, persist=persist)
 
     async def _reconfigure(self, address: MatrixAddress, *, persist=False) -> ReconfigureResult:
-        # Cancel only runtime-owned connect/refresh work before waiting for commands.
-        await self._cancel({self._connect_task, self._refresh_task})
         try:
+            # This drain is part of the transition too: cancellation must still
+            # restore refresh/reconnect ownership before any client was changed.
+            await self._cancel({self._connect_task, self._refresh_task})
             async with self.operation():
                 old_address, old_client, old_names = self.address, self.service.client, self.service.names
                 if old_address and (address.host, address.port) == (old_address.host, old_address.port):
@@ -454,8 +529,24 @@ class HubRuntime:
                         address.password or old_address.password,
                     )
                 candidate = None
+                restored = False
+
+                def restore():
+                    nonlocal restored
+                    if restored:
+                        return
+                    self._unlisten()
+                    self.address = old_address
+                    self.service.replace_client(old_client, names=old_names)
+                    if not self._stopping:
+                        self._listen()
+                    self._rebind_rest()
+                    restored = True
+                    if self._retirements:
+                        self._retirement_reconnect = old_client, self.service._client_generation
+
                 try:
-                    await asyncio.wait_for(self.service.disconnect(), CLEANUP_TIMEOUT)
+                    await asyncio.wait_for(self._retire_client(old_client, interrupted=restore), CLEANUP_TIMEOUT)
                     if getattr(old_client, "connected", False):
                         raise _ReconfigureError("other")
                     self._unlisten()
@@ -495,27 +586,22 @@ class HubRuntime:
                 except BaseException as exc:
 
                     async def rollback():
-                        if candidate:
-                            await candidate.disconnect()
-                        self._unlisten()
-                        self.address = old_address
-                        self.service.replace_client(old_client, names=old_names)
-                        self._listen()
-                        if old_address and not self._stopping:
-                            try:
+                        try:
+                            if candidate:
+                                await self._retire_client(candidate, interrupted=restore)
+                        finally:
+                            restore()
+                        try:
+                            if old_address and not self._stopping and not self._retirements:
                                 await self.service.connect()
-                            finally:
-                                # Cleanup may cancel this waiter while the
-                                # transport's single-flight login is still alive.
-                                # Its existing supervisor must own that attempt
-                                # and any retries, unless shutdown has begun.
-                                if not old_client.connected and not self._stopping:
-                                    reconnect = getattr(old_client, "start_auto_reconnect", None)
-                                    if callable(reconnect):
-                                        reconnect()
-                        self._rebind_rest()
+                        finally:
+                            self._handoff_reconnect(old_client, self.service._client_generation)
 
-                    await self._cleanup(rollback, propagate_cancel=True)
+                    try:
+                        await self._cleanup(rollback, propagate_cancel=True)
+                    finally:
+                        restore()
+                        self._handoff_reconnect(old_client, self.service._client_generation)
                     if isinstance(exc, asyncio.CancelledError):
                         raise
                     return ReconfigureResult(
@@ -524,8 +610,18 @@ class HubRuntime:
                         self.service.connected,
                     )
         finally:
+            self._handoff_reconnect(self.service.client, self.service._client_generation)
             if self._started and not self._stopping:
-                self._refresh_task = asyncio.create_task(self._refresh_loop(), name="hub_runtime_refresh")
+                self._resume_refresh()
+
+    def _resume_refresh(self):
+        if not self._started or self._stopping:
+            return
+        previous = self._refresh_task
+        if previous is not None and not previous.done():
+            previous.add_done_callback(lambda task: self._resume_refresh() if self._refresh_task is task else None)
+            return
+        self._refresh_task = asyncio.create_task(self._refresh_loop(), name="hub_runtime_refresh")
 
     def _rebind_rest(self):
         from rest_api.utils import bind_runtime, get_runtime
