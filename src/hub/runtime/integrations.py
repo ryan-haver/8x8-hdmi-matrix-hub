@@ -31,3 +31,12 @@ def bind_integrations(loader, runtime) -> None:
             current_address=lambda: runtime.address,
             driver_metadata=runtime.driver_metadata,
         )
+    flic = loader.integrations.get("flic")
+    if flic is not None:
+        import rest_api.integrations as _rest_int
+
+        _rest_int._default_registry = flic.registry
+        _rest_int._default_integration = flic
+        _rest_int._registered_buttons = flic.registry._buttons
+        _rest_int._loaded = flic.registry._loaded
+
