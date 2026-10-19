@@ -259,6 +259,7 @@ class HubRuntime:
             self.service._sync_connection()
             if force_refresh:
                 self.service.invalidate_preset_cache()
+                self.service.invalidate_cec_cache()
             if self.service.connected:
                 await self.service.refresh_snapshot()
 
