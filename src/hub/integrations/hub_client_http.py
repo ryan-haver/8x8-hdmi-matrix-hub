@@ -195,7 +195,7 @@ class HubClientHttp(EventPublisher, HubClient):
     async def run_action(self, kind: str, action_id: str, *, passcode: str | None = None) -> dict[str, Any]:
         paths = {
             "profile": "/api/profile/{}/recall",
-            "scene": "/api/scene/{}/recall",
+            "scene": "/api/v2/scenes/{}/execute",
             "shortcut": "/api/shortcuts/{}/execute",
             "macro": "/api/cec/macro/{}/execute",
         }
