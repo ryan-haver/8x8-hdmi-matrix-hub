@@ -1,9 +1,10 @@
 # Project Roadmap
 
-The runtime-completion implementation is integrated in the current candidate:
-shared startup, persistence wiring, UC integration, action dispatch and optional
-Flic/HA lifecycle. The fresh integrated software campaign is coordinator-owned;
-physical hardware, field and soak gates remain pending. See the
+The runtime-completion implementation is integrated in candidate
+`4adbc136a4c1fb6be4b20b58530a47dd521efac8`: shared startup, persistence wiring,
+UC integration, action dispatch and optional Flic/HA lifecycle. Its integrated
+software campaign passed and is indexed; physical hardware, field and soak
+gates remain pending. See the
 [runtime validation index](docs/validation/RUNTIME_VALIDATION_INDEX.md) and
 [next development phases](docs/planning/NEXT_DEVELOPMENT_PHASES.md).
 
@@ -23,8 +24,9 @@ physical hardware, field and soak gates remain pending. See the
 > **Runtime status:** `run.py` and the installed `orei-matrix-driver` command enter the same
 > composition. The current runtime uses `MatrixService`, `ActionRunner`, the
 > integration loader and persistence startup barrier; `src/driver.py` remains
-> a legacy reference. Fresh integrated software evidence is pending and will
-> be recorded in the [runtime validation index](docs/validation/RUNTIME_VALIDATION_INDEX.md).
+> a legacy reference. The passing integrated software campaign is recorded in
+> the [runtime validation index](docs/validation/RUNTIME_VALIDATION_INDEX.md)
+> for source/image commit `4adbc136`.
 
 ---
 
@@ -153,8 +155,8 @@ The web UI at `/ui` and the kiosk at `/kiosk` are part of the core
 ## 4. What is shipped but pending fresh and real-device proof
 
 The table below preserves the earlier ledger snapshot; it is not evidence
-for the runtime-completion candidate. The coordinator's fresh software
-campaign will be indexed separately. Simulator claims remain distinct from
+for the runtime-completion candidate. The fresh software campaign for
+`4adbc136` is indexed separately. Simulator claims remain distinct from
 physical-device evidence. The simulation matrix runs the same command set
 as a real OREI BK-808; the hub code path is real; the response
 envelopes are real; the device readback is from a real `OreiMatrix`
@@ -168,12 +170,12 @@ field ships, or a remote operator watching the display change.
 | **CEC control** (sources, TVs, Telnet path)                                 | mostly **V3**, **V1** on the Telnet-CEC path         | Physical observation (TV turns on, source switches) requires the operator-present sessions. |
 | **REST/WS contract**                                                        | all routes **V2** or **V3**                         | nothing caps it; re-runs are cheap.                                                        |
 | **Web UI / kiosk flows**                                                    | mostly **V3** on simulator; **V1** for hardware (`UI-44`) | Playwright drives the shipped image, not a tablet in a living room.                          |
-| **Remote 3 integration**                                                    | historical candidate records                         | Fresh runtime campaign and physical Remote evidence are tracked separately.                 |
-| **Home Assistant HACS component**                                           | mostly **V3** (real HA container)                    | no HA deployment is run by the validation framework yet.                                    |
+| **Remote 3 integration**                                                    | fresh runtime software campaign; physical proof pending | Scripted Remote evidence does not establish physical Remote 3 behavior.                     |
+| **Home Assistant HACS component**                                           | **V3** checks in actual disposable HA containers      | The owner's HA deployment and physical-LAN discovery remain unobserved.                     |
 | **Flic REST handlers**                                                      | **V3** (request replay)                              | Flic hardware sits in the "available when the owner plugs it in" bucket.                   |
 | **Security controls**                                                       | **V3** with the three auth configurations; **V4** spot check pending HIL Session 2 | covers `SEC-01..SEC-08` plus the device-token rotation.                       |
 | **Reliability**                                                             | mostly **V1** (fault-injection on the simulator); **V5 soak not yet run** | V5 needs 72 h of `python -m tools.validate run` against the sim with flat resource metrics and a real-device spot check. |
-| **Runtime composition**                                                     | fresh integrated campaign pending                   | Physical matrix, field and 72-hour soak gates remain pending.                              |
+| **Runtime composition**                                                     | fresh software campaign passed for `4adbc136`        | Physical matrix, field and 72-hour soak gates remain pending.                              |
 
 The full row-by-row state lives in
 [`docs/validation/LEDGER.md`](docs/validation/LEDGER.md). A feature

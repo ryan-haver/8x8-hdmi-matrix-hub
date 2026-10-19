@@ -395,16 +395,16 @@ version or assert that the release gates have passed.
 - **Flic hardware.** The REST handlers ship (V3 replay evidence on
   the endpoints), but no operator has run the Flic Twist against a
   real Flic Hub for v0.5.x.
-- **Runtime wiring of the framework libraries.** `MatrixService`,
-  `ActionRunner`, `Integration` / `IntegrationRegistry`, the
-  OpenAPI mount, `hub.persistence.migrations` — all exist as
-  tested, importing libraries, but `run.py` and `src/driver.py`
-  still go through `OreiMatrix` and `RestApiServer` directly. See
-  [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) §2 for what that
-  means in practice.
+- **Physical and field runtime proof.** The shared runtime composition is
+  implemented and its software campaigns are indexed for commit `4adbc136`.
+  Those source, image, simulator and disposable-container results do not
+  establish physical matrix/CEC, Remote or Flic behavior, owner-deployed HA,
+  field recovery or the 72-hour soak. See
+  [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) §2 and the
+  [runtime validation index](docs/validation/RUNTIME_VALIDATION_INDEX.md).
 
 The roadmap ([`ROADMAP.md`](ROADMAP.md)) names the next concrete
 milestones; the ledger ([`docs/validation/LEDGER.md`](docs/validation/LEDGER.md))
 shows the row-by-row state of every feature in the registry. A
 v1.0.0 tag will not be pushed until every row is at target with
-fresh evidence and the framework wiring lands.
+fresh evidence and the required hardware/field gates are signed off.

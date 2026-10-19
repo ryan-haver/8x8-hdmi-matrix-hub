@@ -356,8 +356,8 @@ levels mean and how evidence is recorded is in
 (short version: [docs/validation/README.md](docs/validation/README.md)).
 
 Earlier ledger and candidate records remain attached to their tested commits.
-The integrated runtime campaign is pending the coordinator's fresh report and
-will be indexed at [`docs/validation/RUNTIME_VALIDATION_INDEX.md`](docs/validation/RUNTIME_VALIDATION_INDEX.md).
+The integrated software campaign for runtime commit `4adbc136` is recorded in
+the [`runtime validation index`](docs/validation/RUNTIME_VALIDATION_INDEX.md).
 Physical hardware, field/recovery and 72-hour soak evidence remain pending.
 
 ---
