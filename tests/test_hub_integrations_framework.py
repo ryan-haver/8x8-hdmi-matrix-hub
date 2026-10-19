@@ -579,7 +579,7 @@ async def test_loader_cleans_up_partial_start_and_attempts_all_stops(monkeypatch
     with pytest.raises(RuntimeError, match="start failed"):
         await loader.start(HubClientLocal(MemoryMatrix()))
     assert DemoIntegration.calls == ["start:demo", "start:broken", "stop:broken", "stop:demo"]
-    assert loader.health_summary() == {}
+    assert loader.health_summary() == {"broken": {"status": "error", "error": "shutdown failed"}}
 
 
 def test_registry_duplicate_and_registration_validation():
@@ -705,7 +705,12 @@ async def test_loader_stop_failure_and_health_failure(monkeypatch):
     assert loader.health_summary() == {"demo": {"status": "error"}}
     with pytest.raises(ExceptionGroup, match="shutdown failed"):
         await loader.stop()
+    assert loader.health_summary() == {"demo": {"status": "error", "error": "shutdown failed"}}
+    owner, = loader._failed_cleanup
+    owner.fail_stop = False
     await loader.stop()
+    assert loader.health_summary() == {}
+    assert DemoIntegration.calls == ["start:demo", "stop:demo", "stop:demo"]
     assert loader.routes() == []
 
 
