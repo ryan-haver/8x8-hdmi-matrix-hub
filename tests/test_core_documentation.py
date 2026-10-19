@@ -578,17 +578,13 @@ def test_openapi_endpoint_will_be_in_rest_app() -> None:
         )
 
 
-def test_run_py_does_not_instantiate_framework_classes() -> None:
-    """``run.py`` does not instantiate the framework classes.
-
-    Source check underpinning ARCHITECTURE.md's framework vs
-    runtime split. If the wiring has landed, the assertion fires
-    and the doc must follow.
-    """
+def test_root_entry_keeps_construction_in_shared_composition() -> None:
+    """The compatibility entry delegates construction to the canonical CLI."""
     text = _run_py_text()
+    assert "hub" in text and "cli" in text
     for cls in ("MatrixService", "ActionRunner", "IntegrationLoader"):
         assert cls not in text, (
-            f"run.py must not instantiate {cls}; the framework is library-only."
+            f"run.py must delegate {cls} construction to the shared composition."
         )
 
 
