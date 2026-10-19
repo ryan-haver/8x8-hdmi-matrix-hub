@@ -4239,7 +4239,7 @@ features:
       'GET /api/v2/scenes/{scene_id}/history']
   target: V2
   current: V2
-  basis: "tests/sim/test_sim_scenes_v2.py exercises every /api/v2/scenes route on the real hub + simulator and asserts the device effect of execute (V2). R2: tests/sim/test_sim_rest_reads.py::test_scene_override_private_extensions_survive_public_edit_and_reload covers registered list/detail reads and edit/reload with nested private storage extensions, keeping public fields and PIN hashes separated. Existing evidence levels are retained pending the fresh integrated runtime campaign. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence."
+  basis: "tests/sim/test_sim_scenes_v2.py exercises every /api/v2/scenes route on the real hub + simulator and asserts the device effect of execute (V2). R2: tests/sim/test_sim_rest_reads.py::test_scene_override_private_extensions_survive_public_edit_and_reload covers registered list/detail reads and edit/reload with nested private storage extensions, keeping public fields and PIN hashes separated. Existing evidence levels are retained pending the fresh integrated runtime campaign. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence. R2D def66d26 adds tests/test_runtime_legacy_scene_restart_r2d.py for validated migration provenance and legacy/v2 coexistence, including actual HTTP create/fresh-start/list/execute across same/split config layouts and both UC modes. Unchanged source and normal-image regressions in tests/test_runtime_review_r8.py pass in R8B/R8C at their recorded source/image revisions; see docs/validation/RUNTIME_REVIEW_DEADLINE_RESOLUTION.md. New complete candidate evidence remains pending; baseline levels are unchanged."
   evidence:
   - docs/validation/evidence/F-DOM-010/2026-10-04-V2-7dbc4dc7-domain_manage.scene_a_list-api.json
   - docs/validation/evidence/F-DOM-010/2026-10-04-V2-7dbc4dc7-domain_manage.scene_b_create_reject_body_type-api.json
@@ -5273,7 +5273,7 @@ features:
     files: [scenes.json]
   target: V3
   current: V2
-  basis: 'Scenarios scenes.edit_with_profile_step and scenes.invalid_edit_rejected (V2); tests/sim/test_sim_scenes_v2.py (every /api/v2/scenes route on the real hub + simulator); tests/test_scene_manager.py.'
+  basis: "Scenarios scenes.edit_with_profile_step and scenes.invalid_edit_rejected (V2); tests/sim/test_sim_scenes_v2.py (every /api/v2/scenes route on the real hub + simulator); tests/test_scene_manager.py. R2D def66d26 adds tests/test_runtime_legacy_scene_restart_r2d.py for validated migration provenance and legacy/v2 coexistence, including actual HTTP create/fresh-start/list/execute across same/split config layouts and both UC modes. Unchanged source and normal-image regressions in tests/test_runtime_review_r8.py pass in R8B/R8C at their recorded source/image revisions; see docs/validation/RUNTIME_REVIEW_DEADLINE_RESOLUTION.md. New complete candidate evidence remains pending; baseline levels are unchanged."
   evidence:
   - docs/validation/evidence/F-DOM-010/2026-10-04-V2-7dbc4dc7-domain_manage.scene_a_list-api.json
   - docs/validation/evidence/F-DOM-010/2026-10-04-V2-7dbc4dc7-domain_manage.scene_b_create_reject_body_type-api.json
@@ -6621,7 +6621,7 @@ features:
     uc: [setup_driver (reconfigure)]
   target: V4
   current: V3
-  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) since WP-B2/WP-B3: test_setup.py::test_reconfigure_with_a_bad_address_keeps_the_working_setup, ::test_reconfigure_keeps_the_subscribed_entities_working (same address: no login page), ::test_reconfigure_to_another_matrix_disposes_the_old_connection (login page, old matrix disposed: BE-10), ::test_the_login_entered_for_a_matrix_is_used_after_a_restart, ::test_abort_on_the_login_page_discards_the_new_address (UC-05 fixed in WP-B3). UC-02 (open, H) is linked to F-UC-002, not here. V4 on a real Remote pending.'
+  basis: "V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) since WP-B2/WP-B3: test_setup.py::test_reconfigure_with_a_bad_address_keeps_the_working_setup, ::test_reconfigure_keeps_the_subscribed_entities_working (same address: no login page), ::test_reconfigure_to_another_matrix_disposes_the_old_connection (login page, old matrix disposed: BE-10), ::test_the_login_entered_for_a_matrix_is_used_after_a_restart, ::test_abort_on_the_login_page_discards_the_new_address (UC-05 fixed in WP-B3). UC-02 (open, H) is linked to F-UC-002, not here. V4 on a real Remote pending. Shared HubRuntime matrix reconfiguration restoration is additionally covered by the R1G/R1H/R1I source regressions described in F-REL-017; this does not replace actual Remote setup/physical-client acceptance."
   evidence: []
   findings: [UC-05, BE-10]
   scenarios: []
@@ -7419,7 +7419,7 @@ features:
     files: [scenes.json (v1), profiles.json]
   target: V4
   current: V1
-  basis: tests/test_persistence.py TestLegacyMigration; tests/test_error_paths.py TestProfileMigrationErrors.
+  basis: "tests/test_persistence.py TestLegacyMigration; tests/test_error_paths.py TestProfileMigrationErrors. R2D def66d26 adds tests/test_runtime_legacy_scene_restart_r2d.py for validated migration provenance and legacy/v2 coexistence, including actual HTTP create/fresh-start/list/execute across same/split config layouts and both UC modes. Unchanged source and normal-image regressions in tests/test_runtime_review_r8.py pass in R8B/R8C at their recorded source/image revisions; see docs/validation/RUNTIME_REVIEW_DEADLINE_RESOLUTION.md. New complete candidate evidence remains pending; baseline levels are unchanged."
   evidence: []
   findings: [PER-03, API-12, PER-04]
   scenarios: []
@@ -7707,7 +7707,7 @@ features:
     device: [login, get video status]
   target: V4
   current: V0
-  basis: 'Enabled reboot automatically restores HTTP and Telnet through the matrix reconnect supervisor; tests/sim/test_sim_enabled_reboot.py and packaged-image reboot records. The live.matrix_offline browser record also proves recovery after a 30-second simulator outage. Hardware and broader outage/soak cases remain pending.'
+  basis: "Enabled reboot automatically restores HTTP and Telnet through the matrix reconnect supervisor; tests/sim/test_sim_enabled_reboot.py and packaged-image reboot records. The live.matrix_offline browser record also proves recovery after a 30-second simulator outage. Hardware and broader outage/soak cases remain pending. R1G c2e02f00, R1H c36edb91 and R1I 0ea3b7ad are covered by tests/test_runtime_rollback_reconnect_r1g.py, test_runtime_rollback_deadline_r1h.py, test_runtime_rollback_restoration_r1i.py and unchanged review regressions test_runtime_review_r8.py/test_runtime_review_r8b.py/test_runtime_review_r8c.py. Exact R1I source verification passes 59 focused cases; the worker also passes 155 scoped runtime/UC/transport regressions. Cleanup retains one public retirement owner, restores logical state on interruption, fences uncertified disposal errors, and hands successful late closure to the existing reconnect supervisor under lifecycle and generation guards. Cleanup5 plus a separately bounded settling5 phase is not a global transaction deadline. Fresh independent image review and complete candidate campaigns remain pending; no hardware/field level is granted."
   evidence:
   - docs/validation/evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.direct-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.enabled_shortcut-api.json
@@ -7916,7 +7916,7 @@ features:
     uc: [setup_driver]
   target: V4
   current: V0
-  basis: No test.
+  basis: "Source/runtime cleanup coverage; physical and long-duration leak acceptance remain pending. R1G c2e02f00, R1H c36edb91 and R1I 0ea3b7ad are covered by tests/test_runtime_rollback_reconnect_r1g.py, test_runtime_rollback_deadline_r1h.py, test_runtime_rollback_restoration_r1i.py and unchanged review regressions test_runtime_review_r8.py/test_runtime_review_r8b.py/test_runtime_review_r8c.py. Exact R1I source verification passes 59 focused cases; the worker also passes 155 scoped runtime/UC/transport regressions. Cleanup retains one public retirement owner, restores logical state on interruption, fences uncertified disposal errors, and hands successful late closure to the existing reconnect supervisor under lifecycle and generation guards. Cleanup5 plus a separately bounded settling5 phase is not a global transaction deadline. Fresh independent image review and complete candidate campaigns remain pending; no hardware/field level is granted."
   evidence: []
   findings: [BE-10, BE-11]
   scenarios: []

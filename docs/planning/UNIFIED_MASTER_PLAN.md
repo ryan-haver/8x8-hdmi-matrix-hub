@@ -41,10 +41,11 @@ rollback exceeds its cleanup deadline. R1H's deadline correction is merged;
 fresh Astra R8C passes all eight known source/image cases on `dd184725` and its
 new immutable image. R8C also reproduces a source-only failure when cancellation
 or expiry interrupts candidate cleanup before original identity restoration.
-Fresh Sol 6.1 high R1I owns complete bounded rollback restoration, including
-early drain, late closure, shutdown and overlapping reconfiguration. Its initial
-focused checks pass; final exact-commit acceptance and fresh Astra R8D review
-remain pending. The candidate stays held pending that review and new complete
+Sol 6.1 high R1I `0ea3b7ad` is merged as `619baccc`, including early drain,
+late closure, shutdown and overlapping reconfiguration. Independent exact-commit
+validation passes 59 focused tests; its worker also passes 155 scoped regressions.
+Fresh Astra R8D review is active with a new immutable image and all twelve known
+source/image cases required. The candidate stays held pending that review and new complete
 candidate evidence. Historical `4adbc13` CI passes 12/13 required jobs,
 with only the three owner-pending Tron screenshots failing. No visual/hardware
 approval or release tag is implied. The

@@ -1,8 +1,8 @@
 # Runtime validation report
 
-**Disposition: hold runtime release for restoration across interrupted candidate cleanup and fresh candidate gates.**
+**Disposition: hold runtime release for independent restoration acceptance and fresh candidate gates.**
 
-The [independent R8 report](RUNTIME_INDEPENDENT_REVIEW.md) reproduced two availability defects beyond the broad campaign paths below. R2D/R1G and the subsequent R1H deadline correction are merged. The [R8C review](RUNTIME_REVIEW_DEADLINE_RESOLUTION.md) passed all eight known source/image cases on `dd184725` and its new immutable image, but reproduced a further source contract failure: interrupting failed-candidate cleanup can skip restoration of the original client/address/names. Native cancellation at the actual close call needs no added delay; controlled cleanup-expiry cases and a passing release control are reported separately. Fresh R1I owns the restoration correction. This new phase finding is source evidence, not a claim that it ran in the unchanged image. The broad campaign and formal gate below remain tied to the older `4adbc13` candidate; fresh complete evidence and independent verification remain required.
+The [independent R8 report](RUNTIME_INDEPENDENT_REVIEW.md) reproduced two availability defects beyond the broad campaign paths below. R2D/R1G and the subsequent R1H deadline correction are merged. The [R8C review](RUNTIME_REVIEW_DEADLINE_RESOLUTION.md) passed all eight known source/image cases on `dd184725` and its new immutable image, but reproduced a further source contract failure: interrupting failed-candidate cleanup can skip restoration of the original client/address/names. Native cancellation at the actual close call needs no added delay; controlled cleanup-expiry cases and a passing release control are reported separately. R1I `0ea3b7ad`, merged as `619baccc`, corrects the complete restoration boundary. Exact-commit independent checks pass all 59 focused cases, including the eight unchanged source review cases; its worker also passes 155 scoped regressions. Fresh Astra R8D review of integrated source and a new immutable image is active. The R8C phase finding remains source evidence, not a claim that it ran in the unchanged image. The broad campaign and formal gate below remain tied to the older `4adbc13` candidate; fresh complete evidence and independent review acceptance remain required.
 
 The [archived manifest](runs/runtime/manifest.json) retains each actual run commit, artifact root, timestamp, scope and outcome count. These are multiple explicitly attributed runs, not a claim that every historical test ran at one final SHA. The [Phase 6/7 report](VALIDATION_REPORT.md) remains historical evidence.
 
@@ -79,7 +79,7 @@ The earlier discovery of legacy tests touching checkout runtime files is retaine
 
 ## Remaining release gates
 
-- Resolve R8C-01 restoration across interrupted candidate cleanup, refresh complete candidate evidence, finish independent verification and final PR checks.
+- Obtain independent R8D source/image acceptance of R1I's restoration correction, refresh complete candidate evidence, and finish final PR checks.
 - The pending three Tron paused-frame owner visual decisions for PR #36/#37 and the approved merge/tag sequence.
 - Owner HIL-B regression, HIL-C recovery and HIL-E deployed/physical client evidence, including matrix/attached-device firmware and physical CEC effects.
 - HIL-D continuous 72-hour resource measurements and the owner's week of daily use/sign-off; follow the field runbook.

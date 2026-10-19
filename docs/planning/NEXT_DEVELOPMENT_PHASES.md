@@ -23,8 +23,11 @@ exceeds the unchanged five-second cleanup deadline, corrected by fresh Sol R1H.
 The [R8C review](../validation/RUNTIME_REVIEW_DEADLINE_RESOLUTION.md) passes all
 eight known source/image cases but demonstrates that interrupted failed-candidate
 cleanup can skip original-state restoration, including native cancellation
-without an added delay. Fresh Sol R1I owns a complete bounded restoration
-correction. New complete evidence and independent verification remain required.
+without an added delay. Sol R1I's complete bounded restoration correction is
+merged at `619baccc`, after 59 independent focused tests passed at its exact
+commit; the worker also passed 155 scoped regressions. Fresh Astra R8D is
+reviewing the integrated source and a new immutable image. New complete candidate
+evidence and independent review acceptance remain required.
 See the [execution record](RUNTIME_EXECUTION.md). Updated 2026-10-19. This is the next execution
 plan after the integrated Phase 6/7 work. It supplements the original Phase 8
 validation gate rather than renumbering historical phases.
@@ -43,7 +46,7 @@ At the start of this plan, the application constructed `OreiMatrix` and
 loader and migrations were separate frameworks. Shared composition, packaged
 entrypoint, UC bridge and dedicated Flic replay are now accepted on the runtime
 branch. Persistence, action parity and flag/lifecycle corrections have since
-been accepted. The remaining software work is R1I, fresh complete source/image
+been accepted. The remaining software work is R8D review, fresh complete source/image
 validation, evidence/index reconciliation and independent verification that the
 restoration boundary is resolved. Physical
 client, recovery, soak and owner acceptance gates follow those checks.

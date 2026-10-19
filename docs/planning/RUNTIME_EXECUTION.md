@@ -410,10 +410,13 @@ skips. Native cancellation at actual close needs no added delay; the controlled
 deadline cases have separately disclosed scheduling gates. This new finding is
 source contract evidence, not an additional normal-image reproduction.
 
-Fresh Sol 6.1 high R1I owns only runtime composition and a new restoration test,
-with lightweight source/SIM work. Its initial unchanged review and expanded
-late-close/stop/overlapping-reconfiguration controls pass; final commit and
-independent acceptance remain pending. The agreed cleanup policy preserves
+Fresh Sol 6.1 high R1I `0ea3b7ad` changes only runtime composition and a new
+restoration test. Independent exact-commit verification passes all 59 focused
+cases, with four Docker cases explicitly deselected; its worker also passes
+155 scoped regressions. All eight unchanged source review cases pass, including
+native close cancellation and the production cleanup deadline. The worker was
+released before acknowledgment, all evidence copied, the fix merged as
+`619baccc`, and its worktree immediately removed/pruned. The agreed cleanup policy preserves
 `CLEANUP_TIMEOUT=5.0` and allows a separate settling phase of at most five more
 seconds. Original logical state must be restored independently of cleanup
 success. Uncertified public disconnect errors retain explicit ownership/error
@@ -424,9 +427,10 @@ fences. Existing review assertions remain unchanged. The new owned fault-injecte
 oracle was corrected where it assumed an opaque public exception certified
 closure; its original failure is preserved.
 
-Fresh Astra R8D review is prepared, not launched. It follows accepted R1I
-integration and requires all twelve known source/image cases, relevant runtime
-controls and one new clean immutable amd64 image. Only after focused acceptance
+Fresh Astra high R8D review is active in a new Orca worktree at `619baccc`;
+requested/effective Codex `gpt-6-astra` high is recorded. It requires all twelve
+known source/image cases, relevant runtime controls and one new clean immutable
+amd64 image. Only after focused acceptance
 will the coordinator freeze a clean candidate for fresh complete source, client,
 multiarch and deployment campaigns. Each settled worker is released before
 acknowledgment; evidence is copied before merge and immediate worktree removal.
