@@ -181,7 +181,16 @@ async def test_no_values_are_made_up_during_an_outage(uc_hub_factory, sim: SimDe
     truth = expected_attributes(await sim.state())
     async with UcRemoteSim(hub.uc_url) as remote:
         await remote.attach()
-        await remote.wait_event("entity_change", lambda d: d["entity_id"] == "media_player.output_8", timeout=CYCLE)
+        # Routing can arrive before signal/display reads finish. Last-known-value
+        # assertions require every expected value to have been observed first.
+        last: list[str] = []
+
+        async def in_sync() -> bool:
+            nonlocal last
+            last = mismatches(await remote.get_entity_states(), truth)
+            return not last
+
+        assert await wait_for(in_sync), last
         since = await _outage(remote, sim)
         await asyncio.sleep(3 * POLL)
         made_up = [
