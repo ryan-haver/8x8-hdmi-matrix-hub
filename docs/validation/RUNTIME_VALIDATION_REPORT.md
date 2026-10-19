@@ -17,7 +17,7 @@ The [formal combined evidence gate](runs/runtime/formal-gate.txt) passed with ze
 Registered REST route coverage was 177/177 (100.0%) in the enabled configuration at the commit identified by the route-coverage log in the manifest.
 The final source browser smoke/flow project passed 59 tests with 0 unexpected results, 0 flaky results and 0 skips. Visual baseline acceptance is separate.
 
-Older core, installed-package, component and platform supplements retain their original commits; their individual scopes are listed above. They do not by themselves prove later UI code or shipped-image behavior. Windows filesystem skips and optional dependency skips remain visible. The dedicated HA component unit suite is distinct from actual HA containers below.
+Earlier core, component and platform supplements retain their original commits in the execution history; they do not by themselves prove later application or image behavior. The current complete core run includes actual installed-package entry checks. Its Windows filesystem skips remain visible. The dedicated HA component unit suite is distinct from the actual HA container campaigns below.
 
 ## Application images
 
