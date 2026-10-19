@@ -40,6 +40,7 @@ def test_r3e_module_origins_are_from_child_checkout() -> None:
 
 
 @pytest.mark.asyncio
+@pytest.mark.skipif(not shutil.which("node"), reason="Actual frontend routing regression requires Node.js")
 async def test_startup_ws_routing_change_not_overwritten_by_stale_initial_rest_status(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
