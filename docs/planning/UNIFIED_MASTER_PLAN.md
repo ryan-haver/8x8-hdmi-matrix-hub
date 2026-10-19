@@ -21,19 +21,19 @@ effective-model checks pass, Luna handles bounded guides/evidence indexing,
 and Astra handles contract design and independent review. M3.1/DeepSeek are
 conditional alternatives, not assumed successful launches.
 
-R0, R1, R1P, R3/R3B and R6 are accepted and merged, with their worktrees
-removed. R2's M3 checkpoint was preserved after a failed full-scope result;
-fresh Sol 6.1 high completed persistence, accepted as `59a2e8e` after 734
-independent passes and one platform skip. R4/R4A are now accepted as `6ae0227`
-after 432 independent passes and one HA dependency skip. R3C, R5B and R1C are
-also accepted and their worktrees removed. The first combined source run passed
-3,733 tests and covered 177/177 routes, with 47 failures still requiring fixes.
-R2C (Sol) storage isolation, R6B (Flash) Flic replay checks and R1D (Sol) startup/
-capture readiness are also accepted. R4B's Argon candidate was held after review;
-R4C/R4D (fresh Sol) completed the explicit preset/error privacy correction,
-accepted as `5af15c7` after 1,002 independent focused passes and two skips;
-the worker was released and its worktree removed. R7 Luna is
-preparing guides, with its evidence acceptance and R8 waiting for fresh campaigns. The
+Runtime implementation and corrective tracks through R3E's UI ordering fix and
+R1F's CEC enable-cache correction are merged and their worktrees removed. At clean
+`4adbc13`, the full local core passed 3,966 tests with four skips and 177/177 routes;
+dedicated Remote 100, source client outcomes 1,506, actual HA 19 per pinned version,
+and image client outcomes 193 all passed. Both architectures built and matched
+257 shipped files; deployment/arm64 checks, 59 browser flows, four Swagger cases
+and the formal combined evidence gate passed. The current
+[runtime report](../validation/RUNTIME_VALIDATION_REPORT.md) retains actual
+commits/image IDs and prior failed runs. Historical Phase 6/7 results below remain
+tied to their earlier candidate. R7 Luna is finishing the guides and evidence
+index; fresh Astra R8 independent review follows. CI passes 12/13 required jobs,
+with only the three owner-pending Tron screenshots failing. No visual/hardware
+approval or release tag is implied. The
 [execution record](RUNTIME_EXECUTION.md) tracks effective model observations,
 ownership clarifications and acceptance. Hardware and soak gates remain
 owner-observed.

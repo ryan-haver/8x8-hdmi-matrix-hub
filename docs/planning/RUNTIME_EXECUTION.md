@@ -324,26 +324,46 @@ the pending R3E UI correction or physical device actions.
   on 2025.1.4. The latter checks the supported 2025.1 version line, not the exact
   2025.1.0 floor. Original 17-pass/two-failure records remain intact. The worker
   was released and its child removed/pruned.
-- **R3E, Argon high:** active. A separate fresh Sol read-only review used real
+- **R3E, requested Argon high alias:** `ccb4a08`, merged as `4dd7ca5`.
+  Startup/manual refresh now preserve newer WS routes across delayed and
+  overlapping REST reads, with later REST fallback. Independent checks passed
+  16 tests with one optional host dependency skip; final reconnect smoke 1/1
+  and smoke 5/5 passed. Later clean-candidate flows passed all 59. The worker was
+  released and its child removed/pruned. Backend identity behind the alias
+  remains unverified as documented in the model inventory. A fresh Sol review used real
   runtime/SIM payloads and actual application JavaScript to demonstrate newer WS
   routing being overwritten by a delayed startup REST response. Exact event-order
-  attribution to the first failing CI run remains unproven. Argon has bounded
-  `app.js` and new-regression ownership; backend changes and existing E2E oracle
-  or visual-baseline changes are outside that approval. The read-only review is
+  attribution to the first failing CI run remains unproven. The bounded
+  `app.js` and new-regression change leaves existing E2E oracles and visual
+  baselines intact. The read-only review is
   complete, its artifacts copied, and its worker released and child removed.
+- **R1F, Sol 6.1 high:** `007a02d`, merged as `aa27b4d`, expires CEC enable
+  decisions on explicit protocol/facade/WS synchronization. Ordinary cache
+  behavior is preserved. Exact-commit independent checks passed 27 tests; two
+  additional registered simulator cases fail before and pass after the fix.
+  The full clean image campaign now passes the unchanged Flic source-power
+  oracle that previously failed at `55d4fe0`. The worker was released, evidence
+  copied and its child immediately removed/pruned.
 - **R7, Luna medium:** guide preparation accepted at `5608407` after 375
-  independent documentation checks. Final indexing still awaits the actual
-  remaining campaigns and consolidated report. **R8, fresh Astra high**, has
+  independent documentation checks. The final report/evidence reply is now
+  delivered for final indexing. **R8, fresh Astra high**, has
   not launched and remains after those gates.
 
 Draft [PR #38](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/pull/38) targets
-the Phase 6/7 branch. At `a7eedf6`, 12 of 13 checks pass; UI is still running at
-this checkpoint. CI core passed 3,934 tests with 22 skips, 31 deselections and
-177/177 routes; the actual HA container campaign passed 19 scenarios. CI and
-local counts differ and retain their own environments. Full client campaigns
-against the next shipped image, source browser flows, Swagger rendering, final
-evidence/gate reconciliation and R8 remain open. Actual local summaries/logs
-are under `build/runtime-completion/after-r1e/` and `after-r6c/`; the independent
+the Phase 6/7 branch. At `4adbc13`, CI finished 12/13 required jobs passing;
+only the same three Tron screenshots fail (1,098 UI passes, 33 skips; follow-up
+gallery 62 passes). CI core passed 3,948 tests with 22 skips, 31 deselections and
+177/177 routes; actual HA passed. The complete local core separately passed
+3,966 tests with four skips, dedicated UC 100, source clients 1,506 and source
+HA 19 per pinned version. All 193 image client outcomes, both architecture
+builds, deployment/arm64/parity checks, 59 flows and four Swagger checks pass.
+The formal combined gate passed; 26 registry/ledger checks and all 213 archived
+Git-blob hashes pass. An initial importer client-scope overconstraint and Git
+line-ending normalization were corrected without changing original results;
+rejected intermediate checks remain retained. See the
+[runtime report](../validation/RUNTIME_VALIDATION_REPORT.md) and actual
+`build/runtime-completion/after-r1f/` artifacts. Older runs under `after-r1e/`
+and `after-r6c/` retain their original scope; the independent
 R3E report is `build/runtime-completion/r3e-review-evidence/REPORT.txt`.
 
 ## Evidence and release gates

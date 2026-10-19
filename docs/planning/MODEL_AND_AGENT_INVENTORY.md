@@ -112,13 +112,15 @@ MiniMax M3's persistence checkpoint was preserved after its full-scope failure;
 Sol completed that track. M3.1 and DeepSeek remain conditional routes. Luna's
 bounded guide assignment has confirmed requested/effective `gpt-6-luna` medium;
 guide preparation `d956046` was accepted after 375 independent checks and merged
-as `5608407`. Its final evidence index still awaits complete campaign evidence. Catalog entries are
+as `5608407`. Complete campaign evidence is now available and Luna is finishing
+its final guides/index. Catalog entries are
 still distinct from proven current capacity. The no-Anthropic policy applies to
 all retries, reviews and helpers.
 
 The current corrective assignments remain scoped by demonstrated need: Sol
 completed R5C's Linux deployment tests; Flash completed R6C's HA validation error
-classification; Argon owns R3E's UI startup correction; Luna owns the final
+classification; Argon's R3E UI ordering correction is accepted; Sol completed
+R1F's explicit-refresh CEC enable-cache correction; Luna owns the final
 guides/index; a fresh Astra session is reserved for R8 after those gates. A
 separate Sol session completed a read-only R3E source-contract review without
 editing tracked files. Its real-payload JavaScript probe demonstrates a startup

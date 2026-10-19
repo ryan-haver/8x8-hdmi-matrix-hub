@@ -1,15 +1,18 @@
 # Runtime completion and release plan
 
-Status: executing. The runtime implementation and corrective tracks through
-R1E, R5C and R6C are integrated. The clean `59aae63` local core run passed
-3,941 tests with four documented skips and 177/177 routes; its source campaign
-passed all 1,506 API/browser/Remote/Flic outcomes. At `a7eedf6`, corrected real
-HA source campaigns passed 19/19 on both 2026.9.3 and the supported 2025.1 line
-(tested at 2025.1.4). CI passed 3,934 core tests with 22 skips and 177/177 routes;
-these are distinct environments and counts, not interchangeable results.
-Argon owns R3E's bounded UI startup-ordering fix, informed by a separate read-only
-Sol review. R7 Luna's guide preparation is accepted; final evidence indexing and
-fresh Astra R8 review await the remaining image/client and UI validation.
+Status: software campaigns passed; final guides and independent review executing.
+R3E's UI ordering correction and R1F's explicit-refresh CEC cache correction are
+integrated. Clean candidate `4adbc13` passed 3,966 local core tests with four skips
+and 177/177 routes, 100 dedicated Remote tests and all 1,506 source client outcomes.
+Actual HA passed 19/19 on both pinned versions (2026.9.3 and 2025.1.4; the latter
+tests the supported line, not the exact 2025.1.0 floor). Both images built and
+matched 257 shipped files; all 193 image client outcomes, 59 browser flows and
+four Swagger checks passed. The formal combined evidence gate passed.
+See the [runtime report](../validation/RUNTIME_VALIDATION_REPORT.md) for actual
+image IDs, summaries, platform skips, prior rejected runs and byte-preservation
+audit. CI passed 12/13 required jobs; only the three owner-pending Tron visuals
+fail. Luna is completing R7's final guides/index from the committed evidence;
+a fresh Astra R8 review follows that integration.
 See the [execution record](RUNTIME_EXECUTION.md). Updated 2026-10-19. This is the next execution
 plan after the integrated Phase 6/7 work. It supplements the original Phase 8
 validation gate rather than renumbering historical phases.
@@ -28,8 +31,8 @@ At the start of this plan, the application constructed `OreiMatrix` and
 loader and migrations were separate frameworks. Shared composition, packaged
 entrypoint, UC bridge and dedicated Flic replay are now accepted on the runtime
 branch. Persistence, action parity and flag/lifecycle corrections have since
-been accepted. The remaining software work is startup synchronization, fresh
-image/client validation, evidence reconciliation and independent review. Physical
+been accepted. The remaining software work is final guide/index integration,
+fresh independent review and resolution of any consequential findings. Physical
 client, recovery, soak and owner acceptance gates follow those checks.
 
 No work below approves the three pending Tron snapshots. PR #36 and PR #37
@@ -40,12 +43,11 @@ not proof for future runtime changes.
 
 ## Branches, ownership and sequence
 
-Create a new integration branch `wp-runtime-completion` from the current,
-clean Phase 6/7 integration tip when dispatch starts; record its exact SHA.
-Do not base it on `main` while `main` lacks the candidate changes. Bring in
-the approved Phase 5 changes and later merge commits in sequence. Keep runtime
-completion in its own PR after PR #37, with the prerequisite clearly stated.
-Planning changes do not themselves create a worktree or start an agent.
+The integration branch `wp-runtime-completion` was created from the Phase 6/7
+tip `6debe5a9d1ce3b5993bbd1f6c16d14550d11141b`. Draft PR #38 targets that
+Phase 6/7 branch and depends on PR #37; `main` does not yet contain the candidate.
+Keep the approved Phase 5 and later merge/tag sequence intact. Planning changes
+do not themselves create a worktree or start an agent.
 
 The coordinator remains **Sol 6.1 high** and owns merges, shared registry/schema
 updates, release metadata, cross-track integration and evidence aggregation.
