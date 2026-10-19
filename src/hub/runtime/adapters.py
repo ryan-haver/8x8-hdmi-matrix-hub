@@ -153,7 +153,7 @@ class MatrixFacade:
 
     async def get_status(self, force_refresh=False):
         if force_refresh:
-            await self.runtime.refresh()
+            await self.runtime.refresh(force_refresh=True)
         return self.runtime.service.raw_snapshot().get(
             "status", {"connected": self.connected, "host": self.host, "port": self.port}
         )

@@ -356,6 +356,16 @@ class MatrixService:
     def _display_fields(self) -> list[tuple[str, str]]:
         return [(key, f) for key, f in _DISPLAY_FIELDS if f != "arc" or self._model.supports_arc]
 
+    def invalidate_preset_cache(self) -> None:
+        """Expire slot readback for an explicit status refresh, when supported.
+
+        Older structural clients have no slot cache. Keep them compatible while
+        the sole protocol client owns its own cache lifecycle.
+        """
+        invalidate = getattr(self._client, "invalidate_preset_cache", None)
+        if callable(invalidate):
+            invalidate()
+
     async def refresh_snapshot(self) -> bool:
         """Read the matrix and publish what changed. False if the main status read failed.
 
