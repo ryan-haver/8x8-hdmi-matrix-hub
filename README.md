@@ -356,9 +356,11 @@ levels mean and how evidence is recorded is in
 (short version: [docs/validation/README.md](docs/validation/README.md)).
 
 Earlier ledger and candidate records remain attached to their tested commits.
-The integrated software campaign for runtime commit `4adbc136` is recorded in
-the [`runtime validation index`](docs/validation/RUNTIME_VALIDATION_INDEX.md).
-Physical hardware, field/recovery and 72-hour soak evidence remain pending.
+The integrated software campaign for source/image candidate
+`1baac3dec660f41345869c126cfca94d6731c5a0` is recorded in the
+[`runtime validation index`](docs/validation/RUNTIME_VALIDATION_INDEX.md). The
+software campaign is complete; physical hardware, owner deployment, field and
+72-hour soak evidence remain external release gates.
 
 ---
 
