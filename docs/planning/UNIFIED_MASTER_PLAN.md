@@ -55,9 +55,11 @@ The fresh clean `1baac3de` campaign now passes 4,041 core tests with four skips,
 59 flows and four Swagger checks. The combined evidence gate and 26 registry
 checks pass. Archive checkpoint `fe0e7f0` preserves all 439 audited old/new Git
 blobs. CI at `1baac3de` passes all twelve non-UI required jobs; only the same
-three owner-pending Tron snapshots fail. Luna owns the bounded final guide/index
-refresh and Astra the final evidence audit. Visual/hardware approval and release
-tags remain pending. The
+three owner-pending Tron snapshots fail. Luna's bounded guide/index refresh is
+accepted after 49 independent tests; Astra's [final evidence audit](../validation/RUNTIME_FINAL_GATE_REVIEW.md)
+accepts the functional software evidence and actual documentation delta.
+Both workers are settled and their worktrees removed. Final documentation-head
+CI, visual/hardware approval and release tags remain pending. The
 [execution record](RUNTIME_EXECUTION.md) tracks effective model observations,
 ownership clarifications and acceptance. Hardware and soak gates remain
 owner-observed.
@@ -114,7 +116,7 @@ The final suite must retain 100% route coverage. The final amd64 RC image `sha25
   consolidation. On `wp-runtime-completion`, the shared composition, installed
   console, UC bridge, persistence, action parity and lifecycle corrections are
   accepted by the fresh `1baac3de` software campaign and formal evidence gate.
-  Final documentation/audit and owner release gates remain.
+  Final documentation and evidence audit are accepted; CI and owner release gates remain.
 - **Simulator and clients:** the current source and normal-image campaigns pass
   API/browser/scripted-Remote/Flic and actual HA container checks. Flic uses
   Node SDK stubs with actual HTTP replay; physical-button evidence remains open.
@@ -125,7 +127,7 @@ The final suite must retain 100% route coverage. The final amd64 RC image `sha25
   An automated simulator run is not a substitute for the field gate.
 - **Report:** the current [runtime report](../validation/RUNTIME_VALIDATION_REPORT.md)
   publishes feature/client results and limits; the earlier Phase 6/7 report below
-  remains historical. Final evidence attribution review is next.
+  remains historical. Final evidence attribution review is accepted within its software scope.
 
 Phase 8 is called `WP-V3` in the checked-in remediation plan. The handoff's
 `WP-F2` label refers to this final validation gate, not a separate implemented
@@ -145,4 +147,4 @@ Those six Phase 6/7 worktrees and the visual-repair worktree are removed. Runtim
 closing worktrees follow the same immediate cleanup rule. No `v0.5.0`,
 `v1.0.0-rc1`, or `v1.0.0` tag was created during this coordination session.
 Runtime consolidation and its fresh software campaign are complete; Phase 5
-visual approval, final evidence audit and owner hardware/field gates remain open.
+visual approval, final documentation-head CI and owner hardware/field gates remain open.

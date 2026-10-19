@@ -496,9 +496,28 @@ passes every non-UI required job: core 4,023 passes/22 skips/177 routes, actual 
 19, deployment, UC, scenarios/ledger, types/lint/hygiene/security. Main UI has
 1,098 passes, 33 skips and only the same three Tron paused-frame failures;
 gallery 62 passes. Actual logs and both artifacts are retained. Owner visual
-approval is still absent. Luna's final bounded guide/index refresh and Astra's
-final evidence audit follow this consolidation; source/image campaigns are not
-repeated for documentation-only changes.
+approval is still absent. Source/image campaigns are not repeated for
+documentation-only changes.
+
+Luna R7B `603ce187` updates only the four current guide/index files. The
+coordinator independently passes 49 documentation tests at its exact SHA;
+the worker's link scan also passes. The coordinator verifies the requested and
+effective Codex `gpt-6-luna` medium route from its launch receipt, answering the
+worker's identity question without inspecting private configuration. After
+release-before-ack and evidence copying, the change merges as `dd8a8a7d` and
+the worktree is immediately removed/pruned. `e4cdda23` preserves the ROADMAP
+proof table's historical qualification.
+
+Fresh Astra high R8E `a22c5ebb`, merged as `f67883cf`, accepts functional software
+evidence after independently inspecting that actual documentation delta through
+Git. Its checks reconcile 439 binary blobs, 259 captured root inputs, six
+checkout newline variants, all 1,737 original schema-valid outcome records,
+193 exact image copies, 42 declared exclusions and 135 accepted-document links.
+The [final review](../validation/RUNTIME_FINAL_GATE_REVIEW.md) retains CI, visual,
+physical, field, final-version and publication gates. The coordinator validates
+the sole-report scope and seven local report links, releases before acknowledgment,
+copies all `build/r8e`, merges and immediately removes/prunes the worktree.
+Both closing workers are settled; final changes are batched before the next CI push.
 
 ## Evidence and release gates
 

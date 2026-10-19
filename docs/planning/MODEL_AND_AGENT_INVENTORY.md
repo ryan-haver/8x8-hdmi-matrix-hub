@@ -135,8 +135,10 @@ the coordinator independently verifies both controls. Its conditional
 alternate-disconnect limit is explicitly retained with a failing probe.
 The fresh `1baac3de` source/image campaigns and combined evidence gate now pass;
 all 439 audited old/new evidence Git blobs match at `fe0e7f0`. Closing assignments
-are Luna medium for bounded guide/index reconciliation and Astra high for an
-independent evidence-attribution audit. Final documentation-head CI, the three
+were Luna medium for bounded guide/index reconciliation (49 independent tests,
+merged `603ce187`) and Astra high for the accepted independent evidence-attribution
+audit (`a22c5ebb`). Both exact requested/effective routes were verified and both
+worktrees removed after acceptance. Final documentation-head CI, the three
 owner visual decisions and physical/field release gates remain. A
 separate Sol session completed a read-only R3E source-contract review without
 editing tracked files. Its real-payload JavaScript probe demonstrates a startup

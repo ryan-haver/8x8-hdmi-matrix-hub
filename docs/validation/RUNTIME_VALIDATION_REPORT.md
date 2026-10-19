@@ -1,10 +1,12 @@
 # Runtime validation report
 
-**Disposition: software candidate; final independent review, PR checks, owner visual approval and physical/field gates remain separate.**
+**Disposition: functional software evidence accepted; final PR/CI, owner visual approval and physical/field publication gates remain.**
 
 The [archived manifest](runs/runtime-r8b/manifest.json) retains each actual run commit, artifact root, timestamp, scope and outcome count. These are multiple explicitly attributed runs, not a claim that every historical test ran at one final SHA. The [Phase 6/7 report](VALIDATION_REPORT.md) remains historical evidence.
 
 The [formal combined evidence gate](runs/runtime-r8b/formal-gate.txt) passed with zero known failures linked to open findings. It consumed all five client types and the actual source, image and deployment evidence roots. The [gate context](runs/runtime-r8b/formal-gate-context.json) records its consolidation scope. This regression gate does not establish that every feature has reached its hardware/field target.
+
+The [final independent evidence review](RUNTIME_FINAL_GATE_REVIEW.md), committed as `a22c5ebb`, accepts the functional candidate and the inspected Luna documentation changes. It independently reconciles all 1,737 original outcome records, 193 image copies, 42 declared exclusions, 439 preserved Git blobs and the captured source/image identities. This closes the evidence-attribution assessment; CI on the final documentation head is a separate later observation, and the release gates below remain open.
 
 ## Independent restoration review and evidence history
 
@@ -89,7 +91,7 @@ The earlier discovery of legacy tests touching checkout runtime files is retaine
 
 ## Remaining release gates
 
-- Final independent disposition after complete campaign/evidence consolidation and final PR checks.
+- Final documentation-head CI and applicable PR checks after accepted independent evidence review.
 - The pending three Tron paused-frame owner visual decisions for PR #36/#37 and the approved merge/tag sequence.
 - Owner HIL-B regression, HIL-C recovery and HIL-E deployed/physical client evidence, including matrix/attached-device firmware and physical CEC effects.
 - HIL-D continuous 72-hour resource measurements and the owner's week of daily use/sign-off; follow the field runbook.
