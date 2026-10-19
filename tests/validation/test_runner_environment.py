@@ -4,6 +4,7 @@ import asyncio
 
 import pytest
 
+from tools.validate.evidence import iter_records
 from tools.validate.runner import Runner, RunOptions
 from tools.validate.scenarios import discover
 from tools.validate.stack import HubProcess
@@ -29,6 +30,7 @@ def test_simulator_reads_are_ready_and_faults_reach_the_measured_read(tmp_path):
     scenarios = discover()
     chosen = [scenarios[name] for name in (
         "contracts.cables", "profile_state.capture_output_read_failure",
+        "profile_state.capture_video_read_failure",
         "preset_read.device_slot_1",
     )]
     runner = Runner(RunOptions(target="sim", clients=("api",), out_dir=tmp_path))
@@ -36,6 +38,11 @@ def test_simulator_reads_are_ready_and_faults_reach_the_measured_read(tmp_path):
     assert all(outcome.status == "pass" for outcome in outcomes), [
         (outcome.scenario, outcome.failed_checks) for outcome in outcomes if outcome.status != "pass"
     ]
+    records = {record.data["scenario"]: record.data for record in iter_records([tmp_path / "evidence"])}
+    for read in ("output", "video"):
+        record = records[f"profile_state.capture_{read}_read_failure"]
+        assert any(entry["command"] == f"get {read} status" and entry.get("fault")
+                   for entry in record["observations"]["device_log"])
 
 
 @pytest.mark.parametrize("external", [False, True])
