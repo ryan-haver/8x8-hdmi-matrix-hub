@@ -240,9 +240,13 @@ release gate. Corrections have separate ownership:
   targets are refused before imports, preserving original bytes. Legacy test
   fixtures now use disposable source directories. The root rerun left local
   runtime files unchanged against the post-discovery hash checkpoint.
-- **R4B, Argon high:** schema-stamped storage assertions, actual atomic-writer
-  fault injection, and the existing safe error-reference contract for preset
-  exceptions, preserving ordinary refusal bodies.
+- **R4B, Argon high:** candidate `5daa554` passed 395 worker checks with one skip
+  but was not accepted. Review rejected live-client method interception and a
+  special `BaseException` bypass. The committed candidate is preserved in the
+  same child worktree for **R4C, fresh Sol 6.1 high**, which owns explicit service
+  exception propagation and safe public action errors. Ordinary refusals, partial
+  results, cancellation and the sole client owner must remain intact. This was
+  coordinator code review; no automatic approval rejection occurred.
 - **R6B, Flash 3.8 high:** accepted in `30fd047`. Seventy-two independent R6
   checks and an additional command-filter guard passed; root JavaScript lint
   passed. Coordinator tightened maintenance filtering to known commands and
@@ -252,7 +256,13 @@ release gate. Corrections have separate ownership:
   instead of cached facade state; failed reads preserve storage. UC production
   bind rollback was already correct. Harness checks now require this child's
   completed bind and prove exclusive listener conflicts; explicit ports do not
-  silently move. Final combined source/image/client gates remain pending R4B.
+  silently move. Final combined source/image/client gates remain pending R4C.
+
+R7 Luna is preparing guides against accepted behavior while the last correction
+runs. Its final evidence index and completion are blocked on a separate
+coordinator campaign-evidence handoff. Fresh Astra R8 review remains after that
+acceptance. Dedicated HA component tests passed 101 checks in the pinned Python
+3.13 test container; these are unit checks, not HA deployment or physical proof.
 
 Coordinator refreshed only the additive health JSON contract fixture and added
 registered Flic privacy/disabled-route reads. The obsolete direct-construction

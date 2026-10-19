@@ -29,8 +29,9 @@ after 432 independent passes and one HA dependency skip. R3C, R5B and R1C are
 also accepted and their worktrees removed. The first combined source run passed
 3,733 tests and covered 177/177 routes, with 47 failures still requiring fixes.
 R2C (Sol) storage isolation, R6B (Flash) Flic replay checks and R1D (Sol) startup/
-capture readiness are also accepted. R4B (Argon) wire/storage fault contracts
-remains active. R7/R8 follow that correction and fresh campaigns. The
+capture readiness are also accepted. R4B's Argon candidate was held after review;
+R4C (fresh Sol) owns the explicit preset/error privacy correction. R7 Luna is
+preparing guides, with its evidence acceptance and R8 waiting for fresh campaigns. The
 [execution record](RUNTIME_EXECUTION.md) tracks effective model observations,
 ownership clarifications and acceptance. Hardware and soak gates remain
 owner-observed.
