@@ -127,6 +127,50 @@ implementation; final canonical version/matching rebuilt artifacts and gated
 PR/release sequence. Preserve the unchanged red conditional disconnect probe.
 Neither a same-family historical review nor a gallery capture closes these gates.
 
+## Release-readiness planning package (2026-10-19)
+
+The owner's subsequent **proceed** authorizes the proposed evidence-gap inventory
+and release-validation checklist. Scope is coordinator-owned planning/prose and
+read-only evidence analysis. No implementation wave, model probe, worker/worktree,
+hardware action, soak collector, baseline approval, merge to main or tag is started.
+
+| Field | Observation / disposition |
+| --- | --- |
+| Base / publication target | Initial local/origin `wp-runtime-completion` = `621288b11580f348d24481a2973622a4f1f1855a`; publish scoped planning docs through draft PR #38 |
+| Existing Run / runtime | Read-only recheck confirms `run_37205f6095b3`, Orca 1.4.230/runtime `ba9443bb-3d71-459a-8dff-4b535678d276`; no Run reset or mutation |
+| Protected / capacity | Root and unresolved persistence workspace preserved; 38 released/two null-resource retained rows; standing four-total ceiling remains conservative, not measured Orca capacity |
+| Staffing / quota | No dispatch. Provider quotas remain unknown; no model catalog or runtime qualification is asserted by this planning work. Any future EV package needs fresh exact routing, headroom and qualified cross-family implementation review. Anthropic excluded. |
+| Read-only evidence computation | Existing registry/findings/scenario/ledger policy, committed evidence only, at exact base SHA. All 268 features mapped once: 89 software-target gaps, 120 hardware-target gaps, one field-target gap, 58 numerically at target. |
+| Software follow-up partition | 14 target-level mapped, 29 with scenarios but no mapped target-level client, 46 without discoverable scenarios. Scenario mappings use `features_for(client)`; declared mappings are not passes or verified driver support. |
+| Overlays / limits | 68 stale features; 12 HIL-09 caps; three numerically at-target stale rows and 15 at-target rows without fresh passing records. Overlays overlap; no targets lowered or levels promoted. No fresh runtime/schema/hardware qualification. |
+| Artifacts | `build/release-readiness/evidence-gap-snapshot.json` preserves initial analysis; `evidence-gap-snapshot-refined.json` narrows per-client attribution. Local audit/render helpers live under `.git/`, not shipped tooling. Command/check/publication receipts remain alongside snapshots. |
+| Deliverables | `docs/validation/RELEASE_EVIDENCE_GAPS.md`, `RELEASE_VALIDATION_CHECKLIST.md`, discovery links in docs/validation indexes and current plans, this ledger entry and append-only host handoff |
+| Documentation verification | **359 existing documentation tests passed, 1.48 s**, exit 0; seven owned docs: **122 local links/four anchors** pass; all **268 rows** match the pre-existing ledger and read-only computation; all **six protected input hashes** unchanged; whitespace passes. The initial disposable checker misread bold at-target levels; that diagnostic is preserved and formatting-aware comparison passes without changing product evidence. |
+| Integration / publication | Scoped Conventional Commit then normal origin push. Resolve the containing commit from history; exact post-push remote equality is recorded in `build/release-readiness/publication.json` and the host handoff, outside its own commit. |
+
+Proposed EV-01 through EV-05 scopes are **planned only**, with no Task/Dispatch,
+observed start, implementation-review verdict, integration or qualification
+claimed. EV-01 first distinguishes reusable original proof from required reruns,
+missing assertions and actual behavior findings; the other packages depend on
+that disposition. Historical software passes and final-head CI observations stay
+attached to their recorded commits. Release acceptance remains open.
+
+Verification uses the existing Python 3.12 project venv:
+
+```powershell
+.venv/Scripts/python.exe -m pytest tests/test_core_documentation.py tests/test_client_guides_docs.py -p no:tests.route_inventory -q --junitxml=build/release-readiness/documentation-tests.xml
+.venv/Scripts/python.exe -X utf8 .git/check_release_readiness_docs.py
+git diff --check
+```
+
+The local checker/audit helpers are disposable planning aids, not shipped
+implementation tooling. Exact commands and exit receipts are retained in
+`build/release-readiness/verification.json`; partial documentation checks disable
+the shared route-inventory writer. The commit uses the documented invocation-only
+empty `core.hooksPath` exception to avoid broad runtime tests during prose
+maintenance; persistent hook settings remain unchanged. No fresh runtime/model/
+hardware qualification is inferred from these checks.
+
 ## Reusable phase or wave entry
 
 Copy this section for each authorized wave. Use `unknown`, `held` or `not

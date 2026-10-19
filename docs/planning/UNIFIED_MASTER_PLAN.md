@@ -31,6 +31,13 @@ visual approval. Physical/field and final artifact/version gates remain open.
 
 ## Next development and model policy (2026-10-18)
 
+The next planning package is the
+[release evidence-gap inventory](../validation/RELEASE_EVIDENCE_GAPS.md) and
+[release-validation checklist](../validation/RELEASE_VALIDATION_CHECKLIST.md).
+They organize the remaining software/hardware/field proof without changing
+registry targets or claiming new runtime passes. Their proposed follow-ups
+require the standing staffing/quota/review gates before any launch.
+
 The [runtime-completion plan](NEXT_DEVELOPMENT_PHASES.md) now defines R0–R8,
 their worktrees, model assignments, dependencies, file ownership and acceptance
 gates. The [model/agent inventory](MODEL_AND_AGENT_INVENTORY.md) distinguishes

@@ -9,6 +9,11 @@ remain historical; maintaining these instructions does not authorize a phase.
 The master plan's [dated coordination update](UNIFIED_MASTER_PLAN.md#standing-coordination-policy-2026-10-19)
 records the completed final-head CI observation and unchanged owner release gates.
 
+Next release-validation planning artifacts:
+[evidence-gap inventory](../validation/RELEASE_EVIDENCE_GAPS.md) and
+[execution checklist](../validation/RELEASE_VALIDATION_CHECKLIST.md). Use these
+for fresh follow-up scopes; the R0-R8 tasks below retain their historical state.
+
 Status: fresh software campaign, formal gate, documentation and independent evidence
 review accepted; final documentation-head CI, owner visual and physical/field release gates remain.
 R3E's UI ordering correction and R1F's explicit-refresh CEC cache correction are

@@ -7,6 +7,12 @@ describe the shared runtime, optional integrations and storage behavior. The
 exact-commit integrated campaigns. Hardware, field and soak gates remain
 pending owner evidence.
 
+For the next release-validation work, use the
+[evidence-gap inventory](validation/RELEASE_EVIDENCE_GAPS.md) and
+[release checklist](validation/RELEASE_VALIDATION_CHECKLIST.md). These distinguish
+software proof, hardware gates and field qualification; they do not promote
+feature levels or authorize execution.
+
 The next development work is specified in the
 [runtime-completion plan](planning/NEXT_DEVELOPMENT_PHASES.md), with a
 [model/agent inventory](planning/MODEL_AND_AGENT_INVENTORY.md). The future roster
