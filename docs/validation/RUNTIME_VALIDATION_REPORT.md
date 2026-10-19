@@ -1,36 +1,44 @@
 # Runtime validation report
 
-**Disposition: supported Orei restoration accepted; hold runtime release for fresh complete candidate gates.**
+**Disposition: software candidate; final independent review, PR checks, owner visual approval and physical/field gates remain separate.**
 
-The [independent R8 report](RUNTIME_INDEPENDENT_REVIEW.md) reproduced two availability defects beyond the broad campaign paths below. R2D/R1G and the subsequent R1H deadline correction are merged. The [R8C review](RUNTIME_REVIEW_DEADLINE_RESOLUTION.md) passed all eight known source/image cases on `dd184725` and its new immutable image, but reproduced a further source contract failure: interrupting failed-candidate cleanup can skip restoration of the original client/address/names. Native cancellation at the actual close call needs no added delay; controlled cleanup-expiry cases and a passing release control are reported separately. R1I `0ea3b7ad`, merged as `619baccc`, corrects the complete restoration boundary. Exact-commit independent checks pass all 59 focused cases, including the eight unchanged source review cases; its worker also passes 155 scoped regressions. Fresh Astra R8D review of integrated source and a new immutable image is accepted within the supported Orei scope recorded below. The R8C phase finding remains source evidence, not a claim that it ran in the unchanged image. The broad campaign and formal gate below remain tied to the older `4adbc13` candidate; fresh complete evidence and final consolidation review remain required.
+The [archived manifest](runs/runtime-r8b/manifest.json) retains each actual run commit, artifact root, timestamp, scope and outcome count. These are multiple explicitly attributed runs, not a claim that every historical test ran at one final SHA. The [Phase 6/7 report](VALIDATION_REPORT.md) remains historical evidence.
 
-The [archived manifest](runs/runtime/manifest.json) retains each actual run commit, artifact root, timestamp, scope and outcome count. These are multiple explicitly attributed runs, not a claim that every historical test ran at one final SHA. The [Phase 6/7 report](VALIDATION_REPORT.md) remains historical evidence.
+The [formal combined evidence gate](runs/runtime-r8b/formal-gate.txt) passed with zero known failures linked to open findings. It consumed all five client types and the actual source, image and deployment evidence roots. The [gate context](runs/runtime-r8b/formal-gate-context.json) records its consolidation scope. This regression gate does not establish that every feature has reached its hardware/field target.
 
-The completed [R8D review](RUNTIME_REVIEW_RESTORATION.md) accepts the supported restoration boundary: all twelve required source/image cases, 102 regressions and two new supported controls pass at its recorded source/image revisions. The coordinator independently passes both new controls at `2c1c2297`; the review is merged as `02785131`. Its [conditional alternate-disconnect probe](reproductions/README.md) remains unchanged and failing outside the supported Orei guarantee, with no natural in-body Orei bypass demonstrated. No passing universal arbitrary-client guarantee is implied. The fresh complete campaign has not yet run.
+## Independent restoration review and evidence history
 
-The [formal combined evidence gate](runs/runtime/formal-gate.txt) passed with zero known failures linked to open findings. It consumed all five client types and the actual source, image and deployment evidence roots. The [gate context](runs/runtime/formal-gate-context.json) records its consolidation scope. This regression gate does not establish that every feature has reached its hardware/field target.
+The [accepted independent review](RUNTIME_REVIEW_RESTORATION.md) records exact source/image identities and focused findings dispositions. The complete campaigns below then test the clean integrated candidate; a source-only correction is not treated as shipped-image acceptance.
+
+R2D validates legacy migration provenance before accepting v2 coexistence. R1G/R1H restore the sole transport reconnect owner after failed or timed-out rollback login. R1I restores original logical identity across interrupted cleanup and retains one public retirement owner. Uncertified disconnect errors retain an explicit error and traffic/reconnect fence until a supported successful lifecycle drain or restart; they are not reported as recovered connectivity. Actual successful late disposal hands off under current-client/generation/shutdown/reconnect-policy guards. Production cleanup remains five seconds with a separately bounded settling phase of at most five more; this does not impose one global ten-second transaction deadline. Existing review oracles and visual baselines remain unchanged.
+
+The supported Orei transport applies its intentional-close fence before its first await. A separate conditional probe replaces that public call with a failure before its body runs; an already-running supervisor can then continue while composition retains the command fence. The probe remains preserved with its failing outcome and passing after-disposal control. No natural Orei in-body bypass was demonstrated, and the actual in-body error control passes. Independent public quiescence for an alternate disconnect implementation is a documented extension limit, not an accepted universal arbitrary-client guarantee or a relabeled supported-product pass.
+
+The [earlier campaign archive](runs/runtime/manifest.json) remains immutable and tied to 4adbc13. Its [attributed report at the pre-restoration checkpoint](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/blob/40da5376/docs/validation/RUNTIME_VALIDATION_REPORT.md) preserves the earlier complete counts and known CI/UI limits. Failed original R8/R8B/R8C reproductions remain in their reports and local evidence; later passes do not relabel those attempts. Historical source/image proof and physical/field approval retain their distinct scopes.
 
 ## Software checks
 
 | Check | Actual commit | Result | Scope |
 | --- | --- | --- | --- |
-| Complete core (includes actual installed package entry checks) | `4adbc136a4c1fb6be4b20b58530a47dd521efac8` | 3966 passed, 4 skipped | Windows local core; excludes HA component and dedicated UC suites; expected platform skips retained |
-| Dedicated scripted Remote | `4adbc136a4c1fb6be4b20b58530a47dd521efac8` | 100 passed, 0 skipped | 100 actual SDK/simulator tests; no physical Remote claim |
-| Actual amd64 deployment | `4adbc136a4c1fb6be4b20b58530a47dd521efac8` | 26 passed, 3 skipped | Normal built-image command, health, actual SDK/discovery/volume/context checks; explicit configuration skips |
+| Complete core (includes actual installed package entry checks) | `1baac3dec660f41345869c126cfca94d6731c5a0` | 4041 passed, 4 skipped | Windows local core; excludes HA component and dedicated UC suites; expected platform skips retained |
+| Dedicated scripted Remote | `1baac3dec660f41345869c126cfca94d6731c5a0` | 100 passed, 0 skipped | 100 actual SDK/simulator tests; no physical Remote claim |
+| Actual amd64 deployment | `1baac3dec660f41345869c126cfca94d6731c5a0` | 26 passed, 3 skipped | Normal built-image command, health, actual SDK/discovery/volume/context checks; explicit configuration skips |
+| R8 and R8B image release regressions | `1baac3dec660f41345869c126cfca94d6731c5a0` | 4 passed, 0 skipped | Current normal amd64 image; both UC restarts and immediate/deadline rollback recovery; zero xfail/skip |
 
-Registered REST route coverage was 177/177 (100.0%) in the enabled configuration at the commit identified by the route-coverage log in the manifest.
+Registered REST route coverage was 177/177 (100.0%) in the enabled configuration; the [original complete-core log](runs/runtime-r8b/final-source-rerun.log) records its actual run and result.
+The [external-image route diagnostic context](runs/runtime-r8b/r8-image-targeted-route-inventory-context.json) retains the supplemental non-strict zero count from tests outside the instrumented application process. That invocation overwrote the shared diagnostic after the complete strict core run; the original complete JSON was not separately retained. The actual complete result remains in its original log and independent CI log. Future helpers disable the supplemental writer; no replacement JSON was reconstructed.
 The final source browser smoke/flow project passed 59 tests with 0 unexpected results, 0 flaky results and 0 skips. Visual baseline acceptance is separate.
 
-[CI at `4adbc13`](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/actions/runs/39206732559) finished with 12/13 required jobs passing. CI core separately passed 3,948 tests with 22 skips, 31 deselections and 177/177 routes; the actual HA, Docker, scripted Remote and scenario/ledger jobs passed. Main UI passed 1,098 tests with 33 skips and failed only the same three owner-pending Tron paused-frame screenshots. Its follow-up gallery passed all 62 cases. Raw/sanitized logs and both UI artifacts are retained under `build/runtime-completion/pr38-4adbc-*`. These CI results have different environments and counts from the local complete core run above; visual acceptance remains pending.
+[CI at 1baac3de](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/actions/runs/39228762775) completed with all twelve non-UI required jobs passing. Its core run separately passed 4,023 tests with 22 skips, 35 deselections and 177/177 routes in 690.90 seconds; the actual HA container passed all 19 scenarios. Main UI passed 1,098 tests with 33 skips and failed the three existing owner-pending Tron paused-frame snapshots in 25.3 minutes. The review gallery passed all 62 cases in 3.4 minutes. Actual raw/sanitized logs, final job metadata and both UI artifacts remain under build/runtime-completion/pr38-1baac-*. CI and local counts have distinct environments; this is not a visual approval or a claim about a later documentation-only CI head.
 
-Earlier core, component and platform supplements retain their original commits in the execution history; they do not by themselves prove later application or image behavior. The current complete core run includes actual installed-package entry checks. Its Windows filesystem skips remain visible. The dedicated HA component unit suite is distinct from the actual HA container campaigns below.
+Older core, installed-package, component and platform supplements retain their original commits; their individual scopes are listed above. They do not by themselves prove later UI code or shipped-image behavior. Windows filesystem skips and optional dependency skips remain visible. The dedicated HA component unit suite is distinct from actual HA containers below.
 
 ## Application images
 
-Both local images were built from clean tracked `4adbc136a4c1fb6be4b20b58530a47dd521efac8` with product version `1.0.0rc1`:
+Both local images were built from clean tracked `1baac3dec660f41345869c126cfca94d6731c5a0` with product version `1.0.0rc1`:
 
-- amd64: `sha256:1a5de3b5b58a3e1c56d3269bd5c1c6e3e12be2d6fea1abceea36067d733df69e`
-- arm64: `sha256:a8ebd6f1a017322ff514e2051f1153f35d1ed0762034797ba4dbb2b6826668c6`
+- amd64: `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`
+- arm64: `sha256:c7d017fbcbf61e47b64aeab12cab0d153fe92b9ca74ecf0823b32cb551e14c93`
 
 The archived input-parity record verifies the actual tracked shipped bytes on both architectures. The normal-command amd64 deployment checks include real SDK source selection/readback/restore and separate discovery observers. Arm64/QEMU scope is offline startup, canonical metadata, Docker health and graceful SIGTERM; it does not establish arm64 device actions or physical hardware.
 
@@ -42,18 +50,16 @@ Every archived outcome below passed; none failed, blocked or skipped. Counts des
 
 Individual checks explicitly scoped to another client remain recorded as non-applicable (for example browser toasts during API requests). The milestone import verifies each such exclusion against the unchanged scenario definition; it does not turn non-applicable assertions into passes or accept failed checks. The milestone journal lists them.
 
-The archive and this campaign's hash-indexed records preserve their original line endings through scoped Git attributes. A post-commit audit caught automatic normalization of Windows-generated files in the initial archive commit; a follow-up restores the original retained bytes without changing results. The final Git-blob audit verifies all 213 hash-indexed evidence and supplemental files against their original hashes. Historical campaign files are not renormalized.
-
 | Summary | Original commit | Passing outcomes | Scope |
 | --- | --- | --- | --- |
-| [source-campaigns](runs/runtime/source-campaigns.json) | `4adbc136a4c1fb6be4b20b58530a47dd521efac8` | api: 1411, browser: 54, uc: 18, flic: 23 | Normal source run.py: all declared simulator API/browser/scripted-Remote/Flic outcomes |
-| [source-ha-current](runs/runtime/source-ha-current.json) | `4adbc136a4c1fb6be4b20b58530a47dd521efac8` | ha: 19 | Normal source runtime through actual HA 2026.9.3 container |
-| [source-ha-minimum-line](runs/runtime/source-ha-minimum-line.json) | `4adbc136a4c1fb6be4b20b58530a47dd521efac8` | ha: 19 | Normal source runtime through actual HA 2025.1.4 container; supported line, not exact 2025.1.0 floor |
-| [image-campaigns-cached](runs/runtime/image-campaigns-cached.json) | `4adbc136a4c1fb6be4b20b58530a47dd521efac8` | api: 70, browser: 47, flic: 22 | Normal amd64 image: representative API plus full browser/Flic cached-setting scenarios |
-| [image-campaigns-fresh](runs/runtime/image-campaigns-fresh.json) | `4adbc136a4c1fb6be4b20b58530a47dd521efac8` | api: 9, browser: 7, flic: 1 | Same amd64 image: declared fresh-cache fault/recovery API/browser/Flic scenarios |
-| [image-ha-campaigns-cached](runs/runtime/image-ha-campaigns-cached.json) | `4adbc136a4c1fb6be4b20b58530a47dd521efac8` | ha: 18 | Same amd64 image through actual current HA container, declared cached settings |
-| [image-ha-campaigns-fresh](runs/runtime/image-ha-campaigns-fresh.json) | `4adbc136a4c1fb6be4b20b58530a47dd521efac8` | ha: 1 | Same amd64 image through actual current HA container, declared fresh settings |
-| [image-uc-campaigns](runs/runtime/image-uc-campaigns.json) | `4adbc136a4c1fb6be4b20b58530a47dd521efac8` | uc: 18 | Same amd64 image, real SDK socket and unchanged 18 scripted-Remote scenario oracles |
+| [source-campaigns](runs/runtime-r8b/source-campaigns.json) | `1baac3dec660f41345869c126cfca94d6731c5a0` | api: 1411, browser: 54, uc: 18, flic: 23 | Normal source run.py: all declared simulator API/browser/scripted-Remote/Flic outcomes |
+| [source-ha-current](runs/runtime-r8b/source-ha-current.json) | `1baac3dec660f41345869c126cfca94d6731c5a0` | ha: 19 | Normal source runtime through actual HA 2026.9.3 container |
+| [source-ha-minimum-line](runs/runtime-r8b/source-ha-minimum-line.json) | `1baac3dec660f41345869c126cfca94d6731c5a0` | ha: 19 | Normal source runtime through actual HA 2025.1.4 container; supported line, not exact 2025.1.0 floor |
+| [image-campaigns-cached](runs/runtime-r8b/image-campaigns-cached.json) | `1baac3dec660f41345869c126cfca94d6731c5a0` | api: 70, browser: 47, flic: 22 | Normal amd64 image: representative API plus full browser/Flic cached-setting scenarios |
+| [image-campaigns-fresh](runs/runtime-r8b/image-campaigns-fresh.json) | `1baac3dec660f41345869c126cfca94d6731c5a0` | api: 9, browser: 7, flic: 1 | Same amd64 image: declared fresh-cache fault/recovery API/browser/Flic scenarios |
+| [image-ha-campaigns-cached](runs/runtime-r8b/image-ha-campaigns-cached.json) | `1baac3dec660f41345869c126cfca94d6731c5a0` | ha: 18 | Same amd64 image through actual current HA container, declared cached settings |
+| [image-ha-campaigns-fresh](runs/runtime-r8b/image-ha-campaigns-fresh.json) | `1baac3dec660f41345869c126cfca94d6731c5a0` | ha: 1 | Same amd64 image through actual current HA container, declared fresh settings |
+| [image-uc-campaigns](runs/runtime-r8b/image-uc-campaigns.json) | `1baac3dec660f41345869c126cfca94d6731c5a0` | uc: 18 | Same amd64 image, real SDK socket and unchanged 18 scripted-Remote scenario oracles |
 
 Image campaigns exercise every declared simulator browser, scripted Remote, Flic and HA scenario. The API image selection covers representative domain behavior plus all preset-read scenarios; it does not repeat all source API scenarios. Two image groups use the scenarios' declared cache/fault settings. The image Remote harness explicitly supplies the real Docker-published SDK socket to the unchanged RemoteClient/scenario oracles.
 
@@ -81,7 +87,7 @@ The earlier discovery of legacy tests touching checkout runtime files is retaine
 
 ## Remaining release gates
 
-- Refresh complete candidate evidence after accepted R8D restoration review, obtain final consolidation disposition, and finish PR checks.
+- Final independent disposition after complete campaign/evidence consolidation and final PR checks.
 - The pending three Tron paused-frame owner visual decisions for PR #36/#37 and the approved merge/tag sequence.
 - Owner HIL-B regression, HIL-C recovery and HIL-E deployed/physical client evidence, including matrix/attached-device firmware and physical CEC effects.
 - HIL-D continuous 72-hour resource measurements and the owner's week of daily use/sign-off; follow the field runbook.
