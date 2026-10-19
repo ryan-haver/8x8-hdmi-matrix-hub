@@ -525,7 +525,6 @@ class _ReconfigureError(Exception):
 def build_runtime(settings, *, environ: Mapping[str, str], matrix_factory=OreiMatrix) -> HubRuntime:
     # No fallback: R2 must be integrated before a production runtime can construct readers.
     from hub.persistence.startup import prepare_runtime_storage
-
     from persistence import get_data_dir
 
     config_dir = (settings.uc_config_home or default_config_dir(data_dir=settings.data_dir)).resolve()

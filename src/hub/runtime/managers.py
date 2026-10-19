@@ -6,11 +6,10 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from hub.persistence.startup import PreparedPersistence
-
     from cec_macros import MacroManager
     from config import ProfileManager
     from dashboard_layout import DashboardLayoutManager
+    from hub.persistence.startup import PreparedPersistence
     from scene_manager import SceneManager
     from system_shortcuts import SystemShortcutManager
 
