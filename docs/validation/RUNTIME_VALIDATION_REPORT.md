@@ -17,6 +17,8 @@ The [formal combined evidence gate](runs/runtime/formal-gate.txt) passed with ze
 Registered REST route coverage was 177/177 (100.0%) in the enabled configuration at the commit identified by the route-coverage log in the manifest.
 The final source browser smoke/flow project passed 59 tests with 0 unexpected results, 0 flaky results and 0 skips. Visual baseline acceptance is separate.
 
+[CI at `4adbc13`](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/actions/runs/39206732559) finished with 12/13 required jobs passing. CI core separately passed 3,948 tests with 22 skips, 31 deselections and 177/177 routes; the actual HA, Docker, scripted Remote and scenario/ledger jobs passed. Main UI passed 1,098 tests with 33 skips and failed only the same three owner-pending Tron paused-frame screenshots. Its follow-up gallery passed all 62 cases. Raw/sanitized logs and both UI artifacts are retained under `build/runtime-completion/pr38-4adbc-*`. These CI results have different environments and counts from the local complete core run above; visual acceptance remains pending.
+
 Earlier core, component and platform supplements retain their original commits in the execution history; they do not by themselves prove later application or image behavior. The current complete core run includes actual installed-package entry checks. Its Windows filesystem skips remain visible. The dedicated HA component unit suite is distinct from the actual HA container campaigns below.
 
 ## Application images
