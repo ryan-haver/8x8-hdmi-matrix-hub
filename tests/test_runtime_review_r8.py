@@ -1,7 +1,9 @@
-"""Independent R8 reproductions; strict xfails identify unresolved release findings.
+"""Independent R8 desired-behavior checks on the current source and explicit image.
 
-Use --runxfail to see the required behavior fail on the reviewed candidate.
-The Docker case uses the normal immutable image command and mounts data only.
+Historical strict-xfail reproductions and the bad image pin remain at
+dfbd87cd2af8df9e8a104e801f341f5738f42a41. Docker verification requires
+R8_REVIEW_IMAGE=sha256:<current immutable image ID>, runs its normal command,
+and mounts disposable data only; missing configuration is never proof.
 """
 
 from __future__ import annotations
@@ -29,11 +31,10 @@ from tools.simulator import DeviceState, Simulator
 from tools.validate.stack import free_port
 
 ROOT = Path(__file__).resolve().parents[1]
-IMAGE = "sha256:1a5de3b5b58a3e1c56d3269bd5c1c6e3e12be2d6fea1abceea36067d733df69e"
 
 
 class ReviewFindingError(AssertionError):
-    """Only the demonstrated final invariant, never a broken setup, may xfail."""
+    """A demonstrated runtime invariant failed after successful test setup."""
 
 
 @pytest.fixture(autouse=True)
@@ -57,9 +58,6 @@ def seed_legacy(directory):
     return path, path.read_bytes()
 
 
-@pytest.mark.xfail(
-    strict=True, raises=ReviewFindingError, reason="R8-01: new v2 scene makes a migrated legacy installation unbootable"
-)
 @pytest.mark.parametrize("separate_config", [False, True])
 def test_migrated_legacy_scenes_accept_new_scene_and_restart(tmp_path, separate_config):
     data = tmp_path / "data"
@@ -81,13 +79,9 @@ def test_migrated_legacy_scenes_accept_new_scene_and_restart(tmp_path, separate_
         raise ReviewFindingError(str(exc)) from exc
     assert restarted.profiles.get_profile("legacy").outputs[1].input == 3
     assert restarted.scenes.get_scene(scene.id).name == "New scene"
+    assert legacy.read_bytes() == legacy.with_name("scenes.json.v0.bak").read_bytes() == original
 
 
-@pytest.mark.xfail(
-    strict=True,
-    raises=ReviewFindingError,
-    reason="R8-02: failed rollback login abandons the transport reconnect supervisor",
-)
 async def test_failed_reconfigure_recovers_after_transient_login_outage(tmp_path, monkeypatch):
     import orei_matrix
 
@@ -160,7 +154,11 @@ async def wait_health(session, url, *, seconds=20):
 
 @asynccontextmanager
 async def shipped_image(tmp_path, *, legacy=False, uc=False):
-    assert await docker("image", "inspect", IMAGE, "--format", "{{.Id}}") == IMAGE
+    image = os.environ.get("R8_REVIEW_IMAGE", "")
+    assert (
+        image.startswith("sha256:") and len(image) == 71
+    ), "Docker proof requires explicit R8_REVIEW_IMAGE=sha256:<current immutable image ID>"
+    assert await docker("image", "inspect", image, "--format", "{{.Id}}") == image
     data = tmp_path / "volume"
     data.mkdir()
     if legacy:
@@ -196,7 +194,7 @@ async def shipped_image(tmp_path, *, legacy=False, uc=False):
             f"OREI_TELNET_PORT={sim.telnet_port}",
             "-e",
             "STATUS_POLL_INTERVAL=0.2",
-            IMAGE,
+            image,
         )
         try:
             async with aiohttp.ClientSession() as session:
@@ -212,11 +210,6 @@ async def shipped_image(tmp_path, *, legacy=False, uc=False):
 
 
 @pytest.mark.docker
-@pytest.mark.xfail(
-    strict=True,
-    raises=ReviewFindingError,
-    reason="R8-01: normal shipped image exits on restart after successful scene creation",
-)
 @pytest.mark.parametrize("uc", [False, True])
 async def test_shipped_image_legacy_upgrade_scene_creation_restart(tmp_path, uc):
     async with shipped_image(tmp_path, legacy=True, uc=uc) as (_, session, url, name, data):
@@ -232,21 +225,34 @@ async def test_shipped_image_legacy_upgrade_scene_creation_restart(tmp_path, uc)
             created = await response.json()
             assert response.status == 201, created
             assert created["success"]
+            scene_id = created["data"]["scene"]["id"]
         assert legacy.read_bytes() == original
-        assert (data / "scenes_v2.json").exists()
+        assert legacy.with_name("scenes.json.v0.bak").read_bytes() == original
+        profile_bytes = (data / "profiles.json").read_bytes()
+        scene_bytes = (data / "scenes_v2.json").read_bytes()
         await docker("restart", "--time", "15", name)
         healthy = await wait_health(session, url, seconds=6)
         state = await docker("inspect", name, "--format", "{{json .State}}")
         if not healthy:
             raise ReviewFindingError(f"Normal image restart failed: {state}\n{await docker('logs', name)}")
+        async with session.get(url + "/api/profiles") as response:
+            profiles = await response.json()
+            assert response.status == 200
+            assert any(p["id"] == "legacy" and p["outputs"]["1"]["input"] == 3 for p in profiles["data"]["profiles"])
+        async with session.get(url + "/api/v2/scenes") as response:
+            scenes = await response.json()
+            assert response.status == 200
+            assert any(s["id"] == scene_id and s["name"] == "New scene" for s in scenes["data"]["scenes"])
+        assert (data / "profiles.json").read_bytes() == profile_bytes
+        assert (data / "scenes_v2.json").read_bytes() == scene_bytes
+        async with session.post(url + f"/api/v2/scenes/{scene_id}/execute") as response:
+            executed = await response.json()
+            assert response.status == 200 and executed["success"], executed
+        assert legacy.read_bytes() == legacy.with_name("scenes.json.v0.bak").read_bytes() == original
+        assert (data / "profiles.json").read_bytes() == profile_bytes
 
 
 @pytest.mark.docker
-@pytest.mark.xfail(
-    strict=True,
-    raises=ReviewFindingError,
-    reason="R8-02: shipped image does not recover after reconfigure rollback login fails",
-)
 async def test_shipped_image_reconfigure_recovers_after_login_outage(tmp_path):
     async with shipped_image(tmp_path) as (sim, session, url, name, _):
         sim.faults.update({"http_status": 503, "comheads": ["login"], "http_fault_count": 2})
@@ -263,11 +269,8 @@ async def test_shipped_image_reconfigure_recovers_after_login_outage(tmp_path):
             assert result["data"]["connected"] is False
         assert not sim.faults.any_http
         recovered = await wait_health(session, url, seconds=12)
-        # An explicit connection test proves the now-healthy simulator is reachable
-        # from the image. It is a manual workaround, not automatic recovery.
-        async with session.post(url + "/api/settings/test-connection") as response:
-            manual = await response.json()
-            assert response.status == 200 and manual["data"]["connected"], manual
-        assert await wait_health(session, url, seconds=2)
         if not recovered:
-            raise ReviewFindingError(f"Only manual reconnect recovered the image\n{await docker('logs', name)}")
+            raise ReviewFindingError(f"No automatic image recovery\n{await docker('logs', name)}")
+        assert sum(entry.get("fault") == "http_503" for entry in sim.log) == 2
+        logins = [entry for entry in sim.log if entry["channel"] == "http" and entry["command"] == "login"]
+        assert len(logins) == 4 and logins[-1]["login_ok"]
