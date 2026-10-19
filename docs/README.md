@@ -123,10 +123,7 @@ The levels are:
   the owner's sign-off after a week of daily use.
 
 The runtime campaign index links fresh software evidence for the integrated
-runtime at exact commit `4adbc136`. Existing feature-ledger and candidate reports
-keep their original commit provenance and do not automatically prove the
-runtime-completion candidate. Physical hardware, field, recovery and 72-hour
-evidence remain pending owner records.
+runtime source/image candidate `1baac3dec660f41345869c126cfca94d6731c5a0`, with run-level provenance in the archive. The accepted R8D review and software evidence do not establish physical hardware, owner deployment, field, or 72-hour soak acceptance; those remain external gates.
 
 ---
 
