@@ -27,6 +27,7 @@ import asyncio
 import logging
 import re
 import time
+import uuid
 from collections.abc import Awaitable
 from copy import deepcopy
 from typing import Any, Protocol, TypeVar
@@ -320,17 +321,19 @@ class MatrixService:
 
     async def _safe(self, what: str, call: Awaitable[_T]) -> _T | None:
         generation = self._client_generation
+        client = self._client
         try:
             return await call
         except Exception as exc:
             message = str(exc)
-            for field in ("password", "user"):
-                secret = getattr(self._client, field, None)
+            for field in ("password", "user", "_user"):
+                secret = getattr(client, field, None)
                 if isinstance(secret, str) and secret:
                     message = message.replace(secret, "[redacted]")
-            _LOG.error("Matrix %s failed: %s", what, message)
+            reference = uuid.uuid4().hex[:8]
+            _LOG.error("[%s] Matrix %s failed: %s", reference, what, message)
             if generation == self._client_generation:
-                self._last_error = f"{what}: {message}"
+                self._last_error = f"Internal server error (ref: {reference})"
             return None
 
     async def connect(self) -> bool:
