@@ -4081,7 +4081,7 @@ features:
       POST /api/scene/save-current, 'GET|POST|PUT /api/scene/{scene_id}/cec', 'POST /api/scene/{scene_id}/cec/auto-resolve']
   target: V2
   current: V1
-  basis: "Recorded V1 baseline: mocked legacy scene tests. The profile_state packaged-image scenarios add V2 proof for create/read/list/delete/recall aliases, CEC config/auto-resolve, missing/invalid requests and save-current. API-27 fixed: failed output/video reads answer 502 and create nothing (profile_state.capture_*_read_failure pass); API-12 remains open. Status cache TTL is explicitly zero. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence."
+  basis: "Recorded V1 baseline and historical packaged-image scenarios cover scene aliases and save-current. R4 shared execution/catalog notification seams have 432 independent focused passes with one HA dependency skip. R1D fixes capture-specific fresh output/video reads under one runtime transaction; tests/validation/test_runtime_readiness_r1d.py and tests/sim/test_sim_rest_reads.py verify nonzero-TTL current-state capture, registered profile readback and refusal without persistence on failed reads. Ninety-five independent capture/readiness/source-UC checks passed. Existing levels are retained pending fresh integrated image/client evidence; API-12 remains open."
   evidence:
   - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_output_read_failure-api.json
   - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_video_read_failure-api.json
@@ -5227,7 +5227,7 @@ features:
     ui: [modal/save-profile/legacy]
   target: V3
   current: V1
-  basis: "Recorded V1 baseline: mocked save-current tests. The profile_state packaged-image scenarios add V2 proof for all 64 routing pairs, mute/HDR/HDCP capture and default name/icon with independent stored readback. API-27 fixed: output/video read failures answer 502 and create no profile; API-31 fixed: each output's enabled is its stream state from allout (profile_state.capture_stream_states passes); other values answer 502. Status caching is disabled; disabled-stream capture, browser behavior and restart persistence remain outside this batch."
+  basis: "Historical profile_state image scenarios cover routing pairs, mute/HDR/HDCP capture and default name/icon with independent storage readback using TTL=0. R1D runtime/source checks now verify fresh serialized output/video reads with TTL=3600, disabled streams and out-of-band state changes; failed reads return 502 without creating a profile or changing stored bytes. Tests/validation/test_runtime_readiness_r1d.py and tests/sim/test_sim_rest_reads.py cover actual composition and registered readback. Recorded level retained; fresh final-image, browser and restart campaign evidence remains pending."
   evidence:
   - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_output_read_failure-api.json
   - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_video_read_failure-api.json

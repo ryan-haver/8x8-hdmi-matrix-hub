@@ -127,6 +127,31 @@ async def test_cycle_clamp_and_wrap_read_back_exact_operation(
     assert simulator.state.outputs[0].source == wrapped
 
 
+async def test_save_current_reads_fresh_device_state_before_registered_profile_readback(
+    data_hub, matrix, simulator,
+):
+    matrix._status_cache_ttl = 3600
+    cached = await matrix.get_output_status()
+    simulator.state.outputs[0].source = 8
+    simulator.state.outputs[0].stream = 0
+    simulator.state.outputs[0].audio_mute = 1
+    assert await matrix.get_output_status() == cached
+    simulator.log.clear()
+    response = await data_hub.post("/api/scene/save-current", json={"id": "fresh_sim_capture"})
+    assert response.status == 200, await response.text()
+    captured = (await response.json())["data"]
+    assert captured["outputs"]["1"]["input"] == 8
+    assert captured["outputs"]["1"]["enabled"] is False
+    assert captured["outputs"]["1"]["audio_mute"] is True
+    public = (await _get(data_hub, "/api/profile/fresh_sim_capture"))["data"]
+    assert public["outputs"] == captured["outputs"]
+    saved = json.loads((data_hub.data_dir / "profiles.json").read_text(encoding="utf-8"))
+    assert next(row for row in saved["profiles"] if row["id"] == "fresh_sim_capture")["outputs"] == public["outputs"]
+    commands = {entry["command"] for entry in simulator.log if entry["channel"] == "http"}
+    assert {"get output status", "get video status"} <= commands
+    assert sim_writes(simulator) == []
+
+
 @pytest.mark.parametrize("direction", ["next", "previous"])
 @pytest.mark.parametrize("spelling", ["yes", "TRUE", ""])
 async def test_invalid_cycle_option_is_refused_before_any_write(data_hub, simulator, direction, spelling):

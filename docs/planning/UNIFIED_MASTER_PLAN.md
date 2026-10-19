@@ -28,9 +28,9 @@ independent passes and one platform skip. R4/R4A are now accepted as `6ae0227`
 after 432 independent passes and one HA dependency skip. R3C, R5B and R1C are
 also accepted and their worktrees removed. The first combined source run passed
 3,733 tests and covered 177/177 routes, with 47 failures still requiring fixes.
-R2C (Sol) handles storage isolation, R4B (Argon) wire/storage fault contracts,
-R6B (Flash) Flic replay checks, and R1D (Sol) startup/read readiness. R7/R8 follow
-those corrections and fresh campaigns. The
+R2C (Sol) storage isolation, R6B (Flash) Flic replay checks and R1D (Sol) startup/
+capture readiness are also accepted. R4B (Argon) wire/storage fault contracts
+remains active. R7/R8 follow that correction and fresh campaigns. The
 [execution record](RUNTIME_EXECUTION.md) tracks effective model observations,
 ownership clarifications and acceptance. Hardware and soak gates remain
 owner-observed.

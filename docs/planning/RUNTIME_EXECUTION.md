@@ -234,17 +234,25 @@ The first combined source run at `3e21e6f` passed 3,733 tests with four skips,
 29 deselections and 177/177 routes, but **47 tests failed**. This is not a green
 release gate. Corrections have separate ownership:
 
-- **R2C, Sol 6.1 high:** explicit storage isolation and fail-closed handling when
-  an unrelated valid legacy source exists beside an unsafe target; manager/cache
-  isolation and portable synthetic legacy-source regressions.
+- **R2C, Sol 6.1 high:** accepted in `8fc4570`. Both synthetic-source worktree
+  and actual root reruns passed 428 checks with one platform skip. Managed
+  catalogs import only from explicitly selected installations; unsafe existing
+  targets are refused before imports, preserving original bytes. Legacy test
+  fixtures now use disposable source directories. The root rerun left local
+  runtime files unchanged against the post-discovery hash checkpoint.
 - **R4B, Argon high:** schema-stamped storage assertions, actual atomic-writer
   fault injection, and the existing safe error-reference contract for preset
   exceptions, preserving ordinary refusal bodies.
-- **R6B, Flash 3.8 high:** real Flic readiness, exact write/CEC counts separated
-  from maintenance reads, and the Node fixture's explicit process import.
-- **R1D, fresh Sol 6.1 high:** observed matrix/read readiness, deterministic fault
-  timing and UC listener ownership/bind failure handling. Explicit ports must
-  never silently move.
+- **R6B, Flash 3.8 high:** accepted in `30fd047`. Seventy-two independent R6
+  checks and an additional command-filter guard passed; root JavaScript lint
+  passed. Coordinator tightened maintenance filtering to known commands and
+  ensured failed readiness runs inside fixture cleanup.
+- **R1D, fresh Sol 6.1 high:** accepted in `42893e5` after 95 independent
+  capture/readiness/source-UC checks. Capture uses fresh, serialized reads
+  instead of cached facade state; failed reads preserve storage. UC production
+  bind rollback was already correct. Harness checks now require this child's
+  completed bind and prove exclusive listener conflicts; explicit ports do not
+  silently move. Final combined source/image/client gates remain pending R4B.
 
 Coordinator refreshed only the additive health JSON contract fixture and added
 registered Flic privacy/disabled-route reads. The obsolete direct-construction
