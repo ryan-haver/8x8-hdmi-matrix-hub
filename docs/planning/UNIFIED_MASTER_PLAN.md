@@ -37,9 +37,15 @@ legacy-scene migration plus v2 creation breaks restart, and transient failed
 reconfigure rollback abandons automatic reconnect. R2D/R1G corrections are now
 merged, and the R8B follow-up passes all six original source/image cases. It
 accepts the scene-restart fix within scope but reproduces reconnect loss when
-rollback exceeds its cleanup deadline. Fresh Sol 6.1 high R1H owns this remaining
-boundary; the candidate stays held pending new complete evidence and independent
-verification. Historical `4adbc13` CI passes 12/13 required jobs,
+rollback exceeds its cleanup deadline. R1H's deadline correction is merged;
+fresh Astra R8C passes all eight known source/image cases on `dd184725` and its
+new immutable image. R8C also reproduces a source-only failure when cancellation
+or expiry interrupts candidate cleanup before original identity restoration.
+Fresh Sol 6.1 high R1I owns complete bounded rollback restoration, including
+early drain, late closure, shutdown and overlapping reconfiguration. Its initial
+focused checks pass; final exact-commit acceptance and fresh Astra R8D review
+remain pending. The candidate stays held pending that review and new complete
+candidate evidence. Historical `4adbc13` CI passes 12/13 required jobs,
 with only the three owner-pending Tron screenshots failing. No visual/hardware
 approval or release tag is implied. The
 [execution record](RUNTIME_EXECUTION.md) tracks effective model observations,

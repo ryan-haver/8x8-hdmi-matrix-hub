@@ -345,9 +345,8 @@ the pending R3E UI correction or physical device actions.
   oracle that previously failed at `55d4fe0`. The worker was released, evidence
   copied and its child immediately removed/pruned.
 - **R7, Luna medium:** guide preparation accepted at `5608407` after 375
-  independent documentation checks. The final report/evidence reply is now
-  delivered for final indexing. **R8, fresh Astra high**, has
-  not launched and remains after those gates.
+  independent documentation checks. The final guide acceptance and subsequent
+  independent reviews are recorded below.
 
 Draft [PR #38](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/pull/38) targets
 the Phase 6/7 branch. At `4adbc13`, CI finished 12/13 required jobs passing;
@@ -389,13 +388,50 @@ xfails and 87 missing-fixture errors; it is not a clean regression pass. All
 accepts the findings task, not the candidate. Strict historical xfails are
 reproductions of unresolved defects, not final acceptance tests.
 
-Fresh Sol 6.1 high R2D owns persistence startup and a new focused test; R1G owns
-runtime composition rollback/reconnect and its new test. Both Orca worktrees
-start at `75492555`, with requested/effective model verified, disjoint source
-ownership and lightweight tests allowed. New full/Docker campaigns remain
-coordinator-scheduled. Each fix needs red/green proof, exact-commit independent
-validation, merge and immediate worktree removal, then fresh integrated images
-and follow-up independent review. The no-Anthropic policy remains in force.
+Fresh Sol 6.1 high R2D and R1G started at `75492555`, with verified
+requested/effective models and disjoint persistence/runtime ownership. R2D
+`def66d26` and R1G `c2e02f00` are accepted, merged, and their worktrees removed.
+Independent exact-commit checks passed 36 and 37 tests respectively, with
+unselected Docker cases explicitly deselected. Astra R8B `bfcdba5a` confirms
+all six original source/image behaviors on its new clean image, but reproduces
+reconnect loss when rollback login exceeds the unchanged five-second cleanup
+deadline. Its report and failed attempts remain attributed to that revision.
+
+Sol 6.1 high R1H `c36edb91`, merged as `dd184725`, corrects that login-deadline
+handoff. Independent focused checks passed 23 tests. Fresh Astra R8C
+`8c76d998`, merged as `78589e78`, then passes all eight known source/image
+cases and 39 targeted regressions. Its clean normal-command amd64 image is
+`sha256:3abd3745cbe361c1c9fc7ead88774b66e7c507e5eb63f6816239e56d7c455af0`;
+257 shipped input hashes match. These successes do not cover a newly proved
+source boundary, R8C-01: failed-candidate cleanup can be interrupted before
+original client/address/names restoration. The exact review commit independently
+reproduces three failures and one passing release control, with no errors or
+skips. Native cancellation at actual close needs no added delay; the controlled
+deadline cases have separately disclosed scheduling gates. This new finding is
+source contract evidence, not an additional normal-image reproduction.
+
+Fresh Sol 6.1 high R1I owns only runtime composition and a new restoration test,
+with lightweight source/SIM work. Its initial unchanged review and expanded
+late-close/stop/overlapping-reconfiguration controls pass; final commit and
+independent acceptance remain pending. The agreed cleanup policy preserves
+`CLEANUP_TIMEOUT=5.0` and allows a separate settling phase of at most five more
+seconds. Original logical state must be restored independently of cleanup
+success. Uncertified public disconnect errors retain explicit ownership/error
+and block traffic/reconnect until supported disposal confirmation or restart;
+this exceptional fence is not successful automatic recovery. Actual successful
+late closure must hand off under current-client/generation/stop/reconnect-policy
+fences. Existing review assertions remain unchanged. The new owned fault-injected
+oracle was corrected where it assumed an opaque public exception certified
+closure; its original failure is preserved.
+
+Fresh Astra R8D review is prepared, not launched. It follows accepted R1I
+integration and requires all twelve known source/image cases, relevant runtime
+controls and one new clean immutable amd64 image. Only after focused acceptance
+will the coordinator freeze a clean candidate for fresh complete source, client,
+multiarch and deployment campaigns. Each settled worker is released before
+acknowledgment; evidence is copied before merge and immediate worktree removal.
+The no-Anthropic policy remains in force. Historical full-campaign and CI counts
+above remain tied to `4adbc13` and do not certify these later source changes.
 
 ## Evidence and release gates
 
