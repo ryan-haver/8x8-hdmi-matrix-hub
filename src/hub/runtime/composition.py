@@ -498,7 +498,14 @@ class HubRuntime:
                         self.service.replace_client(old_client, names=old_names)
                         self._listen()
                         if old_address and not self._stopping:
-                            await self.service.connect()
+                            connected = await self.service.connect()
+                            if not connected and not self._stopping:
+                                # Disconnect retired the old supervisor. A failed
+                                # rollback login needs the transport to own retries
+                                # again, just as an initially offline startup does.
+                                reconnect = getattr(old_client, "start_auto_reconnect", None)
+                                if callable(reconnect):
+                                    reconnect()
                         self._rebind_rest()
 
                     await self._cleanup(rollback)
