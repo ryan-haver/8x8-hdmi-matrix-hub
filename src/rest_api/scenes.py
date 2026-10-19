@@ -29,6 +29,7 @@ import uuid
 from aiohttp import web
 
 from device_codes import hdr_from_device
+from hub.runtime.actions import catalog_changes
 
 from .profiles import (
     handle_create_profile,
@@ -195,6 +196,7 @@ async def _capture_current_outputs(matrix_device) -> tuple[dict[int, dict] | Non
     return None, "the matrix device cannot report its status"
 
 
+@catalog_changes
 async def handle_save_current_as_scene(request: web.Request) -> web.Response:
     """POST /api/scene/save-current — capture current matrix state as a new profile.
 
@@ -248,6 +250,7 @@ async def handle_save_current_as_scene(request: web.Request) -> web.Response:
         return _json_response(False, error=safe_error_message(exc, "saving current as scene"), status=500)
 
 
+@catalog_changes
 async def handle_auto_resolve_cec(request: web.Request) -> web.Response:
     """POST /api/scene/{scene_id}/cec/auto-resolve — resolve a profile's CEC targets from its routing.
 
