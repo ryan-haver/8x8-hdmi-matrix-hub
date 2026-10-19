@@ -36,6 +36,8 @@ Every archived outcome below passed; none failed, blocked or skipped. Counts des
 
 Individual checks explicitly scoped to another client remain recorded as non-applicable (for example browser toasts during API requests). The milestone import verifies each such exclusion against the unchanged scenario definition; it does not turn non-applicable assertions into passes or accept failed checks. The milestone journal lists them.
 
+The archive and this campaign's hash-indexed records preserve their original line endings through scoped Git attributes. A post-commit audit caught automatic normalization of Windows-generated files in the initial archive commit; a follow-up restores the original retained bytes without changing results. The final Git-blob audit verifies all 213 hash-indexed evidence and supplemental files against their original hashes. Historical campaign files are not renormalized.
+
 | Summary | Original commit | Passing outcomes | Scope |
 | --- | --- | --- | --- |
 | [source-campaigns](runs/runtime/source-campaigns.json) | `4adbc136a4c1fb6be4b20b58530a47dd521efac8` | api: 1411, browser: 54, uc: 18, flic: 23 | Normal source run.py: all declared simulator API/browser/scripted-Remote/Flic outcomes |
