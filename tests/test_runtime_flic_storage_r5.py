@@ -21,7 +21,6 @@ from hub.integrations.flic import FlicButtonRegistry, FlicIntegration, FlicInteg
 from hub.persistence import (
     CURRENT_SCHEMA_VERSION,
     SCHEMA_VERSION_KEY,
-    load_versioned_json,
     reset_preparation,
 )
 from hub.persistence.migrations import block_path
@@ -254,7 +253,9 @@ def test_single_registry_shared_with_rest(tmp_path: Path):
 
     # Mock runtime with bind_integrations
     class MockRuntime:
-        reconfigure = lambda self: None
+        def reconfigure(self):
+            return None
+
         address = None
         driver_metadata = Path(".")
 

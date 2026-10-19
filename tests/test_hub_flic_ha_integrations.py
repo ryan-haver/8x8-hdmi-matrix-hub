@@ -130,8 +130,8 @@ def test_flic_registry_register_new_buttons(tmp_path: Path):
     """Registering new buttons updates in-memory registry and persists atomically."""
     reg = FlicButtonRegistry(data_dir=tmp_path)
     payload = [
-        {"bdaddr": "11:22:33:44", "name": "Bedroom", "serial": "B1"},
-        {"bdaddr": "55:66:77:88", "name": "Kitchen"},
+        {"bdaddr": "11:22:33:44:55:66", "name": "Bedroom", "serial": "B1"},
+        {"bdaddr": "55:66:77:88:99:aa", "name": "Kitchen"},
     ]
     count = reg.register_buttons(payload)
     assert count == 2
@@ -139,32 +139,32 @@ def test_flic_registry_register_new_buttons(tmp_path: Path):
 
     # Verify persisted content on disk
     persisted = json.loads(reg.file_path.read_text(encoding="utf-8"))
-    assert "11:22:33:44" in persisted
-    assert persisted["11:22:33:44"]["name"] == "Bedroom"
-    assert persisted["55:66:77:88"]["name"] == "Kitchen"
+    assert "11:22:33:44:55:66" in persisted
+    assert persisted["11:22:33:44:55:66"]["name"] == "Bedroom"
+    assert persisted["55:66:77:88:99:aa"]["name"] == "Kitchen"
 
 
 def test_flic_registry_register_update_name(tmp_path: Path):
     """Registering an existing button with a changed name updates it."""
     reg = FlicButtonRegistry(data_dir=tmp_path)
-    reg.register_buttons([{"bdaddr": "11:22:33:44", "name": "Old Name"}])
+    reg.register_buttons([{"bdaddr": "11:22:33:44:55:66", "name": "Old Name"}])
 
-    reg.register_buttons([{"bdaddr": "11:22:33:44", "name": "New Name"}])
+    reg.register_buttons([{"bdaddr": "11:22:33:44:55:66", "name": "New Name"}])
     buttons = {b["bdaddr"]: b for b in reg.list_buttons()}
-    assert buttons["11:22:33:44"]["name"] == "New Name"
+    assert buttons["11:22:33:44:55:66"]["name"] == "New Name"
 
     persisted = json.loads(reg.file_path.read_text(encoding="utf-8"))
-    assert persisted["11:22:33:44"]["name"] == "New Name"
+    assert persisted["11:22:33:44:55:66"]["name"] == "New Name"
 
 
 def test_flic_registry_register_identical_is_noop(tmp_path: Path):
     """Registering identical buttons does not trigger an atomic write."""
     reg = FlicButtonRegistry(data_dir=tmp_path)
-    reg.register_buttons([{"bdaddr": "11:22", "name": "Button"}])
+    reg.register_buttons([{"bdaddr": "11:22:33:44:55:77", "name": "Button"}])
     mtime_before = reg.file_path.stat().st_mtime
 
     with patch.object(reg, "save", wraps=reg.save) as mock_save:
-        reg.register_buttons([{"bdaddr": "11:22", "name": "Button"}])
+        reg.register_buttons([{"bdaddr": "11:22:33:44:55:77", "name": "Button"}])
         mock_save.assert_not_called()
 
     assert reg.file_path.stat().st_mtime == mtime_before
@@ -180,15 +180,15 @@ def test_flic_registry_register_invalid_payload(tmp_path: Path):
 def test_flic_registry_save_failure_rolls_back(tmp_path: Path):
     """If saving fails, the in-memory registry rolls back to previous state."""
     reg = FlicButtonRegistry(data_dir=tmp_path)
-    reg.register_buttons([{"bdaddr": "orig:01", "name": "Original"}])
+    reg.register_buttons([{"bdaddr": "00:00:00:00:00:01", "name": "Original"}])
 
     with patch.object(reg, "save", return_value=False):
         with pytest.raises(RuntimeError, match="Failed to save registered Flic buttons"):
-            reg.register_buttons([{"bdaddr": "new:02", "name": "New"}])
+            reg.register_buttons([{"bdaddr": "00:00:00:00:00:02", "name": "New"}])
 
     # Memory state rolled back
     assert len(reg) == 1
-    assert "new:02" not in [b["bdaddr"] for b in reg.list_buttons()]
+    assert "00:00:00:00:00:02" not in [b["bdaddr"] for b in reg.list_buttons()]
 
 
 # =============================================================================
@@ -206,7 +206,7 @@ def test_flic_integration_metadata():
 async def test_flic_integration_lifecycle(tmp_path: Path):
     """FlicIntegration start loads the registry and stop clears client."""
     file_path = tmp_path / "flic_buttons.json"
-    file_path.write_text(json.dumps({"btn:1": {"bdaddr": "btn:1", "name": "B1"}}), encoding="utf-8")
+    file_path.write_text(json.dumps({"00:00:00:00:00:03": {"bdaddr": "00:00:00:00:00:03", "name": "B1"}}), encoding="utf-8")
 
     registry = FlicButtonRegistry(file_path=file_path)
     integration = FlicIntegration(registry=registry)
@@ -223,7 +223,7 @@ async def test_flic_integration_lifecycle(tmp_path: Path):
 def test_flic_integration_health(tmp_path: Path):
     """health() reports status, enabled flag, and button count."""
     registry = FlicButtonRegistry(data_dir=tmp_path)
-    registry.register_buttons([{"bdaddr": "btn:1", "name": "B1"}])
+    registry.register_buttons([{"bdaddr": "00:00:00:00:00:03", "name": "B1"}])
 
     integration = FlicIntegration(config=FlicIntegrationConfig(enabled=True), registry=registry)
     h = integration.health()
@@ -276,7 +276,7 @@ async def test_flic_routes_register_and_get(aiohttp_client, tmp_path: Path):
     assert data["data"]["buttons"] == []
 
     # 2. POST valid buttons
-    payload = {"buttons": [{"bdaddr": "fc:01", "name": "TV Power", "serial": "111"}]}
+    payload = {"buttons": [{"bdaddr": "00:00:00:00:00:04", "name": "TV Power", "serial": "111"}]}
     post_resp = await client.post("/api/integrations/flic/register", json=payload)
     assert post_resp.status == 200
     post_data = await post_resp.json()
@@ -320,7 +320,7 @@ async def test_rest_api_integrations_routes(aiohttp_client, tmp_path: Path):
 
     post_resp = await client.post(
         "/api/integrations/flic/register",
-        json={"buttons": [{"bdaddr": "aa:11", "name": "Living Room"}]},
+        json={"buttons": [{"bdaddr": "00:00:00:00:00:05", "name": "Living Room"}]},
     )
     assert post_resp.status == 200
     post_data = await post_resp.json()
@@ -332,25 +332,25 @@ async def test_rest_api_integrations_routes(aiohttp_client, tmp_path: Path):
     get_data = await get_resp.json()
     assert get_data["success"] is True
     assert len(get_data["data"]["buttons"]) == 1
-    assert get_data["data"]["buttons"][0]["bdaddr"] == "aa:11"
+    assert get_data["data"]["buttons"][0]["bdaddr"] == "00:00:00:00:00:05"
 
 
 def test_rest_api_integrations_global_compatibility(tmp_path: Path):
     """rest_api.integrations preserves module globals and functions for existing tests."""
     file_path = tmp_path / "flic_buttons.json"
     rest_integrations._default_registry = FlicButtonRegistry(file_path=file_path)
-    rest_integrations._registered_buttons = {"btn:legacy": {"bdaddr": "btn:legacy", "name": "Legacy"}}
+    rest_integrations._registered_buttons = {"00:00:00:00:00:06": {"bdaddr": "00:00:00:00:00:06", "name": "Legacy"}}
     assert rest_integrations._save_buttons() is True
 
     # Check file on disk
     loaded = json.loads(file_path.read_text(encoding="utf-8"))
-    assert "btn:legacy" in loaded
+    assert "00:00:00:00:00:06" in loaded
 
     # Reset in-memory state and reload
     rest_integrations._registered_buttons = {}
     rest_integrations._loaded = False
     rest_integrations._load_buttons_if_needed()
-    assert "btn:legacy" in rest_integrations._registered_buttons
+    assert "00:00:00:00:00:06" in rest_integrations._registered_buttons
 
 
 # =============================================================================

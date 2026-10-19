@@ -9,7 +9,6 @@ from pathlib import Path
 
 from aiohttp import web
 
-import hub.integrations.flic as _flic_mod
 from _file_io import atomic_write_json
 from hub.integrations.flic import (
     FlicButtonRegistry,
@@ -41,35 +40,27 @@ __all__ = [
 ]
 
 
-def _sync_flic_hooks() -> None:
-    """Propagate any monkeypatches on rest_api.integrations into hub.integrations.flic."""
-    _flic_mod.atomic_write_json = atomic_write_json
-    _flic_mod.get_data_dir = get_data_dir
-
-
 def _active_integration(app: web.Application | None = None) -> FlicIntegration:
-    """Return active runtime FlicIntegration if present, otherwise default singleton."""
-    if app is not None and "hub_runtime" in app:
-        runtime = app["hub_runtime"]
-        if hasattr(runtime, "loader") and "flic" in runtime.loader.integrations:
-            return runtime.loader.integrations["flic"]
-    from rest_api.utils import get_runtime
-    runtime = get_runtime()
-    if runtime is not None and hasattr(runtime, "loader") and "flic" in runtime.loader.integrations:
-        return runtime.loader.integrations["flic"]
+    """Resolve explicit application ownership before legacy compatibility state."""
+    if app is not None:
+        if "hub_runtime" in app:
+            integration = app["hub_runtime"].loader.integrations.get("flic")
+            if integration is None:
+                raise web.HTTPNotFound()
+            return integration
+        if "flic_integration" in app:
+            return app["flic_integration"]
     return _default_integration
 
 
 def _get_flic_file_path() -> Path:
     """Return the persistent file path for registered Flic buttons."""
-    _sync_flic_hooks()
     return _default_registry.file_path
 
 
 def _load_buttons_if_needed() -> None:
     """Load registered buttons from persistent storage if not already loaded."""
     global _loaded, _registered_buttons
-    _sync_flic_hooks()
     _default_registry._loaded = _loaded
     _default_registry.load_if_needed()
     _registered_buttons = _default_registry._buttons
@@ -78,33 +69,36 @@ def _load_buttons_if_needed() -> None:
 
 def _save_buttons() -> bool:
     """Save the in-memory registered buttons dict to persistent storage."""
-    _sync_flic_hooks()
     _default_registry._buttons = _registered_buttons
-    return _default_registry.save(versioned=False)
+    return _default_registry.save()
 
 
 async def handle_register_flic_buttons(request: web.Request) -> web.Response:
     """Register Flic buttons reported by the Flic Hub SDK script."""
     global _registered_buttons, _loaded
-    _sync_flic_hooks()
     integration = _active_integration(request.app)
-    integration.registry._buttons = _registered_buttons
-    integration.registry._loaded = _loaded
+    legacy = "hub_runtime" not in request.app and "flic_integration" not in request.app
+    if legacy:
+        integration.registry._buttons = _registered_buttons
+        integration.registry._loaded = _loaded
     response = await integration.handle_register(request)
-    _registered_buttons = integration.registry._buttons
-    _loaded = integration.registry._loaded
+    if legacy:
+        _registered_buttons = integration.registry._buttons
+        _loaded = integration.registry._loaded
     return response
 
 
 async def handle_get_flic_buttons(request: web.Request) -> web.Response:
     """Retrieve all registered Flic buttons."""
     global _registered_buttons, _loaded
-    _sync_flic_hooks()
     integration = _active_integration(request.app)
-    integration.registry._buttons = _registered_buttons
-    integration.registry._loaded = _loaded
+    legacy = "hub_runtime" not in request.app and "flic_integration" not in request.app
+    if legacy:
+        integration.registry._buttons = _registered_buttons
+        integration.registry._loaded = _loaded
     response = await integration.handle_get_buttons(request)
-    _registered_buttons = integration.registry._buttons
-    _loaded = integration.registry._loaded
+    if legacy:
+        _registered_buttons = integration.registry._buttons
+        _loaded = integration.registry._loaded
     return response
 

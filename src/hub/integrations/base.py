@@ -5,9 +5,11 @@ an integration's dependencies and module side effects stay behind its flag.
 The hub owns the shared client and mounts ``loader.routes()`` before serving.
 """
 
+import asyncio
 from abc import ABC, abstractmethod
 from collections.abc import Mapping
 from dataclasses import dataclass
+from functools import partial
 from importlib import import_module
 from typing import Any
 
@@ -46,6 +48,26 @@ def _enabled(value: str) -> bool:
     return value.strip().lower() in {"1", "true", "yes", "on"}
 
 
+async def _await_cleanup(task: asyncio.Task[None]) -> None:
+    """Join owned cleanup even after repeated cancellation of its caller."""
+    cancelled: asyncio.CancelledError | None = None
+    while not task.done():
+        try:
+            await asyncio.shield(task)
+        except asyncio.CancelledError as exc:
+            cancelled = exc
+        except BaseException:
+            break  # Retrieve and propagate the cleanup failure below.
+    try:
+        task.result()
+    except BaseException as exc:
+        if cancelled is not None and not isinstance(exc, asyncio.CancelledError):
+            raise BaseExceptionGroup("Integration shutdown failed", [exc, cancelled]) from None
+        raise
+    if cancelled is not None:
+        raise cancelled
+
+
 @dataclass(frozen=True)
 class _Registration:
     name: str
@@ -74,16 +96,28 @@ class IntegrationLoader:
 
     Startup is transactional: a partial start is stopped, as are earlier
     integrations. Stop attempts every integration even when one stop fails.
-    A stopped loader can be loaded and started again.
+    Each cleanup has a deadline. Failed or unfinished owners prevent restart
+    until a later stop retry or the pending cleanup has settled successfully.
     """
 
-    def __init__(self, registry: IntegrationRegistry, environ: Mapping[str, str]) -> None:
+    def __init__(
+        self, registry: IntegrationRegistry, environ: Mapping[str, str], *,
+        cleanup_timeout: float = 5.0, cleanup_cancel_timeout: float = 1.0,
+    ) -> None:
         self.registry = registry
         self.environ = dict(environ)
         self.integrations: dict[str, Integration] = {}
         self._started: list[Integration] = []
+        self._cleanup_timeout = cleanup_timeout
+        self._cleanup_cancel_timeout = cleanup_cancel_timeout
+        self._cleanup_task: asyncio.Task[None] | None = None
+        self._pending_cleanup: dict[Integration, asyncio.Task[None]] = {}
+        self._failed_cleanup: dict[Integration, None] = {}
+        self._cleanup_errors: dict[str, dict[str, Any]] = {}
 
     def load(self) -> dict[str, Integration]:
+        if self._pending_cleanup or self._failed_cleanup:
+            raise RuntimeError("Integration cleanup is unresolved; retry stop before loading")
         if self.integrations:
             return dict(self.integrations)
         loaded: dict[str, Integration] = {}
@@ -97,40 +131,93 @@ class IntegrationLoader:
         return dict(loaded)
 
     async def start(self, hub: HubClient) -> None:
+        if self._cleanup_task is not None and not self._cleanup_task.done():
+            await _await_cleanup(self._cleanup_task)
+        if self._pending_cleanup:
+            raise RuntimeError("Integration cleanup is still pending")
+        if self._failed_cleanup:
+            raise RuntimeError("Integration cleanup failed; retry stop before restart")
         if self._started:
             return
+        self._cleanup_errors.clear()
         self.load()
         try:
             for integration in self.integrations.values():
                 self._started.append(integration)
                 await integration.start(hub)
-        except BaseException:
+        except BaseException as startup_error:
             try:
-                import asyncio
-                await asyncio.shield(self.stop())
-            except Exception:
-                pass  # Preserve the startup error after attempting all cleanup.
+                await self.stop()
+            except BaseException:
+                startup_error.add_note("Integration rollback encountered a shutdown failure or cancellation")
             raise
 
     async def stop(self) -> None:
-        import asyncio
-        failures: list[Exception] = []
-        cancelled: asyncio.CancelledError | None = None
+        if self._cleanup_task is None or self._cleanup_task.done():
+            self._cleanup_task = asyncio.create_task(self._stop_all(), name="integration-cleanup")
+        await _await_cleanup(self._cleanup_task)
+
+    async def _stop_all(self) -> None:
+        failures: list[BaseException] = []
+        if self._pending_cleanup:
+            await asyncio.wait(set(self._pending_cleanup.values()), timeout=self._cleanup_timeout)
+            for integration, task in tuple(self._pending_cleanup.items()):
+                if task.done():
+                    self._cleanup_finished(integration, task)
+                else:
+                    failures.append(TimeoutError(f"Integration cleanup still pending: {integration.name}"))
+        for integration in self._failed_cleanup:
+            self._started.insert(0, integration)
+        self._failed_cleanup.clear()
         while self._started:
-            integration = self._started.pop()
+            integration = self._started[-1]
+            task = asyncio.create_task(integration.stop(), name=f"integration-stop:{integration.name}")
+            self._pending_cleanup[integration] = task
+            done, _ = await asyncio.wait({task}, timeout=self._cleanup_timeout)
+            timed_out = not done
+            if timed_out:
+                task.cancel()
+                await asyncio.wait({task}, timeout=self._cleanup_cancel_timeout)
+                failures.append(TimeoutError(f"Integration cleanup timed out: {integration.name}"))
+                self._cleanup_errors[integration.name] = {"status": "error", "error": "shutdown timed out"}
+                if task.done():
+                    self._failed_cleanup[integration] = None
             try:
-                await integration.stop()
-            except asyncio.CancelledError as exc:
-                cancelled = exc
-            except Exception as exc:
-                failures.append(exc)
+                if task.done():
+                    task.result()
+            except BaseException as exc:
+                self._failed_cleanup[integration] = None
+                if not (timed_out and isinstance(exc, asyncio.CancelledError)):
+                    failures.append(exc)
+                    self._cleanup_errors[integration.name] = {"status": "error", "error": "shutdown failed"}
+            finally:
+                if task.done():
+                    self._pending_cleanup.pop(integration, None)
+                    if integration not in self._failed_cleanup:
+                        self._cleanup_errors.pop(integration.name, None)
+                else:
+                    # A coroutine can suppress cancellation. Keep ownership and
+                    # refuse restart until it exits; never spawn a replacement.
+                    task.add_done_callback(partial(self._cleanup_finished, integration))
+                self._started.pop()
         self.integrations.clear()
         if failures:
-            if cancelled is not None:
-                raise BaseExceptionGroup("Integration shutdown failed", [*failures, cancelled])
-            raise ExceptionGroup("Integration shutdown failed", failures)
-        if cancelled is not None:
-            raise cancelled
+            if len(failures) == 1 and isinstance(failures[0], asyncio.CancelledError):
+                raise failures[0]
+            raise BaseExceptionGroup("Integration shutdown failed", failures)
+
+    def _cleanup_finished(self, integration: Integration, task: asyncio.Task[None]) -> None:
+        if self._pending_cleanup.get(integration) is not task:
+            return
+        self._pending_cleanup.pop(integration, None)
+        try:
+            task.result()
+        except BaseException:
+            self._failed_cleanup[integration] = None
+            # The deadline has already been reported, but task exceptions must
+            # still be retrieved when delayed cancellation finally finishes.
+        else:
+            self._cleanup_errors.pop(integration.name, None)
 
     def routes(self) -> list[Any]:
         return [route for integration in self.integrations.values() for route in integration.routes()]
@@ -142,6 +229,9 @@ class IntegrationLoader:
                 result[name] = integration.health()
             except Exception:
                 result[name] = {"status": "error"}
+        result.update(self._cleanup_errors)
+        for integration in self._pending_cleanup:
+            result[integration.name] = {"status": "error", "error": "shutdown still pending"}
         return result
 
 

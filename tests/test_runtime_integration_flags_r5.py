@@ -3,19 +3,15 @@
 from __future__ import annotations
 
 import logging
-import os
-import sys
 from pathlib import Path
 from unittest.mock import MagicMock
 
 import pytest
 from aiohttp import web
-from aiohttp.test_utils import TestClient, TestServer
+from aiohttp.test_utils import TestClient
 
-from hub.integrations.base import IntegrationLoader
-from hub.runtime.integrations import build_integration_loader, bind_integrations
+from hub.runtime.integrations import bind_integrations, build_integration_loader
 from rest_api.app import create_rest_app
-
 
 # =============================================================================
 # 1. Eight boolean combinations of (UC_ENABLED, FLIC_ENABLED, HA_DISCOVERY_ENABLED)
@@ -198,7 +194,6 @@ def test_disabled_integrations_not_loaded(monkeypatch):
 def test_one_registry_shared_in_runtime():
     """bind_integrations syncs the active Flic registry across the runtime and rest_api."""
     from rest_api import integrations as rest_int
-    from rest_api.utils import bind_runtime
 
     loader = build_integration_loader({"FLIC_ENABLED": "true"})
     loader.load()

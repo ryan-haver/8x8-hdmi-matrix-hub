@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import asyncio
+import inspect
 import logging
 import os
 import socket
@@ -15,7 +17,7 @@ _LOG = logging.getLogger("hub.integrations.homeassistant")
 
 SERVICE_TYPE = "_orei-hdmi-matrix._tcp.local."
 
-from hub.integrations.base import Integration
+from hub.integrations.base import Integration, _await_cleanup
 
 
 def _enabled(val: str) -> bool:
@@ -77,6 +79,7 @@ class HomeAssistantDiscoveryIntegration(Integration):
         self._registered: bool = False
         self._started: bool = False
         self._error: str | None = None
+        self._cleanup_task: asyncio.Task[None] | None = None
 
     @classmethod
     def config_from_env(cls, environ: Mapping[str, str]) -> HomeAssistantDiscoveryConfig:
@@ -112,6 +115,10 @@ class HomeAssistantDiscoveryIntegration(Integration):
 
     async def start(self, hub_client: Any) -> None:
         """Start discovery and advertise service via AsyncZeroconf."""
+        if self._started:
+            return
+        if self._service_info is not None or (self._zeroconf is not None and self._owns_zeroconf):
+            await self.stop()
         self.hub_client = hub_client
         self._started = True
 
@@ -152,45 +159,79 @@ class HomeAssistantDiscoveryIntegration(Integration):
                 self._zeroconf = AsyncZeroconf()
                 self._owns_zeroconf = True
 
-            await self._zeroconf.async_register_service(info)
+            # Registration can acquire the service before it returns or raises.
+            # Retain its identity so rollback also withdraws a partial service.
             self._service_info = info
+            # Preserve the established HA service type, whose service label is
+            # longer than strict RFC 6763's 15-character limit.
+            announcement = await self._zeroconf.async_register_service(info, strict=False)
+            if inspect.isawaitable(announcement):
+                await announcement
             self._registered = True
             self._error = None
             _LOG.info("Advertised Home Assistant discovery service: %s", full_name)
-        except Exception as e:
-            _LOG.warning("Failed to register Home Assistant zeroconf discovery: %s", e)
-            self._error = f"Failed to register discovery service: {e}"
-            self._registered = False
+        except BaseException as e:
+            try:
+                await self.stop()
+            except BaseException as cleanup_error:
+                # Startup cancellation/failure remains authoritative. Failed
+                # cleanup retains its resource for loader rollback or retry.
+                if isinstance(e, Exception) and not isinstance(cleanup_error, Exception):
+                    raise
+            finally:
+                self._error = "Failed to register discovery service"
+            if not isinstance(e, Exception):
+                raise
+            _LOG.warning("Failed to register Home Assistant zeroconf discovery (%s)", type(e).__name__)
 
     async def stop(self) -> None:
         """Stop discovery and cleanly unregister zeroconf service."""
+        if self._cleanup_task is None or self._cleanup_task.done():
+            self._cleanup_task = asyncio.create_task(self._stop_resources(), name="ha-discovery-cleanup")
+        await _await_cleanup(self._cleanup_task)
+
+    async def _stop_resources(self) -> None:
+        failures: list[Exception] = []
         if self._zeroconf is not None and self._service_info is not None:
             try:
-                await self._zeroconf.async_unregister_service(self._service_info)
+                async with asyncio.timeout(2.0):
+                    goodbye = await self._zeroconf.async_unregister_service(self._service_info)
+                    if inspect.isawaitable(goodbye):
+                        await goodbye
                 _LOG.info("Unregistered Home Assistant discovery service: %s", self._service_info.name)
             except Exception as e:
-                _LOG.warning("Error unregistering Home Assistant zeroconf service: %s", e)
-            finally:
+                failures.append(e)
+                _LOG.warning("Error unregistering Home Assistant zeroconf service (%s)", type(e).__name__)
+            else:
                 self._service_info = None
                 self._registered = False
 
         if self._zeroconf is not None and self._owns_zeroconf:
             try:
-                await self._zeroconf.async_close()
+                async with asyncio.timeout(2.0):
+                    await self._zeroconf.async_close()
             except Exception as e:
-                _LOG.warning("Error closing AsyncZeroconf instance: %s", e)
-            finally:
+                failures.append(e)
+                _LOG.warning("Error closing AsyncZeroconf instance (%s)", type(e).__name__)
+            else:
                 self._zeroconf = None
                 self._owns_zeroconf = False
+                self._service_info = None
+                self._registered = False
 
         self._started = False
         self.hub_client = None
         self._error = None
+        if failures:
+            self._error = "Failed to stop discovery service"
+            raise ExceptionGroup("Home Assistant discovery shutdown failed", failures)
 
     def health(self) -> dict[str, Any]:
         """Report discovery integration health."""
         if not self.config.enabled:
             status = "disabled"
+        elif self._error:
+            status = "error"
         elif self._registered:
             status = "ok"
         else:

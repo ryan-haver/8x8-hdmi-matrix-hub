@@ -456,7 +456,7 @@ async def test_ha_discovery_degraded_health_registration_failure():
     health = ha.health()
     assert health["status"] == "error"
     assert health["registered"] is False
-    assert "mDNS port 5353 conflict" in health.get("error", "")
+    assert health["error"] == "Failed to register discovery service"
 
     # Clean stop should still succeed
     await ha.stop()

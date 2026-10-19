@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 import logging
 import os
 from collections.abc import Callable, Mapping
@@ -12,7 +11,6 @@ from typing import Any
 
 from aiohttp import web
 
-from _file_io import atomic_write_json
 from hub.persistence import (
     MigrationError,
     SchemaVersionError,
@@ -22,7 +20,7 @@ from hub.persistence import (
     load_versioned_json,
     save_versioned_json,
 )
-from hub.persistence.migrations import assert_writable
+from hub.persistence.migrations import is_button_key
 from persistence import get_data_dir
 
 _LOG = logging.getLogger("hub.integrations.flic")
@@ -72,7 +70,6 @@ class FlicButtonRegistry:
         self._data_dir = data_dir
         self._file_path = file_path
         self._buttons: dict[str, dict[str, Any]] = {}
-        self._metadata: dict[str, Any] = {}
         self._loaded: bool = False
 
     @property
@@ -95,60 +92,32 @@ class FlicButtonRegistry:
                 if raw is not None:
                     if isinstance(raw, Mapping):
                         records = flat_map_records("flic_buttons.json", raw)
-                        if not records:
-                            records = {
-                                k: dict(v)
-                                for k, v in raw.items()
-                                if k != "schema_version" and isinstance(v, Mapping) and "bdaddr" in v
-                            }
                         self._buttons.clear()
                         self._buttons.update(records)
-                        self._metadata = {k: v for k, v in raw.items() if k not in self._buttons}
-                    elif isinstance(raw, list):
-                        records = {
-                            (btn.get("bdaddr") or btn.get("address")): dict(btn)
-                            for btn in raw
-                            if isinstance(btn, Mapping) and (btn.get("bdaddr") or btn.get("address"))
-                        }
-                        self._buttons.clear()
-                        self._buttons.update(records)
-                        self._metadata = {}
                     else:
                         self._buttons.clear()
-                        self._metadata = {}
                 else:
                     self._buttons.clear()
-                    self._metadata = {}
                 _LOG.info("Loaded %d registered Flic buttons from storage", len(self._buttons))
             except (MigrationError, SchemaVersionError) as e:
                 _LOG.warning("Failed to load registered Flic buttons: %s", e)
                 self._buttons.clear()
-                self._metadata = {}
             except Exception as e:
                 _LOG.warning("Failed to load registered Flic buttons: %s", e)
                 self._buttons.clear()
-                self._metadata = {}
         else:
             self._buttons.clear()
-            self._metadata = {}
         self._loaded = True
 
     def save(self, *, versioned: bool = True) -> bool:
-        """Save the in-memory registered buttons dict to persistent storage."""
+        """Save through R2; the legacy versioned keyword never disables safety."""
         if is_write_blocked(self.file_path):
             _LOG.error("Refusing to save %s: %s", self.file_path.name, block_reason(self.file_path))
             return False
         try:
-            if versioned:
-                payload = dict(self._metadata)
-                payload.update(self._buttons)
-                return save_versioned_json(self.file_path, payload, indent=4)
-            else:
-                assert_writable(self.file_path)
-                payload = dict(self._metadata)
-                payload.update(self._buttons)
-                atomic_write_json(self.file_path, payload, indent=4)
-                return True
+            # The legacy keyword remains accepted, but every writer uses R2's
+            # validation, extension preservation and late-file refusal boundary.
+            return save_versioned_json(self.file_path, self._buttons, indent=4)
         except Exception as e:
             _LOG.warning("Failed to save registered Flic buttons: %s", e)
             return False
@@ -168,8 +137,12 @@ class FlicButtonRegistry:
             if not isinstance(btn, dict) or "bdaddr" not in btn:
                 continue
             bdaddr = btn["bdaddr"]
+            if not isinstance(bdaddr, str) or not is_button_key(bdaddr):
+                continue
             name = btn.get("name", bdaddr)
             serial = btn.get("serial", "")
+            if not isinstance(name, str) or not isinstance(serial, str):
+                continue
 
             existing = self._buttons.get(bdaddr)
             if existing is None or existing.get("name") != name or existing.get("serial") != serial:
@@ -194,9 +167,9 @@ class FlicButtonRegistry:
         self.load_if_needed()
         return [
             {
-                "bdaddr": b.get("bdaddr", k),
-                "name": b.get("name", b.get("bdaddr", k)),
-                "serial": b.get("serial", ""),
+                "bdaddr": k,
+                "name": b["name"] if isinstance(b.get("name"), str) else k,
+                "serial": b["serial"] if isinstance(b.get("serial"), str) else "",
             }
             for k, b in self._buttons.items()
         ]
@@ -204,7 +177,6 @@ class FlicButtonRegistry:
     def __len__(self) -> int:
         self.load_if_needed()
         return len(self._buttons)
-
 
 
 class FlicIntegration(Integration):
