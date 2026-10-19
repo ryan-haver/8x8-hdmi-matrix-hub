@@ -39,6 +39,72 @@ async def test_device_settings_returns_saved_customizations(data_hub, simulator)
     assert sim_writes(simulator) == []
 
 
+async def test_device_settings_private_extensions_survive_edits_without_public_exposure(data_hub, simulator):
+    from rest_api import device_settings
+
+    path = data_hub.data_dir / "device_settings.json"
+    stored = json.loads(path.read_text(encoding="utf-8"))
+    private = {"password": "synthetic-private-extension"}
+    stored["credentials"] = private
+    for kind in ("inputs", "outputs", "presets"):
+        stored[kind]["1"]["credentials"] = private
+    path.write_text(json.dumps(stored), encoding="utf-8")
+    device_settings.init_device_settings(data_hub.data_dir)
+
+    for route in ("/api/device-settings", "/api/device-settings/input/1", "/api/device-settings/output/1"):
+        public = await _get(data_hub, route)
+        assert "synthetic-private-extension" not in json.dumps(public)
+        assert "credentials" not in json.dumps(public)
+        assert "schema_version" not in json.dumps(public)
+    response = await data_hub.post("/api/device-settings/input/1", json={"name": "Edited display name"})
+    assert response.status == 200, await response.text()
+    assert (await _get(data_hub, "/api/device-settings/input/1"))["data"]["name"] == "Edited display name"
+    device_settings.init_device_settings(data_hub.data_dir)
+    assert (await _get(data_hub, "/api/device-settings/input/1"))["data"]["name"] == "Edited display name"
+    saved = json.loads(path.read_text(encoding="utf-8"))
+    assert saved["schema_version"] == 2 and saved["credentials"] == private
+    assert all(saved[kind]["1"]["credentials"] == private for kind in ("inputs", "outputs", "presets"))
+    assert sim_writes(simulator) == []
+
+
+async def test_scene_override_private_extensions_survive_public_edit_and_reload(data_hub, simulator):
+    from rest_api.scenes_v2 import set_phase8_scene_manager
+    from scene_manager import SceneManager
+
+    async def read_scene(route):
+        response = await data_hub.get(route)
+        assert response.status == 200 and response.content_type == "application/json"
+        envelope = await response.json()
+        assert set(envelope) == {"success", "data"} and envelope["success"] is True
+        return envelope
+
+    path = data_hub.data_dir / "scenes_v2.json"
+    stored = json.loads(path.read_text(encoding="utf-8"))
+    scene_id = "scene_movienight01"
+    scene = next(row for row in stored["scenes"] if row["id"] == scene_id)
+    private = {"password": "synthetic-private-scene-extension"}
+    scene["credentials"] = private
+    scene["overrides"]["movie_night"]["2"]["credentials"] = private
+    path.write_text(json.dumps(stored), encoding="utf-8")
+    set_phase8_scene_manager(SceneManager(data_dir=data_hub.data_dir))
+
+    for route in ("/api/v2/scenes", f"/api/v2/scenes/{scene_id}"):
+        public = await read_scene(route)
+        assert "synthetic-private-scene-extension" not in json.dumps(public)
+        assert "credentials" not in json.dumps(public)
+        assert "passcode_hash" not in json.dumps(public)
+    response = await data_hub.put(f"/api/v2/scenes/{scene_id}", json={"name": "Edited scene"})
+    assert response.status == 200, await response.text()
+    set_phase8_scene_manager(SceneManager(data_dir=data_hub.data_dir))
+    public = (await read_scene(f"/api/v2/scenes/{scene_id}"))["data"]["scene"]
+    assert public["name"] == "Edited scene"
+    assert public["overrides"] == {"movie_night": {"2": {"audio_mute": True}}}
+    saved = next(row for row in json.loads(path.read_text(encoding="utf-8"))["scenes"] if row["id"] == scene_id)
+    assert saved["credentials"] == private
+    assert saved["overrides"]["movie_night"]["2"]["credentials"] == private
+    assert sim_writes(simulator) == []
+
+
 @pytest.mark.parametrize("kind,port", [(kind, port) for kind in ("input", "output") for port in (1, 8)])
 async def test_individual_settings_match_saved_port(data_hub, simulator, kind, port):
     saved = json.loads((FIXTURE_DATA / "device_settings.json").read_text(encoding="utf-8"))

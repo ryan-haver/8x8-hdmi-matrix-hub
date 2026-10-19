@@ -1,7 +1,6 @@
-"""Actual R1 transaction + R3 SDK sockets, transport doubles and an explicit R2 barrier shim.
+"""Actual R1 transaction, R2 persistence and R3 SDK sockets, with transport doubles.
 
-The imported builder substitutes only the not-yet-integrated R2 barrier; these
-tests are not normal-entry, migration, image or hardware acceptance evidence.
+These tests are not normal-entry, image or hardware acceptance evidence.
 """
 
 from __future__ import annotations

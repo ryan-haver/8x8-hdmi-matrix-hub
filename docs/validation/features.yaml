@@ -3817,7 +3817,7 @@ features:
       GET /api/device-settings/dashboard-presets, PUT /api/device-settings/dashboard-presets, 'POST /api/device-settings/dashboard-presets/{preset}/toggle']
   target: V2
   current: V1
-  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
+  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. R2 private storage projection: test_device_settings_private_extensions_survive_edits_without_public_exposure verifies real registered reads, edit/reload persistence, schema preservation and no private extension exposure. Recorded level retained pending the fresh integrated campaign. Historical shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
   evidence:
   - docs/validation/evidence/F-API-017/2026-10-04-V2-7dbc4dc7-contracts.device_settings-api.json
   - docs/validation/evidence/F-API-017/2026-10-04-V2-7dbc4dc7-contracts.input_settings-api.json
@@ -4234,7 +4234,7 @@ features:
       'GET /api/v2/scenes/{scene_id}/history']
   target: V2
   current: V2
-  basis: 'tests/sim/test_sim_scenes_v2.py exercises every /api/v2/scenes route on the real hub + simulator and asserts the device effect of execute (V2).'
+  basis: 'tests/sim/test_sim_scenes_v2.py exercises every /api/v2/scenes route on the real hub + simulator and asserts the device effect of execute (V2). R2: tests/sim/test_sim_rest_reads.py::test_scene_override_private_extensions_survive_public_edit_and_reload covers registered list/detail reads and edit/reload with nested private storage extensions, keeping public fields and PIN hashes separated. Existing evidence levels are retained pending the fresh integrated runtime campaign.'
   evidence:
   - docs/validation/evidence/F-DOM-010/2026-10-04-V2-7dbc4dc7-domain_manage.scene_a_list-api.json
   - docs/validation/evidence/F-DOM-010/2026-10-04-V2-7dbc4dc7-domain_manage.scene_b_create_reject_body_type-api.json
