@@ -210,6 +210,10 @@ quiesce arbitrary replacements that fail before applying their own close fence.
 The complete original three-case probe is byte-preserved as
 `build/r8d/conditional-probe.py`, SHA-256
 `defca6b53cd9f03e2c00cd26eb00d6c733e6e68fd93294ab455e59debb077df4`.
+After review acceptance the coordinator also committed a byte-identical copy as
+[an explicitly invoked conditional reproduction](reproductions/r8d_conditional_disconnect_probe.py),
+with [invocation and scope notes](reproductions/README.md), so the original
+failed oracle remains available without the local worker evidence directory.
 The explicit rerun selects its before/after public-disconnect cases and still
 reports **1 failed, 1 passed, 1 deselected**, exit 1. The deselected case is the
 late-original-close test independently retained in the committed supported file.

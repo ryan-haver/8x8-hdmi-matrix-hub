@@ -1,6 +1,6 @@
 # Runtime completion and release plan
 
-Status: release held for restoration across interrupted candidate cleanup.
+Status: supported Orei restoration accepted; release held for fresh complete candidate gates.
 R3E's UI ordering correction and R1F's explicit-refresh CEC cache correction are
 integrated. Clean candidate `4adbc13` passed 3,966 local core tests with four skips
 and 177/177 routes, 100 dedicated Remote tests and all 1,506 source client outcomes.
@@ -25,9 +25,13 @@ eight known source/image cases but demonstrates that interrupted failed-candidat
 cleanup can skip original-state restoration, including native cancellation
 without an added delay. Sol R1I's complete bounded restoration correction is
 merged at `619baccc`, after 59 independent focused tests passed at its exact
-commit; the worker also passed 155 scoped regressions. Fresh Astra R8D is
-reviewing the integrated source and a new immutable image. New complete candidate
-evidence and independent review acceptance remain required.
+commit; the worker also passed 155 scoped regressions. Fresh Astra R8D
+[accepts the supported restoration boundary](../validation/RUNTIME_REVIEW_RESTORATION.md)
+after all twelve source/image cases, 102 regressions and two new controls pass;
+the coordinator independently passes both new controls. A stronger conditional
+guarantee for a replacement disconnect that fails before applying Orei's fence
+is documented with its unchanged failed probe. New complete candidate evidence
+and final consolidation checks remain required.
 See the [execution record](RUNTIME_EXECUTION.md). Updated 2026-10-19. This is the next execution
 plan after the integrated Phase 6/7 work. It supplements the original Phase 8
 validation gate rather than renumbering historical phases.
@@ -46,9 +50,9 @@ At the start of this plan, the application constructed `OreiMatrix` and
 loader and migrations were separate frameworks. Shared composition, packaged
 entrypoint, UC bridge and dedicated Flic replay are now accepted on the runtime
 branch. Persistence, action parity and flag/lifecycle corrections have since
-been accepted. The remaining software work is R8D review, fresh complete source/image
-validation, evidence/index reconciliation and independent verification that the
-restoration boundary is resolved. Physical
+been accepted. The remaining software work is fresh complete source/image
+validation, evidence/index reconciliation, final independent disposition and CI.
+Physical
 client, recovery, soak and owner acceptance gates follow those checks.
 
 No work below approves the three pending Tron snapshots. PR #36 and PR #37

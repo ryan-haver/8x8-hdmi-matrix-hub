@@ -44,9 +44,13 @@ or expiry interrupts candidate cleanup before original identity restoration.
 Sol 6.1 high R1I `0ea3b7ad` is merged as `619baccc`, including early drain,
 late closure, shutdown and overlapping reconfiguration. Independent exact-commit
 validation passes 59 focused tests; its worker also passes 155 scoped regressions.
-Fresh Astra R8D review is active with a new immutable image and all twelve known
-source/image cases required. The candidate stays held pending that review and new complete
-candidate evidence. Historical `4adbc13` CI passes 12/13 required jobs,
+Fresh Astra R8D [accepts the supported Orei restoration boundary](../validation/RUNTIME_REVIEW_RESTORATION.md):
+all twelve required source/image cases, 102 scoped regressions and two new
+supported controls pass. The coordinator independently passes both new controls
+at the review commit. An unchanged conditional probe for a substituted disconnect
+that fails before applying Orei's fence remains a documented extension limit.
+The candidate stays held pending new complete candidate evidence and CI.
+Historical `4adbc13` CI passes 12/13 required jobs,
 with only the three owner-pending Tron screenshots failing. No visual/hardware
 approval or release tag is implied. The
 [execution record](RUNTIME_EXECUTION.md) tracks effective model observations,

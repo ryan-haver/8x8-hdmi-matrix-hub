@@ -427,13 +427,28 @@ fences. Existing review assertions remain unchanged. The new owned fault-injecte
 oracle was corrected where it assumed an opaque public exception certified
 closure; its original failure is preserved.
 
-Fresh Astra high R8D review is active in a new Orca worktree at `619baccc`;
-requested/effective Codex `gpt-6-astra` high is recorded. It requires all twelve
-known source/image cases, relevant runtime controls and one new clean immutable
-amd64 image. Only after focused acceptance
-will the coordinator freeze a clean candidate for fresh complete source, client,
-multiarch and deployment campaigns. Each settled worker is released before
-acknowledgment; evidence is copied before merge and immediate worktree removal.
+Fresh Astra high R8D `2c1c2297`, merged as `02785131`, accepts the supported
+restoration boundary at `619baccc`; requested/effective Codex `gpt-6-astra` high
+is recorded. All twelve known source/image cases, 102 scoped regressions and two
+new supported controls pass. Its new normal-command amd64 image is
+`sha256:900fb2b80078cb543be84ea869d07f9eaf0aee8691cdde946fab69b59e1a99a9`;
+257 shipped inputs match. Exact-commit coordinator verification passes both new
+controls in 6.42 seconds. The worker was released before acknowledgment, all
+`build/r8d` copied, the review merged and its worktree immediately removed/pruned.
+The coordinator now freezes a clean candidate for fresh complete source, client,
+multiarch and deployment campaigns.
+
+The [R8D report](../validation/RUNTIME_REVIEW_RESTORATION.md) also retains a
+conditional probe that replaces public disconnect before Orei applies its
+synchronous intentional-close fence. An already-running supervisor then
+continues; composition does not start a new retry and still rejects commands.
+No natural supported Orei in-body bypass was demonstrated; the actual in-body
+failure control passes. The coordinator explicitly classified independent
+quiescence for such alternate implementations as an extension beyond the
+supported contract, not a high production/image blocker. The unchanged failed
+probe is [committed for explicit invocation](../validation/reproductions/README.md)
+and is not skipped, xfailed or counted as a product pass. The next complete
+campaign must not be described as proving this stronger arbitrary-client guarantee.
 The no-Anthropic policy remains in force. Historical full-campaign and CI counts
 above remain tied to `4adbc13` and do not certify these later source changes.
 

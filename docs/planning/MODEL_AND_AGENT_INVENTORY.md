@@ -129,9 +129,11 @@ deadline boundary, corrected by fresh Sol 6.1 high R1H. Fresh Astra R8C passes
 all eight known source/image cases but reproduces original-state restoration
 being skipped when candidate cleanup is interrupted. Fresh Sol 6.1 high R1I's
 complete restoration correction is merged after 59 independent exact-commit
-checks; fresh Astra high R8D owns the subsequent source/new-image review.
-Independent review acceptance and fresh complete
-candidate evidence remain required. A
+checks. Fresh Astra high R8D accepts the supported source/new-image boundary
+after twelve required cases, 102 regressions and two additional controls pass;
+the coordinator independently verifies both controls. Its conditional
+alternate-disconnect limit is explicitly retained with a failing probe.
+Fresh complete candidate evidence and final review/CI remain required. A
 separate Sol session completed a read-only R3E source-contract review without
 editing tracked files. Its real-payload JavaScript probe demonstrates a startup
 ordering race, while attribution to the first CI failure remains bounded.
