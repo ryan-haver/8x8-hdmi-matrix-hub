@@ -212,24 +212,51 @@ and license files, rather than only legacy driver paths. Sixteen evidence-schema
 tests and focused Ruff checks passed. Old deployment records remain historical;
 these metadata changes do not imply a fresh image run.
 
-## Remaining integration corrections
+## Integrated corrections and combined validation
 
-- **R3C, Argon high / Antigravity:** actual installed-console validation found
-  an unconfigured UC bridge starts with zero entities, then its initial event
-  incorrectly exposes the full 74-entity catalog. The bounded bridge correction
-  also owns only UC next/previous dispatch adoption of R4's atomic wrap/clamp
-  cycle seam. No golden or empty-before-setup assertion is relaxed.
-- **R5B, fresh Sol 6.1 high / Codex:** Flash candidate `7b78785` independently
-  passed 157 tests, but coordinator review reproduced metadata counted as a
-  Flic button, a disabled direct factory importing Flic, and a canceled stop
-  losing its unfinished cleanup owner. The Flash worker was released; its
-  candidate remains unmerged. Sol owns safety completion and exact approved
-  fixture corrections, including retained failed-cleanup health and retry.
-- **R1C, Sol 6.1 high / Codex:** new real simulator cycle/readback tests exposed
-  an unclosed HTTP session. Diagnostic allocation tracing found a shielded
-  output-status fetch initiating a connection during teardown. This track owns
-  only matrix transport read draining plus dedicated tests; intentional shutdown
-  must settle outstanding reads across cache generations before disposal.
+- **R3C, Argon high / Antigravity:** accepted in `709232b` after 67 combined
+  checks. The bridge preserves an empty catalog before setup and restores the
+  configured 74 entities. Fourteen real installed-wheel checks passed, including
+  setup/control/restart outside the checkout. Four concurrent dispatcher/REST
+  simulator checks passed for shared wrap/clamp cycles. SDK 0.7 does not advertise
+  optional select entities; these direct dispatcher calls are not Remote
+  WebSocket cycling proof. Existing real Remote source-selection proof remains.
+- **R5B, fresh Sol 6.1 high / Codex:** accepted in `3e21e6f` after 219 independent
+  checks. Corrected metadata counted as buttons, disabled imports and lost
+  cleanup owners; retained failed owners support explicit retry. Actual separate
+  Zeroconf instances resolve and withdraw the established service type.
+- **R1C, Sol 6.1 high / Codex:** accepted in `89b4928` after 177 independent
+  checks. Owned reads across cache generations drain before transport disposal.
+  Ten registered REST cycle/readback tests passed again without the earlier
+  session leak warnings. Explicit reconnect remains supported after shutdown.
+
+The first combined source run at `3e21e6f` passed 3,733 tests with four skips,
+29 deselections and 177/177 routes, but **47 tests failed**. This is not a green
+release gate. Corrections have separate ownership:
+
+- **R2C, Sol 6.1 high:** explicit storage isolation and fail-closed handling when
+  an unrelated valid legacy source exists beside an unsafe target; manager/cache
+  isolation and portable synthetic legacy-source regressions.
+- **R4B, Argon high:** schema-stamped storage assertions, actual atomic-writer
+  fault injection, and the existing safe error-reference contract for preset
+  exceptions, preserving ordinary refusal bodies.
+- **R6B, Flash 3.8 high:** real Flic readiness, exact write/CEC counts separated
+  from maintenance reads, and the Node fixture's explicit process import.
+- **R1D, fresh Sol 6.1 high:** observed matrix/read readiness, deterministic fault
+  timing and UC listener ownership/bind failure handling. Explicit ports must
+  never silently move.
+
+Coordinator refreshed only the additive health JSON contract fixture and added
+registered Flic privacy/disabled-route reads. The obsolete direct-construction
+documentation assertion will follow the packaged composition documentation in
+R7. No visual baseline changed.
+
+A new amd64 image built from the combined UC correction passed 27 deployment
+checks with two expected skips (Linux-host networking and a UC-only disabled-mode
+check), including separate-container discovery, advertised API access and goodbye
+after normal SIGTERM. Its image ID and source provenance are in
+`build/runtime-completion/image-amd64-build.log` and `deploy-amd64.log`; these
+checks do not cover the still-pending corrective commits or physical LAN clients.
 
 Coordinator removed obsolete R2 module substitutions from the shared R1 test
 builder, retaining a spy around actual preparation. Thirty-nine composition,
@@ -242,9 +269,9 @@ through actual edits/reloads while keeping credentials and hashes out of public
 responses. Registry and ledger are synchronized. OpenAPI describes cycle query
 parameters and scene v2's existing omitted fields, 201 creation and 207 partial
 execution without changing runtime wire bodies: 122 API/config tests and 17
-registry checks passed. Cycle readback checks pass, while their transport cleanup
-warning remains explicitly open for R1C. New deployment discovery proof is ready
-but has not yet run against the final image.
+registry checks passed. Cycle readback and transport cleanup checks now pass.
+Final image/client campaigns and configuration-specific registry/ledger checks
+must follow the current corrective tracks before R7 and independent R8 review.
 
 ## Evidence and release gates
 

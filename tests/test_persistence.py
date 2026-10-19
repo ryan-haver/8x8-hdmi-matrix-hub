@@ -33,6 +33,12 @@ LEGACY_DATA_DIR = PROJECT_ROOT / "data"
 @pytest.fixture(autouse=True)
 def _isolate_env(monkeypatch, tmp_path):
     """Snapshot env vars and clear persistence cache around every test."""
+    # Legacy tests must never create/remove files in a real checkout catalog.
+    project_root = tmp_path / "project"
+    legacy_dir = project_root / "data"
+    monkeypatch.setattr(sys.modules[__name__], "LEGACY_DATA_DIR", legacy_dir)
+    monkeypatch.setattr("persistence.get_project_root", lambda: project_root)
+    monkeypatch.setattr("persistence.get_legacy_data_paths", lambda: [legacy_dir])
     # Clear the three persistence-controlling env vars
     for var in ("MATRIX_DATA_DIR", "UC_CONFIG_HOME", "HOME"):
         monkeypatch.delenv(var, raising=False)
@@ -442,7 +448,8 @@ class TestLegacyMigrationOnInit:
             legacy.unlink(missing_ok=True)
 
     def test_init_device_settings_migrates_legacy(self, monkeypatch, tmp_path):
-        """Old device_settings.json is migrated to the new dir."""
+        """An explicitly selected old volume supplies migrated device settings."""
+        from hub.persistence import prepare_runtime_storage
         from rest_api import device_settings
 
         LEGACY_DATA_DIR.mkdir(parents=True, exist_ok=True)
@@ -460,12 +467,17 @@ class TestLegacyMigrationOnInit:
 
         try:
             monkeypatch.setenv("MATRIX_DATA_DIR", str(tmp_path))
+            original = legacy.read_bytes()
+            prepare_runtime_storage(
+                config_dir=tmp_path / "config", data_dir=tmp_path, legacy_data_dirs=(LEGACY_DATA_DIR,)
+            )
             device_settings.init_device_settings()
 
             new_file = tmp_path / "device_settings.json"
             assert new_file.exists()
             data = json.loads(new_file.read_text(encoding="utf-8"))
             assert data["inputs"]["1"]["name"] == "Migrated PS5"
+            assert legacy.read_bytes() == legacy.with_name("device_settings.json.v0.bak").read_bytes() == original
         finally:
             legacy.unlink(missing_ok=True)
 

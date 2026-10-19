@@ -25,9 +25,12 @@ R0, R1, R1P, R3/R3B and R6 are accepted and merged, with their worktrees
 removed. R2's M3 checkpoint was preserved after a failed full-scope result;
 fresh Sol 6.1 high completed persistence, accepted as `59a2e8e` after 734
 independent passes and one platform skip. R4/R4A are now accepted as `6ae0227`
-after 432 independent passes and one HA dependency skip. R3C corrects UC event
-and cycle behavior, R5B completes lifecycle safety, and R1C drains transport reads
-on shutdown; R7/R8 follow those corrections and fresh campaigns. The
+after 432 independent passes and one HA dependency skip. R3C, R5B and R1C are
+also accepted and their worktrees removed. The first combined source run passed
+3,733 tests and covered 177/177 routes, with 47 failures still requiring fixes.
+R2C (Sol) handles storage isolation, R4B (Argon) wire/storage fault contracts,
+R6B (Flash) Flic replay checks, and R1D (Sol) startup/read readiness. R7/R8 follow
+those corrections and fresh campaigns. The
 [execution record](RUNTIME_EXECUTION.md) tracks effective model observations,
 ownership clarifications and acceptance. Hardware and soak gates remain
 owner-observed.
