@@ -35,11 +35,12 @@ from __future__ import annotations
 import inspect
 import logging
 import math
-import uuid
 from collections.abc import Awaitable, Callable, Mapping
 from dataclasses import dataclass, field
 from typing import Any
 
+from hub.core.errors import safe_action_error
+from hub.core.matrix_service import MatrixService
 from password import attempt_pin, check_pin_lockout, verify_passcode_async
 from profile_execution import apply_profile_state
 from system_shortcuts import execute_shortcut
@@ -488,15 +489,15 @@ class ActionRunner:
             return await _RUNNERS[normalized](self, action_id, passcode, params or {})
         except Exception as exc:
             # One place catches what an action did wrong, so no surface has to.
-            _LOG.exception("%s '%s' failed", normalized, action_id)
+            message, error_id = safe_action_error(exc, f"{normalized} '{action_id}' failed", logger=_LOG)
             return _result(
                 normalized,
                 action_id,
                 success=False,
                 partial=False,
                 status_code=STATUS_FAILED,
-                errors=[str(exc) or f"{normalized.capitalize()} '{action_id}' failed"],
-                data={"code": "execution_error", "id": action_id},
+                errors=[message],
+                data={"code": "execution_error", "id": action_id, "error_id": error_id},
             )
 
     async def _delegate(
@@ -509,19 +510,19 @@ class ActionRunner:
         params: dict[str, Any],
     ) -> ActionRunResult:
         """Run one kind through its registered executor."""
-        call = getattr(executor, "run_action", executor)
         try:
+            call = getattr(executor, "run_action", executor)
             return _coerce(kind, action_id, await _resolve(call(action_id, passcode=passcode, params=params)))
         except Exception as exc:
-            _LOG.exception("%s executor failed for '%s'", kind, action_id)
+            message, error_id = safe_action_error(exc, f"{kind} executor failed for '{action_id}'", logger=_LOG)
             return _result(
                 kind,
                 action_id,
                 success=False,
                 partial=False,
                 status_code=STATUS_FAILED,
-                errors=[str(exc) or f"{kind.capitalize()} '{action_id}' failed"],
-                data={"code": "execution_error", "id": action_id},
+                errors=[message],
+                data={"code": "execution_error", "id": action_id, "error_id": error_id},
             )
 
     # ---- profiles -----------------------------------------------------------
@@ -598,7 +599,8 @@ class ActionRunner:
             try:
                 outcome = await manager.execute_macro(macro_id)
             except Exception as exc:
-                outcome = {"success": False, "error": str(exc)}
+                message, error_id = safe_action_error(exc, f"Power-on macro '{macro_id}' failed", logger=_LOG)
+                outcome = {"success": False, "error": message, "error_id": error_id}
         success = bool(outcome.get("success"))
         reasons = [] if success else _macro_errors(outcome)
         step = StepResult(
@@ -744,9 +746,12 @@ class ActionRunner:
             return _not_found("preset", action_id)
 
         try:
-            recalled = await _call_preset_recaller(executor, recaller, number)
+            if isinstance(executor, MatrixService):
+                recalled = await executor.recall_preset(number, propagate_errors=True)
+            else:
+                recalled = bool(await _resolve(recaller(number)))
         except Exception as exc:
-            message, error_id = _safe_preset_error(exc)
+            message, error_id = safe_action_error(exc, "recalling preset", logger=_LOG)
             return _result(
                 "preset",
                 action_id,
@@ -788,62 +793,6 @@ class ActionRunner:
             [] if recalled else [f"Failed to recall preset {number}"],
             {"preset": number, "name": f"Preset {number}"},
         )
-
-
-class _PresetClientError(BaseException):
-    """Carries a matrix client preset exception past MatrixService._safe."""
-
-    def __init__(self, exc: Exception) -> None:
-        super().__init__(str(exc))
-        self.exc = exc
-
-
-def _safe_preset_error(exc: Exception) -> tuple[str, str]:
-    """Log a preset exception with a correlation ID and return a client-safe message."""
-    correlation_id = uuid.uuid4().hex[:8]
-    _LOG.exception("[%s] recalling preset: %s", correlation_id, exc)
-    return f"Internal server error (ref: {correlation_id})", correlation_id
-
-
-async def _call_preset_recaller(executor: Any, recaller: Any, number: int) -> bool:
-    """Invoke ``recaller(number)``, preserving client exceptions across MatrixService."""
-    service = getattr(executor, "_service", executor)
-    client = getattr(service, "_client", None)
-    client_recall = getattr(client, "recall_preset", None) if client is not None else None
-    if client is None or client_recall is None or not hasattr(client, "__dict__"):
-        return bool(await _resolve(recaller(number)))
-
-    had_own = "recall_preset" in client.__dict__
-    orig_own = client.__dict__.get("recall_preset")
-
-    def _restore() -> None:
-        if had_own:
-            client.__dict__["recall_preset"] = orig_own
-        else:
-            client.__dict__.pop("recall_preset", None)
-
-    def _intercept(*args: Any, **kwargs: Any) -> Any:
-        _restore()
-
-        async def _guarded() -> Any:
-            try:
-                return await _resolve(client_recall(*args, **kwargs))
-            except Exception as exc:
-                sync = getattr(service, "_sync_connection", None)
-                if callable(sync):
-                    sync()
-                raise _PresetClientError(exc) from exc
-
-        return _guarded()
-
-    client.__dict__["recall_preset"] = _intercept
-    try:
-        return bool(await _resolve(recaller(number)))
-    except _PresetClientError as wrapped:
-        raise wrapped.exc from None
-    finally:
-        if client.__dict__.get("recall_preset") is _intercept:
-            _restore()
 
 
 _RUNNERS: dict[str, Callable[[ActionRunner, str, str | None, dict[str, Any]], Awaitable[ActionRunResult]]] = {

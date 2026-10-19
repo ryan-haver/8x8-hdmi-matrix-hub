@@ -84,6 +84,9 @@ async def test_runtime_preset_client_exception_preserves_safe_reference_and_hide
     preset_runtime, monkeypatch, caplog
 ):
     runtime, client, _ = preset_runtime
+    owned_client = runtime.service.client
+    real_recall = owned_client.recall_preset
+    generation = runtime.service._write_generation
     manual_ws = AsyncMock()
     monkeypatch.setattr("rest_api.control.broadcast_status_update", manual_ws)
     monkeypatch.setattr(
@@ -148,6 +151,19 @@ async def test_runtime_preset_client_exception_preserves_safe_reference_and_hide
         status_resp = await client.get("/api/status")
         assert status_resp.status == 200
         _assert_no_secret(await status_resp.text())
+
+        # The error path keeps the sole owner and releases the runtime operation;
+        # the next real simulator recall still refreshes and announces once.
+        assert runtime.service.client is owned_client
+        assert runtime.service._write_generation == generation
+        assert not runtime._operations
+        monkeypatch.setattr(owned_client, "recall_preset", real_recall)
+        recovered = await client.post("/api/preset/1")
+        assert recovered.status == 200
+        await runtime.bus.drain(timeout=1)
+        assert runtime.service._write_generation == generation + 1
+        assert len([e for e in events if e.topic == "presets"]) == 1
+        manual_ws.assert_not_awaited()
     finally:
         unsubscribe()
 

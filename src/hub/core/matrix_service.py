@@ -478,9 +478,20 @@ class MatrixService:
 
     # -- writes -----------------------------------------------------------
 
-    async def _write(self, what: str, call: Awaitable[bool]) -> bool:
-        ok = bool(await self._safe(what, call))
-        self._sync_connection()
+    async def _write(self, what: str, call: Awaitable[bool], *, propagate_errors: bool = False) -> bool:
+        try:
+            if propagate_errors:
+                try:
+                    ok = bool(await call)
+                except Exception:
+                    # The caller logs the exception with its public correlation
+                    # reference. Health and connection events retain no details.
+                    self._last_error = f"{what} failed"
+                    raise
+            else:
+                ok = bool(await self._safe(what, call))
+        finally:
+            self._sync_connection()
         if ok:
             self._write_generation += 1
         return ok
@@ -502,10 +513,12 @@ class MatrixService:
             self._update_routing(dict.fromkeys(targets, input_num), "switch")
         return ok
 
-    async def recall_preset(self, preset: int) -> bool:
-        """Recall ``preset``, then re-read the matrix for the routing it applied."""
+    async def recall_preset(self, preset: int, *, propagate_errors: bool = False) -> bool:
+        """Recall and refresh; optionally propagate client errors to the action runner."""
         self._model.validate_preset(preset)
-        if not await self._write(f"recall preset {preset}", self._client.recall_preset(preset)):
+        if not await self._write(
+            f"recall preset {preset}", self._client.recall_preset(preset), propagate_errors=propagate_errors
+        ):
             return False
         self._bus.publish(
             TOPIC_PRESETS, {"action": "recall", "preset": preset, "name": self._names.preset_name(preset)}

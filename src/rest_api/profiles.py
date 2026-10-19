@@ -25,7 +25,7 @@ from password import (
     verify_passcode_async,
 )
 
-from .utils import _json_response, get_macro_manager, get_matrix_device, get_profile_manager
+from .utils import _json_response, get_macro_manager, get_matrix_device, get_profile_manager, safe_error_message
 
 _LOG = logging.getLogger("rest_api.profiles")
 
@@ -484,8 +484,7 @@ async def handle_recall_profile(request: web.Request) -> web.Response:
             status=result.status_code,
         )
     except Exception as e:
-        _LOG.exception(f"Error recalling profile: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "recalling profile"), status=500)
 
 
 @catalog_changes

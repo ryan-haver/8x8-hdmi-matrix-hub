@@ -1,6 +1,7 @@
 """Shared runtime execution against a disposable in-process matrix simulator."""
 
 import asyncio
+import re
 from copy import deepcopy
 from pathlib import Path
 from unittest.mock import AsyncMock
@@ -87,7 +88,7 @@ async def test_rest_and_local_profile_have_identical_ordered_effects(action_runt
     assert [o.source for o in sim.state.outputs[:2]] == [4, 5]
 
 
-async def test_macro_failure_keeps_profile_effects_and_runs_once(action_runtime, monkeypatch):
+async def test_macro_failure_keeps_profile_effects_and_runs_once(action_runtime, monkeypatch, caplog):
     runtime, client, sim = action_runtime
     await profile(client, macro="wake")
     manager = runtime.managers.macros
@@ -97,7 +98,12 @@ async def test_macro_failure_keeps_profile_effects_and_runs_once(action_runtime,
     response = await client.post("/api/profile/movie/recall")
     assert response.status == 207
     payload = await response.json()
-    assert payload["data"]["power_on_macro"] == {"success": False, "error": "macro timed out"}
+    outcome = payload["data"]["power_on_macro"]
+    assert outcome["success"] is False
+    assert re.fullmatch(r"Internal server error \(ref: [0-9a-f]{8}\)", outcome["error"])
+    assert "macro timed out" not in repr(payload)
+    assert any(outcome["error_id"] in record.getMessage()
+               and "macro timed out" in record.getMessage() and record.exc_info for record in caplog.records)
     assert [o.source for o in sim.state.outputs[:2]] == [4, 5]
     assert execute.await_count == 1
     execute.reset_mock()
