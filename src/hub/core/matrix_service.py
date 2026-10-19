@@ -27,6 +27,7 @@ import asyncio
 import logging
 import re
 import time
+import uuid
 from collections.abc import Awaitable
 from copy import deepcopy
 from typing import Any, Protocol, TypeVar
@@ -320,17 +321,19 @@ class MatrixService:
 
     async def _safe(self, what: str, call: Awaitable[_T]) -> _T | None:
         generation = self._client_generation
+        client = self._client
         try:
             return await call
         except Exception as exc:
             message = str(exc)
-            for field in ("password", "user"):
-                secret = getattr(self._client, field, None)
+            for field in ("password", "user", "_user"):
+                secret = getattr(client, field, None)
                 if isinstance(secret, str) and secret:
                     message = message.replace(secret, "[redacted]")
-            _LOG.error("Matrix %s failed: %s", what, message)
+            reference = uuid.uuid4().hex[:8]
+            _LOG.error("[%s] Matrix %s failed: %s", reference, what, message)
             if generation == self._client_generation:
-                self._last_error = f"{what}: {message}"
+                self._last_error = f"Internal server error (ref: {reference})"
             return None
 
     async def connect(self) -> bool:
@@ -478,9 +481,20 @@ class MatrixService:
 
     # -- writes -----------------------------------------------------------
 
-    async def _write(self, what: str, call: Awaitable[bool]) -> bool:
-        ok = bool(await self._safe(what, call))
-        self._sync_connection()
+    async def _write(self, what: str, call: Awaitable[bool], *, propagate_errors: bool = False) -> bool:
+        try:
+            if propagate_errors:
+                try:
+                    ok = bool(await call)
+                except Exception:
+                    # The caller logs the exception with its public correlation
+                    # reference. Health and connection events retain no details.
+                    self._last_error = f"{what} failed"
+                    raise
+            else:
+                ok = bool(await self._safe(what, call))
+        finally:
+            self._sync_connection()
         if ok:
             self._write_generation += 1
         return ok
@@ -502,10 +516,12 @@ class MatrixService:
             self._update_routing(dict.fromkeys(targets, input_num), "switch")
         return ok
 
-    async def recall_preset(self, preset: int) -> bool:
-        """Recall ``preset``, then re-read the matrix for the routing it applied."""
+    async def recall_preset(self, preset: int, *, propagate_errors: bool = False) -> bool:
+        """Recall and refresh; optionally propagate client errors to the action runner."""
         self._model.validate_preset(preset)
-        if not await self._write(f"recall preset {preset}", self._client.recall_preset(preset)):
+        if not await self._write(
+            f"recall preset {preset}", self._client.recall_preset(preset), propagate_errors=propagate_errors
+        ):
             return False
         self._bus.publish(
             TOPIC_PRESETS, {"action": "recall", "preset": preset, "name": self._names.preset_name(preset)}

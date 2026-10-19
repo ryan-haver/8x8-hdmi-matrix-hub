@@ -17,6 +17,8 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import Any
 
+from hub.core.errors import safe_action_error
+
 _LOG = logging.getLogger(__name__)
 
 
@@ -467,14 +469,22 @@ class MacroManager:
                     # Send command to each target
                     for target in step.targets:
                         try:
-                            target_type, port = self._parse_target(target)
+                            try:
+                                target_type, port = self._parse_target(target)
+                            except ValueError as ex:
+                                # Target validation is an expected user-facing
+                                # refusal, distinct from an unexpected sender error.
+                                step_result["success"] = False
+                                step_result["errors"].append(f"Error sending to {target}: {ex}")
+                                continue
                             success = await self._cec_sender(target_type, port, step.command)
                             if not success:
                                 step_result["success"] = False
                                 step_result["errors"].append(f"Failed to send {step.command} to {target}")
                         except Exception as ex:
+                            message, _ = safe_action_error(ex, f"Macro {macro_id} sending to {target}", logger=_LOG)
                             step_result["success"] = False
-                            step_result["errors"].append(f"Error sending to {target}: {str(ex)}")
+                            step_result["errors"].append(f"Error sending to {target}: {message}")
 
                     results.append(step_result)
 

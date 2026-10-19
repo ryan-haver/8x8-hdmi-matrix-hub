@@ -15,6 +15,7 @@ Three subjects, one work package:
 
 import json
 import os
+import re
 from pathlib import Path
 from typing import Any
 from unittest.mock import AsyncMock, patch
@@ -327,7 +328,7 @@ async def test_profile_without_a_manager_is_503(matrix):
     assert (result.success, result.status_code) == (False, 503)
 
 
-async def test_an_unexpected_failure_is_reported_as_500(matrix):
+async def test_an_unexpected_failure_is_reported_as_500(matrix, caplog):
     class BrokenProfiles:
         def get_profile(self, profile_id):
             raise RuntimeError("profiles are on fire")
@@ -336,7 +337,11 @@ async def test_an_unexpected_failure_is_reported_as_500(matrix):
 
     assert (result.success, result.partial, result.status_code) == (False, False, 500)
     assert result.code == "execution_error"
-    assert result.errors == ["profiles are on fire"]
+    assert (result.steps_completed, result.total_steps) == (0, 0)
+    assert re.fullmatch(r"Internal server error \(ref: [0-9a-f]{8}\)", result.error)
+    assert "profiles are on fire" not in repr(result.to_response_dict())
+    assert any(result.data["error_id"] in record.getMessage()
+               and "profiles are on fire" in record.getMessage() and record.exc_info for record in caplog.records)
 
 
 # =============================================================================
@@ -653,7 +658,7 @@ async def test_registered_executor_may_be_an_object_with_run_action(matrix):
     assert result.data == {"n": 1}
 
 
-async def test_failing_registered_executor_is_500(matrix):
+async def test_failing_registered_executor_is_500(matrix, caplog):
     def executor(action_id, *, passcode=None, params=None):
         raise RuntimeError("executor exploded")
 
@@ -664,7 +669,11 @@ async def test_failing_registered_executor_is_500(matrix):
 
     assert (result.success, result.partial, result.status_code) == (False, False, 500)
     assert result.code == "execution_error"
-    assert result.errors == ["executor exploded"]
+    assert (result.steps_completed, result.total_steps) == (0, 0)
+    assert re.fullmatch(r"Internal server error \(ref: [0-9a-f]{8}\)", result.error)
+    assert "executor exploded" not in repr(result.to_response_dict())
+    assert any(result.data["error_id"] in record.getMessage()
+               and "executor exploded" in record.getMessage() and record.exc_info for record in caplog.records)
 
 
 def test_register_rejects_an_unknown_kind(matrix):

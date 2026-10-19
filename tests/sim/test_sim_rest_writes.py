@@ -52,7 +52,8 @@ async def test_bulk_settings_updates_valid_ports_and_reports_invalid_entries(dat
     assert result["errors"] == ["inputs.0: port must be 1-8", "inputs.oops: not an integer",
                                 "inputs.8: must be an object", "outputs.9: port must be 1-8"]
     saved = _saved(data_hub, "device_settings.json")
-    assert saved == result["settings"]
+    assert "schema_version" not in result["settings"]
+    assert saved == {"schema_version": 2, **result["settings"]}
     assert saved["inputs"]["1"]["name"] == "New source"
     assert saved["outputs"]["8"]["name"] == "New room"
     assert sim_writes(simulator) == []
@@ -228,15 +229,20 @@ async def test_invalid_preferences_leave_saved_values_unchanged(data_hub, path, 
 async def test_flic_register_adds_and_renames_buttons_and_survives_reload(data_hub, simulator, monkeypatch):
     from rest_api import integrations
 
-    existing = _saved(data_hub, "flic_buttons.json")
+    existing = {k: v for k, v in _saved(data_hub, "flic_buttons.json").items() if k != "schema_version"}
     buttons = [{"bdaddr": "80:e4:da:70:00:01", "name": "Renamed", "serial": "BG12-A00001"},
                {"bdaddr": "80:e4:da:70:00:03", "name": "New button", "serial": "BG12-A00003"}]
     assert await _request(data_hub, "POST", "/api/integrations/flic/register", {"buttons": buttons}) == {"count": 3}
     expected = {**existing, **{btn["bdaddr"]: btn for btn in buttons}}
-    assert _saved(data_hub, "flic_buttons.json") == expected
+    assert _saved(data_hub, "flic_buttons.json") == {"schema_version": 2, **expected}
     monkeypatch.setattr(integrations, "_loaded", False)
     monkeypatch.setattr(integrations, "_registered_buttons", {})
-    assert (await _request(data_hub, "GET", "/api/integrations/flic/buttons"))["buttons"] == list(expected.values())
+    if "flic_integration" in data_hub.app:
+        monkeypatch.setattr(data_hub.app["flic_integration"].registry, "_loaded", False)
+        monkeypatch.setattr(data_hub.app["flic_integration"].registry, "_buttons", {})
+    public_buttons = (await _request(data_hub, "GET", "/api/integrations/flic/buttons"))["buttons"]
+    assert public_buttons == list(expected.values())
+    assert all("schema_version" not in btn for btn in public_buttons)
     assert sim_writes(simulator) == []
 
 
@@ -261,20 +267,26 @@ def _deny_save(*args, **kwargs):
     ("/api/device-settings/preset/8/name", {"name": "Unsaved"}),
 ])
 async def test_settings_storage_failure_is_not_success_and_keeps_readback(data_hub, monkeypatch, path, payload):
+    settings_path = data_hub.data_dir / "device_settings.json"
     before = _saved(data_hub, "device_settings.json")
-    monkeypatch.setattr("_file_io.atomic_write_json", _deny_save)
+    before_bytes = settings_path.read_bytes()
+    public_before = {k: v for k, v in before.items() if k != "schema_version"}
+    assert before["schema_version"] == 2
+    monkeypatch.setattr("hub.persistence.migrations.atomic_write_json", _deny_save)
     result = await _request(data_hub, "POST", path, payload, 500)
     if path == "/api/device-settings":
         assert result["updated_inputs"] == [] and result["updated_outputs"] == []
         assert result["errors"] == ["inputs.1: failed to save settings", "outputs.8: failed to save settings"]
+        assert result["settings"] == public_before
+    assert settings_path.read_bytes() == before_bytes
     assert _saved(data_hub, "device_settings.json") == before
-    assert await _request(data_hub, "GET", "/api/device-settings") == before
+    assert await _request(data_hub, "GET", "/api/device-settings") == public_before
 
 
 async def test_bulk_settings_partial_save_reports_only_persisted_ports(data_hub, monkeypatch):
-    import _file_io
+    from hub.persistence import migrations
 
-    original = _file_io.atomic_write_json
+    original = migrations.atomic_write_json
     before = _saved(data_hub, "device_settings.json")
     calls = 0
 
@@ -285,24 +297,32 @@ async def test_bulk_settings_partial_save_reports_only_persisted_ports(data_hub,
             raise OSError("Storage unavailable")
         return original(*args, **kwargs)
 
-    monkeypatch.setattr(_file_io, "atomic_write_json", fail_second_save)
+    monkeypatch.setattr(migrations, "atomic_write_json", fail_second_save)
     result = await _request(data_hub, "POST", "/api/device-settings", {
         "inputs": {"1": {"name": "Saved"}}, "outputs": {"8": {"name": "Unsaved"}},
     }, 500)
     expected = deepcopy(before)
     expected["inputs"]["1"]["name"] = "Saved"
+    public_expected = {k: v for k, v in expected.items() if k != "schema_version"}
     assert result["updated_inputs"] == [1] and result["updated_outputs"] == []
     assert result["errors"] == ["outputs.8: failed to save settings"]
-    assert result["settings"] == expected == _saved(data_hub, "device_settings.json")
-    assert await _request(data_hub, "GET", "/api/device-settings") == expected
+    assert "schema_version" not in result["settings"]
+    assert _saved(data_hub, "device_settings.json") == expected
+    assert result["settings"] == public_expected
+    assert await _request(data_hub, "GET", "/api/device-settings") == public_expected
 
 
 async def test_flic_storage_failure_is_not_success_and_keeps_readback(data_hub, monkeypatch):
+    initial = (await _request(data_hub, "GET", "/api/integrations/flic/buttons"))["buttons"]
+    flic_path = data_hub.data_dir / "flic_buttons.json"
     before = _saved(data_hub, "flic_buttons.json")
-    monkeypatch.setattr("rest_api.integrations.atomic_write_json", _deny_save)
+    before_bytes = flic_path.read_bytes()
+    assert before == {"schema_version": 2, **{btn["bdaddr"]: btn for btn in initial}}
+    monkeypatch.setattr("hub.persistence.migrations.atomic_write_json", _deny_save)
     await _request(data_hub, "POST", "/api/integrations/flic/register", {
         "buttons": [{"bdaddr": "80:e4:da:70:00:01", "name": "Unsaved rename"},
                     {"bdaddr": "80:e4:da:70:00:03", "name": "Unsaved"}],
     }, 500)
+    assert flic_path.read_bytes() == before_bytes
     assert _saved(data_hub, "flic_buttons.json") == before
-    assert (await _request(data_hub, "GET", "/api/integrations/flic/buttons"))["buttons"] == list(before.values())
+    assert (await _request(data_hub, "GET", "/api/integrations/flic/buttons"))["buttons"] == initial

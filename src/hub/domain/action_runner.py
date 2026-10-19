@@ -39,6 +39,8 @@ from collections.abc import Awaitable, Callable, Mapping
 from dataclasses import dataclass, field
 from typing import Any
 
+from hub.core.errors import safe_action_error
+from hub.core.matrix_service import MatrixService
 from password import attempt_pin, check_pin_lockout, verify_passcode_async
 from profile_execution import apply_profile_state
 from system_shortcuts import execute_shortcut
@@ -487,15 +489,15 @@ class ActionRunner:
             return await _RUNNERS[normalized](self, action_id, passcode, params or {})
         except Exception as exc:
             # One place catches what an action did wrong, so no surface has to.
-            _LOG.exception("%s '%s' failed", normalized, action_id)
+            message, error_id = safe_action_error(exc, f"{normalized} '{action_id}' failed", logger=_LOG)
             return _result(
                 normalized,
                 action_id,
                 success=False,
                 partial=False,
                 status_code=STATUS_FAILED,
-                errors=[str(exc) or f"{normalized.capitalize()} '{action_id}' failed"],
-                data={"code": "execution_error", "id": action_id},
+                errors=[message],
+                data={"code": "execution_error", "id": action_id, "error_id": error_id},
             )
 
     async def _delegate(
@@ -508,19 +510,19 @@ class ActionRunner:
         params: dict[str, Any],
     ) -> ActionRunResult:
         """Run one kind through its registered executor."""
-        call = getattr(executor, "run_action", executor)
         try:
+            call = getattr(executor, "run_action", executor)
             return _coerce(kind, action_id, await _resolve(call(action_id, passcode=passcode, params=params)))
         except Exception as exc:
-            _LOG.exception("%s executor failed for '%s'", kind, action_id)
+            message, error_id = safe_action_error(exc, f"{kind} executor failed for '{action_id}'", logger=_LOG)
             return _result(
                 kind,
                 action_id,
                 success=False,
                 partial=False,
                 status_code=STATUS_FAILED,
-                errors=[str(exc) or f"{kind.capitalize()} '{action_id}' failed"],
-                data={"code": "execution_error", "id": action_id},
+                errors=[message],
+                data={"code": "execution_error", "id": action_id, "error_id": error_id},
             )
 
     # ---- profiles -----------------------------------------------------------
@@ -597,7 +599,8 @@ class ActionRunner:
             try:
                 outcome = await manager.execute_macro(macro_id)
             except Exception as exc:
-                outcome = {"success": False, "error": str(exc)}
+                message, error_id = safe_action_error(exc, f"Power-on macro '{macro_id}' failed", logger=_LOG)
+                outcome = {"success": False, "error": message, "error_id": error_id}
         success = bool(outcome.get("success"))
         reasons = [] if success else _macro_errors(outcome)
         step = StepResult(
@@ -742,7 +745,38 @@ class ActionRunner:
         if not 1 <= number <= PRESET_SLOTS:
             return _not_found("preset", action_id)
 
-        recalled = bool(await _resolve(recaller(number)))
+        try:
+            if isinstance(executor, MatrixService):
+                recalled = await executor.recall_preset(number, propagate_errors=True)
+            else:
+                recalled = bool(await _resolve(recaller(number)))
+        except Exception as exc:
+            message, error_id = safe_action_error(exc, "recalling preset", logger=_LOG)
+            return _result(
+                "preset",
+                action_id,
+                success=False,
+                partial=False,
+                status_code=STATUS_FAILED,
+                step_results=[
+                    StepResult(
+                        step_index=0,
+                        action=f"preset:{number}",
+                        success=False,
+                        error=message,
+                        data={"preset": number, "error_id": error_id},
+                    )
+                ],
+                errors=[message],
+                data={
+                    "code": "execution_error",
+                    "id": action_id,
+                    "preset": number,
+                    "name": f"Preset {number}",
+                    "error_id": error_id,
+                },
+            )
+
         steps = [
             StepResult(
                 step_index=0,
