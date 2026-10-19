@@ -433,6 +433,9 @@ R6 replay reruns after R4/R5; physical Remote/Flic and 72-hour soak remain V.
 
 An acceptance arrow includes review and integration, not merely a worker's
 commit. R1's parallel-wave startup proofs are provisional until R2/R3 are linked.
+R7 may prepare factual guide changes from accepted behavior during the final
+correction/campaign. Its evidence index, completion and acceptance remain after
+the coordinator's fresh campaign; the R7-to-R8 acceptance ordering is unchanged.
 Coordinator records each ownership transfer in the dispatch; no overlapping
 edits are authorized by a general directory assignment.
 
