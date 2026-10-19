@@ -36,7 +36,7 @@ claims or guaranteed speed/cost measurements.
 | Model | Harness / exact identifier | Access evidence | Best planned use / limitation |
 | --- | --- | --- | --- |
 | Sol 6.1 | Orca `codex`, `gpt-6.1-sol`, high | Project-proven; visible Codex catalog | Coordinator and core implementation. Default for consequential coding, with task-specific tests. |
-| Astra | Orca `codex`, `gpt-6-astra`, high | Visible Codex catalog; no new probe in this audit | Difficult architecture and independent final review; reserve rather than use for every task. |
+| Astra | Orca `codex`, `gpt-6-astra`, high | Project-proven after the audit: R0 contract accepted as `0125ad2` | Difficult architecture and independent final review; use a fresh reviewer session. |
 | Luna | Orca `codex`, `gpt-6-luna`, medium | Visible Codex catalog; no new probe | Bounded documentation, evidence indexing and focused follow-ups. Escalate architectural ambiguity. |
 | Gemini 4 Argon | Orca `antigravity`, `gemini-4-argon`, high | Project-proven; also advertised in OpenCode catalog | UC integration and complex protocol/lifecycle reasoning; independent provider perspective. |
 | Gemini 3.8 Flash | Orca `antigravity`, `gemini-3.8-flash-high` | Project-proven Orca alias; API ID is `gemini-3.8-flash` | Focused integration/client implementation and tests with clear contracts. |
@@ -98,6 +98,21 @@ The managed OpenCode account list is empty; the global OpenCode configuration
 and its previous project runs are separate evidence. No account was selected
 or changed in this audit. Other Orca-supported agent IDs are not evidence that
 their executables, credentials or model selection are ready here.
+
+## Execution since the audit
+
+Execution after the initial audit confirmed Sol, Astra, Argon and Flash through
+real Orca dispatches. Sol completed core, installed-entry, persistence and
+cleanup corrections; Argon's UC correction and Flash's Flic replay work were
+accepted after coordinator validation. Some candidates needed follow-up fixes,
+so these outcomes support task-specific assignments and review gates, rather
+than a general ranking of model quality.
+
+MiniMax M3's persistence checkpoint was preserved after its full-scope failure;
+Sol completed that track. M3.1 and DeepSeek remain conditional routes, and Luna's
+bounded documentation assignment has not launched yet. Catalog entries are
+still distinct from proven current capacity. The no-Anthropic policy applies to
+all retries, reviews and helpers.
 
 ## Launch rules
 

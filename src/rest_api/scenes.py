@@ -149,10 +149,25 @@ async def _capture_current_outputs(matrix_device) -> tuple[dict[int, dict] | Non
     output, HIL-04); otherwise the capture fails (API-27).
     """
     if hasattr(matrix_device, "get_output_status"):
-        status = await matrix_device.get_output_status()
+        # Only use a declared capability: generic mocks can invent arbitrary
+        # instance attributes, while legacy OreiMatrix keeps its existing reads.
+        fresh_capture = callable(getattr(type(matrix_device), "capture_current_status", None))
+        if fresh_capture:
+            status, video = await matrix_device.capture_current_status()
+        else:
+            from orei_matrix import OreiMatrix
+
+            # A standalone real transport has its own TTL cache. Keep simple
+            # legacy doubles compatible without mistaking a mock's invented
+            # attributes or spoofed __class__ for a declared method contract.
+            if issubclass(type(matrix_device), OreiMatrix):
+                status = await matrix_device.get_output_status(force_refresh=True)
+            else:
+                status = await matrix_device.get_output_status()
         if not isinstance(status, dict):
             return None, "the output status read failed"
-        video = await matrix_device.get_video_status() if hasattr(matrix_device, "get_video_status") else None
+        if not fresh_capture:
+            video = await matrix_device.get_video_status() if hasattr(matrix_device, "get_video_status") else None
         allsource = _complete((video or {}).get("allsource")) or _complete(status.get("allsource"))
         if allsource is None or any(type(src) is not int or not 1 <= src <= 8 for src in allsource):
             return None, "the routing (video status) read failed or was incomplete"

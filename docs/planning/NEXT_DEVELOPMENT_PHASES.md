@@ -1,8 +1,10 @@
 # Runtime completion and release plan
 
-Status: executing; R0/R1/R1P/R2/R3/R3B/R4/R4A/R6 accepted. R3C UC behavior,
-R5B lifecycle safety and R1C transport read draining are active corrections;
-integrated campaigns, R7 guides and R8 review follow their acceptance.
+Status: executing; R0/R1/R1P/R2/R2C/R3/R3B/R3C/R4/R4A/R5B/R6/R6B/R1C/R1D accepted.
+The first combined source run has 3,733 passes, 47 failures and 177/177 routes.
+R2C storage isolation, R6B replay checks and R1D readiness are accepted after
+independent validation. R4B wire/storage contracts (Argon) remains active.
+Fresh integrated campaigns, R7 guides and R8 review follow its acceptance.
 See the [execution record](RUNTIME_EXECUTION.md). Updated 2026-10-18. This is the next execution
 plan after the integrated Phase 6/7 work. It supplements the original Phase 8
 validation gate rather than renumbering historical phases.
