@@ -348,10 +348,14 @@ class HubRuntime:
         if tasks:
             await asyncio.wait(tasks, timeout=CLEANUP_TIMEOUT)
 
-    async def _cleanup(self, function):
+    async def _cleanup(self, function, *, propagate_cancel=False):
         try:
             await asyncio.wait_for(function(), CLEANUP_TIMEOUT)
-        except (Exception, asyncio.CancelledError):
+        except asyncio.CancelledError:
+            if propagate_cancel:
+                raise
+            _LOG.warning("Runtime cleanup phase failed", exc_info=True)
+        except Exception:
             _LOG.warning("Runtime cleanup phase failed", exc_info=True)
 
     async def stop(self):
@@ -498,17 +502,20 @@ class HubRuntime:
                         self.service.replace_client(old_client, names=old_names)
                         self._listen()
                         if old_address and not self._stopping:
-                            connected = await self.service.connect()
-                            if not connected and not self._stopping:
-                                # Disconnect retired the old supervisor. A failed
-                                # rollback login needs the transport to own retries
-                                # again, just as an initially offline startup does.
-                                reconnect = getattr(old_client, "start_auto_reconnect", None)
-                                if callable(reconnect):
-                                    reconnect()
+                            try:
+                                await self.service.connect()
+                            finally:
+                                # Cleanup may cancel this waiter while the
+                                # transport's single-flight login is still alive.
+                                # Its existing supervisor must own that attempt
+                                # and any retries, unless shutdown has begun.
+                                if not old_client.connected and not self._stopping:
+                                    reconnect = getattr(old_client, "start_auto_reconnect", None)
+                                    if callable(reconnect):
+                                        reconnect()
                         self._rebind_rest()
 
-                    await self._cleanup(rollback)
+                    await self._cleanup(rollback, propagate_cancel=True)
                     if isinstance(exc, asyncio.CancelledError):
                         raise
                     return ReconfigureResult(
