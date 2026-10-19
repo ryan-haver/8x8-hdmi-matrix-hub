@@ -441,6 +441,7 @@ def _make_mock_hub() -> MagicMock:
     hub.connected = True
     hub.snapshot = AsyncMock(return_value=_sample_snapshot())
     hub.switch = AsyncMock(return_value=True)
+    hub.cycle_input = AsyncMock(return_value=True)
     hub.recall_preset = AsyncMock(return_value=True)
     hub.power = AsyncMock(return_value=True)
     hub.send_cec = AsyncMock(return_value=True)
@@ -494,10 +495,12 @@ async def test_dispatcher_select_first_last_next_previous() -> None:
     hub.switch.assert_awaited_with(8, 1)
 
     assert await disp.dispatch("select.output_1_source", "select_next", {"cycle": True}) == 200
-    hub.switch.assert_awaited_with(1, 1)
+    hub.cycle_input.assert_awaited_once_with("next", 1, cycle=True)
+    assert hub.switch.await_count == 2
 
     assert await disp.dispatch("select.output_1_source", "select_previous", {"cycle": True}) == 200
-    hub.switch.assert_awaited_with(8, 1)
+    hub.cycle_input.assert_awaited_with("previous", 1, cycle=True)
+    assert hub.switch.await_count == 2
 
 
 async def test_dispatcher_preset_button_push() -> None:

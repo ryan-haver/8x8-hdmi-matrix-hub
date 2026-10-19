@@ -89,6 +89,7 @@ class UCBridge:
         self._current_address_hook: Callable[[], Any] | None = None
         self._unsubscribe: Callable[[], Any] | None = None
         self._running: bool = False
+        self._configured: bool = False
         self._last_published_device_state: ucapi.DeviceStates | None = None
 
         self._ws_server: Any = None
@@ -310,6 +311,19 @@ class UCBridge:
 
     def _sync_entities_from_projector(self, snapshot: Mapping[str, Any] | None = None) -> None:
         """Install or refresh entities in ``api.available_entities`` and replace subscribed entities in place."""
+        if not self._configured:
+            self.entities = []
+            self.projector.available_entities.clear()
+            self.projector.configured_entities.clear()
+            if self.api is not None:
+                avail_store = getattr(self.api, "available_entities", None)
+                if avail_store is not None and hasattr(avail_store, "clear"):
+                    avail_store.clear()
+                cfg_store = getattr(self.api, "configured_entities", None)
+                if cfg_store is not None and hasattr(cfg_store, "clear"):
+                    cfg_store.clear()
+            return
+
         descriptors = self.projector._build_descriptor_list(snapshot)
         self.entities = descriptors
 
@@ -440,6 +454,7 @@ class UCBridge:
             self.api = self._api_factory(loop) if self._api_factory is not None else ucapi.IntegrationAPI(loop)
             self._register_api_listeners(self.api)
             configured = self._is_configured_at_start()
+            self._configured = configured
             if configured:
                 snapshot = await self._fetch_snapshot()
                 runtime = self._persistence_runtime()
@@ -452,8 +467,12 @@ class UCBridge:
                     self.pushed_updates.append(initial_diff)
             else:
                 self.entities = []
+                self.projector.connected = False
+                self.projector.device_state = "DISCONNECTED"
                 self.projector.available_entities.clear()
                 self.projector.configured_entities.clear()
+                self.projector.last_pushed.clear()
+                self.projector._pending_standby.clear()
 
             driver_path = self._prepare_driver_metadata_path()
             await self._init_api(self.api, driver_path)
@@ -555,6 +574,7 @@ class UCBridge:
         _LOG.info("UCBridge stopped")
 
     async def _on_setup_complete(self, address: Any, save_credentials: bool) -> None:
+        self._configured = True
         snapshot = await self._fetch_snapshot()
         runtime = self._persistence_runtime()
         if runtime is not None:
@@ -591,9 +611,22 @@ class UCBridge:
         await self._publish_device_state(force=True)
 
     async def _on_connect(self, *_: Any, **__: Any) -> None:
+        if not self._configured:
+            self.projector.standby = False
+            self.projector._pending_standby.clear()
+            self.projector.connected = False
+            self.projector.device_state = "DISCONNECTED"
+            await self._publish_device_state(force=True)
+            return
         if self.projector.standby:
             await self.on_exit_standby()
-        elif self.hub_client is not None and self._is_configured_at_start():
+        elif self.hub_client is not None:
+            runtime = self._persistence_runtime()
+            if runtime is not None and not runtime.service.connected and not runtime.reconfiguring:
+                try:
+                    await runtime.connect()
+                except Exception:
+                    _LOG.debug("Matrix connect during UC connect failed", exc_info=True)
             snapshot = await self._fetch_snapshot()
             if snapshot:
                 if self.dispatcher is not None:
@@ -624,8 +657,21 @@ class UCBridge:
 
     async def on_exit_standby(self, *_: Any, **__: Any) -> dict[str, dict[str, Any]]:
         """Resume pushes on wake and resync state from the hub (`UC-06`, `UC-17`)."""
+        if not self._configured:
+            self.projector.standby = False
+            self.projector._pending_standby.clear()
+            self.projector.connected = False
+            self.projector.device_state = "DISCONNECTED"
+            await self._publish_device_state()
+            return {}
         flushed = self.projector.exit_standby()
-        if self.hub_client is not None and self._is_configured_at_start():
+        if self.hub_client is not None:
+            runtime = self._persistence_runtime()
+            if runtime is not None and not runtime.service.connected and not runtime.reconfiguring:
+                try:
+                    await runtime.connect()
+                except Exception:
+                    _LOG.debug("Matrix connect during UC standby exit failed", exc_info=True)
             snapshot = await self._fetch_snapshot()
             if snapshot:
                 if self.dispatcher is not None:
@@ -640,6 +686,8 @@ class UCBridge:
         return flushed
 
     async def _on_subscribe_entities(self, entity_ids: list[str] | None = None, *_: Any, **__: Any) -> None:
+        if not self._configured:
+            return
         ids = [str(eid) for eid in (entity_ids or []) if eid]
         if not ids:
             return
@@ -674,6 +722,8 @@ class UCBridge:
                     cfg_store.remove(eid)
 
     async def _refresh_after_reconnect(self) -> None:
+        if not self._configured:
+            return
         snapshot = await self._fetch_snapshot()
         if snapshot:
             if self.dispatcher is not None:
@@ -685,6 +735,8 @@ class UCBridge:
         await self._publish_device_state()
 
     def _persist_renamed_ports(self) -> None:
+        if not self._configured:
+            return
         # HubClientLocal can deliver candidate/rollback name events after the
         # runtime lock is released. Never let this library writer race the
         # runtime's persistence authority, even for delayed events.
@@ -719,6 +771,8 @@ class UCBridge:
         event: Any,
         data: dict[str, Any] | None = None,
     ) -> dict[str, dict[str, Any]]:
+        if not self._configured:
+            return {}
         payload: Mapping[str, Any]
         if isinstance(event, str):
             kind = event.strip().lower()

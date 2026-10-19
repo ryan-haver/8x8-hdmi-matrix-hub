@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import inspect
 import logging
 from collections.abc import Callable, Mapping
 from typing import Any
@@ -336,14 +337,13 @@ class UCCommandDispatcher:
         elif norm == "select_last":
             input_num = self.port_count
         elif norm in ("select_next", "select_previous"):
-            current = self.projector.routed_inputs.get(output_num, 1)
+            if not hasattr(self.hub_client, "cycle_input"):
+                raise AttributeError("hub_client has no cycle_input method")
+            direction = "next" if norm == "select_next" else "previous"
             cycle = bool(params.get("cycle", True))
-            step = 1 if norm == "select_next" else -1
-            nxt = current + step
-            if cycle:
-                input_num = ((nxt - 1) % self.port_count) + 1
-            else:
-                input_num = max(1, min(self.port_count, nxt))
+            res = self.hub_client.cycle_input(direction, output_num, cycle=cycle)
+            out = await res if inspect.isawaitable(res) else res
+            return self._interpret_result(out)
         else:
             return STATUS_NOT_IMPLEMENTED
 

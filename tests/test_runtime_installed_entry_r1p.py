@@ -1,7 +1,8 @@
-"""Installed console bootstrap proof; real startup awaits the R2 merge explicitly."""
+"""Installed console bootstrap and real runtime proof, isolated from checkout imports."""
 
 from __future__ import annotations
 
+import asyncio
 import json
 import os
 import re
@@ -215,10 +216,9 @@ def free_port():
 
 
 def test_real_installed_start_health_ui_uc_off_and_shutdown(installed_runtime, tmp_path):
-    """No factory/migration/REST substitutes; automatically applies after R2 merges."""
+    """No factory/migration/REST substitutes; missing packaged storage is a failure."""
     root, _, site, entry, _ = installed_runtime
-    if not (site / "hub/persistence/startup.py").is_file():
-        pytest.skip("R2 prerequisite pending: wheel lacks hub.persistence.startup; real installed startup unproven")
+    assert (site / "hub/persistence/startup.py").is_file()
     control = site / "runtime_installed_control.py"
     hook = site / "zz-runtime-control.pth"
     control.write_bytes((FIXTURES / "shutdown_control.py").read_bytes())
@@ -276,5 +276,103 @@ def test_real_installed_start_health_ui_uc_off_and_shutdown(installed_runtime, t
         if proc is not None and proc.poll() is None:
             proc.kill()
             proc.wait(timeout=10)
+        hook.unlink()
+        control.unlink()
+
+
+async def test_real_installed_uc_setup_control_restart_and_module_origins(installed_runtime, tmp_path):
+    """Actual console, SDK and simulator; a test signal trigger records cleanup/origins only."""
+    from tools.uc_remote_sim import UcRemoteSim
+    from tools.validate.stack import SimulatorProcess
+
+    root, _, site, entry, version = installed_runtime
+    assert (site / "hub/persistence/startup.py").is_file()
+    data = tmp_path / "data"
+    data.mkdir()
+    sim = SimulatorProcess(log_dir=tmp_path / "simulator")
+    control = site / "runtime_installed_control.py"
+    hook = site / "zz-runtime-control.pth"
+    control.write_bytes((FIXTURES / "shutdown_control.py").read_bytes())
+    hook.write_text("import runtime_installed_control\n", encoding="utf-8")
+    api_port, uc_port = free_port(), free_port()
+    stop, record = tmp_path / "stop", tmp_path / "origins.json"
+    env = clean_env()
+    env.update(
+        DATA_DIR=str(data), UC_CONFIG_HOME=str(data), UC_ENABLED="true",
+        FLIC_ENABLED="false", HA_DISCOVERY_ENABLED="false", MATRIX_HOST="",
+        API_PORT=str(api_port), UC_INTEGRATION_HTTP_PORT=str(uc_port),
+        UC_INTEGRATION_INTERFACE="127.0.0.1", UC_DISABLE_MDNS_PUBLISH="true",
+        UC_DRIVER_URL=f"ws://127.0.0.1:{uc_port}",
+        R1P_STOP=str(stop), R1P_RESULT=str(record), PYTHONUNBUFFERED="1",
+    )
+    proc = None
+    try:
+        sim.start()
+        env["OREI_TELNET_PORT"] = str(sim.telnet_port)
+        for attempt in range(2):
+            stop.unlink(missing_ok=True)
+            log = tmp_path / f"installed-uc-{attempt}.log"
+            with log.open("wb") as output:
+                proc = subprocess.Popen([str(entry)], cwd=root, env=env, stdout=output, stderr=output)
+                deadline = time.monotonic() + 30
+                while True:
+                    assert proc.poll() is None, log.read_text(errors="replace")[-5000:]
+                    try:
+                        with urllib.request.urlopen(f"http://127.0.0.1:{api_port}/api/health", timeout=1) as response:
+                            assert json.loads(response.read())["data"]["status"] == "healthy"
+                        with socket.socket() as sock:
+                            if sock.connect_ex(("127.0.0.1", uc_port)) == 0:
+                                break
+                    except OSError:
+                        pass
+                    assert time.monotonic() < deadline, log.read_text(errors="replace")[-5000:]
+                    await asyncio.sleep(0.05)
+                if attempt == 1:
+                    deadline = time.monotonic() + 30
+                    while True:
+                        assert proc.poll() is None, log.read_text(errors="replace")[-5000:]
+                        try:
+                            with urllib.request.urlopen(f"http://127.0.0.1:{api_port}/api/status", timeout=1) as response:
+                                if json.loads(response.read())["data"]["connected"] is True:
+                                    break
+                        except OSError:
+                            pass
+                        assert time.monotonic() < deadline, log.read_text(errors="replace")[-5000:]
+                        await asyncio.sleep(0.05)
+                async with UcRemoteSim(f"ws://127.0.0.1:{uc_port}") as remote:
+                    if attempt == 0:
+                        assert await remote.get_available_entities() == []
+                        pending = await remote.setup_driver({"host": sim.host, "port": sim.https_port})
+                        assert pending.state == "WAIT_USER_ACTION", pending.events
+                        completed = await remote.set_driver_user_data(input_values={"user": "Admin", "password": "admin"})
+                        assert completed.state == "OK", completed.events
+                    entities = await remote.get_available_entities()
+                    assert len(entities) == 74
+                    metadata = (await remote.get_driver_metadata())["msg_data"]
+                    assert metadata["driver_url"] == f"ws://127.0.0.1:{uc_port}"
+                    assert (await remote.get_driver_version())["msg_data"]["version"]["driver"] == version
+                    await remote.attach()
+                    target, source = (6, "PS5") if attempt == 0 else (2, "AppleTV")
+                    assert (await remote.select_source("media_player.output_2", source))["code"] == 200
+                    with urllib.request.urlopen(f"{sim.control_url}/_sim/state", timeout=5) as response:
+                        assert json.loads(response.read())["outputs"][1]["source"] == target
+                stop.touch()
+                assert await asyncio.to_thread(proc.wait, 15) == 0, log.read_text(errors="replace")[-5000:]
+            origins = json.loads(record.read_text())
+            assert "hub.integrations.unfolded_circle.bridge" in origins and "driver" not in origins
+            assert all(Path(path).is_relative_to(site) for path in origins.values())
+            stored = (data / "config_state.json").read_bytes()
+            config = json.loads(stored)
+            assert (config["host"], config["port"]) == (sim.host, sim.https_port)
+            assert (config["user"], config["password"]) == ("Admin", "admin")
+            if attempt == 0:
+                saved = stored
+            else:
+                assert stored == saved
+    finally:
+        if proc is not None and proc.poll() is None:
+            proc.kill()
+            proc.wait(timeout=10)
+        sim.stop()
         hook.unlink()
         control.unlink()
