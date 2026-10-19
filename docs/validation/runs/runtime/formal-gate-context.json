@@ -1,0 +1,27 @@
+{
+  "observed_after_gate": "2026-10-19T06:58:13.671202+00:00",
+  "head": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+  "tracked_status_after_gate": " M docs/validation/LEDGER.md\n M docs/validation/features.yaml\n",
+  "scope": "Consolidation after clean source/image campaigns: new evidence/archive and feature basis/ledger changes; no application edits",
+  "expected_clients": [
+    "api",
+    "browser",
+    "uc",
+    "ha",
+    "flic"
+  ],
+  "combined_summary": "build/runtime-completion/after-r1f/combined-campaign-summary.json",
+  "evidence_roots": [
+    "build/runtime-completion/after-r1f/source-campaigns/evidence",
+    "build/runtime-completion/after-r1f/source-ha-current/evidence",
+    "build/runtime-completion/after-r1f/source-ha-minimum-line/evidence",
+    "build/runtime-completion/after-r1f/image-campaigns-cached/evidence",
+    "build/runtime-completion/after-r1f/image-campaigns-fresh/evidence",
+    "build/runtime-completion/after-r1f/image-ha-campaigns-cached/evidence",
+    "build/runtime-completion/after-r1f/image-ha-campaigns-fresh/evidence",
+    "build/runtime-completion/after-r1f/image-uc-campaigns/evidence",
+    "build/runtime-completion/after-r1f/final-amd64-deploy-evidence"
+  ],
+  "gate_exit_code": 0,
+  "gate_log_sha256": "c18eb6f36ffcb821517c994f8f83f9f27c7481b5273bb7c8bbba1114a57b854d"
+}

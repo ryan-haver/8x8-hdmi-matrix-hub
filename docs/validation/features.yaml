@@ -2217,7 +2217,7 @@ features:
     rest: [GET /api/status/cec]
   target: V4
   current: V1
-  basis: "Recorded V1 baseline retained. The cec_controls packaged-image scenarios exercise GET /api/status/cec against independent all-off/all-on/mixed matrix flags and a failed matrix read, including raw and formatted arrays. R1F tests/test_runtime_cec_enable_r1f.py and tests/sim/test_sim_rest_reads.py verify real-SIM input/output enable decisions after explicit protocol, facade and WS synchronization, plus registered status readback after power commands; ordinary cache behavior is preserved. Fresh integrated image evidence remains required."
+  basis: "Recorded V1 baseline retained. The cec_controls packaged-image scenarios exercise GET /api/status/cec against independent all-off/all-on/mixed matrix flags and a failed matrix read, including raw and formatted arrays. R1F tests/test_runtime_cec_enable_r1f.py and tests/sim/test_sim_rest_reads.py verify real-SIM input/output enable decisions after explicit protocol, facade and WS synchronization, plus registered status readback after power commands; ordinary cache behavior is preserved. Fresh complete source and image campaigns at clean 4adbc13 pass and are archived in docs/validation/runs/runtime; hardware V4 remains unobserved."
   evidence:
   - docs/validation/evidence/F-CEC-009/2026-10-04-V2-7dbc4dc7-cec_controls.status_mixed-api.json
   - docs/validation/evidence/F-CEC-009/2026-10-04-V2-7dbc4dc7-cec_controls.status_off-api.json
@@ -7064,7 +7064,7 @@ features:
     flic: ['POST http://hub:8080/api/preset/{n} (no body)']
   target: V3
   current: V1
-  basis: "R6 generator/replay tests cover dedicated-client requests. R1F tests/test_runtime_cec_enable_r1f.py and tests/sim/test_sim_rest_reads.py reproduce and correct stale CEC enable decisions after explicit synchronization using a real simulator. Coordinator exact-commit checks: 27 passed; registered input/output cases failed before the fix and both passed afterward. Focused worker normal-entry source/image flic.source_power proofs pass with unchanged strict command oracles, but identify precommit dirty source with file hashes. The failed integrated 55d4fe0 image campaign is retained; a fresh complete image campaign is pending. Recorded V1 retained. Physical Flic Hub and CEC effects remain unobserved."
+  basis: "R6 generator/replay tests cover dedicated-client requests. R1F tests/test_runtime_cec_enable_r1f.py and tests/sim/test_sim_rest_reads.py reproduce and correct stale CEC enable decisions after explicit synchronization using a real simulator. Coordinator exact-commit checks: 27 passed; registered input/output cases failed before the fix and both passed afterward. The failed integrated 55d4fe0 image campaign and focused dirty-source worker proofs remain preserved. Fresh complete source and shipped-image campaigns at clean 4adbc13 both pass all 23 Flic outcomes, including source_power with unchanged strict enable-write/frame/readback oracles; actual image IDs and summaries are archived in docs/validation/runs/runtime. Recorded V1 baseline retained; fresh records supply their actual V3 level. Physical Flic Hub and CEC effects remain unobserved."
   evidence: []
   findings: []
   scenarios: ["flic.preset"]
@@ -7173,7 +7173,7 @@ features:
     ui: [drawer/integrations/flic-generated-request, drawer/integrations/flic-cec]
   target: V3
   current: V1
-  basis: "R6 generator/replay tests cover dedicated-client requests; Node DOM stubs prove generated output separately from browser rendering. R1F tests/test_runtime_cec_enable_r1f.py correct real-SIM CEC enable decisions after explicit synchronization without changing generator or scenario expectations. Focused normal-entry source/image source-power proofs pass; the earlier integrated image failure is retained and a fresh complete image campaign is pending. Recorded V1 retained. Physical Flic Hub, SDK/buttons and CEC effects remain unobserved."
+  basis: "R6 generator/replay tests cover dedicated-client requests; Node DOM stubs prove generated output separately from browser rendering. R1F tests/test_runtime_cec_enable_r1f.py correct real-SIM CEC enable decisions after explicit synchronization without changing generator or scenario expectations. Fresh complete source and shipped-image campaigns at clean 4adbc13 pass all 23 Flic outcomes; docs/validation/runs/runtime retains actual summaries and image metadata. Earlier failed image and dirty-source focused proofs remain distinct. Recorded V1 baseline retained; fresh records supply their actual V3 level. Physical Flic Hub, SDK/buttons and CEC effects remain unobserved."
   evidence: []
   findings: [SEC-08]
   scenarios: ["flic.preset", "flic.power_off", "flic.power_on", "flic.source_power", "flic.display_volume", "flic.profile", "flic.profile_pin_refused", "flic.all_outputs", "flic.cycle_next", "flic.cec_output_navigation_refused", "flic.sdk_single", "flic.sdk_double", "flic.sdk_hold", "flic.sdk_startup_and_click", "flic.sdk_duo_left", "flic.sdk_duo_right"]
