@@ -125,8 +125,11 @@ guides/index. Fresh Astra completed R8 and found two high defects in actual
 source and images; fresh Sol 6.1 high owners now handle disjoint R2D persistence
 and R1G rollback/reconnect corrections, now merged after validation. Fresh Astra
 R8B passes their original six source/image cases but finds the remaining cleanup
-deadline boundary; a fresh Sol 6.1 high R1H owns it. Further independent
-verification and fresh complete candidate evidence remain required. A
+deadline boundary, corrected by fresh Sol 6.1 high R1H. Fresh Astra R8C passes
+all eight known source/image cases but reproduces original-state restoration
+being skipped when candidate cleanup is interrupted; fresh Sol 6.1 high R1I owns
+the complete restoration correction. Independent verification and fresh complete
+candidate evidence remain required. A
 separate Sol session completed a read-only R3E source-contract review without
 editing tracked files. Its real-payload JavaScript probe demonstrates a startup
 ordering race, while attribution to the first CI failure remains bounded.
