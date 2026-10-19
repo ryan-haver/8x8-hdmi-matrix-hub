@@ -30,7 +30,9 @@ also accepted and their worktrees removed. The first combined source run passed
 3,733 tests and covered 177/177 routes, with 47 failures still requiring fixes.
 R2C (Sol) storage isolation, R6B (Flash) Flic replay checks and R1D (Sol) startup/
 capture readiness are also accepted. R4B's Argon candidate was held after review;
-R4C (fresh Sol) owns the explicit preset/error privacy correction. R7 Luna is
+R4C/R4D (fresh Sol) completed the explicit preset/error privacy correction,
+accepted as `5af15c7` after 1,002 independent focused passes and two skips;
+the worker was released and its worktree removed. R7 Luna is
 preparing guides, with its evidence acceptance and R8 waiting for fresh campaigns. The
 [execution record](RUNTIME_EXECUTION.md) tracks effective model observations,
 ownership clarifications and acceptance. Hardware and soak gates remain

@@ -7,9 +7,12 @@ envelope, and reject unavailable/invalid data without changing the matrix.
 from __future__ import annotations
 
 import json
+import logging
 import os
+import re
 import sys
 from pathlib import Path
+from unittest.mock import AsyncMock, Mock
 
 import pytest
 
@@ -36,6 +39,55 @@ async def _get(client, path, status=200):
 async def test_device_settings_returns_saved_customizations(data_hub, simulator):
     expected = json.loads((FIXTURE_DATA / "device_settings.json").read_text(encoding="utf-8"))
     assert (await _get(data_hub, "/api/device-settings"))["data"] == expected
+    assert sim_writes(simulator) == []
+
+
+@pytest.mark.parametrize("route,manager_method", [
+    ("/api/profiles", "list_profiles"),
+    ("/api/profile/movie_night", "get_profile"),
+])
+async def test_profile_read_exception_is_opaque_and_preserves_saved_data(
+    data_hub, simulator, monkeypatch, caplog, route, manager_method,
+):
+    from rest_api.utils import get_profile_manager
+
+    await _get(data_hub, "/api/profiles")
+    before = {path.name: path.read_bytes() for path in data_hub.data_dir.glob("*.json")}
+    private = r"synthetic-private-profile C:\private\catalog.json host 10.93.82.71"
+    failure = Mock(side_effect=OSError(private))
+    monkeypatch.setattr(get_profile_manager(), manager_method, failure)
+    with caplog.at_level(logging.ERROR):
+        result = await _get(data_hub, route, 500)
+    match = re.fullmatch(r"Internal server error \(ref: ([0-9a-f]{8})\)", result["error"])
+    assert match is not None
+    assert private not in json.dumps(result)
+    assert any(f"[{match[1]}]" in record.getMessage() and private in record.getMessage()
+               and record.exc_info for record in caplog.records)
+    failure.assert_called_once()
+    assert {path.name: path.read_bytes() for path in data_hub.data_dir.glob("*.json")} == before
+    assert sim_writes(simulator) == []
+
+
+async def test_registered_preset_exception_keeps_private_diagnostic_and_no_device_write(
+    data_hub, matrix, simulator, monkeypatch, caplog,
+):
+    before = (await _get(data_hub, "/api/status"))["data"]["routing"]
+    private = r"synthetic-private-preset C:\private\matrix.cfg host 10.93.82.71"
+    recall = AsyncMock(side_effect=RuntimeError(private))
+    monkeypatch.setattr(matrix, "recall_preset", recall)
+    with caplog.at_level(logging.ERROR):
+        response = await data_hub.post("/api/preset/1")
+    assert response.status == 500 and response.content_type == "application/json"
+    result = await response.json()
+    assert set(result) == {"success", "data", "error"}
+    assert result["success"] is False and result["data"] is None
+    match = re.fullmatch(r"Internal server error \(ref: ([0-9a-f]{8})\)", result["error"])
+    assert match is not None
+    assert private not in json.dumps(result)
+    assert any(f"[{match[1]}]" in record.getMessage() and private in record.getMessage()
+               and record.exc_info for record in caplog.records)
+    recall.assert_awaited_once_with(1)
+    assert (await _get(data_hub, "/api/status"))["data"]["routing"] == before
     assert sim_writes(simulator) == []
 
 
