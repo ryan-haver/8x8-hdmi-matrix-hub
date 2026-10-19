@@ -254,9 +254,11 @@ class HubRuntime:
                 return True
             return await self.service.connect()
 
-    async def refresh(self):
+    async def refresh(self, *, force_refresh=False):
         async with self.operation():
             self.service._sync_connection()
+            if force_refresh:
+                self.service.invalidate_preset_cache()
             if self.service.connected:
                 await self.service.refresh_snapshot()
 

@@ -313,7 +313,7 @@ class EventStream:
     async def refresh(self) -> dict[str, Any] | None:
         """Read the matrix now, bypassing the status caches, and return the fresh ``status`` snapshot."""
         if self.runtime is not None:
-            await self.runtime.refresh()
+            await self.runtime.refresh(force_refresh=True)
             return self.status_snapshot()
         await self.poll_once(force=True)
         return self.status_snapshot()
@@ -325,7 +325,7 @@ class EventStream:
         :param force_cables: bypass the cable cache (a Telnet push said a cable changed)
         """
         if self.runtime is not None:
-            await self.runtime.refresh()
+            await self.runtime.refresh(force_refresh=force)
             return
         if self._poll_lock is None:
             self._poll_lock = asyncio.Lock()

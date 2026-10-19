@@ -958,13 +958,17 @@ class OreiMatrix:
         self._last_error = f"Matrix rejected '{comhead}' (result={result!r})"
         return False
 
+    def invalidate_preset_cache(self) -> None:
+        """Expire slot readback without fetching slots or changing write generations."""
+        self._preset_cache = None
+
     def _invalidate_status_caches(self) -> None:
         self._cache_generation += 1
         self._status_cache = None
         self._output_status_cache = None
         self._input_status_cache = None
         self._cable_status_cache = None
-        self._preset_cache = None
+        self.invalidate_preset_cache()
 
     async def _send_command(self, command: dict, retry_on_failure: bool = True) -> tuple[bool, dict | None]:
         """
@@ -1377,7 +1381,7 @@ class OreiMatrix:
         if force_refresh:
             # A caller wants the matrix as it is now (e.g. a /ws get_status):
             # the next preset catalog read goes to the matrix as well.
-            self._preset_cache = None
+            self.invalidate_preset_cache()
         return (await self._single_flight("status", self._fetch_status)).copy()
 
     async def _fetch_status(self) -> dict[str, Any]:
