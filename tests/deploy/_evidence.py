@@ -23,6 +23,7 @@ from tools.validate.evidence import SCHEMA_VERSION, redact, write_record
 COVERS_COMMON = [
     "Dockerfile", ".dockerignore", "run.py", "run_server.py", "driver.json", "requirements.txt", "requirements-uc.txt",
     "src", "web", "LICENSE", "THIRD_PARTY_NOTICES.md", "LICENSES",
+    "tests/deploy", "tools/simulator", "tools/uc_remote_sim.py",
 ]
 
 SCENARIOS: dict[str, dict[str, Any]] = {

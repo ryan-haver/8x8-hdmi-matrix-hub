@@ -175,6 +175,43 @@ async def test_remote_reaches_the_integration_at_the_driver_url(hub: Hub) -> Non
     assert len(entities) > 0
 
 
+async def test_remote_source_selection_reaches_the_simulator(hub: Hub, simulator: Simulator) -> None:
+    """Real image SDK source selection changes only its output and reports the resulting state."""
+    if hub.mode != "uc":
+        pytest.skip("integration disabled")
+    _wait_connected(hub)
+    status, state = http_json(f"{simulator.control_url}/_sim/state")
+    assert status == 200
+    before = _sim_routing(simulator)
+    target = 6 if before["1"] != 6 else 7
+    source_name = state["inputs"][target - 1]["name"]
+    original_name = state["inputs"][before["1"] - 1]["name"]
+    async with UcRemoteSim(hub.uc_url) as remote:
+        entities = await remote.attach(["media_player.output_1"])
+        assert len(entities) == 74
+        since = remote.mark()
+        try:
+            result = await remote.select_source("media_player.output_1", source_name)
+            assert result["code"] == 200, result
+            actual = _sim_routing(simulator)
+            assert actual == {**before, "1": target}
+            await remote.wait_event(
+                "entity_change",
+                lambda data: data["entity_id"] == "media_player.output_1"
+                and data["attributes"].get("source") == source_name,
+                since=since, timeout=5,
+            )
+            RECORDER.get("deploy.image_uc").notes.append(json.dumps({
+                "proof": "SDK select_source and authoritative entity_change",
+                "entity_id": "media_player.output_1", "input": target,
+                "response_code": result["code"], "simulator_routing": actual,
+            }, sort_keys=True))
+        finally:
+            restored = await remote.select_source("media_player.output_1", original_name)
+            assert restored["code"] == 200, restored
+            assert _sim_routing(simulator) == before
+
+
 def test_ucapi_imported_only_with_uc(hub: Hub) -> None:
     logs = hub.container.logs()
     imported = set(re.findall(r"^import time:.*\|\s+(\S+)\s*$", logs, flags=re.MULTILINE))
