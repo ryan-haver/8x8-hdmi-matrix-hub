@@ -1,8 +1,8 @@
 # Hub Configuration & Environment Variable Reference
 
-> **Specification Reference**: `src/hub/env.py` (DI-12), `run.py`, `src/persistence.py`, `src/orei_matrix.py`, `src/rest_api/` (DOC-12).
+> **Implementation sources**: `hub.cli`, `hub.runtime.config`, `hub.runtime.composition`, `src/persistence.py`, `src/orei_matrix.py`, and `src/rest_api/`.
 
-This document is the authoritative reference for every environment variable read by the 8x8 HDMI Matrix Hub, including canonical hub settings, opt-in integration settings, deprecated aliases, retired flags, and low-level transport, security, and runtime tuning parameters.
+This document is the operator reference for runtime variables, deprecated aliases, retired flags, and low-level transport/security tuning parameters. `hub.cli` and the installed `orei-matrix-driver` console entry point resolve settings for the shared runtime; see [`ARCHITECTURE.md`](ARCHITECTURE.md).
 
 ---
 
@@ -16,21 +16,27 @@ UC_ENABLED=true python run.py     # Core hub + Unfolded Circle Remote integratio
 python run.py healthcheck         # Exit 0 when http://127.0.0.1:${API_PORT}/api/health answers 200
 ```
 
-### Shipped Runtime vs. Canonical Hub Framework Modules
+### Shared Runtime
 
-- **Current Shipped Runtime (`run.py`, `src/driver.py`, `src/rest_api/`)**:
-  - When `UC_ENABLED=false` (default), `run.py::run_core()` constructs `OreiMatrix` and `RestApiServer` directly and serves the REST API, WebSocket stream (`/ws`), OpenAPI 3.1 specification (`/api/openapi.json`), Swagger UI (`/api/docs`), Web UI (`/ui`), and Kiosk UI (`/kiosk`) on `API_PORT` without importing `ucapi`.
-  - When `UC_ENABLED=true`, `run.py::run_uc_driver()` verifies that `ucapi` is installed, applies `UC_DRIVER_URL` metadata overrides if set, and delegates execution to `src/driver.py` (running the UC Remote integration and REST API in one process).
-  - `src/rest_api/integrations.py` currently imports the Flic compatibility module (`hub.integrations.flic` at `src/hub/integrations/flic`) directly for `/api/integrations/flic/*`.
-- **Canonical Environment Schema & Tested Framework Modules (`src/hub/`)**:
-  - `src/hub/env.py` defines the canonical environment specification (`CORE_ENV_VARS`, `INTEGRATION_ENV_VARS`, `ENV_ALIASES`, `RETIRED_ENV_VARS`) and `resolve_hub_env()`.
-  - `src/hub/core/matrix_service.py` (`MatrixService`), `src/hub/domain/action_runner.py` (`ActionRunner`), `src/hub/integrations/base.py` (`IntegrationLoader`), and `src/hub/integrations/hub_client.py` (`HubClient`) are implemented and tested library/framework modules; wiring `run.py` and REST/UC handlers to instantiate `MatrixService`, `ActionRunner`, and `IntegrationLoader` (including `FLIC_ENABLED` and `HA_DISCOVERY_ENABLED` startup lifecycle) is tracked as pending integration work.
+- **Runtime entry and services (`run.py`, `hub.cli`, `src/rest_api/`)**:
+  - `run.py` is a compatibility wrapper around `hub.cli`; the installed `orei-matrix-driver` command uses the same runtime.
+  - Both UC modes compose one matrix client, `MatrixService`, persistence barrier, REST/WebSocket server and integration loader. The REST/UI server starts before matrix connect.
+  - `FLIC_ENABLED` controls whether Flic registration/list routes and its registry are loaded. `HA_DISCOVERY_ENABLED` controls optional HA discovery. UC disabled means no UC/`ucapi` import or listener.
+- **Runtime packages (`src/hub/`)**:
+  - `hub.runtime.config` resolves matrix addresses; `hub.runtime.composition` wires `MatrixService`, `ActionRunner`, `HubClientLocal`, persistence and integrations into startup.
+  - `hub.cli` normalizes environment aliases and provides the source and installed entry points. Its rules, rather than `hub.env`'s framework inventory, govern runtime behavior.
+
+Implementation references include `src/hub/core/matrix_service.py`,
+`src/hub/domain/action_runner.py`, `src/hub/integrations/base.py`,
+`src/hub/integrations/hub_client.py`, and the Flic adapter under
+`src/hub/integrations/flic`. `src/hub/env.py` remains a framework environment
+inventory; the runtime parser and defaults are in `hub.cli`.
 
 ---
 
 ## 2. Precedence & Boolean Parsing Rules
 
-### Canonical vs. Alias Precedence (`resolve_hub_env` / `resolve_env`)
+### Canonical vs. Alias Precedence (`hub.cli.resolve_env`)
 
 1. **Canonical names always win** over deprecated aliases.
 2. **Only non-empty values count** (`VAR=""` or whitespace-only is treated as unset).
@@ -41,25 +47,31 @@ python run.py healthcheck         # Exit 0 when http://127.0.0.1:${API_PORT}/api
 ### Boolean Values
 
 Boolean environment variables accept (case-insensitively, stripped of surrounding whitespace):
-- **True**: `1`, `true`, `yes`, `on` (`src/hub/env.py::TRUE_VALUES`)
-- **False**: `0`, `false`, `no`, `off` (`src/hub/env.py::FALSE_VALUES`)
+- **True**: `1`, `true`, `yes`, `on` (trimmed, case-insensitive)
+- **False**: `0`, `false`, `no`, `off` (trimmed, case-insensitive)
 - Empty, unset, or unrecognized values fall back to the variable's documented default.
+
+`FLIC_ENABLED` preserves its historical enabled default for an unrecognized
+nonblank spelling and logs a warning. UC and HA discovery use the normal false
+default.
 
 ---
 
-## 3. Canonical Core Hub Variables (`CORE_ENV_VARS`)
+## 3. Core Runtime Variables
 
-Defined in `src/hub/env.py::CORE_ENV_VARS` (`kind="core"`):
+Runtime settings are parsed by `hub.cli.load_settings()`; some transport and
+security variables are read directly by their owning modules and are listed
+in §7.
 
-| Variable | Default (`src/hub/env.py`) | Runtime Fallback (`run.py` / Modules) | Choices / Type | Secret | Deprecated Aliases | Description |
+| Variable | Default | Runtime fallback | Choices / Type | Secret | Deprecated Aliases | Description |
 |----------|----------------------------|---------------------------------------|----------------|--------|--------------------|-------------|
-| `MATRIX_HOST` | `None` | Saved `config_state.json` `host`, else `192.168.0.100` | Hostname / IP | `false` | `OREI_HOST` | IP address or host name of the OREI matrix. |
+| `MATRIX_HOST` | `None` | UC off: explicit, saved setup, then `192.168.0.100`; UC on: saved setup, explicit bootstrap, else unconfigured | Hostname / IP | `false` | `OREI_HOST` | Matrix IP or host name. In UC mode an environment address is not persisted automatically. |
 | `MATRIX_PORT` | `"443"` | `443` (`1`–`65535`) | Integer port | `false` | `OREI_PORT` | HTTPS port of the matrix's web API. |
 | `MATRIX_USER` | `"Admin"` | `"Admin"` | String | `false` | — | User name for the matrix's Telnet command interface. |
 | `MATRIX_PASSWORD` | `None` | `"admin"` (via `OREI_PASSWORD` in `orei_matrix.py`) | String | `true` | — | Password for the matrix's Telnet command interface. |
 | `MATRIX_VERIFY_TLS` | `"false"` | `false` (via `OREI_VERIFY_SSL` in `orei_matrix.py`) | `true`, `false` | `false` | — | Verify the matrix's HTTPS certificate. |
 | `API_PORT` | `"8080"` | `8080` (`1`–`65535`) | Integer port | `false` | `REST_API_PORT`, `OREI_API_PORT` | Port for the REST API, the web UI and the kiosk. |
-| `DATA_DIR` | `None` | `<project_root>/data` (Docker image sets `/data`) | Directory path | `false` | `MATRIX_DATA_DIR` | Directory for every persistent file the hub writes. |
+| `DATA_DIR` | `None` | Docker image `/data`; local config/data defaults are separate | Directory path | `false` | `MATRIX_DATA_DIR` | Explicit directory exported through compatibility aliases; see the path precedence section. Installed wheels require a writable explicit path. |
 | `LOG_LEVEL` | `"INFO"` | `"INFO"` | `DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL` | `false` | — | Root log level for the hub. |
 | `ADMIN_PIN` | `None` | Unset (no admin PIN required) | String | `true` | — | PIN for the web admin. Unset means no admin session. |
 | `CONTROL_PIN` | `None` | Unset (no control PIN required) | String | `true` | — | Optional second PIN that unlocks control-level access only. |
@@ -68,9 +80,9 @@ Defined in `src/hub/env.py::CORE_ENV_VARS` (`kind="core"`):
 
 ---
 
-## 4. Canonical Opt-in Integration Variables (`INTEGRATION_ENV_VARS`)
+## 4. Integration Variables
 
-Defined in `src/hub/env.py::INTEGRATION_ENV_VARS` (`kind="integration"`):
+The shared runtime loader uses these flags and defaults:
 
 | Variable | Default (`src/hub/env.py`) | Choices / Type | Secret | Deprecated Aliases | Description & Runtime Notes |
 |----------|----------------------------|----------------|--------|--------------------|-----------------------------|
@@ -78,11 +90,11 @@ Defined in `src/hub/env.py::INTEGRATION_ENV_VARS` (`kind="integration"`):
 | `UC_INTEGRATION_HTTP_PORT` | `"9095"` | Integer port (`1`–`65535`) | `false` | `UC_PORT` | WebSocket port the Remote 3 integration listens on. |
 | `UC_INTEGRATION_INTERFACE` | `None` | IPv4/IPv6 bind address | `false` | — | Bind address for the integration; also the address published by mDNS. Unset binds all interfaces. |
 | `UC_DISABLE_MDNS_PUBLISH` | `"false"` | `true`, `false` | `false` | `UC_DISABLE_MDNS` | Do not announce the integration over mDNS (bridge networking). |
-| `UC_CONFIG_HOME` | `None` | Directory path | `false` | — | Integration state directory (defaults to `DATA_DIR`). |
+| `UC_CONFIG_HOME` | `None` | Directory path | `false` | — | Remote configuration/state directory. Defaults to explicit `DATA_DIR`; source local development defaults to project `config`. |
 | `UC_DRIVER_URL` | `None` | `ws://...` or `wss://...` URL | `false` | — | `ws://` or `wss://` URL the Remote should dial, when mDNS cannot reach it. Validated by `run.py::load_settings()`. |
 | `UC_AUTH_TOKEN` | `None` | String | `true` | — | Shared token the Remote presents to the hub (falls back to `ADMIN_PIN`). |
-| `FLIC_ENABLED` | `"false"` | `true`, `false` | `false` | — | Accept button registrations from a Flic Hub (`IntegrationLoader` framework variable; `/api/integrations/flic/*` routes are currently registered directly in `rest_api`). |
-| `HA_DISCOVERY_ENABLED` | `"false"` | `true`, `false` | `false` | — | Publish the hub to Home Assistant over mDNS/zeroconf (`IntegrationLoader` / `hub.integrations.homeassistant` framework variable; not yet wired into `run.py` startup). |
+| `FLIC_ENABLED` | `"true"` | `true`, `false` | `false` | — | Load Flic registration/list routes and registry. Explicit false/0/no/off disables them; an unknown nonblank value warns and retains enabled default. |
+| `HA_DISCOVERY_ENABLED` | `"false"` | `true`, `false` | `false` | — | Start optional Home Assistant mDNS discovery. Manual HACS setup remains available when disabled. |
 
 ---
 
@@ -100,7 +112,7 @@ Defined in `src/hub/env.py::ENV_ALIASES` and `run.py::ENV_ALIASES`:
 | `UC_PORT` | `UC_INTEGRATION_HTTP_PORT` | `UC_PORT -> use UC_INTEGRATION_HTTP_PORT` |
 | `UC_DISABLE_MDNS` | `UC_DISABLE_MDNS_PUBLISH` | `UC_DISABLE_MDNS -> use UC_DISABLE_MDNS_PUBLISH` |
 
-> **Compatibility Export (`run.py::export_env`)**: At startup, `run.py` exports resolved canonical values back into `os.environ` under both canonical names (`API_PORT`, `DATA_DIR`, `MATRIX_PORT`, `MATRIX_HOST`, `UC_CONFIG_HOME`, `UC_INTEGRATION_HTTP_PORT`, `UC_DISABLE_MDNS_PUBLISH`, `UC_ENABLED`) and legacy module names (`REST_API_PORT`, `REST_API_ENABLED="true"`, `MATRIX_DATA_DIR`) so internal modules read consistent values.
+> **Compatibility Export (`hub.cli::export_env`)**: Startup exports resolved settings under names consumed by existing transport and persistence modules. In particular, `DATA_DIR` supplies the default `UC_CONFIG_HOME`; data stores resolve via `MATRIX_DATA_DIR`, then `UC_CONFIG_HOME/data`, then project `data`. Explicit config and data paths may remain separate.
 
 ---
 
@@ -150,15 +162,15 @@ As documented in `src/hub/env.py`, several low-level transport, security, and mo
 | `TRUST_PROXY_HEADERS` | `src/rest_api/utils.py` | `"false"` | Boolean (`true`/`false`) | `false` | Trust `X-Forwarded-For` from reverse proxies listed in `TRUSTED_PROXY_IPS` for rate-limiting client identification. |
 | `TRUSTED_PROXY_IPS` | `src/rest_api/utils.py` | `""` | Comma-separated IPs | `false` | Comma-separated proxy IP addresses allowed to supply `X-Forwarded-For` when `TRUST_PROXY_HEADERS=true`. |
 | `RATE_LIMIT_READ_REQUESTS` | `src/rest_api/utils.py` | `"300"` | Integer | `false` | Maximum `GET` requests per 60-second window per client IP (`0` disables read rate limiting; write rate limit is fixed at `60`/min). |
-| `STATUS_POLL_INTERVAL` | `src/rest_api/events.py` | `"5"` | Integer (seconds) | `false` | Interval in seconds between background matrix status polls for the `/ws` event stream (`0` disables periodic polling). |
+| `STATUS_POLL_INTERVAL` | `hub/runtime/composition.py` | `"5"` | Number (seconds) | `false` | Shared runtime refresh interval. If unset, `POLLING_INTERVAL` is used as fallback; invalid values use 5 seconds. |
 | `MAX_WS_CLIENTS` | `src/rest_api/websocket.py` | `"32"` | Integer (`>= 1`) | `false` | Maximum concurrent WebSocket clients allowed on `/ws` (additional connections receive HTTP `503`). |
 
-### 7.3 UC Driver & Integration Helper Variables (`src/driver.py` & `src/hub/integrations/`)
+### 7.3 Remote & Integration Helper Variables (`src/hub/integrations/`)
 
 | Variable | Module | Default | Type | Secret | Description |
 |----------|--------|---------|------|--------|-------------|
-| `POLLING_INTERVAL` | `src/driver.py` | `"30"` | Integer (`>= 5`) | `false` | Interval in seconds for the UC driver's background status watchdog poll (minimum `5` seconds). |
-| `POLLING_ENABLED` | `src/driver.py` | `"true"` | Boolean (`true`/`false`) | `false` | Enable or disable the UC driver's periodic status watchdog loop. |
+| `POLLING_INTERVAL` | `hub/runtime/composition.py` | unset | Number (seconds) | `false` | Fallback refresh interval when `STATUS_POLL_INTERVAL` is unset. |
+| `POLLING_ENABLED` | Legacy `src/driver.py` | n/a | n/a | `false` | The legacy driver is not the runtime entry path; this setting no longer controls shared runtime refresh. |
 | `HUB_URL` | `src/hub/integrations/hub_client.py` | `"http://127.0.0.1:8080"` | URL | `false` | Base URL used by `HubClient.from_env()` to connect to the core hub REST/WebSocket API. |
 | `HUB_API_KEY` | `src/hub/integrations/hub_client.py` | `None` | String | `true` | API key used by `HubClient.from_env()` (falls back to `API_KEY` or `CONTROL_API_KEY`). |
 | `HOST_IP` | `src/hub/integrations/homeassistant` | `None` | IPv4 address | `false` | Explicit LAN IPv4 address advertised by the Home Assistant mDNS discovery service (checked after `UC_INTEGRATION_INTERFACE`, before `API_HOST`). |
@@ -167,12 +179,17 @@ As documented in `src/hub/env.py`, several low-level transport, security, and mo
 
 ---
 
-## 8. Persistent Storage Resolution (`src/persistence.py`)
+## 8. Persistent Storage Resolution (`hub.runtime.composition`, `src/persistence.py`)
 
 `persistence.get_data_dir()` resolves the persistent data directory using the following precedence:
 
-1. `MATRIX_DATA_DIR` (populated from `DATA_DIR` by `run.py::export_env()`, or set directly)
-2. `UC_CONFIG_HOME`
+1. `MATRIX_DATA_DIR` (populated from explicit `DATA_DIR` by startup, or set directly)
+2. `UC_CONFIG_HOME/data`
 3. `<project_root>/data` (local development fallback; Docker images set `DATA_DIR=/data`)
 
-At startup, `run.py::check_writable()` verifies that `DATA_DIR` and `UC_CONFIG_HOME` exist and can be written to, exiting with code `2` and a `chown` remediation message if permissions are insufficient.
+Configuration remains separate: `UC_CONFIG_HOME` is authoritative for
+`config_state.json`, and explicit `DATA_DIR` also supplies its default. With
+neither in source development, configuration is project `config`. Data stores
+resolve as listed above. The startup migration barrier validates managed data
+before managers load it and stops on unsafe or ambiguous inputs. Installed
+packages require an explicit writable `DATA_DIR` or `MATRIX_DATA_DIR`.

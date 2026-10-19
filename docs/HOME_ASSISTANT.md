@@ -29,6 +29,11 @@ services, polling, options flow and device tracking.
 The hub's `manifest.json` field `iot_class` is `local_polling`; the integration
 is a local hub that polls the device. There is no cloud dependency.
 
+The optional runtime discovery advertisement is controlled by
+`HA_DISCOVERY_ENABLED` and defaults off. Enabling it advertises the REST
+service; it does not install the HACS component or perform automatic entity
+setup. The manual config flow and REST integrations work with discovery off.
+
 ---
 
 ## Option A: REST Commands

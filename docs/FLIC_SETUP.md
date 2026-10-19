@@ -43,9 +43,9 @@ Docker.
 - The hub's control-lock setting known — every URL below works as-is in the
   default keyless setup; see [Authentication](#authentication-keyless-vs-keyed-setup)
   if the owner has enabled a control PIN.
-- The Flic REST compatibility routes are always mounted. The newer framework
-  defines `FLIC_ENABLED`, but the shipped compatibility handlers do not read
-  that environment flag; `FLIC_ENABLED=false` does not disable registration.
+- The shared runtime enables Flic by default. Set `FLIC_ENABLED=false` to omit
+  the registration/list routes and registry lifecycle; core REST actions stay
+  available to clients that can reach them.
 
 ## Quick Start
 
@@ -92,7 +92,7 @@ table groups them by access level (see
 | --- | --- | --- |
 | `/api/status` | GET | Matrix status |
 | `/api/auth/status` | GET | Auth state (`admin_pin_set`, `control_pin_set`, `session_level`, `device_remembered`) |
-| `/api/integrations/flic/buttons` | GET | Registered Flic buttons |
+| `/api/integrations/flic/buttons` | GET | Registered Flic buttons (only when Flic is enabled) |
 
 ### Control (API key required when `CONTROL_PIN` is set)
 
@@ -118,7 +118,8 @@ table groups them by access level (see
 
 ### Admin (`/api/integrations/flic/register` and friends)
 
-The Flic Hub posts its registered buttons to `/api/integrations/flic/register`;
+The Flic Hub posts its registered buttons to `/api/integrations/flic/register`
+(only when Flic is enabled);
 the hub persists them in `flic_buttons.json` under the data directory
 (`MATRIX_DATA_DIR` / `DATA_DIR`). This is admin-level so a keyless Flic Hub
 cannot impersonate buttons:
