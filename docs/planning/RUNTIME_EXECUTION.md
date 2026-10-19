@@ -366,6 +366,37 @@ rejected intermediate checks remain retained. See the
 and `after-r6c/` retain their original scope; the independent
 R3E report is `build/runtime-completion/r3e-review-evidence/REPORT.txt`.
 
+## Independent R8 review and corrective follow-up
+
+Luna's final R7 commit `b49fffaa` passed 413 independent documentation tests and
+214 local links across 12 files, merged as `b84ec72`; its worker was released
+before acknowledgment and the child immediately removed/pruned. Archive hashes
+still match all 213 recorded files.
+
+Fresh Astra R8 report/reproductions `dfbd87cd`, merged as `75492555`, establish
+two high release blockers against actual modules and the immutable amd64 image.
+See the [independent report](../validation/RUNTIME_INDEPENDENT_REVIEW.md): legacy
+scene migration followed by successful v2 creation makes restart exit 1 in both
+UC modes; transient candidate/rollback login faults restore a client without a
+reconnect task. The coordinator independently reproduced three source failures
+with zero setup errors. Six source/image desired-behavior cases fail in the
+review proof; the passing broad campaign does not cover these triggers.
+
+Separate unchanged SIM regressions passed 107 and boundary checks passed 214.
+The mixed invocation remains unsuccessful with 1,037 passes, two skips, three
+xfails and 87 missing-fixture errors; it is not a clean regression pass. All
+`build/r8*` evidence was copied before release/removal. Review-only completion
+accepts the findings task, not the candidate. Strict historical xfails are
+reproductions of unresolved defects, not final acceptance tests.
+
+Fresh Sol 6.1 high R2D owns persistence startup and a new focused test; R1G owns
+runtime composition rollback/reconnect and its new test. Both Orca worktrees
+start at `75492555`, with requested/effective model verified, disjoint source
+ownership and lightweight tests allowed. New full/Docker campaigns remain
+coordinator-scheduled. Each fix needs red/green proof, exact-commit independent
+validation, merge and immediate worktree removal, then fresh integrated images
+and follow-up independent review. The no-Anthropic policy remains in force.
+
 ## Evidence and release gates
 
 Accepted worker reports must include the commit, actual files, targeted tests,

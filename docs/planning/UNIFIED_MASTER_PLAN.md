@@ -30,8 +30,13 @@ and image client outcomes 193 all passed. Both architectures built and matched
 and the formal combined evidence gate passed. The current
 [runtime report](../validation/RUNTIME_VALIDATION_REPORT.md) retains actual
 commits/image IDs and prior failed runs. Historical Phase 6/7 results below remain
-tied to their earlier candidate. R7 Luna is finishing the guides and evidence
-index; fresh Astra R8 independent review follows. CI passes 12/13 required jobs,
+tied to their earlier candidate. R7 Luna's final guides/index are merged after
+413 independent tests and 214 local links passed. Completed Astra R8 review
+found two high availability defects in actual source and the normal image:
+legacy-scene migration plus v2 creation breaks restart, and transient failed
+reconfigure rollback abandons automatic reconnect. The candidate is held;
+fresh Sol 6.1 high R2D/R1G worktrees own the disjoint corrections, followed by
+fresh affected evidence and independent verification. CI passes 12/13 required jobs,
 with only the three owner-pending Tron screenshots failing. No visual/hardware
 approval or release tag is implied. The
 [execution record](RUNTIME_EXECUTION.md) tracks effective model observations,

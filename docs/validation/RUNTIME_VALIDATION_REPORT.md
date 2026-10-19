@@ -1,6 +1,8 @@
 # Runtime validation report
 
-**Disposition: software candidate; final independent review, PR checks, owner visual approval and physical/field gates remain separate.**
+**Disposition: hold runtime release. Completed independent review found two high-severity defects beyond the passing campaign paths below.**
+
+The [independent R8 report](RUNTIME_INDEPENDENT_REVIEW.md) and its source/normal-image reproductions establish two unresolved availability defects: creating a v2 scene after legacy migration prevents the next startup, and transient reconfigure/rollback login failures can abandon automatic reconnect. Separate fresh persistence and runtime owners are correcting them. The broad campaign and formal gate below predate these findings; their passing results do not accept the candidate. Fresh candidate proofs and follow-up review are required after correction.
 
 The [archived manifest](runs/runtime/manifest.json) retains each actual run commit, artifact root, timestamp, scope and outcome count. These are multiple explicitly attributed runs, not a claim that every historical test ran at one final SHA. The [Phase 6/7 report](VALIDATION_REPORT.md) remains historical evidence.
 
@@ -77,7 +79,7 @@ The earlier discovery of legacy tests touching checkout runtime files is retaine
 
 ## Remaining release gates
 
-- Fresh independent R8 review, consequential-finding resolution and final PR checks.
+- Resolve both high R8 findings, refresh affected source/image evidence, complete follow-up independent review and final PR checks.
 - The pending three Tron paused-frame owner visual decisions for PR #36/#37 and the approved merge/tag sequence.
 - Owner HIL-B regression, HIL-C recovery and HIL-E deployed/physical client evidence, including matrix/attached-device firmware and physical CEC effects.
 - HIL-D continuous 72-hour resource measurements and the owner's week of daily use/sign-off; follow the field runbook.
