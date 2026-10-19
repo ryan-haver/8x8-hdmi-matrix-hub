@@ -133,7 +133,7 @@ def compact_log(entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Command log excerpt for the record: every write/CEC command in full; plain reads
     (which a page load issues by the dozen) without their payload and response, unless
     they carried a fault or warning."""
-    out = []
+    out: list[dict[str, Any]] = []
     for e in entries:
         if _is_read(e) and not e.get("fault") and not e.get("warnings"):
             out.append({k: e[k] for k in ("t", "channel", "command", "recognised") if k in e})
@@ -547,6 +547,28 @@ class Runner:
                 return f"changes {sorted(unrestorable)}, which cannot be restored; pass --allow-unrestorable"
         return None
 
+    @staticmethod
+    def _is_expected_application_error(sc: Scenario, client: Client, result: ActionResult) -> bool:
+        """True ONLY when result is a classified completed application response matching an expected negative Response."""
+        if result.error_kind != "application":
+            return False
+        if result.status is None or not result.requests:
+            return False
+        if not any(
+            r.get("status") == result.status and r.get("response") is not None
+            for r in result.requests
+        ):
+            return False
+        for exp in sc.expect:
+            if isinstance(exp, Response) and (exp.clients is None or client.name in exp.clients):
+                if exp.status is not None:
+                    allowed = exp.status if isinstance(exp.status, tuple) else (exp.status,)
+                    if all(s >= 400 for s in allowed) and result.status in allowed:
+                        return True
+                if exp.min_status is not None and exp.min_status >= 400 and result.status >= exp.min_status:
+                    return True
+        return False
+
     # ------------------------------------------------------------ one scenario
 
     async def _run_one(self, sc: Scenario, client: Client) -> Outcome:
@@ -635,15 +657,16 @@ class Runner:
                 procedure.extend(f"  {s}" for s in result.steps)
                 if result.error:
                     notes.append(f"client error: {result.error}")
-                    # An unchanged device is expected for a filtered SDK callback,
-                    # but also happens when replay never ran (e.g. missing Node).
-                    # Keep expected HTTP refusals separate: those have a response
-                    # status/body and need not set a replay/transport error.
-                    checks.append({
-                        "description": "client action completed without a replay or transport error",
-                        "result": "fail", "detail": redact(result.error),
-                        "finding": None, "linked_finding": None, "note": None,
-                    })
+                    if not self._is_expected_application_error(sc, client, result):
+                        # An unchanged device is expected for a filtered SDK callback,
+                        # but also happens when replay never ran (e.g. missing Node).
+                        # Keep expected HTTP refusals separate: those have a response
+                        # status/body and need not set a replay/transport error.
+                        checks.append({
+                            "description": "client action completed without a replay or transport error",
+                            "result": "fail", "detail": redact(result.error),
+                            "finding": None, "linked_finding": None, "note": None,
+                        })
                 # ---- expectations
                 for exp in sc.expect:
                     checks.append(await self._check(exp, sc, client, result, state_before, t_action, ws, helper,
