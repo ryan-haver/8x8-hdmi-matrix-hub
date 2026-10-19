@@ -35,6 +35,7 @@ from __future__ import annotations
 import inspect
 import logging
 import math
+import uuid
 from collections.abc import Awaitable, Callable, Mapping
 from dataclasses import dataclass, field
 from typing import Any
@@ -742,7 +743,35 @@ class ActionRunner:
         if not 1 <= number <= PRESET_SLOTS:
             return _not_found("preset", action_id)
 
-        recalled = bool(await _resolve(recaller(number)))
+        try:
+            recalled = await _call_preset_recaller(executor, recaller, number)
+        except Exception as exc:
+            message, error_id = _safe_preset_error(exc)
+            return _result(
+                "preset",
+                action_id,
+                success=False,
+                partial=False,
+                status_code=STATUS_FAILED,
+                step_results=[
+                    StepResult(
+                        step_index=0,
+                        action=f"preset:{number}",
+                        success=False,
+                        error=message,
+                        data={"preset": number, "error_id": error_id},
+                    )
+                ],
+                errors=[message],
+                data={
+                    "code": "execution_error",
+                    "id": action_id,
+                    "preset": number,
+                    "name": f"Preset {number}",
+                    "error_id": error_id,
+                },
+            )
+
         steps = [
             StepResult(
                 step_index=0,
@@ -759,6 +788,62 @@ class ActionRunner:
             [] if recalled else [f"Failed to recall preset {number}"],
             {"preset": number, "name": f"Preset {number}"},
         )
+
+
+class _PresetClientError(BaseException):
+    """Carries a matrix client preset exception past MatrixService._safe."""
+
+    def __init__(self, exc: Exception) -> None:
+        super().__init__(str(exc))
+        self.exc = exc
+
+
+def _safe_preset_error(exc: Exception) -> tuple[str, str]:
+    """Log a preset exception with a correlation ID and return a client-safe message."""
+    correlation_id = uuid.uuid4().hex[:8]
+    _LOG.exception("[%s] recalling preset: %s", correlation_id, exc)
+    return f"Internal server error (ref: {correlation_id})", correlation_id
+
+
+async def _call_preset_recaller(executor: Any, recaller: Any, number: int) -> bool:
+    """Invoke ``recaller(number)``, preserving client exceptions across MatrixService."""
+    service = getattr(executor, "_service", executor)
+    client = getattr(service, "_client", None)
+    client_recall = getattr(client, "recall_preset", None) if client is not None else None
+    if client is None or client_recall is None or not hasattr(client, "__dict__"):
+        return bool(await _resolve(recaller(number)))
+
+    had_own = "recall_preset" in client.__dict__
+    orig_own = client.__dict__.get("recall_preset")
+
+    def _restore() -> None:
+        if had_own:
+            client.__dict__["recall_preset"] = orig_own
+        else:
+            client.__dict__.pop("recall_preset", None)
+
+    def _intercept(*args: Any, **kwargs: Any) -> Any:
+        _restore()
+
+        async def _guarded() -> Any:
+            try:
+                return await _resolve(client_recall(*args, **kwargs))
+            except Exception as exc:
+                sync = getattr(service, "_sync_connection", None)
+                if callable(sync):
+                    sync()
+                raise _PresetClientError(exc) from exc
+
+        return _guarded()
+
+    client.__dict__["recall_preset"] = _intercept
+    try:
+        return bool(await _resolve(recaller(number)))
+    except _PresetClientError as wrapped:
+        raise wrapped.exc from None
+    finally:
+        if client.__dict__.get("recall_preset") is _intercept:
+            _restore()
 
 
 _RUNNERS: dict[str, Callable[[ActionRunner, str, str | None, dict[str, Any]], Awaitable[ActionRunResult]]] = {

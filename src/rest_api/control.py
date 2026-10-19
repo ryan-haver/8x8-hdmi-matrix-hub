@@ -68,6 +68,12 @@ async def handle_preset(request: web.Request) -> web.Response:
                     "message": f"Preset {preset_num} activated",
                 },
             )
+        elif result.code == "execution_error":
+            return _json_response(
+                False,
+                error=result.error or f"Failed to recall preset {preset_num}",
+                status=result.status_code or 500,
+            )
         else:
             await broadcast_status_update("preset_recall_failed", {"preset": preset_num})
             return _json_response(False, error=f"Failed to recall preset {preset_num}", status=500)
