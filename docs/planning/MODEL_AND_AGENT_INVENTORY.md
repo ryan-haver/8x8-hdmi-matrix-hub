@@ -37,7 +37,7 @@ claims or guaranteed speed/cost measurements.
 | --- | --- | --- | --- |
 | Sol 6.1 | Orca `codex`, `gpt-6.1-sol`, high | Project-proven; visible Codex catalog | Coordinator and core implementation. Default for consequential coding, with task-specific tests. |
 | Astra | Orca `codex`, `gpt-6-astra`, high | Project-proven after the audit: R0 contract accepted as `0125ad2` | Difficult architecture and independent final review; use a fresh reviewer session. |
-| Luna | Orca `codex`, `gpt-6-luna`, medium | Visible Codex catalog; no new probe | Bounded documentation, evidence indexing and focused follow-ups. Escalate architectural ambiguity. |
+| Luna | Orca `codex`, `gpt-6-luna`, medium | Effective live dispatch confirmed; R7 guide preparation accepted after 375 independent checks | Bounded documentation, evidence indexing and focused follow-ups. Escalate architectural ambiguity. |
 | Gemini 4 Argon | Orca `antigravity`, `gemini-4-argon`, high | Project-proven; also advertised in OpenCode catalog | UC integration and complex protocol/lifecycle reasoning; independent provider perspective. |
 | Gemini 3.8 Flash | Orca `antigravity`, `gemini-3.8-flash-high` | Project-proven Orca alias; API ID is `gemini-3.8-flash` | Focused integration/client implementation and tests with clear contracts. |
 | MiniMax M3 | Orca `opencode`; configured `minimax-coding-plan/MiniMax-M3` | Project-proven; current primary config; prior run exhausted quota | Bounded persistence wiring, conditional on refreshed quota and observed model. |
@@ -110,10 +110,25 @@ than a general ranking of model quality.
 
 MiniMax M3's persistence checkpoint was preserved after its full-scope failure;
 Sol completed that track. M3.1 and DeepSeek remain conditional routes. Luna's
-bounded guide assignment has now launched with confirmed requested/effective
-`gpt-6-luna` medium; final documentation acceptance awaits campaign evidence. Catalog entries are
+bounded guide assignment has confirmed requested/effective `gpt-6-luna` medium;
+guide preparation `d956046` was accepted after 375 independent checks and merged
+as `5608407`. Its final evidence index still awaits complete campaign evidence. Catalog entries are
 still distinct from proven current capacity. The no-Anthropic policy applies to
 all retries, reviews and helpers.
+
+The current corrective assignments remain scoped by demonstrated need: Sol
+completed R5C's Linux deployment tests; Flash completed R6C's HA validation error
+classification; Argon owns R3E's UI startup correction; Luna owns the final
+guides/index; a fresh Astra session is reserved for R8 after those gates. A
+separate Sol session completed a read-only R3E source-contract review without
+editing tracked files. Its real-payload JavaScript probe demonstrates a startup
+ordering race, while attribution to the first CI failure remains bounded.
+
+Antigravity launch receipts and native UI display the requested Argon high
+alias. Earlier backend self-reporting conflicted with that label; the underlying
+backend identity remains unverified. Do not present the alias as independent
+proof of a particular backend version. The native credit footer alone is also
+not proof that an active worker failed or exited.
 
 ## Launch rules
 
