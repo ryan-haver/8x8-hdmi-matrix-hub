@@ -1,11 +1,16 @@
 # Runtime completion and release plan
 
-Status: executing; R0/R1/R1P/R2/R2C/R3/R3B/R3C/R4/R4A/R5B/R6/R6B/R1C/R1D accepted.
-The first combined source run has 3,733 passes, 47 failures and 177/177 routes.
-R2C storage isolation, R6B replay checks and R1D readiness are accepted after
-independent validation. R4B wire/storage contracts (Argon) remains active.
-Fresh integrated campaigns, R7 guides and R8 review follow its acceptance.
-See the [execution record](RUNTIME_EXECUTION.md). Updated 2026-10-18. This is the next execution
+Status: executing. The runtime implementation and corrective tracks through
+R1E, R5C and R6C are integrated. The clean `59aae63` local core run passed
+3,941 tests with four documented skips and 177/177 routes; its source campaign
+passed all 1,506 API/browser/Remote/Flic outcomes. At `a7eedf6`, corrected real
+HA source campaigns passed 19/19 on both 2026.9.3 and the supported 2025.1 line
+(tested at 2025.1.4). CI passed 3,934 core tests with 22 skips and 177/177 routes;
+these are distinct environments and counts, not interchangeable results.
+Argon owns R3E's bounded UI startup-ordering fix, informed by a separate read-only
+Sol review. R7 Luna's guide preparation is accepted; final evidence indexing and
+fresh Astra R8 review await the remaining image/client and UI validation.
+See the [execution record](RUNTIME_EXECUTION.md). Updated 2026-10-19. This is the next execution
 plan after the integrated Phase 6/7 work. It supplements the original Phase 8
 validation gate rather than renumbering historical phases.
 
@@ -22,9 +27,10 @@ At the start of this plan, the application constructed `OreiMatrix` and
 `RestApiServer` directly or delegated to `src/driver.py`; the service, executor,
 loader and migrations were separate frameworks. Shared composition, packaged
 entrypoint, UC bridge and dedicated Flic replay are now accepted on the runtime
-branch. Persistence acceptance, action parity, flag/lifecycle completion and
-fresh integrated validation remain. Completing these paths is development work
-before final validation, not a documentation-only closure.
+branch. Persistence, action parity and flag/lifecycle corrections have since
+been accepted. The remaining software work is startup synchronization, fresh
+image/client validation, evidence reconciliation and independent review. Physical
+client, recovery, soak and owner acceptance gates follow those checks.
 
 No work below approves the three pending Tron snapshots. PR #36 and PR #37
 remain subject to their own CI and review gates. Their latest runs both fail

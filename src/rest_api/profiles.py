@@ -25,7 +25,7 @@ from password import (
     verify_passcode_async,
 )
 
-from .utils import _json_response, get_macro_manager, get_matrix_device, get_profile_manager
+from .utils import _json_response, get_macro_manager, get_matrix_device, get_profile_manager, safe_error_message
 
 _LOG = logging.getLogger("rest_api.profiles")
 
@@ -228,8 +228,7 @@ async def handle_list_profiles(request: web.Request) -> web.Response:
         profiles = profile_manager.list_profiles()
         return _json_response(True, {"profiles": profiles})
     except Exception as e:
-        _LOG.exception(f"Error listing profiles: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "listing profiles"), status=500)
 
 
 async def handle_get_profile(request: web.Request) -> web.Response:
@@ -250,8 +249,7 @@ async def handle_get_profile(request: web.Request) -> web.Response:
 
         return _json_response(True, profile.to_dict())
     except Exception as e:
-        _LOG.exception(f"Error getting profile: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "getting profile"), status=500)
 
 
 @catalog_changes
@@ -325,8 +323,7 @@ async def handle_create_profile(request: web.Request) -> web.Response:
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON", status=400)
     except Exception as e:
-        _LOG.exception(f"Error creating profile: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "creating profile"), status=500)
 
 
 @catalog_changes
@@ -399,8 +396,7 @@ async def handle_update_profile(request: web.Request) -> web.Response:
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON", status=400)
     except Exception as e:
-        _LOG.exception(f"Error updating profile: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "updating profile"), status=500)
 
 
 @catalog_changes
@@ -437,8 +433,7 @@ async def handle_delete_profile(request: web.Request) -> web.Response:
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON", status=400)
     except Exception as e:
-        _LOG.exception(f"Error deleting profile: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "deleting profile"), status=500)
 
 
 async def handle_recall_profile(request: web.Request) -> web.Response:
@@ -484,8 +479,7 @@ async def handle_recall_profile(request: web.Request) -> web.Response:
             status=result.status_code,
         )
     except Exception as e:
-        _LOG.exception(f"Error recalling profile: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "recalling profile"), status=500)
 
 
 @catalog_changes
@@ -538,8 +532,7 @@ async def handle_profile_cec_config(request: web.Request) -> web.Response:
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON", status=400)
     except Exception as e:
-        _LOG.exception(f"Error handling profile CEC config: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "handling profile CEC config"), status=500)
 
 
 @catalog_changes
@@ -623,8 +616,7 @@ async def handle_profile_macros(request: web.Request) -> web.Response:
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON", status=400)
     except Exception as e:
-        _LOG.exception(f"Error handling profile macros: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "handling profile macros"), status=500)
 
 
 @catalog_changes
@@ -681,8 +673,7 @@ async def handle_reorder_profiles(request: web.Request) -> web.Response:
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON", status=400)
     except Exception as e:
-        _LOG.exception(f"Error reordering profiles: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "reordering profiles"), status=500)
 
 
 # =============================================================================
@@ -704,8 +695,7 @@ async def handle_list_favorite_profiles(request: web.Request) -> web.Response:
             },
         )
     except Exception as exc:
-        _LOG.error("Error listing favorite profiles: %s", exc)
-        return _json_response(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "listing favorite profiles"), status=500)
 
 
 @catalog_changes
@@ -729,8 +719,7 @@ async def handle_toggle_profile_favorite(request: web.Request) -> web.Response:
             },
         )
     except Exception as exc:
-        _LOG.error("Error toggling profile favorite: %s", exc)
-        return _json_response(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "toggling profile favorite"), status=500)
 
 
 @catalog_changes
@@ -763,8 +752,7 @@ async def handle_set_profile_favorite(request: web.Request) -> web.Response:
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON body", status=400)
     except Exception as exc:
-        _LOG.error("Error setting profile favorite: %s", exc)
-        return _json_response(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "setting profile favorite"), status=500)
 
 
 @catalog_changes
@@ -788,8 +776,7 @@ async def handle_toggle_profile_dashboard(request: web.Request) -> web.Response:
             },
         )
     except Exception as exc:
-        _LOG.error("Error toggling profile dashboard flag: %s", exc)
-        return _json_response(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "toggling profile dashboard flag"), status=500)
 
 
 @catalog_changes
@@ -822,8 +809,7 @@ async def handle_set_profile_dashboard(request: web.Request) -> web.Response:
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON body", status=400)
     except Exception as exc:
-        _LOG.error("Error setting profile dashboard flag: %s", exc)
-        return _json_response(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "setting profile dashboard flag"), status=500)
 
 
 async def handle_profile_execution_log(request: web.Request) -> web.Response:

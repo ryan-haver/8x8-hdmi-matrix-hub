@@ -1,0 +1,1191 @@
+{
+  "scope": "Unmodified, schema-validated passing actual-image V2/V3 milestone records; no V4/V5 claim or manual baseline promotion",
+  "source_sha": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+  "image_id": "sha256:1a5de3b5b58a3e1c56d3269bd5c1c6e3e12be2d6fea1abceea36067d733df69e",
+  "counts": {
+    "api": 79,
+    "browser": 54,
+    "flic": 23,
+    "ha": 19,
+    "uc": 18
+  },
+  "declared_client_exclusions": [
+    {
+      "scenario": "macros.run_volume_up",
+      "client": "api",
+      "description": "client shows toast.success == 'Macro executed'"
+    },
+    {
+      "scenario": "profiles.recall_routing",
+      "client": "api",
+      "description": "client shows toast.success == '\"Game Day\" activated'"
+    },
+    {
+      "scenario": "profiles.recall_needs_passcode",
+      "client": "api",
+      "description": "client shows dialogs == ['\"Kids Gaming\" is passcode protected. Enter passcode:']"
+    },
+    {
+      "scenario": "profiles.recall_with_passcode",
+      "client": "api",
+      "description": "client shows toast.success == '\"Kids Gaming\" activated'"
+    },
+    {
+      "scenario": "profiles.recall_wrong_passcode",
+      "client": "api",
+      "description": "client shows toast.error == 'Invalid passcode'"
+    },
+    {
+      "scenario": "reboot.enabled_shortcut",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "scenes.run_protected",
+      "client": "api",
+      "description": "client shows toast.success == 'Scene executed'"
+    },
+    {
+      "scenario": "scenes.partial_failure",
+      "client": "api",
+      "description": "client shows toast.warning == '\"Good Night\" ran partly: 1 of 2 steps succeeded'"
+    },
+    {
+      "scenario": "scenes.conflicts_visible",
+      "client": "api",
+      "description": "client shows scene.conflict_count == 3"
+    },
+    {
+      "scenario": "scenes.conflicts_visible",
+      "client": "api",
+      "description": "client shows scene.values == ['= 2', '= 5', '= 2', '= 5', '= true', '= false']"
+    },
+    {
+      "scenario": "shortcuts.route_one_to_one",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "shortcuts.power_off_all",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "shortcuts.mute_all",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "shortcuts.unmute_all",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "shortcuts.preset_recall",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "shortcuts.beep_off",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "shortcuts.panel_lock",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "shortcuts.lcd_15s",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "shortcuts.beep_on",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "shortcuts.panel_unlock",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "shortcuts.lcd_off",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "shortcuts.lcd_always_on",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "shortcuts.lcd_30s",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "shortcuts.lcd_60s",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "shortcuts.disabled_reboot",
+      "client": "api",
+      "description": "client shows toast.error == 'Failed to execute shortcut'"
+    },
+    {
+      "scenario": "shortcuts.disabled_reboot",
+      "client": "api",
+      "description": "client shows toast.success == None"
+    },
+    {
+      "scenario": "flic.power_off",
+      "client": "flic",
+      "description": "WebSocket event 'power_change' with {'power': 'off'}"
+    },
+    {
+      "scenario": "flic.profile",
+      "client": "flic",
+      "description": "client shows toast.success == '\"Game Day\" activated'"
+    },
+    {
+      "scenario": "flic.profile_pin_refused",
+      "client": "flic",
+      "description": "client shows dialogs == ['\"Kids Gaming\" is passcode protected. Enter passcode:']"
+    },
+    {
+      "scenario": "flic.manual_macro",
+      "client": "flic",
+      "description": "client shows toast.success == 'Macro executed'"
+    },
+    {
+      "scenario": "macros.run_rejected",
+      "client": "api",
+      "description": "client shows toast.error == 'Error: Execution failed'"
+    },
+    {
+      "scenario": "macros.run_rejected",
+      "client": "api",
+      "description": "client shows toast.success == None"
+    },
+    {
+      "scenario": "shortcuts.mute_rejected",
+      "client": "api",
+      "description": "client shows toast.error == 'Failed to execute shortcut'"
+    },
+    {
+      "scenario": "shortcuts.mute_rejected",
+      "client": "api",
+      "description": "client shows toast.success == None"
+    },
+    {
+      "scenario": "shortcuts.beep_rejected",
+      "client": "api",
+      "description": "client shows toast.error == 'Failed to execute shortcut'"
+    },
+    {
+      "scenario": "shortcuts.beep_rejected",
+      "client": "api",
+      "description": "client shows toast.success == None"
+    },
+    {
+      "scenario": "shortcuts.panel_lock_rejected",
+      "client": "api",
+      "description": "client shows toast.error == 'Failed to execute shortcut'"
+    },
+    {
+      "scenario": "shortcuts.panel_lock_rejected",
+      "client": "api",
+      "description": "client shows toast.success == None"
+    },
+    {
+      "scenario": "shortcuts.lcd_rejected",
+      "client": "api",
+      "description": "client shows toast.error == 'Failed to execute shortcut'"
+    },
+    {
+      "scenario": "shortcuts.lcd_rejected",
+      "client": "api",
+      "description": "client shows toast.success == None"
+    },
+    {
+      "scenario": "flic.manual_macro_refused",
+      "client": "flic",
+      "description": "client shows toast.error == 'Error: Execution failed'"
+    },
+    {
+      "scenario": "flic.manual_macro_refused",
+      "client": "flic",
+      "description": "client shows toast.success == None"
+    }
+  ],
+  "records": [
+    {
+      "path": "docs/validation/evidence/F-DOM-020/2026-10-19-V2-4adbc136-macros.run_volume_up-api.json",
+      "sha256": "77d6dae07a24be241e76290b02a22e8486fc316625512573149feaaf8f3d9916",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-030/2026-10-19-V2-4adbc136-preset_read.device_slot_1-api.json",
+      "sha256": "8a11e963ed31cf7af530ea7361d15fe9844f0f41d964c51d38cec94dee8bc73f",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-004/2026-10-19-V2-4adbc136-preset_read.saved_current_1-api.json",
+      "sha256": "5f404f8dde93e5f123862e44d37a133768fb2387357a722b45f8a81dce643108",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-034/2026-10-19-V2-4adbc136-preset_read.saved_partial_1-api.json",
+      "sha256": "f21109f01deaabcd3f328d46321f4ba23d0b82ffb5581b36ca4c627e31b5ab39",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-030/2026-10-19-V2-4adbc136-preset_read.device_slot_2-api.json",
+      "sha256": "a0da75d6dba5a1fbe273e8a40a01952231134116278325bc80d90dad66c007e6",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-004/2026-10-19-V2-4adbc136-preset_read.saved_current_2-api.json",
+      "sha256": "20e45056f3c5742d5262c37ea41da4834315aaf0437b23d510bf3a2961b40532",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-034/2026-10-19-V2-4adbc136-preset_read.saved_partial_2-api.json",
+      "sha256": "37fbbd718651c7672ce677938ad58de72759aeca44718f53f194ab461eafb74b",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-030/2026-10-19-V2-4adbc136-preset_read.device_slot_3-api.json",
+      "sha256": "6b1f63acf86271629ce9dc472b273bc3b659a47738131778f8064f5c24229526",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-004/2026-10-19-V2-4adbc136-preset_read.saved_current_3-api.json",
+      "sha256": "06ac20889dc7833c9a380dfcea9ac528d84be2f05625b391cb73a041f021460e",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-034/2026-10-19-V2-4adbc136-preset_read.saved_partial_3-api.json",
+      "sha256": "da79bac3eaec26f7a9ff097c749b8418dad0c0511ba77ec265d88ab1164e46d3",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-030/2026-10-19-V2-4adbc136-preset_read.device_slot_4-api.json",
+      "sha256": "ed3342d5a00921266cc9c0381653f52b3abd1bef804dc82b689e7498674385d6",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-004/2026-10-19-V2-4adbc136-preset_read.saved_current_4-api.json",
+      "sha256": "96563f82fb2d99b56b920c0ebcd0e5ec20c2499019d119881845d86ea2fbf1e9",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-034/2026-10-19-V2-4adbc136-preset_read.saved_partial_4-api.json",
+      "sha256": "2c6ffc8c69d2c22c7db6862f88c3dc272ee3aa5dd165fec1666f256d0c47564c",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-030/2026-10-19-V2-4adbc136-preset_read.device_slot_5-api.json",
+      "sha256": "114d7b2b7d280d21dd895a248fe8927bf75b357db7b323614e62ac35f286b7dd",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-004/2026-10-19-V2-4adbc136-preset_read.saved_current_5-api.json",
+      "sha256": "c520b2038210a954eaeccd198804c2b90876831f20ed824fdb27adf01aae31e9",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-034/2026-10-19-V2-4adbc136-preset_read.saved_partial_5-api.json",
+      "sha256": "1d45c6c75b9eea7c00771683c37c93df9f3c46d95955e68eb4c8f8a1de52eb47",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-030/2026-10-19-V2-4adbc136-preset_read.device_slot_6-api.json",
+      "sha256": "cdba208c61a4b0f1f2069accdb317ed5ebfee1370a33c0b67a802ffc9caed1ba",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-004/2026-10-19-V2-4adbc136-preset_read.saved_current_6-api.json",
+      "sha256": "09f899a75184d6d434b32a911afe55f337cc25d44d01542d3a66f2d08bee77d5",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-034/2026-10-19-V2-4adbc136-preset_read.saved_partial_6-api.json",
+      "sha256": "61cfaee9364fdd093111830fd65da5c55d1c6e7c7d9816f2f75f1f269df902dd",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-030/2026-10-19-V2-4adbc136-preset_read.device_slot_7-api.json",
+      "sha256": "e96a5b3049615c02e7e1defdca79d7f3d169566d68956d399a2950077043b749",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-004/2026-10-19-V2-4adbc136-preset_read.saved_current_7-api.json",
+      "sha256": "ea117c35d256f3710c90e7fccc94ebaf57c023204f22322a98a4abacac0ca646",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-034/2026-10-19-V2-4adbc136-preset_read.saved_partial_7-api.json",
+      "sha256": "a34c8be53fd45ec5d6f603b3b594b84d9c1fd89aef86ccd7b299337fd1f3c1ee",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-030/2026-10-19-V2-4adbc136-preset_read.device_slot_8-api.json",
+      "sha256": "788bc3b81b0e467781014d6daec2358bf362faa120871667f44405eec2f495f2",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-004/2026-10-19-V2-4adbc136-preset_read.saved_current_8-api.json",
+      "sha256": "4b1586ce8825aad79025398fe7f623ba1c1b3765ef835dd24ab1d17c829274a4",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-034/2026-10-19-V2-4adbc136-preset_read.saved_partial_8-api.json",
+      "sha256": "6bc5a6cec408f69eccfccebdf16d11aced31b5dc2a7bb3677fc21e4ba4b149b8",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-030/2026-10-19-V2-4adbc136-preset_read.catalog_matches_device-api.json",
+      "sha256": "d8f84662cfb8053ce696f0ef2868f2dba3d4260d144e4b9ed82ea0e9e0271786",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-003/2026-10-19-V2-4adbc136-presets.recall-api.json",
+      "sha256": "5820647d670277ddebafeecf8f32dd95e6e931be9aad042e00f0fe346d3f1dc4",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-005/2026-10-19-V2-4adbc136-presets.rename-api.json",
+      "sha256": "ea9016fc7d645093a6ab28810c59fb07a19f072f295a340ce8769ed4c587388f",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-002/2026-10-19-V2-4adbc136-profile_state.alias_recall-api.json",
+      "sha256": "447b56ad7353048d735f1336a60234c920bed66f6bf6f7e24705d0cc0c2d8881",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-002/2026-10-19-V2-4adbc136-profiles.recall_routing-api.json",
+      "sha256": "2fadadebbb48c2729f2ccebad860384bf5e58c9b2a024496f5e780c4977be06f",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-003/2026-10-19-V2-4adbc136-profiles.recall_output_settings-api.json",
+      "sha256": "eba6e51bbe5fcc9b4806180d5f3bd1024f2e9508c9e7b2622afc65a6bc2bff29",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-004/2026-10-19-V2-4adbc136-profiles.recall_power_macro-api.json",
+      "sha256": "4972692309da5d012123397d2557fa9e7b3ade2f5f7c0524c1bf86d33082bc77",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-002/2026-10-19-V2-4adbc136-profiles.recall_disabled_output-api.json",
+      "sha256": "44d2e893d167c8243019b3b15380451f4476d2dd31f41c54a58a45efbb912373",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-005/2026-10-19-V2-4adbc136-profiles.recall_needs_passcode-api.json",
+      "sha256": "6c44aa59bb5a3b1cf7a97e5943dc7bfd929d0e1e14590e92b172f363aae2ea09",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-005/2026-10-19-V2-4adbc136-profiles.recall_with_passcode-api.json",
+      "sha256": "c5922444ee732c1e43d47f99bbfdb40d5fe77ee60fc342f29bcb68ea1e8d8a22",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-005/2026-10-19-V2-4adbc136-profiles.recall_wrong_passcode-api.json",
+      "sha256": "1713693e63fd4dc37f686e301959cd8eaf2bd281b30a7e7fb1a0da4e65518b3c",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-003/2026-10-19-V2-4adbc136-profiles.recall_scaler_arc-api.json",
+      "sha256": "5059460ce88c975793a1db44075655db8f8d116e2def3df2391af18cd402df0f",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-003/2026-10-19-V2-4adbc136-profiles.recall_leaves_unset_scaler_arc-api.json",
+      "sha256": "d933c171b590b297899440b4cd2431e35308d2d39417d02ed0543bf72f0a2c69",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-021/2026-10-19-V2-4adbc136-reboot.enabled_shortcut-api.json",
+      "sha256": "4e1971708ecd9c33d7bc1c7548deff7353ff360a812bb8cc1d08b503fe74e67a",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-001/2026-10-19-V2-4adbc136-routing.switch_one-api.json",
+      "sha256": "75c2b854cf57584d1f07e51c2e6cc89d9d510ad9c446d69845e1bdc0e340a8b9",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-002/2026-10-19-V2-4adbc136-routing.route_all-api.json",
+      "sha256": "d974292c0aa4d3a0e3e9035fb76e7e92e5398d4d97011527ce20ab26f4a35b89",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-011/2026-10-19-V2-4adbc136-scenes.run_profile_macro_preset-api.json",
+      "sha256": "b43245c033a616a797f7dd63612883dc079c8905b2c0ee435b12e710e8927d42",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-011/2026-10-19-V2-4adbc136-scenes.run_protected-api.json",
+      "sha256": "3b94ab3b5d30dce113171062c80984e740b4a21d9a2fe5a15b3dafb8c10a4da3",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-012/2026-10-19-V2-4adbc136-scenes.run_shortcut_and_macro-api.json",
+      "sha256": "80bc44fa70b5457a740ce4f96496f1094924eccaa4f25998a1c08dd25c66f9aa",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-014/2026-10-19-V2-4adbc136-scenes.override_leaves_setting-api.json",
+      "sha256": "9c2a09b8fba3ebdc5de2e5eb710d0b0d48e1c3018ee004a0510e5dae76fa78ee",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-011/2026-10-19-V2-4adbc136-scenes.partial_failure-api.json",
+      "sha256": "c078e6e0182332b905daa41ca0fff9f83ef944bbfb15ef7f099131db357102f0",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-011/2026-10-19-V2-4adbc136-scenes.disabled_output_state-api.json",
+      "sha256": "ff69781f45b1abbbccb19558e932ab9e21ecbb2d67ef48fca5b8f2a10460883a",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-014/2026-10-19-V2-4adbc136-scenes.enabled_override-api.json",
+      "sha256": "84418293958820fc32784a9a94fe6ddfb9bb5b0892147948b99637839d3cf330",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-013/2026-10-19-V2-4adbc136-scenes.wait_between_actions-api.json",
+      "sha256": "8d235d022132ac62f30f2b5994c4805416cc6a6eec4d712b70a20a0ff776ab5b",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-013/2026-10-19-V2-4adbc136-scenes.wait_edit-api.json",
+      "sha256": "36b6e823d54144524cddf5f28df9c3688e8f401785409008c9a27a84d4562a70",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-016/2026-10-19-V2-4adbc136-scenes.conflicts_visible-api.json",
+      "sha256": "da3b14e6fd3ac87965b8b93cc961a77fc2c64b7c955c23d9dab77cd58035e741",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-011/2026-10-19-V2-4adbc136-scenes.run_unknown-api.json",
+      "sha256": "8ea21065a1e7f6b5fc336feb7eeb42a1ba9ac3abcb545acb045a8dcba65027e5",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-011/2026-10-19-V2-4adbc136-scenes.profile_step_scaler_arc-api.json",
+      "sha256": "4512df99ed1a9a20f5dba39389c6d1435ec9795d18a60f649a83826debcd6cda",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-014/2026-10-19-V2-4adbc136-scenes.override_leaves_scaler_arc-api.json",
+      "sha256": "178879392a63caeebfb27bae4a790e7b5601c0f784c208f704c7667e0ef368e1",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-016/2026-10-19-V2-4adbc136-scenes.conflicts_scaler_arc-api.json",
+      "sha256": "3a3dbf463430aeb15a64dd66e59f32230768cb7392b93370cf2706e4dadbf03b",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-023/2026-10-19-V2-4adbc136-shortcuts.route_one_to_one-api.json",
+      "sha256": "e5ac8bb10f172de4d44575651eddbfb0c24e3aab7bf4b9ea20bd9d72cb40f954",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-024/2026-10-19-V2-4adbc136-shortcuts.power_off_all-api.json",
+      "sha256": "8a67ae269ba4d1340a1368d747ac287b16ea57ef2ff62b1a95fec70f0f02632d",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-025/2026-10-19-V2-4adbc136-shortcuts.mute_all-api.json",
+      "sha256": "c886ddabe98dd8eec7a6cbe94cf893a7854a33ad7e93ea8eeabaf8f635f44a67",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-025/2026-10-19-V2-4adbc136-shortcuts.unmute_all-api.json",
+      "sha256": "3f433a0ae364d0db9b34a706f0d9650b92f92b2304ab7960ab314271b85b4b5c",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-026/2026-10-19-V2-4adbc136-shortcuts.preset_recall-api.json",
+      "sha256": "1afd9dfe599a98571b39af881a1dc74442a7d252e8de9e6ab1d7a8cd7dd07580",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-027/2026-10-19-V2-4adbc136-shortcuts.beep_off-api.json",
+      "sha256": "983b2fd963c53a947f26bfe1c26a28291be7ee0819b58af2a2449d6e2ac2d775",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-027/2026-10-19-V2-4adbc136-shortcuts.panel_lock-api.json",
+      "sha256": "c5753540c0050bfe4365d0e9cf6cb797c953cb4c1554cc5880509ddd3c8984a7",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-028/2026-10-19-V2-4adbc136-shortcuts.lcd_15s-api.json",
+      "sha256": "85662df55024a243398de0e9560770371ca7159e37a928c01c70863bc12334bd",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-027/2026-10-19-V2-4adbc136-shortcuts.beep_on-api.json",
+      "sha256": "ccc9b72dc42747e27a11095dcaa28585aa78918790036d222e64cd1fb6c2d07f",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-027/2026-10-19-V2-4adbc136-shortcuts.panel_unlock-api.json",
+      "sha256": "5d75e35459d9f01b4b3a3d24da2a1e5f6143ed4a114eca7f121d1d6fd8f11a66",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-028/2026-10-19-V2-4adbc136-shortcuts.lcd_off-api.json",
+      "sha256": "f0347f0900c6f3f36c04fff97df2fe73ba2aea6218f7173b564a7f497ffcf684",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-028/2026-10-19-V2-4adbc136-shortcuts.lcd_always_on-api.json",
+      "sha256": "764e2e0860d352d8135a1cfc8877c00c76d2d115572eec523f779c3759233e89",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-028/2026-10-19-V2-4adbc136-shortcuts.lcd_30s-api.json",
+      "sha256": "4fd5748b4f2ccde4aefe0173b0f2816d26cd4eaa798951bd083734b0e8c5f47c",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-028/2026-10-19-V2-4adbc136-shortcuts.lcd_60s-api.json",
+      "sha256": "9f12722c9f60a8a77b08c06b9b115a5a973c78c8c5e011bc4990705dd06217c9",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-027/2026-10-19-V2-4adbc136-shortcuts.disabled_reboot-api.json",
+      "sha256": "46a957d4ba6ab7196367ad943978d9e8d55df5980fc6d8f185b86d1e0559ff17",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-KIO-003/2026-10-19-V3-4adbc136-kiosk.route_all_apply-browser.json",
+      "sha256": "b89a053c3a2d1532cbab7719ef076e8a8ba99bc6f6aa370dd27712589a0f72ff",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-KIO-002/2026-10-19-V3-4adbc136-kiosk.route_one_muted-browser.json",
+      "sha256": "e500bc076b60e94e3be7d06982880b439371b5c359ce9a64a7714dcbc6999ea9",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-KIO-008/2026-10-19-V3-4adbc136-kiosk.profile_with_passcode-browser.json",
+      "sha256": "be0132742c8a29d157342fe7bad6631a2e41d127d4fd5a633a19fc18597de1cc",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-KIO-008/2026-10-19-V3-4adbc136-kiosk.profile_wrong_passcode-browser.json",
+      "sha256": "353ad56c3d4b8aa5d7bd4b67c4b560c700cc3ee9f54193622f5f96cf55b4fde5",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-031/2026-10-19-V3-4adbc136-live.front_panel_route-browser.json",
+      "sha256": "e45c83a9ccf12ccf1f8c788e6e42339f3d00a2252dd70bab77d86a161b7f4e16",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-031/2026-10-19-V3-4adbc136-live.input_signal-browser.json",
+      "sha256": "f23f8b48eb8819cd54fc7a122af85896a4cba41ca2fceb4799aebe4fa5f6c402",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-031/2026-10-19-V3-4adbc136-live.display_unplugged-browser.json",
+      "sha256": "e4e84351ecba9218b3b1f9f93e495e4b596e698b294c855915d1b8ade998ee5f",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-031/2026-10-19-V3-4adbc136-live.rename_elsewhere-browser.json",
+      "sha256": "65b00876f23df9539ffbb3ee5e304d518b629605d8d5b965633fdd9abe7ff154",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-REL-009/2026-10-19-V3-4adbc136-live.matrix_offline-browser.json",
+      "sha256": "ca03d620bc01952c6564a3b14fdbb371a836a6c6266fce34a82ab026141b087e",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-020/2026-10-19-V3-4adbc136-macros.run_volume_up-browser.json",
+      "sha256": "023add8a35b8ef9b71ce63d0468b9a99a8cf7ed6fb079f5feb7465da73298753",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-003/2026-10-19-V3-4adbc136-presets.recall-browser.json",
+      "sha256": "ff97c7a9e63482927e8df0c7164569a82ed2682358f17dc3a256b86eafdbf086",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-005/2026-10-19-V3-4adbc136-presets.rename-browser.json",
+      "sha256": "2d863058baf7bd0c2807f647a8c714242bba55b1a6127516ad40492206cb9428",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-002/2026-10-19-V3-4adbc136-profiles.recall_routing-browser.json",
+      "sha256": "a28381dc6c381a1136be1a122d283155f3e3afaf729d7066fb311c2e1928c301",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-003/2026-10-19-V3-4adbc136-profiles.recall_output_settings-browser.json",
+      "sha256": "14efda52f0a77cec649b34e4c055a5bfaddfcbc40904fc4c9dac07417d5fb954",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-004/2026-10-19-V3-4adbc136-profiles.recall_power_macro-browser.json",
+      "sha256": "e48174e6a91fe9eabaf3c6ca682e5015edf3d1b21c1116189d45f9d6215285f2",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-002/2026-10-19-V3-4adbc136-profiles.recall_disabled_output-browser.json",
+      "sha256": "477f9afc6ebdcb6292d07e3008a910ef121c442ffc6f0c87fcb67d159d680921",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-005/2026-10-19-V3-4adbc136-profiles.recall_needs_passcode-browser.json",
+      "sha256": "85ae8004b3b065e9a6c1f25bc3d0b68a45f91edfceba9ba919b3525ab948cc0f",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-005/2026-10-19-V3-4adbc136-profiles.recall_with_passcode-browser.json",
+      "sha256": "90ce3c2f2f575573931f8911a82a06ee2dc1aa48248b25cd8bda5f79b744f150",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-005/2026-10-19-V3-4adbc136-profiles.recall_wrong_passcode-browser.json",
+      "sha256": "4d72e001409572d075054d6c376cba10b60126021c1c262567dd91be522e30a8",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-003/2026-10-19-V3-4adbc136-profiles.recall_scaler_arc-browser.json",
+      "sha256": "5d4e9e27cba0132911566462aded14133d98a83b4b399c20d17505c899e452cc",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-021/2026-10-19-V3-4adbc136-reboot.enabled_shortcut-browser.json",
+      "sha256": "d9093cab3b6ed15536d6537967f92dc114c66b83c85c4f56b78db90bab7050a6",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-001/2026-10-19-V3-4adbc136-routing.switch_one-browser.json",
+      "sha256": "724c75b9adde0809f63c952c76f67ded0620d75e9cc1db4275a6521b9cde6fc6",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-MTX-002/2026-10-19-V3-4adbc136-routing.route_all-browser.json",
+      "sha256": "2f23d04ad8db1d6f5e24c3a1a5989d389dec5c3c06d5be965eb995cdcbe76699",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-UI-024/2026-10-19-V3-4adbc136-routing.grid_notifies_other_clients-browser.json",
+      "sha256": "f3c5eca2bbf43abdd8911a142b9495603e526953d4d5a9b28737bf02b8db4365",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-011/2026-10-19-V3-4adbc136-scenes.run_profile_macro_preset-browser.json",
+      "sha256": "e8c4f6f11a0e146e56ff007422dbc8d126b405ff15dccde8d8eb1572b13dd5b9",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-011/2026-10-19-V3-4adbc136-scenes.run_protected-browser.json",
+      "sha256": "9e878f2163f525d6f3021d97b58dac954fc750fbd420ec527c26277a178e4a43",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-011/2026-10-19-V3-4adbc136-scenes.partial_failure-browser.json",
+      "sha256": "f41791ea6d9189dd17d5e93b93ac5ba1b5c3b308a7fba6440b30f47709471e03",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-011/2026-10-19-V3-4adbc136-scenes.disabled_output_state-browser.json",
+      "sha256": "77e1e8f5217a1689f79a8c05cdf975848b8cf2f2e1296ce60c49b2324c7a0b99",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-014/2026-10-19-V3-4adbc136-scenes.enabled_override-browser.json",
+      "sha256": "93522635080d2edf9a4ba1dc68b8d8799b880a2f546b2fe3a7917e7ba00b0b2e",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-013/2026-10-19-V3-4adbc136-scenes.wait_between_actions-browser.json",
+      "sha256": "29653baa00d12a65fdc94fb7bde95a492c5560440a116106bb01ce64bd1b1410",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-013/2026-10-19-V3-4adbc136-scenes.wait_edit-browser.json",
+      "sha256": "7fa0d3d649d401274b10cac77b173a4589d8356bd2617e5a810be8e08a097595",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-016/2026-10-19-V3-4adbc136-scenes.conflicts_visible-browser.json",
+      "sha256": "3cbac37e030ec95d3e506625e7cc6188884190616e9bc9ce4826f9bc86113c1e",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-023/2026-10-19-V3-4adbc136-shortcuts.route_one_to_one-browser.json",
+      "sha256": "f25b509e07a98fd82c6c588545eeec55009f07f0e532625c32339768edc7ea01",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-024/2026-10-19-V3-4adbc136-shortcuts.power_off_all-browser.json",
+      "sha256": "ab37dcaacf361db763520ed93ffdf3e44d27ae3a8a093213249db6b9f1ef149a",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-025/2026-10-19-V3-4adbc136-shortcuts.mute_all-browser.json",
+      "sha256": "438a8a937c5239cf6710ff9530efccb558ec02fbe7a37ed824c90f48c35e6565",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-025/2026-10-19-V3-4adbc136-shortcuts.unmute_all-browser.json",
+      "sha256": "fff7ed8a5c690fe9ed91b18f6de66ec2d281af4286b353d7eff8edf99aa0fd35",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-026/2026-10-19-V3-4adbc136-shortcuts.preset_recall-browser.json",
+      "sha256": "eea0d9af3a88c4a2e9595c34aa23fe5d515b960d120c679b018a74151ed99970",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-027/2026-10-19-V3-4adbc136-shortcuts.beep_off-browser.json",
+      "sha256": "7ddd3ac0251b366853654732988da5e8145dccdfbd567dde198ec46d765385c7",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-027/2026-10-19-V3-4adbc136-shortcuts.panel_lock-browser.json",
+      "sha256": "eb94d0425c1c4ed6dc03628b07cf75e8d6dab7a32570f43ad1d626442648e6bc",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-028/2026-10-19-V3-4adbc136-shortcuts.lcd_15s-browser.json",
+      "sha256": "ed32a114f4b92d398f29499d3434cd75e425f74b057def78c1d9dbfc59cab013",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-027/2026-10-19-V3-4adbc136-shortcuts.beep_on-browser.json",
+      "sha256": "db4c14624298188941abc4d7f20ca85cefbd7f69815f5da1c191c238ccfe8eb7",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-027/2026-10-19-V3-4adbc136-shortcuts.panel_unlock-browser.json",
+      "sha256": "6355f1862c54cf8774cb95fc087f77e7ae802f04f1cf2a602e650a9ae4383989",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-028/2026-10-19-V3-4adbc136-shortcuts.lcd_off-browser.json",
+      "sha256": "25d1072b01809e4da2810ed7f4d286ace9bd8084109e0147168673e3393b16de",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-028/2026-10-19-V3-4adbc136-shortcuts.lcd_always_on-browser.json",
+      "sha256": "4686c87962b4c4ee5cf24a4353323135f21570bdcce8cc2b7daae8eedf440bde",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-028/2026-10-19-V3-4adbc136-shortcuts.lcd_30s-browser.json",
+      "sha256": "a302d2f5b7b41507348d03f43c4985b14f39e48875a7765ba70228056531d082",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-028/2026-10-19-V3-4adbc136-shortcuts.lcd_60s-browser.json",
+      "sha256": "d95900981da80f7c20f9885e0c22b8281b87514f019f7e042a2df33f11d9a04c",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-027/2026-10-19-V3-4adbc136-shortcuts.disabled_reboot-browser.json",
+      "sha256": "20243b4c65aca45a71a8a99d94cbde91c3d8b3283e02ea527beea6294f8af476",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-FLIC-001/2026-10-19-V3-4adbc136-flic.preset-flic.json",
+      "sha256": "6b46ebc4a68e13ae34747b624ea357dca616ca8ee4bec6684cf6bbc6c74b6637",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-FLIC-002/2026-10-19-V3-4adbc136-flic.power_off-flic.json",
+      "sha256": "8078b2da49ba66053f421ad265a7075fefa3a8710dc8c0bd602666e8b5685f58",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-FLIC-002/2026-10-19-V3-4adbc136-flic.power_on-flic.json",
+      "sha256": "f7f0e54d3c817610aeb88bdd69edc505b5405f213f8c4e603853385f12e9fb35",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-FLIC-003/2026-10-19-V3-4adbc136-flic.source_power-flic.json",
+      "sha256": "87ec0285884d9cbcc71941f10c6b95a3687e7ad87039c3bec98757a930d1df7b",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-FLIC-005/2026-10-19-V3-4adbc136-flic.display_volume-flic.json",
+      "sha256": "1dc1128eca2af49e00ceed31ff37bf7cf868159bab0d5a0759d730604c2467d3",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-FLIC-006/2026-10-19-V3-4adbc136-flic.profile-flic.json",
+      "sha256": "ab9aaf07a66aa7f033ea2741da02213d9901b671bfae1be501985ff65c595b44",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-FLIC-006/2026-10-19-V3-4adbc136-flic.profile_pin_refused-flic.json",
+      "sha256": "5c0101a96911b317c0e6eaf0c8dd75f9a3c4466deecace4c3c664a489494ad86",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-FLIC-006/2026-10-19-V3-4adbc136-flic.manual_macro-flic.json",
+      "sha256": "a31051aa7752dc4f4534585edc02ddea9db3853db3693e6cd563da536dbd02a0",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-FLIC-008/2026-10-19-V3-4adbc136-flic.all_outputs-flic.json",
+      "sha256": "6b74a986066c2173c6bee83a163fbf76c789502b16accfd1873f12e4321237f8",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-FLIC-004/2026-10-19-V3-4adbc136-flic.cycle_next-flic.json",
+      "sha256": "565dcdc6f1b89e74ed78d20aababe68854bfb7c84fcfc92cbf3ce7e152aab41c",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-FLIC-005/2026-10-19-V3-4adbc136-flic.cec_output_navigation_refused-flic.json",
+      "sha256": "168901477ac667e90a73c87adf4f2de23d06d0194f49099da5a3ea6b29d0bf06",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-FLIC-006/2026-10-19-V3-4adbc136-flic.unknown_profile-flic.json",
+      "sha256": "c17ba1774cc7a7c35d7cabb4b8ca2204ff8506194f2bdd1a3a3f2f7e622f501b",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-FLIC-007/2026-10-19-V3-4adbc136-flic.register-flic.json",
+      "sha256": "9267390438b297eef4808e687d54da97682c685212d0daf05392e302ab5f7395",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-FLIC-009/2026-10-19-V3-4adbc136-flic.sdk_single-flic.json",
+      "sha256": "c65f0cb230ebb55f2d39d5daf81dac571cf1df01a63ef251ff53e9960ddee87f",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-FLIC-009/2026-10-19-V3-4adbc136-flic.sdk_double-flic.json",
+      "sha256": "252f46ee5e89fb4a7c0736388f306f915de8b6f99b6ed0bd4ef996e7c9298960",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-FLIC-009/2026-10-19-V3-4adbc136-flic.sdk_hold-flic.json",
+      "sha256": "8a427f6a69a4eddf754870538c52dff822f8febd5cd7ad3b42f7de6e264c7580",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-FLIC-009/2026-10-19-V3-4adbc136-flic.sdk_filter_mismatch-flic.json",
+      "sha256": "56a9ca281312710832dc5bb7cd9a7ba1c9c96c9011ab7a0dfe2caa9529600fa1",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-FLIC-009/2026-10-19-V3-4adbc136-flic.sdk_startup_and_click-flic.json",
+      "sha256": "f4b1ba7b2739f8b5b708ec93caa07ad021f3a37fde37e53ff1a4bbd06736dd47",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-FLIC-009/2026-10-19-V3-4adbc136-flic.sdk_duo_left-flic.json",
+      "sha256": "60ab47dbfb3b59ad48a6ca8e756192a1fde1ae05f8ef30dd7a03d6a989955dad",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-FLIC-009/2026-10-19-V3-4adbc136-flic.sdk_duo_right-flic.json",
+      "sha256": "1d7ac7249871b322a6c4ad5e156cc5cfe0bb5161d898f469c35eeb8b0cee529c",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-FLIC-004/2026-10-19-V3-4adbc136-flic.sdk_twist_next-flic.json",
+      "sha256": "5dd35bdfebb70ccdbc1b9e10227ab303567b75d76eb456e251247f69b89d4e4e",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-FLIC-004/2026-10-19-V3-4adbc136-flic.sdk_twist_previous-flic.json",
+      "sha256": "9bfcb0b652261b87a68a1720745153415e9cbc580cf3d022da54011d72f9c723",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-020/2026-10-19-V2-4adbc136-macros.run_rejected-api.json",
+      "sha256": "6e06732e276f1fe3a0e217dcab36ff39aa7e5840526d325890316b534638ac17",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-002/2026-10-19-V2-4adbc136-profiles.recall_rejected-api.json",
+      "sha256": "778c607e633c57fcc37daa13b219be0378934473a306f953f41141eb446c15da",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-012/2026-10-19-V2-4adbc136-scenes.run_rejected-api.json",
+      "sha256": "08677ef724b3772624c0a6bd1a433b742e50d7475e7c47d55b23c1d864e29167",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-012/2026-10-19-V2-4adbc136-scenes.macro_continues_after_refusal-api.json",
+      "sha256": "0ce4aa99775b5f705dced580b0ce125e118a2e464141543c051b351fb466c636",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-020/2026-10-19-V2-4adbc136-scenes.macro_stops_after_refusal-api.json",
+      "sha256": "63a077a4e3b6c857dd456c1bd490e52989bad3dfd3d7998cc19c09efb15bb494",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-025/2026-10-19-V2-4adbc136-shortcuts.mute_rejected-api.json",
+      "sha256": "0325e75d92582025b022d9e477506c753ac98a8ead454e01a9d512dfcbe9fd66",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-027/2026-10-19-V2-4adbc136-shortcuts.beep_rejected-api.json",
+      "sha256": "c39e06fda3a1b29d84408e19ea7a7b790f86f9bd980f14e84cca8a45b10a9e06",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-027/2026-10-19-V2-4adbc136-shortcuts.panel_lock_rejected-api.json",
+      "sha256": "c3422f238ac4146e4f83dd23425dc2cbec094807eb0df096470797f498bf9438",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-028/2026-10-19-V2-4adbc136-shortcuts.lcd_rejected-api.json",
+      "sha256": "b2a6d2736bb3844c9208f6b83634272d799dad728bfb68cf5799c1f3682318da",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-020/2026-10-19-V3-4adbc136-macros.run_rejected-browser.json",
+      "sha256": "8d1dd0af74ea14f8193b648bf0c045449cdf6aa2a2ec8526e305b1cbaf061ebe",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-012/2026-10-19-V3-4adbc136-scenes.macro_continues_after_refusal-browser.json",
+      "sha256": "6d8a1921210ff89c1c9b091b971d8d5f41f00708f39fdcad3e68fbbbfb1c8574",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-020/2026-10-19-V3-4adbc136-scenes.macro_stops_after_refusal-browser.json",
+      "sha256": "8bd238036a1e2ab34a1f8c1e7ba694633cb852ef2a5ea055c534d7b428991746",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-025/2026-10-19-V3-4adbc136-shortcuts.mute_rejected-browser.json",
+      "sha256": "df680edbc21aba48a2158fe952a42205ef5112fe6b6dd4719cc1af455c37e3d7",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-027/2026-10-19-V3-4adbc136-shortcuts.beep_rejected-browser.json",
+      "sha256": "7fda2824b7e09498ae4f5bd7057d545878f4b9b38903345f08138b4d8e6a6be0",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-027/2026-10-19-V3-4adbc136-shortcuts.panel_lock_rejected-browser.json",
+      "sha256": "9065e54a062197f69188c295323593b64d5d650ea9c21a5ca130b13afedbd883",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/F-DOM-028/2026-10-19-V3-4adbc136-shortcuts.lcd_rejected-browser.json",
+      "sha256": "6261d5a1196bd25c650a00a54748630a8c03d4d7d44129de7f30ad86aabe0323",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/F-FLIC-006/2026-10-19-V3-4adbc136-flic.manual_macro_refused-flic.json",
+      "sha256": "362bfe4bfb7dccd6889232179f0e1ab1f92201a574e6c348fd02ba91ea79a453",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/F-HA-001/2026-10-19-V3-4adbc136-ha.config_flow-ha.json",
+      "sha256": "a5d70bcba019bb58ba7e8a1629ab1d9efe1717c6cae79d786fc55719f1f7e343",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-HA-002/2026-10-19-V3-4adbc136-ha.select_source-ha.json",
+      "sha256": "6646ecf5323775d5334406b4bc6f57cefb945a4e9692d01009282b072d3f4c49",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-HA-003/2026-10-19-V3-4adbc136-ha.power_off-ha.json",
+      "sha256": "dbd47e931576ac65276bdbb476d01e91c3fd7dc11ff216d2d293664ff5bf5afd",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-HA-003/2026-10-19-V3-4adbc136-ha.power_on-ha.json",
+      "sha256": "56c0ceb144263abbe9b7a0748c862add64e82bbf3512ce65f52245f6ab92dbb6",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-HA-004/2026-10-19-V3-4adbc136-ha.mute_switch-ha.json",
+      "sha256": "afb8895205b8208406fb44f37532691cace0ab616be15e41e9de72723b9bf415",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-HA-005/2026-10-19-V3-4adbc136-ha.stream_switch-ha.json",
+      "sha256": "0e53f1607de6b4ffd626045154861bdc90b94cd0ec0fe1cd43a855edf606f7bf",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-HA-006/2026-10-19-V3-4adbc136-ha.preset_button-ha.json",
+      "sha256": "c730152f381167f44b37e5dae06be227ad3e716dc5c153a6a7d2d6c665f48487",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-HA-010/2026-10-19-V3-4adbc136-ha.service_recall_preset-ha.json",
+      "sha256": "33171c02d8da05a1e4dc7363130a0b740a293d04551621c9d02fddc1b1ac0e00",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-HA-011/2026-10-19-V3-4adbc136-ha.service_switch_input-ha.json",
+      "sha256": "794a803e09767f51d593d309b17b507ed172060dcf54fb93147064971a52b1dc",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-HA-012/2026-10-19-V3-4adbc136-ha.service_cec_display-ha.json",
+      "sha256": "0d9082f0ca70931310f9b0c0e84f69816c4479763bcf7133f5ffa83735f6b08b",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-HA-012/2026-10-19-V3-4adbc136-ha.service_cec_source-ha.json",
+      "sha256": "7432ed4933e870f66d84497763a6597a92c5c1e8572b62060492eee53cb339d4",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-HA-012/2026-10-19-V3-4adbc136-ha.service_cec_invalid-ha.json",
+      "sha256": "0c11c9c84b0ecd4e72b8fa3530f29961182e14be4051752d2d34c49706e4be99",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-HA-008/2026-10-19-V3-4adbc136-ha.input_signal-ha.json",
+      "sha256": "1d2b142f88550bc50e12768a41f4424c31444944f4d7c3d653836604ac31f6f1",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-HA-009/2026-10-19-V3-4adbc136-ha.display_unplugged-ha.json",
+      "sha256": "649cff3546e719552b6a08f09ad5b3d2fb6ecf04bc7ef5d039970bf2ecc4c15b",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-HA-002/2026-10-19-V3-4adbc136-ha.front_panel_route-ha.json",
+      "sha256": "4cc47fb72bbc5a801e193188504cad242feda9a2efc85b8ec1488d18541ae09b",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-HA-013/2026-10-19-V3-4adbc136-ha.matrix_offline-ha.json",
+      "sha256": "a02162c09ad8248242fac25b3334519cc604c37adc756271a3ee0d01ab4de286",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-HA-016/2026-10-19-V3-4adbc136-ha.reconfigure-ha.json",
+      "sha256": "a428a146b4103916832358c9f1c46e3853ed89d863ddda92fcb3e1d71794c155",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-HA-007/2026-10-19-V3-4adbc136-ha.reboot_button-ha.json",
+      "sha256": "7bac6871a84ba24ee2fe1effd7eba6f0fa4762d143ede368483c1b4eb2bdd749",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/F-HA-013/2026-10-19-V3-4adbc136-ha.matrix_unreachable-ha.json",
+      "sha256": "f4354f3454d009aa1e22f57e69ef072f904e7496534143fe1bfc86347e1155cb",
+      "original_run": "image-ha-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/F-UC-008/2026-10-19-V3-4adbc136-remote.select_source-uc.json",
+      "sha256": "c11646496c0b1551ea5eba7e2576b6df6f5622ced466d4daf4fd8f5b8269de78",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/F-UC-004/2026-10-19-V3-4adbc136-remote.preset_button-uc.json",
+      "sha256": "c44a8465113ebc685e6acecd6b092efdd51ca7e09bd3d84b3987545b3be36dce",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/F-UC-005/2026-10-19-V3-4adbc136-remote.matrix_preset_command-uc.json",
+      "sha256": "d59593185063c26e5c3d5e296a123fc2fac305a986b25070d218e3fed9dd51b6",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/F-UC-007/2026-10-19-V3-4adbc136-remote.output_cec_power_on-uc.json",
+      "sha256": "48952c979eecbe49b0f4876ac09fb3e08f085542d5a3ae08e9849eed8090f214",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/F-UC-006/2026-10-19-V3-4adbc136-remote.input_cec_command-uc.json",
+      "sha256": "0c97005ae719c2c617f0539371a3c5dbe833046c83ca5af770de8cf7e7ad15a9",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/F-UC-007/2026-10-19-V3-4adbc136-remote.output_cec_on-uc.json",
+      "sha256": "bc3b7afaabc2eb59bf093a04cc112cc5e1d44a20642ad9a7b88745612a1d9c91",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/F-UC-006/2026-10-19-V3-4adbc136-remote.input_cec_off-uc.json",
+      "sha256": "dd2f1526c50124aaebf5608eabca834c3a0ee777f1d216c6b42496d5ba5ae553",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/F-UC-007/2026-10-19-V3-4adbc136-remote.output_cec_toggle-uc.json",
+      "sha256": "de8d8b060a50c98b4dd2c5a3eeea638534aa805d25e12dda13730241872fffb3",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/F-UC-006/2026-10-19-V3-4adbc136-remote.input_cec_sequence-uc.json",
+      "sha256": "0bbcb3129506760d16ec49f8b13d9a5fc96f2f9ac791a6ff016c1162964f0dca",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/F-UC-007/2026-10-19-V3-4adbc136-remote.output_cec_volume_repeat-uc.json",
+      "sha256": "9edf73269e6bb6b9d845e43f612edde0885c49a0adb5de5b36510e6ed910fa2c",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/F-UC-007/2026-10-19-V3-4adbc136-remote.cec_bad_sequence-uc.json",
+      "sha256": "73e6f5f5d56b91f499742a93edab25038d99d5a4b48732e190a513d7acb29f8e",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/F-UC-009/2026-10-19-V3-4adbc136-remote.media_player_toggle-uc.json",
+      "sha256": "fd9826703963c7c2ee707801d01ee613e2f3438f40bfe9409911e6e52d1cbba6",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/F-UC-009/2026-10-19-V3-4adbc136-remote.media_player_volume-uc.json",
+      "sha256": "07d56b7bc428c84a9f13eca9f6874a141dd51b85ffc467331eba1ae607b91f96",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/F-UC-010/2026-10-19-V3-4adbc136-remote.power_switch_off-uc.json",
+      "sha256": "d98b29121531e9792cb8390d7fb373e49a165f9ef35316a8f512450badfd1433",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/F-UC-008/2026-10-19-V3-4adbc136-remote.unknown_source-uc.json",
+      "sha256": "c9eb286846782b96d734e6fa61910003b8ff831f60c8ac6c5a1abf551316ec10",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/F-UC-010/2026-10-19-V3-4adbc136-remote.power_switch_follows_front_panel-uc.json",
+      "sha256": "fd806ceacd992765a30ef6405744888006086d50788976d895ecf51e958a44de",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/F-UC-004/2026-10-19-V3-4adbc136-remote.preset_names_from_web_app-uc.json",
+      "sha256": "27b80a263c0e08cd1e00f585e3a27210a2ef78cc27cbf4d647c6ce22c485582e",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/F-UC-016/2026-10-19-V3-4adbc136-remote.input_rename_live-uc.json",
+      "sha256": "999cb89f2f8a96d4e1eec800264edef30278f73e9055e2329fc8196f0b568e48",
+      "original_run": "image-uc-campaigns"
+    }
+  ]
+}

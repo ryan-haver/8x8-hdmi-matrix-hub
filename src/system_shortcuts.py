@@ -830,8 +830,10 @@ async def execute_shortcut(
         return {"success": False, "detail": f"Unknown shortcut key: {key}", "type": stype}
 
     except Exception as exc:
-        _LOG.error("System shortcut %s failed: %s", key, exc)
-        return {"success": False, "detail": str(exc), "type": stype}
+        from hub.core.errors import safe_action_error
+
+        message, _ = safe_action_error(exc, f"System shortcut {key} failed", logger=_LOG)
+        return {"success": False, "detail": message, "type": stype}
 
 
 # Phase 8 compatibility aliases

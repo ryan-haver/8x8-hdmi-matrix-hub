@@ -6,6 +6,11 @@
 # Third-party notices retain the exact bytes shipped by their distributions.
 LICENSES/python/** -text
 
+# Hash-indexed runtime evidence must retain the original Linux/Windows bytes.
+# Scope the records to this campaign so historical evidence is not renormalized.
+docs/validation/runs/runtime/** -text
+docs/validation/evidence/**/2026-10-19-*-4adbc136-*.json -text
+
 # UI visual baselines (docs/REMEDIATION_PLAN.md §5.3) are stored in Git LFS.
 # The LFS hooks are in .githooks/ because core.hooksPath points there.
 tests/e2e/visual/**/*.png filter=lfs diff=lfs merge=lfs -text

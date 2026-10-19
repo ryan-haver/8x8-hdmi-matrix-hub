@@ -240,9 +240,13 @@ release gate. Corrections have separate ownership:
   targets are refused before imports, preserving original bytes. Legacy test
   fixtures now use disposable source directories. The root rerun left local
   runtime files unchanged against the post-discovery hash checkpoint.
-- **R4B, Argon high:** schema-stamped storage assertions, actual atomic-writer
-  fault injection, and the existing safe error-reference contract for preset
-  exceptions, preserving ordinary refusal bodies.
+- **R4B, Argon high:** candidate `5daa554` passed 395 worker checks with one skip
+  but was not accepted. Review rejected live-client method interception and a
+  special `BaseException` bypass. The committed candidate is preserved in the
+  same child worktree for **R4C, fresh Sol 6.1 high**, which owns explicit service
+  exception propagation and safe public action errors. Ordinary refusals, partial
+  results, cancellation and the sole client owner must remain intact. This was
+  coordinator code review; no automatic approval rejection occurred.
 - **R6B, Flash 3.8 high:** accepted in `30fd047`. Seventy-two independent R6
   checks and an additional command-filter guard passed; root JavaScript lint
   passed. Coordinator tightened maintenance filtering to known commands and
@@ -252,7 +256,13 @@ release gate. Corrections have separate ownership:
   instead of cached facade state; failed reads preserve storage. UC production
   bind rollback was already correct. Harness checks now require this child's
   completed bind and prove exclusive listener conflicts; explicit ports do not
-  silently move. Final combined source/image/client gates remain pending R4B.
+  silently move. Final combined source/image/client gates remain pending R4C.
+
+R7 Luna is preparing guides against accepted behavior while the last correction
+runs. Its final evidence index and completion are blocked on a separate
+coordinator campaign-evidence handoff. Fresh Astra R8 review remains after that
+acceptance. Dedicated HA component tests passed 101 checks in the pinned Python
+3.13 test container; these are unit checks, not HA deployment or physical proof.
 
 Coordinator refreshed only the additive health JSON contract fixture and added
 registered Flic privacy/disabled-route reads. The obsolete direct-construction
@@ -280,6 +290,61 @@ execution without changing runtime wire bodies: 122 API/config tests and 17
 registry checks passed. Cycle readback and transport cleanup checks now pass.
 Final image/client campaigns and configuration-specific registry/ledger checks
 must follow the current corrective tracks before R7 and independent R8 review.
+
+## Integrated correction and campaign checkpoint, 2026-10-19
+
+The held R4B candidate above is historical. Its explicit R4C correction and later
+R1E preset-cache correction are integrated; the rejected interception approach
+was not accepted. The accepted clean `59aae63` local run passed 3,941 core tests,
+four documented skips and 31 deselections, covering 177/177 REST routes. Its
+dedicated actual-SDK UC suite passed 100 tests. The complete source campaign
+passed API 1,411, browser 54, scripted Remote 18 and Flic 23 outcomes. Earlier
+failed source summaries remain preserved, including the preset-read failures
+that led to R1E; they are not counted as accepted passes.
+
+Both normal-command images were built from `59aae63`. Their recorded IDs are
+amd64 `sha256:a91722edff1a44baf29e66b0332a99adb805b1591749846539525b7a039cfc2e`
+and arm64 `sha256:dba8ac3587e5ccdd69580c0498612142fa568c517b419d6a7e53ea86cb40f2bb`.
+Both matched all 257 tracked shipped inputs. The amd64 deployment run passed
+26 tests with three expected platform/configuration skips; arm64/QEMU passed
+normal startup, offline API/health and SIGTERM checks. These results do not cover
+the pending R3E UI correction or physical device actions.
+
+- **R5C, Sol 6.1 high:** `4f57245`, merged as `9b512f5`, fixes Linux deployment
+  test assumptions. Docker selects the isolated subnet before the harness makes
+  it explicit; an independent Zeroconf observer checks actual SDK discovery
+  instead of an obsolete log string. Linux passed 27 deployment tests with two
+  expected configuration skips. Coordinator verification passed four with one
+  Linux-only skip; the new GitHub Docker job also passes. The worker was released
+  and its child removed/pruned.
+- **R6C, Flash 3.8 high:** `b4d0915`, merged as `a7eedf6`, classifies structured HA
+  application errors without bypassing unexpected transport failures or normal
+  response checks. Fourteen independent focused checks passed. Corrected actual
+  HA source campaigns at clean `a7eedf6` passed 19/19 on HA 2026.9.3 and 19/19
+  on 2025.1.4. The latter checks the supported 2025.1 version line, not the exact
+  2025.1.0 floor. Original 17-pass/two-failure records remain intact. The worker
+  was released and its child removed/pruned.
+- **R3E, Argon high:** active. A separate fresh Sol read-only review used real
+  runtime/SIM payloads and actual application JavaScript to demonstrate newer WS
+  routing being overwritten by a delayed startup REST response. Exact event-order
+  attribution to the first failing CI run remains unproven. Argon has bounded
+  `app.js` and new-regression ownership; backend changes and existing E2E oracle
+  or visual-baseline changes are outside that approval. The read-only review is
+  complete, its artifacts copied, and its worker released and child removed.
+- **R7, Luna medium:** guide preparation accepted at `5608407` after 375
+  independent documentation checks. Final indexing still awaits the actual
+  remaining campaigns and consolidated report. **R8, fresh Astra high**, has
+  not launched and remains after those gates.
+
+Draft [PR #38](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/pull/38) targets
+the Phase 6/7 branch. At `a7eedf6`, 12 of 13 checks pass; UI is still running at
+this checkpoint. CI core passed 3,934 tests with 22 skips, 31 deselections and
+177/177 routes; the actual HA container campaign passed 19 scenarios. CI and
+local counts differ and retain their own environments. Full client campaigns
+against the next shipped image, source browser flows, Swagger rendering, final
+evidence/gate reconciliation and R8 remain open. Actual local summaries/logs
+are under `build/runtime-completion/after-r1e/` and `after-r6c/`; the independent
+R3E report is `build/runtime-completion/r3e-review-evidence/REPORT.txt`.
 
 ## Evidence and release gates
 
