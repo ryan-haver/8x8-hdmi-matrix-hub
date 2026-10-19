@@ -62,6 +62,8 @@ class PreparedPersistence:
 
 
 _PREPARED: PreparedPersistence | None = None
+# Completed barriers bind each resolved data volume to its own profile catalog.
+_PROFILE_DIRS: dict[Path, Path] = {}
 
 
 def _read(path: Path) -> Any:
@@ -163,9 +165,42 @@ def _import_catalog(source: Path, target: Path, payload: Any) -> None:
         raise MigrationError(f"{target}: atomic import failed") from exc
 
 
-def prepare_scene_files(data_dir: Path) -> None:
-    target = Path(data_dir) / SCENES_V2_FILENAME
-    legacy = Path(data_dir) / SCENES_LEGACY_FILENAME
+def _require_imported_profile_source(source: Path, payload: Any, config_dir: Path) -> None:
+    """A legacy profile source may coexist with an independent unified catalog.
+
+    Import provenance permits later profile edits, including PIN rehashes. In a
+    split layout, the config copy was serialized by the old-location importer:
+    require equivalent complete content before trusting that copy's digest.
+    """
+    profiles = config_dir / "profiles.json"
+    migration.assert_writable(profiles)
+    if profiles.exists():
+        current = _normalise(profiles.name, _read(profiles))
+        imports = current.get(_IMPORT_KEY, {})
+        if not isinstance(imports, dict):
+            raise MigrationError(f"{profiles}: invalid import provenance metadata")
+        config_source = config_dir / SCENES_LEGACY_FILENAME
+        if config_source.exists():
+            copied = _read(config_source)
+            if (
+                copied == payload
+                and imports.get(source.name) == hashlib.sha256(config_source.read_bytes()).hexdigest()
+            ):
+                return
+    raise MigrationError(
+        f"conflicting {source} and {source.with_name(SCENES_V2_FILENAME)}: "
+        "legacy source has no matching profile import provenance"
+    )
+
+
+def prepare_scene_files(data_dir: Path, *, config_dir: Path | None = None) -> None:
+    data_dir = Path(data_dir).resolve()
+    if config_dir is None:
+        # Standalone readers/writers reuse only this installation's completed
+        # barrier. An unrelated prepared volume cannot authorize coexistence.
+        config_dir = _PROFILE_DIRS.get(data_dir, data_dir)
+    target = data_dir / SCENES_V2_FILENAME
+    legacy = data_dir / SCENES_LEGACY_FILENAME
     try:
         migration.assert_writable(target)
         if target.exists():
@@ -176,7 +211,7 @@ def prepare_scene_files(data_dir: Path) -> None:
             if shape in ("unified", "empty"):
                 _import_catalog(legacy, target, payload if isinstance(payload, dict) else {"scenes": payload})
             elif target.exists():
-                raise MigrationError(f"conflicting {legacy} and {target}: incompatible record shapes")
+                _require_imported_profile_source(legacy, payload, Path(config_dir).resolve())
     except (MigrationError, OSError) as exc:
         migration.block_path(target, str(exc))
         migration.block_path(legacy, str(exc))
@@ -229,6 +264,7 @@ def prepare_runtime_storage(
     from persistence import migrate_legacy_file
 
     config_dir, data_dir = Path(config_dir).resolve(), Path(data_dir).resolve()
+    _PROFILE_DIRS.pop(data_dir, None)
     paths = PersistencePaths(
         config_dir, data_dir, {n: config_dir / n for n in _CONFIG_FILENAMES}, {n: data_dir / n for n in _DATA_FILENAMES}
     )
@@ -249,6 +285,13 @@ def prepare_runtime_storage(
                     scene_shape(_read(path))
                 else:
                     _normalise(path.name, _read(path))
+        legacy_scenes = data_dir / SCENES_LEGACY_FILENAME
+        if (data_dir / SCENES_V2_FILENAME).exists() and legacy_scenes.exists():
+            payload = _read(legacy_scenes)
+            if scene_shape(payload) == "legacy":
+                # Existing competing catalogs must already have a demonstrated
+                # import; do not manufacture provenance while resolving a conflict.
+                _require_imported_profile_source(legacy_scenes, payload, config_dir)
         for path in targets + extras:
             sources = legacy_data_dirs
             if path.parent == config_dir and path.name in _CONFIG_FILENAMES:
@@ -261,7 +304,7 @@ def prepare_runtime_storage(
                     sources = (data_dir, *sources)
             migrate_legacy_file(path, path.name, legacy_dirs=sources)
         prepare_profile_file(config_dir)
-        prepare_scene_files(data_dir)
+        prepare_scene_files(data_dir, config_dir=config_dir)
         prepare_shortcut_files(data_dir)
         for path in targets:
             result = migration.migrate_data_file(path)
@@ -280,6 +323,7 @@ def prepare_runtime_storage(
         _PREPARED = PreparedPersistence(paths, tuple(results), {str(p): str(exc) for p in targets + extras})
         raise MigrationError(str(exc)) from exc
     _PREPARED = PreparedPersistence(paths, tuple(results))
+    _PROFILE_DIRS[data_dir] = config_dir
     return _PREPARED
 
 
@@ -316,4 +360,5 @@ def block_reason(path: Path | str) -> str | None:
 def reset_preparation() -> None:
     global _PREPARED
     _PREPARED = None
+    _PROFILE_DIRS.clear()
     migration._WRITE_FAILURES.clear()
