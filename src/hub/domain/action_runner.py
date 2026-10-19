@@ -334,12 +334,12 @@ async def _passcode_refusal(
 
     Returns None when the action may run, else the 403/429 to answer with.
     """
-    if passcode in (None, ""):
-        return _refused(kind, action_id, PASSCODE_REQUIRED)
     key = _pin_key(kind, action_id)
     retry_after = check_pin_lockout(key)
     if retry_after > 0:
         return _locked(kind, action_id, retry_after)
+    if passcode in (None, ""):
+        return _refused(kind, action_id, PASSCODE_REQUIRED)
     attempt = await attempt_pin(key, verify)
     if attempt.locked:
         return _locked(kind, action_id, attempt.retry_after)
@@ -423,18 +423,18 @@ class ActionRunner:
     @classmethod
     def from_runtime(cls, matrix_device: Any = None) -> ActionRunner:
         """A runner bound to the managers the running hub already holds."""
+        from rest_api.scenes_v2 import _phase8_scene_manager
         from rest_api.utils import (
             get_macro_manager,
             get_matrix_device,
             get_profile_manager,
-            get_scene_manager,
             get_system_shortcut_manager,
         )
 
         return cls(
             matrix_device if matrix_device is not None else get_matrix_device(),
             profile_manager=get_profile_manager(),
-            scene_manager=get_scene_manager(),
+            scene_manager=_phase8_scene_manager,
             macro_manager=get_macro_manager(),
             shortcut_manager=get_system_shortcut_manager(),
         )
@@ -563,11 +563,11 @@ class ActionRunner:
         state = await apply_profile_state(profile, matrix)
         errors.extend(state.errors)
         failed_outputs = set(state.failed_outputs)
-        for offset, (output_num, config) in enumerate(sorted(profile.outputs.items())):
+        for output_num, config in sorted(profile.outputs.items()):
             applied = output_num not in failed_outputs
             steps.append(
                 StepResult(
-                    step_index=len(steps) + offset,
+                    step_index=len(steps),
                     action=f"output:{output_num}",
                     success=applied,
                     error=None if applied else _output_error(state.errors, output_num),
@@ -591,11 +591,13 @@ class ActionRunner:
     async def _run_power_on_macro(self, macro_id: str) -> tuple[StepResult, dict[str, Any] | None, list[str]]:
         """A profile's power-on macro as one step, with the reason it failed."""
         manager = self.macro_manager
-        if manager is None:
-            reason = "Power-on macro '" + macro_id + "': macro manager not initialized"
-            return StepResult(0, f"macro:{macro_id}", False, error=reason), None, [reason]
-
-        outcome = await manager.execute_macro(macro_id)
+        if manager is None or manager.get_macro(macro_id) is None:
+            outcome = {"success": False, "error": f"Macro not found: {macro_id}"}
+        else:
+            try:
+                outcome = await manager.execute_macro(macro_id)
+            except Exception as exc:
+                outcome = {"success": False, "error": str(exc)}
         success = bool(outcome.get("success"))
         reasons = [] if success else _macro_errors(outcome)
         step = StepResult(
@@ -605,7 +607,7 @@ class ActionRunner:
             error="; ".join(reasons) or None,
             data={"macro_id": macro_id, "steps_executed": outcome.get("steps_executed")},
         )
-        errors = [f"Power-on macro '{macro_id}': {reason}" for reason in reasons]
+        errors = [] if success else [f"Power-on macro '{macro_id}': {outcome.get('error') or 'failed'}"]
         return step, outcome, errors
 
     # ---- scenes -------------------------------------------------------------
@@ -633,10 +635,10 @@ class ActionRunner:
             if denied is not None:
                 return denied
 
-        from scene_execution import SceneExecutor
+        from scene_execution import SceneExecutor, _PasscodeCheckedSceneManager
 
         executor = SceneExecutor(
-            scene_manager=manager,
+            scene_manager=_PasscodeCheckedSceneManager(manager, action_id),
             profile_manager=self.profile_manager,
             system_action_manager=self.shortcut_manager,
             macro_manager=self.macro_manager,

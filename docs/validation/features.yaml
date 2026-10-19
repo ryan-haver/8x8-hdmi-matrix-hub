@@ -783,7 +783,7 @@ features:
     flic: [Twist rotate]
   target: V4
   current: V1
-  basis: tests/test_rest_api.py TestInputCycling (mocked).
+  basis: "tests/test_rest_api.py TestInputCycling (mocked). Input next/previous accept optional cycle=true|false (default true); false clamps under the same shared lock. tests/sim/test_sim_rest_reads.py::test_cycle_clamp_and_wrap_read_back_exact_operation and test_invalid_cycle_option_is_refused_before_any_write verify registered operation readback and invalid-input no-write behavior."
   evidence:
   - docs/validation/evidence/F-MTX-029/2026-10-04-V2-7dbc4dc7-status.cycle_next_1_1-api.json
   - docs/validation/evidence/F-MTX-029/2026-10-04-V2-7dbc4dc7-status.cycle_next_1_2-api.json
@@ -2642,7 +2642,7 @@ features:
     rest: [GET /api/health, GET /api/openapi.json, GET /api/docs]
   target: V3
   current: V2
-  basis: 'V2: tests/sim/test_sim_e2e.py::test_health_reports_matrix_and_runtime; tests/sim/test_sim_rest_reads.py::test_health_includes_integration_lifecycle_mapping; tests/sim/test_sim_rest_reads.py::test_openapi_spec_and_swagger_docs_reads; tests/test_health.py; tests/test_openapi_and_config_docs.py. R1 adds data.integrations; real loader/flag startup proof awaits peer integration.'
+  basis: "V2: tests/sim/test_sim_e2e.py::test_health_reports_matrix_and_runtime; tests/sim/test_sim_rest_reads.py::test_health_includes_integration_lifecycle_mapping; tests/sim/test_sim_rest_reads.py::test_openapi_spec_and_swagger_docs_reads; tests/test_health.py; tests/test_openapi_and_config_docs.py. R1 adds data.integrations; real loader/flag startup proof awaits peer integration. OpenAPI describes shared cycle query parameters and the existing SceneV2ResponseEnvelope field omissions, creation201 and execution207; tests/test_openapi_and_config_docs.py::test_live_scene_v2_omitted_fields_and_created_status_match_openapi compares real registered responses with their schemas. Core envelope remains strict; no public wire normalization."
   evidence: []
   findings: []
   scenarios: [contracts.health, contracts.openapi_spec, contracts.api_docs]
@@ -2703,7 +2703,7 @@ features:
     rest: [POST /api/switch]
   target: V3
   current: V2
-  basis: 'V2: tests/sim/test_sim_e2e.py::test_switch_changes_simulator_state, ::test_switch_all_and_preset.'
+  basis: "V2: tests/sim/test_sim_e2e.py::test_switch_changes_simulator_state, ::test_switch_all_and_preset. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence."
   evidence:
   - docs/validation/evidence/F-MTX-001/2026-10-04-V2-d6baf3ca-routing.switch_one-api.json
   - docs/validation/evidence/F-MTX-002/2026-10-04-V2-d6baf3ca-routing.route_all-api.json
@@ -2717,7 +2717,7 @@ features:
     rest: ['POST /api/output/{output}/source', POST /api/input/next, POST /api/input/previous]
   target: V3
   current: V1
-  basis: tests/test_rest_api.py TestControlEndpoints, TestInputCycling (mocked).
+  basis: "tests/test_rest_api.py TestControlEndpoints, TestInputCycling (mocked). R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence. Input next/previous accept optional cycle=true|false (default true); false clamps under the same shared lock. tests/sim/test_sim_rest_reads.py::test_cycle_clamp_and_wrap_read_back_exact_operation and test_invalid_cycle_option_is_refused_before_any_write verify registered operation readback and invalid-input no-write behavior."
   evidence: []
   findings: [VAL-05]
   scenarios: []
@@ -2729,7 +2729,7 @@ features:
     rest: ['POST /api/preset/{preset}']
   target: V3
   current: V2
-  basis: 'V2: tests/sim/test_sim_e2e.py::test_switch_all_and_preset.'
+  basis: "V2: tests/sim/test_sim_e2e.py::test_switch_all_and_preset. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence."
   evidence:
   - docs/validation/evidence/F-MTX-003/2026-10-04-V2-d6baf3ca-presets.recall-api.json
   findings: []
@@ -2742,7 +2742,7 @@ features:
     rest: ['POST /api/preset/{preset}/save']
   target: V2
   current: V1
-  basis: 'Scenario presets.save_custom_mapping (V2, custom mapping body); tests/test_rest_api.py TestControlEndpoints (mocked).'
+  basis: "Scenario presets.save_custom_mapping (V2, custom mapping body); tests/test_rest_api.py TestControlEndpoints (mocked). R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence."
   evidence:
   - docs/validation/evidence/F-DOM-034/2026-10-04-V2-7dbc4dc7-preset_read.saved_partial_1-api.json
   - docs/validation/evidence/F-DOM-034/2026-10-04-V2-7dbc4dc7-preset_read.saved_partial_2-api.json
@@ -2771,7 +2771,7 @@ features:
     rest: [POST /api/power/on, POST /api/power/off]
   target: V3
   current: V1
-  basis: tests/test_rest_api.py TestControlEndpoints (mocked).
+  basis: "tests/test_rest_api.py TestControlEndpoints (mocked). R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence."
   evidence:
   - docs/validation/evidence/F-MTX-006/2026-10-04-V2-7dbc4dc7-power.standby-api.json
   - docs/validation/evidence/F-MTX-006/2026-10-04-V2-7dbc4dc7-power.wake-api.json
@@ -2852,7 +2852,7 @@ features:
     rest: ['POST /api/cec/input/{input}/{command}', 'POST /api/cec/output/{output}/{command}']
   target: V3
   current: V1
-  basis: 'tests/test_rest_api.py TestCecCommandEndpoints (mocked). V2 from the cec_telnet scenarios; BE-37 fixed: an ambiguous Telnet acknowledgement answers 500 without an HTTP resend; BE-38: power on/off are resent once over HTTP and answer 200.'
+  basis: "tests/test_rest_api.py TestCecCommandEndpoints (mocked). V2 from the cec_telnet scenarios; BE-37 fixed: an ambiguous Telnet acknowledgement answers 500 without an HTTP resend; BE-38: power on/off are resent once over HTTP and answer 200. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence."
   evidence:
   - docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_interrupted_volume-api.json
   - docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_interrupted_volume-api.json
@@ -3537,7 +3537,7 @@ features:
       'GET /api/cec/output/{output}/capabilities', 'POST /api/cec/input/{port}/enable', 'POST /api/cec/output/{port}/enable']
   target: V2
   current: V1
-  basis: 'Registered-route simulator reads/writes and fresh packaged-image records. Single-port CEC writes preserve current arrays; tests/sim/test_sim_cec_enable_snapshot.py covers external changes, concurrent edits and failed/incomplete reads (BE-35). Grouped capability routes still have scope beyond the selected scenarios.'
+  basis: "Registered-route simulator reads/writes and fresh packaged-image records. Single-port CEC writes preserve current arrays; tests/sim/test_sim_cec_enable_snapshot.py covers external changes, concurrent edits and failed/incomplete reads (BE-35). Grouped capability routes still have scope beyond the selected scenarios. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence."
   evidence:
   - docs/validation/evidence/F-API-016/2026-10-01-V2-72cc71dc-writes.cec_output_enable-api.json
   - docs/validation/evidence/F-API-016/2026-10-04-V2-7dbc4dc7-contracts.cec_input_catalog-api.json
@@ -3817,7 +3817,7 @@ features:
       GET /api/device-settings/dashboard-presets, PUT /api/device-settings/dashboard-presets, 'POST /api/device-settings/dashboard-presets/{preset}/toggle']
   target: V2
   current: V1
-  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
+  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. R2 private storage projection: test_device_settings_private_extensions_survive_edits_without_public_exposure verifies real registered reads, edit/reload persistence, schema preservation and no private extension exposure. Recorded level retained pending the fresh integrated campaign. Historical shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
   evidence:
   - docs/validation/evidence/F-API-017/2026-10-04-V2-7dbc4dc7-contracts.device_settings-api.json
   - docs/validation/evidence/F-API-017/2026-10-04-V2-7dbc4dc7-contracts.input_settings-api.json
@@ -3854,7 +3854,7 @@ features:
       'POST|PUT /api/profile/{profile_id}/dashboard', 'GET /api/profile/{profile_id}/execution-log']
   target: V2
   current: V1
-  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios. API-22 fixed: profile_crud.*_scaler_arc round trips and *_invalid refusals pass.'
+  basis: "Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios. API-22 fixed: profile_crud.*_scaler_arc round trips and *_invalid refusals pass. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence."
   evidence:
   - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.post_scaler_arc-api.json
   - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.put_scaler_arc-api.json
@@ -4081,7 +4081,7 @@ features:
       POST /api/scene/save-current, 'GET|POST|PUT /api/scene/{scene_id}/cec', 'POST /api/scene/{scene_id}/cec/auto-resolve']
   target: V2
   current: V1
-  basis: "Recorded V1 baseline: mocked legacy scene tests. The profile_state packaged-image scenarios add V2 proof for create/read/list/delete/recall aliases, CEC config/auto-resolve, missing/invalid requests and save-current. API-27 fixed: failed output/video reads answer 502 and create nothing (profile_state.capture_*_read_failure pass); API-12 remains open. Status cache TTL is explicitly zero."
+  basis: "Recorded V1 baseline: mocked legacy scene tests. The profile_state packaged-image scenarios add V2 proof for create/read/list/delete/recall aliases, CEC config/auto-resolve, missing/invalid requests and save-current. API-27 fixed: failed output/video reads answer 502 and create nothing (profile_state.capture_*_read_failure pass); API-12 remains open. Status cache TTL is explicitly zero. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence."
   evidence:
   - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_output_read_failure-api.json
   - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_video_read_failure-api.json
@@ -4234,7 +4234,7 @@ features:
       'GET /api/v2/scenes/{scene_id}/history']
   target: V2
   current: V2
-  basis: 'tests/sim/test_sim_scenes_v2.py exercises every /api/v2/scenes route on the real hub + simulator and asserts the device effect of execute (V2).'
+  basis: "tests/sim/test_sim_scenes_v2.py exercises every /api/v2/scenes route on the real hub + simulator and asserts the device effect of execute (V2). R2: tests/sim/test_sim_rest_reads.py::test_scene_override_private_extensions_survive_public_edit_and_reload covers registered list/detail reads and edit/reload with nested private storage extensions, keeping public fields and PIN hashes separated. Existing evidence levels are retained pending the fresh integrated runtime campaign. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence."
   evidence:
   - docs/validation/evidence/F-DOM-010/2026-10-04-V2-7dbc4dc7-domain_manage.scene_a_list-api.json
   - docs/validation/evidence/F-DOM-010/2026-10-04-V2-7dbc4dc7-domain_manage.scene_b_create_reject_body_type-api.json
@@ -4349,7 +4349,7 @@ features:
       'POST /api/cec/macro/{macro_id}/favorite', 'POST /api/cec/macro/{macro_id}/dashboard']
   target: V2
   current: V1
-  basis: "Recorded V1 baseline: mocked macro API tests. The domain_manage packaged-image scenarios add V2 proof for macro management, validation boundaries/refusals, favorite/dashboard flags, collection ordering and non-executing dry-run. API-28 fixed: edits apply the create limits (domain_manage.macro_update_description_long passes). Macro execution and physical CEC effects are outside this management batch."
+  basis: "Recorded V1 baseline: mocked macro API tests. The domain_manage packaged-image scenarios add V2 proof for macro management, validation boundaries/refusals, favorite/dashboard flags, collection ordering and non-executing dry-run. API-28 fixed: edits apply the create limits (domain_manage.macro_update_description_long passes). Macro execution and physical CEC effects are outside this management batch. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence."
   evidence:
   - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_update_description_long-api.json
   - docs/validation/evidence/F-DOM-019/2026-10-04-V2-7dbc4dc7-domain_manage.macro_all_commands-api.json
@@ -4507,7 +4507,7 @@ features:
         (10 aliases)]
   target: V2
   current: V1
-  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
+  basis: "Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence."
   evidence:
   - docs/validation/evidence/F-API-024/2026-10-04-V2-7dbc4dc7-contracts.shortcut_alias-api.json
   - docs/validation/evidence/F-API-024/2026-10-04-V2-7dbc4dc7-contracts.shortcut_dashboard-api.json

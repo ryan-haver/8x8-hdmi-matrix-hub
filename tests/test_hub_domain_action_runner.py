@@ -310,7 +310,7 @@ async def test_profile_power_on_macro_without_a_macro_manager_is_reported(matrix
     result = await runner.run("profile", "movie")
 
     assert result.status_code == 207
-    assert "macro manager not initialized" in result.errors[0]
+    assert "Macro not found: tv_on" in result.errors[0]
 
 
 async def test_profile_without_a_matrix_is_503(profile_manager):

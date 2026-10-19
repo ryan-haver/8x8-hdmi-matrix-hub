@@ -1,6 +1,6 @@
-"""R1 composition with a structural R2 barrier and transport doubles.
+"""R1 composition with real persistence preparation and transport doubles.
 
-These tests do not claim migration or UC server acceptance before R2/R3 merge.
+The explicit UC subprocess double does not prove SDK or image behavior.
 """
 
 from __future__ import annotations
@@ -11,7 +11,6 @@ import os
 import socket
 import sys
 from pathlib import Path
-from types import ModuleType, SimpleNamespace
 
 import aiohttp
 import pytest
@@ -137,18 +136,17 @@ def free_port():
 
 @pytest.fixture
 def runtime_builder(tmp_path, monkeypatch):
-    """Only the frozen R2 storage barrier is substituted; managers and REST are real."""
-    barrier = ModuleType("hub.persistence.startup")
+    """Observe actual storage preparation; managers and REST use the real R2 module."""
+    import hub.persistence.startup as barrier
+
+    actual_prepare = barrier.prepare_runtime_storage
     preparations = []
 
     def prepare_runtime_storage(*, config_dir, data_dir):
-        config_dir.mkdir(parents=True, exist_ok=True)
-        data_dir.mkdir(parents=True, exist_ok=True)
         preparations.append((config_dir, data_dir))
-        return SimpleNamespace(paths=SimpleNamespace(config_dir=config_dir, data_dir=data_dir), results=())
+        return actual_prepare(config_dir=config_dir, data_dir=data_dir)
 
-    barrier.prepare_runtime_storage = prepare_runtime_storage
-    monkeypatch.setitem(sys.modules, "hub.persistence.startup", barrier)
+    monkeypatch.setattr(barrier, "prepare_runtime_storage", prepare_runtime_storage)
     # The shared fixture predates runtime binding; keep the new global isolated here.
     monkeypatch.setattr("rest_api.utils._runtime", None)
 
@@ -323,10 +321,10 @@ def test_storage_failure_preserves_bytes_and_prevents_reader_construction(runtim
 
 @pytest.mark.parametrize("uc", [False, True])
 async def test_real_run_entry_with_simulator_and_explicit_parallel_seams(tmp_path, uc):
-    """Actual run.py subprocess, real transport/simulator; R2/R3 are explicitly structural.
+    """Actual run.py subprocess, persistence and simulator; UC uses a labeled double.
 
-    Full startup acceptance must rerun without sitecustomize after peer integration.
     The UC seam deliberately opens no UC listener and proves no UC protocol behavior.
+    Real SDK source/installed/image acceptance uses separate unsubstituted tests.
     """
     from tools.simulator import Simulator
 
@@ -338,14 +336,6 @@ async def test_real_run_entry_with_simulator_and_explicit_parallel_seams(tmp_pat
         """
 import os, signal, sys, threading, time, types
 from pathlib import Path
-from types import SimpleNamespace
-barrier = types.ModuleType("hub.persistence.startup")
-def prepare_runtime_storage(*, config_dir, data_dir):
-    config_dir.mkdir(parents=True, exist_ok=True)
-    data_dir.mkdir(parents=True, exist_ok=True)
-    return SimpleNamespace(paths=SimpleNamespace(config_dir=config_dir, data_dir=data_dir), results=())
-barrier.prepare_runtime_storage = prepare_runtime_storage
-sys.modules["hub.persistence.startup"] = barrier
 if os.environ["UC_ENABLED"] == "true":
     bridge = types.ModuleType("hub.integrations.unfolded_circle")
     class StructuralBridge:

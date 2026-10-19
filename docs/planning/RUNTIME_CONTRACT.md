@@ -250,11 +250,21 @@ flag/lifecycle behavior without requiring a new generic factory protocol.
 R1's `command_provider` (in `hub/runtime/adapters.py`) has `snapshot()` returning
 `HubSnapshot`, `switch(input_num, output_num=None)`, `power(on)`,
 `send_cec(target_kind, port, command)`, `recall_preset(preset)`,
-`save_preset(preset)` and `cycle_input(direction, output_num=1)`, all commands
+`save_preset(preset)` and `cycle_input(direction, output_num=1, *, cycle=True)`, all commands
 async returning bool. It translates to service `set_power`, `switch`, etc.; CEC
 uses the same underlying client's existing target-aware protocol implementation.
 Cycle uses one per-output lock shared by REST and UC, not separate read/modify
-locks in two front ends. Macro sender is bound once to this provider's `send_cec`.
+locks in two front ends. The coordinator's additive 2026-10-18 correction retains
+wrapping by default; `cycle=False` clamps to inputs 1–8 under the same lock and
+transaction, preserving the Remote's existing non-wrapping option. `HubClient`,
+Local and HTTP adapters use the same optional keyword. Existing REST next/previous
+routes accept optional `cycle=true|false` (invalid explicit spellings return 400);
+the HTTP client emits the query only for false so default requests stay unchanged.
+R4 owns only these cycle seams in `runtime/adapters.py`, `hub_client.py` and
+`hub_client_http.py` in addition to its original files. R3C owns only the UC
+select-next/previous dispatcher branch plus its unconfigured bridge guard.
+The coordinator owns schema, registry, simulator-read and ledger updates.
+Macro sender is bound once to this provider's `send_cec`.
 `run_action_envelope(kind, action_id, *, passcode=None)` returns the existing
 `success/data/error` mapping expected by `HubClientLocal`, including safe result
 details/status for UC translation. R4 owns its final compatibility projection in

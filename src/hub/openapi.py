@@ -278,7 +278,7 @@ def _path_parameters(route: RouteInfo) -> list[dict[str, Any]]:
 
 
 def envelope_schema() -> dict[str, Any]:
-    """The one response shape every JSON endpoint uses (API-21)."""
+    """The standard core response envelope (API-21)."""
     return {
         "type": "object",
         "description": (
@@ -297,6 +297,15 @@ def envelope_schema() -> dict[str, Any]:
         },
         "additionalProperties": False,
     }
+
+
+def scene_v2_envelope_schema() -> dict[str, Any]:
+    """Scene v2 omits data/error when absent; middleware may include null fields."""
+    schema = envelope_schema()
+    schema["required"] = ["success"]
+    schema["description"] = "Scene v2 response; absent data and error fields are omitted by its handlers."
+    schema["properties"]["data"]["description"] = "Payload when supplied, including execution details on partial failure."
+    return schema
 
 
 def security_schemes() -> dict[str, Any]:
@@ -392,6 +401,18 @@ def _responses(route: RouteInfo) -> dict[str, Any]:
         responses["503"] = _error_response("503")
     if route.method in _BODY_METHODS:
         responses["429"] = _error_response("429")
+    if route.method == "POST" and route.path == "/api/v2/scenes":
+        responses["201"] = responses.pop("200")
+    if route.method == "POST" and route.path == "/api/v2/scenes/{scene_id}/execute":
+        responses["207"] = {
+            "description": "Partial execution; data records completed steps and errors.",
+            "content": {"application/json": {"schema": {}}},
+        }
+    if route.path.startswith("/api/v2/scenes"):
+        for response in responses.values():
+            response["content"]["application/json"]["schema"] = {
+                "$ref": "#/components/schemas/SceneV2ResponseEnvelope"
+            }
     return dict(sorted(responses.items()))
 
 
@@ -403,6 +424,15 @@ def _operation(route: RouteInfo, security: Sequence[dict[str, Any]]) -> dict[str
         "responses": _responses(route),
     }
     parameters = _path_parameters(route)
+    if route.method == "POST" and route.path in {"/api/input/next", "/api/input/previous"}:
+        parameters.extend([
+            {"name": "output", "in": "query", "required": False,
+             "schema": {"type": "integer", "minimum": 1, "maximum": 8, "default": 1},
+             "description": "Output whose source is changed."},
+            {"name": "cycle", "in": "query", "required": False,
+             "schema": {"type": "boolean", "default": True},
+             "description": "Use lowercase true to wrap or false to clamp at inputs 1 and 8. Other explicit values return 400."},
+        ])
     if parameters:
         operation["parameters"] = parameters
     if route.is_api:
@@ -491,7 +521,10 @@ def build_openapi_spec(
         "tags": _tags(routes),
         "paths": dict(sorted(paths.items())),
         "components": {
-            "schemas": {"ApiResponseEnvelope": envelope_schema()},
+            "schemas": {
+                "ApiResponseEnvelope": envelope_schema(),
+                "SceneV2ResponseEnvelope": scene_v2_envelope_schema(),
+            },
             "securitySchemes": security_schemes(),
         },
         "security": [],

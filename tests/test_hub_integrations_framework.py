@@ -202,6 +202,7 @@ class ContractServer:
         app.router.add_post("/api/cec/{kind}/{port}/{command}", self.cec)
         app.router.add_post("/api/profile/{id}/recall", self.action)
         app.router.add_post("/api/scene/{id}/recall", self.action)
+        app.router.add_post("/api/v2/scenes/{id}/execute", self.action)
         app.router.add_post("/api/shortcuts/{id}/execute", self.action)
         app.router.add_post("/api/cec/macro/{id}/execute", self.action)
         app.router.add_get("/ws", self.websocket)
@@ -230,7 +231,10 @@ class ContractServer:
         return web.json_response({"success": True, "data": {}, "error": None})
 
     async def action(self, request):
-        kind = "macro" if "/cec/" in request.path else request.path.split("/")[2].rstrip("s")
+        if request.path.startswith("/api/v2/scenes/"):
+            kind = "scene"
+        else:
+            kind = "macro" if "/cec/" in request.path else request.path.split("/")[2].rstrip("s")
         body = await request.json() if request.can_read_body else {}
         result = await self.matrix.run_action(kind, request.match_info["id"], passcode=body.get("passcode"))
         return web.json_response(result, status=200 if result["success"] else 403)

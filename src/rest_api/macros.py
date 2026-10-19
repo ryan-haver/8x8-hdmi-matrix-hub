@@ -9,6 +9,8 @@ import re
 
 from aiohttp import web
 
+from hub.runtime.actions import catalog_changes, run_rest_action
+
 from .utils import _json_response, get_macro_manager, safe_error_message
 from .validation import ICON_MAX_LENGTH, NAME_MAX_LENGTH, BadRequestError, optional_string, parse_json_object
 
@@ -142,6 +144,7 @@ async def handle_get_macro(request: web.Request) -> web.Response:
         return _json_response(False, error=safe_error_message(e, "getting macro"), status=500)
 
 
+@catalog_changes
 async def handle_create_macro(request: web.Request) -> web.Response:
     """Create a new CEC macro."""
     macro_manager = get_macro_manager()
@@ -184,6 +187,7 @@ async def handle_create_macro(request: web.Request) -> web.Response:
         return _json_response(False, error=safe_error_message(e, "creating macro"), status=500)
 
 
+@catalog_changes
 async def handle_update_macro(request: web.Request) -> web.Response:
     """Update an existing CEC macro."""
     macro_manager = get_macro_manager()
@@ -233,6 +237,7 @@ async def handle_update_macro(request: web.Request) -> web.Response:
         return _json_response(False, error=safe_error_message(e, "updating macro"), status=500)
 
 
+@catalog_changes
 async def handle_delete_macro(request: web.Request) -> web.Response:
     """Delete a CEC macro."""
     macro_manager = get_macro_manager()
@@ -276,7 +281,10 @@ async def handle_execute_macro(request: web.Request) -> web.Response:
             if isinstance(timeout_s, bool) or not isinstance(timeout_s, (int, float)) or timeout_s <= 0:
                 return _json_response(False, error="timeout_s must be a positive number", status=400)
 
-        result = await macro_manager.execute_macro(macro_id, timeout_s=timeout_s if timeout_s is not None else 300.0)
+        run = await run_rest_action("macro", macro_id, params={"timeout_s": timeout_s if timeout_s is not None else 300.0})
+        result = run.data
+        if not result:
+            return _json_response(False, error=run.error, status=run.status_code)
 
         if result.get("success"):
             return _json_response(True, result)
@@ -332,6 +340,7 @@ async def handle_list_favorite_macros(request: web.Request) -> web.Response:
         return _json_response(False, error=safe_error_message(e, "listing favorite macros"), status=500)
 
 
+@catalog_changes
 async def handle_toggle_macro_favorite(request: web.Request) -> web.Response:
     """POST /api/cec/macro/{id}/favorite — toggle favorite flag."""
     macro_manager = get_macro_manager()
@@ -355,6 +364,7 @@ async def handle_toggle_macro_favorite(request: web.Request) -> web.Response:
         return _json_response(False, error=safe_error_message(e, "toggling macro favorite"), status=500)
 
 
+@catalog_changes
 async def handle_toggle_macro_dashboard(request: web.Request) -> web.Response:
     """POST /api/cec/macro/{id}/dashboard — toggle dashboard-visible flag."""
     macro_manager = get_macro_manager()

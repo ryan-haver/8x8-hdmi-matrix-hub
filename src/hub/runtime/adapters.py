@@ -72,7 +72,10 @@ class CommandProvider:
     async def save_preset(self, preset):
         return await self.runtime.command(self.runtime.service.save_preset, preset)
 
-    async def cycle_input(self, direction, output_num=1):
+    async def cycle_input(self, direction, output_num=1, *, cycle: bool = True) -> bool:
+        from .actions import _cycle_observation
+
+        _cycle_observation.set(None)
         if direction not in {"next", "previous"}:
             raise ValueError("direction must be next or previous")
         async with self.cycle_locks[output_num]:
@@ -80,8 +83,11 @@ class CommandProvider:
                 current = self.runtime.snapshot().routing.get(output_num)
                 if current is None:
                     return False
-                target = (current - 1 + (1 if direction == "next" else -1)) % 8 + 1
-                return await self.switch(target, output_num)
+                target = current + (1 if direction == "next" else -1)
+                target = (target - 1) % 8 + 1 if cycle else min(8, max(1, target))
+                success = await self.switch(target, output_num)
+                _cycle_observation.set((current, target))
+                return success
 
 
 class MatrixFacade:
