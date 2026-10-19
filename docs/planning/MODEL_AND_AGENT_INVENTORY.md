@@ -99,7 +99,7 @@ and its previous project runs are separate evidence. No account was selected
 or changed in this audit. Other Orca-supported agent IDs are not evidence that
 their executables, credentials or model selection are ready here.
 
-## Launch rules
+## Execution since the audit
 
 Execution after the initial audit confirmed Sol, Astra, Argon and Flash through
 real Orca dispatches. Sol completed core, installed-entry, persistence and
@@ -113,6 +113,8 @@ Sol completed that track. M3.1 and DeepSeek remain conditional routes, and Luna'
 bounded documentation assignment has not launched yet. Catalog entries are
 still distinct from proven current capacity. The no-Anthropic policy applies to
 all retries, reviews and helpers.
+
+## Launch rules
 
 Use these as recipes when executing the task plan; none
 were run as launches during this planning audit. Resolve the integration base
