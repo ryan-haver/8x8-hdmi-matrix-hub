@@ -366,6 +366,16 @@ class MatrixService:
         if callable(invalidate):
             invalidate()
 
+    def invalidate_cec_cache(self) -> None:
+        """Expire CEC enable decisions on explicit status synchronization.
+
+        The protocol client refreshes flags lazily before the next CEC command.
+        Structural clients without a CEC cache need no invalidation.
+        """
+        invalidate = getattr(self._client, "clear_cec_cache", None)
+        if callable(invalidate):
+            invalidate()
+
     async def refresh_snapshot(self) -> bool:
         """Read the matrix and publish what changed. False if the main status read failed.
 

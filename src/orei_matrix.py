@@ -1380,8 +1380,9 @@ class OreiMatrix:
             return self._status_cache.copy()
         if force_refresh:
             # A caller wants the matrix as it is now (e.g. a /ws get_status):
-            # the next preset catalog read goes to the matrix as well.
+            # subsequent preset and CEC enable decisions must read it as well.
             self.invalidate_preset_cache()
+            self.clear_cec_cache()
         return (await self._single_flight("status", self._fetch_status)).copy()
 
     async def _fetch_status(self) -> dict[str, Any]:
