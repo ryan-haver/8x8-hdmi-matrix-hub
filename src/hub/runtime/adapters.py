@@ -172,6 +172,18 @@ class MatrixFacade:
     async def get_output_status(self, force_refresh=False):
         return await self._read("outputs", force_refresh)
 
+    async def capture_current_status(self):
+        """Read both capture inputs fresh under the sole runtime transaction.
+
+        Ordinary facade reads remain snapshots. Saving a profile needs the
+        current device state, including a failed read rather than a last-good
+        snapshot retained by the background refresh worker.
+        """
+        async with self.runtime.operation():
+            outputs = await self.runtime.protocol("get_output_status", force_refresh=True)
+            video = await self.runtime.protocol("get_video_status")
+            return outputs, video
+
     async def get_all_cable_status(self, force_refresh=False):
         return await self._read("cables", force_refresh) or {"inputs": {}, "outputs": {}}
 

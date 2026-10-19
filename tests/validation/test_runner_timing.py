@@ -174,26 +174,32 @@ def test_free_port_skips_ports_bound_on_all_interfaces(monkeypatch):
         assert check_port_available(picked) is True
 
 
-def test_hub_process_retries_when_an_auto_picked_port_is_taken_before_bind(tmp_path, monkeypatch):
+@pytest.mark.parametrize("stolen_listener", ["api", "uc"])
+def test_hub_process_retries_when_an_auto_picked_port_is_taken_before_bind(tmp_path, monkeypatch, stolen_listener):
     """TST-18: if another process grabs the ephemeral port between free_port() and the hub's bind,
     HubProcess retries on a fresh port instead of failing the test."""
     import socket as _socket
 
     holder = _socket.socket(_socket.AF_INET, _socket.SOCK_STREAM)
+    # Windows SO_REUSEADDR permits the SDK to bind beside a merely bound
+    # socket. Reserve a real exclusive listener to reproduce an actual failure.
+    if hasattr(_socket, "SO_EXCLUSIVEADDRUSE"):
+        holder.setsockopt(_socket.SOL_SOCKET, _socket.SO_EXCLUSIVEADDRUSE, 1)
     holder.bind(("0.0.0.0", 0))
+    holder.listen()
     stolen_port = int(holder.getsockname()[1])
 
     real_free_port = free_port
     calls = 0
 
-    def _steal_first_uc_port(host: str = "127.0.0.1") -> int:
+    def _steal_first_port(host: str = "127.0.0.1") -> int:
         nonlocal calls
         calls += 1
-        if calls == 2:  # 1st call = api_port, 2nd call = uc_port
+        if calls == (1 if stolen_listener == "api" else 2):
             return stolen_port
         return real_free_port(host)
 
-    monkeypatch.setattr("tools.validate.stack.free_port", _steal_first_uc_port)
+    monkeypatch.setattr("tools.validate.stack.free_port", _steal_first_port)
     hub = HubProcess(
         matrix_host="127.0.0.1",
         matrix_port=real_free_port(),
@@ -208,8 +214,12 @@ def test_hub_process_retries_when_an_auto_picked_port_is_taken_before_bind(tmp_p
         hub.launch()
         health = hub.wait_ready(timeout=25)
         assert health
-        assert hub.uc_port != stolen_port
+        assert (hub.api_port if stolen_listener == "api" else hub.uc_port) != stolen_port
         assert hub.starts >= 2
+        failed_log = (hub.log_dir / "hub-uc-1.log").read_text(encoding="utf-8", errors="replace")
+        assert "UCBridge started" not in failed_log
+        assert "error while attempting to bind" in failed_log.lower()
+        assert health["integrations"]["unfolded_circle"]["running"] is True
     finally:
         hub.stop()
         holder.close()
