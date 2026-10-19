@@ -67,7 +67,9 @@ flowchart TD
 
 Each arrow is an acceptance/merge dependency. R1, R2, R3 and R6 may run in
 parallel after R0. R4 and R5 may run together after R1/R2/R3 are accepted.
-R7 waits for all code tracks; R8 reviews the final integrated commit. Do not
+R7 may prepare guides from accepted runtime behavior while the final correction
+and campaigns run. Its evidence index and acceptance wait for the completed
+campaign; R8 reviews the final integrated commit. Do not
 start a dependent worktree on an obsolete base and hope to resolve it later.
 Start with at most four workers, reduce concurrency when quota or Docker/CI
 resources are constrained, and keep heavy campaigns serialized.
