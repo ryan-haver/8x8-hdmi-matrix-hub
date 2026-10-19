@@ -47,6 +47,14 @@ worker, helper, automatic fallback or default tab is authorized.
   projections, real edit/save/restart and legacy imports. The worker was
   released and worktree removed/pruned. Full image/client and R4/R5 behavior
   remain separate gates; these focused results are not a full product campaign.
+- **R4 plus R4A, Sol 6.1 high through Codex:** final `d461daa`, integrated
+  with coordinator test fixes as `9730bf5` and merged as `6ae0227`.
+  Coordinator independently ran 432 action, PIN, cancellation, simulator,
+  foundation and UC transaction tests with one HA dependency skip; mypy passed
+  all 90 source files. Review checked exact public projections, cycle readback,
+  shared authorization, cancellation restoration and HTTP unified-scene parity.
+  Both Dispatches settled, the terminal was released and worktree removed/pruned.
+  UC dispatcher adoption remains R3C-owned; full image/client proof is pending.
 
 ## First implementation wave
 
@@ -102,19 +110,18 @@ transferred; its API/value assertions remain intact.
 
 Coordinator reproduced pre-merge R2 blockers with synthetic data: version-zero
 preparation continued after backup failure, and a real profile save/PIN rehash
-dropped unknown fields plus the schema marker. These are acceptance failures
-under correction, not changes accepted into this branch. R3 is correcting a
-setup/address signature mismatch against the real R1 types; its private UC
-metadata must not change the shared runtime interface.
+dropped unknown fields plus the schema marker. These were pre-acceptance
+failures, subsequently corrected and validated in R2. R3's setup/address
+signature mismatch was corrected without changing the shared runtime interface.
 
 R2's M3 attempt subsequently settled with a failed full-scope checkpoint at
 `cf7ea7c`; its terminal was released. The coordinator merged accepted parent
 `99e9d56` into that clean child as `5ec374e`, preserving the checkpoint. Fresh
-**Sol 6.1 high / Codex** now owns retry Dispatch `ctx_cde87530b675` on the same
+**Sol 6.1 high / Codex** took retry Dispatch `ctx_cde87530b675` on the same
 Task `task_02e6418f9110`. Requested/effective launch preferences matched.
 The finish brief requires real edit/save/restart preservation, fail-closed
 backups and malformed/future files, safe legacy scene reconciliation, Flic
-metadata preparation, and unchanged source/installed startup tests. This is
+metadata preparation, and unchanged source/installed startup tests. This was
 subsequently accepted as recorded above. Final ownership transfers also covered
 five exact obsolete migration/layout expectations, one malformed Flic fixture
 sentinel, the shared simulator's canonical scene-copy filename, and replacing a
@@ -204,6 +211,40 @@ Deployment evidence now covers the shipped source, assets, runtime entrypoints
 and license files, rather than only legacy driver paths. Sixteen evidence-schema
 tests and focused Ruff checks passed. Old deployment records remain historical;
 these metadata changes do not imply a fresh image run.
+
+## Remaining integration corrections
+
+- **R3C, Argon high / Antigravity:** actual installed-console validation found
+  an unconfigured UC bridge starts with zero entities, then its initial event
+  incorrectly exposes the full 74-entity catalog. The bounded bridge correction
+  also owns only UC next/previous dispatch adoption of R4's atomic wrap/clamp
+  cycle seam. No golden or empty-before-setup assertion is relaxed.
+- **R5B, fresh Sol 6.1 high / Codex:** Flash candidate `7b78785` independently
+  passed 157 tests, but coordinator review reproduced metadata counted as a
+  Flic button, a disabled direct factory importing Flic, and a canceled stop
+  losing its unfinished cleanup owner. The Flash worker was released; its
+  candidate remains unmerged. Sol owns safety completion and exact approved
+  fixture corrections, including retained failed-cleanup health and retry.
+- **R1C, Sol 6.1 high / Codex:** new real simulator cycle/readback tests exposed
+  an unclosed HTTP session. Diagnostic allocation tracing found a shielded
+  output-status fetch initiating a connection during teardown. This track owns
+  only matrix transport read draining plus dedicated tests; intentional shutdown
+  must settle outstanding reads across cache generations before disposal.
+
+Coordinator removed obsolete R2 module substitutions from the shared R1 test
+builder, retaining a spy around actual preparation. Thirty-nine composition,
+shutdown and UC transaction checks plus nine state-bridge checks passed; the
+explicit UC subprocess double remains labeled as such. The HTTP contract fixture
+now models the existing unified scene route; 47 framework tests passed.
+
+Registered device-settings and scene reads now test private extension retention
+through actual edits/reloads while keeping credentials and hashes out of public
+responses. Registry and ledger are synchronized. OpenAPI describes cycle query
+parameters and scene v2's existing omitted fields, 201 creation and 207 partial
+execution without changing runtime wire bodies: 122 API/config tests and 17
+registry checks passed. Cycle readback checks pass, while their transport cleanup
+warning remains explicitly open for R1C. New deployment discovery proof is ready
+but has not yet run against the final image.
 
 ## Evidence and release gates
 
