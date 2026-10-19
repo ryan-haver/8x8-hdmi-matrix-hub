@@ -12,6 +12,11 @@ The next development work is specified in the
 [model/agent inventory](planning/MODEL_AND_AGENT_INVENTORY.md). The future roster
 excludes Claude/Anthropic, including fallback and helper roles.
 
+Agent entry points: [root instructions](../AGENTS.md),
+[standing Orca coordination protocol](ORCHESTRATION_PROTOCOL.md) and
+[agent allocation ledger](production/AGENT_ALLOCATION.md). The protocol governs
+authorized execution; reading or maintaining it does not start a phase.
+
 ---
 
 ## 1. Start here

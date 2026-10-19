@@ -1,5 +1,13 @@
 # Model and agent inventory
 
+For future staffing, read the [standing Orca protocol](../ORCHESTRATION_PROTOCOL.md)
+and maintain the [allocation ledger](../production/AGENT_ALLOCATION.md). Refresh
+catalogs, supported host/adapter selection and measured quota before each
+authorized wave. This inventory is historical task evidence, not current
+verified capacity. New implementation needs qualified cross-family review;
+Sol/Astra/Luna are one family, and an unverified backend alias cannot establish
+cross-family independence. No historical qualification is silently upgraded.
+
 Checked 2026-10-18 for the next runtime-completion phases. This inventory
 separates a model from its agent harness and separates discovery from access.
 It does not change accounts, install providers or start billable model probes.
@@ -151,6 +159,14 @@ proof of a particular backend version. The native credit footer alone is also
 not proof that an active worker failed or exited.
 
 ## Launch rules
+
+**Historical recipes below are retained for attribution, not the current
+supervised launch contract.** Use `orchestration worker-start` and the standing
+protocol for future execution. On 2026-10-19, Orca 1.4.230 help advertises
+OpenCode `--model` only for existing worktrees with verified host CLI/model
+availability; effort remains unsupported. Earlier rejection receipts below
+remain true for their older launches. No new exact-model execution, access,
+quota or task qualification follows from this changed help text.
 
 Use these as recipes when executing the task plan; none
 were run as launches during this planning audit. Resolve the integration base

@@ -1,5 +1,14 @@
 # Runtime completion and release plan
 
+Standing operations for any future authorized wave are defined by
+[AGENTS.md](../../AGENTS.md), the [Orca protocol](../ORCHESTRATION_PROTOCOL.md)
+and [allocation ledger](../production/AGENT_ALLOCATION.md). These supersede
+older launch/cleanup recipes and require quota headroom plus qualified
+cross-family review of new implementation. The assignments and results below
+remain historical; maintaining these instructions does not authorize a phase.
+The master plan's [dated coordination update](UNIFIED_MASTER_PLAN.md#standing-coordination-policy-2026-10-19)
+records the completed final-head CI observation and unchanged owner release gates.
+
 Status: fresh software campaign, formal gate, documentation and independent evidence
 review accepted; final documentation-head CI, owner visual and physical/field release gates remain.
 R3E's UI ordering correction and R1F's explicit-refresh CEC cache correction are

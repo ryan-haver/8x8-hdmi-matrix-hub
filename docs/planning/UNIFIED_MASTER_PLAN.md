@@ -5,6 +5,30 @@ in [the phased roadmap](../../orca-phased-roadmap.md). Finding IDs and acceptanc
 criteria come from [the remediation plan](../REMEDIATION_PLAN.md) and
 [the validation plan](../validation/VALIDATION_PLAN.md).
 
+## Standing coordination policy (2026-10-19)
+
+Future agents must read [AGENTS.md](../../AGENTS.md), the
+[Orca coordination protocol](../ORCHESTRATION_PROTOCOL.md) and
+[allocation ledger](../production/AGENT_ALLOCATION.md). The protocol supersedes
+older launch/cleanup recipes for future execution: refresh catalogs/capabilities,
+require measured quota headroom, use genuine supervised isolated workers and
+qualified cross-family review for every new implementation package, preserve
+work before exact cleanup, and verify integration publication before another
+wave. This standing policy does not authorize a new phase or worker launch.
+Historical assignments, same-family reviews and failed evidence remain intact.
+
+The dated ledger records actual branch/Run/protected-resource bindings. In this
+instruction-only task, read-only discovery found Orca 1.4.230 and an unresolved
+persistence workspace outside Git's registered root list; preserve it rather
+than treating prior cleanup summaries as deletion authority.
+
+Final documentation-head CI observation: [run 39239356448](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/actions/runs/39239356448)
+at `6dafb009` completed with all non-UI required jobs passing and only the three
+existing Tron paused-frame failures (1,098 UI passes, 33 skips; gallery 62 passes).
+This observation supplements the earlier pending-CI statements below; it is
+historical evidence, not a fresh runtime check by the instruction task or owner
+visual approval. Physical/field and final artifact/version gates remain open.
+
 ## Next development and model policy (2026-10-18)
 
 The [runtime-completion plan](NEXT_DEVELOPMENT_PHASES.md) now defines R0–R8,
@@ -88,6 +112,11 @@ owner-observed.
 4. Run Phase 8 against the candidate and publish the validation report. Tag
    `v1.0.0` only when the final gates below have evidence.
 
+The runtime work is stacked in [draft PR #38](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/pull/38)
+on #37. The RC must include both Phase 6/7 and the tested runtime on main before
+tagging; the pre-runtime #37 tree is not the tested runtime RC. This dependency
+clarification does not approve any merge, snapshot or release gate.
+
 ## Phases 6–7 ownership
 
 | Track | Requested model | Scope | State |
@@ -101,10 +130,14 @@ owner-observed.
 
 The coordinator owns documentation archive moves, compatibility links, this
 plan, integration validation, PRs, tags, and cleanup. Workers edit only their
-own worktrees and commit their changes. After each accepted completion: run
-targeted tests, review, merge, release the settled worker, remove its Orca
-worktree, and prune Git worktrees. Preserve unmerged work rather than deleting
-it to make the worktree count look clean.
+own worktrees and commit their changes. Future completion handling follows the
+[standing lifecycle](../ORCHESTRATION_PROTOCOL.md#worker-lifecycle-and-recovery):
+accept outcomes and decide release/reuse/explicit retention before acknowledgment;
+verify acceptance and qualified independent review, integrate sequentially,
+preserve verified full bundles/artifacts and publish task refs before exact
+Orca worktree removal. Reconcile only the completed target's metadata, without
+broad pruning. Preserve unmerged work rather than deleting it to make the
+worktree count look clean. Earlier cleanup entries retain their historical scope.
 
 REST additions or changes require `docs/validation/features.yaml`, simulator
 reads in `tests/sim/test_sim_rest_reads.py`, and `python -m tools.validate ledger`.

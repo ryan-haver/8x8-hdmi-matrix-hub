@@ -1,5 +1,10 @@
 # Runtime-completion execution record
 
+Future coordination starts with [AGENTS.md](../../AGENTS.md), the
+[standing protocol](../ORCHESTRATION_PROTOCOL.md) and
+[allocation ledger](../production/AGENT_ALLOCATION.md). The chronology below
+retains historical assignments, reviews, failures and cleanup scope.
+
 Started 2026-10-18 on `wp-runtime-completion`, from Phase 6/7 tip
 `6debe5a9d1ce3b5993bbd1f6c16d14550d11141b`. This branch depends on the
 unmerged Phase 5/6/7 release work; it is not a final release tag.
@@ -530,3 +535,26 @@ The old candidate [validation report](../validation/VALIDATION_REPORT.md)
 remains tied to its recorded commits. Future runtime changes need fresh integrated
 image/client evidence. The three Tron baselines still need owner approval;
 hardware/CEC/client observations, 72-hour soak and field sign-off remain open.
+
+## Instruction-only coordination checkpoint (2026-10-19)
+
+The owner requested durable instructions only, with no phase/worktree/worker
+launch. Root AGENTS, the standing protocol and allocation ledger now define
+prospective catalog/capability refresh, mandatory quota holds, disjoint supervised
+workers, qualified cross-family implementation review, complete preservation
+before exact cleanup and verified remote synchronization. Prior same-family
+Sol/Astra reviews are not retroactively cross-family qualification. Current
+quota remains explicitly unknown; no capacity or model probes were performed.
+
+Read-only discovery confirms integration `wp-runtime-completion` and existing
+Run `run_37205f6095b3`. Orca is now 1.4.230; live handles must be rediscovered.
+Orca also lists a persistence workspace not registered in Git's root worktree
+list; it remains protected and unresolved. The ledger records this discrepancy,
+conservative concurrency ceiling, current PR chain and host-local handoff.
+
+Final historical CI at `6dafb009` completed: all non-UI required jobs pass,
+UI has the same three Tron paused-frame failures (1,098 passes, 33 skips),
+gallery 62 passes. This supplements prior pending-CI wording without changing
+the tested source/image attribution or granting visual/hardware approval.
+Only scoped instruction documentation is verified and published in this task;
+no new runtime qualification, merge to main or release tag is claimed.
