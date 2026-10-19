@@ -4573,7 +4573,7 @@ features:
     rest: [GET /api/integrations/flic/buttons, POST /api/integrations/flic/register]
   target: V2
   current: V0
-  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
+  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. R5B reads verify canonical buttons exclude private metadata, edits preserve private extensions, and FLIC_ENABLED=false removes both routes while core health/status remain available. Fresh-process flag and cleanup checks are in tests/test_runtime_integration_safety_r5b.py. Recorded level retained pending the fresh image/client campaign.'
   evidence:
   - docs/validation/evidence/F-API-028/2026-10-04-V2-7dbc4dc7-contracts.flic_buttons-api.json
   - docs/validation/evidence/F-API-028/2026-10-04-V2-7dbc4dc7-writes.flic_register-api.json
@@ -7132,7 +7132,7 @@ features:
     files: [flic_buttons.json]
   target: V3
   current: V0
-  basis: "R6 implementation: tests/validation/test_flic_replay_r6.py, tests/validation/test_flic_templates_r6.py and tests/validation/test_flic_replay_live_r6.py exercise the dedicated client and actual generator with Node stubs; 74 coordinator tests passed in its isolated pre-R1 worktree, one disabled-route test awaits integrated startup. Recorded level retained until fresh normal-entry/image campaign. Physical Flic Hub, SDK version/buttons and physical CEC effects remain unobserved."
+  basis: "R5B registry safety and configured route ownership: tests/test_runtime_integration_safety_r5b.py and tests/sim/test_sim_rest_reads.py verify canonical six-octet addresses, metadata privacy, private extension retention and disabled-route absence with core reads available. R6 client/generator tests use explicit Node SDK stubs. Recorded level retained pending fresh normal-entry/image campaign; physical Flic Hub, SDK version and buttons remain unobserved."
   evidence: []
   findings: [PER-02, API-15]
   scenarios: ["flic.register"]

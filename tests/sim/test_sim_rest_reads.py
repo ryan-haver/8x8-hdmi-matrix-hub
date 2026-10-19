@@ -305,6 +305,47 @@ async def test_health_includes_integration_lifecycle_mapping(data_hub, simulator
     assert sim_writes(simulator) == []
 
 
+async def test_flic_registered_routes_preserve_private_storage_without_phantom_buttons(data_hub, simulator):
+    from hub.persistence import CURRENT_SCHEMA_VERSION
+
+    address = "80:e4:da:70:00:01"
+    private = {"bdaddr": "metadata-only", "password": "synthetic-private-extension"}
+    path = data_hub.data_dir / "flic_buttons.json"
+    path.write_text(json.dumps({
+        "schema_version": CURRENT_SCHEMA_VERSION, "extension_object": private,
+        address: {"bdaddr": address, "name": "Before", "serial": "sim", "credentials": private},
+    }), encoding="utf-8")
+    public = (await _get(data_hub, "/api/integrations/flic/buttons"))["data"]
+    assert public == {"buttons": [{"bdaddr": address, "name": "Before", "serial": "sim"}]}
+    response = await data_hub.post("/api/integrations/flic/register", json={"buttons": [
+        {"bdaddr": address, "name": "After", "serial": "updated"},
+    ]})
+    assert response.status == 200, await response.text()
+    envelope = await response.json()
+    assert envelope == {"success": True, "data": {"count": 1}, "error": None}
+    assert (await _get(data_hub, "/api/integrations/flic/buttons"))["data"] == {
+        "buttons": [{"bdaddr": address, "name": "After", "serial": "updated"}],
+    }
+    saved = json.loads(path.read_text(encoding="utf-8"))
+    assert saved["extension_object"] == private and saved[address]["credentials"] == private
+    assert saved["schema_version"] == CURRENT_SCHEMA_VERSION
+    assert sim_writes(simulator) == []
+
+
+async def test_disabled_flic_routes_leave_core_reads_available(
+    data_hub, simulator, monkeypatch, aiohttp_client,
+):
+    from rest_api.app import create_rest_app
+
+    monkeypatch.setenv("FLIC_ENABLED", "false")
+    client = await aiohttp_client(create_rest_app(data_dir=data_hub.data_dir))
+    assert (await client.get("/api/integrations/flic/buttons")).status == 404
+    assert (await client.post("/api/integrations/flic/register", json={"buttons": []})).status == 404
+    assert (await _get(client, "/api/health"))["data"]["status"] == "healthy"
+    assert (await _get(client, "/api/status"))["data"]["connected"] is True
+    assert sim_writes(simulator) == []
+
+
 async def test_openapi_spec_and_swagger_docs_reads(data_hub, simulator):
     from hub.openapi import validate_openapi_spec
 
