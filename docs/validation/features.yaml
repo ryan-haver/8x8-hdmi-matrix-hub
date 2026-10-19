@@ -943,7 +943,12 @@ features:
     path: tests/sim/test_golden_hub.py::test_get_preset_info_never_uses_the_http_preset_read. BE-36 fixed on
     fix-backend-wp-v2-bugs: GET /api/presets reads every slot with Telnet r preset N (routing_source matrix; the hub
     copy, marked routing_source saved, only when a slot cannot be read). preset_read.device_slot_1..8 pass on the
-    packaged image (V2). Slot contents on the real BK-808 still need hardware proof (V4).'
+    packaged image (V2). Slot contents on the real BK-808 still need hardware proof (V4).
+    Shared-runtime forced-status expiration is exercised by
+    tests/sim/test_sim_rest_reads.py::test_shared_runtime_preset_catalog_after_explicit_ws_refresh
+    and tests/test_runtime_preset_cache_r1e.py: ordinary reads retain the normal TTL, while an explicit
+    client status refresh expires slots without prefetching them or writing to the matrix. Integrated
+    source and image evidence must follow the R1E correction; existing feature levels are retained.'
   evidence:
   - docs/validation/evidence/F-MTX-030/2026-10-02-V2-f4f417bf-preset_read.device_slot_1-api.json
   - docs/validation/evidence/F-MTX-030/2026-10-02-V2-f4f417bf-preset_read.device_slot_2-api.json
