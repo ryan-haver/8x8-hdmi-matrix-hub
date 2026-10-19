@@ -585,31 +585,30 @@ def test_failures_are_scoped_to_volume_and_not_last_preparation(tmp_path):
     assert ProfileManager(good).get_profile("p").name == "Good"
 
 
-def test_valid_canonical_location_wins_and_corrupt_recovery_preserves_bytes(tmp_path, monkeypatch):
+def test_valid_canonical_location_wins_and_corrupt_target_refuses_legacy_recovery(tmp_path):
     from config import ProfileManager
 
     legacy_dir, config_dir = tmp_path / "legacy", tmp_path / "config"
     legacy_dir.mkdir()
     config_dir.mkdir()
-    monkeypatch.setattr("persistence.get_legacy_data_paths", lambda: [legacy_dir])
     source = legacy_dir / "profiles.json"
     source.write_text(
         json.dumps({"profiles": [{"id": "legacy", "name": "Legacy", "outputs": {}, "private": 8}]}), encoding="utf-8"
     )
     canonical = config_dir / "profiles.json"
     canonical.write_text(json.dumps({"profiles": [{"id": "current", "outputs": {}}]}), encoding="utf-8")
-    prepare_runtime_storage(config_dir=config_dir, data_dir=tmp_path / "data")
+    prepare_runtime_storage(config_dir=config_dir, data_dir=tmp_path / "data", legacy_data_dirs=(legacy_dir,))
     assert ProfileManager(config_dir).get_profile("current") is not None
     assert ProfileManager(config_dir).get_profile("legacy") is None
     corrupt = b"{broken target"
     canonical.write_bytes(corrupt)
-    prepare_runtime_storage(config_dir=config_dir, data_dir=tmp_path / "data")
-    mgr = ProfileManager(config_dir)
-    assert mgr.get_profile("legacy").name == "Legacy"
-    assert mgr.save()
-    assert json.loads(canonical.read_text(encoding="utf-8"))["profiles"][0]["private"] == 8
-    assert (config_dir / "profiles.json.corrupt").read_bytes() == corrupt
-    assert (legacy_dir / "profiles.json.v0.bak").read_bytes() == source.read_bytes()
+    with pytest.raises(MigrationError):
+        prepare_runtime_storage(config_dir=config_dir, data_dir=tmp_path / "data", legacy_data_dirs=(legacy_dir,))
+    with pytest.raises(MigrationError):
+        ProfileManager(config_dir)
+    assert canonical.read_bytes() == corrupt
+    assert not (config_dir / "profiles.json.corrupt").exists()
+    assert not (legacy_dir / "profiles.json.v0.bak").exists()
 
 
 @pytest.mark.parametrize(
@@ -677,7 +676,7 @@ def test_unified_config_scenes_never_become_profiles(tmp_path):
     assert source.read_bytes() == original
 
 
-def test_corrupt_recovery_backup_failure_preserves_original_target(tmp_path, monkeypatch):
+def test_corrupt_target_is_refused_before_any_recovery_backup(tmp_path, monkeypatch):
     import shutil
 
     legacy = tmp_path / "legacy"
@@ -688,17 +687,12 @@ def test_corrupt_recovery_backup_failure_preserves_original_target(tmp_path, mon
     target = config / "profiles.json"
     original = b"{corrupt original"
     target.write_bytes(original)
-    monkeypatch.setattr("persistence.get_legacy_data_paths", lambda: [legacy])
-    real_copy = shutil.copy2
-
-    def fail_corrupt_backup(source, destination, *args, **kwargs):
-        if str(destination).endswith(".corrupt"):
-            raise OSError("injected corrupt backup failure")
-        return real_copy(source, destination, *args, **kwargs)
+    def fail_corrupt_backup(*args, **kwargs):
+        pytest.fail("unsafe target must be rejected before attempting any backup")
 
     monkeypatch.setattr(shutil, "copy2", fail_corrupt_backup)
     with pytest.raises(MigrationError):
-        prepare_runtime_storage(config_dir=config, data_dir=tmp_path / "data")
+        prepare_runtime_storage(config_dir=config, data_dir=tmp_path / "data", legacy_data_dirs=(legacy,))
     assert target.read_bytes() == original
     assert not (tmp_path / "data" / "system_shortcuts.json").exists()
 

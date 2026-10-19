@@ -216,7 +216,15 @@ def prepare_profile_file(config_dir: Path) -> None:
         raise MigrationError(str(exc)) from exc
 
 
-def prepare_runtime_storage(*, config_dir: Path, data_dir: Path) -> PreparedPersistence:
+def prepare_runtime_storage(
+    *, config_dir: Path, data_dir: Path, legacy_data_dirs: tuple[Path, ...] = ()
+) -> PreparedPersistence:
+    """Prepare one installation, optionally importing explicitly selected old volumes.
+
+    Config catalogs may have lived in this installation's data directory in
+    older versions. Other checkout/volume locations are never inferred from
+    process globals; moving those catalogs requires ``legacy_data_dirs``.
+    """
     global _PREPARED
     from persistence import migrate_legacy_file
 
@@ -234,8 +242,6 @@ def prepare_runtime_storage(*, config_dir: Path, data_dir: Path) -> PreparedPers
     try:
         config_dir.mkdir(parents=True, exist_ok=True)
         data_dir.mkdir(parents=True, exist_ok=True)
-        for path in targets + extras:
-            migrate_legacy_file(path, path.name)
         # Preflight the complete inventory before any conversion or default writer.
         for path in targets + extras:
             if path.exists():
@@ -243,6 +249,17 @@ def prepare_runtime_storage(*, config_dir: Path, data_dir: Path) -> PreparedPers
                     scene_shape(_read(path))
                 else:
                     _normalise(path.name, _read(path))
+        for path in targets + extras:
+            sources = legacy_data_dirs
+            if path.parent == config_dir and path.name in _CONFIG_FILENAMES:
+                sources = (data_dir, *sources)
+            # Old output-state scenes in the installation's data directory
+            # can supply profiles, while unified scenes belong only to data.
+            if path == config_dir / "scenes.json" and not path.exists():
+                source = data_dir / "scenes.json"
+                if source.exists() and scene_shape(_read(source)) == "legacy":
+                    sources = (data_dir, *sources)
+            migrate_legacy_file(path, path.name, legacy_dirs=sources)
         prepare_profile_file(config_dir)
         prepare_scene_files(data_dir)
         prepare_shortcut_files(data_dir)
