@@ -1,10 +1,11 @@
 # Project Roadmap
 
-The next development sequence is the [runtime-completion plan](docs/planning/NEXT_DEVELOPMENT_PHASES.md):
-shared startup, persistence wiring, UC integration, action parity, Flic/HA lifecycle,
-and the Flic replay client, followed by fresh validation and the hardware/soak gate.
-Worktree/model assignments are planned there; future implementation, review and
-fallbacks exclude Claude/Anthropic under the owner's 2026-10-18 instruction.
+The runtime-completion implementation is integrated in the current candidate:
+shared startup, persistence wiring, UC integration, action dispatch and optional
+Flic/HA lifecycle. The fresh integrated software campaign is coordinator-owned;
+physical hardware, field and soak gates remain pending. See the
+[runtime validation index](docs/validation/RUNTIME_VALIDATION_INDEX.md) and
+[next development phases](docs/planning/NEXT_DEVELOPMENT_PHASES.md).
 
 
 > Status of every phase of the **8×8 HDMI Matrix Hub** project. Each
@@ -19,15 +20,11 @@ fallbacks exclude Claude/Anthropic under the owner's 2026-10-18 instruction.
 > at target the ledger says so under
 > [`docs/validation/LEDGER.md`](docs/validation/LEDGER.md).
 >
-> **Runtime caveat (the docs must keep saying this):** the modular
-> framework code under `src/hub/` (`MatrixService`, `ActionRunner`,
-> `VisibilityStore`, `IntegrationRegistry` / `IntegrationLoader`,
-> `hub.persistence.migrations`, `hub.openapi`, `hub.env`) ships as
-> importable, unit-tested libraries. They are **not** what `run.py`
-> or `src/driver.py` instantiate today; the shipped run path is
-> `OreiMatrix` + `RestApiServer` (UC mode runs `src/driver.py`
-> instead). The full split is in
-> [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) §2.
+> **Runtime status:** `run.py` and the installed `orei-matrix-driver` command enter the same
+> composition. The current runtime uses `MatrixService`, `ActionRunner`, the
+> integration loader and persistence startup barrier; `src/driver.py` remains
+> a legacy reference. Fresh integrated software evidence is pending and will
+> be recorded in the [runtime validation index](docs/validation/RUNTIME_VALIDATION_INDEX.md).
 
 ---
 
@@ -67,8 +64,8 @@ the ledger for proof levels; this document is maintained alongside them.
   (`unified-settings-drawer.js`, `editor-shell.js`, `cec-remote.js`,
   `kiosk-controller.js`, `dashboard-store.js`),
   `web/css/tokens.css`.
-- **Runtime note.** The web UI is the shipped surface; the rest of
-  the project continues to use `OreiMatrix` + `RestApiServer`.
+- **Runtime note.** This describes the v0.5.0 candidate at its recorded
+  commit; runtime completion is integrated in the current candidate.
 - **Tag status.** PR #36 awaits its final CI check before merge and `v0.5.0`.
 
 - **Evidence.** Web UI rows are V1 unit + V3 browser. **V4 (real
@@ -82,10 +79,9 @@ the ledger for proof levels; this document is maintained alongside them.
   `IntegrationRegistry` / `IntegrationLoader` / `HubClient` in
   `hub.integrations`, `hub.persistence.migrations`,
   `hub.openapi.build_openapi_spec`, `hub.env` canonical table).
-- **What the merge did *not* do.** It did not re-wire `run.py` or
-  `src/driver.py` to instantiate the framework classes; the
-  shipped run path stays `OreiMatrix` + `RestApiServer`. The
-  framework is library-only until the next consolidation.
+- **Historical runtime note.** At the v0.4.0 commit, the framework was not
+  wired into startup. That record remains historical; the current runtime
+  composition is documented in §3 and `docs/ARCHITECTURE.md`.
 - **CI gate.** 401 new unit tests; `python -m ruff check`,
   `python -m mypy`, targeted `pytest` per track; PR #35 13/13
   green.
@@ -111,19 +107,20 @@ The flagship of the runtime is the **`run.py` entry point** plus the
 ([`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)) describe them in full;
 the short version is:
 
-**Shipped runtime (what actually runs):**
+**Current runtime composition:**
 
-- `run.py::run_core()` → `OreiMatrix(...)` + `RestApiServer(host, port)`
-  for the core (web UI, kiosk, REST, WebSocket). Read by every REST
-  handler and by `src/driver.py` for `UC_ENABLED=true`.
-- `run.py::run_uc()` → `runpy.run_path("src/driver.py")` for the UC
-  mode.
+- `run.py` is a compatibility entry point to `hub.cli`; the installed `orei-matrix-driver`
+  command uses the same composition. `hub.runtime.composition` wires one
+  matrix client, `MatrixService`, `ActionRunner`, persistence barrier and REST
+  application. `src/driver.py` remains a legacy reference, not a launch path.
+- `UC_ENABLED` adds the Remote adapter to the shared runtime. Flic routes and
+  HA service discovery follow their integration flags.
 - `src/rest_api/` (22 modules) — the one REST surface,
   `RestApiServer` binds it on `API_PORT` (default `8080`).
 - `src/orei_matrix.py` + `src/telnet_client.py` — the only matrix
   transports.
-- `src/persistence.py` — the shipped data-dir resolution and atomic
-  JSON writer. **Not** the framework's `hub.persistence.migrations`.
+- `hub.persistence.migrations` — startup migration barrier for managed runtime
+  files; legacy data locations are handled by explicit migration inputs.
 - `web/js/core/` — the Focused-UI ES modules
   (`api`, `ws`, `state`, `html` with XSS-safe escape, `overlay`,
   `toast`).
@@ -131,7 +128,7 @@ the short version is:
   CEC remote, the kiosk controller, the dashboard card picker (WP-E2
   tracks).
 
-**Framework libraries (imported, tested, not yet wired into startup):**
+**Runtime services and integration boundaries:**
 
 - `hub.core` — `MatrixService`, `MatrixModel`, `NameStore`,
   `EventBus`.
@@ -140,26 +137,25 @@ the short version is:
   `IntegrationLoader` + `HubClient` (`HubClientLocal`,
   `HubClientHttp`) + the three integration modules
   (`unfolded_circle`, `flic`, `homeassistant`).
-- `hub.persistence.migrations` — versioned JSON, schema_version
-  envelopes, atomic backup-before-migrate. Not what REST handlers
-  write to today.
+- `src/persistence.py` — legacy data-dir resolution and atomic JSON utilities
+  still used by existing storage paths.
 - `hub.openapi.build_openapi_spec` — OpenAPI 3.1 generator; in
   v0.5.0 the generator is mounted at **`GET /api/openapi.json`**
   with Swagger UI at **`GET /api/docs`**, wired by the
   `wp-g2-openapi-swagger-config-docs` track.
-- `hub.env` — `CORE_ENV_VARS` / `INTEGRATION_ENV_VARS`; not yet
-  what `run.py`'s retired-name warnings come from.
+- `hub.env` — canonical runtime environment table and aliases.
 
 The web UI at `/ui` and the kiosk at `/kiosk` are part of the core
 (they do **not** require `UC_ENABLED=true`).
 
 ---
 
-## 4. What is shipped but pending real-device proof
+## 4. What is shipped but pending fresh and real-device proof
 
-This is the gap the roadmap must be honest about: every claim in the
-README and the changelog that says a feature "works" is, today, a
-**simulator** claim. The simulation matrix runs the same command set
+The table below preserves the earlier ledger snapshot; it is not evidence
+for the runtime-completion candidate. The coordinator's fresh software
+campaign will be indexed separately. Simulator claims remain distinct from
+physical-device evidence. The simulation matrix runs the same command set
 as a real OREI BK-808; the hub code path is real; the response
 envelopes are real; the device readback is from a real `OreiMatrix`
 instance against a real matrix simulator running on the hub host.
@@ -172,12 +168,12 @@ field ships, or a remote operator watching the display change.
 | **CEC control** (sources, TVs, Telnet path)                                 | mostly **V3**, **V1** on the Telnet-CEC path         | Physical observation (TV turns on, source switches) requires the operator-present sessions. |
 | **REST/WS contract**                                                        | all routes **V2** or **V3**                         | nothing caps it; re-runs are cheap.                                                        |
 | **Web UI / kiosk flows**                                                    | mostly **V3** on simulator; **V1** for hardware (`UI-44`) | Playwright drives the shipped image, not a tablet in a living room.                          |
-| **Remote 3 integration (legacy driver)**                                    | entities defined, scripted Remote at **V3**         | V4 still wants the operator's Remote 3 against a real matrix.                              |
+| **Remote 3 integration**                                                    | historical candidate records                         | Fresh runtime campaign and physical Remote evidence are tracked separately.                 |
 | **Home Assistant HACS component**                                           | mostly **V3** (real HA container)                    | no HA deployment is run by the validation framework yet.                                    |
 | **Flic REST handlers**                                                      | **V3** (request replay)                              | Flic hardware sits in the "available when the owner plugs it in" bucket.                   |
 | **Security controls**                                                       | **V3** with the three auth configurations; **V4** spot check pending HIL Session 2 | covers `SEC-01..SEC-08` plus the device-token rotation.                       |
 | **Reliability**                                                             | mostly **V1** (fault-injection on the simulator); **V5 soak not yet run** | V5 needs 72 h of `python -m tools.validate run` against the sim with flat resource metrics and a real-device spot check. |
-| **Framework integration into the runtime**                                  | **V1** unit only                                     | `MatrixService`, `ActionRunner`, `IntegrationLoader`, `hub.persistence.migrations`, `hub.openapi` mount are library-tested; nothing runs them yet. |
+| **Runtime composition**                                                     | fresh integrated campaign pending                   | Physical matrix, field and 72-hour soak gates remain pending.                              |
 
 The full row-by-row state lives in
 [`docs/validation/LEDGER.md`](docs/validation/LEDGER.md). A feature
@@ -187,7 +183,7 @@ is "below target" when the ledger says so.
 
 ## 5. What comes next
 
-### Phases 6–7 — Repository hygiene and documentation (WP-G1 / WP-G2) — *in flight on `wp-g1-g2-release-and-docs`*
+### Phases 6–7 — Repository hygiene, runtime completion and documentation
 
 - **`wp-g1-packaging-version-locks`** — delete `setup.py`, single
   `hub.__init__.__version__` (DEP-04, DEP-06), hashed
@@ -222,10 +218,10 @@ is "below target" when the ledger says so.
 - **Tests:** `tests/test_core_documentation.py` (structural checks
   on every owned doc) — done in this branch.
 
-### Phase 8 — Validation campaign (WP-V3) — after Phases 6–7
+### Phase 8 — Validation campaign (WP-V3)
 
-Phase 7 covers documentation. Phase 8 / WP-V3 is the final validation campaign
-following the Phase 6/7 integration merge.
+The integrated software campaign is coordinator-owned. Hardware and field
+validation follow that campaign.
 
 - **HIL Session 2** — owner-present V4 runs of routing, presets,
   matrix power, CEC power/volume on the TV, one profile recall
@@ -237,16 +233,11 @@ following the Phase 6/7 integration merge.
   matrix, firmware versions, the CEC table.
 - **Supported Models table** trimmed to what was validated on
   hardware.
-- **Framework-wiring workstream (independent of validation):**
-  `run.py` and `src/driver.py` move from constructing
-  `OreiMatrix` + `RestApiServer` to instantiating
-  `MatrixService`, `ActionRunner`, and `IntegrationLoader`. Until
-  that lands, the v1.0.0 gate is not just "every feature at
-  target with fresh evidence" but also "the framework is what the
-  shipping runtime uses."
+- **Runtime completion:** integrated in the current candidate; see
+  [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and the runtime validation
+  index for fresh exact-commit evidence and limitations.
 - **Tag `v1.0.0`** when every `F-*` row in the ledger is at or
-  above target with fresh evidence **and** the framework wiring
-  lands.
+  above target with fresh evidence and owner-observed hardware/field gates pass.
 
 ---
 

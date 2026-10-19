@@ -3,14 +3,11 @@
 > A unified API bridge for controlling 8×8 HDMI Matrix switches from
 > Unfolded Circle Remote 3, Flic smart buttons, and Home Assistant.
 >
-> **One Docker image, two runtime modes.** The same image serves the
-> core REST API + web UI + kiosk on port `8080`. With
-> `UC_ENABLED=true`, the same image starts the legacy Unfolded Circle
-> driver on port `9095` alongside the core. Both modes start the
-> exact same `OreiMatrix` + `RestApiServer` underneath — the modular
-> hub framework under `src/hub/` ships library code with pending
-> runtime wiring (see [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
-> §2).
+> **One shared runtime.** The source entry point `run.py` and installed
+> `orei-matrix-driver` console command compose one matrix client, persistence layer, REST API,
+> WebSocket, web UI and kiosk. `UC_ENABLED=true` adds the Remote 3 adapter
+> to that runtime; `src/driver.py` remains a legacy reference and is not
+> launched. See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 >
 > **Version:** `src/hub/__init__.py::__version__` is the canonical source.
 > `python scripts/bump_version.py --check` verifies release manifests;
@@ -54,15 +51,13 @@ validated for this release.
 ## 🎯 Features
 
 > The matrix is the focus; the matrix is the API. The architecture
-> document ([`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)) splits
-> what is shipped today from the framework libraries under
-> `src/hub/`; this README only summarises the shipped surface.
+> document ([`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)) describes
+> the shared runtime and integration boundaries.
 
 ### ✅ Shipped
 
-* **Unfolded Circle Remote 3 integration** — `UC_ENABLED=true`
-  switches `run.py` to `run_uc()`, which hands off to the legacy
-  `src/driver.py`. The legacy driver owns:
+* **Unfolded Circle Remote 3 integration** — `UC_ENABLED=true` adds the
+  shared-runtime adapter. It provides:
   * 8 preset buttons with dynamic names from the matrix.
   * Matrix remote entity with preset-selection UI.
   * CEC control for all 8 inputs (navigation, playback, power).
@@ -108,35 +103,29 @@ validated for this release.
   kiosk-controller.js`) with `switch` / `switch_all` live WebSocket
   updates and a remembered-device PIN unlock.
 
-* **Docker deployment** — single image that contains the core and the
-  UC driver. Core starts with `docker compose up -d`; UC mode is
+* **Docker deployment** — single image that contains the shared runtime and
+  optional integrations. Core starts with `docker compose up -d`; UC mode is
   added with `docker-compose.uc-host.yml` (host networking, mDNS)
   or `docker-compose.uc-bridge.yml` (bridge networking, fixed driver
   URL).
 
-* **Flic REST handlers** — the Flic button integration registers
+* **Flic integration** — enabled by default; it registers
   itself via `POST /api/integrations/flic/register` and is read via
-  `GET /api/integrations/flic/buttons`. **These routes are always
-  mounted**; the framework-level `FLIC_ENABLED` flag (default
-  `true`) does not currently disable them — see the table in
-  [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) §3 for the shipped
-  contract. The user-facing guide at
+  `GET /api/integrations/flic/buttons`. Set `FLIC_ENABLED=false` to omit
+  these integration routes and its registry lifecycle; core actions stay
+  available. The user-facing guide at
   [`docs/FLIC_SETUP.md`](docs/FLIC_SETUP.md) describes Flic Hub
   configuration with the operator.
 
+* **Home Assistant** — the HACS component at
+  [`custom_components/hdmi_matrix/`](custom_components/hdmi_matrix/)
+  remains manually installable. Optional runtime discovery advertises the
+  REST service through `hub.integrations.homeassistant`; it does not install
+  or configure the component. See
+  [`docs/HOME_ASSISTANT.md`](docs/HOME_ASSISTANT.md).
+
 * **CEC macro system** — custom multi-step CEC command sequences
   (power on/off, volume, inputs, delays), test/dry-run via the API.
-
-* **Home Assistant HACS component** at
-  [`custom_components/hdmi_matrix/`](custom_components/hdmi_matrix/)
-  — config flow, HA-native entities, custom services. **Install it
-  through HACS like any other integration** and configure it manually
-  in *Devices & Services*. The framework-level `HA_DISCOVERY_ENABLED`
-  flag exists in `src/hub/integrations/homeassistant/` but is **not
-  wired to startup** — setting it does not start discovery, and there
-  is no MQTT-style auto-discovery payload. See
-  [`docs/HOME_ASSISTANT.md`](docs/HOME_ASSISTANT.md) and
-  [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) §3.
 
 ### 🔲 Not on the current plan
 
@@ -195,17 +184,18 @@ What that means for the user:
 | ----------------------------------------------------- | ---------------------------------------------------------- |
 | [ROADMAP.md](ROADMAP.md)                              | Phases, tags, what shipped, what is pending, what's off-plan |
 | [CHANGELOG.md](CHANGELOG.md)                          | v0.3.0 Secure, v0.4.0 Consolidate, v0.5.0 Focused UI, the pending-hardware section |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)          | **Shipped runtime vs `src/hub/` framework (pending wiring)** |
-| [docs/INTEGRATIONS.md](docs/INTEGRATIONS.md)          | The opt-in `Integration` framework + the three shipped integrations |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)          | Shared runtime startup, state, actions and persistence |
+| [docs/INTEGRATIONS.md](docs/INTEGRATIONS.md)          | Integration flags, lifecycle and shared runtime access |
 | [docs/README.md](docs/README.md)                      | This folder's unified index (DOC-10)                        |
 | [docs/API_REFERENCE.md](docs/API_REFERENCE.md)        | REST + WS contract (generated from `src/hub/openapi.py`; shipped at `GET /api/openapi.json` + Swagger UI at `GET /api/docs`) |
-| [docs/CONFIGURATION.md](docs/CONFIGURATION.md)        | Every env var, generated from `src/hub/env.py`             |
+| [docs/CONFIGURATION.md](docs/CONFIGURATION.md)        | Runtime environment variables, aliases and storage paths |
 | [docs/HOME_ASSISTANT.md](docs/HOME_ASSISTANT.md)      | HA integration guide                                       |
 | [docs/DOCKER.md](docs/DOCKER.md)                      | Docker deployment guide                                    |
 | [docs/FLIC_SETUP.md](docs/FLIC_SETUP.md)              | Flic button configuration                                  |
 | [docs/UNFOLDED_CIRCLE_INTEGRATION_GUIDE.md](docs/UNFOLDED_CIRCLE_INTEGRATION_GUIDE.md) | UC Remote 3 setup and usage                |
 | [docs/INTEGRATION_TEMPLATE.md](docs/INTEGRATION_TEMPLATE.md) | Developer guide: build a new modular integration     |
 | [docs/validation/LEDGER.md](docs/validation/LEDGER.md) | The proof of function — what works today, at which level, with what freshness, with which open findings |
+| [docs/validation/RUNTIME_VALIDATION_INDEX.md](docs/validation/RUNTIME_VALIDATION_INDEX.md) | Exact-commit runtime campaigns and remaining gates |
 | [docs/OREI_API_COMMANDS.md](docs/OREI_API_COMMANDS.md) | Matrix protocol reference                                 |
 | [SECURITY.md](SECURITY.md)                            | Threat model, access model, disclosure                     |
 
@@ -230,9 +220,8 @@ That starts the **core** (REST API + web UI + kiosk) from one image.
 | **+ Remote 3**, host networking, found via mDNS                                        | `HUB_HOST_IP=<this host's LAN IP> docker compose -f docker-compose.yml -f docker-compose.uc-host.yml up -d` |
 | **+ Remote 3**, bridge networking, fixed `UC_DRIVER_URL`                               | `HUB_HOST_IP=<this host's LAN IP> docker compose -f docker-compose.yml -f docker-compose.uc-bridge.yml up -d` |
 
-The Flic REST routes (`POST /api/integrations/flic/register`,
-`GET /api/integrations/flic/buttons`) ship in the hub image. Install the
-HACS component separately in Home Assistant. Neither needs a hub startup flag. See
+Flic registration/list routes are enabled by default and can be disabled with
+the Flic integration setting. Install the HACS component separately in Home Assistant. See
 [`docs/DOCKER.md`](docs/DOCKER.md) for persistent storage, networking
 and upgrading.
 
@@ -253,6 +242,10 @@ On PowerShell, activate with `.venv\Scripts\Activate.ps1` and set
 The runtime lock includes UC dependencies; `requirements-uc.txt` remains a
 compatibility include. Locks are validated on Python 3.12.
 
+An installed wheel uses the `orei-matrix-driver` command and requires an explicit writable
+`DATA_DIR` or `MATRIX_DATA_DIR`; source checkout defaults are not inferred from
+the current working directory.
+
 ### Core environment variables
 
 See [`docs/CONFIGURATION.md`](docs/CONFIGURATION.md) (checked against
@@ -262,21 +255,18 @@ aliases.
 
 | Variable        | Default                                       | Description                                              |
 | --------------- | --------------------------------------------- | -------------------------------------------------------- |
-| `MATRIX_HOST`   | `192.168.0.100`                               | Matrix IP (with `UC_ENABLED=true` the Remote sets it)    |
+| `MATRIX_HOST`   | Core-only `192.168.0.100`; UC: saved setup or unconfigured | Matrix host; explicit UC address is an unsaved bootstrap |
 | `MATRIX_PORT`   | `443`                                         | Matrix HTTPS port                                       |
 | `API_PORT`      | `8080`                                        | REST API + web UI + kiosk                               |
-| `DATA_DIR`      | image: `/data`                                | Persistent data (settings, profiles, macros, integration state) |
-| `UC_ENABLED`    | `false`                                       | Start the Unfolded Circle Remote 3 driver (`src/driver.py`) |
+| `DATA_DIR`      | image: `/data`                                | Writable config path and default Remote config home; data may be separate |
+| `UC_ENABLED`    | `false`                                       | Add the Remote 3 adapter to the shared runtime |
 | `LOG_LEVEL`     | `INFO`                                        | Logging verbosity                                        |
 | `OREI_VERIFY_SSL` | `false`                                     | Verify the matrix's TLS certificate                      |
 
-> `FLIC_ENABLED`, `HA_DISCOVERY_ENABLED` and the rest of the
-> `INTEGRATION_ENV_VARS` table are **framework flags** declared by
-> `src/hub/integrations/*`. They are not read by the shipped
-> `run.py` / `src/driver.py` startup; setting them does not turn the
-> corresponding integration on or off. See
-> [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) §3 for what each
-> flag actually does in shipped vs framework terms.
+`FLIC_ENABLED` defaults true and disables the Flic registration/list routes
+when false. `HA_DISCOVERY_ENABLED` defaults false and enables optional service
+discovery when true. See [`docs/CONFIGURATION.md`](docs/CONFIGURATION.md) for
+the full defaults and address/storage behavior.
 
 The deprecated names (`OREI_HOST`, `OREI_PORT`, `REST_API_PORT`,
 `OREI_API_PORT`, `MATRIX_DATA_DIR`, `UC_PORT`, `UC_DISABLE_MDNS`,
@@ -290,7 +280,7 @@ produce a single deprecation message — see
 
 The deep dive lives in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 The one-screen version, on purpose honest about what is shipped today
-vs what is library-only under `src/hub/`:
+and where integration boundaries sit under `src/hub/`:
 
 ```
        ┌─────────────────────────────────────────────────────────────┐
@@ -315,35 +305,33 @@ vs what is library-only under `src/hub/`:
                         │  OREI Matrix  │
                         └───────────────┘
 
-  UC mode (UC_ENABLED=true): run.py runs src/driver.py in the same process;
-  src/driver.py starts the same OreiMatrix + RestApiServer plus the Remote 3
-  integration WebSocket on port 9095.
+  Shared composition (both modes): hub.cli → runtime storage barrier →
+  MatrixService + ActionRunner + IntegrationLoader → RestApiServer. UC mode
+  adds its SDK WebSocket adapter on port 9095; Flic and HA discovery follow
+  their integration flags.
 
-  Framework library (not yet wired into run.py / src/driver.py):
   ┌─────────────────────────────────────────────────────────────┐
   │  src/hub/                                                    │
   │    core/             MatrixService, MatrixModel, NameStore,    │
-  │                      EventBus  (framework, library-only)       │
+  │                      EventBus  (shared runtime)                │
   │    domain/           ActionRunner, VisibilityStore             │
-  │                      (framework, library-only)                 │
+  │                      (shared runtime)                           │
   │    integrations/     Integration / IntegrationRegistry /        │
   │                      IntegrationLoader + HubClient (Local/Http)│
-  │                      (framework, library-only)                 │
+  │                      (shared runtime)                           │
   │    persistence/      hub.persistence.migrations                │
-  │                      (framework, library-only)                 │
-  │    env.py            canonical env table                       │
-  │                      (framework, library-only)                 │
+  │                      (startup migration barrier)                │
+  │    cli.py            source + installed entry point             │
   │    openapi.py        build_openapi_spec (mounted at            │
   │                      /api/openapi.json and /api/docs)          │
-  │                      (framework, library-only)                 │
+  │                      (live REST app)                             │
   └─────────────────────────────────────────────────────────────┘
 ```
 
 Three guarantees hold end-to-end on the *shipped* runtime:
 
-1. **One startup path per mode.** `run.py` reads `UC_ENABLED` and
-   either runs `run_core()` (`OreiMatrix` + `RestApiServer`) or
-   `run_uc()` (`runpy.run_path("src/driver.py")`).
+1. **One startup path.** `run.py` and the installed `orei-matrix-driver` command enter
+   `hub.cli` and `hub.runtime.composition` for both integration modes.
 2. **One matrix client.** Whether UC mode is on or off, the actual
    matrix is reached through `src/orei_matrix.py.OreiMatrix`.
 3. **One REST surface.** Both modes bind `RestApiServer` on the same
@@ -351,12 +339,9 @@ Three guarantees hold end-to-end on the *shipped* runtime:
 
 Three claims are *intentionally* not made:
 
-* That `hub.core.MatrixService` is the runtime owner — it's a
-  framework library waiting to be wired in.
-* That `hub.domain.ActionRunner` dispatches every action — it's the
-  same; REST handlers currently call the per-kind managers directly.
-* That setting `FLIC_ENABLED=false` disables the Flic REST handlers —
-  the handlers are always mounted; the flag is framework-level state.
+* That scripted, simulator or SDK-stub runs prove physical matrix, Remote,
+  Flic, LAN discovery, field recovery or soak behavior; those gates remain
+  pending owner evidence.
 
 ---
 
@@ -370,21 +355,10 @@ levels mean and how evidence is recorded is in
 [`docs/validation/VALIDATION_PLAN.md`](docs/validation/VALIDATION_PLAN.md)
 (short version: [docs/validation/README.md](docs/validation/README.md)).
 
-**Honest status today:**
-
-* **268 features** in the registry.
-* **0** features at V4 (hardware on a real OREI BK-808) for any tag.
-* **0** features at V5 (72 h soak) for any tag.
-* **12** features capped at V1 by an open critical / high finding.
-* Most matrix control and CEC paths are V3 (simulator + a real
-  client); some output settings paths are still capped at V1 by
-  `HIL-09` (the `hdcvt-port-led` flicker); see the ledger for the
-  row-by-row state.
-
-This README does not claim hardware evidence at V4 or a passing 72 h
-soak until Phase 8 / WP-V3 produces that evidence — see
-[`ROADMAP.md`](ROADMAP.md) §5 and [`CHANGELOG.md`](CHANGELOG.md)
-§"Pending hardware validation".
+Earlier ledger and candidate records remain attached to their tested commits.
+The integrated runtime campaign is pending the coordinator's fresh report and
+will be indexed at [`docs/validation/RUNTIME_VALIDATION_INDEX.md`](docs/validation/RUNTIME_VALIDATION_INDEX.md).
+Physical hardware, field/recovery and 72-hour soak evidence remain pending.
 
 ---
 
@@ -406,9 +380,9 @@ soak until Phase 8 / WP-V3 produces that evidence — see
 
 ```
 .
-├── run.py                       # the one entry point (core + UC sub-process)
+├── run.py                       # compatibility entry point to hub.cli
 ├── src/
-│   ├── driver.py                # the legacy UC driver (loaded with UC_ENABLED=true)
+│   ├── driver.py                # retained legacy reference; not launched
 │   ├── orei_matrix.py           # the matrix client (HTTPS / Telnet) — the shipped transport
 │   ├── telnet_client.py         # async Telnet client (CEC, cable detection)
 │   ├── persistence.py           # data-dir resolution + atomic writes (shipped path)
@@ -425,14 +399,16 @@ soak until Phase 8 / WP-V3 produces that evidence — see
 │   ├── _task_supervisor.py      # task supervision and error handling
 │   ├── _telnet_proto.py         # Telnet protocol implementation
 │   ├── rest_api/                # 22-module aiohttp app (the shipped REST surface)
-│   ├── integrations/            # legacy UC driver support modules
-│   │   └── unfolded_circle/     #   the legacy UC integration started by src/driver.py
-│   └── hub/                     # the modular hub framework (library-only today)
+│   ├── integrations/            # retained legacy integration support modules
+│   │   └── unfolded_circle/     #   legacy code, not launched by runtime
+│   └── hub/                     # packaged shared runtime
 │       ├── core/                #   MatrixService, MatrixModel, NameStore, EventBus
 │       ├── domain/              #   ActionRunner, VisibilityStore
 │       ├── integrations/        #   Integration framework + HubClient + 3 integrations
-│       ├── persistence/         #   hub.persistence.migrations (not wired to runtime)
-│       ├── env.py               # canonical env table (not wired to run.py)
+│       ├── persistence/         #   migration barrier for managed runtime files
+│       ├── runtime/             #   shared composition and startup
+│       ├── env.py               # canonical runtime environment table
+│       ├── cli.py               # source and installed entry point
 │       └── openapi.py           # OpenAPI 3.1 generator (mounted at /api/openapi.json + /api/docs)
 ├── web/                         # Focused UI (ES modules + tokens)
 │   ├── js/core/                 #   the unified client surface
@@ -443,10 +419,10 @@ soak until Phase 8 / WP-V3 produces that evidence — see
 │   └── manifest.json            # PWA install
 ├── custom_components/hdmi_matrix/  # Home Assistant HACS component
 ├── docs/                        # every doc lives here; see docs/README.md
-│   ├── ARCHITECTURE.md          # shipped runtime vs src/hub/ framework library
+│   ├── ARCHITECTURE.md          # shared runtime composition and boundaries
 │   ├── INTEGRATIONS.md
 │   ├── API_REFERENCE.md         # generated from src/hub/openapi.py
-│   ├── CONFIGURATION.md         # generated from src/hub/env.py
+│   ├── CONFIGURATION.md         # runtime flags, aliases and storage paths
 │   ├── validation/              # the proof of function
 │   └── ...
 ├── tests/                       # pytest suite + Playwright + scenario runner
@@ -480,9 +456,8 @@ soak until Phase 8 / WP-V3 produces that evidence — see
 * **Home Assistant does not see entities** — re-add the integration
   through *Devices & Services → Add Integration → HDMI Matrix*; the
   HACS component installs from `custom_components/hdmi_matrix/`.
-  The shipped `HA_DISCOVERY_ENABLED` flag does *not* start a
-  discovery payload today; the `hub.integrations.homeassistant`
-  module does not run at startup.
+  `HA_DISCOVERY_ENABLED=true` advertises the optional REST service over mDNS;
+  it does not install or configure the HACS component. Install HACS manually.
 * **Something else** — open an issue with the hub log, the matrix
   model / firmware, and the `GET /api/info` JSON; the maintainers
   read [SECURITY.md](SECURITY.md) §"Reporting a vulnerability" for

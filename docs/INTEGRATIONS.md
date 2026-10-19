@@ -1,28 +1,20 @@
 # Integrations
 
-> How the hub talks to the outside world. This document splits the
-> framework's opt-in `Integration` contract from the shipped
-> integration surface.
+> How the shared runtime connects to Remote 3, Flic and Home Assistant. The
+> opt-in `Integration` lifecycle uses the same hub client as REST.
 >
-> **Two layers, kept apart on purpose:**
+> **Integration surfaces:**
 >
-> 1. **Shipped integrations** — what `run.py` and `src/driver.py`
->    actually start today. The Unfolded Circle driver is the
->    legacy `src/integrations/unfolded_circle/` package; Flic is
->    the always-mounted REST handlers at
->    `POST /api/integrations/flic/register` and
->    `GET /api/integrations/flic/buttons`; Home Assistant is the
->    HACS component at `custom_components/hdmi_matrix/` (manual
->    config flow).
-> 2. **Framework integration libraries** — the opt-in
->    `Integration` contract under `src/hub/integrations/`
->    (`base.py`, `hub_client*.py`, plus the Flic, Home Assistant
->    discovery, and Unfolded Circle framework modules). These
->    modules are importable, unit-tested, and what the
->    `IntegrationRegistry` / `IntegrationLoader` would discover
->    by env flag. **The shipped `run.py` / `src/driver.py` do not
->    load them yet.** Until the wiring lands, the framework is
->    library-only.
+> 1. **Remote 3 adapter** — optional (`UC_ENABLED`, off by default), started
+>    by the shared runtime. It uses the shared client and setup/reconfigure
+>    path, with no second matrix connection.
+> 2. **Flic** — enabled by default (`FLIC_ENABLED=true`); registration and
+>    list routes are mounted with its registry. Explicit false disables those
+>    integration routes, while core actions remain available.
+> 3. **Home Assistant** — the HACS component at
+>    `custom_components/hdmi_matrix/` is installed and configured manually.
+>    Optional mDNS discovery is disabled by default and is controlled by
+>    `HA_DISCOVERY_ENABLED`.
 >
 > **Validation:** the registry at
 > [`docs/validation/features.yaml`](validation/features.yaml) splits
@@ -33,13 +25,13 @@
 > is "proved on hardware" — see
 > [`../ROADMAP.md`](../ROADMAP.md) §5 and
 > [`../CHANGELOG.md`](../CHANGELOG.md) §"Pending hardware validation".
-> Framework-level tests live in `tests/test_hub_*_integration.py`;
-> they prove the libraries work in isolation, not that the runtime
-> uses them.
+> Older candidate artifacts retain their tested commit provenance. Fresh
+> integrated runtime evidence is indexed at
+> [`docs/validation/RUNTIME_VALIDATION_INDEX.md`](validation/RUNTIME_VALIDATION_INDEX.md).
 
 ---
 
-## 1. The opt-in integration framework (library-only today)
+## 1. The opt-in integration framework
 
 ### What every framework integration gets
 
@@ -62,9 +54,8 @@ class Integration(ABC):
   through the client.
 * **`stop()`** — release subscriptions, cancel background tasks,
   close any HTTP session the integration opened.
-* **`health()`** — dict (currently unused in the shipped runtime;
-  the live `/api/health` returns `matrix` and `runtime` summary,
-  not a per-integration block).
+* **`health()`** — integration status dict available through the loader's
+  health summary at `data.integrations` in `/api/health`.
 * **`routes()`** — optional list of `(METHOD, PATH, HANDLER)` that
   an `IntegrationLoader` would mount on the aiohttp app.
 
@@ -95,39 +86,30 @@ so an integration does not need to know which one the loader gave it.
   (`hub_connection`, `routing`, `power`, `names`, `presets`,
   `signal`, `cable`, `display`).
 
-### Framework defaults — what each flag actually does
+### Runtime flags — defaults and lifecycle
 
-> These flags are declared by the framework modules under
-> `src/hub/integrations/`. **They are not read by the shipped
-> `run.py` or `src/driver.py` startup today.** Setting any of
-> these does not turn the corresponding integration on or off in
-> the shipped binary; it adjusts framework-level state that the
-> not-yet-wired startup would consult.
+The integration loader lazily imports enabled modules. Disabled integrations
+do not create listeners or lifecycle tasks.
 
-| Flag                    | Framework module                  | Library default | Effect when `false`                                                                                                              | Effect when `true` (in the framework)                                                                                  |
-| ----------------------- | --------------------------------- | --------------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `UC_ENABLED`            | `hub.integrations.unfolded_circle`| `False`        | The framework Unfolded Circle integration would not be loaded by `IntegrationLoader`.                                            | The framework Unfolded Circle integration would be loaded and started against the `HubClient`.                          |
-| `FLIC_ENABLED`           | `hub.integrations.flic`           | **`True`**     | The framework Flic integration would not be loaded. The legacy REST handlers `POST /api/integrations/flic/register` and `GET /api/integrations/flic/buttons` are **always** mounted in the shipped app and are unaffected. | The framework Flic integration would be loaded and started against the `HubClient`.                                       |
-| `HA_DISCOVERY_ENABLED` | `hub.integrations.homeassistant` | **`False`**     | The framework HA discovery integration would not be loaded.                                                                       | The framework HA discovery integration would be loaded and started against the `HubClient`.                              |
+| Flag | Integration | Default | Disabled behavior |
+| --- | --- | --- | --- |
+| `UC_ENABLED` | `hub.integrations.unfolded_circle` | `false` | No UC/`ucapi` import, listener or advertisement. |
+| `FLIC_ENABLED` | `hub.integrations.flic` | `true` | Flic routes and registry lifecycle are omitted; core REST actions remain. |
+| `HA_DISCOVERY_ENABLED` | `hub.integrations.homeassistant` | `false` | No discovery import or Zeroconf dependency for HA; manual HACS setup remains. |
 
-The shipped runtime contracts — the ones the operator experiences
-today — are different:
+True spellings are `1`, `true`, `yes`, `on`; false spellings are `0`, `false`,
+`no`, `off`, trimmed and case-insensitive. An unknown nonblank Flic value
+warns and retains the enabled default.
 
-* **`UC_ENABLED`** *is* read by `run.py`: with `true`, it switches
-  to `run_uc()` and runs the **legacy** `src/driver.py` (not the
-  framework module).
-* **`FLIC_ENABLED`** is *not* read by `run.py`. The REST handlers
-  ship always-mounted.
-* **`HA_DISCOVERY_ENABLED`** is *not* read by `run.py`. There is
-  no auto-discovery payload at runtime. The HA component is the
-  HACS install at `custom_components/hdmi_matrix/` (manual setup).
-
+For example, disable Flic endpoints with `FLIC_ENABLED=false`. To advertise the
+REST service for discovery, set `HA_DISCOVERY_ENABLED=true`. This does not
+install or configure the HACS component.
 ---
 
-## 2. Shipped UC integration — `src/integrations/unfolded_circle/`
+## 2. Remote 3 integration — `src/hub/integrations/unfolded_circle/`
 
-> **Env:** `UC_ENABLED` (default `false`). When `true`,
-> `run.py` switches to `run_uc()` and runs `src/driver.py`.
+> **Env:** `UC_ENABLED` (default `false`). When true, the shared runtime
+> starts the Remote adapter alongside REST.
 >
 > **User-facing guide:** [`docs/UNFOLDED_CIRCLE_INTEGRATION_GUIDE.md`](UNFOLDED_CIRCLE_INTEGRATION_GUIDE.md),
 > owned by `wp-g2-client-guides-doc-archive`.
@@ -148,34 +130,28 @@ today — are different:
   step with the matrix.
 * **Handlers** (`handlers.py`) translating Remote commands
   (`select_source`, `send_cmd`, `button.press`, `switch.toggle`)
-  into `OreiMatrix` calls and back into response envelopes.
+  into shared hub-client commands and response envelopes.
 
 ### What it does *not* do
 
-* It does **not** import `hub.integrations.unfolded_circle`. The
-  shipped integration is the legacy `src/driver.py`-driven
-  implementation; the framework module shares the same name but is
-  a separate library.
-* It does **not** keep the matrix connection itself. `OreiMatrix`
-  is shared with the core; `src/driver.py` starts it.
+* It does not create a second matrix connection; the shared runtime owns the
+  `OreiMatrix` client and serializes setup reconfiguration.
 
 ### Validation evidence
 
 * See [`docs/validation/LEDGER.md` — Remote 3 integration](validation/LEDGER.md#remote-3-integration-f-uc).
-* `F-UC` features at V1 today (entity definition + scripted Remote),
-  some V3 (the scripted UC client against the hub against the
-  simulator). **V4 (real Remote 3 against a real OREI BK-808) is not
-  yet recorded.**
+* Earlier records for `F-UC` remain attached to their recorded candidate.
+  Scripted UC tests do not validate this new runtime or a physical Remote;
+  the current campaign is tracked in the runtime validation index.
 * `tests/uc/` exercises the protocol handshake, lifecycle, state
   sync and the entity commands used by the scripted Remote client.
 
 ---
 
-## 3. Shipped Flic integration — REST handlers in `src/rest_api/`
+## 3. Flic integration — REST handlers in `src/rest_api/`
 
-> **What ships today:** two routes, both **always mounted** by
-> `src/rest_api/app.py::create_rest_app`. There is no env flag that
-  toggles them.
+> **What ships:** two routes mounted when `FLIC_ENABLED` enables the Flic
+> integration.
 >
 > **User-facing guide:** [`docs/FLIC_SETUP.md`](FLIC_SETUP.md),
 > owned by `wp-g2-client-guides-doc-archive`.
@@ -188,31 +164,29 @@ today — are different:
 * **`GET /api/integrations/flic/buttons`** — read the registered
   Flic buttons (`handle_get_flic_buttons`).
 
-These are the only `/api/integrations/*` paths in the shipped app.
-There is no general `/api/integrations` and no `/api/integrations/
-<name>/status`. The `/api/health` endpoint returns `matrix` and
-`runtime` summaries, not per-integration health.
+These are the only `/api/integrations/*` paths in the shipped app when Flic
+is enabled. There is no general `/api/integrations` route and no
+`/api/integrations/<name>/status` route. `/api/health` exposes the loader's
+integration lifecycle mapping under `data.integrations`, alongside its
+`matrix` and `runtime` summaries.
 
 ### Framework-level module — `src/hub/integrations/flic/`
 
-`hub.integrations.flic` is a separate, library-only module that
-implements the `Integration` contract for Flic on top of
-`HubClient`. It is what the `IntegrationRegistry` would discover if
-`FLIC_ENABLED=true`. **It is not what the shipped REST handlers
-are.** `FLIC_ENABLED` defaults to `true` in this library (so legacy
-Flic installations remain opted-in when the framework start-up path
-lands), but does not currently gate the always-mounted REST routes.
+`hub.integrations.flic` implements the `Integration` contract on top of
+`HubClient`. The runtime starts one registry instance when enabled and binds
+the REST routes to it. `FLIC_ENABLED` defaults to `true`; explicit false omits
+the registry and its registration/list routes, not the core matrix actions.
 
 ### Validation evidence
 
 * See [`docs/validation/LEDGER.md` — Flic](validation/LEDGER.md#flic).
-* `F-FLIC` features are V1 unit + V3 (request replay against the
-  hub's REST routes listening unconditionally). **V4 (real Flic
-  Hub) is not recorded** for v0.5.x.
+* Older Flic records remain linked to their recorded candidate. Runtime
+  request replay uses explicit Node SDK stubs and is not physical button
+  proof; see the [runtime validation index](validation/RUNTIME_VALIDATION_INDEX.md).
 
 ---
 
-## 4. Shipped Home Assistant integration — HACS component
+## 4. Home Assistant integration — HACS component and discovery
 
 > **What ships today:** the HACS component at
 > [`custom_components/hdmi_matrix/`](../custom_components/hdmi_matrix/),
@@ -233,31 +207,28 @@ lands), but does not currently gate the always-mounted REST routes.
 
 ### What it does *not* do
 
-* **It is not behind `HA_DISCOVERY_ENABLED`.** That framework-level
-  flag exists in `src/hub/integrations/homeassistant/` for a future
-  MQTT-style auto-discovery payload, but **nothing in the shipped
-  runtime reads it.** There is no auto-discovery payload emitted by
-  the running hub today.
+* Optional REST-service mDNS discovery is controlled by
+  `HA_DISCOVERY_ENABLED` (default false). Discovery advertises the service;
+  it does not install or automatically configure the HACS component.
 * The `HACS` component installed in `custom_components/hdmi_matrix/`
   is a normal HACS integration that talks to the hub over REST; it
   is not an opt-in module of the running `run.py`.
 
 ### Framework-level module — `src/hub/integrations/homeassistant/`
 
-`hub.integrations.homeassistant` is a separate, library-only module
-that implements the `Integration` contract for the HA discovery
-flow on top of `HubClient`. It is what `IntegrationRegistry` would
-discover when (and only when) startup is wired. **It is not in the
-shipped runtime path.**
+`hub.integrations.homeassistant` implements the `Integration` contract for
+optional service discovery on top of `HubClient`. The runtime imports it only
+when discovery is enabled. The HACS component remains a separate user-installed
+REST client.
 
 ### Validation evidence
 
 * See [`docs/validation/LEDGER.md` — Home Assistant component](validation/LEDGER.md#home-assistant-component-f-ha).
-* The HACS component at `custom_components/hdmi_matrix/` has V3
-  evidence on the simulator (a real HA container onboarded through
+* Historical HACS component records include V3 evidence on the simulator (a real HA container onboarded through
   `/api/onboarding`, the config flow, the service calls and the
-  entity state changes checked against the simulator).
-  **V4 (the operator's HA deployment) is not yet recorded.**
+  entity state changes checked against the simulator). They do not validate
+  current runtime discovery or physical-LAN HA setup; those gates are tracked
+  separately in the runtime validation index.
 
 ---
 
@@ -285,9 +256,8 @@ integration does not need to know which one the loader gave it.
 * **Read state:** `await hub.snapshot()` → `HubSnapshot`.
 * **Subscribe:** `unsubscribe = hub.subscribe(callback)`; call
   `unsubscribe()` to detach.
-* **Run an action:** `result = await hub.run_action(...)` (the
-  framework module returns an `ActionRunResult`; not the path
-  REST takes today).
+* **Run an action:** `result = await hub.run_action(...)`; the runtime
+  action runner is also used by REST dispatch.
 * **Route a single output / a cycle / a preset:**
   `await hub.switch(input, output)`,
   `await hub.cycle_input("next", output)`,

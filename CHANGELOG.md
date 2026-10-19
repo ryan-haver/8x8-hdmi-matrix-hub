@@ -16,6 +16,24 @@ sees what was proved, not only what was merged.
 > **Version alignment (DEP-06):** `src/hub/__init__.py::__version__` is canonical.
 > Use `scripts/bump_version.py` to synchronize manifests and check the release tag.
 
+## Unreleased — runtime completion (not a release)
+
+- Compose the source and installed entry points through one shared runtime,
+  matrix owner, REST/WebSocket state and action runner.
+- Prepare persisted stores before manager construction; fail safely on corrupt,
+  ambiguous or unsupported data rather than overwriting it with defaults.
+- Run Remote 3 setup/reconfiguration through the shared runtime. Flic and
+  Home Assistant discovery follow their startup flags and share the same hub
+  client.
+- Update operator guides for installed-entry requirements, integration flags,
+  matrix address precedence, config/data paths and setup behavior.
+- Fresh integrated campaign results, independent review, physical hardware,
+  field and 72-hour soak evidence remain pending; see the
+  [runtime validation index](docs/validation/RUNTIME_VALIDATION_INDEX.md).
+
+This section records unreleased work only. It does not change the canonical
+version or assert that the release gates have passed.
+
 ---
 
 ## [1.0.0rc1] — Release candidate — Phases 6–7 — pending tag
