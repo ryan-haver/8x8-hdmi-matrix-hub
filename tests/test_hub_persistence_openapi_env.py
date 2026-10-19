@@ -657,8 +657,10 @@ def test_every_json_operation_answers_with_the_envelope(spec):
         if not path.startswith("/api") or path in {"/api/docs", "/api/openapi.json"}:
             continue
         for method, operation in item.items():
-            schema = operation["responses"]["200"]["content"]["application/json"]["schema"]
-            assert schema == {"$ref": "#/components/schemas/ApiResponseEnvelope"}, f"{method} {path}"
+            family = "SceneV2ResponseEnvelope" if path.startswith("/api/v2/scenes") else "ApiResponseEnvelope"
+            for status, response in operation["responses"].items():
+                schema = response["content"]["application/json"]["schema"]
+                assert schema == {"$ref": f"#/components/schemas/{family}"}, f"{method} {path} {status}"
 
 
 def test_the_web_ui_and_websocket_are_not_forced_into_the_envelope(spec):
