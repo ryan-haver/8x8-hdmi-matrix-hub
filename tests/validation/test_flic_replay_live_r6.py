@@ -18,9 +18,9 @@ from __future__ import annotations
 import inspect
 import json
 import time
-from typing import Any
 import urllib.error
 import urllib.request
+from typing import Any
 
 import aiohttp
 import pytest
@@ -65,11 +65,7 @@ def _is_maintenance_read(entry: dict[str, Any]) -> bool:
     if entry.get("mutated") is True:
         return False
     cmd = entry.get("command", "")
-    if cmd in MAINTENANCE_READ_COMMANDS:
-        return True
-    if cmd.startswith("get ") or cmd.startswith("r "):
-        return True
-    return False
+    return cmd in MAINTENANCE_READ_COMMANDS
 
 
 def _split_sim_logs(logs: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
@@ -86,6 +82,16 @@ def _split_sim_logs(logs: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], l
         else:
             mutations.append(entry)
     return mutations, reads
+
+
+def test_read_filter_retains_cec_unknown_commands_and_reported_mutations():
+    maintenance = {"command": "get output status", "mutated": False}
+    effects = [
+        {"command": "cec command", "mutated": False},
+        {"command": "get unknown command", "mutated": False},
+        {"command": "get output status", "mutated": True},
+    ]
+    assert _split_sim_logs([maintenance, *effects]) == (effects, [maintenance])
 
 
 def _wait_live_readiness(hub: HubProcess, timeout: float = 30.0, api_key: str | None = None) -> None:
@@ -136,9 +142,9 @@ def live_stack(tmp_path_factory):
             "API_KEY": SHARED_API_KEY,
         },
     )
-    hub.start()
-    _wait_live_readiness(hub, api_key=SHARED_API_KEY)
     try:
+        hub.start()
+        _wait_live_readiness(hub, api_key=SHARED_API_KEY)
         yield sim, hub
     finally:
         hub.stop()
@@ -740,9 +746,9 @@ async def test_live_flic_disabled_registry_startup_404_zero_writes(live_stack, t
         log_dir=tmp_path / "disabled-hub", extra_env={"FLIC_ENABLED": "false"},
     )
     client = FlicClient()
-    hub.start()
-    _wait_live_readiness(hub)
     try:
+        hub.start()
+        _wait_live_readiness(hub)
         await client.start(HubInfo(hub.base_url))
         cursor = len(await _get_sim_log(sim))
         result = await client.perform(act("flic_sdk_event", run_startup_registration=True))
