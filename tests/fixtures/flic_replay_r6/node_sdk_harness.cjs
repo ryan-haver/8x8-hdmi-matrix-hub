@@ -2,6 +2,7 @@
 // Stubs CommonJS "buttons" and "http" modules
 
 const fs = require('fs');
+const process = require('node:process');
 
 function runHarness(scriptPath, buttonsList, eventsList) {
     const requests = [];

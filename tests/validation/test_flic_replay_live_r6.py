@@ -16,7 +16,11 @@ and asserts:
 from __future__ import annotations
 
 import inspect
+import json
+import time
 from typing import Any
+import urllib.error
+import urllib.request
 
 import aiohttp
 import pytest
@@ -30,6 +34,90 @@ from tools.validate.model import act
 from tools.validate.stack import HubProcess, SimulatorProcess
 
 SHARED_API_KEY = "flic-live-test-key-42"
+
+MAINTENANCE_READ_COMMANDS = {
+    # HTTP status/read commands
+    "get video status",
+    "get output status",
+    "get input status",
+    "get cec status",
+    "get system status",
+    "get status",
+    "get network",
+    "get ext-audio status",
+    "get routing status",
+    "preset get",
+    # Telnet status/read commands
+    "status",
+    "r fw version",
+    "r type",
+    "r baudrate",
+    "r system",
+}
+
+
+def _is_maintenance_read(entry: dict[str, Any]) -> bool:
+    """True if the command is a read-only maintenance/status query.
+
+    Mutating operations (writes) and CEC commands (even if mutated=False) are never
+    classified as maintenance reads.
+    """
+    if entry.get("mutated") is True:
+        return False
+    cmd = entry.get("command", "")
+    if cmd in MAINTENANCE_READ_COMMANDS:
+        return True
+    if cmd.startswith("get ") or cmd.startswith("r "):
+        return True
+    return False
+
+
+def _split_sim_logs(logs: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Separate mutating/CEC operations from automatic simulator maintenance reads.
+
+    Returns (mutation_and_cec_logs, maintenance_read_logs).
+    Ensures that unexpected writes or CEC frames are never silently ignored as reads.
+    """
+    mutations: list[dict[str, Any]] = []
+    reads: list[dict[str, Any]] = []
+    for entry in logs:
+        if _is_maintenance_read(entry):
+            reads.append(entry)
+        else:
+            mutations.append(entry)
+    return mutations, reads
+
+
+def _wait_live_readiness(hub: HubProcess, timeout: float = 30.0, api_key: str | None = None) -> None:
+    """Wait for actual matrix connection and catalog readiness via /api/status and /api/presets."""
+    headers = {"X-API-Key": api_key} if api_key else {}
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        if hub.returncode is not None:
+            raise RuntimeError(f"hub exited early with code {hub.returncode}")
+        try:
+            req_status = urllib.request.Request(f"{hub.base_url}/api/status", headers=headers)
+            with urllib.request.urlopen(req_status, timeout=2) as resp:
+                if resp.status == 200:
+                    status_data = json.loads(resp.read().decode())
+                    if status_data.get("success") and (status_data.get("data") or {}).get("connected"):
+                        req_presets = urllib.request.Request(f"{hub.base_url}/api/presets", headers=headers)
+                        with urllib.request.urlopen(req_presets, timeout=2) as p_resp:
+                            if p_resp.status == 200:
+                                p_data = json.loads(p_resp.read().decode())
+                                presets = (p_data.get("data") or {}).get("presets", [])
+                                if (
+                                    p_data.get("success")
+                                    and len(presets) == 8
+                                    and all(p.get("routing_source") == "matrix" for p in presets)
+                                ):
+                                    return
+        except (urllib.error.URLError, OSError, ValueError):
+            pass
+        time.sleep(0.05)
+    raise RuntimeError(
+        f"Hub at {hub.base_url} did not reach matrix-connected and catalog-ready status within {timeout}s"
+    )
 
 
 @pytest.fixture(scope="module")
@@ -49,6 +137,7 @@ def live_stack(tmp_path_factory):
         },
     )
     hub.start()
+    _wait_live_readiness(hub, api_key=SHARED_API_KEY)
     try:
         yield sim, hub
     finally:
@@ -126,9 +215,10 @@ async def test_live_post_fix_all_output_exact_replay(live_stack, flic_client):
 
     # Exact ordered command-log assertion: exactly one command sent, zero duplicate writes
     recent_logs = (await _get_sim_log(sim))[log_cursor:]
-    assert len(recent_logs) == 1
-    assert recent_logs[0]["command"] == "video switch"
-    assert recent_logs[0]["payload"]["source"] == [0, 4]
+    mutations, reads = _split_sim_logs(recent_logs)
+    assert len(mutations) == 1
+    assert mutations[0]["command"] == "video switch"
+    assert mutations[0]["payload"]["source"] == [0, 4]
 
 
 @pytest.mark.asyncio
@@ -149,9 +239,10 @@ async def test_live_route_one_output_exact_replay(live_stack, flic_client):
 
     # Exact ordered command-log assertion: exactly 1 command sent, zero duplicates
     recent_logs = (await _get_sim_log(sim))[log_cursor:]
-    assert len(recent_logs) == 1
-    assert recent_logs[0]["command"] == "video switch"
-    assert recent_logs[0]["payload"]["source"] == [3, 2]
+    mutations, reads = _split_sim_logs(recent_logs)
+    assert len(mutations) == 1
+    assert mutations[0]["command"] == "video switch"
+    assert mutations[0]["payload"]["source"] == [3, 2]
 
 
 @pytest.mark.asyncio
@@ -169,9 +260,10 @@ async def test_live_preset_recall_exact_replay(live_stack, flic_client):
 
     # Exact ordered command-log assertion: exactly 1 preset recall command, zero duplicates
     recent_logs = (await _get_sim_log(sim))[log_cursor:]
-    assert len(recent_logs) == 1
-    assert recent_logs[0]["command"] == "preset set"
-    assert recent_logs[0]["payload"]["index"] == 1
+    mutations, reads = _split_sim_logs(recent_logs)
+    assert len(mutations) == 1
+    assert mutations[0]["command"] == "preset set"
+    assert mutations[0]["payload"]["index"] == 1
 
 
 @pytest.mark.asyncio
@@ -305,10 +397,11 @@ async def test_live_partial_profile_recall_207_multi_status(live_stack, flic_cli
 
         # Exact ordered command-log assertion: video switch, tx stream, audio mute in sequence
         recent_logs = (await _get_sim_log(sim))[log_cursor:]
-        assert len(recent_logs) == 3
-        commands = [entry["command"] for entry in recent_logs]
+        mutations, reads = _split_sim_logs(recent_logs)
+        assert len(mutations) == 3
+        commands = [entry["command"] for entry in mutations]
         assert commands == ["video switch", "tx stream", "set output audio mute"]
-        assert recent_logs[0]["payload"]["source"] == [1, 7]
+        assert mutations[0]["payload"]["source"] == [1, 7]
         # Proves zero duplicate writes
         assert commands.count("video switch") == 1
 
@@ -397,7 +490,8 @@ async def test_live_flic_registration_persisted(live_stack, flic_client):
     assert len(res.requests) == 1
     assert res.requests[0]["metadata"]["request_type"] == "generated_sdk_startup"
     assert res.requests[0]["body"] == {"buttons": buttons}
-    assert (await _get_sim_log(sim))[cursor:] == []
+    mutations, _ = _split_sim_logs((await _get_sim_log(sim))[cursor:])
+    assert mutations == []
 
     # Verify buttons are retrievable via GET /api/integrations/flic/buttons
     async with aiohttp.ClientSession(base_url=hub.base_url) as session:
@@ -601,7 +695,8 @@ async def test_live_sdk_startup_401_is_failure_with_zero_writes(live_stack, flic
             assert result.requests[0]["path"] == "/api/integrations/flic/register"
             assert result.requests[0]["metadata"]["auth_mode"] == "keyless"
             assert "X-API-Key" not in result.requests[0]["headers"]
-            assert (await _get_sim_log(sim))[cursor:] == []
+            mutations, _ = _split_sim_logs((await _get_sim_log(sim))[cursor:])
+            assert mutations == []
             assert (await _get_sim_state(sim))["outputs"] == state_before["outputs"]
         finally:
             async with session.post(
@@ -627,7 +722,8 @@ async def test_live_sdk_startup_404_uses_actual_generated_path_with_zero_writes(
     assert result.status == 404 and not result.ok
     assert len(result.requests) == 1
     assert result.requests[0]["path"] == "/api/integrations/flic/missing-startup"
-    assert (await _get_sim_log(sim))[cursor:] == []
+    mutations, _ = _split_sim_logs((await _get_sim_log(sim))[cursor:])
+    assert mutations == []
     assert (await _get_sim_state(sim))["outputs"] == state_before["outputs"]
 
 
@@ -645,6 +741,7 @@ async def test_live_flic_disabled_registry_startup_404_zero_writes(live_stack, t
     )
     client = FlicClient()
     hub.start()
+    _wait_live_readiness(hub)
     try:
         await client.start(HubInfo(hub.base_url))
         cursor = len(await _get_sim_log(sim))
@@ -655,7 +752,8 @@ async def test_live_flic_disabled_registry_startup_404_zero_writes(live_stack, t
         async with aiohttp.ClientSession(base_url=hub.base_url) as session:
             async with session.get("/api/integrations/flic/buttons") as response:
                 assert response.status == 404
-        assert (await _get_sim_log(sim))[cursor:] == []
+        mutations, _ = _split_sim_logs((await _get_sim_log(sim))[cursor:])
+        assert mutations == []
     finally:
         await client.stop()
         hub.stop()
