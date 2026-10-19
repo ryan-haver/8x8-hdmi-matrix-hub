@@ -27,7 +27,8 @@ def _git(*args: str, cwd: Path = ROOT) -> str:
     out = subprocess.run(  # noqa: S603 - fixed git argv
         ["git", *args], cwd=cwd, capture_output=True, text=True, check=True, env=clean_git_env()
     )
-    return out.stdout.strip()
+    # Porcelain status begins with a significant space for unstaged changes.
+    return out.stdout.rstrip("\r\n")
 
 
 def head_sha(cwd: Path = ROOT) -> str:

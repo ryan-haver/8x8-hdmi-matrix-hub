@@ -98,6 +98,63 @@ async def test_shared_runtime_preset_catalog_after_explicit_ws_refresh(
         await runtime.stop()
 
 
+@pytest.mark.parametrize("kind,port,field", [("input", 1, "inputs"), ("output", 8, "outputs")])
+async def test_shared_runtime_cec_status_after_explicit_ws_refresh(
+    matrix_with_telnet, simulator, tmp_path, monkeypatch, aiohttp_client, kind, port, field,
+):
+    """Registered status reflects a power command after an explicit WS synchronization."""
+    import persistence
+    import rest_api.utils as utils
+    import run
+    from hub.runtime.composition import build_runtime
+    from rest_api.app import create_rest_app
+    from tools.validate.runner import WsObserver
+
+    monkeypatch.setattr(utils, "_runtime", None)
+    monkeypatch.setattr(persistence, "get_legacy_data_paths", lambda: [])
+    monkeypatch.delenv("ADMIN_PIN", raising=False)
+    monkeypatch.delenv("CONTROL_PIN", raising=False)
+    env = {
+        "DATA_DIR": str(tmp_path / "data"), "UC_CONFIG_HOME": str(tmp_path / "config"),
+        "MATRIX_HOST": "127.0.0.1", "MATRIX_PORT": str(simulator.https_port),
+        "UC_ENABLED": "false", "FLIC_ENABLED": "false", "HA_DISCOVERY_ENABLED": "false",
+    }
+    runtime = build_runtime(run.load_settings(env), environ=env,
+                            matrix_factory=lambda *_args, **_kwargs: matrix_with_telnet)
+    client = await aiohttp_client(create_rest_app(runtime=runtime))
+    try:
+        assert await runtime.connect()
+        response = await client.post(f"/api/cec/{kind}/{port}/enable", json={"enabled": True})
+        assert response.status == 200, await response.text()
+        assert (await response.json())["success"] is True
+        warm = (await _get(client, "/api/status/cec"))["data"]["cec_config"]
+        assert warm[field][port - 1]["cec_enabled"] is True
+
+        # Model an external configuration change that does not send a Telnet push.
+        getattr(simulator.state, field)[port - 1].cec_enabled = 0
+        assert await matrix_with_telnet.is_cec_enabled(port, kind == "output") is True
+        observer = WsObserver(str(client.make_url("/ws")), "127.0.0.1")
+        await observer.start()
+        try:
+            assert not observer.error
+            assert await observer.sync()
+        finally:
+            await observer.stop()
+        simulator.log.clear()
+        response = await client.post(f"/api/cec/{kind}/{port}/power_on")
+        assert response.status == 200, await response.text()
+        assert (await response.json())["success"] is True
+        assert getattr(simulator.state, field)[port - 1].cec_enabled == 1
+        current = (await _get(client, "/api/status/cec"))["data"]["cec_config"]
+        assert current[field][port - 1]["cec_enabled"] is True
+        simulator.log.clear()
+        assert (await _get(client, "/api/status/cec"))["data"]["cec_config"] == current
+        assert sim_writes(simulator) == []
+    finally:
+        await client.close()
+        await runtime.stop()
+
+
 @pytest.mark.parametrize("route,manager_method", [
     ("/api/profiles", "list_profiles"),
     ("/api/profile/movie_night", "get_profile"),
