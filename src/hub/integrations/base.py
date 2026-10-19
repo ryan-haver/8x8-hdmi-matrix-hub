@@ -106,21 +106,31 @@ class IntegrationLoader:
                 await integration.start(hub)
         except BaseException:
             try:
-                await self.stop()
+                import asyncio
+                await asyncio.shield(self.stop())
             except Exception:
                 pass  # Preserve the startup error after attempting all cleanup.
             raise
 
     async def stop(self) -> None:
+        import asyncio
         failures: list[Exception] = []
+        cancelled: asyncio.CancelledError | None = None
         while self._started:
+            integration = self._started.pop()
             try:
-                await self._started.pop().stop()
+                await integration.stop()
+            except asyncio.CancelledError as exc:
+                cancelled = exc
             except Exception as exc:
                 failures.append(exc)
         self.integrations.clear()
         if failures:
+            if cancelled is not None:
+                raise BaseExceptionGroup("Integration shutdown failed", [*failures, cancelled])
             raise ExceptionGroup("Integration shutdown failed", failures)
+        if cancelled is not None:
+            raise cancelled
 
     def routes(self) -> list[Any]:
         return [route for integration in self.integrations.values() for route in integration.routes()]
@@ -133,3 +143,5 @@ class IntegrationLoader:
             except Exception:
                 result[name] = {"status": "error"}
         return result
+
+

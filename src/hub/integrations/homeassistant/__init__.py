@@ -76,6 +76,7 @@ class HomeAssistantDiscoveryIntegration(Integration):
         self._service_info: Any = None
         self._registered: bool = False
         self._started: bool = False
+        self._error: str | None = None
 
     @classmethod
     def config_from_env(cls, environ: Mapping[str, str]) -> HomeAssistantDiscoveryConfig:
@@ -121,8 +122,10 @@ class HomeAssistantDiscoveryIntegration(Integration):
         try:
             from zeroconf import ServiceInfo
             from zeroconf.asyncio import AsyncZeroconf
-        except ImportError:
-            _LOG.warning("zeroconf library not available; discovery disabled")
+        except ImportError as e:
+            _LOG.warning("zeroconf library not available; discovery disabled: %s", e)
+            self._error = "zeroconf library not available"
+            self._registered = False
             return
 
         try:
@@ -152,9 +155,12 @@ class HomeAssistantDiscoveryIntegration(Integration):
             await self._zeroconf.async_register_service(info)
             self._service_info = info
             self._registered = True
+            self._error = None
             _LOG.info("Advertised Home Assistant discovery service: %s", full_name)
         except Exception as e:
             _LOG.warning("Failed to register Home Assistant zeroconf discovery: %s", e)
+            self._error = f"Failed to register discovery service: {e}"
+            self._registered = False
 
     async def stop(self) -> None:
         """Stop discovery and cleanly unregister zeroconf service."""
@@ -179,13 +185,25 @@ class HomeAssistantDiscoveryIntegration(Integration):
 
         self._started = False
         self.hub_client = None
+        self._error = None
 
     def health(self) -> dict[str, Any]:
         """Report discovery integration health."""
-        return {
-            "status": "ok" if (self._registered or not self.config.enabled) else "error",
+        if not self.config.enabled:
+            status = "disabled"
+        elif self._registered:
+            status = "ok"
+        else:
+            status = "error"
+
+        result = {
+            "status": status,
             "enabled": self.config.enabled,
             "registered": self._registered,
             "service_name": self.config.service_name,
             "port": self.config.api_port,
         }
+        if self._error:
+            result["error"] = self._error
+        return result
+

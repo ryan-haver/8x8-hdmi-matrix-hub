@@ -515,14 +515,17 @@ def create_rest_app(data_dir: Path | None = None, *, runtime=None, integration_r
     _LOG.info(f"Persistent storage initialized at {data_dir}")
 
     # Flic Integrations Auto-Discovery
-    if integration_routes is None:
-        # Legacy direct app construction retains its route defaults.
-        from .integrations import handle_get_flic_buttons, handle_register_flic_buttons
-        app.router.add_post("/api/integrations/flic/register", handle_register_flic_buttons)
-        app.router.add_get("/api/integrations/flic/buttons", handle_get_flic_buttons)
-    else:
+    if integration_routes is not None:
         for method, path, handler in integration_routes:
             app.router.add_route(method, path, handler)
+    elif runtime is None:
+        # Legacy direct app construction retains its route defaults when Flic is enabled.
+        from hub.integrations.flic import FlicIntegrationConfig
+        if FlicIntegrationConfig.config_from_env(os.environ).enabled:
+            from .integrations import handle_get_flic_buttons, handle_register_flic_buttons
+            app.router.add_post("/api/integrations/flic/register", handle_register_flic_buttons)
+            app.router.add_get("/api/integrations/flic/buttons", handle_get_flic_buttons)
+
 
     # WebSocket for real-time updates
     app.router.add_get("/ws", handle_websocket)

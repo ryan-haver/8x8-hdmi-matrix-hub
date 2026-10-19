@@ -13,6 +13,16 @@ from typing import Any
 from aiohttp import web
 
 from _file_io import atomic_write_json
+from hub.persistence import (
+    MigrationError,
+    SchemaVersionError,
+    block_reason,
+    flat_map_records,
+    is_write_blocked,
+    load_versioned_json,
+    save_versioned_json,
+)
+from hub.persistence.migrations import assert_writable
 from persistence import get_data_dir
 
 _LOG = logging.getLogger("hub.integrations.flic")
@@ -62,6 +72,7 @@ class FlicButtonRegistry:
         self._data_dir = data_dir
         self._file_path = file_path
         self._buttons: dict[str, dict[str, Any]] = {}
+        self._metadata: dict[str, Any] = {}
         self._loaded: bool = False
 
     @property
@@ -80,27 +91,64 @@ class FlicButtonRegistry:
         target_file = self.file_path
         if target_file.exists():
             try:
-                with open(target_file, encoding="utf-8") as f:
-                    data = json.load(f)
-                    if isinstance(data, dict):
-                        self._buttons = data
-                    elif isinstance(data, list):
-                        # Convert legacy list structure to dict
-                        self._buttons = {
-                            btn["bdaddr"]: btn
-                            for btn in data
-                            if isinstance(btn, dict) and "bdaddr" in btn
+                raw = load_versioned_json(target_file, default=None)
+                if raw is not None:
+                    if isinstance(raw, Mapping):
+                        records = flat_map_records("flic_buttons.json", raw)
+                        if not records:
+                            records = {
+                                k: dict(v)
+                                for k, v in raw.items()
+                                if k != "schema_version" and isinstance(v, Mapping) and "bdaddr" in v
+                            }
+                        self._buttons.clear()
+                        self._buttons.update(records)
+                        self._metadata = {k: v for k, v in raw.items() if k not in self._buttons}
+                    elif isinstance(raw, list):
+                        records = {
+                            (btn.get("bdaddr") or btn.get("address")): dict(btn)
+                            for btn in raw
+                            if isinstance(btn, Mapping) and (btn.get("bdaddr") or btn.get("address"))
                         }
+                        self._buttons.clear()
+                        self._buttons.update(records)
+                        self._metadata = {}
+                    else:
+                        self._buttons.clear()
+                        self._metadata = {}
+                else:
+                    self._buttons.clear()
+                    self._metadata = {}
                 _LOG.info("Loaded %d registered Flic buttons from storage", len(self._buttons))
+            except (MigrationError, SchemaVersionError) as e:
+                _LOG.warning("Failed to load registered Flic buttons: %s", e)
+                self._buttons.clear()
+                self._metadata = {}
             except Exception as e:
                 _LOG.warning("Failed to load registered Flic buttons: %s", e)
+                self._buttons.clear()
+                self._metadata = {}
+        else:
+            self._buttons.clear()
+            self._metadata = {}
         self._loaded = True
 
-    def save(self) -> bool:
+    def save(self, *, versioned: bool = True) -> bool:
         """Save the in-memory registered buttons dict to persistent storage."""
+        if is_write_blocked(self.file_path):
+            _LOG.error("Refusing to save %s: %s", self.file_path.name, block_reason(self.file_path))
+            return False
         try:
-            atomic_write_json(self.file_path, self._buttons, indent=4)
-            return True
+            if versioned:
+                payload = dict(self._metadata)
+                payload.update(self._buttons)
+                return save_versioned_json(self.file_path, payload, indent=4)
+            else:
+                assert_writable(self.file_path)
+                payload = dict(self._metadata)
+                payload.update(self._buttons)
+                atomic_write_json(self.file_path, payload, indent=4)
+                return True
         except Exception as e:
             _LOG.warning("Failed to save registered Flic buttons: %s", e)
             return False
@@ -114,38 +162,49 @@ class FlicButtonRegistry:
         if not isinstance(buttons, list):
             raise ValueError("Buttons payload must be a list")
 
-        previous = self._buttons.copy()
+        previous = {k: dict(v) for k, v in self._buttons.items()}
         updated = False
         for btn in buttons:
             if not isinstance(btn, dict) or "bdaddr" not in btn:
                 continue
             bdaddr = btn["bdaddr"]
             name = btn.get("name", bdaddr)
+            serial = btn.get("serial", "")
 
-            if bdaddr not in self._buttons or self._buttons[bdaddr].get("name") != name:
-                self._buttons[bdaddr] = {
-                    "bdaddr": bdaddr,
-                    "name": name,
-                    "serial": btn.get("serial", ""),
-                }
+            existing = self._buttons.get(bdaddr)
+            if existing is None or existing.get("name") != name or existing.get("serial") != serial:
+                new_btn = dict(existing) if existing else {"bdaddr": bdaddr}
+                new_btn["bdaddr"] = bdaddr
+                new_btn["name"] = name
+                new_btn["serial"] = serial
+                self._buttons[bdaddr] = new_btn
                 updated = True
 
         if updated:
             if not self.save():
-                self._buttons = previous
+                self._buttons.clear()
+                self._buttons.update(previous)
                 raise RuntimeError("Failed to save registered Flic buttons")
             _LOG.info("Registered/updated Flic buttons. Total active: %d", len(self._buttons))
 
         return len(self._buttons)
 
     def list_buttons(self) -> list[dict[str, Any]]:
-        """Return list of all registered buttons."""
+        """Return list of all registered buttons with only established public fields."""
         self.load_if_needed()
-        return list(self._buttons.values())
+        return [
+            {
+                "bdaddr": b.get("bdaddr", k),
+                "name": b.get("name", b.get("bdaddr", k)),
+                "serial": b.get("serial", ""),
+            }
+            for k, b in self._buttons.items()
+        ]
 
     def __len__(self) -> int:
         self.load_if_needed()
         return len(self._buttons)
+
 
 
 class FlicIntegration(Integration):

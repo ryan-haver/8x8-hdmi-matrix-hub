@@ -47,6 +47,19 @@ def _sync_flic_hooks() -> None:
     _flic_mod.get_data_dir = get_data_dir
 
 
+def _active_integration(app: web.Application | None = None) -> FlicIntegration:
+    """Return active runtime FlicIntegration if present, otherwise default singleton."""
+    if app is not None and "hub_runtime" in app:
+        runtime = app["hub_runtime"]
+        if hasattr(runtime, "loader") and "flic" in runtime.loader.integrations:
+            return runtime.loader.integrations["flic"]
+    from rest_api.utils import get_runtime
+    runtime = get_runtime()
+    if runtime is not None and hasattr(runtime, "loader") and "flic" in runtime.loader.integrations:
+        return runtime.loader.integrations["flic"]
+    return _default_integration
+
+
 def _get_flic_file_path() -> Path:
     """Return the persistent file path for registered Flic buttons."""
     _sync_flic_hooks()
@@ -67,18 +80,19 @@ def _save_buttons() -> bool:
     """Save the in-memory registered buttons dict to persistent storage."""
     _sync_flic_hooks()
     _default_registry._buttons = _registered_buttons
-    return _default_registry.save()
+    return _default_registry.save(versioned=False)
 
 
 async def handle_register_flic_buttons(request: web.Request) -> web.Response:
     """Register Flic buttons reported by the Flic Hub SDK script."""
     global _registered_buttons, _loaded
     _sync_flic_hooks()
-    _default_registry._buttons = _registered_buttons
-    _default_registry._loaded = _loaded
-    response = await _default_integration.handle_register(request)
-    _registered_buttons = _default_registry._buttons
-    _loaded = _default_registry._loaded
+    integration = _active_integration(request.app)
+    integration.registry._buttons = _registered_buttons
+    integration.registry._loaded = _loaded
+    response = await integration.handle_register(request)
+    _registered_buttons = integration.registry._buttons
+    _loaded = integration.registry._loaded
     return response
 
 
@@ -86,9 +100,11 @@ async def handle_get_flic_buttons(request: web.Request) -> web.Response:
     """Retrieve all registered Flic buttons."""
     global _registered_buttons, _loaded
     _sync_flic_hooks()
-    _default_registry._buttons = _registered_buttons
-    _default_registry._loaded = _loaded
-    response = await _default_integration.handle_get_buttons(request)
-    _registered_buttons = _default_registry._buttons
-    _loaded = _default_registry._loaded
+    integration = _active_integration(request.app)
+    integration.registry._buttons = _registered_buttons
+    integration.registry._loaded = _loaded
+    response = await integration.handle_get_buttons(request)
+    _registered_buttons = integration.registry._buttons
+    _loaded = integration.registry._loaded
     return response
+

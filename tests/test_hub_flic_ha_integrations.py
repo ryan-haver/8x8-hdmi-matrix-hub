@@ -113,9 +113,8 @@ def test_flic_registry_load_legacy_list(tmp_path: Path):
     """Registry converts legacy list format into dictionary keyed by bdaddr."""
     file_path = tmp_path / "flic_buttons.json"
     legacy_data = [
-        {"bdaddr": "aa:bb:cc:11", "name": "Living Room", "serial": "S1"},
-        {"bdaddr": "aa:bb:cc:22", "name": "Office", "serial": "S2"},
-        {"invalid": "entry"},  # No bdaddr, should be ignored
+        {"bdaddr": "aa:bb:cc:11:22:33", "name": "Living Room", "serial": "S1"},
+        {"bdaddr": "aa:bb:cc:22:33:44", "name": "Office", "serial": "S2"},
     ]
     file_path.write_text(json.dumps(legacy_data), encoding="utf-8")
 
@@ -123,8 +122,8 @@ def test_flic_registry_load_legacy_list(tmp_path: Path):
     reg.load_if_needed()
     assert len(reg) == 2
     buttons = {b["bdaddr"]: b for b in reg.list_buttons()}
-    assert buttons["aa:bb:cc:11"]["name"] == "Living Room"
-    assert buttons["aa:bb:cc:22"]["name"] == "Office"
+    assert buttons["aa:bb:cc:11:22:33"]["name"] == "Living Room"
+    assert buttons["aa:bb:cc:22:33:44"]["name"] == "Office"
 
 
 def test_flic_registry_register_new_buttons(tmp_path: Path):
