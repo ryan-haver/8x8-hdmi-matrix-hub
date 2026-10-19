@@ -435,8 +435,7 @@ new supported controls pass. Its new normal-command amd64 image is
 257 shipped inputs match. Exact-commit coordinator verification passes both new
 controls in 6.42 seconds. The worker was released before acknowledgment, all
 `build/r8d` copied, the review merged and its worktree immediately removed/pruned.
-The coordinator now freezes a clean candidate for fresh complete source, client,
-multiarch and deployment campaigns.
+The coordinator then froze `1baac3de` for the complete campaign recorded below.
 
 The [R8D report](../validation/RUNTIME_REVIEW_RESTORATION.md) also retains a
 conditional probe that replaces public disconnect before Orei applies its
@@ -447,10 +446,59 @@ failure control passes. The coordinator explicitly classified independent
 quiescence for such alternate implementations as an extension beyond the
 supported contract, not a high production/image blocker. The unchanged failed
 probe is [committed for explicit invocation](../validation/reproductions/README.md)
-and is not skipped, xfailed or counted as a product pass. The next complete
-campaign must not be described as proving this stronger arbitrary-client guarantee.
+and is not skipped, xfailed or counted as a product pass. The completed campaign
+below does not prove this stronger arbitrary-client guarantee.
 The no-Anthropic policy remains in force. Historical full-campaign and CI counts
 above remain tied to `4adbc13` and do not certify these later source changes.
+
+## Fresh frozen campaign and evidence consolidation
+
+Clean source `1baac3dec660f41345869c126cfca94d6731c5a0` passes the complete
+campaign under `build/runtime-completion/after-r8b/`: core 4,041 passed/four
+platform skips/177 routes, dedicated UC 100, source API 1,411/browser 54/UC 18/
+Flic 23, and actual HA 19 on each pinned version (2026.9.3 and 2025.1.4).
+Both canonical `1.0.0rc1` images build with the source revision label; amd64
+deployment passes 26 with three expected skips, arm64/QEMU startup/health/SIGTERM
+passes, and all 257 shipped inputs match both images. All four normal-image
+restart/immediate/deadline regressions pass. Image clients pass all 193 outcomes:
+API 79/browser 54/Flic 23/HA 19/UC 18. Source browser flows pass 59 with zero
+unexpected/flaky/skipped; all four Swagger cases pass with 177/175 operation
+catalogs and no page errors or saved PIN. No physical-client claim follows.
+
+The [new archive](../validation/runs/runtime-r8b/manifest.json) and
+[current report](../validation/RUNTIME_VALIDATION_REPORT.md) retain actual
+identities, scopes and outcomes. The original 193 image records are copied
+unchanged; 42 declared client exclusions remain non-applicable, validated
+against unchanged scenario definitions. Registry baselines are unchanged.
+Ledger generation precedes 26 passing registry checks and the combined formal
+gate, which passes with zero known failures linked to open findings. Gate inputs
+include all eight actual client roots plus deployment evidence.
+
+Archive checkpoint `fe0e7f0705f376aaa9f8c27d6e50a2b78a3df9fe` passes binary
+Git-blob comparison for 439 files: the old 213, new 193 image records, 32 new
+archive files and the original conditional probe. All 259 captured source/build
+inputs are unchanged. Default staged whitespace checking treated preserved
+CRLF as trailing whitespace; CRLF-aware checking passed without rewriting raw
+evidence. The first archive commit omitted the ignored `*.log` core transcript;
+the next explicitly adds that exact file before the successful 439-file audit.
+
+The external-image supplement's non-strict route diagnostic overwrote the
+shared JSON with an uninstrumented zero count. Its raw output/context are
+retained; the original complete strict result remains in the archived core log
+and independent CI log. No replacement JSON is synthesized. Future helpers
+disable that supplemental writer. Six root/review source files differ only by
+verified LF/CRLF checkout representation; final image parity uses actual root
+build bytes. Post-core and post-campaign 16-file metadata/three-presence checks
+match the post-discovery checkpoint, without claiming pre-discovery integrity.
+
+[CI at `1baac3de`](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/actions/runs/39228762775)
+passes every non-UI required job: core 4,023 passes/22 skips/177 routes, actual HA
+19, deployment, UC, scenarios/ledger, types/lint/hygiene/security. Main UI has
+1,098 passes, 33 skips and only the same three Tron paused-frame failures;
+gallery 62 passes. Actual logs and both artifacts are retained. Owner visual
+approval is still absent. Luna's final bounded guide/index refresh and Astra's
+final evidence audit follow this consolidation; source/image campaigns are not
+repeated for documentation-only changes.
 
 ## Evidence and release gates
 
@@ -460,6 +508,6 @@ coordinator validates before merging and promptly removes accepted worktrees.
 Shared registry/ledger/schema/scenario changes stay coordinator-owned.
 
 The old candidate [validation report](../validation/VALIDATION_REPORT.md)
-remains tied to its recorded commits. Runtime changes need fresh integrated
+remains tied to its recorded commits. Future runtime changes need fresh integrated
 image/client evidence. The three Tron baselines still need owner approval;
 hardware/CEC/client observations, 72-hour soak and field sign-off remain open.

@@ -1,6 +1,7 @@
 # Runtime completion and release plan
 
-Status: supported Orei restoration accepted; release held for fresh complete candidate gates.
+Status: fresh software campaign and formal evidence gate passed; final documentation,
+review, owner visual and physical/field release gates remain.
 R3E's UI ordering correction and R1F's explicit-refresh CEC cache correction are
 integrated. Clean candidate `4adbc13` passed 3,966 local core tests with four skips
 and 177/177 routes, 100 dedicated Remote tests and all 1,506 source client outcomes.
@@ -30,8 +31,12 @@ commit; the worker also passed 155 scoped regressions. Fresh Astra R8D
 after all twelve source/image cases, 102 regressions and two new controls pass;
 the coordinator independently passes both new controls. A stronger conditional
 guarantee for a replacement disconnect that fails before applying Orei's fence
-is documented with its unchanged failed probe. New complete candidate evidence
-and final consolidation checks remain required.
+is documented with its unchanged failed probe. The new complete `1baac3de`
+campaign now passes 4,041 core tests (four skips), 177/177 routes, 100 dedicated
+Remote tests, 1,506 source outcomes, both pinned HA versions, both architecture
+builds, deployment/parity, 193 image outcomes, 59 flows and four Swagger checks.
+The combined gate and 26 registry checks pass; the archive at `fe0e7f0` preserves
+all 439 audited old/new Git blobs. Final guide/index and evidence reviews remain.
 See the [execution record](RUNTIME_EXECUTION.md). Updated 2026-10-19. This is the next execution
 plan after the integrated Phase 6/7 work. It supplements the original Phase 8
 validation gate rather than renumbering historical phases.
@@ -50,8 +55,9 @@ At the start of this plan, the application constructed `OreiMatrix` and
 loader and migrations were separate frameworks. Shared composition, packaged
 entrypoint, UC bridge and dedicated Flic replay are now accepted on the runtime
 branch. Persistence, action parity and flag/lifecycle corrections have since
-been accepted. The remaining software work is fresh complete source/image
-validation, evidence/index reconciliation, final independent disposition and CI.
+been accepted. Fresh complete source/image validation and the formal evidence
+gate have passed. Remaining software work is final guide/index reconciliation,
+independent evidence disposition and CI at the final documentation head.
 Physical
 client, recovery, soak and owner acceptance gates follow those checks.
 
