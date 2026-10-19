@@ -80,7 +80,9 @@ Generated reference: [`docs/API_REFERENCE.md`](API_REFERENCE.md)
 
 The composition is organized in `src/hub/core`, `src/hub/domain`,
 `src/hub/integrations`, and `src/hub/persistence`; these modules are active
-runtime components. Fresh end-to-end campaign evidence is still pending.
+runtime components. The fresh integrated software campaign passed for
+`4adbc136`; its scope and limits are recorded in the
+[runtime validation index](validation/RUNTIME_VALIDATION_INDEX.md).
 
 > Modules: `hub.core.event_bus`, `hub.core.matrix_service`,
 > `hub.core.models`, `hub.core.name_store`,
@@ -351,9 +353,9 @@ this interface; WebSocket consumers receive their existing REST frame format.
 
 The feature ledger records its own commit and freshness for each row. Earlier
 RC1 API/browser/Remote/HA/Flic records remain evidence for their recorded
-candidate; they do not validate runtime completion. The coordinator's fresh
-integrated software campaign is pending and will be indexed by exact commit in
-the [runtime validation index](validation/RUNTIME_VALIDATION_INDEX.md).
+candidate; they do not validate runtime completion. The fresh integrated
+software campaign for `4adbc136` is indexed by exact commit in the
+[runtime validation index](validation/RUNTIME_VALIDATION_INDEX.md).
 
 Simulator, scripted Remote, HA-container, browser and request-replay evidence
 are limited to their exercised software paths. They do not prove physical

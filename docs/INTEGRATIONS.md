@@ -121,11 +121,13 @@ install or configure the HACS component.
 * **mDNS advertisement** of `uc_integration` on the integration's
   configured interface; `UC_DISABLE_MDNS_PUBLISH=true` skips it for
   bridge networking.
-* **Entity factory** (`entities.py`) generating every UI entity the
-  Remote shows: `remote.matrix`, `button.preset_1..8`, per-input
-  `remote.input_N_cec`, per-output `media_player.output_N`,
-  `binary_sensor.matrix_connection`, and the sensors, switches and
-  shortcuts the profile / scene / macro surfaces need.
+* **Entity factory** (`entities.py`) generating Remote entity IDs that match
+  the approved catalog: `remote.orei_matrix`, `button.preset_1..8`, per-input
+  `remote.input_N_cec`, per-output `media_player.output_N` and
+  `remote.output_N_cec`, `switch.matrix_power`, and the input/output sensors.
+  Profile, scene, shortcut and macro choices are commands/pages on
+  `remote.orei_matrix`, not separate entity IDs. SDK 0.7 does not advertise
+  the optional select entities.
 * **State projector** (`state.py`) keeping every entity's state in
   step with the matrix.
 * **Handlers** (`handlers.py`) translating Remote commands

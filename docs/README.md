@@ -123,10 +123,10 @@ The levels are:
   the owner's sign-off after a week of daily use.
 
 The runtime campaign index links fresh software evidence for the integrated
-runtime by exact commit when the coordinator supplies the report. Existing
-feature-ledger and candidate reports keep their original commit provenance and
-do not automatically prove the runtime-completion candidate. Physical hardware,
-field, recovery and 72-hour evidence remain pending owner records.
+runtime at exact commit `4adbc136`. Existing feature-ledger and candidate reports
+keep their original commit provenance and do not automatically prove the
+runtime-completion candidate. Physical hardware, field, recovery and 72-hour
+evidence remain pending owner records.
 
 ---
 
