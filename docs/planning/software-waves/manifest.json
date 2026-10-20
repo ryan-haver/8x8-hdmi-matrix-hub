@@ -1268,7 +1268,7 @@
       "feature_ids": [
         "F-API-002"
       ],
-      "state": "launched",
+      "state": "completed_independent_review_launched",
       "exact_base_sha": "97e617c2276c7b1e015bb4a9419cb9820deafdee",
       "task_id": "task_3853c93e69ef",
       "dispatch_id": "ctx_41f75bc23079",
@@ -1293,7 +1293,14 @@
         "main/tags/release publication"
       ],
       "review_required": "different underlying family for every new test/fixture/tool/code deliverable",
-      "artifact_scope": "new empty per-run destination; preserve full source/client/image identities"
+      "artifact_scope": "new empty per-run destination; preserve full source/client/image identities",
+      "submitted_sha": "0dd2c25ea866fd56fbe6046e03f0172499b70080",
+      "implementation_sha": "afe344a0e6a17392ccda90bab140284dd512267e",
+      "prepared_candidate_sha": "3622dc9a82893981feddc2e84ae7784eca3cdede",
+      "review_task_id": "task_b62e4cdfe32e",
+      "review_dispatch_id": "ctx_0334309854fd",
+      "worker_resources": "author settled retained/user_takeover by Orca; review active",
+      "qualification": "pending exact-candidate review and combined integration verification"
     },
     {
       "id": "SW-API-READ-02",
@@ -3294,7 +3301,7 @@
       "id": "SW-REPO-01",
       "package": "SW-REPO",
       "feature_ids": [],
-      "state": "launched",
+      "state": "completed_author_correction_launched",
       "exact_base_sha": "53e4b6710e9835ced03b7c614e2ee00f70649f2f",
       "task_id": "task_39d9d5951f53",
       "dispatch_id": "ctx_789b450d0a6e",
@@ -3320,7 +3327,11 @@
       "artifact_scope": "new empty per-run destination; preserve full source/client/image identities",
       "model": "minimax-coding-plan/MiniMax-M3",
       "effective_native_variant": "thinking",
-      "launch_route": "verified local configuration; CLI model override unsupported and omitted"
+      "launch_route": "verified local configuration; CLI model override unsupported and omitted",
+      "submitted_sha": "73a9621c0874e12c17f8ff525f44ce4c85f41a27",
+      "correction_task_id": "task_f3691c08b309",
+      "correction_dispatch_id": "ctx_7bbd908b29c9",
+      "qualification": "none; source inventory awaiting calibrated prose correction and coordinator review"
     },
     {
       "id": "SW-DOCS-01",

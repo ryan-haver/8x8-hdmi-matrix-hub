@@ -1049,3 +1049,73 @@ Sequential prose-only merge adds both preserved report commits; no register
 closure or qualification. 473 existing documentation tests, whitespace and
 changed Markdown targets checked. Invocation-only documentation hook exception
 used for these prose/static-plan records, not for Sol's implementation.
+
+
+### First implementation delivery and ongoing independent review preparation
+
+SW-API-READ-01 completed at `0dd2c25ea866fd56fbe6046e03f0172499b70080`,
+implementation `afe344a0e6a17392ccda90bab140284dd512267e`. Exact base diff:
+new 76-line scenario, new 209-line report, coordinator's one-line F-API-002
+scenario mapping; no product change. Normal hook passed 4,041/4/35 and 177/177
+routes; 81 relevant tests; clean final API/source simulator campaign has three
+passes and 20 checks, empty state differences, null image digests. Initial
+untracked diagnostic remains excluded. Supported same-pool author observation
+about 17:09Z: **95% remaining**; no model-capacity stop.
+
+Complete native Codex transcript (1,741,792 bytes, hash recorded privately) and
+original source records preserved. Orca settlement action `worker-release`
+returned **retained/user_takeover**, processAction none; no terminal close or
+worktree reuse. This explicit ownership decision precedes acknowledgment
+`delivery_de635c0d28b8`. Coordinator uses a separate `wp-sw-api-acceptance`
+worktree at exact submitted SHA for evidence/registry/ledger assembly; author's
+user-owned worktree stays untouched. Three records copied byte-exact; only
+F-API-002 current/basis/evidence proposed, no target/interfaces/finding change.
+Ledger generation is running alone; registry tests wait until it completes.
+No qualification or integration yet; exact combined candidate needs DeepSeek review.
+
+MiniMax source inventory completed at `73a9621c0874e12c17f8ff525f44ce4c85f41a27`
+in about four minutes. Full native transcript and verified full bundle preserved,
+Dispatch `ctx_789b450d0a6e` released/archived before `delivery_d8edba9685ae`
+acknowledgment. Coordinator review requires prose corrections before acceptance:
+prior CI receipts exist with their original source scope; redacted gitleaks
+matches are candidates, not proven harmless or permission for a broad 64-hex
+allowlist; unreachable tree paths do not prove dangling-blob content/provenance.
+Extra read-only unreachable inspection is not deletion authority.
+Fresh same-worktree correction Task `task_f3691c08b309`, Dispatch
+`ctx_7bbd908b29c9`, terminal `term_097d554a-6d03-448b-bf78-8b1a1e53a50c`, exact
+base `73a9621c0874e12c17f8ff525f44ce4c85f41a27`, same pinned M3/thinking route.
+Only report/correction build output writable, no repeat scans or config changes;
+within original bounded 15-minute allocation with verified 95% Codex fallback.
+
+Supported DeepSeek authenticated balance/catalog refresh **17:13:03Z**: USD
+**16.56** available, current Pro/Flash unchanged, windows/reset/other commitments
+unreported. Reserve USD 3 for exact API combined independent review/corrections.
+This qualified different-family route remains available while M3 corrects prose.
+
+
+Prepared combined API candidate **3622dc9a82893981feddc2e84ae7784eca3cdede**
+was normally published on `ryan-haver/wp-sw-api-acceptance`; author
+`ryan-haver/wp-sw-api-root` published at `0dd2c25e...`; both exact tips verified.
+Canonical ledger generation completed before registry/schema checks (33 pass).
+A coordinator basetemp-parent setup error caused 33 setup errors before test
+bodies, corrected by creating a short new isolated parent; original failure
+retained and no source fix implied. Numerical proposed count 204 below/57 stale.
+
+**Independent combined review launched:** Task `task_b62e4cdfe32e`, Dispatch
+`ctx_0334309854fd`, terminal `term_de20da3a-5639-4b3b-b82f-45b7b09e309a`,
+worktree/branch `wp-sw-api-review` / `ryan-haver/wp-sw-api-review`, exact base
+`3622dc9a82893981feddc2e84ae7784eca3cdede`. DeepSeek Pro/default configured
+route with local provider/internal model pins; supported native export session
+`ses_ea5ae7f03ffeBeIq9I4AsiPF21` positively confirms actual model/variant.
+Different family from OpenAI author/coordinator; prior DeepSeek accepted
+API/evidence review demonstrates relevant competence. New REVIEW.md and private
+`build/swapi-review/**` only writable; no code/metadata fixes by reviewer.
+Required independent 81+33 checks, three clean simulator outcomes, immutable
+hash/mapping/scope audit and actual formal gate result. No ledger regeneration
+concurrent with registry tests. Review is genuinely launched, not yet accepted.
+
+Current M3 correction native session `ses_ea5b1d88fffel0fH1b79YDx36y` also
+positively confirms M3/thinking. Both active tasks fit coordinator + old process
+reservation + two new workers; completed Sol user-owned terminal remains idle
+and preserved. Full author native transcript and verified complete bundle retained;
+full workspace archive is in progress without deleting or rewriting anything.

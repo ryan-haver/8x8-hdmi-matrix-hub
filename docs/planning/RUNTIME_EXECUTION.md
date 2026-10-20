@@ -670,3 +670,25 @@ At the inventory base, CI 39374096223 passed all 13 required checks, UI
 HA client 19 and full core 4,023/22 skips/35 deselections with 177/177 routes.
 That baseline result is not a CI pass for this planning commit or future units.
 No initial unit is yet independently accepted/integrated/qualified by this entry.
+
+
+### Software-wave execution checkpoint after initial publication
+
+The 30-package / 63-unit plan is published; provider capacity is balanced per
+assignment. First Sol API unit completed mandatory normal hook 4,041 pass,
+four documented skips, 35 deselections, 177/177 routes, plus 81 scoped tests and
+three clean source-simulator API outcomes. Source `afe344a0`, author tip
+`0dd2c25e`, prepared coordinator candidate `3622dc9a` preserve exact original
+records and API-only V2 attribution. DeepSeek Pro independent exact-candidate
+review Task `task_b62e4cdfe32e` is running in its own worktree; no feature is
+qualified/integrated from this checkpoint alone. Candidate metadata proposes
+F-API-002 V2 and ledger 204 below / 57 stale, pending acceptance.
+
+DeepSeek all-59 finding triage was corrected, published and sequentially merged
+with explicit coordinator limits at `1edbc5da`, exact origin equality verified.
+No finding/feature closed from prose. MiniMax M3/thinking separately completed
+a bounded SEC-14/15/DEP-05 source inventory and is correcting report overclaims
+under fresh authority before acceptance. Native quota observations and explicit
+fallback commitments are in the allocation ledger; the below-30 MiniMax slice
+uses verified Codex fallback rather than causing a project-wide development stop.
+No physical/owner-device/soak/field/final-release action occurred.
