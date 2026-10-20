@@ -5,6 +5,12 @@ Computed at `621288b11580f348d24481a2973622a4f1f1855a` using the existing ledger
 This is an inventory of qualification gaps, **not a list of confirmed code defects**.
 No scenarios, model workers, hardware actions or soak collectors were launched for this inventory.
 
+Execution follow-up: [EV-01 reconciliation](EV01_EVIDENCE_RECONCILIATION.md)
+inspects the 42-feature union at candidate `95f64920`, preserving original
+scopes and identifying missing assertions/client mappings. The snapshot and
+planned-only statements below retain their original planning-package scope;
+EV-01 does not promote levels or close the remaining packages.
+
 Authorities: [registry](features.yaml), [generated ledger](LEDGER.md),
 [validation policy](README.md), [target definitions](VALIDATION_PLAN.md),
 [release checklist](RELEASE_VALIDATION_CHECKLIST.md),

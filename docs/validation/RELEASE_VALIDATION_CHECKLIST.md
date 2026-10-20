@@ -6,6 +6,11 @@ and existing acceptance rules. It records no new runtime, hardware or field
 passes and does not authorize worker launches, device writes, snapshot approval,
 deployment, merge to main or tags.
 
+Executed follow-up: [EV-01 dispositions](EV01_EVIDENCE_RECONCILIATION.md) now
+record original/candidate CI attribution and assertion gaps for the initial
+42-feature union. No release gate is checked merely because reconciliation
+completed; evidence import, target closure and implementation remain separate.
+
 Use the [master plan](../planning/UNIFIED_MASTER_PLAN.md),
 [validation policy](README.md), [validation plan](VALIDATION_PLAN.md),
 [Orca protocol](../ORCHESTRATION_PROTOCOL.md) and

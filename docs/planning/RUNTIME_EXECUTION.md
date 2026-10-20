@@ -558,3 +558,32 @@ gallery 62 passes. This supplements prior pending-CI wording without changing
 the tested source/image attribution or granting visual/hardware approval.
 Only scoped instruction documentation is verified and published in this task;
 no new runtime qualification, merge to main or release tag is claimed.
+
+## EV-01 evidence reconciliation (2026-10-20 UTC)
+
+The owner authorized release-readiness execution beginning with EV-01.
+The [executed reconciliation](../validation/EV01_EVIDENCE_RECONCILIATION.md)
+disposes all 42 selected features at `95f64920`: seven primary preservation
+cases and 35 missing mapping/assertion cases. It inspects original assertions,
+per-client mappings and 2,728 schema-valid records, preserving eight historical
+failures and 146 byte-verified original source records locally. No scenario,
+implementation, hardware or soak run is claimed by this reconciliation.
+
+Current-head CI 39305698510 uses synthetic merge `66a82c32`; its Git tree equals
+the inspected candidate exactly. All twelve non-UI required checks pass; actual
+UI results retain three Tron paused-frame failures, 1,098 passes and 33 skips.
+The 62-pass review capture is not owner visual approval. Source/image proof
+remains attributed to `1baac3de` and its original image IDs. No registry/ledger
+promotion or evidence import occurred.
+
+Existing Run `run_37205f6095b3` was rebound to the rediscovered coordinator in
+runtime `7974a428-1f2a-4689-96bc-69590e2df7d0` (Orca 1.4.230). Worker accounting
+remains 38 released/two null-resource retained entries. Codex's supported
+account usage read reports 66% remaining weekly for the current managed pool;
+future worker account binding and adequate cross-family reviewer capacity are
+not established. Affected dispatches remain held. Details, exact reset/window
+and alternative-route limitations are in the
+[allocation ledger](../production/AGENT_ALLOCATION.md#ev-01-reconciliation-execution-2026-10-20-utc).
+No new workers/worktrees or non-Orca substitutes were launched. The unresolved
+persistence workspace, private root data and unrelated hook artifact remain
+protected. Scoped publication receipts follow outside the commit they identify.

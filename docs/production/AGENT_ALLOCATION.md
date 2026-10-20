@@ -171,6 +171,109 @@ empty `core.hooksPath` exception to avoid broad runtime tests during prose
 maintenance; persistent hook settings remain unchanged. No fresh runtime/model/
 hardware qualification is inferred from these checks.
 
+## EV-01 reconciliation execution (2026-10-20 UTC)
+
+Owner authorized remaining release-readiness coordination, starting with EV-01.
+This entry records **in-progress coordinator evidence reconciliation**, not a
+new implementation campaign. No author/reviewer/worktree has been launched.
+
+| Field | Observation / decision |
+| --- | --- |
+| Initial base / remote | `wp-runtime-completion` at `95f64920220fd5269007272ed8f3cbe04604db7e`; origin URL revalidated; exact remote and PR receipts under `build/ev01-20261020/` |
+| Existing Run | `run_37205f6095b3` present; no reset/replacement. Initial `run-current` is null in this invoking session; old coordinator handle is historical, not claimed live. |
+| Runtime / host | Orca 1.4.230, runtime `7974a428-1f2a-4689-96bc-69590e2df7d0`; local Windows host Zelu. Saved SSH hosts are disconnected. |
+| Worker accounting | Run-scoped complete inventory: 38 released, two retained compatibility entries; no new dispatch. Four-total project ceiling remains conservative, further subject to verified host/provider limits. |
+| Ownership | Coordinator owns read-only reconciliation, a new EV-01 report and scoped integration records. Product, tests, registry, generated ledger, immutable evidence and visual baselines remain protected. |
+| Protected resources | Root/private data, unrelated encoded hook artifact and unresolved `wp-runtime-persistence-wiring` workspace preserved; no cleanup attempted. |
+| Staffing / quota | Catalog/capability/usage discovery in progress. No verified quota headroom yet; affected worker creation and dispatch held. No Anthropic or non-Orca substitute. |
+| Acceptance | Per-feature source-linked disposition for the union of 14 target-mapped software gaps, 26 stale software gaps and 15 at-target rows without fresh proof; inspect original assertions, client mapping, covers, source/environment/image identities. No automatic level promotion. |
+| Receipts | New `build/ev01-20261020/` destinations only. Initial capture saved all subprocess receipts but console rendering hit Windows cp1252 on terminal preview; receipt bytes were retained. Subsequent output uses UTF-8. |
+
+EV-02/03 implementation dispatch and EV-04/05 owner execution remain dependent
+on actual disposition, verified staffing capacity and their separate gates.
+
+### EV-01 observed execution and staffing gate
+
+Read-only discovery and reconciliation completed on 2026-10-20 UTC; no model
+inference probe or worker launch was used. Supported app-server model/usage
+reads are account queries, not an implementation/reviewer dispatch. Current
+Codex CLI is 0.163.0 and OpenCode is 2.0.32. Exact catalog/usage responses and
+command receipts are local in `build/ev01-20261020/`.
+
+| Candidate / exact route | Current observation | Fit / capacity decision |
+| --- | --- | --- |
+| Sol 6.1 / `codex:gpt-6.1-sol` | Live `model/list`, high supported; historical qualified systems work | Core implementation candidate. Current invoking pool has measured usage below; future worker's actual account binding/commitments still need verification. No dispatch. |
+| Astra / `codex:gpt-6-astra` | Live catalog, high supported | Difficult composition candidate; same family as Sol, cannot close its cross-family review gate. No dispatch. |
+| Older Sol / `codex:gpt-5.6-sol`, `gpt-6-sol` | Both in live catalog; high supported | Compatibility routes, not newly task-qualified. Same pool/family limits. |
+| Luna / `codex:gpt-6-luna` | Live catalog; medium supported | Suitable bounded inventory/documentation candidate; coordinator completed EV-01 directly, so no worker needed. Not a cross-family implementation reviewer. |
+| Argon / historical `antigravity:gemini-4-argon` | OpenCode currently lists `opencode/gemini-4-argon`; native Antigravity selection/backend/access and pool quota not verified | Historical native alias is not current cross-family identity proof. Hold; do not substitute the OpenCode route. |
+| Flash / historical `antigravity:gemini-3.8-flash-high` | OpenCode lists `opencode/gemini-3.8-flash`; native high alias/access/quota not verified | Bounded QA hypothesis only; different selectable route is not an authorized silent substitute. Hold. |
+| MiniMax / `minimax-coding-plan/MiniMax-M3` | Current supported `opencode models` lists it; primary configuration selects it | Historical exhaustion and bounded-task limits retained. Remaining credits/windows unknown; hold. |
+| M3.1 / `minimax-coding-plan/MiniMax-M3.1-Flash` | Current catalog uses this ID; helper configuration still names `MiniMax-M3.1-Flash-Preview` | Exact variant mismatch; effective helper selection and quota unverified. Hold, no relabeling. |
+| DeepSeek Pro / `deepseek/deepseek-v4-pro` | Current catalog presence | Review-domain competence, access and balance unverified. Hold. |
+| DeepSeek Flash / `deepseek/deepseek-flash` | Current catalog presence; helper config still uses `deepseek/deepseek-reasoner` | Helper/catalog mismatch and unverified capacity/review competence. Hold. |
+| Anthropic | Policy-excluded in every new role, including nested/default/plugin routes | No launch or probe. OpenCode plugin-supplied defaults remain unverified and ineligible. |
+
+Quota observation: `account/rateLimits/read` at **2026-10-20T02:56:41Z**
+(exact response timestamp in `codex-quota.json`) reports ordinary usage allowed,
+34% used / **66% remaining** in the current managed Codex account's **10,080-minute
+weekly window**, reset **2026-10-25T20:07:49Z**; no secondary window was supplied.
+Additional credit balance is zero, no reset credits available, and no spend
+control reached. This is included weekly capacity, not a claim of prepaid credits.
+The account is shared with this coordinator; unobserved cross-project demand
+and the pool Orca would select for a new worker are not quantified. Do not
+transfer this observation to a different/default worker account. No inference
+probe or account/global preference change was performed. OpenCode statistics
+help describes usage history, not remaining provider balance; MiniMax/DeepSeek
+headroom remains unknown. Google quota and backend-family proof remain unknown.
+
+Host/launch observation: only local Windows execution verified; saved SSH
+targets disconnected. Repo setup/archive scripts are empty, setup policy runs
+by default with start-immediately. Current `worker-start --help` supports named
+Codex model/effort and OpenCode selection in an existing worktree only, without
+effort. No setup/default-tab or opaque plugin route was executed. The project
+ceiling remains four total, subject to verified pool/host limits; no numeric
+Orca engine capacity is asserted. Unknown alternate-family capacity means no
+suitable verified implementation-review fallback has been established.
+
+### EV-01 result, verification and publication
+
+| State | Evidence / decision |
+| --- | --- |
+| Run binding | Supported `run-use` rebound the existing Run to live coordinator `term_259c5526-02c2-44a8-b469-bf171aa435a0`, generation 2. Prior handle was historical; no Run reset/replacement or worker mutation. |
+| Completed | [Per-feature reconciliation](../validation/EV01_EVIDENCE_RECONCILIATION.md): 42-feature union, seven primary preservation cases and 35 missing mapping/assertion cases; no primary rerun solely for unchanged runtime inputs, no newly reproduced product defect. |
+| Original records | 2,728 schema-valid, per-client-mapping-consistent records: 907 passing source `1baac3de`, 907 passing candidate-CI and 914 old committed (906 pass/eight fail). All 907 selected source records have fresh covers. Original bytes/hashes retained; 146 source records for seven preservation cases copied and verified to a new local archive. No ledger import. |
+| Candidate CI | Run 39305698510 completed for head `95f64920`. Record SHA `66a82c32885baf0893cbd06e57715251e14fd4d0` has parents #37 head and `95f64920`; its tree equals candidate tree `472c02738fa78f7928d2039e98b56f5b0471e42b`. All twelve non-UI required checks pass; actual UI JSON 1,098 expected/33 skipped/three Tron failures/zero flaky, 59 smoke/flow expected results; review capture 62 passes. No visual approval. |
+| Reviewed | Coordinator source/assertion/provenance inspection and existing documentation checks; no independent model reviewer dispatched and no implementation-review acceptance claimed. New implementation review remains held for a qualified different family with verified capacity. |
+| Integrated / qualified | Coordinator-owned documentation/evidence-index package only. Product/tests/fixtures/tooling/registry/generated ledger/baselines unchanged; no runtime, feature-target, HIL, soak or final release qualification. |
+| Verification | 359 existing documentation tests passed (1.89 s), route-inventory plugin disabled; seven owned files, 94 local links/two anchors, 42-feature/2,728-record correspondence and all six protected input hashes pass; whitespace passes. The shared root route report was observed only after these tests; no pre-test hash is claimed. |
+| Publication | Normal scoped commit/push to `origin/wp-runtime-completion`; exact post-push local/remote equality receipt is `build/ev01-20261020/publication.json`, outside its own commit. This row is not a claim that the push already happened. |
+| Lifecycle / cleanup | No new Task/Dispatch, worker, worktree or task branch; no cleanup. Existing retained entries and unresolved persistence workspace preserved. |
+
+EV-02/03 are now **scoped by evidence**, not launched or qualified. Existing
+proof can be preserved without inventing a new runtime pass; missing client
+assertions require implementation and qualified cross-family review. The
+specific staffing hold is unverified alternate-family account capacity,
+effective routing and domain-review qualification, plus exact future worker
+account binding. Owner visual/physical/72-hour/week/final-artifact gates remain.
+
+Actual verification uses the project Python 3.12 venv:
+
+```powershell
+.venv/Scripts/python.exe -m pytest tests/test_core_documentation.py tests/test_client_guides_docs.py -p no:tests.route_inventory -q --junitxml=build/ev01-20261020/documentation-tests.xml
+.venv/Scripts/python.exe -X utf8 .git/ev01_verify.py
+git diff --check
+```
+
+Disposable `.git/ev01_*` audit/check helpers are coordinator analysis aids, not
+shipped implementation tooling. The portable JSON is derived reconciliation
+metadata; original evidence bytes were not reformatted. Its compact encoding
+keeps it below the repository's 2 MiB artifact limit. The scoped documentation/
+evidence-index commit uses invocation-only `git -c core.hooksPath= commit`
+to avoid the broad runtime hook for a package with no product/test/tool changes.
+Persistent hook settings are unchanged; no full-suite/hook success is claimed.
+Post-commit hygiene and exact publication checks are recorded in local receipts.
+
 ## Reusable phase or wave entry
 
 Copy this section for each authorized wave. Use `unknown`, `held` or `not

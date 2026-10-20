@@ -4,6 +4,11 @@ This index summarizes the final integrated software campaign and keeps its sourc
 
 ## Candidate and archive
 
+The subsequent [EV-01 reconciliation](EV01_EVIDENCE_RECONCILIATION.md) inspects
+candidate `95f64920`, its identical-tree CI merge and original `1baac3de` records.
+It preserves the scopes below and records missing feature/client assertions;
+it is not another runtime campaign or a feature-target promotion.
+
 | Item | Revision or result |
 | --- | --- |
 | Tested runtime and image source | [`1baac3dec660f41345869c126cfca94d6731c5a0`](runs/runtime-r8b/manifest.json), clean tracked checkout, product version `1.0.0rc1` |
