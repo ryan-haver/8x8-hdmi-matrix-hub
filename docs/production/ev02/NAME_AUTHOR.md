@@ -28,7 +28,7 @@ commit. These API/simulator results do not close BE-16 or any release gate.
   were disabled for validation invocations. Fresh hub fixture copies and
   simulator reset data were used, without root/private runtime data.
 
-The submitted full commit, full base diff, path/status audit and committed-run
+The submitted full commit, full base diff, path/status audit and initial-run
 assertion inspection are recorded in `build/ev02-name-author/submission.json`
 and `build/ev02-name-author/base-to-submission.patch`. These receipts are
 created after the commit they identify to avoid a self-hash cycle. The exact
@@ -116,7 +116,7 @@ inventory and serial ledger generation remain coordinator-owned.
 
 ## Executed validation
 
-Python 3.12.10, Ruff 0.17.1; source hub version 2.10.0. No hardware, `--record`,
+Python 3.12.10, Ruff 0.17.1; health API version 2.10.0. No hardware, `--record`,
 push, merge, cleanup or persistent hook change was performed.
 
 | Command | Exit | Actual result |
@@ -136,10 +136,9 @@ check, not a claimed full-suite pass or a reproduced product defect.
 
 The first campaign records the immutable base with dirty `writes.py` and is
 preserved as initial author verification, not fresh clean-commit evidence.
-The exact submitted-commit rerun uses the same scenario command with
-`--out build/ev02-name-author/campaign-committed`; its full SHA, exit, actual
-counts and check/device-log inspections are in `submission.json`. Original
-campaign bytes are preserved.
+The exact clean-candidate rerun remains coordinator-owned after committing the
+pending mapping. No clean-commit campaign is claimed by this author. Initial
+campaign bytes and check/device-log inspections are preserved.
 
 The task explicitly authorizes an invocation-only hook exception after the
 assigned checks. The scoped commit uses `git -c core.hooksPath= commit` because
@@ -148,3 +147,58 @@ the mapping is integrated and may generate unowned route artifacts. This
 does not claim hook/full-suite success; persistent hook configuration remains
 unchanged. Independent cross-family review, coordinator acceptance/integration,
 combined validation, publication/preservation and all wider gates remain open.
+
+## Follow-up correction before delivery
+
+The preceding bypass paragraph describes the first commit's actual history,
+not continuing authorization. Author commit
+`0a7d71b2e509b558263bc164a384f157195d96e9` contains the two assigned paths only.
+Coordinator messages sent during the author report/commit step were read
+immediately afterward: the permissive brief sentence was mistaken and withdrawn
+because the standing protocol prohibits bypass for implementation. History was
+not amended/reset. This report correction uses a normal `git commit`, exercising
+the full configured pre-commit hook on the combined working tree; actual output,
+exit, JUnit counts and route inventory are retained under
+`build/ev02-name-author/normal-hook*` and summarized in `submission.json`.
+
+The coordinator independently added the proposed F-API-018 mapping to this
+worktree's `features.yaml`, then corrected its initial indentation before full
+hook execution. That file remains unstaged and outside the author's commits.
+The expected initial registry mismatch remains an honest historical failure;
+later full-hook checks see the pending coordinator mapping. The coordinator
+authorized the normal hook's task-local route-coverage diagnostic, will commit
+the mapping after delivery and rerun clean-candidate scenarios before review.
+
+Source provenance was inspected because the runner's health metadata says
+version 2.10.0. `run.py` prepends this worktree's `src`; importing that entry
+resolves `hub`, `rest_api` and `orei_matrix` to this exact worktree. Canonical
+`hub.__version__` is `1.0.0rc1`; health returns the existing `API_VERSION =
+"2.10.0"` literal from `src/rest_api/utils.py`, through `core.py`. There is no
+observed installed-package substitution. This inspection does not change
+version/product code.
+
+The first normal-hook attempt failed and did not create the report-correction
+commit: repository-wide Ruff passed, then pytest stopped with **3,816 passed,
+one failure, 22 skipped, 35 deselected and four warnings in 763.35 seconds**.
+Route inventory reached **177/177 (100%)**. The unchanged
+`TestJavaScriptLinting.test_npm_run_lint_js_passes` failed because ESLint's
+worktree-local ESM configuration could not resolve `@eslint/js` through the
+shared dependency directory, despite its PATH/NODE_PATH fallback. This is a
+Node dependency-resolution setup failure, not an observed input-name defect.
+The failure/output/XML and route report are preserved; no failing check was
+suppressed and no package manifest/lock or test was altered. Coordinator
+disposition was requested through Orca before any setup change or retry.
+
+Coordinator-owned setup then ran
+`npm ci --ignore-scripts --no-audit --no-fund` in this task worktree: exit 0,
+190 locked packages installed, with no manifest/lockfile changes. Focused
+verification using `python -m pytest -q -p no:tests.route_inventory
+tests/test_ui_unified_settings_overlay.py::TestJavaScriptLinting::test_npm_run_lint_js_passes
+--basetemp=build/ev02-name-author/pytest-js-repair
+-o cache_dir=build/ev02-name-author/pytest-cache
+--junitxml=build/ev02-name-author/js-repair.xml` passed: exit 0, one pass,
+zero skips, 3.85 seconds. The normal hook retry uses new
+`normal-hook-retry.log`, `normal-hook-retry.xml` and `normal-hook-retry-exit.txt`
+destinations; the initial failed log/XML and copied attempt-1 route report are
+preserved. Final retry outcome/counts remain in the post-commit
+`submission.json` receipt rather than changing the commit it identifies.
