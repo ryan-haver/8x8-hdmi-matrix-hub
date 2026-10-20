@@ -1,5 +1,11 @@
 # Runtime completion and release plan
 
+For the remaining nonhardware work after the accepted runtime campaign, use the
+[software wave execution plan](SOFTWARE_RELEASE_WAVES.md) and its package/unit
+manifest. Route ready work across available task-qualified providers; a single
+provider's capacity does not pause independent development. The R0–R8 sections
+below remain historical contract/acceptance context, not a new campaign launch.
+
 Standing operations for any future authorized wave are defined by
 [AGENTS.md](../../AGENTS.md), the [Orca protocol](../ORCHESTRATION_PROTOCOL.md)
 and [allocation ledger](../production/AGENT_ALLOCATION.md). These supersede

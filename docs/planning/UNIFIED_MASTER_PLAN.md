@@ -1,5 +1,12 @@
 # Unified master plan
 
+Current nonhardware execution is organized in the
+[software release phases and waves](SOFTWARE_RELEASE_WAVES.md), with a complete
+feature/finding allocation, bounded worktree units and capacity-balanced Orca
+dispatch/review envelopes. It continues the accepted runtime and EV-01/EV-02
+evidence work; historical phase results and physical release gates below retain
+their original scope.
+
 This is the current coordination entry point. The earlier execution record is
 in [the phased roadmap](../../orca-phased-roadmap.md). Finding IDs and acceptance
 criteria come from [the remediation plan](../REMEDIATION_PLAN.md) and

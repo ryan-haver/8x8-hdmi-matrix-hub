@@ -824,3 +824,122 @@ evidence, failed attempts and any retry-of chain. No ambiguous duplicate writer.
 Close the wave with unresolved findings, unknown capacity/identity, retained
 resources, remote synchronization and next authorized action. Do not erase a
 failed assignment when its fallback succeeds.
+
+
+## Software wave build-out and distributed execution — 2026-10-20 UTC
+
+Owner requested all nonhardware work in phases/waves and explicitly instructed
+that development must continue by balancing available, task-relevant providers.
+Capacity is an assignment-routing constraint, not a project-wide stop; ready
+independent packages are pulled forward. No Claude/Anthropic, anonymous fallback,
+unsupported quota claim or same-family implementation-review substitution.
+
+Baseline root/origin `wp-runtime-completion` exactly
+`97e617c2276c7b1e015bb4a9419cb9820deafdee`; prior CI 39374096223 passed all
+13 required checks. Reobserved Orca **1.4.232**, runtime
+`113f2af8-5169-408a-9b81-00bd6316d35c`; current coordinator terminal show positively
+confirms `term_259c5526-02c2-44a8-b469-bf171aa435a0` in this runtime. Existing
+Run `run_37205f6095b3` reused, no reset/new Run. Local Zelu Windows host available;
+saved SSH hosts disconnected. Repo hooks remain blank, setup may be skipped.
+Historical fleet 40 released/five retained Task rows; three retained rows share
+one older external/user-owned review process whose restored status is
+`unverifiable/missing_status`. Reserve one concurrency slot for it; do not infer
+exit, duplicate or close it. Effective budget: coordinator + reserved old
+process + at most two new workers, below project ceiling four.
+
+Live supported Codex model/list and account/rateLimits/read at **16:35:44Z**:
+ordinary use allowed, **97% weekly remaining** (10,080-minute window), reset
+2026-10-27T06:33:16+00:00; shared current managed launch pool, no extra credits/secondary
+window reported. Sol 6.1 high selected for bounded API implementation; Astra
+reserved for actual concurrency composition work, Luna for bounded inventories,
+older Sol only explicit qualified fallback, not cross-family review. Authenticated
+DeepSeek balance/models at **16:35:44Z**: **USD 18.78 available**, Pro/Flash owned
+by DeepSeek; pool shared with other projects, reset/rate limits and external
+commitments unreported. Reserve USD 5 for bounded audit/review/corrections;
+monitor balance rather than attributing all account consumption to this project.
+OpenCode 2.0.32; previous Pro family/tool competence demonstrated on API/evidence
+review. Pro configured-route pinning must be verified anew before its launch.
+Gemini/Argon/Flash and MiniMax M3/M3.1 remain conditional until current access,
+route and capacity observations; their old quota observations do not hold the
+ready Codex/DeepSeek assignments. No fixed diversity roster. Receipts private
+under `build/software-wave-planning-20261020`.
+
+Plan data allocates 268 features once: 147 software targets (84 below/63 numeric
+at-target), 120 physical-preparation rows and one field-preparation row; 59
+parser-open findings have owners. These are dated inventories, not new defects
+or target acceptance. Thirty packages/63 bounded units planned; exact runtime
+Task/Dispatch/base/lease/status recorded only on genuine dispatch. Existing API
+request/assertion support is sufficient for the first root/API-info unit, so its
+scoped intake/harness check is no-change; global inventory completion is not a
+blanket implementation barrier.
+
+First author assignment is preparing: **SW-API-READ-01 / F-API-002**, Sol 6.1
+high, exact base `97e617c2...`; exclusive new
+`tests/validation/scenarios/sw_api_read_01.py`, optional
+`tests/validation/test_sw_api_read_01.py`, new
+`docs/production/software-waves/SW-API-READ-01/AUTHOR.md` and its build subtree.
+Prohibited: product/shared runner/client/schema, registry/ledger, root manifests/
+locks, old evidence/baselines and private root data. Preserve adequate existing
+api_info proof; add actual GET / and GET /api contract assertions using source
+inspection and simulator-backed runtime. Observe response contract, unchanged
+device/no-command and independent checks; run actual scenarios and normal hook.
+Qualified different-family DeepSeek review reserved before integration.
+Coordinator continues plan/registry/integration ownership; no fictitious Task
+or unobserved launch is claimed by this entry.
+
+### Initial distributed dispatch receipts
+
+**SW-API-READ-01 launched:** Task `task_3853c93e69ef`, Dispatch
+`ctx_41f75bc23079`, terminal `term_f176e63d-c1df-4f09-9916-11aa9b530699`,
+worktree `wp-sw-api-root`, actual branch `ryan-haver/wp-sw-api-root`, full base
+`97e617c2276c7b1e015bb4a9419cb9820deafdee`. Requested/effective
+`codex:gpt-6.1-sol` high match; prompt turn start observed; later transcript
+positively shows actual source inspection/working. Author confirms own managed
+pool matches the current supported 97% observation. Owner's capacity-balanced
+policy supplied in the self-contained spec; no global inventory wait.
+
+The author promptly identified symmetric registry links required by the normal
+hook and continued scoped implementation/checks. Coordinator applied/staged
+exactly F-API-002.scenarios adding `contracts.api_root` and
+`contracts.api_root_alias`, explicitly allowing only this coordinator-authored
+metadata delta in the same normal implementation commit (messages
+`msg_b22c51987e53`, reply `msg_00c30e575432`). General registry ownership was not
+transferred. An initial semantic comparison used Windows text decoding and
+reported spurious Unicode claim differences; explicit UTF-8 Git-byte decoding
+then confirmed only the scenario-list field changed, matching the one-line
+staged diff. No level/evidence/finding changed. Actual author report: Ruff and
+81 relevant tests pass, three diagnostic API outcomes; the diagnostic source
+looked clean because new scenarios were untracked and is **not accepted proof**.
+Normal full implementation hook and later clean committed-head campaign are
+running/pending; no review/integration/qualification claimed yet.
+
+**SW-FINDINGS-01 launched concurrently:** Task `task_e1bec78af179`, Dispatch
+`ctx_07bca220949e`, terminal `term_9a074b85-0f88-4b87-995e-bd9e432feb6b`,
+worktree `wp-sw-findings`, actual branch `ryan-haver/wp-sw-findings`, same full
+base. Scope is read-only source/evidence reconciliation of all 59 parser-open
+findings, exclusive new report/artifact paths. No product/test/registry changes.
+Independent audit competence from prior API/evidence work; no legal/aesthetic
+or hardware conclusions inferred. Native OpenCode 2.0.32 current model list
+contains only DeepSeek Pro/Flash under local pins; seven built-in agents listed.
+The supported config-source read and local pin were inspected without publishing
+credentials; its raw private output may contain inherited MCP environment data
+and must stay private. Global MiniMax/default settings were unchanged; local
+policies deny non-DeepSeek providers, MCP/subagents and unqualified plugins.
+CLI configured-route model/effort fields are null, turn-start observation is
+unsupported, not claimed observed from receipt alone. Actual TUI then shows
+working Pro; supported native export of session
+`ses_ea5d0cd26ffeoHj0iNOGlj7zKj` independently confirms
+`{id: deepseek-v4-pro, providerID: deepseek, variant: default}` and real tool
+activity. Checkpoint export cost USD 0.194, not total account consumption.
+Full completion export still required before settlement.
+
+Two new active workers plus coordinator and one conservative retained-process
+reservation use the four-agent project ceiling. No extra author/reviewer is
+launched until a slot is settled/released; this is resource packing, not a
+provider-capacity pause. DeepSeek audit can settle before it or another qualified
+different-family route reviews the Sol implementation. Original Run, protected
+persistence workspace, older external review resources, rejected empty-folder
+cleanup and unrelated encoded hook artifact remain preserved. No cleanup retry
+or unrelated process stop was attempted. The complete planned allocation lives
+in [the software wave plan](../planning/SOFTWARE_RELEASE_WAVES.md); only the two
+real initial units are marked launched, all others planned.

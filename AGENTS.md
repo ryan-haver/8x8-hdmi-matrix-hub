@@ -21,6 +21,11 @@ Technical scope and release acceptance remain in the
   dispatching authors/reviewers. Unknown quota is not verified headroom. Below
   30%, near exhaustion or insufficient capacity requires a suitable verified
   fallback with checked headroom; otherwise hold the affected dispatch.
+- Capacity is a routing constraint, not a project-wide stop. Per the owner's
+  2026-10-20 direction, redistribute ready work across available, task-qualified
+  providers and continue independent packages when one route is constrained.
+  Preserve cross-family review, honest quota observations and the concurrency
+  ceiling; never wait for a preferred provider while a suitable route is ready.
 - Use real Orca `orchestration worker-start` sessions in dedicated worktrees.
   Record Task/Dispatch authority, exact base, exclusive paths and acceptance.
   Keep shared APIs/contracts, root manifests, lockfiles and integration under

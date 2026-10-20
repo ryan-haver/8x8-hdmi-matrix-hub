@@ -132,6 +132,18 @@ satisfy the cross-family review gate.
 
 ## Quota and rate-limit preflight
 
+Owner clarification (2026-10-20): **capacity constrains routing, not continued
+development**. Balance ready tasks across available, task-qualified providers.
+If a preferred route is low, unavailable or cannot report usage, immediately
+evaluate supported alternative pools/routes and pull independent ready work
+forward. Queue only the affected assignment or acceptance gate when no suitable
+route is available; do not stop the project or wait for a fixed model roster.
+Unknown quota remains an unknown observation, not proof of exhaustion or
+verified headroom. Record each routing choice and keep the different-family
+review and concurrency requirements. A blocked reviewer need not block authors
+on independent work, but unreviewed implementation cannot be integrated or
+qualified. No Anthropic/Claude or opaque fallback is permitted.
+
 Before **creating phase worktrees or dispatching any author or reviewer**, use
 supported provider usage reporting on the intended host/account pool. Record:
 

@@ -632,3 +632,41 @@ BE-16/TST-03, HIL-09 caps, physical gates, 72-hour measurements, owner daily use
 or final version/artifact requirements. Original image attribution remains
 unchanged. Integration publication and its CI receipts follow separately;
 PR #38 remains draft and no main merge or tag is authorized.
+
+## Software waves and capacity-balanced execution (2026-10-20 UTC)
+
+The [software wave plan](SOFTWARE_RELEASE_WAVES.md) allocates all remaining
+nonhardware work: 30 packages/63 bounded units, every one of the 268 feature
+rows and all 59 parser-open findings. Its 147 software-target rows include 84
+below target and 63 numerically at target; 120 V4 and one V5 row receive only
+software-prerequisite/owner-handoff work. Physical execution, deployment-host
+72 hours, week daily-use and release acceptance remain separate.
+
+Owner direction is to keep development moving by balancing task-relevant models
+across available providers. Provider constraints affect individual routing and
+review gates, not the entire ready queue. The standing protocol now states this
+explicitly; no Anthropic, hidden fallback, quota invention or same-family review
+substitution is permitted. Logical wave packing is not an unnecessary global
+dependency; a bounded intake/no-change support check can release a ready unit
+while independent inventory/audit work proceeds.
+
+Reobserved Orca 1.4.232/runtime `113f2af8-5169-408a-9b81-00bd6316d35c` and
+the same coordinator handle/Run. Supported observations at 16:35:44Z show 97%
+remaining in the current Codex weekly pool and USD 18.78 available on the shared
+DeepSeek route. These enabled two genuine isolated worker starts at full base
+`97e617c2276c7b1e015bb4a9419cb9820deafdee`: Sol 6.1 high API root/info proof
+(Task `task_3853c93e69ef`, Dispatch `ctx_41f75bc23079`) and DeepSeek Pro
+source/finding audit (Task `task_e1bec78af179`, Dispatch `ctx_07bca220949e`).
+The author has 81 scoped tests/three diagnostic outcomes; normal hook and clean
+source campaign are pending. The diagnostic's initially untracked source is
+not accepted proof. Coordinator supplied only the symmetric F-API-002 registry
+links for inclusion in the normal source commit. Native DeepSeek session export
+proves the actual Pro/default route and tool activity; null CLI route fields
+are not silently relabelled explicit overrides. Detailed ownership, capacity,
+protected resources and lifecycle observations are in the allocation ledger.
+
+At the inventory base, CI 39374096223 passed all 13 required checks, UI
+1,101/33 skips and all three approved Tron frames; source clients 1,486 passes,
+HA client 19 and full core 4,023/22 skips/35 deselections with 177/177 routes.
+That baseline result is not a CI pass for this planning commit or future units.
+No initial unit is yet independently accepted/integrated/qualified by this entry.
