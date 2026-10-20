@@ -494,9 +494,10 @@ async function perform(msg) {
   // window.prompt / confirm: a passcode prompt is answered with params.passcode,
   // or cancelled when the scenario gives none (UI-01).
   const dialogs = [];
+  let promptValue = msg.intent === 'scene_wait_edit' ? msg.params?.seconds : msg.params?.passcode;
   page.on('dialog', async (dialog) => {
     dialogs.push(dialog.message());
-    const passcode = msg.intent === 'scene_wait_edit' ? msg.params?.seconds : msg.params?.passcode;
+    const passcode = promptValue;
     if (dialog.type() === 'prompt' && passcode) {
       steps.push(`answer the prompt "${dialog.message()}" with the passcode`);
       await dialog.accept(String(passcode));
@@ -517,8 +518,49 @@ async function perform(msg) {
   };
   let status = null;
   let shown = {};
+  let pinProbe = null;
   let error = null;
   try {
+    // A bounded real-UI sequence prepares lockout without failed API setup calls.
+    // The final action may target a different item to prove per-item isolation.
+    const probe = msg.params?.pin_lockout;
+    if (probe) {
+      if (!['profile_recall', 'scene_run'].includes(msg.intent) || msg.params?.via ||
+          probe.attempts !== 5 || !/^\d{4,8}$/.test(probe.wrong_passcode ?? '')) {
+        throw new Error('pin_lockout requires five numeric wrong-PIN attempts on a profile or scene UI flow');
+      }
+      const idKey = msg.intent === 'profile_recall' ? 'profile_id' : 'scene_id';
+      const target = { ...msg.params, [idKey]: probe.item_id ?? msg.params[idKey] };
+      pinProbe = { attempts: [], item_id: target[idKey] };
+      for (let n = 1; n <= probe.attempts; n++) {
+        promptValue = probe.wrong_passcode;
+        const attempt = await flow(page, { ...target, passcode: promptValue }, steps);
+        const body = await attempt.json();
+        pinProbe.attempts.push({ status: attempt.status(), code: body?.data?.error });
+        if (attempt.status() !== 403 || body?.data?.error !== 'invalid_passcode') {
+          throw new Error(`wrong-PIN attempt ${n} did not return 403 invalid_passcode`);
+        }
+        await page.locator('#toast-container .toast.error .toast-message').filter({ hasText: 'Invalid passcode' }).waitFor();
+        steps.push(`actual UI wrong-PIN attempt ${n}: HTTP 403 invalid_passcode; visible Invalid passcode`);
+        await shot(`wrong-pin-${n}`);
+      }
+      promptValue = undefined;
+      const locked = await flow(page, { ...target, passcode: undefined }, steps);
+      const body = await locked.json();
+      const retryAfter = locked.headers()['retry-after'];
+      await page.locator('#toast-container .toast.error .toast-message')
+        .filter({ hasText: /Too many wrong passcodes; try again in \d+ s/ }).waitFor();
+      const visible = (await shownToasts(page)).some((t) => /^error: .*Too many wrong passcodes; try again in \d+ s/.test(t));
+      pinProbe.locked = { status: locked.status(), code: body?.data?.error, retry_after: retryAfter,
+        body_retry_after: body?.data?.retry_after, visible };
+      shown['pin.wrong_attempts'] = pinProbe.attempts.length;
+      shown['pin.lockout_visible'] = visible;
+      shown['pin.retry_after_positive'] = locked.status() === 429 && body?.data?.error === 'passcode_locked' &&
+        /^\d+$/.test(retryAfter ?? '') && Number(retryAfter) > 0 && Number(retryAfter) === body?.data?.retry_after;
+      steps.push(`actual UI locked click: HTTP ${locked.status()} ${body?.data?.error}; Retry-After ${retryAfter}; visible lockout ${visible}`);
+      await shot('locked');
+    }
+    promptValue = msg.params?.passcode;
     const response = await flow(page, msg.params ?? {}, steps);
     status = response.status();
     steps.push(`the page sent ${response.request().method()} ${new URL(response.url()).pathname} -> HTTP ${status}`);
@@ -538,7 +580,7 @@ async function perform(msg) {
   } finally {
     await context.close();
   }
-  return { status, error, steps, screenshots, toasts, dialogs, shown, ...problems };
+  return { status, error, steps, screenshots, toasts, dialogs, shown, pinProbe, ...problems };
 }
 
 const rl = readline.createInterface({ input: process.stdin });

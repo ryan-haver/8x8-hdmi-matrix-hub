@@ -7749,6 +7749,14 @@ features:
   scenarios:
   - security_hardening.profile_wrong_pin
   - security_hardening.scene_wrong_pin
+  - sw_sec_auth_01.profile_wrong_pin
+  - sw_sec_auth_01.profile_allowed
+  - sw_sec_auth_01.profile_locked
+  - sw_sec_auth_01.profile_per_item
+  - sw_sec_auth_01.scene_wrong_pin
+  - sw_sec_auth_01.scene_allowed
+  - sw_sec_auth_01.scene_locked
+  - sw_sec_auth_01.scene_per_item
 - id: F-SEC-008
   area: security
   title: Rate limiting per client
