@@ -245,6 +245,61 @@ coverage is not exhaustive (bounded scope, device-level matrix stays with
 F-MTX-022). No product, test, scenario, registry, evidence or runtime byte was
 changed by this review.
 
+## Baseline fixture integrity audit — owner-approved Tron paused-frames
+
+Separate from the API verdict, the coordinator additionally assigned a structural
+audit of the earlier coordinator-authored baseline fixture package. This is an
+artifact-identity / authorized-fixture review from a different family, **not** an
+aesthetic or pixel judgment; the owner retains the visual design decision.
+
+### Exact source scope
+
+`git diff --name-status bbeaae4a70752b65c131fe87f226b77c5f0e4187..10f788f692881edf329d247de17c5679e1dba2eb`
+shows exactly three modified files — the paused-frame PNG snapshots for
+`desktop`, `kiosk-tab-a11` and `kiosk-iphone16promax` under
+`tests/e2e/visual/__snapshots__/<viewport>/special/tron-background/` — each a
+Git LFS pointer change (2 insertions / 2 deletions per file). No assertion,
+threshold, `.spec.ts`, test-config or product file changed. Commit `10f788f6` is
+an ancestor of both base `3979d602` and candidate `e5ebb376`, so the approved
+baselines are already present in the EV-02 base tree.
+
+### Integrity verification (all pass)
+
+| Check | Result |
+| --- | --- |
+| Commit scope == exactly 3 paused-frame PNG LFS pointers, no other file | pass |
+| New baseline LFS `oid` == original CI `actual` SHA-256 == copied `*-original-ci-actual.png` bytes (×3) | 3 / 3 |
+| Old (parent) LFS `oid` == original CI `expected` SHA-256 == copied `*-original-ci-expected.png` bytes (×3) | 3 / 3 |
+| Copied `*-original-ci-{actual,expected}.png` SHA-256 == `original-ci-frame-matches.json` values (×6) | 6 / 6 |
+| `passing-ui.log` SHA-256 == recorded `local_preservation.ui.log` hash | pass |
+
+The three updated baselines are therefore the **original failing CI's actual
+frames**, not a fresh regeneration — their LFS object IDs equal the original CI
+`actual` PNG SHA-256 exactly, and the prior baselines equal the original CI
+`expected` SHA-256. This is the integrity property the coordinator claimed.
+
+### Passing CI (structural confirmation)
+
+`passing-ci.json` records run `39365581349`, conclusion `success`, at head
+`3979d6020165bcf31f0f44f21de6bb5b3648dc1e` (the EV-02 base tree), with all 13
+required checks successful, `actual_merge_source` tree `identical_to_head_tree:
+true`. The `UI (smoke + visual)` job logged `1101 passed (25.3m)`, `33 skipped`,
+and the three `special/tron-background/paused-frame` passes for the approved
+viewports (`desktop`, `kiosk-tab-a11`, `kiosk-iphone16promax`);
+`unapproved_snapshot_paths: []`. The supplied `passing-ui.log` (hash-verified)
+contains those three paused-frame pass lines.
+
+### Limitations
+
+The main root's portable receipt is not in `e5`; this audit used the immutable
+originals the coordinator supplied under `build/ev02-final-review/baseline-audit`
+(the six CI PNG bytes and the two JSON receipts), verified against the recorded
+hashes and the committed LFS pointers. This is structural artifact and
+authorized-fixture review only: it confirms *which* bytes the baselines point to
+and that the approval matches the original CI actuals, not that the frames are
+aesthetically correct — that remains the owner's explicit approval. No
+image-model, helper, or baseline edit was performed.
+
 ## Final verdict
 
 **Accepted** for the API-only V2 scope at the exact candidate SHA
@@ -253,6 +308,9 @@ to the independently reviewed `0a7d71b2`; all 148 evidence records are
 byte-exact, schema-valid and correctly mapped; the registry edit is limited to
 the seven scoped features; the fresh campaign at the exact SHA passes all 31
 checks; and the independent ledger recomputation matches the canonical ledger
-with a passing gate. Coordinator publication/integration and the qualified/
-published state remain separate; no release, image, hardware, cross-client or
-physical gate is closed by this review.
+with a passing gate. The owner-approved Tron baseline fixture package is
+separately confirmed as structurally sound (exact three-file LFS-pointer scope,
+baseline OIDs equal to the original CI actuals). Coordinator
+publication/integration and the qualified/published state remain separate; no
+release, image, hardware, cross-client or physical gate is closed by this
+review, and the owner retains the visual design decision on the paused-frames.
