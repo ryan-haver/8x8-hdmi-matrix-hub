@@ -1,0 +1,1191 @@
+{
+  "scope": "Unmodified, schema-validated passing actual-image V2/V3 milestone records; no V4/V5 claim or manual baseline promotion",
+  "source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+  "image_id": "sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e",
+  "counts": {
+    "api": 79,
+    "browser": 54,
+    "flic": 23,
+    "ha": 19,
+    "uc": 18
+  },
+  "declared_client_exclusions": [
+    {
+      "scenario": "macros.run_volume_up",
+      "client": "api",
+      "description": "client shows toast.success == 'Macro executed'"
+    },
+    {
+      "scenario": "profiles.recall_routing",
+      "client": "api",
+      "description": "client shows toast.success == '\"Game Day\" activated'"
+    },
+    {
+      "scenario": "profiles.recall_needs_passcode",
+      "client": "api",
+      "description": "client shows dialogs == ['\"Kids Gaming\" is passcode protected. Enter passcode:']"
+    },
+    {
+      "scenario": "profiles.recall_with_passcode",
+      "client": "api",
+      "description": "client shows toast.success == '\"Kids Gaming\" activated'"
+    },
+    {
+      "scenario": "profiles.recall_wrong_passcode",
+      "client": "api",
+      "description": "client shows toast.error == 'Invalid passcode'"
+    },
+    {
+      "scenario": "reboot.enabled_shortcut",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "scenes.run_protected",
+      "client": "api",
+      "description": "client shows toast.success == 'Scene executed'"
+    },
+    {
+      "scenario": "scenes.partial_failure",
+      "client": "api",
+      "description": "client shows toast.warning == '\"Good Night\" ran partly: 1 of 2 steps succeeded'"
+    },
+    {
+      "scenario": "scenes.conflicts_visible",
+      "client": "api",
+      "description": "client shows scene.conflict_count == 3"
+    },
+    {
+      "scenario": "scenes.conflicts_visible",
+      "client": "api",
+      "description": "client shows scene.values == ['= 2', '= 5', '= 2', '= 5', '= true', '= false']"
+    },
+    {
+      "scenario": "shortcuts.route_one_to_one",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "shortcuts.power_off_all",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "shortcuts.mute_all",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "shortcuts.unmute_all",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "shortcuts.preset_recall",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "shortcuts.beep_off",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "shortcuts.panel_lock",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "shortcuts.lcd_15s",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "shortcuts.beep_on",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "shortcuts.panel_unlock",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "shortcuts.lcd_off",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "shortcuts.lcd_always_on",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "shortcuts.lcd_30s",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "shortcuts.lcd_60s",
+      "client": "api",
+      "description": "client shows toast.success == 'Shortcut executed'"
+    },
+    {
+      "scenario": "shortcuts.disabled_reboot",
+      "client": "api",
+      "description": "client shows toast.error == 'Failed to execute shortcut'"
+    },
+    {
+      "scenario": "shortcuts.disabled_reboot",
+      "client": "api",
+      "description": "client shows toast.success == None"
+    },
+    {
+      "scenario": "flic.power_off",
+      "client": "flic",
+      "description": "WebSocket event 'power_change' with {'power': 'off'}"
+    },
+    {
+      "scenario": "flic.profile",
+      "client": "flic",
+      "description": "client shows toast.success == '\"Game Day\" activated'"
+    },
+    {
+      "scenario": "flic.profile_pin_refused",
+      "client": "flic",
+      "description": "client shows dialogs == ['\"Kids Gaming\" is passcode protected. Enter passcode:']"
+    },
+    {
+      "scenario": "flic.manual_macro",
+      "client": "flic",
+      "description": "client shows toast.success == 'Macro executed'"
+    },
+    {
+      "scenario": "macros.run_rejected",
+      "client": "api",
+      "description": "client shows toast.error == 'Error: Execution failed'"
+    },
+    {
+      "scenario": "macros.run_rejected",
+      "client": "api",
+      "description": "client shows toast.success == None"
+    },
+    {
+      "scenario": "shortcuts.mute_rejected",
+      "client": "api",
+      "description": "client shows toast.error == 'Failed to execute shortcut'"
+    },
+    {
+      "scenario": "shortcuts.mute_rejected",
+      "client": "api",
+      "description": "client shows toast.success == None"
+    },
+    {
+      "scenario": "shortcuts.beep_rejected",
+      "client": "api",
+      "description": "client shows toast.error == 'Failed to execute shortcut'"
+    },
+    {
+      "scenario": "shortcuts.beep_rejected",
+      "client": "api",
+      "description": "client shows toast.success == None"
+    },
+    {
+      "scenario": "shortcuts.panel_lock_rejected",
+      "client": "api",
+      "description": "client shows toast.error == 'Failed to execute shortcut'"
+    },
+    {
+      "scenario": "shortcuts.panel_lock_rejected",
+      "client": "api",
+      "description": "client shows toast.success == None"
+    },
+    {
+      "scenario": "shortcuts.lcd_rejected",
+      "client": "api",
+      "description": "client shows toast.error == 'Failed to execute shortcut'"
+    },
+    {
+      "scenario": "shortcuts.lcd_rejected",
+      "client": "api",
+      "description": "client shows toast.success == None"
+    },
+    {
+      "scenario": "flic.manual_macro_refused",
+      "client": "flic",
+      "description": "client shows toast.error == 'Error: Execution failed'"
+    },
+    {
+      "scenario": "flic.manual_macro_refused",
+      "client": "flic",
+      "description": "client shows toast.success == None"
+    }
+  ],
+  "records": [
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-020/2026-10-19-V2-1baac3de-macros.run_volume_up-api.json",
+      "sha256": "1825b0210ff129ff208c97a8040b60a1fafd28c801b8d9b5c0f48165625ffc4d",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-030/2026-10-19-V2-1baac3de-preset_read.device_slot_1-api.json",
+      "sha256": "192a25ae6839042ff766615c673be1c8d3bb4d34e85f906238494965edc4f1dc",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-004/2026-10-19-V2-1baac3de-preset_read.saved_current_1-api.json",
+      "sha256": "9551ea1edf95c7cfccd44d88af4aa6bb6efff6ffbcb05b7bdc64d183e4fecc61",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-034/2026-10-19-V2-1baac3de-preset_read.saved_partial_1-api.json",
+      "sha256": "a9150260e9bbb21864c858ca7afd08f4b9d1d7e5cb37e5dfc64e8b55cda1682a",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-030/2026-10-19-V2-1baac3de-preset_read.device_slot_2-api.json",
+      "sha256": "a374d9ed148198e1967da0e548766efe668981dd8688850ce4089e977d5ea475",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-004/2026-10-19-V2-1baac3de-preset_read.saved_current_2-api.json",
+      "sha256": "5287023c31f229ffb5c3c08132d2443b15bd6982eb289fe6062cb1151c83e99a",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-034/2026-10-19-V2-1baac3de-preset_read.saved_partial_2-api.json",
+      "sha256": "7c05ae5685a1b37d8136f95133b2197845a3a81d0037646b4162196cfefb174a",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-030/2026-10-19-V2-1baac3de-preset_read.device_slot_3-api.json",
+      "sha256": "ddf00bd7824e09f078c3381a325f1e55a79c729c967f5a0b6a59184d6d617b0d",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-004/2026-10-19-V2-1baac3de-preset_read.saved_current_3-api.json",
+      "sha256": "924c5f1c7b9a8bd4871e694ceb0151c02c82a7b36fcb773457fb63758566da5c",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-034/2026-10-19-V2-1baac3de-preset_read.saved_partial_3-api.json",
+      "sha256": "3ccd70e99dbc2cb1c0fe6fc508a7e4c0d5d7e785da662db5a0dce41ac7dc7836",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-030/2026-10-19-V2-1baac3de-preset_read.device_slot_4-api.json",
+      "sha256": "ad1b930d656681028902992d021d7de3a4e4035f16eea4914329dd9c56927e5c",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-004/2026-10-19-V2-1baac3de-preset_read.saved_current_4-api.json",
+      "sha256": "16dfa798043f1405e48a47036fd52a140a5bcb296f1a7b28dc2dcdba6efe6649",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-034/2026-10-19-V2-1baac3de-preset_read.saved_partial_4-api.json",
+      "sha256": "0dec4c01aa930d052d61781880aa266b5bfed89d1bf16bb01d6d8c4eb40f3dd9",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-030/2026-10-19-V2-1baac3de-preset_read.device_slot_5-api.json",
+      "sha256": "962459f32fd0a4c0ab1d7c256fee5b8301342d08ec220779d5ecf20b4f60619f",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-004/2026-10-19-V2-1baac3de-preset_read.saved_current_5-api.json",
+      "sha256": "1ca9843dc53a4b1559156503c3556b8c5a2d9a453781d33df4f9f21b8649af60",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-034/2026-10-19-V2-1baac3de-preset_read.saved_partial_5-api.json",
+      "sha256": "ca42144b2fa5c576041b62c28228915d067a1821425bc64aea91ce6aecdb7125",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-030/2026-10-19-V2-1baac3de-preset_read.device_slot_6-api.json",
+      "sha256": "b0fa665904246f8fc4e7220ac313e55a09e04a655cb408ec453260948e0b8467",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-004/2026-10-19-V2-1baac3de-preset_read.saved_current_6-api.json",
+      "sha256": "5a195fb3500cc8e0ad1fafa8b201e30019acbf992f0d41c73c62988c71baa568",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-034/2026-10-19-V2-1baac3de-preset_read.saved_partial_6-api.json",
+      "sha256": "9da30364829a96779eafc3ec3844867174f65c34531c42c40c5b9fad0e6dbe41",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-030/2026-10-19-V2-1baac3de-preset_read.device_slot_7-api.json",
+      "sha256": "5ff66ad2a56c5c8be51d6f181c194659a30de94632e8b56e4a8001d7dc9e4e74",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-004/2026-10-19-V2-1baac3de-preset_read.saved_current_7-api.json",
+      "sha256": "b8671c83a536c0ffc5a3689b0edb1cb3fff1c299a05842658e62e38eadb63bdb",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-034/2026-10-19-V2-1baac3de-preset_read.saved_partial_7-api.json",
+      "sha256": "1a8d862b0ab5aab49e5ac74f75ae99faf61ee6117a777a8f89442cf291b57142",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-030/2026-10-19-V2-1baac3de-preset_read.device_slot_8-api.json",
+      "sha256": "322746eac1eb167683fe35e4fe7c6b17eab5acc61453e44c5ee3122fbf0b0d26",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-004/2026-10-19-V2-1baac3de-preset_read.saved_current_8-api.json",
+      "sha256": "3644b59134a4a7abd761491215fdd8bdb897c9665ab51fbd3f2792f9722f7e64",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-034/2026-10-19-V2-1baac3de-preset_read.saved_partial_8-api.json",
+      "sha256": "c439f3b4a6cac74d0f20d6d42be220fd822bf271db9301758d6b8785b8c8b83c",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-030/2026-10-19-V2-1baac3de-preset_read.catalog_matches_device-api.json",
+      "sha256": "b81e348e3596d388dc04f4cc8c6984fb7171dd239cb623853379c5348ae4d9ea",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-003/2026-10-19-V2-1baac3de-presets.recall-api.json",
+      "sha256": "1e45db3e0b3e2adb19fda8d001b0fbec4d81c8f41313a06a6e2212e7501089d5",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-005/2026-10-19-V2-1baac3de-presets.rename-api.json",
+      "sha256": "7eb6f3dbbbcef4edb78a30ae885225ddd14ba514b14a63ff6024d90a4e6eca79",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-002/2026-10-19-V2-1baac3de-profile_state.alias_recall-api.json",
+      "sha256": "f1b80aa63211ecc8fa03cf65e0c59c04a9ae1c1b83bc3fac118a9b4954bbaec6",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-002/2026-10-19-V2-1baac3de-profiles.recall_routing-api.json",
+      "sha256": "95dc2b95c53846368b6b4aff333bd8416765ac726eb2659ee0581b84ccc53d63",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-003/2026-10-19-V2-1baac3de-profiles.recall_output_settings-api.json",
+      "sha256": "5caaa049436ac2d4e09ac471c189fd941cbf5b25eb3d9a59c0f7bf178eb1c093",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-004/2026-10-19-V2-1baac3de-profiles.recall_power_macro-api.json",
+      "sha256": "1c39d54a34ec9a35d113d505857ef52f97129c3bb72928234ed935d9984a783a",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-002/2026-10-19-V2-1baac3de-profiles.recall_disabled_output-api.json",
+      "sha256": "179ad78decf01985b70a467070d45f235ab92551a67cbc068a4253a7559d1ca4",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-005/2026-10-19-V2-1baac3de-profiles.recall_needs_passcode-api.json",
+      "sha256": "af1d154f9c40916df6ddebc8ec9299381c8c1f8e1f4753e41052f49bebff0339",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-005/2026-10-19-V2-1baac3de-profiles.recall_with_passcode-api.json",
+      "sha256": "b86d5e01ca7372db12497928a4145d402bd766c7e0eebf7668936fc0c48bb2d5",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-005/2026-10-19-V2-1baac3de-profiles.recall_wrong_passcode-api.json",
+      "sha256": "5497f7e4588829d3764cf66023ee9dd4c5860451227ac662119852dd3e454281",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-003/2026-10-19-V2-1baac3de-profiles.recall_scaler_arc-api.json",
+      "sha256": "68411feba1adb8f41ff0f6fa29f6e88e4910ce42313763672a34304a3405f823",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-003/2026-10-19-V2-1baac3de-profiles.recall_leaves_unset_scaler_arc-api.json",
+      "sha256": "cd9a137eada02359b1a1b6abcdfa53c98b0d5bec0933d2cb10644011cf25814a",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-021/2026-10-19-V2-1baac3de-reboot.enabled_shortcut-api.json",
+      "sha256": "e8c959177feb136ed61edabd56694c77216d5865c6dec6685de96a8900e47ed3",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-001/2026-10-19-V2-1baac3de-routing.switch_one-api.json",
+      "sha256": "c629faa87ab38ba1d51b318917d46279bd87d15bc28eb6a76b8b35023f5535a6",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-002/2026-10-19-V2-1baac3de-routing.route_all-api.json",
+      "sha256": "9c28af59e6c110f76012352803ef1fcde0631b692f426e10d7d9fcb95fe35ffd",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-011/2026-10-19-V2-1baac3de-scenes.run_profile_macro_preset-api.json",
+      "sha256": "ed3dbe59ccf18982d83a6fd7c32cc977becc2a1adabdbfb83e5105fab711ec7b",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-011/2026-10-19-V2-1baac3de-scenes.run_protected-api.json",
+      "sha256": "154734617d9c08e293f7f27b6d5aeb45f03d6e9be00b36e4b3e772534f8eab85",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-012/2026-10-19-V2-1baac3de-scenes.run_shortcut_and_macro-api.json",
+      "sha256": "5889356345b01f4579fb72b642891e823995b6f5ffbe2755693aa06d7af27300",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-014/2026-10-19-V2-1baac3de-scenes.override_leaves_setting-api.json",
+      "sha256": "d20fecf2edb50225fe2ff3f431d2c2d36a7c4301fc2167fbba9e66eff67f724e",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-011/2026-10-19-V2-1baac3de-scenes.partial_failure-api.json",
+      "sha256": "9bf324754bd52423ff8ac22dc8bfc3969d2abe06736e8836a571a87fccda3f0c",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-011/2026-10-19-V2-1baac3de-scenes.disabled_output_state-api.json",
+      "sha256": "f39d8b66c241e7c119088840e1c3c22c9e209d25df382b53f7fd3b64e08455ad",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-014/2026-10-19-V2-1baac3de-scenes.enabled_override-api.json",
+      "sha256": "722ce2cac4dae4d7590c33758648c2ff9fa5170c4a4636835a5ad578ca352ce7",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-013/2026-10-19-V2-1baac3de-scenes.wait_between_actions-api.json",
+      "sha256": "51b7660a44ec7bcd554e727d363f647a22dd9dd5722fe7d6c9c44ece9c6a03da",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-013/2026-10-19-V2-1baac3de-scenes.wait_edit-api.json",
+      "sha256": "83ea45015a015bc0a9592f4c4e0e5920c96fad9bcb6ac4efa611de2ff9f55966",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-016/2026-10-19-V2-1baac3de-scenes.conflicts_visible-api.json",
+      "sha256": "c01eb9a07f54a5d11d3fe199513a5272eb041cc9e24d72b3792660fe506759f2",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-011/2026-10-19-V2-1baac3de-scenes.run_unknown-api.json",
+      "sha256": "de2ee3cf87397275b1f81156bb5bf85098c408a24286f0c44371c42b7022f5da",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-011/2026-10-19-V2-1baac3de-scenes.profile_step_scaler_arc-api.json",
+      "sha256": "20044343854ca4a0e2b5da4afc1acf5910da9c49d7e2b4bedc9170a95df2ad45",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-014/2026-10-19-V2-1baac3de-scenes.override_leaves_scaler_arc-api.json",
+      "sha256": "d3d3c638cae3dd4286085f29df4f88422d89f15d9a74e1584dd4ec122b0b7244",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-016/2026-10-19-V2-1baac3de-scenes.conflicts_scaler_arc-api.json",
+      "sha256": "6ba8c2df7998d542b305a39dcc1c76e44be70d774f3810c657e1b901aa052808",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-023/2026-10-19-V2-1baac3de-shortcuts.route_one_to_one-api.json",
+      "sha256": "0dd97858ae2369171f1f11e38f2793778fe4116d9dc5803492a348ee50fa207b",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-024/2026-10-19-V2-1baac3de-shortcuts.power_off_all-api.json",
+      "sha256": "50b44060df48cb97a72643163d59aab1cf6af2610b8be21dd23ccc0300e6f091",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-025/2026-10-19-V2-1baac3de-shortcuts.mute_all-api.json",
+      "sha256": "03d42176c9aed4422f6738372a8c846c1c6ec6173b9c3a0e265a5de48f95177d",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-025/2026-10-19-V2-1baac3de-shortcuts.unmute_all-api.json",
+      "sha256": "bdc1ae9b290ed76bf94c43df13cb206c8b046d9f13b7f4f18723569a7ebc6f14",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-026/2026-10-19-V2-1baac3de-shortcuts.preset_recall-api.json",
+      "sha256": "70c711e40630c4d48a6a65035a42d670a79b962650a5389815108ac32968cd34",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-027/2026-10-19-V2-1baac3de-shortcuts.beep_off-api.json",
+      "sha256": "e875f899499892539e46917dbcd6ddc70d8270c911b1b63e3e662f4c51222195",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-027/2026-10-19-V2-1baac3de-shortcuts.panel_lock-api.json",
+      "sha256": "8c78764ab9a3de32d1f04318c4be38671d94c0fda462f648b8bd6f73947d21a9",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-028/2026-10-19-V2-1baac3de-shortcuts.lcd_15s-api.json",
+      "sha256": "b4bf49ec38f1d852382b0f1f4b78c9984028dde4492078e40d69aa3939c35950",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-027/2026-10-19-V2-1baac3de-shortcuts.beep_on-api.json",
+      "sha256": "42b091294d5d783578b97c50a5651ca350d2550a6fac9451714b6951207b2c82",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-027/2026-10-19-V2-1baac3de-shortcuts.panel_unlock-api.json",
+      "sha256": "d10a82d00877a750e6af018c891b69931fe03ead810b462c0d13fe342d18bfe1",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-028/2026-10-19-V2-1baac3de-shortcuts.lcd_off-api.json",
+      "sha256": "4e49ad608956d2be3effaf4f345864c6ec5d8dcee25f758713935cb104b3bba4",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-028/2026-10-19-V2-1baac3de-shortcuts.lcd_always_on-api.json",
+      "sha256": "3b97ec53ac5cc505896996156086f4216f5c3a6905e4dc544cc360045bef956d",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-028/2026-10-19-V2-1baac3de-shortcuts.lcd_30s-api.json",
+      "sha256": "4d15a1892fc7c6a397566d30e138a2e656820b3c9ac8b1d10cac8976c8af95c7",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-028/2026-10-19-V2-1baac3de-shortcuts.lcd_60s-api.json",
+      "sha256": "04213e87bf4bd2a56ec446e7d0217cc89491d1796ce150468fdc98e4d3309b31",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-027/2026-10-19-V2-1baac3de-shortcuts.disabled_reboot-api.json",
+      "sha256": "08d83a66a7e47617813ee925650b2c3f82c0eeb151adda5b720c9d72821cfd46",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-KIO-003/2026-10-19-V3-1baac3de-kiosk.route_all_apply-browser.json",
+      "sha256": "4b9ae177dfd0874140e5bd8388ca657d33c75c94181198aa03f275a5316d11c2",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-KIO-002/2026-10-19-V3-1baac3de-kiosk.route_one_muted-browser.json",
+      "sha256": "c5145bd207122747f70017868c36e4bf1ef421ff56fa650bf35d5c022b3597b9",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-KIO-008/2026-10-19-V3-1baac3de-kiosk.profile_with_passcode-browser.json",
+      "sha256": "2ffb2ff20e3033f6d1f950ba126835a55c41c488be935ee291bf0959cf4772eb",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-KIO-008/2026-10-19-V3-1baac3de-kiosk.profile_wrong_passcode-browser.json",
+      "sha256": "4db42ba4e8f02824db92a58f7f840a5833b21abcdebfbd5f57e44bb2aaa082c4",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-031/2026-10-19-V3-1baac3de-live.front_panel_route-browser.json",
+      "sha256": "ed8352dd4e35f08484b1fd4513956b92917c778ae5b41cdf1c31a3adc0c9c67b",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-031/2026-10-19-V3-1baac3de-live.input_signal-browser.json",
+      "sha256": "cfc338135defd81c230300dd275a5a04c69a46253e1fdb2acdb014b28ac60c21",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-031/2026-10-19-V3-1baac3de-live.display_unplugged-browser.json",
+      "sha256": "58c8448b2014eaaffb8dd323a5cd8a19b3bba02cde9e2a87b5c7f08197d27483",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-031/2026-10-19-V3-1baac3de-live.rename_elsewhere-browser.json",
+      "sha256": "7b0f18d925ef042d6ecd6b745fbae75dcd8a039b482183f5698a0ad01cb04269",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-REL-009/2026-10-19-V3-1baac3de-live.matrix_offline-browser.json",
+      "sha256": "1dd1e8a03665d08c409ef55ff0d09a62bf5f8f0d985f6eba190f544772a9cec9",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-020/2026-10-19-V3-1baac3de-macros.run_volume_up-browser.json",
+      "sha256": "2fc435d6f779856450c10397b36b74acbb30211b0dc8501d4f93f454688b54ca",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-003/2026-10-19-V3-1baac3de-presets.recall-browser.json",
+      "sha256": "bd8df611aaca4fddb5164bff18fe2db9c2314b7fac9b37635bf6ddcb851736e6",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-005/2026-10-19-V3-1baac3de-presets.rename-browser.json",
+      "sha256": "267030f36cac1c5373cc4138df87593e845bd8578f987f919189cba706039e97",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-002/2026-10-19-V3-1baac3de-profiles.recall_routing-browser.json",
+      "sha256": "e803b81a13f02679957f997298beec9dd1ad7eb37658ab65dc1b17e085bdc2b4",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-003/2026-10-19-V3-1baac3de-profiles.recall_output_settings-browser.json",
+      "sha256": "aa2d0c7b9d695cb1e68b4ac47a9180a4b8327d13e819d6cdeaf82decc867b6af",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-004/2026-10-19-V3-1baac3de-profiles.recall_power_macro-browser.json",
+      "sha256": "eaa9041edbf5c0cab9855c064540706dd7c9e72d5c7032f072dccaa9ba1e12f7",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-002/2026-10-19-V3-1baac3de-profiles.recall_disabled_output-browser.json",
+      "sha256": "e0ee0a33c8c6f80d1ce23bb1854fc6ef4a1e2e45d1f86fd89c7b698dd02ea922",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-005/2026-10-19-V3-1baac3de-profiles.recall_needs_passcode-browser.json",
+      "sha256": "b7e63939e3707d47f7aa84e18e084891b185660cd332eb3e3d189368943d7ea5",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-005/2026-10-19-V3-1baac3de-profiles.recall_with_passcode-browser.json",
+      "sha256": "01218fe774f7bebb716f352aa2b0f9a542ce12f14d2e441244b034898f954fd4",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-005/2026-10-19-V3-1baac3de-profiles.recall_wrong_passcode-browser.json",
+      "sha256": "2493ae11789292f89ffaf387f4d5810fbb44f03c67571bd9061d5cdd29022904",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-003/2026-10-19-V3-1baac3de-profiles.recall_scaler_arc-browser.json",
+      "sha256": "6afbf076f913a370a34a659600ac2cf837013ea775edf541cf4c85707c46013b",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-021/2026-10-19-V3-1baac3de-reboot.enabled_shortcut-browser.json",
+      "sha256": "8c2a917864a263b336305a9037fefc17eb9abbf8e839231ee73ca01d8f2e3548",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-001/2026-10-19-V3-1baac3de-routing.switch_one-browser.json",
+      "sha256": "4f6f06a3bb2dfa484dcab751494e2f46c1b8ec0e4a0a7ffbb09e5b8e455d7192",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-MTX-002/2026-10-19-V3-1baac3de-routing.route_all-browser.json",
+      "sha256": "8c775b8e4328dd085f5053bbcb7c048a0acb4ac180705c54e052b5c36652179d",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-UI-024/2026-10-19-V3-1baac3de-routing.grid_notifies_other_clients-browser.json",
+      "sha256": "4480e7c4a3b05e974eabfd5ee68f7a1c286af594f2b31763a645554c3dba97ee",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-011/2026-10-19-V3-1baac3de-scenes.run_profile_macro_preset-browser.json",
+      "sha256": "1b69530e8997f3d858e910dd954afc2e6833988f8e3158154dfb71820ed5ce09",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-011/2026-10-19-V3-1baac3de-scenes.run_protected-browser.json",
+      "sha256": "24e3fb99650fb32a5d60433886141e099360507190fcf19a364c79aea5c7224f",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-011/2026-10-19-V3-1baac3de-scenes.partial_failure-browser.json",
+      "sha256": "5e2026b6518b6d7249b7ae595f1ed4d39d45240acb1dea64c44aac06226cefa9",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-011/2026-10-19-V3-1baac3de-scenes.disabled_output_state-browser.json",
+      "sha256": "eed9a31996fde1dcae44cedc096579740330362124d8723fa802e78475af8f63",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-014/2026-10-19-V3-1baac3de-scenes.enabled_override-browser.json",
+      "sha256": "86de49cb85e080f834b8443556e184fbff7927574b5d92f162452c0ef78571f8",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-013/2026-10-19-V3-1baac3de-scenes.wait_between_actions-browser.json",
+      "sha256": "1a0039a9538ed7225062ca7a347f84dd747496f9afb8bac473d383755e5b29f8",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-013/2026-10-19-V3-1baac3de-scenes.wait_edit-browser.json",
+      "sha256": "494793649df87419f8cda2abd05b197b307c50c07a0f6f5a4739b11af28ffe9f",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-016/2026-10-19-V3-1baac3de-scenes.conflicts_visible-browser.json",
+      "sha256": "4e2d7ca9cd9e0e1879f317c4fbf754f9a78bd9345025082b26e7282e651d0670",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-023/2026-10-19-V3-1baac3de-shortcuts.route_one_to_one-browser.json",
+      "sha256": "96688870105d81236bef3c1c7f7195e957009bafd58f40f87603deab0259d808",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-024/2026-10-19-V3-1baac3de-shortcuts.power_off_all-browser.json",
+      "sha256": "724abf1021caec680e5fd9c27e125a8d36656b2235e1642fdc2518238709e0ca",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-025/2026-10-19-V3-1baac3de-shortcuts.mute_all-browser.json",
+      "sha256": "2e1a235f368a832630ae40d9c8b5891ead3d19fb860ed7ea7d3d4e8b461fce73",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-025/2026-10-19-V3-1baac3de-shortcuts.unmute_all-browser.json",
+      "sha256": "333932af14b513093109a08ddbe148b86ed0bf5709d70732a4885f2ec261df3d",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-026/2026-10-19-V3-1baac3de-shortcuts.preset_recall-browser.json",
+      "sha256": "5f93cb0ad6eaf8cd3a4d1b9b98cd0bae789e3eb0db5aac578ab4e9103bfbdc63",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-027/2026-10-19-V3-1baac3de-shortcuts.beep_off-browser.json",
+      "sha256": "cd9d63fd4f461c7680d53535e5c87f9b57f71c2699edd65b29ef9252543c2668",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-027/2026-10-19-V3-1baac3de-shortcuts.panel_lock-browser.json",
+      "sha256": "365caedc318ebc6ce8f259e37aa5dc249603f28e4855c2b07ed0d04e03712f68",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-028/2026-10-19-V3-1baac3de-shortcuts.lcd_15s-browser.json",
+      "sha256": "7e3e7efb1430fb44476a08bad16d4723b0f1ceaa28dd11ad7ef72325285145eb",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-027/2026-10-19-V3-1baac3de-shortcuts.beep_on-browser.json",
+      "sha256": "3c9b0ebf3ddb16ced62ea062c4a7530977028f7f34f857b3105b02503e165279",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-027/2026-10-19-V3-1baac3de-shortcuts.panel_unlock-browser.json",
+      "sha256": "a1b24d43add197294e6c5bc395a3751d1be53bf5b8c9da00a4e2b618b968e88d",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-028/2026-10-19-V3-1baac3de-shortcuts.lcd_off-browser.json",
+      "sha256": "cb45319e7106642ffbd3582ff26effcdc6e0e51800424b7ea2687f37a2de6c68",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-028/2026-10-19-V3-1baac3de-shortcuts.lcd_always_on-browser.json",
+      "sha256": "686b2f3e5789922de31197427d773a67128ae2769248d3dc1f1296016cfe3089",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-028/2026-10-19-V3-1baac3de-shortcuts.lcd_30s-browser.json",
+      "sha256": "49f58c2188c31cb87c8f15ed71e26fa3b025d9b3519d30203b813345db7a8c68",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-028/2026-10-19-V3-1baac3de-shortcuts.lcd_60s-browser.json",
+      "sha256": "6e83047c3b2d797d5800cc482a0c52e9ef9bedd16fbdb4a9594dd82d0f91cfa5",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-027/2026-10-19-V3-1baac3de-shortcuts.disabled_reboot-browser.json",
+      "sha256": "99ff218e19431becb23b349028aa18eb1c32e1c5175377c13b8cf2ab25262dfa",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-FLIC-001/2026-10-19-V3-1baac3de-flic.preset-flic.json",
+      "sha256": "0516a4510a3d3a93bc56e1cc8984adc0181598e80c7f392f8a7039fc36e86b0d",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-FLIC-002/2026-10-19-V3-1baac3de-flic.power_off-flic.json",
+      "sha256": "ff8c1274d2993b616f1cd592c3b9fe8eb7b2409a0b32582aac34cc09ffb8c374",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-FLIC-002/2026-10-19-V3-1baac3de-flic.power_on-flic.json",
+      "sha256": "ff514d564b749065b19f5dbd31e7ea7972dfc0f2f41025a828dc4e6577653f8d",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-FLIC-003/2026-10-19-V3-1baac3de-flic.source_power-flic.json",
+      "sha256": "bced567647eee293082875a6ef2bc4646f41061428bac4a2a9cc49643a6f23ff",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-FLIC-005/2026-10-19-V3-1baac3de-flic.display_volume-flic.json",
+      "sha256": "380d29f45555e93468a7e63c5d2373c910b1c02a59aa3df24fe2ee7df30d7a42",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-FLIC-006/2026-10-19-V3-1baac3de-flic.profile-flic.json",
+      "sha256": "06bafba28479cd9129c320c290dfde2f834a6cf1ff909e0084f095448059405c",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-FLIC-006/2026-10-19-V3-1baac3de-flic.profile_pin_refused-flic.json",
+      "sha256": "4478e27804d288e3d73ddbdaad95d3ef4335f79e0ce4a8ffba5d8757d419ab5f",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-FLIC-006/2026-10-19-V3-1baac3de-flic.manual_macro-flic.json",
+      "sha256": "d6f55cb052d3b485f14d907c1a4d743d7427c7396144f415e0ceddd35008eccd",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-FLIC-008/2026-10-19-V3-1baac3de-flic.all_outputs-flic.json",
+      "sha256": "1e44cce64203807b7be63d0840dca7419a275c658617ba40331a04acebbfbd15",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-FLIC-004/2026-10-19-V3-1baac3de-flic.cycle_next-flic.json",
+      "sha256": "dd431bc1fd5090c987217f0a4e033402ca7fe040c094cf20f5314ec988e83a7e",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-FLIC-005/2026-10-19-V3-1baac3de-flic.cec_output_navigation_refused-flic.json",
+      "sha256": "bbe12a02feb8b09a2d07ed05b23d27b88b78a7b8c89e02ce18c414d03862af6d",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-FLIC-006/2026-10-19-V3-1baac3de-flic.unknown_profile-flic.json",
+      "sha256": "6f76cb1f4ac9562ae7b03eebda5102aa541966fbb8adf3d1e5cc8b5f5d0af9ff",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-FLIC-007/2026-10-19-V3-1baac3de-flic.register-flic.json",
+      "sha256": "4506fe4ec218a3006a5f6b097fa0df42c93e61cf740dba101c43824bd507d528",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-FLIC-009/2026-10-19-V3-1baac3de-flic.sdk_single-flic.json",
+      "sha256": "49d81d8728b539107288fe955a4880b4819015a7e3d1bed80f7d1a4dbce9ade9",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-FLIC-009/2026-10-19-V3-1baac3de-flic.sdk_double-flic.json",
+      "sha256": "e4895e1e60061570a6b4dfd5c44af54e6097d3b96a2adcbad0f879e4ff37b588",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-FLIC-009/2026-10-19-V3-1baac3de-flic.sdk_hold-flic.json",
+      "sha256": "5bb8e96469b3529af5f45e155b4399287a9c5e844d1b1008152913c4e5c468cc",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-FLIC-009/2026-10-19-V3-1baac3de-flic.sdk_filter_mismatch-flic.json",
+      "sha256": "b168fb702ad3b2243a8314f70564c2385864c71e0bcd1a71c5688155a9dae432",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-FLIC-009/2026-10-19-V3-1baac3de-flic.sdk_startup_and_click-flic.json",
+      "sha256": "3c123e64eae9cf8599c7d8f03f88e8507590f957739304a3f2e09b5f1e98d63c",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-FLIC-009/2026-10-19-V3-1baac3de-flic.sdk_duo_left-flic.json",
+      "sha256": "bc98fe7a7a78126ba868e8fbb97c07731a033d80c8ba5934e9936dd584d36a01",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-FLIC-009/2026-10-19-V3-1baac3de-flic.sdk_duo_right-flic.json",
+      "sha256": "368233b3be0dc22547eed52545fa7bf9f656bf2e6bc9657342fdd7164d30c5be",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-FLIC-004/2026-10-19-V3-1baac3de-flic.sdk_twist_next-flic.json",
+      "sha256": "e6c152939243d540333806966acacbabb62ff2ea7c95c5a8c30724665706ee4f",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-FLIC-004/2026-10-19-V3-1baac3de-flic.sdk_twist_previous-flic.json",
+      "sha256": "78d47dc0128c2a9890848fa869f2f9140c7f32121beee5a85665f81cdcb09428",
+      "original_run": "image-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-020/2026-10-19-V2-1baac3de-macros.run_rejected-api.json",
+      "sha256": "a61e5ce666a5ea7e292aa66f0f6f40573ab819a717456b9b2d44ead5def7a32f",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-002/2026-10-19-V2-1baac3de-profiles.recall_rejected-api.json",
+      "sha256": "516d372e4672166bbdaeeea19aa4083e65f996a25d193ce942e68cd90c16faab",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-012/2026-10-19-V2-1baac3de-scenes.run_rejected-api.json",
+      "sha256": "37b210a155a7f9a09381ff8d8f820a35afda92d56493a002001ab99546929f32",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-012/2026-10-19-V2-1baac3de-scenes.macro_continues_after_refusal-api.json",
+      "sha256": "b6f0ffb98a8187433fc6922c4dedcff0e66a88eda4114d1950201b38b94d9fa2",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-020/2026-10-19-V2-1baac3de-scenes.macro_stops_after_refusal-api.json",
+      "sha256": "d01d6e08f80e8ed17753dbe346b402ae9248da8cd19f21fa568e1cde2be4ded4",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-025/2026-10-19-V2-1baac3de-shortcuts.mute_rejected-api.json",
+      "sha256": "72d04c95b6973145461a43d0e6df11c87ce3d0fddbeafbb8b8cd8e2d8bbf04e7",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-027/2026-10-19-V2-1baac3de-shortcuts.beep_rejected-api.json",
+      "sha256": "b359b92dea37a77b997a456bc38696256b58a69e832bc3cfbcac484c720dff2d",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-027/2026-10-19-V2-1baac3de-shortcuts.panel_lock_rejected-api.json",
+      "sha256": "9045e8ff9e6044e9ada9630ae560b0ab620e171f0a28adb352cf0dac579acb41",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-028/2026-10-19-V2-1baac3de-shortcuts.lcd_rejected-api.json",
+      "sha256": "bdf7a62ff2f09ce748c7bb98bf25aee961889f7b7ce46d1e9c525838e43a68b4",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-020/2026-10-19-V3-1baac3de-macros.run_rejected-browser.json",
+      "sha256": "8cdeefde15ba9bc8bd55a750d77270744e79ff1b4b08e46ce8160517298f4b27",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-012/2026-10-19-V3-1baac3de-scenes.macro_continues_after_refusal-browser.json",
+      "sha256": "f5dd062d6003c183c553555a8f2621bd1b0cb922e24aa44a4ff68dc9b286d37c",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-020/2026-10-19-V3-1baac3de-scenes.macro_stops_after_refusal-browser.json",
+      "sha256": "607a162b9fb88dafacb4fcedc9f9ff9f6eb6c6247c1d1567d617242c6c18ca27",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-025/2026-10-19-V3-1baac3de-shortcuts.mute_rejected-browser.json",
+      "sha256": "acbf461c7dd877be58d8d99b1bae20c8834de4836983ad0a0608400363f56011",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-027/2026-10-19-V3-1baac3de-shortcuts.beep_rejected-browser.json",
+      "sha256": "7885875d8785fa5cb6e4c48b12143e3b41d26c1b529daea5176c7056729ba182",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-027/2026-10-19-V3-1baac3de-shortcuts.panel_lock_rejected-browser.json",
+      "sha256": "1c0997444cb4b84cc452409a63211b87459189697d6dd8d90b90142f62f52062",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-DOM-028/2026-10-19-V3-1baac3de-shortcuts.lcd_rejected-browser.json",
+      "sha256": "6d92daf491ef2e7848c8f3a1dbc5448211b85cba5161bc23588689647d0f76cd",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-FLIC-006/2026-10-19-V3-1baac3de-flic.manual_macro_refused-flic.json",
+      "sha256": "c6a8abb837f1f5d7fa0bd3de9d1829fc2ed73c58daa004e04bf45719da15366e",
+      "original_run": "image-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-HA-001/2026-10-19-V3-1baac3de-ha.config_flow-ha.json",
+      "sha256": "fad452998b15675e7cb2da4fe55aaf8337dde7da67e47cc4cdccd887bb75a592",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-HA-002/2026-10-19-V3-1baac3de-ha.select_source-ha.json",
+      "sha256": "af9a007855b2426a58e6a62432ba1c166935cb5c15abdbfc0952fffe78bbd2a3",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-HA-003/2026-10-19-V3-1baac3de-ha.power_off-ha.json",
+      "sha256": "2620ea503c208f978f8a14bd13ba874dd4418050f33044d34fe6d0f28bfc6a47",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-HA-003/2026-10-19-V3-1baac3de-ha.power_on-ha.json",
+      "sha256": "a916c7f48fe77d4e880484d42981b0c5c356265797ab0bb671fba1cd994ad40c",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-HA-004/2026-10-19-V3-1baac3de-ha.mute_switch-ha.json",
+      "sha256": "34b8555ec296b8e021d43fcb9e34af6197d57f203cc9f87e0bba7adbac51bccb",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-HA-005/2026-10-19-V3-1baac3de-ha.stream_switch-ha.json",
+      "sha256": "b4de0a08b6b65d3a4419dcaab53a3b6aa68970f64d0f905a805cc82441739e55",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-HA-006/2026-10-19-V3-1baac3de-ha.preset_button-ha.json",
+      "sha256": "06f1995531c0f1d250221792caa3f9ddbc9c0db58fd8a59437388bc15242fe02",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-HA-010/2026-10-19-V3-1baac3de-ha.service_recall_preset-ha.json",
+      "sha256": "9f0e22c1aec55e05c42528e4b562978092badcff321ad98a7573a073a57f2c53",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-HA-011/2026-10-19-V3-1baac3de-ha.service_switch_input-ha.json",
+      "sha256": "bb4d1f7c5dd34d9551f8e24bd9fea731fe8406ac5564c50c45f5cd3ef5c61add",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-HA-012/2026-10-19-V3-1baac3de-ha.service_cec_display-ha.json",
+      "sha256": "5c35583e5a2ee4a5f0a5bfa1bbdcceb6cc034a638a0e36c2e68500539a67c520",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-HA-012/2026-10-19-V3-1baac3de-ha.service_cec_source-ha.json",
+      "sha256": "9c6bd8f000a37270e68ea75c67d7c4951ee06330fa7862011320692d133093cb",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-HA-012/2026-10-19-V3-1baac3de-ha.service_cec_invalid-ha.json",
+      "sha256": "51245ca89930cf2f458b35791d0034fdd0879c8637d6d48eead940e18a7e79e2",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-HA-008/2026-10-19-V3-1baac3de-ha.input_signal-ha.json",
+      "sha256": "80d33e12eda2fbce44e4cb707fb00407e7847c2db0d282f71e182762fb96a3cb",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-HA-009/2026-10-19-V3-1baac3de-ha.display_unplugged-ha.json",
+      "sha256": "8a12d33648b5388b2329ddef3c6f4414aef1c91a3c1e6089e906e9c275e03ae9",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-HA-002/2026-10-19-V3-1baac3de-ha.front_panel_route-ha.json",
+      "sha256": "a50c5d720c3c3a5cdf48924bfac265aa1799d5d07ce0d0691ce5217a55081d54",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-HA-013/2026-10-19-V3-1baac3de-ha.matrix_offline-ha.json",
+      "sha256": "aaf9b513fcdaa4cb94e25e567829d9b2181360a12f3857ee31608872c762265b",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-HA-016/2026-10-19-V3-1baac3de-ha.reconfigure-ha.json",
+      "sha256": "59149ac07656483de821f3da4ec7f6af1bde86cb52f4994e117a82649f25870a",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-HA-007/2026-10-19-V3-1baac3de-ha.reboot_button-ha.json",
+      "sha256": "6a75966f120528a5ec51604fd184665d32ba54e2d6f66d545e390d51b2ea979b",
+      "original_run": "image-ha-campaigns-cached"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-HA-013/2026-10-19-V3-1baac3de-ha.matrix_unreachable-ha.json",
+      "sha256": "766a7c525800056913a8cde5eaf80363ea3fb09e103ca52d543aed84838af47a",
+      "original_run": "image-ha-campaigns-fresh"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-UC-008/2026-10-19-V3-1baac3de-remote.select_source-uc.json",
+      "sha256": "1a59ad0399b99507690e4f7aae02a06725e9e865cb5fdfaf0980ac470fa74ebd",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-UC-004/2026-10-19-V3-1baac3de-remote.preset_button-uc.json",
+      "sha256": "98d832ed8ffcd29c823d0c08c30656b7cf76beed87d6cfb1b7a451cff52e4a38",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-UC-005/2026-10-19-V3-1baac3de-remote.matrix_preset_command-uc.json",
+      "sha256": "1696c93f11d85effb1cc6657b832a5e9ffdb5f76a7774136eff0e9bfff2b46bf",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-UC-007/2026-10-19-V3-1baac3de-remote.output_cec_power_on-uc.json",
+      "sha256": "166a15a66b9569b73098be1764b6b46efddeb803a11b16d258639dd8d371129f",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-UC-006/2026-10-19-V3-1baac3de-remote.input_cec_command-uc.json",
+      "sha256": "99dce30bf98a2df4fc4deae5b3d63510c36bdb72109194e5779fd5b3cfa1b76f",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-UC-007/2026-10-19-V3-1baac3de-remote.output_cec_on-uc.json",
+      "sha256": "33a9a95ef0e3da7f4440f011550bd2267acb99e67f157e9dd18a96013bd2e4f1",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-UC-006/2026-10-19-V3-1baac3de-remote.input_cec_off-uc.json",
+      "sha256": "3cb05e8e3f2a1fda5b79cb9b963ec3f3935a9c1be528f9e74b19cf2f20b136e2",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-UC-007/2026-10-19-V3-1baac3de-remote.output_cec_toggle-uc.json",
+      "sha256": "bae517fd0ee256f1a5c1775b25e9d9d77cbb2fd877c43b96170eaf1828cdab32",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-UC-006/2026-10-19-V3-1baac3de-remote.input_cec_sequence-uc.json",
+      "sha256": "a36c17ba56890bb8d6218721ac1e2f8ede224136973741e5ce4a1ec5c24e4ace",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-UC-007/2026-10-19-V3-1baac3de-remote.output_cec_volume_repeat-uc.json",
+      "sha256": "f1a34e13dcf4a2a57cb09fe224ed89832bca24f2a832b3ca9924c5936130702e",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-UC-007/2026-10-19-V3-1baac3de-remote.cec_bad_sequence-uc.json",
+      "sha256": "03fcb93a7ab8f6899e9e31aa70c4437ad5e5007aec225988844a265169610b66",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-UC-009/2026-10-19-V3-1baac3de-remote.media_player_toggle-uc.json",
+      "sha256": "b3dce95e5d2f5e9652ab18624f543b95f7c6f6ff1952a4d9c79763457bd77d71",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-UC-009/2026-10-19-V3-1baac3de-remote.media_player_volume-uc.json",
+      "sha256": "3c4307064c730431d831bc28ea9b4ba98ff02b512db1ff94afc699ea1180c553",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-UC-010/2026-10-19-V3-1baac3de-remote.power_switch_off-uc.json",
+      "sha256": "bba80faa245209062d6c5db0a559e7819ef1d3b678fc4861ddaba96e6240f771",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-UC-008/2026-10-19-V3-1baac3de-remote.unknown_source-uc.json",
+      "sha256": "a7f9e6fe7b38710a0224cb3339a2e313c9571f6007ddfb838eb5ba4dcd213255",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-UC-010/2026-10-19-V3-1baac3de-remote.power_switch_follows_front_panel-uc.json",
+      "sha256": "659694faa06fab9a73537cf3fafdb1214514cb2cb89cc00c444c23809fedd738",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-UC-004/2026-10-19-V3-1baac3de-remote.preset_names_from_web_app-uc.json",
+      "sha256": "68e770edbb725dae0a4ec6b385d499e4aa4f5ccf88b0cf8105e85b3926b25caf",
+      "original_run": "image-uc-campaigns"
+    },
+    {
+      "path": "docs/validation/evidence/runtime-r8b/F-UC-016/2026-10-19-V3-1baac3de-remote.input_rename_live-uc.json",
+      "sha256": "8b58c55353075087620bbdcf39bb4061670e6dfa82fbb0842d6145b9a3c8c208",
+      "original_run": "image-uc-campaigns"
+    }
+  ]
+}

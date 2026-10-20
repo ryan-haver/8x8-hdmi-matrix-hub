@@ -8,10 +8,10 @@ macros, scenes, shortcuts, ...).
 
 The hub runs in one of two modes:
 
-* ``api`` (default): modular API-only mode (``USE_MODULAR=true UC_ENABLED=false``).
-* ``uc``: the shipped default, legacy mode, in which ``run.py`` executes
-  ``src/driver.py``: REST API + web UI + the Unfolded Circle integration
-  WebSocket (``ucapi``). The integration listens on its own free port with mDNS
+* ``api`` (default): shared runtime with ``UC_ENABLED=false``.
+* ``uc``: the same shared runtime with ``UC_ENABLED=true``: REST API + web UI
+  + the Unfolded Circle integration WebSocket (``ucapi``).
+  The integration listens on its own free port with mDNS
   publishing disabled, and ``config_state.json`` is seeded with the matrix
   address, so the driver restores its entities at start-up the way an installed
   and configured integration does. ``uc_restore=False`` starts it unconfigured,
@@ -22,12 +22,15 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import shutil
 import socket
 import subprocess
 import sys
 import tempfile
 import time
+import urllib.error
+import urllib.request
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import IO, Any, cast
@@ -44,7 +47,7 @@ RECORDED_ENV = (
     "USE_MODULAR", "UC_ENABLED", "MATRIX_HOST", "MATRIX_PORT", "OREI_TELNET_PORT", "OREI_VERIFY_SSL",
     "OREI_USE_TELNET_CEC", "OREI_STATUS_CACHE_TTL", "TRUST_PROXY_HEADERS", "TRUSTED_PROXY_IPS", "LOG_LEVEL",
     "REST_API_PORT", "UC_INTEGRATION_HTTP_PORT", "UC_INTEGRATION_INTERFACE", "UC_DISABLE_MDNS_PUBLISH",
-    "POLLING_INTERVAL", "STATUS_POLL_INTERVAL",
+    "POLLING_INTERVAL", "STATUS_POLL_INTERVAL", "FLIC_ENABLED", "HA_DISCOVERY_ENABLED",
 )
 
 HUB_MODES = ("api", "uc")
@@ -163,9 +166,7 @@ class HubProcess:
         """How the hub was started, for evidence records."""
         if self.external_url:
             return self.external_url
-        if self.mode == "uc":
-            return "run.py legacy mode (src/driver.py: REST API + UC integration, UC_ENABLED=true)"
-        return "run.py (USE_MODULAR=true, UC_ENABLED=false)"
+        return f"run.py -> hub.cli shared runtime (UC_ENABLED={'true' if self.mode == 'uc' else 'false'})"
 
     @property
     def log_path(self) -> Path:
@@ -175,8 +176,9 @@ class HubProcess:
     def env(self) -> dict[str, str]:
         env = {
             **os.environ,
-            "USE_MODULAR": "true",
             "UC_ENABLED": "false",
+            "FLIC_ENABLED": "true",
+            "HA_DISCOVERY_ENABLED": "false",
             "MATRIX_HOST": self.matrix_host,
             "MATRIX_PORT": str(self.matrix_port),
             "OREI_TELNET_PORT": str(self.telnet_port),
@@ -191,10 +193,7 @@ class HubProcess:
         }
         if self.mode == "uc":
             env.update({
-                "USE_MODULAR": "false",
                 "UC_ENABLED": "true",
-                # driver.py reads REST_API_PORT (run.py's API_PORT is modular mode only).
-                "REST_API_PORT": str(self.api_port),
                 # ucapi reads these: WebSocket port and bind address; never publish mDNS from tests.
                 "UC_INTEGRATION_HTTP_PORT": str(self.uc_port),
                 "UC_INTEGRATION_INTERFACE": self.host,
@@ -263,10 +262,20 @@ class HubProcess:
         )
 
     def _can_retry_bind(self) -> bool:
-        if not (self._auto_api_port or (self.mode == "uc" and self._auto_uc_port)):
-            return False
         tail = self.log_tail(60)
-        return any(m in tail for m in _BIND_ERROR_MARKERS)
+        if not any(m.lower() in tail.lower() for m in _BIND_ERROR_MARKERS):
+            return False
+        # A different auto-selected port doesn't authorize moving an explicit
+        # port, or retrying the same explicit conflict three times.
+        return any(
+            automatic and re.search(rf"(?<!\d){port}(?!\d)", line)
+            for port, automatic in (
+                (self.api_port, self._auto_api_port),
+                (self.uc_port, self.mode == "uc" and self._auto_uc_port),
+            )
+            for line in tail.splitlines()
+            if any(marker.lower() in line.lower() for marker in _BIND_ERROR_MARKERS)
+        )
 
     def _relaunch_on_fresh_ports(self) -> None:
         self.stop(keep_data=True)
@@ -277,27 +286,47 @@ class HubProcess:
         self.launch()
 
     def ready(self) -> bool:
-        """One non-blocking readiness probe (``/api/health`` port and, in UC mode, the integration port)."""
+        """Probe listeners, requiring this child's completed SDK bind in UC mode."""
         if self._proc is None or self._proc.poll() is not None:
             raise RuntimeError(f"hub exited early with code {self.returncode} (log: {self.log_path})")
         if not port_open(self.host, self.api_port):
             return False
-        return self.mode != "uc" or port_open(self.host, self.uc_port)
+        return self.mode != "uc" or (self._uc_started() and port_open(self.host, self.uc_port))
+
+    def _uc_started(self) -> bool:
+        # An unrelated process can accept connections and even speak UC. The
+        # bridge emits this only after its own SDK task has bound successfully,
+        # installed subscriptions and completed startup. Read this launch's log,
+        # never a generic TCP/WS probe against whoever happens to hold the port.
+        try:
+            log = self.log_path.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            return False
+        return f"UCBridge started on port {self.uc_port} (" in log
 
     def wait_ready(self, timeout: float = 60) -> dict[str, Any]:
-        """Block until ``/api/health`` answers and, in UC mode, the integration port accepts."""
+        """Wait for HTTP and, in UC mode, this child's SDK startup and health.
+
+        UC harness logs must include INFO startup messages (the default).
+        Matrix connectivity is separate: unconfigured/offline setup stays ready.
+        """
         assert self._proc is not None, "launch() first"
         for attempt in range(1, _MAX_BIND_ATTEMPTS + 1):
             assert self._proc is not None
             try:
                 health = _wait_for(f"{self.base_url}/api/health", self._proc, timeout, "hub")
                 if self.mode == "uc":
-                    # driver.py starts the REST API after api.init(), so the WebSocket is normally up already.
-                    deadline = time.monotonic() + 10
-                    while not port_open(self.host, self.uc_port):
+                    deadline = time.monotonic() + timeout
+                    while True:
+                        uc = health.get("data", {}).get("integrations", {}).get("unfolded_circle", {})
+                        if (self._uc_started() and uc.get("enabled") is True and uc.get("running") is True
+                                and uc.get("port") == self.uc_port and self._proc.poll() is None):
+                            break
                         if time.monotonic() > deadline or self._proc.poll() is not None:
-                            raise RuntimeError(f"UC integration not listening on {self.uc_url} (log: {self.log_path})")
+                            raise RuntimeError(f"UC integration startup incomplete on {self.uc_url} (log: {self.log_path})")
                         time.sleep(0.1)
+                        health = _wait_for(f"{self.base_url}/api/health", self._proc,
+                                           max(0.1, deadline - time.monotonic()), "hub")
                 return health.get("data", {})
             except RuntimeError as exc:
                 if attempt < _MAX_BIND_ATTEMPTS and self._can_retry_bind():
@@ -305,6 +334,29 @@ class HubProcess:
                     continue
                 raise RuntimeError(f"{exc}\n--- {self.log_path} (tail) ---\n{self.log_tail()}") from None
         raise AssertionError("unreachable")
+
+    def wait_matrix_ready(self, timeout: float = 15) -> dict[str, Any]:
+        """Wait for matrix connectivity, a successful video poll and Telnet.
+
+        Listener readiness intentionally permits an unavailable matrix. Tests
+        measuring device actions can instead wait for the existing health
+        projection of the sole runtime owner, without issuing protocol reads.
+        """
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            if self._proc is not None and self._proc.poll() is not None:
+                raise RuntimeError(f"hub exited before matrix readiness (log: {self.log_path})")
+            try:
+                with urllib.request.urlopen(f"{self.base_url}/api/health", timeout=2) as response:  # noqa: S310
+                    health = json.load(response).get("data", {})
+                matrix = health.get("matrix", {})
+                if (matrix.get("configured") is True and matrix.get("connected") is True
+                        and matrix.get("telnet_connected") is True and matrix.get("last_successful_poll")):
+                    return health
+            except (urllib.error.URLError, OSError, ValueError):
+                pass
+            time.sleep(0.05)
+        raise RuntimeError(f"matrix poll/Telnet did not become ready at {self.base_url} (log: {self.log_path})")
 
     def log_tail(self, lines: int = 40) -> str:
         try:

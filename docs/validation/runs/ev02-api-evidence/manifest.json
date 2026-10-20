@@ -1,0 +1,2539 @@
+{
+  "prepared_utc": "2026-10-20T04:32:10.963834+00:00",
+  "state": "prepared candidate; final independent combined review and integration required",
+  "mapped_candidate_sha": "bb4d3fdc972e7f556f29c6ed468accd4ff3b88b5",
+  "author_sha": "d8e4e1eff6e394144b7a0d007f500579108c2c88",
+  "original_audit_sha": "700a7d7e3eadc89748f0718ba43a462c2e96afcc",
+  "proposed_qualified_api_v2_features": [
+    "F-API-014",
+    "F-API-016",
+    "F-API-018",
+    "F-API-026",
+    "F-API-028",
+    "F-API-036",
+    "F-API-038"
+  ],
+  "per_feature_records": {
+    "F-API-014": [
+      "docs/validation/evidence/ev02-original-api/F-API-014/2026-10-19-V2-1baac3de-contracts.storage-api.json",
+      "docs/validation/evidence/ev02-original-api/F-API-014/2026-10-19-V2-1baac3de-contracts.system_info-api.json"
+    ],
+    "F-API-016": [
+      "docs/validation/evidence/ev02-original-api/F-API-016/2026-10-19-V2-1baac3de-contracts.cec_input_catalog-api.json",
+      "docs/validation/evidence/ev02-original-api/F-API-016/2026-10-19-V2-1baac3de-contracts.cec_invalid_type-api.json",
+      "docs/validation/evidence/ev02-original-api/F-API-016/2026-10-19-V2-1baac3de-contracts.cec_output_catalog-api.json",
+      "docs/validation/evidence/ev02-original-api/F-API-016/2026-10-19-V2-1baac3de-writes.cec_output_enable-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_1_enable_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_1_enable_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_2_enable_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_2_enable_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_3_enable_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_3_enable_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_4_enable_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_4_enable_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_5_enable_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_5_enable_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_6_enable_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_6_enable_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_7_enable_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_7_enable_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_8_enable_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_8_enable_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_enable_default-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_enable_port_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_enable_port_9-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_enable_refused-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_1_enable_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_1_enable_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_2_enable_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_2_enable_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_3_enable_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_3_enable_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_4_enable_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_4_enable_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_5_enable_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_5_enable_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_6_enable_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_6_enable_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_7_enable_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_7_enable_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_8_enable_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_8_enable_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_enable_default-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_enable_port_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_enable_port_9-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_enable_refused-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.all_pattern_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.all_pattern_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.all_pattern_2-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.all_read_unavailable-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.command_catalog-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_1_signal_0_cec_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_1_signal_0_cec_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_1_signal_1_cec_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_1_signal_1_cec_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_2_signal_0_cec_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_2_signal_0_cec_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_2_signal_1_cec_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_2_signal_1_cec_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_3_signal_0_cec_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_3_signal_0_cec_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_3_signal_1_cec_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_3_signal_1_cec_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_4_signal_0_cec_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_4_signal_0_cec_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_4_signal_1_cec_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_4_signal_1_cec_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_5_signal_0_cec_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_5_signal_0_cec_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_5_signal_1_cec_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_5_signal_1_cec_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_6_signal_0_cec_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_6_signal_0_cec_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_6_signal_1_cec_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_6_signal_1_cec_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_7_signal_0_cec_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_7_signal_0_cec_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_7_signal_1_cec_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_7_signal_1_cec_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_8_signal_0_cec_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_8_signal_0_cec_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_8_signal_1_cec_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_8_signal_1_cec_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_catalog-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_invalid_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_invalid_9-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_invalid_invalid-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_read_unavailable-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.invalid_catalog-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_1_scaler_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_1_scaler_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_1_scaler_2-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_1_scaler_3-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_1_scaler_4-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_2_scaler_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_2_scaler_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_2_scaler_2-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_2_scaler_3-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_2_scaler_4-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_3_scaler_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_3_scaler_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_3_scaler_2-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_3_scaler_3-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_3_scaler_4-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_4_scaler_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_4_scaler_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_4_scaler_2-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_4_scaler_3-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_4_scaler_4-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_5_scaler_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_5_scaler_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_5_scaler_2-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_5_scaler_3-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_5_scaler_4-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_6_scaler_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_6_scaler_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_6_scaler_2-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_6_scaler_3-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_6_scaler_4-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_7_scaler_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_7_scaler_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_7_scaler_2-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_7_scaler_3-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_7_scaler_4-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_8_scaler_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_8_scaler_1-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_8_scaler_2-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_8_scaler_3-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_8_scaler_4-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_catalog-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_invalid_0-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_invalid_9-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_invalid_invalid-api.json",
+      "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_read_unavailable-api.json"
+    ],
+    "F-API-018": [
+      "docs/validation/evidence/ev02-input-name/F-API-018/2026-10-20-V2-bb4d3fdc-writes.input_name-api.json",
+      "docs/validation/evidence/ev02-input-name/F-API-018/2026-10-20-V2-bb4d3fdc-writes.input_name_blank-api.json",
+      "docs/validation/evidence/ev02-input-name/F-API-018/2026-10-20-V2-bb4d3fdc-writes.input_name_invalid_port-api.json",
+      "docs/validation/evidence/ev02-input-name/F-API-018/2026-10-20-V2-bb4d3fdc-writes.output_name-api.json"
+    ],
+    "F-API-026": [
+      "docs/validation/evidence/ev02-original-api/F-API-026/2026-10-19-V2-1baac3de-contracts.themes-api.json",
+      "docs/validation/evidence/ev02-original-api/F-API-026/2026-10-19-V2-1baac3de-contracts.ui_preferences-api.json",
+      "docs/validation/evidence/ev02-original-api/F-API-026/2026-10-19-V2-1baac3de-writes.themes-api.json",
+      "docs/validation/evidence/ev02-original-api/F-API-026/2026-10-19-V2-1baac3de-writes.themes_reset-api.json",
+      "docs/validation/evidence/ev02-original-api/F-API-026/2026-10-19-V2-1baac3de-writes.ui_preferences-api.json"
+    ],
+    "F-API-028": [
+      "docs/validation/evidence/ev02-original-api/F-API-028/2026-10-19-V2-1baac3de-contracts.flic_buttons-api.json",
+      "docs/validation/evidence/ev02-original-api/F-API-028/2026-10-19-V2-1baac3de-writes.flic_register-api.json"
+    ],
+    "F-API-036": [
+      "docs/validation/evidence/ev02-original-api/F-MTX-007/2026-10-19-V2-1baac3de-outputs.audio_mute-api.json",
+      "docs/validation/evidence/ev02-original-api/F-REL-008/2026-10-19-V2-1baac3de-outputs.audio_mute_rejected-api.json"
+    ],
+    "F-API-038": [
+      "docs/validation/evidence/ev02-original-api/F-CEC-005/2026-10-19-V2-1baac3de-cec.output_power_on-api.json"
+    ]
+  },
+  "records": [
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-API-014/2026-10-19-V2-1baac3de-contracts.storage-api.json",
+      "sha256": "242f46dde12af469db6290e2961a0f33bcdc596b5c922964643395cfd0e9cc9c",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "contracts.storage",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-API-014"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:38:30.873Z",
+        "finished": "2026-10-19T09:38:30.989Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-API-014/2026-10-19-V2-1baac3de-contracts.system_info-api.json",
+      "sha256": "69548e9192ba72141b89215d3226dda1defe5f66fe4f967dedc8a94e384268be",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "contracts.system_info",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-API-014"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:38:30.657Z",
+        "finished": "2026-10-19T09:38:30.772Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-API-016/2026-10-19-V2-1baac3de-contracts.cec_input_catalog-api.json",
+      "sha256": "3b5540bd829b5d4d3e8f47375859f060445c3a9f8455dfcb80727d73bd5dd236",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "contracts.cec_input_catalog",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:38:27.103Z",
+        "finished": "2026-10-19T09:38:27.325Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-API-016/2026-10-19-V2-1baac3de-contracts.cec_invalid_type-api.json",
+      "sha256": "529524d25ca54e9ef35825d183bc1688cce0ac114301a3de5429cbde8f1c52cd",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "contracts.cec_invalid_type",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:38:27.642Z",
+        "finished": "2026-10-19T09:38:27.857Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-API-016/2026-10-19-V2-1baac3de-contracts.cec_output_catalog-api.json",
+      "sha256": "91e8151fc0f7316e52e3e901dce0afdcaa13c221989f94d7832b62ece5db7b9b",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "contracts.cec_output_catalog",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:38:27.427Z",
+        "finished": "2026-10-19T09:38:27.542Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-API-016/2026-10-19-V2-1baac3de-writes.cec_output_enable-api.json",
+      "sha256": "a44a23d84c4efad47fed5fcd0cf7a6572e273ca653618512e4b1ced8d9f6e345",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "writes.cec_output_enable",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:45:21.537Z",
+        "finished": "2026-10-19T09:45:21.742Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-API-026/2026-10-19-V2-1baac3de-contracts.themes-api.json",
+      "sha256": "16759f8768315cfefeaf3a3782e212018faee8e3705cd434f8977b6b3f604357",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "contracts.themes",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-API-026"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:38:30.010Z",
+        "finished": "2026-10-19T09:38:30.126Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-API-026/2026-10-19-V2-1baac3de-contracts.ui_preferences-api.json",
+      "sha256": "34f219e0ddd24296adebd14e3b9542d6871d04d1048247086d55196a8960d7c9",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "contracts.ui_preferences",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-API-026"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:38:30.226Z",
+        "finished": "2026-10-19T09:38:30.341Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-API-026/2026-10-19-V2-1baac3de-writes.themes-api.json",
+      "sha256": "ca2af7ce04b212980f8b619e0f989527f80c073022163502ac2b356c49d43cd4",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "writes.themes",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-API-026"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:45:25.301Z",
+        "finished": "2026-10-19T09:45:25.472Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-API-026/2026-10-19-V2-1baac3de-writes.themes_reset-api.json",
+      "sha256": "b45ee0ed704e7dc08bf829a34eff244c02c22fc37a1ec35a1babd9af3c7a94b8",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "writes.themes_reset",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-API-026"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:45:25.571Z",
+        "finished": "2026-10-19T09:45:25.745Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-API-026/2026-10-19-V2-1baac3de-writes.ui_preferences-api.json",
+      "sha256": "f18906c58025db68b58731294d51855eea1daff15cbaf4d75abc5f3c1f06f8a3",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "writes.ui_preferences",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-API-026"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:45:25.844Z",
+        "finished": "2026-10-19T09:45:25.971Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-API-028/2026-10-19-V2-1baac3de-contracts.flic_buttons-api.json",
+      "sha256": "a3454066452eefb5e8e3fd1400d0fca29ae5c7b268d1d1a548f2f8413ef3c717",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "contracts.flic_buttons",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-API-028"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:38:31.089Z",
+        "finished": "2026-10-19T09:38:31.254Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-API-028/2026-10-19-V2-1baac3de-writes.flic_register-api.json",
+      "sha256": "7f49d208869078fe9259df09844519926d6f536827d7ff451b21d0b6fa6a7e0a",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "writes.flic_register",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-API-028"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:45:26.318Z",
+        "finished": "2026-10-19T09:45:26.492Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-005/2026-10-19-V2-1baac3de-cec.output_power_on-api.json",
+      "sha256": "76a510a76be7518f58a1e267c10b5cb884db8420a8bc1947f5636dc9e16e1551",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec.output_power_on",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-005",
+        "F-API-015",
+        "F-API-038"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:04.467Z",
+        "finished": "2026-10-19T09:35:04.636Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_1_enable_0-api.json",
+      "sha256": "551fad6a83caf1111c1ff22e8b648bf0222e2cf23554f70a151ed663e9c797dc",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.input_1_enable_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:39.070Z",
+        "finished": "2026-10-19T09:35:39.350Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_1_enable_1-api.json",
+      "sha256": "7f67119913ce21dfff25c5b292ee04943f79946bf1fe78f1b2c6c18f45ff0184",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.input_1_enable_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:39.448Z",
+        "finished": "2026-10-19T09:35:39.656Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_2_enable_0-api.json",
+      "sha256": "98761511cf8715e9c091b5924b507388ea0e0b375ddd4f4eb926ca12c5c3e025",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.input_2_enable_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:45.681Z",
+        "finished": "2026-10-19T09:35:45.964Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_2_enable_1-api.json",
+      "sha256": "a3dab748070057a50a86ca11bb6ca1d039fde7673e0a083b711ced75798c1845",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.input_2_enable_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:46.093Z",
+        "finished": "2026-10-19T09:35:46.372Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_3_enable_0-api.json",
+      "sha256": "a9368a499f5f5cb88e6c2625e698f01437f8fb1bae0c33e9a8e70d42629343a0",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.input_3_enable_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:52.451Z",
+        "finished": "2026-10-19T09:35:52.731Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_3_enable_1-api.json",
+      "sha256": "dca9aeb460528fa9380972b0fd0ac6e30e47560f28e7e39a98a57f0af55864a3",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.input_3_enable_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:52.833Z",
+        "finished": "2026-10-19T09:35:53.045Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_4_enable_0-api.json",
+      "sha256": "afe3a99207f7c5dec636aa03f83f3a091ad6b576c4ec68edc2b7137f8e599709",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.input_4_enable_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:58.780Z",
+        "finished": "2026-10-19T09:35:59.060Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_4_enable_1-api.json",
+      "sha256": "4672e76fb296a2f474563eb9f446e5f9ead992409d4314be8c51ec53a44dd302",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.input_4_enable_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:59.159Z",
+        "finished": "2026-10-19T09:35:59.348Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_5_enable_0-api.json",
+      "sha256": "a1c33054d656691b657ae1344c65fa9257a368885115d41857e4f151e7bc9e90",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.input_5_enable_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:05.368Z",
+        "finished": "2026-10-19T09:36:05.544Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_5_enable_1-api.json",
+      "sha256": "63c0d5c39ef9eb6e98aa0c68b0e6b386ca76a87ebd6dad6f7ebdd0184a6aea10",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.input_5_enable_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:05.641Z",
+        "finished": "2026-10-19T09:36:05.921Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_6_enable_0-api.json",
+      "sha256": "d74998dacf5930fe18239911d8fba04184937276ceda3670c927f8e41ec10b1d",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.input_6_enable_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:12.041Z",
+        "finished": "2026-10-19T09:36:12.218Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_6_enable_1-api.json",
+      "sha256": "a2db5e4fcb98b358f14730c22f1c17218b5d0d0a8ad94c93a413bd79c5f752dd",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.input_6_enable_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:12.317Z",
+        "finished": "2026-10-19T09:36:12.596Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_7_enable_0-api.json",
+      "sha256": "0c6730923a209cd0589ecd5a341bb001e558aa271107d97b929a1ba29235ea75",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.input_7_enable_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:18.527Z",
+        "finished": "2026-10-19T09:36:18.806Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_7_enable_1-api.json",
+      "sha256": "4802f770b46c0faa1f90cb2ee70bc1ad31bcf9da9e1d1a9476cbe104c8baf1a6",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.input_7_enable_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:18.907Z",
+        "finished": "2026-10-19T09:36:19.116Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_8_enable_0-api.json",
+      "sha256": "0db1903e3743cb22916422383740c6d5876fbd3031de37137e02952428bf683b",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.input_8_enable_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:25.137Z",
+        "finished": "2026-10-19T09:36:25.274Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_8_enable_1-api.json",
+      "sha256": "9c653cf939574b3af492b343378b1f80ecf0ecef2b8aaa8e4d213cb92d96aa7e",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.input_8_enable_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:25.376Z",
+        "finished": "2026-10-19T09:36:25.598Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_enable_default-api.json",
+      "sha256": "9f13aa7f09bcca82a33c21b5b0675b3d7a8e37d995b5fdd67ab83c5d26b4e44f",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.input_enable_default",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:25.697Z",
+        "finished": "2026-10-19T09:36:25.768Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_enable_port_0-api.json",
+      "sha256": "5132114e94edb1421a91601ca0bb22bc1d64cde5998cfd8240341590662ecc93",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.input_enable_port_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:26.721Z",
+        "finished": "2026-10-19T09:36:26.887Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_enable_port_9-api.json",
+      "sha256": "787778c7ab84a49031e1922388044f02199995f6baa6e786839da8d0d2f0e219",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.input_enable_port_9",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:26.985Z",
+        "finished": "2026-10-19T09:36:27.099Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_enable_refused-api.json",
+      "sha256": "160da3fb7928c5f5853fbe06d6cf6fd39f841068a7977e8131ae09579956bc12",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.input_enable_refused",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:31.520Z",
+        "finished": "2026-10-19T09:36:33.317Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_1_enable_0-api.json",
+      "sha256": "10be80fc8aaf568aedc9dbae4456d8cc2a9f43b6cf237317fb22949f6fc31385",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.output_1_enable_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:37.251Z",
+        "finished": "2026-10-19T09:36:37.392Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_1_enable_1-api.json",
+      "sha256": "6899854b88b6d23ef7cad404667eb08519b00022d2261a738934347552d706a5",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.output_1_enable_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:37.492Z",
+        "finished": "2026-10-19T09:36:37.680Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_2_enable_0-api.json",
+      "sha256": "970ae04ce5098c6db2a23386277a421eb882e900858698c16ea1de762852292b",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.output_2_enable_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:39.683Z",
+        "finished": "2026-10-19T09:36:40.012Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_2_enable_1-api.json",
+      "sha256": "581eb2bc509e9097be8c83e496b9dddc93793e33ebe8cb8f53c6ffd620658c89",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.output_2_enable_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:40.112Z",
+        "finished": "2026-10-19T09:36:40.186Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_3_enable_0-api.json",
+      "sha256": "a90d22d6b8972a2b8917f836e3c242e55eb876217f47868e84379e27bad9795c",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.output_3_enable_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:42.323Z",
+        "finished": "2026-10-19T09:36:42.582Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_3_enable_1-api.json",
+      "sha256": "2612ad876d674df071a4bdce358ca9b08c295acd1d64133b3b62c6a2a840c34b",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.output_3_enable_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:42.687Z",
+        "finished": "2026-10-19T09:36:42.897Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_4_enable_0-api.json",
+      "sha256": "0509aa6a85e7899368edb14887ddd40934a82efdd06d1a485ce33868c2b5deee",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.output_4_enable_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:44.976Z",
+        "finished": "2026-10-19T09:36:45.151Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_4_enable_1-api.json",
+      "sha256": "1aaaa3b9d30781d7ba203223f40dd6938670c8644a3ed4d7fc795419efd0b89e",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.output_4_enable_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:45.253Z",
+        "finished": "2026-10-19T09:36:45.534Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_5_enable_0-api.json",
+      "sha256": "695df3570e8b707314475531c0092d48852ae974b8394ebe986a8569ae3f1b97",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.output_5_enable_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:47.610Z",
+        "finished": "2026-10-19T09:36:47.786Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_5_enable_1-api.json",
+      "sha256": "ef327afa663136c0e7f109250968f36a9bd5f2b55106d43b1c0328334ee3ef81",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.output_5_enable_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:47.884Z",
+        "finished": "2026-10-19T09:36:48.144Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_6_enable_0-api.json",
+      "sha256": "65b587f62ba0658078542ef62ee3671bfce2493ea9fd459558ab7cd26c165964",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.output_6_enable_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:50.177Z",
+        "finished": "2026-10-19T09:36:50.355Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_6_enable_1-api.json",
+      "sha256": "2e405db7753ff7777b17c6a22e73bbe0611c0727cbd17d2d52d56071e32c678a",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.output_6_enable_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:50.455Z",
+        "finished": "2026-10-19T09:36:50.735Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_7_enable_0-api.json",
+      "sha256": "777b379b091017abe8550677e00a53f5d4b45fdda52b80d10af95d8c1650901d",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.output_7_enable_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:52.868Z",
+        "finished": "2026-10-19T09:36:53.148Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_7_enable_1-api.json",
+      "sha256": "407c67c173e1a2a5fcadcc067c79f6139478e6dbf5f65a7b958485929a17847f",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.output_7_enable_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:53.247Z",
+        "finished": "2026-10-19T09:36:53.456Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_8_enable_0-api.json",
+      "sha256": "a299dddb73a304e03770779f11e31b947e73123ae21ec599599c81b0c29b26d0",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.output_8_enable_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:55.500Z",
+        "finished": "2026-10-19T09:36:55.778Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_8_enable_1-api.json",
+      "sha256": "55e142aa8d14db5adecc8b2fb7be1c19fea8322b4ae697d7e40895965adaca6c",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.output_8_enable_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:55.878Z",
+        "finished": "2026-10-19T09:36:56.091Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_enable_default-api.json",
+      "sha256": "fe79b7579637828d94aea05eafa75df15bb94e165e8c00b3c34113ee853848ff",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.output_enable_default",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:56.203Z",
+        "finished": "2026-10-19T09:36:56.373Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_enable_port_0-api.json",
+      "sha256": "40be8404e3a0fd781ceb305c7a4780725299507f9613116a567e9634a9409656",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.output_enable_port_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:57.173Z",
+        "finished": "2026-10-19T09:36:57.339Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_enable_port_9-api.json",
+      "sha256": "7bb5b9f101a4399f7281e61c2e2cd5fb90f733a3ac8e934387727d4018a1d1a9",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.output_enable_port_9",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:36:57.442Z",
+        "finished": "2026-10-19T09:36:57.558Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_enable_refused-api.json",
+      "sha256": "e23896bcdb1b21ad237ada56a9eb6087bc865a1b9ddd2177a0aadf821255bcfe",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_controls.output_enable_refused",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-008",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:37:02.031Z",
+        "finished": "2026-10-19T09:37:03.835Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.all_pattern_0-api.json",
+      "sha256": "cd731e8cd76f17526ec4aa77cb829c5b192eb0ea5deb24d7c73f7b4922bbc6f2",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.all_pattern_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:21.767Z",
+        "finished": "2026-10-19T09:35:21.946Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.all_pattern_1-api.json",
+      "sha256": "da4996527659c989964a545d0318261eeb0754326190118bd88d7ba1abc8e5a1",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.all_pattern_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:22.048Z",
+        "finished": "2026-10-19T09:35:22.175Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.all_pattern_2-api.json",
+      "sha256": "4429f78a337e63185e84c3aa89f21a03bb935cc385de628191d671b413cbea29",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.all_pattern_2",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:22.275Z",
+        "finished": "2026-10-19T09:35:22.452Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.all_read_unavailable-api.json",
+      "sha256": "ecf9cb19c4cf35a11316119248f7e894656f84327e9a71e0ff541a87716ee163",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.all_read_unavailable",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:29.511Z",
+        "finished": "2026-10-19T09:35:31.309Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.command_catalog-api.json",
+      "sha256": "1eaac3872a65fdd97cfd0bb573c1517cfcbfffae17de99c4091a4232adf182b9",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.command_catalog",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:05.005Z",
+        "finished": "2026-10-19T09:35:05.170Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_1_signal_0_cec_0-api.json",
+      "sha256": "793048f20e198c515a78cd7de533a5f6f72001ca9bd2666098aa4a7a716cdf86",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_1_signal_0_cec_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:05.709Z",
+        "finished": "2026-10-19T09:35:05.877Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_1_signal_0_cec_1-api.json",
+      "sha256": "3908a89b2c5e4086e5cd4668904f95458506d942fca35c5b8aee78f0baf92116",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_1_signal_0_cec_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:05.987Z",
+        "finished": "2026-10-19T09:35:06.107Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_1_signal_1_cec_0-api.json",
+      "sha256": "c94a6dd201c871c5fe041fdd798d1f67908396cda3824adeb946aead019a68b5",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_1_signal_1_cec_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:06.212Z",
+        "finished": "2026-10-19T09:35:06.380Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_1_signal_1_cec_1-api.json",
+      "sha256": "49dfb6dac3d3300143bb837540d1d1818bfec3d2d80a4cbd6d72384c7db241c0",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_1_signal_1_cec_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:06.479Z",
+        "finished": "2026-10-19T09:35:06.596Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_2_signal_0_cec_0-api.json",
+      "sha256": "f86cba1e48fa2f29f023ab9905fd9897cbaff3abd97e2b4decc74fdaa306fe02",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_2_signal_0_cec_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:07.781Z",
+        "finished": "2026-10-19T09:35:07.899Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_2_signal_0_cec_1-api.json",
+      "sha256": "3540791e09ec3121f1fa4d9e21db800b6788d4afd6d05e33f5a2e7b90a450cf0",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_2_signal_0_cec_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:07.998Z",
+        "finished": "2026-10-19T09:35:08.115Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_2_signal_1_cec_0-api.json",
+      "sha256": "a10749ffc753e9e1ab2aa5516e24377e4c8bfc94e9ac1198e2c1d6f2dfc41979",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_2_signal_1_cec_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:08.218Z",
+        "finished": "2026-10-19T09:35:08.335Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_2_signal_1_cec_1-api.json",
+      "sha256": "89b85835236a10ee7710a719df4f4bfa6d34d62df89de967815c0e359f976348",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_2_signal_1_cec_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:08.435Z",
+        "finished": "2026-10-19T09:35:08.603Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_3_signal_0_cec_0-api.json",
+      "sha256": "feeedef0f10fa970712bb5c2b107df3f68f470dc7c0c6d0cca6649f39a5c7aa7",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_3_signal_0_cec_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:09.786Z",
+        "finished": "2026-10-19T09:35:09.906Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_3_signal_0_cec_1-api.json",
+      "sha256": "ac58b2eceb93b0f36d81432d6d55745ef21ef29829d9fb0d7c8b907416e6f6f2",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_3_signal_0_cec_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:10.005Z",
+        "finished": "2026-10-19T09:35:10.123Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_3_signal_1_cec_0-api.json",
+      "sha256": "d24540b03cf4454c18953f08e3d5a374fcef745752e44447faecf730771ca460",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_3_signal_1_cec_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:10.221Z",
+        "finished": "2026-10-19T09:35:10.339Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_3_signal_1_cec_1-api.json",
+      "sha256": "02fc1746a5a79a6297a1e39902d155b3ed9253c9bd7d310fc44458554c3c6652",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_3_signal_1_cec_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:10.437Z",
+        "finished": "2026-10-19T09:35:10.554Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_4_signal_0_cec_0-api.json",
+      "sha256": "1b2164ccccd128e5a2c5fb4aef4dc248d2556ad91538b6f7411bba0a1980da42",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_4_signal_0_cec_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:11.791Z",
+        "finished": "2026-10-19T09:35:11.912Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_4_signal_0_cec_1-api.json",
+      "sha256": "649caff88f290be5244284e462466d779ce90d7e7a330ec95948455524803edd",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_4_signal_0_cec_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:12.010Z",
+        "finished": "2026-10-19T09:35:12.127Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_4_signal_1_cec_0-api.json",
+      "sha256": "4b33a47dbee0fe658c6dbb459718cf0653f4799b5e0d0761f9008d209e3af03d",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_4_signal_1_cec_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:12.228Z",
+        "finished": "2026-10-19T09:35:12.397Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_4_signal_1_cec_1-api.json",
+      "sha256": "222a825ad4e60cbb14a7aa8256973fa5e0befe585fb55e2c7b6f3dad41000ab7",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_4_signal_1_cec_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:12.495Z",
+        "finished": "2026-10-19T09:35:12.611Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_5_signal_0_cec_0-api.json",
+      "sha256": "e676f8fb442652f4d887f98f8d0a75827eee55102d2e8691d84d19eff392bbf8",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_5_signal_0_cec_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:13.793Z",
+        "finished": "2026-10-19T09:35:13.962Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_5_signal_0_cec_1-api.json",
+      "sha256": "9bca08644b5475ad52d0c4f9c367d40911f8ace9ffd87cd2badf09139f3e7773",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_5_signal_0_cec_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:14.061Z",
+        "finished": "2026-10-19T09:35:14.177Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_5_signal_1_cec_0-api.json",
+      "sha256": "671beb7ce8719b8ebc3f576868d63c3b3eab1f4f9dea1ffe42e256d5b10beaad",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_5_signal_1_cec_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:14.275Z",
+        "finished": "2026-10-19T09:35:14.394Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_5_signal_1_cec_1-api.json",
+      "sha256": "c810662d605244c141e0fd6a88998dcd9899d6653b2e74681611dd9965b2365f",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_5_signal_1_cec_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:14.493Z",
+        "finished": "2026-10-19T09:35:14.610Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_6_signal_0_cec_0-api.json",
+      "sha256": "4538762bf125e9249c95cde5f866239fb8507c78232607d1fb0e589b9505dc86",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_6_signal_0_cec_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:15.942Z",
+        "finished": "2026-10-19T09:35:16.067Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_6_signal_0_cec_1-api.json",
+      "sha256": "191e86e166e2e4889e28260109a1db0a92786539d918de9f80f96149d5fc77fa",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_6_signal_0_cec_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:16.178Z",
+        "finished": "2026-10-19T09:35:16.244Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_6_signal_1_cec_0-api.json",
+      "sha256": "442e742113d5d6f2fe8de4477fd769745b7dce523841eb6f507795f91bc6ed60",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_6_signal_1_cec_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:16.344Z",
+        "finished": "2026-10-19T09:35:16.461Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_6_signal_1_cec_1-api.json",
+      "sha256": "6512409413824d9c5e206de2745addfe0b55044241c40e72288d63fb0e11199c",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_6_signal_1_cec_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:16.559Z",
+        "finished": "2026-10-19T09:35:16.676Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_7_signal_0_cec_0-api.json",
+      "sha256": "d176fe69bd4d75a5eaec11007dd45441c1c5f5a4a35de67a789b7d1a2604e538",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_7_signal_0_cec_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:17.918Z",
+        "finished": "2026-10-19T09:35:18.036Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_7_signal_0_cec_1-api.json",
+      "sha256": "44f62aff54ac09e579dcc94841be61f885dc134ed210a024a067fb1569beffaa",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_7_signal_0_cec_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:18.139Z",
+        "finished": "2026-10-19T09:35:18.256Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_7_signal_1_cec_0-api.json",
+      "sha256": "fca36f85732fe8edbee96d9f8aac681f4a2bdd53115faa30a843e054688df23a",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_7_signal_1_cec_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:18.353Z",
+        "finished": "2026-10-19T09:35:18.470Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_7_signal_1_cec_1-api.json",
+      "sha256": "ee699337babd32f4f331fb318ef6fdfa57973fe2982a7c6b97a3ef90029b11bd",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_7_signal_1_cec_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:18.571Z",
+        "finished": "2026-10-19T09:35:18.689Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_8_signal_0_cec_0-api.json",
+      "sha256": "a1df86c55a0e26f437ee66c1b36c49a2fa60b6c9b2f1c28481980d439b386cb2",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_8_signal_0_cec_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:19.811Z",
+        "finished": "2026-10-19T09:35:19.930Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_8_signal_0_cec_1-api.json",
+      "sha256": "2bdbe664c0c3d4fca118feac7edec5dc8dddcb67b534ea77b998b0eba719d637",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_8_signal_0_cec_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:20.029Z",
+        "finished": "2026-10-19T09:35:20.096Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_8_signal_1_cec_0-api.json",
+      "sha256": "809f3d35e08b96bf52aa47018d10fc844179afc0d9669a64fef22e58f896dc35",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_8_signal_1_cec_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:20.195Z",
+        "finished": "2026-10-19T09:35:20.362Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_8_signal_1_cec_1-api.json",
+      "sha256": "d25bfb827945f8054b96033c6cf794d96167984ba6629fc4df36299dcf44a726",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_8_signal_1_cec_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:20.462Z",
+        "finished": "2026-10-19T09:35:20.629Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_catalog-api.json",
+      "sha256": "08070fcad1ee21621aed99cad1fbd96d2db3279bcc686bfba4751a70c30ff0b6",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_catalog",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:05.271Z",
+        "finished": "2026-10-19T09:35:05.344Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_invalid_0-api.json",
+      "sha256": "ba92b5ce62f0ef64516a1cd84183e872fd2a9b5e0d78d82c50e52b6bede21d73",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_invalid_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:22.560Z",
+        "finished": "2026-10-19T09:35:22.689Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_invalid_9-api.json",
+      "sha256": "45ac87b3cddd834b6d16971175cad35b8f01d5eb9955d87b5bdf099da47bcc54",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_invalid_9",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:22.802Z",
+        "finished": "2026-10-19T09:35:22.918Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_invalid_invalid-api.json",
+      "sha256": "559bc2de64fa0f65d0fcf2ec3ac48f5bea864d33526bede80f0c607958dfe9ba",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_invalid_invalid",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:23.026Z",
+        "finished": "2026-10-19T09:35:23.192Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_read_unavailable-api.json",
+      "sha256": "b25acef9a7a4a81e178fbaca4ce2a1ae259a351c5defc30472664b4ed1c61cad",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.input_read_unavailable",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:25.529Z",
+        "finished": "2026-10-19T09:35:27.474Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.invalid_catalog-api.json",
+      "sha256": "2cc7101130fdbfc26381eac75283eb868b6fd625d8cd8dbd8f9359a8b71465cf",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.invalid_catalog",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:23.947Z",
+        "finished": "2026-10-19T09:35:24.061Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_1_scaler_0-api.json",
+      "sha256": "8903847e93df9db81dd6205c2264833af3f07eca242d598022c564d11f3e2cc6",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_1_scaler_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:06.694Z",
+        "finished": "2026-10-19T09:35:06.815Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_1_scaler_1-api.json",
+      "sha256": "7e0cfb950ef8134cc4f0acf9df13061b74c4639dab3493334c4a5dd3ddf5c582",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_1_scaler_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:06.914Z",
+        "finished": "2026-10-19T09:35:07.033Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_1_scaler_2-api.json",
+      "sha256": "17ce9508f21f144916d613be9908d9fb28c9d218d0f51f871d27416b44a9a198",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_1_scaler_2",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:07.133Z",
+        "finished": "2026-10-19T09:35:07.250Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_1_scaler_3-api.json",
+      "sha256": "1b4c27352dc45098525822962697d604cbd3645d2cfcc776f0785a9dbd1fa28d",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_1_scaler_3",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:07.349Z",
+        "finished": "2026-10-19T09:35:07.467Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_1_scaler_4-api.json",
+      "sha256": "a4b4b6b54829454214c3f40835b61a9078d287f7f58424e251c48b71b136a890",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_1_scaler_4",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:07.565Z",
+        "finished": "2026-10-19T09:35:07.683Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_2_scaler_0-api.json",
+      "sha256": "5c076d992f8ace2aa929d8002310c8792f3b29ff3531fd9954720248cff87d32",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_2_scaler_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:08.701Z",
+        "finished": "2026-10-19T09:35:08.819Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_2_scaler_1-api.json",
+      "sha256": "faefc02441b173dd038ef06f6ea424fdfb22db16434cdd7ee2ff50811b569ee6",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_2_scaler_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:08.919Z",
+        "finished": "2026-10-19T09:35:09.039Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_2_scaler_2-api.json",
+      "sha256": "d44f826a0ef789da5f7d83043ca8ca7b126d38af76499d854349f56634a73639",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_2_scaler_2",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:09.137Z",
+        "finished": "2026-10-19T09:35:09.254Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_2_scaler_3-api.json",
+      "sha256": "eda6e6257304fc5e0b7995fabef59b1f00cd3bbe163fa465afcace5a0881d139",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_2_scaler_3",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:09.354Z",
+        "finished": "2026-10-19T09:35:09.473Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_2_scaler_4-api.json",
+      "sha256": "6929e0430cab8d2b11296fd5654c0488a0cf16cd576f46374c2bbe414f23685d",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_2_scaler_4",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:09.571Z",
+        "finished": "2026-10-19T09:35:09.689Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_3_scaler_0-api.json",
+      "sha256": "1802f24a3e19523f959f5d2bacf961afe940065b66fab7d5ae6581fd41f8c848",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_3_scaler_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:10.652Z",
+        "finished": "2026-10-19T09:35:10.821Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_3_scaler_1-api.json",
+      "sha256": "454eb6837bd516623fff28d8695ca922569ca0e8110861d8f3ac44fb15f24ce6",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_3_scaler_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:10.921Z",
+        "finished": "2026-10-19T09:35:11.039Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_3_scaler_2-api.json",
+      "sha256": "12242d60ec3b32d4414bda0998ba069abee42c8c00e837a1c9b1bca5fe565746",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_3_scaler_2",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:11.137Z",
+        "finished": "2026-10-19T09:35:11.255Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_3_scaler_3-api.json",
+      "sha256": "bb2b0bfa371f5644f34b27eaa41d2aa32886f904d523876234b15062d344bb75",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_3_scaler_3",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:11.354Z",
+        "finished": "2026-10-19T09:35:11.472Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_3_scaler_4-api.json",
+      "sha256": "439d074ef42723685a25d0211bfc844423199fca75dbe38a3c5e9b0e14d7de15",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_3_scaler_4",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:11.574Z",
+        "finished": "2026-10-19T09:35:11.692Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_4_scaler_0-api.json",
+      "sha256": "cc444782f07ad3347e12c33df28fbf4ecbc03c46956b0c5d84d115e8ba49ea8a",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_4_scaler_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:12.709Z",
+        "finished": "2026-10-19T09:35:12.828Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_4_scaler_1-api.json",
+      "sha256": "e2435f8722e541973dc2966e472bd136e40aa4d20f41d04ebb4263414e2ec9f4",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_4_scaler_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:12.928Z",
+        "finished": "2026-10-19T09:35:13.046Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_4_scaler_2-api.json",
+      "sha256": "eb582199bd2eaf5dce72cbda0f7c526875e983a0d17e887bf8b7e8ad72e5540b",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_4_scaler_2",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:13.144Z",
+        "finished": "2026-10-19T09:35:13.260Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_4_scaler_3-api.json",
+      "sha256": "09e27116976bf744343f0fcddb9de9cdad734477c9316a97c717758683fc2a26",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_4_scaler_3",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:13.358Z",
+        "finished": "2026-10-19T09:35:13.477Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_4_scaler_4-api.json",
+      "sha256": "460c15ab12b306e96539340d846aa5c6b2b664e58dd957e185b93fc2df665388",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_4_scaler_4",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:13.577Z",
+        "finished": "2026-10-19T09:35:13.694Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_5_scaler_0-api.json",
+      "sha256": "a17ceaaa9df0ccf4e2cdea9c5a75b1948ca10a33ecdbbf46b57d87b607af85a8",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_5_scaler_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:14.707Z",
+        "finished": "2026-10-19T09:35:14.876Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_5_scaler_1-api.json",
+      "sha256": "c2c2645917eeb6770c88c382e1ec72ff8244f7dbf6f6f84c86ca65eb7655388a",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_5_scaler_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:14.976Z",
+        "finished": "2026-10-19T09:35:15.094Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_5_scaler_2-api.json",
+      "sha256": "1ba091a6d91a3eb599c63ed79a317da16fff88e5a6844a00e20906244f699600",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_5_scaler_2",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:15.195Z",
+        "finished": "2026-10-19T09:35:15.362Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_5_scaler_3-api.json",
+      "sha256": "f1cc85bbc5c724213ef49ab9dfb2e3be800df043e3c6fe6ef88b7f4b59257091",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_5_scaler_3",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:15.459Z",
+        "finished": "2026-10-19T09:35:15.627Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_5_scaler_4-api.json",
+      "sha256": "2f14a0be583b6f86d72f3f0d6f1891d2d005e072b9fe5a27296e10262ddc4380",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_5_scaler_4",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:15.725Z",
+        "finished": "2026-10-19T09:35:15.842Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_6_scaler_0-api.json",
+      "sha256": "0302d36d512509e310658b8eb319957894cc5f445f98f9caebf0b78b2117572c",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_6_scaler_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:16.777Z",
+        "finished": "2026-10-19T09:35:16.946Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_6_scaler_1-api.json",
+      "sha256": "adbd145b7737933ccd79447e3299cd609705132294b1e7dfbe1548937c240a49",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_6_scaler_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:17.046Z",
+        "finished": "2026-10-19T09:35:17.163Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_6_scaler_2-api.json",
+      "sha256": "4f1eb4fcfe7c580df473d81cb7574de9f183439e17ae0b82e3f05c4a36d6c25f",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_6_scaler_2",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:17.262Z",
+        "finished": "2026-10-19T09:35:17.380Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_6_scaler_3-api.json",
+      "sha256": "6c1d3422034b70f83ddcac811816834f7b0063d44e18e27903cbe2fb338122fe",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_6_scaler_3",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:17.485Z",
+        "finished": "2026-10-19T09:35:17.604Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_6_scaler_4-api.json",
+      "sha256": "4f1d1d4e3ff91adc6f86487464e6faa493ca8b87294d371c3d4efc2df17abd11",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_6_scaler_4",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:17.703Z",
+        "finished": "2026-10-19T09:35:17.819Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_7_scaler_0-api.json",
+      "sha256": "d6e12317d071a6b343a97599fa6c26d3cf01938effd5e48dae37f7a0e661056a",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_7_scaler_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:18.788Z",
+        "finished": "2026-10-19T09:35:18.855Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_7_scaler_1-api.json",
+      "sha256": "c37ff1d9859167d752d9978798736e02749ed092df35c13765e3b946b1cfaf1a",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_7_scaler_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:18.951Z",
+        "finished": "2026-10-19T09:35:19.017Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_7_scaler_2-api.json",
+      "sha256": "4969fed4cef6897b6ec30b04187c5a234782de2e29e494300c288fb857fa654c",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_7_scaler_2",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:19.114Z",
+        "finished": "2026-10-19T09:35:19.231Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_7_scaler_3-api.json",
+      "sha256": "faf44c8def2967da11a0b0fe728f9629cb1dbda4bf713519ef2aebff0b0af1ec",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_7_scaler_3",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:19.329Z",
+        "finished": "2026-10-19T09:35:19.447Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_7_scaler_4-api.json",
+      "sha256": "3edc0248c77387e77fa673f7ae5992467039bef39dfabeb09117142eec7247d7",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_7_scaler_4",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:19.546Z",
+        "finished": "2026-10-19T09:35:19.714Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_8_scaler_0-api.json",
+      "sha256": "fc21c742e6756e30297c939672f1e540a72fc749ea69a6a29692259282aca839",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_8_scaler_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:20.725Z",
+        "finished": "2026-10-19T09:35:20.844Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_8_scaler_1-api.json",
+      "sha256": "928c2603b9dc31c63e79b8795000f191c7b257ba47dd8d3290108786920bab49",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_8_scaler_1",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:20.943Z",
+        "finished": "2026-10-19T09:35:21.064Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_8_scaler_2-api.json",
+      "sha256": "80450eda1534e5e33a1c0a56d010b7af7cd499932bb30a24f83d846ed9aa050f",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_8_scaler_2",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:21.171Z",
+        "finished": "2026-10-19T09:35:21.237Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_8_scaler_3-api.json",
+      "sha256": "383cc4b7425565a9613d293e850f7f63616817a9a13f8cfef2aed43ca082c5ba",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_8_scaler_3",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:21.334Z",
+        "finished": "2026-10-19T09:35:21.454Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_8_scaler_4-api.json",
+      "sha256": "e08a119a105cfa4f36e79d7909e661e13bde5b1e4f14ae4c74bc8711fd913675",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_8_scaler_4",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:21.551Z",
+        "finished": "2026-10-19T09:35:21.667Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_catalog-api.json",
+      "sha256": "5902caa453234a0aa73f49ab4fea3d8d9827c07745895aa2eabda4170e588d16",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_catalog",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:05.444Z",
+        "finished": "2026-10-19T09:35:05.611Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_invalid_0-api.json",
+      "sha256": "a0d45dd77b4f8a4fc345cfba6a554176fefb977581bb793855c43892de09a4d0",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_invalid_0",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:23.300Z",
+        "finished": "2026-10-19T09:35:23.416Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_invalid_9-api.json",
+      "sha256": "3783f5b292dc0ccd88ac6da2f80cbc062e5680a4018ba494ee95112c9e9258f4",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_invalid_9",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:23.519Z",
+        "finished": "2026-10-19T09:35:23.634Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_invalid_invalid-api.json",
+      "sha256": "a1997dc5276f0ce0469c24c5340fa1595b8d8b51dcb459664d9aa4f8705fc920",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_invalid_invalid",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:23.733Z",
+        "finished": "2026-10-19T09:35:23.848Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_read_unavailable-api.json",
+      "sha256": "8b4e97673e0264dc6905cc37053059f2337ba2bafb2cf249ec3d093ccfe3c48d",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "cec_caps.output_read_unavailable",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-CEC-011",
+        "F-API-016"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:35:27.573Z",
+        "finished": "2026-10-19T09:35:29.409Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-MTX-007/2026-10-19-V2-1baac3de-outputs.audio_mute-api.json",
+      "sha256": "e961d4ee7d760bf4842d766d8bbd34dcba5877cf984c080c9a09bd043aa2b74e",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "outputs.audio_mute",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-MTX-007",
+        "F-API-036"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:42:19.115Z",
+        "finished": "2026-10-19T09:42:19.746Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-original-api/F-REL-008/2026-10-19-V2-1baac3de-outputs.audio_mute_rejected-api.json",
+      "sha256": "3f7398f10baf5e6065218afb763fd4d6701b47d1feeb9bf376b47f9cf58eca08",
+      "original_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+      "scenario": "outputs.audio_mute_rejected",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-REL-008",
+        "F-API-036"
+      ],
+      "timestamp": {
+        "started": "2026-10-19T09:42:21.250Z",
+        "finished": "2026-10-19T09:42:26.153Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-input-name/F-API-018/2026-10-20-V2-bb4d3fdc-writes.input_name-api.json",
+      "sha256": "cdc960d778e6d37f68dbb8bae16a7e1f3cb5db0acca48fc7816b0dcfd9f4eaab",
+      "original_source_sha": "bb4d3fdc972e7f556f29c6ed468accd4ff3b88b5",
+      "scenario": "writes.input_name",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-API-018"
+      ],
+      "timestamp": {
+        "started": "2026-10-20T04:30:48.078Z",
+        "finished": "2026-10-20T04:30:48.320Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-input-name/F-API-018/2026-10-20-V2-bb4d3fdc-writes.input_name_blank-api.json",
+      "sha256": "ef3d9f558ea368e88f0f300d592abca2f1bf79b5a71fd58004416c024ec2d914",
+      "original_source_sha": "bb4d3fdc972e7f556f29c6ed468accd4ff3b88b5",
+      "scenario": "writes.input_name_blank",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-API-018"
+      ],
+      "timestamp": {
+        "started": "2026-10-20T04:30:48.518Z",
+        "finished": "2026-10-20T04:30:48.641Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-input-name/F-API-018/2026-10-20-V2-bb4d3fdc-writes.input_name_invalid_port-api.json",
+      "sha256": "5239e4d8f6edede84bef58ea4bf4bc6910f5ff473b756f275feed0c6bfcb7d9e",
+      "original_source_sha": "bb4d3fdc972e7f556f29c6ed468accd4ff3b88b5",
+      "scenario": "writes.input_name_invalid_port",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-API-018"
+      ],
+      "timestamp": {
+        "started": "2026-10-20T04:30:48.330Z",
+        "finished": "2026-10-20T04:30:48.509Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/ev02-input-name/F-API-018/2026-10-20-V2-bb4d3fdc-writes.output_name-api.json",
+      "sha256": "8a167af9cab8457d988924c0dd292d6563850ac9b68dac380cac7cd3481697c0",
+      "original_source_sha": "bb4d3fdc972e7f556f29c6ed468accd4ff3b88b5",
+      "scenario": "writes.output_name",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-API-018"
+      ],
+      "timestamp": {
+        "started": "2026-10-20T04:30:47.021Z",
+        "finished": "2026-10-20T04:30:48.043Z"
+      }
+    }
+  ],
+  "record_bytes_unchanged": true,
+  "original_records": 144,
+  "clean_mapped_candidate_records": 4,
+  "shared_feature_hold": "F-API-015 remains unqualified: a shared cec.output_power_on record is partial grouped-route proof.",
+  "scope": "API simulator V2 only; no image, browser/UC/HA, physical HIL, soak, field or final release acceptance"
+}

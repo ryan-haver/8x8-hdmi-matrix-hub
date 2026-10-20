@@ -1,0 +1,31 @@
+{
+  "commit": {
+    "sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+    "branch": "wp-runtime-completion",
+    "dirty_files": [],
+    "short": "1baac3de",
+    "dirty": false
+  },
+  "target": "sim",
+  "clients": [
+    "ha"
+  ],
+  "operator": "automation",
+  "finished": "2026-10-19T10:02:11.405Z",
+  "aborted": null,
+  "outcomes": [
+    {
+      "scenario": "ha.matrix_unreachable",
+      "client": "ha",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-HA-013"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "evidence/F-HA-013/2026-10-19-V3-1baac3de-ha.matrix_unreachable-ha.json"
+    }
+  ]
+}

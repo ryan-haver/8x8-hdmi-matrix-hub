@@ -14,7 +14,6 @@ defines the NEW unified Scene concept for Phase 8.
 
 import copy
 import dataclasses
-import json
 import logging
 import math
 import uuid
@@ -23,6 +22,7 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
+from _file_io import atomic_read_json
 from password import (
     PasswordError,
     ensure_hashed_passcode,
@@ -33,9 +33,26 @@ from password import (
 )
 from persistence import ensure_data_dir, get_data_dir
 
+
+def _write_blocked(path) -> bool:
+    from hub.persistence.startup import is_write_blocked
+
+    return is_write_blocked(path)
+
+
+def _block_reason(path) -> str | None:
+    from hub.persistence.startup import block_reason
+
+    return block_reason(path)
+
+
 _LOG = logging.getLogger("scene_manager")
 
-_SCENES_FILE = "scenes.json"
+# R2 contract §4: scene_manager.SceneManager targets ``scenes_v2.json``; the legacy
+# ``scenes.json`` (used by config.SceneManager and pre-Phase-8 releases) is imported
+# non-destructively by ``hub.persistence.startup.prepare_runtime_storage``.
+_SCENES_FILE = "scenes_v2.json"
+SCENES_LEGACY_FILE = "scenes.json"
 
 #: 7-day execution history retention
 _HISTORY_RETENTION = timedelta(days=7)
@@ -133,8 +150,12 @@ class SceneStep:
             return f"Invalid step type: {self.type!r}"
         if self.type == STEP_TYPE_WAIT:
             seconds = self.params.get("seconds")
-            if (isinstance(seconds, bool) or not isinstance(seconds, (int, float))
-                    or not 0.5 <= seconds <= 30 or not math.isfinite(seconds)):
+            if (
+                isinstance(seconds, bool)
+                or not isinstance(seconds, (int, float))
+                or not 0.5 <= seconds <= 30
+                or not math.isfinite(seconds)
+            ):
                 return "Wait seconds must be a finite number from 0.5 to 30"
             return None
         if not self.id:
@@ -203,6 +224,9 @@ class Scene:
     passcode_hash: str = ""
     last_executed: str | None = None
     execution_history: list[ExecutionHistoryEntry] = field(default_factory=list)
+    # R2 contract §4: unknown record-level scalar metadata passes through
+    # load/edit/save on disk; public serializers exclude these private fields.
+    _unknown_fields: dict[str, Any] = field(default_factory=dict, repr=False, compare=False)
 
     def is_password_protected(self) -> bool:
         """True if the scene has its own passcode (the flag or a stored hash; fails closed)."""
@@ -214,14 +238,20 @@ class Scene:
 
         :param include_hash: include ``passcode_hash``; only for persistence,
                              never for clients (SEC-04 / F-SEC-005)
+
+        Unknown extension fields are excluded from this public projection;
+        the private storage writer preserves them separately.
         """
-        result = {
+        result: dict[str, Any] = {
             "id": self.id,
             "name": self.name,
             "icon": self.icon,
             "steps": [s.to_dict() for s in self.steps],
             "overrides": {
-                pid: {str(out_num): settings for out_num, settings in out_map.items()}
+                pid: {
+                    str(out_num): {key: value for key, value in settings.items() if key in OVERRIDABLE_SETTINGS}
+                    for out_num, settings in out_map.items()
+                }
                 for pid, out_map in self.overrides.items()
             },
             "favorite": self.favorite,
@@ -243,10 +273,29 @@ class Scene:
         for pid, outers in overrides_raw.items():
             out_map: dict[int, dict[str, bool]] = {}
             for out_str, settings in outers.items():
-                out_map[int(out_str)] = settings
-            overrides[pid] = out_map
+                known = {key: value for key, value in settings.items() if key in OVERRIDABLE_SETTINGS}
+                if known:
+                    out_map[int(out_str)] = known
+            if out_map:
+                overrides[pid] = out_map
 
         history = [ExecutionHistoryEntry.from_dict(h) for h in data.get("execution_history", [])]
+
+        declared_keys = {
+            "id",
+            "name",
+            "icon",
+            "steps",
+            "overrides",
+            "favorite",
+            "dashboard_visible",
+            "dashboard_order",
+            "password_protected",
+            "passcode_hash",
+            "last_executed",
+            "execution_history",
+        }
+        unknown = {k: v for k, v in data.items() if k not in declared_keys}
 
         return Scene(
             id=data.get("id", ""),
@@ -262,6 +311,7 @@ class Scene:
             passcode_hash=ensure_hashed_passcode(data.get("passcode_hash")) or "",
             last_executed=data.get("last_executed"),
             execution_history=history,
+            _unknown_fields=unknown,
         )
 
     def add_profile_step(self, profile_id: str) -> None:
@@ -501,38 +551,72 @@ class SceneManager:
         self.data_dir = Path(data_dir).resolve()
         self.scenes_file = self.data_dir / _SCENES_FILE
         self._scenes: dict[str, Scene] = {}
+        # Unknown top-level keys captured at load time; re-emitted on save so
+        # operator data and forward-compatible fields survive every edit.
+        self._unknown_top_keys: dict[str, Any] = {}
         self._ensure_loaded()
 
     def _ensure_loaded(self) -> None:
-        if not self.scenes_file.exists():
-            _LOG.info("Scenes file not found (first run): %s", self.scenes_file)
+        from hub.persistence.migrations import load_versioned_json
+        from hub.persistence.startup import prepare_scene_files
+        from persistence import migrate_legacy_file
+
+        migrate_legacy_file(self.scenes_file, "scenes_v2.json")
+        migrate_legacy_file(self.data_dir / SCENES_LEGACY_FILE, SCENES_LEGACY_FILE)
+        prepare_scene_files(self.data_dir)
+        data = load_versioned_json(self.scenes_file, default=None)
+        if data is None:
+            legacy = self.data_dir / SCENES_LEGACY_FILE
+            if legacy.exists():
+                from hub.persistence.startup import scene_shape
+
+                if scene_shape(atomic_read_json(legacy)) == "legacy":
+                    return
+            if not self._save_initial_empty():
+                from hub.persistence import MigrationError
+
+                raise MigrationError(f"{self.scenes_file}: defaults could not be saved")
             return
-        try:
-            with open(self.scenes_file, encoding="utf-8") as f:
-                data = json.load(f)
-            rehashed = False
-            for scene_data in data.get("scenes", []):
-                scene = Scene.from_dict(scene_data)
-                self._scenes[scene.id] = scene
-                rehashed |= scene.passcode_hash != (scene_data.get("passcode_hash") or "")
-            _LOG.info("Loaded %d scenes", len(self._scenes))
-        except Exception as e:
-            _LOG.error("Failed to load scenes: %s", e)
-            return
-        if rehashed:
-            # Replace the plaintext PIN on disk with its hash (F-SEC-004)
-            _LOG.warning("Hashed a plaintext scene passcode found in %s", self.scenes_file)
-            self._save()
+        self._unknown_top_keys = {k: v for k, v in data.items() if k != "scenes"}
+        rehashed = False
+        for raw in data["scenes"]:
+            scene = Scene.from_dict(raw)
+            self._scenes[scene.id] = scene
+            rehashed |= scene.passcode_hash != (raw.get("passcode_hash") or "")
+        if rehashed and not self._save():
+            from hub.persistence import MigrationError
+
+            raise MigrationError(f"{self.scenes_file}: PIN rehash could not be saved")
 
     def _save(self) -> bool:
+        if _write_blocked(self.scenes_file):
+            _LOG.error(
+                "Refusing to save scenes: %s",
+                _block_reason(self.scenes_file),
+            )
+            return False
         try:
             ensure_data_dir(self.data_dir)
-            data = {"scenes": [s.to_dict(include_hash=True) for s in self._scenes.values()]}
-            from _file_io import atomic_write_json
-            atomic_write_json(self.scenes_file, data)
+            data: dict[str, Any] = {}
+            data["scenes"] = [s.to_dict(include_hash=True) for s in self._scenes.values()]
+            from hub.persistence.migrations import save_versioned_json
+
+            save_versioned_json(self.scenes_file, data)
             return True
         except Exception as e:
             _LOG.error("Failed to save scenes: %s", e)
+            return False
+
+    def _save_initial_empty(self) -> bool:
+        """Materialise ``scenes_v2.json`` with an empty scenes list (first run / no legacy)."""
+        try:
+            ensure_data_dir(self.data_dir)
+            from hub.persistence.migrations import save_versioned_json as atomic_write_json
+
+            atomic_write_json(self.scenes_file, {"scenes": []})
+            return True
+        except Exception as e:
+            _LOG.error("Failed to seed scenes_v2.json: %s", e)
             return False
 
     # ---- Read ----

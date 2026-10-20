@@ -1,0 +1,141 @@
+{
+  "observed_utc": "2026-10-20T21:06:15.910989+00:00",
+  "run": 39467476091,
+  "head_sha": "2b10e000587d4279b0cad5583ff1038732c70415",
+  "source_merge_sha": "564346beb0d955970333b22dba6c5f719d079a4a",
+  "merge_tree": "27325b4554875c096e68c1e852615a33601e91ff",
+  "tree_equal": true,
+  "required_jobs": "all13success;UIreviewcommentalsosuccess;GHCRpublishskippedPR",
+  "results": {
+    "core_pass": 4023,
+    "core_skip": 22,
+    "core_deselected": 35,
+    "route_coverage": "177/177",
+    "api": 1416,
+    "browser": 54,
+    "scripted_uc_scenarios": 18,
+    "actual_ha_scenarios": 19,
+    "remote_tests": 100,
+    "ha_tests": 101,
+    "deployment_pass": 29,
+    "deployment_skip": 2,
+    "ui_pass": 1101,
+    "ui_skip": 33
+  },
+  "record_audit": {
+    "validated": 1507,
+    "errors": 0,
+    "original_sha_and_null_image_preserved": true
+  },
+  "qualification": "SW-API-READ-01 F-API-002 source/API V2 accepted; no other feature or physical/field/finalrelease qualification",
+  "scope": "CI source tree564346be equalshead2b10; not image campaign; no1507recordimport or source relabel",
+  "preservation": [
+    {
+      "path": "build/software-wave-02-20261020/ci-39467476091/original-artifact-zips/12285268498.zip",
+      "bytes": 104558,
+      "sha256": "1ce29ba7b7268bdf42dd224871eae7f1bba7a82d700d3bf737a939f3415b19db"
+    },
+    {
+      "path": "build/software-wave-02-20261020/ci-39467476091/original-artifact-zips/12285309607.zip",
+      "bytes": 20374600,
+      "sha256": "039a91dd68a28384ba3e6985799a50052d943a39a9c0f77bbb0e19338bdbf0bd"
+    },
+    {
+      "path": "build/software-wave-02-20261020/ci-39467476091/original-artifact-zips/12285562723.zip",
+      "bytes": 6808,
+      "sha256": "e0548526d028292f90c4c4818aa7d87dc672840c1bf058139ad495d358914b95"
+    },
+    {
+      "path": "build/software-wave-02-20261020/ci-39467476091/original-artifact-zips/12285822712.zip",
+      "bytes": 39416,
+      "sha256": "948b47938a5c64a474969ebf10851789417f4ce152abbba994d905c2fc34015a"
+    },
+    {
+      "path": "build/software-wave-02-20261020/ci-39467476091/original-artifact-zips/12285946414.zip",
+      "bytes": 32572,
+      "sha256": "33ef46f49af8666d5f950b148d483e038795dfca71130e892b8a5161066ad498"
+    },
+    {
+      "path": "build/software-wave-02-20261020/ci-39467476091/original-artifact-zips/12286102258.zip",
+      "bytes": 8191,
+      "sha256": "7d8582d97aad91ac1f28178ef7eecd3fb830ca359b49ae0da0adc9fe0153c086"
+    },
+    {
+      "path": "build/software-wave-02-20261020/ci-39467476091/original-artifact-zips/12286439479.zip",
+      "bytes": 312488,
+      "sha256": "dddc38e734a11158c88746059d66a6268990ea702beb63d92ecb425d6e2231ad"
+    },
+    {
+      "path": "build/software-wave-02-20261020/ci-39467476091/logs/118783674845.raw.log",
+      "bytes": 42777,
+      "sha256": "254354db9fd851384d4f4456f21f32288d00b562d2ff085dba4b027a0ad69c4e"
+    },
+    {
+      "path": "build/software-wave-02-20261020/ci-39467476091/logs/118783675009.raw.log",
+      "bytes": 33625,
+      "sha256": "2bc15e8bfeb2b632f70d6f805676dbb5b230d45da35c4e25b7f94d4f78a780ed"
+    },
+    {
+      "path": "build/software-wave-02-20261020/ci-39467476091/logs/118783675080.raw.log",
+      "bytes": 11571,
+      "sha256": "ef70346a7704e65afe196b5cc979065989a44aad7fb86884691a4f6f025c5f2c"
+    },
+    {
+      "path": "build/software-wave-02-20261020/ci-39467476091/logs/118783675095.raw.log",
+      "bytes": 20453,
+      "sha256": "2e39d3bd563d7f71b6475bfe01928d0017655adef532c8be13df976f399f7211"
+    },
+    {
+      "path": "build/software-wave-02-20261020/ci-39467476091/logs/118783675147.raw.log",
+      "bytes": 241746,
+      "sha256": "8310fce83cab3b3c8eb0b42e9beeb6955cbe5f53cb363757c4ea90fb4dbcec16"
+    },
+    {
+      "path": "build/software-wave-02-20261020/ci-39467476091/logs/118783675167.raw.log",
+      "bytes": 47103,
+      "sha256": "e55bf20892f00e673690c48a203df979a3d9ec9791def0bdd470bf81b80b55c5"
+    },
+    {
+      "path": "build/software-wave-02-20261020/ci-39467476091/logs/118783675204.raw.log",
+      "bytes": 23015,
+      "sha256": "50c487e62bbbdacdd92cfb4bedd7bf57e8f9f53c330c288cddb9bba25cd7768b"
+    },
+    {
+      "path": "build/software-wave-02-20261020/ci-39467476091/logs/118783675297.raw.log",
+      "bytes": 22567,
+      "sha256": "4f480bb1f6af193037d62c581394cbd0415ca60e05899e8fabdd844ef15a6a8b"
+    },
+    {
+      "path": "build/software-wave-02-20261020/ci-39467476091/logs/118783675298.raw.log",
+      "bytes": 56302,
+      "sha256": "249edef89e71efef96fd5a73fac3be45d539c453bd4a3b4569f64bb6635eebdd"
+    },
+    {
+      "path": "build/software-wave-02-20261020/ci-39467476091/logs/118783675299.raw.log",
+      "bytes": 203193,
+      "sha256": "6d13b835614b2bd295dcb192799fcf32b5c0cc1f8663d762a56de76691c7212f"
+    },
+    {
+      "path": "build/software-wave-02-20261020/ci-39467476091/logs/118783675302.raw.log",
+      "bytes": 32054,
+      "sha256": "542b9bbb3d3d02be070bb3b65cc91e91f909fe0f32ad1b42073926d9175874dc"
+    },
+    {
+      "path": "build/software-wave-02-20261020/ci-39467476091/logs/118783675303.raw.log",
+      "bytes": 160903,
+      "sha256": "d38fe1a803793243801a0c0d475a4eb7a75a75a980c49f7c2892a563a69d5e44"
+    },
+    {
+      "path": "build/software-wave-02-20261020/ci-39467476091/logs/118783675396.raw.log",
+      "bytes": 107733,
+      "sha256": "955e3e2f7c3d474692f7d84bc991b8debb0d157c71aa3eb3535accb743cf8267"
+    },
+    {
+      "path": "build/software-wave-02-20261020/ci-39467476091/logs/118798333829.raw.log",
+      "bytes": 7714,
+      "sha256": "31a32f86ad6939f0d1c23cbeded6d1f022f9981676173b9cf4a1772785347821"
+    }
+  ],
+  "download_limits": "ghrunallartifactdownloadexit1 retainedpartialoutput; two dockerbuild payloads are opaque non-ZIP bytes. Directoriginaldownloads all7pass, relevant5ZIPs safelyextractedinto newdest; originalbytes retained.",
+  "original_api_records": "Three0dd2records staybyteexact; reviewed3622candidate/6385reportunchanged"
+}

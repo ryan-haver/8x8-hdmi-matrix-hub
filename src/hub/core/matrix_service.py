@@ -27,7 +27,9 @@ import asyncio
 import logging
 import re
 import time
+import uuid
 from collections.abc import Awaitable
+from copy import deepcopy
 from typing import Any, Protocol, TypeVar
 
 from .event_bus import (
@@ -138,6 +140,8 @@ class MatrixService:
                 raise ValueError("NameStore publishes on a different EventBus")
             bus = bus or names.bus
         self._client = client
+        self._client_generation = 0
+        self._raw: dict[str, Any] = {}
         self._model = model
         self._bus = bus if bus is not None else EventBus()
         self._names = names if names is not None else NameStore(model, self._bus)
@@ -258,6 +262,40 @@ class MatrixService:
 
     # -- connection -------------------------------------------------------
 
+    def replace_client(self, client: MatrixClient, *, names: NameStore | None = None) -> None:
+        """Reset state at a transaction boundary; old reads cannot commit afterward."""
+        self._client_generation += 1
+        self._client = client
+        self._raw = {}
+        self._routing = dict.fromkeys(self._model.output_range())
+        self._power = None
+        self._signal = dict.fromkeys(self._model.input_range())
+        self._cables = {"inputs": dict.fromkeys(self._model.input_range()),
+                        "outputs": dict.fromkeys(self._model.output_range())}
+        self._display = {o: dict.fromkeys(f for _, f in self._display_fields()) for o in self._model.output_range()}
+        self._last_refresh = None
+        self._last_error = None
+        self._names = names if names is not None else NameStore(self._model, self._bus)
+        self._set_connected(False)
+
+    def raw_snapshot(self) -> dict[str, Any]:
+        """Lossless protocol fields plus current command-confirmed state for REST."""
+        raw = deepcopy(self._raw)
+        if "video" in raw:
+            raw["video"].update(allsource=[self._routing[o] for o in self._model.output_range()],
+                                 power=int(self._power) if self._power is not None else None,
+                                 allinputname=list(self.inputs.values()), alloutputname=list(self.outputs.values()),
+                                 allname=list(self.presets.values()))
+        if "status" in raw:
+            raw["status"].update(
+                routing=[self._routing[o] for o in self._model.output_range()],
+                power="on" if self._power else "off", connected=self.connected,
+                host=self.host, port=self.port,
+                input_names=list(self.inputs.values()), output_names=list(self.outputs.values()),
+                preset_names=list(self.presets.values()),
+            )
+        return raw
+
     def _set_connected(self, connected: bool, error: str | None = None) -> None:
         if error is not None:
             self._last_error = error
@@ -282,11 +320,20 @@ class MatrixService:
         self._set_connected(connected)
 
     async def _safe(self, what: str, call: Awaitable[_T]) -> _T | None:
+        generation = self._client_generation
+        client = self._client
         try:
             return await call
-        except Exception as e:
-            _LOG.exception("Matrix %s failed", what)
-            self._last_error = f"{what}: {e}"
+        except Exception as exc:
+            message = str(exc)
+            for field in ("password", "user", "_user"):
+                secret = getattr(client, field, None)
+                if isinstance(secret, str) and secret:
+                    message = message.replace(secret, "[redacted]")
+            reference = uuid.uuid4().hex[:8]
+            _LOG.error("[%s] Matrix %s failed: %s", reference, what, message)
+            if generation == self._client_generation:
+                self._last_error = f"Internal server error (ref: {reference})"
             return None
 
     async def connect(self) -> bool:
@@ -309,6 +356,26 @@ class MatrixService:
     def _display_fields(self) -> list[tuple[str, str]]:
         return [(key, f) for key, f in _DISPLAY_FIELDS if f != "arc" or self._model.supports_arc]
 
+    def invalidate_preset_cache(self) -> None:
+        """Expire slot readback for an explicit status refresh, when supported.
+
+        Older structural clients have no slot cache. Keep them compatible while
+        the sole protocol client owns its own cache lifecycle.
+        """
+        invalidate = getattr(self._client, "invalidate_preset_cache", None)
+        if callable(invalidate):
+            invalidate()
+
+    def invalidate_cec_cache(self) -> None:
+        """Expire CEC enable decisions on explicit status synchronization.
+
+        The protocol client refreshes flags lazily before the next CEC command.
+        Structural clients without a CEC cache need no invalidation.
+        """
+        invalidate = getattr(self._client, "clear_cec_cache", None)
+        if callable(invalidate):
+            invalidate()
+
     async def refresh_snapshot(self) -> bool:
         """Read the matrix and publish what changed. False if the main status read failed.
 
@@ -316,28 +383,47 @@ class MatrixService:
         cable and display reads are best effort and leave their part as it was.
         """
         async with self._refresh_lock:
+            previous_raw = deepcopy(self._raw)
+            client = self._client
+            client_generation = self._client_generation
             generation = self._write_generation
-            video = await self._safe("status read", self._client.get_video_status())
+            video = await self._safe("status read", client.get_video_status())
+            if client_generation != self._client_generation:
+                return False
             if not isinstance(video, dict):
                 self._sync_connection()
                 return False
             if generation == self._write_generation:  # no write landed meanwhile
                 self._apply_video_status(video)
+                self._raw["video"] = deepcopy(video)
+                self._raw["status"] = {"routing": deepcopy(video.get("allsource", [])),
+                                       "power": "on" if video.get("power") == 1 else "off"}
 
-            input_status = await self._safe("input status read", self._client.get_input_status(force_refresh=True))
+            input_status = await self._safe("input status read", client.get_input_status(force_refresh=True))
+            if client_generation != self._client_generation:
+                return False
             if isinstance(input_status, dict):
+                self._raw["inputs"] = deepcopy(input_status)
                 self._apply_signal(input_status)
 
-            cables = await self._safe("cable status read", self._client.get_all_cable_status(force_refresh=True))
+            cables = await self._safe("cable status read", client.get_all_cable_status(force_refresh=True))
+            if client_generation != self._client_generation:
+                return False
             if isinstance(cables, dict):
+                self._raw["cables"] = deepcopy(cables)
                 self._apply_cables(cables)
 
-            output_status = await self._safe("output status read", self._client.get_output_status(force_refresh=True))
+            output_status = await self._safe("output status read", client.get_output_status(force_refresh=True))
+            if client_generation != self._client_generation:
+                return False
             if isinstance(output_status, dict):
+                self._raw["outputs"] = deepcopy(output_status)
                 self._apply_display(output_status)
 
             self._last_refresh = time.time()
             self._sync_connection()
+            if self._raw != previous_raw:
+                self._bus.publish("snapshot", {})
             return True
 
     def _apply_video_status(self, video: dict[str, Any]) -> None:
@@ -415,9 +501,20 @@ class MatrixService:
 
     # -- writes -----------------------------------------------------------
 
-    async def _write(self, what: str, call: Awaitable[bool]) -> bool:
-        ok = bool(await self._safe(what, call))
-        self._sync_connection()
+    async def _write(self, what: str, call: Awaitable[bool], *, propagate_errors: bool = False) -> bool:
+        try:
+            if propagate_errors:
+                try:
+                    ok = bool(await call)
+                except Exception:
+                    # The caller logs the exception with its public correlation
+                    # reference. Health and connection events retain no details.
+                    self._last_error = f"{what} failed"
+                    raise
+            else:
+                ok = bool(await self._safe(what, call))
+        finally:
+            self._sync_connection()
         if ok:
             self._write_generation += 1
         return ok
@@ -439,10 +536,12 @@ class MatrixService:
             self._update_routing(dict.fromkeys(targets, input_num), "switch")
         return ok
 
-    async def recall_preset(self, preset: int) -> bool:
-        """Recall ``preset``, then re-read the matrix for the routing it applied."""
+    async def recall_preset(self, preset: int, *, propagate_errors: bool = False) -> bool:
+        """Recall and refresh; optionally propagate client errors to the action runner."""
         self._model.validate_preset(preset)
-        if not await self._write(f"recall preset {preset}", self._client.recall_preset(preset)):
+        if not await self._write(
+            f"recall preset {preset}", self._client.recall_preset(preset), propagate_errors=propagate_errors
+        ):
             return False
         self._bus.publish(
             TOPIC_PRESETS, {"action": "recall", "preset": preset, "name": self._names.preset_name(preset)}

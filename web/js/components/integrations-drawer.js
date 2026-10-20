@@ -734,7 +734,8 @@ class IntegrationsDrawer {
                 urlPath = `/api/profile/${config.profileId}/recall`;
                 break;
             case 'switch_all':
-                urlPath = `/api/input/${config.inputNum}`;
+                urlPath = '/api/switch';
+                bodyObj = { input: config.inputNum };
                 break;
             case 'switch_output':
                 urlPath = `/api/output/${config.outputNum}/source`;

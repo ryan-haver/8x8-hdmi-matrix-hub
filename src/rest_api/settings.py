@@ -113,6 +113,21 @@ async def handle_set_matrix_host(request: web.Request) -> web.Response:
 
         _LOG.info(f"Updating matrix host from {old_host}:{old_port} to {host}:{port}")
 
+        from .utils import get_runtime
+        runtime = get_runtime()
+        if runtime is not None:
+            from hub.runtime.config import MatrixAddress
+            result = await runtime.reconfigure(MatrixAddress(
+                host, port, telnet_port, body.get("user"), password if isinstance(password, str) else None))
+            connected = result.success and result.connected
+            return _json_response(True, {
+                "host": host, "port": port,
+                "telnet_port": telnet_port if telnet_port is not None else default_telnet_port(),
+                "connected": connected,
+                "message": f"Matrix host updated to {host}:{port}"
+                + (" - Connected!" if connected else " - Connection failed"),
+            })
+
         # Disconnect from old host
         try:
             await matrix_device.disconnect()

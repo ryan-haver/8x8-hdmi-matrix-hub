@@ -17,6 +17,7 @@ them in the docker-build job. Without Docker they skip, unless CI is set.
 
 from __future__ import annotations
 
+import json
 import os
 import shutil
 from collections.abc import Iterator
@@ -53,6 +54,13 @@ def network(hub_image: str) -> Iterator[str]:
     name = unique("hubtest")
     docker("network", "create", name)
     try:
+        # Let Docker choose a free subnet from its own address pools, then make
+        # that allocation explicit before attaching any containers. Linux
+        # Engine 26 refuses --ip on an implicitly allocated subnet (Desktop 29
+        # accepts it). Never guess a host/LAN subnet or modify daemon settings.
+        subnet = json.loads(docker("network", "inspect", name).stdout)[0]["IPAM"]["Config"][0]["Subnet"]
+        docker("network", "rm", name)
+        docker("network", "create", "--subnet", subnet, name)
         yield name
     finally:
         docker("network", "rm", name, check=False)
@@ -113,6 +121,8 @@ def _scenario_of(item: pytest.Item) -> str | None:
     module = item.module.__name__.rsplit(".", 1)[-1] if getattr(item, "module", None) else ""
     if module == "test_compose":
         return "deploy.compose"
+    if module == "test_runtime_discovery":
+        return "deploy.discovery"
     if module == "test_docker_image":
         mode = getattr(item, "callspec", None) and item.callspec.params.get("hub")
         return f"deploy.image_{mode}" if mode else None

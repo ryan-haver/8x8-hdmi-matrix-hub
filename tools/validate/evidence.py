@@ -110,7 +110,14 @@ def iter_records(roots: Iterable[Path]) -> list[LoadedRecord]:
     return records
 
 
-_SECRET_KEYS = re.compile(r"pass(word|code)?|secret|token|api[_-]?key", re.IGNORECASE)
+_SECRET_KEYS = re.compile(
+    r"pass(word|code)?|secret|token|api[_-]?key|^(key|pin|pin_hash|authorization|cookie)$",
+    re.IGNORECASE,
+)
+_SECRET_QUERY = re.compile(
+    r"([?&](?:key|api[_-]?key|token|passcode|password|pin)=)[^&\s\"'<>]+",
+    re.IGNORECASE,
+)
 
 
 def redact(value: Any) -> Any:
@@ -119,4 +126,6 @@ def redact(value: Any) -> Any:
         return {k: ("***" if _SECRET_KEYS.search(str(k)) else redact(v)) for k, v in value.items()}
     if isinstance(value, list):
         return [redact(v) for v in value]
+    if isinstance(value, str):
+        return _SECRET_QUERY.sub(r"\1***", value)
     return value

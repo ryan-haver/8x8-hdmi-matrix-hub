@@ -783,7 +783,7 @@ features:
     flic: [Twist rotate]
   target: V4
   current: V1
-  basis: tests/test_rest_api.py TestInputCycling (mocked).
+  basis: "tests/test_rest_api.py TestInputCycling (mocked). Input next/previous accept optional cycle=true|false (default true); false clamps under the same shared lock. tests/sim/test_sim_rest_reads.py::test_cycle_clamp_and_wrap_read_back_exact_operation and test_invalid_cycle_option_is_refused_before_any_write verify registered operation readback and invalid-input no-write behavior."
   evidence:
   - docs/validation/evidence/F-MTX-029/2026-10-04-V2-7dbc4dc7-status.cycle_next_1_1-api.json
   - docs/validation/evidence/F-MTX-029/2026-10-04-V2-7dbc4dc7-status.cycle_next_1_2-api.json
@@ -943,7 +943,12 @@ features:
     path: tests/sim/test_golden_hub.py::test_get_preset_info_never_uses_the_http_preset_read. BE-36 fixed on
     fix-backend-wp-v2-bugs: GET /api/presets reads every slot with Telnet r preset N (routing_source matrix; the hub
     copy, marked routing_source saved, only when a slot cannot be read). preset_read.device_slot_1..8 pass on the
-    packaged image (V2). Slot contents on the real BK-808 still need hardware proof (V4).'
+    packaged image (V2). Slot contents on the real BK-808 still need hardware proof (V4).
+    Shared-runtime forced-status expiration is exercised by
+    tests/sim/test_sim_rest_reads.py::test_shared_runtime_preset_catalog_after_explicit_ws_refresh
+    and tests/test_runtime_preset_cache_r1e.py: ordinary reads retain the normal TTL, while an explicit
+    client status refresh expires slots without prefetching them or writing to the matrix. Integrated
+    source and image evidence must follow the R1E correction; existing feature levels are retained.'
   evidence:
   - docs/validation/evidence/F-MTX-030/2026-10-02-V2-f4f417bf-preset_read.device_slot_1-api.json
   - docs/validation/evidence/F-MTX-030/2026-10-02-V2-f4f417bf-preset_read.device_slot_2-api.json
@@ -2212,7 +2217,7 @@ features:
     rest: [GET /api/status/cec]
   target: V4
   current: V1
-  basis: "Recorded V1 baseline: driver-level CEC cache reads. The cec_controls packaged-image scenarios now exercise GET /api/status/cec against independent all-off/all-on/mixed matrix flags and a failed matrix read, including raw and formatted arrays."
+  basis: "Recorded V1 baseline retained. The cec_controls packaged-image scenarios exercise GET /api/status/cec against independent all-off/all-on/mixed matrix flags and a failed matrix read, including raw and formatted arrays. R1F tests/test_runtime_cec_enable_r1f.py and tests/sim/test_sim_rest_reads.py verify real-SIM input/output enable decisions after explicit protocol, facade and WS synchronization, plus registered status readback after power commands; ordinary cache behavior is preserved. Fresh complete source and image campaigns at clean 4adbc13 pass and are archived in docs/validation/runs/runtime; hardware V4 remains unobserved."
   evidence:
   - docs/validation/evidence/F-CEC-009/2026-10-04-V2-7dbc4dc7-cec_controls.status_mixed-api.json
   - docs/validation/evidence/F-CEC-009/2026-10-04-V2-7dbc4dc7-cec_controls.status_off-api.json
@@ -2636,13 +2641,13 @@ features:
   - cec_caps.all_read_unavailable
 - id: F-API-001
   area: api
-  title: GET /api/health, /api/openapi.json, /api/docs (liveness, matrix connection, runtime metrics, OpenAPI 3.1 & Swagger UI)
-  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table; src/hub/openapi.py
+  title: GET /api/health, /api/openapi.json, /api/docs (liveness, matrix connection, runtime metrics, integration lifecycle, OpenAPI 3.1 & Swagger UI)
+  claim: docs/API_REFERENCE.md; src/rest_api/app.py route table; src/hub/openapi.py; src/hub/runtime/composition.py
   interfaces:
     rest: [GET /api/health, GET /api/openapi.json, GET /api/docs]
   target: V3
   current: V2
-  basis: 'V2: tests/sim/test_sim_e2e.py::test_health_reports_matrix_and_runtime; tests/sim/test_sim_rest_reads.py::test_openapi_spec_and_swagger_docs_reads; tests/test_health.py; tests/test_openapi_and_config_docs.py.'
+  basis: "V2: tests/sim/test_sim_e2e.py::test_health_reports_matrix_and_runtime; tests/sim/test_sim_rest_reads.py::test_health_includes_integration_lifecycle_mapping; tests/sim/test_sim_rest_reads.py::test_openapi_spec_and_swagger_docs_reads; tests/test_health.py; tests/test_openapi_and_config_docs.py. R1 adds data.integrations; real loader/flag startup proof awaits peer integration. OpenAPI describes shared cycle query parameters and the existing SceneV2ResponseEnvelope field omissions, creation201 and execution207; tests/test_openapi_and_config_docs.py::test_live_scene_v2_omitted_fields_and_created_status_match_openapi compares real registered responses with their schemas. Core envelope remains strict; no public wire normalization."
   evidence: []
   findings: []
   scenarios: [contracts.health, contracts.openapi_spec, contracts.api_docs]
@@ -2653,11 +2658,17 @@ features:
   interfaces:
     rest: [GET /, GET /api, GET /api/info]
   target: V2
-  current: V1
-  basis: 'tests/test_rest_api.py TestHealthEndpoints; API-24: /api/info reads driver.json independent of cwd. DEP-06: canonical version and matching identity when the manifest is absent or corrupt (tests/sim/test_sim_rest_reads.py::test_info_manifest_fallback_keeps_the_driver_identity). GET / needs separate evidence.'
-  evidence: []
+  current: V2
+  basis: "V2: clean source-simulator API campaign at 0dd2c25ea866fd56fbe6046e03f0172499b70080 passes contracts.api_info, contracts.api_root and contracts.api_root_alias. Assertions cover canonical application/driver identity, documented API version/catalog and root aliases, unchanged simulator state and no mutating commands. Existing direct/simulator manifest-fallback tests remain covered. Three original records retain source SHA, timestamps, API-only client and null image digest byte-for-byte. Independent exact-candidate review/integration disposition is recorded in docs/production/software-waves/SW-API-READ-01/REVIEW.md and coordinator records; preparation alone is not final acceptance. No other client, image, hardware, soak or field qualification. All three API cases refreshed at clean 2ae46e6c after the browser-adapter change; two original directory-covered records are stale and retained with original source attribution."
+  evidence:
+  - docs/validation/evidence/software-waves/SW-API-READ-01/F-API-002/2026-10-20-V2-0dd2c25e-contracts.api_info-api.json
+  - docs/validation/evidence/software-waves/SW-API-READ-01/F-API-002/2026-10-20-V2-0dd2c25e-contracts.api_root-api.json
+  - docs/validation/evidence/software-waves/SW-API-READ-01/F-API-002/2026-10-20-V2-0dd2c25e-contracts.api_root_alias-api.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01-api-refresh/F-API-002/2026-10-20-V2-2ae46e6c-contracts.api_info-api.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01-api-refresh/F-API-002/2026-10-20-V2-2ae46e6c-contracts.api_root-api.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01-api-refresh/F-API-002/2026-10-20-V2-2ae46e6c-contracts.api_root_alias-api.json
   findings: [DEP-06]
-  scenarios: [contracts.api_info]
+  scenarios: [contracts.api_info, contracts.api_root, contracts.api_root_alias]
 - id: F-API-003
   area: api
   title: GET /api/status
@@ -2703,7 +2714,7 @@ features:
     rest: [POST /api/switch]
   target: V3
   current: V2
-  basis: 'V2: tests/sim/test_sim_e2e.py::test_switch_changes_simulator_state, ::test_switch_all_and_preset.'
+  basis: "V2: tests/sim/test_sim_e2e.py::test_switch_changes_simulator_state, ::test_switch_all_and_preset. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence."
   evidence:
   - docs/validation/evidence/F-MTX-001/2026-10-04-V2-d6baf3ca-routing.switch_one-api.json
   - docs/validation/evidence/F-MTX-002/2026-10-04-V2-d6baf3ca-routing.route_all-api.json
@@ -2717,7 +2728,7 @@ features:
     rest: ['POST /api/output/{output}/source', POST /api/input/next, POST /api/input/previous]
   target: V3
   current: V1
-  basis: tests/test_rest_api.py TestControlEndpoints, TestInputCycling (mocked).
+  basis: "tests/test_rest_api.py TestControlEndpoints, TestInputCycling (mocked). R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence. Input next/previous accept optional cycle=true|false (default true); false clamps under the same shared lock. tests/sim/test_sim_rest_reads.py::test_cycle_clamp_and_wrap_read_back_exact_operation and test_invalid_cycle_option_is_refused_before_any_write verify registered operation readback and invalid-input no-write behavior."
   evidence: []
   findings: [VAL-05]
   scenarios: []
@@ -2729,7 +2740,7 @@ features:
     rest: ['POST /api/preset/{preset}']
   target: V3
   current: V2
-  basis: 'V2: tests/sim/test_sim_e2e.py::test_switch_all_and_preset.'
+  basis: "V2: tests/sim/test_sim_e2e.py::test_switch_all_and_preset. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence. R4C/R4D preserve opaque correlated preset exception responses without replacing the matrix owner; tests/sim/test_sim_rest_reads.py::test_registered_preset_exception_keeps_private_diagnostic_and_no_device_write verifies the registered route, private log correlation and unchanged simulator routing. Combined runtime regressions: 1002 independent passes, two skips; final image/client campaigns pending."
   evidence:
   - docs/validation/evidence/F-MTX-003/2026-10-04-V2-d6baf3ca-presets.recall-api.json
   findings: []
@@ -2742,7 +2753,7 @@ features:
     rest: ['POST /api/preset/{preset}/save']
   target: V2
   current: V1
-  basis: 'Scenario presets.save_custom_mapping (V2, custom mapping body); tests/test_rest_api.py TestControlEndpoints (mocked).'
+  basis: "Scenario presets.save_custom_mapping (V2, custom mapping body); tests/test_rest_api.py TestControlEndpoints (mocked). R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence."
   evidence:
   - docs/validation/evidence/F-DOM-034/2026-10-04-V2-7dbc4dc7-preset_read.saved_partial_1-api.json
   - docs/validation/evidence/F-DOM-034/2026-10-04-V2-7dbc4dc7-preset_read.saved_partial_2-api.json
@@ -2771,7 +2782,7 @@ features:
     rest: [POST /api/power/on, POST /api/power/off]
   target: V3
   current: V1
-  basis: tests/test_rest_api.py TestControlEndpoints (mocked).
+  basis: "tests/test_rest_api.py TestControlEndpoints (mocked). R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence."
   evidence:
   - docs/validation/evidence/F-MTX-006/2026-10-04-V2-7dbc4dc7-power.standby-api.json
   - docs/validation/evidence/F-MTX-006/2026-10-04-V2-7dbc4dc7-power.wake-api.json
@@ -2837,11 +2848,13 @@ features:
   interfaces:
     rest: [GET /api/system/info, GET /api/system/storage]
   target: V2
-  current: V1
-  basis: 'Recorded V1 baseline: tests/test_persistence.py TestStorageEndpoint (handler-level). New simulator reads verify runtime info and the actual fixture storage directory.'
+  current: V2
+  basis: "Recorded V1 baseline: tests/test_persistence.py TestStorageEndpoint (handler-level). New simulator reads verify runtime info and the actual fixture storage directory. Accepted original source-simulator API V2 proof is preserved byte-exact at 1baac3dec660f41345869c126cfca94d6731c5a0, independently audited in docs/production/ev02/API_PRESERVATION_REVIEW.md (700a7d7e). Original SHA, timestamps and null image digest are retained; this is not a new run or image/client promotion. Existing findings and hardware/cross-client gates remain unchanged."
   evidence:
   - docs/validation/evidence/F-API-014/2026-10-04-V2-7dbc4dc7-contracts.storage-api.json
   - docs/validation/evidence/F-API-014/2026-10-04-V2-7dbc4dc7-contracts.system_info-api.json
+  - docs/validation/evidence/ev02-original-api/F-API-014/2026-10-19-V2-1baac3de-contracts.storage-api.json
+  - docs/validation/evidence/ev02-original-api/F-API-014/2026-10-19-V2-1baac3de-contracts.system_info-api.json
   findings: [SEC-11]
   scenarios: [contracts.system_info, contracts.storage]
 - id: F-API-015
@@ -2852,7 +2865,7 @@ features:
     rest: ['POST /api/cec/input/{input}/{command}', 'POST /api/cec/output/{output}/{command}']
   target: V3
   current: V1
-  basis: 'tests/test_rest_api.py TestCecCommandEndpoints (mocked). V2 from the cec_telnet scenarios; BE-37 fixed: an ambiguous Telnet acknowledgement answers 500 without an HTTP resend; BE-38: power on/off are resent once over HTTP and answer 200.'
+  basis: "tests/test_rest_api.py TestCecCommandEndpoints (mocked). V2 from the cec_telnet scenarios; BE-37 fixed: an ambiguous Telnet acknowledgement answers 500 without an HTTP resend; BE-38: power on/off are resent once over HTTP and answer 200. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence."
   evidence:
   - docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_interrupted_volume-api.json
   - docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.output_interrupted_volume-api.json
@@ -3536,8 +3549,8 @@ features:
     rest: [GET /api/cec/commands, 'GET /api/cec/commands/{type}', GET /api/cec/capabilities, 'GET /api/cec/input/{input}/capabilities',
       'GET /api/cec/output/{output}/capabilities', 'POST /api/cec/input/{port}/enable', 'POST /api/cec/output/{port}/enable']
   target: V2
-  current: V1
-  basis: 'Registered-route simulator reads/writes and fresh packaged-image records. Single-port CEC writes preserve current arrays; tests/sim/test_sim_cec_enable_snapshot.py covers external changes, concurrent edits and failed/incomplete reads (BE-35). Grouped capability routes still have scope beyond the selected scenarios.'
+  current: V2
+  basis: "Registered-route simulator reads/writes and fresh packaged-image records. Single-port CEC writes preserve current arrays; tests/sim/test_sim_cec_enable_snapshot.py covers external changes, concurrent edits and failed/incomplete reads (BE-35). Grouped capability routes still have scope beyond the selected scenarios. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence. Accepted original source-simulator API V2 proof is preserved byte-exact at 1baac3dec660f41345869c126cfca94d6731c5a0, independently audited in docs/production/ev02/API_PRESERVATION_REVIEW.md (700a7d7e). Original SHA, timestamps and null image digest are retained; this is not a new run or image/client promotion. Existing findings and hardware/cross-client gates remain unchanged."
   evidence:
   - docs/validation/evidence/F-API-016/2026-10-01-V2-72cc71dc-writes.cec_output_enable-api.json
   - docs/validation/evidence/F-API-016/2026-10-04-V2-7dbc4dc7-contracts.cec_input_catalog-api.json
@@ -3672,6 +3685,138 @@ features:
   - docs/validation/evidence/F-CEC-011/2026-10-04-V2-7dbc4dc7-cec_caps.output_invalid_9-api.json
   - docs/validation/evidence/F-CEC-011/2026-10-04-V2-7dbc4dc7-cec_caps.output_invalid_invalid-api.json
   - docs/validation/evidence/F-CEC-011/2026-10-04-V2-7dbc4dc7-cec_caps.output_read_unavailable-api.json
+  - docs/validation/evidence/ev02-original-api/F-API-016/2026-10-19-V2-1baac3de-contracts.cec_input_catalog-api.json
+  - docs/validation/evidence/ev02-original-api/F-API-016/2026-10-19-V2-1baac3de-contracts.cec_invalid_type-api.json
+  - docs/validation/evidence/ev02-original-api/F-API-016/2026-10-19-V2-1baac3de-contracts.cec_output_catalog-api.json
+  - docs/validation/evidence/ev02-original-api/F-API-016/2026-10-19-V2-1baac3de-writes.cec_output_enable-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_1_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_1_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_2_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_2_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_3_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_3_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_4_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_4_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_5_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_5_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_6_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_6_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_7_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_7_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_8_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_8_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_enable_default-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_enable_port_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_enable_port_9-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_enable_refused-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_1_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_1_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_2_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_2_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_3_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_3_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_4_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_4_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_5_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_5_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_6_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_6_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_7_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_7_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_8_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_8_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_enable_default-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_enable_port_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_enable_port_9-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_enable_refused-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.all_pattern_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.all_pattern_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.all_pattern_2-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.all_read_unavailable-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.command_catalog-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_1_signal_0_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_1_signal_0_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_1_signal_1_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_1_signal_1_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_2_signal_0_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_2_signal_0_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_2_signal_1_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_2_signal_1_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_3_signal_0_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_3_signal_0_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_3_signal_1_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_3_signal_1_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_4_signal_0_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_4_signal_0_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_4_signal_1_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_4_signal_1_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_5_signal_0_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_5_signal_0_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_5_signal_1_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_5_signal_1_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_6_signal_0_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_6_signal_0_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_6_signal_1_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_6_signal_1_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_7_signal_0_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_7_signal_0_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_7_signal_1_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_7_signal_1_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_8_signal_0_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_8_signal_0_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_8_signal_1_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_8_signal_1_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_catalog-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_invalid_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_invalid_9-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_invalid_invalid-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_read_unavailable-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.invalid_catalog-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_1_scaler_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_1_scaler_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_1_scaler_2-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_1_scaler_3-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_1_scaler_4-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_2_scaler_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_2_scaler_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_2_scaler_2-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_2_scaler_3-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_2_scaler_4-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_3_scaler_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_3_scaler_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_3_scaler_2-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_3_scaler_3-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_3_scaler_4-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_4_scaler_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_4_scaler_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_4_scaler_2-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_4_scaler_3-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_4_scaler_4-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_5_scaler_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_5_scaler_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_5_scaler_2-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_5_scaler_3-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_5_scaler_4-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_6_scaler_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_6_scaler_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_6_scaler_2-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_6_scaler_3-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_6_scaler_4-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_7_scaler_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_7_scaler_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_7_scaler_2-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_7_scaler_3-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_7_scaler_4-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_8_scaler_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_8_scaler_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_8_scaler_2-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_8_scaler_3-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_8_scaler_4-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_catalog-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_invalid_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_invalid_9-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_invalid_invalid-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_read_unavailable-api.json
   findings: [BE-13, BE-35]
   scenarios:
   - contracts.cec_input_catalog
@@ -3817,7 +3962,7 @@ features:
       GET /api/device-settings/dashboard-presets, PUT /api/device-settings/dashboard-presets, 'POST /api/device-settings/dashboard-presets/{preset}/toggle']
   target: V2
   current: V1
-  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
+  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. R2 private storage projection: test_device_settings_private_extensions_survive_edits_without_public_exposure verifies real registered reads, edit/reload persistence, schema preservation and no private extension exposure. Recorded level retained pending the fresh integrated campaign. Historical shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
   evidence:
   - docs/validation/evidence/F-API-017/2026-10-04-V2-7dbc4dc7-contracts.device_settings-api.json
   - docs/validation/evidence/F-API-017/2026-10-04-V2-7dbc4dc7-contracts.input_settings-api.json
@@ -3837,12 +3982,16 @@ features:
   interfaces:
     rest: ['POST /api/input/{input}/name', 'POST /api/output/{output}/name']
   target: V2
-  current: V0
-  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
+  current: V2
+  basis: "Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios. Clean source-simulator API campaign at bb4d3fdc972e7f556f29c6ed468accd4ff3b88b5 passes input/output rename and input invalid-port/blank-name cases with independent device/hub readback and mutation/command checks. Scenario code was independently reviewed at 0a7d71b2; final combined acceptance is recorded separately in the EV-02 execution record. Existing findings and hardware/cross-client gates remain unchanged."
   evidence:
   - docs/validation/evidence/F-API-018/2026-10-04-V2-7dbc4dc7-writes.output_name-api.json
+  - docs/validation/evidence/ev02-input-name/F-API-018/2026-10-20-V2-bb4d3fdc-writes.input_name-api.json
+  - docs/validation/evidence/ev02-input-name/F-API-018/2026-10-20-V2-bb4d3fdc-writes.input_name_blank-api.json
+  - docs/validation/evidence/ev02-input-name/F-API-018/2026-10-20-V2-bb4d3fdc-writes.input_name_invalid_port-api.json
+  - docs/validation/evidence/ev02-input-name/F-API-018/2026-10-20-V2-bb4d3fdc-writes.output_name-api.json
   findings: [BE-16]
-  scenarios: [writes.output_name]
+  scenarios: [writes.output_name, writes.input_name, writes.input_name_invalid_port, writes.input_name_blank]
 - id: F-API-019
   area: api
   title: Profile routes
@@ -3854,7 +4003,7 @@ features:
       'POST|PUT /api/profile/{profile_id}/dashboard', 'GET /api/profile/{profile_id}/execution-log']
   target: V2
   current: V1
-  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios. API-22 fixed: profile_crud.*_scaler_arc round trips and *_invalid refusals pass.'
+  basis: "Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios. API-22 fixed: profile_crud.*_scaler_arc round trips and *_invalid refusals pass. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence. R4D generic profile HTTP500 responses expose opaque references, with full diagnostics confined to private logs. tests/sim/test_sim_rest_reads.py::test_profile_read_exception_is_opaque_and_preserves_saved_data covers registered list/detail failures and byte-preserved stores; tests/test_runtime_error_projections_r4d.py covers all 13 changed handlers. Combined runtime regressions: 1002 independent passes, two skips; final image/client campaigns pending."
   evidence:
   - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.post_scaler_arc-api.json
   - docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.put_scaler_arc-api.json
@@ -4081,7 +4230,7 @@ features:
       POST /api/scene/save-current, 'GET|POST|PUT /api/scene/{scene_id}/cec', 'POST /api/scene/{scene_id}/cec/auto-resolve']
   target: V2
   current: V1
-  basis: "Recorded V1 baseline: mocked legacy scene tests. The profile_state packaged-image scenarios add V2 proof for create/read/list/delete/recall aliases, CEC config/auto-resolve, missing/invalid requests and save-current. API-27 fixed: failed output/video reads answer 502 and create nothing (profile_state.capture_*_read_failure pass); API-12 remains open. Status cache TTL is explicitly zero."
+  basis: "Recorded V1 baseline and historical packaged-image scenarios cover scene aliases and save-current. R4 shared execution/catalog notification seams have 432 independent focused passes with one HA dependency skip. R1D fixes capture-specific fresh output/video reads under one runtime transaction; tests/validation/test_runtime_readiness_r1d.py and tests/sim/test_sim_rest_reads.py verify nonzero-TTL current-state capture, registered profile readback and refusal without persistence on failed reads. Ninety-five independent capture/readiness/source-UC checks passed. Existing levels are retained pending fresh integrated image/client evidence; API-12 remains open."
   evidence:
   - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_output_read_failure-api.json
   - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_video_read_failure-api.json
@@ -4234,7 +4383,7 @@ features:
       'GET /api/v2/scenes/{scene_id}/history']
   target: V2
   current: V2
-  basis: 'tests/sim/test_sim_scenes_v2.py exercises every /api/v2/scenes route on the real hub + simulator and asserts the device effect of execute (V2).'
+  basis: "tests/sim/test_sim_scenes_v2.py exercises every /api/v2/scenes route on the real hub + simulator and asserts the device effect of execute (V2). R2: tests/sim/test_sim_rest_reads.py::test_scene_override_private_extensions_survive_public_edit_and_reload covers registered list/detail reads and edit/reload with nested private storage extensions, keeping public fields and PIN hashes separated. Existing evidence levels are retained pending the fresh integrated runtime campaign. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence. R2D def66d26 adds tests/test_runtime_legacy_scene_restart_r2d.py for validated migration provenance and legacy/v2 coexistence, including actual HTTP create/fresh-start/list/execute across same/split config layouts and both UC modes. Unchanged source and normal-image regressions in tests/test_runtime_review_r8.py pass in R8B/R8C at their recorded source/image revisions; see docs/validation/RUNTIME_REVIEW_DEADLINE_RESOLUTION.md. Complete candidate evidence is attributed below; baseline levels are unchanged. The complete clean 1baac3de campaign passes 4041 core tests with four platform skips and 177/177 routes, 1506 source client outcomes, 19 actual HA outcomes on each pinned version, and 193 normal-image client outcomes. All four normal-image startup/immediate/deadline regressions pass on sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e, with 257 actual shipped inputs matching each architecture. R8D accepts the supported Orei boundary; see docs/validation/RUNTIME_REVIEW_RESTORATION.md and the attributed runs/runtime-r8b manifest. The conditional pre-body alternate-disconnect probe remains explicitly failing outside that supported guarantee. Records contribute their actual software evidence levels; recorded baselines and hardware/field targets are unchanged."
   evidence:
   - docs/validation/evidence/F-DOM-010/2026-10-04-V2-7dbc4dc7-domain_manage.scene_a_list-api.json
   - docs/validation/evidence/F-DOM-010/2026-10-04-V2-7dbc4dc7-domain_manage.scene_b_create_reject_body_type-api.json
@@ -4349,7 +4498,7 @@ features:
       'POST /api/cec/macro/{macro_id}/favorite', 'POST /api/cec/macro/{macro_id}/dashboard']
   target: V2
   current: V1
-  basis: "Recorded V1 baseline: mocked macro API tests. The domain_manage packaged-image scenarios add V2 proof for macro management, validation boundaries/refusals, favorite/dashboard flags, collection ordering and non-executing dry-run. API-28 fixed: edits apply the create limits (domain_manage.macro_update_description_long passes). Macro execution and physical CEC effects are outside this management batch."
+  basis: "Recorded V1 baseline: mocked macro API tests. The domain_manage packaged-image scenarios add V2 proof for macro management, validation boundaries/refusals, favorite/dashboard flags, collection ordering and non-executing dry-run. API-28 fixed: edits apply the create limits (domain_manage.macro_update_description_long passes). Macro execution and physical CEC effects are outside this management batch. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence. R4C macro transport exceptions use correlated opaque public details while preserving partial207 behavior, command counts and private traceback diagnostics; tests/test_runtime_action_error_privacy_r4c.py covers real registered execution and shared action surfaces. Final image/client campaigns pending."
   evidence:
   - docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_update_description_long-api.json
   - docs/validation/evidence/F-DOM-019/2026-10-04-V2-7dbc4dc7-domain_manage.macro_all_commands-api.json
@@ -4507,7 +4656,7 @@ features:
         (10 aliases)]
   target: V2
   current: V1
-  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
+  basis: "Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence. R4C shortcut exception details use correlated opaque references while preserving refusals and action effects; tests/test_runtime_action_error_privacy_r4c.py covers registered routes and shared action surfaces. Final image/client campaigns pending."
   evidence:
   - docs/validation/evidence/F-API-024/2026-10-04-V2-7dbc4dc7-contracts.shortcut_alias-api.json
   - docs/validation/evidence/F-API-024/2026-10-04-V2-7dbc4dc7-contracts.shortcut_dashboard-api.json
@@ -4541,14 +4690,19 @@ features:
   interfaces:
     rest: [GET /api/themes, PUT /api/themes, POST /api/themes/reset, GET /api/ui/preferences, PUT /api/ui/preferences]
   target: V2
-  current: V1
-  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
+  current: V2
+  basis: "Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios. Accepted original source-simulator API V2 proof is preserved byte-exact at 1baac3dec660f41345869c126cfca94d6731c5a0, independently audited in docs/production/ev02/API_PRESERVATION_REVIEW.md (700a7d7e). Original SHA, timestamps and null image digest are retained; this is not a new run or image/client promotion. Existing findings and hardware/cross-client gates remain unchanged."
   evidence:
   - docs/validation/evidence/F-API-026/2026-10-04-V2-7dbc4dc7-contracts.themes-api.json
   - docs/validation/evidence/F-API-026/2026-10-04-V2-7dbc4dc7-contracts.ui_preferences-api.json
   - docs/validation/evidence/F-API-026/2026-10-04-V2-7dbc4dc7-writes.themes-api.json
   - docs/validation/evidence/F-API-026/2026-10-04-V2-7dbc4dc7-writes.themes_reset-api.json
   - docs/validation/evidence/F-API-026/2026-10-04-V2-7dbc4dc7-writes.ui_preferences-api.json
+  - docs/validation/evidence/ev02-original-api/F-API-026/2026-10-19-V2-1baac3de-contracts.themes-api.json
+  - docs/validation/evidence/ev02-original-api/F-API-026/2026-10-19-V2-1baac3de-contracts.ui_preferences-api.json
+  - docs/validation/evidence/ev02-original-api/F-API-026/2026-10-19-V2-1baac3de-writes.themes-api.json
+  - docs/validation/evidence/ev02-original-api/F-API-026/2026-10-19-V2-1baac3de-writes.themes_reset-api.json
+  - docs/validation/evidence/ev02-original-api/F-API-026/2026-10-19-V2-1baac3de-writes.ui_preferences-api.json
   findings: []
   scenarios: [contracts.themes, contracts.ui_preferences, writes.themes, writes.themes_reset, writes.ui_preferences]
 - id: F-API-027
@@ -4572,11 +4726,13 @@ features:
   interfaces:
     rest: [GET /api/integrations/flic/buttons, POST /api/integrations/flic/register]
   target: V2
-  current: V0
-  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
+  current: V2
+  basis: "Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. R5B reads verify canonical buttons exclude private metadata, edits preserve private extensions, and FLIC_ENABLED=false removes both routes while core health/status remain available. Fresh-process flag and cleanup checks are in tests/test_runtime_integration_safety_r5b.py. Recorded level retained pending the fresh image/client campaign. Accepted original source-simulator API V2 proof is preserved byte-exact at 1baac3dec660f41345869c126cfca94d6731c5a0, independently audited in docs/production/ev02/API_PRESERVATION_REVIEW.md (700a7d7e). Original SHA, timestamps and null image digest are retained; this is not a new run or image/client promotion. Existing findings and hardware/cross-client gates remain unchanged."
   evidence:
   - docs/validation/evidence/F-API-028/2026-10-04-V2-7dbc4dc7-contracts.flic_buttons-api.json
   - docs/validation/evidence/F-API-028/2026-10-04-V2-7dbc4dc7-writes.flic_register-api.json
+  - docs/validation/evidence/ev02-original-api/F-API-028/2026-10-19-V2-1baac3de-contracts.flic_buttons-api.json
+  - docs/validation/evidence/ev02-original-api/F-API-028/2026-10-19-V2-1baac3de-writes.flic_register-api.json
   findings: [PER-02, API-15, TST-03]
   scenarios: [contracts.flic_buttons, writes.flic_register]
 - id: F-API-029
@@ -4681,10 +4837,12 @@ features:
     ws: [audio_mute]
   target: V2
   current: V2
-  basis: 'V2: scenario outputs.audio_mute (audio_mute after the matrix reports it) and outputs.audio_mute_rejected (a refused mute is not announced); tests/sim/test_sim_ws_contract.py.'
+  basis: "V2: scenario outputs.audio_mute (audio_mute after the matrix reports it) and outputs.audio_mute_rejected (a refused mute is not announced); tests/sim/test_sim_ws_contract.py. Accepted original source-simulator API V2 proof is preserved byte-exact at 1baac3dec660f41345869c126cfca94d6731c5a0, independently audited in docs/production/ev02/API_PRESERVATION_REVIEW.md (700a7d7e). Original SHA, timestamps and null image digest are retained; this is not a new run or image/client promotion. Existing findings and hardware/cross-client gates remain unchanged."
   evidence:
   - docs/validation/evidence/F-MTX-007/2026-10-04-V2-7dbc4dc7-outputs.audio_mute-api.json
   - docs/validation/evidence/F-REL-008/2026-10-04-V2-7dbc4dc7-outputs.audio_mute_rejected-api.json
+  - docs/validation/evidence/ev02-original-api/F-MTX-007/2026-10-19-V2-1baac3de-outputs.audio_mute-api.json
+  - docs/validation/evidence/ev02-original-api/F-REL-008/2026-10-19-V2-1baac3de-outputs.audio_mute_rejected-api.json
   findings: []
   scenarios: [outputs.audio_mute, outputs.audio_mute_rejected]
 - id: F-API-037
@@ -4708,9 +4866,10 @@ features:
     ws: [cec_command]
   target: V2
   current: V2
-  basis: 'V2: scenario cec.output_power_on (cec_command, now sent after the matrix accepted it, no `optimistic` flag). The web UI does not show it (docs/api/WEBSOCKET.md).'
+  basis: "V2: scenario cec.output_power_on (cec_command, now sent after the matrix accepted it, no `optimistic` flag). The web UI does not show it (docs/api/WEBSOCKET.md). Accepted original source-simulator API V2 proof is preserved byte-exact at 1baac3dec660f41345869c126cfca94d6731c5a0, independently audited in docs/production/ev02/API_PRESERVATION_REVIEW.md (700a7d7e). Original SHA, timestamps and null image digest are retained; this is not a new run or image/client promotion. Existing findings and hardware/cross-client gates remain unchanged."
   evidence:
   - docs/validation/evidence/F-CEC-005/2026-10-04-V2-7dbc4dc7-cec.output_power_on-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-005/2026-10-19-V2-1baac3de-cec.output_power_on-api.json
   findings: []
   scenarios: [cec.output_power_on]
 - id: F-API-039
@@ -5227,7 +5386,7 @@ features:
     ui: [modal/save-profile/legacy]
   target: V3
   current: V1
-  basis: "Recorded V1 baseline: mocked save-current tests. The profile_state packaged-image scenarios add V2 proof for all 64 routing pairs, mute/HDR/HDCP capture and default name/icon with independent stored readback. API-27 fixed: output/video read failures answer 502 and create no profile; API-31 fixed: each output's enabled is its stream state from allout (profile_state.capture_stream_states passes); other values answer 502. Status caching is disabled; disabled-stream capture, browser behavior and restart persistence remain outside this batch."
+  basis: "Historical profile_state image scenarios cover routing pairs, mute/HDR/HDCP capture and default name/icon with independent storage readback using TTL=0. R1D runtime/source checks now verify fresh serialized output/video reads with TTL=3600, disabled streams and out-of-band state changes; failed reads return 502 without creating a profile or changing stored bytes. Tests/validation/test_runtime_readiness_r1d.py and tests/sim/test_sim_rest_reads.py cover actual composition and registered readback. Recorded level retained; fresh final-image, browser and restart campaign evidence remains pending."
   evidence:
   - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_output_read_failure-api.json
   - docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_video_read_failure-api.json
@@ -5268,7 +5427,7 @@ features:
     files: [scenes.json]
   target: V3
   current: V2
-  basis: 'Scenarios scenes.edit_with_profile_step and scenes.invalid_edit_rejected (V2); tests/sim/test_sim_scenes_v2.py (every /api/v2/scenes route on the real hub + simulator); tests/test_scene_manager.py.'
+  basis: "Scenarios scenes.edit_with_profile_step and scenes.invalid_edit_rejected (V2); tests/sim/test_sim_scenes_v2.py (every /api/v2/scenes route on the real hub + simulator); tests/test_scene_manager.py. R2D def66d26 adds tests/test_runtime_legacy_scene_restart_r2d.py for validated migration provenance and legacy/v2 coexistence, including actual HTTP create/fresh-start/list/execute across same/split config layouts and both UC modes. Unchanged source and normal-image regressions in tests/test_runtime_review_r8.py pass in R8B/R8C at their recorded source/image revisions; see docs/validation/RUNTIME_REVIEW_DEADLINE_RESOLUTION.md. Complete candidate evidence is attributed below; baseline levels are unchanged. The complete clean 1baac3de campaign passes 4041 core tests with four platform skips and 177/177 routes, 1506 source client outcomes, 19 actual HA outcomes on each pinned version, and 193 normal-image client outcomes. All four normal-image startup/immediate/deadline regressions pass on sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e, with 257 actual shipped inputs matching each architecture. R8D accepts the supported Orei boundary; see docs/validation/RUNTIME_REVIEW_RESTORATION.md and the attributed runs/runtime-r8b manifest. The conditional pre-body alternate-disconnect probe remains explicitly failing outside that supported guarantee. Records contribute their actual software evidence levels; recorded baselines and hardware/field targets are unchanged."
   evidence:
   - docs/validation/evidence/F-DOM-010/2026-10-04-V2-7dbc4dc7-domain_manage.scene_a_list-api.json
   - docs/validation/evidence/F-DOM-010/2026-10-04-V2-7dbc4dc7-domain_manage.scene_b_create_reject_body_type-api.json
@@ -6616,7 +6775,7 @@ features:
     uc: [setup_driver (reconfigure)]
   target: V4
   current: V3
-  basis: 'V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) since WP-B2/WP-B3: test_setup.py::test_reconfigure_with_a_bad_address_keeps_the_working_setup, ::test_reconfigure_keeps_the_subscribed_entities_working (same address: no login page), ::test_reconfigure_to_another_matrix_disposes_the_old_connection (login page, old matrix disposed: BE-10), ::test_the_login_entered_for_a_matrix_is_used_after_a_restart, ::test_abort_on_the_login_page_discards_the_new_address (UC-05 fixed in WP-B3). UC-02 (open, H) is linked to F-UC-002, not here. V4 on a real Remote pending.'
+  basis: "V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) since WP-B2/WP-B3: test_setup.py::test_reconfigure_with_a_bad_address_keeps_the_working_setup, ::test_reconfigure_keeps_the_subscribed_entities_working (same address: no login page), ::test_reconfigure_to_another_matrix_disposes_the_old_connection (login page, old matrix disposed: BE-10), ::test_the_login_entered_for_a_matrix_is_used_after_a_restart, ::test_abort_on_the_login_page_discards_the_new_address (UC-05 fixed in WP-B3). UC-02 (open, H) is linked to F-UC-002, not here. V4 on a real Remote pending. Shared HubRuntime matrix reconfiguration restoration is additionally covered by the R1G/R1H/R1I source regressions described in F-REL-017; this does not replace actual Remote setup/physical-client acceptance. The complete clean 1baac3de campaign passes 4041 core tests with four platform skips and 177/177 routes, 1506 source client outcomes, 19 actual HA outcomes on each pinned version, and 193 normal-image client outcomes. All four normal-image startup/immediate/deadline regressions pass on sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e, with 257 actual shipped inputs matching each architecture. R8D accepts the supported Orei boundary; see docs/validation/RUNTIME_REVIEW_RESTORATION.md and the attributed runs/runtime-r8b manifest. The conditional pre-body alternate-disconnect probe remains explicitly failing outside that supported guarantee. Records contribute their actual software evidence levels; recorded baselines and hardware/field targets are unchanged."
   evidence: []
   findings: [UC-05, BE-10]
   scenarios: []
@@ -7059,11 +7218,10 @@ features:
     flic: ['POST http://hub:8080/api/preset/{n} (no body)']
   target: V3
   current: V1
-  basis: 'The same REST route has mocked tests only, or a sim test that is not a Flic request replay; no test replays the
-    Flic Hub''s request. Closest: tests/sim/test_sim_e2e.py::test_switch_all_and_preset (POST /api/preset/3, no body).'
+  basis: "R6 generator/replay tests cover dedicated-client requests. R1F tests/test_runtime_cec_enable_r1f.py and tests/sim/test_sim_rest_reads.py reproduce and correct stale CEC enable decisions after explicit synchronization using a real simulator. Coordinator exact-commit checks: 27 passed; registered input/output cases failed before the fix and both passed afterward. The failed integrated 55d4fe0 image campaign and focused dirty-source worker proofs remain preserved. Fresh complete source and shipped-image campaigns at clean 4adbc13 both pass all 23 Flic outcomes, including source_power with unchanged strict enable-write/frame/readback oracles; actual image IDs and summaries are archived in docs/validation/runs/runtime. Recorded V1 baseline retained; fresh records supply their actual V3 level. Physical Flic Hub and CEC effects remain unobserved."
   evidence: []
   findings: []
-  scenarios: []
+  scenarios: ["flic.preset"]
 - id: F-FLIC-002
   area: flic
   title: Button hold powers the matrix off / on
@@ -7072,11 +7230,10 @@ features:
     flic: [POST /api/power/off, POST /api/power/on]
   target: V3
   current: V1
-  basis: The same REST route has mocked tests only, or a sim test that is not a Flic request replay; no test replays the Flic
-    Hub's request.
+  basis: "R6 implementation: tests/validation/test_flic_replay_r6.py, tests/validation/test_flic_templates_r6.py and tests/validation/test_flic_replay_live_r6.py exercise the dedicated client and actual generator with Node stubs; 74 coordinator tests passed in its isolated pre-R1 worktree, one disabled-route test awaits integrated startup. Recorded level retained until fresh normal-entry/image campaign. Physical Flic Hub, SDK version/buttons and physical CEC effects remain unobserved."
   evidence: []
   findings: []
-  scenarios: []
+  scenarios: ["flic.power_off", "flic.power_on"]
 - id: F-FLIC-003
   area: flic
   title: Button powers a source on over CEC
@@ -7085,11 +7242,10 @@ features:
     flic: ['POST /api/cec/input/{n}/power_on']
   target: V3
   current: V1
-  basis: The same REST route has mocked tests only, or a sim test that is not a Flic request replay; no test replays the Flic
-    Hub's request.
+  basis: "R6 implementation: tests/validation/test_flic_replay_r6.py, tests/validation/test_flic_templates_r6.py and tests/validation/test_flic_replay_live_r6.py exercise the dedicated client and actual generator with Node stubs; 74 coordinator tests passed in its isolated pre-R1 worktree, one disabled-route test awaits integrated startup. Recorded level retained until fresh normal-entry/image campaign. Physical Flic Hub, SDK version/buttons and physical CEC effects remain unobserved."
   evidence: []
   findings: []
-  scenarios: []
+  scenarios: ["flic.source_power"]
 - id: F-FLIC-004
   area: flic
   title: Flic Twist cycles an output through its inputs
@@ -7098,11 +7254,10 @@ features:
     flic: ['POST /api/input/next?output=N', 'POST /api/input/previous?output=N']
   target: V3
   current: V1
-  basis: The same REST route has mocked tests only, or a sim test that is not a Flic request replay; no test replays the Flic
-    Hub's request.
+  basis: "R6 implementation: tests/validation/test_flic_replay_r6.py, tests/validation/test_flic_templates_r6.py and tests/validation/test_flic_replay_live_r6.py exercise the dedicated client and actual generator with Node stubs; 74 coordinator tests passed in its isolated pre-R1 worktree, one disabled-route test awaits integrated startup. Recorded level retained until fresh normal-entry/image campaign. Physical Flic Hub, SDK version/buttons and physical CEC effects remain unobserved."
   evidence: []
   findings: []
-  scenarios: []
+  scenarios: ["flic.cycle_next", "flic.sdk_twist_next", "flic.sdk_twist_previous"]
 - id: F-FLIC-005
   area: flic
   title: Flic Twist controls TV volume and mute over CEC
@@ -7111,11 +7266,10 @@ features:
     flic: ['POST /api/cec/output/{n}/volume_up', 'POST /api/cec/output/{n}/volume_down', 'POST /api/cec/output/{n}/mute']
   target: V3
   current: V1
-  basis: The same REST route has mocked tests only, or a sim test that is not a Flic request replay; no test replays the Flic
-    Hub's request.
+  basis: "R6 implementation: tests/validation/test_flic_replay_r6.py, tests/validation/test_flic_templates_r6.py and tests/validation/test_flic_replay_live_r6.py exercise the dedicated client and actual generator with Node stubs; 74 coordinator tests passed in its isolated pre-R1 worktree, one disabled-route test awaits integrated startup. Recorded level retained until fresh normal-entry/image campaign. Physical Flic Hub, SDK version/buttons and physical CEC effects remain unobserved."
   evidence: []
   findings: [BE-14, VAL-03]
-  scenarios: []
+  scenarios: ["flic.display_volume", "flic.cec_output_navigation_refused"]
 - id: F-FLIC-006
   area: flic
   title: Button recalls a profile or runs a macro
@@ -7124,11 +7278,10 @@ features:
     flic: ['POST /api/profile/{id}/recall', 'POST /api/cec/macro/{id}/execute']
   target: V3
   current: V1
-  basis: The same REST route has mocked tests only, or a sim test that is not a Flic request replay; no test replays the Flic
-    Hub's request.
+  basis: "R6 implementation: tests/validation/test_flic_replay_r6.py, tests/validation/test_flic_templates_r6.py and tests/validation/test_flic_replay_live_r6.py exercise the dedicated client and actual generator with Node stubs; 74 coordinator tests passed in its isolated pre-R1 worktree, one disabled-route test awaits integrated startup. Recorded level retained until fresh normal-entry/image campaign. Physical Flic Hub, SDK version/buttons and physical CEC effects remain unobserved. Macro execution is a documented manual protocol variant, not a generated drawer action."
   evidence: []
   findings: [VAL-02, API-08]
-  scenarios: []
+  scenarios: ["flic.profile", "flic.profile_pin_refused", "flic.manual_macro", "flic.manual_macro_refused", "flic.unknown_profile"]
 - id: F-FLIC-007
   area: flic
   title: Register Flic buttons with the hub (button registry)
@@ -7138,22 +7291,22 @@ features:
     files: [flic_buttons.json]
   target: V3
   current: V0
-  basis: Not exercised by any test.
+  basis: "R5B registry safety and configured route ownership: tests/test_runtime_integration_safety_r5b.py and tests/sim/test_sim_rest_reads.py verify canonical six-octet addresses, metadata privacy, private extension retention and disabled-route absence with core reads available. R6 client/generator tests use explicit Node SDK stubs. Recorded level retained pending fresh normal-entry/image campaign; physical Flic Hub, SDK version and buttons remain unobserved."
   evidence: []
   findings: [PER-02, API-15]
-  scenarios: []
+  scenarios: ["flic.register"]
 - id: F-FLIC-008
   area: flic
-  title: Button switches every output to input N (POST /api/input/{n})
+  title: Button switches every output to input N (POST /api/switch with JSON input)
   claim: docs/FLIC_SETUP.md endpoint table
   interfaces:
-    flic: ['POST /api/input/{n}']
+    flic: ['POST /api/switch with JSON input']
   target: V3
   current: V0
-  basis: The documented route does not exist in src/rest_api/app.py (DOC-03).
+  basis: "R6 implementation: tests/validation/test_flic_replay_r6.py, tests/validation/test_flic_templates_r6.py and tests/validation/test_flic_replay_live_r6.py exercise the dedicated client and actual generator with Node stubs; 74 coordinator tests passed in its isolated pre-R1 worktree, one disabled-route test awaits integrated startup. Recorded level retained until fresh normal-entry/image campaign. Physical Flic Hub, SDK version/buttons and physical CEC effects remain unobserved."
   evidence: []
   findings: [DOC-03]
-  scenarios: []
+  scenarios: ["flic.all_outputs"]
 - id: F-FLIC-009
   area: flic
   title: Flic Hub SDK JavaScript module templates
@@ -7162,10 +7315,10 @@ features:
     docs: [docs/FLIC_SETUP.md Flic Hub SDK section]
   target: V3
   current: V0
-  basis: Templates are documentation only; never executed.
+  basis: "R6 implementation: tests/validation/test_flic_replay_r6.py, tests/validation/test_flic_templates_r6.py and tests/validation/test_flic_replay_live_r6.py exercise the dedicated client and actual generator with Node stubs; 74 coordinator tests passed in its isolated pre-R1 worktree, one disabled-route test awaits integrated startup. Recorded level retained until fresh normal-entry/image campaign. Physical Flic Hub, SDK version/buttons and physical CEC effects remain unobserved."
   evidence: []
   findings: []
-  scenarios: []
+  scenarios: ["flic.sdk_single", "flic.sdk_double", "flic.sdk_hold", "flic.sdk_filter_mismatch", "flic.sdk_startup_and_click", "flic.sdk_duo_left", "flic.sdk_duo_right", "flic.sdk_twist_next", "flic.sdk_twist_previous"]
 - id: F-FLIC-010
   area: flic
   title: Generate Flic request URLs in the web UI
@@ -7174,10 +7327,10 @@ features:
     ui: [drawer/integrations/flic-generated-request, drawer/integrations/flic-cec]
   target: V3
   current: V1
-  basis: visual catalog drawer/integrations/flic-*(screenshot baseline only).
+  basis: "R6 generator/replay tests cover dedicated-client requests; Node DOM stubs prove generated output separately from browser rendering. R1F tests/test_runtime_cec_enable_r1f.py correct real-SIM CEC enable decisions after explicit synchronization without changing generator or scenario expectations. Fresh complete source and shipped-image campaigns at clean 4adbc13 pass all 23 Flic outcomes; docs/validation/runs/runtime retains actual summaries and image metadata. Earlier failed image and dirty-source focused proofs remain distinct. Recorded V1 baseline retained; fresh records supply their actual V3 level. Physical Flic Hub, SDK/buttons and CEC effects remain unobserved."
   evidence: []
   findings: [SEC-08]
-  scenarios: []
+  scenarios: ["flic.preset", "flic.power_off", "flic.power_on", "flic.source_power", "flic.display_volume", "flic.profile", "flic.profile_pin_refused", "flic.all_outputs", "flic.cycle_next", "flic.cec_output_navigation_refused", "flic.sdk_single", "flic.sdk_double", "flic.sdk_hold", "flic.sdk_startup_and_click", "flic.sdk_duo_left", "flic.sdk_duo_right"]
 - id: F-OPS-001
   area: ops
   title: Run the hub from the Docker image
@@ -7420,7 +7573,7 @@ features:
     files: [scenes.json (v1), profiles.json]
   target: V4
   current: V1
-  basis: tests/test_persistence.py TestLegacyMigration; tests/test_error_paths.py TestProfileMigrationErrors.
+  basis: "tests/test_persistence.py TestLegacyMigration; tests/test_error_paths.py TestProfileMigrationErrors. R2D def66d26 adds tests/test_runtime_legacy_scene_restart_r2d.py for validated migration provenance and legacy/v2 coexistence, including actual HTTP create/fresh-start/list/execute across same/split config layouts and both UC modes. Unchanged source and normal-image regressions in tests/test_runtime_review_r8.py pass in R8B/R8C at their recorded source/image revisions; see docs/validation/RUNTIME_REVIEW_DEADLINE_RESOLUTION.md. Complete candidate evidence is attributed below; baseline levels are unchanged. The complete clean 1baac3de campaign passes 4041 core tests with four platform skips and 177/177 routes, 1506 source client outcomes, 19 actual HA outcomes on each pinned version, and 193 normal-image client outcomes. All four normal-image startup/immediate/deadline regressions pass on sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e, with 257 actual shipped inputs matching each architecture. R8D accepts the supported Orei boundary; see docs/validation/RUNTIME_REVIEW_RESTORATION.md and the attributed runs/runtime-r8b manifest. The conditional pre-body alternate-disconnect probe remains explicitly failing outside that supported guarantee. Records contribute their actual software evidence levels; recorded baselines and hardware/field targets are unchanged."
   evidence: []
   findings: [PER-03, API-12, PER-04]
   scenarios: []
@@ -7590,15 +7743,37 @@ features:
   title: Wrong-PIN attempts are limited and do not stall the hub
   claim: docs/REMEDIATION_PLAN.md SEC-06
   interfaces:
-    rest: ['POST /api/profile/{profile_id}/recall']
+    rest: ['POST /api/profile/{profile_id}/recall', 'POST /api/v2/scenes/{scene_id}/execute']
   target: V3
-  current: V1
-  basis: 'tests/test_profiles_scenes_pins.py and tests/test_security_v3_hardening_scenarios.py verify per-item exponential lockout (429 + Retry-After) and thread-executor PBKDF2 keeping /api/health loop_lag_ms < 100.'
-  evidence: []
+  current: V3
+  basis: "tests/test_profiles_scenes_pins.py and tests/test_security_v3_hardening_scenarios.py verify per-item exponential lockout (429 + Retry-After) and thread-executor PBKDF2 keeping /api/health loop_lag_ms < 100. V3 source proof at 2ae46e6c: six API and eight real Chromium cases demonstrate wrong-PIN refusal, visible per-item lockout/Retry-After and allowed controls; existing during-held PBKDF2 tests complement UI proof. Null image digests; no deployed-image or physical qualification."
+  evidence:
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V2-2ae46e6c-security_hardening.profile_wrong_pin-api.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V2-2ae46e6c-security_hardening.scene_wrong_pin-api.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V2-2ae46e6c-sw_sec_auth_01.profile_allowed-api.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V2-2ae46e6c-sw_sec_auth_01.profile_wrong_pin-api.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V2-2ae46e6c-sw_sec_auth_01.scene_allowed-api.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V2-2ae46e6c-sw_sec_auth_01.scene_wrong_pin-api.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.profile_allowed-browser.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.profile_locked-browser.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.profile_per_item-browser.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.profile_wrong_pin-browser.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.scene_allowed-browser.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.scene_locked-browser.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.scene_per_item-browser.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.scene_wrong_pin-browser.json
   findings: [SEC-06]
   scenarios:
   - security_hardening.profile_wrong_pin
   - security_hardening.scene_wrong_pin
+  - sw_sec_auth_01.profile_wrong_pin
+  - sw_sec_auth_01.profile_allowed
+  - sw_sec_auth_01.profile_locked
+  - sw_sec_auth_01.profile_per_item
+  - sw_sec_auth_01.scene_wrong_pin
+  - sw_sec_auth_01.scene_allowed
+  - sw_sec_auth_01.scene_locked
+  - sw_sec_auth_01.scene_per_item
 - id: F-SEC-008
   area: security
   title: Rate limiting per client
@@ -7708,7 +7883,7 @@ features:
     device: [login, get video status]
   target: V4
   current: V0
-  basis: 'Enabled reboot automatically restores HTTP and Telnet through the matrix reconnect supervisor; tests/sim/test_sim_enabled_reboot.py and packaged-image reboot records. The live.matrix_offline browser record also proves recovery after a 30-second simulator outage. Hardware and broader outage/soak cases remain pending.'
+  basis: "Enabled reboot automatically restores HTTP and Telnet through the matrix reconnect supervisor; tests/sim/test_sim_enabled_reboot.py and packaged-image reboot records. The live.matrix_offline browser record also proves recovery after a 30-second simulator outage. Hardware and broader outage/soak cases remain pending. R1G c2e02f00, R1H c36edb91 and R1I 0ea3b7ad are covered by tests/test_runtime_rollback_reconnect_r1g.py, test_runtime_rollback_deadline_r1h.py, test_runtime_rollback_restoration_r1i.py and unchanged review regressions test_runtime_review_r8.py/test_runtime_review_r8b.py/test_runtime_review_r8c.py. Exact R1I source verification passes 59 focused cases; the worker also passes 155 scoped runtime/UC/transport regressions. For supported Orei clients, cleanup retains one public retirement owner, restores logical state on interruption, fences uncertified disposal errors, and hands successful late closure to the existing reconnect supervisor under lifecycle and generation guards. Cleanup5 plus a separately bounded settling5 phase is not a global transaction deadline. Supported-client independent review and complete software campaigns are accepted below; no hardware/field level is granted. The complete clean 1baac3de campaign passes 4041 core tests with four platform skips and 177/177 routes, 1506 source client outcomes, 19 actual HA outcomes on each pinned version, and 193 normal-image client outcomes. All four normal-image startup/immediate/deadline regressions pass on sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e, with 257 actual shipped inputs matching each architecture. R8D accepts the supported Orei boundary; see docs/validation/RUNTIME_REVIEW_RESTORATION.md and the attributed runs/runtime-r8b manifest. The conditional pre-body alternate-disconnect probe remains explicitly failing outside that supported guarantee. Records contribute their actual software evidence levels; recorded baselines and hardware/field targets are unchanged."
   evidence:
   - docs/validation/evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.direct-api.json
   - docs/validation/evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.enabled_shortcut-api.json
@@ -7917,7 +8092,7 @@ features:
     uc: [setup_driver]
   target: V4
   current: V0
-  basis: No test.
+  basis: "Source/runtime cleanup coverage; physical and long-duration leak acceptance remain pending. R1G c2e02f00, R1H c36edb91 and R1I 0ea3b7ad are covered by tests/test_runtime_rollback_reconnect_r1g.py, test_runtime_rollback_deadline_r1h.py, test_runtime_rollback_restoration_r1i.py and unchanged review regressions test_runtime_review_r8.py/test_runtime_review_r8b.py/test_runtime_review_r8c.py. Exact R1I source verification passes 59 focused cases; the worker also passes 155 scoped runtime/UC/transport regressions. For supported Orei clients, cleanup retains one public retirement owner, restores logical state on interruption, fences uncertified disposal errors, and hands successful late closure to the existing reconnect supervisor under lifecycle and generation guards. Cleanup5 plus a separately bounded settling5 phase is not a global transaction deadline. Supported-client independent review and complete software campaigns are accepted below; no hardware/field level is granted. The complete clean 1baac3de campaign passes 4041 core tests with four platform skips and 177/177 routes, 1506 source client outcomes, 19 actual HA outcomes on each pinned version, and 193 normal-image client outcomes. All four normal-image startup/immediate/deadline regressions pass on sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e, with 257 actual shipped inputs matching each architecture. R8D accepts the supported Orei boundary; see docs/validation/RUNTIME_REVIEW_RESTORATION.md and the attributed runs/runtime-r8b manifest. The conditional pre-body alternate-disconnect probe remains explicitly failing outside that supported guarantee. Records contribute their actual software evidence levels; recorded baselines and hardware/field targets are unchanged."
   evidence: []
   findings: [BE-10, BE-11]
   scenarios: []
