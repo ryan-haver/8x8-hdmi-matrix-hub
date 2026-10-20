@@ -1138,3 +1138,59 @@ Receipt reports removal accepted/in progress; filesystem/Git/Orca final-state
 verification remains required, so cleanup completion is not yet asserted.
 Protected old user/external workspaces, denied empty-folder removal and odd
 untracked hook artifact remain untouched.
+
+
+### Accepted first API unit: review, sequential integration and publication gate
+
+DeepSeek exact candidate review **accepted API/source-simulator V2 only, no
+findings**, report tip `6385499f7f1c7dc754599a37508d14171c4ef5c7`. Independently
+81 focused + 33 registry/schema tests passed, three clean 3622dc9a scenario
+outcomes / 20 checks. **Actual formal gate PASS**, zero known failures/drops,
+exit 0, 191.9 seconds; the older two-drop hypothesis was not current evidence.
+An initial native 120-second check timeout is preserved in the complete provider
+transcript; later actual process/exit/result was checked, no timeout treated as
+an exit or a gate failure. No extra ledger generation. Both original/imported
+source SHA and all 3 hashes/covers/client mappings audited, null image digests.
+
+Complete native reviewer export positively confirms Pro/default. Exact settled
+Dispatch `ctx_0334309854fd` released/terminal archived before acknowledging
+`delivery_2a64617a7773`. Review task branch published and exact 6385499f remote
+SHA verified. Full bundles and workspace archives preserve original failures,
+tracked/untracked/ignored files, transcripts and private receipts before removal.
+
+Normal sequential Git merge **0812dfbc00418a18220a2492c83ddc052e450166**
+integrates the accepted source/candidate/review with no conflicts or material
+source change. The reviewed source, full registry, ledger, attributes and three
+original evidence blobs are byte-identical in integration. Normal source hook
+passed on author implementation; no hook override was supplied to the Git merge.
+Local combined verification: **515 documentation/registry/schema/ledger tests
+pass**, repository Ruff pass, mypy pass (91 source files). New API change-range
+redacted gitleaks scan: 3 commits, ~201KB, exit0/no leaks; separate from the M3
+full-history exit1 candidate-match inventory. No new suppression/config change.
+Canonical numerical ledger now **204 below / 57 stale**; software-below snapshot
+83. Other features are not freshly qualified by these numbers.
+
+The final publication-head full applicable CI pipeline is required and remains
+pending at this pre-publication checkpoint. Do not reuse old 97e617c2 CI as new
+head proof. Task refs stay published; exact root/origin equality and current-head
+CI receipts will be captured privately without a self-hash commit loop.
+
+GitHub read-only check of PR38 target wp-g1-g2-release-and-docs protection
+returned explicit HTTP404 `Branch not protected`; repository rulesets returned
+empty. The project's 13-check acceptance requirement is still enforced by this
+workflow; it is not falsely described as an observed GitHub branch-protection
+setting. PR38 remains draft and targets the same branch; no settings changed.
+
+Quota-window clarification after re-inspecting the original native footer:
+MiniMax shows Used72%/remaining28% and reset2d14h, but does not explicitly label
+its period weekly. Any initial private task-spec weekly qualifier is corrected:
+MiniMax period is unreported, remaining/reset observation unchanged. Gemini
+explicitly says wk; Codex weekly is independently confirmed by its account API.
+Bounded M3 allocation kept the verified Codex fallback; no credits invented.
+
+Orca exact finding and M3 worktree removals have now removed Git registrations
+and proven completed local task branches; published remote refs remain. Empty
+filesystem residual directories are still present, preserved without raw-delete
+retry. Their full verified archives/status/patch/history/transcripts are retained.
+The old protected/denied cleanup targets and author user-owned worktree remain
+untouched. No extra active worker assignment remains from this initial wave.

@@ -1268,7 +1268,7 @@
       "feature_ids": [
         "F-API-002"
       ],
-      "state": "completed_independent_review_launched",
+      "state": "integrated_independently_reviewed_pending_combined_ci",
       "exact_base_sha": "97e617c2276c7b1e015bb4a9419cb9820deafdee",
       "task_id": "task_3853c93e69ef",
       "dispatch_id": "ctx_41f75bc23079",
@@ -1299,8 +1299,16 @@
       "prepared_candidate_sha": "3622dc9a82893981feddc2e84ae7784eca3cdede",
       "review_task_id": "task_b62e4cdfe32e",
       "review_dispatch_id": "ctx_0334309854fd",
-      "worker_resources": "author settled retained/user_takeover by Orca; review active",
-      "qualification": "pending exact-candidate review and combined integration verification"
+      "worker_resources": "author retained/user_takeover; reviewer released before ack",
+      "qualification": "scoped review accepted; published-head combined CI pending; no broader release acceptance",
+      "review_tip_sha": "6385499f7f1c7dc754599a37508d14171c4ef5c7",
+      "integration_sha": "0812dfbc00418a18220a2492c83ddc052e450166",
+      "review_verdict": "accepted API/source-simulator V2 only;no findings",
+      "published_task_refs": {
+        "author": "0dd2c25ea866fd56fbe6046e03f0172499b70080",
+        "acceptance": "3622dc9a82893981feddc2e84ae7784eca3cdede",
+        "review": "6385499f7f1c7dc754599a37508d14171c4ef5c7"
+      }
     },
     {
       "id": "SW-API-READ-02",

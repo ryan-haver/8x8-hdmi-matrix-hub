@@ -692,3 +692,19 @@ under fresh authority before acceptance. Native quota observations and explicit
 fallback commitments are in the allocation ledger; the below-30 MiniMax slice
 uses verified Codex fallback rather than causing a project-wide development stop.
 No physical/owner-device/soak/field/final-release action occurred.
+
+
+### SW-API-READ-01 independently accepted and integrated
+
+DeepSeek review at exact `3622dc9a` accepted F-API-002 API/source-simulator V2
+with no findings; report `6385499f`. Independent 81+33 tests, three clean
+scenarios/20 checks and actual formal gate PASS (zero known failures/drops).
+Source/records remain attributed to `0dd2c25e`; original untracked diagnostic is
+excluded. Reviewer released/archived before delivery ack; task refs published.
+Normal sequential merge `0812dfbc` preserves reviewed source/registry/ledger/
+attributes/evidence bytes exactly. Local combined 515 documentation/registry/
+schema/ledger tests, Ruff and mypy (91 files) pass. Canonical ledger 204 below /
+57 stale; full publication-head CI remains pending, no blanket feature/release
+qualification. Both calibrated inventory packages are integrated as triage with
+explicit limits, no finding closure. Detailed receipts/ownership/cleanup follow
+allocation ledger and `runs/software-waves/SW-API-READ-01/integration.json`.
