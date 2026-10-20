@@ -1,7 +1,7 @@
 # Feature ledger
 
 > **Generated** by `python -m tools.validate ledger` — do not edit by hand. Registry: [`features.yaml`](features.yaml) · Plan: [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md) · How to add evidence: [`README.md`](README.md).
-> Commit `3539b190`
+> Commit `0dd2c25e`
 
 **Level** = highest level with fresh passing evidence, else the recorded baseline (the registry's `current`), capped at V1 while an open critical/high finding is linked. **Recorded** = the registry baseline. **Fresh** = evidence commit not older than the last change to the scenario's `covers` paths.
 
@@ -11,7 +11,7 @@
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Matrix control | 31 | 0 | 21 | 3 | 7 | 0 | 0 | 31 | 21 |
 | CEC control | 11 | 0 | 8 | 2 | 1 | 0 | 0 | 11 | 8 |
-| REST/WebSocket contract | 42 | 0 | 16 | 22 | 4 | 0 | 0 | 24 | 10 |
+| REST/WebSocket contract | 42 | 0 | 15 | 23 | 4 | 0 | 0 | 23 | 10 |
 | Domain features | 36 | 2 | 14 | 2 | 18 | 0 | 0 | 24 | 11 |
 | Web UI | 36 | 0 | 22 | 0 | 14 | 0 | 0 | 22 | 0 |
 | Kiosk | 14 | 0 | 7 | 0 | 7 | 0 | 0 | 7 | 0 |
@@ -21,7 +21,7 @@
 | Deployment, configuration, persistence | 20 | 3 | 8 | 2 | 7 | 0 | 0 | 20 | 7 |
 | Security controls | 15 | 0 | 13 | 0 | 2 | 0 | 0 | 13 | 0 |
 | Reliability | 18 | 9 | 3 | 2 | 4 | 0 | 0 | 18 | 0 |
-| **All** | **268** | **15** | **115** | **33** | **105** | **0** | **0** | **205** | **57** |
+| **All** | **268** | **15** | **114** | **34** | **105** | **0** | **0** | **204** | **57** |
 
 Levels: **V0** Claimed · **V1** Unit · **V2** Simulated integration · **V3** End-to-end · **V4** Hardware · **V5** Field
 
@@ -31,7 +31,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | Matrix control | 1 | 24 | 1 | 5 | 0 | 0 |
 | CEC control | 0 | 10 | 0 | 1 | 0 | 0 |
-| REST/WebSocket contract | 0 | 20 | 21 | 1 | 0 | 0 |
+| REST/WebSocket contract | 0 | 19 | 22 | 1 | 0 | 0 |
 | Domain features | 2 | 17 | 7 | 10 | 0 | 0 |
 | Web UI | 0 | 25 | 0 | 11 | 0 | 0 |
 | Kiosk | 0 | 8 | 0 | 6 | 0 | 0 |
@@ -41,9 +41,9 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | Deployment, configuration, persistence | 3 | 8 | 2 | 7 | 0 | 0 |
 | Security controls | 0 | 13 | 0 | 2 | 0 | 0 |
 | Reliability | 12 | 3 | 1 | 2 | 0 | 0 |
-| **All** | **22** | **138** | **32** | **76** | **0** | **0** |
+| **All** | **22** | **137** | **33** | **76** | **0** | **0** |
 
-- Features with fresh passing scenario evidence: **106** of 268.
+- Features with fresh passing scenario evidence: **107** of 268.
 - Features with a fresh failing scenario: **0**.
 - Features capped at V1 by an open critical/high finding: **12**.
 
@@ -104,7 +104,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | ID | Feature | Target | Level | Recorded | Freshness | Evidence | Open findings |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | F-API-001 | GET /api/health, /api/openapi.json, /api/docs (liveness, matrix connection, runtime metrics, integration lifecycle, OpenAPI 3.1 & Swagger UI) | V3 | V2 | V2 | — | — | — |
-| F-API-002 | API info and root (GET /, /api, /api/info) | V2 | V1 | V1 | — | — | — |
+| F-API-002 | API info and root (GET /, /api, /api/info) | V2 | **V2** | V2 | fresh | [contracts.api_info·api·pass](evidence/software-waves/SW-API-READ-01/F-API-002/2026-10-20-V2-0dd2c25e-contracts.api_info-api.json)<br>[contracts.api_root·api·pass](evidence/software-waves/SW-API-READ-01/F-API-002/2026-10-20-V2-0dd2c25e-contracts.api_root-api.json)<br>[contracts.api_root_alias·api·pass](evidence/software-waves/SW-API-READ-01/F-API-002/2026-10-20-V2-0dd2c25e-contracts.api_root_alias-api.json) | — |
 | F-API-003 | GET /api/status | V3 | V2 | V2 | — | — | — |
 | F-API-004 | Detailed status (GET /api/status/full\|inputs\|outputs\|cables\|edid\|ext-audio\|system\|device\|cec) | V3 | V1 | V1 | stale | [contracts.cables·api·pass](evidence/F-API-004/2026-10-04-V2-7dbc4dc7-contracts.cables-api.json)<br>[contracts.cec_status·api·pass](evidence/F-API-004/2026-10-04-V2-7dbc4dc7-contracts.cec_status-api.json) | — |
 | F-API-005 | POST /api/switch (one output or all) | V3 | V2 | V2 | fresh | [routing.switch_one·api·pass](evidence/runtime-r8b/F-MTX-001/2026-10-19-V2-1baac3de-routing.switch_one-api.json)<br>[routing.route_all·api·pass](evidence/runtime-r8b/F-MTX-002/2026-10-19-V2-1baac3de-routing.route_all-api.json) | — |
