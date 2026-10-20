@@ -1,0 +1,201 @@
+{
+  "commit": {
+    "sha": "2ae46e6c8bb9c2133371c3d93509277235e5e40e",
+    "branch": "ryan-haver/wp-sw-auth-lockout",
+    "dirty_files": [],
+    "short": "2ae46e6c",
+    "dirty": false
+  },
+  "target": "sim",
+  "clients": [
+    "api",
+    "browser"
+  ],
+  "operator": "automation",
+  "finished": "2026-10-20T22:07:52.432Z",
+  "aborted": null,
+  "outcomes": [
+    {
+      "scenario": "security_hardening.profile_wrong_pin",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-SEC-007"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "evidence/F-SEC-007/2026-10-20-V2-2ae46e6c-security_hardening.profile_wrong_pin-api.json"
+    },
+    {
+      "scenario": "security_hardening.scene_wrong_pin",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-SEC-007"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "evidence/F-SEC-007/2026-10-20-V2-2ae46e6c-security_hardening.scene_wrong_pin-api.json"
+    },
+    {
+      "scenario": "sw_sec_auth_01.profile_wrong_pin",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-SEC-007"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "evidence/F-SEC-007/2026-10-20-V2-2ae46e6c-sw_sec_auth_01.profile_wrong_pin-api.json"
+    },
+    {
+      "scenario": "sw_sec_auth_01.profile_allowed",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-SEC-007"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "evidence/F-SEC-007/2026-10-20-V2-2ae46e6c-sw_sec_auth_01.profile_allowed-api.json"
+    },
+    {
+      "scenario": "sw_sec_auth_01.scene_wrong_pin",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-SEC-007"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "evidence/F-SEC-007/2026-10-20-V2-2ae46e6c-sw_sec_auth_01.scene_wrong_pin-api.json"
+    },
+    {
+      "scenario": "sw_sec_auth_01.scene_allowed",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-SEC-007"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "evidence/F-SEC-007/2026-10-20-V2-2ae46e6c-sw_sec_auth_01.scene_allowed-api.json"
+    },
+    {
+      "scenario": "sw_sec_auth_01.profile_wrong_pin",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-SEC-007"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "evidence/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.profile_wrong_pin-browser.json"
+    },
+    {
+      "scenario": "sw_sec_auth_01.profile_allowed",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-SEC-007"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "evidence/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.profile_allowed-browser.json"
+    },
+    {
+      "scenario": "sw_sec_auth_01.profile_locked",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-SEC-007"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "evidence/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.profile_locked-browser.json"
+    },
+    {
+      "scenario": "sw_sec_auth_01.profile_per_item",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-SEC-007"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "evidence/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.profile_per_item-browser.json"
+    },
+    {
+      "scenario": "sw_sec_auth_01.scene_wrong_pin",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-SEC-007"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "evidence/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.scene_wrong_pin-browser.json"
+    },
+    {
+      "scenario": "sw_sec_auth_01.scene_allowed",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-SEC-007"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "evidence/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.scene_allowed-browser.json"
+    },
+    {
+      "scenario": "sw_sec_auth_01.scene_locked",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-SEC-007"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "evidence/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.scene_locked-browser.json"
+    },
+    {
+      "scenario": "sw_sec_auth_01.scene_per_item",
+      "client": "browser",
+      "status": "pass",
+      "level": "V3",
+      "features": [
+        "F-SEC-007"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "evidence/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.scene_per_item-browser.json"
+    }
+  ]
+}
