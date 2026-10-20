@@ -122,7 +122,7 @@ by this worker.
 
 ## R1 compatibility correction and preserved first source
 
-The first source commit is `f4ffa8d1` (full SHA in `source-initial.txt`). Its
+The first source commit is `f4ffa8d15aea519934e25a8b248992ebb074fe86`. Its
 normal configured hook passed full CI-path Ruff and **4,043 tests, four skips,
 35 deselections**, with strict **177/177 routes (100%)** in 1,145.97 seconds.
 Original hook log and route bytes are retained as `source-commit-hook-01.log`
@@ -144,3 +144,118 @@ current UI failure. The coordinator explicitly narrowed its earlier finding
 and directed reuse of the existing wait scenario after correction. No prompt
 was manufactured and no duplicate test was added. The passing pre-fix diagnostic
 remains in `r1-before-01/` with its own log; it is not clean acceptance evidence.
+
+## Final corrected source and clean results
+
+Submitted implementation source: **`2ae46e6c8bb9c2133371c3d93509277235e5e40e`**.
+This is the corrected commit after R1, based on the first source commit above;
+the assigned comparison base remains **`51275723846e4b126ccdc48c71d1727cabca4dbc`**.
+The later report-only commit changes this file alone; evidence keeps its original
+implementation SHA. Orca's `worker-observed.json` records requested **and
+effective** `codex / gpt-6.1-sol / high`. No different-family acceptance is
+claimed from author checks or the coordinator's preliminary source study.
+
+Fresh normal configured hook 02 passed CI-path Ruff, **4,043 tests / four skips /
+35 deselections / four warnings**, and strict **177/177 actual routes (100%)**
+in **1,352.90 seconds**. Both real Chromium tests were enabled. The hook's four
+skips are reported as skips, not passes; its quiet output does not enumerate
+their reasons. HA and scripted-Remote suites are excluded by the normal hook
+and are not newly qualified here. Original outputs are `logs/source-commit-hook-02.log`
+and `route-coverage-hook-02.json`; the prior full pass remains separately retained.
+Mypy passed all 91 configured source files; this does not claim test-module
+mypy coverage outside the configured scope.
+
+Clean committed-source campaigns both passed with empty dirty-file lists:
+
+| Campaign | Actual results | Checks | Artifacts |
+| --- | --- | --- | --- |
+| F-SEC-007 | **14/14**, six API and eight browser | **108 pass, six expected client-specific n/a, zero fail** | `clean-01/` |
+| Existing `scenes.wait_edit` control | **1/1 browser** | **four pass** | `clean-wait-01/` |
+
+The six n/a checks are explicit client scoping: browser-only toast assertions
+do not apply to API, and API JSON-body subsets do not apply to browser. The
+actual runner checks captured browser response status; no API-only body check
+is used as proof of browser status. All eight new scenarios ran through actual
+GUI intents in Chromium **153.0.8010.12**, pinned Playwright **1.63.0**, Python
+**3.12.10**, Windows 11, and the real `run.py` shared-runtime entry with a local
+matrix simulator. Image digests remain **null**. This is source/client proof,
+not image qualification or a change to F-SEC-007's registry `current: V1`.
+
+Clean records prove five actual GUI 403 `invalid_passcode` attempts, subsequent
+429 `passcode_locked`, a positive integer `Retry-After` matching the body, actual
+page request provenance, and independent protected peer execution. Every refused
+record's independent simulator state and command log remain unchanged; every
+allowed control changes routing from its pre-action value. The focused Chromium
+tests additionally require exact saved profile/scene bytes to remain unchanged
+across refusal and a correct-PIN API request to the locked item. Existing full-hook
+tests supply per-item reset/expiry/escalation and the during-held-PBKDF2 no-stall
+proof. The historical API scenarios' after-only health read is not timing proof.
+
+`campaign-audit-02.json` verifies all **15 records and 33 PNGs**, JSON schemas,
+exact source/dirty attribution, per-client feature ownership, covers, null image
+digests, captured page requests, refusal/control effects and immutable SHA-256
+hashes. The original audit and log remain: it wrongly expected success
+`gate: pass`, while the actual runner contract is `result: pass, gate: ok`.
+The corrected audit rechecked unchanged raw record/screenshot hashes and has
+zero errors. No evidence bytes were normalized or imported.
+
+Manual image inspection confirmed readable final wrong-PIN and profile/scene
+lockout error toasts, plus the wait editor's saved-result feedback. Immediate
+intermediate `locked.png` frames can precede toast paint; those frames are
+observations, not a claim that every intermediate PNG contains readable text.
+The final locked `after.png` frames show the errors. Screenshots grant no visual
+baseline approval.
+
+The actual formal command passed with exit zero and **zero known failures**:
+
+```text
+python -m tools.validate check --evidence build/software-waves/SW-SEC-AUTH-01/clean-01/evidence --run-summary build/software-waves/SW-SEC-AUTH-01/clean-01/run-summary.json --expect-clients api,browser
+```
+
+The gate also scans existing committed evidence and took longer than the scoped
+record audit; its original output is `logs/clean-gate.log`. No ledger generation
+ran. The coordinator separately refreshed three existing F-API-002 cases at
+the same clean source in its own ignored subtree, then explicitly released the
+tracked-file freeze before this report write. Those records are coordinator
+deliverables and are not counted as worker-authored F-SEC-007 results.
+
+Reproduction commands (all output directories were new; partial pytest disabled
+`tests.route_inventory`):
+
+```text
+SW_SEC_AUTH_BROWSER_TESTS=1 python -m pytest -p no:tests.route_inventory tests/test_profiles_scenes_pins.py::TestLockout tests/test_profiles_scenes_pins.py::TestPbkdf2OffTheEventLoop tests/test_security_v3_hardening_scenarios.py::test_wrong_pin_keeps_health_responsive_during_pbkdf2 tests/test_security_v3_hardening_scenarios.py::test_wrong_pin_lockout_is_per_item_and_expires tests/validation/test_sw_sec_auth_01.py --basetemp=build/software-waves/SW-SEC-AUTH-01/focused-01 -q --tb=short
+SW_SEC_AUTH_BROWSER_TESTS=1 python -m pytest -p no:tests.route_inventory tests/validation/test_sw_sec_auth_01.py --basetemp=build/software-waves/SW-SEC-AUTH-01/focused-03 -q --tb=short
+python -m tools.validate run --feature F-SEC-007 --client api --client browser --out build/software-waves/SW-SEC-AUTH-01/clean-01
+python -m tools.validate run --scenario scenes.wait_edit --client browser --out build/software-waves/SW-SEC-AUTH-01/clean-wait-01
+```
+
+These examples use shell-appropriate environment assignment; Windows execution
+set the variables in PowerShell. Both normal Git commits inherited
+`SW_SEC_AUTH_BROWSER_TESTS=1`, `ROUTE_COVERAGE_STRICT=1`, isolated
+`MATRIX_DATA_DIR`/`UC_CONFIG_HOME`, and separate `PYTEST_ADDOPTS=--basetemp=.../hook-01`
+or `hook-02`. `TEMP`/`TMP` used the task-owned new `tmp` parent. No manifests,
+locks, hook configuration or global preferences changed.
+
+The full assigned-base diff has exactly six paths: this report, the two new
+scenario/test files, the two explicitly leased browser files, and only the
+coordinator-authored eight-line registry mapping. No product, runner, DSL/model,
+schema, baseline, finding, evidence or ledger source changed. The existing
+registry interface list names profile recall only; any scene execute interface
+metadata update belongs to coordinator assembly. Different-family exact-candidate
+review, evidence import, registry/ledger qualification, integration, publication
+and release gates remain coordinator/owner responsibilities.
+
+Final shared-pool observation (`quota-finish.json`): ordinary usage still
+allowed, **66% remaining**, same weekly window/reset and no secondary pool.
+The 74% to 66% change is shared-pool usage, not an attribution to this worker.
+Raw native output includes an initial environment discovery with transient Orca
+hook/launch capability values: preserve that transcript privately and sanitize
+external excerpts. No such values are committed in this report or source.
+
+The report-only follow-up uses the task-authorized invocation-only
+`git -c core.hooksPath= commit` exception after the corrected source's full normal
+hook, clean campaigns, audit and formal gate. Its checks are scoped whitespace,
+path/diff and artifact-hash checks; it is not another full-hook pass. Final
+submission SHA and full base diff are recorded in the separate build receipt,
+avoiding a self-referential report hash. No push, merge, tag, ledger import,
+finding closure, worker settlement or destructive cleanup was performed here.
