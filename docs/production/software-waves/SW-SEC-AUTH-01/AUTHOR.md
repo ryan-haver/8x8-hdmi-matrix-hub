@@ -32,7 +32,8 @@ clicks the locked item again. It records the real 429/body/header and visible
 lockout message, screenshots, dialogs and page requests. Stable `pin.*` client
 observations expose five attempts, visible lockout, and a positive integer
 `Retry-After` matching the response body. An optional different target makes the
-final action execute an independently protected peer. Other flows are unchanged.
+final action execute an independently protected peer. Default flow semantics
+are preserved, including the restored native duration-prompt fallback below.
 There is no request-context or page-fetch substitute for GUI execution.
 
 Eight IDs are new, all attributed exclusively to F-SEC-007 with empty
@@ -118,3 +119,28 @@ registry levels and finding closure are not promoted. Existing direct/simulator
 tests complement actual UI proof; different-family review and coordinator
 acceptance/integration remain required. No push, merge, tag or cleanup is owned
 by this worker.
+
+## R1 compatibility correction and preserved first source
+
+The first source commit is `f4ffa8d1` (full SHA in `source-initial.txt`). Its
+normal configured hook passed full CI-path Ruff and **4,043 tests, four skips,
+35 deselections**, with strict **177/177 routes (100%)** in 1,145.97 seconds.
+Original hook log and route bytes are retained as `source-commit-hook-01.log`
+and `route-coverage-hook-01.json` under the build subtree. This first commit is
+not the submitted final source.
+
+Coordinator identified SW-SEC-AUTH-01-R1 during that frozen hook: the new wrapper
+reset `promptValue` to the action's passcode even for a no-probe scene wait edit,
+overriding its original seconds choice. The correction moves that reset inside
+the actual PIN-probe branch, preserving original no-probe prompt semantics.
+The source/index were not changed during the first hook. A fresh complete normal
+hook is required for the corrected source; the first pass cannot cover it.
+
+Calibration: the actual pre-fix `scenes.wait_edit` browser scenario **passed**,
+including independent saved 0.5-second readback and no device writes. The current
+UI uses the duration sheet, with no native dialog. R1 is therefore a native-prompt
+fallback compatibility issue found by source inspection, not a demonstrated
+current UI failure. The coordinator explicitly narrowed its earlier finding
+and directed reuse of the existing wait scenario after correction. No prompt
+was manufactured and no duplicate test was added. The passing pre-fix diagnostic
+remains in `r1-before-01/` with its own log; it is not clean acceptance evidence.

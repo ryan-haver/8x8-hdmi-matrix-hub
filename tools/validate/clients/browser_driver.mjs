@@ -559,8 +559,8 @@ async function perform(msg) {
         /^\d+$/.test(retryAfter ?? '') && Number(retryAfter) > 0 && Number(retryAfter) === body?.data?.retry_after;
       steps.push(`actual UI locked click: HTTP ${locked.status()} ${body?.data?.error}; Retry-After ${retryAfter}; visible lockout ${visible}`);
       await shot('locked');
+      promptValue = msg.params?.passcode;
     }
-    promptValue = msg.params?.passcode;
     const response = await flow(page, msg.params ?? {}, steps);
     status = response.status();
     steps.push(`the page sent ${response.request().method()} ${new URL(response.url()).pathname} -> HTTP ${status}`);
