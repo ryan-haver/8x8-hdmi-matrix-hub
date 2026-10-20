@@ -124,3 +124,86 @@ the coordinator. This author report establishes neither review acceptance nor
 integration, qualification, evidence import or publication. Browser/Remote/HA,
 image builds, physical HIL, 72-hour soak, week field and final release gates
 remain outside this bounded API V2 proof.
+
+## Completed verification and delivery
+
+Implementation commit: **`afe344a0e6a17392ccda90bab140284dd512267e`**.
+The normal configured hook ran without bypass and returned exit 0. Repository
+Ruff passed, then the complete configured core suite passed **4,041 tests**, with
+**four skips, 35 deselections and four warnings in 1,321.26 seconds**. Strict
+route coverage was **177/177 (100%), zero uncovered**, confirmed from both the
+terminal summary and the JSON report (`strict: true`). No ledger generation or
+canonical evidence mutation ran. The hook's generated local route report is
+copied under the assigned build tree for preservation.
+
+The four skips are explicit limits: POSIX permission enforcement
+(`test_persistence.py:270`), POSIX unlink-while-open race
+(`test_process_lock.py:254`), missing Home Assistant dependencies
+(`test_security_access_and_guards.py:185`), and unavailable Windows symlink
+privilege (`test_security_hardening.py:298`). The suite's configured hardware
+and Docker marker exclusions produced the 35 deselections; HA and scripted
+Remote suites are excluded by the normal hook. Four warnings are existing
+aiohttp application mutation/bare function deprecations. None is a passing
+hardware, HA, Remote, image or browser campaign.
+
+Normal commit command:
+`git commit -m "test(validation): prove API root aliases through simulator"`.
+The existing configured hook is
+`C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/.githooks/pre-commit`;
+it runs `ruff check src tests custom_components tools run.py run_server.py`
+and `pytest tests/ --ignore=tests/ha --ignore=tests/uc -q -x -p no:cacheprovider`.
+Environment additions: project venv Scripts first in PATH, `PYTHONUTF8=1`,
+`USE_MOCK_MATRIX=1`, `ROUTE_COVERAGE_STRICT=1`, MATRIX_DATA_DIR and UC_CONFIG_HOME
+at new `hook-01-data`/`hook-01-config` build paths, TEMP/TMP at the new
+`hook-01-temp` path, and
+`PYTEST_ADDOPTS="--basetemp=build/software-waves/SW-API-READ-01/hook-01-temp/cases
+--junitxml=build/software-waves/SW-API-READ-01/hook-01.xml -ra"`.
+Complete output, JUnit, command/environment receipt, start/end timestamps,
+exit and route coverage are preserved as `hook-01.*`,
+`hook-01-invocation.json`, `hook-01-route-coverage.json` and
+`implementation-staged.patch`. The hook passed once; no retry was needed.
+
+Clean source campaign:
+`PYTHON -m tools.validate run --target sim --client api --feature F-API-002
+--out build/software-waves/SW-API-READ-01/campaign-clean-01`.
+Exit **0**; completed `2026-10-20T17:06:35.555Z`, three passes, zero
+failures/skips/abort, **20/20 checks passing** (four existing info checks and
+eight per root alias). Summary and all three records identify full source
+`afe344a0e6a17392ccda90bab140284dd512267e`, `dirty: false`, `dirty_files: []`.
+The actual process is `run.py -> hub.cli shared runtime (UC_ENABLED=false)`
+against the local disposable simulator, Python 3.12.10 / aiohttp 3.13.3.
+All records are API/sim/V2, with null image digest. Independent raw-record
+inspection confirms populated before/after state, empty state diffs, only
+recognized device reads, no mutating commands or protocol warnings, and correct
+request paths `/api/info`, `/` and `/api`. Each root's captured hub reads also
+include its catalog and `/api/info` API-version cross-check.
+
+Preserved source records, relative to the assigned build tree:
+
+- `campaign-clean-01/run-summary.json` and `campaign-clean-01.log`.
+- `campaign-clean-01/evidence/F-API-002/2026-10-20-V2-afe344a0-contracts.api_info-api.json`.
+- `campaign-clean-01/evidence/F-API-002/2026-10-20-V2-afe344a0-contracts.api_root-api.json`.
+- `campaign-clean-01/evidence/F-API-002/2026-10-20-V2-afe344a0-contracts.api_root_alias-api.json`.
+- `clean-01-inspection.json`, including exact record SHA-256 values, commands,
+  check counts, state diffs and full-hook JUnit summary.
+
+Final tracked package consists only of this report, the new scenario module
+(76 added lines), and the coordinator-authored one-line registry mapping.
+No optional unit-test module was necessary: existing direct/source tests plus
+actual simulator scenarios already exercise the required contract. No product
+defect was reproduced; no broader correction was attempted.
+
+This final prose update uses the documented invocation-only documentation
+exception (`git -c core.hooksPath= commit`) after the implementation's full
+normal-hook pass. It changes only this author report and receives whitespace
+and scope checks; it is not another full-suite result. Implementation and
+mapping bytes remain identical to the tested source commit. The final submitted
+tip and any final report-tip replay are recorded in the ignored build receipts
+and exact Orca completion payload, avoiding a self-referential report hash.
+
+Independent different-family review remains **pending**, as do coordinator
+acceptance, evidence preservation/import, ledger reflection, integration and
+publication. The coordinator's 17:05:29Z message records user-owned takeover
+retention of this terminal; no worker release, cleanup or process action was
+attempted by the author. All diagnostic records retain their original bytes
+and attribution limits; none was relabeled as accepted base evidence.
