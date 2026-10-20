@@ -1404,3 +1404,18 @@ Covers inspection confirms four preservation features do not cover changed
 browser adapter paths; original API proof remains scoped to1baac3de. F-API-002
 covers tools/validate and requires three fresh cases at actual clean auth candidate.
 No next wave begins before current integration records/push/equality are complete.
+
+
+SW-API-READ-02 accepted integration **c59406f1b47e6736859f8f5197dcbae39526f739**
+contains original80735439 and corrected56466c16 ancestry. Task remote exact
+56466c16 equality verified. Full archive4,357files/273,805,805bytes, every entry
+hash verified (archiveSHA2569a6552bd19d5138816df0b611a5186d7e85a5233fd4af008cc1cb2d4ce3f8830).
+Full bundleSHA256a1b7f47758748d2d97cf268803ce23ddd584f4cd33270fea1b9b648700e735c6
+verified and separate bare recovery fetch resolves submitted56466c16. Complete
+native exports and patches/status/report are inside private preserved material.
+Exact Orca worktree-rm succeeded asynchronously; Git registration and local task
+branch are now absent. A subsequent safe branch-d observed already absent; no
+force applied. Empty residual filesystem folder remains preserved, no native
+filesystem-delete retry. Remote task branch retained; unrelated/user-owned/
+unresolved workspaces untouched. Scoped prose checks489passed, no implementation
+hook waiver. Integration publication receipt is kept outside its identified commit.

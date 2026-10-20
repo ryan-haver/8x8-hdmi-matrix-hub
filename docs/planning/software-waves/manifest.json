@@ -1322,7 +1322,7 @@
         "F-API-026",
         "F-API-028"
       ],
-      "state": "reviewed_preserved_original_api_v2",
+      "state": "integrated_preserved_original_api_v2",
       "exact_base_sha": "51275723846e4b126ccdc48c71d1727cabca4dbc",
       "task_id": "task_a75ae30df852",
       "dispatch_id": "ctx_de4764241ae7",
@@ -1358,7 +1358,9 @@
       "review_report": "docs/production/software-waves/SW-API-READ-02/REVIEW.md",
       "qualification_scope": "Preserve141 original1baac3de API V2 source records at assigned51275723 base; no new run, level, image or client qualification",
       "terminal_state": "released_before_delivery_ack",
-      "publication": "task ref56466c16 verified; integration pending"
+      "publication": "task ref56466c16 exact-remote equality verified; integration publication receipt follows outside commit",
+      "integration_sha": "c59406f1b47e6736859f8f5197dcbae39526f739",
+      "worktree_state": "Orca removed exact registration/local task branch after full verified recovery/publication/integration; empty residual filesystem folder preserved"
     },
     {
       "id": "SW-API-READ-03",
