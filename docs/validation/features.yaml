@@ -3847,7 +3847,7 @@ features:
   evidence:
   - docs/validation/evidence/F-API-018/2026-10-04-V2-7dbc4dc7-writes.output_name-api.json
   findings: [BE-16]
-  scenarios: [writes.output_name]
+  scenarios: [writes.output_name, writes.input_name, writes.input_name_invalid_port, writes.input_name_blank]
 - id: F-API-019
   area: api
   title: Profile routes
