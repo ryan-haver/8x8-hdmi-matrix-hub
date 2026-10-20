@@ -1,0 +1,70 @@
+{
+  "commit": {
+    "sha": "bb4d3fdc972e7f556f29c6ed468accd4ff3b88b5",
+    "branch": "ryan-haver/wp-ev02-input-name",
+    "dirty_files": [],
+    "short": "bb4d3fdc",
+    "dirty": false
+  },
+  "target": "sim",
+  "clients": [
+    "api"
+  ],
+  "operator": "automation",
+  "finished": "2026-10-20T04:30:48.674Z",
+  "aborted": null,
+  "outcomes": [
+    {
+      "scenario": "writes.output_name",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-018"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "evidence/F-API-018/2026-10-20-V2-bb4d3fdc-writes.output_name-api.json"
+    },
+    {
+      "scenario": "writes.input_name",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-018"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "evidence/F-API-018/2026-10-20-V2-bb4d3fdc-writes.input_name-api.json"
+    },
+    {
+      "scenario": "writes.input_name_invalid_port",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-018"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "evidence/F-API-018/2026-10-20-V2-bb4d3fdc-writes.input_name_invalid_port-api.json"
+    },
+    {
+      "scenario": "writes.input_name_blank",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-018"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "evidence/F-API-018/2026-10-20-V2-bb4d3fdc-writes.input_name_blank-api.json"
+    }
+  ]
+}

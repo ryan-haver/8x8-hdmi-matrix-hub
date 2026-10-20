@@ -12,6 +12,11 @@ docs/validation/runs/runtime/** -text
 docs/validation/evidence/**/2026-10-19-*-4adbc136-*.json -text
 docs/validation/runs/runtime-r8b/** -text
 docs/validation/evidence/runtime-r8b/** -text
+
+# EV-02 preserves original records and clean-candidate evidence byte-for-byte.
+docs/validation/evidence/ev02-original-api/** -text
+docs/validation/evidence/ev02-input-name/** -text
+docs/validation/runs/ev02-api-evidence/** -text
 docs/validation/reproductions/r8d_conditional_disconnect_probe.py -text
 
 # UI visual baselines (docs/REMEDIATION_PLAN.md §5.3) are stored in Git LFS.

@@ -2842,11 +2842,13 @@ features:
   interfaces:
     rest: [GET /api/system/info, GET /api/system/storage]
   target: V2
-  current: V1
-  basis: 'Recorded V1 baseline: tests/test_persistence.py TestStorageEndpoint (handler-level). New simulator reads verify runtime info and the actual fixture storage directory.'
+  current: V2
+  basis: "Recorded V1 baseline: tests/test_persistence.py TestStorageEndpoint (handler-level). New simulator reads verify runtime info and the actual fixture storage directory. Accepted original source-simulator API V2 proof is preserved byte-exact at 1baac3dec660f41345869c126cfca94d6731c5a0, independently audited in docs/production/ev02/API_PRESERVATION_REVIEW.md (700a7d7e). Original SHA, timestamps and null image digest are retained; this is not a new run or image/client promotion. Existing findings and hardware/cross-client gates remain unchanged."
   evidence:
   - docs/validation/evidence/F-API-014/2026-10-04-V2-7dbc4dc7-contracts.storage-api.json
   - docs/validation/evidence/F-API-014/2026-10-04-V2-7dbc4dc7-contracts.system_info-api.json
+  - docs/validation/evidence/ev02-original-api/F-API-014/2026-10-19-V2-1baac3de-contracts.storage-api.json
+  - docs/validation/evidence/ev02-original-api/F-API-014/2026-10-19-V2-1baac3de-contracts.system_info-api.json
   findings: [SEC-11]
   scenarios: [contracts.system_info, contracts.storage]
 - id: F-API-015
@@ -3541,8 +3543,8 @@ features:
     rest: [GET /api/cec/commands, 'GET /api/cec/commands/{type}', GET /api/cec/capabilities, 'GET /api/cec/input/{input}/capabilities',
       'GET /api/cec/output/{output}/capabilities', 'POST /api/cec/input/{port}/enable', 'POST /api/cec/output/{port}/enable']
   target: V2
-  current: V1
-  basis: "Registered-route simulator reads/writes and fresh packaged-image records. Single-port CEC writes preserve current arrays; tests/sim/test_sim_cec_enable_snapshot.py covers external changes, concurrent edits and failed/incomplete reads (BE-35). Grouped capability routes still have scope beyond the selected scenarios. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence."
+  current: V2
+  basis: "Registered-route simulator reads/writes and fresh packaged-image records. Single-port CEC writes preserve current arrays; tests/sim/test_sim_cec_enable_snapshot.py covers external changes, concurrent edits and failed/incomplete reads (BE-35). Grouped capability routes still have scope beyond the selected scenarios. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence. Accepted original source-simulator API V2 proof is preserved byte-exact at 1baac3dec660f41345869c126cfca94d6731c5a0, independently audited in docs/production/ev02/API_PRESERVATION_REVIEW.md (700a7d7e). Original SHA, timestamps and null image digest are retained; this is not a new run or image/client promotion. Existing findings and hardware/cross-client gates remain unchanged."
   evidence:
   - docs/validation/evidence/F-API-016/2026-10-01-V2-72cc71dc-writes.cec_output_enable-api.json
   - docs/validation/evidence/F-API-016/2026-10-04-V2-7dbc4dc7-contracts.cec_input_catalog-api.json
@@ -3677,6 +3679,138 @@ features:
   - docs/validation/evidence/F-CEC-011/2026-10-04-V2-7dbc4dc7-cec_caps.output_invalid_9-api.json
   - docs/validation/evidence/F-CEC-011/2026-10-04-V2-7dbc4dc7-cec_caps.output_invalid_invalid-api.json
   - docs/validation/evidence/F-CEC-011/2026-10-04-V2-7dbc4dc7-cec_caps.output_read_unavailable-api.json
+  - docs/validation/evidence/ev02-original-api/F-API-016/2026-10-19-V2-1baac3de-contracts.cec_input_catalog-api.json
+  - docs/validation/evidence/ev02-original-api/F-API-016/2026-10-19-V2-1baac3de-contracts.cec_invalid_type-api.json
+  - docs/validation/evidence/ev02-original-api/F-API-016/2026-10-19-V2-1baac3de-contracts.cec_output_catalog-api.json
+  - docs/validation/evidence/ev02-original-api/F-API-016/2026-10-19-V2-1baac3de-writes.cec_output_enable-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_1_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_1_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_2_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_2_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_3_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_3_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_4_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_4_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_5_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_5_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_6_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_6_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_7_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_7_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_8_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_8_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_enable_default-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_enable_port_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_enable_port_9-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_enable_refused-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_1_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_1_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_2_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_2_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_3_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_3_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_4_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_4_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_5_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_5_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_6_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_6_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_7_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_7_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_8_enable_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_8_enable_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_enable_default-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_enable_port_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_enable_port_9-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.output_enable_refused-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.all_pattern_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.all_pattern_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.all_pattern_2-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.all_read_unavailable-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.command_catalog-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_1_signal_0_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_1_signal_0_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_1_signal_1_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_1_signal_1_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_2_signal_0_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_2_signal_0_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_2_signal_1_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_2_signal_1_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_3_signal_0_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_3_signal_0_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_3_signal_1_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_3_signal_1_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_4_signal_0_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_4_signal_0_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_4_signal_1_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_4_signal_1_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_5_signal_0_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_5_signal_0_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_5_signal_1_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_5_signal_1_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_6_signal_0_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_6_signal_0_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_6_signal_1_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_6_signal_1_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_7_signal_0_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_7_signal_0_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_7_signal_1_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_7_signal_1_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_8_signal_0_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_8_signal_0_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_8_signal_1_cec_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_8_signal_1_cec_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_catalog-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_invalid_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_invalid_9-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_invalid_invalid-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.input_read_unavailable-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.invalid_catalog-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_1_scaler_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_1_scaler_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_1_scaler_2-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_1_scaler_3-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_1_scaler_4-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_2_scaler_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_2_scaler_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_2_scaler_2-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_2_scaler_3-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_2_scaler_4-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_3_scaler_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_3_scaler_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_3_scaler_2-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_3_scaler_3-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_3_scaler_4-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_4_scaler_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_4_scaler_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_4_scaler_2-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_4_scaler_3-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_4_scaler_4-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_5_scaler_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_5_scaler_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_5_scaler_2-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_5_scaler_3-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_5_scaler_4-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_6_scaler_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_6_scaler_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_6_scaler_2-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_6_scaler_3-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_6_scaler_4-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_7_scaler_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_7_scaler_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_7_scaler_2-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_7_scaler_3-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_7_scaler_4-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_8_scaler_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_8_scaler_1-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_8_scaler_2-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_8_scaler_3-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_8_scaler_4-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_catalog-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_invalid_0-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_invalid_9-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_invalid_invalid-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.output_read_unavailable-api.json
   findings: [BE-13, BE-35]
   scenarios:
   - contracts.cec_input_catalog
@@ -3842,10 +3976,14 @@ features:
   interfaces:
     rest: ['POST /api/input/{input}/name', 'POST /api/output/{output}/name']
   target: V2
-  current: V0
-  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
+  current: V2
+  basis: "Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios. Clean source-simulator API campaign at bb4d3fdc972e7f556f29c6ed468accd4ff3b88b5 passes input/output rename and input invalid-port/blank-name cases with independent device/hub readback and mutation/command checks. Scenario code was independently reviewed at 0a7d71b2; final combined acceptance is recorded separately in the EV-02 execution record. Existing findings and hardware/cross-client gates remain unchanged."
   evidence:
   - docs/validation/evidence/F-API-018/2026-10-04-V2-7dbc4dc7-writes.output_name-api.json
+  - docs/validation/evidence/ev02-input-name/F-API-018/2026-10-20-V2-bb4d3fdc-writes.input_name-api.json
+  - docs/validation/evidence/ev02-input-name/F-API-018/2026-10-20-V2-bb4d3fdc-writes.input_name_blank-api.json
+  - docs/validation/evidence/ev02-input-name/F-API-018/2026-10-20-V2-bb4d3fdc-writes.input_name_invalid_port-api.json
+  - docs/validation/evidence/ev02-input-name/F-API-018/2026-10-20-V2-bb4d3fdc-writes.output_name-api.json
   findings: [BE-16]
   scenarios: [writes.output_name, writes.input_name, writes.input_name_invalid_port, writes.input_name_blank]
 - id: F-API-019
@@ -4546,14 +4684,19 @@ features:
   interfaces:
     rest: [GET /api/themes, PUT /api/themes, POST /api/themes/reset, GET /api/ui/preferences, PUT /api/ui/preferences]
   target: V2
-  current: V1
-  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
+  current: V2
+  basis: "Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios. Accepted original source-simulator API V2 proof is preserved byte-exact at 1baac3dec660f41345869c126cfca94d6731c5a0, independently audited in docs/production/ev02/API_PRESERVATION_REVIEW.md (700a7d7e). Original SHA, timestamps and null image digest are retained; this is not a new run or image/client promotion. Existing findings and hardware/cross-client gates remain unchanged."
   evidence:
   - docs/validation/evidence/F-API-026/2026-10-04-V2-7dbc4dc7-contracts.themes-api.json
   - docs/validation/evidence/F-API-026/2026-10-04-V2-7dbc4dc7-contracts.ui_preferences-api.json
   - docs/validation/evidence/F-API-026/2026-10-04-V2-7dbc4dc7-writes.themes-api.json
   - docs/validation/evidence/F-API-026/2026-10-04-V2-7dbc4dc7-writes.themes_reset-api.json
   - docs/validation/evidence/F-API-026/2026-10-04-V2-7dbc4dc7-writes.ui_preferences-api.json
+  - docs/validation/evidence/ev02-original-api/F-API-026/2026-10-19-V2-1baac3de-contracts.themes-api.json
+  - docs/validation/evidence/ev02-original-api/F-API-026/2026-10-19-V2-1baac3de-contracts.ui_preferences-api.json
+  - docs/validation/evidence/ev02-original-api/F-API-026/2026-10-19-V2-1baac3de-writes.themes-api.json
+  - docs/validation/evidence/ev02-original-api/F-API-026/2026-10-19-V2-1baac3de-writes.themes_reset-api.json
+  - docs/validation/evidence/ev02-original-api/F-API-026/2026-10-19-V2-1baac3de-writes.ui_preferences-api.json
   findings: []
   scenarios: [contracts.themes, contracts.ui_preferences, writes.themes, writes.themes_reset, writes.ui_preferences]
 - id: F-API-027
@@ -4577,11 +4720,13 @@ features:
   interfaces:
     rest: [GET /api/integrations/flic/buttons, POST /api/integrations/flic/register]
   target: V2
-  current: V0
-  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. R5B reads verify canonical buttons exclude private metadata, edits preserve private extensions, and FLIC_ENABLED=false removes both routes while core health/status remain available. Fresh-process flag and cleanup checks are in tests/test_runtime_integration_safety_r5b.py. Recorded level retained pending the fresh image/client campaign.'
+  current: V2
+  basis: "Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. R5B reads verify canonical buttons exclude private metadata, edits preserve private extensions, and FLIC_ENABLED=false removes both routes while core health/status remain available. Fresh-process flag and cleanup checks are in tests/test_runtime_integration_safety_r5b.py. Recorded level retained pending the fresh image/client campaign. Accepted original source-simulator API V2 proof is preserved byte-exact at 1baac3dec660f41345869c126cfca94d6731c5a0, independently audited in docs/production/ev02/API_PRESERVATION_REVIEW.md (700a7d7e). Original SHA, timestamps and null image digest are retained; this is not a new run or image/client promotion. Existing findings and hardware/cross-client gates remain unchanged."
   evidence:
   - docs/validation/evidence/F-API-028/2026-10-04-V2-7dbc4dc7-contracts.flic_buttons-api.json
   - docs/validation/evidence/F-API-028/2026-10-04-V2-7dbc4dc7-writes.flic_register-api.json
+  - docs/validation/evidence/ev02-original-api/F-API-028/2026-10-19-V2-1baac3de-contracts.flic_buttons-api.json
+  - docs/validation/evidence/ev02-original-api/F-API-028/2026-10-19-V2-1baac3de-writes.flic_register-api.json
   findings: [PER-02, API-15, TST-03]
   scenarios: [contracts.flic_buttons, writes.flic_register]
 - id: F-API-029
@@ -4686,10 +4831,12 @@ features:
     ws: [audio_mute]
   target: V2
   current: V2
-  basis: 'V2: scenario outputs.audio_mute (audio_mute after the matrix reports it) and outputs.audio_mute_rejected (a refused mute is not announced); tests/sim/test_sim_ws_contract.py.'
+  basis: "V2: scenario outputs.audio_mute (audio_mute after the matrix reports it) and outputs.audio_mute_rejected (a refused mute is not announced); tests/sim/test_sim_ws_contract.py. Accepted original source-simulator API V2 proof is preserved byte-exact at 1baac3dec660f41345869c126cfca94d6731c5a0, independently audited in docs/production/ev02/API_PRESERVATION_REVIEW.md (700a7d7e). Original SHA, timestamps and null image digest are retained; this is not a new run or image/client promotion. Existing findings and hardware/cross-client gates remain unchanged."
   evidence:
   - docs/validation/evidence/F-MTX-007/2026-10-04-V2-7dbc4dc7-outputs.audio_mute-api.json
   - docs/validation/evidence/F-REL-008/2026-10-04-V2-7dbc4dc7-outputs.audio_mute_rejected-api.json
+  - docs/validation/evidence/ev02-original-api/F-MTX-007/2026-10-19-V2-1baac3de-outputs.audio_mute-api.json
+  - docs/validation/evidence/ev02-original-api/F-REL-008/2026-10-19-V2-1baac3de-outputs.audio_mute_rejected-api.json
   findings: []
   scenarios: [outputs.audio_mute, outputs.audio_mute_rejected]
 - id: F-API-037
@@ -4713,9 +4860,10 @@ features:
     ws: [cec_command]
   target: V2
   current: V2
-  basis: 'V2: scenario cec.output_power_on (cec_command, now sent after the matrix accepted it, no `optimistic` flag). The web UI does not show it (docs/api/WEBSOCKET.md).'
+  basis: "V2: scenario cec.output_power_on (cec_command, now sent after the matrix accepted it, no `optimistic` flag). The web UI does not show it (docs/api/WEBSOCKET.md). Accepted original source-simulator API V2 proof is preserved byte-exact at 1baac3dec660f41345869c126cfca94d6731c5a0, independently audited in docs/production/ev02/API_PRESERVATION_REVIEW.md (700a7d7e). Original SHA, timestamps and null image digest are retained; this is not a new run or image/client promotion. Existing findings and hardware/cross-client gates remain unchanged."
   evidence:
   - docs/validation/evidence/F-CEC-005/2026-10-04-V2-7dbc4dc7-cec.output_power_on-api.json
+  - docs/validation/evidence/ev02-original-api/F-CEC-005/2026-10-19-V2-1baac3de-cec.output_power_on-api.json
   findings: []
   scenarios: [cec.output_power_on]
 - id: F-API-039
