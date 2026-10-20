@@ -2659,11 +2659,14 @@ features:
     rest: [GET /, GET /api, GET /api/info]
   target: V2
   current: V2
-  basis: "V2: clean source-simulator API campaign at 0dd2c25ea866fd56fbe6046e03f0172499b70080 passes contracts.api_info, contracts.api_root and contracts.api_root_alias. Assertions cover canonical application/driver identity, documented API version/catalog and root aliases, unchanged simulator state and no mutating commands. Existing direct/simulator manifest-fallback tests remain covered. Three original records retain source SHA, timestamps, API-only client and null image digest byte-for-byte. Independent exact-candidate review/integration disposition is recorded in docs/production/software-waves/SW-API-READ-01/REVIEW.md and coordinator records; preparation alone is not final acceptance. No other client, image, hardware, soak or field qualification."
+  basis: "V2: clean source-simulator API campaign at 0dd2c25ea866fd56fbe6046e03f0172499b70080 passes contracts.api_info, contracts.api_root and contracts.api_root_alias. Assertions cover canonical application/driver identity, documented API version/catalog and root aliases, unchanged simulator state and no mutating commands. Existing direct/simulator manifest-fallback tests remain covered. Three original records retain source SHA, timestamps, API-only client and null image digest byte-for-byte. Independent exact-candidate review/integration disposition is recorded in docs/production/software-waves/SW-API-READ-01/REVIEW.md and coordinator records; preparation alone is not final acceptance. No other client, image, hardware, soak or field qualification. All three API cases refreshed at clean 2ae46e6c after the browser-adapter change; two original directory-covered records are stale and retained with original source attribution."
   evidence:
   - docs/validation/evidence/software-waves/SW-API-READ-01/F-API-002/2026-10-20-V2-0dd2c25e-contracts.api_info-api.json
   - docs/validation/evidence/software-waves/SW-API-READ-01/F-API-002/2026-10-20-V2-0dd2c25e-contracts.api_root-api.json
   - docs/validation/evidence/software-waves/SW-API-READ-01/F-API-002/2026-10-20-V2-0dd2c25e-contracts.api_root_alias-api.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01-api-refresh/F-API-002/2026-10-20-V2-2ae46e6c-contracts.api_info-api.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01-api-refresh/F-API-002/2026-10-20-V2-2ae46e6c-contracts.api_root-api.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01-api-refresh/F-API-002/2026-10-20-V2-2ae46e6c-contracts.api_root_alias-api.json
   findings: [DEP-06]
   scenarios: [contracts.api_info, contracts.api_root, contracts.api_root_alias]
 - id: F-API-003
@@ -7740,15 +7743,37 @@ features:
   title: Wrong-PIN attempts are limited and do not stall the hub
   claim: docs/REMEDIATION_PLAN.md SEC-06
   interfaces:
-    rest: ['POST /api/profile/{profile_id}/recall']
+    rest: ['POST /api/profile/{profile_id}/recall', 'POST /api/v2/scenes/{scene_id}/execute']
   target: V3
-  current: V1
-  basis: 'tests/test_profiles_scenes_pins.py and tests/test_security_v3_hardening_scenarios.py verify per-item exponential lockout (429 + Retry-After) and thread-executor PBKDF2 keeping /api/health loop_lag_ms < 100.'
-  evidence: []
+  current: V3
+  basis: "tests/test_profiles_scenes_pins.py and tests/test_security_v3_hardening_scenarios.py verify per-item exponential lockout (429 + Retry-After) and thread-executor PBKDF2 keeping /api/health loop_lag_ms < 100. V3 source proof at 2ae46e6c: six API and eight real Chromium cases demonstrate wrong-PIN refusal, visible per-item lockout/Retry-After and allowed controls; existing during-held PBKDF2 tests complement UI proof. Null image digests; no deployed-image or physical qualification."
+  evidence:
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V2-2ae46e6c-security_hardening.profile_wrong_pin-api.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V2-2ae46e6c-security_hardening.scene_wrong_pin-api.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V2-2ae46e6c-sw_sec_auth_01.profile_allowed-api.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V2-2ae46e6c-sw_sec_auth_01.profile_wrong_pin-api.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V2-2ae46e6c-sw_sec_auth_01.scene_allowed-api.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V2-2ae46e6c-sw_sec_auth_01.scene_wrong_pin-api.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.profile_allowed-browser.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.profile_locked-browser.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.profile_per_item-browser.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.profile_wrong_pin-browser.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.scene_allowed-browser.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.scene_locked-browser.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.scene_per_item-browser.json
+  - docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.scene_wrong_pin-browser.json
   findings: [SEC-06]
   scenarios:
   - security_hardening.profile_wrong_pin
   - security_hardening.scene_wrong_pin
+  - sw_sec_auth_01.profile_wrong_pin
+  - sw_sec_auth_01.profile_allowed
+  - sw_sec_auth_01.profile_locked
+  - sw_sec_auth_01.profile_per_item
+  - sw_sec_auth_01.scene_wrong_pin
+  - sw_sec_auth_01.scene_allowed
+  - sw_sec_auth_01.scene_locked
+  - sw_sec_auth_01.scene_per_item
 - id: F-SEC-008
   area: security
   title: Rate limiting per client

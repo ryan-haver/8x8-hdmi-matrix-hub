@@ -38,6 +38,8 @@ class BrowserClient(Client):
     #:   after each action): ``toast.<type>`` (success | warning | error | info) = text of the last
     #:   toast of that type, ``toasts`` = every toast as "<type>: <text>", ``dialogs`` = the message
     #:   of every window.prompt/confirm the page opened.
+    #: - bounded ``pin_lockout`` profile/scene UI sequences: ``pin.wrong_attempts``,
+    #:   ``pin.lockout_visible`` and ``pin.retry_after_positive`` (response/header/body agree).
     observes = True
 
     def __init__(self) -> None:
@@ -117,6 +119,7 @@ class BrowserClient(Client):
             "console_errors": res.get("consoleErrors", []),
             "toasts": res.get("toasts", []),
             "dialogs": res.get("dialogs", []),
+            "pin_probe": res.get("pinProbe"),
         }
         self._shown = {"toasts": list(res.get("toasts", [])), "dialogs": list(res.get("dialogs", []))}
         self._shown.update(res.get("shown", {}))
@@ -124,7 +127,7 @@ class BrowserClient(Client):
         return result
 
     async def observe(self, key: str) -> Any:
-        if key.startswith("scene."):
+        if key.startswith(("scene.", "pin.")):
             return self._shown.get(key)
         if key in ("toasts", "dialogs"):
             return self._shown.get(key, [])

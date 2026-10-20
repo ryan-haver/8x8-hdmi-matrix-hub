@@ -1,7 +1,7 @@
 # Feature ledger
 
 > **Generated** by `python -m tools.validate ledger` — do not edit by hand. Registry: [`features.yaml`](features.yaml) · Plan: [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md) · How to add evidence: [`README.md`](README.md).
-> Commit `0dd2c25e`
+> Commit `141bffb2`
 
 **Level** = highest level with fresh passing evidence, else the recorded baseline (the registry's `current`), capped at V1 while an open critical/high finding is linked. **Recorded** = the registry baseline. **Fresh** = evidence commit not older than the last change to the scenario's `covers` paths.
 
@@ -19,9 +19,9 @@
 | Home Assistant component | 18 | 0 | 1 | 0 | 17 | 0 | 0 | 18 | 0 |
 | Flic | 10 | 0 | 0 | 0 | 10 | 0 | 0 | 0 | 0 |
 | Deployment, configuration, persistence | 20 | 3 | 8 | 2 | 7 | 0 | 0 | 20 | 7 |
-| Security controls | 15 | 0 | 13 | 0 | 2 | 0 | 0 | 13 | 0 |
+| Security controls | 15 | 0 | 12 | 0 | 3 | 0 | 0 | 12 | 0 |
 | Reliability | 18 | 9 | 3 | 2 | 4 | 0 | 0 | 18 | 0 |
-| **All** | **268** | **15** | **114** | **34** | **105** | **0** | **0** | **204** | **57** |
+| **All** | **268** | **15** | **113** | **34** | **106** | **0** | **0** | **203** | **57** |
 
 Levels: **V0** Claimed · **V1** Unit · **V2** Simulated integration · **V3** End-to-end · **V4** Hardware · **V5** Field
 
@@ -39,11 +39,11 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | Home Assistant component | 0 | 1 | 0 | 17 | 0 | 0 |
 | Flic | 3 | 7 | 0 | 0 | 0 | 0 |
 | Deployment, configuration, persistence | 3 | 8 | 2 | 7 | 0 | 0 |
-| Security controls | 0 | 13 | 0 | 2 | 0 | 0 |
+| Security controls | 0 | 12 | 0 | 3 | 0 | 0 |
 | Reliability | 12 | 3 | 1 | 2 | 0 | 0 |
-| **All** | **22** | **137** | **33** | **76** | **0** | **0** |
+| **All** | **22** | **136** | **33** | **77** | **0** | **0** |
 
-- Features with fresh passing scenario evidence: **107** of 268.
+- Features with fresh passing scenario evidence: **108** of 268.
 - Features with a fresh failing scenario: **0**.
 - Features capped at V1 by an open critical/high finding: **12**.
 
@@ -104,7 +104,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | ID | Feature | Target | Level | Recorded | Freshness | Evidence | Open findings |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | F-API-001 | GET /api/health, /api/openapi.json, /api/docs (liveness, matrix connection, runtime metrics, integration lifecycle, OpenAPI 3.1 & Swagger UI) | V3 | V2 | V2 | — | — | — |
-| F-API-002 | API info and root (GET /, /api, /api/info) | V2 | **V2** | V2 | fresh | [contracts.api_info·api·pass](evidence/software-waves/SW-API-READ-01/F-API-002/2026-10-20-V2-0dd2c25e-contracts.api_info-api.json)<br>[contracts.api_root·api·pass](evidence/software-waves/SW-API-READ-01/F-API-002/2026-10-20-V2-0dd2c25e-contracts.api_root-api.json)<br>[contracts.api_root_alias·api·pass](evidence/software-waves/SW-API-READ-01/F-API-002/2026-10-20-V2-0dd2c25e-contracts.api_root_alias-api.json) | — |
+| F-API-002 | API info and root (GET /, /api, /api/info) | V2 | **V2** | V2 | fresh | [contracts.api_info·api·pass](evidence/software-waves/SW-API-READ-01/F-API-002/2026-10-20-V2-0dd2c25e-contracts.api_info-api.json)<br>[contracts.api_info·api·pass](evidence/software-waves/SW-SEC-AUTH-01-api-refresh/F-API-002/2026-10-20-V2-2ae46e6c-contracts.api_info-api.json)<br>[contracts.api_root·api·pass](evidence/software-waves/SW-SEC-AUTH-01-api-refresh/F-API-002/2026-10-20-V2-2ae46e6c-contracts.api_root-api.json)<br>[contracts.api_root_alias·api·pass](evidence/software-waves/SW-SEC-AUTH-01-api-refresh/F-API-002/2026-10-20-V2-2ae46e6c-contracts.api_root_alias-api.json) | — |
 | F-API-003 | GET /api/status | V3 | V2 | V2 | — | — | — |
 | F-API-004 | Detailed status (GET /api/status/full\|inputs\|outputs\|cables\|edid\|ext-audio\|system\|device\|cec) | V3 | V1 | V1 | stale | [contracts.cables·api·pass](evidence/F-API-004/2026-10-04-V2-7dbc4dc7-contracts.cables-api.json)<br>[contracts.cec_status·api·pass](evidence/F-API-004/2026-10-04-V2-7dbc4dc7-contracts.cec_status-api.json) | — |
 | F-API-005 | POST /api/switch (one output or all) | V3 | V2 | V2 | fresh | [routing.switch_one·api·pass](evidence/runtime-r8b/F-MTX-001/2026-10-19-V2-1baac3de-routing.switch_one-api.json)<br>[routing.route_all·api·pass](evidence/runtime-r8b/F-MTX-002/2026-10-19-V2-1baac3de-routing.route_all-api.json) | — |
@@ -342,7 +342,7 @@ Recorded baseline (the registry's `current`: proof that existed before scenario 
 | F-SEC-004 | Profile/scene passcodes are stored as PBKDF2 hashes | V3 | V1 | V1 | — | — | — |
 | F-SEC-005 | Passcode hashes are never sent to clients | V3 | V1 | V1 | — | — | — |
 | F-SEC-006 | Changing or removing a PIN needs the current PIN | V3 | V1 | V1 | — | — | — |
-| F-SEC-007 | Wrong-PIN attempts are limited and do not stall the hub | V3 | V1 | V1 | — | — | — |
+| F-SEC-007 | Wrong-PIN attempts are limited and do not stall the hub | V3 | **V3** | V3 | fresh | [security_hardening.profile_wrong_pin·api·pass](evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V2-2ae46e6c-security_hardening.profile_wrong_pin-api.json)<br>[security_hardening.scene_wrong_pin·api·pass](evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V2-2ae46e6c-security_hardening.scene_wrong_pin-api.json)<br>[sw_sec_auth_01.profile_allowed·api·pass](evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V2-2ae46e6c-sw_sec_auth_01.profile_allowed-api.json)<br>[sw_sec_auth_01.profile_wrong_pin·api·pass](evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V2-2ae46e6c-sw_sec_auth_01.profile_wrong_pin-api.json) | — |
 | F-SEC-008 | Rate limiting per client | V3 | V1 | V1 | — | — | — |
 | F-SEC-009 | Proxy headers trusted only from configured proxies | V3 | V1 | V1 | — | — | — |
 | F-SEC-010 | Static files cannot escape the web root | V3 | V1 | V1 | — | — | — |
