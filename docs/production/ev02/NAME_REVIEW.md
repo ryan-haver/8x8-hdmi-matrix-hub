@@ -6,6 +6,23 @@ F-API-018. It records a source/assertion/behavior review at the exact author
 commit; it does **not** close the package gate or promote F-API-018, because the
 coordinator's registry mapping and the final combined SHA are still pending.
 
+## Correction note (report-only follow-up)
+
+This file carries one prose correction over its first revision (commit
+`37216b6b`), made under follow-up `task_850114b80411` / `ctx_42a2e7a0a189`:
+
+- The happy-path response body was originally written with `"error": null`
+  nested inside `data`. The actual evidence (`checks[0].detail` and
+  `observations.requests[0].response`) records `error: null` at the **top
+  level**, alongside `success` and `data`. The body is now written correctly.
+- The covers statement has been qualified from an absolute
+  dependency-completeness claim to the **inspected declared dependency paths**.
+
+No product, test, scenario, registry, evidence or runtime byte was changed, and
+no runtime test was rerun for this documentation-only correction. The original
+review commit `37216b6b` and the reviewed implementation `0a7d71b2` (base
+`3979d602`) are preserved unchanged; this correction is a new commit on top.
+
 ## Authority, identity and scope
 
 | Field | Observation |
@@ -115,7 +132,8 @@ Python 3.12.10, Ruff 0.17.1, pytest 9.1.1; hub version 2.10.0 (matches
 outcomes with `gate: ok` and no `failed_checks`. Each record was inspected:
 
 - **`writes.input_name`** (happy): 8 checks pass. The response body is
-  `{"success": true, "data": {"input": 8, "name": "Media PC", "message": "Input 8 renamed to 'Media PC'", "error": null}}`.
+  `{"success": true, "data": {"input": 8, "name": "Media PC", "message": "Input 8 renamed to 'Media PC'"}, "error": null}`
+  (`error: null` is top-level, a sibling of `success` and `data`).
   `state_diff` contains exactly one entry — `inputs[7].name` `"Before source" →
   "Media PC"`. `device_log` shows one mutating `set input name` with payload
   `{"comhead": "set input name", "language": 0, "name": "Media PC", "index": 8}`
@@ -141,10 +159,13 @@ outcomes with `gate: ok` and no `failed_checks`. Each record was inspected:
 - `test_model.py::test_every_scenario_is_well_formed` (which discovers and
   validates all scenarios) passes, as do the module's construction-time
   `__post_init__` checks (id/feature regex, non-empty covers).
-- Covers (`_NAMES`) include all paths the route actually depends on —
-  `src/rest_api/core.py`, `src/rest_api/utils.py`, `src/rest_api/app.py`,
-  `src/orei_matrix.py`, `src/_file_io.py`, `src/hub/core`, and the WebSocket
-  schema — so staleness tracking is complete for the rename path.
+- Covers (`_NAMES`) were inspected against the dependency paths the
+  `handle_set_input_name` handler references: `src/rest_api/core.py`,
+  `src/rest_api/utils.py`, `src/rest_api/app.py`, `src/orei_matrix.py`,
+  `src/_file_io.py`, `src/hub/core`, and the WebSocket schema are all declared.
+  This confirms the declared covers are not missing any handler-referenced path
+  that was inspected; it is not an absolute proof of transitive dependency
+  completeness.
 
 ## Findings
 
