@@ -1,10 +1,10 @@
 # SW-API-CLIENT-02-C1: disconnected routing failure event
 
 Disposition: **actual reproduced contract defect**, provisional finding VAL-14;
-registration and corrective dispatch remain pending. This is a bounded child of
+registration remains pending; corrective dispatch is now launched. This is a bounded child of
 SW-API-CLIENT-02 for F-API-033, with F-REL-009 as an affected feature. It creates
 no additional primary feature owner and does not qualify either feature's full
-target. No implementation worker has been launched for this child.
+target. DeepSeekPro/default Tasktask_036936ee9cd3 / Dispatchctx_a7ac1a749cac is launched at411c66429df3b813072e736c41c3a8aa83043a70; implementation, review and qualification remain pending.
 
 [CI39500840835](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/actions/runs/39500840835)
 at published1a4f9f9457f85bdcc2eafb9c43e8e7cd4eecd109 completed12/13 required
@@ -41,7 +41,7 @@ allowed control with independent state/command/event readback. Keep the existing
 unreachable scenario and its event assertion. No retry-only CI waiver, weaker
 assertion, transport/reconnect change or new owner/hardware action is authorized.
 
-A future exact serial lease may include src/rest_api/control.py, an owned new
+The launched exact serial lease includes src/rest_api/control.py, an owned new
 simulator regression test and the required simulator REST read-coverage update.
 Registry/ledger/finding registration and integration remain coordinator-owned.
 A qualified different-family source review, normal full hook/route inventory,

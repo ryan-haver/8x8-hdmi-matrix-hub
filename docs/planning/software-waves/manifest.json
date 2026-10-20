@@ -36041,14 +36041,30 @@
       "affected_secondary": [
         "F-REL-009"
       ],
-      "state": "reproduced_finding_no_dispatch",
+      "state": "launched",
       "finding": "VAL-14 proposed; registration pending",
       "report": "docs/production/software-waves/SW-API-CLIENT-02-C1/FINDING.md",
       "primary_feature_ownership": "unchanged in parent allocation",
-      "source_base_sha": null,
-      "task_id": null,
-      "dispatch_id": null,
+      "source_base_sha": "411c66429df3b813072e736c41c3a8aa83043a70",
+      "task_id": "task_036936ee9cd3",
+      "dispatch_id": "ctx_a7ac1a749cac",
       "acceptance": "Already-offline valid-route failure event, preserved503/invalid-payload behavior, independent simulator controls, qualified cross-family review and combined CI; no fulltargetpromotion implied"
+    },
+    {
+      "id": "SW-API-READ-04-C1",
+      "parent_unit": "SW-API-READ-04",
+      "feature_scope": [
+        "F-API-031"
+      ],
+      "affected_secondary": [],
+      "state": "launched",
+      "finding": "Capability gap: response headers unavailable to assertions; no presumed product defect",
+      "report": "docs/production/software-waves/SW-API-READ-04-C1/AUTHOR.md",
+      "primary_feature_ownership": "unchanged in parent allocation; F-API-032 deferred",
+      "source_base_sha": "411c66429df3b813072e736c41c3a8aa83043a70",
+      "task_id": "task_f21b82527590",
+      "dispatch_id": "ctx_a3ed1a9562f1",
+      "acceptance": "Actual captured header assertions with privacy and negative controls, meaningful clean-source API-only CORS scenarios, normal full hook/routes, different-family review; refresh affected security/root evidence on combined candidate"
     }
   ]
 }

@@ -797,3 +797,6 @@ accepted in namedsourceAPI/browser scope; ledger268/203below/57stale. Both taskr
 published/exactequal, all newworkers settled/released, authorfullworkspace and
 verifiedbundles preserved. Current-head CI/publication receipt follows; independent
 VAL14proposed eventgap still needs correction, not a releasewaiver.
+
+
+Wave03 authorized non-hardware execution: exact published411c66429df3b813072e736c41c3a8aa83043a70 bases, existing Run/runtime unchanged, preflight23:03Z Codex60%weeklyremaining/resetOct27 06:33:16UTC and DeepSeekUSD44.51available. Two genuine nonoverlapping authors: DeepSeekPro/default SW-API-CLIENT-02-C1 task036936ee9cd3/ctx_a7ac1a749cac fixes reproduced offline route event boundary; Sol6.1/high SW-API-READ-04-C1 taskf21b82527590/ctx_a3ed1a9562f1 adds real safe CORS header assertions/API proof forFAPI031. Fouractive budget includes older external reservation. Both require qualified different-family exact-commit reviews before sequential integration; no source acceptance or owner gate inferred. Full paths/quotas/leases in allocation ledger and privatewave03 specs/receipts. Primary65units/268featureowners unchanged, FAPI032 deferred. Current411cCI validation1500passingrecords/source4fac treeequivalent;12requiredjobsPASS/UIpending. Old failedCI/offlinecausalproof preserved, not waived by latest timing pass.
