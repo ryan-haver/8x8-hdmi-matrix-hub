@@ -218,3 +218,31 @@ async def test_unconfigured_matrix_malformed_route_publishes_no_event(data_hub, 
     assert ws.events("switch_all_failed", t0) == []
     assert sim_writes(simulator) == []
     await ws.close()
+
+
+@pytest.mark.parametrize("path", ["/api/switch", "/api/output/1/source"])
+async def test_unavailable_oversized_body_is_503_not_500(aiohttp_client, tmp_path, path):
+    """R1: an over-limit body on an unavailable matrix keeps unavailable precedence (503)."""
+    from rest_api.app import create_rest_app
+
+    app = create_rest_app(data_dir=tmp_path)
+    app._client_max_size = 1024  # type: ignore[attr-defined]
+    # _matrix_device is None under the autouse TST-06 isolation: unconfigured.
+    client = await aiohttp_client(app)
+    try:
+        response = await client.post(path, json={"input": 3, "output": 1, "pad": "x" * 2048})
+        assert response.status == 503
+        body = await response.json()
+        assert body == {"success": False, "data": None, "error": "Matrix device not configured"}
+    finally:
+        await client.close()
+
+
+async def test_connected_oversized_body_is_still_opaque_500(data_hub):
+    """Connected over-limit bodies keep the existing opaque 500 sanitization."""
+    big = "x" * (1024 * 1024 + 1)
+    response = await data_hub.post("/api/switch", json={"input": 3, "output": 1, "pad": big})
+    assert response.status == 500
+    body = await response.json()
+    assert body["success"] is False
+    assert body["error"].startswith("Internal server error (ref: ")

@@ -114,7 +114,12 @@ async def handle_switch(request: web.Request) -> web.Response:
         # its ports must not be published: nothing failed to route yet.
         return _json_response(False, error=unavailable_error, status=503)
     except Exception as e:
-        return _json_response(False, error=safe_error_message(e, "switching routing"), status=500)
+        if connected:
+            return _json_response(False, error=safe_error_message(e, "switching routing"), status=500)
+        # Unavailable precedence (R1): a body-read error such as an over-limit
+        # body on an unavailable matrix is still reported as unavailable, never a
+        # server error.
+        return _json_response(False, error=unavailable_error, status=503)
 
     if not connected:
         # A syntactically valid route against an unavailable matrix (unconfigured
@@ -358,7 +363,12 @@ async def handle_output_source(request: web.Request) -> web.Response:
             return _json_response(False, error="Invalid output/input number", status=400)
         return _json_response(False, error=unavailable_error, status=503)
     except Exception as e:
-        return _json_response(False, error=safe_error_message(e, "setting output source"), status=500)
+        if connected:
+            return _json_response(False, error=safe_error_message(e, "setting output source"), status=500)
+        # Unavailable precedence (R1): a body-read error such as an over-limit
+        # body on an unavailable matrix is still reported as unavailable, never a
+        # server error.
+        return _json_response(False, error=unavailable_error, status=503)
 
     if not connected:
         # A syntactically valid route against an unavailable matrix (unconfigured
