@@ -1199,7 +1199,7 @@
       "id": "SW-FINDINGS-01",
       "package": "SW-FINDINGS",
       "feature_ids": [],
-      "state": "completed_source_triage_not_qualified",
+      "state": "integrated_triage_not_qualified",
       "exact_base_sha": "97e617c2276c7b1e015bb4a9419cb9820deafdee",
       "task_id": "task_e1bec78af179",
       "dispatch_id": "ctx_07bca220949e",
@@ -1227,7 +1227,9 @@
       "correction_task_id": "task_185e93ca5a0c",
       "correction_dispatch_id": "ctx_6cee9d4ae624",
       "worker_resources": "both released before delivery acknowledgment",
-      "qualification": "none; source-inspection candidates only; coordinator row-level review required"
+      "qualification": "none; source-inspection candidates only; coordinator row-level review required",
+      "coordinator_disposition": "docs/production/software-waves/SW-FINDINGS-01/COORDINATOR_RECONCILIATION.md",
+      "task_branch_published_sha": "b008297b1a3c988789e92c2cb4c32f3396bcd07f"
     },
     {
       "id": "SW-HARNESS-01",

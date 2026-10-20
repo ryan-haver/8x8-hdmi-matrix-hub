@@ -1040,3 +1040,12 @@ Source commit `afe344a0` includes only its new scenario/report and the explicitl
 coordinator-authored one-line scenario mapping. The separate committed-head
 campaign and complete author delivery remain pending. No feature level is yet
 advanced and no independent review/integration is claimed.
+
+Corrected finding report branch was normally published and exact remote/local
+`b008297b1a3c988789e92c2cb4c32f3396bcd07f` equality verified. Coordinator
+accepts it **as triage only with explicit residual limits**, recorded in
+`docs/production/software-waves/SW-FINDINGS-01/COORDINATOR_RECONCILIATION.md`.
+Sequential prose-only merge adds both preserved report commits; no register
+closure or qualification. 473 existing documentation tests, whitespace and
+changed Markdown targets checked. Invocation-only documentation hook exception
+used for these prose/static-plan records, not for Sol's implementation.
