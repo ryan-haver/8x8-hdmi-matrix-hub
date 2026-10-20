@@ -1119,3 +1119,22 @@ positively confirms M3/thinking. Both active tasks fit coordinator + old process
 reservation + two new workers; completed Sol user-owned terminal remains idle
 and preserved. Full author native transcript and verified complete bundle retained;
 full workspace archive is in progress without deleting or rewriting anything.
+
+
+M3 report correction completed at **b4736c2b6aedd6b033984e624783bd79ed2bb7c8**,
+prose-only, original commit preserved. Full native correction export confirms
+M3/thinking; Dispatch `ctx_7bbd908b29c9` released/terminal archived before ack
+`delivery_4e664d6ad00d`. Corrected task ref published and exact remote SHA
+verified. OpenAI coordinator independent prose review accepts calibrated source
+inventory with explicit limits in `SW-REPO-01/COORDINATOR_REVIEW.md`. No broad
+secret-scan suppression, source correction, finding closure or release proof
+inferred. Sequential prose merge; actual Markdown targets and whitespace pass;
+invocation-only documentation hook exception, no full-suite claim.
+
+Finding workspace complete private archive verified all 4,288 file entries,
+272,566,411 bytes, SHA-256 recorded. Full bundles/transcripts/status/patch,
+published ref and integrated ancestry verified before exact Orca worktree rm.
+Receipt reports removal accepted/in progress; filesystem/Git/Orca final-state
+verification remains required, so cleanup completion is not yet asserted.
+Protected old user/external workspaces, denied empty-folder removal and odd
+untracked hook artifact remain untouched.

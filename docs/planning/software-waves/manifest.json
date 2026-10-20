@@ -3301,7 +3301,7 @@
       "id": "SW-REPO-01",
       "package": "SW-REPO",
       "feature_ids": [],
-      "state": "completed_author_correction_launched",
+      "state": "integrated_source_inventory_not_qualified",
       "exact_base_sha": "53e4b6710e9835ced03b7c614e2ee00f70649f2f",
       "task_id": "task_39d9d5951f53",
       "dispatch_id": "ctx_789b450d0a6e",
@@ -3328,10 +3328,12 @@
       "model": "minimax-coding-plan/MiniMax-M3",
       "effective_native_variant": "thinking",
       "launch_route": "verified local configuration; CLI model override unsupported and omitted",
-      "submitted_sha": "73a9621c0874e12c17f8ff525f44ce4c85f41a27",
+      "submitted_sha": "b4736c2b6aedd6b033984e624783bd79ed2bb7c8",
       "correction_task_id": "task_f3691c08b309",
       "correction_dispatch_id": "ctx_7bbd908b29c9",
-      "qualification": "none; source inventory awaiting calibrated prose correction and coordinator review"
+      "qualification": "none; exact CI/security/register proof and follow-ups remain",
+      "review": "docs/production/software-waves/SW-REPO-01/COORDINATOR_REVIEW.md",
+      "worker_resources": "both M3 Dispatches released before acknowledgment"
     },
     {
       "id": "SW-DOCS-01",
