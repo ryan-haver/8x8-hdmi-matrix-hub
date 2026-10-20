@@ -789,3 +789,11 @@ occursinsidethecommand. BoundedcorrectivechildSW-API-CLIENT-02-C1 documented,
 provisionalVAL14notregistered/dispatchedyet, parent65unit/268primaryownersunchanged.
 No testweakening, CIwaiver, hardwareaction or ownerapprovalrequest. Furtherbackend
 fixwillneedexactsourcelease, meaningfulregressions, cross-familyreview and pipeline.
+
+
+SW-SEC-AUTH-01 finalreview accepted94b76fe1, report596d39ff; sequential integration
+d4f3c98edd398379ba44978f9c559e9faaa48fab preserves reviewed source byte-for-byte, no conflicts.17cleanrecords/32PNG
+accepted in namedsourceAPI/browser scope; ledger268/203below/57stale. Both taskrefs
+published/exactequal, all newworkers settled/released, authorfullworkspace and
+verifiedbundles preserved. Current-head CI/publication receipt follows; independent
+VAL14proposed eventgap still needs correction, not a releasewaiver.

@@ -1403,7 +1403,7 @@
       "feature_ids": [
         "F-SEC-007"
       ],
-      "state": "reviewed_named_source_scope_ready_for_integration",
+      "state": "integrated_qualified_named_source_scope",
       "exact_base_sha": "51275723846e4b126ccdc48c71d1727cabca4dbc",
       "task_id": "task_eb4ab88caa5b",
       "dispatch_id": "ctx_5c634ce3cf0f",
@@ -1445,7 +1445,7 @@
       "corrected_source_hook": "4043pass4skip35deselected177of177routes;1352.90seconds",
       "author_terminal_state": "released_before_delivery_ack",
       "author_publication": "submitted141bffb2 exact remote equality verified before coordinator assembly commit",
-      "qualification": "AcceptedFSEC007API V2/browserV3 source simulator andFAPI002V2 refresh; no image/authconfiguration/HIL/soak/field/finalrelease acceptance",
+      "qualification": "FSEC007API V2/browserV3 source simulator accepted; FAPI002sourceV2 fresh. Current-head CI/independentWSfinding remain open, no release/image/HIL/field acceptance",
       "candidate_sha": "94b76fe1c1232f43c0df2cd84c6378cee77f14ee",
       "initial_review_task_id": "task_fb868d0f506c",
       "initial_review_dispatch_id": "ctx_aa5e11c43d60",
@@ -1455,7 +1455,9 @@
         "stale": 57
       },
       "review_commit_sha": "596d39ff4c834d0352a997ce4d2c0754c3a11cb5",
-      "preservation": "Full verified author/candidate/review bundles; authorbare recovery94b; fullnative/privateworkspace50883files561979522bytes2links verified; finalreviewworkspacebackup before cleanup pending"
+      "preservation": "Full verified author/candidate/review bundles; authorbare recovery94b; fullnative/privateworkspace50883files561979522bytes2links verified; finalreviewworkspacebackup before cleanup pending",
+      "integration_sha": "d4f3c98edd398379ba44978f9c559e9faaa48fab",
+      "publication": "Taskrefs94b/596dverified; integration record commit/push follows with postpushreceiptoutsidecommit"
     },
     {
       "id": "SW-SEC-AUTH-02",
