@@ -1419,3 +1419,195 @@ force applied. Empty residual filesystem folder remains preserved, no native
 filesystem-delete retry. Remote task branch retained; unrelated/user-owned/
 unresolved workspaces untouched. Scoped prose checks489passed, no implementation
 hook waiver. Integration publication receipt is kept outside its identified commit.
+
+
+### Security adapter compatibility finding before integration
+
+At21:34Z coordinator actual staged-source inspection found SW-SEC-AUTH-01-R1:
+new browser_driver.mjs unconditionally restored promptValue from passcode before
+final flow, overwriting original scene_wait_edit seconds and cancelling its
+existing prompt. Medium compatibility finding in unaccepted task tooling;
+baseline product is unaffected. Exact staged binary diff and finding receipt
+preserved privately before correction. Sol notified msg_1c665341f49d to preserve
+running hook/source and fix at a checkpoint, add meaningful real Chromium
+wait-edit/saved-seconds readback, then verify corrected exact source with normal
+hook and different-family review. No passing earlier hook will be relabelled as
+covering later source. No author completion or qualification is implied.
+
+Fresh21:30:17Z official DeepSeek availableUSD2.21 (down from20:59USD3.79 due
+shared external use); Pro/Flash catalogs unchanged, reset/limits/external
+commitments unreported. Bounded Pro review reservationUSD1.50 remains planning,
+not a lock on shared credits; refresh immediately before actual dispatch. No
+credits spent by this coordinator for inventory. Same Codex weekly pool28%used/
+72%remaining, ordinaryusageallowed, same2026-10-27T06:33:16Z reset. Sol native
+rollout independently confirmsgpt-6.1-sol/high; full native session location
+identified for final byte-preserved export. Review capacity affects that gate,
+not continued author correction or independent coordinator work.
+
+
+R1 calibration21:35:59Z: author actual pre-fix scenes.wait_edit browser run
+PASSES with independent saved0.5seconds, no native dialog because current UI uses
+a duration sheet. Coordinator initial anticipated current UI failure was too
+broad. R1 is limited to source compatibility of the native-prompt fallback;
+no red reproduction is claimed. Passing original diagnostic retained. Minimal
+restoration remains requested, existing scenario post-fix control replaces any
+unnecessary duplicate pytest; no manufactured prompt/mocked red. Corrected-source
+normal hook and qualified review still required. Author acknowledged exact scope.
+
+
+### Bounded independent source review preflight
+
+Initial Sol normal configured hook atf4ffa8d15aea519934e25a8b248992ebb074fe86
+PASS4043/4skip/35deselected,177/177routes,1145.97s; R1 correction remains
+outstanding, so first source is explicitly unaccepted as final. New agent-free
+Orca wp-sw-auth-review created at exactf4ffa8d1 after21:42:53 official
+DeepSeekUSD1.50available/Pro+Flashunchanged. Bounded qualified Pro source review
+can run while author verifies correction; final material source/assembly must be
+reviewed at exact final SHA before acceptance. Previous comparableProreview~0.33;
+reserve estimate0.75initial+0.50final/corrections,1.25total. Shared external use
+unreported; refresh at launch, monitor, no assertion account credits are locked.
+Codex72%remaining checked same pool/reset, but same-family Sol cannot substitute
+for this independent gate. No suitable alternative reviewer is silently assumed.
+
+OpenCode2.1.1 existing-worktree local config pins Pro primary/small/internal
+models, denies other providers/MCP/subagents/unqualifiedplugins/Anthropic. Actual
+local standalone catalog contains only deepseek-v4-pro/deepseek-flash, agents[];
+Flash not authorized. No effort override supported; native effective model/variant
+requires independent export after real start. New reviewer writable ONLY own
+REVIEW.md/build subtree. Four-active ceiling incl coordinator+older external
+reservation+Sol+reviewer. No second source writer, no new Run/global config change.
+
+
+Genuine independent review STARTED Task **task_fb868d0f506c**, Dispatch
+**ctx_aa5e11c43d60**, terminal **term_b69aef52-d856-4e96-a033-ef151cf5d9ef**,
+wp-sw-auth-review / ryan-haver/wp-sw-auth-review at exact initialf4ffa8d15aea519934e25a8b248992ebb074fe86.
+Native session ses_ea4b969d5ffeGDM3TlTzck9NLo independently confirms
+**deepseek/deepseek-v4-pro / default** (not an inferred effort), initialcost0.010564048.
+Configured-only launch model/effortnull and turnStartunsupported are not effective
+model proof; native export is. Fresh21:45:08 supported balanceUSD1.35, catalogs
+unchanged; bounded1.25initial+correction allocation remains available at observation
+with shared-use uncertainty explicit. No Flash/otherfamily fallback. Full source
+review proceeds while Sol corrects R1/second normal hook; no initial-source or
+conditional future green acceptance. Exact final source/assembly must receive
+qualified independent review before integration. Both authors and reviewer are
+live at real injected authority; older external reservation retained, total4.
+
+
+### Initial independent source review settled; final remains separate
+
+DeepSeek initial f4ffa8d1 study independently reproduced5APIcomplements/3.07s
+and2actualChromiumcases/36.25s, plusRuff/nodechecks. No blocking security finding;
+knownR1stillrequiresfinalsource review, lowtuple-widthmypyoutsideconfiguredsrc
+scope and2informational observations retained. Coordinator will addsceneexecute
+interface metadata; no unnecessary newregexbranchtest or thirdsourcehookcycle.
+Freshness precision: only2of3FAPI002records covertools/validate and stale; rerun
+all3ascompletefeaturecampaign (api_info unaffected). Initial worker_done explicitly
+initial-only, reportuncommitted atf4; NOT final acceptance or integrated review.
+Full native export/initialreport preserved. Immediate exact-terminal reuse refused
+agent_unconfigured request3aaf1161-9681-4360-b266-7ce67aaef2e4 beforeanynewTask;
+request-showabsent alone notproof,54Taskaudit/oldexactstate examined. No retry or
+reset; settledctx_aa5e11c43d60 released withclosed_agent_terminal/archivecaptured
+BEFOREdelivery acknowledgment. Freshfinalreview will getnewauthorityatexact
+candidate; no ambiguousduplicate agent. Fresh22:00:46 officialDeepSeekUSD50.19
+available, catalogunchanged (increaseoriginunreported/notinitiatedbycoordinator),
+adequateboundedreviewreserve1.50; limits/windows/externalcommitmentsstillunknown.
+
+### Current published CI exposes independent event boundary gap
+
+CI39500840835 atpublished1a4f9f94 originalvalidationartifact12301981393 inspected.
+Actual cleanmergesourcea7818f2054a57e4e5ee9176f2539e3155dff41d8 treeequals1a4.
+API1415pass/1fail; browser54pass/UC18pass. Onlyfail failures.unreachable_switch:
+503Matrixnotconnected, unchangeddevice, matrix_connection/status events but
+missingswitch_failed. Fullrawjoblog+originalZIP/hash/record/source receipts private;
+workflowwasstillrunningUI, no all-checks-passclaim. Product/scenario source same
+aspreviousgreen2b10: this is existing timing-dependentearlydisconnected branch,
+not a docs/authadapterintroduced regression. handle_switch checksconnected
+beforeparsingrequest and returns503withoutfailureevent; docsWScontractexpects
+failedrouteevent. Coordinator existingcase ordinaryPASS and separate causal
+actualrun.py/simulatorprobe confirm distinction: firstwaitforobservedoffline,
+validroute503unchanged/no routingwrite/missingevent; clearfaults connectedcontrol
+routesoutput1to3with200,WSschemaPASS. Backgroundreconnectloginentries are not
+routingmutations; initialoverstrictdiagnosticassertionretained/calibrated.
+CI-39500840835-WS-01 requires boundedcorrection/review; no weakerassertion or
+pass-onlyrerunwaiver. SeparatefromongoingFSEC007acceptance, no productwrite yet.
+
+
+### Corrected author completed, preserved, released and published
+
+Tasktask_eb4ab88caa5b / ctx_5c634ce3cf0f succeeded at submitted
+**141bffb225c8c2a5cd25f614bccf5d0ab32ec0e1**, functional source
+**2ae46e6c8bb9c2133371c3d93509277235e5e40e**, base51275723. Author six-path
+boundary matches exact assignment/coordinator8-ID mapping. Corrected source
+normal hook4043pass4skip35desel,177/177strict,1352.90s; submittedtip differs
+onlyAUTHOR prose. Clean auth14/14=6API8browser,108pass6expectedclient-scopedn-a;
+waitcontrol1/1fourchecks1PNG private. Coordinator rootAPIrefresh3/3twentychecks
+at sameclean2ae, no source/dirtyrelabelling. Schema/hash/covers/client mappings
+verified;32authPNGs+1privatewaitPNG, finalprofile/scene locked afterframes visibly
+show refusal. Full raw5,172,636-byte native transcript private (contains transient
+capability values); pre/postrelease copies identical and verifiedfull--all bundle
+preserved. Exact worker-releaseclosedagent/transcriptarchivecaptured BEFORE
+worker_doneack. No destructiveworktreeremoval yet. Original author taskrefpublished
+and exact141bffb2 remoteequality verified before coordinator assembly commit.
+
+Coordinator-only candidate preparation now imports14auth+3APIroot originalrecords
+and32PNGs byte-exact, preservesoldAPI records, proposesFSEC007currentV3/basis/
+evidence/scene-executeinterface andFAPI002basis/evidence only. Allotherfeature
+objects/fields unchanged; no product/runner/schema/rootmanifest change. Canonical
+ledger generation runs alone after authorformalcheck settledPASS0knownfailures;
+registry/schema checks follow serially. Final qualified different-family exact
+candidate review and integration remain pending; no releasegateclosed. Diagnostic
+rawfailures/initialR1pass/sourcef4/lowout-of-scope tupletypingnote remain preserved.
+
+The independent CIeventdefect is documented as corrective childSW-API-CLIENT-02-C1
+without changing65units/268primaryowners. Original failing record is retained
+byte-exact outsideaccepted evidence under runs/software-waves; provisionalVAL-14
+not yetregistered/closed/dispatched. All14completedjobraw/sanitizedlogs and7original
+artifactpayloads fromCI39500840835 preserved privately, zero downloaderrors.
+12/13requiredchecksPASSincludingUI; validationaloneFAIL, publicationjobPR-skip.
+No CIwaiver or permissionrequest is implied by current source-package progress.
+
+
+Final review genuine freshTask **task_64c06cbf776f** / **ctx_aa7cf1ed5aab**,
+terminal **term_7937be98-8b1f-43b8-bb8d-5c8e3f6d19e8** inwp-sw-auth-review,
+base141bffb225c8c2a5cd25f614bccf5d0ab32ec0e1 afterserialcoordinatorFF fromf4.
+Fresh22:24:32 officialDeepSeekUSD48.00available/ProFlashunchanged; budget1.50,
+externalcommitmentsunreported. ExistingOpenCode2.1.1 pinnedPro-only route retains
+no helpers/MCP/fallback/Anthropic, effortunsupported/omitted. Newnative session
+ses_ea4945e1effew0n80s9fvck58p independentlyPro/default,13messagescost0.04196984
+atfirstexport, not the oldreleased session. No sourcewriterduplicated. Initial
+relative-path quotahelper ran fromwrongworktree and failed beforeobservation;
+correctRootinvocationverifiedUSD48.00BEFOREfreshdispatch. No catalog/poolguess.
+
+Coordinator exact candidate **94b76fe1c1232f43c0df2cd84c6378cee77f14ee** committed
+55metadata/evidencefiles after141b, zero newruntime/toolsource. Ledger generation
+completedalone before33registry/schemaPASS6.15s and assembledformalGatePASS0known
+failures. Proposedledger268/203below/57stale, securityV1toV3 only; original17JSON
+working/indexbytehashes and32PNGrawLFSOIDs/sizesverified. OriginalWindowsCRLF
+under-text intentionallyretained; defaultGitwhitespaceCRdiagnostic fullypreserved,
+invocation-onlycr-at-eolcheckPASS, no evidencebytes/persistentconfigrenormalized.
+The documented metadata/evidence/prose hookexception followed actual fullsource
+hook and checks; no implementationhookbypass. Candidate providedtofinalreviewer
+with explicit exactFFreviewcheckout authority atno-running-tests checkpoint.
+Approval, integration and candidate publication are still separate transitions.
+
+
+### Exact security candidate accepted for named source scope
+
+FinalPro reviewed exact94b76fe1c1232f43c0df2cd84c6378cee77f14ee, confirmedR1,
+sourcebyteidentitywithtested2ae,17recordhashes/32validPNGs/metadata/ledger and
+boundednode/DSLchecks; earlierindependent5API+2Chromiumbehaviorchecks retainf4
+attribution. Reviewer reportonlycommit **596d39ff4c834d0352a997ce4d2c0754c3a11cb5**
+addsONLYREVIEW.md; qualifieddifferentfamilyaccepts FSEC007sourceV3/APIrootV2,
+notimages/authconfiguration/HIL/soak/field/release. Lowtupletypingoutsideconfigured
+scope andregexcoverageinfo remainnonblocking, interfaceinfo resolved. Fullfinal
+native49messages/Pro-defaultcost0.232677324 andfullverifiedGitbundlepreserved;
+ctx_aa7cf1ed5aabreleasedclosedagent/archivecapturedBEFOREdoneack. Originalinitial
+f4-onlyreport/transcript kept, not relabelledfinal. Both exacttaskrefs published/
+verifiedAuth94b andReview596d;32PNGpaths upload22deduplicatedLFSobjects6.5MB.
+
+Authfullcandidatebundleverifiedandbare recoveryresolves94b. Completeworkspace
+archive50,883files/561,979,522bytes/twolinks(notfollowed), allhashes/targetsverified,
+archiveSHA256faffcf394860ae016c859a898e1f75f5179cb359799f63e91012e946fe890967.
+No worktreeremoval yet; finalreviewworkspace backup andintegration/combinedchecks
+still required. Rootdocumentation/integrationrecordcommit precedes acceptedmerge.
+No ownergate or CIwaiver inferred; separateunreachable-route eventfinding remains.

@@ -205,3 +205,46 @@ reasoning level only for a concrete unresolved problem; no automatic `ultra`
 delegation or unsupervised helper fan-out bypassing the roster.
 Before creating the worktree, also inspect setup hooks and default agent tabs
 so an otherwise valid launch does not start an excluded agent as a side effect.
+
+
+## Software-wave observations, 2026-10-20
+
+These observations supplement the dated initial audit above; they are not new
+permanent launch defaults. The allocation ledger carries exact current authority.
+Sol6.1/high authored the F-SEC-007 lockout scenario/browser-adapter package,
+corrected a native-prompt fallback issue, passed the normal configured hook twice
+(finalsource2ae46e6c:4,043tests,177/177routes), and delivered14clean API/browser
+outcomes plus an existing wait control. Final candidate review remains separate.
+Same managedpool last supported report66%weeklyremaining, reset2026-10-27T06:33:16Z.
+
+MiniMax-M3/thinking delivered the bounded four-feature API preservation audit;
+coordinator factual review corrected five-closed/one-open attribution.141 original
+API V2 records/1,079checks were preserved without a new runtime qualification.
+This qualifies bounded inventories, not an automatic security/concurrency review.
+
+DeepSeek Pro native deepseek/deepseek-v4-pro/default independently executed five
+security/API complements and two actual Chromium checks at exact initialf4ffa8d1,
+reported calibrated nonblocking observations and corrected directory-cover
+freshness reasoning. That is an initial source review, not final source/assembly
+acceptance. Native complete exports preserve attribution. Its settled terminal
+reuse was refused agent_unconfigured before a newTask; oldresourcewasreleased,
+with no duplicatewriter or orchestrationreset. Supported balance22:00:46Z USD50.19
+available, Pro/Flash catalog unchanged; increaseoriginunreported/notinitiated by
+coordinator. Refresh exact headroom again for final review/new assignments.
+
+Current agy supported catalog lists explicit Gemini4Argon medium/high/low and
+Gemini3.8Flash high/medium/low. Historical alias/backend mismatch and enabled
+plugin/helper containment remain unresolved; a catalog does not qualify routing.
+No alternative worker was launched on that basis. Claude/Anthropic catalog names
+remain excluded, with no execution. Capacity routes each task; active source and
+coordinator evidence work continued while alternate routes were assessed.
+
+
+Final independent review then accepted candidate94b76fe1 (report596d39ff) for
+F-SEC-007 source API/browser proof and F-API-002 API refresh. The fresh native
+DeepSeekPro/default session is distinct from the initial f4 review; its49messages
+and source/metadata inspection are preserved. No source change after tested2ae,
+R1reviewed at exact final commit, earlier5API/2Chromium executions keep original
+attribution. Both settled reviewer resources were released before acknowledgment;
+no historical same-family review is reclassified. Fresh22:24:32 credit balance
+USD48.00 supported bounded final review, with external shared use unreported.

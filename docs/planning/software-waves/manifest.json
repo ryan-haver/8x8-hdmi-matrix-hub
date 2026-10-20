@@ -1403,7 +1403,7 @@
       "feature_ids": [
         "F-SEC-007"
       ],
-      "state": "launched",
+      "state": "reviewed_named_source_scope_ready_for_integration",
       "exact_base_sha": "51275723846e4b126ccdc48c71d1727cabca4dbc",
       "task_id": "task_eb4ab88caa5b",
       "dispatch_id": "ctx_5c634ce3cf0f",
@@ -1432,7 +1432,30 @@
       "scope_override": "Wrong PIN and per-item lockout through existing real browserprofile/scene flows, refusal/no-deviceeffects, actual duringPBKDF2 responsivenessproof; no sharedclientlease bydefault.",
       "model": "codex:gpt-6.1-sol",
       "effort": "high",
-      "coordinator_mapping": "Coordinator authored/staged F-SEC-007.scenarios only,8newIDs preserving2oldIDs/allotherfeaturefields; explicitly authorized exact delta in normal-hook source commit"
+      "coordinator_mapping": "Coordinator authored/staged F-SEC-007.scenarios only,8newIDs preserving2oldIDs/allotherfeaturefields; explicitly authorized exact delta in normal-hook source commit",
+      "initial_source_sha": "f4ffa8d15aea519934e25a8b248992ebb074fe86",
+      "initial_source_hook": "4043pass4skip35deselected177of177routes;1145.97seconds; not final corrected source",
+      "review_task_id": "task_64c06cbf776f",
+      "review_dispatch_id": "ctx_aa7cf1ed5aab",
+      "reviewer_model": "deepseek/deepseek-v4-pro",
+      "reviewer_variant": "default native observed",
+      "review_state": "qualifiedDeepSeekPro/default accepted exact94b; finalworkerreleasedbeforeack; taskrefs94b/596dremotesequal",
+      "submitted_sha": "141bffb225c8c2a5cd25f614bccf5d0ab32ec0e1",
+      "corrected_source_sha": "2ae46e6c8bb9c2133371c3d93509277235e5e40e",
+      "corrected_source_hook": "4043pass4skip35deselected177of177routes;1352.90seconds",
+      "author_terminal_state": "released_before_delivery_ack",
+      "author_publication": "submitted141bffb2 exact remote equality verified before coordinator assembly commit",
+      "qualification": "AcceptedFSEC007API V2/browserV3 source simulator andFAPI002V2 refresh; no image/authconfiguration/HIL/soak/field/finalrelease acceptance",
+      "candidate_sha": "94b76fe1c1232f43c0df2cd84c6378cee77f14ee",
+      "initial_review_task_id": "task_fb868d0f506c",
+      "initial_review_dispatch_id": "ctx_aa5e11c43d60",
+      "candidate_ledger": {
+        "total": 268,
+        "below_target": 203,
+        "stale": 57
+      },
+      "review_commit_sha": "596d39ff4c834d0352a997ce4d2c0754c3a11cb5",
+      "preservation": "Full verified author/candidate/review bundles; authorbare recovery94b; fullnative/privateworkspace50883files561979522bytes2links verified; finalreviewworkspacebackup before cleanup pending"
     },
     {
       "id": "SW-SEC-AUTH-02",
@@ -36004,6 +36027,26 @@
     {
       "observed_utc": "2026-10-20T21:06:15.910989+00:00",
       "change": "Split two originalsix-featureunits into preservation/coresecurity/protocol-intake scopes; 30packages65units, original268featureownersunchanged. Snapshotcounts remainbaseline97; currentledger204below57stale."
+    }
+  ],
+  "corrective_children": [
+    {
+      "id": "SW-API-CLIENT-02-C1",
+      "parent_unit": "SW-API-CLIENT-02",
+      "feature_scope": [
+        "F-API-033"
+      ],
+      "affected_secondary": [
+        "F-REL-009"
+      ],
+      "state": "reproduced_finding_no_dispatch",
+      "finding": "VAL-14 proposed; registration pending",
+      "report": "docs/production/software-waves/SW-API-CLIENT-02-C1/FINDING.md",
+      "primary_feature_ownership": "unchanged in parent allocation",
+      "source_base_sha": null,
+      "task_id": null,
+      "dispatch_id": null,
+      "acceptance": "Already-offline valid-route failure event, preserved503/invalid-payload behavior, independent simulator controls, qualified cross-family review and combined CI; no fulltargetpromotion implied"
     }
   ]
 }

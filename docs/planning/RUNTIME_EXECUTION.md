@@ -758,3 +758,34 @@ disabled and isolated data;65uniqueunits/268uniqueprimaryfeatureowners validated
 Invocation-only documentation hook exception is limited to these prose/allocation
 records; source author uses full configured hook. No owner/hardware/field or final
 release gate is inferred. Private receipts: build/software-wave-02-20261020/.
+
+
+### 2026-10-20 corrected security candidate and new CI contract finding
+
+SW-SEC-AUTH-01 delivered141bffb225c8c2a5cd25f614bccf5d0ab32ec0e1, functional
+source2ae46e6c8bb9c2133371c3d93509277235e5e40e at original51275723 base.
+Normal corrected hook4043PASS4skip35deselect177/177routes1352.90s; firstf4
+normalpass retained separately. R1 native-promptfallback semanticsrestored;
+currentduration-sheetUIpassedbefore/after, no redfabricated. Actualclean14auth
+outcomes/32screenshots +3APIroot refreshcases allclean/source2ae/nullimage.
+Privatewaitcontrol1case/1PNGdoesnotpromote F-DOM-013. Fullsource/nativebundle
+preserved, authorreleasedbeforeack, originaltask141bpublished/exactremoteequal.
+
+Coordinatorcandidate94b76fe1c1232f43c0df2cd84c6378cee77f14ee proposes FSEC007V3
+and FAPI002freshnessrefresh; only2features' declaredfields change, alloriginal
+bytesretained.17JSONGitblobhashes/32PNG LFSrawOIDsverified, ledgergeneratedalone,
+33registry/schemaPASS6.15s thenformalGatePASS0knownfailures. Proposed268total/
+203below/57stale, not overallreleaseacceptance. QualifiedfreshDeepSeekPro/default
+Task64c06cbf776f reviews exactcandidate afterinitial f4 source review5API/2Chrome
+passes; oldterminalreuse preflightrefusedbeforeTaskcreation, originalreleased and
+fullnativepreserved. Finalreview/integration/publication pendingatthischeckpoint.
+
+Published1a4 CI39500840835 completed12/13requiredPASSincludingUI, validationFAIL
+oneAPIcase failures.unreachable_switch. Actualsourcea7818f20tree==1a4, all14joblogs/
+7artifactpayloadspreserved.503Matrixnotconnected/unchangeddevice/no switch_failed
+confirmedatobservedalready-offlinebranch; restored-link positivecontrol200/routes3.
+Sourcecontrolhandler'searlyreturnmatchesgap; originalordinarycasecanpasswhenloss
+occursinsidethecommand. BoundedcorrectivechildSW-API-CLIENT-02-C1 documented,
+provisionalVAL14notregistered/dispatchedyet, parent65unit/268primaryownersunchanged.
+No testweakening, CIwaiver, hardwareaction or ownerapprovalrequest. Furtherbackend
+fixwillneedexactsourcelease, meaningfulregressions, cross-familyreview and pipeline.
