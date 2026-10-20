@@ -893,9 +893,32 @@ class Runner:
                     ok = ok and status is not None and status >= exp.min_status
                 if exp.json and client.name == "api":
                     ok = ok and _subset(exp.json, result.body)
+                header_detail = ""
+                if exp.headers or exp.absent_headers:
+                    # Use only the final action exchange. Missing observation is
+                    # not absence, and an earlier request must not fill the gap.
+                    exchange = result.requests[-1] if result.requests else {}
+                    captured = exchange.get("response_headers")
+                    masked = exchange.get("response_headers_redacted")
+                    if (client.name != "api" or exchange.get("status") != status
+                            or not isinstance(captured, dict) or not isinstance(masked, list)):
+                        ok = False
+                        header_detail = "; response headers not observed on an API exchange"
+                    else:
+                        actual = {name.lower(): value for name, value in captured.items()}
+                        redacted = {name.lower() for name in masked}
+                        wrong = [name for name, value in exp.headers.items()
+                                 if name.lower() in redacted or actual.get(name.lower()) != value]
+                        present = [name for name in exp.absent_headers if name.lower() in actual]
+                        ok = ok and not wrong and not present
+                        # Values are already masked at capture, but diagnostics
+                        # deliberately reveal names only (including expectations).
+                        header_detail = (f"; header equality failed: {wrong}; unexpected presence: {present}"
+                                         if wrong or present else "; observed header checks matched")
                 verdict = "pass" if ok else "fail"
                 body = json.dumps(result.body, default=str)[:300] if client.name == "api" else f"({client.name})"
-                detail = f"HTTP {status}; body {body}" + (f"; error {result.error}" if result.error else "")
+                detail = (f"HTTP {status}; body {body}" + (f"; error {result.error}" if result.error else "")
+                          + header_detail)
             elif isinstance(exp, Hub):
                 deadline = time.monotonic() + 4.0
                 while True:
