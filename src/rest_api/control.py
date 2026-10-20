@@ -88,10 +88,11 @@ async def handle_switch(request: web.Request) -> web.Response:
     matrix_device = get_matrix_device()
 
     if matrix_device is None:
-        return _json_response(False, error="Matrix device not configured", status=503)
-
-    if not matrix_device.connected:
-        return _json_response(False, error="Matrix not connected", status=503)
+        connected = False
+        unavailable_error = "Matrix device not configured"
+    else:
+        connected = matrix_device.connected
+        unavailable_error = "Matrix not connected"
 
     try:
         data = await parse_json_object(request)
@@ -99,10 +100,33 @@ async def handle_switch(request: web.Request) -> web.Response:
         allowed_fields = {"input", "output"}
         extra = set(data.keys()) - allowed_fields
         if extra:
-            return _json_response(False, error=f"Unknown fields: {sorted(extra)}", status=400)
+            if connected:
+                return _json_response(False, error=f"Unknown fields: {sorted(extra)}", status=400)
+            return _json_response(False, error=unavailable_error, status=503)
         input_num = validate_port(require_field(data, "input", "'input' is required"), "Input")
         output_num = data.get("output")
+        if output_num is not None:
+            output_num = validate_port(output_num, "Output")
+    except BadRequestError as exc:
+        if connected:
+            return exc.response()
+        # An invalid unavailable route is still reported as unavailable (503), but
+        # its ports must not be published: nothing failed to route yet.
+        return _json_response(False, error=unavailable_error, status=503)
+    except Exception as e:
+        return _json_response(False, error=safe_error_message(e, "switching routing"), status=500)
 
+    if not connected:
+        # A syntactically valid route against an unavailable matrix (unconfigured
+        # or disconnected) is a refused route: emit the documented failure event
+        # and 503, no mutation.
+        if output_num is None:
+            await broadcast_status_update("switch_all_failed", {"input": input_num})
+        else:
+            await broadcast_status_update("switch_failed", {"input": input_num, "output": output_num})
+        return _json_response(False, error=unavailable_error, status=503)
+
+    try:
         # If output is not specified, route to ALL outputs
         if output_num is None:
             _LOG.info(f"REST API: Switching input {input_num} to ALL outputs")
@@ -125,8 +149,6 @@ async def handle_switch(request: web.Request) -> web.Response:
                 return _json_response(False, error="Failed to switch routing", status=500)
 
         # Single output routing
-        output_num = validate_port(output_num, "Output")
-
         _LOG.info(f"REST API: Switching input {input_num} to output {output_num}")
 
         success = await direct_command("switch", input_num, output_num)
@@ -143,8 +165,6 @@ async def handle_switch(request: web.Request) -> web.Response:
         else:
             await broadcast_status_update("switch_failed", {"input": input_num, "output": output_num})
             return _json_response(False, error="Failed to switch routing", status=500)
-    except BadRequestError as exc:
-        return exc.response()
     except Exception as e:
         return _json_response(False, error=safe_error_message(e, "switching routing"), status=500)
 
@@ -314,19 +334,40 @@ async def handle_output_source(request: web.Request) -> web.Response:
     input_names = get_input_names()
 
     if matrix_device is None:
-        return _json_response(False, error="Matrix device not configured", status=503)
-
-    if not matrix_device.connected:
-        return _json_response(False, error="Matrix not connected", status=503)
+        connected = False
+        unavailable_error = "Matrix device not configured"
+    else:
+        connected = matrix_device.connected
+        unavailable_error = "Matrix not connected"
 
     try:
         output_num = int(request.match_info["output"])
         if output_num < 1 or output_num > 8:
-            return _json_response(False, error="Output must be 1-8", status=400)
+            if connected:
+                return _json_response(False, error="Output must be 1-8", status=400)
+            return _json_response(False, error=unavailable_error, status=503)
 
         data = await parse_json_object(request)
         input_num = validate_port(require_field(data, "input", "'input' is required in body"), "Input")
+    except BadRequestError as exc:
+        if connected:
+            return exc.response()
+        return _json_response(False, error=unavailable_error, status=503)
+    except ValueError:
+        if connected:
+            return _json_response(False, error="Invalid output/input number", status=400)
+        return _json_response(False, error=unavailable_error, status=503)
+    except Exception as e:
+        return _json_response(False, error=safe_error_message(e, "setting output source"), status=500)
 
+    if not connected:
+        # A syntactically valid route against an unavailable matrix (unconfigured
+        # or disconnected) is a refused route: emit the documented failure event
+        # and 503, no mutation.
+        await broadcast_status_update("switch_failed", {"input": input_num, "output": output_num})
+        return _json_response(False, error=unavailable_error, status=503)
+
+    try:
         input_name = input_names.get(input_num, f"Input {input_num}")
         _LOG.info(f"REST API: Setting output {output_num} source to input {input_num} ({input_name})")
 
@@ -347,10 +388,6 @@ async def handle_output_source(request: web.Request) -> web.Response:
             # routing change (VAL-05); a refusal is announced here.
             await broadcast_status_update("switch_failed", {"input": input_num, "output": output_num})
             return _json_response(False, error="Failed to set output source", status=500)
-    except BadRequestError as exc:
-        return exc.response()
-    except ValueError:
-        return _json_response(False, error="Invalid output/input number", status=400)
     except Exception as e:
         return _json_response(False, error=safe_error_message(e, "setting output source"), status=500)
 

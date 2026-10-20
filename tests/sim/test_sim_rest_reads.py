@@ -476,6 +476,24 @@ async def test_device_status_reads_after_disconnect_are_json_503(data_hub, matri
     assert sim_writes(simulator) == []
 
 
+async def test_offline_route_refusal_reads_back_unchanged_routing(data_hub, matrix, simulator):
+    """A refused route while disconnected leaves routing/status unchanged (SW-API-CLIENT-02-C1)."""
+    before = (await _get(data_hub, "/api/status"))["data"]["routing"]
+    await matrix.disconnect()
+    response = await data_hub.post("/api/switch", json={"input": 3, "output": 1})
+    assert response.status == 503
+    # /api/status answers 503 with the link in ``data`` (VAL-04), unlike the plain 503 reads above.
+    offline = await data_hub.get("/api/status")
+    assert offline.status == 503
+    envelope = await offline.json()
+    assert envelope["success"] is False
+    assert envelope["error"] == "Matrix not connected"
+    assert envelope["data"]["connected"] is False
+    assert sim_writes(simulator) == []
+    await matrix.connect()
+    assert (await _get(data_hub, "/api/status"))["data"]["routing"] == before
+
+
 @pytest.mark.parametrize("path", ["/kiosk", "/kiosk/"])
 async def test_kiosk_aliases_serve_the_shipped_html(data_hub, path):
     response = await data_hub.get(path)
