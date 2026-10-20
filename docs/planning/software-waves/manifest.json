@@ -1322,10 +1322,10 @@
         "F-API-026",
         "F-API-028"
       ],
-      "state": "planned",
-      "exact_base_sha": null,
-      "task_id": null,
-      "dispatch_id": null,
+      "state": "reviewed_preserved_original_api_v2",
+      "exact_base_sha": "51275723846e4b126ccdc48c71d1727cabca4dbc",
+      "task_id": "task_a75ae30df852",
+      "dispatch_id": "ctx_de4764241ae7",
       "exclusive_writable": [
         "docs/production/software-waves/SW-API-READ-02/AUTHOR.md",
         "build/software-waves/SW-API-READ-02/**",
@@ -1348,7 +1348,17 @@
       ],
       "review_required": "different underlying family for every new test/fixture/tool/code deliverable",
       "artifact_scope": "new empty per-run destination; preserve full source/client/image identities",
-      "scope_override": "Preserve accepted original API V2 proof and currentCI attribution; only necessary new assertions/corrections under separate explicit lease. No speculative new tests."
+      "scope_override": "Four-feature source/evidence preservation report only; no new code/test/tooling or registry edits",
+      "model": "minimax-coding-plan/MiniMax-M3",
+      "submitted_sha": "56466c16e838a936c0278b84f824b2601553a110",
+      "original_author_sha": "807354393ad4fc806556aee000200410505406bc",
+      "correction_task_id": "task_c7b627a988f6",
+      "correction_dispatch_id": "ctx_7fa9d2abc3ff",
+      "reviewer_family": "OpenAI GPT",
+      "review_report": "docs/production/software-waves/SW-API-READ-02/REVIEW.md",
+      "qualification_scope": "Preserve141 original1baac3de API V2 source records at assigned51275723 base; no new run, level, image or client qualification",
+      "terminal_state": "released_before_delivery_ack",
+      "publication": "task ref56466c16 verified; integration pending"
     },
     {
       "id": "SW-API-READ-03",
@@ -1391,10 +1401,10 @@
       "feature_ids": [
         "F-SEC-007"
       ],
-      "state": "planned",
-      "exact_base_sha": null,
-      "task_id": null,
-      "dispatch_id": null,
+      "state": "launched",
+      "exact_base_sha": "51275723846e4b126ccdc48c71d1727cabca4dbc",
+      "task_id": "task_eb4ab88caa5b",
+      "dispatch_id": "ctx_5c634ce3cf0f",
       "exclusive_writable": [
         "docs/production/software-waves/SW-SEC-AUTH-01/AUTHOR.md",
         "build/software-waves/SW-SEC-AUTH-01/**",
@@ -1405,7 +1415,7 @@
         "docs/production/software-waves/SW-SEC-AUTH-01/REVIEW.md",
         "build/software-waves/SW-SEC-AUTH-01-review/**"
       ],
-      "shared_path_lease": "none; existing source/client/schema/test fixtures and root metadata stay coordinator-owned until an explicit exact-path serial lease",
+      "shared_path_lease": "Exclusive serial tools/validate/clients/browser.py and browser_driver.mjs to task_eb4ab88caa5b for bounded actual-UI lockout observation only; runner/model/schema/product stay prohibited",
       "prohibited": [
         "private/root runtime data",
         "historical evidence and failures",
@@ -1417,7 +1427,10 @@
       ],
       "review_required": "different underlying family for every new test/fixture/tool/code deliverable",
       "artifact_scope": "new empty per-run destination; preserve full source/client/image identities",
-      "scope_override": "Wrong PIN and per-item lockout through existing real browserprofile/scene flows, refusal/no-deviceeffects, actual duringPBKDF2 responsivenessproof; no sharedclientlease bydefault."
+      "scope_override": "Wrong PIN and per-item lockout through existing real browserprofile/scene flows, refusal/no-deviceeffects, actual duringPBKDF2 responsivenessproof; no sharedclientlease bydefault.",
+      "model": "codex:gpt-6.1-sol",
+      "effort": "high",
+      "coordinator_mapping": "Coordinator authored/staged F-SEC-007.scenarios only,8newIDs preserving2oldIDs/allotherfeaturefields; explicitly authorized exact delta in normal-hook source commit"
     },
     {
       "id": "SW-SEC-AUTH-02",
@@ -15959,7 +15972,7 @@
         "target": "V3",
         "level": "V2",
         "recorded": "V2",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -16010,7 +16023,7 @@
         "target": "V2",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -16049,7 +16062,7 @@
         "target": "V3",
         "level": "V2",
         "recorded": "V2",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -16214,7 +16227,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -16498,7 +16511,7 @@
         "target": "V2",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -16533,7 +16546,7 @@
         "target": "V2",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -16563,7 +16576,7 @@
         "target": "V2",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -24340,7 +24353,7 @@
         "target": "V3",
         "level": "**V3**",
         "recorded": "V3",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": false,
       "scope": "software_target",
@@ -24376,7 +24389,7 @@
         "target": "V2",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -24406,7 +24419,7 @@
         "target": "V2",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -24763,7 +24776,7 @@
         "target": "V2",
         "level": "**V2**",
         "recorded": "V2",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": false,
       "scope": "software_target",
@@ -24912,7 +24925,7 @@
         "target": "V2",
         "level": "**V2**",
         "recorded": "V2",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": false,
       "scope": "software_target",
@@ -29235,7 +29248,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -29271,7 +29284,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -29354,7 +29367,7 @@
         "target": "V3",
         "level": "V0",
         "recorded": "V0",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -29397,7 +29410,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -29535,7 +29548,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -29567,7 +29580,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -29600,7 +29613,7 @@
         "target": "V3",
         "level": "**V3**",
         "recorded": "V3",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": false,
       "scope": "software_target",
@@ -29669,7 +29682,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -29814,7 +29827,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -29885,7 +29898,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -29918,7 +29931,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -29949,7 +29962,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -30020,7 +30033,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -30103,7 +30116,7 @@
         "target": "V3",
         "level": "**V3**",
         "recorded": "V3",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": false,
       "scope": "software_target",
@@ -30135,7 +30148,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -30163,7 +30176,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -30197,7 +30210,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -30228,7 +30241,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -30259,7 +30272,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -30289,7 +30302,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -30318,7 +30331,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -30346,7 +30359,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -30447,7 +30460,7 @@
         "target": "V3",
         "level": "**V3**",
         "recorded": "V3",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": false,
       "scope": "software_target",
@@ -30476,7 +30489,7 @@
         "target": "V3",
         "level": "**V3**",
         "recorded": "V3",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": false,
       "scope": "software_target",
@@ -30549,7 +30562,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -30578,7 +30591,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -30608,7 +30621,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -30636,7 +30649,7 @@
         "target": "V3",
         "level": "**V3**",
         "recorded": "V3",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": false,
       "scope": "software_target",
@@ -30665,7 +30678,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -30694,7 +30707,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -30723,7 +30736,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -30750,7 +30763,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -30780,7 +30793,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -30810,7 +30823,7 @@
         "target": "V3",
         "level": "**V3**",
         "recorded": "V3",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": false,
       "scope": "software_target",
@@ -30921,7 +30934,7 @@
         "target": "V3",
         "level": "**V3**",
         "recorded": "V3",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": false,
       "scope": "software_target",
@@ -30950,7 +30963,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -30977,7 +30990,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -31007,7 +31020,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -31087,7 +31100,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -31199,7 +31212,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -31228,7 +31241,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -31257,7 +31270,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -31287,7 +31300,7 @@
         "target": "V4",
         "level": "V0",
         "recorded": "V0",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -31322,7 +31335,7 @@
         "target": "V4",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -31354,7 +31367,7 @@
         "target": "V4",
         "level": "V3",
         "recorded": "V3",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -31783,7 +31796,7 @@
         "target": "V4",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -31815,7 +31828,7 @@
         "target": "V4",
         "level": "V3",
         "recorded": "V3",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -31847,7 +31860,7 @@
         "target": "V4",
         "level": "V3",
         "recorded": "V3",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -31878,7 +31891,7 @@
         "target": "V4",
         "level": "V3",
         "recorded": "V3",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -31910,7 +31923,7 @@
         "target": "V4",
         "level": "V3",
         "recorded": "V3",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -31982,7 +31995,7 @@
         "target": "V4",
         "level": "V3",
         "recorded": "V3",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -32571,7 +32584,7 @@
         "target": "V4",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -33453,7 +33466,7 @@
         "target": "V4",
         "level": "V2",
         "recorded": "V2",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -33557,7 +33570,7 @@
         "target": "V4",
         "level": "V2",
         "recorded": "V2",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -33588,7 +33601,7 @@
         "target": "V4",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -33618,7 +33631,7 @@
         "target": "V4",
         "level": "V0",
         "recorded": "V0",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -33647,7 +33660,7 @@
         "target": "V4",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -33712,7 +33725,7 @@
         "target": "V4",
         "level": "V0",
         "recorded": "V0",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -33744,7 +33757,7 @@
         "target": "V4",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -33772,7 +33785,7 @@
         "target": "V4",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -33845,7 +33858,7 @@
         "target": "V4",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -33876,7 +33889,7 @@
         "target": "V4",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -33908,7 +33921,7 @@
         "target": "V4",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -33937,7 +33950,7 @@
         "target": "V4",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -33971,7 +33984,7 @@
         "target": "V4",
         "level": "V0",
         "recorded": "V0",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -33998,7 +34011,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -34125,7 +34138,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -34193,7 +34206,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -34265,7 +34278,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -34312,7 +34325,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -34357,7 +34370,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -34465,7 +34478,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -34509,7 +34522,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -34539,7 +34552,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -34569,7 +34582,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -34617,7 +34630,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -34661,7 +34674,7 @@
         "target": "V3",
         "level": "**V3**",
         "recorded": "V3",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": false,
       "scope": "software_target",
@@ -34694,7 +34707,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -34723,7 +34736,7 @@
         "target": "V3",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "software_target",
@@ -34752,7 +34765,7 @@
         "target": "V3",
         "level": "**V3**",
         "recorded": "V3",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": false,
       "scope": "software_target",
@@ -34847,7 +34860,7 @@
         "target": "V4",
         "level": "V0",
         "recorded": "V0",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -34876,7 +34889,7 @@
         "target": "V4",
         "level": "V0",
         "recorded": "V0",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -34905,7 +34918,7 @@
         "target": "V4",
         "level": "V0",
         "recorded": "V0",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -35001,7 +35014,7 @@
         "target": "V4",
         "level": "V0",
         "recorded": "V0",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -35032,7 +35045,7 @@
         "target": "V4",
         "level": "V0",
         "recorded": "V0",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -35158,7 +35171,7 @@
         "target": "V4",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -35189,7 +35202,7 @@
         "target": "V4",
         "level": "V0",
         "recorded": "V0",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -35256,7 +35269,7 @@
         "target": "V4",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -35286,7 +35299,7 @@
         "target": "V4",
         "level": "V2",
         "recorded": "V2",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -35313,7 +35326,7 @@
         "target": "V4",
         "level": "V1",
         "recorded": "V1",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -35340,7 +35353,7 @@
         "target": "V4",
         "level": "V0",
         "recorded": "V0",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -35370,7 +35383,7 @@
         "target": "V4",
         "level": "V0",
         "recorded": "V0",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "physical_preparation_only",
@@ -35400,7 +35413,7 @@
         "target": "V5",
         "level": "V0",
         "recorded": "V0",
-        "freshness": "—"
+        "freshness": "â€”"
       },
       "below_target": true,
       "scope": "field_preparation_only",
@@ -35458,7 +35471,7 @@
     {
       "id": "BE-22",
       "severity": "L",
-      "text": "Entity creation duplicated 3×, `cec_sender` closure 2×",
+      "text": "Entity creation duplicated 3Ã—, `cec_sender` closure 2Ã—",
       "source": "docs/REMEDIATION_PLAN.md",
       "primary_package": "SW-UC-PREP",
       "disposition": "audit required; parser-open does not establish a current defect",
@@ -35809,7 +35822,7 @@
     {
       "id": "UI-35",
       "severity": "M",
-      "text": "axe: `aria-required-parent` on desktop tabs, unlabeled tab-pin checkboxes, `aria-hidden-focus` in closed drawers, unnamed tooltip, kiosk `color-contrast` ×22, zoom disabled",
+      "text": "axe: `aria-required-parent` on desktop tabs, unlabeled tab-pin checkboxes, `aria-hidden-focus` in closed drawers, unnamed tooltip, kiosk `color-contrast` Ã—22, zoom disabled",
       "source": "docs/REMEDIATION_PLAN.md",
       "primary_package": "SW-UI-PRESENT",
       "disposition": "audit required; parser-open does not establish a current defect",
@@ -35827,7 +35840,7 @@
     {
       "id": "UI-38",
       "severity": "M",
-      "text": "Kiosk output-status footer grows sideways with long names and runs off the right edge (iPhone: columns 3–4 and 7–8 hidden; Tab A11: OUT 8 hidden)",
+      "text": "Kiosk output-status footer grows sideways with long names and runs off the right edge (iPhone: columns 3â€“4 and 7â€“8 hidden; Tab A11: OUT 8 hidden)",
       "source": "docs/REMEDIATION_PLAN.md",
       "primary_package": "SW-KIOSK-STATE",
       "disposition": "audit required; parser-open does not establish a current defect",
@@ -35935,7 +35948,7 @@
     {
       "id": "HIL-09",
       "severity": "C",
-      "text": "✅ Fixed and proven on hardware 2026-09-25 (WP-A4 part 2, `write` run with read-back). Every output/input setting command the hub sends is unknown to this firmware: `set output stream/hdcp/hdr/scaler/arc/mute`, `set input edid`, `copy edid`, `set output exa*` get **no answer** and change nothing; `set lcd on time` with `time` is rejected. The device's own web interface uses different commands and `[port, value]` payloads (`tx hdcp`, `tx stream`, `set output audio mute`, `set arc`, `set hdr conversion`, `set video scaler`, `set edid`, `\"lcd on time\"` …). Output settings, EDID, external audio and LCD have never worked on this hardware",
+      "text": "âœ… Fixed and proven on hardware 2026-09-25 (WP-A4 part 2, `write` run with read-back). Every output/input setting command the hub sends is unknown to this firmware: `set output stream/hdcp/hdr/scaler/arc/mute`, `set input edid`, `copy edid`, `set output exa*` get **no answer** and change nothing; `set lcd on time` with `time` is rejected. The device's own web interface uses different commands and `[port, value]` payloads (`tx hdcp`, `tx stream`, `set output audio mute`, `set arc`, `set hdr conversion`, `set video scaler`, `set edid`, `\"lcd on time\"` â€¦). Output settings, EDID, external audio and LCD have never worked on this hardware",
       "source": "docs/REMEDIATION_PLAN.md",
       "primary_package": "SW-PROTOCOL-PREP",
       "disposition": "audit required; parser-open does not establish a current defect",

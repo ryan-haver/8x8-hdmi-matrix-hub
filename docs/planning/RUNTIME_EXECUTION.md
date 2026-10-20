@@ -726,3 +726,35 @@ follow-ups. Capacity at20:59Z: Codex75% remaining, DeepSeekUSD3.79 withUSD1.50
 review reserve; nativeM325% with checkedSol75% fallback, Geminiusage semantics/
 routing unresolved. No broad provider pause. Exact current runtime/host/ownership,
 per-model rationale and genuine launch receipts live in allocation ledger.
+
+
+### 2026-10-20 wave 02 execution checkpoint
+
+Baseline51275723846e4b126ccdc48c71d1727cabca4dbc published and origin-equal
+before genuine workers. SW-API-READ-02 MiniMax-M3 preservation report completed
+80735439 then corrected56466c16e838a936c0278b84f824b2601553a110 under fresh
+Orca authority. OpenAI coordinator independently verifies141 original API V2
+records/1,079 assertions, original1baac3de/null-image attribution and unchanged
+covered source. Five linked findings were already closed; only TST-03 remains
+open. Corrected report accepted, task ref published/equal, both M3 workers released
+before acknowledgment; full native exports, verified full bundles and4,357-file
+273,805,805-byte full workspace archive retained privately. No new qualification
+level or browser/image/physical proof. Review: production/software-waves/
+SW-API-READ-02/REVIEW.md. Integration is the next separate transition.
+
+SW-SEC-AUTH-01 genuine Sol6.1/high author task_eb4ab88caa5b remains active at
+base51275723, normal configured hook running with strict actual route inventory
+and opt-in real Chromium tests enabled. Six owned/coordinator-authorized staged
+files: new scenario/test/report, minimal serial browser.py/browser_driver.mjs
+lease, coordinator FSEC007-only8-ID registry mapping. No product/runner/schema
+change. Focused real browser2/2 passes; negative and allowed-control calibration
+failures retained. Clean committed campaign and exact-candidate qualified
+DeepSeek cross-family review remain pending. F-API-002 will be rerun because its
+broad tools/validate covers changed; the four preservation features do not cover
+those adapter files. Current observations do not qualify an unfinished candidate.
+
+Coordinator prose/allocation checks489passed, with partial-run route writer
+disabled and isolated data;65uniqueunits/268uniqueprimaryfeatureowners validated.
+Invocation-only documentation hook exception is limited to these prose/allocation
+records; source author uses full configured hook. No owner/hardware/field or final
+release gate is inferred. Private receipts: build/software-wave-02-20261020/.

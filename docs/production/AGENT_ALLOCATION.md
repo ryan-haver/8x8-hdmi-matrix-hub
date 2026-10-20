@@ -1297,3 +1297,110 @@ published base, genuine Orca Task/Dispatch and real acceptance; scoped existing
 client inspection provides a no-change harness gate, not a global inventory wait.
 New implementation still needs qualified different-family review. Model capacity
 routes useful work; it does not pause the project.
+
+
+### Genuine wave 02 starts after exact prior publication
+
+Scoped CI/preflight records published at **51275723846e4b126ccdc48c71d1727cabca4dbc**;
+exact origin equality verified before worktree/author dispatch. 473 existing
+instruction/documentation tests, 65-unit/268-unique-owner/exclusive-path/link
+checks and whitespace passed. Commit is prose/static allocation/evidence receipt
+only; documented invocation-only documentation hook exception, no runtime claim.
+No worker was launched for that coordinator-only record commit itself.
+
+**SW-SEC-AUTH-01/F-SEC-007 Sol author:** Task `task_eb4ab88caa5b`, Dispatch
+`ctx_5c634ce3cf0f`, terminal `term_704585c8-7ce8-4e60-a147-d13c285f1d25`,
+worktree `wp-sw-auth-lockout`, actual branch `ryan-haver/wp-sw-auth-lockout`,
+exact base51275723. Requested/effective **gpt-6.1-sol/high** match, prompt turn
+start observed. Exclusive new sw_sec_auth_01 scenario/optional test, author report
+and own build subtree; existing shared/browser/client/product paths read-only.
+Actual browser wrong-PIN/refusal/control/lockout proof and existing during-held-
+PBKDF2 responsiveness tests are required; API-only response checks do not earn V3.
+Coordinator alone stages mapping after exact scenario IDs; source normal hook,
+clean committed campaigns and qualified DeepSeek different-family review required.
+No level/evidence import or finding closure yet.
+
+**SW-API-READ-02 M3 preservation author:** Task `task_a75ae30df852`, Dispatch
+`ctx_de4764241ae7`, terminal `term_db88836b-5d55-4a57-9397-b4d65bcb4d39`,
+worktree `wp-sw-api-preservation`, actual branch `ryan-haver/wp-sw-api-preservation`,
+same exact full base51275723. Existing-worktree configured route explicitly pins
+M3 primary/small/internal models, denies other providers/MCP/subagents and
+unqualified plugins; supported current local model list is only M3/M3.1-Flash,
+with M3.1 unauthorized. OpenCode2.1.1 `debug agents` returns empty, not the old
+seven-agent listing; no inherited agent-inventory claim. Initial model-list read
+ran in root and showed the global catalog; corrected exact-worktree read proved
+local containment before launch. Catalog exclusion listings are not model use.
+Launch receipt configured-route model/effort null and turn-start unsupported;
+native effective identity still needs independent export verification. Exact new
+AUTHOR/report build subtree only writable, read-only original proof/covers audit
+of F-API-014/016/026/028; no new tests/fixtures/tooling or broader qualification.
+
+Two new workers + coordinator + older external-process reservation occupy the
+conservative four-agent ceiling. No extra reviewer/helper dispatch until a worker
+is settled/released. Original Run reused; no global config/default edits, new
+orchestration reset or ambiguous writer duplication. All ownership/lifecycle
+updates remain separate from completion/review/integration/qualification.
+
+
+### Observed models and minimal serial capability lease
+
+M3 native session `ses_ea4d904d6ffe07R7fPLq6zMJcw` export independently confirms
+provider minimax-coding-plan, model MiniMax-M3, actual **thinking** variant.
+No M3.1 substitution. Sol's own supported account check at21:10:48Z confirms
+same pool,26%used/74%remaining with same window/reset/ordinaryusageallowed.
+Both genuine Tasks show working heartbeats, not merely launch requests.
+
+Sol intake found two concrete lockout-evidence gaps: runner setup aborts on
+expected wrong-PIN403 attempts and ClientState exact toast equality cannot
+express varying retry seconds. Coordinator reply to `msg_eaab70d5172d` grants
+an exclusive serial lease **only** `tools/validate/clients/browser.py` and
+`tools/validate/clients/browser_driver.mjs` to Task `task_eb4ab88caa5b`, alongside
+its owned new scenario/test/report. Author should use a bounded actual-UI burst
+flow and stable visible-lockout/refusal/Retry-After observation, preserve old
+intent/observer defaults and include meaningful negative/allowed controls.
+Runner/model/schema/registry/product remain prohibited; no broad framework or
+expected-status setup bypass. New lease must be covered in exact-candidate
+cross-family implementation review. M3 inventory remains read-only and disjoint.
+
+Because API-root scenarios declare broad tools/validate covers, any browser-
+bridge change makes that original source proof stale under the actual policy.
+Coordinator will rerun those three existing API cases against the actual clean
+candidate and preserve new SHA/bytes before combined review, without replacing
+old records or relabelling their original source. Wider applicable client CI
+is required after accepted integration. Scope is implementation of a measured
+capability gap, not an owner gate or a project-wide capacity hold.
+
+
+### Wave 02 preservation accepted; security source hook active
+
+SW-API-READ-02 original Task task_a75ae30df852 completed80735439. Coordinator
+independently checked all141 original records/1,079 checks and actual source/
+client/assertion mappings. Original prose incorrectly called six linked findings
+open; original native transcript and full verified bundle were preserved, original
+Dispatch ctx_de4764241ae7 released before acknowledgment. Fresh bounded correction
+Task task_c7b627a988f6 / ctx_7fa9d2abc3ff, same worktree at full80735439 base,
+committed56466c16e838a936c0278b84f824b2601553a110 without amend. Exact writable
+AUTHOR.md/private own build only, same verified MiniMax-M3 thinking route and
+same allocation/fallback. Correction confirms five already closed plus TST-03
+open; observations informational, no cleanup/fixture/cover-change request.
+Coordinator OpenAI-family factual review accepts corrected prose and preservation
+of141 original1baac3de API V2 records; no new runtime, image, V3 or level claim.
+Full corrected native export84messages verifies M3/thinking, full bundle verified;
+ctx_7fa9d2abc3ff released21:24Z before delivery acknowledgment. Worktree retained
+pending full workspace backup and accepted integration; no deletion yet.
+
+Sol task_eb4ab88caa5b remains the only new active author, with older external
+process reservation preserved. Exact authorized FSEC007 mapping staged by
+coordinator (eight new IDs, two existing preserved); normal implementation hook
+now executing strict route coverage and SW_SEC_AUTH_BROWSER_TESTS=1 in isolated
+hook-01. Focused actual Chromium2/2 passed after retained assertion-calibration
+failures; these are test-oracle corrections, not a reproduced product defect.
+Ruff full CI paths and mypy91 pass reported; source commit/clean campaign and
+qualified DeepSeek different-family review remain pending. Browser1.63.0 /
+Chromium153.0.8010.12 observed. Ordinary core skip for opt-in Chromium test is
+explicit; actual formal browser scenarios have no fake dependency pass.
+
+Covers inspection confirms four preservation features do not cover changed
+browser adapter paths; original API proof remains scoped to1baac3de. F-API-002
+covers tools/validate and requires three fresh cases at actual clean auth candidate.
+No next wave begins before current integration records/push/equality are complete.
