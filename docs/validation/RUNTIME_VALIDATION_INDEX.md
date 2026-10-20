@@ -4,6 +4,10 @@ This index summarizes the final integrated software campaign and keeps its sourc
 
 ## Candidate and archive
 
+The subsequent [Tron owner approval](TRON_OWNER_APPROVAL_20261020.md) records
+three authorized baseline updates and focused comparison checks. It does not
+replace the source/image campaign or establish complete current-head CI.
+
 The subsequent [EV-01 reconciliation](EV01_EVIDENCE_RECONCILIATION.md) inspects
 candidate `95f64920`, its identical-tree CI merge and original `1baac3de` records.
 It preserves the scopes below and records missing feature/client assertions;

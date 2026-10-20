@@ -96,10 +96,12 @@ are planning scopes, not launched workers.
   checks serially. Require full route coverage of the actual mounted inventory.
 - [ ] Keep partial documentation/external-container checks from overwriting the
   complete route diagnostic (`-p no:tests.route_inventory` for such supplements).
-- [ ] Obtain the owner's explicit decision on all three Tron paused-frame
+- [x] Obtain the owner's explicit decision on all three Tron paused-frame
   differences for desktop, kiosk-tab-a11 and kiosk-iphone16promax. Preserve the
   before/after artifacts. Follow remediation section 5.3; an automatically
   generated gallery is not approval and failed visual CI is not waived.
+  [Owner approval and focused verification](TRON_OWNER_APPROVAL_20261020.md)
+  record the 2026-10-20 decision; full affected CI remains a separate item.
 - [ ] If approved visual changes are committed, use the required separate
   baseline approval commit and verify affected CI at the new head. If rejected,
   assign a scoped correction and repeat independent review/verification.

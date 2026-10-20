@@ -274,6 +274,104 @@ to avoid the broad runtime hook for a package with no product/test/tool changes.
 Persistent hook settings are unchanged; no full-suite/hook success is claimed.
 Post-commit hygiene and exact publication checks are recorded in local receipts.
 
+## Owner visual approval and provider rediscovery (2026-10-20 UTC)
+
+Owner explicitly approved the three existing Tron paused-frame differences
+(desktop, kiosk-tab-a11 and kiosk-iphone16promax) and deferred arranging physical
+validation. This is specific visual-update authority; hardware/field actions
+remain pending. The owner also directed the coordinator to inspect provider
+quota through Orca rather than delegate that discovery back to the owner.
+
+Initial binding: integration/origin `bbeaae4a70752b65c131fe87f226b77c5f0e4187`,
+same Orca 1.4.230/runtime `7974a428-1f2a-4689-96bc-69590e2df7d0`, existing Run
+`run_37205f6095b3`, 38 released/two retained compatibility entries; no new worker.
+Root/private data, historical evidence, unrelated encoded hook artifact and
+unresolved persistence workspace remain protected. No release/tag/main merge.
+
+Coordinator testing uses a fresh tracked-source export under
+`build/visual-approved-20261020/source`, with hydrated baseline copies and
+separate preserved before images. No private/untracked root data is copied.
+Docker Desktop was initially stopped and was started using its supported
+detached command; the existing pinned Playwright image matches CI digest
+`sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27`.
+Only the three approved captures are regenerated in that isolated export;
+root baselines remain untouched pending verification. Separate baseline-only
+approval commit and actual visual checks are required before claiming closure.
+
+Provider discovery is in progress through Orca's native Usage UI. Preliminary
+status/menu observation exposes Antigravity's **Gemini Models · Weekly Limit
+Remaining 77%**, MiniMax **70% / 3d 4h**, and Codex **36% / 5d 16h**. The latter
+two displays need used-versus-remaining and window/account details; these
+rounded footer values alone are not yet recorded as verified launch capacity.
+No excluded-provider action was invoked. The CLI has no advertised general
+quota command; native UI access is being used. Current routing, access,
+commitments and reviewer qualification must still pass before dispatch.
+
+### Verified follow-up observations
+
+The footer is in **Used** display mode. Its rounded Gemini 77% used means
+approximately 23% remaining (held, below 30%); MiniMax 70% used means about 30%
+remaining (held near the floor; limiting reset about 3d 3h). Codex later showed
+37% used, about 63% remaining, limiting reset about 5d 16h. These are shared
+pools; unrelated project commitments are visible but not fully quantified.
+No Antigravity account switching is supported on this Windows host. No excluded
+provider was invoked. The preliminary label above is retained as observed,
+not interpreted as 77% available.
+
+Authenticated, non-inference DeepSeek API reads at **2026-10-20T03:34:17Z**
+reported `is_available: true`, **USD 33.45** available/top-up balance, grant zero.
+The configured OpenCode system-default account is shared; API keys were kept
+in memory and never exported. The current authenticated catalog confirms
+`deepseek-v4-pro` (DeepSeek-V4-Pro) and `deepseek-flash` (DeepSeek-V4.1-Flash).
+Credit expiry/reset and aggregate other-project commitments are not reported.
+Reserve USD 5 for a bounded review/correction cycle; this is an allocation
+estimate, not a provider-enforced spending cap. Rate limits remain unreported.
+Receipts: local `build/provider-preflight-20261020/deepseek-{balance,models}.json`.
+
+OpenCode 2.0.32 has unqualified global helper plugins/defaults. A disposable
+project-local routing configuration was checked without inference: provider
+policy denies all except DeepSeek, external helper plugins and MCP are denied,
+subagents are denied, and primary/title/summary/compaction models are pinned to
+DeepSeek Pro. `opencode models --standalone` exposes exactly the two confirmed
+DeepSeek IDs; `debug agents` confirms the pinned models. Global preferences
+were not changed. The exact managed review worktree must repeat these checks;
+effective launch selection and substantive review qualification remain pending.
+
+The baseline-only commit is `10f788f692881edf329d247de17c5679e1dba2eb`.
+[Approval record](../validation/TRON_OWNER_APPROVAL_20261020.md) and portable
+manifest preserve hashes and the separate three-pass normal comparison.
+Root baselines were copied only after that comparison passed. Full affected CI
+at the published head remains pending; no failed historical run was rewritten.
+Invocation-only hook bypass was used for this baseline-only commit; persistent
+hook settings were unchanged and no full hook pass is claimed.
+
+Next bounded EV-02 package is **planned, not launched**: F-API-018 input rename
+scenario and behavioral assertions, Sol 6.1 high author; DeepSeek Pro independent
+review at the exact author commit. Author may edit only
+`tests/validation/scenarios/writes.py` and its assigned new report/artifact paths.
+Registry/ledger, root manifests, shared runner/contracts and product routes
+remain coordinator-owned. No physical device actions. Acceptance must include
+independent simulator readback, exact command and no unrelated mutation, with
+meaningful negative coverage and actual scenario execution. No feature target
+is promoted until mapping, evidence and independent review are accepted.
+
+The subsequent supported Codex `model/list` and `account/rateLimits/read`
+refresh confirms Sol 6.1, Astra, older Sol and Luna routes in the invoking
+managed pool. At the timestamp in local
+`build/provider-preflight-20261020/codex-quota.json`, weekly use is 38%, **62%
+remaining**, reset **2026-10-25T20:07:49Z**, ordinary usage allowed, no additional
+credits. Sol 6.1 high is selected for the bounded scenario package based on
+prior backend/test work; Astra's concurrency strengths are unnecessary here;
+older Sol and Luna supply no cross-family review. Gemini Argon/Flash are held
+for low shared quota and uncertain alias routing; MiniMax M3/M3.1 are held near
+the quota floor. DeepSeek Pro is the reserved review candidate; Flash is an
+available same-family alternative, not an independent review of Pro work.
+
+Coordinator documentation checks for the approval package: 440 passed in
+7.04 seconds with `-p no:tests.route_inventory`; `git diff --check` passed.
+The root runtime route report is not regenerated by these supplemental tests.
+No implementation package or review has yet been delivered.
+
 ## Reusable phase or wave entry
 
 Copy this section for each authorized wave. Use `unknown`, `held` or `not
