@@ -2658,9 +2658,12 @@ features:
   interfaces:
     rest: [GET /, GET /api, GET /api/info]
   target: V2
-  current: V1
-  basis: 'tests/test_rest_api.py TestHealthEndpoints; API-24: /api/info reads driver.json independent of cwd. DEP-06: canonical version and matching identity when the manifest is absent or corrupt (tests/sim/test_sim_rest_reads.py::test_info_manifest_fallback_keeps_the_driver_identity). GET / needs separate evidence.'
-  evidence: []
+  current: V2
+  basis: "V2: clean source-simulator API campaign at 0dd2c25ea866fd56fbe6046e03f0172499b70080 passes contracts.api_info, contracts.api_root and contracts.api_root_alias. Assertions cover canonical application/driver identity, documented API version/catalog and root aliases, unchanged simulator state and no mutating commands. Existing direct/simulator manifest-fallback tests remain covered. Three original records retain source SHA, timestamps, API-only client and null image digest byte-for-byte. Independent exact-candidate review/integration disposition is recorded in docs/production/software-waves/SW-API-READ-01/REVIEW.md and coordinator records; preparation alone is not final acceptance. No other client, image, hardware, soak or field qualification."
+  evidence:
+  - docs/validation/evidence/software-waves/SW-API-READ-01/F-API-002/2026-10-20-V2-0dd2c25e-contracts.api_info-api.json
+  - docs/validation/evidence/software-waves/SW-API-READ-01/F-API-002/2026-10-20-V2-0dd2c25e-contracts.api_root-api.json
+  - docs/validation/evidence/software-waves/SW-API-READ-01/F-API-002/2026-10-20-V2-0dd2c25e-contracts.api_root_alias-api.json
   findings: [DEP-06]
   scenarios: [contracts.api_info, contracts.api_root, contracts.api_root_alias]
 - id: F-API-003
