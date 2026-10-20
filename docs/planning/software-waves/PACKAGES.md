@@ -1,6 +1,6 @@
 # Software wave package briefs
 
-Status: **planned allocation with two initial supervised launches**. SW-API-READ-01 and SW-FINDINGS-01 are launched; implementation acceptance and finding dispositions remain pending. Other units are planned. Read [the wave plan](../SOFTWARE_RELEASE_WAVES.md) and [task templates](TASK_TEMPLATES.md) first. The [manifest](manifest.json) is authoritative for exact feature/unit allocation. Logical package IDs below are not Orca Task IDs. Every dispatch receives a fresh full SHA, verified route/quota and real Task/Dispatch authority.
+Status: **execution in progress**. SW-API-READ-01 is qualified/published at API V2 after CI39467476091. Finding/repository inventories are integrated as scoped triage, without finding closure. The manifest/ledger record current per-unit states; dated earlier launch summaries are historical.
 
 Every unit is capped at six primary features. This bounds assignment size, not duration or quota cost. If assertions/changes still exceed a bounded author/review/fix cycle, split the unit before dispatch with new exclusive files and update the manifest/ledger; never duplicate a live writer. Preserve adequate existing tests/evidence instead of implementing six new tests by default.
 
@@ -73,8 +73,9 @@ Exercise the complete registered read/status/root/configuration surfaces, event 
 | Dispatch unit | Exact primary features | Default new writable test files |
 | --- | --- | --- |
 | SW-API-READ-01 | F-API-002 | `tests/validation/scenarios/sw_api_read_01.py`<br>`tests/validation/test_sw_api_read_01.py` |
-| SW-API-READ-02 | F-API-014, F-API-016, F-API-026, F-API-028, F-API-031, F-API-032 | `tests/validation/scenarios/sw_api_read_02.py`<br>`tests/validation/test_sw_api_read_02.py` |
+| SW-API-READ-02 | F-API-014, F-API-016, F-API-026, F-API-028 | `tests/validation/scenarios/sw_api_read_02.py`<br>`tests/validation/test_sw_api_read_02.py` |
 | SW-API-READ-03 | F-API-039, F-API-040, F-API-042 | `tests/validation/scenarios/sw_api_read_03.py`<br>`tests/validation/test_sw_api_read_03.py` |
+| SW-API-READ-04 | F-API-031, F-API-032 | `tests/validation/scenarios/sw_api_read_04.py`<br>`tests/validation/test_sw_api_read_04.py` |
 
 Author prose: `docs/production/software-waves/<unit>/AUTHOR.md`; reviewer prose: `docs/production/software-waves/<unit>/REVIEW.md`. Independent review has a separate worktree at the exact submitted commit and no product-write permission. Existing source, browser/SDK bridge, schemas, common fixtures and guides are read-only until a specific serial lease is recorded. Root manifests, lockfiles, registry/ledger and integration remain coordinator-owned.
 
@@ -92,8 +93,9 @@ Cover admin/control PINs, current-PIN changes, rate limits, proxy trust, origins
 
 | Dispatch unit | Exact primary features | Default new writable test files |
 | --- | --- | --- |
-| SW-SEC-AUTH-01 | F-SEC-001, F-SEC-002, F-SEC-003, F-SEC-006, F-SEC-007, F-SEC-008 | `tests/validation/scenarios/sw_sec_auth_01.py`<br>`tests/validation/test_sw_sec_auth_01.py` |
+| SW-SEC-AUTH-01 | F-SEC-007 | `tests/validation/scenarios/sw_sec_auth_01.py`<br>`tests/validation/test_sw_sec_auth_01.py` |
 | SW-SEC-AUTH-02 | F-SEC-009, F-SEC-015 | `tests/validation/scenarios/sw_sec_auth_02.py`<br>`tests/validation/test_sw_sec_auth_02.py` |
+| SW-SEC-AUTH-03 | F-SEC-001, F-SEC-002, F-SEC-003, F-SEC-006, F-SEC-008 | `tests/validation/scenarios/sw_sec_auth_03.py`<br>`tests/validation/test_sw_sec_auth_03.py` |
 
 Author prose: `docs/production/software-waves/<unit>/AUTHOR.md`; reviewer prose: `docs/production/software-waves/<unit>/REVIEW.md`. Independent review has a separate worktree at the exact submitted commit and no product-write permission. Existing source, browser/SDK bridge, schemas, common fixtures and guides are read-only until a specific serial lease is recorded. Root manifests, lockfiles, registry/ledger and integration remain coordinator-owned.
 

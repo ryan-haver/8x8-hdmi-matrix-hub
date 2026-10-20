@@ -46,7 +46,7 @@ are regression/preservation work, not new implementation by default.
 
 ## Phases and suggested wave packing
 
-There are **30 packages and 63 bounded units**. A unit has at most six primary
+There are **30 packages and 65 bounded units** after two scoped splits on 2026-10-20. The original published allocation had 63 units. A unit has at most six primary
 features; cross-cutting units have an explicit scope instead. Each has unique
 new test/report/artifact paths. A package may take several small dispatch
 batches. The wave number is suggested packing, not a dependency on every earlier

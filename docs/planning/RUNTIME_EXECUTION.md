@@ -708,3 +708,21 @@ schema/ledger tests, Ruff and mypy (91 files) pass. Canonical ledger 204 below /
 qualification. Both calibrated inventory packages are integrated as triage with
 explicit limits, no finding closure. Detailed receipts/ownership/cleanup follow
 allocation ledger and `runs/software-waves/SW-API-READ-01/integration.json`.
+
+
+### First-wave CI archived; second bounded wave authorized
+
+CI39467476091 at exact head2b10e000 passed all13 required checks. Original source
+564346be has identical tree27325b45; all1,507 API/browser/UC/actualHA records
+schema/source/client-mapped with zero errors and unchanged null image digests.
+Full original logs/artifacts preserved; F-API-002 API/source-simulator V2 accepted,
+not broader release qualification. Dated pending-CI entries above are superseded
+by this receipt, not overwritten. Current numerical ledger204below/57stale.
+
+Next bounded assignments: Sol wrong-PIN/lockout browser proof (F-SEC-007), M3
+four-feature accepted API-proof preservation. Two packet splits yield65units,
+all268 primary owners unchanged, CORS/WebSocket/client support remain explicit
+follow-ups. Capacity at20:59Z: Codex75% remaining, DeepSeekUSD3.79 withUSD1.50
+review reserve; nativeM325% with checkedSol75% fallback, Geminiusage semantics/
+routing unresolved. No broad provider pause. Exact current runtime/host/ownership,
+per-model rationale and genuine launch receipts live in allocation ledger.

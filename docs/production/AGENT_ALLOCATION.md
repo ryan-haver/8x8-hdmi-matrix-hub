@@ -1194,3 +1194,106 @@ filesystem residual directories are still present, preserved without raw-delete
 retry. Their full verified archives/status/patch/history/transcripts are retained.
 The old protected/denied cleanup targets and author user-owned worktree remain
 untouched. No extra active worker assignment remains from this initial wave.
+
+
+## Software wave 02 preflight and prior-head qualification — 2026-10-20
+
+Owner explicitly authorized proceeding. Revalidated integration/root/origin
+`2b10e000587d4279b0cad5583ff1038732c70415`, same PR38 draft/target and Run
+`run_37205f6095b3`, Orca **1.4.232**, runtime
+`113f2af8-5169-408a-9b81-00bd6316d35c`. Coordinator terminal handle remains
+`term_259c5526-02c2-44a8-b469-bf171aa435a0`; actual process incarnation differs
+and is retained in the fresh receipt. Local Windows Zelu only; all saved SSH
+hosts disconnected. Initial `orca agent list` unsupported, so no capability
+claim came from it; current launch help/catalog and native host receipts used.
+OpenCode is now **2.1.1**, not the historical 2.0.32; current catalog and local
+pins must be checked again before execution. Do not replay old model overrides.
+
+Fleet fresh snapshot: **45 released / 6 retained, no active assignments**.
+Retained rows include null compatibility entries, older external/user resources
+and the completed user-owned Sol author; they are not six new active workers.
+Conservative project ceiling remains four including coordinator. Reserve one
+slot for the older external process whose state is still not proven exited;
+maximum two new workers. Preserve all prior protected persistence/empty-folder/
+user-owned workspaces, root private runtime, unrelated encoded hook artifact and
+historical failures. No deletion or orchestration reset is authorized here.
+
+### Exact CI closure for the first API unit
+
+[CI39467476091](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/actions/runs/39467476091)
+completed successfully at published head `2b10e000...`: all 13 required jobs and
+UI review comment success; GHCR publish skipped on PR. Actual source
+`564346beb0d955970333b22dba6c5f719d079a4a`, tree
+`27325b4554875c096e68c1e852615a33601e91ff`, equals that head's tree. Core
+4,023 passed/22 skipped/35 deselected, 177/177 routes; source API/browser/UC
+1,416/54/18, actual HA19; Remote100, HA component101, deployment29/2 skips,
+UI1,101/33 skips. All **1,507 source records** schema/source/per-client mappings
+validated with zero errors, original merge SHA and null image digests retained.
+They are not imported as later-candidate or image/client qualification.
+F-API-002/API source-simulator V2 now has independent review, integrated proof
+and combined CI acceptance; other targets/physical/field/final release remain.
+
+Full raw job logs and all seven original artifact payloads are preserved under
+`build/software-wave-02-20261020/ci-39467476091/`; hashes and attributed results
+in `docs/validation/runs/software-waves/SW-API-READ-01/ci-39467476091.json`.
+Initial all-artifact gh download exited1 after two outputs; those partial files
+and the failure record remain. Direct original downloads all passed. Two
+Docker-build payloads are opaque non-ZIP bytes, retained without pretending they
+are ZIPs; the other five artifacts were safely extracted into a fresh destination.
+No populated historical capture helper was rerun or original bytes overwritten.
+
+### Current model/host/pool observations and allocation
+
+Supported Codex app-server observation **20:59:33Z**: ordinary usage allowed,
+**25% used / 75% remaining**, 10,080-minute weekly window, reset
+2026-10-27T06:33:16Z, no secondary pool or reset credits. Exact current catalogs
+contain Sol6.1, Astra, older Sol5.6/6 and Luna with their selectable efforts.
+Sol6.1 high remains the implementation choice for bounded security behavior;
+Astra is available for demonstrated concurrency/composition difficulty, not
+added speculatively. Older Sol/Luna remain same-family alternatives; Luna fits
+inventory but MiniMax is selected for the bounded preservation task below.
+
+Supported authenticated DeepSeek balance/catalog observation **20:59:33Z**:
+USD **3.79 available**, Pro/Flash IDs unchanged; rate limits/reset/external
+commitments unreported. This shared pool has materially declined since the
+previous wave. Reserve **USD1.50** for a bounded exact-commit security review
+and corrections, based on prior comparable Pro API review execution; refresh
+before review launch and monitor limits. Do not spend this reserve on generic
+inventory. Pro remains qualified for API/security invariants; Flash remains a
+conditional bounded-audit route, not automatically a qualified implementation
+reviewer. No claim of unlimited headroom or new credits.
+
+Native Orca Used-mode observation about **21:02Z**: Codex25% agrees with the
+supported API; MiniMax75% used / **25% remaining**, reset about2d10h, period not
+reported. This below30 bounded M3 preservation/report assignment has verified
+**Sol6.1 high / 75%** fallback with its own account check; no silent substitution,
+no extra author duplicated on an ambiguous process. The Gemini footer displays
+87% in Used mode while its compact label says Remaining; this semantic
+inconsistency and backend alias routing remain unresolved, so no verified Gemini
+headroom/family launch is asserted. Argon/Flash remain task-conditional candidates;
+their uncertainty does not hold the eligible Sol/M3 assignments. M3 and M3.1-Flash
+both appear in current catalogs; **M3/thinking** is selected for the source
+inventory role with prior accepted comparable work. M3.1 is not silently used.
+All primary/internal/helper models and plugins need local route containment.
+Claude/Anthropic excluded everywhere, including any nested default or fallback.
+
+### Bounded wave packing (planned, not launched by this entry)
+
+Two original six-feature units split before dispatch: allocation now **30
+packages / 65 units**, retaining all268 unique primary feature owners. Original
+63-unit publication remains historical. SW-SEC-AUTH-01 now owns **F-SEC-007**
+only (wrong PIN/lockout, actual UI and independent no-effect/responsiveness
+assertions through existing browser intents). Other five auth features move to
+SW-SEC-AUTH-03. Sol owns only its new scenario/optional test/report/build paths;
+no shared client/runner/schema/product write by default. If existing observations
+are insufficient, request a minimal exact lease or report the gap without fake V3.
+
+SW-API-READ-02 now owns accepted **F-API-014/016/026/028** preservation only;
+CORS/WebSocket F-API-031/032 move to SW-API-READ-04 for explicit capability
+intake. M3 report/readonly source/evidence verification has exclusive new report/
+build paths, no speculative tests or qualification promotion. Coordinator owns
+registry/evidence import/ledger and integration. Each unit gets a full newly
+published base, genuine Orca Task/Dispatch and real acceptance; scoped existing
+client inspection provides a no-change harness gate, not a global inventory wait.
+New implementation still needs qualified different-family review. Model capacity
+routes useful work; it does not pause the project.
