@@ -1,5 +1,16 @@
 # EV-02 API evidence candidate
 
+Execution disposition (2026-10-20): the exact combined candidate
+`e5ebb376230d1dc6bbb62e07f38b7d4cf8221b32` received
+[independent DeepSeek acceptance](../production/ev02/FINAL_API_REVIEW.md).
+The coordinator integrated it sequentially, followed by report-only review tip
+`e5eb9831780742598a605da5adfb17d905377955`, without source or evidence changes.
+The seven API V2 dispositions below are accepted in that bounded scope; five
+below-target current values advance to V2. This does not complete the wider
+EV-02 security/API package. The preparation narrative below retains its original
+checkpoint scope. Publication and current-head CI are recorded separately in
+the execution record and allocation ledger.
+
 This preparation checkpoint proposes seven API V2 evidence dispositions for
 final independent combined review. Integration, qualification and publication
 must be recorded separately in the [execution record](../planning/RUNTIME_EXECUTION.md)

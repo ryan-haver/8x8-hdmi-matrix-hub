@@ -11,6 +11,15 @@ scopes and identifying missing assertions/client mappings. The snapshot and
 planned-only statements below retain their original planning-package scope;
 EV-01 does not promote levels or close the remaining packages.
 
+Subsequent execution: the [EV-02 API evidence slice](EV02_API_EVIDENCE_QUALIFICATION.md)
+has independent cross-family acceptance at exact candidate `e5ebb376` and is
+integrated. Seven API V2 dispositions preserve 144 original records with their
+source attribution and add four mapped-name records; five current levels advance.
+The resulting numerical ledger has **205 below-target** and **57 stale** features.
+Those counts supersede the snapshot for current accounting; the original
+210/68 counts below remain the dated planning baseline. Wider EV-02 security,
+EV-03, physical preparation and soak/field packages remain incomplete.
+
 Authorities: [registry](features.yaml), [generated ledger](LEDGER.md),
 [validation policy](README.md), [target definitions](VALIDATION_PLAN.md),
 [release checklist](RELEASE_VALIDATION_CHECKLIST.md),

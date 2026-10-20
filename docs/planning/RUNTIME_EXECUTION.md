@@ -587,3 +587,48 @@ and alternative-route limitations are in the
 No new workers/worktrees or non-Orca substitutes were launched. The unresolved
 persistence workspace, private root data and unrelated hook artifact remain
 protected. Scoped publication receipts follow outside the commit they identify.
+
+## EV-02 API evidence slice and Tron approval (2026-10-20 UTC)
+
+The owner explicitly approved the three outstanding Tron paused-frame differences
+and deferred physical arrangements. The
+[baseline approval record](../validation/TRON_OWNER_APPROVAL_20261020.md)
+preserves both old and approved hashes. Each updated PNG equals the original
+failed CI actual capture, with no assertion/threshold changes. CI 39365581349
+passes all 13 required checks at `3979d602` (identical-tree synthetic merge),
+including 1,101 UI passes/33 skips. This is distinct from subsequent-head CI.
+
+Verified Codex pool headroom and authenticated DeepSeek balance/catalog access
+enabled genuine Orca author/reviewer dispatches under the existing Run.
+Sol 6.1 high authored a bounded input-name scenario/assertion package; independent
+DeepSeek Pro inspected its implementation and the complete final evidence slice.
+No Anthropic routes, helpers or fallback were used. The pinned configured
+OpenCode route and its unsupported CLI model override are recorded explicitly
+in the allocation ledger; actual provider exports confirm DeepSeek Pro.
+
+The [accepted API slice](../validation/EV02_API_EVIDENCE_QUALIFICATION.md) at
+`e5ebb376230d1dc6bbb62e07f38b7d4cf8221b32` contains 144 byte-exact original
+records at `1baac3de` and four clean mapped-source records at `bb4d3fdc`.
+Seven API V2 dispositions are accepted: F-API-014/016/018/026/028/036/038;
+five current levels advance. Independent exact-candidate replay passes four
+name scenarios/31 checks, 122 scoped tests and the formal evidence gate.
+The author normal hook passes 4,041 tests/four skips/35 deselections and
+177/177 routes; coordinator metadata checks pass 103 tests/two Docker
+deselections. Failed setup/hook history and bounded counterexamples remain
+preserved. No handler, REST route, shared contract, manifest or lockfile changed.
+
+The coordinator fast-forwarded the accepted candidate, then report-only review
+tip `e5eb9831780742598a605da5adfb17d905377955`, sequentially without material
+integration changes. [Final review](../production/ev02/FINAL_API_REVIEW.md)
+also verifies the exact scope and byte identity of the owner-approved fixtures.
+Task branches are published and verified; full-history bundles and complete
+provider/workspace artifacts are preserved outside the worktrees. The final
+reviewer was released before delivery acknowledgment. The older settled review
+terminal is retained by Orca's ownership guard and is not force-closed.
+
+The numerical ledger now reports 268 total, 205 below target and 57 stale.
+This does not close wider EV-02 security work, EV-03, F-API-015's V3 target,
+BE-16/TST-03, HIL-09 caps, physical gates, 72-hour measurements, owner daily use
+or final version/artifact requirements. Original image attribution remains
+unchanged. Integration publication and its CI receipts follow separately;
+PR #38 remains draft and no main merge or tag is authorized.

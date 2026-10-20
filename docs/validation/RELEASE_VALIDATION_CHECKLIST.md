@@ -11,6 +11,12 @@ record original/candidate CI attribution and assertion gaps for the initial
 42-feature union. No release gate is checked merely because reconciliation
 completed; evidence import, target closure and implementation remain separate.
 
+The subsequent [accepted EV-02 API slice](EV02_API_EVIDENCE_QUALIFICATION.md)
+qualifies seven API V2 dispositions at reviewed candidate `e5ebb376`, with five
+current levels advancing; wider software and release gates remain open. The
+three owner-approved Tron frames and passing baseline-head CI are recorded
+below. Unchecked release items do not negate these bounded execution results.
+
 Use the [master plan](../planning/UNIFIED_MASTER_PLAN.md),
 [validation policy](README.md), [validation plan](VALIDATION_PLAN.md),
 [Orca protocol](../ORCHESTRATION_PROTOCOL.md) and
@@ -102,9 +108,11 @@ are planning scopes, not launched workers.
   generated gallery is not approval and failed visual CI is not waived.
   [Owner approval and focused verification](TRON_OWNER_APPROVAL_20261020.md)
   record the 2026-10-20 decision; full affected CI remains a separate item.
-- [ ] If approved visual changes are committed, use the required separate
+- [x] If approved visual changes are committed, use the required separate
   baseline approval commit and verify affected CI at the new head. If rejected,
   assign a scoped correction and repeat independent review/verification.
+  Baseline commit `10f788f6`; [published-head CI proof](TRON_OWNER_APPROVAL_20261020.md#published-head-verification)
+  at `3979d602` passes all 13 required checks. Later candidate CI remains required.
 
 The documented conditional replacement-disconnect probe remains a known
 extension limit; its red result is preserved. It is not silently made a skip,

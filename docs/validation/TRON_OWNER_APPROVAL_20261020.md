@@ -30,3 +30,32 @@ persistent hooks were unchanged. These focused checks do not claim a full hook
 or complete UI suite pass. Affected CI must pass at the subsequently published
 head before the visual regression gate closes. Historical failed CI remains
 attached to its original source. No main merge, tag or final release is approved.
+
+## Published-head verification
+
+[CI run 39365581349](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/actions/runs/39365581349)
+passed all 13 required checks for published head
+`3979d6020165bcf31f0f44f21de6bb5b3648dc1e`. Its actual merge source
+`53a4359f7bbd034acf8ae80fc102ec4fb0c0b297` has exactly the same tree
+(`aae201211708b31185229f10d1fd2ef199e4b74d`) as that head; both parents were
+verified. The additional UI review comment passed; release publication was
+skipped for this PR run.
+
+The full smoke/visual step passed **1,101 tests**, with **33 skips**. The log
+explicitly shows all three approved paused-frame tests passing. The gallery
+contains those three changed images and no unapproved snapshot paths. Original
+test outcome was passing; the failure-only Playwright report upload was skipped.
+Logs and gallery are preserved locally, with hashes and source attribution in
+the [CI receipt](runs/tron-approved-20261020/ci.json). This closes this visual
+approval/update verification; later implementation and final-artifact CI gates
+remain separate.
+
+## Original failed-frame identity
+
+All three updated PNG payloads are byte-identical to the **original actual PNGs**
+from failed CI run `39305698510`; the original expected PNGs also match the
+preserved before hashes. The fresh local regeneration therefore did not replace
+the approved differences with different frames. The
+[frame identity receipt](runs/tron-approved-20261020/original-ci-frame-matches.json)
+records each comparison. Independent fixture-integrity review is included with
+the final EV-02 review; the owner's visual decision remains separate.

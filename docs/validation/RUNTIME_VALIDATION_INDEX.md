@@ -4,9 +4,22 @@ This index summarizes the final integrated software campaign and keeps its sourc
 
 ## Candidate and archive
 
+The [EV-02 API evidence slice](EV02_API_EVIDENCE_QUALIFICATION.md) is accepted
+by [independent DeepSeek review](../production/ev02/FINAL_API_REVIEW.md) at
+`e5ebb376` and integrated without material changes. Seven scoped API V2
+dispositions preserve 144 original `1baac3de` records and four clean mapped-source
+`bb4d3fdc` records. An independent rerun at exact `e5ebb376` passes four scenarios
+and 31 checks; 122 scoped tests and the formal evidence gate pass. Five current
+levels advance; the numerical ledger now has 205 below target and 57 stale.
+This is API simulation proof, not image, browser, UC, HA or physical qualification.
+
 The subsequent [Tron owner approval](TRON_OWNER_APPROVAL_20261020.md) records
-three authorized baseline updates and focused comparison checks. It does not
-replace the source/image campaign or establish complete current-head CI.
+three authorized baseline updates and focused comparison checks. All three
+updated LFS objects match the original failed CI's actual frames exactly.
+CI [39365581349](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/actions/runs/39365581349)
+passes all 13 required checks at `3979d602`, with 1,101 UI passes and 33 skips;
+its synthetic merge has the identical source tree. Later-head CI remains
+separate. This does not replace the source/image campaign.
 
 The subsequent [EV-01 reconciliation](EV01_EVIDENCE_RECONCILIATION.md) inspects
 candidate `95f64920`, its identical-tree CI merge and original `1baac3de` records.
@@ -49,7 +62,7 @@ The formal gate checks evidence relationships and registry/ledger consistency; i
 
 ## CI and remaining gates
 
-CI at [`1baac3de`](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/actions/runs/39228762775) passed all 12 non-UI required jobs. CI core passed 4,023, skipped 22, deselected 35, and covered 177/177 routes; actual HA passed 19 scenarios. Main UI had 1,098 passes, 33 skips, and three existing Tron paused-frame visual failures; the gallery had 62 passes. The owner has not approved those visuals. The independent R8D review accepts the supported Orei fixes: 12 required source/image cases, 102 regressions, and two supported controls pass. Final documentation-head CI remains subsequent to this commit.
+Historical CI at [`1baac3de`](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/actions/runs/39228762775) passed all 12 non-UI required jobs. CI core passed 4,023, skipped 22, deselected 35, and covered 177/177 routes; actual HA passed 19 scenarios. Main UI then had 1,098 passes, 33 skips, and three Tron paused-frame visual failures; the gallery had 62 passes. The owner subsequently approved those three frames, with the passing `3979d602` result recorded above. The independent R8D review accepts the supported Orei fixes: 12 required source/image cases, 102 regressions, and two supported controls pass. Each later integration head requires its own CI result.
 
 The [final independent evidence review](RUNTIME_FINAL_GATE_REVIEW.md) accepts the functional software evidence and the inspected guide/index delta, after reconciling all 1,737 original outcomes and 439 captured Git blobs. This closes evidence attribution while preserving the release gates below.
 

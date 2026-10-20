@@ -1,0 +1,125 @@
+{
+  "observed_utc": "2026-10-20T04:13:20.886165+00:00",
+  "run_id": 39365581349,
+  "url": "https://github.com/ryan-haver/8x8-hdmi-matrix-hub/actions/runs/39365581349",
+  "head_sha": "3979d6020165bcf31f0f44f21de6bb5b3648dc1e",
+  "conclusion": "success",
+  "required_checks": [
+    {
+      "name": "Type check (mypy)",
+      "conclusion": "success"
+    },
+    {
+      "name": "Tests (pytest)",
+      "conclusion": "success"
+    },
+    {
+      "name": "Docker image (build + deployment tests)",
+      "conclusion": "success"
+    },
+    {
+      "name": "Remote 3 integration (scripted Remote)",
+      "conclusion": "success"
+    },
+    {
+      "name": "Lint (ruff)",
+      "conclusion": "success"
+    },
+    {
+      "name": "Home Assistant tests",
+      "conclusion": "success"
+    },
+    {
+      "name": "hassfest",
+      "conclusion": "success"
+    },
+    {
+      "name": "Repository hygiene (binary/size guard)",
+      "conclusion": "success"
+    },
+    {
+      "name": "UI (smoke + visual)",
+      "conclusion": "success"
+    },
+    {
+      "name": "Validation (Home Assistant container)",
+      "conclusion": "success"
+    },
+    {
+      "name": "Secret scan (gitleaks)",
+      "conclusion": "success"
+    },
+    {
+      "name": "HACS validation",
+      "conclusion": "success"
+    },
+    {
+      "name": "Validation (scenarios + ledger)",
+      "conclusion": "success"
+    }
+  ],
+  "additional_ui_review_comment": "success",
+  "release_publication": "skipped; PR run only",
+  "actual_merge_source": {
+    "sha": "53a4359f7bbd034acf8ae80fc102ec4fb0c0b297",
+    "parents": [
+      "6debe5a9d1ce3b5993bbd1f6c16d14550d11141b",
+      "3979d6020165bcf31f0f44f21de6bb5b3648dc1e"
+    ],
+    "tree": "aae201211708b31185229f10d1fd2ef199e4b74d",
+    "identical_to_head_tree": true,
+    "verified_with": "GitHub commits refs/pull/38/merge API and local git rev-parse head^{tree}"
+  },
+  "ui": {
+    "passed": 1101,
+    "skipped": 33,
+    "original_failure_report_upload": "skipped; original test outcome was not failure",
+    "approved_projects": [
+      "desktop",
+      "kiosk-tab-a11",
+      "kiosk-iphone16promax"
+    ],
+    "all_three_paused_frame_passes_in_log": true,
+    "unapproved_snapshot_paths": []
+  },
+  "gallery": {
+    "artifact_id": 12239943856,
+    "changed_entries": [
+      "special/tron-background/paused-frame"
+    ],
+    "images": [
+      {
+        "entry": "special/tron-background/paused-frame",
+        "viewport": "desktop",
+        "theme": "tron-classic",
+        "status": "changed",
+        "diffPixels": 719,
+        "sizeChanged": null
+      },
+      {
+        "entry": "special/tron-background/paused-frame",
+        "viewport": "kiosk-iphone16promax",
+        "theme": "tron-classic",
+        "status": "changed",
+        "diffPixels": 99,
+        "sizeChanged": null
+      },
+      {
+        "entry": "special/tron-background/paused-frame",
+        "viewport": "kiosk-tab-a11",
+        "theme": "tron-classic",
+        "status": "changed",
+        "diffPixels": 1604,
+        "sizeChanged": null
+      }
+    ]
+  },
+  "local_preservation": {
+    "run.json": "71c0ed19259d405060f94f1142a2629dd01948278ac4546855378c65791131ba",
+    "ui.log": "c29c647a3b2708fb25bf43e9f3697a183c7f3cc392bc2e9fc27fa587d41e6141",
+    "artifacts.json": "385249862efd037a5009a4ef5faca6767391611c30d984d032b06a5da356e827",
+    "gallery/changed.json": "3a817fe469469322c9d80b5b019ec39e3e38ad3d7eedb12dfc1aa1c61c6e04d8",
+    "gallery/unapproved.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Visual approval at this source tree only; later implementation/final-artifact gates remain separate"
+}
