@@ -2,16 +2,16 @@
   "schema": "static software-wave planning data; not an executable launcher or evidence record",
   "observed_utc": "2026-10-20T16:35:43.466430+00:00",
   "baseline_sha": "97e617c2276c7b1e015bb4a9419cb9820deafdee",
-  "state": "planned allocation with two initial genuine supervised launches; qualification/integration pending",
+  "state": "planned allocation with genuine supervised execution receipts; per-unit outcomes and qualification remain distinct",
   "run": "run_37205f6095b3",
   "observed_runtime": "113f2af8-5169-408a-9b81-00bd6316d35c",
   "observed_orca_version": "1.4.232",
   "actual_dispatch_identity_and_quota": "must be refreshed; prior handles/credits are historical",
   "source_hashes": {
-    "docs\\validation\\features.yaml": "bc537ee305d19eca491c5c4a28d101d5421f49dac1e4db48dc8e280848591c74",
-    "docs\\validation\\LEDGER.md": "de993d4bdaa310af39752976e9d17b6ace04d7db220b3656d981859be021412f",
-    "docs\\validation\\EV01_EVIDENCE_RECONCILIATION.md": "839e973a5c50cefd28dadeecb5443b20a67df7f6e456f8dccf38bc68eefa72ee",
-    "docs\\validation\\EV02_API_EVIDENCE_QUALIFICATION.md": "9138e292c8a31d9578c13c152ffabbacbef4e63073435d3d97a45eaae1f3fffb"
+    "docs/validation/features.yaml": "10eb6ce0708e5c194287bc6474f3001c3f7480548196e03a4917537a20f7c2f9",
+    "docs/validation/LEDGER.md": "fc3b3564ec4c72acd28c1c30eb3be0080c064b7bcfda32ea7ce81c3127919bf9",
+    "docs/validation/EV01_EVIDENCE_RECONCILIATION.md": "839e973a5c50cefd28dadeecb5443b20a67df7f6e456f8dccf38bc68eefa72ee",
+    "docs/validation/EV02_API_EVIDENCE_QUALIFICATION.md": "f95389bbbafd26cf8e244adfb3e526ab94b4a5e0f81f2da36407359489442c3c"
   },
   "counts": {
     "total": 268,
@@ -1199,7 +1199,7 @@
       "id": "SW-FINDINGS-01",
       "package": "SW-FINDINGS",
       "feature_ids": [],
-      "state": "launched",
+      "state": "completed_source_triage_not_qualified",
       "exact_base_sha": "97e617c2276c7b1e015bb4a9419cb9820deafdee",
       "task_id": "task_e1bec78af179",
       "dispatch_id": "ctx_07bca220949e",
@@ -1222,7 +1222,12 @@
         "main/tags/release publication"
       ],
       "review_required": "different underlying family for every new test/fixture/tool/code deliverable",
-      "artifact_scope": "new empty per-run destination; preserve full source/client/image identities"
+      "artifact_scope": "new empty per-run destination; preserve full source/client/image identities",
+      "submitted_sha": "b008297b1a3c988789e92c2cb4c32f3396bcd07f",
+      "correction_task_id": "task_185e93ca5a0c",
+      "correction_dispatch_id": "ctx_6cee9d4ae624",
+      "worker_resources": "both released before delivery acknowledgment",
+      "qualification": "none; source-inspection candidates only; coordinator row-level review required"
     },
     {
       "id": "SW-HARNESS-01",
@@ -3287,10 +3292,10 @@
       "id": "SW-REPO-01",
       "package": "SW-REPO",
       "feature_ids": [],
-      "state": "planned",
-      "exact_base_sha": null,
-      "task_id": null,
-      "dispatch_id": null,
+      "state": "launched",
+      "exact_base_sha": "53e4b6710e9835ced03b7c614e2ee00f70649f2f",
+      "task_id": "task_39d9d5951f53",
+      "dispatch_id": "ctx_789b450d0a6e",
       "exclusive_writable": [
         "docs/production/software-waves/SW-REPO-01/AUTHOR.md",
         "build/software-waves/SW-REPO-01/**"
@@ -3310,7 +3315,10 @@
         "main/tags/release publication"
       ],
       "review_required": "different underlying family for every new test/fixture/tool/code deliverable",
-      "artifact_scope": "new empty per-run destination; preserve full source/client/image identities"
+      "artifact_scope": "new empty per-run destination; preserve full source/client/image identities",
+      "model": "minimax-coding-plan/MiniMax-M3",
+      "effective_native_variant": "thinking",
+      "launch_route": "verified local configuration; CLI model override unsupported and omitted"
     },
     {
       "id": "SW-DOCS-01",
@@ -35883,5 +35891,6 @@
   "scoped_intake_override": {
     "unit": "SW-API-READ-01",
     "reason": "Coordinator inspected EV-01 F-API-002 disposition, handlers/direct tests and existing request/assertion support. No shared-support change is needed; scoped intake/no-change harness gate satisfied while global audit proceeds."
-  }
+  },
+  "source_hashes_kind": "SHA-256 of exact Git blob bytes at baseline_sha; forward-slash repository-relative paths; independent of checkout line endings"
 }

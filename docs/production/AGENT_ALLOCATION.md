@@ -943,3 +943,100 @@ cleanup and unrelated encoded hook artifact remain preserved. No cleanup retry
 or unrelated process stop was attempted. The complete planned allocation lives
 in [the software wave plan](../planning/SOFTWARE_RELEASE_WAVES.md); only the two
 real initial units are marked launched, all others planned.
+
+### Finding audit settlement, calibration and continued work
+
+Original DeepSeek audit completed at `8f23ae8976a4056f7dd7793ad3733c730594f42d`
+with all 59 rows covered. Coordinator review rejects its unqualified wording
+that static code/file presence reproduced 27 current defects: no tests ran in
+that audit. Required correction distinguishes source-inspection candidates from
+observed reproductions and removes any invented visual/DI-9 approval gates.
+Original report remains preserved; no finding/level/cap is closed from it.
+
+Attempted exact-terminal fresh-authority reuse was refused preflight with
+`agent_unconfigured`, request `26459b4f-8791-45d3-ba58-bc6dff8b8732`. Request-show
+reported absent; fleet/worker/terminal inspection confirmed the original Task
+settled and owned terminal live, with no replacement Task/Dispatch created.
+No ambiguous duplicate writer or terminal-close workaround. Full native session
+export and complete verified bundle were preserved, then accepted original
+Dispatch `ctx_07bca220949e` released (`closed_agent_terminal`, archive captured)
+before acknowledgment `delivery_3fb99400b0b6`.
+
+Supported DeepSeek balance/catalog refresh **16:50:18Z**: USD **17.95** available,
+Pro/Flash unchanged, reset/rate limits/external pool commitments unreported.
+Fresh same-worktree Pro configured-route correction Task `task_185e93ca5a0c`,
+Dispatch `ctx_6cee9d4ae624`, terminal
+`term_dc89e1f3-bafd-4db2-b49b-7fcaefb79657`, full base `8f23ae89...`, was launched
+after the old process release. Only its author report and new correction build
+subtree writable; actual source/tests/register remain unchanged. Native status
+positively reports working; no source or evidence acceptance claimed. Sol's
+implementation hook continues independently (last observed 69%). Capacity
+remains coordinator + one reserved old external process + two new workers.
+
+Planning publication `53e4b6710e9835ced03b7c614e2ee00f70649f2f` exactly matched
+origin. 473 existing documentation tests, complete allocation/DAG/exclusive-path/
+source-input/Markdown checks, whitespace and full-tree hygiene passed. Only
+planning/protocol/static data were committed with the documented invocation-only
+documentation hook exception; no new implementation hook pass was asserted.
+A subsequent portability correction changes snapshot hashes to exact baseline
+Git-blob bytes and forward-slash paths, separating Windows checkout CRLF from
+portable identities; it is queued with this wave's integration records.
+
+### Native usage observation and balanced third-provider assignment
+
+Orca native footer in **Used** mode was visually read about **16:56Z** on
+2026-10-20: Codex 4% used / **96% remaining**, approximate reset 6d13h;
+Gemini 81% used / **19% remaining**, reset 3d5h; MiniMax 72% used /
+**28% remaining**, reset 2d14h. Exact credits, per-window throughput and other
+project commitments are not exposed. The private screenshot remains private;
+sanitized receipt is `build/software-wave-planning-20261020/native-provider-usage-sanitized.json`.
+The eligible below-30 MiniMax bounded allocation has a verified Codex fallback
+with its own checked headroom. No silent model substitution is authorized.
+
+DeepSeek report correction completed at
+`b008297b1a3c988789e92c2cb4c32f3396bcd07f`; zero runtime defects reproduced,
+all 59 rows retained for triage, no register/feature qualification changed.
+Both complete native sessions and verified full Git bundles preserved. Correction
+Dispatch `ctx_6cee9d4ae624` released through Orca with terminal archive captured
+before acknowledging `delivery_c6a841e2cbf0`. Coordinator still requires exact
+row-level validation before any closure: report summary has residual shorthand
+inconsistencies (BE-22 classified R in table but partial in prose; external-gate
+counts in section 7), so neither counts nor broad historical test totals are
+accepted as final closure evidence. This is useful scoped intake, not qualification.
+
+**SW-REPO-01 launched on MiniMax M3:** Task `task_39d9d5951f53`, Dispatch
+`ctx_789b450d0a6e`, terminal `term_e9cd5c16-37dc-4151-ab76-ad622239a0c8`,
+worktree `wp-sw-repo-audit`, branch `ryan-haver/wp-sw-repo-audit`, exact full
+base `53e4b6710e9835ced03b7c614e2ee00f70649f2f`. Source inventory of SEC-14,
+SEC-15 and DEP-05 only, exclusive new report/build subtree, target under 15
+minutes, no source/tests/tooling or feature/register closure. Completed upstream
+triage copied privately; independent package verification is still required.
+Local supported catalog exposes precisely MiniMax-M3 and MiniMax-M3.1-Flash;
+primary/small/build/title/summary/compaction pinned **MiniMax-M3**, other providers,
+MCP/subagents denied and unqualified plugins disabled. Default variant explicit.
+
+An explicit launch-time `--model` was refused `capability_unsupported` before
+agent creation, request `cb434abf-d8de-4b23-a14e-f608e6b9802f`. Installed recovery
+read; request-show absent plus fleet and exact terminal listing positively showed
+no new Task/agent, only plain PowerShell. Supported configured-route start then
+succeeded: receipt model/effort null and turn-start unsupported are not positive
+native-model proof; full native session identity must still be checked. No global
+preference or silent M3.1 change. Coordinator + old external-process reservation
++ Sol author + M3 inventory remain at the four-agent ceiling.
+
+Fleet now labels Sol's existing active terminal `user_owned/user_takeover` while
+its genuine Dispatch remains working/live. Preserve that ownership; do not force
+close/reclaim it after completion or infer capacity from historical retained rows.
+
+Native session `ses_ea5b9e54affecYCZNEwGlFiyLZ` export positively confirms
+MiniMax provider `minimax-coding-plan`, model `MiniMax-M3`, actual variant
+**thinking** (the configured model's resolved default). This is explicitly
+recorded rather than silently relabelled as the literal variant `default`;
+coordinator follow-up `msg_96656284ef84` supplied the actual identity.
+
+Sol's normal implementation hook completed: **4,041 passed, 4 skipped,
+35 deselected, 177/177 REST routes (100%)**, Ruff passed, 1,321.26 seconds.
+Source commit `afe344a0` includes only its new scenario/report and the explicitly
+coordinator-authored one-line scenario mapping. The separate committed-head
+campaign and complete author delivery remain pending. No feature level is yet
+advanced and no independent review/integration is claimed.
