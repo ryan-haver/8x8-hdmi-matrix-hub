@@ -296,11 +296,18 @@ class NoProtocolWarnings(Expectation):
 
 @dataclass(frozen=True)
 class Response(Expectation):
-    """The client's HTTP response (api client only; other clients report ``n/a``)."""
+    """Client HTTP status; body and observed header checks are API-only.
+
+    Header names are case-insensitive, values exact. Masked values cannot prove
+    equality, but their observed presence still disproves absence. Header checks
+    fail when the client cannot supply a captured API exchange.
+    """
 
     status: int | tuple[int, ...] | None = None
     min_status: int | None = None
     json: dict[str, Any] | None = None  # subset match on the response body
+    headers: dict[str, str] = field(default_factory=dict)
+    absent_headers: tuple[str, ...] = ()
 
     def describe(self) -> str:
         parts = []
@@ -310,6 +317,11 @@ class Response(Expectation):
             parts.append(f"HTTP >= {self.min_status}")
         if self.json:
             parts.append(f"body contains {self.json}")
+        if self.headers:
+            # Never persist caller-supplied credential values in descriptions.
+            parts.append(f"headers equal (names: {', '.join(self.headers)})")
+        if self.absent_headers:
+            parts.append(f"headers absent: {', '.join(self.absent_headers)}")
         return "response " + " and ".join(parts)
 
 

@@ -4770,7 +4770,7 @@ features:
   basis: tests/test_rest_api.py (CORS header assertions, mocked).
   evidence: []
   findings: [SEC-02]
-  scenarios: []
+  scenarios: [sw_api_read_04.configured_allowed, sw_api_read_04.configured_allowed_preflight, sw_api_read_04.configured_denied, sw_api_read_04.configured_denied_preflight, sw_api_read_04.default_denied_mutation, sw_api_read_04.default_denied_origin, sw_api_read_04.default_no_origin, sw_api_read_04.default_no_origin_preflight, sw_api_read_04.default_preflight, sw_api_read_04.default_same_origin, sw_api_read_04.wildcard_no_origin, sw_api_read_04.wildcard_origin, sw_api_read_04.wildcard_preflight]
 - id: F-API-032
   area: api
   title: 'WebSocket /ws: welcome, status snapshot, get_status, matrix link, errors'
