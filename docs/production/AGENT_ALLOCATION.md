@@ -1739,3 +1739,24 @@ until pendingcombinedsourcegates; no newpermissionrequest needed. Checkresults
 andlocaldocumentationcommit recorded in adoptionreport/privateadoptionreceipts.
 
 Adoption checks: 489documentationPASS3.95s isolateddata/config/mock/partialroutewriterdisabled;14JSONdocuments/JSONLrecordsparsed;16manifestmembersbyte/hashverified;93localtargets/anchorsPASS (unchangedfragmentcheckedatrootinstallationsite). OriginalAGENTSprefixpreserved, fourexistingfilesadditionsonly; no product/evidencelevelchanges. CR-aware whitespacePASS. Privatebuild/process-adoption-checks-20261020-185702 recordsinitialliteraltemplatepathfalsepositives+correctedcontextproof, retainedwithoutchangingkitbytes. Localdocs-onlycommitinvocationexception scoped; pushheldforpendingcombinedsourceverification, notmissingauthority.
+
+
+### Eligible residual worktree cleanup — 2026-10-21T02:40:43.872819+00:00
+
+User authorized exact eligible cleanup. [Cleanup report](WORKTREE_CLEANUP_20261021.md)
+records four completed empty residuals removed: wp-ev02-final-review,
+wp-sw-findings, wp-sw-repo-audit, wp-sw-auth-review. Existing fullbundles reverified,
+completearchive SHA256matches, publishedtaskheadexact/integratedancestor/released
+workers/no terminals/empty literal directories confirmed before action. ExactOrca
+rm receipts directed deletion of leftover nonGit folders; followed nonrecursive
+literalpath/parent/reparse/empty checks, no force or processkill. Verified both disk
+andOrcaabsence; localbranches already absent, remote refs retained. Orca13->9,
+Gitregistered7unchanged. wp-sw-api-preservation stillprocesslockedempty andretained;
+Handle foundno matchinghandle, no exitinferred. Fournewwave03worktrees stillpending
+combinedverification/wholeworkspacepreservation and retained. User/external/root/
+persistence/private data/oddartifact/baselines untouched. Fleet60=54released/sixretained,
+onecompletepage/no newactive/inboxpeekempty. No qualification/publicationchanges;
+scopedrecordcommit remainslocaluntil combinedsourcegates. Privatecompleteproof
+build/worktree-cleanup-20261021/final-cleanup-report.json; currenthandoffupdated.
+
+Cleanup record checks:489documentationPASS5.35s isolateddata/config/mock/partialroutewriterdisabled;18localMarkdowntargetsPASS;CR-awarewhitespacePASS. Documentation-only scoped commit, no sourcehook/fullpipelineclaim and no publication over pendingcombinedsource.

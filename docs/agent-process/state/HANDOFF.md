@@ -1,5 +1,32 @@
 # Current coordinator handoff
 
+## Current cleanup checkpoint — 2026-10-21T02:40:43.872819+00:00
+
+Latest user request: clean up eligible worktrees. Four completed empty residual
+folders/Orca entries are now removed and their absence verified:
+`wp-ev02-final-review`, `wp-sw-findings`, `wp-sw-repo-audit`, `wp-sw-auth-review`.
+All full bundles/archive hashes, published refs, integration ancestry, released
+workers and empty/no-terminal state were checked first. Exact Orca recovery
+receipts directed removing these leftover non-Git folders; only non-recursive
+literal empty-directory removal was used. No process killed or remote ref deleted.
+
+Orca workspace inventory is now nine, including seven Git-registered checkouts.
+`wp-sw-api-preservation` remains an empty, process-locked residual with no Orca
+terminal; Handle found no matching handle, so no owner/exit is inferred.
+Four recent wave03 worktrees remain pending combined verification and complete
+preservation. User-owned/external root/review resources and unresolved persistence
+workspace remain protected. Fleet still 54 released/six retained, no new active
+workers, complete page; coordinator inbox peek empty. No phase/worker launched.
+
+Read the [cleanup report](../../production/WORKTREE_CLEANUP_20261021.md) and latest
+allocation entry. Pre-cleanup source/docs HEAD is `6b74d77d64a51466b83ba7b27dc77c29f449deca`;
+record commit advances docs only. Source checkpoint c993, origin411c and pending
+combined evidence/review/pipeline/publication below are unchanged. Do not push
+cleanup descendants before those technical gates. Existing publication authority
+persists. No next execution wave starts during cleanup.
+
+## Historical adoption checkpoint (superseded for current cleanup scope/inventory)
+
 Observed 2026-10-21T00:55:25.987039+00:00. This is the current process-adoption checkpoint; older entries
 in the allocation ledger/execution record and host handoff remain historical.
 Revalidate live state before execution. This file is not a launch receipt.
