@@ -34,6 +34,34 @@ coordination. It does not change technical contracts, feature evidence levels,
 release gates or the identity/qualification of historical work. Record a real
 policy conflict and hold the dependent action rather than assuming approval.
 
+## Portable phase process and local precedence
+
+The [adopted phase protocol](agent-process/PROTOCOL.md),
+[repository configuration](agent-process/REPO_CONFIG.json) and
+[adoption report](agent-process/ADOPTION_REPORT.md) supplement this protocol.
+Read the [current portable handoff](agent-process/state/HANDOFF.md) and the
+existing allocation ledger before interpreting older snapshots.
+
+Future program direction/phase preparation uses three genuine independent model
+families across three rounds: independent assessment, peer challenge, and explicit
+verdicts on one hashed final plan/allocation packet. Record actual contributions,
+missing coverage and provisional status. No debate was run during adoption;
+historical and in-flight wave03 decisions retain their recorded scope. Do not
+invent retrospective consensus or redo completed work solely to fill templates.
+Material changes follow the adopted cycle; covered corrections remain bounded.
+
+Reassess model/task/worktree fit for each phase and wave. During active
+coordination, record supported capacity observations at least every 15 minutes at
+natural checkpoints, before creation/dispatch and after limit/commitment changes.
+This cadence is coordinator behavior; no persistent monitor is installed.
+
+Local quota requirements below remain stricter than portable protocol section 5:
+unknown reporting is not headroom; below 30%/insufficient capacity requires a
+suitable verified fallback with its own checked headroom, or hold only the
+affected creation/dispatch. Keep unrelated ready work moving. No implicit new
+spending, account changes or opaque/excluded fallback is authorized. Local release,
+source-hook, evidence, protection and cleanup rules remain authoritative.
+
 ## Rebind the project before work
 
 1. Read all applicable `AGENTS.md` files, current plans, allocation entries and

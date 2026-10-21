@@ -800,3 +800,13 @@ VAL14proposed eventgap still needs correction, not a releasewaiver.
 
 
 Wave03 authorized non-hardware execution: exact published411c66429df3b813072e736c41c3a8aa83043a70 bases, existing Run/runtime unchanged, preflight23:03Z Codex60%weeklyremaining/resetOct27 06:33:16UTC and DeepSeekUSD44.51available. Two genuine nonoverlapping authors: DeepSeekPro/default SW-API-CLIENT-02-C1 task036936ee9cd3/ctx_a7ac1a749cac fixes reproduced offline route event boundary; Sol6.1/high SW-API-READ-04-C1 taskf21b82527590/ctx_a3ed1a9562f1 adds real safe CORS header assertions/API proof forFAPI031. Fouractive budget includes older external reservation. Both require qualified different-family exact-commit reviews before sequential integration; no source acceptance or owner gate inferred. Full paths/quotas/leases in allocation ledger and privatewave03 specs/receipts. Primary65units/268featureowners unchanged, FAPI032 deferred. Current411cCI validation1500passingrecords/source4fac treeequivalent;12requiredjobsPASS/UIpending. Old failedCI/offlinecausalproof preserved, not waived by latest timing pass.
+
+
+### Process adoption checkpoint, 2026-10-21 UTC
+
+Both wave03 bounded source packages were independently accepted and merged
+locally at c9938f1; all four new workers released. Combined evidence, verification
+and integration publication remain pending. The latest user request adopted
+the portable process only, without new execution. Read the current
+[handoff](../agent-process/state/HANDOFF.md), [adoption report](../agent-process/ADOPTION_REPORT.md)
+and latest allocation entry before historical LIVE snapshots above.

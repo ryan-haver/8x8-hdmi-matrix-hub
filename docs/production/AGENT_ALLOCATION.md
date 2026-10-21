@@ -1701,3 +1701,41 @@ Genuine Sol review Tasktask_8bedb7d1234c/Dispatchctx_314709206275/terminalterm_1
 Read-onlyprecompositionglobalcheck atcontroller4bae usingcleanunreachableartifact returnsPASS/0knownfailures (receiptprivateoffline-precomposition-global-check-receipt.json). This is recorded-level consistency, not freshalltargetreleasequalification or newimageproof. ParallelCORSsourceglobalFAIL remainsreservedFSEC007refresh; no sourcegatewaiver. Coordinatorwillmergeacceptedpackagessequentially, verifyexactfunctionalbyteidentity, collectfreshcombined14auth+3rootAPI plusneededcontrols, importoriginal13CORSrecordswithoutsource/imagereattribution, generateledgeralone, checks/reviewfinalassemblyandcompleteCIbeforefinalpublicationqualification.
 
 Allthreecompletebundlesnowverifiedwithactualdetachedrecoverycheckoutsateachsubmittedsource/reviewSHA; LFSskipcheckout keepspointers while originalhydratedpayloads retainedinfullworkspacearchives. InitialoverlongrecoverycheckoutFAILEDandretained; freshshortbuild/w3r paths+invocation-onlycore.longpaths=true verified, no persistentsettings/sourcehookchange. Headerexternaltempnormalizedlinkreconciliation0hash/0unexplainedpathmismatches, junctionmetadata+canonical10bytetargetpreservedwithoutfollow. Originalbadseparatorcomparisonandfailedassertionreceiptsretained, notqualifyingproof. Remainingcontroller/reviewerwholeworkspacearchivesandtaskrefpublicationcompletebeforeanyownedworktreecleanup; noauthor/peerreviewbranchdeletedyet.
+
+
+### Process-kit adoption and current source checkpoint — 2026-10-21T00:55:25.987039+00:00
+
+Latest user request is instruction-only adoption of portable Orca phase kit1.0.0.
+Read the [adoption report](../agent-process/ADOPTION_REPORT.md),
+[repo configuration](../agent-process/REPO_CONFIG.json) and
+[current handoff](../agent-process/state/HANDOFF.md) before older live snapshots.
+Copied complete hash-verified kit, preserved core/template bytes and existing
+controls; future three-round planning is prospective, no retroactive consensus.
+No phase/debate/worker/worktree/service/model probe launched for adoption.
+
+Live discovery confirms wp-runtime-completion localc9938f1b2ce1a2481fd5ac40f39ed88170b52539,
+tracking/freshorigin411c66429df3b813072e736c41c3a8aa83043a70; same Run37205,
+Orca1.4.232/runtime113f2af8/coordinator259c generation2. Fleet60rows54released/
+sixretained/pagefalse/inboxempty; allfour newwave03 workersreleased. Reserveold
+externalprocess; no newassignments. Localc993 contains sequential accepted CORS
+reviewc891 andoffline review0bd3 merges; nine functionalpaths byteequivalence
+proof retained privately. Source acceptance !=combined qualification/publication.
+
+Pending release work preserved: combined14auth+3rootAPIrefresh/offlinecontrol,
+original13CORS attribution, VAL14 closure/VAL15 registration, serialregistry/ledger,
+independentassemblyreview/combinedpipeline andexactpublication. No canonical
+level/evidence/readiness changes byadoption. OriginalthreeTronownerapprovals remain
+closed; HIL/72h/week/finalartifactgates open. Taskworktrees retained; incomplete
+wholeworkspacepreservation holdsremoval, no destructivecleanup. Existing user
+changes/private data/protectedpersistence discrepancy/oddhookartifact preserved.
+
+Supported read-only OpenCodecatalog/Orca cachedusage recorded withtimestamps in
+state/DISCOVERY.json andCAPACITY.jsonl. Codexeffortcatalog00:26Z dated, DeepSeek
+balance00:07Z dated; unknownnotheadroom, no newlaunchqualification. Localstricter
+verifiedfallbackpolicy overrides portableboundedunknownroute permission; route
+independentreadywork, no globalcapacitystop. Threefamilyplanningcoverage unstarted
+byadoption, no newqualification. Publicationauthorityexists but do notpushdescendants
+until pendingcombinedsourcegates; no newpermissionrequest needed. Checkresults
+andlocaldocumentationcommit recorded in adoptionreport/privateadoptionreceipts.
+
+Adoption checks: 489documentationPASS3.95s isolateddata/config/mock/partialroutewriterdisabled;14JSONdocuments/JSONLrecordsparsed;16manifestmembersbyte/hashverified;93localtargets/anchorsPASS (unchangedfragmentcheckedatrootinstallationsite). OriginalAGENTSprefixpreserved, fourexistingfilesadditionsonly; no product/evidencelevelchanges. CR-aware whitespacePASS. Privatebuild/process-adoption-checks-20261020-185702 recordsinitialliteraltemplatepathfalsepositives+correctedcontextproof, retainedwithoutchangingkitbytes. Localdocs-onlycommitinvocationexception scoped; pushheldforpendingcombinedsourceverification, notmissingauthority.
