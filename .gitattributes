@@ -27,3 +27,6 @@ docs/validation/evidence/**/*.png filter=lfs diff=lfs merge=lfs -text
 # Software-wave original source evidence and attributed run records stay byte-exact.
 docs/validation/evidence/software-waves/** -text
 docs/validation/runs/software-waves/** -text
+
+# Preserve original synthetic diagnostic bytes (not accepted feature evidence).
+docs/validation/runs/software-waves/SW-SEC-DATA-02-C1/*.json -text

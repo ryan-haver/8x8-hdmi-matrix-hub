@@ -1,10 +1,12 @@
 # SW-API-CLIENT-02-C1: disconnected routing failure event
 
-Disposition: **actual reproduced contract defect**, provisional finding VAL-14;
-registration remains pending; corrective dispatch is now launched. This is a bounded child of
-SW-API-CLIENT-02 for F-API-033, with F-REL-009 as an affected feature. It creates
-no additional primary feature owner and does not qualify either feature's full
-target. DeepSeekPro/default Tasktask_036936ee9cd3 / Dispatchctx_a7ac1a749cac is launched at411c66429df3b813072e736c41c3a8aa83043a70; implementation, review and qualification remain pending.
+Disposition: **corrected source independently accepted**, provisional finding
+VAL-14; canonical registration and combined evidence qualification remain pending.
+This bounded child of SW-API-CLIENT-02 owns F-API-033's correction, with F-REL-009
+and F-API-034 as secondary impacts. It creates no new primary feature owner and
+does not establish either feature's complete target. Source3788353e, submitted
+4baef574 and independent Sol review0bd3d76f are documented in the sibling
+[author](AUTHOR.md) and [review](REVIEW.md) records.
 
 [CI39500840835](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/actions/runs/39500840835)
 at published1a4f9f9457f85bdcc2eafb9c43e8e7cd4eecd109 completed12/13 required
@@ -46,3 +48,7 @@ simulator regression test and the required simulator REST read-coverage update.
 Registry/ledger/finding registration and integration remain coordinator-owned.
 A qualified different-family source review, normal full hook/route inventory,
 applicable combined CI and exact publication are required before closure.
+
+The all-output boundary also affects F-API-034 (switch_all_failed). It remains a
+secondary impact within the same parent allocation; this correction alone does
+not supply that feature's complete V3 client proof.

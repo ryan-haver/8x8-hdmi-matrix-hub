@@ -216,6 +216,14 @@ terminal title or copied old preamble is insufficient. A launch request is not
 an observed start or completion. Follow hooks/default-tab policy without starting
 an excluded side-effect agent. Do not duplicate launch after an uncertain receipt.
 
+Workers must acknowledge each fully processed delivery in their own follow-up
+inbox before checking for newer mail, using their injected terminal identity and
+the returned delivery ID. An unacknowledged delivery is replayed and can hide
+new corrections behind the old batch. Inspect the next batch returned by the
+acknowledgment; repeated old messages do not prove the inbox is current. This
+does not transfer the coordinator's ownership of completion acknowledgment or
+worker settlement to the worker.
+
 ## Independent review and qualification
 
 Every **new implementation deliverable**, including fixtures, tests and tooling,

@@ -36039,16 +36039,26 @@
         "F-API-033"
       ],
       "affected_secondary": [
-        "F-REL-009"
+        "F-REL-009",
+        "F-API-034"
       ],
-      "state": "launched",
+      "state": "source_independently_reviewed_evidence_assembly_pending",
       "finding": "VAL-14 proposed; registration pending",
       "report": "docs/production/software-waves/SW-API-CLIENT-02-C1/FINDING.md",
       "primary_feature_ownership": "unchanged in parent allocation",
       "source_base_sha": "411c66429df3b813072e736c41c3a8aa83043a70",
       "task_id": "task_036936ee9cd3",
       "dispatch_id": "ctx_a7ac1a749cac",
-      "acceptance": "Already-offline valid-route failure event, preserved503/invalid-payload behavior, independent simulator controls, qualified cross-family review and combined CI; no fulltargetpromotion implied"
+      "acceptance": "Already-offline valid-route failure event, preserved503/invalid-payload behavior, independent simulator controls, qualified cross-family review and combined CI; no fulltargetpromotion implied",
+      "functional_source_sha": "3788353ef2ef92cf52cf266f3e356dd6840d00da",
+      "submitted_sha": "4baef5743b0e970328a979f181d701361f58da70",
+      "worker_resource": "released before completion acknowledgment",
+      "review_task_id": "task_8bedb7d1234c",
+      "review_dispatch_id": "ctx_314709206275",
+      "review_commit": "0bd3d76f8bc965753849f804abb876f0511dfe65",
+      "reviewed_source_sha": "4baef5743b0e970328a979f181d701361f58da70",
+      "review_model_family": "OpenAI; source author DeepSeek",
+      "review_scope": "Bounded source accepted; optional Low test hardening retained; no V3/hardware/release qualification"
     },
     {
       "id": "SW-API-READ-04-C1",
@@ -36057,14 +36067,40 @@
         "F-API-031"
       ],
       "affected_secondary": [],
-      "state": "launched",
+      "state": "source_independently_reviewed_evidence_qualification_pending",
       "finding": "Capability gap: response headers unavailable to assertions; no presumed product defect",
       "report": "docs/production/software-waves/SW-API-READ-04-C1/AUTHOR.md",
       "primary_feature_ownership": "unchanged in parent allocation; F-API-032 deferred",
       "source_base_sha": "411c66429df3b813072e736c41c3a8aa83043a70",
       "task_id": "task_f21b82527590",
       "dispatch_id": "ctx_a3ed1a9562f1",
-      "acceptance": "Actual captured header assertions with privacy and negative controls, meaningful clean-source API-only CORS scenarios, normal full hook/routes, different-family review; refresh affected security/root evidence on combined candidate"
+      "acceptance": "Actual captured header assertions with privacy and negative controls, meaningful clean-source API-only CORS scenarios, normal full hook/routes, different-family review; refresh affected security/root evidence on combined candidate",
+      "functional_source_sha": "7b07e1cb7e7eb29a38b55d3b050703149f1b797c",
+      "submitted_sha": "cb87427bd2646fc686e1cff02692a4240dcf51c1",
+      "global_evidence_gate": "FAILED F-SEC-007 freshness; combined auth refresh required",
+      "worker_resource": "released before completion acknowledgment",
+      "review_task_id": "task_bc1523b9daa3",
+      "review_dispatch_id": "ctx_453df6ae0bf5",
+      "review_commit": "c8910ee5a05a26a2eb53f88d96cbdc080a385886",
+      "reviewed_source_sha": "cb87427bd2646fc686e1cff02692a4240dcf51c1",
+      "review_model_family": "DeepSeek; source author OpenAI",
+      "review_scope": "Source API V2 accepted; global freshness gate remains FAILED until real coordinator refresh"
+    },
+    {
+      "id": "SW-SEC-DATA-02-C1",
+      "parent_unit": "SW-SEC-DATA-02",
+      "feature_scope": [
+        "F-SEC-014"
+      ],
+      "affected_secondary": [],
+      "state": "reproduced_finding_no_dispatch",
+      "finding": "VAL-15 proposed; registration pending",
+      "report": "docs/production/software-waves/SW-SEC-DATA-02-C1/FINDING.md",
+      "primary_feature_ownership": "unchanged in parent allocation; validation artifacts, not full product logging proof",
+      "source_base_sha": null,
+      "task_id": null,
+      "dispatch_id": null,
+      "acceptance": "Actual nested request/action/artifact credential redaction with synthetic negative controls, unchanged public headers/request behavior, normal full hook and cross-family review; preserve immutable historical evidence"
     }
   ]
 }

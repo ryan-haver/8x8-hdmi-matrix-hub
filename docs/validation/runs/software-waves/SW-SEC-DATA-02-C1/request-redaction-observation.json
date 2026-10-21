@@ -1,0 +1,12 @@
+{
+  "scope": "Synthetic readonly calibration of existing request procedure boundary; no credentials/environment values used",
+  "value_survives_redact": {
+    "X-Admin-PIN": true,
+    "X-API-Key": false,
+    "Authorization": false,
+    "Cookie": false
+  },
+  "admin_pin_survives_action_describe": true,
+  "writer_changed": false,
+  "new_cors_scenarios_send_credentials": false
+}
