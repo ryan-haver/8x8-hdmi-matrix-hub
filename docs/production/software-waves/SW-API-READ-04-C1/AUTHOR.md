@@ -119,3 +119,119 @@ remains mandatory; integration, publication and combined reruns belong to the
 coordinator. Tool changes stale 14 auth and two of three root API records; the
 coordinator will rerun all 14 plus all three at the combined candidate, retaining
 old evidence and four unaffected preservation-feature attributions.
+
+## Final author verification
+
+Checked source: **`7b07e1cb7e7eb29a38b55d3b050703149f1b797c`**, parent exactly
+`411c66429df3b813072e736c41c3a8aa83043a70`. The final submitted tip adds only
+this report update; its full SHA is recorded outside its own commit in
+`build/software-waves/SW-API-READ-04-C1/submission.json` and the worker delivery.
+Coordinator independently confirmed native **gpt-6.1-sol/high** in
+`msg_9fa8c3ba36f0`; no helpers, delegation, other models or fallback were used.
+
+The source commit changed exactly these eight tracked paths:
+
+- `tools/validate/clients/api.py`
+- `tools/validate/model.py`
+- `tools/validate/runner.py`
+- `tools/validate/stack.py`
+- `tests/validation/scenarios/sw_api_read_04.py`
+- `tests/validation/test_sw_api_read_04.py`
+- `docs/validation/features.yaml` (coordinator-authored F-API-031 scenario list only)
+- `docs/production/software-waves/SW-API-READ-04-C1/AUTHOR.md`
+
+All product source, other scenarios/tests, evidence schemas/writer, registry
+levels/basis/evidence/findings, ledger, manifests, locks and baselines remain
+unchanged. Additional environment-only lease authorized own ignored
+`node_modules/**`; artifacts remain in the assigned build subtree.
+
+### Normal source hook, including retained failures
+
+Actual command array for all three attempts was
+`[git, commit, -m, "feat(validation): prove CORS headers from actual API exchanges"]`.
+Configured hook remained
+`C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/.githooks/pre-commit`,
+SHA-256 `e69e64194ca07a606718b5fea748f44a06ddf767b6f6756cef578b8565f544bc`.
+No source, test or hook workaround was applied between attempts.
+
+- First attempt: exit 1, Ruff passed; 2,142 passed / 2 skipped / 35 deselected,
+  one fixture error, 314.14s. Temporary Git object write reproduced exit 128,
+  `Filename too long`, in a 215-character repository path under own nested temp.
+  Failed partial route report **109/177** and raw log remain in `source-hook/`.
+- Second attempt used a fresh short OS temp: exit 1, Ruff passed; 3,816 passed /
+  22 skipped / 35 deselected, one failure, 883.99s. Strict routes reached
+  **177/177**, but JavaScript lint failed ESM resolution of `@eslint/js` because
+  own worktree had no local dependencies. This remains a failed full run in
+  `source-hook2/`; its route coverage alone does not make the run pass.
+- Coordinator authorized an exact environment-only dependency lease through
+  the blocking ask reply and `msg_acbcdaf86fd7`. Actual
+  `npm ci --offline --ignore-scripts --no-audit --no-fund` exited 0, installed
+  190 packages in 4s from cache. No network fallback, root dependency mutation,
+  manifest or lock edit. Actual `npm run lint:js` exited 0; the previously failing
+  focused pytest passed 1/1 in 6.99s with the partial route writer disabled.
+  Logs are in `node-setup/`.
+- Third attempt: exit **0**, normal full Ruff passed; **4,063 passed / 6 skipped /
+  35 deselected / 4 warnings**, pytest 1,119.11s; actual strict route coverage
+  **177/177**. Commit succeeded at the checked source SHA. Full log, command
+  start/end, interpreter, configured hook, environment correction and route
+  report are in `source-hook3/`. Source/test bytes were unchanged across attempts.
+
+### Clean committed-source campaign and failed global freshness gate
+
+Actual run command and subsequent check command arrays, start/end times and
+exits are preserved in `clean/commands.json`; raw output is `clean/command-0.log`
+and `clean/command-1.log`. The run exited **0**, all **13 API V2 scenarios passed**.
+All **65 checks passed**: 52 declared checks plus 13 automatic observer-schema
+checks. Those observer checks do not qualify F-API-032.
+
+`clean/audit.json` verifies every original record against the schema, exact
+scenario/client/features/covers, full source SHA, `dirty=false`, empty dirty
+files, actual run.py entry, simulator source fingerprint, explicit per-case
+CORS config (including empty default), null image digest, empty state diff and
+no mutated device command. It retains SHA-256 hashes of all 13 original record
+bytes and actual public header observations. Evidence is exclusively under
+`clean/campaign/evidence/F-API-031/`; nothing was imported or relabelled.
+
+The subsequent **global formal check exited 1** with the sole reported reason:
+`F-SEC-007 dropped below its recorded level: level V2 < recorded V3`.
+The shared tooling changes stale the existing auth V3 evidence, exactly the
+freshness dependency identified in the dispatch. Coordinator owns the reserved
+**14 auth plus all 3 root API reruns against the actual combined candidate**.
+This failed global gate is retained. The earlier uncommitted diagnostic gate
+passed at the base HEAD and is not substituted for this source result. No old
+passes are attached to changed source and no registry level or gate is weakened.
+
+### Additional boundary observation and preservation
+
+A synthetic-only readonly calibration of existing request redaction found that
+`X-API-Key`, `Authorization` and `Cookie` values are masked, while literal
+`X-Admin-PIN` survives `evidence.redact` and `Action.describe`. Receipt
+`request-redaction-observation.json` stores booleans only, without credentials or
+environment data; reported to coordinator as `msg_0b207923dadd`. This is an
+existing writer/procedure boundary outside the lease. New CORS scenarios send
+no credentials, and new response header values are masked at API capture.
+No finding was registered or closed and the readonly writer was not changed.
+
+Retained external test roots, which a worktree-only archive will not include:
+
+- `C:/Users/ryanh/AppData/Local/Temp/c1-hook-v90b4ka3`: inventory **20,006 files /
+  65,452,341 bytes**, `source-hook2/external-temp-inventory.json`.
+- `C:/Users/ryanh/AppData/Local/Temp/c1-hook3-erf6axvs`: inventory **21,207 files /
+  70,080,576 bytes**, `source-hook3/external-temp-inventory.json`.
+
+Inventories hash each regular file and record symlinks without following them;
+coordinator must include relevant external bytes in private preservation. An
+initial third-inventory wrapper prefix assertion failed before output and was
+corrected; receipt remains `source-hook3/inventory-first-attempt.json`. No
+source or evidence was changed by that artifact-script correction.
+
+The follow-up commits only this report, after whitespace and scope checks,
+using the explicitly permitted invocation-only documentation hook exception.
+It claims no new full-hook run. Source, scenario, test and mapping bytes remain
+identical to the normal-hook source commit and clean campaign.
+
+Author scope is complete. Qualified exact-tip different-family DeepSeek
+Pro/default review, global freshness reruns, integration, evidence acceptance,
+publication and worker preservation/settlement remain coordinator steps. The
+global gate is currently failed; no browser/image/WS/hardware/release approval
+is claimed.
