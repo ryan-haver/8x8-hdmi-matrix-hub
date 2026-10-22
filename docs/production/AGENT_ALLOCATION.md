@@ -1760,3 +1760,37 @@ scopedrecordcommit remainslocaluntil combinedsourcegates. Privatecompleteproof
 build/worktree-cleanup-20261021/final-cleanup-report.json; currenthandoffupdated.
 
 Cleanup record checks:489documentationPASS5.35s isolateddata/config/mock/partialroutewriterdisabled;18localMarkdowntargetsPASS;CR-awarewhitespacePASS. Documentation-only scoped commit, no sourcehook/fullpipelineclaim and no publication over pendingcombinedsource.
+
+
+### Project file cleanup / Windows lock recovery — 2026-10-22T02:11:23.692632+00:00
+
+User authorized old project file and failed-worktree cleanup. Refreshed guides:
+Orca1.4.237/runtime90aa9fd9-dfbc-4dfe-8061-8be9154242db; same Run37205,
+coordinator259c generation2. Previouslylockedempty wp-sw-api-preservation removed
+through exact supported Orca leftover-folder recovery/nonrecursive literal path;
+no processkill/handleclose. Orca9->8, Git7unchanged. Fivepreviouslyfailedoldcleanup
+residuals nowgone; unrelated persistence entry remains unresolved (integrated168fc,
+namedremotetaskrefabsent). Fourwave03taskworktrees heldpending combinedchecks and
+remainingwholeworkspacepreservation; olduser/external/private resources protected.
+
+[Detailed file cleanup](PROJECT_FILE_CLEANUP_20261022.md): 11obsolete directories/
+821996324bytes moved reversibly to private projectquarantine after completeproof:
+twooldtesttemps, oneolderEV02recoverycopy, fiveexactproject OpenCodesnapshotcaches,
+threestandalone completedrecoveryclones. All source/fullbundle/extras/native/archive
+hashes retained; ninefullnativeexports; OpenCodeactive snapshotdirs19->14. Permanent
+recursive deletion batch was automatically rejected with only 'blocked by policy';
+never ran/retried. Quarantineisrecoverable, not diskreclaimed; no globalcache/account/
+DB/sessionpurge, broadprune, newworker/modelcall or qualification. Currenthandoff
+updated; privatefullreceipts build/project-file-cleanup-20261022/. Sourcepipeline/
+publicationprerequisites remain, scoped docsrecordcommit only, no push/nextwave.
+
+Additionalorphan-cache sweep completed 2026-10-22T02:16:29.480454+00:00: ninefurther
+projectmapped OpenCodesnapshotstores withabsentoriginalworktreefolders fullyarchived/
+allhashesverified and reversiblyquarantined; no newwritersettlement or qualification
+inferred. Eighteen totalnativeexports retained; originalsessions/DBunchanged. Final
+20directories/1288098644bytes quarantined, OpenCodeprojectcaches19->5; active/protected
+workspacecachesleft. Completeplan reversible-relocation-plan-complete.json and
+postmoveallhashproof updated; first11-directorycheckpoint aboveishistorical, no
+permanentdelete/diskreclaimclaim. Globalsharedcaches/credentials/otherprojectsintact.
+
+Finalcleanupchecks:489documentationPASS3.32s isolateddata/config/mock/partialroutewriterdisabled;20localMarkdowntargetsPASS;20quarantinetrees/fullhashproof and18nativeexporthashes verified;CR-awarewhitespacePASS. Source/evidencelevel/baseline unchanged. Scoped docsrecordcommit invocationexception only; no fullsource/CIclaim.

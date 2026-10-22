@@ -1,6 +1,37 @@
 # Current coordinator handoff
 
-## Current cleanup checkpoint — 2026-10-21T02:40:43.872819+00:00
+## Current project-file cleanup — 2026-10-22T02:11:23.692632+00:00
+
+Latest user authorized broader old-project-file and Windows-lock cleanup.
+Previously locked `wp-sw-api-preservation` empty residual is now gone from disk
+and Orca via exact supported leftover-folder recovery; no kill/handle close.
+Orca1.4.237/runtime90aa9fd9-dfbc-4dfe-8061-8be9154242db now observed; same existing
+Run/coordinator/generation. Orca inventory eight; Git-registered checkouts seven.
+
+Twenty obsolete directories (1,288,098,644 bytes) moved reversibly into
+`build/project-file-cleanup-20261022/quarantine/`: two archived test temp trees,
+one exact older EV-02 copy, fourteen obsolete project OpenCode snapshot caches and
+three completed standalone bundle-recovery clones. Full archives/bundles/eighteen native
+exports/extra untracked hook files retained and verified. Active snapshot caches
+19 -> 5; existing/protected-workspace caches remain. Original source paths
+are clear; these bytes remain on disk. Automatic approval review rejected the
+permanent deletion batch with only 'blocked by policy'; no recursive permanent
+deletion retried. Preserve quarantine and the exact relocation map until permanent
+disposal can be handled safely; restore by the recorded mapping if needed.
+
+Read [new cleanup report](../../production/PROJECT_FILE_CLEANUP_20261022.md) and
+latest allocation entry. Four wave03 task worktrees still await combined source
+verification/full preservation. Old user/external resources remain protected;
+new runtime missing status is not proof of exit. Persistence residual empty but
+named task remote ref absent/original preservation attribution unresolved; retain.
+Source c993 combined qualification/evidence/review/pipeline and integration push
+remain pending; existing publication authority sufficient after gates. No new
+phase, worker, paid probe, service restart or next wave started during cleanup.
+Pre-record HEAD040ab08eeae3ba8ea37fe6665bdc039236d12ee0; record advances docs only.
+
+## Historical cleanup checkpoint below (superseded for current scope/inventory)
+
+## Current cleanup checkpoint â€” 2026-10-21T02:40:43.872819+00:00
 
 Latest user request: clean up eligible worktrees. Four completed empty residual
 folders/Orca entries are now removed and their absence verified:
