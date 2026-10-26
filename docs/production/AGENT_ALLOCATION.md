@@ -1794,3 +1794,85 @@ postmoveallhashproof updated; first11-directorycheckpoint aboveishistorical, no
 permanentdelete/diskreclaimclaim. Globalsharedcaches/credentials/otherprojectsintact.
 
 Finalcleanupchecks:489documentationPASS3.32s isolateddata/config/mock/partialroutewriterdisabled;20localMarkdowntargetsPASS;20quarantinetrees/fullhashproof and18nativeexporthashes verified;CR-awarewhitespacePASS. Source/evidencelevel/baseline unchanged. Scoped docsrecordcommit invocationexception only; no fullsource/CIclaim.
+
+### Owner-authorized phase resumption and closeout fan-out — 2026-10-26
+
+Owner explicitly requested fan-out for the remaining phase in dedicated worktrees.
+Resume the existing wave03 closeout before dependent implementation or a new wave;
+no new phase/material plan change or retrospective planning consensus is claimed.
+Live source base is `310d8b65a9fce3c9069523d4ac5ce21157e75c9f`, branch
+`wp-runtime-completion`; fresh origin remains
+`411c66429df3b813072e736c41c3a8aa83043a70`. The original unrelated untracked
+encoded hook-directory artifact is preserved. No source dirt or new product edit.
+
+Orca 1.4.241 / local Zelu Windows / runtime
+`58b18776-307e-4118-8728-cc372452ffd5`; existing Run
+`run_37205f6095b3` rebound through supported run-use to current coordinator
+`term_dcf96b5a-bb99-4ecb-b887-eb53f7f01662`, generation 3. Complete fleet page:
+60 historical rows, 54 released / six retained; all four wave03 workers released.
+Coordinator inbox empty. Eight Orca workspaces / seven Git checkouts; no cleanup
+or writer replacement. Old retained/external liveness remains unverifiable;
+preserve its reservation, so at most two new workers plus coordinator for now.
+No connected paired environments; saved SSH hosts disconnected. Root/private
+data, quarantine, persistence discrepancy, task refs and evidence remain protected.
+Setup/archive scripts blank; setup skip does not omit an existing setup script.
+
+Preflight 22:22 UTC supported Orca usage, provider update 22:17 UTC: Codex
+96% weekly remaining, 10080-minute reset 2026-11-02 06:13:28 UTC; MiniMax
+96% weekly / 100% session remaining, reset timestamps retained in receipt.
+External shared commitments unreported. Reserve bounded evidence collection,
+inventory, coordinator verification and correction; refresh before dispatch and
+at natural checkpoints at least every 15 minutes. DeepSeek balance is currently
+unknown; dated USD38.60 is not headroom. No credential stores read, new spending,
+accounts, probes or provider setting changes. Antigravity routing/usage semantics
+remain unverified. No Anthropic, opaque fallback, helpers or nested workers.
+
+Fresh managed Codex catalog 22:21:59 UTC (CLI 0.164.0) supports Sol6.1/high,
+Astra, Terra6.1, older Sol and Luna. Sol has demonstrated actual GUI/tooling
+evidence competence; Astra/Terra bring no established advantage to unchanged
+scenario execution, and older Sol/Luna do not inherit it. OpenCode 2.1.4 catalog
+lists native MiniMax-M3 and M3.1-Flash separately; M3 has accepted bounded
+preservation work, not core/security-review qualification. DeepSeek Pro remains
+a qualified bounded source-review candidate, held for refreshed supported usage;
+Flash and broker aliases lack the required observed scope/routing. Refresh and
+independent exact-candidate review remain required before any new implementation
+acceptance; no same-family substitution or prospective evidence approval.
+
+| Assignment | Route / rationale | Exclusive writes | Acceptance / review |
+| --- | --- | --- | --- |
+| W03-CLOSE-EVIDENCE | Codex gpt-6.1-sol/high; proven auth/browser and API evidence tooling | New `docs/production/software-waves/W03-CLOSE-EVIDENCE/AUTHOR.md`, own new ignored `build/phase-resume-20261026/evidence/**` in its worktree | Clean exact-base 14 auth outcomes, three root API outcomes, 13 CORS outcomes and offline control; inspect actual checks/source/images/client attribution, preserve failures. Existing code only; no registry/ledger/import/product edits. Independent bounded evidence inventory by M3, coordinator verifies; final assembly review remains a separate gate. |
+| W03-CLOSE-INVENTORY | Native minimax-coding-plan/MiniMax-M3; accepted bounded source/evidence preservation competence | New `docs/production/software-waves/W03-CLOSE-INVENTORY/AUTHOR.md`, own new ignored `build/phase-resume-20261026/inventory/**` | Independently reconcile original 13 CORS records, exact source/report refs and preservation gaps against actual files; classify remaining handoff work without promoting levels or claiming core review. OpenAI coordinator independently checks report and any scratch tooling. |
+
+Pin both tasks to the full live source SHA above; dedicated new child worktrees,
+no reuse of protected old writers. Bounded report/evidence-only follow-ups to
+accepted wave03 plan, not new implementation packages. Shared contracts, root
+manifests/locks, canonical evidence import, findings, registry/ledger, integration
+and publication remain coordinator-only. Planned names/roles are not launches;
+actual Task/Dispatch/branch/handle/effective model receipts follow after start.
+Private sanitized discovery: `build/phase-resume-20261026/`. Publication and
+combined verification remain pending; no next implementation wave until closeout.
+
+Actual starts at22:23–22:26Z, both exact base310d8b65 and genuine live tasks:
+
+| Task / Dispatch | Actual branch / worktree | Effective route and observed state |
+| --- | --- | --- |
+| `task_4a90a94be3a3` / `ctx_aa530b51696d` | `ryan-haver/wp-w03-close-evidence`; `C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-w03-close-evidence` | Codex gpt-6.1-sol/high requested/effective, observed turn/tool execution; terminal `term_f36b71e4-d506-4021-b50e-3440f8406b18`. |
+| `task_feae2579595e` / `ctx_82ee9bfe90aa` | `ryan-haver/wp-w03-close-inventory`; `C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-w03-close-inventory` | OpenCode2.1.4 through installed enabled `opencode2`; native session `ses_e85ada578ffeU6KEQv3Z3jI2ky` export independently confirms minimax-coding-plan / MiniMax-M3 / thinking, tools and heartbeat; terminal `term_9f86e1f1-d613-488b-84a6-f47812d03542`. |
+
+Initial `--agent opencode` refused `agent_unconfigured` before new Task/Dispatch.
+Request-show absence alone was not used as exit proof: full fleet, clean exact
+worktree and sole unused shell were inspected before the alternate enabled
+launcher. Installed opencode2 version matches2.1.4; no global launcher/routing
+change. Local ignored config pins main/small/build/title/summary/compaction to M3,
+denies other providers, MCP/plugins/subagents; audit receipts preserved. CLI
+model/effort fields are null for this configured-route start, not relabeled as an
+explicit override. Native export proves actual identity; no M3.1 substitution.
+
+Both workers now live/working in complete fleet page, two active + coordinator
++ older external reservation = conservative4. Source acceptance/evidence/feature
+qualification remain separate. Sol count question resolved using actual registry:
+12 new auth outcomes + older API profile/scene wrong-PIN controls =14 (sixAPI,
+eightbrowser). Reply delivered; coordinator FIFO batches fully processed/acked.
+Scoped coordinator documentation checks489PASS3.29s with isolated data/config,
+partial route writer disabled; CR-aware whitespacePASS. These checks establish
+instruction/allocation integrity, not combined code CI or new evidence acceptance.

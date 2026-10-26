@@ -1,5 +1,42 @@
 # Current coordinator handoff
 
+## Owner-authorized phase resumption — 2026-10-26
+
+Owner requested fan-out of remaining phase work into dedicated worktrees.
+Continuing existing wave03 closeout, not starting a new material phase. Source
+base `310d8b65a9fce3c9069523d4ac5ce21157e75c9f`; live origin remains `411c6642`.
+Orca1.4.241/runtime58b18776-307e-4118-8728-cc372452ffd5, existing
+Run `run_37205f6095b3`, coordinator `term_dcf96b5a-bb99-4ecb-b887-eb53f7f01662`
+generation3. Two new dedicated workers, conservative four-total ceiling includes
+coordinator and old unverifiable external reservation. No protected cleanup.
+
+| Work | Actual authority / worktree | State |
+| --- | --- | --- |
+| Combined unchanged-source auth/root API/CORS/offline evidence | Task `task_4a90a94be3a3`, Dispatch `ctx_aa530b51696d`; `wp-w03-close-evidence`, branch `ryan-haver/wp-w03-close-evidence`, terminal `term_f36b71e4-d506-4021-b50e-3440f8406b18` | Codex Sol6.1/high requested/effective, turn observed and tools active. Own report/build only; no canonical metadata writes. |
+| Original CORS/source/preservation inventory | Task `task_feae2579595e`, Dispatch `ctx_82ee9bfe90aa`; `wp-w03-close-inventory`, branch `ryan-haver/wp-w03-close-inventory`, terminal `term_9f86e1f1-d613-488b-84a6-f47812d03542` | Supported `opencode2` route; native session `ses_e85ada578ffeU6KEQv3Z3jI2ky` export independently confirms MiniMax-M3 / minimax-coding-plan / thinking and tool activity. Own report/build only. |
+
+The old `opencode` launcher refused before Task/Dispatch creation; full receipt
+preserved. No blind retry: fleet and worktree census confirmed only an unused
+shell; installed `opencode2` uses OpenCode2.1.4 and started the sole inventory
+Dispatch. This inherits audited worktree-only routing; null CLI model fields
+are not an explicit model override. No global launcher/provider changes.
+
+Supported usage at22:22Z: Codex96% weekly, MiniMax96% weekly/100% session,
+provider updates22:17Z. Exact resets/catalog/capacity in private
+`build/phase-resume-20261026/`; no DeepSeek fresh balance, no headroom claimed.
+No credentials-store read, Anthropic, helper or nested worker. Sol source-run
+count question resolved: F-SEC-007 selects12 new auth outcomes plus two older
+API controls =14. Preserve actual counts and all failures.
+
+Coordinator owns canonical evidence import/findings/registry/serial ledger,
+full combined checks, independent assembly acceptance, preservation/publication.
+All prior evidence, cleanup quarantine, retained workspaces and original failed
+runs remain protected. No new feature qualification, source implementation,
+push, next execution wave or release is claimed from these starts. Existing
+publication authority remains sufficient once combined technical gates pass.
+
+## Historical project-file cleanup checkpoint
+
 ## Current project-file cleanup — 2026-10-22T02:11:23.692632+00:00
 
 Latest user authorized broader old-project-file and Windows-lock cleanup.
