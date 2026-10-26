@@ -1,5 +1,51 @@
 # Current coordinator handoff
 
+## Current closeout fan-out checkpoint — 2026-10-26T22:47Z
+
+Both delegated assignments completed; all three new Dispatches (including the
+inventory report correction) settled and released before delivery acknowledgment.
+Full fleet:63 rows,57 released/six historical retained, no active new worker,
+one complete page. Existing Run/coordinator/generation below remain applicable;
+older unverifiable resources are preserved, not declared exited.
+
+Sol evidence report `b325d41a1731cadd9f890ff0a64e2de50387d86e` and corrected
+M3 inventory `3567a093b7a9c2597cf0467c6cb8614e139de762` integrated sequentially
+at `3ce155699e96891a9d01d8a901a0e77fa053c497`, documentation only. Both task
+refs published and exact-live-remote verified. The original M3 report
+`87973d0a53fe3d34083a85a244dcd7fc3492ebc9` and correction provenance are retained.
+Accepted report scopes do not grant new core/security-review qualification.
+
+Fresh clean source310d8b65:31/31 outcomes,200 passing checks/six expected n/a,
+32 screenshots; auth14,rootAPI3,CORS13,unreachable1. Actual formal gate PASS,
+zero known failures. Offline existing regressions18PASS distinguish ordinary
+inside-command500 from already-disconnected503/events. Coordinator combined
+source at b3f87232:4084PASS/four skip/35 deselections, strict177/177 routes,
+100 dedicated Remote testsPASS, RuffPASS, mypyPASS91files. Report integration
+has zero source/tools/tests/UI/manifest/lockfile diff from the tested tree.
+
+Raw delivery117 files copied/hash-verified with zero mismatches; complete native
+exports, verified full bundles, original/corrected inventory artifacts and lifecycle
+receipts retained in `build/phase-resume-20261026/`. Source and task workspaces,
+incidental caches and short external task temp remain preserved; none removed.
+The M3 correction used fresh Task `task_db2a7faf4f27` / Dispatch `ctx_9adb8245a10e`
+after supported same-terminal reuse refused before new authority; prior writer
+was preserved/released first. Native session `ses_e85a28ebdffeGaUh9X6DxvrZs5`
+independently confirms M3/thinking. No duplicate writer, fallback or nesting.
+
+**Remaining phase work:** canonical byte-preserving evidence import, findings
+VAL-14/VAL-15 registration/disposition, serial registry/ledger reconciliation,
+independent exact final-assembly review, remaining combined CI/image/client gates,
+and integration publication. Three older controller/reviewer full workspace
+archives and preservation-proof reconciliation remain before their removal.
+Inventory quarantine-count discrepancy is unresolved, not proof of lost bytes;
+retain original archives/quarantine and receipts. Numerical canonical ledger
+unchanged268/203below/57stale. Integration origin remains411c6642; this local
+documentation checkpoint is not integration publication or release acceptance.
+No next implementation wave started; existing publication authority suffices
+after its technical prerequisites, with no new permission needed.
+
+## Historical authorized resumption and launch checkpoint
+
 ## Owner-authorized phase resumption — 2026-10-26
 
 Owner requested fan-out of remaining phase work into dedicated worktrees.
