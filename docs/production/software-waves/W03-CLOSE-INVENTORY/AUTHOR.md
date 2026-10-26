@@ -3,6 +3,17 @@
 Task `task_feae2579595e`, Dispatch `ctx_82ee9bfe90aa`, existing Run
 `run_37205f6095b3`; worker terminal `term_9f86e1f1-d613-488b-84a6-f47812d03542`.
 
+**Correction pass (provenance, not erasure).** This file was corrected under
+task `task_db2a7faf4f27`, Dispatch `ctx_9adb8245a10e`, in the same Run and the
+same worktree, starting from the submitted report commit
+`87973d0a53fe3d34083a85a244dcd7fc3492ebc9` (starting HEAD verified equal to
+that full SHA before any edit — §11.4). The correction is limited to the
+material factual inconsistency recorded in **§11**. The previous attempt's
+committed report at `87973d0a` and every machine-readable inventory under
+`build/phase-resume-20261026/inventory/**` are **retained unmodified**; no
+prior attempt, output or receipt was erased, overwritten or re-scored, and
+every withdrawn statement keeps its withdrawal provenance.
+
 - Exact base: `310d8b65a9fce3c9069523d4ac5ce21157e75c9f`.
 - Own worktree: `wp-w03-close-inventory`, branch `ryan-haver/wp-w03-close-inventory`,
   HEAD `310d8b65a9fce3c9069523d4ac5ce21157e75c9f` (verified equal to the base
@@ -16,6 +27,21 @@ Task `task_feae2579595e`, Dispatch `ctx_82ee9bfe90aa`, existing Run
   attestation on its own and is not relied on here. No helper, subagent,
   fallback, broker, MCP server, Anthropic/Claude model or nested worker was
   used.
+- **Correction-pass native attestation — independent coordinator export.** The
+  coordinator independently exported the supported opencode session
+  `ses_e85a28ebdffeGaUh9X6DxvrZs5` ("W03-CLOSE-INVENTORY report correction",
+  this worktree) and saved that export as
+  `inventory-correction-native-initial-private.json` in the root repository's
+  `build/phase-resume-20261026/` directory (read-only here; that file lives in
+  the root repository, not in this worktree). Parsing that export shows **37
+  assistant messages, every one of them attributed to provider
+  `minimax-coding-plan`, model `MiniMax-M3`, variant `thinking`**, and to no
+  other provider, model or variant. That coordinator export is the
+  execution-side attestation for the correction pass; the session index and
+  the quota receipt alone do **not** attest the native backend and are not
+  relied on as if they did, and a worker's self-report is not native
+  attestation either. No helper, subagent, MCP server, fallback provider,
+  Anthropic/Claude model or nested worker was used on this pass either.
 - Scope: **report-only bounded inventory.** No source, test, tooling, registry,
   ledger, finding, manifest, evidence, archive, quarantine or runtime change was
   made. This report does **not** qualify anything: it is not a core/security
@@ -40,11 +66,19 @@ It does not import records, does not relabel attribution, does not register or
 close findings, does not regenerate a ledger, does not run the combined
 pipeline, and does not authorise or perform cleanup.
 
-Every record inspected is **client `api`, target `sim`, level `V2`, image digest
-`null`**. Nothing here is browser/Remote/HA V3, image, physical HIL, 72-hour
-soak, week field sign-off, Tron visual approval or final version/artifact
-release evidence. No API-as-browser or API-as-image qualification is claimed or
-implied.
+Every **original wave03 record** inspected is `client: api`, `target: sim`,
+`level: V2`, `image_digest: null` — that is **exactly the 57 records of sets
+A–G** (§4.1). The **31 fresh combined records** (§6.5) are a **separate,
+mixed-client** set: **23 API V2** records and **8 browser V3** records, all
+with `image_digest: null`. Total records inspected across the twelve declared
+sets: **88** = **57 original API V2** + **31 fresh (23 API V2 + 8 browser V3)**.
+
+Nothing here is image, physical HIL, 72-hour soak, week field sign-off, Tron
+visual approval or final version/artifact release evidence. No API-as-browser,
+browser-as-API or API-as-image qualification is claimed or implied. The 8
+browser V3 records are inspected **read-only**; their presence in the inspected
+set is **not** a source, image, client or level qualification granted by this
+report, and they are neither re-attributed nor re-qualified here.
 
 ---
 
@@ -81,20 +115,25 @@ inspection-only, so `route_inventory` was never enabled or disabled.
 | Command (own worktree) | Exit | Result |
 | --- | --- | --- |
 | `git status` / `git rev-parse HEAD` / `git branch --show-current` / `git worktree list` | 0 | clean tree; HEAD `310d8b65…`; branch `ryan-haver/wp-w03-close-inventory`; nine registered worktrees listed |
-| `python build/phase-resume-20261026/inventory/inventory_records.py` | 0 | 57 evidence records inventoried across 8 declared sets |
+| `python build/phase-resume-20261026/inventory/inventory_records.py` | 0 | **88** evidence records inventoried across **12** declared sets — **57** original (sets A–G) + **31** fresh (H–H4); the first run of the script inventoried the 8 original sets / 57 records, and the script was then extended with the 4 fresh roots and re-run to produce the current `records-inventory.json` |
 | `python build/phase-resume-20261026/inventory/blob_survival.py` | 0 | 12 package paths checked at the base |
 | `python build/phase-resume-20261026/inventory/workspace_inventory.py` | 0 | 4 worktrees + bundles + archives + publication receipts inventoried |
 | `git cat-file -p <rev>:<path>` / `git rev-parse <rev>:<path>` (via the script) | 0 | blob identity at base, functional source, submitted candidate and report commit |
 | `git status --porcelain` in each of the 4 wave03 worktrees | 0 | all empty (clean) |
 | `git check-ignore -v build/phase-resume-20261026/inventory/probe.txt` | 0 | `.gitignore:7:build/` → own build tree is ignored |
-| `python build/phase-resume-20261026/inventory/report_checks.py` | 0 | report-only pre-commit gate: structure, local links (0 markdown links, 0 broken), cited repository-relative paths (36 checked, 0 missing, 5 intentionally absent placeholders/proposed destinations), CR-aware whitespace (0 CR bytes, 0 trailing-whitespace lines, final newline present), path characters → PASS |
+| `python build/phase-resume-20261026/inventory/report_checks.py` | 0 | report-only pre-commit gate: structure, local links (0 markdown links, 0 broken), cited repository-relative paths (36 checked, 0 missing, 5 intentionally absent placeholders/proposed destinations), CR-aware whitespace (0 CR bytes, 0 trailing-whitespace lines, final newline present), path characters → PASS *(numbers as recorded in the original run)* |
 | `git rev-parse 310d8b65:docs/production/software-waves/SW-API-READ-04-C1/REVIEW.md` and the offline `REVIEW.md` counterpart, cross-checked against `c8910ee5` / `0bd3d76f` | 0 | both review blobs are present at the base and byte-identical to their review commits (corrects an earlier draft error) |
-| `Get-ChildItem` / Python read of `wp-w03-close-evidence/build/phase-resume-20261026/evidence/**` and its receipts | 0 | 31 fresh combined records / 206 assertions inspected read-only (§6.5) |
+| `Get-ChildItem` / Python read of `wp-w03-close-evidence/build/phase-resume-20261026/evidence/**` and its receipts | 0 | 31 fresh combined records / 206 assertions (200 pass + 6 expected `n/a`) inspected read-only — 23 API V2 + 8 browser V3 (§6.5) |
 | Python read of `build/project-file-cleanup-20261022/reversible-relocation-plan-complete.json` and `verified-quarantine-post-state.json` | 0 | both original external temp roots relocated reversibly into quarantine; quarantine copies confirmed present on disk |
+| `git rev-parse HEAD` (correction pass, §11) | 0 | `87973d0a53fe3d34083a85a244dcd7fc3492ebc9` — equal to the submitted report commit, checked before any edit (§11.4) |
+| `python build/phase-resume-20261026/inventory/report_checks.py` (correction pass, §11) | 0 | report-only gate re-run on the corrected file: structure and required tokens present, local links (0 markdown links, 0 broken), cited repository-relative paths (42 checked, 0 missing, 8 intentionally absent), CR-aware whitespace (0 CR bytes, 0 trailing-whitespace lines, final newline present), path characters → PASS |
+| Python re-read of the original record bytes (correction pass, §11) | 0 | confirmed **57** original records (all `client: api` / `level: V2` / `image_digest: null`) / **322** assertions (317 pass, 5 fail) and **31** fresh mixed-client records (23 API V2 + 8 browser V3) / **206** assertions (200 pass, 6 expected `n/a`); the 8 browser V3 records and their 32 browser screenshots confirmed read-only |
 
 This commit is **report-only**: one new file,
 `docs/production/software-waves/W03-CLOSE-INVENTORY/AUTHOR.md`, and no other
-tracked change. It uses the documented **invocation-only** hook exception
+tracked change. The **correction** commit of §11 is likewise **report-only**:
+it modifies that same single file and no other tracked path. Both use the
+documented **invocation-only** hook exception
 (`git -c core.hooksPath= commit …`) after the real checks above. No
 implementation hook was bypassed: no source, test, tooling, registry, ledger,
 manifest, evidence or archive byte is in this commit, so no implementation
@@ -139,13 +178,20 @@ declared root and read the record fields directly.
 
 Expected counts reconcile exactly for the accepted sets: **A = 13 records /
 65 assertions** (5 declared + 1 automatic observer-schema check per record),
-**E = 1 record / 7 assertions**. Every record in A, B, C, D, D2, E, F and G has
-`image_digest: null`, `dirty: false`, `dirty_files: []`, level `V2`, client
-`api`, target `sim`, and `state_diff` empty (no device mutation).
+**E = 1 record / 7 assertions**. All **57** records of A, B, C, D, D2, E, F and
+G have `image_digest: null`, `dirty: false`, `dirty_files: []`, level `V2`,
+client `api`, target `sim`, and `state_diff` empty (no device mutation). At
+assertion level those same 57 records carry **322 assertions (317 pass, 5
+fail)**; the 5 failures are the 4 intentional negative controls (D, D2) plus
+the single committed CI regression (G) of §4.6 — no original record was
+re-scored, downgraded or hidden.
 
 Four further sets (H, H2, H3, H4) hold the **fresh combined** campaign at the
 integration base produced by the Sol worktree; they are inventoried in §6.5.
-Total evidence records inspected across all twelve declared sets: **88**.
+Those **31** records are **not** API-only — 8 of them are browser V3 — and
+their assertion total (**206**) is a separate quantity from the **322** of the
+original 57. Total evidence records inspected across all twelve declared sets:
+**88** = **57 original API V2** + **31 fresh (23 API V2 + 8 browser V3)**.
 
 ### 4.2 Author-receipt cross-check
 
@@ -453,7 +499,22 @@ base. Its build tree
 | `auth` | F-SEC-007 | **14** | 114 | api 6, browser 8 | V2 6, V3 8 | 14 pass / 0 other |
 | `api-root` | F-API-002 | **3** | 20 | api 3 | V2 3 | 3 pass / 0 other |
 | `offline` | F-API-033, F-REL-009 | **1** | 7 | api 1 | V2 1 | 1 pass / 0 other |
-| **total** | | **31** | **206** | api 23, browser 8 | V2 23, V3 8 | **31 pass / 0 non-pass** |
+| **total** | | **31** | **206** | api 23, browser 8 | V2 23, V3 8 | **31 pass / 0 non-pass (records)**; **206 = 200 pass + 6 expected `n/a` (assertions)** |
+
+**Record level and assertion level are distinct quantities and are kept
+distinct here.** At *record* level the fresh set is **31 pass / 0 non-pass**.
+At *assertion* level the **206** assertions break down as **200 pass + 6
+expected `n/a`** (200 + 6 = 206). The 6 `n/a` are client-scoped
+not-applicable checks recorded by the runner with an explicit `detail` — 2
+carry `not checked for client 'api'` (the two API `sw_sec_auth_01.*_wrong_pin`
+records, whose `client shows toast.error` check is not observable over the API
+client) and 4 carry `not checked for client 'browser'` (the browser V3
+`profile_allowed`, `profile_wrong_pin`, `scene_allowed` and `scene_wrong_pin`
+records). They are **not** failures, **not** skipped-and-dropped assertions and
+**not** re-scored as passes; the `n/a` detail strings are quoted from the
+original record bytes. This **206 / 200+6** figure applies to the **31 fresh
+records only** and must not be conflated with the **322** assertions of the
+**57 original API V2 records** (§4.1).
 
 The **31** count reconciles exactly with the coordinator's statement
 (14 auth + 3 root API + 13 CORS + 1 unreachable-switch), and every one of the
@@ -604,12 +665,17 @@ Measured at base `310d8b65` in this worktree:
 
 ## 9. Boundaries explicitly not crossed
 
-- No API-as-browser and no API-as-image qualification. The 57 records of the
-  original wave03 packages are all `client: api`, `target: sim`, `level: V2`,
-  `image_digest: null`. The **fresh combined** set (§6.5) contains 23 API V2
-  records and 8 **browser V3** records for F-SEC-007; those browser records
-  are the Sol worker's own V3 evidence with browser screenshots, and this
-  inventory neither re-attributes nor re-qualifies them.
+- No API-as-browser and no API-as-image qualification. The **57 original
+  wave03 records** (sets A–G, §4.1) are all `client: api`, `target: sim`,
+  `level: V2`, `image_digest: null`. The **31 fresh combined records** (§6.5)
+  are a **separate, mixed-client** set: 23 API V2 records and 8 **browser V3**
+  records for F-SEC-007; those browser records are the Sol worker's own V3
+  evidence with browser screenshots, and this inventory neither re-attributes
+  nor re-qualifies them. Both groups are named separately precisely so that no
+  reader can take either of them for "every inspected record": **88** records
+  were inspected in total, **57** of them original API V2 and **8** of them
+  browser V3. Inspecting a browser V3 record is not a browser/source/image
+  qualification granted by this report.
 - No evidence import, relabel, rewrite, re-serialisation, rename or move.
 - No registry, ledger, findings, manifest, feature-owner or root-manifest
   change; no `python -m tools.validate ledger` run; no registry check run.
@@ -635,14 +701,21 @@ Measured at base `310d8b65` in this worktree:
    (13/65 at `cb87427b`, 1/7 at `4baef574`) match in count and are separately
    attributed. Duplicate diagnostics (13/65 at `411c6642`) and the retained
    failing records (2 + 2 focused negatives, 1 committed CI failure) are
-   excluded from any import and stay separate.
+   excluded from any import and stay separate. All **57** original wave03
+   records (sets A–G) are `client: api` / `target: sim` / `level: V2` /
+   `image_digest: null`, and carry **322 assertions (317 pass, 5 fail)**; the 5
+   failures are the 4 intentional negative controls plus the 1 committed CI
+   regression, all retained separately.
 2. **All nine accepted functional source blobs survive at `310d8b65`** with
    identical Git object IDs; the two report files match the *submitted*
    candidates; the only working-tree difference on all 12 paths is CRLF
    checkout conversion, proven by byte-identical CRLF-normalised comparison.
 3. The concrete closeout blockers are: whole-workspace archives still missing
    for the controller and both reviewers (G1–G3), a missing recovery-checkout
-   proof row for the controller reviewer (G4), **pending canonical import and
+   proof row for the controller reviewer (G4 — an **archival proof-set gap**:
+   the bundle exists and its verify log says "is okay", so it is **not** proof
+   of absent source and **not** restated here as a technical source gate),
+   **pending canonical import and
    final assembly** (G6 — the historical F-SEC-007 freshness failure is a
    stale historical gate at the older source and is now superseded by the
    fresh combined gate that **passes** at the base, §6.5), and **VAL-14 and
@@ -653,9 +726,14 @@ Measured at base `310d8b65` in this worktree:
    from the base (G7) was **wrong** and is withdrawn: both review blobs are
    present at `310d8b65` and byte-identical to their review commits.
 4. The fresh combined evidence reconciles exactly at **31 records / 206
-   assertions, 31 pass / 0 non-pass**, all at source `310d8b65`, all clean, all
-   `image_digest: null`, with the expected per-client split (23 API V2, 8
-   browser V3) — no count or source gap found. The two original external temp
+   assertions — 31 pass / 0 non-pass at record level, and 200 pass + 6 expected
+   `n/a` at assertion level** — all at source `310d8b65`, all clean, all
+   `image_digest: null`, with the expected **mixed-client** split (23 API V2, 8
+   browser V3) — no count or source gap found. These **31 fresh** records are
+   distinct from the **57 original API V2** records of item 1; **88** records
+   were inspected in total, and the 8 browser V3 records are inspected
+   read-only without being re-attributed or re-qualified here. The two
+   original external temp
    roots are **not lost**: they were relocated reversibly into
    `build/project-file-cleanup-20261022/quarantine/`, their hash-verified
    archives are intact, and an unreconciled ~1.1 MB / ~1,108-file difference
@@ -663,3 +741,114 @@ Measured at base `310d8b65` in this worktree:
    quarantine copies is reported for the coordinator, not resolved here.
    Every one of these is coordinator-owned; this task neither fixed nor
    authorised any of them.
+
+---
+
+## 11. Correction pass — material factual inconsistency (task `task_db2a7faf4f27`)
+
+### 11.1 What the coordinator found
+
+The coordinator reviewed the submitted report at commit
+`87973d0a53fe3d34083a85a244dcd7fc3492ebc9` and found a material factual
+inconsistency **inside the report itself**:
+
+- **§1** asserted a blanket *"Every record inspected is `client: api`, `target:
+  sim`, `level: V2`, image digest `null`"*.
+- **§9** asserted that the inspected records are all API.
+- Both statements are true only of the **57 original wave03 records** (sets
+  A–G), while the report's own **§6.5** and **§10 item 4** record that the
+  **31 fresh combined** records are a **mixed-client** set containing **8
+  browser V3** records.
+
+A reader applying §1 or §9 literally would conclude that none of the **88**
+inspected records is browser V3 — which the report's own §6.5 contradicts.
+
+### 11.2 Corrections applied (this and only this)
+
+| location | before | after |
+| --- | --- | --- |
+| §1 | blanket "Every record inspected is client api … level V2 … image digest null" | the **57 original wave03 records** are all API V2 with `image_digest: null`; the **31 fresh combined** records are a **separate, mixed-client** set (**23 API V2 + 8 browser V3**), also `image_digest: null`; **88** inspected in total; the browser V3 records are inspected read-only and are **not** qualified here |
+| §3 command table | "31 fresh combined records / 206 assertions inspected read-only" | adds the assertion split **200 pass + 6 expected `n/a`** and the client split **23 API V2 + 8 browser V3** |
+| §3 report-only paragraph | described the original commit only | states that the correction commit is **report-only** as well, on the same single file, with the same invocation-scoped `core.hooksPath` exception and **no source hook bypass** |
+| §4.1 | "Every record in A, B, C, D, D2, E, F and G …" | names the count explicitly (**57**) and adds that group's own assertion split (**322 = 317 pass + 5 fail**), kept distinct from the fresh **206** |
+| §6.5 | record-level "31 pass / 0 non-pass" only | adds the assertion-level split **206 = 200 pass + 6 expected `n/a`**, identifies the 6 `n/a` by their runner `detail` (2 × `not checked for client 'api'`, 4 × `not checked for client 'browser'`), and states they are **not** failures, **not** dropped and **not** re-scored as passes |
+| §9 | "The 57 records of the original wave03 packages are all …" | names the **57 original** records and the **31 fresh mixed-client** records separately, with the 88-record total, so no blanket reading survives |
+| §10 items 1, 3 and 4 | record-level counts; G4 stated without its nature | item 1 states the **57 original API V2** records and their **322 / 317 pass / 5 fail** assertion split; item 3 states that **G4 is an archival proof-set gap, not proof of absent source and not a technical source gate**; item 4 keeps **31 records / 206 assertions** distinct at record level (**31 pass / 0 non-pass**) and assertion level (**200 pass + 6 expected `n/a`**), names the mixed-client split and the 88-record total |
+
+No other statement was changed. No blanket "all inspected records are API V2"
+statement survives anywhere in this report: the only API-only claim left is the
+one it actually supports — the **57 original wave03 records**.
+
+### 11.3 Preserved on purpose
+
+- **G7 stays withdrawn.** The earlier draft's claim that the two independent
+  review reports were absent from the base remains **wrong and withdrawn**;
+  both `REVIEW.md` blobs are present at `310d8b65` and byte-identical to their
+  review commits `c8910ee5` and `0bd3d76f` (§5, §6.4, §10 item 3). The
+  correction did not revive it.
+- **G6 stays a supersession, not a new gate.** The historical global check
+  that failed after the *original* CORS source
+  (`F-SEC-007 dropped below its recorded level: level V2 < recorded V3`) remains
+  described as a **stale historical gate at the older source**, **superseded**
+  by the fresh combined gate that **passes** at the base (§6.5). The correction
+  created no new gate and asserted no new pass.
+- **G4 stays an archival verification gap.** The missing
+  `recovery-checkouts-proof.json` row for the controller reviewer remains
+  exactly that: the bundle exists and its verify log says "is okay", so this
+  is a **gap in the archival proof set**, **not** proof of absent source and
+  **not** a technical source gate. No new source-absence condition was
+  invented.
+- **No new qualification.** The correction introduces **no** source, image,
+  client or level qualification. It does not qualify the 8 browser V3 records,
+  the 31 fresh records, F-SEC-007 or any feature, and it grants no
+  source-review competence.
+- **The two assertion ledgers stay distinct**: the fresh set's **206 = 200 pass
+  + 6 expected `n/a`** versus the original 57 records' **322 = 317 pass +
+  5 fail**; and record-level results (**31 pass / 0 non-pass**) versus
+  assertion-level results (**200 pass + 6 expected `n/a`**).
+
+### 11.4 Correction-pass provenance and checks
+
+- **Starting HEAD verified equal to the submitted report commit**:
+  `git rev-parse HEAD` → `87973d0a53fe3d34083a85a244dcd7fc3492ebc9`, checked
+  before any edit.
+- **New authority, new session identity.** This correction ran under task
+  `task_db2a7faf4f27` / Dispatch `ctx_9adb8245a10e` in Run
+  `run_37205f6095b3`, in the same worktree `wp-w03-close-inventory` on branch
+  `ryan-haver/wp-w03-close-inventory`. The original task
+  `task_feae2579595e` / Dispatch `ctx_82ee9bfe90aa` was **fully preserved and
+  released before** this dispatch was created. The earlier attempt's terminal
+  `term_9f86e1f1-d613-488b-84a6-f47812d03542` **was not reused**: the
+  coordinator's fresh-authority message records that the old terminal could
+  not be reused through Orca recognized-agent preflight and that this is a
+  **fresh session**. This pass therefore ran on terminal
+  `term_c9878b83-fdb6-4fb6-a229-bd8392c9b739`, session
+  `ses_e85a28ebdffeGaUh9X6DxvrZs5`. **No same-terminal claim is made**, and
+  the prior session's identity above is left exactly as recorded.
+- **Exclusive writes**: this file only. The previous attempt's committed
+  report (commit `87973d0a`) and every machine-readable output under
+  `build/phase-resume-20261026/inventory/**` are **retained unmodified**; no
+  prior attempt, output, record or receipt was erased, rewritten or re-scored.
+  All source, canonical metadata, registry, ledger, manifest and archival
+  resources were treated as **read-only**.
+- **Route**: native `minimax-coding-plan` / `MiniMax-M3`, **thinking** variant.
+  The coordinator's fresh-authority message records "Native M3 route/author
+  family unchanged", and the coordinator's **independent native export** of
+  this session (`ses_e85a28ebdffeGaUh9X6DxvrZs5`, saved as
+  `inventory-correction-native-initial-private.json` in the root repository's
+  `build/phase-resume-20261026/` directory) shows **37 assistant messages, all
+  of them** provider `minimax-coding-plan`, model `MiniMax-M3`, variant
+  `thinking`, and no other. The session index and the coordinator's quota
+  receipt do **not** attest the native backend and are not relied on as if they
+  did. No helper, subagent, MCP server, fallback provider, Anthropic/Claude
+  model or nested worker was used.
+- **Checks re-run for this correction**: `python
+  build/phase-resume-20261026/inventory/report_checks.py` (structure, local
+  links, cited repository-relative paths, CR-aware whitespace, path
+  characters) → exit 0, results in §3; plus an independent re-read of the
+  original record bytes to confirm the 57 / 31 record split and the
+  200 + 6 and 317 + 5 assertion splits.
+- **Commit scope**: the correction commit modifies
+  `docs/production/software-waves/W03-CLOSE-INVENTORY/AUTHOR.md` only. No
+  push, merge, tag, branch deletion, cleanup, new phase, new script, new
+  record or test suite was performed.
