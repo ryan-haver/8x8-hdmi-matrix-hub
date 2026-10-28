@@ -2334,3 +2334,49 @@ probe so queued guidance can be consumed; no worker/process kill, no asserted
 probe PASS. Worker must settle own jobs and report limits honestly. No source
 review hold is imposed on this independent report. Currentfleet69=62released/
 sixhistoricalretained/oneactive, no reclaimable source terminal.
+
+### Freshness mapping accepted with explicit limits — 2026-10-28T23:57Z
+
+Audit report11b09676f78acd76bd1ac47d11a8d8817e8d0624 independently checked:54
+changedrows,39fresh->stale, FAPI031newfresh,203->210below/57->96stale; all54
+package/unit owners matchmanifest.67old displayed recordlinks match onlycontrol.py
+in the generationwindow. Full targeted oldrecord inspection independently proves
+60proofunits/55scenarios for38rerunrows; ledger intentionally displays atmost4
+freshlinks perrow, so preliminary displayedsubset46/41 is notthe fullrerunset.
+2087common Gitrecordblobs unchanged,+44records/no removals; rawledger/reportSHA
+match. Independent coordinator review records two nonblockinglimits: commandtable
+exit1shouldbe0for plain gitdiffnameonly, and original mangled scratch extracts
+were overwritten/not recovered. Source/evidence bytes intact; no blanketclaim of
+all historicaldiagnosticbytes preserved, retain auditworkspace/taskref, no cleanup.
+No target/record/finding/level change or global268audit/parentcompletion implied.
+
+Genuine auditworker settled/released before deliverye46ack. Full157message native
+export/153M3thinkingturns verified, fullGitbundle verified, exacttaskref11b published
+and liveverified; fullcurrentworkspace archivead342c58b00a2d67be910ab86958d1ab1f6ef78b47271ce8a166135a1834da4d
+verified4629regularfiles/518270803bytes, no linktraversal. This current snapshot
+doesnot recover prior overwritten scratch bytes. Report integratedsequentially
+at4c5c733cf4d94c5b679a7a41bed84bbb7aab8c47, docs-only; separate OAI factual
+COORDINATOR_REVIEW.md preserves report unchanged and stateserrata/limits.
+All69fleetrows onepage=63released/sixhistoricalretained/no newactive/reclaimable.
+
+Continue independent ready P1evidence work: proposed Sol6.1/high readonly CIproof
+intake, new wp-ci-proof-intake, own new CI_EVIDENCE_INTAKE.md/build only. Inspect
+existing green CI40770556464 artifacts for60mapped units before deciding reruns;
+this is covered audit/evidence preparation, no new phase/materialplan/source
+implementation, canonicalimport or qualification. Actual GitHub metadata lists
+validation-evidence artifact12853945294 (30334482bytes, digest54fbd594...),
+validation-ha-evidence12853275385; notexpired. Preserve rawZIPbytes/digests,
+source/client/dirty/image/check attribution and screenshotpaths. Sourcebdcf06/e16
+treeequivalence known; test actual source ancestry/currentcovers, do not relabel
+records or silently waive an unknown freshness/ancestrygate. No source/registry/
+manifest/lock/Gitref mutation in author task. Bounded20min plus corrections.
+
+23:55Z supported quota refreshed via native Usagecontrol and independentlyread
+CLI: Codex85%weeklyremaining, MiniMax98%weekly/82%session; providerreport40seconds
+old atobservation, exactwindows/resets private. SameRun/runtime/coordinator, old
+externalreservationstillprotected, conservativeceiling4. CurrentfreshSolcatalog
+23:55:52/client0.164 supportshigh; selected from accepted actual W03evidencework.
+MiniMax remains eligiblebounded metadata/inventory review only, no implied code
+privacyreviewqualification. DeepSeekreviewquotaunknown, source11f remainsoutof
+integration. Independent CIproofintake neednot wait for that sourcegate. Actual
+newauthority/base/branches follow launchreceipts after publication/equality.

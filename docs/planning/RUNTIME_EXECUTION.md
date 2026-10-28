@@ -868,3 +868,13 @@ archives and published exact taskref verified. No unreviewed code/test merged.
 Qualified different-family review quota remainsunknown; body/Response strings
 negative oracle stillfails, VAL15open. Independent freshness audit continues.
 Actual source/lease/lifecycle/preservation boundaries are in current handoff.
+
+### Freshness mapping accepted with limits — 2026-10-28T23:57Z
+
+Report11b09676 independently checks54changedrows/39stale flips and54owner-unit
+mappings;38rerunrows select60proofunits/55scenarios, oneassertiongap,15preserve.
+No newpass/bug/qualification implied. Separate OAIreview records commandexit
+erratum and overwritten scratch-byte gap; native/fullbundle/currentworkspace
+archives/taskref retained, worker released beforeack, no cleanup. Docs-only
+integration4c5c733c. Prepared same-phase CIartifactintake will inspect existing
+green40770556464 proof before rerun decisions; redactionreviewgate staysheld.
