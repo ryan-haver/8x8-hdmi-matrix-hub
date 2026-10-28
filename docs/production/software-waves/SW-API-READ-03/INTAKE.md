@@ -15,12 +15,20 @@ completion of the SW-API-READ-03 unit.
   ctx_32f5f2ecfabe --json`: `status: dispatched`, `depth: 1`, `hostScope: local`,
   `assigneeHandle: term_52b7a031-e38e-483d-84fd-2a56eed2614a`, worktree effect
   `reused` at `.../wp-api-read-03-intake`, `startOptions.agent: opencode2`. Orca
-  records `launch.effective.model: null`, so the control plane does **not** attest a
-  model; the coordinator's pinned route (`minimax-coding-plan/MiniMax-M3/thinking`)
-  is the only authority for it. The OpenCode model catalogue does expose
-  `minimax-coding-plan/MiniMax-M3` with variants `none` and `thinking`; the
+  records `launch.effective.model: null`, so the control plane does **not** attest
+  an effective model. The configured route of record was
+  `minimax-coding-plan/MiniMax-M3/thinking`; that configured pin alone is **not**
+  independent proof of the model that actually answered and is not treated as
+  such here. The effective-model evidence is a **separate coordinator export** of
+  the original native session `ses_e7b4c6d4affe8DcdYrsP51cVwD`, which the
+  coordinator reports to show all **85** assistant turns on
+  `M3/minimax-coding-plan/thinking`; this intake did **not** run that export and
+  does not restate it as a check of its own. The OpenCode model catalogue does
+  expose `minimax-coding-plan/MiniMax-M3` with variants `none` and `thinking`; the
   neighbouring `MiniMax-M3.1-Flash` entry was **not** used and no variant was
   substituted. No Anthropic/Claude, no broker alias, no nested helper or subagent.
+  This attribution is **not** a core/security-review qualification for the author
+  or for any later reader.
 - Worktree
   `C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-api-read-03-intake`,
   branch `ryan-haver/wp-api-read-03-intake`, `HEAD` =
@@ -57,7 +65,7 @@ completion of the SW-API-READ-03 unit.
 | Model / expectations | `tools/validate/model.py:199` (`RUNNER_INTENTS`), `:400-418` (`WsEvent`, `NoWsEvent`), `:424-494` (`Scenario`) |
 | Scenarios | `tests/validation/scenarios/live.py:25-113`, `power.py:7-25`, `outputs.py:7-44`, `matrix_status.py:164`, `_paths.py:4-22` |
 | Registry | `docs/validation/features.yaml:4803-4820` (F-API-032), `:4905-4916` (F-API-039), `:4917-4934` (F-API-040), `:4948-4960` (F-API-042); `tests/validation/test_registry.py:90-98` (symmetry) |
-| Simulator | `tools/simulator/server.py:665-683` (`POST /_sim/event`: cable/signal/push), `tools/simulator/README.md:73,80` (`PATCH /_sim/state`, `POST /_sim/event`), `tools/validate/device.py:117-123` |
+| Simulator | `tools/simulator/server.py:665-683` (`POST /_sim/event`: cable/signal/push), `tools/simulator/README.md:73,80-81` (`PATCH /_sim/state`, `POST /_sim/event` for cable and signal), `tools/validate/device.py:117-123` |
 | Browser client | `web/js/websocket.js:11-19,178-185` (25 s `{command:'ping'}`), loaded by `web/index.html:677` and `web/kiosk.html:1525`; second copy `web/js/core/ws.js:14-20,199-205` |
 
 ---
@@ -163,18 +171,59 @@ above overlaps other rows.
 | `audio_mute` (refusal control) | `outputs.audio_mute_rejected` | F-REL-008, F-API-036 | api | refused write | `docs/validation/evidence/F-REL-008/2026-10-04-V2-7dbc4dc7-outputs.audio_mute_rejected-api.json`; the check is `NoWsEvent("audio_mute", timeout=3)` at `tests/validation/scenarios/outputs.py:26-44` |
 | **`output_name_change`** | **none** | - | - | - | **no assertion in any test or scenario** |
 
-Every one of these records holds exactly four observer messages
-(`connected`, `status`, `status`, and the one change event) and every one of them
-carries exactly one behavioural WS check plus the schema check.
+The observer messages and the behavioural WS checks are **not** uniform across
+these records. The counts below are read from each record's
+`observations.ws_events` list and `checks` array - there is **no** top-level
+`ws_events` key in these records. A record's `t_ms` is the message's own offset
+from the action mark (`tools/validate/runner.py:760`), so a negative `t_ms` is
+a message recorded **before** the action and a non-negative one **after** it;
+that split agrees with the `events after the action: [...]` detail of the
+behavioural checks in every record listed here.
+
+| Record | `observations.ws_events` | Before the action | After the action | Behavioural WS checks | Schema check |
+| --- | --- | --- | --- | --- | --- |
+| `live.front_panel_route` | 4 | `connected`, `status`, `status` | `routing_change` | 1 (`routing_change`) | `4 message(s) checked` |
+| `live.input_signal` | 5 | `connected`, `status`, `routing_change`, `status` | `signal_change` | 1 (`signal_change`) | `5 message(s) checked` |
+| `live.display_unplugged` | 6 | `connected`, `status`, `signal_change`, `status` | `cable_change`, `connection_change` | 2 (`cable_change` **and** `connection_change`) | `6 message(s) checked` |
+| `live.rename_elsewhere` | 6 | `connected`, `status`, `cable_change`, `connection_change`, `status` | `input_name_change` | 1 (`input_name_change`) | `6 message(s) checked` |
+| `routing.switch_one` | 4 | `connected`, `status`, `status` | `routing_change` | 1 (`routing_change`) | `4 message(s) checked` |
+| `power.standby` | 4 | `connected`, `status`, `status` | `power_change` | 1 (`power_change`) | `4 message(s) checked` |
+| `outputs.audio_mute` | 4 | `connected`, `status`, `status` | `audio_mute` | 1 (`audio_mute`) | `4 message(s) checked` |
+| `outputs.audio_mute_rejected` | 4 | `connected`, `status`, `audio_mute`, `status` | (none) | 1 (`no WebSocket event 'audio_mute'`) | `4 message(s) checked` |
+
+A **behavioural** WS check is a check whose `description` names a `WebSocket
+event ...` (or its negative form); the **schema** check is the one whose
+`description` is `every WebSocket message follows
+docs/api/websocket.schema.json` and whose detail is `N message(s) checked`. The
+extra pre-action entries (`routing_change`, `signal_change`, `cable_change` /
+`connection_change`, and the `audio_mute` with `{'output': 2, 'muted': false}`)
+are messages the hub emitted during the setup window after the simulator reset,
+**not** results of the scenario action, and none of them is asserted
+behaviourally. These counts are **per record**: this intake makes no blanket
+"four messages and one behavioural check" claim, for these records or for the
+repository as a whole.
 
 ## The distinctions the intake was asked to keep apart
 
 - **True device-poller change** - the matrix changed by itself and the hub's
   scheduled read noticed it: `live.front_panel_route`, `live.input_signal`,
-  `live.rename_elsewhere`. These actions are `act("device_change", patch=...)`,
-  executed by the runner directly against the simulator
-  (`tools/validate/runner.py:796-813` -> `PATCH /_sim/state`), so nothing goes
-  through the hub.
+  `live.rename_elsewhere`. The runner performs these actions itself, directly
+  against the simulator (`tools/validate/runner.py:796-813` ->
+  `tools/validate/device.py:117-123`), so nothing goes through the hub - but the
+  simulator call **differs per scenario** and the difference must not be
+  flattened:
+  - `live.front_panel_route` and `live.rename_elsewhere` are
+    `act("device_change", patch=...)` -> `PATCH /_sim/state`
+    (`tools/validate/device.py:117-119`, `tools/simulator/README.md:73`): the
+    simulator state changes silently, with **no** Telnet push;
+  - `live.input_signal` is `act("device_change", event={"type": "signal", ...})`
+    -> `POST /_sim/event` (`tools/validate/device.py:121-123`), whose `signal`
+    branch only sets the simulator's input signal state
+    (`tools/simulator/server.py:671-676`) and likewise **does not** push to
+    Telnet.
+  All three are device-side changes that the hub's poller observes, but only two
+  of them are a simulator *state patch*; `live.input_signal` is a simulator
+  *event*.
 - **Telnet-push change** - a distinct trigger from the interval poll:
   `live.display_unplugged` sends `POST /_sim/event {"type":"cable"}`
   (`tests/validation/scenarios/live.py:63`), the simulator pushes
@@ -199,9 +248,13 @@ is `WebSocket event 'routing_change' with {'output': 2, 'input': 6, 'input_name'
 'PS5'} | pass | events after the action: ['routing_change']`. The remaining check
 is `every WebSocket message follows docs/api/websocket.schema.json | pass | 4
 message(s) checked`. The welcome and the two snapshots are **captured but never
-asserted behaviourally**. This is exactly the "a connection or schema pass alone is
-not complete behavioural proof" boundary, and it applies to every WS record in the
-repository.
+asserted behaviourally**. This is exactly the "a connection or schema pass alone
+is not complete behavioural proof" boundary. The boundary is **structural, not a
+count**: the schema check is appended unconditionally
+(`tools/validate/runner.py:674-675`) and asserts only that each recorded message
+matches the schema, so it holds for every record the runner produces - while the
+**number** of observer messages and of behavioural checks differs per record, as
+the table above shows.
 
 ## Disposition: PRESERVE + RERUN (already fresh) + MISSING-SUPPORT (one named gap). No defect found.
 
@@ -319,10 +372,15 @@ Consequences:
    continue`). `WsObserver` also records only `WSMsgType.TEXT` (`:233`).
 
 The data itself is not missing: the observer already records `connected`, the
-connect `status` and the `get_status` `status` in **every** scenario (visible as
-the four `ws_events` of the original `live.front_panel_route` record). What is
-missing is an **expectation surface** that can address them, and a way to
-**command** the WS from a scenario.
+connect `status` and the `get_status` `status` in **every** scenario - they are
+visible in the original `live.front_panel_route` record, whose
+`observations.ws_events` holds four entries (`connected`, `status`, `status`,
+`routing_change`). The number is **not** four everywhere: `live.input_signal`
+holds five and `live.display_unplugged` / `live.rename_elsewhere` hold six, and
+some of those extra entries are pre-action carryover messages rather than setup
+messages (see the table above). What is missing is an **expectation surface**
+that can address the setup messages, and a way to **command** the WS from a
+scenario.
 
 ---
 
@@ -377,11 +435,21 @@ Minimal shared-contract delta - **not granted by this intake**:
      plus a protocol-frame expectation if the protocol heartbeat is to be proven in
      a scenario.
 
-Blast radius: every scenario's evidence record changes shape and
-`ws_contract_check` must keep tolerating control frames. That is a
-whole-suite change, which is precisely why it needs its own serial lease, its own
-child scope and its own different-family review, and why it must not be smuggled
-into this unit.
+Blast radius: **not established by this intake; it depends on the design that
+is actually chosen.** An additional expectation/observation capability does
+**not** by itself prove that every existing evidence record must change shape,
+nor that protocol control frames must be fed to the JSON `ws_contract_check`:
+the observer records only `WSMsgType.TEXT` frames today
+(`tools/validate/runner.py:233`), so control frames never reach the check, and
+`ws_contract_check` (`tools/validate/runner.py:62-79`) validates only the
+recorded `{"event", "data"}` JSON messages against
+`docs/api/websocket.schema.json`. Possible designs - a separately addressable
+connect-phase bucket, a new observation channel for protocol frames, or a
+change to how `ws_events` is serialised - and their compatibility risks are
+**proposals** that need their own serial scope, their own coordinator lease and
+their own different-family review. Old evidence, schema and record shapes must
+be preserved unless a separate justification says otherwise. This correction
+grants no shared-contract lease and no implementation.
 
 # Proposed minimal child scope (proposed only; not started)
 
@@ -479,9 +547,11 @@ Preserved build artifacts (ignored, all under
   the registry and the ledger are untouched.
 - The 27-test rerun is a **regression check of the existing basis**. It is
   V2-level test evidence only and changes no level anywhere.
-- The four-message `ws_events` quoted for `live.front_panel_route` and
-  `power.standby` come from the **existing committed records**, not from a new
-  run; their original SHAs and `dirty: false` state are reported as found.
+- The observer-message counts quoted for `live.front_panel_route`,
+  `power.standby` and the other records tabulated above come from the
+  **existing committed records** (`observations.ws_events` and `checks`), not
+  from a new run; their original SHAs and `dirty: false` state are reported as
+  found.
 - The boundary probe drives the real `Runner._check` with a stand-in observer and
   the autoping probe uses a real aiohttp server/client pair, but neither is a
   scenario run and neither is a substitute for one.
@@ -523,3 +593,75 @@ completion of SW-API-READ-03, no core/security review competence, no product
 defect (none was reproduced), and no change to any shared contract, registry,
 ledger, manifest, lockfile, source file, test file or evidence record. The only
 tracked change is this report.
+
+---
+
+# Correction note (prose-only, same original author family)
+
+- **Provenance of the original report.** The report above was authored by the
+  original MiniMax author family under Task `task_abb0caba9fdf` / Dispatch
+  `ctx_32f5f2ecfabe` (existing Run `run_37205f6095b3`, terminal
+  `term_52b7a031-e38e-483d-84fd-2a56eed2614a`) on branch
+  `ryan-haver/wp-api-read-03-intake`, from base
+  `d6e78e0b6ab1dab5216443584d810a7a24af32b2`, and was committed as
+  `d3b41e1a4e081ef657e0d2a7146bc073ccc61a8b` - "docs(validation): record the
+  SW-API-READ-03 WebSocket intake inventory". That writer's Dispatch completed
+  and was released through Orca before its completion acknowledgement; this
+  correction does **not** re-open it and does **not** replace or re-label its
+  delivery.
+- **Who corrected it.** This correction was written by the **same original
+  MiniMax author family**, as the sole report writer, under the new Task
+  `task_2fa50807fa72` / Dispatch `ctx_efb4ba56611d`, in the **same preserved
+  worktree** `.../wp-api-read-03-intake` on branch
+  `ryan-haver/wp-api-read-03-intake`, at exact base
+  `d3b41e1a4e081ef657e0d2a7146bc073ccc61a8b`. No reset, no replacement writer,
+  no nested helper, no new agent, no fallback route.
+- **What changed** - prose only, four factual corrections, each verified
+  against the current source and the committed record bytes rather than against
+  the report's own asserted counts:
+  1. the blanket "every record holds four observer messages and exactly one
+     behavioural WS check" statement was replaced by a per-record table read
+     from `observations.ws_events` and `checks`, with the pre-action /
+     post-action split taken from each record's own `t_ms`
+     (`tools/validate/runner.py:760`);
+  2. the device-side cause distinction was corrected: `live.input_signal` uses
+     `device_change(event=...)` -> `POST /_sim/event` (signal branch, no
+     Telnet push), **not** `PATCH /_sim/state`; only `live.front_panel_route`
+     and `live.rename_elsewhere` are simulator state patches;
+  3. the shared-contract blast-radius paragraph was qualified into a
+     design-dependent **proposal**; the claim that every existing evidence
+     record must change shape, and that protocol control frames must be fed to
+     the JSON `ws_contract_check`, is withdrawn as unproven;
+  4. the model-provenance wording was corrected: a null CLI model/effort is
+     correctly **not** a model override, a configured pin alone is not
+     independent effective-model proof, and the coordinator's separate export
+     of the original native session `ses_e7b4c6d4affe8DcdYrsP51cVwD` (all
+     **85** assistant turns on `M3/minimax-coding-plan/thinking`) is
+     attributed to the coordinator and was **not** re-executed here.
+- **What did not change.** No implementation, test, tooling, source, scenario,
+  runner, model, schema, registry, ledger, finding, manifest, lockfile,
+  evidence record or probe/log byte was added, edited, re-labelled or
+  overwritten; no original failed or successful probe was overwritten or
+  re-labelled. The original `live.front_panel_route` example (four messages,
+  one behavioural check) was already correct and is unchanged. The 27-test
+  basis rerun, the two bounded probes and any campaign were **not** re-run for
+  this prose-only correction and no result is claimed from them here. Nothing
+  was pushed, merged, tagged or cleaned up. No qualification, unit completion
+  or reviewer acceptance is claimed or implied by this correction: it is a
+  prose correction of the original author's own report and nothing else.
+- **Correction checks actually run**, all read-only against the repository and
+  all writing only inside the ignored
+  `build/software-waves/SW-API-READ-03-intake/correction-01/` tree: a
+  record-inspection script that printed `observations.ws_events`, every check
+  `description`/`detail` and the `t_ms` split for the eight records named
+  above; a source re-read of `tools/validate/runner.py`,
+  `tools/validate/device.py`, `tools/simulator/server.py`,
+  `tools/simulator/README.md`, `src/rest_api/events.py` and
+  `tests/validation/scenarios/live.py` for the cited anchors; the
+  repository-relative path/link check; a UTF-8 and line-ending check; and
+  `git -c core.whitespace=cr-at-eol diff --check`. The diff against
+  `d3b41e1a4e081ef657e0d2a7146bc073ccc61a8b` touches this report only. The
+  commit uses the documented invocation-only `git -c core.hooksPath= commit`
+  exception for instruction-only maintenance (`docs/ORCHESTRATION_PROTOCOL.md`,
+  `CONTRIBUTING.md`); no persistent hook setting was changed and **no** source
+  or full-suite hook pass is claimed.
