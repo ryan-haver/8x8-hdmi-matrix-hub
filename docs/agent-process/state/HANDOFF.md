@@ -1,5 +1,49 @@
 # Current coordinator handoff
 
+## Intake delivery and active factual correction — 2026-10-28T23:00Z
+
+SW-API-READ-03 intake delivered original report
+`d3b41e1a4e081ef657e0d2a7146bc073ccc61a8b`:27existingtestsPASS, no product
+source/canonical writes and no product defect reproduced. Independent coordinator
+source/JSON check found factual report errors: named original browser WS records
+have message/behavioral-check counts4/1,5/1,6/2,6/1; signal injection is a simulator
+POST event without Telnet push rather than statePATCH; future schema/record-shape
+blast radius is not proven mandatory. Useful observer boundary/ping/attribution
+findings remain; report content acceptance/integration held for author corrections.
+
+Original Taskabb0caba/Dispatchctx_32f5f2ecfabe settled and released before
+completion deliveryfdc11ack. Full87message native export/85M3thinking turns,
+verified fullGitbundle and complete original workspace archive
+`ebaf1566cbf244ff29e296cb96e76b52448590344465c8da35be7c6a1f0d2b12`
+preserved; original exact taskrefd3 published/liveverified before new writer.
+No worktree reset/removal or original artifact overwrite. Archive and receipts
+are under `build/p1-fanout-20261028/`.
+
+Fresh genuine correction Task `task_2fa50807fa72`, Dispatch `ctx_efb4ba56611d`,
+terminal `term_0fbd1221-6784-4d82-90cc-e29ad99ff417` is active in preserved
+wp-api-read-03-intake, same branch at exactd3. Only INTAKE.md and new ignored
+correction-01/build writable; source/evidence/registry/shared contracts readonly.
+Native new session ses_e7b422acbffebUDqEjtS9N6wVK independently confirms M3/thinking; no CLI override,
+nesting/fallback/Anthropic. Bound5min prose/source/record correction; no new tests
+or campaign/ledger rerun. This is ordinary author correction of qualified factual
+findings, not a failed-model-qualification retry or code review qualification.
+
+Sol redaction Taskcf272c0e3b6c/Dispatchctx_a52a1d96ad08 remains active in separate
+wp-sec-data-02-c1 (actual branchryan-haver/wolffish), normal browser-enabled strict
+hook running per author status; focused58tests/Ruff/mypy passed as reported.
+Free-form body/Response-detail redaction gaps remain explicit negative probes;
+no source lease expansion or broad VAL15 closure. Qualified DeepSeek review quota
+still unknown, so unreviewed code cannot integrate. Freshness audit remains queued
+behind actual corrected intake acceptance/settlement/new authority.
+
+22:58Z supported capacity Codex89%weekly, MiniMax99%weekly/91%session remaining;
+shared external commitments unknown. Same Run37205/runtime14c5/coordinatorgen3 and
+four-total ceiling (coordinator + at most two new + old external reservation).
+No protected source/private/quarantine/oddhook resource changed. Preserve actual
+authorship, process next completion/questions before ack and release settled
+workers before delivery acknowledgment. Earlier active intake Task in the
+historical launch table below is now superseded by this correction authority.
+
 ## Active prepared P1 fan-out — 2026-10-28T22:51Z
 
 Owner explicitly requested fan-out/get agents working. Two genuine workers are

@@ -2183,3 +2183,39 @@ mutation or shared-target deletion. Preserve exact junction type/target for late
 no-follow archive/cleanup. Question3dc913 answered and deliveryabbf4 acked; source
 evidence.py/test lease unchanged. Private response-detail-guidance.json and
 dependency-junction-reply.json retain exact authority under current campaign.
+
+### SW-API-READ-03 delivered; bounded author report correction — 22:59Z
+
+Intake Taskabb0caba/Dispatch32f5 delivered reportd3b41e1a4e081ef657e0d2a7146bc073ccc61a8b,
+27existingtestsPASS/26.90s, no product defect reproduced, source/canonical untouched.
+Coordinator independently checked live source/record bytes: important inventory
+boundaries correct, but report requires factual corrections before content
+acceptance/integration. Named browser records have WSmessage/check counts4/1,
+5/1,6/2,6/1 (not blanket4/1); input_signal uses a simulator signal event, not a
+statePATCH; future record-shape blast radius is a proposal, not proved necessity.
+Useful report findings are preserved, not a source/model-review qualification or
+an automatic retry of a failed qualification. Full findings private intake-coordinator-findings.json.
+
+Original valid worker settlement accepted, released viaOrca before deliveryfdc11
+ack. Full87message native export/85M3thinkingturns, verified fullbundle, original
+report+all ignored workspace bytes archived SHA256ebaf1566cbf244ff29e296cb96e76b52448590344465c8da35be7c6a1f0d2b12;
+original taskrefd3b41 published/exactliveverified before any new writer. Checkout
+clean/exactd3; no reset/cleanup, original failure/probe evidence retained.
+
+Proposed fresh real opencode2 correction Task in same preserved checkout, same
+MiniMax author family/config, only existing INTAKE.md + new correction-01/build
+subtree writable. Bound5min source/JSON/prose correction; no test/campaign/ledger
+rerun or shared-contract lease. Full native prior-session provenance separate
+from configured pin and null CLI override. At22:58Z supportedMiniMax99%weekly/
+91%session and Codex89%weekly remaining; external commitments unknown. Fleet
+67completepage=60released/sixretained/oneactiveSol. ExistingRun/runtime/coordinator/
+sourcelease/conservative4total ceiling unchanged. Prior writer released, original
+bytes preserved, no duplicate report writer. Freshness audit stays queued until
+actual corrected report acceptance/settlement/newauthority, not launched here.
+
+Actual bounded correction launched Tasktask_2fa50807fa72 / Dispatchctx_efb4ba56611d,
+terminalterm_0fbd1221-6784-4d82-90cc-e29ad99ff417, same preserved exactd3
+checkout/branch after released original writer. Fresh native sessionses_e7b422acbffebUDqEjtS9N6wVK
+independently confirms MiniMax-M3/thinking and actual tool activity. CLI model/
+effort null, no override claim or model substitution. Original d3 report held
+for specific author factual corrections; not integrated or qualification claimed.
