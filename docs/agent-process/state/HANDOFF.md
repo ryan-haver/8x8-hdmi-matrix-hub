@@ -1,5 +1,41 @@
 # Current coordinator handoff
 
+## Freshness audit active after accepted intake — 2026-10-28T23:12Z
+
+Corrected intakec0312d70 accepted/published in root4ae2f301 (exact live equality),
+bounded report only. Its worker settled/released before deliveryack and all
+original/corrected source/natives/fullbundles/workspace archives preserved. No
+source/test/evidence/registry/ledger qualification or proposed child lease granted.
+
+Queued same-wave audit is now active: Task `task_02c22e77963a`, Dispatch
+`ctx_e973d4be3c60`, terminal `term_ba1c0350-0193-49cb-80d3-019fdcfd3dda`, new
+wp-audit-freshness-delta, actual branch ryan-haver/wp-audit-freshness-delta, exactbase
+`d6e78e0b6ab1dab5216443584d810a7a24af32b2`. Native session ses_e7b373110ffeK9w625190pzJZ7
+independently confirms MiniMax-M3/minimax-coding-plan/thinking plus tools; CLI
+model/effort null through audited worktree-only routing, no override claim,
+Anthropic, fallback or nested helper. Writes only new
+`docs/production/software-waves/SW-AUDIT-01/FRESHNESS_DELTA.md` and own ignored
+build subtree. Reuse29c completed comparison; map changed freshness/levels to
+existing package/units and minimal proof, no ledger/check/global-history reruns,
+source/tests/tooling, evidence imports or level promotion. Bound15min plus
+correction reserve; no completion/acceptance claim from launch.
+
+Quota cache aged15min caused a pre-Task dispatch hold (no failed/duplicate worker).
+Used native Orca Usage/Refresh rate limits via installed computer-use skill because
+CLI has no refresh command; independently re-read supported account-list provider
+report6seconds old at23:11Z: MiniMax98%weekly/88%session and Codex87%weekly
+remaining, windows/resets private. Usage-only read refresh, no account/settings/
+credentials/model/spend change. Private complete receipts under current campaign.
+
+Sol redaction Taskcf272/Dispatcha52a still has its exclusive source lease in
+separate wp-sec-data-02-c1, normal short-temp strict/browser hook retry active;
+free-form body/Response gaps open and qualified DeepSeek review quota unknown.
+No unreviewed source integration. Four-total ceiling includes coordinator, two
+new workers and older external reservation. Protected root/private/user/external/
+persistence/oddhook/quarantine/original evidence untouched; retain exact external
+short-temp and task dependency junction for future no-follow archive/cleanup.
+New active audit supersedes the prepared/queued state in historical entries below.
+
 ## Corrected intake accepted; audit continuation prepared — 2026-10-28T23:08Z
 
 Corrected SW-API-READ-03 report `c0312d7068215046cddd140665f61047ce54bfac`
