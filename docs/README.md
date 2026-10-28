@@ -1,16 +1,27 @@
 # Documentation Index
 
 Start with the deployment and client guides below. The architecture documents
-identify the shipped `OreiMatrix` / `RestApiServer` paths and framework modules
-with pending runtime wiring. OpenAPI generation is connected to the REST app.
-The [feature ledger](validation/LEDGER.md) records proof levels and freshness;
-[the release report](validation/VALIDATION_REPORT.md) records candidate checks
-and outstanding hardware gates.
+describe the shared runtime, optional integrations and storage behavior. The
+[feature ledger](validation/LEDGER.md) records feature proof; the
+[runtime validation index](validation/RUNTIME_VALIDATION_INDEX.md) references
+exact-commit integrated campaigns. Hardware, field and soak gates remain
+pending owner evidence.
+
+For the next release-validation work, use the
+[evidence-gap inventory](validation/RELEASE_EVIDENCE_GAPS.md) and
+[release checklist](validation/RELEASE_VALIDATION_CHECKLIST.md). These distinguish
+software proof, hardware gates and field qualification; they do not promote
+feature levels or authorize execution.
 
 The next development work is specified in the
 [runtime-completion plan](planning/NEXT_DEVELOPMENT_PHASES.md), with a
 [model/agent inventory](planning/MODEL_AND_AGENT_INVENTORY.md). The future roster
 excludes Claude/Anthropic, including fallback and helper roles.
+
+Agent entry points: [root instructions](../AGENTS.md),
+[standing Orca coordination protocol](ORCHESTRATION_PROTOCOL.md) and
+[agent allocation ledger](production/AGENT_ALLOCATION.md). The protocol governs
+authorized execution; reading or maintaining it does not start a phase.
 
 ---
 
@@ -21,8 +32,8 @@ excludes Claude/Anthropic, including fallback and helper roles.
 | [`../README.md`](../README.md)                                    | Project pitch, quick start, hardware list, env-var cheat-sheet                                                      | Maintained documentation (DOC-02) |
 | [`../ROADMAP.md`](../ROADMAP.md)                                  | Phases, tags, what shipped, what is pending, what is not on the plan, framework-wiring gap                          | Maintained documentation (DOC-01) |
 | [`../CHANGELOG.md`](../CHANGELOG.md)                              | v0.3.0 Secure, v0.4.0 Consolidate, v0.5.0 Focused UI and the RC, with pending-hardware and pending-wiring sections | Maintained documentation (DOC-12) |
-| [`ARCHITECTURE.md`](ARCHITECTURE.md)                              | The shipped runtime vs the `src/hub/` framework libraries (with pending wiring)                                    | Maintained documentation |
-| [`INTEGRATIONS.md`](INTEGRATIONS.md)                              | The `Integration` framework contract + the three shipped integrations (Unfolded Circle legacy driver, Flic REST handlers, Home Assistant HACS) | Maintained documentation |
+| [`ARCHITECTURE.md`](ARCHITECTURE.md)                              | Shared startup, runtime state, action and persistence flow                                                          | Maintained documentation |
+| [`INTEGRATIONS.md`](INTEGRATIONS.md)                              | Runtime flags, lazy loading, shared state, and integration evidence limits                                         | Maintained documentation |
 
 ---
 
@@ -36,6 +47,7 @@ The configuration reference is maintained against the source and checked by test
 | [`API_REFERENCE.md`](API_REFERENCE.md)         | `src/hub/openapi.py::build_openapi_spec(app)` (framework library) + the WebSocket schema at [`api/websocket.schema.json`](api/websocket.schema.json) | Shipped today at `GET /api/openapi.json` (raw document) and Swagger UI at `GET /api/docs`, wired by the `wp-g2-openapi-swagger-config-docs` track. | `wp-g2-openapi-swagger-config-docs` (DOC-03) |
 | [`CONFIGURATION.md`](CONFIGURATION.md)         | `src/hub/env.py::CORE_ENV_VARS` and `INTEGRATION_ENV_VARS` (DI-12)                                  | Documents runtime variables and aliases separately from framework-only flags           | `wp-g2-openapi-swagger-config-docs` (DOC-12) |
 | `validation/LEDGER.md`                         | `python -m tools.validate ledger` over `validation/features.yaml` + `validation/evidence/`            | generated; do not edit by hand                                                                          | generated    |
+| [`validation/RUNTIME_VALIDATION_INDEX.md`](validation/RUNTIME_VALIDATION_INDEX.md) | Exact-commit integrated runtime campaigns and remaining gates | Maintained from coordinator reports |
 
 When one of these moves, regenerate it from the source and commit
 the diff together with the source change.
@@ -63,7 +75,7 @@ needs:
 | ---------------------------------------------------------------- | --------------------------------- | -------------- |
 | `CONTRIBUTING.md` (project root)                                 | Contributors                      | `wp-g2-client-guides-doc-archive` (DOC-13) |
 | [`INTEGRATION_TEMPLATE.md`](INTEGRATION_TEMPLATE.md)             | New framework integration authors | merged in Phase 4 (track 4) |
-| [`INTEGRATIONS.md`](INTEGRATIONS.md)                             | Operating the opt-in framework (and the shipped legacy driver) | Maintained documentation |
+| [`INTEGRATIONS.md`](INTEGRATIONS.md)                             | Runtime integration flags, lifecycle and shared state | Maintained documentation |
 | [`ARCHITECTURE.md`](ARCHITECTURE.md)                             | Anyone reading the runtime source or the `src/hub/` framework | Maintained documentation |
 
 ---
@@ -121,18 +133,8 @@ The levels are:
 * **V5 — Field.** A 72 h soak with flat resource metrics, plus
   the owner's sign-off after a week of daily use.
 
-The ledger currently records a mix of V1, V2 and V3 across the 268
-features. **No row is at V4 or V5 yet** — Phase 8 / WP-V3 is where
-those levels start to be filled.
-
-The shipped REST contract, `OreiMatrix`, `RestApiServer`, the
-Persistent storage (`src/persistence.py`), the legacy UC driver,
-the HACS component and the Focused UI are exercised in CI; the
-framework libraries under `src/hub/` have unit-test coverage that
-proves they work in isolation. What the framework tests do **not**
-prove is that `run.py` or `src/driver.py` instantiates the
-framework classes, and that gap is what the wiring workstream
-before v1.0.0 has to close.
+The runtime campaign index links fresh software evidence for the integrated
+runtime source/image candidate `1baac3dec660f41345869c126cfca94d6731c5a0`, with run-level provenance in the archive. The accepted R8D review and software evidence do not establish physical hardware, owner deployment, field, or 72-hour soak acceptance; those remain external gates.
 
 ---
 

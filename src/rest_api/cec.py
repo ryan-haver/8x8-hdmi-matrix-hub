@@ -9,6 +9,7 @@ import logging
 from aiohttp import web
 
 from device_codes import CEC_OUTPUT_COMMANDS
+from hub.runtime.actions import direct_command
 
 from .utils import _json_response, get_input_names, get_matrix_device, safe_error_message
 from .validation import BadRequestError, optional_bool, parse_json_object, validate_port
@@ -43,7 +44,7 @@ async def handle_cec_input(request: web.Request) -> web.Response:
         input_name = input_names.get(input_num, f"Input {input_num}")
         _LOG.info(f"REST API: CEC {command} to input {input_num} ({input_name})")
 
-        success = await matrix_device.send_cec(command, input_num, is_output=False)
+        success = await direct_command("send_cec", "input", input_num, command)
 
         if success:
             # Announced after the matrix accepted it (power commands only; docs/api/WEBSOCKET.md)
@@ -95,7 +96,7 @@ async def handle_cec_output(request: web.Request) -> web.Response:
 
         _LOG.info(f"REST API: CEC {command} to output {output_num}")
 
-        success = await matrix_device.send_cec(command, output_num, is_output=True)
+        success = await direct_command("send_cec", "output", output_num, command)
 
         if success:
             # Announced after the matrix accepted it (power commands only; docs/api/WEBSOCKET.md)
@@ -370,7 +371,7 @@ async def handle_cec_enable(request: web.Request) -> web.Response:
         enabled = optional_bool(data, "enabled", True)
 
         _LOG.info(f"REST API: Setting CEC for {port_type} {port_num} to {'enabled' if enabled else 'disabled'}")
-        success = await matrix_device.set_cec_enable(port_type, port_num, enabled)
+        success = await direct_command("set_cec_enable", port_type, port_num, enabled)
 
         if success:
             return _json_response(
@@ -407,7 +408,7 @@ async def handle_cec_enable_input(request: web.Request) -> web.Response:
         enabled = optional_bool(data, "enabled", True)
 
         _LOG.info(f"REST API: Setting CEC for input {port_num} to {'enabled' if enabled else 'disabled'}")
-        success = await matrix_device.set_cec_enable("input", port_num, enabled)
+        success = await direct_command("set_cec_enable", "input", port_num, enabled)
 
         if success:
             return _json_response(
@@ -444,7 +445,7 @@ async def handle_cec_enable_output(request: web.Request) -> web.Response:
         enabled = optional_bool(data, "enabled", True)
 
         _LOG.info(f"REST API: Setting CEC for output {port_num} to {'enabled' if enabled else 'disabled'}")
-        success = await matrix_device.set_cec_enable("output", port_num, enabled)
+        success = await direct_command("set_cec_enable", "output", port_num, enabled)
 
         if success:
             return _json_response(

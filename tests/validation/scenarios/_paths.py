@@ -3,6 +3,13 @@
 #: The hub process and its device transport: every scenario goes through these.
 HUB_CORE = (
     "run.py",
+    "src/hub/cli.py",
+    "src/hub/runtime_paths.py",
+    "src/hub/runtime",
+    "src/hub/core",
+    "src/hub/persistence",
+    "src/hub/domain/action_runner.py",
+    "src/hub/integrations/hub_client_local.py",
     "src/orei_matrix.py",
     "src/telnet_client.py",
     "src/_task_supervisor.py",
@@ -50,8 +57,8 @@ WEB_RUN = (
 #: The kiosk page (one file).
 KIOSK = ("web/kiosk.html",)
 
-#: The Unfolded Circle integration as it ships (run.py legacy mode -> src/driver.py on ucapi).
-UC_DRIVER = ("src/driver.py", "driver.json", "requirements-uc.txt", "src/rest_api/__init__.py")
+#: The active UC adapter behind the shared runtime; src/driver.py is a legacy reference.
+UC_DRIVER = ("src/hub/integrations/unfolded_circle", "driver.json", "requirements-uc.txt", "src/rest_api/__init__.py")
 
 #: The Home Assistant custom component the `ha` client installs in a real Home Assistant (WP-D1).
 HA_COMPONENT = ("custom_components/hdmi_matrix",)

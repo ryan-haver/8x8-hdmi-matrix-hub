@@ -1,0 +1,102 @@
+{
+  "template": false,
+  "record_status": "observed_read_only",
+  "observed_utc": "2026-10-21T00:55:25.987039+00:00",
+  "source_kit_manifest_sha256": "5951a0940c0f92ba3aa10fb4d7558370c316c85b404d3f5bf479656499babfcc",
+  "kit_files_verified": 16,
+  "local_head_before_adoption": "c9938f1b2ce1a2481fd5ac40f39ed88170b52539",
+  "tracking_and_live_origin_head": "411c66429df3b813072e736c41c3a8aa83043a70",
+  "branch": "wp-runtime-completion",
+  "runtime": "113f2af8-5169-408a-9b81-00bd6316d35c",
+  "run": "run_37205f6095b3",
+  "coordinator": "term_259c5526-02c2-44a8-b469-bf171aa435a0",
+  "coordinator_generation": 2,
+  "repo_id": "2d494566-13c3-4624-b834-7e0bc340801b",
+  "orca_version": "1.4.232",
+  "host": "Zelu / local / win32",
+  "saved_ssh_hosts": "all disconnected; no remote capacity verified",
+  "fleet_counts": {
+    "retained": 6,
+    "released": 54
+  },
+  "fleet_page": {
+    "limit": 100,
+    "total": 60,
+    "hasMore": false,
+    "nextCursor": null
+  },
+  "inbox_peek_count": 0,
+  "setup_scripts": {
+    "setup": "",
+    "archive": ""
+  },
+  "setup_policy": "run-by-default",
+  "startup_policy": "start-immediately",
+  "usage": [
+    {
+      "provider": "codex",
+      "provider_updated_utc": "2026-10-21T00:50:30.343000+00:00",
+      "status": "ok",
+      "windows": {
+        "session": null,
+        "weekly": {
+          "reported_used_percent": 51,
+          "window_minutes": 10080,
+          "reset_utc": "2026-10-27T06:33:16+00:00"
+        }
+      },
+      "limitations": "Cached supported account-pool usage; external commitments and absolute allowance unreported. MiniMax prior low reading changed; cause/reset not independently established."
+    },
+    {
+      "provider": "minimax",
+      "provider_updated_utc": "2026-10-21T00:50:30.026000+00:00",
+      "status": "ok",
+      "windows": {
+        "session": {
+          "reported_used_percent": 2,
+          "window_minutes": 300,
+          "reset_utc": "2026-10-21T05:28:46.900000+00:00"
+        },
+        "weekly": {
+          "reported_used_percent": 1,
+          "window_minutes": 10080,
+          "reset_utc": "2026-10-28T00:28:46.066000+00:00"
+        }
+      },
+      "limitations": "Cached supported account-pool usage; external commitments and absolute allowance unreported. MiniMax prior low reading changed; cause/reset not independently established."
+    },
+    {
+      "provider": "antigravity",
+      "provider_updated_utc": "2026-10-21T00:50:33.971000+00:00",
+      "status": "ok",
+      "windows": {
+        "session": {
+          "reported_used_percent": 17,
+          "window_minutes": 300,
+          "reset_utc": "2026-10-21T02:24:44+00:00"
+        },
+        "weekly": {
+          "reported_used_percent": 91,
+          "window_minutes": 10080,
+          "reset_utc": "2026-10-23T21:59:37+00:00"
+        }
+      },
+      "limitations": "Cached account observation; not a new dispatch qualification. Antigravity remaining/used labels and backend mapping unresolved."
+    }
+  ],
+  "adoption_created": {
+    "runs": 0,
+    "tasks": 0,
+    "dispatches": 0,
+    "worktrees": 0,
+    "services": 0,
+    "model_inference_probes": 0
+  },
+  "private_receipts": [
+    "build/adoption-worker-snapshot.json",
+    "build/adoption-repo-snapshot.json",
+    "build/adoption-worktree-snapshot.json",
+    "build/adoption-model-list.txt"
+  ],
+  "raw_account_receipt": "Private ignored build only; not copied into public process records."
+}

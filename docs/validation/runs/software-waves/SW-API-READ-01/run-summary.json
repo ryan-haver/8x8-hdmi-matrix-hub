@@ -1,0 +1,57 @@
+{
+  "commit": {
+    "sha": "0dd2c25ea866fd56fbe6046e03f0172499b70080",
+    "branch": "ryan-haver/wp-sw-api-root",
+    "dirty_files": [],
+    "short": "0dd2c25e",
+    "dirty": false
+  },
+  "target": "sim",
+  "clients": [
+    "api"
+  ],
+  "operator": "automation",
+  "finished": "2026-10-20T17:08:03.710Z",
+  "aborted": null,
+  "outcomes": [
+    {
+      "scenario": "contracts.api_info",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-002"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "evidence/F-API-002/2026-10-20-V2-0dd2c25e-contracts.api_info-api.json"
+    },
+    {
+      "scenario": "contracts.api_root",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-002"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "evidence/F-API-002/2026-10-20-V2-0dd2c25e-contracts.api_root-api.json"
+    },
+    {
+      "scenario": "contracts.api_root_alias",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-002"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "evidence/F-API-002/2026-10-20-V2-0dd2c25e-contracts.api_root_alias-api.json"
+    }
+  ]
+}

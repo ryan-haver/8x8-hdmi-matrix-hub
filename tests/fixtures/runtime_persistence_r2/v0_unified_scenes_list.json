@@ -1,0 +1,16 @@
+[
+  {
+    "id": "scene_movienight01",
+    "name": "Movie Night (legacy)",
+    "icon": "\ud83c\udf7f",
+    "steps": [{"type": "macro", "id": "macro_tv_on"}],
+    "overrides": {},
+    "favorite": true,
+    "dashboard_visible": true,
+    "dashboard_order": 0,
+    "password_protected": false,
+    "passcode_hash": "",
+    "last_executed": null,
+    "execution_history": []
+  }
+]

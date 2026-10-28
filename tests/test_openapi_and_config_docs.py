@@ -289,3 +289,30 @@ class TestFeatureRegistryEntry:
         assert "GET /api/health" in rest_routes
         assert "GET /api/openapi.json" in rest_routes
         assert "GET /api/docs" in rest_routes
+
+
+async def test_live_scene_v2_omitted_fields_and_created_status_match_openapi(aiohttp_client, tmp_path):
+    from jsonschema import Draft202012Validator
+
+    client = await aiohttp_client(create_rest_app(data_dir=tmp_path))
+    spec = await (await client.get("/api/openapi.json")).json()
+    cases = [
+        ("GET", "/api/v2/scenes", "/api/v2/scenes", 200, None),
+        ("GET", "/api/v2/scenes/missing", "/api/v2/scenes/{scene_id}", 404, None),
+        ("POST", "/api/v2/scenes", "/api/v2/scenes", 201, {"name": "Schema proof", "steps": []}),
+    ]
+    for method, path, template, status, payload in cases:
+        response = await client.request(method, path, json=payload)
+        assert response.status == status, await response.text()
+        body = await response.json()
+        ref = spec["paths"][template][method.lower()]["responses"][str(status)]["content"]["application/json"]["schema"]
+        assert ref == {"$ref": "#/components/schemas/SceneV2ResponseEnvelope"}
+        Draft202012Validator(spec["components"]["schemas"]["SceneV2ResponseEnvelope"]).validate(body)
+        assert ("data" in body) is (status != 404)
+        assert ("error" in body) is (status == 404)
+    assert "207" in spec["paths"]["/api/v2/scenes/{scene_id}/execute"]["post"]["responses"]
+    for direction in ("next", "previous"):
+        parameters = spec["paths"][f"/api/input/{direction}"]["post"]["parameters"]
+        queries = {parameter["name"]: parameter for parameter in parameters}
+        assert queries["cycle"]["schema"] == {"type": "boolean", "default": True}
+        assert queries["output"]["schema"] == {"type": "integer", "minimum": 1, "maximum": 8, "default": 1}

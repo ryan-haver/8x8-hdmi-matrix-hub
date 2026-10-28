@@ -1,0 +1,34 @@
+{
+  "template": true,
+  "record_status": "uninitialized",
+  "observed_utc": null,
+  "execution_host": null,
+  "catalog_commands_and_receipts": [],
+  "scope_and_limitations": [],
+  "models": [
+    {
+      "provider": null,
+      "exact_model_id": null,
+      "route": null,
+      "underlying_family": null,
+      "family_identity_evidence": null,
+      "alias_preview_stable_or_router_notes": null,
+      "supported_efforts": [],
+      "advertised_capabilities_and_limits": null,
+      "catalog_evidence": null,
+      "user_reported_access": null,
+      "authenticated_availability_evidence": null,
+      "exact_launch_and_effective_response_evidence": [],
+      "demonstrated_author_scope": [],
+      "demonstrated_review_scope": [],
+      "immutable_failed_or_rejected_evidence": [],
+      "quota_pool_and_route_mapping_evidence": null,
+      "proposed_task_classes": [],
+      "excluded": null,
+      "exclusion_basis": null,
+      "qualification_status": "unverified"
+    }
+  ],
+  "new_qualifications_claimed": false,
+  "credentials_or_private_account_data_included": false
+}

@@ -202,7 +202,7 @@ def test_built_metadata_modules_and_assets(distributions: tuple[Path, Path, str]
         for dependency in config["project"]["dependencies"]:
             assert dependency in requirements
         entrypoints = archive.read(next(name for name in names if name.endswith("/entry_points.txt"))).decode()
-        assert "orei-matrix-driver = driver:main" in entrypoints
+        assert "orei-matrix-driver = hub.cli:main" in entrypoints
         driver_manifest = next(name for name in names if name.endswith(".data/data/driver.json"))
         assert json.loads(archive.read(driver_manifest))["version"] == expected_version
         license_files = {"LICENSE", "THIRD_PARTY_NOTICES.md"} | {
@@ -217,13 +217,17 @@ def test_built_metadata_modules_and_assets(distributions: tuple[Path, Path, str]
 
 def test_installed_wheel_imports_outside_checkout(distributions: tuple[Path, Path, str], tmp_path: Path) -> None:
     wheel, _, _ = distributions
-    target = tmp_path / "installed"
+    # A target named src must not be mistaken for a source/Docker checkout.
+    target = tmp_path / "src"
     run("-m", "pip", "install", "--no-deps", "--target", str(target), str(wheel), cwd=tmp_path)
     code = (
         "import sys; from pathlib import Path; "
         "sys.path.insert(0, sys.argv[1]); "
         "import _file_io, _process_lock, _task_supervisor, _telnet_proto, device_codes; "
         "import hub, version, rest_api, profile_execution; "
+        "from hub import cli; from hub.runtime_paths import driver_metadata_path, SOURCE_ROOT; "
+        "assert SOURCE_ROOT is None; "
+        "assert cli.DRIVER_JSON == driver_metadata_path() == Path(sys.argv[1], 'driver.json'); "
         "from importlib.metadata import version as metadata_version; "
         "from importlib.resources import files; "
         "assert hub.__version__ == version.__version__ == metadata_version('ucapi-orei-hdmi-matrix'); "

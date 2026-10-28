@@ -1,0 +1,116 @@
+{
+  "kit": "orca-phase-development",
+  "version": "1.0.0",
+  "created_utc": "2026-10-21T00:43:01.522703+00:00",
+  "purpose": "Portable process documentation and evidence templates; no execution or qualification is claimed.",
+  "derived_from": {
+    "source_protocol_baseline_commit": "71f15622d1ddb75a8d9399b095d20408679ffb4c",
+    "files": [
+      {
+        "path": "AGENTS.md",
+        "sha256": "54576f74fc912a14ee8cf56b836d9be0a3e9a9f9fd9c3d2a6a5f8cb8d1c7a207"
+      },
+      {
+        "path": "docs/ORCHESTRATION_PROTOCOL.md",
+        "sha256": "70edcbf666a19ed0f1d1e2d5acd2a9fddacb6234cd2a63885f5ecd006ab0b136"
+      },
+      {
+        "path": "docs/PHASE_DEBATE.md",
+        "sha256": "4d47b0cabe20ff31940ca5ad6b337eb223dc6c8a7031e736feb95212af932d0c"
+      },
+      {
+        "path": "docs/MODEL_DISPATCH_POLICY.md",
+        "sha256": "d38158cb6758576884b2afae47cc3060ba2d1418ae6f4a134672fe68936b2d5f"
+      },
+      {
+        "path": "docs/REVIEW_POLICY.md",
+        "sha256": "e59e4d10b91281dc9cd6b1e3a547d3e28a742c98eb439b059b336ba83ff03c0d"
+      }
+    ],
+    "source_state_is_not_target_authority": true
+  },
+  "hash_algorithm": "SHA-256",
+  "manifest_self_hash_excluded": true,
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 14,
+      "sha256": "a79691a93b46e49ce460c26ef22afcc03d6eca1e63bf2edbc20e96159510f6c9"
+    },
+    {
+      "path": "ADOPTION_PROMPT.md",
+      "bytes": 5604,
+      "sha256": "38f3283f45deb824f6ecf1d28b882b279fb0b0f2cf40000d1c85fe525f66950f"
+    },
+    {
+      "path": "ORCA.md",
+      "bytes": 4650,
+      "sha256": "38568cfa2691bd2fe4bc354793b81601922691d4ceeaa0333b34c53a503698ee"
+    },
+    {
+      "path": "PROTOCOL.md",
+      "bytes": 15202,
+      "sha256": "4aeb2351edec0da278c0c330c4df0e852fed0335cff2e35a4e835895ab1ac052"
+    },
+    {
+      "path": "README.md",
+      "bytes": 7259,
+      "sha256": "71ef973215bc39fa939fa7f9bee6827f86db35255764b10f76cf37c5d72aa581"
+    },
+    {
+      "path": "SKILL.md",
+      "bytes": 1869,
+      "sha256": "e9fbb0feb4335e87a0d7b2ff0d4c5bc8f9bdf7745e0ddc43acfd05cda3f8f9c1"
+    },
+    {
+      "path": "templates/AGENTS.fragment.md",
+      "bytes": 2760,
+      "sha256": "c92cd894567eed7632adf09ba89960aacbd05242b07ade822674c07e64ab1765"
+    },
+    {
+      "path": "templates/CAPACITY_EVENT.template.json",
+      "bytes": 1303,
+      "sha256": "7714397cd38cf3b4d2dc34460a419e43f3e3fe72e675c2da005c1f42c929ed1a"
+    },
+    {
+      "path": "templates/CLOSEOUT.template.json",
+      "bytes": 1525,
+      "sha256": "ff123b108050a791b3f7d728a27c0574796a571343fac42a44b9995549983ca4"
+    },
+    {
+      "path": "templates/CONSENSUS.template.json",
+      "bytes": 1165,
+      "sha256": "6d3e585df0b198315af2a9fcad0b1824b30c38a9840ed04d737c32d4461dc808"
+    },
+    {
+      "path": "templates/HANDOFF.template.md",
+      "bytes": 1763,
+      "sha256": "8b7018af23b58c81a0c2aa5b23199b7cbebb676a35ba9b68fc168f728b6d3b13"
+    },
+    {
+      "path": "templates/MODEL_CATALOG.template.json",
+      "bytes": 1079,
+      "sha256": "1da7cc17e73f4752acd9749714c9db31b6817a87b7ff8641f912fe2b02bbfe56"
+    },
+    {
+      "path": "templates/PHASE_PLAN.template.md",
+      "bytes": 3271,
+      "sha256": "19e28d0b7b28604c5813ea30d43bb19506ddcddd90d9c706bcd16e4aed8e40ab"
+    },
+    {
+      "path": "templates/REPO_CONFIG.template.json",
+      "bytes": 2943,
+      "sha256": "1c1508c4ec6d8d9f4034b90805ee6dcf0590a719f1a229ad07c0c1f45f65ba2e"
+    },
+    {
+      "path": "templates/REVIEW.template.md",
+      "bytes": 1585,
+      "sha256": "fb7d0b9db87594937691fa3e596fe717d35a32c5bff65ebb828e3063bd9bbf53"
+    },
+    {
+      "path": "templates/WAVE.template.json",
+      "bytes": 2383,
+      "sha256": "a9e4fb28d95c562d10f7d526ad2b38be705dd5f6f940d265f8350ebaf729f239"
+    }
+  ]
+}

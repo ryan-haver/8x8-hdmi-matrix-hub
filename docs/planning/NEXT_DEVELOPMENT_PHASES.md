@@ -1,6 +1,65 @@
 # Runtime completion and release plan
 
-Status: planned, not dispatched. Updated 2026-10-18. This is the next execution
+For the remaining nonhardware work after the accepted runtime campaign, use the
+[software wave execution plan](SOFTWARE_RELEASE_WAVES.md) and its package/unit
+manifest. Route ready work across available task-qualified providers; a single
+provider's capacity does not pause independent development. The R0–R8 sections
+below remain historical contract/acceptance context, not a new campaign launch.
+
+Standing operations for any future authorized wave are defined by
+[AGENTS.md](../../AGENTS.md), the [Orca protocol](../ORCHESTRATION_PROTOCOL.md)
+and [allocation ledger](../production/AGENT_ALLOCATION.md). These supersede
+older launch/cleanup recipes and require quota headroom plus qualified
+cross-family review of new implementation. The assignments and results below
+remain historical; maintaining these instructions does not authorize a phase.
+The master plan's [dated coordination update](UNIFIED_MASTER_PLAN.md#standing-coordination-policy-2026-10-19)
+records the completed final-head CI observation and unchanged owner release gates.
+
+Next release-validation planning artifacts:
+[evidence-gap inventory](../validation/RELEASE_EVIDENCE_GAPS.md) and
+[execution checklist](../validation/RELEASE_VALIDATION_CHECKLIST.md). Use these
+for fresh follow-up scopes; the R0-R8 tasks below retain their historical state.
+
+Status: fresh software campaign, formal gate, documentation and independent evidence
+review accepted; final documentation-head CI, owner visual and physical/field release gates remain.
+R3E's UI ordering correction and R1F's explicit-refresh CEC cache correction are
+integrated. Clean candidate `4adbc13` passed 3,966 local core tests with four skips
+and 177/177 routes, 100 dedicated Remote tests and all 1,506 source client outcomes.
+Actual HA passed 19/19 on both pinned versions (2026.9.3 and 2025.1.4; the latter
+tests the supported line, not the exact 2025.1.0 floor). Both images built and
+matched 257 shipped files; all 193 image client outcomes, 59 browser flows and
+four Swagger checks passed. The formal combined evidence gate passed.
+See the [runtime report](../validation/RUNTIME_VALIDATION_REPORT.md) for actual
+image IDs, summaries, platform skips, prior rejected runs and byte-preservation
+audit. CI passed 12/13 required jobs; only the three owner-pending Tron visuals
+fail. Luna's R7 guides/index are merged after 413 independent tests and 214 local
+links passed. Astra's completed [R8 review](../validation/RUNTIME_INDEPENDENT_REVIEW.md)
+reproduced legacy-scene/v2 creation breaking restart and failed reconfigure
+rollback abandoning reconnect, in both actual modules and the normal image.
+Fresh Sol 6.1 high R2D/R1G corrections are merged after independent validation
+and immediate worktree removal. The [R8B follow-up](../validation/RUNTIME_REVIEW_FOLLOWUP.md)
+passes all six original source/image cases and accepts the scene-restart fix
+within that focused scope, but reproduces automatic-reconnect loss when rollback
+exceeds the unchanged five-second cleanup deadline, corrected by fresh Sol R1H.
+The [R8C review](../validation/RUNTIME_REVIEW_DEADLINE_RESOLUTION.md) passes all
+eight known source/image cases but demonstrates that interrupted failed-candidate
+cleanup can skip original-state restoration, including native cancellation
+without an added delay. Sol R1I's complete bounded restoration correction is
+merged at `619baccc`, after 59 independent focused tests passed at its exact
+commit; the worker also passed 155 scoped regressions. Fresh Astra R8D
+[accepts the supported restoration boundary](../validation/RUNTIME_REVIEW_RESTORATION.md)
+after all twelve source/image cases, 102 regressions and two new controls pass;
+the coordinator independently passes both new controls. A stronger conditional
+guarantee for a replacement disconnect that fails before applying Orei's fence
+is documented with its unchanged failed probe. The new complete `1baac3de`
+campaign now passes 4,041 core tests (four skips), 177/177 routes, 100 dedicated
+Remote tests, 1,506 source outcomes, both pinned HA versions, both architecture
+builds, deployment/parity, 193 image outcomes, 59 flows and four Swagger checks.
+The combined gate and 26 registry checks pass; the archive at `fe0e7f0` preserves
+all 439 audited old/new Git blobs. Luna's guide/index update passed 49 independent
+tests and is merged; Astra's [final evidence review](../validation/RUNTIME_FINAL_GATE_REVIEW.md)
+accepts the functional software and inspected documentation evidence.
+See the [execution record](RUNTIME_EXECUTION.md). Updated 2026-10-19. This is the next execution
 plan after the integrated Phase 6/7 work. It supplements the original Phase 8
 validation gate rather than renumbering historical phases.
 
@@ -13,12 +72,16 @@ exact IDs, access limitations and capability sources.
 
 ## What must be completed
 
-The current application still starts `OreiMatrix` and `RestApiServer` directly
-or delegates to `src/driver.py`. The new service, executor, integration loader
-and persistence migrations have unit coverage but are not the shipped runtime.
-Flic routes ignore `FLIC_ENABLED`; HA discovery is not started by its flag;
-the dedicated Flic validation client is a placeholder. Completing these paths
-is development work before final validation, not a documentation-only closure.
+At the start of this plan, the application constructed `OreiMatrix` and
+`RestApiServer` directly or delegated to `src/driver.py`; the service, executor,
+loader and migrations were separate frameworks. Shared composition, packaged
+entrypoint, UC bridge and dedicated Flic replay are now accepted on the runtime
+branch. Persistence, action parity and flag/lifecycle corrections have since
+been accepted. Fresh complete source/image validation and the formal evidence
+gate have passed, and guide/index reconciliation and independent evidence review
+are accepted. CI at the final documentation head remains to be observed.
+Physical
+client, recovery, soak and owner acceptance gates follow those checks.
 
 No work below approves the three pending Tron snapshots. PR #36 and PR #37
 remain subject to their own CI and review gates. Their latest runs both fail
@@ -28,12 +91,11 @@ not proof for future runtime changes.
 
 ## Branches, ownership and sequence
 
-Create a new integration branch `wp-runtime-completion` from the current,
-clean Phase 6/7 integration tip when dispatch starts; record its exact SHA.
-Do not base it on `main` while `main` lacks the candidate changes. Bring in
-the approved Phase 5 changes and later merge commits in sequence. Keep runtime
-completion in its own PR after PR #37, with the prerequisite clearly stated.
-Planning changes do not themselves create a worktree or start an agent.
+The integration branch `wp-runtime-completion` was created from the Phase 6/7
+tip `6debe5a9d1ce3b5993bbd1f6c16d14550d11141b`. Draft PR #38 targets that
+Phase 6/7 branch and depends on PR #37; `main` does not yet contain the candidate.
+Keep the approved Phase 5 and later merge/tag sequence intact. Planning changes
+do not themselves create a worktree or start an agent.
 
 The coordinator remains **Sol 6.1 high** and owns merges, shared registry/schema
 updates, release metadata, cross-track integration and evidence aggregation.
@@ -61,7 +123,9 @@ flowchart TD
 
 Each arrow is an acceptance/merge dependency. R1, R2, R3 and R6 may run in
 parallel after R0. R4 and R5 may run together after R1/R2/R3 are accepted.
-R7 waits for all code tracks; R8 reviews the final integrated commit. Do not
+R7 may prepare guides from accepted runtime behavior while the final correction
+and campaigns run. Its evidence index and acceptance wait for the completed
+campaign; R8 reviews the final integrated commit. Do not
 start a dependent worktree on an obsolete base and hope to resolve it later.
 Start with at most four workers, reduce concurrency when quota or Docker/CI
 resources are constrained, and keep heavy campaigns serialized.
@@ -93,6 +157,13 @@ assign R2 to Argon high and record the change. If Google is constrained, Sol hig
 is the fallback for critical wiring and Luna high for bounded client/docs work.
 No fallback may use Anthropic. Prefer a fresh reviewer who did not author the
 implementation; unresolved critical review findings block acceptance.
+
+Execution adjustment: M3 produced a committed R2 checkpoint but did not complete
+the storage acceptance boundary. After its failed outcome and release, fresh
+Sol 6.1 high took over the same worktree and Task. Sol also completed bounded
+R1P installed-entry and R3B transaction corrections. These quality-driven
+assignments are recorded in the execution record; the original model balance
+does not override data-preservation or transaction requirements.
 
 ## Worktree briefs and acceptance
 

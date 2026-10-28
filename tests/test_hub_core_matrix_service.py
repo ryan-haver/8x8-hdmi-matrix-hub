@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import re
 from typing import Any
 
 import pytest
@@ -480,7 +481,7 @@ async def test_connect_publishes_connection_and_full_snapshot(service: MatrixSer
     assert snap["last_refresh"] is not None
 
 
-async def test_connect_failure_and_exception(matrix: FakeMatrix) -> None:
+async def test_connect_failure_and_exception(matrix: FakeMatrix, caplog: pytest.LogCaptureFixture) -> None:
     service = MatrixService(matrix)
     rec = Recorder(service.bus)
     matrix.connect_result = False
@@ -489,7 +490,15 @@ async def test_connect_failure_and_exception(matrix: FakeMatrix) -> None:
     assert rec.events == []  # was never connected: no transition
     matrix.connect_error = OSError("unreachable")
     assert not await service.connect()
-    assert "unreachable" in (service.last_error or "")
+    match = re.fullmatch(r"Internal server error \(ref: ([0-9a-f]{8})\)", service.last_error or "")
+    assert match is not None
+    assert "unreachable" not in repr(service.snapshot())
+    assert any(
+        f"[{match[1]}]" in record.getMessage() and "unreachable" in record.getMessage()
+        for record in caplog.records
+    )
+    assert not service.connected and rec.events == []
+    assert service._write_generation == 0
 
 
 async def test_no_host_means_no_connect_attempt() -> None:

@@ -410,18 +410,31 @@ class HomeAssistantClient(Client):
                        result: ActionResult) -> None:
         t0 = time.perf_counter()
         msg = await self._ws_message("call_service", domain=domain, service=service, service_data=data)
-        error = msg.get("error") or {}
-        result.status = 200 if msg.get("success") else _ERROR_STATUS.get(str(error.get("code")), 500)
+        error = msg.get("error") if isinstance(msg, dict) else {}
+        if not isinstance(error, dict):
+            error = {}
+        error_code = str(error.get("code")) if error.get("code") is not None else None
+        result.status = 200 if (isinstance(msg, dict) and msg.get("success")) else _ERROR_STATUS.get(str(error_code), 500)
         result.ok = result.status == 200
         if error:
             result.error = f"{error.get('code')}: {error.get('message')}"
+            if (
+                isinstance(msg, dict)
+                and msg.get("success") is False
+                and error_code in _ERROR_STATUS
+                and isinstance(error.get("message"), str)
+                and bool(error.get("message").strip())
+            ):
+                result.error_kind = "application"
+        elif not result.ok:
+            result.error = "call_service failed without error details"
         result.requests.append({
             "method": "call_service", "path": f"{domain}.{service}", "body": data, "status": result.status,
-            "response": {"success": msg.get("success"), "error": error or None},
+            "response": {"success": msg.get("success") if isinstance(msg, dict) else None, "error": error or None},
             "via": "home assistant websocket api", "elapsed_ms": round((time.perf_counter() - t0) * 1000, 1),
         })
         result.steps.append(f"call_service {domain}.{service} {data} -> "
-                            + ("ok" if result.ok else f"{error.get('code')}: {error.get('message')}"))
+                            + ("ok" if result.ok else (result.error or "error")))
 
     async def _service_call(self, action: Action) -> tuple[str, str, dict[str, Any]]:
         """``(domain, service, service_data)`` for an intent."""

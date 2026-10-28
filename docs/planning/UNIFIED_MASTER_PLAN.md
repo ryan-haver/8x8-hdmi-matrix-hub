@@ -1,11 +1,49 @@
 # Unified master plan
 
+Current nonhardware execution is organized in the
+[software release phases and waves](SOFTWARE_RELEASE_WAVES.md), with a complete
+feature/finding allocation, bounded worktree units and capacity-balanced Orca
+dispatch/review envelopes. It continues the accepted runtime and EV-01/EV-02
+evidence work; historical phase results and physical release gates below retain
+their original scope.
+
 This is the current coordination entry point. The earlier execution record is
 in [the phased roadmap](../../orca-phased-roadmap.md). Finding IDs and acceptance
 criteria come from [the remediation plan](../REMEDIATION_PLAN.md) and
 [the validation plan](../validation/VALIDATION_PLAN.md).
 
+## Standing coordination policy (2026-10-19)
+
+Future agents must read [AGENTS.md](../../AGENTS.md), the
+[Orca coordination protocol](../ORCHESTRATION_PROTOCOL.md) and
+[allocation ledger](../production/AGENT_ALLOCATION.md). The protocol supersedes
+older launch/cleanup recipes for future execution: refresh catalogs/capabilities,
+require measured quota headroom, use genuine supervised isolated workers and
+qualified cross-family review for every new implementation package, preserve
+work before exact cleanup, and verify integration publication before another
+wave. This standing policy does not authorize a new phase or worker launch.
+Historical assignments, same-family reviews and failed evidence remain intact.
+
+The dated ledger records actual branch/Run/protected-resource bindings. In this
+instruction-only task, read-only discovery found Orca 1.4.230 and an unresolved
+persistence workspace outside Git's registered root list; preserve it rather
+than treating prior cleanup summaries as deletion authority.
+
+Final documentation-head CI observation: [run 39239356448](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/actions/runs/39239356448)
+at `6dafb009` completed with all non-UI required jobs passing and only the three
+existing Tron paused-frame failures (1,098 UI passes, 33 skips; gallery 62 passes).
+This observation supplements the earlier pending-CI statements below; it is
+historical evidence, not a fresh runtime check by the instruction task or owner
+visual approval. Physical/field and final artifact/version gates remain open.
+
 ## Next development and model policy (2026-10-18)
+
+The next planning package is the
+[release evidence-gap inventory](../validation/RELEASE_EVIDENCE_GAPS.md) and
+[release-validation checklist](../validation/RELEASE_VALIDATION_CHECKLIST.md).
+They organize the remaining software/hardware/field proof without changing
+registry targets or claiming new runtime passes. Their proposed follow-ups
+require the standing staffing/quota/review gates before any launch.
 
 The [runtime-completion plan](NEXT_DEVELOPMENT_PHASES.md) now defines R0–R8,
 their worktrees, model assignments, dependencies, file ownership and acceptance
@@ -21,9 +59,48 @@ effective-model checks pass, Luna handles bounded guides/evidence indexing,
 and Astra handles contract design and independent review. M3.1/DeepSeek are
 conditional alternatives, not assumed successful launches.
 
-These worktrees are **planned, not launched**. The next step is R0 contract and
-access preflight, then independent workers in dependency order, with immediate
-validation, merge and cleanup. Hardware and soak gates remain owner-observed.
+Runtime implementation and corrective tracks through R3E's UI ordering fix and
+R1F's CEC enable-cache correction are merged and their worktrees removed. At clean
+`4adbc13`, the full local core passed 3,966 tests with four skips and 177/177 routes;
+dedicated Remote 100, source client outcomes 1,506, actual HA 19 per pinned version,
+and image client outcomes 193 all passed. Both architectures built and matched
+257 shipped files; deployment/arm64 checks, 59 browser flows, four Swagger cases
+and the formal combined evidence gate passed. The current
+[runtime report](../validation/RUNTIME_VALIDATION_REPORT.md) retains actual
+commits/image IDs and prior failed runs. Historical Phase 6/7 results below remain
+tied to their earlier candidate. R7 Luna's final guides/index are merged after
+413 independent tests and 214 local links passed. Completed Astra R8 review
+found two high availability defects in actual source and the normal image:
+legacy-scene migration plus v2 creation breaks restart, and transient failed
+reconfigure rollback abandons automatic reconnect. R2D/R1G corrections are now
+merged, and the R8B follow-up passes all six original source/image cases. It
+accepts the scene-restart fix within scope but reproduces reconnect loss when
+rollback exceeds its cleanup deadline. R1H's deadline correction is merged;
+fresh Astra R8C passes all eight known source/image cases on `dd184725` and its
+new immutable image. R8C also reproduces a source-only failure when cancellation
+or expiry interrupts candidate cleanup before original identity restoration.
+Sol 6.1 high R1I `0ea3b7ad` is merged as `619baccc`, including early drain,
+late closure, shutdown and overlapping reconfiguration. Independent exact-commit
+validation passes 59 focused tests; its worker also passes 155 scoped regressions.
+Fresh Astra R8D [accepts the supported Orei restoration boundary](../validation/RUNTIME_REVIEW_RESTORATION.md):
+all twelve required source/image cases, 102 scoped regressions and two new
+supported controls pass. The coordinator independently passes both new controls
+at the review commit. An unchanged conditional probe for a substituted disconnect
+that fails before applying Orei's fence remains a documented extension limit.
+The fresh clean `1baac3de` campaign now passes 4,041 core tests with four skips,
+177/177 routes, 100 dedicated Remote tests, 1,506 source client outcomes and
+193 image outcomes, plus both HA versions, architectures, deployment, parity,
+59 flows and four Swagger checks. The combined evidence gate and 26 registry
+checks pass. Archive checkpoint `fe0e7f0` preserves all 439 audited old/new Git
+blobs. CI at `1baac3de` passes all twelve non-UI required jobs; only the same
+three owner-pending Tron snapshots fail. Luna's bounded guide/index refresh is
+accepted after 49 independent tests; Astra's [final evidence audit](../validation/RUNTIME_FINAL_GATE_REVIEW.md)
+accepts the functional software evidence and actual documentation delta.
+Both workers are settled and their worktrees removed. Final documentation-head
+CI, visual/hardware approval and release tags remain pending. The
+[execution record](RUNTIME_EXECUTION.md) tracks effective model observations,
+ownership clarifications and acceptance. Hardware and soak gates remain
+owner-observed.
 
 ## Release sequence
 
@@ -49,6 +126,11 @@ validation, merge and cleanup. Hardware and soak gates remain owner-observed.
 4. Run Phase 8 against the candidate and publish the validation report. Tag
    `v1.0.0` only when the final gates below have evidence.
 
+The runtime work is stacked in [draft PR #38](https://github.com/ryan-haver/8x8-hdmi-matrix-hub/pull/38)
+on #37. The RC must include both Phase 6/7 and the tested runtime on main before
+tagging; the pre-runtime #37 tree is not the tested runtime RC. This dependency
+clarification does not approve any merge, snapshot or release gate.
+
 ## Phases 6–7 ownership
 
 | Track | Requested model | Scope | State |
@@ -62,10 +144,14 @@ validation, merge and cleanup. Hardware and soak gates remain owner-observed.
 
 The coordinator owns documentation archive moves, compatibility links, this
 plan, integration validation, PRs, tags, and cleanup. Workers edit only their
-own worktrees and commit their changes. After each accepted completion: run
-targeted tests, review, merge, release the settled worker, remove its Orca
-worktree, and prune Git worktrees. Preserve unmerged work rather than deleting
-it to make the worktree count look clean.
+own worktrees and commit their changes. Future completion handling follows the
+[standing lifecycle](../ORCHESTRATION_PROTOCOL.md#worker-lifecycle-and-recovery):
+accept outcomes and decide release/reuse/explicit retention before acknowledgment;
+verify acceptance and qualified independent review, integrate sequentially,
+preserve verified full bundles/artifacts and publish task refs before exact
+Orca worktree removal. Reconcile only the completed target's metadata, without
+broad pruning. Preserve unmerged work rather than deleting it to make the
+worktree count look clean. Earlier cleanup entries retain their historical scope.
 
 REST additions or changes require `docs/validation/features.yaml`, simulator
 reads in `tests/sim/test_sim_rest_reads.py`, and `python -m tools.validate ledger`.
@@ -73,21 +159,22 @@ The final suite must retain 100% route coverage. The final amd64 RC image `sha25
 
 ## Final validation gates and discovered gaps
 
-- **Runtime wiring:** the Phase 4 `MatrixService`, `ActionRunner`, and
-  `IntegrationLoader` classes exist and have tests, but the shipped `run.py`
-  still constructs `OreiMatrix` and `RestApiServer` directly or delegates to
-  `src/driver.py` for UC. Documentation must distinguish the framework from
-  actual runtime behavior. Runtime consolidation is not proven complete.
-- **Simulator and clients:** candidate API/browser/scripted-Remote and Home
-  Assistant runs passed as recorded below. Features below their target and the
-  Flic replay placeholder remain visible; these runs do not close hardware gates.
+- **Runtime wiring:** the Phase 6/7 candidate described below predates runtime
+  consolidation. On `wp-runtime-completion`, the shared composition, installed
+  console, UC bridge, persistence, action parity and lifecycle corrections are
+  accepted by the fresh `1baac3de` software campaign and formal evidence gate.
+  Final documentation and evidence audit are accepted; CI and owner release gates remain.
+- **Simulator and clients:** the current source and normal-image campaigns pass
+  API/browser/scripted-Remote/Flic and actual HA container checks. Flic uses
+  Node SDK stubs with actual HTTP replay; physical-button evidence remains open.
 - **Hardware:** owner-observed HIL-B regression, HIL-C fault injection, HIL-E
   real-client checks, firmware versions, and physical CEC observations remain
   required. Existing checked-in ledger evidence contains no V4/V5 records.
 - **Reliability:** HIL-D requires the planned 72-hour soak and resource metrics.
   An automated simulator run is not a substitute for the field gate.
-- **Report:** publish `docs/validation/VALIDATION_REPORT.md` with feature/client
-  results, limitations, supported hardware, and the evidence behind each gate.
+- **Report:** the current [runtime report](../validation/RUNTIME_VALIDATION_REPORT.md)
+  publishes feature/client results and limits; the earlier Phase 6/7 report below
+  remains historical. Final evidence attribution review is accepted within its software scope.
 
 Phase 8 is called `WP-V3` in the checked-in remediation plan. The handoff's
 `WP-F2` label refers to this final validation gate, not a separate implemented
@@ -103,7 +190,8 @@ regression gate passed with zero known/unexplained failures. The dedicated Flic
 replay client is still a placeholder (one explicit skip), not V3 client proof.
 The separate scripted-Remote pytest suite passed 100 tests.
 
-All six worker worktrees and the coordinator's visual-repair worktree are removed;
-only the main checkout remains. No `v0.5.0`, `v1.0.0-rc1`, or `v1.0.0` tag was
-created during this coordination session. Phase 5 visual approval, runtime
-framework consolidation and the owner-observed hardware/field gates remain open.
+Those six Phase 6/7 worktrees and the visual-repair worktree are removed. Runtime
+closing worktrees follow the same immediate cleanup rule. No `v0.5.0`,
+`v1.0.0-rc1`, or `v1.0.0` tag was created during this coordination session.
+Runtime consolidation and its fresh software campaign are complete; Phase 5
+visual approval, final documentation-head CI and owner hardware/field gates remain open.

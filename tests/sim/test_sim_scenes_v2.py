@@ -59,8 +59,8 @@ async def test_create_with_a_profile_step_while_profiles_exist(data_hub):
     scene = await create(data_hub, name="Game", steps=[{"type": "profile", "id": "game_day"}])
     assert scene["id"].startswith("scene_")
     assert scene["steps"] == [{"type": "profile", "id": "game_day"}]
-    # persisted
-    saved = json.loads((data_hub.data_dir / "scenes.json").read_text(encoding="utf-8"))
+    # R2 contract §4: scene_manager.SceneManager persists to scenes_v2.json.
+    saved = json.loads((data_hub.data_dir / "scenes_v2.json").read_text(encoding="utf-8"))
     assert scene["id"] in [s["id"] for s in saved["scenes"]]
 
 
@@ -132,7 +132,7 @@ async def test_invalid_update_leaves_the_scene_unchanged(data_hub, payload):
     assert after == before
     # and the next successful save does not persist the rejected values either
     assert (await data_hub.put("/api/v2/scenes/scene_goodnight01", json={"favorite": True})).status == 200
-    saved = json.loads((data_hub.data_dir / "scenes.json").read_text(encoding="utf-8"))
+    saved = json.loads((data_hub.data_dir / "scenes_v2.json").read_text(encoding="utf-8"))
     persisted = next(s for s in saved["scenes"] if s["id"] == "scene_goodnight01")
     assert persisted["name"] == "Good Night" and persisted["icon"] == before["icon"]
     assert persisted["steps"] == before["steps"] and persisted["password_protected"] is False
