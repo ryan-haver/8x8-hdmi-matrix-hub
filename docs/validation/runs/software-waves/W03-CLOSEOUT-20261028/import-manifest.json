@@ -1,0 +1,465 @@
+{
+  "prepared_at_base": "28fce729ca4ea08bfc2f19805b36e13ae8c184f2",
+  "original_cors_source": "7b07e1cb7e7eb29a38b55d3b050703149f1b797c",
+  "combined_source": "310d8b65a9fce3c9069523d4ac5ce21157e75c9f",
+  "records": 44,
+  "screenshots": 32,
+  "files": [
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V2-310d8b65-security_hardening.profile_wrong_pin-api.json",
+      "sha256": "f1d3f2ab249881f86b9033ab656810699564765f1a60a90b233e65108dd9da48",
+      "bytes": 39519,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V2-310d8b65-security_hardening.scene_wrong_pin-api.json",
+      "sha256": "355d3b8bddb78c135acf5d468e71ef93238cc2a17819636360b7f3baf7f841ed",
+      "bytes": 32447,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V2-310d8b65-sw_sec_auth_01.profile_allowed-api.json",
+      "sha256": "5bdf5ca65a2b793ef9b585390b475ee42b188199f3e01c1c11cca48467fc61da",
+      "bytes": 37883,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V2-310d8b65-sw_sec_auth_01.profile_wrong_pin-api.json",
+      "sha256": "326a12845d23c8356422b261ee912ed388e2dc7026266500e256416a11451b53",
+      "bytes": 35176,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V2-310d8b65-sw_sec_auth_01.scene_allowed-api.json",
+      "sha256": "1663816972d40cc87207cb6c2f1a3dac4a99ed179d0e1264bc5b0deb5e04bcfd",
+      "bytes": 39524,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V2-310d8b65-sw_sec_auth_01.scene_wrong_pin-api.json",
+      "sha256": "8a2488422d67f8e0945d40ac15bf67476938190818bc18186ff512e9bb15c09f",
+      "bytes": 35911,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.profile_allowed-browser/after.png",
+      "sha256": "f8439d2864039434f0c1d33cd42719bfadc06d98ce5925b227d7900282f39428",
+      "bytes": 300073,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.profile_allowed-browser.json",
+      "sha256": "905a0f48b31194d025f4b4675dacba8a909bb67876e1534357abeef3c3a41bd4",
+      "bytes": 40892,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.profile_locked-browser/after.png",
+      "sha256": "7bc0ff79840090214a5df1c485f49d8eb0a3f3085aac28bcaa2494274d8ae027",
+      "bytes": 290405,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.profile_locked-browser/locked.png",
+      "sha256": "6d1767ac38a420200105b226556890e4e1ad784c9010353a338ba410d299ecc9",
+      "bytes": 284118,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.profile_locked-browser/wrong-pin-1.png",
+      "sha256": "0997df849d993e6ef4e18ced126ace7fb7c3e01685f73e525543889bea259c84",
+      "bytes": 285900,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.profile_locked-browser/wrong-pin-2.png",
+      "sha256": "0997df849d993e6ef4e18ced126ace7fb7c3e01685f73e525543889bea259c84",
+      "bytes": 285900,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.profile_locked-browser/wrong-pin-3.png",
+      "sha256": "f3e73deac8af548e1a4120382c1ee10182c5df876b09e160239106826e84e83b",
+      "bytes": 286653,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.profile_locked-browser/wrong-pin-4.png",
+      "sha256": "0997df849d993e6ef4e18ced126ace7fb7c3e01685f73e525543889bea259c84",
+      "bytes": 285900,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.profile_locked-browser/wrong-pin-5.png",
+      "sha256": "f3e73deac8af548e1a4120382c1ee10182c5df876b09e160239106826e84e83b",
+      "bytes": 286653,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.profile_locked-browser.json",
+      "sha256": "17ebb2ffb4f8a142bd7cd2f5ca8099139fb60f7683d41f23541ef453948db525",
+      "bytes": 58033,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.profile_per_item-browser/after.png",
+      "sha256": "af1e7abd45174e510411ff247745d5988a755e3a7b809f4256930c45d1f102db",
+      "bytes": 302839,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.profile_per_item-browser/locked.png",
+      "sha256": "fae4f1249bd1eebe1de286e3641d533c9d3b9605abf8da0d55b282a243c4c528",
+      "bytes": 288886,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.profile_per_item-browser/wrong-pin-1.png",
+      "sha256": "033797116fbb937d06cc3ceebcf4226943b0a878228a03fecee5990db3ba5552",
+      "bytes": 290688,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.profile_per_item-browser/wrong-pin-2.png",
+      "sha256": "033797116fbb937d06cc3ceebcf4226943b0a878228a03fecee5990db3ba5552",
+      "bytes": 290688,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.profile_per_item-browser/wrong-pin-3.png",
+      "sha256": "033797116fbb937d06cc3ceebcf4226943b0a878228a03fecee5990db3ba5552",
+      "bytes": 290688,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.profile_per_item-browser/wrong-pin-4.png",
+      "sha256": "033797116fbb937d06cc3ceebcf4226943b0a878228a03fecee5990db3ba5552",
+      "bytes": 290688,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.profile_per_item-browser/wrong-pin-5.png",
+      "sha256": "033797116fbb937d06cc3ceebcf4226943b0a878228a03fecee5990db3ba5552",
+      "bytes": 290688,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.profile_per_item-browser.json",
+      "sha256": "ceba4148701342e96e283bad69e8e6c6e3e19d733174c4ec115f2966770b2d24",
+      "bytes": 70333,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.profile_wrong_pin-browser/after.png",
+      "sha256": "bce7b27d9c86b3f98599bfc1961e1e157fcc658ccffaf3a27987d393714620a7",
+      "bytes": 287170,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.profile_wrong_pin-browser.json",
+      "sha256": "5c08e058104837f871e7983a8b7f9755811ba333928249e5f963826171edd1c5",
+      "bytes": 37735,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.scene_allowed-browser/after.png",
+      "sha256": "ee695d04ad54622a99b20f7f1d7f89ed93ec9a43a5930fcd4a642cb8e50f029d",
+      "bytes": 297045,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.scene_allowed-browser.json",
+      "sha256": "ab18ba9561cd02f1a8094653cc8ab00f26853d174c28ebd499624ca4e1888f0a",
+      "bytes": 41944,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.scene_locked-browser/after.png",
+      "sha256": "5e9d4463885cdb41c6c9d5624bc21b0f1638fd11f01ad7be38b7338f3a4bfb76",
+      "bytes": 298793,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.scene_locked-browser/locked.png",
+      "sha256": "73015483597e9a60e00d007a2d915eeac7353c7fadcd5edbeff9e69d20cc9c1e",
+      "bytes": 295157,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.scene_locked-browser/wrong-pin-1.png",
+      "sha256": "cff551d474eb4c57c4a5337bfaac8ed7b25f6609d237d23a8adc95a9e890fafc",
+      "bytes": 296874,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.scene_locked-browser/wrong-pin-2.png",
+      "sha256": "cff551d474eb4c57c4a5337bfaac8ed7b25f6609d237d23a8adc95a9e890fafc",
+      "bytes": 296874,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.scene_locked-browser/wrong-pin-3.png",
+      "sha256": "cff551d474eb4c57c4a5337bfaac8ed7b25f6609d237d23a8adc95a9e890fafc",
+      "bytes": 296874,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.scene_locked-browser/wrong-pin-4.png",
+      "sha256": "cff551d474eb4c57c4a5337bfaac8ed7b25f6609d237d23a8adc95a9e890fafc",
+      "bytes": 296874,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.scene_locked-browser/wrong-pin-5.png",
+      "sha256": "4b7746f2bb0dcd1f664c92be0750bf3bdf75a6ece144bfdcaa240e14081ca2a2",
+      "bytes": 297562,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.scene_locked-browser.json",
+      "sha256": "12a13cb587fd9b672fedb7a211a8aa8d1c7d85b66e4d502ef450de255d5e226e",
+      "bytes": 58746,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.scene_per_item-browser/after.png",
+      "sha256": "16c918afa639c2c8de30000f4813c45f74f60b7f4a924385eb8a4002fd4a8438",
+      "bytes": 351455,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.scene_per_item-browser/locked.png",
+      "sha256": "9cb0e46ea09fa479c88d1dce96656d11bbe0f44783729069e1efa31244aa9201",
+      "bytes": 294651,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.scene_per_item-browser/wrong-pin-1.png",
+      "sha256": "e5988487358ece8232dc4da8ea8e8e9007472bcc3fa24e255f32c4b81113b8ca",
+      "bytes": 297064,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.scene_per_item-browser/wrong-pin-2.png",
+      "sha256": "8209340775fe83d1f8584af3666dc154115ed07c0ead9a748cda6009fb99a48d",
+      "bytes": 296358,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.scene_per_item-browser/wrong-pin-3.png",
+      "sha256": "e5988487358ece8232dc4da8ea8e8e9007472bcc3fa24e255f32c4b81113b8ca",
+      "bytes": 297064,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.scene_per_item-browser/wrong-pin-4.png",
+      "sha256": "8209340775fe83d1f8584af3666dc154115ed07c0ead9a748cda6009fb99a48d",
+      "bytes": 296358,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.scene_per_item-browser/wrong-pin-5.png",
+      "sha256": "8209340775fe83d1f8584af3666dc154115ed07c0ead9a748cda6009fb99a48d",
+      "bytes": 296358,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.scene_per_item-browser.json",
+      "sha256": "2ee0b12f051fec69b1a6dd292a76c54672da8a85288f6a4d7821423ffbc32f60",
+      "bytes": 70607,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.scene_wrong_pin-browser/after.png",
+      "sha256": "913ebd02b6c345798ea7c30f5e9e34d61e2bb756fac67b29ff429ef2d9e899d2",
+      "bytes": 296901,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V3-310d8b65-sw_sec_auth_01.scene_wrong_pin-browser.json",
+      "sha256": "65b6621a1ff2a1da6bbd5649efc576ad303943f4b59821b3dc0659dbb3355868",
+      "bytes": 45209,
+      "group": "auth"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/api-root/F-API-002/2026-10-26-V2-310d8b65-contracts.api_info-api.json",
+      "sha256": "c515284f29efedfb45fed6d47490fd959835785a92aeb4fc76737afe1788ba69",
+      "bytes": 37409,
+      "group": "api-root"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/api-root/F-API-002/2026-10-26-V2-310d8b65-contracts.api_root-api.json",
+      "sha256": "165259f6585c00216a59981ab450de747128a27eb63819204a63c2bc84ae8b23",
+      "bytes": 71499,
+      "group": "api-root"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/api-root/F-API-002/2026-10-26-V2-310d8b65-contracts.api_root_alias-api.json",
+      "sha256": "d440321a1f6062e9d391d8efcb152d7751782b587867dd1a1b921e0497ba42cd",
+      "bytes": 71529,
+      "group": "api-root"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/cors/F-API-031/2026-10-26-V2-310d8b65-sw_api_read_04.configured_allowed-api.json",
+      "sha256": "f628d0227d8163f7237908b2fc9429ee00262b2f9c0abf8b9b5e6ec7eaa5bb17",
+      "bytes": 38365,
+      "group": "cors"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/cors/F-API-031/2026-10-26-V2-310d8b65-sw_api_read_04.configured_allowed_preflight-api.json",
+      "sha256": "fbd6abbae970484b0c6ec97e626428897a53bb933066879b1b9ebcb93124d1d4",
+      "bytes": 30244,
+      "group": "cors"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/cors/F-API-031/2026-10-26-V2-310d8b65-sw_api_read_04.configured_denied-api.json",
+      "sha256": "016dbf93de962c60b71e7556b3947650549f5319dc73fd9f7f8376a315a46e2d",
+      "bytes": 31310,
+      "group": "cors"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/cors/F-API-031/2026-10-26-V2-310d8b65-sw_api_read_04.configured_denied_preflight-api.json",
+      "sha256": "14e861c2a6a1ce18cffe36bc5cf18c779242d0ba7a3b438dae813207fb9b84de",
+      "bytes": 30172,
+      "group": "cors"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/cors/F-API-031/2026-10-26-V2-310d8b65-sw_api_read_04.default_denied_mutation-api.json",
+      "sha256": "cf32ebbc6e237a3d8801ef27ff8de9cfc89611ea23f10fd3c8d46ac9a1b4b3e7",
+      "bytes": 29979,
+      "group": "cors"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/cors/F-API-031/2026-10-26-V2-310d8b65-sw_api_read_04.default_denied_origin-api.json",
+      "sha256": "7f84577e828c8bc52df0f9c03a9ddd49faa14caf7b55f4b9634e9ddbf0e39641",
+      "bytes": 31293,
+      "group": "cors"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/cors/F-API-031/2026-10-26-V2-310d8b65-sw_api_read_04.default_no_origin-api.json",
+      "sha256": "a5b0d41e9263f14124e5d534427d5ec42d6566ffb1b15a52fb8a482f6594d7f1",
+      "bytes": 38236,
+      "group": "cors"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/cors/F-API-031/2026-10-26-V2-310d8b65-sw_api_read_04.default_no_origin_preflight-api.json",
+      "sha256": "e9270148d2d8b787d0d34bb5675ef2694c14b33dfe320b4b67fd34beb943d23a",
+      "bytes": 30113,
+      "group": "cors"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/cors/F-API-031/2026-10-26-V2-310d8b65-sw_api_read_04.default_preflight-api.json",
+      "sha256": "7a1ace191b9b6cc145c5d2c2b4335131e8a810769ae70715cfdb2dd468fed232",
+      "bytes": 30129,
+      "group": "cors"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/cors/F-API-031/2026-10-26-V2-310d8b65-sw_api_read_04.default_same_origin-api.json",
+      "sha256": "7c1b3cdd957a8c51ec9db5b7ba4188d673d54c87793d96cc5e237d94a3a5d5f5",
+      "bytes": 31371,
+      "group": "cors"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/cors/F-API-031/2026-10-26-V2-310d8b65-sw_api_read_04.wildcard_no_origin-api.json",
+      "sha256": "e22a64a32920e7149fb66438ef82d8c469afa03a1a01d4d796b123b8e55d7961",
+      "bytes": 31306,
+      "group": "cors"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/cors/F-API-031/2026-10-26-V2-310d8b65-sw_api_read_04.wildcard_origin-api.json",
+      "sha256": "2287ae40c213c54681911aa7881b26746856b7317b368249b3ea2c365f98b905",
+      "bytes": 39168,
+      "group": "cors"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/cors/F-API-031/2026-10-26-V2-310d8b65-sw_api_read_04.wildcard_preflight-api.json",
+      "sha256": "ee5ca81c4f751a995c369014d031b6a4e454def00558a36e1d0cc757c5bb7421",
+      "bytes": 30179,
+      "group": "cors"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/offline/F-REL-009/2026-10-26-V2-310d8b65-failures.unreachable_switch-api.json",
+      "sha256": "470acf1337efc4f2f8569800bd1c523c033aaf584838895f505dd28575524a10",
+      "bytes": 40779,
+      "group": "offline"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/original-cors/F-API-031/2026-10-20-V2-7b07e1cb-sw_api_read_04.configured_allowed-api.json",
+      "sha256": "0d1996df3464805691ec438197713a87c331979ca79e7d7bba1946e2c24e63f6",
+      "bytes": 39511,
+      "group": "original-cors"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/original-cors/F-API-031/2026-10-20-V2-7b07e1cb-sw_api_read_04.configured_allowed_preflight-api.json",
+      "sha256": "13b9b77df4ec7b6e68b9594db6ea99cd0fa1be95c2f284e0ea41d45055acb7c3",
+      "bytes": 30243,
+      "group": "original-cors"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/original-cors/F-API-031/2026-10-20-V2-7b07e1cb-sw_api_read_04.configured_denied-api.json",
+      "sha256": "e6259473794138c7758b3c03e60be195d15efae55ce7fcb5a3004bec0229c39f",
+      "bytes": 31314,
+      "group": "original-cors"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/original-cors/F-API-031/2026-10-20-V2-7b07e1cb-sw_api_read_04.configured_denied_preflight-api.json",
+      "sha256": "bef05f287ac9a4421e169693d70150f486c8086f851ddab55eed0d765b93e862",
+      "bytes": 30172,
+      "group": "original-cors"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/original-cors/F-API-031/2026-10-20-V2-7b07e1cb-sw_api_read_04.default_denied_mutation-api.json",
+      "sha256": "27a67cf1b8ed377f036ec34846cce5340fced392f24c25ab2283f95596139b37",
+      "bytes": 29978,
+      "group": "original-cors"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/original-cors/F-API-031/2026-10-20-V2-7b07e1cb-sw_api_read_04.default_denied_origin-api.json",
+      "sha256": "0ede42833071f8fb91d6419756f715554803f9ba6dcda66c211057b52a3cac35",
+      "bytes": 31295,
+      "group": "original-cors"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/original-cors/F-API-031/2026-10-20-V2-7b07e1cb-sw_api_read_04.default_no_origin-api.json",
+      "sha256": "b002824e078dade6deb0868859cba8962200aca3d84a075c757c3767005e0fad",
+      "bytes": 39383,
+      "group": "original-cors"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/original-cors/F-API-031/2026-10-20-V2-7b07e1cb-sw_api_read_04.default_no_origin_preflight-api.json",
+      "sha256": "b1fe326de917d7248d27a146960654bd2e7ab0d0b284e5bd77a63b5d5152104f",
+      "bytes": 30114,
+      "group": "original-cors"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/original-cors/F-API-031/2026-10-20-V2-7b07e1cb-sw_api_read_04.default_preflight-api.json",
+      "sha256": "7c6ebe4c8f09e8f191aa0c69ddc4ffda1eaba10759b0d8edc77321c2687226b9",
+      "bytes": 30128,
+      "group": "original-cors"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/original-cors/F-API-031/2026-10-20-V2-7b07e1cb-sw_api_read_04.default_same_origin-api.json",
+      "sha256": "c212f2dcdeecb1d1e048fb74a6d3cfe66ce4dbc75b46e5f0cfae55c125eecc7f",
+      "bytes": 31372,
+      "group": "original-cors"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/original-cors/F-API-031/2026-10-20-V2-7b07e1cb-sw_api_read_04.wildcard_no_origin-api.json",
+      "sha256": "9e499474732c0ff467d61bba49519472d4deaf1effe8d1cd3abaee89d8cd770c",
+      "bytes": 31307,
+      "group": "original-cors"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/original-cors/F-API-031/2026-10-20-V2-7b07e1cb-sw_api_read_04.wildcard_origin-api.json",
+      "sha256": "cabc0c8427b17268baa95de04e212d8a57be4b8d23472d5ff3c65838fc1baeea",
+      "bytes": 39171,
+      "group": "original-cors"
+    },
+    {
+      "destination": "docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/original-cors/F-API-031/2026-10-20-V2-7b07e1cb-sw_api_read_04.wildcard_preflight-api.json",
+      "sha256": "2df9bf886cb1d71e797dc070e7f8e337efbfcd5218c8ec37c6ec4d55c1b51c6a",
+      "bytes": 30180,
+      "group": "original-cors"
+    }
+  ]
+}
