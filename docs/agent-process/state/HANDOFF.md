@@ -28,6 +28,15 @@ launch/allocation/catalog/quota/native receipts: `build/p1-fanout-20261028/`;
 prior post-push `build/fanout-readiness-20261028/ci-final.json` is now populated.
 Current CI passes do not import evidence or close physical/soak/field/release.
 
+Author operational dependency lease (22:53Z): new ignored task-root node_modules
+junction to root node_modules authorized for read-only existing Playwright use;
+no installs/updates/dependency/root mutations. Preserve the link itself and exact
+target/type; never traverse it for removal/archive. Source lease unchanged.
+Response-detail strings at runner.py:925 are an additional explicitly unresolved
+synthetic negative-control boundary; no assertion omission or broad VAL15 closure.
+Exact replies are in private campaign response-detail-guidance.json and
+dependency-junction-reply.json; questions answered/acked before this checkpoint.
+
 Sol's real ask about writer sanitation was answered within evidence.py lease;
 free-form API body-step string redaction remains a separate reported boundary,
 with no client/runner/model lease expansion or broad VAL15 closure. Initial

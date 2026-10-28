@@ -2171,3 +2171,15 @@ remains queued behind proven laneB settlement and new authority/capacity check.
 No third worker, helper/nesting, excluded family, worktree cleanup or new material
 phase/debate consensus. Launch record uses scoped documentation-only checks and
 invocation-only hook exception; no implementation hook bypass.
+
+22:53Z additional real author guidance: preserve runner.py:925 free-form Response
+detail leakage as a separate synthetic negative-control/report boundary alongside
+ApiClient body strings; no omission of existing assertions to manufacture a safe
+persistence claim, no new source lease or broad VAL15 closure. Operational-only
+ignored task node_modules junction explicitly authorized after source/absence
+checks: wp-sec-data-02-c1/node_modules -> root node_modules, read-only locked
+dependency use for browser-enabled normal hook; no npm install/update, root/lock
+mutation or shared-target deletion. Preserve exact junction type/target for later
+no-follow archive/cleanup. Question3dc913 answered and deliveryabbf4 acked; source
+evidence.py/test lease unchanged. Private response-detail-guidance.json and
+dependency-junction-reply.json retain exact authority under current campaign.
