@@ -59,7 +59,9 @@ def dumps(record: dict[str, Any]) -> str:
 def write_record(root: Path, record: dict[str, Any]) -> Path:
     path = record_path(root, record)
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(dumps(record) + "\n", encoding="utf-8")
+    # Callers may supply structured diagnostics without redacting them first.
+    # Sanitize a copy at persistence as well as at individual capture boundaries.
+    path.write_text(dumps(redact(record)) + "\n", encoding="utf-8")
     return path
 
 
@@ -111,7 +113,7 @@ def iter_records(roots: Iterable[Path]) -> list[LoadedRecord]:
 
 
 _SECRET_KEYS = re.compile(
-    r"pass(word|code)?|secret|token|api[_-]?key|^(key|pin|pin_hash|authorization|cookie)$",
+    r"pass(word|code)?|secret|token|api[_-]?key|^(key|pin|pin_hash|authorization|cookie|x-admin-pin)$",
     re.IGNORECASE,
 )
 _SECRET_QUERY = re.compile(
