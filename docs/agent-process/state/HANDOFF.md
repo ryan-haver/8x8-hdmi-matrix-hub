@@ -1,6 +1,55 @@
 # Current coordinator handoff
 
+## Corrected intake accepted; audit continuation prepared — 2026-10-28T23:08Z
+
+Corrected SW-API-READ-03 report `c0312d7068215046cddd140665f61047ce54bfac`
+independently fact-checked/accepted as bounded preparation:8named record count /
+behavioral-check rows match actual original bytes, action causes and proposal
+limits corrected. It does not grant its proposed implementation/shared-contract
+leases, complete its parent unit, qualify source or promote features. Merged
+sequentially at6dbd516a, only new INTAKE.md; canonical/source/test bytes untouched.
+Original d3 report and its provenance remain preserved. Correction Task2fa508 /
+Dispatchefb4 settled/released before delivery5d781ack, full native47M3thinking
+assistant turns, verified fullbundle and separate full workspace archive
+`e3f574f6dff26be543587fe68219fbe1a36ead73f589e0b2b4f4ed4df000e31d` verified.
+Exact c031 taskref published/liveverified; no local worktree removal.
+
+Preplanned laneB freshness-to-unit audit will use new wp-audit-freshness-delta,
+exactbase d6e78e0b, own new FRESHNESS_DELTA/build only, M3/thinking with independent
+OAI factual checking. No ledger generation/global-history re-scan, campaigns,
+source/testing/tooling implementation or qualification. Reuse attributed completed
+29c comparison; map actual freshness/level changes to existing package/units and
+minimal next proof, unknowns stay unknown. Actual new Task/Dispatch follow launch
+receipt; no static authority, not yet launched at this record. Same current P1wave
+continuation, not a new material phase/debate consensus. Publish/verify scoped
+records before launch and refresh quota/route/concurrency.
+
+Sol Taskcf272/Dispatcha52a remains active in wp-sec-data-02-c1, exactbase d6;
+normal strict/browser-enabled hook retry runs in authorized new external
+`C:/t/sec-c1-a52a1` after the targeted hygiene retest passed. Keep original failed
+long-temp fixture/log/positive MAX_PATH reproduction and partial route report;
+only a complete strict hook result counts. Preserve read-only node_modules
+junction itself and external short-temp bytes for full no-follow archive after
+settlement. Free-form body/Response string gaps stay open; DeepSeek source-review
+quota unknown, no unreviewed source integration. All68fleet rows enumerated:
+61released/sixhistoricalretained/oneactive before audit launch, four-total ceiling
+still includes older external reservation. Original owner/private/evidence/
+quarantine/oddhook resources preserved. Entry e16 CI13requiredPASS retains exact
+source/merge-tree attribution; later coordination-prose CI is separate/pending.
+Private receipts/acceptance: `build/p1-fanout-20261028/`.
+
 ## Intake delivery and active factual correction — 2026-10-28T23:00Z
+
+Operational update23:01Z: Sol's strict normal hook failed at an existing
+nested-Git hygiene fixture after2197passes; author reproduced Windows MAX_PATH,
+preserved failed log/temp and partial109/177route report (not acceptance).
+Coordinator authorized only new absent `C:/t/sec-c1-a52a1` for task TEMP/TMP and
+fresh per-run pytest basetemp: specific failing test first, then full unchanged
+strict/browser-enabled hook if green. No source/test/global config workaround.
+Preserve this external task-owned temp for full no-follow archive before later
+cleanup; private exact ask/reply `short-temp-lease-reply.json`. Original failure
+remains evidence; no pass, source acceptance or review closure is inferred.
+
 
 SW-API-READ-03 intake delivered original report
 `d3b41e1a4e081ef657e0d2a7146bc073ccc61a8b`:27existingtestsPASS, no product

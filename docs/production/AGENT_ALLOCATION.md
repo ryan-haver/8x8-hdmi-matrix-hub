@@ -2219,3 +2219,48 @@ checkout/branch after released original writer. Fresh native sessionses_e7b422ac
 independently confirms MiniMax-M3/thinking and actual tool activity. CLI model/
 effort null, no override claim or model substitution. Original d3 report held
 for specific author factual corrections; not integrated or qualification claimed.
+
+23:01Z author normal-hook failure preserved, not waived: existing hygiene test
+`test_hook_environment_cannot_redirect_the_guard` failed in its nested disposable
+Git fixture after2197pass/2skip/35deselected; partial109/177routes is not full
+acceptance. Author positively reproduced Filename too long/exit128 with fixture
+core.longpaths=false, no implementation failure inferred from this environmental
+report. Coordinator verified requested C:/t/sec-c1-a52a1 absent and authorized
+only that new external task-owned operational temp, preserving old failed temp/
+logs and all future new run subdirectories. Actual questionmsg_3136441b0fb1
+answered in private short-temp-lease-reply.json; delivery3c482 acked after reply.
+First rerun the precise failing hygiene test, then full normal strict/browser-
+enabled hook if it passes; no source/test weakening or global Git config change.
+New external temp must be fully inventoried/no-follow archived after settlement
+and before cleanup; it is not root/private data or a generic deletion lease.
+Both actual author and report-correction Tasks remain active, no release here.
+
+### Corrected intake accepted; queued audit continuation — 23:08Z
+
+Corrected reportc0312d7068215046cddd140665f61047ce54bfac passes independent
+coordinator checks: all8named event-count/check-count table rows match original
+record bytes; signal-event versus statePATCH mechanism matches real source;
+future blast radius correctly qualified; actual native/model provenance stays
+attributed. Scope accepted is factual preparation only, proposed child/API/
+contract leases remain unapproved, no feature promotion or source qualification.
+Original d3 report/failures preserved. Correction worker completed valid report,
+released throughOrca before delivery5d781ack. Full correction native export
+47M3thinkingassistant turns, verified fullGitbundle and full workspace archive
+SHA256e3f574f6dff26be543587fe68219fbe1a36ead73f589e0b2b4f4ed4df000e31d retained
+separately from original; c031 taskref published/exactliveverified. Report merged
+sequentially at6dbd516a46c39b202c72f351100b79e111f9cb97, only new INTAKE.md.
+Canonical/source/tests unchanged; no fresh27test rerun claimed for prose repair.
+
+Freshness-to-unit audit is the preplanned laneB continuation in the same P1wave,
+not a new material phase or source development wave. Prepared exactbased6e78,
+new wp-audit-freshness-delta worktree with only new FRESHNESS_DELTA.md/build
+writes. M3/thinking chosen for bounded accepted inventory, Sol independent facts;
+no code/reviewer qualification inferred, no nesting/Anthropic. Reuse completed
+29c ledger comparison; do not rerun global ledger/history or campaigns. About
+15min table/mapping task plus bounded correction reserve; unknown cause remains
+unknown. Quota/fleet/currentbindings checked: sameRun/runtime/coordinator, all
+68rows onepage=61released/sixretained/oneactiveSol; at23:06 observed nativeM3
+99%weekly/91%session and Codex89%weeklyremaining, reported windows/resets retained.
+Refresh before actual creation/dispatch. Old source/user/private resources not
+reset/released. Sol strict hook retry stillactive and qualified independent
+source review held; report/audit progress doesn't waive it.

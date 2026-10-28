@@ -849,3 +849,12 @@ merge/source trees identical. No completed implementation or source-review
 acceptance claimed; qualified DeepSeek quota/review gate held, independent
 authoring proceeds. Freshness audit queued for settled laneB; no new material
 phase/debate consensus or release gates closed.
+
+### WS intake corrected and accepted — 2026-10-28T23:08Z
+
+Corrected reportc0312d70 independently checked and integrated at6dbd516a, new
+INTAKE.md only. Original d3 report retained; correction worker released before
+ack, full native/bundles/archives and exact taskrefs verified. No source, test,
+canonical registry/evidence/ledger or qualification changes. Prepared freshness
+audit is the queued same-wave report continuation; Sol strict hook retry and
+qualified source-review hold remain separate. See current handoff/allocation.
