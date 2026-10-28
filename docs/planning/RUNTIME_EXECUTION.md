@@ -836,3 +836,16 @@ limits, full native/bundles/artifacts and published taskrefs preserved. The
 prepared queue is re-pinned tod6e78; no new implementation wave has launched.
 Scoped integration publication/current-head CI follow through PR38draft, with
 private post-push receipts linked from the handoff. No release approval implied.
+
+### Prepared P1 wave launched — 2026-10-28T22:51Z
+
+Owner requested fan-out; the two prepared lanes now run in dedicated real Orca
+worktrees at published/acceptedd6e78: Sol6.1/high redaction author
+(taskcf272c0e3b6c/ctxa52a1d96ad08; actual branchryan-haver/wolffish), and native
+MiniMax-M3/thinking WS intake (taskabb0caba9fdf/ctx32f5f2ecfabe). Observed live
+tools, disjoint leases and exact bases recorded in handoff/allocation ledger.
+Entrye16ec6af exactliveorigin equality and CI40770556464 all13requiredPASS; actual
+merge/source trees identical. No completed implementation or source-review
+acceptance claimed; qualified DeepSeek quota/review gate held, independent
+authoring proceeds. Freshness audit queued for settled laneB; no new material
+phase/debate consensus or release gates closed.

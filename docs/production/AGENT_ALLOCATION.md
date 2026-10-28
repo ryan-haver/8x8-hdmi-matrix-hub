@@ -2084,3 +2084,90 @@ a self-hash commit loop. Currenthead CI/image/broader-client gates remain pendin
 until their real results. Source unchanged from testedb3f87232; no broad rerun
 for encoding/prose maintenance. Invocation-only hook exception for this scoped
 documentation commit after applicable checks; no implementation hook bypass.
+
+### Owner-authorized prepared P1 fan-out — 2026-10-28T22:47Z
+
+Owner explicitly requested fan-out/get agents working. Entry integration
+e16ec6af4d13c76c7024d42b605afec0c8ae9bf4 equals liveorigin exactly; CI40770556464
+all13required checksPASS (plus UIcomment, expected GHCRskip), currenthead not a
+historical pass. Private entry/ci-final receipts saved. Existing prepared P1/API
+security continuation, no new material phase/debate consensus asserted. Frozen
+author basesd6e78e0b6ab1dab5216443584d810a7a24af32b2 are accepted/published
+ancestors ofe16; source/canonical bytes unchanged beyond scoped report records.
+
+Rediscovered Orca1.4.243/runtime14c5d968-cfad-4ebc-b071-19d297a7c1f4/localZelu,
+sameRun37205/coordinator term_dcf96b5a-bb99-4ecb-b887-eb53f7f01662/gen3. All65
+fleetrows enumerated on onepage=59released/sixhistoricalretained; inboxempty.
+Conservative ceiling4includes coordinator+atmost2newworkers+oldexternal
+unverifiable reservation. Protected root/private/user/external/persistence/
+quarantine/oddhook state preserved; no old worktree reset or cleanup. Repo
+setup/archive hooks empty/start-immediately; local host ready, no remote capacity
+inferred. Complete host/worktree/Git/capability receipts retained privately.
+
+Supported pools22:45Z: Codex90%weeklyremaining/resetNov4 06:36:04UTC, native
+MiniMax99%weekly/93%session remaining with exact reset/windows in receipt; shared
+external demand unknown. Reserve bounded author+normalhook/corrections and
+independent bounded report checking. DeepSeek currentusageunknown; qualified
+source-review dispatch/integration held, independent authoring proceeds. No new
+spend/accounts/credentials. Current OAIcache22:44fresh supports Sol6.1/high and
+Astra/Terra/Luna alternatives. Sol selected from accepted comparable source/
+privacy/assertion work; Astra depth unnecessary, Terra/Luna not automatically
+qualified. NativeM3 catalog refreshed22:46, selected only for bounded accepted
+inventory role; M3.1 distinct/unqualified. Google broker semantics/routing
+unverified, Anthropicexcluded in all roles. No silent substitutes or nesting.
+
+LaneA: proposed genuine Sol6.1/high SW-SEC-DATA-02-C1 author, dedicated
+wp-sec-data-02-c1. Exclusive serial lease tools/validate/evidence.py ONLY, new
+tests/validation/test_sw_sec_data_02_c1.py and own AUTHOR.md/build. All shared
+contracts/model/runner/schema/manifests/locks/canonicalmetadata readonly.
+Meaningful real artifact before/after/negative/nonmutation controls, normal
+strict full source hook/ruff/mypy and clean-source proof required. About30min
+including prior15min fullhook plus correction reserve; reviewer held, no code
+acceptance implied. No coordinator second writer in leased source.
+
+LaneB: proposed genuine nativeMiniMax-M3/thinking SW-API-READ-03 intake,
+dedicated wp-api-read-03-intake. Own new INTAKE.md/build only; three named
+WS snapshot/poller/heartbeat proof/gap dispositions, no shared source edit or
+new tests/tooling/qualification. Bound10min, no global ledger/history recompute.
+Independent OAI factual checking/report acceptance, no M3 core/security review
+qualification. LaneB next freshness-to-unit audit only after proven settlement/
+newauthority/capacitycheck; conservative concurrency never exceeded.
+
+Task/Dispatch/worktree/effective model identities follow actual launch receipts
+in build/p1-fanout-20261028/, not static template authority. Current instructions
+authorize covered starts; no fresh approval request. Coordinator alone retains
+canonicalregistry/ledger/integration/reviewclosure and all release/owner gates.
+
+#### Actual launch/working checkpoint — 2026-10-28T22:51Z
+
+| Assignment | Actual Task / Dispatch / worktree / branch | Observed execution |
+| --- | --- | --- |
+| SW-SEC-DATA-02-C1 redaction author | task_cf272c0e3b6c / ctx_a52a1d96ad08; wp-sec-data-02-c1; actual branch `ryan-haver/wolffish`; terminal term_77194263-f9fb-465a-a5be-960323466d96 | Codex Sol6.1/high requested/effective; native turn start observed, tool/source inspection active. Orca generated branch is recorded as returned, not silently renamed. |
+| SW-API-READ-03 bounded intake | task_abb0caba9fdf / ctx_32f5f2ecfabe; wp-api-read-03-intake; branch `ryan-haver/wp-api-read-03-intake`; terminal term_52b7a031-e38e-483d-84fd-2a56eed2614a | Genuine opencode2; CLI model/effort null through audited isolated config. Native session ses_e7b4c6d4affe8DcdYrsP51cVwD independently attests MiniMax-M3/minimax-coding-plan/thinking and tool use, 25assistant turns at initial snapshot. No false override or core-review qualification. |
+
+Both exact assigned HEADs verifiedd6e78e0b, both live/working by fresh fleet67
+rows=59released/sixhistoricalretained/twoactive, completepage. All private
+launch/config/quota/catalog/native/tree-comparison receipts under
+`build/p1-fanout-20261028/`. Current CI40770556464 actual merge bdcf06dc6723aad7da63ecfed3d3555ab0d02e55
+has tree7fa5c9d99731349b0705fa2ef7818d5eb5a11350 exactly equal to published
+e16ec6af, independently verified. Full CI log archived: core4064PASS/24skip/
+35deselected/strict177routes; Remote100PASS; HA101PASS; deployment29PASS/2skip;
+UI1101PASS. These keep their actual current CI source attribution; no feature
+evidence import or physical/soak/field/final release qualification is implied.
+
+Sol asked an actual blocking questionmsg_d7ebcc9040cb about write_record and
+free-form body steps. Coordinator repliedmsg_0d2322eba135: within existing
+evidence.py lease authorize recursive mapping/list persistence sanitation with
+public-field, nonmutation/schema/path/transmission controls; no arbitrary text
+regex or model/client/runner lease expansion. Existing free-form body step gap
+is reported separately with synthetic source-linked boolean reproduction and
+minimal future child scope, not silently declared fixed or waived. Both heartbeat
+messages handled and deliveryaf347 acknowledged after the question reply.
+
+These are active author/intake assignments, not completed/reviewed/integrated
+deliveries. DeepSeek current quota remains unknown and affected source-review/
+integration gate held; independent authoring continues. Freshness-to-unit audit
+remains queued behind proven laneB settlement and new authority/capacity check.
+No third worker, helper/nesting, excluded family, worktree cleanup or new material
+phase/debate consensus. Launch record uses scoped documentation-only checks and
+invocation-only hook exception; no implementation hook bypass.

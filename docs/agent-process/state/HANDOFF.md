@@ -1,5 +1,49 @@
 # Current coordinator handoff
 
+## Active prepared P1 fan-out — 2026-10-28T22:51Z
+
+Owner explicitly requested fan-out/get agents working. Two genuine workers are
+live in new isolated worktrees, exact base
+`d6e78e0b6ab1dab5216443584d810a7a24af32b2`, under existing Run37205/coordinator
+term_dcf96b5a-bb99-4ecb-b887-eb53f7f01662/gen3. Local Orca1.4.243/runtime
+14c5d968-cfad-4ebc-b071-19d297a7c1f4. Continuing the prepared P1/API-security
+scope; no new material phase decision or completed three-provider debate claimed.
+
+| Work | Live authority / worktree / actual branch | State |
+| --- | --- | --- |
+| VAL-15 request-artifact redaction | Tasktask_cf272c0e3b6c / Dispatchctx_a52a1d96ad08; wp-sec-data-02-c1; actual `ryan-haver/wolffish`; terminal term_77194263-f9fb-465a-a5be-960323466d96 | Sol6.1/high requested/effective, actual turn/tools observed. Exclusive evidence.py + new scoped test/AUTHOR/build only. Normal strict source hook required. |
+| WS snapshot/poller/heartbeat intake | Tasktask_abb0caba9fdf / Dispatchctx_32f5f2ecfabe; wp-api-read-03-intake; `ryan-haver/wp-api-read-03-intake`; terminal term_52b7a031-e38e-483d-84fd-2a56eed2614a | Native MiniMax-M3/thinking confirmed in ses_e7b4c6d4affe8DcdYrsP51cVwD, actual tools active; own new INTAKE/build only, no implementation or qualification. |
+
+All67fleet rows enumerated:59released/sixhistoricalretained/twoactive. Ceiling
+remains coordinator+two new workers+old unverifiable external reservation.
+No duplicate source writer, nesting or Anthropic. Fresh22:45Z supported headroom:
+Codex90%weekly, MiniMax99%weekly/93%session; external pool demand unknown.
+DeepSeek qualified source-review current quota unknown: review dispatch and
+unreviewed integration held, independent authoring proceeds. No new spend/login.
+
+Entry publication e16ec6af4d13c76c7024d42b605afec0c8ae9bf4 equals liveorigin and
+CI40770556464 passed all13required checks. Actual PR merge bdcf06dc has identical
+tree7fa5c9d99731349b0705fa2ef7818d5eb5a11350. Full log/artifact attribution,
+launch/allocation/catalog/quota/native receipts: `build/p1-fanout-20261028/`;
+prior post-push `build/fanout-readiness-20261028/ci-final.json` is now populated.
+Current CI passes do not import evidence or close physical/soak/field/release.
+
+Sol's real ask about writer sanitation was answered within evidence.py lease;
+free-form API body-step string redaction remains a separate reported boundary,
+with no client/runner/model lease expansion or broad VAL15 closure. Initial
+heartbeats/question handled before deliveryaf347 ack. Canonical registry/ledger,
+shared contracts, manifests/locks and integration stay coordinator-owned.
+
+Next: handle actual worker inbox/questions and delivery before ack; verify
+source/diff/tests/normal hook at exact author commit, preserve native/full bundle/
+ignored artifacts, settle through Orca and publish taskrefs before eligible
+cleanup. Qualified different-family source review remains required. Queue bounded
+freshness-to-unit audit only after laneB settles, route/quota recheck and new live
+authority; do not overlap its report writer or exceed concurrency. Do not claim
+these active assignments completed or integrate unreviewed code. Eight older
+settled worktrees are fully archived but retained; root/private/oddhook/user/
+external/persistence/quarantine/evidence bytes remain protected.
+
 ## Accepted closeout and prepared fan-out — 2026-10-28T21:14Z
 
 [Prepared next-wave assignments](../../planning/software-waves/READY_QUEUE_20261028.md)
