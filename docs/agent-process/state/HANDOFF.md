@@ -1,5 +1,104 @@
 # Current coordinator handoff
 
+## Accepted closeout and prepared fan-out — 2026-10-28T21:14Z
+
+[Prepared next-wave assignments](../../planning/software-waves/READY_QUEUE_20261028.md)
+are re-pinned to accepted exact metadata base
+`d6e78e0b6ab1dab5216443584d810a7a24af32b2`: Sol redaction author, MiniMax
+bounded WS intake, then attributed freshness-to-unit audit. Thirty packages /
+65 units remain the complete plan, not 65 immediately launch-ready writers.
+Qualified DeepSeek code-review quota remains unknown: that dispatch/integration
+gate is held, independent ready authors/audits need not stop. No new source wave,
+new material phase decision or retrospective provider consensus is claimed.
+
+Independent original metadata review29c217ae25856f91d79a85064eb7e38a6aa197a0
+held78ce solely on F-01:14 double-encoded section signs in features.yaml.
+Coordinator correctiond6e78e0b restores exactly those14 sequences. Independent
+focused review029b30a0256b4e61043acda040499649de36cf82 ACCEPTS exactd6e78e0b:
+only seven intended registry rows/fields differ from28fce, all claims/targets
+unchanged, FAPI031 soleV1->V2; all other2610canonical Git blobs identical to78ce.
+42metadata testsPASS after fix. Original import76/76byte comparisons/schema /
+formal/ledger attribution stay credited to29c, not re-executed or relabelled.
+Both report-only commits integrated sequentially with no canonical/source merge
+edits. Original HOLD and stopped optional probe evidence remain preserved.
+
+Both real Orca reviewers settled and released before completion acknowledgment.
+Same Run37205/coordinator term_dcf96b5a-bb99-4ecb-b887-eb53f7f01662/gen3, local
+Orca1.4.243/runtime14c5d968-cfad-4ebc-b071-19d297a7c1f4. Native sessions
+ses_e7bcf75d7ffeIAzB2BKfNBwc5m and ses_e7ba86ce0ffe3G0sYWP4Ckvfoi attest
+MiniMax-M3/minimax-coding-plan/thinking through audited worktree-only routing;
+CLI model/effort null, no false override, Anthropic, helper/nesting or fallback.
+Correction Tasktask_10bb93a6b7e5 / Dispatchctx_da1e98f76403. Full native exports,
+verified full bundles and workspace archives retained privately. Both exact
+review task refs published/live-remote verified; old six source archives,
+external temp and quarantine preserved. No worktree deletion is claimed.
+
+Ledger268/210below/96stale is accepted current metadata, not38new defects;
+39fresh-to-stale flips track merged covered source paths, and FAPI031 is newly
+fresh. VAL14/15 remain medium/open; no current-head CI, image, broader-client or
+release gate is inferred. Tested unchanged product source retains Oct26
+4084core/100Remote/strict177routes/Ruff/mypy original attribution. Three original
+Tron owner approvals remain closedOct20; physical HIL/72hours/week/final artifact
+acceptance remains open.
+
+Next: commit/push scoped integration records under existing authority, verify
+exact local/live-remote equality and current-head combined CI before dependent
+next-wave dispatch. Publication/CI receipts belong outside the commit they
+identify: `build/fanout-readiness-20261028/publication.json` and `ci-final.json`.
+Until those receipts exist and pass, publication/CI remain pending. Preserve
+root/private data, odd hook artifact, protected user/external resources and
+unresolved persistence workspace. Refresh route/quota/fleet before each wave.
+
+## Fan-out readiness checkpoint — 2026-10-28T21:01Z
+
+Prepared next assignments are in
+[READY_QUEUE_20261028.md](../../planning/software-waves/READY_QUEUE_20261028.md):
+VAL-15 redaction author, bounded WS snapshot/poller/heartbeat intake, then
+freshness-delta audit. Frozen base78ce344800a9d1b3088bb8e886f65e2c8dfa0918;
+briefs committed6228b273df5822b63b6d516121ab9a3f169f598e. Exact disjoint
+writes, routes, reviewer hold, acceptance and publication gates are explicit.
+These are prepared assignments, not all65 units launched or a new phase decision.
+
+Canonical candidate78ce preserves44JSON/32PNG byte-exact and registers open
+VAL-14/VAL-15. Serial ledger generation gives268/210below/96stale;42 metadata
+tests and actual formal gate pass,489 documentation tests pass, hygiene against
+live origin411c6642 passes zero errors/warnings. No source/tools/tests/UI/root
+manifest/lock changes from the independently accepted/tested source. Oct26
+4084core/100Remote passes retain their original source attribution, not fresh CI.
+
+Exact-candidate independent MiniMax-M3/thinking metadata review is active:
+Tasktask_d3647390e5bd/Dispatchctx_b52c29555f80, session
+ses_e7bcf75d7ffeIAzB2BKfNBwc5m, worktree w03-final-metadata-review.
+Original-byte comparison and independent formal/scratch-ledger checks completed;
+verdict remains pending. Expensive optional historical attribution probes are
+bounded; incomplete probes must be reported honestly and owned background jobs
+settled before worker_done. Canonical author remains OpenAI, report-only reviewer
+writes its assigned REVIEW.md/build only. Prior code cross-family reviews remain
+separate; no general core/security qualification is inferred from this inventory.
+
+Orca1.4.243/runtime14c5d968-cfad-4ebc-b071-19d297a7c1f4; same Run37205,
+coordinator term_dcf96b5a-bb99-4ecb-b887-eb53f7f01662/gen3. Complete fleet64:
+57released/sixretained/oneactive. Supported usage at20:59Z shows Codex95%weekly
+and MiniMax99%weekly/session remaining; DeepSeek current quota unknown, its
+proposed code-review route held. No Anthropic, new account/spend or nesting.
+
+Six old settled task workspaces and the evidence-worker external temp now have
+full private archives with all member/content/link and stable-source checks;
+six full bundles and six published exact task refs reverified. Quarantine counts
+reconcile exactly when nested .git fixtures are included; original archives and
+quarantine remain untouched. Windows tar link-following control failure is
+preserved; actual archives explicitly avoid link traversal and preserve native
+junction metadata. No worktree removed while current review reads originals.
+
+Next: settle/review/preserve/release the metadata worker, integrate its accepted
+report sequentially, finish applicable publication/CI gates and verify exact
+integration local/live-remote equality before any next execution wave. Remaining
+broader client/image/CI qualification and physical/soak/field/final artifact gates
+are not closed by documentation preparation. Existing publication/fan-out
+authority persists; no new approval request is needed for covered steps.
+Private receipts: build/fanout-readiness-20261028/. Protected root/user/external,
+unresolved persistence workspace, odd hook artifact and old evidence preserved.
+
 ## Current closeout fan-out checkpoint — 2026-10-26T22:47Z
 
 Both delegated assignments completed; all three new Dispatches (including the

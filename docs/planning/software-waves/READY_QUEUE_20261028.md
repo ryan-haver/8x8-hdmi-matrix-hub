@@ -5,13 +5,14 @@ allocation remains 30 packages / 65 units / 268 primary feature owners in
 `manifest.json`; this packet does not declare all 65 assignments launch-ready.
 No new phase decision or retrospective three-provider consensus is claimed.
 
-Frozen prepared base: **78ce344800a9d1b3088bb8e886f65e2c8dfa0918** on
+Frozen prepared base: **d6e78e0b6ab1dab5216443584d810a7a24af32b2** on
 `wp-runtime-completion`, existing Orca Run `run_37205f6095b3`. This base contains
-the reviewed-source evidence assembly. At preparation, independent metadata
-review and integration publication are pending. Before dispatch, require its
-accepted review, integration ancestry, published reachability, verified live
-local/remote head equality, completed prior closeout and current route/capacity
-checks. Re-pin if a later source/registry change alters this frozen task scope.
+the accepted metadata correction over the unchanged reviewed source. Original
+metadata review29c217ae held its original78ce candidate solely on text encoding;
+correction review029b30a0 accepts exactd6e78e0b after the fourteen-sequence repair.
+Both reports retain their actual checks and limits. Before dispatch, require
+integration ancestry, published reachability, verified live local/remote head
+equality, completed prior closeout/current CI and current route/capacity checks. Re-pin if a later source/registry change alters this frozen task scope.
 
 | Order/lane | Assignment | Exact writes | Proposed route / independent review | Prepared state |
 | --- | --- | --- | --- | --- |

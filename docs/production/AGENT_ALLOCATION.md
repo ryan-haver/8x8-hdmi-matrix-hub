@@ -1962,3 +1962,125 @@ this does not infer MiniMax core/security-review qualification from inventories.
 Future dispatch briefs must distinguish prepared versus launch-ready and retain
 publication/phase-preparation/reviewer-capacity gates. No dependent implementation
 wave before prior closeout/publication equality; no source/hardware/release action.
+
+Prepared canonical metadata candidate78ce344800a9d1b3088bb8e886f65e2c8dfa0918
+imports44 original JSON/32 original PNG at unchanged original7b07/source310d
+attribution. Every staged JSON blob and raw PNG LFS OID equals its original
+SHA256;42 registry/schema/ledger testsPASS and actual formalgatePASS0knownfailures.
+Only FAPI031 proposes recordedV1->V2; existing API/root/auth levels unchanged.
+VAL14/VAL15 registered mediumOPEN with explicit corrected-source/finalCI and
+unimplemented-tooling boundaries. Original failedCI/assertions remain untouched.
+Serial regenerated ledger268/210below/96stale exposes wider prior-source covers
+staleness; old203/57 was a dated report, not a current count to preserve by hand.
+
+Bounded independent metadata review Tasktask_d3647390e5bd/Dispatchctx_b52c29555f80,
+terminalterm_d9710574-6640-4704-9c63-54c03bf61e1c, dedicated
+w03-final-metadata-review at exact78ce, assigned base28fce. Native session
+ses_e7bcf75d7ffeIAzB2BKfNBwc5m export confirms nativeMiniMax-M3/thinking;
+CLI model/effort fields null for audited worktree-configured opencode2 route.
+Own new REVIEW.md/build only; all canonical/product paths read-only. This
+verifies copied data/mapping/attribution and prior source equivalence; it does
+not infer general security/core review competence or allow self-review of the
+earlier M3-authored inventory. Outcome pending, no future metadata preapproval.
+
+One actual reviewer helper was overbroad:44times old-evidence git subprocess
+scan. Preserved its code/logs, delivered scoped cheaper Git-diff/original-hash
+alternatives; one visible supported Ctrl+B backgrounds that owned probe without
+interrupting/relaunching the worker. Agent progressed afterward; instructed to
+settle its owned background job before worker_done. No worker stop, duplicate
+writer, lifecycle impersonation, shared service kill or failed-qualification retry.
+
+Prepared next-wave envelopes at docs/planning/software-waves/READY_QUEUE_20261028.md
+and next-wave/: redaction source author, bounded WS intake, then freshness-delta
+audit. Frozen base78ce and exact disjoint writes; route/publication/review holds
+explicit. Prose packet6228b273df5822b63b6d516121ab9a3f169f598e passes489doc tests,
+no new implementation dispatch or phase/debate consensus claimed. DeepSeek
+core-review quota remains unknown; independent ready authors/audits need not
+stop, but their unreviewed implementation cannot integrate.
+
+Six released task workspaces now have new full private no-link-traversal archives
+under build/fanout-readiness-20261028/preservation/, all regular bytes, archive
+members/types, links, final source/head/status verified. Six old fullGitbundles
+reverified and six exact published task heads reobserved. New evidence-worker
+external task temp also fully archived/verified; root/quarantine bytes untouched.
+A safe fixture proves Windows native tar follows junctions by default; that
+failed control is retained and was not used on project data. Explicit lstat/
+junction-aware traversal archives link representation plus native target/type/
+reparse metadata, never external link contents. Restoration of native junction
+kind requires the preserved manifest; no restoration/deletion is claimed.
+
+Quarantine count delta reconciled: the old inventory excluded nested .git test
+fixtures. Including them without following junctions gives20,005regularfiles/
+65,452,331bytes and21,206/70,080,566, exactly the verified original regular-byte
+totals. Earlier double-counted10-byte junction alias is already documented.
+No lost-byte allegation, quarantine purge or retry of the rejected permanent
+deletion batch. Current reviewer/workspaces remain while review uses originals;
+eligible exact cleanup follows only after accepted settlement/publication proof.
+
+Independent metadata review draft identifies F-01:14 UTF-8 section signs in
+features.yaml were accidentally double-encoded, including ten unintended feature
+rows. Coordinator accepts the real finding; it is not a failed model qualification.
+Mechanical correctiond6e78e0b6ab1dab5216443584d810a7a24af32b2 restores only those
+14 sequences; exact parsed base comparison now shows only seven intended feature
+rows/fields, with no claim changes.42 registry/schema/ledger testsPASS. Scoped
+encoding-only commit used documented invocation-only hook exception; no product
+implementation or evidence byte changed. Original78ce HOLD will be preserved.
+
+Prepare bounded exact-fix metadata re-review atd6e78e0b, authorOpenAI / native
+MiniMax-M3 independent reviewer. New dedicated w03-metadata-encoding-review,
+new CORRECTION_REVIEW.md/build only. Scope: exact14-sequence correction, original
+base seven-row field boundary, all other canonical bytes unchanged from78ce,
+reconcile first review's actual disposition. Do not repeat historical four-world
+ledger recomputation, campaigns or core suites. Prior worker must settle/release;
+no duplicate report writer. Five-minute demand plus correction reserve; at21:05Z
+supported Codex95%weekly,MiniMax99%weekly/98%session remaining; shared external
+commitments unknown. DeepSeek stillunknown and excluded from affected dispatch.
+Same Run/runtime/coordinator and conservative four-total budget apply. Prior
+source qualified review attribution remains unchanged; no next development wave.
+
+Original independent review29c217ae25856f91d79a85064eb7e38a6aa197a0 reports
+HOLD solelyF-01; all other canonical assembly aspects accepted within its stated
+metadata limits.115nativeassistant turns independently attest M3/thinking; full
+123message export, verified fullbundle and fullworkspace archive3fc34327e8b66e4d3e68e6be330eac9064d01a0659bf64a9387dace4d4e7f61b
+preserved privately. Original worker completed valid report, released through
+Orca before delivery7a34ack; taskref published/exactlive verified29c217ae,
+report integrated sequentially. Its incomplete helpers remain recorded, no fake
+PASS. Decisive generated-ledger comparison accounts for39fresh->stale and one
+newfreshFAPI031; no broad attribution rerun needed. OwnerTron approvals remain
+closedOct20, unchanged; other physical/field/final gates open.
+
+Focused correction re-review actually launched Tasktask_10bb93a6b7e5 /
+Dispatchctx_da1e98f76403 / terminalterm_8e562836-4a7a-4508-924c-082cc50544b6,
+dedicated w03-metadata-encoding-review branchryan-haver/w03-metadata-encoding-review
+at exactd6e78e0b. Native sessionses_e7ba86ce0ffe3G0sYWP4Ckvfoi independently
+confirms MiniMax-M3/minimax-coding-plan/thinking with actual tools. Worktree-only
+audited routing identicalSHA25662e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096;
+provider allowlist/native internal models, helpers/MCP/plugin deny, no fallback.
+CLI model/effort null, no false override claim. Own new CORRECTION_REVIEW.md/build
+only; all canonical/source paths readonly. Pending actual verdict; no code or
+future CI preapproval. Conservative concurrency includes older external reservation.
+
+Focused review029b30a0256b4e61043acda040499649de36cf82 ACCEPTS exactd6e78e0b
+and resolvesF-01;42 metadata testsPASS, byte/YAML/subtree proofs complete. Its
+optional extra formal scan was bounded/interrupted and explicitly not a PASS;
+original29c formal proof remains correctly attributed and unchanged. No source
+qualification retry or future CI preapproval. Worker settled, releasedthrough
+Orca before deliverybfc20ack, no ownedbackgroundjob left. Full native export/
+verified fullbundle and entire workspace archiveee52507137195cf55ffda4722c0f368ae4d99007a6f18ce15768d81b7567b916
+retained. Exact taskref029b30a0 published/liveverified; accepted report integrated
+sequentially with no canonical/source conflict edits.65fleetrows=59released/
+sixhistoricalretained, onecompletepage/no reclaimable/newactiveworker. Protected
+old external reservation remains; no absence-based process cleanup.
+
+Next envelopes re-pinned from held78ce to acceptedd6e78; complete30packages/65units
+remain a backlog rather than65launch-readywriters. Root/private and all original
+evidence/failures/quarantine preserved. Eight settled task workspace archives now
+verified plus evidence-workerexternaltemp; no worktree removed, cleanup still
+subject to complete publication/verification boundaries. Scoped integration
+records will publish through existing draftPR38 chain; no mainmerge/tag/release.
+Actual post-push local/live-remote equality and currentCI receipt are external
+files build/fanout-readiness-20261028/publication.json and ci-final.json, avoiding
+a self-hash commit loop. Currenthead CI/image/broader-client gates remain pending
+until their real results. Source unchanged from testedb3f87232; no broad rerun
+for encoding/prose maintenance. Invocation-only hook exception for this scoped
+documentation commit after applicable checks; no implementation hook bypass.

@@ -810,3 +810,29 @@ and integration publication remain pending. The latest user request adopted
 the portable process only, without new execution. Read the current
 [handoff](../agent-process/state/HANDOFF.md), [adoption report](../agent-process/ADOPTION_REPORT.md)
 and latest allocation entry before historical LIVE snapshots above.
+
+### Bounded next-wave preparation — 2026-10-28
+
+The [prepared dispatch packet](software-waves/READY_QUEUE_20261028.md) pins
+redaction, bounded WS intake and freshness-delta assignments at78ce3448, with
+exclusive writes and actual launch/review/publication gates. Canonical44JSON/
+32PNG import is byte-exact;42metadata checks/formal gate/489doc checks/hygiene
+pass. Regenerated ledger268/210below/96stale reflects current covered-path
+freshness, not38new product bugs. VAL14/15 remain medium/open; onlyFAPI031
+proposes V1->V2. Exact metadata review taskd3647390/ctxb52c remains pending
+at this checkpoint; no next implementation wave or publication is claimed.
+Six complete private workspace archives plus external evidence temp and full
+bundles/taskrefs are verified; quarantine counts reconciled, no originals
+removed. Current handoff/allocation ledger retain live authority and outcomes.
+
+### Exact metadata correction accepted — 2026-10-28T21:14Z
+
+Independent metadata review29c217ae held78ce for one real encoding regression.
+Coordinator repaird6e78e0b restores exactly14 section-sign sequences and seven
+authorized feature rows; focused different-family review029b30a0 ACCEPTS that
+exact fix, with42metadata testsPASS and all other canonical/evidence blobs
+unchanged. Both reviewers settled/released before delivery ack; original HOLD,
+limits, full native/bundles/artifacts and published taskrefs preserved. The
+prepared queue is re-pinned tod6e78; no new implementation wave has launched.
+Scoped integration publication/current-head CI follow through PR38draft, with
+private post-push receipts linked from the handoff. No release approval implied.
