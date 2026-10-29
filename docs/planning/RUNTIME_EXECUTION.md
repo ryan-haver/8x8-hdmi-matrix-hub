@@ -1066,3 +1066,7 @@ Native link metadata and private launch-environment captures remain preserved/
 unpublished. Same two genuine workers, Codex77%weekly03:17Z, DeepSeek source
 review unknown/HELD. See current handoff/ledger for exact authority and receipts;
 no source integration, cleanup or release gate advancement.
+
+### Source gates reported; global validation remains failed — 2026-10-29T03:47Z
+
+C3 normal4102core/177routes and clean74tests pass at8fc65e05; final delivery pending, inherited C1/C2/C3 qualified review held. WS normal4098core/177routes and clean managed FAPI040 V2 nine checks pass at5331d547, but actual tools.validate check exits1 for F-SEC-007 V2 below recordedV3. Final failed/partial delivery directed, no retry or canonical changes; baseline causation unverified. Exact JUnit relocation/preflight failures and all native/private evidence preserved. Both worker_done settlements still awaited; no source integration, cleanup, target/global/privacy qualification or release gate advancement. See latest handoff/ledger for exact authority, source heads and retained holds.

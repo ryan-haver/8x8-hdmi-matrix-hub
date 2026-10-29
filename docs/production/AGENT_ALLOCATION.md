@@ -3371,3 +3371,13 @@ without reported failure; original failed attempt retained, no source acceptance
 Sanitized receipt privacy-ws-0336-capacity.json and capacity event retained.
 Observation-only records checked for JSON validity and CR-aware whitespace; no
 implementation or readiness change. Invocation-only metadata hook exception.
+
+### Source checks complete; final deliveries pending — 2026-10-29T03:47Z
+
+C3 Task242c1cc61b92/Dispatch793d3e4da3c3 source8fc65e052954a30f89be209d2d8f04e58ac1266f normalhook4102pass/4skip/35deselected,177routes/100%,888.39s. Clean74tests pass31.87s, five safe persisted lifecycle records with actual source/dirtyfalse and correct raw one-pass/four-fail controls; report2d02004d3108953a302e1a49aab9a5f24e944136 observed, actual worker_done still awaited. Full first invocation failure/native junction relocation remain preserved, no source qualification or global VAL15 closure.
+
+WS Taskd72e772cd2f9/Dispatch07f9f4c85a04 source5331d5471a9d319c134e6798645d6ba8cf8466fc normalhook4098pass/6skip/35deselected,177routes. Clean managed campaign02 api/sim V2 pass/ok,9checks and exact1output-name event. Actual tools.validate check exit1 reports F-SEC-007 V2<recordedV3, required global acceptance UNMET. Reply msg_62db40fc2e26 directs failed/partial delivery with all raw failures retained, no retry/level/registry/evidence changes or passing-gate substitution. Baseline/preexistence attribution is unverified without exact-input comparison. Source proof does not turn global gate green.
+
+Earlier WS source hook JUnit landed in exact owned stray directory via shlex backslash parsing. Coordinator independently verified sole XML549050bytes SHA256bd1c3098b41194c3bafee934809eacd7375c904f0cb673de2c7f9d1544d4c930, native directory without reparse. Reply msg_6af3554e3454 permits ONLY exact preservation-first LiteralPath relocation into absent own ignored hook-junit-relocated/, retaining independent copy, then fresh campaign02. Campaign01 had clean preflight abort before CLI/services; no scenario record created, native errors/empty artifacts preserved, no recreated saved log. Exact path/receipts/decisions in current handoff and private ws040-stray-junit-coordinator-check.json/ws040-junit-relocation-decision.json.
+
+Current two authors remain live until genuine worker_done, neither delivery accepted yet. Same quota03:36Codex76%weekly, review DeepSeekUNKNOWN. No new creation/reviewer, source integration/admission or cleanup. Final full private native/bundle/workspace/external-temp/native-link preservation/taskref publication and Orca release-before-ack remain coordinator obligations. All original failures/provenance/privacy holds persist, canonical268/210below/96stale unchanged.

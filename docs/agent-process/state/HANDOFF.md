@@ -1,5 +1,42 @@
 # Current coordinator handoff
 
+## Author finalization; global validation failure retained — 2026-10-29T03:47Z
+
+Both genuine authors remain active until actual worker_done and Orca settlement.
+C3 source8fc65e052954a30f89be209d2d8f04e58ac1266f: normal corrected hook
+4102pass/4skip/35deselected,177of177routes,888.39s; clean74tests pass31.87s,
+five safe C3 records with raw one-pass/four-fail controls, exact source/dirtyfalse.
+Report head observed2d02004d3108953a302e1a49aab9a5f24e944136, final delivery
+not yet accepted. First failed invocation/relocated native-link facts remain
+preserved. No qualified review/global VAL15 closure or source integration.
+
+WS source5331d5471a9d319c134e6798645d6ba8cf8466fc: normal hook4098pass/
+6skip/35deselected,177of177routes. Clean managed campaign02 api/sim V2 passes
+all9checks with exact one output-name event. Actual tools.validate check exits1
+with F-SEC-007 V2 below recordedV3; global acceptance UNMET. Reply
+msg_62db40fc2e26 directs failed/partial final delivery, no retry/broader campaign/
+registry/evidence/level changes or substitute scoped passing gate. Preexistence/
+baseline causation is unverified unless separately proved from exact inputs.
+Private gate bytes/logs/copies/native failure facts retained; author finalizes.
+
+WS hook JUnit also suffered backslash parsing: exact own untracked directory
+Usersryanhorcaworkspacesunfoldedcircle-orei-hdmi-matrix-integrationwp-api-read-03-c1buildsoftware-wavesSW-API-READ-03-C1hook-01
+contained only junit.xml549050bytes, no reparse point. Coordinator independently
+matched original/copy SHA256bd1c3098b41194c3bafee934809eacd7375c904f0cb673de2c7f9d1544d4c930.
+Reply msg_6af3554e3454 grants only preservation-first LiteralPath move into
+absent own ignored hook-junit-relocated/ then fresh campaign02. Campaign01
+aborted clean preflight before CLI/services, no scenario record; retain native
+errors/empty artifacts, never reconstruct nonexistent saved logs. Private
+ws040-stray-junit-coordinator-check.json and relocation-decision receipt.
+
+Quota03:36Z Codex76%weekly, MiniMax97%weekly/95%session, DeepSeek UNKNOWN.
+No new dispatch/reviewer reserve. Preserve final actual native transcript in full,
+verified Git bundles/workspaces/external temps/native links, publish/verify exact
+task refs, release each settled terminal before delivery ack. Private WS native
+launch-environment capture remains unpublished. Await authoritative deliveries;
+do not equate report commit or heartbeat with worker_done. No cleanup/source
+merge/qualification/readiness promotion; canonical268/210below/96stale unchanged.
+
 ## Live asks resolved; authors continue — 2026-10-29T03:25Z
 
 Same two Tasks/Dispatches/worktrees and bases listed in the03:08 checkpoint below.
