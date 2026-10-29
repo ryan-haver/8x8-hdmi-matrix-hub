@@ -2498,3 +2498,29 @@ Postlaunch records publication/equality receipt: ci-followup-launch-publication.
 Postlaunch record checks:489existing documentation tests passed2.79s with isolated
 data/config and partialroute/cache plugins disabled; UTF8/JSONL/scope/CR-aware
 checks passed. Invocation-only docs hook exception; no source hook/runtime claim.
+
+
+### Flic functional checkpoint; artifact admission held — 2026-10-29T00:19Z
+
+Dispatchctx_33cdb9118f04 sent escalationmsg_9a78f922fb8b: allfour genuine Flic
+simulator scenarios reported pass/gateok, but eight unmasked state_before/
+state_after.auth.password fields observed across records. This is a worker
+checkpoint, not independently accepted final delivery or privacy clearance.
+Supported evidence check stillrunning against canonical plus extra evidence;
+retain its exactexit/scope separately from fourcase outcomes. No values printed
+or raw payloads published/imported. Coordinator guidance msg_76f35e7ffbd4:
+preserve alloriginalbytes privately, verify fixtureonly attribution without
+printing values, document secretfree report and artifact-admission HOLD, no
+source patch/sanitization/rerun or lease expansion. Source11f remains unintegrated
+pending qualified code review; M3 bounded metadata review cannot clear privacy.
+Both workerTask/Dispatch IDs match current allocation. NativeM3 review heartbeat
+msg_2e15fdfc548a processed, stillreviewing. Delivery1b6d56fc5603 acknowledged only
+after guidance enqueue; next inbox empty. No worker settled/released from this
+checkpoint, no duplicate or new dispatch. Existing originalTron approvalsclosed;
+no physicaldevice qualification. Private checkpoint receipt
+build/p1-fanout-20261028/flic-password-escalation-checkpoint.json.
+
+Checkpoint prose checks:489existing docs tests pass2.75s with isolated data/config
+and route/cache plugins disabled; UTF8 and CR-aware whitespace checks pass.
+Invocation-only docs hook exception, no source-hook/runtime acceptance claimed.
+Post-push equality receipt: build/p1-fanout-20261028/flic-escalation-publication.json.

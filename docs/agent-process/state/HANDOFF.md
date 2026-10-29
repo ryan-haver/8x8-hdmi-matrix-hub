@@ -1,5 +1,18 @@
 # Current coordinator handoff
 
+## Flic privacy checkpoint — 2026-10-29T00:19Z
+
+Both workers remain active. Flic Dispatchctx_33cdb9118f04 reports four functional
+pass/ok outcomes but eight unmasked simulator state auth.password fields.
+Artifact admission/publication/import HELD; originalbytes private/unchanged.
+Worker instructed to finish exact read-only evidencecheck, document fixture
+attribution and actualexit without exposing values, commit only secretfree
+assigned report, then worker_done/idle. No source patch/rerun/lease expansion.
+This is reported checkpoint, not final independently accepted evidence. M3
+Dispatchctx_3d5cba0330a2 still reviews originalCI inventory; metadata competence
+cannot clear privacy. Source11f review gate unchanged. Latest ledger holds
+message/delivery IDs. Guidance sent before batchack; next inbox empty.
+
 ## Two bounded evidence workers active — 2026-10-29T00:17Z
 
 Existing Run37205/localruntime14c5/coordinator term_dcf96b5a-bb99-4ecb-b887-eb53f7f01662.
