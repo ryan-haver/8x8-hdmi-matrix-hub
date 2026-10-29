@@ -1,5 +1,39 @@
 # Current coordinator handoff
 
+## Two bounded evidence workers active — 2026-10-29T00:17Z
+
+Existing Run37205/localruntime14c5/coordinator term_dcf96b5a-bb99-4ecb-b887-eb53f7f01662.
+After exactpublished865ec9c6 equality, both real Orca worker-start tasks launched:
+
+- Independent CI inventory review: Task task_88451be35b50, Dispatch
+  ctx_3d5cba0330a2, terminal term_be107841-b2ac-45be-b772-58df5ed4af79,
+  wp-ci-proof-review / ryan-haver/wp-ci-proof-review, exactbase9036ecff.
+  Native MiniMax-M3/thinking actual session ses_e7afcfe42ffeYgZzM8j6ZIg5OK
+  verified, metadata inventory only. Own NEW CI_EVIDENCE_REVIEW.md/build only.
+- Four existing Flic simulator proofs: Task task_442e2245e0a1, Dispatch
+  ctx_33cdb9118f04, terminal term_2085a94f-b9c4-4a36-9823-4497561dc5b7,
+  wp-flic-proof-refresh / ryan-haver/wp-flic-proof-refresh, exactbase865ec9c6.
+  Sol6.1/high requested/effective and actualnativecontexts/tools verified.
+  Own NEW FLIC_REFRESH.md/build only; no source/test/physical device actions.
+
+Fullfleet72onepage=64released/sixretained/twoactive; reserve older external
+process, no nesting. Current84%Codexweekly/98%M3weekly82%session headroom;
+refresh at natural checkpoints/15min and before future dispatch. Preserve
+correction and independent Flic evidence review reserve. No source/privacy
+qualification for M3, code11f still unreviewed/unintegrated/DeepSeekquotaunknown.
+CIinventory9036 is preserved/published but awaits independentreview;56matches
+retain bdcf06nonancestry, fourFlicmissing, separateFAPI034gap. No canonicaladoption,
+SHA rewrite or history ancestry manipulation. Original Tronapprovalsclosed.
+
+Exact briefs/ownership/acceptance and previous deliverypreservation in ledger
+and below. Process actual inbox; release settled workers before acknowledgment,
+then preserve fullnatives/currentworkspaces/bundles/artifacts and taskpublication.
+M3 Orcastructuredtranscript unsupported; nativeexport/actualscreen provenance
+recorded. Rawcheckpoint is not finalexport. No worktree removals or background
+quota service. Root/private/user/external/persistence/oddhook/quarantine protected.
+Current private receipts build/p1-fanout-20261028/; postlaunch publication equality
+ci-followup-launch-publication.json. Status is ACTIVE, not complete/qualified.
+
 ## CI inventory settled; follow-up review and Flic refresh prepared — 2026-10-29T00:14Z
 
 Report9036ecff is preserved/published on its taskref, not yet integrated. Sol

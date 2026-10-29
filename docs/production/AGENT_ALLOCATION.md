@@ -2455,3 +2455,47 @@ data/config, route-inventory/cache plugins disabled; UTF-8/scope and CR-aware
 whitespace checks pass. No source hook or full runtime suite claimed. Use scoped
 invocation-only docs hook exception for this coordination commit. Post-push exact
 remote/local equality receipt: build/p1-fanout-20261028/ci-followup-prelaunch-publication.json.
+
+### CI inventory review and Flic proof refresh launched — 2026-10-29T00:17Z
+
+Prelaunch coordination865ec9c6d0df56e0a0b72dcaee8cc0b5c95f468b was pushed and
+exactliveorigin equality verified before creation/start. New dedicated Orca
+worktrees returned exact assigned bases and actual branches; no prior writer
+replaced or retained checkout reset. Both launches are genuine worker-start
+in existing Run37205, localruntime14c5, generation3coordinator unchanged.
+
+| Task / Dispatch | Actual worktree / branch | Exact base / route | Exclusive deliverable |
+| --- | --- | --- | --- |
+| task_88451be35b50 / ctx_3d5cba0330a2 | wp-ci-proof-review / ryan-haver/wp-ci-proof-review | 9036ecffe2b5e18ccb6d636eba55edfbd0d6a80a; native MiniMax-M3/thinking | NEW SW-AUDIT-01/CI_EVIDENCE_REVIEW.md and own ignored ci-review build subtree |
+| task_442e2245e0a1 / ctx_33cdb9118f04 | wp-flic-proof-refresh / ryan-haver/wp-flic-proof-refresh | 865ec9c6d0df56e0a0b72dcaee8cc0b5c95f468b; gpt-6.1-sol/high | NEW SW-AUDIT-01/FLIC_REFRESH.md and own ignored flic-refresh build subtree |
+
+Reviewterminalterm_be107841-b2ac-45be-b772-58df5ed4af79 consumed task/heartbeat
+and actual tools observed. Native session ses_e7afcfe42ffeYgZzM8j6ZIg5OK has11
+actualassistant MiniMax-M3/minimax-coding-plan/thinking messages at entry
+checkpoint; Task/Dispatch/cwd verified. Pinned main/small/internal models and
+provider/plugin/MCP/nesting deny policy exactconfig62e6f5ab verified and ignored.
+CLI launch model/effort fields null for inherited native route, not an override
+claim. Structured Orca transcript currently unavailable(session_not_reported);
+terminal tools/native export provide explicit separate attribution. Final native
+must be exported again after settlement, not replaced by this checkpoint.
+
+Flicterminalterm_2085a94f-b9c4-4a36-9823-4497561dc5b7 has observedturnstart,
+requested/effectiveSol6.1high, exactsource Orca transcript tools and own native
+turn_contextSolhigh with actualTask/Dispatch/cwd. Node24.22.1 and OpenCode2.1.4
+verified. Four existing simulator cases only; no source/test changes or physical
+Flic claims. M3 independent evidence-metadata review reserved after settlement;
+no implementation/privacy review or eventual canonical qualification inferred.
+
+Fullfleet72onepage=64released/sixhistoricalretained/twoactive, respecting the old
+externalreservation plus coordinator ceiling4. No duplicate/nested writer.
+Currentcapacity observation84%Codexweekly/98%M3weekly82%session remainsfresh;
+material source reviewer allocation not changed, DeepSeekquota stillunknown,
+source11f unintegrated. All code/contracts/registry/ledger/root/private/protected
+resources readonly to these workers. Original closedTron approvals preserved.
+Receipts under build/p1-fanout-20261028/ci-review-*, flic-refresh-*, ci-followup-*.
+Postlaunch records publication/equality receipt: ci-followup-launch-publication.json.
+
+Postlaunch record checks:489existing documentation tests passed2.79s with isolated
+data/config and partialroute/cache plugins disabled; UTF8/JSONL/scope/CR-aware
+checks passed. Invocation-only docs hook exception; no source hook/runtime claim.
+
