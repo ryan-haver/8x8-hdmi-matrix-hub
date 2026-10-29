@@ -122,43 +122,23 @@ class TestReadme:
         return _read(self.FILENAME)
 
     def test_describes_run_py_entry_point(self, text: str) -> None:
-        """The README names ``run.py`` and the two startup modes."""
+        """Source and installed entries share the packaged bootstrap."""
         assert "run.py" in text, "README.md must describe run.py"
         assert "UC_ENABLED" in text, "README.md must describe UC_ENABLED as the runtime mode switch"
-        assert "src/driver.py" in text, "README.md must mention that UC_ENABLED=true runs src/driver.py"
+        assert "hub.cli" in text, "README.md must name the shared packaged bootstrap"
 
-    def test_honest_about_shipped_vs_framework(self, text: str) -> None:
-        """The README splits the shipped runtime from the ``src/hub/`` framework.
-
-        The previous version of this doc claimed ``MatrixService``,
-        ``ActionRunner`` and ``IntegrationLoader`` were the runtime
-        owners — they aren't. The shipped ``run.py`` constructs
-        ``OreiMatrix`` and ``RestApiServer`` directly; the framework
-        classes are library-only with pending runtime wiring.
-        """
+    def test_describes_shared_runtime_owners(self, text: str) -> None:
+        """The documented owners follow the accepted runtime composition."""
         assert "OreiMatrix" in text, "README.md must name OreiMatrix as the actual matrix client"
         assert "RestApiServer" in text, "README.md must name RestApiServer as the REST surface"
-        # Framework classes may be mentioned but only with the wiring caveat.
-        assert "framework" in text.lower(), (
-            "README.md must distinguish shipped runtime from the src/hub/ framework"
-        )
-        assert "pending" in text.lower() and "wiring" in text.lower(), (
-            "README.md must explicitly say the src/hub/ framework wiring is pending"
-        )
+        for owner in ("MatrixService", "ActionRunner", "IntegrationLoader"):
+            assert owner in text, f"README.md must describe the active {owner} owner"
 
-    def test_does_not_invent_env_flag_behaviour(self, text: str) -> None:
-        """The README must not claim FLIC_ENABLED / HA_DISCOVERY_ENABLED gate the runtime."""
-        lowered = text.lower()
-        # these are framework flags today; the Flic REST handlers are always mounted;
-        # there is no discovery payload emitted at runtime.
-        assert "flic_enabled=true" not in lowered or "framework flag" in lowered or "always" in lowered, (
-            "README.md must not describe `FLIC_ENABLED=true` as a startup switch "
-            "(the handlers are always mounted; FLIC_ENABLED is a framework flag)."
-        )
-        assert "ha_discovery_enabled=true" not in lowered or "not wired" in lowered or "no auto-discovery" in lowered, (
-            "README.md must not describe `HA_DISCOVERY_ENABLED=true` as starting a discovery "
-            "payload — the flag is not wired to startup."
-        )
+    def test_documents_runtime_integration_switches(self, text: str) -> None:
+        """The actual switches are discoverable from the main guide."""
+        for flag in ("UC_ENABLED", "FLIC_ENABLED", "HA_DISCOVERY_ENABLED"):
+            assert flag in text, f"README.md must document the runtime {flag} switch"
+        assert "default" in text.lower(), "README.md must explain integration defaults"
 
     @pytest.mark.parametrize("integration", ["unfolded_circle", "flic", "homeassistant"])
     def test_mentions_each_integration(self, text: str, integration: str) -> None:
@@ -200,17 +180,11 @@ class TestReadme:
         assert "docs/API_REFERENCE.md" in text, "README.md must link to docs/API_REFERENCE.md"
 
     def test_no_fabricated_quickstart_commands(self, text: str) -> None:
-        """The README quick start does not invent Flic/HA startup commands."""
-        # The HA discovery flag is not wired to startup — there is no extra docker compose line for it.
-        assert "HA_DISCOVERY_ENABLED=true" not in text, (
-            "README.md quick start must not advertise HA_DISCOVERY_ENABLED=true; "
-            "the flag is not wired to startup and there is no discovery payload."
-        )
-        # The README should not say FLIC_ENABLED must be set to start Flic — handlers are always mounted.
-        assert "FLIC_ENABLED=true" not in text, (
-            "README.md quick start must not advertise FLIC_ENABLED=true; "
-            "the Flic REST handlers are always mounted and the flag is framework-only."
-        )
+        """Optional integrations use the shared entry, not invented module CLIs."""
+        assert "python run.py" in text
+        assert "orei-matrix-driver" in text, "README.md must document the installed console entry"
+        for unsupported in ("python -m hub.integrations.flic", "python -m hub.integrations.homeassistant"):
+            assert unsupported not in text, f"Unsupported independent integration CLI: {unsupported}"
 
 
 # ---------------------------------------------------------------------------
@@ -219,10 +193,7 @@ class TestReadme:
 
 
 class TestArchitecture:
-    """docs/ARCHITECTURE.md must document the actual shipped path and
-    keep the ``src/hub/`` framework libraries clearly labelled as
-    library-only with pending runtime wiring.
-    """
+    """Describe the shared runtime; functional wiring is tested by runtime suites."""
 
     FILENAME = "docs/ARCHITECTURE.md"
 
@@ -239,42 +210,23 @@ class TestArchitecture:
         return _run_py_text()
 
     def test_describes_shipped_run_path(self, text: str) -> None:
-        """Architecture describes what ``run.py`` actually does: OreiMatrix + RestApiServer."""
+        """Architecture names the packaged bootstrap and real transport/surface."""
         assert "OreiMatrix" in text, f"{self.FILENAME} must name OreiMatrix"
         assert "RestApiServer" in text, f"{self.FILENAME} must name RestApiServer"
         assert "run.py" in text, f"{self.FILENAME} must mention run.py"
-        assert "src/driver.py" in text, f"{self.FILENAME} must mention src/driver.py for UC mode"
+        assert "hub.cli" in text, f"{self.FILENAME} must name the shared packaged bootstrap"
 
-    def test_run_py_constructs_orei_matrix_directly(
-        self, text: str, run_text: str
-    ) -> None:
-        """Architecture is honest: ``run.py`` constructs OreiMatrix directly."""
-        assert "OreiMatrix(" in run_text, (
-            "Source check: run.py must construct OreiMatrix directly — "
-            "if this assertion fires, the wiring has changed and the doc must follow."
-        )
+    def test_describes_shared_composition_root(self, text: str) -> None:
+        """Readers can locate the composition behind both supported entries."""
+        assert "build_runtime" in text or "hub.runtime.composition" in text
 
-    def test_run_py_does_not_wire_framework_classes(
-        self, text: str, run_text: str
-    ) -> None:
-        """``run.py`` does NOT instantiate MatrixService, ActionRunner, or IntegrationLoader.
+    def test_documents_active_service_action_and_integration_owners(self, text: str) -> None:
+        for owner in ("MatrixService", "ActionRunner", "IntegrationLoader", "EventBus"):
+            assert owner in text, f"{self.FILENAME} must describe the active {owner} owner"
 
-        Source check: a simple substring search. If the framework
-        is wired into run.py later, this assertion flips and the
-        doc must be updated.
-        """
-        for cls in ("MatrixService", "ActionRunner", "IntegrationLoader"):
-            assert cls not in run_text, (
-                f"Source check: run.py must not instantiate {cls}. "
-                "If the wiring has landed, update this test and the doc."
-            )
-
-    def test_explicit_pending_wiring_section(self, text: str) -> None:
-        """The framework libraries are flagged as ``pending runtime wiring``."""
-        lowered = text.lower()
-        assert "pending" in lowered and "wiring" in lowered, (
-            f"{self.FILENAME} must say the framework libraries have pending runtime wiring"
-        )
+    def test_describes_active_versioned_storage(self, text: str) -> None:
+        assert "schema_version" in text
+        assert "prepare_runtime_storage" in text or "hub.persistence" in text
 
     def test_describes_all_four_layers(self, text: str) -> None:
         """Each of core, domain, integrations, persistence has its own heading or section."""
@@ -386,22 +338,15 @@ class TestIntegrations:
                 f"{self.FILENAME} must reference the framework '{integration}' integration"
             )
 
-    def test_flic_handlers_always_mounted(self, text: str) -> None:
-        """The doc says the Flic REST handlers are always mounted; FLIC_ENABLED does not disable them."""
-        lowered = text.lower()
-        assert "always" in lowered and "mount" in lowered, (
-            f"{self.FILENAME} must explain that the Flic REST handlers are always mounted"
-        )
+    def test_flic_flag_controls_optional_registry_routes(self, text: str) -> None:
+        assert "FLIC_ENABLED=false" in text, f"{self.FILENAME} must explain how to disable Flic"
+        assert "/api/integrations/flic/" in text
 
-    def test_ha_discovery_not_wired(self, text: str) -> None:
-        """The doc says ``HA_DISCOVERY_ENABLED`` is not wired to startup."""
+    def test_ha_discovery_is_opt_in(self, text: str) -> None:
+        """Discovery startup is documented without inventing a separate service."""
         lowered = text.lower()
-        assert "ha_discovery_enabled" in lowered, (
-            f"{self.FILENAME} must reference HA_DISCOVERY_ENABLED by name"
-        )
-        assert "not wired" in lowered or "no auto-discovery" in lowered or "not read by" in lowered, (
-            f"{self.FILENAME} must say HA_DISCOVERY_ENABLED is not wired to runtime startup"
-        )
+        assert "HA_DISCOVERY_ENABLED=true" in text
+        assert "zeroconf" in lowered or "mdns" in lowered
 
     def test_documents_hacs_component(self, text: str) -> None:
         """Home Assistant ships as a HACS component and a separate framework module."""
@@ -633,17 +578,13 @@ def test_openapi_endpoint_will_be_in_rest_app() -> None:
         )
 
 
-def test_run_py_does_not_instantiate_framework_classes() -> None:
-    """``run.py`` does not instantiate the framework classes.
-
-    Source check underpinning ARCHITECTURE.md's framework vs
-    runtime split. If the wiring has landed, the assertion fires
-    and the doc must follow.
-    """
+def test_root_entry_keeps_construction_in_shared_composition() -> None:
+    """The compatibility entry delegates construction to the canonical CLI."""
     text = _run_py_text()
+    assert "hub" in text and "cli" in text
     for cls in ("MatrixService", "ActionRunner", "IntegrationLoader"):
         assert cls not in text, (
-            f"run.py must not instantiate {cls}; the framework is library-only."
+            f"run.py must delegate {cls} construction to the shared composition."
         )
 
 

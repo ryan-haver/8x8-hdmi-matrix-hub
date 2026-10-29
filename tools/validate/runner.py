@@ -133,7 +133,7 @@ def compact_log(entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Command log excerpt for the record: every write/CEC command in full; plain reads
     (which a page load issues by the dozen) without their payload and response, unless
     they carried a fault or warning."""
-    out = []
+    out: list[dict[str, Any]] = []
     for e in entries:
         if _is_read(e) and not e.get("fault") and not e.get("warnings"):
             out.append({k: e[k] for k in ("t", "channel", "command", "recognised") if k in e})
@@ -547,6 +547,28 @@ class Runner:
                 return f"changes {sorted(unrestorable)}, which cannot be restored; pass --allow-unrestorable"
         return None
 
+    @staticmethod
+    def _is_expected_application_error(sc: Scenario, client: Client, result: ActionResult) -> bool:
+        """True ONLY when result is a classified completed application response matching an expected negative Response."""
+        if result.error_kind != "application":
+            return False
+        if result.status is None or not result.requests:
+            return False
+        if not any(
+            r.get("status") == result.status and r.get("response") is not None
+            for r in result.requests
+        ):
+            return False
+        for exp in sc.expect:
+            if isinstance(exp, Response) and (exp.clients is None or client.name in exp.clients):
+                if exp.status is not None:
+                    allowed = exp.status if isinstance(exp.status, tuple) else (exp.status,)
+                    if all(s >= 400 for s in allowed) and result.status in allowed:
+                        return True
+                if exp.min_status is not None and exp.min_status >= 400 and result.status >= exp.min_status:
+                    return True
+        return False
+
     # ------------------------------------------------------------ one scenario
 
     async def _run_one(self, sc: Scenario, client: Client) -> Outcome:
@@ -635,6 +657,16 @@ class Runner:
                 procedure.extend(f"  {s}" for s in result.steps)
                 if result.error:
                     notes.append(f"client error: {result.error}")
+                    if not self._is_expected_application_error(sc, client, result):
+                        # An unchanged device is expected for a filtered SDK callback,
+                        # but also happens when replay never ran (e.g. missing Node).
+                        # Keep expected HTTP refusals separate: those have a response
+                        # status/body and need not set a replay/transport error.
+                        checks.append({
+                            "description": "client action completed without a replay or transport error",
+                            "result": "fail", "detail": redact(result.error),
+                            "finding": None, "linked_finding": None, "note": None,
+                        })
                 # ---- expectations
                 for exp in sc.expect:
                     checks.append(await self._check(exp, sc, client, result, state_before, t_action, ws, helper,
@@ -861,9 +893,32 @@ class Runner:
                     ok = ok and status is not None and status >= exp.min_status
                 if exp.json and client.name == "api":
                     ok = ok and _subset(exp.json, result.body)
+                header_detail = ""
+                if exp.headers or exp.absent_headers:
+                    # Use only the final action exchange. Missing observation is
+                    # not absence, and an earlier request must not fill the gap.
+                    exchange = result.requests[-1] if result.requests else {}
+                    captured = exchange.get("response_headers")
+                    masked = exchange.get("response_headers_redacted")
+                    if (client.name != "api" or exchange.get("status") != status
+                            or not isinstance(captured, dict) or not isinstance(masked, list)):
+                        ok = False
+                        header_detail = "; response headers not observed on an API exchange"
+                    else:
+                        actual = {name.lower(): value for name, value in captured.items()}
+                        redacted = {name.lower() for name in masked}
+                        wrong = [name for name, value in exp.headers.items()
+                                 if name.lower() in redacted or actual.get(name.lower()) != value]
+                        present = [name for name in exp.absent_headers if name.lower() in actual]
+                        ok = ok and not wrong and not present
+                        # Values are already masked at capture, but diagnostics
+                        # deliberately reveal names only (including expectations).
+                        header_detail = (f"; header equality failed: {wrong}; unexpected presence: {present}"
+                                         if wrong or present else "; observed header checks matched")
                 verdict = "pass" if ok else "fail"
                 body = json.dumps(result.body, default=str)[:300] if client.name == "api" else f"({client.name})"
-                detail = f"HTTP {status}; body {body}" + (f"; error {result.error}" if result.error else "")
+                detail = (f"HTTP {status}; body {body}" + (f"; error {result.error}" if result.error else "")
+                          + header_detail)
             elif isinstance(exp, Hub):
                 deadline = time.monotonic() + 4.0
                 while True:

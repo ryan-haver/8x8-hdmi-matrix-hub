@@ -1,0 +1,30 @@
+{
+  "observed_after_gate": "2026-10-19T10:16:29.508610+00:00",
+  "campaign_source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+  "consolidation_head": "1baac3dec660f41345869c126cfca94d6731c5a0",
+  "tracked_status_after_gate": " M docs/validation/LEDGER.md\n M docs/validation/features.yaml\n",
+  "scope": "Evidence/registry/report consolidation after frozen source/image campaigns; no application or test edits",
+  "expected_clients": [
+    "api",
+    "browser",
+    "uc",
+    "ha",
+    "flic"
+  ],
+  "combined_summary": "build/runtime-completion/after-r8b/combined-campaign-summary.json",
+  "evidence_roots": [
+    "build/runtime-completion/after-r8b/source-campaigns/evidence",
+    "build/runtime-completion/after-r8b/source-ha-current/evidence",
+    "build/runtime-completion/after-r8b/source-ha-minimum-line/evidence",
+    "build/runtime-completion/after-r8b/image-campaigns-cached/evidence",
+    "build/runtime-completion/after-r8b/image-campaigns-fresh/evidence",
+    "build/runtime-completion/after-r8b/image-ha-campaigns-cached/evidence",
+    "build/runtime-completion/after-r8b/image-ha-campaigns-fresh/evidence",
+    "build/runtime-completion/after-r8b/image-uc-campaigns/evidence",
+    "build/runtime-completion/after-r8b/final-amd64-deploy-evidence"
+  ],
+  "gate_exit_code": 0,
+  "complete_core_log": "final-source-rerun.log",
+  "complete_core_log_sha256": "5796baa6d854d6098c3077ee1294e61fb378da06f3076a8482ae5384eea5a958",
+  "gate_log_sha256": "c18eb6f36ffcb821517c994f8f83f9f27c7481b5273bb7c8bbba1114a57b854d"
+}

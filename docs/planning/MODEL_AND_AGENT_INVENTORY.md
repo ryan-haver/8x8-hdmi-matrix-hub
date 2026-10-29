@@ -1,5 +1,13 @@
 # Model and agent inventory
 
+For future staffing, read the [standing Orca protocol](../ORCHESTRATION_PROTOCOL.md)
+and maintain the [allocation ledger](../production/AGENT_ALLOCATION.md). Refresh
+catalogs, supported host/adapter selection and measured quota before each
+authorized wave. This inventory is historical task evidence, not current
+verified capacity. New implementation needs qualified cross-family review;
+Sol/Astra/Luna are one family, and an unverified backend alias cannot establish
+cross-family independence. No historical qualification is silently upgraded.
+
 Checked 2026-10-18 for the next runtime-completion phases. This inventory
 separates a model from its agent harness and separates discovery from access.
 It does not change accounts, install providers or start billable model probes.
@@ -36,8 +44,8 @@ claims or guaranteed speed/cost measurements.
 | Model | Harness / exact identifier | Access evidence | Best planned use / limitation |
 | --- | --- | --- | --- |
 | Sol 6.1 | Orca `codex`, `gpt-6.1-sol`, high | Project-proven; visible Codex catalog | Coordinator and core implementation. Default for consequential coding, with task-specific tests. |
-| Astra | Orca `codex`, `gpt-6-astra`, high | Visible Codex catalog; no new probe in this audit | Difficult architecture and independent final review; reserve rather than use for every task. |
-| Luna | Orca `codex`, `gpt-6-luna`, medium | Visible Codex catalog; no new probe | Bounded documentation, evidence indexing and focused follow-ups. Escalate architectural ambiguity. |
+| Astra | Orca `codex`, `gpt-6-astra`, high | Project-proven after the audit: R0 contract accepted as `0125ad2` | Difficult architecture and independent final review; use a fresh reviewer session. |
+| Luna | Orca `codex`, `gpt-6-luna`, medium | Effective live dispatch confirmed; R7 guide preparation accepted after 375 independent checks | Bounded documentation, evidence indexing and focused follow-ups. Escalate architectural ambiguity. |
 | Gemini 4 Argon | Orca `antigravity`, `gemini-4-argon`, high | Project-proven; also advertised in OpenCode catalog | UC integration and complex protocol/lifecycle reasoning; independent provider perspective. |
 | Gemini 3.8 Flash | Orca `antigravity`, `gemini-3.8-flash-high` | Project-proven Orca alias; API ID is `gemini-3.8-flash` | Focused integration/client implementation and tests with clear contracts. |
 | MiniMax M3 | Orca `opencode`; configured `minimax-coding-plan/MiniMax-M3` | Project-proven; current primary config; prior run exhausted quota | Bounded persistence wiring, conditional on refreshed quota and observed model. |
@@ -99,7 +107,66 @@ and its previous project runs are separate evidence. No account was selected
 or changed in this audit. Other Orca-supported agent IDs are not evidence that
 their executables, credentials or model selection are ready here.
 
+## Execution since the audit
+
+Execution after the initial audit confirmed Sol, Astra, Argon and Flash through
+real Orca dispatches. Sol completed core, installed-entry, persistence and
+cleanup corrections; Argon's UC correction and Flash's Flic replay work were
+accepted after coordinator validation. Some candidates needed follow-up fixes,
+so these outcomes support task-specific assignments and review gates, rather
+than a general ranking of model quality.
+
+MiniMax M3's persistence checkpoint was preserved after its full-scope failure;
+Sol completed that track. M3.1 and DeepSeek remain conditional routes. Luna's
+bounded guide assignment has confirmed requested/effective `gpt-6-luna` medium;
+guide preparation `d956046` was accepted after 375 independent checks and merged
+as `5608407`. Luna's final guides/index subsequently passed 413 independent
+documentation tests and 214 local links and were merged at `b84ec72`. Catalog entries are
+still distinct from proven current capacity. The no-Anthropic policy applies to
+all retries, reviews and helpers.
+
+The current corrective assignments remain scoped by demonstrated need: Sol
+completed R5C's Linux deployment tests; Flash completed R6C's HA validation error
+classification; Argon's R3E UI ordering correction is accepted; Sol completed
+R1F's explicit-refresh CEC enable-cache correction; Luna owns the final
+guides/index. Fresh Astra completed R8 and found two high defects in actual
+source and images; fresh Sol 6.1 high owners now handle disjoint R2D persistence
+and R1G rollback/reconnect corrections, now merged after validation. Fresh Astra
+R8B passes their original six source/image cases but finds the remaining cleanup
+deadline boundary, corrected by fresh Sol 6.1 high R1H. Fresh Astra R8C passes
+all eight known source/image cases but reproduces original-state restoration
+being skipped when candidate cleanup is interrupted. Fresh Sol 6.1 high R1I's
+complete restoration correction is merged after 59 independent exact-commit
+checks. Fresh Astra high R8D accepts the supported source/new-image boundary
+after twelve required cases, 102 regressions and two additional controls pass;
+the coordinator independently verifies both controls. Its conditional
+alternate-disconnect limit is explicitly retained with a failing probe.
+The fresh `1baac3de` source/image campaigns and combined evidence gate now pass;
+all 439 audited old/new evidence Git blobs match at `fe0e7f0`. Closing assignments
+were Luna medium for bounded guide/index reconciliation (49 independent tests,
+merged `603ce187`) and Astra high for the accepted independent evidence-attribution
+audit (`a22c5ebb`). Both exact requested/effective routes were verified and both
+worktrees removed after acceptance. Final documentation-head CI, the three
+owner visual decisions and physical/field release gates remain. A
+separate Sol session completed a read-only R3E source-contract review without
+editing tracked files. Its real-payload JavaScript probe demonstrates a startup
+ordering race, while attribution to the first CI failure remains bounded.
+
+Antigravity launch receipts and native UI display the requested Argon high
+alias. Earlier backend self-reporting conflicted with that label; the underlying
+backend identity remains unverified. Do not present the alias as independent
+proof of a particular backend version. The native credit footer alone is also
+not proof that an active worker failed or exited.
+
 ## Launch rules
+
+**Historical recipes below are retained for attribution, not the current
+supervised launch contract.** Use `orchestration worker-start` and the standing
+protocol for future execution. On 2026-10-19, Orca 1.4.230 help advertises
+OpenCode `--model` only for existing worktrees with verified host CLI/model
+availability; effort remains unsupported. Earlier rejection receipts below
+remain true for their older launches. No new exact-model execution, access,
+quota or task qualification follows from this changed help text.
 
 Use these as recipes when executing the task plan; none
 were run as launches during this planning audit. Resolve the integration base
@@ -138,3 +205,46 @@ reasoning level only for a concrete unresolved problem; no automatic `ultra`
 delegation or unsupervised helper fan-out bypassing the roster.
 Before creating the worktree, also inspect setup hooks and default agent tabs
 so an otherwise valid launch does not start an excluded agent as a side effect.
+
+
+## Software-wave observations, 2026-10-20
+
+These observations supplement the dated initial audit above; they are not new
+permanent launch defaults. The allocation ledger carries exact current authority.
+Sol6.1/high authored the F-SEC-007 lockout scenario/browser-adapter package,
+corrected a native-prompt fallback issue, passed the normal configured hook twice
+(finalsource2ae46e6c:4,043tests,177/177routes), and delivered14clean API/browser
+outcomes plus an existing wait control. Final candidate review remains separate.
+Same managedpool last supported report66%weeklyremaining, reset2026-10-27T06:33:16Z.
+
+MiniMax-M3/thinking delivered the bounded four-feature API preservation audit;
+coordinator factual review corrected five-closed/one-open attribution.141 original
+API V2 records/1,079checks were preserved without a new runtime qualification.
+This qualifies bounded inventories, not an automatic security/concurrency review.
+
+DeepSeek Pro native deepseek/deepseek-v4-pro/default independently executed five
+security/API complements and two actual Chromium checks at exact initialf4ffa8d1,
+reported calibrated nonblocking observations and corrected directory-cover
+freshness reasoning. That is an initial source review, not final source/assembly
+acceptance. Native complete exports preserve attribution. Its settled terminal
+reuse was refused agent_unconfigured before a newTask; oldresourcewasreleased,
+with no duplicatewriter or orchestrationreset. Supported balance22:00:46Z USD50.19
+available, Pro/Flash catalog unchanged; increaseoriginunreported/notinitiated by
+coordinator. Refresh exact headroom again for final review/new assignments.
+
+Current agy supported catalog lists explicit Gemini4Argon medium/high/low and
+Gemini3.8Flash high/medium/low. Historical alias/backend mismatch and enabled
+plugin/helper containment remain unresolved; a catalog does not qualify routing.
+No alternative worker was launched on that basis. Claude/Anthropic catalog names
+remain excluded, with no execution. Capacity routes each task; active source and
+coordinator evidence work continued while alternate routes were assessed.
+
+
+Final independent review then accepted candidate94b76fe1 (report596d39ff) for
+F-SEC-007 source API/browser proof and F-API-002 API refresh. The fresh native
+DeepSeekPro/default session is distinct from the initial f4 review; its49messages
+and source/metadata inspection are preserved. No source change after tested2ae,
+R1reviewed at exact final commit, earlier5API/2Chromium executions keep original
+attribution. Both settled reviewer resources were released before acknowledgment;
+no historical same-family review is reclassified. Fresh22:24:32 credit balance
+USD48.00 supported bounded final review, with external shared use unreported.

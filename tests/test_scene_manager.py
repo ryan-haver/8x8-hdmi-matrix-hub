@@ -354,16 +354,17 @@ class TestScenePins:
         import json
 
         scene, _ = mgr.create_scene(name="Locked", password_protected=True, passcode="1234")
-        saved = json.loads((data_dir / "scenes.json").read_text(encoding="utf-8"))
+        # R2 contract §4: scene_manager.SceneManager persists to scenes_v2.json.
+        saved = json.loads((data_dir / "scenes_v2.json").read_text(encoding="utf-8"))
         assert saved["scenes"][0]["passcode_hash"].startswith("pbkdf2_sha256$")
         reloaded = SceneManager(data_dir=data_dir)
         assert reloaded.verify_scene_passcode(scene.id, "1234") is True
 
     def test_plaintext_pin_on_disk_is_hashed_on_load(self, data_dir):
-        """F-SEC-004: a raw PIN in scenes.json is hashed in memory and rewritten on disk."""
+        """F-SEC-004: a raw PIN in scenes_v2.json is hashed in memory and rewritten on disk."""
         import json
 
-        (data_dir / "scenes.json").write_text(
+        (data_dir / "scenes_v2.json").write_text(
             json.dumps({"scenes": [{"id": "s1", "name": "Hand edited", "password_protected": True,
                                     "passcode_hash": "4321"}]}),
             encoding="utf-8",
@@ -371,7 +372,7 @@ class TestScenePins:
         mgr = SceneManager(data_dir=data_dir)
         assert mgr.get_scene("s1").passcode_hash.startswith("pbkdf2_sha256$")
         assert mgr.verify_scene_passcode("s1", "4321") is True
-        on_disk = json.loads((data_dir / "scenes.json").read_text(encoding="utf-8"))["scenes"][0]["passcode_hash"]
+        on_disk = json.loads((data_dir / "scenes_v2.json").read_text(encoding="utf-8"))["scenes"][0]["passcode_hash"]
         assert on_disk.startswith("pbkdf2_sha256$") and "4321" != on_disk
 
     def test_inherited_protection_needs_the_profile_map(self, mgr):

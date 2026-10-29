@@ -39,6 +39,8 @@ from collections.abc import Awaitable, Callable, Mapping
 from dataclasses import dataclass, field
 from typing import Any
 
+from hub.core.errors import safe_action_error
+from hub.core.matrix_service import MatrixService
 from password import attempt_pin, check_pin_lockout, verify_passcode_async
 from profile_execution import apply_profile_state
 from system_shortcuts import execute_shortcut
@@ -334,12 +336,12 @@ async def _passcode_refusal(
 
     Returns None when the action may run, else the 403/429 to answer with.
     """
-    if passcode in (None, ""):
-        return _refused(kind, action_id, PASSCODE_REQUIRED)
     key = _pin_key(kind, action_id)
     retry_after = check_pin_lockout(key)
     if retry_after > 0:
         return _locked(kind, action_id, retry_after)
+    if passcode in (None, ""):
+        return _refused(kind, action_id, PASSCODE_REQUIRED)
     attempt = await attempt_pin(key, verify)
     if attempt.locked:
         return _locked(kind, action_id, attempt.retry_after)
@@ -423,18 +425,18 @@ class ActionRunner:
     @classmethod
     def from_runtime(cls, matrix_device: Any = None) -> ActionRunner:
         """A runner bound to the managers the running hub already holds."""
+        from rest_api.scenes_v2 import _phase8_scene_manager
         from rest_api.utils import (
             get_macro_manager,
             get_matrix_device,
             get_profile_manager,
-            get_scene_manager,
             get_system_shortcut_manager,
         )
 
         return cls(
             matrix_device if matrix_device is not None else get_matrix_device(),
             profile_manager=get_profile_manager(),
-            scene_manager=get_scene_manager(),
+            scene_manager=_phase8_scene_manager,
             macro_manager=get_macro_manager(),
             shortcut_manager=get_system_shortcut_manager(),
         )
@@ -487,15 +489,15 @@ class ActionRunner:
             return await _RUNNERS[normalized](self, action_id, passcode, params or {})
         except Exception as exc:
             # One place catches what an action did wrong, so no surface has to.
-            _LOG.exception("%s '%s' failed", normalized, action_id)
+            message, error_id = safe_action_error(exc, f"{normalized} '{action_id}' failed", logger=_LOG)
             return _result(
                 normalized,
                 action_id,
                 success=False,
                 partial=False,
                 status_code=STATUS_FAILED,
-                errors=[str(exc) or f"{normalized.capitalize()} '{action_id}' failed"],
-                data={"code": "execution_error", "id": action_id},
+                errors=[message],
+                data={"code": "execution_error", "id": action_id, "error_id": error_id},
             )
 
     async def _delegate(
@@ -508,19 +510,19 @@ class ActionRunner:
         params: dict[str, Any],
     ) -> ActionRunResult:
         """Run one kind through its registered executor."""
-        call = getattr(executor, "run_action", executor)
         try:
+            call = getattr(executor, "run_action", executor)
             return _coerce(kind, action_id, await _resolve(call(action_id, passcode=passcode, params=params)))
         except Exception as exc:
-            _LOG.exception("%s executor failed for '%s'", kind, action_id)
+            message, error_id = safe_action_error(exc, f"{kind} executor failed for '{action_id}'", logger=_LOG)
             return _result(
                 kind,
                 action_id,
                 success=False,
                 partial=False,
                 status_code=STATUS_FAILED,
-                errors=[str(exc) or f"{kind.capitalize()} '{action_id}' failed"],
-                data={"code": "execution_error", "id": action_id},
+                errors=[message],
+                data={"code": "execution_error", "id": action_id, "error_id": error_id},
             )
 
     # ---- profiles -----------------------------------------------------------
@@ -563,11 +565,11 @@ class ActionRunner:
         state = await apply_profile_state(profile, matrix)
         errors.extend(state.errors)
         failed_outputs = set(state.failed_outputs)
-        for offset, (output_num, config) in enumerate(sorted(profile.outputs.items())):
+        for output_num, config in sorted(profile.outputs.items()):
             applied = output_num not in failed_outputs
             steps.append(
                 StepResult(
-                    step_index=len(steps) + offset,
+                    step_index=len(steps),
                     action=f"output:{output_num}",
                     success=applied,
                     error=None if applied else _output_error(state.errors, output_num),
@@ -591,11 +593,14 @@ class ActionRunner:
     async def _run_power_on_macro(self, macro_id: str) -> tuple[StepResult, dict[str, Any] | None, list[str]]:
         """A profile's power-on macro as one step, with the reason it failed."""
         manager = self.macro_manager
-        if manager is None:
-            reason = "Power-on macro '" + macro_id + "': macro manager not initialized"
-            return StepResult(0, f"macro:{macro_id}", False, error=reason), None, [reason]
-
-        outcome = await manager.execute_macro(macro_id)
+        if manager is None or manager.get_macro(macro_id) is None:
+            outcome = {"success": False, "error": f"Macro not found: {macro_id}"}
+        else:
+            try:
+                outcome = await manager.execute_macro(macro_id)
+            except Exception as exc:
+                message, error_id = safe_action_error(exc, f"Power-on macro '{macro_id}' failed", logger=_LOG)
+                outcome = {"success": False, "error": message, "error_id": error_id}
         success = bool(outcome.get("success"))
         reasons = [] if success else _macro_errors(outcome)
         step = StepResult(
@@ -605,7 +610,7 @@ class ActionRunner:
             error="; ".join(reasons) or None,
             data={"macro_id": macro_id, "steps_executed": outcome.get("steps_executed")},
         )
-        errors = [f"Power-on macro '{macro_id}': {reason}" for reason in reasons]
+        errors = [] if success else [f"Power-on macro '{macro_id}': {outcome.get('error') or 'failed'}"]
         return step, outcome, errors
 
     # ---- scenes -------------------------------------------------------------
@@ -633,10 +638,10 @@ class ActionRunner:
             if denied is not None:
                 return denied
 
-        from scene_execution import SceneExecutor
+        from scene_execution import SceneExecutor, _PasscodeCheckedSceneManager
 
         executor = SceneExecutor(
-            scene_manager=manager,
+            scene_manager=_PasscodeCheckedSceneManager(manager, action_id),
             profile_manager=self.profile_manager,
             system_action_manager=self.shortcut_manager,
             macro_manager=self.macro_manager,
@@ -740,7 +745,38 @@ class ActionRunner:
         if not 1 <= number <= PRESET_SLOTS:
             return _not_found("preset", action_id)
 
-        recalled = bool(await _resolve(recaller(number)))
+        try:
+            if isinstance(executor, MatrixService):
+                recalled = await executor.recall_preset(number, propagate_errors=True)
+            else:
+                recalled = bool(await _resolve(recaller(number)))
+        except Exception as exc:
+            message, error_id = safe_action_error(exc, "recalling preset", logger=_LOG)
+            return _result(
+                "preset",
+                action_id,
+                success=False,
+                partial=False,
+                status_code=STATUS_FAILED,
+                step_results=[
+                    StepResult(
+                        step_index=0,
+                        action=f"preset:{number}",
+                        success=False,
+                        error=message,
+                        data={"preset": number, "error_id": error_id},
+                    )
+                ],
+                errors=[message],
+                data={
+                    "code": "execution_error",
+                    "id": action_id,
+                    "preset": number,
+                    "name": f"Preset {number}",
+                    "error_id": error_id,
+                },
+            )
+
         steps = [
             StepResult(
                 step_index=0,

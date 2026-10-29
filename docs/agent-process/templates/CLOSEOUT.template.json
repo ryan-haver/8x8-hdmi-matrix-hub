@@ -1,0 +1,43 @@
+{
+  "template": true,
+  "phase_id": null,
+  "wave_id": null,
+  "observed_utc": null,
+  "status": "not_started",
+  "tasks": [],
+  "per_task_required_evidence": [
+    "actual_task_dispatch_and_outcome",
+    "all_material_author_identities_and_source_heads",
+    "qualified_different_family_review_and_exact_accepted_head",
+    "scope_and_actual_acceptance_commands_results",
+    "settlement_and_immediate_resource_decision",
+    "full_relevant_artifact_manifest_and_verified_git_bundle",
+    "available_native_transcript_and_explicit_clipping_or_omissions",
+    "exact_task_branch_publication_and_live_remote_verification",
+    "orca_managed_cleanup_and_completed_local_branch_disposition"
+  ],
+  "combined_source_head": null,
+  "combined_source_equivalence_and_review": null,
+  "applicable_verification": [],
+  "skipped_checks_and_limits": [],
+  "actual_model_fit_usage_and_time_observations": [],
+  "protected_resources_verification": null,
+  "readiness_changes_and_qualifying_evidence": [],
+  "handoff_baseline_and_ledger_updates": [],
+  "all_worker_list_pages_evidence": null,
+  "active_dispatches": null,
+  "reclaimable_resources": null,
+  "unprocessed_messages": null,
+  "integration_publication": {
+    "authorization": "unknown",
+    "local_head": null,
+    "tracking_head": null,
+    "fresh_live_remote_head": null,
+    "all_equal_verified": false,
+    "working_tree_state": "unknown",
+    "evidence": null
+  },
+  "unresolved_blockers": [],
+  "next_wave_started": false,
+  "closure_requirements_actually_met": false
+}

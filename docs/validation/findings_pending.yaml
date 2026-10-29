@@ -7,4 +7,20 @@
 # Each row: id, severity (C/H/M/L), title, location, proposed register row
 # (section + text), proof (scenario that demonstrates it), status (open|closed).
 
-findings: []
+findings:
+  - id: VAL-14
+    severity: M
+    title: Already-disconnected routing requests omitted documented failure events
+    location: src/rest_api/control.py
+    proposed_register_row: "4.10 validation: preserve 503 and emit switch_failed/switch_all_failed for valid offline requests; reject invalid ports without an event."
+    proof: "docs/production/software-waves/SW-API-CLIENT-02-C1/FINDING.md; original failed CI bytes remain under docs/validation/runs/software-waves/SW-API-CLIENT-02-C1/failed-ci; accepted correction at 3788353e, independent review 0bd3d76f, fresh source310d8b65 unreachable scenario and 18 offline regressions."
+    status: open
+    disposition: Source correction independently accepted; formal closeout awaits final assembly review and combined CI/publication. No V3 target promotion or historical failure waiver.
+  - id: VAL-15
+    severity: M
+    title: Validation request artifacts and action descriptions do not redact X-Admin-PIN
+    location: tools/validate/evidence.py and tools/validate/model.py
+    proposed_register_row: "4.10 validation tooling: redact supported credential headers recursively before artifact/procedure persistence while preserving public fields and actual request behavior."
+    proof: docs/production/software-waves/SW-SEC-DATA-02-C1/FINDING.md
+    status: open
+    disposition: Reproduced with synthetic markers only; not an observed owner credential leak or a finding against all product logging. Corrective package SW-SEC-DATA-02-C1 remains undispatched.

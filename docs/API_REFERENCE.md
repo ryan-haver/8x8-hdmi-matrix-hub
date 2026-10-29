@@ -57,7 +57,13 @@ Default port: `8080`. Use the hub host's address; configure `API_PORT` to change
 
 ## Response Format & OpenAPI 3.1 Contract
 
-JSON control API responses use the uniform `ApiResponseEnvelope` schema (`#/components/schemas/ApiResponseEnvelope` in `GET /api/openapi.json`). The specification endpoint itself returns a raw OpenAPI document; `/api/docs` returns HTML.
+Core JSON control responses use `ApiResponseEnvelope` (`#/components/schemas/ApiResponseEnvelope` in `GET /api/openapi.json`). Scene v2 handlers omit absent `data` or `error` fields and use `SceneV2ResponseEnvelope`; execution failures can carry partial-result data. The specification endpoint returns a raw OpenAPI document; `/api/docs` returns HTML.
+
+`POST /api/input/next` and `/api/input/previous` accept `output=1` through `8`
+(default `1`) and optional `cycle=true|false`. Omitted `cycle` wraps between
+inputs 1 and 8; lowercase `false` clamps at either boundary. Other explicit
+values return `400` before routing changes. Responses preserve the operation's
+`previous_input` and `current_input`, including during concurrent requests.
 
 ```json
 {

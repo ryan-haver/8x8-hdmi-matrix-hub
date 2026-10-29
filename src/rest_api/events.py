@@ -13,8 +13,8 @@ One :class:`EventStream` per hub process owns
   plugged) or a link change. Each difference is published once, whatever made
   the change (UC-17): the hub, another controller or the front panel.
 
-The poller runs with the REST app (``install_event_stream``), in every mode,
-whether or not a Remote or any WebSocket client is connected.
+Runtime composition supplies the shared service cache and refresh worker.
+Direct app construction retains the compatibility poller.
 """
 
 from __future__ import annotations
@@ -78,7 +78,7 @@ def link_summary(device: Any) -> dict[str, Any]:
         state_value = "connected" if connected else "disconnected"
     host = getattr(device, "host", None)
     return {
-        "configured": True,
+        "configured": getattr(device, "configured", True) is not False,
         "connected": connected,
         "state": state_value,
         "host": host if isinstance(host, str) else None,
@@ -129,7 +129,10 @@ class _Client:
 class EventStream:
     """The /ws clients and the hub-owned matrix poller (see the module docstring)."""
 
-    def __init__(self, poll_interval: float | None = None) -> None:
+    def __init__(self, poll_interval: float | None = None, *, runtime=None) -> None:
+        self.runtime = runtime
+        self._runtime_unsubscribe = None
+        self._runtime_generation = None
         self.poll_interval = poll_interval if poll_interval is not None else poll_interval_from_env()
         self._clients: dict[web.WebSocketResponse, _Client] = {}
         self.view = MatrixView()
@@ -245,12 +248,19 @@ class EventStream:
     # ------------------------------------------------------------------ poller
 
     def start(self) -> None:
+        if self.runtime is not None:
+            self._runtime_unsubscribe = self.runtime.bus.subscribe(self._runtime_changed)
+            self._runtime_changed(None)
+            return
         loop = asyncio.get_running_loop()
         self._wake = asyncio.Event()
         if self._poll_task is None or self._poll_task.done():
             self._poll_task = loop.create_task(self._poll_loop(), name="hub_status_poller")
 
     async def stop(self) -> None:
+        if self._runtime_unsubscribe:
+            self._runtime_unsubscribe()
+            self._runtime_unsubscribe = None
         task, self._poll_task = self._poll_task, None
         if task is not None:
             task.cancel()
@@ -259,9 +269,13 @@ class EventStream:
         self._follow(None)
         for client in list(self._clients.values()):
             await self.remove_client(client.ws)
+            await _close(client.ws)
 
     def request_poll(self, *, settle: bool = False, force_cables: bool = False) -> None:
         """Read the matrix now instead of at the next interval."""
+        if self.runtime is not None:
+            self.runtime.request_refresh()
+            return
         self._settle = self._settle or settle
         self._force_cables = self._force_cables or force_cables
         if self._wake is not None:
@@ -298,6 +312,9 @@ class EventStream:
 
     async def refresh(self) -> dict[str, Any] | None:
         """Read the matrix now, bypassing the status caches, and return the fresh ``status`` snapshot."""
+        if self.runtime is not None:
+            await self.runtime.refresh(force_refresh=True)
+            return self.status_snapshot()
         await self.poll_once(force=True)
         return self.status_snapshot()
 
@@ -307,6 +324,9 @@ class EventStream:
         :param force: bypass the status caches (``get_status``: a client asked for the current state)
         :param force_cables: bypass the cable cache (a Telnet push said a cable changed)
         """
+        if self.runtime is not None:
+            await self.runtime.refresh(force_refresh=force)
+            return
         if self._poll_lock is None:
             self._poll_lock = asyncio.Lock()
         async with self._poll_lock:
@@ -329,6 +349,20 @@ class EventStream:
             self._apply(raw_status, raw_outputs, raw_inputs, raw_cables)
 
     # ------------------------------------------------------------------ device and link
+
+    def _runtime_changed(self, event) -> None:
+        generation = self.runtime.service._client_generation
+        if generation != self._runtime_generation:
+            self.view = MatrixView()
+            self._runtime_generation = generation
+            for client in self._clients.values():
+                client.has_snapshot = False
+        self._device = self.runtime.matrix
+        self._check_link(self._device)
+        raw = self.runtime.service.raw_snapshot()
+        self._apply(raw.get("status"), raw.get("outputs"), raw.get("inputs"), raw.get("cables"))
+        if event is not None and event.topic == "presets" and event.data.get("action") == "recall":
+            self.publish("preset_recall", {"preset": event.data["preset"]})
 
     def _follow(self, device: Any) -> None:
         """Listen to the current matrix; a different matrix starts a new view (no diffs across devices)."""
@@ -530,13 +564,14 @@ def reset_event_stream() -> None:
     _stream = None
 
 
-def install_event_stream(app: web.Application) -> None:
+def install_event_stream(app: web.Application, *, runtime=None) -> None:
     """Run the hub's event stream (and its poller) for the app's lifetime."""
 
     async def _ctx(app: web.Application) -> AsyncIterator[None]:
         global _stream
-        stream = EventStream()
+        stream = EventStream(runtime=runtime)
         _stream = stream
+        app["event_stream"] = stream
         stream.start()
         yield
         await stream.stop()

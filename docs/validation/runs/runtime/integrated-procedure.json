@@ -1,0 +1,243 @@
+{
+  "commit": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+  "version": "1.0.0rc1",
+  "steps": [
+    {
+      "label": "final-source-rerun",
+      "command": [
+        "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "tests/",
+        "--ignore=tests/ha",
+        "--ignore=tests/uc",
+        "--tb=short",
+        "--junitxml=C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\runtime-completion\\after-r1f/final-source-rerun.xml"
+      ],
+      "environment_overrides": {
+        "USE_MOCK_MATRIX": "1",
+        "ROUTE_COVERAGE_STRICT": "1"
+      },
+      "start": "2026-10-19T05:51:53.249315+00:00",
+      "log": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\runtime-completion\\after-r1f\\final-source-rerun.log",
+      "exit_code": 0,
+      "finish": "2026-10-19T06:06:35.446725+00:00"
+    },
+    {
+      "label": "final-uc",
+      "command": [
+        "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "tests/uc",
+        "-q",
+        "--tb=short",
+        "--junitxml=C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\runtime-completion\\after-r1f/final-uc.xml"
+      ],
+      "environment_overrides": {},
+      "start": "2026-10-19T06:06:35.588277+00:00",
+      "log": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\runtime-completion\\after-r1f\\final-uc.log",
+      "exit_code": 0,
+      "finish": "2026-10-19T06:10:11.538458+00:00"
+    },
+    {
+      "label": "source-campaigns",
+      "command": [
+        "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\.venv\\Scripts\\python.exe",
+        ".git/runtime_client_campaigns.py",
+        "source"
+      ],
+      "environment_overrides": {},
+      "start": "2026-10-19T06:10:11.686304+00:00",
+      "log": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\runtime-completion\\after-r1f\\source-campaigns.log",
+      "exit_code": 0,
+      "finish": "2026-10-19T06:28:08.378038+00:00"
+    },
+    {
+      "label": "source-ha-current",
+      "command": [
+        "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\.venv\\Scripts\\python.exe",
+        "-m",
+        "tools.validate",
+        "run",
+        "--target",
+        "sim",
+        "--client",
+        "ha",
+        "--out",
+        "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\runtime-completion\\after-r1f\\source-ha-current"
+      ],
+      "environment_overrides": {
+        "VALIDATE_HA_IMAGE": "homeassistant/home-assistant:2026.9.3",
+        "MATRIX_USER": "Admin",
+        "MATRIX_PASSWORD": "admin"
+      },
+      "start": "2026-10-19T06:28:08.462687+00:00",
+      "log": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\runtime-completion\\after-r1f\\source-ha-current.log",
+      "exit_code": 0,
+      "finish": "2026-10-19T06:30:12.841377+00:00"
+    },
+    {
+      "label": "source-ha-minimum-line",
+      "command": [
+        "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\.venv\\Scripts\\python.exe",
+        "-m",
+        "tools.validate",
+        "run",
+        "--target",
+        "sim",
+        "--client",
+        "ha",
+        "--out",
+        "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\runtime-completion\\after-r1f\\source-ha-minimum-line"
+      ],
+      "environment_overrides": {
+        "VALIDATE_HA_IMAGE": "homeassistant/home-assistant:2025.1.4",
+        "MATRIX_USER": "Admin",
+        "MATRIX_PASSWORD": "admin"
+      },
+      "start": "2026-10-19T06:30:12.933115+00:00",
+      "log": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\runtime-completion\\after-r1f\\source-ha-minimum-line.log",
+      "exit_code": 0,
+      "finish": "2026-10-19T06:32:09.112683+00:00"
+    },
+    {
+      "label": "final-amd64-build",
+      "command": [
+        "docker",
+        "buildx",
+        "build",
+        "--platform",
+        "linux/amd64",
+        "--load",
+        "--build-arg",
+        "VERSION=1.0.0rc1",
+        "-t",
+        "hdmi-matrix-hub:runtime-r1f-final-amd64",
+        "."
+      ],
+      "environment_overrides": {},
+      "start": "2026-10-19T06:32:09.205704+00:00",
+      "log": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\runtime-completion\\after-r1f\\final-amd64-build.log",
+      "exit_code": 0,
+      "finish": "2026-10-19T06:32:12.248057+00:00"
+    },
+    {
+      "label": "final-arm64-build",
+      "command": [
+        "docker",
+        "buildx",
+        "build",
+        "--platform",
+        "linux/arm64",
+        "--load",
+        "--build-arg",
+        "VERSION=1.0.0rc1",
+        "-t",
+        "hdmi-matrix-hub:runtime-r1f-final-arm64",
+        "."
+      ],
+      "environment_overrides": {},
+      "start": "2026-10-19T06:32:12.608096+00:00",
+      "log": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\runtime-completion\\after-r1f\\final-arm64-build.log",
+      "exit_code": 0,
+      "finish": "2026-10-19T06:32:18.908058+00:00"
+    },
+    {
+      "label": "final-amd64-deploy",
+      "command": [
+        "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "tests/deploy",
+        "-m",
+        "docker",
+        "-q",
+        "--tb=short",
+        "--junitxml=C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\runtime-completion\\after-r1f/final-amd64-deploy.xml"
+      ],
+      "environment_overrides": {
+        "HUB_IMAGE": "hdmi-matrix-hub:runtime-r1f-final-amd64",
+        "DEPLOY_EVIDENCE_DIR": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\runtime-completion\\after-r1f\\final-amd64-deploy-evidence"
+      },
+      "start": "2026-10-19T06:32:19.139010+00:00",
+      "log": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\runtime-completion\\after-r1f\\final-amd64-deploy.log",
+      "exit_code": 0,
+      "finish": "2026-10-19T06:33:01.509394+00:00"
+    },
+    {
+      "label": "final-arm64-smoke",
+      "command": [
+        "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\.venv\\Scripts\\python.exe",
+        ".git/r1f_arm64_smoke.py"
+      ],
+      "environment_overrides": {},
+      "start": "2026-10-19T06:33:01.588969+00:00",
+      "log": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\runtime-completion\\after-r1f\\final-arm64-smoke.log",
+      "exit_code": 0,
+      "finish": "2026-10-19T06:33:14.070189+00:00"
+    },
+    {
+      "label": "final-image-input-parity",
+      "command": [
+        "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\.venv\\Scripts\\python.exe",
+        ".git/r1f_verify_image_inputs.py"
+      ],
+      "environment_overrides": {},
+      "start": "2026-10-19T06:33:14.152029+00:00",
+      "log": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\runtime-completion\\after-r1f\\final-image-input-parity.log",
+      "exit_code": 0,
+      "finish": "2026-10-19T06:33:17.185121+00:00"
+    },
+    {
+      "label": "image-campaigns",
+      "command": [
+        "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\.venv\\Scripts\\python.exe",
+        ".git/runtime_client_campaigns.py",
+        "image"
+      ],
+      "environment_overrides": {},
+      "start": "2026-10-19T06:33:17.256468+00:00",
+      "log": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\runtime-completion\\after-r1f\\image-campaigns.log",
+      "exit_code": 0,
+      "finish": "2026-10-19T06:41:14.519262+00:00"
+    },
+    {
+      "label": "image-uc-campaigns",
+      "command": [
+        "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\.venv\\Scripts\\python.exe",
+        ".git/runtime_image_uc.py"
+      ],
+      "environment_overrides": {},
+      "start": "2026-10-19T06:41:14.597717+00:00",
+      "log": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\runtime-completion\\after-r1f\\image-uc-campaigns.log",
+      "exit_code": 0,
+      "finish": "2026-10-19T06:41:25.019832+00:00"
+    },
+    {
+      "label": "source-flows",
+      "command": [
+        "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\.venv\\Scripts\\python.exe",
+        ".git/runtime_client_campaigns.py",
+        "source-flows"
+      ],
+      "environment_overrides": {},
+      "start": "2026-10-19T06:41:25.098753+00:00",
+      "log": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\runtime-completion\\after-r1f\\source-flows.log",
+      "exit_code": 0,
+      "finish": "2026-10-19T06:46:16.756778+00:00"
+    },
+    {
+      "label": "swagger-image",
+      "command": [
+        "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\.venv\\Scripts\\python.exe",
+        ".git/runtime_swagger_image.py"
+      ],
+      "environment_overrides": {},
+      "start": "2026-10-19T06:46:22.824878+00:00",
+      "log": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\runtime-completion\\after-r1f\\swagger-image.log",
+      "exit_code": 0,
+      "finish": "2026-10-19T06:46:40.249786+00:00"
+    }
+  ]
+}

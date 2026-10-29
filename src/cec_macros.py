@@ -10,7 +10,6 @@ across multiple devices.
 """
 
 import asyncio
-import json
 import logging
 import os
 import uuid
@@ -18,7 +17,21 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import Any
 
+from hub.core.errors import safe_action_error
+
 _LOG = logging.getLogger(__name__)
+
+
+def _write_blocked(path) -> bool:
+    from hub.persistence.startup import is_write_blocked
+
+    return is_write_blocked(path)
+
+
+def _block_reason(path) -> str | None:
+    from hub.persistence.startup import block_reason
+
+    return block_reason(path)
 
 
 # =============================================================================
@@ -79,6 +92,10 @@ class CecMacro:
     dashboard_order: int = 0  # Position within the Dashboard card grid
     # Execution behavior flags
     continue_on_error: bool = False  # If True, continue executing remaining steps on failure
+    # R2 contract §4: unknown scalar metadata at the record level passes through
+    # load/edit/save untouched. Populated by ``from_dict`` from any extra keys
+    # the dataclass did not declare; public serializers exclude them.
+    _unknown_fields: dict[str, Any] = field(default_factory=dict, repr=False, compare=False)
 
     def __post_init__(self):
         """Set timestamps if not provided."""
@@ -89,8 +106,12 @@ class CecMacro:
             self.updated_at = now
 
     def to_dict(self) -> dict[str, Any]:
-        """Convert to dictionary for JSON serialization."""
-        return {
+        """Convert to dictionary for JSON serialization.
+
+        This public projection contains only declared fields. Private storage
+        serialization retains extensions independently.
+        """
+        result: dict[str, Any] = {
             "id": self.id,
             "name": self.name,
             "icon": self.icon,
@@ -103,11 +124,30 @@ class CecMacro:
             "dashboard_order": self.dashboard_order,
             "continue_on_error": self.continue_on_error,
         }
+        return result
 
     @staticmethod
     def from_dict(data: dict[str, Any]) -> "CecMacro":
-        """Create from dictionary."""
+        """Create from dictionary.
+
+        Unknown scalar metadata is preserved in ``_unknown_fields`` and
+        retained separately by the private disk writer.
+        """
         steps = [MacroStep.from_dict(s) for s in data.get("steps", [])]
+        declared_keys = {
+            "id",
+            "name",
+            "icon",
+            "description",
+            "steps",
+            "created_at",
+            "updated_at",
+            "favorite",
+            "dashboard_visible",
+            "dashboard_order",
+            "continue_on_error",
+        }
+        unknown = {k: v for k, v in data.items() if k not in declared_keys}
         return CecMacro(
             id=data.get("id", ""),
             name=data.get("name", "Unnamed Macro"),
@@ -120,6 +160,7 @@ class CecMacro:
             dashboard_visible=data.get("dashboard_visible", False),
             dashboard_order=data.get("dashboard_order", 0),
             continue_on_error=data.get("continue_on_error", False),
+            _unknown_fields=unknown,
         )
 
     def update_timestamp(self):
@@ -167,29 +208,30 @@ class MacroManager:
 
     def load(self) -> bool:
         """Load macros from file."""
+        from pathlib import Path
+
+        from hub.persistence.migrations import load_versioned_json
+        from persistence import migrate_legacy_file
+
+        migrate_legacy_file(Path(self.macros_file), "cec_macros.json")
+        data = load_versioned_json(self.macros_file, default={"macros": []})
         if not os.path.exists(self.macros_file):
             _LOG.info("Macros file not found: %s", self.macros_file)
             return False
 
-        try:
-            with open(self.macros_file, encoding="utf-8") as f:
-                data = json.load(f)
-                self._macros = {}
-                for macro_data in data.get("macros", []):
-                    macro = CecMacro.from_dict(macro_data)
-                    self._macros[macro.id] = macro
-                _LOG.info("Loaded %d macros", len(self._macros))
-                return True
-        except Exception as ex:
-            _LOG.error("Failed to load macros: %s", ex)
-            return False
+        self._macros = {raw["id"]: CecMacro.from_dict(raw) for raw in data["macros"]}
+        return True
 
     def save(self) -> bool:
         """Save macros to file atomically."""
+        if _write_blocked(self.macros_file):
+            _LOG.error("Refusing to save cec_macros.json: %s", _block_reason(self.macros_file))
+            return False
         try:
             os.makedirs(self.config_dir, exist_ok=True)
             data = {"version": 1, "macros": [m.to_dict() for m in self._macros.values()]}
-            from _file_io import atomic_write_json
+            from hub.persistence.migrations import save_versioned_json as atomic_write_json
+
             atomic_write_json(self.macros_file, data)
             _LOG.info("Saved %d macros", len(self._macros))
             return True
@@ -427,14 +469,22 @@ class MacroManager:
                     # Send command to each target
                     for target in step.targets:
                         try:
-                            target_type, port = self._parse_target(target)
+                            try:
+                                target_type, port = self._parse_target(target)
+                            except ValueError as ex:
+                                # Target validation is an expected user-facing
+                                # refusal, distinct from an unexpected sender error.
+                                step_result["success"] = False
+                                step_result["errors"].append(f"Error sending to {target}: {ex}")
+                                continue
                             success = await self._cec_sender(target_type, port, step.command)
                             if not success:
                                 step_result["success"] = False
                                 step_result["errors"].append(f"Failed to send {step.command} to {target}")
                         except Exception as ex:
+                            message, _ = safe_action_error(ex, f"Macro {macro_id} sending to {target}", logger=_LOG)
                             step_result["success"] = False
-                            step_result["errors"].append(f"Error sending to {target}: {str(ex)}")
+                            step_result["errors"].append(f"Error sending to {target}: {message}")
 
                     results.append(step_result)
 

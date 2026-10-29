@@ -3,9 +3,10 @@
 One image runs the whole hub. The **core** (matrix control, REST API, web UI at
 `/ui`, kiosk at `/kiosk`) always runs. **Integrations** are switched on with
 environment variables; a disabled integration is not imported and opens no
-port. Today there is one: the Unfolded Circle Remote 3 integration
-(`UC_ENABLED=true`, WebSocket port 9095). The hub resolves every variable
-through one table — `src/hub/env.py` — so this guide and the code agree.
+port. The Unfolded Circle Remote 3 integration is opt-in (`UC_ENABLED=true`,
+WebSocket port 9095); Flic is enabled by default and HA discovery is optional
+and disabled by default. The shared runtime resolves settings through
+`hub.cli`; see [`CONFIGURATION.md`](CONFIGURATION.md).
 
 ## Quick start (Docker Compose)
 
@@ -88,10 +89,12 @@ integration. The registration API is described in the pinned core-api docs,
 ### The matrix address with the Remote integration on
 
 With `UC_ENABLED=true` the Remote's setup asks for the matrix address and the
-integration saves it in `/data/config_state.json`; that saved address is the one
-the whole hub uses. Until the Remote has been set up, `MATRIX_HOST` (if set)
-gives the hub its matrix; it is never saved, and a saved setup wins over it.
-Moving the matrix address to the core is planned (docs/audits/UC_INTEGRATION_AUDIT.md §5).
+shared runtime saves it in `UC_CONFIG_HOME/config_state.json` (default
+`/data/config_state.json`). The saved address takes effect across the hub.
+Until setup is saved, explicit `MATRIX_HOST` is an unsaved bootstrap. Without
+either address, REST health/UI and Remote setup stay online without connecting
+to the core-only default. Reconfiguration of the same address retains its login;
+a new target needs its own login. REST matrix-host changes remain transient.
 
 For an address the hub does not use yet, the Remote's setup first checks that
 the address answers (sending nothing to it), then asks for that matrix's login
@@ -114,11 +117,12 @@ the driver:
   `ucapi.SetupError(error_type=ucapi.IntegrationSetupError.AUTHORIZATION_ERROR)`
   and changes nothing on the hub.
 
-The driver accepts the token as `auth_token`, `token`, or `pin` and compares it
+The adapter accepts the token as `auth_token`, `token`, or `pin` and compares it
 with `hmac.compare_digest`; the value is never logged. Without one, the setup
 page keeps the **"Current matrix password (when changing address)"** field, and
-changing the matrix host or port requires re-entering the matrix's password
-(stored password is never sent to a new address — `src/driver.py:2182-2193`).
+changing an already configured matrix address requires its current password to
+authorize setup. The new target then requires its own credentials; the stored
+password is never sent to a new address.
 
 The token guards *setup*, not the transport: anything that can reach TCP 9095
 can still subscribe to the entities and control the matrix. Restrict the port
@@ -127,14 +131,14 @@ to the Remote's IP at the firewall (see "Network: firewall port 9095" in
 
 ## Environment variables
 
-`run.py` resolves every variable through `src/hub/env.py`; deprecated names
-still work and one warning at start-up lists them. Compose-only variables
+`hub.cli` resolves runtime variables; deprecated names still work and startup
+logs their use. Compose-only variables
 (`MATRIX_DATA_DIR` as the host folder, `HUB_PORT`, `HUB_HOST_IP`, `UC_HOST_PORT`,
 `HUB_CONTAINER_NAME`) only change the compose files.
 
 | Variable | Deprecated names | Default | Effect |
 | --- | --- | --- | --- |
-| `MATRIX_HOST` | `OREI_HOST` | the address a Remote setup saved, else `192.168.0.100` | Matrix IP/host name (core only; see above for UC) |
+| `MATRIX_HOST` | `OREI_HOST` | core-only: `192.168.0.100`; UC: saved setup, environment bootstrap, or unconfigured | Matrix IP/host name; saved UC setup has precedence. |
 | `MATRIX_PORT` | `OREI_PORT` | `443` | Matrix HTTPS port |
 | `API_PORT` | `REST_API_PORT`, `OREI_API_PORT` | `8080` | REST API, web UI and kiosk port (in the container) |
 | `DATA_DIR` | `MATRIX_DATA_DIR` (in the container) | image: `/data`; local: the modules' defaults | Persistent data directory; must be writable |
@@ -148,15 +152,16 @@ still work and one warning at start-up lists them. Compose-only variables
 | `UC_INTEGRATION_INTERFACE` | | all interfaces | Bind address, also the address mDNS announces: set it to the LAN IP |
 | `UC_DISABLE_MDNS_PUBLISH` | `UC_DISABLE_MDNS` | `false` | `true`: do not announce by mDNS (bridge networking) |
 | `UC_DRIVER_URL` | | not set | `ws://host:port` advertised to the Remote (bridge networking); must start with `ws://` or `wss://` |
-| `UC_CONFIG_HOME` | | `DATA_DIR` | Integration state (`config_state.json`, `driver.lock`) and the profile/macro/scene files |
+| `UC_CONFIG_HOME` | | `DATA_DIR` | Remote state and configuration (`config_state.json`, `driver.lock`). Data stores can live under a separate data directory. |
 | `UC_AUTH_TOKEN` | | unset | Setup token — when set, `pwd: true` and the "Hub setup token" field are added; falls back to `ADMIN_PIN` |
 | `OREI_USER`, `OREI_PASSWORD` | | `Admin` / `admin` | Matrix login (a login entered in the Remote's setup takes precedence for its matrix) |
 | `OREI_VERIFY_SSL` | | `false` | Verify the matrix's TLS certificate |
 | `OREI_TELNET_PORT`, `OREI_USE_TELNET_CEC` | | `23` / `false` | Matrix Telnet options; `OREI_TELNET_PORT` is the default for a matrix whose setup names no `telnet_port` (`POST /api/settings/matrix-host`, `config_state.json`) |
 | `STATUS_POLL_INTERVAL` | | `5` | Seconds between the hub's own status reads, the source of the live `/ws` events in every mode ([`api/WEBSOCKET.md`](api/WEBSOCKET.md)); writes, Telnet pushes and link changes trigger a read at once |
-| `POLLING_INTERVAL`, `POLLING_ENABLED` | | `30` / `true` | Remote 3 entity updates (UC mode); the `/ws` events use `STATUS_POLL_INTERVAL` |
-| `FLIC_ENABLED` | | `true` in the framework | Framework flag; the current REST compatibility handlers remain mounted and do not read this environment flag. It does not disable Flic registration in the shipped runtime. |
-| `HA_DISCOVERY_ENABLED` | | `false` in the framework | Framework flag; `run.py` does not start the discovery module yet. Add the Home Assistant component manually. |
+| `POLLING_INTERVAL` | | unset | Shared runtime refresh interval fallback when `STATUS_POLL_INTERVAL` is unset. |
+| `POLLING_ENABLED` | | legacy only | No longer controls shared runtime polling; legacy driver path is not launched. |
+| `FLIC_ENABLED` | | `true` | Enables the Flic registration/list routes and registry. Explicit `false`, `0`, `no`, or `off` disables those integration routes; core actions remain available. |
+| `HA_DISCOVERY_ENABLED` | | `false` | Enables optional HA mDNS discovery. Manual HACS setup remains supported when disabled. |
 
 A bad port number or a `UC_DRIVER_URL` that is not a WebSocket URL stops the hub
 with exit code 2 and a message saying what to fix (`run.py:_port`,
@@ -172,13 +177,15 @@ These are accepted but no longer change behaviour:
 
 The legacy `REST_API_PORT`, `OREI_API_PORT`, `MATRIX_DATA_DIR`, `UC_PORT` and
 `UC_DISABLE_MDNS` names are still read as aliases for their canonical names;
-one warning at start-up names them. See `src/hub/env.py` and `run.py:resolve_env`
-for the full table.
+one warning at start-up names them. See [`CONFIGURATION.md`](CONFIGURATION.md)
+and `hub.cli.resolve_env` for the full table.
 
 ## Persistent storage
 
-Everything the hub saves is under `/data` in the container, mounted from the host
-folder `MATRIX_DATA_DIR` (compose default `./data`):
+The default compose setup mounts `/data` in the container from the host folder
+`MATRIX_DATA_DIR` (compose default `./data`). Configuration and data locations
+may be set separately: Remote config uses `UC_CONFIG_HOME`; data stores use
+`MATRIX_DATA_DIR`, else `UC_CONFIG_HOME/data`, else project `data`.
 
 | File in `/data` | What it contains |
 | --- | --- |
@@ -186,7 +193,7 @@ folder `MATRIX_DATA_DIR` (compose default `./data`):
 | `themes.json`, `ui_preferences.json` | Theme and web UI preferences |
 | `system_shortcuts.json`, `dashboard_layout.json` | Shortcuts and dashboard cards |
 | `profiles.json`, `cec_macros.json`, `scenes.json` | Profiles, CEC macros, legacy scenes |
-| `config_state.json`, `driver.lock` | Remote 3 integration: matrix address, names and the matrix login from its setup; single-instance lock |
+| `config_state.json`, `driver.lock` | Remote config home: matrix address, names and address-bound login from setup; single-instance lock |
 | `security.json` | Admin / control PIN hashes, persistent "remembered device" tokens and named API key hashes (`src/rest_api/security.py`) |
 | `flic_buttons.json` | Registered Flic buttons (`src/hub/integrations/flic/__init__.py:FlicButtonRegistry`) |
 
@@ -204,9 +211,12 @@ curl http://localhost:8080/api/system/storage
 # "data_dir": "/data", "config_dir": "/data", "matrix_data_dir_env": "/data", "uc_config_home_env": "/data", ...
 ```
 
-Earlier versions kept `device_settings.json`, `themes.json` and
-`ui_preferences.json` in a project-local `data/` folder; on first start they are
-copied (not moved) into the data directory.
+Runtime prepares managed data before manager construction and retains source
+files and backups. Existing unsafe/corrupt/ambiguous files stop startup rather
+than being replaced with defaults. To import catalogs from a different old
+volume, use the explicit `persistence.get_legacy_data_paths` helper; runtime no
+longer discovers catalogs from another checkout automatically. Older
+installation-local preference copy behavior remains supported.
 
 ## docker run
 
@@ -271,7 +281,7 @@ Create a stack from `docker-compose.yml` and add `MATRIX_HOST` and
 
 - Use host networking (`docker-compose.uc-host.yml`) with `HUB_HOST_IP` set to the
   LAN address the Remote can reach; check the log line
-  `Integrations: Unfolded Circle Remote (port 9095, mDNS on, address …)`.
+  `UCBridge started on port 9095` and confirm the advertised interface.
 - Make sure the firewall allows TCP 9095 and mDNS (UDP 5353).
 - Or register it by URL (bridge networking, above).
 
@@ -279,7 +289,7 @@ Create a stack from `docker-compose.yml` and add `MATRIX_HOST` and
 
 - The hub has `UC_AUTH_TOKEN` (or `ADMIN_PIN`) set; enter the **"Hub setup token"**
   on the Remote's setup page. A reconfigure needs it too, not just the first
-  setup (`src/driver.py:2182-2193`).
+  setup.
 - A token change requires re-entering it on each Remote (`pwd` is advertised at
   startup). Keep the token stable, or re-enter it on every Remote after
   changing it.

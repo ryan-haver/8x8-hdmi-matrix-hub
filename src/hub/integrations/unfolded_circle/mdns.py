@@ -3,9 +3,13 @@
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import logging
 import socket
 from typing import Any
+
+from zeroconf import IPVersion
+from zeroconf.asyncio import AsyncServiceInfo, AsyncZeroconf
 
 from hub import __version__
 
@@ -97,6 +101,16 @@ class UCMdnsPublisher:
             "txt": dict(props),
         }
 
+    def _build_zeroconf_service_info(self, info: dict[str, Any]) -> AsyncServiceInfo:
+        return AsyncServiceInfo(
+            info["type"],
+            info["name"],
+            addresses=info["addresses"],
+            port=info["port"],
+            properties=info["properties"],
+            server=info["server"],
+        )
+
     async def start(self) -> bool:
         """Publish the mDNS service unless disabled or already published."""
         if self.disable_mdns:
@@ -106,10 +120,26 @@ class UCMdnsPublisher:
             return True
 
         info = self.build_service_info()
-        self._registered_info = info
-
-        if self._zeroconf is not None:
-            await self._register_with_backend(self._zeroconf, info)
+        created_zc: AsyncZeroconf | None = None
+        try:
+            if self._zeroconf is None:
+                created_zc = AsyncZeroconf(ip_version=IPVersion.V4Only)
+                self._zeroconf = created_zc
+                self._owns_zeroconf = True
+                zc_info = self._build_zeroconf_service_info(info)
+                await self._register_with_backend(self._zeroconf, zc_info)
+                self._registered_info = zc_info
+            else:
+                await self._register_with_backend(self._zeroconf, info)
+                self._registered_info = info
+        except BaseException:
+            self._registered_info = None
+            if created_zc is not None:
+                self._zeroconf = None
+                self._owns_zeroconf = False
+                with contextlib.suppress(Exception):
+                    await created_zc.async_close()
+            raise
 
         self.published = True
         _LOG.info(
@@ -123,29 +153,33 @@ class UCMdnsPublisher:
 
     async def stop(self) -> None:
         """Unregister the mDNS service cleanly (`UC-11`)."""
-        if not self.published:
+        if not self.published and not self._owns_zeroconf:
             return
 
         info = self._registered_info
         self._registered_info = None
+        was_published = self.published
         self.published = False
 
-        if self._zeroconf is not None and info is not None:
-            await self._unregister_with_backend(self._zeroconf, info)
+        try:
+            if was_published and self._zeroconf is not None and info is not None:
+                await self._unregister_with_backend(self._zeroconf, info)
+        finally:
+            if self._owns_zeroconf and self._zeroconf is not None:
+                zc = self._zeroconf
+                self._zeroconf = None
+                self._owns_zeroconf = False
+                close_fn = getattr(zc, "async_close", None) or getattr(zc, "close", None)
+                if close_fn is not None:
+                    res = close_fn()
+                    if asyncio.iscoroutine(res):
+                        await res
 
-        if self._owns_zeroconf and self._zeroconf is not None:
-            close_fn = getattr(self._zeroconf, "async_close", None) or getattr(self._zeroconf, "close", None)
-            if close_fn is not None:
-                res = close_fn()
-                if asyncio.iscoroutine(res):
-                    await res
-            self._zeroconf = None
-            self._owns_zeroconf = False
-
-        _LOG.info("Unregistered UC mDNS service")
+        if was_published:
+            _LOG.info("Unregistered UC mDNS service")
 
     @staticmethod
-    async def _register_with_backend(zc: Any, info: dict[str, Any]) -> None:
+    async def _register_with_backend(zc: Any, info: Any) -> None:
         reg = getattr(zc, "async_register_service", None) or getattr(zc, "register_service", None)
         if reg is not None:
             res = reg(info)
@@ -153,7 +187,7 @@ class UCMdnsPublisher:
                 await res
 
     @staticmethod
-    async def _unregister_with_backend(zc: Any, info: dict[str, Any]) -> None:
+    async def _unregister_with_backend(zc: Any, info: Any) -> None:
         unreg = getattr(zc, "async_unregister_service", None) or getattr(zc, "unregister_service", None)
         if unreg is not None:
             res = unreg(info)

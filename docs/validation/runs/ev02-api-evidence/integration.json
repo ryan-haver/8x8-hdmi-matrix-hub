@@ -1,0 +1,84 @@
+{
+  "observed_utc": "2026-10-20T05:16:16.752075+00:00",
+  "candidate_sha": "e5ebb376230d1dc6bbb62e07f38b7d4cf8221b32",
+  "review_tip_sha": "e5eb9831780742598a605da5adfb17d905377955",
+  "integration": "sequential fast-forwards, no material integration change",
+  "api_v2_qualified_features": [
+    "F-API-014",
+    "F-API-016",
+    "F-API-018",
+    "F-API-026",
+    "F-API-028",
+    "F-API-036",
+    "F-API-038"
+  ],
+  "newly_at_v2_features": [
+    "F-API-014",
+    "F-API-016",
+    "F-API-018",
+    "F-API-026",
+    "F-API-028"
+  ],
+  "immutable_evidence_git_and_worktree_hashes": {
+    "verified": 148,
+    "mismatches": 0
+  },
+  "evidence_sources": {
+    "original_1baac3de": 144,
+    "mapped_source_bb4d3fdc": 4,
+    "independent_e5ebb376_replay": {
+      "scenarios": 4,
+      "checks": 31
+    }
+  },
+  "numerical_ledger": {
+    "total": 268,
+    "below_target": 205,
+    "stale": 57
+  },
+  "independent_review": {
+    "family": "DeepSeek",
+    "model": "deepseek/deepseek-v4-pro",
+    "task": "task_2f3700b530a4",
+    "dispatch": "ctx_294f9d071a03",
+    "verdict": "accepted API V2",
+    "provider_export_complete": true,
+    "released_before_ack": true
+  },
+  "preservation": [
+    {
+      "private_local_file": "build/ev02-name-coordination/candidate-full.bundle",
+      "sha256": "c345454f90ae14c81120aece706549251c6ae275476d59a02429dd1b06299017",
+      "bytes": 11295751
+    },
+    {
+      "private_local_file": "build/ev02-name-coordination/final-review-full.bundle",
+      "sha256": "0558666977956953816b791e4a266c0441a72d9beea81fbf7ceeaf32ef838589",
+      "bytes": 11373674
+    },
+    {
+      "private_local_file": "build/ev02-name-coordination/author-complete-workspace.tar",
+      "sha256": "151051d1aee274830a68ed6c407bbeb413cc7f01d5191b92641242e1be5fb713",
+      "bytes": 610426880
+    },
+    {
+      "private_local_file": "build/ev02-name-coordination/final-review-complete-workspace.tar",
+      "sha256": "04b947547b8ad766efa0b0a54c91ceca64b84af94d211070f853eb0702d3b1c3",
+      "bytes": 290590720
+    },
+    {
+      "private_local_file": "build/ev02-name-coordination/final-review-complete-provider-export.json",
+      "sha256": "4b2fd36b437ebeadb99b8ba4cbd69ff89d619fae576830a5e11bd66e3ddbe13a",
+      "bytes": 960003
+    }
+  ],
+  "cleanup": {
+    "author": "Orca rm accepted; residual filesystem and stale exact Git metadata observed, completion held",
+    "final_review": "Orca rm accepted then EBUSY directory lock; completion held",
+    "old_review": "Orca release guard retained external terminal; preserve workspace",
+    "local_task_branches": "retained until exact workspace removal and unused-branch proof",
+    "protected_persistence_workspace_and_odd_hook_artifact": "untouched"
+  },
+  "ci": "3979d602 baseline CI passed all 13 required checks; later integration-head CI separate and pending publication",
+  "release_acceptance": false
+}
