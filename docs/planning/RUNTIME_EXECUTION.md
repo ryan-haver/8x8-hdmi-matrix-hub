@@ -947,3 +947,11 @@ admission HOLD. Coordinator found two prose errors (family attribution and six
 power-off passes); minimal author correction prepared before report integration.
 Worker released before acknowledgment; full preservation/task publication done.
 No source/privacy acceptance or canonical qualification; current handoff has IDs.
+
+
+### Flic review prose correction started — 2026-10-29T00:42Z
+
+Task808f6c02a0f0/Dispatch5a3f46883ddf is active in settled/preserved
+wp-flic-proof-review at1d7; native M3/thinking verified. Two prose fixes only,
+original artifacts readonly. No code/privacy review or canonical qualification;
+raw admission and source11f holds retained. Exact authority in handoff/ledger.
