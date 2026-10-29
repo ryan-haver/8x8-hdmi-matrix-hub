@@ -278,3 +278,114 @@ DeepSeek Pro is only the retained candidate with current quota UNKNOWN. Raw
 captures remain private with admission HOLD under VAL-15. No canonical evidence
 import, ledger generation, publication, integration, cleanup or release is performed
 by this worker.
+
+## Final source verification and partial disposition — 2026-10-29
+
+Useful source commit: `386872316cb60130b06dd704557ae6ca1a92b5c8`
+(`test(validation): assert unavailable route-all refusal`), parent exactly
+`938ae30339790c361abdda6fdd01b11a4e498518`. This follow-up is append-only to the
+historical report: its original 11,878-byte Git blob remains the exact prefix,
+SHA-256 `c25692409f8d4f7ae38a21695571821475b1ec097de995517b266c2b59c4e9ff`.
+The coordinator corrected the brief's mistaken NEW designation and explicitly
+granted this append-only lease in message `msg_6b90fae7a341`.
+
+All current commands used the root `.venv/Scripts/python.exe` from this checkout
+with its own root/src `PYTHONPATH`, bytecode disabled and UTF-8 output. Data/config
+were isolated under the owned build tree or retained disposable hub temp;
+`TEMP`/`TMP` stayed within `C:/t/f034-20261029-a`. The committed-source campaign
+used NEW empty `campaign-parent-01`, and the gate check used NEW empty
+`check-parent-01`, both below that allocated parent. No install or dependency
+update ran; the supplied ignored `node_modules` junction was used read-only.
+
+Normal source commit used the configured hook at
+`C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/.githooks`, with
+`ROUTE_COVERAGE_STRICT=1`, `USE_MOCK_MATRIX=1` and `PYTHONUTF8=1`, without bypass.
+Ruff passed over the configured full paths. Complete core pytest (excluding the
+separate HA and UC jobs) passed **4,095 tests, 6 skipped, 35 deselected, 4 warnings
+in 899.75 s**. Route coverage was **177/177, 100%, strict true, zero uncovered**.
+Commit/hook exit was 0. Original output and exit are
+`source-commit-hook.log` / `source-commit-hook.exit`; exact route proof is copied
+to `full-route-coverage.json` under the owned build directory.
+
+One clean committed-source campaign ran with:
+
+```text
+PYTHON build/software-waves/SW-API-CLIENT-02-C1/campaign.py build/software-waves/SW-API-CLIENT-02-C1/campaign-clean-01
+```
+
+The script invokes the committed owned helper through existing external-stack
+runner interfaces and then inspects the actual summary and records. Exit 0;
+**one outcome PASS/ok, one schema-valid record, all eight checks PASS, zero n/a**;
+actual client `api`, target `sim`, level **V2**, source full SHA above,
+`dirty: false`, `dirty_files: []`, image digest null. It checks the actual captured
+`POST /api/switch` body `{"input":6}`, exact 503 refusal body, exact single
+`switch_all_failed {"input":6}`, absence of success/single-output events, full
+device state equality, empty state diff and no routing command/write. It also
+checks recorded source hashes against current files and the committed text.
+The 30 live counterfactual oracle checks are exercised by the focused module
+and the normal complete core hook, rather than fabricated into campaign evidence.
+
+Private campaign artifacts are under
+`build/software-waves/SW-API-CLIENT-02-C1/campaign-clean-01/`:
+`run-summary.json`, `evidence/F-API-034/2026-10-29-V2-38687231-sw_api_client_02_c1.switch_all_failed-api.json`,
+`external-stack-receipt.json`, `artifact-checks.json` and original process logs.
+The evidence record SHA-256 is
+`11849d40b89ad90b2a554577e26df9ac62f154d67c55f2b5ecaa935a218e0492`;
+the artifact-check receipt lists all campaign member hashes. Actual child
+return codes after the existing Windows stop helper were hub **1**, simulator
+**1**; these are recorded separately and are not represented as graceful exit 0.
+
+The final tracked base diff is limited to the two new assigned source/test
+modules, this append-only author report, and the coordinator-authored one-line
+F-API-034 registry mapping. `precommit-ownership-audit.json` records the exact
+path/semantic/prefix audit and five hash-verified preserved files from the
+successful focused external attempt. No product/shared source, other tests,
+fixture, canonical evidence, ledger, finding, current/target level, manifest,
+lockfile or baseline changed. Build artifacts remain ignored/private.
+
+**Acceptance is partial/UNMET, and the required worker outcome is FAILED.**
+The original managed BLOCKED raw JSON/hub logs could not be recovered honestly;
+the coordinator explicitly requires failed/partial outcome for this preservation
+failure despite useful functional passes. `preservation-status.json` records the
+exact lost paths, surviving diagnostic references and observed copy error,
+explicitly as an authored status receipt, not reconstructed original evidence.
+The surviving `focused-first.log` retains the initial **12 passed, 1 failed,
+exit 1**. There was no rerun or relabeling of that failed managed qualification.
+The separately approved external campaign does not repair default managed-runner
+preparation or normal all-scenario CI compatibility, which remains an integration
+blocker. Qualified different-family review, integration/qualification, VAL-15
+privacy admission and all cleanup remain HELD. No push, merge, tag, task-ref
+publication, worker release, worktree removal or canonical import was performed;
+those decisions remain coordinator-owned. F-API-034's V3 target and parent scope
+remain open.
+
+### Current invocation and exit inventory
+
+`PYTHON` below is the root virtual-environment interpreter specified above;
+all relative commands ran in the assigned task checkout. Logs named below are
+under `build/software-waves/SW-API-CLIENT-02-C1/`.
+
+| Invocation | Exit and actual result | Surviving artifact |
+| --- | --- | --- |
+| `PYTHON -m pytest tests/validation/test_sw_api_client_02_c1.py -q -p no:tests.route_inventory -p no:cacheprovider` (initial managed attempt) | 1; 12 passed, 1 failed; BLOCKED managed preparation | `focused-first.log`; original raw JSON/logs LOST as recorded above |
+| Same focused invocation, after explicit external-mode approval | 0; 13 passed | `focused-external.log`, hash-verified `focused-external-raw/` |
+| `PYTHON -m ruff check tests/validation/scenarios/sw_api_client_02_c1.py tests/validation/test_sw_api_client_02_c1.py` | 0; all checks passed | Native tool transcript; full Ruff repeated by normal hook |
+| `PYTHON -m pytest tests/sim/test_sim_offline_switch_events.py tests/sim/test_sim_ws_contract.py -q -p no:tests.route_inventory -p no:cacheprovider` | 0; 38 passed | `existing-regressions.log` |
+| `PYTHON -m pytest tests/validation/test_registry.py tests/validation/test_model.py tests/validation/test_evidence_schema.py -q -p no:tests.route_inventory -p no:cacheprovider` | 0; 52 passed | `registry.log` |
+| `PYTHON -m mypy src/ --cache-dir build/software-waves/SW-API-CLIENT-02-C1/mypy-cache` | 0; 91 source files passed | `mypy.log` |
+| `git commit -m "test(validation): assert unavailable route-all refusal"` with normal configured hook and strict route environment | 0; Ruff and 4,095 complete-core passes; 177/177 routes | `source-commit-hook.log`, `.exit`, `full-route-coverage.json` |
+| Committed-source external campaign command above | 0; one PASS API V2 outcome, one valid record, eight PASS checks | `campaign-clean-01.log`, `.exit`, campaign directory and member hash receipt |
+| `PYTHON -m tools.validate check --evidence build/software-waves/SW-API-CLIENT-02-C1/campaign-clean-01/evidence --run-summary build/software-waves/SW-API-CLIENT-02-C1/campaign-clean-01/run-summary.json --expect-clients api` | 0; gate OK, zero known failures in supplied summary | `campaign-check.log`, `.exit` |
+| `PYTHON -m pytest tests/test_core_documentation.py tests/test_client_guides_docs.py tests/test_openapi_and_config_docs.py tests/test_security_docs.py tests/test_license_and_protocol_docs.py -q -p no:tests.route_inventory -p no:cacheprovider` | 0; 489 passed in 3.10 s | `report-docs.log`, `.exit`; NEW empty `docs-parent-01` |
+| `git -c core.whitespace=cr-at-eol diff --check` | 0 | Native tool transcript |
+
+The actual validation CLI gate pass reads registry/evidence and evaluates its
+existing rules; it does not admit private artifacts, establish different-family
+review, solve managed-runner preparation or promote API V2 to V3. No ledger was
+generated. The final closeout changes this report only and uses the documented
+invocation-only documentation hook exception after the actual checks above;
+the source implementation commit used its complete normal hook. No global or
+repository hook configuration is changed. The coordinator owns final artifact/
+native-transcript/bundle preservation and exact task publication; surviving
+worktree/temp resources must remain retained because preservation acceptance
+is UNMET.
