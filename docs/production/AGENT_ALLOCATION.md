@@ -2975,3 +2975,47 @@ isolated data/config and route/cache plugins disabled. UTF8/scope/CR-aware check
 passed. Invocation-only docs hook exception for coordination prose only; no new
 source-hook/full runtime acceptance. Post-push equality is recorded privately
 outside this commit; both worker implementations remain unintegrated.
+
+
+### API registry handshake completed; authors continue — 2026-10-29T02:21Z
+
+Blocking questionmsg_63a8adef31cd from API Taskc0d26e9e563e/Dispatch0f27082dc4eb
+answered via msg_a617ce710651 after coordinator scope/contract inspection of the
+new scenario and real simulator/HTTP/WS tests. Scenario declares ONLY FAPI034,
+api/sim, existing expectations, private disposable TLS refusal; no product/runner/
+model edits. This is scope inspection, not qualified final source review.
+
+Coordinator wrote/STAGED ONLY docs/validation/features.yaml in the API CHILD
+checkout: F-API-034.scenarios adds sw_api_client_02_c1.switch_all_failed. Exact
+byte/parsed YAML comparison proves every other semantic field unchanged,
+including current/target/evidence/findings. Registry file before SHA256
+a8c6d592bbded20af6d2b8d587c5ce81a48bf98931b0372727e09a261b0cdc8e,
+after4b69d22cc999c79eb0f2569038ad95aff50e5e7fe7d3115a7bec074a68010332.
+First probe assumed top-level YAML list, failed before any source write/staging;
+failed note retained, corrected comparison uses features mapping explicitly.
+Private before/after/scope/source hashes and receipt:
+build/p1-fanout-20261028/fapi034-registry-contribution-01/.
+
+Explicit reply lets author run focused/registry/scenario/full strict checks and
+include that coordinator-staged contribution in the normal-hook source commit,
+with composite authorship recorded. Author still cannot edit/stage registry;
+any further mapping change requires ask. No ledger generation, level promotion,
+raw artifact import or root registry modification. Reply processed before
+batch57a9088694a1 acknowledgment; next inbox empty. Registry task is UNBLOCKED;
+this does not release source-review/integration gates.
+
+C2 statuses54bbbb2bf1d1/a5e810ce36a1 report four before-fix actual lifecycle cases
+failed as expected, then66focused tests/Ruff/mypy91 passed after only leased
+formatting fixes. Normal configured source hook started with strict routes;
+not yet completed or coordinator accepted. model.py expected-description gap
+remains explicitly residual, no globalprivacy claim. Both source authors active,
+no worker settlement/release or new dispatch. Refresh supported usage at current
+natural checkpoint; private implementation-checkpoint-capacity.json retains
+current window/reset and unknown external commitments/reviewer quota.
+
+Supported checkpoint02:20:48Z retains Codex81%weekly, M3 98%weekly/99%session;
+DeepSeek reporting still null. Both admitted authors continue, external demand
+unknown, no new reviewer or acceptance. Coordination-only verification489docs
+tests passed2.99s with isolated data/config and route/cache plugins disabled;
+UTF8/JSONL/scope/CR-aware checks passed. Invocation-only docs hook exception.
+Post-push equality: build/p1-fanout-20261028/implementation-registry-record-publication.json.

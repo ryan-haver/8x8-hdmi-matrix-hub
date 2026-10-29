@@ -987,3 +987,13 @@ Coordinator registry handshake and normal strict source hooks required. Qualifie
 DeepSeek review quota unknown, no review launched/integration accepted. Independent
 author work continues under explicit review holds; no phase/family-policy change.
 Current handoff/ledger carry actual paths, external temps, asks and acceptance.
+
+
+### API registry gate unblocked; source verification underway — 2026-10-29T02:21Z
+
+Coordinator inspected new FAPI034 scenario/tests and staged only the new scenario
+link in the API child features.yaml, explicitly authorizing composite source
+commit after normal checks. Root registry/levels/evidence unchanged. API author
+unblocked; C2 reports66focused passes and normal strict source hook underway.
+Both Sol authors active; qualified review/integration still held. Latest handoff
+and private registry-contribution receipt preserve scope and exact metadata hashes.

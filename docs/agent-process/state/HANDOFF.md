@@ -1,5 +1,28 @@
 # Current coordinator handoff
 
+## Registry handshake answered; source authors validating — 2026-10-29T02:21Z
+
+API Taskc0d26e9e563e/Dispatchctx_0f27082dc4eb blocking question answered. Coordinator
+inspected scenario/tests and wrote/STAGED ONLY the FAPI034 new scenario link in
+features.yaml in wp-api-client-02-c1 (NOT root). Author explicitly authorized to
+include that already-staged coordinator contribution in normal-hook source
+commit with composite authorship; author must never edit/stage registry itself.
+No current/target/evidence/findings/ledger change. Do not duplicate the mapping.
+Private before/after/hash/receipt fapi034-registry-contribution-01 in current root
+build campaign. First YAML shape probe failed before writes; corrected proof passed.
+API author now proceeds with focused/scenario/registry/full strict checks.
+
+C2 Task4e33d0624489/Dispatchctx_a35145bc2f5d reports four real lifecycle before-fix
+failures and66focused passes/Ruff/mypy91 after two leased formatting corrections;
+normal strict full source hook underway, not accepted/completed yet. Known readonly
+model.py expected-JSON description boundary stays residual; no full VAL15 closure.
+Both authors remain active, source review/integration/raw admission HELD. Actual
+bindings/scopes/temp/junctions below and newest ledger. Root integration contains
+coordination prose only; staged registry contribution lives only in API child.
+Current usage checkpoint file implementation-checkpoint-capacity.json; no
+background quota service, no new reviewer or source acceptance. Preserve original
+C1, all source/evidence/failures/protected resources and owned external temps.
+
 ## Two implementation authors active — 2026-10-29T02:16Z
 
 - Privacy C2: Task `task_4e33d0624489`, Dispatch `ctx_a35145bc2f5d`, terminal
