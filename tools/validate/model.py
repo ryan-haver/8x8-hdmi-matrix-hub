@@ -316,7 +316,11 @@ class Response(Expectation):
         if self.min_status is not None:
             parts.append(f"HTTP >= {self.min_status}")
         if self.json:
-            parts.append(f"body contains {self.json}")
+            # Mask a structured copy before formatting persisted descriptions.
+            # Import lazily: evidence also imports Level from this module.
+            from .evidence import redact
+
+            parts.append(f"body contains {redact(self.json)}")
         if self.headers:
             # Never persist caller-supplied credential values in descriptions.
             parts.append(f"headers equal (names: {', '.join(self.headers)})")
