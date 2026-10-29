@@ -177,3 +177,104 @@ do coordinator acceptance, finding registration/closure, evidence preservation
 and integration/publication. Browser/Remote/HA, image builds, physical HIL,
 72-hour soak, week field and final release gates remain outside this bounded
 API V2 proof. Actual native model: DeepSeek `deepseek-v4-pro` (default route).
+
+
+---
+
+# 2026-10-29 declarative assertion follow-up
+
+Bounded child of existing SW-API-CLIENT-02, F-API-034 only; primary ownership
+unchanged. OpenAI `gpt-6.1-sol/high` author, Task `task_c0d26e9e563e`, Dispatch
+`ctx_0f27082dc4eb`, existing Run `run_37205f6095b3`. Frozen published base
+`938ae30339790c361abdda6fdd01b11a4e498518`; actual task branch
+`ryan-haver/wp-api-client-02-c1` on local Windows.
+
+## Scope and assertion design
+
+The product handler already refuses a valid canonical `POST /api/switch`
+route-all request when unavailable with HTTP 503 and `switch_all_failed` carrying
+the validated input. This package adds declarative scenario
+`sw_api_client_02_c1.switch_all_failed` and simulator-backed tests; product source,
+the shared runner/model/client, existing scenarios/tests and fixtures are unchanged.
+
+The scenario checks the exact status and refusal body, failure event input,
+absence of `routing_change` and the single-output `switch_failed`, no `video switch`
+command (including an attempted nonmutating write), no device write, and unchanged
+full simulator state. Direct tests use a real simulator, real `OreiMatrix`
+transport, real hub app, existing `ApiClient`, `WsObserver`, `SimDevice` and
+the runner's actual expectation checker. Inputs 1, 4, 8 and `" 6 "` prove ports
+are validated and normalized rather than hardcoded. Invalid range/type/missing/
+unknown-field controls retain unavailable precedence and publish no invalid ports.
+The connected per-output positive control proves the no-command, unchanged-state
+and no-success-event assertions each fail on an actual successful route. Wrong
+response/status/event expectations fail against the actual refused exchange.
+
+## Coordinator registry contribution
+
+The author never edited or staged the registry. In response to the blocking
+registry handshake, the coordinator independently inspected these source files,
+changed and staged only the F-API-034 scenario-link list in this checkout, and
+explicitly authorized including that already-staged contribution in the normal
+source commit. Its sole change appends the new scenario ID; `current`, `target`,
+basis, evidence, findings and other features are unchanged. This is composite
+authorship: new source/tests/report by the dispatched author, registry link by
+the coordinator. The private coordinator receipt is
+`build/p1-fanout-20261028/fapi034-registry-contribution-01/receipt.json` in the
+coordinator checkout, not a portable path in this task checkout.
+
+## Preserved initial preparation failure
+
+The first focused run passed 12 direct simulator regressions and failed the
+managed-source-runner assertion: the outcome was BLOCKED because the managed
+runner requires a healthy Telnet link before starting any simulator scenario.
+Requiring certificate verification against the disposable simulator's self-signed
+TLS certificate correctly keeps the actual matrix client disconnected, so that
+managed preparation cannot complete. No shared-runner edit or product defect
+is inferred. Original log: `build/software-waves/SW-API-CLIENT-02-C1/focused-first.log`.
+The original raw failed record/hub logs were created under
+`C:/t/f034-20261029-a/pytest-of-ryanh/pytest-0/test_registered_scenario_with_0/`,
+but subsequent pytest automatic retention removed that temporary directory before
+the author's preservation copy. This is a preservation failure: the raw JSON/hub
+logs are unavailable, not preserved. The failed pytest log retains the count,
+assertion and BLOCKED outcome; the native tool transcript records the actual
+Telnet blocked reason observed from that original JSON. The coordinator was
+notified; no reconstructed raw record or qualification retry substitutes for it.
+
+## Verification and disposition
+
+The coordinator explicitly approved the existing external-stack interface in a
+second blocking ask after the initial preparation failure. The owned helper
+launches a new disposable `SimulatorProcess` and `HubProcess` from this checkout
+with free loopback ports, applies the declared TLS-verification environment, and
+passes their actual URLs to the unchanged runner through `hub_url` and
+`sim_control_url`. This external mode skips the managed-stack healthy-Telnet
+preparation by its existing contract. It does not falsify link health, weaken
+assertions or repair the managed preparation limit. Normal managed all-scenario
+CI compatibility remains UNRESOLVED and is an additional integration blocker.
+The explicit external source mode is neither an image nor a hardware campaign.
+
+Each new external attempt records `external-stack-receipt.json` with actual
+source root, Python executable, parent/child argv, PIDs, loopback ports, source
+hashes, declared and recorded hub settings, initial disconnected health, source
+commit and process exit codes. Hub data is retained in the private allocated
+temp tree. External runner metadata alone omits these settings; the sidecar
+provides that attribution rather than inferring it from an API result.
+
+Before source commit: scoped Ruff passed; 52 registry/model/schema tests passed
+in 4.11 s; Mypy passed all 91 source files; 38 existing offline-switch/WebSocket
+contract tests passed in 28.38 s; the corrected external-mode focused module
+passed all 13 tests in 24.42 s. Focused pytest invocations use
+`-p no:tests.route_inventory -p no:cacheprovider` so they do not overwrite full
+route proof. Logs are under `build/software-waves/SW-API-CLIENT-02-C1/`.
+The normal configured source-commit hook and clean committed-source campaign
+are pending at this source report write; final actual results will follow in
+a report-only commit after execution.
+
+Actual source API plus `/ws` observation is V2 only. F-API-034 retains its V3
+target and recorded current V2; neither the full parent unit nor the per-output
+success branch nor shipped-image/browser behavior is qualified by this package.
+Qualified different-family review, integration and qualification remain HELD;
+DeepSeek Pro is only the retained candidate with current quota UNKNOWN. Raw
+captures remain private with admission HOLD under VAL-15. No canonical evidence
+import, ledger generation, publication, integration, cleanup or release is performed
+by this worker.

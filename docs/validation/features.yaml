@@ -4845,7 +4845,7 @@ features:
   evidence:
   - docs/validation/evidence/F-MTX-002/2026-10-04-V2-d6baf3ca-routing.route_all-api.json
   findings: [VAL-14]
-  scenarios: [routing.route_all]
+  scenarios: [routing.route_all, sw_api_client_02_c1.switch_all_failed]
 - id: F-API-035
   area: api
   title: WS event preset_recall / preset_recall_failed
