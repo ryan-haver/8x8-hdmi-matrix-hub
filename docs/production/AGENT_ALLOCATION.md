@@ -3122,10 +3122,10 @@ API heartbeat96e283fc024d matched Taskc0d26e9e563e/Dispatch0f27082dc4eb and was
 acknowledged; next inbox empty. Supported native Usagecontrol/CLI refreshed at
 this natural checkpoint; sanitized author-monitor-0236-capacity.json and new
 CAPACITY.jsonl entry retain actual provider windows/resets, active two author
-commitments and unknown external demand. Codex81%weekly remains; DeepSeek quota
+commitments and unknown external demand. Codex80%weekly remains; DeepSeek quota
 unknown, no new dispatch/reviewer or source acceptance. C2 normal-hook pass at
 47b0bbb8 was a worker checkpoint (4094pass/strict177routes), clean rerun/report
 pending final delivery. API original raw preservation and managed-runner gates
 remain unmet. Both authors active; no new source lease or qualification.
 Metadata-only JSONL/UTF8/whitespace checks apply; no runtime test claim.
-Post-push receipt: build/p1-fanout-20261028/author-monitor-0236-publication.json.
+Post-push receipt: build/p1-fanout-20261028/author-monitor-0236-corrected-publication.json.
