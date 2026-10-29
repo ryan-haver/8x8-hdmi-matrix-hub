@@ -7,6 +7,7 @@ from typing import Any
 
 import aiohttp
 
+from ..evidence import redact
 from ..model import Action
 from .base import ActionResult, Client, HubInfo, NotSupportedError
 
@@ -155,7 +156,9 @@ class ApiClient(Client):
             result.requests.append(record)
             result.status, result.body = status, parsed
             result.ok = 200 <= status < 300
-            result.steps.append(f"{method} {path}" + (f" {body}" if body is not None else "") + f" -> HTTP {status}")
+            # Mask structured fields before they become opaque procedure text.
+            result.steps.append(f"{method} {path}" + (f" {redact(body)}" if body is not None else "")
+                                + f" -> HTTP {status}")
         except (aiohttp.ClientError, TimeoutError) as exc:
             result.error = f"{type(exc).__name__}: {exc}"
             result.steps.append(f"{method} {path} -> {result.error}")

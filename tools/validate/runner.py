@@ -916,7 +916,8 @@ class Runner:
                         header_detail = (f"; header equality failed: {wrong}; unexpected presence: {present}"
                                          if wrong or present else "; observed header checks matched")
                 verdict = "pass" if ok else "fail"
-                body = json.dumps(result.body, default=str)[:300] if client.name == "api" else f"({client.name})"
+                # Comparisons above use the original body; only diagnostics are masked.
+                body = json.dumps(redact(result.body), default=str)[:300] if client.name == "api" else f"({client.name})"
                 detail = (f"HTTP {status}; body {body}" + (f"; error {result.error}" if result.error else "")
                           + header_detail)
             elif isinstance(exp, Hub):
