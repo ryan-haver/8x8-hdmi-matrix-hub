@@ -1,5 +1,51 @@
 # Current coordinator handoff
 
+## Existing-CI proof intake active — 2026-10-29T00:01Z (Oct28 local campaign)
+
+Freshness mapping11b09676 and separate coordinator review accepted/integrated/
+published at490a879b, with commandexit erratum and overwritten-scratch-byte
+preservationlimit explicitly retained. No feature qualification or source changes.
+All original/corrected/report workers settled/released before deliveryack; full
+natives/bundles/currentworkspace archives/taskrefs preserved. Audit workspace
+retained due diagnostic-preservationlimit; no destructive cleanup approved.
+
+New readonly existing-CI evidence intake is ACTIVE: Task `task_1143adebca18`,
+Dispatch `ctx_84eb3a122772`, terminal `term_d3a08f38-c21f-4b69-a35c-badc1e49fdea`,
+wp-ci-proof-intake / actualbranch `ryan-haver/wp-ci-proof-intake`, exact base
+`490a879bd346773cca64fac861eaaab29e703628`. Sol6.1/high requested/effective,
+actual turn/tool activity and source-exact transcript observed. Own new
+`docs/production/software-waves/SW-AUDIT-01/CI_EVIDENCE_INTAKE.md` plus ignored
+build subtree only; coordinator-input.json readonly, SHA256
+34be806ec99a4f66ca58628c7204e5c4b1e362e6c2544bf76378bc983c4764d3 verified.
+
+Task checks existing green CI40770556464 artifacts for60old evidence units /
+55scenarios serving38stale rows before deciding reruns. RawZIPbyte/digest checks,
+actual record source/client/level/dirty/image/assertion/schema/screenshot mapping
+and source ancestry/covered-path comparison required. FAPI034 failure assertion
+stays a separate gap; no source/SHA relabel, canonical import, rerun, Gitref/history
+mutation, source/testing/tooling implementation or qualification. Synthetic merge
+non-ancestry, if observed, stays explicit; treeequivalence alone cannot waive it.
+Artifact payloads remain private, no printed credential markers or executed raw
+artifact scripts. Bound20min plus corrections, no ledger/fullsuite regeneration.
+
+Run37205/coordinatorterm_dcf96b5a-bb99-4ecb-b887-eb53f7f01662/gen3/runtime14c5/
+localOrca1.4.243 unchanged. Fullfleet70=63released/sixretained/oneactive, onepage;
+four-total ceiling preserves old external reservation. Supported usage refreshed
+23:55Z: Codex85%weeklyremaining, nativeMiniMax98%weekly/82%session; external
+shared commitments unknown, bounded intake/correction reserve admitted. Fresh
+Solcatalog23:55:52 supportshigh. Publication490a equality verified beforestart;
+new coordination-prose CI is separate from e16entryCI13requiredPASS.
+
+Redaction11f/source8b is preserved/publishedtaskref but unreviewed/unintegrated;
+qualified DeepSeek quota unknown. No source/privacyqualification inferred for
+M3 inventory or same-family substitution, no material model-allocation bypass.
+VAL15 body/Response string gaps remain open. Protected root/private/user/external/
+persistence/quarantine/oddhook/immutable evidence untouched; preserve exact
+source task junction and short externaltemp before any future cleanup. Current
+private receipts: `build/p1-fanout-20261028/`. Process actual questions/delivery,
+verify exact report/diff/proofs, preserve/release beforeack; do not promise
+background coordination or claim active work completed.
+
 ## Audit accepted; existing CI proof intake prepared — 2026-10-28T23:57Z
 
 Freshness report11b09676 accepted as bounded mapping with separate factual

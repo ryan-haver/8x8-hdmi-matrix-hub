@@ -2380,3 +2380,23 @@ MiniMax remains eligiblebounded metadata/inventory review only, no implied code
 privacyreviewqualification. DeepSeekreviewquotaunknown, source11f remainsoutof
 integration. Independent CIproofintake neednot wait for that sourcegate. Actual
 newauthority/base/branches follow launchreceipts after publication/equality.
+
+### Existing-CI proof intake live — 2026-10-29T00:01Z (Oct28 local campaign)
+
+Actual Tasktask_1143adebca18/Dispatchctx_84eb3a122772, terminalterm_d3a08f38-c21f-4b69-a35c-badc1e49fdea,
+dedicated wp-ci-proof-intake / branchryan-haver/wp-ci-proof-intake / exact
+base490a879bd346773cca64fac861eaaab29e703628. Sol6.1/high requested/effective,
+actualturnstart and source-exacttranscripttools observed, freshfleet70onepage=
+63released/sixhistoricalretained/oneactive. TaskinputSHA25634be806ec99a4f66ca58628c7204e5c4b1e362e6c2544bf76378bc983c4764d3
+copiedbyteexact/readonly beforelaunch. Only new CI_EVIDENCE_INTAKE.md/ownbuild
+writable, no source/scenario/test/canonical/refs/runtime edits, no rerun/import/
+qualification. ExistingCI rawZIP/digest/source/client/dirty/image/assertion/
+screenshot checks and synthetic-merge ancestry are explicit acceptance.
+
+SameRun/runtime/coordinator/remote/protectedresources revalidated, baseline
+publication490a exactlive equality beforestart. Currentqueue is bounded existing
+P1audit/evidence continuation, not a newmaterialphase or reviewerfamilychange.
+Code11f reviewgate remainsheld; independent archive/proof inventory proceeds
+using known-suitable Sol evidence role, not unqualified source-reviewfallback.
+Launch/entry/artifact/quota/capability/metadata receipts under currentprivate
+campaign. New deployment/HIL/image/baseline/owner approval is not authorized.

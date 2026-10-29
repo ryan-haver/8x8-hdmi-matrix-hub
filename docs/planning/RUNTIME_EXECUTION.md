@@ -878,3 +878,12 @@ erratum and overwritten scratch-byte gap; native/fullbundle/currentworkspace
 archives/taskref retained, worker released beforeack, no cleanup. Docs-only
 integration4c5c733c. Prepared same-phase CIartifactintake will inspect existing
 green40770556464 proof before rerun decisions; redactionreviewgate staysheld.
+
+### Existing CI proof intake started — 2026-10-29T00:01Z
+
+Task1143adebca18/Dispatch84eb3a122772 is live in new wp-ci-proof-intake,
+Sol6.1/high, exact published490a base. It inventories green40770556464 artifacts
+for60proofunits/55scenarios before reruns, preserving raw digest/source/client/
+ancestry and assertion boundaries. Report/build only, no source or qualification.
+Independent ready evidence work continues while source11f review quota isheld.
+Actual authority, inputhash, capacity and readonly leases are in currenthandoff.
