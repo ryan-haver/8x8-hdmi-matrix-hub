@@ -3360,3 +3360,14 @@ integration, release approval or canonical268/210below/96stale change.
 Private receipts c3-misplaced-coordinator-check.json and privacy-ws-0315-capacity.json.
 
 Checkpoint verification:489 documentation tests passed2.90s with isolated data/config; all13capacity JSONL events parsed; CR-aware diff check passed. Coordination-only publication uses invocation-only hook exception; implementation workers retain mandatory normal hooks.
+
+
+### Active-worker usage checkpoint — 2026-10-29T03:36Z
+
+Supported refresh: Codex76%weekly remaining, MiniMax97%weekly/95%session,
+DeepSeek unknown. Same C3/WS author Dispatches, no new creation/dispatch or
+qualified review reserve. C3 corrected normal hook about two-thirds complete
+without reported failure; original failed attempt retained, no source acceptance.
+Sanitized receipt privacy-ws-0336-capacity.json and capacity event retained.
+Observation-only records checked for JSON validity and CR-aware whitespace; no
+implementation or readiness change. Invocation-only metadata hook exception.
