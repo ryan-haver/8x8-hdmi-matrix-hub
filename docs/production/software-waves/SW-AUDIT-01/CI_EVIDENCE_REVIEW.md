@@ -268,8 +268,11 @@ approvals stay closed.
 - **No** feature qualification or canonical adoption. The coordinator owns
   preservation, release, publication and any eventual canonical admission.
 - The four Flic units, the F-API-034 negative-path assertion, the unintegrated
-  redaction implementation and its own qualified review, the physical-HIL and
-  field gates, and the Tron owner approvals all remain open.
+  redaction implementation and its own qualified review, the physical-HIL,
+  field, 72-hour soak and final version/artifact release gates, and the
+  `source11f` source/privacy qualification all remain open. The original three
+  Tron owner approvals are closed and stay closed; this review does not reopen
+  or extend them.
 
 ## Commands, checks and exits
 
