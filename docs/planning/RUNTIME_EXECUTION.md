@@ -928,3 +928,13 @@ nativeM3 independent Flicfour-record metadata review in newwp-flic-proof-review
 at67d80. Nativefamilies/authority/tools verified, twoactive; no source/privacy
 review or artifactadmission. Originalworkersreleased/preserved/taskrefspublished.
 Currenthandoff/ledger retain rawprivacyhold, exactbases/paths and reviewboundaries.
+
+
+### CI inventory and corrected independent review integrated — 2026-10-29T00:34Z
+
+9036inventory/6d00independentreview/7ebbTron-statuscorrection accepted andintegrated
+sequentially docs-only at8825eb70/b694ad2a/5dd3c364. Fullcorrectedworkspace/native/
+bundle/taskref preserved, workerreleasedbeforeack. ActualCIbdcfnonancestry still
+blocksordinaryfreshness; acceptedinventory isnot canonicaladoption/qualification.
+Flicmetadatareview6855b88f3e18 remainsactive; rawprivacyhold/source11freviewhold
+unchanged, originalTronclosed. Exacthandoff/ledger authoritative for nextworker.

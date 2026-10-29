@@ -2646,3 +2646,48 @@ build/p1-fanout-20261028/review-followup-launch-publication.json.
 Launch-recordprose checks:489existing documentation tests pass2.74s, isolated
 data/config, partialroute/cache plugins disabled; UTF8/JSONL/scope/CR-awarechecks
 passed. Invocation-only docs hook exception; no source/fullsuite qualification.
+
+
+### CI inventory and corrected independent review accepted/integrated — 2026-10-29T00:34Z
+
+CorrectionTask2ba7594b9ba8/Dispatch81f8a8333f36 submitted7ebb520215383d87449adaa9ed7da17e1ee41cd2
+from exact6d00, onlyreviewreportparagraph. CoordinatorOpenAI independently verified
+reversing that paragraph recreates original6d00blob byte-for-byte; all inventory
+counts/claims/provenance unchanged and originalTronclosed explicit. All4698other
+original regularfiles, including214probe01files, bytehashverified unchanged
+against originalfullarchive manifest. Scope/cleanparentverified, no numerical
+or code/privacy qualification change. Validsettlementaccepted and Orcareleased
+(terminalarchivecaptured) BEFORE delivery0ee06914970a acknowledgment, nextinboxempty.
+
+Fullnativefinal ses_e7af095beffe1faHHobOMneQoj verified39messages/37actualnative
+M3thinkingassistantturns/Task/Dispatch/cwd,329749bytes/hash5bac1483a7ffd537626078b343aec7fcf2e561cb7b759c69598f192c71775376.
+Correctedreportblobhash5c824b27e23645b3f43d19509c746789700d3ef82fb74f7c8597da1035be9eea.
+Exacttaskref7ebb5202published/liveverified, fullGitbundleverifiedcomplete. Separate
+correctedfullworkspace4705files/297419962bytes archivefd11eb71ee5251171e3ce84c18d14c377794772cf057a414434b98a1baa72a0e
+verifiedallbytes/types/finalsource/head/status, zerolinks; originalarchive/natives/
+failedprobes/report unchanged. No worktree removal. Private receipts
+ci-review-correction-* and preservation-ci-review-correction-01/wp-ci-proof-review/.
+
+Accepted reports integratedsequentially docs-only: sourceinventory9036 ->8825eb705121255b999e3adbe3155481e2a49e69;
+independentM3review6d00 ->b694ad2a4781c2f578a64b1828674628aef942f5;
+authorprosecorrection7ebb ->5dd3c364cb1ab11d306f6f8b5167b2b7e7aa2e39.
+Finalblobs exactaccepted candidates. No source/tests/canonicalevidence/registry/
+ledger/findings/manifest/lock changes. This accepts bounded inventory, NOT the
+56records for canonicalqualification: actualbdcfsource remainsnonancestor,
+privacy/adoption/refresh unresolved; no SHA relabel/historymanipulation. Numerical
+ledger268features/210below/96stale unchanged; no ledger generation. Originalthree
+Tronapprovals CLOSED; all physical/soak/field/finalrelease gates unchanged.
+
+Flicmetadatareview Taskc20c74f1c8fa/Dispatch6855b88f3e18 remainsactive in dedicated
+wp-flic-proof-review, nativeM3/thinking exact67d80; sourceFlicreport unintegrated
+pendingindependentreview, rawartifactprivacyHOLD. Source11f stillunreviewed/
+unintegrated, qualifiedDeepSeekquotaUNKNOWN, no M3source/privacyreviewinferred.
+SameRun/runtime/coordinator/protectedresources; conservativeoldexternalreservation
+intact. Publish integrationrecords/exactverify before any laterexecutionwave.
+
+Combined instruction/report verification:489existing documentation tests pass
+2.76s, isolateddata/config and partialroute/cache disabled. Acceptedreportblobs
+match exactly, localMarkdown targets/UTF8/scope/CR-aware whitespace passed.
+Invocation-only docs hook exception for reportcherries/coordination records,
+no sourcehook/runtimepass claimed. Finalintegrationpublication/equalityreceipt:
+build/p1-fanout-20261028/ci-inventory-integration-publication.json.
