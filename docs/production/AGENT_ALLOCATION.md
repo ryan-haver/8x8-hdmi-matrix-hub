@@ -2498,4 +2498,3 @@ Postlaunch records publication/equality receipt: ci-followup-launch-publication.
 Postlaunch record checks:489existing documentation tests passed2.79s with isolated
 data/config and partialroute/cache plugins disabled; UTF8/JSONL/scope/CR-aware
 checks passed. Invocation-only docs hook exception; no source hook/runtime claim.
-
