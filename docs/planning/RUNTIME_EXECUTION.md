@@ -997,3 +997,13 @@ commit after normal checks. Root registry/levels/evidence unchanged. API author
 unblocked; C2 reports66focused passes and normal strict source hook underway.
 Both Sol authors active; qualified review/integration still held. Latest handoff
 and private registry-contribution receipt preserve scope and exact metadata hashes.
+
+
+### API managed-preparation constraint retained — 2026-10-29T02:25Z
+
+12direct API refusal regressions reported pass; managed scenario blocks at healthy
+Telnet preparation. Bounded existing external disposable stack mode approved for
+truthful own test/campaign, original blocked bytes preserved. Default-runner/full
+scenario CI compatibility remains an integration blocker requiring separately
+scoped support, not waived by external proof. Both source authors active; no new
+shared runner lease, code acceptance or qualification. Current handoff has decision.

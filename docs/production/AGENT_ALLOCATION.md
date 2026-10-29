@@ -3019,3 +3019,43 @@ unknown, no new reviewer or acceptance. Coordination-only verification489docs
 tests passed2.99s with isolated data/config and route/cache plugins disabled;
 UTF8/JSONL/scope/CR-aware checks passed. Invocation-only docs hook exception.
 Post-push equality: build/p1-fanout-20261028/implementation-registry-record-publication.json.
+
+
+### Bounded external proof mode approved; managed preparation remains blocked — 2026-10-29T02:25Z
+
+API Dispatch0f27082dc4eb escalation5c1a9c94ebc8/questionce80f092d9d9 reports12direct
+simulator/API/WS regressions pass but the startup-disconnected managed scenario
+is BLOCKED before its action by existing _wait_hub_telnet preparation. Coordinator
+independently inspected runner.py: managed simulator reset requires healthy link;
+external hub_url/sim_control_url mode intentionally retains operator-owned settings
+and skips that runner-started-hub precondition. Original failure is real and stays.
+
+Reply msg_2ec594fdfa50 explicitly approves a bounded existing external disposable
+SimulatorProcess+HubProcess mode in owned regression/campaign paths ONLY. Use
+free loopback ports, pinned task source, fresh isolated fixture data and explicit
+TLS environment; attach sanitized source/process/environment/argv/hash sidecars
+because external-mode record env may omit actual hub settings. Preserve original
+managed BLOCKED bytes/exit separately, new empty external attempt, same503/exact
+failure event/no write/no state/no optimistic success assertions and counterfactual
+controls. No runner/model/product lease, monkeypatch, fabricated healthy link,
+assertion/timeout weakening, owner/off-host service or canonical evidence import.
+
+This decision does NOT claim normal/default all-scenario CI compatibility; that
+remains UNRESOLVED and an additional integration blocker even if external proof
+passes. Preserve actual V2/client/mode, no target/parent closure or reclassification
+of old failure. Any minimal managed-preparation capability needs a separate serial
+shared-source scope after the existing privacy lease settles, then qualified review
+and combined default-runner validation. No material family/phase or acceptance-gate
+waiver inferred from supported execution-mode adaptation. Qualified source review
+and privacy/admission holds still apply. Registry contribution stays unchanged.
+
+Question answered before deliverycad62c8c59dd acknowledgment; subsequent C2 heartbeat
+250125273788 matched active Task/Dispatch and deliveryd66eaacbaf89 was acknowledged.
+Both original source authors remain active; no settlement/release/new dispatch.
+C2 full configured strict source hook still underway, not complete or accepted.
+Private decision receipt build/p1-fanout-20261028/fapi034-external-mode-decision.json.
+
+Decision-record verification:489 existing docs tests passed3.09s with isolated
+data/config and route/cache plugins disabled. UTF8/scope/CR-aware checks pass.
+Invocation-only docs hook exception; no new runtime/source acceptance. Exact
+post-push equality: build/p1-fanout-20261028/external-proof-record-publication.json.

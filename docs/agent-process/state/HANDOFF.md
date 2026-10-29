@@ -1,5 +1,26 @@
 # Current coordinator handoff
 
+## API external proof approved; default-runner integration blocked — 2026-10-29T02:25Z
+
+API Taskc0d26e9e563e/Dispatchctx_0f27082dc4eb found managed startup-disconnected
+scenario BLOCKED by healthy-Telnet preparation;12direct regressions pass. Preserve
+that original managed BLOCKED record/log/exit. Coordinator reply2ec594fdfa50 to
+questionce80f092d9d9 permits existing external disposable SimulatorProcess+HubProcess
+through Runner hub_url/sim_control_url, new owned attempt only, pinned source/free
+loopback ports/isolated fixture data/TLS settings and truthful environment/process
+sidecars. No new shared-source lease or fake healthy state/removed assertion.
+
+IMPORTANT: external proof does NOT resolve default managed-runner/all-scenario CI
+compatibility. That is a separate integration blocker alongside qualified review
+and privacy admission, even if new external run passes. Future preparation support
+needs a separate serial scope after privacy runner lease settles; never silently
+merge a scenario that breaks ordinary campaign CI. No target promotion/parent
+closure, source-SHA relabel or old failure rewrite. Registry contribution unchanged.
+Both current source authors remain active; C2 full hook underway. Exact bindings,
+leases/temps/junctions below. Latest decision ledger/private fapi034-external-mode-
+decision.json; release/preserve only after genuine settlement. No new phase or
+family allocation; all existing source/privacy/protected-resource gates retained.
+
 ## Registry handshake answered; source authors validating — 2026-10-29T02:21Z
 
 API Taskc0d26e9e563e/Dispatchctx_0f27082dc4eb blocking question answered. Coordinator
