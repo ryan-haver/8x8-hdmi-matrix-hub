@@ -534,7 +534,14 @@ class Runner:
             return f"scenario is not defined for client '{client.name}'"
         if sc.action.intent in RUNNER_INTENTS:
             if not client.observes:
-                return f"client '{client.name}' cannot observe a '{sc.action.intent}'"
+                applicable = [e for e in sc.expect if e.clients is None or client.name in e.clients]
+                api_ws_observation = (
+                    self.o.target == "sim" and client.name == "api" and sc.action.intent == "device_change"
+                    and any(isinstance(e, WsEvent) for e in applicable)
+                    and not any(isinstance(e, ClientState) for e in applicable)
+                )
+                if not api_ws_observation:
+                    return f"client '{client.name}' cannot observe a '{sc.action.intent}'"
         elif not client.supports(sc.action):
             return f"client '{client.name}' cannot perform '{sc.action.intent}'"
         if self.o.target not in sc.targets:

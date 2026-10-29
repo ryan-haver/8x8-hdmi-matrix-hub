@@ -4931,7 +4931,7 @@ features:
   - docs/validation/evidence/F-MTX-031/2026-10-04-V3-d6baf3ca-live.input_signal-browser.json
   - docs/validation/evidence/F-MTX-031/2026-10-04-V3-d6baf3ca-live.rename_elsewhere-browser.json
   findings: [BE-24]
-  scenarios: [live.front_panel_route, live.input_signal, live.display_unplugged, live.rename_elsewhere, power.standby]
+  scenarios: [live.front_panel_route, live.input_signal, live.display_unplugged, live.rename_elsewhere, power.standby, sw_api_read_03_c1.output_name_change]
 - id: F-API-041
   area: api
   title: WS event scene_execution_error
