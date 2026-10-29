@@ -2691,3 +2691,55 @@ match exactly, localMarkdown targets/UTF8/scope/CR-aware whitespace passed.
 Invocation-only docs hook exception for reportcherries/coordination records,
 no sourcehook/runtimepass claimed. Finalintegrationpublication/equalityreceipt:
 build/p1-fanout-20261028/ci-inventory-integration-publication.json.
+
+
+### Flic metadata review settled; two prose corrections prepared — 2026-10-29T00:40Z
+
+Task `task_c20c74f1c8fa` / Dispatch `ctx_6855b88f3e18` delivered report-only
+`1d7ef03f824bc5385aa4f0345bccec30cd1e26af` from exact `67d80ae9`. Its 90 checks
+(81 PASS, 9 INFO, zero FAIL) confirm four Flic records, 25 pass + one n/a,
+36 manifest members, clean source, generated transport and privacy HOLD. The
+coordinator accepts those bounded facts but holds integration for two prose
+corrections: line11 incorrectly denies actual OpenAI-to-MiniMax family
+independence; line41 says four power-off passing assertions instead of six.
+The review remains unqualified for source/privacy code review regardless of
+its genuine different-family metadata provenance. Artifact admission stays held.
+
+Valid settlement accepted; Orca released the worker and captured terminal output
+BEFORE delivery `delivery_d132afdf1a7c` acknowledgment; next inbox empty.
+Full native `ses_e7af05a25ffe26430M39WkV429`: 47 messages / 45 actual MiniMax-M3
+thinking assistant turns; 509132 bytes; SHA256
+5700cd80028088e45c0d8b9be04ad64fe53b89cf33572f9c85aa7cb201f566f1.
+Report Git blob SHA256 c26941e01a2690439390ec71d01871bea0dfd2f9c2ea6e438357d571bdefc204.
+Task ref published/live verified at1d7ef03f; full Git bundle verified complete.
+Full workspace4521 files /295400935 bytes; verified archive SHA256
+45e15be30f5c33b7e53873e3c9487adf4f215d6ff9ca6c9d86a8bc1ebe39eb5c,
+all member bytes/types/final head/status checked, no links or traversal.
+Original failed diagnostics retained, no worktree removed. Private receipts:
+`build/p1-fanout-20261028/flic-review-original-*`, preservation/wp-flic-proof-review/.
+
+Prepare a new serial native M3/thinking author Task at exact1d7 in the same
+positively released/preserved worktree. Brief
+`next-wave/SW-AUDIT-01-FLIC-REVIEW-CORRECTION.txt` permits only two report prose
+locations and NEW correction-01 diagnostics; original attempt-01 stays readonly.
+Five-minute bound plus checks/reserve; no repeated 90-check inventory, no new
+phase or source/privacy qualification. Coordinator OpenAI checks the exact fix.
+Original report attribution stays intact; correction authority belongs in its
+new private receipt. Private-attempt link limitation remains explicitly recorded;
+ignored invocation diagnostics are retained operational records, not shipped or
+new implementation/tooling deliverables. No privacy disposition inferred.
+
+Usage refreshed00:38:53Z: MiniMax98%weekly/81%session remaining, Codex83%weekly;
+DeepSeek quota unknown. Supported reporting/status/window/reset receipts retained
+in flic-correction-capacity.json. External commitments unknown; bounded correction
+and reserve admitted without new spend/accounts. Full fleet74, one page:
+68 released / six historical retained / no active worker. Same integration,
+remote, Run37205/runtime14c5/coordinator/localOrca1.4.243; native M3 catalog checked.
+Old external reservation/protected resources/concurrency ceiling unchanged.
+Publish these records and verify exact remote/local equality before dispatch.
+
+Correction preparation checks:489 existing documentation tests passed2.82s with
+isolated data/config and route/cache plugins disabled. UTF8/JSONL/scope/CR-aware
+checks passed. Invocation-only documentation hook exception; no source-hook or
+runtime qualification. Prelaunch equality receipt:
+build/p1-fanout-20261028/flic-correction-prelaunch-publication.json.
