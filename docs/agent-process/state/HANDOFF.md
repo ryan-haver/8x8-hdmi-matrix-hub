@@ -1,5 +1,36 @@
 # Current coordinator handoff
 
+C2 status02:31:51Z confirms four original before-fix records copied outside pytest
+temp before hook and SHA256 reverified; failure log/exit/procedure/check bytes
+retained. This is an author checkpoint pending final independent preservation
+check. API missing managed BLOCKED artifacts remain a separate unresolved failure.
+
+## API original failure artifacts missing; acceptance remains failed — 2026-10-29T02:31Z
+
+Active API Taskc0d26e9e563e/Dispatchctx_0f27082dc4eb reports pytest retention removed
+original managed BLOCKED raw JSON/hub logs before preservation. focused-first.log
+and native transcript retain failure facts; original raw bytes unavailable. Do NOT
+reconstruct/relabel/rerun as originals or claim full historical byte preservation.
+Cleanup of owned worktree/temp HELD. Finish current authorized hook/external
+campaign, preserve useful source/results, but final worker_done must report failed/
+partial requested acceptance if originals remain unrecovered. Qualified review,
+default-runner/all-scenario CI and privacy/admission holds remain unchanged.
+
+Report-path correction: base938 historical DeepSeek AUTHOR.md existed; coordinator
+brief mistakenly called it NEW. Historical Git blob11878bytes/SHA c2569240 is
+restored as exact LF-normalized prefix (independently verified), current Sol Task/
+Dispatch/model follow-up separate. Corrected lease permits APPEND-ONLY current
+section. Never overwrite/relabel earlier authorship. Root brief updated; no shared
+source lease expands. All current staged code/registry still unintegrated.
+
+Guidance6b90fae7a341 to API, warning0b617d07a1c1 to privacy author: preserve completed
+pytest artifacts outside retention trees before further runs; use a new empty owned
+TEMP/TMP parent per future invocation, no populated --basetemp or active-hook
+interruption. C2 author must verify its own raw oracles remain preserved and report
+any limitation. Both authors still active. Current private decision/inspection
+receipts in build/p1-fanout-20261028/; latest ledger holds message IDs and exact
+scope. Preserve raw logs/transcripts/temp, all original/root/protected resources.
+
 ## API external proof approved; default-runner integration blocked — 2026-10-29T02:25Z
 
 API Taskc0d26e9e563e/Dispatchctx_0f27082dc4eb found managed startup-disconnected

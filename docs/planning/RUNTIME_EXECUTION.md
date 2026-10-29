@@ -1007,3 +1007,13 @@ truthful own test/campaign, original blocked bytes preserved. Default-runner/ful
 scenario CI compatibility remains an integration blocker requiring separately
 scoped support, not waived by external proof. Both source authors active; no new
 shared runner lease, code acceptance or qualification. Current handoff has decision.
+
+
+### API failed-run preservation gap recorded — 2026-10-29T02:31Z
+
+Pytest retention removed initial managed BLOCKED JSON/hub logs before archival;
+worker reports exact failure summary/native trace retained. Preservation acceptance
+UNMET, cleanup held, no reconstructed originals. Historical DeepSeek AUTHOR report
+restored/verified; coordinator corrects mistaken NEW-path brief to append-only Sol
+follow-up. Current hooks/external campaign continue, both authors active, review/
+managed compatibility/privacy gates held. Exact guidance and source limits in handoff.

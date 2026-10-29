@@ -3059,3 +3059,59 @@ Decision-record verification:489 existing docs tests passed3.09s with isolated
 data/config and route/cache plugins disabled. UTF8/scope/CR-aware checks pass.
 Invocation-only docs hook exception; no new runtime/source acceptance. Exact
 post-push equality: build/p1-fanout-20261028/external-proof-record-publication.json.
+
+
+### API preservation failure and report-path scope corrected — 2026-10-29T02:31Z
+
+Escalationmsg_ab9ea558bd86 from active API Dispatch0f27082dc4eb reports original
+managed BLOCKED raw record/hub logs under pytest-0 removed by pytest automatic
+retention before archival; attempted preservation copy failed. focused-first.log
+and native tool transcript retain failure count/exit/Telnet reason. Original raw
+bytes are currently unavailable; no reconstruction/relabel or rerun as original
+allowed. This is an actual FAILED preservation requirement, not a passing archive
+or an allegation of canonical source/evidence loss. Preserve exact lost paths and
+all remaining raw/log/native/copy-failure diagnostics; worktree/temp cleanup HELD.
+Functional external13/existing38/registry-model-schema52 and mypy91 passes are
+worker checkpoints, not qualified source acceptance or default-runner success.
+
+Coordinator's initial brief also incorrectly called the assigned AUTHOR.md NEW.
+Base938 already contains the historical DeepSeek report (Git11878bytes,
+SHA256c25692409f8d4f7ae38a21695571821475b1ec097de995517b266c2b59c4e9ff).
+Worker restored it before adding the current follow-up; coordinator independently
+verified exact LF-normalized historical Git prefix and separate current Sol Task/
+Dispatch/model section. Explicit corrected lease now permits APPEND-ONLY current
+follow-up, no historical-authority rewrite or qualification relabel. Brief amended;
+coordinator owns the mistaken NEW-path assumption. No source/runtime lease expands.
+
+Guidance6b90fae7a341: finish already-authorized active hook/distinct external
+committed-source campaign without interrupting it or weakening assertions; report
+preservation acceptance UNMET and final failed/partial requested acceptance if
+original bytes cannot be honestly recovered. Commit useful source and exact true
+functional results; do not claim all requirements/phase complete. Managed-runner
+CI compatibility, qualified review and privacy/admission remain blocked. This is
+not a model-exam retry or permission to recreate lost historical artifacts.
+
+Warning0b617d07a1c1 to privacy author requires verifying before-fix raw artifacts
+are already outside pytest-retained trees, reporting any gap, and preserving all
+remaining data before future invocations. Use a NEW empty owned TEMP/TMP parent
+for each future run; never reuse populated --basetemp, which pytest may clear.
+Do not change or interrupt currently running hooks, delete directories or reset
+source. Both original authors remain active, no duplicate/replacement dispatch.
+Escalation handled/guidance enqueued BEFORE delivery1e98269ca40c acknowledgment;
+subsequent C2 heartbeat744841a92f63 acknowledged. Private receipts
+fapi034-report-collision-inspection.json and fapi034-preservation-failure-decision.json
+under current build/p1-fanout-20261028/. Report restoration does not recover lost
+managed-run raw bytes; retain that distinction in final preservation manifests.
+
+Follow-up225e96401daa: C2 author reports all four original failed JSON records
+were copied byte-exact outside pytest temp before the source hook, SHA256 values
+reverified, procedure/check bytes retained within originals, failure log/exit and
+boolean receipts also preserved. No C2 baseline loss reported; coordinator final
+artifact verification remains pending. Current hook unchanged; future invocations
+use new empty owned temp parents. API heartbeat matches expected Task/Dispatch;
+delivery5f824a4e10ee processed/acknowledged. Both authors remain active.
+
+Record checks:489 existing documentation tests passed3.19s, isolated data/config
+and route/cache plugins disabled. UTF8/scope/CR-aware checks pass. Invocation-only
+docs hook exception; no new runtime/source acceptance. Post-push equality:
+build/p1-fanout-20261028/preservation-gap-record-publication.json.
