@@ -2524,3 +2524,88 @@ Checkpoint prose checks:489existing docs tests pass2.75s with isolated data/conf
 and route/cache plugins disabled; UTF8 and CR-aware whitespace checks pass.
 Invocation-only docs hook exception, no source-hook/runtime acceptance claimed.
 Post-push equality receipt: build/p1-fanout-20261028/flic-escalation-publication.json.
+
+
+### Independent CI inventory review delivered; one prose correction held — 2026-10-29T00:23Z
+
+Task88451be35b50/Dispatch3d5cba0330a2 submitted6d00a871f24ead60b65947367a404c76570df059,
+onlynew CI_EVIDENCE_REVIEW.md from exact9036 candidate. Actual nativeM3 independently
+reproduced rawZIPs/60units/38features/56matches/470pass+two n/a/sourceancestry/
+scenarios/covers/sevenscreenshots/tables. Coordinator scope/report receipts match.
+Inventory findings accepted as bounded facts, but integration HELD: line272
+incorrectly groups original Tron owner approvals with remaining open gates,
+contradicting correct closed status at248-249 and ownerrecord. No owner gate is
+reopened by this prose error. Authors fix; coordinator requests minimal serial
+M3 report correction, exact6d00base, same settled/preserved worktree, new Task.
+No source/privacy/model-allocation change or fresh three-provider phase required.
+
+Valid completed settlement accepted, Orca workerreleased (terminal archivecaptured)
+BEFORE delivery06f120e76f7b acknowledgment; nextinboxempty. Full nativefinalexport
+ses_e7afcfe42ffeYgZzM8j6ZIg5OK verified55messages/53actualM3thinkingassistantturns,
+487211bytes/SHAe3bd109255c0f0830df3e0538d72eaaa24ceceeba5f84dbf3a9f15a19958b4cb,
+Task/Dispatch/cwd match. Reportblob SHA20224e81716589ba2f57d5b7c1a4961b3b6ce6c543cff615fb9d2e39c4375312.
+Exacttaskref6d00 published/liveverified; fullGitbundlecomplete/verified. Fullcurrent
+workspace4699files/297352981bytes archivecd9b9bb85207f3d60c3755a241da090ce2f6f6c0290b3c5197562bcc5fddd7f6
+verifiedallbytes/types/finalhead/status, zerolinks. Original failedprobe attempts
+retained separately; no cleanup. Private receipts ci-review-original-* and
+preservation/wp-ci-proof-review/ under current build/p1-fanout-20261028/.
+
+Prepared brief next-wave/SW-AUDIT-01-CI-REVIEW-CORRECTION.txt leases only existing
+reviewreport and NEW correction-01 diagnostics, originalprobe01 readonly. Bound5min,
+actualM3inventoryauthor/thinking, no repeated inventoryscan. Prior lease settled;
+config unchanged readonly. Independent Flicworker remains active with artifact
+privacyhold, no sourcecode lease orcanonicaladmission. Existing quota00:11Z M3
+98%weekly/82%session andCodex84%weekly remains within15min; refresh before affected
+dispatch if stale. Conservative four-total ceiling/oldreservation/protections intact.
+Publish this correction authority and verify exactorigin equality before start.
+
+
+### Flic refresh settled/preserved; two metadata follow-ups prepared — 2026-10-29T00:28Z
+
+Task442e2245e0a1/Dispatch33cdb9118f04 submitted67d80ae997a988ce6d9983d541205e8ca432a57c,
+onlynew FLIC_REFRESH.md from exact865ec9c6. Valid settlementaccepted/released via
+Orca BEFORE delivery847a989bd81d acknowledgment; nextinboxempty. Coordinator
+independently verified four flic/sim/V3clean-sourcepass/ok records,25pass+one n/a,
+36finalmanifest memberbytes/hashes and eight statepassword fields equal to the
+checked-in simulatorseed without exposing values. Run/check exit0/lower scope
+retained. Independent bounded metadata review pending; rawARTIFACT ADMISSION/
+PUBLICATION HOLD persists, no privacyclearance/canonicaladoption. Source11f
+reviewgate, VAL15freeformstrings andFAPI034assertiongap open; originalTronclosed.
+
+ReportworktreeCRLF hashfa99efc55c5df11f2a517eb9547286ddc688c674eb7cf5b2d84edb29e0142d7d
+and GitLFblob293088059c2e9627c7288478227aba12ecb1b051436097aec338a001a555c626
+verified identical after CRLFnormalization. Initialcoordinatorprobe compared forms
+incorrectly andfailed; diagnosticretained, corrected verificationpassed. Final
+manifestd474cf5ecbbfd6c3e396439223da883ced8f1750fa7bd6b89d970f673c897134 unchanged.
+Fullrawnative1417048bytes/hash5c1d6670c87d165ef80109daecdb54bba50682710c39128c9f23192627c29abe
+verifiesactualSolhigh/Task/Dispatch/cwd. Exacttaskref67d80published/liveverified,
+fullGitbundleverifiedcomplete. Fullcurrentworkspace4522files/295405445bytes
+archive106c777f5419040a345a6b4856c7549fec991b25783b4c3b0f3187ff0d27036e
+verifiedallbytes/types/finalhead/status, no links. Originalrawlogs/records and
+ignored disposableTLSfixturefiles remain private. No worktree removed. Private
+receipts flic-refresh-* /preservation/wp-flic-proof-refresh/ in currentcampaign.
+
+Prepared two disjoint nativeM3/thinking tasks: CIreview authorcorrection at6d00
+in settled/preserved wp-ci-proof-review (5min), and independent Flicinventory
+review at exact67d80 in new wp-flic-proof-review (15min), plus correctionsreserve.
+New next-wave briefs define serial reportcorrection vs new independentreport,
+original artifacts readonly. M3 boundedinventory qualification suits both; Sol
+Flicauthor->M3 independent metadatareview; coordinatorOpenAI checks M3 prosefix.
+No source/privacyreview, new phase or materialmodelallocation change. DeepSeek
+source-review quotaUNKNOWN; code11f unintegrated. Existing physical/soak/field/
+finalrelease gates unchanged, originalthreeTronowner approvals CLOSED.
+
+Supported Usagecontrol/CLI refreshed00:24:12Z: Codex84%weeklyremaining, M3 98%weekly/
+82%sessionremaining; exactwindows/resets ci-review-correction-capacity.json.
+Other shared commitments unknown; boundedtasks plus correctionreserve admitted,
+no new spend/accounts. Fullfleet72onepage=66released/sixhistoricalretained/zero
+active/reclaimable. Conservative coordinator+two workers+oldexternalreservation
+ceiling4, no nesting. SameRun37205/localOrca1.4.243/runtime14c5/coordinator unchanged,
+integration/remote reverified and nativeM3catalog available. Publish/verify these
+records before creation/dispatch. Protected root/private/user/external/persistence/
+oddhook/quarantine/baselines/immutable evidence remain untouched.
+
+Prepared follow-up prose checks:489existing docs tests pass2.72s, isolated data/
+config, partialroute/cache disabled; UTF8/JSONL/scope/CR-aware checks passed.
+Invocation-only docs hook exception, no source/runtime qualification. Exact
+prelaunch publication receipt: build/p1-fanout-20261028/review-followup-prelaunch-publication.json.
