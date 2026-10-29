@@ -1,5 +1,33 @@
 # Current coordinator handoff
 
+## Owner-authorized source fan-out prepared — 2026-10-29T02:10Z
+
+Two disjoint Sol6.1/high authors prepared under existing P1 scope:
+1. SW-SEC-DATA-02-C2 in new wp-sec-data-02-c2 at preserved/published11f305b1.
+   Exclusive privacy lease clients/api.py and runner.py, own NEW regression/report/
+   build. Mask structured copies before request-step/Response-detail formatting;
+   inherited C1 is readonly, unreviewed/unintegrated. No WebSocket runner writer.
+2. SW-API-CLIENT-02-C1 in new wp-api-client-02-c1 at published938ae303.
+   Only NEW scenario/test/report/build for FAPI034 failure assertions; product,
+   runner/model/fixtures readonly. Coordinator registry mapping requires blocking
+   ask before final checks/commit; author never writes/stages registry metadata.
+
+Next-wave briefs pin scope/acceptance. Both authors require normal source hooks,
+strict route coverage and clean-source verification. Qualified different-family
+review/integration held: DeepSeek quota unknown, no process key, no credential
+store access or false reviewer reserve. Existing plan permits independent verified
+authoring while exact review gates remain queued; no same-family/M3 inventory
+substitute, material fallback allocation or new phase inferred.
+
+Fresh02:06Z Codex81%weekly headroom covers bounded60min authors + corrections;
+other commitments unknown. MiniMax98%weekly100%session available but not qualified
+source/privacy reviewer. Fleet75=69released/sixretained/noactive, inbox empty.
+Same Run37205/runtime14c5/coordinator/localOrca1.4.243; old external reservation,
+max2newworkers/no nesting. All13required PR38 checks at938ae303 now SUCCESS,
+PR OPEN/DRAFT; current integration/remote equal. New short temps/dependency links
+must be separately recorded/preserved; root/private/protected resources untouched.
+Publish/verify current records before creation/start; actual Task/Dispatch follows.
+
 ## Bounded CI/Flic evidence wave settled — 2026-10-29T00:48Z
 
 All new workers settled/released before delivery acknowledgment. Full fleet75:

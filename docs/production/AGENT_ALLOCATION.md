@@ -2841,3 +2841,69 @@ workspace link has the recorded limitation. UTF8/CR-aware whitespace checks pass
 Invocation-only documentation hook exception for report cherry-picks and records;
 no source-hook/full runtime qualification claimed. Post-push exact equality:
 build/p1-fanout-20261028/flic-reports-integration-publication.json.
+
+
+### Owner-authorized implementation fan-out prepared — 2026-10-29T02:10Z
+
+Owner explicitly requested fan-out after the next-work proposal. Continue existing
+P1 corrective/API refusal scopes, not a new program phase or material provider
+allocation. Two independent Sol6.1/high authors use the two available slots;
+coordinator plus older unverifiable external reservation preserves ceiling4.
+No nesting, Anthropic/default/helper/fallback or duplicate writer. Full fleet75,
+one page:69 released/sixhistoricalretained/noactive; coordinator inbox empty.
+Same Run37205/runtime14c5/coordinator term_dcf96b5a-bb99-4ecb-b887-eb53f7f01662,
+local Zelu/Orca1.4.243, no connected remote environments. Integration and origin
+revalidated at938ae30339790c361abdda6fdd01b11a4e498518. PR38 remains OPEN/DRAFT,
+base wp-g1-g2-release-and-docs; all13required checks for that published head are
+now SUCCESS (extra UI comment success, expected GHCR skip). This supersedes only
+the earlier pending documentation-head CI observation; no record-source rewrite.
+
+| Prepared child | Exact frozen source base | Exclusive implementation paths | Review/integration state |
+| --- | --- | --- | --- |
+| SW-SEC-DATA-02-C2, new wp-sec-data-02-c2 | published preserved11f305b16c4c95e27682d13df4b02c8de33354d7 | Serial lease tools/validate/clients/api.py and tools/validate/runner.py; NEW test_sw_sec_data_02_c2.py and own report/build | Sol author; qualified DeepSeek review remains held; inheritedC1 and C2 unintegrated |
+| SW-API-CLIENT-02-C1, new wp-api-client-02-c1 | published938ae30339790c361abdda6fdd01b11a4e498518 | NEW owned scenario/test module and report/build only; no runner/model/product edits | Sol author; qualified different-family review held; no target promotion |
+
+Briefs next-wave/SW-SEC-DATA-02-C2.txt and SW-API-CLIENT-02-C1.txt define exact
+acceptance, prohibitions, normal source hooks/strict route coverage and independent
+review holds. C2 masks structured copies before the two reproduced string-format
+sites without altering transmission/assertion input; no arbitrary string scrubber
+or global VAL15 closure. API child adds actual disconnected switch_all_failed/
+503/input/state/no-write/no-success proof for FAPI034, parent ownership unchanged.
+Coordinator alone supplies the minimal features.yaml scenario-link update in the
+API task checkout after a blocking ask; author cannot write/stage the registry.
+Explicit reply may allow the coordinator-staged mapping in the final source
+commit with composite authorship recorded. No current/target/ledger/evidence edits.
+
+This is authoring with explicit acceptance holds, as permitted by the existing
+software plan and earlier C1 envelope; unknown reviewer quota is NOT relabelled
+verified headroom or reserved review capacity. Qualified bounded DeepSeek route
+remains the accepted reviewer candidate, current rateLimits null and process
+DEEPSEEK_API_KEY absent. No credential store read, no unsupported balance probe,
+review dispatch, source integration or family substitution. Material fallback
+family changes still require the adopted planning process. Independent verified
+OpenAI author work continues; Codex correction reserve only is admitted now.
+
+Supported Usagecontrol/CLI refresh02:06Z: Codex81%weeklyremaining, MiniMax98%weekly/
+100%sessionremaining; exactwindows/resets private implementation-capacity.json.
+Other shared commitments unknown; two bounded60min tasks including normal hooks,
+plus author corrections, admitted on the author pool; no fixed token guarantee.
+Sol catalog fresh02:06:31/client0.164.0 supports high. Reserve future reviewer/fix
+slots after authors settle, but no qualified reviewer headroom is claimed.
+
+Each author gets a NEW owned disposable short temp path (proposed C:/t/c2-20261029-a,
+C:/t/f034-20261029-a, both observed absent) and ignored node_modules junction to
+existing root dependencies READONLY. No npm installs/updates, root data writes or
+junction cleanup. Preserve full external temp/junction metadata/bytes before any
+future removal. Original source/workspaces/failures/artifacts remain untouched.
+C2 inherited evidence.py/tests from11f are readonly; source11f review gate stays
+open. API source product behavior is readonly; new product defect stops for lease.
+Physical HIL/soak/field/release gates unchanged; original Tron approvals CLOSED;
+rawFlic privacy/admission HOLD and CIbdcf freshness/adoption remain unchanged.
+Publish these scoped records and verify exact live origin equality BEFORE any
+new worktree creation or dispatch. Actual authority/branches follow receipts.
+
+Preparation verification:489 existing docs tests passed3.74s with isolated
+data/config and route/cache plugins disabled. UTF8/JSONL/path/scope/CR-aware
+checks passed. Invocation-only docs hook exception; no new source-hook or code
+acceptance claimed. Prelaunch exact equality receipt:
+build/p1-fanout-20261028/implementation-prelaunch-publication.json.
