@@ -3129,3 +3129,131 @@ pending final delivery. API original raw preservation and managed-runner gates
 remain unmet. Both authors active; no new source lease or qualification.
 Metadata-only JSONL/UTF8/whitespace checks apply; no runtime test claim.
 Post-push receipt: build/p1-fanout-20261028/author-monitor-0236-corrected-publication.json.
+
+
+### C2 author settled and preserved; bounded expected-description follow-up prepared — 2026-10-29T02:47Z
+
+Task4e33d0624489/Dispatcha35145bc2f5d delivered source47b0bbb86a1dfd36726e60ab2ccf24b867883160,
+report head615d3c8403b237dd117c8032697c9b58895f9217, clean checkout. Scope is exact:
+two leased formatting sites in api.py/runner.py + four new lifecycle regressions;
+report-only follow-up adds AUTHOR.md. Valid author settlement accepted, not source
+qualification. Worker released with transcript captured BEFORE delivery521dd27f962f
+acknowledgment. Subsequent API heartbeat acknowledged; no duplicate writer.
+
+Coordinator independently reran all66 focused tests at submitted head (31.10s,
+route/cache disabled, new isolated owned audit temp), verified four original
+before-fix unsafe written JSON/procedure/check copies and four clean safe copies,
+actual source47b/dirtyfalse and recorded copy hashes. Normal source hook stdout/
+exit/strict177/177 route proof supports4094pass/4skip/35deselected/4warnings;
+Ruff/mypy91 passed as reported. Requested full-hook XML absent at its requested
+path, clean XML present; no XML existence or original-byte-loss claim fabricated.
+This ordinary coordinator verification is NOT qualified different-family review.
+Readonly Response.describe expected-json leak remains separately reproduced.
+
+Full raw native01a1856e-d431-7221-896e-76233290217e verified actual Sol/high/cwd/
+Task/Dispatch,1502412bytes/SHA2568fe7981661981e22615ba398ab249bbdf33f2021de22a7e41d834e33bcec2e6a.
+Exact taskref615d3c84 published/live verified; full Git bundle verified complete.
+Full current workspace4567files/304511217bytes, one no-follow dependency junction:
+archive27d2967d6a802fa479610f2f0182ac4d9b749c5b16d1acb604944fe9abfdde8c.
+Full owned short temp C:/t/c2-20261029-a (includes separate coordinator audit):
+21930files/78904274bytes, one link; archive333fa8ee0447fdbfe7629a72b2cc9d78ab23082610f765d53ca68b36c35e4d44.
+All member bytes/types/links/final source/head/status verified, no shared-target
+traversal, no removals. Private receipts privacy-c2-* and preservation/wp-sec-data-02-c2/,
+preservation/external-privacy-c2-short-temp/. Inherited C1/C2 source remains outside
+integration pending exact qualified review; raw artifacts private/admission HOLD.
+
+Prepare C3 as a distinct bounded same-finding follow-up, exact published615d3c84,
+new wp-sec-data-02-c3. Exclusive serial lease model.py::Response.describe expected
+json formatting ONLY; public fields/comparison inputs unchanged, no schema/new
+runner contract. API author model.py readonly, so no overlap. NEW C3 test/report
+paths independently verified absent at615 before assigning; no historical report
+collision. Brief next-wave/SW-SEC-DATA-02-C3.txt requires actual written-lifecycle
+before/after proof with sensitive expected-json matching/mismatching controls,
+immediate raw failure copying before pytest retention, normal strict source hook,
+clean-source proof and honest residual limits. Bound60min plus author fixes.
+
+Same qualified Sol6.1/high author fit for structured-before-text redaction; same
+held DeepSeek reviewer candidate. No source/privacy reviewer substitution or new
+material phase/allocation: covered corrective work in existing P1/VAL15 continues
+while review remains queued/unknown. C3 inherits unreviewed C1/C2; no source merge,
+qualification, target increase or global VAL15 closure. API author stays active,
+managed-preparation/default CI + lost original raw evidence + qualified review +
+privacy/admission gates unchanged; expected final failed/partial acceptance if
+raw artifacts unrecovered. Existing runtime/Run/coordinator/protections unchanged.
+Before creation/start verify fresh capacity, all fleet pages/inbox, publish these
+records and exact remote/local equality. At most two new workers plus coordinator
+and older external reservation; no nesting. Original Tron approvals CLOSED.
+
+
+### API author partial failure settled/preserved; two independent follow-ups prepared — 2026-10-29T03:02Z
+
+API Taskc0d26e9e563e/Dispatch0f27082dc4eb correctly delivered FAILED/partial,
+source386872316cb60130b06dd704557ae6ca1a92b5c8, report060769b724e7a546b8df22eac82f3b288d9bbbe8.
+Valid failed settlement accepted; worker released BEFORE deliveryb6de2d5a6109
+acknowledgment. Source4095core/strict177routes,13focused/38existing/52registry/
+model/schema/mypy91 and one clean external API V2 record/8pass checks reported.
+Coordinator independently checked exact four-path ownership, historical DeepSeek
+Git report prefix, exact coordinator registry contribution, source/dirty/client/
+level/schema-gate facts and external record hash11849d40b89ad90b2a554577e26df9ac62f154d67c55f2b5ecaa935a218e0492;
+49 surviving manifest member sizes/hashes match. These do NOT recover original
+managed BLOCKED raw JSON/hub logs; preservation acceptance UNMET and default
+managed/all-scenario CI compatibility, qualified review, privacy/admission and
+cleanup remain HELD. No source/registry changes imported into root.
+
+Full native01a1856f-3a92-7de2-9d30-bdfe6c13dc21, actual Sol/high/Task/Dispatch/cwd,
+2420894bytes/SHA25600e09f28930d8172c4c798c13691457440dd6e4de93ae3d4eccbe24b8adaadc9.
+Exact taskref060769b7 published/live verified; full Git bundle verified complete.
+Current workspace4554files/303883755bytes/one dependency junction, verified archive
+c11da5cf5bff13d80e76e1577eb8341357053ccab509dcffd77918c39a712a4c.
+Current owned C:/t/f034-20261029-a:22805files/72002479bytes/one link, archive
+4cd174b1971a956b78a983ea450496751d819cb48a039c05c37f21c6b5451d24.
+All current member bytes/types/links verified, no traversal/removal. These current
+snapshots do not claim to contain lost original attempts. Retain workspace/ref/temp.
+Private receipts fapi034-partial-*,fapi034-native-final-private.jsonl and preservation/
+wp-api-client-02-c1/, external-fapi034-short-temp/; failed old record stays failed.
+
+Both prior authors settled. Full fleet77 one page=71released/sixhistoricalretained/
+noactive/reclaimable; conservative old external reservation/protected resources
+remain. Same Run37205/runtime14c5/localOrca1.4.243/coordinator. Remote environments
+rediscovered empty, current repo/hooks/host/capabilities and Sol/high catalog
+revalidated. Current integration47957cbe remains source-unchanged; publish these
+records/exact verify before any creation/start. Qualified review quota remains
+unknown, no independent code/privacy reviewer launched or same-family substitute.
+
+Two ready disjoint existing-P1 author continuations:
+- C3 at published615d3c84, new wp-sec-data-02-c3, only model.py::Response.describe
+  structured expected-json display redaction + NEW regression/report/build.
+- SW-API-READ-03-C1 at published938ae303, new wp-api-read-03-c1, only NEW event
+  scenario/test/report/build for FAPI040 output_name_change with real simulator/
+  hub/WS, healthy default managed path, no shared source/model/runner edits.
+
+The accepted READ03 intake explicitly identified output-name proof as expressible
+with existing expectations; this is bounded unit continuation, not new phase,
+shared-contract design or provider allocation. API/sim level remains actual V2,
+no FAPI040 target/parent closure or FAPI039/042 snapshot/heartbeat claims. Require
+autonomous device-side event observation before hub readback, unchanged-name quiet
+control, exact payload/schema/state/no write/no routing success. Registry new link
+requires coordinator blocking handshake in THIS new child; author cannot write/
+stage metadata. Source test/report paths verified absent at938; no NEW-path collision.
+No failed API034 scenario inherited, no external-only preparation workaround.
+
+Both selected gpt-6.1-sol/high with demonstrated bounded privacy/assertion fit;
+Astra adds no demonstrated need for these small scopes, other OpenAI variants
+are not independent reviewers, M3 inventory qualification does not qualify source
+privacy/core authorship/review. Existing qualified DeepSeek candidate held pending
+supported quota; no accepted fallback/material-family change manufactured. All
+unreviewed source stays outside integration, including inherited C1/C2/C3.
+Raw artifact admission, ledger268/210below/96stale and physical/release gates unchanged;
+original Tron owner approvals CLOSED. No canonical evidence import or lost-byte redo.
+
+Fresh supported author headroom 2026-10-29T03:01:23.659837+00:00: Codex78%weekly remaining; two bounded60min
+authors plus author-fix reserve admitted, external shared demand unknown. Exact
+provider windows/resets in privacy-ws-capacity.json; no qualified reviewer reserve
+claimed. New owned short temps C:/t/c3-20261029-a and C:/t/ws040-20261029-a were
+observed absent; readonly dependency junctions only, no installs/target cleanup.
+No nesting; coordinator+two authors+old reservation respects ceiling4.
+
+Preparation checks:489 existing documentation tests passed2.79s with isolated
+data/config and route/cache plugins disabled. UTF8/JSONL/path/scope/CR-aware checks
+passed. Invocation-only docs hook exception; no source acceptance. Prelaunch
+publication/equality: build/p1-fanout-20261028/privacy-ws-prelaunch-publication.json.
