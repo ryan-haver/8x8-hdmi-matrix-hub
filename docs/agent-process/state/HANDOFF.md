@@ -1,5 +1,52 @@
 # Current coordinator handoff
 
+## C3 privacy and FAPI040 event-proof authors active — 2026-10-29T03:08Z
+
+- Task `task_242c1cc61b92` / Dispatch `ctx_793d3e4da3c3`, terminal
+  `term_ea66eadb-b85d-499f-ac92-0d6536d97288`, wp-sec-data-02-c3 /
+  ryan-haver/wp-sec-data-02-c3 at615d3c8403b237dd117c8032697c9b58895f9217.
+  Sol6.1/high actual native01a1859e-84ec-7800-8a93-bcb6b40918f9 verified.
+  Only model.py::Response.describe expected-json display redaction + NEW C3
+  regression/report/build. Inherited C1/C2 remain unreviewed/unintegrated.
+- Task `task_d72e772cd2f9` / Dispatch `ctx_07f9f4c85a04`, terminal
+  `term_f014699e-0979-4e2c-8328-2890f4849dc8`, wp-api-read-03-c1 /
+  ryan-haver/wp-api-read-03-c1 at938ae30339790c361abdda6fdd01b11a4e498518.
+  Sol6.1/high actual native01a1859e-fc0b-7512-a0b1-41bfac182df2 verified.
+  Only NEW FAPI040 output_name_change scenario/test/report/build. Existing healthy
+  managed runner required, no shared source/runner/model changes. API/sim V2 only;
+  no target/parent/FAPI039/042 snapshot/heartbeat closure.
+
+WS REGISTRY ASK: inspect new source when worker asks exact mapping
+sw_api_read_03_c1.output_name_change -> F-API-040. Coordinator alone minimally
+edits/STAGES feature scenario link in WS CHILD features.yaml, no current/target/
+evidence/findings/ledger changes. Reply explicitly allowing coordinator-staged
+contribution in normal source hook commit; worker cannot edit/stage registry.
+No global ledger generation during registry checks. Avoid first-probe old mistake:
+registry YAML top level is mapping with features list.
+
+Both real worker-start READY/observed turns after published6aaf1c7b equality.
+Fleet79=71released/sixretained/twoactive, conservative older reservation+coordinator
+ceiling4. SameRun37205/runtime14c5/coordinator/localOrca1.4.243. Quota03:01Codex78%
+weekly, two60min bounded authors plus fixes; shared commitments unknown. Refresh
+at15min natural checkpoints and before further creation/dispatch. DeepSeek review
+headroom UNKNOWN; all code review/integration/admission HELD, no false reserve or
+same-family/M3 inventory substitution. Existing same-P1 scope, no new phase.
+
+Exact new short roots C:/t/c3-20261029-a, C:/t/ws040-20261029-a and own readonly
+node_modules junctions require full no-follow preservation later. New empty temp
+parent each invocation; immediate copy/hashverify every failure before retention.
+Normal configured strict source hook/clean-source tests required, no source bypass.
+Prior C2 fully preserved/published; API partial FAILED with original managed raw
+artifacts lost/default CI unresolved, retained forever until explicit disposition.
+Current snapshots do NOT restore lost originals. No prior source integrated.
+
+Read newest ledger/briefs for acceptance and scope. Process genuine asks/deliveries,
+release settled resources before ack, preserve full final native/bundles/ignored/
+external temps/taskrefs, then qualified review before integration. Entry native
+checkpoints are not final archives. Original Tron CLOSED; physical/soak/field/
+release gates and root/private/user/external/persistence/oddhook/quarantine/
+baselines/historical failures protected. Current private build/p1-fanout-20261028/.
+
 ## Both source authors settled; C3 and output-name proof prepared — 2026-10-29T03:02Z
 
 C2 source47b/report615 narrow author work complete, full preservation and task

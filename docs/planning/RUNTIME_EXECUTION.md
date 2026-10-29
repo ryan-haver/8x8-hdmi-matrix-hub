@@ -1038,3 +1038,14 @@ archives/natives/taskrefs preserved; all authors released. Prepare disjoint C3
 model description redaction and FAPI040 output-name proof with existing healthy
 managed runner, existing P1 units/roles, no source acceptance or new phase. See
 current handoff/ledger/briefs for actual next gates and preservation constraints.
+
+
+### Two P1 author continuations active — 2026-10-29T03:08Z
+
+C3 Task242c1cc61b92/Dispatch793d3e4da3c3 corrects expected-json description at615,
+model.py only. WS Taskd72e772cd2f9/Dispatch07f9f4c85a04 adds output_name_change
+proof at938 with existing healthy runner, only new scenario/tests. Both Sol/high
+actual native/cwd/authority verified; child registry handshake remains coordinator
+owned. Fleet79, twoactive; priorC2 delivered/API partialfailed settled/preserved.
+No source integration/qualified review or raw artifact admission; exact handoff
+and ledger record scope, short temps, reservations and remaining gates.

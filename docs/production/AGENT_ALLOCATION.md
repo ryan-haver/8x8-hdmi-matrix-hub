@@ -3257,3 +3257,53 @@ Preparation checks:489 existing documentation tests passed2.79s with isolated
 data/config and route/cache plugins disabled. UTF8/JSONL/path/scope/CR-aware checks
 passed. Invocation-only docs hook exception; no source acceptance. Prelaunch
 publication/equality: build/p1-fanout-20261028/privacy-ws-prelaunch-publication.json.
+
+
+### C3 and FAPI040 authors active — 2026-10-29T03:08Z
+
+Prelaunch6aaf1c7bc66b206bfe3478b96a37c28784847621 pushed/live equality verified
+before new worktree creation. Both clean bases and NEW report/test paths checked;
+new short temp roots allocated only after absence/resolved-parent verification.
+Real existing-Run worker-start receipts READY, turn starts observed, requested/
+effective and actual native gpt-6.1-sol/high verified with source-exact tool activity.
+
+| Actual authority | Worktree / branch / exact base | Exclusive writes |
+| --- | --- | --- |
+| task_242c1cc61b92 / ctx_793d3e4da3c3 / term_ea66eadb-b85d-499f-ac92-0d6536d97288 | wp-sec-data-02-c3 / ryan-haver/wp-sec-data-02-c3 / 615d3c8403b237dd117c8032697c9b58895f9217 | model.py::Response.describe expected-json display only + NEW C3 regression/report/build |
+| task_d72e772cd2f9 / ctx_07f9f4c85a04 / term_f014699e-0979-4e2c-8328-2890f4849dc8 | wp-api-read-03-c1 / ryan-haver/wp-api-read-03-c1 / 938ae30339790c361abdda6fdd01b11a4e498518 | NEW output-name event scenario/test/report/build only; shared source readonly |
+
+Native sessions01a1859e-84ec-7800-8a93-bcb6b40918f9 and
+01a1859e-fc0b-7512-a0b1-41bfac182df2 match current Task/Dispatch/cwd and actual
+Sol/high contexts. Entry files are checkpoints, final full exports still required.
+Full fleet79 one page=71released/sixhistoricalretained/twoactive. SameRun/runtime/
+coordinator/localhost; older external reservation plus coordinator/authors ceiling4,
+no nesting or duplicate writer. C2/API prior authors fully settled/released first.
+
+Owned exact short roots C:/t/c3-20261029-a and C:/t/ws040-20261029-a, both initially
+absent, belong to these Tasks. Ignored task node_modules junctions point to existing
+root dependencies READONLY, native link metadata recorded, no installs/updates/
+cleanup. Per-invocation new empty temp parents and immediate raw-byte copies before
+pytest retention are explicit acceptance. Preserve full external temp/junction
+metadata later; never traverse/remove shared target or owner data. All protected
+root/private/user/external/persistence/encoded-hook/quarantine/baselines untouched.
+
+Fresh03:01 Codex78%weekly headroom, two bounded60min authors plus author fixes;
+external commitments unknown. Qualified DeepSeek review quota remains unknown,
+no reviewer reserve/dispatch or M3/same-family substitute, all source integration
+and privacy admission held. Same accepted source-author/reviewer-family allocation;
+no new phase/material plan debate fabricated. Original Tron approvals CLOSED.
+WS child API V2 only, no target/parent/FAPI039/042 claims or external-only preparation.
+
+REGISTRY checkpoint: WS author must blocking-ask once source ready, mapping
+sw_api_read_03_c1.output_name_change -> F-API-040 ONLY. Coordinator inspects source,
+edits/STAGES only that feature scenario link in the WS CHILD checkout, then replies
+allowing inclusion of coordinator-staged metadata in normal-hook source commit
+with composite authorship. Worker never edits/stages registry; no level/evidence/
+ledger changes or concurrent generation. C3 has no registry/source API change.
+Private receipts privacy-c3-*,ws040-*,privacy-ws-*; final postlaunch publication
+receipt build/p1-fanout-20261028/privacy-ws-launch-publication.json.
+
+Launch-record verification:489 existing documentation tests passed3.05s, isolated
+data/config and route/cache plugins disabled. UTF8/scope/CR-aware checks passed.
+Invocation-only docs hook exception; no new source acceptance or raw admission.
+Post-push exact equality receipt remains private outside the commit.
