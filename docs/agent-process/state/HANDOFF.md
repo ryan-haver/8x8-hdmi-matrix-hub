@@ -1,5 +1,54 @@
 # Current coordinator handoff
 
+## Two implementation authors active — 2026-10-29T02:16Z
+
+- Privacy C2: Task `task_4e33d0624489`, Dispatch `ctx_a35145bc2f5d`, terminal
+  `term_bb233940-b557-4000-b3b5-c3652f2ac3bc`, wp-sec-data-02-c2 /
+  ryan-haver/wp-sec-data-02-c2, exact base11f305b16c4c95e27682d13df4b02c8de33354d7.
+  Sol6.1/high requested/effective/actual native verified. Own api.py request-step
+  and runner.py Response-detail privacy lease only; new test/report/build.
+  Inherited C1 remains readonly/unreviewed/unintegrated. model.py expected-JSON
+  description boundary reported as residual; no expanded lease/global privacy claim.
+- FAPI034 assertion child: Task `task_c0d26e9e563e`, Dispatch `ctx_0f27082dc4eb`,
+  terminal `term_0b99c857-414e-4891-ae63-768327f92812`, wp-api-client-02-c1 /
+  ryan-haver/wp-api-client-02-c1, exact base938ae30339790c361abdda6fdd01b11a4e498518.
+  Sol6.1/high requested/effective/actual native verified. Only new owned scenario/
+  tests/report/build. No product/runner/model/shared-fixture edits.
+
+REGISTRY ASK MUST BE HANDLED: API author will block before registry-dependent/full
+checks and commit, asking mapping sw_api_client_02_c1.switch_all_failed -> F-API-034.
+Coordinator must inspect new source then update/stage only that scenario link in
+features.yaml in the API CHILD checkout. Author never writes/stages registry.
+Reply explicitly allowing inclusion of coordinator-staged mapping in normal-hook
+source commit with composite authorship; no current/target/evidence/ledger change.
+This is separate from root integration; qualification/review still held.
+
+Both are genuine READY worker-start sessions after published c7965ade exact remote
+parity. Fleet77=69released/sixretained/twoactive, plus protected old external
+reservation gives ceiling4 including coordinator. Same Run37205/runtime14c5/local
+Orca1.4.243/coordinator term_dcf96b5a-bb99-4ecb-b887-eb53f7f01662; no nesting.
+Fresh02:06 Codex81%weekly headroom admits bounded60min authors + fixes; refresh
+usage at15min natural checkpoints and before any new dispatch. Shared commitments
+unknown. DeepSeek qualified review headroom UNKNOWN and not dispatched; no false
+review reserve or M3/same-family substitution. All source integration held.
+
+Exact new short temps C:/t/c2-20261029-a and C:/t/f034-20261029-a belong to these
+Tasks; task node_modules junctions target root dependencies READONLY. Preserve
+external temp bytes/native junction metadata before any future cleanup. Never
+remove/traverse shared target or touch owner runtime data. New isolated config/
+data required. Full normal strict source hooks/actual complete route coverage,
+applicable lint/types and clean committed-source verification required. Partial
+tests disable route inventory; no ledger generation alongside registry checks.
+
+Actual native sessions01a1856e-d431-7221-896e-76233290217e and
+01a1856f-3a92-7de2-9d30-bdfe6c13dc21, source-exact Orca tool transcripts observed.
+Entry checkpoints are not final archives. Process asks/status/deliveries, guide
+within leases, preserve/release before ack, then exact source cross-family review.
+No source/API qualification, raw artifact admission or release gates advanced.
+Original Tron CLOSED; root/private/user/external/persistence/oddhook/quarantine/
+baselines/historical failures protected. Current private receipts in
+build/p1-fanout-20261028/. See latest ledger and next-wave briefs for acceptance.
+
 ## Owner-authorized source fan-out prepared — 2026-10-29T02:10Z
 
 Two disjoint Sol6.1/high authors prepared under existing P1 scope:

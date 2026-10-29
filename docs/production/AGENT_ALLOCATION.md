@@ -2907,3 +2907,71 @@ data/config and route/cache plugins disabled. UTF8/JSONL/path/scope/CR-aware
 checks passed. Invocation-only docs hook exception; no new source-hook or code
 acceptance claimed. Prelaunch exact equality receipt:
 build/p1-fanout-20261028/implementation-prelaunch-publication.json.
+
+
+### Two source authors launched — 2026-10-29T02:16Z
+
+Prelaunch coordination `c7965ade612c5239809fe3cdc86df6e37a7eaf82` was pushed and
+exact live origin equality verified before either worktree creation/start.
+Both new dedicated Orca checkouts returned the exact declared bases and clean
+initial Git state; no old workspace reset or uncertain writer replaced.
+
+| Actual authority | Worktree / branch / exact base | Route and exclusive source ownership |
+| --- | --- | --- |
+| task_4e33d0624489 / ctx_a35145bc2f5d / term_bb233940-b557-4000-b3b5-c3652f2ac3bc | wp-sec-data-02-c2 / ryan-haver/wp-sec-data-02-c2 / 11f305b16c4c95e27682d13df4b02c8de33354d7 | gpt-6.1-sol/high; api.py request-step and runner.py Response-detail formatting only, own new regression/report/build |
+| task_c0d26e9e563e / ctx_0f27082dc4eb / term_0b99c857-414e-4891-ae63-768327f92812 | wp-api-client-02-c1 / ryan-haver/wp-api-client-02-c1 / 938ae30339790c361abdda6fdd01b11a4e498518 | gpt-6.1-sol/high; new FAPI034 scenario/test/report/build only, no product/runner/model writes |
+
+Both real worker-start receipts are READY, observed turn start, requested/effective
+Sol6.1/high. Actual source-exact Orca transcripts contain assistant/tool activity;
+native sessions01a1856e-d431-7221-896e-76233290217e (privacy) and
+01a1856f-3a92-7de2-9d30-bdfe6c13dc21 (API) independently confirm exact Task/Dispatch/
+cwd and actual Sol/high turn contexts. Entry attestation is a checkpoint, not
+final transcript preservation. First privacy discovery saved a session-id from
+the last scanned header; original attempt retained and corrected attestation
+reopens each exact matched file header. Source path/model/Task checks were valid;
+no invented provenance, source or evidence mutation. Private note preserved.
+
+Coordinator allocated previously absent exact external temps C:/t/c2-20261029-a
+and C:/t/f034-20261029-a and ignored task node_modules junctions targeting the
+existing root dependency tree READONLY. Native target/reparse metadata retained;
+no install/update/global config or owner data writes. Preserve full owned external
+temps and junction representation before future cleanup, never traverse/delete
+root target. New per-task data/config and short temp fixtures mandated. Root
+private/user/external/persistence/encoded-hook/quarantine/baselines protected.
+
+Full fleet77 one page=69released/sixhistoricalretained/twoactive. Same localRun37205/
+runtime14c5/coordinator, conservative ceiling4 including old external reservation,
+no nesting. Fresh02:06 Codex81%weekly remaining, author/fix reserve admitted;
+shared external demand unknown. Qualified DeepSeek review remains UNDISPATCHED
+and headroom UNKNOWN; source acceptance/integration/qualification held. No same-
+family or M3 inventory reviewer substitute. Authoring proceeds under existing
+plan's explicit review-hold rule; no new material provider allocation or phase.
+
+Privacy checkpoint msg_c261c5756bf3 identifies Response.describe expected-json
+stringification in readonly model.py as another residual boundary (inspection,
+not yet a coordinator-accepted reproduced finding). Guidance msg_8655bb3a7286
+keeps two-site lease, meaningful actual lifecycle before/after oracles, raw-body
+comparison controls and public expected-JSON test surface; no test weakening,
+model lease or claim all persisted forms/VAL15 are fixed. Boundary must remain
+explicit in report with honest reproduction status. Both heartbeat IDs match;
+deliverye8dba3b889b8 acknowledged after guidance enqueue, next inbox empty.
+
+API registry handshake remains mandatory: when source/scenario ID is ready,
+worker must blocking-ask and pause. Coordinator inspects and minimally writes/
+stages only the FAPI034 scenario link in THAT child checkout. Worker cannot
+write/stage registry but may explicitly include the coordinator-staged contribution
+in its normal source commit after reply. Record composite authorship; no level,
+target, findings, evidence or ledger edits. Full strict hook and clean-source
+verification required for both authors; no source hook bypass. Do not generate
+ledger concurrently with registry checks, or import raw artifacts. Later reviewer
+slots become available only after positive author settlement and fresh routing.
+
+Private current receipts privacy-c2-*, fapi034-*, implementation-*;
+postlaunch integration-record publication equality receipt:
+build/p1-fanout-20261028/implementation-launch-publication.json.
+
+Launch-record verification:489 existing documentation tests passed3.65s with
+isolated data/config and route/cache plugins disabled. UTF8/scope/CR-aware checks
+passed. Invocation-only docs hook exception for coordination prose only; no new
+source-hook/full runtime acceptance. Post-push equality is recorded privately
+outside this commit; both worker implementations remain unintegrated.
