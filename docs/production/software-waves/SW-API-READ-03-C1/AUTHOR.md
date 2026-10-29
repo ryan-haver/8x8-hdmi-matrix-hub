@@ -1,7 +1,10 @@
 # SW-API-READ-03-C1: device-side output-name event proof
 
 Implemented `sw_api_read_03_c1.output_name_change` for F-API-040, API/sim V2
-only, with real managed simulator/hub regression controls. Independent qualified
+only, with real managed simulator/hub regression controls. **Overall delivery:
+FAILED acceptance** because the actual global validation gate exited 1 for
+F-SEC-007 (V2 below recorded V3), despite the scoped event proof passing.
+Its baseline/preexistence attribution is unverified. Independent qualified
 different-family review, integration, qualification and artifact admission remain
 HOLD; this report does not close the feature or parent unit.
 
@@ -74,9 +77,14 @@ All commands use root Python
 this checkout's `src` and root `PYTHONPATH`, `PYTHONDONTWRITEBYTECODE=1` and
 `PYTHONIOENCODING=utf-8`. Each pytest/docs/hook invocation gets a NEW empty
 parent under coordinator-allocated `C:/t/ws040-20261029-a`, isolated data/config
-and absent pytest basetemp. Raw logs, exit codes, JUnit/JSON, exact command/env
-receipts and every produced temp file are copied outside pytest retention and
-SHA256-verified against still-existing originals before another invocation.
+and absent pytest basetemp. Raw logs, exit codes, JSON, command/env receipts and
+remaining produced temp files are copied outside pytest retention and
+SHA256-verified against still-existing originals. The hook JUnit path exception
+and recovery are described below; that XML was initially missed at its unexpected
+path before the first campaign preflight, but its original bytes survived and
+were verified before any later pytest invocation. Managed shutdown removes its
+disposable hub data by design; no archive of that removed scratch data is claimed.
+Actual observed state/log evidence and surviving raw outputs are retained.
 No originals, failed attempts or evidence are reconstructed or overwritten.
 
 - Initial documentation checks: 489 passed in 2.90 s, exit 0, five existing
@@ -95,8 +103,71 @@ No originals, failed attempts or evidence are reconstructed or overwritten.
 - New module plus registry/evidence-schema checks: 49 passed in 19.39 s,
   exit 0, including all three coordinator-requested eligibility controls;
   private `registry-01/`, raw temp copies hash-verified. No ledger generation.
-- Normal configured source hook with strict full routes and clean committed-source campaign:
-  pending at this source checkpoint; final outcomes will be appended after runs.
+- Normal configured source commit/hook: full Ruff passed; **4,098 passed,
+  six skipped, 35 deselected**, four deprecation warnings, 874.24 s; exit 0.
+  `ROUTE_COVERAGE_STRICT=1`: **177/177 routes, 100%, zero uncovered**, verified
+  from the actual JSON report. Private `hook-01/` retains stdout, exit, command,
+  copied temp files and verified hashes. The hook was never bypassed or retried.
+  Skips: two POSIX-only cases, unavailable HA dependencies, unavailable symlink
+  creation, and two opt-in Chromium bridge cases. Hardware/Docker are deselected
+  by configured defaults; HA/UC directories are excluded by the normal core hook.
+- Source commit **`5331d5471a9d319c134e6798645d6ba8cf8466fc`** contains the
+  runner exception, new scenario/test/report and coordinator-staged registry link.
+- Clean committed-source `campaign-02`: run exit 0, one API/sim **V2 pass/ok**,
+  **nine checks passed**, zero failed/n/a checks. Both pre/post Git status are
+  clean and recorded source is exactly `5331d5471a9d319c134e6798645d6ba8cf8466fc`.
+  Actual validator PID 65624, command/environment/start/exit receipts and managed
+  hub/simulator logs are in private `campaign-02/`; an immediate byte-verified
+  copy is in `campaign-02-copy/`. Inspection validated record/WS schemas, all
+  six actual JSON messages, exactly one post-action `{"output":1,"name":"Den TV"}`
+  event, zero routing events/writes and only `outputs[0].name` changed. The
+  positive WS check precedes hub REST readback. Private record SHA256:
+  `7591de8ce9e152fceb18af12668b9593f6afbba7af2996a4adb4a7c1a089e3b2`.
+- Actual global gate **exit 1** at the same clean source:
+  `python -m tools.validate check --evidence build/software-waves/SW-API-READ-03-C1/campaign-02/run/evidence --run-summary build/software-waves/SW-API-READ-03-C1/campaign-02/run/run-summary.json --expect-clients api`.
+  Inputs are the committed `docs/validation/evidence` tree plus that one campaign
+  record and its one-outcome summary, with the registry/findings at source5331.
+  Sole reported failure: `(b) F-SEC-007 dropped below its recorded level:
+  level V2 < recorded V3`. Original `gate-01/check.log`, exit, command/process
+  checkpoint and hash-verified `gate-01-copy/` remain private. No gate retry,
+  scoped substitute pass, metadata change or baseline comparison was performed.
+  Baseline/preexistence and causal attribution remain **unverified**.
+- Final report-only documentation checks: 489 passed in 2.88 s, exit 0,
+  fresh `docs-02` temp/basetemp, route inventory/cache disabled; original log,
+  JUnit, command/exit and verified temp copies retained privately. UTF-8,
+  CR-aware whitespace and sole-report follow-up scope checks passed. The
+  report-only commit uses invocation-only `git -c core.hooksPath= commit`
+  under the documented exception; persistent hook configuration is unchanged.
+  No repeated full source-hook or runtime pass is inferred from this exception.
+
+Coordinator answer `msg_62db40fc2e26` to question `msg_5045ae513e2a` directs
+this failed delivery with explicit partial functional success and unmet actual
+global-gate acceptance. It authorizes the documented report-only hook exception
+after scoped checks; source acceptance, review, integration and admission stay held.
+
+## Receipt-path failure and authorized recovery
+
+The normal hook's `PYTEST_ADDOPTS` used a native backslash JUnit path. Pytest's
+argument parsing stripped the backslashes and wrote one XML in an unexpected
+untracked directory directly beneath this child root. The first post-hook XML
+read failed, and `campaign-01`'s clean-checkout assertion then failed **before
+starting the validation CLI, hub or simulator**. This is a real preflight failure,
+not a scenario run or a failed scenario retry. Original tool error/preflight stderr
+is retained in the private native transcript only; no standalone log is recreated.
+The original campaign-01 launcher, empty temp/artifact paths and existing copy
+manifests remain distinct and unchanged.
+
+The surviving original JUnit XML is 549,050 bytes, SHA256
+`bd1c3098b41194c3bafee934809eacd7375c904f0cb673de2c7f9d1544d4c930`.
+It was copied and hash-verified in `hook-junit-original-copy/`. Coordinator
+`msg_6af3554e3454` independently verified that exact sole file and authorized
+only an exact preservation-first `Move-Item` of its generated directory into
+NEW `hook-junit-relocated/`, after immediate absolute source/destination
+containment, absence, no-reparse-point and file/hash checks. Relocated bytes
+and the independent copy match; `hook-junit-relocation.json` retains the receipt.
+No directory was deleted and no generic cleanup occurred. The coordinator then
+authorized one fresh campaign-02 with forward-slash paths and full output capture;
+it passed as described above. No hook rerun or source correction was needed.
 
 Registry question `msg_f82d03cb5b47`, answered in `msg_fe753eca38d2`, completed
 the blocking handshake. The coordinator alone edited and staged the exact
@@ -107,7 +178,13 @@ stage the registry. Coordinator-observed registry SHA256 changed from
 `a8c6d592bbded20af6d2b8d587c5ce81a48bf98931b0372727e09a261b0cdc8e` to
 `df2f1662c94306f1e107734c0c7190ab95b21d7350ccf13e1299bebd4c7196af`.
 No current/target/basis/evidence/finding/ledger changes are authorized.
-No source commit or clean campaign is yet claimed in this checkpoint.
+The report-only follow-up preserves the exact source/scenario/test/registry
+blobs from source5331. Its final commit SHA is delivered through worker_done;
+the source commit and original report checkpoint remain in Git history.
+Private `final-receipt.json`, `external-temp-manifest.json` and
+`artifact-manifest.json` record final heads/status, placement/junction metadata
+and retained file hashes; native transcript/full bundle/task-ref preservation
+and Orca settlement remain coordinator-owned, not claimed complete by this worker.
 
 All `build/software-waves/SW-API-READ-03-C1/` raw artifacts are PRIVATE and
 admission HOLD because simulator fixture state/logs may carry credentials under
