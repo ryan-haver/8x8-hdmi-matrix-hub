@@ -887,3 +887,14 @@ for60proofunits/55scenarios before reruns, preserving raw digest/source/client/
 ancestry and assertion boundaries. Report/build only, no source or qualification.
 Independent ready evidence work continues while source11f review quota isheld.
 Actual authority, inputhash, capacity and readonly leases are in currenthandoff.
+
+
+### CI inventory delivered; bounded follow-ups prepared — 2026-10-29T00:14Z
+
+Report9036ecff:56matchedpass/ok proofrecords with470pass+two n/a checks; four
+Flic cases missing, actual synthetic CI source nonancestor. Coordinator factual
+checks/preservation/taskref verified; worker released beforeack. No canonical
+adoption/qualification. IndependentM3metadatareview and genuine Sol four-case
+Flicsimulatorrefresh prepared; exact launch authority follows publication.
+Code11f/source8b still unreviewed/unintegrated, qualified reviewer quota unknown;
+independent evidence work proceeds. Current ledger/handoff have exact boundaries.

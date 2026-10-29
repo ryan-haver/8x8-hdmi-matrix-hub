@@ -1,5 +1,29 @@
 # Current coordinator handoff
 
+## CI inventory settled; follow-up review and Flic refresh prepared — 2026-10-29T00:14Z
+
+Report9036ecff is preserved/published on its taskref, not yet integrated. Sol
+Task1143adebca18/Dispatch84eb3a122772 released before deliveryack. Coordinator
+independently checked rawZIPdigests/CRC and60units/38features:56pass/ok records,
+470pass+two n/a assertions, four missing Flic cases. Actual bdcf06 source remains
+nonancestor despite e16tree equality; no qualification, SHA rewrite or ancestry
+manipulation. FAPI034 failure assertion separate. Full native/bundle/current
+workspace archives verified; exact taskref publication verified; no cleanup.
+
+Prepared next two disjoint covered P1 evidence tasks: independent nativeM3
+bounded inventory review at9036 and Sol6.1/high existing four-case Flic simulator
+execution. See next-wave briefs and newest allocation ledger for ownership,
+acceptance, capacity and protected resources. Publication/equality required before
+actual start; launched IDs/branches recorded afterward. No new phase or material
+source-review allocation. Fresh00:11Z capacity Codex84%weeklyremaining/M3
+98%weekly82%session; fullfleet70=64released/sixretained; reserve old external
+process. Max two new workers plus coordinator/reservation; no nested agents.
+Code11f remains outside integration pending qualified different-family review;
+DeepSeek current quota unknown. M3 is inventory-only, not source/privacy reviewer.
+Original Tron approvals closed; hardware/soak/field/final release gates open.
+Private current receipts build/p1-fanout-20261028/. Preserve source/evidence bytes,
+root/private/unrelated edits and retained workspaces. No background quota service.
+
 ## Existing-CI proof intake active — 2026-10-29T00:01Z (Oct28 local campaign)
 
 Freshness mapping11b09676 and separate coordinator review accepted/integrated/
