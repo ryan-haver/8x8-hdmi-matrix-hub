@@ -1,5 +1,44 @@
 # Current coordinator handoff
 
+## Bounded CI/Flic evidence wave settled — 2026-10-29T00:48Z
+
+All new workers settled/released before delivery acknowledgment. Full fleet75:
+69released/sixhistoricalretained/noactive/reclaimable. Existing Run37205,
+runtime14c5/coordinator term_dcf96b5a-bb99-4ecb-b887-eb53f7f01662/localOrca1.4.243
+unchanged; old external reservation and protected resources remain unresolved.
+No worktree removed; all exact taskrefs published, full native transcripts,
+verified Git bundles and current/earlier workspace archives retained privately.
+
+CIinventory9036/review6d00/Tron correction7ebb accepted and integrated previously
+at8825eb70/b694ad2a/5dd3c364. Flic author67d80/review1d7/correction19bab now accepted
+and integrated sequentially at2a7fe096/21a57813/862b9299; exact report blobs match.
+Only two review prose lines changed;4520other original files incl20attempt files
+byte-hash verified unchanged. Latest correction Task808f6c02a0f0/Dispatch5a3f46883ddf
+released beforeack; full final native/workspace/bundle/taskref preserved.
+
+Four genuine Flic/sim/V3 pass/ok records,25pass+one n/a, run/check exit0 accepted
+as bounded execution facts only. Raw artifacts retain eight unchanged simulator
+fixture-password fields; PRIVATE and ARTIFACT ADMISSION/PUBLICATION HOLD. Original
+report's private-attempt link is author-workspace-local, not an available public
+artifact. No fabricated link target, canonical import or feature qualification.
+CI56matchedrecords remain actualbdcfnonancestor; no freshness waiver, SHA rewrite
+or history manipulation. Ledger268/210below/96stale unchanged.
+
+P1/full65-unit allocation is NOT complete. Next dependent gates: qualified
+independent source/privacy review of preserved code11f (DeepSeek current quota
+unknown; no same-family or M3 inventory substitute), broader VAL15 Action/Response
+string repair, compliant proof refresh/admission and FAPI034 negative-path assertion.
+Prepare any further scope under actual accepted plan and verified capacity; do
+not assume report acceptance launches a new phase. Original three Tron owner
+approvals CLOSED; physical/soak/field/final release gates remain open. No source,
+test, canonical evidence, registry, ledger, manifest or lock changes in this wave.
+
+Latest accepted records in allocation ledger/execution record; private current
+campaign build/p1-fanout-20261028/. Preserve root/private, unrelated encoded hook
+artifact, user/external/persistence/quarantine/baselines and all historical failures.
+No background quota service or cleanup authorization inferred. Commit/push current
+integration records and verify live equality before any subsequent execution wave.
+
 ## Flic report correction active — 2026-10-29T00:42Z
 
 Task `task_808f6c02a0f0`, Dispatch `ctx_5a3f46883ddf`, terminal

@@ -2776,3 +2776,68 @@ Launch-record verification:489 existing documentation tests passed2.63s with
 isolated data/config and route/cache plugins disabled; UTF8/scope/CR-aware checks
 passed. Invocation-only documentation hook exception; no source-hook/runtime
 qualification claimed. Final equality receipt is private outside this commit.
+
+
+### Flic reports accepted/integrated; bounded evidence wave settled — 2026-10-29T00:48Z
+
+Correction Task `task_808f6c02a0f0` / Dispatch `ctx_5a3f46883ddf` submitted
+`19bab90f40c9aeebcbfcc6558b240f30da70f6bb` from exact1d7ef03f. Coordinator
+independently verified only lines11/41 changed, genuine OpenAI-to-MiniMax metadata
+independence accurately stated without source/privacy qualification, and six
+power-off passing assertions. All4520 other original regular files, including
+20 original attempt-01 diagnostic files, byte-hash verified unchanged against
+the original full archive manifest. Scope/parent/status verified, privacy HOLD
+unchanged. Valid settlement accepted; Orca released and captured terminal output
+BEFORE delivery435cb7d3c69f acknowledgment; next inbox empty.
+
+Full native `ses_e7ae56528ffe7XKA1qcAIPQjH8` verified43messages/41actual native
+M3 thinking assistant turns with Task/Dispatch/cwd;329370bytes, SHA256
+96264a0eff76f9c7baf7f9aeb9cb2cb937490bbc26dd4fe4e3ff003770faa44e.
+Corrected report Git blob SHA256
+35fc6f50aa7a28cd275089800215df5a69d635274f50f60008c69ae15b9d457d.
+Exact taskref19bab90f published/live verified; full Git bundle verified complete.
+Separate corrected workspace4526files/295516223bytes; archive SHA256
+50319055600660de4b74a4ef361d8134ffcd472531187fa150805a2dde945c13,
+all bytes/types/final source/head/status checked, zero links/traversal. Original
+archive/natives/failed diagnostics retained. No worktree removed; retain owned
+workspaces and private artifacts for unresolved code/privacy/evidence disposition.
+Receipts flic-review-correction-* and preservation-flic-review-correction-01/.
+
+Accepted reports integrated sequentially, documentation only:
+
+- Sol author67d80 -> `2a7fe0963c61cf69f4497a7771335463e4a6691f`.
+- Independent M3 review1d7 -> `21a578136443fc91f43273ea56ec77a2277e8330`.
+- Minimal author correction19bab -> `862b9299a2679829916bacd82e23fca2269ff9f4`.
+
+Final report blobs exactly match accepted candidates. Four Flic/sim/V3 records,
+25pass/one n/a and run/check exit0 are independently accepted bounded execution
+facts; raw eight fixture-password fields remain PRIVATE, ARTIFACT ADMISSION/
+PUBLICATION HOLD persists. No record import or feature qualification. Author's
+private-attempt Markdown link is intentionally workspace-local and unavailable
+to ordinary checkout/GitHub readers; review records that limit. No private path
+or missing evidence is fabricated to make it resolve. All other local targets
+resolve. Ignored one-off invocation diagnostics remain operational records,
+not shipped tooling or implementation deliverables; no source review inferred.
+
+Full fleet75, one page:69released/sixhistoricalretained/no active or reclaimable
+worker. This bounded audit/evidence wave is settled; P1/the65-unit allocation is
+NOT complete. CI56records retain actual bdcf06 nonancestor source and cannot gain
+ordinary freshness by tree equality. Do not relabel source or manipulate history.
+Code11f remains unreviewed/unintegrated; qualified DeepSeek quota is unknown;
+M3 metadata review does not replace qualified source/privacy review. Broader
+VAL15 Action/Response string gap and FAPI034 switch_all_failed assertion gap stay
+open. Next dependent work requires verified qualified review headroom and scoped
+privacy-safe proof refresh/admission, then negative-path assertion work under
+normal author/review gates. No further ready task is silently dispatched from
+these reports or promoted to a new phase. Preserve original Tron approvals CLOSED;
+physical HIL/72-hour soak/week field/final release gates unchanged. Numerical
+ledger268features/210below/96stale unchanged; no ledger generation. All protected
+root/private/user/external/persistence/oddhook/quarantine/baselines untouched.
+
+Combined report/instruction checks:489 existing documentation tests passed2.77s
+with isolated data/config and partial route/cache plugins disabled. Exact accepted
+report blobs and scope checked; public local links resolve, the explicitly private
+workspace link has the recorded limitation. UTF8/CR-aware whitespace checks pass.
+Invocation-only documentation hook exception for report cherry-picks and records;
+no source-hook/full runtime qualification claimed. Post-push exact equality:
+build/p1-fanout-20261028/flic-reports-integration-publication.json.

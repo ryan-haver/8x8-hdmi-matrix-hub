@@ -955,3 +955,14 @@ Task808f6c02a0f0/Dispatch5a3f46883ddf is active in settled/preserved
 wp-flic-proof-review at1d7; native M3/thinking verified. Two prose fixes only,
 original artifacts readonly. No code/privacy review or canonical qualification;
 raw admission and source11f holds retained. Exact authority in handoff/ledger.
+
+
+### Flic reports integrated; bounded audit wave settled — 2026-10-29T00:48Z
+
+Author67d80/review1d7/prose correction19bab accepted and integrated sequentially
+at2a7fe096/21a57813/862b9299. Four functional Flic/sim passes,25pass+one n/a and
+bounded check exit0 accepted as facts only. Raw artifact privacy/admission HOLD,
+code11f qualified review and CI ancestry/adoption gates remain. No canonical
+qualification or ledger change. All75fleet rows settled (69released/sixhistorical
+retained), full preservation/task publication done, no worktree removed. P1/full
+65-unit allocation is not complete; next actual gates in current handoff/ledger.
