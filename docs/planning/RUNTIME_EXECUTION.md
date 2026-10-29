@@ -1070,3 +1070,18 @@ no source integration, cleanup or release gate advancement.
 ### Source gates reported; global validation remains failed — 2026-10-29T03:47Z
 
 C3 normal4102core/177routes and clean74tests pass at8fc65e05; final delivery pending, inherited C1/C2/C3 qualified review held. WS normal4098core/177routes and clean managed FAPI040 V2 nine checks pass at5331d547, but actual tools.validate check exits1 for F-SEC-007 V2 below recordedV3. Final failed/partial delivery directed, no retry or canonical changes; baseline causation unverified. Exact JUnit relocation/preflight failures and all native/private evidence preserved. Both worker_done settlements still awaited; no source integration, cleanup, target/global/privacy qualification or release gate advancement. See latest handoff/ledger for exact authority, source heads and retained holds.
+
+
+### C3 succeeded / WS failed-partial, both settled — 2026-10-29T03:57Z
+
+C3 source8fc65e05/report2d02004d accepted as bounded author success; coordinator
+74tests pass and177original/copied before/fixed/clean artifacts verified. WS
+source5331d547/report7294af5e accepted FAILED/partial: actual managed nine checks
+pass and coordinator50tests pass, required global gate remains exit1 F-SEC-007
+V2<recordedV3 with baseline attribution unverified. Both released before inbox
+ack, full private natives/bundles/workspaces/external temps/native links preserved,
+exact task refs published/live equality verified and bundle recovery proved.
+No source integrated/reviewed/qualified, privacy admission or cleanup authorized.
+Next gates: qualified different-family exact-commit review and global-gate input/
+baseline diagnosis; no new phase/worker launch. Exact details in current handoff
+and allocation ledger; canonical268/210below/96stale and owner gates unchanged.

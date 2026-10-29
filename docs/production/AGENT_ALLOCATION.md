@@ -3381,3 +3381,66 @@ WS Taskd72e772cd2f9/Dispatch07f9f4c85a04 source5331d5471a9d319c134e6798645d6ba8c
 Earlier WS source hook JUnit landed in exact owned stray directory via shlex backslash parsing. Coordinator independently verified sole XML549050bytes SHA256bd1c3098b41194c3bafee934809eacd7375c904f0cb673de2c7f9d1544d4c930, native directory without reparse. Reply msg_6af3554e3454 permits ONLY exact preservation-first LiteralPath relocation into absent own ignored hook-junit-relocated/, retaining independent copy, then fresh campaign02. Campaign01 had clean preflight abort before CLI/services; no scenario record created, native errors/empty artifacts preserved, no recreated saved log. Exact path/receipts/decisions in current handoff and private ws040-stray-junit-coordinator-check.json/ws040-junit-relocation-decision.json.
 
 Current two authors remain live until genuine worker_done, neither delivery accepted yet. Same quota03:36Codex76%weekly, review DeepSeekUNKNOWN. No new creation/reviewer, source integration/admission or cleanup. Final full private native/bundle/workspace/external-temp/native-link preservation/taskref publication and Orca release-before-ack remain coordinator obligations. All original failures/provenance/privacy holds persist, canonical268/210below/96stale unchanged.
+
+
+### Final C3/WS author settlement and preservation — 2026-10-29T03:57Z
+
+C3 Task task_242c1cc61b92 / Dispatch ctx_793d3e4da3c3 delivered succeeded,
+source8fc65e052954a30f89be209d2d8f04e58ac1266f/report2d02004d3108953a302e1a49aab9a5f24e944136.
+Only leased Response.describe plus new tests/report. Normal4102core/177routes;
+author clean74 and coordinator74passed31.93s. Coordinator independently verified
+177before/fixed/clean original/copied members, five unsafe-before/five-safe-after
+records per scope and unchanged raw one-pass/four-fail oracles. First failed hook,
+exact relocation and native junction/stale-target metadata remain preserved.
+
+WS Task task_d72e772cd2f9 / Dispatch ctx_07f9f4c85a04 delivered FAILED/partial,
+source5331d5471a9d319c134e6798645d6ba8cf8466fc/report7294af5e39a5225d61f5b1b9961bf6976d9bc904.
+Coordinator AST comparison proves only leased runner._refusal changed outside
+new scenario/tests/report; sole coordinator-authored F-API-040 scenario link
+verified against saved contribution. Normal4098core/177routes, actual clean
+managed api/sim V2 nine checks pass; coordinator50tests pass26.10s. Required
+actual global gate exit1, F-SEC-007 V2<recordedV3; baseline causation unverified.
+No rerun/canonical edits or substitution. Coordinator rehashed22418own artifacts
+and22302original external-temp members, exact clean record/copy facts and failed
+gate bytes. JUnit relocation/preflight failure/native privacy capture retained.
+
+Both actual worker_done authorities accepted as their real author outcomes;
+both Orca terminals RELEASED before delivery acknowledgments (C3 e554599c9742,
+WS2a8841e7369d). No current active/reclaimable worker, fleet79=73released plus
+six historical retained. Older external reservation remains protected/uncertain.
+These are ordinary coordinator audits, NOT qualified different-family source
+review. C1/C2/C3 and WS remain UNREVIEWED/UNINTEGRATED/UNQUALIFIED. DeepSeek
+headroom UNKNOWN, no reviewer reserve or M3/same-family substitution. No global
+VAL15 closure, artifact admission, target/parent/FAPI039/042 or release approval.
+
+Both exact task refs published/live verified; complete Git bundles verified and
+separate bare recovery clones resolve exact submitted heads and bases. Full
+private native transcripts copied/hashverified after release with actual Sol6.1/
+high contexts; WS native includes private launch/hook environment capture and
+MUST NOT be published or copied into public reports. Full own workspaces plus
+external short-temp roots archived/verified without native link traversal,
+including coordinator audits. Native junction restoration metadata retained;
+tar link representation is not automatic native-junction recreation.
+
+Private receipts: privacy-c3-coordinator-delivery-audit.json,
+ws040-coordinator-delivery-audit.json, privacy-ws-final-task-publication-bundles.json
+and four *-preservation.json under build/p1-fanout-20261028/. All worktrees,
+branches, ignored bytes and originals retained; NO destructive cleanup. Root
+contains coordination-only updates, no implementation merge; combined source
+pipeline awaits qualified acceptance/integration. Next affected gates are exact
+different-family review and bounded F-SEC-007 input/baseline diagnosis, with no
+implicit phase/worker launch. Last quota03:36Codex76%weekly, now zero author
+commitments; refresh before any future dispatch. Canonical268/210below/96stale
+unchanged. Original Tron approvals CLOSED, HIL/soak/field/final release gates open.
+
+
+| Verified private archive | Regular files / bytes | Native links | SHA256 |
+| --- | --- | --- | --- |
+| privacy-c3-workspace | 67271 / 537183458 | 2 | 68a5af726f45e332a5becd1871f8c5dc8f7654bb51316486278ed1cbf8b90ec4 |
+| privacy-c3-external | 23167 / 92689035 | 1 | b9099dd49b5a37f5951b8215ffab42199794321ff1ac95b9feaa980f7f003ea5 |
+| ws040-workspace | 26924 / 391229455 | 1 | a2cca9eee28554db8084e89ee282dec974c8d682621f70460172ccb49d0143b2 |
+| ws040-external | 22323 / 72432351 | 1 | a6c09ae2fa096cb742dbff56a8ee707d6886497da6f35bd30ac001c846d98afa |
+
+Full native C3: 2004652bytes SHA256cc5fa61c2d96a112fe5baedc470b3884efb62ecc03570766bef970c742d3a81e; WS: 2530894bytes SHA256f0c12d85210d6a641544dc5ae6b788f8546d542b1ad334b9c105b88dfbce0ef4. Private unchanged, no raw values published.
+
+Final coordination-record checks:489 existing documentation tests passed (private privacy-ws-final-docs.log), CR-aware whitespace and scoped root-doc changes checked. Invocation-only documentation hook exception; source workers used normal complete hooks. Final integration publication receipt remains outside commit at privacy-ws-final-integration-publication.json.
