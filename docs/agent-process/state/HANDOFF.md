@@ -1,5 +1,38 @@
 # Current coordinator handoff
 
+## CI correction and Flic metadata reviewer active — 2026-10-29T00:30Z
+
+- Task task_2ba7594b9ba8 / Dispatch ctx_81f8a8333f36, terminal
+  term_d7e8e8a2-3e4a-40db-997a-dbc6b4d029d7, wp-ci-proof-review /
+  ryan-haver/wp-ci-proof-review at6d00a871. Native MiniMax-M3/thinking
+  ses_e7af095beffe1faHHobOMneQoj verified. Only minimal originalTronclosed
+  correction in CI_EVIDENCE_REVIEW.md and NEW correction-01 diagnostics;
+  originalfullreview/artifacts/native/bundle/workspace/taskref preserved.
+- Task task_c20c74f1c8fa / Dispatch ctx_6855b88f3e18, terminal
+  term_9d0fcb9d-6b31-46d6-901d-7a65958dc58b, wp-flic-proof-review /
+  ryan-haver/wp-flic-proof-review at67d80ae9. Native MiniMax-M3/thinking
+  ses_e7af05a25ffe26430M39WkV429 verified. NEW FLIC_EVIDENCE_REVIEW.md/build
+  only, independent Sol-authored four-record inventory; NO privacycode review.
+
+Both realOrca starts after exactpublished489e4360 equality; fleet74onepage=
+66released/sixretained/twoactive. Oldexternalreservation/concurrency4 preserved,
+no nesting. Fresh00:24M3quota98%weekly82%session, bounded5mincorrection/15minreview
+plus corrections admitted, othercommitmentsunknown. SameRun37205/runtime14c5/
+coordinatorterm_dcf96b5a-bb99-4ecb-b887-eb53f7f01662/localOrca1.4.243.
+OriginalCIintake9036/review6d00 and Flic67d80 reports notyetintegrated. Flicfour
+functionalpasses/25pass+one n/a independently checked, eightfixturepasswordfields
+remainPRIVATE and admission/publicationHOLD. Source11f unreviewed/unmerged,
+DeepSeekquotaunknown, M3 boundedinventory doesnotclearprivacy. CIbdcfsource
+nonancestor; no recordSHArewrite/historymanipulation. FAPI034gap unchanged;
+originalthreeTronowner approvals CLOSED, physical/soak/field/releasegates open.
+
+Process realinbox, verify exactsubmitted scope/reports, release settledworkers
+before deliveryack, preserve fullfinalnative/artifacts/workspace/bundles/taskrefs,
+integrate acceptedreportsonly sequentially andpublish/exactverify. Entryexports
+are checkpoints, not finalpreservation. No removals, source/code/test leases or
+backgroundservice. Root/private/user/external/persistence/oddhook/quarantine/
+baselines/immutableevidence protected. Currentprivatecampaign build/p1-fanout-20261028/.
+
 ## Both originals settled; metadata follow-ups prepared — 2026-10-29T00:28Z
 
 CIreview6d00 reproduces inventory9036 but requires one minimal originalTron

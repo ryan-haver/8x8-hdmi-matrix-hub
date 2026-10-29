@@ -2609,3 +2609,40 @@ Prepared follow-up prose checks:489existing docs tests pass2.72s, isolated data/
 config, partialroute/cache disabled; UTF8/JSONL/scope/CR-aware checks passed.
 Invocation-only docs hook exception, no source/runtime qualification. Exact
 prelaunch publication receipt: build/p1-fanout-20261028/review-followup-prelaunch-publication.json.
+
+
+### Two metadata follow-ups active — 2026-10-29T00:30Z
+
+Publishedprelaunch489e4360aa281538a99ff7c004b7ca9288d16140 matched exactliveorigin
+before newworktreecreation/dispatch. Genuine existingRun37205 worker-start:
+
+| Task / Dispatch | Actual worktree / branch / exact base | Route / exclusive writes |
+| --- | --- | --- |
+| task_2ba7594b9ba8 / ctx_81f8a8333f36 | wp-ci-proof-review / ryan-haver/wp-ci-proof-review / 6d00a871f24ead60b65947367a404c76570df059 | nativeM3/thinking; existing CI_EVIDENCE_REVIEW.md minimal Tron-status correction + NEW correction-01 subtree only |
+| task_c20c74f1c8fa / ctx_6855b88f3e18 | wp-flic-proof-review / ryan-haver/wp-flic-proof-review / 67d80ae997a988ce6d9983d541205e8ca432a57c | nativeM3/thinking; NEW FLIC_EVIDENCE_REVIEW.md + own ignored flic-review subtree only |
+
+Correctionterminalterm_d7e8e8a2-3e4a-40db-997a-dbc6b4d029d7 native
+ses_e7af095beffe1faHHobOMneQoj observed10M3thinkingassistantturns; Flicreviewterminal
+term_9d0fcb9d-6b31-46d6-901d-7a65958dc58b native ses_e7af05a25ffe26430M39WkV429
+observedtwo. NativeTask/Dispatch/cwd/model verified independently; inheritedCLI
+model/effort fields null, actualnativeModelMiniMax-M3/providerMiniMax/thinking
+verified. Main/small/internal routing pinned exactconfig62e6f5ab; helpers/providers/
+plugins/MCP/nesting denied, no globalchanges. FirstPythonexportprobe couldnot
+resolve PowerShelllauncher; supportedPowerShellopencode2 export succeeded, no
+executable/provider substitution. Failedprobe noted privately. Fullfinalnatives
+must be preserved anew after settlement; entrycheckpoints are not finalexports.
+
+Fullfleet74onepage=66released/sixhistoricalretained/twoactive, sameRun/runtime/
+coordinator/localhost, conservative fourtotal incl olderexternalreservation.
+No priorwriter duplicated; correction starts only after positive originalrelease,
+fullpreservation/exacttaskrefpublication. Sourcecontracts/canonicalmetadata/root/
+private/protectedresources readonly. OriginalTronclosed, rawFlicprivacyadmission
+HOLD, source11fqualifiedreviewheld/DeepSeekquotaunknown; no featurequalification.
+Current00:24M3quota98%weekly82%session with two boundedtasks/corrections reserve;
+sharedcommitmentsunknown. Private currentreceipts ci-review-correction-*,
+flic-review-*, review-followup-*; postlaunch equalityreceipt
+build/p1-fanout-20261028/review-followup-launch-publication.json.
+
+Launch-recordprose checks:489existing documentation tests pass2.74s, isolated
+data/config, partialroute/cache plugins disabled; UTF8/JSONL/scope/CR-awarechecks
+passed. Invocation-only docs hook exception; no source/fullsuite qualification.

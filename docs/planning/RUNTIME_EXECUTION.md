@@ -918,3 +918,13 @@ fixturepassword fields require privateartifact admissionHOLD. Both originalworke
 released/preserved/publishedtaskrefs, no canonicalqualification. NativeM3 bounded
 CIreview correction and independent four-record Flicmetadatareview prepared;
 actualauthority follows currenthandoff/ledger and publication. Code11fheld.
+
+
+### Metadata follow-up workers active — 2026-10-29T00:30Z
+
+Task2ba7594b9ba8/Dispatch81f8a8333f36: nativeM3 minimal originalTronclosed prose
+correction in preserved CIreview worktree at6d00. Taskc20c74f1c8fa/Dispatch6855b88f3e18:
+nativeM3 independent Flicfour-record metadata review in newwp-flic-proof-review
+at67d80. Nativefamilies/authority/tools verified, twoactive; no source/privacy
+review or artifactadmission. Originalworkersreleased/preserved/taskrefspublished.
+Currenthandoff/ledger retain rawprivacyhold, exactbases/paths and reviewboundaries.
