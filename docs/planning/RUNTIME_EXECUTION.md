@@ -1049,3 +1049,20 @@ actual native/cwd/authority verified; child registry handshake remains coordinat
 owned. Fleet79, twoactive; priorC2 delivered/API partialfailed settled/preserved.
 No source integration/qualified review or raw artifact admission; exact handoff
 and ledger record scope, short temps, reservations and remaining gates.
+
+
+### Active P1 authors unblocked within exact leases — 2026-10-29T03:25Z
+
+WS Taskd72/Dispatch07f9 source now includes explicit serial runner.py::_refusal
+lease for real positive WS-observed sim/api/device_change only, no UI expectations;
+all existing safeguards retained. Initial no-runner-change intake assumption
+corrected, coordinator registry-only contribution staged in child and normal
+composite source commit authorized. Focused13new/60existing checks pass; full
+hook and clean managed V2 campaign pending, no FAPI039/042 or parent promotion.
+C3 first hook failed from Windows path parsing/generated fixture lint; all19812
+manifest members byte/hash verified, exact preservation-first relocation and
+corrected normal hook authorized, failure retained with174of177route result.
+Native link metadata and private launch-environment captures remain preserved/
+unpublished. Same two genuine workers, Codex77%weekly03:17Z, DeepSeek source
+review unknown/HELD. See current handoff/ledger for exact authority and receipts;
+no source integration, cleanup or release gate advancement.

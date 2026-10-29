@@ -3307,3 +3307,56 @@ Launch-record verification:489 existing documentation tests passed3.05s, isolate
 data/config and route/cache plugins disabled. UTF8/scope/CR-aware checks passed.
 Invocation-only docs hook exception; no new source acceptance or raw admission.
 Post-push exact equality receipt remains private outside the commit.
+
+
+### WS serial lease/registry contribution and C3 invocation recovery — 2026-10-29T03:25Z
+
+Actual authority remains C3 task_242c1cc61b92/ctx_793d3e4da3c3 and WS
+task_d72e772cd2f9/ctx_07f9f4c85a04, their03:08 worktrees/bases/Sol6.1-high.
+The initial WS intake underestimated API device_change eligibility. Coordinator
+reply msg_1f797d216755 grants ONLY runner.py::_refusal: sim/api/device_change,
+applicable positive WsEvent, no applicable UI ClientState. Exact clients=None
+or api-in-clients semantics, unchanged ApiClient.observes=False and hardware/
+write/unrestorable/other-client/other-intent safeguards. Existing ClientState
+tests unchanged; new controls belong only to own new module. Prior C2 runner
+writer settled, current C3 owns model.py only; no duplicate writer. Scope remains
+bounded existing P1, no phase/family allocation change or qualification inferred.
+
+WS13new/60existing focused tests and mypy91 passed before extra guard controls.
+Coordinator inspected source and alone edited/STAGED child features.yaml sole
+F-API-040.scenarios append sw_api_read_03_c1.output_name_change. No level/basis/
+evidence/findings/ledger change; before/after bytes and semantic/source hashes
+retained in private ws040-registry-contribution-01/. Reply msg_fe753eca38d2
+allows coordinator-staged mapping in normal-hook source commit with composite
+authorship. Worker proceeds full checks and genuinely clean managed proof.
+Early native environment enumeration captured launch/hook values; original raw
+native stays PRIVATE/unchanged, values excluded from reports/receipts/publication.
+Guidance msg_f6c392e3af7e; only named nonsecret fields/presence booleans later.
+No credential-store/account/token changes or messages outside existing workers.
+
+C3 first normal hook failed3680pass/1fail/4skip/35deselected/174of177routes,
+642.64s: Windows backslashes in PYTEST_ADDOPTS lost separators and misplaced
+generated runtime fixtures under source, triggering ESLint. This is preserved
+invocation failure, not a passed gate or failed source qualification. Coordinator
+verified19812 original/copied manifest member sizes/hashes; no-follow scan found
+19811regular files and one native test junction. Exact own paths only:
+wp-sec-data-02-c3/tc3-20261029-asource-hook-parentpytest and
+wp-sec-data-02-c3/tc3-20261029-asource-hook-parentresults.xml. Reply
+msg_b27f6c8b03e7 permits preservation-first PowerShell LiteralPath relocation to
+new absent own ignored source-hook-misplaced-relocated/, recording original link
+metadata and resulting stale absolute target without traversal/repair/deletion.
+Retain independent byte copies/full failed logs; verify moved regular hashes and
+native metadata, then corrected normal complete strict hook using new empty
+forward-slash source-hook-02 parent. No source/tests weakening or bypass.
+
+Supported Usage refresh03:17:43Z: Codex77%weekly remaining; MiniMax97%weekly/
+96%session; DeepSeek null/UNKNOWN. Same two bounded author/fix commitments,
+external demand unknown; no fake review reserve or M3/same-family source-review
+substitution. Source review/integration/privacy admission remain HELD. Full fleet
+03:23Z79rows, one page/no cursor; twoactive,71released/sixhistoricalretained;
+older external reservation plus coordinator preserves ceiling4. Inbox through
+delivery_0b3b70774815 processed/replied/acked, none settled. No cleanup, source
+integration, release approval or canonical268/210below/96stale change.
+Private receipts c3-misplaced-coordinator-check.json and privacy-ws-0315-capacity.json.
+
+Checkpoint verification:489 documentation tests passed2.90s with isolated data/config; all13capacity JSONL events parsed; CR-aware diff check passed. Coordination-only publication uses invocation-only hook exception; implementation workers retain mandatory normal hooks.

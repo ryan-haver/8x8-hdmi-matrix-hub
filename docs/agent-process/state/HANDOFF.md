@@ -1,5 +1,41 @@
 # Current coordinator handoff
 
+## Live asks resolved; authors continue — 2026-10-29T03:25Z
+
+Same two Tasks/Dispatches/worktrees and bases listed in the03:08 checkpoint below.
+The WS source boundary now includes ONLY runner.py::_refusal under explicit
+serial lease msg_1f797d216755: sim/api/device_change with applicable positive
+WsEvent and no applicable ClientState; all existing safeguards unchanged.
+ApiClient.observes stays False. Initial intake capability assumption was wrong;
+the exact correction and tests remain unreviewed, with no product REST change.
+Coordinator inspected source and alone staged F-API-040's scenario-link append
+in the WS CHILD. Reply msg_fe753eca38d2 permits composite source commit; private
+before/after semantic/hash receipt ws040-registry-contribution-01/. Worker13new
+and60existing focused checks/mypy91 passed before additional guard controls.
+No level/evidence/ledger promotion. Author now proceeds full normal hook/clean
+healthy managed proof. Native launch-environment capture remains PRIVATE and
+unchanged; no values in public reports, guidance msg_f6c392e3af7e.
+
+C3 first normal hook FAILED:3680pass/1fail/4skip/35deselected,174of177routes,
+642.64s. Backslash PYTEST_ADDOPTS parsing misplaced generated test files in the
+checkout, making ESLint scan installed fixture JS. Preserve failure honestly;
+no source qualification/retry claim. Coordinator verified19812 copied/original
+manifest byte/hash pairs and no-follow scanned19811regular files plus one native
+test junction. Reply msg_b27f6c8b03e7 authorizes moving ONLY the exact misplaced
+tree/XML into absent own ignored source-hook-misplaced-relocated/, recording
+unchanged native link metadata/stale absolute target, retaining independent copy,
+then one corrected normal hook with new forward-slash source-hook-02 temp paths.
+No generic cleanup, link repair, source bypass or source/test weakening.
+
+Fresh supported usage03:17:43Z: Codex77%weekly remaining; MiniMax97%weekly/
+96%session; DeepSeek unknown. Same two author/fix commitments; qualified review
+not reserved/dispatched, all source integration and artifact admission HELD.
+Fleet03:23Z79rows/onepage, no next cursor; two active authors, prior dispositions
+unchanged. Conservative older external reservation remains. Inbox delivered
+through delivery_0b3b70774815 processed/replied/acked; no worker settled there.
+No source integrated or cleanup authorized. Continue real Orca lifecycle and
+final full private native/bundle/workspace/external-temp/taskref preservation.
+
 ## C3 privacy and FAPI040 event-proof authors active — 2026-10-29T03:08Z
 
 - Task `task_242c1cc61b92` / Dispatch `ctx_793d3e4da3c3`, terminal
