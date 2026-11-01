@@ -114,3 +114,106 @@ worktree cleanup or self-release is performed. The supplied ignored native
 `node_modules` junction targets root dependencies and is used readonly; its
 native metadata is preserved at final delivery. Coordinator owns full native/
 bundle/workspace/temp/link preservation, exact taskref publication and settlement.
+
+## Final verification and failed/partial acceptance — 2026-11-01 UTC
+
+Useful source commit: **`ee3f2e7f034a9ace64553e942f328dff921a1e04`**, parent
+exactly the assigned060769b7 base. The normal configured hook at
+`C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/.githooks` ran without
+bypass: full Ruff passed; complete core pytest passed **4,136 tests,6 skipped,
+35 deselected,4 warnings in1015.50s**. Strict route proof reports **177/177,
+100%, strict true, zero uncovered**. The hook and commit exited0. Mypy previously
+passed all91 source files. The six skips are POSIX permission enforcement,
+POSIX unlink-while-open behavior, unavailable HA dependencies, unavailable
+Windows symlink privilege and two opt-in Chromium bridge cases; no HA/browser
+qualification is inferred from them.
+
+The hook artifacts are in `source-hook-01/`: full output, exit, invocation,
+JUnit and a hash-verified copy of `full-route-coverage.json`. Temp preservation
+was completed before another Python invocation. The first wrapper receipt
+enumerated20,418 visible source files; a supplementary **full-preservation.json**
+verified all **21,762** remaining source files including hidden files against
+the preserved copy. One additional file captured during copying is retained
+and individually hashed as an extra, not deleted or presented as missing source.
+The invocation wrapper now includes hidden files in subsequent enumerations.
+
+### Clean committed-source managed campaign
+
+The owned observer launched the actual normal CLI unchanged:
+
+```text
+PYTHON -m tools.validate run --target sim --client api --scenario sw_api_client_02_c1.switch_all_failed --out build/software-waves/SW-API-CLIENT-02-C2/managed-clean-01/campaign
+```
+
+`managed-clean-01/`: CLI exit0, exactly one **PASS/ok**, simulator/API **V2**,
+one schema-valid record and **all eight checks PASS, zero n/a**. Actual record
+source is full `ee3f2e7f034a9ace64553e942f328dff921a1e04`, `dirty:false`,
+`dirty_files:[]`; the separate full porcelain check also proves no untracked
+source/report changes. Image digest is null. The record's SHA256 is
+`d62fa302f168a4a054a20f4e40804f583894eb33a85876e92b2095e33f9fdc64`.
+Its exact private relative path is
+`managed-clean-01/campaign/evidence/F-API-034/2026-11-01-V2-ee3f2e7f-sw_api_client_02_c1.switch_all_failed-api.json`.
+
+`campaign-inspection-01/` and the campaign's `artifact-inspection.json` retain
+exit0 inspection of schema, exact status/body/input/event, all eight checks,
+no routing event/command/write, unchanged full state and no state diff.
+The inspection compares inherited behavioral fields and existing covers with
+the exact base, checks the appended field position and six-path lease, and
+compares runner ASTs: the Telnet waiter, hardware preparation branch and all
+other runner methods outside the leased sites remain unchanged.
+
+`managed-cli-processes.json` records the actual root-venv CLI argv, PID79016,
+underlying runtime PID76440, simulator launcher PID79752 and hub launchers
+PID69164/PID60860, their descendants, launch observations and observed exits.
+All observed campaign processes exited. Launcher returns were simulator1 and
+hub1/1 under the existing Windows stop helper; observed underlying runtime
+children returned0, as recorded individually. These distinct process layers
+are preserved without relabeling launcher returns as graceful exit0.
+Real simulator/hub logs, stdout/stderr, JSON and receipts are hashed/private.
+
+### Required global CLI gate failed; no retry
+
+The actual unmodified global command ran once against the default committed
+evidence plus this clean campaign (not a hand-selected feature-row substitute):
+
+```text
+PYTHON -m tools.validate check --evidence build/software-waves/SW-API-CLIENT-02-C2/managed-clean-01/campaign/evidence --run-summary build/software-waves/SW-API-CLIENT-02-C2/managed-clean-01/campaign/run-summary.json --expect-clients api
+```
+
+**Exit1, FAILED**:
+
+```text
+(b) F-SEC-007 dropped below its recorded level: level V2 < recorded V3
+```
+
+`global-gate-01/` preserves the actual command, start/end, output, exit1,
+process-liveness observations and member hashes. The registry records
+F-SEC-007 (wrong-PIN limits/nonblocking hub) currentV3/targetV3; no registry,
+security scenario, existing evidence or freshness rule was changed. This
+observation establishes the global gate failure, not its historical onset or
+a newly diagnosed product security regression. No before-base global result
+was fabricated. The coordinator was notified by escalation. There was no gate
+retry, scoped passing replacement, ledger generation or security-scope expansion.
+
+**Requested source acceptance is PARTIAL/UNMET; worker outcome is FAILED.**
+The bounded compatibility implementation and clean managed inherited scenario
+are useful verified results, but they do not satisfy the required global gate.
+The old C1 lost-original preservation failure remains independently immutable.
+Qualified different-family review, integration, qualification and private fixture
+artifact admission remain HOLD; parent/V3/image/HIL/soak/field/final release
+gates are unchanged. Coordinator owns independent diagnosis/disposition of the
+global evidence-level failure and every subsequent acceptance decision.
+
+Only this new author record changes after the source commit. Final report-only
+verification uses the five required existing documentation modules, explicit
+UTF8/scope/CR-aware checks, then the documented invocation-only empty hooksPath
+exception for this prose commit. It does not bypass the already completed
+normal implementation hook or change any hook configuration. Exact owned
+paths are staged; no push, merge, tag, cleanup or self-release follows.
+
+Actual closeout checks: `report-docs-01/` exited0 with **489 passed in3.09s**
+across all five required existing documentation modules, with the route plugin
+disabled so full route proof is retained. `report-audit-01/` exited0 for strict
+UTF8, exact report-only scope, unchanged implementation and CR-aware whitespace.
+Coordinator message `msg_29ab0a729542` explicitly confirms the single gate failure
+and failed/partial closeout without a security campaign, retry or admission.
