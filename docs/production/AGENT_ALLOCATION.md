@@ -3835,3 +3835,26 @@ program capacity or qualified source review. Refresh before creation/dispatch/15
 Private receipts build/execution-pinning-20261101/. Publish preparation and verify
 exactintegrationorigin before creating/dispatching planning worktrees. Product and
 canonical268/210below/96stale, originalTron approvals and all owner gates unchanged.
+
+
+### Actual independent planning assessments launched — 2026-11-01T06:05:45.304526+00:00
+
+After published/verified preparation19ee8be994eb2d4630aead8a7eec8f6a22140224 and
+actual UTF8/frozen-hash/84pin/65base-ID/family checks, three dedicated Orca planning
+worktrees created at that exactbase: wp-pins-anthropic/minimax/openai-20261101,
+branches planning/execution-pins-<family>-20261101. Anthropic R1 Task7cd1706e862c/
+Dispatch369b591f37ba ready/observed start; native session7ca203a2-bb53-4546-9de0-0d4f0c35c4c1
+actual modelclaude-opus-4-7 verified, high effort attested by launch receipt only.
+MiniMax R1 Task78f4747ef78a/Dispatch0fab2d28029e ready; turnStart unsupported and
+CLI model/effort null honestly recorded; native session ses_e6a49f9dcffe10Jns6KmaJJvIV
+actual M3 verified. Both independent; OpenAI third assessment waits for slot, no
+peers shared before all3R1reports settled. Concurrency2workers+coordinator+older
+external reservation4; no nesting. Worktree/local routing config owner-only;
+Claude teams0/helper tools denied, managed plugins absent/Orca hooks unchanged,
+M3 main/small/internal models pinned and other providers/helpers denied. Exact
+local .claude/settings.local.json ignore appended to Git info/exclude; original
+exclude bytes separately preserved, no global agent preferences changed.
+Earlier Windows decoding probe failed before validation; corrected explicitUTF8
+checks passed before any creation/dispatch, not hidden as a passed failed probe.
+Source/validation/release unchanged. Final natives/workspaces/bundles/publication
+and Orca settlement required at delivery. Private execution-pinning-20261101/.
