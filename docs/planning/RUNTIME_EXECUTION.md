@@ -1295,3 +1295,48 @@ receipt is round-closeout-publication.json outside its identified commit.
 
 
 Round-closeout records checked:489 existing documentation tests passed3.19s, correct partial route/cache plugins disabled, isolated data/config/new temp. Capacity JSONL/UTF8/scoped paths/CR-aware whitespace checked. Documentation-only invocation hook exception; no source verification bypass or combined candidate qualification. Final exact root local/origin equality receipt remains private and outside its identified commit.
+
+
+### Owner-authorized complete execution allocation preparation — 2026-11-01T06:01:17.027749+00:00
+
+Owner requests all mapped remaining work pinned for execution and reports DeepSeek
+out of credit. Current owner explicitly allows Anthropic, Gemini, OpenAI Codex and
+MiniMax via OpenCode2, superseding the earlier Anthropic exclusion for FUTURE work.
+Historical reviews/routing/exclusions and same existing Run objective stay dated;
+no Run reset/replacement or historical attribution rewrite. AGENTS/protocol/current
+REPO_CONFIG updated to current authority; no DeepSeek dispatch/new spend authorized.
+
+Draft84 pins=65base units+12specific P1 review/evidence/integration followups+7owner
+gates; exact selected routes, separate named author/review worktree reservations,
+accepted dependency requirements, exclusive paths, acceptance and base resolvers.
+Uncreated worktrees remain reserved, actual IDs null; future base SHAs resolve at
+accepted/published dependency heads, not fabricated from current snapshot. Existing
+source candidates have exact fixed heads and read-only source references.
+
+Planning only: required three genuine family participants (OpenAI Sol/high, native
+Anthropic claude-opus-4-7/high candidate, MiniMax-M3/thinking via OpenCode2) assess
+program and each prospective phase in3rounds: independent, peer challenge, final
+same-packet decisions. No consensus yet, no code/source review qualification from
+planning. At most2active planning workers + coordinator + older external reservation
+within4, no nesting. Each family gets isolated NEW planning worktree at exact
+published preparation commit; native identity/headroom/helpers audited. Frozen
+input DRAFT_PACKET.json refers to immutable draft pins/program/baseline, no source
+patches/campaigns/ledger generation/visual/hardware/release actions.
+
+Preflight same Runrun_37205f6095b3/gen4/currentterm15310037/runtime9a441843/Orca1.4.245
+localWindows; all83fleet rows onepage77released/sixhistoricalretained/zeroactive,
+inboxempty. Integratione2161484 exactorigin; protectedroot/private/oddhook/user/
+external/persistence candidates retained. Installed Codex catalog refreshed
+05:54:18Z supportsSol6.1/Astra/Terra/Luna/high; ClaudeCode2.1.303 supports exact
+model selection/high, managed settings have Orca lifecycle hooks/no plugins and
+experimentalteams key. New planning worktree disables teams/helpers; actual model
+proof still required. OpenCode2M3 catalog and existing pinned config confirmed;
+other providers/internal helper fallbacks denied for that session. Gemini direct
+CLI unavailable; Antigravity absentPATH and exact model/helper/usage semantics
+unverified, so Google is held candidate, not counted planning family/headroom.
+Fresh supported05:54:13Z Codex71%weekly, Anthropic87%weekly98%session, MiniMax89%
+weekly98%session. Only bounded planning demand/revisions reserved, not whole future
+program capacity or qualified source review. Refresh before creation/dispatch/15min.
+Private receipts build/execution-pinning-20261101/. Publish preparation and verify
+exactintegrationorigin before creating/dispatching planning worktrees. Product and
+canonical268/210below/96stale, originalTron approvals and all owner gates unchanged.

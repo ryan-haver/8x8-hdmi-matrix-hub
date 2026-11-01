@@ -11,8 +11,12 @@ Technical scope and release acceptance remain in the
 - Standing instructions govern authorized work; they do not authorize starting
   a development phase, launching workers, changing visual baselines or releasing.
   For instruction-only maintenance, edit and check documentation only.
-- **No Claude/Anthropic**, including reviewers, helpers, defaults and fallbacks.
-  The historical six-model roster is retired. Audit nested routing too.
+- **Current owner routing direction (2026-11-01):** Anthropic, Gemini,
+  OpenAI Codex and MiniMax via OpenCode 2 are allowed candidates. This supersedes
+  the earlier Claude/Anthropic exclusion for future work. DeepSeek is unavailable
+  because the owner reports exhausted credit; do not dispatch it or buy credit.
+  Preserve historical routing/reviews unchanged. Verify exact route, family,
+  qualification and quota; audit nested routing and disable unassigned helpers.
 - Before each execution wave, rediscover the integration branch, remote, Orca
   Run, execution hosts, catalogs, launch capabilities, protected resources and
   concurrency. Reuse the applicable Run; never reset or replace it to evade state.

@@ -10,11 +10,15 @@ Installing this protocol does not start a phase or authorize worker launches,
 hardware actions, visual approval, deployment, merge to main or release tags.
 The instruction-recording task of 2026-10-19 explicitly prohibits launches.
 
-Owner instructions and exclusions take precedence over example rosters, model
-catalogs and skill examples. **Claude/Anthropic is excluded from all new roles**:
-authors, reviewers, helpers, category routing, retries and automatic fallbacks.
-An opaque alias is ineligible until its provider/family and routing are known.
-Do not rewrite historical Claude work or historical failures to match policy.
+Owner instructions take precedence over example rosters, catalogs and skills.
+The owner's 2026-11-01 direction allows Anthropic, Gemini, OpenAI Codex and MiniMax
+via OpenCode 2 for future assignments and supersedes the earlier Anthropic
+exclusion, including older exclusion wording elsewhere in this repository.
+DeepSeek is unavailable because the owner reports exhausted credit; no dispatch,
+credit purchase, account change or implicit fallback is authorized. Each allowed
+route still needs verified family, capability, qualification and current quota.
+Historical routing, reviews, exclusions and failures retain their actual dates
+and provenance. An opaque alias remains ineligible until its routing is known.
 
 Technical and acceptance authorities remain:
 
@@ -128,7 +132,7 @@ and historical IDs; it is not a live capacity report.
 | MiniMax M3.1 Flash variants | Bounded implementation, tests and mocks | Exact variant and effective launch proof; M3 is not M3.1 evidence |
 | DeepSeek Pro variants | Architecture/concurrency review | Exact ID/access, tool execution, demonstrated review of invariants/failure paths |
 | DeepSeek Flash variants | Bounded invariant, lock-graph and tooling audits | Accurate source-linked findings and tested audit scope |
-| Claude/Anthropic | Excluded by owner policy | Mark policy-excluded; listing or account presence does not authorize use |
+| Claude/Anthropic | Allowed by owner direction 2026-11-01 | Verify exact native route/model, current headroom, helper routing and task-specific qualification; historical exclusion remains historical |
 
 Discover exact selectable provider/model/variant IDs and supported effort on
 the execution host. Example names are search candidates, not portable commands.

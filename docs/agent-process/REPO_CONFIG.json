@@ -48,15 +48,13 @@
   "model_policy": {
     "candidate_families_to_assess": [
       "OpenAI",
+      "Anthropic",
       "Google",
-      "MiniMax",
-      "DeepSeek"
+      "MiniMax"
     ],
     "assess_new_relevant_candidates": true,
-    "excluded_underlying_families": [
-      "Anthropic"
-    ],
-    "exclusion_basis": "Current HDMI repository owner and AGENTS.md: no Claude/Anthropic through any route, helper, reviewer or fallback.",
+    "excluded_underlying_families": [],
+    "exclusion_basis": "Owner 2026-11-01 explicitly allows Anthropic, Gemini, OpenAI Codex and MiniMax via OpenCode 2, superseding earlier Anthropic exclusion for future work; historical reviews unchanged.",
     "unknown_alias_identity": "unverified_not_independent_capacity",
     "preferred_models_with_scope_and_evidence": [
       {
@@ -76,7 +74,16 @@
       }
     ],
     "independent_review_requires_different_family": true,
-    "qualification_history_imported_from_source_repo": false
+    "qualification_history_imported_from_source_repo": false,
+    "unavailable_routes": [
+      {
+        "family": "DeepSeek",
+        "status": "owner_reported_out_of_credit",
+        "dispatch_allowed": false,
+        "new_spend_authorized": false
+      }
+    ],
+    "current_owner_direction_utc_date": "2026-11-01"
   },
   "capacity": {
     "monitoring_owner": "active_coordinator",
