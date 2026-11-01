@@ -1,5 +1,21 @@
 # Current coordinator handoff
 
+
+### Actual browser proof worker launched — 2026-11-01T01:27:17.932903+00:00
+
+Task task_017738dbb31b / Dispatch ctx_4e220d036b79 / terminal
+term_b4a559e6-a569-4777-be62-0f0ef9349cba accepted input/observed start in existing
+wp-api-read-03-c1 at659d3f4a, after verified root prelaunch8f66ae0c publication.
+Native session 01a194b6-bbde-7622-93d7-66702e2e2744 confirms actual Sol6.1/high/cwd/Task/Dispatch;
+entry601186bytes SHA0a27858844304ec23f42dfb6c5b3fafb6c309d80203a0fc3afa588ec68905104
+is checkpoint only, not full final archive. Exclusive NEW browser report/private
+subtree, inherited source/evidence immutable. API-C2 remains independent active
+at new sourceee3f2e7f; normal hook4136pass/sixskip/177routes completed, clean
+managed campaign/global gate pending. Two active workers plus coordinator/external
+reservation within4; qualified source review/integration/privacy remain held.
+Prior scoped documentation verification489pass3.47s, exact UTF8/JSONL/whitespace
+checks apply; this launch record adds no source or acceptance.
+
 ## Metadata settled; fresh browser follow-up prepared — 2026-11-01T01:25:13.420896+00:00
 
 Taskf441e3251dbd/Dispatch341e35be5290 delivered diagnosis d9273a03;

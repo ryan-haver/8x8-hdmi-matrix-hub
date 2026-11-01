@@ -1183,3 +1183,19 @@ artifact gates unchanged. Private receipts build/p1-round-20261031/.
 
 
 Metadata preservation/publication completed before browser dispatch: full26964file WS workspace and3570file external temp archives verified byte/type/hash/link and stablehead; full Git bundle 6ce852188e61b3f7d96298360bd935f6c003f818be52c8a8283da6d312405337 verified with separate bare recovery of659d/d927/5331. Taskref local/origin exact659d3f4a65bd3eb463bf7e4f9a78857cf6b8acb2, both final natives/released-terminal archives retained privately. No worktree removed. Follow-up records:489 existing documentation tests passed3.47s with correct route/cache plugins disabled, all capacity JSONL parsed and CR-aware diff/scope checked; invocation-only documentation hook exception, no source bypass. Exact root push/equality receipt will be private browser-prelaunch-publication.json outside its identified commit.
+
+
+### Actual browser proof worker launched — 2026-11-01T01:27:17.932903+00:00
+
+Task task_017738dbb31b / Dispatch ctx_4e220d036b79 / terminal
+term_b4a559e6-a569-4777-be62-0f0ef9349cba accepted input/observed start in existing
+wp-api-read-03-c1 at659d3f4a, after verified root prelaunch8f66ae0c publication.
+Native session 01a194b6-bbde-7622-93d7-66702e2e2744 confirms actual Sol6.1/high/cwd/Task/Dispatch;
+entry601186bytes SHA0a27858844304ec23f42dfb6c5b3fafb6c309d80203a0fc3afa588ec68905104
+is checkpoint only, not full final archive. Exclusive NEW browser report/private
+subtree, inherited source/evidence immutable. API-C2 remains independent active
+at new sourceee3f2e7f; normal hook4136pass/sixskip/177routes completed, clean
+managed campaign/global gate pending. Two active workers plus coordinator/external
+reservation within4; qualified source review/integration/privacy remain held.
+Prior scoped documentation verification489pass3.47s, exact UTF8/JSONL/whitespace
+checks apply; this launch record adds no source or acceptance.
