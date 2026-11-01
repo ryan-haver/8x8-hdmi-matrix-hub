@@ -3694,3 +3694,99 @@ managed campaign/global gate pending. Two active workers plus coordinator/extern
 reservation within4; qualified source review/integration/privacy remain held.
 Prior scoped documentation verification489pass3.47s, exact UTF8/JSONL/whitespace
 checks apply; this launch record adds no source or acceptance.
+
+
+### API-C2 settled failed/partial; browser check remains active — 2026-11-01T01:36:39.631002+00:00
+
+Task14b35f83dc26/Dispatchd658a8d62647 delivered FAILED with source
+ee3f2e7f034a9ace64553e942f328dff921a1e04/reportcaaa4faabe9ede1e3aed37d2269efd4a4d691e04.
+Normal4136core/177strict routes,54focused/108regressions/mypy91 and clean
+managed8checks pass; actual global CLI exit1 FSEC007 V2<recordedV3. No retry.
+Accepted failed/partial settlement and released through Orca before delivery ACK.
+Taskref published/exact verifiedcaaa; full final2433737byte Sol/high native saved;
+whole workspace/external-temp preservation running, no cleanup. Historical C1
+lost original bytes remain failed and unrecovered. Source review/integration and
+private admission held. Coordinator static boundary audit verified six paths,
+unchanged waiter/hardware/client/schema/registry/oldtests and old assertions.
+Browser Task017738dbb31b/Dispatch4e220d036b79 remains active:8 clean V3 outcomes,
+68pass/four inherited browser body-check n-a, zero fail; schema verified. First
+combined-input API-summary gate0; separate browser-summary check still running.
+No canonical promotion or source qualification. Fresh quota01:36:08Z Codex75%
+weekly/M3 90%weekly, DeepSeek unknown. SameRun/gen4; one active worker, ceiling4
+with external reservation. Final closeout/preservation/publication pending.
+
+
+
+### P1 round settled and preserved; source integration held — 2026-11-01T01:41:08.866819+00:00
+
+All four new Dispatches settled and released through Orca before their delivery
+ACKs. Same Run run_37205f6095b3/gen4/coordinator term_15310037-f316-4fe8-9bbd-012f4e5ce38f,
+Orca1.4.245/local Windows/runtime9a441843. Final full fleet83rows/onepage=
+77released/sixhistoricalretained/zeroactive; reclaimable query zero. Historical
+retained/external resources remain protected, not assumed exited or removed.
+
+| Task / Dispatch | Actual outcome and exact heads | Acceptance limits |
+| --- | --- | --- |
+| task_f441e3251dbd / ctx_341e35be5290 | bounded M3 metadata diagnosis succeeded at d9273a0385f6534b7c8e75b6fd8b5fafce14cb29 | initial factual revisions required; original bytes/provenance retained |
+| task_3dabf0d8d5be / ctx_dd26ee86926f | bounded M3 factual correction succeeded at659d3f4a65bd3eb463bf7e4f9a78857cf6b8acb2; OpenAI coordinator independently verified counts/input selection | accepted metadata with explicit route-plugin erratum above; not source/security review |
+| task_14b35f83dc26 / ctx_d658a8d62647 | Sol sourceee3f2e7f034a9ace64553e942f328dff921a1e04/reportcaaa4faabe9ede1e3aed37d2269efd4a4d691e04; FAILED/PARTIAL | 4136core/177strict routes,54focused/108regressions/mypy91 and clean managed8checks pass; actual globalgate exit1 FSEC007 V2<recordedV3; no retry |
+| task_017738dbb31b / ctx_4e220d036b79 | Sol real-browser execution succeeded at clean659d/report1fbfee112cc503ffa273c19dc565092d01fe2d6b | eight sim/browser V3 pass,68pass/four inherited API-only body-check n-a/zero fail; both new combined-input gates0; raw privacy/source-review/integration holds remain |
+
+Browser actual Chromium153.0.8010.12,32screenshots/independent simulator state/logs,
+unchanged scenarios/source/expectations. TWO checks each used original WS API plus
+new browser evidence roots, with original API and original browser summaries
+separate/unmixed. Historical single-root gate-01 exit1 remains immutable. All8
+record schemas,236 final inventory members and20 original protected input hashes
+independently verified. API1schema-valid clean V2 record/all8checks and strict177
+original route proof verified;23195 final delivery manifest members matched.
+Coordinator static audit confirms exactly six API paths, unchanged Telnet waiter,
+hardware branch, client/stack/schema/registry/oldtests and old scenario assertions.
+These checks do not substitute for qualified different-family source review.
+
+Full final native transcripts preserved after release: API2433737bytes and
+browser1242675bytes, actual Sol6.1/high/Task/Dispatch/cwd verified. Both original
+M3 final exports607949/604206bytes remain preserved with actual M3/thinking.
+Released-terminal archives, all original failures, patches/source/history,
+private ignored artifacts, relevant temp data and native junction metadata retained.
+
+| Final verified archive | Regular files / bytes | SHA256 |
+| --- | --- | --- |
+| wp-api-client-02-c2 | 27703 / 397618401 | 4db677bc3f30c7829dc4975438df954571d0fdc3bb4ce5d3930853a7279a757e |
+| external-api-c2-short-temp | 23083 / 74422867 | 6d79bdcdb98423316188b418b40387f055cbde92c2ecb205b452fc835b9fa4b4 |
+| wp-api-read-03-c1 | 27203 / 412051077 | 793517871dce0b3707e47af1a9b93b58284de08c0804815ba21637bed0e694ef |
+| external-browser-short-temp | 104 / 101510 | ec86fe9a39707ffd2d7055af1ff5b74f62c9e2ebd30ad0473b1e4f9f25494409 |
+
+All members/types/bytes/hash/links and final source/head/status checked; junctions
+not traversed. Earlier pre-browser M3 workspace/external archives also retained.
+Full --all Git bundle SHA37ad38805d4c3fe77b3f17582f956d09954a4b5cdf45d1b8991a93de7a3ff22c verified with separate bare recovery
+of all eight source/report/base heads and full fsck exit0. Task refs published and
+live exact-verified: API-C2caaa4faa, WS1fbfee11. No worktree/branch removed this
+development round; both candidates and all privacy/other unresolved workspaces
+are explicitly retained for review/further development. Prior11 completed-task
+cleanup remains final; no broader prune, reset, force-push or evidence rewriting.
+
+Latest supported capacity01:36:08Z Codex75%weekly, MiniMax90%weekly; source-review
+DeepSeek current headroom remains unknown, not a verified reservation. No eligible
+different-family source route has been established, so all new source integration,
+qualification and privacy admission remain HELD. Same-family variants or M3 metadata
+qualification are not substitutes. No new worker/phase or background quota service
+is started by closeout. Future dispatch requires fresh full preflight and published
+integration equality. Prospective three-provider phase planning remains prospective.
+
+Next work: obtain verified capacity for qualified different-family exact-commit
+reviews of retained API/WS/privacy packages; independently assess API-C2's FSEC007
+input/freshness envelope and separately scope any NEW real-browser evidence for
+that exact candidate. WS browser records cannot be attributed to the independent
+API-C2 branch. No automatic unchanged failed-gate retry, source merge, canonical
+evidence import, ledger generation, finding/parent closure or P2 start is authorized
+by these records. Existing owner development authority continues within its gates.
+Canonical268features/210below/96stale unchanged; original Tron approvals retained;
+physical HIL/72-hour soak/week field/final version and matching-artifact release
+gates remain open. No release, main merge or tag.
+
+Private receipts build/p1-round-20261031/; browser and API sanitized reports remain
+on their published task branches. Final root record verification/push/equality
+receipt is round-closeout-publication.json outside its identified commit.
+
+
+Round-closeout records checked:489 existing documentation tests passed3.19s, correct partial route/cache plugins disabled, isolated data/config/new temp. Capacity JSONL/UTF8/scoped paths/CR-aware whitespace checked. Documentation-only invocation hook exception; no source verification bypass or combined candidate qualification. Final exact root local/origin equality receipt remains private and outside its identified commit.
