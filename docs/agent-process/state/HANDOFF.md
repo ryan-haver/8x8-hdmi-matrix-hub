@@ -1,5 +1,61 @@
 # Current coordinator handoff
 
+## Metadata settled; fresh browser follow-up prepared — 2026-11-01T01:25:13.420896+00:00
+
+Taskf441e3251dbd/Dispatch341e35be5290 delivered diagnosis d9273a03;
+Task3dabf0d8d5be/Dispatchdd26ee86926f delivered factual correction659d3f4a.
+Both accepted as bounded metadata outcomes and released through Orca before ACK.
+Same-terminal correction reuse was refused agent_unconfigured; request/fleet/tasks
+proved no new authority created, original released, then one fresh M3 writer.
+Final original native607949bytes/64assistant SHA02e5f009ef1d97ffa0bc898b4674da58564553acf75f153f1f9412b29639658e;
+correction604206bytes/72assistant SHAafa871e435402becad038aa0f2079461f9da9899856fa4745fd8120ab88807dd.
+Actual minimax-coding-plan/MiniMax-M3/thinking independently verified in both.
+
+Coordinator verified FSEC007 counts using existing library against isolated bare
+diagnostics from verified bundle: baseline938=16freshpass/12stale/V3, source5331=
+4freshpass/24stale/V2, exactly12newlystale, no fresh failed records. No actual gate
+rerun or behavioral acceptance. Corrected registry ownership FAPI040; browser
+scenario mapping2API-only/4shared/4browser-only. Report proposes correct repeatable
+two-root evidence checks/two original separate summaries. Fresh browser behavior
+remains unexecuted. Historical WS globalgate exit1/failedpartial remains immutable.
+
+Explicit coordinator erratum to correction report section9.1: docs489pass3.18s
+is real, but no:route did NOT disable tests.route_inventory. It wrote root
+route-coverage.json8/177/report-only, copied byte-identically outside child with
+SHAbed6c3befd318ed0717d7988b232667945f077f3f3408f59d78d25c9e4fa5b34.
+Original archived hook-01 strict177/177 remains SHA6f4d570ee7d899010ee1c982086130bebb882bb3323c1581e6573161ed38194a.
+Neither restored/rewritten/deleted; partial docs result is NOT route qualification.
+Correction manifest all members verified; metadata accepted with this erratum,
+not source/security review. Original report/diagnostics/provenance retained.
+
+Sol API-C2 Task14b35f83dc26/Dispatchd658a8d62647 remains active in its dedicated
+wp-api-client-02-c2 at exact060769 base with previously granted lease. Reported
+54focused/108regressions/Ruff/mypy pass; normal full strict hook still pending.
+No source implementation integrated, accepted or independently reviewed.
+
+Prepare Sol6.1/high real eight-scenario FSEC007 browser refresh in existing
+settled wp-api-read-03-c1 at exact659d3f4a65bd3eb463bf7e4f9a78857cf6b8acb2,
+only NEW report/private browser-refresh subtree. Full preservation/ref publication
+must finish and coordinator records push/live equality precede dispatch. Existing
+P1 source freshness remediation, no new phase/material planning cycle. Original
+WS campaign plus new browser root, two separately original API/browser summaries;
+no canonical import/record/registry/ledger edits or unchanged failed-gate retry.
+Brief next-wave/FSEC007-BROWSER-REFRESH.txt defines exact scope and failure stops.
+Dependency probe Node26.13/Playwright1.63/installed Chromium1243 exists, no install.
+Actual browser version still requires execution. NEW temp C:/t/fsec007-browser-20261031-a.
+
+Fresh supported capacity01:22:55Z Codex76%weekly/M3 91%weekly97%session; DeepSeek
+unknown. Author/correction/metadata capacity only; qualified different-family source
+review/privacy admission HELD, not invented review reserve. Sol chosen for actual
+browser-client competence; Astra/Terra/Luna samefamily alternatives, M3 only bounded
+metadata, Google routing/qualification unresolved, Anthropic excluded allroutes.
+Fleet82/onepage=75released/sixhistoricalretained/oneactive. After planned launch,
+coordinator+two workers+external reservation=4; no nesting. SameRun/gen4/runtime,
+localhost; no reset/newRun or remote fallback. Source changes on API-C2 will need
+their own fresh proof; nonancestor WS browser records cannot qualify that branch.
+Canonical268/210below/96stale, original Tron approval and physical/soak/field/final
+artifact gates unchanged. Private receipts build/p1-round-20261031/.
+
 ## Two P1 workers active; exact managed-support lease granted — 2026-11-01T01:03Z
 
 Both genuine worker-start receipts READY/input accepted after prelaunch
@@ -1447,3 +1503,6 @@ Read first: root AGENTS.md; adopted PROTOCOL.md and REPO_CONFIG.json; this hando
 standing repository protocol; allocation ledger; current SOFTWARE_RELEASE_WAVES,
 master/runtime plans and release checklist. The host-local append-only handoff is
 supplemental, not portable authority.
+
+
+Metadata preservation/publication completed before browser dispatch: full26964file WS workspace and3570file external temp archives verified byte/type/hash/link and stablehead; full Git bundle 6ce852188e61b3f7d96298360bd935f6c003f818be52c8a8283da6d312405337 verified with separate bare recovery of659d/d927/5331. Taskref local/origin exact659d3f4a65bd3eb463bf7e4f9a78857cf6b8acb2, both final natives/released-terminal archives retained privately. No worktree removed. Follow-up records:489 existing documentation tests passed3.47s with correct route/cache plugins disabled, all capacity JSONL parsed and CR-aware diff/scope checked; invocation-only documentation hook exception, no source bypass. Exact root push/equality receipt will be private browser-prelaunch-publication.json outside its identified commit.
