@@ -3858,3 +3858,71 @@ Earlier Windows decoding probe failed before validation; corrected explicitUTF8
 checks passed before any creation/dispatch, not hidden as a passed failed probe.
 Source/validation/release unchanged. Final natives/workspaces/bundles/publication
 and Orca settlement required at delivery. Private execution-pinning-20261101/.
+
+
+### Round1 partial deliveries and canonical-byte correction — 2026-11-01T06:24:36.575546+00:00
+
+Anthropic R1 reporta973922ae39821e8e30e912dc59aeaddcf78f6ed delivered succeeded as
+independent assessment requiring plan changes; released before ACK. Native
+1306615bytes/81assistant entries allclaude-opus-4-7 preserved, high effort from
+launch only. Same-Round1 third participant OpenAI Taskca1f06e6d2bc/Dispatche04f56080b14
+started in reserved wp-pins-openai at exact19ee, no peer reports shared. Delivered
+independent succeeded/changesrequired report1effc39eaee20979521c2b96d9b3d6af7290bb39,
+released beforeACK; exact own native session01a195bf-0f33-7a01-93fa-9e1498b34ba6,
+822798bytes/nativeSol-high verified. Earlier capture matched Task text in root
+coordinator history rather than assigned cwd; original misidentified checkpoint
+and receipt retained/explicitlyINVALID as worker evidence, matcher corrected to
+require exact session_meta.cwd+Task/Dispatch, distinct correct native saved.
+
+Both independent reports establish draft recordedSHA hashes came from original
+Windows CRLF working files; Git19ee stores LF. Coordinator verified byte equality
+after CRLF-to-LF and exact actual Gitblob SHA values. All three assessors share
+the same canonical Git inputs; no substantive input drift or R1 rewrite. Wrong
+DRAFT_PACKET hash metadata remains historical, successor packet will use exact
+LF bytes/canonical Gitblob verification before final hash decisions. No final
+consensus/qualified source review claimed. MiniMax R1 stillactive, no replacement
+or duplicate writer; asked to finish bounded report from existing evidence.
+Current headroom monitor Codex71%/Anthropic86%/M3 89%weekly; DeepSeek exhausted.
+Actual reports/native receipts private execution-pinning-20261101/, root program
+source and canonical feature/evidence levels unchanged.
+
+
+## Three independent assessments settled; peer challenge prepared — 2026-11-01T06:43:42.863618+00:00
+
+All3R1 Tasks succeeded as independent assessments requiring material corrections,
+not plan/source approval. Anthropic a973922a/OpenAI1effc39e/M3 800c369d reports
+accepted for synthesis, released beforeACK, exact final natives captured and
+report-only scope/clean heads verified; all3task refs published/live exact.
+Native evidence: Anthropic1306615bytes/81assistant allOpus4.7 (effortlaunchhigh);
+OpenAI822798bytes actualSol/high/exactcwd; M3 1116457bytes/60assistant allM3thinking.
+M3 R1 exceeded initial bounded target, original analysis/checks and longer actual
+work duration preserved; no fake deadline pass, fallback or duplicate writer. R2 narrows
+input reads to peer/disposition/selected-row checks, <=1000words, no global audit.
+
+Original reports integrated sequentially as documentation da0debc5/da40d670/f402c385.
+Recorded rawCRLF/GitLF hash mismatch and original coordinator-transcript match
+error retained explicitly with corrected exact-cwd worker proof; no originals
+rewritten or invalid evidence used as source acceptance. Rootcode unchanged.
+
+Revised85pins=65base+13followup/closure+7humanonly owner gates. Full268feature
+contracts,170separate author/review reservations, explicit qualified-domain gates,
+fix/re-review reserve, preserved accepted files/status/leases, current-vs-historical
+count dimensions, source-versus-review/evaluation trees, corrected full API034
+review boundary938-to-caaa (including386+ee3), full P1 closure and P5/release
+rollup. M3 collector source assignment replaced bySol; M3 roles prose/inventory
+only. Coordinator/root mutation and humanowner authority explicit. No future
+commits/OrcaIDs/qualifications fabricated, no code or phase launched.
+
+RECONCILIATION_R1.md disposes each source finding, including explicit rejection
+of same-family source review, record-count/feature-count conflation and rebinding
+a valid historicalbaseline to a different commit. Originals remain unchanged and
+all3peers can challenge coordinator decisions. New exactUTF8LF challenge packet
+SHA256 c1ed1f07795e39c5ec14a43b596941c512b72b7740d1251765ea94aed8682293; verify working AND committed input bytes after
+push before dispatch. Same3native families, same3isolated planning trees at own
+R1heads for new fresh R2sessions, atmost2active+coordinator+externalreservation4.
+Qualified source review/privacy/owner/release gates remain separate. NoDeepSeek;
+Google held unverified. Latest supported monitor70%Codex/86%Anthropic/89%M3weekly;
+fresh preflight required beforeR2 dispatch. Private execution-pinning-20261101/.
+
+
+Round2 preparation checks:489 existing documentation tests passed3.78s with isolated fresh temp and partial route/cache plugins disabled. 85pin/65base/268feature-contract coverage,170unique worktree reservations, disjoint outputs, explicit Anthropic gates and full dependency DAG checked. Invocation-only documentation hook exception; no source bypass. Original R1 metadata errors and valid historical baselines retained with explicit dispositions. Pre-dispatch verify packet against committed Git bytes and live origin; receipt outside identified commit.
