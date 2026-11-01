@@ -3926,3 +3926,21 @@ fresh preflight required beforeR2 dispatch. Private execution-pinning-20261101/.
 
 
 Round2 preparation checks:489 existing documentation tests passed3.78s with isolated fresh temp and partial route/cache plugins disabled. 85pin/65base/268feature-contract coverage,170unique worktree reservations, disjoint outputs, explicit Anthropic gates and full dependency DAG checked. Invocation-only documentation hook exception; no source bypass. Original R1 metadata errors and valid historical baselines retained with explicit dispositions. Pre-dispatch verify packet against committed Git bytes and live origin; receipt outside identified commit.
+
+
+### Round2 peer challenges active — 2026-11-01T06:54:56.208071+00:00
+
+Published49e1ec4543851f99d7095d805615487a5133ae2e exactorigin and all challenge
+packet hashes verified against committed blobs before launch. Old quota observation
+expired; gate stopped before any worker start, then supported refresh70%Codex/
+86%Anthropic/89%M3weekly permitted this bounded round. Fresh native sessions:
+
+minimax: task_3ee308c354ca/ctx_7bc6929a4372, nativeses_e6a1dda46ffeeNBiFqFsHaIRKA, models['minimax-coding-plan/MiniMax-M3'], entry35333bytes/checkpoint only
+openai: task_ee7d6c8e10bf/ctx_ea6c27b10a28, native01a195e2-2c98-7732-a23b-23d35747e61b, models['gpt-6.1-sol'], entry678089bytes/checkpoint only
+
+Anthropic third challenge waits for a slot; no duplicate/unknown writer or Run
+reset. Each reads all3original reports and identical sharedreadonly challenge
+packet, writes only own NEWROUND2 report/private subtree. Twoactive+coordinator+
+externalreservation4; no helpers. Planning only, source qualification/implementation/
+owner gates not passed. Actual final captures/bundles/archives/publication and
+release-beforeACK follow delivery. Private execution-pinning-20261101/.
