@@ -444,6 +444,9 @@ class Scenario:
         ``{"browser": ("F-UI-002",)}`` - the UI flow is only exercised in the browser.
     :param hub_env: scenario-specific overrides for a runner-managed simulator
         hub. External hubs and hardware are configured by the operator.
+    :param matrix_connection: preparation precondition. ``ready`` retains the
+        normal Telnet wait; ``disconnected`` requires observed disconnected
+        health for a simulator-only API failure without setup, cleanup or faults.
     """
 
     id: str
@@ -466,8 +469,17 @@ class Scenario:
     client_features: dict[str, tuple[str, ...]] = field(default_factory=dict)
     hub_env: dict[str, str] = field(default_factory=dict)
     notes: str = ""
+    matrix_connection: Literal["ready", "disconnected"] = "ready"
 
     def __post_init__(self) -> None:
+        if self.matrix_connection not in ("ready", "disconnected"):
+            raise ValueError(f"scenario {self.id}: invalid matrix_connection {self.matrix_connection!r}")
+        if self.matrix_connection == "disconnected" and (
+            self.targets != ("sim",) or self.clients != ("api",) or self.kind != "failure"
+            or self.writes or self.setup or self.cleanup or self.faults
+        ):
+            raise ValueError(f"scenario {self.id}: disconnected preparation requires a simulator-only API failure "
+                             "without writes, setup, cleanup or faults")
         if not re.fullmatch(r"[a-z0-9_]+\.[a-z0-9_]+", self.id):
             raise ValueError(f"scenario id {self.id!r} must look like 'area.flow'")
         if not self.features:

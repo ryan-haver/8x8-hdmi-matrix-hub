@@ -464,6 +464,26 @@ class Runner:
             await asyncio.sleep(0.05)
         raise RuntimeError("the hub's Telnet link to the matrix did not become ready before the scenario")
 
+    async def _prepare_sim_matrix(self, sc: Scenario, client: Client, helper: ApiClient) -> str | None:
+        """Meet the declared precondition; a disconnected matrix must be observed, never assumed."""
+        if sc.matrix_connection == "ready":
+            await self._wait_hub_telnet(helper)
+            return "wait for the simulator Telnet link before setup and fault injection" if self.stack else None
+        if (sc.matrix_connection != "disconnected" or self.o.target != "sim" or client.name != "api"
+                or sc.targets != ("sim",) or sc.clients != ("api",) or sc.kind != "failure"
+                or sc.writes or sc.setup or sc.cleanup or sc.faults):
+            raise RuntimeError("disconnected preparation requires a simulator-only API failure "
+                               "without writes, setup, cleanup or faults")
+        status, body, _ = await helper.request("GET", "/api/health")
+        data = body.get("data") if isinstance(body, dict) else None
+        matrix = data.get("matrix") if isinstance(data, dict) else None
+        if (status != 200 or not isinstance(body, dict) or body.get("success") is not True
+                or not isinstance(matrix, dict) or matrix.get("configured") is not True
+                or matrix.get("connected") is not False):
+            raise RuntimeError("disconnected preparation requires HTTP 200 health with success=true, "
+                               "configured=true and connected=false")
+        return "observe /api/health: HTTP 200, success=true, matrix configured=true, connected=false"
+
     async def run(self, scenarios: list[Scenario]) -> list[Outcome]:
         self.evidence_dir.mkdir(parents=True, exist_ok=True)
         await asyncio.to_thread(self._start_system)
@@ -530,6 +550,8 @@ class Runner:
             await client.stop()
 
     def _refusal(self, sc: Scenario, client: Client) -> str | None:
+        if sc.matrix_connection == "disconnected" and (self.o.target != "sim" or client.name != "api"):
+            return "disconnected preparation requires simulator target and API client"
         if client.name not in sc.clients:
             return f"scenario is not defined for client '{client.name}'"
         if sc.action.intent in RUNNER_INTENTS:
@@ -598,9 +620,9 @@ class Runner:
             if isinstance(dev, SimDevice):
                 await dev.reset(sc.sim_state)
                 procedure.append("reset the simulator to the seed state" + (f" + {sc.sim_state}" if sc.sim_state else ""))
-                await self._wait_hub_telnet(helper)
-                if self.stack is not None:
-                    procedure.append("wait for the simulator Telnet link before setup and fault injection")
+                preparation = await self._prepare_sim_matrix(sc, client, helper)
+                if preparation:
+                    procedure.append(preparation)
             else:
                 await self._wait_hub_telnet(helper)
                 if self._runner_started_hub():
