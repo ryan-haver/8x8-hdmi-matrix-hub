@@ -3558,3 +3558,62 @@ scope/acceptance. Source/test/full gate/privacy/globalVAL15/parent/release holds
 remain, canonical268/210below/96stale unchanged. Private build/p1-round-20261031/.
 
 Prelaunch documentation verification:489 existing documentation tests passed, capacity JSONL parsed, scope/UTF8/CR-aware whitespace checked. Invocation-only coordination-doc hook exception, no source implementation bypass. Post-push exact equality receipt build/p1-round-20261031/prelaunch-publication.json remains outside commit.
+
+
+### Actual P1 launches and exact serial lease — 2026-11-01T01:03Z
+
+Both genuine worker-start receipts READY/input accepted after prelaunch
+473e766936d5f1ba91fd2f672212486c69860130 push/live equality, before new creation.
+
+| Task / Dispatch / live handle | Worktree / exact base | Exclusive scope |
+| --- | --- | --- |
+| task_f441e3251dbd / ctx_341e35be5290 / term_1d715234-7226-4115-b2a3-84fd4cab9f39 | existing wp-api-read-03-c1 at7294af5e39a5225d61f5b1b9961bf6976d9bc904 | NEW FSEC007_DIAGNOSIS.md + diagnosis-20261031/** only; all inherited source/report/registry/evidence read-only |
+| task_14b35f83dc26 / ctx_d658a8d62647 / term_08951960-c0f5-4952-ae2c-c5de17f54cfb | NEW wp-api-client-02-c2 / ryan-haver/wp-api-client-02-c2 at060769b724e7a546b8df22eac82f3b288d9bbbe8 | initial new intake/build; exact serial lease below now granted, NEW C2 tests/report |
+
+Actual native identity verified: M3 session ses_e6b657c6cffe0emEDtV9rmr0Sy,
+24assistant messages all minimax-coding-plan/MiniMax-M3/thinking, Task/Dispatch/
+cwd verified. CLI model/effort null and turnStart unsupported are honestly recorded;
+pin config62e6f5ab main/small/internal plus deny policies audited. Sol session
+01a1949a-c04c-7470-8326-e559a73d7654 has actual gpt-6.1-sol/high turn contexts,
+matching requested/effective model, Task/Dispatch/cwd, turn start observed. Entry
+native copies are checkpoints, NOT final full archives. V2 native export messages
+use type rather than role; initial schema probe failure retained, no raw rewrite.
+
+Lease question msg_05641ceb157b / answer msg_74a2ae1ee05a: coordinator inspected
+intake, Scenario, Runner wait/refusal/callsite and actual /api/health/schema.
+ONLY Scenario optional appended matrix_connection ready/disconnected field,
+docstring/__post_init__; NEW Runner preparation helper, simulator _run_one wait
+callsite, exact profile guard in _refusal if needed; inherited C1 scenario only
+explicit profile/note/covers additions. _wait_hub_telnet/hardware branch unchanged.
+No other shared source/client/stack/schema/registry/product changes. Declared
+sim-only API failure/no writes/setup/cleanup/faults; actual runtime client/target
+guard including direct helper calls. Health200/success True/data.matrix configured
+True/connected False with strict types, malformed/false envelope/etc blocks before
+action; existing procedure booleans only, no new record shape or fault-arrival wait.
+All inherited refusal/event/no-write/state assertions/TLS settings/existing covers
+and old tests/report preserved. Meaningful controls, real managed8checks and
+healthy/disconnected/healthy sequence, normal strict hook, clean CLI and actual
+gate required. Global failure stays failed/partial with no automatic retry.
+This is bounded missing support for existing P1 refusal unit, no new phase/source
+approval. C1 lost historical originals remain failed/immutable; no reconstruction.
+
+Owned new roots C:/t/fsec007-20261031-a and C:/t/f034-c2-20261031-a initially absent;
+C:/t parent also absent and safely created, no deletion/reuse. Sol node_modules
+native junction to existing root deps READONLY, allocated after exact child base
+check; native metadata receipt retained. No install/update/global preference change.
+Initial PowerShell path/DateTime-coercion probe failed before any creation; raw ISO
+Python checked actual quota age555s. Original diagnostics retained, no false age
+or recreated data. All raw failures copied/hashverified before another invocation.
+
+Supported usage01:01:30Z: Codex77%weekly, M3 91%weekly/99%session, DeepSeek unknown.
+Two bounded author/intake tasks plus correction/metadata-check headroom only; no
+qualified source reviewer reserve. Full fleet81rows onepage=73released/sixhistorical
+retained/twoactive, conservative external reservation+coordinator ceiling4. SameRun/
+coordinator gen4/runtime9a441843/localhost. No nested/duplicate writer. Independent
+OpenAI metadata check planned; qualified different-family code review/integration/
+privacy admission HELD. Canonical268/210below/96stale and owner gates unchanged.
+Private receipts build/p1-round-20261031/, current lease in C2 brief. Monitor inbox,
+settle resources before acknowledgments; full final native/bundles/workspaces/
+external roots/native-link preservation and exact taskref publication still required.
+
+Actual-launch records checked:489 existing documentation tests passed, all capacity JSONL parsed, CR-aware whitespace/scope checked. Invocation-only coordination-doc hook exception; workers retain mandatory normal implementation hooks. Post-push equality receipt private build/p1-round-20261031/launch-publication.json, outside its identified commit.

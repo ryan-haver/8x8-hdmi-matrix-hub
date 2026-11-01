@@ -1109,3 +1109,16 @@ failed evidence or lost bytes. Quota78%Codex/91%M3 weekly freshly observed, sour
 review DeepSeek unknown/HELD. Actual launch IDs follow receipts, not these planned
 bindings; prelaunch record push/equality required. Existing P1 scope, no new phase,
 source integration, qualification, privacy admission or owner-gate change.
+
+
+### Two P1 workers active after verified prelaunch publication — 2026-11-01T01:03Z
+
+MiniMax Taskf441e3251dbd/Dispatch341e35be5290 diagnoses F-SEC-007 metadata at WS7294,
+actual native M3/thinking verified. Sol Task14b35f83dc26/Dispatchd658a8d62647 at NEW
+API-C2/060769b7 has source-checked exact lease for explicit disconnected-matrix
+precondition, preserving ordinary/hardware/external defaults and original negative
+oracles. Native Sol6.1/high verified, intake ask/reply recorded. Source/test work now
+authorized only within exact lease; qualified source review/integration remain held.
+Fleet81/twoactive, quota77%Codex/91%M3 weekly01:01Z. No new phase, original-failure
+reclassification or canonical promotion. Current handoff/ledger/briefs carry exact
+authority/paths/acceptance, protected resources and preservation obligations.
