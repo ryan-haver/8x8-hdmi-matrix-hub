@@ -3444,3 +3444,62 @@ unchanged. Original Tron approvals CLOSED, HIL/soak/field/final release gates op
 Full native C3: 2004652bytes SHA256cc5fa61c2d96a112fe5baedc470b3884efb62ecc03570766bef970c742d3a81e; WS: 2530894bytes SHA256f0c12d85210d6a641544dc5ae6b788f8546d542b1ad334b9c105b88dfbce0ef4. Private unchanged, no raw values published.
 
 Final coordination-record checks:489 existing documentation tests passed (private privacy-ws-final-docs.log), CR-aware whitespace and scoped root-doc changes checked. Invocation-only documentation hook exception; source workers used normal complete hooks. Final integration publication receipt remains outside commit at privacy-ws-final-integration-publication.json.
+
+
+### Owner-authorized completed-task cleanup — 2026-11-01T00:38Z
+
+Owner2026-10-31 cleanup request executed for11 exact completed-task candidates.
+All11 removed through Orca worktree rm, without force/manual filesystem deletion;
+Orca also deleted their11 completed local task branches. Every remote task branch
+is retained and live exact-head verified after cleanup. Orca workspaces23->12;
+Git-registered worktrees22->11. The extra Orca persistence entry remains the
+previously protected registration discrepancy; no reconciliation/pruning done.
+
+Preflight: every related Dispatch succeeded/released, no attached/unverifiable
+terminals in candidates, clean tracked/untracked source, full current file/type/
+link inventory matches exact-head archived bytes. All tar member hashes/types/
+sizes/link targets and archive hashes reverified; 97864 regular files /
+3589316409bytes preserved. Native links not traversed. Full14provider
+sessions freshly captured privately with each settled Dispatch represented;
+all capture hashes reverified. All original exports/archives/failed diagnostics
+remain unchanged. Initial read-only export-schema probe failed on moved directory
+field; attempt01 bytes retained, corrected audit used fresh attempt02 destinations.
+No source qualification retry or recreated historical failure artifact.
+
+One full --all Git bundle preserves all refs/reachable task history outside
+removed paths; verify passed, separate bare recovery resolves all11 submitted
+heads and full fsck passed. Nine task heads are integration ancestors; both CI
+report branches have inspected exact cherry-pick mappings and identical final
+report blobs. No source/evidence acceptance or readiness promotion inferred.
+
+Retained all five unmerged privacy/API workspaces, three evidence/privacy-held
+audit/Flic workspaces, user/external-owned sw-api-root and ev02-name-review,
+unresolved persistence entry, coordinator/root/private runtime/encoded hook
+artifact. Remaining workspace heads/paths/branches verified unchanged. Original
+failures and all backup archives/transcripts remain private and retained.
+No author/reviewer dispatched, phase launched, source merged or remote ref deleted.
+
+Private audit/removal/recovery receipts: build/worktree-cleanup-20261031/;
+post-cleanup-verification.json, attempt-02/preflight.json, removal-results.json,
+bundle-proof.json and per-worktree raw Orca receipts. Final documentation-only
+publication receipt cleanup-publication.json stays outside its identified commit.
+Previous C3 author success/WS failed-partial, qualified source review/privacy/
+global-gate holds, canonical268/210below/96stale and owner release gates unchanged.
+
+| Removed worktree and local task branch | Preserved submitted head | Integration proof |
+| --- | --- | --- |
+| w03-final-metadata-review / ryan-haver/w03-final-metadata-review | 29c217ae25856f91d79a85064eb7e38a6aa197a0 | ancestor |
+| w03-metadata-encoding-review / ryan-haver/w03-metadata-encoding-review | 029b30a0256b4e61043acda040499649de36cf82 | ancestor |
+| wp-api-read-03-intake / ryan-haver/wp-api-read-03-intake | c0312d7068215046cddd140665f61047ce54bfac | ancestor |
+| wp-ci-proof-intake / ryan-haver/wp-ci-proof-intake | 9036ecffe2b5e18ccb6d636eba55edfbd0d6a80a | exact inspected CI report cherry-picks and final blobs |
+| wp-ci-proof-review / ryan-haver/wp-ci-proof-review | 7ebb520215383d87449adaa9ed7da17e1ee41cd2 | exact inspected CI report cherry-picks and final blobs |
+| wp-sw-api-header-proof / ryan-haver/wp-sw-api-header-proof | cb87427bd2646fc686e1cff02692a4240dcf51c1 | ancestor |
+| wp-sw-api-header-review / ryan-haver/wp-sw-api-header-review | c8910ee5a05a26a2eb53f88d96cbdc080a385886 | ancestor |
+| wp-sw-api-offline-events / ryan-haver/wp-sw-api-offline-events | 4baef5743b0e970328a979f181d701361f58da70 | ancestor |
+| wp-sw-api-offline-review / ryan-haver/wp-sw-api-offline-review | 0bd3d76f8bc965753849f804abb876f0511dfe65 | ancestor |
+| wp-w03-close-evidence / ryan-haver/wp-w03-close-evidence | b325d41a1731cadd9f890ff0a64e2de50387d86e | ancestor |
+| wp-w03-close-inventory / ryan-haver/wp-w03-close-inventory | 3567a093b7a9c2597cf0467c6cb8614e139de762 | ancestor |
+
+Full private repository bundle SHA2561fa0374e3dec2fcba5772a31710169832817efeaad087ed2fb2972acf05759d4; full recovery fsck passed. Removal of working copies does not remove originals preserved in the verified private archives or remote task refs.
+
+Cleanup-record verification:489 existing documentation tests passed2.72s with isolated data/config/temp and partial route/cache plugins disabled. CR-aware whitespace and exact three-document staging checked. Retained task workspace heads were verified unchanged before coordinator cleanup-record edits; the integration head advances only by these scoped records. Document-only invocation hook exception; no source/core/combined qualification claimed. Root/private/protected encoded hook artifact remains untouched. Final exact local/origin publication receipt is private build/worktree-cleanup-20261031/cleanup-publication.json.

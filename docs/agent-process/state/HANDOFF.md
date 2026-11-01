@@ -1,5 +1,45 @@
 # Current coordinator handoff
 
+## Completed-task worktree cleanup — 2026-11-01T00:38Z
+
+Owner2026-10-31 cleanup request executed for11 exact completed-task candidates.
+All11 removed through Orca worktree rm, without force/manual filesystem deletion;
+Orca also deleted their11 completed local task branches. Every remote task branch
+is retained and live exact-head verified after cleanup. Orca workspaces23->12;
+Git-registered worktrees22->11. The extra Orca persistence entry remains the
+previously protected registration discrepancy; no reconciliation/pruning done.
+
+Preflight: every related Dispatch succeeded/released, no attached/unverifiable
+terminals in candidates, clean tracked/untracked source, full current file/type/
+link inventory matches exact-head archived bytes. All tar member hashes/types/
+sizes/link targets and archive hashes reverified; 97864 regular files /
+3589316409bytes preserved. Native links not traversed. Full14provider
+sessions freshly captured privately with each settled Dispatch represented;
+all capture hashes reverified. All original exports/archives/failed diagnostics
+remain unchanged. Initial read-only export-schema probe failed on moved directory
+field; attempt01 bytes retained, corrected audit used fresh attempt02 destinations.
+No source qualification retry or recreated historical failure artifact.
+
+One full --all Git bundle preserves all refs/reachable task history outside
+removed paths; verify passed, separate bare recovery resolves all11 submitted
+heads and full fsck passed. Nine task heads are integration ancestors; both CI
+report branches have inspected exact cherry-pick mappings and identical final
+report blobs. No source/evidence acceptance or readiness promotion inferred.
+
+Retained all five unmerged privacy/API workspaces, three evidence/privacy-held
+audit/Flic workspaces, user/external-owned sw-api-root and ev02-name-review,
+unresolved persistence entry, coordinator/root/private runtime/encoded hook
+artifact. Remaining workspace heads/paths/branches verified unchanged. Original
+failures and all backup archives/transcripts remain private and retained.
+No author/reviewer dispatched, phase launched, source merged or remote ref deleted.
+
+Private audit/removal/recovery receipts: build/worktree-cleanup-20261031/;
+post-cleanup-verification.json, attempt-02/preflight.json, removal-results.json,
+bundle-proof.json and per-worktree raw Orca receipts. Final documentation-only
+publication receipt cleanup-publication.json stays outside its identified commit.
+Previous C3 author success/WS failed-partial, qualified source review/privacy/
+global-gate holds, canonical268/210below/96stale and owner release gates unchanged.
+
 ## Both authors settled, preserved and task refs published — 2026-10-29T03:57Z
 
 C3 Task task_242c1cc61b92 / Dispatch ctx_793d3e4da3c3 delivered succeeded,

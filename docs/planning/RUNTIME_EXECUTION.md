@@ -1085,3 +1085,15 @@ No source integrated/reviewed/qualified, privacy admission or cleanup authorized
 Next gates: qualified different-family exact-commit review and global-gate input/
 baseline diagnosis; no new phase/worker launch. Exact details in current handoff
 and allocation ledger; canonical268/210below/96stale and owner gates unchanged.
+
+
+### Completed-task workspace cleanup — 2026-11-01T00:38Z
+
+Owner-authorized11 exact completed/integrated task worktrees and their11 local
+branches removed through Orca after complete preservation, native/settlement/
+remote/integration/recovery verification. Remote task refs and all private full
+backups remain.23Orca workspaces reduced to12,22Git worktrees to11; unmerged
+privacy/API, evidence/Flic holds, user/external/protected/persistence discrepancy
+retained unchanged. No force/manual deletion, source change, worker launch,
+qualification/readiness promotion or release gate advancement. Full audit in
+build/worktree-cleanup-20261031/ and latest handoff/allocation ledger.
