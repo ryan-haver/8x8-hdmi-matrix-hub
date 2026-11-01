@@ -1,5 +1,14 @@
 # Agent allocation and execution ledger
 
+## Entire mapped scope pinned; three-family decisions complete — 2026-11-01T07:29:05.058950+00:00
+
+All9genuine planning Tasks succeeded (3families x3rounds), all3final reports explicitly accept program/P0residual/P1remainder/P2/P3/P4/P5 on FINAL_PACKET sha25652ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e. Actual Task/Dispatch/native/report hashes and outcomes in docs/agent-process/phases/execution-pinning-20261101/CONSENSUS.json. The coordinator is not a participant; no dissent is hidden and no source qualification or product implementation launch follows from these planning decisions. Immutable R1/R2 inputs/reports/errata preserved.
+
+85entries=65mapped/30packages/268features+13residual/closure+7human-only gates.170unique future author/review/assistance worktree reservations; only3planning trees created, exact actual finalheads/native reports privately preserved, worker terminals released beforeACK. Planning trees explicitly retained for bounded amendments after preservation; no duplicate writer or other cleanup. DeepSeekoff; Googleheld. Sol/Astra source authors, candidate Opus4.7 qualified-domain review, M3inventory/prose with OpenAIreview. Fresh quota/dependencies/base SHA/leases/review-fix-re-review capacity required at each wave. Qualified alternative new authorship can redistribute work, actual prior authorship never changes.
+
+Read docs/planning/software-waves/EXECUTION_READINESS.md then EXECUTION_PINS.json. Next bounded execution preflight is QUALAnthropic core candidate evaluation plus dependency-ready audit delta; no implementation dispatch from this planning request. First qualification needs independent judge and coordinator disposition. Full P1retained candidates and closure precede residual P2/P3/P4/P5 software acceptance; physical/HIL/CEC/outage/client/72h/week/final artifact-release gates remain owner-open. Canonical268/210below/96stale unchanged. Original3Tronclosed.
+
+
 This reusable ledger implements the [standing protocol](../ORCHESTRATION_PROTOCOL.md).
 Read [AGENTS.md](../../AGENTS.md), the [master plan](../planning/UNIFIED_MASTER_PLAN.md)
 and [model inventory](../planning/MODEL_AND_AGENT_INVENTORY.md) first. Append
@@ -3962,3 +3971,12 @@ after all3R2 dispositions; old packets/reports remain immutable.
 All3Round2 challenges delivered report-only, actual native families attested, workers released beforeACK and all3taskrefs published/exact verified. OpenAI0764221c/Anthropiced2b0eed/M3ed4bbd93. R2 reports integrated as c6924fac/ed70084b/11bee3cc. Adopt B1-B4 actual field/prose corrections and explicit HARNESS intake/REPO completion/concurrency aliases; B5 stays scoped risk, independent metadata continues. New immutable FINAL_PACKET sha256 52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e with85pins/268contracts/170 unique reservations and explicit qualifications/bases/deps/owner gates. No source qualification, implementation or owner/release actions. Next3genuine final decision Tasks, max2active+coordinator+external=4, same ownR2trees/fresh native sessions. Capacity snapshot69%Codex/86%Anthropic/88%M3weekly remaining; fresh perdispatch age checks. Googleheld, DeepSeekexhausted. Root scoped docs checks/publication required before actualR3.
 
 Coordinator Round3 preflight: first isolated docs invocation failed489setup cases because new basetemp parent was absent (no assertions ran); originals retained. New coordinator-r3b parent and isolated paths fixed invocation;489passed3.29s. Structural checks85/65/268/170, DAG/path/family/owner gates pass. No source suite or ledger generation claimed.
+
+
+### Actual final-decision dispatches —2026-11-01
+openai: task_90629d8df3e5/ctx_a153226a879b; own priorR2base, fresh native session. OpenAI alreadyaccepted49d9cfe5/released beforeACK; other verdicts pending.
+minimax: task_2549113a8ba4/ctx_53a31ed6e909; own priorR2base, fresh native session. OpenAI alreadyaccepted49d9cfe5/released beforeACK; other verdicts pending.
+anthropic: task_134d08c99333/ctx_b787493db33d; own priorR2base, fresh native session. OpenAI alreadyaccepted49d9cfe5/released beforeACK; other verdicts pending.
+All same immutable FINAL_PACKET52ed758e, max2active+coordinator+external4. Private launch/native receipts retained.
+
+Finalization checks:489docs passed3.06s;20process JSONs/JSONL and local Markdown targets parsed;85/65/268/170 structure, DAG/family/ownership/fixed-commit and frozen Git-byte checks pass. All9native finals and all4complete workspace/temp archives verified by member type/hash and stable source/head. Originalfailed setup retained separately. Planning trees explicitly retained, worker terminals released; no cleanup. Postcommit full-allrefs bundle/bare recovery/fsck and exact integration/task remote equality are required before reporting this task complete; receipt build/execution-pinning-20261101/final-publication.json is outside referenced commit.

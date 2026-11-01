@@ -215,5 +215,34 @@
       "resolution": "Old external reservation and persistence workspace discrepancy remain protected; no cleanup authority inferred."
     }
   ],
-  "phase_execution_status": "not_started_by_adoption"
+  "phase_execution_status": "not_started_by_adoption",
+  "current_execution_allocation_20261101": {
+    "observed_utc": "2026-11-01T07:29:05.058950+00:00",
+    "pins": "docs/planning/software-waves/EXECUTION_PINS.json",
+    "readiness": "docs/planning/software-waves/EXECUTION_READINESS.md",
+    "consensus": "docs/agent-process/phases/execution-pinning-20261101/CONSENSUS.json",
+    "packet_sha256": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+    "current_owner_routing": "Anthropic/Gemini/OpenAI Codex/MiniMax allowed; DeepSeek exhausted. Prior exclusions/catalog/usage remain dated historical observations.",
+    "native_planning_routes": {
+      "OpenAI": "gpt-6.1-sol/high",
+      "Anthropic": "claude-opus-4-7/high launch receipt",
+      "MiniMax": "minimax-coding-plan/MiniMax-M3/thinking via opencode2; CLI effort unsupported"
+    },
+    "source_reviewer_qualification": "not granted by planning; see explicit per-row core/domain gates",
+    "runtime": "9a441843-8a87-4165-bfb7-1116dd285efb",
+    "orca_version": "1.4.245",
+    "run": "run_37205f6095b3",
+    "coordinator": "term_15310037-f316-4fe8-9bbd-012f4e5ce38f",
+    "max_new_active_workers": 2,
+    "integration_branch": "wp-runtime-completion",
+    "canonical_snapshot": {
+      "features": 268,
+      "below_target": 210,
+      "stale": 96,
+      "status": "unchanged by planning; earlier values in this file remain dated adoption snapshots"
+    },
+    "google_status": "held; exact native route/helpers/capacity not verified",
+    "deepseek_dispatch_allowed": false,
+    "implementation_launched_by_this_task": false
+  }
 }

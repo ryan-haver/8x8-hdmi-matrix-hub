@@ -1,5 +1,8 @@
 # Software release phases and Orca execution waves
 
+Current prospective execution allocation: [complete readiness and model/worktree reservations](software-waves/EXECUTION_READINESS.md), accepted through three genuine family planning rounds on2026-11-01. This supplements the historical roadmap; actual source qualification, dependencies, capacity and owner gates remain separate.
+
+
 Owner scope: build out and execute the remaining nonhardware development through
 dedicated Orca worktrees, balancing task-relevant models across available
 providers. Capacity affects routing and packing, not whether development continues.

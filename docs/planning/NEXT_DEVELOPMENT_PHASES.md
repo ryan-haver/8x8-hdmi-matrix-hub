@@ -1,5 +1,8 @@
 # Runtime completion and release plan
 
+Current prospective execution allocation: [complete readiness and model/worktree reservations](software-waves/EXECUTION_READINESS.md), accepted through three genuine family planning rounds on2026-11-01. This supplements the historical roadmap; actual source qualification, dependencies, capacity and owner gates remain separate.
+
+
 For the remaining nonhardware work after the accepted runtime campaign, use the
 [software wave execution plan](SOFTWARE_RELEASE_WAVES.md) and its package/unit
 manifest. Route ready work across available task-qualified providers; a single

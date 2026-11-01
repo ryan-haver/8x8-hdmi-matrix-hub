@@ -1,5 +1,8 @@
 # Unified master plan
 
+Current prospective execution allocation: [complete readiness and model/worktree reservations](software-waves/EXECUTION_READINESS.md), accepted through three genuine family planning rounds on2026-11-01. This supplements the historical roadmap; actual source qualification, dependencies, capacity and owner gates remain separate.
+
+
 Current nonhardware execution is organized in the
 [software release phases and waves](SOFTWARE_RELEASE_WAVES.md), with a complete
 feature/finding allocation, bounded worktree units and capacity-balanced Orca
