@@ -36102,5 +36102,12 @@
       "dispatch_id": null,
       "acceptance": "Actual nested request/action/artifact credential redaction with synthetic negative controls, unchanged public headers/request behavior, normal full hook and cross-family review; preserve immutable historical evidence"
     }
-  ]
+  ],
+  "prospective_execution_allocation": {
+    "file": "docs/planning/software-waves/EXECUTION_PINS.json",
+    "frozen_packet": "docs/agent-process/phases/execution-pinning-20261101/FINAL_PACKET.json",
+    "decision_record": "docs/agent-process/phases/execution-pinning-20261101/CONSENSUS.json",
+    "historical_rows_unchanged": true,
+    "does_not_launch": true
+  }
 }
