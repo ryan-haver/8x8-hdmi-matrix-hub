@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-03T17:11:43.735413+00:00",
+  "observed_utc": "2026-11-03T17:21:30.692620+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -8,7 +8,7 @@
     "qualified_domains": [],
     "disposition": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/execution-20261101/COORDINATOR_DISPOSITION.json",
     "manual_attempt02": {
-      "status": "owner-approved candidate evaluation launched, no qualification verdict",
+      "status": "evaluator delivered/released/preserved; fresh independent judge prepared, no verdict",
       "authorization": "docs/production/software-waves/MVP-EXECUTION-20261102/QUALIFICATION_MANUAL02_AUTHORIZATION.json",
       "candidate": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
       "rubric_sha256": "66f37090564007afebe29cdfd095af7fa85c4321a8420016ada8633dc0563672",
@@ -51,6 +51,70 @@
         "status": "launched, no verdict/qualification/acceptance inferred",
         "observed_dispatch_status": "dispatched",
         "observed_worker_state": "ready"
+      },
+      "evaluator_delivery": {
+        "observed_utc": "2026-11-03T17:16:24.130615+00:00",
+        "head": "78eea1519cd4b6c8ac626b28ee45281f43623198",
+        "base": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+        "tree": "wp-exec-qual-anthropic-core-01-manual02",
+        "actual_branch": "execution/wp-exec-qual-anthropic-core-01-manual02",
+        "report": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/AUTHOR.md",
+        "bytes": 16677,
+        "sha256": "4dfbfc8a77c6ad910dc34eac55b62611195fe601ee6996dc2818ded7de988942",
+        "working_identical": true,
+        "cr_bytes": 0,
+        "task_id": "task_1d3db0c0e0e8",
+        "dispatch_id": "ctx_ea6771c3440b",
+        "terminal": "released",
+        "publication": "exact task ref remote/local verified",
+        "cleanup": "exact worktree retained read-only pending independent judgement; no removal",
+        "acceptance": "evaluation submission only, no qualification or source acceptance",
+        "native_final": {
+          "session": "646a8df5-036f-4b59-a94a-809cbaf76015",
+          "models": [
+            "claude-opus-4-7"
+          ],
+          "effort": "high explicit supported launch/localconfig; native per-turn effort not independently exposed",
+          "bytes": 1294061,
+          "sha256": "1538b9810b23f8ec7e5733b81c353e5864ca769523b63a42120a98f0ec21a8a5",
+          "unassigned_helper_tools_observed": [],
+          "scope": "complete captured session, not complete OS descendant census"
+        },
+        "worker_reported_checks": "54focused/489docs passed once each; judge must corroborate direct originals, assertions, scope/calibration",
+        "further_qualification_retry_authorized": false,
+        "integration_commit": "7c38016c77adb69c607b2033f0324b2abd9f473e",
+        "archives": [
+          {
+            "archive_sha256": "175c7536ce423e83051f263f9d3868a35766dbafe342467c7cd2e01c3ed56b84",
+            "archive_bytes": 207276698,
+            "regular_files": 4652,
+            "regular_bytes": 298183314,
+            "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+          },
+          {
+            "archive_sha256": "a2e13b224ae77e2bfe64a2323cfa13637b78961b0a6e9a4be972ddc84555db85",
+            "archive_bytes": 145242,
+            "regular_files": 283,
+            "regular_bytes": 687290,
+            "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+          }
+        ]
+      },
+      "prepared_judge": {
+        "base": "78eea1519cd4b6c8ac626b28ee45281f43623198",
+        "spec": "QUALIFICATION_MANUAL02_JUDGE_TASK.txt",
+        "worktree_name": "wp-exec-qual-anthropic-core-01-manual02-review",
+        "dependency": "task_1d3db0c0e0e8",
+        "title": "Fresh independent six-axis judgement of manual qualification attempt02",
+        "new_report": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/REVIEW.md",
+        "gate_path": [
+          "core_reviewer_qualification",
+          "manual_attempt02",
+          "independent_judge"
+        ],
+        "budget": "15min bounded exact-report six-axis judgement, no repeated full focused campaign by default",
+        "task_id": null,
+        "dispatch_id": null
       }
     }
   },
