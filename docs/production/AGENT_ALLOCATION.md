@@ -1,5 +1,14 @@
 # Agent allocation and execution ledger
 
+## Exact33-worktree cleanup backed up and ready — 2026-11-03T21:25:13.908876+00:00
+
+Owner "proceed" authorizes only the33 exact completed paths in WORKTREE_CLEANUP_AUDIT_20261103.json. Fresh full --all Git bundle45b33516... (13652547bytes), bundleverify, independent mirror/full strictfsck and physical recovery of all33exactheads/finalownedblobidentities passed. Windows long-path failure/private partial restore retained; successful invocation-only longpath restore distinguishes four generated untracked GitLFS hooks from clean tracked recovery. No root/global setting changes.
+
+All33 existing workspace archives verified against152090 current regular files/10090681637logicalbytes; every archive member/type/hash and current source file byte matched, no fresh copies required. Full native originals for55 exact Task/Dispatch authorities copied/hashed outside deletion targets. One old Anthropic planning native changed cwd only into its own documentation subdirectory, confirmed by original complete-final attestation; preserved. Twelve task-owned default PowerShell shells positively idle, no agent writers or unverifiable terminals. Default shell outputs captured. Alltaskrefs exactremote/localverified and final report blobs retained in integration.
+
+Prepare sequential Orca-managed removal of the33literalownedpaths with final path/head/status/file/agent/remote guards. Preserve ALL local/remote branches and10protectedentries (root+6pending API/security+2unverifiableolder+1stale persistencefolder). No removals yet; no broad prune or raw recursive deletion. Public WORKTREE_CLEANUP_20261103.json records exact targets/backup/recovery/guards. Publish/verify preparation before removal; private cleanup-ready-publication.json postpushreceipt outside its commit. Product source/qualification/release gates unchanged, no workers/phase launched.
+
+
 ## Worktree cleanup candidates audited — 2026-11-03T21:05:53.746427+00:00
 
 Read-only live inventory:42 Git worktrees,43 Orca entries (one stale persistence-wiring entry with folder/oldEBUSY error). Exact33 completed planning/qualification/audit/findings/repository/CI/preservation/freshness/Flic-metadata worktrees can retire after current full-bundle/recovery and original-file preservation verification. All33 tracked/untracked clean, exact remote task heads verified, final task-commit paths canonically present in integration, current-head workspace archive records present, all matched workers released and no app-reported agents. These are cleanup candidates, not immediate deletion authorization from a name pattern or proof of fresh lossless backup. Full exact names/heads/paths/checks in docs/production/WORKTREE_CLEANUP_AUDIT_20261103.json.

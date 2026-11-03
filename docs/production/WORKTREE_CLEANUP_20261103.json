@@ -1,0 +1,1555 @@
+{
+  "observed_utc": "2026-11-03T21:25:13.908876+00:00",
+  "owner_authorization": "proceed on the exact33 audited worktrees",
+  "status": "backup/recovery/native verification complete;33 exact removals prepared, zero performed",
+  "removed_count": 0,
+  "planned_count": 33,
+  "original_counts": {
+    "Git": 42,
+    "Orca": 43
+  },
+  "expected_counts_after": {
+    "Git": 9,
+    "Orca": 10
+  },
+  "integration_branch": "wp-runtime-completion",
+  "candidates": [
+    {
+      "name": "wp-audit-freshness-delta",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-audit-freshness-delta",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-audit-freshness-delta",
+      "branch": "ryan-haver/wp-audit-freshness-delta",
+      "head": "11b09676f78acd76bd1ac47d11a8d8817e8d0624",
+      "dispatches": [
+        "ctx_e973d4be3c60"
+      ],
+      "default_terminals": [],
+      "integration_final_paths": [
+        "docs/production/software-waves/SW-AUDIT-01/FRESHNESS_DELTA.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/p1-fanout-20261028/preservation/wp-audit-freshness-delta/manifest.json",
+          "head": "11b09676f78acd76bd1ac47d11a8d8817e8d0624",
+          "archive_sha256": "ad342c58b00a2d67be910ab86958d1ab1f6ef78b47271ce8a166135a1834da4d",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4629
+        }
+      ]
+    },
+    {
+      "name": "wp-exec-ev-ci-attribution",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-ci-attribution",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-ci-attribution",
+      "branch": "ryan-haver/wp-exec-ev-ci-attribution",
+      "head": "b1ca1390f90652bf25fcb8ce73efb211c1b666da",
+      "dispatches": [
+        "ctx_c3d0257ab154",
+        "ctx_c2550304397b"
+      ],
+      "default_terminals": [
+        {
+          "handle": "term_438fb2f2-cb73-4ecd-9d19-5b8b33d6b0a7",
+          "role": "verified idle owned default PowerShell; removal may close it",
+          "ui_orphaned": true,
+          "source": "positive current idle prompt plus complete retained output; UI-orphaned flag is not inferred process exit"
+        }
+      ],
+      "integration_final_paths": [
+        "docs/production/software-waves/EV-CI-ATTRIBUTION/execution-20261101/AUTHOR.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-cf-fixed-authors/wp-exec-ev-ci-attribution/manifest.json",
+          "head": "b1ca1390f90652bf25fcb8ce73efb211c1b666da",
+          "archive_sha256": "b6d7e7434196156d0cfd168579fef9d3e4d42f51b2f2c9cc87691ebcacb3e77d",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4698
+        }
+      ]
+    },
+    {
+      "name": "wp-exec-ev-ci-attribution-rereview01",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-ci-attribution-rereview01",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-ci-attribution-rereview01",
+      "branch": "ryan-haver/wp-exec-ev-ci-attribution-rereview01",
+      "head": "79b08fd075f933ba63be908cb67707781cdd1ed4",
+      "dispatches": [
+        "ctx_67980920fabd"
+      ],
+      "default_terminals": [],
+      "integration_final_paths": [
+        "docs/production/software-waves/EV-CI-ATTRIBUTION/execution-20261101/CORRECTION_REVIEW_01.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-ci-review01/wp-exec-ev-ci-attribution-rereview01/manifest.json",
+          "head": "79b08fd075f933ba63be908cb67707781cdd1ed4",
+          "archive_sha256": "5e081ad9e5e16b691938ec12c392f971d39c838acf08ac9c5023bd6f1c86a9d5",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4620
+        }
+      ]
+    },
+    {
+      "name": "wp-exec-ev-ci-attribution-review",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-ci-attribution-review",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-ci-attribution-review",
+      "branch": "ryan-haver/wp-exec-ev-ci-attribution-review",
+      "head": "81ac391cdc07ca8885b3b2237aa467aee0625675",
+      "dispatches": [
+        "ctx_a83af2c61fa3"
+      ],
+      "default_terminals": [],
+      "integration_final_paths": [
+        "docs/production/software-waves/EV-CI-ATTRIBUTION/execution-20261101/REVIEW.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-cf-reviews/wp-exec-ev-ci-attribution-review/manifest.json",
+          "head": "81ac391cdc07ca8885b3b2237aa467aee0625675",
+          "archive_sha256": "6aaa5b7604e5f0cdea6751d2d7306b694fe01c08b85991775e04fef974fd6561",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4730
+        }
+      ]
+    },
+    {
+      "name": "wp-exec-ev-preservation-gaps",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-preservation-gaps",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-preservation-gaps",
+      "branch": "execution/wp-exec-ev-preservation-gaps",
+      "head": "816755055028d37aa62c0ff62caace473288654d",
+      "dispatches": [
+        "ctx_f56a5a99bfee",
+        "ctx_f2864b9be31e"
+      ],
+      "default_terminals": [
+        {
+          "handle": "term_3752e221-f5c4-4321-b7db-7613fe0ce542",
+          "role": "verified idle owned default PowerShell; removal may close it",
+          "ui_orphaned": true,
+          "source": "positive current idle prompt plus complete retained output; UI-orphaned flag is not inferred process exit"
+        }
+      ],
+      "integration_final_paths": [
+        "docs/production/software-waves/EV-PRESERVATION-GAPS/execution-20261101/AUTHOR.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-ev-fix01/wp-exec-ev-preservation-gaps/manifest.json",
+          "head": "816755055028d37aa62c0ff62caace473288654d",
+          "archive_sha256": "aa77178167033a771662cc5e0e3d3727aac61d4e8cef6b875463eab6a9751a8f",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4597
+        }
+      ]
+    },
+    {
+      "name": "wp-exec-ev-preservation-gaps-rereview01",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-preservation-gaps-rereview01",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-preservation-gaps-rereview01",
+      "branch": "ryan-haver/wp-exec-ev-preservation-gaps-rereview01",
+      "head": "0ff12f0091d6c7e96e723fd6b840ca72b056182a",
+      "dispatches": [
+        "ctx_5011d343f010"
+      ],
+      "default_terminals": [],
+      "integration_final_paths": [
+        "docs/production/software-waves/EV-PRESERVATION-GAPS/execution-20261101/CORRECTION_REVIEW_01.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-corrected-metadata-reviews/wp-exec-ev-preservation-gaps-rereview01/manifest.json",
+          "head": "0ff12f0091d6c7e96e723fd6b840ca72b056182a",
+          "archive_sha256": "5ccb7d374df5cdb21ff11e0451dc93907cafb4e7f21fdc1129db5f96daea24c3",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4577
+        }
+      ]
+    },
+    {
+      "name": "wp-exec-ev-preservation-gaps-review",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-preservation-gaps-review",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-preservation-gaps-review",
+      "branch": "ryan-haver/wp-exec-ev-preservation-gaps-review",
+      "head": "abd339eda108e4d74f1a147b2f445299814e9cf9",
+      "dispatches": [
+        "ctx_70e7d15a49fc"
+      ],
+      "default_terminals": [],
+      "integration_final_paths": [
+        "docs/production/software-waves/EV-PRESERVATION-GAPS/execution-20261101/REVIEW.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-ev-review01/wp-exec-ev-preservation-gaps-review/manifest.json",
+          "head": "abd339eda108e4d74f1a147b2f445299814e9cf9",
+          "archive_sha256": "85c147864da0bbe7e72e221b05aa75c9df82f5865ad07e570844abfaad9a6af1",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4571
+        }
+      ]
+    },
+    {
+      "name": "wp-exec-qual-anthropic-core-01",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-anthropic-core-01",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-anthropic-core-01",
+      "branch": "execution/wp-exec-qual-anthropic-core-01",
+      "head": "97c47be3670df297b2a7ac2696350615b88846c1",
+      "dispatches": [
+        "ctx_cd0f4f2bae5c"
+      ],
+      "default_terminals": [
+        {
+          "handle": "term_23d83b89-2909-4abb-abdd-b5572fabb8ab",
+          "role": "verified idle owned default PowerShell; removal may close it",
+          "ui_orphaned": true,
+          "source": "positive current idle prompt plus complete retained output; UI-orphaned flag is not inferred process exit"
+        }
+      ],
+      "integration_final_paths": [
+        "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/execution-20261101/AUTHOR.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation/wp-exec-qual-anthropic-core-01/manifest.json",
+          "head": "97c47be3670df297b2a7ac2696350615b88846c1",
+          "archive_sha256": "cb4590afe940f8e6ac31a521d715675f711d17811c72b18315ed0e3eeefb9be1",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4502
+        }
+      ]
+    },
+    {
+      "name": "wp-exec-qual-anthropic-core-01-manual02",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-anthropic-core-01-manual02",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-anthropic-core-01-manual02",
+      "branch": "execution/wp-exec-qual-anthropic-core-01-manual02",
+      "head": "78eea1519cd4b6c8ac626b28ee45281f43623198",
+      "dispatches": [
+        "ctx_ea6771c3440b"
+      ],
+      "default_terminals": [
+        {
+          "handle": "term_c0f36efb-b693-428d-b6d1-a8f5091ef76b",
+          "role": "verified idle owned default PowerShell; removal may close it",
+          "ui_orphaned": false,
+          "source": "positive current idle prompt plus complete retained output; UI-orphaned flag is not inferred process exit"
+        }
+      ],
+      "integration_final_paths": [
+        "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/AUTHOR.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/mvp-preparation-20261103/preservation-manual02-evaluator/wp-exec-qual-anthropic-core-01-manual02/manifest.json",
+          "head": "78eea1519cd4b6c8ac626b28ee45281f43623198",
+          "archive_sha256": "175c7536ce423e83051f263f9d3868a35766dbafe342467c7cd2e01c3ed56b84",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4652
+        }
+      ]
+    },
+    {
+      "name": "wp-exec-qual-anthropic-core-01-manual02-review",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-anthropic-core-01-manual02-review",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-anthropic-core-01-manual02-review",
+      "branch": "ryan-haver/wp-exec-qual-anthropic-core-01-manual02-review",
+      "head": "7548b5b7cd39a714e6e626c6226d8e49a39a14be",
+      "dispatches": [
+        "ctx_6f1b83d8f673"
+      ],
+      "default_terminals": [],
+      "integration_final_paths": [
+        "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/REVIEW.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/mvp-preparation-20261103/preservation-manual02-judge/wp-exec-qual-anthropic-core-01-manual02-review/manifest.json",
+          "head": "7548b5b7cd39a714e6e626c6226d8e49a39a14be",
+          "archive_sha256": "5f2342ca74e679eb5b4a9b3fa06bded1071d2e1e690ac6a543ceb20725678f6b",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4608
+        }
+      ]
+    },
+    {
+      "name": "wp-exec-qual-anthropic-core-01-review",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-anthropic-core-01-review",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-anthropic-core-01-review",
+      "branch": "ryan-haver/wp-exec-qual-anthropic-core-01-review",
+      "head": "5b70c91604c427d0d0398e6c5b3fce815b35efb3",
+      "dispatches": [
+        "ctx_5db4e4b62a69",
+        "ctx_f7db39e6c800"
+      ],
+      "default_terminals": [
+        {
+          "handle": "term_c7a24a92-61f1-4df5-b0fc-f86387a7bd57",
+          "role": "verified idle owned default PowerShell; removal may close it",
+          "ui_orphaned": false,
+          "source": "positive current idle prompt plus complete retained output; UI-orphaned flag is not inferred process exit"
+        }
+      ],
+      "integration_final_paths": [
+        "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/execution-20261101/REVIEW.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-final-reviewers/wp-exec-qual-anthropic-core-01-review/manifest.json",
+          "head": "5b70c91604c427d0d0398e6c5b3fce815b35efb3",
+          "archive_sha256": "00e1aa19579007220dbb05842d959d77e8563415b79d11c4bc2b9880bd5924d1",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4605
+        }
+      ]
+    },
+    {
+      "name": "wp-exec-qual-opus55-20261103",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-opus55-20261103",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-opus55-20261103",
+      "branch": "execution/qual-opus55-20261103",
+      "head": "1d49014bbf4d040e56d8a709952b31a10c20232e",
+      "dispatches": [
+        "ctx_5e62800cd2dc"
+      ],
+      "default_terminals": [
+        {
+          "handle": "term_2f7735a2-eb90-430c-aadf-d8f5f14dc6e1",
+          "role": "verified idle owned default PowerShell; removal may close it",
+          "ui_orphaned": false,
+          "source": "positive current idle prompt plus complete retained output; UI-orphaned flag is not inferred process exit"
+        }
+      ],
+      "integration_final_paths": [
+        "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/replacement-opus55-20261103/AUTHOR.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/qualification-route-20261103/preservation-candidate-opus55/wp-exec-qual-opus55-20261103/manifest.json",
+          "head": "1d49014bbf4d040e56d8a709952b31a10c20232e",
+          "archive_sha256": "67bf77a89fb7e48f81a57be7a9deb69e5dcd704512c74408c788a55b9fc15943",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4788
+        }
+      ]
+    },
+    {
+      "name": "wp-exec-qual-opus55-20261103-review",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-opus55-20261103-review",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-opus55-20261103-review",
+      "branch": "execution/qual-opus55-20261103-review",
+      "head": "dda63d661d143a591d6d3d82346457fb52199795",
+      "dispatches": [
+        "ctx_4492909a6860"
+      ],
+      "default_terminals": [
+        {
+          "handle": "term_ce249677-7dc7-4e1d-abef-33e395a4358c",
+          "role": "verified idle owned default PowerShell; removal may close it",
+          "ui_orphaned": false,
+          "source": "positive current idle prompt plus complete retained output; UI-orphaned flag is not inferred process exit"
+        }
+      ],
+      "integration_final_paths": [
+        "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/replacement-opus55-20261103/REVIEW.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/qualification-route-20261103/preservation-judge-opus55/wp-exec-qual-opus55-20261103-review/manifest.json",
+          "head": "dda63d661d143a591d6d3d82346457fb52199795",
+          "archive_sha256": "bfefb25033d5b61268cbc20da95a73b5a800f54d43ab94c33020ba4717b9b710",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4609
+        }
+      ]
+    },
+    {
+      "name": "wp-exec-sw-audit-01",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01",
+      "branch": "execution/wp-exec-sw-audit-01",
+      "head": "f2ee085a37a40cf8e3fc67aef4bb6fec5e7ad731",
+      "dispatches": [
+        "ctx_597f4ffe52bf",
+        "ctx_14d9b1569d7e",
+        "ctx_f2343717872b",
+        "ctx_a0c78df4a3b9"
+      ],
+      "default_terminals": [
+        {
+          "handle": "term_c99938f8-e8b2-423b-b3cb-aa607760623b",
+          "role": "verified idle owned default PowerShell; removal may close it",
+          "ui_orphaned": true,
+          "source": "positive current idle prompt plus complete retained output; UI-orphaned flag is not inferred process exit"
+        }
+      ],
+      "integration_final_paths": [
+        "docs/production/software-waves/SW-AUDIT-01/execution-20261101/AUTHOR.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-audit03/wp-exec-sw-audit-01/manifest.json",
+          "head": "f2ee085a37a40cf8e3fc67aef4bb6fec5e7ad731",
+          "archive_sha256": "b68f7937d7540a1ed705e0b594e910ca49e53bac767c783ef288ab75d0674253",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4588
+        }
+      ]
+    },
+    {
+      "name": "wp-exec-sw-audit-01-rereview01",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01-rereview01",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01-rereview01",
+      "branch": "ryan-haver/wp-exec-sw-audit-01-rereview01",
+      "head": "d44ad2bca78dfe82c4b541e41f861c965cce2461",
+      "dispatches": [
+        "ctx_4ec26c6917ca"
+      ],
+      "default_terminals": [],
+      "integration_final_paths": [
+        "docs/production/software-waves/SW-AUDIT-01/execution-20261101/CORRECTION_REVIEW_01.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-metadata-round01/wp-exec-sw-audit-01-rereview01/manifest.json",
+          "head": "d44ad2bca78dfe82c4b541e41f861c965cce2461",
+          "archive_sha256": "b0f8f0bd2e2d1ee6c05be8064dcec9712b91224b3c47cf695e6d9fa2f8785d52",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4561
+        }
+      ]
+    },
+    {
+      "name": "wp-exec-sw-audit-01-rereview02",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01-rereview02",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01-rereview02",
+      "branch": "ryan-haver/wp-exec-sw-audit-01-rereview02",
+      "head": "394dd8670ab59bbe82a88e0188bc7d474615645b",
+      "dispatches": [
+        "ctx_c0dcf402e9f3"
+      ],
+      "default_terminals": [],
+      "integration_final_paths": [
+        "docs/production/software-waves/SW-AUDIT-01/execution-20261101/CORRECTION_REVIEW_02.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-corrected-metadata-reviews/wp-exec-sw-audit-01-rereview02/manifest.json",
+          "head": "394dd8670ab59bbe82a88e0188bc7d474615645b",
+          "archive_sha256": "7876b6e66b6975e6c7ae1b3de10250e5f2dd50cdedc179815df076086fd83884",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4559
+        }
+      ]
+    },
+    {
+      "name": "wp-exec-sw-audit-01-rereview03",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01-rereview03",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01-rereview03",
+      "branch": "ryan-haver/wp-exec-sw-audit-01-rereview03",
+      "head": "577bfe6b1475183ab0881a1f2d70a7691540e2b8",
+      "dispatches": [
+        "ctx_d77b1f25e526"
+      ],
+      "default_terminals": [],
+      "integration_final_paths": [
+        "docs/production/software-waves/SW-AUDIT-01/execution-20261101/CORRECTION_REVIEW_03.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-afreviews/wp-exec-sw-audit-01-rereview03/manifest.json",
+          "head": "577bfe6b1475183ab0881a1f2d70a7691540e2b8",
+          "archive_sha256": "ffaf62bbaac97e96e7c6ba654617d2569c0164ca400f79f9ebf0176002201ca8",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4549
+        }
+      ]
+    },
+    {
+      "name": "wp-exec-sw-audit-01-review",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01-review",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01-review",
+      "branch": "ryan-haver/wp-exec-sw-audit-01-review",
+      "head": "4c2d18b8cdd3f49523e9014e498bbfd7d55601ac",
+      "dispatches": [
+        "ctx_e3e2bd49b348"
+      ],
+      "default_terminals": [],
+      "integration_final_paths": [
+        "docs/production/software-waves/SW-AUDIT-01/execution-20261101/REVIEW.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-final-reviewers/wp-exec-sw-audit-01-review/manifest.json",
+          "head": "4c2d18b8cdd3f49523e9014e498bbfd7d55601ac",
+          "archive_sha256": "25f405cec61e8268917d0ddf51f85bdf25a2c53938127a888f4d3897e2cea92a",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4546
+        }
+      ]
+    },
+    {
+      "name": "wp-exec-sw-findings-01",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-findings-01",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-findings-01",
+      "branch": "ryan-haver/wp-exec-sw-findings-01",
+      "head": "a2dab11cdc871d6a98c563b019a361371a9af710",
+      "dispatches": [
+        "ctx_160f933c1154",
+        "ctx_92d5aa88ea41",
+        "ctx_8f2f304eeed7"
+      ],
+      "default_terminals": [
+        {
+          "handle": "term_23c9e4d1-a186-415c-8841-c7f9ef0d5350",
+          "role": "verified idle owned default PowerShell; removal may close it",
+          "ui_orphaned": true,
+          "source": "positive current idle prompt plus complete retained output; UI-orphaned flag is not inferred process exit"
+        }
+      ],
+      "integration_final_paths": [
+        "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/AUTHOR.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-cf-fixed-authors/wp-exec-sw-findings-01/manifest.json",
+          "head": "a2dab11cdc871d6a98c563b019a361371a9af710",
+          "archive_sha256": "52bf1bf8588399d21d6d93fc3983b3e6c915c1e1a02d3ec96695c33f6224f4f3",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4647
+        }
+      ]
+    },
+    {
+      "name": "wp-exec-sw-findings-01-rereview01",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-findings-01-rereview01",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-findings-01-rereview01",
+      "branch": "ryan-haver/wp-exec-sw-findings-01-rereview01",
+      "head": "43356a0c0d0948719bf989d7bd824631d8c89a0e",
+      "dispatches": [
+        "ctx_3ae35200ca22"
+      ],
+      "default_terminals": [],
+      "integration_final_paths": [
+        "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/CORRECTION_REVIEW_01.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-cf-reviews/wp-exec-sw-findings-01-rereview01/manifest.json",
+          "head": "43356a0c0d0948719bf989d7bd824631d8c89a0e",
+          "archive_sha256": "0c3453d473a5115e058b26f6c7d4caf497880a83c0fa379523012fe3a49647ad",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4599
+        }
+      ]
+    },
+    {
+      "name": "wp-exec-sw-findings-01-rereview02",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-findings-01-rereview02",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-findings-01-rereview02",
+      "branch": "ryan-haver/wp-exec-sw-findings-01-rereview02",
+      "head": "ac9c4d49fd3c8fb88971c2d8fd59118e1019d7b7",
+      "dispatches": [
+        "ctx_b4174280ec27"
+      ],
+      "default_terminals": [],
+      "integration_final_paths": [
+        "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/CORRECTION_REVIEW_02.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-findings-review02/wp-exec-sw-findings-01-rereview02/manifest.json",
+          "head": "ac9c4d49fd3c8fb88971c2d8fd59118e1019d7b7",
+          "archive_sha256": "8de7ea656768dc6b9cbcbd53f89287c601fde64a4917ff5037393948f11072cc",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4598
+        }
+      ]
+    },
+    {
+      "name": "wp-exec-sw-findings-01-review",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-findings-01-review",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-findings-01-review",
+      "branch": "ryan-haver/wp-exec-sw-findings-01-review",
+      "head": "00b7b04994a08d45961c67619d402506ba2a65a3",
+      "dispatches": [
+        "ctx_f5097c9b3ca5"
+      ],
+      "default_terminals": [],
+      "integration_final_paths": [
+        "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/REVIEW.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-afreviews/wp-exec-sw-findings-01-review/manifest.json",
+          "head": "00b7b04994a08d45961c67619d402506ba2a65a3",
+          "archive_sha256": "c222c55b2648c101bea951cc31ad9c79f05762bf519b669d4a6314090d2026a5",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4596
+        }
+      ]
+    },
+    {
+      "name": "wp-exec-sw-repo-01",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-repo-01",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-repo-01",
+      "branch": "ryan-haver/wp-exec-sw-repo-01",
+      "head": "9f12743e882e3175e7dfbe38b60eefbfe62376f3",
+      "dispatches": [
+        "ctx_20ac5203bd5e",
+        "ctx_e47c86a8e4ee"
+      ],
+      "default_terminals": [
+        {
+          "handle": "term_ac148d98-d9bd-4faa-83d9-0fdb05f9e702",
+          "role": "verified idle owned default PowerShell; removal may close it",
+          "ui_orphaned": true,
+          "source": "positive current idle prompt plus complete retained output; UI-orphaned flag is not inferred process exit"
+        }
+      ],
+      "integration_final_paths": [
+        "docs/production/software-waves/SW-REPO-01/execution-20261101/AUTHOR.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/mvp-preparation-20261103/preservation-repo-correction01/wp-exec-sw-repo-01/manifest.json",
+          "head": "9f12743e882e3175e7dfbe38b60eefbfe62376f3",
+          "archive_sha256": "88c3db7ba3152d8677196abc8f0acc5748ba71390d5f09c94650ead166aa72e3",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4642
+        }
+      ]
+    },
+    {
+      "name": "wp-exec-sw-repo-01-rereview01",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-repo-01-rereview01",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-repo-01-rereview01",
+      "branch": "ryan-haver/wp-exec-sw-repo-01-rereview01",
+      "head": "fd16638d2cfb7e1e7429a066dc89e158ba312905",
+      "dispatches": [
+        "ctx_fb0e59b59685"
+      ],
+      "default_terminals": [],
+      "integration_final_paths": [
+        "docs/production/software-waves/SW-REPO-01/execution-20261101/CORRECTION_REVIEW_01.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/mvp-preparation-20261103/preservation-repo-rereview01/wp-exec-sw-repo-01-rereview01/manifest.json",
+          "head": "fd16638d2cfb7e1e7429a066dc89e158ba312905",
+          "archive_sha256": "0cbd73d5b70add172980588514235cac56dfa06eaddaedfa34d12ab3f4d8d6f9",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4635
+        }
+      ]
+    },
+    {
+      "name": "wp-exec-sw-repo-01-review",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-repo-01-review",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-repo-01-review",
+      "branch": "ryan-haver/wp-exec-sw-repo-01-review",
+      "head": "218744b088a505461f33065e672559c9edbccae3",
+      "dispatches": [
+        "ctx_d29018e7a4a3"
+      ],
+      "default_terminals": [],
+      "integration_final_paths": [
+        "docs/production/software-waves/SW-REPO-01/execution-20261101/REVIEW.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-repo-review01/wp-exec-sw-repo-01-review/manifest.json",
+          "head": "218744b088a505461f33065e672559c9edbccae3",
+          "archive_sha256": "b919ffb1adfb3e061598c23dbaad8a3a32a6399fe259792bcbc6824692793cf7",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4634
+        }
+      ]
+    },
+    {
+      "name": "wp-flic-proof-refresh",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-flic-proof-refresh",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-flic-proof-refresh",
+      "branch": "ryan-haver/wp-flic-proof-refresh",
+      "head": "67d80ae997a988ce6d9983d541205e8ca432a57c",
+      "dispatches": [
+        "ctx_33cdb9118f04"
+      ],
+      "default_terminals": [],
+      "integration_final_paths": [
+        "docs/production/software-waves/SW-AUDIT-01/FLIC_REFRESH.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/p1-fanout-20261028/preservation/wp-flic-proof-refresh/manifest.json",
+          "head": "67d80ae997a988ce6d9983d541205e8ca432a57c",
+          "archive_sha256": "106c777f5419040a345a6b4856c7549fec991b25783b4c3b0f3187ff0d27036e",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4522
+        }
+      ]
+    },
+    {
+      "name": "wp-flic-proof-review",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-flic-proof-review",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-flic-proof-review",
+      "branch": "ryan-haver/wp-flic-proof-review",
+      "head": "19bab90f40c9aeebcbfcc6558b240f30da70f6bb",
+      "dispatches": [
+        "ctx_5a3f46883ddf",
+        "ctx_6855b88f3e18"
+      ],
+      "default_terminals": [],
+      "integration_final_paths": [
+        "docs/production/software-waves/SW-AUDIT-01/FLIC_EVIDENCE_REVIEW.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/p1-fanout-20261028/preservation-flic-review-correction-01/wp-flic-proof-review/manifest.json",
+          "head": "19bab90f40c9aeebcbfcc6558b240f30da70f6bb",
+          "archive_sha256": "50319055600660de4b74a4ef361d8134ffcd472531187fa150805a2dde945c13",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4526
+        }
+      ]
+    },
+    {
+      "name": "wp-pins-anthropic-20261101",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-pins-anthropic-20261101",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-pins-anthropic-20261101",
+      "branch": "planning/execution-pins-anthropic-20261101",
+      "head": "1b5c679db9d6d1118a6aef12acd6c8afe79065d8",
+      "dispatches": [
+        "ctx_b787493db33d",
+        "ctx_873c66e53a6c",
+        "ctx_369b591f37ba"
+      ],
+      "default_terminals": [],
+      "integration_final_paths": [
+        "docs/agent-process/phases/execution-pinning-20261101/reports/anthropic/ROUND3.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/execution-pinning-20261101/preservation/wp-pins-anthropic-20261101/manifest.json",
+          "head": "1b5c679db9d6d1118a6aef12acd6c8afe79065d8",
+          "archive_sha256": "4a1cadbdc9d45d3f4c8b5398358785eeb350376c8072f40531ad3eec31eaa5d5",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4574
+        }
+      ]
+    },
+    {
+      "name": "wp-pins-minimax-20261101",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-pins-minimax-20261101",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-pins-minimax-20261101",
+      "branch": "planning/execution-pins-minimax-20261101",
+      "head": "54739a754edd8eaa4287a84c923c0699f3f0e90c",
+      "dispatches": [
+        "ctx_53a31ed6e909",
+        "ctx_7bc6929a4372",
+        "ctx_0fab2d28029e"
+      ],
+      "default_terminals": [],
+      "integration_final_paths": [
+        "docs/agent-process/phases/execution-pinning-20261101/reports/minimax/ROUND3.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/execution-pinning-20261101/preservation/wp-pins-minimax-20261101/manifest.json",
+          "head": "54739a754edd8eaa4287a84c923c0699f3f0e90c",
+          "archive_sha256": "fca81acd409f445296b1ad813437fccdb8a0bcc66628d2e699348ea34bb69f4d",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4551
+        }
+      ]
+    },
+    {
+      "name": "wp-pins-openai-20261101",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-pins-openai-20261101",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-pins-openai-20261101",
+      "branch": "planning/execution-pins-openai-20261101",
+      "head": "49d9cfe5aa37f57d7282665db72e2cad901f5ae9",
+      "dispatches": [
+        "ctx_a153226a879b",
+        "ctx_ea6c27b10a28",
+        "ctx_e04f56080b14"
+      ],
+      "default_terminals": [],
+      "integration_final_paths": [
+        "docs/agent-process/phases/execution-pinning-20261101/reports/openai/ROUND3.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/execution-pinning-20261101/preservation/wp-pins-openai-20261101/manifest.json",
+          "head": "49d9cfe5aa37f57d7282665db72e2cad901f5ae9",
+          "archive_sha256": "7e313ec2044f0758c025221dc19b458b3baa1fa9cd88cda78275a6bf280ef6f1",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4528
+        }
+      ]
+    },
+    {
+      "name": "wp-qr-r1-anthropic",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-anthropic",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-anthropic",
+      "branch": "planning/qr-20261103-r1-anthropic",
+      "head": "04ca6c4191ec309bb3a21b2b7447ef1e04b4fdf6",
+      "dispatches": [
+        "ctx_516e9f13d9fa",
+        "ctx_8cbcabfc43d2",
+        "ctx_cf269c96096f"
+      ],
+      "default_terminals": [
+        {
+          "handle": "term_ec9dad5f-64a2-49cb-97e5-109d4d97014a",
+          "role": "verified idle owned default PowerShell; removal may close it",
+          "ui_orphaned": false,
+          "source": "positive current idle prompt plus complete retained output; UI-orphaned flag is not inferred process exit"
+        }
+      ],
+      "integration_final_paths": [
+        "docs/agent-process/phases/qualification-replacement-20261103/round3/anthropic.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/qualification-route-20261103/preservation-round3-anthropic/wp-qr-r1-anthropic/manifest.json",
+          "head": "04ca6c4191ec309bb3a21b2b7447ef1e04b4fdf6",
+          "archive_sha256": "990defcdedd0f70dde2a7e8126b40cfb1218f02cb0c49c4efb840043943a1c38",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4682
+        }
+      ]
+    },
+    {
+      "name": "wp-qr-r1-minimax",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-minimax",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-minimax",
+      "branch": "planning/qr-20261103-r1-minimax",
+      "head": "7b07bf03f5aacbfa910d80ddf05459215c7fa891",
+      "dispatches": [
+        "ctx_55dc79dcba80",
+        "ctx_e407d807e727",
+        "ctx_11e7bd819fd5"
+      ],
+      "default_terminals": [
+        {
+          "handle": "term_ff0e11c5-2b14-47f1-9477-587d24786d24",
+          "role": "verified idle owned default PowerShell; removal may close it",
+          "ui_orphaned": false,
+          "source": "positive current idle prompt plus complete retained output; UI-orphaned flag is not inferred process exit"
+        }
+      ],
+      "integration_final_paths": [
+        "docs/agent-process/phases/qualification-replacement-20261103/round3/minimax.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/qualification-route-20261103/preservation-round3-minimax/wp-qr-r1-minimax/manifest.json",
+          "head": "7b07bf03f5aacbfa910d80ddf05459215c7fa891",
+          "archive_sha256": "8e345a2b8d2232ff8f1bd6ee3783434eea7cfec990a36e2139170bdefde93acf",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4683
+        }
+      ]
+    },
+    {
+      "name": "wp-qr-r1-openai",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-openai",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-openai",
+      "branch": "ryan-haver/wp-qr-r1-openai",
+      "head": "0c88c613ac8c7c7ec21cbb94bf9481db81baf3cc",
+      "dispatches": [
+        "ctx_48e9a1a9c523",
+        "ctx_c9e525312e2e",
+        "ctx_f2421e534169"
+      ],
+      "default_terminals": [],
+      "integration_final_paths": [
+        "docs/agent-process/phases/qualification-replacement-20261103/round3/openai.md"
+      ],
+      "last_commit_equivalence": "canonical report path bytes equal published integration",
+      "archive_candidates": [
+        {
+          "manifest": "build/qualification-route-20261103/preservation-round3-openai/wp-qr-r1-openai/manifest.json",
+          "head": "0c88c613ac8c7c7ec21cbb94bf9481db81baf3cc",
+          "archive_sha256": "a4fa332ecbe9fb8a387cbcf138e0cb5a5365d7557caee9b66e2505e32ba581c6",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4684
+        }
+      ]
+    }
+  ],
+  "protected": [
+    {
+      "name": "integration workspace",
+      "path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration",
+      "branch": "wp-runtime-completion",
+      "reason": "current coordinator/integration and private runtime/unrelated hook artifact protected"
+    },
+    {
+      "name": "wp-api-client-02-c1",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-api-client-02-c1",
+      "head": "060769b724e7a546b8df22eac82f3b288d9bbbe8",
+      "branch": "ryan-haver/wp-api-client-02-c1",
+      "reason": "pending unintegrated API/client/validation or privacy/redaction source/evidence review chain; preserve current workspace",
+      "integration_final_report_differences": [
+        "docs/production/software-waves/SW-API-CLIENT-02-C1/AUTHOR.md"
+      ]
+    },
+    {
+      "name": "wp-api-client-02-c2",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-api-client-02-c2",
+      "head": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+      "branch": "ryan-haver/wp-api-client-02-c2",
+      "reason": "pending unintegrated API/client/validation or privacy/redaction source/evidence review chain; preserve current workspace",
+      "integration_final_report_differences": [
+        "docs/production/software-waves/SW-API-CLIENT-02-C2/AUTHOR.md"
+      ]
+    },
+    {
+      "name": "wp-api-read-03-c1",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-api-read-03-c1",
+      "head": "1fbfee112cc503ffa273c19dc565092d01fe2d6b",
+      "branch": "ryan-haver/wp-api-read-03-c1",
+      "reason": "pending unintegrated API/client/validation or privacy/redaction source/evidence review chain; preserve current workspace",
+      "integration_final_report_differences": [
+        "docs/production/software-waves/SW-API-READ-03-C1/FSEC007_BROWSER_REFRESH.md"
+      ]
+    },
+    {
+      "name": "wp-sec-data-02-c1",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-sec-data-02-c1",
+      "head": "11f305b16c4c95e27682d13df4b02c8de33354d7",
+      "branch": "ryan-haver/wolffish",
+      "reason": "pending unintegrated API/client/validation or privacy/redaction source/evidence review chain; preserve current workspace",
+      "integration_final_report_differences": [
+        "docs/production/software-waves/SW-SEC-DATA-02-C1/AUTHOR.md"
+      ]
+    },
+    {
+      "name": "wp-sec-data-02-c2",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-sec-data-02-c2",
+      "head": "615d3c8403b237dd117c8032697c9b58895f9217",
+      "branch": "ryan-haver/wp-sec-data-02-c2",
+      "reason": "pending unintegrated API/client/validation or privacy/redaction source/evidence review chain; preserve current workspace",
+      "integration_final_report_differences": [
+        "docs/production/software-waves/SW-SEC-DATA-02-C2/AUTHOR.md"
+      ]
+    },
+    {
+      "name": "wp-sec-data-02-c3",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-sec-data-02-c3",
+      "head": "2d02004d3108953a302e1a49aab9a5f24e944136",
+      "branch": "ryan-haver/wp-sec-data-02-c3",
+      "reason": "pending unintegrated API/client/validation or privacy/redaction source/evidence review chain; preserve current workspace",
+      "integration_final_report_differences": [
+        "docs/production/software-waves/SW-SEC-DATA-02-C3/AUTHOR.md"
+      ]
+    },
+    {
+      "name": "wp-ev02-name-review",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-ev02-name-review",
+      "reason": "historical completed Dispatches still retain resources with unverifiable missing-status liveness; no exit inference or destructive removal",
+      "dispatches": [
+        {
+          "taskId": "task_c339a58870e0",
+          "dispatchId": "ctx_0f509ee13c00",
+          "terminalState": "retained",
+          "dispatchStatus": "completed",
+          "workerState": "succeeded",
+          "liveness": {
+            "verdict": "unverifiable",
+            "reason": "missing_status"
+          }
+        },
+        {
+          "taskId": "task_850114b80411",
+          "dispatchId": "ctx_42a2e7a0a189",
+          "terminalState": "retained",
+          "dispatchStatus": "completed",
+          "workerState": "succeeded",
+          "liveness": {
+            "verdict": "unverifiable",
+            "reason": "missing_status"
+          }
+        },
+        {
+          "taskId": "task_515977753dd0",
+          "dispatchId": "ctx_15fe6f7a06be",
+          "terminalState": "retained",
+          "dispatchStatus": "completed",
+          "workerState": "succeeded",
+          "liveness": {
+            "verdict": "unverifiable",
+            "reason": "missing_status"
+          }
+        }
+      ]
+    },
+    {
+      "name": "wp-sw-api-root",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-sw-api-root",
+      "reason": "historical completed Dispatches still retain resources with unverifiable missing-status liveness; no exit inference or destructive removal",
+      "dispatches": [
+        {
+          "taskId": "task_3853c93e69ef",
+          "dispatchId": "ctx_41f75bc23079",
+          "terminalState": "retained",
+          "dispatchStatus": "completed",
+          "workerState": "succeeded",
+          "liveness": {
+            "verdict": "unverifiable",
+            "reason": "missing_status"
+          }
+        }
+      ]
+    },
+    {
+      "name": "wp-runtime-persistence-wiring",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-runtime-persistence-wiring",
+      "reason": "Orca entry/folder remains with previous EBUSY removal error, but absent from Git worktree registry; requires exact managed recovery, not blind folder deletion",
+      "folder_exists": true
+    }
+  ],
+  "git_backup": {
+    "observed_utc": "2026-11-03T21:18:46.607463+00:00",
+    "bundle": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\worktree-cleanup-20261103\\complete-repository-before-cleanup.bundle",
+    "bundle_bytes": 13652547,
+    "bundle_sha256": "45b335164a06e26aeb0464101775a135a350d7e5a717b152539bb04c4c02a7ea",
+    "scope": "complete --all reachable history/refs; no exclusion range or shallow prerequisites",
+    "git_bundle_verify": "passed",
+    "independent_mirror_clone": "passed",
+    "git_fsck_full_strict": "passed",
+    "separate_physical_recovery_checkout": "each of33 exact task heads checked out and resolved, tracked status clean, four generated untracked Git LFS hooks retained, and final owned path blob identities verified",
+    "recovered_tasks": [
+      {
+        "name": "wp-audit-freshness-delta",
+        "commit": "11b09676f78acd76bd1ac47d11a8d8817e8d0624",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/production/software-waves/SW-AUDIT-01/FRESHNESS_DELTA.md",
+            "original_blob": "1d52df87ee556c5e24c47763b5165b80983612ce",
+            "restored_blob": "1d52df87ee556c5e24c47763b5165b80983612ce"
+          }
+        ]
+      },
+      {
+        "name": "wp-exec-ev-ci-attribution",
+        "commit": "b1ca1390f90652bf25fcb8ce73efb211c1b666da",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/production/software-waves/EV-CI-ATTRIBUTION/execution-20261101/AUTHOR.md",
+            "original_blob": "bec710bd4e2d2abbbf89c9787ad2ad0bf48760af",
+            "restored_blob": "bec710bd4e2d2abbbf89c9787ad2ad0bf48760af"
+          }
+        ]
+      },
+      {
+        "name": "wp-exec-ev-ci-attribution-rereview01",
+        "commit": "79b08fd075f933ba63be908cb67707781cdd1ed4",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/production/software-waves/EV-CI-ATTRIBUTION/execution-20261101/CORRECTION_REVIEW_01.md",
+            "original_blob": "d789ab6a27a5f6c604f8087411a3e84583be77c6",
+            "restored_blob": "d789ab6a27a5f6c604f8087411a3e84583be77c6"
+          }
+        ]
+      },
+      {
+        "name": "wp-exec-ev-ci-attribution-review",
+        "commit": "81ac391cdc07ca8885b3b2237aa467aee0625675",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/production/software-waves/EV-CI-ATTRIBUTION/execution-20261101/REVIEW.md",
+            "original_blob": "30487d10873c281a45cda68563c40c5505266152",
+            "restored_blob": "30487d10873c281a45cda68563c40c5505266152"
+          }
+        ]
+      },
+      {
+        "name": "wp-exec-ev-preservation-gaps",
+        "commit": "816755055028d37aa62c0ff62caace473288654d",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/production/software-waves/EV-PRESERVATION-GAPS/execution-20261101/AUTHOR.md",
+            "original_blob": "727914247b7b1a9c6f20cf6023655290e858e009",
+            "restored_blob": "727914247b7b1a9c6f20cf6023655290e858e009"
+          }
+        ]
+      },
+      {
+        "name": "wp-exec-ev-preservation-gaps-rereview01",
+        "commit": "0ff12f0091d6c7e96e723fd6b840ca72b056182a",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/production/software-waves/EV-PRESERVATION-GAPS/execution-20261101/CORRECTION_REVIEW_01.md",
+            "original_blob": "6111e7cc1626367bc5fa7e93165440a0f4cd1887",
+            "restored_blob": "6111e7cc1626367bc5fa7e93165440a0f4cd1887"
+          }
+        ]
+      },
+      {
+        "name": "wp-exec-ev-preservation-gaps-review",
+        "commit": "abd339eda108e4d74f1a147b2f445299814e9cf9",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/production/software-waves/EV-PRESERVATION-GAPS/execution-20261101/REVIEW.md",
+            "original_blob": "becec4bcf424f2f6ea349207dca198ea4e3e17c5",
+            "restored_blob": "becec4bcf424f2f6ea349207dca198ea4e3e17c5"
+          }
+        ]
+      },
+      {
+        "name": "wp-exec-qual-anthropic-core-01",
+        "commit": "97c47be3670df297b2a7ac2696350615b88846c1",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/execution-20261101/AUTHOR.md",
+            "original_blob": "e69fbe49a01b8cdb9723b3172516547dc465825b",
+            "restored_blob": "e69fbe49a01b8cdb9723b3172516547dc465825b"
+          }
+        ]
+      },
+      {
+        "name": "wp-exec-qual-anthropic-core-01-manual02",
+        "commit": "78eea1519cd4b6c8ac626b28ee45281f43623198",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/AUTHOR.md",
+            "original_blob": "19a4968a8156ea76d8fd15ad6961bb3e22a7d307",
+            "restored_blob": "19a4968a8156ea76d8fd15ad6961bb3e22a7d307"
+          }
+        ]
+      },
+      {
+        "name": "wp-exec-qual-anthropic-core-01-manual02-review",
+        "commit": "7548b5b7cd39a714e6e626c6226d8e49a39a14be",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/REVIEW.md",
+            "original_blob": "71c3ba883b4d19befab14ae9140f12590de99a87",
+            "restored_blob": "71c3ba883b4d19befab14ae9140f12590de99a87"
+          }
+        ]
+      },
+      {
+        "name": "wp-exec-qual-anthropic-core-01-review",
+        "commit": "5b70c91604c427d0d0398e6c5b3fce815b35efb3",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/execution-20261101/REVIEW.md",
+            "original_blob": "172963b1a61d0840815b5f139fd7d4992bc4cde1",
+            "restored_blob": "172963b1a61d0840815b5f139fd7d4992bc4cde1"
+          }
+        ]
+      },
+      {
+        "name": "wp-exec-qual-opus55-20261103",
+        "commit": "1d49014bbf4d040e56d8a709952b31a10c20232e",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/replacement-opus55-20261103/AUTHOR.md",
+            "original_blob": "48bb1d0a560abaf7c27c30728fbfb8492ffcd058",
+            "restored_blob": "48bb1d0a560abaf7c27c30728fbfb8492ffcd058"
+          }
+        ]
+      },
+      {
+        "name": "wp-exec-qual-opus55-20261103-review",
+        "commit": "dda63d661d143a591d6d3d82346457fb52199795",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/replacement-opus55-20261103/REVIEW.md",
+            "original_blob": "bbc806f3f2c89c64e36c494badad59fed5ca957d",
+            "restored_blob": "bbc806f3f2c89c64e36c494badad59fed5ca957d"
+          }
+        ]
+      },
+      {
+        "name": "wp-exec-sw-audit-01",
+        "commit": "f2ee085a37a40cf8e3fc67aef4bb6fec5e7ad731",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/production/software-waves/SW-AUDIT-01/execution-20261101/AUTHOR.md",
+            "original_blob": "ae43bf67da7f8b56844f91f89ea29edbc4e9a05d",
+            "restored_blob": "ae43bf67da7f8b56844f91f89ea29edbc4e9a05d"
+          }
+        ]
+      },
+      {
+        "name": "wp-exec-sw-audit-01-rereview01",
+        "commit": "d44ad2bca78dfe82c4b541e41f861c965cce2461",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/production/software-waves/SW-AUDIT-01/execution-20261101/CORRECTION_REVIEW_01.md",
+            "original_blob": "7c1fedfca31198e9f6118983271142e79e08a57e",
+            "restored_blob": "7c1fedfca31198e9f6118983271142e79e08a57e"
+          }
+        ]
+      },
+      {
+        "name": "wp-exec-sw-audit-01-rereview02",
+        "commit": "394dd8670ab59bbe82a88e0188bc7d474615645b",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/production/software-waves/SW-AUDIT-01/execution-20261101/CORRECTION_REVIEW_02.md",
+            "original_blob": "791064665ed9af4e1f63c10766f34667b8b94125",
+            "restored_blob": "791064665ed9af4e1f63c10766f34667b8b94125"
+          }
+        ]
+      },
+      {
+        "name": "wp-exec-sw-audit-01-rereview03",
+        "commit": "577bfe6b1475183ab0881a1f2d70a7691540e2b8",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/production/software-waves/SW-AUDIT-01/execution-20261101/CORRECTION_REVIEW_03.md",
+            "original_blob": "46d3113f21f3e7d2cbe10645e2a0fc425f3f0eaa",
+            "restored_blob": "46d3113f21f3e7d2cbe10645e2a0fc425f3f0eaa"
+          }
+        ]
+      },
+      {
+        "name": "wp-exec-sw-audit-01-review",
+        "commit": "4c2d18b8cdd3f49523e9014e498bbfd7d55601ac",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/production/software-waves/SW-AUDIT-01/execution-20261101/REVIEW.md",
+            "original_blob": "cc20b5d45f60317274084187685bad3ed7efb8f2",
+            "restored_blob": "cc20b5d45f60317274084187685bad3ed7efb8f2"
+          }
+        ]
+      },
+      {
+        "name": "wp-exec-sw-findings-01",
+        "commit": "a2dab11cdc871d6a98c563b019a361371a9af710",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/AUTHOR.md",
+            "original_blob": "f09c333636cb0d562806140b28b34568c3ae406d",
+            "restored_blob": "f09c333636cb0d562806140b28b34568c3ae406d"
+          }
+        ]
+      },
+      {
+        "name": "wp-exec-sw-findings-01-rereview01",
+        "commit": "43356a0c0d0948719bf989d7bd824631d8c89a0e",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/CORRECTION_REVIEW_01.md",
+            "original_blob": "fcb93973b604cd9dc6e8e1d36f1425f54a06d928",
+            "restored_blob": "fcb93973b604cd9dc6e8e1d36f1425f54a06d928"
+          }
+        ]
+      },
+      {
+        "name": "wp-exec-sw-findings-01-rereview02",
+        "commit": "ac9c4d49fd3c8fb88971c2d8fd59118e1019d7b7",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/CORRECTION_REVIEW_02.md",
+            "original_blob": "91abeebfbba7ce00fb634d4fc877de3ad40f0b11",
+            "restored_blob": "91abeebfbba7ce00fb634d4fc877de3ad40f0b11"
+          }
+        ]
+      },
+      {
+        "name": "wp-exec-sw-findings-01-review",
+        "commit": "00b7b04994a08d45961c67619d402506ba2a65a3",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/REVIEW.md",
+            "original_blob": "f596df36e206759774c9f278ba9f55c82e87add9",
+            "restored_blob": "f596df36e206759774c9f278ba9f55c82e87add9"
+          }
+        ]
+      },
+      {
+        "name": "wp-exec-sw-repo-01",
+        "commit": "9f12743e882e3175e7dfbe38b60eefbfe62376f3",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/production/software-waves/SW-REPO-01/execution-20261101/AUTHOR.md",
+            "original_blob": "dceb6bb7e4fa938a6a1398c1dd72a3379e7d31f1",
+            "restored_blob": "dceb6bb7e4fa938a6a1398c1dd72a3379e7d31f1"
+          }
+        ]
+      },
+      {
+        "name": "wp-exec-sw-repo-01-rereview01",
+        "commit": "fd16638d2cfb7e1e7429a066dc89e158ba312905",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/production/software-waves/SW-REPO-01/execution-20261101/CORRECTION_REVIEW_01.md",
+            "original_blob": "6f09d94ac7a7ba40cfb06bef10023b74f1a520f7",
+            "restored_blob": "6f09d94ac7a7ba40cfb06bef10023b74f1a520f7"
+          }
+        ]
+      },
+      {
+        "name": "wp-exec-sw-repo-01-review",
+        "commit": "218744b088a505461f33065e672559c9edbccae3",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/production/software-waves/SW-REPO-01/execution-20261101/REVIEW.md",
+            "original_blob": "349314eff77f635cdca9ed3b90288c1cddeb9fe4",
+            "restored_blob": "349314eff77f635cdca9ed3b90288c1cddeb9fe4"
+          }
+        ]
+      },
+      {
+        "name": "wp-flic-proof-refresh",
+        "commit": "67d80ae997a988ce6d9983d541205e8ca432a57c",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/production/software-waves/SW-AUDIT-01/FLIC_REFRESH.md",
+            "original_blob": "05467dfcb8ef4cdc3b12f589c16d8e74c5909835",
+            "restored_blob": "05467dfcb8ef4cdc3b12f589c16d8e74c5909835"
+          }
+        ]
+      },
+      {
+        "name": "wp-flic-proof-review",
+        "commit": "19bab90f40c9aeebcbfcc6558b240f30da70f6bb",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/production/software-waves/SW-AUDIT-01/FLIC_EVIDENCE_REVIEW.md",
+            "original_blob": "bf7d018b0b54144738eb7e919109b84b1d5174c3",
+            "restored_blob": "bf7d018b0b54144738eb7e919109b84b1d5174c3"
+          }
+        ]
+      },
+      {
+        "name": "wp-pins-anthropic-20261101",
+        "commit": "1b5c679db9d6d1118a6aef12acd6c8afe79065d8",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/agent-process/phases/execution-pinning-20261101/reports/anthropic/ROUND3.md",
+            "original_blob": "c3ecf55bbb9607640b1d48a82fc2591a0adb48e5",
+            "restored_blob": "c3ecf55bbb9607640b1d48a82fc2591a0adb48e5"
+          }
+        ]
+      },
+      {
+        "name": "wp-pins-minimax-20261101",
+        "commit": "54739a754edd8eaa4287a84c923c0699f3f0e90c",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/agent-process/phases/execution-pinning-20261101/reports/minimax/ROUND3.md",
+            "original_blob": "1d5b0a4f342953658bac28e1f10af5dd8147023d",
+            "restored_blob": "1d5b0a4f342953658bac28e1f10af5dd8147023d"
+          }
+        ]
+      },
+      {
+        "name": "wp-pins-openai-20261101",
+        "commit": "49d9cfe5aa37f57d7282665db72e2cad901f5ae9",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/agent-process/phases/execution-pinning-20261101/reports/openai/ROUND3.md",
+            "original_blob": "fb94e4512fe846c19bcf506e62e78beff7402de5",
+            "restored_blob": "fb94e4512fe846c19bcf506e62e78beff7402de5"
+          }
+        ]
+      },
+      {
+        "name": "wp-qr-r1-anthropic",
+        "commit": "04ca6c4191ec309bb3a21b2b7447ef1e04b4fdf6",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/agent-process/phases/qualification-replacement-20261103/round3/anthropic.md",
+            "original_blob": "1d2af634b03d9dde3341f687e3fa331331f1c30a",
+            "restored_blob": "1d2af634b03d9dde3341f687e3fa331331f1c30a"
+          }
+        ]
+      },
+      {
+        "name": "wp-qr-r1-minimax",
+        "commit": "7b07bf03f5aacbfa910d80ddf05459215c7fa891",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/agent-process/phases/qualification-replacement-20261103/round3/minimax.md",
+            "original_blob": "af3c152a3298262695c160656939e430a1951fec",
+            "restored_blob": "af3c152a3298262695c160656939e430a1951fec"
+          }
+        ]
+      },
+      {
+        "name": "wp-qr-r1-openai",
+        "commit": "0c88c613ac8c7c7ec21cbb94bf9481db81baf3cc",
+        "tracked_recovery_checkout_clean": true,
+        "untracked_generated_git_lfs_hooks": 4,
+        "owned_final_paths": [
+          {
+            "path": "docs/agent-process/phases/qualification-replacement-20261103/round3/openai.md",
+            "original_blob": "4c5a9b525bd0cf492c21181c01ca751d2173a889",
+            "restored_blob": "4c5a9b525bd0cf492c21181c01ca751d2173a889"
+          }
+        ]
+      }
+    ],
+    "root_refs_unchanged": true,
+    "initial_recovery_attempt": "first physical checkout hit Windows filename-length limit; original failure/partial private checkout retained. Second fresh recovery checkout uses invocation-only core.longpaths=true. Git LFS creates four untracked root hook scripts; those verified Git LFS scripts remain retained and are distinguished from tracked restoration, no global/root setting changes. Hydrated workspace bytes are separately preserved in full archives; root common Git LFS storage is outside deletion targets.",
+    "raw_logs": "build/worktree-cleanup-20261103/{bundle-,recovery-,restore-,resolve-} logs"
+  },
+  "workspace_preservation_summary": {
+    "verified_archives": 33,
+    "regular_files": 152090,
+    "regular_bytes": 10090681637,
+    "verification": "all archive members/types/sizes/hashes and all current workspace file bytes checked, no extra/missing members",
+    "current_archives_reused": 33,
+    "fresh_copies_needed": 0,
+    "details": "build/worktree-cleanup-20261103/artifact-proof.json"
+  },
+  "native_preservation": {
+    "dispatches": 55,
+    "full_native_records": 55,
+    "all_exact_task_dispatch_cwd_authority_verified": true,
+    "details": "build/worktree-cleanup-20261103/native-proof.json",
+    "private_raw_directory": "build/worktree-cleanup-20261103/native-originals",
+    "clipping": "CLI transcript projection clips large contents; not used as full backup. Raw native originals preserved instead."
+  },
+  "default_terminals": {
+    "verified_idle_owned_powershell": 12,
+    "source": "current exact-path prompts and complete retained output, all agent Dispatches released; UI orphan flag not used as exit proof"
+  },
+  "branch_policy": "retain all local and remote branches; no --delete-branch or branch prune",
+  "removal_method": "exact Orca-managed worktree rm selectors; --force only permits removal of fully preserved ignored files after settlement/path/head checks, never force branch deletion or push",
+  "remaining_guards": "recheck exact resolved path, head, clean tracked/untracked status, complete file identities, no agents/new terminals/unverifiable resources, and remote equality immediately before each removal",
+  "restoration_limits": "Windows long-path initial checkout failure and generated Git LFS hook files preserved as failed private restore attempt. Successful second checkout resolves every task commit, restores owned blobs and has clean tracked status; four verified generated LFS hook files explicitly retained as untracked. Hydrated source bytes held in full workspace archives, common root Git/LFS store protected.",
+  "source_changed": false,
+  "product_readiness_changed": false,
+  "no_new_workers": true,
+  "no_cleanup_of_protected_entries": true
+}
