@@ -16,6 +16,7 @@ stale** for all 56, with a precisely scoped refresh as a separately gated next a
 | Entry HEAD (exact, verified) | `638a226a49b9cc0ead952a4a787d12c26dfcd35e`; tracked source clean at start |
 | Accepted inputs reused, unmodified | [CI_EVIDENCE_INTAKE.md](../../SW-AUDIT-01/CI_EVIDENCE_INTAKE.md) (OpenAI `gpt-6.1-sol`/high; report `9036ecffe2b5e18ccb6d636eba55edfbd0d6a80a` at frozen base `490a879bd346773cca64fac861eaaab29e703628`) and [CI_EVIDENCE_REVIEW.md](../../SW-AUDIT-01/CI_EVIDENCE_REVIEW.md) (independent MiniMax-M3 review; **ACCEPT**, inventory/metadata only) |
 | New report commit | the commit that adds this file; the exact SHA is recorded in the delivery receipt and is verifiable with `git log -1 -- docs/production/software-waves/EV-CI-ATTRIBUTION/execution-20261101/AUTHOR.md` |
+| Correction authority (this commit) | Task `task_f88cda2cf757` / Dispatch `ctx_c3d0257ab154`, worker `term_e65e8a7b-e69d-4cfd-8040-3c76188451be`; parent `d86b65c271cc06d95895b8abdce53e24210bc6d9`. Bounded prose corrections R1–R7 only, against the independent review at `81ac391cdc07ca8885b3b2237aa467aee0625675` (`REVIEW.md`, verdict `require_changes`): no new CI execution, source qualification, admission or failed-qualification retry, and no change to any 56-row, cover, object, ancestry or freshness fact below |
 
 ## Scope, and the three limits that bound it
 
@@ -34,16 +35,18 @@ download is claimed to be current.
 - **Covered-path equivalence is not canonical admission, and not a source relabel.** No SHA,
   record, cover, feature or level was rewritten to the integration SHA.
 
-## Method (bounded, static, read-only)
+## Method (bounded, static, read-only metadata inspection)
 
 1. **Accepted inventory first.** The 56 unit tuples (unit, scenario, client, level, state) were
    parsed from the accepted table in `CI_EVIDENCE_INTAKE.md`; the accepted `B`/`M` state column
    was honoured — 60 requested units, 56 matched (`B`), 4 missing (`M`).
 2. **Git facts re-derived** at this worktree by fixed argv `subprocess.run`, retaining return
    codes and full stdout/stderr.
-3. **One cached source→entry diff.** Exactly one `git diff --name-only bdcf06dc… 638a226a…` was
-   executed and cached; one historical source SHA means no quadratic blob scan and no repeated
-   global audit.
+3. **Finite cached source→entry diff.** The source→entry comparison
+   `git diff --name-only bdcf06dc… 638a226a…` was executed and cached in **both** retained
+   receipts (`probe_01` and `probe_02`); the comparison was finite and reused rather than
+   re-derived, so one historical source SHA means no quadratic blob scan and no repeated global
+   audit. The diff was not re-run here to restate wording.
 4. **Covers re-derived from the historical source definitions.** `tools`, `tests/validation` and
    `docs/api` were exported read-only from `bdcf06dc…` via `git archive` into this worker's
    private subtree and the scenario metadata imported there. The accepted review had established
@@ -77,7 +80,7 @@ manipulation.
   `e16ec6af…` → 136 paths.
 
 **Changed-path scope (NEW).** The 136 changed paths are `AGENTS.md` (1) plus 135 `docs/**` paths
-(`docs/agent-process/**` 39, `docs/ORCHESTRATION_PROTOCOL.md` 1, `docs/planning/**` 21,
+(`docs/agent-process/**` 39, `docs/ORCHESTRATION_PROTOCOL.md` 1, `docs/planning/**` 20,
 `docs/production/**` 75), and **zero** of them are covered by any unit's `covers`. The historical
 six-path documentation diff **does not carry over** to this base — the changed set is now 136
 paths, still entirely documentation plus the root `AGENTS.md`, and still intersecting **zero** unit
@@ -186,11 +189,14 @@ covers at the historical source SHA against this entry HEAD.
 1. **Refresh-required; explicit unknown intake retained.** A compliant record for these 56 units
    needs a real CI execution whose source commit is an ancestor of the integration head —
    practically, a refresh from the current approved integration source (the entry base
-   `638a226a…` or a descendant). Because the covered runtime/client/schema subtrees are
-   byte-identical between the historical source and the entry base, such a refresh would exercise
-   the same covered code paths and scenario definitions; it would still be a genuine new
-   execution with new record bytes, and would still need the separate privacy/VAL-15, image,
-   client and owner gates.
+   `638a226a…` or a descendant). Git identity here establishes **static definition identity at
+   the exact entry base only**: the covered runtime/client/schema subtrees are byte-identical
+   between the historical source and `638a226a…`. It does **not** predict what a later run would
+   exercise — a descendant may change code, and environment, inputs and scheduling may change
+   exercised paths even at an unchanged source. Any future refresh is therefore a separately
+   gated real execution whose **actual** source, environment and behaviour must be checked and
+   recorded, producing new record bytes and still needing the separate privacy/VAL-15, image,
+   client and owner gates. No such execution is authorized, performed or claimed here.
 2. **The coordinator-owned admission decision stays open and unsatisfied.** Under current rules
    there is no compliant admission route for a non-ancestor source; this report proposes none and
    records no waiver. No forced pass, no undocumented waiver.
@@ -204,10 +210,23 @@ covers at the historical source SHA against this entry HEAD.
   requested a Flic client — are historical facts of the accepted report and review. The 470
   passing / 2 nonapplicable / 0 failed tally and the two client-scope exclusions (U53, U59) are
   historical and were **not** re-executed here.
-- **U01–U04 (Flic) remain absent and are not relabelled.** No Flic record could exist because
-  that CI never requested a Flic client; F-FLIC-001/002/008 still need a genuine Flic execution
-  (generated-request/Node replay client with real provenance), a separate gated action.
-- **F-API-034** remains a separate negative-path assertion gap, untouched here.
+- **U01–U04 (Flic) are absent from these old CI archives, and are not relabelled.** That CI
+  never requested a Flic client, so no Flic record could exist in it; that is an
+  **archive-specific** absence, not a project-wide missing-Flic-proof finding. Separate, later
+  proof already exists: [FLIC_REFRESH.md](../../SW-AUDIT-01/FLIC_REFRESH.md), independently
+  accepted in [FLIC_EVIDENCE_REVIEW.md](../../SW-AUDIT-01/FLIC_EVIDENCE_REVIEW.md) as four
+  genuine `flic`/`sim`/V3 `pass`/`gate=ok` records with 25 pass and one n/a, accepted as bounded
+  execution facts, with **privacy/artifact admission on HOLD**; integrated at
+  `2a7fe096`/`21a57813`/`862b9299`. That existing proof needs a **coordinator disposition
+  before any further refresh decision**; no duplicate Flic execution is mandated by these
+  archives, and nothing here admits or publishes the held artifacts.
+- **F-API-034** remains a negative-path assertion gap **in the old CI archives**, untouched here.
+  Current context: the retained API-V2 candidate chain (`938ae303…` → `386872…` → `ee3f2e7f…` →
+  report `caaa4faa…`) is still **awaiting qualified review**, and the failed/partial parallel
+  FSEC007 gate remains failed. Existing candidate work is **not** accepted source and is not proof
+  that duplicate implementation is needed; no duplicate implementation is mandated here, and no
+  V3-target or `F-MTX-002` attribution is made. This report reuses the recorded metadata outcomes
+  only and reviews no candidate source or payload.
 - Image, source, dirty and screenshot identities and the original record bytes are immutable and
   were not re-read. The null hub `image_digest` remains **source-run simulator proof, not
   release-image execution**; screenshot checks remain structural only.
@@ -219,9 +238,15 @@ covers at the historical source SHA against this entry HEAD.
 
 - Bounded **current attribution/scope metadata** at one exact entry base; no implementation
   correctness opinion and no source or privacy code-review qualification claimed or inferred.
-- Static Git and metadata inspection only: no scenario, test, campaign or ledger executed or
-  generated; no Expectation predicate evaluated; no artifact script run; no archive extracted; no
-  secret read or printed; no network refetch.
+- Bounded Git and metadata inspection plus documentation-module tests only: **no raw CI archive was
+  interpreted and no runtime/scenario campaign was run**. No scenario or `Expectation` predicate
+  was evaluated, no CI record or payload was opened, no ledger, registry or finding was generated
+  or imported, no secret was read or printed, and no network refetch occurred. Two bounded
+  non-CI events did occur and are disclosed: a read-only **Git `archive` tar export and extraction
+  of the historical *source* tree** (`tools`, `tests/validation`, `docs/api`) used for static
+  definition comparison, and a **pytest run of the five existing documentation modules**
+  (`core`, `client-guides`, `openapi-config`, `security`, `license-protocol`). Neither is a new CI
+  execution, a source qualification or an admission.
 - The zero-intersection result is a **path-scope** result about the paths each unit names. It is
   not a statement that the recorded behaviour still holds at the entry base, nor a substitute for
   a real refresh.
@@ -234,12 +259,20 @@ covers at the historical source SHA against this entry HEAD.
   requirements, clear privacy/VAL-15, or resolve the retained API/WS/privacy source reviews or the
   actual parallel FSEC007 failure. Those remain held/unresolved.
 
-## Gates unchanged and closed
+## Gate status: held/open, with the original three Tron owner decisions closed
 
-Privacy/VAL-15 admission; retained API/WS/privacy qualified source reviews; the actual parallel
-FSEC007 failure; hardware HIL; owner visual approval; 72-hour soak; week field sign-off; final
-version/artifact release; and the Tron owner approvals, which stay closed. Software-level scope
-metadata never satisfies these.
+**Held / open and unsatisfied.** Privacy/VAL-15 admission; the retained API/WS/privacy qualified
+source reviews; the actual parallel FSEC007 failure; physical hardware HIL; any outstanding
+owner visual approval; the 72-hour soak; week field sign-off; and the final version/artifact
+release. These remain open and this report changes none of them; software-level scope metadata
+never satisfies them.
+
+**Closed, separately.** The **original three** Tron paused-frame owner decisions were approved by
+the owner on 2026-10-20
+([TRON_OWNER_APPROVAL_20261020.md](../../../../validation/TRON_OWNER_APPROVAL_20261020.md)).
+That closure covers only those three reported differences and the three named captures. It is not
+a general visual approval and not a release approval, and it does not close any gate listed
+above.
 
 ## Checks, invocations and exits
 
@@ -249,16 +282,18 @@ stdout/stderr of each were captured before the next. No piped status was inferre
 | Invocation / check | Exit / result |
 | --- | --- |
 | `git rev-parse HEAD` / `--abbrev-ref` / `status --porcelain`; `git cat-file -t`; `git merge-base --is-ancestor` source→entry / published→entry / frozen→entry | 0; HEAD `638a226a…`, branch `ryan-haver/wp-exec-ev-ci-attribution`, tracked tree clean; all three are `commit`; ancestry **1** / 0 / 0 (the 1 is the intended finding) |
-| `git rev-parse …^{tree}`; `git diff --name-only` source→entry (the one cached diff) and published→entry; `git rev-parse <sha>:<path>` for 16 subtrees | 0; source == published ≠ entry; 136 paths, identical sets; all 16 subtrees identical |
+| `git rev-parse …^{tree}`; `git diff --name-only` source→entry (the cached diff recorded in probe 01 and probe 02) and published→entry; `git rev-parse <sha>:<path>` for 16 subtrees | 0; source == published ≠ entry; 136 paths, identical sets; all 16 subtrees identical |
 | `git archive --format=tar bdcf06dc… tools tests/validation tests/__init__.py docs/api`; scenario metadata import; `gitinfo.matches` over 56 covers × 136 paths plus an independent re-implementation | 0; 0 unsafe member names; 101 scenarios across the 8 modules owning the 56 units; 0 intersections by both rule implementations |
-| `ledger.freshness` at the entry checkout, 56 units | `unknown` × 56 at the historical source SHA; `fresh` × 56 at the published-head SHA — **scope evidence only**, **not** an admission |
+| `ledger.freshness` at the entry checkout, 56 units | `unknown` × 56 at the historical source SHA (the actual result); `fresh` × 56 at the published-head SHA — **HYPOTHETICAL metadata only**, since no actual record carries that source: it relabels, admits and waives nothing — **not** an admission |
 | Accepted-table parse; report UTF-8 / LF / JSON / 56-ID / reference / scope checks | 0; 60 rows, 56 `B`, 4 `M`; all report checks pass; receipts in the ignored build subtree |
 | `pytest -p no:tests.route_inventory -p no:cacheprovider` over the five docs modules (`core`, `client-guides`, `openapi-config`, `security`, `license-protocol`) | all pass; receipt in the ignored build subtree |
 | `git -c core.hooksPath= commit` | documented **invocation-only** exception for this prose-only report, after the checks above; no hook configuration change, **no source-hook or full-suite pass claimed** |
 
 All worker diagnostics are confined to this worker's ignored build subtree
-`build/software-waves/EV-CI-ATTRIBUTION/execution-20261101/author/` and the fresh private scratch
-tree `C:/t/exec-ev-ci-attribution/nov02-attempt01/`; every failed probe attempt is preserved under
+`build/software-waves/EV-CI-ATTRIBUTION/execution-20261101/author/` (this correction's own
+subtree is `author/correction-01/`) and the fresh private scratch trees
+`C:/t/exec-ev-ci-attribution/nov02-attempt01/` and
+`C:/t/exec-ev-ci-attribution/nov02-correction01/`; every failed probe attempt is preserved under
 its own numbered filename and no historical byte was overwritten. The only tracked deliverable is
 this new report. Root source, tests, tools, fixtures, scenarios, schema, registry, ledger,
 findings, manifests, lockfiles, evidence and baselines are unchanged.
@@ -267,6 +302,9 @@ findings, manifests, lockfiles, evidence and baselines are unchanged.
 
 This new deliverable needs **independent factual review by a different underlying model family
 at the exact report commit** (an OpenAI/Astra-family reviewer is the indicated route; the author is
-MiniMax-M3). There is **no self-acceptance**. The prior attempt-1 failure (no review route/domain
-available) is **not** retried automatically; the owner retake choice is pending. The coordinator
-owns settlement, preservation, publication and any actual acceptance or admission.
+MiniMax-M3). There is **no self-acceptance**. The prior attempt-1 outcome was a **formal core
+qualification attempt-1 FAIL with no qualified domain** — provenance, invariants and
+counterexamples passed, while `behavior_and_tools`, `calibration` and `review_quality` failed. It
+is **not** retried automatically; the explicit owner retake choice is pending, and route
+provider capacity is a separate concern from that outcome. The coordinator owns settlement,
+preservation, publication and any actual acceptance or admission.
