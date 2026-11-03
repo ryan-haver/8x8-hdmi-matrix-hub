@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-03T03:30:24.534736+00:00",
+  "observed_utc": "2026-11-03T03:40:07.523938+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -99,7 +99,7 @@
       "R5",
       "R6"
     ],
-    "next": "M3 targeted correction02 at981, then different-family exact-commit re-review; no inventory acceptance yet",
+    "next": "targeted correction03: basis100 vs primary96, legacy field provenance, three unit-local gap phrases; exact-commit independent re-review",
     "correction": {
       "task_id": "task_1a5ca9009556",
       "dispatch_id": "ctx_f2343717872b",
@@ -175,10 +175,17 @@
           "bytes": 718506,
           "sha256": "f06d39aaa41987cfca90ea540a70f3d4af1f2858eb23952f4f35ea98e6d76f44"
         },
-        "status": "active independent re-review; no delivery/verdict/integration/qualification claimed"
+        "status": "delivered require_changes; released/preserved/published",
+        "report_commit": "394dd8670ab59bbe82a88e0188bc7d474615645b"
       }
     },
-    "review_instruction_erratum": "docs/production/software-waves/MVP-EXECUTION-20261102/REVIEW_INSTRUCTION_ERRATUM.json"
+    "review_instruction_erratum": "docs/production/software-waves/MVP-EXECUTION-20261102/REVIEW_INSTRUCTION_ERRATUM.json",
+    "correction03": {
+      "status": "prepared, not launched",
+      "base": "ac97e1f5886d591562597b5e81c3fa410adda2f8",
+      "task_id": null,
+      "dispatch_id": null
+    }
   },
   "automatic_retakes": false,
   "owner_decision_pending": "Explicit question presented: authorize one prepared controlled manual new qualification attempt, or assess a different provider. No answer/approval inferred; no retake launched.",
@@ -186,7 +193,7 @@
   "product_source_changed_by_this_batch": false,
   "preservation_gaps": {
     "author_commit": "ed78321e51156f229507e654f0cf3faae100b935",
-    "status": "correction delivered; independent exact816 re-review active",
+    "status": "completed and coordinator accepted as bounded negative-gap documentation only",
     "original_preservation_pass": false,
     "independent_review": {
       "task_id": "task_eea6f443f108",
@@ -219,8 +226,8 @@
       },
       "status": "active; no delivered/reviewed/integrated/qualified outcome claimed"
     },
-    "review_commit": "abd339eda108e4d74f1a147b2f445299814e9cf9",
-    "review_verdict": "require_changes",
+    "review_commit": "0ff12f0091d6c7e96e723fd6b840ca72b056182a",
+    "review_verdict": "accept",
     "correction01": {
       "task_id": "task_e1d5c3589200",
       "dispatch_id": "ctx_f56a5a99bfee",
@@ -258,6 +265,15 @@
         },
         "status": "active independent re-review; no delivery/verdict/integration/qualification claimed"
       }
-    }
+    },
+    "coordinator_disposition": "docs/production/software-waves/EV-PRESERVATION-GAPS/execution-20261101/COORDINATOR_DISPOSITION.json",
+    "unit_documentation_acceptance_satisfied": true
+  },
+  "independent_findings_delta": {
+    "status": "prepared, not launched",
+    "prior_triage": "accepted59 rows with limits, DeepSeek authorship preserved",
+    "dependencies": [],
+    "task_id": null,
+    "dispatch_id": null
   }
 }
