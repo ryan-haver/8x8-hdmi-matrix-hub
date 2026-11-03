@@ -104,6 +104,19 @@ mappings are unchanged; only dispositions, actions, three prose statements and t
 annotation moved.
 
 
+### 0.3 Correction-03 — what changed and why
+
+This is a **targeted, ordinary author correction** of the report at
+`ac97e1f5886d591562597b5e81c3fa410adda2f8`, after the different-family
+re-review at `394dd8670ab59bbe82a88e0188bc7d474615645b` (`require_changes`). It
+is **not** a qualification retake and **not** a new global audit: it corrects
+**three residual statements** — the §4.1/§10 census prose, the provenance of
+the legacy `software_gap` / `disposition` fields, and the §8 unit-local
+bounded-negative claims. The accepted R1–R6 fixes, the **268** structural rows,
+the **41** named identities, the 77/29/104 transition sets and the F-API-029
+erratum are **unchanged**, and no row label, table cell, census figure or
+source byte was altered to make any statement true.
+
 ---
 
 ## 1. What this report is, and what it is not
@@ -309,7 +322,7 @@ Canonical disposition, all 268 rows, recomputed after the corrections:
 
 | `DECLARATIVE-GAP` | **7** | The exact contract message type has **no typed declarative assertion**, but a **non-declarative control already asserts the same message** in the current tree. The gap is *declaration placement*, not absent proof; the control was not executed, a call-site match locates a **candidate** control only, and its adequacy (polarity, client, feature coverage, target) was not judged |
 
-| `COVERAGE-UNRESOLVED` | **96** | **No live declarative scenario declares the feature.** The registry basis either cites non-declarative proof that this method did not inspect (**72** rows) or itself states that no effect is asserted (**28** rows). Either way existing-proof coverage is **unresolved** — not proven absent and not proven defective. A registry statement is **not** an independently established absence of an assertion |
+| `COVERAGE-UNRESOLVED` | **96** | **No live declarative scenario declares the feature.** In the **100**-row scenario-less basis universe the registry basis either cites non-declarative proof that this method did not inspect (**72** rows) or itself states that no effect is asserted (**28** rows); **96** of those 100 carry this primary label and **four** carry another (note below). Either way existing-proof coverage is **unresolved** — not proven absent and not proven defective. A registry statement is **not** an independently established absence of an assertion |
 
 | `PHYS-OWNER-GATE` | **33** | Software side satisfied; the binding gate is the owner's physical HIL measurement (12 of them are the `HIL-09(C)`-capped rows) |
 | `RETAINED-CHAIN-OPEN` | **1** | `F-SEC-014` / `VAL-15`: the finding is open in the register and was historically reproduced, and the corrective chain C1/C2/C3 is **delivered but unreviewed/unintegrated**. No current reproduction is established by this report and no corrective package is undispatched |
@@ -337,6 +350,26 @@ real-client requirement. The complete final census is the table above; §4.3
 gives the label transitions against the original report and separately the
 correction-02 delta.
 
+
+**Basis universe vs primary label (correction-03).** The **100**-row
+scenario-less basis universe (**72** + **28**) is a *basis* classification, not
+a label census: **96** of those 100 rows carry the primary label
+`COVERAGE-UNRESOLVED` and **four** carry another — `F-API-039` and `F-API-042`
+(`DECLARATIVE-GAP`), `F-DOM-032` (`MISSING-ASSERT`), `F-SEC-014`
+(`RETAINED-CHAIN-OPEN`). All four are visible in the §7 table; no row was
+relabelled to reconcile the two figures.
+
+**Row-metadata provenance (correction-03).** In the private corrected rows
+(`author/correction-02/correction02_rows.json`) the fields `software_gap` and
+`disposition` are **superseded historical fields copied forward from the
+earlier inventory**: they are retained unchanged for traceability and are **not
+authoritative**. The authoritative classification is `corrected_gap` with
+`corrected_action`, and the disposition and action displayed in the §7 table.
+`F-SEC-001` keeps the legacy `missing assertion` beside
+`corrected_gap: MISSING-CLIENT`; `F-KIO-005` beside `COVERAGE-UNRESOLVED`;
+`F-API-032` beside `DECLARATIVE-GAP`. The correction-02 rows file stays
+**byte-for-byte unchanged**; the provenance is recorded in the new
+`author/correction-03/correction03_provenance.json`.
 
 ### 4.2 Same dispositions split by target class (corrected)
 
@@ -878,10 +911,10 @@ have run by this report.
 | `SW-API-CLIENT-02` (P1) | 6 | 3 MISSING-CLIENT, 2 DECLARATIVE-GAP, 1 COVERAGE-UNRESOLVED | review and integrate the **retained** API-V2 `switch_all_failed` candidate across the exact `938ae303` → `caaa4faa` boundary under `RV-API034`, then re-assess the residual V3 client gap (no new assertion implementation); `F-API-035` reuses the existing `preset_recall_failed` control in `tests/test_runtime_preset_errors_r4b.py` |
 | `SW-API-READ-02` (P1) | 4 | 4 PRESERVE | none — preserve the accepted evidence for this unit |
 | `SW-API-WRITE-02` (P1) | 6 | 4 RERUN-FRESH, 2 PRESERVE | re-run the stale units at current source |
-| `SW-API-WRITE-03` (P1) | 6 | 3 RERUN-FRESH, 1 COVERAGE-UNRESOLVED, 1 MISSING-ASSERT, 1 PRESERVE | re-run 3 stale units; `F-API-037`'s `device_settings_full` has **no located control** and is the inventory's only bounded-negative gap |
+| `SW-API-WRITE-03` (P1) | 6 | 3 RERUN-FRESH, 1 COVERAGE-UNRESOLVED, 1 MISSING-ASSERT, 1 PRESERVE | re-run 3 stale units; `F-API-037`'s `device_settings_full` has **no located control** — the bounded-negative gap **local to this unit**, one of the **four** inventory rows with no located control (§6.1) |
 | `SW-API-READ-04` (P1) | 2 | 1 DECLARATIVE-GAP, 1 PRESERVE | inspect and reuse the located non-declarative control(s) named in the row actions instead of authoring a duplicate assertion |
 | `SW-API-WRITE-04` (P1) | 2 | 2 PRESERVE | none — preserve the accepted evidence for this unit |
-| `SW-API-READ-03` (P1) | 3 | 2 DECLARATIVE-GAP, 1 MISSING-ASSERT | `F-API-039` (`status`) and `F-API-042` (`pong`) reuse the existing non-declarative controls in `tests/sim/test_sim_ws_contract.py` and `tests/test_rest_api.py`; `F-API-040`'s `output_name_change` has **no located control** and is the inventory's only bounded-negative gap |
+| `SW-API-READ-03` (P1) | 3 | 2 DECLARATIVE-GAP, 1 MISSING-ASSERT | `F-API-039` (`status`) and `F-API-042` (`pong`) reuse the existing non-declarative controls in `tests/sim/test_sim_ws_contract.py` and `tests/test_rest_api.py`; `F-API-040`'s `output_name_change` has **no located control** — the bounded-negative gap **local to this unit**, one of the **four** inventory rows with no located control (§6.1) |
 | `SW-PROTOCOL-PREP-06` (P3) | 6 | 4 MISSING-CLIENT, 2 PRESERVE | real-client execution of the existing scenarios |
 | `SW-PROTOCOL-PREP-07` (P3) | 6 | 6 MISSING-CLIENT | real-client execution of the existing scenarios |
 | `SW-DOM-PROFILE-01` (P1) | 6 | 5 MISSING-CLIENT, 1 PRESERVE | real-client execution of the existing scenarios |
@@ -891,7 +924,7 @@ have run by this report.
 | `SW-DOM-MACRO-01` (P2) | 3 | 3 MISSING-CLIENT | real-client execution of the existing scenarios |
 | `SW-DOM-SHORTCUT-01` (P2) | 6 | 5 PRESERVE, 1 RERUN-FRESH | re-run the stale units at current source |
 | `SW-DOM-SHORTCUT-02` (P2) | 2 | 2 COVERAGE-UNRESOLVED | inspect and reuse the existing non-declarative basis named in the registry for the unresolved rows before naming any gap |
-| `SW-DOM-PRESENT-01` (P2) | 6 | 3 COVERAGE-UNRESOLVED, 2 MISSING-CLIENT, 1 MISSING-ASSERT | `F-DOM-032`'s `device_settings_full` has **no located control** and is the inventory's only bounded-negative gap; the other rows need their registry basis inspected |
+| `SW-DOM-PRESENT-01` (P2) | 6 | 3 COVERAGE-UNRESOLVED, 2 MISSING-CLIENT, 1 MISSING-ASSERT | `F-DOM-032`'s `device_settings_full` has **no located control** — the bounded-negative gap **local to this unit**, one of the **four** inventory rows with no located control (§6.1); the other rows need their registry basis inspected |
 | `SW-FLIC-01` (P2) | 6 | 4 PRESERVE, 2 RERUN-FRESH | re-run the stale units at current source |
 | `SW-FLIC-02` (P2) | 4 | 3 PRESERVE, 1 RERUN-FRESH | re-run the stale units at current source |
 | `SW-HA-PREP-01` (P3) | 6 | 6 RERUN-FRESH | re-run the stale units at current source |
@@ -1057,8 +1090,13 @@ coverage that was not established.
    judgement. **Corrected in R4**, and again in **correction-02 (R4)**: the
    inventory records the basis class of every one of them — **72** cite
    non-declarative proof that this method did not inspect, and **28** state in
-   the basis itself that no effect is asserted — and **all 100** are now
-   `COVERAGE-UNRESOLVED`. The 28 are **not** `MISSING-ASSERT`: none of them
+   the basis itself that no effect is asserted. **Correction-03:** the **100**
+   is the *basis* universe, not a label count — **96** of those 100 rows carry
+   the primary label `COVERAGE-UNRESOLVED` and **four** carry another
+   (`F-API-039` and `F-API-042` → `DECLARATIVE-GAP`, `F-DOM-032` →
+   `MISSING-ASSERT`, `F-SEC-014` → `RETAINED-CHAIN-OPEN`); the two figures were
+   never meant to be equal and no row was relabelled to reconcile them. The 28
+   are **not** `MISSING-ASSERT`: none of them
    declares a WebSocket contract entry, so there is no contract effect to be
    missing, and a registry statement is **not** an independently established
    absence of an assertion. The inventory asserts neither that the underlying
@@ -1176,6 +1214,10 @@ invocation; the same interpreter, `PYTHONPATH`, UTF-8/bytecode-off settings and
 isolated data/config directories were used, and the single documentation-module
 run received the explicit forward-slash `--basetemp`
 `C:/t/exec-sw-audit-01/nov02-correction02/pytest-temp`.
+**Correction-03** used `C:/t/exec-sw-audit-01/nov02-correction03/**` with the
+same interpreter, `PYTHONPATH`, UTF-8/bytecode-off settings, isolated data/config
+parents and an explicit forward-slash `--basetemp`; its private artefacts are in
+`author/correction-03/**`.
 
 
 | # | Invocation | Exit | Result |
@@ -1209,6 +1251,7 @@ run received the explicit forward-slash `--basetemp`
 | 19h | **correction-02**: `author/correction-02/patch_author_report_correction02.py` | **0** | the report patch pass (this file's prose only); every replacement asserts its exact occurrence count, so a drifted anchor fails loudly instead of silently producing a wrong report |
 | 19i | **correction-02**: `author/correction-02/report_selfcheck_correction02.py` | **0** | the report-only self-checks (UTF-8, CR-aware line endings, trailing whitespace, final newline, fenced JSON, 268-row table integrity against the canonical ledger, uniform cell count, census agreement with the table, the R1/R4/R5/R6 correction assertions, local-link resolution, tracked-scope screen, no self-acceptance claim); the receipt is `author/correction-02/report_selfcheck_correction02.txt` |
 | 19j | **correction-02**: `author/correction-02/verify_artifact_identities.py` | **0** | re-computes the SHA-256 and byte count of every artefact listed in §12.3 and confirms that the 22 retained original / correction-01 identities in §12.1 and §12.2 are still byte-identical on disk and still stated in this report |
+| 19k | **correction-03**: `author/correction-03/verify_correction03.py`, the five documentation modules (same command as #15, fresh `--basetemp` and `--junitxml` under `nov02-correction03`) and `author/correction-03/report_selfcheck_correction03.py` | **0** | read-only provenance verification, the single documentation-module run (no module reads this report) and the narrow report self-checks; the artefact identities are in the delivery message |
 | 20 | full test / core / CI / image suite, validation campaigns, hardware, Docker, owner deployment | **not run** | out of scope for this dispatch |
 
 
