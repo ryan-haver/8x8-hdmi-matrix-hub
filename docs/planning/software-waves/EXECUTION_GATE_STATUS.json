@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-03T05:45:52.469135+00:00",
+  "observed_utc": "2026-11-03T05:46:47.122141+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -908,7 +908,7 @@
     "source_or_feature_qualification": false
   },
   "repo_early_intake": {
-    "status": "author delivered/released/preserved/published, independent review prepared; no acceptance",
+    "status": "independent early three-row factual review launched, no verdict acceptance",
     "exact_entry_base": "61957a47cf91c504f48149a6c43a3dfea3cdd032",
     "scoped_ids": [
       "SEC-14",
@@ -1019,6 +1019,41 @@
       "task_id": null,
       "dispatch_id": null
     },
-    "correction_capacity": "M3 below30% current session; author/fix stages held until fresh suitable verified headroom/fallback"
+    "correction_capacity": "M3 below30% current session; author/fix stages held until fresh suitable verified headroom/fallback",
+    "independent_review": {
+      "task_id": "task_dd9f6e3c9c49",
+      "dispatch_id": "ctx_d29018e7a4a3",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-repo-01-review",
+      "actual_branch": "ryan-haver/wp-exec-sw-repo-01-review",
+      "exact_entry_base": "be7e441a0e034fb838e44914b245f84ba2a42cbf",
+      "observed_head": "be7e441a0e034fb838e44914b245f84ba2a42cbf",
+      "new_report": "docs/production/software-waves/SW-REPO-01/execution-20261101/REVIEW.md",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+        "session": "01a19ff1-aa64-7a00-9ab2-438ae9b6fdc8",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 360214,
+        "sha256": "425ecf8a5256d50768fec62ba2d555e825d4547dafdff652d15fade8bfeb28d1"
+      },
+      "status": "launched; no verdict or report acceptance inferred",
+      "observed_dispatch_status": "dispatched",
+      "observed_worker_state": "ready"
+    }
   }
 }
