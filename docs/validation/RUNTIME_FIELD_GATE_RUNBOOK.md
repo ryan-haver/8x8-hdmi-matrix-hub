@@ -22,6 +22,45 @@ timestamps. Keep credentials and private configuration out of committed evidence
    Enable `--allow-writes` only for the agreed session; check restoration reports.
    `--allow-unrestorable` is a separate decision for disruptive operations.
 
+## Flic and Home Assistant preparation
+
+This checklist prepares the existing HIL-E session; every row is **pending for
+the eventual accepted candidate** until a matching execution receipt is attached.
+Historical simulator and container passes keep their original source and scope.
+Software checks can use a simulator and disposable Home Assistant installation;
+the owner deployment is needed only for the field observations below. Follow the
+current source-review and evidence-admission gates before running dependent
+campaigns or promoting results.
+
+| Preparation | Required software receipt | Later field observation |
+| --- | --- | --- |
+| Candidate and setup | Exact Git SHA, image digest/platform, hub version from `/api/info`, selected scenario list and client versions; reconcile guide examples with the accepted candidate | Record matrix/firmware, Flic Hub/SDK/button models, HA version and deployment host; confirm the agreed devices and starting state |
+| Flic generated actions | Existing SDK replay and generated-request cases for presets, power, cycling/Twist, profiles/macros, registration and all-output switching; retain the actual method/path/body and allowed/denied outcomes without publishing credentials | Trigger each selected physical click/hold/rotation, observe the intended output and ensure one intended action rather than duplicate execution |
+| HA installation and flows | HACS custom-repository packaging and hassfest results; disposable real-HA config, reconfigure and options-flow receipts, with the tested component and HA versions | Install through the agreed HACS custom repository, add the deployed hub, change its address/options and confirm the correct device/entities remain associated |
+| HA entities and services | Selects, switches, buttons and binary sensors; `hdmi_matrix.recall_preset`, `hdmi_matrix.switch_input` and `hdmi_matrix.send_cec_command`, including unambiguous config-entry/device targeting | Confirm entity names and state updates on the owner installation, and verify that a selected service targets only the intended matrix |
+| Authentication | Keyless and control-lock cases, valid and invalid/revoked API-key outcomes, and permitted versus refused operations; reviewed artifacts before admission | Exercise the agreed credential configuration on both clients; a denied action must not change routing/device state |
+| Offline and recovery | Existing isolated outage/reconnect cases with unavailable state, recovery and duplicate-action checks; retain failures as well as passes | Observe loss and recovery on the deployment LAN, including entity availability and the absence of an unintended action after reconnect |
+| CEC and restoration | Simulator/source assertions with their actual limits, plus a selected reversible action/restoration plan | Observe the attached TV/source/receiver effect; API success or matrix readback alone does not prove a CEC effect. Restore the recorded starting state |
+
+The declared HA floor in `hacs.json` is 2025.1.0. The historical 2025.1.4
+container pass does not test that exact floor; reconcile this explicitly in
+SW-HA-PREP before making a minimum-version acceptance claim. HACS
+custom-repository installation and inclusion in the default HACS catalog are
+separate claims; this checklist requires the former and grants neither a
+catalog listing nor a release approval.
+
+For each selected case, record the candidate SHA/digest, scenario, operator and
+timestamps, client/device versions, expected and observed result, starting and
+ending state, restoration result, and preserved evidence location. Keep secrets
+and private deployment configuration out of committed receipts. Mark unavailable
+equipment or an unexecuted case explicitly; do not turn it into a pass.
+
+Use the [Flic setup guide](../FLIC_SETUP.md),
+[Home Assistant guide](../HOME_ASSISTANT.md),
+[runtime evidence index](RUNTIME_VALIDATION_INDEX.md) and the feature registry
+to select the applicable cases. This preparation adds no execution result,
+feature-level promotion, privacy clearance or owner sign-off.
+
 ## Required owner observations
 
 | Gate | Record |

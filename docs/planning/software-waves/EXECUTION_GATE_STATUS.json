@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-03T05:51:45.178612+00:00",
+  "observed_utc": "2026-11-03T16:54:02.494640+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -1020,34 +1020,34 @@
       "dispatch_id": null
     },
     "correction_capacity": {
-      "observed_utc": "2026-11-03T05:51:45.178612+00:00",
+      "observed_utc": "2026-11-03T16:54:02.494640+00:00",
       "codex": {
         "status": "ok",
         "session": null,
         "weekly": {
-          "usedPercent": 47,
+          "usedPercent": 55,
           "windowMinutes": 10080,
           "resetsAt": 1793774164000,
-          "resetDescription": "Tue 11:36 PM"
+          "resetDescription": "11:36 PM"
         },
-        "updatedAt": 1793684775199,
+        "updatedAt": 1793724226436,
         "error": null
       },
       "minimax": {
         "status": "ok",
         "session": {
-          "usedPercent": 75,
+          "usedPercent": 2,
           "windowMinutes": 300,
-          "resetsAt": 1793685244454,
+          "resetsAt": 1793740313659,
           "resetDescription": null
         },
         "weekly": {
-          "usedPercent": 20,
+          "usedPercent": 23,
           "windowMinutes": 10080,
           "resetsAt": 1793823932889,
           "resetDescription": null
         },
-        "updatedAt": 1793684775137,
+        "updatedAt": 1793724226653,
         "error": null
       }
     },
@@ -1135,9 +1135,16 @@
       ],
       "scope": "R1 only SEC14 LICENSE table/JSON:373physical/293nonempty and literal title; allotherlines preserved, no harness",
       "budget": "3min target <=100newwords, exactly2in-place passages",
-      "status": "HELD for suitable verified author/fix capacity; no launch",
+      "status": "prepared; fresh capacity verified and prior hold cleared, no launch",
       "task_id": null,
-      "dispatch_id": null
+      "dispatch_id": null,
+      "current_preflight": "docs/production/software-waves/MVP-EXECUTION-20261102/NOV03_REPO_CORRECTION_PREFLIGHT.json"
     }
+  },
+  "test_session_preparation": {
+    "status": "pending-candidate checklist prepared in existing fieldrunbook; documentation only",
+    "path": "docs/validation/RUNTIME_FIELD_GATE_RUNBOOK.md",
+    "execution_result": false,
+    "owner_signoff": false
   }
 }
