@@ -101,10 +101,16 @@
       "R5",
       "R6"
     ],
-    "next": "MiniMax author report correction, then exact-commit OpenAI-family re-review; independent of failed core qualification"
+    "next": "MiniMax author report correction, then exact-commit OpenAI-family re-review; independent of failed core qualification",
+    "correction": {
+      "task_id": "task_1a5ca9009556",
+      "dispatch_id": "ctx_f2343717872b",
+      "status": "active, review/acceptance pending",
+      "base": "13fe2ae8d423d8e43065b08a8767109e011c61c0"
+    }
   },
   "automatic_retakes": false,
-  "owner_decision_pending": "proposed one controlled manual new qualification attempt vs alternate provider assessment; proposal only, no retake authorized/launched",
+  "owner_decision_pending": "Explicit question presented: authorize one prepared controlled manual new qualification attempt, or assess a different provider. No answer/approval inferred; no retake launched.",
   "proposed_manual_attempt": "docs/production/software-waves/MVP-EXECUTION-20261102/PROPOSED_MANUAL_QUALIFICATION_ATTEMPT02.txt",
   "product_source_changed_by_this_batch": false
 }

@@ -1,0 +1,62 @@
+{
+  "observed_utc": "2026-11-03T02:09:41.713113+00:00",
+  "status": "author correction active; not accepted or qualified",
+  "task_id": "task_1a5ca9009556",
+  "dispatch_id": "ctx_f2343717872b",
+  "pin": "SW-AUDIT-01",
+  "author": "MiniMax-M3 via project-pinned OpenCode2",
+  "base": "13fe2ae8d423d8e43065b08a8767109e011c61c0",
+  "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01",
+  "actual_branch": "execution/wp-exec-sw-audit-01",
+  "review_to_address": "4c2d18b8cdd3f49523e9014e498bbfd7d55601ac R1-R6",
+  "native_entry": {
+    "status": "native model attested",
+    "session": "ses_e60d64611ffe2ov3BRBzln45dw",
+    "models": [
+      "minimax-coding-plan/MiniMax-M3"
+    ],
+    "bytes": 280904,
+    "sha256": "0dcb5da1407624e7142b9dd7e1b71bf0ac6bee4990f02890a5f685fb90710781",
+    "effort": "CLI override unsupported, inherited project configuration, no unsupported effort claim"
+  },
+  "exact_tracked_lease": "docs/production/software-waves/SW-AUDIT-01/execution-20261101/AUTHOR.md",
+  "new_private_artifacts": "build/software-waves/SW-AUDIT-01/execution-20261101/author/correction-01/**",
+  "prior_artifacts_and_workspaces": "preserved read-only; only existing author report lease transferred after confirmed old author/reviewer release",
+  "review_after_correction": "different-family OpenAI/Astra exact-commit re-review, fresh capacity/base/lease checks",
+  "source_or_feature_acceptance": false,
+  "failed_core_qualification": "attempt1 remainsFAIL, noqualifieddomain, noautomaticretake",
+  "owner_decision": "asynchronous explicit decision requested on prepared one controlled manual attempt vs another provider; no response/approval inferred and no retake launched",
+  "capacity": {
+    "observed_utc": "2026-11-03T02:07:51.477618+00:00",
+    "minimax": {
+      "session": {
+        "usedPercent": 15,
+        "windowMinutes": 300,
+        "resetsAt": 1793685244454,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 14,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932900,
+        "resetDescription": null
+      },
+      "updatedAt": 1793671432501,
+      "error": null,
+      "status": "ok"
+    },
+    "codex": {
+      "session": null,
+      "weekly": {
+        "usedPercent": 40,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "updatedAt": 1793671432656,
+      "error": null,
+      "status": "ok"
+    }
+  },
+  "concurrency": "one new M3worker+coordinator+protectedexternal=3; second slot reserved, no nesting"
+}
