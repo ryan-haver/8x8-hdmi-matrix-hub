@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-03T03:40:07.523938+00:00",
+  "observed_utc": "2026-11-03T03:42:04.327171+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -181,10 +181,35 @@
     },
     "review_instruction_erratum": "docs/production/software-waves/MVP-EXECUTION-20261102/REVIEW_INSTRUCTION_ERRATUM.json",
     "correction03": {
-      "status": "prepared, not launched",
-      "base": "ac97e1f5886d591562597b5e81c3fa410adda2f8",
-      "task_id": null,
-      "dispatch_id": null
+      "task_id": "task_a1d5fdadce54",
+      "dispatch_id": "ctx_597f4ffe52bf",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01",
+      "actual_branch": "execution/wp-exec-sw-audit-01",
+      "exact_entry_base": "ac97e1f5886d591562597b5e81c3fa410adda2f8",
+      "launch": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "turn_start": "unsupported",
+      "native_entry": {
+        "status": "native MiniMax-M3 attested at exact Task/Dispatch/directory",
+        "session": "ses_e6080e92bffegPPto3UPYr8ozy",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "effort": "CLI override unsupported; inherited exact project model, native thinking",
+        "bytes": 126496,
+        "sha256": "464e674ed36f0a551042f72172518e8e8f28db47dbb52477b95dbb1b5873a736"
+      },
+      "status": "active, no delivery/review/acceptance claimed"
     }
   },
   "automatic_retakes": false,
@@ -270,10 +295,35 @@
     "unit_documentation_acceptance_satisfied": true
   },
   "independent_findings_delta": {
-    "status": "prepared, not launched",
-    "prior_triage": "accepted59 rows with limits, DeepSeek authorship preserved",
-    "dependencies": [],
-    "task_id": null,
-    "dispatch_id": null
+    "task_id": "task_003f9f06ee62",
+    "dispatch_id": "ctx_8f2f304eeed7",
+    "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-findings-01",
+    "actual_branch": "ryan-haver/wp-exec-sw-findings-01",
+    "exact_entry_base": "3602a4e4ad3333d4be989ce34b8285e73cbd472c",
+    "launch": {
+      "requested": {
+        "agent": "opencode2",
+        "model": null,
+        "effort": null
+      },
+      "effective": {
+        "agent": "opencode2",
+        "model": null,
+        "effort": null
+      }
+    },
+    "turn_start": "unsupported",
+    "native_entry": {
+      "status": "native MiniMax-M3 attested at exact Task/Dispatch/directory",
+      "session": "ses_e6080b9f5ffen66hRLrq2lTFjt",
+      "models": [
+        "minimax-coding-plan/MiniMax-M3"
+      ],
+      "effort": "CLI override unsupported; inherited exact project model, native thinking",
+      "bytes": 85484,
+      "sha256": "a2afc3371cc51f9e11b4e322c8a686d512c385db42bd7a6e9254d457666fde21"
+    },
+    "status": "active, no delivery/review/acceptance claimed",
+    "scope": "current remaining delta to accepted59-row historical DeepSeek triage, no finding/source closure"
   }
 }

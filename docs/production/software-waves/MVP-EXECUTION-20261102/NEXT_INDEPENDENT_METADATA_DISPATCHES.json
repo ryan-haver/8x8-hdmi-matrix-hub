@@ -1,0 +1,110 @@
+{
+  "observed_utc": "2026-11-03T03:42:04.327171+00:00",
+  "status": "two independent accepted-plan metadata assignments active",
+  "run": "run_37205f6095b3",
+  "runtime": "e8ce3460-a9d4-4897-8e4f-10a8e3cdc400",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "publication_before_wave": "3602a4e4ad3333d4be989ce34b8285e73cbd472c",
+  "actors": {
+    "audit03": {
+      "task_id": "task_a1d5fdadce54",
+      "dispatch_id": "ctx_597f4ffe52bf",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01",
+      "actual_branch": "execution/wp-exec-sw-audit-01",
+      "exact_entry_base": "ac97e1f5886d591562597b5e81c3fa410adda2f8",
+      "launch": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "turn_start": "unsupported",
+      "native_entry": {
+        "status": "native MiniMax-M3 attested at exact Task/Dispatch/directory",
+        "session": "ses_e6080e92bffegPPto3UPYr8ozy",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "effort": "CLI override unsupported; inherited exact project model, native thinking",
+        "bytes": 126496,
+        "sha256": "464e674ed36f0a551042f72172518e8e8f28db47dbb52477b95dbb1b5873a736"
+      },
+      "status": "active, no delivery/review/acceptance claimed"
+    },
+    "findings": {
+      "task_id": "task_003f9f06ee62",
+      "dispatch_id": "ctx_8f2f304eeed7",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-findings-01",
+      "actual_branch": "ryan-haver/wp-exec-sw-findings-01",
+      "exact_entry_base": "3602a4e4ad3333d4be989ce34b8285e73cbd472c",
+      "launch": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "turn_start": "unsupported",
+      "native_entry": {
+        "status": "native MiniMax-M3 attested at exact Task/Dispatch/directory",
+        "session": "ses_e6080b9f5ffen66hRLrq2lTFjt",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "effort": "CLI override unsupported; inherited exact project model, native thinking",
+        "bytes": 85484,
+        "sha256": "a2afc3371cc51f9e11b4e322c8a686d512c385db42bd7a6e9254d457666fde21"
+      },
+      "status": "active, no delivery/review/acceptance claimed"
+    }
+  },
+  "findings_provisioning": {
+    "base": "3602a4e4ad3333d4be989ce34b8285e73cbd472c",
+    "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-findings-01",
+    "path": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-exec-sw-findings-01",
+    "actual_branch": "ryan-haver/wp-exec-sw-findings-01",
+    "local_ignored_config_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+    "provisioning": "agent-free Orca create for exact project routing, no agent launched until genuine worker-start",
+    "spec_sha256": "893023cf926b7810298f4a8d82a31c3ebfc57014aba6b751b6d7ed8f58ca89be"
+  },
+  "fleet": {
+    "total": 107,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 107,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoxOTkxfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOCAyMjo0NDowNCIsImRpc3BhdGNoSWQiOiJjdHhfMTM0NmJiZmY3OTM1IiwiZGF0YWJhc2VJZCI6NjAwfX0"
+      },
+      {
+        "limit": 100,
+        "total": 107,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 8,
+      "released": 99
+    },
+    "new_dispatched": 2,
+    "historical_retained": 6,
+    "accounting": "two running keep-open resources also read retained; this is not eight active assignments"
+  },
+  "concurrency": "max2new+coordinator+protected external reservation=4; no nesting",
+  "acceptance": "EV negative-gap documentation accepted via coordinator disposition; current inventory correction03 and findings delta unaccepted until independent exact-commit review",
+  "core_qualification": "attempt1FAIL/no domain, explicit owner manual-retake choice pending; source/physical/release gates unchanged"
+}
