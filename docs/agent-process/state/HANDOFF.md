@@ -1,5 +1,12 @@
 # Current coordinator handoff
 
+## Worktree cleanup candidates audited — 2026-11-03T21:05:53.746427+00:00
+
+Read-only live inventory:42 Git worktrees,43 Orca entries (one stale persistence-wiring entry with folder/oldEBUSY error). Exact33 completed planning/qualification/audit/findings/repository/CI/preservation/freshness/Flic-metadata worktrees can retire after current full-bundle/recovery and original-file preservation verification. All33 tracked/untracked clean, exact remote task heads verified, final task-commit paths canonically present in integration, current-head workspace archive records present, all matched workers released and no app-reported agents. These are cleanup candidates, not immediate deletion authorization from a name pattern or proof of fresh lossless backup. Full exact names/heads/paths/checks in docs/production/WORKTREE_CLEANUP_AUDIT_20261103.json.
+
+Keep integration plus6 pending source/evidence worktrees: APIclientC1/C2, APIreadC1, securitydataC1/C2/C3. Two older completed worktrees wp-ev02-name-review and wp-sw-api-root retain unverifiable resources; missing status is not exit. Persistence-wiring has an Orca/Git mismatch and leftover folder, recovery required. Verified first33 retirement would reduce visible Orca entries43to10, with these protected states retained. Flic metadata checkout retirement does not close its privacy/admission/hardware gates. No removal, branch deletion, release, phase or worker launch performed; source/qualification/release readiness unchanged.
+
+
 ## Opus5.5 bounded reviewer qualification PASS; phase closed — 2026-11-03T19:29:56.832704+00:00
 
 Independent fresh OpenAI Astra/high judgement dda63d66 at exact Opus5.5 evaluator1d49014b PASSES all six frozen axes. Coordinator ACCEPTS ONLY: bounded Python validation-runner/model offline simulator API refusal preparation and relevant compatibility guards. Actual9planning/ONEcandidate/ONEjudge complete; no additional automatic retry/author rewrite/secondjudge authority. New COORDINATOR_DISPOSITION records exactnative/commit/hash/axisbasis and conditions. Generic core qualification is NOTgranted; gate status SCOPED_PASS deliberately does not auto-unlock78reservations, sourceacceptance or broader domains. Both4.7FAILs remain byte-identical, lostC1originalsstaylost/FSEC007unretried.
