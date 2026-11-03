@@ -1,0 +1,286 @@
+{
+  "version": 1,
+  "phase": "qualification-replacement-20261103",
+  "round": 2,
+  "status": "frozen common peer challenge input; proposed controls are not consensus",
+  "created_utc": "2026-11-03T18:14:47.045890+00:00",
+  "planning_integration_snapshot": "a2f85019efa902f7c99ab58e5f6cc823c2ab608d",
+  "authority": "docs/agent-process/phases/qualification-replacement-20261103/AUTHORIZATION.json",
+  "original_R1_input": {
+    "path": "docs/agent-process/phases/qualification-replacement-20261103/INPUT_PACKET.json",
+    "sha256": "fc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9"
+  },
+  "all_R1_reports": [
+    {
+      "head": "9108174ed78056ca1732228b33b8379ae7fca6b8",
+      "report": "docs/agent-process/phases/qualification-replacement-20261103/round1/anthropic.md",
+      "bytes": 4458,
+      "sha256": "813366cf7626fa00d62ce76eac23d90ce0ee203401d6b9d86e8676d7e6a4b4c6",
+      "recommendation": "require_changes"
+    },
+    {
+      "head": "6307afb565a8b564536185079d9e16118512dab9",
+      "report": "docs/agent-process/phases/qualification-replacement-20261103/round1/minimax.md",
+      "bytes": 4931,
+      "sha256": "887dd64f72fec1489e9772dc04c4e9e58445fde328d0089bf7b911675354f3c2",
+      "recommendation": "proceed with binding conditions"
+    },
+    {
+      "head": "914103e8ba5707ac203959ebf5e5c59d57a3a1c5",
+      "report": "docs/agent-process/phases/qualification-replacement-20261103/round1/openai.md",
+      "bytes": 5138,
+      "sha256": "5f257fc06c67b1eaa421e6ae73b0087a2ef33a66bd1592ef427a428e6de4228f",
+      "recommendation": "require_changes"
+    }
+  ],
+  "read_method": "Read every full report using git show <head>:<report>, verify canonical blob SHA; do not substitute coordinator summaries. All R1 native transcripts remain private; public native identity receipts suffice for planning. Do not access current R2 peer reports before all three R2 reports are preserved.",
+  "fixed_source": {
+    "candidate": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+    "review_base": "938ae30339790c361abdda6fdd01b11a4e498518",
+    "full_lineage": [
+      "938ae30339790c361abdda6fdd01b11a4e498518",
+      "386872316cb60130b06dd704557ae6ca1a92b5c8",
+      "060769b724e7a546b8df22eac82f3b288d9bbbe8",
+      "ee3f2e7f034a9ace64553e942f328dff921a1e04",
+      "caaa4faabe9ede1e3aed37d2269efd4a4d691e04"
+    ],
+    "nine_path_manifest": [
+      {
+        "path": "docs/production/software-waves/SW-API-CLIENT-02-C1/AUTHOR.md",
+        "revision": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+        "git_blob": "c72db0cc7361fe37f5b29169e86d70045ce6868d",
+        "bytes": 26557,
+        "sha256": "ce8dc212540fcbc8f175dcd9558f2cfe6f4e1b75d6660f7c4bc0fd03e450e0bf"
+      },
+      {
+        "path": "docs/production/software-waves/SW-API-CLIENT-02-C2/AUTHOR.md",
+        "revision": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+        "git_blob": "5f3f408c8cf8c0c435b22d4449149cd9dfb76ccb",
+        "bytes": 13306,
+        "sha256": "721ffb34faf10d663c90f3fac3f5f02982d3b6879d22025eeee8e01305a688a5"
+      },
+      {
+        "path": "docs/production/software-waves/SW-API-CLIENT-02-C2/INTAKE.md",
+        "revision": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+        "git_blob": "1286fca5431b73e726745bb357a7fbb9de30bcaa",
+        "bytes": 6397,
+        "sha256": "0228392f8bccd6d59d5267ecac325ae84a242cbec557786fbecceb4ea44e47a7"
+      },
+      {
+        "path": "docs/validation/features.yaml",
+        "revision": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+        "git_blob": "ff61632fa00527a63b7215cdcf2014e9aa14a327",
+        "bytes": 529489,
+        "sha256": "bd5f8f015a7ac0e1cd8f6eaaec0ae9b071ff0643109cd531ee5266c7a8b31bfa"
+      },
+      {
+        "path": "tests/validation/scenarios/sw_api_client_02_c1.py",
+        "revision": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+        "git_blob": "ea3fe0008fb36062ccaff73267df4b2193dac2c2",
+        "bytes": 2069,
+        "sha256": "4259fcd0a87ced4b6e6c25149ada17cbd455cc80f3282757685489d1c8ef855c"
+      },
+      {
+        "path": "tests/validation/test_sw_api_client_02_c1.py",
+        "revision": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+        "git_blob": "a7bddfcda29c0826d6b4fb7e57e849186aec96de",
+        "bytes": 11583,
+        "sha256": "c5cf8fb897ee84fdbd9708e2ac8c4936142f6d2aafe7d78841762e4f9ce7a9e0"
+      },
+      {
+        "path": "tests/validation/test_sw_api_client_02_c2.py",
+        "revision": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+        "git_blob": "c654a1897450ac4336046b468c7a0bb3124bd461",
+        "bytes": 10358,
+        "sha256": "3d02092758dd5023acd70fa044e2e3db6754ec08fea7af48d796d44cc1711b90"
+      },
+      {
+        "path": "tools/validate/model.py",
+        "revision": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+        "git_blob": "30f9c0adc8967489bc5eeb0f6c7eb24b74874b73",
+        "bytes": 21046,
+        "sha256": "9e5553c931d5199fb127628f2f90f8477fe75868698d8d7bbccbad84ea1571be"
+      },
+      {
+        "path": "tools/validate/runner.py",
+        "revision": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+        "git_blob": "95df14bb5017487b61a075608a9ff10e2a9f0344",
+        "bytes": 53822,
+        "sha256": "d15667f9b948af23ed1ccc001ae620f2acda0f8202187d3377e036b4c140cee6"
+      }
+    ],
+    "manifest_limit": "Read-only coordinator metadata, never a substitute for evaluator actual reads or substantive review"
+  },
+  "rubric": {
+    "path": "docs/production/software-waves/MVP-EXECUTION-20261102/QUALIFICATION_RUBRIC.json",
+    "canonical_sha256": "66f37090564007afebe29cdfd095af7fa85c4321a8420016ada8633dc0563672",
+    "mandatory_axes": [
+      "provenance",
+      "invariants",
+      "counterexamples",
+      "behavior_and_tools",
+      "calibration",
+      "review_quality"
+    ],
+    "rule": "all pass required; unknown holds; no frozen-byte or threshold change"
+  },
+  "eligible_domain": "bounded Python validation-runner/model offline simulator API refusal preparation and relevant compatibility guards",
+  "history": [
+    {
+      "attempt": 1,
+      "model": "claude-opus-4-7/high",
+      "evaluator": "97c47be3670df297b2a7ac2696350615b88846c1",
+      "judge": "5b70c91604c427d0d0398e6c5b3fce815b35efb3",
+      "status": "FAIL/noqualifieddomain",
+      "disposition": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/execution-20261101/COORDINATOR_DISPOSITION.json"
+    },
+    {
+      "attempt": 2,
+      "model": "claude-opus-4-7/high",
+      "evaluator": "78eea1519cd4b6c8ac626b28ee45281f43623198",
+      "judge": "7548b5b7cd39a714e6e626c6226d8e49a39a14be",
+      "status": "FAIL/noqualifieddomain",
+      "disposition": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/COORDINATOR_DISPOSITION.json"
+    }
+  ],
+  "challenges": [
+    {
+      "id": "C1",
+      "claim": "Anthropic proposes evaluator at final integration base, MiniMax requires caaa checkout",
+      "proposed_disposition": "Use dedicated evaluator checkout at exact caaa and execute existing sample tests there. Integration base is planning metadata, not sample source; no copied harness or detached substitute. Judge starts at exact new evaluator report commit whose parent is caaa.",
+      "why": "Integration base lacks five sample paths; all nine paths and original existing controls must actually be inspected/executed."
+    },
+    {
+      "id": "C2",
+      "claim": "Rubric source_commits abbreviated implementation list versus full lineage",
+      "proposed_disposition": "Keep frozen rubric bytes unchanged; 938 to caaa full four-commit/nine-path window governs, including report-only 060769 and caaa. Require per-path/per-commit coverage and actual tool reads.",
+      "why": "Implementation shorthand does not define an exhaustive report-inclusive review boundary; no invented causal claim that shorthand caused J1."
+    },
+    {
+      "id": "C3",
+      "claim": "MiniMax parenthetical says ee3 contains the only in-window code changes",
+      "proposed_disposition": "Correct prospectively: 386 also adds scenario and test code. Preserve original R1 report and challenge explicitly.",
+      "why": "Actual diff metadata is authoritative."
+    },
+    {
+      "id": "C4",
+      "claim": "MiniMax calls recurrence the modal outcome; Anthropic asks for lower weighting and says two different-family FAILs",
+      "proposed_disposition": "No unsupported failure probability or weighted majority. Both prior judges are OpenAI (different from evaluator, not two distinct judge families). Disclose same-model planning conflict; all three R3 explicit acceptances remain required.",
+      "why": "Planning contributors do not qualify models or replace unanimous decisions."
+    },
+    {
+      "id": "C5",
+      "claim": "Proof publication, populations and execution claims failed prior mandatory axes",
+      "proposed_disposition": "Use command-derived counts with exact denominators including blocked controls, tracked-at-commit versus task-ref-published versus ignored/private labels, direct return codes/full streams/JUnit/argv/safe environment/time and original artifacts. Unknown termination cause/descendant census stays unknown. Existing runner reset side effects must not become absolute no-side-effect claims.",
+      "why": "A judge cannot fill missing evaluator coverage or relabel private artifacts as published."
+    },
+    {
+      "id": "C6",
+      "claim": "Process deviations in R1 and qualification correction reserves",
+      "proposed_disposition": "Preserve all originals. Standard Windows child environment via os.environ.copy(), keep SystemDrive/SystemRoot/USERPROFILE, sanitize receipts rather than stripping actual OS variables. Finalize prose before ONE final docs invocation; do not rerun for word trimming. Aim <=600 words is subordinate to truthful completeness. Reserve does not authorize evaluator rewrite/retry or replacement judge.",
+      "why": "Prior Anthropic cache side effect and MiniMax three documentation invocations are recorded deviations, not actual planning R2/R3."
+    },
+    {
+      "id": "C7",
+      "claim": "Fresh OpenAI judge and route capacity",
+      "proposed_disposition": "New exact-commit judge session cites original source, assertions, evaluator native/tool evidence and receipts. Prior same-family judges are historical evidence, not verdict templates. Refresh pool/reset/commitments before each stage; unknown or <30% requires suitable verified fallback or hold affected dispatch. No alternative qualification pair is currently verified.",
+      "why": "Catalog/native availability and planning consensus do not establish source competence or fund the whole backlog."
+    }
+  ],
+  "proposed_evidence_controls": {
+    "coverage_matrix": [
+      "path",
+      "all relevant inspected revisions/commits",
+      "actual reads/tool proof reference",
+      "invariant/assertions/compatibility impact",
+      "finding or reasoned no-finding; severity/location/support"
+    ],
+    "counts": "derive from exact scoped commands, blocked statuses retained; no fixed stale expected population as substitute",
+    "execution": "existing 54 focused controls plus existing documentation checks at source checkout, no new harness; direct subprocess receipt/full streams/JUnit/argv/safe effective settings/time/temp per invocation; capture failed originals before any authorized continuation",
+    "isolation": "dedicated fresh data/config/TEMP/TMP/pytest paths; env.copy + explicit paths, -B/bytecodeoff not -I; no global scans/campaign or historical FSEC007 retry",
+    "artifact_labels": "tracked-at-commit and verified remote publication are separate; ignored/private never shipped or public",
+    "future_disposition": "one candidate + one fresh judge only after three R3 accepts; exact report judge all six axes; any fail/hold means no domain; no automatic retry/rewrite/new judge; no source acceptance"
+  },
+  "proposed_staffing": {
+    "candidate": "Anthropic native claude-opus-5-5/high, dedicated NEW qualification tree at caaa, exclusive NEW AUTHOR.md plus assigned ignored/temp paths, 15min target; not yet qualified",
+    "judge": "OpenAI native gpt-6-astra/high, NEW tree/session at exact future evaluator report commit, exclusive NEW REVIEW.md plus own ignored/temp, 15min target; evaluation-quality judge only, cannot accept OpenAI authored source",
+    "panel": "same three actual families, bounded planning only, max9 contributions; coordinator synthesis not contributor",
+    "alternatives": "Opus 4.7 both failures retained. Sol/Astra/Luna same family/pool; MiniMax bounded prose only. No verified alternate source qualification pair."
+  },
+  "capacity_observation": {
+    "observed_utc": "2026-11-03T18:14:47.045890+00:00",
+    "source": "supported orca account list, cached usage; no absolute allowance exposed",
+    "other_host_demand": "unknown; not zero",
+    "reserve": "remaining six bounded planning contributions plus one candidate and one fresh judge, each stage separately gated; no automatic qualification correction/retry authority",
+    "claude": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 4,
+        "windowMinutes": 300,
+        "resetsAt": 1793740800373,
+        "resetDescription": "2:20 PM"
+      },
+      "weekly": {
+        "usedPercent": 21,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400373,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "updatedAt": 1793729399394,
+      "error": null
+    },
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 62,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "11:36 PM"
+      },
+      "updatedAt": 1793729399742,
+      "error": null
+    },
+    "minimax": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 18,
+        "windowMinutes": 300,
+        "resetsAt": 1793740313659,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 25,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932884,
+        "resetDescription": null
+      },
+      "updatedAt": 1793729399468,
+      "error": null
+    }
+  },
+  "catalog_observation": {
+    "observed_utc": "2026-11-03T18:14:47.045890+00:00",
+    "OpenAI": {
+      "model": "gpt-6-astra",
+      "supported_effort": "high",
+      "cache_fetched_at": "2026-11-03T18:14:41.060834900Z",
+      "native_prior_R1": "exact Astra/high attested; fresh new session still required"
+    },
+    "Anthropic": {
+      "model": "claude-opus-5-5",
+      "effort": "high supported launch/local config, native per-turn effort not exposed",
+      "native_prior_R1": "actual Opus 5.5 attested; this establishes availability, not source competence"
+    },
+    "MiniMax": {
+      "catalog_model": "minimax-coding-plan/MiniMax-M3",
+      "effort": "thinking inherited, CLI override unsupported",
+      "native_prior_R1": "actual MiniMax M3 attested; routing exact config rehashed"
+    },
+    "Google": "primary unavailable; alternate alias identity/qualification/headroom not verified, not fallback",
+    "DeepSeek": "owner exhausted; forbidden dispatch or credit purchase",
+    "alternatives": "Opus 4.7 both failures retained. Sol/Astra/Luna same family/pool; MiniMax bounded prose only. No verified alternate source qualification pair."
+  },
+  "decision_process": "Each R2 reads all three R1 reports and challenges every material contradiction/control/staffing issue; coordinator preserves reports/dispositions, creates one complete hashed final plan+allocation for all three R3 explicit accept/require_changes/blocked; unanimity, not weighted majority. No candidate execution before that barrier.",
+  "authorization_limits": "No implementation/test/tool edits, fixture/parser/harness, registry/ledger generation, global campaigns, source/release/privacy/HA/hardware signoff; both prior FAILs immutable; no new spend/accounts/credentials; no helpers/nesting; total max9 planning contributions and one candidate/one judge. Frozen original 85-pin plan untouched."
+}

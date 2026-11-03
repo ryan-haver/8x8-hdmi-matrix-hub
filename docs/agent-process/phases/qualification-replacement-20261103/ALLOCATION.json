@@ -1,6 +1,6 @@
 {
-  "observed_utc": "2026-11-03T18:03:59.845260+00:00",
-  "status": "R1firsttwo preserved, thirdindependentassessmentlaunched",
+  "observed_utc": "2026-11-03T18:14:47.045890+00:00",
+  "status": "R1 complete and preserved; R2 all three prepared, no new dispatch yet",
   "phase": "qualification-replacement-20261103",
   "frozen_input_sha256": "fc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9",
   "all_round1_bases": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
@@ -24,7 +24,7 @@
         "round1",
         "anthropic"
       ],
-      "stage": "delivered/released/preserved; recommendationwithhelduntilbarrier",
+      "stage": "delivered/released/preserved/published",
       "actual_assignment": {
         "task_id": "task_b2647dfbc03e",
         "dispatch_id": "ctx_cf269c96096f",
@@ -88,12 +88,21 @@
         "retention": "readonlyexacttree, originalartifacts retained; no removal",
         "process_history": "604words versus600aim retained; own4file %SystemDrive% cache sideeffect reportedly movedintact into assignedignored stray-side-effect, fullnative/source/artifacts retained for verification; not a protocolconformance pass",
         "preservation": {
-          "archive_sha256": "870721d2c905724efa2dd38ca88cefb33f6010d097f713ce195efb79bdb071a2",
-          "archive_bytes": 207172257,
-          "regular_files": 4671,
-          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+          "wp-qr-r1-anthropic": {
+            "archive_sha256": "870721d2c905724efa2dd38ca88cefb33f6010d097f713ce195efb79bdb071a2",
+            "archive_bytes": 207172257,
+            "regular_files": 4671,
+            "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+          },
+          "external-r1-anthropic": {
+            "archive_sha256": "695ad62fd62d10e4f22957f6a4e4cc4d67443575c1987b9aefc01bca75236cbc",
+            "archive_bytes": 59582,
+            "regular_files": 103,
+            "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+          }
         },
-        "integration_commit": "4a6496c85abc1ca6d69571ec0556521b403da677"
+        "integration_commit": "4a6496c85abc1ca6d69571ec0556521b403da677",
+        "recommendation": "require_changes"
       }
     },
     "minimax": {
@@ -115,7 +124,7 @@
         "round1",
         "minimax"
       ],
-      "stage": "delivered/released/preserved; recommendationwithhelduntilbarrier",
+      "stage": "delivered/released/preserved/published",
       "actual_assignment": {
         "task_id": "task_8fda5920c385",
         "dispatch_id": "ctx_11e7bd819fd5",
@@ -178,12 +187,21 @@
         "retention": "readonlyexacttree, originalartifacts retained; no removal",
         "process_history": "Three docs invocations reported (two pretrim, onefinal) despite taskONE; alloriginals retained in distinctdata/config/temp-r2/r3. These r2/r3filenames are testattempts WITHIN R1, not phaseRounds2/3 contributions. No single-invocation conformance pass.",
         "preservation": {
-          "archive_sha256": "83e246a50dc4b2f34d93fdd148f54134763ab160f1c811532ae988d7883bc91f",
-          "archive_bytes": 207017249,
-          "regular_files": 4674,
-          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+          "wp-qr-r1-minimax": {
+            "archive_sha256": "83e246a50dc4b2f34d93fdd148f54134763ab160f1c811532ae988d7883bc91f",
+            "archive_bytes": 207017249,
+            "regular_files": 4674,
+            "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+          },
+          "external-r1-minimax": {
+            "archive_sha256": "166e01b2a8c43b92cf8869537ad0206a22b1cb3c72663ecab260c4c15d712a61",
+            "archive_bytes": 202431,
+            "regular_files": 311,
+            "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+          }
         },
-        "integration_commit": "c0e168dd66437a6515e46d3f7a08ff1fe35df647"
+        "integration_commit": "c0e168dd66437a6515e46d3f7a08ff1fe35df647",
+        "recommendation": "proceed with binding conditions"
       }
     },
     "openai": {
@@ -205,7 +223,7 @@
         "round1",
         "openai"
       ],
-      "stage": "launched/nodeliveryyet",
+      "stage": "delivered/released/preserved/published",
       "branch_reservation": "planning/qr-20261103-r1-openai",
       "creation": "genuineworker-start new-top-level; returnedactualbranchmustberecorded, reservationnotassumed",
       "actual_assignment": {
@@ -243,7 +261,46 @@
         "observed_dispatch_status": "dispatched",
         "observed_worker_state": "ready"
       },
-      "actual_branch": "ryan-haver/wp-qr-r1-openai"
+      "actual_branch": "ryan-haver/wp-qr-r1-openai",
+      "delivery_metadata": {
+        "head": "914103e8ba5707ac203959ebf5e5c59d57a3a1c5",
+        "base": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
+        "tree": "wp-qr-r1-openai",
+        "actual_branch": "ryan-haver/wp-qr-r1-openai",
+        "report": "docs/agent-process/phases/qualification-replacement-20261103/round1/openai.md",
+        "bytes": 5138,
+        "sha256": "5f257fc06c67b1eaa421e6ae73b0087a2ef33a66bd1592ef427a428e6de4228f",
+        "task_id": "task_62000ea30205",
+        "dispatch_id": "ctx_f2421e534169",
+        "terminal": "released",
+        "task_ref_publication": "exact remote/local verified",
+        "native_final": {
+          "session": "01a1a293-aef8-7693-bc71-ba1ddae999fc",
+          "models": [
+            "gpt-6-astra"
+          ],
+          "effort": "high",
+          "bytes": 606346,
+          "sha256": "397693a165a1daa5193ae02033c6984884d31bea7cb5d5e748004666b5bc1f6c"
+        },
+        "process_history": "one documentation invocation, 489 passed/direct exit 0; no semantic qualification",
+        "preservation": {
+          "wp-qr-r1-openai": {
+            "archive_sha256": "3239b686a867d50bce44dcb068b110d7e817c91ae2bac0153049277f9f4c6f0e",
+            "archive_bytes": 207019424,
+            "regular_files": 4668,
+            "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+          },
+          "external-r1-openai": {
+            "archive_sha256": "c67ef88eb7b262d4b57b0c4d32411d8f5cfbf5495b7992f32d5310186084c43a",
+            "archive_bytes": 57760,
+            "regular_files": 102,
+            "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+          }
+        },
+        "integration_commit": "a2f85019efa902f7c99ab58e5f6cc823c2ab608d",
+        "recommendation": "require_changes"
+      }
     }
   },
   "first_execution_wave": [
@@ -263,77 +320,185 @@
   "independent_future_judge": "OpenAI Astra/high at exactfutureAnthropicevaluationreport, one judge under ownerapproval",
   "demand": "9 bounded prose planning contributions (R1/R2 target4min/<=600words inclJSON, R3 target2min explicitverdict), one15min candidateassessment and one15min independentjudge; later stages separatelycapacitygated, no unsupportedtoken/cost forecasts",
   "capacity": {
-    "observed_utc": "2026-11-03T17:47:23.285520+00:00",
+    "observed_utc": "2026-11-03T18:14:47.045890+00:00",
+    "source": "supported orca account list, cached usage; no absolute allowance exposed",
+    "other_host_demand": "unknown; not zero",
+    "reserve": "remaining six bounded planning contributions plus one candidate and one fresh judge, each stage separately gated; no automatic qualification correction/retry authority",
     "claude": {
       "status": "ok",
       "session": {
         "usedPercent": 4,
         "windowMinutes": 300,
-        "resetsAt": 1793740799522,
-        "resetDescription": "2:19 PM"
+        "resetsAt": 1793740800373,
+        "resetDescription": "2:20 PM"
       },
       "weekly": {
         "usedPercent": 21,
         "windowMinutes": 10080,
-        "resetsAt": 1793966399522,
-        "resetDescription": "Fri 4:59 AM"
+        "resetsAt": 1793966400373,
+        "resetDescription": "Fri 5:00 AM"
       },
-      "updatedAt": 1793727648542,
+      "updatedAt": 1793729399394,
       "error": null
     },
     "codex": {
       "status": "ok",
       "session": null,
       "weekly": {
-        "usedPercent": 60,
+        "usedPercent": 62,
         "windowMinutes": 10080,
         "resetsAt": 1793774164000,
         "resetDescription": "11:36 PM"
       },
-      "updatedAt": 1793727648904,
+      "updatedAt": 1793729399742,
       "error": null
     },
     "minimax": {
       "status": "ok",
       "session": {
-        "usedPercent": 8,
+        "usedPercent": 18,
         "windowMinutes": 300,
         "resetsAt": 1793740313659,
         "resetDescription": null
       },
       "weekly": {
-        "usedPercent": 24,
+        "usedPercent": 25,
         "windowMinutes": 10080,
-        "resetsAt": 1793823932894,
+        "resetsAt": 1793823932884,
         "resetDescription": null
       },
-      "updatedAt": 1793727648483,
+      "updatedAt": 1793729399468,
       "error": null
     }
   },
   "fleet": {
-    "total": 123,
+    "total": 126,
     "all_pages": true,
     "pages": [
       {
         "limit": 100,
-        "total": 123,
+        "total": 126,
         "hasMore": true,
-        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMTcyfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwMjoxNzozMCIsImRpc3BhdGNoSWQiOiJjdHhfYjAxNDkxYjk3OGU5IiwiZGF0YWJhc2VJZCI6NjY3fX0"
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMTgyfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwMzo0NToxMiIsImRpc3BhdGNoSWQiOiJjdHhfMjQxZDQwNmE1Nzc3IiwiZGF0YWJhc2VJZCI6Njc2fX0"
       },
       {
         "limit": 100,
-        "total": 123,
+        "total": 126,
         "hasMore": false,
         "nextCursor": null
       }
     ],
     "terminal_counts": {
-      "released": 117,
+      "released": 120,
       "retained": 6
-    }
+    },
+    "new_active": 0,
+    "historical_retained": 6
   },
   "alternatives": "Opus4.7 two failed mandatoryqualifications retained, Google primaryunavailable and alternate route unqualified/unknown, DeepSeek exhausted, no samefamilyevaluationjudge or silent substitution",
   "protected": "root/private runtime/oldfailedbytes/native/artifacts/baselines/retainedworkspaces/odd untrackedhook artifact; no cleanup/reset/prune/forcepush",
-  "concurrency": "max2newworkers+coordinator+protected external reservation4 total; no nesting; stagger3contributors"
+  "concurrency": "max2newworkers+coordinator+protected external reservation4 total; no nesting; stagger3contributors",
+  "round2": {
+    "anthropic": {
+      "participant": "anthropic",
+      "family": "Anthropic",
+      "agent": "claude",
+      "model": "claude-opus-5-5",
+      "effort": "high",
+      "base": "9108174ed78056ca1732228b33b8379ae7fca6b8",
+      "worktree_name": "wp-qr-r1-anthropic",
+      "expected_branch": "planning/qr-20261103-r1-anthropic",
+      "spec": "docs/agent-process/phases/qualification-replacement-20261103/tasks/ROUND2_ANTHROPIC.txt",
+      "report": "docs/agent-process/phases/qualification-replacement-20261103/round2/anthropic.md",
+      "title": "Qualification replacement R2 Anthropic peer challenge",
+      "dependencies": [
+        "task_b2647dfbc03e",
+        "task_8fda5920c385",
+        "task_62000ea30205"
+      ],
+      "input_sha256": "a1d5beb25ba6ff7b493b498c9974f8e7b4c834b2629097233b55228243d9e84c",
+      "gate_path": [
+        "replacement_qualification",
+        "round2",
+        "anthropic"
+      ],
+      "stage": "prepared, not launched",
+      "routing_binding": {
+        "observed_utc": "2026-11-03T17:48:52.924322+00:00",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-anthropic",
+        "exact_base": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
+        "actual_branch": "planning/qr-20261103-r1-anthropic",
+        "agent_free_routing_provisioning": true,
+        "ignored_config_relative_path": ".claude\\settings.local.json",
+        "ignored_config_sha256": "53d75479d9fa111ad3e8ec185a464e3228f5be3659d540ef00fa63fcc278bdfd",
+        "configuration_not_native_identity_proof": true,
+        "publication_before_creation": "90855870adc3f7645d9394581d1446e11d8063a1"
+      }
+    },
+    "minimax": {
+      "participant": "minimax",
+      "family": "MiniMax",
+      "agent": "opencode2",
+      "model": "minimax-coding-plan/MiniMax-M3",
+      "effort": "thinking inherited; CLI override unsupported",
+      "base": "6307afb565a8b564536185079d9e16118512dab9",
+      "worktree_name": "wp-qr-r1-minimax",
+      "expected_branch": "planning/qr-20261103-r1-minimax",
+      "spec": "docs/agent-process/phases/qualification-replacement-20261103/tasks/ROUND2_MINIMAX.txt",
+      "report": "docs/agent-process/phases/qualification-replacement-20261103/round2/minimax.md",
+      "title": "Qualification replacement R2 MiniMax peer challenge",
+      "dependencies": [
+        "task_b2647dfbc03e",
+        "task_8fda5920c385",
+        "task_62000ea30205"
+      ],
+      "input_sha256": "a1d5beb25ba6ff7b493b498c9974f8e7b4c834b2629097233b55228243d9e84c",
+      "gate_path": [
+        "replacement_qualification",
+        "round2",
+        "minimax"
+      ],
+      "stage": "prepared, not launched",
+      "routing_binding": {
+        "observed_utc": "2026-11-03T17:49:00.243131+00:00",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-minimax",
+        "exact_base": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
+        "actual_branch": "planning/qr-20261103-r1-minimax",
+        "agent_free_routing_provisioning": true,
+        "ignored_config_relative_path": "opencode.json",
+        "ignored_config_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+        "configuration_not_native_identity_proof": true,
+        "publication_before_creation": "90855870adc3f7645d9394581d1446e11d8063a1"
+      }
+    },
+    "openai": {
+      "participant": "openai",
+      "family": "OpenAI",
+      "agent": "codex",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "base": "914103e8ba5707ac203959ebf5e5c59d57a3a1c5",
+      "worktree_name": "wp-qr-r1-openai",
+      "expected_branch": "ryan-haver/wp-qr-r1-openai",
+      "spec": "docs/agent-process/phases/qualification-replacement-20261103/tasks/ROUND2_OPENAI.txt",
+      "report": "docs/agent-process/phases/qualification-replacement-20261103/round2/openai.md",
+      "title": "Qualification replacement R2 OpenAI peer challenge",
+      "dependencies": [
+        "task_b2647dfbc03e",
+        "task_8fda5920c385",
+        "task_62000ea30205"
+      ],
+      "input_sha256": "a1d5beb25ba6ff7b493b498c9974f8e7b4c834b2629097233b55228243d9e84c",
+      "gate_path": [
+        "replacement_qualification",
+        "round2",
+        "openai"
+      ],
+      "stage": "prepared, not launched",
+      "branch_reservation": "planning/qr-20261103-r1-openai",
+      "creation": "genuineworker-start new-top-level; returnedactualbranchmustberecorded, reservationnotassumed",
+      "actual_branch": "ryan-haver/wp-qr-r1-openai"
+    }
+  },
+  "round2_input_sha256": "a1d5beb25ba6ff7b493b498c9974f8e7b4c834b2629097233b55228243d9e84c"
 }

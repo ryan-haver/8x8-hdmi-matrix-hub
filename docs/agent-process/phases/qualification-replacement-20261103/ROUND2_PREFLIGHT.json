@@ -1,0 +1,207 @@
+{
+  "observed_utc": "2026-11-03T18:14:47.045890+00:00",
+  "status": "R2 first pair prepared; third reserved, no Task/Dispatch yet",
+  "input_sha256": "a1d5beb25ba6ff7b493b498c9974f8e7b4c834b2629097233b55228243d9e84c",
+  "jobs": {
+    "anthropic": {
+      "participant": "anthropic",
+      "family": "Anthropic",
+      "agent": "claude",
+      "model": "claude-opus-5-5",
+      "effort": "high",
+      "base": "9108174ed78056ca1732228b33b8379ae7fca6b8",
+      "worktree_name": "wp-qr-r1-anthropic",
+      "expected_branch": "planning/qr-20261103-r1-anthropic",
+      "spec": "docs/agent-process/phases/qualification-replacement-20261103/tasks/ROUND2_ANTHROPIC.txt",
+      "report": "docs/agent-process/phases/qualification-replacement-20261103/round2/anthropic.md",
+      "title": "Qualification replacement R2 Anthropic peer challenge",
+      "dependencies": [
+        "task_b2647dfbc03e",
+        "task_8fda5920c385",
+        "task_62000ea30205"
+      ],
+      "input_sha256": "a1d5beb25ba6ff7b493b498c9974f8e7b4c834b2629097233b55228243d9e84c",
+      "gate_path": [
+        "replacement_qualification",
+        "round2",
+        "anthropic"
+      ],
+      "stage": "prepared, not launched",
+      "routing_binding": {
+        "observed_utc": "2026-11-03T17:48:52.924322+00:00",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-anthropic",
+        "exact_base": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
+        "actual_branch": "planning/qr-20261103-r1-anthropic",
+        "agent_free_routing_provisioning": true,
+        "ignored_config_relative_path": ".claude\\settings.local.json",
+        "ignored_config_sha256": "53d75479d9fa111ad3e8ec185a464e3228f5be3659d540ef00fa63fcc278bdfd",
+        "configuration_not_native_identity_proof": true,
+        "publication_before_creation": "90855870adc3f7645d9394581d1446e11d8063a1"
+      }
+    },
+    "minimax": {
+      "participant": "minimax",
+      "family": "MiniMax",
+      "agent": "opencode2",
+      "model": "minimax-coding-plan/MiniMax-M3",
+      "effort": "thinking inherited; CLI override unsupported",
+      "base": "6307afb565a8b564536185079d9e16118512dab9",
+      "worktree_name": "wp-qr-r1-minimax",
+      "expected_branch": "planning/qr-20261103-r1-minimax",
+      "spec": "docs/agent-process/phases/qualification-replacement-20261103/tasks/ROUND2_MINIMAX.txt",
+      "report": "docs/agent-process/phases/qualification-replacement-20261103/round2/minimax.md",
+      "title": "Qualification replacement R2 MiniMax peer challenge",
+      "dependencies": [
+        "task_b2647dfbc03e",
+        "task_8fda5920c385",
+        "task_62000ea30205"
+      ],
+      "input_sha256": "a1d5beb25ba6ff7b493b498c9974f8e7b4c834b2629097233b55228243d9e84c",
+      "gate_path": [
+        "replacement_qualification",
+        "round2",
+        "minimax"
+      ],
+      "stage": "prepared, not launched",
+      "routing_binding": {
+        "observed_utc": "2026-11-03T17:49:00.243131+00:00",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-minimax",
+        "exact_base": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
+        "actual_branch": "planning/qr-20261103-r1-minimax",
+        "agent_free_routing_provisioning": true,
+        "ignored_config_relative_path": "opencode.json",
+        "ignored_config_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+        "configuration_not_native_identity_proof": true,
+        "publication_before_creation": "90855870adc3f7645d9394581d1446e11d8063a1"
+      }
+    },
+    "openai": {
+      "participant": "openai",
+      "family": "OpenAI",
+      "agent": "codex",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "base": "914103e8ba5707ac203959ebf5e5c59d57a3a1c5",
+      "worktree_name": "wp-qr-r1-openai",
+      "expected_branch": "ryan-haver/wp-qr-r1-openai",
+      "spec": "docs/agent-process/phases/qualification-replacement-20261103/tasks/ROUND2_OPENAI.txt",
+      "report": "docs/agent-process/phases/qualification-replacement-20261103/round2/openai.md",
+      "title": "Qualification replacement R2 OpenAI peer challenge",
+      "dependencies": [
+        "task_b2647dfbc03e",
+        "task_8fda5920c385",
+        "task_62000ea30205"
+      ],
+      "input_sha256": "a1d5beb25ba6ff7b493b498c9974f8e7b4c834b2629097233b55228243d9e84c",
+      "gate_path": [
+        "replacement_qualification",
+        "round2",
+        "openai"
+      ],
+      "stage": "prepared, not launched",
+      "branch_reservation": "planning/qr-20261103-r1-openai",
+      "creation": "genuineworker-start new-top-level; returnedactualbranchmustberecorded, reservationnotassumed",
+      "actual_branch": "ryan-haver/wp-qr-r1-openai"
+    }
+  },
+  "fleet": {
+    "total": 126,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 126,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMTgyfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwMzo0NToxMiIsImRpc3BhdGNoSWQiOiJjdHhfMjQxZDQwNmE1Nzc3IiwiZGF0YWJhc2VJZCI6Njc2fX0"
+      },
+      {
+        "limit": 100,
+        "total": 126,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "released": 120,
+      "retained": 6
+    },
+    "new_active": 0,
+    "historical_retained": 6
+  },
+  "capacity": {
+    "observed_utc": "2026-11-03T18:14:47.045890+00:00",
+    "source": "supported orca account list, cached usage; no absolute allowance exposed",
+    "other_host_demand": "unknown; not zero",
+    "reserve": "remaining six bounded planning contributions plus one candidate and one fresh judge, each stage separately gated; no automatic qualification correction/retry authority",
+    "claude": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 4,
+        "windowMinutes": 300,
+        "resetsAt": 1793740800373,
+        "resetDescription": "2:20 PM"
+      },
+      "weekly": {
+        "usedPercent": 21,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400373,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "updatedAt": 1793729399394,
+      "error": null
+    },
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 62,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "11:36 PM"
+      },
+      "updatedAt": 1793729399742,
+      "error": null
+    },
+    "minimax": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 18,
+        "windowMinutes": 300,
+        "resetsAt": 1793740313659,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 25,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932884,
+        "resetDescription": null
+      },
+      "updatedAt": 1793729399468,
+      "error": null
+    }
+  },
+  "catalog": {
+    "observed_utc": "2026-11-03T18:14:47.045890+00:00",
+    "OpenAI": {
+      "model": "gpt-6-astra",
+      "supported_effort": "high",
+      "cache_fetched_at": "2026-11-03T18:14:41.060834900Z",
+      "native_prior_R1": "exact Astra/high attested; fresh new session still required"
+    },
+    "Anthropic": {
+      "model": "claude-opus-5-5",
+      "effort": "high supported launch/local config, native per-turn effort not exposed",
+      "native_prior_R1": "actual Opus 5.5 attested; this establishes availability, not source competence"
+    },
+    "MiniMax": {
+      "catalog_model": "minimax-coding-plan/MiniMax-M3",
+      "effort": "thinking inherited, CLI override unsupported",
+      "native_prior_R1": "actual MiniMax M3 attested; routing exact config rehashed"
+    },
+    "Google": "primary unavailable; alternate alias identity/qualification/headroom not verified, not fallback",
+    "DeepSeek": "owner exhausted; forbidden dispatch or credit purchase",
+    "alternatives": "Opus 4.7 both failures retained. Sol/Astra/Luna same family/pool; MiniMax bounded prose only. No verified alternate source qualification pair."
+  },
+  "concurrency": "two new workers + coordinator + protected old external reservation =4; no nesting",
+  "source_or_qualification_acceptance": false
+}
