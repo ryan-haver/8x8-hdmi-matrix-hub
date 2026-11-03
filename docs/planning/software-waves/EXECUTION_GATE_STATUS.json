@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-03T04:15:07.782523+00:00",
+  "observed_utc": "2026-11-03T04:46:20.591724+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -359,7 +359,7 @@
       "bytes": 85484,
       "sha256": "a2afc3371cc51f9e11b4e322c8a686d512c385db42bd7a6e9254d457666fde21"
     },
-    "status": "R1-R8 author correction01 launched; no findings report acceptance",
+    "status": "corrected report submitted, not accepted pending exact-commit review",
     "scope": "current remaining delta to accepted59-row historical DeepSeek triage, no finding/source closure",
     "report_commit": "f2af2f38f1ea95891de39b8e64fd0ab7826336de",
     "parser_state_claim": "265total/61open/204closed, original59+VAL14/15, pending independent review",
@@ -429,13 +429,14 @@
         "bytes": 76801,
         "sha256": "4997cafa00fad2028a6be2533d3a72a3dcb5bad8ac8980088b4249624ca29c4b"
       },
-      "status": "launched, no delivery/review/acceptance claimed",
+      "status": "delivered487a, released/preserved/published, exact-commit re-review prepared",
       "observed_dispatch_status": "dispatched",
-      "observed_worker_state": "ready"
+      "observed_worker_state": "ready",
+      "report_commit": "487a6ca7afaf65882fb490880421f0026ae59cc5"
     }
   },
   "CI_attribution": {
-    "status": "bounded56unit author mapping launched; no freshness/admission pass",
+    "status": "delivered d86; exact-commit factual review prepared, no freshness/admission pass",
     "source": "bdcf06dc6723aad7da63ecfed3d3555ab0d02e55",
     "units": 56,
     "original_freshness_admission": false,
@@ -471,9 +472,11 @@
         "bytes": 171678,
         "sha256": "7b3c61b1138b5c8dc7cc1c46e8624a443676726b2c3dbce556e8160ceeab19af"
       },
-      "status": "launched, no delivery/review/acceptance claimed",
+      "status": "delivered, released/preserved/published",
       "observed_dispatch_status": "dispatched",
-      "observed_worker_state": "ready"
-    }
+      "observed_worker_state": "ready",
+      "report_commit": "d86b65c271cc06d95895b8abdce53e24210bc6d9"
+    },
+    "report_commit": "d86b65c271cc06d95895b8abdce53e24210bc6d9"
   }
 }
