@@ -1,6 +1,6 @@
 {
   "observed_utc": "2026-11-03T03:03:05.157319+00:00",
-  "status": "two bounded metadata workers active",
+  "status": "inventory correction02 in flight; EV review delivered require_changes and released",
   "run": "run_37205f6095b3",
   "runtime": "e8ce3460-a9d4-4897-8e4f-10a8e3cdc400",
   "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
@@ -67,7 +67,8 @@
         "bytes": 522495,
         "sha256": "f8c1d02aadcf875723c0708ec2df370e7c12a96648060dac56ef6c9b0b7b1572"
       },
-      "status": "active; no delivered/reviewed/integrated/qualified outcome claimed"
+      "status": "delivered require_changes R1-R3; terminal released; full originals preserved",
+      "report_commit": "abd339eda108e4d74f1a147b2f445299814e9cf9"
     }
   },
   "fleet": {

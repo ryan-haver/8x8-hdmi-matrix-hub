@@ -1,5 +1,12 @@
 # Agent allocation and execution ledger
 
+## Preservation review requires three prose corrections — 2026-11-03T03:07:21.953049+00:00
+
+Astra task_eea6f443f108 / ctx_70e7d15a49fc delivered abd339eda108e4d74f1a147b2f445299814e9cf9 at exact author ed78321e: require_changes R1-R3. Qualify universal irrecoverability as accepted recorded loss plus bounded absence/copies elsewhere unknown; acknowledge new inspection metadata separately from historical evidence; preserve failed-log count/outcome versus native-transcript reported Telnet reason. Named historical identities and negative consequences verify; no original preservation/source/feature acceptance. Terminal released, final native691293bytes SHA e6f0241a... and verified workspace/temp archives retained; exact task ref published. Author/report integrated sequentially as RECORDS ONLY; workspaces retained, no destructive cleanup.
+
+Ready ordinary M3 correction01 at clean ed78321e in settled author tree, new private correction01/temp paths only, then independent Astra exact-commit re-review. Existing reserved EV fix/re-review capacity applies; seven-minute targeted text edit, no new phase or qualification retry. Codex59%/M3 85% weekly headroom observed,102fleet rows across2pages=95released/7retained (six historical plus separate in-flight inventory correction02). Max2new+coordinator+oldexternalreservation4, no nesting. Task/Dispatch remain null until actual launch. Core qualification1 FAIL/no domain and pending explicit owner retake decision unchanged; source/physical/release gates remain held/open. Details PRESERVATION_REVIEW01_DELIVERY.json and PRESERVATION_CORRECTION01_PREFLIGHT.json.
+
+
 ## Two targeted metadata workers active — 2026-11-03T03:03:05.157319+00:00
 
 MiniMax task task_4c7cf7c289ff / dispatch ctx_14d9b1569d7e corrects remaining R1/R4/R5/R6 at exact981e7e4a in existing wp-exec-sw-audit-01, only AUTHOR.md and NEW private correction02 namespace. Independent Astra task task_eea6f443f108 / dispatch ctx_70e7d15a49fc reviews two EV negative gaps at exacted78321e in NEW wp-exec-ev-preservation-gaps-review, only NEW REVIEW.md and private namespace. Actual branches/native entry attestations in METADATA_ROUND02_DISPATCHES.json; exact assigned native models observed, no completion or acceptance claimed. Prior writers released and originals preserved.
