@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-03T03:58:23.325065+00:00",
+  "observed_utc": "2026-11-03T04:00:57.035875+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -209,8 +209,42 @@
         "bytes": 126496,
         "sha256": "464e674ed36f0a551042f72172518e8e8f28db47dbb52477b95dbb1b5873a736"
       },
-      "status": "delivered f2ee; released/preserved/published, exact-commit re-review prepared",
-      "report_commit": "f2ee085a37a40cf8e3fc67aef4bb6fec5e7ad731"
+      "status": "delivered, independent exact-f2ee re-review launched",
+      "report_commit": "f2ee085a37a40cf8e3fc67aef4bb6fec5e7ad731",
+      "independent_review": {
+        "task_id": "task_d3524ee17f00",
+        "dispatch_id": "ctx_d77b1f25e526",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01-rereview03",
+        "actual_branch": "ryan-haver/wp-exec-sw-audit-01-rereview03",
+        "exact_entry_base": "f2ee085a37a40cf8e3fc67aef4bb6fec5e7ad731",
+        "observed_head": "f2ee085a37a40cf8e3fc67aef4bb6fec5e7ad731",
+        "launch": {
+          "requested": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          },
+          "effective": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        },
+        "turn_start": "observed",
+        "native_entry": {
+          "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+          "session": "01a19f8f-91d5-74b3-8605-3440a87faf38",
+          "models": [
+            "gpt-6-astra"
+          ],
+          "effort": "high native",
+          "bytes": 550023,
+          "sha256": "980674846fdfe48aa112cacc5e3a6ee53c3399355c43fdd5ca3924bd79e428f8"
+        },
+        "status": "review launched; author report still unaccepted until actual verdict/disposition",
+        "observed_dispatch_status": "dispatched",
+        "observed_worker_state": "ready"
+      }
     }
   },
   "automatic_retakes": false,
@@ -324,9 +358,43 @@
       "bytes": 85484,
       "sha256": "a2afc3371cc51f9e11b4e322c8a686d512c385db42bd7a6e9254d457666fde21"
     },
-    "status": "delivered f2af; released/preserved/published, independent exact-commit review prepared",
+    "status": "delivered, independent exact-f2af factual review launched",
     "scope": "current remaining delta to accepted59-row historical DeepSeek triage, no finding/source closure",
     "report_commit": "f2af2f38f1ea95891de39b8e64fd0ab7826336de",
-    "parser_state_claim": "265total/61open/204closed, original59+VAL14/15, pending independent review"
+    "parser_state_claim": "265total/61open/204closed, original59+VAL14/15, pending independent review",
+    "independent_review": {
+      "task_id": "task_14ca62be7c5f",
+      "dispatch_id": "ctx_f5097c9b3ca5",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-findings-01-review",
+      "actual_branch": "ryan-haver/wp-exec-sw-findings-01-review",
+      "exact_entry_base": "f2af2f38f1ea95891de39b8e64fd0ab7826336de",
+      "observed_head": "f2af2f38f1ea95891de39b8e64fd0ab7826336de",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+        "session": "01a19f8f-c5dc-78f0-9c89-4eb72483536b",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 723363,
+        "sha256": "f4eb43d59c164b4f02d10c5595afd53e0e398571ea1cc3613527638df7cbaf4d"
+      },
+      "status": "review launched; author report still unaccepted until actual verdict/disposition",
+      "observed_dispatch_status": "dispatched",
+      "observed_worker_state": "ready"
+    }
   }
 }

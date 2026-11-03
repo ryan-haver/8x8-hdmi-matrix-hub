@@ -1,0 +1,107 @@
+{
+  "observed_utc": "2026-11-03T04:00:57.035875+00:00",
+  "status": "two genuine independent exact-commit factual reviews launched",
+  "run": "run_37205f6095b3",
+  "runtime": "e8ce3460-a9d4-4897-8e4f-10a8e3cdc400",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "actors": {
+    "audit03": {
+      "task_id": "task_d3524ee17f00",
+      "dispatch_id": "ctx_d77b1f25e526",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01-rereview03",
+      "actual_branch": "ryan-haver/wp-exec-sw-audit-01-rereview03",
+      "exact_entry_base": "f2ee085a37a40cf8e3fc67aef4bb6fec5e7ad731",
+      "observed_head": "f2ee085a37a40cf8e3fc67aef4bb6fec5e7ad731",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+        "session": "01a19f8f-91d5-74b3-8605-3440a87faf38",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 550023,
+        "sha256": "980674846fdfe48aa112cacc5e3a6ee53c3399355c43fdd5ca3924bd79e428f8"
+      },
+      "status": "review launched; author report still unaccepted until actual verdict/disposition",
+      "observed_dispatch_status": "dispatched",
+      "observed_worker_state": "ready"
+    },
+    "findings": {
+      "task_id": "task_14ca62be7c5f",
+      "dispatch_id": "ctx_f5097c9b3ca5",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-findings-01-review",
+      "actual_branch": "ryan-haver/wp-exec-sw-findings-01-review",
+      "exact_entry_base": "f2af2f38f1ea95891de39b8e64fd0ab7826336de",
+      "observed_head": "f2af2f38f1ea95891de39b8e64fd0ab7826336de",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+        "session": "01a19f8f-c5dc-78f0-9c89-4eb72483536b",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 723363,
+        "sha256": "f4eb43d59c164b4f02d10c5595afd53e0e398571ea1cc3613527638df7cbaf4d"
+      },
+      "status": "review launched; author report still unaccepted until actual verdict/disposition",
+      "observed_dispatch_status": "dispatched",
+      "observed_worker_state": "ready"
+    }
+  },
+  "publication_before_wave": "5d4982cd6eadd965d5e3de97cc8c70d7f03e26e4",
+  "fleet": {
+    "total": 109,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 109,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoxOTk1fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOCAyMzowOTo0NiIsImRpc3BhdGNoSWQiOiJjdHhfY2RlODc1MzBiNjc1IiwiZGF0YWJhc2VJZCI6NjEzfX0"
+      },
+      {
+        "limit": 100,
+        "total": 109,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 8,
+      "released": 101
+    },
+    "historical_retained": 6,
+    "new_worker_resources": 2,
+    "accounting": "keep-open running/settled worker resources may read retained; not eight active assignments"
+  },
+  "concurrency": "max2new+coordinator+protected external reservation=4; no nesting",
+  "acceptance": "no inventory/findings/source qualification claimed from launches; EV documentation acceptance remains bounded",
+  "core_qualification": "attempt1FAIL/no domain; explicit owner retake decision pending, no answer/approval inferred"
+}
