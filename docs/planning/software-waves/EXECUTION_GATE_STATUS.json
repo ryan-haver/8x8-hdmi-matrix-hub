@@ -1,12 +1,22 @@
 {
-  "observed_utc": "2026-11-03T16:54:59.139382+00:00",
+  "observed_utc": "2026-11-03T17:06:01.428967+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
     "status": "FAIL",
     "attempt": 1,
     "qualified_domains": [],
-    "disposition": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/execution-20261101/COORDINATOR_DISPOSITION.json"
+    "disposition": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/execution-20261101/COORDINATOR_DISPOSITION.json",
+    "manual_attempt02": {
+      "status": "owner-approved, prepared not launched",
+      "authorization": "docs/production/software-waves/MVP-EXECUTION-20261102/QUALIFICATION_MANUAL02_AUTHORIZATION.json",
+      "candidate": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+      "rubric_sha256": "66f37090564007afebe29cdfd095af7fa85c4321a8420016ada8633dc0563672",
+      "task_id": null,
+      "dispatch_id": null,
+      "qualified_domains": [],
+      "further_retry_authorized": false
+    }
   },
   "direct_qualification_dependent_reservations": [
     "SW-HARNESS-01",
@@ -1135,7 +1145,7 @@
       ],
       "scope": "R1 only SEC14 LICENSE table/JSON:373physical/293nonempty and literal title; allotherlines preserved, no harness",
       "budget": "3min target <=100newwords, exactly2in-place passages",
-      "status": "bounded author correction launched, no delivery or acceptance inferred",
+      "status": "corrected submission delivered/released/preserved; exact-commit re-review prepared",
       "task_id": null,
       "dispatch_id": null,
       "current_preflight": "docs/production/software-waves/MVP-EXECUTION-20261102/NOV03_REPO_CORRECTION_PREFLIGHT.json",
@@ -1174,6 +1184,49 @@
         "status": "author correction launched, no delivery/review/acceptance inferred",
         "observed_dispatch_status": "dispatched",
         "observed_worker_state": "ready"
+      },
+      "author_delivery": {
+        "head": "9f12743e882e3175e7dfbe38b60eefbfe62376f3",
+        "base": "be7e441a0e034fb838e44914b245f84ba2a42cbf",
+        "tree": "wp-exec-sw-repo-01",
+        "actual_branch": "ryan-haver/wp-exec-sw-repo-01",
+        "report": "docs/production/software-waves/SW-REPO-01/execution-20261101/AUTHOR.md",
+        "bytes": 7113,
+        "sha256": "8b1ddcce3c3f5f2007fe6abcf0f7dbbf42e1bcab3dae8f813093350f75f02890",
+        "working_identical": true,
+        "cr_bytes": 0,
+        "whole_report_whitespace_tokens": 848,
+        "task_id": "task_418b22e1e9b2",
+        "dispatch_id": "ctx_20ac5203bd5e",
+        "terminal": "released",
+        "publication": "exact task ref remote/local verified",
+        "cleanup": "exact tree retained read-only, no removal",
+        "acceptance": "unaccepted corrected submission, exact-commit independent factual re-review required",
+        "native_final": {
+          "session": "ses_e5daa9932ffeko1EzAMEboL7hv",
+          "models": [
+            "minimax-coding-plan/MiniMax-M3"
+          ],
+          "variant": "thinking",
+          "bytes": 364028,
+          "sha256": "52e3ddd943321bde1010dc7f0835a85f9f382868dc13036d1a0510588b593352"
+        },
+        "budget": "3min correction target exceeded; original5min/<=700budget deviations preserved; no deadline or full-word-budget conformance",
+        "reference_precision": "Worker reported absent shared-root filename after ambiguous shorthand. Actual preflight exists at full docs/production/software-waves/MVP-EXECUTION-20261102/NOV03_REPO_CORRECTION_PREFLIGHT.json. Corrected future specs use full paths; no file loss inferred.",
+        "preservation": {
+          "archive_sha256": "88c3db7ba3152d8677196abc8f0acc5748ba71390d5f09c94650ead166aa72e3",
+          "archive_bytes": 206921261,
+          "regular_files": 4642,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "original_integrity": {
+          "preexisting_regular_files": 4636,
+          "changed_existing_files": [
+            "docs/production/software-waves/SW-REPO-01/execution-20261101/AUTHOR.md"
+          ],
+          "all_old_private_author_files_unchanged": true
+        },
+        "integration_commit": "7d8ab17d9741b947f207c51356d6a88ccf98a86d"
       }
     }
   },
