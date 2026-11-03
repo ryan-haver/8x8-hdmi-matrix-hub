@@ -1,0 +1,77 @@
+{
+  "status": "ready independent metadata wave; actual runtime IDs null until real start",
+  "observed_utc": "2026-11-03T02:36:42.548063+00:00",
+  "accepted_packet_sha256": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+  "run": "run_37205f6095b3",
+  "runtime": "e8ce3460-a9d4-4897-8e4f-10a8e3cdc400",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "tasks": {
+    "audit_correction_rereview": {
+      "base_sha": "981e7e4a48bce07e4dce24443d386b3e0643601a",
+      "worktree_name": "wp-exec-sw-audit-01-rereview01",
+      "model": "gpt-6-astra/high",
+      "family": "OpenAI",
+      "scope": "different-family re-review of M3 metadata correction, no source acceptance",
+      "new_report": "docs/production/software-waves/SW-AUDIT-01/execution-20261101/CORRECTION_REVIEW_01.md",
+      "rationale": "one reserved independent re-review session; new dedicated exact-corrected-head tree avoids resetting or overwriting archived oldreview workspace/report",
+      "task_id": null,
+      "dispatch_id": null
+    },
+    "EV-PRESERVATION-GAPS": {
+      "dependencies": [],
+      "base_selector": "exact published integration preflight head resolved immediately after scoped commit/push",
+      "worktree_name": "wp-exec-ev-preservation-gaps",
+      "model": "minimax-coding-plan/MiniMax-M3; no unsupported CLI effort/model override",
+      "family": "MiniMax",
+      "scope": "only lost API-C1 managed-failure artifacts and overwritten freshness scratch originals; negative-gap disposition never a preservation pass",
+      "independent_reviewer": "OpenAI/Astra bounded factual review after exact report commit; actual capacity reserved at wave preflight",
+      "task_id": null,
+      "dispatch_id": null
+    }
+  },
+  "capacity": {
+    "observed_utc": "2026-11-03T02:35:16.968955+00:00",
+    "codex": {
+      "session": null,
+      "weekly": {
+        "usedPercent": 40,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "updatedAt": 1793673232611,
+      "error": null,
+      "status": "ok"
+    },
+    "minimax": {
+      "session": {
+        "usedPercent": 20,
+        "windowMinutes": 300,
+        "resetsAt": 1793685244454,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 14,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932905,
+        "resetDescription": null
+      },
+      "updatedAt": 1793673232400,
+      "error": null,
+      "status": "ok"
+    }
+  },
+  "demand": "one bounded Astra re-review, one10min M3 negative-gap disposition plus subsequent independent factual review/correction reserve",
+  "fleet": {
+    "total": 98,
+    "retained": 6,
+    "released": 92,
+    "all_pages": true,
+    "new_active": 0
+  },
+  "concurrency": "max2new+coordinator+oldexternalreservation=4; no nesting",
+  "protected_resources": "all old workspaces/history/ignoredruntime/private data/oddhookartifact/failed originals/baselines; no cleanup/reset/prune/forcepush",
+  "qualification": "Anthropic core attempt1FAIL, noqualifieddomain, noautomaticretake; explicit owner choice still pending; these metadata tasks are independent",
+  "material_plan_change": false
+}

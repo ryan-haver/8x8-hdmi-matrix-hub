@@ -105,8 +105,11 @@
     "correction": {
       "task_id": "task_1a5ca9009556",
       "dispatch_id": "ctx_f2343717872b",
-      "status": "active, review/acceptance pending",
-      "base": "13fe2ae8d423d8e43065b08a8767109e011c61c0"
+      "status": "delivered981e7e4a, independent re-review pending",
+      "base": "13fe2ae8d423d8e43065b08a8767109e011c61c0",
+      "report_commit": "981e7e4a48bce07e4dce24443d386b3e0643601a",
+      "git_blob_sha256": "f2870b27b3ad12a4f9e0a9d332acfab80a7d2fa23ef128e6fce193cd5d3223c2",
+      "representation_erratum": "reported07c5836d is workingCRLF hash, canonicalGitLF f2870b27; exact normalization, no substantive drift"
     }
   },
   "automatic_retakes": false,
