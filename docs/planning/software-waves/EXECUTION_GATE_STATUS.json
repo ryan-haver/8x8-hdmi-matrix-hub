@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-03T04:48:53.224756+00:00",
+  "observed_utc": "2026-11-03T05:01:05.512701+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -359,7 +359,7 @@
       "bytes": 85484,
       "sha256": "a2afc3371cc51f9e11b4e322c8a686d512c385db42bd7a6e9254d457666fde21"
     },
-    "status": "corrected report submitted, not accepted pending exact-commit review",
+    "status": "correction re-review require_changes R3/R5 only; correction02 prepared",
     "scope": "current remaining delta to accepted59-row historical DeepSeek triage, no finding/source closure",
     "report_commit": "f2af2f38f1ea95891de39b8e64fd0ab7826336de",
     "parser_state_claim": "265total/61open/204closed, original59+VAL14/15, pending independent review",
@@ -464,15 +464,22 @@
           "bytes": 804384,
           "sha256": "9a6435ab4eeb680405009530cef958d577cbf3766b31be9064786dbacea4393e"
         },
-        "status": "launched; no verdict or report acceptance inferred",
+        "status": "delivered require_changes R3/R5; released/preserved/published",
         "observed_dispatch_status": "dispatched",
-        "observed_worker_state": "ready"
+        "observed_worker_state": "ready",
+        "report_commit": "43356a0c0d0948719bf989d7bd824631d8c89a0e"
       },
       "review_state": "independent exact-commit review launched, no verdict acceptance"
+    },
+    "correction02": {
+      "status": "prepared, not launched",
+      "base": "487a6ca7afaf65882fb490880421f0026ae59cc5",
+      "task_id": null,
+      "dispatch_id": null
     }
   },
   "CI_attribution": {
-    "status": "delivered d86; exact-commit factual review prepared, no freshness/admission pass",
+    "status": "review require_changes seven reporting corrections; core56mapping verified, correction01 prepared",
     "source": "bdcf06dc6723aad7da63ecfed3d3555ab0d02e55",
     "units": 56,
     "original_freshness_admission": false,
@@ -545,10 +552,17 @@
         "bytes": 715562,
         "sha256": "9f04f9a9365223032fb720f6411346cb0f325f31b88a6f44af4251fdc14fb56d"
       },
-      "status": "launched; no verdict or report acceptance inferred",
+      "status": "delivered require_changes; released/preserved/published",
       "observed_dispatch_status": "dispatched",
-      "observed_worker_state": "ready"
+      "observed_worker_state": "ready",
+      "report_commit": "81ac391cdc07ca8885b3b2237aa467aee0625675"
     },
-    "review_state": "independent exact-commit review launched, no verdict acceptance"
+    "review_state": "independent exact-commit review launched, no verdict acceptance",
+    "correction01": {
+      "status": "prepared, not launched",
+      "base": "d86b65c271cc06d95895b8abdce53e24210bc6d9",
+      "task_id": null,
+      "dispatch_id": null
+    }
   }
 }

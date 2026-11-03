@@ -1,6 +1,6 @@
 {
   "observed_utc": "2026-11-03T04:48:53.224756+00:00",
-  "status": "two genuine independent exact-commit factual reviews launched",
+  "status": "both reviewers delivered and released; neither report accepted, bounded author fixes prepared",
   "run": "run_37205f6095b3",
   "runtime": "e8ce3460-a9d4-4897-8e4f-10a8e3cdc400",
   "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
@@ -37,9 +37,11 @@
         "bytes": 804384,
         "sha256": "9a6435ab4eeb680405009530cef958d577cbf3766b31be9064786dbacea4393e"
       },
-      "status": "launched; no verdict or report acceptance inferred",
+      "status": "delivered require_changes; released/preserved/published",
       "observed_dispatch_status": "dispatched",
-      "observed_worker_state": "ready"
+      "observed_worker_state": "ready",
+      "report_commit": "43356a0c0d0948719bf989d7bd824631d8c89a0e",
+      "verdict": "require_changes R3/R5 only; other six accepted"
     },
     "ci_attribution": {
       "task_id": "task_e8646aacd637",
@@ -72,9 +74,11 @@
         "bytes": 715562,
         "sha256": "9f04f9a9365223032fb720f6411346cb0f325f31b88a6f44af4251fdc14fb56d"
       },
-      "status": "launched; no verdict or report acceptance inferred",
+      "status": "delivered require_changes; released/preserved/published",
       "observed_dispatch_status": "dispatched",
-      "observed_worker_state": "ready"
+      "observed_worker_state": "ready",
+      "report_commit": "81ac391cdc07ca8885b3b2237aa467aee0625675",
+      "verdict": "require_changes seven bounded reporting corrections;56core mappings verified"
     }
   },
   "publication_before_wave": "9e12d67054aca2db38b069e24bf65b84cf52f02c",
