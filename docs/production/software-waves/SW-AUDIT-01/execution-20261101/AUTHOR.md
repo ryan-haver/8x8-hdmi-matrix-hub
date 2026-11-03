@@ -27,10 +27,18 @@ set a new MVP scope, and does not claim a completion percentage.
 | Correction-01 private subtree | `build/software-waves/SW-AUDIT-01/execution-20261101/author/correction-01/**` (git-ignored, newly created). The original `author/**` tree — inventory, scripts, tables, probes and failed diagnostics — is **preserved byte-for-byte** and was not edited, rewritten or made to "look repaired". |
 | Correction-01 one-off scratch | `C:/t/exec-sw-audit-01/nov02-correction01/**`; new parents created before each invocation, each run given an explicit forward-slash `--basetemp`. |
 | Correction-01 authorship | The original author of the 268-row inventory is unchanged: the correction is made **by that same author lane** under the injected correction Task/Dispatch. The original report content, its dated source baseline and its history stay attributable to the original authoring pass; this commit records the correction, not a new authorship. |
+| **Correction-02 authority (this commit)** | Task `task_4c7cf7c289ff` / Dispatch `ctx_14d9b1569d7e`; worker terminal `term_a5d072ab-db6a-4d97-8599-f23a3efd4fc1`; coordinator terminal `term_6ed8131e-3ab3-4693-8094-56cc10acd412`; the **same** Run `run_37205f6095b3` (not reset or replaced). Owner-authorised **targeted** ordinary author correction of the corrected report at `981e7e4a48bce07e4dce24443d386b3e0643601a` after the different-family re-review at `d44ad2bca78dfe82c4b541e41f861c965cce2461` (`require_changes`, R1–R6). It resolves **only** the remaining R1, R4, R5 and R6 findings. It is **not** a retry of the failed Anthropic core qualification, **not** a new global audit and **not** a re-run of the accepted slices. |
+| Correction-02 private subtree | `build/software-waves/SW-AUDIT-01/execution-20261101/author/correction-02/**` (git-ignored, newly created). The original `author/**` tree **and** the whole `author/correction-01/**` tree are **preserved byte-for-byte**; correction-02 reads them and never writes them. |
+| Correction-02 one-off scratch | `C:/t/exec-sw-audit-01/nov02-correction02/**`; the data, config and temp parents were created before the invocation and the single test run received an explicit forward-slash `--basetemp`. |
+| Correction-02 authorship | Same author lane as correction-01. The original inventory, the correction-01 pass and this pass stay separately attributable through the three commits; **this report does not accept itself** and no different-family re-review of this commit has yet happened. |
+
 
 ---
 
-## 0. Correction-01 — what changed and why
+## 0. Correction history — 01 and 02
+
+### 0.1 Correction-01 — what changed and why
+
 
 This is a **report-only correction** of the original SW-AUDIT-01 author report at
 `13fe2ae8d423d8e43065b08a8767109e011c61c0`, made after the independent factual review
@@ -52,12 +60,49 @@ this file. The original `author/**` artefacts are untouched.
 | **R5** | Substring search over `describe()` is not a WebSocket predicate: `/ws` matched HTTP documents, `error` matched `scene_execution_error`, `connected` occurs inside `disconnected`, `status` occurs in unrelated HTTP text. The four exact names are absent from expectation objects, so **four unique named effects across seven rows** survive — not five effects. | Substring matching is replaced by **typed exact predicates** (`WsEvent.event` / `NoWsEvent.event`, expectation `clients` restriction, `features_for(client)` binding) for all **25** WebSocket-contract rows, with non-event contract entries (`/ws`, `all broadcasts`, `ping`) treated semantically. The `F-SEC-001` and `F-API-032` claims are corrected. (§6.1, the affected rows) |
 | **R6** | §12.1's claimed final scratch digests do not match the two retained files; §8 calls five entries P4 (four are P4, `SW-SOFTWARE-GATE-01` is P5); §4.1's **89** owner-suffix rows is an arithmetic error. | §12.1 now carries the **actual final identities** of the untouched original files and labels the earlier digests as historical checkpoints; the correction's own artefacts are listed separately in §12.2. §8 now says **four P4** and **P5**. The owner-suffix count is corrected to **88**; all **121** owner-gate rows keep their owner gate, and the 89 below-target software rows are kept as the separate axis they are. |
 
-**What did not change.** The canonical counts are reproduced exactly as before: **268**
-features, **210** below target, **96** stale rows, **147** software targets = **58** at target
-+ **89** below target, **120** V4 and **1** V5. The per-feature phase and unit mappings are
-unchanged. The changed axis is the **disposition label and its action**, recomputed honestly
-after the corrections: **77 of 268 rows** change label (the full transition
-list is in §4.3 and in the private `author/correction-01/disposition_diff.json`).
+**What did not change (as of correction-01).** The canonical counts are reproduced exactly as
+before: **268** features, **210** below target, **96** stale rows, **147** software targets =
+**58** at target + **89** below target, **120** V4 and **1** V5. The per-feature phase and unit
+mappings are unchanged. The changed axis is the **disposition label and its action**, recomputed
+honestly after the corrections: **77 of 268 rows** changed label **as of correction-01** (that
+pass's transition list is in §4.3 and in the private
+`author/correction-01/disposition_diff.json`). **Correction-02 changes a further 29 labels**;
+§4.3 carries the recomputed final figure, and the correction-01 census and its 77-row
+transition set remain on record as dated history.
+
+### 0.2 Correction-02 — what changed and why
+
+This is a **targeted, owner-authorised ordinary correction** of the corrected report at
+`981e7e4a48bce07e4dce24443d386b3e0643601a`, made after the **different-family** re-review at
+`d44ad2bca78dfe82c4b541e41f861c965cce2461` (`require_changes`). It is **not** a new
+implementation phase, **not** a qualification retake and **not** a new global audit: it
+re-derives only what the four **remaining** findings required, using a new targeted
+verification probe in the private `author/correction-02/` subtree. The accepted **R2** and
+**R3** findings, the original review `4c2d18b8`, the correction-01 commit `981e7e4a` and the
+review `d44ad2bc` itself all stay immutable history.
+
+**No source, test, tool, fixture, scenario, schema, registry, ledger, finding, manifest,
+lockfile, evidence or baseline byte was changed.** The only tracked write in this commit is
+this file. The original `author/**` artefacts and the whole `author/correction-01/**` tree are
+untouched and byte-identical.
+
+| Finding | What the re-review established | Correction applied here |
+| --- | --- | --- |
+| **R1** | §3 item 6 still defined a *reproduced defect* by the dispatch state of its corrective package rather than by the **delivered, unreviewed/unintegrated** chain that actually exists, and named `VAL-15` on `F-SEC-014` as exactly that case. | §3 item 6 is rewritten to the retained-chain reading. The **historical** `VAL-15` reproduction and the **open** register row are preserved, **no current reproduction is inferred**, `VAL-15` is **not** closed, and the qualified review / admission / integration gates are unchanged. |
+| **R4** | §8's `SW-API-CLIENT-01` slice misstated both membership and runnability, and **all 28** no-effect-basis rows carried an "exact contract WS event(s) this feature" action although their WS column says **no ws contract entry**. | The unit's six rows are stated as **`F-API-001/003/004/005/006/007`**, and the runnable subset is named as the **API** subset (`F-API-001`, `F-API-004`, `F-API-005`, `F-API-007`), which proves **V2 only**; the browser bindings of `routing.switch_one` (`F-MTX-001` / `F-UI-002`) and `presets.recall` (`F-MTX-003` / `F-UI-005`) are named, so **no currently runnable browser proof** is claimed. The **28** rows are corrected to the bounded basis inspect/reuse intake and to `COVERAGE-UNRESOLVED`; no WS contract is invented and no absence is inferred from registry prose. |
+| **R5** | `F-SEC-001` lost its V3 client requirement; the three attribution rows (`F-MTX-001`, `F-REL-012`, `F-CEC-006`) had their named gaps erased by numeric freshness; §6 row 3 still claimed `F-API-032`'s `error` was asserted under other feature ids; §6.1's "seven rows" figure was copied into an **eight**-row table. | `F-SEC-001` returns to **`MISSING-CLIENT`** with an explicit real-client obligation; the three attribution rows keep their primary label but gain an **explicit inspection/reuse obligation**; §6 row 3's stale substring claim is removed; §6.1 states the exact scope (**four unique message types across eight rows**) and the bounded-negative caveat now governs the stronger "demonstrated gap" wording. |
+| **R6** | §4.2 mixed the below-target software axis into the owner-row decomposition, and the 12 capped rows showed a bare `V1` although the legend and §5 promise `V1*`. | The owner decomposition is corrected to **`88 + 33 = 121`** and the 89 below-target software rows are kept as a separate axis. The **12** capped rows display **`V1*`** again. No level changed, no cap was lifted and no finding was closed. |
+
+**What correction-02 changed, in numbers.** Against the **original** author report at
+`13fe2ae8`, **104 of 268** rows now differ in label (7 transition groups, §4.3); correction-01
+alone accounted for **77** rows in 8 groups, and correction-02 adds **29** label changes of its
+own (**28** rows moved `MISSING-ASSERT` → `COVERAGE-UNRESOLVED`; `F-SEC-001` moved
+`RERUN-FRESH` → `MISSING-CLIENT`). All canonical counts are unchanged: **268** features,
+**210** below target, **96** stale, **147** software targets = **58** at + **89** below,
+**120** V4 + **1** V5. The per-feature unit, phase, target, level, recorded and freshness
+mappings are unchanged; only dispositions, actions, three prose statements and the cap
+annotation moved.
+
 
 ---
 
@@ -173,12 +218,18 @@ ledger.
    is used **only** for ownership; a `planned` flag is never read as missing
    code, and an accepted historical scope is never reopened.
 6. **Findings.** Open provisional findings are read from
-   `findings_pending.yaml` and the registry's per-feature `findings` list. A
-   finding is called a *reproduced defect* here only when it is open **and**
-   its corrective package has no dispatched replacement (that is `VAL-15` on
-   `F-SEC-014`). `VAL-14` is open as a register row but its source correction
-   is already merged and independently reviewed (`0bd3d76f`), so it is not
-   re-reported as an unfixed defect.
+   `findings_pending.yaml` and the registry's per-feature `findings` list. An
+   open finding is called an **open retained chain** here when it is open
+   **and** its corrective chain is **delivered but unreviewed/unintegrated** —
+   that is `VAL-15` on `F-SEC-014`, whose chain C1/C2/C3 is delivered at
+   `11f305b1` / `615d3c84` / `2d02004d` and is therefore **not** an
+   undispatched replacement. The **historical** `VAL-15` reproduction and the
+   **open** register row are preserved as history; **no current reproduction at
+   this base is inferred**, and `VAL-15` is **not** closed here. `VAL-14` is
+   open as a register row but its source correction is already merged and
+   independently reviewed (`0bd3d76f`), so it is not re-reported as an unfixed
+   defect.
+
 7. **Cross-check against the accepted slice.** The 54 rows the accepted
    freshness delta changed (39 `fresh → stale`, 15 other) were re-parsed from
    the accepted report and compared row by row with this inventory (§9).
@@ -250,11 +301,16 @@ Canonical disposition, all 268 rows, recomputed after the corrections:
 | Disposition | Rows | Meaning |
 | --- | ---: | --- |
 | `PRESERVE` | **39** | Fresh passing evidence at/above the software ceiling; nothing to redo |
-| `RERUN-FRESH` | **41** | The existing scenario/client proves the feature but the evidence is stale or absent; re-run it at the current source |
-| `MISSING-CLIENT` | **47** | The target needs a real client (V3) but live coverage is `api`-only (V2), or a declared client is not covered live |
-| `MISSING-ASSERT` | **32** | The gap is **established**: the contract's exact WebSocket message type has no typed declarative assertion **and** no non-declarative assertion call site was found in the bounded committed-byte search (`device_settings_full`, `output_name_change`), or the registry basis itself states that no effect is asserted |
-| `DECLARATIVE-GAP` | **7** | The exact contract message type has **no typed declarative assertion**, but a **non-declarative control already asserts the same message** in the current tree. The gap is *declaration placement*, not absent proof; the control was not executed and its adequacy was not judged |
-| `COVERAGE-UNRESOLVED` | **68** | **No live declarative scenario declares the feature.** The registry basis cites non-declarative proof that this method did not inspect, so existing-proof coverage is **unresolved** — not proven absent and not proven defective |
+| `RERUN-FRESH` | **40** | The existing scenario/client proves the feature but the evidence is stale or absent; re-run it at the current source. A re-run at the `api` client alone never establishes a **V3** target |
+
+| `MISSING-CLIENT` | **48** | The target needs a real client (V3) but live coverage is `api`-only (V2), or a declared client is not covered live |
+
+| `MISSING-ASSERT` | **4** | The row **has** a WebSocket contract entry, and its exact message type has no typed declarative assertion **and** no non-declarative assertion call site was found in the bounded committed-byte search (`device_settings_full`, `output_name_change`). This is a **bounded negative**, not a proof of absence: the search is textual over committed bytes and can miss a dynamically constructed message name |
+
+| `DECLARATIVE-GAP` | **7** | The exact contract message type has **no typed declarative assertion**, but a **non-declarative control already asserts the same message** in the current tree. The gap is *declaration placement*, not absent proof; the control was not executed, a call-site match locates a **candidate** control only, and its adequacy (polarity, client, feature coverage, target) was not judged |
+
+| `COVERAGE-UNRESOLVED` | **96** | **No live declarative scenario declares the feature.** The registry basis either cites non-declarative proof that this method did not inspect (**72** rows) or itself states that no effect is asserted (**28** rows). Either way existing-proof coverage is **unresolved** — not proven absent and not proven defective. A registry statement is **not** an independently established absence of an assertion |
+
 | `PHYS-OWNER-GATE` | **33** | Software side satisfied; the binding gate is the owner's physical HIL measurement (12 of them are the `HIL-09(C)`-capped rows) |
 | `RETAINED-CHAIN-OPEN` | **1** | `F-SEC-014` / `VAL-15`: the finding is open in the register and was historically reproduced, and the corrective chain C1/C2/C3 is **delivered but unreviewed/unintegrated**. No current reproduction is established by this report and no corrective package is undispatched |
 
@@ -270,39 +326,81 @@ rows keep an owner gate, in the disposition **and** in the action:
 **33** owner-primary rows plus **88** software-action rows with an owner
 suffix.
 
+**Correction-02 (R4).** The 28 rows whose registry basis itself states that no
+effect is asserted moved from `MISSING-ASSERT` to `COVERAGE-UNRESOLVED`: none
+of them has a WebSocket contract entry, so the correction-01 action text named
+a contract effect that does not exist for them, and a registry statement is not
+an independently established absence of an assertion. `F-SEC-001` moved from
+`RERUN-FRESH` to `MISSING-CLIENT` (R5): its target is V3 and its live coverage
+is `api`-only, so removing the false `/ws` event match does not remove the
+real-client requirement. The complete final census is the table above; §4.3
+gives the label transitions against the original report and separately the
+correction-02 delta.
+
+
 ### 4.2 Same dispositions split by target class (corrected)
 
 | Target class | Rows | `PRESERVE` | `RERUN-FRESH` | `MISSING-ASSERT` | `DECLARATIVE-GAP` | `COVERAGE-UNRESOLVED` | `MISSING-CLIENT` | owner gate | retained chain |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Software targets (≤ V3) | 147 | 39 | 21 | 31 | 5 | 25 | 25 | 0 | 1 |
+| Software targets (≤ V3) | 147 | 39 | 20 | 3 | 5 | 53 | 26 | 0 | 1 |
 | Physical (V4) / field (V5) | 121 | 0 | 20 (+PHYS) | 1 (+PHYS) | 2 (+PHYS) | 42 (+PHYS) + 1 (+FIELD) | 22 (+PHYS) | 33 | 0 |
-| **Total** | **268** | **39** | **41** | **32** | **7** | **68** | **47** | **33** | **1** |
+| **Total** | **268** | **39** | **40** | **4** | **7** | **96** | **48** | **33** | **1** |
+
 
 The **89** below-target software rows and the **88** owner-suffix rows are
 **different axes** and are not added together: the 89 is the below-target
 software subset, the 88 is the set of owner-gate rows whose software side is
-still open. `89 + 32 = 121` owner rows total, of which 33 have a satisfied
-software side and carry the owner gate as their primary disposition.
+still open. The owner decomposition is **`88 + 33 = 121`**: **88** owner-gate
+rows whose software side is still open (the owner gate is a suffix on their
+software action) plus **33** owner-gate rows whose software side is satisfied
+and whose **primary** disposition is the owner gate. The earlier sentence
+added the below-target software rows to the owner-primary rows, which mixed
+the two axes; it is corrected here (R6).
+
 
 ### 4.3 Which rows changed label, and why (R1, R4, R5)
 
-**77 of 268 rows** change disposition label against the original report. The
-transitions are exactly these, and no other row moved:
+**104 of 268 rows** now differ in disposition label from the **original** author report at
+`13fe2ae8`. The transitions are exactly these, and no other row moved:
 
 | From | To | Rows | Why |
 | --- | --- | ---: | --- |
-| `MISSING-ASSERT` | `COVERAGE-UNRESOLVED` | 25 | R4 — no declarative scenario, but a non-declarative basis this method does not inspect |
+| `MISSING-ASSERT` | `COVERAGE-UNRESOLVED` | 53 | R4 (25 rows) plus correction-02 (28 rows) — no live declarative scenario; the basis cites non-declarative proof this method does not inspect, or states in the registry itself that no effect is asserted, which is a registry statement and not an established absence |
 | `MISSING-ASSERT +PHYS` | `COVERAGE-UNRESOLVED +PHYS` | 42 | R4 — same, on V4 rows |
 | `MISSING-ASSERT +FIELD` | `COVERAGE-UNRESOLVED +FIELD` | 1 | R4 — same, on the single V5 row |
 | `MISSING-ASSERT` | `DECLARATIVE-GAP` | 4 | R5 — the exact message type has no typed declarative assertion, but a non-declarative control asserts it (`F-API-034`, `F-API-035`, `F-API-039`, `F-API-042`) |
 | `MISSING-ASSERT +PHYS` | `DECLARATIVE-GAP +PHYS` | 2 | R5 — same, on `F-MTX-002` and `F-MTX-003` |
 | `PRESERVE` | `DECLARATIVE-GAP` | 1 | R5 — `F-API-032`: the contract's `connected` / `status` / `error` entries have no typed declarative assertion (the original *"asserted under other feature: error"* claim was a substring artefact of `scene_execution_error`) |
-| `MISSING-CLIENT` | `RERUN-FRESH` | 1 | R5 — `F-SEC-001`: the contract entry `/ws` is a **non-event** entry, so no typed predicate applies; the row's live `api` coverage and fresh/stale evidence govern it |
 | `REPRODUCED-DEFECT` | `RETAINED-CHAIN-OPEN` | 1 | R1 — `F-SEC-014`: the corrective chain is delivered, unreviewed/unintegrated |
 
-The remaining 191 rows keep the original label, and **all** canonical counts
+The remaining 164 rows keep the original label, and **all** canonical counts
 (268 / 210 / 96 / 147 = 58 + 89 / 120 + 1) and all per-feature unit and phase
 mappings are unchanged.
+
+**The correction-01 layer, kept as dated history.** At `981e7e4a` the report
+recorded **77 of 268** changed rows in **eight** transition groups; the eighth
+group was `MISSING-CLIENT` → `RERUN-FRESH` for `F-SEC-001`. Correction-02
+**reverses** that single transition, because the false `/ws` event match had
+been used to drop the row's V3 client requirement, and it **adds** 28 rows to
+the `MISSING-ASSERT` → `COVERAGE-UNRESOLVED` group. The correction-01 census
+and its 77-row transition set are retained unchanged in the private
+`author/correction-01/` artefacts and are not restated here as the current
+figure.
+
+**Correction-02 delta — 29 label changes against `981e7e4a`.**
+
+| From | To | Rows | Why |
+| --- | --- | ---: | --- |
+| `MISSING-ASSERT` | `COVERAGE-UNRESOLVED` | 28 | R4 — these rows have **no WebSocket contract entry**, so the "exact contract WS event(s) this feature" action named a contract that does not exist; the bounded basis inspect/reuse intake replaces it |
+| `RERUN-FRESH` | `MISSING-CLIENT` | 1 | R5 — `F-SEC-001`: target V3, live coverage `api`-only; an API freshness run cannot establish V3 |
+
+The 28 rows are `F-KIO-005/006/007/009/012/013` and
+`F-UI-003/007/009/010/011/013/016/017/018/019/020/021/022/023/028/029/030/032/033/034/035/036`.
+In addition, **label-preserving** changes were made to the action text of three
+rows (`F-MTX-001`, `F-REL-012`, `F-CEC-006` — explicit attribution obligations,
+R5) and to the display of the 12 capped rows (`V1*`, R6); those rows are not
+label changes and are not counted in the 29.
+
 
 ---
 
@@ -313,26 +411,40 @@ The vocabulary is the one fixed by the dispatch:
 | Disposition | Rule applied (all inputs from §2) |
 | --- | --- |
 | `PRESERVE` | evidence freshness `fresh` **and** ledger level ≥ software ceiling **and** no established contract-effect gap **and** no open retained chain |
-| `RERUN-FRESH` | freshness `stale` or `none`, a live scenario/client covers the feature, and no established contract-effect gap and no missing client |
-| `MISSING-ASSERT` | the gap is **established**: the contract's exact WebSocket message type has no typed declarative assertion **and** no non-declarative assertion call site was found in the bounded committed-byte search, **or** the registry basis itself states that no effect is asserted |
+| `RERUN-FRESH` | freshness `stale` or `none`, a live scenario/client covers the feature, and no bounded-negative contract-effect gap and no missing client. A re-run at the `api` client never establishes a **V3** target |
+
+| `MISSING-ASSERT` | the row **has** a WebSocket contract entry, and the contract's exact message type has no typed declarative assertion **and** no non-declarative assertion call site was found in the bounded committed-byte search. A row whose registry basis merely states that no effect is asserted, and which declares **no** WebSocket contract entry, is **not** `MISSING-ASSERT` (correction-02) |
+
 | `DECLARATIVE-GAP` | the contract's exact WebSocket message type has no typed declarative assertion, but a non-declarative control already asserts the same message; the gap is declaration placement, and the existing control's adequacy is **not** judged here |
-| `COVERAGE-UNRESOLVED` | no live declarative scenario declares the feature **and** the registry basis cites non-declarative proof that was not inspected. Existing-proof coverage is explicitly **undecided**: neither absence nor defect is asserted, and no new scenario is prescribed |
+| `COVERAGE-UNRESOLVED` | no live declarative scenario declares the feature **and** the registry basis either cites non-declarative proof that was not inspected, or states in the registry itself that no effect is asserted. Existing-proof coverage is explicitly **undecided**: neither absence nor defect is asserted, and no new scenario is prescribed |
+
 | `MISSING-CLIENT` | the contract target needs V3 but live coverage is `api`-only, or a manifest-declared client is not covered live |
 | `RETAINED-CHAIN-OPEN` | an open register finding whose corrective chain is **delivered, unreviewed/unintegrated** (`VAL-15`); the historical reproduction is preserved, no current reproduction is inferred, and the finding is not closed |
 | `PHYS-OWNER-GATE` / `FIELD-OWNER-GATE` | V4/V5 target whose software side is satisfied; the binding gate is owner measurement/sign-off |
 
 Precedence, in order: retained chain → capped-by-open-critical-finding →
-established effect gap → missing client → freshness → at-target; a
-scenario-less row without an established effect gap falls to
-`COVERAGE-UNRESOLVED`. The `+PHYS` / `+FIELD` suffix records that the
-physical/field owner gate still follows the software action. The *next exact acceptance action* column is the composed
-list of the outstanding steps, in order, and names the owning unit and phase.
+bounded-negative effect gap (a contract message type with no typed assertion
+and no located control) → missing client → freshness → at-target. A
+scenario-less row without such a gap falls to `COVERAGE-UNRESOLVED` — this
+now includes the 28 rows whose registry basis itself states that no effect is
+asserted, because a registry statement is not an established absence. The
+`+PHYS` / `+FIELD` suffix records that the physical/field owner gate still
+follows the software action. The *next exact acceptance action* column is the
+composed list of the outstanding steps, in order, and names the owning unit and
+phase.
 
-The 12 rows shown as `V1*` in the ledger (`F-MTX-007` … `F-MTX-020`) are
-capped by the open critical finding `HIL-09(C)`; the cap is a
+
+The 12 rows shown as `V1*` in the ledger (`F-MTX-007` … `F-MTX-017` and
+`F-MTX-020`) are capped by the open critical finding `HIL-09(C)`; the cap is a
 **finding-closure gate**, not an evidence shortfall, so those rows are
 `PHYS-OWNER-GATE` with "close the open critical finding by physical
-measurement" as their action.
+measurement" as their action. **Corrected in correction-02 (R6):** the table
+displays the `*` cap marker on the level cell again for all 12 rows
+(`V1*/V1/…`), which the correction-01 table had dropped even though the legend
+and this paragraph promised it. The ledger levels themselves are unchanged —
+no cap was lifted, no level was promoted or demoted, and no finding was
+closed.
+
 
 ---
 
@@ -346,7 +458,7 @@ report**; the pins' own dispatch state at the base is `not_launched`.
 | --- | --- | --- | --- | --- | --- | --- |
 | 1 | Retained API candidate: full boundary `938ae303` → `386872316` → `ee3f2e7f` → report `caaa4faa` | `QUAL-ANTHROPIC-CORE-01` | `caaa4faabe9ede1e3aed37d2269efd4a4d691e04` | the 64 P1-owned feature rows (§8) | the inventory states, per row, the exact assertion each P1 unit still owes, so the candidate evaluation can be judged against named rows rather than prose | independent Anthropic evaluation + OpenAI judgement + coordinator pass/hold/fail |
 | 2 | `RV-API034` — review of the unreviewed OpenAI F-API-034 chain | `RV-API034` | `caaa4faa…` | `F-API-034` (V3, `SW-API-CLIENT-02`) | **corrected (R2)**: at the current base the live 1 507-scenario corpus contains **no typed `WsEvent('switch_all_failed')`**, while the source *does* emit it (`src/rest_api/control.py:129,153`); but a **retained API-V2 candidate already asserts it** — at `caaa4faa`, `tests/validation/scenarios/sw_api_client_02_c1.py` binds `F-API-034` to `api` and contains `WsEvent("switch_all_failed", {"input": 6})` with HTTP 503, no-success-event, no-command and unchanged-device controls. Source `386872` introduces the assertion and `ee3f2e7f` supplies the later managed preparation correction. `git merge-base --is-ancestor` returns **exit 1** for `386872`, `ee3f2e7f` and `caaa4faa` against this HEAD, and **exit 0** for `938ae303` — so the candidate is outside the integration ancestry | **no new assertion implementation**: prefer exact `938ae303` → `caaa4faa` review and accepted integration, then re-assess the residual client/feature gap. That candidate is **API V2**, not V3 acceptance, and it is **not** claimed to map `F-MTX-002` |
-| 3 | `RV-WS040` — WS source `5331d547` vs `938ae303` at submitted `1fbfee11` | `RV-WS040` | `1fbfee112cc503ffa273c19dc565092d01fe2d6b` | WS-contract rows (`F-API-032`, `F-API-040`, `F-REL-012`) and the browser-V3 rows the accepted freshness delta lists as needing refresh (`F-KIO-002/003`, `F-UI-002/004/005`) | `F-API-040`'s contract effect `output_name_change` is emitted by the source (`src/rest_api/events.py:465`) but is asserted **nowhere** in the corpus; `F-API-032`'s `error` effect is asserted only under other feature ids. This report does **not** assert which feature rows the `1fbfee11` browser records cover — that attribution belongs to `RV-WS040` / `EV-CI-ATTRIBUTION` | the pin's own source/artefact review; candidate freshness of the browser V3 records |
+| 3 | `RV-WS040` — WS source `5331d547` vs `938ae303` at submitted `1fbfee11` | `RV-WS040` | `1fbfee112cc503ffa273c19dc565092d01fe2d6b` | WS-contract rows (`F-API-032`, `F-API-040`, `F-REL-012`) and the browser-V3 rows the accepted freshness delta lists as needing refresh (`F-KIO-002/003`, `F-UI-002/004/005`) | `F-API-040`'s contract effect `output_name_change` is emitted by the source (`src/rest_api/events.py:465`) but has **no typed declarative assertion**, and the bounded non-declarative search found **no** control for it; `F-API-032`'s `error` effect is **absent from the typed corpus** — `scene_execution_error` is a *different* message type — and is asserted by non-declarative controls only, so `F-API-032` is a **declaration-placement** gap and **not** an effect asserted under other feature ids. This report does **not** assert which feature rows the `1fbfee11` browser records cover — that attribution belongs to `RV-WS040` / `EV-CI-ATTRIBUTION` | the pin's own source/artefact review; candidate freshness of the browser V3 records |
 | 4 | `RV-PRIVACY-CHAIN` — full retained VAL-15 C1/C2/C3 chain (`11f305b1` / `615d3c84` / `2d02004d`) | `RV-PRIVACY-CHAIN` | `2d02004d3108953a302e1a49aab9a5f24e944136` | **`F-SEC-014`** — the only row whose disposition is `RETAINED-CHAIN-OPEN` | **corrected (R1)**: `SW-SEC-DATA-02.corrective_child_dispositions` states that the historical `reproduced_finding_no_dispatch` record is a **dated snapshot, not current authority**, and gives the current residual as **"C1/C2/C3 delivered, unreviewed/unintegrated"** with submitted heads `11f305b1` / `615d3c84` / `2d02004d` and functional heads `8b9f5623` / `47b0bb88` / `8fc65e05`. The row's other state at this base is unchanged: target V3, level V1, **no evidence record**, and no live declarative scenario declares it. The **historical** VAL-15 reproduction is preserved as history; **no current reproduction at this base is inferred**, and the open register row alone is not a reproduction | qualified different-family review of the retained chain, then the required corrections, privacy-safe accepted fresh evidence, admission and integration under the accepted pins; **VAL-15 is not closed** |
 | 5 | `FSEC007` candidate-specific freshness disposition | `EV-API034-SECURITY-REFRESH` | `caaa4faa…` | `F-SEC-007` | **corrected (R3)**: two different facts must not be merged. (a) On the **canonical** ledger at this base `F-SEC-007` is `V3/V3/fresh` at target with live scenarios across `api`+`browser`, and the older W03 supersession wording remains valid **within its own stated scope**. (b) Separately, the retained API-C2 author report at `caaa4faa` records the **actual global command at `ee3f2e7f`: exit 1, `F-SEC-007` level V2 < recorded V3**, with source acceptance partial/unmet and a failed worker outcome. That is a **distinct parallel-candidate failure**; canonical-V3/fresh metadata neither supersedes it nor establishes usable ancestry, and it does not diagnose a historical onset or a new security regression. **No runtime campaign, rerun or diagnosis was performed by this correction** | `EV-API034-SECURITY-REFRESH` stays **open and unresolved**; the candidate-specific disposition is still owed, with no borrowing of non-ancestor proof |
 | 6 | Privacy / Flic / CI admission | `EV-PRIVACY-ADMISSION`, `EV-FLIC-ADMISSION`, `EV-CI-ATTRIBUTION` | accepted-integration-after-dependencies | `F-FLIC-001/002/008` (Flic V3 rows), `F-API-034` + `F-SEC-014` (privacy), the 56 CI records | the inventory keeps **actual fresh accepted evidence distinct from inherited private unreviewed evidence**: the Flic rows are `RERUN-FRESH`/preserve on the canonical ledger while the private Flic attempt stays on privacy + artifact-admission HOLD (8 unmasked fixture-password fields, unchanged bytes), and the 56 CI records at the non-ancestral source `bdcf06dc` are **not** ordinary fresh evidence (4 Flic units absent because the CI command never requested the `flic` client) | admission decisions and privacy clearance are coordinator-owned and remain open |
@@ -355,7 +467,12 @@ report**; the pins' own dispatch state at the base is `not_launched`.
 ### 6.1 WebSocket-contract coverage, re-derived with typed exact predicates (corrected in R5)
 
 **Heading correction.** The original heading said *"five WebSocket effects"*.
-The correct figure is **four unique named effects across seven feature rows**.
+The correct figure is **four unique named WebSocket message types**, carried
+by **eight** feature rows in the complete mapping displayed below. The earlier
+independent review's *"seven rows"* figure describes the **narrower subset**
+that excluded the scenario-less `F-DOM-032`; it is **not** the scope of the
+table below, and this report states the scope of the table it actually shows.
+
 
 The corpus at this base contains **13** distinct typed `WsEvent` message names
 (`audio_mute`, `cable_change`, `cec_command`, `connection_change`,
@@ -363,7 +480,8 @@ The corpus at this base contains **13** distinct typed `WsEvent` message names
 `preset_recall`, `routing_change`, `scene_execution_error`, `signal_change`,
 `switch_failed`) and **3** `NoWsEvent` names (`audio_mute`, `cec_command`,
 `routing_change`). Four contract message types are **absent from every
-expectation object**, and they are carried by seven feature rows:
+expectation object**, and they are carried by **eight** feature rows:
+
 
 | Contract message type | Feature rows | Emitter at the base | Typed declarative assertion | Non-declarative control found in the bounded search |
 | --- | --- | --- | --- | --- |
@@ -375,13 +493,19 @@ expectation object**, and they are carried by seven feature rows:
 This is the R4 lesson applied to the R5 rows: for `switch_all_failed` and
 `preset_recall_failed` the gap is **declaration placement**, because an
 existing non-declarative control already asserts the exact message. Those four
-rows are `DECLARATIVE-GAP`, and their action is to **inspect and reuse that
-control**, not to author a duplicate assertion. For `device_settings_full` and
+rows (`F-API-034`, `F-MTX-002`, `F-API-035`, `F-MTX-003`) are
+`DECLARATIVE-GAP`, and their action is to **inspect and reuse that control**,
+not to author a duplicate assertion. For `device_settings_full` and
 `output_name_change` no assertion call site was found at all in the searched
-paths, so those four rows remain `MISSING-ASSERT` — a *demonstrated* gap, not
-a presumption. The bounded search is textual over committed bytes: it can miss
-a dynamically constructed message name, so "none found" is a **bounded
-negative**, not a proof of absence.
+paths, so those four rows (`F-API-037`, `F-DOM-032`, `F-API-040`,
+`F-MTX-024`) remain `MISSING-ASSERT` — a gap established **to the bounded
+limit of this method**, not a presumption and not a proof of absence. The
+bounded search is textual over committed bytes: it can miss a dynamically
+constructed message name, and a call-site match would in any case only
+**locate a candidate control** — it does not by itself establish matching
+polarity, client, full feature coverage or target adequacy. That bounded
+caveat governs every "gap" wording in this section.
+
 
 Four further features have a WebSocket contract and **no live declarative
 scenario**: `F-API-039` (`status`), `F-API-042` (`ping` / `pong`), `F-DOM-032`
@@ -397,7 +521,10 @@ therefore given no typed predicate at all:
   endpoint-description document, and they assert nothing about WebSocket
   access or PIN behaviour. The row's `/ws` entry is now reported as a
   **non-event contract entry**; its disposition follows the live `api` coverage
-  and the evidence freshness (`RERUN-FRESH`), not a fake effect gap.
+  and the **V3** target — **`MISSING-CLIENT`** (R5), because an `api`-only
+  coverage cannot establish a V3 target whatever the evidence freshness — and
+  not a fake effect gap.
+
 * `F-REL-014` → `all broadcasts`. A prose entry, not a message type. The row
   has no live declarative scenario and is therefore `COVERAGE-UNRESOLVED`.
 * `F-API-042` → `ping`. `ping` is a **client → server command**
@@ -422,8 +549,16 @@ original substring method could not separate either.
 
 Three features remain genuine **attribution gaps** — their message type is
 asserted by a typed `WsEvent`, but only under a **different** feature id:
-`F-MTX-001` (`switch_failed`), `F-CEC-006` (`cec_command`), `F-REL-012`
-(`signal_change`).
+`F-MTX-001` (`switch_failed`, bound under `F-API-033` / `F-REL-009`),
+`F-CEC-006` (`cec_command`, bound under `F-CEC-001` / `F-CEC-007` /
+`F-API-015` / `F-CEC-005` / `F-API-038`), `F-REL-012` (`signal_change`, bound
+under `F-MTX-031` / `F-API-040` / `F-UI-024` / `F-KIO-010`). **Correction-02
+(R5):** each of these three rows keeps its **primary** disposition — numeric
+freshness does not erase a named attribution gap and no row is demoted — but
+its action now carries an **explicit** obligation to inspect and reuse the
+existing assertion bound under the other feature id, or to record the
+attribution as deliberately out of scope. No new assertion is prescribed.
+
 
 This is a **declarative-assertion inventory gap**, not a reproduced functional
 defect: in every case above the emitter exists in the current source.
@@ -495,7 +630,7 @@ the registry.**
 | F-CEC-003 | Control playback on a source over CEC | V4 | V1/V1/stale | SW-PROTOCOL-PREP-06 (P3) | api / cec_controls.input_1_fast_forward, cec_controls.input_1_next, cec_controls.input_1_pause (+53) | no ws contract entry | `docs/api/websocket.schema.json` (+19) | MISSING-CLIENT +PHYS | re-run cec_controls.input_1_fast_forward/api at current source to refresh; add/execute a real-client end-to-end assertion; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-06, P3] |
 | F-CEC-004 | Source volume / mute over CEC | V4 | V1/V1/stale | SW-PROTOCOL-PREP-06 (P3) | api / cec_controls.input_1_mute, cec_controls.input_1_volume_down, cec_controls.input_1_volume_up (+21) | no ws contract entry | `docs/api/websocket.schema.json` (+19) | MISSING-CLIENT +PHYS | re-run cec_controls.input_1_mute/api at current source to refresh; add/execute a real-client end-to-end assertion; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-06, P3] |
 | F-CEC-005 | Turn a display (TV) on / off over CEC | V4 | V3/V3/fresh | SW-PROTOCOL-PREP-06 (P3) | api,ha,uc / cec.output_power_on, cec_controls.output_1_power_off, cec_controls.output_1_power_on (+16) | cec_command [exact bound] | `custom_components/hdmi_matrix` (+28) | PHYS-OWNER-GATE | no SW-AUDIT-01 action; preserve accepted evidence; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-06, P3] |
-| F-CEC-006 | Display / soundbar volume and mute over CEC | V4 | V1/V1/stale | SW-PROTOCOL-PREP-07 (P3) | api / cec.output_volume_up, cec_controls.output_1_mute, cec_controls.output_1_volume_down (+22) | cec_command [exact bound elsewhere] | `docs/api/websocket.schema.json` (+19) | MISSING-CLIENT +PHYS | re-run cec.output_volume_up/api at current source to refresh; add/execute a real-client end-to-end assertion; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-07, P3] |
+| F-CEC-006 | Display / soundbar volume and mute over CEC | V4 | V1/V1/stale | SW-PROTOCOL-PREP-07 (P3) | api / cec.output_volume_up, cec_controls.output_1_mute, cec_controls.output_1_volume_down (+22) | cec_command [exact bound elsewhere] | `docs/api/websocket.schema.json` (+19) | MISSING-CLIENT +PHYS | re-run cec.output_volume_up/api at current source to refresh; add/execute a real-client end-to-end assertion; the contract effect `cec_command` is typed-asserted only under other feature ids (F-CEC-001 / F-CEC-007 / F-API-015 / F-CEC-005 / F-API-038), so the owning unit must inspect and reuse that existing assertion for this row, or record the attribution as deliberately out of scope - no new assertion is prescribed and the primary disposition is unchanged by this obligation; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-07, P3] |
 | F-CEC-007 | Enable CEC on the target port automatically before a command | V4 | V1/V1/stale | SW-PROTOCOL-PREP-07 (P3) | api / cec.input_power_on, cec_controls.input_1_already_enabled, cec_controls.input_1_back (+414) | no ws contract entry | `docs/api/websocket.schema.json` (+21) | MISSING-CLIENT +PHYS | re-run cec.input_power_on/api at current source to refresh; add/execute a real-client end-to-end assertion; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-07, P3] |
 | F-CEC-008 | Enable / disable CEC per port | V4 | V2/V1/fresh | SW-PROTOCOL-PREP-07 (P3) | api / cec_controls.input_1_enable_0, cec_controls.input_1_enable_1, cec_controls.input_2_enable_0 (+37) | no ws contract entry | `docs/api/websocket.schema.json` (+19) | MISSING-CLIENT +PHYS | add/execute a real-client end-to-end assertion; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-07, P3] |
 | F-CEC-009 | Read which ports have CEC enabled | V4 | V1/V1/stale | SW-PROTOCOL-PREP-07 (P3) | api / cec_controls.status_mixed, cec_controls.status_off, cec_controls.status_on (+1) | no ws contract entry | `docs/api/websocket.schema.json` (+19) | MISSING-CLIENT +PHYS | re-run cec_controls.status_mixed/api at current source to refresh; add/execute a real-client end-to-end assertion; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-07, P3] |
@@ -569,36 +704,36 @@ the registry.**
 | F-KIO-002 | Route a source to one display with the routing wizard | V3 | V3/V3/stale | SW-KIOSK-CONTROL-01 (P2) | browser / kiosk.route_one_muted | no ws contract entry | `docs/api/websocket.schema.json` (+19) | RERUN-FRESH | re-run kiosk.route_one_muted/browser at current source to refresh [unit=SW-KIOSK-CONTROL-01, P2] |
 | F-KIO-003 | Route a source to every display from the kiosk | V3 | V3/V3/stale | SW-KIOSK-CONTROL-01 (P2) | browser / kiosk.route_all_apply | no ws contract entry | `docs/api/websocket.schema.json` (+19) | RERUN-FRESH | re-run kiosk.route_all_apply/browser at current source to refresh [unit=SW-KIOSK-CONTROL-01, P2] |
 | F-KIO-004 | Input and output status tiles | V3 | V3/V3/none | SW-KIOSK-STATE-01 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | inspect and reuse the existing non-declarative basis and controls named in the registry basis to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-KIOSK-STATE-01, P2] |
-| F-KIO-005 | Recall a preset from the kiosk | V3 | V1/V1/none | SW-KIOSK-CONTROL-01 (P2) | none / - | no ws contract entry | `-` | MISSING-ASSERT | the exact contract WS event(s) this feature have no typed declarative assertion and no non-declarative control was found in the bounded committed-byte search; decide the assertion with the owning unit before authoring one [unit=SW-KIOSK-CONTROL-01, P2] |
-| F-KIO-006 | Configure which presets the kiosk shows (edit mode) | V3 | V1/V1/none | SW-KIOSK-CONTROL-01 (P2) | none / - | no ws contract entry | `-` | MISSING-ASSERT | the exact contract WS event(s) this feature have no typed declarative assertion and no non-declarative control was found in the bounded committed-byte search; decide the assertion with the owning unit before authoring one [unit=SW-KIOSK-CONTROL-01, P2] |
-| F-KIO-007 | Run shortcuts from the kiosk and map them to slots | V3 | V1/V1/none | SW-KIOSK-CONTROL-01 (P2) | none / - | no ws contract entry | `-` | MISSING-ASSERT | the exact contract WS event(s) this feature have no typed declarative assertion and no non-declarative control was found in the bounded committed-byte search; decide the assertion with the owning unit before authoring one [unit=SW-KIOSK-CONTROL-01, P2] |
+| F-KIO-005 | Recall a preset from the kiosk | V3 | V1/V1/none | SW-KIOSK-CONTROL-01 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | the registry basis itself states that no effect is asserted ("screenshot baseline only") and this row declares no WebSocket contract entry, so no contract effect is missing here; inspect and reuse the basis and controls named in the registry to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-KIOSK-CONTROL-01, P2] |
+| F-KIO-006 | Configure which presets the kiosk shows (edit mode) | V3 | V1/V1/none | SW-KIOSK-CONTROL-01 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | the registry basis itself states that no effect is asserted ("screenshot baseline only") and this row declares no WebSocket contract entry, so no contract effect is missing here; inspect and reuse the basis and controls named in the registry to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-KIOSK-CONTROL-01, P2] |
+| F-KIO-007 | Run shortcuts from the kiosk and map them to slots | V3 | V1/V1/none | SW-KIOSK-CONTROL-01 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | the registry basis itself states that no effect is asserted ("screenshot baseline only") and this row declares no WebSocket contract entry, so no contract effect is missing here; inspect and reuse the basis and controls named in the registry to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-KIOSK-CONTROL-01, P2] |
 | F-KIO-008 | Run profiles from the kiosk; create one with the profile wizard | V3 | V3/V1/fresh | SW-KIOSK-CONTROL-01 (P2) | browser / kiosk.profile_with_passcode, kiosk.profile_wrong_passcode | no ws contract entry | `docs/api/websocket.schema.json` (+21) | PRESERVE | no SW-AUDIT-01 action; preserve accepted evidence [unit=SW-KIOSK-CONTROL-01, P2] |
-| F-KIO-009 | CEC remote in the kiosk | V3 | V1/V1/none | SW-KIOSK-CONTROL-02 (P2) | none / - | no ws contract entry | `-` | MISSING-ASSERT | the exact contract WS event(s) this feature have no typed declarative assertion and no non-declarative control was found in the bounded committed-byte search; decide the assertion with the owning unit before authoring one [unit=SW-KIOSK-CONTROL-02, P2] |
+| F-KIO-009 | CEC remote in the kiosk | V3 | V1/V1/none | SW-KIOSK-CONTROL-02 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | the registry basis itself states that no effect is asserted ("screenshot baseline only") and this row declares no WebSocket contract entry, so no contract effect is missing here; inspect and reuse the basis and controls named in the registry to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-KIOSK-CONTROL-02, P2] |
 | F-KIO-010 | Kiosk live updates | V3 | V3/V3/fresh | SW-KIOSK-STATE-01 (P2) | browser / live.front_panel_route, live.input_signal | no ws contract entry | `docs/api/websocket.schema.json` (+23) | PRESERVE | no SW-AUDIT-01 action; preserve accepted evidence [unit=SW-KIOSK-STATE-01, P2] |
 | F-KIO-011 | Kiosk disconnected state | V3 | V3/V3/fresh | SW-KIOSK-STATE-01 (P2) | browser / live.matrix_offline | no ws contract entry | `docs/api/websocket.schema.json` (+22) | PRESERVE | no SW-AUDIT-01 action; preserve accepted evidence [unit=SW-KIOSK-STATE-01, P2] |
-| F-KIO-012 | Kiosk layout and pins persist | V3 | V1/V1/none | SW-KIOSK-STATE-01 (P2) | none / - | no ws contract entry | `-` | MISSING-ASSERT | the exact contract WS event(s) this feature have no typed declarative assertion and no non-declarative control was found in the bounded committed-byte search; decide the assertion with the owning unit before authoring one [unit=SW-KIOSK-STATE-01, P2] |
-| F-KIO-013 | Kiosk follows the selected theme | V3 | V1/V1/none | SW-KIOSK-STATE-01 (P2) | none / - | no ws contract entry | `-` | MISSING-ASSERT | the exact contract WS event(s) this feature have no typed declarative assertion and no non-declarative control was found in the bounded committed-byte search; decide the assertion with the owning unit before authoring one [unit=SW-KIOSK-STATE-01, P2] |
+| F-KIO-012 | Kiosk layout and pins persist | V3 | V1/V1/none | SW-KIOSK-STATE-01 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | the registry basis itself states that no effect is asserted ("screenshot baseline only") and this row declares no WebSocket contract entry, so no contract effect is missing here; inspect and reuse the basis and controls named in the registry to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-KIOSK-STATE-01, P2] |
+| F-KIO-013 | Kiosk follows the selected theme | V3 | V1/V1/none | SW-KIOSK-STATE-01 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | the registry basis itself states that no effect is asserted ("screenshot baseline only") and this row declares no WebSocket contract entry, so no contract effect is missing here; inspect and reuse the basis and controls named in the registry to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-KIOSK-STATE-01, P2] |
 | F-KIO-014 | Kiosk touch accessibility (targets, ARIA, contrast) | V3 | V1/V1/none | SW-KIOSK-STATE-02 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | inspect and reuse the existing non-declarative basis and controls named in the registry basis to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-KIOSK-STATE-02, P2] |
-| F-MTX-001 | Route one input to one output | V4 | V3/V3/fresh | SW-PROTOCOL-PREP-01 (P3) | api,browser,ha,uc / ha.select_source, remote.select_source, routing.switch_one | routing_change [exact bound]; switch_failed [exact bound elsewhere] | `custom_components/hdmi_matrix` (+30) | PHYS-OWNER-GATE | no SW-AUDIT-01 action; preserve accepted evidence; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-01, P3] |
+| F-MTX-001 | Route one input to one output | V4 | V3/V3/fresh | SW-PROTOCOL-PREP-01 (P3) | api,browser,ha,uc / ha.select_source, remote.select_source, routing.switch_one | routing_change [exact bound]; switch_failed [exact bound elsewhere] | `custom_components/hdmi_matrix` (+30) | PHYS-OWNER-GATE | no SW-AUDIT-01 action for the software side; preserve accepted evidence; the contract effect `switch_failed` is typed-asserted only under other feature ids (F-API-033 / F-REL-009), so the owning unit must inspect and reuse that existing assertion for this row, or record the attribution as deliberately out of scope - no new assertion is prescribed and the primary disposition is unchanged by this obligation; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-01, P3] |
 | F-MTX-002 | Route one input to every output | V4 | V3/V3/stale | SW-PROTOCOL-PREP-01 (P3) | api,browser / routing.route_all | routing_change [exact bound]; switch_all_failed [exact absent; non-declarative control: tests/sim/test_sim_offline_switch_events.py] | `docs/api/websocket.schema.json` (+25) | DECLARATIVE-GAP +PHYS | re-run routing.route_all/api at current source to refresh; the exact contract WS event(s) switch_all_failed have no typed declarative assertion, but a non-declarative control already asserts the same event (tests/sim/test_sim_offline_switch_events.py); inspect that control and reuse or promote it instead of authoring a duplicate assertion; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-01, P3] |
 | F-MTX-003 | Recall a matrix preset (1-8) | V4 | V3/V3/fresh | SW-PROTOCOL-PREP-01 (P3) | api,browser,ha,uc / ha.preset_button, presets.recall, remote.preset_button | preset_recall [exact bound]; preset_recall_failed [exact absent; non-declarative control: tests/test_runtime_preset_errors_r4b.py] | `custom_components/hdmi_matrix` (+32) | DECLARATIVE-GAP +PHYS | the exact contract WS event(s) preset_recall_failed have no typed declarative assertion, but a non-declarative control already asserts the same event (tests/test_runtime_preset_errors_r4b.py); inspect that control and reuse or promote it instead of authoring a duplicate assertion; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-01, P3] |
 | F-MTX-004 | Save the current routing to a matrix preset | V4 | V1/V1/stale | SW-PROTOCOL-PREP-01 (P3) | api / matrix.preset_invalid_slot, matrix.preset_refused, matrix.save_current_preset (+8) | no ws contract entry | `docs/api/websocket.schema.json` (+21) | MISSING-CLIENT +PHYS | re-run matrix.preset_invalid_slot/api at current source to refresh; add/execute a real-client end-to-end assertion; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-01, P3] |
 | F-MTX-005 | Name presets in the web app (names shown by the API, UI, kiosk) | V4 | V3/V0/fresh | SW-PROTOCOL-PREP-01 (P3) | api,browser / presets.rename | device_settings [exact bound] | `docs/api/websocket.schema.json` (+25) | PHYS-OWNER-GATE | no SW-AUDIT-01 action; preserve accepted evidence; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-01, P3] |
 | F-MTX-006 | Matrix power on / standby | V4 | V3/V3/fresh | SW-PROTOCOL-PREP-01 (P3) | api,ha,uc / ha.power_off, ha.power_on, power.standby (+2) | no ws contract entry | `custom_components/hdmi_matrix` (+24) | PHYS-OWNER-GATE | no SW-AUDIT-01 action; preserve accepted evidence; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-01, P3] |
-| F-MTX-007 | Mute / unmute the audio of an output | V4 | V1/V1/fresh | SW-PROTOCOL-PREP-02 (P3) | api,ha / ha.mute_switch, outputs.audio_mute | audio_mute [exact bound] | `custom_components/hdmi_matrix` (+20) | PHYS-OWNER-GATE | close open critical/high finding HIL-09 by physical measurement (owner); then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-02, P3] |
-| F-MTX-008 | Enable / disable an output's video stream | V4 | V1/V1/stale | SW-PROTOCOL-PREP-02 (P3) | api / settings.enable_0, settings.enable_1, settings.enable_port_0 (+2) | no ws contract entry | `docs/api/websocket.schema.json` (+18) | PHYS-OWNER-GATE | re-run settings.enable_0/api at current source to refresh; close open critical/high finding HIL-09 by physical measurement (owner); then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-02, P3] |
-| F-MTX-009 | Set an output's HDCP mode | V4 | V1/V1/stale | SW-PROTOCOL-PREP-02 (P3) | api / settings.hdcp_1, settings.hdcp_2, settings.hdcp_3 (+8) | no ws contract entry | `docs/api/websocket.schema.json` (+18) | PHYS-OWNER-GATE | re-run settings.hdcp_1/api at current source to refresh; close open critical/high finding HIL-09 by physical measurement (owner); then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-02, P3] |
-| F-MTX-010 | Set an output's HDR mode | V4 | V1/V1/stale | SW-PROTOCOL-PREP-02 (P3) | api / settings.hdr_1, settings.hdr_2, settings.hdr_3 (+6) | no ws contract entry | `docs/api/websocket.schema.json` (+18) | PHYS-OWNER-GATE | re-run settings.hdr_1/api at current source to refresh; close open critical/high finding HIL-09 by physical measurement (owner); then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-02, P3] |
-| F-MTX-011 | Set an output's scaler mode (incl. audio-only) | V4 | V1/V1/stale | SW-PROTOCOL-PREP-02 (P3) | api / settings.scaler_1, settings.scaler_2, settings.scaler_3 (+8) | no ws contract entry | `docs/api/websocket.schema.json` (+18) | PHYS-OWNER-GATE | re-run settings.scaler_1/api at current source to refresh; close open critical/high finding BE-15 by physical measurement (owner); then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-02, P3] |
-| F-MTX-012 | Enable / disable ARC on an output | V4 | V1/V1/stale | SW-PROTOCOL-PREP-02 (P3) | api / settings.arc_0, settings.arc_1, settings.arc_port_0 (+2) | no ws contract entry | `docs/api/websocket.schema.json` (+18) | PHYS-OWNER-GATE | re-run settings.arc_0/api at current source to refresh; close open critical/high finding HIL-09 by physical measurement (owner); then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-02, P3] |
-| F-MTX-013 | Set an input's EDID | V4 | V1/V1/stale | SW-PROTOCOL-PREP-03 (P3) | api / settings.edid_input_0, settings.edid_input_9, settings.edid_missing_mode (+7) | no ws contract entry | `docs/api/websocket.schema.json` (+18) | PHYS-OWNER-GATE | re-run settings.edid_input_0/api at current source to refresh; close open critical/high finding HIL-09 by physical measurement (owner); then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-03, P3] |
-| F-MTX-014 | Copy EDID from a connected display | V4 | V1/V1/stale | SW-PROTOCOL-PREP-03 (P3) | api / settings.edid_copy_invalid_0, settings.edid_copy_invalid_9, settings.edid_copy_output_1 (+8) | no ws contract entry | `docs/api/websocket.schema.json` (+18) | PHYS-OWNER-GATE | re-run settings.edid_copy_invalid_0/api at current source to refresh; close open critical/high finding BE-25 by physical measurement (owner); then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-03, P3] |
-| F-MTX-015 | External audio: matrix mode | V4 | V1/V1/stale | SW-PROTOCOL-PREP-03 (P3) | api / audio.mode_0, audio.mode_1, audio.mode_2 (+6) | no ws contract entry | `docs/api/websocket.schema.json` (+18) | PHYS-OWNER-GATE | re-run audio.mode_0/api at current source to refresh; close open critical/high finding HIL-09 by physical measurement (owner); then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-03, P3] |
-| F-MTX-016 | External audio: enable per output | V4 | V1/V1/stale | SW-PROTOCOL-PREP-03 (P3) | api / audio.enable_1_0, audio.enable_1_1, audio.enable_2_0 (+17) | no ws contract entry | `docs/api/websocket.schema.json` (+18) | PHYS-OWNER-GATE | re-run audio.enable_1_0/api at current source to refresh; close open critical/high finding HIL-09 by physical measurement (owner); then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-03, P3] |
-| F-MTX-017 | External audio: source per output | V4 | V1/V1/stale | SW-PROTOCOL-PREP-03 (P3) | api / audio.source_1_1, audio.source_1_2, audio.source_1_3 (+68) | no ws contract entry | `docs/api/websocket.schema.json` (+18) | PHYS-OWNER-GATE | re-run audio.source_1_1/api at current source to refresh; close open critical/high finding HIL-09 by physical measurement (owner); then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-03, P3] |
+| F-MTX-007 | Mute / unmute the audio of an output | V4 | V1*/V1/fresh | SW-PROTOCOL-PREP-02 (P3) | api,ha / ha.mute_switch, outputs.audio_mute | audio_mute [exact bound] | `custom_components/hdmi_matrix` (+20) | PHYS-OWNER-GATE | close open critical/high finding HIL-09 by physical measurement (owner); then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-02, P3] |
+| F-MTX-008 | Enable / disable an output's video stream | V4 | V1*/V1/stale | SW-PROTOCOL-PREP-02 (P3) | api / settings.enable_0, settings.enable_1, settings.enable_port_0 (+2) | no ws contract entry | `docs/api/websocket.schema.json` (+18) | PHYS-OWNER-GATE | re-run settings.enable_0/api at current source to refresh; close open critical/high finding HIL-09 by physical measurement (owner); then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-02, P3] |
+| F-MTX-009 | Set an output's HDCP mode | V4 | V1*/V1/stale | SW-PROTOCOL-PREP-02 (P3) | api / settings.hdcp_1, settings.hdcp_2, settings.hdcp_3 (+8) | no ws contract entry | `docs/api/websocket.schema.json` (+18) | PHYS-OWNER-GATE | re-run settings.hdcp_1/api at current source to refresh; close open critical/high finding HIL-09 by physical measurement (owner); then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-02, P3] |
+| F-MTX-010 | Set an output's HDR mode | V4 | V1*/V1/stale | SW-PROTOCOL-PREP-02 (P3) | api / settings.hdr_1, settings.hdr_2, settings.hdr_3 (+6) | no ws contract entry | `docs/api/websocket.schema.json` (+18) | PHYS-OWNER-GATE | re-run settings.hdr_1/api at current source to refresh; close open critical/high finding HIL-09 by physical measurement (owner); then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-02, P3] |
+| F-MTX-011 | Set an output's scaler mode (incl. audio-only) | V4 | V1*/V1/stale | SW-PROTOCOL-PREP-02 (P3) | api / settings.scaler_1, settings.scaler_2, settings.scaler_3 (+8) | no ws contract entry | `docs/api/websocket.schema.json` (+18) | PHYS-OWNER-GATE | re-run settings.scaler_1/api at current source to refresh; close open critical/high finding BE-15 by physical measurement (owner); then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-02, P3] |
+| F-MTX-012 | Enable / disable ARC on an output | V4 | V1*/V1/stale | SW-PROTOCOL-PREP-02 (P3) | api / settings.arc_0, settings.arc_1, settings.arc_port_0 (+2) | no ws contract entry | `docs/api/websocket.schema.json` (+18) | PHYS-OWNER-GATE | re-run settings.arc_0/api at current source to refresh; close open critical/high finding HIL-09 by physical measurement (owner); then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-02, P3] |
+| F-MTX-013 | Set an input's EDID | V4 | V1*/V1/stale | SW-PROTOCOL-PREP-03 (P3) | api / settings.edid_input_0, settings.edid_input_9, settings.edid_missing_mode (+7) | no ws contract entry | `docs/api/websocket.schema.json` (+18) | PHYS-OWNER-GATE | re-run settings.edid_input_0/api at current source to refresh; close open critical/high finding HIL-09 by physical measurement (owner); then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-03, P3] |
+| F-MTX-014 | Copy EDID from a connected display | V4 | V1*/V1/stale | SW-PROTOCOL-PREP-03 (P3) | api / settings.edid_copy_invalid_0, settings.edid_copy_invalid_9, settings.edid_copy_output_1 (+8) | no ws contract entry | `docs/api/websocket.schema.json` (+18) | PHYS-OWNER-GATE | re-run settings.edid_copy_invalid_0/api at current source to refresh; close open critical/high finding BE-25 by physical measurement (owner); then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-03, P3] |
+| F-MTX-015 | External audio: matrix mode | V4 | V1*/V1/stale | SW-PROTOCOL-PREP-03 (P3) | api / audio.mode_0, audio.mode_1, audio.mode_2 (+6) | no ws contract entry | `docs/api/websocket.schema.json` (+18) | PHYS-OWNER-GATE | re-run audio.mode_0/api at current source to refresh; close open critical/high finding HIL-09 by physical measurement (owner); then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-03, P3] |
+| F-MTX-016 | External audio: enable per output | V4 | V1*/V1/stale | SW-PROTOCOL-PREP-03 (P3) | api / audio.enable_1_0, audio.enable_1_1, audio.enable_2_0 (+17) | no ws contract entry | `docs/api/websocket.schema.json` (+18) | PHYS-OWNER-GATE | re-run audio.enable_1_0/api at current source to refresh; close open critical/high finding HIL-09 by physical measurement (owner); then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-03, P3] |
+| F-MTX-017 | External audio: source per output | V4 | V1*/V1/stale | SW-PROTOCOL-PREP-03 (P3) | api / audio.source_1_1, audio.source_1_2, audio.source_1_3 (+68) | no ws contract entry | `docs/api/websocket.schema.json` (+18) | PHYS-OWNER-GATE | re-run audio.source_1_1/api at current source to refresh; close open critical/high finding HIL-09 by physical measurement (owner); then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-03, P3] |
 | F-MTX-018 | Front-panel beep on / off | V4 | V1/V1/stale | SW-PROTOCOL-PREP-03 (P3) | api / matrix.beep_off, matrix.beep_on, matrix.beep_refused | no ws contract entry | `docs/api/websocket.schema.json` (+17) | MISSING-CLIENT +PHYS | re-run matrix.beep_off/api at current source to refresh; add/execute a real-client end-to-end assertion; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-03, P3] |
 | F-MTX-019 | Front-panel lock | V4 | V1/V1/stale | SW-PROTOCOL-PREP-04 (P3) | api / matrix.panel_lock_off, matrix.panel_lock_on, matrix.panel_lock_refused | no ws contract entry | `docs/api/websocket.schema.json` (+17) | MISSING-CLIENT +PHYS | re-run matrix.panel_lock_off/api at current source to refresh; add/execute a real-client end-to-end assertion; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-04, P3] |
-| F-MTX-020 | Front-panel LCD timeout | V4 | V1/V1/stale | SW-PROTOCOL-PREP-04 (P3) | api / matrix.lcd_invalid_mode, matrix.lcd_missing_mode, matrix.lcd_mode_0 (+5) | no ws contract entry | `docs/api/websocket.schema.json` (+17) | PHYS-OWNER-GATE | re-run matrix.lcd_invalid_mode/api at current source to refresh; close open critical/high finding API-07 by physical measurement (owner); then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-04, P3] |
+| F-MTX-020 | Front-panel LCD timeout | V4 | V1*/V1/stale | SW-PROTOCOL-PREP-04 (P3) | api / matrix.lcd_invalid_mode, matrix.lcd_missing_mode, matrix.lcd_mode_0 (+5) | no ws contract entry | `docs/api/websocket.schema.json` (+17) | PHYS-OWNER-GATE | re-run matrix.lcd_invalid_mode/api at current source to refresh; close open critical/high finding API-07 by physical measurement (owner); then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-04, P3] |
 | F-MTX-021 | Reboot the matrix | V4 | V1/V1/stale | SW-PROTOCOL-PREP-04 (P3) | api,browser / reboot.direct, reboot.enabled_shortcut, reboot.legacy_shortcut | no ws contract entry | `docs/api/websocket.schema.json` (+27) | RERUN-FRESH +PHYS | re-run reboot.direct/api at current source to refresh; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-04, P3] |
 | F-MTX-022 | Rename inputs (names stored on the matrix) | V4 | V1/V1/stale | SW-PROTOCOL-PREP-04 (P3) | api / matrix.input_blank_name, matrix.input_invalid_port, matrix.input_long_name (+3) | no ws contract entry | `docs/api/websocket.schema.json` (+19) | MISSING-CLIENT +PHYS | re-run matrix.input_blank_name/api at current source to refresh; add/execute a real-client end-to-end assertion; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-04, P3] |
 | F-MTX-023 | Rename outputs (names stored on the matrix) | V4 | V1/V1/stale | SW-PROTOCOL-PREP-04 (P3) | api / matrix.output_blank_name, matrix.output_invalid_port, matrix.output_long_name (+3) | no ws contract entry | `docs/api/websocket.schema.json` (+19) | MISSING-CLIENT +PHYS | re-run matrix.output_blank_name/api at current source to refresh; add/execute a real-client end-to-end assertion; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-PROTOCOL-PREP-04, P3] |
@@ -641,14 +776,14 @@ the registry.**
 | F-REL-009 | Matrix unreachable: commands fail visibly and no state is made up | V4 | V3/V3/fresh | SW-RUNTIME-PREP-05 (P3) | api,browser,ha / failures.unreachable_switch, ha.matrix_offline, live.matrix_offline | no ws contract entry | `custom_components/hdmi_matrix` (+26) | PHYS-OWNER-GATE | no SW-AUDIT-01 action; preserve accepted evidence; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-RUNTIME-PREP-05, P3] |
 | F-REL-010 | Status stays fresh (caches expire, one refresh at a time) | V4 | V1/V1/none | SW-RUNTIME-PREP-05 (P3) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED +PHYS | inspect and reuse the existing non-declarative basis and controls named in the registry basis to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-RUNTIME-PREP-05, P3] |
 | F-REL-011 | API calls are not blocked while the hub reconnects | V4 | V0/V0/none | SW-RUNTIME-PREP-06 (P3) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED +PHYS | inspect and reuse the existing non-declarative basis and controls named in the registry basis to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-RUNTIME-PREP-06, P3] |
-| F-REL-012 | Background polling keeps state live without a Remote connected | V4 | V3/V3/fresh | SW-RUNTIME-PREP-06 (P3) | browser / live.front_panel_route | routing_change [exact bound]; signal_change [exact bound elsewhere] | `docs/api/websocket.schema.json` (+23) | PHYS-OWNER-GATE | no SW-AUDIT-01 action; preserve accepted evidence; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-RUNTIME-PREP-06, P3] |
+| F-REL-012 | Background polling keeps state live without a Remote connected | V4 | V3/V3/fresh | SW-RUNTIME-PREP-06 (P3) | browser / live.front_panel_route | routing_change [exact bound]; signal_change [exact bound elsewhere] | `docs/api/websocket.schema.json` (+23) | PHYS-OWNER-GATE | no SW-AUDIT-01 action for the software side; preserve accepted evidence; the contract effect `signal_change` is typed-asserted only under other feature ids (F-MTX-031 / F-API-040 / F-UI-024 / F-KIO-010), so the owning unit must inspect and reuse that existing assertion for this row, or record the attribution as deliberately out of scope - no new assertion is prescribed and the primary disposition is unchanged by this obligation; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-RUNTIME-PREP-06, P3] |
 | F-REL-013 | The event loop never stalls (loop-lag metric) | V4 | V1/V1/none | SW-RUNTIME-PREP-06 (P3) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED +PHYS | inspect and reuse the existing non-declarative basis and controls named in the registry basis to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-RUNTIME-PREP-06, P3] |
 | F-REL-014 | A slow WebSocket client cannot stall commands | V4 | V2/V2/none | SW-RUNTIME-PREP-06 (P3) | none / - | all broadcasts [non-event contract entry] | `-` | COVERAGE-UNRESOLVED +PHYS | inspect and reuse the existing non-declarative basis and controls named in the registry basis to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-RUNTIME-PREP-06, P3] |
 | F-REL-015 | Tolerate slow and malformed matrix responses | V4 | V1/V1/none | SW-RUNTIME-PREP-06 (P3) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED +PHYS | inspect and reuse the existing non-declarative basis and controls named in the registry basis to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-RUNTIME-PREP-06, P3] |
 | F-REL-016 | Standby does not start reconnect storms or duplicate pollers | V4 | V0/V0/none | SW-RUNTIME-PREP-06 (P3) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED +PHYS | inspect and reuse the existing non-declarative basis and controls named in the registry basis to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-RUNTIME-PREP-06, P3] |
 | F-REL-017 | No leaked sessions, sockets or tasks after reconfiguration | V4 | V0/V0/none | SW-RUNTIME-PREP-07 (P3) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED +PHYS | inspect and reuse the existing non-declarative basis and controls named in the registry basis to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-RUNTIME-PREP-07, P3] |
 | F-REL-018 | 72-hour soak with flat memory, tasks and sockets | V5 | V0/V0/none | SW-SOAK-PREP-01 (P3) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED +FIELD | inspect and reuse the existing non-declarative basis and controls named in the registry basis to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row; then owner week-of-use field sign-off (OWNER-FIELD-WEEK) [unit=SW-SOAK-PREP-01, P3] |
-| F-SEC-001 | Optional admin / control PIN gate | V3 | V1/V1/none | SW-SEC-AUTH-03 (P1) | api / security_auth.admin_pin_blocks_admin_route, security_auth.api_key_not_admin, security_auth.api_key_status_level (+9) | /ws [non-event contract entry] | `docs/api/websocket.schema.json` (+20) | RERUN-FRESH | first run of security_auth.admin_pin_blocks_admin_route/api at current source to refresh [unit=SW-SEC-AUTH-03, P1] |
+| F-SEC-001 | Optional admin / control PIN gate | V3 | V1/V1/none | SW-SEC-AUTH-03 (P1) | api / security_auth.admin_pin_blocks_admin_route, security_auth.api_key_not_admin, security_auth.api_key_status_level (+9) | /ws [non-event contract entry] | `docs/api/websocket.schema.json` (+20) | MISSING-CLIENT | first run of security_auth.admin_pin_blocks_admin_route/api at current source to refresh; add/execute a real-client end-to-end assertion - the contract target is V3 and the live coverage is api-only, so an API freshness run alone cannot establish V3 and the real-client intake stays unresolved [unit=SW-SEC-AUTH-03, P1] |
 | F-SEC-002 | Cross-site request protection (CORS, Origin, Content-Type, Host allow-list) | V3 | V1/V1/none | SW-SEC-AUTH-03 (P1) | api / security_auth.cross_site_allowed_origin, security_auth.cross_site_bad_host, security_auth.cross_site_content_type (+2) | no ws contract entry | `docs/api/websocket.schema.json` (+19) | MISSING-CLIENT | first run of security_auth.cross_site_allowed_origin/api at current source to refresh; add/execute a real-client end-to-end assertion [unit=SW-SEC-AUTH-03, P1] |
 | F-SEC-003 | Matrix host changes cannot leak the matrix password (SSRF guard) | V3 | V1/V1/none | SW-SEC-AUTH-03 (P1) | api / security_auth.matrix_host_admin_pin, security_auth.matrix_host_link_local, security_auth.matrix_host_loopback (+3) | no ws contract entry | `docs/api/websocket.schema.json` (+19) | MISSING-CLIENT | first run of security_auth.matrix_host_admin_pin/api at current source to refresh; add/execute a real-client end-to-end assertion [unit=SW-SEC-AUTH-03, P1] |
 | F-SEC-004 | Profile/scene passcodes are stored as PBKDF2 hashes | V3 | V1/V1/none | SW-SEC-DATA-01 (P1) | api / security_hardening.profile_read_protected, security_hardening.scene_read_protected | no ws contract entry | `docs/api/websocket.schema.json` (+28) | MISSING-CLIENT | first run of security_hardening.profile_read_protected/api at current source to refresh; add/execute a real-client end-to-end assertion [unit=SW-SEC-DATA-01, P1] |
@@ -682,40 +817,40 @@ the registry.**
 | F-UC-017 | Restore the configuration at startup (also with the matrix offline) | V4 | V3/V3/none | SW-UC-PREP-03 (P3) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED +PHYS | inspect and reuse the existing non-declarative basis and controls named in the registry basis to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row; then owner HIL measurement on the physical device (OWNER-HIL-*) [unit=SW-UC-PREP-03, P3] |
 | F-UI-001 | Open the web UI; the header shows the matrix connection | V3 | V3/V3/none | SW-UI-CONTROL-01 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | inspect and reuse the existing non-declarative basis and controls named in the registry basis to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-UI-CONTROL-01, P2] |
 | F-UI-002 | Route by clicking a cell in the matrix grid | V3 | V3/V3/stale | SW-UI-CONTROL-01 (P2) | browser / routing.switch_one | no ws contract entry | `docs/api/websocket.schema.json` (+23) | RERUN-FRESH | re-run routing.switch_one/browser at current source to refresh [unit=SW-UI-CONTROL-01, P2] |
-| F-UI-003 | Route from the matrix card view (routing sheet) | V3 | V1/V1/none | SW-UI-CONTROL-01 (P2) | none / - | no ws contract entry | `-` | MISSING-ASSERT | the exact contract WS event(s) this feature have no typed declarative assertion and no non-declarative control was found in the bounded committed-byte search; decide the assertion with the owning unit before authoring one [unit=SW-UI-CONTROL-01, P2] |
+| F-UI-003 | Route from the matrix card view (routing sheet) | V3 | V1/V1/none | SW-UI-CONTROL-01 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | the registry basis itself states that no effect is asserted ("screenshot baseline only") and this row declares no WebSocket contract entry, so no contract effect is missing here; inspect and reuse the basis and controls named in the registry to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-UI-CONTROL-01, P2] |
 | F-UI-004 | Route one input to every output from the Route To All drawer | V3 | V1/V1/stale | SW-UI-CONTROL-01 (P2) | browser / routing.route_all | no ws contract entry | `docs/api/websocket.schema.json` (+25) | RERUN-FRESH | re-run routing.route_all/browser at current source to refresh [unit=SW-UI-CONTROL-01, P2] |
 | F-UI-005 | Recall a preset from the Presets drawer | V3 | V1/V1/stale | SW-UI-CONTROL-01 (P2) | browser / presets.recall | no ws contract entry | `docs/api/websocket.schema.json` (+24) | RERUN-FRESH | re-run presets.recall/browser at current source to refresh [unit=SW-UI-CONTROL-01, P2] |
 | F-UI-006 | Rename a preset in the Presets drawer | V3 | V3/V1/fresh | SW-UI-CONTROL-01 (P2) | browser / presets.rename | no ws contract entry | `docs/api/websocket.schema.json` (+25) | PRESERVE | no SW-AUDIT-01 action; preserve accepted evidence [unit=SW-UI-CONTROL-01, P2] |
-| F-UI-007 | Overwrite a preset / save a custom mapping from the Presets drawer | V3 | V1/V1/none | SW-UI-CONTROL-02 (P2) | none / - | no ws contract entry | `-` | MISSING-ASSERT | the exact contract WS event(s) this feature have no typed declarative assertion and no non-declarative control was found in the bounded committed-byte search; decide the assertion with the owning unit before authoring one [unit=SW-UI-CONTROL-02, P2] |
+| F-UI-007 | Overwrite a preset / save a custom mapping from the Presets drawer | V3 | V1/V1/none | SW-UI-CONTROL-02 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | the registry basis itself states that no effect is asserted ("screenshot baseline only") and this row declares no WebSocket contract entry, so no contract effect is missing here; inspect and reuse the basis and controls named in the registry to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-UI-CONTROL-02, P2] |
 | F-UI-008 | Run profiles, scenes, presets, shortcuts and macros from dashboard cards | V3 | V3/V3/fresh | SW-UI-MANAGE-01 (P2) | browser / scenes.run_protected | no ws contract entry | `docs/api/websocket.schema.json` (+35) | PRESERVE | no SW-AUDIT-01 action; preserve accepted evidence [unit=SW-UI-MANAGE-01, P2] |
-| F-UI-009 | Customise the dashboard (card picker, pin, reorder) | V3 | V1/V1/none | SW-UI-MANAGE-01 (P2) | none / - | no ws contract entry | `-` | MISSING-ASSERT | the exact contract WS event(s) this feature have no typed declarative assertion and no non-declarative control was found in the bounded committed-byte search; decide the assertion with the owning unit before authoring one [unit=SW-UI-MANAGE-01, P2] |
-| F-UI-010 | Inputs tab: signal/cable status and input settings (name, icon, EDID) | V3 | V1/V1/none | SW-UI-CONTROL-02 (P2) | none / - | no ws contract entry | `-` | MISSING-ASSERT | the exact contract WS event(s) this feature have no typed declarative assertion and no non-declarative control was found in the bounded committed-byte search; decide the assertion with the owning unit before authoring one [unit=SW-UI-CONTROL-02, P2] |
-| F-UI-011 | Outputs tab: display status and output settings (HDCP, HDR, scaler, ARC, mute) | V3 | V1/V1/none | SW-UI-CONTROL-02 (P2) | none / - | no ws contract entry | `-` | MISSING-ASSERT | the exact contract WS event(s) this feature have no typed declarative assertion and no non-declarative control was found in the bounded committed-byte search; decide the assertion with the owning unit before authoring one [unit=SW-UI-CONTROL-02, P2] |
+| F-UI-009 | Customise the dashboard (card picker, pin, reorder) | V3 | V1/V1/none | SW-UI-MANAGE-01 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | the registry basis itself states that no effect is asserted ("screenshot baseline only") and this row declares no WebSocket contract entry, so no contract effect is missing here; inspect and reuse the basis and controls named in the registry to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-UI-MANAGE-01, P2] |
+| F-UI-010 | Inputs tab: signal/cable status and input settings (name, icon, EDID) | V3 | V1/V1/none | SW-UI-CONTROL-02 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | the registry basis itself states that no effect is asserted ("screenshot baseline only") and this row declares no WebSocket contract entry, so no contract effect is missing here; inspect and reuse the basis and controls named in the registry to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-UI-CONTROL-02, P2] |
+| F-UI-011 | Outputs tab: display status and output settings (HDCP, HDR, scaler, ARC, mute) | V3 | V1/V1/none | SW-UI-CONTROL-02 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | the registry basis itself states that no effect is asserted ("screenshot baseline only") and this row declares no WebSocket contract entry, so no contract effect is missing here; inspect and reuse the basis and controls named in the registry to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-UI-CONTROL-02, P2] |
 | F-UI-012 | Profiles tab and profile manager | V3 | V3/V3/fresh | SW-UI-MANAGE-01 (P2) | browser / profiles.recall_routing | no ws contract entry | `docs/api/websocket.schema.json` (+30) | PRESERVE | no SW-AUDIT-01 action; preserve accepted evidence [unit=SW-UI-MANAGE-01, P2] |
-| F-UI-013 | Create and edit a profile in the profile editor | V3 | V1/V1/none | SW-UI-MANAGE-01 (P2) | none / - | no ws contract entry | `-` | MISSING-ASSERT | the exact contract WS event(s) this feature have no typed declarative assertion and no non-declarative control was found in the bounded committed-byte search; decide the assertion with the owning unit before authoring one [unit=SW-UI-MANAGE-01, P2] |
+| F-UI-013 | Create and edit a profile in the profile editor | V3 | V1/V1/none | SW-UI-MANAGE-01 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | the registry basis itself states that no effect is asserted ("screenshot baseline only") and this row declares no WebSocket contract entry, so no contract effect is missing here; inspect and reuse the basis and controls named in the registry to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-UI-MANAGE-01, P2] |
 | F-UI-014 | Run a passcode-protected profile (passcode prompt) | V3 | V3/V3/fresh | SW-UI-MANAGE-01 (P2) | browser / profiles.recall_needs_passcode, profiles.recall_with_passcode, profiles.recall_wrong_passcode | no ws contract entry | `docs/api/websocket.schema.json` (+31) | PRESERVE | no SW-AUDIT-01 action; preserve accepted evidence [unit=SW-UI-MANAGE-01, P2] |
 | F-UI-015 | Build a scene in the scene editor | V3 | V3/V3/none | SW-UI-MANAGE-01 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | inspect and reuse the existing non-declarative basis and controls named in the registry basis to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-UI-MANAGE-01, P2] |
-| F-UI-016 | Build a CEC macro in the macro editor | V3 | V1/V1/none | SW-UI-MANAGE-02 (P2) | none / - | no ws contract entry | `-` | MISSING-ASSERT | the exact contract WS event(s) this feature have no typed declarative assertion and no non-declarative control was found in the bounded committed-byte search; decide the assertion with the owning unit before authoring one [unit=SW-UI-MANAGE-02, P2] |
-| F-UI-017 | CEC remote on output/input tiles and the CEC tray | V3 | V1/V1/none | SW-UI-CONTROL-02 (P2) | none / - | no ws contract entry | `-` | MISSING-ASSERT | the exact contract WS event(s) this feature have no typed declarative assertion and no non-declarative control was found in the bounded committed-byte search; decide the assertion with the owning unit before authoring one [unit=SW-UI-CONTROL-02, P2] |
-| F-UI-018 | Theme presets, customisation and card opacity | V3 | V1/V1/none | SW-UI-PRESENT-01 (P2) | none / - | no ws contract entry | `-` | MISSING-ASSERT | the exact contract WS event(s) this feature have no typed declarative assertion and no non-declarative control was found in the bounded committed-byte search; decide the assertion with the owning unit before authoring one [unit=SW-UI-PRESENT-01, P2] |
-| F-UI-019 | General settings: matrix host and connection test | V3 | V1/V1/none | SW-UI-PRESENT-01 (P2) | none / - | no ws contract entry | `-` | MISSING-ASSERT | the exact contract WS event(s) this feature have no typed declarative assertion and no non-declarative control was found in the bounded committed-byte search; decide the assertion with the owning unit before authoring one [unit=SW-UI-PRESENT-01, P2] |
-| F-UI-020 | Hardware settings: beep, panel lock, LCD, reboot | V3 | V1/V1/none | SW-UI-PRESENT-01 (P2) | none / - | no ws contract entry | `-` | MISSING-ASSERT | the exact contract WS event(s) this feature have no typed declarative assertion and no non-declarative control was found in the bounded committed-byte search; decide the assertion with the owning unit before authoring one [unit=SW-UI-PRESENT-01, P2] |
-| F-UI-021 | Interface settings | V3 | V1/V1/none | SW-UI-PRESENT-01 (P2) | none / - | no ws contract entry | `-` | MISSING-ASSERT | the exact contract WS event(s) this feature have no typed declarative assertion and no non-declarative control was found in the bounded committed-byte search; decide the assertion with the owning unit before authoring one [unit=SW-UI-PRESENT-01, P2] |
-| F-UI-022 | Shortcuts drawer: run, rename, reorder | V3 | V1/V1/none | SW-UI-MANAGE-02 (P2) | none / - | no ws contract entry | `-` | MISSING-ASSERT | the exact contract WS event(s) this feature have no typed declarative assertion and no non-declarative control was found in the bounded committed-byte search; decide the assertion with the owning unit before authoring one [unit=SW-UI-MANAGE-02, P2] |
-| F-UI-023 | Integrations drawer (Flic request builder, HA YAML, Remote 3 info) | V3 | V1/V1/none | SW-UI-MANAGE-02 (P2) | none / - | no ws contract entry | `-` | MISSING-ASSERT | the exact contract WS event(s) this feature have no typed declarative assertion and no non-declarative control was found in the bounded committed-byte search; decide the assertion with the owning unit before authoring one [unit=SW-UI-MANAGE-02, P2] |
+| F-UI-016 | Build a CEC macro in the macro editor | V3 | V1/V1/none | SW-UI-MANAGE-02 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | the registry basis itself states that no effect is asserted ("screenshot baseline only") and this row declares no WebSocket contract entry, so no contract effect is missing here; inspect and reuse the basis and controls named in the registry to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-UI-MANAGE-02, P2] |
+| F-UI-017 | CEC remote on output/input tiles and the CEC tray | V3 | V1/V1/none | SW-UI-CONTROL-02 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | the registry basis itself states that no effect is asserted ("screenshot baseline only") and this row declares no WebSocket contract entry, so no contract effect is missing here; inspect and reuse the basis and controls named in the registry to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-UI-CONTROL-02, P2] |
+| F-UI-018 | Theme presets, customisation and card opacity | V3 | V1/V1/none | SW-UI-PRESENT-01 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | the registry basis itself states that no effect is asserted ("screenshot baseline only") and this row declares no WebSocket contract entry, so no contract effect is missing here; inspect and reuse the basis and controls named in the registry to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-UI-PRESENT-01, P2] |
+| F-UI-019 | General settings: matrix host and connection test | V3 | V1/V1/none | SW-UI-PRESENT-01 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | the registry basis itself states that no effect is asserted ("screenshot baseline only") and this row declares no WebSocket contract entry, so no contract effect is missing here; inspect and reuse the basis and controls named in the registry to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-UI-PRESENT-01, P2] |
+| F-UI-020 | Hardware settings: beep, panel lock, LCD, reboot | V3 | V1/V1/none | SW-UI-PRESENT-01 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | the registry basis itself states that no effect is asserted ("screenshot baseline only") and this row declares no WebSocket contract entry, so no contract effect is missing here; inspect and reuse the basis and controls named in the registry to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-UI-PRESENT-01, P2] |
+| F-UI-021 | Interface settings | V3 | V1/V1/none | SW-UI-PRESENT-01 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | the registry basis itself states that no effect is asserted ("screenshot baseline only") and this row declares no WebSocket contract entry, so no contract effect is missing here; inspect and reuse the basis and controls named in the registry to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-UI-PRESENT-01, P2] |
+| F-UI-022 | Shortcuts drawer: run, rename, reorder | V3 | V1/V1/none | SW-UI-MANAGE-02 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | the registry basis itself states that no effect is asserted ("screenshot baseline only") and this row declares no WebSocket contract entry, so no contract effect is missing here; inspect and reuse the basis and controls named in the registry to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-UI-MANAGE-02, P2] |
+| F-UI-023 | Integrations drawer (Flic request builder, HA YAML, Remote 3 info) | V3 | V1/V1/none | SW-UI-MANAGE-02 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | the registry basis itself states that no effect is asserted ("screenshot baseline only") and this row declares no WebSocket contract entry, so no contract effect is missing here; inspect and reuse the basis and controls named in the registry to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-UI-MANAGE-02, P2] |
 | F-UI-024 | Live updates when another client or the matrix changes something | V3 | V3/V3/fresh | SW-UI-CONTROL-02 (P2) | browser / live.display_unplugged, live.front_panel_route, live.input_signal (+2) | no ws contract entry | `docs/api/websocket.schema.json` (+24) | PRESERVE | no SW-AUDIT-01 action; preserve accepted evidence [unit=SW-UI-CONTROL-02, P2] |
 | F-UI-025 | Reconnect and resync after the WebSocket drops | V3 | V3/V3/none | SW-UI-CONTROL-02 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | inspect and reuse the existing non-declarative basis and controls named in the registry basis to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-UI-CONTROL-02, P2] |
 | F-UI-026 | Show an error state when the matrix is unreachable | V3 | V3/V3/none | SW-UI-CONTROL-03 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | inspect and reuse the existing non-declarative basis and controls named in the registry basis to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-UI-CONTROL-03, P2] |
 | F-UI-027 | Toasts and confirmation dialogs | V3 | V3/V3/fresh | SW-UI-CONTROL-03 (P2) | browser / scenes.partial_failure | no ws contract entry | `docs/api/websocket.schema.json` (+34) | PRESERVE | no SW-AUDIT-01 action; preserve accepted evidence [unit=SW-UI-CONTROL-03, P2] |
-| F-UI-028 | Keyboard shortcuts | V3 | V1/V1/none | SW-UI-PRESENT-01 (P2) | none / - | no ws contract entry | `-` | MISSING-ASSERT | the exact contract WS event(s) this feature have no typed declarative assertion and no non-declarative control was found in the bounded committed-byte search; decide the assertion with the owning unit before authoring one [unit=SW-UI-PRESENT-01, P2] |
-| F-UI-029 | Accessibility (keyboard, focus, ARIA, contrast, zoom) | V3 | V1/V1/none | SW-UI-PRESENT-01 (P2) | none / - | no ws contract entry | `-` | MISSING-ASSERT | the exact contract WS event(s) this feature have no typed declarative assertion and no non-declarative control was found in the bounded committed-byte search; decide the assertion with the owning unit before authoring one [unit=SW-UI-PRESENT-01, P2] |
-| F-UI-030 | Debug panel | V3 | V1/V1/none | SW-UI-PRESENT-02 (P2) | none / - | no ws contract entry | `-` | MISSING-ASSERT | the exact contract WS event(s) this feature have no typed declarative assertion and no non-declarative control was found in the bounded committed-byte search; decide the assertion with the owning unit before authoring one [unit=SW-UI-PRESENT-02, P2] |
+| F-UI-028 | Keyboard shortcuts | V3 | V1/V1/none | SW-UI-PRESENT-01 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | the registry basis itself states that no effect is asserted ("screenshot baseline only") and this row declares no WebSocket contract entry, so no contract effect is missing here; inspect and reuse the basis and controls named in the registry to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-UI-PRESENT-01, P2] |
+| F-UI-029 | Accessibility (keyboard, focus, ARIA, contrast, zoom) | V3 | V1/V1/none | SW-UI-PRESENT-01 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | the registry basis itself states that no effect is asserted ("not asserted") and this row declares no WebSocket contract entry, so no contract effect is missing here; inspect and reuse the basis and controls named in the registry to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-UI-PRESENT-01, P2] |
+| F-UI-030 | Debug panel | V3 | V1/V1/none | SW-UI-PRESENT-02 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | the registry basis itself states that no effect is asserted ("screenshot baseline only") and this row declares no WebSocket contract entry, so no contract effect is missing here; inspect and reuse the basis and controls named in the registry to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-UI-PRESENT-02, P2] |
 | F-UI-031 | About dialog | V3 | V3/V3/none | SW-UI-PRESENT-02 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | inspect and reuse the existing non-declarative basis and controls named in the registry basis to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-UI-PRESENT-02, P2] |
-| F-UI-032 | Animated Tron background (opt-in) | V3 | V1/V1/none | SW-UI-PRESENT-02 (P2) | none / - | no ws contract entry | `-` | MISSING-ASSERT | the exact contract WS event(s) this feature have no typed declarative assertion and no non-declarative control was found in the bounded committed-byte search; decide the assertion with the owning unit before authoring one [unit=SW-UI-PRESENT-02, P2] |
-| F-UI-033 | Tablet and phone layouts | V3 | V1/V1/none | SW-UI-PRESENT-02 (P2) | none / - | no ws contract entry | `-` | MISSING-ASSERT | the exact contract WS event(s) this feature have no typed declarative assertion and no non-declarative control was found in the bounded committed-byte search; decide the assertion with the owning unit before authoring one [unit=SW-UI-PRESENT-02, P2] |
-| F-UI-034 | Personalise tabs in the Control Deck (pin, reorder) | V3 | V1/V1/none | SW-UI-MANAGE-02 (P2) | none / - | no ws contract entry | `-` | MISSING-ASSERT | the exact contract WS event(s) this feature have no typed declarative assertion and no non-declarative control was found in the bounded committed-byte search; decide the assertion with the owning unit before authoring one [unit=SW-UI-MANAGE-02, P2] |
-| F-UI-035 | Copy an API endpoint for automation (API button / modal) | V3 | V1/V1/none | SW-UI-MANAGE-02 (P2) | none / - | no ws contract entry | `-` | MISSING-ASSERT | the exact contract WS event(s) this feature have no typed declarative assertion and no non-declarative control was found in the bounded committed-byte search; decide the assertion with the owning unit before authoring one [unit=SW-UI-MANAGE-02, P2] |
-| F-UI-036 | First-run setup wizard (matrix connection) | V3 | V1/V1/none | SW-UI-MANAGE-02 (P2) | none / - | no ws contract entry | `-` | MISSING-ASSERT | the exact contract WS event(s) this feature have no typed declarative assertion and no non-declarative control was found in the bounded committed-byte search; decide the assertion with the owning unit before authoring one [unit=SW-UI-MANAGE-02, P2] |
+| F-UI-032 | Animated Tron background (opt-in) | V3 | V1/V1/none | SW-UI-PRESENT-02 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | the registry basis itself states that no effect is asserted ("screenshot baseline only") and this row declares no WebSocket contract entry, so no contract effect is missing here; inspect and reuse the basis and controls named in the registry to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-UI-PRESENT-02, P2] |
+| F-UI-033 | Tablet and phone layouts | V3 | V1/V1/none | SW-UI-PRESENT-02 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | the registry basis itself states that no effect is asserted ("screenshot baseline only") and this row declares no WebSocket contract entry, so no contract effect is missing here; inspect and reuse the basis and controls named in the registry to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-UI-PRESENT-02, P2] |
+| F-UI-034 | Personalise tabs in the Control Deck (pin, reorder) | V3 | V1/V1/none | SW-UI-MANAGE-02 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | the registry basis itself states that no effect is asserted ("screenshot baseline only") and this row declares no WebSocket contract entry, so no contract effect is missing here; inspect and reuse the basis and controls named in the registry to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-UI-MANAGE-02, P2] |
+| F-UI-035 | Copy an API endpoint for automation (API button / modal) | V3 | V1/V1/none | SW-UI-MANAGE-02 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | the registry basis itself states that no effect is asserted ("screenshot baseline only") and this row declares no WebSocket contract entry, so no contract effect is missing here; inspect and reuse the basis and controls named in the registry to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-UI-MANAGE-02, P2] |
+| F-UI-036 | First-run setup wizard (matrix connection) | V3 | V1/V1/none | SW-UI-MANAGE-02 (P2) | none / - | no ws contract entry | `-` | COVERAGE-UNRESOLVED | the registry basis itself states that no effect is asserted ("screenshot baseline only") and this row declares no WebSocket contract entry, so no contract effect is missing here; inspect and reuse the basis and controls named in the registry to decide whether an assertion, client or freshness gap really remains; this report prescribes no new scenario for this row [unit=SW-UI-MANAGE-02, P2] |
 
 ---
 
@@ -737,16 +872,16 @@ have run by this report.
 
 | Unit (phase) | Rows | Disposition mix | Smallest next independently executable slice |
 | --- | ---: | --- | --- |
-| `SW-API-CLIENT-01` (P1) | 6 | 4 MISSING-CLIENT, 2 COVERAGE-UNRESOLVED | one real-client (`browser`) execution of the **exact runnable subset** — the three rows that have a declarative `api` scenario: `F-API-001` (`contracts.api_docs` / `contracts.health`), `F-API-004` (`cec_controls.status_off`), `F-API-005` (`routing.switch_one`) — bound to the `browser` client. The other three rows (`F-API-003`, `F-API-006`, `F-API-029`) have **no** declarative scenario, so their registry basis must be inspected before any gap is named; *"no new assertion needed"* is **not** claimed for the unit as a whole |
+| `SW-API-CLIENT-01` (P1) | 6 | 4 MISSING-CLIENT, 2 COVERAGE-UNRESOLVED | the unit's six rows are exactly **`F-API-001/003/004/005/006/007`** — **not** `F-API-029`, which the manifest assigns to `SW-API-CLIENT-02` and which has **no** live declarative declaration. The **API-runnable subset** is the four rows with a live `api` declaration — `F-API-001` (`contracts.api_docs` / `contracts.health`), `F-API-004` (`cec_controls.status_off`), `F-API-005` (`routing.switch_one`) and `F-API-007` (`presets.recall`) — and it proves **V2 only**: `contracts.api_docs`, `contracts.health` and `cec_controls.status_off` declare **no** real client, while the `browser` binding of `routing.switch_one` is `F-MTX-001` / `F-UI-002` and the `browser` binding of `presets.recall` is `F-MTX-003` / `F-UI-005`, so **no currently runnable browser proof exists for this unit's rows**. `F-API-003` and `F-API-006` have **no** declarative scenario at all, so their registry basis must be inspected before any gap is named; the unit's **V3 / real-client intake stays unresolved**, and *"no new assertion needed"* is **not** claimed for the unit as a whole |
 | `SW-API-READ-01` (P1) | 1 | 1 PRESERVE | none — preserve the accepted evidence for this unit |
 | `SW-API-WRITE-01` (P1) | 6 | 3 COVERAGE-UNRESOLVED, 3 RERUN-FRESH | inspect and reuse the existing non-declarative basis named in the registry for the unresolved rows before naming any gap; re-run the stale units at current source |
 | `SW-API-CLIENT-02` (P1) | 6 | 3 MISSING-CLIENT, 2 DECLARATIVE-GAP, 1 COVERAGE-UNRESOLVED | review and integrate the **retained** API-V2 `switch_all_failed` candidate across the exact `938ae303` → `caaa4faa` boundary under `RV-API034`, then re-assess the residual V3 client gap (no new assertion implementation); `F-API-035` reuses the existing `preset_recall_failed` control in `tests/test_runtime_preset_errors_r4b.py` |
 | `SW-API-READ-02` (P1) | 4 | 4 PRESERVE | none — preserve the accepted evidence for this unit |
 | `SW-API-WRITE-02` (P1) | 6 | 4 RERUN-FRESH, 2 PRESERVE | re-run the stale units at current source |
-| `SW-API-WRITE-03` (P1) | 6 | 3 RERUN-FRESH, 1 COVERAGE-UNRESOLVED, 1 MISSING-ASSERT, 1 PRESERVE | re-run 3 stale units; `F-API-037`'s `device_settings_full` has **no located control** and is the established gap |
+| `SW-API-WRITE-03` (P1) | 6 | 3 RERUN-FRESH, 1 COVERAGE-UNRESOLVED, 1 MISSING-ASSERT, 1 PRESERVE | re-run 3 stale units; `F-API-037`'s `device_settings_full` has **no located control** and is the inventory's only bounded-negative gap |
 | `SW-API-READ-04` (P1) | 2 | 1 DECLARATIVE-GAP, 1 PRESERVE | inspect and reuse the located non-declarative control(s) named in the row actions instead of authoring a duplicate assertion |
 | `SW-API-WRITE-04` (P1) | 2 | 2 PRESERVE | none — preserve the accepted evidence for this unit |
-| `SW-API-READ-03` (P1) | 3 | 2 DECLARATIVE-GAP, 1 MISSING-ASSERT | `F-API-039` (`status`) and `F-API-042` (`pong`) reuse the existing non-declarative controls in `tests/sim/test_sim_ws_contract.py` and `tests/test_rest_api.py`; `F-API-040`'s `output_name_change` has **no located control** and is the established gap |
+| `SW-API-READ-03` (P1) | 3 | 2 DECLARATIVE-GAP, 1 MISSING-ASSERT | `F-API-039` (`status`) and `F-API-042` (`pong`) reuse the existing non-declarative controls in `tests/sim/test_sim_ws_contract.py` and `tests/test_rest_api.py`; `F-API-040`'s `output_name_change` has **no located control** and is the inventory's only bounded-negative gap |
 | `SW-PROTOCOL-PREP-06` (P3) | 6 | 4 MISSING-CLIENT, 2 PRESERVE | real-client execution of the existing scenarios |
 | `SW-PROTOCOL-PREP-07` (P3) | 6 | 6 MISSING-CLIENT | real-client execution of the existing scenarios |
 | `SW-DOM-PROFILE-01` (P1) | 6 | 5 MISSING-CLIENT, 1 PRESERVE | real-client execution of the existing scenarios |
@@ -756,15 +891,15 @@ have run by this report.
 | `SW-DOM-MACRO-01` (P2) | 3 | 3 MISSING-CLIENT | real-client execution of the existing scenarios |
 | `SW-DOM-SHORTCUT-01` (P2) | 6 | 5 PRESERVE, 1 RERUN-FRESH | re-run the stale units at current source |
 | `SW-DOM-SHORTCUT-02` (P2) | 2 | 2 COVERAGE-UNRESOLVED | inspect and reuse the existing non-declarative basis named in the registry for the unresolved rows before naming any gap |
-| `SW-DOM-PRESENT-01` (P2) | 6 | 3 COVERAGE-UNRESOLVED, 2 MISSING-CLIENT, 1 MISSING-ASSERT | `F-DOM-032`'s `device_settings_full` has **no located control** and is the established gap; the other rows need their registry basis inspected |
+| `SW-DOM-PRESENT-01` (P2) | 6 | 3 COVERAGE-UNRESOLVED, 2 MISSING-CLIENT, 1 MISSING-ASSERT | `F-DOM-032`'s `device_settings_full` has **no located control** and is the inventory's only bounded-negative gap; the other rows need their registry basis inspected |
 | `SW-FLIC-01` (P2) | 6 | 4 PRESERVE, 2 RERUN-FRESH | re-run the stale units at current source |
 | `SW-FLIC-02` (P2) | 4 | 3 PRESERVE, 1 RERUN-FRESH | re-run the stale units at current source |
 | `SW-HA-PREP-01` (P3) | 6 | 6 RERUN-FRESH | re-run the stale units at current source |
 | `SW-HA-PREP-02` (P3) | 6 | 6 RERUN-FRESH | re-run the stale units at current source |
 | `SW-HA-PREP-03` (P3) | 6 | 5 RERUN-FRESH, 1 COVERAGE-UNRESOLVED | inspect and reuse the existing non-declarative basis named in the registry for the unresolved rows before naming any gap; re-run the stale units at current source |
-| `SW-KIOSK-STATE-01` (P2) | 6 | 2 COVERAGE-UNRESOLVED, 2 MISSING-ASSERT, 2 PRESERVE | resolve the established assertion gap(s) named in the row actions with the owning unit — no new scenario is prescribed by this report; inspect and reuse the existing non-declarative basis named in the registry for the unresolved rows before naming any gap |
-| `SW-KIOSK-CONTROL-01` (P2) | 6 | 3 MISSING-ASSERT, 2 RERUN-FRESH, 1 PRESERVE | resolve the established assertion gap(s) named in the row actions with the owning unit — no new scenario is prescribed by this report; re-run the stale units at current source |
-| `SW-KIOSK-CONTROL-02` (P2) | 1 | 1 MISSING-ASSERT | resolve the established assertion gap(s) named in the row actions with the owning unit — no new scenario is prescribed by this report |
+| `SW-KIOSK-STATE-01` (P2) | 6 | 4 COVERAGE-UNRESOLVED, 2 PRESERVE | inspect and reuse the existing non-declarative basis named in the registry for the unresolved rows before naming any gap — these rows declare **no WebSocket contract entry**, so no contract effect is missing and no assertion is prescribed |
+| `SW-KIOSK-CONTROL-01` (P2) | 6 | 3 COVERAGE-UNRESOLVED, 2 RERUN-FRESH, 1 PRESERVE | re-run the stale rows at current source; inspect and reuse the existing non-declarative basis named in the registry for the unresolved rows before naming any gap — these rows declare **no WebSocket contract entry**, so no contract effect is missing and no assertion is prescribed |
+| `SW-KIOSK-CONTROL-02` (P2) | 1 | 1 COVERAGE-UNRESOLVED | inspect and reuse the existing non-declarative basis named in the registry before naming any gap — this row declares **no WebSocket contract entry**, so no contract effect is missing and no assertion is prescribed |
 | `SW-KIOSK-STATE-02` (P2) | 1 | 1 COVERAGE-UNRESOLVED | inspect and reuse the existing non-declarative basis named in the registry for the unresolved rows before naming any gap |
 | `SW-PROTOCOL-PREP-01` (P3) | 6 | 3 PRESERVE, 2 DECLARATIVE-GAP, 1 MISSING-CLIENT | `F-MTX-002` (`switch_all_failed`) and `F-MTX-003` (`preset_recall_failed`) reuse the existing non-declarative controls in `tests/sim/test_sim_offline_switch_events.py` and `tests/test_runtime_preset_errors_r4b.py`; then owner HIL |
 | `SW-PROTOCOL-PREP-02` (P3) | 6 | 6 PHYS-OWNER-GATE | owner HIL measurement (owner) |
@@ -779,7 +914,7 @@ have run by this report.
 | `SW-RUNTIME-PREP-06` (P3) | 6 | 5 COVERAGE-UNRESOLVED, 1 PRESERVE | inspect and reuse the existing non-declarative basis named in the registry for the unresolved rows before naming any gap |
 | `SW-RUNTIME-PREP-07` (P3) | 1 | 1 COVERAGE-UNRESOLVED | inspect and reuse the existing non-declarative basis named in the registry for the unresolved rows before naming any gap |
 | `SW-SOAK-PREP-01` (P3) | 1 | 1 COVERAGE-UNRESOLVED | `F-REL-018` — inspect the registry basis; then the owner 72-hour soak and the owner week-of-use field sign-off |
-| `SW-SEC-AUTH-03` (P1) | 5 | 3 MISSING-CLIENT, 1 COVERAGE-UNRESOLVED, 1 RERUN-FRESH | real-client proof for the profile rows; inspect and reuse the existing non-declarative controls for `F-SEC-008` (`tests/test_security_v3_hardening_scenarios.py:359`) before naming any gap |
+| `SW-SEC-AUTH-03` (P1) | 5 | 4 MISSING-CLIENT, 1 COVERAGE-UNRESOLVED | real-client proof for the profile rows — `F-SEC-001` is target V3 with `api`-only live coverage, so its API re-run alone does not establish V3 and the real-client intake stays unresolved; inspect and reuse the existing non-declarative controls for `F-SEC-008` (`tests/test_security_v3_hardening_scenarios.py:359`) before naming any gap |
 | `SW-SEC-DATA-01` (P1) | 6 | 4 MISSING-CLIENT, 2 COVERAGE-UNRESOLVED | real-client proof for the declared rows; inspect the registry basis of `F-SEC-012` / `F-SEC-013` before naming any gap |
 | `SW-SEC-AUTH-01` (P1) | 1 | 1 PRESERVE | none — preserve the accepted evidence for this unit |
 | `SW-SEC-AUTH-02` (P1) | 2 | 2 COVERAGE-UNRESOLVED | inspect and reuse the existing non-declarative controls for `F-SEC-008` / `F-SEC-009` (`tests/test_security_v3_hardening_scenarios.py:359,386` — rate limits, read/write separation, health exemption, unchanged simulator state, trusted proxy / rightmost-untrusted IP) before naming any gap |
@@ -787,13 +922,13 @@ have run by this report.
 | `SW-UC-PREP-01` (P3) | 6 | 3 COVERAGE-UNRESOLVED, 3 PRESERVE | inspect and reuse the existing non-declarative basis named in the registry for the unresolved rows before naming any gap |
 | `SW-UC-PREP-02` (P3) | 6 | 4 PRESERVE, 2 COVERAGE-UNRESOLVED | inspect and reuse the existing non-declarative basis named in the registry for the unresolved rows before naming any gap |
 | `SW-UC-PREP-03` (P3) | 5 | 4 COVERAGE-UNRESOLVED, 1 PRESERVE | inspect and reuse the existing non-declarative basis named in the registry for the unresolved rows before naming any gap |
-| `SW-UI-CONTROL-01` (P2) | 6 | 3 RERUN-FRESH, 1 COVERAGE-UNRESOLVED, 1 MISSING-ASSERT, 1 PRESERVE | resolve the established assertion gap(s) named in the row actions with the owning unit — no new scenario is prescribed by this report; inspect and reuse the existing non-declarative basis named in the registry for the unresolved rows before naming any gap |
-| `SW-UI-CONTROL-02` (P2) | 6 | 4 MISSING-ASSERT, 1 COVERAGE-UNRESOLVED, 1 PRESERVE | resolve the established assertion gap(s) named in the row actions with the owning unit — no new scenario is prescribed by this report; inspect and reuse the existing non-declarative basis named in the registry for the unresolved rows before naming any gap |
-| `SW-UI-MANAGE-01` (P2) | 6 | 3 PRESERVE, 2 MISSING-ASSERT, 1 COVERAGE-UNRESOLVED | resolve the established assertion gap(s) named in the row actions with the owning unit — no new scenario is prescribed by this report; inspect and reuse the existing non-declarative basis named in the registry for the unresolved rows before naming any gap |
-| `SW-UI-MANAGE-02` (P2) | 6 | 6 MISSING-ASSERT | resolve the established assertion gap(s) named in the row actions with the owning unit — no new scenario is prescribed by this report |
-| `SW-UI-PRESENT-01` (P2) | 6 | 6 MISSING-ASSERT | resolve the established assertion gap(s) named in the row actions with the owning unit — no new scenario is prescribed by this report |
+| `SW-UI-CONTROL-01` (P2) | 6 | 3 RERUN-FRESH, 2 COVERAGE-UNRESOLVED, 1 PRESERVE | re-run the stale rows at current source; inspect and reuse the existing non-declarative basis named in the registry for the unresolved rows before naming any gap — these rows declare **no WebSocket contract entry**, so no contract effect is missing and no assertion is prescribed |
+| `SW-UI-CONTROL-02` (P2) | 6 | 5 COVERAGE-UNRESOLVED, 1 PRESERVE | inspect and reuse the existing non-declarative basis named in the registry for the unresolved rows before naming any gap — these rows declare **no WebSocket contract entry**, so no contract effect is missing and no assertion is prescribed |
+| `SW-UI-MANAGE-01` (P2) | 6 | 3 PRESERVE, 3 COVERAGE-UNRESOLVED | inspect and reuse the existing non-declarative basis named in the registry for the unresolved rows before naming any gap — these rows declare **no WebSocket contract entry**, so no contract effect is missing and no assertion is prescribed |
+| `SW-UI-MANAGE-02` (P2) | 6 | 6 COVERAGE-UNRESOLVED | inspect and reuse the existing non-declarative basis named in the registry for the unresolved rows before naming any gap — these rows declare **no WebSocket contract entry**, so no contract effect is missing and no assertion is prescribed |
+| `SW-UI-PRESENT-01` (P2) | 6 | 6 COVERAGE-UNRESOLVED | inspect and reuse the existing non-declarative basis named in the registry for the unresolved rows before naming any gap — these rows declare **no WebSocket contract entry**, so no contract effect is missing and no assertion is prescribed |
 | `SW-UI-CONTROL-03` (P2) | 2 | 1 COVERAGE-UNRESOLVED, 1 PRESERVE | inspect and reuse the existing non-declarative basis named in the registry for the unresolved rows before naming any gap |
-| `SW-UI-PRESENT-02` (P2) | 4 | 3 MISSING-ASSERT, 1 COVERAGE-UNRESOLVED | resolve the established assertion gap(s) named in the row actions with the owning unit — no new scenario is prescribed by this report; inspect and reuse the existing non-declarative basis named in the registry for the unresolved rows before naming any gap |
+| `SW-UI-PRESENT-02` (P2) | 4 | 4 COVERAGE-UNRESOLVED | inspect and reuse the existing non-declarative basis named in the registry for the unresolved rows before naming any gap — these rows declare **no WebSocket contract entry**, so no contract effect is missing and no assertion is prescribed |
 
 **Accepted-intake dependencies for the smallest executable slices.** Every slice
 above is *independently executable* only after the intake it depends on has
@@ -811,10 +946,17 @@ been accepted:
   (`tests/sim/test_sim_ws_contract.py`, `tests/test_rest_api.py`), `error`
   (`tests/sim/test_sim_ws_contract.py`, `tests/test_rest_api.py`), and the
   `F-SEC-008` / `F-SEC-009` controls in
-  `tests/test_security_v3_hardening_scenarios.py`. Only `device_settings_full`
+    `tests/test_security_v3_hardening_scenarios.py`. Only `device_settings_full`
   (`F-API-037`, `F-DOM-032`) and `output_name_change` (`F-API-040`,
-  `F-MTX-024`) have **no located control** and are established gaps. `F-API-034`
-  is **not** in this list: it prefers the retained candidate under `RV-API034`.
+  `F-MTX-024`) have **no located control**, and those **four** rows are the
+  inventory's only bounded-negative gaps — established **to the bounded limit of
+  this method**, not proofs of absence. `F-API-034` is **not** in this list: it
+  prefers the retained candidate under `RV-API034`. The **28** rows whose
+  registry basis itself states that no effect is asserted are **not** in this
+  list either: they declare no WebSocket contract entry, so there is no
+  contract effect to be missing, and their intake is the bounded basis
+  inspection named in their own row actions.
+
   Any new assertion that a unit does decide to write is an implementation
   deliverable and needs a qualified **different-underlying-family** review at
   the exact commit before integration;
@@ -853,7 +995,8 @@ proof" — `F-API-005`, `F-API-007`, `F-DOM-034`, `F-MTX-004`, `F-MTX-030`; or
 label and 4 differ, each for a stated reason: `F-API-033` (V3 target, `api`-only
 live coverage), `F-MTX-003` (`preset_recall_failed` asserted nowhere),
 `F-MTX-007` (capped at V1 by the open critical `HIL-09(C)`), `F-SEC-014` (open
-reproduced finding `VAL-15`). None of these differences reopens an accepted
+`VAL-15` finding with a **historically** reproduced defect and a delivered but
+unreviewed/unintegrated corrective chain). None of these differences reopens an accepted
 scope: the delta disposition describes what changed in the ledger row, this
 report describes what the row still owes.
 
@@ -879,7 +1022,11 @@ coverage that was not established.
    an ownership decision for the owning unit and the coordinator; this report
    does not change any feature mapping. The original report listed **5** rows
    here; two of them (`F-API-032` `error`, `F-SEC-001` `/ws`) were substring
-   artefacts and are corrected in §6.1.
+   artefacts and are corrected in §6.1. **Correction-02 (R5):** each of the
+   three rows now carries an explicit inspection/reuse obligation in its
+   action; the obligation is an **intake** step for the owning unit, and this
+   report does not judge whether the attribution should change.
+
 3. **Freshness is evaluated only against the canonical ledger's generation
    `HEAD` (`28fce729`)**, as committed. Whether the 96 stale rows will pass at
    the current source is **not known**; staleness establishes neither a defect
@@ -907,20 +1054,29 @@ coverage that was not established.
 8. **The 100 features with no live declarative scenario** are baseline-only
    features whose proof rests on non-declarative tests cited in the registry
    `basis`. Whether each of those needs a declarative scenario is a unit-level
-   judgement. **Corrected in R4**: the inventory now records the basis class
-   of every one of them — **72** cite non-declarative proof that this method
-   did not inspect (`COVERAGE-UNRESOLVED`), and **28** state in the basis
-   itself that no effect is asserted (`MISSING-ASSERT`) — and it asserts
-   neither that the underlying behaviour is unproven nor that it is defective.
-   No blanket *"author a declarative scenario"* prescription remains.
+   judgement. **Corrected in R4**, and again in **correction-02 (R4)**: the
+   inventory records the basis class of every one of them — **72** cite
+   non-declarative proof that this method did not inspect, and **28** state in
+   the basis itself that no effect is asserted — and **all 100** are now
+   `COVERAGE-UNRESOLVED`. The 28 are **not** `MISSING-ASSERT`: none of them
+   declares a WebSocket contract entry, so there is no contract effect to be
+   missing, and a registry statement is **not** an independently established
+   absence of an assertion. The inventory asserts neither that the underlying
+   behaviour is unproven nor that it is defective. No blanket *"author a
+   declarative scenario"* prescription remains.
+
 9. **No physical, HIL, CEC, outage, 72-hour soak, week-of-use, visual or
    release gate was executed, inspected for fact, or dispositioned.**
 10. **The bounded non-declarative control search is textual.** It matches the
-    exact message name at a WebSocket-assertion call site in `tests/**` outside
-    the declarative registry. It can miss a dynamically constructed name and it
-    can match a same-named helper; *"no control found"* is a **bounded
-    negative**, not a proof of absence, and no located control was executed or
-    judged adequate.
+     exact message name at a WebSocket-assertion call site in `tests/**` outside
+     the declarative registry. It can miss a dynamically constructed name and it
+     can match a same-named helper; *"no control found"* is a **bounded
+     negative**, not a proof of absence, and no located control was executed or
+     judged adequate. A **found** call site is likewise only a **candidate**
+     location: it does not by itself establish matching polarity, client, full
+     feature coverage or target adequacy. This caveat governs the stronger
+     "gap" wording used anywhere in this report, not only the negative case.
+
 11. **No Anthropic qualification is claimed by this report.** The Anthropic
     `QUAL` candidate is formally **FAIL** by coordinator disposition (the
     original record is preserved unchanged); this correction does not mark it,
@@ -951,6 +1107,28 @@ coverage that was not established.
   Its typed inspection and its bounded control search are **one-off private
   inspection code**, not shipped tooling, and are reviewable alongside this
   report.
+* **Correction-02 preservation.** The original `author/**` tree **and** the whole
+  `author/correction-01/**` tree are **byte-identical** after this correction;
+  correction-02 only *reads* them and writes exclusively into
+  `author/correction-02/**` and `C:/t/exec-sw-audit-01/nov02-correction02/**`.
+  No original or correction-01 file was deleted, overwritten, regenerated or
+  made to "look repaired".
+* **Correction-02 method limits.** This pass resolves only the **remaining**
+  R1, R4, R5 and R6 findings. It does not re-audit the registry, the pins, the
+  ledger or the 268 mappings, does not repeat the accepted slices' raw-evidence
+  scans, and does not run a campaign, service or gate. Its targeted verification
+  probe re-derives from committed bytes exactly the facts the remaining findings
+  turn on (unit membership, client bindings, the empty WebSocket-contract entry
+  set of the 28 rows, the `F-SEC-001` client/evidence state, the three
+  attribution bindings and the 12 capped rows); the unchanged per-row fields are
+  carried from the retained correction-01 inspection and are re-used, not
+  re-derived, as stated. The probe is **one-off private inspection code**, not
+  shipped tooling, and is reviewable alongside this report.
+* **No self-acceptance.** The author of this correction cannot accept it. The
+  report remains an author submission pending a qualified **different-family**
+  re-review at the exact corrected commit; the coordinator owns routing,
+  settlement, preservation, publication and acceptance.
+
 * **Diagnostic preservation.** This author's first scratch extraction
   overwrote its own earlier mangled output before being replaced by a
   byte-exact version. The original generated bytes of that first pass were
@@ -992,6 +1170,13 @@ subdirectory with an isolated `MATRIX_DATA_DIR` and `UC_CONFIG_HOME`.
 parents were created before the invocation and whose each run received an
 explicit forward-slash `--basetemp`; the same interpreter, `PYTHONPATH`,
 UTF-8/bytecode-off settings and isolated data/config directories were used.
+**Correction-02** used `C:/t/exec-sw-audit-01/nov02-correction02/**`, whose
+`data`, `config`, `temp` and `pytest-temp` parents were created before the
+invocation; the same interpreter, `PYTHONPATH`, UTF-8/bytecode-off settings and
+isolated data/config directories were used, and the single documentation-module
+run received the explicit forward-slash `--basetemp`
+`C:/t/exec-sw-audit-01/nov02-correction02/pytest-temp`.
+
 
 | # | Invocation | Exit | Result |
 | ---: | --- | ---: | --- |
@@ -1018,7 +1203,14 @@ UTF-8/bytecode-off settings and isolated data/config directories were used.
 | 19b | **correction-01**: `author/correction-01/inspect_correction.py` | **0** | typed re-inspection: 268 rows, 25 WebSocket-contract rows, 13 typed `WsEvent` names, 3 `NoWsEvent` names, 100 scenario-less rows with their basis classes; `correction_data.json` written |
 | 19c | **correction-01**: `author/correction-01/render_corrected_table.py` | **0** | corrected classification, bounded non-declarative control search, regenerated 268-row table, rollups and the row-by-row disposition diff against the original table (268 compared, **77** changed) |
 | 19d | **correction-01**: the five documentation modules (same command as #15, fresh `--basetemp` and `--junitxml` under `nov02-correction01`) | **0** | see §12.2 — stdout, stderr, JUnit and the return-code file were captured directly and retained before any further run |
+| 19e | **correction-02**: `author/correction-02/probe_correction02.py` | **0** | targeted verification probe over committed bytes: 268 ledger rows, **1 507** scenarios discovered, `SW-API-CLIENT-01` membership = `F-API-001/003/004/005/006/007`, `F-API-029` assigned by the manifest to `SW-API-CLIENT-02` with no live declaration, the `routing.switch_one` / `presets.recall` client→feature bindings, the **28** no-effect rows with **empty** WebSocket-contract entry sets, the `F-SEC-001` client/evidence state, the three attribution bindings and the 12 capped rows; `correction02_probe.json` written |
+| 19f | **correction-02**: `author/correction-02/render_correction02.py` | **0** | correction-02 re-classification, recomputed census and per-unit mix, the corrected 268-row table, and the label diff against both the original report (`13fe2ae8`) and the correction-01 report (`981e7e4a`) |
+| 19g | **correction-02**: the five documentation modules (same command as #15, fresh `--basetemp` and `--junitxml` under `nov02-correction02`) | **0** | **489 passed in 2.77 s** — see §12.3 — the direct subprocess return code, the full stdout, the full stderr and the JUnit XML were captured to files and retained before any further invocation |
+| 19h | **correction-02**: `author/correction-02/patch_author_report_correction02.py` | **0** | the report patch pass (this file's prose only); every replacement asserts its exact occurrence count, so a drifted anchor fails loudly instead of silently producing a wrong report |
+| 19i | **correction-02**: `author/correction-02/report_selfcheck_correction02.py` | **0** | the report-only self-checks (UTF-8, CR-aware line endings, trailing whitespace, final newline, fenced JSON, 268-row table integrity against the canonical ledger, uniform cell count, census agreement with the table, the R1/R4/R5/R6 correction assertions, local-link resolution, tracked-scope screen, no self-acceptance claim); the receipt is `author/correction-02/report_selfcheck_correction02.txt` |
+| 19j | **correction-02**: `author/correction-02/verify_artifact_identities.py` | **0** | re-computes the SHA-256 and byte count of every artefact listed in §12.3 and confirms that the 22 retained original / correction-01 identities in §12.1 and §12.2 are still byte-identical on disk and still stated in this report |
 | 20 | full test / core / CI / image suite, validation campaigns, hardware, Docker, owner deployment | **not run** | out of scope for this dispatch |
+
 
 ### 12.1 Own private artefacts (ignored; retained, not deleted)
 
@@ -1074,17 +1266,65 @@ Its byte length, Git blob SHA-256 and commit id are stated in the delivery
 message, not here: a document cannot carry its own digest or commit id without
 changing them.
 
+**Representation erratum, carried forward (correction-01).** The correction-01
+delivery labelled the **working-file** identity of this report as its **Git
+blob** identity. The actual Git blob of the correction-01 commit
+`981e7e4a48bce07e4dce24443d386b3e0643601a` is **195 324** bytes with SHA-256
+`f2870b27b3ad12a4f9e0a9d332acfab80a7d2fa23ef128e6fce193cd5d3223c2`; the
+**working** representation of that same commit was **196 430** bytes with
+SHA-256 `07c5836d89bc7d38538d329250be1e3a36a466f90fb56138ca0b76738d993875`
+and **1 106** CRLF sequences, and replacing only CRLF with LF reproduces the Git
+blob exactly. The incorrect old identity validation is **not** called passed.
+Correction-02 writes this report **LF-only**, so its working-file and Git-blob
+identities coincide; they are still stated **separately** in the delivery
+message, and the canonical identity is the `git show HEAD:<path>` one.
+
+
+### 12.3 Correction-02 artefacts (new; ignored; retained)
+
+| SHA-256 | Bytes | Artefact |
+| --- | ---: | --- |
+| `c78ef18c266fc055d8611aae7f111e413ed21e638d9802ba7934c9ccda2c06ef` | 15,613 | `author/correction-02/probe_correction02.py` |
+| `3d3c02e29db4e4f80499c2b3f307144d1e537e5765ce51c480be7c163cc9a204` | 70,789 | `author/correction-02/correction02_probe.json` |
+| `50e4d143fa70333908bae28d75c9a5240d7aa94048b9409d0fe87cec4d15f28f` | 15,450 | `author/correction-02/render_correction02.py` |
+| `bd73f82535d9045d48786ee03a606ccf142af00bef824af43284945d3860afe4` | 10,627 | `author/correction-02/correction02_rollup.json` |
+| `6f82240021e57774946ecb2dd81dcc09c380e7bbdfe52f5212f3f6e7d1dac3ac` | 842,304 | `author/correction-02/correction02_rows.json` |
+| `09cfd85ad20004deac8dac5379f1ef2ed3892e1434e2d7a98ed5845861edd8b7` | 120,428 | `author/correction-02/table268_corrected02.md` |
+| `06ec72c2962c3e6efd563f82ea138ba33b8921daf986e869611446767ed161b4` | 68,386 | `author/correction-02/patch_author_report_correction02.py` |
+| `23a83607cb97bc980a51ab3652df5359769cac263644c95c45d53df5cbc12060` | 3,007 | `author/correction-02/run_docs_checks.py` |
+| `73e3e63f9618dbff7d0c0007e1953f85cf0d3a55ee31cb0433ae04381d03711b` | 10,357 | `author/correction-02/report_selfcheck_correction02.py` |
+| `023d755ee05251a5619272534395d3bcb3660e7f1bf58a1b75889e9fd2b17920` | 4,468 | `author/correction-02/verify_artifact_identities.py` |
+| `5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9` | 1 | `C:/t/exec-sw-audit-01/nov02-correction02/docs.exit.txt` — the captured direct subprocess return code `0` |
+| `f5777cb0d67c868d96d1f7a0083992a843e2c8d0b6c8bb877a3d44e7e78ab6fa` | 588 | `C:/t/exec-sw-audit-01/nov02-correction02/docs.stdout.txt` — `489 passed in 2.77s` |
+| `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` | 0 | `C:/t/exec-sw-audit-01/nov02-correction02/docs.stderr.txt` — empty |
+| `293a1e16feb41945e06f47a2497a75d8801b161b5a461df7729d0e2576249190` | 63,691 | `C:/t/exec-sw-audit-01/nov02-correction02/docs.junit.xml` — the JUnit XML of the single documentation-module run |
+| `3e6f99dcda23859e465053f85cbd4a7fa4d3b28ce855d6318c3571c05bca7d9a` | 1,282 | `C:/t/exec-sw-audit-01/nov02-correction02/docs.command.json` — the exact argv, cwd, environment and return code of that run |
+
+`author/correction-02/report_selfcheck_correction02.txt` and
+`author/correction-02/report_patch_receipt.json` are written **after** this table is
+spliced, so their own identities are stated in the delivery message rather than
+here — for the same reason a document cannot carry its own digest. The original
+`author/**` artefacts and the whole `author/correction-01/**` tree are unchanged
+and byte-identical; their identities stay as listed in §12.1 and §12.2.
+
+
 ---
 
 ## 13. Non-claims that remain open after this report
 
 * **Full global inventory acceptance is still pending independent exact-report
   factual review.** The first review (`4c2d18b8cdd3f49523e9014e498bbfd7d55601ac`)
-  returned **require_changes** with R1–R6; this commit is the author's
-  correction of that review and is **the author's submission, not its
-  acceptance**. A **different-family (OpenAI-family) re-review at the exact
-  corrected commit** is required, and the coordinator owns integration,
-  qualification and status. This report does not accept itself.
+  returned **require_changes** with R1–R6; the correction at `981e7e4a` was
+  the author's response to it. The **different-family re-review** at
+  `d44ad2bca78dfe82c4b541e41f861c965cce2461` then returned **require_changes**
+  again, on the **remaining** R1, R4, R5 and R6 findings, and this commit is
+  the author's targeted correction of **that** review. It is **the author's
+  submission, not its acceptance**: the author of a correction cannot accept
+  it. A **different-family re-review at the exact corrected commit** is still
+  required, and the coordinator owns routing, settlement, preservation,
+  publication, integration, qualification and status. This report does not
+  accept itself.
+
 * The Anthropic `QUAL` candidate is **FAIL** by coordinator disposition (the
   original record is preserved unchanged); this correction does not mark it, or
   any dependent source review, as passed, and does not re-run a qualification.
@@ -1098,8 +1338,10 @@ changing them.
 * The `SW-AUDIT-01` **parent unit** is not closed by this report: the
   dispositions are mapped, but the P1 review/admission/integration chain, the
   retained candidates under `RV-API034` and `RV-PRIVACY-CHAIN`, the
-  declaration gaps named in §6.1 and §8, and the owner gates still have to be
-  executed and independently reviewed.
+  declaration gaps named in §6.1 and §8, the three attribution intakes in §6.1
+  and §7, and the owner gates still have to be executed and independently
+  reviewed.
+
 
 *Report-only child of `SW-AUDIT-01`. The 268 feature dispositions are mapped;
 no feature, unit, package, candidate or artefact is qualified or accepted by
