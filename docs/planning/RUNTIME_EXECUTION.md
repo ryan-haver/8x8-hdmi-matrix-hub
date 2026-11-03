@@ -1,5 +1,12 @@
 # Runtime-completion execution record
 
+## Preservation author correction launched — 2026-11-03T03:08:36.528186+00:00
+
+MiniMax task task_e1d5c3589200 / dispatch ctx_f56a5a99bfee is active in existing wp-exec-ev-preservation-gaps at exact ed78321e, only AUTHOR.md and NEW private correction01/temp namespace. It addresses review abd339 R1-R3; independent Astra re-review at resulting exact commit remains owed. Native entry: {"status": "native MiniMax-M3 attested at exact Task/Dispatch/directory", "session": "ses_e609f4c5cffeALUy1NHYhE5Vup", "models": ["minimax-coding-plan/MiniMax-M3"], "effort": "CLI override unsupported; project pinned routing, native thinking", "bytes": 94144, "sha256": "1d09557cd31547669ff1c44e39104300fb12c337492b101ac782a67c0d3ac991"}. Inventory correction02 task_4c7cf7c289ff remains a separate assignment; latest observed Dispatch state dispatched. Complete fleet103rows across2pages, terminal accounting {"retained": 8, "released": 95}; running keep-open resources may read retained. Max2new+coordinator+oldexternalreservation4, no nesting.
+
+Prewave f2430d01 exact remote/local verified; fresh supported M3/Codex quotas checked again before start. No delivery/accepted disposition/original-preservation PASS/source qualification from this launch. Core qualification1 remainsFAIL/no domain, explicit owner retake decision pending, no retake launched. Details PRESERVATION_CORRECTION01_DISPATCH.json; private post-push receipt ev-fix01-launch-publication.json outside referenced commit. End turn for Orca report wakes, no polling.
+
+
 ## Preservation review requires three prose corrections — 2026-11-03T03:07:21.953049+00:00
 
 Astra task_eea6f443f108 / ctx_70e7d15a49fc delivered abd339eda108e4d74f1a147b2f445299814e9cf9 at exact author ed78321e: require_changes R1-R3. Qualify universal irrecoverability as accepted recorded loss plus bounded absence/copies elsewhere unknown; acknowledge new inspection metadata separately from historical evidence; preserve failed-log count/outcome versus native-transcript reported Telnet reason. Named historical identities and negative consequences verify; no original preservation/source/feature acceptance. Terminal released, final native691293bytes SHA e6f0241a... and verified workspace/temp archives retained; exact task ref published. Author/report integrated sequentially as RECORDS ONLY; workspaces retained, no destructive cleanup.
