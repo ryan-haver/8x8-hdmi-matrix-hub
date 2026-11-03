@@ -1,6 +1,6 @@
 {
-  "observed_utc": "2026-11-03T17:50:39.672826+00:00",
-  "status": "firsttwoR1contributorslaunched, OpenAIthirdreservednotlaunched",
+  "observed_utc": "2026-11-03T18:01:20.091487+00:00",
+  "status": "firsttwoR1delivered, OpenAIthirdpreparednotlaunched",
   "phase": "qualification-replacement-20261103",
   "frozen_input_sha256": "fc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9",
   "all_round1_bases": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
@@ -24,7 +24,7 @@
         "round1",
         "anthropic"
       ],
-      "stage": "ready for firsttwo",
+      "stage": "delivered/released/preserved; recommendationwithhelduntilbarrier",
       "actual_assignment": {
         "task_id": "task_b2647dfbc03e",
         "dispatch_id": "ctx_cf269c96096f",
@@ -61,6 +61,39 @@
         "status": "R1launched, independentassessment not yetdelivered; no planningconsensus or qualification",
         "observed_dispatch_status": "dispatched",
         "observed_worker_state": "ready"
+      },
+      "delivery_metadata": {
+        "head": "9108174ed78056ca1732228b33b8379ae7fca6b8",
+        "base": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
+        "tree": "wp-qr-r1-anthropic",
+        "actual_branch": "planning/qr-20261103-r1-anthropic",
+        "report": "docs/agent-process/phases/qualification-replacement-20261103/round1/anthropic.md",
+        "bytes": 4458,
+        "sha256": "813366cf7626fa00d62ce76eac23d90ce0ee203401d6b9d86e8676d7e6a4b4c6",
+        "working_identical": true,
+        "task_id": "task_b2647dfbc03e",
+        "dispatch_id": "ctx_cf269c96096f",
+        "terminal": "released",
+        "task_ref_publication": "exactremote/localverified",
+        "native_final": {
+          "session": "b4f339f3-b571-43e2-b310-90b7c14299c2",
+          "models": [
+            "claude-opus-5-5"
+          ],
+          "bytes": 687386,
+          "sha256": "f54b29792b82137e59abcdabaacdb102b763d73cc13742cce13b29dcf547fa57"
+        },
+        "acceptance": "genuineindependentR1contribution delivered; no planningconsensus/qualification/sourcepass",
+        "peer_barrier": "recommendation/materialconditions not shared until all3R1preserved",
+        "retention": "readonlyexacttree, originalartifacts retained; no removal",
+        "process_history": "604words versus600aim retained; own4file %SystemDrive% cache sideeffect reportedly movedintact into assignedignored stray-side-effect, fullnative/source/artifacts retained for verification; not a protocolconformance pass",
+        "preservation": {
+          "archive_sha256": "870721d2c905724efa2dd38ca88cefb33f6010d097f713ce195efb79bdb071a2",
+          "archive_bytes": 207172257,
+          "regular_files": 4671,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "integration_commit": "4a6496c85abc1ca6d69571ec0556521b403da677"
       }
     },
     "minimax": {
@@ -82,7 +115,7 @@
         "round1",
         "minimax"
       ],
-      "stage": "ready for firsttwo",
+      "stage": "delivered/released/preserved; recommendationwithhelduntilbarrier",
       "actual_assignment": {
         "task_id": "task_8fda5920c385",
         "dispatch_id": "ctx_11e7bd819fd5",
@@ -118,6 +151,39 @@
         "status": "R1launched, independentassessment not yetdelivered; no planningconsensus or qualification",
         "observed_dispatch_status": "dispatched",
         "observed_worker_state": "ready"
+      },
+      "delivery_metadata": {
+        "head": "6307afb565a8b564536185079d9e16118512dab9",
+        "base": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
+        "tree": "wp-qr-r1-minimax",
+        "actual_branch": "planning/qr-20261103-r1-minimax",
+        "report": "docs/agent-process/phases/qualification-replacement-20261103/round1/minimax.md",
+        "bytes": 4931,
+        "sha256": "887dd64f72fec1489e9772dc04c4e9e58445fde328d0089bf7b911675354f3c2",
+        "working_identical": true,
+        "task_id": "task_8fda5920c385",
+        "dispatch_id": "ctx_11e7bd819fd5",
+        "terminal": "released",
+        "task_ref_publication": "exactremote/localverified",
+        "native_final": {
+          "session": "ses_e5d7845e8ffe7Y93J2oaPGju3F",
+          "models": [
+            "minimax-coding-plan/MiniMax-M3"
+          ],
+          "bytes": 279453,
+          "sha256": "1af48051759ccc13567ea48c24ca9c0cceb4ac8afb52ac3ebcaa59ed18da8de2"
+        },
+        "acceptance": "genuineindependentR1contribution delivered; no planningconsensus/qualification/sourcepass",
+        "peer_barrier": "recommendation/materialconditions not shared until all3R1preserved",
+        "retention": "readonlyexacttree, originalartifacts retained; no removal",
+        "process_history": "Three docs invocations reported (two pretrim, onefinal) despite taskONE; alloriginals retained in distinctdata/config/temp-r2/r3. These r2/r3filenames are testattempts WITHIN R1, not phaseRounds2/3 contributions. No single-invocation conformance pass.",
+        "preservation": {
+          "archive_sha256": "83e246a50dc4b2f34d93fdd148f54134763ab160f1c811532ae988d7883bc91f",
+          "archive_bytes": 207017249,
+          "regular_files": 4674,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "integration_commit": "c0e168dd66437a6515e46d3f7a08ff1fe35df647"
       }
     },
     "openai": {
@@ -128,7 +194,7 @@
       "effort": "high",
       "base": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
       "worktree_name": "wp-qr-r1-openai",
-      "expected_branch": "planning/qr-20261103-r1-openai",
+      "expected_branch": null,
       "spec": "docs/agent-process/phases/qualification-replacement-20261103/tasks/ROUND1_OPENAI.txt",
       "report": "docs/agent-process/phases/qualification-replacement-20261103/round1/openai.md",
       "title": "Qualification replacement R1 independent OpenAI assessment",
@@ -139,7 +205,9 @@
         "round1",
         "openai"
       ],
-      "stage": "planned/reserved next free slot, not launched"
+      "stage": "prepared next independentR1, notlaunched",
+      "branch_reservation": "planning/qr-20261103-r1-openai",
+      "creation": "genuineworker-start new-top-level; returnedactualbranchmustberecorded, reservationnotassumed"
     }
   },
   "first_execution_wave": [
