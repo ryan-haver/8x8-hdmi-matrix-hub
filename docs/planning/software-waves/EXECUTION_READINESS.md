@@ -1,5 +1,8 @@
 # Complete execution allocation
 
+Current execution gate: **core reviewer qualification attempt1 FAIL**, no qualified domain. [Actual gate status](EXECUTION_GATE_STATUS.json) and [coordinator disposition](../../production/software-waves/QUAL-ANTHROPIC-CORE-01/execution-20261101/COORDINATOR_DISPOSITION.json) govern current launch eligibility. The accepted planning packet stays unchanged. The global inventory requires author corrections and independent re-review; no source or feature acceptance follows. Automatic qualification retakes are prohibited; a separately controlled manual attempt remains a proposal pending owner direction. Independent metadata work can continue.
+
+
 Accepted prospective plan: three genuine families across three rounds, with all final decisions on packet `52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e`. See the [actual decisions and nine Task outcomes](../../agent-process/phases/execution-pinning-20261101/CONSENSUS.json) and [final program](../../agent-process/phases/execution-pinning-20261101/FINAL_PROGRAM.md). This is execution planning; no new product implementation phase was launched by this task.
 
 85 entries cover the existing30packages/65mapped units and268features, plus13specific review/evidence/integration/closure entries and7human-owner gates. Author/reviewer routes, acceptance, exclusive paths, environments, dependencies, correction reserve and exact base rules are in [EXECUTION_PINS.json](EXECUTION_PINS.json). All170author/review or owner-assistance tree names are reservations. Only the three planning worktrees were created; retained source workspaces are separately read-only.
