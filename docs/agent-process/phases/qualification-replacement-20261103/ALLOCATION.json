@@ -1,6 +1,6 @@
 {
-  "observed_utc": "2026-11-03T18:26:23.433179+00:00",
-  "status": "Anthropic and OpenAI R2 preserved; MiniMax R2 not yet delivered to coordinator",
+  "observed_utc": "2026-11-03T18:42:16.918976+00:00",
+  "status": "all six R1/R2 preserved; R3 same complete final packet decisions prepared, no launches",
   "phase": "qualification-replacement-20261103",
   "frozen_input_sha256": "fc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9",
   "all_round1_bases": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
@@ -320,41 +320,43 @@
   "independent_future_judge": "OpenAI Astra/high at exactfutureAnthropicevaluationreport, one judge under ownerapproval",
   "demand": "9 bounded prose planning contributions (R1/R2 target4min/<=600words inclJSON, R3 target2min explicitverdict), one15min candidateassessment and one15min independentjudge; later stages separatelycapacitygated, no unsupportedtoken/cost forecasts",
   "capacity": {
-    "observed_utc": "2026-11-03T18:26:23.433179+00:00",
-    "other_host_demand": "unknown, not zero",
-    "codex": {
-      "status": "ok",
-      "session": null,
-      "weekly": {
-        "usedPercent": 62,
-        "windowMinutes": 10080,
-        "resetsAt": 1793774164000,
-        "resetDescription": "11:36 PM"
-      },
-      "updatedAt": 1793729399742,
-      "error": null
-    },
+    "observed_utc": "2026-11-03T18:42:16.918976+00:00",
+    "source": "supported orca account list, cached usage; no absolute allowance exposed",
+    "other_host_demand": "unknown; not zero",
+    "reserve": "remaining six bounded planning contributions plus one candidate and one fresh judge, each stage separately gated; no automatic qualification correction/retry authority",
     "claude": {
       "status": "ok",
       "session": {
         "usedPercent": 4,
         "windowMinutes": 300,
-        "resetsAt": 1793740800373,
+        "resetsAt": 1793740800498,
         "resetDescription": "2:20 PM"
       },
       "weekly": {
         "usedPercent": 21,
         "windowMinutes": 10080,
-        "resetsAt": 1793966400373,
+        "resetsAt": 1793966400498,
         "resetDescription": "Fri 5:00 AM"
       },
-      "updatedAt": 1793729399394,
+      "updatedAt": 1793730990532,
+      "error": null
+    },
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 64,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "11:36 PM"
+      },
+      "updatedAt": 1793730990934,
       "error": null
     },
     "minimax": {
       "status": "ok",
       "session": {
-        "usedPercent": 18,
+        "usedPercent": 26,
         "windowMinutes": 300,
         "resetsAt": 1793740313659,
         "resetDescription": null
@@ -362,10 +364,10 @@
       "weekly": {
         "usedPercent": 25,
         "windowMinutes": 10080,
-        "resetsAt": 1793823932884,
+        "resetsAt": 1793823932889,
         "resetDescription": null
       },
-      "updatedAt": 1793729399468,
+      "updatedAt": 1793730990570,
       "error": null
     }
   },
@@ -387,18 +389,11 @@
       }
     ],
     "terminal_counts": {
-      "released": 122,
-      "retained": 7
+      "released": 123,
+      "retained": 6
     },
-    "historical_retained": 6,
-    "MiniMax_R2": {
-      "taskId": "task_8c044cfcdce5",
-      "dispatchId": "ctx_e407d807e727",
-      "dispatchStatus": "dispatched",
-      "workerState": "ready",
-      "terminalState": "retained"
-    },
-    "new_current_retained_resources": 1
+    "new_active": 0,
+    "historical_retained": 6
   },
   "alternatives": "Opus4.7 two failed mandatoryqualifications retained, Google primaryunavailable and alternate route unqualified/unknown, DeepSeek exhausted, no samefamilyevaluationjudge or silent substitution",
   "protected": "root/private runtime/oldfailedbytes/native/artifacts/baselines/retainedworkspaces/odd untrackedhook artifact; no cleanup/reset/prune/forcepush",
@@ -427,7 +422,7 @@
         "round2",
         "anthropic"
       ],
-      "stage": "delivered/released/preserved/published; peer conditions withheld",
+      "stage": "delivered/released/preserved/published; barrier complete",
       "routing_binding": {
         "observed_utc": "2026-11-03T17:48:52.924322+00:00",
         "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-anthropic",
@@ -503,12 +498,21 @@
         "process_history": "reported715 words versus600 aim retained; one489 doc invocation/direct0 and original streams/JUnit/receipt/temp preserved",
         "cleanup": "retain exact tree read-only, no removal",
         "preservation": {
-          "archive_sha256": "5a1049ab115aee1e50da2c919c5c41f4e8ed5731eca6cb2485f6a1ba6eec84ef",
-          "archive_bytes": 207192840,
-          "regular_files": 4676,
-          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+          "wp-qr-r1-anthropic": {
+            "archive_sha256": "5a1049ab115aee1e50da2c919c5c41f4e8ed5731eca6cb2485f6a1ba6eec84ef",
+            "archive_bytes": 207192840,
+            "regular_files": 4676,
+            "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+          },
+          "external-r2-anthropic": {
+            "archive_sha256": "edbdf04f6178bff4d1ad1fca1fbfc224acc16998cd8aa24118e98f56a91da855",
+            "archive_bytes": 59813,
+            "regular_files": 103,
+            "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+          }
         },
-        "integration_commit": "0d78a4eccd6f55d93f12ea085579e3c4fe396fbe"
+        "integration_commit": "0d78a4eccd6f55d93f12ea085579e3c4fe396fbe",
+        "recommendation": "require_changes"
       }
     },
     "minimax": {
@@ -534,7 +538,7 @@
         "round2",
         "minimax"
       ],
-      "stage": "launched; no delivery yet",
+      "stage": "delivered/released/preserved/published; barrier complete",
       "routing_binding": {
         "observed_utc": "2026-11-03T17:49:00.243131+00:00",
         "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-minimax",
@@ -581,6 +585,49 @@
         "status": "R2 peer challenge launched, no delivery or consensus inferred",
         "observed_dispatch_status": "dispatched",
         "observed_worker_state": "ready"
+      },
+      "delivery_metadata": {
+        "observed_utc": "2026-11-03T18:39:03.507773+00:00",
+        "head": "6b5e1ca0bbb11c2fcc15ed00ec709cd54cb09fbe",
+        "base": "6307afb565a8b564536185079d9e16118512dab9",
+        "tree": "wp-qr-r1-minimax",
+        "actual_branch": "planning/qr-20261103-r1-minimax",
+        "report": "docs/agent-process/phases/qualification-replacement-20261103/round2/minimax.md",
+        "bytes": 5221,
+        "sha256": "8b019d0950998f2576ca66f5f9ce740d8be28531e3893aa624f4b4a5e8d1c9b8",
+        "task_id": "task_8c044cfcdce5",
+        "dispatch_id": "ctx_e407d807e727",
+        "terminal": "released",
+        "task_ref_publication": "exact remote/local verified",
+        "native_final": {
+          "session": "ses_e5d5ff869ffeJam18NX7cmNIPm",
+          "models": [
+            "minimax-coding-plan/MiniMax-M3"
+          ],
+          "bytes": 1245073,
+          "sha256": "98c7b11da4b482a1e4587f18b12c23356061c8f9916bfb633b07f943e4d26427"
+        },
+        "R1_original_files_rehashed_unchanged": 4674,
+        "acceptance": "R2 contribution delivered; no consensus or qualification",
+        "peer_barrier": "substantive recommendation/conditions withheld until all three R2 preserved",
+        "process_history": "one489 doc invocation/direct0; elapsed target overrun retained. Case-sensitive SystemDrive/SystemRoot membership booleans false in receipt despite env.copy preserving uppercase Windows keys; does not prove actual OS variables absent. Private single-use invocation script preserved, no implementation deliverable accepted.",
+        "cleanup": "retain exact tree read-only, no removal",
+        "preservation": {
+          "wp-qr-r1-minimax": {
+            "archive_sha256": "0a40e8899df5703eaf3ff754231befa503d62ef6642c8d55582116d1c6967d52",
+            "archive_bytes": 207018625,
+            "regular_files": 4681,
+            "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+          },
+          "external-r2-minimax": {
+            "archive_sha256": "c0b3a9364037524f8357d843d5a886bacc18ce029aa9bee04b5d91059892c9dd",
+            "archive_bytes": 66781,
+            "regular_files": 103,
+            "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+          }
+        },
+        "integration_commit": "3acbbfd07471979c51e1a257ff02149a9b549fa4",
+        "recommendation": "require_changes"
       }
     },
     "openai": {
@@ -606,7 +653,7 @@
         "round2",
         "openai"
       ],
-      "stage": "delivered/released/preserved/published; conditions withheld until barrier",
+      "stage": "delivered/released/preserved/published; barrier complete",
       "branch_reservation": "planning/qr-20261103-r1-openai",
       "creation": "genuineworker-start new-top-level; returnedactualbranchmustberecorded, reservationnotassumed",
       "actual_branch": "ryan-haver/wp-qr-r1-openai",
@@ -673,7 +720,10 @@
         "process_history": "reported488words, four-minute target overrun and initial read/pre-pytest env-key assertion errors retained; exactly one docs invocation489/direct0; no qualification or source pass",
         "peer_barrier": "R2 substantive conditions withheld until all three preserved",
         "cleanup": "retain exact review tree read-only; no removal",
-        "integration_commit": "7482868dd42eba2c3516d839326f14ace1e7e585",
+        "head": "1ac7d96d7000f85e072a97512f35095906d7934c",
+        "base": "914103e8ba5707ac203959ebf5e5c59d57a3a1c5",
+        "tree": "wp-qr-r1-openai",
+        "actual_branch": "ryan-haver/wp-qr-r1-openai",
         "preservation": {
           "wp-qr-r1-openai": {
             "archive_sha256": "18289dd6002ac905e3f0cb7ed7a0ffc9482eb73f11da19c52f5863e628af6527",
@@ -687,9 +737,114 @@
             "regular_files": 102,
             "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
           }
-        }
+        },
+        "integration_commit": "7482868dd42eba2c3516d839326f14ace1e7e585",
+        "recommendation": "require_changes"
       }
     }
   },
-  "round2_input_sha256": "a1d5beb25ba6ff7b493b498c9974f8e7b4c834b2629097233b55228243d9e84c"
+  "round2_input_sha256": "a1d5beb25ba6ff7b493b498c9974f8e7b4c834b2629097233b55228243d9e84c",
+  "round3": {
+    "anthropic": {
+      "participant": "anthropic",
+      "family": "Anthropic",
+      "agent": "claude",
+      "model": "claude-opus-5-5",
+      "effort": "high",
+      "base": "fbfb38ebcb026a2c3713d8bbbb7684d126a50af9",
+      "worktree_name": "wp-qr-r1-anthropic",
+      "expected_branch": "planning/qr-20261103-r1-anthropic",
+      "spec": "docs/agent-process/phases/qualification-replacement-20261103/tasks/ROUND3_ANTHROPIC.txt",
+      "report": "docs/agent-process/phases/qualification-replacement-20261103/round3/anthropic.md",
+      "title": "Qualification replacement R3 Anthropic final packet decision",
+      "dependencies": [
+        "task_06770011f5e7",
+        "task_8c044cfcdce5",
+        "task_d065f4c36365"
+      ],
+      "input_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74",
+      "gate_path": [
+        "replacement_qualification",
+        "round3",
+        "anthropic"
+      ],
+      "stage": "reserved, not launched",
+      "routing_binding": {
+        "observed_utc": "2026-11-03T17:48:52.924322+00:00",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-anthropic",
+        "exact_base": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
+        "actual_branch": "planning/qr-20261103-r1-anthropic",
+        "agent_free_routing_provisioning": true,
+        "ignored_config_relative_path": ".claude\\settings.local.json",
+        "ignored_config_sha256": "53d75479d9fa111ad3e8ec185a464e3228f5be3659d540ef00fa63fcc278bdfd",
+        "configuration_not_native_identity_proof": true,
+        "publication_before_creation": "90855870adc3f7645d9394581d1446e11d8063a1"
+      }
+    },
+    "minimax": {
+      "participant": "minimax",
+      "family": "MiniMax",
+      "agent": "opencode2",
+      "model": "minimax-coding-plan/MiniMax-M3",
+      "effort": "thinking inherited; CLI override unsupported",
+      "base": "6b5e1ca0bbb11c2fcc15ed00ec709cd54cb09fbe",
+      "worktree_name": "wp-qr-r1-minimax",
+      "expected_branch": "planning/qr-20261103-r1-minimax",
+      "spec": "docs/agent-process/phases/qualification-replacement-20261103/tasks/ROUND3_MINIMAX.txt",
+      "report": "docs/agent-process/phases/qualification-replacement-20261103/round3/minimax.md",
+      "title": "Qualification replacement R3 MiniMax final packet decision",
+      "dependencies": [
+        "task_06770011f5e7",
+        "task_8c044cfcdce5",
+        "task_d065f4c36365"
+      ],
+      "input_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74",
+      "gate_path": [
+        "replacement_qualification",
+        "round3",
+        "minimax"
+      ],
+      "stage": "reserved, not launched",
+      "routing_binding": {
+        "observed_utc": "2026-11-03T17:49:00.243131+00:00",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-minimax",
+        "exact_base": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
+        "actual_branch": "planning/qr-20261103-r1-minimax",
+        "agent_free_routing_provisioning": true,
+        "ignored_config_relative_path": "opencode.json",
+        "ignored_config_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+        "configuration_not_native_identity_proof": true,
+        "publication_before_creation": "90855870adc3f7645d9394581d1446e11d8063a1"
+      }
+    },
+    "openai": {
+      "participant": "openai",
+      "family": "OpenAI",
+      "agent": "codex",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "base": "1ac7d96d7000f85e072a97512f35095906d7934c",
+      "worktree_name": "wp-qr-r1-openai",
+      "expected_branch": "ryan-haver/wp-qr-r1-openai",
+      "spec": "docs/agent-process/phases/qualification-replacement-20261103/tasks/ROUND3_OPENAI.txt",
+      "report": "docs/agent-process/phases/qualification-replacement-20261103/round3/openai.md",
+      "title": "Qualification replacement R3 OpenAI final packet decision",
+      "dependencies": [
+        "task_06770011f5e7",
+        "task_8c044cfcdce5",
+        "task_d065f4c36365"
+      ],
+      "input_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74",
+      "gate_path": [
+        "replacement_qualification",
+        "round3",
+        "openai"
+      ],
+      "stage": "reserved, not launched",
+      "branch_reservation": "planning/qr-20261103-r1-openai",
+      "creation": "genuineworker-start new-top-level; returnedactualbranchmustberecorded, reservationnotassumed",
+      "actual_branch": "ryan-haver/wp-qr-r1-openai"
+    }
+  },
+  "final_packet_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74"
 }
