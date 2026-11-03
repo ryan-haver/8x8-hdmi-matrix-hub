@@ -1,5 +1,14 @@
 # Runtime-completion execution record
 
+## Cleanup complete:33 retired,10 protected entries remain — 2026-11-03T21:29:31.329834+00:00
+
+Removed exactly the33 owner-approved completed worktrees through Orca after fresh full-bundle/recovery,152090-file archive/current-byte,55-native-transcript, writer/idle-shell, path/head/status and remote-ref verification. All33directories and Git registrations gone, no failures. Orca43→10 entries; actual Git worktrees42→9, plus original stale persistence-wiring folder/entry. Logical working-file bytes retired10090681637 (~10.09GB decimal), not a physical-free-space estimate. Full verified bundle45b33516.../recovery checkout and all archives/natives remain private outside deletion targets.
+
+Kept ALL local and remote task branches, all task heads exactly unchanged; no branch deletion/prune/force-push. Integration root plus6pending API/security worktrees kept;8protected nonroot Git heads/statuses unchanged (includes2oldunverifiable workspaces). Those2 and stale persistencefolder still need recovery, not silently cleaned. All10protected directory identities match original set. Root unrelated encoded hook artifact/private runtime preserved; source/qualification/release readiness unchanged. All Run pages checked, historical retained resources preserved.
+
+Current WORKTREE_CLEANUP_20261103.json records each exact removal/receipt, remaining paths and recovery mapping from deleted checkout to retained refs/fullbundle/archive/native proofs. Earlier audit/preparation remain historical. No software/model/worker phase launched. Final scoped documentation checks and normal integration publication follow; private cleanup-finished-publication.json postpushreceipt outside its commit.
+
+
 ## Exact33-worktree cleanup backed up and ready — 2026-11-03T21:25:13.908876+00:00
 
 Owner "proceed" authorizes only the33 exact completed paths in WORKTREE_CLEANUP_AUDIT_20261103.json. Fresh full --all Git bundle45b33516... (13652547bytes), bundleverify, independent mirror/full strictfsck and physical recovery of all33exactheads/finalownedblobidentities passed. Windows long-path failure/private partial restore retained; successful invocation-only longpath restore distinguishes four generated untracked GitLFS hooks from clean tracked recovery. No root/global setting changes.
