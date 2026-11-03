@@ -1,14 +1,14 @@
 {
-  "observed_utc": "2026-11-03T17:23:10.565362+00:00",
+  "observed_utc": "2026-11-03T17:36:51.308169+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
     "status": "FAIL",
-    "attempt": 1,
+    "attempt": 2,
     "qualified_domains": [],
-    "disposition": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/execution-20261101/COORDINATOR_DISPOSITION.json",
+    "disposition": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/COORDINATOR_DISPOSITION.json",
     "manual_attempt02": {
-      "status": "fresh independent six-axis judgement launched, no qualification verdict",
+      "status": "FAIL, allsix independently judged; no qualifieddomain",
       "authorization": "docs/production/software-waves/MVP-EXECUTION-20261102/QUALIFICATION_MANUAL02_AUTHORIZATION.json",
       "candidate": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
       "rubric_sha256": "66f37090564007afebe29cdfd095af7fa85c4321a8420016ada8633dc0563672",
@@ -150,8 +150,69 @@
         "status": "launched; no verdict or report acceptance inferred",
         "observed_dispatch_status": "dispatched",
         "observed_worker_state": "ready"
+      },
+      "judge_delivery": {
+        "observed_utc": "2026-11-03T17:34:10.902069+00:00",
+        "review_commit": "7548b5b7cd39a714e6e626c6226d8e49a39a14be",
+        "review_base": "78eea1519cd4b6c8ac626b28ee45281f43623198",
+        "report": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/REVIEW.md",
+        "bytes": 18514,
+        "sha256": "23f0676cdbcb3cda998b8ef284199da1e57d99fc5c8a9281995bcaac884678e2",
+        "task_id": "task_c8b55f48fcff",
+        "dispatch_id": "ctx_6f1b83d8f673",
+        "worktree": "wp-exec-qual-anthropic-core-01-manual02-review",
+        "branch": "ryan-haver/wp-exec-qual-anthropic-core-01-manual02-review",
+        "verdict": "FAIL mandatoryprovenance/calibration/review_quality; invariants/counterexamples/behavior_and_tools PASS, no qualified domain",
+        "terminal": "released",
+        "task_ref_publication": "exact remote/local verified",
+        "native_final": {
+          "session": "01a1a26f-1348-71e3-94e0-e1a0c5e66e0e",
+          "models": [
+            "gpt-6-astra"
+          ],
+          "effort": "high",
+          "bytes": 1088133,
+          "sha256": "b7e23d43d24c1ce22f14275fee2454711629629c12973e7634f2f992b9ea8754"
+        },
+        "checks": "489 documentation tests, direct exit0 and full stdout/JUnit/temp preserved; not semantic proof",
+        "cleanup": "retain exact review tree read-only; no removal",
+        "integration_commit": "a87df0927d857ae1bf40687b0e9180bb8ab7de3f",
+        "archives": [
+          {
+            "archive_sha256": "5f2342ca74e679eb5b4a9b3fa06bded1071d2e1e690ac6a543ceb20725678f6b",
+            "archive_bytes": 206071336,
+            "regular_files": 4608,
+            "regular_bytes": 295604926,
+            "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+          },
+          {
+            "archive_sha256": "628223a8a01683b3f12eaafd09d8f31b11e357ffa863cdf3d31367b716e6c5f7",
+            "archive_bytes": 67537,
+            "regular_files": 106,
+            "regular_bytes": 167143,
+            "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+          }
+        ]
+      },
+      "coordinator_disposition": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/COORDINATOR_DISPOSITION.json"
+    },
+    "historical_attempts": [
+      {
+        "attempt": 1,
+        "status": "FAIL",
+        "qualified_domains": [],
+        "disposition": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/execution-20261101/COORDINATOR_DISPOSITION.json"
       }
-    }
+    ],
+    "per_axis_verdicts": {
+      "provenance": "fail",
+      "invariants": "pass",
+      "counterexamples": "pass",
+      "behavior_and_tools": "pass",
+      "calibration": "fail",
+      "review_quality": "fail"
+    },
+    "further_retry_authorized": false
   },
   "direct_qualification_dependent_reservations": [
     "SW-HARNESS-01",
@@ -1441,5 +1502,11 @@
     "path": "docs/validation/RUNTIME_FIELD_GATE_RUNBOOK.md",
     "execution_result": false,
     "owner_signoff": false
+  },
+  "prospective_replacement_qualification": {
+    "status": "proposalonly, noapprovalorlaunch",
+    "path": "docs/production/software-waves/MVP-EXECUTION-20261102/PROPOSED_REPLACEMENT_MODEL_QUALIFICATION.json",
+    "task_id": null,
+    "dispatch_id": null
   }
 }
