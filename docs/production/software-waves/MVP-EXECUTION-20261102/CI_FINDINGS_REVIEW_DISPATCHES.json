@@ -1,0 +1,109 @@
+{
+  "observed_utc": "2026-11-03T04:48:53.224756+00:00",
+  "status": "two genuine independent exact-commit factual reviews launched",
+  "run": "run_37205f6095b3",
+  "runtime": "e8ce3460-a9d4-4897-8e4f-10a8e3cdc400",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "actors": {
+    "findings_fix01": {
+      "task_id": "task_f76d52b72a2e",
+      "dispatch_id": "ctx_3ae35200ca22",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-findings-01-rereview01",
+      "actual_branch": "ryan-haver/wp-exec-sw-findings-01-rereview01",
+      "exact_entry_base": "487a6ca7afaf65882fb490880421f0026ae59cc5",
+      "observed_head": "487a6ca7afaf65882fb490880421f0026ae59cc5",
+      "new_report": "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/CORRECTION_REVIEW_01.md",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+        "session": "01a19fbb-97a0-7da3-baf6-65d81d8f7343",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 804384,
+        "sha256": "9a6435ab4eeb680405009530cef958d577cbf3766b31be9064786dbacea4393e"
+      },
+      "status": "launched; no verdict or report acceptance inferred",
+      "observed_dispatch_status": "dispatched",
+      "observed_worker_state": "ready"
+    },
+    "ci_attribution": {
+      "task_id": "task_e8646aacd637",
+      "dispatch_id": "ctx_a83af2c61fa3",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-ci-attribution-review",
+      "actual_branch": "ryan-haver/wp-exec-ev-ci-attribution-review",
+      "exact_entry_base": "d86b65c271cc06d95895b8abdce53e24210bc6d9",
+      "observed_head": "d86b65c271cc06d95895b8abdce53e24210bc6d9",
+      "new_report": "docs/production/software-waves/EV-CI-ATTRIBUTION/execution-20261101/REVIEW.md",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+        "session": "01a19fbb-cf1e-7991-b040-862d4c2a2eeb",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 715562,
+        "sha256": "9f04f9a9365223032fb720f6411346cb0f325f31b88a6f44af4251fdc14fb56d"
+      },
+      "status": "launched; no verdict or report acceptance inferred",
+      "observed_dispatch_status": "dispatched",
+      "observed_worker_state": "ready"
+    }
+  },
+  "publication_before_wave": "9e12d67054aca2db38b069e24bf65b84cf52f02c",
+  "fleet": {
+    "total": 113,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 113,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMDEyfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwMDowMDoyMiIsImRpc3BhdGNoSWQiOiJjdHhfNzJjZmY3ODY1NWQ4IiwiZGF0YWJhc2VJZCI6NjMwfX0"
+      },
+      {
+        "limit": 100,
+        "total": 113,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 8,
+      "released": 105
+    },
+    "historical_retained": 6,
+    "new_worker_resources": 2,
+    "accounting": "running keep-open workers also read retained; not eight active assignments"
+  },
+  "concurrency": "max2new+coordinator+protected external reservation=4; no nesting",
+  "acceptance": "neither current CI/findings submission accepted until actual verdict and coordinator disposition; prior SW-AUDIT and EV negative-gap documentation acceptances remain bounded",
+  "core_qualification": "attempt1FAIL/no domain, explicit owner manual-retake choice pending, no answer/approval inferred; source/physical/release gates unchanged"
+}

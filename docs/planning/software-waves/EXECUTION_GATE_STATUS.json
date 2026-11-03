@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-03T04:46:20.591724+00:00",
+  "observed_utc": "2026-11-03T04:48:53.224756+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -432,7 +432,43 @@
       "status": "delivered487a, released/preserved/published, exact-commit re-review prepared",
       "observed_dispatch_status": "dispatched",
       "observed_worker_state": "ready",
-      "report_commit": "487a6ca7afaf65882fb490880421f0026ae59cc5"
+      "report_commit": "487a6ca7afaf65882fb490880421f0026ae59cc5",
+      "independent_review": {
+        "task_id": "task_f76d52b72a2e",
+        "dispatch_id": "ctx_3ae35200ca22",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-findings-01-rereview01",
+        "actual_branch": "ryan-haver/wp-exec-sw-findings-01-rereview01",
+        "exact_entry_base": "487a6ca7afaf65882fb490880421f0026ae59cc5",
+        "observed_head": "487a6ca7afaf65882fb490880421f0026ae59cc5",
+        "new_report": "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/CORRECTION_REVIEW_01.md",
+        "launch": {
+          "requested": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          },
+          "effective": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        },
+        "turn_start": "observed",
+        "native_entry": {
+          "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+          "session": "01a19fbb-97a0-7da3-baf6-65d81d8f7343",
+          "models": [
+            "gpt-6-astra"
+          ],
+          "effort": "high native",
+          "bytes": 804384,
+          "sha256": "9a6435ab4eeb680405009530cef958d577cbf3766b31be9064786dbacea4393e"
+        },
+        "status": "launched; no verdict or report acceptance inferred",
+        "observed_dispatch_status": "dispatched",
+        "observed_worker_state": "ready"
+      },
+      "review_state": "independent exact-commit review launched, no verdict acceptance"
     }
   },
   "CI_attribution": {
@@ -477,6 +513,42 @@
       "observed_worker_state": "ready",
       "report_commit": "d86b65c271cc06d95895b8abdce53e24210bc6d9"
     },
-    "report_commit": "d86b65c271cc06d95895b8abdce53e24210bc6d9"
+    "report_commit": "d86b65c271cc06d95895b8abdce53e24210bc6d9",
+    "independent_review": {
+      "task_id": "task_e8646aacd637",
+      "dispatch_id": "ctx_a83af2c61fa3",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-ci-attribution-review",
+      "actual_branch": "ryan-haver/wp-exec-ev-ci-attribution-review",
+      "exact_entry_base": "d86b65c271cc06d95895b8abdce53e24210bc6d9",
+      "observed_head": "d86b65c271cc06d95895b8abdce53e24210bc6d9",
+      "new_report": "docs/production/software-waves/EV-CI-ATTRIBUTION/execution-20261101/REVIEW.md",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+        "session": "01a19fbb-cf1e-7991-b040-862d4c2a2eeb",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 715562,
+        "sha256": "9f04f9a9365223032fb720f6411346cb0f325f31b88a6f44af4251fdc14fb56d"
+      },
+      "status": "launched; no verdict or report acceptance inferred",
+      "observed_dispatch_status": "dispatched",
+      "observed_worker_state": "ready"
+    },
+    "review_state": "independent exact-commit review launched, no verdict acceptance"
   }
 }
