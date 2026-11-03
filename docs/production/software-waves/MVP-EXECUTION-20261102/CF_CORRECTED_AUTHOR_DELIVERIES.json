@@ -1,0 +1,110 @@
+{
+  "observed_utc": "2026-11-03T05:25:24.967750+00:00",
+  "status": "both corrected author submissions delivered, released, preserved, published; independent re-review required",
+  "actors": {
+    "findings_fix02": {
+      "head": "a2dab11cdc871d6a98c563b019a361371a9af710",
+      "base": "487a6ca7afaf65882fb490880421f0026ae59cc5",
+      "tree": "wp-exec-sw-findings-01",
+      "actual_branch": "ryan-haver/wp-exec-sw-findings-01",
+      "report": "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/AUTHOR.md",
+      "bytes": 26988,
+      "sha256": "56989fd60a7817facde500511e6be0b05286a256679f940da07c91591af19798",
+      "working_identical": true,
+      "cr_bytes": 0,
+      "task_id": "task_37183952cac7",
+      "dispatch_id": "ctx_160f933c1154",
+      "terminal": "released",
+      "publication": "exact task ref remote/local verified",
+      "cleanup": "read-only retention pending exact-commit independent re-review; no removal",
+      "acceptance": "unaccepted submission",
+      "native_final": {
+        "session": "ses_e6036b300ffe9koOcJWNjCrEKr",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "bytes": 335731,
+        "sha256": "0c065600d979d072d25f4702a780ed888f80d9d4bfa2772c08887f18b5f00ae1"
+      },
+      "budget": "target exceeded, actual history retained with no deadline pass",
+      "scope": "exact two residual substitutions,4insertions2deletions per delivery;3min target exceeded with about6.5min wallclock reported",
+      "integrated_as": "unaccepted submission record only",
+      "integration_commit": "aeb906a3ee48c79c136b440c4b9d4285579e4248",
+      "original_integrity": {
+        "old_head": "487a6ca7afaf65882fb490880421f0026ae59cc5",
+        "new_head": "a2dab11cdc871d6a98c563b019a361371a9af710",
+        "preexisting_regular_files": 4631,
+        "changed_existing_files": [
+          "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/AUTHOR.md"
+        ],
+        "all_old_private_author_files_unchanged": true
+      },
+      "preservation": {
+        "head": "a2dab11cdc871d6a98c563b019a361371a9af710",
+        "archive_sha256": "52bf1bf8588399d21d6d93fc3983b3e6c915c1e1a02d3ec96695c33f6224f4f3",
+        "archive_bytes": 206957960,
+        "regular_files": 4647,
+        "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+      }
+    },
+    "ci_fix01": {
+      "head": "b1ca1390f90652bf25fcb8ce73efb211c1b666da",
+      "base": "d86b65c271cc06d95895b8abdce53e24210bc6d9",
+      "tree": "wp-exec-ev-ci-attribution",
+      "actual_branch": "ryan-haver/wp-exec-ev-ci-attribution",
+      "report": "docs/production/software-waves/EV-CI-ATTRIBUTION/execution-20261101/AUTHOR.md",
+      "bytes": 26899,
+      "sha256": "5954a2ac675fc1f7919431e114a1cba865d0fb2a7a5f55599ce01e69404b9f5d",
+      "working_identical": true,
+      "cr_bytes": 0,
+      "task_id": "task_f88cda2cf757",
+      "dispatch_id": "ctx_c3d0257ab154",
+      "terminal": "released",
+      "publication": "exact task ref remote/local verified",
+      "cleanup": "read-only retention pending exact-commit independent re-review; no removal",
+      "acceptance": "unaccepted submission",
+      "native_final": {
+        "session": "ses_e6036a1caffef30r0KYYPYu178",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "bytes": 543379,
+        "sha256": "01c7b65b79ff4cc7d921d8dbf1e9e82bb1054b3e828663f69e7e42a71609ecbe"
+      },
+      "budget": "target exceeded, actual history retained with no deadline pass",
+      "process_deviation": "Author reports new private51check script and two failed attempts despite no-new-harness instruction; preserve this deviation and originals, do not promote selfchecks to independent proof. No new public/product tool was committed.",
+      "delivery_hash_erratum": {
+        "message_id": "msg_bb9ad34f38ff",
+        "reported_digest": "5954a2ac675fc1f7919431e114a1cba865d0fba2a7a5f55599ce01e69404b9f5d",
+        "reported_length": 65,
+        "actual_digest": "5954a2ac675fc1f7919431e114a1cba865d0fb2a7a5f55599ce01e69404b9f5d",
+        "actual_bytes": 26899,
+        "report_commit": "b1ca1390f90652bf25fcb8ce73efb211c1b666da",
+        "error": "malformed delivery digest; extra character, no report-byte drift inferred"
+      },
+      "integrated_as": "unaccepted submission record only",
+      "integration_commit": "3434e953869171f31e99146296aec73c829ff892",
+      "original_integrity": {
+        "old_head": "d86b65c271cc06d95895b8abdce53e24210bc6d9",
+        "new_head": "b1ca1390f90652bf25fcb8ce73efb211c1b666da",
+        "preexisting_regular_files": 4674,
+        "changed_existing_files": [
+          "docs/production/software-waves/EV-CI-ATTRIBUTION/execution-20261101/AUTHOR.md"
+        ],
+        "all_old_private_author_files_unchanged": true
+      },
+      "preservation": {
+        "head": "b1ca1390f90652bf25fcb8ce73efb211c1b666da",
+        "archive_sha256": "b6d7e7434196156d0cfd168579fef9d3e4d42f51b2f2c9cc87691ebcacb3e77d",
+        "archive_bytes": 206885843,
+        "regular_files": 4698,
+        "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+      }
+    }
+  },
+  "source_or_feature_acceptance": false,
+  "freshness_admission": false,
+  "qualification": "core attempt1 FAIL/no domain; owner manual-retake decision pending; no answer inferred"
+}

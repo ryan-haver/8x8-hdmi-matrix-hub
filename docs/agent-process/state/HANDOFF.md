@@ -1,5 +1,16 @@
 # Current coordinator handoff
 
+## Corrected CI and findings submissions preserved; re-reviews prepared — 2026-11-03T05:25:24.967750+00:00
+
+M3 findings correction02 a2dab11c (parent487a) changes exactly two residual R3/R5 passages, canonical26988bytes SHA56989fd60a7817facde500511e6be0b05286a256679f940da07c91591af19798. CI correction01 b1ca1390 (parentd86) submits R1-R7 prose corrections, canonical26899bytes SHA5954a2ac675fc1f7919431e114a1cba865d0fb2a7a5f55599ce01e69404b9f5d. Both author working copies LF/identical, released, exact task refs remote-verified, full native transcripts/workspace/temp archives preserved. Every4631/4674preexisting regular file compared: only assigned AUTHOR.md changed; old private artifacts immutable. Reports integrated as UNACCEPTED records at aeb906a3/3434e953, not bounded acceptance or source/finding/freshness qualification.
+
+CI original worker message contains malformed65character digest (extra character); actual Git/working64character digest independently verified and explicit erratum preserved in CF_CORRECTED_AUTHOR_DELIVERIES.json. Author also created private51check harness/two failed attempts despite no-new-harness instruction; retain deviation, no procedural-conformance or semantic pass. Both target durations exceeded; no deadline pass.
+
+Prepare TWO NEW Astra/high different-family exact-commit reviews: findings wp-exec-sw-findings-01-rereview02 at a2dab for complete4insertions2deletions and changed context, CI wp-exec-ev-ci-attribution-rereview01 at b1ca for complete seven corrected claims. Prior accepted structure/mappings preserved by unchanged-byte/diff checks, no repeat global audit. No new Task/Dispatch until genuine starts. Full115row2page fleet109released/6historicalretained/0newactive. Same Run/runtime/gen5/host rediscovered, catalog/high supported, fresh verified quotas and correction/re-review reserve; max2new+coordinator+protected external4, no nesting. Details CF_CORRECTED_REVIEW_PREFLIGHT.json.
+
+Prior SW-AUDIT/EV negative-gap documentation acceptances remain bounded; core qualification1 formalFAIL/no domain, explicit owner retake choice pending. Source/privacy/HIL/72h/week/finalrelease gates unchanged; original3Tron decisions closed. Frozen packet hash unchanged. Scoped publication before next execution wave; post-push private cf-corrected-review-preflight-publication.json receipt outside referenced commit.
+
+
 ## Two bounded CI/findings author corrections active — 2026-11-03T05:03:18.654985+00:00
 
 - findings_fix02: task task_37183952cac7 / dispatch ctx_160f933c1154, exact base 487a6ca7afaf65882fb490880421f0026ae59cc5, branch ryan-haver/wp-exec-sw-findings-01, only docs/production/software-waves/SW-FINDINGS-01/execution-20261101/AUTHOR.md plus NEW assigned private paths; R3 _SECRET_KEYS versus _SECRET_QUERY, R5 six separate Ruff tokens only; no new audit/selfcheck harness; native {"status": "native MiniMax-M3 attested at exact Task/Dispatch/directory", "session": "ses_e6036b300ffe9koOcJWNjCrEKr", "models": ["minimax-coding-plan/MiniMax-M3"], "variant": "thinking", "CLI_effort_override": "unsupported; exact project routing inherited", "bytes": 84616, "sha256": "e3e01dcb4a98bebf31898e98415e00b2d92e14b38182dd0b8d54e52a6828051f"}; observed Dispatch dispatched.
