@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-03T17:09:10.672181+00:00",
+  "observed_utc": "2026-11-03T17:11:43.735413+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -954,7 +954,7 @@
     "source_or_feature_qualification": false
   },
   "repo_early_intake": {
-    "status": "review requires R1 correction; intake unaccepted",
+    "status": "accepted corrected early three-finding metadata intake only",
     "exact_entry_base": "61957a47cf91c504f48149a6c43a3dfea3cdd032",
     "scoped_ids": [
       "SEC-14",
@@ -1165,7 +1165,7 @@
       },
       "integration_commit": "d3718fc211c23c4019446892087c6cd2b11ee7b8"
     },
-    "review_verdict": "require_changes R1",
+    "review_verdict": "accept bounded metadata",
     "coordinator_disposition": "docs/production/software-waves/SW-REPO-01/execution-20261101/COORDINATOR_DISPOSITION.json",
     "correction01": {
       "base": "be7e441a0e034fb838e44914b245f84ba2a42cbf",
@@ -1181,7 +1181,7 @@
       ],
       "scope": "R1 only SEC14 LICENSE table/JSON:373physical/293nonempty and literal title; allotherlines preserved, no harness",
       "budget": "3min target <=100newwords, exactly2in-place passages",
-      "status": "independent exact-commit R1 re-review launched, no acceptance",
+      "status": "delivered/reviewed/accepted bounded correction, authors/reviewersreleased",
       "task_id": null,
       "dispatch_id": null,
       "current_preflight": "docs/production/software-waves/MVP-EXECUTION-20261102/NOV03_REPO_CORRECTION_PREFLIGHT.json",
@@ -1297,8 +1297,45 @@
         "status": "launched, no verdict/qualification/acceptance inferred",
         "observed_dispatch_status": "dispatched",
         "observed_worker_state": "ready"
+      },
+      "independent_review_delivery": {
+        "observed_utc": "2026-11-03T17:10:24.963710+00:00",
+        "review_commit": "fd16638d2cfb7e1e7429a066dc89e158ba312905",
+        "review_base": "9f12743e882e3175e7dfbe38b60eefbfe62376f3",
+        "report": "docs/production/software-waves/SW-REPO-01/execution-20261101/CORRECTION_REVIEW_01.md",
+        "bytes": 5461,
+        "sha256": "8caba84ce4c086134f495194ac573b4e72ab88c5f4d7491a722345b4c2bc6bf4",
+        "task_id": "task_0e44c7b07b03",
+        "dispatch_id": "ctx_fb0e59b59685",
+        "worktree": "wp-exec-sw-repo-01-rereview01",
+        "branch": "ryan-haver/wp-exec-sw-repo-01-rereview01",
+        "verdict": "accept bounded R1 two-passage correction; allotherlines and prior accepted scope preserved",
+        "terminal": "released",
+        "task_ref_publication": "exact remote/local verified",
+        "native_final": {
+          "session": "01a1a261-4b41-77d2-b1a1-c190a8ada0e5",
+          "models": [
+            "gpt-6-astra"
+          ],
+          "effort": "high",
+          "bytes": 514333,
+          "sha256": "0b2778587532cf022e6c7881cd146ec80ae0a18ad455bb5f082dad29a76a3272"
+        },
+        "checks": "489 documentation tests, direct exit0 and full stdout/JUnit/temp preserved; not semantic proof",
+        "cleanup": "retain exact review tree read-only; no removal",
+        "preservation": {
+          "archive_sha256": "0cbd73d5b70add172980588514235cac56dfa06eaddaedfa34d12ab3f4d8d6f9",
+          "archive_bytes": 206914073,
+          "regular_files": 4635,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "integration_commit": "6c26cd3dc78b1771a938f2a3e42e06b53cd22191"
       }
-    }
+    },
+    "current_author_commit": "9f12743e882e3175e7dfbe38b60eefbfe62376f3",
+    "current_review_commit": "fd16638d2cfb7e1e7429a066dc89e158ba312905",
+    "current_intake_documentation_complete": true,
+    "source_security_license_qualification": false
   },
   "test_session_preparation": {
     "status": "pending-candidate checklist prepared in existing fieldrunbook; documentation only",

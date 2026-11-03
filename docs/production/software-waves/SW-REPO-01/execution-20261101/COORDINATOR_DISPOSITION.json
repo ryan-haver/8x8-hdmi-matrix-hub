@@ -1,59 +1,132 @@
 {
-  "observed_utc": "2026-11-03T05:51:45.178612+00:00",
+  "observed_utc": "2026-11-03T17:11:43.735413+00:00",
   "unit": "SW-REPO-01",
-  "coordinator_decision": "WITHHOLD bounded early-intake acceptance pending R1 LICENSE row/JSON correction and independent exact-commit re-review",
+  "coordinator_decision": "ACCEPT corrected early three-finding metadata intake only",
   "author_family": "MiniMax",
-  "author_commit": "be7e441a0e034fb838e44914b245f84ba2a42cbf",
+  "author_commit": "9f12743e882e3175e7dfbe38b60eefbfe62376f3",
+  "author_git_blob_sha256": "8b1ddcce3c3f5f2007fe6abcf0f7dbbf42e1bcab3dae8f813093350f75f02890",
   "reviewer_family": "OpenAI",
-  "review_commit": "218744b088a505461f33065e672559c9edbccae3",
-  "review_git_blob_sha256": "36123e12a86dfea7fb686029ef5d9639de2d74f5d4f974577fac3a9532b66518",
+  "review_commit": "fd16638d2cfb7e1e7429a066dc89e158ba312905",
+  "review_git_blob_sha256": "8caba84ce4c086134f495194ac573b4e72ab88c5f4d7491a722345b4c2bc6bf4",
   "row_dispositions": {
-    "SEC-14": "require_changes R1 physical vs nonempty count and literal-token/title attribution",
-    "SEC-15": "accept source declarations within metadata intake only",
-    "DEP-05": "accept source declarations within metadata intake only"
+    "SEC-14": "accept R1 corrected LICENSE source-text observation as bounded stale-stub lead; no legal/security/history proof",
+    "SEC-15": "prior2187 source declaration acceptance preserved, not a fresh re-audit or CI/supply-chain qualification",
+    "DEP-05": "prior2187 source declaration acceptance preserved, not a fresh CI/platform pass or finding closure"
   },
-  "R1": "LICENSE16726bytes/373physicalLF-terminated lines/293nonempty; zero literalMPL-2.0, zero case-insensitive stub, actual title Mozilla Public License Version2.0. Correct only current author row/JSON, preserve historical293line statement and source identity",
-  "preserved_scope": "actual historicalM3b473/53e inventory, currenta2dab/ac9 findings leads,56CI nonancestorunknown-stale;36redacted candidates/188uninspected blobs/cacheunknown unchanged; no new global audit",
-  "process_deviations": "Original5min target exceeded and821whole-report whitespace tokens vs683reportedbodywords+requiredJSON; no deadline or full<=700budget pass",
+  "review_chain": "218744b088a505461f33065e672559c9edbccae3 acceptedSEC15/DEP05 and requestedSEC14R1; fd16638d2cfb7e1e7429a066dc89e158ba312905 acceptsR1/fulltwo-line-diff and preserves allotherlines",
+  "resolved_residual": "Current author table and JSON accurately label373physicalLF-terminated versus293nonempty LICENSE lines and literal Mozilla Public License Version2.0 title; unsupported MPL-2.0/293denominator removed. Originalsourceidentity and historical293line statement preserved",
+  "preserved_scope": "historicalM3b473/original73a/source53e inventory, currentfindingsa2dab/ac9 and CI56nonancestorunknown-stale;36redacted candidates/188uninspected blobs/cacheunknown remain bounded inherited observations",
+  "current_intake_documentation_complete": true,
+  "package_completion": false,
+  "finding_closure": false,
+  "source_security_license_qualification": false,
+  "privacy_or_freshness_admission": false,
+  "procedural_or_deadline_or_word_budget_conformance": false,
+  "process_deviations": "Original5min/<=700whole-report deviations and correction3mintarget overrun retained; current848whitespace tokens, no conformity pass. Content accepted on independent factual review, not selfchecks",
   "settlement": {
-    "observed_utc": "2026-11-03T05:50:01.316313+00:00",
-    "review_commit": "218744b088a505461f33065e672559c9edbccae3",
-    "review_base": "be7e441a0e034fb838e44914b245f84ba2a42cbf",
-    "report": "docs/production/software-waves/SW-REPO-01/execution-20261101/REVIEW.md",
-    "bytes": 7896,
-    "sha256": "36123e12a86dfea7fb686029ef5d9639de2d74f5d4f974577fac3a9532b66518",
-    "task_id": "task_dd9f6e3c9c49",
-    "dispatch_id": "ctx_d29018e7a4a3",
-    "worktree": "wp-exec-sw-repo-01-review",
-    "branch": "ryan-haver/wp-exec-sw-repo-01-review",
-    "verdict": "require_changes R1 LICENSE row and JSON; SEC15/DEP05 accepted metadata only",
+    "observed_utc": "2026-11-03T17:10:24.963710+00:00",
+    "review_commit": "fd16638d2cfb7e1e7429a066dc89e158ba312905",
+    "review_base": "9f12743e882e3175e7dfbe38b60eefbfe62376f3",
+    "report": "docs/production/software-waves/SW-REPO-01/execution-20261101/CORRECTION_REVIEW_01.md",
+    "bytes": 5461,
+    "sha256": "8caba84ce4c086134f495194ac573b4e72ab88c5f4d7491a722345b4c2bc6bf4",
+    "task_id": "task_0e44c7b07b03",
+    "dispatch_id": "ctx_fb0e59b59685",
+    "worktree": "wp-exec-sw-repo-01-rereview01",
+    "branch": "ryan-haver/wp-exec-sw-repo-01-rereview01",
+    "verdict": "accept bounded R1 two-passage correction; allotherlines and prior accepted scope preserved",
     "terminal": "released",
     "task_ref_publication": "exact remote/local verified",
     "native_final": {
-      "session": "01a19ff1-aa64-7a00-9ab2-438ae9b6fdc8",
+      "session": "01a1a261-4b41-77d2-b1a1-c190a8ada0e5",
       "models": [
         "gpt-6-astra"
       ],
       "effort": "high",
-      "bytes": 703380,
-      "sha256": "18c5452dee545300c98ab017771a907a7c809d942c8cd5b0d3c098561c1b658b"
+      "bytes": 514333,
+      "sha256": "0b2778587532cf022e6c7881cd146ec80ae0a18ad455bb5f082dad29a76a3272"
     },
     "checks": "489 documentation tests, direct exit0 and full stdout/JUnit/temp preserved; not semantic proof",
     "cleanup": "retain exact review tree read-only; no removal",
     "preservation": {
-      "archive_sha256": "b919ffb1adfb3e061598c23dbaad8a3a32a6399fe259792bcbc6824692793cf7",
-      "archive_bytes": 206908437,
-      "regular_files": 4634,
+      "archive_sha256": "0cbd73d5b70add172980588514235cac56dfa06eaddaedfa34d12ab3f4d8d6f9",
+      "archive_bytes": 206914073,
+      "regular_files": 4635,
       "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
     },
-    "integration_commit": "d3718fc211c23c4019446892087c6cd2b11ee7b8"
+    "integration_commit": "6c26cd3dc78b1771a938f2a3e42e06b53cd22191"
   },
-  "correction_state": "HELD for suitable verified author/fix capacity; no launch",
-  "current_intake_documentation_complete": false,
-  "package_completion": false,
-  "finding_closure": false,
-  "source_security_license_qualification": false,
-  "remaining": "All SW-REPO completion dependencies and final candidate hygiene/security/license/history/secret-scan/required-check proof remain unsatisfied; all61findings stayopen",
-  "core_qualification": "attempt1formalFAIL/no domain; explicit owner manual-retake choice pending, no retry/source authority",
-  "owner_gates": "physical/HIL/72h/week/finalrelease held/open, original3Tron decisions closed"
+  "author_settlement": "priorauthorreleased, exacttaskrefpublished/verified, fullnative/workspace/temp retained; all4636oldfiles unchanged except assignedAUTHOR, originalprivate files unchanged",
+  "integration_mapping": {
+    "author": "7d8ab17d9741b947f207c51356d6a88ccf98a86d",
+    "review": "6c26cd3dc78b1771a938f2a3e42e06b53cd22191"
+  },
+  "remaining": "All SW-REPO completion dependencies and final exact-candidate hygiene/security/license/history/secret-scan/required-check/evidence proof unsatisfied; all61findings remainopen",
+  "core_qualification": "attempt1formalFAIL/no domain; owner explicitlyapprovedONE manualattempt02, evaluatorcurrentlyunderway, freshindependentjudge pending, no qualifieddomain/sourceacceptance yet",
+  "owner_gates": "physical/HIL/72h/week/finalrelease held/open, original3Trondecisionsclosed",
+  "previous_dispositions": [
+    {
+      "sha256": "6e0229dbfa049368e1865571e49d8a26ab7acf418f136271607e549c3f493d85",
+      "record": {
+        "observed_utc": "2026-11-03T05:51:45.178612+00:00",
+        "unit": "SW-REPO-01",
+        "coordinator_decision": "WITHHOLD bounded early-intake acceptance pending R1 LICENSE row/JSON correction and independent exact-commit re-review",
+        "author_family": "MiniMax",
+        "author_commit": "be7e441a0e034fb838e44914b245f84ba2a42cbf",
+        "reviewer_family": "OpenAI",
+        "review_commit": "218744b088a505461f33065e672559c9edbccae3",
+        "review_git_blob_sha256": "36123e12a86dfea7fb686029ef5d9639de2d74f5d4f974577fac3a9532b66518",
+        "row_dispositions": {
+          "SEC-14": "require_changes R1 physical vs nonempty count and literal-token/title attribution",
+          "SEC-15": "accept source declarations within metadata intake only",
+          "DEP-05": "accept source declarations within metadata intake only"
+        },
+        "R1": "LICENSE16726bytes/373physicalLF-terminated lines/293nonempty; zero literalMPL-2.0, zero case-insensitive stub, actual title Mozilla Public License Version2.0. Correct only current author row/JSON, preserve historical293line statement and source identity",
+        "preserved_scope": "actual historicalM3b473/53e inventory, currenta2dab/ac9 findings leads,56CI nonancestorunknown-stale;36redacted candidates/188uninspected blobs/cacheunknown unchanged; no new global audit",
+        "process_deviations": "Original5min target exceeded and821whole-report whitespace tokens vs683reportedbodywords+requiredJSON; no deadline or full<=700budget pass",
+        "settlement": {
+          "observed_utc": "2026-11-03T05:50:01.316313+00:00",
+          "review_commit": "218744b088a505461f33065e672559c9edbccae3",
+          "review_base": "be7e441a0e034fb838e44914b245f84ba2a42cbf",
+          "report": "docs/production/software-waves/SW-REPO-01/execution-20261101/REVIEW.md",
+          "bytes": 7896,
+          "sha256": "36123e12a86dfea7fb686029ef5d9639de2d74f5d4f974577fac3a9532b66518",
+          "task_id": "task_dd9f6e3c9c49",
+          "dispatch_id": "ctx_d29018e7a4a3",
+          "worktree": "wp-exec-sw-repo-01-review",
+          "branch": "ryan-haver/wp-exec-sw-repo-01-review",
+          "verdict": "require_changes R1 LICENSE row and JSON; SEC15/DEP05 accepted metadata only",
+          "terminal": "released",
+          "task_ref_publication": "exact remote/local verified",
+          "native_final": {
+            "session": "01a19ff1-aa64-7a00-9ab2-438ae9b6fdc8",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "effort": "high",
+            "bytes": 703380,
+            "sha256": "18c5452dee545300c98ab017771a907a7c809d942c8cd5b0d3c098561c1b658b"
+          },
+          "checks": "489 documentation tests, direct exit0 and full stdout/JUnit/temp preserved; not semantic proof",
+          "cleanup": "retain exact review tree read-only; no removal",
+          "preservation": {
+            "archive_sha256": "b919ffb1adfb3e061598c23dbaad8a3a32a6399fe259792bcbc6824692793cf7",
+            "archive_bytes": 206908437,
+            "regular_files": 4634,
+            "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+          },
+          "integration_commit": "d3718fc211c23c4019446892087c6cd2b11ee7b8"
+        },
+        "correction_state": "HELD for suitable verified author/fix capacity; no launch",
+        "current_intake_documentation_complete": false,
+        "package_completion": false,
+        "finding_closure": false,
+        "source_security_license_qualification": false,
+        "remaining": "All SW-REPO completion dependencies and final candidate hygiene/security/license/history/secret-scan/required-check proof remain unsatisfied; all61findings stayopen",
+        "core_qualification": "attempt1formalFAIL/no domain; explicit owner manual-retake choice pending, no retry/source authority",
+        "owner_gates": "physical/HIL/72h/week/finalrelease held/open, original3Tron decisions closed"
+      }
+    }
+  ],
+  "publication": "scopedacceptance committed/pushed/exactremote-local verified, receiptoutside referencedcommit"
 }
