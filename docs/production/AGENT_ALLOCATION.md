@@ -1,5 +1,12 @@
 # Agent allocation and execution ledger
 
+## Two independent corrected-report re-reviews active — 2026-11-03T03:30:24.534736+00:00
+
+Astra/high inventory reviewer task_afbc5357eb0e / ctx_c0dcf402e9f3 at exactac97e1f5 in NEW wp-exec-sw-audit-01-rereview02 writes only NEW CORRECTION_REVIEW_02.md. Astra/high EV reviewer task_cc2af79f455c / ctx_5011d343f010 at exact81675505 in NEW wp-exec-ev-preservation-gaps-rereview01 writes only NEW CORRECTION_REVIEW_01.md. Both native Astra/high at exact Task/Dispatch/cwd attested; original M3 authors and all old reviewers definitively released/preserved/published, no duplicate writers. Report corrections remain unaccepted pending actual verdicts; no source/original-preservation pass. Full actual branches/native receipts in CORRECTED_METADATA_REREVIEW_DISPATCHES.json.
+
+Fresh quotas checked before each launch; prewave integration da6ecfce5ec0f4b84f492ad97d290736a36c7260 verified exact remote/local. Complete105-row fleet across2pages:97released/8retained resources (six historical plus two running keep-open workers), two new assignments only. Max2new+coordinator+oldexternalreservation4, no nesting. F-API-029 erratum explicitly supplied, frozen actual mapping preserved; old mistaken review/spec unchanged. Corequalification1 staysFAIL/no domain and explicit owner retake decision pending, no retake/source/physical/release work from metadata tasks. Private corrected-rereviews-launch-publication.json is post-push receipt outside referenced commit. End turn for Orca wakes, no polling.
+
+
 ## Both metadata corrections delivered; independent re-reviews prepared — 2026-11-03T03:28:37.094738+00:00
 
 Inventory correction task_4c7cf7c289ff/ctx_14d9b1569d7e delivered ac97e1f5886d591562597b5e81c3fa410adda2f8 (parent981),223560Gitbytes SHA f64b6165...; EV correction task_e1d5c3589200/ctx_f56a5a99bfee delivered816755055028d37aa62c0ff62caace473288654d(parented783),56040Gitbytes SHA ebaa6fb4.... Both report-only, clean, LF/working identical, terminals released; full natives, complete verified workspace/temp archives and exact task refs preserved/published. Every preexisting regular file compared to previous manifest: only respective AUTHOR.md changed; old private artifacts/correction01 unchanged. Reports integrated sequentially as RECORDS ONLY, independent acceptance still pending. Both author time bounds exceeded; actual history retained and no deadline pass claimed. Inventory finish guidance sent03:23:03; no replacement/duplicate writer.
