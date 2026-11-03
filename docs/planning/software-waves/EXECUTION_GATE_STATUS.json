@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-03T05:46:47.122141+00:00",
+  "observed_utc": "2026-11-03T05:51:45.178612+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -908,7 +908,7 @@
     "source_or_feature_qualification": false
   },
   "repo_early_intake": {
-    "status": "independent early three-row factual review launched, no verdict acceptance",
+    "status": "review requires R1 correction; intake unaccepted",
     "exact_entry_base": "61957a47cf91c504f48149a6c43a3dfea3cdd032",
     "scoped_ids": [
       "SEC-14",
@@ -1019,7 +1019,38 @@
       "task_id": null,
       "dispatch_id": null
     },
-    "correction_capacity": "M3 below30% current session; author/fix stages held until fresh suitable verified headroom/fallback",
+    "correction_capacity": {
+      "observed_utc": "2026-11-03T05:51:45.178612+00:00",
+      "codex": {
+        "status": "ok",
+        "session": null,
+        "weekly": {
+          "usedPercent": 47,
+          "windowMinutes": 10080,
+          "resetsAt": 1793774164000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "updatedAt": 1793684775199,
+        "error": null
+      },
+      "minimax": {
+        "status": "ok",
+        "session": {
+          "usedPercent": 75,
+          "windowMinutes": 300,
+          "resetsAt": 1793685244454,
+          "resetDescription": null
+        },
+        "weekly": {
+          "usedPercent": 20,
+          "windowMinutes": 10080,
+          "resetsAt": 1793823932889,
+          "resetDescription": null
+        },
+        "updatedAt": 1793684775137,
+        "error": null
+      }
+    },
     "independent_review": {
       "task_id": "task_dd9f6e3c9c49",
       "dispatch_id": "ctx_d29018e7a4a3",
@@ -1054,6 +1085,59 @@
       "status": "launched; no verdict or report acceptance inferred",
       "observed_dispatch_status": "dispatched",
       "observed_worker_state": "ready"
+    },
+    "review_delivery": {
+      "observed_utc": "2026-11-03T05:50:01.316313+00:00",
+      "review_commit": "218744b088a505461f33065e672559c9edbccae3",
+      "review_base": "be7e441a0e034fb838e44914b245f84ba2a42cbf",
+      "report": "docs/production/software-waves/SW-REPO-01/execution-20261101/REVIEW.md",
+      "bytes": 7896,
+      "sha256": "36123e12a86dfea7fb686029ef5d9639de2d74f5d4f974577fac3a9532b66518",
+      "task_id": "task_dd9f6e3c9c49",
+      "dispatch_id": "ctx_d29018e7a4a3",
+      "worktree": "wp-exec-sw-repo-01-review",
+      "branch": "ryan-haver/wp-exec-sw-repo-01-review",
+      "verdict": "require_changes R1 LICENSE row and JSON; SEC15/DEP05 accepted metadata only",
+      "terminal": "released",
+      "task_ref_publication": "exact remote/local verified",
+      "native_final": {
+        "session": "01a19ff1-aa64-7a00-9ab2-438ae9b6fdc8",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high",
+        "bytes": 703380,
+        "sha256": "18c5452dee545300c98ab017771a907a7c809d942c8cd5b0d3c098561c1b658b"
+      },
+      "checks": "489 documentation tests, direct exit0 and full stdout/JUnit/temp preserved; not semantic proof",
+      "cleanup": "retain exact review tree read-only; no removal",
+      "preservation": {
+        "archive_sha256": "b919ffb1adfb3e061598c23dbaad8a3a32a6399fe259792bcbc6824692793cf7",
+        "archive_bytes": 206908437,
+        "regular_files": 4634,
+        "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+      },
+      "integration_commit": "d3718fc211c23c4019446892087c6cd2b11ee7b8"
+    },
+    "review_verdict": "require_changes R1",
+    "coordinator_disposition": "docs/production/software-waves/SW-REPO-01/execution-20261101/COORDINATOR_DISPOSITION.json",
+    "correction01": {
+      "base": "be7e441a0e034fb838e44914b245f84ba2a42cbf",
+      "worktree_name": "wp-exec-sw-repo-01",
+      "expected_branch": "ryan-haver/wp-exec-sw-repo-01",
+      "spec": "REPO_CORRECTION01_TASK.txt",
+      "dependency": "task_dd9f6e3c9c49",
+      "title": "SW-REPO exact two-passage LICENSE metadata correction01",
+      "report": "docs/production/software-waves/SW-REPO-01/execution-20261101/AUTHOR.md",
+      "gate_path": [
+        "repo_early_intake",
+        "correction01"
+      ],
+      "scope": "R1 only SEC14 LICENSE table/JSON:373physical/293nonempty and literal title; allotherlines preserved, no harness",
+      "budget": "3min target <=100newwords, exactly2in-place passages",
+      "status": "HELD for suitable verified author/fix capacity; no launch",
+      "task_id": null,
+      "dispatch_id": null
     }
   }
 }

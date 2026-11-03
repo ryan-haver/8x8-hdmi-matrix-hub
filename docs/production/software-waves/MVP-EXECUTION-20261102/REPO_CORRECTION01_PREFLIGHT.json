@@ -1,0 +1,97 @@
+{
+  "observed_utc": "2026-11-03T05:51:45.178612+00:00",
+  "status": "HELD for suitable verified author/fix capacity; no launch",
+  "launch_allowed_on_current_quota": false,
+  "capacity": {
+    "observed_utc": "2026-11-03T05:51:45.178612+00:00",
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 47,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "updatedAt": 1793684775199,
+      "error": null
+    },
+    "minimax": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 75,
+        "windowMinutes": 300,
+        "resetsAt": 1793685244454,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 20,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932889,
+        "resetDescription": null
+      },
+      "updatedAt": 1793684775137,
+      "error": null
+    }
+  },
+  "fleet": {
+    "total": 119,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 119,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMDM5fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwMDo0MTowMSIsImRpc3BhdGNoSWQiOiJjdHhfNDNhMDA5MmQ3ODQ5IiwiZGF0YWJhc2VJZCI6NjU0fX0"
+      },
+      {
+        "limit": 100,
+        "total": 119,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "released": 113,
+      "retained": 6
+    },
+    "new_active": 0
+  },
+  "run": "run_37205f6095b3",
+  "runtime": "e8ce3460-a9d4-4897-8e4f-10a8e3cdc400",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "host": "local/Zelu/win32, fresh supported status/host/Run/repo/inbox/worktree receipts retained privately",
+  "job": {
+    "base": "be7e441a0e034fb838e44914b245f84ba2a42cbf",
+    "worktree_name": "wp-exec-sw-repo-01",
+    "expected_branch": "ryan-haver/wp-exec-sw-repo-01",
+    "spec": "REPO_CORRECTION01_TASK.txt",
+    "dependency": "task_dd9f6e3c9c49",
+    "title": "SW-REPO exact two-passage LICENSE metadata correction01",
+    "report": "docs/production/software-waves/SW-REPO-01/execution-20261101/AUTHOR.md",
+    "gate_path": [
+      "repo_early_intake",
+      "correction01"
+    ],
+    "scope": "R1 only SEC14 LICENSE table/JSON:373physical/293nonempty and literal title; allotherlines preserved, no harness",
+    "budget": "3min target <=100newwords, exactly2in-place passages",
+    "task_id": null,
+    "dispatch_id": null
+  },
+  "reviewer_reservation": "new wp-exec-sw-repo-01-rereview01 OpenAI/Astra/high exact correctedcommit, only newCORRECTION_REVIEW_01.md afterauthor delivery; no actualbase/Task beforeexists",
+  "scope": "covered first material correction/re-review reserve, only current SEC14 two passages, prior accepted SEC15/DEP05 preserved; no package completion or new phase",
+  "selection": "same qualified bounded M3 author/OpenAI Astra independentreview families; historical acceptedb473/a2dab/b1ca/f2ee authoredprose and ac9/79b08/2187 factualreviews; no source/legal/security qualification",
+  "alternatives": "No silent substitute. OpenAI author plus OpenAI review would violate independence; M3 independent source/legal reviewer not qualified. Google unknownheadroom, DeepSeek exhausted, Anthropic coreformalFAIL/no domain; held author route has no suitable verified current fallback",
+  "quota_policy": "fresh verified>=30% before actual dispatch mandatory; imminent reset or elapsedtime is not capacity; unknown/below30% holds affected stage only. No persistent quota monitor/scheduler or spend authorized",
+  "catalog": {
+    "author": "minimax-coding-plan/MiniMax-M3 thinking via exact ignored routing62e6f5...",
+    "reviewer": "gpt-6-astra/high",
+    "OpenAI_fetched_at": "2026-11-03T05:51:30.853327200Z",
+    "supported": true
+  },
+  "concurrency": "at most1newauthor+coordinator+protectedexternal3<=4, no nesting; currently0newactive",
+  "protected": "root/private runtime/historical originals/failed evidence/natives/ignored artifacts/baselines/retained trees/odd untrackedhook artifact; no cleanup/reset/prune/forcepush",
+  "material_plan_change": false,
+  "core_qualification": "attempt1formalFAIL/no domain; owner manualretakechoicepending noanswer/retryinferred"
+}
