@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-03T05:33:04.599002+00:00",
+  "observed_utc": "2026-11-03T05:34:30.597520+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -908,7 +908,7 @@
     "source_or_feature_qualification": false
   },
   "repo_early_intake": {
-    "status": "prepared, not launched",
+    "status": "one early scoped metadata author launched; no acceptance",
     "exact_entry_base": "61957a47cf91c504f48149a6c43a3dfea3cdd032",
     "scoped_ids": [
       "SEC-14",
@@ -932,6 +932,42 @@
     "task_id": null,
     "dispatch_id": null,
     "package_completion": false,
-    "source_or_feature_qualification": false
+    "source_or_feature_qualification": false,
+    "author": {
+      "task_id": "task_5486db7aed82",
+      "dispatch_id": "ctx_e47c86a8e4ee",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-repo-01",
+      "actual_branch": "ryan-haver/wp-exec-sw-repo-01",
+      "exact_entry_base": "61957a47cf91c504f48149a6c43a3dfea3cdd032",
+      "report": "docs/production/software-waves/SW-REPO-01/execution-20261101/AUTHOR.md",
+      "scope": "SEC14/15/DEP05 accepted-source metadata delta only; no new history/secret/CI audit",
+      "launch": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "turn_start": "unsupported",
+      "native_entry": {
+        "status": "native MiniMax-M3 attested at exact Task/Dispatch/directory",
+        "session": "ses_e6019c6d9ffe4pDsmO1pQo24Xd",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "CLI_effort_override": "unsupported; exact project routing inherited",
+        "bytes": 34865,
+        "sha256": "5ac53244d0b8f2b7f62c43cba16352eccc4ffa7094fe30e9f8dc4de48bc5f9a7"
+      },
+      "status": "launched; no delivery/review/acceptance inferred",
+      "observed_dispatch_status": "dispatched",
+      "observed_worker_state": "ready"
+    }
   }
 }
