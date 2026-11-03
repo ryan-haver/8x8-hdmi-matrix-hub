@@ -1,0 +1,96 @@
+{
+  "observed_utc": "2026-11-03T03:58:23.325065+00:00",
+  "actors": {
+    "audit03": {
+      "observed_utc": "2026-11-03T03:55:25.853979+00:00",
+      "task_id": "task_a1d5fdadce54",
+      "dispatch_id": "ctx_597f4ffe52bf",
+      "head": "f2ee085a37a40cf8e3fc67aef4bb6fec5e7ad731",
+      "parent": "ac97e1f5886d591562597b5e81c3fa410adda2f8",
+      "report": "docs/production/software-waves/SW-AUDIT-01/execution-20261101/AUTHOR.md",
+      "git_blob_bytes": 227028,
+      "git_blob_sha256": "d3ad3af48e7f63cfbf9752da81048da54b91df53b6871c1e779ce0e108a1ef5e",
+      "working_identical": true,
+      "cr_bytes": 0,
+      "terminal": "released",
+      "publication": "exact task ref remote/local verified",
+      "native_final": {
+        "session": "ses_e6080e92bffegPPto3UPYr8ozy",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "bytes": 658745,
+        "sha256": "507d613f77e63d57690555ff7787b85e62b2e63b916904c65398bd18f5998eb9"
+      },
+      "cleanup": "read-only retention pending independent factual acceptance; no removal",
+      "scope": "one tracked report,49insertions6deletions,424added explanatory words per delivery, original table/census unchanged claim pending independent review",
+      "budget": "five-minute target exceeded: dispatch03:41:06/delivery03:53:23UTC; at least7.1min from first artifact, no deadline pass; coordinator bounded-finish guidance retained",
+      "acceptance": "not accepted until different-family exact-commit re-review",
+      "archives": [
+        {
+          "archive_sha256": "b68f7937d7540a1ed705e0b594e910ca49e53bac767c783ef288ab75d0674253",
+          "regular_files": 4588,
+          "regular_bytes": 303819498,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        {
+          "archive_sha256": "bf23b66c9f3da75c0a9fce3b415259dd1aa88f30fbbc06b7cd50f6e89d18a33a",
+          "regular_files": 107,
+          "regular_bytes": 166266,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      ],
+      "original_integrity": {
+        "old_head": "ac97e1f5886d591562597b5e81c3fa410adda2f8",
+        "new_head": "f2ee085a37a40cf8e3fc67aef4bb6fec5e7ad731",
+        "preexisting_regular_files": 4578,
+        "changed_existing_files": [
+          "docs/production/software-waves/SW-AUDIT-01/execution-20261101/AUTHOR.md"
+        ],
+        "all_old_private_author_correction01_correction02_files_unchanged": true
+      },
+      "integration": "author report integrated as RECORD ONLY, no acceptance until independent exact-commit review"
+    },
+    "findings": {
+      "observed_utc": "2026-11-03T03:52:16.894171+00:00",
+      "task_id": "task_003f9f06ee62",
+      "dispatch_id": "ctx_8f2f304eeed7",
+      "head": "f2af2f38f1ea95891de39b8e64fd0ab7826336de",
+      "parent": "3602a4e4ad3333d4be989ce34b8285e73cbd472c",
+      "report": "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/AUTHOR.md",
+      "git_blob_bytes": 22552,
+      "git_blob_sha256": "647ec87929e485f6df45151a03a528214644cfb8b610c012fd9792289df9e3e8",
+      "working_identical": true,
+      "cr_bytes": 0,
+      "terminal": "released",
+      "publication": "exact task ref remote/local verified",
+      "native_final": {
+        "session": "ses_e6080b9f5ffen66hRLrq2lTFjt",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "bytes": 471481,
+        "sha256": "a3eb0bec074a1a4ec0ad3b3264c6d1721320b3613c3aea422b9d2bf8db04aeed"
+      },
+      "cleanup": "read-only retention pending factual acceptance and evidence history; no removal",
+      "claims_pending_review": "265total/61open/204closed, original59carried+VAL14/15, zero removals; current static delta only, no source/runtime/finding closure",
+      "archives": [
+        {
+          "archive_sha256": "49de1dcb7c677c90484e7529ad7cd86dadb3c5195d48b349ed3a52f374f2f5be",
+          "regular_files": 4612,
+          "regular_bytes": 300377142,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        {
+          "archive_sha256": "c762dd6bedf58959e9860004fbdd22b93f1eb8f25e9ccda8551f0d0b24d66a53",
+          "regular_files": 103,
+          "regular_bytes": 164426,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      ],
+      "integration": "author report integrated as RECORD ONLY, no acceptance until independent exact-commit review"
+    }
+  },
+  "no_source_or_feature_qualification": true,
+  "EV_documentation_acceptance": "unchanged and bounded; original preservation/source qualification false"
+}

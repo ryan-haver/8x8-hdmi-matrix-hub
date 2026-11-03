@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-03T03:42:04.327171+00:00",
+  "observed_utc": "2026-11-03T03:58:23.325065+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -209,7 +209,8 @@
         "bytes": 126496,
         "sha256": "464e674ed36f0a551042f72172518e8e8f28db47dbb52477b95dbb1b5873a736"
       },
-      "status": "active, no delivery/review/acceptance claimed"
+      "status": "delivered f2ee; released/preserved/published, exact-commit re-review prepared",
+      "report_commit": "f2ee085a37a40cf8e3fc67aef4bb6fec5e7ad731"
     }
   },
   "automatic_retakes": false,
@@ -323,7 +324,9 @@
       "bytes": 85484,
       "sha256": "a2afc3371cc51f9e11b4e322c8a686d512c385db42bd7a6e9254d457666fde21"
     },
-    "status": "active, no delivery/review/acceptance claimed",
-    "scope": "current remaining delta to accepted59-row historical DeepSeek triage, no finding/source closure"
+    "status": "delivered f2af; released/preserved/published, independent exact-commit review prepared",
+    "scope": "current remaining delta to accepted59-row historical DeepSeek triage, no finding/source closure",
+    "report_commit": "f2af2f38f1ea95891de39b8e64fd0ab7826336de",
+    "parser_state_claim": "265total/61open/204closed, original59+VAL14/15, pending independent review"
   }
 }

@@ -1,6 +1,6 @@
 {
   "observed_utc": "2026-11-03T03:42:04.327171+00:00",
-  "status": "two independent accepted-plan metadata assignments active",
+  "status": "both authors delivered/released, independent exact-commit reviews prepared",
   "run": "run_37205f6095b3",
   "runtime": "e8ce3460-a9d4-4897-8e4f-10a8e3cdc400",
   "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
@@ -36,7 +36,8 @@
         "bytes": 126496,
         "sha256": "464e674ed36f0a551042f72172518e8e8f28db47dbb52477b95dbb1b5873a736"
       },
-      "status": "active, no delivery/review/acceptance claimed"
+      "status": "delivered; released/preserved/published; not accepted",
+      "report_commit": "f2ee085a37a40cf8e3fc67aef4bb6fec5e7ad731"
     },
     "findings": {
       "task_id": "task_003f9f06ee62",
@@ -67,7 +68,8 @@
         "bytes": 85484,
         "sha256": "a2afc3371cc51f9e11b4e322c8a686d512c385db42bd7a6e9254d457666fde21"
       },
-      "status": "active, no delivery/review/acceptance claimed"
+      "status": "delivered; released/preserved/published; not accepted",
+      "report_commit": "f2af2f38f1ea95891de39b8e64fd0ab7826336de"
     }
   },
   "findings_provisioning": {
