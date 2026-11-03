@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-03T05:01:05.512701+00:00",
+  "observed_utc": "2026-11-03T05:03:18.654985+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -472,11 +472,42 @@
       "review_state": "independent exact-commit review launched, no verdict acceptance"
     },
     "correction02": {
-      "status": "prepared, not launched",
-      "base": "487a6ca7afaf65882fb490880421f0026ae59cc5",
-      "task_id": null,
-      "dispatch_id": null
-    }
+      "task_id": "task_37183952cac7",
+      "dispatch_id": "ctx_160f933c1154",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-findings-01",
+      "actual_branch": "ryan-haver/wp-exec-sw-findings-01",
+      "exact_entry_base": "487a6ca7afaf65882fb490880421f0026ae59cc5",
+      "report": "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/AUTHOR.md",
+      "scope": "R3 _SECRET_KEYS versus _SECRET_QUERY, R5 six separate Ruff tokens only; no new audit/selfcheck harness",
+      "launch": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "turn_start": "unsupported",
+      "native_entry": {
+        "status": "native MiniMax-M3 attested at exact Task/Dispatch/directory",
+        "session": "ses_e6036b300ffe9koOcJWNjCrEKr",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "CLI_effort_override": "unsupported; exact project routing inherited",
+        "bytes": 84616,
+        "sha256": "e3e01dcb4a98bebf31898e98415e00b2d92e14b38182dd0b8d54e52a6828051f"
+      },
+      "status": "author correction launched, no delivery/review/acceptance inferred",
+      "observed_dispatch_status": "dispatched",
+      "observed_worker_state": "ready"
+    },
+    "author_correction_state": "new bounded author correction launched; no acceptance"
   },
   "CI_attribution": {
     "status": "review require_changes seven reporting corrections; core56mapping verified, correction01 prepared",
@@ -559,10 +590,41 @@
     },
     "review_state": "independent exact-commit review launched, no verdict acceptance",
     "correction01": {
-      "status": "prepared, not launched",
-      "base": "d86b65c271cc06d95895b8abdce53e24210bc6d9",
-      "task_id": null,
-      "dispatch_id": null
-    }
+      "task_id": "task_f88cda2cf757",
+      "dispatch_id": "ctx_c3d0257ab154",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-ci-attribution",
+      "actual_branch": "ryan-haver/wp-exec-ev-ci-attribution",
+      "exact_entry_base": "d86b65c271cc06d95895b8abdce53e24210bc6d9",
+      "report": "docs/production/software-waves/EV-CI-ATTRIBUTION/execution-20261101/AUTHOR.md",
+      "scope": "R1-R7 arithmetic/future-path/Flic-API context/gates/qualification/method wording only;56core mappings untouched",
+      "launch": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "turn_start": "unsupported",
+      "native_entry": {
+        "status": "native MiniMax-M3 attested at exact Task/Dispatch/directory",
+        "session": "ses_e6036a1caffef30r0KYYPYu178",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "CLI_effort_override": "unsupported; exact project routing inherited",
+        "bytes": 176800,
+        "sha256": "ec79e0efc1301fbb9d26b30641524095f3493b4f8f790f61d7f5e074841cc456"
+      },
+      "status": "author correction launched, no delivery/review/acceptance inferred",
+      "observed_dispatch_status": "dispatched",
+      "observed_worker_state": "ready"
+    },
+    "author_correction_state": "new bounded author correction launched; no acceptance"
   }
 }
