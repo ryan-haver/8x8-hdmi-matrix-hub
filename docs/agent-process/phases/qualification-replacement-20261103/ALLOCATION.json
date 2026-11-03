@@ -1,6 +1,6 @@
 {
-  "observed_utc": "2026-11-03T18:01:20.091487+00:00",
-  "status": "firsttwoR1delivered, OpenAIthirdpreparednotlaunched",
+  "observed_utc": "2026-11-03T18:03:59.845260+00:00",
+  "status": "R1firsttwo preserved, thirdindependentassessmentlaunched",
   "phase": "qualification-replacement-20261103",
   "frozen_input_sha256": "fc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9",
   "all_round1_bases": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
@@ -194,7 +194,7 @@
       "effort": "high",
       "base": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
       "worktree_name": "wp-qr-r1-openai",
-      "expected_branch": null,
+      "expected_branch": "ryan-haver/wp-qr-r1-openai",
       "spec": "docs/agent-process/phases/qualification-replacement-20261103/tasks/ROUND1_OPENAI.txt",
       "report": "docs/agent-process/phases/qualification-replacement-20261103/round1/openai.md",
       "title": "Qualification replacement R1 independent OpenAI assessment",
@@ -205,9 +205,45 @@
         "round1",
         "openai"
       ],
-      "stage": "prepared next independentR1, notlaunched",
+      "stage": "launched/nodeliveryyet",
       "branch_reservation": "planning/qr-20261103-r1-openai",
-      "creation": "genuineworker-start new-top-level; returnedactualbranchmustberecorded, reservationnotassumed"
+      "creation": "genuineworker-start new-top-level; returnedactualbranchmustberecorded, reservationnotassumed",
+      "actual_assignment": {
+        "task_id": "task_62000ea30205",
+        "dispatch_id": "ctx_f2421e534169",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-openai",
+        "actual_branch": "ryan-haver/wp-qr-r1-openai",
+        "exact_base": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
+        "report": "docs/agent-process/phases/qualification-replacement-20261103/round1/openai.md",
+        "frozen_input_sha256": "fc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9",
+        "launch": {
+          "requested": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          },
+          "effective": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        },
+        "turn_start": "observed",
+        "native_entry": {
+          "status": "nativeOpenAI Astra/high attestedatexactTask/Dispatch/cwd",
+          "session": "01a1a293-aef8-7693-bc71-ba1ddae999fc",
+          "models": [
+            "gpt-6-astra"
+          ],
+          "effort": "highnative",
+          "bytes": 533873,
+          "sha256": "060aa97f0c88164d4200ee9998e680aac3289cc83a2393cdeefea59b936d69de"
+        },
+        "status": "thirdindependentR1launched, nodelivery/peerchallenge/consensus/qualificationinferred",
+        "observed_dispatch_status": "dispatched",
+        "observed_worker_state": "ready"
+      },
+      "actual_branch": "ryan-haver/wp-qr-r1-openai"
     }
   },
   "first_execution_wave": [
