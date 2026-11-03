@@ -1,6 +1,6 @@
 {
-  "observed_utc": "2026-11-03T19:14:53.613853+00:00",
-  "status": "Opus5.5 submission preserved/UNJUDGED; ONE fresh OpenAI judge prepared not launched",
+  "observed_utc": "2026-11-03T19:17:09.418931+00:00",
+  "status": "ONE fresh Astra/high exact-report judge launched; qualification pending",
   "phase": "qualification-replacement-20261103",
   "frozen_input_sha256": "fc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9",
   "all_round1_bases": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
@@ -1349,11 +1349,46 @@
       "task_5b5162506677"
     ],
     "final_packet_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74",
-    "stage": "prepared, not provisioned or dispatched",
+    "stage": "launched, no verdict delivered yet",
     "gate_path": [
       "replacement_qualification",
       "judge"
     ],
-    "qualification_judge_budget": 1
+    "qualification_judge_budget": 1,
+    "actual_assignment": {
+      "task_id": "task_ea5e42f11e94",
+      "dispatch_id": "ctx_4492909a6860",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-opus55-20261103-review",
+      "actual_branch": "execution/qual-opus55-20261103-review",
+      "exact_base": "1d49014bbf4d040e56d8a709952b31a10c20232e",
+      "report": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/replacement-opus55-20261103/REVIEW.md",
+      "frozen_input_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "nativeOpenAI Astra/high attestedatexactTask/Dispatch/cwd",
+        "session": "01a1a2d7-348e-75a1-8ff2-cca40f80df34",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "highnative",
+        "bytes": 621688,
+        "sha256": "1d23789bb22ab5ffb0cb6da7f698c90a0c4a971efba7d3788eb3fb8efa0ffb45"
+      },
+      "status": "ONE fresh independent exact-report judge launched; no verdict or qualification inferred",
+      "observed_dispatch_status": "dispatched",
+      "observed_worker_state": "ready"
+    }
   }
 }

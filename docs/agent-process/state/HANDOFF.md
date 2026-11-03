@@ -1,5 +1,16 @@
 # Current coordinator handoff
 
+## Fresh Opus5.5 qualification judgement active — 2026-11-03T19:17:09.418931+00:00
+
+Genuine OpenAI Astra/high Task task_ea5e42f11e94 / Dispatch ctx_4492909a6860, NEW dedicated wp-exec-qual-opus55-20261103-review / actualbranch execution/qual-opus55-20261103-review, EXACT candidate report1d49014b base (parentcaAA), sole NEW replacement-opus55-20261103/REVIEW.md and assigned ignored/temp. Native entry {"status": "nativeOpenAI Astra/high attestedatexactTask/Dispatch/cwd", "session": "01a1a2d7-348e-75a1-8ff2-cca40f80df34", "models": ["gpt-6-astra"], "effort": "highnative", "bytes": 621688, "sha256": "1d23789bb22ab5ffb0cb6da7f698c90a0c4a971efba7d3788eb3fb8efa0ffb45"}; observed dispatch dispatched. Judge must independently examine actual source/assertions/original native tool proof/raw receipts against ALL SIX unchanged rubric axes, including new issues and factual calibration; no forcedPASS, no missing evaluator reads repaired by judge. Actual native identity not itself competence.
+
+Candidate positively released, full originals/workspace/temp/native preserved and task ref published/exactverified; report integrated only as UNJUDGED submission. Nine planning contributions and ONE candidate delivered; this is the ONE authorized fresh judge, no automatic author rewrite/retake/newjudge. SourceOpenAI authorship stays actual; evaluating Anthropic review quality does not accept OpenAI source. Finalpacketdfd43355/consensusd599/rubric66f370 and sourcecaaa unchanged.
+
+Fresh joint quotas before exact-branch agent-free provision and genuine start; current readings79%Claude/34%OpenAI weekly with unknown absolute allowance/otherhost demand, bounded onejudge target/reserve, no alternatepair or fundingguarantee. Prewave integration f3e9fa25e06b4c3a478b37bc36430700ba80394d pushed and exact remote/local verified. Full134-row two-page fleet127released/7retained=six historical plus one current judge resource; onejudge+coordinator+protectedexternal3<=4, no nesting. All exact settled trees retained, no cleanup.
+
+No qualification/source/release pass yet. Both4.7FAILs/currentemptydomains/all61findings/privacy/HIL/72h/week/finalrelease gates unchanged, original3Tronclosed. Private judge-launch-publication.json postpushreceiptoutsidecommit. Publish/verify scoped launch record then end turn for Orca delivery wake, no polling.
+
+
 ## Opus5.5 report preserved; fresh exact-report judgement prepared — 2026-11-03T19:14:53.613853+00:00
 
 Candidate Task5b51/ctx5e62 delivered1d49014b(parentexactcaAA), sole new AUTHOR.md27505canonicalbytes SHA34074c8c..., full native2182789bytes SHA76a5ef49... actualOpus5.5/nohelpers; high explicitlaunch/config, native perturneffortnotexposed. Exact worker released, taskrefremote/local verified, full workspace/temp archives rehashed and originals retained. Integrated submission as UNJUDGED record 091d5f56f1dcb2e5facb2a73604f7079e44e7e05, not qualification or source acceptance. Structural receipts corroborate direct0 collect/focused/docs and JUnit54/489, originalfullstreams/argv/env/time/temp retained; one LowF1/I1-I3 and substantive claims require actual independent judgement, no coordinator semantic pass.
