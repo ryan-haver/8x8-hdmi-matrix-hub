@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-03T17:47:23.285520+00:00",
+  "observed_utc": "2026-11-03T17:50:39.672826+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -1510,7 +1510,7 @@
     "dispatch_id": null
   },
   "replacement_qualification": {
-    "status": "owner approved prospective planning and ONE replacementassessment; R1prepared/notlaunched",
+    "status": "R1independentassessments underway, OpenAIthirdreservednextslot; notconsensusorqualification",
     "authorization": "docs/agent-process/phases/qualification-replacement-20261103/AUTHORIZATION.json",
     "input_sha256": "fc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9",
     "candidate": "claude-opus-5-5/high",
@@ -1519,14 +1519,77 @@
     "qualified_domains": [],
     "round1": {
       "anthropic": {
-        "status": "ready for firsttwo",
-        "task_id": null,
-        "dispatch_id": null
+        "task_id": "task_b2647dfbc03e",
+        "dispatch_id": "ctx_cf269c96096f",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-anthropic",
+        "actual_branch": "planning/qr-20261103-r1-anthropic",
+        "exact_base": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
+        "report": "docs/agent-process/phases/qualification-replacement-20261103/round1/anthropic.md",
+        "frozen_input_sha256": "fc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9",
+        "launch": {
+          "requested": {
+            "agent": "claude",
+            "model": "claude-opus-5-5",
+            "effort": "high"
+          },
+          "effective": {
+            "agent": "claude",
+            "model": "claude-opus-5-5",
+            "effort": "high"
+          }
+        },
+        "turn_start": "observed",
+        "native_entry": {
+          "status": "native Anthropic Opus5.5 attested at exact Task/Dispatch/cwd",
+          "session": "b4f339f3-b571-43e2-b310-90b7c14299c2",
+          "models": [
+            "claude-opus-5-5"
+          ],
+          "effort": "high explicit supportedlaunch/localconfig; nativeperturneffortnotexposed",
+          "bytes": 558861,
+          "sha256": "fef6a0b59c7819e120898401f4853b629a06aee0d7a62fad1ccca22f7e6d1d1e",
+          "unassigned_helper_tools_observed": [],
+          "scope": "pointintime nativecapture, not descendantcensus"
+        },
+        "status": "R1launched, independentassessment not yetdelivered; no planningconsensus or qualification",
+        "observed_dispatch_status": "dispatched",
+        "observed_worker_state": "ready"
       },
       "minimax": {
-        "status": "ready for firsttwo",
-        "task_id": null,
-        "dispatch_id": null
+        "task_id": "task_8fda5920c385",
+        "dispatch_id": "ctx_11e7bd819fd5",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-minimax",
+        "actual_branch": "planning/qr-20261103-r1-minimax",
+        "exact_base": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
+        "report": "docs/agent-process/phases/qualification-replacement-20261103/round1/minimax.md",
+        "frozen_input_sha256": "fc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9",
+        "launch": {
+          "requested": {
+            "agent": "opencode2",
+            "model": null,
+            "effort": null
+          },
+          "effective": {
+            "agent": "opencode2",
+            "model": null,
+            "effort": null
+          }
+        },
+        "turn_start": "unsupported",
+        "native_entry": {
+          "status": "native MiniMaxM3 attested at exact Task/Dispatch/directory",
+          "session": "ses_e5d7845e8ffe7Y93J2oaPGju3F",
+          "models": [
+            "minimax-coding-plan/MiniMax-M3"
+          ],
+          "variant": "thinking",
+          "CLI_effort_override": "unsupported, exact projectrouteinherited",
+          "bytes": 121158,
+          "sha256": "ebcb5217ace8affe1d5b1adef8b8b54534f5094cdcecb77222171824302e6ae7"
+        },
+        "status": "R1launched, independentassessment not yetdelivered; no planningconsensus or qualification",
+        "observed_dispatch_status": "dispatched",
+        "observed_worker_state": "ready"
       },
       "openai": {
         "status": "planned/reserved next free slot, not launched",
