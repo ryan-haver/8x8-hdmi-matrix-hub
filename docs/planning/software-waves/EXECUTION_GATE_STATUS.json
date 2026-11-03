@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-03T05:25:24.967750+00:00",
+  "observed_utc": "2026-11-03T05:26:19.710785+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -552,7 +552,7 @@
           "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
         }
       },
-      "review_state": "corrected author submission unaccepted; new independent re-review prepared, not launched",
+      "review_state": "independent exact-commit review launched, no verdict acceptance",
       "prepared_independent_review": {
         "base": "a2dab11cdc871d6a98c563b019a361371a9af710",
         "spec": "FINDINGS_CORRECTION02_REREVIEW_TASK.txt",
@@ -568,6 +568,41 @@
         "budget": "5min target; complete4insertions2deletions/context, no61row re-audit",
         "task_id": null,
         "dispatch_id": null
+      },
+      "independent_review": {
+        "task_id": "task_5016bec03442",
+        "dispatch_id": "ctx_b4174280ec27",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-findings-01-rereview02",
+        "actual_branch": "ryan-haver/wp-exec-sw-findings-01-rereview02",
+        "exact_entry_base": "a2dab11cdc871d6a98c563b019a361371a9af710",
+        "observed_head": "a2dab11cdc871d6a98c563b019a361371a9af710",
+        "new_report": "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/CORRECTION_REVIEW_02.md",
+        "launch": {
+          "requested": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          },
+          "effective": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        },
+        "turn_start": "observed",
+        "native_entry": {
+          "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+          "session": "01a19fde-fbe9-78a3-8565-555b8692359a",
+          "models": [
+            "gpt-6-astra"
+          ],
+          "effort": "high native",
+          "bytes": 412857,
+          "sha256": "e516ba5c1387dcc0d0dba4d7d03a1c0bb2b350bdd683026f83de4e46c1d231e8"
+        },
+        "status": "launched; no verdict or report acceptance inferred",
+        "observed_dispatch_status": "dispatched",
+        "observed_worker_state": "ready"
       }
     },
     "author_correction_state": "new bounded author correction launched; no acceptance"
@@ -742,7 +777,7 @@
           "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
         }
       },
-      "review_state": "corrected author submission unaccepted; new independent re-review prepared, not launched",
+      "review_state": "independent exact-commit review launched, no verdict acceptance",
       "prepared_independent_review": {
         "base": "b1ca1390f90652bf25fcb8ce73efb211c1b666da",
         "spec": "CI_ATTRIBUTION_CORRECTION01_REREVIEW_TASK.txt",
@@ -758,6 +793,41 @@
         "budget": "10min target; complete R1-R7 correction/context, prior56unit proof preserved without repeat audit",
         "task_id": null,
         "dispatch_id": null
+      },
+      "independent_review": {
+        "task_id": "task_3916f3c5ba32",
+        "dispatch_id": "ctx_67980920fabd",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-ci-attribution-rereview01",
+        "actual_branch": "ryan-haver/wp-exec-ev-ci-attribution-rereview01",
+        "exact_entry_base": "b1ca1390f90652bf25fcb8ce73efb211c1b666da",
+        "observed_head": "b1ca1390f90652bf25fcb8ce73efb211c1b666da",
+        "new_report": "docs/production/software-waves/EV-CI-ATTRIBUTION/execution-20261101/CORRECTION_REVIEW_01.md",
+        "launch": {
+          "requested": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          },
+          "effective": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        },
+        "turn_start": "observed",
+        "native_entry": {
+          "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+          "session": "01a19fdf-372c-7de2-9bd8-d04d13266db1",
+          "models": [
+            "gpt-6-astra"
+          ],
+          "effort": "high native",
+          "bytes": 175526,
+          "sha256": "a8dddc41a7e314231a0d681dcaa4beeb3ff872d5205819ea5aa30eb50364d245"
+        },
+        "status": "launched; no verdict or report acceptance inferred",
+        "observed_dispatch_status": "dispatched",
+        "observed_worker_state": "ready"
       }
     },
     "author_correction_state": "new bounded author correction launched; no acceptance"
