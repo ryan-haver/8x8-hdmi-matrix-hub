@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-03T05:30:57.896706+00:00",
+  "observed_utc": "2026-11-03T05:33:04.599002+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -905,6 +905,33 @@
     "current_review_commit": "79b08fd075f933ba63be908cb67707781cdd1ed4",
     "review_verdict": "accept within bounded documentation scope",
     "coordinator_disposition": "docs/production/software-waves/EV-CI-ATTRIBUTION/execution-20261101/COORDINATOR_DISPOSITION.json",
+    "source_or_feature_qualification": false
+  },
+  "repo_early_intake": {
+    "status": "prepared, not launched",
+    "exact_entry_base": "61957a47cf91c504f48149a6c43a3dfea3cdd032",
+    "scoped_ids": [
+      "SEC-14",
+      "SEC-15",
+      "DEP-05"
+    ],
+    "coordinator_authorized_scoped_intake": {
+      "scope": "accepted current findings metadata for these three IDs plus preserved accepted historical SW-REPO inventory",
+      "accepted_published_commit": "61957a47cf91c504f48149a6c43a3dfea3cdd032",
+      "publication_receipt": "private cf-accepted-publication.json exact remote/local equality verified again now",
+      "current_findings_author": "a2dab11cdc871d6a98c563b019a361371a9af710",
+      "review_chain": [
+        "00b7b04994a08d45961c67619d402506ba2a65a3",
+        "43356a0c0d0948719bf989d7bd824631d8c89a0e",
+        "ac9c4d49fd3c8fb88971c2d8fd59118e1019d7b7"
+      ],
+      "coordinator_disposition": "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/COORDINATOR_DISPOSITION.json",
+      "remaining": "All SW-REPO completion dependencies and actual candidate security/license/history/hygiene/secret-scan proof remain mandatory and unsatisfied; no silent dependency deletion",
+      "coordinator_authorization": "existing scoped-intake resolver applied to these three accepted intake rows only; no source lease or phase/release approval"
+    },
+    "task_id": null,
+    "dispatch_id": null,
+    "package_completion": false,
     "source_or_feature_qualification": false
   }
 }
