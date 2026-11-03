@@ -1,0 +1,82 @@
+{
+  "observed_utc": "2026-11-03T01:49:18.290032+00:00",
+  "status": "two independent report reviews active; results pending",
+  "run": "run_37205f6095b3",
+  "runtime": "e8ce3460-a9d4-4897-8e4f-10a8e3cdc400",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "reviewers": {
+    "judge": {
+      "task_id": "task_3a3a04200302",
+      "dispatch_id": "ctx_5db4e4b62a69",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-anthropic-core-01-review",
+      "base": "97c47be3670df297b2a7ac2696350615b88846c1",
+      "actual_branch": "ryan-haver/wp-exec-qual-anthropic-core-01-review",
+      "requested_and_effective": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+        "session": "01a19f16-8c54-7ea3-a2e7-6bfa1f2d9688",
+        "model": "gpt-6-astra",
+        "effort": "high native",
+        "bytes": 662398,
+        "sha256": "d742491f130016282137dcf3560a620251a30ed11b0ea228a1349607e3de30d1"
+      },
+      "status": "active; report/verdict pending"
+    },
+    "audit": {
+      "task_id": "task_b6f6a269c364",
+      "dispatch_id": "ctx_e3e2bd49b348",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01-review",
+      "base": "13fe2ae8d423d8e43065b08a8767109e011c61c0",
+      "actual_branch": "ryan-haver/wp-exec-sw-audit-01-review",
+      "requested_and_effective": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+        "session": "01a19f16-09ea-7061-8452-cc919ca9b6de",
+        "model": "gpt-6-astra",
+        "effort": "high native",
+        "bytes": 715655,
+        "sha256": "55f315c9c2d5aae804111e3a06003825d7c77ba4d3dc5f061b98052720a1b58a"
+      },
+      "status": "active; report/verdict pending"
+    }
+  },
+  "author_delivery_status": "Anthropic evaluation97c47 and M3inventory13fe delivered, both released/published/preserved; neither source qualification nor inventory acceptance granted",
+  "prior_judge": "Sol ctx_f7db39e6c800 native at capacity, stopped/released; uncommitted original FAIL preserved with full dirty archive/native/Git recovery",
+  "same_judge_task": "task_3a3a04200302 reused by Astra ctx_5db4e4b62a69 with retry_of previous stopped Dispatch; evaluator/report/rubric/path/family unchanged; not candidate qualification rerun",
+  "capacity_handover_guidance": "high-priority explicit coordinator handoff durably enqueued to new active judge Dispatch; original Sol clean/model instruction overridden transparently by committed continuation file and preserved original Task history",
+  "control_plane_correction": {
+    "rejected_request": "368c1548-08a8-4d46-9e01-0df98401605c",
+    "cause": "coordinator had marked Task ready; installed --retry-of requires failed/blocked, so start rejected before new Dispatch",
+    "resolution": "inspected actual latest failed/stopped Dispatch, restored original capacity-blocked Task state with reason, same-Task retry_of then accepted; original rejection and both state changes retained, no failure-count reset or new Task/Run workaround"
+  },
+  "concurrency": "max2newworkers+coordinator+protectedexternal=4, no nesting",
+  "next": "settle/preserve each delivered reviewer, apply exact-commit findings, route author corrections if needed; qualification pass/hold/fail and source acceptance remain separate",
+  "source_qualification_granted": false,
+  "source_integrated": false,
+  "new_hardware_or_release_authority": false
+}
