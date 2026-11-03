@@ -1,5 +1,8 @@
 # Model and agent inventory
 
+Current qualification update (2026-11-03T19:29:56.832704+00:00): native Anthropic **Opus5.5/high** passed independent OpenAI judgement for **bounded Python validation-runner/model offline simulator API refusal preparation and relevant compatibility guards** only. See [the exact scoped disposition](../production/software-waves/QUAL-ANTHROPIC-CORE-01/replacement-opus55-20261103/COORDINATOR_DISPOSITION.json). Fresh task/domain/route/capacity and independent exact-commit source review remain required; no broad core or authorship entitlement and no automatic reservation unlock. The owner's2026-11-01 direction allows Anthropic/Gemini/OpenAI/MiniMax; DeepSeek remains unavailable. The dated inventory and exclusion wording below are historical, superseded for future routing, and retained with their actual provenance.
+
+
 For future staffing, read the [standing Orca protocol](../ORCHESTRATION_PROTOCOL.md)
 and maintain the [allocation ledger](../production/AGENT_ALLOCATION.md). Refresh
 catalogs, supported host/adapter selection and measured quota before each

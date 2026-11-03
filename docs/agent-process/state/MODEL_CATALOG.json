@@ -332,5 +332,49 @@
     "google_status": "held; exact native route/helpers/capacity not verified",
     "deepseek_dispatch_allowed": false,
     "implementation_launched_by_this_task": false
-  }
+  },
+  "dated_qualification_updates": [
+    {
+      "observed_utc": "2026-11-03T19:29:56.832704+00:00",
+      "qualification": {
+        "model": "claude-opus-5-5",
+        "family": "Anthropic",
+        "route": "native Claude via genuine Orca supervised worker, local Zelu win32",
+        "effort": "high supported explicit launch/local config; native per-turn effort unobservable",
+        "status": "PASS",
+        "scope": "bounded Python validation-runner/model offline simulator API refusal preparation and relevant compatibility guards",
+        "role_limit": "bounded review/validation-preparation competence demonstrated; no general implementation authorship or broad core-review entitlement",
+        "evaluated_source": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+        "review_base": "938ae30339790c361abdda6fdd01b11a4e498518",
+        "evaluator_report_commit": "1d49014bbf4d040e56d8a709952b31a10c20232e",
+        "independent_judge_family": "OpenAI",
+        "independent_judge_model": "gpt-6-astra/high",
+        "judge_report_commit": "dda63d661d143a591d6d3d82346457fb52199795",
+        "disposition": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/replacement-opus55-20261103/COORDINATOR_DISPOSITION.json",
+        "fresh_task_match_required": true,
+        "automatic_reservation_unlock": false
+      },
+      "native_candidate": {
+        "session": "f2d52957-9554-4636-917b-b83780388faa",
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "effort": "high explicit launch/config; native per-turn effort not exposed",
+        "bytes": 2182789,
+        "sha256": "76a5ef49087827f0874bcd8bfdf41586bceb8302e8d08bbedeb7406fc3b533aa",
+        "unassigned_helper_tools_observed": []
+      },
+      "independent_judge": {
+        "session": "01a1a2d7-348e-75a1-8ff2-cca40f80df34",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native turn_context",
+        "bytes": 1875545,
+        "sha256": "6d0ddf7d31f89fc6003bd4bd5d23388e4ac51d8c89b27cfdfd7309c996f76672",
+        "unassigned_helper_calls_observed": []
+      },
+      "history_limit": "Original catalog date/observations and Opus4.7 failures unchanged; this update only native Opus5.5 bounded review qualification, current quota separately required"
+    }
+  ]
 }

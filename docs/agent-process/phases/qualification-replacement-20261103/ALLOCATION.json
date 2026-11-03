@@ -1,6 +1,6 @@
 {
-  "observed_utc": "2026-11-03T19:17:09.418931+00:00",
-  "status": "ONE fresh Astra/high exact-report judge launched; qualification pending",
+  "observed_utc": "2026-11-03T19:29:56.832704+00:00",
+  "status": "qualification phase completed: scoped Opus5.5 PASS, all current workers released; no source acceptance or auto-unlock",
   "phase": "qualification-replacement-20261103",
   "frozen_input_sha256": "fc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9",
   "all_round1_bases": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
@@ -320,25 +320,24 @@
   "independent_future_judge": "OpenAI Astra/high at exactfutureAnthropicevaluationreport, one judge under ownerapproval",
   "demand": "9 bounded prose planning contributions (R1/R2 target4min/<=600words inclJSON, R3 target2min explicitverdict), one15min candidateassessment and one15min independentjudge; later stages separatelycapacitygated, no unsupportedtoken/cost forecasts",
   "capacity": {
-    "observed_utc": "2026-11-03T19:14:53.613853+00:00",
-    "source": "supported orca account list, cached usage; no absolute allowance exposed",
-    "other_host_demand": "unknown; not zero",
-    "reserve": "one remaining fresh15min-target judge; nine planning contributions and ONE candidate already completed. No extra retry/author rewrite/new judge authority. Absolute allowance and other-host demand unknown.",
+    "observed_utc": "2026-11-03T19:29:56.832704+00:00",
+    "source": "supported Orca cached usage, dated observation not future dispatch headroom",
+    "other_host_demand": "unknown",
     "claude": {
       "status": "ok",
       "session": {
         "usedPercent": 5,
         "windowMinutes": 300,
-        "resetsAt": 1793740800138,
+        "resetsAt": 1793740800118,
         "resetDescription": "2:20 PM"
       },
       "weekly": {
         "usedPercent": 21,
         "windowMinutes": 10080,
-        "resetsAt": 1793966400138,
+        "resetsAt": 1793966400118,
         "resetDescription": "Fri 5:00 AM"
       },
-      "updatedAt": 1793733226198,
+      "updatedAt": 1793734126138,
       "error": null
     },
     "codex": {
@@ -350,33 +349,51 @@
         "resetsAt": 1793774164000,
         "resetDescription": "11:36 PM"
       },
-      "updatedAt": 1793733226499,
+      "updatedAt": 1793734126433,
+      "error": null
+    },
+    "minimax": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 31,
+        "windowMinutes": 300,
+        "resetsAt": 1793740313659,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 26,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932876,
+        "resetDescription": null
+      },
+      "updatedAt": 1793734126023,
       "error": null
     }
   },
   "fleet": {
-    "total": 133,
+    "total": 134,
     "all_pages": true,
     "pages": [
       {
         "limit": 100,
-        "total": 133,
+        "total": 134,
         "hasMore": true,
-        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMTk4fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwNzo0NTowMiIsImRpc3BhdGNoSWQiOiJjdHhfNWVmNDhiYzExZGYzIiwiZGF0YWJhc2VJZCI6NzMwfX0"
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMjAxfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwODowMDoxOSIsImRpc3BhdGNoSWQiOiJjdHhfZTAxY2NhMTNiNWZlIiwiZGF0YWJhc2VJZCI6NzMxfX0"
       },
       {
         "limit": 100,
-        "total": 133,
+        "total": 134,
         "hasMore": false,
         "nextCursor": null
       }
     ],
     "terminal_counts": {
-      "released": 127,
+      "released": 128,
       "retained": 6
     },
-    "new_active": 0,
-    "historical_retained": 6
+    "current_active_workers": 0,
+    "historical_retained": 6,
+    "protected_external_reservation": "still unproven exit; retained/protected, not cleaned"
   },
   "alternatives": "Opus4.7 two failed mandatoryqualifications retained, Google primaryunavailable and alternate route unqualified/unknown, DeepSeek exhausted, no samefamilyevaluationjudge or silent substitution",
   "protected": "root/private runtime/oldfailedbytes/native/artifacts/baselines/retainedworkspaces/odd untrackedhook artifact; no cleanup/reset/prune/forcepush",
@@ -1349,7 +1366,7 @@
       "task_5b5162506677"
     ],
     "final_packet_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74",
-    "stage": "launched, no verdict delivered yet",
+    "stage": "delivered/released/preserved/published; six-axisPASS accepted bounded domain",
     "gate_path": [
       "replacement_qualification",
       "judge"
@@ -1389,6 +1406,137 @@
       "status": "ONE fresh independent exact-report judge launched; no verdict or qualification inferred",
       "observed_dispatch_status": "dispatched",
       "observed_worker_state": "ready"
+    },
+    "delivery_metadata": {
+      "observed_utc": "2026-11-03T19:27:27.312104+00:00",
+      "head": "dda63d661d143a591d6d3d82346457fb52199795",
+      "base": "1d49014bbf4d040e56d8a709952b31a10c20232e",
+      "tree": "wp-exec-qual-opus55-20261103-review",
+      "actual_branch": "execution/qual-opus55-20261103-review",
+      "report": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/replacement-opus55-20261103/REVIEW.md",
+      "bytes": 21770,
+      "sha256": "c10d4c5c1c784528a5969769a57fb607305845f8486909f7bb5c219cf2681a1a",
+      "task_id": "task_ea5e42f11e94",
+      "dispatch_id": "ctx_4492909a6860",
+      "terminal": "released",
+      "task_ref_publication": "exact remote/local verified",
+      "native_final": {
+        "session": "01a1a2d7-348e-75a1-8ff2-cca40f80df34",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native turn_context",
+        "bytes": 1875545,
+        "sha256": "6d0ddf7d31f89fc6003bd4bd5d23388e4ac51d8c89b27cfdfd7309c996f76672",
+        "unassigned_helper_calls_observed": []
+      },
+      "decision": {
+        "evaluator_commit": "1d49014bbf4d040e56d8a709952b31a10c20232e",
+        "source_candidate": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+        "review_base": "938ae30339790c361abdda6fdd01b11a4e498518",
+        "rubric_sha256": "66f37090564007afebe29cdfd095af7fa85c4321a8420016ada8633dc0563672",
+        "final_packet_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74",
+        "actual_model": "gpt-6-astra",
+        "family": "OpenAI",
+        "effort": "high; own native turn_context attested",
+        "candidate_model": "claude-opus-5-5",
+        "candidate_family": "Anthropic",
+        "axes": {
+          "provenance": {
+            "status": "pass",
+            "evidence": "Original native 166-335/473-474; all nine pinned blobs and full changed-report content; exact evaluator SHA."
+          },
+          "invariants": {
+            "status": "pass",
+            "evidence": "Original native 200-289; model 472-482, runner 467-485/553-554/620-631; original schema-valid refusal records; J1 breadth excluded."
+          },
+          "counterexamples": {
+            "status": "pass",
+            "evidence": "Full C1/C2 assertions, native 393-438, focused JUnit e2d60dcb54fdb881a18c8ad4779d87b2cccee3f26f5e54e75ae1e57286a0c112: 54/0/0/0."
+          },
+          "behavior_and_tools": {
+            "status": "pass",
+            "evidence": "Original manifests 926274ca/011d08c9/53daecd5/5727dc10, unchanged recorder 4831d299, 275 original/copy files matched, native 451/452 process limits."
+          },
+          "calibration": {
+            "status": "pass",
+            "evidence": "AUTHOR sections 8-9; original failed/partial C1/C2 histories retained; no global retry, source acceptance or private-publication claim."
+          },
+          "review_quality": {
+            "status": "pass",
+            "evidence": "F1 static/historical timing support and exact assertions; I1-I3 verified; J1 Low/J2 informational scope corrections explicit; all material execution claims corroborated."
+          }
+        },
+        "verdict": "PASS",
+        "qualified_domain_recommendation": "Coordinator consideration only: bounded Python validation-runner/model offline simulator API refusal preparation and relevant compatibility guards",
+        "source_or_release_acceptance": false,
+        "automatic_reservation_unlock": false,
+        "automatic_retry_authorized": false,
+        "judge_focused_reexecution": false,
+        "remaining_unknowns": [
+          "process termination cause",
+          "complete descendant census",
+          "historical FSEC007 onset",
+          "complete host side-effect inventory"
+        ]
+      },
+      "judge_docs": {
+        "tests": 489,
+        "direct_exit": 0,
+        "receipt_sha256": "30d6aca16af0b7e3bca0aaf873881c4719530014d59c63c62fcba38bf47c244b"
+      },
+      "minor_observations": [
+        "J1 Low capped tools/tests serialization grep does not prove repo-wide negative; rejected breadth not used as invariant proof",
+        "J2 informational omitted ancillary exit2 from absent conftest path, no hidden test retry",
+        "candidate native scratch public-input/report copies outside275 invocation file count, supplemental preservation next"
+      ],
+      "process_history": "judge one UnicodeEncodeError read corrected with UTF8; no focused reexecution or test retry",
+      "cleanup": "retain exact tree read-only; no removal",
+      "preservation": {
+        "wp-exec-qual-opus55-20261103-review": {
+          "archive_sha256": "bfefb25033d5b61268cbc20da95a73b5a800f54d43ab94c33020ba4717b9b710",
+          "archive_bytes": 206080963,
+          "regular_files": 4609,
+          "regular_bytes": 295630211,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "external-judge-opus55": {
+          "archive_sha256": "35f039b6f9dbee72217974e9e52c49094c555e845a670960d3cdafefb816606e",
+          "archive_bytes": 57637,
+          "regular_files": 102,
+          "regular_bytes": 100735,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "external-candidate-native-scratch": {
+          "archive_sha256": "fc5aab9844ab7c80bc84f9cb42543188b58a5e715b3438e1436d328b50919641",
+          "archive_bytes": 94063,
+          "regular_files": 7,
+          "regular_bytes": 238594,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      },
+      "integration_commit": "aeb044775b9773c5970c1b828b264f6de0f98d9e"
     }
-  }
+  },
+  "qualification": {
+    "model": "claude-opus-5-5",
+    "family": "Anthropic",
+    "route": "native Claude via genuine Orca supervised worker, local Zelu win32",
+    "effort": "high supported explicit launch/local config; native per-turn effort unobservable",
+    "status": "PASS",
+    "scope": "bounded Python validation-runner/model offline simulator API refusal preparation and relevant compatibility guards",
+    "role_limit": "bounded review/validation-preparation competence demonstrated; no general implementation authorship or broad core-review entitlement",
+    "evaluated_source": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+    "review_base": "938ae30339790c361abdda6fdd01b11a4e498518",
+    "evaluator_report_commit": "1d49014bbf4d040e56d8a709952b31a10c20232e",
+    "independent_judge_family": "OpenAI",
+    "independent_judge_model": "gpt-6-astra/high",
+    "judge_report_commit": "dda63d661d143a591d6d3d82346457fb52199795",
+    "disposition": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/replacement-opus55-20261103/COORDINATOR_DISPOSITION.json",
+    "fresh_task_match_required": true,
+    "automatic_reservation_unlock": false
+  },
+  "phase_complete": true,
+  "source_project_complete": false,
+  "remaining_qualification_attempt_authority": 0
 }
