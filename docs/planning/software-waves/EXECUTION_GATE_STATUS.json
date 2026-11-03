@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-03T02:02:41.705982+00:00",
+  "observed_utc": "2026-11-03T02:59:30.202947+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -95,25 +95,34 @@
     "verdict": "require_changes",
     "material_findings": [
       "R1",
-      "R2",
-      "R3",
       "R4",
       "R5",
       "R6"
     ],
-    "next": "MiniMax author report correction, then exact-commit OpenAI-family re-review; independent of failed core qualification",
+    "next": "M3 targeted correction02 at981, then different-family exact-commit re-review; no inventory acceptance yet",
     "correction": {
       "task_id": "task_1a5ca9009556",
       "dispatch_id": "ctx_f2343717872b",
-      "status": "delivered981e7e4a, independent re-review pending",
+      "status": "delivered; independent d44 re-review requires further targeted changes",
       "base": "13fe2ae8d423d8e43065b08a8767109e011c61c0",
       "report_commit": "981e7e4a48bce07e4dce24443d386b3e0643601a",
       "git_blob_sha256": "f2870b27b3ad12a4f9e0a9d332acfab80a7d2fa23ef128e6fce193cd5d3223c2",
-      "representation_erratum": "reported07c5836d is workingCRLF hash, canonicalGitLF f2870b27; exact normalization, no substantive drift"
-    }
+      "representation_erratum": "reported07c5836d is workingCRLF hash, canonicalGitLF f2870b27; exact normalization, no substantive drift",
+      "re_review_commit": "d44ad2bca78dfe82c4b541e41f861c965cce2461",
+      "re_review_verdict": "require_changes"
+    },
+    "accepted_factual_corrections": [
+      "R2",
+      "R3"
+    ]
   },
   "automatic_retakes": false,
   "owner_decision_pending": "Explicit question presented: authorize one prepared controlled manual new qualification attempt, or assess a different provider. No answer/approval inferred; no retake launched.",
   "proposed_manual_attempt": "docs/production/software-waves/MVP-EXECUTION-20261102/PROPOSED_MANUAL_QUALIFICATION_ATTEMPT02.txt",
-  "product_source_changed_by_this_batch": false
+  "product_source_changed_by_this_batch": false,
+  "preservation_gaps": {
+    "author_commit": "ed78321e51156f229507e654f0cf3faae100b935",
+    "status": "delivered, independent exact-commit factual review prepared",
+    "original_preservation_pass": false
+  }
 }

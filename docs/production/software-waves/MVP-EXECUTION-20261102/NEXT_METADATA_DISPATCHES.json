@@ -1,6 +1,6 @@
 {
   "observed_utc": "2026-11-03T02:44:00.942242+00:00",
-  "status": "two independent metadata tasks active",
+  "status": "both tasks delivered and released; inventory re-review requires changes, preservation report awaits review",
   "run": "run_37205f6095b3",
   "runtime": "e8ce3460-a9d4-4897-8e4f-10a8e3cdc400",
   "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
@@ -33,7 +33,9 @@
         "bytes": 705411,
         "sha256": "fd92b9c7567bdf73ee8c1fdaa07cf7b6873c326dff07b97cbcb92f1b3dbdfa6c"
       },
-      "status": "active, no acceptance granted"
+      "status": "require_changes",
+      "report_commit": "d44ad2bca78dfe82c4b541e41f861c965cce2461",
+      "terminal_state": "released"
     },
     "preservation": {
       "task_id": "task_9456469c267b",
@@ -64,12 +66,15 @@
         "sha256": "997490e7a0fa731642f884140c898ae685046f6f3db98d73fb5f849817ac5371",
         "effort": "CLI override unsupported, project config inherited; no unsupported override"
       },
-      "status": "active, no acceptance granted"
+      "status": "independent exact-commit factual review pending",
+      "report_commit": "ed78321e51156f229507e654f0cf3faae100b935",
+      "terminal_state": "released"
     }
   },
   "concurrency": "max2newworkers+coordinator+protectedoldexternalreservation=4; no nesting",
   "rereview_scope": "corrected M3 report981 canonical Git f2870b27...; new CORRECTION_REVIEW_01.md only, old reviewers/workspaces/reports untouched",
   "preservation_scope": "EV-PRESERVATION-GAPS exactly two historical lost/overwritten-original gaps, no recreated bytes or preservation pass; independent OpenAI factual review after exact author commit",
   "core_qualification": "attempt1FAIL, noqualifieddomain; owner retake decision pending, no answer/approval inferred, no retake launched",
-  "source_or_feature_acceptance": false
+  "source_or_feature_acceptance": false,
+  "completed_observed_utc": "2026-11-03T02:59:30.202947+00:00"
 }
