@@ -43,16 +43,27 @@ Nothing else is dispositioned. In particular this report **does not**:
 
 **Accepted negative-gap disposition versus accepted original evidence/function
 proof.** What follows is a *negative* disposition: two losses are recorded as
-losses, with the surviving material separated from the irrecoverable material
-and from what remains unverifiable. It is **not** an acceptance of the two
+losses, with the surviving material separated from the material the accepted
+records disposition as irrecoverable and from what remains unverifiable. It is **not** an acceptance of the two
 histories, of the artifacts they produced, or of the behaviour they exercised.
 The two must never be read as one: "the gap is disposed" never means "the
 original evidence was accepted" and never means "the original function was
 proved".
 
-**No new evidence was created.** No campaign, gate, ledger, registry check,
-source test or probe ran. The only invocations were the five existing
-documentation modules and report-only UTF-8/CR-aware/reference checks (§7).
+**No new runtime, campaign, qualification or recovered-original evidence was
+produced, in this correction round or the original attempt.** No managed
+failure, validation campaign, gate, ledger generation, registry check,
+source/core/client/image/physical test, recovery probe of the lost material,
+cleanup, push, merge or release ran, and no historical original was recovered,
+reconstructed or substituted. Two kinds of **new inspection metadata** were
+created and are described in §7–§8 and §9: bounded **read-only** hash /
+existence / Git-provenance inspection artifacts (byte-extraction receipts, an
+existence-and-identity probe and a Git provenance proof), and
+**documentation-check** artifacts (the five existing documentation modules'
+own receipts plus the report-only UTF-8/CR-aware/reference checks). The **only
+test invocation** in each recorded round was the five existing documentation
+modules (§7.1, §9.3); the metadata commands were read-only inspection, not
+tests.
 
 ---
 
@@ -60,8 +71,8 @@ documentation modules and report-only UTF-8/CR-aware/reference checks (§7).
 
 | # | Gap | Event, actor, Task/Dispatch, source/report | Accepted recorded failure and limit | Surviving originals (demonstrably retained) | Irrecoverable | Unverifiable / unknown | Acceptance and cleanup consequence |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| **G1** | **Lost original API-C1 managed-failure artifacts** | SW-API-CLIENT-02-C1 declarative-assertion follow-up (F-API-034 only). OpenAI `gpt-6.1-sol/high` author, Task `task_c0d26e9e563e`, Dispatch `ctx_0f27082dc4eb`, Run `run_37205f6095b3`, worker terminal `term_0b99c857-414e-4891-ae63-768327f92812`. Worktree `wp-api-client-02-c1`, branch `ryan-haver/wp-api-client-02-c1`, frozen base `938ae30339790c361abdda6fdd01b11a4e498518`. Source `386872316cb60130b06dd704557ae6ca1a92b5c8`; report `060769b724e7a546b8df22eac82f3b288d9bbbe8` (report-only, one path). | First focused invocation exited **1** with 12 passed / 1 failed: the managed source runner BLOCKED because it requires a healthy Telnet link before any simulator scenario. The raw failed record/hub logs were created under `C:/t/f034-20261029-a/pytest-of-ryanh/pytest-0/test_registered_scenario_with_0/`, and pytest's automatic retention removed that directory **before** the author's preservation copy; the copy failed. Accepted limit: *"Acceptance is partial/UNMET, and the required worker outcome is FAILED."* | `focused-first.log` (1 497 B, SHA-256 `744800b8…a580`); `preservation-status.json` (1 496 B, SHA-256 `93abb25c…2d27`, the authored status receipt); `focused-external.log`; `source-commit-hook.log`; `precommit-ownership-audit.json`; the clean external campaign record (18 179 B, SHA-256 `11849d40…0492`, equal to the hash the accepted report records); the report's 11 878-byte historical DeepSeek prefix (SHA-256 `c2569240…c4e9ff`) byte-identical inside the new report; Git objects for source and report; the published task ref and its verified full Git bundle. | The **original managed BLOCKED raw JSON/hub logs** at the path above. Verified absent now: that directory, its `pytest-0` parent, the `pytest-of-ryanh` parent and the whole `C:/t/f034-20261029-a` root. Permanently unrecoverable; no later run, snapshot, archive or diagnostic restores them. | The original bytes, byte length and SHA-256 of those lost logs are recorded nowhere accepted and are **not invented here**. The raw JSON that showed the actual Telnet blocked reason is gone; the reason survives only as the author's reported symptom in `focused-first.log` and the native tool transcript. | Preservation acceptance stays **UNMET / partial**; the failed outcome is not converted to passed. Cleanup of the owned worktree/temp stays **HELD**. Default managed-runner / all-scenario CI compatibility, qualified review, privacy admission and integration stay **HELD**. The chain `38687231 → 060769b7 → ee3f2e7f → caaa4faa` stays unreviewed and unintegrated. |
-| **G2** | **Overwritten original SW-AUDIT freshness scratch extracts** | SW-AUDIT-01 freshness-delta child (committed-ledger comparison). Native MiniMax-M3 / thinking author, Task `task_02c22e77963a`, Dispatch `ctx_e973d4be3c60`, Run `run_37205f6095b3`, worker terminal `term_ba1c0350-0193-49cb-80d3-019fdcfd3dda`, coordinator terminal `term_dcf96b5a-bb99-4ecb-b887-eb53f7f01662`. Worktree `wp-audit-freshness-delta`, branch `ryan-haver/wp-audit-freshness-delta`, base `d6e78e0b6ab1dab5216443584d810a7a24af32b2`; report `11b09676f78acd76bd1ac47d11a8d8817e8d0624` (one path). Independent factual check: OpenAI coordinator, accepted at `490a879bd346773cca64fac861eaaab29e703628`. | Attempt 1 ran `git show <rev>:docs/validation/LEDGER.md > file` through a shell redirection: exit 0, but every non-ASCII character was mangled (U+2014/U+00B7 → U+FFFD) and the parse found 0 feature rows. The mangled first-pass files were then **replaced** by byte-exact `git cat-file` extracts. Accepted limit (coordinator review): *"The author reports overwriting its first mangled scratch extracts. Their original generated bytes are not preserved or reconstructed as originals. … This is a diagnostic preservation gap, not lost project source or evidence. Retain this worktree and task ref; no destructive cleanup is approved here."* | The **ledger content itself was never lost**: the two committed blobs exist and are byte-exact — `28fce729…:docs/validation/LEDGER.md` (blob `fa0da83c…129a`, 74 831 B, SHA-256 `41d81dae…aecce`, 0 CR, 0 U+FFFD) and `d6e78e0b…:docs/validation/LEDGER.md` (blob `281a7647…4d98`, 74 447 B, SHA-256 `b8078e4d…5cf7`, 0 CR, 0 U+FFFD), matching the report's §1 values exactly. The **replacement** scratch extracts survive and are byte-identical to those blobs (`ledger_old.md`, `ledger_new.md`). The analysis scripts survive (`parse_ledger.py`, `attribute_delta.py`). The report and the coordinator acceptance are in the tree. | The **original generated bytes of the first-pass mangled scratch extracts** (the two files that existed on disk before the byte-exact replacement). Never committed, never hashed in any accepted record, overwritten. Their bytes are unrecoverable and no hash is invented. | The first-pass files' exact byte length, content and SHA-256 are recorded nowhere accepted and are **not invented here**. Whether the mangled files were ever copied elsewhere before replacement is not established by any accepted record and is not asserted. | The accepted freshness-mapping acceptance is **unaffected** — it accepted the report's mapping, not a code review or a runtime qualification. The gap is **diagnostic only**: no canonical ledger, record, finding, manifest, source or baseline byte is affected and no feature level moves. The worktree and task ref must be **retained**; no destructive cleanup is approved by this report. |
+| **G1** | **Lost original API-C1 managed-failure artifacts** | SW-API-CLIENT-02-C1 declarative-assertion follow-up (F-API-034 only). OpenAI `gpt-6.1-sol/high` author, Task `task_c0d26e9e563e`, Dispatch `ctx_0f27082dc4eb`, Run `run_37205f6095b3`, worker terminal `term_0b99c857-414e-4891-ae63-768327f92812`. Worktree `wp-api-client-02-c1`, branch `ryan-haver/wp-api-client-02-c1`, frozen base `938ae30339790c361abdda6fdd01b11a4e498518`. Source `386872316cb60130b06dd704557ae6ca1a92b5c8`; report `060769b724e7a546b8df22eac82f3b288d9bbbe8` (report-only, one path). | First focused invocation exited **1** with 12 passed / 1 failed: the managed source runner BLOCKED because it requires a healthy Telnet link before any simulator scenario. The raw failed record/hub logs were created under `C:/t/f034-20261029-a/pytest-of-ryanh/pytest-0/test_registered_scenario_with_0/`, and pytest's automatic retention removed that directory **before** the author's preservation copy; the copy failed. Accepted limit: *"Acceptance is partial/UNMET, and the required worker outcome is FAILED."* | `focused-first.log` (1 497 B, SHA-256 `744800b8…a580`); `preservation-status.json` (1 496 B, SHA-256 `93abb25c…2d27`, the authored status receipt); `focused-external.log`; `source-commit-hook.log`; `precommit-ownership-audit.json`; the clean external campaign record (18 179 B, SHA-256 `11849d40…0492`, equal to the hash the accepted report records); the report's 11 878-byte historical DeepSeek prefix (SHA-256 `c2569240…c4e9ff`) byte-identical inside the new report; Git objects for source and report; the published task ref and its verified full Git bundle. | The **original managed BLOCKED raw JSON/hub logs** at the path above. Verified absent now: that directory, its `pytest-0` parent, the `pytest-of-ryanh` parent and the whole `C:/t/f034-20261029-a` root. The accepted records disposition these originals as a lost, unrecoverable preservation failure; the bounded inspection performed here did **not** recover them, and that disposition is the accepted record's rather than a newly proven global fact. The present absence of this one temp root is **not** an exhaustive backup search and does **not** prove recovery is universally impossible; copies held elsewhere remain **unverified**. Narrow and still valid: no later run can recreate the original historical bytes. | The original bytes, byte length and SHA-256 of those lost logs are recorded nowhere accepted and are **not invented here**. The raw JSON that showed the actual Telnet blocked reason is gone. Per the original C1 report, `focused-first.log` retains the **count, assertion and BLOCKED outcome**, while the **native tool transcript** records the actual Telnet blocked reason observed from that original JSON; the reason is carried here as an **accepted reported observation**, not as a detail independently found in the log, and no raw payload was read. | Preservation acceptance stays **UNMET / partial**; the failed outcome is not converted to passed. Cleanup of the owned worktree/temp stays **HELD**. Default managed-runner / all-scenario CI compatibility, qualified review, privacy admission and integration stay **HELD**. The chain `38687231 → 060769b7 → ee3f2e7f → caaa4faa` stays unreviewed and unintegrated. |
+| **G2** | **Overwritten original SW-AUDIT freshness scratch extracts** | SW-AUDIT-01 freshness-delta child (committed-ledger comparison). Native MiniMax-M3 / thinking author, Task `task_02c22e77963a`, Dispatch `ctx_e973d4be3c60`, Run `run_37205f6095b3`, worker terminal `term_ba1c0350-0193-49cb-80d3-019fdcfd3dda`, coordinator terminal `term_dcf96b5a-bb99-4ecb-b887-eb53f7f01662`. Worktree `wp-audit-freshness-delta`, branch `ryan-haver/wp-audit-freshness-delta`, base `d6e78e0b6ab1dab5216443584d810a7a24af32b2`; report `11b09676f78acd76bd1ac47d11a8d8817e8d0624` (one path). Independent factual check: OpenAI coordinator, accepted at `490a879bd346773cca64fac861eaaab29e703628`. | Attempt 1 ran `git show <rev>:docs/validation/LEDGER.md > file` through a shell redirection: exit 0, but every non-ASCII character was mangled (U+2014/U+00B7 → U+FFFD) and the parse found 0 feature rows. The mangled first-pass files were then **replaced** by byte-exact `git cat-file` extracts. Accepted limit (coordinator review): *"The author reports overwriting its first mangled scratch extracts. Their original generated bytes are not preserved or reconstructed as originals. … This is a diagnostic preservation gap, not lost project source or evidence. Retain this worktree and task ref; no destructive cleanup is approved here."* | The **ledger content itself was never lost**: the two committed blobs exist and are byte-exact — `28fce729…:docs/validation/LEDGER.md` (blob `fa0da83c…129a`, 74 831 B, SHA-256 `41d81dae…aecce`, 0 CR, 0 U+FFFD) and `d6e78e0b…:docs/validation/LEDGER.md` (blob `281a7647…4d98`, 74 447 B, SHA-256 `b8078e4d…5cf7`, 0 CR, 0 U+FFFD), matching the report's §1 values exactly. The **replacement** scratch extracts survive and are byte-identical to those blobs (`ledger_old.md`, `ledger_new.md`). The analysis scripts survive (`parse_ledger.py`, `attribute_delta.py`). The report and the coordinator acceptance are in the tree. | The **original generated bytes of the first-pass mangled scratch extracts** (the two files that existed on disk before the byte-exact replacement). Never committed, never hashed in any accepted record, overwritten. The accepted coordinator review dispositions these originals as not preserved and not reconstructed; the bounded inspection performed here did **not** recover them, and no hash is invented. That disposition is the accepted record's rather than a newly proven global fact: no backup or archive search was performed, copies held elsewhere remain **unverified**, and no later run can recreate the original historical bytes. | The first-pass files' exact byte length, content and SHA-256 are recorded nowhere accepted and are **not invented here**. Whether the mangled files were ever copied elsewhere before replacement is not established by any accepted record and is not asserted. | The accepted freshness-mapping acceptance is **unaffected** — it accepted the report's mapping, not a code review or a runtime qualification. The gap is **diagnostic only**: no canonical ledger, record, finding, manifest, source or baseline byte is affected and no feature level moves. The worktree and task ref must be **retained**; no destructive cleanup is approved by this report. |
 
 ---
 
@@ -104,18 +115,18 @@ sections.
 
 ### 3.2 The accepted recorded failure
 
-The first focused invocation
+The accepted report records the first focused invocation
 
 ```text
 python -m pytest tests/validation/test_sw_api_client_02_c1.py -q -p no:tests.route_inventory -p no:cacheprovider
 ```
 
-exited **1** with **12 passed, 1 failed** and the outcome **BLOCKED**: the managed
-source runner requires a healthy Telnet link before starting any simulator
-scenario, and requiring certificate verification against the disposable
-simulator's self-signed TLS certificate correctly keeps the matrix client
-disconnected. The accepted report states this is *"not a shared-runner edit or
-product defect"*.
+as exited **1** with **12 passed, 1 failed** and the outcome **BLOCKED**: the
+managed source runner requires a healthy Telnet link before starting any
+simulator scenario, and requiring certificate verification against the
+disposable simulator's self-signed TLS certificate correctly keeps the matrix
+client disconnected. The accepted report states this is *"not a shared-runner
+edit or product defect"*.
 
 The loss itself, in the accepted report's own words: *"The original raw failed
 record/hub logs were created under
@@ -183,7 +194,7 @@ Git-retained references, verified at the base:
   explicitly that they *"do not claim to contain lost original attempts"*, and
   this report adopts that limit unchanged.
 
-### 3.4 What remains irrecoverable
+### 3.4 What the accepted records disposition as irrecoverable
 
 The original managed **BLOCKED** raw JSON/hub logs under
 `C:/t/f034-20261029-a/pytest-of-ryanh/pytest-0/test_registered_scenario_with_0/`.
@@ -191,10 +202,22 @@ Verified at the base: that directory, its `pytest-0` parent, the
 `pytest-of-ryanh` parent and the whole `C:/t/f034-20261029-a` root are all
 **absent** on this host.
 
-Consequences, stated exactly:
+The disposition and its exact limit:
 
-* The bytes are gone. No re-run reproduces *the original* bytes — a later
-  invocation at a different state is a different artifact, not the original.
+* The accepted records (the C1 author report at `060769b7` and the coordinator
+  ledger entries cited in §3.2) disposition these originals as a
+  **lost, unrecoverable** preservation failure. That disposition is carried
+  here as **accepted recorded history**, attributed to those records.
+* The bounded inspection performed for this report **did not recover** the
+  original logs. No substitute, reconstruction or recovered hash is offered in
+  their place.
+* The scope of that inspection is **narrow**: the present absence of one temp
+  root. It is **not** an exhaustive backup or archive search, and it does
+  **not** establish that recovery is universally impossible. Whether a copy of
+  those bytes exists anywhere else remains **unverified** and is left open.
+* What does hold, and is unaffected by that limit: **no later run can recreate
+  the original historical bytes.** A later invocation at a different state is a
+  different artifact, not the original.
 * This report does not reconstruct them, does not label any later artifact as
   them, and does not offer the retained current snapshots as their substitute.
 * A missing path is **not** treated here as proof of worker exit, of any
@@ -205,10 +228,18 @@ Consequences, stated exactly:
 
 * The original bytes, byte length and SHA-256 of the lost logs: recorded
   nowhere accepted, **not invented here**.
-* The raw JSON that showed the actual Telnet blocked reason is gone. The reason
-  survives only as the author's reported symptom in `focused-first.log` and in
-  the native tool transcript; it is carried here as a **reported** symptom, not
-  as a re-verified observation.
+* The raw JSON that showed the actual Telnet blocked reason is gone. The
+  original C1 report at `060769b7` states the split this report preserves
+  exactly: *"The failed pytest log retains the count, assertion and BLOCKED
+  outcome; the native tool transcript records the actual Telnet blocked reason
+  observed from that original JSON."* So `focused-first.log` retains the
+  **count, assertion and BLOCKED outcome**, while the **native tool
+  transcript** records the actual Telnet blocked reason observed from the
+  original JSON. The reason is carried here as an **accepted reported
+  observation** from that transcript, **not** as a detailed reason
+  independently found in the log. This report identified the retained log by
+  existence, size and SHA-256 only; no raw payload was read, and no raw
+  payload read is requested.
 * The precise mechanism of the removal beyond the author's recorded statement
   (pytest automatic retention) is not independently established by this report.
 
@@ -319,14 +350,26 @@ Also retained: the report `11b09676` and its coordinator acceptance
 reported failed symptoms (per the accepted coordinator review), and the present
 workspace.
 
-### 4.4 What remains irrecoverable
+### 4.4 What the accepted records disposition as irrecoverable
 
 The **original generated bytes of the two first-pass mangled scratch extracts**
 — the files that existed on disk before the byte-exact replacement. They were
 never committed, never hashed in any accepted record, and were overwritten.
 
-* Their bytes cannot be recovered. This report does not reconstruct them and
-  invents no hash for them.
+* The accepted coordinator review (`490a879b`, quoted in §4.2)
+  dispositions these originals as **not preserved and not reconstructed**, and
+  classifies the event as a diagnostic preservation gap. That disposition is
+  carried here as **accepted recorded history**, attributed to that review.
+* The bounded inspection performed for this report **did not recover** the
+  first-pass bytes. This report does not reconstruct them and invents no hash
+  for them.
+* The scope of that inspection is **narrow**: it establishes that the retained
+  scratch files are the byte-exact **replacements**, not the originals. It is
+  **not** an exhaustive backup or archive search, and it does **not** establish
+  that recovery is universally impossible. Whether the mangled files were ever
+  copied elsewhere before replacement remains **unverified** and is left open.
+* What does hold, and is unaffected by that limit: **no later run can recreate
+  the original historical bytes.**
 * The ledger **content** they were meant to hold is fully recoverable from the
   committed blobs, but that is a different thing: it does not restore the
   first-pass artifact of the failure. The gap is that the failure's own
@@ -376,6 +419,13 @@ never committed, never hashed in any accepted record, and were overwritten.
 * It does not close **VAL-14** or **VAL-15**, promote any level, admit any
   evidence, or approve any source / privacy / owner / CI / image / physical
   HIL / 72-hour soak / week field / version or release gate.
+* It does not claim that the lost originals are provably unrecoverable
+  **globally**, and it does not claim that an exhaustive backup or archive
+  search was performed. The unrecoverable-original disposition is the
+  **accepted records'** recorded history; the bounded inspection here did not
+  recover the originals and leaves copies held elsewhere **unverified**. It
+  does claim the narrow, valid fact that **no later run can recreate the
+  original historical bytes**.
 * It does not grant the author any authority to accept this report. An
   **Independent OpenAI-family factual review at the exact report commit** is
   required, and the author cannot self-accept or canonicalize a waiver.
@@ -386,7 +436,7 @@ never committed, never hashed in any accepted record, and were overwritten.
 
 ---
 
-## 6. Checks actually run
+## 6. Checks actually run (original attempt)
 
 Interpreter: the root virtualenv
 `C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/.venv/Scripts/python.exe`
@@ -405,13 +455,17 @@ cited repository-relative path existence, markdown link targets, required
 section tokens, and single-path tracked scope) were run against this file.
 
 No campaign, ledger generation, registry check, source/core/client/image test,
-recovery probe, cleanup, push, merge, tag or release ran.
+cleanup, push, merge, tag or release ran. The bounded **read-only**
+hash/existence/Git-provenance metadata commands and the report-only checks
+described above are inspection metadata, not runtime, campaign, qualification
+or recovered-original evidence; no recovery action against the lost material
+ran.
 
 ---
 
 ## 7. Recorded results
 
-### 7.1 Existing documentation modules (the only test invocation)
+### 7.1 Existing documentation modules (the only test invocation of the original attempt)
 
 Interpreter: root virtualenv
 `C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/.venv/Scripts/python.exe`
@@ -472,6 +526,11 @@ deletion, reset, prune, service, dependency install, Docker, hardware, external
 deployment, version, tag or release. No cleanup was performed or authorized.
 No push, merge or self-release.
 
+The read-only existence/hash/Git-provenance inspection metadata of §8 is
+not part of that excluded list: it started no runtime service, campaign or
+qualification, ran no recovery action against the lost material, and produced
+no recovered-original evidence.
+
 ---
 
 ## 8. Artifacts and limits
@@ -481,8 +540,10 @@ byte-exact extraction receipts of the historical blobs read
 (`refs/`, `refs-receipt.json`), the bounded existence/identity probe
 (`probe_survival.py`, `survival-probe.json`), the Git provenance proof
 (`git_proof.py`, `git-proof.json`), and the invocation receipts. These are
-inspection aids for this report only; **no new reusable tool or fixture is
-shipped** and nothing here is imported into the canonical tree.
+**new inspection metadata** created for this report, **not** restored
+historical evidence and **not** recovered originals. They are inspection aids
+for this report only; **no new reusable tool or fixture is shipped** and
+nothing here is imported into the canonical tree.
 
 **Uncertainties left open** (stated, not speculated):
 
@@ -491,6 +552,10 @@ shipped** and nothing here is imported into the canonical tree.
 * The absolute paths quoted for other hosts' workspaces and temp roots are
   supplemental; existence was verified for the paths this report names, and
   their absence is asserted only for the recorded lost paths.
+* Whether a copy of the G1 lost logs or of the G2 first-pass mangled extracts
+  exists anywhere else was **not searched for** and remains **unverified**. The
+  unrecoverable-original disposition is the accepted records' recorded
+  history, not a newly proven global filesystem fact.
 * No raw private record, log, screenshot, archive payload or credential was
   opened. The retained private artifacts above were identified by existence,
   size and SHA-256 only.
@@ -513,17 +578,244 @@ coverage, and **not** dispositioned here):
   preservation-gap set and are outside this unit's pinned scope. Nothing in
   this report re-hashes, re-scores or re-audits that inventory.
 * The **failed Anthropic core qualification** (`QUAL-ANTHROPIC-CORE-01`): a
-  separate matter with **no domain granted** and **no automatic retry**. Its
-  own findings do not repair, widen or reclassify either gap here, and it
-  grants no source acceptance.
-* The **inventory correction re-review** for SW-AUDIT-01, which is pending and
-  is not treated here as an accepted proof source.
+  separate matter with **attempt 1 FAILED**, **no domain granted** and **no
+  automatic retry**. The owner's explicit retake choice is **pending**; this
+  correction round performs no retake and grants no source authority. Its own
+  findings do not repair, widen or reclassify either gap here, and it grants no
+  source acceptance.
+* The **current global inventory** for SW-AUDIT-01, whose correction re-review
+  still reads **`require_changes`** as recorded by the independent review at
+  `abd339eda`. No global acceptance is inferred, claimed or re-audited here,
+  and it is not treated here as an accepted proof source. It is a **separate**
+  global scope owned by another worker; this correction round neither edits
+  nor takes it over.
+
+---
+
+## 9. Correction round (this commit)
+
+### 9.1 Round identity, scope, and what this round does not change
+
+This is a **prose-only correction** of this report, made after the independent
+factual review at the exact commit `ed78321e51156f229507e654f0cf3faae100b935`
+returned **`require_changes`** with three required corrections (R1, R2, R3). It
+is **not** a new source phase, not a failed-qualification retry and not a
+re-audit.
+
+| Item | Value |
+| --- | --- |
+| Correction Task / Dispatch | `task_e1d5c3589200` / `ctx_f56a5a99bfee` |
+| Run | `run_37205f6095b3` (existing Run; not reset or replaced) |
+| Worker terminal | `term_b6996ca4-3c88-4471-8c4d-1ccbb18f3eed` |
+| Coordinator terminal | `term_6ed8131e-3ab3-4693-8094-56cc10acd412` |
+| Runtime / Orca | `e8ce3460-a9d4-4897-8e4f-10a8e3cdc400` / 1.4.246 |
+| Worktree / branch | `wp-exec-ev-preservation-gaps` / `execution/wp-exec-ev-preservation-gaps` |
+| Corrected base (exact, verified) | `ed78321e51156f229507e654f0cf3faae100b935` |
+| Corrected base's parent | `f2dc1dbf683d8f96200d1517b0786e3441105b36` |
+| Author route | native MiniMax-M3 via OpenCode 2 (project-pinned model; no CLI model/effort override) |
+| Date of this record | 2026-11-02 local (-07:00) / 2026-11-03 UTC |
+| Delivery class | report prose only - one tracked path, no implementation, test or tool |
+
+Reviewed identities (immutable history, not restated as new artifacts): the
+independent review blob at
+`docs/production/software-waves/EV-PRESERVATION-GAPS/execution-20261101/REVIEW.md`
+is commit `abd339eda108e4d74f1a147b2f445299814e9cf9`, 10 496 bytes, SHA-256
+`b0720257b8e0104f7cab5ed5c3a72bd39e01c4cadc56bc35f9e8dc9149a233f6`; the
+reviewed author blob was 36 331 bytes, SHA-256
+`ca72b8fff2c1adc60a03b77d6932febc450171716a074c1b9c8b163b0bce76ab`. The
+original author and the independent OpenAI-family reviewer (native
+`gpt-6-astra/high`) were **settled and released**; their originals, natives,
+workspace and temp archives are preserved and their exact task refs are
+published. No duplicate writer was created.
+
+This round **changed no** source, test, tool, fixture, scenario, schema,
+registry, ledger, finding, manifest, lockfile, evidence, baseline, runtime or
+credential setting, and performed **no** campaign, gate, ledger generation,
+registry check, source/core/client/image/physical test, recovery probe,
+cleanup, push, merge, tag, release, archive opening or broad filesystem
+search. The **only test invocation** was the same five existing documentation
+modules; the only other executions were read-only report-only checks
+(§9.3). Every historical artifact, private artifact and historical
+identity quoted in §1 to §8 is **byte-identical and unchanged**; this round
+only edits prose and adds new, separately identified correction artifacts.
+
+§1 to §8 record the **original attempt**. Their check-time rows
+(for example the tracked-scope and base rows in §7.2) describe that
+attempt's state and are superseded for the current commit by §9.3.
+
+### 9.2 Responses to the required corrections
+
+**R1 - qualify the universal recovery assertions.** Applied.
+
+* The **summary G1 row** now attributes the loss and the irrecoverable-original
+  disposition to the **accepted records**, states that the bounded inspection
+  did **not** recover the originals, and states explicitly that the present
+  absence of one temp root is **not** an exhaustive backup search and does
+  **not** prove recovery is universally impossible, so copies held elsewhere
+  remain **unverified**.
+* The **summary G2 row** carries the same qualification, attributing the
+  disposition to the accepted coordinator review and recording that no backup
+  or archive search was performed.
+* §3.4 and §4.4 are retitled and rewritten to state the disposition as the
+  accepted records' recorded history, to state that the bounded inspection did
+  not recover the originals, and to leave copies elsewhere unverified.
+* The **closing characterization** and a new bullet in §5 carry the same
+  limit, and a new bullet in §8 records that no copy search was performed.
+* The **valid narrow fact is retained**: no later run can recreate the original
+  historical bytes.
+* **Not done, deliberately**: no broader search, no archive opening, no
+  substitute originals and no recovered hashes. The accepted record's own
+  irrecoverable-original *disposition* is preserved as recorded history; the
+  report simply no longer asserts it as a newly proven global filesystem fact.
+
+**R2 - distinguish new inspection metadata from historical evidence.** Applied.
+
+* §1 no longer says *"No new evidence was created"* and no longer says *"The
+  only invocations were"*. It now states precisely that **no new runtime,
+  campaign, qualification or recovered-original evidence was produced**, and
+  that **new bounded read-only hash / existence / Git-provenance inspection
+  metadata** and **documentation-check artifacts** were created. *"Only"* is
+  now scoped to the **test invocation**.
+* §6 and §7.3 now distinguish the read-only inspection metadata from the
+  excluded runtime work.
+* §8 now labels the private inspection artifacts as **new inspection
+  metadata**, explicitly **not** restored historical evidence and **not**
+  recovered originals.
+* This is a **reporting correction only**. It does **not** assert that any
+  prohibited runtime diagnostic ran; the inspected records establish no such
+  execution, and none ran in this round either.
+
+**R3 - preserve the original count/outcome versus reason-attribution split.**
+Applied.
+
+* The **summary G1 row** and §3.5 now follow the original C1 report at
+  `060769b724e7a546b8df22eac82f3b288d9bbbe8` exactly: `focused-first.log`
+  retains the **count, assertion and BLOCKED outcome**, while the **native
+  tool transcript** records the actual Telnet blocked reason observed from the
+  original JSON.
+* The reason is carried as an **accepted reported observation**, explicitly
+  **not** as a detailed reason independently found in the log. The report
+  states that the retained log was identified by existence, size and SHA-256
+  only, and that **no raw payload was read and no raw payload read is
+  requested**.
+* §3.2 now attributes the recorded outcome to the accepted report.
+
+### 9.3 Correction-round checks and new artifact identities
+
+This round ran **exactly one test invocation** and otherwise only read-only
+report checks. Environment: root virtualenv
+`C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/.venv/Scripts/python.exe`
+(Python 3.12.10), own checkout root + `src` on `PYTHONPATH` (forward slashes),
+`PYTHONUTF8=1`, bytecode disabled, a **freshly created** isolated
+`MATRIX_DATA_DIR` / `UC_CONFIG_HOME` / `TEMP` / `TMP` under
+`C:/t/exec-ev-preservation-gaps/nov02-correction01/`, and explicit
+**forward-slash** `--basetemp` and `--junitxml`.
+
+#### 9.3.1 The one test invocation of this round
+
+```text
+python -B -m pytest tests/test_core_documentation.py tests/test_client_guides_docs.py tests/test_openapi_and_config_docs.py tests/test_security_docs.py tests/test_license_and_protocol_docs.py -p no:tests.route_inventory -p no:cacheprovider -q --tb=short --basetemp=C:/t/exec-ev-preservation-gaps/nov02-correction01/docs-modules/pytest-temp --junitxml=C:/t/exec-ev-preservation-gaps/nov02-correction01/docs-modules/docs.junit.xml
+```
+
+| Item | Value |
+| --- | --- |
+| Direct subprocess return code | **0** (captured from the process, not inferred from a pipeline) |
+| Result line | `489 passed in 2.93s` |
+| Wall clock | 2026-11-03T03:17:42.517087Z → 2026-11-03T03:17:45.964583Z |
+| stdout | 588 bytes, SHA-256 `ac717f1dfb578463ba5e5428228853124a61c3f4135e31163138446950b99a63` |
+| stderr | 0 bytes, SHA-256 `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| JUnit XML | 63 691 bytes, SHA-256 `f3dc919fd1f7cd4b3f26c74eda716c993cfbc3da8869f88e4c2a89a96fba0f85` |
+| Fresh temp parent after the run | 103 files / 164 426 bytes, each file hashed immediately after the invocation and before any later one |
+| Capture order | return code, full stdout, full stderr, JUnit and every temp file captured and hashed immediately after the invocation returned, before any further invocation |
+| Deletion | **none** - no captured original, receipt, artifact or temp file was removed |
+
+Receipt: `build/software-waves/EV-PRESERVATION-GAPS/execution-20261101/author/correction-01/checks/docs-modules.receipt.json`.
+
+#### 9.3.2 Report-only checks
+
+A private, read-only correction checker
+(`author/correction-01/correction_report_checks.py`) ran against this file. It
+checks, and it reported:
+
+| Check | Result |
+| --- | --- |
+| UTF-8 strict decode | **pass** (0 U+FFFD replacement characters) |
+| CR-aware whitespace | **pass** (0 CR bytes, 0 trailing-whitespace lines, 0 tabs, single final LF) |
+| Non-ASCII inventory | only `§`, `–`, `—`, `…`, `→`, `−` — unchanged from the reviewed file, no mojibake, no unlabelled CRLF mixing |
+| Fenced JSON and round-receipt JSON parse | **pass** |
+| Cited base-tree paths resolve | **pass** — 12/12 present |
+| Cited historical paths resolve at their named revision | **pass** — 4/4 (the two C1 source paths at `38687231`, the C1 author report at `060769b7`, and this unit's independent review at `abd339eda`) |
+| Markdown link targets | **pass** — 0 broken |
+| Required provenance tokens | **pass** — every Task, Dispatch, Run, base, commit, artifact hash and review-family token present, including the correction-round tokens |
+| R1 content assertions | **pass** — the superseded universal wording is absent from the body, and the qualification reaches both summary rows, sections 3.4 and 4.4, section 5 and section 8 |
+| R2 content assertions | **pass** — the superseded absolute wording is absent from the body, and the precise scope wording is present |
+| R3 content assertions | **pass** — the superseded reason attribution is absent from the body, and the original count/outcome versus reason split is present in both the summary G1 row and section 3.5 |
+| Tracked scope | **pass** — exactly one modified tracked path (`docs/production/software-waves/EV-PRESERVATION-GAPS/execution-20261101/AUTHOR.md`), no untracked paths |
+| Private build tree ignored | **pass** — `.gitignore:7:build/` |
+| Base / branch at check time | `ed78321e51156f229507e654f0cf3faae100b935` on `execution/wp-exec-ev-preservation-gaps` |
+
+The report's own committed blob identity cannot be embedded in the file it
+describes; it is recorded by the commit object and reported separately to the
+coordinator. The §9.3.1 hashes come from the invocation recorded there, and
+the only byte difference between the file state that invocation last saw and
+the committed file lies within §9.3 itself; §9.3.2 ran on the final
+bytes.
+
+#### 9.3.3 New correction artifact identities
+
+These are **new, round-local inspection metadata**. They are **distinct from**
+every immutable historical identity quoted in §3.3, §4.3 and §9.1,
+and they do not restate or replace the original author's or the reviewer's
+artifacts.
+
+| New artifact | Bytes | SHA-256 |
+| --- | ---: | --- |
+| `author/correction-01/checks/correction-responses.json` | 10 764 | `e5a91daf3bea255cf8fa9b715191ba26459d393c9fb1bb0a024046ed6f7cc18f` |
+| `author/correction-01/checks/docs-modules.receipt.json` | 23 554 | `72b19bde0a25aea7ec2274403b1752d4c2fd9f18f85c4c355657738f2670b49e` |
+
+Root: `build/software-waves/EV-PRESERVATION-GAPS/execution-20261101/author/correction-01/`
+(private, ignored, this worktree only). Temp root:
+`C:/t/exec-ev-preservation-gaps/nov02-correction01/` (private, this host only).
+Both are **new inspection metadata** for this round: not restored historical
+evidence, not recovered originals, and not part of the canonical tree.
+
+### 9.4 Remaining limits after this correction
+
+* The **two-gap scope** is unchanged: G1 remains **FAILED / partial / UNMET**
+  with managed/all-scenario CI compatibility, qualified different-family
+  review, VAL-15 privacy admission, integration and cleanup **HELD**; G2
+  remains a **diagnostic-only** gap, with the accepted historical
+  freshness-mapping acceptance and its recorded limits and retention
+  requirement unchanged.
+* No **original preservation PASS**, **function proof**, **source
+  qualification**, **feature promotion** or **gate closure** is claimed,
+  implied or granted by this correction.
+* The **current global inventory** remains `require_changes` and is outside
+  this unit's scope; it is neither edited nor re-audited here.
+* **Core qualification** attempt 1 remains **FAILED with no domain** and the
+  owner's explicit retake choice remains **pending**. This round performs no
+  retake and grants no source authority.
+* The **physical HIL, 72-hour soak, week field sign-off, version and final
+  release gates** remain **owner-open**.
+* **New and distinct from the immutable historical identities**: the
+  correction-round artifacts of §9.3 are new inspection metadata for
+  this round only. They are **not** restatements of, and do not replace, the
+  original author's or the reviewer's historical artifact identities.
+* A **qualified OpenAI-family re-review at the exact corrected commit**
+  remains mandatory. There is **no self-acceptance** here; the coordinator
+  owns settlement, preservation, publication and the different-family
+  exact-commit re-review.
 
 ---
 
 *Report-only disposition of two known historical preservation gaps. It records
-what is retained, what is irrecoverable and what is unknown. It is **not** a
-preservation acceptance, **not** an original evidence or function proof, and
-**not** a source, privacy, owner or release approval. Independent OpenAI-family
-factual review at the exact report commit is required; the coordinator owns the
-canonical ledger, registry, integration and all cleanup decisions.*
+what is retained, what the accepted records disposition as irrecoverable, and
+what is unknown. The unrecoverable-original disposition is **accepted recorded
+history**: the bounded inspection here did not recover the originals, did not
+search exhaustively for copies, and leaves copies held elsewhere
+**unverified**; the narrow fact that no later run can recreate the original
+historical bytes stands. It is **not** a preservation acceptance, **not** an
+original evidence or function proof, and **not** a source, privacy, owner or
+release approval. Independent OpenAI-family factual review at the exact report
+commit is required; the coordinator owns the canonical ledger, registry,
+integration and all cleanup decisions.*
