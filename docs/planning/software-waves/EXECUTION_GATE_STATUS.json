@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-03T17:21:30.692620+00:00",
+  "observed_utc": "2026-11-03T17:23:10.565362+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -8,7 +8,7 @@
     "qualified_domains": [],
     "disposition": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/execution-20261101/COORDINATOR_DISPOSITION.json",
     "manual_attempt02": {
-      "status": "evaluator delivered/released/preserved; fresh independent judge prepared, no verdict",
+      "status": "fresh independent six-axis judgement launched, no qualification verdict",
       "authorization": "docs/production/software-waves/MVP-EXECUTION-20261102/QUALIFICATION_MANUAL02_AUTHORIZATION.json",
       "candidate": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
       "rubric_sha256": "66f37090564007afebe29cdfd095af7fa85c4321a8420016ada8633dc0563672",
@@ -115,6 +115,41 @@
         "budget": "15min bounded exact-report six-axis judgement, no repeated full focused campaign by default",
         "task_id": null,
         "dispatch_id": null
+      },
+      "independent_judge": {
+        "task_id": "task_c8b55f48fcff",
+        "dispatch_id": "ctx_6f1b83d8f673",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-anthropic-core-01-manual02-review",
+        "actual_branch": "ryan-haver/wp-exec-qual-anthropic-core-01-manual02-review",
+        "exact_entry_base": "78eea1519cd4b6c8ac626b28ee45281f43623198",
+        "observed_head": "78eea1519cd4b6c8ac626b28ee45281f43623198",
+        "new_report": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/REVIEW.md",
+        "launch": {
+          "requested": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          },
+          "effective": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        },
+        "turn_start": "observed",
+        "native_entry": {
+          "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+          "session": "01a1a26f-1348-71e3-94e0-e1a0c5e66e0e",
+          "models": [
+            "gpt-6-astra"
+          ],
+          "effort": "high native",
+          "bytes": 418832,
+          "sha256": "a4f5052cb1b07c865353303411e58539b2c3eed43f48cc3ae7bf3a8f8c15e59a"
+        },
+        "status": "launched; no verdict or report acceptance inferred",
+        "observed_dispatch_status": "dispatched",
+        "observed_worker_state": "ready"
       }
     }
   },
