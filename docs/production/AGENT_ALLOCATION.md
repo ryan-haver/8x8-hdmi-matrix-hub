@@ -1,5 +1,14 @@
 # Agent allocation and execution ledger
 
+## First peer challenge preserved; OpenAI peer challenge prepared — 2026-11-03T18:20:58.693633+00:00
+
+Anthropic Task0677/ctx8cbc delivered fbfb38eb (parent9108174e),5047 canonical bytes SHA77cb0388..., nativefinal768680 bytes SHAff37d80d..., exact worker released with positive resource/liveness proof. Exact task ref remote/local verified; full workspace/temp archives rehashed, all4671 original R1 files rehashed unchanged. Integrated as planning contribution 0d78a4eccd6f55d93f12ea085579e3c4fe396fbe; reported715-word overrun against600 aim preserved, one489 docs/direct0 and original receipt/streams/JUnit/temp retained. All exact trees explicitly retained; no removal or new full-Git-bundle claim. Substantive R2 recommendations/conditions remain withheld until all three R2 reports are preserved.
+
+Prepare genuine OpenAI Astra/high third R2 in existing wp-qr-r1-openai at exact914103e8 / actualbranch ryan-haver/wp-qr-r1-openai. SAME frozen R2 input SHAa1d5beb25ba6ff7b493b498c9974f8e7b4c834b2629097233b55228243d9e84c, all three full R1 reports; no current R2 peer material. Exclusive NEW round2/openai report/private/temp paths; no source/fixture/tool edits. Task/Dispatch null until actual start. Fresh supported Run/runtime/gen5/host/repo/inbox/catalog/OpenAI quota and full128-row two-page fleet121released/7retained checked; MiniMax exact observed state recorded in ROUND2_OPENAI_PREFLIGHT, not inferred from retention. Maximum two current workers + coordinator + protected external reservation4; no nesting.
+
+R2 third contribution/R3 three same-hash decisions and one future candidate/one fresh judge remain separately gated; no qualification/source/release acceptance. Both4.7 failures, frozen source/rubric/85-pin packet, empty domains/all61findings/privacy/HIL/soak/week/final gates unchanged, original3Tron closed. Private r2-openai-ready-publication.json is postpush receipt outside its commit. Publish and independently verify integration head before next actual dispatch.
+
+
 ## Peer challenge first pair active — 2026-11-03T18:16:33.859156+00:00
 
 - anthropic: Task task_06770011f5e7 / Dispatch ctx_8cbcabfc43d2, exact base 9108174ed78056ca1732228b33b8379ae7fca6b8, branch planning/qr-20261103-r1-anthropic, exclusive NEW docs/agent-process/phases/qualification-replacement-20261103/round2/anthropic.md; native entry {"status": "native Anthropic Opus5.5 attested at exact Task/Dispatch/cwd", "session": "5027f511-2dcd-4f9e-84b4-5fc77dcb5aa8", "models": ["claude-opus-5-5"], "effort": "high explicit supportedlaunch/localconfig; nativeperturneffortnotexposed", "bytes": 596716, "sha256": "17261fde8152a9ce0140421e166c2f1f976b2b178653466615e22405321c9f91", "unassigned_helper_tools_observed": [], "scope": "pointintime nativecapture, not descendantcensus"}; observed dispatch dispatched.

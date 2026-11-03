@@ -1,6 +1,6 @@
 {
-  "observed_utc": "2026-11-03T18:16:33.859156+00:00",
-  "status": "R2 first two peer challenge sessions launched; OpenAI third reserved, not launched",
+  "observed_utc": "2026-11-03T18:20:58.693633+00:00",
+  "status": "Anthropic R2 delivered; MiniMax retained; OpenAI R2 prepared not launched",
   "phase": "qualification-replacement-20261103",
   "frozen_input_sha256": "fc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9",
   "all_round1_bases": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
@@ -320,10 +320,21 @@
   "independent_future_judge": "OpenAI Astra/high at exactfutureAnthropicevaluationreport, one judge under ownerapproval",
   "demand": "9 bounded prose planning contributions (R1/R2 target4min/<=600words inclJSON, R3 target2min explicitverdict), one15min candidateassessment and one15min independentjudge; later stages separatelycapacitygated, no unsupportedtoken/cost forecasts",
   "capacity": {
-    "observed_utc": "2026-11-03T18:14:47.045890+00:00",
-    "source": "supported orca account list, cached usage; no absolute allowance exposed",
-    "other_host_demand": "unknown; not zero",
-    "reserve": "remaining six bounded planning contributions plus one candidate and one fresh judge, each stage separately gated; no automatic qualification correction/retry authority",
+    "observed_utc": "2026-11-03T18:20:58.693633+00:00",
+    "other_host_demand": "unknown, not zero",
+    "scope": "one bounded remaining R2 assessment; R3 and future judge separately gated, no assurance of all-stage funding",
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 62,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "11:36 PM"
+      },
+      "updatedAt": 1793729399742,
+      "error": null
+    },
     "claude": {
       "status": "ok",
       "session": {
@@ -339,18 +350,6 @@
         "resetDescription": "Fri 5:00 AM"
       },
       "updatedAt": 1793729399394,
-      "error": null
-    },
-    "codex": {
-      "status": "ok",
-      "session": null,
-      "weekly": {
-        "usedPercent": 62,
-        "windowMinutes": 10080,
-        "resetsAt": 1793774164000,
-        "resetDescription": "11:36 PM"
-      },
-      "updatedAt": 1793729399742,
       "error": null
     },
     "minimax": {
@@ -372,28 +371,35 @@
     }
   },
   "fleet": {
-    "total": 126,
+    "total": 128,
     "all_pages": true,
     "pages": [
       {
         "limit": 100,
-        "total": 126,
+        "total": 128,
         "hasMore": true,
-        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMTgyfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwMzo0NToxMiIsImRpc3BhdGNoSWQiOiJjdHhfMjQxZDQwNmE1Nzc3IiwiZGF0YWJhc2VJZCI6Njc2fX0"
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMTg2fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwNDowOTo1MiIsImRpc3BhdGNoSWQiOiJjdHhfMmExOWI5OWI5ZGY0IiwiZGF0YWJhc2VJZCI6Njc4fX0"
       },
       {
         "limit": 100,
-        "total": 126,
+        "total": 128,
         "hasMore": false,
         "nextCursor": null
       }
     ],
     "terminal_counts": {
-      "released": 120,
-      "retained": 6
+      "retained": 7,
+      "released": 121
     },
-    "new_active": 0,
-    "historical_retained": 6
+    "historical_retained": 6,
+    "current_other_resource": {
+      "taskId": "task_8c044cfcdce5",
+      "dispatchId": "ctx_e407d807e727",
+      "dispatchStatus": "dispatched",
+      "workerState": "ready",
+      "terminalState": "retained"
+    },
+    "accounting": "six historical and one MiniMax R2 retained resource; status not inferred as active from retention"
   },
   "alternatives": "Opus4.7 two failed mandatoryqualifications retained, Google primaryunavailable and alternate route unqualified/unknown, DeepSeek exhausted, no samefamilyevaluationjudge or silent substitution",
   "protected": "root/private runtime/oldfailedbytes/native/artifacts/baselines/retainedworkspaces/odd untrackedhook artifact; no cleanup/reset/prune/forcepush",
@@ -422,7 +428,7 @@
         "round2",
         "anthropic"
       ],
-      "stage": "launched; no delivery yet",
+      "stage": "delivered/released/preserved/published; peer conditions withheld",
       "routing_binding": {
         "observed_utc": "2026-11-03T17:48:52.924322+00:00",
         "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-anthropic",
@@ -470,6 +476,40 @@
         "status": "R2 peer challenge launched, no delivery or consensus inferred",
         "observed_dispatch_status": "dispatched",
         "observed_worker_state": "ready"
+      },
+      "delivery_metadata": {
+        "observed_utc": "2026-11-03T18:19:57.909253+00:00",
+        "head": "fbfb38ebcb026a2c3713d8bbbb7684d126a50af9",
+        "base": "9108174ed78056ca1732228b33b8379ae7fca6b8",
+        "tree": "wp-qr-r1-anthropic",
+        "actual_branch": "planning/qr-20261103-r1-anthropic",
+        "report": "docs/agent-process/phases/qualification-replacement-20261103/round2/anthropic.md",
+        "bytes": 5047,
+        "sha256": "77cb03883ace830324cda67658f8e89c6996b8ac0bfa55c518b26f533eecc29b",
+        "task_id": "task_06770011f5e7",
+        "dispatch_id": "ctx_8cbcabfc43d2",
+        "terminal": "released",
+        "task_ref_publication": "exact remote/local verified",
+        "native_final": {
+          "session": "5027f511-2dcd-4f9e-84b4-5fc77dcb5aa8",
+          "models": [
+            "claude-opus-5-5"
+          ],
+          "bytes": 768680,
+          "sha256": "ff37d80d21f5e1cca267f110440fd479589ef225214b3d7733857a662e0731ad"
+        },
+        "R1_original_files_rehashed_unchanged": 4671,
+        "acceptance": "R2 contribution delivered; no consensus or qualification",
+        "peer_barrier": "substantive recommendation/conditions withheld until all three R2 preserved",
+        "process_history": "reported715 words versus600 aim retained; one489 doc invocation/direct0 and original streams/JUnit/receipt/temp preserved",
+        "cleanup": "retain exact tree read-only, no removal",
+        "preservation": {
+          "archive_sha256": "5a1049ab115aee1e50da2c919c5c41f4e8ed5731eca6cb2485f6a1ba6eec84ef",
+          "archive_bytes": 207192840,
+          "regular_files": 4676,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "integration_commit": "0d78a4eccd6f55d93f12ea085579e3c4fe396fbe"
       }
     },
     "minimax": {
@@ -567,7 +607,7 @@
         "round2",
         "openai"
       ],
-      "stage": "prepared, not launched",
+      "stage": "prepared next free slot; not launched",
       "branch_reservation": "planning/qr-20261103-r1-openai",
       "creation": "genuineworker-start new-top-level; returnedactualbranchmustberecorded, reservationnotassumed",
       "actual_branch": "ryan-haver/wp-qr-r1-openai"
