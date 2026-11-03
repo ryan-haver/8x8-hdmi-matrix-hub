@@ -1,0 +1,69 @@
+{
+  "status": "author inventory delivered; independent factual review pending",
+  "task_id": "task_45eb6e2ea9fc",
+  "dispatch_id": "ctx_a0c78df4a3b9",
+  "report_commit": "13fe2ae8d423d8e43065b08a8767109e011c61c0",
+  "source_base": "b4a2c6e93918028e080fdc5ed3d7abedb3f14a9e",
+  "report_sha256": "ee1aac572cf9b269568fcb5ac7791bf3b150d49968123f0399cb9d1fc52f17ef",
+  "report_bytes": 143808,
+  "scope_audited": "one new report-only commit, clean tracked tree; no source/registry/evidence changes",
+  "worker_state": "released",
+  "native": {
+    "task_id": "task_45eb6e2ea9fc",
+    "dispatch_id": "ctx_a0c78df4a3b9",
+    "session": "ses_e61087679ffeooXLgY4Hzkm6Us",
+    "models": [
+      "minimax-coding-plan/MiniMax-M3"
+    ],
+    "bytes": 940365,
+    "sha256": "6b48c67e37e4075a370b4aa7b621143ab595e570d33a9adfe6dcb5acaaeb4102",
+    "assistant_messages": 109,
+    "captured_after_release": true,
+    "report_commit": "13fe2ae8d423d8e43065b08a8767109e011c61c0"
+  },
+  "task_ref_remote_exact": "refs/heads/execution/wp-exec-sw-audit-01 at13fe2ae8",
+  "preserved_archives": [
+    {
+      "workspace": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-exec-sw-audit-01",
+      "head": "13fe2ae8d423d8e43065b08a8767109e011c61c0",
+      "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\mvp-execution-20261102\\preservation\\wp-exec-sw-audit-01\\workspace.tar.gz",
+      "archive_sha256": "00ad54715af7bb4350fab2c9d51acd650161d452a657adfbd51da8039db2cdb1",
+      "regular_files": 4554,
+      "regular_bytes": 300577558,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+    },
+    {
+      "workspace": "C:\\t\\exec-sw-audit-01\\nov02-attempt01",
+      "head": null,
+      "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\mvp-execution-20261102\\preservation\\external-audit-nov02\\workspace.tar.gz",
+      "archive_sha256": "b14e4746433bf2e20f5dfb4b10903d6a0bfd0a477e3a5ba531b39a2bf7172028",
+      "regular_files": 12,
+      "regular_bytes": 328847,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+    }
+  ],
+  "reported_census_not_yet_accepted": {
+    "features": 268,
+    "below_target": 210,
+    "stale": 96,
+    "software_targets": 147,
+    "software_numerically_at_target": 58,
+    "software_below_target": 89,
+    "author_dispositions": {
+      "preserve": 40,
+      "rerun_freshness": 40,
+      "missing_assertion": 106,
+      "missing_client": 48,
+      "physical_owner_gate": 33,
+      "reproduced_defect": 1
+    }
+  },
+  "candidate_findings_for_independent_review": [
+    "dated undispatched privacy-child claim vs actual retained delivered C1/C2/C3 history",
+    "new assertion action vs already retained unreviewed FAPI034 assertion candidate",
+    "canonical FSEC007 freshness vs actual failed parallel candidate gate/ancestry",
+    "disposition counting dimensions, non-declarative proof limits and physical/field obligations",
+    "open register row is not a fresh reproduction"
+  ],
+  "qualification_or_feature_or_parent_acceptance_granted": false
+}

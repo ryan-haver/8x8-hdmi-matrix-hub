@@ -1,0 +1,106 @@
+{
+  "status": "same judge Task capacity recovery prepared; no failed qualification retry or acceptance",
+  "observed_utc": "2026-11-03T01:43:57.947515+00:00",
+  "task_id": "task_3a3a04200302",
+  "prior_dispatch": "ctx_f7db39e6c800",
+  "prior_model": "gpt-6.1-sol/high",
+  "interruption": "native selected model at capacity before commit and worker_done; not weekly-credit exhaustion",
+  "prior_source_head": "97c47be3670df297b2a7ac2696350615b88846c1",
+  "prior_branch": "ryan-haver/wp-exec-qual-anthropic-core-01-review",
+  "guarded_stop": {
+    "dispatchId": "ctx_f7db39e6c800",
+    "state": "stopped",
+    "alreadySettled": false,
+    "processAction": "closed_agent_terminal",
+    "close": {
+      "handle": "term_18befcd0-c242-450b-b16d-e562ff869c3e",
+      "tabId": "c79c0e18-2ea5-4db6-a015-9e5cfdac291b",
+      "ptyKilled": true
+    },
+    "mutation": {
+      "requestId": "6a8783ac-5112-41f5-a213-e117f4acfe85",
+      "replayed": false
+    }
+  },
+  "release": {
+    "dispatchId": "ctx_f7db39e6c800",
+    "state": "released",
+    "processAction": "none",
+    "archive": {
+      "source": "terminal",
+      "status": "captured"
+    },
+    "mutation": {
+      "requestId": "fac8d46f-dc4f-438a-acfe-e6b577a28683",
+      "replayed": false
+    }
+  },
+  "native_final": {
+    "native_session": "01a19f05-e621-7ac3-9a71-f6ad4b0b934b",
+    "bytes": 1037304,
+    "sha256": "928df9a2201b17ae22930b152e82f989208ed02c7be0ba931db9ace715d7c20e",
+    "model": "gpt-6.1-sol",
+    "effort": "high native",
+    "stopped_dispatch": "ctx_f7db39e6c800",
+    "task_id": "task_3a3a04200302",
+    "uncommitted_fail_draft_sha256": "8bb63b86df69be173c893eba9fdf31532c910b1f6427cf7dc60a644af5ad65a0",
+    "source_worktree": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-anthropic-core-01-review",
+    "source_head": "97c47be3670df297b2a7ac2696350615b88846c1",
+    "status": "capacity-interrupted partial judgement, not source acceptance/worker_done"
+  },
+  "uncommitted_original_fail_draft_sha256": "8bb63b86df69be173c893eba9fdf31532c910b1f6427cf7dc60a644af5ad65a0",
+  "original_draft_verdict": "FAIL; three technical axes pass, behavior_and_tools/calibration/review_quality fail; not yet committed or delivered as worker_done",
+  "workspace_preservation": {
+    "workspace": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-exec-qual-anthropic-core-01-review",
+    "head": "97c47be3670df297b2a7ac2696350615b88846c1",
+    "branch": "ryan-haver/wp-exec-qual-anthropic-core-01-review",
+    "status": "?? docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/execution-20261101/REVIEW.md",
+    "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\mvp-execution-20261102\\preservation-before-astra\\wp-exec-qual-anthropic-core-01-review\\workspace.tar.gz",
+    "archive_sha256": "42a5715bb437a962d67fe21e9bc14af5be708b6c451b795afc3e9a709409508b",
+    "regular_files": 4498,
+    "regular_bytes": 295389470,
+    "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+  },
+  "temp_root_observation": {
+    "expected_temp_root": "C:\\t\\exec-qual-anthropic-core-01\\nov02-judge01",
+    "observed_after_guarded_stop": "absent",
+    "archive_created": false,
+    "no_originals_fabricated": true,
+    "workspace_full_dirty_archive": "verified separately, including all existing ignored and untracked files"
+  },
+  "git_preservation": {
+    "bundle": "build/mvp-execution-20261102/handover-all-refs.bundle",
+    "sha256": "e01ab159edecd8aaf809e4492b3ad9f972965dd4070c7e3bad23e2d417cc09cb",
+    "full_bundle_verify": "pass",
+    "independent_bare_recovery_fsck": "pass",
+    "qualification_and_audit_report_heads_recovered": true
+  },
+  "selected_alternative": "gpt-6-astra/high; same OpenAI independent evaluator-judge family, frozen source/rubric/acceptance/paths unchanged",
+  "qualification_basis": "bounded existing source review and counterexample competence: docs/validation/RUNTIME_INDEPENDENT_REVIEW.md and runtime review followup; this is evaluator-report finalization/factual verification, not acceptance of OpenAI-authored source or blanket model qualification",
+  "capacity": {
+    "observed_utc": "2026-11-03T01:36:14.427015+00:00",
+    "pool": {
+      "session": null,
+      "weekly": {
+        "usedPercent": 38,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "updatedAt": 1793669632631,
+      "error": null,
+      "status": "ok"
+    },
+    "per_model_event": "gpt-6.1-sol native at-capacity error interrupted judge before commit/worker_done; shared weekly remaining does not negate this refusal",
+    "selected_alternative": "gpt-6-astra/high in same supported OpenAI judge/reviewer family; actual availability still requires successful genuine launch",
+    "demand": "two bounded report judgements/factual reviews with correction reserve; no core/source acceptance or failed-qualification retry"
+  },
+  "scope_authority": "Owner instructs continued accepted work and routing over available task-qualified providers. Family allocation and technical scope unchanged; per-wave model reassessment for actual capacity event, not a material phase-plan replacement. No reset/new Run/duplicate writer or automatic failed-qualification rerun.",
+  "followup_same_task_guidance": {
+    "file": "docs/production/software-waves/MVP-EXECUTION-20261102/QUALIFICATION_JUDGE_CONTINUATION.txt",
+    "sha256": "b8f48d05a8943263920476739dd2a1535a14c3171d1f6dbbff10de1d857c02bd",
+    "delivery": "send explicit higher-priority coordinator handover to new Dispatch immediately after same-Task --retry-of start; preserve original Task spec as dated Sol selection"
+  },
+  "independent_audit_review_model": "gpt-6-astra/high same OpenAI reviewer family for M3-authored inventory, not source acceptance",
+  "no_new_workers_launched_from_this_record_yet": true
+}
