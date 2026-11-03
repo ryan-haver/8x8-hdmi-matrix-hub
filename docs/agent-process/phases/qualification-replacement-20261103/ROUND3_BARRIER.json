@@ -1,0 +1,164 @@
+{
+  "observed_utc": "2026-11-03T18:56:48.436776+00:00",
+  "status": "all three R3 decisions preserved before consensus interpretation; all exact refs published and workers released",
+  "final_packet_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74",
+  "actors": {
+    "anthropic": {
+      "observed_utc": "2026-11-03T18:46:02.196270+00:00",
+      "head": "04ca6c4191ec309bb3a21b2b7447ef1e04b4fdf6",
+      "base": "fbfb38ebcb026a2c3713d8bbbb7684d126a50af9",
+      "tree": "wp-qr-r1-anthropic",
+      "actual_branch": "planning/qr-20261103-r1-anthropic",
+      "report": "docs/agent-process/phases/qualification-replacement-20261103/round3/anthropic.md",
+      "bytes": 3960,
+      "sha256": "d4df5baf81b8410286a6561fbea9d9a73dfb68d2443a647b61826bc13100e711",
+      "task_id": "task_9dff86280e44",
+      "dispatch_id": "ctx_516e9f13d9fa",
+      "terminal": "released",
+      "task_ref_publication": "exact remote/local verified",
+      "native_final": {
+        "session": "41aa3a76-4b99-48a6-bc3d-e6c63f4384d6",
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "bytes": 980357,
+        "sha256": "24fe44a7aa7d0d68465837450a310835983ceb24f27931140a1327948d1e4465"
+      },
+      "R2_original_files_rehashed_unchanged": 4676,
+      "acceptance": "R3 decision delivered; no all-three consensus or qualification inferred",
+      "peer_barrier": "R3 decision contents withheld from peers until all three originals preserved",
+      "process_history": "one489 docs/direct0 and full original streams/JUnit/temp retained; failed first commit attempt from PowerShell here-string/pathspec parse preserved in process-notes; no source hook/full CI claim",
+      "cleanup": "retain exact tree read-only, no removal",
+      "preservation": {
+        "wp-qr-r1-anthropic": {
+          "archive_sha256": "990defcdedd0f70dde2a7e8126b40cfb1218f02cb0c49c4efb840043943a1c38",
+          "archive_bytes": 207200028,
+          "regular_files": 4682,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "external-r3-anthropic": {
+          "archive_sha256": "2fcc9f7712f6e141c823d21bb6144986a056a8c3560a5f721f5dea20888e8563",
+          "archive_bytes": 61367,
+          "regular_files": 104,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      },
+      "integration_commit": "22a696cb9a1e613dc88d88e6fb346ca9ba39979a"
+    },
+    "minimax": {
+      "observed_utc": "2026-11-03T18:50:49.394279+00:00",
+      "head": "7b07bf03f5aacbfa910d80ddf05459215c7fa891",
+      "base": "6b5e1ca0bbb11c2fcc15ed00ec709cd54cb09fbe",
+      "tree": "wp-qr-r1-minimax",
+      "actual_branch": "planning/qr-20261103-r1-minimax",
+      "report": "docs/agent-process/phases/qualification-replacement-20261103/round3/minimax.md",
+      "bytes": 14091,
+      "sha256": "379eb88de9cc5d9a530375343cd86f8df3bec9ee4be408820d4cbdc5916a51ba",
+      "task_id": "task_06484235023d",
+      "dispatch_id": "ctx_55dc79dcba80",
+      "terminal": "released",
+      "task_ref_publication": "exact remote/local verified",
+      "native_final": {
+        "session": "ses_e5d4720acffe2srGP4Nnd05N39",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "bytes": 432414,
+        "sha256": "17b5bc42525355d8d36b270636a5a83c246d8c95fb3ca39fe2a7fdf7608bcedc"
+      },
+      "R2_original_files_rehashed_unchanged": 4681,
+      "acceptance": "R3 decision delivered; no all-three consensus or qualification inferred",
+      "peer_barrier": "R3 decision contents withheld until all three originals preserved",
+      "process_history": "one489 docs/direct0, full stdout/stderr embedded in receipt, JUnit and temp retained. Correct case-insensitive Windows checks. Long14091-byte prose and target overrun preserved; own sanitized native export cannot attest per-message model, coordinator preserves full raw native export with actual M3 identity.",
+      "cleanup": "retain exact tree read-only, no removal",
+      "preservation": {
+        "wp-qr-r1-minimax": {
+          "archive_sha256": "8e345a2b8d2232ff8f1bd6ee3783434eea7cfec990a36e2139170bdefde93acf",
+          "archive_bytes": 207016611,
+          "regular_files": 4683,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "external-r3-minimax": {
+          "archive_sha256": "e2550017598e4797ea905a551fa60381afaa2b1b92a6c757d90893458bc6e4cd",
+          "archive_bytes": 127211,
+          "regular_files": 122,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      },
+      "integration_commit": "18e92bd62eddcd37eb2916c14970895bc097f4ae"
+    },
+    "openai": {
+      "observed_utc": "2026-11-03T18:50:09.545003+00:00",
+      "review_commit": "0c88c613ac8c7c7ec21cbb94bf9481db81baf3cc",
+      "review_base": "1ac7d96d7000f85e072a97512f35095906d7934c",
+      "report": "docs/agent-process/phases/qualification-replacement-20261103/round3/openai.md",
+      "bytes": 4655,
+      "sha256": "306affeebeb63f69e469440c81f593602128f7fc76bf160b72004bec743a43fd",
+      "task_id": "task_59ba5ac247bd",
+      "dispatch_id": "ctx_48e9a1a9c523",
+      "worktree": "wp-qr-r1-openai",
+      "branch": "ryan-haver/wp-qr-r1-openai",
+      "verdict": "R3 final decision delivered; no all-three consensus or qualification inferred",
+      "terminal": "released",
+      "task_ref_publication": "exact remote/local verified",
+      "native_final": {
+        "session": "01a1a2bc-a7b8-7232-9516-741e76e45825",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high",
+        "bytes": 894191,
+        "sha256": "ca447e06e8c63b56605d1119ab98efc0ab4238adba3510dac080b5258f1c5fe6"
+      },
+      "checks": "489 documentation tests, direct exit0 and full stdout/JUnit/temp preserved; not semantic proof",
+      "R2_original_files_rehashed_unchanged": 4677,
+      "process_history": "two-minute target overrun and initial truncated reads followed by bounded packet reads retained; exactly one docs invocation489/direct0; no qualification/source/full CI pass",
+      "peer_barrier": "R3 decision contents withheld from peers until all three originals preserved",
+      "cleanup": "retain exact review tree read-only; no removal",
+      "head": "0c88c613ac8c7c7ec21cbb94bf9481db81baf3cc",
+      "base": "1ac7d96d7000f85e072a97512f35095906d7934c",
+      "tree": "wp-qr-r1-openai",
+      "actual_branch": "ryan-haver/wp-qr-r1-openai",
+      "preservation": {
+        "wp-qr-r1-openai": {
+          "archive_sha256": "a4fa332ecbe9fb8a387cbcf138e0cb5a5365d7557caee9b66e2505e32ba581c6",
+          "archive_bytes": 207041835,
+          "regular_files": 4684,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "external-r3-openai": {
+          "archive_sha256": "d3412e6e8a14ab408cc5fae9ea0f661f26b071b2912d8436c5c2fb473bdd5812",
+          "archive_bytes": 57303,
+          "regular_files": 102,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      },
+      "integration_commit": "0a12644216c184999edc75440e03d6c26275943c"
+    }
+  },
+  "fleet_after_settlement": {
+    "total": 132,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 132,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMTk1fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwNzozMzoyOSIsImRpc3BhdGNoSWQiOiJjdHhfYjZiNzVkNzI5MDAyIiwiZGF0YWJhc2VJZCI6NzI5fX0"
+      },
+      {
+        "limit": 100,
+        "total": 132,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "released": 126,
+      "retained": 6
+    },
+    "new_active": 0,
+    "historical_retained": 6
+  },
+  "source_or_qualification_acceptance": false
+}
