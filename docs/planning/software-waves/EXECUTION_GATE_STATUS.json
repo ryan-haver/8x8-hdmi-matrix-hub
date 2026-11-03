@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-03T02:59:30.202947+00:00",
+  "observed_utc": "2026-11-03T03:03:05.157319+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -114,7 +114,38 @@
     "accepted_factual_corrections": [
       "R2",
       "R3"
-    ]
+    ],
+    "correction02": {
+      "task_id": "task_4c7cf7c289ff",
+      "dispatch_id": "ctx_14d9b1569d7e",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01",
+      "actual_branch": "execution/wp-exec-sw-audit-01",
+      "exact_entry_base": "981e7e4a48bce07e4dce24443d386b3e0643601a",
+      "launch": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "turn_start": "unsupported",
+      "native_entry": {
+        "status": "native assigned family/model attested at exact Task/Dispatch/cwd",
+        "session": "ses_e60a60154ffe3ynfNFDflaLE6d",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "effort": "CLI override unsupported; inherited exact project routing; native thinking",
+        "bytes": 57882,
+        "sha256": "48dcc3528a166b6772f2102b6454b92d7c152631155d4af8405fbb8ac9344f9b"
+      },
+      "status": "active; no delivered/reviewed/integrated/qualified outcome claimed"
+    }
   },
   "automatic_retakes": false,
   "owner_decision_pending": "Explicit question presented: authorize one prepared controlled manual new qualification attempt, or assess a different provider. No answer/approval inferred; no retake launched.",
@@ -123,6 +154,37 @@
   "preservation_gaps": {
     "author_commit": "ed78321e51156f229507e654f0cf3faae100b935",
     "status": "delivered, independent exact-commit factual review prepared",
-    "original_preservation_pass": false
+    "original_preservation_pass": false,
+    "independent_review": {
+      "task_id": "task_eea6f443f108",
+      "dispatch_id": "ctx_70e7d15a49fc",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-preservation-gaps-review",
+      "actual_branch": "ryan-haver/wp-exec-ev-preservation-gaps-review",
+      "exact_entry_base": "ed78321e51156f229507e654f0cf3faae100b935",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "native assigned family/model attested at exact Task/Dispatch/cwd",
+        "session": "01a19f5a-2166-7a02-8b5a-9181fae48770",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 522495,
+        "sha256": "f8c1d02aadcf875723c0708ec2df370e7c12a96648060dac56ef6c9b0b7b1572"
+      },
+      "status": "active; no delivered/reviewed/integrated/qualified outcome claimed"
+    }
   }
 }

@@ -1,5 +1,12 @@
 # Agent allocation and execution ledger
 
+## Two targeted metadata workers active — 2026-11-03T03:03:05.157319+00:00
+
+MiniMax task task_4c7cf7c289ff / dispatch ctx_14d9b1569d7e corrects remaining R1/R4/R5/R6 at exact981e7e4a in existing wp-exec-sw-audit-01, only AUTHOR.md and NEW private correction02 namespace. Independent Astra task task_eea6f443f108 / dispatch ctx_70e7d15a49fc reviews two EV negative gaps at exacted78321e in NEW wp-exec-ev-preservation-gaps-review, only NEW REVIEW.md and private namespace. Actual branches/native entry attestations in METADATA_ROUND02_DISPATCHES.json; exact assigned native models observed, no completion or acceptance claimed. Prior writers released and originals preserved.
+
+Fresh supported quotas checked before each start. Complete fleet pagination:102rows across2pages,94released/8retained terminal resources;8means6historical plus2currently dispatched workers explicitly held open for settlement, not8active workers. Max2new+coordinator+protectedexternalreservation4, no nesting. Prewave integration ad832918 verified exact live remote/local equality. Corequalification1 remainsFAIL/no domain; explicit owner retake decision pending, no retake/source/physical/release work from these tasks. End turn for Orca report wakes per installed guide, no polling. Private post-push receipt metadata-round02-launch-publication.json sits outside the commit it identifies.
+
+
 ## Inventory re-review requires targeted fixes; preservation report delivered — 2026-11-03T02:59:30.202947+00:00
 
 Astra re-review task_2e497661d2af/ctx_4ec26c6917ca delivered d44ad2bca78dfe82c4b541e41f861c965cce2461 at exact author981e7e4a: require_changes. R2/R3 corrections accepted within factual scope; R1/R4/R5/R6 retain precise action/client/count/cap-display errors. All268 structural mappings and22 named artifact identities verified; no accepted global inventory, source or feature qualification. Report and corrected author integrated as RECORDS ONLY, original reports preserved. EV-PRESERVATION-GAPS task_9456469c267b/ctx_f2864b9be31e delivered ed78321e51156f229507e654f0cf3faae100b935: exactly two negative-gap dispositions, independent factual review pending, no original preservation pass. Both terminals explicitly released; final full native transcripts, verified full workspace/temp archives and live exact published task refs retained privately. Worktrees explicitly retained read-only, no destructive cleanup.
