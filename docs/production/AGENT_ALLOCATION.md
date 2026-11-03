@@ -1,5 +1,16 @@
 # Agent allocation and execution ledger
 
+## Findings delta and CI attribution documentation accepted — 2026-11-03T05:30:57.896706+00:00
+
+Astra review ac9c4d49 at exact M3 author a2dab11c accepts R3/R5; prior433 review acceptance of six other corrections and initial00b7 verified265/61/204/exact61ID structure preserved by unchanged lines. Coordinator accepts bounded corrected current-delta routing documentation, not global report/source/finding qualification. Historical59/12detailed+47inherited+2new scope retained; all61findings remain open. New execution COORDINATOR_DISPOSITION.json records exact chain and limits.
+
+Astra review79b08fd0 at M3 authorb1ca1390 accepts all seven CI prose corrections; prior81ac56tuples/11covers/16objects/zerointersections/nonancestorunknown-stale facts preserved without new global audit. Coordinator accepts bounded attribution documentation only. Actualsourcebdcf remains nonancestor/56unknown-stale at entry638a; no evidence admission, freshness/source/feature/privacy pass. Malformed65character hash in delivery and privateverification receipt preserved as explicit erratum; canonical64character identity independently verified. Private51check harness/two failed attempts violate no-new-harness instruction; corrected prose accepted on independent factual review, procedural conformance NOTcertified, no deadlinepass or invented totalduration. New execution COORDINATOR_DISPOSITION.json records this separate process disposition.
+
+Both reviewers released, exact task refs published/verified, full natives and verified workspace/temp archives preserved; review records integrated sequentially at 22fd6d10fa03bbbe7901d8c2bdca1756a1a4dbc8/4d88b4c6d145bbe18811cc1345f6d725815189ea. Exact worktrees retained read-only, no cleanup. Full117row2page fleet111released/6historicalretained/0newactive, max2new+coordinator+protectedexternal4. Details CF_CORRECTED_REVIEW_DELIVERIES.json. Relevant accepted SEC14/15/DEP05 slice permits separately recorded early SW-REPO metadata intake; its actual source/security/license/history and all completion dependencies remain unsatisfied. SW-DOCS completion remains dependent on accepted software.
+
+SW-AUDIT/EV negative-gap acceptances remain bounded. Formal core qualification1 FAIL/no domain; explicit owner manual-retake choice pending, no answer inferred and no retry launched. Source/privacy/physical/HIL/72h/week/finalrelease gates unchanged; original3Tron decisions closed. Frozen85pin packet unchanged. Publish/verify scoped integration records before next wave; private cf-accepted-publication.json post-push receipt outside referenced commit.
+
+
 ## CI attribution and corrected findings independent reviews launched — 2026-11-03T05:26:19.710785+00:00
 
 - findings_fix02: task task_5016bec03442 / dispatch ctx_b4174280ec27, exact base a2dab11cdc871d6a98c563b019a361371a9af710, branch ryan-haver/wp-exec-sw-findings-01-rereview02, only NEW docs/production/software-waves/SW-FINDINGS-01/execution-20261101/CORRECTION_REVIEW_02.md, native entry {"status": "native Astra/high attested at exact Task/Dispatch/cwd", "session": "01a19fde-fbe9-78a3-8565-555b8692359a", "models": ["gpt-6-astra"], "effort": "high native", "bytes": 412857, "sha256": "e516ba5c1387dcc0d0dba4d7d03a1c0bb2b350bdd683026f83de4e46c1d231e8"}; observed Dispatch dispatched.

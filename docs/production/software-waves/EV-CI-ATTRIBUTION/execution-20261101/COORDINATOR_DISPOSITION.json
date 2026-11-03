@@ -1,0 +1,68 @@
+{
+  "observed_utc": "2026-11-03T05:30:57.896706+00:00",
+  "unit": "EV-CI-ATTRIBUTION",
+  "coordinator_decision": "ACCEPT bounded corrected historical CI attribution documentation only",
+  "author_family": "MiniMax",
+  "author_commit": "b1ca1390f90652bf25fcb8ce73efb211c1b666da",
+  "author_git_blob_sha256": "5954a2ac675fc1f7919431e114a1cba865d0fb2a7a5f55599ce01e69404b9f5d",
+  "independent_review_family": "OpenAI",
+  "independent_review": {
+    "observed_utc": "2026-11-03T05:29:37.474326+00:00",
+    "review_commit": "79b08fd075f933ba63be908cb67707781cdd1ed4",
+    "review_base": "b1ca1390f90652bf25fcb8ce73efb211c1b666da",
+    "report": "docs/production/software-waves/EV-CI-ATTRIBUTION/execution-20261101/CORRECTION_REVIEW_01.md",
+    "bytes": 9199,
+    "sha256": "18d3598b176d0173945187521eda6e2d5aac5a0ddf479581822638c8e0375fd9",
+    "task_id": "task_3916f3c5ba32",
+    "dispatch_id": "ctx_67980920fabd",
+    "worktree": "wp-exec-ev-ci-attribution-rereview01",
+    "branch": "ryan-haver/wp-exec-ev-ci-attribution-rereview01",
+    "verdict": "accept R1-R7 bounded attribution prose only",
+    "terminal": "released",
+    "task_ref_publication": "exact remote/local verified",
+    "native_final": {
+      "session": "01a19fdf-372c-7de2-9bd8-d04d13266db1",
+      "models": [
+        "gpt-6-astra"
+      ],
+      "effort": "high",
+      "bytes": 844428,
+      "sha256": "42e80513dbcb835349c5a4a5538e5e2a08855ac998932ab7e37a3082eb79f6fc"
+    },
+    "checks": "489 documentation tests, direct exit0 and full stdout/JUnit/temp preserved; not semantic proof",
+    "cleanup": "retain exact review tree read-only; no removal",
+    "preservation": {
+      "archive_sha256": "5e081ad9e5e16b691938ec12c392f971d39c838acf08ac9c5023bd6f1c86a9d5",
+      "archive_bytes": 206867853,
+      "regular_files": 4620,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+    },
+    "integration_commit": "4d88b4c6d145bbe18811cc1345f6d725815189ea"
+  },
+  "prior_review": "81ac391cdc07ca8885b3b2237aa467aee0625675 require_changes R1-R7; verified56tuples/11covers/16objects/zerointersections/nonancestorunknown-stale retained with its actual provenance",
+  "resolved_residuals": [
+    "planning20 arithmetic",
+    "static entry identity vs future behavior",
+    "separate retained Flic/API proof before duplicate work",
+    "held/open unsatisfied gates vsclosed original3Tron",
+    "formal qualification FAIL/no domain separate from capacity",
+    "Git SOURCE archive and docs-test disclosures",
+    "both original diff invocations and hypothetical published-source freshness wording"
+  ],
+  "scope": "exact corrected prose and prior verified table/Git-fact preservation; no new56unit/global/rawarchive re-audit",
+  "actual_historical_source": "bdcf06dc6723aad7da63ecfed3d3555ab0d02e55",
+  "historical_analysis_entry": "638a226a49b9cc0ead952a4a787d12c26dfcd35e",
+  "units": 56,
+  "actual_freshness": "nonancestor at recorded entry; all56 unknown/stale, actual source never relabeled",
+  "freshness_admission": false,
+  "source_or_feature_qualification": false,
+  "privacy_clearance": false,
+  "bounded_documentation_task_complete": true,
+  "global_software_completion": false,
+  "delivery_identity_erratum": "Original malformed65character hash also exists in private author verification receipt; neither is a passed identity check. Exact canonical64character digest independently verified, working content identical; all originals preserved",
+  "process_deviation_disposition": "New private51check harness despite no-new-harness instruction and two failed attempts are recorded as nonconforming. Accept corrected prose based on independent exact-commit factual review, not that harness. No product/tool deliverable, procedural-conformance certification or deadline pass. Future bounded correction tasks retain no-new-harness constraint",
+  "timing": "Eight-minute target exceeded as reported; verification-only3.1min interval is not reliable total duration, numeric total unknown",
+  "settlement": "Authors/reviewers released; exact task refs published/verified; full natives/workspace/temp archives retained; exact worktrees read-only, no removal",
+  "core_qualification": "attempt1 FAIL/no domain; explicit owner manual-retake decision pending; no retry authority",
+  "owner_gates": "physical/HIL/72h/week/finalrelease held/open, original3Tron decisions closed"
+}
