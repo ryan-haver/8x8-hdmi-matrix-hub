@@ -1,6 +1,6 @@
 {
-  "observed_utc": "2026-11-03T18:46:49.803914+00:00",
-  "status": "Anthropic R3 delivered; MiniMax retained; OpenAI R3 prepared, not launched",
+  "observed_utc": "2026-11-03T18:47:43.537419+00:00",
+  "status": "R3 Anthropic preserved; MiniMax and OpenAI decisions pending, no consensus",
   "phase": "qualification-replacement-20261103",
   "frozen_input_sha256": "fc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9",
   "all_round1_bases": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
@@ -953,10 +953,45 @@
         "round3",
         "openai"
       ],
-      "stage": "prepared next free slot, not launched",
+      "stage": "launched; no decision delivered yet",
       "branch_reservation": "planning/qr-20261103-r1-openai",
       "creation": "genuineworker-start new-top-level; returnedactualbranchmustberecorded, reservationnotassumed",
-      "actual_branch": "ryan-haver/wp-qr-r1-openai"
+      "actual_branch": "ryan-haver/wp-qr-r1-openai",
+      "actual_assignment": {
+        "task_id": "task_59ba5ac247bd",
+        "dispatch_id": "ctx_48e9a1a9c523",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-openai",
+        "actual_branch": "ryan-haver/wp-qr-r1-openai",
+        "exact_base": "1ac7d96d7000f85e072a97512f35095906d7934c",
+        "report": "docs/agent-process/phases/qualification-replacement-20261103/round3/openai.md",
+        "frozen_input_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74",
+        "launch": {
+          "requested": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          },
+          "effective": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        },
+        "turn_start": "observed",
+        "native_entry": {
+          "status": "nativeOpenAI Astra/high attestedatexactTask/Dispatch/cwd",
+          "session": "01a1a2bc-a7b8-7232-9516-741e76e45825",
+          "models": [
+            "gpt-6-astra"
+          ],
+          "effort": "highnative",
+          "bytes": 475828,
+          "sha256": "3981d19a804d095ee27cd7d6c5692c7a8e2c6e43cc8354b0fe3a41cec9df7c69"
+        },
+        "status": "third R3 final packet decision launched; no verdict, consensus or qualification inferred",
+        "observed_dispatch_status": "dispatched",
+        "observed_worker_state": "ready"
+      }
     }
   },
   "final_packet_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74"
