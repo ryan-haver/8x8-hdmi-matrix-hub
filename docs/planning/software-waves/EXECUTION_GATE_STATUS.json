@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-03T18:43:34.736595+00:00",
+  "observed_utc": "2026-11-03T18:46:49.803914+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -1510,7 +1510,7 @@
     "dispatch_id": null
   },
   "replacement_qualification": {
-    "status": "R3 first two final packet decisions underway, third reserved; no consensus or qualification",
+    "status": "Anthropic R3 preserved; OpenAI third prepared, no all-three consensus",
     "authorization": "docs/agent-process/phases/qualification-replacement-20261103/AUTHORIZATION.json",
     "input_sha256": "fc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9",
     "candidate": "claude-opus-5-5/high",
@@ -2034,9 +2034,43 @@
           "unassigned_helper_tools_observed": [],
           "scope": "pointintime nativecapture, not descendantcensus"
         },
-        "status": "R3 final packet decision launched; no verdict or consensus inferred",
+        "status": "delivered/released/preserved/published",
         "observed_dispatch_status": "dispatched",
-        "observed_worker_state": "ready"
+        "observed_worker_state": "ready",
+        "delivery_metadata": {
+          "observed_utc": "2026-11-03T18:46:02.196270+00:00",
+          "head": "04ca6c4191ec309bb3a21b2b7447ef1e04b4fdf6",
+          "base": "fbfb38ebcb026a2c3713d8bbbb7684d126a50af9",
+          "tree": "wp-qr-r1-anthropic",
+          "actual_branch": "planning/qr-20261103-r1-anthropic",
+          "report": "docs/agent-process/phases/qualification-replacement-20261103/round3/anthropic.md",
+          "bytes": 3960,
+          "sha256": "d4df5baf81b8410286a6561fbea9d9a73dfb68d2443a647b61826bc13100e711",
+          "task_id": "task_9dff86280e44",
+          "dispatch_id": "ctx_516e9f13d9fa",
+          "terminal": "released",
+          "task_ref_publication": "exact remote/local verified",
+          "native_final": {
+            "session": "41aa3a76-4b99-48a6-bc3d-e6c63f4384d6",
+            "models": [
+              "claude-opus-5-5"
+            ],
+            "bytes": 980357,
+            "sha256": "24fe44a7aa7d0d68465837450a310835983ceb24f27931140a1327948d1e4465"
+          },
+          "R2_original_files_rehashed_unchanged": 4676,
+          "acceptance": "R3 decision delivered; no all-three consensus or qualification inferred",
+          "peer_barrier": "R3 decision contents withheld from peers until all three originals preserved",
+          "process_history": "one489 docs/direct0 and full original streams/JUnit/temp retained; failed first commit attempt from PowerShell here-string/pathspec parse preserved in process-notes; no source hook/full CI claim",
+          "cleanup": "retain exact tree read-only, no removal",
+          "preservation": {
+            "archive_sha256": "990defcdedd0f70dde2a7e8126b40cfb1218f02cb0c49c4efb840043943a1c38",
+            "archive_bytes": 207200028,
+            "regular_files": 4682,
+            "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+          },
+          "integration_commit": "22a696cb9a1e613dc88d88e6fb346ca9ba39979a"
+        }
       },
       "minimax": {
         "task_id": "task_06484235023d",

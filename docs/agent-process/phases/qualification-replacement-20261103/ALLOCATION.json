@@ -1,6 +1,6 @@
 {
-  "observed_utc": "2026-11-03T18:43:34.736595+00:00",
-  "status": "R3 first two final packet decisions launched; OpenAI reserved, no consensus",
+  "observed_utc": "2026-11-03T18:46:49.803914+00:00",
+  "status": "Anthropic R3 delivered; MiniMax retained; OpenAI R3 prepared, not launched",
   "phase": "qualification-replacement-20261103",
   "frozen_input_sha256": "fc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9",
   "all_round1_bases": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
@@ -320,10 +320,21 @@
   "independent_future_judge": "OpenAI Astra/high at exactfutureAnthropicevaluationreport, one judge under ownerapproval",
   "demand": "9 bounded prose planning contributions (R1/R2 target4min/<=600words inclJSON, R3 target2min explicitverdict), one15min candidateassessment and one15min independentjudge; later stages separatelycapacitygated, no unsupportedtoken/cost forecasts",
   "capacity": {
-    "observed_utc": "2026-11-03T18:42:16.918976+00:00",
-    "source": "supported orca account list, cached usage; no absolute allowance exposed",
-    "other_host_demand": "unknown; not zero",
-    "reserve": "remaining six bounded planning contributions plus one candidate and one fresh judge, each stage separately gated; no automatic qualification correction/retry authority",
+    "observed_utc": "2026-11-03T18:46:49.803914+00:00",
+    "other_host_demand": "unknown, not zero",
+    "scope": "one bounded remaining R3 final decision; future candidate and judge separately gated, no assurance of all-stage funding",
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 64,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "11:36 PM"
+      },
+      "updatedAt": 1793730990934,
+      "error": null
+    },
     "claude": {
       "status": "ok",
       "session": {
@@ -339,18 +350,6 @@
         "resetDescription": "Fri 5:00 AM"
       },
       "updatedAt": 1793730990532,
-      "error": null
-    },
-    "codex": {
-      "status": "ok",
-      "session": null,
-      "weekly": {
-        "usedPercent": 64,
-        "windowMinutes": 10080,
-        "resetsAt": 1793774164000,
-        "resetDescription": "11:36 PM"
-      },
-      "updatedAt": 1793730990934,
       "error": null
     },
     "minimax": {
@@ -372,28 +371,35 @@
     }
   },
   "fleet": {
-    "total": 129,
+    "total": 131,
     "all_pages": true,
     "pages": [
       {
         "limit": 100,
-        "total": 129,
+        "total": 131,
         "hasMore": true,
-        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMTg3fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwNTozMTowOCIsImRpc3BhdGNoSWQiOiJjdHhfNWU0NDRhYjUyODVjIiwiZGF0YWJhc2VJZCI6Njk0fX0"
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMTk0fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwNzozMzoxMSIsImRpc3BhdGNoSWQiOiJjdHhfNmI3ODA3Yzk2ZDAzIiwiZGF0YWJhc2VJZCI6NzI4fX0"
       },
       {
         "limit": 100,
-        "total": 129,
+        "total": 131,
         "hasMore": false,
         "nextCursor": null
       }
     ],
     "terminal_counts": {
-      "released": 123,
-      "retained": 6
+      "retained": 7,
+      "released": 124
     },
-    "new_active": 0,
-    "historical_retained": 6
+    "historical_retained": 6,
+    "current_other_resource": {
+      "taskId": "task_06484235023d",
+      "dispatchId": "ctx_55dc79dcba80",
+      "dispatchStatus": "dispatched",
+      "workerState": "ready",
+      "terminalState": "retained"
+    },
+    "accounting": "six historical and one MiniMax R2 retained resource; status not inferred as active from retention"
   },
   "alternatives": "Opus4.7 two failed mandatoryqualifications retained, Google primaryunavailable and alternate route unqualified/unknown, DeepSeek exhausted, no samefamilyevaluationjudge or silent substitution",
   "protected": "root/private runtime/oldfailedbytes/native/artifacts/baselines/retainedworkspaces/odd untrackedhook artifact; no cleanup/reset/prune/forcepush",
@@ -768,7 +774,7 @@
         "round3",
         "anthropic"
       ],
-      "stage": "launched; no decision delivered yet",
+      "stage": "delivered/released/preserved/published; peer decision withheld",
       "routing_binding": {
         "observed_utc": "2026-11-03T17:48:52.924322+00:00",
         "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-anthropic",
@@ -816,6 +822,40 @@
         "status": "R3 final packet decision launched; no verdict or consensus inferred",
         "observed_dispatch_status": "dispatched",
         "observed_worker_state": "ready"
+      },
+      "delivery_metadata": {
+        "observed_utc": "2026-11-03T18:46:02.196270+00:00",
+        "head": "04ca6c4191ec309bb3a21b2b7447ef1e04b4fdf6",
+        "base": "fbfb38ebcb026a2c3713d8bbbb7684d126a50af9",
+        "tree": "wp-qr-r1-anthropic",
+        "actual_branch": "planning/qr-20261103-r1-anthropic",
+        "report": "docs/agent-process/phases/qualification-replacement-20261103/round3/anthropic.md",
+        "bytes": 3960,
+        "sha256": "d4df5baf81b8410286a6561fbea9d9a73dfb68d2443a647b61826bc13100e711",
+        "task_id": "task_9dff86280e44",
+        "dispatch_id": "ctx_516e9f13d9fa",
+        "terminal": "released",
+        "task_ref_publication": "exact remote/local verified",
+        "native_final": {
+          "session": "41aa3a76-4b99-48a6-bc3d-e6c63f4384d6",
+          "models": [
+            "claude-opus-5-5"
+          ],
+          "bytes": 980357,
+          "sha256": "24fe44a7aa7d0d68465837450a310835983ceb24f27931140a1327948d1e4465"
+        },
+        "R2_original_files_rehashed_unchanged": 4676,
+        "acceptance": "R3 decision delivered; no all-three consensus or qualification inferred",
+        "peer_barrier": "R3 decision contents withheld from peers until all three originals preserved",
+        "process_history": "one489 docs/direct0 and full original streams/JUnit/temp retained; failed first commit attempt from PowerShell here-string/pathspec parse preserved in process-notes; no source hook/full CI claim",
+        "cleanup": "retain exact tree read-only, no removal",
+        "preservation": {
+          "archive_sha256": "990defcdedd0f70dde2a7e8126b40cfb1218f02cb0c49c4efb840043943a1c38",
+          "archive_bytes": 207200028,
+          "regular_files": 4682,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "integration_commit": "22a696cb9a1e613dc88d88e6fb346ca9ba39979a"
       }
     },
     "minimax": {
@@ -913,7 +953,7 @@
         "round3",
         "openai"
       ],
-      "stage": "reserved, not launched",
+      "stage": "prepared next free slot, not launched",
       "branch_reservation": "planning/qr-20261103-r1-openai",
       "creation": "genuineworker-start new-top-level; returnedactualbranchmustberecorded, reservationnotassumed",
       "actual_branch": "ryan-haver/wp-qr-r1-openai"
