@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-03T03:08:36.528186+00:00",
+  "observed_utc": "2026-11-03T03:28:37.094738+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -144,8 +144,10 @@
         "bytes": 57882,
         "sha256": "48dcc3528a166b6772f2102b6454b92d7c152631155d4af8405fbb8ac9344f9b"
       },
-      "status": "active; no delivered/reviewed/integrated/qualified outcome claimed"
-    }
+      "status": "delivered ac97, exact-commit re-review prepared",
+      "report_commit": "ac97e1f5886d591562597b5e81c3fa410adda2f8"
+    },
+    "review_instruction_erratum": "docs/production/software-waves/MVP-EXECUTION-20261102/REVIEW_INSTRUCTION_ERRATUM.json"
   },
   "automatic_retakes": false,
   "owner_decision_pending": "Explicit question presented: authorize one prepared controlled manual new qualification attempt, or assess a different provider. No answer/approval inferred; no retake launched.",
@@ -153,7 +155,7 @@
   "product_source_changed_by_this_batch": false,
   "preservation_gaps": {
     "author_commit": "ed78321e51156f229507e654f0cf3faae100b935",
-    "status": "ordinary author correction01 active; report still requires changes and exact-commit re-review",
+    "status": "correction delivered816, exact-commit re-review prepared",
     "original_preservation_pass": false,
     "independent_review": {
       "task_id": "task_eea6f443f108",
@@ -192,7 +194,8 @@
       "task_id": "task_e1d5c3589200",
       "dispatch_id": "ctx_f56a5a99bfee",
       "base": "ed78321e51156f229507e654f0cf3faae100b935",
-      "status": "active, no acceptance"
+      "status": "delivered; released/preserved/published, re-review pending",
+      "report_commit": "816755055028d37aa62c0ff62caace473288654d"
     }
   }
 }
