@@ -1,5 +1,16 @@
 # Agent allocation and execution ledger
 
+## Owner-approved replacement assessment planning prepared — 2026-11-03T17:47:23.285520+00:00
+
+Owner "prepare and deploy" approves proposed replacement-model assessment planning/execution, interpreted in context as deploying workers, not software release. New qualification-replacement-20261103 AUTHORIZATION records max9planningcontributions across3genuinefamilies/3rounds thenatmostONE Opus5.5candidate andONE freshindependentOpenAIjudge, unchangedcaaa/full938boundary/frozenrubric66f370.../eligibledomain. Bothfailed4.7attemptsimmutable; currentqualifieddomainsremainempty, no source/gate waiver. Frozen85pinpacket52ed unchanged.
+
+R1INPUT_PACKET frozenSHAfc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9, exactcommonintegrationbased00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1; independentAnthropicOpus5.5/high,MiniMaxM3thinking,OpenAIAstra/high contributions, coordinatordoesnotcount. Firstwave two new dedicated planningtrees wp-qr-r1-anthropic/wp-qr-r1-minimax; OpenAIR1 wp-qr-r1-openai reservednextslot, Task/Dispatchnulluntilactualstart. No peerreports/peer-based summaries shared beforeall3R1preserved. R2readseverypeer; R3all3explicitdecisionsonsamehashedfinalpacket required, noconsensusassumed. Fullscope/leases/tasks in newphase ALLOCATION/INPUT_PACKET/AUTHORIZATION andtasks.
+
+FreshsameRun37205/gen5/coordinatorterm6ed/runtime35d5d4fb/Orca1.4.247/localZelu, all123workerrows2pages117released/6historicalretained/0newactive checked. Current intendedpoolquotas verified>=30%; exactM3main/small/internal andhelperdenials, AnthropicprofileOpus5.5/high preference and15Orcahooks audited; actualnativebackend stillmustattest, localteams/delegation/MCP/pluginrestrictions beforelaunch. OpenAIcatalogAstra/high supported. Firstwavepluscoordinator+protectedexternal4total, no nesting. Finiteplanning/evaluation/judgereserve, freshquota/qualification gates everyactualstage, currentobservation notwholebacklogfunding. No newsource/test/tool or hardware/HA/container/CI/releaseexecution.
+
+Publish/verify scopedauthority/input/allocation beforeprovisioning and genuineOrca worker-start. Existingboundedpreparations/checklistacceptedonlywithinmetadata; all61findings/source/privacy/HIL/72h/week/finalrelease gatesunchanged, original3Tronclosed. Private r1-ready-publication.json postpushreceiptoutside referencedcommit.
+
+
 ## Manual qualification attempt02 formally FAIL; single approved retake exhausted — 2026-11-03T17:36:51.308169+00:00
 
 Fresh Astra judge7548b5b7 at evaluator78ee/sourcecaaa independently FAILS mandatoryprovenance/calibration/reviewquality, PASSES invariants/counterexamples/behaviorandtools. Coordinator records FAIL/noqualifieddomain in NEW manual-attempt-02/COORDINATOR_DISPOSITION.json; originalattempt1FAIL dispositionSHA unchanged, bothhistories/failures/evidence preserved. J1: intervening060769incorrectlyexcluded, actualnativeinspection lacked threechangedreports/fullninepathdiff. J2: ignoredprivatesidecar falselycalledpublished/shipped. J3: docs106filesnotone and FAPI034fourrecordswithtwoblockedcontrols,notsix. Actual54focused/489docs and all283externalbytes corroborated withoutmismatch; no newlyestablishedproduct-source defect or sourceacceptance. Technical/capturestrengths donotwaive6-axisrule.

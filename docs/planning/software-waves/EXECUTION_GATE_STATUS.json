@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-03T17:36:51.308169+00:00",
+  "observed_utc": "2026-11-03T17:47:23.285520+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -1508,5 +1508,32 @@
     "path": "docs/production/software-waves/MVP-EXECUTION-20261102/PROPOSED_REPLACEMENT_MODEL_QUALIFICATION.json",
     "task_id": null,
     "dispatch_id": null
+  },
+  "replacement_qualification": {
+    "status": "owner approved prospective planning and ONE replacementassessment; R1prepared/notlaunched",
+    "authorization": "docs/agent-process/phases/qualification-replacement-20261103/AUTHORIZATION.json",
+    "input_sha256": "fc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9",
+    "candidate": "claude-opus-5-5/high",
+    "source_candidate": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+    "rubric_sha256": "66f37090564007afebe29cdfd095af7fa85c4321a8420016ada8633dc0563672",
+    "qualified_domains": [],
+    "round1": {
+      "anthropic": {
+        "status": "ready for firsttwo",
+        "task_id": null,
+        "dispatch_id": null
+      },
+      "minimax": {
+        "status": "ready for firsttwo",
+        "task_id": null,
+        "dispatch_id": null
+      },
+      "openai": {
+        "status": "planned/reserved next free slot, not launched",
+        "task_id": null,
+        "dispatch_id": null
+      }
+    },
+    "source_or_release_acceptance": false
   }
 }
