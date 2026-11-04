@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T11:51:55.724910+00:00",
+  "observed_utc": "2026-11-04T11:54:19.685951+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -3120,11 +3120,29 @@
         "privacy_delivery": "docs/production/remediation-20261104/recovery-execution/PRIV_C4_DELIVERY.json"
       },
       "waveB": {
-        "status": "PREPARED / no Task/Dispatch/worktree yet",
+        "status": "LAUNCHED: qualified WS-R01 and FIRST privacy M3candidate, no report/verdict/acceptance",
         "subject_packet_sha256": "7a6256111da21e71aee2f3ad315a646f7e3b6e088c45a3d4ee18dcf222c66763",
-        "record": "docs/production/remediation-20261104/recovery-execution/WAVE_B_PREFLIGHT.json",
+        "record": "docs/production/remediation-20261104/recovery-execution/WAVE_B_DISPATCHES.json",
         "privacy_qualification": "NOT_GRANTED",
-        "source_acceptance": false
+        "source_acceptance": false,
+        "actors": {
+          "openai": {
+            "task_id": "task_dbebfdfebb1c",
+            "dispatch_id": "ctx_ecdde4971dc6",
+            "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-ws-work-c01-review",
+            "branch": "remediation/ws-work-c01-review",
+            "exact_base": "24c5170458200209836228646fdfc8784a967ad1",
+            "status": "Qualified component SOURCE REVIEW active; no finding/verdict/acceptance yet"
+          },
+          "minimax": {
+            "task_id": "task_eef2d2e8f289",
+            "dispatch_id": "ctx_b6947db9e4fd",
+            "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-recovery-privacy-m3-assess",
+            "branch": "qualification/recovery-privacy-m3",
+            "exact_base": "5385325722a39e6dd766352489f828f5e54b56d5",
+            "status": "FIRST privacy-review domain CANDIDATE active, NOT_QUALIFIED, no verdict/source acceptance"
+          }
+        }
       }
     },
     "recovery_source_wave_A": {

@@ -1,0 +1,220 @@
+{
+  "observed_utc": "2026-11-04T11:54:19.685951+00:00",
+  "phase": "remediation-recovery-20261104",
+  "wave": "B",
+  "status": "WS qualified exact-source reviewer and FIRST MiniMax privacy-domain candidate LAUNCHED; no report/verdict/source acceptance",
+  "actors": {
+    "openai": {
+      "task_id": "task_dbebfdfebb1c",
+      "dispatch_id": "ctx_ecdde4971dc6",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-ws-work-c01-review",
+      "branch": "remediation/ws-work-c01-review",
+      "exact_base": "24c5170458200209836228646fdfc8784a967ad1",
+      "exclusive_report": "docs/production/remediation-20261104/WS-WORK-01/CORRECTION-01-REVIEW.md",
+      "spec": "docs/production/remediation-20261104/recovery-execution/WS_R01_TASK.md",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "actual native model at exact Task/Dispatch/cwd",
+        "session": "01a1a667-cced-7b92-b3fe-600fcd82611b",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 830880,
+        "sha256": "a61c13f2366f6caf22ff2d63bf088504edb1a10eef55ff2aa504c5a36a78b495",
+        "unassigned_helpers_observed": [],
+        "scope": "entry only; no competence/completion/descendant census"
+      },
+      "status": "Qualified component SOURCE REVIEW active; no finding/verdict/acceptance yet",
+      "dispatch_status": "dispatched",
+      "worker_state": "ready"
+    },
+    "minimax": {
+      "task_id": "task_eef2d2e8f289",
+      "dispatch_id": "ctx_b6947db9e4fd",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-recovery-privacy-m3-assess",
+      "branch": "qualification/recovery-privacy-m3",
+      "exact_base": "5385325722a39e6dd766352489f828f5e54b56d5",
+      "exclusive_report": "docs/production/remediation-20261104/PRIVACY-M3-ASSESSMENT/AUTHOR.md",
+      "spec": "docs/production/remediation-20261104/recovery-execution/PRIV_M3_ASSESS_TASK.md",
+      "launch": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "turn_start": "unsupported",
+      "native_entry": {
+        "status": "actual native MiniMax M3 at exact Task/Dispatch/directory",
+        "session": "ses_e5998016fffe3emviWZx9eKO2h",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "CLI_effort_override": "unsupported, configured route inherited",
+        "bytes": 23742,
+        "sha256": "189b75a7f4eae1d301a10f39bd8103906e159194a4653dd2d6c446a0d7cd5d15",
+        "unassigned_helpers_observed": [],
+        "scope": "entry capture only, not source qualification/completion/descendant census"
+      },
+      "status": "FIRST privacy-review domain CANDIDATE active, NOT_QUALIFIED, no verdict/source acceptance",
+      "dispatch_status": "dispatched",
+      "worker_state": "ready"
+    }
+  },
+  "adopted_packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+  "subject_packet_sha256": "7a6256111da21e71aee2f3ad315a646f7e3b6e088c45a3d4ee18dcf222c66763",
+  "prewave_published_verified_head": "f693b7848c5b973f0c207ae53b8b7dfffc8b5758",
+  "capacity": {
+    "openai": {
+      "observed_utc": "2026-11-04T11:53:01.418055+00:00",
+      "scope": "two bounded WS exact-source review and first privacy-domain assessment; one future independent judge plus qualified source review/evaluation and material-fix reserve conditional and freshly gated; absolute allowances/otherhost commitments unknown",
+      "codex": {
+        "status": "ok",
+        "session": null,
+        "weekly": {
+          "usedPercent": 13,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "updatedAt": 1793792626278,
+        "error": null
+      },
+      "claude": {
+        "status": "ok",
+        "session": {
+          "usedPercent": 5,
+          "windowMinutes": 300,
+          "resetsAt": 1793796600122,
+          "resetDescription": "5:50 AM"
+        },
+        "weekly": {
+          "usedPercent": 25,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400122,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "updatedAt": 1793792626087,
+        "error": null
+      },
+      "minimax": {
+        "status": "ok",
+        "session": {
+          "usedPercent": 20,
+          "windowMinutes": 300,
+          "resetsAt": 1793794421794,
+          "resetDescription": null
+        },
+        "weekly": {
+          "usedPercent": 34,
+          "windowMinutes": 10080,
+          "resetsAt": 1793823932892,
+          "resetDescription": null
+        },
+        "updatedAt": 1793792626060,
+        "error": null
+      }
+    },
+    "minimax": {
+      "observed_utc": "2026-11-04T11:53:12.766820+00:00",
+      "scope": "two bounded WS exact-source review and first privacy-domain assessment; one future independent judge plus qualified source review/evaluation and material-fix reserve conditional and freshly gated; absolute allowances/otherhost commitments unknown",
+      "codex": {
+        "status": "ok",
+        "session": null,
+        "weekly": {
+          "usedPercent": 13,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "updatedAt": 1793792626278,
+        "error": null
+      },
+      "claude": {
+        "status": "ok",
+        "session": {
+          "usedPercent": 5,
+          "windowMinutes": 300,
+          "resetsAt": 1793796600122,
+          "resetDescription": "5:50 AM"
+        },
+        "weekly": {
+          "usedPercent": 25,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400122,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "updatedAt": 1793792626087,
+        "error": null
+      },
+      "minimax": {
+        "status": "ok",
+        "session": {
+          "usedPercent": 20,
+          "windowMinutes": 300,
+          "resetsAt": 1793794421794,
+          "resetDescription": null
+        },
+        "weekly": {
+          "usedPercent": 34,
+          "windowMinutes": 10080,
+          "resetsAt": 1793823932892,
+          "resetDescription": null
+        },
+        "updatedAt": 1793792626060,
+        "error": null
+      }
+    }
+  },
+  "fleet": {
+    "total": 154,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 154,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMzY2fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yMCAyMTo0NToxMCIsImRpc3BhdGNoSWQiOiJjdHhfYWE1ZTExYzQzZDYwIiwiZGF0YWJhc2VJZCI6MTA0NH19"
+      },
+      {
+        "limit": 100,
+        "total": 154,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 9,
+      "released": 145
+    },
+    "retained_metadata": 7,
+    "current_owned": 2
+  },
+  "concurrency": "two workers + coordinator + protected external =4of4; no nesting",
+  "routing": "Astra/high explicit requested/effective/native; OpenCode2 does not expose launch model/effort or turn-start observation on this route. Exact ignored scoped config selects M3 main/small/internal; native attests actual underlying model/variant separately, never treating null/unsupported as observed. No implicit substitution, credentials/accounts/spend or helper/provider access.",
+  "scope": "Only own NEW report and ignored/temp exploratory evidence per exact specs; product source/tests read-only. Source authors positively released and full original preservation/taskrefs verified before this wave.",
+  "privacy_next": "Exactly ONE later independent Astra/high judge at exact first M3 candidate report evaluates all six unchanged frozen criteria; FAIL/HOLD/unknown no retry or replacement judge. Only actual PASS could permit SEPARATE qualified full-chain source review and independent report-quality evaluation. M3 not currently qualified, judge cannot self-accept OpenAI source.",
+  "WS_next": "Exact original/corrected component review only, no first-authorship grant or handler lease; findings to original author under fresh gate and conditional material fix/re-review reserve. WSR03/prior failures immutable.",
+  "remaining": "D6targetindependence and WS wiring remain HELD; API034M-1/freshness, broaderWS040/combined, owner visual/HIL/72h/week/final artifacts/version/release remain open. No evidence admission/intake now.",
+  "settlement": "Preserve full native/config/ignored/temp/original report and actual history, positively release owned worker promptly on delivery, publish exact task ref. Retain source trees; full verified Git bundle before destructive Orca cleanup; none now.",
+  "next": "Publish scoped launch records/docs489 and independently verify integration remote/local, then END TURN for Orca wake. No completion polling."
+}
