@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T18:23:24.841525+00:00",
+  "observed_utc": "2026-11-04T18:26:05.551541+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -3384,7 +3384,7 @@
   },
   "historical_proposed_manual_attempt": "docs/production/software-waves/MVP-EXECUTION-20261102/PROPOSED_MANUAL_QUALIFICATION_ATTEMPT02.txt",
   "functional_completion_planning": {
-    "status": "All3R2preserved/released/published; completefinalv1/R3prepared/NOT_ADOPTED",
+    "status": "OpenAI+Anthropic actualR3samepacket decisionsACTIVE/MiniMaxreserved/NOADOPTION",
     "phase": "functional-completion-20261104",
     "input_packet_sha256": "cb6a9871fdf8a4adfb181ab1fbf3abafb6c265323c27b543ebd62f9c68857dc4",
     "record": "docs/agent-process/phases/functional-completion-20261104/ROUND1_DISPATCHES.json",
@@ -3509,7 +3509,26 @@
     },
     "round2_complete": "docs/agent-process/phases/functional-completion-20261104/ROUND2_COMPLETE.json",
     "final_packet": "docs/agent-process/phases/functional-completion-20261104/FINAL_PACKET.json",
-    "final_packet_sha256": "933166c3925e38e748bb4b78e15bb488c90e43bb12807b2f02ffd65b7ea6f2f4"
+    "final_packet_sha256": "933166c3925e38e748bb4b78e15bb488c90e43bb12807b2f02ffd65b7ea6f2f4",
+    "round3_dispatches": "docs/agent-process/phases/functional-completion-20261104/ROUND3_DISPATCHES.json",
+    "round3_actors": {
+      "openai": {
+        "task_id": "task_908b71effe7d",
+        "dispatch_id": "ctx_02b138df77b6",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-openai",
+        "branch": "planning/remediation-recovery-r1-openai",
+        "exact_report_base": "ddd04f78d7da37ee1d0ae0d84cefdf5745684228",
+        "status": "R3 explicit samepacket decision active; no vote received/adoption/implementation"
+      },
+      "anthropic": {
+        "task_id": "task_ae9877d75a18",
+        "dispatch_id": "ctx_37e0d2f0e439",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-anthropic",
+        "branch": "planning/remediation-recovery-r1-anthropic",
+        "exact_report_base": "5ab8653dc1d0f7bf3807e500945b76b888061779",
+        "status": "R3 explicit samepacket decision active; no vote received/adoption/implementation"
+      }
+    }
   },
   "latest_verified_CI": {
     "head": "9b783d723c81cc56ec86810b789fa31be41e75cc",
