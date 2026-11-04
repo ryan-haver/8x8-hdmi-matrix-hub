@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T20:50:00.250210+00:00",
+  "observed_utc": "2026-11-04T21:27:56.766981+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -3384,7 +3384,7 @@
   },
   "historical_proposed_manual_attempt": "docs/production/software-waves/MVP-EXECUTION-20261102/PROPOSED_MANUAL_QUALIFICATION_ATTEMPT02.txt",
   "functional_completion_planning": {
-    "status": "FC-SUPPORT-RUN report PARTIAL, reserved independent receipt-fidelity review ACTIVE",
+    "status": "Corrected FC-TRUTH preserved/released/published; reserved Sol exactcommit rereview PREPARED/no Task yet",
     "phase": "functional-completion-20261104",
     "input_packet_sha256": "cb6a9871fdf8a4adfb181ab1fbf3abafb6c265323c27b543ebd62f9c68857dc4",
     "record": "docs/agent-process/phases/functional-completion-20261104/ROUND1_DISPATCHES.json",
@@ -3590,7 +3590,7 @@
         "status": "ACTIVE assigned bounded inventory/metadata authorship, no source/qualification/featureacceptance"
       }
     },
-    "execution_wave_A_latest_record": "docs/agent-process/phases/functional-completion-20261104/SUPPORT_REVIEW_DISPATCH.json",
+    "execution_wave_A_latest_record": "docs/agent-process/phases/functional-completion-20261104/TRUTH_CORRECTION_REREVIEW_READY.json",
     "execution_wave_A_reviewers": {
       "truth": {
         "package": "FC-TRUTH",

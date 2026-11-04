@@ -1,5 +1,14 @@
 # Agent allocation and execution ledger
 
+## FC-TRUTH correction preserved; reserved Sol rereview prepared — 2026-11-04T21:27:56.766981+00:00
+
+Original MiniMax author Tasktask_5305a1b797cc/ctx_467d7a450979 delivered7996a080b64750da5c6de4f1e365d6fcd85c7ddc parent99e72bd9, onlyINVENTORY.md and literalNEW CORRECTION.md (the task said optional NEW CORRECTION.md). Exacthashes dd2067ca/955d1fbc, source/configboundary clean; originalfilename/history preserved. AuthorreportsR1-R4/nonblockingcorrections and new268semanticmap; no canonicalacceptance fromselfclaim. Original99e/errorreceipts intact. ONE actualauthorfactualcorrection consumed, ONE Sol exact7996rereview nowPREPARED/noTaskyet; no assessment retake/extra judge.
+
+Worker positivelyreleased/transcript captured, finalactualnativeM3thinking/exactTaskDispatchdirectory/nohelpersobserved/fullverifiedGitbundle/normaltaskref fastforward exactpublication proven. Originalregistered correctionpayload8cf626a93e994201a7f90405627e24b9 retainedreadonly137files5141798bytes; once-only489docs/direct0/zeroerrorsskips verified, no oldrun substitution. Newregisteredcoor6b6b0c08cfd64ef5997d668e0974257c holds compactcustody/native/fullbundle/receipts; no wholeworkspace/build/dependencycopy/deletion/quarantine. ReviewDec04.
+
+FreshsameRun/runtime2fec/Orca1.4.248/gen5/local/catalog/inbox/all173rows2pages165released/sevenretained(sixold+M3supportreview)/onenullcompat. NativeUIRefresh effectCLIages7seconds at21:26:30Z: OpenAI73/Anthropic73/M3weekly98percentremaining, M3session33remaining. OnlyintendedCodex gates newSol dispatch; otherprovidersobserved honestly, no projectwidestop ifM3laterconstrained. Qualified boundedproseAstra alternative sameOpenAI vsM3author; no substitutionperformed. Freshbeforeprepare/start/latercorrection. Max2current+coordinator+protectedexternal4/no nesting, oldunknown/userresources protected. Existing M3supportfidelityreview remainsindependent/inflight. Allsource/Q/D6/WSR03/privacyFAIL/ownerbudget/physicalvisualsoakweekreleasegatesheld. Publish489docs/exactremoteequalbeforeSolrereview.
+
+
 ## Independent support receipt-fidelity review active — 2026-11-04T20:50:00.250210+00:00
 
 MiniMax Task task_14f236edde4f / ctx_e2922f3f76f4 starts in NEW wp-fc26-fc-support-run-review at EXACT Sol report commit abb52542858845cf488a63b01f6ac619f3f38173, branch review/wp-fc26-fc-support-run-review. Only new FC-SUPPORT-RUN/REVIEW.md is writable; original report/source/receipts/config/private material readonly. Review actualHA/Python/HACS claims against original raw receipts, no unchanged failed gate rerun. Prose-fidelity competence from accepted29f5 review, not HA/packaging source qualification. Native entry: actual native entry Task/Dispatch/directory verified; M3thinking route/config/helper control separate from launch's unsupported CLIeffort/turnStart.
