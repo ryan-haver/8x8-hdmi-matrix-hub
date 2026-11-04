@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T19:36:22.265368+00:00",
+  "observed_utc": "2026-11-04T19:41:30.469970+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -3384,7 +3384,7 @@
   },
   "historical_proposed_manual_attempt": "docs/production/software-waves/MVP-EXECUTION-20261102/PROPOSED_MANUAL_QUALIFICATION_ATTEMPT02.txt",
   "functional_completion_planning": {
-    "status": "ADOPTED/firstwaveauthorsdelivered/released/published; exactcommitindependentprose/fidelityreviewsPREPARED/noTaskyet",
+    "status": "ADOPTED/firstinventoriespreserved; Soltruth/M3provenancefidelityexactcommitreviewsACTIVE/noacceptedcanonicalchanges",
     "phase": "functional-completion-20261104",
     "input_packet_sha256": "cb6a9871fdf8a4adfb181ab1fbf3abafb6c265323c27b543ebd62f9c68857dc4",
     "record": "docs/agent-process/phases/functional-completion-20261104/ROUND1_DISPATCHES.json",
@@ -3590,7 +3590,27 @@
         "status": "ACTIVE assigned bounded inventory/metadata authorship, no source/qualification/featureacceptance"
       }
     },
-    "execution_wave_A_latest_record": "docs/agent-process/phases/functional-completion-20261104/EXECUTION_WAVE_A_REVIEW_READY.json"
+    "execution_wave_A_latest_record": "docs/agent-process/phases/functional-completion-20261104/EXECUTION_WAVE_A_REVIEW_DISPATCHES.json",
+    "execution_wave_A_reviewers": {
+      "truth": {
+        "package": "FC-TRUTH",
+        "task_id": "task_999c32971b04",
+        "dispatch_id": "ctx_465cf8734afd",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-fc26-fc-truth-review",
+        "branch": "review/wp-fc26-fc-truth-review",
+        "exact_base": "99e72bd9ac9c592afde5fd3b110f8b56e7c3d5d4",
+        "status": "ACTIVE exactcommit independent factual/fidelity review only; no canonical/source/modelgateacceptance"
+      },
+      "provenance": {
+        "package": "FC-PROVENANCE",
+        "task_id": "task_64e1d8cb5db6",
+        "dispatch_id": "ctx_f509f51a7c49",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-fc26-fc-provenance-review",
+        "branch": "review/wp-fc26-fc-provenance-review",
+        "exact_base": "4c5c8120a27e41c8666998a6d0faeb6c758cc57b",
+        "status": "ACTIVE exactcommit independent factual/fidelity review only; no canonical/source/modelgateacceptance"
+      }
+    }
   },
   "latest_verified_CI": {
     "head": "9b783d723c81cc56ec86810b789fa31be41e75cc",
