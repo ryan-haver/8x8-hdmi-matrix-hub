@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T12:57:47.972270+00:00",
+  "observed_utc": "2026-11-04T13:22:32.318750+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -3173,7 +3173,7 @@
         "delivery_record": "docs/production/remediation-20261104/recovery-execution/PRIV_JUDGE_DELIVERY.json"
       },
       "ws_wording_followup": {
-        "status": "LAUNCHED / observed start; no delivery/intake",
+        "status": "AUTHOR DELIVERED / RELEASED / PRESERVED / taskrefPUBLISHED; exact source re-review PREPARED",
         "record": "docs/production/remediation-20261104/recovery-execution/WS_WORDING_DISPATCH.json",
         "reserve": "One reserved original-author product fix/re-review explicitly used for qualified C01-R01; no qualificationretry",
         "actor": {
@@ -3183,7 +3183,10 @@
           "branch": "remediation/ws-work-c01",
           "exact_base": "24c5170458200209836228646fdfc8784a967ad1",
           "status": "Covered original-author WS C01-R01 wording correction ACTIVE; no delivery/source acceptance or qualification"
-        }
+        },
+        "source_commit": "78295ecdf8c47e330786e10eb8e00136c2025b7d",
+        "delivery_record": "docs/production/remediation-20261104/recovery-execution/WS_WORDING_DELIVERY.json",
+        "rereview_record": "docs/production/remediation-20261104/recovery-execution/WS_WORDING_REVIEW_PREFLIGHT.json"
       }
     },
     "recovery_source_wave_A": {
