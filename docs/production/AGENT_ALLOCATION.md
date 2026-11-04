@@ -1,5 +1,14 @@
 # Agent allocation and execution ledger
 
+## Independent support receipt-fidelity review active — 2026-11-04T20:50:00.250210+00:00
+
+MiniMax Task task_14f236edde4f / ctx_e2922f3f76f4 starts in NEW wp-fc26-fc-support-run-review at EXACT Sol report commit abb52542858845cf488a63b01f6ac619f3f38173, branch review/wp-fc26-fc-support-run-review. Only new FC-SUPPORT-RUN/REVIEW.md is writable; original report/source/receipts/config/private material readonly. Review actualHA/Python/HACS claims against original raw receipts, no unchanged failed gate rerun. Prose-fidelity competence from accepted29f5 review, not HA/packaging source qualification. Native entry: actual native entry Task/Dispatch/directory verified; M3thinking route/config/helper control separate from launch's unsupported CLIeffort/turnStart.
+
+Author Sol positively released/finalnative/fullbundle/taskref/sourceboundary preserved; original payload retained in place including912unfollowed special entries. Actual support outcome PARTIAL and all missing controls remain held. The worker's extracted-HACS duplicate cleanup was rejected by automatic approval review as 'blocked by policy'; no coordinator repeat/bypass or deletion. New review source tree retained active, registered coor output6e86d613d6c64ec2aa2f29c909260b6a holds compact custody only, no whole workspace/build/dependency/runtime copies. ReviewDec04, final receipt before turnend.
+
+Prelaunch0b5c5e37 passed489docs/exactremoteequality. SameRun/runtime2fec/gen5/local/catalog/inbox/all173rows2pages counts{'retained': 8, 'released': 164, None: 1}. Existing inventory correction plus support reviewer + coordinator + protectedexternal=4/no nesting. Fresh intended pools checked before prepare/start, future review/correction capacity separately gated; unknown absoluteallowance/otherhostdemand not guaranteed. All Q/D6/WSR03/privacyFAIL/fullchain/ownerbudget/hardwarevisual72hweekfinalrelease holds unchanged. Publish scoped records/exactremoteequality then end turn for Orca wake, no completionpoll.
+
+
 ## Support evidence delivered; independent fidelity review prepared — 2026-11-04T20:48:06.592530+00:00
 
 Sol Tasktask_2d9ebaaea545/ctx_982cda0c983a delivered exactabb52542858845cf488a63b01f6ac619f3f38173 parent436af63f, soleREPORT SHA1b84fa7b25d161463906a2c157858e040cfbcb1b899e18e4995be9569d3eb79b. OverallPARTIAL: actualHA2025.1.0/2026.11.0 exposed credential/options/reconfigure failures; HACS genuineinstallupgrade held; hubPython3.11 lockpyee14 failure and metadata install separate; attemptedcore blocked by captureFileNotFoundError/incomplete9of177routes, no product-regression/full-suite inference. Qualified support/source/effect acceptance remainsheld. Original 489docs once verified; no rerun of failed support gates.

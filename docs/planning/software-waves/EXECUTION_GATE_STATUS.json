@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T20:48:06.592530+00:00",
+  "observed_utc": "2026-11-04T20:50:00.250210+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -3384,7 +3384,7 @@
   },
   "historical_proposed_manual_attempt": "docs/production/software-waves/MVP-EXECUTION-20261102/PROPOSED_MANUAL_QUALIFICATION_ATTEMPT02.txt",
   "functional_completion_planning": {
-    "status": "Support report delivered PARTIAL/preserved/released/exact task ref published; M3 receipt-fidelity review PREPARED/no Task yet",
+    "status": "FC-SUPPORT-RUN report PARTIAL, reserved independent receipt-fidelity review ACTIVE",
     "phase": "functional-completion-20261104",
     "input_packet_sha256": "cb6a9871fdf8a4adfb181ab1fbf3abafb6c265323c27b543ebd62f9c68857dc4",
     "record": "docs/agent-process/phases/functional-completion-20261104/ROUND1_DISPATCHES.json",
@@ -3590,7 +3590,7 @@
         "status": "ACTIVE assigned bounded inventory/metadata authorship, no source/qualification/featureacceptance"
       }
     },
-    "execution_wave_A_latest_record": "docs/agent-process/phases/functional-completion-20261104/SUPPORT_DELIVERY_REVIEW_READY.json",
+    "execution_wave_A_latest_record": "docs/agent-process/phases/functional-completion-20261104/SUPPORT_REVIEW_DISPATCH.json",
     "execution_wave_A_reviewers": {
       "truth": {
         "package": "FC-TRUTH",
@@ -3628,6 +3628,14 @@
         "exact_base": "436af63f44d2c4200c680909221343c9d6b976ae",
         "status": "ACTIVE independent support evidence, domain acceptance held"
       }
+    },
+    "support_review": {
+      "task_id": "task_14f236edde4f",
+      "dispatch_id": "ctx_e2922f3f76f4",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-fc26-fc-support-run-review",
+      "branch": "review/wp-fc26-fc-support-run-review",
+      "exact_base": "abb52542858845cf488a63b01f6ac619f3f38173",
+      "status": "ACTIVE exact-commit independent receipt-fidelity review only"
     }
   },
   "latest_verified_CI": {
