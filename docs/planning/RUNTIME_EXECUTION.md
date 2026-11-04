@@ -1,5 +1,16 @@
 # Runtime-completion execution record
 
+## Reviews settled; factual correction and support evidence prepared — 2026-11-04T20:11:56.977181+00:00
+
+FC-TRUTH Sol review93bc4e4a is REQUIRE_CHANGES: falseC2absence/fivefalseResolvedlabels/incomplete268semanticmap/falseoldimportconclusion. Original99e/report/native/failedreceipts retained unchanged, no canonical dispositions accepted. Existing ONE actual-M3-author factual correction at positivelyreleased own99e plus ONE Sol exactcorrectedcommit rereview prepared, no qualification retake. FC-PROVENANCE M3 fidelity review29f5ba51 PASS with nonblocking F1 test-file/tool-name erratum, formallyrecorded alongside immutable4c5audit. No eligibility/source/domain gate cleared; all nonM3/nonOpenAI factual entry checks and Q/D6/WSR03/privacyFAIL/ownerbudget holds persist.
+
+Bothreviewers positivelyreleased/finalactualnative exactTaskDispatchcwd/models/helpersobserved/sole-report scope/fullverifiedGitbundles/exact normaltaskrefpublication proven; originalregisteredreviewevidence retainedinplace. Exactoriginalreports/reviews imported ashistoricalfacts with explicitdispositions, not productacceptance. Newregisteredcoordinatorpayload13451d40ddac4c2d83718cb1cd81b8cf for all outputs, under100MiB/retainreviewDec04/zeroquarantine/removal/workspacedeletion.
+
+Adopted independent FC-SUPPORT-RUN prepared: Solhigh boundedcommand/evidenceoperator, M3receipt-fidelityreview only, actual Sol operational records/scoped93bc capture and hostDocker29.6.2Linux/no runningcontainers verified. Newdedicatedtree at thenexactpublishedbase, readonlysource/newREPORT/ownregisteredruntime; actualHA2025.1.0/currentdigest/HACScustominstallupgrade/hubPython3.11 attempted honestly, unavailablecredentials/runtime recordedpartial notpass. No sharedimageprune/sourcefix/floorchange/acceptance.
+
+FreshsameRun/runtime2fec/Orca1.4.248/gen5/local/catalog/help/inbox/all170rows2pages163released/sixoldretained/onenullcompat/zero currentowned; UIRefresh usage effect verified byCLIupdatedAtages6-7seconds at20:09:30Z: OpenAI74/Anthropic73/M3weekly60percentremaining, M3session49remaining. Fresh intended pools beforeeachcreation/start/laterreviewcorrection; absoluteallowances/otherhostdemandunknown. Atmost2new+coordinator+protectedexternal4/no nesting. Oldunknown/userresources protected. Publish489docs/exactremoteequalitybeforelaunch.
+
+
 ## Independent first-wave inventory reviews active; registered storage retained — 2026-11-04T19:41:30.469970+00:00
 
 FC-TRUTH review Tasktask_999c32971b04/ctx_465cf8734afd actualgpt-6.1-sol/high inNEWwp-fc26-fc-truth-review atEXACT99e72bd9, soleNEWFC-TRUTH/REVIEW.md. FC-PROVENANCE review Tasktask_64e1d8cb5db6/ctx_f509f51a7c49 actualMiniMax-M3/thinking inNEWwp-fc26-fc-provenance-review atEXACT4c5c8120, soleNEWFC-PROVENANCE/REVIEW.md. RealOrcaTask/Dispatch/completeauthordeps, helper-offconfigs/actualnativeentry verified; M3CLIeffort/turnStartunsupported honest. Reviewsprose/fidelityonly, no code/modelgateacceptance. Authorworkspaces/originalsreadonly; authorspositivelyreleased/fullGitbundles/native/requiredartifactsretained/exacttaskrefspublished.

@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T19:41:30.469970+00:00",
+  "observed_utc": "2026-11-04T20:11:56.977181+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -3384,7 +3384,7 @@
   },
   "historical_proposed_manual_attempt": "docs/production/software-waves/MVP-EXECUTION-20261102/PROPOSED_MANUAL_QUALIFICATION_ATTEMPT02.txt",
   "functional_completion_planning": {
-    "status": "ADOPTED/firstinventoriespreserved; Soltruth/M3provenancefidelityexactcommitreviewsACTIVE/noacceptedcanonicalchanges",
+    "status": "Both reviewers delivered/released/published; truth negative correction prepared, provenance fidelity pass with erratum and all eligibility gates held",
     "phase": "functional-completion-20261104",
     "input_packet_sha256": "cb6a9871fdf8a4adfb181ab1fbf3abafb6c265323c27b543ebd62f9c68857dc4",
     "record": "docs/agent-process/phases/functional-completion-20261104/ROUND1_DISPATCHES.json",
@@ -3590,7 +3590,7 @@
         "status": "ACTIVE assigned bounded inventory/metadata authorship, no source/qualification/featureacceptance"
       }
     },
-    "execution_wave_A_latest_record": "docs/agent-process/phases/functional-completion-20261104/EXECUTION_WAVE_A_REVIEW_DISPATCHES.json",
+    "execution_wave_A_latest_record": "docs/agent-process/phases/functional-completion-20261104/REVIEW_CLOSEOUT_NEXT_READY.json",
     "execution_wave_A_reviewers": {
       "truth": {
         "package": "FC-TRUTH",
