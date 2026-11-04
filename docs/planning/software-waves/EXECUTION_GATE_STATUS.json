@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-03T19:29:56.832704+00:00",
+  "observed_utc": "2026-11-04T01:49:57.493094+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -2654,5 +2654,22 @@
     "phase_complete": true,
     "remaining_authorized_attempts": 0,
     "automatic_reservation_unlock": false
+  },
+  "independent_source_reviews": {
+    "RV-API034": {
+      "status": "SOURCE_REVIEW_DELIVERED; RV-API034 PARTIAL / SOURCE_INTEGRATION_HOLD",
+      "report_commit": "12eeef938857bfd740854ccbaad34f9bc1b6ce36",
+      "report_sha256": "145c899d9196ad672f2db014d5c7d8d8337835ca46e26973f64e15a7d18e5e17",
+      "source": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+      "review_base": "938ae30339790c361abdda6fdd01b11a4e498518",
+      "reviewer": "Anthropic claude-opus-5-5/high",
+      "bounded_verdict": "PASS",
+      "full_RV_completed": false,
+      "source_integrated": false,
+      "integration_hold": "M-1 F-SEC-007 freshness; secondary evaluation pending/capacity-held",
+      "disposition": "docs/production/software-waves/RV-API034/execution-20261101/SOURCE_REVIEW_DISPOSITION_20261103.json",
+      "next_pin": "EV-API034-SECURITY-REFRESH",
+      "automatic_dispatch": false
+    }
   }
 }
