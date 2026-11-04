@@ -1,0 +1,328 @@
+{
+  "schema_version": 1,
+  "phase": "remediation-recovery-20261104",
+  "assessment_role": "PRIV-JUDGE / exactly ONE independent gpt-6-astra/high report-quality/competence judge of first genuine MiniMax privacy review-domain candidate",
+  "adopted_plan_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+  "standard_unchanged": {
+    "subject": "Exact C4 descendant from original privacy base, criteria frozen now before implementation; source hash/path delta bound in dispatch artifact after C4 settles and before candidate start",
+    "axes": {
+      "provenance": "Verify exact full corrected chain/base/all commits/paths/authors and unchanged historical failures; actual M3/thinking Task/Dispatch/cwd/native/helper route. Bind added ha.py scope explicitly. Source attribution and evidence admission stay separate.",
+      "dataflow_invariants": "Inspect full supported credential/carrier/caller/sink path and raw/public-data preservation, including HA diagnostic lease, model/runner/evidence persistence and summary. Calling a mask helper alone does not prove safety.",
+      "counterexamples": "Meaningful independently chosen positive preservation and failure-sensitive synthetic controls using actual raw/wire/verdict/persisted-byte effects. Known public defects are inputs, not own discoveries. No novel-defect requirement; no mirror-only assertions.",
+      "behavior_and_tools": "Actual full changed source/tests/caller reads, current import origins/versions/direct child argv/exits/full output/JUnit, inherited OS isolation/fresh original temp and complete honest native/tool/output coverage. Hash/preservation is not a full semantic read. No canonical global-gate retry.",
+      "calibration": "Distinguish changed/inherited defects, supported/conditional/unproved shapes, private/public artifact exposure, actual HA harness versus product HA and physical devices; preserve skipped/failed/lost originals. Accurate severities, limitations and qualified domain only.",
+      "review_quality": "Substantive source/assertion/invariant analysis and supported findings across complete C1-C4 window, including sensitivity/compatibility/race/error paths and no factual overclaims. All six PASS required, unknown holds."
+    },
+    "standard": "Same six substantive behavioral standards as earlier privacy assessment, adapted prospectively for actual new family/complete corrected source and explicitly added HA diagnostic scope. Original Opus packet/report/verdict remain immutable. No softened safety/tools/calibration standard or forced PASS.",
+    "budget": "ONE candidate, ONE judge; separate actual qualified full-chain source review and secondary report-quality evaluation later. No automatic old/new attempt retry."
+  },
+  "candidate": {
+    "report_commit": "f3a783b497786b36a08f302a9cd2fd7249526c35",
+    "source_parent": "5385325722a39e6dd766352489f828f5e54b56d5",
+    "report": "docs/production/remediation-20261104/PRIVACY-M3-ASSESSMENT/AUTHOR.md",
+    "report_sha256": "a06c1334b0e65d942078ece13a20979f56a4f2cb5e58b00a54f1c42acdfcfd0d",
+    "native": {
+      "session": "ses_e5998016fffe3emviWZx9eKO2h",
+      "models": [
+        "minimax-coding-plan/MiniMax-M3"
+      ],
+      "variant": "thinking",
+      "bytes": 1642596,
+      "sha256": "c19d45451cc7eeb4a9041a64ef6457783f58137a7563c8476e68029912827741",
+      "unassigned_helpers_observed": [],
+      "scope": "full original native; semantic coverage/claims judged independently at frozen report"
+    },
+    "actual_checks": {
+      "checks": {
+        "p01-carriers": {
+          "exit": 0,
+          "stdout_bytes": 96378,
+          "stderr_bytes": 0
+        },
+        "p01b-carriers": {
+          "exit": 0,
+          "stdout_bytes": 79362,
+          "stderr_bytes": 0
+        },
+        "p02-live": {
+          "exit": 0,
+          "stdout_bytes": 25076,
+          "stderr_bytes": 0
+        },
+        "p02b-live": {
+          "exit": 0,
+          "stdout_bytes": 21464,
+          "stderr_bytes": 0
+        },
+        "p03-live-profile": {
+          "exit": 0,
+          "stdout_bytes": 6902,
+          "stderr_bytes": 0
+        },
+        "p03b-live-profile": {
+          "exit": 0,
+          "stdout_bytes": 10830,
+          "stderr_bytes": 100
+        },
+        "p04-live-verdicts": {
+          "exit": 0,
+          "stdout_bytes": 10661,
+          "stderr_bytes": 138
+        },
+        "p05-changed-scope": {
+          "exit": 0,
+          "stdout_bytes": 3505,
+          "stderr_bytes": 0
+        },
+        "p06-baseline": {
+          "exit": 1,
+          "stdout_bytes": 1576,
+          "stderr_bytes": 0
+        },
+        "p06-mask-all": {
+          "exit": 1,
+          "stdout_bytes": 0,
+          "stderr_bytes": 2143
+        },
+        "p06-no-error-suppression": {
+          "exit": 1,
+          "stdout_bytes": 1634,
+          "stderr_bytes": 0
+        },
+        "p06-no-mask": {
+          "exit": 0,
+          "stdout_bytes": 1721,
+          "stderr_bytes": 0
+        },
+        "p06-no-public-exception": {
+          "exit": 1,
+          "stdout_bytes": 1636,
+          "stderr_bytes": 0
+        },
+        "p06-no-query-mask": {
+          "exit": 1,
+          "stdout_bytes": 1686,
+          "stderr_bytes": 0
+        },
+        "p06-no-writer-boundary": {
+          "exit": 1,
+          "stdout_bytes": 1675,
+          "stderr_bytes": 0
+        },
+        "p06b-baseline": {
+          "exit": 1,
+          "stdout_bytes": 0,
+          "stderr_bytes": 1427
+        },
+        "p06b-mask-all": {
+          "exit": 1,
+          "stdout_bytes": 0,
+          "stderr_bytes": 2149
+        },
+        "p06b-no-error-suppression": {
+          "exit": 1,
+          "stdout_bytes": 0,
+          "stderr_bytes": 1427
+        },
+        "p06b-no-mask": {
+          "exit": 1,
+          "stdout_bytes": 0,
+          "stderr_bytes": 1427
+        },
+        "p06b-no-public-exception": {
+          "exit": 1,
+          "stdout_bytes": 0,
+          "stderr_bytes": 1427
+        },
+        "p06b-no-query-mask": {
+          "exit": 1,
+          "stdout_bytes": 0,
+          "stderr_bytes": 1427
+        },
+        "p06b-no-writer-boundary": {
+          "exit": 1,
+          "stdout_bytes": 0,
+          "stderr_bytes": 1427
+        },
+        "p06c-baseline": {
+          "exit": 0,
+          "stdout_bytes": 1891,
+          "stderr_bytes": 0
+        },
+        "p06c-mask-all": {
+          "exit": 1,
+          "stdout_bytes": 0,
+          "stderr_bytes": 2149
+        },
+        "p06c-no-error-suppression": {
+          "exit": 1,
+          "stdout_bytes": 1949,
+          "stderr_bytes": 0
+        },
+        "p06c-no-mask": {
+          "exit": 0,
+          "stdout_bytes": 2121,
+          "stderr_bytes": 0
+        },
+        "p06c-no-public-exception": {
+          "exit": 0,
+          "stdout_bytes": 2032,
+          "stderr_bytes": 0
+        },
+        "p06c-no-query-mask": {
+          "exit": 0,
+          "stdout_bytes": 2001,
+          "stderr_bytes": 0
+        },
+        "p06c-no-writer-boundary": {
+          "exit": 0,
+          "stdout_bytes": 1990,
+          "stderr_bytes": 0
+        },
+        "p06d-baseline": {
+          "exit": 0,
+          "stdout_bytes": 1909,
+          "stderr_bytes": 0
+        },
+        "p06d-mask-all": {
+          "exit": 1,
+          "stdout_bytes": 0,
+          "stderr_bytes": 1346
+        },
+        "p06d-no-error-suppression": {
+          "exit": 0,
+          "stdout_bytes": 2076,
+          "stderr_bytes": 0
+        },
+        "p06d-no-mask": {
+          "exit": 0,
+          "stdout_bytes": 2139,
+          "stderr_bytes": 0
+        },
+        "p06d-no-public-exception": {
+          "exit": 0,
+          "stdout_bytes": 2050,
+          "stderr_bytes": 0
+        },
+        "p06d-no-query-mask": {
+          "exit": 0,
+          "stdout_bytes": 2019,
+          "stderr_bytes": 0
+        },
+        "p06d-no-writer-boundary": {
+          "exit": 0,
+          "stdout_bytes": 2008,
+          "stderr_bytes": 0
+        },
+        "p06e-mask-all": {
+          "exit": 1,
+          "stdout_bytes": 0,
+          "stderr_bytes": 1326
+        },
+        "p06f-mask-all": {
+          "exit": 1,
+          "stdout_bytes": 0,
+          "stderr_bytes": 1364
+        },
+        "p06g-mask-all": {
+          "exit": 0,
+          "stdout_bytes": 2377,
+          "stderr_bytes": 0
+        },
+        "p07-raw-vs-persisted": {
+          "exit": 0,
+          "stdout_bytes": 6789,
+          "stderr_bytes": 0
+        },
+        "p08-origins": {
+          "exit": 0,
+          "stdout_bytes": 4038,
+          "stderr_bytes": 415
+        },
+        "p09-c1c4-tests": {
+          "exit": 0,
+          "stdout_bytes": 184,
+          "stderr_bytes": 0
+        },
+        "p10-blocked": {
+          "exit": 0,
+          "stdout_bytes": 889,
+          "stderr_bytes": 0
+        },
+        "p11-ha-harness": {
+          "exit": 0,
+          "stdout_bytes": 3584,
+          "stderr_bytes": 0
+        },
+        "p12-provenance": {
+          "exit": 0,
+          "stdout_bytes": 8194,
+          "stderr_bytes": 0
+        },
+        "p13-docs": {
+          "exit": 0,
+          "stdout_bytes": 588,
+          "stderr_bytes": 0
+        }
+      },
+      "junit_counts": {
+        "p09-tests-results.xml": {
+          "tests": 136,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "p13-docs-results.xml": {
+          "tests": 489,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "scope": "Verifies actual direct exits/hashes/JUnit only; adequacy and any exit-zero sensitivity claims remain for exact-report judge"
+    },
+    "positive_release": true,
+    "preservation": [
+      {
+        "name": "priv-m3-assess",
+        "files": 845,
+        "links": 0,
+        "archive_sha256": "a0d88eeef9c805f442e2907c8354009196d0295c264eb9d583731b1dea9a39cc",
+        "archive_bytes": 370122,
+        "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+      },
+      {
+        "name": "wp-recovery-privacy-m3-assess",
+        "files": 4628,
+        "links": 0,
+        "archive_sha256": "daca2f66b8c5718bab628844a378860736c909904a1b4a5f46d8770282fb0fad",
+        "archive_bytes": 205942842,
+        "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+      }
+    ],
+    "task_publication": {
+      "observed_utc": "2026-11-04T12:16:08.458073+00:00",
+      "ref": "refs/heads/qualification/recovery-privacy-m3",
+      "local_head": "f3a783b497786b36a08f302a9cd2fd7249526c35",
+      "remote_head": "f3a783b497786b36a08f302a9cd2fd7249526c35",
+      "exact_equal": true,
+      "normal_push": true
+    },
+    "boundary": "Only NEW report tracked; product/source/tests unchanged, coordinator scoped config retained unstaged/ignored. Full original ignored/temp/native and failed/superseded probes preserved; no fullGitbundle/destructivecleanup.",
+    "task_id": "task_eef2d2e8f289",
+    "dispatch_id": "ctx_b6947db9e4fd",
+    "coordinator_disposition": "Delivered FIRST candidate report, all6self recommendations not qualification. Exactly ONE independent Astra judge next; no candidate rewrite/retry/extra judge.",
+    "qualification_granted": false,
+    "source_acceptance": false,
+    "findings": "F1 reported Low public admin_pin_set/control_pin_set/pin_order masking; F2/F3Info/error-fidelity/latent-mutant robustness and F4-F6 scope claims pending actual judge/source review. No automatic author correction or bug closure from candidate report."
+  },
+  "source_subject": {
+    "report_base": "5385325722a39e6dd766352489f828f5e54b56d5",
+    "chain_base": "d6e78e0b6ab1dab5216443584d810a7a24af32b2",
+    "whole_subject_packet_sha256": "7a6256111da21e71aee2f3ad315a646f7e3b6e088c45a3d4ee18dcf222c66763",
+    "added_ha_scope": "Bounded _http/perform diagnostic/error copies; full13paths/8commits before report unchanged"
+  },
+  "role_separation": "Judge assesses actual MiniMax report/reads/tools/invariants/counterexamples/calibration against all6frozen criteria. Does not supply qualified independent acceptance of OpenAI-authored source. Candidate finding or self recommendation does not by itself dictate the competence verdict.",
+  "attempt_budget": "ONE candidate and ONE judge, unknown/HOLD/FAIL terminal for this attempt; no corrected report, extra judge, softened criterion or automatic alternate-family retake. All6actualPASS alone can earn exact demonstrated domain, then separately gated full-chain review/report-quality evaluation required.",
+  "source_acceptance": false
+}

@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T11:54:19.685951+00:00",
+  "observed_utc": "2026-11-04T12:18:05.039603+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -3120,7 +3120,7 @@
         "privacy_delivery": "docs/production/remediation-20261104/recovery-execution/PRIV_C4_DELIVERY.json"
       },
       "waveB": {
-        "status": "LAUNCHED: qualified WS-R01 and FIRST privacy M3candidate, no report/verdict/acceptance",
+        "status": "Both reports delivered/released/preserved/taskrefsverified; exact WS component review PASS, M3 candidate pending single judge",
         "subject_packet_sha256": "7a6256111da21e71aee2f3ad315a646f7e3b6e088c45a3d4ee18dcf222c66763",
         "record": "docs/production/remediation-20261104/recovery-execution/WAVE_B_DISPATCHES.json",
         "privacy_qualification": "NOT_GRANTED",
@@ -3142,7 +3142,14 @@
             "exact_base": "5385325722a39e6dd766352489f828f5e54b56d5",
             "status": "FIRST privacy-review domain CANDIDATE active, NOT_QUALIFIED, no verdict/source acceptance"
           }
-        }
+        },
+        "delivery_record": "docs/production/remediation-20261104/recovery-execution/WAVE_B_DELIVERIES.json"
+      },
+      "waveC": {
+        "status": "PREPARED / no Task/Dispatch/worktree yet",
+        "judge_packet_sha256": "75b563b74156a478e84bfa945d2ab2a3c0355c7c027a685dd84e7e02627a10d9",
+        "record": "docs/production/remediation-20261104/recovery-execution/WAVE_C_PREFLIGHT.json",
+        "qualification_granted": false
       }
     },
     "recovery_source_wave_A": {
