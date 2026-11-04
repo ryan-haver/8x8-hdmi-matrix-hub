@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T12:55:48.038536+00:00",
+  "observed_utc": "2026-11-04T12:57:47.972270+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -3173,9 +3173,17 @@
         "delivery_record": "docs/production/remediation-20261104/recovery-execution/PRIV_JUDGE_DELIVERY.json"
       },
       "ws_wording_followup": {
-        "status": "PREPARED / no newTask/Dispatch yet",
-        "record": "docs/production/remediation-20261104/recovery-execution/WS_WORDING_PREFLIGHT.json",
-        "reserve": "One reserved original-author product fix/re-review explicitly used for qualified C01-R01; no qualificationretry"
+        "status": "LAUNCHED / observed start; no delivery/intake",
+        "record": "docs/production/remediation-20261104/recovery-execution/WS_WORDING_DISPATCH.json",
+        "reserve": "One reserved original-author product fix/re-review explicitly used for qualified C01-R01; no qualificationretry",
+        "actor": {
+          "task_id": "task_c4e3c9018634",
+          "dispatch_id": "ctx_5c6661149549",
+          "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-ws-work-c01",
+          "branch": "remediation/ws-work-c01",
+          "exact_base": "24c5170458200209836228646fdfc8784a967ad1",
+          "status": "Covered original-author WS C01-R01 wording correction ACTIVE; no delivery/source acceptance or qualification"
+        }
       }
     },
     "recovery_source_wave_A": {
