@@ -1,0 +1,218 @@
+{
+  "observed_utc": "2026-11-04T08:39:01.962393+00:00",
+  "phase": "remediation-recovery-20261104",
+  "round": 1,
+  "status": "OpenAI and MiniMax independent assessments ACTIVE; Anthropic R1 reserved, no consensus/source execution",
+  "actors": {
+    "openai": {
+      "task_id": "task_3533f742d143",
+      "dispatch_id": "ctx_ad93f7ebf306",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-openai",
+      "branch": "planning/remediation-recovery-r1-openai",
+      "exact_base": "b13ddc4de461b7e1072fead0d39361bcb079282f",
+      "exclusive_report": "docs/agent-process/phases/remediation-recovery-20261104/round1/openai.md",
+      "packet_sha256": "40526f127575feead63c94058250a868e0452ccb19b5552f60be66b6b82b77dc",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "actual native Astra/high at exact Task/Dispatch/cwd",
+        "session": "01a1a5b5-0f2f-7d63-bd33-ecf5509ed499",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 601583,
+        "sha256": "b84d574d32a69a3a260d71443cf20ff3660b535975a31e8aca5ecf27c9717b6f",
+        "unassigned_helpers_observed": [],
+        "scope": "entry capture only, not outcome or descendant census"
+      },
+      "configuration_sha256": "92207a5a69cbc0f711534664a43e3d397433bab8fbd2290226a32d5e664202f4",
+      "status": "R1 independent assessment ACTIVE, no result/consensus/qualification",
+      "dispatch_status": "dispatched",
+      "worker_state": "ready"
+    },
+    "minimax": {
+      "task_id": "task_30e8158c02a5",
+      "dispatch_id": "ctx_ba59b5829abe",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-minimax",
+      "branch": "planning/remediation-recovery-r1-minimax",
+      "exact_base": "b13ddc4de461b7e1072fead0d39361bcb079282f",
+      "exclusive_report": "docs/agent-process/phases/remediation-recovery-20261104/round1/minimax.md",
+      "packet_sha256": "40526f127575feead63c94058250a868e0452ccb19b5552f60be66b6b82b77dc",
+      "launch": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "turn_start": "unsupported",
+      "native_entry": {
+        "status": "actual native MiniMaxM3 at exact Task/Dispatch/directory",
+        "session": "ses_e5a4affb5ffeT3Mqxdy2LvA8cq",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "CLI_effort_override": "unsupported; inherited configured route, native variant recorded",
+        "bytes": 140283,
+        "sha256": "e33f01fbd174c66644ccc0bf7a585945754fe364a899f2cdbbbfee2149cfa456",
+        "scope": "entry capture only, not outcome or descendant census"
+      },
+      "configuration_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+      "status": "R1 independent assessment ACTIVE, no result/consensus/qualification",
+      "dispatch_status": "dispatched",
+      "worker_state": "ready"
+    }
+  },
+  "Anthropic": "Not launched; same frozen packet after released slot, no R1 peer-report sharing until all three preserved",
+  "packet_sha256": "40526f127575feead63c94058250a868e0452ccb19b5552f60be66b6b82b77dc",
+  "prewave_published_head": "56f1b4ee71aaace0afd690d834e0822e90a8ba88",
+  "capacity": {
+    "openai": {
+      "observed_utc": "2026-11-04T08:37:46.997777+00:00",
+      "scope": "bounded R1 prose; later rounds/qualification/implementation/review/correction must be freshly gated; absolute allowances/otherhost commitments unknown",
+      "codex": {
+        "status": "ok",
+        "session": null,
+        "weekly": {
+          "usedPercent": 9,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "updatedAt": 1793781230662,
+        "error": null
+      },
+      "claude": {
+        "status": "ok",
+        "session": {
+          "usedPercent": 0,
+          "windowMinutes": 300,
+          "resetsAt": 1793796600173,
+          "resetDescription": "5:50 AM"
+        },
+        "weekly": {
+          "usedPercent": 25,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400173,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "updatedAt": 1793781230153,
+        "error": null
+      },
+      "minimax": {
+        "status": "ok",
+        "session": {
+          "usedPercent": 15,
+          "windowMinutes": 300,
+          "resetsAt": 1793794421794,
+          "resetDescription": null
+        },
+        "weekly": {
+          "usedPercent": 33,
+          "windowMinutes": 10080,
+          "resetsAt": 1793823932853,
+          "resetDescription": null
+        },
+        "updatedAt": 1793781230351,
+        "error": null
+      }
+    },
+    "minimax": {
+      "observed_utc": "2026-11-04T08:37:42.298674+00:00",
+      "scope": "bounded R1 prose; later rounds/qualification/implementation/review/correction must be freshly gated; absolute allowances/otherhost commitments unknown",
+      "codex": {
+        "status": "ok",
+        "session": null,
+        "weekly": {
+          "usedPercent": 9,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "updatedAt": 1793781230662,
+        "error": null
+      },
+      "claude": {
+        "status": "ok",
+        "session": {
+          "usedPercent": 0,
+          "windowMinutes": 300,
+          "resetsAt": 1793796600173,
+          "resetDescription": "5:50 AM"
+        },
+        "weekly": {
+          "usedPercent": 25,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400173,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "updatedAt": 1793781230153,
+        "error": null
+      },
+      "minimax": {
+        "status": "ok",
+        "session": {
+          "usedPercent": 15,
+          "windowMinutes": 300,
+          "resetsAt": 1793794421794,
+          "resetDescription": null
+        },
+        "weekly": {
+          "usedPercent": 33,
+          "windowMinutes": 10080,
+          "resetsAt": 1793823932853,
+          "resetDescription": null
+        },
+        "updatedAt": 1793781230351,
+        "error": null
+      }
+    }
+  },
+  "fleet": {
+    "total": 142,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 142,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMzMzfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yMCAwNDowNDoxMSIsImRpc3BhdGNoSWQiOiJjdHhfNDJhMmU3YTBhMTg5IiwiZGF0YWJhc2VJZCI6ODE2fX0"
+      },
+      {
+        "limit": 100,
+        "total": 142,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 8,
+      "released": 134
+    },
+    "historical_retained": 6,
+    "current_resources": 2
+  },
+  "concurrency": "two current+coordinator+protectedexternal=4, no nesting",
+  "barrier": "R1 reports must remain independent. Preserve all3before R2 peer challenge; R3 same hashed final packet explicit three-family decisions. No implementation/retake/source competence/acceptance or release from planning.",
+  "failures": "Privacy qualificationFAIL/WS correctnessFAIL and first-authorshipHOLD preserved; existing earned API-refusal review scope unchanged.",
+  "settings": "Codex multi_agent=false actually verified under exact managed profile/cwd, untrackedconfig must never stage; MiniMaxM3 only main/small/internal model with policy denial of other providers/helpers/plugins/MCP, project config source observed; actual native backend independently recorded. Global settings/accounts unchanged.",
+  "settlement": "On genuine delivery preserve workspace/temp/native/ignored originals and exact task ref; release owned worker promptly, record reuse/retention; no destructive cleanup in this wave."
+}

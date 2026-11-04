@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T08:35:29.572457+00:00",
+  "observed_utc": "2026-11-04T08:39:01.962393+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -2757,14 +2757,92 @@
     },
     "WS_component_review_disposition": "docs/production/remediation-20261104/WS-WORK-01/REVIEW_DELIVERY.json",
     "recovery_planning": {
-      "status": "PREPARED prospective threefamily/threeround recovery; no consensus/sourceexecution",
+      "status": "R1 OpenAI+MiniMax assessments ACTIVE; Anthropic same-input R1 reserved; no consensus/source execution",
       "packet_sha256": "40526f127575feead63c94058250a868e0452ccb19b5552f60be66b6b82b77dc",
       "packet": "docs/agent-process/phases/remediation-recovery-20261104/INPUT_PACKET.json",
       "first_wave": [
         "OpenAI",
         "MiniMax"
       ],
-      "third_family": "Anthropic reserved R1 after slot release"
+      "third_family": "Anthropic reserved R1 after slot release",
+      "round1_actors": {
+        "openai": {
+          "task_id": "task_3533f742d143",
+          "dispatch_id": "ctx_ad93f7ebf306",
+          "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-openai",
+          "branch": "planning/remediation-recovery-r1-openai",
+          "exact_base": "b13ddc4de461b7e1072fead0d39361bcb079282f",
+          "exclusive_report": "docs/agent-process/phases/remediation-recovery-20261104/round1/openai.md",
+          "packet_sha256": "40526f127575feead63c94058250a868e0452ccb19b5552f60be66b6b82b77dc",
+          "launch": {
+            "requested": {
+              "agent": "codex",
+              "model": "gpt-6-astra",
+              "effort": "high"
+            },
+            "effective": {
+              "agent": "codex",
+              "model": "gpt-6-astra",
+              "effort": "high"
+            }
+          },
+          "turn_start": "observed",
+          "native_entry": {
+            "status": "actual native Astra/high at exact Task/Dispatch/cwd",
+            "session": "01a1a5b5-0f2f-7d63-bd33-ecf5509ed499",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "effort": "high native",
+            "bytes": 601583,
+            "sha256": "b84d574d32a69a3a260d71443cf20ff3660b535975a31e8aca5ecf27c9717b6f",
+            "unassigned_helpers_observed": [],
+            "scope": "entry capture only, not outcome or descendant census"
+          },
+          "configuration_sha256": "92207a5a69cbc0f711534664a43e3d397433bab8fbd2290226a32d5e664202f4",
+          "status": "R1 independent assessment ACTIVE, no result/consensus/qualification",
+          "dispatch_status": "dispatched",
+          "worker_state": "ready"
+        },
+        "minimax": {
+          "task_id": "task_30e8158c02a5",
+          "dispatch_id": "ctx_ba59b5829abe",
+          "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-minimax",
+          "branch": "planning/remediation-recovery-r1-minimax",
+          "exact_base": "b13ddc4de461b7e1072fead0d39361bcb079282f",
+          "exclusive_report": "docs/agent-process/phases/remediation-recovery-20261104/round1/minimax.md",
+          "packet_sha256": "40526f127575feead63c94058250a868e0452ccb19b5552f60be66b6b82b77dc",
+          "launch": {
+            "requested": {
+              "agent": "opencode2",
+              "model": null,
+              "effort": null
+            },
+            "effective": {
+              "agent": "opencode2",
+              "model": null,
+              "effort": null
+            }
+          },
+          "turn_start": "unsupported",
+          "native_entry": {
+            "status": "actual native MiniMaxM3 at exact Task/Dispatch/directory",
+            "session": "ses_e5a4affb5ffeT3Mqxdy2LvA8cq",
+            "models": [
+              "minimax-coding-plan/MiniMax-M3"
+            ],
+            "variant": "thinking",
+            "CLI_effort_override": "unsupported; inherited configured route, native variant recorded",
+            "bytes": 140283,
+            "sha256": "e33f01fbd174c66644ccc0bf7a585945754fe364a899f2cdbbbfee2149cfa456",
+            "scope": "entry capture only, not outcome or descendant census"
+          },
+          "configuration_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+          "status": "R1 independent assessment ACTIVE, no result/consensus/qualification",
+          "dispatch_status": "dispatched",
+          "worker_state": "ready"
+        }
+      }
     }
   },
   "prospective_privacy_review_domain": {
