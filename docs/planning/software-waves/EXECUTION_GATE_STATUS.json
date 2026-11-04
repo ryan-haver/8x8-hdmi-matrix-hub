@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T12:29:11.363581+00:00",
+  "observed_utc": "2026-11-04T12:55:48.038536+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -3146,7 +3146,7 @@
         "delivery_record": "docs/production/remediation-20261104/recovery-execution/WAVE_B_DELIVERIES.json"
       },
       "waveC": {
-        "status": "ONE PRIV-JUDGE LAUNCHED / observed start; no verdict/qualification",
+        "status": "DONE: exact judge FAIL/NOT_QUALIFIED, twoPASS/fourFAIL; worker released/preserved/taskrefpublished",
         "judge_packet_sha256": "75b563b74156a478e84bfa945d2ab2a3c0355c7c027a685dd84e7e02627a10d9",
         "record": "docs/production/remediation-20261104/recovery-execution/WAVE_C_DISPATCH.json",
         "qualification_granted": false,
@@ -3161,7 +3161,21 @@
         "evidence_location_addendum": {
           "record": "docs/production/remediation-20261104/recovery-execution/PRIV_CANDIDATE_PRESERVATION_ADDENDUM.json",
           "state": "Judge question answered: pre-overwrite record/summary originals unavailable in known captures; two actual outside-root authored files newly preserved; qualification still pending"
-        }
+        },
+        "axes": {
+          "provenance": "PASS",
+          "dataflow_invariants": "FAIL",
+          "counterexamples": "PASS",
+          "behavior_and_tools": "FAIL",
+          "calibration": "FAIL",
+          "review_quality": "FAIL"
+        },
+        "delivery_record": "docs/production/remediation-20261104/recovery-execution/PRIV_JUDGE_DELIVERY.json"
+      },
+      "ws_wording_followup": {
+        "status": "PREPARED / no newTask/Dispatch yet",
+        "record": "docs/production/remediation-20261104/recovery-execution/WS_WORDING_PREFLIGHT.json",
+        "reserve": "One reserved original-author product fix/re-review explicitly used for qualified C01-R01; no qualificationretry"
       }
     },
     "recovery_source_wave_A": {
@@ -3313,9 +3327,19 @@
     "qualification_granted": false
   },
   "prospective_privacy_m3_review_domain": {
-    "status": "Prospective first candidate only, NOT_QUALIFIED; corrected C4 subject and exact hash gate still pending",
+    "status": "FAIL/NOT_QUALIFIED; onefirstcandidate/onejudgeexhausted; noautomaticretry/extrajudge",
     "frozen_standard_packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
     "one_candidate_one_judge": true,
-    "source_acceptance": false
+    "source_acceptance": false,
+    "qualification_granted": false,
+    "axes": {
+      "provenance": "PASS",
+      "dataflow_invariants": "FAIL",
+      "counterexamples": "PASS",
+      "behavior_and_tools": "FAIL",
+      "calibration": "FAIL",
+      "review_quality": "FAIL"
+    },
+    "report_commit": "1b2b7c5f0ff868c5367a8d2c014807f86e61d1cb"
   }
 }
