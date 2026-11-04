@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T08:55:30.260275+00:00",
+  "observed_utc": "2026-11-04T09:13:15.813781+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -2757,50 +2757,14 @@
     },
     "WS_component_review_disposition": "docs/production/remediation-20261104/WS-WORK-01/REVIEW_DELIVERY.json",
     "recovery_planning": {
-      "status": "Independent Anthropic R1 ACTIVE; OpenAI/MiniMax delivered/released/preserved/taskrefpublished; all3R1barrier closed",
+      "status": "All3R1reports preserved/released/taskrefpublished; peerbarrierOPEN, R2prepared (OpenAI+Anthropic first, MiniMax nextslot)",
       "packet_sha256": "40526f127575feead63c94058250a868e0452ccb19b5552f60be66b6b82b77dc",
       "packet": "docs/agent-process/phases/remediation-recovery-20261104/INPUT_PACKET.json",
       "first_wave": [
         "OpenAI",
         "MiniMax"
       ],
-      "third_family": {
-        "task_id": "task_ad18152bbe0f",
-        "dispatch_id": "ctx_af51d4d4295c",
-        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-anthropic",
-        "branch": "planning/remediation-recovery-r1-anthropic",
-        "exact_base": "b13ddc4de461b7e1072fead0d39361bcb079282f",
-        "exclusive_report": "docs/agent-process/phases/remediation-recovery-20261104/round1/anthropic.md",
-        "packet_sha256": "40526f127575feead63c94058250a868e0452ccb19b5552f60be66b6b82b77dc",
-        "launch": {
-          "requested": {
-            "agent": "claude",
-            "model": "claude-opus-5-5",
-            "effort": "high"
-          },
-          "effective": {
-            "agent": "claude",
-            "model": "claude-opus-5-5",
-            "effort": "high"
-          }
-        },
-        "turn_start": "observed",
-        "native_entry": {
-          "status": "actual native Opus5.5 at exact Task/Dispatch/cwd",
-          "session": "3c01f05c-f3da-45a6-b6dc-6e8314f33d1f",
-          "models": [
-            "claude-opus-5-5"
-          ],
-          "effort": "high explicit supported launch/local config; native per-turn effort not exposed",
-          "bytes": 682845,
-          "sha256": "8f6e3f11cf7af45929453f7c1bc03695c730d1284fa57790d01ddc5216b66750",
-          "unassigned_helpers_observed": [],
-          "scope": "point-in-time entry only; no competence/outcome or descendant census"
-        },
-        "dispatch_status": "dispatched",
-        "worker_state": "ready",
-        "status": "independent third-family R1 ACTIVE; no report/verdict/consensus yet"
-      },
+      "third_family": "Anthropic R1 delivered3e7a83a1 and positively released/preserved/published; no source grant",
       "round1_actors": {
         "openai": {
           "task_id": "task_3533f742d143",
@@ -2879,7 +2843,10 @@
           "worker_state": "ready"
         }
       },
-      "round1_delivery_metadata": "docs/agent-process/phases/remediation-recovery-20261104/ROUND1_DELIVERY_METADATA.json"
+      "round1_delivery_metadata": "docs/agent-process/phases/remediation-recovery-20261104/ROUND1_DELIVERY_METADATA.json",
+      "R1_complete": "docs/agent-process/phases/remediation-recovery-20261104/ROUND1_COMPLETE.json",
+      "R2_packet": "docs/agent-process/phases/remediation-recovery-20261104/ROUND2_PACKET.json",
+      "R2_packet_sha256": "25aeccfe87568ccba0e424e8bc7b21f85854fac6410a472c710af05b30ae63f7"
     }
   },
   "prospective_privacy_review_domain": {
