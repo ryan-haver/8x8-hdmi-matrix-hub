@@ -1,5 +1,16 @@
 # Runtime-completion execution record
 
+## Factual correction and independent support evidence active — 2026-11-04T20:15:09.494796+00:00
+
+MiniMax Task task_5305a1b797cc / ctx_467d7a450979 reuses positively released original wp-fc26-fc-truth at exact 99e72bd9 for the existing one-author factual correction reserve. Only INVENTORY.md and optional new CORRECTION.md are leased; original report history and receipts remain preserved. Sol exact corrected-commit rereview is reserved. This is not an assessment retake. Native entry: actual native entry Task/Dispatch/directory verified.
+
+Sol Task task_2d9ebaaea545 / ctx_982cda0c983a starts in new dedicated wp-fc26-fc-support-run at exact published 436af63f44d2c4200c680909221343c9d6b976ae. Only new REPORT.md and owned registered operational output are writable. Test declared HA2025.1.0/current immutable image, genuine HACS custom install/upgrade and hubPython3.11 where possible; exact failures/credential or environment limitations stay honest. M3 receipt-fidelity review reserved; qualified domain/support acceptance remains held. Native entry: actual native entry Task/Dispatch/cwd verified. No product/source/manifest/lock/baseline edits or shared cache/image pruning.
+
+Both real Orca Task/Dispatch dependencies, exact source bases, scoped helper-off configs and fresh intended-pool quotas verified before each prepare/start. Same Run/runtime2fec/gen5/local, all 172 fleet rows over two pages: {'retained': 8, 'released': 163, None: 1}. Two current + coordinator + protected external reservation = four; no nesting. Prior reviewers positively released; old uncertain/user resources preserved. Prelaunch 489 docs passed once; scoped immutable original EOF whitespace exception recorded after initial stop, exact source bytes preserved.
+
+Review verdicts: inventory REQUIRE_CHANGES; provenance factual PASS with formal nonblocking test-file-name erratum. No Q/D6/WSR03/privacy/source admission/owner budget/hardware/visual/72h/week/final-release gate cleared. Coordinator registered output13451d40ddac4c2d83718cb1cd81b8cf retains compact native/bundles/receipts; original reviewer registered output retained in place, no workspace/build/dependency copies, quarantine or removal. ReviewDec04; final storage receipt before turn end. Publish scoped records/exact remote equality, then end turn for Orca delivery wake without polling.
+
+
 ## Reviews settled; factual correction and support evidence prepared — 2026-11-04T20:11:56.977181+00:00
 
 FC-TRUTH Sol review93bc4e4a is REQUIRE_CHANGES: falseC2absence/fivefalseResolvedlabels/incomplete268semanticmap/falseoldimportconclusion. Original99e/report/native/failedreceipts retained unchanged, no canonical dispositions accepted. Existing ONE actual-M3-author factual correction at positivelyreleased own99e plus ONE Sol exactcorrectedcommit rereview prepared, no qualification retake. FC-PROVENANCE M3 fidelity review29f5ba51 PASS with nonblocking F1 test-file/tool-name erratum, formallyrecorded alongside immutable4c5audit. No eligibility/source/domain gate cleared; all nonM3/nonOpenAI factual entry checks and Q/D6/WSR03/privacyFAIL/ownerbudget holds persist.
