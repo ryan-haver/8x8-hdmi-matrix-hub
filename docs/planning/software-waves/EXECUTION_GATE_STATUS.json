@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T11:29:06.843685+00:00",
+  "observed_utc": "2026-11-04T11:51:55.724910+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -3088,7 +3088,7 @@
       },
       "consensus": "docs/agent-process/phases/remediation-recovery-20261104/CONSENSUS.json",
       "sourceWaveA": {
-        "status": "WS-C01 delivered/released/preserved/taskrefpublished; PRIV-C4 active; no review/intake",
+        "status": "Both source deliveries settled/released/preserved/exact taskrefpublished; qualified reviews and source acceptance pending",
         "record": "docs/production/remediation-20261104/recovery-execution/WAVE_A_DISPATCHES.json",
         "actors": {
           "ws-c01": {
@@ -3105,7 +3105,7 @@
             "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-sec-data-02-c4",
             "branch": "remediation/privacy-c4",
             "exact_base": "2d02004d3108953a302e1a49aab9a5f24e944136",
-            "status": "Source correction ACTIVE; no delivery/review/acceptance/integration"
+            "status": "DELIVERED / RELEASED / PRESERVED / exacttaskrefPUBLISHED; privacy acceptance HELD"
           }
         },
         "privacy_acceptance": "HELD",
@@ -3116,7 +3116,15 @@
           "future_review_fix_reserve": "unspent / conditional",
           "acceptance": false
         },
-        "ws_delivery": "docs/production/remediation-20261104/recovery-execution/WS_C01_DELIVERY.json"
+        "ws_delivery": "docs/production/remediation-20261104/recovery-execution/WS_C01_DELIVERY.json",
+        "privacy_delivery": "docs/production/remediation-20261104/recovery-execution/PRIV_C4_DELIVERY.json"
+      },
+      "waveB": {
+        "status": "PREPARED / no Task/Dispatch/worktree yet",
+        "subject_packet_sha256": "7a6256111da21e71aee2f3ad315a646f7e3b6e088c45a3d4ee18dcf222c66763",
+        "record": "docs/production/remediation-20261104/recovery-execution/WAVE_B_PREFLIGHT.json",
+        "privacy_qualification": "NOT_GRANTED",
+        "source_acceptance": false
       }
     },
     "recovery_source_wave_A": {

@@ -1,0 +1,429 @@
+{
+  "observed_utc": "2026-11-04T11:51:55.724910+00:00",
+  "task_id": "task_25a4c3572682",
+  "dispatch_id": "ctx_5ca1ba3f03ac",
+  "status": "DELIVERED / original receipt and tracked boundary verified / RELEASED / PRESERVED / exact taskref PUBLISHED; source acceptance HELD",
+  "source_commit": "5385325722a39e6dd766352489f828f5e54b56d5",
+  "assignment_base": "2d02004d3108953a302e1a49aab9a5f24e944136",
+  "initial_source_commit": "01ca55728d8f47076f7b1f805ece1877845546bd",
+  "full_chain_base": "d6e78e0b6ab1dab5216443584d810a7a24af32b2",
+  "full_chain_commits": [
+    "8b9f5623b3b5a12c55ed6b9da0ae59662bd6b873",
+    "11f305b16c4c95e27682d13df4b02c8de33354d7",
+    "47b0bbb86a1dfd36726e60ab2ccf24b867883160",
+    "615d3c8403b237dd117c8032697c9b58895f9217",
+    "8fc65e052954a30f89be209d2d8f04e58ac1266f",
+    "2d02004d3108953a302e1a49aab9a5f24e944136",
+    "01ca55728d8f47076f7b1f805ece1877845546bd",
+    "5385325722a39e6dd766352489f828f5e54b56d5"
+  ],
+  "full_chain_paths": [
+    "docs/production/software-waves/SW-SEC-DATA-02-C1/AUTHOR.md",
+    "docs/production/software-waves/SW-SEC-DATA-02-C2/AUTHOR.md",
+    "docs/production/software-waves/SW-SEC-DATA-02-C3/AUTHOR.md",
+    "docs/production/software-waves/SW-SEC-DATA-02-C4/AUTHOR.md",
+    "tests/validation/test_sw_sec_data_02_c1.py",
+    "tests/validation/test_sw_sec_data_02_c2.py",
+    "tests/validation/test_sw_sec_data_02_c3.py",
+    "tests/validation/test_sw_sec_data_02_c4.py",
+    "tools/validate/clients/api.py",
+    "tools/validate/clients/ha.py",
+    "tools/validate/evidence.py",
+    "tools/validate/model.py",
+    "tools/validate/runner.py"
+  ],
+  "paths": [
+    "docs/production/software-waves/SW-SEC-DATA-02-C4/AUTHOR.md",
+    "tests/validation/test_sw_sec_data_02_c4.py",
+    "tools/validate/clients/api.py",
+    "tools/validate/clients/ha.py",
+    "tools/validate/evidence.py",
+    "tools/validate/model.py",
+    "tools/validate/runner.py"
+  ],
+  "source_sha256": {
+    "tools/validate/evidence.py": "7a72d75e86400d05b998f641bc3adf96e5df6a653ad3ca983fd6ec6b4deef36d",
+    "tools/validate/clients/api.py": "e762a226ae12b7805c4bff68b5f0793aa0349735bb0334136087b6bcf0393b0e",
+    "tools/validate/model.py": "7e5c880d2593b0cafa4c08500d1b57d54e2264e992fdf98d52540a0fab395773",
+    "tools/validate/runner.py": "ee0da8426b7522f06940cc49d49ba93477b1c351e3e4dd75a96477f29a52e6fe",
+    "tools/validate/clients/ha.py": "4477c4fb309344edbd3bd0e460b9ebd251ebfa7d4c245c0e7dc8cbccffaf3f27",
+    "tests/validation/test_sw_sec_data_02_c4.py": "0edfbbd1d35642547213f212c74afe8e1527517dfafa5621edc58cadb39007c4"
+  },
+  "native": {
+    "session": "01a1a62d-5b7d-7282-b691-753a3c38d963",
+    "model": "gpt-6.1-sol",
+    "effort": "high native",
+    "bytes": 3889288,
+    "sha256": "3e728f1c9c3d8aaa220e909ddd226f3346e24e1a0948cce281452c2d38f8cdd6",
+    "unassigned_helpers_observed": [],
+    "scope": "full current native capture; no source acceptance or competence grant"
+  },
+  "verified_receipts": {
+    "checks": {
+      "catalog-after": {
+        "exit": 0,
+        "counts": {
+          "tests": 21,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "catalog-before": {
+        "exit": 1,
+        "counts": {
+          "tests": 21,
+          "failures": 19,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "catalog-lint": {
+        "exit": 0,
+        "counts": null
+      },
+      "catalog-mypy": {
+        "exit": 0,
+        "counts": null
+      },
+      "catalog-regression": {
+        "exit": 0,
+        "counts": {
+          "tests": 294,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 2
+        }
+      },
+      "completion-final": {
+        "exit": 0,
+        "counts": null
+      },
+      "focused-01": {
+        "exit": 1,
+        "counts": {
+          "tests": 30,
+          "failures": 1,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "focused-02": {
+        "exit": 1,
+        "counts": {
+          "tests": 50,
+          "failures": 1,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "focused-03": {
+        "exit": 0,
+        "counts": {
+          "tests": 51,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "focused-04": {
+        "exit": 0,
+        "counts": {
+          "tests": 35,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "focused-frozen": {
+        "exit": 0,
+        "counts": {
+          "tests": 88,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "focused-frozen-02": {
+        "exit": 0,
+        "counts": {
+          "tests": 94,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "focused-frozen-03": {
+        "exit": 0,
+        "counts": {
+          "tests": 94,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "freeze-audit": {
+        "exit": 1,
+        "counts": null
+      },
+      "freeze-audit-02": {
+        "exit": 0,
+        "counts": null
+      },
+      "freeze-catalog-final": {
+        "exit": 0,
+        "counts": null
+      },
+      "freeze-delivery": {
+        "exit": 0,
+        "counts": null
+      },
+      "lint-01": {
+        "exit": 0,
+        "counts": null
+      },
+      "lint-delivery": {
+        "exit": 0,
+        "counts": null
+      },
+      "lint-final": {
+        "exit": 0,
+        "counts": null
+      },
+      "lint-frozen": {
+        "exit": 0,
+        "counts": null
+      },
+      "mutant-actual": {
+        "exit": 1,
+        "counts": {
+          "tests": 6,
+          "failures": 6,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "mutant-api_steps": {
+        "exit": 1,
+        "counts": {
+          "tests": 6,
+          "failures": 6,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "mutant-errors": {
+        "exit": 1,
+        "counts": {
+          "tests": 1,
+          "failures": 1,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "mutant-expected": {
+        "exit": 1,
+        "counts": {
+          "tests": 6,
+          "failures": 4,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "mutant-field": {
+        "exit": 1,
+        "counts": {
+          "tests": 3,
+          "failures": 3,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "mutant-ha_default": {
+        "exit": 1,
+        "counts": {
+          "tests": 1,
+          "failures": 1,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "mutant-ha_http": {
+        "exit": 1,
+        "counts": {
+          "tests": 2,
+          "failures": 2,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "mutant-ha_steps": {
+        "exit": 1,
+        "counts": {
+          "tests": 1,
+          "failures": 1,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "mutant-hub": {
+        "exit": 1,
+        "counts": {
+          "tests": 1,
+          "failures": 1,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "mutant-pairs": {
+        "exit": 1,
+        "counts": {
+          "tests": 3,
+          "failures": 3,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "mutant-public": {
+        "exit": 1,
+        "counts": {
+          "tests": 9,
+          "failures": 2,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "mutant-serialized": {
+        "exit": 1,
+        "counts": {
+          "tests": 6,
+          "failures": 6,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "mutant-summary": {
+        "exit": 1,
+        "counts": {
+          "tests": 6,
+          "failures": 6,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "mutant-tuple": {
+        "exit": 1,
+        "counts": {
+          "tests": 3,
+          "failures": 3,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "mutant-writer": {
+        "exit": 1,
+        "counts": {
+          "tests": 3,
+          "failures": 3,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "mypy-final": {
+        "exit": 0,
+        "counts": null
+      },
+      "mypy-frozen": {
+        "exit": 0,
+        "counts": null
+      },
+      "regression-final": {
+        "exit": 0,
+        "counts": {
+          "tests": 267,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 2
+        }
+      },
+      "runner-frozen": {
+        "exit": 0,
+        "counts": {
+          "tests": 18,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "source-hook": {
+        "exit": 0,
+        "counts": {
+          "tests": 4147,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 4
+        }
+      },
+      "source-hook-catalog": {
+        "exit": 0,
+        "counts": {
+          "tests": 4168,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 4
+        }
+      }
+    },
+    "old_C1_C3_unchanged": true,
+    "initial_report_test_prefix_unchanged": true,
+    "completion_sha256": "387d689929566ea049edca575d0830052a8ea9180601ca81cf23e822f6ab68fa"
+  },
+  "initial_hook": {
+    "tests": 4147,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 4,
+    "passed": 4143
+  },
+  "final_hook": {
+    "tests": 4168,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 4,
+    "passed": 4164
+  },
+  "strict_routes": {
+    "covered": 177,
+    "total": 177,
+    "percent": 100,
+    "strict": true
+  },
+  "task_publication": {
+    "ref": "refs/heads/remediation/privacy-c4",
+    "local_head": "5385325722a39e6dd766352489f828f5e54b56d5",
+    "remote_head": "5385325722a39e6dd766352489f828f5e54b56d5",
+    "exact_equal": true,
+    "normal_push": true
+  },
+  "preservation": [
+    {
+      "name": "priv-c4",
+      "files": 48572,
+      "links": 2,
+      "archive_sha256": "2312f3f442ee1db56be3e8f79e651157092d27ed0be84e90e2c2fb81b5fbd96a",
+      "archive_bytes": 64754033,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+    },
+    {
+      "name": "wp-sec-data-02-c4",
+      "files": 4648,
+      "links": 1,
+      "archive_sha256": "de96d192eeb00d90eca5889650db35b8c5d09f58f7561be1f3f657ce560daae3",
+      "archive_bytes": 207136772,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+    }
+  ],
+  "preservation_scope": "Full workspace, owned hidden/ordinary temp, exact untracked coordinator Codex config, junction metadata and full native. No target traversal, full Git bundle or destructive cleanup; source tree retained. Worker inventory scope and coordinator archive counts are different populations, not silently equated.",
+  "boundary": "Seven total leased paths; descendant only evidence helper plus append-only C4tests/report. C1-C3 exact source/reports unchanged and actual seven-file initial snapshot/first commit retained. Semantics/full write audit subject to independent review, not accepted from preservation.",
+  "remaining": "First genuine M3 domain assessment + ONE Astra judge, then only actual PASS permits separate qualified full-chain source review and report-quality evaluation. No new qualification, acceptance, canonical evidence admission or integration. D6/wiring and owner gates held."
+}

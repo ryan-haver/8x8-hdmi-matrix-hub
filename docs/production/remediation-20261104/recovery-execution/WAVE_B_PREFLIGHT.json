@@ -1,0 +1,103 @@
+{
+  "observed_utc": "2026-11-04T11:51:55.724910+00:00",
+  "status": "PREPARED / not launched",
+  "source_heads": {
+    "ws": "24c5170458200209836228646fdfc8784a967ad1",
+    "privacy": "5385325722a39e6dd766352489f828f5e54b56d5"
+  },
+  "source_delivery_records": [
+    "WS_C01_DELIVERY.json",
+    "PRIV_C4_DELIVERY.json"
+  ],
+  "same_adopted_packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+  "exact_subject_packet_sha256": "7a6256111da21e71aee2f3ad315a646f7e3b6e088c45a3d4ee18dcf222c66763",
+  "live_binding": "same Run/runtime/gen5/localZelu/win32; saved SSH disconnected; all152rows/145released/7retainedmetadata/0current",
+  "capacity": {
+    "codex": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 13,
+        "windowMinutes": 10080,
+        "resetsAt": 1794378964000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "session": null,
+      "updatedAt": 1793792626278,
+      "error": null,
+      "age_seconds": 319
+    },
+    "claude": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 25,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400122,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "session": {
+        "usedPercent": 5,
+        "windowMinutes": 300,
+        "resetsAt": 1793796600122,
+        "resetDescription": "5:50 AM"
+      },
+      "updatedAt": 1793792626087,
+      "error": null,
+      "age_seconds": 319
+    },
+    "minimax": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 34,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932892,
+        "resetDescription": null
+      },
+      "session": {
+        "usedPercent": 20,
+        "windowMinutes": 300,
+        "resetsAt": 1793794421794,
+        "resetDescription": null
+      },
+      "updatedAt": 1793792626060,
+      "error": null,
+      "age_seconds": 319
+    }
+  },
+  "capacity_decision": "Two bounded read-only review/candidate reports; reserve future ONE privacy judge plus actual qualified review/evaluation/materialfix conditional, re-gate every creation/start/natural15min checkpoint. Unknown absolute allowance/other-host commitments; no qualified privacy/wiring fallback claimed.",
+  "selected": {
+    "openai": {
+      "name": "wp-remediation-ws-work-c01-review",
+      "branch": "remediation/ws-work-c01-review",
+      "base": "24c5170458200209836228646fdfc8784a967ad1",
+      "agent": "codex",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "title": "WS-R01 independent corrected-component source review",
+      "report": "docs/production/remediation-20261104/WS-WORK-01/CORRECTION-01-REVIEW.md",
+      "spec": "docs/production/remediation-20261104/recovery-execution/WS_R01_TASK.md",
+      "deps": [
+        "task_92d47e338d62"
+      ],
+      "packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e"
+    },
+    "minimax": {
+      "name": "wp-recovery-privacy-m3-assess",
+      "branch": "qualification/recovery-privacy-m3",
+      "base": "5385325722a39e6dd766352489f828f5e54b56d5",
+      "agent": "opencode2",
+      "model": "minimax-coding-plan/MiniMax-M3",
+      "effort": "unsupported; thinking inherited",
+      "title": "PRIV-ASSESS first MiniMax corrected-chain review-domain candidate",
+      "report": "docs/production/remediation-20261104/PRIVACY-M3-ASSESSMENT/AUTHOR.md",
+      "spec": "docs/production/remediation-20261104/recovery-execution/PRIV_M3_ASSESS_TASK.md",
+      "deps": [
+        "task_25a4c3572682"
+      ],
+      "packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e"
+    }
+  },
+  "alternatives": "Astra qualified component reviewer distinct from Anthropic author. M3 first candidate NOT qualified; Sol actual privacy author disqualified as source reviewer, Astra judge only/report assessment. Opus prior privacy FAIL retained; Google unknown access/domain, DeepSeek unavailable.",
+  "routing": "Codex explicit Astra/high helpersfalse; OpenCode2v2.2.5 actual supported catalog contains exactM3 and M3.1Flash; choose M3only reviewed scoped config. Initial unsupported models positional argument preserved; corrected supported no-arg catalog used. Exact family/native execution attestation required after launch.",
+  "concurrency": "two planned workers + coordinator + protected external =4of4; no nesting",
+  "gates": "No source acceptance/intake/privacy qualification/wiring/owner gates closed; publish/exactverify checkpoint before creation/start."
+}
