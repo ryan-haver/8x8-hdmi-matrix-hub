@@ -1,5 +1,16 @@
 # Runtime-completion execution record
 
+## Reserved FC-TRUTH exact corrected-commit rereview active — 2026-11-04T21:31:16.126289+00:00
+
+Sol Task task_ba4c0694e78e / ctx_72b222ccb718 starts in NEW wp-fc26-fc-truth-rereview, branch review/wp-fc26-fc-truth-rereview at EXACT7996a080b64750da5c6de4f1e365d6fcd85c7ddc. Only new REREVIEW.md writable; original corrected reports/source/receipts/config readonly. Same reserved independent Solhigh route after ONE actual-M3-author factual correction, no model assessment retry/extra judge. Review R1-R4/all61dispositions/all268semanticmapping and consequential overclaims; completeness not granted from table counts/52namedfunctions/explicitunknowns. LiteralNEW CORRECTION.md preserved from dispatched wording; no silentrename. Native entry: actual native Task/Dispatch/cwd entry verified.
+
+Coordinator prematurely ran launchhelper while prepare exec was yielded/stillrunning; it stopped at missingbinding before worker-start API. Prepare later positivelycompleted. A readonly worktreeps --worktree inspection was rejected (unsupportedflag); originalerror preserved, help consulted and exactterminal list proved oneordinaryPowerShell/noagent. Rechecked completedexistingtree/head/branch/config/spec/priorauthorrelease/freshquota and invoked FIRST worker-start once. No re-create/failed-worker retry/duplicatewriter; raw helpers/errors/receipts retained.
+
+Prelaunchffe4039d passed489docs/normalpush/exactremoteequality. SameRun/runtime2fec/Orca1.4.248/gen5/local/catalog/inbox/all174rows2pages counts{'retained': 8, 'released': 165, None: 1}. Existing M3supportfidelityreview plus Soltruthrereview + coordinator + protectedexternal=4/no nesting. Fresh intendedCodex capacity before prepare/actualstart; otherprovider constraints observed without blocking unrelated ready work, no newM3dispatch. Originalauthor positivelyreleased/native/fullbundle/normalfastforwardtaskref preserved; registeredcorrection evidence retainedinplace. Registeredcoor6b6b0c08cfd64ef5997d668e0974257c compactcustody retained/reviewDec04; no wholeworkspace/build/dependencycopies/quarantine/removal.
+
+No canonical feature/finding/source/Q/D6/WSR03/privacyFAIL/ownerbudget/hardwarevisual72hweekrelease gate cleared from delivery or launch. Publish scopedrecords/exactremoteequality then end turn for Orca wake, no completionpoll or extra automaticcorrectioncycle.
+
+
 ## FC-TRUTH correction preserved; reserved Sol rereview prepared — 2026-11-04T21:27:56.766981+00:00
 
 Original MiniMax author Tasktask_5305a1b797cc/ctx_467d7a450979 delivered7996a080b64750da5c6de4f1e365d6fcd85c7ddc parent99e72bd9, onlyINVENTORY.md and literalNEW CORRECTION.md (the task said optional NEW CORRECTION.md). Exacthashes dd2067ca/955d1fbc, source/configboundary clean; originalfilename/history preserved. AuthorreportsR1-R4/nonblockingcorrections and new268semanticmap; no canonicalacceptance fromselfclaim. Original99e/errorreceipts intact. ONE actualauthorfactualcorrection consumed, ONE Sol exact7996rereview nowPREPARED/noTaskyet; no assessment retake/extra judge.

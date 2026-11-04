@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T21:27:56.766981+00:00",
+  "observed_utc": "2026-11-04T21:31:16.126289+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -3384,7 +3384,7 @@
   },
   "historical_proposed_manual_attempt": "docs/production/software-waves/MVP-EXECUTION-20261102/PROPOSED_MANUAL_QUALIFICATION_ATTEMPT02.txt",
   "functional_completion_planning": {
-    "status": "Corrected FC-TRUTH preserved/released/published; reserved Sol exactcommit rereview PREPARED/no Task yet",
+    "status": "FC-TRUTH actual-author correction complete/preserved; exact7996 Sol rereview ACTIVE, no canonical acceptance",
     "phase": "functional-completion-20261104",
     "input_packet_sha256": "cb6a9871fdf8a4adfb181ab1fbf3abafb6c265323c27b543ebd62f9c68857dc4",
     "record": "docs/agent-process/phases/functional-completion-20261104/ROUND1_DISPATCHES.json",
@@ -3590,7 +3590,7 @@
         "status": "ACTIVE assigned bounded inventory/metadata authorship, no source/qualification/featureacceptance"
       }
     },
-    "execution_wave_A_latest_record": "docs/agent-process/phases/functional-completion-20261104/TRUTH_CORRECTION_REREVIEW_READY.json",
+    "execution_wave_A_latest_record": "docs/agent-process/phases/functional-completion-20261104/TRUTH_REREVIEW_DISPATCH.json",
     "execution_wave_A_reviewers": {
       "truth": {
         "package": "FC-TRUTH",
@@ -3636,6 +3636,14 @@
       "branch": "review/wp-fc26-fc-support-run-review",
       "exact_base": "abb52542858845cf488a63b01f6ac619f3f38173",
       "status": "ACTIVE exact-commit independent receipt-fidelity review only"
+    },
+    "truth_rereview": {
+      "task_id": "task_ba4c0694e78e",
+      "dispatch_id": "ctx_72b222ccb718",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-fc26-fc-truth-rereview",
+      "branch": "review/wp-fc26-fc-truth-rereview",
+      "exact_base": "7996a080b64750da5c6de4f1e365d6fcd85c7ddc",
+      "status": "ACTIVE reserved exact-corrected-commit different-family factual rereview"
     }
   },
   "latest_verified_CI": {
