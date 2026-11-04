@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T13:41:57.285555+00:00",
+  "observed_utc": "2026-11-04T14:02:31.749729+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -322,7 +322,7 @@
     "OWNER-FINAL-RELEASE",
     "P1-ACCEPTANCE-CLOSURE"
   ],
-  "meaning": "These reservations cannot treat failed mandatory qualification as passed; entry/completion/owner gates remain distinct, no source or physical/release acceptance.",
+  "meaning": "Exact independently reviewed unwired WS component is integrated with local combinedproof. Failed mandatory privacy qualification remains failed; no general author/domain/feature/physical/release acceptance follows. Current budget-expansion proposal is owner-only and not authorized by elapsedtime or prior remediation approval.",
   "inventory": {
     "original_author": "13fe2ae8d423d8e43065b08a8767109e011c61c0",
     "independent_review": "4c2d18b8cdd3f49523e9014e498bbfd7d55601ac",
@@ -483,9 +483,9 @@
     "source_or_feature_qualification": false
   },
   "automatic_retakes": false,
-  "owner_decision_pending": "No qualification-retake approval pending. Owner now authorizes software remediation of comprehensive findings; separate actual hardware/visual/final-release gates remain.",
-  "proposed_manual_attempt": "docs/production/software-waves/MVP-EXECUTION-20261102/PROPOSED_MANUAL_QUALIFICATION_ATTEMPT02.txt",
-  "product_source_changed_by_this_batch": false,
+  "owner_decision_pending": "Bounded privacy reassessment budget proposal requires explicit owner approval; current exhaustedattemptsremainterminal/noautomaticretake. Separate physical/visual/finalreleasegates remain.",
+  "proposed_manual_attempt": "docs/production/remediation-20261104/recovery-execution/PRIVACY_REASSESSMENT_BUDGET_REQUEST.json",
+  "product_source_changed_by_this_batch": true,
   "preservation_gaps": {
     "author_commit": "ed78321e51156f229507e654f0cf3faae100b935",
     "status": "completed and coordinator accepted as bounded negative-gap documentation only",
@@ -2714,7 +2714,7 @@
       }
     ],
     "new_bounded_authorship": "NOT_GRANTED; candidate component only",
-    "source_changed_in_integration": false,
+    "source_changed_in_integration": true,
     "findings_closed": [],
     "api_report_evaluation": "accepted/released/preserved/published; no source integration",
     "WS_component_environment": "Node cause repaired, authorized normal hook67 PASS; failed66/prior originals preserved",
@@ -3199,11 +3199,12 @@
         "review_commit": "9817554ed6d77df8b828d6d6c2e465bb77d26707"
       },
       "component_intake": {
-        "status": "PREPARED coordinator-only exacttwofile unwired component intake, source tree unchanged yet",
-        "record": "docs/production/remediation-20261104/recovery-execution/WS_COMPONENT_INTAKE_PLAN.json",
+        "status": "INTEGRATED / combinedPASS / sourcecommitpublished, module UNWIRED",
+        "record": "docs/production/remediation-20261104/recovery-execution/WS_COMPONENT_INTAKE_RESULT.json",
         "qualified_source": "78295ecdf8c47e330786e10eb8e00136c2025b7d",
         "privacy_intake": false,
-        "wiring": false
+        "wiring": false,
+        "integration_commit": "e54228c0e3a9451f39b27caeef6aa77e1e1fa59a"
       }
     },
     "recovery_source_wave_A": {
@@ -3242,6 +3243,17 @@
         }
       ],
       "source_changed_in_integration": false
+    },
+    "accepted_unwired_WS_component": {
+      "status": "INTEGRATED / locally combinedPASS / sourcecommitpublishedexactverified; UNWIRED",
+      "integration_commit": "e54228c0e3a9451f39b27caeef6aa77e1e1fa59a",
+      "reviewed_source": "78295ecdf8c47e330786e10eb8e00136c2025b7d",
+      "paths": [
+        "src/rest_api/ws_request_work.py",
+        "tests/test_ws_request_work.py"
+      ],
+      "record": "docs/production/remediation-20261104/recovery-execution/WS_COMPONENT_INTAKE_RESULT.json",
+      "CR01_closed": false
     }
   },
   "prospective_privacy_review_domain": {
@@ -3369,5 +3381,6 @@
       "review_quality": "FAIL"
     },
     "report_commit": "1b2b7c5f0ff868c5367a8d2c014807f86e61d1cb"
-  }
+  },
+  "historical_proposed_manual_attempt": "docs/production/software-waves/MVP-EXECUTION-20261102/PROPOSED_MANUAL_QUALIFICATION_ATTEMPT02.txt"
 }

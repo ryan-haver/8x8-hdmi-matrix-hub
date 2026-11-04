@@ -1,0 +1,90 @@
+{
+  "observed_utc": "2026-11-04T14:02:31.749729+00:00",
+  "status": "INTEGRATED / combined local checks PASS / source integration commit PUBLISHED exact verified; module remains UNWIRED",
+  "source_integration_commit": "e54228c0e3a9451f39b27caeef6aa77e1e1fa59a",
+  "pre_intake_head": "28c2c249380a40523d1b137bf5329b77dcc153a0",
+  "reviewed_source_commit": "78295ecdf8c47e330786e10eb8e00136c2025b7d",
+  "exact_blob_mapping": [
+    {
+      "path": "src/rest_api/ws_request_work.py",
+      "source_commit": "78295ecdf8c47e330786e10eb8e00136c2025b7d",
+      "git_blob_sha256": "3ae622fd21ca8b8c9472d0758df66bf7f674e5462ad251c8cb6417521d013449",
+      "git_blob_id": "145845f493627c98bdf37bc7a6028798b014dd7c",
+      "mapping": "Copy exact Git blob bytes as NEW files only; verify Git blob equality after staging and after commit. No conflict resolution, ref reset or source rewriting."
+    },
+    {
+      "path": "tests/test_ws_request_work.py",
+      "source_commit": "78295ecdf8c47e330786e10eb8e00136c2025b7d",
+      "git_blob_sha256": "69ac419d6513888831239816e5a7c2dd20e6a5654bafe7d506e3719fdb619776",
+      "git_blob_id": "2b697a48c471cc24bddf80e946f75add9cde3843",
+      "mapping": "Copy exact Git blob bytes as NEW files only; verify Git blob equality after staging and after commit. No conflict resolution, ref reset or source rewriting."
+    }
+  ],
+  "qualified_different_family_reviews": [
+    "ed69708325f9e10a2ae2784179303016acbd69d0",
+    "9817554ed6d77df8b828d6d6c2e465bb77d26707"
+  ],
+  "composition": "Exact reviewed Git blobs copied as two NEW root files only; no conflictresolution/rewrite/runtimeformatting or other product source changes. Original actual Anthropic authorship retained; coordinator integrates bytes and runs combined checks, not relabeling implementation.",
+  "core": {
+    "tests": 4161,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 6,
+    "passed": 4155
+  },
+  "focused_debug": {
+    "tests": 73,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 73
+  },
+  "mypy": {
+    "direct_exit": 0,
+    "source_files": 92
+  },
+  "strict_routes": {
+    "covered": 177,
+    "total": 177,
+    "percent": 100.0,
+    "strict": true
+  },
+  "source_hook": "Normal configured hook ran Ruff CIpaths + complete applicable core with own data/config/nativeTEMP/basetemp/JUnit, no override. Sourcecommit parent/current exactblob/stageddiff checked; supplementalfocused has routeplugin disabled.",
+  "raw_evidence": "C:/t/ws-intake-20261104/01-mypy,02-focused-debug,03-normal-source-commit; coordinator ws-component-intake/combined-result-private/protected-before-private/protected-after-private and original route copies. Current protection snapshot is not historical integrity proof.",
+  "helper_error": "Initial coordinator untracked guard compared quoted default Git filenames against raw-z protected artifact names; exact raw-z sets verified, original script/error retained, source/tests unchanged and passed mypy/focused not repeated. Resume only staged/normal sourcehook.",
+  "private_runtime_and_unrelated_artifacts": "All private runtime/data/config/root inputJSON/YAML/env/untracked encodedhook entries exact unchanged after checks; generated validation route-coverage JSON changed only expected mtime, byte/size identity preserved. No restore/delete/baseline changes.",
+  "generated_route_metadata_exception": {
+    "observed_utc": "2026-11-04T14:00:51.467692+00:00",
+    "strict_guard": "Correctly halted because generic rootJSON inventory included generated route-coverage.json mtime. No source/test/protection snapshot overwritten or restored.",
+    "accepted_exception": [
+      {
+        "path": "route-coverage.json",
+        "before": {
+          "path": "route-coverage.json",
+          "size": 6631,
+          "mtime_ns": 1793054762947367000,
+          "kind": "file",
+          "sha256": "6f4d570ee7d899010ee1c982086130bebb882bb3323c1581e6573161ed38194a"
+        },
+        "after": {
+          "path": "route-coverage.json",
+          "size": 6631,
+          "mtime_ns": 1793800740605752400,
+          "kind": "file",
+          "sha256": "6f4d570ee7d899010ee1c982086130bebb882bb3323c1581e6573161ed38194a"
+        }
+      }
+    ],
+    "proof": "Exactly one expected generated validation output mtime differs; all entry bytes/size and every private runtime/unrelated entry including metadata remain exact. Actual hook strict route output/direct exit/JUnit prove fresh run despite byte-identical JSON. Before/after raw bytes preserved separately.",
+    "source_hook_repeated": false
+  },
+  "source_publication": {
+    "observed_utc": "2026-11-04T14:01:18.809040+00:00",
+    "local_head": "e54228c0e3a9451f39b27caeef6aa77e1e1fa59a",
+    "remote_head": "e54228c0e3a9451f39b27caeef6aa77e1e1fa59a",
+    "exact_equal": true,
+    "normal_push": true,
+    "source_changes": "Only exact reviewed78295ecd component/test blobs; normal combinedsourcehook/types/focuseddebug pass, private runtime unchanged, expected generatedrouteJSON mtimeonlyexception retained"
+  },
+  "readiness": "Component only. Handler/app/events/runtime imports/wiring, CR01 networkbound, D6reviewerindependence, privacy source/qualification/admission/API034M1/WS040/combinedfeatureproof and ownerHA/visual/HIL/72h/week/finalversion/artifact/release remain held. No featureledger/registrygeneration or hardware/CIcontainer/image acceptance inferred from local Python passes."
+}
