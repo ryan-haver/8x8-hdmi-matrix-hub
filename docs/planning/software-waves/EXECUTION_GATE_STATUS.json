@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T13:24:00.846728+00:00",
+  "observed_utc": "2026-11-04T13:41:57.285555+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -3173,7 +3173,7 @@
         "delivery_record": "docs/production/remediation-20261104/recovery-execution/PRIV_JUDGE_DELIVERY.json"
       },
       "ws_wording_followup": {
-        "status": "AUTHOR delivered/released/preserved/published; reserved exact source re-review ACTIVE",
+        "status": "Exact78295ecd qualified re-reviewPASS/C01-R01corrected, worker released/preserved/taskrefpublished; sourceintake not yet performed",
         "record": "docs/production/remediation-20261104/recovery-execution/WS_WORDING_DISPATCH.json",
         "reserve": "One reserved original-author product fix/re-review explicitly used for qualified C01-R01; no qualificationretry",
         "actor": {
@@ -3185,7 +3185,7 @@
           "status": "Covered original-author WS C01-R01 wording correction ACTIVE; no delivery/source acceptance or qualification"
         },
         "source_commit": "78295ecdf8c47e330786e10eb8e00136c2025b7d",
-        "delivery_record": "docs/production/remediation-20261104/recovery-execution/WS_WORDING_DELIVERY.json",
+        "delivery_record": "docs/production/remediation-20261104/recovery-execution/WS_WORDING_REVIEW_DELIVERY.json",
         "rereview_record": "docs/production/remediation-20261104/recovery-execution/WS_WORDING_REVIEW_PREFLIGHT.json",
         "review_actor": {
           "task_id": "task_2baa71b16197",
@@ -3195,7 +3195,15 @@
           "exact_base": "78295ecdf8c47e330786e10eb8e00136c2025b7d",
           "status": "ONE reserved qualified different-family exact WS wording correction RE-REVIEW active; no verdict/intake"
         },
-        "review_record": "docs/production/remediation-20261104/recovery-execution/WS_WORDING_REVIEW_DISPATCH.json"
+        "review_record": "docs/production/remediation-20261104/recovery-execution/WS_WORDING_REVIEW_DISPATCH.json",
+        "review_commit": "9817554ed6d77df8b828d6d6c2e465bb77d26707"
+      },
+      "component_intake": {
+        "status": "PREPARED coordinator-only exacttwofile unwired component intake, source tree unchanged yet",
+        "record": "docs/production/remediation-20261104/recovery-execution/WS_COMPONENT_INTAKE_PLAN.json",
+        "qualified_source": "78295ecdf8c47e330786e10eb8e00136c2025b7d",
+        "privacy_intake": false,
+        "wiring": false
       }
     },
     "recovery_source_wave_A": {
