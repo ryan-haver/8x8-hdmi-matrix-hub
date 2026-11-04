@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T21:31:16.126289+00:00",
+  "observed_utc": "2026-11-04T21:47:31.232359+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -3384,7 +3384,7 @@
   },
   "historical_proposed_manual_attempt": "docs/production/software-waves/MVP-EXECUTION-20261102/PROPOSED_MANUAL_QUALIFICATION_ATTEMPT02.txt",
   "functional_completion_planning": {
-    "status": "FC-TRUTH actual-author correction complete/preserved; exact7996 Sol rereview ACTIVE, no canonical acceptance",
+    "status": "FC-TRUTH REQUIRE_CHANGES after reserved correction/rereview; proposals not accepted; cycle exhausted",
     "phase": "functional-completion-20261104",
     "input_packet_sha256": "cb6a9871fdf8a4adfb181ab1fbf3abafb6c265323c27b543ebd62f9c68857dc4",
     "record": "docs/agent-process/phases/functional-completion-20261104/ROUND1_DISPATCHES.json",
@@ -3590,7 +3590,7 @@
         "status": "ACTIVE assigned bounded inventory/metadata authorship, no source/qualification/featureacceptance"
       }
     },
-    "execution_wave_A_latest_record": "docs/agent-process/phases/functional-completion-20261104/TRUTH_REREVIEW_DISPATCH.json",
+    "execution_wave_A_latest_record": "docs/agent-process/phases/functional-completion-20261104/TRUTH_REREVIEW_CLOSEOUT.json",
     "execution_wave_A_reviewers": {
       "truth": {
         "package": "FC-TRUTH",
@@ -3644,6 +3644,14 @@
       "branch": "review/wp-fc26-fc-truth-rereview",
       "exact_base": "7996a080b64750da5c6de4f1e365d6fcd85c7ddc",
       "status": "ACTIVE reserved exact-corrected-commit different-family factual rereview"
+    },
+    "truth_rereview_outcome": {
+      "verdict": "REQUIRE_CHANGES",
+      "review_head": "a18dea2d6f18f61117571fae22d3568cec8d4b5c",
+      "reviewed_head": "7996a080b64750da5c6de4f1e365d6fcd85c7ddc",
+      "resource": "released",
+      "canonical_proposals": "HOLD",
+      "correction_rereview_reserve": "exhausted; no automatic further cycle"
     }
   },
   "latest_verified_CI": {
