@@ -46,6 +46,23 @@ Lifecycle
     requests cancellation again for whatever is still alive and waits again,
     bounded each time; it never reopens admission.
 
+Truthful drain (CORRECTION-01)
+    ``DrainReport.remaining`` counts **all** unfinished admitted work of the
+    scope when the call returns: attached tasks that are not done *and*
+    admissions still in progress (a reservation held while the factory or an
+    eager first step runs), including the calling task itself when it belongs
+    to the scope. ``requested`` counts only attached live tasks this call
+    actually requested cancellation of, so ``remaining`` may exceed it. A
+    reservation is never reported as cancelled; the admission that holds it
+    cancels its task after registration because the scope is closed by then.
+
+    A cleanup that runs inside an admission (from the factory, or from an eager
+    first step of the same scope) or from one of the scope's own tasks cannot
+    usefully wait: what it would wait for cannot progress until it returns. It
+    therefore returns at once, without awaiting, with that work in
+    ``remaining`` (never ``drained``). Otherwise it waits once, bounded by
+    ``timeout``, and recounts unfinished work after the wait.
+
 Cooperative and resistant cancellation
     ``Task.cancel()`` is a request. A cooperative task (the normal case: it is
     suspended in an ``await`` and lets ``CancelledError`` propagate) finishes
@@ -68,10 +85,17 @@ Failures
     are never logged or kept. The coroutine itself should still handle its own
     errors (``_reply_status`` already answers ``error`` to the client).
 
-Threading
-    Not thread-safe by design: every method must be called from the event loop
-    the controller first admitted work on (aiohttp handlers already are). A call
-    from another loop raises ``RuntimeError`` before the factory is called.
+Threading and event loops
+    Not thread-safe by design; no thread-safety is claimed. The first
+    ``try_start`` (admitted or rejected) binds the controller to the running
+    loop; only admission binds. After that, ``try_start`` and every lifecycle
+    method (``close``, ``aclose``, ``begin_shutdown``, ``shutdown``) raise
+    ``RuntimeError`` when called from another loop or with no running loop,
+    *before* any state changes: the factory is not called, no fence closes and
+    no task is cancelled. On a controller that never admitted (so owns no
+    task), ``close`` and ``begin_shutdown`` work with or without a running loop
+    and close their admission fence; neither they nor ``aclose``/``shutdown``
+    bind it to a loop.
 
 Admission is atomic with respect to the event loop: :meth:`WorkOwner.try_start`
 never awaits, and it reserves capacity *before* calling the factory or creating
@@ -102,7 +126,7 @@ import enum
 import itertools
 import logging
 import math
-from collections.abc import Callable, Coroutine
+from collections.abc import Callable, Collection, Coroutine
 from dataclasses import dataclass
 from typing import Any, TypeVar
 
@@ -136,9 +160,14 @@ class RejectReason(enum.Enum):
 class DrainReport:
     """Outcome of one bounded :meth:`WorkOwner.aclose` / :meth:`WsRequestWork.shutdown`.
 
-    :ivar requested: live tasks cancellation was requested for by this call
-    :ivar remaining: of those, tasks still not finished when the wait ended
-        (cancellation-resistant or slow); they stay referenced and counted
+    :ivar requested: attached live tasks of the scope that this call actually
+        requested cancellation of
+    :ivar remaining: all unfinished admitted work of the scope when the call
+        returned: live tasks (cancellation-resistant, slow, or the caller
+        itself) plus admissions still in progress. It is not limited to the
+        ``requested`` tasks and may exceed ``requested``; that work stays
+        referenced and counted. (Before CORRECTION-01 this was documented as
+        "of those" requested tasks, which omitted in-progress admissions.)
     """
 
     requested: int
@@ -146,7 +175,7 @@ class DrainReport:
 
     @property
     def drained(self) -> bool:
-        """Every task this call cancelled has finished."""
+        """No admitted work of the scope was unfinished when the call returned."""
         return self.remaining == 0
 
 
@@ -167,17 +196,40 @@ def _validate_timeout(value: object) -> float:
     return seconds
 
 
-async def _wait_bounded(tasks: list[asyncio.Task[Any]], timeout: float) -> int:
-    """Wait at most ``timeout`` s for ``tasks``; return how many are still running.
+def _cancel_live(tasks: Collection[asyncio.Task[Any]]) -> int:
+    """Request cancellation of every task in ``tasks``; return how many requests took effect.
 
-    ``asyncio.wait`` neither raises the tasks' exceptions nor cancels them when
-    this waiter is cancelled, which is what a bounded drain needs.
+    ``Task.cancel()`` returns ``False`` for a task that is already done, so a
+    task that finished but whose done callback has not run yet is not counted.
     """
-    if not tasks:
-        return 0
-    if timeout > 0:
-        await asyncio.wait(tasks, timeout=timeout)
-    return sum(1 for task in tasks if not task.done())
+    return sum(1 for task in list(tasks) if task.cancel())
+
+
+async def _drain(requested: int, tasks: Collection[asyncio.Task[Any]],
+                 reserved: Callable[[], int], timeout: float) -> DrainReport:
+    """Wait at most once, at most ``timeout`` s, for the scope's work; report what is left.
+
+    ``tasks`` is the scope's live set (read again after the wait) and
+    ``reserved`` its count of admissions in progress. ``asyncio.wait`` neither
+    raises the tasks' exceptions nor cancels them when this waiter is
+    cancelled, which is what a bounded drain needs.
+    """
+
+    def unfinished() -> int:
+        return reserved() + sum(1 for task in tasks if not task.done())
+
+    pending = [task for task in tasks if not task.done()]
+    if timeout == 0 or not pending or reserved():
+        # Nothing to wait for, no time to wait, or this cleanup runs inside an
+        # admission of the scope: what it would wait for cannot progress before
+        # it returns, so it returns at once and reports that work as unfinished.
+        return DrainReport(requested=requested, remaining=unfinished())
+    if asyncio.current_task() in pending:
+        # One of the scope's own tasks is cleaning its scope: it cannot finish
+        # while it waits for itself.
+        return DrainReport(requested=requested, remaining=unfinished())
+    await asyncio.wait(pending, timeout=timeout)
+    return DrainReport(requested=requested, remaining=unfinished())
 
 
 class WorkOwner:
@@ -233,20 +285,32 @@ class WorkOwner:
         return self._controller._admit(self, factory, name)
 
     def close(self) -> None:
-        """Stop admitting and request cancellation of this owner's live tasks. Idempotent."""
+        """Stop admitting and request cancellation of this owner's live tasks. Idempotent.
+
+        :raises RuntimeError: the controller is bound to an event loop that is
+            not the running one (or none is running); nothing is changed
+        """
+        self._controller._check_lifecycle_loop()
+        self._close()
+
+    def _close(self) -> int:
         self._closed = True
-        for task in list(self._tasks):
-            task.cancel()
+        return _cancel_live(self._tasks)
 
     async def aclose(self, timeout: float = DEFAULT_OWNER_CLOSE_TIMEOUT) -> DrainReport:
-        """:meth:`close`, then wait at most ``timeout`` s for this owner's tasks only.
+        """:meth:`close`, then wait at most ``timeout`` s for this owner's work only.
 
-        Unrelated owners are neither cancelled nor waited for.
+        Unrelated owners are neither cancelled nor waited for. Returns at once,
+        not drained, when called inside one of this owner's admissions or from
+        one of its tasks (see "Truthful drain" in the module docstring).
+
+        :raises TypeError, ValueError: invalid ``timeout``; nothing is changed
+        :raises RuntimeError: as for :meth:`close`; nothing is changed
         """
         seconds = _validate_timeout(timeout)
-        tasks = [task for task in self._tasks if not task.done()]
-        self.close()
-        return DrainReport(requested=len(tasks), remaining=await _wait_bounded(tasks, seconds))
+        self._controller._check_lifecycle_loop()
+        requested = self._close()
+        return await _drain(requested, self._tasks, lambda: self._reserved, seconds)
 
 
 class WsRequestWork:
@@ -323,12 +387,28 @@ class WsRequestWork:
     # ------------------------------------------------------------------ admission
 
     def _check_loop(self) -> asyncio.AbstractEventLoop:
+        """Admission only: require a running loop and bind to it on first use."""
         loop = asyncio.get_running_loop()  # RuntimeError outside the loop
         if self._loop is None:
             self._loop = loop
         elif self._loop is not loop:
             raise RuntimeError(f"{self!r} is bound to a different event loop")
         return loop
+
+    def _check_lifecycle_loop(self) -> None:
+        """Lifecycle: refuse a bound controller's foreign or missing loop. Never binds.
+
+        Called before any fence or cancellation change. An unbound controller has
+        never admitted, so it owns no task and no reservation that a loop could run.
+        """
+        if self._loop is None:
+            return
+        try:
+            loop = asyncio.get_running_loop()
+        except RuntimeError:
+            raise RuntimeError(f"{self!r} is bound to an event loop, but no event loop is running") from None
+        if loop is not self._loop:
+            raise RuntimeError(f"{self!r} is bound to a different event loop")
 
     def _reject(self, reason: RejectReason) -> RejectReason:
         self._counts[f"rejected_{reason.value}"] += 1
@@ -399,14 +479,28 @@ class WsRequestWork:
     # ------------------------------------------------------------------ shutdown
 
     def begin_shutdown(self) -> None:
-        """Stop admitting for every owner (also owners opened later) and cancel all live tasks. Idempotent."""
+        """Stop admitting for every owner (also owners opened later) and cancel all live tasks. Idempotent.
+
+        :raises RuntimeError: bound to an event loop that is not the running one
+            (or none is running); nothing is changed
+        """
+        self._check_lifecycle_loop()
+        self._begin_shutdown()
+
+    def _begin_shutdown(self) -> int:
         self._closing = True
-        for task in list(self._tasks):
-            task.cancel()
+        return _cancel_live(self._tasks)
 
     async def shutdown(self, timeout: float = DEFAULT_SHUTDOWN_TIMEOUT) -> DrainReport:
-        """:meth:`begin_shutdown`, then wait at most ``timeout`` s for every task."""
+        """:meth:`begin_shutdown`, then wait at most ``timeout`` s for all work.
+
+        Returns at once, not drained, when called inside any admission or from
+        one of the controller's tasks (see "Truthful drain" in the module docstring).
+
+        :raises TypeError, ValueError: invalid ``timeout``; nothing is changed
+        :raises RuntimeError: as for :meth:`begin_shutdown`; nothing is changed
+        """
         seconds = _validate_timeout(timeout)
-        tasks = [task for task in self._tasks if not task.done()]
-        self.begin_shutdown()
-        return DrainReport(requested=len(tasks), remaining=await _wait_bounded(tasks, seconds))
+        self._check_lifecycle_loop()
+        requested = self._begin_shutdown()
+        return await _drain(requested, self._tasks.keys(), lambda: self._reserved, seconds)

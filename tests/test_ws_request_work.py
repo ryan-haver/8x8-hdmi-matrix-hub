@@ -885,3 +885,618 @@ async def test_repr_and_diagnostics_carry_no_client_data(make_work):
     text = " ".join([repr(work), repr(owner), json.dumps(work.diagnostics())])
     assert "SECRET" not in text and "ws_get_status" in text
     assert (await owner.aclose()).drained and task.cancelled()
+
+
+# =========================================================================== CORRECTION-01 regressions
+#
+# Added by WS-C01 (CORRECTION-01, same original author). Everything above is the
+# original 44-case suite, unchanged. These cases cover WSR-01 (a cleanup that runs
+# while an admission still holds its reservation must not report "drained") and
+# WSR-02 (the lifecycle methods respect the bound event loop). Evidence comes
+# from test-owned gates (factory entry/return, body entry, release), actual task
+# states and cancellation requests, not from the controller's counters alone.
+
+
+SCOPES = ("owner", "application")
+#: A small but non-zero drain timeout.
+SMALL = 0.001
+
+
+def _configured_asyncio_debug(config: pytest.Config) -> bool:
+    """pytest-asyncio's own precedence: ``--asyncio-debug``, else the ``asyncio_debug`` ini value."""
+    value = config.getoption("asyncio_debug")
+    if value is None:
+        value = config.getini("asyncio_debug")
+    return value if isinstance(value, bool) else value == "true"
+
+
+@pytest.fixture
+async def debug_checked(request) -> asyncio.AbstractEventLoop:
+    """The running test loop, whose debug mode must be the configured one (recorded in JUnit).
+
+    (``user_properties`` directly: the ``record_property`` fixture warns under xunit2.)
+    """
+    loop = asyncio.get_running_loop()
+    configured = _configured_asyncio_debug(request.config)
+    request.node.user_properties.append(("asyncio_debug_configured", configured))
+    request.node.user_properties.append(("asyncio_loop_debug", loop.get_debug()))
+    assert loop.get_debug() is configured
+    return loop
+
+
+def _cleanup(work: WsRequestWork, owner: WorkOwner, scope: str) -> Callable[..., Coroutine[Any, Any, DrainReport]]:
+    return owner.aclose if scope == "owner" else work.shutdown
+
+
+def _closed_reason(scope: str) -> RejectReason:
+    return RejectReason.OWNER_CLOSED if scope == "owner" else RejectReason.SHUTTING_DOWN
+
+
+class AdmissionProbe:
+    """Test-owned gates around one admitted body.
+
+    ``factory_entered``/``factory_returned`` are set by the test's factory,
+    ``body_entered`` and ``task`` by the body itself, and ``release`` lets the
+    body finish. A *resistant* body swallows every cancellation until released;
+    a cooperative one lets the first cancellation end it.
+    """
+
+    def __init__(self) -> None:
+        self.factory_entered = False
+        self.factory_returned = False
+        self.body_entered = False
+        self.task: asyncio.Task[Any] | None = None
+        self.release = asyncio.Event()
+        self.cancel_seen = asyncio.Event()
+        self.cancellations = 0
+        self.reports: list[DrainReport] = []
+        self.snapshots: list[dict[str, Any]] = []
+
+    async def body(self, *, resistant: bool,
+                   before: Callable[[], Coroutine[Any, Any, None]] | None = None) -> str:
+        self.body_entered = True
+        self.task = asyncio.current_task()
+        if before is not None:
+            await before()
+        while not self.release.is_set():
+            try:
+                await self.release.wait()
+            except asyncio.CancelledError:
+                self.cancellations += 1
+                self.cancel_seen.set()
+                if not resistant:
+                    raise
+                asyncio.current_task().uncancel()
+        return "released"
+
+
+@pytest.fixture
+async def probes(make_work) -> AsyncIterator[Callable[[], AdmissionProbe]]:
+    """Make probes; teardown releases and awaits every body, even after a failed assertion.
+
+    (Depends on ``make_work`` so this teardown runs before its leak check.)
+    """
+    made: list[AdmissionProbe] = []
+
+    def make() -> AdmissionProbe:
+        made.append(AdmissionProbe())
+        return made[-1]
+
+    yield make
+
+    for probe in made:
+        probe.release.set()
+    tasks = [p.task for p in made if p.task is not None and not p.task.done()]
+    if tasks:
+        await asyncio.wait_for(asyncio.wait(tasks), GUARD)
+    await flush_callbacks()
+
+
+# --------------------------------------------------------------------------- WSR-01: the four judge shapes
+
+
+@pytest.mark.parametrize("timeout", [0, SMALL], ids=["timeout0", "small"])
+@pytest.mark.parametrize("resistant_body", [True, False], ids=["resistant", "cooperative"])
+@pytest.mark.parametrize("scope", SCOPES)
+async def test_cleanup_from_an_eager_cleaner_spawned_by_the_factory_is_not_drained(
+        make_work, eager_tasks, probes, debug_checked, scope, resistant_body, timeout):
+    """Judge shapes 1/3: the factory starts an eager cleaner while the admission holds its reservation."""
+    loop = debug_checked
+    work = make_work(application_limit=1)
+    owner, bystander = work.open_owner(), work.open_owner()
+    cleanup = _cleanup(work, owner, scope)
+    probe = probes()
+    cleaners: list[asyncio.Task[DrainReport]] = []
+
+    def factory() -> Coroutine[Any, Any, str]:
+        probe.factory_entered = True
+        # Factory-cleaner window: the body coroutine does not exist yet, so there is
+        # no task of it anywhere (all_tasks() could not show it); only the reservation is held.
+        probe.snapshots.append({"body_entered": probe.body_entered, "active": work.active_count,
+                                "tracked": len(work.tasks())})
+        cleaners.append(loop.create_task(cleanup(timeout=timeout)))  # eager: runs here
+        probe.snapshots.append({"cleaner_done": cleaners[0].done(), "body_entered": probe.body_entered})
+        coro = probe.body(resistant=resistant_body)
+        probe.factory_returned = True
+        return coro
+
+    task = owner.try_start(factory)
+
+    assert isinstance(task, asyncio.Task)
+    assert probe.snapshots == [{"body_entered": False, "active": 1, "tracked": 0},
+                               {"cleaner_done": True, "body_entered": False}]
+    report = cleaners[0].result()
+    # The admitted request was unfinished when the cleanup returned: never "drained".
+    assert report == DrainReport(requested=0, remaining=1) and not report.drained
+    # The body is real and alive; the admission cancelled it after registration.
+    assert probe.factory_returned and probe.body_entered and probe.task is task
+    assert not task.done() and task.cancelling() == 1
+    assert owner.closed and work.tasks() == {task} and owner.tasks() == {task}
+    assert work.active_count == 1  # capacity still held
+    assert bystander.try_start(never_call) is (
+        RejectReason.APPLICATION_BUSY if scope == "owner" else RejectReason.SHUTTING_DOWN)
+
+    if resistant_body:
+        await within(probe.cancel_seen.wait())
+        # A later drain is truthful too: the task is alive, so it is requested and remaining.
+        assert await within(cleanup(timeout=timeout)) == DrainReport(requested=1, remaining=1)
+        assert not task.done() and work.active_count == 1
+        probe.release.set()
+        assert await within(task) == "released"
+    else:
+        second = await within(cleanup(timeout=GUARD))
+        assert second == DrainReport(requested=1, remaining=0) and second.drained
+        assert task.cancelled() and probe.cancellations == 1
+    await flush_callbacks()
+    assert work.active_count == 0
+    assert await within(cleanup(timeout=GUARD)) == DrainReport(requested=0, remaining=0)
+
+
+@pytest.mark.parametrize("timeout", [0, SMALL], ids=["timeout0", "small"])
+@pytest.mark.parametrize("resistant_body", [True, False], ids=["resistant", "cooperative"])
+@pytest.mark.parametrize("scope", SCOPES)
+async def test_cleanup_awaited_in_the_eager_first_step_is_not_drained(
+        make_work, eager_tasks, probes, debug_checked, scope, resistant_body, timeout):
+    """Judge shapes 2/4: the admitted coroutine's eager first step awaits its own scope's cleanup."""
+    work = make_work(application_limit=1)
+    owner = work.open_owner()
+    cleanup = _cleanup(work, owner, scope)
+    probe = probes()
+    in_admission = True
+
+    async def clean_first() -> None:
+        # The task exists (it is running this step) but is not attached yet.
+        probe.snapshots.append({"current_is_body": asyncio.current_task() is probe.task,
+                                "tracked": probe.task in work.tasks(), "active": work.active_count})
+        probe.reports.append(await cleanup(timeout=timeout))
+        probe.snapshots.append({"inside_admission": in_admission})
+
+    def factory() -> Coroutine[Any, Any, str]:
+        probe.factory_entered = True
+        coro = probe.body(resistant=resistant_body, before=clean_first)
+        probe.factory_returned = True
+        return coro
+
+    task = owner.try_start(factory)
+    in_admission = False
+
+    assert isinstance(task, asyncio.Task) and probe.task is task
+    assert probe.snapshots == [{"current_is_body": True, "tracked": False, "active": 1},
+                               {"inside_admission": True}]
+    # The caller itself was the unfinished admitted work.
+    assert probe.reports == [DrainReport(requested=0, remaining=1)]
+    assert not probe.reports[0].drained
+    assert not task.done() and task.cancelling() == 1 and owner.closed
+    assert work.tasks() == {task} and work.active_count == 1
+
+    if resistant_body:
+        await within(probe.cancel_seen.wait())
+        assert await within(cleanup(timeout=SMALL)) == DrainReport(requested=1, remaining=1)
+        probe.release.set()
+        assert await within(task) == "released"
+    else:
+        assert await within(cleanup(timeout=GUARD)) == DrainReport(requested=1, remaining=0)
+        assert task.cancelled()
+    await flush_callbacks()
+    assert work.active_count == 0
+    assert (await within(cleanup(timeout=GUARD))).drained
+
+
+@pytest.mark.parametrize("scope", SCOPES)
+async def test_cleanup_inside_an_admission_does_not_wait_for_attached_siblings(
+        make_work, eager_tasks, probes, debug_checked, scope):
+    """With other work attached, a cleanup inside an admission still returns at once (no self-wait)."""
+    loop = debug_checked
+    work = make_work(application_limit=2, owner_limit=2)
+    owner = work.open_owner()
+    cleanup = _cleanup(work, owner, scope)
+    sibling, probe = probes(), probes()
+    sibling_task = owner.try_start(lambda: sibling.body(resistant=True))
+    assert isinstance(sibling_task, asyncio.Task) and not sibling_task.done()
+    in_admission = True
+    loop_ran: list[str] = []
+
+    async def clean_first() -> None:
+        loop.call_soon(loop_ran.append, "ran")  # runs only if the cleanup suspends
+        probe.reports.append(await cleanup(timeout=GUARD))
+        probe.snapshots.append({"inside_admission": in_admission, "loop_ran": bool(loop_ran)})
+
+    task = owner.try_start(lambda: probe.body(resistant=True, before=clean_first))
+    in_admission = False
+
+    assert isinstance(task, asyncio.Task)
+    # Returned without suspending: the sibling (requested) plus the caller's own reservation.
+    assert probe.reports == [DrainReport(requested=1, remaining=2)]
+    assert probe.snapshots == [{"inside_admission": True, "loop_ran": False}]
+    assert sibling_task.cancelling() == 1 and task.cancelling() == 1
+    await within(sibling.cancel_seen.wait())
+    await within(probe.cancel_seen.wait())
+    assert await within(cleanup(timeout=0)) == DrainReport(requested=2, remaining=2)
+
+    sibling.release.set()
+    probe.release.set()
+    assert await within(asyncio.gather(sibling_task, task)) == ["released", "released"]
+    await flush_callbacks()
+    assert work.active_count == 0
+
+
+@pytest.mark.parametrize("scope", SCOPES)
+async def test_a_task_cleaning_its_own_scope_returns_at_once_and_counts_itself(
+        make_work, probes, debug_checked, scope):
+    """Self dependency on an attached task: no wait on itself, the caller is in ``remaining``."""
+    loop = debug_checked
+    work = make_work(application_limit=3, owner_limit=2)
+    owner, other = work.open_owner(), work.open_owner()
+    cleanup = _cleanup(work, owner, scope)
+    sibling, bystander = probes(), probes()
+    sibling_task = owner.try_start(lambda: sibling.body(resistant=False))
+    other_task = other.try_start(lambda: bystander.body(resistant=False))
+    assert isinstance(sibling_task, asyncio.Task) and isinstance(other_task, asyncio.Task)
+    go = asyncio.Event()
+    seen: list[Any] = []
+
+    async def cleans_its_own_scope() -> None:
+        await go.wait()
+        loop_ran: list[str] = []
+        loop.call_soon(loop_ran.append, "ran")
+        report = await cleanup(timeout=GUARD)
+        seen.append((report, bool(loop_ran), asyncio.current_task().cancelling()))
+        try:
+            await asyncio.Event().wait()
+        except asyncio.CancelledError:
+            seen.append("cancelled")
+            raise
+
+    me = owner.try_start(cleans_its_own_scope)
+    assert isinstance(me, asyncio.Task)
+    await flush_callbacks()
+    assert sibling_task.cancelling() == 0 and not owner.closed  # nothing closed before ``go``
+    go.set()
+    await within(asyncio.wait([me]))
+
+    expected = DrainReport(requested=2, remaining=2) if scope == "owner" else DrainReport(requested=3, remaining=3)
+    assert seen == [(expected, False, 1), "cancelled"] and me.cancelled()
+    await within(asyncio.wait([sibling_task]))
+    assert sibling_task.cancelled()
+    if scope == "owner":
+        assert not other_task.done() and other_task.cancelling() == 0  # other owner untouched
+        bystander.release.set()
+        assert await within(other_task) == "released"
+    else:
+        await within(asyncio.wait([other_task]))
+        assert other_task.cancelled()
+    await flush_callbacks()
+    assert work.active_count == 0
+
+
+@pytest.mark.parametrize("scope", SCOPES)
+async def test_nested_reentrant_admissions_are_each_counted_exactly(make_work, probes, debug_checked, scope):
+    """Several nested reservations at once, with failure/creation-failure/completion boundaries between them."""
+    loop = debug_checked
+    work = make_work(application_limit=6, owner_limit=4)
+    owner, other = work.open_owner(), work.open_owner()
+    cleanup = _cleanup(work, owner, scope)
+    outer, middle, inner, unrelated = probes(), probes(), probes(), probes()
+    refused_coros: list[Coroutine[Any, Any, Any]] = []
+    log: list[tuple[str, int, int, int]] = []
+    cleaners: list[asyncio.Task[DrainReport]] = []
+    made: dict[str, asyncio.Task[Any]] = {}
+
+    async def refused() -> None:
+        raise AssertionError("a coroutine whose task was refused ran")
+
+    def selective_eager_factory(loop_: asyncio.AbstractEventLoop, coro: Any, **kwargs: Any) -> asyncio.Task[Any]:
+        if getattr(coro, "__name__", "") == "refused":
+            refused_coros.append(coro)
+            raise RuntimeError("task creation refused")
+        return asyncio.eager_task_factory(loop_, coro, **kwargs)
+
+    def counts(label: str) -> None:
+        log.append((label, owner.active_count, work.active_count, len(owner.tasks())))
+
+    def explode() -> Coroutine[Any, Any, Any]:
+        raise LookupError("nested factory failed")
+
+    def inner_factory() -> Coroutine[Any, Any, str]:
+        counts("inner-entered")
+        cleaners.append(loop.create_task(cleanup(timeout=SMALL)))  # eager: completes here
+        counts("inner-after-cleanup")
+        return inner.body(resistant=True)
+
+    def middle_factory() -> Coroutine[Any, Any, str]:
+        counts("middle-entered")
+        with pytest.raises(LookupError):
+            owner.try_start(explode)
+        counts("middle-after-factory-failure")
+        with pytest.raises(RuntimeError, match="task creation refused"):
+            owner.try_start(refused)
+        counts("middle-after-creation-failure")
+        made["done"] = owner.try_start(lambda: returns("eager-done"))
+        assert made["done"].done()  # completed inside create_task; its release callback has not run
+        counts("middle-after-eager-completion")
+        made["inner"] = owner.try_start(inner_factory)
+        counts("middle-after-inner")
+        assert owner.try_start(never_call) is _closed_reason(scope)  # closed now: factory uncalled
+        return middle.body(resistant=True)
+
+    def outer_factory() -> Coroutine[Any, Any, str]:
+        counts("outer-entered")
+        made["middle"] = owner.try_start(middle_factory)
+        counts("outer-after-middle")
+        return outer.body(resistant=True)
+
+    previous = loop.get_task_factory()
+    loop.set_task_factory(selective_eager_factory)
+    try:
+        other_task = other.try_start(lambda: unrelated.body(resistant=True))
+        assert isinstance(other_task, asyncio.Task)
+        made["outer"] = owner.try_start(outer_factory)
+        counts("after-outer")
+    finally:
+        loop.set_task_factory(previous)
+
+    # (owner.active_count, work.active_count, attached owner tasks) at every boundary.
+    assert log == [
+        ("outer-entered", 1, 2, 0),
+        ("middle-entered", 2, 3, 0),
+        ("middle-after-factory-failure", 2, 3, 0),
+        ("middle-after-creation-failure", 2, 3, 0),
+        ("middle-after-eager-completion", 3, 4, 1),
+        ("inner-entered", 4, 5, 1),
+        ("inner-after-cleanup", 4, 5, 1),
+        ("middle-after-inner", 4, 5, 2),
+        ("outer-after-middle", 4, 5, 3),
+        ("after-outer", 4, 5, 4),
+    ]
+    assert len(refused_coros) == 1 and inspect.getcoroutinestate(refused_coros[0]) == inspect.CORO_CLOSED
+    (cleaner,) = cleaners
+    # Three reservations were open (outer, middle, inner); the completed task is not unfinished
+    # and is not "requested" (cancel() of a done task does nothing). Shutdown also requested the
+    # other owner's live task and counts it.
+    first = cleaner.result()
+    assert first == (DrainReport(requested=0, remaining=3) if scope == "owner"
+                     else DrainReport(requested=1, remaining=4))
+    live = [made["outer"], made["middle"], made["inner"]]
+    assert all(not t.done() and t.cancelling() == 1 for t in live)
+    assert made["done"].result() == "eager-done"
+    assert other_task.cancelling() == (0 if scope == "owner" else 1)
+
+    await flush_callbacks()
+    assert owner.active_count == 3 and work.active_count == 4
+    work._release(made["done"])  # a stale, duplicated done callback frees and counts nothing
+    assert owner.active_count == 3 and work.active_count == 4
+    counters = work.diagnostics()
+    assert (counters["admitted"], counters["completed"]) == (5, 1)
+    assert counters[f"rejected_{_closed_reason(scope).value}"] == 1
+
+    second = await within(cleanup(timeout=SMALL))
+    assert second == (DrainReport(requested=3, remaining=3) if scope == "owner"
+                      else DrainReport(requested=4, remaining=4))
+    for probe in (outer, middle, inner, unrelated):
+        probe.release.set()
+    assert await within(asyncio.gather(*live, other_task)) == ["released"] * 4
+    await flush_callbacks()
+    assert work.active_count == 0
+    assert await within(cleanup(timeout=GUARD)) == DrainReport(requested=0, remaining=0)
+
+
+async def test_cleanup_of_another_owner_inside_an_admission_still_waits_for_it(
+        make_work, eager_tasks, probes, debug_checked):
+    """Other-owner progress: only this scope's own admissions make a cleanup return early."""
+    loop = debug_checked
+    work = make_work(application_limit=3)
+    a, b = work.open_owner(), work.open_owner()
+    a_probe, b_probe = probes(), probes()
+    a_task = a.try_start(lambda: a_probe.body(resistant=False))
+    assert isinstance(a_task, asyncio.Task)
+    cleaners: list[asyncio.Task[DrainReport]] = []
+
+    def b_factory() -> Coroutine[Any, Any, str]:
+        cleaners.append(loop.create_task(a.aclose(timeout=GUARD)))  # eager; suspends in its wait
+        b_probe.snapshots.append({"cleaner_done": cleaners[0].done()})
+        return b_probe.body(resistant=False)
+
+    b_task = b.try_start(b_factory)
+
+    assert isinstance(b_task, asyncio.Task)
+    assert b_probe.snapshots == [{"cleaner_done": False}]
+    report = await within(cleaners[0])
+    assert report == DrainReport(requested=1, remaining=0) and report.drained
+    assert a_task.cancelled() and a.closed
+    assert not b.closed and not b_task.done() and b_task.cancelling() == 0
+    b_probe.release.set()
+    assert await within(b_task) == "released"
+    await flush_callbacks()
+    assert work.active_count == 0
+
+
+@pytest.mark.parametrize("scope", SCOPES)
+async def test_cancelling_a_cleanup_waiter_keeps_resistant_work_tracked(make_work, probes, debug_checked, scope):
+    """Waiter cancellation at both scopes: it propagates, the fence stays closed, nothing is forgotten."""
+    loop = debug_checked
+    work = make_work(application_limit=1)
+    owner, bystander = work.open_owner(), work.open_owner()
+    cleanup = _cleanup(work, owner, scope)
+    probe = probes()
+    task = owner.try_start(lambda: probe.body(resistant=True))
+    assert isinstance(task, asyncio.Task)
+    await flush_callbacks()
+    assert probe.body_entered
+
+    waiter = loop.create_task(cleanup(timeout=GUARD * 3))
+    await within(probe.cancel_seen.wait())  # the waiter has requested cancellation and is waiting
+    assert not waiter.done()
+    waiter.cancel()
+    with pytest.raises(asyncio.CancelledError):
+        await within(waiter)
+
+    assert owner.closed and (work.closing is (scope == "application"))
+    assert work.tasks() == {task} and not task.done() and work.active_count == 1
+    assert owner.try_start(never_call) is _closed_reason(scope)
+    assert bystander.try_start(never_call) is (
+        RejectReason.APPLICATION_BUSY if scope == "owner" else RejectReason.SHUTTING_DOWN)
+    assert await within(cleanup(timeout=0)) == DrainReport(requested=1, remaining=1)
+    probe.release.set()
+    assert await within(task) == "released"
+    await flush_callbacks()
+    assert await within(cleanup(timeout=GUARD)) == DrainReport(requested=0, remaining=0)
+
+
+# --------------------------------------------------------------------------- WSR-02: lifecycle event-loop boundary
+
+
+def test_bound_lifecycle_refuses_a_foreign_or_missing_loop_before_changing_state():
+    work = WsRequestWork(application_limit=2)
+    owner = work.open_owner()
+    home = asyncio.new_event_loop()
+    home.set_debug(True)
+    gate = asyncio.Event()
+    task: asyncio.Task[Any] | None = None
+
+    async def admit() -> asyncio.Task[Any]:
+        assert asyncio.get_running_loop().get_debug()
+        started = owner.try_start(lambda: blocked(gate))
+        assert isinstance(started, asyncio.Task)
+        return started
+
+    def unchanged() -> None:
+        assert task is not None
+        assert not owner.closed and not work.closing
+        assert not task.done() and task.cancelling() == 0 and work.active_count == 1
+
+    try:
+        task = home.run_until_complete(admit())
+
+        # No running loop at all (the bound loop exists but is not running).
+        for sync_call in (owner.close, work.begin_shutdown):
+            with pytest.raises(RuntimeError, match="no event loop is running"):
+                sync_call()
+            unchanged()
+
+        async def foreign() -> None:
+            assert asyncio.get_running_loop().get_debug()
+            for sync_call in (owner.close, work.begin_shutdown):
+                with pytest.raises(RuntimeError, match="different event loop"):
+                    sync_call()
+                unchanged()
+            for async_call in (owner.aclose, work.shutdown):
+                with pytest.raises(ValueError):  # timeout validation still comes first
+                    await async_call(timeout=-1)
+                with pytest.raises(RuntimeError, match="different event loop"):
+                    await async_call(timeout=0)
+                unchanged()
+            with pytest.raises(RuntimeError, match="different event loop"):
+                owner.try_start(never_call)
+            unchanged()
+
+        asyncio.run(foreign(), debug=True)
+
+        async def stop_at_home() -> DrainReport:
+            return await work.shutdown(timeout=GUARD)
+
+        assert home.run_until_complete(stop_at_home()) == DrainReport(requested=1, remaining=0)
+        assert task.cancelled() and work.active_count == 0
+    finally:
+        if task is not None and not task.done():
+            task.cancel()
+            home.run_until_complete(asyncio.wait([task], timeout=GUARD))
+        home.close()
+
+
+def test_unbound_owner_close_closes_the_fence_without_binding():
+    work = WsRequestWork(application_limit=2)
+    closed_without_loop = work.open_owner()
+    closed_without_loop.close()  # no running loop, never admitted: allowed
+    assert closed_without_loop.closed and not work.closing
+
+    async def on_loop_a() -> WorkOwner:
+        assert asyncio.get_running_loop().get_debug()
+        closed_in_loop = work.open_owner()
+        closed_in_loop.close()  # unbound, inside loop A: must not bind to A
+        report = await work.open_owner().aclose(timeout=0)  # truthful: nothing was admitted
+        assert report == DrainReport(requested=0, remaining=0)
+        assert await work.open_owner().aclose(timeout=GUARD) == DrainReport(requested=0, remaining=0)
+        return closed_in_loop
+
+    closed_in_loop = asyncio.run(on_loop_a(), debug=True)
+    assert closed_in_loop.closed
+
+    async def on_loop_b() -> None:
+        assert asyncio.get_running_loop().get_debug()
+        # Not bound to loop A: admission works here (and binds this loop).
+        assert closed_without_loop.try_start(never_call) is RejectReason.OWNER_CLOSED
+        assert closed_in_loop.try_start(never_call) is RejectReason.OWNER_CLOSED
+        task = work.open_owner().try_start(lambda: returns("loop b"))
+        assert isinstance(task, asyncio.Task)
+        assert await task == "loop b"
+        await flush_callbacks()
+
+    asyncio.run(on_loop_b(), debug=True)
+    assert work.active_count == 0
+
+
+def test_unbound_begin_shutdown_closes_admission_without_binding():
+    without_loop = WsRequestWork(application_limit=1)
+    without_loop.begin_shutdown()  # no running loop, never admitted: allowed
+    assert without_loop.closing and without_loop.open_owner().closed
+    in_loop = WsRequestWork(application_limit=1)
+
+    async def on_loop_a() -> None:
+        assert asyncio.get_running_loop().get_debug()
+        in_loop.begin_shutdown()  # unbound, inside loop A: must not bind to A
+        assert await in_loop.shutdown(timeout=0) == DrainReport(requested=0, remaining=0)
+        assert await in_loop.shutdown(timeout=GUARD) == DrainReport(requested=0, remaining=0)
+
+    asyncio.run(on_loop_a(), debug=True)
+
+    async def on_loop_b() -> None:
+        assert asyncio.get_running_loop().get_debug()
+        # A refusal, not "bound to a different event loop".
+        assert without_loop.open_owner().try_start(never_call) is RejectReason.SHUTTING_DOWN
+        assert in_loop.open_owner().try_start(never_call) is RejectReason.SHUTTING_DOWN
+
+    asyncio.run(on_loop_b(), debug=True)
+
+
+def test_a_rejected_admission_binds_the_loop_too():
+    """Prebinding: the first try_start binds even when it is refused; lifecycle then follows that loop."""
+    work = WsRequestWork(application_limit=1)
+    owner = work.open_owner()
+    owner.close()
+
+    async def on_loop_a() -> None:
+        assert owner.try_start(never_call) is RejectReason.OWNER_CLOSED
+
+    asyncio.run(on_loop_a(), debug=True)
+
+    async def on_loop_b() -> None:
+        with pytest.raises(RuntimeError, match="different event loop"):
+            work.begin_shutdown()
+        with pytest.raises(RuntimeError, match="different event loop"):
+            await work.shutdown(timeout=0)
+        assert not work.closing
+
+    asyncio.run(on_loop_b(), debug=True)
+    with pytest.raises(RuntimeError, match="no event loop is running"):
+        work.begin_shutdown()
+    assert not work.closing
