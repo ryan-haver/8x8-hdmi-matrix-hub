@@ -174,7 +174,9 @@ Unknown quota remains an unknown observation, not proof of exhaustion or
 verified headroom. Record each routing choice and keep the different-family
 review and concurrency requirements. A blocked reviewer need not block authors
 on independent work, but unreviewed implementation cannot be integrated or
-qualified. No Anthropic/Claude or opaque fallback is permitted.
+qualified. DeepSeek is unavailable; do not dispatch it or any opaque or unqualified fallback.
+Anthropic is permitted only under the current owner routing direction and the
+task-specific qualification and capacity rules.
 
 Before **creating phase worktrees or dispatching any author or reviewer**, use
 supported provider usage reporting on the intended host/account pool. Record:

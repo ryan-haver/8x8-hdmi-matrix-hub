@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T10:23:52.732839+00:00",
+  "observed_utc": "2026-11-04T10:40:42.423394+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -2757,7 +2757,7 @@
     },
     "WS_component_review_disposition": "docs/production/remediation-20261104/WS-WORK-01/REVIEW_DELIVERY.json",
     "recovery_planning": {
-      "status": "Third genuine MiniMax R3 same-packet decision ACTIVE; two peer decisions preserved/released, no adoption/source execution",
+      "status": "ADOPTED: three genuine families explicitly ACCEPT same complete f8fe93c8 packet after all3rounds",
       "packet_sha256": "40526f127575feead63c94058250a868e0452ccb19b5552f60be66b6b82b77dc",
       "packet": "docs/agent-process/phases/remediation-recovery-20261104/INPUT_PACKET.json",
       "first_wave": [
@@ -2967,7 +2967,7 @@
       "round2_complete": "docs/agent-process/phases/remediation-recovery-20261104/ROUND2_COMPLETE.json",
       "final_packet": "docs/agent-process/phases/remediation-recovery-20261104/FINAL_PACKET.json",
       "final_packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
-      "round3_status": "ACTIVE final family; all three actual same-hash verdicts must be independently verified before adoption",
+      "round3_status": "ALL3ACCEPT verified; original reports/native/evidence preserved/released/task refs published",
       "round3_actors": {
         "openai": {
           "task_id": "task_3c062bb9de42",
@@ -3085,7 +3085,45 @@
         "dispatch_status": "dispatched",
         "worker_state": "ready",
         "status": "Third genuine independent R3 same-packet decision ACTIVE; no verdict/adoption yet"
-      }
+      },
+      "consensus": "docs/agent-process/phases/remediation-recovery-20261104/CONSENSUS.json"
+    },
+    "recovery_source_wave_A": {
+      "status": "PREPARED, no worktrees/Tasks/Dispatches",
+      "record": "docs/production/remediation-20261104/recovery-execution/WAVE_A_PREFLIGHT.json",
+      "jobs": [
+        {
+          "id": "WS-C01",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "base": "15c069bdeb3a9ace37bf68033812ff72659bfbd1",
+          "name": "wp-remediation-ws-work-c01",
+          "branch": "remediation/ws-work-c01",
+          "tracked_paths": [
+            "src/rest_api/ws_request_work.py",
+            "tests/test_ws_request_work.py",
+            "docs/production/remediation-20261104/WS-WORK-01/CORRECTION-01.md"
+          ]
+        },
+        {
+          "id": "PRIV-C4",
+          "model": "gpt-6.1-sol",
+          "effort": "high",
+          "base": "2d02004d3108953a302e1a49aab9a5f24e944136",
+          "name": "wp-sec-data-02-c4",
+          "branch": "remediation/privacy-c4",
+          "tracked_paths": [
+            "tools/validate/evidence.py",
+            "tools/validate/clients/api.py",
+            "tools/validate/model.py",
+            "tools/validate/runner.py",
+            "tools/validate/clients/ha.py",
+            "tests/validation/test_sw_sec_data_02_c4.py",
+            "docs/production/software-waves/SW-SEC-DATA-02-C4/AUTHOR.md"
+          ]
+        }
+      ],
+      "source_changed_in_integration": false
     }
   },
   "prospective_privacy_review_domain": {
@@ -3192,5 +3230,16 @@
     "qualification_granted": false,
     "no_automatic_retry": true,
     "next": "Privacy source remains unaccepted. Preserve original defect evidence and plan source corrections for current_pin, supported shapes, summary and HA sibling plus public-value fidelity. Qualified non-OpenAI privacy source review still missing; alternative family/staffing material changes require actual prospective three-provider rounds. No new family allocation or retake launched."
+  },
+  "prospective_async_lifecycle_review_domain": {
+    "status": "HELD / NOT_DISPATCHABLE_AS_SCOPED",
+    "record": "docs/production/remediation-20261104/recovery-execution/D6_PROVENANCE_HOLD.json",
+    "qualification_granted": false
+  },
+  "prospective_privacy_m3_review_domain": {
+    "status": "Prospective first candidate only, NOT_QUALIFIED; corrected C4 subject and exact hash gate still pending",
+    "frozen_standard_packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+    "one_candidate_one_judge": true,
+    "source_acceptance": false
   }
 }

@@ -244,5 +244,20 @@
     "google_status": "held; exact native route/helpers/capacity not verified",
     "deepseek_dispatch_allowed": false,
     "implementation_launched_by_this_task": false
+  },
+  "current_recovery_allocation_20261104": {
+    "adopted_utc": "2026-11-04T10:40:42.423394+00:00",
+    "complete_packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+    "consensus": "phases/remediation-recovery-20261104/CONSENSUS.json",
+    "scope": "Covered original-author product corrections plus prospective new-family/domain assessments; no qualification from planning",
+    "MiniMax_current_earned_scope": "Planning/prose/bounded inventories only; preserve historical qualification records",
+    "MiniMax_prospective_privacy_candidate": "ONE first assessment at corrected C4 tip, NOT qualified reviewer until exact independent all-six judgement PASS",
+    "async_review_candidate": "HELD exact-target provenance/conflict gate, no candidate launch or wiring lease",
+    "source_wave_A": {
+      "WS-C01": "Anthropic Opus5.5/high original component PRODUCT correction, Astra/high independent component source review; original author competence stays HOLD",
+      "PRIV-C4": "OpenAI Sol6.1/high original chain correction, explicit HELD qualified privacy acceptance; future exact M3review conditional on actual assessmentPASS"
+    },
+    "capacity": "At most2current+coordinator+protectedexternal=4; fresh intended-pool check before every creation/start and future review/correction gate",
+    "no_automatic_retakes": true
   }
 }
