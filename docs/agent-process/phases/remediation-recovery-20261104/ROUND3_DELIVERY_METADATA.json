@@ -1,0 +1,276 @@
+{
+  "observed_utc": "2026-11-04T10:22:11.902637+00:00",
+  "status": "Two R3 decisions preserved, MiniMax same-full-packet R3 PREPARED; no adoption, no third Task/Dispatch yet",
+  "final_packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+  "version": 1,
+  "deliveries": {
+    "anthropic": {
+      "task_id": "task_79d0d9028045",
+      "dispatch_id": "ctx_9d313bb15f8b",
+      "head": "5097650314502686a845a714e638643d66087971",
+      "parent": "4b3605fdd35b5e536a73026209b5ef2ae008212e",
+      "canonical_report_sha256": "7c1244a326ae2635e58f53364f3e26fbd02131753732684e3594d731a2acb591",
+      "report_path": "docs/agent-process/phases/remediation-recovery-20261104/round3/anthropic.md",
+      "complete_final_packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+      "checks": {
+        "docs_passed": 489,
+        "direct_exit": 0,
+        "failures": 0,
+        "errors": 0,
+        "skips": 0,
+        "junit_sha256": "8eb0fdebe8619318ddfda6df61ae28d5c2d9181f9635fc8836c5d17f13029e61",
+        "original": "C:\\t\\remediation-recovery\\anthropic-r3\\docs01"
+      },
+      "native": {
+        "session": "816774bf-9bb2-4931-95c6-942e6fe22021",
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "effort": "high explicit launch/local config; native per-turn effort unexposed",
+        "bytes": 1605581,
+        "sha256": "97dff189be19cfbba7723c31683b081605e5ee3d721da5bbf62c1327c261de0a",
+        "unassigned_helpers_observed": []
+      },
+      "preservation": {
+        "wp-remediation-recovery-r1-anthropic": {
+          "workspace": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-remediation-recovery-r1-anthropic",
+          "head": "5097650314502686a845a714e638643d66087971",
+          "branch": "planning/remediation-recovery-r1-anthropic",
+          "status": "",
+          "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\remediation-execution-20261104\\recovery-planning\\round3\\anthropic-closeout\\preservation\\wp-remediation-recovery-r1-anthropic\\workspace.tar.gz",
+          "archive_sha256": "b330bcc4708fd67d0f264dd2257624b14ea36ed9eb9752999eb5ed7d9e572eb6",
+          "archive_bytes": 207801818,
+          "regular_files": 4784,
+          "regular_bytes": 303962699,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "junction_restore": "Junction kind and original target/reparse metadata are in entries; tar stores link representation, not a native junction recreation."
+        },
+        "external-anthropic-r3": {
+          "workspace": "C:\\t\\remediation-recovery\\anthropic-r3",
+          "head": null,
+          "branch": null,
+          "status": null,
+          "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\remediation-execution-20261104\\recovery-planning\\round3\\anthropic-closeout\\preservation\\external-anthropic-r3\\workspace.tar.gz",
+          "archive_sha256": "d9425ac75be4b75fa2aeea8aeea1d82f33c8bbd7516e7a135efda83b520567e9",
+          "archive_bytes": 66726,
+          "regular_files": 108,
+          "regular_bytes": 168613,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "junction_restore": "Junction kind and original target/reparse metadata are in entries; tar stores link representation, not a native junction recreation."
+        }
+      },
+      "task_publication": {
+        "head": "5097650314502686a845a714e638643d66087971",
+        "remote_head": "5097650314502686a845a714e638643d66087971",
+        "branch": "planning/remediation-recovery-r1-anthropic",
+        "exact": true,
+        "prior_head": "4b3605fdd35b5e536a73026209b5ef2ae008212e",
+        "prior_refs": "R1/R2remain ancestors and original archives immutable; normal fast-forward only",
+        "tree": "retained; no full Git bundle or destructive cleanup"
+      },
+      "resource_settlement": {
+        "released_exact_current_owner": "ctx_9d313bb15f8b",
+        "operational_ack": null
+      },
+      "status": "Genuine R3 decision delivered, resource positively released, originals preserved and exact descendant ref published; VERDICT NOT SHARED with pending independent MiniMax R3",
+      "source_and_config_unchanged": true,
+      "limits": "No source/runtime/qualification or adoption from documentation passes. Anthropic hub editable import points at root source, not assigned checkout; source identity/source-dirty limits retained in original report. Native/receipt integrity does not replace semantic verdict review."
+    },
+    "openai": {
+      "task_id": "task_3c062bb9de42",
+      "dispatch_id": "ctx_6cb8482cdd03",
+      "head": "ff57e990c93d56ad4c050f399b5e49131949b647",
+      "parent": "949d12cae8e1fe1db7bc8ccf57dc498ba72e1ac8",
+      "canonical_report_sha256": "7eb1da2f2e1bce4738e0b7b656214f208f9522be841285a44a2b564ee559436e",
+      "report_path": "docs/agent-process/phases/remediation-recovery-20261104/round3/openai.md",
+      "complete_final_packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+      "checks": {
+        "docs_passed": 489,
+        "direct_exit": 0,
+        "failures": 0,
+        "errors": 0,
+        "skips": 0,
+        "junit_sha256": "94adabdb9eb0dce09251264a69b7add8f100051c390c8f467a879c70f9da7aea",
+        "original": "C:\\t\\remediation-recovery\\openai-r3\\docs01"
+      },
+      "native": {
+        "session": "01a1a608-cf9b-7fe1-af42-24c752a8ca18",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 1557227,
+        "sha256": "e4dda223bb3e7fed48b4d7fe7011bb18a01f54c792f4636e352d513e2a7816a9",
+        "unassigned_helpers_observed": []
+      },
+      "preservation": {
+        "wp-remediation-recovery-r1-openai": {
+          "workspace": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-remediation-recovery-r1-openai",
+          "head": "ff57e990c93d56ad4c050f399b5e49131949b647",
+          "branch": "planning/remediation-recovery-r1-openai",
+          "status": "?? .codex/config.toml",
+          "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\remediation-execution-20261104\\recovery-planning\\round3\\openai-closeout\\preservation\\wp-remediation-recovery-r1-openai\\workspace.tar.gz",
+          "archive_sha256": "9f3fb03e8ac1b196695ed242be40c7ab5044eb71b0b182ef5f569f412af12812",
+          "archive_bytes": 209287357,
+          "regular_files": 4913,
+          "regular_bytes": 308369020,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "junction_restore": "Junction kind and original target/reparse metadata are in entries; tar stores link representation, not a native junction recreation."
+        },
+        "external-openai-r3": {
+          "workspace": "C:\\t\\remediation-recovery\\openai-r3",
+          "head": null,
+          "branch": null,
+          "status": null,
+          "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\remediation-execution-20261104\\recovery-planning\\round3\\openai-closeout\\preservation\\external-openai-r3\\workspace.tar.gz",
+          "archive_sha256": "a1f2f4727897802821d05fdffc9ba59160d7bf2875f91ce1ee9ec77f5f292a52",
+          "archive_bytes": 69944,
+          "regular_files": 115,
+          "regular_bytes": 173777,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "junction_restore": "Junction kind and original target/reparse metadata are in entries; tar stores link representation, not a native junction recreation."
+        }
+      },
+      "task_publication": {
+        "head": "ff57e990c93d56ad4c050f399b5e49131949b647",
+        "remote_head": "ff57e990c93d56ad4c050f399b5e49131949b647",
+        "branch": "planning/remediation-recovery-r1-openai",
+        "exact": true,
+        "prior_head": "949d12cae8e1fe1db7bc8ccf57dc498ba72e1ac8",
+        "prior_refs": "R1/R2remain ancestors and original archives immutable; normal fast-forward only",
+        "tree": "retained; no full Git bundle or destructive cleanup"
+      },
+      "resource_settlement": {
+        "released_exact_current_owner": "ctx_137233665e42",
+        "operational_ack": "OpenAI publication acknowledgement Tasktask_a97184f8e574/ctx_137233665e42 only, no new vote/checks/source; latest resource ownership positively verified/released"
+      },
+      "status": "Genuine R3 decision delivered, resource positively released, originals preserved and exact descendant ref published; VERDICT NOT SHARED with pending independent MiniMax R3",
+      "source_and_config_unchanged": true,
+      "limits": "No source/runtime/qualification or adoption from documentation passes. Anthropic hub editable import points at root source, not assigned checkout; source identity/source-dirty limits retained in original report. Native/receipt integrity does not replace semantic verdict review."
+    }
+  },
+  "peer_verdicts_or_recommendations_included": false,
+  "MiniMax": {
+    "key": "minimax",
+    "family": "MiniMax",
+    "agent": "opencode2",
+    "model": "minimax-coding-plan/MiniMax-M3",
+    "effort": null,
+    "name": "wp-remediation-recovery-r1-minimax",
+    "branch": "planning/remediation-recovery-r1-minimax",
+    "base": "6671c92789d0de0590609590aeebc73772c00069",
+    "report": "docs/agent-process/phases/remediation-recovery-20261104/round3/minimax.md",
+    "spec": "docs/agent-process/phases/remediation-recovery-20261104/tasks/minimax-r3.md",
+    "title": "Remediation recovery final same-packet R3 decision: MiniMax",
+    "deps": [
+      "task_eb1c577c2685",
+      "task_da8abc159b3e",
+      "task_24b952fffacf"
+    ],
+    "packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+    "reuse": "same isolated R1worktree after positive release; original reports/config/source unchanged"
+  },
+  "preflight": {
+    "observed_utc": "2026-11-04T10:21:04.292791+00:00",
+    "integration_head": "30a2b6b81f4ed852dd2ab10a910386600700a925",
+    "remote_equal": true,
+    "runtime": "35d5d4fb-e6bd-4756-9d7b-24632ba727d7",
+    "current": {
+      "runId": "run_37205f6095b3",
+      "objective": "Complete runtime wiring R0-R8 in isolated Orca worktrees; no Anthropic models; validate, merge and clean up; preserve pending visual/hardware release gates"
+    },
+    "fleet": {
+      "total": 149,
+      "all_pages": true,
+      "pages": [
+        {
+          "limit": 100,
+          "total": 149,
+          "hasMore": true,
+          "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMzU4fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yMCAxNzoxMzo0OSIsImRpc3BhdGNoSWQiOiJjdHhfN2JiZDkwOGIyOWM5IiwiZGF0YWJhc2VJZCI6OTAxfX0"
+        },
+        {
+          "limit": 100,
+          "total": 149,
+          "hasMore": false,
+          "nextCursor": null
+        }
+      ],
+      "counts": {
+        "released": 142,
+        "retained": 7
+      }
+    },
+    "capacity": {
+      "codex": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 12,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "session": null,
+        "updatedAt": 1793787226301,
+        "error": null,
+        "age_seconds": 438
+      },
+      "claude": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 25,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400020,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "session": {
+          "usedPercent": 3,
+          "windowMinutes": 300,
+          "resetsAt": 1793796600020,
+          "resetDescription": "5:50 AM"
+        },
+        "updatedAt": 1793787641416,
+        "error": null,
+        "age_seconds": 23
+      },
+      "minimax": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 34,
+          "windowMinutes": 10080,
+          "resetsAt": 1793823932868,
+          "resetDescription": null
+        },
+        "session": {
+          "usedPercent": 19,
+          "windowMinutes": 300,
+          "resetsAt": 1793794421794,
+          "resetDescription": null
+        },
+        "updatedAt": 1793787226339,
+        "error": null,
+        "age_seconds": 438
+      }
+    },
+    "selection": {
+      "family": "OpenAI",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "catalog_sha256": "3feb1b5b1f96eb08661db2ff1e9dab369d3af0eb81628013103191a3f3070bf6",
+      "catalog_modified_utc": "2026-11-04T10:20:55.612803+00:00"
+    },
+    "placement": "local/Zelu/win32; inspect saved host receipts, no remote dispatch",
+    "concurrency": "0 current + 1 planned MiniMaxR3 + coordinator + protected external =3of4; no nesting",
+    "alternatives": "OpenAI Astra/high, Anthropic Opus5.5/high and MiniMax-M3 are planning candidates only, based on accepted actual planning/prose work. Failed source-domain assessments remain failed and confer no source role. Google alternate route remains unverified; DeepSeek unavailable.",
+    "reserve": "three-family/three-round bounded prose contributions, staggered at two current; future implementation/qualification/correction reserve must be decided and freshly gated; future stages freshly gated; absolute provider allowance and otherhost demand unknown"
+  },
+  "resource_accounting": "All149rows:142released/7retained. Six old retained metadata rows plus original OpenAI R3 compatibility row after transfer to publication-ACK Dispatch; that row has no owned resource and completed capability. Exact current resource owner ctx_137233665e42 was positively released and worker-show confirms released. No current owned workers, no status-based exit inference.",
+  "operational_ack": "Tasktask_a97184f8e574/ctx_137233665e42 only acknowledged the publication update, no report/check/source change and NOT another R3 vote. Original source Task/Dispatch preserved.",
+  "independence": "Pending MiniMax receives same frozen complete packet and all R2 reports, but no peer R3 verdicts. All3genuine explicit same-hash ACCEPT required; no majority/coordinator consent.",
+  "source_and_owner_gates": "No source author/reviewer grant, qualification retry, immediate API lease, source integration or owner HIL/soak/field/release gate follows. Frozen qualification/provenance/conflict gates remain mandatory.",
+  "publication": "MiniMax R2 normal same-ref publication resolved after two preserved GitHub server errors. Final packet freeze history unchanged; no new decision/criteria/hash."
+}

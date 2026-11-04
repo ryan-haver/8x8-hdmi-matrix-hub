@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T10:10:49.451150+00:00",
+  "observed_utc": "2026-11-04T10:22:11.902637+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -2757,7 +2757,7 @@
     },
     "WS_component_review_disposition": "docs/production/remediation-20261104/WS-WORK-01/REVIEW_DELIVERY.json",
     "recovery_planning": {
-      "status": "R3 OpenAI+Anthropic actual same-packet decisions ACTIVE, MiniMax next slot; no verdict/adoption/source execution",
+      "status": "Two R3 decisions delivered/released/preserved/task refs published; MiniMax same-packet R3 prepared, no adoption/source execution",
       "packet_sha256": "40526f127575feead63c94058250a868e0452ccb19b5552f60be66b6b82b77dc",
       "packet": "docs/agent-process/phases/remediation-recovery-20261104/INPUT_PACKET.json",
       "first_wave": [
@@ -3003,7 +3003,7 @@
             "unassigned_helpers_observed": [],
             "scope": "entry only; no competence/completion/descendant census"
           },
-          "status": "R3 same-packet final decision ACTIVE; no verdict/adoption/source execution",
+          "status": "Decision delivered, originals preserved, exact current resource released and task ref verified; verdict withheld from pending peer",
           "dispatch_status": "dispatched",
           "worker_state": "ready"
         },
@@ -3041,12 +3041,14 @@
             "unassigned_helpers_observed": [],
             "scope": "entry only; no competence/completion/descendant census"
           },
-          "status": "R3 same-packet final decision ACTIVE; no verdict/adoption/source execution",
+          "status": "Decision delivered, originals preserved, exact current resource released and task ref verified; verdict withheld from pending peer",
           "dispatch_status": "dispatched",
           "worker_state": "ready"
         }
       },
-      "MiniMax_R2_publication": "RESOLVED: third normal same-ref fast-forward succeeded, exact remote/local6671c927 verified; two earlier GitHub server errors/hold preserved"
+      "MiniMax_R2_publication": "RESOLVED: third normal same-ref fast-forward succeeded, exact remote/local6671c927 verified; two earlier GitHub server errors/hold preserved",
+      "round3_delivery_metadata": "docs/agent-process/phases/remediation-recovery-20261104/ROUND3_DELIVERY_METADATA.json",
+      "round3_third_family": "MiniMax prepared at exact6671c927, samef8fe93c8 full packet; no Task/Dispatch yet"
     }
   },
   "prospective_privacy_review_domain": {
