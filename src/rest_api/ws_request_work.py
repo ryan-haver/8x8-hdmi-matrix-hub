@@ -56,11 +56,21 @@ Truthful drain (CORRECTION-01)
     reservation is never reported as cancelled; the admission that holds it
     cancels its task after registration because the scope is closed by then.
 
-    A cleanup that runs inside an admission (from the factory, or from an eager
-    first step of the same scope) or from one of the scope's own tasks cannot
-    usefully wait: what it would wait for cannot progress until it returns. It
-    therefore returns at once, without awaiting, with that work in
-    ``remaining`` (never ``drained``). Otherwise it waits once, bounded by
+    A cleanup that finds an admission of its own scope still in progress returns
+    at once, without awaiting, with that work in ``remaining`` (never
+    ``drained``). ``try_start`` never awaits, so such a cleanup runs
+    synchronously inside that admission, in a task step started there (for
+    example the eager first step of a cleaner task the factory creates, or of
+    the admitted task itself). This immediate return is the adopted
+    conservative, bounded policy, not a claim that the admission cannot
+    progress: a reservation has no attached task to await, and an
+    independently spawned eager cleaner that suspended would let the factory
+    continue, the admission attach and other work finish before that cleaner
+    returns.
+
+    A cleanup called from one of the scope's own attached tasks also returns at
+    once: that caller cannot finish while it waits for itself, so no wait could
+    report the scope drained. Otherwise the cleanup waits once, bounded by
     ``timeout``, and recounts unfinished work after the wait.
 
 Cooperative and resistant cancellation
@@ -220,13 +230,16 @@ async def _drain(requested: int, tasks: Collection[asyncio.Task[Any]],
 
     pending = [task for task in tasks if not task.done()]
     if timeout == 0 or not pending or reserved():
-        # Nothing to wait for, no time to wait, or this cleanup runs inside an
-        # admission of the scope: what it would wait for cannot progress before
-        # it returns, so it returns at once and reports that work as unfinished.
+        # Nothing to wait for, no time to wait, or an admission of the scope is
+        # still in progress (so this cleanup runs synchronously inside it, e.g. in
+        # an eager first step). Returning at once with that work reported as
+        # unfinished is the adopted conservative policy, not proof that the
+        # admission cannot progress: a cleaner task that suspended could let it
+        # attach, and other work finish, before the cleaner returns.
         return DrainReport(requested=requested, remaining=unfinished())
     if asyncio.current_task() in pending:
         # One of the scope's own tasks is cleaning its scope: it cannot finish
-        # while it waits for itself.
+        # while it waits for itself, so no wait here could report the scope drained.
         return DrainReport(requested=requested, remaining=unfinished())
     await asyncio.wait(pending, timeout=timeout)
     return DrainReport(requested=requested, remaining=unfinished())
