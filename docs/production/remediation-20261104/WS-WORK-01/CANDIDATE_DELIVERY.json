@@ -1,0 +1,131 @@
+{
+  "observed_utc": "2026-11-04T08:08:26.253454+00:00",
+  "boundary": {
+    "key": "ws-component-closeout2",
+    "name": "wp-remediation-ws-work-01",
+    "agent": "claude",
+    "model": "claude-opus-5-5",
+    "task": "task_38756b76bd12",
+    "dispatch": "ctx_14a660b697ab",
+    "head": "15c069bdeb3a9ace37bf68033812ff72659bfbd1",
+    "base": "460a190575e905f8350c454e63c4d570c8b560fa",
+    "paths": [
+      "src/rest_api/ws_request_work.py",
+      "tests/test_ws_request_work.py",
+      "docs/production/remediation-20261104/WS-WORK-01/AUTHOR.md"
+    ],
+    "status": "",
+    "native": {
+      "session": "2a593a53-f899-407f-a59d-862cd4c8e524",
+      "models": [
+        "claude-opus-5-5"
+      ],
+      "effort": "high explicit launch/local config; native per-turn effort not exposed",
+      "bytes": 2484777,
+      "sha256": "62c345ef6af80abe7eb302d868722f90b8895da359fd7bd8c1bad9b5e37a22e6",
+      "unassigned_helper_calls_observed": []
+    },
+    "release": {
+      "dispatchId": "ctx_14a660b697ab",
+      "state": "released",
+      "processAction": "closed_agent_terminal",
+      "archive": {
+        "source": "transcript",
+        "status": "captured"
+      },
+      "mutation": {
+        "requestId": "681e1853-807c-49ac-a213-dc988b2afb71",
+        "replayed": false
+      }
+    },
+    "preservation": "Full workspace/temp and task-ref publication still required; no deletion authorized"
+  },
+  "publication": {
+    "head": "15c069bdeb3a9ace37bf68033812ff72659bfbd1",
+    "branch": "remediation/ws-work-01",
+    "remote_head": "15c069bdeb3a9ace37bf68033812ff72659bfbd1",
+    "exact": true,
+    "cleanup": "None; full verified Git bundle not created in this closeout, retain exact workspace and all branches"
+  },
+  "preservation": {
+    "wp-remediation-ws-work-01": {
+      "workspace": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-remediation-ws-work-01",
+      "head": "15c069bdeb3a9ace37bf68033812ff72659bfbd1",
+      "branch": "remediation/ws-work-01",
+      "status": "",
+      "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\remediation-execution-20261104\\ws-component-closeout2\\preservation\\wp-remediation-ws-work-01\\workspace.tar.gz",
+      "archive_sha256": "573b9ef885ab9695bc87a95281ca0b539bd984e090d66c35b23d0c533eb738b5",
+      "archive_bytes": 208895814,
+      "regular_files": 5102,
+      "regular_bytes": 315013014,
+      "links": 1,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+      "junction_restore": "Junction kind and original target/reparse metadata are in entries; tar stores link representation, not a native junction recreation."
+    },
+    "external-ws": {
+      "workspace": "C:\\t\\remediation-ws-work",
+      "head": null,
+      "branch": null,
+      "status": null,
+      "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\remediation-execution-20261104\\ws-component-closeout2\\preservation\\external-ws\\workspace.tar.gz",
+      "archive_sha256": "1ddfc4f2a1ddf5c470f38fda2f4307812986cb65be6b33fb0139b1f627af6a25",
+      "archive_bytes": 55136992,
+      "regular_files": 45587,
+      "regular_bytes": 186901433,
+      "links": 2,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+      "junction_restore": "Junction kind and original target/reparse metadata are in entries; tar stores link representation, not a native junction recreation."
+    }
+  },
+  "hook": {
+    "original": "C:\\t\\remediation-ws-work\\67-commit-hook-strict-after-env-repair",
+    "direct_exit": 0,
+    "started_utc": "2026-11-04T07:40:37.152645+00:00",
+    "finished_utc": "2026-11-04T07:55:43.382730+00:00",
+    "junit": {
+      "cases": 4132,
+      "failures": 0,
+      "errors": 0,
+      "skips": 6
+    },
+    "passed": 4126,
+    "deselected": 35,
+    "warnings": 4,
+    "route": {
+      "covered": 177,
+      "total": 177,
+      "percent": 100.0,
+      "strict": true,
+      "uncovered": []
+    },
+    "captured": {
+      "stdout.txt": {
+        "sha256": "f33a512420531dae220ef0075f6c4b418b422ce2abab6552652fe666806db961",
+        "bytes": 337
+      },
+      "stderr.txt": {
+        "sha256": "bf084525c976765f1248d9211d66398a4950c3e41e1a51d7f9183124c1f7bb85",
+        "bytes": 6386
+      },
+      "junit.xml": {
+        "sha256": "343b865eedb9e9727a42c87d5b6574ac3f38cffa5cf69594e7e0cb5a3fa33a39",
+        "bytes": 551953
+      },
+      "route-coverage.json": {
+        "sha256": "6f4d570ee7d899010ee1c982086130bebb882bb3323c1581e6573161ed38194a",
+        "bytes": 6631
+      }
+    },
+    "prior_route_hash_equal": true,
+    "route_note": "Deterministic coverage JSON equals prior capture; fresh strict coverage independently printed by this normal hook. No new registry/evidence campaign admission."
+  },
+  "commit_message": {
+    "original_private": "C:\\Users\\ryanh\\AppData\\Local\\Temp\\claude\\875bd745fb934beb\\2a593a53-f899-407f-a59d-862cd4c8e524\\scratchpad\\commit-msg.txt",
+    "sha256": "56cc22db23a74ecf2db28a261277eb4cef243589b96b11893789e300bb1c2c83",
+    "bytes": 773,
+    "scope_note": "Harness default Claude scratchpad outside explicit assigned temp root; exact original copied separately, scope/tool fidelity requires independent review."
+  },
+  "provenance_note": "Native includes legitimate commands with cwd in owned build/remediation-20261104/ws-work/receipts below assigned tree; initial coordinator exact-cwd-set assertion failed before release, then ancestor scope verified. Original failed capture retained, not a product test failure.",
+  "source_integrated": false,
+  "cleanup": "Workers released, original workspaces/temp/native preserved and exact task refs published. No full Git bundle created or tree removal authorized in this closeout."
+}
