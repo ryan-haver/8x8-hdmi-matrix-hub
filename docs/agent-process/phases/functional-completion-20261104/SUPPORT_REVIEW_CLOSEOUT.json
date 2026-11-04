@@ -1,0 +1,273 @@
+{
+  "observed_utc": "2026-11-04T22:02:46.465965+00:00",
+  "status": "FC-SUPPORT-RUN fidelity PASS with nonblocking errata; all eight current-wave dispatches settled/released; no compatibility/source acceptance",
+  "delivery": {
+    "observed_utc": "2026-11-04T22:00:07.925056+00:00",
+    "task_id": "task_14f236edde4f",
+    "dispatch_id": "ctx_e2922f3f76f4",
+    "head": "fad50dee3912847cf38f2dfff1a95254fd119006",
+    "parent": "abb52542858845cf488a63b01f6ac619f3f38173",
+    "report": "docs/production/functional-completion-20261104/FC-SUPPORT-RUN/REVIEW.md",
+    "report_sha256": "183e278f63511edb530bd2def19f7565badadbcb10e8b89fe644d0d84a64fd10",
+    "actual_native": {
+      "session": "ses_e57ad6a09ffeQHNRlh7GLGfJWQ",
+      "model": "minimax-coding-plan/MiniMax-M3",
+      "variant": "thinking",
+      "bytes": 3166613,
+      "sha256": "57bb53aaa06c6d6b3066bb3453cfa1e4af1f908904fd98b4936cd1eae003d7f6",
+      "helper_calls_observed": false,
+      "scope": "Final exact Task/Dispatch/directory only, no all-host proof"
+    },
+    "resource": "positively released; transcript captured",
+    "full_git_bundle": {
+      "bytes": 14673721,
+      "sha256": "37df3330f5cca44f16ec91ff7b8ce3d23d28be42a5841b38066c39fa6bfceca7",
+      "verify_exit": 0,
+      "head_verified": true
+    },
+    "task_ref_published_exact": "fad50dee3912847cf38f2dfff1a95254fd119006",
+    "original_review_evidence": {
+      "registration": "c2d66bc44d094e24930f538c5dd58db3",
+      "regular_files": 124,
+      "regular_bytes": 310797,
+      "unfollowed_links": 0,
+      "disposition": "Retained originals readonly in place; no workspace/build/dependency/runtime copy",
+      "review_date": "2026-12-04"
+    },
+    "docs_check": {
+      "tests": 489,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "direct_exit": 0,
+      "scope": "Reviewer once-only docs; no semantic source/domain/support acceptance"
+    },
+    "verdict": "PASS receipt fidelity at exactabb525, three nonblocking LOW findings and four refinements",
+    "accepted_scope": "Bounded faithful reporting of original PARTIAL/FAIL/HOLD software observations only; no support/domain/source acceptance or gate change",
+    "nonblocking_errata": [
+      {
+        "id": "F-1",
+        "severity": "LOW",
+        "blocking": false,
+        "location": "REPORT.md line 22",
+        "summary": "Host C free-space figure 1,012,058,304,512 bytes is stated as an observed environment fact but has no measurement receipt; it originates only as a literal in the author's own pull.py / runtime-layer-plan.json.",
+        "correction": "Attach a free-space measurement receipt or re-label the number as the pre-pull plan input."
+      },
+      {
+        "id": "F-2",
+        "severity": "LOW",
+        "blocking": false,
+        "location": "REPORT.md line 22",
+        "summary": "'initially 60 stopped' is a docker system df Containers TOTAL, not a per-container census; the same payload's docker ps -a census enumerates 24 containers, all exited, 0 running.",
+        "correction": "State the df TOTAL/ACTIVE semantics and cite the docker ps -a enumeration, or drop the '60 stopped' phrasing."
+      },
+      {
+        "id": "F-3",
+        "severity": "LOW",
+        "blocking": false,
+        "location": "REPORT.md line 24",
+        "summary": "'root directory inventory was ordinary directories' has no receipt; source-safety.json and the prereq scripts enumerate only tracked file paths from git ls-files.",
+        "correction": "Restrict the sentence to what source-safety.json records, or attach a directory inventory receipt."
+      }
+    ],
+    "refinements": [
+      "R-1 cite the observed docker info registry/proxy fields instead of asserting Desktop proxy routing",
+      "R-2 name both probed endpoints (health, device) explicitly",
+      "R-3 quote the recorded in-run argv verbatim rather than paraphrasing it",
+      "R-4 the two storage byte totals differ by measurement instant and file-population definition, reconciled in the review"
+    ],
+    "completion_metadata_erratum": {
+      "field": "reviewed_report_worktree_sha256",
+      "original_wrong_value": "183e278f63511edb530bd2def19f7565badadbcb10e8b89fe644d0d84a64fd10",
+      "correct_author_worktree_sha256": "e32392f59480facb03570dc4509a2942c4a59efa42778983d6d2a7fb69f6a636",
+      "author_worktree_bytes": 22121,
+      "explanation": "Original completion erroneously copied REVIEW.md digest into reviewed REPORT.md worktree field. Author REPORT canonical1b84 hash/CRLFbytes are separately verified and review text is correct; original completion unchanged, this supplement corrects metadata only."
+    },
+    "storage_registration": "9a35e9ee4a8141d891347951ce36b1f4"
+  },
+  "disposition": "Accept bounded receipt fidelity of exactabb525 as PARTIAL/FAIL/HOLD observations with three formal low errata and four refinements. No author correction required for nonblocking notes; original report immutable.",
+  "fleet": {
+    "total": 174,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 174,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyNDcyfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yOSAwMDo0MToxMCIsImRpc3BhdGNoSWQiOiJjdHhfNWEzZjQ2ODgzZGRmIiwiZGF0YWJhc2VJZCI6MTM4M319"
+      },
+      {
+        "limit": 100,
+        "total": 174,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "released": 167,
+      "null": 1,
+      "retained": 6
+    },
+    "current_wave": [
+      {
+        "taskId": "task_ae949bd12fff",
+        "dispatchId": "ctx_2caca18359bf",
+        "dispatchStatus": "completed",
+        "workerState": "succeeded",
+        "terminalState": "released"
+      },
+      {
+        "taskId": "task_a7ee911f3245",
+        "dispatchId": "ctx_d6197cc497ff",
+        "dispatchStatus": "completed",
+        "workerState": "succeeded",
+        "terminalState": "released"
+      },
+      {
+        "taskId": "task_999c32971b04",
+        "dispatchId": "ctx_465cf8734afd",
+        "dispatchStatus": "completed",
+        "workerState": "succeeded",
+        "terminalState": "released"
+      },
+      {
+        "taskId": "task_64e1d8cb5db6",
+        "dispatchId": "ctx_f509f51a7c49",
+        "dispatchStatus": "completed",
+        "workerState": "succeeded",
+        "terminalState": "released"
+      },
+      {
+        "taskId": "task_5305a1b797cc",
+        "dispatchId": "ctx_467d7a450979",
+        "dispatchStatus": "completed",
+        "workerState": "succeeded",
+        "terminalState": "released"
+      },
+      {
+        "taskId": "task_2d9ebaaea545",
+        "dispatchId": "ctx_982cda0c983a",
+        "dispatchStatus": "completed",
+        "workerState": "succeeded",
+        "terminalState": "released"
+      },
+      {
+        "taskId": "task_14f236edde4f",
+        "dispatchId": "ctx_e2922f3f76f4",
+        "dispatchStatus": "completed",
+        "workerState": "succeeded",
+        "terminalState": "released"
+      },
+      {
+        "taskId": "task_ba4c0694e78e",
+        "dispatchId": "ctx_72b222ccb718",
+        "dispatchStatus": "completed",
+        "workerState": "succeeded",
+        "terminalState": "released"
+      }
+    ],
+    "historical_retained": "Six historical protected resources remain; no exit/removal/recovery authority from silence or missing status."
+  },
+  "capacity_observation": {
+    "codex": {
+      "provider": "codex",
+      "session": null,
+      "weekly": {
+        "usedPercent": 28,
+        "windowMinutes": 10080,
+        "resetsAt": 1794378964000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "rateLimitResetCredits": {
+        "availableCount": 2,
+        "totalEarnedCount": 0,
+        "nextExpiresAt": 1796068349636,
+        "credits": [
+          {
+            "status": "available",
+            "expiresAt": 1796068349636,
+            "grantedAt": 1793476349636
+          },
+          {
+            "status": "available",
+            "expiresAt": 1796164096174,
+            "grantedAt": 1793572096174
+          }
+        ]
+      },
+      "updatedAt": 1793829664260,
+      "error": null,
+      "status": "ok",
+      "usageMetadata": {},
+      "age_seconds": 102,
+      "dispatch_headroom_verified_now": true
+    },
+    "claude": {
+      "provider": "claude",
+      "session": {
+        "usedPercent": 7,
+        "windowMinutes": 300,
+        "resetsAt": 1793832600059,
+        "resetDescription": "3:50 PM"
+      },
+      "weekly": {
+        "usedPercent": 27,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400059,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "fableWeekly": {
+        "usedPercent": 0,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400000,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "monthly": null,
+      "extraUsage": null,
+      "updatedAt": 1793829664022,
+      "error": null,
+      "status": "ok",
+      "usageMetadata": {},
+      "age_seconds": 102,
+      "dispatch_headroom_verified_now": true
+    },
+    "minimax": {
+      "provider": "minimax",
+      "session": {
+        "usedPercent": 75,
+        "windowMinutes": 300,
+        "resetsAt": 1793830434075,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 3,
+        "windowMinutes": 10080,
+        "resetsAt": 1794428735074,
+        "resetDescription": null
+      },
+      "updatedAt": 1793829663957,
+      "error": null,
+      "status": "ok",
+      "usageMetadata": {
+        "source": "web",
+        "lastSuccessfulSource": "web"
+      },
+      "age_seconds": 103,
+      "dispatch_headroom_verified_now": false
+    }
+  },
+  "capacity_scope": "Cached usage at settlement checkpoint, stale/low not headroom. No new worktree/dispatch this turn; intended routes/fallbacks must be freshly checked before next wave. No project-wide exhaustion inference.",
+  "remaining_work": [
+    "FC-TRUTH semantic inventory still REQUIRE_CHANGES; original correction/rereview reserve exhausted, canonical proposals HOLD",
+    "Resolve exact native-family/role/target independence and qualified judge/source-review gates before UI/HA/WS source leases",
+    "HA strict bare auth-status/effective-key validation and override correction with qualified independent review and missing negative controls",
+    "Python3.11 checked-in lock incompatibility and stable complete core execution/177route proof after reviewed changes; no unchanged failure retry",
+    "Genuine HACS authenticated custom install/upgrade and currentHA policy boundary remain unestablished",
+    "Retained privacy/source chains/candidate freshness plus owner physical/visual/72h/week/final-release gates remain open"
+  ],
+  "next_authority": "Existing adopted plan and source/reviewer gates govern ready independent work. No new phase/qualification or automatic extra inventory cycle launched by this closeout. Further material allocation changes require adopted prospective process, not relabeling exhausted work.",
+  "owner_inputs": "Existing explicit extra privacy-assessment budget proposal remains pending. Later genuine HACS test needs authenticated test setup; do not request or expose owner credential bytes. Physical-device/visual/soak/field/release owner gates separate.",
+  "cleanup_review_rejection": "Worker extracted-HACS cleanup rejected blocked by policy; copy retained, no repeat/bypass.",
+  "storage_registration": "9a35e9ee4a8141d891347951ce36b1f4",
+  "review_date": "2026-12-04"
+}
