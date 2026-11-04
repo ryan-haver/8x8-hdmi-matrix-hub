@@ -259,5 +259,15 @@
     },
     "capacity": "At most2current+coordinator+protectedexternal=4; fresh intended-pool check before every creation/start and future review/correction gate",
     "no_automatic_retakes": true
+  },
+  "current_functional_completion_allocation_20261104": {
+    "adopted_utc": "2026-11-04T18:57:44.618593+00:00",
+    "complete_packet_sha256": "933166c3925e38e748bb4b78e15bb488c90e43bb12807b2f02ffd65b7ea6f2f4",
+    "consensus": "phases/functional-completion-20261104/CONSENSUS.json",
+    "scope": "AllCR01-14/30packages/65units retained, conditionalqualifiedsource/evidence/owner gates; firstFC-TRUTH+FC-PROVENANCE only",
+    "first_wave": "M3inventoryauthor/Solreview; Astranativeaudit/M3fidelityreview; independentreviewstaged/coordinatorchecksM3facts",
+    "failed_history": "UnchangedWSNOT_GRANTED/WSR03/D6wholehold/OpusM3privacyFAIL; no automaticretake",
+    "owner_budget": "ExistingextraOpusprivacyassessment+oneAstrajudge stillpendingexplicitanswer",
+    "no_release_authority": true
   }
 }

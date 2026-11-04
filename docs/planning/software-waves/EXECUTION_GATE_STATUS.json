@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T18:39:27.640656+00:00",
+  "observed_utc": "2026-11-04T18:57:44.618593+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -3384,7 +3384,7 @@
   },
   "historical_proposed_manual_attempt": "docs/production/software-waves/MVP-EXECUTION-20261102/PROPOSED_MANUAL_QUALIFICATION_ATTEMPT02.txt",
   "functional_completion_planning": {
-    "status": "MiniMaxthirdsamepacketR3ACTIVE, firsttwo delivered/released/preserved/withheld; NOADOPTION",
+    "status": "ADOPTED: actualall3R3ACCEPT same933166packet; firstexecutionwaveprepared/noTaskyet",
     "phase": "functional-completion-20261104",
     "input_packet_sha256": "cb6a9871fdf8a4adfb181ab1fbf3abafb6c265323c27b543ebd62f9c68857dc4",
     "record": "docs/agent-process/phases/functional-completion-20261104/ROUND1_DISPATCHES.json",
@@ -3565,7 +3565,10 @@
         "scope": "actual native entry Task/Dispatch/directory; no competence/completion/full host census"
       },
       "status": "actual samepacketR3 decision active; no vote/adoption/implementation yet"
-    }
+    },
+    "consensus": "docs/agent-process/phases/functional-completion-20261104/CONSENSUS.json",
+    "adoption_notes": "docs/agent-process/phases/functional-completion-20261104/ADOPTION_NOTES.md",
+    "execution_wave_A": "docs/agent-process/phases/functional-completion-20261104/EXECUTION_WAVE_A_PREFLIGHT.json"
   },
   "latest_verified_CI": {
     "head": "9b783d723c81cc56ec86810b789fa31be41e75cc",
