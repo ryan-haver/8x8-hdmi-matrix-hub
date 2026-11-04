@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T10:22:11.902637+00:00",
+  "observed_utc": "2026-11-04T10:23:52.732839+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -2757,7 +2757,7 @@
     },
     "WS_component_review_disposition": "docs/production/remediation-20261104/WS-WORK-01/REVIEW_DELIVERY.json",
     "recovery_planning": {
-      "status": "Two R3 decisions delivered/released/preserved/task refs published; MiniMax same-packet R3 prepared, no adoption/source execution",
+      "status": "Third genuine MiniMax R3 same-packet decision ACTIVE; two peer decisions preserved/released, no adoption/source execution",
       "packet_sha256": "40526f127575feead63c94058250a868e0452ccb19b5552f60be66b6b82b77dc",
       "packet": "docs/agent-process/phases/remediation-recovery-20261104/INPUT_PACKET.json",
       "first_wave": [
@@ -2967,7 +2967,7 @@
       "round2_complete": "docs/agent-process/phases/remediation-recovery-20261104/ROUND2_COMPLETE.json",
       "final_packet": "docs/agent-process/phases/remediation-recovery-20261104/FINAL_PACKET.json",
       "final_packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
-      "round3_status": "ACTIVE first two; all three explicit same-hash ACCEPT still required",
+      "round3_status": "ACTIVE final family; all three actual same-hash verdicts must be independently verified before adoption",
       "round3_actors": {
         "openai": {
           "task_id": "task_3c062bb9de42",
@@ -3048,7 +3048,44 @@
       },
       "MiniMax_R2_publication": "RESOLVED: third normal same-ref fast-forward succeeded, exact remote/local6671c927 verified; two earlier GitHub server errors/hold preserved",
       "round3_delivery_metadata": "docs/agent-process/phases/remediation-recovery-20261104/ROUND3_DELIVERY_METADATA.json",
-      "round3_third_family": "MiniMax prepared at exact6671c927, samef8fe93c8 full packet; no Task/Dispatch yet"
+      "round3_third_family": {
+        "task_id": "task_dfe340b7113e",
+        "dispatch_id": "ctx_500618559004",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-minimax",
+        "branch": "planning/remediation-recovery-r1-minimax",
+        "exact_base": "6671c92789d0de0590609590aeebc73772c00069",
+        "exclusive_report": "docs/agent-process/phases/remediation-recovery-20261104/round3/minimax.md",
+        "complete_final_packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+        "launch": {
+          "requested": {
+            "agent": "opencode2",
+            "model": null,
+            "effort": null
+          },
+          "effective": {
+            "agent": "opencode2",
+            "model": null,
+            "effort": null
+          }
+        },
+        "turn_start": "unsupported",
+        "native_entry": {
+          "status": "actual native MiniMax M3 at exact Task/Dispatch/directory",
+          "session": "ses_e59eab66fffeTpxkIFjV21JciX",
+          "models": [
+            "minimax-coding-plan/MiniMax-M3"
+          ],
+          "variant": "thinking",
+          "CLI_effort_override": "unsupported, configured route inherited",
+          "bytes": 283452,
+          "sha256": "891711f18c625e0f88ca32d8ef1eb923714f1434a3b35c65d404c885723b2c46",
+          "unassigned_helpers_observed": [],
+          "scope": "entry capture only, not source qualification/completion/descendant census"
+        },
+        "dispatch_status": "dispatched",
+        "worker_state": "ready",
+        "status": "Third genuine independent R3 same-packet decision ACTIVE; no verdict/adoption yet"
+      }
     }
   },
   "prospective_privacy_review_domain": {
