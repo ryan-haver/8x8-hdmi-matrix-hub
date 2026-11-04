@@ -1,5 +1,14 @@
 # Current coordinator handoff
 
+## RV-API034 independent source reviewer active — 2026-11-04T01:35:15.025446+00:00
+
+Genuine Anthropic Opus5.5/high Task task_43fbf6bb49a2 / Dispatch ctx_4e0e187682b0, dedicated wp-exec-rv-api034-review, actualbranch execution/wp-exec-rv-api034-review, EXACT caaa4faabe9ede1e3aed37d2269efd4a4d691e04 against 938ae30339790c361abdda6fdd01b11a4e498518. Sole new docs/production/software-waves/RV-API034/execution-20261101/REVIEW.md plus assigned ignored/temp; source frozen, reviewers report/authors fix. Native entry {"status": "native Anthropic Opus5.5 attested at exact Task/Dispatch/cwd", "session": "ad131db1-c207-495f-ac80-371efd971b04", "models": ["claude-opus-5-5"], "effort": "high supported explicit launch/local config; native per-turn effort not exposed", "bytes": 589365, "sha256": "f0929fb2d8bcdab85a711cb20674bb1aff8c0daadf449203b9b9f59711ed6604", "unassigned_helpers_observed": [], "scope": "point-in-time entry evidence, not a descendant census or source competence"}. This is actual independent review of OpenAI C1/C2 runner/model/refusal compatibility, not a qualification retake or source acceptance from qualification. Covered existing accepted RV-API034, no changed family/outcome/contract.
+
+Fresh Anthropic capacity checked before creation and start; OpenAI25% below30% means affected author-fix/secondary-evaluation dispatches HELD without suitable verified fallback. Independent report-only review continues; correction budget not promised, source integration/fullRV promotion await required gates. Prewave a62b1b85bcce97de17a2fc6cde6eac8800cf3cef pushed/exactremote verified. All135rows/two pages128released/7retained=sixhistorical+onecurrent; one reviewer+coordinator+protectedexternal3<=4, no helpers/nesting.
+
+No source delivery/review verdict/integration/client/privacy/hardware/soak/release acceptance yet; all61finding records/prior failures/lost originals and protected resources remain. Reviewer retained only until delivery preservation/settlement, existing10entries preserved plusONEnew. SOURCE_REVIEW_DISPATCH_20261103.json records actual authority/placement/native/capacity. Publish/independently verify scoped launch records and end turn for Orca wake, no polling.
+
+
 ## RV-API034 independent source review prepared — 2026-11-04T01:33:27.375062+00:00
 
 Owner proceed activates the existing accepted bounded C1/C2 review at exact caaa4faabe9ede1e3aed37d2269efd4a4d691e04 against 938ae30339790c361abdda6fdd01b11a4e498518, nine paths; no new phase/family/scope change or manufactured debate. Newly qualified Anthropic Opus5.5/high is task-matched to runner/model offline refusal and compatibility scope; prior qualification is not source acceptance. Dedicated reserved wp-exec-rv-api034-review, sole new REVIEW.md and own ignored/temp; no Task/Dispatch/worktree yet. Full preflight/task in docs/production/software-waves/RV-API034/execution-20261101.
