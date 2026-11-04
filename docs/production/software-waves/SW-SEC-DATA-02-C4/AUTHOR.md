@@ -192,3 +192,92 @@ physical HIL, 72-hour soak, week field sign-off and final release remain separat
 No REST routes changed; there is no registry/route-count accommodation. Qualified
 privacy assessment/judge, separate actual full-chain review and report-quality
 evaluation, sequential coordinator integration and combined acceptance remain due.
+
+## Append-only supported catalog-context correction
+
+The first normal hook succeeded at source/report commit
+`01ca55728d8f47076f7b1f805ece1877845546bd`, parent
+`2d02004d3108953a302e1a49aab9a5f24e944136`. It ran unchanged from
+2026-11-04T11:08:54.520316Z to 11:23:54.026959Z, direct exit 0:
+Ruff PASS; 4,143 tests passed, four skipped, 35 deselected, four warnings,
+896.24s pytest time; actual strict 177/177 routes, 100%. Skips were POSIX
+permissions, POSIX unlink-while-open, unavailable HA dependencies and unavailable
+symlink permission; warnings were the existing aiohttp application/function
+deprecations. Its complete history, original report prefix and actual outputs
+remain immutable; this addendum does not turn that software pass into privacy
+acceptance or conceal its public-data fidelity defect.
+
+Continued caller inspection found `contracts.py` favorites/dashboard checks of
+`data.shortcuts[0].key`, plus the supported builtin.one_to_one alias. The first
+C4 context exception covered single-shortcut canonical key/data.key only; those
+catalog/alias diagnostics therefore masked known public values despite correct
+raw verdicts. Coordinator question `msg_a73ea52381bf` and reply
+`msg_21e6d9d7a1e8` explicitly authorize completion of this same initial assignment
+under the same Task/Dispatch/base/lease, with exactly one additional changed-source
+normal hook. The recorded decision at integration observation
+`1b41e6350ab9a46b398e2fc87821c6c418687303` is
+`docs/production/remediation-20261104/recovery-execution/WAVE_A_C4_SELF_AUDIT_DECISION.json`.
+This spends no future qualified-review correction reserve and grants no retry,
+new phase, qualification, integration or source acceptance.
+
+Only evidence.py's existing display helper changes in this descendant: sequence
+traversal retains indexed field context, and known built-in string keys survive
+only at `data.shortcuts[<integer>].key` on the exact catalog/favorites/dashboard
+routes of `/api/shortcuts` and `/api/system-shortcuts`. Single-key contexts also
+recognize the inspected matching `builtin.` aliases, including one_to_one and
+all_to_out_1. Arbitrary nested key fields, unrelated/lookalike routes, unknown
+values, genuine generated credentials and wrong types stay masked. No global key
+exemption, raw transport/comparison mutation or product/scenario edit is added.
+
+The C4 test file is append-only relative to the first commit: 21 additional cases
+bring it to 62. Twelve run actual product favorites/dashboard handlers and
+SystemShortcutManager through ApiClient/Runner/Hub/persistence, both registered
+prefixes and indexes 0, 1 and -1. Two exercise actual supported aliases. Seven
+pair catalog public values with unknown strings, keys freshly created by the
+real auth endpoint, integer/bool/null values, nested credential/key fields and
+lookalike/auth routes. Raw bodies/references/paths/verdicts are checked before
+full persisted byte/stream and public-value assertions; generated keys are
+deleted from disposable product instances in finally blocks. Bounded HTTP
+server/session teardown remains explicit. C1–C3 and all initial C4 assertions
+and report bytes are retained unchanged as prefixes/history.
+
+The before-fix child exited 1 with **19 failed/two passed/41 deselected**, 3.85s;
+raw requests/verdicts reached the persisted public-key oracle, which observed
+`***` instead of the actual known key. After the helper change, the same 21 cases
+passed, 41 deselected, 3.66s, exit 0. `catalog-regression` then ran all
+tests/validation: **292 passed/two opt-in Chromium skips**, 211.52s, exit 0.
+`catalog-lint` passed the complete CI Ruff paths. `catalog-mypy` passed 92 explicit
+source files using `src/ tools/validate/evidence.py --follow-imports=skip`; the
+earlier normal CI src/ type check remains separately recorded above. All use
+the same fresh per-invocation Windows environment/import/isolation/original
+stream/JUnit protocol; no unchanged failed check was retried.
+
+The first seven-file candidate was byte-copied before correction to
+`C:/t/remediation-recovery/priv-c4/initial-frozen-b0a4417b/`, each original/copy
+SHA256 matched and staged Git blobs/tree are retained in
+`initial-frozen-preservation.json`. The initial AUTHOR.md working-byte SHA256 is
+`ab8437a042742e7c683190392b3dc5bb8d4aa019322f12e25cfae4e884866943`.
+The first hook originals remain in `source-hook/`, with stdout SHA256
+`ad1a80ba23555804a8dc11c04cea6bb403d48b50dff81a43c9b5ab16147910ae`, stderr
+`c161fab93e160639ccfa0a68ffb89b15a5925d5c2b619e37f13c7f61b799584a`, strict
+route copy `6f4d570ee7d899010ee1c982086130bebb882bb3323c1581e6573161ed38194a`,
+and full JUnit original `C:/t/remediation-recovery/priv-c4/source-hook-5744730d/results.xml`
+SHA256 `cee39937424b8c571dbdb0b67fe8fbdb6a3e51abb9c1a6d9e0c225d0b2bddd51`.
+
+New originals are under catalog-before/, catalog-after/, catalog-regression/,
+catalog-lint/ and catalog-mypy/ at the same own-build root. Their receipt.json
+files bind every exact argv/path/environment/exit/stream/JUnit hash. In particular,
+the before/after JUnit hashes are respectively
+`30b9c1f3dbb4274c068919ab903e7ea5ff684bc280e068f3f179750279e7ac57` and
+`b1ed7b712c0646d1f9f9edb830e430eb291f4d567a110d85410a9129fe31993d`;
+the full validation regression JUnit is at
+`C:/t/remediation-recovery/priv-c4/catalog-regression-e7fd4439/results.xml`, SHA256
+`bb065e23f798539788f9471fa694363046c7c155b2a96b947b3610fdf39183f3`.
+
+This addendum also predates its own hook. Exactly one authorized descendant
+`source-hook-catalog` normal commit/full-core run follows with fresh actual strict
+route/JUnit originals and the unchanged browser-auth setting. Its actual commit,
+parent, exit, counts/hashes, complete base diff, initial-history/prefix checks
+and no-follow surviving-artifact inventory belong in the separate owned
+completion.json/worker_done receipt. The original report and all qualification,
+real-HA, canonical-admission and owner release holds above remain in force.

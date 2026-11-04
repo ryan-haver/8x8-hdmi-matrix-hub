@@ -151,8 +151,16 @@ def _query_copy(text: str) -> str:
 
 def _public_field(name: str, value: Any, path: str, field: str) -> bool:
     route = urlsplit(path).path
-    if name == "key" and field in {"key", "data.key"} and type(value) is str and value in _PUBLIC_SHORTCUTS:
-        return route in {"shortcut_run", f"/api/shortcuts/{value}", f"/api/system-shortcuts/{value}"}
+    if name == "key" and type(value) is str and value in _PUBLIC_SHORTCUTS:
+        prefixes = ("/api/shortcuts", "/api/system-shortcuts")
+        if field in {"key", "data.key"}:
+            legacy = {"route_one_to_one": "one_to_one", "route_all_to_output": "all_to_out_1"}.get(value, value)
+            return route == "shortcut_run" or route in {
+                f"{prefix}/{identifier}" for prefix in prefixes
+                for identifier in (value, f"builtin.{value}", f"builtin.{legacy}")
+            }
+        if re.fullmatch(r"data\.shortcuts\[-?\d+\]\.key", field):
+            return route in {f"{prefix}{suffix}" for prefix in prefixes for suffix in ("", "/favorites", "/dashboard")}
     if name == "password_protected" and type(value) is bool:
         return bool(re.fullmatch(r"/api/profile(?:/[^/]+)?|/api/v2/scenes(?:/[^/]+)?", route)) and field in {
             "password_protected", "data.password_protected", "scene.password_protected", "data.scene.password_protected",
@@ -231,7 +239,8 @@ def redact(value: Any, *, path: str = "", field_path: str = "", headers: bool = 
                 for item in value
             ]
         else:
-            pairs = [redact(v, path=path, field_path="", exchanges=exchanges) for v in value]
+            pairs = [redact(v, path=path, field_path=f"{field_path}[{i}]" if field_path else "", exchanges=exchanges)
+                     for i, v in enumerate(value)]
         return tuple(pairs) if isinstance(value, tuple) else pairs
     if isinstance(value, str):
         if value.lstrip().startswith(("{", "[")):

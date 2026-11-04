@@ -477,3 +477,167 @@ async def test_ha_http_opaque_error_copy_before_truncation(bounded_http, structu
     text = str(error.value)
     assert "POST /bad?api_key=***: HTTP 400" in text
     assert_safe(text.encode())
+
+
+# Coordinator-authorized catalog-context correction. Keep the original C4 cases
+# above intact; these exercise actual supported product callers and the gap.
+@pytest.mark.parametrize("prefix", ("/api/shortcuts", "/api/system-shortcuts"))
+@pytest.mark.parametrize("view,keys", (
+    ("favorites", ("route_all_to_output", "route_one_to_one")),
+    ("dashboard", ("power_off_all", "mute_all_audio")),
+))
+@pytest.mark.parametrize("index", (0, 1, -1))
+async def test_catalog_context_real_favorites_dashboard(
+    bounded_http, tmp_path, monkeypatch, capsys, caplog, prefix, view, keys, index,
+):
+    from rest_api.app import create_rest_app
+    from rest_api.utils import set_system_shortcut_manager
+    from system_shortcuts import SystemShortcutManager
+
+    app = create_rest_app(tmp_path / "product")
+    manager = SystemShortcutManager(tmp_path / "shortcut-prefs")
+    assert manager.update_prefs("power_off_all", dashboard_visible=True)
+    assert manager.update_prefs("mute_all_audio", dashboard_visible=True)
+    set_system_shortcut_manager(manager)
+    server = await bounded_http(app)
+    url = str(server.make_url("/"))
+    path = prefix + "/" + view + "?current_pin=" + MARKERS[0] + "&public=1"
+    action = act("request", path=path)
+    field = f"data.shortcuts[{index}].key"
+    expected = keys[index]
+    sc = scenario(action, (Response(status=200, json={"data": {"count": 2}}),
+                           Hub(path, field, equals=expected)))
+    runner = runner_at(url, tmp_path / "run", monkeypatch)
+    api = ApiClient()
+    results = []
+    perform = api.perform
+
+    async def capture(action):
+        result = await perform(action)
+        results.append(result)
+        return result
+
+    monkeypatch.setattr(api, "perform", capture)
+    await api.start(HubInfo(url))
+    try:
+        outcome = await asyncio.wait_for(runner._run_one(sc, api), 6)
+    finally:
+        await asyncio.wait_for(api.stop(), 2)
+    assert outcome.status == "pass"
+    raw = results[0]
+    assert tuple(item["key"] for item in raw.body["data"]["shortcuts"]) == keys
+    assert raw.requests[0]["response"] is raw.body and raw.requests[0]["path"] == path
+    record = persist_and_scan(runner, outcome, tmp_path / "run", capsys, caplog, raw.steps)
+    observed = record["observations"]["requests"][0]["response"]["data"]["shortcuts"]
+    assert tuple(item["key"] for item in observed) == keys
+    assert f" == {expected!r}" in record["checks"][1]["description"]
+    assert expected in record["checks"][1]["detail"]
+    assert record["observations"]["hub_reads"][0]["response"]["data"]["shortcuts"][index]["key"] == expected
+    assert tuple(item["key"] for item in raw.body["data"]["shortcuts"]) == keys
+
+
+@pytest.mark.parametrize("alias,key", (
+    ("builtin.one_to_one", "route_one_to_one"), ("builtin.all_to_out_1", "route_all_to_output"),
+))
+async def test_catalog_context_real_supported_aliases(
+    bounded_http, tmp_path, monkeypatch, capsys, caplog, alias, key,
+):
+    from rest_api.app import create_rest_app
+    from rest_api.utils import set_system_shortcut_manager
+    from system_shortcuts import SystemShortcutManager
+
+    app = create_rest_app(tmp_path / "product")
+    set_system_shortcut_manager(SystemShortcutManager(tmp_path / "shortcut-prefs"))
+    server = await bounded_http(app)
+    url = str(server.make_url("/"))
+    path = "/api/shortcuts/" + alias
+    runner = runner_at(url, tmp_path, monkeypatch)
+    api = ApiClient()
+    sc = scenario(act("request", path=path), (Response(status=200, json={"data": {"key": key}}),
+                                            Hub(path, "data.key", equals=key)))
+    await api.start(HubInfo(url))
+    try:
+        outcome = await asyncio.wait_for(runner._run_one(sc, api), 5)
+    finally:
+        await asyncio.wait_for(api.stop(), 2)
+    assert outcome.status == "pass"
+    record = persist_and_scan(runner, outcome, tmp_path, capsys, caplog)
+    assert record["observations"]["requests"][0]["response"]["data"]["key"] == key
+    assert f" == {key!r}" in record["checks"][1]["description"]
+    assert "'key': '" + key + "'" in record["checks"][0]["description"]
+
+
+@pytest.mark.parametrize("kind,path", (
+    ("unknown", "/api/shortcuts/favorites"), ("created", "/api/shortcuts/favorites"),
+    ("integer", "/api/shortcuts/favorites"), ("boolean", "/api/shortcuts/favorites"),
+    ("null", "/api/shortcuts/favorites"), ("known", "/api/shortcuts/favorites-extra"),
+    ("known", "/api/auth/api-keys"),
+))
+async def test_catalog_context_negative_keys_types_and_exact_routes(
+    bounded_http, tmp_path, monkeypatch, capsys, caplog, kind, path,
+):
+    from rest_api.app import create_rest_app
+
+    product = await bounded_http(create_rest_app(tmp_path / "product"))
+    product_api = ApiClient()
+    await product_api.start(HubInfo(str(product.make_url("/"))))
+    key_id = None
+    try:
+        created = await asyncio.wait_for(product_api.perform(act(
+            "request", method="POST", path="/api/auth/api-keys", json={"name": "public-catalog-control"},
+        )), 4)
+        assert created.status == 201
+        genuine = created.body["key"]
+        key_id = created.body["id"]
+        value = {"unknown": MARKERS[1], "created": genuine, "integer": 1, "boolean": True,
+                 "null": None, "known": "power_off_all"}[kind]
+        body = {"data": {"shortcuts": [
+            {"key": "mute_all_audio", "api_key": MARKERS[2]}, {"key": value},
+            {"nested": {"key": "power_off_all"}},
+        ], "key": "route_one_to_one"}, "public": "catalog-public-control"}
+        original = copy.deepcopy(body)
+
+        async def exchange(request):
+            return web.json_response(body)
+
+        app = web.Application()
+        app.router.add_get(path, exchange)
+        server = await bounded_http(app)
+        url = str(server.make_url("/"))
+        runner = runner_at(url, tmp_path / "run", monkeypatch)
+        api = ApiClient()
+        captured = []
+        perform = api.perform
+
+        async def capture(action):
+            result = await perform(action)
+            captured.append(result)
+            return result
+
+        monkeypatch.setattr(api, "perform", capture)
+        sc = scenario(act("request", path=path), (Response(status=200, json=body),
+                                                Hub(path, "data.shortcuts[1].key", equals=value)))
+        await api.start(HubInfo(url))
+        try:
+            outcome = await asyncio.wait_for(runner._run_one(sc, api), 5)
+        finally:
+            await asyncio.wait_for(api.stop(), 2)
+        assert outcome.status == "pass"
+        result = captured[0]
+        assert result.body == original and result.requests[0]["response"] is result.body
+        record = persist_and_scan(runner, outcome, tmp_path / "run", capsys, caplog, result.steps)
+        observed = record["observations"]["requests"][0]["response"]["data"]
+        assert observed["shortcuts"][0]["key"] == ("mute_all_audio" if kind != "known" else "***")
+        assert observed["shortcuts"][0]["api_key"] == "***"
+        assert observed["shortcuts"][1]["key"] == "***"
+        assert observed["shortcuts"][2]["nested"]["key"] == "***" and observed["key"] == "***"
+        assert " == '***'" in record["checks"][1]["description"]
+        assert body == original and result.body == original
+        for member in (tmp_path / "run").rglob("*"):
+            if member.is_file():
+                assert genuine.encode() not in member.read_bytes()
+    finally:
+        if key_id is not None:
+            status, _, _ = await asyncio.wait_for(product_api.request("DELETE", "/api/auth/api-keys/" + key_id), 4)
+            assert status == 200
+        await asyncio.wait_for(product_api.stop(), 2)
