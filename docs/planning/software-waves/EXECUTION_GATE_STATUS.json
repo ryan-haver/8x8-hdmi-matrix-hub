@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T07:08:00.597969+00:00",
+  "observed_utc": "2026-11-04T07:33:45.405390+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -2719,7 +2719,7 @@
     "api_report_evaluation": "accepted/released/preserved/published; no source integration"
   },
   "prospective_privacy_review_domain": {
-    "status": "ONE candidate ACTIVE; NOT_QUALIFIED, judge reserved",
+    "status": "candidate delivered/released/preserved/published; ONE judge prepared, NOT_QUALIFIED",
     "packet": "docs/production/remediation-20261104/PRIVACY-REVIEW-ASSESSMENT/ASSESSMENT_PACKET.json",
     "sha256": "94b28ad847b727a005c3cd9f4bb42d79916afdab80f49f3e43a156a9559a1ce4",
     "no_source_acceptance": true,
@@ -2759,6 +2759,21 @@
       },
       "dispatch_status": "dispatched",
       "worker_state": "ready"
+    },
+    "candidate_commit": "1a38e2851f0223627f5377fa5e32584c233e1223",
+    "candidate_sha256": "7b469ade0388e0de5a46051528992bfb675ba43addd871c48fdaeaf48aa01f2c",
+    "packet_representation": {
+      "scope": "Representation erratum only: previous94b28 digest binds working CRLF; canonical Git LF173270 digest differs only by CRLF normalization. Original task/packet/rubric/source content unchanged.",
+      "working_CRLF": {
+        "bytes": 8460,
+        "sha256": "94b28ad847b727a005c3cd9f4bb42d79916afdab80f49f3e43a156a9559a1ce4"
+      },
+      "canonical_Git_LF": {
+        "bytes": 8308,
+        "sha256": "1732709314f8c6639ff9e136277861abaf444075227734a0b7d9e2d38b7c4dd8"
+      },
+      "normalization_exact_equal": true,
+      "parsed_content_exact_equal": true
     }
   }
 }
