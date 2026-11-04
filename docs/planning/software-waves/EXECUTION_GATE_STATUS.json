@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T06:44:59.365910+00:00",
+  "observed_utc": "2026-11-04T06:48:27.330797+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -2682,8 +2682,32 @@
   "remediation_authority": {
     "owner_request": "now enact the plan and remediate all findings",
     "plan": "docs/planning/COMPREHENSIVE_REMEDIATION_20261104.md",
-    "state": "authorized; wave1 prepared, not launched",
+    "state": "wave1 active: NEW bounded WS component authorship assessment and planned API-review evaluation",
     "no_automatic_retakes": true,
     "no_blanket_domain_grant": true
+  },
+  "remediation_execution": {
+    "wave1_record": "docs/production/remediation-20261104/WAVE1_DISPATCHES.json",
+    "actors": [
+      {
+        "key": "ws-component",
+        "task_id": "task_38756b76bd12",
+        "dispatch_id": "ctx_14a660b697ab",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-ws-work-01",
+        "actual_branch": "remediation/ws-work-01",
+        "exact_base": "460a190575e905f8350c454e63c4d570c8b560fa"
+      },
+      {
+        "key": "api-evaluation",
+        "task_id": "task_dca414868333",
+        "dispatch_id": "ctx_8017ffe0975e",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-rv-api034-review-evaluation",
+        "actual_branch": "execution/wp-exec-rv-api034-review-evaluation",
+        "exact_base": "12eeef938857bfd740854ccbaad34f9bc1b6ce36"
+      }
+    ],
+    "new_bounded_authorship": "NOT_GRANTED; candidate component only",
+    "source_changed_in_integration": false,
+    "findings_closed": []
   }
 }

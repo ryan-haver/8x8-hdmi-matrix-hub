@@ -1,5 +1,19 @@
 # Agent allocation and execution ledger
 
+## Remediation wave1 active: WS component and API evaluation — 2026-11-04T06:48:27.330797+00:00
+
+Owner-authorized remediation now has two genuine supervised workers in dedicated worktrees.
+
+- ws-component: Task task_38756b76bd12, Dispatch ctx_14a660b697ab, actual branch remediation/ws-work-01, exact base 460a190575e905f8350c454e63c4d570c8b560fa; native {"status": "actual native model attested at exact Task/Dispatch/cwd", "session": "2a593a53-f899-407f-a59d-862cd4c8e524", "models": ["claude-opus-5-5"], "effort": "high explicit supported launch/local config; native per-turn effort not exposed", "bytes": 724167, "sha256": "8e7a1de0e4ef8ca5c4c828fc17c57d0673394b1a2ae98eb80c24a9163cc26f4e", "unassigned_helper_calls_observed": [], "scope": "point-in-time native entry, not completed competence/descendant census"}.
+- api-evaluation: Task task_dca414868333, Dispatch ctx_8017ffe0975e, actual branch execution/wp-exec-rv-api034-review-evaluation, exact base 12eeef938857bfd740854ccbaad34f9bc1b6ce36; native {"status": "actual native model attested at exact Task/Dispatch/cwd", "session": "01a1a54f-4474-7943-aa42-05d86ce034ef", "models": ["gpt-6-astra"], "effort": "high native", "bytes": 923799, "sha256": "fa72f3c80c1d3daa3f7f6095a3e34904667433946a9df54dcee0441e9d235efb", "unassigned_helper_calls_observed": [], "scope": "point-in-time native entry, not completed competence/descendant census"}.
+
+WS author is a useful bounded NEW-file controller/tests candidate, not qualified product authorship or an existing API lease. Existing handlers and public protocol stay untouched; independent qualified Astra judgement at exact delivery must earn narrow competence/component acceptance before later normal wiring and changed-commit review. Existing source is not relabelled. API evaluator assesses exact Anthropic12ee report/native/raw evidence; it cannot self-accept original OpenAI implementation, clear M-1 or integrate source. Future component reviewer reserved/not launched. No findings closed.
+
+Prewave522ffdbb normal-pushed/exactremoteverified; fresh joint Claude/OpenAI headroom checked before both provisioning/start after supported actual OpenAI reset. All137rows/two pages129released/8retained=six historical plus two current. Two workers+coordinator+protectedexternal=4; no nesting. Codex helperfeaturefalse actually verified in exact execution-profile/cwd; untracked coordinator-owned .codex/config.toml must never be staged. Claude ignored local helper/team/MCP/plugin denial verified. No global profile/account change.
+
+CR-08 present-status stale approval/qualification instructions corrected, original failures/approval history retained; not a61findingclosure or broad qualification grant. Protected resources/root private data/baselines/sourcechains remain. Preserve originals/native/workspace/temp and exact taskrefs at delivery, release workers promptly; do not treat retention as proof of liveness. Publish scoped launch records and end turn for Orca wake; source integration/hardware/soak/field/finalrelease remain gated.
+
+
 ## Remediation authorized; current-status correction and wave1 prepared — 2026-11-04T06:44:59.365910+00:00
 
 Owner now authorizes enactment of the comprehensive corrective plan. CR-08 present-tense readiness metadata corrected: scoped Opus5.5 PASS/actual API review, completed qualification attempts and bounded inventory acceptance are distinguished from historical failures and old next-task instructions. Old approval-pending text retained in a historical JSON field; no finding closed or broad domain granted. Existing85pin packet unchanged.
